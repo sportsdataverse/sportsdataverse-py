@@ -249,11 +249,7 @@ pbp.select(have).head() if have else 'pbp not published for these seasons right 
 ```
 
     ✅ load_cfb_pbp 2023
-    ✅ load_cfb_pbp 2022
-
-
-    ✅ load_cfb_pbp 2021
-    pbp season: 2021 | pbp shape: (137046, 370)
+    pbp season: 2023 | pbp shape: (153625, 460)
 
 
 
@@ -263,13 +259,13 @@ pbp.select(have).head() if have else 'pbp not published for these seasons right 
     ┌───────────┬─────────────────────┬──────┬──────────┬───────────┬───────────┐
     │ game_id   ┆ start.pos_team.name ┆ down ┆ distance ┆ EPA       ┆ wpa       │
     │ ---       ┆ ---                 ┆ ---  ┆ ---      ┆ ---       ┆ ---       │
-    │ i64       ┆ str                 ┆ f64  ┆ f64      ┆ f64       ┆ f64       │
+    │ i64       ┆ str                 ┆ i64  ┆ i64      ┆ f64       ┆ f64       │
     ╞═══════════╪═════════════════════╪══════╪══════════╪═══════════╪═══════════╡
-    │ 401281942 ┆ Miami               ┆ null ┆ null     ┆ -1.024319 ┆ -0.605042 │
-    │ 401281942 ┆ Alabama             ┆ null ┆ null     ┆ -0.345141 ┆ -0.434851 │
-    │ 401281942 ┆ Alabama             ┆ null ┆ null     ┆ -0.666759 ┆ -0.000523 │
-    │ 401281942 ┆ Alabama             ┆ null ┆ null     ┆ -0.298288 ┆ -0.000052 │
-    │ 401281942 ┆ Alabama             ┆ null ┆ null     ┆ -0.20101  ┆ -0.000039 │
+    │ 401523986 ┆ San José State      ┆ 1    ┆ 10       ┆ 0.0       ┆ 0.0       │
+    │ 401523986 ┆ San José State      ┆ 1    ┆ 10       ┆ -0.687781 ┆ -0.003872 │
+    │ 401523986 ┆ San José State      ┆ 2    ┆ 10       ┆ 2.339749  ┆ 0.019609  │
+    │ 401523986 ┆ San José State      ┆ 1    ┆ 10       ┆ 0.121639  ┆ 0.002179  │
+    │ 401523986 ┆ San José State      ┆ 2    ┆ 5        ┆ -1.149794 ┆ -0.006335 │
     └───────────┴─────────────────────┴──────┴──────────┴───────────┴───────────┘
 
 
@@ -440,23 +436,23 @@ out
 
 
     shape: (15, 3)
-    ┌──────────────────┬───────┬──────────────┐
-    │ offense          ┆ plays ┆ epa_per_play │
-    │ ---              ┆ ---   ┆ ---          │
-    │ str              ┆ u32   ┆ f64          │
-    ╞══════════════════╪═══════╪══════════════╡
-    │ Ohio State       ┆ 972   ┆ 0.28         │
-    │ Western Kentucky ┆ 1021  ┆ 0.195        │
-    │ Virginia         ┆ 914   ┆ 0.178        │
-    │ Oregon State     ┆ 897   ┆ 0.17         │
-    │ Oklahoma         ┆ 970   ┆ 0.154        │
-    │ …                ┆ …     ┆ …            │
-    │ Wake Forest      ┆ 1071  ┆ 0.121        │
-    │ Alabama          ┆ 1202  ┆ 0.115        │
-    │ Nevada           ┆ 980   ┆ 0.114        │
-    │ Missouri         ┆ 906   ┆ 0.113        │
-    │ TCU              ┆ 730   ┆ 0.112        │
-    └──────────────────┴───────┴──────────────┘
+    ┌────────────┬───────┬──────────────┐
+    │ offense    ┆ plays ┆ epa_per_play │
+    │ ---        ┆ ---   ┆ ---          │
+    │ str        ┆ u32   ┆ f64          │
+    ╞════════════╪═══════╪══════════════╡
+    │ LSU        ┆ 945   ┆ 0.374        │
+    │ Oregon     ┆ 1052  ┆ 0.343        │
+    │ Georgia    ┆ 1064  ┆ 0.268        │
+    │ USC        ┆ 956   ┆ 0.213        │
+    │ Liberty    ┆ 1079  ┆ 0.205        │
+    │ …          ┆ …     ┆ …            │
+    │ Missouri   ┆ 1003  ┆ 0.153        │
+    │ Alabama    ┆ 1030  ┆ 0.153        │
+    │ Ohio State ┆ 931   ┆ 0.151        │
+    │ Miami      ┆ 1005  ┆ 0.148        │
+    │ Ole Miss   ┆ 989   ┆ 0.147        │
+    └────────────┴───────┴──────────────┘
 
 
 
@@ -501,8 +497,8 @@ out
     │ OL       ┆ 21      │
     │ WR       ┆ 19      │
     │ LB       ┆ 18      │
-    │ DE       ┆ 12      │
     │ DL       ┆ 12      │
+    │ DE       ┆ 12      │
     │ TE       ┆ 11      │
     │ RB       ┆ 11      │
     │ PK       ┆ 6       │
@@ -604,15 +600,15 @@ standings_tbl.head(10)
     │ ---                      ┆ ---  ┆ ---    ┆ ---     │
     │ str                      ┆ u32  ┆ u32    ┆ f64     │
     ╞══════════════════════════╪══════╪════════╪═════════╡
-    │ Harding University       ┆ 15   ┆ 0      ┆ 1.0     │
     │ Michigan                 ┆ 15   ┆ 0      ┆ 1.0     │
+    │ Harding University       ┆ 15   ┆ 0      ┆ 1.0     │
     │ South Dakota State       ┆ 15   ┆ 0      ┆ 1.0     │
+    │ Washington               ┆ 14   ┆ 1      ┆ 0.933   │
     │ Cortland                 ┆ 14   ┆ 1      ┆ 0.933   │
     │ Colorado School Of Mines ┆ 14   ┆ 1      ┆ 0.933   │
     │ North Central College    ┆ 14   ┆ 1      ┆ 0.933   │
-    │ Washington               ┆ 14   ┆ 1      ┆ 0.933   │
-    │ Liberty                  ┆ 13   ┆ 1      ┆ 0.929   │
     │ Florida State            ┆ 13   ┆ 1      ┆ 0.929   │
+    │ Georgia                  ┆ 13   ┆ 1      ┆ 0.929   │
     │ Wartburg                 ┆ 13   ┆ 1      ┆ 0.929   │
     └──────────────────────────┴──────┴────────┴─────────┘
 
@@ -711,9 +707,9 @@ gamelog.head(16) if gamelog.height else f'no games found for {team}'
     │ ---  ┆ ---           ┆ ---     ┆ ---         ┆ ---    ┆ ---          │
     │ i32  ┆ str           ┆ i32     ┆ i32         ┆ i32    ┆ bool         │
     ╞══════╪═══════════════╪═════════╪═════════════╪════════╪══════════════╡
+    │ 1    ┆ East Carolina ┆ 30      ┆ 3           ┆ 27     ┆ false        │
     │ 1    ┆ Alabama       ┆ 27      ┆ 20          ┆ 7      ┆ true         │
     │ 1    ┆ Washington    ┆ 34      ┆ 13          ┆ 21     ┆ true         │
-    │ 1    ┆ East Carolina ┆ 30      ┆ 3           ┆ 27     ┆ false        │
     │ 2    ┆ UNLV          ┆ 35      ┆ 7           ┆ 28     ┆ false        │
     │ 3    ┆ Bowling Green ┆ 31      ┆ 6           ┆ 25     ┆ false        │
     │ …    ┆ …             ┆ …       ┆ …           ┆ …      ┆ …            │
@@ -763,17 +759,17 @@ out
     │ ---                ┆ ---     ┆ ---      ┆ ---          │
     │ str                ┆ u32     ┆ i64      ┆ f64          │
     ╞════════════════════╪═════════╪══════════╪══════════════╡
-    │ Lew Nichols III    ┆ 315     ┆ 1765     ┆ -0.022       │
-    │ Abram Smith        ┆ 257     ┆ 1599     ┆ 0.165        │
-    │ Tyler Allgeier     ┆ 272     ┆ 1592     ┆ 0.127        │
-    │ Kenneth Walker III ┆ 251     ┆ 1576     ┆ 0.062        │
-    │ Sincere McCormick  ┆ 288     ┆ 1480     ┆ -0.035       │
+    │ Ollie Gordon II    ┆ 280     ┆ 1762     ┆ 0.076        │
+    │ Kimani Vidal       ┆ 288     ┆ 1600     ┆ 0.044        │
+    │ Cody Schrader      ┆ 274     ┆ 1585     ┆ 0.14         │
+    │ Tahj Brooks        ┆ 289     ┆ 1570     ┆ 0.196        │
+    │ Omarion Hampton    ┆ 243     ┆ 1503     ┆ 0.121        │
     │ …                  ┆ …       ┆ …        ┆ …            │
-    │ Rasheen Ali        ┆ 237     ┆ 1365     ┆ 0.049        │
-    │ Brian Robinson Jr. ┆ 271     ┆ 1361     ┆ 0.004        │
-    │ Breece Hall        ┆ 222     ┆ 1336     ┆ 0.095        │
-    │ B.J. Baylor        ┆ 222     ┆ 1336     ┆ 0.145        │
-    │ Hassan Haskins     ┆ 268     ┆ 1324     ┆ 0.134        │
+    │ Makhi Hughes       ┆ 255     ┆ 1365     ┆ 0.073        │
+    │ Ismail Mahdi       ┆ 217     ┆ 1362     ┆ 0.139        │
+    │ Jaydn Ott          ┆ 244     ┆ 1349     ┆ -0.007       │
+    │ Ashton Jeanty      ┆ 212     ┆ 1340     ┆ 0.112        │
+    │ Marcus Carroll     ┆ 272     ┆ 1336     ┆ 0.026        │
     └────────────────────┴─────────┴──────────┴──────────────┘
 
 
@@ -929,29 +925,29 @@ out
 ```
 
     ✅ load_cfb_betting_lines
-    biggest favorites, 2019 season:
+    biggest favorites, 2025 season:
 
 
 
 
 
     shape: (10, 3)
-    ┌─────────────────────────────────┬──────┬────────────┐
-    │ game_desc                       ┆ abbr ┆ avg_spread │
-    │ ---                             ┆ ---  ┆ ---        │
-    │ str                             ┆ str  ┆ f64        │
-    ╞═════════════════════════════════╪══════╪════════════╡
-    │ Western Carolina@Alabama        ┆ BAMA ┆ -58.0      │
-    │ New Mexico State@Alabama        ┆ BAMA ┆ -54.9      │
-    │ Arkansas-Pine Bluff@TCU         ┆ TCU  ┆ -54.0      │
-    │ Ohio State@Rutgers              ┆ OSU  ┆ -52.2      │
-    │ Northwestern State@LSU          ┆ LSU  ┆ -51.6      │
-    │ Murray State@Georgia            ┆ UGA  ┆ -49.2      │
-    │ Wofford@Clemson                 ┆ CLE  ┆ -48.5      │
-    │ Butler@North Dakota State       ┆ NDS  ┆ -47.5      │
-    │ Oklahoma Panhandle State@Sam H… ┆ SHS  ┆ -47.5      │
-    │ Idaho@Penn State                ┆ PSU  ┆ -47.3      │
-    └─────────────────────────────────┴──────┴────────────┘
+    ┌────────────────────────────────┬────────────┬────────────┐
+    │ game_desc                      ┆ abbr       ┆ avg_spread │
+    │ ---                            ┆ ---        ┆ ---        │
+    │ str                            ┆ str        ┆ f64        │
+    ╞════════════════════════════════╪════════════╪════════════╡
+    │ Arkansas-Pine Bluff@Texas Tech ┆ Texas Tech ┆ -54.5      │
+    │ Bethune-Cookman@Miami          ┆ Miami      ┆ -54.5      │
+    │ Samford@Texas A&M              ┆ Texas A&M  ┆ -54.2      │
+    │ Grambling@Ohio State           ┆ Ohio State ┆ -53.5      │
+    │ Samford@Baylor                 ┆ Baylor     ┆ -52.0      │
+    │ The Citadel@Ole Miss           ┆ Ole Miss   ┆ -51.8      │
+    │ Eastern Illinois@Alabama       ┆ Alabama    ┆ -51.3      │
+    │ East Texas A&M@SMU             ┆ SMU        ┆ -50.8      │
+    │ SE Louisiana@LSU               ┆ LSU        ┆ -48.8      │
+    │ Northwestern State@Cincinnati  ┆ Cincinnati ┆ -48.5      │
+    └────────────────────────────────┴────────────┴────────────┘
 
 
 
@@ -1014,8 +1010,6 @@ rankings = safe('ESPN rankings (polls)', sdv.cfb.espn_cfb_rankings)
 ```
 
     ✅ ESPN standings
-
-
     ✅ ESPN rankings (polls)
 
 
@@ -1030,15 +1024,15 @@ rankings = safe('ESPN rankings (polls)', sdv.cfb.espn_cfb_rankings)
     │            ┆ str        ┆         ┆            ┆   ┆ str        ┆           ┆ str       ┆ ---    │
     │            ┆            ┆         ┆            ┆   ┆            ┆           ┆           ┆ str    │
     ╞════════════╪════════════╪═════════╪════════════╪═══╪════════════╪═══════════╪═══════════╪════════╡
-    │ American   ┆ American   ┆ 249     ┆ Mean Green ┆ … ┆ null       ┆ null      ┆ null      ┆ null   │
-    │ Conference ┆            ┆         ┆            ┆   ┆            ┆           ┆           ┆        │
-    │ American   ┆ American   ┆ 2655    ┆ Green Wave ┆ … ┆ null       ┆ null      ┆ null      ┆ null   │
-    │ Conference ┆            ┆         ┆            ┆   ┆            ┆           ┆           ┆        │
-    │ American   ┆ American   ┆ 151     ┆ Pirates    ┆ … ┆ null       ┆ null      ┆ null      ┆ null   │
+    │ American   ┆ American   ┆ 5       ┆ Blazers    ┆ … ┆ null       ┆ null      ┆ null      ┆ null   │
     │ Conference ┆            ┆         ┆            ┆   ┆            ┆           ┆           ┆        │
     │ American   ┆ American   ┆ 58      ┆ Bulls      ┆ … ┆ null       ┆ null      ┆ null      ┆ null   │
     │ Conference ┆            ┆         ┆            ┆   ┆            ┆           ┆           ┆        │
-    │ American   ┆ American   ┆ 235     ┆ Tigers     ┆ … ┆ null       ┆ null      ┆ null      ┆ null   │
+    │ American   ┆ American   ┆ 151     ┆ Pirates    ┆ … ┆ null       ┆ null      ┆ null      ┆ null   │
+    │ Conference ┆            ┆         ┆            ┆   ┆            ┆           ┆           ┆        │
+    │ American   ┆ American   ┆ 202     ┆ Golden     ┆ … ┆ null       ┆ null      ┆ null      ┆ null   │
+    │ Conference ┆            ┆         ┆ Hurricane  ┆   ┆            ┆           ┆           ┆        │
+    │ American   ┆ American   ┆ 218     ┆ Owls       ┆ … ┆ null       ┆ null      ┆ null      ┆ null   │
     │ Conference ┆            ┆         ┆            ┆   ┆            ┆           ┆           ┆        │
     └────────────┴────────────┴─────────┴────────────┴───┴────────────┴───────────┴───────────┴────────┘
 
@@ -1119,14 +1113,35 @@ out
     │ ---    ┆ ---      ┆ ---  ┆ ---      ┆ ---       │
     │ i64    ┆ i64      ┆ i64  ┆ i64      ┆ f64       │
     ╞════════╪══════════╪══════╪══════════╪═══════════╡
-    │ 1      ┆ 99       ┆ 1    ┆ 10       ┆ -1.309487 │
-    │ 1      ┆ 99       ┆ 1    ┆ 10       ┆ 1.130336  │
-    │ 1      ┆ 99       ┆ 1    ┆ 10       ┆ 0.963541  │
-    │ 1      ┆ 99       ┆ 1    ┆ 10       ┆ -0.674958 │
-    │ 1      ┆ 99       ┆ 2    ┆ 8        ┆ 0.250361  │
+    │ 1      ┆ 99       ┆ 1    ┆ 10       ┆ -1.056855 │
+    │ 1      ┆ 99       ┆ 1    ┆ 10       ┆ 1.160273  │
+    │ 1      ┆ 99       ┆ 1    ┆ 10       ┆ 1.005587  │
+    │ 1      ┆ 99       ┆ 1    ┆ 10       ┆ -0.563137 │
+    │ 1      ┆ 99       ┆ 2    ┆ 8        ┆ 0.052125  │
     └────────┴──────────┴──────┴──────────┴───────────┘
 
 
+
+## 🏛️ stats.ncaa.org football — `parse_cfb_ncaa_pbp` + box parsers
+
+New in 0.0.72: parsers for the **stats.ncaa.org** football surface.
+`parse_cfb_ncaa_pbp` takes the raw HTML of a `/contests/{id}/play_by_play`
+page and emits one tidy row per play, cfbfastR-style — drive context,
+down/distance/yard line, a classified `play_type`, extracted
+players/yards/kick details, and boolean flags — while `cfb_ncaa_box` adds the
+box-score / drives / officials tables:
+
+```python
+from sportsdataverse.cfb import parse_cfb_ncaa_pbp
+
+pbp = parse_cfb_ncaa_pbp(html, contest_id=6081276)   # html = captured page
+pbp.filter(pl.col("touchdown") == True).head()
+```
+
+stats.ncaa.org is rate-limit unfriendly, so this family is parser-first:
+feed it pages captured by your own fetch pipeline (the shared proxy-bound
+NCAA fetch layer used by the `ncaa_mbb_*` family) rather than scraping live
+in a notebook.
 
 ## 🎉 Where to next
 

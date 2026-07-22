@@ -232,7 +232,7 @@ pbp.shape
 
 
 
-    (10456, 95)
+    (14186, 104)
 
 
 
@@ -247,17 +247,22 @@ pbp.shape
 
 
 
-    shape: (4, 2)
-    ┌─────────┬────────┐
-    │ event   ┆ events │
-    │ ---     ┆ ---    │
-    │ str     ┆ u32    │
-    ╞═════════╪════════╡
-    │ shot    ┆ 4922   │
-    │ faceoff ┆ 4631   │
-    │ penalty ┆ 518    │
-    │ goal    ┆ 385    │
-    └─────────┴────────┘
+    shape: (9, 2)
+    ┌───────────────┬────────┐
+    │ event         ┆ events │
+    │ ---           ┆ ---    │
+    │ str           ┆ u32    │
+    ╞═══════════════╪════════╡
+    │ shot          ┆ 4922   │
+    │ faceoff       ┆ 4631   │
+    │ hit           ┆ 2123   │
+    │ blocked_shot  ┆ 1243   │
+    │ penalty       ┆ 518    │
+    │ goal          ┆ 385    │
+    │ goalie_change ┆ 354    │
+    │ shootout      ┆ 7      │
+    │ penaltyshot   ┆ 3      │
+    └───────────────┴────────┘
 
 
 
@@ -291,8 +296,8 @@ No loader is needed for a quick standings table: the schedule's `winner` column 
     │ Montreal  ┆ 13   │
     │ Boston    ┆ 12   │
     │ Minnesota ┆ 12   │
-    │ New York  ┆ 9    │
     │ Ottawa    ┆ 9    │
+    │ New York  ┆ 9    │
     └───────────┴──────┘
 
 
@@ -319,22 +324,22 @@ Aggregate the skater boxscore across every game to build a points leaderboard �
 
 
     shape: (10, 5)
-    ┌──────────────┬───────────┬───────┬─────────┬────────┐
-    │ first_name   ┆ last_name ┆ goals ┆ assists ┆ points │
-    │ ---          ┆ ---       ┆ ---   ┆ ---     ┆ ---    │
-    │ str          ┆ str       ┆ i32   ┆ i32     ┆ i32    │
-    ╞══════════════╪═══════════╪═══════╪═════════╪════════╡
-    │ Natalie      ┆ Spooner   ┆ 21    ┆ 8       ┆ 29     │
-    │ Marie-Philip ┆ Poulin    ┆ 11    ┆ 14      ┆ 25     │
-    │ Sarah        ┆ Nurse     ┆ 11    ┆ 13      ┆ 24     │
-    │ Alex         ┆ Carpenter ┆ 8     ┆ 15      ┆ 23     │
-    │ Taylor       ┆ Heise     ┆ 9     ┆ 12      ┆ 21     │
-    │ Ella         ┆ Shelton   ┆ 7     ┆ 14      ┆ 21     │
-    │ Emma         ┆ Maltais   ┆ 5     ┆ 16      ┆ 21     │
-    │ Erin         ┆ Ambrose   ┆ 4     ┆ 16      ┆ 20     │
-    │ Brianne      ┆ Jenner    ┆ 9     ┆ 11      ┆ 20     │
-    │ Grace        ┆ Zumwinkle ┆ 12    ┆ 8       ┆ 20     │
-    └──────────────┴───────────┴───────┴─────────┴────────┘
+    ┌──────────────┬─────────────────┬───────┬─────────┬────────┐
+    │ first_name   ┆ last_name       ┆ goals ┆ assists ┆ points │
+    │ ---          ┆ ---             ┆ ---   ┆ ---     ┆ ---    │
+    │ str          ┆ str             ┆ i32   ┆ i32     ┆ i32    │
+    ╞══════════════╪═════════════════╪═══════╪═════════╪════════╡
+    │ Natalie      ┆ Spooner         ┆ 21    ┆ 8       ┆ 29     │
+    │ Marie-Philip ┆ Poulin          ┆ 11    ┆ 14      ┆ 25     │
+    │ Sarah        ┆ Nurse           ┆ 11    ┆ 13      ┆ 24     │
+    │ Alex         ┆ Carpenter       ┆ 8     ┆ 15      ┆ 23     │
+    │ Emma         ┆ Maltais         ┆ 5     ┆ 16      ┆ 21     │
+    │ Taylor       ┆ Heise           ┆ 9     ┆ 12      ┆ 21     │
+    │ Ella         ┆ Shelton         ┆ 7     ┆ 14      ┆ 21     │
+    │ Grace        ┆ Zumwinkle       ┆ 12    ┆ 8       ┆ 20     │
+    │ Brianne      ┆ Jenner          ┆ 9     ┆ 11      ┆ 20     │
+    │ Kendall      ┆ Coyne Schofield ┆ 7     ┆ 13      ┆ 20     │
+    └──────────────┴─────────────────┴───────┴─────────┴────────┘
 
 
 
@@ -626,8 +631,8 @@ top_infractions
     │ Interference   ┆ 53    │
     │ Slashing       ┆ 35    │
     │ Boarding       ┆ 30    │
-    │ Cross Checking ┆ 26    │
     │ Holding        ┆ 26    │
+    │ Cross Checking ┆ 26    │
     └────────────────┴───────┘
 
 
@@ -660,11 +665,11 @@ top_infractions
     │ Abby           ┆ Roque         ┆ 31  ┆ 10        │
     │ Jesse          ┆ Compher       ┆ 25  ┆ 7         │
     │ Megan          ┆ Keller        ┆ 22  ┆ 11        │
-    │ Gabbie         ┆ Hughes        ┆ 20  ┆ 10        │
     │ Allie          ┆ Munroe        ┆ 20  ┆ 10        │
-    │ Renata         ┆ Fast          ┆ 18  ┆ 9         │
+    │ Gabbie         ┆ Hughes        ┆ 20  ┆ 10        │
     │ Sarah          ┆ Nurse         ┆ 18  ┆ 9         │
-    │ Emma           ┆ Maltais       ┆ 18  ┆ 9         │
+    │ Renata         ┆ Fast          ┆ 18  ┆ 9         │
+    │ Sarah          ┆ Bujold        ┆ 18  ┆ 9         │
     └────────────────┴───────────────┴─────┴───────────┘
 
 
@@ -726,14 +731,14 @@ goals_by_period
     ╞═══════════════════╪══════════════════╪═══════╡
     │ Natalie           ┆ Spooner          ┆ 21    │
     │ Grace             ┆ Zumwinkle        ┆ 12    │
-    │ Marie-Philip      ┆ Poulin           ┆ 11    │
     │ Sarah             ┆ Nurse            ┆ 11    │
+    │ Marie-Philip      ┆ Poulin           ┆ 11    │
     │ Laura             ┆ Stacey           ┆ 10    │
     │ Daryl             ┆ Watts            ┆ 10    │
     │ Taylor            ┆ Heise            ┆ 9     │
-    │ Brianne           ┆ Jenner           ┆ 9     │
     │ Gabbie            ┆ Hughes           ┆ 9     │
     │ Michela           ┆ Cava             ┆ 9     │
+    │ Brianne           ┆ Jenner           ┆ 9     │
     └───────────────────┴──────────────────┴───────┘
 
 
@@ -759,22 +764,22 @@ three_stars = pwhl.load_pwhl_three_stars(seasons=[2024])
 
 
     shape: (10, 3)
-    ┌──────────────┬───────────────┬─────────────┐
-    │ first_name   ┆ last_name     ┆ first_stars │
-    │ ---          ┆ ---           ┆ ---         │
-    │ str          ┆ str           ┆ u32         │
-    ╞══════════════╪═══════════════╪═════════════╡
-    │ Natalie      ┆ Spooner       ┆ 7           │
-    │ Nicole       ┆ Hensley       ┆ 4           │
-    │ Kristen      ┆ Campbell      ┆ 4           │
-    │ Alex         ┆ Carpenter     ┆ 3           │
-    │ Gabbie       ┆ Hughes        ┆ 3           │
-    │ Sarah        ┆ Nurse         ┆ 3           │
-    │ Hilary       ┆ Knight        ┆ 3           │
-    │ Marie-Philip ┆ Poulin        ┆ 3           │
-    │ Susanna      ┆ Tapani        ┆ 3           │
-    │ Jade         ┆ Downie-Landry ┆ 2           │
-    └──────────────┴───────────────┴─────────────┘
+    ┌──────────────┬───────────┬─────────────┐
+    │ first_name   ┆ last_name ┆ first_stars │
+    │ ---          ┆ ---       ┆ ---         │
+    │ str          ┆ str       ┆ u32         │
+    ╞══════════════╪═══════════╪═════════════╡
+    │ Natalie      ┆ Spooner   ┆ 7           │
+    │ Kristen      ┆ Campbell  ┆ 4           │
+    │ Nicole       ┆ Hensley   ┆ 4           │
+    │ Sarah        ┆ Nurse     ┆ 3           │
+    │ Hilary       ┆ Knight    ┆ 3           │
+    │ Marie-Philip ┆ Poulin    ┆ 3           │
+    │ Alex         ┆ Carpenter ┆ 3           │
+    │ Gabbie       ┆ Hughes    ┆ 3           │
+    │ Susanna      ┆ Tapani    ┆ 3           │
+    │ Kateřina     ┆ Mrázová   ┆ 2           │
+    └──────────────┴───────────┴─────────────┘
 
 
 
@@ -1065,11 +1070,11 @@ out
     │ ---       ┆ ---       ┆ ---           ┆ ---             │
     │ str       ┆ i64       ┆ i64           ┆ f64             │
     ╞═══════════╪═══════════╪═══════════════╪═════════════════╡
-    │ 115       ┆ 18        ┆ 5             ┆ 84.155844       │
-    │ 76        ┆ 20        ┆ 5             ┆ 78.26087        │
-    │ 89        ┆ 17        ┆ 7             ┆ 72.943981       │
-    │ 100       ┆ 19        ┆ 10            ┆ 66.86217        │
-    │ 20        ┆ 20        ┆ 17            ┆ 64.228368       │
+    │ 115       ┆ 16        ┆ 2             ┆ 74.805195       │
+    │ 76        ┆ 17        ┆ 4             ┆ 66.521739       │
+    │ 89        ┆ 15        ┆ 6             ┆ 64.362336       │
+    │ 100       ┆ 17        ┆ 8             ┆ 59.824047       │
+    │ 20        ┆ 16        ┆ 14            ┆ 51.382694       │
     └───────────┴───────────┴───────────────┴─────────────────┘
 
 
@@ -1134,6 +1139,44 @@ print('type:', type(skater_pd).__name__, '| shape:', skater_pd.shape)
     18        Brianne     Jenner      20
     42           Erin    Ambrose      20
     47          Grace  Zumwinkle      20
+
+
+
+## ⏱️ Shifts, strength state, and shot-level xG
+
+New in 0.0.72: two published PWHL dataset releases. `load_pwhl_shifts` is the
+shift-chart table backing the real on-ice `strength_state` (EV/PP/SH), and
+`load_pwhl_xg_pbp` is the play-by-play enriched with shot-level,
+coordinate-based expected goals:
+
+
+```python
+from sportsdataverse.pwhl import load_pwhl_shifts, load_pwhl_xg_pbp
+
+shifts = load_pwhl_shifts(seasons=[2025])
+xg     = load_pwhl_xg_pbp(seasons=[2025])
+print("shifts:", shifts.shape, "| xg pbp:", xg.shape)
+xg.select(["game_id", "event_type", "shot_distance", "shot_angle", "xg"]).drop_nulls("xg").head()
+```
+
+    shifts: (81546, 14) | xg pbp: (5671, 21)
+
+
+
+
+
+    shape: (5, 5)
+    ┌─────────┬────────────┬───────────────┬────────────┬──────────┐
+    │ game_id ┆ event_type ┆ shot_distance ┆ shot_angle ┆ xg       │
+    │ ---     ┆ ---        ┆ ---           ┆ ---        ┆ ---      │
+    │ i32     ┆ str        ┆ f64           ┆ f64        ┆ f64      │
+    ╞═════════╪════════════╪═══════════════╪════════════╪══════════╡
+    │ 105     ┆ Default    ┆ 38.6912       ┆ 33.3136    ┆ 0.050235 │
+    │ 105     ┆ Default    ┆ 46.5487       ┆ 21.4205    ┆ 0.053222 │
+    │ 105     ┆ Default    ┆ 24.8723       ┆ 17.9129    ┆ 0.082214 │
+    │ 105     ┆ Default    ┆ 36.8333       ┆ 22.6199    ┆ 0.06718  │
+    │ 105     ┆ Default    ┆ 25.5563       ┆ 61.145     ┆ 0.061872 │
+    └─────────┴────────────┴───────────────┴────────────┴──────────┘
 
 
 

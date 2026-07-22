@@ -344,13 +344,13 @@ out
     │ Silas Demary Jr. ┆ 2      ┆ 6' 4"          ┆ 195 lbs        │
     │ Rrezon Elezaj    ┆ 10     ┆ 7' 1"          ┆ 225 lbs        │
     │ Jacob Furphy     ┆ 7      ┆ 6' 6"          ┆ 205 lbs        │
-    │ Alex Karaban     ┆ 11     ┆ 6' 8"          ┆ 230 lbs        │
+    │ Dwayne Koroma    ┆ 4      ┆ 6' 8"          ┆ 212 lbs        │
     │ …                ┆ …      ┆ …              ┆ …              │
-    │ Braylon Mullins  ┆ 24     ┆ 6' 6"          ┆ 196 lbs        │
     │ Uroš Paunovic    ┆ 77     ┆ 6' 3"          ┆ 190 lbs        │
-    │ Tarris Reed Jr.  ┆ 5      ┆ 6' 11"         ┆ 265 lbs        │
     │ Eric Reibe       ┆ 12     ┆ 7' 1"          ┆ 260 lbs        │
     │ Jacob Ross       ┆ 13     ┆ 6' 5"          ┆ 195 lbs        │
+    │ Jayden Ross      ┆ 23     ┆ 6' 7"          ┆ 205 lbs        │
+    │ Malachi Smith    ┆ 0      ┆ 6' 1"          ┆ 180 lbs        │
     └──────────────────┴────────┴────────────────┴────────────────┘
 
 
@@ -398,8 +398,8 @@ print("player box rows:", pbox.shape)
     │ David Jones          ┆ Memphis                 ┆ 32  ┆ 21.8 │
     │ Dalton Knecht        ┆ Tennessee               ┆ 36  ┆ 21.7 │
     │ Tyson Acuff          ┆ E Michigan              ┆ 27  ┆ 21.7 │
-    │ Tucker DeVries       ┆ Drake                   ┆ 34  ┆ 21.6 │
     │ Jordan Sears         ┆ UT Martin               ┆ 32  ┆ 21.6 │
+    │ Tucker DeVries       ┆ Drake                   ┆ 34  ┆ 21.6 │
     └──────────────────────┴─────────────────────────┴─────┴──────┘
 
 
@@ -546,8 +546,8 @@ Same team-box parquet, different question: sum makes and attempts across the sea
     │ Colorado Buffaloes      ┆ 254.0 ┆ 649.0 ┆ 39.1      │
     │ Northwestern Wildcats   ┆ 278.0 ┆ 713.0 ┆ 39.0      │
     │ Baylor Bears            ┆ 301.0 ┆ 773.0 ┆ 38.9      │
-    │ McNeese Cowboys         ┆ 257.0 ┆ 671.0 ┆ 38.3      │
     │ Wright State Raiders    ┆ 218.0 ┆ 569.0 ┆ 38.3      │
+    │ McNeese Cowboys         ┆ 257.0 ┆ 671.0 ┆ 38.3      │
     └─────────────────────────┴───────┴───────┴───────────┘
 
 
@@ -594,8 +594,8 @@ pbox = sdv.mbb.load_mbb_player_boxscore(seasons=[2024])
     │ Ryan Kalkbrenner     ┆ CREI              ┆ 35  ┆ 604.0 ┆ 68.9   │
     │ Cedric Coward        ┆ EWU               ┆ 32  ┆ 494.0 ┆ 68.3   │
     │ Jaylin Williams      ┆ AUB               ┆ 34  ┆ 422.0 ┆ 68.2   │
-    │ Chaz Lanier          ┆ UNF               ┆ 32  ┆ 629.0 ┆ 67.3   │
     │ Zach Edey            ┆ PUR               ┆ 39  ┆ 983.0 ┆ 67.3   │
+    │ Chaz Lanier          ┆ UNF               ┆ 32  ┆ 629.0 ┆ 67.3   │
     └──────────────────────┴───────────────────┴─────┴───────┴────────┘
 
 
@@ -627,6 +627,8 @@ out
 
     ✅ conferences
     some conferences: ['NCAA Division I', 'Non-NCAA Division I']
+
+
     ✅ standings 2024
 
 
@@ -763,7 +765,7 @@ print("season pbp rows:", season_pbp.shape)
     .head(10))
 ```
 
-    season pbp rows: (2004997, 56)
+    season pbp rows: (2004997, 58)
 
 
 
@@ -776,26 +778,26 @@ print("season pbp rows:", season_pbp.shape)
     │ i32       ┆ ---                ┆ ---               ┆ str               ┆ i32        ┆ i32        │
     │           ┆ str                ┆ str               ┆                   ┆            ┆            │
     ╞═══════════╪════════════════════╪═══════════════════╪═══════════════════╪════════════╪════════════╡
-    │ 401638645 ┆ 2nd Half           ┆ 1:22              ┆ Zach Edey made    ┆ 73         ┆ 60         │
-    │           ┆                    ┆                   ┆ Dunk. Assisted …  ┆            ┆            │
-    │ 401638645 ┆ 2nd Half           ┆ 0:45              ┆ Donovan Clingan   ┆ 75         ┆ 60         │
-    │           ┆                    ┆                   ┆ made Layup. As…   ┆            ┆            │
-    │ 401638643 ┆ 2nd Half           ┆ 1:27              ┆ Jayden Taylor     ┆ 63         ┆ 47         │
-    │           ┆                    ┆                   ┆ made Layup.       ┆            ┆            │
-    │ 401638643 ┆ 2nd Half           ┆ 0:45              ┆ Jayden Taylor     ┆ 63         ┆ 50         │
-    │           ┆                    ┆                   ┆ made Three Point… ┆            ┆            │
-    │ 401638644 ┆ 2nd Half           ┆ 1:07              ┆ Tristen Newton    ┆ 83         ┆ 68         │
-    │           ┆                    ┆                   ┆ made Three Poin…  ┆            ┆            │
-    │ 401638644 ┆ 2nd Half           ┆ 0:55              ┆ Grant Nelson made ┆ 83         ┆ 70         │
-    │           ┆                    ┆                   ┆ Layup.            ┆            ┆            │
-    │ 401638644 ┆ 2nd Half           ┆ 0:33              ┆ Cam Spencer made  ┆ 86         ┆ 70         │
+    │ 401573353 ┆ 2nd Half           ┆ 0:19              ┆ Aanen Moody made  ┆ 89         ┆ 79         │
     │           ┆                    ┆                   ┆ Three Point J…    ┆            ┆            │
-    │ 401638644 ┆ 2nd Half           ┆ 0:20              ┆ Grant Nelson made ┆ 86         ┆ 72         │
-    │           ┆                    ┆                   ┆ Two Point Ti…     ┆            ┆            │
-    │ 401641124 ┆ 2nd Half           ┆ 1:07              ┆ Al-Amir Dawes     ┆ 77         ┆ 77         │
-    │           ┆                    ┆                   ┆ made Three Point… ┆            ┆            │
-    │ 401641124 ┆ 2nd Half           ┆ 0:20              ┆ Dre Davis made    ┆ 79         ┆ 77         │
-    │           ┆                    ┆                   ┆ Layup.            ┆            ┆            │
+    │ 401573354 ┆ 2nd Half           ┆ 0:20              ┆ Terren Frank made ┆ 48         ┆ 62         │
+    │           ┆                    ┆                   ┆ Jumper.           ┆            ┆            │
+    │ 401573355 ┆ 2nd Half           ┆ 0:04              ┆ Miguel Tomley     ┆ 75         ┆ 76         │
+    │           ┆                    ┆                   ┆ made Free Throw.  ┆            ┆            │
+    │ 401573355 ┆ 2nd Half           ┆ 0:04              ┆ Miguel Tomley     ┆ 76         ┆ 76         │
+    │           ┆                    ┆                   ┆ made Free Throw.  ┆            ┆            │
+    │ 401573355 ┆ OT                 ┆ 1:16              ┆ Carson Basham     ┆ 83         ┆ 79         │
+    │           ┆                    ┆                   ┆ made Free Throw.  ┆            ┆            │
+    │ 401573355 ┆ OT                 ┆ 0:51              ┆ Trent McLaughlin  ┆ 83         ┆ 82         │
+    │           ┆                    ┆                   ┆ made Three Po…    ┆            ┆            │
+    │ 401573355 ┆ OT                 ┆ 0:29              ┆ Maleek Arington   ┆ 84         ┆ 82         │
+    │           ┆                    ┆                   ┆ made Free Thro…   ┆            ┆            │
+    │ 401573355 ┆ OT                 ┆ 0:06              ┆ Liam Lloyd made   ┆ 84         ┆ 83         │
+    │           ┆                    ┆                   ┆ Free Throw.       ┆            ┆            │
+    │ 401573355 ┆ OT                 ┆ 0:06              ┆ Liam Lloyd made   ┆ 84         ┆ 84         │
+    │           ┆                    ┆                   ┆ Free Throw.       ┆            ┆            │
+    │ 401573355 ┆ 2OT                ┆ 0:42              ┆ Jayden Jackson    ┆ 88         ┆ 90         │
+    │           ┆                    ┆                   ┆ made Layup.       ┆            ┆            │
     └───────────┴────────────────────┴───────────────────┴───────────────────┴────────────┴────────────┘
 
 
@@ -984,6 +986,56 @@ print("season schedule rows:", schedule_2024.shape)
     └────────────┴───────────────────────────┴───────────────────────┴────────────┴────────────┴───────┘
 
 
+
+## 🏛️ stats.ncaa.org — the `ncaa_mbb_*` family (bigballR parity)
+
+New in 0.0.72: a 16-function port of bigballR wired to **stats.ncaa.org** —
+schedules, rosters, box scores, play-by-play, lineups, possessions, on/off
+splits, and shot locations (`ncaa_mbb_team_schedule`, `ncaa_mbb_game_pbp`,
+`ncaa_mbb_lineups`, `ncaa_mbb_possessions`, `ncaa_mbb_on_off`, ...). The
+`(team, season) → stats.ncaa.org id` crosswalk ships with the package, so it
+works offline:
+
+
+```python
+from sportsdataverse.mbb import ncaa_mbb_team_ids
+
+ids = ncaa_mbb_team_ids()
+print("team-id crosswalk:", ids.shape)
+ids.filter(pl.col("season") == "2025-26").head()
+```
+
+    team-id crosswalk: (6006, 4)
+
+
+
+
+
+    shape: (5, 4)
+    ┌────────────────────┬────────────┬────────┬─────────┐
+    │ team               ┆ conference ┆ id     ┆ season  │
+    │ ---                ┆ ---        ┆ ---    ┆ ---     │
+    │ str                ┆ str        ┆ i64    ┆ str     │
+    ╞════════════════════╪════════════╪════════╪═════════╡
+    │ A&M-Corpus Christi ┆ Southland  ┆ 609609 ┆ 2025-26 │
+    │ Abilene Christian  ┆ WAC        ┆ 609614 ┆ 2025-26 │
+    │ Air Force          ┆ MWC        ┆ 609502 ┆ 2025-26 │
+    │ Akron              ┆ MAC        ┆ 609541 ┆ 2025-26 │
+    │ Alabama            ┆ SEC        ┆ 609617 ┆ 2025-26 │
+    └────────────────────┴────────────┴────────┴─────────┘
+
+
+
+Live game fetches go through the shared proxy-bound NCAA fetch layer
+(stats.ncaa.org is IP-ban-happy — configure `SDV_PY_NCAA_*` /
+`SDV_PY_PROXYBONANZA_*` before fetching):
+
+```python
+from sportsdataverse.mbb import ncaa_mbb_game_pbp, ncaa_mbb_lineups
+
+pbp     = ncaa_mbb_game_pbp(game_id)      # one row per event
+lineups = ncaa_mbb_lineups(game_id)       # five-player stints
+```
 
 ## 🎉 Where to next
 

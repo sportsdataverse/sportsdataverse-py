@@ -479,7 +479,7 @@ standings = safe('2025 standings', lambda: wbb.espn_wbb_standings(season=SEASON)
     │ State Jackrabbits ┆                  ┆      ┆        ┆             ┆            ┆                │
     │ James Madison     ┆ belt             ┆ 18   ┆ 0      ┆ 1.0         ┆ 1358.0     ┆ 1072.0         │
     │ Dukes             ┆                  ┆      ┆        ┆             ┆            ┆                │
-    │ Grand Canyon      ┆ wac              ┆ 16   ┆ 0      ┆ 1.0         ┆ 1219.0     ┆ 894.0          │
+    │ Grand Canyon      ┆ UAC              ┆ 16   ┆ 0      ┆ 1.0         ┆ 1219.0     ┆ 894.0          │
     │ Lopes             ┆                  ┆      ┆        ┆             ┆            ┆                │
     │ Green Bay Phoenix ┆ hor              ┆ 19   ┆ 1      ┆ 0.95        ┆ 1408.0     ┆ 1037.0         │
     │ Fairfield Stags   ┆ maac             ┆ 19   ┆ 1      ┆ 0.95        ┆ 1498.0     ┆ 1034.0         │
@@ -658,16 +658,16 @@ top_scorers
     │ ---        ┆ ---                  ┆ ---                     ┆ ---   ┆ ---          ┆ ---  │
     │ i32        ┆ str                  ┆ str                     ┆ u32   ┆ i32          ┆ f64  │
     ╞════════════╪══════════════════════╪═════════════════════════╪═══════╪══════════════╪══════╡
-    │ 5177257    ┆ Charlotte Climenhage ┆ Nevada                  ┆ 32    ┆ 0            ┆ null │
-    │ 4899637    ┆ Caroline de Klauman  ┆ Manhattan               ┆ 30    ┆ 0            ┆ null │
-    │ 5175868    ┆ Montaya Dew          ┆ Arizona                 ┆ 34    ┆ 0            ┆ null │
-    │ 5105722    ┆ Jaylah Robinson      ┆ Arizona St              ┆ 31    ┆ 0            ┆ null │
-    │ 5175847    ┆ Emma Larios          ┆ High Point              ┆ 32    ┆ 0            ┆ null │
-    │ 5109401    ┆ Tiara Bellamy        ┆ Saint Peter's           ┆ 30    ┆ 0            ┆ null │
-    │ 4705035    ┆ Diamond Hunter       ┆ Southern                ┆ 30    ┆ 0            ┆ null │
-    │ 4704165    ┆ Lindsey Syrek        ┆ NJIT                    ┆ 30    ┆ 0            ┆ null │
-    │ 4594867    ┆ Margarita Satini     ┆ Weber St                ┆ 33    ┆ 0            ┆ null │
-    │ 5175569    ┆ Crystianna Whitehead ┆ AR-Pine Bluff           ┆ 33    ┆ 0            ┆ null │
+    │ 5125264    ┆ Jana El Alfy         ┆ UConn                   ┆ 39    ┆ 0            ┆ null │
+    │ 5107554    ┆ Ella Okubasu         ┆ Binghamton              ┆ 31    ┆ 0            ┆ null │
+    │ 4704431    ┆ Dayna Tirado         ┆ Fairfield               ┆ 33    ┆ 0            ┆ null │
+    │ 4595339    ┆ Keeli Burton-Oliver  ┆ Montana                 ┆ 33    ┆ 0            ┆ null │
+    │ 5176367    ┆ Emily Montes         ┆ Columbia                ┆ 30    ┆ 0            ┆ null │
+    │ 5174515    ┆ Alana Scott          ┆ Bryant                  ┆ 30    ┆ 0            ┆ null │
+    │ 4900069    ┆ Clare Chambers       ┆ Miami OH                ┆ 29    ┆ 0            ┆ null │
+    │ 4705316    ┆ Destiny Howell       ┆ Howard                  ┆ 31    ┆ 0            ┆ null │
+    │ 5177057    ┆ Fantasia James       ┆ FIU                     ┆ 33    ┆ 0            ┆ null │
+    │ 5174353    ┆ Alyssa Lewis         ┆ NC State                ┆ 38    ┆ 0            ┆ null │
     └────────────┴──────────────────────┴─────────────────────────┴───────┴──────────────┴──────┘
 
 
@@ -790,16 +790,16 @@ three_pt
     │ ---     ┆ ---                            ┆ ---   ┆ --- ┆ ---  ┆ ---       │
     │ i32     ┆ str                            ┆ u32   ┆ i32 ┆ i32  ┆ f64       │
     ╞═════════╪════════════════════════════════╪═══════╪═════╪══════╪═══════════╡
-    │ 84      ┆ Indiana Hoosiers               ┆ 32    ┆ 268 ┆ 677  ┆ 39.6      │
     │ 2250    ┆ Gonzaga Bulldogs               ┆ 36    ┆ 336 ┆ 849  ┆ 39.6      │
+    │ 84      ┆ Indiana Hoosiers               ┆ 32    ┆ 268 ┆ 677  ┆ 39.6      │
     │ 2579    ┆ South Carolina Gamecocks       ┆ 38    ┆ 253 ┆ 640  ┆ 39.5      │
     │ 149     ┆ Montana Lady Griz              ┆ 33    ┆ 357 ┆ 927  ┆ 38.5      │
-    │ 66      ┆ Iowa State Cyclones            ┆ 33    ┆ 285 ┆ 745  ┆ 38.3      │
     │ 2086    ┆ Butler Bulldogs                ┆ 32    ┆ 266 ┆ 694  ┆ 38.3      │
+    │ 66      ┆ Iowa State Cyclones            ┆ 33    ┆ 285 ┆ 745  ┆ 38.3      │
     │ 2571    ┆ South Dakota State Jackrabbits ┆ 33    ┆ 223 ┆ 586  ┆ 38.1      │
     │ 257     ┆ Richmond Spiders               ┆ 35    ┆ 320 ┆ 840  ┆ 38.1      │
     │ 2294    ┆ Iowa Hawkeyes                  ┆ 39    ┆ 426 ┆ 1132 ┆ 37.6      │
-    │ 127     ┆ Michigan State Spartans        ┆ 31    ┆ 283 ┆ 757  ┆ 37.4      │
+    │ 213     ┆ Penn State Lady Lions          ┆ 35    ┆ 294 ┆ 787  ┆ 37.4      │
     └─────────┴────────────────────────────────┴───────┴─────┴──────┴───────────┘
 
 
@@ -939,10 +939,10 @@ dd
     │ 4433403    ┆ Caitlin Clark        ┆ Iowa                    ┆ 24             │
     │ 4898966    ┆ Adrianna Smith       ┆ Maine                   ┆ 22             │
     │ 4684384    ┆ Aneesah Morrow       ┆ LSU                     ┆ 22             │
-    │ 4898391    ┆ Phillipina Kyei      ┆ Oregon                  ┆ 20             │
-    │ 4433404    ┆ Cameron Brink        ┆ Stanford                ┆ 20             │
     │ 4899516    ┆ Akasha Davis         ┆ Lamar                   ┆ 20             │
+    │ 4898391    ┆ Phillipina Kyei      ┆ Oregon                  ┆ 20             │
     │ 5108550    ┆ Serah Williams       ┆ Wisconsin               ┆ 20             │
+    │ 4433404    ┆ Cameron Brink        ┆ Stanford                ┆ 20             │
     └────────────┴──────────────────────┴─────────────────────────┴────────────────┘
 
 
@@ -1071,6 +1071,51 @@ play_mix
     9   OfficialTVTimeOut   24582
 
 
+
+## 🏛️ stats.ncaa.org — the `ncaa_wbb_*` family (bigballR parity)
+
+New in 0.0.72: a 16-function port of bigballR/wbigballR wired to
+**stats.ncaa.org** — schedules, rosters, box scores, play-by-play, lineups,
+possessions, on/off splits, and shot locations (`ncaa_wbb_team_schedule`,
+`ncaa_wbb_game_pbp`, `ncaa_wbb_lineups`, `ncaa_wbb_possessions`,
+`ncaa_wbb_on_off`, ...). The `(team, season) → stats.ncaa.org id` crosswalk
+ships with the package, so it works offline:
+
+
+```python
+from sportsdataverse.wbb import ncaa_wbb_team_ids
+
+ids = ncaa_wbb_team_ids()
+print("team-id crosswalk:", ids.shape)
+ids.filter(pl.col("season") == "2025-26").head()
+```
+
+    team-id crosswalk: (5613, 4)
+
+
+
+
+
+    shape: (0, 4)
+    ┌──────┬────────────┬─────┬────────┐
+    │ team ┆ conference ┆ id  ┆ season │
+    │ ---  ┆ ---        ┆ --- ┆ ---    │
+    │ str  ┆ str        ┆ i64 ┆ str    │
+    ╞══════╪════════════╪═════╪════════╡
+    └──────┴────────────┴─────┴────────┘
+
+
+
+Live game fetches go through the shared proxy-bound NCAA fetch layer
+(stats.ncaa.org is IP-ban-happy — configure `SDV_PY_NCAA_*` /
+`SDV_PY_PROXYBONANZA_*` before fetching):
+
+```python
+from sportsdataverse.wbb import ncaa_wbb_game_pbp, ncaa_wbb_lineups
+
+pbp     = ncaa_wbb_game_pbp(game_id)      # one row per event
+lineups = ncaa_wbb_lineups(game_id)       # five-player stints
+```
 
 ## 🎉 Where to go next
 
