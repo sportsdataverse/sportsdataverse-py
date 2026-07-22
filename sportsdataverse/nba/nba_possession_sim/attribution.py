@@ -199,22 +199,47 @@ class PlayerAttribution:
     Attributes:
         home: Home team's shares.
         away: Away team's shares.
+        ft_pct: Optional shooter-conditional free-throw rates
+            (``{player_id: shrunk FT%}``). OPT-IN: when present, the
+            expanded walk samples the FT shooter BEFORE resolving makes and
+            uses their rate — shooter identity then AFFECTS the outcome
+            stream, deliberately trading the attribution-only-credits
+            contract (exact star-out redistribution) for FT realism.
     """
 
     home: TeamAttribution
     away: TeamAttribution
+    ft_pct: Optional[Dict[int, float]] = None
 
     @classmethod
-    def from_logs(cls, logs: pl.DataFrame, *, home_team_id: int, away_team_id: int) -> "PlayerAttribution":
+    def from_logs(
+        cls,
+        logs: pl.DataFrame,
+        *,
+        home_team_id: int,
+        away_team_id: int,
+        with_ft_pct: bool = False,
+        ft_shrinkage: float = 10.0,
+    ) -> "PlayerAttribution":
         """Build both teams from one logs frame.
 
         Args:
             logs: ``player_game_logs_from_pbp`` output with ``team_id``.
             home_team_id: Home team.
             away_team_id: Away team.
+            with_ft_pct: Fit shooter-conditional FT rates from the logs'
+                ``ftm``/``fta`` (empirical-Bayes shrunk toward the pooled
+                league rate with ``ft_shrinkage`` pseudo-attempts).
+                Default off — see the ``ft_pct`` attribute for the
+                contract this trades away.
+            ft_shrinkage: Pseudo-attempt weight of the pooled prior.
 
         Returns:
             The :class:`PlayerAttribution` pair.
+
+        Raises:
+            ValueError: When ``with_ft_pct`` is requested but the logs
+                carry no ``ftm`` column.
 
         Example:
             Quick start::
@@ -228,9 +253,21 @@ class PlayerAttribution:
                 ens = simulate_ensemble(shelf, n_sim=500, seed=7, attribution=att)
                 pts_dist = ens["player_points"]  # {player_id: np.ndarray(n_sim)}
         """
+        ft_pct: Optional[Dict[int, float]] = None
+        if with_ft_pct:
+            if "ftm" not in logs.columns:
+                raise ValueError("with_ft_pct needs an 'ftm' column in the logs")
+            pooled = logs.select(pl.col("ftm").sum().alias("m"), pl.col("fta").sum().alias("a")).to_dicts()[0]
+            league = float(pooled["m"] / pooled["a"]) if pooled["a"] else 0.78
+            per_player = logs.group_by("player_id").agg(pl.col("ftm").sum(), pl.col("fta").sum())
+            ft_pct = {
+                int(row["player_id"]): float((row["ftm"] + ft_shrinkage * league) / (row["fta"] + ft_shrinkage))
+                for row in per_player.iter_rows(named=True)
+            }
         return cls(
             home=TeamAttribution.from_logs(logs, home_team_id),
             away=TeamAttribution.from_logs(logs, away_team_id),
+            ft_pct=ft_pct,
         )
 
     def sample(self, offense_is_home: bool, outcome: str, rng: np.random.Generator) -> int:
@@ -248,6 +285,7 @@ class PlayerAttribution:
         return PlayerAttribution(
             home=self.home.without(home_unavailable) if home_unavailable else self.home,
             away=self.away.without(away_unavailable) if away_unavailable else self.away,
+            ft_pct=self.ft_pct,
         )
 
     def all_player_ids(self) -> List[int]:
@@ -348,7 +386,11 @@ def simulate_player_boxscores(
                     elif event == "dreb":
                         side = attribution.away if offense_is_home else attribution.home
                         stats["reb"][side.sample_rebounder(rng)][i] += 1
-                clock -= float(np.clip(rng.uniform(0.5, 1.5) * shelf.mean_possession_seconds, 4.0, 24.0))
+                if shelf.pace_rates is not None:
+                    pace_base = shelf.pace_for(shelf.key_for(diff, period, clock))
+                else:
+                    pace_base = shelf.mean_possession_seconds
+                clock -= float(np.clip(rng.uniform(0.5, 1.5) * pace_base, 4.0, 24.0))
                 offense_is_home = not offense_is_home
             if period >= league_rules.periods and home != away:
                 break

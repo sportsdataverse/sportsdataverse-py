@@ -583,7 +583,12 @@ def simulate_game_actions(
                     _render_free_throws(shooter, made, total)
                     index += 1  # consume ft_made_k
                 index += 1
-            clock -= float(np.clip(game_rng.uniform(0.5, 1.5) * shelf.mean_possession_seconds, 4.0, 24.0))
+            if shelf.pace_rates is not None:
+                render_diff = float(score["home"] - score["away"] if offense_is_home else score["away"] - score["home"])
+                pace_base = shelf.pace_for(shelf.key_for(render_diff, period, clock))
+            else:
+                pace_base = shelf.mean_possession_seconds
+            clock -= float(np.clip(game_rng.uniform(0.5, 1.5) * pace_base, 4.0, 24.0))
             offense_is_home = not offense_is_home
         _period_row("end")
         if period >= rules.periods and score["home"] != score["away"]:

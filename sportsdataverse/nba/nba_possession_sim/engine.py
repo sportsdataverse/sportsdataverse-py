@@ -115,9 +115,13 @@ def _finish_game(
                         "score_away": st.score_away,
                     }
                 )
+            if shelf.pace_rates is not None:
+                pace_base = shelf.pace_for(shelf.key_for(diff, st.period, st.clock_seconds))
+            else:
+                pace_base = shelf.mean_possession_seconds
             burn = float(
                 np.clip(
-                    rng.uniform(0.5, 1.5) * shelf.mean_possession_seconds,
+                    rng.uniform(0.5, 1.5) * pace_base,
                     MIN_POSSESSION_SECONDS,
                     MAX_POSSESSION_SECONDS,
                 )

@@ -94,9 +94,16 @@ class ReboundNode:
 class FreeThrowNode:
     """Resolves a free-throw trip into made points."""
 
-    def sample(self, shelf: Shelf, n_attempts: int, rng: np.random.Generator) -> int:
-        """Binomial trip makes at the shelf's empirical FT percentage."""
-        return int(rng.binomial(n_attempts, shelf.ft_pct))
+    def sample(
+        self,
+        shelf: Shelf,
+        n_attempts: int,
+        rng: np.random.Generator,
+        p_make: Optional[float] = None,
+    ) -> int:
+        """Binomial trip makes — shooter-conditional when ``p_make`` is
+        given (the fitted FreeThrowNode), else the shelf's empirical rate."""
+        return int(rng.binomial(n_attempts, shelf.ft_pct if p_make is None else p_make))
 
 
 def simulate_possession(

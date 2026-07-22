@@ -242,9 +242,10 @@ def simulate_possession_expanded(
                 rng=np.random.default_rng(7),
             )
     """
-    aux = aux if aux is not None else dict(shelf.aux or DEFAULT_AUX)
     state = PossessionState(score_diff=score_diff, period=period, clock_seconds=clock_seconds)
     key = shelf.key_for(score_diff, period, clock_seconds)
+    if aux is None:
+        aux = shelf.aux_for(key) if shelf.aux or shelf.aux_rates else dict(DEFAULT_AUX)
 
     play_type = PlayTypeNode()
     shot_result = ShotResultNode()
@@ -255,6 +256,13 @@ def simulate_possession_expanded(
     rebound = ReboundNode()
     ft = FreeThrowNode()
     usage = UsageNode()
+
+    # shooter-conditional FT is OPT-IN via attribution.ft_pct: sampling the
+    # shooter before resolving makes changes both the draw order and the
+    # outcome stream, deliberately breaking the attribution-only-credits
+    # contract (and the exact star-out redistribution that rests on it)
+    shooter_ft = attribution is not None and getattr(attribution, "ft_pct", None)
+    pre_scorer: Optional[int] = None
 
     state.events.extend(side.sample(aux, rng))
     terminal: str = "tov"
@@ -267,7 +275,12 @@ def simulate_possession_expanded(
             break
         if attempt.startswith("ft_trip_"):
             n_attempts = int(attempt.rsplit("_", 1)[1])
-            made = ft.sample(shelf, n_attempts, rng)
+            p_make: Optional[float] = None
+            if shooter_ft:
+                pre_scorer = usage.sample(attribution, offense_is_home, attempt, rng)
+                if pre_scorer is not None:
+                    p_make = attribution.ft_pct.get(pre_scorer)  # type: ignore[union-attr]
+            made = ft.sample(shelf, n_attempts, rng, p_make=p_make)
             state.points += made
             state.events.extend([attempt, f"ft_made_{made}"])
             terminal = attempt
@@ -278,7 +291,12 @@ def simulate_possession_expanded(
             state.events.extend([f"{attempt}_make", "make"])
             terminal = f"{attempt}_make"
             if and1.sample(aux, rng):
-                bonus = ft.sample(shelf, 1, rng)
+                bonus_p: Optional[float] = None
+                if shooter_ft:
+                    pre_scorer = usage.sample(attribution, offense_is_home, terminal, rng)
+                    if pre_scorer is not None:
+                        bonus_p = attribution.ft_pct.get(pre_scorer)  # type: ignore[union-attr]
+                bonus = ft.sample(shelf, 1, rng, p_make=bonus_p)
                 state.points += bonus
                 state.events.extend(["and1", f"ft_made_{bonus}"])
             break
@@ -292,7 +310,10 @@ def simulate_possession_expanded(
         state.events.append("dreb")
         break
 
-    scorer = usage.sample(attribution, offense_is_home, terminal, rng) if state.points > 0 else None
+    if state.points > 0:
+        scorer = pre_scorer if pre_scorer is not None else usage.sample(attribution, offense_is_home, terminal, rng)
+    else:
+        scorer = None
     return state.points, state.events, scorer
 
 

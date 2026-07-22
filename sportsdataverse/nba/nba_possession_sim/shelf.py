@@ -324,6 +324,11 @@ class Shelf:
             domain — a learned-keyed shelf serves the global rate.
         keyer: Optional learned gamestate keyer the shelf was built with;
             ``key_for`` routes through it so lookups match the build keys.
+        aux_rates: Optional per-key expanded-node rate overrides
+            (``{key: {rate_name: value}}``) — the fitted aux nodes;
+            ``aux_for`` overlays them on the global ``aux`` dict.
+        pace_rates: Optional per-key mean possession seconds (the fitted
+            pace node); ``pace_for`` falls back to the global scalar.
     """
 
     outcome_pmfs: Dict[str, Dict[str, float]]
@@ -335,6 +340,8 @@ class Shelf:
     oreb_rates: Optional[Dict[str, float]] = None
     aux: Optional[Dict[str, float]] = None
     keyer: Optional[LearnedGamestateKeyer] = None
+    aux_rates: Optional[Dict[str, Dict[str, float]]] = None
+    pace_rates: Optional[Dict[str, float]] = None
     _hits: int = dataclasses.field(default=0, repr=False)
     _fallbacks: int = dataclasses.field(default=0, repr=False)
 
@@ -356,6 +363,38 @@ class Shelf:
         if self.keyer is not None:
             return self.keyer.key(score_diff, period, clock_seconds)
         return gamestate_key(score_diff, period, clock_seconds)
+
+    def aux_for(self, key: str) -> Dict[str, float]:
+        """Expanded-node rates for a gamestate: fitted per-key overlays on
+        the global ``aux`` dict (identical to the global dict when no
+        per-key aux was fitted — the empirical default path).
+
+        Args:
+            key: The gamestate key.
+
+        Returns:
+            The rate dict the expanded nodes consume.
+        """
+        base = dict(self.aux) if self.aux else {}
+        if self.aux_rates is not None:
+            base.update(self.aux_rates.get(key, {}))
+        return base
+
+    def pace_for(self, key: str) -> float:
+        """Mean possession seconds for a gamestate (fitted per-key pace
+        when present, else the global scalar).
+
+        Args:
+            key: The gamestate key.
+
+        Returns:
+            The clock-burn base for this state.
+        """
+        if self.pace_rates is not None:
+            rate = self.pace_rates.get(key)
+            if rate is not None:
+                return rate
+        return self.mean_possession_seconds
 
     def get_pmf(self, key: str) -> Tuple[Dict[str, float], bool]:
         """Look up a gamestate's outcome PMF, falling back to the global PMF.
@@ -517,6 +556,14 @@ def shelf_to_parquet(shelf: Shelf, path: Union[str, Path]) -> Path:
     }
     if shelf.oreb_rates is not None:
         rows.extend({"key": key, "outcome": "__oreb__", "prob": rate} for key, rate in shelf.oreb_rates.items())
+    if shelf.pace_rates is not None:
+        rows.extend({"key": key, "outcome": "__pace__", "prob": rate} for key, rate in shelf.pace_rates.items())
+    if shelf.aux_rates is not None:
+        rows.extend(
+            {"key": key, "outcome": f"__aux__{name}", "prob": value}
+            for key, rates in shelf.aux_rates.items()
+            for name, value in rates.items()
+        )
     rows.append({"key": _META_KEY, "outcome": json.dumps(meta, sort_keys=True), "prob": None})
     out = Path(path)
     pl.DataFrame(rows).write_parquet(out)
@@ -539,7 +586,19 @@ def shelf_from_parquet(path: Union[str, Path]) -> Shelf:
     oreb_rates: Optional[Dict[str, float]] = None
     if oreb_frame.height:
         oreb_rates = {row["key"]: float(row["prob"]) for row in oreb_frame.to_dicts()}
-    pmf_rows = frame.filter((pl.col("key") != _META_KEY) & (pl.col("outcome") != "__oreb__"))
+    pace_frame = frame.filter(pl.col("outcome") == "__pace__")
+    pace_rates: Optional[Dict[str, float]] = None
+    if pace_frame.height:
+        pace_rates = {row["key"]: float(row["prob"]) for row in pace_frame.to_dicts()}
+    aux_frame = frame.filter(pl.col("outcome").str.starts_with("__aux__"))
+    aux_rates: Optional[Dict[str, Dict[str, float]]] = None
+    if aux_frame.height:
+        aux_rates = {}
+        for row in aux_frame.to_dicts():
+            aux_rates.setdefault(row["key"], {})[str(row["outcome"])[len("__aux__") :]] = float(row["prob"])
+    pmf_rows = frame.filter(
+        (pl.col("key") != _META_KEY) & (pl.col("outcome").str.starts_with("__") == False)  # noqa: E712
+    )
     pmfs: Dict[str, Dict[str, float]] = {}
     for row in pmf_rows.to_dicts():
         pmfs.setdefault(row["key"], {})[row["outcome"]] = float(row["prob"])
@@ -553,6 +612,8 @@ def shelf_from_parquet(path: Union[str, Path]) -> Shelf:
         meta=dict(meta["meta"]),
         oreb_rates=oreb_rates,
         aux=dict(meta["aux"]) if meta.get("aux") else None,
+        pace_rates=pace_rates,
+        aux_rates=aux_rates,
     )
 
 
@@ -600,6 +661,7 @@ def player_box_from_boxscorev3(payload: "Dict[str, Any]") -> pl.DataFrame:
                     "fga": int(stats.get("fieldGoalsAttempted") or 0),
                     "fg3a": int(stats.get("threePointersAttempted") or 0),
                     "fta": int(stats.get("freeThrowsAttempted") or 0),
+                    "ftm": int(stats.get("freeThrowsMade") or 0),
                     "pts": int(stats.get("points") or 0),
                     "tov": int(stats.get("turnovers") or 0),
                     "reb": int(stats.get("reboundsTotal") or 0),
@@ -613,6 +675,7 @@ def player_box_from_boxscorev3(payload: "Dict[str, Any]") -> pl.DataFrame:
         "fga": pl.Int64,
         "fg3a": pl.Int64,
         "fta": pl.Int64,
+        "ftm": pl.Int64,
         "pts": pl.Int64,
         "tov": pl.Int64,
         "reb": pl.Int64,
@@ -661,6 +724,7 @@ def player_game_logs_from_pbp(actions: pl.DataFrame) -> pl.DataFrame:
         .group_by(["game_id", "person_id"])
         .agg(
             pl.len().alias("fta"),
+            pl.col("_ft_made").cast(pl.Int64).sum().alias("ftm"),
             (pl.col("_ft_made").cast(pl.Int64) * pl.col("_ft_value")).sum().alias("ft_pts"),
         )
     )
@@ -722,10 +786,12 @@ def player_game_logs_from_pbp(actions: pl.DataFrame) -> pl.DataFrame:
         .join(reb_stats, on=["game_id", "person_id"], how="full", coalesce=True)
         .join(ast_stats, on=["game_id", "person_id"], how="full", coalesce=True)
         .join(team_map, on=["game_id", "person_id"], how="left")
-        .with_columns([pl.col(c).fill_null(0) for c in ("fga", "fg3a", "pts_fg", "fta", "ft_pts", "tov", "reb", "ast")])
+        .with_columns(
+            [pl.col(c).fill_null(0) for c in ("fga", "fg3a", "pts_fg", "fta", "ftm", "ft_pts", "tov", "reb", "ast")]
+        )
         .with_columns((pl.col("pts_fg") + pl.col("ft_pts")).alias("pts"))
         .rename({"person_id": "player_id"})
-        .select("game_id", "player_id", "team_id", "fga", "fg3a", "fta", "pts", "tov", "reb", "ast")
+        .select("game_id", "player_id", "team_id", "fga", "fg3a", "fta", "ftm", "pts", "tov", "reb", "ast")
         .sort("game_id", "player_id")
     )
     return logs

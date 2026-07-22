@@ -236,7 +236,7 @@ def player_game_logs_from_espn(
         if not raw.isdigit():
             return
         pid = int(raw)
-        stats.setdefault(pid, {"fga": 0, "fg3a": 0, "fta": 0, "pts": 0, "tov": 0, "reb": 0, "ast": 0})
+        stats.setdefault(pid, {"fga": 0, "fg3a": 0, "fta": 0, "ftm": 0, "pts": 0, "tov": 0, "reb": 0, "ast": 0})
         stats[pid][stat] += amount
         if team_id.isdigit() and pid not in teams:
             teams[pid] = int(team_id)
@@ -253,6 +253,7 @@ def player_game_logs_from_espn(
         if "Free Throw" in type_text:
             _bump(first, team_id, "fta")
             if scoring:
+                _bump(first, team_id, "ftm")
                 _bump(first, team_id, "pts", score_value)
         elif play.get("shootingPlay"):
             _bump(first, team_id, "fga")
@@ -275,6 +276,7 @@ def player_game_logs_from_espn(
         "fga": pl.Int64,
         "fg3a": pl.Int64,
         "fta": pl.Int64,
+        "ftm": pl.Int64,
         "pts": pl.Int64,
         "tov": pl.Int64,
         "reb": pl.Int64,

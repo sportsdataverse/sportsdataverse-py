@@ -52,7 +52,9 @@ from sportsdataverse.nba.nba_possession_sim.keygen import (
     score_diff_bin,
 )
 from sportsdataverse.nba.nba_possession_sim.node_models import (
+    fit_aux_node_models,
     fit_outcome_node_model,
+    fit_pace_node,
     fit_rebound_node_model,
     models_to_shelf,
 )
@@ -115,7 +117,9 @@ __all__ = [
     "aux_params_from_espn",
     "aux_params_from_pbp",
     "clock_bin",
+    "fit_aux_node_models",
     "fit_outcome_node_model",
+    "fit_pace_node",
     "fit_rebound_node_model",
     "gamestate_key",
     "in_game_win_prob",
