@@ -14,8 +14,9 @@ leakage-safe, is whether realized totals and margins fall where the
 season-fitted tree says they should. Team-strength factors are the next
 layer on top of this seam.
 
-Loader imports are lazy so the module stays importable without the live
-sdv-py data surface (the sdv-engine ``[live]`` extra provides it).
+Loader imports are lazy purely for import speed — in the sdv-engine
+mirror, ``sportsdataverse`` is a direct dependency (editable from the
+local sdv-py checkout), so the live/load surface is always available.
 """
 
 from __future__ import annotations
