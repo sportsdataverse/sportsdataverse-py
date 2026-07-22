@@ -60,6 +60,8 @@ def _finish_game(
     pbp_sink: Optional[List[Dict[str, Any]]] = None,
     event_sink: Optional[Dict[str, int]] = None,
     expanded: bool = False,
+    home_factors: Optional[FactorAdjustment] = None,
+    away_factors: Optional[FactorAdjustment] = None,
 ) -> GameState:
     """Play a game to completion from ``state`` (mutates a copy)."""
     outcome_set = set(OUTCOMES)
@@ -67,6 +69,9 @@ def _finish_game(
     while True:
         while st.clock_seconds > 0:
             diff = st.score_home - st.score_away if st.offense_is_home else st.score_away - st.score_home
+            # matchup asymmetry: per-side factors (team strength) override
+            # the shared adjustment for the side on offense
+            side_factors = (home_factors if st.offense_is_home else away_factors) or factors
             if expanded:
                 from sportsdataverse.nba.nba_possession_sim.expanded_nodes import (
                     simulate_possession_expanded,
@@ -78,7 +83,7 @@ def _finish_game(
                     period=st.period,
                     clock_seconds=st.clock_seconds,
                     rng=rng,
-                    factors=factors,
+                    factors=side_factors,
                     offense_is_home=st.offense_is_home,
                 )
             else:
@@ -88,7 +93,7 @@ def _finish_game(
                     period=st.period,
                     clock_seconds=st.clock_seconds,
                     rng=rng,
-                    factors=factors,
+                    factors=side_factors,
                 )
             if st.offense_is_home:
                 st.score_home += points
@@ -177,6 +182,8 @@ def simulate_ensemble(
     attribution: Optional[PlayerAttribution] = None,
     rules: SportRules = NBA_RULES,
     collect_event_counts: bool = False,
+    home_factors: Optional[FactorAdjustment] = None,
+    away_factors: Optional[FactorAdjustment] = None,
 ) -> Dict[str, Any]:
     """Monte Carlo ensemble: n_sim games collapsed into sample vectors.
 
@@ -223,7 +230,18 @@ def simulate_ensemble(
             if start is not None
             else GameState(clock_seconds=rules.period_seconds, offense_is_home=bool(rng.random() < 0.5))
         )
-        final = _finish_game(shelf, game_start, rng, factors, attribution, sink, rules=rules, event_sink=event_sink)
+        final = _finish_game(
+            shelf,
+            game_start,
+            rng,
+            factors,
+            attribution,
+            sink,
+            rules=rules,
+            event_sink=event_sink,
+            home_factors=home_factors,
+            away_factors=away_factors,
+        )
         home[i] = final.score_home
         away[i] = final.score_away
         if player_arrays is not None and sink:

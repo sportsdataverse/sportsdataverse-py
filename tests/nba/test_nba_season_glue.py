@@ -44,6 +44,23 @@ def test_leaguegamelog_pivot_on_real_sample() -> None:
         games_from_leaguegamelog(log.drop("MATCHUP"))
 
 
+def test_team_ratings_mechanics_on_real_sample() -> None:
+    from sportsdataverse.nba.nba_possession_sim import fit_team_ratings, matchup_targets
+
+    games = games_from_leaguegamelog(pl.read_parquet(SAMPLE))
+    ratings = fit_team_ratings(games, shrinkage=2.0)
+    assert set(ratings["off"]) == set(ratings["def"])
+    assert len(ratings["off"]) == 6  # three games, six teams
+    for factor in [*ratings["off"].values(), *ratings["def"].values()]:
+        assert 0.7 < factor < 1.3  # one-game teams shrink hard toward league
+    assert ratings["home_edge"] > 0 and ratings["team_mean"] > 60
+    rated_home = next(iter(ratings["off"]))
+    targets = matchup_targets(ratings, rated_home, 999_999)  # unrated away -> league prior
+    assert targets["home"] > 0 and targets["away"] > 0
+    with pytest.raises(ValueError, match="no completed"):
+        fit_team_ratings(games.with_columns(pl.lit(False).alias("completed")))
+
+
 @skip_if_no_live
 def test_season_data_respects_the_cutoff() -> None:
     from sportsdataverse.nba.nba_possession_sim import season_data
@@ -79,8 +96,14 @@ def test_walk_forward_window_is_leakage_safe_and_calibrated() -> None:
     summary = result["summary"]
     assert summary["n_games"] > 0 and summary["n_refits"] > 0
     assert summary["max_train_date_lt_eval"] is True  # never trains on the eval date
-    assert 0.4 <= summary["total_coverage_80"] <= 1.0  # observed .737 at nominal .80
-    assert 0.4 <= summary["margin_coverage_80"] <= 1.0  # observed .921
-    assert abs(summary["total_bias"]) < 15.0  # observed +8.0
+    assert 0.4 <= summary["total_coverage_80"] <= 1.0  # observed .71 at nominal .80
+    assert 0.4 <= summary["margin_coverage_80"] <= 1.0  # observed .84
+    assert abs(summary["total_bias"]) < 15.0  # observed -5.4
+    # team factors give real discrimination: full 07-08..07-21 window
+    # observed winner brier .1999 vs .25 baseline (favorites 28/38); the
+    # short CI window gets a loose absolute bound for resilience
+    assert summary["winner_baseline_brier"] == pytest.approx(0.25, abs=0.02)
+    assert summary["winner_brier"] < 0.30
     games = result["games"]
     assert (games["total_p10"] <= games["total_p90"]).all()
+    assert ((games["p_home"] >= 0.0) & (games["p_home"] <= 1.0)).all()

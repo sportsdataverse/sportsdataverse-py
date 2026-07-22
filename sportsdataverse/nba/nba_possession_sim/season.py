@@ -246,6 +246,7 @@ def walk_forward_backtest(
     seed: int = 7,
     min_train_games: int = 20,
     learned_keyer: bool = False,
+    team_factors: bool = True,
 ) -> Dict[str, Any]:
     """Walk-forward distributional calibration of the season-fitted tree.
 
@@ -311,11 +312,23 @@ def walk_forward_backtest(
         # leakage-safe level anchor: the TRAIN games' realized mean total
         train_target = float((train_games["home_pts"] + train_games["away_pts"]).mean())
         shelf = _calibrate_pace_to_total(shelf, train_target, rules)
+        ratings = fit_team_ratings(train_games) if team_factors else None
         n_refits += 1
         max_train_dates.append(train_games["game_date"].max())
         slate = window.filter(pl.col("game_date") == eval_date)
         for index, game in enumerate(slate.iter_rows(named=True)):
-            ens = simulate_ensemble(shelf, n_sim=n_sim, seed=seed + 1000 * n_refits + index, rules=rules)
+            home_factors = away_factors = None
+            if ratings is not None:
+                targets = matchup_targets(ratings, int(game["home_team_id"]), int(game["away_team_id"]))
+                home_factors, away_factors = matchup_factors(shelf, rules, targets["home"], targets["away"])
+            ens = simulate_ensemble(
+                shelf,
+                n_sim=n_sim,
+                seed=seed + 1000 * n_refits + index,
+                rules=rules,
+                home_factors=home_factors,
+                away_factors=away_factors,
+            )
             total = ens["total"].astype(float)
             margin = ens["margin"].astype(float)
             realized_total = float(game["home_pts"] + game["away_pts"])
@@ -325,6 +338,8 @@ def walk_forward_backtest(
                 "game_id": game["game_id"],
                 "total": realized_total,
                 "margin": realized_margin,
+                "p_home": float((margin > 0).mean()),
+                "home_win": bool(realized_margin > 0),
                 "total_mean": float(total.mean()),
                 "total_p10": float(np.quantile(total, 0.1)),
                 "total_p90": float(np.quantile(total, 0.9)),
@@ -338,9 +353,13 @@ def walk_forward_backtest(
     if not rows:
         raise ValueError("window produced no evaluated games (min_train_games too high?)")
     frame = pl.DataFrame(rows)
+    outcomes = frame["home_win"].cast(pl.Float64).to_numpy()
+    predictions = frame["p_home"].to_numpy()
     summary = {
         "n_games": frame.height,
         "n_refits": n_refits,
+        "winner_brier": float(np.mean((predictions - outcomes) ** 2)),
+        "winner_baseline_brier": float(np.mean((0.5 - outcomes) ** 2)),
         "total_coverage_80": float(frame["total_in_band"].cast(pl.Float64).mean()),
         "margin_coverage_80": float(frame["margin_in_band"].cast(pl.Float64).mean()),
         "total_bias": float((frame["total_mean"] - frame["total"]).mean()),
@@ -350,3 +369,203 @@ def walk_forward_backtest(
         ),
     }
     return {"games": frame, "summary": summary, "n_refits": n_refits}
+
+
+#: Scoring outcomes the team-strength multipliers act on.
+_SCORING_OUTCOMES = ("rim_make", "mid_make", "three_make", "ft_trip_1", "ft_trip_2", "ft_trip_3")
+
+
+def fit_team_ratings(games: pl.DataFrame, *, shrinkage: float = 6.0) -> Dict[str, Any]:
+    """Offense/defense strength + home edge from realized finals.
+
+    Ratings are per-game points for/against, empirical-Bayes shrunk toward
+    the league mean with ``n / (n + shrinkage)`` games and expressed as
+    multiplicative factors (1.0 = league average).
+
+    Args:
+        games: :func:`games_from_leaguegamelog` output (completed rows).
+        shrinkage: Pseudo-game weight of the league mean.
+
+    Returns:
+        ``{"off": {team_id: factor}, "def": {team_id: factor},
+        "team_mean": league per-team points mean, "home_edge":
+        mean(home points) / mean(away points)}``.
+
+    Raises:
+        ValueError: When no completed games exist.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nba.nba_possession_sim.season import (
+                fit_team_ratings, games_from_leaguegamelog,
+            )
+            ratings = fit_team_ratings(games_from_leaguegamelog(log))
+            ratings["off"][home_id] * ratings["def"][away_id]
+    """
+    finals = games.filter(pl.col("completed") == True)  # noqa: E712
+    if finals.height == 0:
+        raise ValueError("no completed games to rate teams from")
+    long = pl.concat(
+        [
+            finals.select(
+                pl.col("home_team_id").alias("team_id"),
+                pl.col("home_pts").alias("pf"),
+                pl.col("away_pts").alias("pa"),
+            ),
+            finals.select(
+                pl.col("away_team_id").alias("team_id"),
+                pl.col("away_pts").alias("pf"),
+                pl.col("home_pts").alias("pa"),
+            ),
+        ]
+    )
+    team_mean = float(long["pf"].mean())
+    per_team = long.group_by("team_id").agg(
+        pl.len().alias("n"), pl.col("pf").mean().alias("pf"), pl.col("pa").mean().alias("pa")
+    )
+    off: Dict[int, float] = {}
+    defense: Dict[int, float] = {}
+    for row in per_team.iter_rows(named=True):
+        n = int(row["n"])
+        off[int(row["team_id"])] = ((n * float(row["pf"]) + shrinkage * team_mean) / (n + shrinkage)) / team_mean
+        defense[int(row["team_id"])] = ((n * float(row["pa"]) + shrinkage * team_mean) / (n + shrinkage)) / team_mean
+    home_edge = float(finals["home_pts"].mean() / finals["away_pts"].mean())
+    return {"off": off, "def": defense, "team_mean": team_mean, "home_edge": home_edge}
+
+
+def matchup_targets(ratings: Dict[str, Any], home_team_id: int, away_team_id: int) -> Dict[str, float]:
+    """Expected team points for one matchup from the fitted ratings.
+
+    ``target = team_mean x own offense x opponent defense``, with the home
+    edge split symmetrically across the two sides. Unrated teams (early
+    season, expansion) fall back to league-average factors.
+
+    Args:
+        ratings: :func:`fit_team_ratings` output.
+        home_team_id: Home team.
+        away_team_id: Away team.
+
+    Returns:
+        ``{"home": expected home points, "away": expected away points}``.
+
+    Example:
+        Quick start::
+
+            targets = matchup_targets(ratings, home_id, away_id)
+    """
+    edge = float(ratings["home_edge"]) ** 0.5
+    home = ratings["team_mean"] * ratings["off"].get(home_team_id, 1.0) * ratings["def"].get(away_team_id, 1.0)
+    away = ratings["team_mean"] * ratings["off"].get(away_team_id, 1.0) * ratings["def"].get(home_team_id, 1.0)
+    return {"home": home * edge, "away": away / edge}
+
+
+def matchup_factors(
+    shelf: Shelf,
+    rules: SportRules,
+    home_target: float,
+    away_target: float,
+    *,
+    n_pilot: int = 400,
+    seed: int = 13,
+    passes: int = 2,
+) -> Any:
+    """Pilot-calibrated per-side scoring factors hitting the matchup targets.
+
+    Scales each side's make/trip outcome probabilities (renormalized by
+    :class:`~sportsdataverse.nba.nba_possession_sim.factors.FactorAdjustment`)
+    until the simulated team means match the targets — the PMF response to
+    a multiplier is sublinear, so two pilot passes converge.
+
+    Args:
+        shelf: The (pace-calibrated) shelf.
+        rules: League clock structure.
+        home_target: Expected home points (:func:`matchup_targets`).
+        away_target: Expected away points.
+        n_pilot: Pilot simulations per pass.
+        seed: Pilot RNG seed.
+        passes: Calibration passes.
+
+    Returns:
+        ``(home_factors, away_factors)`` — auditable
+        :class:`~sportsdataverse.nba.nba_possession_sim.factors.FactorAdjustment`
+        pairs for the engine's per-side seam.
+
+    Example:
+        Quick start::
+
+            hf, af = matchup_factors(shelf, WNBA_RULES, 84.2, 88.9)
+            ens = simulate_ensemble(shelf, n_sim=5000, seed=7, rules=rules,
+                                    home_factors=hf, away_factors=af)
+    """
+    from sportsdataverse.nba.nba_possession_sim.factors import FactorAdjustment
+
+    home_mult = {outcome: 1.0 for outcome in _SCORING_OUTCOMES}
+    away_mult = {outcome: 1.0 for outcome in _SCORING_OUTCOMES}
+    for _ in range(passes):
+        pilot = simulate_ensemble(
+            shelf,
+            n_sim=n_pilot,
+            seed=seed,
+            rules=rules,
+            home_factors=FactorAdjustment(factors=dict(home_mult)),
+            away_factors=FactorAdjustment(factors=dict(away_mult)),
+        )
+        home_scale = home_target / float(pilot["score_home"].mean())
+        away_scale = away_target / float(pilot["score_away"].mean())
+        home_mult = {outcome: value * home_scale for outcome, value in home_mult.items()}
+        away_mult = {outcome: value * away_scale for outcome, value in away_mult.items()}
+    return FactorAdjustment(factors=home_mult), FactorAdjustment(factors=away_mult)
+
+
+def season_matchup(
+    league: str,
+    seasons: List[int],
+    home_team_id: int,
+    away_team_id: int,
+    *,
+    through: Optional[dt.date] = None,
+    learned_keyer: bool = False,
+) -> Dict[str, Any]:
+    """The one-call pregame surface: fitted tree + matchup team factors.
+
+    Args:
+        league: ``"wnba"`` or ``"nba"``.
+        seasons: Seasons to load.
+        home_team_id: Home team (stats-namespace id).
+        away_team_id: Away team.
+        through: Optional inclusive as-of cutoff.
+        learned_keyer: Compose the shelf with a learned keyer.
+
+    Returns:
+        ``{"shelf", "home_factors", "away_factors", "ratings", "targets",
+        "data"}`` — feed shelf + factors straight to ``simulate_ensemble``
+        / ``simulate_player_boxscores``.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nba.nba_possession_sim.season import season_matchup
+            game = season_matchup("wnba", [2026], home_id, away_id)
+            ens = simulate_ensemble(game["shelf"], n_sim=5000, seed=7,
+                                    rules=WNBA_RULES,
+                                    home_factors=game["home_factors"],
+                                    away_factors=game["away_factors"])
+    """
+    data = season_data(league, seasons, through=through)
+    keyer = fit_learned_gamestate_keyer(data["events"]) if learned_keyer else None
+    shelf = models_to_shelf(data["events"], keyer=keyer, actions=data["pbp"])
+    finals = data["schedule"].filter(pl.col("completed") == True)  # noqa: E712
+    rules = _rules_for(league)
+    shelf = _calibrate_pace_to_total(shelf, float((finals["home_pts"] + finals["away_pts"]).mean()), rules)
+    ratings = fit_team_ratings(finals)
+    targets = matchup_targets(ratings, home_team_id, away_team_id)
+    home_factors, away_factors = matchup_factors(shelf, rules, targets["home"], targets["away"])
+    return {
+        "shelf": shelf,
+        "home_factors": home_factors,
+        "away_factors": away_factors,
+        "ratings": ratings,
+        "targets": targets,
+        "data": data,
+    }

@@ -72,8 +72,12 @@ from sportsdataverse.nba.nba_possession_sim.props import (
     price_prop,
 )
 from sportsdataverse.nba.nba_possession_sim.season import (
+    fit_team_ratings,
     games_from_leaguegamelog,
+    matchup_factors,
+    matchup_targets,
     season_data,
+    season_matchup,
     season_shelf,
     walk_forward_backtest,
 )
@@ -165,4 +169,8 @@ __all__ = [
     "season_data",
     "season_shelf",
     "walk_forward_backtest",
+    "fit_team_ratings",
+    "matchup_factors",
+    "matchup_targets",
+    "season_matchup",
 ]

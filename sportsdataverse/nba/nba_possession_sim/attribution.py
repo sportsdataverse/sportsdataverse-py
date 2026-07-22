@@ -308,6 +308,8 @@ def simulate_player_boxscores(
     n_sim: int = 300,
     seed: Optional[int] = None,
     rules: Optional[Any] = None,
+    home_factors: Optional[Any] = None,
+    away_factors: Optional[Any] = None,
 ) -> Dict[str, Any]:
     """Monte Carlo per-player boxscore distributions (pts / reb / ast).
 
@@ -365,6 +367,7 @@ def simulate_player_boxscores(
                     period=period,
                     clock_seconds=clock,
                     rng=rng,
+                    factors=(home_factors if offense_is_home else away_factors),
                     attribution=attribution,
                     offense_is_home=offense_is_home,
                 )
