@@ -211,30 +211,39 @@ def fit_aux_node_models(
     """
     a_type = "actionType" if "actionType" in actions.columns else "action_type"
     sub = "subType" if "subType" in actions.columns else "sub_type"
-    frame = actions.select(
-        pl.col(a_type).cast(pl.Utf8).alias("t"),
-        pl.col(sub).cast(pl.Utf8).fill_null("").alias("s"),
-        pl.col("description").cast(pl.Utf8).fill_null("").alias("d"),
-        pl.col("period").cast(pl.Int64).alias("period"),
-        pl.col("clock").cast(pl.Utf8).map_elements(parse_clock, return_dtype=pl.Float64).alias("clock_seconds"),
-    ).with_columns(
-        pl.col("period").map_elements(period_bin, return_dtype=pl.Int64).alias("pbin"),
-        pl.col("clock_seconds").map_elements(clock_bin, return_dtype=pl.Utf8).alias("cbin"),
-        pl.col("t").is_in(["Made Shot", "Missed Shot", "Turnover"]).alias("is_end"),
-        (pl.col("t") == "Timeout").alias("is_timeout"),
-        ((pl.col("t") == "Foul") & (pl.col("d").str.contains("(?i)shooting") == False)).alias("is_def_foul"),  # noqa: E712
-        (pl.col("t") == "Turnover").alias("is_tov"),
-        (
-            (pl.col("t") == "Turnover")
-            & (
-                pl.col("s").str.contains("(?i)lost ball")
-                | (
-                    pl.col("s").str.contains("(?i)bad pass") & (pl.col("s").str.contains("(?i)out of bounds") == False)  # noqa: E712
+    frame = (
+        actions.select(
+            pl.col(a_type).cast(pl.Utf8).alias("t"),
+            pl.col(sub).cast(pl.Utf8).fill_null("").alias("s"),
+            pl.col("description").cast(pl.Utf8).fill_null("").alias("d"),
+            pl.col("period").cast(pl.Int64).alias("period"),
+            pl.col("clock").cast(pl.Utf8).map_elements(parse_clock, return_dtype=pl.Float64).alias("clock_seconds"),
+        )
+        .with_columns(
+            pl.col("period").map_elements(period_bin, return_dtype=pl.Int64).alias("pbin"),
+            pl.col("clock_seconds").map_elements(clock_bin, return_dtype=pl.Utf8).alias("cbin"),
+            pl.col("t").is_in(["Made Shot", "Missed Shot", "Turnover"]).alias("is_end"),
+            (pl.col("t") == "Timeout").alias("is_timeout"),
+            ((pl.col("t") == "Foul") & (pl.col("d").str.contains("(?i)shooting") == False)).alias("is_def_foul"),  # noqa: E712
+            (pl.col("t") == "Turnover").alias("is_tov"),
+            (
+                (pl.col("t") == "Turnover")
+                & (
+                    pl.col("s").str.contains("(?i)lost ball")
+                    | (
+                        pl.col("s").str.contains("(?i)bad pass")
+                        & (pl.col("s").str.contains("(?i)out of bounds") == False)  # noqa: E712
+                    )
                 )
-            )
-        ).alias("is_live_tov"),
-        (pl.col("t") == "Made Shot").alias("is_make"),
-        ((pl.col("t") == "Free Throw") & pl.col("d").str.contains("1 of 1")).alias("is_and1_ft"),
+            ).alias("is_live_tov"),
+            (pl.col("t") == "Made Shot").alias("is_make"),
+            ((pl.col("t") == "Free Throw") & pl.col("d").str.contains("1 of 1")).alias("is_and1_ft"),
+        )
+        .filter(
+            # season releases occasionally ship all-null placeholder rows;
+            # a null state cannot key a rate cell
+            pl.col("pbin").is_not_null() & pl.col("cbin").is_not_null()
+        )
     )
     totals = frame.select(
         pl.col("is_end").sum().alias("events"),

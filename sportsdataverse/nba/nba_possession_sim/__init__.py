@@ -71,6 +71,12 @@ from sportsdataverse.nba.nba_possession_sim.props import (
     price_board,
     price_prop,
 )
+from sportsdataverse.nba.nba_possession_sim.season import (
+    games_from_leaguegamelog,
+    season_data,
+    season_shelf,
+    walk_forward_backtest,
+)
 from sportsdataverse.nba.nba_possession_sim.shelf import (
     OUTCOMES,
     SHOT_MIX_SPEC,
@@ -155,4 +161,8 @@ __all__ = [
     "ensemble_samples",
     "ensemble_market_summary",
     "player_points_long",
+    "games_from_leaguegamelog",
+    "season_data",
+    "season_shelf",
+    "walk_forward_backtest",
 ]

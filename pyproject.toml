@@ -334,6 +334,7 @@ files = [
     "sportsdataverse/nba/nba_possession_sim/props.py",
     "sportsdataverse/nba/nba_possession_sim/wp_surface.py",
     "sportsdataverse/nba/nba_possession_sim/ensemble_frames.py",
+    "sportsdataverse/nba/nba_possession_sim/season.py",
     "sportsdataverse/wnba/wnba_possession_sim.py",
     "sportsdataverse/mbb/mbb_possession_sim.py",
     "sportsdataverse/wbb/wbb_possession_sim.py",

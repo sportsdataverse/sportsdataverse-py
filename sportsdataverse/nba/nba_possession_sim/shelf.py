@@ -155,9 +155,11 @@ def possessions_from_pbp(actions: pl.DataFrame) -> pl.DataFrame:
         home_team: Optional[int] = None
         team_ids = {int(r["team_id"]) for r in records if r.get("team_id")} - {0}
         prev_home = prev_away = 0
+        saw_score = False
         for rec in records:
             new_home = _score(rec.get("score_home"), prev_home)
             new_away = _score(rec.get("score_away"), prev_away)
+            saw_score = saw_score or new_home > prev_home or new_away > prev_away
             tid = int(rec["team_id"]) if rec.get("team_id") else 0
             if home_team is None and tid:
                 if new_home > prev_home:
@@ -166,6 +168,11 @@ def possessions_from_pbp(actions: pl.DataFrame) -> pl.DataFrame:
                     home_team = (team_ids - {tid}).pop()
             prev_home, prev_away = new_home, new_away
         if home_team is None:
+            if not saw_score:
+                # degenerate capture (season releases occasionally ship a
+                # game as one all-null placeholder row): zero information,
+                # zero events — skip it rather than kill a season build
+                continue
             raise ValueError(f"{game_id}: could not infer home team from score stream")
 
         prev_home = prev_away = 0
