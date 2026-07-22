@@ -196,7 +196,7 @@ The Brier score (0.0 is a perfect forecast).
 
 ```python
 import numpy as np
-from sportsdataverse._common.metrics import brier_score
+from sportsdataverse.modeling.eval.metrics import brier_score
 brier_score(np.array([1, 0]), np.array([0.9, 0.1]))
 ```
 
@@ -220,7 +220,7 @@ A `polars.DataFrame` with columns `bin_mid`, `mean_pred`, `mean_actual`, `n` (on
 
 ```python
 import numpy as np
-from sportsdataverse._common.metrics import calibration_table
+from sportsdataverse.modeling.eval.metrics import calibration_table
 calibration_table(np.array([1, 0, 1, 0]), np.array([0.9, 0.1, 0.8, 0.2]))
 ```
 
@@ -244,7 +244,7 @@ The mean log loss.
 
 ```python
 import numpy as np
-from sportsdataverse._common.metrics import log_loss_score
+from sportsdataverse.modeling.eval.metrics import log_loss_score
 log_loss_score(np.array([1, 0]), np.array([0.9, 0.1]))
 ```
 
@@ -267,7 +267,7 @@ The mean absolute error.
 
 ```python
 import numpy as np
-from sportsdataverse._common.metrics import mae
+from sportsdataverse.modeling.eval.metrics import mae
 mae(np.array([1.0, 2.0]), np.array([1.5, 2.5]))
 ```
 
@@ -1214,6 +1214,6 @@ The Spearman rank correlation coefficient.
 
 ```python
 import numpy as np
-from sportsdataverse._common.metrics import spearman_corr
+from sportsdataverse.modeling.eval.metrics import spearman_corr
 spearman_corr(np.array([1, 2, 3]), np.array([3, 1, 2]))
 ```

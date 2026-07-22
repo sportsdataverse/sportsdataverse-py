@@ -873,7 +873,7 @@ The mean absolute error.
 
 ```python
 import numpy as np
-from sportsdataverse._common.metrics import mae
+from sportsdataverse.modeling.eval.metrics import mae
 mae(np.array([1.0, 2.0]), np.array([1.5, 2.5]))
 ```
 
@@ -3283,7 +3283,7 @@ The Spearman rank correlation coefficient.
 
 ```python
 import numpy as np
-from sportsdataverse._common.metrics import spearman_corr
+from sportsdataverse.modeling.eval.metrics import spearman_corr
 spearman_corr(np.array([1, 2, 3]), np.array([3, 1, 2]))
 ```
 

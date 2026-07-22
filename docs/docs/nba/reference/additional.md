@@ -1087,7 +1087,7 @@ A `polars.DataFrame` containing only rows with `date < cutoff_date`.
 
 ```python
 import datetime as dt
-from sportsdataverse._common.metrics import as_of_ratings_split
+from sportsdataverse.modeling.eval.metrics import as_of_ratings_split
 as_of_ratings_split(results, dt.date(2023, 9, 8))
 ```
 

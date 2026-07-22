@@ -38,8 +38,43 @@ _OFF: list[str] = [f"off_player_{i}" for i in range(1, 6)]
 _DEF: list[str] = [f"def_player_{i}" for i in range(1, 6)]
 
 
+#: Sentinel id the low-observation replacement pool collapses into. Negative so
+#: it can never collide with a real NBA person id.
+REPLACEMENT_PLAYER_ID = -9999
+
+
+def lambda_to_alpha(prior_possessions: float, mean_row_weight: float = 1.0) -> float:
+    """Convert a possession-denominated ridge prior to a sklearn ``alpha``.
+
+    The interpretability convention (WS6 fold-in): with one design row
+    per possession and binary on-court indicators, the ridge penalty acts
+    like ``prior_possessions`` of league-average evidence per player — so
+    ``alpha`` IS the prior strength in possessions. When rows carry weights
+    (aggregated stints), scale by the mean row weight to keep the same
+    interpretation.
+
+    Args:
+        prior_possessions: Prior strength expressed in possessions of
+            league-average evidence (e.g. 3000).
+        mean_row_weight: Mean design-row weight (1.0 for per-possession rows).
+
+    Returns:
+        The equivalent sklearn ``Ridge``/``RidgeCV`` alpha.
+
+    Example:
+        Quick start::
+
+            import numpy as np
+            from sportsdataverse.nba.nba_rapm import lambda_to_alpha, nba_rapm
+            df = nba_rapm(poss, alphas=np.array([lambda_to_alpha(3000.0)]))
+    """
+    return float(prior_possessions) * float(mean_row_weight)
+
+
 def build_rapm_design(
     possessions: pl.DataFrame,
+    *,
+    replacement_min_obs: int | None = None,
 ) -> tuple[csr_matrix, np.ndarray, list[int]]:
     """Build a sparse RAPM design matrix from a possession stint DataFrame.
 
@@ -60,6 +95,12 @@ def build_rapm_design(
             Possessions with any null lineup cell are dropped (a partial lineup
             is unreliable for RAPM); if that leaves no rows, an empty design is
             returned.
+        replacement_min_obs: When set, players below this combined
+            possession count collapse into the :data:`REPLACEMENT_PLAYER_ID`
+            column.  Two pooled players sharing the floor intentionally sum
+            to 2 in that column — the count of replacement-level players on
+            court is the correct design encoding (the distinct-ids duplicate
+            warning below applies to REAL player ids only).
 
     Returns:
         A 3-tuple ``(X, y, player_ids)`` where:
@@ -115,6 +156,17 @@ def build_rapm_design(
     off = possessions.select(_OFF).to_numpy().astype(np.int64)
     deff = possessions.select(_DEF).to_numpy().astype(np.int64)
 
+    if replacement_min_obs is not None:
+        # The reference replacement-pool recipe: players below the observation floor
+        # collapse into ONE replacement column instead of being dropped — their
+        # possessions still inform everyone else's coefficients.
+        all_ids = np.concatenate([off.ravel(), deff.ravel()])
+        ids, counts = np.unique(all_ids, return_counts=True)
+        low = ids[counts < replacement_min_obs]
+        if low.size:
+            off = np.where(np.isin(off, low), REPLACEMENT_PLAYER_ID, off)
+            deff = np.where(np.isin(deff, low), REPLACEMENT_PLAYER_ID, deff)
+
     pids = sorted(set(int(v) for v in np.concatenate([off.ravel(), deff.ravel()])))
     idx: dict[int, int] = {p: k for k, p in enumerate(pids)}
     P = len(pids)
@@ -147,6 +199,7 @@ def nba_rapm(
     possessions: pl.DataFrame,
     *,
     alphas: np.ndarray = DEFAULT_RAPM_ALPHAS,
+    replacement_min_obs: int | None = None,
 ) -> pl.DataFrame:
     """Fit plain Regularized Adjusted Plus-Minus (RAPM) via ridge regression.
 
@@ -180,7 +233,15 @@ def nba_rapm(
             An empty or fully-null-lineup frame returns a zero-row result.
         alphas: 1-D array of ridge penalty values to evaluate via cross-
             validation.  Defaults to :data:`DEFAULT_RAPM_ALPHAS`
-            (``np.logspace(2, 5, 8)``, i.e. 100 … 100 000).
+            (``np.logspace(2, 5, 8)``, i.e. 100 … 100 000).  Use
+            :func:`lambda_to_alpha` to express the grid in possessions of
+            prior evidence.
+        replacement_min_obs: When set, players appearing on fewer than this
+            many possessions (offense + defense combined) collapse into a
+            single replacement pool (``player_id`` =
+            :data:`REPLACEMENT_PLAYER_ID`) instead of receiving their own
+            noisy coefficient — their possessions still inform everyone
+            else's estimates.  ``None`` (default) keeps every player.
 
     Returns:
         A :class:`polars.DataFrame` with exactly the columns defined in
@@ -225,7 +286,7 @@ def nba_rapm(
         .. _nflverse: https://nflverse.nflverse.com
         .. _nba_api: https://github.com/swar/nba_api
     """
-    X, y, player_ids = build_rapm_design(possessions)
+    X, y, player_ids = build_rapm_design(possessions, replacement_min_obs=replacement_min_obs)
 
     if not player_ids:
         return _empty_rapm_frame()

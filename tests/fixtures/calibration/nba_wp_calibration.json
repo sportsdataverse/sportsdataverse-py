@@ -1,0 +1,192 @@
+{
+  "card": {
+    "feature_fingerprint": {
+      "home_win": "16a163377e10786d477da3865b9d629493b8541772e671268ea4819fdd77d22c",
+      "margin": "0f12d52e3a263ae01533c90d709c8d977480e457b912427bcc6674e9cadacbef",
+      "path_id": "aaf27c0d1c97533044c59d4d3a8a96705eef0c017a4600f636cca346891a289d",
+      "seconds_remaining": "ed0e98a22174373758845acb15e05d180070bcb1a16da91da0650618dfe0da05"
+    },
+    "metrics": {
+      "n_cells": 2053.0,
+      "real_brier": 0.1414881011,
+      "self_brier": 0.1653418219
+    },
+    "name": "nba_wp_surface",
+    "source_features": [
+      "path_id",
+      "seconds_remaining",
+      "margin",
+      "home_win"
+    ],
+    "trained_seasons": [
+      2021,
+      2022,
+      2023
+    ],
+    "training_script": "tools/calibration/build.py"
+  },
+  "params": {
+    "games": [
+      "0022100001",
+      "0022200001",
+      "0022300001"
+    ],
+    "margin_cap": 24,
+    "n_eval": 160,
+    "n_train": 240,
+    "seed": 7,
+    "shrinkage": 20.0,
+    "time_bin_seconds": 60.0
+  },
+  "real": {
+    "baseline_brier": 0.25,
+    "beat_baseline": true,
+    "brier": 0.1414881011,
+    "finals": [
+      {
+        "game_id": "0022100001",
+        "home_win": true,
+        "margin": 23,
+        "pred": 1.0
+      },
+      {
+        "game_id": "0022200001",
+        "home_win": true,
+        "margin": 9,
+        "pred": 0.9999999835
+      },
+      {
+        "game_id": "0022300001",
+        "home_win": true,
+        "margin": 5,
+        "pred": 0.9993478835
+      }
+    ],
+    "n_snapshots": 1483,
+    "reliability": [
+      {
+        "bin_mid": 0.25,
+        "mean_actual": 1.0,
+        "mean_pred": 0.2576367077,
+        "n": 21
+      },
+      {
+        "bin_mid": 0.35,
+        "mean_actual": 1.0,
+        "mean_pred": 0.3588314893,
+        "n": 95
+      },
+      {
+        "bin_mid": 0.45,
+        "mean_actual": 1.0,
+        "mean_pred": 0.4492573678,
+        "n": 247
+      },
+      {
+        "bin_mid": 0.55,
+        "mean_actual": 1.0,
+        "mean_pred": 0.5398030389,
+        "n": 251
+      },
+      {
+        "bin_mid": 0.65,
+        "mean_actual": 1.0,
+        "mean_pred": 0.642180229,
+        "n": 171
+      },
+      {
+        "bin_mid": 0.75,
+        "mean_actual": 1.0,
+        "mean_pred": 0.7479303958,
+        "n": 90
+      },
+      {
+        "bin_mid": 0.85,
+        "mean_actual": 1.0,
+        "mean_pred": 0.8691980905,
+        "n": 93
+      },
+      {
+        "bin_mid": 0.95,
+        "mean_actual": 1.0,
+        "mean_pred": 0.9605719048,
+        "n": 515
+      }
+    ]
+  },
+  "self": {
+    "baseline_brier": 0.25,
+    "beat_baseline": true,
+    "brier": 0.1653418219,
+    "n_snapshots": 35734,
+    "reliability": [
+      {
+        "bin_mid": 0.05,
+        "mean_actual": 0.0143451143,
+        "mean_pred": 0.0279404294,
+        "n": 4810
+      },
+      {
+        "bin_mid": 0.15,
+        "mean_actual": 0.1308121513,
+        "mean_pred": 0.1461792456,
+        "n": 1613
+      },
+      {
+        "bin_mid": 0.25,
+        "mean_actual": 0.2381974249,
+        "mean_pred": 0.2526143033,
+        "n": 1864
+      },
+      {
+        "bin_mid": 0.35,
+        "mean_actual": 0.365215655,
+        "mean_pred": 0.3567416094,
+        "n": 5008
+      },
+      {
+        "bin_mid": 0.45,
+        "mean_actual": 0.4615282215,
+        "mean_pred": 0.4491539924,
+        "n": 7512
+      },
+      {
+        "bin_mid": 0.55,
+        "mean_actual": 0.5731934337,
+        "mean_pred": 0.5429260253,
+        "n": 5909
+      },
+      {
+        "bin_mid": 0.65,
+        "mean_actual": 0.6633663366,
+        "mean_pred": 0.6409899775,
+        "n": 2222
+      },
+      {
+        "bin_mid": 0.75,
+        "mean_actual": 0.732735426,
+        "mean_pred": 0.7467997294,
+        "n": 1115
+      },
+      {
+        "bin_mid": 0.85,
+        "mean_actual": 0.897939156,
+        "mean_pred": 0.8612690985,
+        "n": 1019
+      },
+      {
+        "bin_mid": 0.95,
+        "mean_actual": 0.9924924925,
+        "mean_pred": 0.9666733786,
+        "n": 4662
+      }
+    ]
+  },
+  "surface": {
+    "drift_mu": -1.225,
+    "drift_sigma": 16.1482519694,
+    "n_cells": 2053,
+    "n_paths": 240,
+    "total_seconds": 2880.0
+  }
+}
