@@ -409,6 +409,12 @@ def write_rds(
     # out_dir) would otherwise interleave their bytes into one fixed temp file.
     fd, tmp_name = tempfile.mkstemp(dir=out_path.parent, prefix=f".{out_path.name}.", suffix=".partial")
     tmp_path = Path(tmp_name)
+    # mkstemp creates 0600 and rename preserves the mode, so without this the output
+    # would silently become owner-only -- where opening the destination directly gave
+    # the usual umask-derived 0644. Match what a plain open() would have produced.
+    _umask = os.umask(0o022)
+    os.umask(_umask)
+    os.chmod(tmp_path, 0o666 & ~_umask)
     try:
         with os.fdopen(fd, "wb") as raw:
             # gzip stamps the output filename into its header, so name it for the
