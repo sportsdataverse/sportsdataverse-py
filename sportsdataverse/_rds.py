@@ -19,7 +19,10 @@ values outside int32 range are written as doubles (R has no 64-bit integer).
 from __future__ import annotations
 
 import gzip
+import os
 import struct
+import tempfile
+from contextlib import nullcontext
 from datetime import datetime, timezone
 from functools import partial
 from pathlib import Path
@@ -101,15 +104,23 @@ class _RdsWriter:
         self._sym_refs: dict[str, int] = {}
 
     def payload(self) -> bytes:
-        """The buffered stream. Only meaningful when constructed without a sink."""
+        """The buffered stream. Only valid on a writer constructed without a sink.
+
+        Raises:
+            RuntimeError: If a sink was given -- the bytes went to it, so returning
+                the (empty) buffer would look like a successfully serialized object.
+        """
+        if self._sink is not None:
+            raise RuntimeError("payload() is unavailable on a streaming writer")
         return b"".join(self._chunks)
 
     def flush(self) -> None:
         """Hand any buffered bytes to the sink. Must be called before closing it."""
-        if self._pending:
-            self._sink.write(b"".join(self._pending))  # type: ignore[union-attr]
-            self._pending.clear()
-            self._pending_len = 0
+        if self._sink is None or not self._pending:
+            return
+        self._sink.write(b"".join(self._pending))
+        self._pending.clear()
+        self._pending_len = 0
 
     def _raw(self, data: bytes) -> None:
         if self._sink is None:
@@ -393,40 +404,49 @@ def write_rds(
     # was created at all. A truncated .rds is worse than a missing one -- it
     # reads as a corrupt object and can be published as if it were complete --
     # so write to a temp sibling and rename on success, which is atomic within a
-    # filesystem and never exposes a partial file at `path`.
-    tmp_path = out_path.with_name(f".{out_path.name}.partial")
+    # filesystem and never exposes a partial file at `path`. The temp name is unique
+    # per writer: two processes writing the same `path` (two compiles sharing an
+    # out_dir) would otherwise interleave their bytes into one fixed temp file.
+    fd, tmp_name = tempfile.mkstemp(dir=out_path.parent, prefix=f".{out_path.name}.", suffix=".partial")
+    tmp_path = Path(tmp_name)
     try:
-        with gzip.open(tmp_path, "wb") if compress else open(tmp_path, "wb") as f:
-            writer = _RdsWriter(sink=f)
-            writer.header()
+        with os.fdopen(fd, "wb") as raw:
+            # gzip stamps the output filename into its header, so name it for the
+            # final path -- opening the temp path directly would embed the temp name
+            # and make the bytes differ from a plain gzip.open(path). Built only when
+            # compressing: GzipFile writes its header at construction.
+            sink_ctx = gzip.GzipFile(filename=out_path.name, mode="wb", fileobj=raw) if compress else nullcontext(raw)
+            with sink_ctx as f:
+                writer = _RdsWriter(sink=f)
+                writer.header()
 
-            column_writers = [_column_writer(writer, df[name]) for name in df.columns]
+                column_writers = [_column_writer(writer, df[name]) for name in df.columns]
 
-            # Attribute order is mutation-history-dependent in R; this matches a
-            # data.frame that went through `$<-` column assignment (as in
-            # sportsdataverse_save's season/week coercion): names, row.names, class.
-            # Readers accept any order; the byte-golden fixture pins this one.
-            frame_attributes: list[tuple[str, _ColumnWriter]] = [
-                ("names", lambda: writer.strsxp(list(df.columns), length=df.width)),
-                (
-                    "row.names",
-                    # compact internal form: c(NA_integer_, -nrow)
-                    lambda: writer.intsxp_raw(struct.pack(">ii", _NA_INT, -df.height), length=2),
-                ),
-                writer.class_attr(cls if cls is not None else ["data.frame"]),
-            ]
-            for attr_name, attr_value in (attributes or {}).items():
-                if isinstance(attr_value, datetime):
-                    frame_attributes.append((attr_name, partial(writer.posixct_scalar, attr_value)))
-                else:
-                    frame_attributes.append((attr_name, partial(writer.scalar_string, attr_value)))
+                # Attribute order is mutation-history-dependent in R; this matches a
+                # data.frame that went through `$<-` column assignment (as in
+                # sportsdataverse_save's season/week coercion): names, row.names, class.
+                # Readers accept any order; the byte-golden fixture pins this one.
+                frame_attributes: list[tuple[str, _ColumnWriter]] = [
+                    ("names", lambda: writer.strsxp(list(df.columns), length=df.width)),
+                    (
+                        "row.names",
+                        # compact internal form: c(NA_integer_, -nrow)
+                        lambda: writer.intsxp_raw(struct.pack(">ii", _NA_INT, -df.height), length=2),
+                    ),
+                    writer.class_attr(cls if cls is not None else ["data.frame"]),
+                ]
+                for attr_name, attr_value in (attributes or {}).items():
+                    if isinstance(attr_value, datetime):
+                        frame_attributes.append((attr_name, partial(writer.posixct_scalar, attr_value)))
+                    else:
+                        frame_attributes.append((attr_name, partial(writer.scalar_string, attr_value)))
 
-            writer._flags(_VECSXP, is_object=True, has_attr=True)
-            writer._int(df.width)
-            for write_column in column_writers:
-                write_column()
-            writer.attr_pairlist(frame_attributes)
-            writer.flush()  # the tail of the stream is still buffered
+                writer._flags(_VECSXP, is_object=True, has_attr=True)
+                writer._int(df.width)
+                for write_column in column_writers:
+                    write_column()
+                writer.attr_pairlist(frame_attributes)
+                writer.flush()  # the tail of the stream is still buffered
     except BaseException:
         tmp_path.unlink(missing_ok=True)
         raise
