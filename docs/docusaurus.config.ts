@@ -24,6 +24,13 @@ const builtVersions: string[] = [
 ];
 
 const config: Config = {
+  // Rspack/SWC build pipeline (@docusaurus/faster). Adopted when the 0.0.72
+  // snapshot doubled the built page count (current + one full release tree)
+  // and the webpack build started OOM-SIGKILLing the Vercel container.
+  future: {
+    v4: true,
+    faster: true,
+  },
   title: 'sdv-py',
   tagline: "The SportsDataverse's Python Package for Sports Data.",
   url: 'https://sportsdataverse-py.sportsdataverse.org',
