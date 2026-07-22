@@ -1,0 +1,31 @@
+{
+ "columns": {
+  "event_type": {
+   "allowed_values": [
+    "Foul",
+    "Free Throw",
+    "Heave",
+    "Instant Replay",
+    "Jump Ball",
+    "Made Shot",
+    "Missed Shot",
+    "Rebound",
+    "Substitution",
+    "Timeout",
+    "Turnover",
+    "Violation",
+    "period"
+   ],
+   "dtype": "String",
+   "max_value": null,
+   "min_value": null,
+   "null_rate_max": null,
+   "required": true
+  }
+ },
+ "key": null,
+ "min_rows": null,
+ "min_rows_per_partition": null,
+ "name": "nba_v3_action_types",
+ "partition_key": null
+}

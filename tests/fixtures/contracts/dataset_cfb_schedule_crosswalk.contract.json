@@ -1,0 +1,102 @@
+{
+ "columns": {
+  "away_team": {
+   "allowed_values": null,
+   "dtype": "String",
+   "max_value": null,
+   "min_value": null,
+   "null_rate_max": 0.05,
+   "required": true
+  },
+  "espn_date": {
+   "allowed_values": null,
+   "dtype": "String",
+   "max_value": null,
+   "min_value": null,
+   "null_rate_max": 0.490745,
+   "required": true
+  },
+  "espn_game_id": {
+   "allowed_values": null,
+   "dtype": "Int64",
+   "max_value": null,
+   "min_value": null,
+   "null_rate_max": 0.490745,
+   "required": true
+  },
+  "fox_date": {
+   "allowed_values": null,
+   "dtype": "String",
+   "max_value": null,
+   "min_value": null,
+   "null_rate_max": 0.510599,
+   "required": true
+  },
+  "fox_game_id": {
+   "allowed_values": null,
+   "dtype": "String",
+   "max_value": null,
+   "min_value": null,
+   "null_rate_max": 0.510599,
+   "required": true
+  },
+  "home_team": {
+   "allowed_values": null,
+   "dtype": "String",
+   "max_value": null,
+   "min_value": null,
+   "null_rate_max": 0.05,
+   "required": true
+  },
+  "matched_sources": {
+   "allowed_values": [
+    "espn+fox",
+    "espn+fox+yahoo",
+    "espn+yahoo",
+    "yahoo"
+   ],
+   "dtype": "String",
+   "max_value": null,
+   "min_value": null,
+   "null_rate_max": 0.05,
+   "required": true
+  },
+  "matchup_key": {
+   "allowed_values": null,
+   "dtype": "String",
+   "max_value": null,
+   "min_value": null,
+   "null_rate_max": 0.05,
+   "required": true
+  },
+  "yahoo_date": {
+   "allowed_values": null,
+   "dtype": "String",
+   "max_value": null,
+   "min_value": null,
+   "null_rate_max": 0.050305,
+   "required": true
+  },
+  "yahoo_game_id": {
+   "allowed_values": null,
+   "dtype": "String",
+   "max_value": null,
+   "min_value": null,
+   "null_rate_max": 0.050305,
+   "required": true
+  },
+  "yahoo_global_game_id": {
+   "allowed_values": null,
+   "dtype": "String",
+   "max_value": null,
+   "min_value": null,
+   "null_rate_max": 0.050305,
+   "required": true
+  }
+ },
+ "key": null,
+ "min_rows": 3208,
+ "min_rows_per_partition": null,
+ "name": "cfb_schedule_crosswalk",
+ "partition_key": null
+}

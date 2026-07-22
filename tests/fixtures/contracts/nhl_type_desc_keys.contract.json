@@ -1,0 +1,32 @@
+{
+ "columns": {
+  "event_type": {
+   "allowed_values": [
+    "blocked-shot",
+    "delayed-penalty",
+    "faceoff",
+    "game-end",
+    "giveaway",
+    "goal",
+    "hit",
+    "missed-shot",
+    "penalty",
+    "period-end",
+    "period-start",
+    "shot-on-goal",
+    "stoppage",
+    "takeaway"
+   ],
+   "dtype": "String",
+   "max_value": null,
+   "min_value": null,
+   "null_rate_max": null,
+   "required": true
+  }
+ },
+ "key": null,
+ "min_rows": null,
+ "min_rows_per_partition": null,
+ "name": "nhl_type_desc_keys",
+ "partition_key": null
+}

@@ -1,0 +1,31 @@
+{
+ "columns": {
+  "event_type": {
+   "allowed_values": [
+    "Bunt Groundout",
+    "Caught Stealing 2B",
+    "Double",
+    "Field Error",
+    "Flyout",
+    "Forceout",
+    "Grounded Into DP",
+    "Groundout",
+    "Home Run",
+    "Lineout",
+    "Single",
+    "Strikeout",
+    "Walk"
+   ],
+   "dtype": "String",
+   "max_value": null,
+   "min_value": null,
+   "null_rate_max": null,
+   "required": true
+  }
+ },
+ "key": null,
+ "min_rows": null,
+ "min_rows_per_partition": null,
+ "name": "mlb_result_events",
+ "partition_key": null
+}

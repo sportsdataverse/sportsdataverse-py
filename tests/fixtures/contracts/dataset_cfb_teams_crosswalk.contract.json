@@ -1,0 +1,103 @@
+{
+ "columns": {
+  "espn_abbreviation": {
+   "allowed_values": null,
+   "dtype": "String",
+   "max_value": null,
+   "min_value": null,
+   "null_rate_max": 0.137062,
+   "required": true
+  },
+  "espn_team": {
+   "allowed_values": null,
+   "dtype": "String",
+   "max_value": null,
+   "min_value": null,
+   "null_rate_max": 0.137062,
+   "required": true
+  },
+  "espn_team_id": {
+   "allowed_values": null,
+   "dtype": "Int64",
+   "max_value": null,
+   "min_value": null,
+   "null_rate_max": 0.137062,
+   "required": true
+  },
+  "fox_abbreviation": {
+   "allowed_values": null,
+   "dtype": "String",
+   "max_value": null,
+   "min_value": null,
+   "null_rate_max": 0.403083,
+   "required": true
+  },
+  "fox_team": {
+   "allowed_values": null,
+   "dtype": "String",
+   "max_value": null,
+   "min_value": null,
+   "null_rate_max": 0.403083,
+   "required": true
+  },
+  "fox_team_id": {
+   "allowed_values": null,
+   "dtype": "String",
+   "max_value": null,
+   "min_value": null,
+   "null_rate_max": 0.403083,
+   "required": true
+  },
+  "matched_sources": {
+   "allowed_values": [
+    "espn",
+    "espn+fox",
+    "espn+fox+yahoo",
+    "fox",
+    "fox+yahoo"
+   ],
+   "dtype": "String",
+   "max_value": null,
+   "min_value": null,
+   "null_rate_max": 0.05,
+   "required": true
+  },
+  "norm_key": {
+   "allowed_values": null,
+   "dtype": "String",
+   "max_value": null,
+   "min_value": null,
+   "null_rate_max": 0.05,
+   "required": true
+  },
+  "yahoo_abbreviation": {
+   "allowed_values": null,
+   "dtype": "String",
+   "max_value": null,
+   "min_value": null,
+   "null_rate_max": 0.72896,
+   "required": true
+  },
+  "yahoo_team": {
+   "allowed_values": null,
+   "dtype": "String",
+   "max_value": null,
+   "min_value": null,
+   "null_rate_max": 0.72896,
+   "required": true
+  },
+  "yahoo_team_id": {
+   "allowed_values": null,
+   "dtype": "String",
+   "max_value": null,
+   "min_value": null,
+   "null_rate_max": 0.72896,
+   "required": true
+  }
+ },
+ "key": null,
+ "min_rows": 1620,
+ "min_rows_per_partition": null,
+ "name": "cfb_teams_crosswalk",
+ "partition_key": null
+}

@@ -1,0 +1,21 @@
+{
+ "columns": {
+  "event_type": {
+   "allowed_values": [
+    "in",
+    "post",
+    "pre"
+   ],
+   "dtype": "String",
+   "max_value": null,
+   "min_value": null,
+   "null_rate_max": null,
+   "required": true
+  }
+ },
+ "key": null,
+ "min_rows": null,
+ "min_rows_per_partition": null,
+ "name": "espn_scoreboard_states",
+ "partition_key": null
+}

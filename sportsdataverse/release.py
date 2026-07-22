@@ -30,6 +30,7 @@ vars the R package reads (``SPORTSDATAVERSE.UPLOAD.INSIST`` /
 
 from __future__ import annotations
 
+import dataclasses
 import json
 import os
 import re
@@ -45,7 +46,15 @@ from typing import Any
 
 import polars as pl
 
+from sportsdataverse._common.publish_audit import (
+    DEFAULT_SHRINK_TOLERANCE,
+    FINGERPRINT_SUFFIX,
+    append_manifest,
+    audit_asset,
+    read_fingerprint,
+)
 from sportsdataverse._rds import write_rds
+from sportsdataverse.modeling.integrity.contracts import DataContract, validate_frame
 
 DEFAULT_REPO = "sportsdataverse/sportsdataverse-data"
 
@@ -65,6 +74,7 @@ _ASSETS_SCHEMA: dict[str, type[pl.DataType]] = {
 }
 
 __all__ = [
+    "AuditSpec",
     "DEFAULT_REPO",
     "gh_cli_available",
     "gh_cli_rate_limits",
@@ -74,6 +84,100 @@ __all__ = [
     "sportsdataverse_save",
     "sportsdataverse_upload",
 ]
+
+
+@dataclasses.dataclass(frozen=True)
+class AuditSpec:
+    """Publish-integrity audit configuration for release uploads (WS1).
+
+    The zero-argument spec is fingerprint-only: every parquet asset gets a
+    ``<asset>.fingerprint.json`` sidecar uploaded alongside it, and nothing can
+    block. Blocking (completeness) checks activate only through ``key_cols`` /
+    ``row_floor`` / ``prior_dir``; drift findings are always warn-only.
+
+    Attributes:
+        key_cols: Identity columns whose coverage must never silently shrink.
+        row_floor: Absolute minimum row count per asset.
+        tolerance: Allowed fractional shrinkage vs the prior release.
+        prior_dir: Directory holding prior-release fingerprint sidecars
+            (drift + shrink comparisons; None skips them).
+        manifest: Parquet manifest append-log path (None skips the manifest).
+        contract: Optional data contract(s) validated against every parquet
+            asset before upload — a single
+            :class:`~sportsdataverse.modeling.integrity.contracts.DataContract`
+            applies to every asset; a mapping routes by asset filename (or
+            stem), unmatched assets skip. Blocking violations join the
+            completeness block; drift-class violations warn.
+    """
+
+    key_cols: tuple[str, ...] = ()
+    row_floor: int | None = None
+    tolerance: float = DEFAULT_SHRINK_TOLERANCE
+    prior_dir: str | Path | None = None
+    manifest: str | Path | None = None
+    contract: DataContract | dict[str, DataContract] | None = None
+
+
+def _contract_for(setting: DataContract | dict[str, DataContract] | None, filename: str) -> DataContract | None:
+    if setting is None or isinstance(setting, DataContract):
+        return setting
+    return setting.get(filename) or setting.get(Path(filename).stem)
+
+
+def _audit_parquet_files(files: list[Path], spec: AuditSpec) -> list[Path]:
+    """Audit the parquet members of an upload set; return fingerprint sidecars.
+
+    Raises:
+        RuntimeError: When any asset fails a completeness check — raised
+            BEFORE any upload so a bad asset never partially publishes.
+    """
+    sidecars: list[Path] = []
+    blocked: list[str] = []
+    for path in files:
+        if path.suffix != ".parquet":
+            continue
+        prior = None
+        if spec.prior_dir is not None:
+            prior_sidecar = Path(spec.prior_dir) / (path.name + FINGERPRINT_SUFFIX)
+            if prior_sidecar.exists():
+                prior = read_fingerprint(prior_sidecar)
+        result = audit_asset(
+            path,
+            key_cols=spec.key_cols,
+            prior=prior,
+            row_floor=spec.row_floor,
+            tolerance=spec.tolerance,
+        )
+        for warning in result.drift_warnings:
+            warnings.warn(f"publish audit drift [{result.asset}]: {warning}", stacklevel=3)
+        if spec.manifest is not None:
+            append_manifest(spec.manifest, result)
+        if not result.ok:
+            blocked.extend(f"{result.asset}: {error}" for error in result.errors)
+        asset_contract = _contract_for(spec.contract, path.name)
+        if asset_contract is not None:
+            report = validate_frame(pl.read_parquet(path), asset_contract)
+            for violation in report.warnings:
+                warnings.warn(
+                    f"data contract [{path.name}] {violation.kind}[{violation.column}]: {violation.detail}",
+                    stacklevel=3,
+                )
+            blocked.extend(
+                f"{path.name}: contract {violation.kind}[{violation.column}]: {violation.detail}"
+                for violation in report.blocking
+            )
+        sidecars.append(Path(str(path) + FINGERPRINT_SUFFIX))
+    if blocked:
+        raise RuntimeError("publish audit BLOCKED the upload (completeness):\n  " + "\n  ".join(blocked))
+    return sidecars
+
+
+def _resolve_audit(audit: AuditSpec | bool | None) -> AuditSpec | None:
+    if audit is True:
+        return AuditSpec()
+    if audit is False:
+        return None
+    return audit
 
 
 def _gh_env() -> dict[str, str]:
@@ -340,6 +444,7 @@ def sportsdataverse_upload(
     *,
     repo: str = DEFAULT_REPO,
     overwrite: bool = True,
+    audit: AuditSpec | bool | None = None,
 ) -> bool:
     """Upload files plus timestamp sidecars to a sportsdataverse release.
 
@@ -358,6 +463,11 @@ def sportsdataverse_upload(
         overwrite: Pass ``--clobber`` so existing assets are replaced. Retry
             attempts always clobber regardless — a failed attempt may have
             landed some files already, and re-uploading them must succeed.
+        audit: Publish-integrity audit (WS1). ``None`` (default) skips
+            it (parity with the R package); ``True`` fingerprints every
+            parquet asset and uploads the ``.fingerprint.json`` sidecars;
+            an :class:`AuditSpec` additionally enables the blocking
+            completeness gate + drift warnings vs ``prior_dir``.
 
     Returns:
         True when files were uploaded, False when none existed.
@@ -375,7 +485,13 @@ def sportsdataverse_upload(
                 pkg_function="sportsdataverse.nfl.load_nfl_espn_qbr()",
             )
     """
-    files = list(files)  # a generator would be exhausted on retry attempt 2
+    file_paths = [Path(f) for f in files]  # a generator would be exhausted on retry attempt 2
+    spec = _resolve_audit(audit)
+    if spec is not None:
+        # audit once, BEFORE the retry loop: a blocked asset never uploads,
+        # and the fingerprint sidecars ride along with the release assets so
+        # the next publish has priors to diff against.
+        file_paths += _audit_parquet_files(file_paths, spec)
     insist = os.environ.get("SPORTSDATAVERSE.UPLOAD.INSIST", "true") == "true"
     pause_base = float(os.environ.get("SPORTSDATAVERSE.UPLOAD.PAUSE_BASE", "0.05"))
     pause_min = float(os.environ.get("SPORTSDATAVERSE.UPLOAD.PAUSE_MIN", "1"))
@@ -388,7 +504,7 @@ def sportsdataverse_upload(
             if pkg_function is not None:
                 sidecars += _create_package_function(temp_dir, pkg_function)
             return gh_cli_release_upload(
-                [*files, *sidecars],
+                [*file_paths, *sidecars],
                 tag=tag,
                 repo=repo,
                 # retries re-upload files a failed earlier attempt may have
@@ -420,6 +536,7 @@ def sportsdataverse_save(
     *,
     file_types: Iterable[str] = ("rds", "csv", "parquet"),
     repo: str = DEFAULT_REPO,
+    audit: AuditSpec | bool | None = True,
 ) -> list[Path]:
     """Save a frame in release formats and upload it (upload.R L100-188).
 
@@ -442,6 +559,12 @@ def sportsdataverse_save(
             raises ``ValueError`` — write that from R via
             ``sportsdataversedata``.
         repo: Target repository. Defaults to ``sportsdataverse/sportsdataverse-data``.
+        audit: Publish-integrity audit (WS1). Defaults to ``True`` —
+            fingerprint-only, which uploads a ``.fingerprint.json`` sidecar
+            next to the parquet asset and can never block. Pass an
+            :class:`AuditSpec` (``key_cols`` / ``row_floor`` / ``prior_dir``)
+            to enable the blocking completeness gate + drift warnings, or
+            ``None`` / ``False`` for exact R-parity behavior.
 
     Returns:
         Paths of the data files written (sidecars excluded). They live in a
@@ -529,5 +652,5 @@ def sportsdataverse_save(
         df.write_parquet(path, metadata=metadata)
         written.append(path)
 
-    sportsdataverse_upload(written, tag=release_tag, pkg_function=pkg_function, repo=repo)
+    sportsdataverse_upload(written, tag=release_tag, pkg_function=pkg_function, repo=repo, audit=audit)
     return written

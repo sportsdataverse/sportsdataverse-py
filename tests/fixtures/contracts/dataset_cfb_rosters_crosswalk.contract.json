@@ -1,0 +1,149 @@
+{
+ "columns": {
+  "espn_athlete_id": {
+   "allowed_values": null,
+   "dtype": "Int64",
+   "max_value": null,
+   "min_value": null,
+   "null_rate_max": 0.359592,
+   "required": true
+  },
+  "espn_jersey": {
+   "allowed_values": null,
+   "dtype": "String",
+   "max_value": null,
+   "min_value": null,
+   "null_rate_max": 0.371807,
+   "required": true
+  },
+  "espn_position": {
+   "allowed_values": null,
+   "dtype": "String",
+   "max_value": null,
+   "min_value": null,
+   "null_rate_max": 0.359592,
+   "required": true
+  },
+  "espn_team_id": {
+   "allowed_values": null,
+   "dtype": "Int64",
+   "max_value": null,
+   "min_value": null,
+   "null_rate_max": 0.05,
+   "required": true
+  },
+  "fox_athlete_id": {
+   "allowed_values": null,
+   "dtype": "String",
+   "max_value": null,
+   "min_value": null,
+   "null_rate_max": 0.090037,
+   "required": true
+  },
+  "fox_jersey": {
+   "allowed_values": null,
+   "dtype": "String",
+   "max_value": null,
+   "min_value": null,
+   "null_rate_max": 1.0,
+   "required": true
+  },
+  "fox_position": {
+   "allowed_values": [
+    "C",
+    "CB",
+    "DB",
+    "DE",
+    "DL",
+    "DT",
+    "FB",
+    "G",
+    "K",
+    "LB",
+    "LS",
+    "NT",
+    "OL",
+    "P",
+    "QB",
+    "RB",
+    "S",
+    "T",
+    "TE",
+    "WR"
+   ],
+   "dtype": "String",
+   "max_value": null,
+   "min_value": null,
+   "null_rate_max": 0.090037,
+   "required": true
+  },
+  "fox_team_id": {
+   "allowed_values": null,
+   "dtype": "String",
+   "max_value": null,
+   "min_value": null,
+   "null_rate_max": 0.05,
+   "required": true
+  },
+  "match_method": {
+   "allowed_values": [
+    "name",
+    "unmatched"
+   ],
+   "dtype": "String",
+   "max_value": null,
+   "min_value": null,
+   "null_rate_max": 0.05,
+   "required": true
+  },
+  "matched_sources": {
+   "allowed_values": [
+    "espn",
+    "espn+fox",
+    "fox"
+   ],
+   "dtype": "String",
+   "max_value": null,
+   "min_value": null,
+   "null_rate_max": 0.05,
+   "required": true
+  },
+  "name": {
+   "allowed_values": null,
+   "dtype": "String",
+   "max_value": null,
+   "min_value": null,
+   "null_rate_max": 0.05,
+   "required": true
+  },
+  "person_key": {
+   "allowed_values": null,
+   "dtype": "String",
+   "max_value": null,
+   "min_value": null,
+   "null_rate_max": 0.05,
+   "required": true
+  },
+  "yahoo_athlete_id": {
+   "allowed_values": null,
+   "dtype": "String",
+   "max_value": null,
+   "min_value": null,
+   "null_rate_max": 1.0,
+   "required": true
+  },
+  "yahoo_position": {
+   "allowed_values": null,
+   "dtype": "String",
+   "max_value": null,
+   "min_value": null,
+   "null_rate_max": 1.0,
+   "required": true
+  }
+ },
+ "key": null,
+ "min_rows": 36985,
+ "min_rows_per_partition": null,
+ "name": "cfb_rosters_crosswalk",
+ "partition_key": null
+}
