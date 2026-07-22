@@ -60,3 +60,71 @@ def test_wnba_runtime_fixes_host():
     wget("leaguedashplayerstats", {}, transport=transport)
     assert captured["url"] == "https://stats.wnba.com/stats/leaguedashplayerstats"
     assert captured["host_header"] == "stats.wnba.com"
+
+
+# --- retry / timeout tunables (SDV_PY_NBA_STATS_RETRIES / _TIMEOUT / _BACKOFF) ---
+
+
+def test_get_no_retry_by_default(monkeypatch):
+    monkeypatch.delenv("SDV_PY_NBA_STATS_RETRIES", raising=False)
+    calls = {"n": 0}
+
+    def transport(url, params, headers, proxy_url):
+        calls["n"] += 1
+        return 200, "{}"  # blank envelope
+
+    assert _get("gamerotation", {}, transport=transport) == {}
+    assert calls["n"] == 1  # single shot, no retry
+
+
+def test_get_retries_on_empty_then_succeeds(monkeypatch):
+    monkeypatch.setenv("SDV_PY_NBA_STATS_RETRIES", "3")
+    monkeypatch.setenv("SDV_PY_NBA_STATS_BACKOFF", "0")
+    seq = iter([(200, "{}"), (200, "{}"), (200, '{"resultSets": [1]}')])
+
+    def transport(url, params, headers, proxy_url):
+        return next(seq)
+
+    out = _get("gamerotation", {}, transport=transport)
+    assert out == {"resultSets": [1]}  # recovered on the 3rd attempt
+
+
+def test_get_retries_on_exception_then_succeeds(monkeypatch):
+    monkeypatch.setenv("SDV_PY_NBA_STATS_RETRIES", "2")
+    monkeypatch.setenv("SDV_PY_NBA_STATS_BACKOFF", "0")
+    calls = {"n": 0}
+
+    def transport(url, params, headers, proxy_url):
+        calls["n"] += 1
+        if calls["n"] == 1:
+            raise TimeoutError("curl 28")
+        return 200, '{"resultSets": [1]}'
+
+    assert _get("gamerotation", {}, transport=transport) == {"resultSets": [1]}
+    assert calls["n"] == 2
+
+
+def test_get_exhausted_exception_reraises(monkeypatch):
+    monkeypatch.setenv("SDV_PY_NBA_STATS_RETRIES", "2")
+    monkeypatch.setenv("SDV_PY_NBA_STATS_BACKOFF", "0")
+
+    def transport(url, params, headers, proxy_url):
+        raise TimeoutError("always hangs")
+
+    import pytest
+
+    with pytest.raises(TimeoutError):
+        _get("gamerotation", {}, transport=transport)
+
+
+def test_get_exhausted_empty_returns_blank(monkeypatch):
+    monkeypatch.setenv("SDV_PY_NBA_STATS_RETRIES", "2")
+    monkeypatch.setenv("SDV_PY_NBA_STATS_BACKOFF", "0")
+    calls = {"n": 0}
+
+    def transport(url, params, headers, proxy_url):
+        calls["n"] += 1
+        return 200, "{}"
+
+    assert _get("gamerotation", {}, transport=transport) == {}
+    assert calls["n"] == 3  # 1 + 2 retries, then gives up
