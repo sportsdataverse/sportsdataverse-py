@@ -2220,9 +2220,9 @@ def load_cfb_passing(seasons, return_as_pandas: bool = False):
         |att                 |Float64 |
         |comppct             |Float64 |
         |passing_td          |Float64 |
-        |sacked              |Float64 |
+        |sacked              |Int32   |
         |sack_yds            |Float64 |
-        |pass_int            |Float64 |
+        |pass_int            |Int32   |
         |detmer              |Float64 |
         |detmergame          |Float64 |
         |dropbacks           |Float64 |

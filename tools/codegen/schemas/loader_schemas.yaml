@@ -927,11 +927,11 @@ load_cfb_passing:
 - name: passing_td
   type: Float64
 - name: sacked
-  type: Float64
+  type: Int32
 - name: sack_yds
   type: Float64
 - name: pass_int
-  type: Float64
+  type: Int32
 - name: detmer
   type: Float64
 - name: detmergame

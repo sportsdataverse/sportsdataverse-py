@@ -1454,9 +1454,9 @@ Release: [espn_cfb_passing](https://github.com/sportsdataverse/sportsdataverse-d
 | `att` | Float64 |
 | `comppct` | Float64 |
 | `passing_td` | Float64 |
-| `sacked` | Float64 |
+| `sacked` | Int32 |
 | `sack_yds` | Float64 |
-| `pass_int` | Float64 |
+| `pass_int` | Int32 |
 | `detmer` | Float64 |
 | `detmergame` | Float64 |
 | `dropbacks` | Float64 |
