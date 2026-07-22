@@ -72,6 +72,12 @@ def _read_release_parquet(url: str) -> Optional[pl.DataFrame]:
     aren't silently swallowed. The token list is deliberately narrow: ``403/forbidden``
     (rate-limit / auth) and generic ``could not`` (parse/type failures) are NOT treated
     as missing assets, so they surface instead of being masked as "no data".
+
+    R-producer assets can carry an ``arrow.r.vctrs`` field-extension whose metadata is
+    raw RDS bytes (not UTF-8) — e.g. a ``glue`` character column. polars' arrow-FFI
+    import panics on that metadata (``pyo3 PanicException``, a ``BaseException`` the
+    404 classifier never sees), so on panic we re-read via pyarrow with all
+    field/schema metadata stripped; the storage types are plain, so this is lossless.
     """
     try:
         return pl.read_parquet(url, use_pyarrow=True)
@@ -80,6 +86,25 @@ def _read_release_parquet(url: str) -> Optional[pl.DataFrame]:
         if any(tok in msg for tok in ("404", "not found", "no such")):
             return None
         raise
+    except BaseException as e:  # pyo3 PanicException does not subclass Exception
+        if type(e).__name__ != "PanicException":
+            raise
+        return _read_parquet_stripped_metadata(url)
+
+
+def _read_parquet_stripped_metadata(url: str) -> pl.DataFrame:
+    """Fetch a parquet and load it with every field/schema metadata entry dropped."""
+    import io
+
+    import pyarrow as pa
+    import pyarrow.parquet as pq
+
+    resp = download(url)
+    tbl = pq.read_table(io.BytesIO(resp.content))
+    plain = pa.schema([pa.field(f.name, f.type) for f in tbl.schema])
+    out = pl.from_arrow(tbl.cast(plain).replace_schema_metadata(None))
+    assert isinstance(out, pl.DataFrame)
+    return out
 
 
 def format_nhl_season(season: Any) -> Optional[str]:
