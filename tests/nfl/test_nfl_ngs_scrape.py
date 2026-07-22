@@ -231,10 +231,24 @@ def test_scrape_season_live_passing_2023():
         "avg_time_to_throw",
     ):
         assert col in df.columns, f"missing key column: {col}"
-    # Season-aggregate (week 0) + regular-season weeks present.
+    # Regular-season weeks present.
     weeks = set(df["week"].unique().to_list())
-    assert 0 in weeks
     assert weeks & set(range(1, 19))
     # team_abbr resolved for the vast majority of rows.
     resolved = df.filter(pl.col("team_abbr").is_not_null()).height
     assert resolved / df.height > 0.95
+
+
+@skip_if_no_live
+@pytest.mark.xfail(
+    strict=False,
+    reason=(
+        "NGS stopped serving the week-less season-aggregate statboard around "
+        "2026-07 (empty stats[] envelope for every season; weekly queries fine). "
+        "scrape_ngs_season still requests week 0 so this self-heals if upstream "
+        "restores the aggregate — at which point this xfail starts XPASSing."
+    ),
+)
+def test_scrape_season_live_includes_week0_aggregate():
+    df = scrape_ngs_season("passing", 2023)
+    assert 0 in set(df["week"].unique().to_list())

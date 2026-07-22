@@ -856,6 +856,20 @@ def scrape_ngs_season(
         )
         if wk.height:
             frames.append(wk)
+        elif week == 0:
+            # Upstream drift (observed 2026-07): the week-less season-aggregate
+            # statboard returns an empty stats[] envelope for every season while
+            # weekly queries still work. Keep requesting it (self-heals if NGS
+            # restores the aggregate) but surface the gap instead of dropping it
+            # silently.
+            import warnings
+
+            warnings.warn(
+                f"scrape_ngs_season({stat_type!r}, {season}): NGS returned no "
+                "season-aggregate (week=0) rows — upstream currently serves an "
+                "empty aggregate statboard; weekly rows are unaffected.",
+                stacklevel=2,
+            )
 
     if not frames:
         return _empty_ngs_frame(stat_type, return_as_pandas)
