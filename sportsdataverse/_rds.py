@@ -20,8 +20,8 @@ from __future__ import annotations
 
 import gzip
 import os
+import secrets
 import struct
-import tempfile
 from contextlib import nullcontext
 from datetime import datetime, timezone
 from functools import partial
@@ -59,9 +59,36 @@ _INT32_MAX = 2**31 - 1
 _R_VERSION = (4 << 16) | (5 << 8) | 3
 _R_MIN_VERSION = (2 << 16) | (3 << 8) | 0
 
+# O_EXCL retries when claiming a temp name; a collision needs a 64-bit token clash
+_TEMP_NAME_ATTEMPTS = 8
+
 # runtime-evaluated alias: `str | datetime` needs py3.10+, floor is 3.9
 _AttrValue = Union[str, datetime]
 _ColumnWriter = Callable[[], None]
+
+
+def _create_temp_sibling(out_path: Path) -> tuple[int, Path]:
+    """Create a uniquely-named sibling of ``out_path``; return its fd and path.
+
+    ``tempfile.mkstemp`` would do this but hardcodes mode 0600, and the rename that
+    publishes the file preserves that mode -- so every output would silently become
+    owner-only. Creating with 0666 lets the kernel subtract the caller's umask, which
+    is exactly what ``open(path, "wb")`` did before the atomic-write change.
+
+    Reading the umask in-process instead (``os.umask(0)`` then restore) would mutate
+    process-global state and race any other thread creating a file in that window.
+
+    Raises:
+        OSError: If no unique name could be claimed.
+    """
+    for _ in range(_TEMP_NAME_ATTEMPTS):
+        candidate = out_path.with_name(f".{out_path.name}.{secrets.token_hex(8)}.partial")
+        try:
+            fd = os.open(candidate, os.O_CREAT | os.O_EXCL | os.O_WRONLY, 0o666)
+        except FileExistsError:
+            continue
+        return fd, candidate
+    raise OSError(f"could not claim a unique temp name next to {out_path}")
 
 
 class _ByteSink(Protocol):
@@ -407,14 +434,13 @@ def write_rds(
     # filesystem and never exposes a partial file at `path`. The temp name is unique
     # per writer: two processes writing the same `path` (two compiles sharing an
     # out_dir) would otherwise interleave their bytes into one fixed temp file.
-    fd, tmp_name = tempfile.mkstemp(dir=out_path.parent, prefix=f".{out_path.name}.", suffix=".partial")
-    tmp_path = Path(tmp_name)
-    # mkstemp creates 0600 and rename preserves the mode, so without this the output
-    # would silently become owner-only -- where opening the destination directly gave
-    # the usual umask-derived 0644. Match what a plain open() would have produced.
-    _umask = os.umask(0o022)
-    os.umask(_umask)
-    os.chmod(tmp_path, 0o666 & ~_umask)
+    # Opened O_EXCL with mode 0666 rather than via tempfile.mkstemp: mkstemp forces
+    # 0600, and rename preserves the mode, so the output would silently become
+    # owner-only where opening the destination directly gave the usual 0644. Passing
+    # 0666 lets the kernel subtract the caller's umask exactly as open() would --
+    # reading the umask in-process instead would mean os.umask(), which mutates
+    # process-global state and races any other thread creating a file meanwhile.
+    fd, tmp_path = _create_temp_sibling(out_path)
     try:
         with os.fdopen(fd, "wb") as raw:
             # gzip stamps the output filename into its header, so name it for the
