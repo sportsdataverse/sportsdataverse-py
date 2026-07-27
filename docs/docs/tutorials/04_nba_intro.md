@@ -233,21 +233,21 @@ cols = ['full_name', 'jersey', 'position_abbreviation', 'height', 'weight', 'age
 
 
     shape: (10, 6)
-    ┌───────────────────┬────────┬───────────────────────┬────────┬────────┬─────┐
-    │ full_name         ┆ jersey ┆ position_abbreviation ┆ height ┆ weight ┆ age │
-    │ ---               ┆ ---    ┆ ---                   ┆ ---    ┆ ---    ┆ --- │
-    │ str               ┆ str    ┆ str                   ┆ f64    ┆ f64    ┆ i64 │
-    ╞═══════════════════╪════════╪═══════════════════════╪════════╪════════╪═════╡
-    │ Dalano Banton     ┆ 45     ┆ F                     ┆ 80.0   ┆ 203.0  ┆ 26  │
-    │ Jaylen Brown      ┆ 7      ┆ G                     ┆ 78.0   ┆ 223.0  ┆ 29  │
-    │ Luka Garza        ┆ 52     ┆ C                     ┆ 82.0   ┆ 243.0  ┆ 27  │
-    │ Hugo Gonzalez     ┆ 28     ┆ G                     ┆ 78.0   ┆ 200.0  ┆ 20  │
-    │ …                 ┆ …      ┆ …                     ┆ …      ┆ …      ┆ …   │
-    │ Payton Pritchard  ┆ 11     ┆ G                     ┆ 73.0   ┆ 195.0  ┆ 28  │
-    │ Neemias Queta     ┆ 88     ┆ C                     ┆ 84.0   ┆ 248.0  ┆ 26  │
-    │ Baylor Scheierman ┆ 55     ┆ G                     ┆ 78.0   ┆ 205.0  ┆ 25  │
-    │ Max Shulga        ┆ 44     ┆ G                     ┆ 76.0   ┆ 210.0  ┆ 23  │
-    └───────────────────┴────────┴───────────────────────┴────────┴────────┴─────┘
+    ┌──────────────────┬────────┬───────────────────────┬────────┬────────┬─────┐
+    │ full_name        ┆ jersey ┆ position_abbreviation ┆ height ┆ weight ┆ age │
+    │ ---              ┆ ---    ┆ ---                   ┆ ---    ┆ ---    ┆ --- │
+    │ str              ┆ str    ┆ str                   ┆ f64    ┆ f64    ┆ i64 │
+    ╞══════════════════╪════════╪═══════════════════════╪════════╪════════╪═════╡
+    │ Chris Cenac Jr.  ┆ 12     ┆ F                     ┆ 83.0   ┆ 240.0  ┆ 19  │
+    │ Mike Conley      ┆ null   ┆ G                     ┆ 73.0   ┆ 175.0  ┆ 38  │
+    │ Luka Garza       ┆ 52     ┆ C                     ┆ 82.0   ┆ 243.0  ┆ 27  │
+    │ Paul George      ┆ 8      ┆ F                     ┆ 80.0   ┆ 220.0  ┆ 36  │
+    │ …                ┆ …      ┆ …                     ┆ …      ┆ …      ┆ …   │
+    │ Sam Hauser       ┆ 30     ┆ F                     ┆ 79.0   ┆ 217.0  ┆ 28  │
+    │ Dillon Mitchell  ┆ null   ┆ F                     ┆ 80.0   ┆ 210.0  ┆ 22  │
+    │ Payton Pritchard ┆ 11     ┆ G                     ┆ 73.0   ┆ 195.0  ┆ 28  │
+    │ Neemias Queta    ┆ 88     ┆ C                     ┆ 84.0   ┆ 248.0  ┆ 27  │
+    └──────────────────┴────────┴───────────────────────┴────────┴────────┴─────┘
 
 
 
@@ -266,7 +266,7 @@ cols = ['id', 'date', 'name', 'short_name', 'season_year']
  if tsched is not None and tsched.height else 'team schedule unavailable')
 ```
 
-    ✅ team schedule 2 — 7 rows
+    ✅ team schedule 2 — 82 rows
 
 
 
@@ -278,11 +278,11 @@ cols = ['id', 'date', 'name', 'short_name', 'season_year']
     │ ---       ┆ ---               ┆ ---                             ┆ ---        ┆ ---         │
     │ str       ┆ str               ┆ str                             ┆ str        ┆ i64         │
     ╞═══════════╪═══════════════════╪═════════════════════════════════╪════════════╪═════════════╡
-    │ 401869191 ┆ 2026-04-19T17:00Z ┆ Philadelphia 76ers at Boston C… ┆ PHI @ BOS  ┆ 2026        │
-    │ 401869396 ┆ 2026-04-21T23:00Z ┆ Philadelphia 76ers at Boston C… ┆ PHI @ BOS  ┆ 2026        │
-    │ 401869404 ┆ 2026-04-24T23:00Z ┆ Boston Celtics at Philadelphia… ┆ BOS @ PHI  ┆ 2026        │
-    │ 401869406 ┆ 2026-04-26T23:00Z ┆ Boston Celtics at Philadelphia… ┆ BOS @ PHI  ┆ 2026        │
-    │ 401869408 ┆ 2026-04-28T23:00Z ┆ Philadelphia 76ers at Boston C… ┆ PHI @ BOS  ┆ 2026        │
+    │ 401809936 ┆ 2025-10-22T23:30Z ┆ Philadelphia 76ers at Boston C… ┆ PHI @ BOS  ┆ 2026        │
+    │ 401809945 ┆ 2025-10-24T23:30Z ┆ Boston Celtics at New York Kni… ┆ BOS @ NY   ┆ 2026        │
+    │ 401809961 ┆ 2025-10-26T19:30Z ┆ Boston Celtics at Detroit Pist… ┆ BOS @ DET  ┆ 2026        │
+    │ 401809972 ┆ 2025-10-28T00:00Z ┆ Boston Celtics at New Orleans … ┆ BOS @ NO   ┆ 2026        │
+    │ 401809983 ┆ 2025-10-29T23:00Z ┆ Cleveland Cavaliers at Boston … ┆ CLE @ BOS  ┆ 2026        │
     └───────────┴───────────────────┴─────────────────────────────────┴────────────┴─────────────┘
 
 
@@ -522,8 +522,8 @@ out
     │ Jalen Johnson        ┆ ATL               ┆ 51             │
     │ …                    ┆ …                 ┆ …              │
     │ Donovan Clingan      ┆ POR               ┆ 37             │
-    │ Alperen Sengun       ┆ HOU               ┆ 37             │
     │ Rudy Gobert          ┆ MIN               ┆ 37             │
+    │ Alperen Sengun       ┆ HOU               ┆ 37             │
     │ Bam Adebayo          ┆ MIA               ┆ 35             │
     └──────────────────────┴───────────────────┴────────────────┘
 
@@ -713,28 +713,28 @@ else:
 out
 ```
 
-    ✅ injuries — 27 rows
+    ✅ injuries — 29 rows
 
 
 
 
 
     shape: (12, 2)
-    ┌───────────────────────┬────────────────┐
-    │ display_name          ┆ players_listed │
-    │ ---                   ┆ ---            │
-    │ str                   ┆ i64            │
-    ╞═══════════════════════╪════════════════╡
-    │ Memphis Grizzlies     ┆ 13             │
-    │ Brooklyn Nets         ┆ 10             │
-    │ Chicago Bulls         ┆ 10             │
-    │ Indiana Pacers        ┆ 9              │
-    │ …                     ┆ …              │
-    │ Washington Wizards    ┆ 8              │
-    │ New Orleans Pelicans  ┆ 6              │
-    │ Golden State Warriors ┆ 4              │
-    │ Miami Heat            ┆ 4              │
-    └───────────────────────┴────────────────┘
+    ┌──────────────────────┬────────────────┐
+    │ display_name         ┆ players_listed │
+    │ ---                  ┆ ---            │
+    │ str                  ┆ i64            │
+    ╞══════════════════════╪════════════════╡
+    │ Brooklyn Nets        ┆ 11             │
+    │ Memphis Grizzlies    ┆ 9              │
+    │ Sacramento Kings     ┆ 9              │
+    │ Utah Jazz            ┆ 9              │
+    │ …                    ┆ …              │
+    │ Indiana Pacers       ┆ 7              │
+    │ New Orleans Pelicans ┆ 7              │
+    │ Toronto Raptors      ┆ 7              │
+    │ Miami Heat           ┆ 6              │
+    └──────────────────────┴────────────────┘
 
 
 
@@ -878,7 +878,7 @@ cols = ['athlete_display_name', 'team_abbreviation', 'starter', 'jersey', 'posit
     │ Spencer Dinwiddie    ┆ LAL               ┆ true    ┆ 26     │
     │ …                    ┆ …                 ┆ …       ┆ …      │
     │ Cam Reddish          ┆ LAL               ┆ false   ┆ 5      │
-    │ Jaxson Hayes         ┆ LAL               ┆ false   ┆ 11     │
+    │ Jaxson Hayes         ┆ LAL               ┆ false   ┆ null   │
     │ Max Christie         ┆ LAL               ┆ false   ┆ 00     │
     │ Harry Giles III      ┆ LAL               ┆ false   ┆ 20     │
     └──────────────────────┴───────────────────┴─────────┴────────┘
@@ -930,6 +930,52 @@ cols = ['id', 'date', 'home_display_name', 'away_display_name', 'home_score', 'a
 
 With the schedule release in hand, a combined-points leaderboard is a quick
 polars pipeline — cast the scores, sum them, sort descending.
+
+## stats.nba.com surface (`nba_stats_*`)
+
+Beyond the ESPN wrappers, `sportsdataverse.nba` also ships **112 wrappers** for the official `stats.nba.com` API — the same source powering [nba_api](https://github.com/swar/nba_api). The module is `nba_stats` and every function is named `nba_stats_<slug>`. These are the **capture-confirmed live, non-deprecated** endpoints; deprecated and never-populated endpoints are excluded (see `ENDPOINT_HEALTH.md` in `sdv-internal-refs` for the full active/dying/barren/dead matrix).
+
+**League routing** is a single `league_id` parameter: `"00"` → NBA, `"20"` → G-League, `"15"` → Summer League. One stem, one host, league chosen per call.
+
+**curl_cffi required for live calls:** `stats.nba.com` uses TLS/JA3 fingerprinting that silently blocks plain `requests`. Install the optional transport: `pip install "sportsdataverse[all]"` (or `pip install curl_cffi`). The wrappers run fully offline when fed a fixture — live calls simply need the extra installed.
+
+Wrappers return a tidy **polars DataFrame** by default (parsed via the generic `parse_nba_stats_result_sets` parser — which also flattens the shot-location endpoints' grouped 2-level headers into composite columns and unrolls the `scoreboardv3` game feed). Pass `return_parsed=False` for the raw `Dict` or `return_as_pandas=True` for pandas. Multi-result-set endpoints (e.g. `playercareerstats`) return `dict[str, DataFrame]`.
+
+
+```python
+from sportsdataverse.nba import nba_stats
+
+# NBA player dashboard (polars DataFrame by default)
+# Live calls require: pip install "sportsdataverse[all]"  (curl_cffi transport)
+df = safe('nba_stats_leaguedashplayerstats (NBA)',
+          lambda: nba_stats.nba_stats_leaguedashplayerstats(league_id="00"))
+
+# Same endpoint, other leagues via league_id on the SAME stem:
+gleague = safe('nba_stats_leaguedashplayerstats (G-League)',
+               lambda: nba_stats.nba_stats_leaguedashplayerstats(league_id="20"))
+summer  = safe('nba_stats_leaguedashplayerstats (Summer League)',
+               lambda: nba_stats.nba_stats_leaguedashplayerstats(league_id="15"))
+
+# Multi result-set endpoint -> dict[str, polars.DataFrame]
+career = safe('nba_stats_playercareerstats (LeBron)',
+              lambda: nba_stats.nba_stats_playercareerstats(player_id="2544"))
+
+print('career result sets:', list(career.keys()) if isinstance(career, dict) else career)
+df
+```
+
+    ⏭️  nba_stats_leaguedashplayerstats (NBA): unavailable right now (Timeout)
+
+
+    ⏭️  nba_stats_leaguedashplayerstats (G-League): unavailable right now (Timeout)
+
+
+    ⏭️  nba_stats_leaguedashplayerstats (Summer League): unavailable right now (Timeout)
+
+
+    ⏭️  nba_stats_playercareerstats (LeBron): unavailable right now (Timeout)
+    career result sets: None
+
 
 
 ```python

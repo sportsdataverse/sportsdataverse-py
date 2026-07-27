@@ -416,8 +416,6 @@ else:
 
 
 
-
-
 ```python
 # CFL team schedule — Winnipeg Blue Bombers (team_id=100) 2023 season
 schedule_cfl = safe(
@@ -435,8 +433,6 @@ else:
 ```
 
     ✅ CFL team schedule
-
-
 
 
 ---
@@ -474,8 +470,6 @@ else:
 ```
 
     ✅ college baseball scoreboard (parsed)
-
-
 
 
 
@@ -540,7 +534,7 @@ else:
     'rankings unavailable (only current during the season)'
 ```
 
-    ✅ college baseball rankings
+    ⏭️  college baseball rankings: unavailable right now (NoESPNDataError)
 
 
 ### 📅 College baseball: team schedule
@@ -632,9 +626,7 @@ else:
     'rankings unavailable (only current during the season)'
 ```
 
-    ✅ college softball rankings
-
-
+    ⏭️  college softball rankings: unavailable right now (NoESPNDataError)
 
 
 ### 🥎 College softball: game summary
@@ -943,8 +935,6 @@ else:
 ```
 
     ✅ ufl teams
-
-
     ✅ xfl teams
 
 
@@ -955,9 +945,9 @@ else:
 
 
     ✅ college_softball teams
-
-
     ✅ mch teams
+
+
     ✅ wch teams
     Total teams across all 7 leagues: 1067
 
@@ -986,7 +976,7 @@ else:
     'no CFL games today (or offseason)'
 ```
 
-    ✅ today's CFL slate (20260617)
+    ✅ today's CFL slate (20260727)
 
 
 ### Recipe 3 — Player info for any athlete 🧑‍💻
@@ -1037,8 +1027,6 @@ _keys(injuries_cfl)
 ```
 
     ✅ UFL news
-
-
     <class 'polars.dataframe.frame.DataFrame'>
     ✅ CFL injuries
     <class 'polars.dataframe.frame.DataFrame'>
@@ -1110,10 +1098,10 @@ for name, mod in [('ufl', ufl), ('xfl', xfl), ('cfl', cfl),
       ufl                 : 110 wrappers
       xfl                 : 110 wrappers
       cfl                 : 110 wrappers
-      college_baseball    : 113 wrappers
-      college_softball    : 113 wrappers
-      mch                 : 113 wrappers
-      wch                 : 113 wrappers
+      college_baseball    : 116 wrappers
+      college_softball    : 116 wrappers
+      mch                 : 116 wrappers
+      wch                 : 116 wrappers
 
 
 ---

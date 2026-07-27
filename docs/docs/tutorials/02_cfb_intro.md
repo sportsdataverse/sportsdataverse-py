@@ -436,23 +436,23 @@ out
 
 
     shape: (15, 3)
-    ┌────────────┬───────┬──────────────┐
-    │ offense    ┆ plays ┆ epa_per_play │
-    │ ---        ┆ ---   ┆ ---          │
-    │ str        ┆ u32   ┆ f64          │
-    ╞════════════╪═══════╪══════════════╡
-    │ LSU        ┆ 945   ┆ 0.374        │
-    │ Oregon     ┆ 1052  ┆ 0.343        │
-    │ Georgia    ┆ 1064  ┆ 0.268        │
-    │ USC        ┆ 956   ┆ 0.213        │
-    │ Liberty    ┆ 1079  ┆ 0.205        │
-    │ …          ┆ …     ┆ …            │
-    │ Missouri   ┆ 1003  ┆ 0.153        │
-    │ Alabama    ┆ 1030  ┆ 0.153        │
-    │ Ohio State ┆ 931   ┆ 0.151        │
-    │ Miami      ┆ 1005  ┆ 0.148        │
-    │ Ole Miss   ┆ 989   ┆ 0.147        │
-    └────────────┴───────┴──────────────┘
+    ┌───────────────┬───────┬──────────────┐
+    │ offense       ┆ plays ┆ epa_per_play │
+    │ ---           ┆ ---   ┆ ---          │
+    │ str           ┆ u32   ┆ f64          │
+    ╞═══════════════╪═══════╪══════════════╡
+    │ LSU           ┆ 945   ┆ 0.374        │
+    │ Oregon        ┆ 1052  ┆ 0.343        │
+    │ Georgia       ┆ 1064  ┆ 0.268        │
+    │ USC           ┆ 956   ┆ 0.213        │
+    │ Liberty       ┆ 1079  ┆ 0.205        │
+    │ …             ┆ …     ┆ …            │
+    │ Alabama       ┆ 1030  ┆ 0.153        │
+    │ Missouri      ┆ 1003  ┆ 0.153        │
+    │ Ohio State    ┆ 931   ┆ 0.151        │
+    │ Miami         ┆ 1005  ┆ 0.148        │
+    │ West Virginia ┆ 950   ┆ 0.147        │
+    └───────────────┴───────┴──────────────┘
 
 
 
@@ -497,12 +497,12 @@ out
     │ OL       ┆ 21      │
     │ WR       ┆ 19      │
     │ LB       ┆ 18      │
-    │ DL       ┆ 12      │
     │ DE       ┆ 12      │
-    │ TE       ┆ 11      │
+    │ DL       ┆ 12      │
     │ RB       ┆ 11      │
-    │ PK       ┆ 6       │
+    │ TE       ┆ 11      │
     │ QB       ┆ 6       │
+    │ PK       ┆ 6       │
     └──────────┴─────────┘
 
 
@@ -601,12 +601,12 @@ standings_tbl.head(10)
     │ str                      ┆ u32  ┆ u32    ┆ f64     │
     ╞══════════════════════════╪══════╪════════╪═════════╡
     │ Michigan                 ┆ 15   ┆ 0      ┆ 1.0     │
-    │ Harding University       ┆ 15   ┆ 0      ┆ 1.0     │
     │ South Dakota State       ┆ 15   ┆ 0      ┆ 1.0     │
+    │ Harding University       ┆ 15   ┆ 0      ┆ 1.0     │
     │ Washington               ┆ 14   ┆ 1      ┆ 0.933   │
-    │ Cortland                 ┆ 14   ┆ 1      ┆ 0.933   │
     │ Colorado School Of Mines ┆ 14   ┆ 1      ┆ 0.933   │
     │ North Central College    ┆ 14   ┆ 1      ┆ 0.933   │
+    │ Cortland                 ┆ 14   ┆ 1      ┆ 0.933   │
     │ Florida State            ┆ 13   ┆ 1      ┆ 0.929   │
     │ Georgia                  ┆ 13   ┆ 1      ┆ 0.929   │
     │ Wartburg                 ┆ 13   ┆ 1      ┆ 0.929   │
@@ -707,9 +707,9 @@ gamelog.head(16) if gamelog.height else f'no games found for {team}'
     │ ---  ┆ ---           ┆ ---     ┆ ---         ┆ ---    ┆ ---          │
     │ i32  ┆ str           ┆ i32     ┆ i32         ┆ i32    ┆ bool         │
     ╞══════╪═══════════════╪═════════╪═════════════╪════════╪══════════════╡
-    │ 1    ┆ East Carolina ┆ 30      ┆ 3           ┆ 27     ┆ false        │
-    │ 1    ┆ Alabama       ┆ 27      ┆ 20          ┆ 7      ┆ true         │
     │ 1    ┆ Washington    ┆ 34      ┆ 13          ┆ 21     ┆ true         │
+    │ 1    ┆ Alabama       ┆ 27      ┆ 20          ┆ 7      ┆ true         │
+    │ 1    ┆ East Carolina ┆ 30      ┆ 3           ┆ 27     ┆ false        │
     │ 2    ┆ UNLV          ┆ 35      ┆ 7           ┆ 28     ┆ false        │
     │ 3    ┆ Bowling Green ┆ 31      ┆ 6           ┆ 25     ┆ false        │
     │ …    ┆ …             ┆ …       ┆ …           ┆ …      ┆ …            │
@@ -946,7 +946,7 @@ out
     │ Eastern Illinois@Alabama       ┆ Alabama    ┆ -51.3      │
     │ East Texas A&M@SMU             ┆ SMU        ┆ -50.8      │
     │ SE Louisiana@LSU               ┆ LSU        ┆ -48.8      │
-    │ Northwestern State@Cincinnati  ┆ Cincinnati ┆ -48.5      │
+    │ Western Illinois@Illinois      ┆ Illinois   ┆ -48.5      │
     └────────────────────────────────┴────────────┴────────────┘
 
 
@@ -1010,6 +1010,8 @@ rankings = safe('ESPN rankings (polls)', sdv.cfb.espn_cfb_rankings)
 ```
 
     ✅ ESPN standings
+
+
     ✅ ESPN rankings (polls)
 
 

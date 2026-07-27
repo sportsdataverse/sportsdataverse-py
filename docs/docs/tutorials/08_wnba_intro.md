@@ -143,15 +143,15 @@ aces = safe('Aces roster', lambda: wnba.espn_wnba_team_roster(team_id=17, season
     ╞════════════╪══════════════════╪════════╪═══════════════════════╪════════════════╪═════╡
     │ 4565501    ┆ Janiah Barker    ┆ 2      ┆ F                     ┆ 6' 4"          ┆ 22  │
     │ 4433633    ┆ Kierstan Bell    ┆ 1      ┆ F                     ┆ 6' 1"          ┆ 26  │
-    │ 4280892    ┆ Chennedy Carter  ┆ 23     ┆ G                     ┆ 5' 9"          ┆ 27  │
     │ 4281190    ┆ Dana Evans       ┆ 11     ┆ G                     ┆ 5' 6"          ┆ 27  │
     │ 2529122    ┆ Chelsea Gray     ┆ 12     ┆ G                     ┆ 5' 11"         ┆ 33  │
+    │ 4609797    ┆ Ta'Niya Latson   ┆ null   ┆ G                     ┆ 5' 8"          ┆ 22  │
     │ …          ┆ …                ┆ …      ┆ …                     ┆ …              ┆ …   │
+    │ 4682855    ┆ Justine Pissott  ┆ 13     ┆ G                     ┆ 6' 4"          ┆ 22  │
     │ 4398776    ┆ NaLyssa Smith    ┆ 3      ┆ F                     ┆ 6' 4"          ┆ 25  │
     │ 3099736    ┆ Stephanie Talbot ┆ 7      ┆ F                     ┆ 6' 2"          ┆ 32  │
-    │ 3142086    ┆ Brianna Turner   ┆ 21     ┆ F                     ┆ 6' 3"          ┆ 29  │
+    │ 3142086    ┆ Brianna Turner   ┆ 21     ┆ F                     ┆ 6' 3"          ┆ 30  │
     │ 3149391    ┆ A'ja Wilson      ┆ 22     ┆ C                     ┆ 6' 4"          ┆ 29  │
-    │ 4065870    ┆ Jackie Young     ┆ 0      ┆ G                     ┆ 6' 0"          ┆ 28  │
     └────────────┴──────────────────┴────────┴───────────────────────┴────────────────┴─────┘
 
 
@@ -483,8 +483,8 @@ top_scorers
     │ Napheesa Collier     ┆ MIN               ┆ 47    ┆ 1000         ┆ 21.3 ┆ 3.4 │
     │ Kahleah Copper       ┆ PHX               ┆ 39    ┆ 811          ┆ 20.8 ┆ 2.3 │
     │ Breanna Stewart      ┆ NY                ┆ 50    ┆ 1014         ┆ 20.3 ┆ 3.5 │
-    │ Kelsey Mitchell      ┆ IND               ┆ 42    ┆ 805          ┆ 19.2 ┆ 1.9 │
     │ Caitlin Clark        ┆ IND               ┆ 42    ┆ 805          ┆ 19.2 ┆ 8.4 │
+    │ Kelsey Mitchell      ┆ IND               ┆ 42    ┆ 805          ┆ 19.2 ┆ 1.9 │
     │ Jewell Loyd          ┆ SEA               ┆ 39    ┆ 744          ┆ 19.1 ┆ 3.6 │
     │ Sabrina Ionescu      ┆ NY                ┆ 50    ┆ 900          ┆ 18.0 ┆ 5.9 │
     │ Brittney Griner      ┆ PHX               ┆ 32    ┆ 568          ┆ 17.8 ┆ 2.2 │
@@ -845,21 +845,21 @@ position_mix
 
     shape: (12, 4)
     ┌───────────────────┬─────┬─────┬─────┐
-    │ team_abbreviation ┆ G   ┆ F   ┆ C   │
+    │ team_abbreviation ┆ F   ┆ C   ┆ G   │
     │ ---               ┆ --- ┆ --- ┆ --- │
     │ str               ┆ u32 ┆ u32 ┆ u32 │
     ╞═══════════════════╪═════╪═════╪═════╡
-    │ ATL               ┆ 7   ┆ 4   ┆ 1   │
-    │ CHI               ┆ 9   ┆ 3   ┆ 2   │
-    │ CONNECTICU        ┆ 8   ┆ 5   ┆ 2   │
-    │ DALLAS            ┆ 7   ┆ 6   ┆ 1   │
-    │ IND               ┆ 8   ┆ 3   ┆ 2   │
+    │ ATL               ┆ 4   ┆ 1   ┆ 7   │
+    │ CHI               ┆ 3   ┆ 2   ┆ 9   │
+    │ CONNECTICU        ┆ 5   ┆ 2   ┆ 8   │
+    │ DALLAS            ┆ 6   ┆ 1   ┆ 7   │
+    │ IND               ┆ 3   ┆ 2   ┆ 8   │
     │ …                 ┆ …   ┆ …   ┆ …   │
-    │ MIN               ┆ 5   ┆ 8   ┆ 1   │
-    │ NY                ┆ 8   ┆ 5   ┆ 2   │
-    │ PHX               ┆ 7   ┆ 7   ┆ 1   │
-    │ SEA               ┆ 6   ┆ 5   ┆ 3   │
-    │ WSH               ┆ 9   ┆ 3   ┆ 2   │
+    │ MIN               ┆ 8   ┆ 1   ┆ 5   │
+    │ NY                ┆ 5   ┆ 2   ┆ 8   │
+    │ PHX               ┆ 7   ┆ 1   ┆ 7   │
+    │ SEA               ┆ 5   ┆ 3   ┆ 6   │
+    │ WSH               ┆ 3   ┆ 2   ┆ 9   │
     └───────────────────┴─────┴─────┴─────┘
 
 
@@ -923,6 +923,29 @@ The `load_wnba_*` family reads pre-built **parquet releases** (whole seasons at 
 | [`load_wnba_shots`](../wnba/reference/loaders.md#load_wnba_shots) | shot locations |
 
 Pass a list of seasons to combine several years in one frame.
+
+## stats.wnba.com surface (`wnba_stats_*`)
+
+`sportsdataverse.wnba` also ships **95 wrappers** for the official `stats.wnba.com` API (WNBA `LeagueID=10`) — the capture-confirmed live, non-deprecated endpoints. Every function is named `wnba_stats_<slug>`. The module uses the same `curl_cffi` browser-TLS transport as the NBA stats family — live calls require `pip install "sportsdataverse[all]"` (or `pip install curl_cffi`). WNBA is served by **both** `stats.wnba.com` and `stats.nba.com` (`LeagueID=10`).
+
+Wrappers return a tidy **polars DataFrame** by default via the generic `parse_wnba_stats_result_sets` parser (a re-export alias of `parse_nba_stats_result_sets`, which also flattens the shot-location endpoints' grouped headers and unrolls the `scoreboardv3` game feed). Pass `return_as_pandas=True` for pandas.
+
+
+```python
+from sportsdataverse.wnba import wnba_stats
+
+# WNBA player dashboard (stats.wnba.com)
+# Live calls require: pip install "sportsdataverse[all]"  (curl_cffi transport)
+wdf = safe('wnba_stats_leaguedashplayerstats',
+           lambda: wnba_stats.wnba_stats_leaguedashplayerstats())
+
+print('shape:', wdf.shape if wdf is not None else None)
+wdf
+```
+
+    ⏭️  wnba_stats_leaguedashplayerstats: unavailable right now (Timeout)
+    shape: None
+
 
 
 ```python

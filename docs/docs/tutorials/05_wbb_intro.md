@@ -658,16 +658,16 @@ top_scorers
     │ ---        ┆ ---                  ┆ ---                     ┆ ---   ┆ ---          ┆ ---  │
     │ i32        ┆ str                  ┆ str                     ┆ u32   ┆ i32          ┆ f64  │
     ╞════════════╪══════════════════════╪═════════════════════════╪═══════╪══════════════╪══════╡
-    │ 5125264    ┆ Jana El Alfy         ┆ UConn                   ┆ 39    ┆ 0            ┆ null │
-    │ 5107554    ┆ Ella Okubasu         ┆ Binghamton              ┆ 31    ┆ 0            ┆ null │
-    │ 4704431    ┆ Dayna Tirado         ┆ Fairfield               ┆ 33    ┆ 0            ┆ null │
-    │ 4595339    ┆ Keeli Burton-Oliver  ┆ Montana                 ┆ 33    ┆ 0            ┆ null │
-    │ 5176367    ┆ Emily Montes         ┆ Columbia                ┆ 30    ┆ 0            ┆ null │
-    │ 5174515    ┆ Alana Scott          ┆ Bryant                  ┆ 30    ┆ 0            ┆ null │
-    │ 4900069    ┆ Clare Chambers       ┆ Miami OH                ┆ 29    ┆ 0            ┆ null │
-    │ 4705316    ┆ Destiny Howell       ┆ Howard                  ┆ 31    ┆ 0            ┆ null │
-    │ 5177057    ┆ Fantasia James       ┆ FIU                     ┆ 33    ┆ 0            ┆ null │
-    │ 5174353    ┆ Alyssa Lewis         ┆ NC State                ┆ 38    ┆ 0            ┆ null │
+    │ 5176432    ┆ Mecca Bullchild      ┆ Dartmouth               ┆ 26    ┆ 0            ┆ null │
+    │ 5174965    ┆ Sahana Kanagasabay   ┆ Providence              ┆ 34    ┆ 0            ┆ null │
+    │ 5108522    ┆ Aubrey Amendala      ┆ Utah Tech               ┆ 32    ┆ 0            ┆ null │
+    │ 5108750    ┆ Junae Mahan          ┆ UC San Diego            ┆ 31    ┆ 0            ┆ null │
+    │ 5108578    ┆ Sarah Adams          ┆ UL Monroe               ┆ 35    ┆ 0            ┆ null │
+    │ 5176896    ┆ Nadia Dial           ┆ Army                    ┆ 29    ┆ 0            ┆ null │
+    │ 5178441    ┆ Megan Aulbert        ┆ Tennessee Tech          ┆ 31    ┆ 0            ┆ null │
+    │ 4594693    ┆ Liz Scott            ┆ Oklahoma                ┆ 33    ┆ 0            ┆ null │
+    │ 4400490    ┆ Jayla Ruffus-Milner  ┆ ETSU                    ┆ 30    ┆ 0            ┆ null │
+    │ 4898977    ┆ Elizabeth Field      ┆ Stony Brook             ┆ 33    ┆ 0            ┆ null │
     └────────────┴──────────────────────┴─────────────────────────┴───────┴──────────────┴──────┘
 
 
@@ -794,10 +794,10 @@ three_pt
     │ 84      ┆ Indiana Hoosiers               ┆ 32    ┆ 268 ┆ 677  ┆ 39.6      │
     │ 2579    ┆ South Carolina Gamecocks       ┆ 38    ┆ 253 ┆ 640  ┆ 39.5      │
     │ 149     ┆ Montana Lady Griz              ┆ 33    ┆ 357 ┆ 927  ┆ 38.5      │
-    │ 2086    ┆ Butler Bulldogs                ┆ 32    ┆ 266 ┆ 694  ┆ 38.3      │
     │ 66      ┆ Iowa State Cyclones            ┆ 33    ┆ 285 ┆ 745  ┆ 38.3      │
-    │ 2571    ┆ South Dakota State Jackrabbits ┆ 33    ┆ 223 ┆ 586  ┆ 38.1      │
+    │ 2086    ┆ Butler Bulldogs                ┆ 32    ┆ 266 ┆ 694  ┆ 38.3      │
     │ 257     ┆ Richmond Spiders               ┆ 35    ┆ 320 ┆ 840  ┆ 38.1      │
+    │ 2571    ┆ South Dakota State Jackrabbits ┆ 33    ┆ 223 ┆ 586  ┆ 38.1      │
     │ 2294    ┆ Iowa Hawkeyes                  ┆ 39    ┆ 426 ┆ 1132 ┆ 37.6      │
     │ 213     ┆ Penn State Lady Lions          ┆ 35    ┆ 294 ┆ 787  ┆ 37.4      │
     └─────────┴────────────────────────────────┴───────┴─────┴──────┴───────────┘
@@ -937,11 +937,11 @@ dd
     │ 4433402    ┆ Angel Reese          ┆ LSU                     ┆ 27             │
     │ 4705101    ┆ Macy McGlone         ┆ E Illinois              ┆ 26             │
     │ 4433403    ┆ Caitlin Clark        ┆ Iowa                    ┆ 24             │
-    │ 4898966    ┆ Adrianna Smith       ┆ Maine                   ┆ 22             │
     │ 4684384    ┆ Aneesah Morrow       ┆ LSU                     ┆ 22             │
-    │ 4899516    ┆ Akasha Davis         ┆ Lamar                   ┆ 20             │
+    │ 4898966    ┆ Adrianna Smith       ┆ Maine                   ┆ 22             │
     │ 4898391    ┆ Phillipina Kyei      ┆ Oregon                  ┆ 20             │
     │ 5108550    ┆ Serah Williams       ┆ Wisconsin               ┆ 20             │
+    │ 4899516    ┆ Akasha Davis         ┆ Lamar                   ┆ 20             │
     │ 4433404    ┆ Cameron Brink        ┆ Stanford                ┆ 20             │
     └────────────┴──────────────────────┴─────────────────────────┴────────────────┘
 

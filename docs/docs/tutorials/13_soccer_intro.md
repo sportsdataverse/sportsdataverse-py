@@ -100,7 +100,7 @@ from sportsdataverse.soccer import epl, mls, ucl, laliga, bundesliga
 print('polars version:', pl.__version__)
 ```
 
-    polars version: 1.40.1
+    polars version: 1.42.0
 
 
 ESPN's live endpoints are seasonal and occasionally rate-limited, so a tiny
@@ -562,8 +562,6 @@ else:
 ```
 
     ✅ Arsenal schedule 2023/24
-
-
     shape: (38, 21)
     shape: (5, 21)
     ┌────────┬────────────┬────────────┬───────────┬───┬───────────┬───────────┬───────────┬───────────┐
@@ -671,7 +669,7 @@ else:
     │ i64       ┆ str       ┆ str       ┆ str       ┆   ┆ i64       ┆ str       ┆ ---       ┆ ---      │
     │           ┆           ┆           ┆           ┆   ┆           ┆           ┆ str       ┆ str      │
     ╞═══════════╪═══════════╪═══════════╪═══════════╪═══╪═══════════╪═══════════╪═══════════╪══════════╡
-    │ 2025      ┆ 2025-26   ┆ 2025-06-0 ┆ 2026-06-0 ┆ … ┆ 13481     ┆ 2025-26   ┆ 2025-06-0 ┆ 2026-06- │
+    │ 2026      ┆ 2026-27   ┆ 2026-06-0 ┆ 2027-06-0 ┆ … ┆ 14308     ┆ 2026-27   ┆ 2026-06-0 ┆ 2027-06- │
     │           ┆ English   ┆ 1T04:00:0 ┆ 1T03:59:0 ┆   ┆           ┆ English   ┆ 1T04:00:0 ┆ 01T03:59 │
     │           ┆ Premier   ┆ 0.000+00: ┆ 0.000+00: ┆   ┆           ┆ Premier   ┆ 0.000+00: ┆ :00.000+ │
     │           ┆ League    ┆ 00        ┆ 00        ┆   ┆           ┆ League    ┆ 00        ┆ 00:00    │
@@ -931,9 +929,9 @@ pl.DataFrame(rows)
 ```
 
     ✅ Premier League standings
-
-
     ✅ La Liga standings
+
+
     ✅ Bundesliga standings
 
 
