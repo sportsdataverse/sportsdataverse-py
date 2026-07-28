@@ -100,14 +100,19 @@ def test_efficiency_ratings_orders_teams() -> None:
     assert set(out.columns) >= _EXPECTED_COLUMNS
 
 
-def test_efficiency_ratings_reference_team_present_at_baseline() -> None:
+def test_efficiency_ratings_reference_team_present_and_netted() -> None:
     # "A" sorts first among {"A", "B"} so the ridge drops it as the reference
-    # level on both offense and defense; efficiency_ratings must re-add it at
-    # the intercept (adj_net == 0), not silently omit it.
+    # level on both sides. Under the netted (R adjust_epa) semantics A still
+    # nets real values from its own games, while B -- whose EVERY opponent is
+    # the reference team, so no opponent strength exists for any of its games
+    # (only possible in a tiny synthetic league) -- falls back to the
+    # league-neutral 0.0, not a null and not a silent omission.
     out = efficiency_ratings(_mini_plays())
     assert set(out["team_id"].to_list()) == {"A", "B"}
     a = out.filter(pl.col("team_id") == "A").row(0, named=True)
-    assert a["adj_net"] == 0.0
+    b = out.filter(pl.col("team_id") == "B").row(0, named=True)
+    assert a["adj_net"] > 0.0  # A's +0.30/play offense nets positive vs B
+    assert b["adj_net"] == 0.0  # all-reference-opponent fallback
 
 
 def test_efficiency_ratings_empty_input_returns_documented_schema() -> None:
@@ -198,7 +203,7 @@ def test_special_teams_ratings_orders_teams_and_fills_no_st_team() -> None:
     c = out.filter(pl.col("team_id") == "C").row(0, named=True)
     assert a["adj_st_epa"] > b["adj_st_epa"]
     # C never executes a special-teams play -> no unit contributes a nonzero
-    # z-score, so its per-unit sum is 0.0.
+    # centered deviation, so its per-unit sum is 0.0.
     assert c["adj_st_epa"] == 0.0
 
 
@@ -214,7 +219,10 @@ def test_special_teams_ratings_tracks_sp_plus_special() -> None:
     st = special_teams_ratings(pbp)
     j = st.join(sp, on="team_id", how="inner")
     r = spearman_corr(j["adj_st_epa"].to_numpy(), j["sp_special"].to_numpy())
-    assert r >= 0.75, r  # fuller per-unit model (observed 0.768); do NOT lower this floor
+    # Centered per-unit EPA composite (2026-07-28, true EPA units) observed
+    # 0.865 -- BETTER than the replaced z-scored composite's 0.768. Floor
+    # RAISED just below the new observed value; do NOT lower it.
+    assert r >= 0.84, r
 
 
 def test_special_teams_ratings_credits_executing_team_not_the_defender() -> None:

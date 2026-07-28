@@ -34,7 +34,7 @@ from typing import Literal, overload
 import pandas as pd
 import polars as pl
 
-from sportsdataverse.cfb.cfb_adjusted_epa import _REQUIRED_COLUMNS, _fit_opponent_ridge, _prepare
+from sportsdataverse.cfb.cfb_adjusted_epa import _REQUIRED_COLUMNS, _adjust_games, _fit_opponent_ridge, _prepare
 from sportsdataverse.cfb.cfb_loaders import load_cfb_pbp, load_cfb_schedule
 from sportsdataverse.cfb.cfb_prediction_constants import RatingsConfig, as_of_ratings_split
 
@@ -173,10 +173,13 @@ def efficiency_ratings(plays: pl.DataFrame, *, config: RatingsConfig | None = No
 
     Fits the offense/defense ridge from :mod:`cfb_adjusted_epa` on the
     competitive plays in ``plays`` (``min_competitive_wp <= wp_before <=
-    max_competitive_wp``) and reshapes the result to one row per team,
-    including the reference team the ridge's ``model.matrix``-style
-    parameterization drops (its rating is the fitted intercept, i.e. the
-    league baseline).
+    max_competitive_wp``), then nets each team's raw per-game EPA (all
+    pass/rush plays, garbage time included) against the opponent's fitted
+    strength and averages across games -- the R ``adjust_epa`` /
+    gameonpaper ``team_agg.R`` statistic and scale (a top team nets
+    ~0.30-0.40/play; the pre-2026-07-28 coefficient+intercept scale ran
+    ~1.8x hotter). The ridge's dropped reference team nets normally from
+    its own games.
 
     Args:
         plays: A cfbfastR-schema play-by-play frame carrying every column in
@@ -220,11 +223,26 @@ def efficiency_ratings(plays: pl.DataFrame, *, config: RatingsConfig | None = No
     if clean.height == 0:
         return pl.DataFrame(schema=_OUTPUT_SCHEMA)
 
-    offense, defense, intercept = _fit_opponent_ridge(clean, cfg.ridge_lambda)
+    offense, defense, _intercept = _fit_opponent_ridge(clean, cfg.ridge_lambda)
 
-    # `off_pace` = scrimmage plays per game (the pace/tempo the totals model uses):
-    # `base` is already filtered to pass|rush plays by `_prepare`, so play count / games
-    # is the offensive tempo. Computed on all teams (the ridge's reference team included).
+    # R `adjust_epa` netting (gameonpaper `team_agg.R` parity): each team's raw
+    # per-GAME EPA over ALL pass/rush plays (garbage time included) minus the
+    # opponent's fitted strength, averaged across games. The ridge only supplies
+    # the opponent strengths. NOT coefficient + intercept -- that is the model's
+    # competitive-play strength and runs ~1.8x hot at the top (max ~0.63 vs the
+    # ~0.35 netted scale); releases before 2026-07-28 carried that hot scale.
+    opp = _adjust_games(base, offense, defense, fill_strength=None)
+    netted = (
+        opp.group_by("pos_team_id")
+        .agg(
+            adj_off_epa=pl.col("adj_off_epa").mean(),
+            adj_def_epa=pl.col("adj_def_epa").mean(),
+        )
+        .rename({"pos_team_id": "team_id"})
+    )
+
+    # `off_pace` = scrimmage plays per game (the tempo input the totals model
+    # uses): `base` is already filtered to pass|rush plays by `_prepare`.
     games = (
         base.group_by("pos_team_id")
         .agg(
@@ -236,15 +254,16 @@ def efficiency_ratings(plays: pl.DataFrame, *, config: RatingsConfig | None = No
         .rename({"pos_team_id": "team_id"})
     )
     assert games.schema["team_id"] == pl.Utf8
-    assert offense.schema["team_id"] == pl.Utf8
-    assert defense.schema["team_id"] == pl.Utf8
+    assert netted.schema["team_id"] == pl.Utf8
 
     out = (
-        games.join(offense.rename({"adjmodelOff": "adj_off_epa"}), on="team_id", how="left")
-        .join(defense.rename({"adjmodelDef": "adj_def_epa"}), on="team_id", how="left")
+        games.join(netted, on="team_id", how="left")
         .with_columns(
-            pl.col("adj_off_epa").fill_null(intercept),
-            pl.col("adj_def_epa").fill_null(intercept),
+            # Netted values are centered near zero (own-effect deviations), so a
+            # team whose every opponent is a ridge reference level (possible only
+            # in tiny synthetic leagues) falls back to league-neutral 0.0.
+            pl.col("adj_off_epa").fill_null(0.0),
+            pl.col("adj_def_epa").fill_null(0.0),
             pl.col("games").fill_null(0),
             pl.col("off_pace").fill_null(0.0),
         )
@@ -273,14 +292,19 @@ def special_teams_ratings(plays: pl.DataFrame, *, config: RatingsConfig | None =
       *hurts* agreement (0.72 vs 0.77) -- special teams is only weakly
       opponent-dependent, so this function does not fit a ridge at all.
     * Splitting the offense-side plays into per-phase units (field goal, punt,
-      kick return) and standardizing each separately, then summing the
-      z-scores, is what helps: it reached Spearman 0.768 against SP+, versus
-      0.703 for a single-unit offense-minus-intercept ridge fit.
+      kick return) is what helps. Each unit's per-team mean EPA/play is
+      centered on that unit's league-wide per-play mean and the three
+      centered deviations are summed -- true EPA units. This centered form
+      reached Spearman 0.865 against SP+ special teams, beating both the
+      originally-shipped z-scored composite (0.768 -- dimensionless, std
+      ~1.7, range +-5 under an ``_epa`` column name; replaced 2026-07-28)
+      and a single-unit offense-minus-intercept ridge fit (0.703).
 
     ``adj_st_epa`` is therefore the sum, over the three special-teams units
-    (field goal, punt, kick return), of each unit's z-scored per-team mean EPA. A
-    team with no plays in a given unit contributes 0 for that unit (not a
-    penalty). ``config`` is accepted for signature parity with
+    (field goal, punt, kick return), of each unit's per-team mean EPA/play
+    above the unit's league average. A team with no plays in a given unit
+    contributes 0 for that unit (not a penalty). ``config`` is accepted for
+    signature parity with
     :func:`efficiency_ratings` / :func:`fei_ratings` but is unused -- there is
     no ridge (and therefore no ``ridge_lambda``) in this recipe.
 
@@ -294,7 +318,8 @@ def special_teams_ratings(plays: pl.DataFrame, *, config: RatingsConfig | None =
     Returns:
         A ``polars.DataFrame`` with one row per ``team_id`` appearing
         anywhere in ``plays``: ``team_id`` (Utf8), ``adj_st_epa`` (Float64,
-        the sum of per-unit z-scored executing-team mean EPA). Teams with no
+        the sum of per-unit executing-team mean EPA/play above each unit's
+        league average). Teams with no
         special-teams plays get ``adj_st_epa == 0.0``. Zero-row
         (correctly-typed) when ``plays`` has no special-teams plays.
 
@@ -326,16 +351,19 @@ def special_teams_ratings(plays: pl.DataFrame, *, config: RatingsConfig | None =
         u = plays.filter(pl.col("play_type").cast(pl.Utf8).str.contains(pat)).filter(pl.col("EPA").is_not_null())
         if u.height == 0:
             continue
-        per = u.group_by(pl.col("pos_team_id").cast(pl.Utf8).alias("team_id")).agg(pl.col("EPA").mean().alias("m"))
-        std = per["m"].std()
-        if std is None or std == 0:
-            continue
-        mean = float(per["m"].mean() or 0.0)
-        per = per.with_columns(((pl.col("m") - mean) / float(std)).alias("z"))
+        # Per-unit mean EPA/play centered on the unit's LEAGUE-WIDE per-play
+        # mean -- true EPA units. The original z-scored composite (shipped
+        # pre-2026-07-28) was dimensionless (std ~1.7, range +-5) under an
+        # `_epa` column name AND tracked the SP+ special-teams oracle worse
+        # (Spearman 0.768 vs 0.865 for this centered form).
+        league_mean = float(u["EPA"].mean() or 0.0)
+        per = u.group_by(pl.col("pos_team_id").cast(pl.Utf8).alias("team_id")).agg(
+            (pl.col("EPA").mean() - league_mean).alias("dev")
+        )
         st = (
-            st.join(per.select("team_id", "z"), on="team_id", how="left")
-            .with_columns((pl.col("adj_st_epa") + pl.col("z").fill_null(0.0)).alias("adj_st_epa"))
-            .drop("z")
+            st.join(per.select("team_id", "dev"), on="team_id", how="left")
+            .with_columns((pl.col("adj_st_epa") + pl.col("dev").fill_null(0.0)).alias("adj_st_epa"))
+            .drop("dev")
         )
     return st.select("team_id", "adj_st_epa")
 

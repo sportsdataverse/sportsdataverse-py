@@ -1898,10 +1898,13 @@ One row per team: opponent-adjusted offensive/defensive efficiency.
 
 Fits the offense/defense ridge from `cfb_adjusted_epa` on the
 competitive plays in `plays` (`min_competitive_wp <= wp_before <=
-max_competitive_wp`) and reshapes the result to one row per team,
-including the reference team the ridge's `model.matrix`-style
-parameterization drops (its rating is the fitted intercept, i.e. the
-league baseline).
+max_competitive_wp`), then nets each team's raw per-game EPA (all
+pass/rush plays, garbage time included) against the opponent's fitted
+strength and averages across games -- the R `adjust_epa` /
+gameonpaper `team_agg.R` statistic and scale (a top team nets
+~0.30-0.40/play; the pre-2026-07-28 coefficient+intercept scale ran
+~1.8x hotter). The ridge's dropped reference team nets normally from
+its own games.
 
 **Parameters**
 
@@ -2786,14 +2789,19 @@ special-teams oracle (`tests/fixtures/cfb_prediction/sp_plus_2023.parquet`
   *hurts* agreement (0.72 vs 0.77) -- special teams is only weakly
   opponent-dependent, so this function does not fit a ridge at all.
 * Splitting the offense-side plays into per-phase units (field goal, punt,
-  kick return) and standardizing each separately, then summing the
-  z-scores, is what helps: it reached Spearman 0.768 against SP+, versus
-  0.703 for a single-unit offense-minus-intercept ridge fit.
+  kick return) is what helps. Each unit's per-team mean EPA/play is
+  centered on that unit's league-wide per-play mean and the three
+  centered deviations are summed -- true EPA units. This centered form
+  reached Spearman 0.865 against SP+ special teams, beating both the
+  originally-shipped z-scored composite (0.768 -- dimensionless, std
+  ~1.7, range +-5 under an epa` column name; replaced 2026-07-28)
+  and a single-unit offense-minus-intercept ridge fit (0.703).
 
 `adj_st_epa` is therefore the sum, over the three special-teams units
-(field goal, punt, kick return), of each unit's z-scored per-team mean EPA. A
-team with no plays in a given unit contributes 0 for that unit (not a
-penalty). `config` is accepted for signature parity with
+(field goal, punt, kick return), of each unit's per-team mean EPA/play
+above the unit's league average. A team with no plays in a given unit
+contributes 0 for that unit (not a penalty). `config` is accepted for
+signature parity with
 `efficiency_ratings` / `fei_ratings` but is unused -- there is
 no ridge (and therefore no `ridge_lambda`) in this recipe.
 
@@ -2806,7 +2814,7 @@ no ridge (and therefore no `ridge_lambda`) in this recipe.
 
 **Returns**
 
-A `polars.DataFrame` with one row per `team_id` appearing anywhere in `plays`: `team_id` (Utf8), `adj_st_epa` (Float64, the sum of per-unit z-scored executing-team mean EPA). Teams with no special-teams plays get `adj_st_epa == 0.0`. Zero-row (correctly-typed) when `plays` has no special-teams plays.
+A `polars.DataFrame` with one row per `team_id` appearing anywhere in `plays`: `team_id` (Utf8), `adj_st_epa` (Float64, the sum of per-unit executing-team mean EPA/play above each unit's league average). Teams with no special-teams plays get `adj_st_epa == 0.0`. Zero-row (correctly-typed) when `plays` has no special-teams plays.
 
 **Example**
 
