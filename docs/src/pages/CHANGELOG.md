@@ -2,6 +2,8 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
+- [Unreleased](#unreleased)
+  - [CFB — `cfb_ratings` gameonpaper-parity filters (default ON)](#cfb--cfb_ratings-gameonpaper-parity-filters-default-on)
 - [0.0.72 Release: July 22, 2026](#0072-release-july-22-2026)
   - [BREAKING CHANGES](#breaking-changes)
   - [CFB — loaders for 6 published-but-unreachable dataset releases](#cfb--loaders-for-6-published-but-unreachable-dataset-releases)
@@ -193,6 +195,28 @@
 - [0.0.5 Release: October 20, 2021](#005-release-october-20-2021)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+## Unreleased
+
+### CFB — `cfb_ratings` gameonpaper-parity filters (default ON)
+
+- **`cfb_ratings()` now defaults to `fbs_only=True` and `drop_kneels=True`**,
+  matching the game-on-paper `cfb-team-summaries` pipeline's play substrate.
+  `fbs_only` keeps only games where the schedule's `home_division` /
+  `away_division` are both `"fbs"`; `drop_kneels` strips kneel-downs via a
+  pipeline `kneel_down` flag when present, otherwise the play-text regex
+  (`kneel` / `takes a knee`) plus the end-of-half anonymized-TEAM-run clock
+  heuristic (pass plays are never treated as kneels). Both filters skip
+  gracefully when the input frame lacks the needed columns, so slim/canonical
+  frames keep working; pass `fbs_only=False` / `drop_kneels=False` for the
+  previous unfiltered behavior. Downstream consumers (`cfb_resume`,
+  `cfb_season_odds`) inherit the defaults. Ratings computed on real released
+  data will shift accordingly (FCS blowouts and kneels leave the ridge fit).
+- **`model_ledger.json`** — new repo-root machine-readable ledger of every
+  trained/fitted model across the ecosystem (73 entries): league, artifact,
+  training script, trained-season window, available-data window, window
+  rationale, and known provenance gaps. Seed registry for per-artifact model
+  cards.
 
 ## 0.0.72 Release: July 22, 2026
 

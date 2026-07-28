@@ -102,6 +102,45 @@ _RELEASED_PBP_ALIASES: dict[str, str] = {
 # of these words) -- deliberately loose since `play_type` free text varies.
 _ST_PLAY_TYPE_PATTERN = "(?i)kickoff|punt|field goal"
 
+# Kneel-down text/clock heuristic (gameonpaper `team_agg.R` / `cfb_pbp`'s own
+# `kneel_down` flag): the text regexes catch narrated kneels; the clock-window
+# branch catches ESPN-anonymized "TEAM run for a loss of 1-2 yards" snaps in
+# the final minute of either half (2Q: 1860-1800, 4Q: 60-0 on adj_TimeSecsRem).
+_KNEEL_TEXT_PATTERN = r"(?i)kneel|takes a knee"
+_KNEEL_TEAM_RUN_PATTERN = r"(?i)^team run for a loss of (?:1 yard|2 yards)"
+_KNEEL_TEXT_COLUMNS = ("cleaned_text", "text", "play_text")
+_KNEEL_CLOCK_COLUMNS = ("adj_TimeSecsRem", "start.adj_TimeSecsRem")
+
+
+def _drop_kneel_downs(plays: pl.DataFrame) -> pl.DataFrame:
+    """Strip kneel-downs (gameonpaper parity) from an aliased plays frame.
+
+    Prefers a pipeline-computed ``kneel_down`` flag when present; otherwise
+    applies the text heuristic on the first available play-text column, plus
+    the end-of-half TEAM-run clock heuristic when a clock column exists.
+    Pass plays are never treated as kneels. A frame with neither a
+    ``kneel_down`` flag nor any play-text column passes through unchanged
+    (same graceful-column posture as the orchestrator's ``neutral_site``
+    handling -- the released assets always carry ``text``).
+    """
+    if "kneel_down" in plays.columns:
+        return plays.filter(pl.col("kneel_down") == False)  # noqa: E712
+
+    text_col = next((c for c in _KNEEL_TEXT_COLUMNS if c in plays.columns), None)
+    if text_col is None:
+        return plays
+    text = pl.col(text_col).cast(pl.Utf8)
+    kneel = text.str.contains(_KNEEL_TEXT_PATTERN).fill_null(False)
+
+    clock_col = next((c for c in _KNEEL_CLOCK_COLUMNS if c in plays.columns), None)
+    if clock_col is not None:
+        clock = pl.col(clock_col).cast(pl.Float64)
+        half_end = ((clock <= 1860) & (clock >= 1800)) | ((clock <= 60) & (clock >= 0))
+        kneel = kneel | (half_end & text.str.contains(_KNEEL_TEAM_RUN_PATTERN)).fill_null(False)
+
+    return plays.filter((pl.col("pass") == 1) | (kneel == False))  # noqa: E712
+
+
 # Executing-team special-teams units (pos_team owns the play). Coverage/defense
 # units are deliberately excluded -- EPA does not isolate them (see docstring).
 _ST_UNIT_PATTERNS: tuple[tuple[str, str], ...] = (
@@ -402,6 +441,8 @@ def cfb_ratings(
     *,
     as_of_date: datetime.date | None = ...,
     config: RatingsConfig | None = ...,
+    fbs_only: bool = True,
+    drop_kneels: bool = True,
     return_as_pandas: Literal[True],
 ) -> pd.DataFrame: ...
 @overload
@@ -410,6 +451,8 @@ def cfb_ratings(
     *,
     as_of_date: datetime.date | None = ...,
     config: RatingsConfig | None = ...,
+    fbs_only: bool = True,
+    drop_kneels: bool = True,
     return_as_pandas: Literal[False] = ...,
 ) -> pl.DataFrame: ...
 def cfb_ratings(
@@ -417,6 +460,8 @@ def cfb_ratings(
     *,
     as_of_date: datetime.date | None = None,
     config: RatingsConfig | None = None,
+    fbs_only: bool = True,
+    drop_kneels: bool = True,
     return_as_pandas: bool = False,
 ) -> pl.DataFrame | pd.DataFrame:
     """One row per team: the full CFB ratings spine (off/def/ST EPA + FEI).
@@ -441,6 +486,18 @@ def cfb_ratings(
             uses the full season(s), unfiltered.
         config: Ratings tuning knobs forwarded to all three component
             functions. Defaults to :class:`RatingsConfig` when omitted.
+        fbs_only: Keep only FBS-vs-FBS games (gameonpaper
+            ``cfb-team-summaries`` parity) -- both of the schedule's
+            ``home_division`` / ``away_division`` must be ``"fbs"``. Default
+            True. Skipped (all games kept) when the schedule lacks the
+            division columns; pass False to rate FCS opponents as regular
+            teams.
+        drop_kneels: Strip kneel-downs before fitting (gameonpaper parity).
+            Default True. Uses a pipeline ``kneel_down`` flag when present,
+            otherwise the play-text regex (``kneel`` / ``takes a knee``) plus
+            the end-of-half anonymized-TEAM-run clock heuristic; skipped when
+            neither a flag nor a play-text column exists. Pass False to let
+            kneels with non-null EPA flow into the fit.
         return_as_pandas: If True, returns a pandas DataFrame; otherwise polars.
 
     Returns:
@@ -522,9 +579,21 @@ def cfb_ratings(
         # `neutral_site` is a game attribute -- the released pbp omits it, so it
         # rides the schedule join that already runs for `date`.
         sched_cols.append(pl.col("neutral_site"))
+    # FBS filter rides the schedule join like `neutral_site` above; a schedule
+    # without division columns (slim fixtures) skips the filter rather than
+    # raising -- the real `load_cfb_schedule` always ships both.
+    apply_fbs = fbs_only and "home_division" in schedule.columns and "away_division" in schedule.columns
+    if apply_fbs:
+        sched_cols.extend([pl.col("home_division"), pl.col("away_division")])
     schedule_dates = schedule.select(sched_cols)
 
     dated_plays = plays.join(schedule_dates, on="game_id", how="left")
+    if apply_fbs:
+        dated_plays = dated_plays.filter((pl.col("home_division") == "fbs") & (pl.col("away_division") == "fbs")).drop(
+            "home_division", "away_division"
+        )
+    if drop_kneels:
+        dated_plays = _drop_kneel_downs(dated_plays)
     if as_of_date is not None:
         dated_plays = as_of_ratings_split(dated_plays, as_of_date)
 

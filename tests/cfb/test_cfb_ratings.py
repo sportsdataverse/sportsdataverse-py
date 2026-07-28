@@ -615,3 +615,143 @@ def test_cfb_ratings_rejects_mismatched_hfa_namespace(monkeypatch: pytest.Monkey
 
     with pytest.raises(KeyError, match="must share a namespace"):
         cfb_ratings(_SEASON)
+
+
+# ---------------------------------------------------------------------------
+# gameonpaper parity filters: fbs_only + drop_kneels
+# ---------------------------------------------------------------------------
+
+
+def _division_schedule() -> pl.DataFrame:
+    return _mini_season_schedule().with_columns(
+        home_division=pl.lit("fbs"),
+        away_division=pl.lit("fbs"),
+    )
+
+
+def _mini_row(game_id: str, *, offense: str, defense: str, epa: float, is_pass: bool) -> dict:
+    return {
+        "game_id": game_id,
+        "pos_team": offense,
+        "pos_team_id": offense,
+        "def_pos_team_id": defense,
+        "home": offense,
+        "EPA": epa,
+        "pass": 1 if is_pass else 0,
+        "rush": 0 if is_pass else 1,
+        "wp_before": 0.5,
+        "neutral_site": False,
+        "play_type": "Pass Reception" if is_pass else "Rush",
+        "drive_id": f"{game_id}-{offense}",
+    }
+
+
+def test_cfb_ratings_fbs_only_drops_fcs_games(monkeypatch: pytest.MonkeyPatch) -> None:
+    """An FBS-vs-FCS game must vanish under fbs_only=True -- the FCS team never
+    enters the ridge and the FBS teams' ratings match a run that never saw it."""
+    fcs_game = pl.DataFrame(
+        [
+            _mini_row("2000", offense="A", defense="C", epa=2.0, is_pass=True),
+            _mini_row("2000", offense="C", defense="A", epa=-2.0, is_pass=False),
+        ]
+    )
+    fcs_sched_row = pl.DataFrame(
+        {
+            "game_id": [2000],
+            "season": [_SEASON],
+            "date": [dt.date(2024, 11, 20)],
+            "home_division": ["fbs"],
+            "away_division": ["fcs"],
+        }
+    )
+
+    monkeypatch.setattr(_cfb_ratings_mod, "load_cfb_pbp", lambda seasons, return_as_pandas=False: _mini_season_plays())
+    monkeypatch.setattr(
+        _cfb_ratings_mod, "load_cfb_schedule", lambda seasons, return_as_pandas=False: _division_schedule()
+    )
+    baseline = cfb_ratings(_SEASON)  # fbs_only defaults True
+
+    plays_with_fcs = pl.concat([_mini_season_plays(), fcs_game], how="diagonal")
+    sched_with_fcs = pl.concat([_division_schedule(), fcs_sched_row], how="diagonal")
+    monkeypatch.setattr(_cfb_ratings_mod, "load_cfb_pbp", lambda seasons, return_as_pandas=False: plays_with_fcs)
+    monkeypatch.setattr(_cfb_ratings_mod, "load_cfb_schedule", lambda seasons, return_as_pandas=False: sched_with_fcs)
+
+    unfiltered = cfb_ratings(_SEASON, fbs_only=False)
+    assert "C" in unfiltered["team_id"].to_list()
+
+    filtered = cfb_ratings(_SEASON)
+    assert "C" not in filtered["team_id"].to_list()
+    assert_frame_equal(filtered.sort("team_id"), baseline.sort("team_id"))
+
+
+def test_cfb_ratings_fbs_only_skips_without_division_columns(monkeypatch: pytest.MonkeyPatch) -> None:
+    """A schedule without division columns (slim fixtures) skips the FBS
+    filter instead of raising -- default-on stays safe for slim inputs."""
+    monkeypatch.setattr(_cfb_ratings_mod, "load_cfb_pbp", lambda seasons, return_as_pandas=False: _mini_season_plays())
+    monkeypatch.setattr(
+        _cfb_ratings_mod, "load_cfb_schedule", lambda seasons, return_as_pandas=False: _mini_season_schedule()
+    )
+    skipped = cfb_ratings(_SEASON)
+    unfiltered = cfb_ratings(_SEASON, fbs_only=False)
+    assert_frame_equal(skipped.sort("team_id"), unfiltered.sort("team_id"))
+
+
+def test_cfb_ratings_drop_kneels_matches_kneel_free_baseline(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Kneel rows (narrated + anonymized-TEAM-run) are stripped; a pass play
+    whose text mentions a kneel is kept (pass guard)."""
+    base = _mini_season_plays().with_columns(
+        cleaned_text=pl.lit(None, dtype=pl.Utf8),
+        adj_TimeSecsRem=pl.lit(None, dtype=pl.Float64),
+    )
+    decoy = pl.DataFrame([_mini_row("1000", offense="A", defense="B", epa=0.1, is_pass=True)]).with_columns(
+        cleaned_text=pl.lit("fake spike after the kneel discussion"),
+        adj_TimeSecsRem=pl.lit(900.0),
+    )
+    kneels = pl.concat(
+        [
+            pl.DataFrame([_mini_row("1000", offense="A", defense="B", epa=-1.5, is_pass=False)]).with_columns(
+                cleaned_text=pl.lit("Smith kneels at the A 25 yard line"),
+                adj_TimeSecsRem=pl.lit(900.0),  # mid-quarter: text regex alone must catch it
+            ),
+            pl.DataFrame([_mini_row("1001", offense="B", defense="A", epa=-1.4, is_pass=False)]).with_columns(
+                cleaned_text=pl.lit("TEAM run for a loss of 2 yards"),
+                adj_TimeSecsRem=pl.lit(30.0),  # end-of-game clock heuristic
+            ),
+        ],
+        how="diagonal",
+    )
+
+    kneel_free = pl.concat([base, decoy], how="diagonal")
+    with_kneels = pl.concat([base, decoy, kneels], how="diagonal")
+
+    monkeypatch.setattr(
+        _cfb_ratings_mod, "load_cfb_schedule", lambda seasons, return_as_pandas=False: _mini_season_schedule()
+    )
+
+    monkeypatch.setattr(_cfb_ratings_mod, "load_cfb_pbp", lambda seasons, return_as_pandas=False: kneel_free)
+    baseline = cfb_ratings(_SEASON)
+
+    monkeypatch.setattr(_cfb_ratings_mod, "load_cfb_pbp", lambda seasons, return_as_pandas=False: with_kneels)
+    polluted = cfb_ratings(_SEASON, drop_kneels=False)
+    stripped = cfb_ratings(_SEASON)  # drop_kneels defaults True
+
+    assert_frame_equal(stripped.sort("team_id"), baseline.sort("team_id"))
+    with pytest.raises(AssertionError):
+        assert_frame_equal(polluted.sort("team_id"), baseline.sort("team_id"))
+
+
+def test_drop_kneel_downs_prefers_flag_and_validates() -> None:
+    from sportsdataverse.cfb.cfb_ratings import _drop_kneel_downs
+
+    flagged = pl.DataFrame(
+        {
+            "pass": [0, 0],
+            "kneel_down": [True, False],
+            "cleaned_text": ["no kneel wording here", "kneels"],  # flag must win over text
+        }
+    )
+    out = _drop_kneel_downs(flagged)
+    assert out["kneel_down"].to_list() == [False]
+
+    slim = pl.DataFrame({"pass": [0], "EPA": [0.1]})
+    assert_frame_equal(_drop_kneel_downs(slim), slim)  # no flag, no text -> pass-through
