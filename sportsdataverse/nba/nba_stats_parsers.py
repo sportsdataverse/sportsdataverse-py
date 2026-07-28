@@ -141,7 +141,13 @@ def _to_frame(rs: dict) -> pl.DataFrame:
     norm = [r for r in norm if len(r) == len(headers)]
     if norm:
         try:
-            return pl.DataFrame(norm, schema=headers, orient="row")
+            # infer_schema_length=None scans EVERY row before choosing dtypes.
+            # The default (100) infers Null for a column whose first rows are
+            # all null, then errors when a real value appears deeper in the
+            # rowSet — and the except below would silently turn a 3k-row
+            # payload into an empty frame (observed: WNBA 1998 leaguegamelog,
+            # PLUS_MINUS null until late in the season).
+            return pl.DataFrame(norm, schema=headers, orient="row", infer_schema_length=None)
         except Exception:
             pass
     return pl.DataFrame(schema={h: pl.Utf8 for h in headers})
