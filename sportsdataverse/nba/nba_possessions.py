@@ -1214,8 +1214,8 @@ def nba_raw_store_season_frame(
 ) -> Optional["pl.DataFrame"]:
     """Read a committed SEASON-LEVEL capture from the raw store, parsed to a frame.
 
-    The per-game half of the store is served by :func:`_through_raw_store`; this is
-    the season-keyed half (``leaguegamelog``, ``playerindex``,
+    The per-game half of the store is served by the read-through per-game path;
+    this is the season-keyed half (``leaguegamelog``, ``playerindex``,
     ``leaguedashplayerbiostats``, ...) that the ``-raw`` scraper writes as
 
     * ``{endpoint}/{season}/{variant}.json`` -- parameterized captures, where
@@ -1249,6 +1249,18 @@ def nba_raw_store_season_frame(
             from sportsdataverse.nba import nba_raw_store_season_frame
             base = "https://raw.githubusercontent.com/sportsdataverse/hoopR-nba-stats-raw/main/nba_stats/json"
             logs = nba_raw_store_season_frame("leaguegamelog", 2024, "regular-season", raw_store_dir=base)
+
+        Fall back to a live fetch when the capture is absent::
+
+            frame = nba_raw_store_season_frame("playerindex", 2024, raw_store_dir=base)
+            positions = frame if frame is not None else nba_stats_playerindex(season="2023-24")
+
+        See Also:
+            * `nba_api`_ -- reference Python client for stats.nba.com
+            * `hoopR`_ -- R companion package for NBA/MBB data
+
+        .. _nba_api: https://github.com/swar/nba_api
+        .. _hoopR: https://hoopR.sportsdataverse.org
     """
     from sportsdataverse.nba.nba_stats_parsers import parse_nba_stats_result_sets
 

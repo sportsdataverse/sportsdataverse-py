@@ -2870,8 +2870,8 @@ panel = nba_ratings_panel(RidgeRapmModel(), season_poss)
 
 Read a committed SEASON-LEVEL capture from the raw store, parsed to a frame.
 
-The per-game half of the store is served by through_raw_store`; this is
-the season-keyed half (`leaguegamelog`, `playerindex`,
+The per-game half of the store is served by the read-through per-game path;
+this is the season-keyed half (`leaguegamelog`, `playerindex`,
 `leaguedashplayerbiostats`, ...) that the `-raw` scraper writes as
 
 * `{endpoint}/{season}/{variant}.json` -- parameterized captures, where
@@ -2905,6 +2905,11 @@ The parsed `polars.DataFrame`, or `None` when the store is unset, the capture is
 from sportsdataverse.nba import nba_raw_store_season_frame
 base = "https://raw.githubusercontent.com/sportsdataverse/hoopR-nba-stats-raw/main/nba_stats/json"
 logs = nba_raw_store_season_frame("leaguegamelog", 2024, "regular-season", raw_store_dir=base)
+
+# Fall back to a live fetch when the capture is absent
+
+frame = nba_raw_store_season_frame("playerindex", 2024, raw_store_dir=base)
+positions = frame if frame is not None else nba_stats_playerindex(season="2023-24")
 ```
 
 ### `nba_rookie_projection(draft_year: "'int | list[int]'", *, league: 'str' = 'nba', college_prior: "'Optional[pl.DataFrame]'" = None, return_as_pandas: 'bool' = False) -> "'pl.DataFrame | pd.DataFrame'"` {#nba_rookie_projection}
