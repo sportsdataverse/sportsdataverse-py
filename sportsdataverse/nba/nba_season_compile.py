@@ -67,7 +67,12 @@ def _season_index_from_store(season: int, season_type: str, raw_store_dir: "RawS
 
     parsed = nba_raw_store_season_frame(
         "leaguegamelog",
-        season,
+        # ``season`` is the END year (2024 = 2023-24) everywhere in this module,
+        # but the store's SEASON-LEVEL captures are filed under the START year --
+        # dir 2023 holds 2023-24, while the per-game dirs use the end year. Off by
+        # one here means compiling a season from the NEXT season's game list, and
+        # nothing errors: the ids resolve, they are simply the wrong games.
+        season - 1,
         season_type.lower().replace(" ", "-"),
         raw_store_dir=raw_store_dir,
     )
