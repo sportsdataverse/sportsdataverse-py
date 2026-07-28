@@ -947,3 +947,46 @@ def test_start_type_ft_sandwich_technical_asymmetry():
     # retained (possession_has_timeout keeps `and not is_technical_ft`) → OffTimeout.
     cur_rows_to = [timeout, tech_ft, {"event_type": "made_shot", "seconds_remaining": 80.0}]
     assert _possession_start_type(made, [made], cur_rows_to) == "OffTimeout"
+
+
+def test_forward_fill_ignores_legacy_zero_score_rows():
+    """Pre-2018 payloads report ``score_home``/``score_away`` as the literal
+    string ``"0"`` on NON-scoring rows (rebounds, misses, substitutions); modern
+    ones carry the running total everywhere.
+
+    ``"0"`` is truthy, so accepting any non-empty value reset the running score
+    to zero on those rows. Possession points are a score DIFFERENCE, so the
+    collapse produced possessions worth up to +/-140 points -- about 40% of
+    pre-2018 possessions -- and wrecked the RAPM fit built on them.
+    """
+    from sportsdataverse.nba.nba_possessions import _forward_fill_scores
+
+    rows = [
+        {"score_home": "2", "score_away": "0"},  # made shot
+        {"score_home": "0", "score_away": "0"},  # legacy zero-fill on a rebound
+        {"score_home": "0", "score_away": "0"},  # legacy zero-fill on a miss
+        {"score_home": "4", "score_away": "0"},  # made shot
+        {"score_home": "0", "score_away": "0"},  # legacy zero-fill
+    ]
+    _forward_fill_scores(rows)
+    filled = [(r["_home"], r["_away"]) for r in rows]
+
+    # The score must never walk backwards -- that is the whole failure mode.
+    assert filled == [(2, 0), (2, 0), (2, 0), (4, 0), (4, 0)], filled
+    homes = [h for h, _ in filled]
+    assert homes == sorted(homes), f"running score decreased: {homes}"
+
+
+def test_forward_fill_still_tracks_modern_running_scores():
+    """The modern dialect must be untouched: every row carries the running total
+    and each genuine increase is picked up."""
+    from sportsdataverse.nba.nba_possessions import _forward_fill_scores
+
+    rows = [
+        {"score_home": "0", "score_away": "0"},
+        {"score_home": "3", "score_away": "0"},
+        {"score_home": "3", "score_away": "2"},
+        {"score_home": "5", "score_away": "2"},
+    ]
+    _forward_fill_scores(rows)
+    assert [(r["_home"], r["_away"]) for r in rows] == [(0, 0), (3, 0), (3, 2), (5, 2)]

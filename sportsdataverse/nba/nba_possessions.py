@@ -447,6 +447,41 @@ def _possession_start_type(
     return "OffDeadball"
 
 
+def _forward_fill_scores(rows: list) -> None:
+    """Stamp a running ``_home`` / ``_away`` score onto every pbp row, in place.
+
+    Two payload dialects exist and they disagree about what a NON-scoring row
+    reports. Modern games (2018+) carry the running total on every row; older
+    ones leave it as the literal string ``"0"`` on rebounds, misses and
+    substitutions, populating it only on scoring rows.
+
+    ``"0"`` is a truthy string, so accepting any non-empty value let those rows
+    reset the running score to zero. Possession points are a score DIFFERENCE,
+    so differencing against a collapsed score produced possessions worth up to
+    +/-140 points -- around 40% of pre-2018 possessions -- and wrecked the RAPM
+    fit built on them (response std 38.7 vs 1.2 on modern seasons) while leaving
+    modern seasons untouched.
+
+    A basketball score never decreases, so a backward step is ignored. That
+    resolves both dialects without having to detect which one a game is in.
+    """
+    last_home = 0
+    last_away = 0
+    for row in rows:
+        sh = (row.get("score_home") or "").strip()
+        sa = (row.get("score_away") or "").strip()
+        if sh:
+            value = int(sh)
+            if value >= last_home:
+                last_home = value
+        if sa:
+            value = int(sa)
+            if value >= last_away:
+                last_away = value
+        row["_home"] = last_home
+        row["_away"] = last_away
+
+
 def _count_as_possession(
     prev_poss_end_seconds: float,
     end_seconds: float,
@@ -636,18 +671,7 @@ def _assemble(enhanced_pbp: pl.DataFrame) -> tuple[pl.DataFrame, pl.DataFrame]:
     # Sort by order_index and convert to row-dicts for imperative traversal
     rows = enhanced_pbp.sort("order_index").to_dicts()
 
-    # Forward-fill scores (score_home / score_away only populated on scoring events)
-    last_home = 0
-    last_away = 0
-    for row in rows:
-        sh = (row.get("score_home") or "").strip()
-        sa = (row.get("score_away") or "").strip()
-        if sh:
-            last_home = int(sh)
-        if sa:
-            last_away = int(sa)
-        row["_home"] = last_home
-        row["_away"] = last_away
+    _forward_fill_scores(rows)
 
     groups = _build_possession_groups(rows, home_id, away_id)
 
@@ -1237,9 +1261,20 @@ def nba_raw_store_season_frame(
     ``hoopR-nba-stats-data`` model producer -- runs clone-free in CI against the
     same committed tree the per-game compile reads.
 
+    .. warning::
+        The store's two halves use **different season keys**, and mixing them
+        silently yields another season's data rather than an error. The per-game
+        half (:func:`_through_raw_store`) is keyed by season **END** year, because
+        it derives the directory from the game id. This season-level half is keyed
+        by the season's **START** year, because the sweep files each capture under
+        the year it passed to the API -- so ``leaguegamelog/2023/`` holds 2023-24
+        while ``playbyplayv3/2024/`` holds that same 2023-24 season. A caller
+        working in end years must subtract one before calling this.
+
     Args:
         endpoint: stats.nba.com endpoint slug (the store subdirectory).
-        season: Season END year (2024 = 2023-24), matching the store layout.
+        season: Season **START** year (2023 = 2023-24) -- the key this half of the
+            store is filed under; see the warning above.
         variant: Capture variant slug, or ``None`` for an unparameterized capture.
         result_set: Named result set to return when the payload carries several;
             defaults to the first frame that parses.

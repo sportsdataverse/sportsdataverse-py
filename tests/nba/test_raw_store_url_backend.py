@@ -151,7 +151,11 @@ def _leaguegamelog_raw() -> dict:
 
 
 def test_season_index_from_store_filesystem(tmp_path):
-    p = tmp_path / "leaguegamelog" / "2024" / "regular-season.json"
+    """Discovery takes an END year but must read the START-year directory: the
+    store's season-level captures are filed under the year passed to the API,
+    while the per-game half uses the end year. Getting this wrong compiles a
+    season from the NEXT season's games and raises nothing."""
+    p = tmp_path / "leaguegamelog" / "2023" / "regular-season.json"  # 2023-24
     p.parent.mkdir(parents=True)
     p.write_text(json.dumps(_leaguegamelog_raw()), encoding="utf-8")
     idx = nsc._season_index_from_store(2024, "Regular Season", str(tmp_path))
@@ -160,8 +164,39 @@ def test_season_index_from_store_filesystem(tmp_path):
     assert idx.schema["game_date"] == pl.Date
 
 
+def test_season_index_reads_the_matching_season_not_its_neighbour(tmp_path):
+    """The regression guard for the off-by-one: with BOTH neighbouring captures
+    present, discovery for 2024 (=2023-24) must return the 2023-24 ids, and the
+    ids it returns must live in the per-game directory for that same season --
+    i.e. the two halves of the store agree."""
+    for year, gid in (("2023", "0022300001"), ("2024", "0022400001")):
+        p = tmp_path / "leaguegamelog" / year / "regular-season.json"
+        p.parent.mkdir(parents=True)
+        p.write_text(
+            json.dumps(
+                {
+                    "resultSets": [
+                        {
+                            "name": "LeagueGameLog",
+                            "headers": ["GAME_ID", "GAME_DATE"],
+                            "rowSet": [[gid, "2023-10-24"]],
+                        }
+                    ]
+                }
+            ),
+            encoding="utf-8",
+        )
+    idx = nsc._season_index_from_store(2024, "Regular Season", str(tmp_path))
+    assert idx is not None
+    gid = idx["game_id"][0]
+    assert gid == "0022300001", "discovery read the neighbouring season's capture"
+    # cross-half agreement: the per-game path for this id must be season 2024
+    assert npo._season_dir_for_game(gid) == "2024"
+
+
 def test_season_index_from_store_url(monkeypatch):
-    served = {"https://cdn/x/leaguegamelog/2024/playoffs.json": _leaguegamelog_raw()}
+    # END-year 2024 -> START-year directory 2023 (season-level store convention)
+    served = {"https://cdn/x/leaguegamelog/2023/playoffs.json": _leaguegamelog_raw()}
     monkeypatch.setattr(npo, "_http_get_json", lambda url, **k: served.get(url))
     idx = nsc._season_index_from_store(2024, "Playoffs", "https://cdn/x")
     assert idx is not None and idx.height == 2

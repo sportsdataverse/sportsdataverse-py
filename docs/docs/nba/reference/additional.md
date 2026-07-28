@@ -2890,7 +2890,7 @@ same committed tree the per-game compile reads.
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `endpoint` | `str` |  | stats.nba.com endpoint slug (the store subdirectory). |
-| `season` | `int` |  | Season END year (2024 = 2023-24), matching the store layout. |
+| `season` | `int` |  | Season **START** year (2023 = 2023-24) -- the key this half of the store is filed under; see the warning above. |
 | `variant` | `Optional[str]` | `None` | Capture variant slug, or `None` for an unparameterized capture. |
 | `result_set` | `Optional[str]` | `None` | Named result set to return when the payload carries several; defaults to the first frame that parses. |
 | `raw_store_dir` | `RawStoreDir` | `None` | Store root spec (dir or URL base) or per-endpoint mapping; `None` falls back to the env vars, `""` disables. |

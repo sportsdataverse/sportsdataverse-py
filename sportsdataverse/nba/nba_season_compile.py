@@ -22,7 +22,11 @@ import polars as pl
 _LOG = logging.getLogger(__name__)
 
 #: Bump when the possession pipeline changes in a way that invalidates cached parquet.
-PIPELINE_VERSION: int = 3
+#: v4: legacy pbp dialects report a literal "0" score on non-scoring rows, which
+#: the forward-fill accepted and so reset the running score. Possession points
+#: are a score difference, so every cached pre-2018 game holds corrupted points
+#: (up to +/-140 per possession) and must be recompiled rather than reused.
+PIPELINE_VERSION: int = 4
 
 _LEAGUE_ID = "00"
 
@@ -67,7 +71,12 @@ def _season_index_from_store(season: int, season_type: str, raw_store_dir: "RawS
 
     parsed = nba_raw_store_season_frame(
         "leaguegamelog",
-        season,
+        # ``season`` is the END year (2024 = 2023-24) everywhere in this module,
+        # but the store's SEASON-LEVEL captures are filed under the START year --
+        # dir 2023 holds 2023-24, while the per-game dirs use the end year. Off by
+        # one here means compiling a season from the NEXT season's game list, and
+        # nothing errors: the ids resolve, they are simply the wrong games.
+        season - 1,
         season_type.lower().replace(" ", "-"),
         raw_store_dir=raw_store_dir,
     )

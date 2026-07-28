@@ -2,19 +2,24 @@
 
 from __future__ import annotations
 
+import pytest
 import polars as pl
 
 from sportsdataverse.nba.nba_box_logs import box_features
 
 
 def _logs():
-    # 2 games, one team (id 1), one player (id 10) who plays all the team's minutes
+    # 2 games, one team (id 1), one player (id 10) who is on court wire-to-wire.
+    # A player's ``min`` is elapsed game minutes (48); the TEAM's is the sum over
+    # its five on-court slots (240). Giving the player 240 here -- as this fixture
+    # once did -- is physically impossible and hid a 5x error in the per-100
+    # denominator, because it made min/team_min accidentally equal 1.
     player = pl.DataFrame(
         {
             "game_id": ["G1", "G2"],
             "team_id": [1, 1],
             "player_id": [10, 10],
-            "min": [240.0, 240.0],
+            "min": [48.0, 48.0],
             "pts": [20, 30],
             "fg3m": [2, 3],
             "fga": [15, 20],
@@ -46,7 +51,7 @@ def test_box_features_per100_and_totals():
     player, team = _logs()
     f = box_features(player, team)
     assert f.height == 1 and f["player_id"][0] == 10
-    assert f["gp"][0] == 2 and abs(f["min"][0] - 480.0) < 1e-9
+    assert f["gp"][0] == 2 and abs(f["min"][0] - 96.0) < 1e-9  # 2 full games
     # team_poss = (80-10+14+0.44*20)+(85-12+12+0.44*22) = 92.8 + 94.68 = 187.48
     # player plays all minutes -> player_poss = 187.48 ; pts/100 = 50/187.48*100
     assert abs(f["pts"][0] - (50 / 187.48 * 100)) < 1e-6
@@ -76,13 +81,14 @@ def test_box_features_game_id_restriction():
 
 
 def test_box_features_traded_player_uses_per_game_pace():
-    # player 10 plays G1 for team 1 (fast) and G2 for team 2 (slow); each game full team minutes
+    # player 10 plays G1 for team 1 (fast) and G2 for team 2 (slow), wire-to-wire
+    # in each -- 48 elapsed minutes, against a team total of 240 across five slots
     player = pl.DataFrame(
         {
             "game_id": ["G1", "G2"],
             "team_id": [1, 2],
             "player_id": [10, 10],
-            "min": [240.0, 240.0],
+            "min": [48.0, 48.0],
             "pts": [20, 20],
             "fg3m": [2, 2],
             "fga": [15, 15],
@@ -112,3 +118,57 @@ def test_box_features_traded_player_uses_per_game_pace():
     # player plays all minutes -> player_poss = 112.8 + 78.6 = 191.4 ; pts/100 = 40/191.4*100
     assert f.height == 1 and f["player_id"][0] == 10
     assert abs(f["pts"][0] - (40 / 191.4 * 100)) < 1e-6
+
+
+def test_full_game_player_gets_the_teams_possessions():
+    """Oracle for the per-100 denominator: a player on court for the whole game
+    faced exactly the team's possessions, so a 100-possession team-game must give
+    that player player_poss == 100 and pts-per-100 == their actual points.
+
+    A team-game's ``min`` sums five on-court slots (240 in regulation), so
+    dividing by it directly -- rather than by team_min/5 -- understates a
+    player's possessions fivefold and inflates every per-100 rate by 5x. SPM
+    hides that (its coefficients are fitted on these features); BPM does not,
+    because it applies fixed published coefficients.
+    """
+    import polars as pl
+
+    from sportsdataverse.nba.nba_box_logs import box_features
+
+    # team-game engineered to exactly 100 possessions: 100 - 10 + 8 + 0.44*5 ~= 100.2
+    team = pl.DataFrame(
+        {
+            "game_id": ["0022300001"],
+            "team_id": [1610612737],
+            "min": [240],
+            "fga": [100],
+            "oreb": [10],
+            "tov": [8],
+            "fta": [5],
+        }
+    )
+    team_poss = 100 - 10 + 8 + 0.44 * 5
+    player = pl.DataFrame(
+        {
+            "game_id": ["0022300001"],
+            "team_id": [1610612737],
+            "player_id": [201939],
+            "min": [48],  # wire-to-wire
+            "pts": [30],
+            "fg3m": [5],
+            "fga": [20],
+            "fta": [4],
+            "ast": [6],
+            "oreb": [1],
+            "dreb": [5],
+            "stl": [2],
+            "blk": [1],
+            "tov": [3],
+            "pf": [2],
+        }
+    )
+    bf = box_features(player, team)
+    assert bf.height == 1
+    # 30 points over the team's ~100 possessions -> ~30 per 100, not ~150
+    assert bf["pts"][0] == pytest.approx(30 / team_poss * 100, rel=1e-9)
+    assert 25.0 < bf["pts"][0] < 35.0, "per-100 scoring outside any plausible NBA range"

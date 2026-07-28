@@ -11,6 +11,11 @@ from sportsdataverse.nba.nba_stats import nba_stats_leaguegamelog
 # per-100 feature columns (snake-cased leaguegamelog player fields)
 _STATS = ["pts", "fg3m", "fga", "fta", "ast", "oreb", "dreb", "stl", "blk", "tov", "pf"]
 
+#: On-court players per team. A team-game's ``min`` sums all five slots, so
+#: dividing it by this recovers the game's elapsed minutes -- the basis a
+#: player's share of team possessions must be taken against.
+ON_COURT_PLAYERS = 5.0
+
 
 def box_features(
     player_logs: pl.DataFrame,
@@ -50,9 +55,16 @@ def box_features(
         pl.col("min").alias("team_min"),
     ).select("game_id", "team_id", "team_poss", "team_min")
     # Step 2: join each player-game to its team-game; compute per-game player possessions
+    # A team's ``min`` is the sum over its five on-court slots (240 for regulation,
+    # 265/290 with overtimes), NOT the game's elapsed minutes. A player's share of
+    # the team's possessions is therefore min / (team_min / 5) -- dividing by
+    # team_min directly understates it fivefold, which silently inflates every
+    # per-100 rate by 5x. That is invisible to SPM (its coefficients are fitted on
+    # these features, so a uniform scale is absorbed) but lands straight in BPM,
+    # which applies fixed published coefficients.
     player_with_poss = player_logs.join(team_poss, on=["game_id", "team_id"], how="left").with_columns(
         pl.when(pl.col("team_min") > 0)
-        .then(pl.col("team_poss") * (pl.col("min") / pl.col("team_min")))
+        .then(pl.col("team_poss") * (pl.col("min") / (pl.col("team_min") / ON_COURT_PLAYERS)))
         .otherwise(0.0)
         .alias("player_poss")
     )
