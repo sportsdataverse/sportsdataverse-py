@@ -66,6 +66,41 @@ def test_through_store_filesystem_hit(tmp_path):
     assert got == {"game": {"actions": [1, 2]}}
 
 
+def test_http_get_json_logs_faults_but_not_plain_misses(monkeypatch, caplog):
+    """A 404 is an ordinary miss and stays quiet; a transport error or a non-404
+    status is logged, so an unreachable host / typo'd base is distinguishable
+    from "this capture doesn't exist" instead of looking like empty data."""
+    import requests
+
+    class Resp:
+        def __init__(self, code):
+            self.status_code = code
+
+        def json(self):
+            return {"ok": 1}
+
+    monkeypatch.setattr(requests, "get", lambda *a, **k: Resp(404))
+    with caplog.at_level("WARNING"):
+        assert npo._http_get_json("https://cdn/x/a.json") is None
+    assert caplog.records == []
+
+    caplog.clear()
+    monkeypatch.setattr(requests, "get", lambda *a, **k: Resp(500))
+    with caplog.at_level("WARNING"):
+        assert npo._http_get_json("https://cdn/x/a.json") is None
+    assert any("500" in r.getMessage() for r in caplog.records)
+
+    caplog.clear()
+
+    def _boom_get(*a, **k):
+        raise requests.RequestException("unreachable")
+
+    monkeypatch.setattr(requests, "get", _boom_get)
+    with caplog.at_level("WARNING"):
+        assert npo._http_get_json("https://cdn/x/a.json") is None
+    assert caplog.records, "a transport failure must not be silent"
+
+
 # --- period-box one-file reconciliation -------------------------------------
 
 

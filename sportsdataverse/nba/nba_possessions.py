@@ -1152,12 +1152,20 @@ def _http_get_json(url: str, *, timeout: Optional[float] = None) -> Optional[dic
     try:
         resp = requests.get(url, timeout=timeout)
     except requests.RequestException:
+        # Connection/timeout: not a miss. Silence here would make an unreachable
+        # host (or a typo'd base) look exactly like "this season has no data" for
+        # every game in the sweep.
+        logger.warning("raw store: request failed for %s", url, exc_info=True)
         return None
+    if resp.status_code == 404:
+        return None  # ordinary miss -- the capture simply isn't in the store
     if resp.status_code != 200:
+        logger.warning("raw store: HTTP %s for %s", resp.status_code, url)
         return None
     try:
         return resp.json()
     except ValueError:
+        logger.warning("raw store: undecodable JSON at %s", url)
         return None
 
 
