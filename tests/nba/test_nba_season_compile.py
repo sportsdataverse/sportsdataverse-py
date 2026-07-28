@@ -38,7 +38,7 @@ def test_compile_dedups_gameids_and_tags_season(tmp_path, monkeypatch):
     monkeypatch.setattr(
         C,
         "_season_game_index",
-        lambda s, st, *, proxy_url=None: _idx(
+        lambda s, st, *, proxy_url=None, raw_store_dir=None: _idx(
             ["001", "002"], [datetime.date(2023, 10, 24), datetime.date(2023, 10, 25)]
         ),
     )
@@ -80,7 +80,7 @@ def test_compile_resume_skips_cached(tmp_path, monkeypatch):
     monkeypatch.setattr(
         C,
         "_season_game_index",
-        lambda s, st, *, proxy_url=None: _idx(
+        lambda s, st, *, proxy_url=None, raw_store_dir=None: _idx(
             ["001", "002"], [datetime.date(2023, 10, 24), datetime.date(2023, 10, 25)]
         ),
     )
@@ -102,7 +102,7 @@ def test_compile_best_effort_skips_failing_game(tmp_path, monkeypatch):
     monkeypatch.setattr(
         C,
         "_season_game_index",
-        lambda s, st, *, proxy_url=None: _idx(
+        lambda s, st, *, proxy_url=None, raw_store_dir=None: _idx(
             ["ok1", "bad", "ok2"],
             [datetime.date(2023, 10, 24), datetime.date(2023, 10, 25), datetime.date(2023, 10, 26)],
         ),
@@ -119,7 +119,7 @@ def test_compile_best_effort_skips_failing_game(tmp_path, monkeypatch):
 
 
 def test_compile_never_raises_on_no_games(tmp_path, monkeypatch):
-    monkeypatch.setattr(C, "_season_game_index", lambda s, st, *, proxy_url=None: _idx([], []))
+    monkeypatch.setattr(C, "_season_game_index", lambda s, st, *, proxy_url=None, raw_store_dir=None: _idx([], []))
     out = C.compile_nba_season(2023, cache_dir=str(tmp_path), delay_s=0.0)
     assert out.is_empty() and "season" in out.columns
 
@@ -135,7 +135,7 @@ def test_compile_rotates_proxy_once_per_game(tmp_path, monkeypatch):
     monkeypatch.setattr(
         C,
         "_season_game_index",
-        lambda s, st, *, proxy_url=None: _idx(
+        lambda s, st, *, proxy_url=None, raw_store_dir=None: _idx(
             ["001", "002", "003"],
             [datetime.date(2023, 10, 24), datetime.date(2023, 10, 25), datetime.date(2023, 10, 26)],
         ),
@@ -158,7 +158,9 @@ def test_compile_rotates_proxy_once_per_game(tmp_path, monkeypatch):
 def test_compile_without_proxy_provider_passes_none(tmp_path, monkeypatch):
     """Default (no provider) must stay a plain unproxied fetch -- back-compat."""
     monkeypatch.setattr(
-        C, "_season_game_index", lambda s, st, *, proxy_url=None: _idx(["001"], [datetime.date(2023, 10, 24)])
+        C,
+        "_season_game_index",
+        lambda s, st, *, proxy_url=None, raw_store_dir=None: _idx(["001"], [datetime.date(2023, 10, 24)]),
     )
     seen: list[str | None] = []
 
@@ -181,7 +183,7 @@ def test_compile_proxies_game_discovery(tmp_path, monkeypatch):
     """
     seen: list[str | None] = []
 
-    def idx(s, st, *, proxy_url=None):
+    def idx(s, st, *, proxy_url=None, raw_store_dir=None):
         seen.append(proxy_url)
         return _idx(["001"], [datetime.date(2023, 10, 24)])
 
@@ -236,7 +238,7 @@ def _fixture_poss() -> pl.DataFrame:
 def test_compile_attaches_game_date(monkeypatch, tmp_path):
     from sportsdataverse.nba import nba_season_compile as mod
 
-    monkeypatch.setattr(mod, "_season_game_index", lambda s, st, *, proxy_url=None: _fake_index())
+    monkeypatch.setattr(mod, "_season_game_index", lambda s, st, *, proxy_url=None, raw_store_dir=None: _fake_index())
     monkeypatch.setattr(
         mod, "_fetch_possessions", lambda gid, lid, lineup_source="auto", proxy_url=None, **_kwargs: _fixture_poss()
     )
@@ -252,7 +254,7 @@ def test_compile_game_date_covers_cached_parquet(monkeypatch, tmp_path):
 
     cache = tmp_path / mod._game_cache_key("0022300001")
     _fixture_poss().write_parquet(cache)  # simulates a cache written before this change
-    monkeypatch.setattr(mod, "_season_game_index", lambda s, st, *, proxy_url=None: _fake_index())
+    monkeypatch.setattr(mod, "_season_game_index", lambda s, st, *, proxy_url=None, raw_store_dir=None: _fake_index())
     monkeypatch.setattr(
         mod,
         "_fetch_possessions",
@@ -271,7 +273,7 @@ def test_compile_missing_game_date_raises(monkeypatch, tmp_path):
         {"game_id": ["0022300001"], "game_date": [None]},
         schema={"game_id": pl.Utf8, "game_date": pl.Date},
     )
-    monkeypatch.setattr(mod, "_season_game_index", lambda s, st, *, proxy_url=None: bad_index)
+    monkeypatch.setattr(mod, "_season_game_index", lambda s, st, *, proxy_url=None, raw_store_dir=None: bad_index)
     monkeypatch.setattr(
         mod, "_fetch_possessions", lambda gid, lid, lineup_source="auto", proxy_url=None, **_kwargs: _fixture_poss()
     )
@@ -289,6 +291,6 @@ from tests.conftest import skip_if_no_nba_stats_live  # noqa: E402
 def test_compile_live_small_slice(tmp_path, monkeypatch):
     # only the first 3 real regular-season game ids, real fetch, real cache
     real_index = C._season_game_index(2023, "Regular Season").head(3)
-    monkeypatch.setattr(C, "_season_game_index", lambda s, st, *, proxy_url=None: real_index)
+    monkeypatch.setattr(C, "_season_game_index", lambda s, st, *, proxy_url=None, raw_store_dir=None: real_index)
     out = C.compile_nba_season(2023, cache_dir=str(tmp_path), delay_s=1.0)
     assert not out.is_empty() and "off_player_1" in out.columns
