@@ -124,7 +124,9 @@ def _drop_kneel_downs(plays: pl.DataFrame) -> pl.DataFrame:
     handling -- the released assets always carry ``text``).
     """
     if "kneel_down" in plays.columns:
-        return plays.filter(pl.col("kneel_down") == False)  # noqa: E712
+        # fill_null(False): an unset flag means "not a confirmed kneel" -- keep
+        # the row (a bare `== False` filter would drop null-flag rows).
+        return plays.filter(pl.col("kneel_down").fill_null(False) == False)  # noqa: E712
 
     text_col = next((c for c in _KNEEL_TEXT_COLUMNS if c in plays.columns), None)
     if text_col is None:

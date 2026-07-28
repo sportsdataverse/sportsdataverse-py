@@ -745,13 +745,14 @@ def test_drop_kneel_downs_prefers_flag_and_validates() -> None:
 
     flagged = pl.DataFrame(
         {
-            "pass": [0, 0],
-            "kneel_down": [True, False],
-            "cleaned_text": ["no kneel wording here", "kneels"],  # flag must win over text
+            "pass": [0, 0, 0],
+            "kneel_down": [True, False, None],
+            "cleaned_text": ["no kneel wording here", "kneels", "unknown flag"],  # flag must win over text
         }
     )
     out = _drop_kneel_downs(flagged)
-    assert out["kneel_down"].to_list() == [False]
+    # null flag = "not a confirmed kneel" -> retained, not silently dropped
+    assert out["kneel_down"].to_list() == [False, None]
 
     slim = pl.DataFrame({"pass": [0], "EPA": [0.1]})
     assert_frame_equal(_drop_kneel_downs(slim), slim)  # no flag, no text -> pass-through
