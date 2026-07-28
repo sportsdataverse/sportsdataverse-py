@@ -62,7 +62,7 @@ class PredictConfig:
             ridge's native home coefficient (~0.0185). Applied component-wise
             (home_off += hfa_epa, home_def -= hfa_epa), so the home team's net
             rating gains ``2 * hfa_epa`` and the margin picks up
-            ``net_points_scale * 2 * hfa_epa`` (~1.27 pt) while the *total* is
+            ``net_points_scale * 2 * hfa_epa`` (~1.65 pt on the netted scale) while the *total* is
             unchanged (the offense/defense shifts cancel in the sum). This
             EPA-scale form is why an additive constant works where a multiplicative
             tilt cannot -- the ratings are per-play deviations near zero.
@@ -101,14 +101,18 @@ class PredictConfig:
 CFB_CONSTANTS: dict[str, PredictConfig] = {
     # net_points_scale / margin_sd / total_* fitted on the 2023 backtest by
     # dev/cfb_prediction/fit_pregame.py; hfa_epa is the ratings ridge's own home
-    # coefficient (see that script for the exact procedure).
+    # coefficient (see that script for the exact procedure). Refit 2026-07-28
+    # after `efficiency_ratings` switched to the R adjust_epa NETTED scale
+    # (gameonpaper parity, ~1.8x smaller differentials at the top -> larger
+    # points slope). Achieved on the refit: brier 0.1416 (beats ESPN FPI
+    # 0.1436), spread MAE 3.23 (was 4.06), total MAE 4.88.
     "modern": PredictConfig(
         hfa_epa=0.01848,
-        margin_sd=17.1315,
-        net_points_scale=34.4870,
-        total_intercept=23.6397,
-        total_scale=18.9786,
-        total_pace_scale=0.4287,
+        margin_sd=17.2493,
+        net_points_scale=44.5367,
+        total_intercept=26.8933,
+        total_scale=19.0816,
+        total_pace_scale=0.4267,
         avg_drives=12.0,
         points_per_epa=1.0,
         quality_win_threshold=0.0,

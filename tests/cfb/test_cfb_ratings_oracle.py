@@ -46,7 +46,13 @@ def test_adj_net_tracks_sp_plus_overall() -> None:
 
 
 def test_adj_off_tracks_sp_plus_off() -> None:
-    """Offensive EPA vs SP+ offense (observed 0.849).
+    """Offensive EPA vs SP+ offense (observed 0.836 netted; 0.849 pre-rescale).
+
+    2026-07-28 semantic change (owner-directed): adj_off_epa switched from the
+    competitive-only ridge coefficient to the R adjust_epa netted average, which
+    includes garbage-time plays by construction (gameonpaper parity). Observed r
+    moved 0.849 -> 0.836; the floor is re-derived just below the NEW statistic's
+    observed value, not lowered to pass the old one.
 
     SP+ offense is a differently-constructed, noisier metric than play-level EPA
     and the ESPN ``team_id`` <-> SP+ join drops a few teams, so this caps around
@@ -55,7 +61,7 @@ def test_adj_off_tracks_sp_plus_off() -> None:
     """
     e = efficiency_ratings(_PBP).join(_SP, on="team_id", how="inner")
     r = spearman_corr(e["adj_off_epa"].to_numpy(), e["sp_off"].to_numpy())
-    assert r >= 0.84, r
+    assert r >= 0.82, r
 
 
 def test_adj_def_tracks_sp_plus_def() -> None:
@@ -74,3 +80,20 @@ def test_fei_net_tracks_fei() -> None:
     f = fei_ratings(_PBP).join(_FEI, on="team_id", how="inner")
     r = spearman_corr(f["fei_net"].to_numpy(), f["fei"].to_numpy())
     assert r >= 0.90, r
+
+
+def test_adj_net_magnitude_matches_gameonpaper_scale() -> None:
+    """Scale gate -- the one failure mode Spearman gates cannot see.
+
+    ``adj_net`` is the R ``adjust_epa`` / gameonpaper netted statistic: the
+    per-season MAX net lands ~0.30-0.40 EPA/play on real data (gameonpaper
+    2024 max = 0.366; 2014-2024 site history stays under 0.46). The
+    pre-2026-07-28 coefficient+intercept scale ran ~1.8x hotter on full-season
+    data (max ~0.63) and shipped because every gate here was rank-based.
+    Band, not a point, derived from observed values on THIS fixture: netted
+    max = 0.483 (the sample is a subset of games, so wider than the ~0.35
+    full-season ceiling).
+    """
+    e = efficiency_ratings(_PBP)
+    top = float(e["adj_net"].max())
+    assert 0.15 <= top <= 0.55, f"max adj_net {top:.3f} outside the gameonpaper netted-scale band"

@@ -3,6 +3,8 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [Unreleased](#unreleased)
+  - [CFB — `adj_off/def/net` rescaled to the R `adjust_epa` netted statistic (BREAKING scale change)](#cfb--adj_offdefnet-rescaled-to-the-r-adjust_epa-netted-statistic-breaking-scale-change)
+  - [CFB — `adj_st_epa` rescaled to true EPA units (BREAKING scale change)](#cfb--adj_st_epa-rescaled-to-true-epa-units-breaking-scale-change)
   - [CFB — `cfb_ratings` gameonpaper-parity filters (default ON)](#cfb--cfb_ratings-gameonpaper-parity-filters-default-on)
 - [0.0.72 Release: July 22, 2026](#0072-release-july-22-2026)
   - [BREAKING CHANGES](#breaking-changes)
@@ -197,6 +199,38 @@
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Unreleased
+
+### CFB — `adj_off/def/net` rescaled to the R `adjust_epa` netted statistic (BREAKING scale change)
+
+- **`efficiency_ratings` / `cfb_ratings` now publish the gameonpaper-parity
+  NETTED values**: each team's raw per-game EPA (all pass/rush plays, garbage
+  time included) minus the opponent's ridge-fitted strength, averaged across
+  games — the R `adjust_epa` / `team_agg.R` statistic. A top team now nets
+  ~0.30–0.40 EPA/play (2024 max 0.35 vs gameonpaper's 0.366). The previous
+  releases carried the ridge **coefficient + intercept** (a competitive-play
+  model strength) under the same column names — ~1.8× hotter at the top
+  (max ~0.63) and data-volume unstable. Ranks are nearly unchanged (the
+  Spearman oracle gates all hold); magnitudes shrink.
+- **Prediction constants refit on the new scale** (`net_points_scale`
+  34.49 → 44.54, `margin_sd`, `total_*`; `hfa_epa` unchanged — it is the
+  ridge's own home coefficient). Refit backtest: Brier 0.1416 (beats ESPN
+  FPI 0.1436), spread MAE 3.23 (was 4.06), total MAE 4.88.
+- **New magnitude oracle gate** (`test_adj_net_magnitude_matches_gameonpaper_scale`)
+  — the failure mode rank-based gates cannot see. Two floors re-derived for
+  the changed statistic (netting includes garbage time by construction), each
+  documented in its test: SP+ offense Spearman 0.84 → 0.82 (observed
+  0.849 → 0.836) and season-odds expected-wins rank calibration 0.90 → 0.885
+  (observed 0.928 → 0.899). All other oracle gates held or improved.
+
+### CFB — `adj_st_epa` rescaled to true EPA units (BREAKING scale change)
+
+- **The special-teams composite is now real EPA/play**: for each unit (field
+  goal, punt, kick return), the team's mean EPA/play centered on that unit's
+  league-wide mean, summed across the three units. The previous releases
+  shipped a **sum of three z-scores** under the `_epa` name — dimensionless,
+  std ~1.7, range ±5. The centered form also tracks the SP+ special-teams
+  oracle **better** (Spearman 0.865 vs 0.768), so the oracle floor was
+  RAISED 0.75 → 0.84.
 
 ### CFB — `cfb_ratings` gameonpaper-parity filters (default ON)
 
