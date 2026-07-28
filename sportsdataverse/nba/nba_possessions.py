@@ -1204,6 +1204,76 @@ def _raw_store_path(
     return Path(resolved) / _raw_store_relpath(endpoint, game_id, suffix)
 
 
+def nba_raw_store_season_frame(
+    endpoint: str,
+    season: int,
+    variant: Optional[str] = None,
+    *,
+    result_set: Optional[str] = None,
+    raw_store_dir: RawStoreDir = None,
+) -> Optional["pl.DataFrame"]:
+    """Read a committed SEASON-LEVEL capture from the raw store, parsed to a frame.
+
+    The per-game half of the store is served by :func:`_through_raw_store`; this is
+    the season-keyed half (``leaguegamelog``, ``playerindex``,
+    ``leaguedashplayerbiostats``, ...) that the ``-raw`` scraper writes as
+
+    * ``{endpoint}/{season}/{variant}.json`` -- parameterized captures, where
+      *variant* is the slugified parameter sweep (e.g. ``"regular-season"``,
+      ``"regular-season_totals"``), and
+    * ``{endpoint}/{season}.json`` -- unparameterized captures (e.g.
+      ``playerindex``), i.e. ``variant=None``.
+
+    Roots may be a local checkout or an ``http(s)://`` base (the raw repo served
+    over raw.githubusercontent / a CDN), so a consumer -- notably the
+    ``hoopR-nba-stats-data`` model producer -- runs clone-free in CI against the
+    same committed tree the per-game compile reads.
+
+    Args:
+        endpoint: stats.nba.com endpoint slug (the store subdirectory).
+        season: Season END year (2024 = 2023-24), matching the store layout.
+        variant: Capture variant slug, or ``None`` for an unparameterized capture.
+        result_set: Named result set to return when the payload carries several;
+            defaults to the first frame that parses.
+        raw_store_dir: Store root spec (dir or URL base) or per-endpoint mapping;
+            ``None`` falls back to the env vars, ``""`` disables.
+
+    Returns:
+        The parsed :class:`polars.DataFrame`, or ``None`` when the store is
+        unset, the capture is absent, or the payload carries no usable frame --
+        so a caller can cleanly fall back to a live fetch.
+
+    Example:
+        Read a committed season capture from a URL store::
+
+            from sportsdataverse.nba import nba_raw_store_season_frame
+            base = "https://raw.githubusercontent.com/sportsdataverse/hoopR-nba-stats-raw/main/nba_stats/json"
+            logs = nba_raw_store_season_frame("leaguegamelog", 2024, "regular-season", raw_store_dir=base)
+    """
+    from sportsdataverse.nba.nba_stats_parsers import parse_nba_stats_result_sets
+
+    root = _resolve_store_root(endpoint, raw_store_dir)
+    if not root:
+        return None
+    relpath = f"{endpoint}/{season}/{variant}.json" if variant else f"{endpoint}/{season}.json"
+    if _is_url_root(root):
+        raw = _http_get_json(root.rstrip("/") + "/" + relpath)
+    else:
+        path = Path(root) / relpath
+        try:
+            raw = json.loads(path.read_text(encoding="utf-8")) if path.exists() else None
+        except (OSError, ValueError):
+            raw = None
+    if not raw:
+        return None
+    parsed = parse_nba_stats_result_sets(raw, result_set=result_set)
+    if isinstance(parsed, dict):  # multi-set payload: take the first usable frame
+        parsed = next((f for f in parsed.values() if isinstance(f, pl.DataFrame) and f.height), None)
+    if not isinstance(parsed, pl.DataFrame) or parsed.is_empty():
+        return None
+    return parsed
+
+
 def _through_raw_store(
     endpoint: str,
     game_id: str,

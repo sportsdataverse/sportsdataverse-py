@@ -135,3 +135,56 @@ def test_season_index_from_store_url(monkeypatch):
 def test_season_index_from_store_absent_returns_none(tmp_path):
     assert nsc._season_index_from_store(2024, "Regular Season", str(tmp_path)) is None
     assert nsc._season_index_from_store(2024, "Regular Season", None) is None
+
+
+# --- public season-level store reader ---------------------------------------
+
+
+def test_season_frame_parameterized_and_bare_layouts(tmp_path):
+    """Both committed shapes: {endpoint}/{season}/{variant}.json (swept params)
+    and {endpoint}/{season}.json (unparameterized, e.g. playerindex)."""
+    par = tmp_path / "leaguedashplayerbiostats" / "2024" / "regular-season_totals.json"
+    par.parent.mkdir(parents=True)
+    par.write_text(
+        json.dumps({"resultSets": [{"name": "X", "headers": ["PLAYER_ID", "AGE"], "rowSet": [[1, 25.0]]}]}),
+        encoding="utf-8",
+    )
+    got = npo.nba_raw_store_season_frame(
+        "leaguedashplayerbiostats", 2024, "regular-season_totals", raw_store_dir=str(tmp_path)
+    )
+    assert got is not None and got["player_id"].to_list() == [1]
+
+    bare = tmp_path / "playerindex" / "2024.json"
+    bare.parent.mkdir(parents=True)
+    bare.write_text(
+        json.dumps({"resultSets": [{"name": "P", "headers": ["PERSON_ID", "POSITION"], "rowSet": [[7, "PG"]]}]}),
+        encoding="utf-8",
+    )
+    got = npo.nba_raw_store_season_frame("playerindex", 2024, raw_store_dir=str(tmp_path))
+    assert got is not None and got["person_id"].to_list() == [7]
+
+
+def test_season_frame_url_and_absent(monkeypatch, tmp_path):
+    served = {
+        "https://cdn/x/playerindex/2024.json": {
+            "resultSets": [{"name": "P", "headers": ["PERSON_ID"], "rowSet": [[7]]}]
+        }
+    }
+    monkeypatch.setattr(npo, "_http_get_json", lambda url, **k: served.get(url))
+    assert npo.nba_raw_store_season_frame("playerindex", 2024, raw_store_dir="https://cdn/x") is not None
+    # absent capture / disabled store -> None so the caller falls back to live
+    assert npo.nba_raw_store_season_frame("playerindex", 1999, raw_store_dir="https://cdn/x") is None
+    assert npo.nba_raw_store_season_frame("playerindex", 2024, raw_store_dir=str(tmp_path)) is None
+    assert npo.nba_raw_store_season_frame("playerindex", 2024, raw_store_dir="") is None
+
+
+def test_season_frame_empty_rowset_returns_none(tmp_path):
+    """An empty capture must read as a miss, not an empty frame that would
+    silently replace a live fetch with zero rows."""
+    p = tmp_path / "playerindex" / "2024.json"
+    p.parent.mkdir(parents=True)
+    p.write_text(
+        json.dumps({"resultSets": [{"name": "P", "headers": ["PERSON_ID"], "rowSet": []}]}),
+        encoding="utf-8",
+    )
+    assert npo.nba_raw_store_season_frame("playerindex", 2024, raw_store_dir=str(tmp_path)) is None

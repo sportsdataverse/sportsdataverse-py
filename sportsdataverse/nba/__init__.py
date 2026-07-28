@@ -82,6 +82,7 @@ from sportsdataverse.nba.nba_play_context import (  # noqa: F401
 )
 from sportsdataverse.nba.nba_possessions import (  # noqa: F401
     build_possession_shooting,
+    nba_raw_store_season_frame,
     POSSESSION_SHOOTING_SCHEMA,
 )
 from sportsdataverse.nba.nba_rapm_variants import (  # noqa: F401

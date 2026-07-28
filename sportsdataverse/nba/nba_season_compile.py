@@ -7,7 +7,6 @@ already-compiled games. Best-effort — a failing/empty game is logged and skipp
 
 from __future__ import annotations
 
-import json
 import logging
 import os
 import time
@@ -64,30 +63,15 @@ def _season_index_from_store(season: int, season_type: str, raw_store_dir: "RawS
     layout the ``-raw`` scraper writes; the raw resultSets payload is parsed the
     same way the live wrapper parses it.
     """
-    from .nba_possessions import _http_get_json, _is_url_root, _resolve_store_root
-    from .nba_stats_parsers import parse_nba_stats_result_sets
+    from .nba_possessions import nba_raw_store_season_frame
 
-    root = _resolve_store_root("leaguegamelog", raw_store_dir)
-    if not root:
-        return None
-    relpath = f"leaguegamelog/{season}/{season_type.lower().replace(' ', '-')}.json"
-    if _is_url_root(root):
-        raw = _http_get_json(root.rstrip("/") + "/" + relpath)
-    else:
-        path = Path(root) / relpath
-        try:
-            raw = json.loads(path.read_text(encoding="utf-8")) if path.exists() else None
-        except (OSError, ValueError):
-            raw = None
-    if not raw:
-        return None
-    parsed = parse_nba_stats_result_sets(raw)
-    if isinstance(parsed, dict):  # multi-set safety; leaguegamelog is single-set
-        parsed = next(
-            (f for f in parsed.values() if isinstance(f, pl.DataFrame) and "game_id" in f.columns),
-            None,
-        )
-    if not isinstance(parsed, pl.DataFrame):
+    parsed = nba_raw_store_season_frame(
+        "leaguegamelog",
+        season,
+        season_type.lower().replace(" ", "-"),
+        raw_store_dir=raw_store_dir,
+    )
+    if parsed is None or "game_id" not in parsed.columns:
         return None
     idx = _index_select(parsed)
     return idx if not idx.is_empty() else None
