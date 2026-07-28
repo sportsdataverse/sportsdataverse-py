@@ -2718,14 +2718,25 @@ so a trade is visible rather than silently collapsed.
 
 **Returns**
 
-One row per `player_id` with `PLAYER_IDENTITY_SCHEMA`. An empty input gives the zero-row frame with that schema, so callers can join unconditionally.
+One row per `player_id` with `PLAYER_IDENTITY_SCHEMA`. An empty input -- or one missing any required column, `min` included -- gives the zero-row frame with that schema, so callers can join unconditionally. `min` is required rather than optional: without it every team totals zero minutes and "primary team" quietly degrades to whichever `team_id` sorts first, which looks like an answer but is not one.
 
 **Example**
 
 ```python
-from sportsdataverse.nba import nba_box_logs, nba_player_identity
-logs = nba_box_logs("2023-24")
-named = ratings.join(nba_player_identity(logs["player"]), on="player_id", how="left")
+import polars as pl
+from sportsdataverse.nba import nba_player_identity
+
+logs = pl.DataFrame({
+    "player_id": [1628983],
+    "player_name": ["Shai Gilgeous-Alexander"],
+    "team_id": [1610612760],
+    "team_abbreviation": ["OKC"],
+    "team_name": ["Oklahoma City Thunder"],
+    "min": [34.0],
+})
+ratings = pl.DataFrame({"player_id": [1628983], "war": [21.9]})
+named = ratings.join(nba_player_identity(logs), on="player_id", how="left")
+print(named.select("player_name", "team_name", "war"))
 ```
 
 ### `nba_player_positions(season: 'str', *, league_id: 'str' = '00', fetch: 'Optional[Callable[..., pl.DataFrame]]' = None) -> 'pl.DataFrame'` {#nba_player_positions}

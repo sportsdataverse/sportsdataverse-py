@@ -209,7 +209,14 @@ def test_player_identity_primary_team_is_by_minutes_and_lists_all():
 
 
 def test_player_identity_empty_and_missing_columns_give_typed_frame():
-    """Callers join this unconditionally, so a bad input must not raise."""
+    """Callers join this unconditionally, so a bad input must not raise -- and the
+    frame must carry the DTYPES too, or a downstream join on player_id silently
+    mismatches on a Null column instead of failing loudly.
+
+    A frame missing ``min`` is malformed, not merely minute-less: aggregating it
+    would total zero minutes for every team and pick a "primary" team by team_id
+    order -- a wrong answer wearing the shape of a right one.
+    """
     import polars as pl
 
     from sportsdataverse.nba.nba_box_logs import (
@@ -217,7 +224,42 @@ def test_player_identity_empty_and_missing_columns_give_typed_frame():
         nba_player_identity,
     )
 
-    for bad in (pl.DataFrame(), pl.DataFrame({"player_id": [1]})):
+    complete = _idlogs()
+    for bad in (
+        pl.DataFrame(),
+        pl.DataFrame({"player_id": [1]}),
+        complete.drop("min"),  # the silent-degradation case
+        complete.drop("team_name"),
+    ):
         out = nba_player_identity(bad)
         assert out.height == 0
-        assert out.columns == list(PLAYER_IDENTITY_SCHEMA)
+        assert dict(out.schema) == PLAYER_IDENTITY_SCHEMA
+
+
+def test_player_identity_primary_team_does_not_depend_on_group_order():
+    """The primary pick and the `teams` order must come from an explicit sort, not
+    from group_by happening to preserve a prior one -- polars only guarantees that
+    with maintain_order, so relying on it is undocumented behaviour that holds
+    until it doesn't."""
+    import polars as pl
+
+    from sportsdataverse.nba.nba_box_logs import nba_player_identity
+
+    n = 200
+    logs = pl.DataFrame(
+        {
+            "game_id": [f"G{i}" for i in range(n) for _ in (0, 1)],
+            "player_id": [i for i in range(n) for _ in (0, 1)],
+            "player_name": [f"P{i}" for i in range(n) for _ in (0, 1)],
+            # the HIGH-minutes team deliberately carries the LOWER team_id, so a
+            # team_id-ordered fallback would pick the wrong club
+            "team_id": [t for _ in range(n) for t in (900, 100)],
+            "team_abbreviation": [a for _ in range(n) for a in ("HI", "LO")],
+            "team_name": [t for _ in range(n) for t in ("High Id", "Low Id")],
+            "min": [m for _ in range(n) for m in (5.0, 50.0)],
+        }
+    )
+    out = nba_player_identity(logs)
+    assert out.height == n
+    assert out.filter(pl.col("team_abbreviation") != "LO").height == 0
+    assert out.filter(pl.col("teams") != "LO,HI").height == 0

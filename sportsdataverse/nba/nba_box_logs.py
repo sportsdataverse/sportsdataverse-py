@@ -164,15 +164,33 @@ def nba_player_identity(player_logs: pl.DataFrame) -> pl.DataFrame:
 
     Returns:
         One row per ``player_id`` with :data:`PLAYER_IDENTITY_SCHEMA`. An empty
-        input gives the zero-row frame with that schema, so callers can join
-        unconditionally.
+        input -- or one missing any required column, ``min`` included -- gives the
+        zero-row frame with that schema, so callers can join unconditionally.
+        ``min`` is required rather than optional: without it every team totals
+        zero minutes and "primary team" quietly degrades to whichever ``team_id``
+        sorts first, which looks like an answer but is not one.
+
+    Raises:
+        None: a malformed frame yields the typed zero-row frame instead of
+        raising, so a caller can join unconditionally.
 
     Example:
         Attach names to a model output::
 
-            from sportsdataverse.nba import nba_box_logs, nba_player_identity
-            logs = nba_box_logs("2023-24")
-            named = ratings.join(nba_player_identity(logs["player"]), on="player_id", how="left")
+            import polars as pl
+            from sportsdataverse.nba import nba_player_identity
+
+            logs = pl.DataFrame({
+                "player_id": [1628983],
+                "player_name": ["Shai Gilgeous-Alexander"],
+                "team_id": [1610612760],
+                "team_abbreviation": ["OKC"],
+                "team_name": ["Oklahoma City Thunder"],
+                "min": [34.0],
+            })
+            ratings = pl.DataFrame({"player_id": [1628983], "war": [21.9]})
+            named = ratings.join(nba_player_identity(logs), on="player_id", how="left")
+            print(named.select("player_name", "team_name", "war"))
 
         See Also:
             * `nba_api`_ -- reference Python client for stats.nba.com
@@ -181,23 +199,34 @@ def nba_player_identity(player_logs: pl.DataFrame) -> pl.DataFrame:
         .. _nba_api: https://github.com/swar/nba_api
         .. _hoopR: https://hoopR.sportsdataverse.org
     """
-    need = {"player_id", "player_name", "team_id", "team_abbreviation", "team_name"}
+    # ``min`` is required, not optional: without it every team totals zero minutes
+    # and the "primary" team degrades to whichever team_id sorts first -- a wrong
+    # answer wearing the shape of a right one. Refuse rather than guess.
+    need = {"player_id", "player_name", "team_id", "team_abbreviation", "team_name", "min"}
     if player_logs.is_empty() or not need.issubset(set(player_logs.columns)):
         return pl.DataFrame(schema=PLAYER_IDENTITY_SCHEMA)
 
-    minutes = pl.col("min") if "min" in player_logs.columns else pl.lit(0.0)
     per_team = (
-        player_logs.with_columns(minutes.fill_null(0.0).cast(pl.Float64).alias("_min"))
+        player_logs.with_columns(pl.col("min").fill_null(0.0).cast(pl.Float64).alias("_min"))
         .group_by(["player_id", "team_id", "team_abbreviation", "team_name"])
         .agg(pl.col("_min").sum().alias("_team_min"), pl.col("player_name").last().alias("player_name"))
-        # Ties would otherwise resolve by group_by's nondeterministic output order,
-        # so break them on team_id to keep a rebuild byte-identical.
-        .sort(["player_id", "_team_min", "team_id"], descending=[False, True, False])
     )
-    primary = per_team.group_by("player_id").first()
-    teams = per_team.group_by("player_id").agg(pl.col("team_abbreviation").str.join(",").alias("teams"))
+    # Order the teams INSIDE each aggregation rather than pre-sorting and trusting
+    # group_by to preserve that order -- polars only guarantees preservation with
+    # maintain_order, so a pre-sort would leave BOTH the primary pick and the teams
+    # string resting on undocumented behaviour. Ties break on team_id so a rebuild
+    # stays byte-identical.
+    _by, _desc = ["_team_min", "team_id"], [True, False]
+    _first = lambda c: pl.col(c).sort_by(_by, descending=_desc).first().alias(c)  # noqa: E731
     return (
-        primary.join(teams, on="player_id", how="left")
+        per_team.group_by("player_id")
+        .agg(
+            _first("player_name"),
+            _first("team_id"),
+            _first("team_abbreviation"),
+            _first("team_name"),
+            pl.col("team_abbreviation").sort_by(_by, descending=_desc).str.join(",").alias("teams"),
+        )
         .select(
             pl.col("player_id").cast(pl.Int64),
             pl.col("player_name").cast(pl.Utf8),
