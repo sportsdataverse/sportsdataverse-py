@@ -4458,6 +4458,16 @@ load_nba_player_boxscore:
 load_nba_player_impact:
 - name: player_id
   type: Int64
+- name: player_name
+  type: Utf8
+- name: team_id
+  type: Int64
+- name: team_abbreviation
+  type: Utf8
+- name: team_name
+  type: Utf8
+- name: teams
+  type: Utf8
 - name: o_rapm
   type: Float64
 - name: d_rapm

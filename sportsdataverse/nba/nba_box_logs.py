@@ -128,3 +128,83 @@ def nba_box_logs(
         season_type_all_star=season_type,
     )
     return {"player": player, "team": team}
+
+
+#: Identity columns :func:`nba_player_identity` emits, in output order.
+PLAYER_IDENTITY_SCHEMA: Dict[str, pl.DataType] = {
+    "player_id": pl.Int64,
+    "player_name": pl.Utf8,
+    "team_id": pl.Int64,
+    "team_abbreviation": pl.Utf8,
+    "team_name": pl.Utf8,
+    "teams": pl.Utf8,
+}
+
+
+def nba_player_identity(player_logs: pl.DataFrame) -> pl.DataFrame:
+    """Human-readable identity for every player in a season's box logs.
+
+    Model outputs key on ``player_id`` alone, which makes them unusable without a
+    second lookup -- a leaderboard reads ``1628983`` instead of
+    ``Shai Gilgeous-Alexander``. This derives the display columns from the season's
+    own game logs, so they are **season-accurate**: a player's team is what he
+    actually played for that year, not his current one (which is what a player
+    directory would give and would silently mislabel every historical season).
+
+    A traded player has rows for several teams. ``team_*`` is his **primary** team
+    by minutes -- the one a reader means when they say "his team that season" --
+    and ``teams`` lists every abbreviation he appeared for, in descending minutes,
+    so a trade is visible rather than silently collapsed.
+
+    Args:
+        player_logs: Per-player-per-game rows from ``leaguegamelog`` (the
+            ``player_or_team="P"`` variant), carrying ``player_id``,
+            ``player_name``, ``team_id``, ``team_abbreviation``, ``team_name``
+            and ``min``.
+
+    Returns:
+        One row per ``player_id`` with :data:`PLAYER_IDENTITY_SCHEMA`. An empty
+        input gives the zero-row frame with that schema, so callers can join
+        unconditionally.
+
+    Example:
+        Attach names to a model output::
+
+            from sportsdataverse.nba import nba_box_logs, nba_player_identity
+            logs = nba_box_logs("2023-24")
+            named = ratings.join(nba_player_identity(logs["player"]), on="player_id", how="left")
+
+        See Also:
+            * `nba_api`_ -- reference Python client for stats.nba.com
+            * `hoopR`_ -- R companion package for NBA/MBB data
+
+        .. _nba_api: https://github.com/swar/nba_api
+        .. _hoopR: https://hoopR.sportsdataverse.org
+    """
+    need = {"player_id", "player_name", "team_id", "team_abbreviation", "team_name"}
+    if player_logs.is_empty() or not need.issubset(set(player_logs.columns)):
+        return pl.DataFrame(schema=PLAYER_IDENTITY_SCHEMA)
+
+    minutes = pl.col("min") if "min" in player_logs.columns else pl.lit(0.0)
+    per_team = (
+        player_logs.with_columns(minutes.fill_null(0.0).cast(pl.Float64).alias("_min"))
+        .group_by(["player_id", "team_id", "team_abbreviation", "team_name"])
+        .agg(pl.col("_min").sum().alias("_team_min"), pl.col("player_name").last().alias("player_name"))
+        # Ties would otherwise resolve by group_by's nondeterministic output order,
+        # so break them on team_id to keep a rebuild byte-identical.
+        .sort(["player_id", "_team_min", "team_id"], descending=[False, True, False])
+    )
+    primary = per_team.group_by("player_id").first()
+    teams = per_team.group_by("player_id").agg(pl.col("team_abbreviation").str.join(",").alias("teams"))
+    return (
+        primary.join(teams, on="player_id", how="left")
+        .select(
+            pl.col("player_id").cast(pl.Int64),
+            pl.col("player_name").cast(pl.Utf8),
+            pl.col("team_id").cast(pl.Int64),
+            pl.col("team_abbreviation").cast(pl.Utf8),
+            pl.col("team_name").cast(pl.Utf8),
+            pl.col("teams").cast(pl.Utf8),
+        )
+        .sort("player_id")
+    )
