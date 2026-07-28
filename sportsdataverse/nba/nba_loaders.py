@@ -1028,6 +1028,11 @@ def load_nba_player_impact(seasons, return_as_pandas: bool = False):
         |col_name               |type    |
         |:----------------------|:-------|
         |player_id              |Int64   |
+        |player_name            |Utf8    |
+        |team_id                |Int64   |
+        |team_abbreviation      |Utf8    |
+        |team_name              |Utf8    |
+        |teams                  |Utf8    |
         |o_rapm                 |Float64 |
         |d_rapm                 |Float64 |
         |rapm                   |Float64 |

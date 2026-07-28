@@ -2694,6 +2694,51 @@ ages = nba_player_ages("2023-24")
 print(ages.head())
 ```
 
+### `nba_player_identity(player_logs: 'pl.DataFrame') -> 'pl.DataFrame'` {#nba_player_identity}
+
+Human-readable identity for every player in a season's box logs.
+
+Model outputs key on `player_id` alone, which makes them unusable without a
+second lookup -- a leaderboard reads `1628983` instead of
+`Shai Gilgeous-Alexander`. This derives the display columns from the season's
+own game logs, so they are **season-accurate**: a player's team is what he
+actually played for that year, not his current one (which is what a player
+directory would give and would silently mislabel every historical season).
+
+A traded player has rows for several teams. `team_*` is his **primary** team
+by minutes -- the one a reader means when they say "his team that season" --
+and `teams` lists every abbreviation he appeared for, in descending minutes,
+so a trade is visible rather than silently collapsed.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `player_logs` | `DataFrame` |  | Per-player-per-game rows from `leaguegamelog` (the `player_or_team="P"` variant), carrying `player_id`, `player_name`, `team_id`, `team_abbreviation`, `team_name` and `min`. |
+
+**Returns**
+
+One row per `player_id` with `PLAYER_IDENTITY_SCHEMA`. An empty input -- or one missing any required column, `min` included -- gives the zero-row frame with that schema, so callers can join unconditionally. `min` is required rather than optional: without it every team totals zero minutes and "primary team" quietly degrades to whichever `team_id` sorts first, which looks like an answer but is not one.
+
+**Example**
+
+```python
+import polars as pl
+from sportsdataverse.nba import nba_player_identity
+
+logs = pl.DataFrame({
+    "player_id": [1628983],
+    "player_name": ["Shai Gilgeous-Alexander"],
+    "team_id": [1610612760],
+    "team_abbreviation": ["OKC"],
+    "team_name": ["Oklahoma City Thunder"],
+    "min": [34.0],
+})
+ratings = pl.DataFrame({"player_id": [1628983], "war": [21.9]})
+named = ratings.join(nba_player_identity(logs), on="player_id", how="left")
+print(named.select("player_name", "team_name", "war"))
+```
+
 ### `nba_player_positions(season: 'str', *, league_id: 'str' = '00', fetch: 'Optional[Callable[..., pl.DataFrame]]' = None) -> 'pl.DataFrame'` {#nba_player_positions}
 
 Fetch league-wide listed positions for a season as numeric 1-5.

@@ -250,6 +250,7 @@ from sportsdataverse.nba import nba_matchup_drapm as nba_matchup_drapm  # noqa: 
 from sportsdataverse.nba import nba_pbp_disk as nba_pbp_disk  # noqa: F401
 from sportsdataverse.nba import nba_play_context as nba_play_context  # noqa: F401
 from sportsdataverse.nba import nba_player_ages as nba_player_ages  # noqa: F401
+from sportsdataverse.nba import nba_player_identity as nba_player_identity  # noqa: F401
 from sportsdataverse.nba import nba_player_positions as nba_player_positions  # noqa: F401
 from sportsdataverse.nba import nba_player_props as nba_player_props  # noqa: F401
 from sportsdataverse.nba import nba_playtype_ratings as nba_playtype_ratings  # noqa: F401
@@ -530,6 +531,7 @@ __all__ = [
     "nba_pbp_disk",
     "nba_play_context",
     "nba_player_ages",
+    "nba_player_identity",
     "nba_player_positions",
     "nba_player_props",
     "nba_playtype_ratings",

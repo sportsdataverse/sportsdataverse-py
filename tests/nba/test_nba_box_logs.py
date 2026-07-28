@@ -172,3 +172,94 @@ def test_full_game_player_gets_the_teams_possessions():
     # 30 points over the team's ~100 possessions -> ~30 per 100, not ~150
     assert bf["pts"][0] == pytest.approx(30 / team_poss * 100, rel=1e-9)
     assert 25.0 < bf["pts"][0] < 35.0, "per-100 scoring outside any plausible NBA range"
+
+
+def _idlogs():
+    """Two players; one traded mid-season (more minutes with the second team)."""
+    import polars as pl
+
+    return pl.DataFrame(
+        {
+            "game_id": ["G1", "G2", "G3", "G1"],
+            "player_id": [10, 10, 10, 20],
+            "player_name": ["Traded Guy", "Traded Guy", "Traded Guy", "Stayer"],
+            "team_id": [1, 1, 2, 3],
+            "team_abbreviation": ["AAA", "AAA", "BBB", "CCC"],
+            "team_name": ["Alpha Aces", "Alpha Aces", "Beta Bears", "Gamma Cats"],
+            "min": [10.0, 10.0, 30.0, 25.0],
+        }
+    )
+
+
+def test_player_identity_primary_team_is_by_minutes_and_lists_all():
+    """A trade must be visible, not silently collapsed: team_* is the team the
+    player actually spent most minutes with, and `teams` shows every stop."""
+    from sportsdataverse.nba.nba_box_logs import nba_player_identity
+
+    out = nba_player_identity(_idlogs())
+    assert out.height == 2
+    traded = out.filter(out["player_id"] == 10).to_dicts()[0]
+    # 30 minutes with BBB beats 20 with AAA -> BBB is primary
+    assert traded["team_abbreviation"] == "BBB"
+    assert traded["team_name"] == "Beta Bears"
+    assert traded["teams"] == "BBB,AAA"  # descending minutes
+    assert traded["player_name"] == "Traded Guy"
+    stayer = out.filter(out["player_id"] == 20).to_dicts()[0]
+    assert stayer["teams"] == "CCC" and stayer["team_name"] == "Gamma Cats"
+
+
+def test_player_identity_empty_and_missing_columns_give_typed_frame():
+    """Callers join this unconditionally, so a bad input must not raise -- and the
+    frame must carry the DTYPES too, or a downstream join on player_id silently
+    mismatches on a Null column instead of failing loudly.
+
+    A frame missing ``min`` is malformed, not merely minute-less: aggregating it
+    would total zero minutes for every team and pick a "primary" team by team_id
+    order -- a wrong answer wearing the shape of a right one.
+    """
+    import polars as pl
+
+    from sportsdataverse.nba.nba_box_logs import (
+        PLAYER_IDENTITY_SCHEMA,
+        nba_player_identity,
+    )
+
+    complete = _idlogs()
+    for bad in (
+        pl.DataFrame(),
+        pl.DataFrame({"player_id": [1]}),
+        complete.drop("min"),  # the silent-degradation case
+        complete.drop("team_name"),
+    ):
+        out = nba_player_identity(bad)
+        assert out.height == 0
+        assert dict(out.schema) == PLAYER_IDENTITY_SCHEMA
+
+
+def test_player_identity_primary_team_does_not_depend_on_group_order():
+    """The primary pick and the `teams` order must come from an explicit sort, not
+    from group_by happening to preserve a prior one -- polars only guarantees that
+    with maintain_order, so relying on it is undocumented behaviour that holds
+    until it doesn't."""
+    import polars as pl
+
+    from sportsdataverse.nba.nba_box_logs import nba_player_identity
+
+    n = 200
+    logs = pl.DataFrame(
+        {
+            "game_id": [f"G{i}" for i in range(n) for _ in (0, 1)],
+            "player_id": [i for i in range(n) for _ in (0, 1)],
+            "player_name": [f"P{i}" for i in range(n) for _ in (0, 1)],
+            # the HIGH-minutes team deliberately carries the LOWER team_id, so a
+            # team_id-ordered fallback would pick the wrong club
+            "team_id": [t for _ in range(n) for t in (900, 100)],
+            "team_abbreviation": [a for _ in range(n) for a in ("HI", "LO")],
+            "team_name": [t for _ in range(n) for t in ("High Id", "Low Id")],
+            "min": [m for _ in range(n) for m in (5.0, 50.0)],
+        }
+    )
+    out = nba_player_identity(logs)
+    assert out.height == n
+    assert out.filter(pl.col("team_abbreviation") != "LO").height == 0
+    assert out.filter(pl.col("teams") != "LO,HI").height == 0

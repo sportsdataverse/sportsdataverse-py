@@ -33,7 +33,12 @@ from sportsdataverse.nba.nba_model_validation import (  # noqa: F401
     validate_model,
     walk_forward,
 )
-from sportsdataverse.nba.nba_box_logs import box_features, nba_box_logs  # noqa: F401
+from sportsdataverse.nba.nba_box_logs import (  # noqa: F401
+    PLAYER_IDENTITY_SCHEMA,
+    box_features,
+    nba_box_logs,
+    nba_player_identity,
+)
 from sportsdataverse.nba.nba_spm import (  # noqa: F401
     NbaSpmModel,
     SpmCoefficients,

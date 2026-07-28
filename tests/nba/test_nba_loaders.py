@@ -17,6 +17,13 @@ from sportsdataverse.nba import nba_loaders
 # with tools/codegen/schemas/loader_schemas.yaml::load_nba_player_impact.
 _IMPACT_SCHEMA = {
     "player_id": pl.Int64,
+    # Identity columns are part of the published contract: a fixture without them
+    # lets the round-trip test pass while the release has changed underneath it.
+    "player_name": pl.Utf8,
+    "team_id": pl.Int64,
+    "team_abbreviation": pl.Utf8,
+    "team_name": pl.Utf8,
+    "teams": pl.Utf8,
     "o_rapm": pl.Float64,
     "d_rapm": pl.Float64,
     "rapm": pl.Float64,
@@ -42,9 +49,11 @@ _IMPACT_SCHEMA = {
 
 
 def _impact_row(season: int) -> pl.DataFrame:
-    return pl.DataFrame({c: pl.Series([0], dtype=t) for c, t in _IMPACT_SCHEMA.items()}).with_columns(
-        pl.lit(season, dtype=pl.Int64).alias("season")
-    )
+    # Seed each column with a value of its OWN dtype -- a hardcoded 0 cannot build
+    # the Utf8 identity columns.
+    return pl.DataFrame(
+        {c: pl.Series(["x"] if t == pl.Utf8 else [0], dtype=t) for c, t in _IMPACT_SCHEMA.items()}
+    ).with_columns(pl.lit(season, dtype=pl.Int64).alias("season"))
 
 
 def test_load_nba_player_impact_round_trips_schema(monkeypatch):
