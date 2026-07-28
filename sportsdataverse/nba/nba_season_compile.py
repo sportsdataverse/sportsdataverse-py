@@ -36,24 +36,78 @@ def _game_cache_key(game_id: str) -> str:
     return f"{game_id}__v{PIPELINE_VERSION}.parquet"
 
 
-def _season_game_index(season: int, season_type: str, *, proxy_url: Optional[str] = None) -> pl.DataFrame:
+def _index_select(frame: pl.DataFrame) -> pl.DataFrame:
+    """``(game_id, game_date)`` index from a parsed leaguegamelog frame.
+
+    One row per game id (the team-level log has two rows per game; first kept);
+    ``game_date`` parsed from the first 10 chars, tolerating bare-date and
+    ISO-datetime string forms. Empty typed frame when the columns are absent.
+    """
+    if frame.is_empty() or "game_id" not in frame.columns or "game_date" not in frame.columns:
+        return pl.DataFrame(schema={"game_id": pl.Utf8, "game_date": pl.Date})
+    return frame.select(
+        pl.col("game_id").cast(pl.Utf8),
+        pl.col("game_date").cast(pl.Utf8).str.slice(0, 10).str.to_date("%Y-%m-%d"),
+    ).unique(subset=["game_id"], keep="first", maintain_order=True)
+
+
+def _season_index_from_store(season: int, season_type: str, raw_store_dir: "RawStoreDir") -> Optional[pl.DataFrame]:
+    """``(game_id, game_date)`` index from a COMMITTED leaguegamelog in the raw
+    store (local dir or ``http(s)://`` base), or ``None`` when the store is unset
+    or the capture is absent.
+
+    Lets discovery run clone-free / offline (CI) off the same committed tree the
+    per-game compile reads — closing the one stats.nba.com call the compile would
+    otherwise always make. Season-level captures live at
+    ``leaguegamelog/{season}/{variant}.json`` (variant = season-type slug), the
+    layout the ``-raw`` scraper writes; the raw resultSets payload is parsed the
+    same way the live wrapper parses it.
+    """
+    from .nba_possessions import nba_raw_store_season_frame
+
+    parsed = nba_raw_store_season_frame(
+        "leaguegamelog",
+        season,
+        season_type.lower().replace(" ", "-"),
+        raw_store_dir=raw_store_dir,
+    )
+    if parsed is None or "game_id" not in parsed.columns:
+        return None
+    idx = _index_select(parsed)
+    return idx if not idx.is_empty() else None
+
+
+def _season_game_index(
+    season: int,
+    season_type: str,
+    *,
+    proxy_url: Optional[str] = None,
+    raw_store_dir: "RawStoreDir" = None,
+) -> pl.DataFrame:
     """``(game_id, game_date)`` index for a season from leaguegamelog (monkeypatchable).
 
-    One row per game id (the team-level log has two rows per game; first kept).
-    ``game_date`` is parsed from the first 10 chars, tolerating both bare-date
-    and ISO-datetime string forms.
+    A committed leaguegamelog in ``raw_store_dir`` (local dir or URL) is used when
+    present — making discovery clone-free/offline in CI — else the live
+    stats.nba.com wrapper is called.
 
     Args:
         season: Season END year (e.g. 2024 for 2023-24).
         season_type: NBA season type string (e.g. ``"Regular Season"``).
-        proxy_url: Optional proxy URL forwarded to the underlying transport.
-            Discovery is a stats.nba.com call like any other — on a datacenter
-            host an unproxied call returns no rows, which silently compiles the
-            season to zero games.
+        proxy_url: Optional proxy URL forwarded to the live transport. Discovery
+            is a stats.nba.com call like any other — on a datacenter host an
+            unproxied call returns no rows, silently compiling the season to zero
+            games (irrelevant once ``raw_store_dir`` serves it offline).
+        raw_store_dir: Raw JSON store root (dir or ``http(s)://`` base) or
+            per-endpoint mapping; ``None`` -> env vars. When it yields a committed
+            leaguegamelog the live call is skipped entirely.
 
     Returns:
         Polars DataFrame with ``game_id: Utf8`` and ``game_date: Date``.
     """
+    from_store = _season_index_from_store(season, season_type, raw_store_dir)
+    if from_store is not None:
+        return from_store
+
     from .nba_schedule import year_to_season
     from .nba_stats import nba_stats_leaguegamelog
 
@@ -63,17 +117,20 @@ def _season_game_index(season: int, season_type: str, *, proxy_url: Optional[str
         league_id=_LEAGUE_ID,
         proxy_url=proxy_url,
     )
-    if log.is_empty() or "game_id" not in log.columns or "game_date" not in log.columns:
-        return pl.DataFrame(schema={"game_id": pl.Utf8, "game_date": pl.Date})
-    return log.select(
-        pl.col("game_id").cast(pl.Utf8),
-        pl.col("game_date").cast(pl.Utf8).str.slice(0, 10).str.to_date("%Y-%m-%d"),
-    ).unique(subset=["game_id"], keep="first", maintain_order=True)
+    return _index_select(log)
 
 
-def _game_ids_for_season(season: int, season_type: str, *, proxy_url: Optional[str] = None) -> List[str]:
+def _game_ids_for_season(
+    season: int,
+    season_type: str,
+    *,
+    proxy_url: Optional[str] = None,
+    raw_store_dir: "RawStoreDir" = None,
+) -> List[str]:
     """Return the (deduped) game ids for a season (delegates to :func:`_season_game_index`)."""
-    return _season_game_index(season, season_type, proxy_url=proxy_url)["game_id"].to_list()
+    return _season_game_index(season, season_type, proxy_url=proxy_url, raw_store_dir=raw_store_dir)[
+        "game_id"
+    ].to_list()
 
 
 def _fetch_possessions(
@@ -217,6 +274,7 @@ def compile_nba_season(
         season,
         season_type,
         proxy_url=proxy_provider() if proxy_provider is not None else None,
+        raw_store_dir=raw_store_dir,
     )
     # dedupe preserving order
     game_ids = list(dict.fromkeys(index["game_id"].to_list()))

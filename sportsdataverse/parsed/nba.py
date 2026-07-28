@@ -255,6 +255,7 @@ from sportsdataverse.nba import nba_player_props as nba_player_props  # noqa: F4
 from sportsdataverse.nba import nba_playtype_ratings as nba_playtype_ratings  # noqa: F401
 from sportsdataverse.nba import nba_predict_games as nba_predict_games  # noqa: F401
 from sportsdataverse.nba import nba_ratings_panel as nba_ratings_panel  # noqa: F401
+from sportsdataverse.nba import nba_raw_store_season_frame as nba_raw_store_season_frame  # noqa: F401
 from sportsdataverse.nba import nba_rookie_projection as nba_rookie_projection  # noqa: F401
 from sportsdataverse.nba import nba_shot_value as nba_shot_value  # noqa: F401
 from sportsdataverse.nba import nba_shot_value_lineups as nba_shot_value_lineups  # noqa: F401
@@ -534,6 +535,7 @@ __all__ = [
     "nba_playtype_ratings",
     "nba_predict_games",
     "nba_ratings_panel",
+    "nba_raw_store_season_frame",
     "nba_rookie_projection",
     "nba_shot_value",
     "nba_shot_value_lineups",

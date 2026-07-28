@@ -1104,6 +1104,71 @@ def _env_store_root(endpoint: str) -> Optional[str]:
     return os.environ.get("SDV_PY_NBA_RAW_JSON_DIR")
 
 
+def _is_url_root(root: str) -> bool:
+    """A store root that is an HTTP(S) base (the raw repo served over URL) rather
+    than a local checkout — e.g. ``raw.githubusercontent.com/.../nba_stats/json`` or
+    a CDN like ``cdn.jsdelivr.net/gh/...``. URL roots make the compile clone-free in
+    CI: the committed per-game JSON is fetched over HTTP instead of read off disk."""
+    return root.startswith("http://") or root.startswith("https://")
+
+
+def _season_dir_for_game(game_id: str) -> str:
+    """Season subdirectory for a game id, matching the committed raw layout.
+
+    Digits 4-5 of the id are the season START year; cross-year leagues (NBA
+    ``"00"`` / G-League ``"20"``) label the season by its END year (+1), while
+    WNBA (``"10"``) seasons are single calendar years (no shift). ``>= 46``
+    selects the 1900s (no NBA game ids predate 1946).
+    """
+    yy = game_id[3:5]
+    if not yy.isdigit():
+        return "unknown"
+    year = 1900 + int(yy) if int(yy) >= 46 else 2000 + int(yy)
+    return str(year if game_id.startswith("10") else year + 1)
+
+
+def _raw_store_relpath(endpoint: str, game_id: str, suffix: str = "") -> str:
+    """Store-relative path for one payload: ``{endpoint}/{season}/{game_id}{suffix}.json``.
+
+    Shared by the filesystem (:func:`_raw_store_path`) and URL
+    (:func:`_through_raw_store`) backends so both address the identical committed
+    layout.
+    """
+    return f"{endpoint}/{_season_dir_for_game(game_id)}/{game_id}{suffix}.json"
+
+
+def _http_get_json(url: str, *, timeout: Optional[float] = None) -> Optional[dict]:
+    """GET a committed raw JSON over HTTP; ``None`` on 404 / error / non-JSON.
+
+    For URL store roots only. These are GitHub/CDN URLs (NOT stats.nba.com), so a
+    plain ``requests.get`` is correct — the TLS/JA3 impersonation the stats API
+    needs does not apply. Module-level so tests monkeypatch it without a network.
+    Timeout defaults to ``SDV_PY_NBA_RAW_JSON_HTTP_TIMEOUT`` (30s).
+    """
+    import requests
+
+    if timeout is None:
+        timeout = float(os.environ.get("SDV_PY_NBA_RAW_JSON_HTTP_TIMEOUT", "30"))
+    try:
+        resp = requests.get(url, timeout=timeout)
+    except requests.RequestException:
+        # Connection/timeout: not a miss. Silence here would make an unreachable
+        # host (or a typo'd base) look exactly like "this season has no data" for
+        # every game in the sweep.
+        logger.warning("raw store: request failed for %s", url, exc_info=True)
+        return None
+    if resp.status_code == 404:
+        return None  # ordinary miss -- the capture simply isn't in the store
+    if resp.status_code != 200:
+        logger.warning("raw store: HTTP %s for %s", resp.status_code, url)
+        return None
+    try:
+        return resp.json()
+    except ValueError:
+        logger.warning("raw store: undecodable JSON at %s", url)
+        return None
+
+
 def _raw_store_path(
     endpoint: str,
     game_id: str,
@@ -1140,20 +1205,93 @@ def _raw_store_path(
         Absolute :class:`~pathlib.Path`, or ``None`` when the store is off.
     """
     resolved = _resolve_store_root(endpoint, root)
-    if resolved is None:
+    if resolved is None or _is_url_root(resolved):
+        # URL roots carry no filesystem Path — _through_raw_store serves them over
+        # HTTP. A caller that only wants a local path (existence checks) gets None.
         return None
-    root = resolved
-    yy = game_id[3:5]
-    if yy.isdigit():
-        year = 1900 + int(yy) if int(yy) >= 46 else 2000 + int(yy)
-        # End-year season convention. Cross-year leagues (NBA "00",
-        # G-League "20") label a season by its END year, so shift +1.
-        # WNBA (league prefix "10") seasons are single calendar years:
-        # 1022600071 -> 2026, no shift.
-        season = str(year if game_id.startswith("10") else year + 1)
+    return Path(resolved) / _raw_store_relpath(endpoint, game_id, suffix)
+
+
+def nba_raw_store_season_frame(
+    endpoint: str,
+    season: int,
+    variant: Optional[str] = None,
+    *,
+    result_set: Optional[str] = None,
+    raw_store_dir: RawStoreDir = None,
+) -> Optional["pl.DataFrame"]:
+    """Read a committed SEASON-LEVEL capture from the raw store, parsed to a frame.
+
+    The per-game half of the store is served by the read-through per-game path;
+    this is the season-keyed half (``leaguegamelog``, ``playerindex``,
+    ``leaguedashplayerbiostats``, ...) that the ``-raw`` scraper writes as
+
+    * ``{endpoint}/{season}/{variant}.json`` -- parameterized captures, where
+      *variant* is the slugified parameter sweep (e.g. ``"regular-season"``,
+      ``"regular-season_totals"``), and
+    * ``{endpoint}/{season}.json`` -- unparameterized captures (e.g.
+      ``playerindex``), i.e. ``variant=None``.
+
+    Roots may be a local checkout or an ``http(s)://`` base (the raw repo served
+    over raw.githubusercontent / a CDN), so a consumer -- notably the
+    ``hoopR-nba-stats-data`` model producer -- runs clone-free in CI against the
+    same committed tree the per-game compile reads.
+
+    Args:
+        endpoint: stats.nba.com endpoint slug (the store subdirectory).
+        season: Season END year (2024 = 2023-24), matching the store layout.
+        variant: Capture variant slug, or ``None`` for an unparameterized capture.
+        result_set: Named result set to return when the payload carries several;
+            defaults to the first frame that parses.
+        raw_store_dir: Store root spec (dir or URL base) or per-endpoint mapping;
+            ``None`` falls back to the env vars, ``""`` disables.
+
+    Returns:
+        The parsed :class:`polars.DataFrame`, or ``None`` when the store is
+        unset, the capture is absent, or the payload carries no usable frame --
+        so a caller can cleanly fall back to a live fetch.
+
+    Example:
+        Read a committed season capture from a URL store::
+
+            from sportsdataverse.nba import nba_raw_store_season_frame
+            base = "https://raw.githubusercontent.com/sportsdataverse/hoopR-nba-stats-raw/main/nba_stats/json"
+            logs = nba_raw_store_season_frame("leaguegamelog", 2024, "regular-season", raw_store_dir=base)
+
+        Fall back to a live fetch when the capture is absent::
+
+            frame = nba_raw_store_season_frame("playerindex", 2024, raw_store_dir=base)
+            positions = frame if frame is not None else nba_stats_playerindex(season="2023-24")
+
+        See Also:
+            * `nba_api`_ -- reference Python client for stats.nba.com
+            * `hoopR`_ -- R companion package for NBA/MBB data
+
+        .. _nba_api: https://github.com/swar/nba_api
+        .. _hoopR: https://hoopR.sportsdataverse.org
+    """
+    from sportsdataverse.nba.nba_stats_parsers import parse_nba_stats_result_sets
+
+    root = _resolve_store_root(endpoint, raw_store_dir)
+    if not root:
+        return None
+    relpath = f"{endpoint}/{season}/{variant}.json" if variant else f"{endpoint}/{season}.json"
+    if _is_url_root(root):
+        raw = _http_get_json(root.rstrip("/") + "/" + relpath)
     else:
-        season = "unknown"
-    return Path(root) / endpoint / season / f"{game_id}{suffix}.json"
+        path = Path(root) / relpath
+        try:
+            raw = json.loads(path.read_text(encoding="utf-8")) if path.exists() else None
+        except (OSError, ValueError):
+            raw = None
+    if not raw:
+        return None
+    parsed = parse_nba_stats_result_sets(raw, result_set=result_set)
+    if isinstance(parsed, dict):  # multi-set payload: take the first usable frame
+        parsed = next((f for f in parsed.values() if isinstance(f, pl.DataFrame) and f.height), None)
+    if not isinstance(parsed, pl.DataFrame) or parsed.is_empty():
+        return None
+    return parsed
 
 
 def _through_raw_store(
@@ -1195,9 +1333,19 @@ def _through_raw_store(
     Returns:
         Raw payload ``dict`` (from disk on hit, from ``fetch()`` on miss).
     """
-    path = _raw_store_path(endpoint, game_id, suffix, root=store_dir)
-    if path is None:
+    root = _resolve_store_root(endpoint, store_dir)
+    if root is None:
         return fetch()
+    if _is_url_root(root):
+        # URL store: offline-authoritative and inherently read-only (you can't
+        # write to a URL). A root is a URL precisely where the live stats API is
+        # unreachable — GitHub Actions with no proxy — so a miss returns empty
+        # rather than falling back to a live fetch that would hang. The caller
+        # then skips that game/endpoint just as it does for a genuinely-absent one.
+        url = root.rstrip("/") + "/" + _raw_store_relpath(endpoint, game_id, suffix)
+        payload = _http_get_json(url)
+        return payload if payload else {}
+    path = Path(root) / _raw_store_relpath(endpoint, game_id, suffix)
     if path.exists():
         try:
             return json.loads(path.read_text(encoding="utf-8"))
@@ -1373,15 +1521,19 @@ def _fetch_box_periods(
     from sportsdataverse.nba.nba_lineups import _QUARTER_BOX_RANGE_TYPE, _period_start_range
     from sportsdataverse.nba.nba_stats import nba_stats_boxscoretraditionalv3
 
-    out: Dict[int, dict] = {}
-    for period in range(1, n_periods + 1):
-        start_range, end_range = _period_start_range(period)
+    def _fetch_all_periods_live() -> dict:
+        """Live-fill every period into ONE period-keyed dict ``{"1": payload, ...}``.
 
-        # Bind the window as defaults: the callable runs inside
-        # _through_raw_store on this iteration, and late-binding closures
-        # over loop variables would fetch every period at the LAST window.
-        def _fetch_period(sr: str = start_range, er: str = end_range) -> dict:
-            return nba_stats_boxscoretraditionalv3(
+        This is the committed shape the -raw scraper writes and the -data repos
+        consume — a single ``boxscoretraditionalv3_period/{season}/{game}.json``
+        per game. Persisting the live fill in that same shape keeps the store
+        single-form (the old per-period ``_p{n}`` files never matched the
+        committed layout, so a store read always missed).
+        """
+        built: Dict[str, dict] = {}
+        for period in range(1, n_periods + 1):
+            sr, er = _period_start_range(period)
+            built[str(period)] = nba_stats_boxscoretraditionalv3(
                 game_id=game_id,
                 start_range=sr,
                 end_range=er,
@@ -1389,15 +1541,24 @@ def _fetch_box_periods(
                 return_parsed=False,
                 proxy_url=proxy_url,
             )
+        return built
 
-        out[period] = _through_raw_store(
-            "boxscoretraditionalv3_period",
-            game_id,
-            _fetch_period,
-            suffix=f"_p{period}",
-            store_dir=raw_store_dir,
-            readonly=raw_store_readonly,
-        )
+    combined = _through_raw_store(
+        "boxscoretraditionalv3_period",
+        game_id,
+        _fetch_all_periods_live,
+        store_dir=raw_store_dir,
+        readonly=raw_store_readonly,
+    )
+
+    # ``combined`` maps period -> range payload; JSON keys are strings on disk /
+    # over URL, but a live in-process build could hand back ints. Normalise to
+    # ``{int period: payload}`` up to n_periods, dropping empty periods.
+    out: Dict[int, dict] = {}
+    for period in range(1, n_periods + 1):
+        payload = combined.get(str(period)) or combined.get(period)
+        if payload:
+            out[period] = payload
     return out
 
 

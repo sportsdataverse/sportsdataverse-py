@@ -2866,6 +2866,52 @@ print(panel.filter(pl.col("player_id") == 201939).sort("date"))
 panel = nba_ratings_panel(RidgeRapmModel(), season_poss)
 ```
 
+### `nba_raw_store_season_frame(endpoint: 'str', season: 'int', variant: 'Optional[str]' = None, *, result_set: 'Optional[str]' = None, raw_store_dir: 'RawStoreDir' = None) -> "Optional['pl.DataFrame']"` {#nba_raw_store_season_frame}
+
+Read a committed SEASON-LEVEL capture from the raw store, parsed to a frame.
+
+The per-game half of the store is served by the read-through per-game path;
+this is the season-keyed half (`leaguegamelog`, `playerindex`,
+`leaguedashplayerbiostats`, ...) that the `-raw` scraper writes as
+
+* `{endpoint}/{season}/{variant}.json` -- parameterized captures, where
+  *variant* is the slugified parameter sweep (e.g. `"regular-season"`,
+  `"regular-season_totals"`), and
+* `{endpoint}/{season}.json` -- unparameterized captures (e.g.
+  `playerindex`), i.e. `variant=None`.
+
+Roots may be a local checkout or an `http(s)://` base (the raw repo served
+over raw.githubusercontent / a CDN), so a consumer -- notably the
+`hoopR-nba-stats-data` model producer -- runs clone-free in CI against the
+same committed tree the per-game compile reads.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `endpoint` | `str` |  | stats.nba.com endpoint slug (the store subdirectory). |
+| `season` | `int` |  | Season END year (2024 = 2023-24), matching the store layout. |
+| `variant` | `Optional[str]` | `None` | Capture variant slug, or `None` for an unparameterized capture. |
+| `result_set` | `Optional[str]` | `None` | Named result set to return when the payload carries several; defaults to the first frame that parses. |
+| `raw_store_dir` | `RawStoreDir` | `None` | Store root spec (dir or URL base) or per-endpoint mapping; `None` falls back to the env vars, `""` disables. |
+
+**Returns**
+
+The parsed `polars.DataFrame`, or `None` when the store is unset, the capture is absent, or the payload carries no usable frame -- so a caller can cleanly fall back to a live fetch.
+
+**Example**
+
+```python
+from sportsdataverse.nba import nba_raw_store_season_frame
+base = "https://raw.githubusercontent.com/sportsdataverse/hoopR-nba-stats-raw/main/nba_stats/json"
+logs = nba_raw_store_season_frame("leaguegamelog", 2024, "regular-season", raw_store_dir=base)
+
+# Fall back to a live fetch when the capture is absent
+
+frame = nba_raw_store_season_frame("playerindex", 2024, raw_store_dir=base)
+positions = frame if frame is not None else nba_stats_playerindex(season="2023-24")
+```
+
 ### `nba_rookie_projection(draft_year: "'int | list[int]'", *, league: 'str' = 'nba', college_prior: "'Optional[pl.DataFrame]'" = None, return_as_pandas: 'bool' = False) -> "'pl.DataFrame | pd.DataFrame'"` {#nba_rookie_projection}
 
 Project rookie/sophomore value by composing draft x aging x availability.
