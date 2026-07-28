@@ -22,7 +22,11 @@ import polars as pl
 _LOG = logging.getLogger(__name__)
 
 #: Bump when the possession pipeline changes in a way that invalidates cached parquet.
-PIPELINE_VERSION: int = 3
+#: v4: legacy pbp dialects report a literal "0" score on non-scoring rows, which
+#: the forward-fill accepted and so reset the running score. Possession points
+#: are a score difference, so every cached pre-2018 game holds corrupted points
+#: (up to +/-140 per possession) and must be recompiled rather than reused.
+PIPELINE_VERSION: int = 4
 
 _LEAGUE_ID = "00"
 
