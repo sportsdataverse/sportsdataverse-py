@@ -6738,17 +6738,18 @@ class CFBPlayProcess(object):
         # 1) clean captured names, then null obvious artifacts (always runs)
         present_names = [nc for nc, _, _ in self._PLAYER_ID_TEAM_MAP if nc in play_df.columns]
         if present_names:
-            # 1a) shed a trailing "(TEAM)" and any narrative tail that bled into
-            #     the capture. Both patterns are end-anchored, so one pass each
-            #     suffices. This runs before the garbage check so a name like
-            #     "Raynard Hornetackled by" is repaired rather than nulled.
+            # 1a) shed a trailing "(TEAM)". This one is unconditional: a trailing
+            #     parenthesised team code is never part of a person's name, so
+            #     stripping it can't destroy information.
+            #
+            #     The narrative-tail strip is NOT done here -- it is applied in
+            #     step 4, and only when the roster confirms the trimmed form.
+            #     Blanket-stripping it would turn a real surname into a wrong one
+            #     ("John Middle" -> "John"), which the surname fallback could then
+            #     resolve to the wrong athlete.
             play_df = play_df.with_columns(
                 [
-                    pl.col(nc)
-                    .str.replace(_PLAYER_NAME_TEAM_SUFFIX.pattern, "")
-                    .str.replace(_PLAYER_NAME_TAIL.pattern, "")
-                    .str.strip_chars()
-                    .alias(nc)
+                    pl.col(nc).str.replace(_PLAYER_NAME_TEAM_SUFFIX.pattern, "").str.strip_chars().alias(nc)
                     for nc in present_names
                 ],
             )
@@ -6823,14 +6824,45 @@ class CFBPlayProcess(object):
                     return aid
             return last_lu.get((parts[-1], tid))
 
+        def _resolve(name, team_id):
+            """Resolve a captured name to (display_name, athlete_id).
+
+            The narrative-tail strip is applied HERE rather than blanket-applied
+            during cleanup, and only when it actually earns a match. A name is
+            rewritten only when the roster/box confirms the trimmed form, so a
+            legitimate surname that happens to collide with a stopword
+            ("John Middle", "Alex Screen") survives intact instead of being
+            truncated and then mis-resolved by the surname fallback.
+            """
+            if not name:
+                return {"name": None, "id": None}
+            aid = _match(name, team_id)
+            if aid is not None:
+                return {"name": name, "id": aid}
+            trimmed = _PLAYER_NAME_TAIL.sub("", str(name)).strip()
+            if trimmed and trimmed != name:
+                aid = _match(trimmed, team_id)
+                if aid is not None:
+                    return {"name": trimmed, "id": aid}
+            # Neither form matched: keep the name as captured. Without a roster
+            # hit there is no evidence the tail is narrative bleed rather than
+            # part of the name, so trimming here would be a guess.
+            return {"name": name, "id": None}
+
         # 4) attach {type}_player_id (fill nulls only; preserve participant ids)
+        _RESOLVED = pl.Struct([pl.Field("name", pl.Utf8), pl.Field("id", pl.Int64)])
         exprs = []
         for name_col, id_col, team_col in self._PLAYER_ID_TEAM_MAP:
             if name_col not in play_df.columns or team_col not in play_df.columns:
                 continue
-            roster_id = pl.struct(
-                [pl.col(name_col).alias("_n"), pl.col(team_col).cast(pl.Utf8).alias("_t")],
-            ).map_elements(lambda s: _match(s["_n"], s["_t"]), return_dtype=pl.Int64)
+            resolved = (
+                pl.struct([pl.col(name_col).alias("_n"), pl.col(team_col).cast(pl.Utf8).alias("_t")])
+                .map_elements(lambda s: _resolve(s["_n"], s["_t"]), return_dtype=_RESOLVED)
+                .alias(f"__res_{name_col}")
+            )
+            play_df = play_df.with_columns(resolved)
+            exprs.append(pl.col(f"__res_{name_col}").struct.field("name").alias(name_col))
+            roster_id = pl.col(f"__res_{name_col}").struct.field("id")
             if id_col in play_df.columns:
                 exprs.append(
                     pl.when(pl.col(id_col).is_null()).then(roster_id).otherwise(pl.col(id_col)).alias(id_col),
@@ -6838,7 +6870,9 @@ class CFBPlayProcess(object):
             else:
                 exprs.append(roster_id.alias(id_col))
         if exprs:
-            play_df = play_df.with_columns(exprs)
+            play_df = play_df.with_columns(exprs).drop(
+                [c for c in play_df.columns if c.startswith("__res_")],
+            )
         return play_df
 
     # cfb4th decision-surface columns appended to 4th-down plays when

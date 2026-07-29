@@ -331,6 +331,43 @@ def test_conflicting_ids_across_sources_stay_null():
     assert out["passer_player_id"][0] is None
 
 
+def test_legitimate_surname_colliding_with_a_stopword_is_preserved():
+    """A real surname that IS one of the tail stopwords must survive.
+
+    Blanket tail-stripping would turn "John Middle" into "John", and the surname
+    fallback could then resolve it to a different athlete entirely. The strip is
+    therefore only applied when the roster confirms the trimmed form.
+    """
+    proc = CFBPlayProcess(gameId=1)
+    proc.join_participants = False
+    proc.game_roster = [
+        {"athlete_id": 501, "full_name": "John Middle", "team_id": 80},
+        {"athlete_id": 502, "full_name": "Alex Screen", "team_id": 80},
+        {"athlete_id": 503, "full_name": "John Passer", "team_id": 80},
+    ]
+    df = pl.DataFrame(
+        [
+            {"rusher_player_name": "John Middle", "pos_team": 80},
+            {"rusher_player_name": "Alex Screen", "pos_team": 80},
+        ]
+    )
+    out = proc._CFBPlayProcess__attach_player_ids(df)
+    assert out["rusher_player_name"].to_list() == ["John Middle", "Alex Screen"]
+    assert out["rusher_player_id"].to_list() == [501, 502]
+
+
+def test_unmatched_name_keeps_its_tail_rather_than_guessing():
+    """With no roster evidence that a tail is narrative bleed, trimming would be a
+    guess -- so the captured name is left as-is and the id stays null."""
+    proc = CFBPlayProcess(gameId=1)
+    proc.join_participants = False
+    proc.game_roster = [{"athlete_id": 601, "full_name": "Someone Else", "team_id": 90}]
+    df = pl.DataFrame([{"rusher_player_name": "Unknown Guy sideline", "pos_team": 90}])
+    out = proc._CFBPlayProcess__attach_player_ids(df)
+    assert out["rusher_player_name"][0] == "Unknown Guy sideline"
+    assert out["rusher_player_id"][0] is None
+
+
 def test_real_surname_not_damaged_by_tail_stripper():
     """The tail stripper is end-anchored on a closed stopword list; ordinary names
     (including a legitimate parenthetical-free name) must pass through intact."""
