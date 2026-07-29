@@ -891,17 +891,17 @@ load_cfb_passing:
 - name: conference
   type: String
 - name: season
-  type: Int32
-- name: player_id
   type: Float64
+- name: player_id
+  type: Int64
 - name: passer_player_name
   type: String
 - name: plays
-  type: Int32
+  type: UInt32
 - name: games
-  type: Int32
+  type: UInt32
 - name: team_games
-  type: Int32
+  type: UInt32
 - name: playsgame
   type: Float64
 - name: TEPA
@@ -911,7 +911,7 @@ load_cfb_passing:
 - name: EPAgame
   type: Float64
 - name: yards
-  type: Float64
+  type: Int64
 - name: yardsplay
   type: Float64
 - name: yardsgame
@@ -927,11 +927,11 @@ load_cfb_passing:
 - name: passing_td
   type: Float64
 - name: sacked
-  type: Int32
+  type: UInt32
 - name: sack_yds
-  type: Float64
+  type: Int64
 - name: pass_int
-  type: Int32
+  type: UInt32
 - name: detmer
   type: Float64
 - name: detmergame
@@ -939,7 +939,7 @@ load_cfb_passing:
 - name: dropbacks
   type: Float64
 - name: sack_adj_yards
-  type: Float64
+  type: Int64
 - name: yardsdropback
   type: Float64
 - name: TEPA_rank
@@ -2028,17 +2028,17 @@ load_cfb_receiving:
 - name: conference
   type: String
 - name: season
-  type: Int32
-- name: player_id
   type: Float64
+- name: player_id
+  type: Int64
 - name: receiver_player_name
   type: String
 - name: plays
-  type: Int32
+  type: UInt32
 - name: games
-  type: Int32
+  type: UInt32
 - name: team_games
-  type: Int32
+  type: UInt32
 - name: playsgame
   type: Float64
 - name: TEPA
@@ -2048,7 +2048,7 @@ load_cfb_receiving:
 - name: EPAgame
   type: Float64
 - name: yards
-  type: Float64
+  type: Int64
 - name: yardsplay
   type: Float64
 - name: yardsgame
@@ -2056,9 +2056,9 @@ load_cfb_receiving:
 - name: success
   type: Float64
 - name: comp
-  type: Int32
+  type: UInt32
 - name: targets
-  type: Int32
+  type: UInt32
 - name: catchpct
   type: Float64
 - name: passing_td
@@ -2141,17 +2141,17 @@ load_cfb_rushing:
 - name: conference
   type: String
 - name: season
-  type: Int32
-- name: player_id
   type: Float64
+- name: player_id
+  type: Int64
 - name: rusher_player_name
   type: String
 - name: plays
-  type: Int32
+  type: UInt32
 - name: games
-  type: Int32
+  type: UInt32
 - name: team_games
-  type: Int32
+  type: UInt32
 - name: playsgame
   type: Float64
 - name: TEPA
@@ -2161,7 +2161,7 @@ load_cfb_rushing:
 - name: EPAgame
   type: Float64
 - name: yards
-  type: Float64
+  type: Int64
 - name: yardsplay
   type: Float64
 - name: yardsgame
@@ -2384,9 +2384,9 @@ load_cfb_team_summaries:
 - name: conference
   type: String
 - name: season
-  type: Int32
+  type: Float64
 - name: plays_off
-  type: Int32
+  type: UInt32
 - name: playsgame_off
   type: Float64
 - name: passrate_off
@@ -2406,7 +2406,7 @@ load_cfb_team_summaries:
 - name: EPAgame_off
   type: Float64
 - name: yards_off
-  type: Float64
+  type: Int64
 - name: yardsplay_off
   type: Float64
 - name: yardsgame_off
@@ -2414,7 +2414,7 @@ load_cfb_team_summaries:
 - name: play_stuffed_off
   type: Float64
 - name: drives_off
-  type: Int32
+  type: UInt32
 - name: drivesgame_off
   type: Float64
 - name: yardsdrive_off
@@ -2494,7 +2494,7 @@ load_cfb_team_summaries:
 - name: opportunity_rate_off_rank
   type: Float64
 - name: plays_def
-  type: Int32
+  type: UInt32
 - name: playsgame_def
   type: Float64
 - name: passrate_def
@@ -2514,7 +2514,7 @@ load_cfb_team_summaries:
 - name: EPAgame_def
   type: Float64
 - name: yards_def
-  type: Float64
+  type: Int64
 - name: yardsplay_def
   type: Float64
 - name: yardsgame_def
@@ -2522,7 +2522,7 @@ load_cfb_team_summaries:
 - name: play_stuffed_def
   type: Float64
 - name: drives_def
-  type: Int32
+  type: UInt32
 - name: drivesgame_def
   type: Float64
 - name: yardsdrive_def
@@ -2632,7 +2632,7 @@ load_cfb_team_summaries:
 - name: total_available_yards_off
   type: Float64
 - name: total_gained_yards_off
-  type: Int32
+  type: Int64
 - name: available_yards_pct_off
   type: Float64
 - name: available_yards_pct_off_rank
@@ -2640,7 +2640,7 @@ load_cfb_team_summaries:
 - name: total_available_yards_def
   type: Float64
 - name: total_gained_yards_def
-  type: Int32
+  type: Int64
 - name: available_yards_pct_def
   type: Float64
 - name: available_yards_pct_def_rank
@@ -2648,7 +2648,7 @@ load_cfb_team_summaries:
 - name: total_available_yards_margin
   type: Float64
 - name: total_gained_yards_margin
-  type: Int32
+  type: Int64
 - name: available_yards_pct_margin
   type: Float64
 - name: total_available_yards_margin_rank
@@ -2658,7 +2658,7 @@ load_cfb_team_summaries:
 - name: available_yards_pct_margin_rank
   type: Float64
 - name: plays_off_pass
-  type: Int32
+  type: UInt32
 - name: playsgame_off_pass
   type: Float64
 - name: passrate_off_pass
@@ -2678,7 +2678,7 @@ load_cfb_team_summaries:
 - name: EPAgame_off_pass
   type: Float64
 - name: yards_off_pass
-  type: Float64
+  type: Int64
 - name: yardsplay_off_pass
   type: Float64
 - name: yardsgame_off_pass
@@ -2686,7 +2686,7 @@ load_cfb_team_summaries:
 - name: play_stuffed_off_pass
   type: Float64
 - name: drives_off_pass
-  type: Int32
+  type: UInt32
 - name: drivesgame_off_pass
   type: Float64
 - name: yardsdrive_off_pass
@@ -2762,7 +2762,7 @@ load_cfb_team_summaries:
 - name: opportunity_rate_off_pass_rank
   type: Float64
 - name: plays_def_pass
-  type: Int32
+  type: UInt32
 - name: playsgame_def_pass
   type: Float64
 - name: passrate_def_pass
@@ -2782,7 +2782,7 @@ load_cfb_team_summaries:
 - name: EPAgame_def_pass
   type: Float64
 - name: yards_def_pass
-  type: Float64
+  type: Int64
 - name: yardsplay_def_pass
   type: Float64
 - name: yardsgame_def_pass
@@ -2790,7 +2790,7 @@ load_cfb_team_summaries:
 - name: play_stuffed_def_pass
   type: Float64
 - name: drives_def_pass
-  type: Int32
+  type: UInt32
 - name: drivesgame_def_pass
   type: Float64
 - name: yardsdrive_def_pass
@@ -2890,7 +2890,7 @@ load_cfb_team_summaries:
 - name: yardsplay_margin_pass_rank
   type: Float64
 - name: plays_off_rush
-  type: Int32
+  type: UInt32
 - name: playsgame_off_rush
   type: Float64
 - name: passrate_off_rush
@@ -2910,7 +2910,7 @@ load_cfb_team_summaries:
 - name: EPAgame_off_rush
   type: Float64
 - name: yards_off_rush
-  type: Float64
+  type: Int64
 - name: yardsplay_off_rush
   type: Float64
 - name: yardsgame_off_rush
@@ -2918,7 +2918,7 @@ load_cfb_team_summaries:
 - name: play_stuffed_off_rush
   type: Float64
 - name: drives_off_rush
-  type: Int32
+  type: UInt32
 - name: drivesgame_off_rush
   type: Float64
 - name: yardsdrive_off_rush
@@ -2994,7 +2994,7 @@ load_cfb_team_summaries:
 - name: opportunity_rate_off_rush_rank
   type: Float64
 - name: plays_def_rush
-  type: Int32
+  type: UInt32
 - name: playsgame_def_rush
   type: Float64
 - name: passrate_def_rush
@@ -3014,7 +3014,7 @@ load_cfb_team_summaries:
 - name: EPAgame_def_rush
   type: Float64
 - name: yards_def_rush
-  type: Float64
+  type: Int64
 - name: yardsplay_def_rush
   type: Float64
 - name: yardsgame_def_rush
@@ -3022,7 +3022,7 @@ load_cfb_team_summaries:
 - name: play_stuffed_def_rush
   type: Float64
 - name: drives_def_rush
-  type: Int32
+  type: UInt32
 - name: drivesgame_def_rush
   type: Float64
 - name: yardsdrive_def_rush
@@ -3124,7 +3124,7 @@ load_cfb_team_summaries:
 - name: fbs_class
   type: String
 - name: valid_games
-  type: Float64
+  type: UInt32
 - name: adj_off_epa
   type: Float64
 - name: adj_def_epa
