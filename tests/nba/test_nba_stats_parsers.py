@@ -84,3 +84,16 @@ def test_parse_ragged_rows_returns_zero_row_frame():
     raw = {"resultSets": [{"name": "X", "headers": ["A", "B"], "rowSet": [[1]]}]}  # row width != headers
     df = parse_nba_stats_result_sets(raw, result_set="X")
     assert isinstance(df, pl.DataFrame) and df.height == 0
+
+
+def test_parse_null_prefix_column_keeps_all_rows():
+    # A column that is null for the first 100+ rows and numeric later must not
+    # collapse the whole set to an empty frame (polars' default
+    # infer_schema_length=100 inferred Null, then errored on the late number
+    # and the never-raise contract swallowed it — observed on the WNBA 1998
+    # leaguegamelog player capture, PLUS_MINUS null until late in the season).
+    rows = [[i, None] for i in range(150)] + [[150, 3.5]]
+    raw = {"resultSets": [{"name": "X", "headers": ["A", "PLUS_MINUS"], "rowSet": rows}]}
+    df = parse_nba_stats_result_sets(raw, result_set="X")
+    assert df.height == 151
+    assert df["plus_minus"][150] == 3.5
