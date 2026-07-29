@@ -356,6 +356,42 @@ def test_legitimate_surname_colliding_with_a_stopword_is_preserved():
     assert out["rusher_player_id"].to_list() == [501, 502]
 
 
+def test_tail_word_does_not_resolve_via_the_surname_fallback():
+    """A narrative tail word is itself a plausible surname, so the fuzzy tiers
+    must not run until the tail is stripped.
+
+    With "Russell Wilson" and "Alex Screen" both rostered, the captured text
+    "Russell Wilson screen" hit the surname tier on the UNTRIMMED name and
+    resolved to Alex Screen -- silent misattribution to the wrong player.
+    """
+    proc = CFBPlayProcess(gameId=1)
+    proc.join_participants = False
+    proc.game_roster = [
+        {"athlete_id": 701, "full_name": "Russell Wilson", "team_id": 70},
+        {"athlete_id": 702, "full_name": "Alex Screen", "team_id": 70},
+    ]
+    df = pl.DataFrame(
+        [
+            {"passer_player_name": "Russell Wilson screen", "pos_team": 70},
+            {"passer_player_name": "Alex Screen", "pos_team": 70},  # exact still wins
+        ]
+    )
+    out = proc._CFBPlayProcess__attach_player_ids(df)
+    assert out["passer_player_name"].to_list() == ["Russell Wilson", "Alex Screen"]
+    assert out["passer_player_id"].to_list() == [701, 702]
+
+
+def test_name_that_is_entirely_a_tail_word_resolves_to_null():
+    """If stripping the tail leaves nothing, there is no name to match -- the
+    surname tier must not rescue it into a real athlete."""
+    proc = CFBPlayProcess(gameId=1)
+    proc.join_participants = False
+    proc.game_roster = [{"athlete_id": 801, "full_name": "Alex Screen", "team_id": 70}]
+    df = pl.DataFrame([{"passer_player_name": "screen", "pos_team": 70}])
+    out = proc._CFBPlayProcess__attach_player_ids(df)
+    assert out["passer_player_id"][0] is None
+
+
 def test_unmatched_name_keeps_its_tail_rather_than_guessing():
     """With no roster evidence that a tail is narrative bleed, trimming would be a
     guess -- so the captured name is left as-is and the id stays null."""

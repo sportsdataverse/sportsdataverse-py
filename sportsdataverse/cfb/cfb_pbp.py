@@ -6806,7 +6806,13 @@ class CFBPlayProcess(object):
         initial_lu = {k: next(iter(v)) for k, v in by_initial.items() if len(v) == 1}
         last_lu = {k: next(iter(v)) for k, v in by_last.items() if len(v) == 1}
 
-        def _match(name, team_id):
+        def _match(name, team_id, *, allow_fallback=True):
+            """Exact tiers always; the fuzzy tiers only when ``allow_fallback``.
+
+            The fuzzy tiers key on a bare surname, so they must NOT be run on a
+            name that still carries a narrative tail -- the tail word is itself a
+            plausible surname. See ``_resolve``.
+            """
             nn = _norm_player_name(name)
             if not nn:
                 return None
@@ -6817,6 +6823,8 @@ class CFBPlayProcess(object):
             aid = global_lu.get(nn)
             if aid is not None:
                 return aid
+            if not allow_fallback:
+                return None
             parts = nn.split()
             if len(parts) >= 2:
                 aid = initial_lu.get((f"{parts[0][0]} {parts[-1]}", tid))
@@ -6836,11 +6844,19 @@ class CFBPlayProcess(object):
             """
             if not name:
                 return {"name": None, "id": None}
-            aid = _match(name, team_id)
+            trimmed = _PLAYER_NAME_TAIL.sub("", str(name)).strip()
+            has_tail = trimmed != name
+
+            # A name that still carries a narrative tail is only trustworthy for
+            # an EXACT match. The fuzzy tiers key on a bare surname, and a tail
+            # word is itself a plausible surname: with roster entries
+            # "Russell Wilson" and "Alex Screen", running the surname tier on
+            # "Russell Wilson screen" resolves it to ALEX SCREEN. Withhold the
+            # fuzzy tiers until the tail is gone.
+            aid = _match(name, team_id, allow_fallback=not has_tail)
             if aid is not None:
                 return {"name": name, "id": aid}
-            trimmed = _PLAYER_NAME_TAIL.sub("", str(name)).strip()
-            if trimmed and trimmed != name:
+            if has_tail and trimmed:
                 aid = _match(trimmed, team_id)
                 if aid is not None:
                     return {"name": trimmed, "id": aid}
