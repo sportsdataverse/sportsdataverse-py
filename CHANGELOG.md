@@ -245,8 +245,25 @@
   with names emitted as `Bryan Randall` / `Matt Leinart` rather than
   `Bryan Randall (VT)` / `Matt Leinart (USC)`.
 
-- 2018 is deliberately unchanged (~67%): 376 of its 898 games have empty
-  `game_rosters` in the raw tree, which only a rescrape can fix.
+- **Player box score is now a second id source.** `game_rosters` stays primary,
+  but ESPN 404s its roster resource for a large minority of games — 376 of 898
+  in 2018, 142 of 706 in 2020 — leaving the join nothing to match against.
+  ESPN's per-player box score covers the same athletes in the **same athlete-id
+  namespace** and already ships inside the summary payload, so it costs no extra
+  request. Namespace agreement was measured, not assumed: 0 id conflicts on the
+  roster/box overlap in 21 of 22 seasons. Where the two disagree the name becomes
+  ambiguous and resolves to null.
+
+  | seasons | gain |
+  |---|---|
+  | 2004–2013 | +0.0pp (box is a strict subset of the roster, ~27 vs ~60 names) |
+  | 2014–2017 | +2.9 to +5.3pp |
+  | **2018** | **+32.4pp** (63.7% → 96.2%) |
+  | 2019–2025 | +0.1 to +6.4pp |
+
+  End-to-end on three real 2018 empty-roster games with `game_roster=[]`:
+  97.0% / 97.7% / 98.4% — the last of which the season fill probe previously
+  reported at **0.0%**.
 
 ### CFB — `adj_off/def/net` rescaled to the R `adjust_epa` netted statistic (BREAKING scale change)
 
