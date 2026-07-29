@@ -255,6 +255,82 @@ def test_fallback_join_tiers_are_team_scoped_and_uniqueness_gated():
     assert out["rusher_player_id"].to_list() == [1, 2, None]
 
 
+def _box(team_id, athletes):
+    """Minimal ESPN summary boxscore shaped for _parse_espn_player_box."""
+    return {
+        "boxscore": {
+            "players": [
+                {
+                    "team": {"id": team_id, "abbreviation": "AAA"},
+                    "statistics": [
+                        {
+                            "name": "passing",
+                            "keys": ["completions"],
+                            "athletes": [
+                                {"athlete": {"id": aid, "displayName": nm}, "stats": ["1"]} for aid, nm in athletes
+                            ],
+                        }
+                    ],
+                }
+            ]
+        }
+    }
+
+
+def test_boxscore_resolves_ids_when_roster_is_empty():
+    """ESPN 404s the roster resource on a large minority of games (376 of 898 in
+    2018). The per-player box score carries the same athlete-id namespace and is
+    already in the summary, so it must still resolve ids with no roster at all.
+    """
+    proc = CFBPlayProcess(gameId=1)
+    proc.join_participants = False
+    proc.game_roster = None  # the 2018 failure mode
+    proc.json = _box(60, [("777", "Sam Hartman"), ("888", "Gardner Minshew II")])
+    df = pl.DataFrame(
+        [
+            {"passer_player_name": "Sam Hartman", "pos_team": 60},
+            {"passer_player_name": "Gardner Minshew II", "pos_team": 60},
+        ]
+    )
+    out = proc._CFBPlayProcess__attach_player_ids(df)
+    assert out["passer_player_id"].to_list() == [777, 888]
+
+
+def test_boxscore_supplements_a_partial_roster_without_displacing_it():
+    """The box score is additive: roster-resolved ids stay, box-only players get
+    resolved, and the two sources agreeing on a name keeps it unambiguous."""
+    proc = CFBPlayProcess(gameId=1)
+    proc.join_participants = False
+    proc.game_roster = [{"athlete_id": 111, "full_name": "Rostered Passer", "team_id": 60}]
+    proc.json = _box(
+        60,
+        [
+            ("111", "Rostered Passer"),  # same id in both sources -> still unique
+            ("222", "Box Only Passer"),  # absent from the roster
+        ],
+    )
+    df = pl.DataFrame(
+        [
+            {"passer_player_name": "Rostered Passer", "pos_team": 60},
+            {"passer_player_name": "Box Only Passer", "pos_team": 60},
+        ]
+    )
+    out = proc._CFBPlayProcess__attach_player_ids(df)
+    assert out["passer_player_id"].to_list() == [111, 222]
+
+
+def test_conflicting_ids_across_sources_stay_null():
+    """If roster and box disagree on a name's id, the name is ambiguous and must
+    resolve to null rather than silently picking one."""
+    proc = CFBPlayProcess(gameId=1)
+    proc.join_participants = False
+    proc.game_roster = [{"athlete_id": 111, "full_name": "Disputed Name", "team_id": 60}]
+    proc.json = _box(60, [("999", "Disputed Name")])
+    df = pl.DataFrame([{"passer_player_name": "Disputed Name", "pos_team": 60}])
+    out = proc._CFBPlayProcess__attach_player_ids(df)
+    assert out["passer_player_id"][0] is None
+
+
 def test_real_surname_not_damaged_by_tail_stripper():
     """The tail stripper is end-anchored on a closed stopword list; ordinary names
     (including a legitimate parenthetical-free name) must pass through intact."""

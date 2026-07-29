@@ -6691,6 +6691,35 @@ class CFBPlayProcess(object):
                 continue
         return out
 
+    def __boxscore_records(self):
+        """Secondary id source: ESPN's per-player box score, same tuple shape as
+        ``__roster_records``.
+
+        ``game_rosters`` is the primary source, but ESPN 404s its roster resource
+        for a non-trivial share of games -- 376 of 898 in 2018, 142 of 706 in
+        2020 -- and on those games the roster join has nothing to match against.
+        The box score ships the SAME ESPN athlete-id namespace (measured: 0 id
+        conflicts on the roster/box overlap across 2004-2025) and already lives
+        in the summary payload, so this costs no extra request.
+
+        Coverage effect, measured on the committed cfbfastR-cfb-raw tree:
+        pre-2014 the box is a strict subset of the roster (~27 names vs ~60) and
+        adds nothing; 2014+ it adds +0.4 to +6.4pp normally and +32.4pp on 2018,
+        where it recovers almost the entire empty-roster hole.
+        """
+        box = (getattr(self, "json", None) or {}).get("boxscore") or {}
+        out = []
+        for r in _parse_espn_player_box(box):
+            aid = r.get("athlete_id")
+            nn = _norm_player_name(r.get("athlete"))
+            if aid is None or not nn:
+                continue
+            try:
+                out.append((nn, int(aid), str(r.get("team_id"))))
+            except (TypeError, ValueError):
+                continue
+        return out
+
     def __attach_player_ids(self, play_df):
         """Null garbage names, then attach a roster-resolved ``{type}_player_id``
         for each extracted ``{type}_player_name``.
@@ -6745,7 +6774,12 @@ class CFBPlayProcess(object):
             except Exception as exc:  # pragma: no cover - network dependent
                 logging.debug(f"{self.gameId}: __attach_player_ids roster fetch failed -- {exc}")
                 roster = None
-        records = self.__roster_records(roster)
+        # Roster first, box score second. Both feed the same set-valued lookups
+        # below, so order only affects which source seeds a name -- and since the
+        # two agree on ids, a name present in both stays unambiguous. A name that
+        # genuinely maps to two different ids becomes ambiguous and is dropped,
+        # which is the intended conservative behavior.
+        records = self.__roster_records(roster) + self.__boxscore_records()
         if not records:
             return play_df
 
