@@ -172,3 +172,100 @@ def test_garbage_player_name_nulled():
     df = pl.DataFrame([{"rusher_player_name": "bea loss of", "pos_team": 10}])
     out = proc._CFBPlayProcess__attach_player_ids(df)
     assert out["rusher_player_name"][0] is None
+
+
+def test_pre2014_team_abbrev_suffix_stripped_and_id_resolved():
+    """2004-era text renders "Player Name (TEAM)"; the passer capture keeps the
+    parenthetical. It must be shed so the name column is clean AND the roster
+    id-join lands (previously "matt leinart usc" never matched "matt leinart").
+
+    Real strings from cfb-raw game 242410259 (2004 VT/USC).
+    """
+    proc = CFBPlayProcess(gameId=1)
+    proc.join_participants = False
+    proc.game_roster = [
+        {"athlete_id": 100, "full_name": "Matt Leinart", "team_id": 30},
+        {"athlete_id": 200, "full_name": "Bryan Randall", "team_id": 40},
+        {"athlete_id": 300, "full_name": "Reggie Bush", "team_id": 30},
+    ]
+    df = pl.DataFrame(
+        [
+            {"passer_player_name": "Matt Leinart (USC)", "pos_team": 30, "return_team": 30},
+            {"passer_player_name": "Bryan Randall (VT)", "pos_team": 40, "return_team": 30},
+            {"passer_player_name": "Reggie Bush (USC)", "pos_team": 30, "return_team": 30},
+        ]
+    )
+    out = proc._CFBPlayProcess__attach_player_ids(df)
+    assert out["passer_player_name"].to_list() == ["Matt Leinart", "Bryan Randall", "Reggie Bush"]
+    assert out["passer_player_id"].to_list() == [100, 200, 300]
+
+
+def test_narrative_tail_stripped_from_captured_name():
+    """Pass-direction words and ESPN's missing-space concatenations bleed into the
+    capture on 2005-2013 text. Real strings sampled from cfb-raw 2010-2013.
+    """
+    proc = CFBPlayProcess(gameId=1)
+    proc.join_participants = False
+    proc.game_roster = [
+        {"athlete_id": 11, "full_name": "Russell Wilson", "team_id": 50},
+        {"athlete_id": 22, "full_name": "Dominique Davis", "team_id": 50},
+        {"athlete_id": 33, "full_name": "Raynard Horne", "team_id": 50},
+    ]
+    df = pl.DataFrame(
+        [
+            {"passer_player_name": "Russell Wilson sideline", "pos_team": 50},
+            {"passer_player_name": "Russell Wilson deep out", "pos_team": 50},
+            {"passer_player_name": "Dominique Davis screen", "pos_team": 50},
+            {"passer_player_name": "Dominique Davis crossing", "pos_team": 50},
+            {"passer_player_name": "Raynard Hornetackled by", "pos_team": 50},
+        ]
+    )
+    out = proc._CFBPlayProcess__attach_player_ids(df)
+    assert out["passer_player_name"].to_list() == [
+        "Russell Wilson",
+        "Russell Wilson",
+        "Dominique Davis",
+        "Dominique Davis",
+        "Raynard Horne",
+    ]
+    assert out["passer_player_id"].to_list() == [11, 11, 22, 22, 33]
+
+
+def test_fallback_join_tiers_are_team_scoped_and_uniqueness_gated():
+    """Below exact match: first-initial+last, then bare surname -- both scoped to
+    the fielding team and only when unique within it. An ambiguous surname must
+    stay null rather than guess.
+    """
+    proc = CFBPlayProcess(gameId=1)
+    proc.join_participants = False
+    proc.game_roster = [
+        {"athlete_id": 1, "full_name": "Anthony Smith", "team_id": 60},
+        {"athlete_id": 2, "full_name": "Cornell Brockington", "team_id": 60},
+        {"athlete_id": 3, "full_name": "Devon Jones", "team_id": 60},
+        {"athlete_id": 4, "full_name": "Marcus Jones", "team_id": 60},  # surname collision
+    ]
+    df = pl.DataFrame(
+        [
+            {"rusher_player_name": "A. Smith", "pos_team": 60},  # initial tier
+            {"rusher_player_name": "Brockington", "pos_team": 60},  # unique-surname tier
+            {"rusher_player_name": "Jones", "pos_team": 60},  # ambiguous -> null
+        ]
+    )
+    out = proc._CFBPlayProcess__attach_player_ids(df)
+    assert out["rusher_player_id"].to_list() == [1, 2, None]
+
+
+def test_real_surname_not_damaged_by_tail_stripper():
+    """The tail stripper is end-anchored on a closed stopword list; ordinary names
+    (including a legitimate parenthetical-free name) must pass through intact."""
+    proc = CFBPlayProcess(gameId=1)
+    proc.join_participants = False
+    df = pl.DataFrame(
+        [
+            {"rusher_player_name": "Middleton Banks", "pos_team": 70},
+            {"rusher_player_name": "Deep Patel", "pos_team": 70},
+            {"rusher_player_name": "LenDale White", "pos_team": 70},
+        ]
+    )
+    out = proc._CFBPlayProcess__attach_player_ids(df)
+    assert out["rusher_player_name"].to_list() == ["Middleton Banks", "Deep Patel", "LenDale White"]

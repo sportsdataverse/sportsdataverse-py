@@ -69,6 +69,27 @@ _PLAYER_NAME_GARBAGE = re.compile(
     r"(?i)\b(loss|gain|yards?|incomplete|penalty|fumbled|sacked|touchdown|kickoff|punt|return|hurried by|QB)\b"
 )
 
+#: ESPN's pre-2014 play text renders a name as ``"Player Name (TEAM)"`` --
+#: e.g. ``"Bryan Randall (VT) pass incomplete to the right side."``. The rusher
+#: capture strips the parenthetical but the passer capture keeps it, and
+#: :func:`_norm_player_name` then folds it into the join key
+#: (``"matt ryan bc" != "matt ryan"``), so every 2004 passer failed the roster
+#: id-join. Stripping a trailing ``(ABBR)`` at the shared cleanup chokepoint
+#: fixes the emitted name column AND the join in one place.
+_PLAYER_NAME_TEAM_SUFFIX = re.compile(r"\s*\([A-Za-z][\w&'.\- ]{0,11}\)\s*$")
+
+#: Narrative tails that bleed into a captured name where the extraction regex
+#: has no stopword boundary: pass-direction phrases (``"Russell Wilson deep
+#: out"``, ``"Dominique Davis screen"``) and missing-space concatenations in
+#: ESPN's own text (``"Raynard Hornetackled by"``). Anchored to end-of-string
+#: and matched without a leading word boundary so the concatenated form sheds
+#: the tail and keeps the surname.
+_PLAYER_NAME_TAIL = re.compile(
+    r"(?i)\s*(?:tackled\s+by|pushed\s+out\s+of\s+bounds|ran\s+out\s+of\s+bounds"
+    r"|deep\s+(?:left|right|middle|out)|short\s+(?:left|right|middle)"
+    r"|sideline|crossing|screen|middle|scramble)\s*\.?\s*$"
+)
+
 
 def _norm_player_name(name) -> str:
     """Normalize a player name for roster matching.
@@ -6685,12 +6706,28 @@ class CFBPlayProcess(object):
         """
         from collections import defaultdict
 
-        # 1) null obvious play-text artifacts masquerading as names (always runs)
+        # 1) clean captured names, then null obvious artifacts (always runs)
         present_names = [nc for nc, _, _ in self._PLAYER_ID_TEAM_MAP if nc in play_df.columns]
         if present_names:
+            # 1a) shed a trailing "(TEAM)" and any narrative tail that bled into
+            #     the capture. Both patterns are end-anchored, so one pass each
+            #     suffices. This runs before the garbage check so a name like
+            #     "Raynard Hornetackled by" is repaired rather than nulled.
             play_df = play_df.with_columns(
                 [
-                    pl.when(pl.col(nc).str.contains(_PLAYER_NAME_GARBAGE.pattern))
+                    pl.col(nc)
+                    .str.replace(_PLAYER_NAME_TEAM_SUFFIX.pattern, "")
+                    .str.replace(_PLAYER_NAME_TAIL.pattern, "")
+                    .str.strip_chars()
+                    .alias(nc)
+                    for nc in present_names
+                ],
+            )
+            play_df = play_df.with_columns(
+                [
+                    pl.when(
+                        pl.col(nc).str.contains(_PLAYER_NAME_GARBAGE.pattern) | (pl.col(nc).str.len_chars() == 0),
+                    )
                     .then(None)
                     .otherwise(pl.col(nc))
                     .alias(nc)
@@ -6720,12 +6757,37 @@ class CFBPlayProcess(object):
         team_lu = {k: next(iter(v)) for k, v in by_name_team.items() if len(v) == 1}
         global_lu = {k: next(iter(v)) for k, v in by_name.items() if len(v) == 1}
 
+        # Fallback tiers for pre-2014 games, where the name comes from play text
+        # rather than participants[] and may not render as the roster's full
+        # name ("A. Smith" / bare surname). Both are TEAM-SCOPED and require the
+        # key to be unique within that team -- a global last-name fallback
+        # collides far too often to be safe.
+        by_initial, by_last = defaultdict(set), defaultdict(set)
+        for nn, aid, tid in records:
+            parts = nn.split()
+            if len(parts) >= 2:
+                by_initial[(f"{parts[0][0]} {parts[-1]}", tid)].add(aid)
+                by_last[(parts[-1], tid)].add(aid)
+        initial_lu = {k: next(iter(v)) for k, v in by_initial.items() if len(v) == 1}
+        last_lu = {k: next(iter(v)) for k, v in by_last.items() if len(v) == 1}
+
         def _match(name, team_id):
             nn = _norm_player_name(name)
             if not nn:
                 return None
-            aid = team_lu.get((nn, str(team_id)))
-            return aid if aid is not None else global_lu.get(nn)
+            tid = str(team_id)
+            aid = team_lu.get((nn, tid))
+            if aid is not None:
+                return aid
+            aid = global_lu.get(nn)
+            if aid is not None:
+                return aid
+            parts = nn.split()
+            if len(parts) >= 2:
+                aid = initial_lu.get((f"{parts[0][0]} {parts[-1]}", tid))
+                if aid is not None:
+                    return aid
+            return last_lu.get((parts[-1], tid))
 
         # 4) attach {type}_player_id (fill nulls only; preserve participant ids)
         exprs = []
