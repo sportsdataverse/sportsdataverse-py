@@ -172,3 +172,249 @@ def test_garbage_player_name_nulled():
     df = pl.DataFrame([{"rusher_player_name": "bea loss of", "pos_team": 10}])
     out = proc._CFBPlayProcess__attach_player_ids(df)
     assert out["rusher_player_name"][0] is None
+
+
+def test_pre2014_team_abbrev_suffix_stripped_and_id_resolved():
+    """2004-era text renders "Player Name (TEAM)"; the passer capture keeps the
+    parenthetical. It must be shed so the name column is clean AND the roster
+    id-join lands (previously "matt leinart usc" never matched "matt leinart").
+
+    Real strings from cfb-raw game 242410259 (2004 VT/USC).
+    """
+    proc = CFBPlayProcess(gameId=1)
+    proc.join_participants = False
+    proc.game_roster = [
+        {"athlete_id": 100, "full_name": "Matt Leinart", "team_id": 30},
+        {"athlete_id": 200, "full_name": "Bryan Randall", "team_id": 40},
+        {"athlete_id": 300, "full_name": "Reggie Bush", "team_id": 30},
+    ]
+    df = pl.DataFrame(
+        [
+            {"passer_player_name": "Matt Leinart (USC)", "pos_team": 30, "return_team": 30},
+            {"passer_player_name": "Bryan Randall (VT)", "pos_team": 40, "return_team": 30},
+            {"passer_player_name": "Reggie Bush (USC)", "pos_team": 30, "return_team": 30},
+        ]
+    )
+    out = proc._CFBPlayProcess__attach_player_ids(df)
+    assert out["passer_player_name"].to_list() == ["Matt Leinart", "Bryan Randall", "Reggie Bush"]
+    assert out["passer_player_id"].to_list() == [100, 200, 300]
+
+
+def test_narrative_tail_stripped_from_captured_name():
+    """Pass-direction words and ESPN's missing-space concatenations bleed into the
+    capture on 2005-2013 text. Real strings sampled from cfb-raw 2010-2013.
+    """
+    proc = CFBPlayProcess(gameId=1)
+    proc.join_participants = False
+    proc.game_roster = [
+        {"athlete_id": 11, "full_name": "Russell Wilson", "team_id": 50},
+        {"athlete_id": 22, "full_name": "Dominique Davis", "team_id": 50},
+        {"athlete_id": 33, "full_name": "Raynard Horne", "team_id": 50},
+    ]
+    df = pl.DataFrame(
+        [
+            {"passer_player_name": "Russell Wilson sideline", "pos_team": 50},
+            {"passer_player_name": "Russell Wilson deep out", "pos_team": 50},
+            {"passer_player_name": "Dominique Davis screen", "pos_team": 50},
+            {"passer_player_name": "Dominique Davis crossing", "pos_team": 50},
+            {"passer_player_name": "Raynard Hornetackled by", "pos_team": 50},
+        ]
+    )
+    out = proc._CFBPlayProcess__attach_player_ids(df)
+    assert out["passer_player_name"].to_list() == [
+        "Russell Wilson",
+        "Russell Wilson",
+        "Dominique Davis",
+        "Dominique Davis",
+        "Raynard Horne",
+    ]
+    assert out["passer_player_id"].to_list() == [11, 11, 22, 22, 33]
+
+
+def test_fallback_join_tiers_are_team_scoped_and_uniqueness_gated():
+    """Below exact match: first-initial+last, then bare surname -- both scoped to
+    the fielding team and only when unique within it. An ambiguous surname must
+    stay null rather than guess.
+    """
+    proc = CFBPlayProcess(gameId=1)
+    proc.join_participants = False
+    proc.game_roster = [
+        {"athlete_id": 1, "full_name": "Anthony Smith", "team_id": 60},
+        {"athlete_id": 2, "full_name": "Cornell Brockington", "team_id": 60},
+        {"athlete_id": 3, "full_name": "Devon Jones", "team_id": 60},
+        {"athlete_id": 4, "full_name": "Marcus Jones", "team_id": 60},  # surname collision
+    ]
+    df = pl.DataFrame(
+        [
+            {"rusher_player_name": "A. Smith", "pos_team": 60},  # initial tier
+            {"rusher_player_name": "Brockington", "pos_team": 60},  # unique-surname tier
+            {"rusher_player_name": "Jones", "pos_team": 60},  # ambiguous -> null
+        ]
+    )
+    out = proc._CFBPlayProcess__attach_player_ids(df)
+    assert out["rusher_player_id"].to_list() == [1, 2, None]
+
+
+def _box(team_id, athletes):
+    """Minimal ESPN summary boxscore shaped for _parse_espn_player_box."""
+    return {
+        "boxscore": {
+            "players": [
+                {
+                    "team": {"id": team_id, "abbreviation": "AAA"},
+                    "statistics": [
+                        {
+                            "name": "passing",
+                            "keys": ["completions"],
+                            "athletes": [
+                                {"athlete": {"id": aid, "displayName": nm}, "stats": ["1"]} for aid, nm in athletes
+                            ],
+                        }
+                    ],
+                }
+            ]
+        }
+    }
+
+
+def test_boxscore_resolves_ids_when_roster_is_empty():
+    """ESPN 404s the roster resource on a large minority of games (376 of 898 in
+    2018). The per-player box score carries the same athlete-id namespace and is
+    already in the summary, so it must still resolve ids with no roster at all.
+    """
+    proc = CFBPlayProcess(gameId=1)
+    proc.join_participants = False
+    proc.game_roster = None  # the 2018 failure mode
+    proc.json = _box(60, [("777", "Sam Hartman"), ("888", "Gardner Minshew II")])
+    df = pl.DataFrame(
+        [
+            {"passer_player_name": "Sam Hartman", "pos_team": 60},
+            {"passer_player_name": "Gardner Minshew II", "pos_team": 60},
+        ]
+    )
+    out = proc._CFBPlayProcess__attach_player_ids(df)
+    assert out["passer_player_id"].to_list() == [777, 888]
+
+
+def test_boxscore_supplements_a_partial_roster_without_displacing_it():
+    """The box score is additive: roster-resolved ids stay, box-only players get
+    resolved, and the two sources agreeing on a name keeps it unambiguous."""
+    proc = CFBPlayProcess(gameId=1)
+    proc.join_participants = False
+    proc.game_roster = [{"athlete_id": 111, "full_name": "Rostered Passer", "team_id": 60}]
+    proc.json = _box(
+        60,
+        [
+            ("111", "Rostered Passer"),  # same id in both sources -> still unique
+            ("222", "Box Only Passer"),  # absent from the roster
+        ],
+    )
+    df = pl.DataFrame(
+        [
+            {"passer_player_name": "Rostered Passer", "pos_team": 60},
+            {"passer_player_name": "Box Only Passer", "pos_team": 60},
+        ]
+    )
+    out = proc._CFBPlayProcess__attach_player_ids(df)
+    assert out["passer_player_id"].to_list() == [111, 222]
+
+
+def test_conflicting_ids_across_sources_stay_null():
+    """If roster and box disagree on a name's id, the name is ambiguous and must
+    resolve to null rather than silently picking one."""
+    proc = CFBPlayProcess(gameId=1)
+    proc.join_participants = False
+    proc.game_roster = [{"athlete_id": 111, "full_name": "Disputed Name", "team_id": 60}]
+    proc.json = _box(60, [("999", "Disputed Name")])
+    df = pl.DataFrame([{"passer_player_name": "Disputed Name", "pos_team": 60}])
+    out = proc._CFBPlayProcess__attach_player_ids(df)
+    assert out["passer_player_id"][0] is None
+
+
+def test_legitimate_surname_colliding_with_a_stopword_is_preserved():
+    """A real surname that IS one of the tail stopwords must survive.
+
+    Blanket tail-stripping would turn "John Middle" into "John", and the surname
+    fallback could then resolve it to a different athlete entirely. The strip is
+    therefore only applied when the roster confirms the trimmed form.
+    """
+    proc = CFBPlayProcess(gameId=1)
+    proc.join_participants = False
+    proc.game_roster = [
+        {"athlete_id": 501, "full_name": "John Middle", "team_id": 80},
+        {"athlete_id": 502, "full_name": "Alex Screen", "team_id": 80},
+        {"athlete_id": 503, "full_name": "John Passer", "team_id": 80},
+    ]
+    df = pl.DataFrame(
+        [
+            {"rusher_player_name": "John Middle", "pos_team": 80},
+            {"rusher_player_name": "Alex Screen", "pos_team": 80},
+        ]
+    )
+    out = proc._CFBPlayProcess__attach_player_ids(df)
+    assert out["rusher_player_name"].to_list() == ["John Middle", "Alex Screen"]
+    assert out["rusher_player_id"].to_list() == [501, 502]
+
+
+def test_tail_word_does_not_resolve_via_the_surname_fallback():
+    """A narrative tail word is itself a plausible surname, so the fuzzy tiers
+    must not run until the tail is stripped.
+
+    With "Russell Wilson" and "Alex Screen" both rostered, the captured text
+    "Russell Wilson screen" hit the surname tier on the UNTRIMMED name and
+    resolved to Alex Screen -- silent misattribution to the wrong player.
+    """
+    proc = CFBPlayProcess(gameId=1)
+    proc.join_participants = False
+    proc.game_roster = [
+        {"athlete_id": 701, "full_name": "Russell Wilson", "team_id": 70},
+        {"athlete_id": 702, "full_name": "Alex Screen", "team_id": 70},
+    ]
+    df = pl.DataFrame(
+        [
+            {"passer_player_name": "Russell Wilson screen", "pos_team": 70},
+            {"passer_player_name": "Alex Screen", "pos_team": 70},  # exact still wins
+        ]
+    )
+    out = proc._CFBPlayProcess__attach_player_ids(df)
+    assert out["passer_player_name"].to_list() == ["Russell Wilson", "Alex Screen"]
+    assert out["passer_player_id"].to_list() == [701, 702]
+
+
+def test_name_that_is_entirely_a_tail_word_resolves_to_null():
+    """If stripping the tail leaves nothing, there is no name to match -- the
+    surname tier must not rescue it into a real athlete."""
+    proc = CFBPlayProcess(gameId=1)
+    proc.join_participants = False
+    proc.game_roster = [{"athlete_id": 801, "full_name": "Alex Screen", "team_id": 70}]
+    df = pl.DataFrame([{"passer_player_name": "screen", "pos_team": 70}])
+    out = proc._CFBPlayProcess__attach_player_ids(df)
+    assert out["passer_player_id"][0] is None
+
+
+def test_unmatched_name_keeps_its_tail_rather_than_guessing():
+    """With no roster evidence that a tail is narrative bleed, trimming would be a
+    guess -- so the captured name is left as-is and the id stays null."""
+    proc = CFBPlayProcess(gameId=1)
+    proc.join_participants = False
+    proc.game_roster = [{"athlete_id": 601, "full_name": "Someone Else", "team_id": 90}]
+    df = pl.DataFrame([{"rusher_player_name": "Unknown Guy sideline", "pos_team": 90}])
+    out = proc._CFBPlayProcess__attach_player_ids(df)
+    assert out["rusher_player_name"][0] == "Unknown Guy sideline"
+    assert out["rusher_player_id"][0] is None
+
+
+def test_real_surname_not_damaged_by_tail_stripper():
+    """The tail stripper is end-anchored on a closed stopword list; ordinary names
+    (including a legitimate parenthetical-free name) must pass through intact."""
+    proc = CFBPlayProcess(gameId=1)
+    proc.join_participants = False
+    df = pl.DataFrame(
+        [
+            {"rusher_player_name": "Middleton Banks", "pos_team": 70},
+            {"rusher_player_name": "Deep Patel", "pos_team": 70},
+            {"rusher_player_name": "LenDale White", "pos_team": 70},
+        ]
+    )
+    out = proc._CFBPlayProcess__attach_player_ids(df)
+    assert out["rusher_player_name"].to_list() == ["Middleton Banks", "Deep Patel", "LenDale White"]

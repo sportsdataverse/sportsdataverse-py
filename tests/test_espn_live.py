@@ -507,12 +507,33 @@ def test_espn_cfb_team_roster_live():
     assert "position_group" in df.columns, "CFB roster should be position-grouped (offense/defense/specialTeam)"
 
 
+def _skip_if_espn_publishes_no_roster(fetch, team_id, league):
+    """Skip only when ESPN itself ships zero athletes.
+
+    Between seasons ESPN rolls the roster endpoint to the next season year and
+    serves it EMPTY until programs are repopulated -- observed 2026-07-28, when
+    every sampled MBB program (Duke, UNC, Kansas, Michigan St, Florida St,
+    Kentucky) returned 0 athletes under season=2027 while WBB was still serving
+    2026 rosters normally.
+
+    Checking the RAW payload keeps the failure mode honest: an upstream-empty
+    response skips, but a payload that carries athletes which the parser then
+    drops still fails, which is the regression this test exists to catch.
+    """
+    raw = fetch(team_id=team_id, return_parsed=False)
+    athletes = (raw or {}).get("athletes") or []
+    if not athletes:
+        season = ((raw or {}).get("season") or {}).get("year")
+        pytest.skip(f"ESPN publishes no {league} roster for team {team_id} (season={season}, offseason window)")
+
+
 def test_espn_mbb_team_roster_live():
     """NCAA M basketball roster uses the flat shape (no position
     groups), matching NBA / WNBA convention."""
     from sportsdataverse.mbb.mbb_espn_ext import espn_mbb_team_roster
 
-    df = espn_mbb_team_roster(team_id=150, return_parsed=True)  # Duke
+    _skip_if_espn_publishes_no_roster(espn_mbb_team_roster, 150, "MBB")  # Duke
+    df = espn_mbb_team_roster(team_id=150, return_parsed=True)
     assert df.height >= 10, f"expected >=10 MBB roster rows, got {df.height}"
     assert "first_name" in df.columns or "last_name" in df.columns
 
@@ -520,7 +541,9 @@ def test_espn_mbb_team_roster_live():
 def test_espn_wbb_team_roster_live():
     from sportsdataverse.wbb.wbb_espn_ext import espn_wbb_team_roster
 
-    df = espn_wbb_team_roster(team_id=41, return_parsed=True)  # UConn
+    # WBB hits the same offseason-empty window as MBB, just on a different date.
+    _skip_if_espn_publishes_no_roster(espn_wbb_team_roster, 41, "WBB")  # UConn
+    df = espn_wbb_team_roster(team_id=41, return_parsed=True)
     assert df.height >= 8, f"expected >=8 WBB roster rows, got {df.height}"
 
 

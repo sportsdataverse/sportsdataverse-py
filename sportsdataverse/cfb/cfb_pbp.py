@@ -69,6 +69,27 @@ _PLAYER_NAME_GARBAGE = re.compile(
     r"(?i)\b(loss|gain|yards?|incomplete|penalty|fumbled|sacked|touchdown|kickoff|punt|return|hurried by|QB)\b"
 )
 
+#: ESPN's pre-2014 play text renders a name as ``"Player Name (TEAM)"`` --
+#: e.g. ``"Bryan Randall (VT) pass incomplete to the right side."``. The rusher
+#: capture strips the parenthetical but the passer capture keeps it, and
+#: :func:`_norm_player_name` then folds it into the join key
+#: (``"matt ryan bc" != "matt ryan"``), so every 2004 passer failed the roster
+#: id-join. Stripping a trailing ``(ABBR)`` at the shared cleanup chokepoint
+#: fixes the emitted name column AND the join in one place.
+_PLAYER_NAME_TEAM_SUFFIX = re.compile(r"\s*\([A-Za-z][\w&'.\- ]{0,11}\)\s*$")
+
+#: Narrative tails that bleed into a captured name where the extraction regex
+#: has no stopword boundary: pass-direction phrases (``"Russell Wilson deep
+#: out"``, ``"Dominique Davis screen"``) and missing-space concatenations in
+#: ESPN's own text (``"Raynard Hornetackled by"``). Anchored to end-of-string
+#: and matched without a leading word boundary so the concatenated form sheds
+#: the tail and keeps the surname.
+_PLAYER_NAME_TAIL = re.compile(
+    r"(?i)\s*(?:tackled\s+by|pushed\s+out\s+of\s+bounds|ran\s+out\s+of\s+bounds"
+    r"|deep\s+(?:left|right|middle|out)|short\s+(?:left|right|middle)"
+    r"|sideline|crossing|screen|middle|scramble)\s*\.?\s*$"
+)
+
 
 def _norm_player_name(name) -> str:
     """Normalize a player name for roster matching.
@@ -6670,6 +6691,35 @@ class CFBPlayProcess(object):
                 continue
         return out
 
+    def __boxscore_records(self):
+        """Secondary id source: ESPN's per-player box score, same tuple shape as
+        ``__roster_records``.
+
+        ``game_rosters`` is the primary source, but ESPN 404s its roster resource
+        for a non-trivial share of games -- 376 of 898 in 2018, 142 of 706 in
+        2020 -- and on those games the roster join has nothing to match against.
+        The box score ships the SAME ESPN athlete-id namespace (measured: 0 id
+        conflicts on the roster/box overlap across 2004-2025) and already lives
+        in the summary payload, so this costs no extra request.
+
+        Coverage effect, measured on the committed cfbfastR-cfb-raw tree:
+        pre-2014 the box is a strict subset of the roster (~27 names vs ~60) and
+        adds nothing; 2014+ it adds +0.4 to +6.4pp normally and +32.4pp on 2018,
+        where it recovers almost the entire empty-roster hole.
+        """
+        box = (getattr(self, "json", None) or {}).get("boxscore") or {}
+        out = []
+        for r in _parse_espn_player_box(box):
+            aid = r.get("athlete_id")
+            nn = _norm_player_name(r.get("athlete"))
+            if aid is None or not nn:
+                continue
+            try:
+                out.append((nn, int(aid), str(r.get("team_id"))))
+            except (TypeError, ValueError):
+                continue
+        return out
+
     def __attach_player_ids(self, play_df):
         """Null garbage names, then attach a roster-resolved ``{type}_player_id``
         for each extracted ``{type}_player_name``.
@@ -6685,12 +6735,29 @@ class CFBPlayProcess(object):
         """
         from collections import defaultdict
 
-        # 1) null obvious play-text artifacts masquerading as names (always runs)
+        # 1) clean captured names, then null obvious artifacts (always runs)
         present_names = [nc for nc, _, _ in self._PLAYER_ID_TEAM_MAP if nc in play_df.columns]
         if present_names:
+            # 1a) shed a trailing "(TEAM)". This one is unconditional: a trailing
+            #     parenthesised team code is never part of a person's name, so
+            #     stripping it can't destroy information.
+            #
+            #     The narrative-tail strip is NOT done here -- it is applied in
+            #     step 4, and only when the roster confirms the trimmed form.
+            #     Blanket-stripping it would turn a real surname into a wrong one
+            #     ("John Middle" -> "John"), which the surname fallback could then
+            #     resolve to the wrong athlete.
             play_df = play_df.with_columns(
                 [
-                    pl.when(pl.col(nc).str.contains(_PLAYER_NAME_GARBAGE.pattern))
+                    pl.col(nc).str.replace(_PLAYER_NAME_TEAM_SUFFIX.pattern, "").str.strip_chars().alias(nc)
+                    for nc in present_names
+                ],
+            )
+            play_df = play_df.with_columns(
+                [
+                    pl.when(
+                        pl.col(nc).str.contains(_PLAYER_NAME_GARBAGE.pattern) | (pl.col(nc).str.len_chars() == 0),
+                    )
                     .then(None)
                     .otherwise(pl.col(nc))
                     .alias(nc)
@@ -6708,7 +6775,12 @@ class CFBPlayProcess(object):
             except Exception as exc:  # pragma: no cover - network dependent
                 logging.debug(f"{self.gameId}: __attach_player_ids roster fetch failed -- {exc}")
                 roster = None
-        records = self.__roster_records(roster)
+        # Roster first, box score second. Both feed the same set-valued lookups
+        # below, so order only affects which source seeds a name -- and since the
+        # two agree on ids, a name present in both stays unambiguous. A name that
+        # genuinely maps to two different ids becomes ambiguous and is dropped,
+        # which is the intended conservative behavior.
+        records = self.__roster_records(roster) + self.__boxscore_records()
         if not records:
             return play_df
 
@@ -6720,21 +6792,93 @@ class CFBPlayProcess(object):
         team_lu = {k: next(iter(v)) for k, v in by_name_team.items() if len(v) == 1}
         global_lu = {k: next(iter(v)) for k, v in by_name.items() if len(v) == 1}
 
-        def _match(name, team_id):
+        # Fallback tiers for pre-2014 games, where the name comes from play text
+        # rather than participants[] and may not render as the roster's full
+        # name ("A. Smith" / bare surname). Both are TEAM-SCOPED and require the
+        # key to be unique within that team -- a global last-name fallback
+        # collides far too often to be safe.
+        by_initial, by_last = defaultdict(set), defaultdict(set)
+        for nn, aid, tid in records:
+            parts = nn.split()
+            if len(parts) >= 2:
+                by_initial[(f"{parts[0][0]} {parts[-1]}", tid)].add(aid)
+                by_last[(parts[-1], tid)].add(aid)
+        initial_lu = {k: next(iter(v)) for k, v in by_initial.items() if len(v) == 1}
+        last_lu = {k: next(iter(v)) for k, v in by_last.items() if len(v) == 1}
+
+        def _match(name, team_id, *, allow_fallback=True):
+            """Exact tiers always; the fuzzy tiers only when ``allow_fallback``.
+
+            The fuzzy tiers key on a bare surname, so they must NOT be run on a
+            name that still carries a narrative tail -- the tail word is itself a
+            plausible surname. See ``_resolve``.
+            """
             nn = _norm_player_name(name)
             if not nn:
                 return None
-            aid = team_lu.get((nn, str(team_id)))
-            return aid if aid is not None else global_lu.get(nn)
+            tid = str(team_id)
+            aid = team_lu.get((nn, tid))
+            if aid is not None:
+                return aid
+            aid = global_lu.get(nn)
+            if aid is not None:
+                return aid
+            if not allow_fallback:
+                return None
+            parts = nn.split()
+            if len(parts) >= 2:
+                aid = initial_lu.get((f"{parts[0][0]} {parts[-1]}", tid))
+                if aid is not None:
+                    return aid
+            return last_lu.get((parts[-1], tid))
+
+        def _resolve(name, team_id):
+            """Resolve a captured name to (display_name, athlete_id).
+
+            The narrative-tail strip is applied HERE rather than blanket-applied
+            during cleanup, and only when it actually earns a match. A name is
+            rewritten only when the roster/box confirms the trimmed form, so a
+            legitimate surname that happens to collide with a stopword
+            ("John Middle", "Alex Screen") survives intact instead of being
+            truncated and then mis-resolved by the surname fallback.
+            """
+            if not name:
+                return {"name": None, "id": None}
+            trimmed = _PLAYER_NAME_TAIL.sub("", str(name)).strip()
+            has_tail = trimmed != name
+
+            # A name that still carries a narrative tail is only trustworthy for
+            # an EXACT match. The fuzzy tiers key on a bare surname, and a tail
+            # word is itself a plausible surname: with roster entries
+            # "Russell Wilson" and "Alex Screen", running the surname tier on
+            # "Russell Wilson screen" resolves it to ALEX SCREEN. Withhold the
+            # fuzzy tiers until the tail is gone.
+            aid = _match(name, team_id, allow_fallback=not has_tail)
+            if aid is not None:
+                return {"name": name, "id": aid}
+            if has_tail and trimmed:
+                aid = _match(trimmed, team_id)
+                if aid is not None:
+                    return {"name": trimmed, "id": aid}
+            # Neither form matched: keep the name as captured. Without a roster
+            # hit there is no evidence the tail is narrative bleed rather than
+            # part of the name, so trimming here would be a guess.
+            return {"name": name, "id": None}
 
         # 4) attach {type}_player_id (fill nulls only; preserve participant ids)
+        _RESOLVED = pl.Struct([pl.Field("name", pl.Utf8), pl.Field("id", pl.Int64)])
         exprs = []
         for name_col, id_col, team_col in self._PLAYER_ID_TEAM_MAP:
             if name_col not in play_df.columns or team_col not in play_df.columns:
                 continue
-            roster_id = pl.struct(
-                [pl.col(name_col).alias("_n"), pl.col(team_col).cast(pl.Utf8).alias("_t")],
-            ).map_elements(lambda s: _match(s["_n"], s["_t"]), return_dtype=pl.Int64)
+            resolved = (
+                pl.struct([pl.col(name_col).alias("_n"), pl.col(team_col).cast(pl.Utf8).alias("_t")])
+                .map_elements(lambda s: _resolve(s["_n"], s["_t"]), return_dtype=_RESOLVED)
+                .alias(f"__res_{name_col}")
+            )
+            play_df = play_df.with_columns(resolved)
+            exprs.append(pl.col(f"__res_{name_col}").struct.field("name").alias(name_col))
+            roster_id = pl.col(f"__res_{name_col}").struct.field("id")
             if id_col in play_df.columns:
                 exprs.append(
                     pl.when(pl.col(id_col).is_null()).then(roster_id).otherwise(pl.col(id_col)).alias(id_col),
@@ -6742,7 +6886,9 @@ class CFBPlayProcess(object):
             else:
                 exprs.append(roster_id.alias(id_col))
         if exprs:
-            play_df = play_df.with_columns(exprs)
+            play_df = play_df.with_columns(exprs).drop(
+                [c for c in play_df.columns if c.startswith("__res_")],
+            )
         return play_df
 
     # cfb4th decision-surface columns appended to 4th-down plays when

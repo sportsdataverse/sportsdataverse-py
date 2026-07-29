@@ -3,6 +3,7 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [Unreleased](#unreleased)
+  - [CFB — pre-2014 `{type}_player_id` join recovered (2004 +36pp, 2005–2013 +2–8pp)](#cfb--pre-2014-type_player_id-join-recovered-2004-36pp-20052013-28pp)
   - [CFB — `adj_off/def/net` rescaled to the R `adjust_epa` netted statistic (BREAKING scale change)](#cfb--adj_offdefnet-rescaled-to-the-r-adjust_epa-netted-statistic-breaking-scale-change)
   - [CFB — `adj_st_epa` rescaled to true EPA units (BREAKING scale change)](#cfb--adj_st_epa-rescaled-to-true-epa-units-breaking-scale-change)
   - [CFB — `cfb_ratings` gameonpaper-parity filters (default ON)](#cfb--cfb_ratings-gameonpaper-parity-filters-default-on)
@@ -199,6 +200,70 @@
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Unreleased
+
+### CFB — pre-2014 `{type}_player_id` join recovered (2004 +36pp, 2005–2013 +2–8pp)
+
+- **Context.** ESPN ships no per-play `participants[]` before 2014 — verified
+  live against Core v2 `/events/{id}/competitions/{id}/plays`, which returns a
+  full 150–240-play stream for 2004–2013 with **zero** participants, and
+  ~90% participant coverage from 2014 on. Pre-2014 `{type}_player_id` therefore
+  comes entirely from `CFBPlayProcess.__attach_player_ids` matching a
+  regex-extracted name against the game roster. Two defects were capping that
+  join far below its ceiling.
+
+- **2004 team-abbreviation suffix.** 2004 play text renders a name as
+  `"Player Name (TEAM)"`. The rusher capture strips the parenthetical; the
+  passer capture keeps it, and `_norm_player_name` folds it into the join key
+  (`"matt ryan bc"` never matches `"matt ryan"`). Passers are the largest name
+  family, which accounted for the entire 2004 gap.
+
+- **Narrative-tail bleed (2005–2013).** Pass-direction phrases and ESPN's own
+  missing-space concatenations survived into the capture —
+  `"Russell Wilson deep out"`, `"Dominique Davis screen"`,
+  `"Raynard Hornetackled by"`.
+
+- **Both are now cleaned at the shared chokepoint** in `__attach_player_ids`,
+  which already iterates every `{type}_player_name` column, rather than by
+  patching each extraction regex — so the emitted name column and the join key
+  are fixed together in one place. New module-level patterns
+  `_PLAYER_NAME_TEAM_SUFFIX` and `_PLAYER_NAME_TAIL`.
+
+- **Two fallback join tiers** added below exact match: first-initial + surname,
+  then bare surname. Both are **team-scoped and uniqueness-gated** — an
+  ambiguous surname stays null rather than guessing.
+
+- **Measured** on the committed `cfbfastR-cfb-raw` tree (25 games/season, 11
+  player-column families), share of populated name cells resolving to an id:
+
+  | seasons | before | after |
+  |---|---|---|
+  | 2004 | 52.1% | **87.8%** |
+  | 2005–2013 | 82.7–94.7% | 89.3–96.6% |
+  | 2014+ | 87.0–98.6% | 87.8–99.3% |
+
+  End-to-end on 2004 game `242410259`: pass+rush id resolution 46.4% → 100%,
+  with names emitted as `Bryan Randall` / `Matt Leinart` rather than
+  `Bryan Randall (VT)` / `Matt Leinart (USC)`.
+
+- **Player box score is now a second id source.** `game_rosters` stays primary,
+  but ESPN 404s its roster resource for a large minority of games — 376 of 898
+  in 2018, 142 of 706 in 2020 — leaving the join nothing to match against.
+  ESPN's per-player box score covers the same athletes in the **same athlete-id
+  namespace** and already ships inside the summary payload, so it costs no extra
+  request. Namespace agreement was measured, not assumed: 0 id conflicts on the
+  roster/box overlap in 21 of 22 seasons. Where the two disagree the name becomes
+  ambiguous and resolves to null.
+
+  | seasons | gain |
+  |---|---|
+  | 2004–2013 | +0.0pp (box is a strict subset of the roster, ~27 vs ~60 names) |
+  | 2014–2017 | +2.9 to +5.3pp |
+  | **2018** | **+32.4pp** (63.7% → 96.2%) |
+  | 2019–2025 | +0.1 to +6.4pp |
+
+  End-to-end on three real 2018 empty-roster games with `game_roster=[]`:
+  97.0% / 97.7% / 98.4% — the last of which the season fill probe previously
+  reported at **0.0%**.
 
 ### CFB — `adj_off/def/net` rescaled to the R `adjust_epa` netted statistic (BREAKING scale change)
 
