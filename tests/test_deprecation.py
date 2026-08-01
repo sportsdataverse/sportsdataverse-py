@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import os
 import warnings
 
 import pytest
@@ -71,7 +72,11 @@ def test_warn_deprecated_stacklevel_points_at_callers_caller() -> None:
         warnings.simplefilter("always")
         deprecated_api()  # the warning should be attributed to THIS line
     assert len(caught) == 1
-    assert caught[0].filename == __file__  # not _deprecation.py
+    # normcase: on Windows the drive-letter case of a recorded warning filename
+    # depends on how the interpreter was launched, so a raw == can differ from
+    # __file__ by "c:" vs "C:" alone. Case-folding keeps the real assertion
+    # (this file, not _deprecation.py) without the platform flake.
+    assert os.path.normcase(caught[0].filename) == os.path.normcase(__file__)
 
 
 # ===========================================================================
