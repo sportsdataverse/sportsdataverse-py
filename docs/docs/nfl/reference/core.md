@@ -5,7 +5,7 @@ sidebar_position: 22
 ---
 # NFL — ESPN core API (v2)
 
-`sportsdataverse.nfl` — 83 endpoints.
+`sportsdataverse.nfl` — 84 endpoints.
 
 ## `espn_nfl_league_root`
 
@@ -365,6 +365,34 @@ ESPN endpoint.
 
 ```python
 espn_nfl_season_week(season=2024, season_type=2, week=1)
+```
+
+_Last validated n/a._
+
+## `espn_nfl_season_week_powerindex`
+
+ESPN endpoint.
+
+**Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/{season}/types/{season_type}/weeks/{week}/powerindex`
+
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/types/2/weeks/8/powerindex](https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/types/2/weeks/8/powerindex)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `season` | `season` |  | `Y` |  | season path parameter. |
+| `season_type` | `season_type` |  | `Y` |  | season_type path parameter. |
+| `week` | `week` |  | `Y` |  | week path parameter. |
+| `limit` | `limit` |  |  | `Y` | Page size; the full FBS table is ~134 rows, so pass a limit above that to avoid paging. |
+
+### Returns
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_weekly_powerindex`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example
+
+```python
+espn_nfl_season_week_powerindex(season=2024, season_type=2, week=8)
 ```
 
 _Last validated n/a._

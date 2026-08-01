@@ -80,7 +80,9 @@ Endpoint → parser mapping
 
 from __future__ import annotations
 
-from typing import Dict, List
+from typing import Any, Dict, List
+
+import re
 
 import pandas as pd
 import polars as pl
@@ -471,6 +473,103 @@ def parse_groups(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
 # ===========================================================================
 # 5. Athlete overview
 # ===========================================================================
+
+
+def parse_fpi(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
+    """Parse an ESPN fitt-v3 ``powerindex`` payload into a tidy team-season frame.
+
+    Input: raw payload from ``espn_{league}_fpi()``.
+    Output: one row per team, with a column per FPI field.
+
+    The per-team ``categories`` blocks carry ``values`` as POSITIONAL arrays and
+    leave ``names`` null, so the labels are taken from the TOP-LEVEL ``categories``
+    metadata and zipped by index. Zipping is length-guarded: ESPN has shipped a
+    category whose value array is shorter than its name list, and a naive
+    ``zip`` would silently shift every subsequent field onto the wrong label.
+
+    ``fpirank`` appears in both the ``fpi`` and ``resume`` categories; the second
+    occurrence is suffixed rather than overwriting the first, so neither is lost.
+
+    Empty / malformed payloads return a zero-row frame rather than raising.
+    """
+    teams = (payload or {}).get("teams") or []
+    if not teams:
+        return pd.DataFrame().pipe(lambda d: d if return_as_pandas else pl.DataFrame())
+
+    names_by_cat = {c.get("name"): (c.get("names") or []) for c in (payload or {}).get("categories") or []}
+    rows = []
+    for entry in teams:
+        tm = entry.get("team") or {}
+        row: Dict[str, Any] = {
+            "team_id": tm.get("id"),
+            "team_uid": tm.get("uid"),
+            "team_abbreviation": tm.get("abbreviation"),
+            "team_display_name": tm.get("displayName"),
+            "team_short_display_name": tm.get("shortDisplayName"),
+            "team_nickname": tm.get("nickname"),
+            "season": (payload or {}).get("requestedSeason"),
+        }
+        for cat in entry.get("categories") or []:
+            names = cat.get("names") or names_by_cat.get(cat.get("name")) or []
+            values = cat.get("values") or []
+            # length-guard: never let a short value array shift labels
+            for name, value in zip(names, values):
+                key = underscore(str(name))
+                if key in row:
+                    key = f"{key}_{underscore(str(cat.get('name') or 'x'))}"
+                row[key] = value
+        rows.append(row)
+
+    df = pd.json_normalize(rows)
+    out = pl.from_pandas(df)
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+def parse_weekly_powerindex(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
+    """Parse a core-v2 weekly ``powerindex`` payload into a tidy team-week frame.
+
+    Input: raw payload from ``espn_{league}_season_week_powerindex()``.
+    Output: one row per team, one column per FPI field, plus the point-in-time
+    stamps that make the row usable as an as-of-week value.
+
+    Unlike the fitt-v3 season table, these values are a genuine weekly snapshot --
+    ``lastUpdated`` / ``run_date_time_key`` record when ESPN computed them, and the
+    figures move across weeks. The fitt-v3 endpoint accepts a ``week`` parameter
+    and silently ignores it, so it cannot substitute for this.
+
+    ``team_id`` is parsed out of the team ``$ref`` rather than fetched, keeping the
+    parse to a single request. Fields arrive as ``name``/``value`` pairs under
+    ``predictives`` and ``efficiencies``; both are flattened into one row, and a
+    name colliding across the two blocks is suffixed rather than overwritten.
+
+    Empty / malformed payloads return a zero-row frame rather than raising.
+    """
+    items = (payload or {}).get("items") or []
+    if not items:
+        return pd.DataFrame().pipe(lambda d: d if return_as_pandas else pl.DataFrame())
+
+    rows = []
+    for it in items:
+        ref = ((it or {}).get("team") or {}).get("$ref", "") or ""
+        m = re.search(r"/teams/(\d+)", ref)
+        row: Dict[str, Any] = {
+            "team_id": int(m.group(1)) if m else None,
+            "season": it.get("season"),
+            "last_updated": it.get("lastUpdated"),
+            "run_date_time_key": it.get("runDateTimeKey"),
+        }
+        for block in ("predictives", "efficiencies"):
+            for f in it.get(block) or []:
+                key = underscore(str(f.get("name") or ""))
+                if not key:
+                    continue
+                if key in row:
+                    key = f"{key}_{block[:3]}"
+                row[key] = f.get("value")
+        rows.append(row)
+
+    out = pl.from_pandas(pd.json_normalize(rows))
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
 def parse_athlete_overview(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
@@ -2079,6 +2178,8 @@ ENDPOINT_PARSERS = {
     "conferences": parse_groups,
     # Web v3 athlete deep dives
     "athlete_overview": parse_athlete_overview,
+    "fpi": parse_fpi,
+    "season_week_powerindex": parse_weekly_powerindex,
     "athlete_stats": parse_athlete_stats,
     "athlete_gamelog": parse_athlete_gamelog,
     "athlete_splits": parse_athlete_splits,

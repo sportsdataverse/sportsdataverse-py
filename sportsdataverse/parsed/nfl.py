@@ -30,6 +30,7 @@ from sportsdataverse.nfl import espn_nfl_coach_record as _raw_espn_nfl_coach_rec
 from sportsdataverse.nfl import espn_nfl_coach_season as _raw_espn_nfl_coach_season
 from sportsdataverse.nfl import espn_nfl_conferences as _raw_espn_nfl_conferences
 from sportsdataverse.nfl import espn_nfl_draft as _raw_espn_nfl_draft
+from sportsdataverse.nfl import espn_nfl_fpi as _raw_espn_nfl_fpi
 from sportsdataverse.nfl import espn_nfl_franchise as _raw_espn_nfl_franchise
 from sportsdataverse.nfl import espn_nfl_franchises as _raw_espn_nfl_franchises
 from sportsdataverse.nfl import espn_nfl_game as _raw_espn_nfl_game
@@ -110,6 +111,7 @@ from sportsdataverse.nfl import espn_nfl_season_type_leaders as _raw_espn_nfl_se
 from sportsdataverse.nfl import espn_nfl_season_types as _raw_espn_nfl_season_types
 from sportsdataverse.nfl import espn_nfl_season_week as _raw_espn_nfl_season_week
 from sportsdataverse.nfl import espn_nfl_season_week_games as _raw_espn_nfl_season_week_games
+from sportsdataverse.nfl import espn_nfl_season_week_powerindex as _raw_espn_nfl_season_week_powerindex
 from sportsdataverse.nfl import espn_nfl_season_weeks as _raw_espn_nfl_season_weeks
 from sportsdataverse.nfl import espn_nfl_seasons as _raw_espn_nfl_seasons
 from sportsdataverse.nfl import espn_nfl_standings as _raw_espn_nfl_standings
@@ -346,6 +348,7 @@ __all__ = [
     "espn_nfl_coach_season",
     "espn_nfl_conferences",
     "espn_nfl_draft",
+    "espn_nfl_fpi",
     "espn_nfl_franchise",
     "espn_nfl_franchises",
     "espn_nfl_game",
@@ -429,6 +432,7 @@ __all__ = [
     "espn_nfl_season_types",
     "espn_nfl_season_week",
     "espn_nfl_season_week_games",
+    "espn_nfl_season_week_powerindex",
     "espn_nfl_season_weeks",
     "espn_nfl_seasons",
     "espn_nfl_standings",
@@ -698,6 +702,20 @@ def espn_nfl_draft(*args, **kwargs):
     """
     kwargs.setdefault("return_parsed", True)
     return _raw_espn_nfl_draft(*args, **kwargs)
+
+
+def espn_nfl_fpi(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nfl.espn_nfl_fpi``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.nfl.espn_nfl_fpi` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nfl.espn_nfl_fpi` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_espn_nfl_fpi(*args, **kwargs)
 
 
 def espn_nfl_franchise(*args, **kwargs):
@@ -1818,6 +1836,20 @@ def espn_nfl_season_week_games(*args, **kwargs):
     """
     kwargs.setdefault("return_parsed", True)
     return _raw_espn_nfl_season_week_games(*args, **kwargs)
+
+
+def espn_nfl_season_week_powerindex(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nfl.espn_nfl_season_week_powerindex``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.nfl.espn_nfl_season_week_powerindex` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nfl.espn_nfl_season_week_powerindex` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_espn_nfl_season_week_powerindex(*args, **kwargs)
 
 
 def espn_nfl_season_weeks(*args, **kwargs):

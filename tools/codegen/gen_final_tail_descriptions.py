@@ -50,6 +50,25 @@ STATIC: dict[str, str] = {
         "Shareable nhl.com URL for the French-language highlight clip; its trailing numeric segment "
         "is the same id carried in highlightClipFr."
     ),
+    # load_nhl_schedule availability flags. All six are CONSTANT Boolean markers for
+    # which sub-feed blocks the source game record carried, and without explicit
+    # entries they fell through to the R-package dict -- which matched same-named
+    # FOOTBALL columns and described `scoring` as "TD, FG, safety, two-point
+    # conversion" on an NHL schedule.
+    "scoring": (
+        "CONSTANT true: marks that the source game record carried a scoring-summary block. "
+        "It is an availability flag, not a count or a scoring event."
+    ),
+    "penalties": (
+        "CONSTANT true: marks that the source game record carried a penalty-summary block. "
+        "It is an availability flag, not a penalty count."
+    ),
+    "shifts": (
+        "CONSTANT false in every published row: the shift-chart block is not carried on this "
+        "asset. An availability flag, not a shift count."
+    ),
+    "three_stars": "CONSTANT true: marks that the source game record carried a three-stars block.",
+    "game_info": "CONSTANT true: marks that the source game record carried a game-info block.",
     "linescore": (
         "CONSTANT: true on every published row, so it carries no information as shipped. It marks "
         "that a linescore block existed on the source game record."
@@ -107,10 +126,38 @@ STATIC: dict[str, str] = {
 
 
 def describe(col: str) -> str | None:
+    """Compose the description for one column name, or None if it cannot be grounded.
+
+    Args:
+        col: the column name as declared in ``loader_schemas.yaml``.
+
+    Returns:
+        The description string, or ``None`` when the column is outside this
+        generator's vocabulary. Returning ``None`` is meaningful: ``main`` reports
+        those columns rather than emitting an invented description for them.
+
+    Example:
+        Resolve a localized NHL name key::
+
+            describe("drawnBy.lastName.cs")
+    """
     if col in STATIC:
         return STATIC[col]
 
     # NHL localized name keys, optionally prefixed by a participant role
+    # servedBy exposes its locale keys DIRECTLY (servedBy.cs), with no nested
+    # firstName/lastName/name segment, so it needs its own branch.
+    m = re.fullmatch(r"servedBy\.(default|cs|de|es|fi|fr|sk|sv)", col)
+    if m:
+        loc = m.group(1)
+        if loc == "default":
+            return "Abbreviated name, in the feed's default English locale, of the player serving the penalty."
+        return (
+            f"Alternate abbreviated name (first initial plus family name) for the player serving the "
+            f"penalty, published under the NHL feed's {LOCALE[loc]} key, differing from the default by "
+            "diacritics or by an alternate given-name form."
+        )
+
     m = re.fullmatch(r"(?:(committedByPlayer|drawnBy|servedBy)\.)?(firstName|lastName|name)\.(default|\w{2})", col)
     if m:
         role_key, kind, loc = m.groups()
@@ -148,11 +195,32 @@ def describe(col: str) -> str | None:
 
 
 def main() -> None:
+    """Write ``_final_descs.yaml`` for every still-uncovered loader column.
+
+    Reads the deferred-column work-list and the declared schemas, composes what it
+    can ground, and prints anything it cannot so the gap is visible rather than
+    silently dropped.
+
+    Returns:
+        None. Side effect is the ``_final_descs.yaml`` file in the working
+        directory, which ``merge_column_descriptions.py`` folds into the manual dict.
+
+    Example:
+        Run from the repo root::
+
+            uv run python tools/codegen/gen_final_tail_descriptions.py
+    """
     import yaml
 
     from tools.codegen import extract_residual_columns as x
 
-    rows = [r for r in x.deferred_columns() if r["bucket"] == "loader_schemas"]
+    # Enumerate the DECLARED schemas of every rendering loader, not the deferred
+    # work-list: that list shrinks to empty as descriptions land, so driving off it
+    # makes the generator non-idempotent and silently emits nothing once the gap is
+    # closed -- which then blocks any correction to an already-covered column.
+    rendering = x._rendering_loaders()
+    schemas = yaml.safe_load(pathlib.Path("tools/codegen/schemas/loader_schemas.yaml").read_text(encoding="utf-8"))
+    rows = [{"schema": fn, "col": c["name"]} for fn, cols in schemas.items() if fn in rendering for c in cols]
     schemas = yaml.safe_load(pathlib.Path("tools/codegen/schemas/loader_schemas.yaml").read_text(encoding="utf-8"))
     out, unparsed = {}, []
     for r in rows:
@@ -167,9 +235,10 @@ def main() -> None:
             d = describe(c["name"])
             if d:
                 out[fn].setdefault(c["name"], d)
-    print(f"composed {sum(len(v) for v in out.values())}; unresolved {len(unparsed)}")
-    for u in unparsed:
-        print(f"   {u}")
+    # unparsed is every column outside this generator's vocabulary (most of the
+    # repo), so it is counted rather than listed -- the per-column work-list lives
+    # in extract_residual_columns, not here.
+    print(f"composed {sum(len(v) for v in out.values())}; outside this generator: {len(unparsed)}")
     with open("_final_descs.yaml", "w", encoding="utf-8") as fh:
         yaml.safe_dump(
             {k: dict(sorted(v.items())) for k, v in out.items()}, fh, sort_keys=True, allow_unicode=True, width=120

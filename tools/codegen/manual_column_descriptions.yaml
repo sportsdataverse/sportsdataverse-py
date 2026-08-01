@@ -2988,9 +2988,6 @@ load_cfb_teams_crosswalk:
   yahoo_abbreviation: Yahoo Sports' short team code for the school.
   yahoo_team: Yahoo Sports' team display name, school plus mascot.
   yahoo_team_id: Yahoo Sports team id for the same team.
-load_mbb_game_rosters:
-  athlete_headshot: URL of the player's ESPN headshot image, whose filename is the athlete_id (verified equal for all 190,365
-    non-null rows in 2025); null when ESPN publishes no photo for that player.
 load_mbb_player_season_stats:
   stat_description: ESPN's prose glossary definition of the statistic named in stat_name, for example defining assists as
     a pass to a teammate that leads directly to a field goal.
@@ -2999,13 +2996,6 @@ load_mbb_ratings:
     so each season is centered at zero with unit spread.
   adj_tempo: Opponent-adjusted possessions per 40 minutes, solved by the same fixed point as the efficiency ratings under
     the additive model that a game's pace is the two teams' tempos less the league baseline; it averages about 71 in 2025.
-load_mbb_standings:
-  group_short_name: Abbreviated conference label ESPN prints in standings tables, such as ACC, Big Ten or Am. East, one value
-    per group_id.
-  stat_abbreviation: Short code ESPN prints for the standings statistic in a table header, such as W, L, PCT, GB or STRK;
-    it diverges from stat_short_display_name for playoff seed and the home and conference record rows.
-  stat_description: ESPN's longer-form label for the standings statistic, which can differ from stat_display_name (streak
-    is described as Current Streak and playoffSeed as Playoff Seed).
 load_mbb_team_season_stats:
   stat_description: ESPN's prose glossary definition of the statistic named in stat_name, for example defining field goal
     percentage as the ratio of field goals made to field goals attempted.
@@ -3075,103 +3065,17 @@ load_nba_draft:
     reads FALSE, so it does not currently identify traded picks.
   round_display_name: ESPN's display label for the draft round a pick belongs to, read from the round object's displayName;
     the NBA payload supplies no round metadata, so this is null for every released season 2003 through 2025.
-load_nba_officials:
-  official_display_name: ESPN's display-form name for the official, falling back to the full name when ESPN omits it; it never
-    diverges from official_full_name in the released NBA data.
-  official_full_name: Full name of an on-court game official as ESPN publishes it in the summary gameInfo.officials array;
-    it is identical to official_display_name in every released NBA row.
-  official_order: The official's listing index within the game's crew as ESPN orders them, normally 1 through 3 for a three-person
-    crew; a fourth entry appears in a small share of recent-season games and the sequence is not guaranteed to be gap-free.
-  official_position: ESPN's label for the official's assignment slot; the NBA summary feed only ever ships Referee, so this
-    reads the same on every released row.
-  official_position_id: ESPN's numeric identifier for the official's assignment slot, constant at 40 (Referee) across every
-    released NBA season.
 load_nba_player_season_stats:
   stat_description: ESPN's prose definition of the statistic on this row, for example the ratio of field goals made to field
     goals attempted; for the paired Made-Attempted stats it is the two definitions joined with a hyphen.
-load_nba_standings:
-  group_short_name: ESPN's short name for the standings grouping the team sits in, read from the group node's shortName; the
-    NBA standings payload supplies only the group name and abbreviation, so this is null throughout.
-  stat_abbreviation: ESPN's short code for the standings statistic, such as PCT, GB or OPP PPG; it is null for the four record-style
-    splits (Home, Road, vs. Conf., vs. Div.), which ship no abbreviation.
-  stat_description: ESPN's prose gloss for the standings statistic on this row; for the clincher stat it is not a fixed label
-    but the team's actual status text, such as Clinched Playoff Berth or Eliminated From Playoff.
 load_nba_team_season_stats:
   stat_description: ESPN's prose definition of the team statistic on this row, for example the average number of assists a
     team records per turnover.
-load_nhl_shootout:
-  discreteClipFr: Numeric NHL video identifier of the French-language clip of the shootout attempt, distinct from the id in
-    discreteClip.
-  firstName.cs: Alternate given name published under the NHL feed's Czech key. Verified against the data it is frequently
-    a different name form rather than a re-spelling (Joshua published as Josh, Aliaksei as Alexei), so it is not a reliable
-    transliteration of the default.
-  firstName.de: Alternate given name published under the NHL feed's German key. Verified against the data it is frequently
-    a different name form rather than a re-spelling (Joshua published as Josh, Aliaksei as Alexei), so it is not a reliable
-    transliteration of the default.
-  firstName.default: Given name of the shooter in the feed's default English locale; null on the per-game summary row.
-  firstName.es: Alternate given name published under the NHL feed's Spanish key. Verified against the data it is frequently
-    a different name form rather than a re-spelling (Joshua published as Josh, Aliaksei as Alexei), so it is not a reliable
-    transliteration of the default.
-  firstName.fi: Alternate given name published under the NHL feed's Finnish key. Verified against the data it is frequently
-    a different name form rather than a re-spelling (Joshua published as Josh, Aliaksei as Alexei), so it is not a reliable
-    transliteration of the default.
-  firstName.sk: Alternate given name published under the NHL feed's Slovak key. Verified against the data it is frequently
-    a different name form rather than a re-spelling (Joshua published as Josh, Aliaksei as Alexei), so it is not a reliable
-    transliteration of the default.
-  firstName.sv: Alternate given name published under the NHL feed's Swedish key. Verified against the data it is frequently
-    a different name form rather than a re-spelling (Joshua published as Josh, Aliaksei as Alexei), so it is not a reliable
-    transliteration of the default.
-  gameWinner: True on the single attempt per shootout credited as the game-deciding goal, false on every other attempt and
-    null on the per-game summary row.
-  lastName.cs: Alternate rendering of the family name published under the NHL feed's Czech key. It differs from the default
-    in orthography -- usually restoring diacritics the default folds to ASCII, though for some names it strips them instead
-    -- so treat it as an alternate spelling, not a canonical one.
-  lastName.default: Family name of the shooter in the feed's default English locale; null on the per-game summary row.
-  lastName.fi: Alternate rendering of the family name published under the NHL feed's Finnish key. It differs from the default
-    in orthography -- usually restoring diacritics the default folds to ASCII, though for some names it strips them instead
-    -- so treat it as an alternate spelling, not a canonical one.
-  lastName.sk: Alternate rendering of the family name published under the NHL feed's Slovak key. It differs from the default
-    in orthography -- usually restoring diacritics the default folds to ASCII, though for some names it strips them instead
-    -- so treat it as an alternate spelling, not a canonical one.
-  lastName.sv: Alternate rendering of the family name published under the NHL feed's Swedish key. It differs from the default
-    in orthography -- usually restoring diacritics the default folds to ASCII, though for some names it strips them instead
-    -- so treat it as an alternate spelling, not a canonical one.
-  teamAbbrev.default: Three-letter code of the shooting player's team; null on the per-game summary row that instead carries
-    the home and away shootout goal totals.
 load_nhl_shots_by_period:
   max_regulation_periods: Number of regulation periods the game format defines before overtime, constant at 3 for every row
     in the published seasons.
   ot_periods: Overtime period ordinal taken from the NHL period descriptor, populated only from the second overtime onward
     so period 5 rows carry 2 and all other rows are null.
-load_nhl_three_stars:
-  name.cs: Alternate abbreviated name (first initial plus family name) published under the NHL feed's Czech key, differing
-    from the default by diacritics or by an alternate given-name form.
-  name.de: Alternate abbreviated name (first initial plus family name) published under the NHL feed's German key, differing
-    from the default by diacritics or by an alternate given-name form.
-  name.es: Alternate abbreviated name (first initial plus family name) published under the NHL feed's Spanish key, differing
-    from the default by diacritics or by an alternate given-name form.
-  name.fi: Alternate abbreviated name (first initial plus family name) published under the NHL feed's Finnish key, differing
-    from the default by diacritics or by an alternate given-name form.
-  name.sk: Alternate abbreviated name (first initial plus family name) published under the NHL feed's Slovak key, differing
-    from the default by diacritics or by an alternate given-name form.
-  name.sv: Alternate abbreviated name (first initial plus family name) published under the NHL feed's Swedish key, differing
-    from the default by diacritics or by an alternate given-name form.
-load_wbb_game_rosters:
-  athlete_headshot: URL of the player's ESPN headshot image on a.espncdn.com, whose filename is the athlete_id; null when
-    ESPN publishes no headshot for that player.
-load_wbb_officials:
-  official_display_name: ESPN's displayName for the official, which is identical to official_full_name in every published
-    row of the released data.
-  official_first_name: The official's given name as ESPN splits it out separately from the full name, excluding any middle
-    initial that appears in official_full_name.
-  official_full_name: ESPN's fullName for the official, falling back to displayName when fullName is absent; ESPN sometimes
-    ships it with a middle initial or a doubled internal space, so it is not simply first plus last name.
-  official_last_name: The official's surname as ESPN splits it out; joined to official_first_name it reconstructs roughly
-    98 percent of official_full_name values, the rest differing by middle initials or spacing.
-  official_order: ESPN's 1-based sequence of the official within that game's crew listing, unique within a game and running
-    1 to 3 for the standard three-person crew.
-  official_uid: ESPN's globally unique resource identifier for the official, read from the core-api items[] uid key; that
-    payload never ships it, so the column is null for every published row.
 load_wbb_player_season_stats:
   stat_description: ESPN's prose definition of the statistic named in stat_name, for example The average assists per game
     for avgAssists; combined made-attempted stats carry both definitions joined by a hyphen.
@@ -3193,31 +3097,9 @@ load_wnba_draft:
   round_display_name: Human-readable label for the draft round, read from the ESPN round object's displayName falling back
     to its name; null whenever ESPN ships the modern flat picks array with no round objects, which is the case for every published
     season.
-load_wnba_game_rosters:
-  athlete_headshot: Direct link to the player's ESPN headshot image, always of the form https://a.espncdn.com/i/headshots/wnba/players/full/{athlete_id}.png,
-    and null for the few players ESPN has no photo for.
-load_wnba_officials:
-  official_display_name: ESPN's display rendering of the official's name, which is byte-identical to official_full_name on
-    every published row and therefore adds nothing.
-  official_first_name: Given name of the official as ESPN splits it out, the leading token of official_full_name.
-  official_full_name: The official's full name, taken from ESPN fullName and falling back to displayName; it equals first
-    plus last name on every published row.
-  official_last_name: Family name of the official as ESPN splits it out, the trailing token of official_full_name, with hyphenated
-    surnames kept intact.
-  official_order: ESPN's 1-based position of the official within that game's crew; most games run 1 through 3 for a three-person
-    crew and 40 of 573 games in 2024-2025 add a fourth.
-  official_uid: ESPN's global uid string for the official, carried straight through from the officials payload; the Core v2
-    items ESPN serves omit it, so it is null in every published season.
 load_wnba_player_season_stats:
   stat_description: ESPN's prose definition of the statistic on this row, for example The average number of points scored
     per game for avgPoints; combined made-attempted stats carry both halves joined by a hyphen.
-load_wnba_standings:
-  group_short_name: Short label of the standings group node the team sits under, read from ESPN shortName; the WNBA conference
-    nodes ship only name and abbreviation, so it is null on every published row.
-  stat_abbreviation: ESPN's abbreviation for the standings stat, which can differ from stat_short_display_name (playoffSeed
-    is SEED here but POS there) and is null on the record-split rows such as Home and vs. Conf.
-  stat_description: ESPN's long-form explanation of the standings stat, such as Clinched Best League Record for clincher or
-    Record last 10 games for lasttengames.
 load_wnba_stats_coaches:
   coach_name: Full name of the staff member as the feed renders it, exactly first_name plus a space plus last_name on every
     published row.
@@ -3229,21 +3111,6 @@ load_wnba_stats_coaches:
     every published row is null.
   sub_sort_sequence: 'Secondary display-ordering rank that tracks coach_type exactly: 1 head coach, 2 associate head coach,
     5 assistant coach, 7 trainer.'
-load_cfb_adv_defensive_players:
-  def_pos_team: Display name of the team on defense (e.g. 'Ohio State Buckeyes'). Held an ESPN team id until the 2026-08 republish;
-    the id now lives in def_pos_team_id.
-  def_pos_team_id: ESPN team id of the team on defense. Present for every season 2004+.
-  forced_fumbles: Fumbles forced by the defender. Available from 2005 on; null for 2004, which ESPN ships with only the fumble-recovery
-    statistics.
-  fumble_recoveries: Fumbles recovered by the defender. Available for every season 2004+.
-  fumble_recoveries_yards: Yards returned on the defender's fumble recoveries. Available for every season 2004+.
-  interceptions: Passes intercepted by the defender. Available from 2014 on; null for 2004-2013, which ESPN ships without
-    interception statistics in this block.
-  interceptions_yards: Yards returned on the defender's interceptions. Available from 2014 on; null for 2004-2013.
-  pass_breakups: Passes broken up by the defender. Available from 2005 on; null for 2004.
-  player_name: Display name of the defender.
-  sacks: Sacks recorded by the defender. Available from 2005 on; null for 2004.
-  sacks_yards: Yards lost by the offense on the defender's sacks. Available from 2005 on; null for 2004.
 load_cfb_adv_drives:
   avg_field_position: Mean distance to the opponent end zone at drive start averaged over the team's scrimmage plays, exactly
     drive_total_available_yards divided by that play count.
@@ -3409,172 +3276,6 @@ load_cfb_adv_situational:
   pos_team: Display name of the team on offense (e.g. 'Ohio State Buckeyes').
   pos_team_id: ESPN team id of the team on offense. Present for every season 2004+.
   standard_downs: Number of plays the team ran on standard downs (the team ahead of schedule for the series).
-load_cfb_adv_team:
-  EPA_explosive: Count of explosive plays, per ESPN's advanced box score. Despite the EPA_ prefix this is a play COUNT, not
-    an EPA total.
-  EPA_explosive_passing: Count of explosive pass plays. A play count, not an EPA total.
-  EPA_explosive_passing_rate: Explosive-play rate on pass plays, over ESPN's qualifying-play denominator.
-  EPA_explosive_rate: Explosive-play rate. Note this is NOT EPA_explosive divided by EPA_plays -- ESPN divides by its own
-    smaller qualifying-play count, so deriving it yourself will not reproduce this value.
-  EPA_explosive_rushing: Count of explosive rush plays. A play count, not an EPA total.
-  EPA_explosive_rushing_rate: Explosive-play rate on rush plays, over ESPN's qualifying-play denominator.
-  EPA_fg: Total EPA on field-goal attempts.
-  EPA_kickoff: Total EPA on kickoff plays.
-  EPA_non_explosive: Total EPA with explosive plays excluded, isolating the team's routine-down production.
-  EPA_non_explosive_passing: Total EPA on pass plays with explosive plays excluded.
-  EPA_non_explosive_passing_per_play: EPA per pass play with explosive plays excluded.
-  EPA_non_explosive_per_play: EPA per play with explosive plays excluded.
-  EPA_non_explosive_rushing: Total EPA on rush plays with explosive plays excluded.
-  EPA_non_explosive_rushing_per_play: EPA per rush play with explosive plays excluded.
-  EPA_overall_off: Total offensive EPA for the team. Duplicated exactly by EPA_overall_offense in every published season checked
-    -- prefer one and ignore the other.
-  EPA_overall_offense: Total offensive EPA. An exact duplicate of EPA_overall_off.
-  EPA_overall_total: Total EPA across all phases, which is why it differs from the offense-only EPA_overall_off.
-  EPA_passing_overall: Total EPA on pass plays.
-  EPA_passing_per_play: EPA per pass play.
-  EPA_penalty: Total EPA attributed to penalties.
-  EPA_per_play: Offensive EPA per play.
-  EPA_plays: Number of plays ESPN's advanced box score scored for the team.
-  EPA_punt: Total EPA on punt plays.
-  EPA_rushing_overall: Total EPA on rush plays.
-  EPA_rushing_per_play: EPA per rush play.
-  EPA_rushing_power: Total EPA on power rushing situations, as classified by ESPN's advanced box score.
-  EPA_rushing_power_per_play: EPA per play on power rushing situations.
-  EPA_sp: Total special-teams EPA, ESPN's abbreviated field for the same phase.
-  EPA_special_teams: Total EPA generated on special-teams plays.
-  field_goals: Number of field-goal attempts.
-  first_downs_created: Number of first downs the team created.
-  first_downs_created_rate: Share of the team's plays that created a first down.
-  kickoff_plays: Number of kickoff plays.
-  line_yards: Line yards -- the portion of rushing yardage credited to the offensive line under the standard rushing decomposition.
-    ESPN applies its own qualifying threshold for the yardage split.
-  line_yards_per_carry: Line yards per rushing attempt.
-  off_yards: Offensive yards gained from scrimmage.
-  open_field_yards: Open-field yards -- rushing yardage earned well downfield, past the second level.
-  pass_yards: Total yards the team gained on pass plays.
-  passes: Number of pass plays the team ran.
-  passes_rate: Share of the team's plays from scrimmage that were pass plays.
-  passing_first_downs_created: Number of first downs created on pass plays.
-  passing_first_downs_created_rate: Share of pass plays that created a first down.
-  penalties: Number of penalties assessed against the team.
-  penalty_first_downs_created: Number of first downs the team gained via opponent penalty.
-  penalty_first_downs_created_rate: Share of the team's first downs that came via opponent penalty.
-  penalty_yards: Net penalty yardage assessed against the team; can be negative when enforcement moved the team forward on
-    balance.
-  pos_team_id: ESPN team id of the team on offense. Present for every season 2004+.
-  punt_plays: Number of punt plays.
-  rush_yards: Total yards the team gained on rush plays.
-  rushes: Number of rushing attempts.
-  rushes_rate: Share of the team's plays from scrimmage that were rush plays.
-  rushing_first_downs_created: Number of first downs created on rush plays.
-  rushing_first_downs_created_rate: Share of rush plays that created a first down.
-  rushing_highlight: Highlight yards -- rushing yardage credited to the back rather than the offensive line.
-  rushing_highlight_rate: Share of rushing yardage that was highlight (back-credited) yardage.
-  rushing_highlight_yards: Total highlight yards the team accumulated -- the yardage credited to ball carriers rather than
-    the line. The per-carry figure is rushing_highlight_yards_per_opp.
-  rushing_highlight_yards_per_opp: Highlight yards per rushing opportunity.
-  rushing_opportunity: Count of rushing opportunities -- carries that reached ESPN's opportunity threshold.
-  rushing_opportunity_rate: Share of carries that qualified as rushing opportunities.
-  rushing_power: Count of power rushing attempts, in short-yardage situations as classified by ESPN's advanced box score.
-  rushing_power_rate: Share of carries that were power rushing attempts.
-  rushing_power_success: Count of power rushing attempts that gained the yardage needed. An integer count, not a rate -- the
-    rate is published separately as rushing_power_success_rate.
-  rushing_power_success_rate: Share of power rushing attempts that succeeded.
-  rushing_stopped: Count of rushing attempts stopped at or behind the line of scrimmage.
-  rushing_stopped_rate: Share of carries stopped at or behind the line of scrimmage.
-  rushing_stuff: Count of stuffed rushing attempts.
-  rushing_stuff_rate: Share of the team's carries that were stuffed at or behind the line of scrimmage.
-  scrimmage_plays: Number of plays from scrimmage (rushes plus passes), excluding special teams.
-  second_level_yards: Second-level yards -- rushing yardage earned just beyond the line of scrimmage.
-  special_teams_plays: Number of special-teams plays.
-  total_off_yards: Total offensive yards across all plays.
-  total_pen_yards: Total penalty yards assessed.
-  total_yards: Total yards the team gained across all plays.
-  yards_per_play: Yards gained per play.
-  yards_per_rush: Yards gained per rushing attempt.
-load_cfb_adv_team_gamelog:
-  EPA_explosive: Count of explosive plays, per ESPN's advanced box score. Despite the EPA_ prefix this is a play COUNT, not
-    an EPA total.
-  EPA_explosive_passing: Count of explosive pass plays. A play count, not an EPA total.
-  EPA_explosive_passing_rate: Explosive-play rate on pass plays, over ESPN's qualifying-play denominator.
-  EPA_explosive_rate: Explosive-play rate. Note this is NOT EPA_explosive divided by EPA_plays -- ESPN divides by its own
-    smaller qualifying-play count, so deriving it yourself will not reproduce this value.
-  EPA_explosive_rushing: Count of explosive rush plays. A play count, not an EPA total.
-  EPA_explosive_rushing_rate: Explosive-play rate on rush plays, over ESPN's qualifying-play denominator.
-  EPA_fg: Total EPA on field-goal attempts.
-  EPA_kickoff: Total EPA on kickoff plays.
-  EPA_non_explosive: Total EPA with explosive plays excluded, isolating the team's routine-down production.
-  EPA_non_explosive_passing: Total EPA on pass plays with explosive plays excluded.
-  EPA_non_explosive_passing_per_play: EPA per pass play with explosive plays excluded.
-  EPA_non_explosive_per_play: EPA per play with explosive plays excluded.
-  EPA_non_explosive_rushing: Total EPA on rush plays with explosive plays excluded.
-  EPA_non_explosive_rushing_per_play: EPA per rush play with explosive plays excluded.
-  EPA_overall_off: Total offensive EPA for the team. Duplicated exactly by EPA_overall_offense in every published season checked
-    -- prefer one and ignore the other.
-  EPA_overall_offense: Total offensive EPA. An exact duplicate of EPA_overall_off.
-  EPA_overall_total: Total EPA across all phases, which is why it differs from the offense-only EPA_overall_off.
-  EPA_passing_overall: Total EPA on pass plays.
-  EPA_passing_per_play: EPA per pass play.
-  EPA_penalty: Total EPA attributed to penalties.
-  EPA_per_play: Offensive EPA per play.
-  EPA_plays: Number of plays ESPN's advanced box score scored for the team.
-  EPA_punt: Total EPA on punt plays.
-  EPA_rushing_overall: Total EPA on rush plays.
-  EPA_rushing_per_play: EPA per rush play.
-  EPA_rushing_power: Total EPA on power rushing situations, as classified by ESPN's advanced box score.
-  EPA_rushing_power_per_play: EPA per play on power rushing situations.
-  EPA_sp: Total special-teams EPA, ESPN's abbreviated field for the same phase.
-  EPA_special_teams: Total EPA generated on special-teams plays.
-  field_goals: Number of field-goal attempts.
-  first_downs_created: Number of first downs the team created.
-  first_downs_created_rate: Share of the team's plays that created a first down.
-  kickoff_plays: Number of kickoff plays.
-  line_yards: Line yards -- the portion of rushing yardage credited to the offensive line under the standard rushing decomposition.
-    ESPN applies its own qualifying threshold for the yardage split.
-  line_yards_per_carry: Line yards per rushing attempt.
-  margin: Final scoring margin from this team's perspective, exactly points_for minus points_against.
-  off_yards: Offensive yards gained from scrimmage.
-  open_field_yards: Open-field yards -- rushing yardage earned well downfield, past the second level.
-  pass_yards: Total yards the team gained on pass plays.
-  passes: Number of pass plays the team ran.
-  passes_rate: Share of the team's plays from scrimmage that were pass plays.
-  passing_first_downs_created: Number of first downs created on pass plays.
-  passing_first_downs_created_rate: Share of pass plays that created a first down.
-  penalties: Number of penalties assessed against the team.
-  penalty_first_downs_created: Number of first downs the team gained via opponent penalty.
-  penalty_first_downs_created_rate: Share of the team's first downs that came via opponent penalty.
-  penalty_yards: Net penalty yardage assessed against the team; can be negative when enforcement moved the team forward on
-    balance.
-  punt_plays: Number of punt plays.
-  rush_yards: Total yards the team gained on rush plays.
-  rushes: Number of rushing attempts.
-  rushes_rate: Share of the team's plays from scrimmage that were rush plays.
-  rushing_first_downs_created: Number of first downs created on rush plays.
-  rushing_first_downs_created_rate: Share of rush plays that created a first down.
-  rushing_highlight: Highlight yards -- rushing yardage credited to the back rather than the offensive line.
-  rushing_highlight_rate: Share of rushing yardage that was highlight (back-credited) yardage.
-  rushing_highlight_yards: Total highlight yards the team accumulated -- the yardage credited to ball carriers rather than
-    the line. The per-carry figure is rushing_highlight_yards_per_opp.
-  rushing_highlight_yards_per_opp: Highlight yards per rushing opportunity.
-  rushing_opportunity: Count of rushing opportunities -- carries that reached ESPN's opportunity threshold.
-  rushing_opportunity_rate: Share of carries that qualified as rushing opportunities.
-  rushing_power: Count of power rushing attempts, in short-yardage situations as classified by ESPN's advanced box score.
-  rushing_power_rate: Share of carries that were power rushing attempts.
-  rushing_power_success: Count of power rushing attempts that gained the yardage needed. An integer count, not a rate -- the
-    rate is published separately as rushing_power_success_rate.
-  rushing_power_success_rate: Share of power rushing attempts that succeeded.
-  rushing_stopped: Count of rushing attempts stopped at or behind the line of scrimmage.
-  rushing_stopped_rate: Share of carries stopped at or behind the line of scrimmage.
-  rushing_stuff: Count of stuffed rushing attempts.
-  rushing_stuff_rate: Share of the team's carries that were stuffed at or behind the line of scrimmage.
-  scrimmage_plays: Number of plays from scrimmage (rushes plus passes), excluding special teams.
-  second_level_yards: Second-level yards -- rushing yardage earned just beyond the line of scrimmage.
-  special_teams_plays: Number of special-teams plays.
-  total_off_yards: Total offensive yards across all plays.
-  total_pen_yards: Total penalty yards assessed.
-  total_yards: Total yards the team gained across all plays.
-  yards_per_play: Yards gained per play.
-  yards_per_rush: Yards gained per rushing attempt.
 load_cfb_pbp:
   A_score_diff: Away team's score minus the home team's, from the away perspective.
   EPA_explosive: True when the play was explosive.
@@ -5177,10 +4878,6 @@ load_wnba_stats_player_game_logs:
   reb: Total rebounds collected.
   stl: Steals recorded.
   tov: Turnovers committed.
-load_wnba_stats_rosters:
-  how_acquired: How the team acquired the player (draft, trade, free agency).
-  season_2: Season label in the league's second display form.
-  team_id_lookup: Team id used to join the row back to the team tables.
 load_wnba_team_season_stats:
   stat_description: Human-readable description of the statistic the row reports.
 load_cfb_adv_defensive:
@@ -5209,6 +4906,21 @@ load_cfb_adv_defensive:
   pass_breakups: Passes the defense broke up, counted from plays whose narrative contains the phrase broken up by.
   sacks_rate: Sacks divided by pass plays faced, the defense's per-pass-play sack rate as a 0-to-1 fraction.
   scrimmage_plays: Number of plays from scrimmage (rushes plus passes), excluding special teams.
+load_cfb_adv_defensive_players:
+  def_pos_team: Display name of the team on defense (e.g. 'Ohio State Buckeyes'). Held an ESPN team id until the 2026-08 republish;
+    the id now lives in def_pos_team_id.
+  def_pos_team_id: ESPN team id of the team on defense. Present for every season 2004+.
+  forced_fumbles: Fumbles forced by the defender. Available from 2005 on; null for 2004, which ESPN ships with only the fumble-recovery
+    statistics.
+  fumble_recoveries: Fumbles recovered by the defender. Available for every season 2004+.
+  fumble_recoveries_yards: Yards returned on the defender's fumble recoveries. Available for every season 2004+.
+  interceptions: Passes intercepted by the defender. Available from 2014 on; null for 2004-2013, which ESPN ships without
+    interception statistics in this block.
+  interceptions_yards: Yards returned on the defender's interceptions. Available from 2014 on; null for 2004-2013.
+  pass_breakups: Passes broken up by the defender. Available from 2005 on; null for 2004.
+  player_name: Display name of the defender.
+  sacks: Sacks recorded by the defender. Available from 2005 on; null for 2004.
+  sacks_yards: Yards lost by the offense on the defender's sacks. Available from 2005 on; null for 2004.
 load_cfb_adv_specialists:
   field_goals: Number of field-goal attempts.
   field_goals_yards: Sum of the field-goal attempt distances parsed out of the play text; it stays at zero when no distance
@@ -5220,6 +4932,172 @@ load_cfb_adv_specialists:
   punts: Punts attempted.
   punts_yards: Total gross punt yardage parsed from the play text for this punter, working out to roughly 42 yards per punt
     league-wide.
+load_cfb_adv_team:
+  EPA_explosive: Count of explosive plays, per ESPN's advanced box score. Despite the EPA_ prefix this is a play COUNT, not
+    an EPA total.
+  EPA_explosive_passing: Count of explosive pass plays. A play count, not an EPA total.
+  EPA_explosive_passing_rate: Explosive-play rate on pass plays, over ESPN's qualifying-play denominator.
+  EPA_explosive_rate: Explosive-play rate. Note this is NOT EPA_explosive divided by EPA_plays -- ESPN divides by its own
+    smaller qualifying-play count, so deriving it yourself will not reproduce this value.
+  EPA_explosive_rushing: Count of explosive rush plays. A play count, not an EPA total.
+  EPA_explosive_rushing_rate: Explosive-play rate on rush plays, over ESPN's qualifying-play denominator.
+  EPA_fg: Total EPA on field-goal attempts.
+  EPA_kickoff: Total EPA on kickoff plays.
+  EPA_non_explosive: Total EPA with explosive plays excluded, isolating the team's routine-down production.
+  EPA_non_explosive_passing: Total EPA on pass plays with explosive plays excluded.
+  EPA_non_explosive_passing_per_play: EPA per pass play with explosive plays excluded.
+  EPA_non_explosive_per_play: EPA per play with explosive plays excluded.
+  EPA_non_explosive_rushing: Total EPA on rush plays with explosive plays excluded.
+  EPA_non_explosive_rushing_per_play: EPA per rush play with explosive plays excluded.
+  EPA_overall_off: Total offensive EPA for the team. Duplicated exactly by EPA_overall_offense in every published season checked
+    -- prefer one and ignore the other.
+  EPA_overall_offense: Total offensive EPA. An exact duplicate of EPA_overall_off.
+  EPA_overall_total: Total EPA across all phases, which is why it differs from the offense-only EPA_overall_off.
+  EPA_passing_overall: Total EPA on pass plays.
+  EPA_passing_per_play: EPA per pass play.
+  EPA_penalty: Total EPA attributed to penalties.
+  EPA_per_play: Offensive EPA per play.
+  EPA_plays: Number of plays ESPN's advanced box score scored for the team.
+  EPA_punt: Total EPA on punt plays.
+  EPA_rushing_overall: Total EPA on rush plays.
+  EPA_rushing_per_play: EPA per rush play.
+  EPA_rushing_power: Total EPA on power rushing situations, as classified by ESPN's advanced box score.
+  EPA_rushing_power_per_play: EPA per play on power rushing situations.
+  EPA_sp: Total special-teams EPA, ESPN's abbreviated field for the same phase.
+  EPA_special_teams: Total EPA generated on special-teams plays.
+  field_goals: Number of field-goal attempts.
+  first_downs_created: Number of first downs the team created.
+  first_downs_created_rate: Share of the team's plays that created a first down.
+  kickoff_plays: Number of kickoff plays.
+  line_yards: Line yards -- the portion of rushing yardage credited to the offensive line under the standard rushing decomposition.
+    ESPN applies its own qualifying threshold for the yardage split.
+  line_yards_per_carry: Line yards per rushing attempt.
+  off_yards: Offensive yards gained from scrimmage.
+  open_field_yards: Open-field yards -- rushing yardage earned well downfield, past the second level.
+  pass_yards: Total yards the team gained on pass plays.
+  passes: Number of pass plays the team ran.
+  passes_rate: Share of the team's plays from scrimmage that were pass plays.
+  passing_first_downs_created: Number of first downs created on pass plays.
+  passing_first_downs_created_rate: Share of pass plays that created a first down.
+  penalties: Number of penalties assessed against the team.
+  penalty_first_downs_created: Number of first downs the team gained via opponent penalty.
+  penalty_first_downs_created_rate: Share of the team's first downs that came via opponent penalty.
+  penalty_yards: Net penalty yardage assessed against the team; can be negative when enforcement moved the team forward on
+    balance.
+  pos_team_id: ESPN team id of the team on offense. Present for every season 2004+.
+  punt_plays: Number of punt plays.
+  rush_yards: Total yards the team gained on rush plays.
+  rushes: Number of rushing attempts.
+  rushes_rate: Share of the team's plays from scrimmage that were rush plays.
+  rushing_first_downs_created: Number of first downs created on rush plays.
+  rushing_first_downs_created_rate: Share of rush plays that created a first down.
+  rushing_highlight: Highlight yards -- rushing yardage credited to the back rather than the offensive line.
+  rushing_highlight_rate: Share of rushing yardage that was highlight (back-credited) yardage.
+  rushing_highlight_yards: Total highlight yards the team accumulated -- the yardage credited to ball carriers rather than
+    the line. The per-carry figure is rushing_highlight_yards_per_opp.
+  rushing_highlight_yards_per_opp: Highlight yards per rushing opportunity.
+  rushing_opportunity: Count of rushing opportunities -- carries that reached ESPN's opportunity threshold.
+  rushing_opportunity_rate: Share of carries that qualified as rushing opportunities.
+  rushing_power: Count of power rushing attempts, in short-yardage situations as classified by ESPN's advanced box score.
+  rushing_power_rate: Share of carries that were power rushing attempts.
+  rushing_power_success: Count of power rushing attempts that gained the yardage needed. An integer count, not a rate -- the
+    rate is published separately as rushing_power_success_rate.
+  rushing_power_success_rate: Share of power rushing attempts that succeeded.
+  rushing_stopped: Count of rushing attempts stopped at or behind the line of scrimmage.
+  rushing_stopped_rate: Share of carries stopped at or behind the line of scrimmage.
+  rushing_stuff: Count of stuffed rushing attempts.
+  rushing_stuff_rate: Share of the team's carries that were stuffed at or behind the line of scrimmage.
+  scrimmage_plays: Number of plays from scrimmage (rushes plus passes), excluding special teams.
+  second_level_yards: Second-level yards -- rushing yardage earned just beyond the line of scrimmage.
+  special_teams_plays: Number of special-teams plays.
+  total_off_yards: Total offensive yards across all plays.
+  total_pen_yards: Total penalty yards assessed.
+  total_yards: Total yards the team gained across all plays.
+  yards_per_play: Yards gained per play.
+  yards_per_rush: Yards gained per rushing attempt.
+load_cfb_adv_team_gamelog:
+  EPA_explosive: Count of explosive plays, per ESPN's advanced box score. Despite the EPA_ prefix this is a play COUNT, not
+    an EPA total.
+  EPA_explosive_passing: Count of explosive pass plays. A play count, not an EPA total.
+  EPA_explosive_passing_rate: Explosive-play rate on pass plays, over ESPN's qualifying-play denominator.
+  EPA_explosive_rate: Explosive-play rate. Note this is NOT EPA_explosive divided by EPA_plays -- ESPN divides by its own
+    smaller qualifying-play count, so deriving it yourself will not reproduce this value.
+  EPA_explosive_rushing: Count of explosive rush plays. A play count, not an EPA total.
+  EPA_explosive_rushing_rate: Explosive-play rate on rush plays, over ESPN's qualifying-play denominator.
+  EPA_fg: Total EPA on field-goal attempts.
+  EPA_kickoff: Total EPA on kickoff plays.
+  EPA_non_explosive: Total EPA with explosive plays excluded, isolating the team's routine-down production.
+  EPA_non_explosive_passing: Total EPA on pass plays with explosive plays excluded.
+  EPA_non_explosive_passing_per_play: EPA per pass play with explosive plays excluded.
+  EPA_non_explosive_per_play: EPA per play with explosive plays excluded.
+  EPA_non_explosive_rushing: Total EPA on rush plays with explosive plays excluded.
+  EPA_non_explosive_rushing_per_play: EPA per rush play with explosive plays excluded.
+  EPA_overall_off: Total offensive EPA for the team. Duplicated exactly by EPA_overall_offense in every published season checked
+    -- prefer one and ignore the other.
+  EPA_overall_offense: Total offensive EPA. An exact duplicate of EPA_overall_off.
+  EPA_overall_total: Total EPA across all phases, which is why it differs from the offense-only EPA_overall_off.
+  EPA_passing_overall: Total EPA on pass plays.
+  EPA_passing_per_play: EPA per pass play.
+  EPA_penalty: Total EPA attributed to penalties.
+  EPA_per_play: Offensive EPA per play.
+  EPA_plays: Number of plays ESPN's advanced box score scored for the team.
+  EPA_punt: Total EPA on punt plays.
+  EPA_rushing_overall: Total EPA on rush plays.
+  EPA_rushing_per_play: EPA per rush play.
+  EPA_rushing_power: Total EPA on power rushing situations, as classified by ESPN's advanced box score.
+  EPA_rushing_power_per_play: EPA per play on power rushing situations.
+  EPA_sp: Total special-teams EPA, ESPN's abbreviated field for the same phase.
+  EPA_special_teams: Total EPA generated on special-teams plays.
+  field_goals: Number of field-goal attempts.
+  first_downs_created: Number of first downs the team created.
+  first_downs_created_rate: Share of the team's plays that created a first down.
+  kickoff_plays: Number of kickoff plays.
+  line_yards: Line yards -- the portion of rushing yardage credited to the offensive line under the standard rushing decomposition.
+    ESPN applies its own qualifying threshold for the yardage split.
+  line_yards_per_carry: Line yards per rushing attempt.
+  margin: Final scoring margin from this team's perspective, exactly points_for minus points_against.
+  off_yards: Offensive yards gained from scrimmage.
+  open_field_yards: Open-field yards -- rushing yardage earned well downfield, past the second level.
+  pass_yards: Total yards the team gained on pass plays.
+  passes: Number of pass plays the team ran.
+  passes_rate: Share of the team's plays from scrimmage that were pass plays.
+  passing_first_downs_created: Number of first downs created on pass plays.
+  passing_first_downs_created_rate: Share of pass plays that created a first down.
+  penalties: Number of penalties assessed against the team.
+  penalty_first_downs_created: Number of first downs the team gained via opponent penalty.
+  penalty_first_downs_created_rate: Share of the team's first downs that came via opponent penalty.
+  penalty_yards: Net penalty yardage assessed against the team; can be negative when enforcement moved the team forward on
+    balance.
+  punt_plays: Number of punt plays.
+  rush_yards: Total yards the team gained on rush plays.
+  rushes: Number of rushing attempts.
+  rushes_rate: Share of the team's plays from scrimmage that were rush plays.
+  rushing_first_downs_created: Number of first downs created on rush plays.
+  rushing_first_downs_created_rate: Share of rush plays that created a first down.
+  rushing_highlight: Highlight yards -- rushing yardage credited to the back rather than the offensive line.
+  rushing_highlight_rate: Share of rushing yardage that was highlight (back-credited) yardage.
+  rushing_highlight_yards: Total highlight yards the team accumulated -- the yardage credited to ball carriers rather than
+    the line. The per-carry figure is rushing_highlight_yards_per_opp.
+  rushing_highlight_yards_per_opp: Highlight yards per rushing opportunity.
+  rushing_opportunity: Count of rushing opportunities -- carries that reached ESPN's opportunity threshold.
+  rushing_opportunity_rate: Share of carries that qualified as rushing opportunities.
+  rushing_power: Count of power rushing attempts, in short-yardage situations as classified by ESPN's advanced box score.
+  rushing_power_rate: Share of carries that were power rushing attempts.
+  rushing_power_success: Count of power rushing attempts that gained the yardage needed. An integer count, not a rate -- the
+    rate is published separately as rushing_power_success_rate.
+  rushing_power_success_rate: Share of power rushing attempts that succeeded.
+  rushing_stopped: Count of rushing attempts stopped at or behind the line of scrimmage.
+  rushing_stopped_rate: Share of carries stopped at or behind the line of scrimmage.
+  rushing_stuff: Count of stuffed rushing attempts.
+  rushing_stuff_rate: Share of the team's carries that were stuffed at or behind the line of scrimmage.
+  scrimmage_plays: Number of plays from scrimmage (rushes plus passes), excluding special teams.
+  second_level_yards: Second-level yards -- rushing yardage earned just beyond the line of scrimmage.
+  special_teams_plays: Number of special-teams plays.
+  total_off_yards: Total offensive yards across all plays.
+  total_pen_yards: Total penalty yards assessed.
+  total_yards: Total yards the team gained across all plays.
+  yards_per_play: Yards gained per play.
+  yards_per_rush: Yards gained per rushing attempt.
 load_cfb_adv_turnover:
   Int: Interceptions thrown.
   Int_pbp: Interception count derived from the play-by-play, kept alongside the ESPN-sourced Int for reconciliation.
@@ -5260,6 +5138,9 @@ load_cfb_game_rosters:
   statistics_href: ESPN Core v2 API reference URL for this athlete's stat line in this game, null for the roughly 71 percent
     of listed players who recorded no stats.
   team_alternate_ids_sdr: The team's Sportradar alternate identifier, which maps one-to-one with team_id.
+load_mbb_game_rosters:
+  athlete_headshot: URL of the player's ESPN headshot image, whose filename is the athlete_id (verified equal for all 190,365
+    non-null rows in 2025); null when ESPN publishes no photo for that player.
 load_mbb_officials:
   official_display_name: Display form of the official's name used by ESPN's game feed, which duplicates official_full_name
     for all 18,284 rows of the 2025 release.
@@ -5285,6 +5166,13 @@ load_mbb_player_value:
     to zero residual across all 9,805 rows of 2025).
   box_dbpm: Box-score defensive plus/minus for the player, the defensive half of box BPM.
   box_obpm: Box-score offensive plus/minus for the player, the offensive half of box BPM.
+load_mbb_standings:
+  group_short_name: Abbreviated conference label ESPN prints in standings tables, such as ACC, Big Ten or Am. East, one value
+    per group_id.
+  stat_abbreviation: Short code ESPN prints for the standings statistic in a table header, such as W, L, PCT, GB or STRK;
+    it diverges from stat_short_display_name for playoff seed and the home and conference record rows.
+  stat_description: ESPN's longer-form label for the standings statistic, which can differ from stat_display_name (streak
+    is described as Current Streak and playoffSeed as Playoff Seed).
 load_mlb_batter_projection:
   proj_pa: Combined prior-three-season pa behind the projection, its effective sample size; it inherits the pitch-row counting
     of load_mlb_expected_stats pa rather than true plate appearances.
@@ -5295,6 +5183,17 @@ load_mlb_xera:
   x_woba: Expected weighted on-base average, derived from batted-ball quality rather than outcomes.
 load_nba_game_rosters:
   athlete_headshot: URL of the player's headshot image.
+load_nba_officials:
+  official_display_name: ESPN's display-form name for the official, falling back to the full name when ESPN omits it; it never
+    diverges from official_full_name in the released NBA data.
+  official_full_name: Full name of an on-court game official as ESPN publishes it in the summary gameInfo.officials array;
+    it is identical to official_display_name in every released NBA row.
+  official_order: The official's listing index within the game's crew as ESPN orders them, normally 1 through 3 for a three-person
+    crew; a fourth entry appears in a small share of recent-season games and the sequence is not guaranteed to be gap-free.
+  official_position: ESPN's label for the official's assignment slot; the NBA summary feed only ever ships Referee, so this
+    reads the same on every released row.
+  official_position_id: ESPN's numeric identifier for the official's assignment slot, constant at 40 (Referee) across every
+    released NBA season.
 load_nba_player_impact:
   adj_rapm: Total prior-informed RAPM per 100 possessions, exactly the sum of o_adj_rapm and d_adj_rapm.
   d_adj_rapm: Defensive regularized adjusted plus/minus after the ridge opponent adjustment.
@@ -5323,6 +5222,13 @@ load_nba_player_impact:
   spm: Total statistical plus-minus per 100 possessions, exactly the sum of ospm and dspm.
   war: Wins above replacement, computed as (rapm minus a replacement level of -2.0 per 100) times total possessions divided
     by 100, divided by a points-per-win constant calibrated each season by regressing team wins on full-season point margin.
+load_nba_standings:
+  group_short_name: ESPN's short name for the standings grouping the team sits in, read from the group node's shortName; the
+    NBA standings payload supplies only the group name and abbreviation, so this is null throughout.
+  stat_abbreviation: ESPN's short code for the standings statistic, such as PCT, GB or OPP PPG; it is null for the four record-style
+    splits (Home, Road, vs. Conf., vs. Div.), which ship no abbreviation.
+  stat_description: ESPN's prose gloss for the standings statistic on this row; for the clincher stat it is not a fixed label
+    but the team's actual status text, such as Clinched Playoff Berth or Eliminated From Playoff.
 load_nba_stats_schedules:
   game_label: The stats.nba.com event label naming the round or special event a game belongs to, such as NBA Finals, East
     First Round, Emirates NBA Cup or NBA Mexico City Game; an empty string for an ordinary regular-season game.
@@ -5438,12 +5344,26 @@ load_nhl_penalties:
     from the default by diacritics or by an alternate given-name form.
   teamAbbrev.default: Three-letter code of the team charged with the penalty, matching the committing player's boxscore team
     rather than the team that drew it.
+load_nhl_player_boxscore:
+  shifts: 'CONSTANT false in every published row: the shift-chart block is not carried on this asset. An availability flag,
+    not a shift count.'
+load_nhl_player_boxscores:
+  shifts: 'CONSTANT false in every published row: the shift-chart block is not carried on this asset. An availability flag,
+    not a shift count.'
 load_nhl_schedule:
+  game_info: 'CONSTANT true: marks that the source game record carried a game-info block.'
   linescore: 'CONSTANT: true on every published row, so it carries no information as shipped. It marks that a linescore block
     existed on the source game record.'
+  penalties: 'CONSTANT true: marks that the source game record carried a penalty-summary block. It is an availability flag,
+    not a penalty count.'
+  scoring: 'CONSTANT true: marks that the source game record carried a scoring-summary block. It is an availability flag,
+    not a count or a scoring event.'
   scratches: True when the source game record carried a scratches block for the game.
   series_letter: Playoff series identifier letter, populated only for postseason games (88 of 1,400 rows in 2024) and null
     for the regular season.
+  shifts: 'CONSTANT false in every published row: the shift-chart block is not carried on this asset. An availability flag,
+    not a shift count.'
+  three_stars: 'CONSTANT true: marks that the source game record carried a three-stars block.'
 load_nhl_scoring:
   discreteClipFr: Numeric NHL video identifier of the French-language standalone clip of the goal, always a different asset
     id from discreteClip.
@@ -5514,6 +5434,83 @@ load_nhl_scoring:
     from the default by diacritics or by an alternate given-name form.
   teamAbbrev.default: Three-letter code of the team that scored the goal, resolving to the home club exactly when isHome is
     true and to the visitor otherwise.
+load_nhl_shootout:
+  discreteClipFr: Numeric NHL video identifier of the French-language clip of the shootout attempt, distinct from the id in
+    discreteClip.
+  firstName.cs: Alternate given name published under the NHL feed's Czech key. Verified against the data it is frequently
+    a different name form rather than a re-spelling (Joshua published as Josh, Aliaksei as Alexei), so it is not a reliable
+    transliteration of the default.
+  firstName.de: Alternate given name published under the NHL feed's German key. Verified against the data it is frequently
+    a different name form rather than a re-spelling (Joshua published as Josh, Aliaksei as Alexei), so it is not a reliable
+    transliteration of the default.
+  firstName.default: Given name of the shooter in the feed's default English locale; null on the per-game summary row.
+  firstName.es: Alternate given name published under the NHL feed's Spanish key. Verified against the data it is frequently
+    a different name form rather than a re-spelling (Joshua published as Josh, Aliaksei as Alexei), so it is not a reliable
+    transliteration of the default.
+  firstName.fi: Alternate given name published under the NHL feed's Finnish key. Verified against the data it is frequently
+    a different name form rather than a re-spelling (Joshua published as Josh, Aliaksei as Alexei), so it is not a reliable
+    transliteration of the default.
+  firstName.sk: Alternate given name published under the NHL feed's Slovak key. Verified against the data it is frequently
+    a different name form rather than a re-spelling (Joshua published as Josh, Aliaksei as Alexei), so it is not a reliable
+    transliteration of the default.
+  firstName.sv: Alternate given name published under the NHL feed's Swedish key. Verified against the data it is frequently
+    a different name form rather than a re-spelling (Joshua published as Josh, Aliaksei as Alexei), so it is not a reliable
+    transliteration of the default.
+  gameWinner: True on the single attempt per shootout credited as the game-deciding goal, false on every other attempt and
+    null on the per-game summary row.
+  lastName.cs: Alternate rendering of the family name published under the NHL feed's Czech key. It differs from the default
+    in orthography -- usually restoring diacritics the default folds to ASCII, though for some names it strips them instead
+    -- so treat it as an alternate spelling, not a canonical one.
+  lastName.default: Family name of the shooter in the feed's default English locale; null on the per-game summary row.
+  lastName.fi: Alternate rendering of the family name published under the NHL feed's Finnish key. It differs from the default
+    in orthography -- usually restoring diacritics the default folds to ASCII, though for some names it strips them instead
+    -- so treat it as an alternate spelling, not a canonical one.
+  lastName.sk: Alternate rendering of the family name published under the NHL feed's Slovak key. It differs from the default
+    in orthography -- usually restoring diacritics the default folds to ASCII, though for some names it strips them instead
+    -- so treat it as an alternate spelling, not a canonical one.
+  lastName.sv: Alternate rendering of the family name published under the NHL feed's Swedish key. It differs from the default
+    in orthography -- usually restoring diacritics the default folds to ASCII, though for some names it strips them instead
+    -- so treat it as an alternate spelling, not a canonical one.
+  teamAbbrev.default: Three-letter code of the shooting player's team; null on the per-game summary row that instead carries
+    the home and away shootout goal totals.
+load_nhl_skater_boxscores:
+  shifts: 'CONSTANT false in every published row: the shift-chart block is not carried on this asset. An availability flag,
+    not a shift count.'
+load_nhl_three_stars:
+  name.cs: Alternate abbreviated name (first initial plus family name) published under the NHL feed's Czech key, differing
+    from the default by diacritics or by an alternate given-name form.
+  name.de: Alternate abbreviated name (first initial plus family name) published under the NHL feed's German key, differing
+    from the default by diacritics or by an alternate given-name form.
+  name.default: Abbreviated name of the player as published in the NHL feed's default English locale.
+  name.es: Alternate abbreviated name (first initial plus family name) published under the NHL feed's Spanish key, differing
+    from the default by diacritics or by an alternate given-name form.
+  name.fi: Alternate abbreviated name (first initial plus family name) published under the NHL feed's Finnish key, differing
+    from the default by diacritics or by an alternate given-name form.
+  name.fr: Alternate abbreviated name for the player under the NHL feed's French key, differing from the default by diacritics
+    or by an alternate given-name form.
+  name.sk: Alternate abbreviated name (first initial plus family name) published under the NHL feed's Slovak key, differing
+    from the default by diacritics or by an alternate given-name form.
+  name.sv: Alternate abbreviated name (first initial plus family name) published under the NHL feed's Swedish key, differing
+    from the default by diacritics or by an alternate given-name form.
+load_pwhl_schedules:
+  game_info: 'CONSTANT true: marks that the source game record carried a game-info block.'
+  three_stars: 'CONSTANT true: marks that the source game record carried a three-stars block.'
+load_wbb_game_rosters:
+  athlete_headshot: URL of the player's ESPN headshot image on a.espncdn.com, whose filename is the athlete_id; null when
+    ESPN publishes no headshot for that player.
+load_wbb_officials:
+  official_display_name: ESPN's displayName for the official, which is identical to official_full_name in every published
+    row of the released data.
+  official_first_name: The official's given name as ESPN splits it out separately from the full name, excluding any middle
+    initial that appears in official_full_name.
+  official_full_name: ESPN's fullName for the official, falling back to displayName when fullName is absent; ESPN sometimes
+    ships it with a middle initial or a doubled internal space, so it is not simply first plus last name.
+  official_last_name: The official's surname as ESPN splits it out; joined to official_first_name it reconstructs roughly
+    98 percent of official_full_name values, the rest differing by middle initials or spacing.
+  official_order: ESPN's 1-based sequence of the official within that game's crew listing, unique within a game and running
+    1 to 3 for the standard three-person crew.
+  official_uid: ESPN's globally unique resource identifier for the official, read from the core-api items[] uid key; that
+    payload never ships it, so the column is null for every published row.
 load_wbb_player_value:
   box_bpm: Total box plus/minus in points per 100 possessions above average, exactly box_obpm plus box_dbpm in every published
     row.
@@ -5525,11 +5522,37 @@ load_wbb_standings:
     stat_short_display_name for about 90 percent of rows.
   stat_description: ESPN's longer wording for the standings stat, for example Overall Record for the Team Season Record entry
     and Current Streak for Streak; null for stats ESPN ships without one, such as vs AP Top 25.
+load_wnba_game_rosters:
+  athlete_headshot: Direct link to the player's ESPN headshot image, always of the form https://a.espncdn.com/i/headshots/wnba/players/full/{athlete_id}.png,
+    and null for the few players ESPN has no photo for.
+load_wnba_officials:
+  official_display_name: ESPN's display rendering of the official's name, which is byte-identical to official_full_name on
+    every published row and therefore adds nothing.
+  official_first_name: Given name of the official as ESPN splits it out, the leading token of official_full_name.
+  official_full_name: The official's full name, taken from ESPN fullName and falling back to displayName; it equals first
+    plus last name on every published row.
+  official_last_name: Family name of the official as ESPN splits it out, the trailing token of official_full_name, with hyphenated
+    surnames kept intact.
+  official_order: ESPN's 1-based position of the official within that game's crew; most games run 1 through 3 for a three-person
+    crew and 40 of 573 games in 2024-2025 add a fourth.
+  official_uid: ESPN's global uid string for the official, carried straight through from the officials payload; the Core v2
+    items ESPN serves omit it, so it is null in every published season.
+load_wnba_standings:
+  group_short_name: Short label of the standings group node the team sits under, read from ESPN shortName; the WNBA conference
+    nodes ship only name and abbreviation, so it is null on every published row.
+  stat_abbreviation: ESPN's abbreviation for the standings stat, which can differ from stat_short_display_name (playoffSeed
+    is SEED here but POS there) and is null on the record-split rows such as Home and vs. Conf.
+  stat_description: ESPN's long-form explanation of the standings stat, such as Clinched Best League Record for clincher or
+    Record last 10 games for lasttengames.
 load_wnba_stats_draft:
   draft_type: 'CONSTANT in the published asset: every row reads ''Draft'', so it does not currently distinguish the main draft
     from any other selection event.'
   season_2: 'REDUNDANT: duplicates the season column on every published row. It exists because the upstream feed returns the
     season under a second key.'
+load_wnba_stats_rosters:
+  how_acquired: How the team acquired the player (draft, trade, free agency).
+  season_2: Season label in the league's second display form.
+  team_id_lookup: Team id used to join the row back to the team tables.
 load_contracts:
   cols: Placeholder column retained in the contracts loader output schema; contains no meaningful data in this context.
 load_depth_charts:

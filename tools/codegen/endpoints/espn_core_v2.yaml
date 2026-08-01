@@ -186,6 +186,38 @@ endpoints:
     season: 2024
     season_type: 2
     week: 1
+- short: season_week_powerindex
+  scope: universal
+  # WEEKLY HISTORICAL FPI -- the point-in-time table. Each row carries its own
+  # lastUpdated / runDateTimeKey stamp and the values genuinely move week to week
+  # (Ohio State 2024: 26.200 wk3 -> 27.471 wk8 -> 24.823 wk15), so this is the
+  # leakage-safe source for as-of-week ratings.
+  #
+  # Do NOT substitute the fitt-v3 season table for this: that endpoint ACCEPTS a
+  # `week` query param and silently ignores it, returning the season-final figure
+  # for every week requested.
+  path: /{sport}/leagues/{league}/seasons/{season}/types/{season_type}/weeks/{week}/powerindex
+  path_params:
+  - name: season
+    type: int|str
+    required: true
+  - name: season_type
+    type: int|str
+    required: true
+  - name: week
+    type: int|str
+    required: true
+  extra_params:
+  - name: limit
+    query_key: limit
+    type: int
+    description: Page size; the full FBS table is ~134 rows, so pass a limit above that to avoid paging.
+  parser: parse_weekly_powerindex
+  returns_schema: weekly_powerindex
+  example_args:
+    season: 2024
+    season_type: 2
+    week: 8
 - short: season_week_events
   scope: universal
   path: /{sport}/leagues/{league}/seasons/{season}/types/{season_type}/weeks/{week}/events

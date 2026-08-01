@@ -169,7 +169,7 @@ Release: [nhl_player_boxscores](https://github.com/sportsdataverse/sportsdataver
 | `faceoff_winning_pctg` | Float64 | Faceoff win percentage. |
 | `toi` | String | Time on ice. |
 | `blocked_shots` | Int64 | Blocked shots. |
-| `shifts` | Int64 | Number of shifts. |
+| `shifts` | Int64 | CONSTANT false in every published row: the shift-chart block is not carried on this asset. An availability flag, not a shift count. |
 | `giveaways` | Int64 | Giveaways. |
 | `takeaways` | Int64 | Takeaways. |
 | `even_strength_shots_against` | String | Even-strength shots against (saves/total). |
@@ -224,14 +224,14 @@ Release: [nhl_schedules](https://github.com/sportsdataverse/sportsdataverse-data
 | `series_game_number` | Int32 | Series game number. |
 | `skater_box` | Boolean | Whether skater box data is available. |
 | `goalie_box` | Boolean | Whether goalie box data is available. |
-| `game_info` | Boolean | Whether game info data is available. |
+| `game_info` | Boolean | CONSTANT true: marks that the source game record carried a game-info block. |
 | `game_rosters` | Boolean | Whether game rosters data is available. |
-| `scoring` | Boolean | TRUE when the play results in a score (TD, FG, safety, two-point conversion). |
-| `penalties` | Boolean | Penalty count. |
+| `scoring` | Boolean | CONSTANT true: marks that the source game record carried a scoring-summary block. It is an availability flag, not a count or a scoring event. |
+| `penalties` | Boolean | CONSTANT true: marks that the source game record carried a penalty-summary block. It is an availability flag, not a penalty count. |
 | `scratches` | Boolean | True when the source game record carried a scratches block for the game. |
 | `linescore` | Boolean | CONSTANT: true on every published row, so it carries no information as shipped. It marks that a linescore block existed on the source game record. |
-| `three_stars` | Boolean | Whether three stars data is available. |
-| `shifts` | Boolean | Number of shifts. |
+| `three_stars` | Boolean | CONSTANT true: marks that the source game record carried a three-stars block. |
+| `shifts` | Boolean | CONSTANT false in every published row: the shift-chart block is not carried on this asset. An availability flag, not a shift count. |
 | `officials` | Boolean | Whether officials data is available. |
 | `shots_by_period` | Boolean | Whether shots-by-period data is available. |
 | `shootout` | Boolean | Whether shootout data is available. |
@@ -607,7 +607,7 @@ Release: [nhl_player_boxscores](https://github.com/sportsdataverse/sportsdataver
 | `faceoff_winning_pctg` | Float64 | Faceoff win percentage. |
 | `toi` | String | Time on ice. |
 | `blocked_shots` | Int32 | Blocked shots. |
-| `shifts` | Int32 | Number of shifts. |
+| `shifts` | Int32 | CONSTANT false in every published row: the shift-chart block is not carried on this asset. An availability flag, not a shift count. |
 | `giveaways` | Int32 | Giveaways. |
 | `takeaways` | Int32 | Takeaways. |
 | `even_strength_shots_against` | String | Even-strength shots against (saves/total). |
@@ -873,7 +873,7 @@ Release: [nhl_skater_boxscores](https://github.com/sportsdataverse/sportsdataver
 | `faceoff_winning_pctg` | Float64 | Faceoff win percentage. |
 | `toi` | String | Time on ice. |
 | `blocked_shots` | Int32 | Blocked shots. |
-| `shifts` | Int32 | Number of shifts. |
+| `shifts` | Int32 | CONSTANT false in every published row: the shift-chart block is not carried on this asset. An availability flag, not a shift count. |
 | `giveaways` | Int32 | Giveaways. |
 | `takeaways` | Int32 | Takeaways. |
 | `game_id` | Int32 | Unique game identifier. |
@@ -935,14 +935,14 @@ Release: [nhl_three_stars](https://github.com/sportsdataverse/sportsdataverse-da
 | `loser_name` | String | Name of the losing goalie. |
 | `goalsAgainstAverage` | Float64 | Goals-against average (goalies). |
 | `savePctg` | Float64 | Save percentage (goalies). |
-| `name.default` | String | Team name (default language). |
+| `name.default` | String | Abbreviated name of the player as published in the NHL feed's default English locale. |
 | `name.cs` | String | Alternate abbreviated name (first initial plus family name) published under the NHL feed's Czech key, differing from the default by diacritics or by an alternate given-name form. |
 | `name.sk` | String | Alternate abbreviated name (first initial plus family name) published under the NHL feed's Slovak key, differing from the default by diacritics or by an alternate given-name form. |
 | `name.fi` | String | Alternate abbreviated name (first initial plus family name) published under the NHL feed's Finnish key, differing from the default by diacritics or by an alternate given-name form. |
 | `name.sv` | String | Alternate abbreviated name (first initial plus family name) published under the NHL feed's Swedish key, differing from the default by diacritics or by an alternate given-name form. |
 | `name.de` | String | Alternate abbreviated name (first initial plus family name) published under the NHL feed's German key, differing from the default by diacritics or by an alternate given-name form. |
 | `name.es` | String | Alternate abbreviated name (first initial plus family name) published under the NHL feed's Spanish key, differing from the default by diacritics or by an alternate given-name form. |
-| `name.fr` | String | Team name (French). |
+| `name.fr` | String | Alternate abbreviated name for the player under the NHL feed's French key, differing from the default by diacritics or by an alternate given-name form. |
 
 ```python
 load_nhl_three_stars(seasons=2024)

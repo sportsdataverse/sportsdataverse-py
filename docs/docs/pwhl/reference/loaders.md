@@ -688,11 +688,11 @@ Release: [pwhl_schedules](https://github.com/sportsdataverse/sportsdataverse-dat
 | `skater_box` | Boolean | Whether skater box data is available. |
 | `goalie_box` | Boolean | Whether goalie box data is available. |
 | `team_box` | Boolean | Whether team box score data is available. |
-| `game_info` | Boolean | Whether game info data is available. |
+| `game_info` | Boolean | CONSTANT true: marks that the source game record carried a game-info block. |
 | `game_rosters` | Boolean | Whether game rosters data is available. |
 | `scoring_summary` | Boolean | Whether scoring summary data is available. |
 | `penalty_summary` | Boolean | Whether penalty summary data is available. |
-| `three_stars` | Boolean | Whether three stars data is available. |
+| `three_stars` | Boolean | CONSTANT true: marks that the source game record carried a three-stars block. |
 | `officials` | Boolean | Whether officials data is available. |
 | `shots_by_period` | Boolean | Whether shots-by-period data is available. |
 | `shootout` | Boolean | Whether shootout data is available. |

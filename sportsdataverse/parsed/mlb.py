@@ -30,6 +30,7 @@ from sportsdataverse.mlb import espn_mlb_coach_record as _raw_espn_mlb_coach_rec
 from sportsdataverse.mlb import espn_mlb_coach_season as _raw_espn_mlb_coach_season
 from sportsdataverse.mlb import espn_mlb_conferences as _raw_espn_mlb_conferences
 from sportsdataverse.mlb import espn_mlb_draft as _raw_espn_mlb_draft
+from sportsdataverse.mlb import espn_mlb_fpi as _raw_espn_mlb_fpi
 from sportsdataverse.mlb import espn_mlb_franchise as _raw_espn_mlb_franchise
 from sportsdataverse.mlb import espn_mlb_franchises as _raw_espn_mlb_franchises
 from sportsdataverse.mlb import espn_mlb_game as _raw_espn_mlb_game
@@ -109,6 +110,7 @@ from sportsdataverse.mlb import espn_mlb_season_type_leaders as _raw_espn_mlb_se
 from sportsdataverse.mlb import espn_mlb_season_types as _raw_espn_mlb_season_types
 from sportsdataverse.mlb import espn_mlb_season_week as _raw_espn_mlb_season_week
 from sportsdataverse.mlb import espn_mlb_season_week_games as _raw_espn_mlb_season_week_games
+from sportsdataverse.mlb import espn_mlb_season_week_powerindex as _raw_espn_mlb_season_week_powerindex
 from sportsdataverse.mlb import espn_mlb_season_weeks as _raw_espn_mlb_season_weeks
 from sportsdataverse.mlb import espn_mlb_seasons as _raw_espn_mlb_seasons
 from sportsdataverse.mlb import espn_mlb_standings as _raw_espn_mlb_standings
@@ -395,6 +397,7 @@ __all__ = [
     "espn_mlb_coach_season",
     "espn_mlb_conferences",
     "espn_mlb_draft",
+    "espn_mlb_fpi",
     "espn_mlb_franchise",
     "espn_mlb_franchises",
     "espn_mlb_game",
@@ -478,6 +481,7 @@ __all__ = [
     "espn_mlb_season_types",
     "espn_mlb_season_week",
     "espn_mlb_season_week_games",
+    "espn_mlb_season_week_powerindex",
     "espn_mlb_season_weeks",
     "espn_mlb_seasons",
     "espn_mlb_standings",
@@ -802,6 +806,20 @@ def espn_mlb_draft(*args, **kwargs):
     """
     kwargs.setdefault("return_parsed", True)
     return _raw_espn_mlb_draft(*args, **kwargs)
+
+
+def espn_mlb_fpi(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mlb.espn_mlb_fpi``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.mlb.espn_mlb_fpi` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mlb.espn_mlb_fpi` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_espn_mlb_fpi(*args, **kwargs)
 
 
 def espn_mlb_franchise(*args, **kwargs):
@@ -1908,6 +1926,20 @@ def espn_mlb_season_week_games(*args, **kwargs):
     """
     kwargs.setdefault("return_parsed", True)
     return _raw_espn_mlb_season_week_games(*args, **kwargs)
+
+
+def espn_mlb_season_week_powerindex(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mlb.espn_mlb_season_week_powerindex``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.mlb.espn_mlb_season_week_powerindex` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mlb.espn_mlb_season_week_powerindex` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_espn_mlb_season_week_powerindex(*args, **kwargs)
 
 
 def espn_mlb_season_weeks(*args, **kwargs):

@@ -1,0 +1,32 @@
+api: espn_fitt_v3
+host: fitt_v3
+name_pattern: espn_{prefix}_{short}
+endpoints:
+# ESPN's Football Power Index table. The core_v2 `powerindex` endpoint under an
+# event returns only `$ref` links (which is why espn_cfb_power_index ships a link
+# list rather than data); this one serves the resolved season FPI table in a
+# single request per season -- 134 CFB teams x 30 fields for 2024.
+#
+# Grain is TEAM-SEASON. It is complementary to, not a replacement for, the
+# per-game core_v2 refs, which carry gameprojection / teampredptdiff /
+# matchupquality / teamadjgamescore and are not available here.
+- short: fpi
+  scope: universal
+  path: /{sport}/{league}/powerindex
+  extra_params:
+  - name: season
+    query_key: season
+    type: int|str
+    description: Season (4-digit year) whose FPI table to return; defaults to the current season.
+  - name: limit
+    query_key: limit
+    type: int
+    description: Page size. The response is a single page for every league observed, so the default suffices.
+  - name: page
+    query_key: page
+    type: int
+    description: Page number, for the paginated envelope.
+  parser: parse_fpi
+  returns_schema: fpi
+  example_args:
+    season: 2024
