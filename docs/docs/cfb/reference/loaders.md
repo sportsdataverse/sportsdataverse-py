@@ -273,7 +273,7 @@ Release: [espn_cfb_pbp](https://github.com/sportsdataverse/sportsdataverse-data/
 | `scoring_opp` | Boolean | Binary flag for a scoring opportunity (yards_to_goal <= 40). |
 | `stuffed_run` | Boolean | Binary flag for a stuffed run (zero or negative yards gained). |
 | `stopped_run` | Boolean | True when the rush was stopped at or behind the line of scrimmage. |
-| `opportunity_run` | Boolean | True when the play is a rush gaining 4 yards or fewer. Note this is the inverse of the conventional 'opportunity' definition (a carry gaining 4 or more). |
+| `opportunity_run` | Boolean | True when a rush reached 4 yards -- the carries on which the blocking did its job. Matches cfbfastR's espn_cfb_15 definition. Assets published before the 2026-08 fix carry the inverted (4 yards or fewer) flag. |
 | `highlight_run` | Boolean | True when the rush gained 8 or more yards. |
 | `short_rush_success` | Boolean | True when a short-yardage rush gained the yardage needed. |
 | `short_rush_attempt` | Boolean | True when the play is a rush in a short-yardage situation. |
@@ -374,7 +374,7 @@ Release: [espn_cfb_pbp](https://github.com/sportsdataverse/sportsdataverse-data/
 | `second_level_yards` | Float64 | Rushing yards earned from 4 to 8, split evenly between line and carrier under the line-yards decomposition. |
 | `open_field_yards` | Int32 | Rushing yards gained beyond 8, credited to the ball carrier rather than the line. |
 | `highlight_yards` | Float64 | Second-level plus open-field yards -- the yardage credited to the carrier. |
-| `opp_highlight_yards` | Float64 | Highlight yards on opportunity runs. DEGENERATE: this column is 0 in every published row, because its gate requires a rush of 4 yards or fewer while highlight yards only accrue at 4 or more. Do not use it as a signal. |
+| `opp_highlight_yards` | Float64 | Highlight yards earned on opportunity runs, isolating carrier production on carries where the blocking succeeded. Assets published before the 2026-08 fix are identically 0 here, because the inverted opportunity_run gate could never co-occur with non-zero highlight yards. |
 | `lag_EP_end` | Float64 | Value of EP_end on the previous play, used for sequence-aware derivations. |
 | `EP_between` | Float64 | Change in expected points across the play, before penalty adjustment. |
 | `EPA_rush` | Float64 | EPA credited to the play on rush plays. |

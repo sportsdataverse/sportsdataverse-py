@@ -77,13 +77,14 @@ STATIC: dict[str, str] = {
     "highlight_yards": "Second-level plus open-field yards -- the yardage credited to the carrier.",
     "highlight_run": "True when the rush gained 8 or more yards.",
     "opportunity_run": (
-        "True when the play is a rush gaining 4 yards or fewer. Note this is the inverse of the "
-        "conventional 'opportunity' definition (a carry gaining 4 or more)."
+        "True when a rush reached 4 yards -- the carries on which the blocking did its job. Matches "
+        "cfbfastR's espn_cfb_15 definition. Assets published before the 2026-08 fix carry the "
+        "inverted (4 yards or fewer) flag."
     ),
     "opp_highlight_yards": (
-        "Highlight yards on opportunity runs. DEGENERATE: this column is 0 in every published row, "
-        "because its gate requires a rush of 4 yards or fewer while highlight yards only accrue at "
-        "4 or more. Do not use it as a signal."
+        "Highlight yards earned on opportunity runs, isolating carrier production on carries where "
+        "the blocking succeeded. Assets published before the 2026-08 fix are identically 0 here, "
+        "because the inverted opportunity_run gate could never co-occur with non-zero highlight yards."
     ),
     "power_rush_attempt": "True when the play is a short-yardage power rushing attempt.",
     "power_rush_success": "True when a power rushing attempt gained the yardage needed.",

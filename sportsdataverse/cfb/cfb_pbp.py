@@ -4500,15 +4500,28 @@ class CFBPlayProcess(object):
                 stopped_run=pl.when((pl.col("type.text") == "Rush").and_(pl.col("yds_rushed") <= 2))
                 .then(True)
                 .otherwise(False),
-                opportunity_run=pl.when((pl.col("type.text") == "Rush").and_(pl.col("yds_rushed") <= 4))
+                # An "opportunity" is a carry where the blocking did its job, i.e. the run
+                # REACHED 4 yards -- cfbfastR's espn_cfb_15 oracle is
+                # `opportunity_run = ((rush == 1) & (yds_rushed >= 4))`, and the sibling
+                # cfb-data producer agrees. This was inverted to `<= 4`, which also made
+                # opp_highlight_yards identically 0 (its gate demanded <= 4 rushing yards
+                # while highlight yards only accrue from 4 up, so the two could never
+                # co-occur).
+                # Gate on `rush`, not `type.text == "Rush"`. The literal play-type
+                # string excludes "Rushing Touchdown" and "Fumble Recovery (Own)"
+                # rushes, so a 4-yard rushing TD was not counted as an opportunity;
+                # cfbfastR's oracle gates on `rush == 1`. It also left
+                # adj_rush_yardage null on those plays while line_yards below gates
+                # on `rush`, so the decomposition disagreed with itself.
+                opportunity_run=pl.when((pl.col("rush") == True).and_(pl.col("yds_rushed") >= 4))
                 .then(True)
                 .otherwise(False),
-                highlight_run=pl.when((pl.col("type.text") == "Rush").and_(pl.col("yds_rushed") >= 8))
+                highlight_run=pl.when((pl.col("rush") == True).and_(pl.col("yds_rushed") >= 8))
                 .then(True)
                 .otherwise(False),
-                adj_rush_yardage=pl.when((pl.col("type.text") == "Rush").and_(pl.col("yds_rushed") > 8))
+                adj_rush_yardage=pl.when((pl.col("rush") == True).and_(pl.col("yds_rushed") > 8))
                 .then(8)
-                .when((pl.col("type.text") == "Rush").and_(pl.col("yds_rushed") <= 8))
+                .when((pl.col("rush") == True).and_(pl.col("yds_rushed") <= 8))
                 .then(pl.col("yds_rushed"))
                 .otherwise(None),
             )

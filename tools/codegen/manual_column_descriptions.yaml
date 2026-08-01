@@ -4048,6 +4048,124 @@ load_cfb_adv_situational:
   pos_team: Display name of the team on offense (e.g. 'Ohio State Buckeyes').
   pos_team_id: ESPN team id of the team on offense. Present for every season 2004+.
   standard_downs: Number of plays the team ran on standard downs (the team ahead of schedule for the series).
+load_phf_pbp:
+  away_goalie_jersey: Jersey number of the away goaltender on the ice.
+  away_nickname: Nickname of the away team.
+  away_score_total: Away team's cumulative score after the play.
+  defending_team_abbrev: Abbreviation of the team defending on the play.
+  defending_team_on_ice: Skaters the defending team had on the ice for the play.
+  defensive_player_jersey_1: Jersey number of the defending team's skater in on-ice slot 1 for the play.
+  defensive_player_jersey_2: Jersey number of the defending team's skater in on-ice slot 2 for the play.
+  defensive_player_jersey_3: Jersey number of the defending team's skater in on-ice slot 3 for the play.
+  defensive_player_jersey_4: Jersey number of the defending team's skater in on-ice slot 4 for the play.
+  defensive_player_jersey_5: Jersey number of the defending team's skater in on-ice slot 5 for the play.
+  defensive_player_jersey_6: Jersey number of the defending team's skater in on-ice slot 6 for the play.
+  defensive_player_name_1: Name of the defending team's skater in on-ice slot 1 for the play.
+  defensive_player_name_2: Name of the defending team's skater in on-ice slot 2 for the play.
+  defensive_player_name_3: Name of the defending team's skater in on-ice slot 3 for the play.
+  defensive_player_name_4: Name of the defending team's skater in on-ice slot 4 for the play.
+  defensive_player_name_5: Name of the defending team's skater in on-ice slot 5 for the play.
+  defensive_player_name_6: Name of the defending team's skater in on-ice slot 6 for the play.
+  end_power_play: True on the play where a power play ends.
+  goalie_change: True when the play records a goaltender change.
+  goalie_involved: Name of the goaltender involved in the play.
+  home_goalie_jersey: Jersey number of the home goaltender on the ice.
+  home_nickname: Nickname of the home team.
+  home_score_total: Home team's cumulative score after the play.
+  leader: Team leading the game at this point in the play sequence.
+  offensive_player_jersey_1: Jersey number of the attacking team's skater in on-ice slot 1 for the play.
+  offensive_player_jersey_2: Jersey number of the attacking team's skater in on-ice slot 2 for the play.
+  offensive_player_jersey_3: Jersey number of the attacking team's skater in on-ice slot 3 for the play.
+  offensive_player_jersey_4: Jersey number of the attacking team's skater in on-ice slot 4 for the play.
+  offensive_player_jersey_5: Jersey number of the attacking team's skater in on-ice slot 5 for the play.
+  offensive_player_jersey_6: Jersey number of the attacking team's skater in on-ice slot 6 for the play.
+  offensive_player_name_1: Name of the attacking team's skater in on-ice slot 1 for the play.
+  offensive_player_name_2: Name of the attacking team's skater in on-ice slot 2 for the play.
+  offensive_player_name_3: Name of the attacking team's skater in on-ice slot 3 for the play.
+  offensive_player_name_4: Name of the attacking team's skater in on-ice slot 4 for the play.
+  offensive_player_name_5: Name of the attacking team's skater in on-ice slot 5 for the play.
+  offensive_player_name_6: Name of the attacking team's skater in on-ice slot 6 for the play.
+  on_ice_situation: Strength situation on the ice for the play (e.g. even strength, power play).
+  penalty_level: Severity classification of the penalty (e.g. minor, major).
+  play_description: Free-text description of the play as published by the league.
+  player_jersey_1: Jersey number of the player in slot 1 of the play's participant list.
+  player_jersey_2: Jersey number of the player in slot 2 of the play's participant list.
+  player_jersey_3: Jersey number of the player in slot 3 of the play's participant list.
+  player_name_1: Name of the player in slot 1 of the play's participant list.
+  player_name_2: Name of the player in slot 2 of the play's participant list.
+  player_name_3: Name of the player in slot 3 of the play's participant list.
+  power_play_seconds: Elapsed seconds of the power play at this play.
+  scoring_team_abbrev: Abbreviation of the team credited with the goal.
+  scoring_team_on_ice: Skaters the scoring team had on the ice for the goal.
+  start_power_play: True on the play where a power play begins.
+load_phf_player_boxscores:
+  faceoffs_win_pct: Share of the player's faceoffs won.
+  faceoffs_won_lost: Faceoffs won and lost, as the league's combined won-lost string.
+  goalies_href: Relative link to the league's goaltender table for this game.
+  player_jersey: Player's jersey number.
+  powerplay_goals: Goals the player scored on the power play.
+  save_percent: Share of shots faced that the goaltender saved.
+  shots_blocked: Shots the player blocked.
+  skaters_href: Relative link to the league's skater table for this game.
+load_phf_schedules:
+  allow_players: League flag for whether player-level detail is published for the game.
+  away_division_id: League identifier for the away team's division.
+  away_penalty_minutes: Penalty minutes assessed to the away team.
+  away_roster_count: Number of players dressed for the away team.
+  away_team_logo_url_100: URL of the away team's logo at the 100px rendition.
+  away_team_logo_url_200: URL of the away team's logo at the 200px rendition.
+  away_team_logo_url_50: URL of the away team's logo at the 50px rendition.
+  away_team_logo_url_full: URL of the away team's logo at the full rendition.
+  away_team_logo_url_large: URL of the away team's logo at the large rendition.
+  away_team_logo_url_medium: URL of the away team's logo at the medium rendition.
+  away_team_logo_url_small: URL of the away team's logo at the small rendition.
+  away_team_short: Short display name of the away team.
+  created_at: Timestamp at which the league created the game record.
+  date_group: League grouping key for the game's date, used to bucket a slate.
+  datetime: Scheduled start of the game as a timestamp.
+  datetime_tz: Scheduled start of the game including its time-zone offset.
+  external_url: League-published external link for the game.
+  facility: Name of the facility hosting the game.
+  facility_address: Street address of the hosting facility.
+  facility_id: League identifier for the hosting facility.
+  has_play_by_play: True when a play-by-play feed exists for the game.
+  highlight_color: Display colour the league uses for the game in its schedule UI.
+  home_division_id: League identifier for the home team's division.
+  home_penalty_minutes: Penalty minutes assessed to the home team.
+  home_roster_count: Number of players dressed for the home team.
+  home_team_logo_url_100: URL of the home team's logo at the 100px rendition.
+  home_team_logo_url_200: URL of the home team's logo at the 200px rendition.
+  home_team_logo_url_50: URL of the home team's logo at the 50px rendition.
+  home_team_logo_url_full: URL of the home team's logo at the full rendition.
+  home_team_logo_url_large: URL of the home team's logo at the large rendition.
+  home_team_logo_url_medium: URL of the home team's logo at the medium rendition.
+  home_team_logo_url_small: URL of the home team's logo at the small rendition.
+  home_team_short: Short display name of the home team.
+  rink: Name of the rink within the facility.
+  rink_id: League identifier for the rink.
+  tickets_url: Link to purchase tickets for the game.
+  time_zone: Time zone in which the game is played.
+  time_zone_abbr: Abbreviated form of the game's time zone.
+  updated_at: Timestamp at which the league last updated the game record.
+  watch_live_url: Link to the live broadcast of the game.
+load_phf_team_boxscores:
+  blocked_opponent_shots: Opponent shots the team blocked.
+  overtime_scoring: Goals the team scored in overtime.
+  overtime_shots: Shots the team took in overtime.
+  period_1_scoring: Goals the team scored in period 1.
+  period_1_shots: Shots the team took in period 1.
+  period_2_scoring: Goals the team scored in period 2.
+  period_2_shots: Shots the team took in period 2.
+  period_3_scoring: Goals the team scored in period 3.
+  period_3_shots: Shots the team took in period 3.
+  power_play_percent: Share of the team's power plays that produced a goal.
+  shootout_made_scoring: Shootout attempts the team converted.
+  shootout_made_shots: Shootout shots the team took that scored.
+  shootout_missed_scoring: Shootout attempts the team failed to convert.
+  shootout_missed_shots: Shootout shots the team took that did not score.
+  successful_power_play: Number of power plays on which the team scored.
+  total_scoring: Goals the team scored in the game.
+  total_shots: Shots the team took in the game.
 load_cfb_pbp:
   A_score_diff: Away team's score minus the home team's, from the away perspective.
   EPA_explosive: True when the play was explosive.
@@ -4223,10 +4341,11 @@ load_cfb_pbp:
   new_down: Down after the play, including any penalty enforcement.
   non_fumble_sack: True when the play was a sack that did not produce a fumble.
   open_field_yards: Rushing yards gained beyond 8, credited to the ball carrier rather than the line.
-  opp_highlight_yards: 'Highlight yards on opportunity runs. DEGENERATE: this column is 0 in every published row, because
-    its gate requires a rush of 4 yards or fewer while highlight yards only accrue at 4 or more. Do not use it as a signal.'
-  opportunity_run: True when the play is a rush gaining 4 yards or fewer. Note this is the inverse of the conventional 'opportunity'
-    definition (a carry gaining 4 or more).
+  opp_highlight_yards: Highlight yards earned on opportunity runs, isolating carrier production on carries where the blocking
+    succeeded. Assets published before the 2026-08 fix are identically 0 here, because the inverted opportunity_run gate could
+    never co-occur with non-zero highlight yards.
+  opportunity_run: True when a rush reached 4 yards -- the carries on which the blocking did its job. Matches cfbfastR's espn_cfb_15
+    definition. Assets published before the 2026-08 fix carry the inverted (4 yards or fewer) flag.
   overUnder: Over/under total used as a model input.
   pass_breakup: True when a defender broke up the pass.
   pass_epa: EPA credited to the play when it is a pass.
@@ -4303,124 +4422,6 @@ load_cfb_pbp:
   type.id: ESPN's numeric identifier for the play type.
   type.text: ESPN's text label for the play type.
   wp_touchback: Win probability the offense would have had starting from a touchback.
-load_phf_pbp:
-  away_goalie_jersey: Jersey number of the away goaltender on the ice.
-  away_nickname: Nickname of the away team.
-  away_score_total: Away team's cumulative score after the play.
-  defending_team_abbrev: Abbreviation of the team defending on the play.
-  defending_team_on_ice: Skaters the defending team had on the ice for the play.
-  defensive_player_jersey_1: Jersey number of the defending team's skater in on-ice slot 1 for the play.
-  defensive_player_jersey_2: Jersey number of the defending team's skater in on-ice slot 2 for the play.
-  defensive_player_jersey_3: Jersey number of the defending team's skater in on-ice slot 3 for the play.
-  defensive_player_jersey_4: Jersey number of the defending team's skater in on-ice slot 4 for the play.
-  defensive_player_jersey_5: Jersey number of the defending team's skater in on-ice slot 5 for the play.
-  defensive_player_jersey_6: Jersey number of the defending team's skater in on-ice slot 6 for the play.
-  defensive_player_name_1: Name of the defending team's skater in on-ice slot 1 for the play.
-  defensive_player_name_2: Name of the defending team's skater in on-ice slot 2 for the play.
-  defensive_player_name_3: Name of the defending team's skater in on-ice slot 3 for the play.
-  defensive_player_name_4: Name of the defending team's skater in on-ice slot 4 for the play.
-  defensive_player_name_5: Name of the defending team's skater in on-ice slot 5 for the play.
-  defensive_player_name_6: Name of the defending team's skater in on-ice slot 6 for the play.
-  end_power_play: True on the play where a power play ends.
-  goalie_change: True when the play records a goaltender change.
-  goalie_involved: Name of the goaltender involved in the play.
-  home_goalie_jersey: Jersey number of the home goaltender on the ice.
-  home_nickname: Nickname of the home team.
-  home_score_total: Home team's cumulative score after the play.
-  leader: Team leading the game at this point in the play sequence.
-  offensive_player_jersey_1: Jersey number of the attacking team's skater in on-ice slot 1 for the play.
-  offensive_player_jersey_2: Jersey number of the attacking team's skater in on-ice slot 2 for the play.
-  offensive_player_jersey_3: Jersey number of the attacking team's skater in on-ice slot 3 for the play.
-  offensive_player_jersey_4: Jersey number of the attacking team's skater in on-ice slot 4 for the play.
-  offensive_player_jersey_5: Jersey number of the attacking team's skater in on-ice slot 5 for the play.
-  offensive_player_jersey_6: Jersey number of the attacking team's skater in on-ice slot 6 for the play.
-  offensive_player_name_1: Name of the attacking team's skater in on-ice slot 1 for the play.
-  offensive_player_name_2: Name of the attacking team's skater in on-ice slot 2 for the play.
-  offensive_player_name_3: Name of the attacking team's skater in on-ice slot 3 for the play.
-  offensive_player_name_4: Name of the attacking team's skater in on-ice slot 4 for the play.
-  offensive_player_name_5: Name of the attacking team's skater in on-ice slot 5 for the play.
-  offensive_player_name_6: Name of the attacking team's skater in on-ice slot 6 for the play.
-  on_ice_situation: Strength situation on the ice for the play (e.g. even strength, power play).
-  penalty_level: Severity classification of the penalty (e.g. minor, major).
-  play_description: Free-text description of the play as published by the league.
-  player_jersey_1: Jersey number of the player in slot 1 of the play's participant list.
-  player_jersey_2: Jersey number of the player in slot 2 of the play's participant list.
-  player_jersey_3: Jersey number of the player in slot 3 of the play's participant list.
-  player_name_1: Name of the player in slot 1 of the play's participant list.
-  player_name_2: Name of the player in slot 2 of the play's participant list.
-  player_name_3: Name of the player in slot 3 of the play's participant list.
-  power_play_seconds: Elapsed seconds of the power play at this play.
-  scoring_team_abbrev: Abbreviation of the team credited with the goal.
-  scoring_team_on_ice: Skaters the scoring team had on the ice for the goal.
-  start_power_play: True on the play where a power play begins.
-load_phf_player_boxscores:
-  faceoffs_win_pct: Share of the player's faceoffs won.
-  faceoffs_won_lost: Faceoffs won and lost, as the league's combined won-lost string.
-  goalies_href: Relative link to the league's goaltender table for this game.
-  player_jersey: Player's jersey number.
-  powerplay_goals: Goals the player scored on the power play.
-  save_percent: Share of shots faced that the goaltender saved.
-  shots_blocked: Shots the player blocked.
-  skaters_href: Relative link to the league's skater table for this game.
-load_phf_schedules:
-  allow_players: League flag for whether player-level detail is published for the game.
-  away_division_id: League identifier for the away team's division.
-  away_penalty_minutes: Penalty minutes assessed to the away team.
-  away_roster_count: Number of players dressed for the away team.
-  away_team_logo_url_100: URL of the away team's logo at the 100px rendition.
-  away_team_logo_url_200: URL of the away team's logo at the 200px rendition.
-  away_team_logo_url_50: URL of the away team's logo at the 50px rendition.
-  away_team_logo_url_full: URL of the away team's logo at the full rendition.
-  away_team_logo_url_large: URL of the away team's logo at the large rendition.
-  away_team_logo_url_medium: URL of the away team's logo at the medium rendition.
-  away_team_logo_url_small: URL of the away team's logo at the small rendition.
-  away_team_short: Short display name of the away team.
-  created_at: Timestamp at which the league created the game record.
-  date_group: League grouping key for the game's date, used to bucket a slate.
-  datetime: Scheduled start of the game as a timestamp.
-  datetime_tz: Scheduled start of the game including its time-zone offset.
-  external_url: League-published external link for the game.
-  facility: Name of the facility hosting the game.
-  facility_address: Street address of the hosting facility.
-  facility_id: League identifier for the hosting facility.
-  has_play_by_play: True when a play-by-play feed exists for the game.
-  highlight_color: Display colour the league uses for the game in its schedule UI.
-  home_division_id: League identifier for the home team's division.
-  home_penalty_minutes: Penalty minutes assessed to the home team.
-  home_roster_count: Number of players dressed for the home team.
-  home_team_logo_url_100: URL of the home team's logo at the 100px rendition.
-  home_team_logo_url_200: URL of the home team's logo at the 200px rendition.
-  home_team_logo_url_50: URL of the home team's logo at the 50px rendition.
-  home_team_logo_url_full: URL of the home team's logo at the full rendition.
-  home_team_logo_url_large: URL of the home team's logo at the large rendition.
-  home_team_logo_url_medium: URL of the home team's logo at the medium rendition.
-  home_team_logo_url_small: URL of the home team's logo at the small rendition.
-  home_team_short: Short display name of the home team.
-  rink: Name of the rink within the facility.
-  rink_id: League identifier for the rink.
-  tickets_url: Link to purchase tickets for the game.
-  time_zone: Time zone in which the game is played.
-  time_zone_abbr: Abbreviated form of the game's time zone.
-  updated_at: Timestamp at which the league last updated the game record.
-  watch_live_url: Link to the live broadcast of the game.
-load_phf_team_boxscores:
-  blocked_opponent_shots: Opponent shots the team blocked.
-  overtime_scoring: Goals the team scored in overtime.
-  overtime_shots: Shots the team took in overtime.
-  period_1_scoring: Goals the team scored in period 1.
-  period_1_shots: Shots the team took in period 1.
-  period_2_scoring: Goals the team scored in period 2.
-  period_2_shots: Shots the team took in period 2.
-  period_3_scoring: Goals the team scored in period 3.
-  period_3_shots: Shots the team took in period 3.
-  power_play_percent: Share of the team's power plays that produced a goal.
-  shootout_made_scoring: Shootout attempts the team converted.
-  shootout_made_shots: Shootout shots the team took that scored.
-  shootout_missed_scoring: Shootout attempts the team failed to convert.
-  shootout_missed_shots: Shootout shots the team took that did not score.
-  successful_power_play: Number of power plays on which the team scored.
-  total_scoring: Goals the team scored in the game.
-  total_shots: Shots the team took in the game.
 load_contracts:
   cols: Placeholder column retained in the contracts loader output schema; contains no meaningful data in this context.
 load_depth_charts:
