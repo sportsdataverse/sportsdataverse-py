@@ -30,6 +30,7 @@ __all__ = [
     "load_cfb_game_rosters",
     "load_cfb_linescores",
     "load_cfb_betting",
+    "load_cfb_fpi_weekly",
     "load_cfb_power_index",
     "load_cfb_adv_team",
     "load_cfb_adv_passing",
@@ -1384,6 +1385,100 @@ def load_cfb_betting(seasons, return_as_pandas: bool = False):
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
+def load_cfb_fpi_weekly(seasons, return_as_pandas: bool = False):
+    """Load cfb_fpi_weekly (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_fpi_weekly
+
+    Args:
+        seasons: an int or iterable of seasons (>= 2005).
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; seasons with no published asset are
+        skipped with a warning rather than raising (404-safe).
+
+        |col_name                    |type    |
+        |:---------------------------|:-------|
+        |season                      |Int64   |
+        |season_type                 |Int64   |
+        |week                        |Int64   |
+        |team_id                     |Int64   |
+        |last_updated                |String  |
+        |run_date_time_key           |Int64   |
+        |snapshot_out_of_sequence    |Boolean |
+        |fpi                         |Float64 |
+        |fpirank                     |Float64 |
+        |projectedw                  |Float64 |
+        |projectedl                  |Float64 |
+        |projectedt                  |Null    |
+        |projectedwpctrank           |Float64 |
+        |probwinout                  |Float64 |
+        |probwinconf                 |Float64 |
+        |sosremainingrank            |Float64 |
+        |accomplishment              |Float64 |
+        |accomplishmentrank          |Float64 |
+        |adjwins                     |Float64 |
+        |adjlosses                   |Float64 |
+        |adjwinpctrank               |Float64 |
+        |gamecontrol                 |Float64 |
+        |gamecontrolrank             |Float64 |
+        |adjavgingamewp              |Float64 |
+        |adjavgingamewprank          |Float64 |
+        |avgingamewp                 |Float64 |
+        |avgingamewprank             |Float64 |
+        |avgsosrank                  |Float64 |
+        |topsosrank                  |Float64 |
+        |epaoffense                  |Float64 |
+        |epadefense                  |Float64 |
+        |epaspecialteams             |Float64 |
+        |probwindiv                  |Float64 |
+        |probmakeplayoffs            |Float64 |
+        |probmaketitlegame           |Float64 |
+        |numwins                     |Float64 |
+        |numlosses                   |Float64 |
+        |numties                     |Float64 |
+        |probwintitle                |Float64 |
+        |rankchange7days             |Float64 |
+        |prob6wins                   |Float64 |
+        |rank                        |Float64 |
+        |offefficiency               |Float64 |
+        |offefficiencyrank           |Float64 |
+        |defefficiency               |Float64 |
+        |defefficiencyrank           |Float64 |
+        |stefficiency                |Float64 |
+        |stefficiencyrank            |Float64 |
+        |totefficiency               |Float64 |
+        |totefficiencyrank           |Float64 |
+        |snapshot_is_contemporaneous |Boolean |
+
+    Example:
+        Quick start::
+
+            load_cfb_fpi_weekly(seasons=2024)
+    """
+    frames, missing = [], []
+    for season in _as_season_list(seasons):
+        if int(season) < 2005:
+            raise SeasonNotFoundError("season cannot be less than 2005")
+        df = _read_release_parquet(
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/cfb_fpi_weekly/cfb_fpi_weekly_{season}.parquet"
+        )
+        if df is None:
+            missing.append(season)
+            continue
+        frames.append(df)
+    if missing:
+        cli_warn("load_cfb_fpi_weekly: no data for season(s) {missing} (skipped)".format(missing=missing))
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    # Producers shipped this id with differing dtypes across releases; pin it here
+    # so a cross-dataset join cannot silently match nothing.
+    out = _cast_ids_int64(out, ["team_id"])
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
 def load_cfb_power_index(seasons, return_as_pandas: bool = False):
     """Load espn_cfb_power_index (sportsdataverse-data release).
 
@@ -1397,12 +1492,15 @@ def load_cfb_power_index(seasons, return_as_pandas: bool = False):
         A polars (or pandas) DataFrame; seasons with no published asset are
         skipped with a warning rather than raising (404-safe).
 
-        |col_name |type   |
-        |:--------|:------|
-        |$ref     |String |
-        |game_id  |Int64  |
-        |season   |Int64  |
-        |week     |Int64  |
+        |col_name         |type    |
+        |:----------------|:-------|
+        |season           |Int64   |
+        |game_id          |Int64   |
+        |team_id          |Int64   |
+        |teampredptdiff   |Float64 |
+        |gameprojection   |Float64 |
+        |matchupquality   |Float64 |
+        |teamadjgamescore |Float64 |
 
     Example:
         Quick start::
@@ -1425,6 +1523,9 @@ def load_cfb_power_index(seasons, return_as_pandas: bool = False):
     # diagonal: per-season release schemas can drift (columns added/dropped
     # over the years) -- union columns, null-fill gaps.
     out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    # Producers shipped this id with differing dtypes across releases; pin it here
+    # so a cross-dataset join cannot silently match nothing.
+    out = _cast_ids_int64(out, ["team_id"])
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 

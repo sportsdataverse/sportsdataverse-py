@@ -914,6 +914,26 @@ def render_flat_module(api: spec.FlatApi, league_prefix: str = "") -> str:
     )
 
 
+def _assert_declared_types_are_strings(schemas: dict) -> None:
+    """Fail loudly when a declared dtype came back as None instead of a string.
+
+    polars' all-null dtype is literally ``Null``, and YAML parses a BARE ``Null``
+    as the null literal -- so a schema re-derived from an all-null column writes
+    ``type: Null`` and reads back as ``None``, which then blows up much later in
+    ``_build_loader_docstring`` with an opaque ``len(None)``. Quoting it (``'Null'``)
+    is the fix; this turns the delayed crash into an actionable message naming the
+    exact loader and column.
+    """
+    bad = [
+        f"{fn}.{c.get('name')}"
+        for fn, cols in (schemas or {}).items()
+        for c in (cols or [])
+        if isinstance(c, dict) and c.get("type") is None
+    ]
+    if bad:
+        raise SystemExit("loader_schemas.yaml has null dtypes (quote them as 'Null'): " + ", ".join(bad[:10]))
+
+
 @functools.lru_cache(maxsize=1)
 def _loader_schemas() -> dict:
     """``{fn: [{name, type}, ...]}`` introspected from the release parquet footers
@@ -2017,7 +2037,9 @@ def _loader_schema_table(fn: str, league: str | None = None) -> str:
     documents its columns under its own name), then the R-package column dict for
     the league. Columns with neither are left blank rather than invented.
     """
-    cols = _loader_schemas().get(fn) or []
+    schemas = _loader_schemas()
+    _assert_declared_types_are_strings(schemas)
+    cols = schemas.get(fn) or []
     if not cols:
         return ""
     head = "| col_name | type | description |\n|---|---|---|\n"
