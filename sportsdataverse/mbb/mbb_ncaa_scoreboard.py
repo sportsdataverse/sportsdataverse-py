@@ -117,8 +117,9 @@ NCAA_MBB_SEASON_DIVISIONS: "dict[str, int]" = {
 }
 
 #: WBB ``season_divisions`` ids by season label (wbigballR all_functions.R:1106-1147).
-#: NOTE: the women's table has NO 2009-10 and NO 2025-26 entry (wbigballR is an
-#: older fork; extend forward as new ids are confirmed).
+#: NOTE: the women's table has NO 2009-10 entry (wbigballR is an older fork;
+#: extend forward as new ids are confirmed). 2025-26 was likewise missing
+#: upstream and was discovered + backfilled here on 2026-08-01.
 NCAA_WBB_SEASON_DIVISIONS: "dict[str, int]" = {
     "2010-11": 10200,
     "2011-12": 10520,
@@ -135,6 +136,10 @@ NCAA_WBB_SEASON_DIVISIONS: "dict[str, int]" = {
     "2022-23": 17941,
     "2023-24": 18220,
     "2024-25": 18423,
+    # Discovered 2026-08-01 by probing candidate ids around the men's 18703 and
+    # confirming sport_code=WBB on a team page from the division (the ids carry
+    # no MBB<->WBB offset: observed deltas run -59..+567).
+    "2025-26": 18704,
 }
 
 #: Conference name -> stats.ncaa.org conference id (bigballR
