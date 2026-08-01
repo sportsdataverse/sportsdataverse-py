@@ -943,7 +943,12 @@ def _loader_schemas() -> dict:
         return {}
     import yaml
 
-    return yaml.safe_load(p.read_text(encoding="utf-8")) or {}
+    schemas = yaml.safe_load(p.read_text(encoding="utf-8")) or {}
+    # Validate at the single chokepoint, not at one call site: _build_loader_docstring
+    # reads this dict directly and indexes c["type"], so guarding only the docs table
+    # would leave the crash the guard exists to prevent still reachable.
+    _assert_declared_types_are_strings(schemas)
+    return schemas
 
 
 def _build_loader_docstring(ld: spec.Loader) -> str:
@@ -2037,9 +2042,7 @@ def _loader_schema_table(fn: str, league: str | None = None) -> str:
     documents its columns under its own name), then the R-package column dict for
     the league. Columns with neither are left blank rather than invented.
     """
-    schemas = _loader_schemas()
-    _assert_declared_types_are_strings(schemas)
-    cols = schemas.get(fn) or []
+    cols = _loader_schemas().get(fn) or []
     if not cols:
         return ""
     head = "| col_name | type | description |\n|---|---|---|\n"
