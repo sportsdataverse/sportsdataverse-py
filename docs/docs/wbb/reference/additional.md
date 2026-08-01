@@ -6352,7 +6352,7 @@ Discover every NCAA WBB game played on a date (wbigballR `get_date_games`).
 Same engine as
 `sportsdataverse.mbb.mbb_ncaa_scoreboard.ncaa_mbb_date_games` with
 the WBB `season_divisions` table bound (see the module docstring for
-the 2010-11..2024-25 coverage caveat).
+the 2010-11..2025-26 coverage caveat).
 
 **Parameters**
 
