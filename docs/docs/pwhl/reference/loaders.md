@@ -46,81 +46,81 @@ Release: [phf_pbp](https://github.com/sportsdataverse/sportsdataverse-data/relea
 | `play_type` | String | String indicating the type of play: pass (includes sacks), run (includes scrambles), punt, field_goal, kickoff, extra_point, qb_kneel, qb_spike, no_play (timeouts and penalties), and missing for rows indicating end of play. |
 | `team` | String | Team name. |
 | `time` | String | Game clock at infraction (MM:SS). |
-| `play_description` | String |  |
+| `play_description` | String | Free-text description of the play as published by the league. |
 | `period_id` | Int32 | Period identifier. |
 | `game_id` | Int32 | Unique game identifier. |
 | `game_date` | String | Game date. |
 | `home_team` | String | Home team name. |
 | `home_location` | String | Home team city. |
-| `home_nickname` | String |  |
+| `home_nickname` | String | Nickname of the home team. |
 | `home_abbreviation` | String | Home team abbreviation. |
-| `home_score_total` | Int32 |  |
+| `home_score_total` | Int32 | Home team's cumulative score after the play. |
 | `away_team` | String | Away team name. |
 | `away_location` | String | Away team city. |
-| `away_nickname` | String |  |
+| `away_nickname` | String | Nickname of the away team. |
 | `away_abbreviation` | String | Away team abbreviation. |
-| `away_score_total` | Int32 |  |
+| `away_score_total` | Int32 | Away team's cumulative score after the play. |
 | `away_goalie` | String | Name of the away goalie on the ice. |
-| `away_goalie_jersey` | String |  |
-| `goalie_change` | String |  |
+| `away_goalie_jersey` | String | Jersey number of the away goaltender on the ice. |
+| `goalie_change` | String | True when the play records a goaltender change. |
 | `penalty` | Int32 | Binary indicator for whether or not a penalty occurred. |
-| `on_ice_situation` | String |  |
+| `on_ice_situation` | String | Strength situation on the ice for the play (e.g. even strength, power play). |
 | `score` | String | Final score string. |
 | `minute_start` | Int32 | Minute mark of the period when the event started. |
 | `second_start` | Int32 | Second mark of the period when the event started. |
 | `clock` | String | Game clock time remaining (MM:SS). |
-| `leader` | String |  |
+| `leader` | String | Team leading the game at this point in the play sequence. |
 | `away_goals` | String | Away goals in the period. |
 | `home_goals` | String | Home goals in the period. |
 | `sec_from_start` | Int32 | Seconds elapsed since the start of the game. |
-| `power_play_seconds` | Int32 |  |
+| `power_play_seconds` | Int32 | Elapsed seconds of the power play at this play. |
 | `time_elapsed` | String | Elapsed game time for the drive (`MM:SS`). |
 | `time_remaining` | String | Time remaining. |
-| `player_name_1` | String |  |
-| `player_jersey_1` | String |  |
+| `player_name_1` | String | Name of the player in slot 1 of the play's participant list. |
+| `player_jersey_1` | String | Jersey number of the player in slot 1 of the play's participant list. |
 | `home_skaters` | Int32 | Number of home skaters on the ice. |
 | `away_skaters` | Int32 | Number of away skaters on the ice. |
 | `home_goalie` | String | Name of the home goalie on the ice. |
-| `home_goalie_jersey` | String |  |
-| `player_name_2` | String |  |
-| `player_jersey_2` | String |  |
+| `home_goalie_jersey` | String | Jersey number of the home goaltender on the ice. |
+| `player_name_2` | String | Name of the player in slot 2 of the play's participant list. |
+| `player_jersey_2` | String | Jersey number of the player in slot 2 of the play's participant list. |
 | `shot_result` | String | Shot result ('Made' / 'Missed'). |
-| `goalie_involved` | String |  |
+| `goalie_involved` | String | Name of the goaltender involved in the play. |
 | `penalty_type` | String | String indicating the penalty type of the first penalty in the given play. Will be `NA` if `desc` is missing the type. |
-| `penalty_level` | String |  |
+| `penalty_level` | String | Severity classification of the penalty (e.g. minor, major). |
 | `penalty_length` | String | Penalty length in minutes. |
-| `start_power_play` | Int32 |  |
-| `end_power_play` | Int32 |  |
-| `player_name_3` | String |  |
-| `player_jersey_3` | String |  |
-| `scoring_team_abbrev` | String |  |
-| `scoring_team_on_ice` | String |  |
-| `offensive_player_name_1` | String |  |
-| `offensive_player_name_2` | String |  |
-| `offensive_player_name_3` | String |  |
-| `offensive_player_name_4` | String |  |
-| `offensive_player_name_5` | String |  |
-| `defending_team_abbrev` | String |  |
-| `offensive_player_jersey_1` | String |  |
-| `offensive_player_jersey_2` | String |  |
-| `offensive_player_jersey_3` | String |  |
-| `offensive_player_jersey_4` | String |  |
-| `offensive_player_jersey_5` | String |  |
-| `defending_team_on_ice` | String |  |
-| `defensive_player_name_1` | String |  |
-| `defensive_player_name_2` | String |  |
-| `defensive_player_name_3` | String |  |
-| `defensive_player_name_4` | String |  |
-| `defensive_player_name_5` | String |  |
-| `defensive_player_jersey_1` | String |  |
-| `defensive_player_jersey_2` | String |  |
-| `defensive_player_jersey_3` | String |  |
-| `defensive_player_jersey_4` | String |  |
-| `defensive_player_jersey_5` | String |  |
-| `defensive_player_name_6` | String |  |
-| `defensive_player_jersey_6` | String |  |
-| `offensive_player_name_6` | String |  |
-| `offensive_player_jersey_6` | String |  |
+| `start_power_play` | Int32 | True on the play where a power play begins. |
+| `end_power_play` | Int32 | True on the play where a power play ends. |
+| `player_name_3` | String | Name of the player in slot 3 of the play's participant list. |
+| `player_jersey_3` | String | Jersey number of the player in slot 3 of the play's participant list. |
+| `scoring_team_abbrev` | String | Abbreviation of the team credited with the goal. |
+| `scoring_team_on_ice` | String | Skaters the scoring team had on the ice for the goal. |
+| `offensive_player_name_1` | String | Name of the attacking team's skater in on-ice slot 1 for the play. |
+| `offensive_player_name_2` | String | Name of the attacking team's skater in on-ice slot 2 for the play. |
+| `offensive_player_name_3` | String | Name of the attacking team's skater in on-ice slot 3 for the play. |
+| `offensive_player_name_4` | String | Name of the attacking team's skater in on-ice slot 4 for the play. |
+| `offensive_player_name_5` | String | Name of the attacking team's skater in on-ice slot 5 for the play. |
+| `defending_team_abbrev` | String | Abbreviation of the team defending on the play. |
+| `offensive_player_jersey_1` | String | Jersey number of the attacking team's skater in on-ice slot 1 for the play. |
+| `offensive_player_jersey_2` | String | Jersey number of the attacking team's skater in on-ice slot 2 for the play. |
+| `offensive_player_jersey_3` | String | Jersey number of the attacking team's skater in on-ice slot 3 for the play. |
+| `offensive_player_jersey_4` | String | Jersey number of the attacking team's skater in on-ice slot 4 for the play. |
+| `offensive_player_jersey_5` | String | Jersey number of the attacking team's skater in on-ice slot 5 for the play. |
+| `defending_team_on_ice` | String | Skaters the defending team had on the ice for the play. |
+| `defensive_player_name_1` | String | Name of the defending team's skater in on-ice slot 1 for the play. |
+| `defensive_player_name_2` | String | Name of the defending team's skater in on-ice slot 2 for the play. |
+| `defensive_player_name_3` | String | Name of the defending team's skater in on-ice slot 3 for the play. |
+| `defensive_player_name_4` | String | Name of the defending team's skater in on-ice slot 4 for the play. |
+| `defensive_player_name_5` | String | Name of the defending team's skater in on-ice slot 5 for the play. |
+| `defensive_player_jersey_1` | String | Jersey number of the defending team's skater in on-ice slot 1 for the play. |
+| `defensive_player_jersey_2` | String | Jersey number of the defending team's skater in on-ice slot 2 for the play. |
+| `defensive_player_jersey_3` | String | Jersey number of the defending team's skater in on-ice slot 3 for the play. |
+| `defensive_player_jersey_4` | String | Jersey number of the defending team's skater in on-ice slot 4 for the play. |
+| `defensive_player_jersey_5` | String | Jersey number of the defending team's skater in on-ice slot 5 for the play. |
+| `defensive_player_name_6` | String | Name of the defending team's skater in on-ice slot 6 for the play. |
+| `defensive_player_jersey_6` | String | Jersey number of the defending team's skater in on-ice slot 6 for the play. |
+| `offensive_player_name_6` | String | Name of the attacking team's skater in on-ice slot 6 for the play. |
+| `offensive_player_jersey_6` | String | Jersey number of the attacking team's skater in on-ice slot 6 for the play. |
 | `season` | Int32 | Season year (echoed from arg). |
 
 ```python
@@ -134,7 +134,7 @@ Release: [phf_player_boxscores](https://github.com/sportsdataverse/sportsdataver
 
 | col_name | type | description |
 |---|---|---|
-| `player_jersey` | Int32 |  |
+| `player_jersey` | Int32 | Player's jersey number. |
 | `player_name` | String | Player name. |
 | `position` | String | Player position. |
 | `goals` | Int32 | Goals scored. |
@@ -145,24 +145,24 @@ Release: [phf_player_boxscores](https://github.com/sportsdataverse/sportsdataver
 | `blocks` | Int32 | Total blocks. |
 | `giveaways` | Int32 | Giveaways. |
 | `takeaways` | Int32 | Takeaways. |
-| `faceoffs_won_lost` | String |  |
-| `faceoffs_win_pct` | Float64 |  |
-| `powerplay_goals` | Int32 |  |
+| `faceoffs_won_lost` | String | Faceoffs won and lost, as the league's combined won-lost string. |
+| `faceoffs_win_pct` | Float64 | Share of the player's faceoffs won. |
+| `powerplay_goals` | Int32 | Goals the player scored on the power play. |
 | `shorthanded_goals` | Int32 | Shorthanded goals. |
 | `shots` | Int32 | Shots on goal. |
-| `shots_blocked` | Int32 |  |
+| `shots_blocked` | Int32 | Shots the player blocked. |
 | `faceoffs_won` | Int32 | Faceoffs won in the season. |
 | `faceoffs_lost` | Int32 | Faceoffs lost in the season. |
 | `team` | String | Team name. |
-| `skaters_href` | String |  |
+| `skaters_href` | String | Relative link to the league's skater table for this game. |
 | `player_id` | String | Unique player identifier. |
 | `game_id` | Int32 | Unique game identifier. |
 | `minutes_played` | String | Minutes played. |
 | `shots_against` | Int32 | Shots faced. |
 | `goals_against` | Int32 | Goals against. |
 | `saves` | Int32 | Saves made. |
-| `save_percent` | Float64 |  |
-| `goalies_href` | String |  |
+| `save_percent` | Float64 | Share of shots faced that the goaltender saved. |
+| `goalies_href` | String | Relative link to the league's goaltender table for this game. |
 | `season` | Int32 | Season year (echoed from arg). |
 
 ```python
@@ -183,62 +183,62 @@ Release: [phf_schedules](https://github.com/sportsdataverse/sportsdataverse-data
 | `tournament_id` | Boolean | ESPN tournament id parsed from the `$ref` URL. |
 | `game_id` | Int32 | Unique game identifier. |
 | `number` | Int32 | Week number as returned by the API. |
-| `datetime` | Datetime(time_unit='us', time_zone='UTC') |  |
-| `datetime_tz` | Datetime(time_unit='us', time_zone='UTC') |  |
-| `time_zone` | String |  |
-| `time_zone_abbr` | String |  |
-| `updated_at` | Datetime(time_unit='us', time_zone='UTC') |  |
-| `created_at` | Datetime(time_unit='us', time_zone='UTC') |  |
+| `datetime` | Datetime(time_unit='us', time_zone='UTC') | Scheduled start of the game as a timestamp. |
+| `datetime_tz` | Datetime(time_unit='us', time_zone='UTC') | Scheduled start of the game including its time-zone offset. |
+| `time_zone` | String | Time zone in which the game is played. |
+| `time_zone_abbr` | String | Abbreviated form of the game's time zone. |
+| `updated_at` | Datetime(time_unit='us', time_zone='UTC') | Timestamp at which the league last updated the game record. |
+| `created_at` | Datetime(time_unit='us', time_zone='UTC') | Timestamp at which the league created the game record. |
 | `home_team_id` | Int32 | Home team identifier. |
 | `home_team` | String | Home team name. |
-| `home_team_short` | String |  |
-| `home_team_logo_url_full` | String |  |
-| `home_team_logo_url_small` | String |  |
-| `home_team_logo_url_medium` | String |  |
-| `home_team_logo_url_large` | String |  |
-| `home_team_logo_url_50` | String |  |
-| `home_team_logo_url_100` | String |  |
-| `home_team_logo_url_200` | String |  |
+| `home_team_short` | String | Short display name of the home team. |
+| `home_team_logo_url_full` | String | URL of the home team's logo at the full rendition. |
+| `home_team_logo_url_small` | String | URL of the home team's logo at the small rendition. |
+| `home_team_logo_url_medium` | String | URL of the home team's logo at the medium rendition. |
+| `home_team_logo_url_large` | String | URL of the home team's logo at the large rendition. |
+| `home_team_logo_url_50` | String | URL of the home team's logo at the 50px rendition. |
+| `home_team_logo_url_100` | String | URL of the home team's logo at the 100px rendition. |
+| `home_team_logo_url_200` | String | URL of the home team's logo at the 200px rendition. |
 | `away_team_id` | Int32 | Away team identifier. |
 | `away_team` | String | Away team name. |
-| `away_team_short` | String |  |
-| `away_team_logo_url_full` | String |  |
-| `away_team_logo_url_small` | String |  |
-| `away_team_logo_url_medium` | String |  |
-| `away_team_logo_url_large` | String |  |
-| `away_team_logo_url_50` | String |  |
-| `away_team_logo_url_100` | String |  |
-| `away_team_logo_url_200` | String |  |
-| `home_division_id` | Int32 |  |
+| `away_team_short` | String | Short display name of the away team. |
+| `away_team_logo_url_full` | String | URL of the away team's logo at the full rendition. |
+| `away_team_logo_url_small` | String | URL of the away team's logo at the small rendition. |
+| `away_team_logo_url_medium` | String | URL of the away team's logo at the medium rendition. |
+| `away_team_logo_url_large` | String | URL of the away team's logo at the large rendition. |
+| `away_team_logo_url_50` | String | URL of the away team's logo at the 50px rendition. |
+| `away_team_logo_url_100` | String | URL of the away team's logo at the 100px rendition. |
+| `away_team_logo_url_200` | String | URL of the away team's logo at the 200px rendition. |
+| `home_division_id` | Int32 | League identifier for the home team's division. |
 | `home_division` | String | Home team division. |
-| `away_division_id` | Int32 |  |
+| `away_division_id` | Int32 | League identifier for the away team's division. |
 | `away_division` | String | Away team division. |
 | `home_score` | Int32 | Home team final score. |
 | `away_score` | Int32 | Away team final score. |
 | `home_shots` | Int32 | Home team shots in the period. |
 | `away_shots` | Int32 | Away team shots in the period. |
-| `home_penalty_minutes` | Int32 |  |
-| `away_penalty_minutes` | Int32 |  |
-| `home_roster_count` | Int32 |  |
-| `away_roster_count` | Int32 |  |
-| `facility_id` | Int32 |  |
-| `facility` | String |  |
-| `facility_address` | String |  |
-| `rink_id` | Boolean |  |
-| `rink` | Boolean |  |
+| `home_penalty_minutes` | Int32 | Penalty minutes assessed to the home team. |
+| `away_penalty_minutes` | Int32 | Penalty minutes assessed to the away team. |
+| `home_roster_count` | Int32 | Number of players dressed for the home team. |
+| `away_roster_count` | Int32 | Number of players dressed for the away team. |
+| `facility_id` | Int32 | League identifier for the hosting facility. |
+| `facility` | String | Name of the facility hosting the game. |
+| `facility_address` | String | Street address of the hosting facility. |
+| `rink_id` | Boolean | League identifier for the rink. |
+| `rink` | Boolean | Name of the rink within the facility. |
 | `game_type` | String | Game type the row belongs to. |
 | `notes` | String | Notes flag for the pick. |
 | `status` | String | Status string (e.g. captain markers). |
 | `overtime` | Boolean | Binary indicator of whether or not game went to overtime. |
 | `shootout` | Boolean | Whether shootout data is available. |
-| `allow_players` | Boolean |  |
-| `tickets_url` | String |  |
-| `watch_live_url` | String |  |
-| `external_url` | Boolean |  |
-| `has_play_by_play` | Boolean |  |
-| `highlight_color` | Boolean |  |
+| `allow_players` | Boolean | League flag for whether player-level detail is published for the game. |
+| `tickets_url` | String | Link to purchase tickets for the game. |
+| `watch_live_url` | String | Link to the live broadcast of the game. |
+| `external_url` | Boolean | League-published external link for the game. |
+| `has_play_by_play` | Boolean | True when a play-by-play feed exists for the game. |
+| `highlight_color` | Boolean | Display colour the league uses for the game in its schedule UI. |
 | `attendance` | Int32 | Game attendance. |
-| `date_group` | Date |  |
+| `date_group` | Date | League grouping key for the game's date, used to bucket a slate. |
 | `winner` | String | Whether this competitor won the game. |
 | `season` | Int32 | Season year (echoed from arg). |
 | `PBP` | Boolean | Whether play-by-play data is available. |
@@ -259,28 +259,28 @@ Release: [phf_team_boxscores](https://github.com/sportsdataverse/sportsdataverse
 | `team` | String | Team name. |
 | `game_id` | Int32 | Unique game identifier. |
 | `winner` | Boolean | Whether this competitor won the game. |
-| `total_scoring` | Int32 |  |
-| `successful_power_play` | Float64 |  |
+| `total_scoring` | Int32 | Goals the team scored in the game. |
+| `successful_power_play` | Float64 | Number of power plays on which the team scored. |
 | `power_play_opportunities` | Float64 | Power play opportunities. |
-| `power_play_percent` | Float64 |  |
+| `power_play_percent` | Float64 | Share of the team's power plays that produced a goal. |
 | `penalty_minutes` | Float64 | Penalty minutes. |
 | `faceoff_percent` | Float64 | Faceoff win percentage. |
-| `blocked_opponent_shots` | Float64 |  |
+| `blocked_opponent_shots` | Float64 | Opponent shots the team blocked. |
 | `takeaways` | Float64 | Takeaways. |
 | `giveaways` | Float64 | Giveaways. |
-| `period_1_shots` | Int32 |  |
-| `period_2_shots` | Int32 |  |
-| `period_3_shots` | Int32 |  |
-| `overtime_shots` | Int32 |  |
-| `shootout_made_shots` | Int32 |  |
-| `shootout_missed_shots` | Int32 |  |
-| `total_shots` | Int32 |  |
-| `period_1_scoring` | Int32 |  |
-| `period_2_scoring` | Int32 |  |
-| `period_3_scoring` | Int32 |  |
-| `overtime_scoring` | Int32 |  |
-| `shootout_made_scoring` | Float64 |  |
-| `shootout_missed_scoring` | Float64 |  |
+| `period_1_shots` | Int32 | Shots the team took in period 1. |
+| `period_2_shots` | Int32 | Shots the team took in period 2. |
+| `period_3_shots` | Int32 | Shots the team took in period 3. |
+| `overtime_shots` | Int32 | Shots the team took in overtime. |
+| `shootout_made_shots` | Int32 | Shootout shots the team took that scored. |
+| `shootout_missed_shots` | Int32 | Shootout shots the team took that did not score. |
+| `total_shots` | Int32 | Shots the team took in the game. |
+| `period_1_scoring` | Int32 | Goals the team scored in period 1. |
+| `period_2_scoring` | Int32 | Goals the team scored in period 2. |
+| `period_3_scoring` | Int32 | Goals the team scored in period 3. |
+| `overtime_scoring` | Int32 | Goals the team scored in overtime. |
+| `shootout_made_scoring` | Float64 | Shootout attempts the team converted. |
+| `shootout_missed_scoring` | Float64 | Shootout attempts the team failed to convert. |
 | `season` | Int32 | Season year (echoed from arg). |
 
 ```python

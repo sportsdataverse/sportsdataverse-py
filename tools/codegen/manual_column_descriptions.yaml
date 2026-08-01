@@ -4048,6 +4048,379 @@ load_cfb_adv_situational:
   pos_team: Display name of the team on offense (e.g. 'Ohio State Buckeyes').
   pos_team_id: ESPN team id of the team on offense. Present for every season 2004+.
   standard_downs: Number of plays the team ran on standard downs (the team ahead of schedule for the series).
+load_cfb_pbp:
+  A_score_diff: Away team's score minus the home team's, from the away perspective.
+  EPA_explosive: True when the play was explosive.
+  EPA_explosive_pass: True when the pass play was explosive.
+  EPA_explosive_rush: True when the rush play was explosive.
+  EPA_fg: EPA credited to the play on field-goal attempts.
+  EPA_kickoff: EPA credited to the play on kickoff plays.
+  EPA_middle_8_success: True when the play in the middle eight was successful by EPA.
+  EPA_middle_8_success_pass: True when the pass play in the middle eight was successful by EPA.
+  EPA_middle_8_success_rush: True when the rush play in the middle eight was successful by EPA.
+  EPA_non_explosive: EPA credited to the play on non-explosive plays.
+  EPA_pass: EPA credited to the play on pass plays.
+  EPA_penalty: EPA credited to the play attributable to penalties.
+  EPA_punt: EPA credited to the play on punt plays.
+  EPA_rush: EPA credited to the play on rush plays.
+  EPA_scrimmage: EPA credited to the play on plays from scrimmage.
+  EPA_sp: EPA credited to the play on special-teams plays.
+  EPA_success: True when the play was successful by EPA.
+  EPA_success_EPA: EPA on successful plays.
+  EPA_success_early_down: True when the play on an early down was successful by EPA.
+  EPA_success_early_down_pass: True when the pass play on an early down was successful by EPA.
+  EPA_success_early_down_rush: True when the rush play on an early down was successful by EPA.
+  EPA_success_late_down: True when the play on a late down was successful by EPA.
+  EPA_success_late_down_pass: True when the pass play on a late down was successful by EPA.
+  EPA_success_late_down_rush: True when the rush play on a late down was successful by EPA.
+  EPA_success_pass: True when the pass play was successful by EPA.
+  EPA_success_pass_EPA: EPA on successful pass plays.
+  EPA_success_passing_down: True when the play on a passing down was successful by EPA.
+  EPA_success_passing_down_EPA: EPA on successful plays on a passing down.
+  EPA_success_rush: True when the rush play was successful by EPA.
+  EPA_success_rush_EPA: EPA on successful rush plays.
+  EPA_success_standard_down: True when the play on a standard down was successful by EPA.
+  EPA_success_standard_down_EPA: EPA on successful plays on a standard down.
+  EP_between: Change in expected points across the play, before penalty adjustment.
+  EP_end: Expected points for the offense at the end of the play.
+  EP_start: Expected points for the offense at the start of the play.
+  EP_start_touchback: Expected points the offense would have had from a touchback on this play.
+  HA_score_diff: Home score minus away score for the play.
+  H_score_diff: Home team's score minus the away team's, from the home perspective.
+  TFL: True when the play was a tackle for loss.
+  TFL_pass: True when the play was a tackle for loss on a pass play (a sack).
+  TFL_rush: True when the play was a tackle for loss on a rush play.
+  action_play: True when the play advanced the game state -- excludes timeouts, end-of-period markers and other non-action
+    rows.
+  adj_rush_yardage: Rushing yards capped at 8, the input to the line-yards decomposition.
+  awayTeamAbbrev: ESPN's away-team Abbrev for the game, stamped on every play.
+  awayTeamId: ESPN's away-team Id for the game, stamped on every play.
+  awayTeamMascot: ESPN's away-team Mascot for the game, stamped on every play.
+  awayTeamName: ESPN's away-team Name for the game, stamped on every play.
+  awayTeamNameAlt: ESPN's away-team NameAlt for the game, stamped on every play.
+  awayTimeoutCalled: True when the away team called a timeout on the play.
+  clock.displayValue: Game clock at the play, as the displayed mm:ss string.
+  clock.minutes: Minutes remaining on the game clock at the play.
+  clock.seconds: Seconds component of the game clock at the play.
+  down_1: True when it is 1st down at the start of the play.
+  down_1_end: True when it is 1st down at the end of the play.
+  down_2: True when it is 2nd down at the start of the play.
+  down_2_end: True when it is 2nd down at the end of the play.
+  down_3: True when it is 3rd down at the start of the play.
+  down_3_end: True when it is 3rd down at the end of the play.
+  down_4: True when it is 4th down at the start of the play.
+  down_4_end: True when it is 4th down at the end of the play.
+  drive.description: ESPN's `description` field for the drive containing this play.
+  drive.displayResult: ESPN's `displayResult` field for the drive containing this play.
+  drive.end.clock.displayValue: ESPN's `end.clock.displayValue` field for the drive containing this play.
+  drive.end.period.number: ESPN's `end.period.number` field for the drive containing this play.
+  drive.end.period.type: ESPN's `end.period.type` field for the drive containing this play.
+  drive.end.yardLine: ESPN's `end.yardLine` field for the drive containing this play.
+  drive.id: ESPN's `id` field for the drive containing this play.
+  drive.isScore: ESPN's `isScore` field for the drive containing this play.
+  drive.offensivePlays: ESPN's `offensivePlays` field for the drive containing this play.
+  drive.result: ESPN's `result` field for the drive containing this play.
+  drive.shortDisplayResult: ESPN's `shortDisplayResult` field for the drive containing this play.
+  drive.start.clock.displayValue: ESPN's `start.clock.displayValue` field for the drive containing this play.
+  drive.start.period.number: ESPN's `start.period.number` field for the drive containing this play.
+  drive.start.period.type: ESPN's `start.period.type` field for the drive containing this play.
+  drive.start.text: ESPN's `start.text` field for the drive containing this play.
+  drive.start.yardLine: ESPN's `start.yardLine` field for the drive containing this play.
+  drive.team.abbreviation: ESPN's `team.abbreviation` field for the drive containing this play.
+  drive.team.displayName: ESPN's `team.displayName` field for the drive containing this play.
+  drive.team.name: ESPN's `team.name` field for the drive containing this play.
+  drive.team.shortDisplayName: ESPN's `team.shortDisplayName` field for the drive containing this play.
+  drive.timeElapsed.displayValue: ESPN's `timeElapsed.displayValue` field for the drive containing this play.
+  drive.yards: ESPN's `yards` field for the drive containing this play.
+  drive_offense_plays: Offensive plays run on the drive.
+  drive_offense_yards: Offensive yards gained on the drive.
+  drive_play_index: Sequence number of the play within its drive.
+  drive_start: Yard line at which the drive began.
+  drive_stopped: True when the play ended the drive.
+  drive_total_yards: Total yards gained on the drive.
+  early_down: True when the play is a scrimmage play on first or second down.
+  early_down_pass: True when the play is a pass on an early down.
+  early_down_rush: True when the play is a rush on an early down.
+  end.ExpScoreDiff: ESPN's `ExpScoreDiff` value for the play state at the end of the play.
+  end.ExpScoreDiff_Time_Ratio: ESPN's `ExpScoreDiff_Time_Ratio` value for the play state at the end of the play.
+  end.TimeSecsRem: ESPN's `TimeSecsRem` value for the play state at the end of the play.
+  end.adj_TimeSecsRem: ESPN's `adj_TimeSecsRem` value for the play state at the end of the play.
+  end.awayScore: ESPN's `awayScore` value for the play state at the end of the play.
+  end.awayTeamTimeouts: ESPN's `awayTeamTimeouts` value for the play state at the end of the play.
+  end.defPosTeamTimeouts: ESPN's `defPosTeamTimeouts` value for the play state at the end of the play.
+  end.def_pos_team.id: ESPN's `def_pos_team.id` value for the play state at the end of the play.
+  end.def_pos_team.name: ESPN's `def_pos_team.name` value for the play state at the end of the play.
+  end.def_pos_team_score: ESPN's `def_pos_team_score` value for the play state at the end of the play.
+  end.def_team.id: ESPN's `def_team.id` value for the play state at the end of the play.
+  end.distance: ESPN's `distance` value for the play state at the end of the play.
+  end.down: ESPN's `down` value for the play state at the end of the play.
+  end.downDistanceText: ESPN's `downDistanceText` value for the play state at the end of the play.
+  end.elapsed_share: ESPN's `elapsed_share` value for the play state at the end of the play.
+  end.homeScore: ESPN's `homeScore` value for the play state at the end of the play.
+  end.homeTeamTimeouts: ESPN's `homeTeamTimeouts` value for the play state at the end of the play.
+  end.is_home: ESPN's `is_home` value for the play state at the end of the play.
+  end.posTeamTimeouts: ESPN's `posTeamTimeouts` value for the play state at the end of the play.
+  end.pos_score_diff: ESPN's `pos_score_diff` value for the play state at the end of the play.
+  end.pos_team.id: ESPN's `pos_team.id` value for the play state at the end of the play.
+  end.pos_team.name: ESPN's `pos_team.name` value for the play state at the end of the play.
+  end.pos_team_receives_2H_kickoff: ESPN's `pos_team_receives_2H_kickoff` value for the play state at the end of the play.
+  end.pos_team_score: ESPN's `pos_team_score` value for the play state at the end of the play.
+  end.pos_team_spread: ESPN's `pos_team_spread` value for the play state at the end of the play.
+  end.possessionText: ESPN's `possessionText` value for the play state at the end of the play.
+  end.shortDownDistanceText: ESPN's `shortDownDistanceText` value for the play state at the end of the play.
+  end.spread_time: ESPN's `spread_time` value for the play state at the end of the play.
+  end.team.id: ESPN's `team.id` value for the play state at the end of the play.
+  end.yard: ESPN's `yard` value for the play state at the end of the play.
+  end.yardLine: ESPN's `yardLine` value for the play state at the end of the play.
+  end.yardsToEndzone: ESPN's `yardsToEndzone` value for the play state at the end of the play.
+  fg_attempt: True when the play was a field-goal attempt.
+  firstHalfKickoffTeamId: ESPN id of the team that received the opening kickoff.
+  first_down_created: True when the play produced a first down for the offense.
+  forced_fumble: True when the defense forced a fumble on the play.
+  fumble_recovered: True when a fumble on the play was recovered.
+  gameSpread: Point spread used as an input to the win-probability model.
+  gameSpreadAvailable: True when a spread was available for the game.
+  havoc: 'True when the defense disrupted the play: a pass breakup, tackle for loss, interception or forced fumble.'
+  highlight_run: True when the rush gained 8 or more yards.
+  highlight_yards: Second-level plus open-field yards -- the yardage credited to the carrier.
+  homeFavorite: True when the home team was favoured by the spread.
+  homeTeamAbbrev: ESPN's home-team Abbrev for the game, stamped on every play.
+  homeTeamId: ESPN's home-team Id for the game, stamped on every play.
+  homeTeamMascot: ESPN's home-team Mascot for the game, stamped on every play.
+  homeTeamName: ESPN's home-team Name for the game, stamped on every play.
+  homeTeamNameAlt: ESPN's home-team NameAlt for the game, stamped on every play.
+  homeTeamSpread: ESPN's home-team Spread for the game, stamped on every play.
+  homeTimeoutCalled: True when the home team called a timeout on the play.
+  kickoff_return_player_name: Name of the player returning the kickoff.
+  lag_EP_end: Value of EP_end on the previous play, used for sequence-aware derivations.
+  lag_HA_score_diff: Value of HA_score_diff on the previous play, used for sequence-aware derivations.
+  lag_awayScore: Value of awayScore on the previous play, used for sequence-aware derivations.
+  lag_change_of_pos_team: Value of change_of_pos_team on the previous play, used for sequence-aware derivations.
+  lag_half: Value of half on the previous play, used for sequence-aware derivations.
+  lag_homeScore: Value of homeScore on the previous play, used for sequence-aware derivations.
+  lag_pos_score_diff: Value of pos_score_diff on the previous play, used for sequence-aware derivations.
+  lag_pos_team: Value of pos_team on the previous play, used for sequence-aware derivations.
+  lag_scoringPlay: Value of scoringPlay on the previous play, used for sequence-aware derivations.
+  late_down: True when the play is a scrimmage play on third or fourth down.
+  late_down_pass: True when the play is a pass on a late down.
+  late_down_rush: True when the play is a rush on a late down.
+  lead_half: Value of half on the next play, used for sequence-aware derivations.
+  lead_play_type: Value of play_type on the next play, used for sequence-aware derivations.
+  lead_pos_team: Value of pos_team on the next play, used for sequence-aware derivations.
+  lead_pos_team2: Value of pos_team on the next 2 plays play, used for sequence-aware derivations.
+  lead_scoringPlay: Value of scoringPlay on the next play, used for sequence-aware derivations.
+  lead_start_distance: Value of start_distance on the next play, used for sequence-aware derivations.
+  lead_start_down: Value of start_down on the next play, used for sequence-aware derivations.
+  lead_start_team: Value of start_team on the next play, used for sequence-aware derivations.
+  lead_start_yardsToEndzone: Value of start_yardsToEndzone on the next play, used for sequence-aware derivations.
+  lead_text: Value of text on the next play, used for sequence-aware derivations.
+  lead_wp_before: Value of wp_before on the next play, used for sequence-aware derivations.
+  lead_wp_before2: Value of wp_before on the next 2 plays play, used for sequence-aware derivations.
+  line_yards: 'Yards credited to the offensive line on a rush, using the standard sliding scale: 1.2x the capped yardage on
+    a loss, all of it through 3 yards, half of each yard from 4 to 8, and a 5.5-yard ceiling beyond that.'
+  net_HA_score_pts: Net points the play added to the home-minus-away score margin.
+  new_distance: Distance to go after the play, including any penalty enforcement.
+  new_down: Down after the play, including any penalty enforcement.
+  non_fumble_sack: True when the play was a sack that did not produce a fumble.
+  open_field_yards: Rushing yards gained beyond 8, credited to the ball carrier rather than the line.
+  opp_highlight_yards: 'Highlight yards on opportunity runs. DEGENERATE: this column is 0 in every published row, because
+    its gate requires a rush of 4 yards or fewer while highlight yards only accrue at 4 or more. Do not use it as a signal.'
+  opportunity_run: True when the play is a rush gaining 4 yards or fewer. Note this is the inverse of the conventional 'opportunity'
+    definition (a carry gaining 4 or more).
+  overUnder: Over/under total used as a model input.
+  pass_breakup: True when a defender broke up the pass.
+  pass_epa: EPA credited to the play when it is a pass.
+  pass_weight: Weighting applied to the pass component of the play.
+  passing_down: True when the offense is behind schedule for the series -- second down needing 8 or more, or third/fourth
+    down needing 5 or more.
+  pen_epa: EPA attributable to a penalty on the play.
+  pen_weight: Weighting applied to the penalty component of the play.
+  penalty_in_text: True when the play description mentions a penalty.
+  period.number: Period (quarter) number in which the play occurred.
+  playType: ESPN's play-type label for the play.
+  pos_score_diff_end: Score differential from the possessing team's perspective at the end of the play.
+  power_rush_attempt: True when the play is a short-yardage power rushing attempt.
+  power_rush_success: True when a power rushing attempt gained the yardage needed.
+  prog_drive_EPA: Cumulative EPA accrued by the drive up to and including this play.
+  prog_drive_WPA: Cumulative win-probability added by the drive up to and including this play.
+  punt_return_player_name: Name of the player returning the punt.
+  qbr_epa: EPA variant used as an input to the QBR calculation.
+  rush_epa: EPA credited to the play when it is a rush.
+  rush_weight: Weighting applied to the rush component of the play.
+  sack_epa: EPA credited to the play when it is a sack.
+  sack_weight: Weighting applied to the sack component of the play.
+  scoringPlay: ESPN flag marking the play as a scoring play.
+  scoringType.abbreviation: ESPN's abbreviation for the scoring type.
+  scoringType.displayName: ESPN's display label for the scoring type.
+  scoringType.name: ESPN's name for the scoring type (e.g. touchdown, field goal).
+  scrimmage_play: True when the play is a play from scrimmage rather than a special-teams or administrative row.
+  seasonType: ESPN season type for the game (2 = regular season, 3 = postseason).
+  second_level_yards: Rushing yards earned from 4 to 8, split evenly between line and carrier under the line-yards decomposition.
+  short_rush_attempt: True when the play is a rush in a short-yardage situation.
+  short_rush_success: True when a short-yardage rush gained the yardage needed.
+  standard_down: True when the offense is on schedule for the series -- first down, second down needing fewer than 8, or third/fourth
+    down needing fewer than 5.
+  start.ExpScoreDiff: ESPN's `ExpScoreDiff` value for the play state at the start of the play.
+  start.ExpScoreDiff_Time_Ratio: ESPN's `ExpScoreDiff_Time_Ratio` value for the play state at the start of the play.
+  start.ExpScoreDiff_Time_Ratio_touchback: ESPN's `ExpScoreDiff_Time_Ratio_touchback` value for the play state at the start
+    of the play.
+  start.ExpScoreDiff_touchback: ESPN's `ExpScoreDiff_touchback` value for the play state at the start of the play.
+  start.TimeSecsRem: ESPN's `TimeSecsRem` value for the play state at the start of the play.
+  start.adj_TimeSecsRem: ESPN's `adj_TimeSecsRem` value for the play state at the start of the play.
+  start.awayScore: ESPN's `awayScore` value for the play state at the start of the play.
+  start.awayTeamTimeouts: ESPN's `awayTeamTimeouts` value for the play state at the start of the play.
+  start.defPosTeamTimeouts: ESPN's `defPosTeamTimeouts` value for the play state at the start of the play.
+  start.def_pos_team.id: ESPN's `def_pos_team.id` value for the play state at the start of the play.
+  start.def_pos_team.name: ESPN's `def_pos_team.name` value for the play state at the start of the play.
+  start.def_pos_team_score: ESPN's `def_pos_team_score` value for the play state at the start of the play.
+  start.distance: ESPN's `distance` value for the play state at the start of the play.
+  start.down: ESPN's `down` value for the play state at the start of the play.
+  start.downDistanceText: ESPN's `downDistanceText` value for the play state at the start of the play.
+  start.elapsed_share: ESPN's `elapsed_share` value for the play state at the start of the play.
+  start.homeScore: ESPN's `homeScore` value for the play state at the start of the play.
+  start.homeTeamTimeouts: ESPN's `homeTeamTimeouts` value for the play state at the start of the play.
+  start.is_home: ESPN's `is_home` value for the play state at the start of the play.
+  start.posTeamTimeouts: ESPN's `posTeamTimeouts` value for the play state at the start of the play.
+  start.pos_score_diff: ESPN's `pos_score_diff` value for the play state at the start of the play.
+  start.pos_team.id: ESPN's `pos_team.id` value for the play state at the start of the play.
+  start.pos_team.name: ESPN's `pos_team.name` value for the play state at the start of the play.
+  start.pos_team_receives_2H_kickoff: ESPN's `pos_team_receives_2H_kickoff` value for the play state at the start of the play.
+  start.pos_team_score: ESPN's `pos_team_score` value for the play state at the start of the play.
+  start.pos_team_spread: ESPN's `pos_team_spread` value for the play state at the start of the play.
+  start.possessionText: ESPN's `possessionText` value for the play state at the start of the play.
+  start.shortDownDistanceText: ESPN's `shortDownDistanceText` value for the play state at the start of the play.
+  start.spread_time: ESPN's `spread_time` value for the play state at the start of the play.
+  start.team.id: ESPN's `team.id` value for the play state at the start of the play.
+  start.yard: ESPN's `yard` value for the play state at the start of the play.
+  start.yardLine: ESPN's `yardLine` value for the play state at the start of the play.
+  start.yardsToEndzone: ESPN's `yardsToEndzone` value for the play state at the start of the play.
+  start.yardsToEndzone.touchback: ESPN's `yardsToEndzone.touchback` value for the play state at the start of the play.
+  statYardage: Yardage ESPN credits to the play for statistical purposes.
+  stopped_run: True when the rush was stopped at or behind the line of scrimmage.
+  td_check: Internal flag used while reconciling whether the play produced a touchdown.
+  text_dupe: True when the play description duplicates the previous row's text.
+  type.abbreviation: ESPN's abbreviation for the play type.
+  type.id: ESPN's numeric identifier for the play type.
+  type.text: ESPN's text label for the play type.
+  wp_touchback: Win probability the offense would have had starting from a touchback.
+load_phf_pbp:
+  away_goalie_jersey: Jersey number of the away goaltender on the ice.
+  away_nickname: Nickname of the away team.
+  away_score_total: Away team's cumulative score after the play.
+  defending_team_abbrev: Abbreviation of the team defending on the play.
+  defending_team_on_ice: Skaters the defending team had on the ice for the play.
+  defensive_player_jersey_1: Jersey number of the defending team's skater in on-ice slot 1 for the play.
+  defensive_player_jersey_2: Jersey number of the defending team's skater in on-ice slot 2 for the play.
+  defensive_player_jersey_3: Jersey number of the defending team's skater in on-ice slot 3 for the play.
+  defensive_player_jersey_4: Jersey number of the defending team's skater in on-ice slot 4 for the play.
+  defensive_player_jersey_5: Jersey number of the defending team's skater in on-ice slot 5 for the play.
+  defensive_player_jersey_6: Jersey number of the defending team's skater in on-ice slot 6 for the play.
+  defensive_player_name_1: Name of the defending team's skater in on-ice slot 1 for the play.
+  defensive_player_name_2: Name of the defending team's skater in on-ice slot 2 for the play.
+  defensive_player_name_3: Name of the defending team's skater in on-ice slot 3 for the play.
+  defensive_player_name_4: Name of the defending team's skater in on-ice slot 4 for the play.
+  defensive_player_name_5: Name of the defending team's skater in on-ice slot 5 for the play.
+  defensive_player_name_6: Name of the defending team's skater in on-ice slot 6 for the play.
+  end_power_play: True on the play where a power play ends.
+  goalie_change: True when the play records a goaltender change.
+  goalie_involved: Name of the goaltender involved in the play.
+  home_goalie_jersey: Jersey number of the home goaltender on the ice.
+  home_nickname: Nickname of the home team.
+  home_score_total: Home team's cumulative score after the play.
+  leader: Team leading the game at this point in the play sequence.
+  offensive_player_jersey_1: Jersey number of the attacking team's skater in on-ice slot 1 for the play.
+  offensive_player_jersey_2: Jersey number of the attacking team's skater in on-ice slot 2 for the play.
+  offensive_player_jersey_3: Jersey number of the attacking team's skater in on-ice slot 3 for the play.
+  offensive_player_jersey_4: Jersey number of the attacking team's skater in on-ice slot 4 for the play.
+  offensive_player_jersey_5: Jersey number of the attacking team's skater in on-ice slot 5 for the play.
+  offensive_player_jersey_6: Jersey number of the attacking team's skater in on-ice slot 6 for the play.
+  offensive_player_name_1: Name of the attacking team's skater in on-ice slot 1 for the play.
+  offensive_player_name_2: Name of the attacking team's skater in on-ice slot 2 for the play.
+  offensive_player_name_3: Name of the attacking team's skater in on-ice slot 3 for the play.
+  offensive_player_name_4: Name of the attacking team's skater in on-ice slot 4 for the play.
+  offensive_player_name_5: Name of the attacking team's skater in on-ice slot 5 for the play.
+  offensive_player_name_6: Name of the attacking team's skater in on-ice slot 6 for the play.
+  on_ice_situation: Strength situation on the ice for the play (e.g. even strength, power play).
+  penalty_level: Severity classification of the penalty (e.g. minor, major).
+  play_description: Free-text description of the play as published by the league.
+  player_jersey_1: Jersey number of the player in slot 1 of the play's participant list.
+  player_jersey_2: Jersey number of the player in slot 2 of the play's participant list.
+  player_jersey_3: Jersey number of the player in slot 3 of the play's participant list.
+  player_name_1: Name of the player in slot 1 of the play's participant list.
+  player_name_2: Name of the player in slot 2 of the play's participant list.
+  player_name_3: Name of the player in slot 3 of the play's participant list.
+  power_play_seconds: Elapsed seconds of the power play at this play.
+  scoring_team_abbrev: Abbreviation of the team credited with the goal.
+  scoring_team_on_ice: Skaters the scoring team had on the ice for the goal.
+  start_power_play: True on the play where a power play begins.
+load_phf_player_boxscores:
+  faceoffs_win_pct: Share of the player's faceoffs won.
+  faceoffs_won_lost: Faceoffs won and lost, as the league's combined won-lost string.
+  goalies_href: Relative link to the league's goaltender table for this game.
+  player_jersey: Player's jersey number.
+  powerplay_goals: Goals the player scored on the power play.
+  save_percent: Share of shots faced that the goaltender saved.
+  shots_blocked: Shots the player blocked.
+  skaters_href: Relative link to the league's skater table for this game.
+load_phf_schedules:
+  allow_players: League flag for whether player-level detail is published for the game.
+  away_division_id: League identifier for the away team's division.
+  away_penalty_minutes: Penalty minutes assessed to the away team.
+  away_roster_count: Number of players dressed for the away team.
+  away_team_logo_url_100: URL of the away team's logo at the 100px rendition.
+  away_team_logo_url_200: URL of the away team's logo at the 200px rendition.
+  away_team_logo_url_50: URL of the away team's logo at the 50px rendition.
+  away_team_logo_url_full: URL of the away team's logo at the full rendition.
+  away_team_logo_url_large: URL of the away team's logo at the large rendition.
+  away_team_logo_url_medium: URL of the away team's logo at the medium rendition.
+  away_team_logo_url_small: URL of the away team's logo at the small rendition.
+  away_team_short: Short display name of the away team.
+  created_at: Timestamp at which the league created the game record.
+  date_group: League grouping key for the game's date, used to bucket a slate.
+  datetime: Scheduled start of the game as a timestamp.
+  datetime_tz: Scheduled start of the game including its time-zone offset.
+  external_url: League-published external link for the game.
+  facility: Name of the facility hosting the game.
+  facility_address: Street address of the hosting facility.
+  facility_id: League identifier for the hosting facility.
+  has_play_by_play: True when a play-by-play feed exists for the game.
+  highlight_color: Display colour the league uses for the game in its schedule UI.
+  home_division_id: League identifier for the home team's division.
+  home_penalty_minutes: Penalty minutes assessed to the home team.
+  home_roster_count: Number of players dressed for the home team.
+  home_team_logo_url_100: URL of the home team's logo at the 100px rendition.
+  home_team_logo_url_200: URL of the home team's logo at the 200px rendition.
+  home_team_logo_url_50: URL of the home team's logo at the 50px rendition.
+  home_team_logo_url_full: URL of the home team's logo at the full rendition.
+  home_team_logo_url_large: URL of the home team's logo at the large rendition.
+  home_team_logo_url_medium: URL of the home team's logo at the medium rendition.
+  home_team_logo_url_small: URL of the home team's logo at the small rendition.
+  home_team_short: Short display name of the home team.
+  rink: Name of the rink within the facility.
+  rink_id: League identifier for the rink.
+  tickets_url: Link to purchase tickets for the game.
+  time_zone: Time zone in which the game is played.
+  time_zone_abbr: Abbreviated form of the game's time zone.
+  updated_at: Timestamp at which the league last updated the game record.
+  watch_live_url: Link to the live broadcast of the game.
+load_phf_team_boxscores:
+  blocked_opponent_shots: Opponent shots the team blocked.
+  overtime_scoring: Goals the team scored in overtime.
+  overtime_shots: Shots the team took in overtime.
+  period_1_scoring: Goals the team scored in period 1.
+  period_1_shots: Shots the team took in period 1.
+  period_2_scoring: Goals the team scored in period 2.
+  period_2_shots: Shots the team took in period 2.
+  period_3_scoring: Goals the team scored in period 3.
+  period_3_shots: Shots the team took in period 3.
+  power_play_percent: Share of the team's power plays that produced a goal.
+  shootout_made_scoring: Shootout attempts the team converted.
+  shootout_made_shots: Shootout shots the team took that scored.
+  shootout_missed_scoring: Shootout attempts the team failed to convert.
+  shootout_missed_shots: Shootout shots the team took that did not score.
+  successful_power_play: Number of power plays on which the team scored.
+  total_scoring: Goals the team scored in the game.
+  total_shots: Shots the team took in the game.
 load_contracts:
   cols: Placeholder column retained in the contracts loader output schema; contains no meaningful data in this context.
 load_depth_charts:
