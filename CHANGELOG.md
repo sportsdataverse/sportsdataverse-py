@@ -2,17 +2,22 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
-- [Unreleased](#unreleased)
+- [0.0.73 Release: August 1, 2026](#0073-release-august-1-2026)
   - [CFB — pre-2014 `{type}_player_id` join recovered (2004 +36pp, 2005–2013 +2–8pp)](#cfb--pre-2014-type_player_id-join-recovered-2004-36pp-20052013-28pp)
   - [CFB — `adj_off/def/net` rescaled to the R `adjust_epa` netted statistic (BREAKING scale change)](#cfb--adj_offdefnet-rescaled-to-the-r-adjust_epa-netted-statistic-breaking-scale-change)
   - [CFB — `adj_st_epa` rescaled to true EPA units (BREAKING scale change)](#cfb--adj_st_epa-rescaled-to-true-epa-units-breaking-scale-change)
   - [CFB — `cfb_ratings` gameonpaper-parity filters (default ON)](#cfb--cfb_ratings-gameonpaper-parity-filters-default-on)
+  - [CFB — loaders for 3 published-but-unreachable dataset releases](#cfb--loaders-for-3-published-but-unreachable-dataset-releases)
+  - [CFB — 5 summaries loaders unblocked for 2004–2013](#cfb--5-summaries-loaders-unblocked-for-20042013)
+  - [NBA — human-readable player and team columns for model outputs](#nba--human-readable-player-and-team-columns-for-model-outputs)
+  - [NBA — read the committed raw store over URL + season-level captures](#nba--read-the-committed-raw-store-over-url--season-level-captures)
+  - [Fixes](#fixes)
 - [0.0.72 Release: July 22, 2026](#0072-release-july-22-2026)
   - [BREAKING CHANGES](#breaking-changes)
   - [CFB — loaders for 6 published-but-unreachable dataset releases](#cfb--loaders-for-6-published-but-unreachable-dataset-releases)
   - [CFB — `load_cfb_ratings` dataset loader](#cfb--load_cfb_ratings-dataset-loader)
   - [NBA / WNBA — CTG play context (T3.6): possession/shot/lineup/player tables + start-type oracle](#nba--wnba--ctg-play-context-t36-possessionshotlineupplayer-tables--start-type-oracle)
-  - [Fixes](#fixes)
+  - [Fixes](#fixes-1)
   - [Dependencies](#dependencies)
   - [Release utilities — `sportsdataverse.release` (sportsdataversedata R-package port)](#release-utilities--sportsdataverserelease-sportsdataversedata-r-package-port)
   - [PWHL — coordinate-based xG (T5.3b): xg_method default flips quality → coords](#pwhl--coordinate-based-xg-t53b-xg_method-default-flips-quality-%E2%86%92-coords)
@@ -199,7 +204,7 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-## Unreleased
+## 0.0.73 Release: August 1, 2026
 
 ### CFB — pre-2014 `{type}_player_id` join recovered (2004 +36pp, 2005–2013 +2–8pp)
 
@@ -316,6 +321,79 @@
   training script, trained-season window, available-data window, window
   rationale, and known provenance gaps. Seed registry for per-artifact model
   cards.
+
+### CFB — loaders for 3 published-but-unreachable dataset releases
+
+The CFB producer publishes to `sportsdataverse-data`, but a release asset is
+only reachable once a loader exists on this side — the two repos are
+independent, so publishing does not make data queryable. Three tags shipped
+without one:
+
+| loader | tag | 2024 shape |
+|---|---|---|
+| `load_cfb_adv_team_gamelog` | `espn_cfb_adv_team_gamelog` | 1,892 × 90 |
+| `load_cfb_ratings_weekly` | `cfb_ratings_weekly` | 2,068 × 16 |
+| `load_cfb_team_summaries_weekly` | `cfb_team_summaries_weekly` | 2,119 × 384 |
+
+- **`load_cfb_adv_team_gamelog`** — opponent-adjusted team efficiency joined to
+  the game context `adv_team` lacks (opponent, home/away, scores, margin,
+  result, date). One row per team-**game**, 2004–2025.
+- **The two `*_weekly` loaders** return **long format**: one asset per season
+  carrying a `through_week` column that stacks every week's cumulative state,
+  so a consumer filters `through_week == W` for as-of-week-W ratings rather
+  than fetching per-week assets. Only the opponent-adjusted *team* products
+  ship weekly — the ridge is refit on everything through week W, so that state
+  cannot be reconstructed by summing per-game rows.
+
+### CFB — 5 summaries loaders unblocked for 2004–2013
+
+`load_cfb_passing`, `load_cfb_percentiles`, `load_cfb_receiving`,
+`load_cfb_rushing`, and `load_cfb_team_summaries` raised
+`SeasonNotFoundError("season cannot be less than 2014")` for seasons that are
+in fact published. The producer's offline-rebuild backfill now ships **22
+seasons (2004–2025) for all five tags**; the loader-side `min_season` guard was
+never widened to match, so **10 published seasons per dataset (2004–2013) were
+unreachable** through the public API.
+
+- Verified against the live releases before changing the guard — all four
+  probe seasons (2004/2010/2013/2014) return HTTP 200 for these five tags.
+- **`load_cfb_play_participants` and the two crosswalk loaders keep their 2014
+  floor** — that one is a real data cliff, not a stale guard: ESPN ships no
+  per-play `participants[]` before 2014, and those tags genuinely 404 pre-2014.
+  Widening them would have converted a clear error into silent empty frames.
+- **Declared `season` dtype corrected `Float64` → `Int64`** for
+  `load_cfb_passing` / `_receiving` / `_rushing` / `_team_summaries`. The
+  republished assets ship `Int64`; the declared schema drives the generated
+  returns tables only, so the drift was invisible to the test suite and
+  surfaced as incorrect published documentation.
+
+### NBA — human-readable player and team columns for model outputs
+
+Model outputs keyed on bare numeric ids now also carry resolved player and team
+names, so a published table is legible without a second join.
+
+### NBA — read the committed raw store over URL + season-level captures
+
+The possessions / season-compile path prefers the committed raw JSON store over
+network reads, making season builds reproducible offline.
+
+### Fixes
+
+- **NBA** — result-set schema inference scans **all** rows rather than the
+  first; a leading run of nulls previously inferred the wrong dtype for the
+  whole column.
+- **NBA** — three real-data bugs in the raw-store impact path.
+- **NBA** — tunable timeout + retry for the `stats.nba.com` runtime.
+- **RDS** — `write_rds` streams to its sink instead of buffering the whole
+  object; the temp-file write path keeps the umask-derived file mode.
+- **NFL** — NGS season-aggregate (week 0) upstream removal is handled with a
+  warning + xfail sentinel instead of a hard failure.
+- **NHL** — survive the R-arrow `vctrs` extension-metadata panic when reading
+  release parquets.
+- **CFB** — `load_cfb_passing` declared schema tracks the republished `Int32`
+  `sacked` / `pass_int`.
+- **Docs** — Docusaurus builds via rspack (`future.v4`), resolving the Vercel
+  heap OOM.
 
 ## 0.0.72 Release: July 22, 2026
 
