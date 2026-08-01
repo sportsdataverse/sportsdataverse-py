@@ -1638,384 +1638,384 @@ Release: [espn_cfb_team_summaries](https://github.com/sportsdataverse/sportsdata
 | `division` | String | Division in the conference for the team. |
 | `conference` | String | Conference of the team. |
 | `season` | Int64 | Season (4-digit year). |
-| `plays_off` | UInt32 |  |
-| `playsgame_off` | Float64 |  |
-| `passrate_off` | Float64 |  |
-| `rushrate_off` | Float64 |  |
-| `havoc_off` | Float64 |  |
-| `explosive_off` | Float64 |  |
-| `TEPA_off` | Float64 |  |
-| `EPAplay_off` | Float64 |  |
-| `EPAdrive_off` | Float64 |  |
-| `EPAgame_off` | Float64 |  |
-| `yards_off` | Int64 |  |
-| `yardsplay_off` | Float64 |  |
-| `yardsgame_off` | Float64 |  |
-| `play_stuffed_off` | Float64 |  |
-| `drives_off` | UInt32 |  |
-| `drivesgame_off` | Float64 |  |
-| `yardsdrive_off` | Float64 |  |
-| `playsdrive_off` | Float64 |  |
-| `success_off` | Float64 |  |
-| `red_zone_success_off` | Float64 |  |
-| `third_down_success_off` | Float64 |  |
-| `third_down_distance_off` | Float64 |  |
-| `late_down_success_off` | Float64 |  |
-| `early_down_EPA_off` | Float64 |  |
-| `start_position_off` | Float64 |  |
-| `nonExplosiveEpaPerPlay_off` | Float64 |  |
-| `line_yards_off` | Float64 |  |
-| `opportunity_rate_off` | Float64 |  |
-| `playsgame_off_rank` | Float64 |  |
-| `TEPA_off_rank` | Float64 |  |
-| `EPAgame_off_rank` | Float64 |  |
-| `EPAplay_off_rank` | Float64 |  |
-| `EPAdrive_off_rank` | Float64 |  |
-| `early_down_EPA_off_rank` | Float64 |  |
-| `success_off_rank` | Float64 |  |
-| `yards_off_rank` | Float64 |  |
-| `yardsplay_off_rank` | Float64 |  |
-| `yardsgame_off_rank` | Float64 |  |
-| `drivesgame_off_rank` | Float64 |  |
-| `yardsdrive_off_rank` | Float64 |  |
-| `playsdrive_off_rank` | Float64 |  |
-| `play_stuffed_off_rank` | Float64 |  |
-| `red_zone_success_off_rank` | Float64 |  |
-| `third_down_success_off_rank` | Float64 |  |
-| `late_down_success_off_rank` | Float64 |  |
-| `third_down_distance_off_rank` | Float64 |  |
-| `start_position_off_rank` | Float64 |  |
-| `havoc_off_rank` | Float64 |  |
-| `explosive_off_rank` | Float64 |  |
-| `passrate_off_rank` | Float64 |  |
-| `rushrate_off_rank` | Float64 |  |
-| `nonExplosiveEpaPerPlay_off_rank` | Float64 |  |
-| `line_yards_off_rank` | Float64 |  |
-| `opportunity_rate_off_rank` | Float64 |  |
-| `plays_def` | UInt32 |  |
-| `playsgame_def` | Float64 |  |
-| `passrate_def` | Float64 |  |
-| `rushrate_def` | Float64 |  |
-| `havoc_def` | Float64 |  |
-| `explosive_def` | Float64 |  |
-| `TEPA_def` | Float64 |  |
-| `EPAplay_def` | Float64 |  |
-| `EPAdrive_def` | Float64 |  |
-| `EPAgame_def` | Float64 |  |
-| `yards_def` | Int64 |  |
-| `yardsplay_def` | Float64 |  |
-| `yardsgame_def` | Float64 |  |
-| `play_stuffed_def` | Float64 |  |
-| `drives_def` | UInt32 |  |
-| `drivesgame_def` | Float64 |  |
-| `yardsdrive_def` | Float64 |  |
-| `playsdrive_def` | Float64 |  |
-| `success_def` | Float64 |  |
-| `red_zone_success_def` | Float64 |  |
-| `third_down_success_def` | Float64 |  |
-| `third_down_distance_def` | Float64 |  |
-| `late_down_success_def` | Float64 |  |
-| `early_down_EPA_def` | Float64 |  |
-| `start_position_def` | Float64 |  |
-| `nonExplosiveEpaPerPlay_def` | Float64 |  |
-| `line_yards_def` | Float64 |  |
-| `opportunity_rate_def` | Float64 |  |
-| `playsgame_def_rank` | Float64 |  |
-| `TEPA_def_rank` | Float64 |  |
-| `EPAgame_def_rank` | Float64 |  |
-| `EPAplay_def_rank` | Float64 |  |
-| `EPAdrive_def_rank` | Float64 |  |
-| `early_down_EPA_def_rank` | Float64 |  |
-| `success_def_rank` | Float64 |  |
-| `yards_def_rank` | Float64 |  |
-| `yardsplay_def_rank` | Float64 |  |
-| `yardsgame_def_rank` | Float64 |  |
-| `drivesgame_def_rank` | Float64 |  |
-| `yardsdrive_def_rank` | Float64 |  |
-| `playsdrive_def_rank` | Float64 |  |
-| `play_stuffed_def_rank` | Float64 |  |
-| `red_zone_success_def_rank` | Float64 |  |
-| `third_down_success_def_rank` | Float64 |  |
-| `late_down_success_def_rank` | Float64 |  |
-| `third_down_distance_def_rank` | Float64 |  |
-| `start_position_def_rank` | Float64 |  |
-| `havoc_def_rank` | Float64 |  |
-| `explosive_def_rank` | Float64 |  |
-| `passrate_def_rank` | Float64 |  |
-| `rushrate_def_rank` | Float64 |  |
-| `nonExplosiveEpaPerPlay_def_rank` | Float64 |  |
-| `line_yards_def_rank` | Float64 |  |
-| `opportunity_rate_def_rank` | Float64 |  |
-| `TEPA_margin` | Float64 |  |
-| `EPAplay_margin` | Float64 |  |
-| `EPAdrive_margin` | Float64 |  |
-| `EPAgame_margin` | Float64 |  |
-| `success_margin` | Float64 |  |
-| `yardsplay_margin` | Float64 |  |
-| `TEPA_margin_rank` | Float64 |  |
-| `EPAgame_margin_rank` | Float64 |  |
-| `EPAdrive_margin_rank` | Float64 |  |
-| `EPAplay_margin_rank` | Float64 |  |
-| `success_margin_rank` | Float64 |  |
-| `yardsplay_margin_rank` | Float64 |  |
-| `start_position_margin` | Float64 |  |
-| `start_position_margin_rank` | Float64 |  |
-| `total_available_yards_off` | Float64 |  |
-| `total_gained_yards_off` | Int64 |  |
-| `available_yards_pct_off` | Float64 |  |
-| `available_yards_pct_off_rank` | Float64 |  |
-| `total_available_yards_def` | Float64 |  |
-| `total_gained_yards_def` | Int64 |  |
-| `available_yards_pct_def` | Float64 |  |
-| `available_yards_pct_def_rank` | Float64 |  |
-| `total_available_yards_margin` | Float64 |  |
-| `total_gained_yards_margin` | Int64 |  |
-| `available_yards_pct_margin` | Float64 |  |
-| `total_available_yards_margin_rank` | Float64 |  |
-| `total_gained_yards_margin_rank` | Float64 |  |
-| `available_yards_pct_margin_rank` | Float64 |  |
-| `plays_off_pass` | UInt32 |  |
-| `playsgame_off_pass` | Float64 |  |
-| `passrate_off_pass` | Float64 |  |
-| `rushrate_off_pass` | Float64 |  |
-| `havoc_off_pass` | Float64 |  |
-| `explosive_off_pass` | Float64 |  |
-| `TEPA_off_pass` | Float64 |  |
-| `EPAplay_off_pass` | Float64 |  |
-| `EPAdrive_off_pass` | Float64 |  |
-| `EPAgame_off_pass` | Float64 |  |
-| `yards_off_pass` | Int64 |  |
-| `yardsplay_off_pass` | Float64 |  |
-| `yardsgame_off_pass` | Float64 |  |
-| `play_stuffed_off_pass` | Float64 |  |
-| `drives_off_pass` | UInt32 |  |
-| `drivesgame_off_pass` | Float64 |  |
-| `yardsdrive_off_pass` | Float64 |  |
-| `playsdrive_off_pass` | Float64 |  |
-| `success_off_pass` | Float64 |  |
-| `red_zone_success_off_pass` | Float64 |  |
-| `third_down_success_off_pass` | Float64 |  |
-| `third_down_distance_off_pass` | Float64 |  |
-| `late_down_success_off_pass` | Float64 |  |
-| `early_down_EPA_off_pass` | Float64 |  |
-| `nonExplosiveEpaPerPlay_off_pass` | Float64 |  |
-| `line_yards_off_pass` | Float64 |  |
-| `opportunity_rate_off_pass` | Float64 |  |
-| `playsgame_off_pass_rank` | Float64 |  |
-| `TEPA_off_pass_rank` | Float64 |  |
-| `EPAgame_off_pass_rank` | Float64 |  |
-| `EPAplay_off_pass_rank` | Float64 |  |
-| `EPAdrive_off_pass_rank` | Float64 |  |
-| `early_down_EPA_off_pass_rank` | Float64 |  |
-| `success_off_pass_rank` | Float64 |  |
-| `yards_off_pass_rank` | Float64 |  |
-| `yardsplay_off_pass_rank` | Float64 |  |
-| `yardsgame_off_pass_rank` | Float64 |  |
-| `drivesgame_off_pass_rank` | Float64 |  |
-| `yardsdrive_off_pass_rank` | Float64 |  |
-| `playsdrive_off_pass_rank` | Float64 |  |
-| `play_stuffed_off_pass_rank` | Float64 |  |
-| `red_zone_success_off_pass_rank` | Float64 |  |
-| `third_down_success_off_pass_rank` | Float64 |  |
-| `late_down_success_off_pass_rank` | Float64 |  |
-| `third_down_distance_off_pass_rank` | Float64 |  |
-| `havoc_off_pass_rank` | Float64 |  |
-| `explosive_off_pass_rank` | Float64 |  |
-| `passrate_off_pass_rank` | Float64 |  |
-| `rushrate_off_pass_rank` | Float64 |  |
-| `nonExplosiveEpaPerPlay_off_pass_rank` | Float64 |  |
-| `line_yards_off_pass_rank` | Float64 |  |
-| `opportunity_rate_off_pass_rank` | Float64 |  |
-| `plays_def_pass` | UInt32 |  |
-| `playsgame_def_pass` | Float64 |  |
-| `passrate_def_pass` | Float64 |  |
-| `rushrate_def_pass` | Float64 |  |
-| `havoc_def_pass` | Float64 |  |
-| `explosive_def_pass` | Float64 |  |
-| `TEPA_def_pass` | Float64 |  |
-| `EPAplay_def_pass` | Float64 |  |
-| `EPAdrive_def_pass` | Float64 |  |
-| `EPAgame_def_pass` | Float64 |  |
-| `yards_def_pass` | Int64 |  |
-| `yardsplay_def_pass` | Float64 |  |
-| `yardsgame_def_pass` | Float64 |  |
-| `play_stuffed_def_pass` | Float64 |  |
-| `drives_def_pass` | UInt32 |  |
-| `drivesgame_def_pass` | Float64 |  |
-| `yardsdrive_def_pass` | Float64 |  |
-| `playsdrive_def_pass` | Float64 |  |
-| `success_def_pass` | Float64 |  |
-| `red_zone_success_def_pass` | Float64 |  |
-| `third_down_success_def_pass` | Float64 |  |
-| `third_down_distance_def_pass` | Float64 |  |
-| `late_down_success_def_pass` | Float64 |  |
-| `early_down_EPA_def_pass` | Float64 |  |
-| `nonExplosiveEpaPerPlay_def_pass` | Float64 |  |
-| `line_yards_def_pass` | Float64 |  |
-| `opportunity_rate_def_pass` | Float64 |  |
-| `playsgame_def_pass_rank` | Float64 |  |
-| `TEPA_def_pass_rank` | Float64 |  |
-| `EPAgame_def_pass_rank` | Float64 |  |
-| `EPAplay_def_pass_rank` | Float64 |  |
-| `EPAdrive_def_pass_rank` | Float64 |  |
-| `early_down_EPA_def_pass_rank` | Float64 |  |
-| `success_def_pass_rank` | Float64 |  |
-| `yards_def_pass_rank` | Float64 |  |
-| `yardsplay_def_pass_rank` | Float64 |  |
-| `yardsgame_def_pass_rank` | Float64 |  |
-| `drivesgame_def_pass_rank` | Float64 |  |
-| `yardsdrive_def_pass_rank` | Float64 |  |
-| `playsdrive_def_pass_rank` | Float64 |  |
-| `play_stuffed_def_pass_rank` | Float64 |  |
-| `red_zone_success_def_pass_rank` | Float64 |  |
-| `third_down_success_def_pass_rank` | Float64 |  |
-| `late_down_success_def_pass_rank` | Float64 |  |
-| `third_down_distance_def_pass_rank` | Float64 |  |
-| `havoc_def_pass_rank` | Float64 |  |
-| `explosive_def_pass_rank` | Float64 |  |
-| `passrate_def_pass_rank` | Float64 |  |
-| `rushrate_def_pass_rank` | Float64 |  |
-| `nonExplosiveEpaPerPlay_def_pass_rank` | Float64 |  |
-| `line_yards_def_pass_rank` | Float64 |  |
-| `opportunity_rate_def_pass_rank` | Float64 |  |
-| `TEPA_margin_pass` | Float64 |  |
-| `EPAplay_margin_pass` | Float64 |  |
-| `EPAdrive_margin_pass` | Float64 |  |
-| `EPAgame_margin_pass` | Float64 |  |
-| `success_margin_pass` | Float64 |  |
-| `yardsplay_margin_pass` | Float64 |  |
-| `TEPA_margin_pass_rank` | Float64 |  |
-| `EPAgame_margin_pass_rank` | Float64 |  |
-| `EPAdrive_margin_pass_rank` | Float64 |  |
-| `EPAplay_margin_pass_rank` | Float64 |  |
-| `success_margin_pass_rank` | Float64 |  |
-| `yardsplay_margin_pass_rank` | Float64 |  |
-| `plays_off_rush` | UInt32 |  |
-| `playsgame_off_rush` | Float64 |  |
-| `passrate_off_rush` | Float64 |  |
-| `rushrate_off_rush` | Float64 |  |
-| `havoc_off_rush` | Float64 |  |
-| `explosive_off_rush` | Float64 |  |
-| `TEPA_off_rush` | Float64 |  |
-| `EPAplay_off_rush` | Float64 |  |
-| `EPAdrive_off_rush` | Float64 |  |
-| `EPAgame_off_rush` | Float64 |  |
-| `yards_off_rush` | Int64 |  |
-| `yardsplay_off_rush` | Float64 |  |
-| `yardsgame_off_rush` | Float64 |  |
-| `play_stuffed_off_rush` | Float64 |  |
-| `drives_off_rush` | UInt32 |  |
-| `drivesgame_off_rush` | Float64 |  |
-| `yardsdrive_off_rush` | Float64 |  |
-| `playsdrive_off_rush` | Float64 |  |
-| `success_off_rush` | Float64 |  |
-| `red_zone_success_off_rush` | Float64 |  |
-| `third_down_success_off_rush` | Float64 |  |
-| `third_down_distance_off_rush` | Float64 |  |
-| `late_down_success_off_rush` | Float64 |  |
-| `early_down_EPA_off_rush` | Float64 |  |
-| `nonExplosiveEpaPerPlay_off_rush` | Float64 |  |
-| `line_yards_off_rush` | Float64 |  |
-| `opportunity_rate_off_rush` | Float64 |  |
-| `playsgame_off_rush_rank` | Float64 |  |
-| `TEPA_off_rush_rank` | Float64 |  |
-| `EPAgame_off_rush_rank` | Float64 |  |
-| `EPAplay_off_rush_rank` | Float64 |  |
-| `EPAdrive_off_rush_rank` | Float64 |  |
-| `early_down_EPA_off_rush_rank` | Float64 |  |
-| `success_off_rush_rank` | Float64 |  |
-| `yards_off_rush_rank` | Float64 |  |
-| `yardsplay_off_rush_rank` | Float64 |  |
-| `yardsgame_off_rush_rank` | Float64 |  |
-| `drivesgame_off_rush_rank` | Float64 |  |
-| `yardsdrive_off_rush_rank` | Float64 |  |
-| `playsdrive_off_rush_rank` | Float64 |  |
-| `play_stuffed_off_rush_rank` | Float64 |  |
-| `red_zone_success_off_rush_rank` | Float64 |  |
-| `third_down_success_off_rush_rank` | Float64 |  |
-| `late_down_success_off_rush_rank` | Float64 |  |
-| `third_down_distance_off_rush_rank` | Float64 |  |
-| `havoc_off_rush_rank` | Float64 |  |
-| `explosive_off_rush_rank` | Float64 |  |
-| `passrate_off_rush_rank` | Float64 |  |
-| `rushrate_off_rush_rank` | Float64 |  |
-| `nonExplosiveEpaPerPlay_off_rush_rank` | Float64 |  |
-| `line_yards_off_rush_rank` | Float64 |  |
-| `opportunity_rate_off_rush_rank` | Float64 |  |
-| `plays_def_rush` | UInt32 |  |
-| `playsgame_def_rush` | Float64 |  |
-| `passrate_def_rush` | Float64 |  |
-| `rushrate_def_rush` | Float64 |  |
-| `havoc_def_rush` | Float64 |  |
-| `explosive_def_rush` | Float64 |  |
-| `TEPA_def_rush` | Float64 |  |
-| `EPAplay_def_rush` | Float64 |  |
-| `EPAdrive_def_rush` | Float64 |  |
-| `EPAgame_def_rush` | Float64 |  |
-| `yards_def_rush` | Int64 |  |
-| `yardsplay_def_rush` | Float64 |  |
-| `yardsgame_def_rush` | Float64 |  |
-| `play_stuffed_def_rush` | Float64 |  |
-| `drives_def_rush` | UInt32 |  |
-| `drivesgame_def_rush` | Float64 |  |
-| `yardsdrive_def_rush` | Float64 |  |
-| `playsdrive_def_rush` | Float64 |  |
-| `success_def_rush` | Float64 |  |
-| `red_zone_success_def_rush` | Float64 |  |
-| `third_down_success_def_rush` | Float64 |  |
-| `third_down_distance_def_rush` | Float64 |  |
-| `late_down_success_def_rush` | Float64 |  |
-| `early_down_EPA_def_rush` | Float64 |  |
-| `nonExplosiveEpaPerPlay_def_rush` | Float64 |  |
-| `line_yards_def_rush` | Float64 |  |
-| `opportunity_rate_def_rush` | Float64 |  |
-| `playsgame_def_rush_rank` | Float64 |  |
-| `TEPA_def_rush_rank` | Float64 |  |
-| `EPAgame_def_rush_rank` | Float64 |  |
-| `EPAplay_def_rush_rank` | Float64 |  |
-| `EPAdrive_def_rush_rank` | Float64 |  |
-| `early_down_EPA_def_rush_rank` | Float64 |  |
-| `success_def_rush_rank` | Float64 |  |
-| `yards_def_rush_rank` | Float64 |  |
-| `yardsplay_def_rush_rank` | Float64 |  |
-| `yardsgame_def_rush_rank` | Float64 |  |
-| `drivesgame_def_rush_rank` | Float64 |  |
-| `yardsdrive_def_rush_rank` | Float64 |  |
-| `playsdrive_def_rush_rank` | Float64 |  |
-| `play_stuffed_def_rush_rank` | Float64 |  |
-| `red_zone_success_def_rush_rank` | Float64 |  |
-| `third_down_success_def_rush_rank` | Float64 |  |
-| `late_down_success_def_rush_rank` | Float64 |  |
-| `third_down_distance_def_rush_rank` | Float64 |  |
-| `havoc_def_rush_rank` | Float64 |  |
-| `explosive_def_rush_rank` | Float64 |  |
-| `passrate_def_rush_rank` | Float64 |  |
-| `rushrate_def_rush_rank` | Float64 |  |
-| `nonExplosiveEpaPerPlay_def_rush_rank` | Float64 |  |
-| `line_yards_def_rush_rank` | Float64 |  |
-| `opportunity_rate_def_rush_rank` | Float64 |  |
-| `TEPA_margin_rush` | Float64 |  |
-| `EPAplay_margin_rush` | Float64 |  |
-| `EPAdrive_margin_rush` | Float64 |  |
-| `EPAgame_margin_rush` | Float64 |  |
-| `success_margin_rush` | Float64 |  |
-| `yardsplay_margin_rush` | Float64 |  |
-| `TEPA_margin_rush_rank` | Float64 |  |
-| `EPAgame_margin_rush_rank` | Float64 |  |
-| `EPAdrive_margin_rush_rank` | Float64 |  |
-| `EPAplay_margin_rush_rank` | Float64 |  |
-| `success_margin_rush_rank` | Float64 |  |
-| `yardsplay_margin_rush_rank` | Float64 |  |
-| `fbs_class` | String |  |
-| `valid_games` | UInt32 |  |
-| `adj_off_epa` | Float64 |  |
-| `adj_def_epa` | Float64 |  |
-| `def_strength_faced` | Float64 |  |
-| `off_strength_faced` | Float64 |  |
-| `net_adj_epa` | Float64 |  |
-| `adj_off_epa_rank` | Float64 |  |
-| `adj_def_epa_rank` | Float64 |  |
-| `net_adj_epa_rank` | Float64 |  |
+| `plays_off` | UInt32 | Plays run, with the team on offense. |
+| `playsgame_off` | Float64 | Plays run per game, with the team on offense. |
+| `passrate_off` | Float64 | Share of plays that were pass plays, with the team on offense. |
+| `rushrate_off` | Float64 | Share of plays that were rush plays, with the team on offense. |
+| `havoc_off` | Float64 | Havoc rate -- the share of plays carrying the defensive-disruption flag, with the team on offense. |
+| `explosive_off` | Float64 | Explosive-play rate -- the share of plays carrying the explosive flag, with the team on offense. |
+| `TEPA_off` | Float64 | Total EPA summed over every play, with the team on offense. |
+| `EPAplay_off` | Float64 | EPA per play, with the team on offense. |
+| `EPAdrive_off` | Float64 | EPA per drive (total EPA divided by drives), with the team on offense. |
+| `EPAgame_off` | Float64 | EPA per game (total EPA divided by games), with the team on offense. |
+| `yards_off` | Int64 | Total yards gained, with the team on offense. |
+| `yardsplay_off` | Float64 | Yards gained per play, with the team on offense. |
+| `yardsgame_off` | Float64 | Yards gained per game, with the team on offense. |
+| `play_stuffed_off` | Float64 | Stuffed-play rate -- the share of plays carrying the stuffed flag, with the team on offense. |
+| `drives_off` | UInt32 | Offensive drives, with the team on offense. |
+| `drivesgame_off` | Float64 | Drives per game, with the team on offense. |
+| `yardsdrive_off` | Float64 | Yards gained per drive, with the team on offense. |
+| `playsdrive_off` | Float64 | Plays run per drive, with the team on offense. |
+| `success_off` | Float64 | Success rate -- the share of plays flagged as successful by EPA, with the team on offense. |
+| `red_zone_success_off` | Float64 | Success rate on red-zone plays, with the team on offense. |
+| `third_down_success_off` | Float64 | Success rate on third-down plays, with the team on offense. |
+| `third_down_distance_off` | Float64 | Average yards to go on third down, with the team on offense. |
+| `late_down_success_off` | Float64 | Success rate on late-down plays, with the team on offense. |
+| `early_down_EPA_off` | Float64 | EPA per early-down play, with the team on offense. |
+| `start_position_off` | Float64 | Average drive start position, measured in yards from the opponent goal line, with the team on offense. |
+| `nonExplosiveEpaPerPlay_off` | Float64 | EPA per play with explosive plays excluded, with the team on offense. |
+| `line_yards_off` | Float64 | Average line yards credited to the offensive line on rushes, with the team on offense. |
+| `opportunity_rate_off` | Float64 | Opportunity rate -- the share of rushes carrying the opportunity flag, with the team on offense. |
+| `playsgame_off_rank` | Float64 | National rank of the team's plays run per game with the team on offense, where 1 is best. |
+| `TEPA_off_rank` | Float64 | National rank of the team's total EPA summed over every play with the team on offense, where 1 is best. |
+| `EPAgame_off_rank` | Float64 | National rank of the team's EPA per game (total EPA divided by games) with the team on offense, where 1 is best. |
+| `EPAplay_off_rank` | Float64 | National rank of the team's EPA per play with the team on offense, where 1 is best. |
+| `EPAdrive_off_rank` | Float64 | National rank of the team's EPA per drive (total EPA divided by drives) with the team on offense, where 1 is best. |
+| `early_down_EPA_off_rank` | Float64 | National rank of the team's EPA per early-down play with the team on offense, where 1 is best. |
+| `success_off_rank` | Float64 | National rank of the team's success rate -- the share of plays flagged as successful by EPA with the team on offense, where 1 is best. |
+| `yards_off_rank` | Float64 | National rank of the team's total yards gained with the team on offense, where 1 is best. |
+| `yardsplay_off_rank` | Float64 | National rank of the team's yards gained per play with the team on offense, where 1 is best. |
+| `yardsgame_off_rank` | Float64 | National rank of the team's yards gained per game with the team on offense, where 1 is best. |
+| `drivesgame_off_rank` | Float64 | National rank of the team's drives per game with the team on offense, where 1 is best. |
+| `yardsdrive_off_rank` | Float64 | National rank of the team's yards gained per drive with the team on offense, where 1 is best. |
+| `playsdrive_off_rank` | Float64 | National rank of the team's plays run per drive with the team on offense, where 1 is best. |
+| `play_stuffed_off_rank` | Float64 | National rank of the team's stuffed-play rate -- the share of plays carrying the stuffed flag with the team on offense, where 1 is best. |
+| `red_zone_success_off_rank` | Float64 | National rank of the team's success rate on red-zone plays with the team on offense, where 1 is best. |
+| `third_down_success_off_rank` | Float64 | National rank of the team's success rate on third-down plays with the team on offense, where 1 is best. |
+| `late_down_success_off_rank` | Float64 | National rank of the team's success rate on late-down plays with the team on offense, where 1 is best. |
+| `third_down_distance_off_rank` | Float64 | National rank of the team's average yards to go on third down with the team on offense, where 1 is best. |
+| `start_position_off_rank` | Float64 | National rank of the team's average drive start position, measured in yards from the opponent goal line with the team on offense, where 1 is best. |
+| `havoc_off_rank` | Float64 | National rank of the team's havoc rate -- the share of plays carrying the defensive-disruption flag with the team on offense, where 1 is best. |
+| `explosive_off_rank` | Float64 | National rank of the team's explosive-play rate -- the share of plays carrying the explosive flag with the team on offense, where 1 is best. |
+| `passrate_off_rank` | Float64 | National rank of the team's share of plays that were pass plays with the team on offense, where 1 is best. |
+| `rushrate_off_rank` | Float64 | National rank of the team's share of plays that were rush plays with the team on offense, where 1 is best. |
+| `nonExplosiveEpaPerPlay_off_rank` | Float64 | National rank of the team's EPA per play with explosive plays excluded with the team on offense, where 1 is best. |
+| `line_yards_off_rank` | Float64 | National rank of the team's average line yards credited to the offensive line on rushes with the team on offense, where 1 is best. |
+| `opportunity_rate_off_rank` | Float64 | National rank of the team's opportunity rate -- the share of rushes carrying the opportunity flag with the team on offense, where 1 is best. |
+| `plays_def` | UInt32 | Plays run, with the team on defense (i.e. allowed to opponents). |
+| `playsgame_def` | Float64 | Plays run per game, with the team on defense (i.e. allowed to opponents). |
+| `passrate_def` | Float64 | Share of plays that were pass plays, with the team on defense (i.e. allowed to opponents). |
+| `rushrate_def` | Float64 | Share of plays that were rush plays, with the team on defense (i.e. allowed to opponents). |
+| `havoc_def` | Float64 | Havoc rate -- the share of plays carrying the defensive-disruption flag, with the team on defense (i.e. allowed to opponents). |
+| `explosive_def` | Float64 | Explosive-play rate -- the share of plays carrying the explosive flag, with the team on defense (i.e. allowed to opponents). |
+| `TEPA_def` | Float64 | Total EPA summed over every play, with the team on defense (i.e. allowed to opponents). |
+| `EPAplay_def` | Float64 | EPA per play, with the team on defense (i.e. allowed to opponents). |
+| `EPAdrive_def` | Float64 | EPA per drive (total EPA divided by drives), with the team on defense (i.e. allowed to opponents). |
+| `EPAgame_def` | Float64 | EPA per game (total EPA divided by games), with the team on defense (i.e. allowed to opponents). |
+| `yards_def` | Int64 | Total yards gained, with the team on defense (i.e. allowed to opponents). |
+| `yardsplay_def` | Float64 | Yards gained per play, with the team on defense (i.e. allowed to opponents). |
+| `yardsgame_def` | Float64 | Yards gained per game, with the team on defense (i.e. allowed to opponents). |
+| `play_stuffed_def` | Float64 | Stuffed-play rate -- the share of plays carrying the stuffed flag, with the team on defense (i.e. allowed to opponents). |
+| `drives_def` | UInt32 | Offensive drives, with the team on defense (i.e. allowed to opponents). |
+| `drivesgame_def` | Float64 | Drives per game, with the team on defense (i.e. allowed to opponents). |
+| `yardsdrive_def` | Float64 | Yards gained per drive, with the team on defense (i.e. allowed to opponents). |
+| `playsdrive_def` | Float64 | Plays run per drive, with the team on defense (i.e. allowed to opponents). |
+| `success_def` | Float64 | Success rate -- the share of plays flagged as successful by EPA, with the team on defense (i.e. allowed to opponents). |
+| `red_zone_success_def` | Float64 | Success rate on red-zone plays, with the team on defense (i.e. allowed to opponents). |
+| `third_down_success_def` | Float64 | Success rate on third-down plays, with the team on defense (i.e. allowed to opponents). |
+| `third_down_distance_def` | Float64 | Average yards to go on third down, with the team on defense (i.e. allowed to opponents). |
+| `late_down_success_def` | Float64 | Success rate on late-down plays, with the team on defense (i.e. allowed to opponents). |
+| `early_down_EPA_def` | Float64 | EPA per early-down play, with the team on defense (i.e. allowed to opponents). |
+| `start_position_def` | Float64 | Average drive start position, measured in yards from the opponent goal line, with the team on defense (i.e. allowed to opponents). |
+| `nonExplosiveEpaPerPlay_def` | Float64 | EPA per play with explosive plays excluded, with the team on defense (i.e. allowed to opponents). |
+| `line_yards_def` | Float64 | Average line yards credited to the offensive line on rushes, with the team on defense (i.e. allowed to opponents). |
+| `opportunity_rate_def` | Float64 | Opportunity rate -- the share of rushes carrying the opportunity flag, with the team on defense (i.e. allowed to opponents). |
+| `playsgame_def_rank` | Float64 | National rank of the team's plays run per game with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `TEPA_def_rank` | Float64 | National rank of the team's total EPA summed over every play with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `EPAgame_def_rank` | Float64 | National rank of the team's EPA per game (total EPA divided by games) with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `EPAplay_def_rank` | Float64 | National rank of the team's EPA per play with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `EPAdrive_def_rank` | Float64 | National rank of the team's EPA per drive (total EPA divided by drives) with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `early_down_EPA_def_rank` | Float64 | National rank of the team's EPA per early-down play with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `success_def_rank` | Float64 | National rank of the team's success rate -- the share of plays flagged as successful by EPA with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `yards_def_rank` | Float64 | National rank of the team's total yards gained with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `yardsplay_def_rank` | Float64 | National rank of the team's yards gained per play with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `yardsgame_def_rank` | Float64 | National rank of the team's yards gained per game with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `drivesgame_def_rank` | Float64 | National rank of the team's drives per game with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `yardsdrive_def_rank` | Float64 | National rank of the team's yards gained per drive with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `playsdrive_def_rank` | Float64 | National rank of the team's plays run per drive with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `play_stuffed_def_rank` | Float64 | National rank of the team's stuffed-play rate -- the share of plays carrying the stuffed flag with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `red_zone_success_def_rank` | Float64 | National rank of the team's success rate on red-zone plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `third_down_success_def_rank` | Float64 | National rank of the team's success rate on third-down plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `late_down_success_def_rank` | Float64 | National rank of the team's success rate on late-down plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `third_down_distance_def_rank` | Float64 | National rank of the team's average yards to go on third down with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `start_position_def_rank` | Float64 | National rank of the team's average drive start position, measured in yards from the opponent goal line with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `havoc_def_rank` | Float64 | National rank of the team's havoc rate -- the share of plays carrying the defensive-disruption flag with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `explosive_def_rank` | Float64 | National rank of the team's explosive-play rate -- the share of plays carrying the explosive flag with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `passrate_def_rank` | Float64 | National rank of the team's share of plays that were pass plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `rushrate_def_rank` | Float64 | National rank of the team's share of plays that were rush plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `nonExplosiveEpaPerPlay_def_rank` | Float64 | National rank of the team's EPA per play with explosive plays excluded with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `line_yards_def_rank` | Float64 | National rank of the team's average line yards credited to the offensive line on rushes with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `opportunity_rate_def_rank` | Float64 | National rank of the team's opportunity rate -- the share of rushes carrying the opportunity flag with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `TEPA_margin` | Float64 | Margin in total EPA summed over every play: the team's offensive value minus the value it allowed on defense. |
+| `EPAplay_margin` | Float64 | Margin in EPA per play: the team's offensive value minus the value it allowed on defense. |
+| `EPAdrive_margin` | Float64 | Margin in EPA per drive (total EPA divided by drives): the team's offensive value minus the value it allowed on defense. |
+| `EPAgame_margin` | Float64 | Margin in EPA per game (total EPA divided by games): the team's offensive value minus the value it allowed on defense. |
+| `success_margin` | Float64 | Margin in success rate -- the share of plays flagged as successful by EPA: the team's offensive value minus the value it allowed on defense. |
+| `yardsplay_margin` | Float64 | Margin in yards gained per play: the team's offensive value minus the value it allowed on defense. |
+| `TEPA_margin_rank` | Float64 | Margin in total EPA summed over every play: the team's offensive value minus the value it allowed on defense. National rank of that margin, 1 = largest. |
+| `EPAgame_margin_rank` | Float64 | Margin in EPA per game (total EPA divided by games): the team's offensive value minus the value it allowed on defense. National rank of that margin, 1 = largest. |
+| `EPAdrive_margin_rank` | Float64 | Margin in EPA per drive (total EPA divided by drives): the team's offensive value minus the value it allowed on defense. National rank of that margin, 1 = largest. |
+| `EPAplay_margin_rank` | Float64 | Margin in EPA per play: the team's offensive value minus the value it allowed on defense. National rank of that margin, 1 = largest. |
+| `success_margin_rank` | Float64 | Margin in success rate -- the share of plays flagged as successful by EPA: the team's offensive value minus the value it allowed on defense. National rank of that margin, 1 = largest. |
+| `yardsplay_margin_rank` | Float64 | Margin in yards gained per play: the team's offensive value minus the value it allowed on defense. National rank of that margin, 1 = largest. |
+| `start_position_margin` | Float64 | Field-position margin: the team's own average starting field position minus the average starting field position it allowed, both measured as yards gained from their own goal line. Positive means the team started closer to scoring than its opponents. |
+| `start_position_margin_rank` | Float64 | Field-position margin: the team's own average starting field position minus the average starting field position it allowed, both measured as yards gained from their own goal line. Positive means the team started closer to scoring than its opponents. National rank of that margin, 1 = largest. |
+| `total_available_yards_off` | Float64 | Available yards are the yards a drive could theoretically gain, summed from each drive's starting distance to the opponent goal line. Total available yards on the team's own drives. |
+| `total_gained_yards_off` | Int64 | Total yards the team actually gained across its own drives. |
+| `available_yards_pct_off` | Float64 | Share of available yards the team's offense actually gained (total_gained_yards_off divided by total_available_yards_off). Higher is better. |
+| `available_yards_pct_off_rank` | Float64 | National rank of the team's offensive available-yards share, where 1 is best. |
+| `total_available_yards_def` | Float64 | Available yards are the yards a drive could theoretically gain, summed from each drive's starting distance to the opponent goal line. Total available yards on drives the team defended. |
+| `total_gained_yards_def` | Int64 | Total yards the team allowed across the drives it defended. |
+| `available_yards_pct_def` | Float64 | Share of available yards the team's defense allowed opponents to gain. Lower is better. |
+| `available_yards_pct_def_rank` | Float64 | National rank of the team's defensive available-yards share, where 1 is best. |
+| `total_available_yards_margin` | Float64 | Available yards on the team's own drives minus available yards on drives it defended. |
+| `total_gained_yards_margin` | Int64 | Yards the team gained minus yards it allowed. |
+| `available_yards_pct_margin` | Float64 | Available-yards share gained by the offense minus the share allowed by the defense. Higher is better. |
+| `total_available_yards_margin_rank` | Float64 | National rank of total_available_yards_margin, 1 = largest margin. |
+| `total_gained_yards_margin_rank` | Float64 | National rank of total_gained_yards_margin, 1 = largest margin. |
+| `available_yards_pct_margin_rank` | Float64 | National rank of available_yards_pct_margin, 1 = largest margin. |
+| `plays_off_pass` | UInt32 | Plays run on pass plays, with the team on offense. |
+| `playsgame_off_pass` | Float64 | Plays run per game on pass plays, with the team on offense. |
+| `passrate_off_pass` | Float64 | Share of plays that were pass plays on pass plays, with the team on offense. |
+| `rushrate_off_pass` | Float64 | Share of plays that were rush plays on pass plays, with the team on offense. |
+| `havoc_off_pass` | Float64 | Havoc rate -- the share of plays carrying the defensive-disruption flag on pass plays, with the team on offense. |
+| `explosive_off_pass` | Float64 | Explosive-play rate -- the share of plays carrying the explosive flag on pass plays, with the team on offense. |
+| `TEPA_off_pass` | Float64 | Total EPA summed over every play on pass plays, with the team on offense. |
+| `EPAplay_off_pass` | Float64 | EPA per play on pass plays, with the team on offense. |
+| `EPAdrive_off_pass` | Float64 | EPA per drive (total EPA divided by drives) on pass plays, with the team on offense. |
+| `EPAgame_off_pass` | Float64 | EPA per game (total EPA divided by games) on pass plays, with the team on offense. |
+| `yards_off_pass` | Int64 | Total yards gained on pass plays, with the team on offense. |
+| `yardsplay_off_pass` | Float64 | Yards gained per play on pass plays, with the team on offense. |
+| `yardsgame_off_pass` | Float64 | Yards gained per game on pass plays, with the team on offense. |
+| `play_stuffed_off_pass` | Float64 | Stuffed-play rate -- the share of plays carrying the stuffed flag on pass plays, with the team on offense. |
+| `drives_off_pass` | UInt32 | Offensive drives on pass plays, with the team on offense. |
+| `drivesgame_off_pass` | Float64 | Drives per game on pass plays, with the team on offense. |
+| `yardsdrive_off_pass` | Float64 | Yards gained per drive on pass plays, with the team on offense. |
+| `playsdrive_off_pass` | Float64 | Plays run per drive on pass plays, with the team on offense. |
+| `success_off_pass` | Float64 | Success rate -- the share of plays flagged as successful by EPA on pass plays, with the team on offense. |
+| `red_zone_success_off_pass` | Float64 | Success rate on red-zone plays on pass plays, with the team on offense. |
+| `third_down_success_off_pass` | Float64 | Success rate on third-down plays on pass plays, with the team on offense. |
+| `third_down_distance_off_pass` | Float64 | Average yards to go on third down on pass plays, with the team on offense. |
+| `late_down_success_off_pass` | Float64 | Success rate on late-down plays on pass plays, with the team on offense. |
+| `early_down_EPA_off_pass` | Float64 | EPA per early-down play on pass plays, with the team on offense. |
+| `nonExplosiveEpaPerPlay_off_pass` | Float64 | EPA per play with explosive plays excluded on pass plays, with the team on offense. |
+| `line_yards_off_pass` | Float64 | Average line yards credited to the offensive line on rushes on pass plays, with the team on offense. |
+| `opportunity_rate_off_pass` | Float64 | Opportunity rate -- the share of rushes carrying the opportunity flag on pass plays, with the team on offense. |
+| `playsgame_off_pass_rank` | Float64 | National rank of the team's plays run per game on pass plays with the team on offense, where 1 is best. |
+| `TEPA_off_pass_rank` | Float64 | National rank of the team's total EPA summed over every play on pass plays with the team on offense, where 1 is best. |
+| `EPAgame_off_pass_rank` | Float64 | National rank of the team's EPA per game (total EPA divided by games) on pass plays with the team on offense, where 1 is best. |
+| `EPAplay_off_pass_rank` | Float64 | National rank of the team's EPA per play on pass plays with the team on offense, where 1 is best. |
+| `EPAdrive_off_pass_rank` | Float64 | National rank of the team's EPA per drive (total EPA divided by drives) on pass plays with the team on offense, where 1 is best. |
+| `early_down_EPA_off_pass_rank` | Float64 | National rank of the team's EPA per early-down play on pass plays with the team on offense, where 1 is best. |
+| `success_off_pass_rank` | Float64 | National rank of the team's success rate -- the share of plays flagged as successful by EPA on pass plays with the team on offense, where 1 is best. |
+| `yards_off_pass_rank` | Float64 | National rank of the team's total yards gained on pass plays with the team on offense, where 1 is best. |
+| `yardsplay_off_pass_rank` | Float64 | National rank of the team's yards gained per play on pass plays with the team on offense, where 1 is best. |
+| `yardsgame_off_pass_rank` | Float64 | National rank of the team's yards gained per game on pass plays with the team on offense, where 1 is best. |
+| `drivesgame_off_pass_rank` | Float64 | National rank of the team's drives per game on pass plays with the team on offense, where 1 is best. |
+| `yardsdrive_off_pass_rank` | Float64 | National rank of the team's yards gained per drive on pass plays with the team on offense, where 1 is best. |
+| `playsdrive_off_pass_rank` | Float64 | National rank of the team's plays run per drive on pass plays with the team on offense, where 1 is best. |
+| `play_stuffed_off_pass_rank` | Float64 | National rank of the team's stuffed-play rate -- the share of plays carrying the stuffed flag on pass plays with the team on offense, where 1 is best. |
+| `red_zone_success_off_pass_rank` | Float64 | National rank of the team's success rate on red-zone plays on pass plays with the team on offense, where 1 is best. |
+| `third_down_success_off_pass_rank` | Float64 | National rank of the team's success rate on third-down plays on pass plays with the team on offense, where 1 is best. |
+| `late_down_success_off_pass_rank` | Float64 | National rank of the team's success rate on late-down plays on pass plays with the team on offense, where 1 is best. |
+| `third_down_distance_off_pass_rank` | Float64 | National rank of the team's average yards to go on third down on pass plays with the team on offense, where 1 is best. |
+| `havoc_off_pass_rank` | Float64 | National rank of the team's havoc rate -- the share of plays carrying the defensive-disruption flag on pass plays with the team on offense, where 1 is best. |
+| `explosive_off_pass_rank` | Float64 | National rank of the team's explosive-play rate -- the share of plays carrying the explosive flag on pass plays with the team on offense, where 1 is best. |
+| `passrate_off_pass_rank` | Float64 | National rank of the team's share of plays that were pass plays on pass plays with the team on offense, where 1 is best. |
+| `rushrate_off_pass_rank` | Float64 | National rank of the team's share of plays that were rush plays on pass plays with the team on offense, where 1 is best. |
+| `nonExplosiveEpaPerPlay_off_pass_rank` | Float64 | National rank of the team's EPA per play with explosive plays excluded on pass plays with the team on offense, where 1 is best. |
+| `line_yards_off_pass_rank` | Float64 | National rank of the team's average line yards credited to the offensive line on rushes on pass plays with the team on offense, where 1 is best. |
+| `opportunity_rate_off_pass_rank` | Float64 | National rank of the team's opportunity rate -- the share of rushes carrying the opportunity flag on pass plays with the team on offense, where 1 is best. |
+| `plays_def_pass` | UInt32 | Plays run on pass plays, with the team on defense (i.e. allowed to opponents). |
+| `playsgame_def_pass` | Float64 | Plays run per game on pass plays, with the team on defense (i.e. allowed to opponents). |
+| `passrate_def_pass` | Float64 | Share of plays that were pass plays on pass plays, with the team on defense (i.e. allowed to opponents). |
+| `rushrate_def_pass` | Float64 | Share of plays that were rush plays on pass plays, with the team on defense (i.e. allowed to opponents). |
+| `havoc_def_pass` | Float64 | Havoc rate -- the share of plays carrying the defensive-disruption flag on pass plays, with the team on defense (i.e. allowed to opponents). |
+| `explosive_def_pass` | Float64 | Explosive-play rate -- the share of plays carrying the explosive flag on pass plays, with the team on defense (i.e. allowed to opponents). |
+| `TEPA_def_pass` | Float64 | Total EPA summed over every play on pass plays, with the team on defense (i.e. allowed to opponents). |
+| `EPAplay_def_pass` | Float64 | EPA per play on pass plays, with the team on defense (i.e. allowed to opponents). |
+| `EPAdrive_def_pass` | Float64 | EPA per drive (total EPA divided by drives) on pass plays, with the team on defense (i.e. allowed to opponents). |
+| `EPAgame_def_pass` | Float64 | EPA per game (total EPA divided by games) on pass plays, with the team on defense (i.e. allowed to opponents). |
+| `yards_def_pass` | Int64 | Total yards gained on pass plays, with the team on defense (i.e. allowed to opponents). |
+| `yardsplay_def_pass` | Float64 | Yards gained per play on pass plays, with the team on defense (i.e. allowed to opponents). |
+| `yardsgame_def_pass` | Float64 | Yards gained per game on pass plays, with the team on defense (i.e. allowed to opponents). |
+| `play_stuffed_def_pass` | Float64 | Stuffed-play rate -- the share of plays carrying the stuffed flag on pass plays, with the team on defense (i.e. allowed to opponents). |
+| `drives_def_pass` | UInt32 | Offensive drives on pass plays, with the team on defense (i.e. allowed to opponents). |
+| `drivesgame_def_pass` | Float64 | Drives per game on pass plays, with the team on defense (i.e. allowed to opponents). |
+| `yardsdrive_def_pass` | Float64 | Yards gained per drive on pass plays, with the team on defense (i.e. allowed to opponents). |
+| `playsdrive_def_pass` | Float64 | Plays run per drive on pass plays, with the team on defense (i.e. allowed to opponents). |
+| `success_def_pass` | Float64 | Success rate -- the share of plays flagged as successful by EPA on pass plays, with the team on defense (i.e. allowed to opponents). |
+| `red_zone_success_def_pass` | Float64 | Success rate on red-zone plays on pass plays, with the team on defense (i.e. allowed to opponents). |
+| `third_down_success_def_pass` | Float64 | Success rate on third-down plays on pass plays, with the team on defense (i.e. allowed to opponents). |
+| `third_down_distance_def_pass` | Float64 | Average yards to go on third down on pass plays, with the team on defense (i.e. allowed to opponents). |
+| `late_down_success_def_pass` | Float64 | Success rate on late-down plays on pass plays, with the team on defense (i.e. allowed to opponents). |
+| `early_down_EPA_def_pass` | Float64 | EPA per early-down play on pass plays, with the team on defense (i.e. allowed to opponents). |
+| `nonExplosiveEpaPerPlay_def_pass` | Float64 | EPA per play with explosive plays excluded on pass plays, with the team on defense (i.e. allowed to opponents). |
+| `line_yards_def_pass` | Float64 | Average line yards credited to the offensive line on rushes on pass plays, with the team on defense (i.e. allowed to opponents). |
+| `opportunity_rate_def_pass` | Float64 | Opportunity rate -- the share of rushes carrying the opportunity flag on pass plays, with the team on defense (i.e. allowed to opponents). |
+| `playsgame_def_pass_rank` | Float64 | National rank of the team's plays run per game on pass plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `TEPA_def_pass_rank` | Float64 | National rank of the team's total EPA summed over every play on pass plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `EPAgame_def_pass_rank` | Float64 | National rank of the team's EPA per game (total EPA divided by games) on pass plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `EPAplay_def_pass_rank` | Float64 | National rank of the team's EPA per play on pass plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `EPAdrive_def_pass_rank` | Float64 | National rank of the team's EPA per drive (total EPA divided by drives) on pass plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `early_down_EPA_def_pass_rank` | Float64 | National rank of the team's EPA per early-down play on pass plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `success_def_pass_rank` | Float64 | National rank of the team's success rate -- the share of plays flagged as successful by EPA on pass plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `yards_def_pass_rank` | Float64 | National rank of the team's total yards gained on pass plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `yardsplay_def_pass_rank` | Float64 | National rank of the team's yards gained per play on pass plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `yardsgame_def_pass_rank` | Float64 | National rank of the team's yards gained per game on pass plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `drivesgame_def_pass_rank` | Float64 | National rank of the team's drives per game on pass plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `yardsdrive_def_pass_rank` | Float64 | National rank of the team's yards gained per drive on pass plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `playsdrive_def_pass_rank` | Float64 | National rank of the team's plays run per drive on pass plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `play_stuffed_def_pass_rank` | Float64 | National rank of the team's stuffed-play rate -- the share of plays carrying the stuffed flag on pass plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `red_zone_success_def_pass_rank` | Float64 | National rank of the team's success rate on red-zone plays on pass plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `third_down_success_def_pass_rank` | Float64 | National rank of the team's success rate on third-down plays on pass plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `late_down_success_def_pass_rank` | Float64 | National rank of the team's success rate on late-down plays on pass plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `third_down_distance_def_pass_rank` | Float64 | National rank of the team's average yards to go on third down on pass plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `havoc_def_pass_rank` | Float64 | National rank of the team's havoc rate -- the share of plays carrying the defensive-disruption flag on pass plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `explosive_def_pass_rank` | Float64 | National rank of the team's explosive-play rate -- the share of plays carrying the explosive flag on pass plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `passrate_def_pass_rank` | Float64 | National rank of the team's share of plays that were pass plays on pass plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `rushrate_def_pass_rank` | Float64 | National rank of the team's share of plays that were rush plays on pass plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `nonExplosiveEpaPerPlay_def_pass_rank` | Float64 | National rank of the team's EPA per play with explosive plays excluded on pass plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `line_yards_def_pass_rank` | Float64 | National rank of the team's average line yards credited to the offensive line on rushes on pass plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `opportunity_rate_def_pass_rank` | Float64 | National rank of the team's opportunity rate -- the share of rushes carrying the opportunity flag on pass plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `TEPA_margin_pass` | Float64 | Margin in total EPA summed over every play on pass plays: the team's offensive value minus the value it allowed on defense. |
+| `EPAplay_margin_pass` | Float64 | Margin in EPA per play on pass plays: the team's offensive value minus the value it allowed on defense. |
+| `EPAdrive_margin_pass` | Float64 | Margin in EPA per drive (total EPA divided by drives) on pass plays: the team's offensive value minus the value it allowed on defense. |
+| `EPAgame_margin_pass` | Float64 | Margin in EPA per game (total EPA divided by games) on pass plays: the team's offensive value minus the value it allowed on defense. |
+| `success_margin_pass` | Float64 | Margin in success rate -- the share of plays flagged as successful by EPA on pass plays: the team's offensive value minus the value it allowed on defense. |
+| `yardsplay_margin_pass` | Float64 | Margin in yards gained per play on pass plays: the team's offensive value minus the value it allowed on defense. |
+| `TEPA_margin_pass_rank` | Float64 | Margin in total EPA summed over every play on pass plays: the team's offensive value minus the value it allowed on defense. National rank of that margin, 1 = largest. |
+| `EPAgame_margin_pass_rank` | Float64 | Margin in EPA per game (total EPA divided by games) on pass plays: the team's offensive value minus the value it allowed on defense. National rank of that margin, 1 = largest. |
+| `EPAdrive_margin_pass_rank` | Float64 | Margin in EPA per drive (total EPA divided by drives) on pass plays: the team's offensive value minus the value it allowed on defense. National rank of that margin, 1 = largest. |
+| `EPAplay_margin_pass_rank` | Float64 | Margin in EPA per play on pass plays: the team's offensive value minus the value it allowed on defense. National rank of that margin, 1 = largest. |
+| `success_margin_pass_rank` | Float64 | Margin in success rate -- the share of plays flagged as successful by EPA on pass plays: the team's offensive value minus the value it allowed on defense. National rank of that margin, 1 = largest. |
+| `yardsplay_margin_pass_rank` | Float64 | Margin in yards gained per play on pass plays: the team's offensive value minus the value it allowed on defense. National rank of that margin, 1 = largest. |
+| `plays_off_rush` | UInt32 | Plays run on rush plays, with the team on offense. |
+| `playsgame_off_rush` | Float64 | Plays run per game on rush plays, with the team on offense. |
+| `passrate_off_rush` | Float64 | Share of plays that were pass plays on rush plays, with the team on offense. |
+| `rushrate_off_rush` | Float64 | Share of plays that were rush plays on rush plays, with the team on offense. |
+| `havoc_off_rush` | Float64 | Havoc rate -- the share of plays carrying the defensive-disruption flag on rush plays, with the team on offense. |
+| `explosive_off_rush` | Float64 | Explosive-play rate -- the share of plays carrying the explosive flag on rush plays, with the team on offense. |
+| `TEPA_off_rush` | Float64 | Total EPA summed over every play on rush plays, with the team on offense. |
+| `EPAplay_off_rush` | Float64 | EPA per play on rush plays, with the team on offense. |
+| `EPAdrive_off_rush` | Float64 | EPA per drive (total EPA divided by drives) on rush plays, with the team on offense. |
+| `EPAgame_off_rush` | Float64 | EPA per game (total EPA divided by games) on rush plays, with the team on offense. |
+| `yards_off_rush` | Int64 | Total yards gained on rush plays, with the team on offense. |
+| `yardsplay_off_rush` | Float64 | Yards gained per play on rush plays, with the team on offense. |
+| `yardsgame_off_rush` | Float64 | Yards gained per game on rush plays, with the team on offense. |
+| `play_stuffed_off_rush` | Float64 | Stuffed-play rate -- the share of plays carrying the stuffed flag on rush plays, with the team on offense. |
+| `drives_off_rush` | UInt32 | Offensive drives on rush plays, with the team on offense. |
+| `drivesgame_off_rush` | Float64 | Drives per game on rush plays, with the team on offense. |
+| `yardsdrive_off_rush` | Float64 | Yards gained per drive on rush plays, with the team on offense. |
+| `playsdrive_off_rush` | Float64 | Plays run per drive on rush plays, with the team on offense. |
+| `success_off_rush` | Float64 | Success rate -- the share of plays flagged as successful by EPA on rush plays, with the team on offense. |
+| `red_zone_success_off_rush` | Float64 | Success rate on red-zone plays on rush plays, with the team on offense. |
+| `third_down_success_off_rush` | Float64 | Success rate on third-down plays on rush plays, with the team on offense. |
+| `third_down_distance_off_rush` | Float64 | Average yards to go on third down on rush plays, with the team on offense. |
+| `late_down_success_off_rush` | Float64 | Success rate on late-down plays on rush plays, with the team on offense. |
+| `early_down_EPA_off_rush` | Float64 | EPA per early-down play on rush plays, with the team on offense. |
+| `nonExplosiveEpaPerPlay_off_rush` | Float64 | EPA per play with explosive plays excluded on rush plays, with the team on offense. |
+| `line_yards_off_rush` | Float64 | Average line yards credited to the offensive line on rushes on rush plays, with the team on offense. |
+| `opportunity_rate_off_rush` | Float64 | Opportunity rate -- the share of rushes carrying the opportunity flag on rush plays, with the team on offense. |
+| `playsgame_off_rush_rank` | Float64 | National rank of the team's plays run per game on rush plays with the team on offense, where 1 is best. |
+| `TEPA_off_rush_rank` | Float64 | National rank of the team's total EPA summed over every play on rush plays with the team on offense, where 1 is best. |
+| `EPAgame_off_rush_rank` | Float64 | National rank of the team's EPA per game (total EPA divided by games) on rush plays with the team on offense, where 1 is best. |
+| `EPAplay_off_rush_rank` | Float64 | National rank of the team's EPA per play on rush plays with the team on offense, where 1 is best. |
+| `EPAdrive_off_rush_rank` | Float64 | National rank of the team's EPA per drive (total EPA divided by drives) on rush plays with the team on offense, where 1 is best. |
+| `early_down_EPA_off_rush_rank` | Float64 | National rank of the team's EPA per early-down play on rush plays with the team on offense, where 1 is best. |
+| `success_off_rush_rank` | Float64 | National rank of the team's success rate -- the share of plays flagged as successful by EPA on rush plays with the team on offense, where 1 is best. |
+| `yards_off_rush_rank` | Float64 | National rank of the team's total yards gained on rush plays with the team on offense, where 1 is best. |
+| `yardsplay_off_rush_rank` | Float64 | National rank of the team's yards gained per play on rush plays with the team on offense, where 1 is best. |
+| `yardsgame_off_rush_rank` | Float64 | National rank of the team's yards gained per game on rush plays with the team on offense, where 1 is best. |
+| `drivesgame_off_rush_rank` | Float64 | National rank of the team's drives per game on rush plays with the team on offense, where 1 is best. |
+| `yardsdrive_off_rush_rank` | Float64 | National rank of the team's yards gained per drive on rush plays with the team on offense, where 1 is best. |
+| `playsdrive_off_rush_rank` | Float64 | National rank of the team's plays run per drive on rush plays with the team on offense, where 1 is best. |
+| `play_stuffed_off_rush_rank` | Float64 | National rank of the team's stuffed-play rate -- the share of plays carrying the stuffed flag on rush plays with the team on offense, where 1 is best. |
+| `red_zone_success_off_rush_rank` | Float64 | National rank of the team's success rate on red-zone plays on rush plays with the team on offense, where 1 is best. |
+| `third_down_success_off_rush_rank` | Float64 | National rank of the team's success rate on third-down plays on rush plays with the team on offense, where 1 is best. |
+| `late_down_success_off_rush_rank` | Float64 | National rank of the team's success rate on late-down plays on rush plays with the team on offense, where 1 is best. |
+| `third_down_distance_off_rush_rank` | Float64 | National rank of the team's average yards to go on third down on rush plays with the team on offense, where 1 is best. |
+| `havoc_off_rush_rank` | Float64 | National rank of the team's havoc rate -- the share of plays carrying the defensive-disruption flag on rush plays with the team on offense, where 1 is best. |
+| `explosive_off_rush_rank` | Float64 | National rank of the team's explosive-play rate -- the share of plays carrying the explosive flag on rush plays with the team on offense, where 1 is best. |
+| `passrate_off_rush_rank` | Float64 | National rank of the team's share of plays that were pass plays on rush plays with the team on offense, where 1 is best. |
+| `rushrate_off_rush_rank` | Float64 | National rank of the team's share of plays that were rush plays on rush plays with the team on offense, where 1 is best. |
+| `nonExplosiveEpaPerPlay_off_rush_rank` | Float64 | National rank of the team's EPA per play with explosive plays excluded on rush plays with the team on offense, where 1 is best. |
+| `line_yards_off_rush_rank` | Float64 | National rank of the team's average line yards credited to the offensive line on rushes on rush plays with the team on offense, where 1 is best. |
+| `opportunity_rate_off_rush_rank` | Float64 | National rank of the team's opportunity rate -- the share of rushes carrying the opportunity flag on rush plays with the team on offense, where 1 is best. |
+| `plays_def_rush` | UInt32 | Plays run on rush plays, with the team on defense (i.e. allowed to opponents). |
+| `playsgame_def_rush` | Float64 | Plays run per game on rush plays, with the team on defense (i.e. allowed to opponents). |
+| `passrate_def_rush` | Float64 | Share of plays that were pass plays on rush plays, with the team on defense (i.e. allowed to opponents). |
+| `rushrate_def_rush` | Float64 | Share of plays that were rush plays on rush plays, with the team on defense (i.e. allowed to opponents). |
+| `havoc_def_rush` | Float64 | Havoc rate -- the share of plays carrying the defensive-disruption flag on rush plays, with the team on defense (i.e. allowed to opponents). |
+| `explosive_def_rush` | Float64 | Explosive-play rate -- the share of plays carrying the explosive flag on rush plays, with the team on defense (i.e. allowed to opponents). |
+| `TEPA_def_rush` | Float64 | Total EPA summed over every play on rush plays, with the team on defense (i.e. allowed to opponents). |
+| `EPAplay_def_rush` | Float64 | EPA per play on rush plays, with the team on defense (i.e. allowed to opponents). |
+| `EPAdrive_def_rush` | Float64 | EPA per drive (total EPA divided by drives) on rush plays, with the team on defense (i.e. allowed to opponents). |
+| `EPAgame_def_rush` | Float64 | EPA per game (total EPA divided by games) on rush plays, with the team on defense (i.e. allowed to opponents). |
+| `yards_def_rush` | Int64 | Total yards gained on rush plays, with the team on defense (i.e. allowed to opponents). |
+| `yardsplay_def_rush` | Float64 | Yards gained per play on rush plays, with the team on defense (i.e. allowed to opponents). |
+| `yardsgame_def_rush` | Float64 | Yards gained per game on rush plays, with the team on defense (i.e. allowed to opponents). |
+| `play_stuffed_def_rush` | Float64 | Stuffed-play rate -- the share of plays carrying the stuffed flag on rush plays, with the team on defense (i.e. allowed to opponents). |
+| `drives_def_rush` | UInt32 | Offensive drives on rush plays, with the team on defense (i.e. allowed to opponents). |
+| `drivesgame_def_rush` | Float64 | Drives per game on rush plays, with the team on defense (i.e. allowed to opponents). |
+| `yardsdrive_def_rush` | Float64 | Yards gained per drive on rush plays, with the team on defense (i.e. allowed to opponents). |
+| `playsdrive_def_rush` | Float64 | Plays run per drive on rush plays, with the team on defense (i.e. allowed to opponents). |
+| `success_def_rush` | Float64 | Success rate -- the share of plays flagged as successful by EPA on rush plays, with the team on defense (i.e. allowed to opponents). |
+| `red_zone_success_def_rush` | Float64 | Success rate on red-zone plays on rush plays, with the team on defense (i.e. allowed to opponents). |
+| `third_down_success_def_rush` | Float64 | Success rate on third-down plays on rush plays, with the team on defense (i.e. allowed to opponents). |
+| `third_down_distance_def_rush` | Float64 | Average yards to go on third down on rush plays, with the team on defense (i.e. allowed to opponents). |
+| `late_down_success_def_rush` | Float64 | Success rate on late-down plays on rush plays, with the team on defense (i.e. allowed to opponents). |
+| `early_down_EPA_def_rush` | Float64 | EPA per early-down play on rush plays, with the team on defense (i.e. allowed to opponents). |
+| `nonExplosiveEpaPerPlay_def_rush` | Float64 | EPA per play with explosive plays excluded on rush plays, with the team on defense (i.e. allowed to opponents). |
+| `line_yards_def_rush` | Float64 | Average line yards credited to the offensive line on rushes on rush plays, with the team on defense (i.e. allowed to opponents). |
+| `opportunity_rate_def_rush` | Float64 | Opportunity rate -- the share of rushes carrying the opportunity flag on rush plays, with the team on defense (i.e. allowed to opponents). |
+| `playsgame_def_rush_rank` | Float64 | National rank of the team's plays run per game on rush plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `TEPA_def_rush_rank` | Float64 | National rank of the team's total EPA summed over every play on rush plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `EPAgame_def_rush_rank` | Float64 | National rank of the team's EPA per game (total EPA divided by games) on rush plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `EPAplay_def_rush_rank` | Float64 | National rank of the team's EPA per play on rush plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `EPAdrive_def_rush_rank` | Float64 | National rank of the team's EPA per drive (total EPA divided by drives) on rush plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `early_down_EPA_def_rush_rank` | Float64 | National rank of the team's EPA per early-down play on rush plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `success_def_rush_rank` | Float64 | National rank of the team's success rate -- the share of plays flagged as successful by EPA on rush plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `yards_def_rush_rank` | Float64 | National rank of the team's total yards gained on rush plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `yardsplay_def_rush_rank` | Float64 | National rank of the team's yards gained per play on rush plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `yardsgame_def_rush_rank` | Float64 | National rank of the team's yards gained per game on rush plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `drivesgame_def_rush_rank` | Float64 | National rank of the team's drives per game on rush plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `yardsdrive_def_rush_rank` | Float64 | National rank of the team's yards gained per drive on rush plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `playsdrive_def_rush_rank` | Float64 | National rank of the team's plays run per drive on rush plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `play_stuffed_def_rush_rank` | Float64 | National rank of the team's stuffed-play rate -- the share of plays carrying the stuffed flag on rush plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `red_zone_success_def_rush_rank` | Float64 | National rank of the team's success rate on red-zone plays on rush plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `third_down_success_def_rush_rank` | Float64 | National rank of the team's success rate on third-down plays on rush plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `late_down_success_def_rush_rank` | Float64 | National rank of the team's success rate on late-down plays on rush plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `third_down_distance_def_rush_rank` | Float64 | National rank of the team's average yards to go on third down on rush plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `havoc_def_rush_rank` | Float64 | National rank of the team's havoc rate -- the share of plays carrying the defensive-disruption flag on rush plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `explosive_def_rush_rank` | Float64 | National rank of the team's explosive-play rate -- the share of plays carrying the explosive flag on rush plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `passrate_def_rush_rank` | Float64 | National rank of the team's share of plays that were pass plays on rush plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `rushrate_def_rush_rank` | Float64 | National rank of the team's share of plays that were rush plays on rush plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `nonExplosiveEpaPerPlay_def_rush_rank` | Float64 | National rank of the team's EPA per play with explosive plays excluded on rush plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `line_yards_def_rush_rank` | Float64 | National rank of the team's average line yards credited to the offensive line on rushes on rush plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `opportunity_rate_def_rush_rank` | Float64 | National rank of the team's opportunity rate -- the share of rushes carrying the opportunity flag on rush plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `TEPA_margin_rush` | Float64 | Margin in total EPA summed over every play on rush plays: the team's offensive value minus the value it allowed on defense. |
+| `EPAplay_margin_rush` | Float64 | Margin in EPA per play on rush plays: the team's offensive value minus the value it allowed on defense. |
+| `EPAdrive_margin_rush` | Float64 | Margin in EPA per drive (total EPA divided by drives) on rush plays: the team's offensive value minus the value it allowed on defense. |
+| `EPAgame_margin_rush` | Float64 | Margin in EPA per game (total EPA divided by games) on rush plays: the team's offensive value minus the value it allowed on defense. |
+| `success_margin_rush` | Float64 | Margin in success rate -- the share of plays flagged as successful by EPA on rush plays: the team's offensive value minus the value it allowed on defense. |
+| `yardsplay_margin_rush` | Float64 | Margin in yards gained per play on rush plays: the team's offensive value minus the value it allowed on defense. |
+| `TEPA_margin_rush_rank` | Float64 | Margin in total EPA summed over every play on rush plays: the team's offensive value minus the value it allowed on defense. National rank of that margin, 1 = largest. |
+| `EPAgame_margin_rush_rank` | Float64 | Margin in EPA per game (total EPA divided by games) on rush plays: the team's offensive value minus the value it allowed on defense. National rank of that margin, 1 = largest. |
+| `EPAdrive_margin_rush_rank` | Float64 | Margin in EPA per drive (total EPA divided by drives) on rush plays: the team's offensive value minus the value it allowed on defense. National rank of that margin, 1 = largest. |
+| `EPAplay_margin_rush_rank` | Float64 | Margin in EPA per play on rush plays: the team's offensive value minus the value it allowed on defense. National rank of that margin, 1 = largest. |
+| `success_margin_rush_rank` | Float64 | Margin in success rate -- the share of plays flagged as successful by EPA on rush plays: the team's offensive value minus the value it allowed on defense. National rank of that margin, 1 = largest. |
+| `yardsplay_margin_rush_rank` | Float64 | Margin in yards gained per play on rush plays: the team's offensive value minus the value it allowed on defense. National rank of that margin, 1 = largest. |
+| `fbs_class` | String | Power/Group classification for the season: P4 or G6 from 2024 on, P5 or G5 through 2023, derived from conference membership (Notre Dame is classified with the power group). Null for teams outside FBS. |
+| `valid_games` | UInt32 | Number of the team's games that produced both an offensive and a defensive adjusted-EPA value; teams below two valid games are dropped from the adjusted ratings. |
+| `adj_off_epa` | Float64 | Offensive opponent-adjusted EPA per play from the ridge (RAPM-style) regression on offense/defense team indicators plus home field -- cfbfastR's adjust_epa adjustment, fit in-sample across the season, so the value is descriptive of that window rather than predictive. |
+| `adj_def_epa` | Float64 | Defensive opponent-adjusted EPA per play from the ridge (RAPM-style) regression on offense/defense team indicators plus home field -- cfbfastR's adjust_epa adjustment, fit in-sample across the season, so the value is descriptive of that window rather than predictive. Lower is better -- it is EPA allowed. |
+| `def_strength_faced` | Float64 | Average opponent-offense strength the team's defense faced, taken as the mean of the ridge's offensive coefficients across its opponents. Higher means a tougher slate. |
+| `off_strength_faced` | Float64 | Average opponent-defense strength the team's offense faced, taken as the mean of the ridge's defensive coefficients across its opponents. Higher means a tougher slate. |
+| `net_adj_epa` | Float64 | Net opponent-adjusted EPA per play: adj_off_epa minus adj_def_epa. Higher is better. |
+| `adj_off_epa_rank` | Float64 | National rank of the team's adj_off_epa, where 1 is best. |
+| `adj_def_epa_rank` | Float64 | National rank of the team's adj_def_epa, where 1 is best (fewest EPA allowed). |
+| `net_adj_epa_rank` | Float64 | National rank of the team's net_adj_epa, 1 = largest net adjusted EPA. |
 
 ```python
 load_cfb_team_summaries(seasons=2024)
@@ -2163,385 +2163,385 @@ Release: [cfb_team_summaries_weekly](https://github.com/sportsdataverse/sportsda
 | `division` | String | Division in the conference for the team. |
 | `conference` | String | Conference of the team. |
 | `season` | Int64 | Season (4-digit year). |
-| `plays_off` | UInt32 |  |
-| `passrate_off` | Float64 |  |
-| `rushrate_off` | Float64 |  |
-| `havoc_off` | Float64 |  |
-| `explosive_off` | Float64 |  |
-| `TEPA_off` | Float64 |  |
-| `EPAplay_off` | Float64 |  |
-| `yards_off` | Int64 |  |
-| `yardsplay_off` | Float64 |  |
-| `play_stuffed_off` | Float64 |  |
-| `success_off` | Float64 |  |
-| `red_zone_success_off` | Float64 |  |
-| `third_down_success_off` | Float64 |  |
-| `third_down_distance_off` | Float64 |  |
-| `late_down_success_off` | Float64 |  |
-| `early_down_EPA_off` | Float64 |  |
-| `start_position_off` | Float64 |  |
-| `nonExplosiveEpaPerPlay_off` | Float64 |  |
-| `line_yards_off` | Float64 |  |
-| `opportunity_rate_off` | Float64 |  |
-| `playsgame_off` | Float64 |  |
-| `EPAdrive_off` | Float64 |  |
-| `EPAgame_off` | Float64 |  |
-| `yardsgame_off` | Float64 |  |
-| `drives_off` | UInt32 |  |
-| `drivesgame_off` | Float64 |  |
-| `yardsdrive_off` | Float64 |  |
-| `playsdrive_off` | Float64 |  |
-| `playsgame_off_rank` | Float64 |  |
-| `TEPA_off_rank` | Float64 |  |
-| `EPAgame_off_rank` | Float64 |  |
-| `EPAplay_off_rank` | Float64 |  |
-| `EPAdrive_off_rank` | Float64 |  |
-| `early_down_EPA_off_rank` | Float64 |  |
-| `success_off_rank` | Float64 |  |
-| `yards_off_rank` | Float64 |  |
-| `yardsplay_off_rank` | Float64 |  |
-| `yardsgame_off_rank` | Float64 |  |
-| `drivesgame_off_rank` | Float64 |  |
-| `yardsdrive_off_rank` | Float64 |  |
-| `playsdrive_off_rank` | Float64 |  |
-| `play_stuffed_off_rank` | Float64 |  |
-| `red_zone_success_off_rank` | Float64 |  |
-| `third_down_success_off_rank` | Float64 |  |
-| `late_down_success_off_rank` | Float64 |  |
-| `third_down_distance_off_rank` | Float64 |  |
-| `start_position_off_rank` | Float64 |  |
-| `havoc_off_rank` | Float64 |  |
-| `explosive_off_rank` | Float64 |  |
-| `passrate_off_rank` | Float64 |  |
-| `rushrate_off_rank` | Float64 |  |
-| `nonExplosiveEpaPerPlay_off_rank` | Float64 |  |
-| `line_yards_off_rank` | Float64 |  |
-| `opportunity_rate_off_rank` | Float64 |  |
-| `plays_def` | UInt32 |  |
-| `passrate_def` | Float64 |  |
-| `rushrate_def` | Float64 |  |
-| `havoc_def` | Float64 |  |
-| `explosive_def` | Float64 |  |
-| `TEPA_def` | Float64 |  |
-| `EPAplay_def` | Float64 |  |
-| `yards_def` | Int64 |  |
-| `yardsplay_def` | Float64 |  |
-| `play_stuffed_def` | Float64 |  |
-| `success_def` | Float64 |  |
-| `red_zone_success_def` | Float64 |  |
-| `third_down_success_def` | Float64 |  |
-| `third_down_distance_def` | Float64 |  |
-| `late_down_success_def` | Float64 |  |
-| `early_down_EPA_def` | Float64 |  |
-| `start_position_def` | Float64 |  |
-| `nonExplosiveEpaPerPlay_def` | Float64 |  |
-| `line_yards_def` | Float64 |  |
-| `opportunity_rate_def` | Float64 |  |
-| `playsgame_def` | Float64 |  |
-| `EPAdrive_def` | Float64 |  |
-| `EPAgame_def` | Float64 |  |
-| `yardsgame_def` | Float64 |  |
-| `drives_def` | UInt32 |  |
-| `drivesgame_def` | Float64 |  |
-| `yardsdrive_def` | Float64 |  |
-| `playsdrive_def` | Float64 |  |
-| `playsgame_def_rank` | Float64 |  |
-| `TEPA_def_rank` | Float64 |  |
-| `EPAgame_def_rank` | Float64 |  |
-| `EPAplay_def_rank` | Float64 |  |
-| `EPAdrive_def_rank` | Float64 |  |
-| `early_down_EPA_def_rank` | Float64 |  |
-| `success_def_rank` | Float64 |  |
-| `yards_def_rank` | Float64 |  |
-| `yardsplay_def_rank` | Float64 |  |
-| `yardsgame_def_rank` | Float64 |  |
-| `drivesgame_def_rank` | Float64 |  |
-| `yardsdrive_def_rank` | Float64 |  |
-| `playsdrive_def_rank` | Float64 |  |
-| `play_stuffed_def_rank` | Float64 |  |
-| `red_zone_success_def_rank` | Float64 |  |
-| `third_down_success_def_rank` | Float64 |  |
-| `late_down_success_def_rank` | Float64 |  |
-| `third_down_distance_def_rank` | Float64 |  |
-| `start_position_def_rank` | Float64 |  |
-| `havoc_def_rank` | Float64 |  |
-| `explosive_def_rank` | Float64 |  |
-| `passrate_def_rank` | Float64 |  |
-| `rushrate_def_rank` | Float64 |  |
-| `nonExplosiveEpaPerPlay_def_rank` | Float64 |  |
-| `line_yards_def_rank` | Float64 |  |
-| `opportunity_rate_def_rank` | Float64 |  |
-| `TEPA_margin` | Float64 |  |
-| `EPAplay_margin` | Float64 |  |
-| `EPAdrive_margin` | Float64 |  |
-| `EPAgame_margin` | Float64 |  |
-| `success_margin` | Float64 |  |
-| `yardsplay_margin` | Float64 |  |
-| `TEPA_margin_rank` | Float64 |  |
-| `EPAplay_margin_rank` | Float64 |  |
-| `EPAdrive_margin_rank` | Float64 |  |
-| `EPAgame_margin_rank` | Float64 |  |
-| `success_margin_rank` | Float64 |  |
-| `yardsplay_margin_rank` | Float64 |  |
-| `start_position_margin` | Float64 |  |
-| `start_position_margin_rank` | Float64 |  |
-| `total_available_yards_off` | Float64 |  |
-| `total_gained_yards_off` | Int64 |  |
-| `available_yards_pct_off` | Float64 |  |
-| `available_yards_pct_off_rank` | Float64 |  |
-| `total_available_yards_def` | Float64 |  |
-| `total_gained_yards_def` | Int64 |  |
-| `available_yards_pct_def` | Float64 |  |
-| `available_yards_pct_def_rank` | Float64 |  |
-| `total_available_yards_margin` | Float64 |  |
-| `total_gained_yards_margin` | Int64 |  |
-| `available_yards_pct_margin` | Float64 |  |
-| `total_available_yards_margin_rank` | Float64 |  |
-| `total_gained_yards_margin_rank` | Float64 |  |
-| `available_yards_pct_margin_rank` | Float64 |  |
-| `plays_off_pass` | UInt32 |  |
-| `passrate_off_pass` | Float64 |  |
-| `rushrate_off_pass` | Float64 |  |
-| `havoc_off_pass` | Float64 |  |
-| `explosive_off_pass` | Float64 |  |
-| `TEPA_off_pass` | Float64 |  |
-| `EPAplay_off_pass` | Float64 |  |
-| `yards_off_pass` | Int64 |  |
-| `yardsplay_off_pass` | Float64 |  |
-| `play_stuffed_off_pass` | Float64 |  |
-| `success_off_pass` | Float64 |  |
-| `red_zone_success_off_pass` | Float64 |  |
-| `third_down_success_off_pass` | Float64 |  |
-| `third_down_distance_off_pass` | Float64 |  |
-| `late_down_success_off_pass` | Float64 |  |
-| `early_down_EPA_off_pass` | Float64 |  |
-| `nonExplosiveEpaPerPlay_off_pass` | Float64 |  |
-| `line_yards_off_pass` | Float64 |  |
-| `opportunity_rate_off_pass` | Float64 |  |
-| `playsgame_off_pass` | Float64 |  |
-| `EPAdrive_off_pass` | Float64 |  |
-| `EPAgame_off_pass` | Float64 |  |
-| `yardsgame_off_pass` | Float64 |  |
-| `drives_off_pass` | UInt32 |  |
-| `drivesgame_off_pass` | Float64 |  |
-| `yardsdrive_off_pass` | Float64 |  |
-| `playsdrive_off_pass` | Float64 |  |
-| `playsgame_off_pass_rank` | Float64 |  |
-| `TEPA_off_pass_rank` | Float64 |  |
-| `EPAgame_off_pass_rank` | Float64 |  |
-| `EPAplay_off_pass_rank` | Float64 |  |
-| `EPAdrive_off_pass_rank` | Float64 |  |
-| `early_down_EPA_off_pass_rank` | Float64 |  |
-| `success_off_pass_rank` | Float64 |  |
-| `yards_off_pass_rank` | Float64 |  |
-| `yardsplay_off_pass_rank` | Float64 |  |
-| `yardsgame_off_pass_rank` | Float64 |  |
-| `drivesgame_off_pass_rank` | Float64 |  |
-| `yardsdrive_off_pass_rank` | Float64 |  |
-| `playsdrive_off_pass_rank` | Float64 |  |
-| `play_stuffed_off_pass_rank` | Float64 |  |
-| `red_zone_success_off_pass_rank` | Float64 |  |
-| `third_down_success_off_pass_rank` | Float64 |  |
-| `late_down_success_off_pass_rank` | Float64 |  |
-| `third_down_distance_off_pass_rank` | Float64 |  |
-| `havoc_off_pass_rank` | Float64 |  |
-| `explosive_off_pass_rank` | Float64 |  |
-| `passrate_off_pass_rank` | Float64 |  |
-| `rushrate_off_pass_rank` | Float64 |  |
-| `nonExplosiveEpaPerPlay_off_pass_rank` | Float64 |  |
-| `line_yards_off_pass_rank` | Float64 |  |
-| `opportunity_rate_off_pass_rank` | Float64 |  |
-| `plays_def_pass` | UInt32 |  |
-| `passrate_def_pass` | Float64 |  |
-| `rushrate_def_pass` | Float64 |  |
-| `havoc_def_pass` | Float64 |  |
-| `explosive_def_pass` | Float64 |  |
-| `TEPA_def_pass` | Float64 |  |
-| `EPAplay_def_pass` | Float64 |  |
-| `yards_def_pass` | Int64 |  |
-| `yardsplay_def_pass` | Float64 |  |
-| `play_stuffed_def_pass` | Float64 |  |
-| `success_def_pass` | Float64 |  |
-| `red_zone_success_def_pass` | Float64 |  |
-| `third_down_success_def_pass` | Float64 |  |
-| `third_down_distance_def_pass` | Float64 |  |
-| `late_down_success_def_pass` | Float64 |  |
-| `early_down_EPA_def_pass` | Float64 |  |
-| `nonExplosiveEpaPerPlay_def_pass` | Float64 |  |
-| `line_yards_def_pass` | Float64 |  |
-| `opportunity_rate_def_pass` | Float64 |  |
-| `playsgame_def_pass` | Float64 |  |
-| `EPAdrive_def_pass` | Float64 |  |
-| `EPAgame_def_pass` | Float64 |  |
-| `yardsgame_def_pass` | Float64 |  |
-| `drives_def_pass` | UInt32 |  |
-| `drivesgame_def_pass` | Float64 |  |
-| `yardsdrive_def_pass` | Float64 |  |
-| `playsdrive_def_pass` | Float64 |  |
-| `playsgame_def_pass_rank` | Float64 |  |
-| `TEPA_def_pass_rank` | Float64 |  |
-| `EPAgame_def_pass_rank` | Float64 |  |
-| `EPAplay_def_pass_rank` | Float64 |  |
-| `EPAdrive_def_pass_rank` | Float64 |  |
-| `early_down_EPA_def_pass_rank` | Float64 |  |
-| `success_def_pass_rank` | Float64 |  |
-| `yards_def_pass_rank` | Float64 |  |
-| `yardsplay_def_pass_rank` | Float64 |  |
-| `yardsgame_def_pass_rank` | Float64 |  |
-| `drivesgame_def_pass_rank` | Float64 |  |
-| `yardsdrive_def_pass_rank` | Float64 |  |
-| `playsdrive_def_pass_rank` | Float64 |  |
-| `play_stuffed_def_pass_rank` | Float64 |  |
-| `red_zone_success_def_pass_rank` | Float64 |  |
-| `third_down_success_def_pass_rank` | Float64 |  |
-| `late_down_success_def_pass_rank` | Float64 |  |
-| `third_down_distance_def_pass_rank` | Float64 |  |
-| `havoc_def_pass_rank` | Float64 |  |
-| `explosive_def_pass_rank` | Float64 |  |
-| `passrate_def_pass_rank` | Float64 |  |
-| `rushrate_def_pass_rank` | Float64 |  |
-| `nonExplosiveEpaPerPlay_def_pass_rank` | Float64 |  |
-| `line_yards_def_pass_rank` | Float64 |  |
-| `opportunity_rate_def_pass_rank` | Float64 |  |
-| `TEPA_margin_pass` | Float64 |  |
-| `EPAplay_margin_pass` | Float64 |  |
-| `EPAdrive_margin_pass` | Float64 |  |
-| `EPAgame_margin_pass` | Float64 |  |
-| `success_margin_pass` | Float64 |  |
-| `yardsplay_margin_pass` | Float64 |  |
-| `TEPA_margin_pass_rank` | Float64 |  |
-| `EPAplay_margin_pass_rank` | Float64 |  |
-| `EPAdrive_margin_pass_rank` | Float64 |  |
-| `EPAgame_margin_pass_rank` | Float64 |  |
-| `success_margin_pass_rank` | Float64 |  |
-| `yardsplay_margin_pass_rank` | Float64 |  |
-| `plays_off_rush` | UInt32 |  |
-| `passrate_off_rush` | Float64 |  |
-| `rushrate_off_rush` | Float64 |  |
-| `havoc_off_rush` | Float64 |  |
-| `explosive_off_rush` | Float64 |  |
-| `TEPA_off_rush` | Float64 |  |
-| `EPAplay_off_rush` | Float64 |  |
-| `yards_off_rush` | Int64 |  |
-| `yardsplay_off_rush` | Float64 |  |
-| `play_stuffed_off_rush` | Float64 |  |
-| `success_off_rush` | Float64 |  |
-| `red_zone_success_off_rush` | Float64 |  |
-| `third_down_success_off_rush` | Float64 |  |
-| `third_down_distance_off_rush` | Float64 |  |
-| `late_down_success_off_rush` | Float64 |  |
-| `early_down_EPA_off_rush` | Float64 |  |
-| `nonExplosiveEpaPerPlay_off_rush` | Float64 |  |
-| `line_yards_off_rush` | Float64 |  |
-| `opportunity_rate_off_rush` | Float64 |  |
-| `playsgame_off_rush` | Float64 |  |
-| `EPAdrive_off_rush` | Float64 |  |
-| `EPAgame_off_rush` | Float64 |  |
-| `yardsgame_off_rush` | Float64 |  |
-| `drives_off_rush` | UInt32 |  |
-| `drivesgame_off_rush` | Float64 |  |
-| `yardsdrive_off_rush` | Float64 |  |
-| `playsdrive_off_rush` | Float64 |  |
-| `playsgame_off_rush_rank` | Float64 |  |
-| `TEPA_off_rush_rank` | Float64 |  |
-| `EPAgame_off_rush_rank` | Float64 |  |
-| `EPAplay_off_rush_rank` | Float64 |  |
-| `EPAdrive_off_rush_rank` | Float64 |  |
-| `early_down_EPA_off_rush_rank` | Float64 |  |
-| `success_off_rush_rank` | Float64 |  |
-| `yards_off_rush_rank` | Float64 |  |
-| `yardsplay_off_rush_rank` | Float64 |  |
-| `yardsgame_off_rush_rank` | Float64 |  |
-| `drivesgame_off_rush_rank` | Float64 |  |
-| `yardsdrive_off_rush_rank` | Float64 |  |
-| `playsdrive_off_rush_rank` | Float64 |  |
-| `play_stuffed_off_rush_rank` | Float64 |  |
-| `red_zone_success_off_rush_rank` | Float64 |  |
-| `third_down_success_off_rush_rank` | Float64 |  |
-| `late_down_success_off_rush_rank` | Float64 |  |
-| `third_down_distance_off_rush_rank` | Float64 |  |
-| `havoc_off_rush_rank` | Float64 |  |
-| `explosive_off_rush_rank` | Float64 |  |
-| `passrate_off_rush_rank` | Float64 |  |
-| `rushrate_off_rush_rank` | Float64 |  |
-| `nonExplosiveEpaPerPlay_off_rush_rank` | Float64 |  |
-| `line_yards_off_rush_rank` | Float64 |  |
-| `opportunity_rate_off_rush_rank` | Float64 |  |
-| `plays_def_rush` | UInt32 |  |
-| `passrate_def_rush` | Float64 |  |
-| `rushrate_def_rush` | Float64 |  |
-| `havoc_def_rush` | Float64 |  |
-| `explosive_def_rush` | Float64 |  |
-| `TEPA_def_rush` | Float64 |  |
-| `EPAplay_def_rush` | Float64 |  |
-| `yards_def_rush` | Int64 |  |
-| `yardsplay_def_rush` | Float64 |  |
-| `play_stuffed_def_rush` | Float64 |  |
-| `success_def_rush` | Float64 |  |
-| `red_zone_success_def_rush` | Float64 |  |
-| `third_down_success_def_rush` | Float64 |  |
-| `third_down_distance_def_rush` | Float64 |  |
-| `late_down_success_def_rush` | Float64 |  |
-| `early_down_EPA_def_rush` | Float64 |  |
-| `nonExplosiveEpaPerPlay_def_rush` | Float64 |  |
-| `line_yards_def_rush` | Float64 |  |
-| `opportunity_rate_def_rush` | Float64 |  |
-| `playsgame_def_rush` | Float64 |  |
-| `EPAdrive_def_rush` | Float64 |  |
-| `EPAgame_def_rush` | Float64 |  |
-| `yardsgame_def_rush` | Float64 |  |
-| `drives_def_rush` | UInt32 |  |
-| `drivesgame_def_rush` | Float64 |  |
-| `yardsdrive_def_rush` | Float64 |  |
-| `playsdrive_def_rush` | Float64 |  |
-| `playsgame_def_rush_rank` | Float64 |  |
-| `TEPA_def_rush_rank` | Float64 |  |
-| `EPAgame_def_rush_rank` | Float64 |  |
-| `EPAplay_def_rush_rank` | Float64 |  |
-| `EPAdrive_def_rush_rank` | Float64 |  |
-| `early_down_EPA_def_rush_rank` | Float64 |  |
-| `success_def_rush_rank` | Float64 |  |
-| `yards_def_rush_rank` | Float64 |  |
-| `yardsplay_def_rush_rank` | Float64 |  |
-| `yardsgame_def_rush_rank` | Float64 |  |
-| `drivesgame_def_rush_rank` | Float64 |  |
-| `yardsdrive_def_rush_rank` | Float64 |  |
-| `playsdrive_def_rush_rank` | Float64 |  |
-| `play_stuffed_def_rush_rank` | Float64 |  |
-| `red_zone_success_def_rush_rank` | Float64 |  |
-| `third_down_success_def_rush_rank` | Float64 |  |
-| `late_down_success_def_rush_rank` | Float64 |  |
-| `third_down_distance_def_rush_rank` | Float64 |  |
-| `havoc_def_rush_rank` | Float64 |  |
-| `explosive_def_rush_rank` | Float64 |  |
-| `passrate_def_rush_rank` | Float64 |  |
-| `rushrate_def_rush_rank` | Float64 |  |
-| `nonExplosiveEpaPerPlay_def_rush_rank` | Float64 |  |
-| `line_yards_def_rush_rank` | Float64 |  |
-| `opportunity_rate_def_rush_rank` | Float64 |  |
-| `TEPA_margin_rush` | Float64 |  |
-| `EPAplay_margin_rush` | Float64 |  |
-| `EPAdrive_margin_rush` | Float64 |  |
-| `EPAgame_margin_rush` | Float64 |  |
-| `success_margin_rush` | Float64 |  |
-| `yardsplay_margin_rush` | Float64 |  |
-| `TEPA_margin_rush_rank` | Float64 |  |
-| `EPAplay_margin_rush_rank` | Float64 |  |
-| `EPAdrive_margin_rush_rank` | Float64 |  |
-| `EPAgame_margin_rush_rank` | Float64 |  |
-| `success_margin_rush_rank` | Float64 |  |
-| `yardsplay_margin_rush_rank` | Float64 |  |
-| `fbs_class` | String |  |
-| `valid_games` | UInt32 |  |
-| `adj_off_epa` | Float64 |  |
-| `adj_def_epa` | Float64 |  |
-| `off_strength_faced` | Float64 |  |
-| `def_strength_faced` | Float64 |  |
-| `net_adj_epa` | Float64 |  |
-| `adj_off_epa_rank` | Float64 |  |
-| `adj_def_epa_rank` | Float64 |  |
-| `net_adj_epa_rank` | Float64 |  |
-| `through_week` | Int32 |  |
+| `plays_off` | UInt32 | Plays run, with the team on offense. |
+| `passrate_off` | Float64 | Share of plays that were pass plays, with the team on offense. |
+| `rushrate_off` | Float64 | Share of plays that were rush plays, with the team on offense. |
+| `havoc_off` | Float64 | Havoc rate -- the share of plays carrying the defensive-disruption flag, with the team on offense. |
+| `explosive_off` | Float64 | Explosive-play rate -- the share of plays carrying the explosive flag, with the team on offense. |
+| `TEPA_off` | Float64 | Total EPA summed over every play, with the team on offense. |
+| `EPAplay_off` | Float64 | EPA per play, with the team on offense. |
+| `yards_off` | Int64 | Total yards gained, with the team on offense. |
+| `yardsplay_off` | Float64 | Yards gained per play, with the team on offense. |
+| `play_stuffed_off` | Float64 | Stuffed-play rate -- the share of plays carrying the stuffed flag, with the team on offense. |
+| `success_off` | Float64 | Success rate -- the share of plays flagged as successful by EPA, with the team on offense. |
+| `red_zone_success_off` | Float64 | Success rate on red-zone plays, with the team on offense. |
+| `third_down_success_off` | Float64 | Success rate on third-down plays, with the team on offense. |
+| `third_down_distance_off` | Float64 | Average yards to go on third down, with the team on offense. |
+| `late_down_success_off` | Float64 | Success rate on late-down plays, with the team on offense. |
+| `early_down_EPA_off` | Float64 | EPA per early-down play, with the team on offense. |
+| `start_position_off` | Float64 | Average drive start position, measured in yards from the opponent goal line, with the team on offense. |
+| `nonExplosiveEpaPerPlay_off` | Float64 | EPA per play with explosive plays excluded, with the team on offense. |
+| `line_yards_off` | Float64 | Average line yards credited to the offensive line on rushes, with the team on offense. |
+| `opportunity_rate_off` | Float64 | Opportunity rate -- the share of rushes carrying the opportunity flag, with the team on offense. |
+| `playsgame_off` | Float64 | Plays run per game, with the team on offense. |
+| `EPAdrive_off` | Float64 | EPA per drive (total EPA divided by drives), with the team on offense. |
+| `EPAgame_off` | Float64 | EPA per game (total EPA divided by games), with the team on offense. |
+| `yardsgame_off` | Float64 | Yards gained per game, with the team on offense. |
+| `drives_off` | UInt32 | Offensive drives, with the team on offense. |
+| `drivesgame_off` | Float64 | Drives per game, with the team on offense. |
+| `yardsdrive_off` | Float64 | Yards gained per drive, with the team on offense. |
+| `playsdrive_off` | Float64 | Plays run per drive, with the team on offense. |
+| `playsgame_off_rank` | Float64 | National rank of the team's plays run per game with the team on offense, where 1 is best. |
+| `TEPA_off_rank` | Float64 | National rank of the team's total EPA summed over every play with the team on offense, where 1 is best. |
+| `EPAgame_off_rank` | Float64 | National rank of the team's EPA per game (total EPA divided by games) with the team on offense, where 1 is best. |
+| `EPAplay_off_rank` | Float64 | National rank of the team's EPA per play with the team on offense, where 1 is best. |
+| `EPAdrive_off_rank` | Float64 | National rank of the team's EPA per drive (total EPA divided by drives) with the team on offense, where 1 is best. |
+| `early_down_EPA_off_rank` | Float64 | National rank of the team's EPA per early-down play with the team on offense, where 1 is best. |
+| `success_off_rank` | Float64 | National rank of the team's success rate -- the share of plays flagged as successful by EPA with the team on offense, where 1 is best. |
+| `yards_off_rank` | Float64 | National rank of the team's total yards gained with the team on offense, where 1 is best. |
+| `yardsplay_off_rank` | Float64 | National rank of the team's yards gained per play with the team on offense, where 1 is best. |
+| `yardsgame_off_rank` | Float64 | National rank of the team's yards gained per game with the team on offense, where 1 is best. |
+| `drivesgame_off_rank` | Float64 | National rank of the team's drives per game with the team on offense, where 1 is best. |
+| `yardsdrive_off_rank` | Float64 | National rank of the team's yards gained per drive with the team on offense, where 1 is best. |
+| `playsdrive_off_rank` | Float64 | National rank of the team's plays run per drive with the team on offense, where 1 is best. |
+| `play_stuffed_off_rank` | Float64 | National rank of the team's stuffed-play rate -- the share of plays carrying the stuffed flag with the team on offense, where 1 is best. |
+| `red_zone_success_off_rank` | Float64 | National rank of the team's success rate on red-zone plays with the team on offense, where 1 is best. |
+| `third_down_success_off_rank` | Float64 | National rank of the team's success rate on third-down plays with the team on offense, where 1 is best. |
+| `late_down_success_off_rank` | Float64 | National rank of the team's success rate on late-down plays with the team on offense, where 1 is best. |
+| `third_down_distance_off_rank` | Float64 | National rank of the team's average yards to go on third down with the team on offense, where 1 is best. |
+| `start_position_off_rank` | Float64 | National rank of the team's average drive start position, measured in yards from the opponent goal line with the team on offense, where 1 is best. |
+| `havoc_off_rank` | Float64 | National rank of the team's havoc rate -- the share of plays carrying the defensive-disruption flag with the team on offense, where 1 is best. |
+| `explosive_off_rank` | Float64 | National rank of the team's explosive-play rate -- the share of plays carrying the explosive flag with the team on offense, where 1 is best. |
+| `passrate_off_rank` | Float64 | National rank of the team's share of plays that were pass plays with the team on offense, where 1 is best. |
+| `rushrate_off_rank` | Float64 | National rank of the team's share of plays that were rush plays with the team on offense, where 1 is best. |
+| `nonExplosiveEpaPerPlay_off_rank` | Float64 | National rank of the team's EPA per play with explosive plays excluded with the team on offense, where 1 is best. |
+| `line_yards_off_rank` | Float64 | National rank of the team's average line yards credited to the offensive line on rushes with the team on offense, where 1 is best. |
+| `opportunity_rate_off_rank` | Float64 | National rank of the team's opportunity rate -- the share of rushes carrying the opportunity flag with the team on offense, where 1 is best. |
+| `plays_def` | UInt32 | Plays run, with the team on defense (i.e. allowed to opponents). |
+| `passrate_def` | Float64 | Share of plays that were pass plays, with the team on defense (i.e. allowed to opponents). |
+| `rushrate_def` | Float64 | Share of plays that were rush plays, with the team on defense (i.e. allowed to opponents). |
+| `havoc_def` | Float64 | Havoc rate -- the share of plays carrying the defensive-disruption flag, with the team on defense (i.e. allowed to opponents). |
+| `explosive_def` | Float64 | Explosive-play rate -- the share of plays carrying the explosive flag, with the team on defense (i.e. allowed to opponents). |
+| `TEPA_def` | Float64 | Total EPA summed over every play, with the team on defense (i.e. allowed to opponents). |
+| `EPAplay_def` | Float64 | EPA per play, with the team on defense (i.e. allowed to opponents). |
+| `yards_def` | Int64 | Total yards gained, with the team on defense (i.e. allowed to opponents). |
+| `yardsplay_def` | Float64 | Yards gained per play, with the team on defense (i.e. allowed to opponents). |
+| `play_stuffed_def` | Float64 | Stuffed-play rate -- the share of plays carrying the stuffed flag, with the team on defense (i.e. allowed to opponents). |
+| `success_def` | Float64 | Success rate -- the share of plays flagged as successful by EPA, with the team on defense (i.e. allowed to opponents). |
+| `red_zone_success_def` | Float64 | Success rate on red-zone plays, with the team on defense (i.e. allowed to opponents). |
+| `third_down_success_def` | Float64 | Success rate on third-down plays, with the team on defense (i.e. allowed to opponents). |
+| `third_down_distance_def` | Float64 | Average yards to go on third down, with the team on defense (i.e. allowed to opponents). |
+| `late_down_success_def` | Float64 | Success rate on late-down plays, with the team on defense (i.e. allowed to opponents). |
+| `early_down_EPA_def` | Float64 | EPA per early-down play, with the team on defense (i.e. allowed to opponents). |
+| `start_position_def` | Float64 | Average drive start position, measured in yards from the opponent goal line, with the team on defense (i.e. allowed to opponents). |
+| `nonExplosiveEpaPerPlay_def` | Float64 | EPA per play with explosive plays excluded, with the team on defense (i.e. allowed to opponents). |
+| `line_yards_def` | Float64 | Average line yards credited to the offensive line on rushes, with the team on defense (i.e. allowed to opponents). |
+| `opportunity_rate_def` | Float64 | Opportunity rate -- the share of rushes carrying the opportunity flag, with the team on defense (i.e. allowed to opponents). |
+| `playsgame_def` | Float64 | Plays run per game, with the team on defense (i.e. allowed to opponents). |
+| `EPAdrive_def` | Float64 | EPA per drive (total EPA divided by drives), with the team on defense (i.e. allowed to opponents). |
+| `EPAgame_def` | Float64 | EPA per game (total EPA divided by games), with the team on defense (i.e. allowed to opponents). |
+| `yardsgame_def` | Float64 | Yards gained per game, with the team on defense (i.e. allowed to opponents). |
+| `drives_def` | UInt32 | Offensive drives, with the team on defense (i.e. allowed to opponents). |
+| `drivesgame_def` | Float64 | Drives per game, with the team on defense (i.e. allowed to opponents). |
+| `yardsdrive_def` | Float64 | Yards gained per drive, with the team on defense (i.e. allowed to opponents). |
+| `playsdrive_def` | Float64 | Plays run per drive, with the team on defense (i.e. allowed to opponents). |
+| `playsgame_def_rank` | Float64 | National rank of the team's plays run per game with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `TEPA_def_rank` | Float64 | National rank of the team's total EPA summed over every play with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `EPAgame_def_rank` | Float64 | National rank of the team's EPA per game (total EPA divided by games) with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `EPAplay_def_rank` | Float64 | National rank of the team's EPA per play with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `EPAdrive_def_rank` | Float64 | National rank of the team's EPA per drive (total EPA divided by drives) with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `early_down_EPA_def_rank` | Float64 | National rank of the team's EPA per early-down play with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `success_def_rank` | Float64 | National rank of the team's success rate -- the share of plays flagged as successful by EPA with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `yards_def_rank` | Float64 | National rank of the team's total yards gained with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `yardsplay_def_rank` | Float64 | National rank of the team's yards gained per play with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `yardsgame_def_rank` | Float64 | National rank of the team's yards gained per game with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `drivesgame_def_rank` | Float64 | National rank of the team's drives per game with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `yardsdrive_def_rank` | Float64 | National rank of the team's yards gained per drive with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `playsdrive_def_rank` | Float64 | National rank of the team's plays run per drive with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `play_stuffed_def_rank` | Float64 | National rank of the team's stuffed-play rate -- the share of plays carrying the stuffed flag with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `red_zone_success_def_rank` | Float64 | National rank of the team's success rate on red-zone plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `third_down_success_def_rank` | Float64 | National rank of the team's success rate on third-down plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `late_down_success_def_rank` | Float64 | National rank of the team's success rate on late-down plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `third_down_distance_def_rank` | Float64 | National rank of the team's average yards to go on third down with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `start_position_def_rank` | Float64 | National rank of the team's average drive start position, measured in yards from the opponent goal line with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `havoc_def_rank` | Float64 | National rank of the team's havoc rate -- the share of plays carrying the defensive-disruption flag with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `explosive_def_rank` | Float64 | National rank of the team's explosive-play rate -- the share of plays carrying the explosive flag with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `passrate_def_rank` | Float64 | National rank of the team's share of plays that were pass plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `rushrate_def_rank` | Float64 | National rank of the team's share of plays that were rush plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `nonExplosiveEpaPerPlay_def_rank` | Float64 | National rank of the team's EPA per play with explosive plays excluded with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `line_yards_def_rank` | Float64 | National rank of the team's average line yards credited to the offensive line on rushes with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `opportunity_rate_def_rank` | Float64 | National rank of the team's opportunity rate -- the share of rushes carrying the opportunity flag with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `TEPA_margin` | Float64 | Margin in total EPA summed over every play: the team's offensive value minus the value it allowed on defense. |
+| `EPAplay_margin` | Float64 | Margin in EPA per play: the team's offensive value minus the value it allowed on defense. |
+| `EPAdrive_margin` | Float64 | Margin in EPA per drive (total EPA divided by drives): the team's offensive value minus the value it allowed on defense. |
+| `EPAgame_margin` | Float64 | Margin in EPA per game (total EPA divided by games): the team's offensive value minus the value it allowed on defense. |
+| `success_margin` | Float64 | Margin in success rate -- the share of plays flagged as successful by EPA: the team's offensive value minus the value it allowed on defense. |
+| `yardsplay_margin` | Float64 | Margin in yards gained per play: the team's offensive value minus the value it allowed on defense. |
+| `TEPA_margin_rank` | Float64 | Margin in total EPA summed over every play: the team's offensive value minus the value it allowed on defense. National rank of that margin, 1 = largest. |
+| `EPAplay_margin_rank` | Float64 | Margin in EPA per play: the team's offensive value minus the value it allowed on defense. National rank of that margin, 1 = largest. |
+| `EPAdrive_margin_rank` | Float64 | Margin in EPA per drive (total EPA divided by drives): the team's offensive value minus the value it allowed on defense. National rank of that margin, 1 = largest. |
+| `EPAgame_margin_rank` | Float64 | Margin in EPA per game (total EPA divided by games): the team's offensive value minus the value it allowed on defense. National rank of that margin, 1 = largest. |
+| `success_margin_rank` | Float64 | Margin in success rate -- the share of plays flagged as successful by EPA: the team's offensive value minus the value it allowed on defense. National rank of that margin, 1 = largest. |
+| `yardsplay_margin_rank` | Float64 | Margin in yards gained per play: the team's offensive value minus the value it allowed on defense. National rank of that margin, 1 = largest. |
+| `start_position_margin` | Float64 | Field-position margin: the team's own average starting field position minus the average starting field position it allowed, both measured as yards gained from their own goal line. Positive means the team started closer to scoring than its opponents. |
+| `start_position_margin_rank` | Float64 | Field-position margin: the team's own average starting field position minus the average starting field position it allowed, both measured as yards gained from their own goal line. Positive means the team started closer to scoring than its opponents. National rank of that margin, 1 = largest. |
+| `total_available_yards_off` | Float64 | Available yards are the yards a drive could theoretically gain, summed from each drive's starting distance to the opponent goal line. Total available yards on the team's own drives. |
+| `total_gained_yards_off` | Int64 | Total yards the team actually gained across its own drives. |
+| `available_yards_pct_off` | Float64 | Share of available yards the team's offense actually gained (total_gained_yards_off divided by total_available_yards_off). Higher is better. |
+| `available_yards_pct_off_rank` | Float64 | National rank of the team's offensive available-yards share, where 1 is best. |
+| `total_available_yards_def` | Float64 | Available yards are the yards a drive could theoretically gain, summed from each drive's starting distance to the opponent goal line. Total available yards on drives the team defended. |
+| `total_gained_yards_def` | Int64 | Total yards the team allowed across the drives it defended. |
+| `available_yards_pct_def` | Float64 | Share of available yards the team's defense allowed opponents to gain. Lower is better. |
+| `available_yards_pct_def_rank` | Float64 | National rank of the team's defensive available-yards share, where 1 is best. |
+| `total_available_yards_margin` | Float64 | Available yards on the team's own drives minus available yards on drives it defended. |
+| `total_gained_yards_margin` | Int64 | Yards the team gained minus yards it allowed. |
+| `available_yards_pct_margin` | Float64 | Available-yards share gained by the offense minus the share allowed by the defense. Higher is better. |
+| `total_available_yards_margin_rank` | Float64 | National rank of total_available_yards_margin, 1 = largest margin. |
+| `total_gained_yards_margin_rank` | Float64 | National rank of total_gained_yards_margin, 1 = largest margin. |
+| `available_yards_pct_margin_rank` | Float64 | National rank of available_yards_pct_margin, 1 = largest margin. |
+| `plays_off_pass` | UInt32 | Plays run on pass plays, with the team on offense. |
+| `passrate_off_pass` | Float64 | Share of plays that were pass plays on pass plays, with the team on offense. |
+| `rushrate_off_pass` | Float64 | Share of plays that were rush plays on pass plays, with the team on offense. |
+| `havoc_off_pass` | Float64 | Havoc rate -- the share of plays carrying the defensive-disruption flag on pass plays, with the team on offense. |
+| `explosive_off_pass` | Float64 | Explosive-play rate -- the share of plays carrying the explosive flag on pass plays, with the team on offense. |
+| `TEPA_off_pass` | Float64 | Total EPA summed over every play on pass plays, with the team on offense. |
+| `EPAplay_off_pass` | Float64 | EPA per play on pass plays, with the team on offense. |
+| `yards_off_pass` | Int64 | Total yards gained on pass plays, with the team on offense. |
+| `yardsplay_off_pass` | Float64 | Yards gained per play on pass plays, with the team on offense. |
+| `play_stuffed_off_pass` | Float64 | Stuffed-play rate -- the share of plays carrying the stuffed flag on pass plays, with the team on offense. |
+| `success_off_pass` | Float64 | Success rate -- the share of plays flagged as successful by EPA on pass plays, with the team on offense. |
+| `red_zone_success_off_pass` | Float64 | Success rate on red-zone plays on pass plays, with the team on offense. |
+| `third_down_success_off_pass` | Float64 | Success rate on third-down plays on pass plays, with the team on offense. |
+| `third_down_distance_off_pass` | Float64 | Average yards to go on third down on pass plays, with the team on offense. |
+| `late_down_success_off_pass` | Float64 | Success rate on late-down plays on pass plays, with the team on offense. |
+| `early_down_EPA_off_pass` | Float64 | EPA per early-down play on pass plays, with the team on offense. |
+| `nonExplosiveEpaPerPlay_off_pass` | Float64 | EPA per play with explosive plays excluded on pass plays, with the team on offense. |
+| `line_yards_off_pass` | Float64 | Average line yards credited to the offensive line on rushes on pass plays, with the team on offense. |
+| `opportunity_rate_off_pass` | Float64 | Opportunity rate -- the share of rushes carrying the opportunity flag on pass plays, with the team on offense. |
+| `playsgame_off_pass` | Float64 | Plays run per game on pass plays, with the team on offense. |
+| `EPAdrive_off_pass` | Float64 | EPA per drive (total EPA divided by drives) on pass plays, with the team on offense. |
+| `EPAgame_off_pass` | Float64 | EPA per game (total EPA divided by games) on pass plays, with the team on offense. |
+| `yardsgame_off_pass` | Float64 | Yards gained per game on pass plays, with the team on offense. |
+| `drives_off_pass` | UInt32 | Offensive drives on pass plays, with the team on offense. |
+| `drivesgame_off_pass` | Float64 | Drives per game on pass plays, with the team on offense. |
+| `yardsdrive_off_pass` | Float64 | Yards gained per drive on pass plays, with the team on offense. |
+| `playsdrive_off_pass` | Float64 | Plays run per drive on pass plays, with the team on offense. |
+| `playsgame_off_pass_rank` | Float64 | National rank of the team's plays run per game on pass plays with the team on offense, where 1 is best. |
+| `TEPA_off_pass_rank` | Float64 | National rank of the team's total EPA summed over every play on pass plays with the team on offense, where 1 is best. |
+| `EPAgame_off_pass_rank` | Float64 | National rank of the team's EPA per game (total EPA divided by games) on pass plays with the team on offense, where 1 is best. |
+| `EPAplay_off_pass_rank` | Float64 | National rank of the team's EPA per play on pass plays with the team on offense, where 1 is best. |
+| `EPAdrive_off_pass_rank` | Float64 | National rank of the team's EPA per drive (total EPA divided by drives) on pass plays with the team on offense, where 1 is best. |
+| `early_down_EPA_off_pass_rank` | Float64 | National rank of the team's EPA per early-down play on pass plays with the team on offense, where 1 is best. |
+| `success_off_pass_rank` | Float64 | National rank of the team's success rate -- the share of plays flagged as successful by EPA on pass plays with the team on offense, where 1 is best. |
+| `yards_off_pass_rank` | Float64 | National rank of the team's total yards gained on pass plays with the team on offense, where 1 is best. |
+| `yardsplay_off_pass_rank` | Float64 | National rank of the team's yards gained per play on pass plays with the team on offense, where 1 is best. |
+| `yardsgame_off_pass_rank` | Float64 | National rank of the team's yards gained per game on pass plays with the team on offense, where 1 is best. |
+| `drivesgame_off_pass_rank` | Float64 | National rank of the team's drives per game on pass plays with the team on offense, where 1 is best. |
+| `yardsdrive_off_pass_rank` | Float64 | National rank of the team's yards gained per drive on pass plays with the team on offense, where 1 is best. |
+| `playsdrive_off_pass_rank` | Float64 | National rank of the team's plays run per drive on pass plays with the team on offense, where 1 is best. |
+| `play_stuffed_off_pass_rank` | Float64 | National rank of the team's stuffed-play rate -- the share of plays carrying the stuffed flag on pass plays with the team on offense, where 1 is best. |
+| `red_zone_success_off_pass_rank` | Float64 | National rank of the team's success rate on red-zone plays on pass plays with the team on offense, where 1 is best. |
+| `third_down_success_off_pass_rank` | Float64 | National rank of the team's success rate on third-down plays on pass plays with the team on offense, where 1 is best. |
+| `late_down_success_off_pass_rank` | Float64 | National rank of the team's success rate on late-down plays on pass plays with the team on offense, where 1 is best. |
+| `third_down_distance_off_pass_rank` | Float64 | National rank of the team's average yards to go on third down on pass plays with the team on offense, where 1 is best. |
+| `havoc_off_pass_rank` | Float64 | National rank of the team's havoc rate -- the share of plays carrying the defensive-disruption flag on pass plays with the team on offense, where 1 is best. |
+| `explosive_off_pass_rank` | Float64 | National rank of the team's explosive-play rate -- the share of plays carrying the explosive flag on pass plays with the team on offense, where 1 is best. |
+| `passrate_off_pass_rank` | Float64 | National rank of the team's share of plays that were pass plays on pass plays with the team on offense, where 1 is best. |
+| `rushrate_off_pass_rank` | Float64 | National rank of the team's share of plays that were rush plays on pass plays with the team on offense, where 1 is best. |
+| `nonExplosiveEpaPerPlay_off_pass_rank` | Float64 | National rank of the team's EPA per play with explosive plays excluded on pass plays with the team on offense, where 1 is best. |
+| `line_yards_off_pass_rank` | Float64 | National rank of the team's average line yards credited to the offensive line on rushes on pass plays with the team on offense, where 1 is best. |
+| `opportunity_rate_off_pass_rank` | Float64 | National rank of the team's opportunity rate -- the share of rushes carrying the opportunity flag on pass plays with the team on offense, where 1 is best. |
+| `plays_def_pass` | UInt32 | Plays run on pass plays, with the team on defense (i.e. allowed to opponents). |
+| `passrate_def_pass` | Float64 | Share of plays that were pass plays on pass plays, with the team on defense (i.e. allowed to opponents). |
+| `rushrate_def_pass` | Float64 | Share of plays that were rush plays on pass plays, with the team on defense (i.e. allowed to opponents). |
+| `havoc_def_pass` | Float64 | Havoc rate -- the share of plays carrying the defensive-disruption flag on pass plays, with the team on defense (i.e. allowed to opponents). |
+| `explosive_def_pass` | Float64 | Explosive-play rate -- the share of plays carrying the explosive flag on pass plays, with the team on defense (i.e. allowed to opponents). |
+| `TEPA_def_pass` | Float64 | Total EPA summed over every play on pass plays, with the team on defense (i.e. allowed to opponents). |
+| `EPAplay_def_pass` | Float64 | EPA per play on pass plays, with the team on defense (i.e. allowed to opponents). |
+| `yards_def_pass` | Int64 | Total yards gained on pass plays, with the team on defense (i.e. allowed to opponents). |
+| `yardsplay_def_pass` | Float64 | Yards gained per play on pass plays, with the team on defense (i.e. allowed to opponents). |
+| `play_stuffed_def_pass` | Float64 | Stuffed-play rate -- the share of plays carrying the stuffed flag on pass plays, with the team on defense (i.e. allowed to opponents). |
+| `success_def_pass` | Float64 | Success rate -- the share of plays flagged as successful by EPA on pass plays, with the team on defense (i.e. allowed to opponents). |
+| `red_zone_success_def_pass` | Float64 | Success rate on red-zone plays on pass plays, with the team on defense (i.e. allowed to opponents). |
+| `third_down_success_def_pass` | Float64 | Success rate on third-down plays on pass plays, with the team on defense (i.e. allowed to opponents). |
+| `third_down_distance_def_pass` | Float64 | Average yards to go on third down on pass plays, with the team on defense (i.e. allowed to opponents). |
+| `late_down_success_def_pass` | Float64 | Success rate on late-down plays on pass plays, with the team on defense (i.e. allowed to opponents). |
+| `early_down_EPA_def_pass` | Float64 | EPA per early-down play on pass plays, with the team on defense (i.e. allowed to opponents). |
+| `nonExplosiveEpaPerPlay_def_pass` | Float64 | EPA per play with explosive plays excluded on pass plays, with the team on defense (i.e. allowed to opponents). |
+| `line_yards_def_pass` | Float64 | Average line yards credited to the offensive line on rushes on pass plays, with the team on defense (i.e. allowed to opponents). |
+| `opportunity_rate_def_pass` | Float64 | Opportunity rate -- the share of rushes carrying the opportunity flag on pass plays, with the team on defense (i.e. allowed to opponents). |
+| `playsgame_def_pass` | Float64 | Plays run per game on pass plays, with the team on defense (i.e. allowed to opponents). |
+| `EPAdrive_def_pass` | Float64 | EPA per drive (total EPA divided by drives) on pass plays, with the team on defense (i.e. allowed to opponents). |
+| `EPAgame_def_pass` | Float64 | EPA per game (total EPA divided by games) on pass plays, with the team on defense (i.e. allowed to opponents). |
+| `yardsgame_def_pass` | Float64 | Yards gained per game on pass plays, with the team on defense (i.e. allowed to opponents). |
+| `drives_def_pass` | UInt32 | Offensive drives on pass plays, with the team on defense (i.e. allowed to opponents). |
+| `drivesgame_def_pass` | Float64 | Drives per game on pass plays, with the team on defense (i.e. allowed to opponents). |
+| `yardsdrive_def_pass` | Float64 | Yards gained per drive on pass plays, with the team on defense (i.e. allowed to opponents). |
+| `playsdrive_def_pass` | Float64 | Plays run per drive on pass plays, with the team on defense (i.e. allowed to opponents). |
+| `playsgame_def_pass_rank` | Float64 | National rank of the team's plays run per game on pass plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `TEPA_def_pass_rank` | Float64 | National rank of the team's total EPA summed over every play on pass plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `EPAgame_def_pass_rank` | Float64 | National rank of the team's EPA per game (total EPA divided by games) on pass plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `EPAplay_def_pass_rank` | Float64 | National rank of the team's EPA per play on pass plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `EPAdrive_def_pass_rank` | Float64 | National rank of the team's EPA per drive (total EPA divided by drives) on pass plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `early_down_EPA_def_pass_rank` | Float64 | National rank of the team's EPA per early-down play on pass plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `success_def_pass_rank` | Float64 | National rank of the team's success rate -- the share of plays flagged as successful by EPA on pass plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `yards_def_pass_rank` | Float64 | National rank of the team's total yards gained on pass plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `yardsplay_def_pass_rank` | Float64 | National rank of the team's yards gained per play on pass plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `yardsgame_def_pass_rank` | Float64 | National rank of the team's yards gained per game on pass plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `drivesgame_def_pass_rank` | Float64 | National rank of the team's drives per game on pass plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `yardsdrive_def_pass_rank` | Float64 | National rank of the team's yards gained per drive on pass plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `playsdrive_def_pass_rank` | Float64 | National rank of the team's plays run per drive on pass plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `play_stuffed_def_pass_rank` | Float64 | National rank of the team's stuffed-play rate -- the share of plays carrying the stuffed flag on pass plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `red_zone_success_def_pass_rank` | Float64 | National rank of the team's success rate on red-zone plays on pass plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `third_down_success_def_pass_rank` | Float64 | National rank of the team's success rate on third-down plays on pass plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `late_down_success_def_pass_rank` | Float64 | National rank of the team's success rate on late-down plays on pass plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `third_down_distance_def_pass_rank` | Float64 | National rank of the team's average yards to go on third down on pass plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `havoc_def_pass_rank` | Float64 | National rank of the team's havoc rate -- the share of plays carrying the defensive-disruption flag on pass plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `explosive_def_pass_rank` | Float64 | National rank of the team's explosive-play rate -- the share of plays carrying the explosive flag on pass plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `passrate_def_pass_rank` | Float64 | National rank of the team's share of plays that were pass plays on pass plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `rushrate_def_pass_rank` | Float64 | National rank of the team's share of plays that were rush plays on pass plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `nonExplosiveEpaPerPlay_def_pass_rank` | Float64 | National rank of the team's EPA per play with explosive plays excluded on pass plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `line_yards_def_pass_rank` | Float64 | National rank of the team's average line yards credited to the offensive line on rushes on pass plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `opportunity_rate_def_pass_rank` | Float64 | National rank of the team's opportunity rate -- the share of rushes carrying the opportunity flag on pass plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `TEPA_margin_pass` | Float64 | Margin in total EPA summed over every play on pass plays: the team's offensive value minus the value it allowed on defense. |
+| `EPAplay_margin_pass` | Float64 | Margin in EPA per play on pass plays: the team's offensive value minus the value it allowed on defense. |
+| `EPAdrive_margin_pass` | Float64 | Margin in EPA per drive (total EPA divided by drives) on pass plays: the team's offensive value minus the value it allowed on defense. |
+| `EPAgame_margin_pass` | Float64 | Margin in EPA per game (total EPA divided by games) on pass plays: the team's offensive value minus the value it allowed on defense. |
+| `success_margin_pass` | Float64 | Margin in success rate -- the share of plays flagged as successful by EPA on pass plays: the team's offensive value minus the value it allowed on defense. |
+| `yardsplay_margin_pass` | Float64 | Margin in yards gained per play on pass plays: the team's offensive value minus the value it allowed on defense. |
+| `TEPA_margin_pass_rank` | Float64 | Margin in total EPA summed over every play on pass plays: the team's offensive value minus the value it allowed on defense. National rank of that margin, 1 = largest. |
+| `EPAplay_margin_pass_rank` | Float64 | Margin in EPA per play on pass plays: the team's offensive value minus the value it allowed on defense. National rank of that margin, 1 = largest. |
+| `EPAdrive_margin_pass_rank` | Float64 | Margin in EPA per drive (total EPA divided by drives) on pass plays: the team's offensive value minus the value it allowed on defense. National rank of that margin, 1 = largest. |
+| `EPAgame_margin_pass_rank` | Float64 | Margin in EPA per game (total EPA divided by games) on pass plays: the team's offensive value minus the value it allowed on defense. National rank of that margin, 1 = largest. |
+| `success_margin_pass_rank` | Float64 | Margin in success rate -- the share of plays flagged as successful by EPA on pass plays: the team's offensive value minus the value it allowed on defense. National rank of that margin, 1 = largest. |
+| `yardsplay_margin_pass_rank` | Float64 | Margin in yards gained per play on pass plays: the team's offensive value minus the value it allowed on defense. National rank of that margin, 1 = largest. |
+| `plays_off_rush` | UInt32 | Plays run on rush plays, with the team on offense. |
+| `passrate_off_rush` | Float64 | Share of plays that were pass plays on rush plays, with the team on offense. |
+| `rushrate_off_rush` | Float64 | Share of plays that were rush plays on rush plays, with the team on offense. |
+| `havoc_off_rush` | Float64 | Havoc rate -- the share of plays carrying the defensive-disruption flag on rush plays, with the team on offense. |
+| `explosive_off_rush` | Float64 | Explosive-play rate -- the share of plays carrying the explosive flag on rush plays, with the team on offense. |
+| `TEPA_off_rush` | Float64 | Total EPA summed over every play on rush plays, with the team on offense. |
+| `EPAplay_off_rush` | Float64 | EPA per play on rush plays, with the team on offense. |
+| `yards_off_rush` | Int64 | Total yards gained on rush plays, with the team on offense. |
+| `yardsplay_off_rush` | Float64 | Yards gained per play on rush plays, with the team on offense. |
+| `play_stuffed_off_rush` | Float64 | Stuffed-play rate -- the share of plays carrying the stuffed flag on rush plays, with the team on offense. |
+| `success_off_rush` | Float64 | Success rate -- the share of plays flagged as successful by EPA on rush plays, with the team on offense. |
+| `red_zone_success_off_rush` | Float64 | Success rate on red-zone plays on rush plays, with the team on offense. |
+| `third_down_success_off_rush` | Float64 | Success rate on third-down plays on rush plays, with the team on offense. |
+| `third_down_distance_off_rush` | Float64 | Average yards to go on third down on rush plays, with the team on offense. |
+| `late_down_success_off_rush` | Float64 | Success rate on late-down plays on rush plays, with the team on offense. |
+| `early_down_EPA_off_rush` | Float64 | EPA per early-down play on rush plays, with the team on offense. |
+| `nonExplosiveEpaPerPlay_off_rush` | Float64 | EPA per play with explosive plays excluded on rush plays, with the team on offense. |
+| `line_yards_off_rush` | Float64 | Average line yards credited to the offensive line on rushes on rush plays, with the team on offense. |
+| `opportunity_rate_off_rush` | Float64 | Opportunity rate -- the share of rushes carrying the opportunity flag on rush plays, with the team on offense. |
+| `playsgame_off_rush` | Float64 | Plays run per game on rush plays, with the team on offense. |
+| `EPAdrive_off_rush` | Float64 | EPA per drive (total EPA divided by drives) on rush plays, with the team on offense. |
+| `EPAgame_off_rush` | Float64 | EPA per game (total EPA divided by games) on rush plays, with the team on offense. |
+| `yardsgame_off_rush` | Float64 | Yards gained per game on rush plays, with the team on offense. |
+| `drives_off_rush` | UInt32 | Offensive drives on rush plays, with the team on offense. |
+| `drivesgame_off_rush` | Float64 | Drives per game on rush plays, with the team on offense. |
+| `yardsdrive_off_rush` | Float64 | Yards gained per drive on rush plays, with the team on offense. |
+| `playsdrive_off_rush` | Float64 | Plays run per drive on rush plays, with the team on offense. |
+| `playsgame_off_rush_rank` | Float64 | National rank of the team's plays run per game on rush plays with the team on offense, where 1 is best. |
+| `TEPA_off_rush_rank` | Float64 | National rank of the team's total EPA summed over every play on rush plays with the team on offense, where 1 is best. |
+| `EPAgame_off_rush_rank` | Float64 | National rank of the team's EPA per game (total EPA divided by games) on rush plays with the team on offense, where 1 is best. |
+| `EPAplay_off_rush_rank` | Float64 | National rank of the team's EPA per play on rush plays with the team on offense, where 1 is best. |
+| `EPAdrive_off_rush_rank` | Float64 | National rank of the team's EPA per drive (total EPA divided by drives) on rush plays with the team on offense, where 1 is best. |
+| `early_down_EPA_off_rush_rank` | Float64 | National rank of the team's EPA per early-down play on rush plays with the team on offense, where 1 is best. |
+| `success_off_rush_rank` | Float64 | National rank of the team's success rate -- the share of plays flagged as successful by EPA on rush plays with the team on offense, where 1 is best. |
+| `yards_off_rush_rank` | Float64 | National rank of the team's total yards gained on rush plays with the team on offense, where 1 is best. |
+| `yardsplay_off_rush_rank` | Float64 | National rank of the team's yards gained per play on rush plays with the team on offense, where 1 is best. |
+| `yardsgame_off_rush_rank` | Float64 | National rank of the team's yards gained per game on rush plays with the team on offense, where 1 is best. |
+| `drivesgame_off_rush_rank` | Float64 | National rank of the team's drives per game on rush plays with the team on offense, where 1 is best. |
+| `yardsdrive_off_rush_rank` | Float64 | National rank of the team's yards gained per drive on rush plays with the team on offense, where 1 is best. |
+| `playsdrive_off_rush_rank` | Float64 | National rank of the team's plays run per drive on rush plays with the team on offense, where 1 is best. |
+| `play_stuffed_off_rush_rank` | Float64 | National rank of the team's stuffed-play rate -- the share of plays carrying the stuffed flag on rush plays with the team on offense, where 1 is best. |
+| `red_zone_success_off_rush_rank` | Float64 | National rank of the team's success rate on red-zone plays on rush plays with the team on offense, where 1 is best. |
+| `third_down_success_off_rush_rank` | Float64 | National rank of the team's success rate on third-down plays on rush plays with the team on offense, where 1 is best. |
+| `late_down_success_off_rush_rank` | Float64 | National rank of the team's success rate on late-down plays on rush plays with the team on offense, where 1 is best. |
+| `third_down_distance_off_rush_rank` | Float64 | National rank of the team's average yards to go on third down on rush plays with the team on offense, where 1 is best. |
+| `havoc_off_rush_rank` | Float64 | National rank of the team's havoc rate -- the share of plays carrying the defensive-disruption flag on rush plays with the team on offense, where 1 is best. |
+| `explosive_off_rush_rank` | Float64 | National rank of the team's explosive-play rate -- the share of plays carrying the explosive flag on rush plays with the team on offense, where 1 is best. |
+| `passrate_off_rush_rank` | Float64 | National rank of the team's share of plays that were pass plays on rush plays with the team on offense, where 1 is best. |
+| `rushrate_off_rush_rank` | Float64 | National rank of the team's share of plays that were rush plays on rush plays with the team on offense, where 1 is best. |
+| `nonExplosiveEpaPerPlay_off_rush_rank` | Float64 | National rank of the team's EPA per play with explosive plays excluded on rush plays with the team on offense, where 1 is best. |
+| `line_yards_off_rush_rank` | Float64 | National rank of the team's average line yards credited to the offensive line on rushes on rush plays with the team on offense, where 1 is best. |
+| `opportunity_rate_off_rush_rank` | Float64 | National rank of the team's opportunity rate -- the share of rushes carrying the opportunity flag on rush plays with the team on offense, where 1 is best. |
+| `plays_def_rush` | UInt32 | Plays run on rush plays, with the team on defense (i.e. allowed to opponents). |
+| `passrate_def_rush` | Float64 | Share of plays that were pass plays on rush plays, with the team on defense (i.e. allowed to opponents). |
+| `rushrate_def_rush` | Float64 | Share of plays that were rush plays on rush plays, with the team on defense (i.e. allowed to opponents). |
+| `havoc_def_rush` | Float64 | Havoc rate -- the share of plays carrying the defensive-disruption flag on rush plays, with the team on defense (i.e. allowed to opponents). |
+| `explosive_def_rush` | Float64 | Explosive-play rate -- the share of plays carrying the explosive flag on rush plays, with the team on defense (i.e. allowed to opponents). |
+| `TEPA_def_rush` | Float64 | Total EPA summed over every play on rush plays, with the team on defense (i.e. allowed to opponents). |
+| `EPAplay_def_rush` | Float64 | EPA per play on rush plays, with the team on defense (i.e. allowed to opponents). |
+| `yards_def_rush` | Int64 | Total yards gained on rush plays, with the team on defense (i.e. allowed to opponents). |
+| `yardsplay_def_rush` | Float64 | Yards gained per play on rush plays, with the team on defense (i.e. allowed to opponents). |
+| `play_stuffed_def_rush` | Float64 | Stuffed-play rate -- the share of plays carrying the stuffed flag on rush plays, with the team on defense (i.e. allowed to opponents). |
+| `success_def_rush` | Float64 | Success rate -- the share of plays flagged as successful by EPA on rush plays, with the team on defense (i.e. allowed to opponents). |
+| `red_zone_success_def_rush` | Float64 | Success rate on red-zone plays on rush plays, with the team on defense (i.e. allowed to opponents). |
+| `third_down_success_def_rush` | Float64 | Success rate on third-down plays on rush plays, with the team on defense (i.e. allowed to opponents). |
+| `third_down_distance_def_rush` | Float64 | Average yards to go on third down on rush plays, with the team on defense (i.e. allowed to opponents). |
+| `late_down_success_def_rush` | Float64 | Success rate on late-down plays on rush plays, with the team on defense (i.e. allowed to opponents). |
+| `early_down_EPA_def_rush` | Float64 | EPA per early-down play on rush plays, with the team on defense (i.e. allowed to opponents). |
+| `nonExplosiveEpaPerPlay_def_rush` | Float64 | EPA per play with explosive plays excluded on rush plays, with the team on defense (i.e. allowed to opponents). |
+| `line_yards_def_rush` | Float64 | Average line yards credited to the offensive line on rushes on rush plays, with the team on defense (i.e. allowed to opponents). |
+| `opportunity_rate_def_rush` | Float64 | Opportunity rate -- the share of rushes carrying the opportunity flag on rush plays, with the team on defense (i.e. allowed to opponents). |
+| `playsgame_def_rush` | Float64 | Plays run per game on rush plays, with the team on defense (i.e. allowed to opponents). |
+| `EPAdrive_def_rush` | Float64 | EPA per drive (total EPA divided by drives) on rush plays, with the team on defense (i.e. allowed to opponents). |
+| `EPAgame_def_rush` | Float64 | EPA per game (total EPA divided by games) on rush plays, with the team on defense (i.e. allowed to opponents). |
+| `yardsgame_def_rush` | Float64 | Yards gained per game on rush plays, with the team on defense (i.e. allowed to opponents). |
+| `drives_def_rush` | UInt32 | Offensive drives on rush plays, with the team on defense (i.e. allowed to opponents). |
+| `drivesgame_def_rush` | Float64 | Drives per game on rush plays, with the team on defense (i.e. allowed to opponents). |
+| `yardsdrive_def_rush` | Float64 | Yards gained per drive on rush plays, with the team on defense (i.e. allowed to opponents). |
+| `playsdrive_def_rush` | Float64 | Plays run per drive on rush plays, with the team on defense (i.e. allowed to opponents). |
+| `playsgame_def_rush_rank` | Float64 | National rank of the team's plays run per game on rush plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `TEPA_def_rush_rank` | Float64 | National rank of the team's total EPA summed over every play on rush plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `EPAgame_def_rush_rank` | Float64 | National rank of the team's EPA per game (total EPA divided by games) on rush plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `EPAplay_def_rush_rank` | Float64 | National rank of the team's EPA per play on rush plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `EPAdrive_def_rush_rank` | Float64 | National rank of the team's EPA per drive (total EPA divided by drives) on rush plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `early_down_EPA_def_rush_rank` | Float64 | National rank of the team's EPA per early-down play on rush plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `success_def_rush_rank` | Float64 | National rank of the team's success rate -- the share of plays flagged as successful by EPA on rush plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `yards_def_rush_rank` | Float64 | National rank of the team's total yards gained on rush plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `yardsplay_def_rush_rank` | Float64 | National rank of the team's yards gained per play on rush plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `yardsgame_def_rush_rank` | Float64 | National rank of the team's yards gained per game on rush plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `drivesgame_def_rush_rank` | Float64 | National rank of the team's drives per game on rush plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `yardsdrive_def_rush_rank` | Float64 | National rank of the team's yards gained per drive on rush plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `playsdrive_def_rush_rank` | Float64 | National rank of the team's plays run per drive on rush plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `play_stuffed_def_rush_rank` | Float64 | National rank of the team's stuffed-play rate -- the share of plays carrying the stuffed flag on rush plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `red_zone_success_def_rush_rank` | Float64 | National rank of the team's success rate on red-zone plays on rush plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `third_down_success_def_rush_rank` | Float64 | National rank of the team's success rate on third-down plays on rush plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `late_down_success_def_rush_rank` | Float64 | National rank of the team's success rate on late-down plays on rush plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `third_down_distance_def_rush_rank` | Float64 | National rank of the team's average yards to go on third down on rush plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `havoc_def_rush_rank` | Float64 | National rank of the team's havoc rate -- the share of plays carrying the defensive-disruption flag on rush plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `explosive_def_rush_rank` | Float64 | National rank of the team's explosive-play rate -- the share of plays carrying the explosive flag on rush plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `passrate_def_rush_rank` | Float64 | National rank of the team's share of plays that were pass plays on rush plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `rushrate_def_rush_rank` | Float64 | National rank of the team's share of plays that were rush plays on rush plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `nonExplosiveEpaPerPlay_def_rush_rank` | Float64 | National rank of the team's EPA per play with explosive plays excluded on rush plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `line_yards_def_rush_rank` | Float64 | National rank of the team's average line yards credited to the offensive line on rushes on rush plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `opportunity_rate_def_rush_rank` | Float64 | National rank of the team's opportunity rate -- the share of rushes carrying the opportunity flag on rush plays with the team on defense (i.e. allowed to opponents), where 1 is best. |
+| `TEPA_margin_rush` | Float64 | Margin in total EPA summed over every play on rush plays: the team's offensive value minus the value it allowed on defense. |
+| `EPAplay_margin_rush` | Float64 | Margin in EPA per play on rush plays: the team's offensive value minus the value it allowed on defense. |
+| `EPAdrive_margin_rush` | Float64 | Margin in EPA per drive (total EPA divided by drives) on rush plays: the team's offensive value minus the value it allowed on defense. |
+| `EPAgame_margin_rush` | Float64 | Margin in EPA per game (total EPA divided by games) on rush plays: the team's offensive value minus the value it allowed on defense. |
+| `success_margin_rush` | Float64 | Margin in success rate -- the share of plays flagged as successful by EPA on rush plays: the team's offensive value minus the value it allowed on defense. |
+| `yardsplay_margin_rush` | Float64 | Margin in yards gained per play on rush plays: the team's offensive value minus the value it allowed on defense. |
+| `TEPA_margin_rush_rank` | Float64 | Margin in total EPA summed over every play on rush plays: the team's offensive value minus the value it allowed on defense. National rank of that margin, 1 = largest. |
+| `EPAplay_margin_rush_rank` | Float64 | Margin in EPA per play on rush plays: the team's offensive value minus the value it allowed on defense. National rank of that margin, 1 = largest. |
+| `EPAdrive_margin_rush_rank` | Float64 | Margin in EPA per drive (total EPA divided by drives) on rush plays: the team's offensive value minus the value it allowed on defense. National rank of that margin, 1 = largest. |
+| `EPAgame_margin_rush_rank` | Float64 | Margin in EPA per game (total EPA divided by games) on rush plays: the team's offensive value minus the value it allowed on defense. National rank of that margin, 1 = largest. |
+| `success_margin_rush_rank` | Float64 | Margin in success rate -- the share of plays flagged as successful by EPA on rush plays: the team's offensive value minus the value it allowed on defense. National rank of that margin, 1 = largest. |
+| `yardsplay_margin_rush_rank` | Float64 | Margin in yards gained per play on rush plays: the team's offensive value minus the value it allowed on defense. National rank of that margin, 1 = largest. |
+| `fbs_class` | String | Power/Group classification for the season: P4 or G6 from 2024 on, P5 or G5 through 2023, derived from conference membership (Notre Dame is classified with the power group). Null for teams outside FBS. |
+| `valid_games` | UInt32 | Number of the team's games that produced both an offensive and a defensive adjusted-EPA value; teams below two valid games are dropped from the adjusted ratings. |
+| `adj_off_epa` | Float64 | Offensive opponent-adjusted EPA per play from the ridge (RAPM-style) regression on offense/defense team indicators plus home field -- cfbfastR's adjust_epa adjustment, fit in-sample across the season, so the value is descriptive of that window rather than predictive. |
+| `adj_def_epa` | Float64 | Defensive opponent-adjusted EPA per play from the ridge (RAPM-style) regression on offense/defense team indicators plus home field -- cfbfastR's adjust_epa adjustment, fit in-sample across the season, so the value is descriptive of that window rather than predictive. Lower is better -- it is EPA allowed. |
+| `off_strength_faced` | Float64 | Average opponent-defense strength the team's offense faced, taken as the mean of the ridge's defensive coefficients across its opponents. Higher means a tougher slate. |
+| `def_strength_faced` | Float64 | Average opponent-offense strength the team's defense faced, taken as the mean of the ridge's offensive coefficients across its opponents. Higher means a tougher slate. |
+| `net_adj_epa` | Float64 | Net opponent-adjusted EPA per play: adj_off_epa minus adj_def_epa. Higher is better. |
+| `adj_off_epa_rank` | Float64 | National rank of the team's adj_off_epa, where 1 is best. |
+| `adj_def_epa_rank` | Float64 | National rank of the team's adj_def_epa, where 1 is best (fewest EPA allowed). |
+| `net_adj_epa_rank` | Float64 | National rank of the team's net_adj_epa, 1 = largest net adjusted EPA. |
+| `through_week` | Int32 | Regular-season week this cumulative snapshot covers -- the row reflects the team's state through the end of that week. One asset holds every week, so filter on this column. |
 
 ```python
 load_cfb_team_summaries_weekly(seasons=2024)
