@@ -975,83 +975,83 @@ Release: [espn_cfb_adv_team](https://github.com/sportsdataverse/sportsdataverse-
 
 | col_name | type | description |
 |---|---|---|
-| `pos_team_id` | Int64 |  |
+| `pos_team_id` | Int64 | ESPN team id of the team on offense. Present for every season 2004+. |
 | `pos_team` | String | Team name in possession at the start of the play (offense, kickoff-aware). |
-| `rushing_highlight_yards_per_opp` | Float64 |  |
-| `total_pen_yards` | Int64 |  |
-| `EPA_penalty` | Float64 |  |
-| `penalty_first_downs_created` | Int64 |  |
-| `penalty_first_downs_created_rate` | Float64 |  |
+| `rushing_highlight_yards_per_opp` | Float64 | Highlight yards per rushing opportunity. |
+| `total_pen_yards` | Int64 | Total penalty yards assessed. |
+| `EPA_penalty` | Float64 | Total EPA attributed to penalties. |
+| `penalty_first_downs_created` | Int64 | Number of first downs the team gained via opponent penalty. |
+| `penalty_first_downs_created_rate` | Float64 | Share of the team's first downs that came via opponent penalty. |
 | `penalties` | Int64 | Total number of penalties. |
 | `penalty_yards` | Int64 | Yards gained (or lost) by the posteam from the penalty. |
-| `special_teams_plays` | Int64 |  |
-| `EPA_sp` | Float64 |  |
-| `EPA_special_teams` | Float64 |  |
-| `field_goals` | Int64 |  |
-| `EPA_fg` | Float64 |  |
-| `punt_plays` | Int64 |  |
-| `EPA_punt` | Float64 |  |
-| `kickoff_plays` | Int64 |  |
-| `EPA_kickoff` | Float64 |  |
-| `rushes` | Int64 |  |
+| `special_teams_plays` | Int64 | Number of special-teams plays. |
+| `EPA_sp` | Float64 | Total special-teams EPA, ESPN's abbreviated field for the same phase. |
+| `EPA_special_teams` | Float64 | Total EPA generated on special-teams plays. |
+| `field_goals` | Int64 | Number of field-goal attempts. |
+| `EPA_fg` | Float64 | Total EPA on field-goal attempts. |
+| `punt_plays` | Int64 | Number of punt plays. |
+| `EPA_punt` | Float64 | Total EPA on punt plays. |
+| `kickoff_plays` | Int64 | Number of kickoff plays. |
+| `EPA_kickoff` | Float64 | Total EPA on kickoff plays. |
+| `rushes` | Int64 | Number of rushing attempts. |
 | `rush_yards` | Float64 | The number of rushing yards gained |
-| `yards_per_rush` | Float64 |  |
-| `rushing_power_rate` | Float64 |  |
-| `rushing_first_downs_created` | Int64 |  |
-| `rushing_first_downs_created_rate` | Float64 |  |
-| `EPA_rushing_overall` | Float64 |  |
-| `EPA_rushing_per_play` | Float64 |  |
-| `EPA_explosive_rushing` | Int64 |  |
-| `EPA_explosive_rushing_rate` | Float64 |  |
-| `EPA_non_explosive_rushing` | Float64 |  |
-| `EPA_non_explosive_rushing_per_play` | Float64 |  |
+| `yards_per_rush` | Float64 | Yards gained per rushing attempt. |
+| `rushing_power_rate` | Float64 | Share of carries that were power rushing attempts. |
+| `rushing_first_downs_created` | Int64 | Number of first downs created on rush plays. |
+| `rushing_first_downs_created_rate` | Float64 | Share of rush plays that created a first down. |
+| `EPA_rushing_overall` | Float64 | Total EPA on rush plays. |
+| `EPA_rushing_per_play` | Float64 | EPA per rush play. |
+| `EPA_explosive_rushing` | Int64 | Count of explosive rush plays. A play count, not an EPA total. |
+| `EPA_explosive_rushing_rate` | Float64 | Explosive-play rate on rush plays, over ESPN's qualifying-play denominator. |
+| `EPA_non_explosive_rushing` | Float64 | Total EPA on rush plays with explosive plays excluded. |
+| `EPA_non_explosive_rushing_per_play` | Float64 | EPA per rush play with explosive plays excluded. |
 | `passes` | Int64 | Passes. |
 | `pass_yards` | Float64 | Number of yards gained on pass plays |
 | `yards_per_pass` | Float64 | Team game yards per pass. |
-| `passing_first_downs_created` | Int64 |  |
-| `passing_first_downs_created_rate` | Float64 |  |
-| `EPA_passing_overall` | Float64 |  |
-| `EPA_passing_per_play` | Float64 |  |
-| `EPA_explosive_passing` | Int64 |  |
-| `EPA_explosive_passing_rate` | Float64 |  |
-| `EPA_non_explosive_passing` | Float64 |  |
-| `EPA_non_explosive_passing_per_play` | Float64 |  |
-| `scrimmage_plays` | Int64 |  |
-| `EPA_overall_off` | Float64 |  |
-| `EPA_overall_offense` | Float64 |  |
-| `EPA_per_play` | Float64 |  |
-| `EPA_non_explosive` | Float64 |  |
-| `EPA_non_explosive_per_play` | Float64 |  |
-| `EPA_explosive` | Int64 |  |
-| `EPA_explosive_rate` | Float64 |  |
-| `passes_rate` | Float64 |  |
-| `off_yards` | Int64 |  |
-| `total_off_yards` | Int64 |  |
-| `yards_per_play` | Float64 |  |
-| `EPA_plays` | Int64 |  |
+| `passing_first_downs_created` | Int64 | Number of first downs created on pass plays. |
+| `passing_first_downs_created_rate` | Float64 | Share of pass plays that created a first down. |
+| `EPA_passing_overall` | Float64 | Total EPA on pass plays. |
+| `EPA_passing_per_play` | Float64 | EPA per pass play. |
+| `EPA_explosive_passing` | Int64 | Count of explosive pass plays. A play count, not an EPA total. |
+| `EPA_explosive_passing_rate` | Float64 | Explosive-play rate on pass plays, over ESPN's qualifying-play denominator. |
+| `EPA_non_explosive_passing` | Float64 | Total EPA on pass plays with explosive plays excluded. |
+| `EPA_non_explosive_passing_per_play` | Float64 | EPA per pass play with explosive plays excluded. |
+| `scrimmage_plays` | Int64 | Number of plays from scrimmage (rushes plus passes), excluding special teams. |
+| `EPA_overall_off` | Float64 | Total offensive EPA for the team. Duplicated exactly by EPA_overall_offense in every published season checked -- prefer one and ignore the other. |
+| `EPA_overall_offense` | Float64 | Total offensive EPA. An exact duplicate of EPA_overall_off. |
+| `EPA_per_play` | Float64 | Offensive EPA per play. |
+| `EPA_non_explosive` | Float64 | Total EPA with explosive plays excluded, isolating the team's routine-down production. |
+| `EPA_non_explosive_per_play` | Float64 | EPA per play with explosive plays excluded. |
+| `EPA_explosive` | Int64 | Count of explosive plays, per ESPN's advanced box score. Despite the EPA_ prefix this is a play COUNT, not an EPA total. |
+| `EPA_explosive_rate` | Float64 | Explosive-play rate. Note this is NOT EPA_explosive divided by EPA_plays -- ESPN divides by its own smaller qualifying-play count, so deriving it yourself will not reproduce this value. |
+| `passes_rate` | Float64 | Share of the team's plays from scrimmage that were pass plays. |
+| `off_yards` | Int64 | Offensive yards gained from scrimmage. |
+| `total_off_yards` | Int64 | Total offensive yards across all plays. |
+| `yards_per_play` | Float64 | Yards gained per play. |
+| `EPA_plays` | Int64 | Number of plays ESPN's advanced box score scored for the team. |
 | `total_yards` | Int64 | Team total yards. |
-| `EPA_overall_total` | Float64 |  |
-| `rushes_rate` | Float64 |  |
-| `first_downs_created` | Int64 |  |
-| `first_downs_created_rate` | Float64 |  |
-| `EPA_rushing_power` | Float64 |  |
-| `EPA_rushing_power_per_play` | Float64 |  |
+| `EPA_overall_total` | Float64 | Total EPA across all phases, which is why it differs from the offense-only EPA_overall_off. |
+| `rushes_rate` | Float64 | Share of the team's plays from scrimmage that were rush plays. |
+| `first_downs_created` | Int64 | Number of first downs the team created. |
+| `first_downs_created_rate` | Float64 | Share of the team's plays that created a first down. |
+| `EPA_rushing_power` | Float64 | Total EPA on power rushing situations, as classified by ESPN's advanced box score. |
+| `EPA_rushing_power_per_play` | Float64 | EPA per play on power rushing situations. |
 | `rushing_power_success` | Int64 | Rushing power success rate. |
-| `rushing_power_success_rate` | Float64 |  |
-| `rushing_power` | Int64 |  |
-| `rushing_stuff` | Int64 |  |
+| `rushing_power_success_rate` | Float64 | Share of power rushing attempts that succeeded. |
+| `rushing_power` | Int64 | Count of power rushing attempts, in short-yardage situations as classified by ESPN's advanced box score. |
+| `rushing_stuff` | Int64 | Count of stuffed rushing attempts. |
 | `rushing_stuff_rate` | Float64 | Rushing stuff rate. |
-| `rushing_stopped` | Int64 |  |
-| `rushing_stopped_rate` | Float64 |  |
-| `rushing_opportunity` | Int64 |  |
-| `rushing_opportunity_rate` | Float64 |  |
-| `rushing_highlight` | Int64 |  |
-| `rushing_highlight_rate` | Float64 |  |
+| `rushing_stopped` | Int64 | Count of rushing attempts stopped at or behind the line of scrimmage. |
+| `rushing_stopped_rate` | Float64 | Share of carries stopped at or behind the line of scrimmage. |
+| `rushing_opportunity` | Int64 | Count of rushing opportunities -- carries that reached ESPN's opportunity threshold. |
+| `rushing_opportunity_rate` | Float64 | Share of carries that qualified as rushing opportunities. |
+| `rushing_highlight` | Int64 | Highlight yards -- rushing yardage credited to the back rather than the offensive line. |
+| `rushing_highlight_rate` | Float64 | Share of rushing yardage that was highlight (back-credited) yardage. |
 | `rushing_highlight_yards` | Float64 | Opponent-adjusted offensive highlight yards per opportunity rush. |
-| `line_yards` | Float64 |  |
-| `line_yards_per_carry` | Float64 |  |
-| `second_level_yards` | Float64 |  |
-| `open_field_yards` | Float64 |  |
+| `line_yards` | Float64 | Line yards -- the portion of rushing yardage credited to the offensive line under the standard rushing decomposition. ESPN applies its own qualifying threshold for the yardage split. |
+| `line_yards_per_carry` | Float64 | Line yards per rushing attempt. |
+| `second_level_yards` | Float64 | Second-level yards -- rushing yardage earned just beyond the line of scrimmage. |
+| `open_field_yards` | Float64 | Open-field yards -- rushing yardage earned well downfield, past the second level. |
 | `game_id` | Int64 | ESPN game identifier. |
 | `season` | Int64 | Season (4-digit year). |
 | `week` | Int64 | Game week of the season. |
@@ -2043,81 +2043,81 @@ Release: [espn_cfb_adv_team_gamelog](https://github.com/sportsdataverse/sportsda
 | `points_against` | Int64 | Points allowed. |
 | `margin` | Int64 |  |
 | `win` | Boolean | Whether the game was a win (goalie). |
-| `rushing_highlight_yards_per_opp` | Float64 |  |
-| `total_pen_yards` | Int64 |  |
-| `EPA_penalty` | Float64 |  |
-| `penalty_first_downs_created` | Int64 |  |
-| `penalty_first_downs_created_rate` | Float64 |  |
+| `rushing_highlight_yards_per_opp` | Float64 | Highlight yards per rushing opportunity. |
+| `total_pen_yards` | Int64 | Total penalty yards assessed. |
+| `EPA_penalty` | Float64 | Total EPA attributed to penalties. |
+| `penalty_first_downs_created` | Int64 | Number of first downs the team gained via opponent penalty. |
+| `penalty_first_downs_created_rate` | Float64 | Share of the team's first downs that came via opponent penalty. |
 | `penalties` | Int64 | Total number of penalties. |
 | `penalty_yards` | Int64 | Yards gained (or lost) by the posteam from the penalty. |
-| `special_teams_plays` | Int64 |  |
-| `EPA_sp` | Float64 |  |
-| `EPA_special_teams` | Float64 |  |
-| `field_goals` | Int64 |  |
-| `EPA_fg` | Float64 |  |
-| `punt_plays` | Int64 |  |
-| `EPA_punt` | Float64 |  |
-| `kickoff_plays` | Int64 |  |
-| `EPA_kickoff` | Float64 |  |
-| `rushes` | Int64 |  |
+| `special_teams_plays` | Int64 | Number of special-teams plays. |
+| `EPA_sp` | Float64 | Total special-teams EPA, ESPN's abbreviated field for the same phase. |
+| `EPA_special_teams` | Float64 | Total EPA generated on special-teams plays. |
+| `field_goals` | Int64 | Number of field-goal attempts. |
+| `EPA_fg` | Float64 | Total EPA on field-goal attempts. |
+| `punt_plays` | Int64 | Number of punt plays. |
+| `EPA_punt` | Float64 | Total EPA on punt plays. |
+| `kickoff_plays` | Int64 | Number of kickoff plays. |
+| `EPA_kickoff` | Float64 | Total EPA on kickoff plays. |
+| `rushes` | Int64 | Number of rushing attempts. |
 | `rush_yards` | Float64 | The number of rushing yards gained |
-| `yards_per_rush` | Float64 |  |
-| `rushing_power_rate` | Float64 |  |
-| `rushing_first_downs_created` | Int64 |  |
-| `rushing_first_downs_created_rate` | Float64 |  |
-| `EPA_rushing_overall` | Float64 |  |
-| `EPA_rushing_per_play` | Float64 |  |
-| `EPA_explosive_rushing` | Int64 |  |
-| `EPA_explosive_rushing_rate` | Float64 |  |
-| `EPA_non_explosive_rushing` | Float64 |  |
-| `EPA_non_explosive_rushing_per_play` | Float64 |  |
+| `yards_per_rush` | Float64 | Yards gained per rushing attempt. |
+| `rushing_power_rate` | Float64 | Share of carries that were power rushing attempts. |
+| `rushing_first_downs_created` | Int64 | Number of first downs created on rush plays. |
+| `rushing_first_downs_created_rate` | Float64 | Share of rush plays that created a first down. |
+| `EPA_rushing_overall` | Float64 | Total EPA on rush plays. |
+| `EPA_rushing_per_play` | Float64 | EPA per rush play. |
+| `EPA_explosive_rushing` | Int64 | Count of explosive rush plays. A play count, not an EPA total. |
+| `EPA_explosive_rushing_rate` | Float64 | Explosive-play rate on rush plays, over ESPN's qualifying-play denominator. |
+| `EPA_non_explosive_rushing` | Float64 | Total EPA on rush plays with explosive plays excluded. |
+| `EPA_non_explosive_rushing_per_play` | Float64 | EPA per rush play with explosive plays excluded. |
 | `passes` | Int64 | Passes. |
 | `pass_yards` | Float64 | Number of yards gained on pass plays |
 | `yards_per_pass` | Float64 | Team game yards per pass. |
-| `passing_first_downs_created` | Int64 |  |
-| `passing_first_downs_created_rate` | Float64 |  |
-| `EPA_passing_overall` | Float64 |  |
-| `EPA_passing_per_play` | Float64 |  |
-| `EPA_explosive_passing` | Int64 |  |
-| `EPA_explosive_passing_rate` | Float64 |  |
-| `EPA_non_explosive_passing` | Float64 |  |
-| `EPA_non_explosive_passing_per_play` | Float64 |  |
-| `scrimmage_plays` | Int64 |  |
-| `EPA_overall_off` | Float64 |  |
-| `EPA_overall_offense` | Float64 |  |
-| `EPA_per_play` | Float64 |  |
-| `EPA_non_explosive` | Float64 |  |
-| `EPA_non_explosive_per_play` | Float64 |  |
-| `EPA_explosive` | Int64 |  |
-| `EPA_explosive_rate` | Float64 |  |
-| `passes_rate` | Float64 |  |
-| `off_yards` | Int64 |  |
-| `total_off_yards` | Int64 |  |
-| `yards_per_play` | Float64 |  |
-| `EPA_plays` | Int64 |  |
+| `passing_first_downs_created` | Int64 | Number of first downs created on pass plays. |
+| `passing_first_downs_created_rate` | Float64 | Share of pass plays that created a first down. |
+| `EPA_passing_overall` | Float64 | Total EPA on pass plays. |
+| `EPA_passing_per_play` | Float64 | EPA per pass play. |
+| `EPA_explosive_passing` | Int64 | Count of explosive pass plays. A play count, not an EPA total. |
+| `EPA_explosive_passing_rate` | Float64 | Explosive-play rate on pass plays, over ESPN's qualifying-play denominator. |
+| `EPA_non_explosive_passing` | Float64 | Total EPA on pass plays with explosive plays excluded. |
+| `EPA_non_explosive_passing_per_play` | Float64 | EPA per pass play with explosive plays excluded. |
+| `scrimmage_plays` | Int64 | Number of plays from scrimmage (rushes plus passes), excluding special teams. |
+| `EPA_overall_off` | Float64 | Total offensive EPA for the team. Duplicated exactly by EPA_overall_offense in every published season checked -- prefer one and ignore the other. |
+| `EPA_overall_offense` | Float64 | Total offensive EPA. An exact duplicate of EPA_overall_off. |
+| `EPA_per_play` | Float64 | Offensive EPA per play. |
+| `EPA_non_explosive` | Float64 | Total EPA with explosive plays excluded, isolating the team's routine-down production. |
+| `EPA_non_explosive_per_play` | Float64 | EPA per play with explosive plays excluded. |
+| `EPA_explosive` | Int64 | Count of explosive plays, per ESPN's advanced box score. Despite the EPA_ prefix this is a play COUNT, not an EPA total. |
+| `EPA_explosive_rate` | Float64 | Explosive-play rate. Note this is NOT EPA_explosive divided by EPA_plays -- ESPN divides by its own smaller qualifying-play count, so deriving it yourself will not reproduce this value. |
+| `passes_rate` | Float64 | Share of the team's plays from scrimmage that were pass plays. |
+| `off_yards` | Int64 | Offensive yards gained from scrimmage. |
+| `total_off_yards` | Int64 | Total offensive yards across all plays. |
+| `yards_per_play` | Float64 | Yards gained per play. |
+| `EPA_plays` | Int64 | Number of plays ESPN's advanced box score scored for the team. |
 | `total_yards` | Int64 | Team total yards. |
-| `EPA_overall_total` | Float64 |  |
-| `rushes_rate` | Float64 |  |
-| `first_downs_created` | Int64 |  |
-| `first_downs_created_rate` | Float64 |  |
-| `EPA_rushing_power` | Float64 |  |
-| `EPA_rushing_power_per_play` | Float64 |  |
+| `EPA_overall_total` | Float64 | Total EPA across all phases, which is why it differs from the offense-only EPA_overall_off. |
+| `rushes_rate` | Float64 | Share of the team's plays from scrimmage that were rush plays. |
+| `first_downs_created` | Int64 | Number of first downs the team created. |
+| `first_downs_created_rate` | Float64 | Share of the team's plays that created a first down. |
+| `EPA_rushing_power` | Float64 | Total EPA on power rushing situations, as classified by ESPN's advanced box score. |
+| `EPA_rushing_power_per_play` | Float64 | EPA per play on power rushing situations. |
 | `rushing_power_success` | Int64 | Rushing power success rate. |
-| `rushing_power_success_rate` | Float64 |  |
-| `rushing_power` | Int64 |  |
-| `rushing_stuff` | Int64 |  |
+| `rushing_power_success_rate` | Float64 | Share of power rushing attempts that succeeded. |
+| `rushing_power` | Int64 | Count of power rushing attempts, in short-yardage situations as classified by ESPN's advanced box score. |
+| `rushing_stuff` | Int64 | Count of stuffed rushing attempts. |
 | `rushing_stuff_rate` | Float64 | Rushing stuff rate. |
-| `rushing_stopped` | Int64 |  |
-| `rushing_stopped_rate` | Float64 |  |
-| `rushing_opportunity` | Int64 |  |
-| `rushing_opportunity_rate` | Float64 |  |
-| `rushing_highlight` | Int64 |  |
-| `rushing_highlight_rate` | Float64 |  |
+| `rushing_stopped` | Int64 | Count of rushing attempts stopped at or behind the line of scrimmage. |
+| `rushing_stopped_rate` | Float64 | Share of carries stopped at or behind the line of scrimmage. |
+| `rushing_opportunity` | Int64 | Count of rushing opportunities -- carries that reached ESPN's opportunity threshold. |
+| `rushing_opportunity_rate` | Float64 | Share of carries that qualified as rushing opportunities. |
+| `rushing_highlight` | Int64 | Highlight yards -- rushing yardage credited to the back rather than the offensive line. |
+| `rushing_highlight_rate` | Float64 | Share of rushing yardage that was highlight (back-credited) yardage. |
 | `rushing_highlight_yards` | Float64 | Opponent-adjusted offensive highlight yards per opportunity rush. |
-| `line_yards` | Float64 |  |
-| `line_yards_per_carry` | Float64 |  |
-| `second_level_yards` | Float64 |  |
-| `open_field_yards` | Float64 |  |
+| `line_yards` | Float64 | Line yards -- the portion of rushing yardage credited to the offensive line under the standard rushing decomposition. ESPN applies its own qualifying threshold for the yardage split. |
+| `line_yards_per_carry` | Float64 | Line yards per rushing attempt. |
+| `second_level_yards` | Float64 | Second-level yards -- rushing yardage earned just beyond the line of scrimmage. |
+| `open_field_yards` | Float64 | Open-field yards -- rushing yardage earned well downfield, past the second level. |
 
 ```python
 load_cfb_adv_team_gamelog(seasons=2024)

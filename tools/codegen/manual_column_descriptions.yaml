@@ -3808,6 +3808,147 @@ load_cfb_team_summaries_weekly:
   yardsplay_off_rush: Yards gained per play on rush plays, with the team on offense.
   yardsplay_off_rush_rank: National rank of the team's yards gained per play on rush plays with the team on offense, where
     1 is best.
+load_cfb_adv_team:
+  EPA_explosive: Count of explosive plays, per ESPN's advanced box score. Despite the EPA_ prefix this is a play COUNT, not
+    an EPA total.
+  EPA_explosive_passing: Count of explosive pass plays. A play count, not an EPA total.
+  EPA_explosive_passing_rate: Explosive-play rate on pass plays, over ESPN's qualifying-play denominator.
+  EPA_explosive_rate: Explosive-play rate. Note this is NOT EPA_explosive divided by EPA_plays -- ESPN divides by its own
+    smaller qualifying-play count, so deriving it yourself will not reproduce this value.
+  EPA_explosive_rushing: Count of explosive rush plays. A play count, not an EPA total.
+  EPA_explosive_rushing_rate: Explosive-play rate on rush plays, over ESPN's qualifying-play denominator.
+  EPA_fg: Total EPA on field-goal attempts.
+  EPA_kickoff: Total EPA on kickoff plays.
+  EPA_non_explosive: Total EPA with explosive plays excluded, isolating the team's routine-down production.
+  EPA_non_explosive_passing: Total EPA on pass plays with explosive plays excluded.
+  EPA_non_explosive_passing_per_play: EPA per pass play with explosive plays excluded.
+  EPA_non_explosive_per_play: EPA per play with explosive plays excluded.
+  EPA_non_explosive_rushing: Total EPA on rush plays with explosive plays excluded.
+  EPA_non_explosive_rushing_per_play: EPA per rush play with explosive plays excluded.
+  EPA_overall_off: Total offensive EPA for the team. Duplicated exactly by EPA_overall_offense in every published season checked
+    -- prefer one and ignore the other.
+  EPA_overall_offense: Total offensive EPA. An exact duplicate of EPA_overall_off.
+  EPA_overall_total: Total EPA across all phases, which is why it differs from the offense-only EPA_overall_off.
+  EPA_passing_overall: Total EPA on pass plays.
+  EPA_passing_per_play: EPA per pass play.
+  EPA_penalty: Total EPA attributed to penalties.
+  EPA_per_play: Offensive EPA per play.
+  EPA_plays: Number of plays ESPN's advanced box score scored for the team.
+  EPA_punt: Total EPA on punt plays.
+  EPA_rushing_overall: Total EPA on rush plays.
+  EPA_rushing_per_play: EPA per rush play.
+  EPA_rushing_power: Total EPA on power rushing situations, as classified by ESPN's advanced box score.
+  EPA_rushing_power_per_play: EPA per play on power rushing situations.
+  EPA_sp: Total special-teams EPA, ESPN's abbreviated field for the same phase.
+  EPA_special_teams: Total EPA generated on special-teams plays.
+  field_goals: Number of field-goal attempts.
+  first_downs_created: Number of first downs the team created.
+  first_downs_created_rate: Share of the team's plays that created a first down.
+  kickoff_plays: Number of kickoff plays.
+  line_yards: Line yards -- the portion of rushing yardage credited to the offensive line under the standard rushing decomposition.
+    ESPN applies its own qualifying threshold for the yardage split.
+  line_yards_per_carry: Line yards per rushing attempt.
+  off_yards: Offensive yards gained from scrimmage.
+  open_field_yards: Open-field yards -- rushing yardage earned well downfield, past the second level.
+  passes_rate: Share of the team's plays from scrimmage that were pass plays.
+  passing_first_downs_created: Number of first downs created on pass plays.
+  passing_first_downs_created_rate: Share of pass plays that created a first down.
+  penalty_first_downs_created: Number of first downs the team gained via opponent penalty.
+  penalty_first_downs_created_rate: Share of the team's first downs that came via opponent penalty.
+  pos_team_id: ESPN team id of the team on offense. Present for every season 2004+.
+  punt_plays: Number of punt plays.
+  rushes: Number of rushing attempts.
+  rushes_rate: Share of the team's plays from scrimmage that were rush plays.
+  rushing_first_downs_created: Number of first downs created on rush plays.
+  rushing_first_downs_created_rate: Share of rush plays that created a first down.
+  rushing_highlight: Highlight yards -- rushing yardage credited to the back rather than the offensive line.
+  rushing_highlight_rate: Share of rushing yardage that was highlight (back-credited) yardage.
+  rushing_highlight_yards_per_opp: Highlight yards per rushing opportunity.
+  rushing_opportunity: Count of rushing opportunities -- carries that reached ESPN's opportunity threshold.
+  rushing_opportunity_rate: Share of carries that qualified as rushing opportunities.
+  rushing_power: Count of power rushing attempts, in short-yardage situations as classified by ESPN's advanced box score.
+  rushing_power_rate: Share of carries that were power rushing attempts.
+  rushing_power_success_rate: Share of power rushing attempts that succeeded.
+  rushing_stopped: Count of rushing attempts stopped at or behind the line of scrimmage.
+  rushing_stopped_rate: Share of carries stopped at or behind the line of scrimmage.
+  rushing_stuff: Count of stuffed rushing attempts.
+  scrimmage_plays: Number of plays from scrimmage (rushes plus passes), excluding special teams.
+  second_level_yards: Second-level yards -- rushing yardage earned just beyond the line of scrimmage.
+  special_teams_plays: Number of special-teams plays.
+  total_off_yards: Total offensive yards across all plays.
+  total_pen_yards: Total penalty yards assessed.
+  yards_per_play: Yards gained per play.
+  yards_per_rush: Yards gained per rushing attempt.
+load_cfb_adv_team_gamelog:
+  EPA_explosive: Count of explosive plays, per ESPN's advanced box score. Despite the EPA_ prefix this is a play COUNT, not
+    an EPA total.
+  EPA_explosive_passing: Count of explosive pass plays. A play count, not an EPA total.
+  EPA_explosive_passing_rate: Explosive-play rate on pass plays, over ESPN's qualifying-play denominator.
+  EPA_explosive_rate: Explosive-play rate. Note this is NOT EPA_explosive divided by EPA_plays -- ESPN divides by its own
+    smaller qualifying-play count, so deriving it yourself will not reproduce this value.
+  EPA_explosive_rushing: Count of explosive rush plays. A play count, not an EPA total.
+  EPA_explosive_rushing_rate: Explosive-play rate on rush plays, over ESPN's qualifying-play denominator.
+  EPA_fg: Total EPA on field-goal attempts.
+  EPA_kickoff: Total EPA on kickoff plays.
+  EPA_non_explosive: Total EPA with explosive plays excluded, isolating the team's routine-down production.
+  EPA_non_explosive_passing: Total EPA on pass plays with explosive plays excluded.
+  EPA_non_explosive_passing_per_play: EPA per pass play with explosive plays excluded.
+  EPA_non_explosive_per_play: EPA per play with explosive plays excluded.
+  EPA_non_explosive_rushing: Total EPA on rush plays with explosive plays excluded.
+  EPA_non_explosive_rushing_per_play: EPA per rush play with explosive plays excluded.
+  EPA_overall_off: Total offensive EPA for the team. Duplicated exactly by EPA_overall_offense in every published season checked
+    -- prefer one and ignore the other.
+  EPA_overall_offense: Total offensive EPA. An exact duplicate of EPA_overall_off.
+  EPA_overall_total: Total EPA across all phases, which is why it differs from the offense-only EPA_overall_off.
+  EPA_passing_overall: Total EPA on pass plays.
+  EPA_passing_per_play: EPA per pass play.
+  EPA_penalty: Total EPA attributed to penalties.
+  EPA_per_play: Offensive EPA per play.
+  EPA_plays: Number of plays ESPN's advanced box score scored for the team.
+  EPA_punt: Total EPA on punt plays.
+  EPA_rushing_overall: Total EPA on rush plays.
+  EPA_rushing_per_play: EPA per rush play.
+  EPA_rushing_power: Total EPA on power rushing situations, as classified by ESPN's advanced box score.
+  EPA_rushing_power_per_play: EPA per play on power rushing situations.
+  EPA_sp: Total special-teams EPA, ESPN's abbreviated field for the same phase.
+  EPA_special_teams: Total EPA generated on special-teams plays.
+  field_goals: Number of field-goal attempts.
+  first_downs_created: Number of first downs the team created.
+  first_downs_created_rate: Share of the team's plays that created a first down.
+  kickoff_plays: Number of kickoff plays.
+  line_yards: Line yards -- the portion of rushing yardage credited to the offensive line under the standard rushing decomposition.
+    ESPN applies its own qualifying threshold for the yardage split.
+  line_yards_per_carry: Line yards per rushing attempt.
+  off_yards: Offensive yards gained from scrimmage.
+  open_field_yards: Open-field yards -- rushing yardage earned well downfield, past the second level.
+  passes_rate: Share of the team's plays from scrimmage that were pass plays.
+  passing_first_downs_created: Number of first downs created on pass plays.
+  passing_first_downs_created_rate: Share of pass plays that created a first down.
+  penalty_first_downs_created: Number of first downs the team gained via opponent penalty.
+  penalty_first_downs_created_rate: Share of the team's first downs that came via opponent penalty.
+  punt_plays: Number of punt plays.
+  rushes: Number of rushing attempts.
+  rushes_rate: Share of the team's plays from scrimmage that were rush plays.
+  rushing_first_downs_created: Number of first downs created on rush plays.
+  rushing_first_downs_created_rate: Share of rush plays that created a first down.
+  rushing_highlight: Highlight yards -- rushing yardage credited to the back rather than the offensive line.
+  rushing_highlight_rate: Share of rushing yardage that was highlight (back-credited) yardage.
+  rushing_highlight_yards_per_opp: Highlight yards per rushing opportunity.
+  rushing_opportunity: Count of rushing opportunities -- carries that reached ESPN's opportunity threshold.
+  rushing_opportunity_rate: Share of carries that qualified as rushing opportunities.
+  rushing_power: Count of power rushing attempts, in short-yardage situations as classified by ESPN's advanced box score.
+  rushing_power_rate: Share of carries that were power rushing attempts.
+  rushing_power_success_rate: Share of power rushing attempts that succeeded.
+  rushing_stopped: Count of rushing attempts stopped at or behind the line of scrimmage.
+  rushing_stopped_rate: Share of carries stopped at or behind the line of scrimmage.
+  rushing_stuff: Count of stuffed rushing attempts.
+  scrimmage_plays: Number of plays from scrimmage (rushes plus passes), excluding special teams.
+  second_level_yards: Second-level yards -- rushing yardage earned just beyond the line of scrimmage.
+  special_teams_plays: Number of special-teams plays.
+  total_off_yards: Total offensive yards across all plays.
+  total_pen_yards: Total penalty yards assessed.
+  yards_per_play: Yards gained per play.
+  yards_per_rush: Yards gained per rushing attempt.
 load_contracts:
   cols: Placeholder column retained in the contracts loader output schema; contains no meaningful data in this context.
 load_depth_charts:
