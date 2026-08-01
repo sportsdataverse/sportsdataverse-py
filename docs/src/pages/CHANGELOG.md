@@ -226,10 +226,10 @@ every season).
 | `pos_team` / `def_pos_team` | `Int64` id (`48`) | `String` name (`Ohio State Buckeyes`) |
 | `pos_team_id` / `def_pos_team_id` | — | `Int64` id |
 
-- **Affected tags** (10): `adv_team`, `adv_passing`, `adv_rushing`,
-  `adv_receiving`, `adv_defensive`, `adv_defensive_players`, `adv_turnover`,
-  `adv_drives`, `adv_situational`, `adv_specialists`. The first eight use
-  `pos_team`; `adv_defensive` and `adv_defensive_players` use `def_pos_team`.
+- **Affected tags** (10). Eight carry the offense's team and use `pos_team`:
+  `adv_team`, `adv_passing`, `adv_rushing`, `adv_receiving`, `adv_turnover`,
+  `adv_drives`, `adv_situational`, `adv_specialists`. Two carry the defense's
+  team and use `def_pos_team`: `adv_defensive`, `adv_defensive_players`.
 - **The summaries family was NOT affected** — `cfb_team_summaries`,
   `cfb_passing`, `cfb_rushing`, `cfb_receiving` already shipped `team_id` for
   the id and a readable `pos_team`, so they were deliberately left alone.
@@ -251,8 +251,18 @@ documented schema now matches what the loaders actually return. Beyond the
 - `load_cfb_adv_passing` was missing `xComp`, `CompPct`, `xCompPct`, `CPOE`,
   and declared `rush_epa` / `pen_epa` as `Null` rather than `Float64`.
 - `load_cfb_adv_defensive_players` was missing `sacks`, `sacks_yards`,
-  `pass_breakups`, `interceptions`, `interceptions_yards`, `forced_fumbles`
-  (present from 2014 on; 2004 legitimately ships the narrower 8-column shape).
+  `pass_breakups`, `forced_fumbles`, `interceptions`, `interceptions_yards`.
+
+  This block's shape **ramps in two steps**, so the union is the only honest
+  declaration. Columns absent in a requested season come back null (the loaders
+  concatenate diagonally), so a 2004–2025 pull is uniform in shape but sparse in
+  the early years:
+
+  | seasons | cols | shape |
+  |---|---|---|
+  | 2004 | 8 | fumble recoveries only |
+  | 2005–2013 | 12 | `+ sacks, sacks_yards, pass_breakups, forced_fumbles` |
+  | 2014–2025 | 14 | `+ interceptions, interceptions_yards` |
 
 `loader_schemas.yaml` drives the generated returns tables only — nothing casts
 from it — so this drift was invisible to the test suite and surfaced purely as
