@@ -339,7 +339,7 @@ Release: [espn_nba_game_rosters](https://github.com/sportsdataverse/sportsdatave
 | `athlete_last_name` | String | Athlete last name. |
 | `athlete_jersey` | String | Athlete jersey number. |
 | `athlete_position` | String | Player position name; `athlete_detail = TRUE` only. |
-| `athlete_headshot` | String |  |
+| `athlete_headshot` | String | URL of the player's headshot image. |
 | `starter` | Boolean | TRUE if the player was in the starting lineup; FALSE otherwise. |
 | `did_not_play` | Boolean | TRUE if the player did not appear in the game. |
 | `active` | Boolean | TRUE if the row represents an active record (player / team / season). |
@@ -610,7 +610,7 @@ Release: [nba_stats_schedules](https://github.com/sportsdataverse/sportsdatavers
 | `if_necessary` | String | If necessary. |
 | `series_game_number` | String | Series game number. |
 | `game_label` | String | The stats.nba.com event label naming the round or special event a game belongs to, such as NBA Finals, East First Round, Emirates NBA Cup or NBA Mexico City Game; an empty string for an ordinary regular-season game. |
-| `game_sub_label` | String |  |
+| `game_sub_label` | String | Secondary label for special-event games (e.g. 'NBA Abu Dhabi Game'); an empty string for ordinary games rather than null. |
 | `series_text` | String | Series text. |
 | `arena_name` | String | Arena name. |
 | `arena_state` | String | Arena state. |
@@ -618,7 +618,7 @@ Release: [nba_stats_schedules](https://github.com/sportsdataverse/sportsdatavers
 | `postponed_status` | String | Postponed status. |
 | `branch_link` | String | Branch link. |
 | `game_subtype` | String | Game subtype. |
-| `is_neutral` | Boolean |  |
+| `is_neutral` | Boolean | True when the game was played at a neutral site. |
 | `home_team_id` | Int32 | Unique identifier for the home team. |
 | `home_team_name` | String | Home team name. |
 | `home_team_city` | String | Home team city / location. |
@@ -664,8 +664,8 @@ Release: [nba_player_impact](https://github.com/sportsdataverse/sportsdataverse-
 | `rapm` | Float64 | Total regularized adjusted plus-minus per 100 possessions, exactly the sum of o_rapm and d_rapm. |
 | `off_poss` | Int64 | Number of possessions the player was on the floor on offense, the count of design-matrix rows carrying his offensive indicator and therefore the offensive-side sample size behind o_rapm. |
 | `def_poss` | Int64 | Number of possessions the player was on the floor on defense, the sample size behind d_rapm; it tracks off_poss almost exactly because substitutions rarely split an offense-defense pair. |
-| `o_adj_rapm` | Float64 |  |
-| `d_adj_rapm` | Float64 |  |
+| `o_adj_rapm` | Float64 | Offensive regularized adjusted plus/minus after the ridge opponent adjustment. |
+| `d_adj_rapm` | Float64 | Defensive regularized adjusted plus/minus after the ridge opponent adjustment. |
 | `adj_rapm` | Float64 | Total prior-informed RAPM per 100 possessions, exactly the sum of o_adj_rapm and d_adj_rapm. |
 | `ospm` | Float64 | Offensive statistical plus-minus per 100 possessions: the player's per-100 box-score feature vector scored through ridge coefficients trained on that season's o_rapm target. |
 | `dspm` | Float64 | Defensive statistical plus-minus per 100 possessions from the same box-score feature vector scored through coefficients trained on the d_rapm target. |

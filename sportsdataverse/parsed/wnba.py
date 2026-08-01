@@ -29,6 +29,7 @@ from sportsdataverse.wnba import espn_wnba_coach as _raw_espn_wnba_coach
 from sportsdataverse.wnba import espn_wnba_coach_record as _raw_espn_wnba_coach_record
 from sportsdataverse.wnba import espn_wnba_coach_season as _raw_espn_wnba_coach_season
 from sportsdataverse.wnba import espn_wnba_conferences as _raw_espn_wnba_conferences
+from sportsdataverse.wnba import espn_wnba_fpi as _raw_espn_wnba_fpi
 from sportsdataverse.wnba import espn_wnba_franchise as _raw_espn_wnba_franchise
 from sportsdataverse.wnba import espn_wnba_franchises as _raw_espn_wnba_franchises
 from sportsdataverse.wnba import espn_wnba_game as _raw_espn_wnba_game
@@ -106,6 +107,7 @@ from sportsdataverse.wnba import espn_wnba_season_type_leaders as _raw_espn_wnba
 from sportsdataverse.wnba import espn_wnba_season_types as _raw_espn_wnba_season_types
 from sportsdataverse.wnba import espn_wnba_season_week as _raw_espn_wnba_season_week
 from sportsdataverse.wnba import espn_wnba_season_week_games as _raw_espn_wnba_season_week_games
+from sportsdataverse.wnba import espn_wnba_season_week_powerindex as _raw_espn_wnba_season_week_powerindex
 from sportsdataverse.wnba import espn_wnba_season_weeks as _raw_espn_wnba_season_weeks
 from sportsdataverse.wnba import espn_wnba_seasons as _raw_espn_wnba_seasons
 from sportsdataverse.wnba import espn_wnba_standings_core as _raw_espn_wnba_standings_core
@@ -239,6 +241,7 @@ __all__ = [
     "espn_wnba_coach_season",
     "espn_wnba_conferences",
     "espn_wnba_draft",
+    "espn_wnba_fpi",
     "espn_wnba_franchise",
     "espn_wnba_franchises",
     "espn_wnba_game",
@@ -321,6 +324,7 @@ __all__ = [
     "espn_wnba_season_types",
     "espn_wnba_season_week",
     "espn_wnba_season_week_games",
+    "espn_wnba_season_week_powerindex",
     "espn_wnba_season_weeks",
     "espn_wnba_seasons",
     "espn_wnba_standings",
@@ -518,6 +522,20 @@ def espn_wnba_conferences(*args, **kwargs):
     """
     kwargs.setdefault("return_parsed", True)
     return _raw_espn_wnba_conferences(*args, **kwargs)
+
+
+def espn_wnba_fpi(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``wnba.espn_wnba_fpi``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.wnba.espn_wnba_fpi` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.wnba.espn_wnba_fpi` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_espn_wnba_fpi(*args, **kwargs)
 
 
 def espn_wnba_franchise(*args, **kwargs):
@@ -1596,6 +1614,20 @@ def espn_wnba_season_week_games(*args, **kwargs):
     """
     kwargs.setdefault("return_parsed", True)
     return _raw_espn_wnba_season_week_games(*args, **kwargs)
+
+
+def espn_wnba_season_week_powerindex(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``wnba.espn_wnba_season_week_powerindex``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.wnba.espn_wnba_season_week_powerindex` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.wnba.espn_wnba_season_week_powerindex` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_espn_wnba_season_week_powerindex(*args, **kwargs)
 
 
 def espn_wnba_season_weeks(*args, **kwargs):

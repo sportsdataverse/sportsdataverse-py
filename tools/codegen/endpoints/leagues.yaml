@@ -3,6 +3,9 @@ hosts:
   site_v2_alt: "https://site.api.espn.com/apis/v2/sports"
   web_v3: "https://site.web.api.espn.com/apis/common/v3/sports"
   core_v2: "https://sports.core.api.espn.com/v2/sports"
+  # ESPN's FPI surface. The core_v2 powerindex endpoint returns only $ref links;
+  # this host serves the resolved Football Power Index table directly.
+  fitt_v3: "https://site.web.api.espn.com/apis/fitt/v3/sports"
 leagues:
   - {prefix: nba, sport: basketball, league: nba, scopes: [universal]}
   - {prefix: wnba, sport: basketball, league: wnba, scopes: [universal]}

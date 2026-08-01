@@ -18,6 +18,7 @@ from sportsdataverse._common_espn_parsers import (
     parse_event_competitor_roster,
     parse_event_competitor_statistics,
     parse_event_plays,
+    parse_fpi,
     parse_groups,
     parse_injuries,
     parse_items,
@@ -30,6 +31,7 @@ from sportsdataverse._common_espn_parsers import (
     parse_team_roster,
     parse_team_schedule,
     parse_teams,
+    parse_weekly_powerindex,
 )
 
 __all__ = [
@@ -76,6 +78,7 @@ __all__ = [
     "espn_nfl_season_type_corrections",
     "espn_nfl_season_weeks",
     "espn_nfl_season_week",
+    "espn_nfl_season_week_powerindex",
     "espn_nfl_season_week_games",
     "espn_nfl_season_teams",
     "espn_nfl_season_team",
@@ -145,6 +148,7 @@ __all__ = [
     "espn_nfl_talentpicks",
     "espn_nfl_season_qbr",
     "espn_nfl_season_qbr_week",
+    "espn_nfl_fpi",
 ]
 
 
@@ -1821,6 +1825,51 @@ def espn_nfl_season_week(
     )
     if return_parsed:
         return parse_single_entity(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_nfl_season_week_powerindex(
+    season: Union[int, str],
+    season_type: Union[int, str],
+    week: Union[int, str],
+    limit: Optional[int] = None,
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='football', league='nfl'.
+
+    Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/seasons/{season}/types/{season_type}/weeks/{week}/powerindex``
+    Example URL: https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/types/2/weeks/8/powerindex
+
+    Args:
+        season: season path parameter.
+        season_type: season_type path parameter.
+        week: week path parameter.
+        limit: limit query parameter.
+        return_parsed: parse the payload through parse_weekly_powerindex -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        Quick start::
+
+            espn_nfl_season_week_powerindex(season=2024, season_type=2, week=8)
+    """
+    raw = _get(
+        f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/{season}/types/{season_type}/weeks/{week}/powerindex",
+        params={
+            "limit": limit,
+        },
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_weekly_powerindex(raw, return_as_pandas=return_as_pandas)
     return raw
 
 
@@ -4564,4 +4613,49 @@ def espn_nfl_season_qbr_week(
     )
     if return_parsed:
         return parse_items(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_nfl_fpi(
+    season: Optional[Union[int, str]] = None,
+    limit: Optional[int] = None,
+    page: Optional[int] = None,
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='football', league='nfl'.
+
+    Endpoint: ``GET https://site.web.api.espn.com/apis/fitt/v3/sports/{sport}/{league}/powerindex``
+    Example URL: https://site.web.api.espn.com/apis/fitt/v3/sports/football/nfl/powerindex?season=2024
+
+    Args:
+        season: season query parameter.
+        limit: limit query parameter.
+        page: page query parameter.
+        return_parsed: parse the payload through parse_fpi -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        Quick start::
+
+            espn_nfl_fpi(season=2024)
+    """
+    raw = _get(
+        "https://site.web.api.espn.com/apis/fitt/v3/sports/football/nfl/powerindex",
+        params={
+            "season": season,
+            "limit": limit,
+            "page": page,
+        },
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_fpi(raw, return_as_pandas=return_as_pandas)
     return raw

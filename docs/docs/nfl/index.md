@@ -8,7 +8,8 @@ sidebar_label: NFL
 |---|---:|---|
 | [ESPN site API (v2)](reference/site) | 24 | `https://site.api.espn.com/apis/site/v2/sports` |
 | [ESPN web API (v3)](reference/web) | 5 | `https://site.web.api.espn.com/apis/common/v3/sports` |
-| [ESPN core API (v2)](reference/core) | 83 | `https://sports.core.api.espn.com/v2/sports` |
+| [ESPN core API (v2)](reference/core) | 84 | `https://sports.core.api.espn.com/v2/sports` |
+| [ESPN FPI API (fitt v3)](reference/fitt) | 1 | `https://site.web.api.espn.com/apis/fitt/v3/sports` |
 | [NFL.com API](reference/nfl_api) | 11 | `https://api.nfl.com` |
 | [PFF Premium Stats (premium.pff.com)](reference/pff_core) | 46 | `https://premium.pff.com` |
 | [Dataset loaders](reference/loaders) | 8 | nflverse data releases |

@@ -58,107 +58,98 @@ def load_nhl_pbp(seasons, return_as_pandas: bool = False):
         |:------------------------|:-------|
         |event_type               |String  |
         |event                    |String  |
-        |description              |String  |
-        |period                   |Int32   |
-        |period_seconds           |Int32   |
-        |period_seconds_remaining |Int32   |
-        |game_seconds             |Int32   |
-        |game_seconds_remaining   |Int32   |
-        |home_score               |Int32   |
-        |away_score               |Int32   |
-        |strength_state           |String  |
-        |event_idx                |String  |
-        |extra_attacker           |Boolean |
-        |home_skaters             |Int32   |
-        |away_skaters             |Int32   |
-        |game_id                  |Int32   |
-        |period_type              |String  |
-        |ordinal_num              |String  |
-        |period_time              |String  |
-        |period_time_remaining    |String  |
-        |date_time                |String  |
-        |home_final               |Int32   |
-        |away_final               |Int32   |
-        |season                   |Int32   |
-        |season_type              |String  |
-        |game_date                |String  |
-        |game_start               |String  |
-        |game_end                 |String  |
-        |game_length              |Int32   |
-        |game_state               |String  |
-        |detailed_state           |String  |
-        |venue_name               |String  |
-        |venue_link               |String  |
-        |home_name                |String  |
-        |home_abbreviation        |String  |
-        |home_division_name       |String  |
-        |home_conference_name     |String  |
-        |home_id                  |String  |
-        |away_name                |String  |
-        |away_abbreviation        |String  |
-        |away_division_name       |String  |
-        |away_conference_name     |String  |
-        |away_id                  |String  |
-        |event_id                 |Float64 |
-        |event_team               |String  |
+        |secondary_type           |String  |
+        |event_team_abbr          |String  |
         |event_team_type          |String  |
-        |num_on                   |Int32   |
+        |description              |String  |
+        |period                   |Int64   |
+        |period_type              |String  |
+        |period_time              |String  |
+        |period_seconds           |Int64   |
+        |period_seconds_remaining |Int64   |
+        |period_time_remaining    |String  |
+        |game_seconds             |Int64   |
+        |game_seconds_remaining   |Int64   |
+        |home_score               |Int64   |
+        |away_score               |Int64   |
+        |event_player_1_name      |String  |
+        |event_player_1_type      |String  |
+        |event_player_1_id        |Int64   |
+        |event_player_2_name      |String  |
+        |event_player_2_type      |String  |
+        |event_player_2_id        |Int64   |
+        |event_player_3_name      |String  |
+        |event_player_3_type      |String  |
+        |event_player_3_id        |Int64   |
+        |event_goalie_name        |String  |
+        |event_goalie_id          |Int64   |
+        |penalty_severity         |String  |
+        |penalty_minutes          |Int64   |
+        |empty_net                |Boolean |
+        |extra_attacker           |Boolean |
+        |x                        |Int64   |
+        |y                        |Int64   |
+        |x_fixed                  |Int64   |
+        |y_fixed                  |Int64   |
+        |shot_distance            |Float64 |
+        |shot_angle               |Float64 |
+        |home_skaters             |Int64   |
+        |away_skaters             |Int64   |
         |players_on               |String  |
         |players_off              |String  |
-        |away_on_1                |String  |
-        |away_on_2                |String  |
-        |away_on_3                |String  |
-        |away_on_4                |String  |
-        |away_on_5                |String  |
-        |away_goalie              |String  |
-        |ids_on                   |String  |
-        |ids_off                  |String  |
-        |secondary_type           |String  |
+        |game_id                  |Int64   |
+        |season                   |String  |
+        |season_type              |String  |
+        |home_abbr                |String  |
+        |away_abbr                |String  |
+        |event_idx                |Int64   |
+        |event_id                 |Int64   |
+        |away_goalie_in           |Int64   |
+        |home_goalie_in           |Int64   |
+        |reason                   |String  |
+        |secondaryReason          |String  |
+        |xg                       |Float64 |
+        |strength_state           |String  |
+        |strength_code            |String  |
+        |strength                 |String  |
         |home_on_1                |String  |
         |home_on_2                |String  |
         |home_on_3                |String  |
         |home_on_4                |String  |
         |home_on_5                |String  |
-        |home_goalie              |String  |
-        |event_player_1_name      |String  |
-        |event_player_1_type      |String  |
-        |event_player_2_name      |String  |
-        |event_player_2_type      |String  |
-        |strength_code            |String  |
-        |strength                 |String  |
-        |x                        |Int32   |
-        |y                        |Int32   |
-        |x_fixed                  |Int32   |
-        |y_fixed                  |Int32   |
-        |event_player_1_id        |Int32   |
-        |event_player_1_link      |String  |
-        |event_player_2_id        |Int32   |
-        |event_player_2_link      |String  |
-        |event_team_id            |Int32   |
-        |event_team_link          |String  |
-        |event_team_abbr          |String  |
-        |num_off                  |Int32   |
-        |event_goalie_name        |String  |
-        |shot_distance            |Float64 |
-        |shot_angle               |Float64 |
-        |event_goalie_id          |Int32   |
-        |event_goalie_link        |String  |
-        |event_goalie_type        |String  |
-        |event_player_3_name      |String  |
-        |event_player_3_type      |String  |
-        |game_winning_goal        |Boolean |
-        |empty_net                |Boolean |
-        |event_player_3_id        |Int32   |
-        |event_player_3_link      |String  |
-        |event_player_4_type      |String  |
-        |event_player_4_id        |Int32   |
-        |event_player_4_name      |String  |
-        |event_player_4_link      |String  |
-        |penalty_severity         |String  |
-        |penalty_minutes          |Int32   |
         |home_on_6                |String  |
-        |venue_id                 |Int32   |
+        |home_on_7                |String  |
+        |away_on_1                |String  |
+        |away_on_2                |String  |
+        |away_on_3                |String  |
+        |away_on_4                |String  |
+        |away_on_5                |String  |
         |away_on_6                |String  |
+        |away_on_7                |String  |
+        |home_goalie              |String  |
+        |away_goalie              |String  |
+        |num_on                   |Int64   |
+        |num_off                  |Int64   |
+        |ids_on                   |String  |
+        |ids_off                  |String  |
+        |home_on_1_id             |Int64   |
+        |away_on_1_id             |Int64   |
+        |home_on_2_id             |Int64   |
+        |away_on_2_id             |Int64   |
+        |home_on_3_id             |Int64   |
+        |away_on_3_id             |Int64   |
+        |home_on_4_id             |Int64   |
+        |away_on_4_id             |Int64   |
+        |home_on_5_id             |Int64   |
+        |away_on_5_id             |Int64   |
+        |home_on_6_id             |Int64   |
+        |away_on_6_id             |Int64   |
+        |home_on_7_id             |Int64   |
+        |away_on_7_id             |Int64   |
+        |home_goalie_id           |Int64   |
+        |away_goalie_id           |Int64   |
+        |pptReplayUrl             |String  |
+        |game_date                |String  |
 
     Example:
         Quick start::
@@ -197,58 +188,45 @@ def load_nhl_player_boxscore(seasons, return_as_pandas: bool = False):
         A polars (or pandas) DataFrame; seasons with no published asset are
         skipped with a warning rather than raising (404-safe).
 
-        |col_name                                   |type    |
-        |:------------------------------------------|:-------|
-        |player_id                                  |Int32   |
-        |player_full_name                           |String  |
-        |link                                       |String  |
-        |shoots_catches                             |String  |
-        |roster_status                              |String  |
-        |jersey_number                              |String  |
-        |position_code                              |String  |
-        |position_name                              |String  |
-        |position_type                              |String  |
-        |position_abbreviation                      |String  |
-        |skater_stats_time_on_ice                   |String  |
-        |skater_stats_assists                       |Int32   |
-        |skater_stats_goals                         |Int32   |
-        |skater_stats_shots                         |Int32   |
-        |skater_stats_hits                          |Int32   |
-        |skater_stats_power_play_goals              |Int32   |
-        |skater_stats_power_play_assists            |Int32   |
-        |skater_stats_penalty_minutes               |Int32   |
-        |skater_stats_face_off_wins                 |Int32   |
-        |skater_stats_faceoff_taken                 |Int32   |
-        |skater_stats_takeaways                     |Int32   |
-        |skater_stats_giveaways                     |Int32   |
-        |skater_stats_short_handed_goals            |Int32   |
-        |skater_stats_short_handed_assists          |Int32   |
-        |skater_stats_blocked                       |Int32   |
-        |skater_stats_plus_minus                    |Int32   |
-        |skater_stats_even_time_on_ice              |String  |
-        |skater_stats_power_play_time_on_ice        |String  |
-        |skater_stats_short_handed_time_on_ice      |String  |
-        |home_away                                  |String  |
-        |skater_stats_face_off_pct                  |Float64 |
-        |goalie_stats_time_on_ice                   |String  |
-        |goalie_stats_assists                       |Int32   |
-        |goalie_stats_goals                         |Int32   |
-        |goalie_stats_pim                           |Int32   |
-        |goalie_stats_shots                         |Int32   |
-        |goalie_stats_saves                         |Int32   |
-        |goalie_stats_power_play_saves              |Int32   |
-        |goalie_stats_short_handed_saves            |Int32   |
-        |goalie_stats_even_saves                    |Int32   |
-        |goalie_stats_short_handed_shots_against    |Int32   |
-        |goalie_stats_even_shots_against            |Int32   |
-        |goalie_stats_power_play_shots_against      |Int32   |
-        |goalie_stats_decision                      |String  |
-        |goalie_stats_save_percentage               |Float64 |
-        |goalie_stats_power_play_save_percentage    |Float64 |
-        |goalie_stats_even_strength_save_percentage |Float64 |
-        |goalie_stats_short_handed_save_percentage  |Float64 |
-        |game_id                                    |Int32   |
-        |season                                     |Int32   |
+        |col_name                    |type    |
+        |:---------------------------|:-------|
+        |home_away                   |String  |
+        |team_id                     |Int64   |
+        |team_abbrev                 |String  |
+        |player_id                   |Int64   |
+        |player_name                 |String  |
+        |sweater_number              |Int64   |
+        |position                    |String  |
+        |goals                       |Int64   |
+        |assists                     |Int64   |
+        |points                      |Int64   |
+        |plus_minus                  |Int64   |
+        |pim                         |Int64   |
+        |hits                        |Int64   |
+        |power_play_goals            |Int64   |
+        |shots_on_goal               |Int64   |
+        |faceoff_winning_pctg        |Float64 |
+        |toi                         |String  |
+        |blocked_shots               |Int64   |
+        |shifts                      |Int64   |
+        |giveaways                   |Int64   |
+        |takeaways                   |Int64   |
+        |even_strength_shots_against |String  |
+        |power_play_shots_against    |String  |
+        |shorthanded_shots_against   |String  |
+        |save_shots_against          |String  |
+        |save_pctg                   |Float64 |
+        |even_strength_goals_against |Int64   |
+        |power_play_goals_against    |Int64   |
+        |shorthanded_goals_against   |Int64   |
+        |goals_against               |Int64   |
+        |starter                     |Boolean |
+        |decision                    |String  |
+        |shots_against               |Int64   |
+        |saves                       |Int64   |
+        |game_id                     |Int64   |
+        |season                      |Int64   |
+        |game_date                   |String  |
 
     Example:
         Quick start::
@@ -287,36 +265,43 @@ def load_nhl_schedule(seasons, return_as_pandas: bool = False):
         A polars (or pandas) DataFrame; seasons with no published asset are
         skipped with a warning rather than raising (404-safe).
 
-        |col_name                   |type                                      |
-        |:--------------------------|:-----------------------------------------|
-        |game_id                    |Int32                                     |
-        |link                       |String                                    |
-        |game_type_abbreviation     |String                                    |
-        |season_full                |Int32                                     |
-        |game_date_time             |Datetime(time_unit='us', time_zone='UTC') |
-        |status_abstract_game_state |String                                    |
-        |status_coded_game_state    |Int32                                     |
-        |status_detailed_state      |String                                    |
-        |status_status_code         |Int32                                     |
-        |status_start_time_tbd      |Boolean                                   |
-        |away_score                 |Int32                                     |
-        |away_team_id               |Int32                                     |
-        |away_team_name             |String                                    |
-        |away_team_link             |String                                    |
-        |home_score                 |Int32                                     |
-        |home_team_id               |Int32                                     |
-        |home_team_name             |String                                    |
-        |home_team_link             |String                                    |
-        |venue_name                 |String                                    |
-        |venue_link                 |String                                    |
-        |venue_id                   |Int32                                     |
-        |content_link               |String                                    |
-        |game_type                  |String                                    |
-        |game_date                  |Date                                      |
-        |season                     |Int32                                     |
-        |PBP                        |Boolean                                   |
-        |team_box                   |Boolean                                   |
-        |player_box                 |Boolean                                   |
+        |col_name           |type    |
+        |:------------------|:-------|
+        |game_id            |Int32   |
+        |season_full        |String  |
+        |game_type          |String  |
+        |game_date          |String  |
+        |game_time          |String  |
+        |home_team_abbr     |String  |
+        |away_team_abbr     |String  |
+        |home_team_name     |String  |
+        |away_team_name     |String  |
+        |home_score         |Int32   |
+        |away_score         |Int32   |
+        |game_state         |String  |
+        |venue              |String  |
+        |season             |Int32   |
+        |game_json          |Boolean |
+        |game_json_url      |String  |
+        |PBP                |Boolean |
+        |team_box           |Boolean |
+        |player_box         |Boolean |
+        |series_letter      |String  |
+        |playoff_round      |Int32   |
+        |series_game_number |Int32   |
+        |skater_box         |Boolean |
+        |goalie_box         |Boolean |
+        |game_info          |Boolean |
+        |game_rosters       |Boolean |
+        |scoring            |Boolean |
+        |penalties          |Boolean |
+        |scratches          |Boolean |
+        |linescore          |Boolean |
+        |three_stars        |Boolean |
+        |shifts             |Boolean |
+        |officials          |Boolean |
+        |shots_by_period    |Boolean |
+        |shootout           |Boolean |
 
     Example:
         Quick start::
@@ -355,26 +340,27 @@ def load_nhl_team_boxscore(seasons, return_as_pandas: bool = False):
         A polars (or pandas) DataFrame; seasons with no published asset are
         skipped with a warning rather than raising (404-safe).
 
-        |col_name                 |type   |
-        |:------------------------|:------|
-        |team_id                  |Int32  |
-        |team_name                |String |
-        |link                     |String |
-        |abbreviation             |String |
-        |tri_code                 |String |
-        |goals                    |Int32  |
-        |pim                      |Int32  |
-        |shots                    |Int32  |
-        |power_play_percentage    |String |
-        |power_play_goals         |Int32  |
-        |power_play_opportunities |Int32  |
-        |face_off_win_percentage  |String |
-        |blocked                  |Int32  |
-        |takeaways                |Int32  |
-        |giveaways                |Int32  |
-        |hits                     |Int32  |
-        |game_id                  |Int32  |
-        |season                   |Int32  |
+        |col_name         |type    |
+        |:----------------|:-------|
+        |home_away        |String  |
+        |team_id          |Int64   |
+        |team_abbrev      |String  |
+        |team_name        |String  |
+        |goals            |Int64   |
+        |shots_on_goal    |Int64   |
+        |pim              |Int64   |
+        |hits             |Int64   |
+        |blocked_shots    |Int64   |
+        |giveaways        |Int64   |
+        |takeaways        |Int64   |
+        |power_play_goals |Int64   |
+        |faceoff_win_pctg |Float64 |
+        |saves            |Int64   |
+        |save_pctg        |Float64 |
+        |goals_against    |Int64   |
+        |game_id          |Int64   |
+        |season           |Int64   |
+        |game_date        |String  |
 
     Example:
         Quick start::

@@ -73,13 +73,13 @@ Release: [espn_mens_college_basketball_pbp](https://github.com/sportsdataverse/s
 | `time` | String | Time / clock value. |
 | `clock_minutes` | Int32 | Clock minutes split out for convenience. |
 | `clock_seconds` | Int32 | Clock seconds split out for convenience. |
-| `home_timeout_called` | Boolean |  |
-| `away_timeout_called` | Boolean |  |
+| `home_timeout_called` | Boolean | True when the home team called a timeout on the play. |
+| `away_timeout_called` | Boolean | True when the away team called a timeout on the play. |
 | `lead_period` | Int32 | Period number of the next play in the same game (period_number shifted back one row within game_id), and null on each game's final play. |
 | `lead_half` | Int32 | A lead column on the half |
 | `start_period_seconds_remaining` | Int32 | Seconds left in the current period when the play started, computed as 60 times the game clock minutes plus the seconds, so 1200 at the tip of each 20-minute half and 300 at the start of an overtime. |
 | `start_game_seconds_remaining` | Int32 | Seconds remaining in the game at the start of the play. |
-| `end_period_seconds_remaining` | Int32 |  |
+| `end_period_seconds_remaining` | Int32 | Seconds left in the period when the play ended. |
 | `end_game_seconds_remaining` | Int32 | Seconds remaining in the game at the end of the play. |
 | `lag_period` | Int32 | Period number of the previous play in the same game (period_number shifted forward one row within game_id), and null on each game's first play. |
 | `lag_half` | Int32 | A lag column on the half |
@@ -352,8 +352,8 @@ Release: [mbb_player_value](https://github.com/sportsdataverse/sportsdataverse-d
 | `season` | Int64 | Season year. |
 | `team_id` | String | Unique team identifier. |
 | `min` | Float64 | Minutes played. |
-| `box_obpm` | Float64 |  |
-| `box_dbpm` | Float64 |  |
+| `box_obpm` | Float64 | Box-score offensive plus/minus for the player, the offensive half of box BPM. |
+| `box_dbpm` | Float64 | Box-score defensive plus/minus for the player, the defensive half of box BPM. |
 | `box_bpm` | Float64 | Total box plus/minus in points per 100 possessions above an average player, exactly box_obpm plus box_dbpm (verified to zero residual across all 9,805 rows of 2025). |
 
 ```python
@@ -511,7 +511,7 @@ Release: [espn_mens_college_basketball_officials](https://github.com/sportsdatav
 | `official_display_name` | String | Display form of the official's name used by ESPN's game feed, which duplicates official_full_name for all 18,284 rows of the 2025 release. |
 | `official_position` | String | ESPN's role label for the crew member, which is the constant Referee for every men's college basketball official in this release rather than a distinct crew chief or umpire designation. |
 | `official_position_id` | Int32 | ESPN's numeric code for the official's role, constant at 40 (Referee) across the entire men's college basketball officials release. |
-| `official_order` | Int32 |  |
+| `official_order` | Int32 | Position of the official within the game's listed officiating crew. |
 
 ```python
 load_mbb_officials(seasons=2025)

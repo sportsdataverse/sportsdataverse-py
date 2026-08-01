@@ -30,6 +30,7 @@ from sportsdataverse.mbb import espn_mbb_coach_record as _raw_espn_mbb_coach_rec
 from sportsdataverse.mbb import espn_mbb_coach_season as _raw_espn_mbb_coach_season
 from sportsdataverse.mbb import espn_mbb_conferences as _raw_espn_mbb_conferences
 from sportsdataverse.mbb import espn_mbb_draft as _raw_espn_mbb_draft
+from sportsdataverse.mbb import espn_mbb_fpi as _raw_espn_mbb_fpi
 from sportsdataverse.mbb import espn_mbb_franchise as _raw_espn_mbb_franchise
 from sportsdataverse.mbb import espn_mbb_franchises as _raw_espn_mbb_franchises
 from sportsdataverse.mbb import espn_mbb_game as _raw_espn_mbb_game
@@ -113,6 +114,7 @@ from sportsdataverse.mbb import espn_mbb_season_type_leaders as _raw_espn_mbb_se
 from sportsdataverse.mbb import espn_mbb_season_types as _raw_espn_mbb_season_types
 from sportsdataverse.mbb import espn_mbb_season_week as _raw_espn_mbb_season_week
 from sportsdataverse.mbb import espn_mbb_season_week_games as _raw_espn_mbb_season_week_games
+from sportsdataverse.mbb import espn_mbb_season_week_powerindex as _raw_espn_mbb_season_week_powerindex
 from sportsdataverse.mbb import espn_mbb_season_week_rankings as _raw_espn_mbb_season_week_rankings
 from sportsdataverse.mbb import espn_mbb_season_weeks as _raw_espn_mbb_season_weeks
 from sportsdataverse.mbb import espn_mbb_seasons as _raw_espn_mbb_seasons
@@ -705,6 +707,7 @@ __all__ = [
     "espn_mbb_coach_season",
     "espn_mbb_conferences",
     "espn_mbb_draft",
+    "espn_mbb_fpi",
     "espn_mbb_franchise",
     "espn_mbb_franchises",
     "espn_mbb_game",
@@ -792,6 +795,7 @@ __all__ = [
     "espn_mbb_season_types",
     "espn_mbb_season_week",
     "espn_mbb_season_week_games",
+    "espn_mbb_season_week_powerindex",
     "espn_mbb_season_week_rankings",
     "espn_mbb_season_weeks",
     "espn_mbb_seasons",
@@ -1166,6 +1170,20 @@ def espn_mbb_draft(*args, **kwargs):
     """
     kwargs.setdefault("return_parsed", True)
     return _raw_espn_mbb_draft(*args, **kwargs)
+
+
+def espn_mbb_fpi(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mbb.espn_mbb_fpi``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.mbb.espn_mbb_fpi` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mbb.espn_mbb_fpi` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_espn_mbb_fpi(*args, **kwargs)
 
 
 def espn_mbb_franchise(*args, **kwargs):
@@ -2328,6 +2346,20 @@ def espn_mbb_season_week_games(*args, **kwargs):
     """
     kwargs.setdefault("return_parsed", True)
     return _raw_espn_mbb_season_week_games(*args, **kwargs)
+
+
+def espn_mbb_season_week_powerindex(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mbb.espn_mbb_season_week_powerindex``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.mbb.espn_mbb_season_week_powerindex` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mbb.espn_mbb_season_week_powerindex` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_espn_mbb_season_week_powerindex(*args, **kwargs)
 
 
 def espn_mbb_season_week_rankings(*args, **kwargs):

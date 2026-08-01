@@ -22,7 +22,7 @@ ENDPOINTS = ROOT / "tools" / "codegen" / "endpoints"
 OUT = ROOT / "tools" / "codegen" / "_generated"
 LIVE = ROOT / "sportsdataverse"
 
-ESPN_APIS = ["espn_site_v2", "espn_web_v3", "espn_core_v2"]
+ESPN_APIS = ["espn_site_v2", "espn_web_v3", "espn_core_v2", "espn_fitt_v3"]
 
 # Invoke ruff via the *current interpreter's* environment (``python -m ruff``)
 # rather than a bare ``ruff`` on PATH. A bare ``ruff`` can resolve to a stale
@@ -1966,6 +1966,7 @@ _ESPN_API_DOC = {
     "espn_site_v2": ("site", "ESPN site API (v2)"),
     "espn_web_v3": ("web", "ESPN web API (v3)"),
     "espn_core_v2": ("core", "ESPN core API (v2)"),
+    "espn_fitt_v3": ("fitt", "ESPN FPI API (fitt v3)"),
 }
 
 # Flat/native API module -> human label for the per-API doc pages. Parallels

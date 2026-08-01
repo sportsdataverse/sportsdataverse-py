@@ -125,7 +125,7 @@ Release: [mlb_hitting_models](https://github.com/sportsdataverse/sportsdataverse
 |---|---|---|
 | `batter` | Int64 | Full name of the batter for this swing record. |
 | `age` | Int64 | Player age (in years). |
-| `proj_xwoba` | Float64 |  |
+| `proj_xwoba` | Float64 | Projected expected weighted on-base average for the batter. |
 | `proj_pa` | Float64 | Combined prior-three-season pa behind the projection, its effective sample size; it inherits the pitch-row counting of load_mlb_expected_stats pa rather than true plate appearances. |
 
 ```python
@@ -175,7 +175,7 @@ Release: [mlb_pitching_models](https://github.com/sportsdataverse/sportsdatavers
 |---|---|---|
 | `pitcher` | Int64 | Whether the position is a pitcher. |
 | `season` | Int64 | Season year. |
-| `x_woba` | Float64 |  |
+| `x_woba` | Float64 | Expected weighted on-base average, derived from batted-ball quality rather than outcomes. |
 | `x_era` | Float64 | ERA-scale conversion of x_woba as league_era plus (x_woba minus league_woba) over woba_scale times pa_per_9, an exact linear function of x_woba that can go negative for extreme pitchers. |
 
 ```python

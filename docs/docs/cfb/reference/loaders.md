@@ -905,7 +905,7 @@ Release: [espn_cfb_game_rosters](https://github.com/sportsdataverse/sportsdatave
 | `draft_round` | Float64 | Round of the draft selection. |
 | `draft_year` | Float64 | Draft year (4-digit). |
 | `draft_selection` | Float64 | Draft selection. |
-| `draft_team_href` | String |  |
+| `draft_team_href` | String | API link to the team that drafted the player. Sparse: absent entirely from the 2023 and 2024 assets and populated on only a small share of 2025 rows. |
 | `middle_name` | String | Middle name of the player. |
 | `headshot_href` | String | URL of the athlete headshot image. |
 | `headshot_alt` | String | Alternative-text label for the headshot. |
@@ -946,7 +946,7 @@ Release: [espn_cfb_betting](https://github.com/sportsdataverse/sportsdataverse-d
 | `home_favorite` | Boolean | `TRUE` if the home team is the favorite. |
 | `home_team_spread` | Float64 | The game spread with respect to the home team |
 | `game_spread_available` | Boolean | Logical (TRUE/FALSE) indicating whether the spread was available from ESPN. Basically, I would just not recommend using any of the spread information, I think I defaulted a lot of them to -2.5 for the home team. Most games probably do not have spread information. This column should really be listed first |
-| `odds_source` | String |  |
+| `odds_source` | String | Provenance of the spread and over/under used for the game: summary_pickcenter when ESPN's own pickcenter carried them, core_odds_api when they came from the live odds endpoint, default when neither resolved, injected when supplied by an offline rebuild. |
 
 ```python
 load_cfb_betting(seasons=2024)
@@ -1168,7 +1168,7 @@ Release: [espn_cfb_adv_defensive](https://github.com/sportsdataverse/sportsdatav
 
 | col_name | type | description |
 |---|---|---|
-| `def_pos_team_id` | Int64 |  |
+| `def_pos_team_id` | Int64 | ESPN team id of the team on defense. Present for every season 2004+. |
 | `def_pos_team` | String | Team name on defense at the start of the play. |
 | `scrimmage_plays` | Int64 | Number of plays from scrimmage (rushes plus passes), excluding special teams. |
 | `TFL` | Int64 | Count of scrimmage plays the defense held to negative yardage (non-penalty, non-special-teams, ESPN statYardage below zero) plus every sack. |
@@ -1344,7 +1344,7 @@ Release: [espn_cfb_adv_specialists](https://github.com/sportsdataverse/sportsdat
 | `punts` | Int64 | Punts attempted. |
 | `punts_yards` | Int64 | Total gross punt yardage parsed from the play text for this punter, working out to roughly 42 yards per punt league-wide. |
 | `kick_returns` | Int64 | Number of kick returns. |
-| `kick_returns_yards` | Int64 |  |
+| `kick_returns_yards` | Int64 | Total yards the team gained returning kickoffs. |
 | `punt_returns` | Int64 | Number of punt returns. |
 | `punt_returns_yards` | Int64 | Total punt-return yardage credited to this returner, with fair catches, downed punts, and out-of-bounds punts scored as zero. |
 | `game_id` | Int64 | ESPN game identifier. |
@@ -1367,7 +1367,7 @@ Release: [espn_cfb_adv_turnover](https://github.com/sportsdataverse/sportsdatave
 | `pos_team_id` | Int64 | ESPN team id of the team on offense. Present for every season 2004+. |
 | `pos_team` | String | Team name in possession at the start of the play (offense, kickoff-aware). |
 | `turnovers` | Int64 | Turnovers total. |
-| `st_turnovers_lost` | Int64 |  |
+| `st_turnovers_lost` | Int64 | Turnovers the team lost on special-teams plays. |
 | `Int` | Int64 | Interceptions thrown. |
 | `fumbles_lost` | Int64 | Fumbles lost. |
 | `pass_breakups` | Int64 | Passes thrown by this offense that the opposing defense broke up; it equals the opponent's row in the advanced defensive table exactly. |
@@ -1377,7 +1377,7 @@ Release: [espn_cfb_adv_turnover](https://github.com/sportsdataverse/sportsdatave
 | `turnovers_pbp` | Int64 | Turnover count derived from the play-by-play, retained unchanged so it can be reconciled against the ESPN-sourced turnovers total. |
 | `Int_pbp` | Int64 | Interception count derived from the play-by-play, kept alongside the ESPN-sourced Int for reconciliation. |
 | `fumbles_lost_pbp` | Int64 | Fumbles-lost count derived from the play-by-play, kept alongside the ESPN-sourced fumbles_lost for reconciliation. |
-| `espn_sourced` | Boolean |  |
+| `espn_sourced` | Boolean | CONSTANT: true on every published row. It records that the row was built from the ESPN feed rather than an alternate provider, and no other provider is currently used. |
 | `expected_turnovers` | Float64 | Turnover expectation for this team, computed as half its total fumbles plus 0.22 times the sum of its pass breakups and interceptions. |
 | `expected_turnover_margin` | Float64 | The opponent's expected_turnovers minus this team's, so positive means the team was expected to win the turnover battle. |
 | `turnover_margin` | Int64 | The opponent's turnovers minus this team's turnovers, positive when the team gained more possessions than it gave away. |

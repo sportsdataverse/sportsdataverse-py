@@ -114,41 +114,63 @@ Release: [espn_wnba_player_boxscores](https://github.com/sportsdataverse/sportsd
 
 | col_name | type | description |
 |---|---|---|
+| `game_id` | Int32 | Unique game identifier. |
+| `season` | Int32 | Season identifier (4-digit year or 'YYYY-YY' string). |
+| `season_type` | Int32 | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
+| `game_date` | Date | Game date (YYYY-MM-DD). |
+| `game_date_time` | Datetime(time_unit='us', time_zone='America/New_York') | Game start date/time (ISO 8601). |
+| `athlete_id` | Int32 | Unique athlete identifier (ESPN). |
 | `athlete_display_name` | String | Athlete display name (full). |
+| `team_id` | Int32 | Unique team identifier. |
+| `team_name` | String | Full team display name (e.g. 'Las Vegas Aces'). |
+| `team_location` | String | Team city or location string. |
 | `team_short_display_name` | String | Short team display name (e.g. 'Aces'). |
-| `min` | String | Minutes played. |
-| `fg` | String |  |
-| `fg3` | String |  |
-| `ft` | String |  |
-| `oreb` | String | Offensive rebounds. |
-| `dreb` | String | Defensive rebounds. |
-| `reb` | String | Total rebounds. |
-| `ast` | String | Assists. |
-| `stl` | String | Steals. |
-| `blk` | String | Blocks. |
-| `to` | String | Final season played in NFL |
-| `pf` | String | Personal fouls. |
+| `minutes` | Float64 | Minutes played, formatted MM:SS (V3 PT-duration parsed) or decimal minutes (V2). |
+| `field_goals_made` | Int32 | Field goals made (2-pt + 3-pt). |
+| `field_goals_attempted` | Int32 | Field goal attempts (2-pt + 3-pt). |
+| `three_point_field_goals_made` | Int32 | Three-point field goals made. |
+| `three_point_field_goals_attempted` | Int32 | Three-point field goal attempts. |
+| `free_throws_made` | Int32 | Free throws made. |
+| `free_throws_attempted` | Int32 | Free throw attempts. |
+| `offensive_rebounds` | Int32 | Offensive rebounds. |
+| `defensive_rebounds` | Int32 | Defensive rebounds. |
+| `rebounds` | Int32 | Total rebounds. |
+| `assists` | Int32 | Total assists. |
+| `steals` | Int32 | Total steals. |
+| `blocks` | Int32 | Total blocks. |
+| `turnovers` | Int32 | Total turnovers. |
+| `fouls` | Int32 | Personal fouls. |
 | `plus_minus` | String | Plus/minus point differential while on court. |
-| `pts` | String | Points scored. |
+| `points` | Int32 | Points scored. |
 | `starter` | Boolean | TRUE if the player was in the starting lineup; FALSE otherwise. |
 | `ejected` | Boolean | TRUE if the player was ejected from the game. |
 | `did_not_play` | Boolean | TRUE if the player did not appear in the game. |
 | `active` | Boolean | TRUE if the row represents an active record (player / team / season). |
 | `athlete_jersey` | String | Athlete jersey number. |
-| `athlete_id` | String | Unique athlete identifier (ESPN). |
 | `athlete_short_name` | String | Athlete short display name. |
+| `athlete_headshot_href` | String | Athlete headshot image URL. |
 | `athlete_position_name` | String | Athlete position ('Guard', 'Forward', 'Center'). |
 | `athlete_position_abbreviation` | String | Athlete position abbreviation (G / F / C). |
-| `team_name` | String | Full team display name (e.g. 'Las Vegas Aces'). |
+| `team_display_name` | String | Full team display name. |
+| `team_uid` | String | ESPN universal team identifier (UID format 's:40~l:...~t:...'). |
+| `team_slug` | String | URL-safe team identifier (e.g. 'lasvegas-aces' / 'aces'). |
 | `team_logo` | String | Team logo image URL. |
-| `team_id` | String | Unique team identifier. |
 | `team_abbreviation` | String | Short team abbreviation (e.g. 'LAS'). |
 | `team_color` | String | Team primary color (hex without leading '#'). |
-| `game_id` | Int32 | Unique game identifier. |
-| `season` | Int32 | Season identifier (4-digit year or 'YYYY-YY' string). |
-| `season_type` | Int32 | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
-| `game_date` | Date | Game date (YYYY-MM-DD). |
-| `athlete_headshot_href` | String | Athlete headshot image URL. |
+| `team_alternate_color` | String | Team alternate color (hex without leading '#'). |
+| `home_away` | String | Game venue label ('home' or 'away'). |
+| `team_winner` | Boolean | TRUE if the team won this game. |
+| `team_score` | Int32 | Team's score / final score. |
+| `opponent_team_id` | Int32 | Unique identifier for the opponent team. |
+| `opponent_team_name` | String | Opponent team display name. |
+| `opponent_team_location` | String | Opponent team city / location. |
+| `opponent_team_display_name` | String | Opponent team full display name. |
+| `opponent_team_abbreviation` | String | Opponent team abbreviation. |
+| `opponent_team_logo` | String | Opponent team logo URL. |
+| `opponent_team_color` | String | Opponent team primary color (hex). |
+| `opponent_team_alternate_color` | String | Opponent team alternate color (hex). |
+| `opponent_team_score` | Int32 | Opponent team's score. |
+| `reason` | String | Reason. |
 
 ```python
 load_wnba_player_boxscore(seasons=2024)
@@ -582,18 +604,17 @@ Release: [wnba_stats_coaches](https://github.com/sportsdataverse/sportsdataverse
 
 | col_name | type | description |
 |---|---|---|
-| `team_id` | String | Unique team identifier. |
+| `team_id` | Int64 | Unique team identifier. |
 | `season` | Int32 | Season identifier (4-digit year or 'YYYY-YY' string). |
-| `coach_id` | String | Unique identifier for coach. |
+| `coach_id` | Int64 | Unique identifier for coach. |
 | `first_name` | String | Player's first name. |
 | `last_name` | String | Player's last name. |
 | `coach_name` | String | Full name of the staff member as the feed renders it, exactly first_name plus a space plus last_name on every published row. |
-| `is_assistant` | String | Numeric staff-role code rather than a boolean flag: 1 head coach, 2 assistant coach, 3 trainer, 9 associate head coach, mapping one-to-one onto coach_type. |
+| `is_assistant` | Int64 | Numeric staff-role code rather than a boolean flag: 1 head coach, 2 assistant coach, 3 trainer, 9 associate head coach, mapping one-to-one onto coach_type. |
 | `coach_type` | String | Job title of the staff member, one of Head Coach, Associate Head Coach, Assistant Coach or Trainer in the published data. |
-| `sort_sequence` | String | Ordering field passed through unchanged from the stats.wnba.com coaches result set; it arrives empty, so every published row is null. |
-| `sub_sort_sequence` | String | Secondary display-ordering rank that tracks coach_type exactly: 1 head coach, 2 associate head coach, 5 assistant coach, 7 trainer. |
-| `season_2` | Int32 |  |
-| `team_id_lookup` | Int32 |  |
+| `sort_sequence` | Null | Ordering field passed through unchanged from the stats.wnba.com coaches result set; it arrives empty, so every published row is null. |
+| `sub_sort_sequence` | Int64 | Secondary display-ordering rank that tracks coach_type exactly: 1 head coach, 2 associate head coach, 5 assistant coach, 7 trainer. |
+| `season_type` | String | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
 
 ```python
 load_wnba_stats_coaches(seasons=2026)
@@ -612,7 +633,7 @@ Release: [wnba_stats_draft](https://github.com/sportsdataverse/sportsdataverse-d
 | `round_number` | String | Numeric round. |
 | `round_pick` | String | Round pick. |
 | `overall_pick` | String | Overall pick. |
-| `draft_type` | String |  |
+| `draft_type` | String | CONSTANT in the published asset: every row reads 'Draft', so it does not currently distinguish the main draft from any other selection event. |
 | `team_id` | String | Unique team identifier. |
 | `team_city` | String | Team city or region (e.g. 'Las Vegas'). |
 | `team_name` | String | Full team display name (e.g. 'Las Vegas Aces'). |
@@ -620,7 +641,7 @@ Release: [wnba_stats_draft](https://github.com/sportsdataverse/sportsdataverse-d
 | `organization` | String | Organization. |
 | `organization_type` | String | Organization type. |
 | `player_profile_flag` | String | Player profile flag. |
-| `season_2` | Int32 |  |
+| `season_2` | Int32 | REDUNDANT: duplicates the season column on every published row. It exists because the upstream feed returns the season under a second key. |
 
 ```python
 load_wnba_stats_draft(seasons=2025)

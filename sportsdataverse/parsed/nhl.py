@@ -31,6 +31,7 @@ from sportsdataverse.nhl import espn_nhl_coach_record as _raw_espn_nhl_coach_rec
 from sportsdataverse.nhl import espn_nhl_coach_season as _raw_espn_nhl_coach_season
 from sportsdataverse.nhl import espn_nhl_conferences as _raw_espn_nhl_conferences
 from sportsdataverse.nhl import espn_nhl_draft as _raw_espn_nhl_draft
+from sportsdataverse.nhl import espn_nhl_fpi as _raw_espn_nhl_fpi
 from sportsdataverse.nhl import espn_nhl_franchise as _raw_espn_nhl_franchise
 from sportsdataverse.nhl import espn_nhl_franchises as _raw_espn_nhl_franchises
 from sportsdataverse.nhl import espn_nhl_game as _raw_espn_nhl_game
@@ -109,6 +110,7 @@ from sportsdataverse.nhl import espn_nhl_season_type_leaders as _raw_espn_nhl_se
 from sportsdataverse.nhl import espn_nhl_season_types as _raw_espn_nhl_season_types
 from sportsdataverse.nhl import espn_nhl_season_week as _raw_espn_nhl_season_week
 from sportsdataverse.nhl import espn_nhl_season_week_games as _raw_espn_nhl_season_week_games
+from sportsdataverse.nhl import espn_nhl_season_week_powerindex as _raw_espn_nhl_season_week_powerindex
 from sportsdataverse.nhl import espn_nhl_season_weeks as _raw_espn_nhl_season_weeks
 from sportsdataverse.nhl import espn_nhl_seasons as _raw_espn_nhl_seasons
 from sportsdataverse.nhl import espn_nhl_standings as _raw_espn_nhl_standings
@@ -424,6 +426,7 @@ __all__ = [
     "espn_nhl_coach_season",
     "espn_nhl_conferences",
     "espn_nhl_draft",
+    "espn_nhl_fpi",
     "espn_nhl_franchise",
     "espn_nhl_franchises",
     "espn_nhl_game",
@@ -506,6 +509,7 @@ __all__ = [
     "espn_nhl_season_types",
     "espn_nhl_season_week",
     "espn_nhl_season_week_games",
+    "espn_nhl_season_week_powerindex",
     "espn_nhl_season_weeks",
     "espn_nhl_seasons",
     "espn_nhl_standings",
@@ -890,6 +894,20 @@ def espn_nhl_draft(*args, **kwargs):
     """
     kwargs.setdefault("return_parsed", True)
     return _raw_espn_nhl_draft(*args, **kwargs)
+
+
+def espn_nhl_fpi(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nhl.espn_nhl_fpi``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.nhl.espn_nhl_fpi` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nhl.espn_nhl_fpi` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_espn_nhl_fpi(*args, **kwargs)
 
 
 def espn_nhl_franchise(*args, **kwargs):
@@ -1982,6 +2000,20 @@ def espn_nhl_season_week_games(*args, **kwargs):
     """
     kwargs.setdefault("return_parsed", True)
     return _raw_espn_nhl_season_week_games(*args, **kwargs)
+
+
+def espn_nhl_season_week_powerindex(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nhl.espn_nhl_season_week_powerindex``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.nhl.espn_nhl_season_week_powerindex` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nhl.espn_nhl_season_week_powerindex` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_espn_nhl_season_week_powerindex(*args, **kwargs)
 
 
 def espn_nhl_season_weeks(*args, **kwargs):

@@ -30,6 +30,7 @@ from sportsdataverse.cfb import espn_cfb_coach_record as _raw_espn_cfb_coach_rec
 from sportsdataverse.cfb import espn_cfb_coach_season as _raw_espn_cfb_coach_season
 from sportsdataverse.cfb import espn_cfb_conferences as _raw_espn_cfb_conferences
 from sportsdataverse.cfb import espn_cfb_draft as _raw_espn_cfb_draft
+from sportsdataverse.cfb import espn_cfb_fpi as _raw_espn_cfb_fpi
 from sportsdataverse.cfb import espn_cfb_franchise as _raw_espn_cfb_franchise
 from sportsdataverse.cfb import espn_cfb_franchises as _raw_espn_cfb_franchises
 from sportsdataverse.cfb import espn_cfb_futures as _raw_espn_cfb_futures
@@ -114,6 +115,7 @@ from sportsdataverse.cfb import espn_cfb_season_type_leaders as _raw_espn_cfb_se
 from sportsdataverse.cfb import espn_cfb_season_types as _raw_espn_cfb_season_types
 from sportsdataverse.cfb import espn_cfb_season_week as _raw_espn_cfb_season_week
 from sportsdataverse.cfb import espn_cfb_season_week_games as _raw_espn_cfb_season_week_games
+from sportsdataverse.cfb import espn_cfb_season_week_powerindex as _raw_espn_cfb_season_week_powerindex
 from sportsdataverse.cfb import espn_cfb_season_weeks as _raw_espn_cfb_season_weeks
 from sportsdataverse.cfb import espn_cfb_seasons as _raw_espn_cfb_seasons
 from sportsdataverse.cfb import espn_cfb_standings as _raw_espn_cfb_standings
@@ -478,6 +480,7 @@ __all__ = [
     "espn_cfb_coach_season",
     "espn_cfb_conferences",
     "espn_cfb_draft",
+    "espn_cfb_fpi",
     "espn_cfb_franchise",
     "espn_cfb_franchises",
     "espn_cfb_futures",
@@ -566,6 +569,7 @@ __all__ = [
     "espn_cfb_season_types",
     "espn_cfb_season_week",
     "espn_cfb_season_week_games",
+    "espn_cfb_season_week_powerindex",
     "espn_cfb_season_weeks",
     "espn_cfb_seasons",
     "espn_cfb_standings",
@@ -914,6 +918,20 @@ def espn_cfb_draft(*args, **kwargs):
     """
     kwargs.setdefault("return_parsed", True)
     return _raw_espn_cfb_draft(*args, **kwargs)
+
+
+def espn_cfb_fpi(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.espn_cfb_fpi``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.espn_cfb_fpi` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.espn_cfb_fpi` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_espn_cfb_fpi(*args, **kwargs)
 
 
 def espn_cfb_franchise(*args, **kwargs):
@@ -2090,6 +2108,20 @@ def espn_cfb_season_week_games(*args, **kwargs):
     """
     kwargs.setdefault("return_parsed", True)
     return _raw_espn_cfb_season_week_games(*args, **kwargs)
+
+
+def espn_cfb_season_week_powerindex(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.espn_cfb_season_week_powerindex``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.espn_cfb_season_week_powerindex` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.espn_cfb_season_week_powerindex` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_espn_cfb_season_week_powerindex(*args, **kwargs)
 
 
 def espn_cfb_season_weeks(*args, **kwargs):
