@@ -1252,77 +1252,77 @@ Release: [espn_cfb_adv_situational](https://github.com/sportsdataverse/sportsdat
 
 | col_name | type | description |
 |---|---|---|
-| `pos_team_id` | Int64 |  |
-| `pos_team` | String | Team name in possession at the start of the play (offense, kickoff-aware). |
-| `EPA_success` | Int64 |  |
-| `EPA_success_rate` | Float64 |  |
-| `EPA_success_pass` | Int64 |  |
-| `EPA_success_pass_rate` | Float64 |  |
-| `EPA_success_rush` | Int64 |  |
-| `EPA_success_rush_rate` | Float64 |  |
-| `EPA_success_rz` | Int64 |  |
-| `EPA_success_rate_rz` | Float64 |  |
-| `EPA_success_third` | Int64 |  |
-| `EPA_success_rate_third` | Float64 |  |
-| `EPA_success_early_down` | Int64 |  |
-| `EPA_success_early_down_rate` | Float64 |  |
-| `early_downs` | Int64 |  |
-| `early_down_pass_rate` | Float64 |  |
-| `early_down_rush_rate` | Float64 |  |
-| `EPA_early_down` | Float64 |  |
-| `EPA_early_down_per_play` | Float64 |  |
-| `early_down_first_down` | Int64 |  |
-| `early_down_first_down_rate` | Float64 |  |
-| `early_down_pass` | Int64 |  |
-| `EPA_early_down_pass` | Float64 |  |
-| `EPA_early_down_pass_per_play` | Float64 |  |
-| `EPA_success_early_down_pass` | Int64 |  |
-| `EPA_success_early_down_pass_rate` | Float64 |  |
-| `early_down_rush` | Int64 |  |
-| `EPA_early_down_rush` | Float64 |  |
-| `EPA_early_down_rush_per_play` | Float64 |  |
-| `EPA_success_early_down_rush` | Int64 |  |
-| `EPA_success_early_down_rush_rate` | Float64 |  |
-| `middle_8` | Int64 | TRUE for plays in the middle-8 window (final 4 min of 1H, first 4 min of 2H). |
-| `middle_8_pass_rate` | Float64 |  |
-| `middle_8_rush_rate` | Float64 |  |
-| `EPA_middle_8` | Float64 |  |
-| `EPA_middle_8_per_play` | Float64 |  |
-| `EPA_middle_8_success` | Int64 |  |
-| `EPA_middle_8_success_rate` | Float64 |  |
-| `middle_8_pass` | Int64 |  |
-| `EPA_middle_8_pass` | Float64 |  |
-| `EPA_middle_8_pass_per_play` | Float64 |  |
-| `EPA_middle_8_success_pass` | Int64 |  |
-| `EPA_middle_8_success_pass_rate` | Float64 |  |
-| `middle_8_rush` | Int64 |  |
-| `EPA_middle_8_rush` | Float64 |  |
-| `EPA_middle_8_rush_per_play` | Float64 |  |
-| `EPA_middle_8_success_rush` | Int64 |  |
-| `EPA_middle_8_success_rush_rate` | Float64 |  |
-| `EPA_success_late_down` | Int64 |  |
-| `EPA_success_late_down_pass` | Int64 |  |
-| `EPA_success_late_down_rush` | Int64 |  |
-| `late_downs` | Int64 |  |
-| `late_down_pass` | Int64 |  |
-| `late_down_rush` | Int64 |  |
-| `EPA_late_down` | Float64 |  |
-| `EPA_late_down_per_play` | Float64 |  |
-| `EPA_success_late_down_rate` | Float64 |  |
-| `EPA_success_late_down_pass_rate` | Float64 |  |
-| `EPA_success_late_down_rush_rate` | Float64 |  |
-| `late_down_pass_rate` | Float64 |  |
-| `late_down_rush_rate` | Float64 |  |
-| `EPA_success_standard_down` | Int64 |  |
-| `EPA_success_standard_down_rate` | Float64 |  |
-| `EPA_standard_down` | Float64 |  |
-| `EPA_standard_down_per_play` | Float64 |  |
-| `standard_downs` | Int64 |  |
-| `EPA_success_passing_down` | Int64 |  |
-| `EPA_success_passing_down_rate` | Float64 |  |
-| `EPA_passing_down` | Float64 |  |
-| `EPA_passing_down_per_play` | Float64 |  |
-| `passing_downs` | Int64 |  |
+| `pos_team_id` | Int64 | ESPN team id of the team on offense. Present for every season 2004+. |
+| `pos_team` | String | Display name of the team on offense (e.g. 'Ohio State Buckeyes'). |
+| `EPA_success` | Int64 | Count of successful plays. Despite the EPA_ prefix this is a play COUNT, not an EPA total. |
+| `EPA_success_rate` | Float64 | Success rate -- the share of those plays ESPN scored as successful. |
+| `EPA_success_pass` | Int64 | Count of successful plays on pass plays. Despite the EPA_ prefix this is a play COUNT, not an EPA total. |
+| `EPA_success_pass_rate` | Float64 | Success rate on pass plays -- the share of those plays ESPN scored as successful. |
+| `EPA_success_rush` | Int64 | Count of successful plays on rush plays. Despite the EPA_ prefix this is a play COUNT, not an EPA total. |
+| `EPA_success_rush_rate` | Float64 | Success rate on rush plays -- the share of those plays ESPN scored as successful. |
+| `EPA_success_rz` | Int64 | Count of successful plays on the red zone. Despite the EPA_ prefix this is a play COUNT, not an EPA total. |
+| `EPA_success_rate_rz` | Float64 | Success rate on the red zone -- the share of those plays ESPN scored as successful. |
+| `EPA_success_third` | Int64 | Count of successful plays on third down. Despite the EPA_ prefix this is a play COUNT, not an EPA total. |
+| `EPA_success_rate_third` | Float64 | Success rate on third down -- the share of those plays ESPN scored as successful. |
+| `EPA_success_early_down` | Int64 | Count of successful plays on early downs. Despite the EPA_ prefix this is a play COUNT, not an EPA total. |
+| `EPA_success_early_down_rate` | Float64 | Success rate on early downs -- the share of those plays ESPN scored as successful. |
+| `early_downs` | Int64 | Number of plays the team ran on early downs. |
+| `early_down_pass_rate` | Float64 | Share of the team's plays on early downs that were pass plays. |
+| `early_down_rush_rate` | Float64 | Share of the team's plays on early downs that were rush plays. |
+| `EPA_early_down` | Float64 | Total EPA the team generated on early downs. |
+| `EPA_early_down_per_play` | Float64 | EPA per play on early downs. |
+| `early_down_first_down` | Int64 | Number of early-down plays that produced a first down. |
+| `early_down_first_down_rate` | Float64 | Share of early-down plays that produced a first down. |
+| `early_down_pass` | Int64 | Number of pass plays the team ran on early downs. |
+| `EPA_early_down_pass` | Float64 | Total EPA the team generated on early downs on pass plays. |
+| `EPA_early_down_pass_per_play` | Float64 | EPA per play on early downs on pass plays. |
+| `EPA_success_early_down_pass` | Int64 | Count of successful plays on early downs on pass plays. Despite the EPA_ prefix this is a play COUNT, not an EPA total. |
+| `EPA_success_early_down_pass_rate` | Float64 | Success rate on early downs on pass plays -- the share of those plays ESPN scored as successful. |
+| `early_down_rush` | Int64 | Number of rush plays the team ran on early downs. |
+| `EPA_early_down_rush` | Float64 | Total EPA the team generated on early downs on rush plays. |
+| `EPA_early_down_rush_per_play` | Float64 | EPA per play on early downs on rush plays. |
+| `EPA_success_early_down_rush` | Int64 | Count of successful plays on early downs on rush plays. Despite the EPA_ prefix this is a play COUNT, not an EPA total. |
+| `EPA_success_early_down_rush_rate` | Float64 | Success rate on early downs on rush plays -- the share of those plays ESPN scored as successful. |
+| `middle_8` | Int64 | Number of plays the team ran in the middle eight -- the closing minutes of the first half and opening minutes of the second. |
+| `middle_8_pass_rate` | Float64 | Share of the team's plays on the middle eight -- the closing minutes of the first half and opening minutes of the second that were pass plays. |
+| `middle_8_rush_rate` | Float64 | Share of the team's plays on the middle eight -- the closing minutes of the first half and opening minutes of the second that were rush plays. |
+| `EPA_middle_8` | Float64 | Total EPA the team generated on the middle eight -- the closing minutes of the first half and opening minutes of the second. |
+| `EPA_middle_8_per_play` | Float64 | EPA per play on the middle eight -- the closing minutes of the first half and opening minutes of the second. |
+| `EPA_middle_8_success` | Int64 | Count of successful plays on the middle eight -- the closing minutes of the first half and opening minutes of the second. Despite the EPA_ prefix this is a play COUNT, not an EPA total. |
+| `EPA_middle_8_success_rate` | Float64 | Success rate on the middle eight -- the closing minutes of the first half and opening minutes of the second -- the share of those plays ESPN scored as successful. |
+| `middle_8_pass` | Int64 | Number of pass plays the team ran on the middle eight -- the closing minutes of the first half and opening minutes of the second. |
+| `EPA_middle_8_pass` | Float64 | Total EPA the team generated on the middle eight -- the closing minutes of the first half and opening minutes of the second on pass plays. |
+| `EPA_middle_8_pass_per_play` | Float64 | EPA per play on the middle eight -- the closing minutes of the first half and opening minutes of the second on pass plays. |
+| `EPA_middle_8_success_pass` | Int64 | Count of successful plays on the middle eight -- the closing minutes of the first half and opening minutes of the second on pass plays. Despite the EPA_ prefix this is a play COUNT, not an EPA total. |
+| `EPA_middle_8_success_pass_rate` | Float64 | Success rate on the middle eight -- the closing minutes of the first half and opening minutes of the second on pass plays -- the share of those plays ESPN scored as successful. |
+| `middle_8_rush` | Int64 | Number of rush plays the team ran on the middle eight -- the closing minutes of the first half and opening minutes of the second. |
+| `EPA_middle_8_rush` | Float64 | Total EPA the team generated on the middle eight -- the closing minutes of the first half and opening minutes of the second on rush plays. |
+| `EPA_middle_8_rush_per_play` | Float64 | EPA per play on the middle eight -- the closing minutes of the first half and opening minutes of the second on rush plays. |
+| `EPA_middle_8_success_rush` | Int64 | Count of successful plays on the middle eight -- the closing minutes of the first half and opening minutes of the second on rush plays. Despite the EPA_ prefix this is a play COUNT, not an EPA total. |
+| `EPA_middle_8_success_rush_rate` | Float64 | Success rate on the middle eight -- the closing minutes of the first half and opening minutes of the second on rush plays -- the share of those plays ESPN scored as successful. |
+| `EPA_success_late_down` | Int64 | Count of successful plays on late downs. Despite the EPA_ prefix this is a play COUNT, not an EPA total. |
+| `EPA_success_late_down_pass` | Int64 | Count of successful plays on late downs on pass plays. Despite the EPA_ prefix this is a play COUNT, not an EPA total. |
+| `EPA_success_late_down_rush` | Int64 | Count of successful plays on late downs on rush plays. Despite the EPA_ prefix this is a play COUNT, not an EPA total. |
+| `late_downs` | Int64 | Number of plays the team ran on late downs. |
+| `late_down_pass` | Int64 | Number of pass plays the team ran on late downs. |
+| `late_down_rush` | Int64 | Number of rush plays the team ran on late downs. |
+| `EPA_late_down` | Float64 | Total EPA the team generated on late downs. |
+| `EPA_late_down_per_play` | Float64 | EPA per play on late downs. |
+| `EPA_success_late_down_rate` | Float64 | Success rate on late downs -- the share of those plays ESPN scored as successful. |
+| `EPA_success_late_down_pass_rate` | Float64 | Success rate on late downs on pass plays -- the share of those plays ESPN scored as successful. |
+| `EPA_success_late_down_rush_rate` | Float64 | Success rate on late downs on rush plays -- the share of those plays ESPN scored as successful. |
+| `late_down_pass_rate` | Float64 | Share of the team's plays on late downs that were pass plays. |
+| `late_down_rush_rate` | Float64 | Share of the team's plays on late downs that were rush plays. |
+| `EPA_success_standard_down` | Int64 | Count of successful plays on standard downs (the team ahead of schedule for the series). Despite the EPA_ prefix this is a play COUNT, not an EPA total. |
+| `EPA_success_standard_down_rate` | Float64 | Success rate on standard downs (the team ahead of schedule for the series) -- the share of those plays ESPN scored as successful. |
+| `EPA_standard_down` | Float64 | Total EPA the team generated on standard downs (the team ahead of schedule for the series). |
+| `EPA_standard_down_per_play` | Float64 | EPA per play on standard downs (the team ahead of schedule for the series). |
+| `standard_downs` | Int64 | Number of plays the team ran on standard downs (the team ahead of schedule for the series). |
+| `EPA_success_passing_down` | Int64 | Count of successful plays on passing downs (the team behind schedule for the series). Despite the EPA_ prefix this is a play COUNT, not an EPA total. |
+| `EPA_success_passing_down_rate` | Float64 | Success rate on passing downs (the team behind schedule for the series) -- the share of those plays ESPN scored as successful. |
+| `EPA_passing_down` | Float64 | Total EPA the team generated on passing downs (the team behind schedule for the series). |
+| `EPA_passing_down_per_play` | Float64 | EPA per play on passing downs (the team behind schedule for the series). |
+| `passing_downs` | Int64 | Number of plays the team ran on passing downs (the team behind schedule for the series). |
 | `game_id` | Int64 | ESPN game identifier. |
 | `season` | Int64 | Season (4-digit year). |
 | `week` | Int64 | Game week of the season. |
