@@ -1,0 +1,21 @@
+name: espn_standings
+description: >-
+  ESPN group/season resource archived at <lg>/standings/json/<season>.json. NOT
+  a {"standings": {...}} document -- it is the top-level group node, and the
+  standings tables hang off `children` (conferences) and `season`.
+# Derived from all 24 committed wehoop-wbb-raw standings captures (2026-08-01):
+# all ten keys present in every file.
+additional_properties: true
+required:
+  id: str
+  children: list
+optional:
+  uid: str
+  name: str
+  abbreviation: str
+  shortName: str
+  parent: dict
+  season: dict
+  seasons: list
+  links: list
+  standings: dict

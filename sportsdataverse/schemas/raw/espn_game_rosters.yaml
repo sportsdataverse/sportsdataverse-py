@@ -1,0 +1,32 @@
+name: espn_game_rosters
+description: >-
+  ESPN payload archived at <lg>/game_rosters/json/<game_id>.json. NOTE: despite
+  the directory name this is a full Site v2 *summary* payload, not a
+  roster-shaped one -- the per-game roster is read out of its boxscore. It is a
+  different summary variant from <lg>/json/final: it carries meta, news, and
+  wallclockAvailable, and omits espnWP, predictor, season, teamInfo, timeouts.
+# Derived from 200 randomly sampled wehoop-wbb-raw captures (2026-08-01):
+# 16 keys present in every file; `article` in only 10%.
+additional_properties: true
+required:
+  header: dict
+  boxscore: dict
+  plays: list
+  gameInfo: dict
+optional:
+  # list in every game_rosters capture sampled; dict occurs in the sibling
+  # json/final variant, so the union is declared for both.
+  winprobability: list|dict
+  article: dict|list
+  meta: dict
+  news: dict
+  standings: dict
+  format: dict
+  leaders: list
+  broadcasts: list
+  videos: list
+  pickcenter: list
+  againstTheSpread: list
+  odds: list
+  wallclockAvailable: bool
+  gameId: int|str

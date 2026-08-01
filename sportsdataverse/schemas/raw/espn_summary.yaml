@@ -1,0 +1,45 @@
+name: espn_summary
+description: >-
+  ESPN Site v2 game summary payload, archived at <lg>/json/raw/<game_id>.json
+  (as fetched) and <lg>/json/final/<game_id>.json (same payload plus gameId and
+  playByPlaySource). Source of pbp, team_box, player_box, shots, and the
+  win-probability join.
+# Derived from 400 randomly sampled wehoop-wbb-raw wbb/json/final captures
+# (2026-08-01): all 21 keys were present in every file. `required` is limited
+# to the four a parser cannot proceed without, so a payload that loses a
+# peripheral section still builds.
+additional_properties: true
+required:
+  header: dict
+  boxscore: dict
+  plays: list
+  gameInfo: dict
+optional:
+  # Observed as BOTH list and dict across real captures -- a single-type
+  # declaration reds the daily job on legitimate data.
+  winprobability: list|dict
+  article: dict|list
+  predictor: dict|list
+  leaders: list
+  standings: dict
+  broadcasts: list
+  videos: list
+  pickcenter: list
+  againstTheSpread: list
+  odds: list
+  espnWP: dict
+  teamInfo: dict
+  format: dict
+  # json/raw and json/final are NOT the same payload plus two keys: the
+  # raw->final step also converts `timeouts` and `season` from list to dict.
+  # Verified across 300 sampled captures of each (2026-08-01) -- raw was a
+  # list in 300/300, final a dict in 300/300.
+  timeouts: list|dict
+  season: list|dict
+  news: dict
+  meta: dict
+  wallclockAvailable: bool
+  # Present in json/final only; json/raw is the payload exactly as fetched.
+  # Observed as int in final captures; str tolerated for older captures.
+  gameId: int|str
+  playByPlaySource: str
