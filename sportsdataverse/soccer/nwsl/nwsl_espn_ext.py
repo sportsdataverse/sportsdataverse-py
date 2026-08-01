@@ -1627,6 +1627,7 @@ def espn_nwsl_season_group_children(
     season: Union[int, str],
     season_type: Union[int, str],
     group_id: Union[int, str],
+    limit: Optional[int] = 500,
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
@@ -1643,6 +1644,7 @@ def espn_nwsl_season_group_children(
         season: season path parameter.
         season_type: season_type path parameter.
         group_id: group_id path parameter.
+        limit: limit query parameter.
         return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
@@ -1656,7 +1658,9 @@ def espn_nwsl_season_group_children(
     """
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.nwsl/seasons/{season}/types/{season_type}/groups/{group_id}/children",
-        params={},
+        params={
+            "limit": limit,
+        },
         **kwargs,
     )
     if return_parsed:

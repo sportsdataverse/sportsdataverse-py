@@ -250,6 +250,7 @@ ESPN endpoint.
 | `season` | `season` |  | `Y` |  | season path parameter. |
 | `season_type` | `season_type` |  | `Y` |  | season_type path parameter. |
 | `group_id` | `group_id` |  | `Y` |  | group_id path parameter. |
+| `limit` | `limit` |  |  | `Y` | Maximum number of items to return. |
 
 ### Returns
 
