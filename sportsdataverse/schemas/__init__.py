@@ -19,8 +19,18 @@ opposite ways:
   ``winprobability`` is a list in most games and a dict in some), the schema
   declares the union explicitly rather than widening to "any".
 
+**One provider can ship several envelopes.** ESPN is one family per endpoint
+group, but stats.nba.com has *five*, and which one an endpoint uses is a
+property of the endpoint rather than of the season or league: a classic
+``resultSets`` list, a singular ``resultSet`` dict, a ``resultSets`` dict whose
+``headers`` are column-group objects, the modern v3 ``{<entity>, meta}`` tree,
+and a period-number map of v3 payloads. Classify before validating -- see
+:func:`validate_payload` usage in the ``-raw`` repos.
+
 Every schema here was derived from real committed captures. Do not edit one to
-make a test pass without re-sampling the payloads it describes.
+make a test pass without re-sampling the payloads it describes. The nba_stats
+families were checked against 8,608 payloads spanning 54 endpoint directories
+of ``hoopR-nba-stats-raw``; every one matched exactly one family.
 
 Example:
     Validate a captured payload::
@@ -59,6 +69,14 @@ RAW_SCHEMAS: dict[str, str] = {
     "espn_standings": "<lg>/standings/json/<season>.json",
     "espn_team_stats": "<lg>/team_stats/json/<season>/<team_id>.json",
     "espn_player_season_stats": "<lg>/player_season_stats/json/<season>/<athlete_id>.json",
+    # stats.nba.com / stats.wnba.com. FIVE envelope families, not one -- see
+    # each schema's description. Which family an endpoint uses is a property of
+    # the endpoint, not of the season or league.
+    "nba_stats_result_sets": "nba_stats/json/<endpoint>/<season>/<slug>.json",
+    "nba_stats_result_set": "nba_stats/json/<endpoint>/<season>/<slug>.json",
+    "nba_stats_result_sets_grouped": "nba_stats/json/<endpoint>/<season>/<slug>.json",
+    "nba_stats_v3": "nba_stats/json/<endpoint>/<season>/<game_id>.json",
+    "nba_stats_v3_period": "nba_stats/json/boxscoretraditionalv3_period/<season>/<game_id>.json",
 }
 
 _TYPES: dict[str, type | tuple[type, ...]] = {
@@ -181,6 +199,15 @@ def validate_payload(name: str, payload: Any) -> list[str]:
             problems.append(f"{name}: missing required key {key!r}")
             continue
         problems.extend(_check(name, key, payload[key], declared))
+    # `required_any`: at least one of these keys must be present. The
+    # stats.nba.com v3 endpoints all ship {<entityKey>, meta} where the entity
+    # key is named per endpoint (boxScoreTraditional, game, leagueSchedule,
+    # scoreboard, ...). Requiring only `meta` would let a payload whose body
+    # was dropped validate clean, and one schema per entity key would be a
+    # dozen near-identical files.
+    for group in schema.get("required_any") or []:
+        if not any(key in payload for key in group):
+            problems.append(f"{name}: payload has none of {sorted(group)!r}; expected one")
     for key, declared in (schema.get("optional") or {}).items():
         # An absent optional key and an explicit null are both "not provided".
         if payload.get(key) is not None:

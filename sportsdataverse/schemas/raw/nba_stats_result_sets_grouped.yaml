@@ -1,0 +1,23 @@
+name: nba_stats_result_sets_grouped
+description: >-
+  The shot-locations variant: the key is PLURAL (`resultSets`) but the value is
+  a single dict, and its `headers` is a list of GROUP dicts
+  ({columnNames, columnSpan, columnsToSkip, name}) rather than a flat list of
+  column-name strings. The grouping encodes the shot-zone column bands, so a
+  parser that assumes flat string headers mis-reads these entirely.
+# Derived from the committed hoopR-nba-stats-raw tree (2026-08-01): 21 of the
+# sampled payloads. Observed on leaguedashplayershotlocations and
+# leaguedashteamshotlocations, e.g. leaguedashteamshotlocations/1996/
+# playoffs_base_pergame.json -- headers is a 2-element list of group dicts over
+# a 26-wide rowSet.
+#
+# Known latent hazard: season_capture._ids_from() iterates
+# `payload.get("resultSets") or []` and calls .get() on each element. Against
+# this family that iterates the dict's KEYS (strings) and would raise
+# AttributeError. It does not fire today only because _ids_from is pointed
+# exclusively at nba_stats_result_sets payloads.
+additional_properties: true
+required:
+  resource: str
+  parameters: dict
+  resultSets: dict
