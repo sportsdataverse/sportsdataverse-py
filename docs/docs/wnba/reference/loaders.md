@@ -567,7 +567,7 @@ Release: [espn_wnba_team_season_stats](https://github.com/sportsdataverse/sports
 | `stat_label` | String | Human-readable label of the statistic (e.g. 'At bats'). |
 | `stat_name` | String | Internal stat key. |
 | `stat_display_name` | String | Stat display name. |
-| `stat_description` | String |  |
+| `stat_description` | String | Human-readable description of the statistic the row reports. |
 | `display_value` | String | Display-formatted value. |
 | `value` | Float64 | Numeric or string value field. |
 
@@ -744,18 +744,18 @@ Release: [wnba_stats_pbp](https://github.com/sportsdataverse/sportsdataverse-dat
 | `player3_team_nickname` | String | Player3 team nickname. |
 | `player3_team_abbreviation` | String | Player3 team abbreviation. |
 | `score_value` | Int32 | Point value of the play (2 / 3 / 1). |
-| `msg_type` | Int32 |  |
-| `act_type` | Int32 |  |
-| `slug_team` | String |  |
-| `shot_pts` | Int32 |  |
-| `secs_passed_game` | Float64 |  |
-| `team_away` | String |  |
-| `team_home` | String |  |
-| `off_slug_team` | String |  |
-| `number_event` | Int32 |  |
+| `msg_type` | Int32 | Message-type code for the play-by-play event. |
+| `act_type` | Int32 | Action-type code for the play-by-play event. |
+| `slug_team` | String | Slug of the team credited with the event. |
+| `shot_pts` | Int32 | Points scored on the shot, if the event was a made field goal. |
+| `secs_passed_game` | Float64 | Seconds elapsed in the game at the event. |
+| `team_away` | String | Slug of the away team. |
+| `team_home` | String | Slug of the home team. |
+| `off_slug_team` | String | Slug of the team on offense for the event. |
+| `number_event` | Int32 | Sequence number of the event within the game. |
 | `possession` | Int32 | Abbreviation of the team currently in possession. |
-| `total_starters_home` | Int32 |  |
-| `total_starters_away` | Int32 |  |
+| `total_starters_home` | Int32 | Number of the home team's starters on the floor for the event. |
+| `total_starters_away` | Int32 | Number of the away team's starters on the floor for the event. |
 | `garbage_time` | Int32 | TRUE if the play occurred during garbage time. |
 | `season` | Int32 | Season identifier (4-digit year or 'YYYY-YY' string). |
 
@@ -782,25 +782,25 @@ Release: [wnba_stats_player_game_logs](https://github.com/sportsdataverse/sports
 | `wl` | String | Wl. |
 | `min` | String | Minutes played. |
 | `fgm` | String | Field goals made. |
-| `fga` | String | Field goal attempts. |
-| `fg_pct` | String | Field goal percentage (0-1). |
+| `fga` | String | Field goals attempted. |
+| `fg_pct` | String | Field-goal percentage. |
 | `fg3m` | String | Three-point field goals made. |
-| `fg3a` | String | Three-point field goal attempts. |
-| `fg3_pct` | String | Three-point field goal percentage (0-1). |
+| `fg3a` | String | Three-point field goals attempted. |
+| `fg3_pct` | String | Three-point percentage. |
 | `ftm` | String | Free throws made. |
-| `fta` | String | Free throw attempts. |
-| `ft_pct` | String | Free throw percentage (0-1). |
-| `oreb` | String | Offensive rebounds. |
-| `dreb` | String | Defensive rebounds. |
-| `reb` | String | Total rebounds. |
-| `ast` | String | Assists. |
-| `stl` | String | Steals. |
-| `blk` | String | Blocks. |
-| `tov` | String | Turnovers. |
-| `pf` | String | Personal fouls. |
-| `pts` | String | Points scored. |
-| `plus_minus` | String | Plus/minus point differential while on court. |
-| `fantasy_pts` | String |  |
+| `fta` | String | Free throws attempted. |
+| `ft_pct` | String | Free-throw percentage. |
+| `oreb` | String | Offensive rebounds collected. |
+| `dreb` | String | Defensive rebounds collected. |
+| `reb` | String | Total rebounds collected. |
+| `ast` | String | Assists credited. |
+| `stl` | String | Steals recorded. |
+| `blk` | String | Total shots blocked. |
+| `tov` | String | Turnovers committed. |
+| `pf` | String | Personal fouls committed. |
+| `pts` | String | Total points scored. |
+| `plus_minus` | String | Plus-minus point differential. |
+| `fantasy_pts` | String | Fantasy points. |
 | `video_available` | String | Video available. |
 | `team_location` | String | Team city or location string. |
 | `season` | Int32 | Season identifier (4-digit year or 'YYYY-YY' string). |
@@ -831,9 +831,9 @@ Release: [wnba_stats_rosters](https://github.com/sportsdataverse/sportsdataverse
 | `exp` | String | Years of MLB service experience. |
 | `school` | String | Player's school / college (when distinct from 'college'). |
 | `player_id` | String | Unique player identifier. |
-| `how_acquired` | String |  |
-| `season_2` | Int32 |  |
-| `team_id_lookup` | Int32 |  |
+| `how_acquired` | String | How the team acquired the player (draft, trade, free agency). |
+| `season_2` | Int32 | Season label in the league's second display form. |
+| `team_id_lookup` | Int32 | Team id used to join the row back to the team tables. |
 
 ```python
 load_wnba_stats_rosters(seasons=2026)

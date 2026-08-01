@@ -4422,6 +4422,46 @@ load_cfb_pbp:
   type.id: ESPN's numeric identifier for the play type.
   type.text: ESPN's text label for the play type.
   wp_touchback: Win probability the offense would have had starting from a touchback.
+load_wnba_stats_pbp:
+  act_type: Action-type code for the play-by-play event.
+  msg_type: Message-type code for the play-by-play event.
+  number_event: Sequence number of the event within the game.
+  off_slug_team: Slug of the team on offense for the event.
+  secs_passed_game: Seconds elapsed in the game at the event.
+  shot_pts: Points scored on the shot, if the event was a made field goal.
+  slug_team: Slug of the team credited with the event.
+  team_away: Slug of the away team.
+  team_home: Slug of the home team.
+  total_starters_away: Number of the away team's starters on the floor for the event.
+  total_starters_home: Number of the home team's starters on the floor for the event.
+load_wnba_stats_player_game_logs:
+  ast: Assists credited.
+  blk: Total shots blocked.
+  dreb: Defensive rebounds collected.
+  fantasy_pts: Fantasy points.
+  fg3_pct: Three-point percentage.
+  fg3a: Three-point field goals attempted.
+  fg3m: Three-point field goals made.
+  fg_pct: Field-goal percentage.
+  fga: Field goals attempted.
+  fgm: Field goals made.
+  ft_pct: Free-throw percentage.
+  fta: Free throws attempted.
+  ftm: Free throws made.
+  min: Minutes played.
+  oreb: Offensive rebounds collected.
+  pf: Personal fouls committed.
+  plus_minus: Plus-minus point differential.
+  pts: Total points scored.
+  reb: Total rebounds collected.
+  stl: Steals recorded.
+  tov: Turnovers committed.
+load_wnba_stats_rosters:
+  how_acquired: How the team acquired the player (draft, trade, free agency).
+  season_2: Season label in the league's second display form.
+  team_id_lookup: Team id used to join the row back to the team tables.
+load_wnba_team_season_stats:
+  stat_description: Human-readable description of the statistic the row reports.
 load_contracts:
   cols: Placeholder column retained in the contracts loader output schema; contains no meaningful data in this context.
 load_depth_charts:
