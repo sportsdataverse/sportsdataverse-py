@@ -151,43 +151,65 @@ def load_wnba_player_boxscore(seasons, return_as_pandas: bool = False):
         A polars (or pandas) DataFrame; seasons with no published asset are
         skipped with a warning rather than raising (404-safe).
 
-        |col_name                      |type    |
-        |:-----------------------------|:-------|
-        |athlete_display_name          |String  |
-        |team_short_display_name       |String  |
-        |min                           |String  |
-        |fg                            |String  |
-        |fg3                           |String  |
-        |ft                            |String  |
-        |oreb                          |String  |
-        |dreb                          |String  |
-        |reb                           |String  |
-        |ast                           |String  |
-        |stl                           |String  |
-        |blk                           |String  |
-        |to                            |String  |
-        |pf                            |String  |
-        |plus_minus                    |String  |
-        |pts                           |String  |
-        |starter                       |Boolean |
-        |ejected                       |Boolean |
-        |did_not_play                  |Boolean |
-        |active                        |Boolean |
-        |athlete_jersey                |String  |
-        |athlete_id                    |String  |
-        |athlete_short_name            |String  |
-        |athlete_position_name         |String  |
-        |athlete_position_abbreviation |String  |
-        |team_name                     |String  |
-        |team_logo                     |String  |
-        |team_id                       |String  |
-        |team_abbreviation             |String  |
-        |team_color                    |String  |
-        |game_id                       |Int32   |
-        |season                        |Int32   |
-        |season_type                   |Int32   |
-        |game_date                     |Date    |
-        |athlete_headshot_href         |String  |
+        |col_name                          |type                                                   |
+        |:---------------------------------|:------------------------------------------------------|
+        |game_id                           |Int32                                                  |
+        |season                            |Int32                                                  |
+        |season_type                       |Int32                                                  |
+        |game_date                         |Date                                                   |
+        |game_date_time                    |Datetime(time_unit='us', time_zone='America/New_York') |
+        |athlete_id                        |Int32                                                  |
+        |athlete_display_name              |String                                                 |
+        |team_id                           |Int32                                                  |
+        |team_name                         |String                                                 |
+        |team_location                     |String                                                 |
+        |team_short_display_name           |String                                                 |
+        |minutes                           |Float64                                                |
+        |field_goals_made                  |Int32                                                  |
+        |field_goals_attempted             |Int32                                                  |
+        |three_point_field_goals_made      |Int32                                                  |
+        |three_point_field_goals_attempted |Int32                                                  |
+        |free_throws_made                  |Int32                                                  |
+        |free_throws_attempted             |Int32                                                  |
+        |offensive_rebounds                |Int32                                                  |
+        |defensive_rebounds                |Int32                                                  |
+        |rebounds                          |Int32                                                  |
+        |assists                           |Int32                                                  |
+        |steals                            |Int32                                                  |
+        |blocks                            |Int32                                                  |
+        |turnovers                         |Int32                                                  |
+        |fouls                             |Int32                                                  |
+        |plus_minus                        |String                                                 |
+        |points                            |Int32                                                  |
+        |starter                           |Boolean                                                |
+        |ejected                           |Boolean                                                |
+        |did_not_play                      |Boolean                                                |
+        |active                            |Boolean                                                |
+        |athlete_jersey                    |String                                                 |
+        |athlete_short_name                |String                                                 |
+        |athlete_headshot_href             |String                                                 |
+        |athlete_position_name             |String                                                 |
+        |athlete_position_abbreviation     |String                                                 |
+        |team_display_name                 |String                                                 |
+        |team_uid                          |String                                                 |
+        |team_slug                         |String                                                 |
+        |team_logo                         |String                                                 |
+        |team_abbreviation                 |String                                                 |
+        |team_color                        |String                                                 |
+        |team_alternate_color              |String                                                 |
+        |home_away                         |String                                                 |
+        |team_winner                       |Boolean                                                |
+        |team_score                        |Int32                                                  |
+        |opponent_team_id                  |Int32                                                  |
+        |opponent_team_name                |String                                                 |
+        |opponent_team_location            |String                                                 |
+        |opponent_team_display_name        |String                                                 |
+        |opponent_team_abbreviation        |String                                                 |
+        |opponent_team_logo                |String                                                 |
+        |opponent_team_color               |String                                                 |
+        |opponent_team_alternate_color     |String                                                 |
+        |opponent_team_score               |Int32                                                  |
+        |reason                            |String                                                 |
 
     Example:
         Quick start::
@@ -929,18 +951,17 @@ def load_wnba_stats_coaches(seasons, return_as_pandas: bool = False):
 
         |col_name          |type   |
         |:-----------------|:------|
-        |team_id           |String |
+        |team_id           |Int64  |
         |season            |Int32  |
-        |coach_id          |String |
+        |coach_id          |Int64  |
         |first_name        |String |
         |last_name         |String |
         |coach_name        |String |
-        |is_assistant      |String |
+        |is_assistant      |Int64  |
         |coach_type        |String |
-        |sort_sequence     |String |
-        |sub_sort_sequence |String |
-        |season_2          |Int32  |
-        |team_id_lookup    |Int32  |
+        |sort_sequence     |Null   |
+        |sub_sort_sequence |Int64  |
+        |season_type       |String |
 
     Example:
         Quick start::

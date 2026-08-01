@@ -350,8 +350,8 @@ Release: [wbb_player_value](https://github.com/sportsdataverse/sportsdataverse-d
 | `season` | Int64 | Season identifier (4-digit year or 'YYYY-YY' string). |
 | `team_id` | String | Unique team identifier. |
 | `min` | Float64 | Minutes played. |
-| `box_obpm` | Float64 |  |
-| `box_dbpm` | Float64 |  |
+| `box_obpm` | Float64 | Box-score offensive plus/minus for the player, the offensive half of box BPM. |
+| `box_dbpm` | Float64 | Box-score defensive plus/minus for the player, the defensive half of box BPM. |
 | `box_bpm` | Float64 | Total box plus/minus in points per 100 possessions above average, exactly box_obpm plus box_dbpm in every published row. |
 
 ```python
@@ -529,7 +529,7 @@ Release: [espn_womens_college_basketball_standings](https://github.com/sportsdat
 | `group_id` | String | ESPN group id. |
 | `group_name` | String | Group name (conference / division). |
 | `group_abbreviation` | String | Group abbreviation. |
-| `group_short_name` | String |  |
+| `group_short_name` | String | Short display name of the conference or division grouping the row belongs to. |
 | `team_id` | Int32 | Unique team identifier. |
 | `team_uid` | String | ESPN universal team identifier (UID format 's:40~l:...~t:...'). |
 | `team_slug` | String | URL-safe team identifier (e.g. 'lasvegas-aces' / 'aces'). |

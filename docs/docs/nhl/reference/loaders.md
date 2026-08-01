@@ -47,107 +47,98 @@ Release: [nhl_pbp_full](https://github.com/sportsdataverse/sportsdataverse-data/
 |---|---|---|
 | `event_type` | String | Standardized event type code. |
 | `event` | String | Event description label. |
-| `description` | String | Full text description of the event. |
-| `period` | Int32 | Period number. |
-| `period_seconds` | Int32 | Elapsed seconds in the period. |
-| `period_seconds_remaining` | Int32 | Seconds remaining in the period. |
-| `game_seconds` | Int32 | Elapsed seconds in the game. |
-| `game_seconds_remaining` | Int32 | Seconds remaining in regulation. |
-| `home_score` | Int32 | Home team final score. |
-| `away_score` | Int32 | Away team final score. |
-| `strength_state` | String | Strength state (e.g. 5v5, 5v4). |
-| `event_idx` | String | Sequential event index within the game. |
-| `extra_attacker` | Boolean | Whether an extra attacker was on the ice. |
-| `home_skaters` | Int32 | Number of home skaters on the ice. |
-| `away_skaters` | Int32 | Number of away skaters on the ice. |
-| `game_id` | Int32 | Unique game identifier. |
-| `period_type` | String | Period type (REG/OT/SO). |
-| `ordinal_num` | String | Inning ordinal label (e.g. 1st). |
-| `period_time` | String | Elapsed time in the period (MM:SS). |
-| `period_time_remaining` | String | Time remaining in the period (MM:SS). |
-| `date_time` | String |  |
-| `home_final` | Int32 |  |
-| `away_final` | Int32 |  |
-| `season` | Int32 | Season year (echoed from arg). |
-| `season_type` | String | Season type code (echoed from arg). |
-| `game_date` | String | Game date. |
-| `game_start` | String |  |
-| `game_end` | String |  |
-| `game_length` | Int32 |  |
-| `game_state` | String | Game state (e.g., FINAL, LIVE). |
-| `detailed_state` | String | Detailed status description (e.g. 'Scheduled', 'Pre-Game', 'In Progress'). |
-| `venue_name` | String | Name of the venue. |
-| `venue_link` | String | API link to the venue. |
-| `home_name` | String | Home team display name. |
-| `home_abbreviation` | String | Home team abbreviation. |
-| `home_division_name` | String |  |
-| `home_conference_name` | String |  |
-| `home_id` | String | Home team ESPN identifier. |
-| `away_name` | String | Away team display name. |
-| `away_abbreviation` | String | Away team abbreviation. |
-| `away_division_name` | String |  |
-| `away_conference_name` | String |  |
-| `away_id` | String | Away team ESPN identifier. |
-| `event_id` | Float64 | ESPN event id (echoed from arg). |
-| `event_team` | String | Team associated with the shift change. |
+| `secondary_type` | String | Secondary event type (e.g. shot type). |
+| `event_team_abbr` | String | Abbreviation of the team credited with the event. |
 | `event_team_type` | String | Whether the event team is home or away. |
-| `num_on` | Int32 | Number of players coming on (line change). |
+| `description` | String | Full text description of the event. |
+| `period` | Int64 | Period number. |
+| `period_type` | String | Period type (REG/OT/SO). |
+| `period_time` | String | Elapsed time in the period (MM:SS). |
+| `period_seconds` | Int64 | Elapsed seconds in the period. |
+| `period_seconds_remaining` | Int64 | Seconds remaining in the period. |
+| `period_time_remaining` | String | Time remaining in the period (MM:SS). |
+| `game_seconds` | Int64 | Elapsed seconds in the game. |
+| `game_seconds_remaining` | Int64 | Seconds remaining in regulation. |
+| `home_score` | Int64 | Home team final score. |
+| `away_score` | Int64 | Away team final score. |
+| `event_player_1_name` | String | Name of the primary event player. |
+| `event_player_1_type` | String | Role of the primary event player. |
+| `event_player_1_id` | Int64 | Player id of the primary event player. |
+| `event_player_2_name` | String | Name of the secondary event player. |
+| `event_player_2_type` | String | Role of the secondary event player. |
+| `event_player_2_id` | Int64 | Player id of the secondary event player. |
+| `event_player_3_name` | String | Name of the tertiary event player. |
+| `event_player_3_type` | String | Role of the tertiary event player. |
+| `event_player_3_id` | Int64 | Player ID of the tertiary event player. |
+| `event_goalie_name` | String | Name of the goalie on the event. |
+| `event_goalie_id` | Int64 | Player id of the goalie on the event. |
+| `penalty_severity` | String | Severity of the penalty. |
+| `penalty_minutes` | Int64 | Penalty minutes. |
+| `empty_net` | Boolean | Whether the net was empty. |
+| `extra_attacker` | Boolean | Whether an extra attacker was on the ice. |
+| `x` | Int64 | Raw x-coordinate of the event. |
+| `y` | Int64 | Raw y-coordinate of the event. |
+| `x_fixed` | Int64 | Normalized x coordinate (home shoots right). |
+| `y_fixed` | Int64 | Normalized y coordinate (home shoots right). |
+| `shot_distance` | Float64 | Distance of the shot from the net. |
+| `shot_angle` | Float64 | Angle of the shot relative to the net. |
+| `home_skaters` | Int64 | Number of home skaters on the ice. |
+| `away_skaters` | Int64 | Number of away skaters on the ice. |
 | `players_on` | String | Names of players coming on. |
 | `players_off` | String | Names of players going off. |
-| `away_on_1` | String | Name of away skater 1 on the ice. |
-| `away_on_2` | String | Name of away skater 2 on the ice. |
-| `away_on_3` | String | Name of away skater 3 on the ice. |
-| `away_on_4` | String | Name of away skater 4 on the ice. |
-| `away_on_5` | String | Name of away skater 5 on the ice. |
-| `away_goalie` | String | Name of the away goalie on the ice. |
-| `ids_on` | String | Player ids coming on. |
-| `ids_off` | String | Player ids going off. |
-| `secondary_type` | String | Secondary event type (e.g. shot type). |
+| `game_id` | Int64 | Unique game identifier. |
+| `season` | String | Season year (echoed from arg). |
+| `season_type` | String | Season type code (echoed from arg). |
+| `home_abbr` | String | Home team abbreviation. |
+| `away_abbr` | String | Away team abbreviation. |
+| `event_idx` | Int64 | Sequential event index within the game. |
+| `event_id` | Int64 | ESPN event id (echoed from arg). |
+| `away_goalie_in` | Int64 | Whether the away goalie is on the ice (1/0). |
+| `home_goalie_in` | Int64 | Whether the home goalie is on the ice (1/0). |
+| `reason` | String | Reason for the event (e.g. stoppage reason). |
+| `secondaryReason` | String | Secondary reason for a stoppage. |
+| `xg` | Float64 | Expected goals value for the shot event. |
+| `strength_state` | String | Strength state (e.g. 5v5, 5v4). |
+| `strength_code` | String | Strength state code (e.g., all, even, pp, pk). |
+| `strength` | String | Strength label (Even, Power Play, Shorthanded). |
 | `home_on_1` | String | Name of home skater 1 on the ice. |
 | `home_on_2` | String | Name of home skater 2 on the ice. |
 | `home_on_3` | String | Name of home skater 3 on the ice. |
 | `home_on_4` | String | Name of home skater 4 on the ice. |
 | `home_on_5` | String | Name of home skater 5 on the ice. |
-| `home_goalie` | String | Name of the home goalie on the ice. |
-| `event_player_1_name` | String | Name of the primary event player. |
-| `event_player_1_type` | String | Role of the primary event player. |
-| `event_player_2_name` | String | Name of the secondary event player. |
-| `event_player_2_type` | String | Role of the secondary event player. |
-| `strength_code` | String | Strength state code (e.g., all, even, pp, pk). |
-| `strength` | String | Strength label (Even, Power Play, Shorthanded). |
-| `x` | Int32 | Raw x-coordinate of the event. |
-| `y` | Int32 | Raw y-coordinate of the event. |
-| `x_fixed` | Int32 | Normalized x coordinate (home shoots right). |
-| `y_fixed` | Int32 | Normalized y coordinate (home shoots right). |
-| `event_player_1_id` | Int32 | Player id of the primary event player. |
-| `event_player_1_link` | String |  |
-| `event_player_2_id` | Int32 | Player id of the secondary event player. |
-| `event_player_2_link` | String |  |
-| `event_team_id` | Int32 |  |
-| `event_team_link` | String |  |
-| `event_team_abbr` | String | Abbreviation of the team credited with the event. |
-| `num_off` | Int32 | Number of players going off (line change). |
-| `event_goalie_name` | String | Name of the goalie on the event. |
-| `shot_distance` | Float64 | Distance of the shot from the net. |
-| `shot_angle` | Float64 | Angle of the shot relative to the net. |
-| `event_goalie_id` | Int32 | Player id of the goalie on the event. |
-| `event_goalie_link` | String |  |
-| `event_goalie_type` | String |  |
-| `event_player_3_name` | String | Name of the tertiary event player. |
-| `event_player_3_type` | String | Role of the tertiary event player. |
-| `game_winning_goal` | Boolean |  |
-| `empty_net` | Boolean | Whether the net was empty. |
-| `event_player_3_id` | Int32 | Player ID of the tertiary event player. |
-| `event_player_3_link` | String |  |
-| `event_player_4_type` | String |  |
-| `event_player_4_id` | Int32 |  |
-| `event_player_4_name` | String |  |
-| `event_player_4_link` | String |  |
-| `penalty_severity` | String | Severity of the penalty. |
-| `penalty_minutes` | Int32 | Penalty minutes. |
 | `home_on_6` | String | Name of home skater 6 on the ice. |
-| `venue_id` | Int32 | Venue identifier. |
+| `home_on_7` | String | Name of home skater 7 on the ice. |
+| `away_on_1` | String | Name of away skater 1 on the ice. |
+| `away_on_2` | String | Name of away skater 2 on the ice. |
+| `away_on_3` | String | Name of away skater 3 on the ice. |
+| `away_on_4` | String | Name of away skater 4 on the ice. |
+| `away_on_5` | String | Name of away skater 5 on the ice. |
 | `away_on_6` | String | Name of away skater 6 on the ice. |
+| `away_on_7` | String | Name of away skater 7 on the ice. |
+| `home_goalie` | String | Name of the home goalie on the ice. |
+| `away_goalie` | String | Name of the away goalie on the ice. |
+| `num_on` | Int64 | Number of players coming on (line change). |
+| `num_off` | Int64 | Number of players going off (line change). |
+| `ids_on` | String | Player ids coming on. |
+| `ids_off` | String | Player ids going off. |
+| `home_on_1_id` | Int64 | Player id of home skater 1 on the ice. |
+| `away_on_1_id` | Int64 | Player id of away skater 1 on the ice. |
+| `home_on_2_id` | Int64 | Player id of home skater 2 on the ice. |
+| `away_on_2_id` | Int64 | Player id of away skater 2 on the ice. |
+| `home_on_3_id` | Int64 | Player id of home skater 3 on the ice. |
+| `away_on_3_id` | Int64 | Player id of away skater 3 on the ice. |
+| `home_on_4_id` | Int64 | Player id of home skater 4 on the ice. |
+| `away_on_4_id` | Int64 | Player id of away skater 4 on the ice. |
+| `home_on_5_id` | Int64 | Player id of home skater 5 on the ice. |
+| `away_on_5_id` | Int64 | Player id of away skater 5 on the ice. |
+| `home_on_6_id` | Int64 | Player id of home skater 6 on the ice. |
+| `away_on_6_id` | Int64 | Player id of away skater 6 on the ice. |
+| `home_on_7_id` | Int64 | Player id of home skater 7 on the ice. |
+| `away_on_7_id` | Int64 | Player id of away skater 7 on the ice. |
+| `home_goalie_id` | Int64 | Player ID of the home goalie on the ice. |
+| `away_goalie_id` | Int64 | Player ID of the away goalie on the ice. |
+| `pptReplayUrl` | String | URL to the play replay, if available. |
+| `game_date` | String | Game date. |
 
 ```python
 load_nhl_pbp(seasons=2024)
@@ -160,56 +151,43 @@ Release: [nhl_player_boxscores](https://github.com/sportsdataverse/sportsdataver
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | Int32 | Unique player identifier. |
-| `player_full_name` | String | Player full name. |
-| `link` | String | API link to the game feed. |
-| `shoots_catches` | String | Handedness (shoots/catches). |
-| `roster_status` | String | Payroll table the row came from: Active, IL, or Retained Salary. |
-| `jersey_number` | String | Jersey number. |
-| `position_code` | String | Player position code. |
-| `position_name` | String | Official position name (e.g. "Referee", "Linesman"). |
-| `position_type` | String | Position category (e.g. 'Pitcher', 'Infielder'). |
-| `position_abbreviation` | String | Position abbreviation. |
-| `skater_stats_time_on_ice` | String |  |
-| `skater_stats_assists` | Int32 |  |
-| `skater_stats_goals` | Int32 |  |
-| `skater_stats_shots` | Int32 |  |
-| `skater_stats_hits` | Int32 |  |
-| `skater_stats_power_play_goals` | Int32 |  |
-| `skater_stats_power_play_assists` | Int32 |  |
-| `skater_stats_penalty_minutes` | Int32 |  |
-| `skater_stats_face_off_wins` | Int32 |  |
-| `skater_stats_faceoff_taken` | Int32 |  |
-| `skater_stats_takeaways` | Int32 |  |
-| `skater_stats_giveaways` | Int32 |  |
-| `skater_stats_short_handed_goals` | Int32 |  |
-| `skater_stats_short_handed_assists` | Int32 |  |
-| `skater_stats_blocked` | Int32 |  |
-| `skater_stats_plus_minus` | Int32 |  |
-| `skater_stats_even_time_on_ice` | String |  |
-| `skater_stats_power_play_time_on_ice` | String |  |
-| `skater_stats_short_handed_time_on_ice` | String |  |
 | `home_away` | String | Home or away indicator. |
-| `skater_stats_face_off_pct` | Float64 |  |
-| `goalie_stats_time_on_ice` | String |  |
-| `goalie_stats_assists` | Int32 |  |
-| `goalie_stats_goals` | Int32 |  |
-| `goalie_stats_pim` | Int32 |  |
-| `goalie_stats_shots` | Int32 |  |
-| `goalie_stats_saves` | Int32 |  |
-| `goalie_stats_power_play_saves` | Int32 |  |
-| `goalie_stats_short_handed_saves` | Int32 |  |
-| `goalie_stats_even_saves` | Int32 |  |
-| `goalie_stats_short_handed_shots_against` | Int32 |  |
-| `goalie_stats_even_shots_against` | Int32 |  |
-| `goalie_stats_power_play_shots_against` | Int32 |  |
-| `goalie_stats_decision` | String |  |
-| `goalie_stats_save_percentage` | Float64 |  |
-| `goalie_stats_power_play_save_percentage` | Float64 |  |
-| `goalie_stats_even_strength_save_percentage` | Float64 |  |
-| `goalie_stats_short_handed_save_percentage` | Float64 |  |
-| `game_id` | Int32 | Unique game identifier. |
-| `season` | Int32 | Season year (echoed from arg). |
+| `team_id` | Int64 | Unique team identifier. |
+| `team_abbrev` | String | Team abbreviation. |
+| `player_id` | Int64 | Unique player identifier. |
+| `player_name` | String | Player name. |
+| `sweater_number` | Int64 | Jersey number. |
+| `position` | String | Player position. |
+| `goals` | Int64 | Goals scored. |
+| `assists` | Int64 | Assists. |
+| `points` | Int64 | Total points (goals + assists). |
+| `plus_minus` | Int64 | Plus/minus rating. |
+| `pim` | Int64 | Penalty minutes. |
+| `hits` | Int64 | Hits. |
+| `power_play_goals` | Int64 | Power-play goals. |
+| `shots_on_goal` | Int64 | Shots on goal. |
+| `faceoff_winning_pctg` | Float64 | Faceoff win percentage. |
+| `toi` | String | Time on ice. |
+| `blocked_shots` | Int64 | Blocked shots. |
+| `shifts` | Int64 | Number of shifts. |
+| `giveaways` | Int64 | Giveaways. |
+| `takeaways` | Int64 | Takeaways. |
+| `even_strength_shots_against` | String | Even-strength shots against (saves/total). |
+| `power_play_shots_against` | String | Power-play shots against (saves/total). |
+| `shorthanded_shots_against` | String | Shorthanded shots against (saves/total). |
+| `save_shots_against` | String | Total shots against (saves/total). |
+| `save_pctg` | Float64 | Save percentage. |
+| `even_strength_goals_against` | Int64 | Even-strength goals against. |
+| `power_play_goals_against` | Int64 | Power-play goals against. |
+| `shorthanded_goals_against` | Int64 | Shorthanded goals against. |
+| `goals_against` | Int64 | Goals against. |
+| `starter` | Boolean | Whether the goalie started the game. |
+| `decision` | String | Goalie decision (W/L/O). |
+| `shots_against` | Int64 | Shots faced. |
+| `saves` | Int64 | Saves made. |
+| `game_id` | Int64 | Unique game identifier. |
+| `season` | Int64 | Season year (echoed from arg). |
+| `game_date` | String | Game date. |
 
 ```python
 load_nhl_player_boxscore(seasons=2024)
@@ -223,33 +201,40 @@ Release: [nhl_schedules](https://github.com/sportsdataverse/sportsdataverse-data
 | col_name | type | description |
 |---|---|---|
 | `game_id` | Int32 | Unique game identifier. |
-| `link` | String | API link to the game feed. |
-| `game_type_abbreviation` | String |  |
-| `season_full` | Int32 | Full season label (e.g. 20212022). |
-| `game_date_time` | Datetime(time_unit='us', time_zone='UTC') | Game start date/time (ISO 8601). |
-| `status_abstract_game_state` | String | Abstract game state (e.g. 'Final'). |
-| `status_coded_game_state` | Int32 | Coded game state. |
-| `status_detailed_state` | String | Detailed game state. |
-| `status_status_code` | Int32 | Status code for the game. |
-| `status_start_time_tbd` | Boolean | Whether the start time is TBD. |
-| `away_score` | Int32 | Away team final score. |
-| `away_team_id` | Int32 | Away team identifier. |
-| `away_team_name` | String | Away team name. |
-| `away_team_link` | String | MLB Stats API relative away team link. |
-| `home_score` | Int32 | Home team final score. |
-| `home_team_id` | Int32 | Home team identifier. |
-| `home_team_name` | String | Home team name. |
-| `home_team_link` | String | MLB Stats API relative home team link. |
-| `venue_name` | String | Name of the venue. |
-| `venue_link` | String | API link to the venue. |
-| `venue_id` | Int32 | Venue identifier. |
-| `content_link` | String | API link to the game content. |
+| `season_full` | String | Full season label (e.g. 20212022). |
 | `game_type` | String | Game type the row belongs to. |
-| `game_date` | Date | Game date. |
+| `game_date` | String | Game date. |
+| `game_time` | String | Scheduled start time of the game. |
+| `home_team_abbr` | String | Home team abbreviation. |
+| `away_team_abbr` | String | Away team abbreviation. |
+| `home_team_name` | String | Home team name. |
+| `away_team_name` | String | Away team name. |
+| `home_score` | Int32 | Home team final score. |
+| `away_score` | Int32 | Away team final score. |
+| `game_state` | String | Game state (e.g., FINAL, LIVE). |
+| `venue` | String | Venue where the game was played. |
 | `season` | Int32 | Season year (echoed from arg). |
+| `game_json` | Boolean | Whether processed game JSON is available. |
+| `game_json_url` | String | URL to the processed game JSON. |
 | `PBP` | Boolean | Whether play-by-play data is available. |
 | `team_box` | Boolean | Whether team box score data is available. |
 | `player_box` | Boolean | Whether player box score data is available. |
+| `series_letter` | String | Playoff series identifier letter, populated only for postseason games (88 of 1,400 rows in 2024) and null for the regular season. |
+| `playoff_round` | Int32 | Playoff round identifier. |
+| `series_game_number` | Int32 | Series game number. |
+| `skater_box` | Boolean | Whether skater box data is available. |
+| `goalie_box` | Boolean | Whether goalie box data is available. |
+| `game_info` | Boolean | Whether game info data is available. |
+| `game_rosters` | Boolean | Whether game rosters data is available. |
+| `scoring` | Boolean | TRUE when the play results in a score (TD, FG, safety, two-point conversion). |
+| `penalties` | Boolean | Penalty count. |
+| `scratches` | Boolean | True when the source game record carried a scratches block for the game. |
+| `linescore` | Boolean | CONSTANT: true on every published row, so it carries no information as shipped. It marks that a linescore block existed on the source game record. |
+| `three_stars` | Boolean | Whether three stars data is available. |
+| `shifts` | Boolean | Number of shifts. |
+| `officials` | Boolean | Whether officials data is available. |
+| `shots_by_period` | Boolean | Whether shots-by-period data is available. |
+| `shootout` | Boolean | Whether shootout data is available. |
 
 ```python
 load_nhl_schedule(seasons=2024)
@@ -262,24 +247,25 @@ Release: [nhl_team_boxscores](https://github.com/sportsdataverse/sportsdataverse
 
 | col_name | type | description |
 |---|---|---|
-| `team_id` | Int32 | Unique team identifier. |
+| `home_away` | String | Home or away indicator. |
+| `team_id` | Int64 | Unique team identifier. |
+| `team_abbrev` | String | Team abbreviation. |
 | `team_name` | String | Team name. |
-| `link` | String | API link to the game feed. |
-| `abbreviation` | String | Team abbreviation. |
-| `tri_code` | String | Team three-letter code. |
-| `goals` | Int32 | Goals scored. |
-| `pim` | Int32 | Penalty minutes. |
-| `shots` | Int32 | Shots on goal. |
-| `power_play_percentage` | String |  |
-| `power_play_goals` | Int32 | Power-play goals. |
-| `power_play_opportunities` | Int32 | Power play opportunities. |
-| `face_off_win_percentage` | String |  |
-| `blocked` | Int32 |  |
-| `takeaways` | Int32 | Takeaways. |
-| `giveaways` | Int32 | Giveaways. |
-| `hits` | Int32 | Hits. |
-| `game_id` | Int32 | Unique game identifier. |
-| `season` | Int32 | Season year (echoed from arg). |
+| `goals` | Int64 | Goals scored. |
+| `shots_on_goal` | Int64 | Shots on goal. |
+| `pim` | Int64 | Penalty minutes. |
+| `hits` | Int64 | Hits. |
+| `blocked_shots` | Int64 | Blocked shots. |
+| `giveaways` | Int64 | Giveaways. |
+| `takeaways` | Int64 | Takeaways. |
+| `power_play_goals` | Int64 | Power-play goals. |
+| `faceoff_win_pctg` | Float64 | Faceoff win percentage. |
+| `saves` | Int64 | Saves made. |
+| `save_pctg` | Float64 | Save percentage. |
+| `goals_against` | Int64 | Goals against. |
+| `game_id` | Int64 | Unique game identifier. |
+| `season` | Int64 | Season year (echoed from arg). |
+| `game_date` | String | Game date. |
 
 ```python
 load_nhl_team_boxscore(seasons=2024)
@@ -549,42 +535,42 @@ Release: [nhl_penalties](https://github.com/sportsdataverse/sportsdataverse-data
 | `game_id` | Int32 | Unique game identifier. |
 | `period_number` | Int32 | Period number (1-3 regulation, 4+ OT). |
 | `period_type` | String | Period type (REG/OT/SO). |
-| `committedByPlayer.sweaterNumber` | Int32 |  |
-| `committedByPlayer.firstName.default` | String |  |
-| `committedByPlayer.firstName.cs` | String |  |
-| `committedByPlayer.firstName.de` | String |  |
-| `committedByPlayer.firstName.es` | String |  |
-| `committedByPlayer.firstName.fi` | String |  |
-| `committedByPlayer.firstName.sk` | String |  |
-| `committedByPlayer.firstName.sv` | String |  |
-| `committedByPlayer.firstName.fr` | String |  |
-| `committedByPlayer.lastName.default` | String |  |
+| `committedByPlayer.sweaterNumber` | Int32 | Jersey number of the penalized player on the play. |
+| `committedByPlayer.firstName.default` | String | Given name of the penalized player as published in the NHL feed's default English locale. |
+| `committedByPlayer.firstName.cs` | String | Alternate given name for the penalized player under the NHL feed's Czech key. Verified against the data it is frequently a different name form rather than a re-spelling (Joshua published as Josh, Aliaksei as Alexei), so it is not a reliable transliteration of the default. |
+| `committedByPlayer.firstName.de` | String | Alternate given name for the penalized player under the NHL feed's German key. Verified against the data it is frequently a different name form rather than a re-spelling (Joshua published as Josh, Aliaksei as Alexei), so it is not a reliable transliteration of the default. |
+| `committedByPlayer.firstName.es` | String | Alternate given name for the penalized player under the NHL feed's Spanish key. Verified against the data it is frequently a different name form rather than a re-spelling (Joshua published as Josh, Aliaksei as Alexei), so it is not a reliable transliteration of the default. |
+| `committedByPlayer.firstName.fi` | String | Alternate given name for the penalized player under the NHL feed's Finnish key. Verified against the data it is frequently a different name form rather than a re-spelling (Joshua published as Josh, Aliaksei as Alexei), so it is not a reliable transliteration of the default. |
+| `committedByPlayer.firstName.sk` | String | Alternate given name for the penalized player under the NHL feed's Slovak key. Verified against the data it is frequently a different name form rather than a re-spelling (Joshua published as Josh, Aliaksei as Alexei), so it is not a reliable transliteration of the default. |
+| `committedByPlayer.firstName.sv` | String | Alternate given name for the penalized player under the NHL feed's Swedish key. Verified against the data it is frequently a different name form rather than a re-spelling (Joshua published as Josh, Aliaksei as Alexei), so it is not a reliable transliteration of the default. |
+| `committedByPlayer.firstName.fr` | String | Alternate given name for the penalized player under the NHL feed's French key. Verified against the data it is frequently a different name form rather than a re-spelling (Joshua published as Josh, Aliaksei as Alexei), so it is not a reliable transliteration of the default. |
+| `committedByPlayer.lastName.default` | String | Family name of the penalized player as published in the NHL feed's default English locale. |
 | `committedByPlayer.lastName.cs` | String | Alternate rendering of the family name published under the NHL feed's Czech key. It differs from the default in orthography -- usually restoring diacritics the default folds to ASCII, though for some names it strips them instead -- so treat it as an alternate spelling, not a canonical one. |
 | `committedByPlayer.lastName.fi` | String | Alternate rendering of the family name published under the NHL feed's Finnish key. It differs from the default in orthography -- usually restoring diacritics the default folds to ASCII, though for some names it strips them instead -- so treat it as an alternate spelling, not a canonical one. |
 | `committedByPlayer.lastName.sk` | String | Alternate rendering of the family name published under the NHL feed's Slovak key. It differs from the default in orthography -- usually restoring diacritics the default folds to ASCII, though for some names it strips them instead -- so treat it as an alternate spelling, not a canonical one. |
 | `committedByPlayer.lastName.sv` | String | Alternate rendering of the family name published under the NHL feed's Swedish key. It differs from the default in orthography -- usually restoring diacritics the default folds to ASCII, though for some names it strips them instead -- so treat it as an alternate spelling, not a canonical one. |
-| `committedByPlayer.lastName.de` | String |  |
-| `committedByPlayer.lastName.es` | String |  |
-| `committedByPlayer.lastName.fr` | String |  |
+| `committedByPlayer.lastName.de` | String | Alternate rendering of the penalized player's family name under the NHL feed's German key. It differs from the default in orthography -- usually restoring diacritics the default folds to ASCII, though for some names it strips them instead -- so treat it as an alternate spelling, not a canonical one. |
+| `committedByPlayer.lastName.es` | String | Alternate rendering of the penalized player's family name under the NHL feed's Spanish key. It differs from the default in orthography -- usually restoring diacritics the default folds to ASCII, though for some names it strips them instead -- so treat it as an alternate spelling, not a canonical one. |
+| `committedByPlayer.lastName.fr` | String | Alternate rendering of the penalized player's family name under the NHL feed's French key. It differs from the default in orthography -- usually restoring diacritics the default folds to ASCII, though for some names it strips them instead -- so treat it as an alternate spelling, not a canonical one. |
 | `teamAbbrev.default` | String | Three-letter code of the team charged with the penalty, matching the committing player's boxscore team rather than the team that drew it. |
 | `drawnBy.sweaterNumber` | Int32 | Jersey number of the opposing player credited with drawing the infraction; null whenever no victim is credited, as on all bench and game-misconduct penalties. |
 | `drawnBy.firstName.default` | String | Given name, in the feed's default English locale, of the opposing player credited with drawing the penalty. |
-| `drawnBy.firstName.cs` | String |  |
-| `drawnBy.firstName.fi` | String |  |
-| `drawnBy.firstName.sk` | String |  |
-| `drawnBy.firstName.de` | String |  |
-| `drawnBy.firstName.es` | String |  |
-| `drawnBy.firstName.sv` | String |  |
-| `drawnBy.firstName.fr` | String |  |
+| `drawnBy.firstName.cs` | String | Alternate given name for the opposing player credited with drawing the penalty under the NHL feed's Czech key. Verified against the data it is frequently a different name form rather than a re-spelling (Joshua published as Josh, Aliaksei as Alexei), so it is not a reliable transliteration of the default. |
+| `drawnBy.firstName.fi` | String | Alternate given name for the opposing player credited with drawing the penalty under the NHL feed's Finnish key. Verified against the data it is frequently a different name form rather than a re-spelling (Joshua published as Josh, Aliaksei as Alexei), so it is not a reliable transliteration of the default. |
+| `drawnBy.firstName.sk` | String | Alternate given name for the opposing player credited with drawing the penalty under the NHL feed's Slovak key. Verified against the data it is frequently a different name form rather than a re-spelling (Joshua published as Josh, Aliaksei as Alexei), so it is not a reliable transliteration of the default. |
+| `drawnBy.firstName.de` | String | Alternate given name for the opposing player credited with drawing the penalty under the NHL feed's German key. Verified against the data it is frequently a different name form rather than a re-spelling (Joshua published as Josh, Aliaksei as Alexei), so it is not a reliable transliteration of the default. |
+| `drawnBy.firstName.es` | String | Alternate given name for the opposing player credited with drawing the penalty under the NHL feed's Spanish key. Verified against the data it is frequently a different name form rather than a re-spelling (Joshua published as Josh, Aliaksei as Alexei), so it is not a reliable transliteration of the default. |
+| `drawnBy.firstName.sv` | String | Alternate given name for the opposing player credited with drawing the penalty under the NHL feed's Swedish key. Verified against the data it is frequently a different name form rather than a re-spelling (Joshua published as Josh, Aliaksei as Alexei), so it is not a reliable transliteration of the default. |
+| `drawnBy.firstName.fr` | String | Alternate given name for the opposing player credited with drawing the penalty under the NHL feed's French key. Verified against the data it is frequently a different name form rather than a re-spelling (Joshua published as Josh, Aliaksei as Alexei), so it is not a reliable transliteration of the default. |
 | `drawnBy.lastName.default` | String | Family name, in the feed's default English locale, of the opposing player credited with drawing the penalty. |
 | `drawnBy.lastName.cs` | String | Alternate rendering of the family name published under the NHL feed's Czech key. It differs from the default in orthography -- usually restoring diacritics the default folds to ASCII, though for some names it strips them instead -- so treat it as an alternate spelling, not a canonical one. |
 | `drawnBy.lastName.fi` | String | Alternate rendering of the family name published under the NHL feed's Finnish key. It differs from the default in orthography -- usually restoring diacritics the default folds to ASCII, though for some names it strips them instead -- so treat it as an alternate spelling, not a canonical one. |
 | `drawnBy.lastName.sk` | String | Alternate rendering of the family name published under the NHL feed's Slovak key. It differs from the default in orthography -- usually restoring diacritics the default folds to ASCII, though for some names it strips them instead -- so treat it as an alternate spelling, not a canonical one. |
 | `drawnBy.lastName.sv` | String | Alternate rendering of the family name published under the NHL feed's Swedish key. It differs from the default in orthography -- usually restoring diacritics the default folds to ASCII, though for some names it strips them instead -- so treat it as an alternate spelling, not a canonical one. |
-| `drawnBy.lastName.de` | String |  |
-| `drawnBy.lastName.es` | String |  |
-| `drawnBy.lastName.fr` | String |  |
-| `servedBy.default` | String |  |
+| `drawnBy.lastName.de` | String | Alternate rendering of the opposing player credited with drawing the penalty's family name under the NHL feed's German key. It differs from the default in orthography -- usually restoring diacritics the default folds to ASCII, though for some names it strips them instead -- so treat it as an alternate spelling, not a canonical one. |
+| `drawnBy.lastName.es` | String | Alternate rendering of the opposing player credited with drawing the penalty's family name under the NHL feed's Spanish key. It differs from the default in orthography -- usually restoring diacritics the default folds to ASCII, though for some names it strips them instead -- so treat it as an alternate spelling, not a canonical one. |
+| `drawnBy.lastName.fr` | String | Alternate rendering of the opposing player credited with drawing the penalty's family name under the NHL feed's French key. It differs from the default in orthography -- usually restoring diacritics the default folds to ASCII, though for some names it strips them instead -- so treat it as an alternate spelling, not a canonical one. |
+| `servedBy.default` | String | Abbreviated name, in the feed's default English locale, of the player serving the penalty. |
 | `servedBy.cs` | String | Alternate abbreviated name (first initial plus family name) published under the NHL feed's Czech key, differing from the default by diacritics or by an alternate given-name form. |
 | `servedBy.fi` | String | Alternate abbreviated name (first initial plus family name) published under the NHL feed's Finnish key, differing from the default by diacritics or by an alternate given-name form. |
 | `servedBy.sk` | String | Alternate abbreviated name (first initial plus family name) published under the NHL feed's Slovak key, differing from the default by diacritics or by an alternate given-name form. |
@@ -721,34 +707,34 @@ Release: [nhl_scoring](https://github.com/sportsdataverse/sportsdataverse-data/r
 | `game_id` | Int32 | Unique game identifier. |
 | `period_number` | Int32 | Period number (1-3 regulation, 4+ OT). |
 | `period_type` | String | Period type (REG/OT/SO). |
-| `highlightClipSharingUrlFr` | String |  |
-| `highlightClipFr` | Float64 |  |
+| `highlightClipSharingUrlFr` | String | Shareable nhl.com URL for the French-language highlight clip; its trailing numeric segment is the same id carried in highlightClipFr. |
+| `highlightClipFr` | Float64 | NHL video id of the French-language highlight clip for the goal. Stored as Float64 even though it is a whole 13-digit identifier, so cast before using it as a key. |
 | `discreteClip` | Float64 | Discrete clip identifier. |
 | `discreteClipFr` | Float64 | Numeric NHL video identifier of the French-language standalone clip of the goal, always a different asset id from discreteClip. |
 | `firstName.default` | String | Given name of the goal scorer as rendered in the NHL feed's default English locale. |
-| `firstName.cs` | String |  |
-| `firstName.de` | String |  |
-| `firstName.es` | String |  |
-| `firstName.fi` | String |  |
-| `firstName.sk` | String |  |
-| `firstName.sv` | String |  |
-| `firstName.fr` | String |  |
+| `firstName.cs` | String | Alternate given name for the player under the NHL feed's Czech key. Verified against the data it is frequently a different name form rather than a re-spelling (Joshua published as Josh, Aliaksei as Alexei), so it is not a reliable transliteration of the default. |
+| `firstName.de` | String | Alternate given name for the player under the NHL feed's German key. Verified against the data it is frequently a different name form rather than a re-spelling (Joshua published as Josh, Aliaksei as Alexei), so it is not a reliable transliteration of the default. |
+| `firstName.es` | String | Alternate given name for the player under the NHL feed's Spanish key. Verified against the data it is frequently a different name form rather than a re-spelling (Joshua published as Josh, Aliaksei as Alexei), so it is not a reliable transliteration of the default. |
+| `firstName.fi` | String | Alternate given name for the player under the NHL feed's Finnish key. Verified against the data it is frequently a different name form rather than a re-spelling (Joshua published as Josh, Aliaksei as Alexei), so it is not a reliable transliteration of the default. |
+| `firstName.sk` | String | Alternate given name for the player under the NHL feed's Slovak key. Verified against the data it is frequently a different name form rather than a re-spelling (Joshua published as Josh, Aliaksei as Alexei), so it is not a reliable transliteration of the default. |
+| `firstName.sv` | String | Alternate given name for the player under the NHL feed's Swedish key. Verified against the data it is frequently a different name form rather than a re-spelling (Joshua published as Josh, Aliaksei as Alexei), so it is not a reliable transliteration of the default. |
+| `firstName.fr` | String | Alternate given name for the player under the NHL feed's French key. Verified against the data it is frequently a different name form rather than a re-spelling (Joshua published as Josh, Aliaksei as Alexei), so it is not a reliable transliteration of the default. |
 | `lastName.default` | String | Family name of the goal scorer as rendered in the NHL feed's default English locale. |
 | `lastName.cs` | String | Alternate rendering of the family name published under the NHL feed's Czech key. It differs from the default in orthography -- usually restoring diacritics the default folds to ASCII, though for some names it strips them instead -- so treat it as an alternate spelling, not a canonical one. |
 | `lastName.fi` | String | Alternate rendering of the family name published under the NHL feed's Finnish key. It differs from the default in orthography -- usually restoring diacritics the default folds to ASCII, though for some names it strips them instead -- so treat it as an alternate spelling, not a canonical one. |
 | `lastName.sk` | String | Alternate rendering of the family name published under the NHL feed's Slovak key. It differs from the default in orthography -- usually restoring diacritics the default folds to ASCII, though for some names it strips them instead -- so treat it as an alternate spelling, not a canonical one. |
 | `lastName.sv` | String | Alternate rendering of the family name published under the NHL feed's Swedish key. It differs from the default in orthography -- usually restoring diacritics the default folds to ASCII, though for some names it strips them instead -- so treat it as an alternate spelling, not a canonical one. |
-| `lastName.de` | String |  |
-| `lastName.es` | String |  |
+| `lastName.de` | String | Alternate rendering of the player's family name under the NHL feed's German key. It differs from the default in orthography -- usually restoring diacritics the default folds to ASCII, though for some names it strips them instead -- so treat it as an alternate spelling, not a canonical one. |
+| `lastName.es` | String | Alternate rendering of the player's family name under the NHL feed's Spanish key. It differs from the default in orthography -- usually restoring diacritics the default folds to ASCII, though for some names it strips them instead -- so treat it as an alternate spelling, not a canonical one. |
 | `lastName.fr` | String | Alternate rendering of the family name published under the NHL feed's French key. It differs from the default in orthography -- usually restoring diacritics the default folds to ASCII, though for some names it strips them instead -- so treat it as an alternate spelling, not a canonical one. |
-| `name.default` | String | Team name (default language). |
+| `name.default` | String | Abbreviated name of the player as published in the NHL feed's default English locale. |
 | `name.cs` | String | Alternate abbreviated name (first initial plus family name) published under the NHL feed's Czech key, differing from the default by diacritics or by an alternate given-name form. |
 | `name.fi` | String | Alternate abbreviated name (first initial plus family name) published under the NHL feed's Finnish key, differing from the default by diacritics or by an alternate given-name form. |
 | `name.sk` | String | Alternate abbreviated name (first initial plus family name) published under the NHL feed's Slovak key, differing from the default by diacritics or by an alternate given-name form. |
 | `name.sv` | String | Alternate abbreviated name (first initial plus family name) published under the NHL feed's Swedish key, differing from the default by diacritics or by an alternate given-name form. |
 | `name.de` | String | Alternate abbreviated name (first initial plus family name) published under the NHL feed's German key, differing from the default by diacritics or by an alternate given-name form. |
 | `name.es` | String | Alternate abbreviated name (first initial plus family name) published under the NHL feed's Spanish key, differing from the default by diacritics or by an alternate given-name form. |
-| `name.fr` | String | Team name (French). |
+| `name.fr` | String | Alternate abbreviated name for the player under the NHL feed's French key, differing from the default by diacritics or by an alternate given-name form. |
 | `teamAbbrev.default` | String | Three-letter code of the team that scored the goal, resolving to the home club exactly when isHome is true and to the visitor otherwise. |
 | `leadingTeamAbbrev.default` | String | Three-letter code of the team ahead on the scoreboard immediately after this goal, null exactly when the goal tied the game and not always the scoring team. |
 
