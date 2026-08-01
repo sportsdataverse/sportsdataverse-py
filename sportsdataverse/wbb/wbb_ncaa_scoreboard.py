@@ -6,10 +6,11 @@ id table.
 
 **Season coverage caveat.** The WBB season table
 (:data:`~sportsdataverse.mbb.mbb_ncaa_scoreboard.NCAA_WBB_SEASON_DIVISIONS`)
-covers 2010-11 through 2024-25 only — wbigballR is an older fork, so it has
-NO 2009-10 and NO 2025-26 entry (the MBB table has both). Dates in the
-missing seasons raise ``ValueError``; extend the table forward as new ids
-are confirmed.
+covers 2010-11 through 2025-26 — wbigballR is an older fork, so it has NO
+2009-10 entry (the MBB table does). 2025-26 was likewise missing upstream
+and was discovered live + backfilled here (2026-08-01). Dates in a missing
+season raise ``ValueError``; extend the table forward as new ids are
+confirmed.
 """
 
 from __future__ import annotations
@@ -43,7 +44,7 @@ def ncaa_wbb_date_games(
     Same engine as
     :func:`sportsdataverse.mbb.mbb_ncaa_scoreboard.ncaa_mbb_date_games` with
     the WBB ``season_divisions`` table bound (see the module docstring for
-    the 2010-11..2024-25 coverage caveat).
+    the 2010-11..2025-26 coverage caveat).
 
     Args:
         date: ``"MM/DD/YYYY"``. Defaults to yesterday (R default).
@@ -62,8 +63,8 @@ def ncaa_wbb_date_games(
 
     Raises:
         ValueError: The date's season has no WBB ``season_divisions`` id
-            (includes 2009-10 and 2025-26 — see module docstring), the date
-            is not ``MM/DD/YYYY``, or the fetched page has no games table.
+            (includes 2009-10 — see module docstring), the date is not
+            ``MM/DD/YYYY``, or the fetched page has no games table.
 
     Example:
         Quick start::

@@ -89,10 +89,15 @@ def test_wbb_date_games_offline_fetcher_injection() -> None:
 
 
 def test_wbb_season_table_divergence() -> None:
-    """W table lacks 2009-10 and 2025-26 (wbigballR all_functions.R:1106-1147)."""
+    """W table lacks 2009-10 (wbigballR all_functions.R:1106-1147).
+
+    2025-26 was ALSO absent upstream -- wbigballR is a stale fork and never
+    added it -- until it was discovered live (2026-08-01) and backfilled here;
+    see NCAA_WBB_SEASON_DIVISIONS. 2009-10 remains genuinely absent.
+    """
     assert "2009-10" not in NCAA_WBB_SEASON_DIVISIONS
-    assert "2025-26" not in NCAA_WBB_SEASON_DIVISIONS
-    assert len(NCAA_WBB_SEASON_DIVISIONS) == 15
+    assert NCAA_WBB_SEASON_DIVISIONS["2025-26"] == 18704
+    assert len(NCAA_WBB_SEASON_DIVISIONS) == 16
     assert NCAA_WBB_SEASON_DIVISIONS["2024-25"] == 18423
     assert NCAA_WBB_SEASON_DIVISIONS["2010-11"] == 10200
     # The per-league ids really differ season-by-season (the league knob).
@@ -101,10 +106,16 @@ def test_wbb_season_table_divergence() -> None:
 
 
 def test_wbb_unknown_season_raises_value_error() -> None:
-    """2025-26 exists for MBB but not WBB — the WBB path must raise."""
+    """A season absent from the WBB table must raise, not fetch.
+
+    Uses 2009-10, which MBB has and WBB genuinely lacks. (This asserted on
+    2025-26 until that season was backfilled; with fetcher=None a
+    non-raising path would escape into a live network call, so the example
+    season must be one that is really absent.)
+    """
     with pytest.raises(ValueError, match="Season Not Available"):
         _ncaa_bb_date_games(
-            "11/11/2025",
+            "12/05/2009",
             conference="All",
             conference_id=None,
             fetcher=None,

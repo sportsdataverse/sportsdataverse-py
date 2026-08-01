@@ -118,17 +118,30 @@ def test_ncaa_wbb_date_games_matches_core_wbb_league() -> None:
 
 
 def test_ncaa_wbb_date_games_missing_seasons_raise() -> None:
-    """WBB season table lacks 2009-10 and 2025-26 (module docstring caveat)."""
-    for date in ("12/05/2009", "12/05/2025"):
-        with pytest.raises(ValueError, match="Season Not Available"):
-            ncaa_wbb_date_games(date, fetcher=FakeHtmlFetcher(SCOREBOARD_HTML))
+    """WBB season table lacks 2009-10 (module docstring caveat).
+
+    2025-26 was also absent until it was discovered live and backfilled
+    (2026-08-01), so it is no longer a valid "missing season" example.
+    """
+    with pytest.raises(ValueError, match="Season Not Available"):
+        ncaa_wbb_date_games("12/05/2009", fetcher=FakeHtmlFetcher(SCOREBOARD_HTML))
 
 
 def test_ncaa_wbb_team_ids_table() -> None:
     df = ncaa_wbb_team_ids()
-    assert df.height == 5613
+    assert df.height == 5972
     assert df.columns == ["team", "conference", "id", "season"]
     assert df.schema["id"] == pl.Int64
+    # 2025-26 backfilled 2026-08-01 via refresh_ncaa_team_ids (wbigballR, the
+    # upstream data asset, stops at 2024-25). Pin it so a stale re-vendor of
+    # the CSV can't silently drop the season and re-block WBB discovery.
+    latest = df.filter(pl.col("season") == "2025-26")
+    assert latest.height == 359
+    # Renamed upstream: the new label must be present AND the legacy one gone.
+    # Asserting only the former would pass if a stale "Fairleigh Dickinson" row
+    # co-existed with "FDU" while some other team silently went missing.
+    assert latest.filter(pl.col("team") == "FDU").height == 1
+    assert latest.filter(pl.col("team") == "Fairleigh Dickinson").height == 0
 
 
 def test_ncaa_wbb_team_schedule_matches_core() -> None:
