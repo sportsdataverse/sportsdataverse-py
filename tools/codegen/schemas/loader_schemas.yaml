@@ -1,6 +1,8 @@
 load_cfb_adv_defensive:
-- name: def_pos_team
+- name: def_pos_team_id
   type: Int64
+- name: def_pos_team
+  type: String
 - name: scrimmage_plays
   type: Int64
 - name: TFL
@@ -42,8 +44,10 @@ load_cfb_adv_defensive:
 - name: week
   type: Int64
 load_cfb_adv_defensive_players:
-- name: def_pos_team
+- name: def_pos_team_id
   type: Int64
+- name: def_pos_team
+  type: String
 - name: player_name
   type: String
 - name: fumble_recoveries
@@ -56,9 +60,23 @@ load_cfb_adv_defensive_players:
   type: Int64
 - name: week
   type: Int64
-load_cfb_adv_drives:
-- name: pos_team
+- name: sacks
   type: Int64
+- name: sacks_yards
+  type: Int64
+- name: pass_breakups
+  type: Int64
+- name: forced_fumbles
+  type: Int64
+- name: interceptions
+  type: Int64
+- name: interceptions_yards
+  type: Int64
+load_cfb_adv_drives:
+- name: pos_team_id
+  type: Int64
+- name: pos_team
+  type: String
 - name: drive_total_available_yards
   type: Float64
 - name: drive_total_gained_yards
@@ -80,14 +98,18 @@ load_cfb_adv_drives:
 - name: week
   type: Int64
 load_cfb_adv_passing:
-- name: pos_team
+- name: pos_team_id
   type: Int64
+- name: pos_team
+  type: String
 - name: passer_player_name
   type: String
 - name: Comp
   type: Int64
 - name: Att
   type: Int64
+- name: xComp
+  type: Float64
 - name: Yds
   type: Float64
 - name: Pass_TD
@@ -106,6 +128,12 @@ load_cfb_adv_passing:
   type: Float64
 - name: Sck
   type: Int64
+- name: CompPct
+  type: Float64
+- name: xCompPct
+  type: Float64
+- name: CPOE
+  type: Float64
 - name: qbr_epa
   type: Float64
 - name: sack_epa
@@ -113,9 +141,9 @@ load_cfb_adv_passing:
 - name: pass_epa
   type: Float64
 - name: rush_epa
-  type: 'Null'
+  type: Float64
 - name: pen_epa
-  type: 'Null'
+  type: Float64
 - name: spread
   type: Float64
 - name: era0
@@ -135,8 +163,10 @@ load_cfb_adv_passing:
 - name: week
   type: Int64
 load_cfb_adv_receiving:
-- name: pos_team
+- name: pos_team_id
   type: Int64
+- name: pos_team
+  type: String
 - name: receiver_player_name
   type: String
 - name: Rec
@@ -168,8 +198,10 @@ load_cfb_adv_receiving:
 - name: week
   type: Int64
 load_cfb_adv_rushing:
-- name: pos_team
+- name: pos_team_id
   type: Int64
+- name: pos_team
+  type: String
 - name: rusher_player_name
   type: String
 - name: Car
@@ -199,8 +231,10 @@ load_cfb_adv_rushing:
 - name: week
   type: Int64
 load_cfb_adv_situational:
-- name: pos_team
+- name: pos_team_id
   type: Int64
+- name: pos_team
+  type: String
 - name: EPA_success
   type: Int64
 - name: EPA_success_rate
@@ -346,8 +380,10 @@ load_cfb_adv_situational:
 - name: week
   type: Int64
 load_cfb_adv_specialists:
-- name: pos_team
+- name: pos_team_id
   type: Int64
+- name: pos_team
+  type: String
 - name: player_name
   type: String
 - name: punts
@@ -373,8 +409,10 @@ load_cfb_adv_specialists:
 - name: field_goals_yards
   type: Int64
 load_cfb_adv_team:
-- name: pos_team
+- name: pos_team_id
   type: Int64
+- name: pos_team
+  type: String
 - name: rushing_highlight_yards_per_opp
   type: Float64
 - name: total_pen_yards
@@ -532,8 +570,10 @@ load_cfb_adv_team:
 - name: week
   type: Int64
 load_cfb_adv_turnover:
-- name: pos_team
+- name: pos_team_id
   type: Int64
+- name: pos_team
+  type: String
 - name: turnovers
   type: Int64
 - name: st_turnovers_lost
