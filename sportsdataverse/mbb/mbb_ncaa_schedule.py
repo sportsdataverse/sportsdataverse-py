@@ -336,10 +336,11 @@ def parse_ncaa_bb_team_roster(html: str, team_id: int) -> pl.DataFrame:
     """Parse a ``stats.ncaa.org/teams/{team_id}/roster`` page.
 
     Pure core of bigballR ``get_team_roster`` (all_functions.R:1709-1845):
-    the site's first 9 roster columns (snake_cased) plus the three derived
+    the site's first 9 roster columns (snake_cased) plus the four derived
     columns -- ``player`` (the normalized ``FIRST.LAST`` join key, byte-
     matching the play-by-play name normalization), ``clean_name`` (the raw
-    display name) and ``ht_inches``.
+    display name), ``ht_inches``, and ``player_id`` (from the row's
+    ``/players/{id}`` link).
 
     Rows are emitted in raw page order; the R oracle's chromote-rendered
     DataTable re-sorts alphabetically (see module docstring).
