@@ -206,12 +206,37 @@ def validate_payload(name: str, payload: Any) -> list[str]:
     # was dropped validate clean, and one schema per entity key would be a
     # dozen near-identical files.
     for group in schema.get("required_any") or []:
-        if not any(key in payload for key in group):
-            problems.append(f"{name}: payload has none of {sorted(group)!r}; expected one")
+        # A bare string is a schema-authoring slip (`required_any: [foo]` rather
+        # than `[[foo]]`). Iterating it would test the payload for single
+        # CHARACTERS and report nonsense, so treat it as a one-key group.
+        keys = [group] if isinstance(group, str) else list(group)
+        if not any(key in payload for key in keys):
+            problems.append(f"{name}: payload has none of {sorted(keys)!r}; expected one")
     for key, declared in (schema.get("optional") or {}).items():
         # An absent optional key and an explicit null are both "not provided".
         if payload.get(key) is not None:
             problems.extend(_check(name, key, payload[key], declared))
+
+    # `values_of`: every present value must itself match another declared
+    # family. Without it a period map validates as long as its four keys hold
+    # *some* dict, so `{"1": {}, "2": {}, "3": {}, "4": {}}` -- a capture that
+    # lost every payload body -- passes as a complete game.
+    nested = schema.get("values_of")
+    if nested:
+        if nested == name:
+            raise ValueError(f"raw schema {name!r} declares itself as values_of")
+        # Only DECLARED keys. Unknown keys stay ignored, as everywhere else --
+        # `additional_properties: true` must keep meaning the same thing here,
+        # or a new top-level field would be reported as a malformed period.
+        declared_keys = [
+            key for key in list(schema.get("required") or {}) + list(schema.get("optional") or {}) if key in payload
+        ]
+        for key in declared_keys:
+            value = payload[key]
+            if not isinstance(value, dict):
+                problems.append(f"{name}: {key!r} is {type(value).__name__}, expected dict")
+                continue
+            problems.extend(f"{name}[{key}] -> {p}" for p in validate_payload(nested, value))
     return problems
 
 

@@ -279,8 +279,10 @@ def test_v3_requires_an_entity_body_not_just_meta():
     assert problems and "expected one" in problems[0]
 
 
-@pytest.mark.parametrize("entity", ["game", "leagueSchedule", "scoreboard", "boxScoreUsage"])
+@pytest.mark.parametrize("entity", sorted(load_raw_schema("nba_stats_v3")["required_any"][0]))
 def test_v3_accepts_each_observed_entity_key(entity):
+    """Parametrized FROM the schema, so a newly-observed entity key is covered
+    the moment it is declared rather than whenever someone remembers this list."""
     payload = {"meta": {"request": "r", "time": "t", "version": 1}, entity: {}}
     assert validate_payload("nba_stats_v3", payload) == []
 
@@ -297,3 +299,47 @@ def test_v3_period_accepts_overtime():
     ot = dict(NBA_STATS_SAMPLES["nba_stats_v3_period"])
     ot["5"] = {"meta": {"request": "r", "time": "t", "version": 1}, "boxScoreTraditional": {}}
     assert validate_payload("nba_stats_v3_period", ot) == []
+
+
+def test_v3_period_rejects_a_map_of_empty_periods():
+    """`values_of` -- each period is validated as a full nba_stats_v3 payload.
+
+    Without it this passes: the four required keys are present and each holds
+    *a* dict. It is a capture that lost every payload body, which is exactly
+    the corruption these schemas exist to catch.
+    """
+    problems = validate_payload("nba_stats_v3_period", {str(p): {} for p in range(1, 5)})
+    assert problems
+    assert any("[1]" in p for p in problems), problems
+
+
+def test_v3_period_reports_which_period_is_bad():
+    payload = dict(NBA_STATS_SAMPLES["nba_stats_v3_period"])
+    payload["3"] = {"meta": {"version": 1}}  # entity body dropped
+    problems = validate_payload("nba_stats_v3_period", payload)
+    assert any("[3]" in p and "expected one" in p for p in problems), problems
+
+
+def test_v3_period_rejects_a_non_dict_period():
+    payload = dict(NBA_STATS_SAMPLES["nba_stats_v3_period"])
+    payload["2"] = "not-a-payload"
+    assert validate_payload("nba_stats_v3_period", payload)
+
+
+def test_required_any_tolerates_a_bare_string_group():
+    """`required_any: [foo]` instead of `[[foo]]` is an easy YAML slip.
+
+    Iterating the string would test the payload for single CHARACTERS and
+    report nonsense, so a bare string is treated as a one-key group.
+    """
+    from sportsdataverse import schemas
+
+    schema = {"required": {}, "required_any": ["meta"], "additional_properties": True}
+    monkey = schemas.load_raw_schema
+    try:
+        schemas.load_raw_schema = lambda _n: schema
+        assert schemas.validate_payload("x", {"meta": {}}) == []
+        problems = schemas.validate_payload("x", {"other": 1})
+        assert problems and "'meta'" in problems[0]
+    finally:
+        schemas.load_raw_schema = monkey

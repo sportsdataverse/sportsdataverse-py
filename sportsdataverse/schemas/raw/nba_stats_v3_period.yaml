@@ -12,7 +12,13 @@ description: >-
 # optional and open-ended -- 5 through 14 covers ten OTs, well past the
 # six-OT record. A game missing period 3 is a partial capture, which is
 # precisely what this schema exists to catch.
+#
+# Every value is a full nba_stats_v3 payload, so it is validated as one rather
+# than merely checked for dict-ness -- otherwise
+# `{"1": {}, "2": {}, "3": {}, "4": {}}`, a capture that lost every payload
+# body, would pass as a complete game.
 additional_properties: true
+values_of: nba_stats_v3
 required:
   "1": dict
   "2": dict
