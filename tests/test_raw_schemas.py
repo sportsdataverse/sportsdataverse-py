@@ -103,6 +103,27 @@ def test_unknown_schema_name_raises():
         load_raw_schema("espn_not_a_real_family")
 
 
+def test_non_mapping_schema_fails_at_the_source(tmp_path, monkeypatch):
+    """yaml.safe_load returns whatever the document is. A schema that parsed to
+    a list must fail here, not later inside a caller's .get()."""
+    import sportsdataverse.schemas as schemas_mod
+
+    class _FakePath:
+        def joinpath(self, *_parts):
+            return self
+
+        def read_text(self, encoding="utf-8"):
+            return "- not\n- a mapping\n"
+
+    schemas_mod.load_raw_schema.cache_clear()
+    monkeypatch.setattr(schemas_mod, "files", lambda _pkg: _FakePath())
+    try:
+        with pytest.raises(TypeError, match="expected a mapping"):
+            schemas_mod.load_raw_schema("espn_summary")
+    finally:
+        schemas_mod.load_raw_schema.cache_clear()
+
+
 def test_yaml_is_not_a_module_level_dependency():
     """PyYAML is a build/CI-time dep, not a runtime one. A module-level import
     would make `pip install sportsdataverse` unable to import this package."""

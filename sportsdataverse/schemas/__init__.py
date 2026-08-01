@@ -85,6 +85,26 @@ def load_raw_schema(name: str) -> dict[str, Any]:
     Raises:
         KeyError: If ``name`` is not a declared payload family.
         ImportError: If PyYAML is not installed.
+        TypeError: If the schema file does not parse to a mapping.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.schemas import load_raw_schema
+
+            schema = load_raw_schema("espn_summary")
+            print(sorted(schema["required"]))
+
+        Inspect what a family tolerates::
+
+            print(schema["additional_properties"])   # True -- unknown keys allowed
+
+        See Also:
+            * `wehoop-wbb-raw`_ -- the archive whose payloads these describe
+            * `wehoop`_ -- the R client that consumes the reshaped output
+
+        .. _wehoop-wbb-raw: https://github.com/sportsdataverse/wehoop-wbb-raw
+        .. _wehoop: https://wehoop.sportsdataverse.org
     """
     if name not in RAW_SCHEMAS:
         raise KeyError(f"unknown raw payload family {name!r}; expected one of {sorted(RAW_SCHEMAS)}")
@@ -100,7 +120,13 @@ def load_raw_schema(name: str) -> dict[str, Any]:
             "`pip install pyyaml` or `pip install sportsdataverse[all]`."
         ) from exc
     path = files("sportsdataverse.schemas").joinpath("raw", f"{name}.yaml")
-    return yaml.safe_load(path.read_text(encoding="utf-8"))
+    schema = yaml.safe_load(path.read_text(encoding="utf-8"))
+    # safe_load returns whatever the document is. A schema that parsed to a
+    # list or a bare string would otherwise fail much later, inside .get() on
+    # a caller's behalf, with an error that points nowhere near the cause.
+    if not isinstance(schema, dict):
+        raise TypeError(f"raw schema {name!r} parsed to {type(schema).__name__}, expected a mapping")
+    return schema
 
 
 def validate_payload(name: str, payload: Any) -> list[str]:
@@ -118,6 +144,32 @@ def validate_payload(name: str, payload: Any) -> list[str]:
 
     Raises:
         KeyError: If ``name`` is not a declared payload family.
+
+    Example:
+        Quick start::
+
+            import json
+            from sportsdataverse.schemas import validate_payload
+
+            payload = json.loads(open("wbb/json/final/401811123.json").read())
+            problems = validate_payload("espn_summary", payload)
+            print(problems)   # [] when the payload matches
+
+        Fail a scrape on a bad capture::
+
+            if validate_payload("espn_team_stats", payload):
+                raise AssertionError("refusing to persist a non-conforming payload")
+
+        Scan an archive for damage::
+
+            bad = [p for p in paths if validate_payload("espn_team_stats", load(p))]
+
+        See Also:
+            * `wehoop-wbb-raw`_ -- the archive whose payloads these describe
+            * `hoopR`_ -- the men's-basketball sibling with the same tree shape
+
+        .. _wehoop-wbb-raw: https://github.com/sportsdataverse/wehoop-wbb-raw
+        .. _hoopR: https://hoopR.sportsdataverse.org
     """
     schema = load_raw_schema(name)
     if not isinstance(payload, dict):

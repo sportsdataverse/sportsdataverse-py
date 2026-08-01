@@ -638,4 +638,5 @@ files = [
     "sportsdataverse/mbb/mbb_player_core.py",
     "sportsdataverse/wnba/wnba_player_core.py",
     "sportsdataverse/wbb/wbb_player_core.py",
+    "sportsdataverse/schemas/__init__.py",
 ]
