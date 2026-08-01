@@ -35,6 +35,7 @@ from sportsdataverse.wbb.wbb_ncaa_schedule import *
 from sportsdataverse.wbb.wbb_ncaa_scoreboard import *
 from sportsdataverse.wbb.wbb_ncaa_shots import *
 from sportsdataverse.wbb.wbb_ncaa_stats_agg import *
+from sportsdataverse.wbb.wbb_ncaa_espn_crosswalk import *
 from sportsdataverse.wbb.wbb_ncaa_team_ids import *
 from sportsdataverse.wbb.wbb_pbp import *
 from sportsdataverse.wbb.wbb_play_by_play import *

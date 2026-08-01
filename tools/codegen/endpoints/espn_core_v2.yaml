@@ -121,6 +121,16 @@ endpoints:
   - name: group_id
     type: int|str
     required: true
+  # ESPN pages this collection at 25 by default, so without an explicit limit
+  # the wrapper silently returned page 1 only -- 25 of 31 women's D-I
+  # conferences, leaving 76 ESPN teams with a null conference. Mirrors the
+  # limit block its sibling season_group_teams already declares. scope is
+  # universal, so this one entry fixes every league's wrapper.
+  extra_params:
+  - name: limit
+    query_key: limit
+    type: int
+    default: 500
   parser: parse_items
   example_args:
     season: 2024

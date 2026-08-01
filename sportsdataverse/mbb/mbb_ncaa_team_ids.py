@@ -43,19 +43,23 @@ _LEADING_WS_RE = re.compile(r"^ +")
 _RECORD_RE = re.compile(r" \([0-9]-[0-9]\)")
 
 
-def _teamids_csv_bytes(league: str) -> bytes:
-    """Bundled-CSV bytes for *league*, importlib.resources first, Path fallback.
+def _league_data_bytes(league: str, fname: str) -> bytes:
+    """Bundled ``<league>/data/<fname>`` bytes, importlib.resources first.
 
-    The plain-``Path`` fallback keeps tests green before the CSVs are wired
-    into ``[tool.setuptools.package-data]``.
+    The plain-``Path`` fallback keeps tests green before a CSV is wired into
+    ``[tool.setuptools.package-data]``.
     """
     if league not in _LEAGUE_PKG:
         raise ValueError(f"league must be one of {sorted(_LEAGUE_PKG)}, got {league!r}")
-    fname = f"ncaa_teamids_{league}.csv"
     try:
         return resources.files(_LEAGUE_PKG[league]).joinpath("data", fname).read_bytes()
     except (FileNotFoundError, ModuleNotFoundError, NotADirectoryError, OSError):
         return (Path(__file__).resolve().parents[1] / league / "data" / fname).read_bytes()
+
+
+def _teamids_csv_bytes(league: str) -> bytes:
+    """Bundled team-id CSV bytes for *league*."""
+    return _league_data_bytes(league, f"ncaa_teamids_{league}.csv")
 
 
 def _ncaa_bb_team_ids(league: str) -> pl.DataFrame:
