@@ -394,6 +394,7 @@ from sportsdataverse.cfb import load_cfb_adv_turnover as load_cfb_adv_turnover  
 from sportsdataverse.cfb import load_cfb_betting as load_cfb_betting  # noqa: F401
 from sportsdataverse.cfb import load_cfb_betting_lines as load_cfb_betting_lines  # noqa: F401
 from sportsdataverse.cfb import load_cfb_drives as load_cfb_drives  # noqa: F401
+from sportsdataverse.cfb import load_cfb_fpi_weekly as load_cfb_fpi_weekly  # noqa: F401
 from sportsdataverse.cfb import load_cfb_game_rosters as load_cfb_game_rosters  # noqa: F401
 from sportsdataverse.cfb import load_cfb_linescores as load_cfb_linescores  # noqa: F401
 from sportsdataverse.cfb import load_cfb_model_pbp as load_cfb_model_pbp  # noqa: F401
@@ -635,6 +636,7 @@ __all__ = [
     "load_cfb_betting",
     "load_cfb_betting_lines",
     "load_cfb_drives",
+    "load_cfb_fpi_weekly",
     "load_cfb_game_rosters",
     "load_cfb_linescores",
     "load_cfb_model_pbp",

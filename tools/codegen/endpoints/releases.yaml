@@ -131,12 +131,24 @@ loaders:
   min_season: 2004
   example_args:
     seasons: 2024
+- fn: load_cfb_fpi_weekly
+  league: cfb
+  base: sdv_releases
+  url: cfb_fpi_weekly/cfb_fpi_weekly_{season}.parquet
+  tag: cfb_fpi_weekly
+  min_season: 2005
+  id_int64:
+  - team_id
+  example_args:
+    seasons: 2024
 - fn: load_cfb_power_index
   league: cfb
   base: sdv_releases
   url: espn_cfb_power_index/power_index_{season}.parquet
   tag: espn_cfb_power_index
   min_season: 2015
+  id_int64:
+  - team_id
   example_args:
     seasons: 2024
 - fn: load_cfb_adv_team

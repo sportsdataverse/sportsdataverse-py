@@ -29,6 +29,7 @@ flowchart LR
 | `load_cfb_game_rosters` | [espn_cfb_game_rosters](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_game_rosters) | — |
 | `load_cfb_linescores` | [espn_cfb_linescores](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_linescores) | — |
 | `load_cfb_betting` | [espn_cfb_betting](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_betting) | — |
+| `load_cfb_fpi_weekly` | [cfb_fpi_weekly](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_fpi_weekly) | — |
 | `load_cfb_power_index` | [espn_cfb_power_index](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_power_index) | — |
 | `load_cfb_adv_team` | [espn_cfb_adv_team](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_adv_team) | — |
 | `load_cfb_adv_passing` | [espn_cfb_adv_passing](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_adv_passing) | — |
@@ -952,6 +953,69 @@ Release: [espn_cfb_betting](https://github.com/sportsdataverse/sportsdataverse-d
 load_cfb_betting(seasons=2024)
 ```
 
+## `load_cfb_fpi_weekly`
+
+Release: [cfb_fpi_weekly](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_fpi_weekly) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/cfb_fpi_weekly/cfb_fpi_weekly_{season}.parquet`
+### Returns
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season (4-digit year). |
+| `season_type` | Int64 | ESPN season type (2 = regular, 3 = postseason). |
+| `week` | Int64 | Game week of the season. |
+| `team_id` | Int64 | ESPN team id. |
+| `last_updated` | String | Timestamp ESPN last refreshed the power index. |
+| `run_date_time_key` | Int64 |  |
+| `snapshot_out_of_sequence` | Boolean |  |
+| `fpi` | Float64 | ESPN Football Power Index rating (projected scoring margin vs. average team). |
+| `fpirank` | Float64 |  |
+| `projectedw` | Float64 |  |
+| `projectedl` | Float64 |  |
+| `projectedt` | Null |  |
+| `projectedwpctrank` | Float64 |  |
+| `probwinout` | Float64 |  |
+| `probwinconf` | Float64 |  |
+| `sosremainingrank` | Float64 |  |
+| `accomplishment` | Float64 |  |
+| `accomplishmentrank` | Float64 |  |
+| `adjwins` | Float64 |  |
+| `adjlosses` | Float64 |  |
+| `adjwinpctrank` | Float64 |  |
+| `gamecontrol` | Float64 |  |
+| `gamecontrolrank` | Float64 |  |
+| `adjavgingamewp` | Float64 |  |
+| `adjavgingamewprank` | Float64 |  |
+| `avgingamewp` | Float64 |  |
+| `avgingamewprank` | Float64 |  |
+| `avgsosrank` | Float64 |  |
+| `topsosrank` | Float64 |  |
+| `epaoffense` | Float64 |  |
+| `epadefense` | Float64 |  |
+| `epaspecialteams` | Float64 |  |
+| `probwindiv` | Float64 |  |
+| `probmakeplayoffs` | Float64 |  |
+| `probmaketitlegame` | Float64 |  |
+| `numwins` | Float64 |  |
+| `numlosses` | Float64 |  |
+| `numties` | Float64 |  |
+| `probwintitle` | Float64 |  |
+| `rankchange7days` | Float64 |  |
+| `prob6wins` | Float64 |  |
+| `rank` | Float64 | Position of the school within the poll for the given week (1 = top-ranked). |
+| `offefficiency` | Float64 |  |
+| `offefficiencyrank` | Float64 |  |
+| `defefficiency` | Float64 |  |
+| `defefficiencyrank` | Float64 |  |
+| `stefficiency` | Float64 |  |
+| `stefficiencyrank` | Float64 |  |
+| `totefficiency` | Float64 |  |
+| `totefficiencyrank` | Float64 |  |
+| `snapshot_is_contemporaneous` | Boolean |  |
+
+```python
+load_cfb_fpi_weekly(seasons=2024)
+```
+
 ## `load_cfb_power_index`
 
 Release: [espn_cfb_power_index](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_power_index) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_power_index/power_index_{season}.parquet`
@@ -959,10 +1023,13 @@ Release: [espn_cfb_power_index](https://github.com/sportsdataverse/sportsdataver
 
 | col_name | type | description |
 |---|---|---|
-| `$ref` | String | ESPN Core v2 API URL for one team's FPI projection on this game; the published asset carries only these links, not the resolved projection numbers. |
-| `game_id` | Int64 | ESPN game identifier. |
 | `season` | Int64 | Season (4-digit year). |
-| `week` | Int64 | Game week of the season. |
+| `game_id` | Int64 | ESPN game identifier. |
+| `team_id` | Int64 | ESPN team id. |
+| `teampredptdiff` | Float64 |  |
+| `gameprojection` | Float64 |  |
+| `matchupquality` | Float64 |  |
+| `teamadjgamescore` | Float64 |  |
 
 ```python
 load_cfb_power_index(seasons=2024)

@@ -2847,8 +2847,6 @@ load_cfb_player_box:
   yardsPerReception: Yards gained per reception.
   yardsPerRushAttempt: Yards gained per rushing attempt.
 load_cfb_power_index:
-  $ref: ESPN Core v2 API URL for one team's FPI projection on this game; the published asset carries only these links, not
-    the resolved projection numbers.
 load_cfb_ratings:
   adj_def_epa: Opponent-adjusted EPA per play allowed, netted the same way as the offensive rating, so lower is better because
     it measures EPA surrendered.
