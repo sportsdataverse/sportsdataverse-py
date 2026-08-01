@@ -18,6 +18,50 @@ _SDV_RELEASES = "https://github.com/sportsdataverse/sportsdataverse-data/release
 _RAW_DATA = "https://raw.githubusercontent.com/sportsdataverse/"
 
 
+def _cast_ids_int64(df: pl.DataFrame, cols: List[str]) -> pl.DataFrame:
+    """Canonicalize id columns to ``Int64`` at the loader boundary.
+
+    Producers have shipped the same ESPN id as ``String``, ``Int32`` and ``Int64``
+    across releases (CFB ``team_id`` was String on the summaries/ratings family and
+    Int64 on the box/pbp/adv family). Joining across two such datasets matches
+    **nothing** -- silently, with no error and a structurally valid frame -- so the
+    dtype is pinned once here rather than left to every caller.
+
+    Conservative by construction: a column is only converted when every non-null
+    value survives the cast. A String column holding a genuinely non-numeric id, or
+    one with leading zeros that would change meaning, is left exactly as-is rather
+    than corrupted or nulled. Float-origin ids go straight to Int64 rather than
+    through a string (which would yield ``"123.0"``).
+
+    Args:
+        df: frame to normalize (may be empty).
+        cols: id column names to canonicalize; missing ones are ignored.
+
+    Returns:
+        The frame with each named column cast to ``Int64`` where safe.
+    """
+    if df.height == 0:
+        return df
+    for col in cols:
+        if col not in df.columns or df.schema[col] == pl.Int64:
+            continue
+        src = df[col]
+        cast = src.cast(pl.Int64, strict=False)
+        # Refuse if the cast would invent nulls -- a value did not survive, so the
+        # column is not really an integer id.
+        if cast.null_count() != src.null_count():
+            continue
+        # Widening one integer type to another is always lossless. For every other
+        # source dtype require an exact round-trip, because "no new nulls" is
+        # necessary but NOT sufficient: "007" casts cleanly to 7 and 1.5 truncates
+        # to 1, both silently changing the id. Zero-padded and fractional values
+        # must keep their original column untouched.
+        if not src.dtype.is_integer() and not cast.cast(src.dtype).equals(src):
+            continue
+        df = df.with_columns(cast.alias(col))
+    return df
+
+
 def _get(url: str, params: Optional[dict] = None, **kwargs) -> Dict:
     """GET ``url`` as JSON. Returns ``{}`` on failure. Strips ``None`` params."""
     clean = {k: v for k, v in (params or {}).items() if v is not None}

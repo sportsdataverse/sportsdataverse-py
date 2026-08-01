@@ -58,13 +58,52 @@ def _bucket_of(path: str) -> str:
 # tracked follow-up, mirroring the nba_stats/wnba_stats decision above.
 # native/on3 + native/pff: the On3 RDB and PFF Premium column tails are likewise
 # authored as pilots with the remainder deferred (see those tracks' plans).
+# loader_schemas: generated dataset-loader return tables gained a `description`
+# column (previously they rendered name+type only), which exposed ~3k columns
+# across 8 leagues in one step. The shared//id columns fill from the R dict for
+# free; the per-dataset statistical tails are authored incrementally, mirroring
+# the nba_stats/wnba_stats decision above. `deferred_columns()` reports the count.
 _DEFERRED_BUCKETS = {
     "native/nba_stats",
     "native/wnba_stats",
     "native/sports247_site_pages",
     "native/on3",
     "native/pff",
+    "loader_schemas",
 }
+
+
+def _loader_schema_rows(d: dict) -> list[dict]:
+    """Rows for ``loader_schemas.yaml`` — ``{loader_fn: [{name, type}]}``.
+
+    The league is taken from the ``load_<league>_*`` function name (matching what
+    ``_loader_schema_table`` passes as ``league``), so the R-dict fallback resolves
+    the same way here as it does at render time. These entries carry no stored
+    description, so ``blank`` is always True and coverage is decided purely by the
+    manual dict + R dict.
+    """
+    rows: list[dict] = []
+    for fn, cols in (d or {}).items():
+        if not isinstance(cols, list):
+            continue
+        parts = fn.split("_")
+        league = parts[1] if len(parts) > 2 and parts[0] == "load" else None
+        names = [c.get("name", "") for c in cols if isinstance(c, dict)]
+        for c in cols:
+            if not isinstance(c, dict):
+                continue
+            rows.append(
+                {
+                    "schema": fn,
+                    "league": league,
+                    "bucket": "loader_schemas",
+                    "col": c.get("name", ""),
+                    "type": c.get("type", ""),
+                    "blank": True,
+                    "siblings": [n for n in names if n != c.get("name", "")],
+                }
+            )
+    return rows
 
 
 def iter_schema_columns() -> list[dict]:
@@ -78,6 +117,14 @@ def iter_schema_columns() -> list[dict]:
         except (yaml.YAMLError, OSError):
             continue
         if not isinstance(d, dict):
+            continue
+        # loader_schemas.yaml is a flat {loader_fn: [{name, type}]} map, not the
+        # `kind: dataframe` shape. It is globbed like any other schema file, so
+        # without this branch its columns silently contribute nothing -- and since
+        # loader return tables now render a description column, they would be blank
+        # cells invisible to the ratchet.
+        if os.path.basename(f) == "loader_schemas.yaml":
+            out.extend(_loader_schema_rows(d))
             continue
         schema = d.get("schema") or os.path.splitext(os.path.basename(f))[0]
         league = _league_of(f)

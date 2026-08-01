@@ -9,6 +9,7 @@ import polars as pl
 from sportsdataverse._codegen_runtime import (
     SeasonNotFoundError,  # noqa: F401
     _as_season_list,
+    _cast_ids_int64,  # noqa: F401  (used only by loaders declaring id_int64)
     _read_release_parquet,
     cli_warn,
 )
@@ -470,7 +471,7 @@ def load_cfb_ratings(seasons, return_as_pandas: bool = False):
         |col_name    |type    |
         |:-----------|:-------|
         |season      |Int64   |
-        |team_id     |String  |
+        |team_id     |Int64   |
         |adj_off_epa |Float64 |
         |adj_def_epa |Float64 |
         |adj_st_epa  |Float64 |
@@ -506,6 +507,9 @@ def load_cfb_ratings(seasons, return_as_pandas: bool = False):
     # diagonal: per-season release schemas can drift (columns added/dropped
     # over the years) -- union columns, null-fill gaps.
     out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    # Producers shipped this id with differing dtypes across releases; pin it here
+    # so a cross-dataset join cannot silently match nothing.
+    out = _cast_ids_int64(out, ["team_id"])
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
@@ -525,7 +529,7 @@ def load_cfb_recruiting_proj(seasons, return_as_pandas: bool = False):
         |col_name     |type    |
         |:------------|:-------|
         |season       |Int64   |
-        |team_id      |String  |
+        |team_id      |Int64   |
         |pred_wins    |Float64 |
         |pred_margin  |Float64 |
         |pred_net_epa |Float64 |
@@ -551,6 +555,9 @@ def load_cfb_recruiting_proj(seasons, return_as_pandas: bool = False):
     # diagonal: per-season release schemas can drift (columns added/dropped
     # over the years) -- union columns, null-fill gaps.
     out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    # Producers shipped this id with differing dtypes across releases; pin it here
+    # so a cross-dataset join cannot silently match nothing.
+    out = _cast_ids_int64(out, ["team_id"])
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
@@ -698,7 +705,7 @@ def load_cfb_team_info(seasons, return_as_pandas: bool = False):
 
         |col_name         |type    |
         |:----------------|:-------|
-        |team_id          |Int32   |
+        |team_id          |Int64   |
         |school           |String  |
         |mascot           |String  |
         |abbreviation     |String  |
@@ -748,6 +755,9 @@ def load_cfb_team_info(seasons, return_as_pandas: bool = False):
     # diagonal: per-season release schemas can drift (columns added/dropped
     # over the years) -- union columns, null-fill gaps.
     out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    # Producers shipped this id with differing dtypes across releases; pin it here
+    # so a cross-dataset join cannot silently match nothing.
+    out = _cast_ids_int64(out, ["team_id"])
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
@@ -2221,7 +2231,7 @@ def load_cfb_passing(seasons, return_as_pandas: bool = False):
 
         |col_name            |type    |
         |:-------------------|:-------|
-        |team_id             |String  |
+        |team_id             |Int64   |
         |pos_team            |String  |
         |division            |String  |
         |conference          |String  |
@@ -2286,6 +2296,9 @@ def load_cfb_passing(seasons, return_as_pandas: bool = False):
     # diagonal: per-season release schemas can drift (columns added/dropped
     # over the years) -- union columns, null-fill gaps.
     out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    # Producers shipped this id with differing dtypes across releases; pin it here
+    # so a cross-dataset join cannot silently match nothing.
+    out = _cast_ids_int64(out, ["team_id"])
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
@@ -2371,7 +2384,7 @@ def load_cfb_receiving(seasons, return_as_pandas: bool = False):
 
         |col_name             |type    |
         |:--------------------|:-------|
-        |team_id              |String  |
+        |team_id              |Int64   |
         |pos_team             |String  |
         |division             |String  |
         |conference           |String  |
@@ -2425,6 +2438,9 @@ def load_cfb_receiving(seasons, return_as_pandas: bool = False):
     # diagonal: per-season release schemas can drift (columns added/dropped
     # over the years) -- union columns, null-fill gaps.
     out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    # Producers shipped this id with differing dtypes across releases; pin it here
+    # so a cross-dataset join cannot silently match nothing.
+    out = _cast_ids_int64(out, ["team_id"])
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
@@ -2443,7 +2459,7 @@ def load_cfb_rushing(seasons, return_as_pandas: bool = False):
 
         |col_name           |type    |
         |:------------------|:-------|
-        |team_id            |String  |
+        |team_id            |Int64   |
         |pos_team           |String  |
         |division           |String  |
         |conference         |String  |
@@ -2493,6 +2509,9 @@ def load_cfb_rushing(seasons, return_as_pandas: bool = False):
     # diagonal: per-season release schemas can drift (columns added/dropped
     # over the years) -- union columns, null-fill gaps.
     out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    # Producers shipped this id with differing dtypes across releases; pin it here
+    # so a cross-dataset join cannot silently match nothing.
+    out = _cast_ids_int64(out, ["team_id"])
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
@@ -2511,7 +2530,7 @@ def load_cfb_team_summaries(seasons, return_as_pandas: bool = False):
 
         |col_name                             |type    |
         |:------------------------------------|:-------|
-        |team_id                              |String  |
+        |team_id                              |Int64   |
         |pos_team                             |String  |
         |division                             |String  |
         |conference                           |String  |
@@ -2916,6 +2935,9 @@ def load_cfb_team_summaries(seasons, return_as_pandas: bool = False):
     # diagonal: per-season release schemas can drift (columns added/dropped
     # over the years) -- union columns, null-fill gaps.
     out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    # Producers shipped this id with differing dtypes across releases; pin it here
+    # so a cross-dataset join cannot silently match nothing.
+    out = _cast_ids_int64(out, ["team_id"])
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
@@ -3065,7 +3087,7 @@ def load_cfb_ratings_weekly(seasons, return_as_pandas: bool = False):
         |col_name     |type    |
         |:------------|:-------|
         |season       |Int64   |
-        |team_id      |String  |
+        |team_id      |Int64   |
         |adj_off_epa  |Float64 |
         |adj_def_epa  |Float64 |
         |adj_st_epa   |Float64 |
@@ -3102,6 +3124,9 @@ def load_cfb_ratings_weekly(seasons, return_as_pandas: bool = False):
     # diagonal: per-season release schemas can drift (columns added/dropped
     # over the years) -- union columns, null-fill gaps.
     out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    # Producers shipped this id with differing dtypes across releases; pin it here
+    # so a cross-dataset join cannot silently match nothing.
+    out = _cast_ids_int64(out, ["team_id"])
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
@@ -3120,7 +3145,7 @@ def load_cfb_team_summaries_weekly(seasons, return_as_pandas: bool = False):
 
         |col_name                             |type    |
         |:------------------------------------|:-------|
-        |team_id                              |String  |
+        |team_id                              |Int64   |
         |pos_team                             |String  |
         |division                             |String  |
         |conference                           |String  |
@@ -3526,4 +3551,7 @@ def load_cfb_team_summaries_weekly(seasons, return_as_pandas: bool = False):
     # diagonal: per-season release schemas can drift (columns added/dropped
     # over the years) -- union columns, null-fill gaps.
     out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    # Producers shipped this id with differing dtypes across releases; pin it here
+    # so a cross-dataset join cannot silently match nothing.
+    out = _cast_ids_int64(out, ["team_id"])
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out

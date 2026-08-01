@@ -973,6 +973,7 @@ class _LoaderView:
         self.stub_message = ld.stub_message
         self.abs_url = "" if ld.stub else f"{bases[ld.base]}{ld.url}"
         self.docstring = _build_loader_docstring(ld)
+        self.id_int64 = ld.id_int64
 
 
 def render_loader_module(league: str, loaders, bases: dict) -> str:
@@ -2006,13 +2007,22 @@ def _loader_base_label(prefix: str) -> str:
     return " / ".join(_LOADER_BASE_LABEL.get(b, b) for b in bases) or "sportsdataverse-data releases"
 
 
-def _loader_schema_table(fn: str) -> str:
-    """Markdown column table for a loader from the introspected footer schemas."""
+def _loader_schema_table(fn: str, league: str | None = None) -> str:
+    """Markdown column table for a loader from the introspected footer schemas.
+
+    Carries a ``description`` column so loader returns tables match the endpoint
+    ones. Descriptions resolve exactly like ``_return_table``'s: the hand-curated
+    ``manual_column_descriptions.yaml`` (keyed by the loader's ``fn``, so a loader
+    documents its columns under its own name), then the R-package column dict for
+    the league. Columns with neither are left blank rather than invented.
+    """
     cols = _loader_schemas().get(fn) or []
     if not cols:
         return ""
-    head = "| col_name | type |\n|---|---|\n"
-    return head + "".join(f"| `{c['name']}` | {c['type']} |\n" for c in cols)
+    head = "| col_name | type | description |\n|---|---|---|\n"
+    return head + "".join(
+        f"| `{c['name']}` | {c['type']} | {_table_cell_desc('', league, c['name'], fn)} |\n" for c in cols
+    )
 
 
 def _loader_doc_views(prefix: str) -> list[dict]:
@@ -2043,7 +2053,11 @@ def _loader_doc_views(prefix: str) -> list[dict]:
                 "tag_url": f"{tag_base}{ld.tag}",
                 "url": "" if ld.stub else f"{rel.bases[ld.base]}{ld.url}",
                 "automation": {"repo": auto.get("repo", ""), "workflow": auto.get("workflow", "")},
-                "return_table": _return_table(ld.returns_schema) if ld.returns_schema else _loader_schema_table(ld.fn),
+                "return_table": (
+                    _return_table(ld.returns_schema, prefix)
+                    if ld.returns_schema
+                    else _loader_schema_table(ld.fn, prefix)
+                ),
                 "example_seasons": (ld.example_args or {}).get("seasons", 2024),
             },
         )
