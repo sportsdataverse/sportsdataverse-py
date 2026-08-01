@@ -14,12 +14,13 @@ Verified while writing (see the module for line refs):
       second_level      >=4 -> 0.5*(adj-4) else 0
       open_field        >8  -> yards-adj  else 0
       highlight_yards   = second_level + open_field
-  * opportunity_run is `rush AND yards <= 4` -- the INVERSE of the conventional
-    "carry gained 4+", so it is documented as what the code computes.
-  * opp_highlight_yards is identically 0 in every published row (verified across
-    162,950 plays in 2024): its gate requires <=4 rushing yards while
-    highlight_yards is non-zero only at >=4, so the two can never co-occur.
-    Documented as a known-degenerate column rather than silently described.
+  * opportunity_run WAS `rush AND yards <= 4` -- the inverse of the cfbfastR
+    oracle. FIXED (2026-08) to `rush AND yards >= 4`; the column descriptions
+    scope the old behaviour to assets published before that fix.
+  * opp_highlight_yards was consequently identically 0 in every published row
+    (verified across 162,950 plays in 2024): the inverted gate required <=4
+    rushing yards while highlight_yards only accrues at >=4, so the two could
+    never co-occur. Non-degenerate since the fix.
 
 Anything unparsed is reported and left blank, never invented.
 """
@@ -221,9 +222,13 @@ def describe(col: str) -> str | None:
     m = re.fullmatch(r"(lag|lead)_(.+?)(\d?)$", col)
     if m:
         d, base, n = m.groups()
-        direction = "previous" if d == "lag" else "next"
-        step = f" {n} plays" if n and n not in ("1", "") else ""
-        return f"Value of {base} on the {direction}{step or ''} play, used for sequence-aware derivations."
+        # A multi-step column names the OFFSET, so "the next 2 plays" must not also
+        # take the singular "play" suffix -- that rendered "on the next 2 plays play".
+        if n and n not in ("1", ""):
+            where = f"{n} plays {'back' if d == 'lag' else 'ahead'}"
+        else:
+            where = f"the {'previous' if d == 'lag' else 'next'} play"
+        return f"Value of {base} {where}, used for sequence-aware derivations."
 
     # --- ESPN nested passthrough: start.* / end.* / drive.* / homeTeam* / awayTeam*
     m = re.fullmatch(r"(start|end)\.(.+)", col)

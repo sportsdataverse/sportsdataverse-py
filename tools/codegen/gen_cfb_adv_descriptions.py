@@ -108,6 +108,29 @@ DESCS: dict[str, str] = {
     "rushing_power_rate": "Share of carries that were power rushing attempts.",
     "rushing_power_success_rate": "Share of power rushing attempts that succeeded.",
     "rushing_stopped": "Count of rushing attempts stopped at or behind the line of scrimmage.",
+    # These nine were falling through to the R-package dict, which mislabels two of
+    # them: rushing_power_success is Int64 0-7 (a COUNT) but was rendered "success
+    # rate", and rushing_highlight_yards was given the per-opportunity wording that
+    # belongs to rushing_highlight_yards_per_opp. Manual entries take precedence,
+    # so these override the fallback. Ranges verified on the published 2024 asset.
+    "rushing_power_success": (
+        "Count of power rushing attempts that gained the yardage needed. An integer count, not a "
+        "rate -- the rate is published separately as rushing_power_success_rate."
+    ),
+    "rushing_highlight_yards": (
+        "Total highlight yards the team accumulated -- the yardage credited to ball carriers rather "
+        "than the line. The per-carry figure is rushing_highlight_yards_per_opp."
+    ),
+    "rushing_stuff_rate": "Share of the team's carries that were stuffed at or behind the line of scrimmage.",
+    "rush_yards": "Total yards the team gained on rush plays.",
+    "pass_yards": "Total yards the team gained on pass plays.",
+    "passes": "Number of pass plays the team ran.",
+    "total_yards": "Total yards the team gained across all plays.",
+    "penalties": "Number of penalties assessed against the team.",
+    "penalty_yards": (
+        "Net penalty yardage assessed against the team; can be negative when enforcement moved the "
+        "team forward on balance."
+    ),
     "rushing_stopped_rate": "Share of carries stopped at or behind the line of scrimmage.",
     "rushing_stuff": "Count of stuffed rushing attempts.",
     # --- yardage totals -----------------------------------------------------

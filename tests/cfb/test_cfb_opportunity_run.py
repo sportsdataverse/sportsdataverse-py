@@ -42,7 +42,12 @@ def plays(request) -> pl.DataFrame:
     request.addfinalizer(mp.undo)
     mp.setattr("sportsdataverse.cfb.cfb_pbp.download", lambda *a, **k: _Resp())
 
-    proc = CFBPlayProcess(gameId=401628455)
+    # join_participants=False keeps this offline. The monkeypatch above only
+    # replaces cfb_pbp.download; the participants path makes its OWN cdn sidecar
+    # and $ref fetches, so leaving the default True would let this "offline"
+    # regression test reach the network. None of the rushing decomposition under
+    # test depends on participant joins.
+    proc = CFBPlayProcess(gameId=401628455, join_participants=False)
     proc.espn_cfb_pbp()
     out = proc.run_processing_pipeline()
     df = out["plays"] if isinstance(out, dict) else out

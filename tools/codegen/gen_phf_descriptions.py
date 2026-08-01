@@ -74,12 +74,12 @@ STATIC: dict[str, str] = {
     "facility": "Name of the facility hosting the game.",
     "facility_address": "Street address of the hosting facility.",
     "facility_id": "League identifier for the hosting facility.",
-    "rink": "Name of the rink within the facility.",
-    "rink_id": "League identifier for the rink.",
-    "external_url": "League-published external link for the game.",
+    "rink": "Name of the rink within the facility.  NEVER POPULATED: the column is all-null in every published season, which is why it is typed Boolean -- that dtype is polars' inference for an entirely empty column, not a flag.",
+    "rink_id": "League identifier for the rink.  NEVER POPULATED: the column is all-null in every published season, which is why it is typed Boolean -- that dtype is polars' inference for an entirely empty column, not a flag.",
+    "external_url": "League-published external link for the game.  NEVER POPULATED: the column is all-null in every published season, which is why it is typed Boolean -- that dtype is polars' inference for an entirely empty column, not a flag.",
     "tickets_url": "Link to purchase tickets for the game.",
     "watch_live_url": "Link to the live broadcast of the game.",
-    "highlight_color": "Display colour the league uses for the game in its schedule UI.",
+    "highlight_color": "Display colour the league uses for the game in its schedule UI.  NEVER POPULATED: the column is all-null in every published season, which is why it is typed Boolean -- that dtype is polars' inference for an entirely empty column, not a flag.",
     "home_team_short": "Short display name of the home team.",
     "away_team_short": "Short display name of the away team.",
     "home_division_id": "League identifier for the home team's division.",
@@ -138,11 +138,18 @@ def main() -> None:
             d = describe(c["name"])
             if d:
                 got[c["name"]] = d
+            else:
+                # report, never silently omit -- a column this generator cannot
+                # resolve must surface so it is authored rather than lost
+                unparsed.append(f"{t}.{c['name']}")
         out[t] = got
     # report anything declared in STATIC but absent from every schema
     declared = {c["name"] for t in targets for c in schemas.get(t, [])}
     stale = sorted(k for k in STATIC if k not in declared)
     print("composed: " + ", ".join(f"{t.split('_', 2)[-1]}={len(v)}" for t, v in out.items()))
+    print(f"unresolved (left blank, never invented): {len(unparsed)}")
+    for u in unparsed[:40]:
+        print(f"   {u}")
     if stale:
         print(f"WARNING described but not in any PHF schema: {stale}")
     with open("_phf_descs.yaml", "w", encoding="utf-8") as fh:
