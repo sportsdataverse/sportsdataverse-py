@@ -1,0 +1,21 @@
+name: nba_stats_result_sets
+description: >-
+  The classic stats.nba.com envelope: {resource, parameters, resultSets} where
+  resultSets is a LIST of {name, headers, rowSet} tables. This is the shape
+  parse_nba_stats_result_sets() reads. It is only one of five envelope families
+  in the archive -- see nba_stats_result_set (singular/dict),
+  nba_stats_result_sets_grouped (plural key, dict value, dict headers),
+  nba_stats_v3 and nba_stats_v3_period.
+# Derived from the committed hoopR-nba-stats-raw tree (489,977 files,
+# 64 endpoint dirs, 40 sampled per dir, 2026-08-01). 1,331 of the sampled
+# payloads carried resultSets-as-list; every inner element had exactly
+# ('headers', 'name', 'rowSet').
+#
+# `parameters` is required on purpose: it is the echo of the query that
+# produced the payload, so an offline reprocess can tell which season /
+# per-mode / measure-type a file represents without trusting its path.
+additional_properties: true
+required:
+  resource: str
+  parameters: dict
+  resultSets: list

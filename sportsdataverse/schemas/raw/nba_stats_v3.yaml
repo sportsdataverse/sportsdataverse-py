@@ -1,0 +1,35 @@
+name: nba_stats_v3
+description: >-
+  The modern stats.nba.com v3 envelope: {<entityKey>, meta}. There is no
+  `resultSets` at all -- the payload is a typed object tree, and the entity key
+  is named per endpoint (boxScoreTraditional, boxScoreAdvanced, game,
+  leagueSchedule, scoreboard, ...). This family is the BULK of the archive:
+  boxscoretraditionalv3 and playbyplayv3 are 39,244 files each, and the nine v3
+  box scores plus pbp and the schedule account for roughly 340k of the 490k
+  committed payloads.
+# Derived from the committed hoopR-nba-stats-raw tree (2026-08-01). `meta` was
+# present with exactly (request, time, version) in every v3 sample.
+#
+# `required_any` lists the observed entity keys: at least one must be present.
+# Requiring only `meta` would let a payload whose body was dropped validate
+# clean; a schema per entity key would be a dozen near-identical files.
+#
+# An empty body is NOT an empty payload: playbyplayv3/1996/0029500001.json is a
+# valid 201-byte envelope whose `game.actions` is []. v3 pbp genuinely has no
+# actions that far back. Only a literal `{}` on disk indicates a failed fetch.
+additional_properties: true
+required:
+  meta: dict
+required_any:
+  - - boxScoreTraditional
+    - boxScoreAdvanced
+    - boxScoreDefensive
+    - boxScoreFourFactors
+    - boxScoreMatchups
+    - boxScoreMisc
+    - boxScorePlayerTrack
+    - boxScoreScoring
+    - boxScoreUsage
+    - game
+    - leagueSchedule
+    - scoreboard

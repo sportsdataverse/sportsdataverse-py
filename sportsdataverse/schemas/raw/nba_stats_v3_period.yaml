@@ -1,0 +1,37 @@
+name: nba_stats_v3_period
+description: >-
+  Period-sliced box scores: a map of period NUMBER (as a string key) to a
+  complete nba_stats_v3 payload. Written by the per-period capture pass, one
+  file per game holding every period rather than one file per period.
+# Derived from the committed hoopR-nba-stats-raw tree (2026-08-01): the
+# boxscoretraditionalv3_period dir (37,966 files). Observed key sets were
+# ('1','2','3','4') for regulation and ('1','2','3','4','5') for a single-OT
+# game, each value a {boxScoreTraditional, meta} object.
+#
+# Periods 1-4 are required: every completed NBA game has four. Overtimes are
+# optional and open-ended -- 5 through 14 covers ten OTs, well past the
+# six-OT record. A game missing period 3 is a partial capture, which is
+# precisely what this schema exists to catch.
+#
+# Every value is a full nba_stats_v3 payload, so it is validated as one rather
+# than merely checked for dict-ness -- otherwise
+# `{"1": {}, "2": {}, "3": {}, "4": {}}`, a capture that lost every payload
+# body, would pass as a complete game.
+additional_properties: true
+values_of: nba_stats_v3
+required:
+  "1": dict
+  "2": dict
+  "3": dict
+  "4": dict
+optional:
+  "5": dict
+  "6": dict
+  "7": dict
+  "8": dict
+  "9": dict
+  "10": dict
+  "11": dict
+  "12": dict
+  "13": dict
+  "14": dict

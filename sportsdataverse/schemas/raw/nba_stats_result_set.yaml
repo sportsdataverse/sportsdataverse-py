@@ -1,0 +1,18 @@
+name: nba_stats_result_set
+description: >-
+  stats.nba.com endpoints that ship a SINGULAR `resultSet` holding one
+  {name, headers, rowSet} table as a dict, not a list of them. Reading these
+  with the plural-key path yields nothing -- the key is genuinely different,
+  not a list of length one.
+# Derived from the committed hoopR-nba-stats-raw tree (2026-08-01): 120 of the
+# sampled payloads used the singular key, all with a dict value. Observed on
+# leagueleaders, playerestimatedmetrics and teamestimatedmetrics.
+#
+# An empty result is still a full envelope -- leagueleaders/1996/
+# playoffs_pergame.json carries headers with `rowSet: []`. That is why a bare
+# `{}` on disk means a failed fetch, never "no data for this season".
+additional_properties: true
+required:
+  resource: str
+  parameters: dict
+  resultSet: dict
