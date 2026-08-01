@@ -130,7 +130,14 @@ class TestRosterParity:
         )
 
     def test_contract_columns(self, roster_df: pl.DataFrame) -> None:
-        assert list(roster_df.columns) == list(ROSTER_SCHEMA)
+        # player_id is Python-only additive (from the /players/{id} hrefs);
+        # the R oracle never had it, so it sits outside ROSTER_SCHEMA.
+        assert list(roster_df.columns) == [*ROSTER_SCHEMA, "player_id"]
+
+    def test_player_id_from_hrefs(self, roster_df: pl.DataFrame) -> None:
+        ids = roster_df.get_column("player_id").drop_nulls()
+        assert ids.len() == roster_df.height  # every fixture row carries a link
+        assert ids.str.contains(r"^\d+$").all()
 
 
 class TestTeamIds:
@@ -168,7 +175,7 @@ class TestPublicSurface:
 
     def test_roster_pandas(self) -> None:
         out = ncaa_mbb_team_roster(TEAM_ID, fetcher=_FakeFetcher(), return_as_pandas=True)
-        assert list(out.columns) == list(ROSTER_SCHEMA)
+        assert list(out.columns) == [*ROSTER_SCHEMA, "player_id"]
 
     def test_improper_request(self) -> None:
         with pytest.raises(ValueError):
