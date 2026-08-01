@@ -1433,7 +1433,8 @@ def load_cfb_adv_team(seasons, return_as_pandas: bool = False):
 
         |col_name                           |type    |
         |:----------------------------------|:-------|
-        |pos_team                           |Int64   |
+        |pos_team_id                        |Int64   |
+        |pos_team                           |String  |
         |rushing_highlight_yards_per_opp    |Float64 |
         |total_pen_yards                    |Int64   |
         |EPA_penalty                        |Float64 |
@@ -1552,10 +1553,12 @@ def load_cfb_adv_passing(seasons, return_as_pandas: bool = False):
 
         |col_name           |type    |
         |:------------------|:-------|
-        |pos_team           |Int64   |
+        |pos_team_id        |Int64   |
+        |pos_team           |String  |
         |passer_player_name |String  |
         |Comp               |Int64   |
         |Att                |Int64   |
+        |xComp              |Float64 |
         |Yds                |Float64 |
         |Pass_TD            |Int64   |
         |Int                |Int64   |
@@ -1565,11 +1568,14 @@ def load_cfb_adv_passing(seasons, return_as_pandas: bool = False):
         |WPA                |Float64 |
         |SR                 |Float64 |
         |Sck                |Int64   |
+        |CompPct            |Float64 |
+        |xCompPct           |Float64 |
+        |CPOE               |Float64 |
         |qbr_epa            |Float64 |
         |sack_epa           |Float64 |
         |pass_epa           |Float64 |
-        |rush_epa           |Null    |
-        |pen_epa            |Null    |
+        |rush_epa           |Float64 |
+        |pen_epa            |Float64 |
         |spread             |Float64 |
         |era0               |Int64   |
         |era1               |Int64   |
@@ -1619,7 +1625,8 @@ def load_cfb_adv_rushing(seasons, return_as_pandas: bool = False):
 
         |col_name           |type    |
         |:------------------|:-------|
-        |pos_team           |Int64   |
+        |pos_team_id        |Int64   |
+        |pos_team           |String  |
         |rusher_player_name |String  |
         |Car                |Int64   |
         |Yds                |Float64 |
@@ -1674,7 +1681,8 @@ def load_cfb_adv_receiving(seasons, return_as_pandas: bool = False):
 
         |col_name             |type    |
         |:--------------------|:-------|
-        |pos_team             |Int64   |
+        |pos_team_id          |Int64   |
+        |pos_team             |String  |
         |receiver_player_name |String  |
         |Rec                  |Int64   |
         |Tar                  |Int64   |
@@ -1730,7 +1738,8 @@ def load_cfb_adv_defensive(seasons, return_as_pandas: bool = False):
 
         |col_name              |type    |
         |:---------------------|:-------|
-        |def_pos_team          |Int64   |
+        |def_pos_team_id       |Int64   |
+        |def_pos_team          |String  |
         |scrimmage_plays       |Int64   |
         |TFL                   |Int64   |
         |TFL_pass              |Int64   |
@@ -1791,13 +1800,20 @@ def load_cfb_adv_defensive_players(seasons, return_as_pandas: bool = False):
 
         |col_name                |type   |
         |:-----------------------|:------|
-        |def_pos_team            |Int64  |
+        |def_pos_team_id         |Int64  |
+        |def_pos_team            |String |
         |player_name             |String |
         |fumble_recoveries       |Int64  |
         |fumble_recoveries_yards |Int64  |
         |game_id                 |Int64  |
         |season                  |Int64  |
         |week                    |Int64  |
+        |sacks                   |Int64  |
+        |sacks_yards             |Int64  |
+        |pass_breakups           |Int64  |
+        |forced_fumbles          |Int64  |
+        |interceptions           |Int64  |
+        |interceptions_yards     |Int64  |
 
     Example:
         Quick start::
@@ -1838,7 +1854,8 @@ def load_cfb_adv_drives(seasons, return_as_pandas: bool = False):
 
         |col_name                      |type    |
         |:-----------------------------|:-------|
-        |pos_team                      |Int64   |
+        |pos_team_id                   |Int64   |
+        |pos_team                      |String  |
         |drive_total_available_yards   |Float64 |
         |drive_total_gained_yards      |Int64   |
         |avg_field_position            |Float64 |
@@ -1889,7 +1906,8 @@ def load_cfb_adv_situational(seasons, return_as_pandas: bool = False):
 
         |col_name                         |type    |
         |:--------------------------------|:-------|
-        |pos_team                         |Int64   |
+        |pos_team_id                      |Int64   |
+        |pos_team                         |String  |
         |EPA_success                      |Int64   |
         |EPA_success_rate                 |Float64 |
         |EPA_success_pass                 |Int64   |
@@ -2002,7 +2020,8 @@ def load_cfb_adv_specialists(seasons, return_as_pandas: bool = False):
 
         |col_name           |type   |
         |:------------------|:------|
-        |pos_team           |Int64  |
+        |pos_team_id        |Int64  |
+        |pos_team           |String |
         |player_name        |String |
         |punts              |Int64  |
         |punts_yards        |Int64  |
@@ -2055,7 +2074,8 @@ def load_cfb_adv_turnover(seasons, return_as_pandas: bool = False):
 
         |col_name                 |type    |
         |:------------------------|:-------|
-        |pos_team                 |Int64   |
+        |pos_team_id              |Int64   |
+        |pos_team                 |String  |
         |turnovers                |Int64   |
         |st_turnovers_lost        |Int64   |
         |Int                      |Int64   |
