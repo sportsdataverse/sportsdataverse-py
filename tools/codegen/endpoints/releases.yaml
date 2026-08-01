@@ -19,6 +19,8 @@ loaders:
   min_season: 2004
   example_args:
     seasons: 2024
+  id_int64:
+  - team_id
 - fn: load_cfb_recruiting_proj
   league: cfb
   base: sdv_releases
@@ -27,6 +29,8 @@ loaders:
   min_season: 2016
   example_args:
     seasons: 2024
+  id_int64:
+  - team_id
 - fn: load_cfb_rosters
   league: cfb
   base: raw_data
@@ -51,6 +55,8 @@ loaders:
   min_season: 2003
   example_args:
     seasons: 2024
+  id_int64:
+  - team_id
 - fn: load_cfb_teams_crosswalk
   league: cfb
   base: sdv_releases
@@ -229,6 +235,8 @@ loaders:
   min_season: 2004
   example_args:
     seasons: 2024
+  id_int64:
+  - team_id
 - fn: load_cfb_percentiles
   league: cfb
   base: sdv_releases
@@ -245,6 +253,8 @@ loaders:
   min_season: 2004
   example_args:
     seasons: 2024
+  id_int64:
+  - team_id
 - fn: load_cfb_rushing
   league: cfb
   base: sdv_releases
@@ -253,6 +263,8 @@ loaders:
   min_season: 2004
   example_args:
     seasons: 2024
+  id_int64:
+  - team_id
 - fn: load_cfb_team_summaries
   league: cfb
   base: sdv_releases
@@ -261,6 +273,8 @@ loaders:
   min_season: 2004
   example_args:
     seasons: 2024
+  id_int64:
+  - team_id
 - fn: load_cfb_adv_team_gamelog
   league: cfb
   base: sdv_releases
@@ -277,6 +291,8 @@ loaders:
   min_season: 2004
   example_args:
     seasons: 2024
+  id_int64:
+  - team_id
 - fn: load_cfb_team_summaries_weekly
   league: cfb
   base: sdv_releases
@@ -285,6 +301,8 @@ loaders:
   min_season: 2004
   example_args:
     seasons: 2024
+  id_int64:
+  - team_id
 - fn: load_mbb_pbp
   league: mbb
   base: sdv_releases

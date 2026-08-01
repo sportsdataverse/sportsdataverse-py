@@ -8,6 +8,7 @@ import polars as pl
 from sportsdataverse._codegen_runtime import (
     SeasonNotFoundError,  # noqa: F401
     _as_season_list,
+    _cast_ids_int64,  # noqa: F401  (used only by loaders declaring id_int64)
     _read_release_parquet,
     cli_warn,
 )
@@ -41,6 +42,11 @@ def {{ ld.fn }}(seasons, return_as_pandas: bool = False):
     # diagonal: per-season release schemas can drift (columns added/dropped
     # over the years) -- union columns, null-fill gaps.
     out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+{% if ld.id_int64 %}
+    # Producers shipped this id with differing dtypes across releases; pin it here
+    # so a cross-dataset join cannot silently match nothing.
+    out = _cast_ids_int64(out, {{ ld.id_int64|py_repr }})
+{% endif %}
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 {% endif %}
 {% endfor %}

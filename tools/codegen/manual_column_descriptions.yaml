@@ -2585,6 +2585,21 @@ fit_field_position_ep:
 load_fp_curve:
   ep: Bundled expected points for a drive starting at this yard line (2018-2021 fit).
   yardline_own: Starting yard line from the offense's own goal (1-99).
+load_cfb_adv_defensive_players:
+  def_pos_team: Display name of the team on defense (e.g. 'Ohio State Buckeyes'). Held an ESPN team id until the
+    2026-08 republish; the id now lives in def_pos_team_id.
+  def_pos_team_id: ESPN team id of the team on defense. Present for every season 2004+.
+  forced_fumbles: Fumbles forced by the defender. Available from 2005 on; null for 2004, which ESPN ships with only
+    the fumble-recovery statistics.
+  fumble_recoveries: Fumbles recovered by the defender. Available for every season 2004+.
+  fumble_recoveries_yards: Yards returned on the defender's fumble recoveries. Available for every season 2004+.
+  interceptions: Passes intercepted by the defender. Available from 2014 on; null for 2004-2013, which ESPN ships
+    without interception statistics in this block.
+  interceptions_yards: Yards returned on the defender's interceptions. Available from 2014 on; null for 2004-2013.
+  pass_breakups: Passes broken up by the defender. Available from 2005 on; null for 2004.
+  player_name: Display name of the defender.
+  sacks: Sacks recorded by the defender. Available from 2005 on; null for 2004.
+  sacks_yards: Yards lost by the offense on the defender's sacks. Available from 2005 on; null for 2004.
 load_cfb_betting_lines:
   abbr: Selection/side this odds row applies to — a team abbreviation for spread and moneyline markets, or 'over'/'under'
     for total markets (the data is long-format, one row per book per selection per market_type).

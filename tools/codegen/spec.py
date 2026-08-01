@@ -102,6 +102,11 @@ class Loader:
     notebook: Optional[str] = None
     stub: bool = False
     stub_message: Optional[str] = None
+    # Id columns to canonicalize to Int64 at the loader boundary. Producers have
+    # shipped the same ESPN id as String, Int32 and Int64 across releases, which
+    # makes a cross-dataset join on that id silently match nothing. Declaring the
+    # column here normalizes it on read without touching the published asset.
+    id_int64: List[str] = field(default_factory=list)
 
 
 @dataclass(frozen=True)
@@ -255,6 +260,7 @@ def load_releases(path: Path) -> ReleasesConfig:
             notebook=ld.get("notebook"),
             stub=ld.get("stub", False),
             stub_message=ld.get("stub_message"),
+            id_int64=list(ld.get("id_int64", []) or []),
         )
         for ld in raw["loaders"]
     ]

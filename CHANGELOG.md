@@ -3,6 +3,8 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [Unreleased](#unreleased)
+  - [CFB — `team_id` canonicalized to `Int64` at the loader boundary](#cfb--team_id-canonicalized-to-int64-at-the-loader-boundary)
+  - [Docs — loader returns tables now carry column descriptions](#docs--loader-returns-tables-now-carry-column-descriptions)
   - [CFB — `adv_*` `pos_team` now holds the team NAME, id moves to `pos_team_id` (BREAKING data change)](#cfb--adv_-pos_team-now-holds-the-team-name-id-moves-to-pos_team_id-breaking-data-change)
   - [CFB — `adv_*` declared schemas re-derived from the shipped data](#cfb--adv_-declared-schemas-re-derived-from-the-shipped-data)
 - [0.0.73 Release: August 1, 2026](#0073-release-august-1-2026)
@@ -208,6 +210,65 @@
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Unreleased
+
+### CFB — `team_id` canonicalized to `Int64` at the loader boundary
+
+The same ESPN team id shipped with **three different dtypes** across the CFB
+release surface, which makes a cross-dataset join match **nothing** — silently,
+with no error and a structurally valid frame:
+
+| dtype | datasets |
+|---|---|
+| `Int64` | 13 — all `adv_*`, `drives`, `game_rosters`, `linescores`, `player_box`, `team_box`, `adv_team_gamelog` |
+| `String` | 8 — `passing`, `receiving`, `rushing`, `team_summaries`(+`_weekly`), `ratings`(+`_weekly`), `recruiting_proj` |
+| `Int32` | 1 — `team_info` |
+
+All nine non-`Int64` loaders now normalize on read, so
+`load_cfb_team_summaries(...)` joined to `load_cfb_adv_team(...)` on
+`team_id`/`pos_team_id` resolves **134/134** teams where it previously matched 0.
+
+- **Fixed at the boundary, not by republishing.** The published assets are
+  untouched; the loader pins the dtype on read, per the repo's "one dtype per id,
+  cast at the boundary" rule. No breaking change for anyone reading the parquet
+  directly.
+- **New `id_int64:` key in `releases.yaml`** declares which id columns a loader
+  canonicalizes; the generated loader emits a `_cast_ids_int64` call. Declaring it
+  is the whole change — no hand-edits to generated loaders.
+- **Lossless or refused, never silent.** `_cast_ids_int64` converts only when every
+  non-null value survives a round-trip. `"007"` casts cleanly to `7` and `1.5`
+  truncates to `1` — both change the id, so both leave the column untouched. A
+  "no new nulls" check alone would let both through. Float-origin ids go straight
+  to `Int64` rather than through a string (which would yield `"123.0"`).
+- Covered by `tests/codegen/test_id_casts.py`, including a manifest gate that fails
+  if a loader declares `id_int64` without emitting the call, or declares a
+  canonicalized column as anything other than `Int64`.
+- The two producer-schema contract tests now apply the declared `id_int64` overlay:
+  a returns table documents the **loader's** output, not the raw asset, so a
+  boundary cast is an expected divergence rather than a docs lie.
+
+### Docs — loader returns tables now carry column descriptions
+
+Generated loader returns tables rendered `col_name | type` only, while endpoint
+tables carried a third `description` column. Loader tables now match, resolving
+descriptions from `manual_column_descriptions.yaml` (keyed by the loader's own
+function name) and falling back to the R-package column dict — so shared columns
+like `game_id` / `season` / `week` fill in automatically.
+
+This exposed ~5,850 loader columns to the description coverage ratchet, which had
+never globbed `loader_schemas.yaml` — so those blanks were **invisible** to a gate
+whose stated intent is "every return-table column renders a description". The
+extractor now sees them (59% already covered) and the remainder is tracked via the
+existing `_DEFERRED_BUCKETS` mechanism, mirroring the `nba_stats` decision.
+
+The first documented use is `load_cfb_adv_defensive_players`, whose column
+availability is season-dependent and previously undiscoverable without loading
+several seasons and diffing them:
+
+| seasons | cols | shape |
+|---|---|---|
+| 2004 | 8 | fumble recoveries only |
+| 2005–2013 | 12 | `+ sacks, sacks_yards, pass_breakups, forced_fumbles` |
+| 2014–2025 | 14 | `+ interceptions, interceptions_yards` |
 
 ### CFB — `adv_*` `pos_team` now holds the team NAME, id moves to `pos_team_id` (BREAKING data change)
 

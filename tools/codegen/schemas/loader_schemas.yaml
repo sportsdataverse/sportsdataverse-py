@@ -923,7 +923,7 @@ load_cfb_model_pbp:
   type: String
 load_cfb_passing:
 - name: team_id
-  type: String
+  type: Int64
 - name: pos_team
   type: String
 - name: division
@@ -2031,7 +2031,7 @@ load_cfb_ratings:
 - name: season
   type: Int64
 - name: team_id
-  type: String
+  type: Int64
 - name: adj_off_epa
   type: Float64
 - name: adj_def_epa
@@ -2060,7 +2060,7 @@ load_cfb_ratings:
   type: Float64
 load_cfb_receiving:
 - name: team_id
-  type: String
+  type: Int64
 - name: pos_team
   type: String
 - name: division
@@ -2127,7 +2127,7 @@ load_cfb_recruiting_proj:
 - name: season
   type: Int64
 - name: team_id
-  type: String
+  type: Int64
 - name: pred_wins
   type: Float64
 - name: pred_margin
@@ -2173,7 +2173,7 @@ load_cfb_rosters:
   type: Int32
 load_cfb_rushing:
 - name: team_id
-  type: String
+  type: Int64
 - name: pos_team
   type: String
 - name: division
@@ -2359,7 +2359,7 @@ load_cfb_team_box:
   type: Int64
 load_cfb_team_info:
 - name: team_id
-  type: Int32
+  type: Int64
 - name: school
   type: String
 - name: mascot
@@ -2416,7 +2416,7 @@ load_cfb_team_info:
   type: Boolean
 load_cfb_team_summaries:
 - name: team_id
-  type: String
+  type: Int64
 - name: pos_team
   type: String
 - name: division
@@ -11055,7 +11055,7 @@ load_cfb_ratings_weekly:
 - name: season
   type: Int64
 - name: team_id
-  type: String
+  type: Int64
 - name: adj_off_epa
   type: Float64
 - name: adj_def_epa
@@ -11086,7 +11086,7 @@ load_cfb_ratings_weekly:
   type: Int32
 load_cfb_team_summaries_weekly:
 - name: team_id
-  type: String
+  type: Int64
 - name: pos_team
   type: String
 - name: division

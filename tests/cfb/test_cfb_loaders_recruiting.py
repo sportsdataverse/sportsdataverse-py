@@ -38,12 +38,22 @@ def _loader_entry() -> dict:
 
 
 def test_declared_schema_matches_the_producer_output_schema() -> None:
-    """The loader's returns-table must match the projection's real output.
+    """The loader's returns-table must match what the LOADER hands back.
 
     Both column ORDER and dtype: the published parquet is written straight from
     that frame, so any divergence here is a docs lie, not a formatting nit.
+
+    One documented exception: columns listed under the loader's ``id_int64`` key
+    are canonicalized to Int64 at the loader boundary (the same ESPN team id ships
+    as String here and Int64 on the adv_*/box families, which makes a cross-dataset
+    join silently match nothing). For those the declared type must be Int64 even
+    though the producer still emits Utf8 -- the returns table documents the
+    loader's output, not the raw asset.
     """
-    produced = _proj_mod._PROJECTION_SCHEMA
+    produced = dict(_proj_mod._PROJECTION_SCHEMA)
+    for col in _loader_entry().get("id_int64", []):
+        if col in produced:
+            produced[col] = pl.Int64
     declared = _declared_schema()
 
     assert [c["name"] for c in declared] == list(produced.keys())
