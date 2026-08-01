@@ -2,6 +2,9 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
+- [Unreleased](#unreleased)
+  - [CFB — `adv_*` `pos_team` now holds the team NAME, id moves to `pos_team_id` (BREAKING data change)](#cfb--adv_-pos_team-now-holds-the-team-name-id-moves-to-pos_team_id-breaking-data-change)
+  - [CFB — `adv_*` declared schemas re-derived from the shipped data](#cfb--adv_-declared-schemas-re-derived-from-the-shipped-data)
 - [0.0.73 Release: August 1, 2026](#0073-release-august-1-2026)
   - [CFB — pre-2014 `{type}_player_id` join recovered (2004 +36pp, 2005–2013 +2–8pp)](#cfb--pre-2014-type_player_id-join-recovered-2004-36pp-20052013-28pp)
   - [CFB — `adj_off/def/net` rescaled to the R `adjust_epa` netted statistic (BREAKING scale change)](#cfb--adj_offdefnet-rescaled-to-the-r-adjust_epa-netted-statistic-breaking-scale-change)
@@ -203,6 +206,58 @@
 - [0.0.5 Release: October 20, 2021](#005-release-october-20-2021)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+## Unreleased
+
+### CFB — `adv_*` `pos_team` now holds the team NAME, id moves to `pos_team_id` (BREAKING data change)
+
+ESPN's `advBoxScore` blocks put a **team id in a name-shaped column**. Verified
+against the published assets rather than assumed: all **235/235** distinct
+`pos_team` values in `adv_team` 2024 resolve to real teams.
+
+The producer (`cfbfastR-cfb-data`) now surfaces the id as `pos_team_id` /
+`def_pos_team_id` and fills the original column with the display name, so each
+column means what it is named. **All 10 `adv_*` tags have been rebuilt and
+republished for 2004–2025** (220 assets, 0 failures, 100% name resolution on
+every season).
+
+| | before | after |
+|---|---|---|
+| `pos_team` / `def_pos_team` | `Int64` id (`48`) | `String` name (`Ohio State Buckeyes`) |
+| `pos_team_id` / `def_pos_team_id` | — | `Int64` id |
+
+- **Affected tags** (10): `adv_team`, `adv_passing`, `adv_rushing`,
+  `adv_receiving`, `adv_defensive`, `adv_defensive_players`, `adv_turnover`,
+  `adv_drives`, `adv_situational`, `adv_specialists`. The first eight use
+  `pos_team`; `adv_defensive` and `adv_defensive_players` use `def_pos_team`.
+- **The summaries family was NOT affected** — `cfb_team_summaries`,
+  `cfb_passing`, `cfb_rushing`, `cfb_receiving` already shipped `team_id` for
+  the id and a readable `pos_team`, so they were deliberately left alone.
+- **Cross-family joins need a cast.** The two families spell this differently:
+  summaries uses `team_id` (**String**), `adv_*` uses `pos_team_id`
+  (**Int64**). Joining `cfb_team_summaries.team_id` to `adv_team.pos_team_id`
+  without casting matches nothing, silently.
+- **`espn_cfb_adv_team_gamelog` was rebuilt** for 2004–2025 off the new shape;
+  it continues to expose `team_id` + a readable `team` / `opponent`, so its
+  consumers see no change.
+
+### CFB — `adv_*` declared schemas re-derived from the shipped data
+
+The declared returns tables for all 10 `adv_*` loaders are regenerated from a
+diagonal union of real published seasons (2004/2014/2024/2025), so the
+documented schema now matches what the loaders actually return. Beyond the
+`pos_team` split this closes **pre-existing drift** the audit surfaced:
+
+- `load_cfb_adv_passing` was missing `xComp`, `CompPct`, `xCompPct`, `CPOE`,
+  and declared `rush_epa` / `pen_epa` as `Null` rather than `Float64`.
+- `load_cfb_adv_defensive_players` was missing `sacks`, `sacks_yards`,
+  `pass_breakups`, `interceptions`, `interceptions_yards`, `forced_fumbles`
+  (present from 2014 on; 2004 legitimately ships the narrower 8-column shape).
+
+`loader_schemas.yaml` drives the generated returns tables only — nothing casts
+from it — so this drift was invisible to the test suite and surfaced purely as
+incorrect published documentation. Declared-vs-shipped now diffs clean for all
+10.
 
 ## 0.0.73 Release: August 1, 2026
 
