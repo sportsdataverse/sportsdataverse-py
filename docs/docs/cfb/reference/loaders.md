@@ -589,13 +589,13 @@ Release: [cfb_crosswalk](https://github.com/sportsdataverse/sportsdataverse-data
 | col_name | type | description |
 |---|---|---|
 | `norm_key` | String |  |
-| `espn_team_id` | Int64 | ESPN team id (canonical key). |
+| `espn_team_id` | Int64 | ESPN team id for the crosswalk row. |
 | `espn_team` | String |  |
 | `espn_abbreviation` | String | ESPN abbreviation. |
-| `fox_team_id` | String | Fox Bifrost team id (NA if unmatched). |
+| `fox_team_id` | String | Fox Sports team id for the same team. |
 | `fox_team` | String |  |
 | `fox_abbreviation` | String |  |
-| `yahoo_team_id` | String | Yahoo team id (NA placeholder). |
+| `yahoo_team_id` | String | Yahoo Sports team id for the same team. |
 | `yahoo_team` | String |  |
 | `yahoo_abbreviation` | String |  |
 | `matched_sources` | String |  |
@@ -612,9 +612,9 @@ Release: [cfb_crosswalk](https://github.com/sportsdataverse/sportsdataverse-data
 | col_name | type | description |
 |---|---|---|
 | `matchup_key` | String |  |
-| `espn_game_id` | Int64 | ESPN game id (NA for bart-only rows). |
-| `fox_game_id` | String | Fox game id (NA placeholder). |
-| `yahoo_game_id` | String | Yahoo game id (NA placeholder). |
+| `espn_game_id` | Int64 | ESPN game id for the crosswalk row. |
+| `fox_game_id` | String | Fox Sports game id for the same game. |
+| `yahoo_game_id` | String | Yahoo Sports game id for the same game. |
 | `yahoo_global_game_id` | String |  |
 | `home_team` | String | Home team name. |
 | `away_team` | String | Away team name. |
@@ -641,9 +641,9 @@ Release: [espn_cfb_team_box](https://github.com/sportsdataverse/sportsdataverse-
 | `netPassingYards` | String |  |
 | `completionAttempts` | String |  |
 | `yardsPerPass` | String |  |
-| `rushingYards` | String |  |
-| `rushingAttempts` | String |  |
-| `yardsPerRushAttempt` | String |  |
+| `rushingYards` | String | Net rushing yards gained. |
+| `rushingAttempts` | String | Rushing attempts. |
+| `yardsPerRushAttempt` | String | Yards gained per rushing attempt. |
 | `totalPenaltiesYards` | String |  |
 | `turnovers` | String | Turnovers total. |
 | `fumblesLost` | String |  |
@@ -667,45 +667,45 @@ Release: [espn_cfb_player_box](https://github.com/sportsdataverse/sportsdatavers
 
 | col_name | type | description |
 |---|---|---|
-| `completions/passingAttempts` | String |  |
-| `passingYards` | String |  |
-| `yardsPerPassAttempt` | String |  |
-| `passingTouchdowns` | String |  |
+| `completions/passingAttempts` | String | Completions and pass attempts, as ESPN's combined string. |
+| `passingYards` | String | Net passing yards gained. |
+| `yardsPerPassAttempt` | String | Yards gained per pass attempt. |
+| `passingTouchdowns` | String | Passing touchdowns. |
 | `interceptions` | String | Passing interceptions. |
-| `adjQBR` | String |  |
+| `adjQBR` | String | Adjusted Total QBR for the quarterback. |
 | `category` | String | CFBD stats category name (e.g. passing, rushing, defensive). |
 | `athlete_id` | Int64 | ESPN athlete id. |
 | `athlete_name` | String | Player full name. |
 | `jersey` | Null | Jersey number. |
 | `team_id` | Int64 | ESPN team id. |
-| `rushingAttempts` | String |  |
-| `rushingYards` | String |  |
-| `yardsPerRushAttempt` | String |  |
-| `rushingTouchdowns` | String |  |
-| `longRushing` | String |  |
+| `rushingAttempts` | String | Rushing attempts. |
+| `rushingYards` | String | Net rushing yards gained. |
+| `yardsPerRushAttempt` | String | Yards gained per rushing attempt. |
+| `rushingTouchdowns` | String | Rushing touchdowns. |
+| `longRushing` | String | Longest rush of the game, in yards. |
 | `receptions` | String | The number of pass receptions. Lateral receptions officially don't count as reception. |
-| `receivingYards` | String |  |
-| `yardsPerReception` | String |  |
-| `receivingTouchdowns` | String |  |
-| `longReception` | String |  |
-| `interceptionYards` | String |  |
-| `interceptionTouchdowns` | String |  |
-| `puntReturns` | String |  |
-| `puntReturnYards` | String |  |
-| `yardsPerPuntReturn` | String |  |
-| `longPuntReturn` | String |  |
-| `puntReturnTouchdowns` | String |  |
-| `fieldGoalsMade/fieldGoalAttempts` | String |  |
-| `fieldGoalPct` | String |  |
-| `longFieldGoalMade` | String |  |
-| `extraPointsMade/extraPointAttempts` | String |  |
-| `totalKickingPoints` | String |  |
-| `punts` | String |  |
-| `puntYards` | String |  |
-| `grossAvgPuntYards` | String |  |
-| `touchbacks` | String |  |
-| `puntsInside20` | String |  |
-| `longPunt` | String |  |
+| `receivingYards` | String | Receiving yards gained. |
+| `yardsPerReception` | String | Yards gained per reception. |
+| `receivingTouchdowns` | String | Receiving touchdowns. |
+| `longReception` | String | Longest reception of the game, in yards. |
+| `interceptionYards` | String | Yards returned on interceptions. |
+| `interceptionTouchdowns` | String | Touchdowns scored on interception returns. |
+| `puntReturns` | String | Punt returns attempted. |
+| `puntReturnYards` | String | Yards gained on punt returns. |
+| `yardsPerPuntReturn` | String | Yards gained per punt return. |
+| `longPuntReturn` | String | Longest punt return of the game, in yards. |
+| `puntReturnTouchdowns` | String | Touchdowns scored on punt returns. |
+| `fieldGoalsMade/fieldGoalAttempts` | String | Field goals made and attempted, as ESPN's combined string. |
+| `fieldGoalPct` | String | Field-goal percentage. |
+| `longFieldGoalMade` | String | Longest field goal made, in yards. |
+| `extraPointsMade/extraPointAttempts` | String | Extra points made and attempted, as ESPN's combined string. |
+| `totalKickingPoints` | String | Total points scored by kicking. |
+| `punts` | String | Punts attempted. |
+| `puntYards` | String | Total punt yards. |
+| `grossAvgPuntYards` | String | Gross average yards per punt, before return yardage. |
+| `touchbacks` | String | Punts or kickoffs that resulted in a touchback. |
+| `puntsInside20` | String | Punts downed inside the opponent 20-yard line. |
+| `longPunt` | String | Longest punt of the game, in yards. |
 | `game_id` | Int64 | ESPN game identifier. |
 | `season` | Int64 | Season (4-digit year). |
 | `stat_1` | String |  |
@@ -759,72 +759,72 @@ Release: [espn_cfb_play_participants](https://github.com/sportsdataverse/sportsd
 |---|---|---|
 | `game_id` | Int64 | ESPN game identifier. |
 | `play_id` | Int64 | ESPN play id. |
-| `kicker_player_name` | String | String name for the kicker on FG or kickoff. |
-| `returner_player_name` | String |  |
-| `passer_player_name` | String | Name of the passer on a passing play. |
-| `receiver_player_name` | String | Name of the receiver on a passing play. |
-| `rusher_player_name` | String | Name of the rusher on a rushing play. |
-| `penalized_player_name` | String |  |
-| `scorer_player_name` | String |  |
-| `pass_defender_player_name` | String |  |
-| `punter_player_name` | String | Name of the punter. |
-| `pat_scorer_player_name` | String |  |
-| `sacked_by_player_name` | String |  |
-| `kicker_player_id` | String | Unique identifier for the kicker on FG or kickoff. |
-| `returner_player_id` | String |  |
-| `passer_player_id` | String | Unique identifier for the player that attempted the pass. |
-| `receiver_player_id` | String | Unique identifier for the receiver that was targeted on the pass. |
-| `rusher_player_id` | String | Unique identifier for the player that attempted the run. |
-| `penalized_player_id` | String |  |
-| `scorer_player_id` | String |  |
-| `pass_defender_player_id` | String |  |
-| `punter_player_id` | String | Unique identifier for the punter. |
-| `pat_scorer_player_id` | String |  |
-| `sacked_by_player_id` | String |  |
-| `kicker_player_names` | String |  |
-| `returner_player_names` | String |  |
-| `passer_player_names` | String |  |
-| `receiver_player_names` | String |  |
-| `rusher_player_names` | String |  |
-| `penalized_player_names` | String |  |
-| `scorer_player_names` | String |  |
-| `pass_defender_player_names` | String |  |
-| `punter_player_names` | String |  |
-| `pat_scorer_player_names` | String |  |
-| `sacked_by_player_names` | String |  |
-| `kicker_player_ids` | String |  |
-| `returner_player_ids` | String |  |
-| `passer_player_ids` | String |  |
-| `receiver_player_ids` | String |  |
-| `rusher_player_ids` | String |  |
-| `penalized_player_ids` | String |  |
-| `scorer_player_ids` | String |  |
-| `pass_defender_player_ids` | String |  |
-| `punter_player_ids` | String |  |
-| `pat_scorer_player_ids` | String |  |
-| `sacked_by_player_ids` | String |  |
+| `kicker_player_name` | String | Display name of the kicker -- the FIRST participant in that role on the play. |
+| `returner_player_name` | String | Display name of the player returning the kick or punt -- the FIRST participant in that role on the play. |
+| `passer_player_name` | String | Display name of the passer -- the FIRST participant in that role on the play. |
+| `receiver_player_name` | String | Display name of the targeted receiver -- the FIRST participant in that role on the play. |
+| `rusher_player_name` | String | Display name of the ball carrier on a rush -- the FIRST participant in that role on the play. |
+| `penalized_player_name` | String | Display name of the penalized player -- the FIRST participant in that role on the play. |
+| `scorer_player_name` | String | Display name of the player credited with the score -- the FIRST participant in that role on the play. |
+| `pass_defender_player_name` | String | Display name of the defender credited with defending the pass -- the FIRST participant in that role on the play. |
+| `punter_player_name` | String | Display name of the punter -- the FIRST participant in that role on the play. |
+| `pat_scorer_player_name` | String | Display name of the player credited with the point-after score -- the FIRST participant in that role on the play. |
+| `sacked_by_player_name` | String | Display name of a defender credited with the sack -- the FIRST participant in that role on the play. |
+| `kicker_player_id` | String | ESPN athlete id of the kicker -- the FIRST participant in that role on the play. |
+| `returner_player_id` | String | ESPN athlete id of the player returning the kick or punt -- the FIRST participant in that role on the play. |
+| `passer_player_id` | String | ESPN athlete id of the passer -- the FIRST participant in that role on the play. |
+| `receiver_player_id` | String | ESPN athlete id of the targeted receiver -- the FIRST participant in that role on the play. |
+| `rusher_player_id` | String | ESPN athlete id of the ball carrier on a rush -- the FIRST participant in that role on the play. |
+| `penalized_player_id` | String | ESPN athlete id of the penalized player -- the FIRST participant in that role on the play. |
+| `scorer_player_id` | String | ESPN athlete id of the player credited with the score -- the FIRST participant in that role on the play. |
+| `pass_defender_player_id` | String | ESPN athlete id of the defender credited with defending the pass -- the FIRST participant in that role on the play. |
+| `punter_player_id` | String | ESPN athlete id of the punter -- the FIRST participant in that role on the play. |
+| `pat_scorer_player_id` | String | ESPN athlete id of the player credited with the point-after score -- the FIRST participant in that role on the play. |
+| `sacked_by_player_id` | String | ESPN athlete id of a defender credited with the sack -- the FIRST participant in that role on the play. |
+| `kicker_player_names` | String | List of the display names of EVERY participant credited as the kicker on the play, so multi-entry roles such as split sacks or gang tackles are not collapsed to one. |
+| `returner_player_names` | String | List of the display names of EVERY participant credited as the player returning the kick or punt on the play, so multi-entry roles such as split sacks or gang tackles are not collapsed to one. |
+| `passer_player_names` | String | List of the display names of EVERY participant credited as the passer on the play, so multi-entry roles such as split sacks or gang tackles are not collapsed to one. |
+| `receiver_player_names` | String | List of the display names of EVERY participant credited as the targeted receiver on the play, so multi-entry roles such as split sacks or gang tackles are not collapsed to one. |
+| `rusher_player_names` | String | List of the display names of EVERY participant credited as the ball carrier on a rush on the play, so multi-entry roles such as split sacks or gang tackles are not collapsed to one. |
+| `penalized_player_names` | String | List of the display names of EVERY participant credited as the penalized player on the play, so multi-entry roles such as split sacks or gang tackles are not collapsed to one. |
+| `scorer_player_names` | String | List of the display names of EVERY participant credited as the player credited with the score on the play, so multi-entry roles such as split sacks or gang tackles are not collapsed to one. |
+| `pass_defender_player_names` | String | List of the display names of EVERY participant credited as the defender credited with defending the pass on the play, so multi-entry roles such as split sacks or gang tackles are not collapsed to one. |
+| `punter_player_names` | String | List of the display names of EVERY participant credited as the punter on the play, so multi-entry roles such as split sacks or gang tackles are not collapsed to one. |
+| `pat_scorer_player_names` | String | List of the display names of EVERY participant credited as the player credited with the point-after score on the play, so multi-entry roles such as split sacks or gang tackles are not collapsed to one. |
+| `sacked_by_player_names` | String | List of the display names of EVERY participant credited as a defender credited with the sack on the play, so multi-entry roles such as split sacks or gang tackles are not collapsed to one. |
+| `kicker_player_ids` | String | List of the athlete ids of EVERY participant credited as the kicker on the play, so multi-entry roles such as split sacks or gang tackles are not collapsed to one. |
+| `returner_player_ids` | String | List of the athlete ids of EVERY participant credited as the player returning the kick or punt on the play, so multi-entry roles such as split sacks or gang tackles are not collapsed to one. |
+| `passer_player_ids` | String | List of the athlete ids of EVERY participant credited as the passer on the play, so multi-entry roles such as split sacks or gang tackles are not collapsed to one. |
+| `receiver_player_ids` | String | List of the athlete ids of EVERY participant credited as the targeted receiver on the play, so multi-entry roles such as split sacks or gang tackles are not collapsed to one. |
+| `rusher_player_ids` | String | List of the athlete ids of EVERY participant credited as the ball carrier on a rush on the play, so multi-entry roles such as split sacks or gang tackles are not collapsed to one. |
+| `penalized_player_ids` | String | List of the athlete ids of EVERY participant credited as the penalized player on the play, so multi-entry roles such as split sacks or gang tackles are not collapsed to one. |
+| `scorer_player_ids` | String | List of the athlete ids of EVERY participant credited as the player credited with the score on the play, so multi-entry roles such as split sacks or gang tackles are not collapsed to one. |
+| `pass_defender_player_ids` | String | List of the athlete ids of EVERY participant credited as the defender credited with defending the pass on the play, so multi-entry roles such as split sacks or gang tackles are not collapsed to one. |
+| `punter_player_ids` | String | List of the athlete ids of EVERY participant credited as the punter on the play, so multi-entry roles such as split sacks or gang tackles are not collapsed to one. |
+| `pat_scorer_player_ids` | String | List of the athlete ids of EVERY participant credited as the player credited with the point-after score on the play, so multi-entry roles such as split sacks or gang tackles are not collapsed to one. |
+| `sacked_by_player_ids` | String | List of the athlete ids of EVERY participant credited as a defender credited with the sack on the play, so multi-entry roles such as split sacks or gang tackles are not collapsed to one. |
 | `season` | Int64 | Season (4-digit year). |
 | `week` | Int64 | Game week of the season. |
-| `recoverer_player_name` | String |  |
-| `recoverer_player_id` | String |  |
-| `recoverer_player_names` | String |  |
-| `recoverer_player_ids` | String |  |
-| `tackler_player_name` | String |  |
-| `assisted_by_player_name` | String |  |
-| `forced_by_player_name` | String |  |
-| `tackler_player_id` | String |  |
-| `assisted_by_player_id` | String |  |
-| `forced_by_player_id` | String |  |
-| `tackler_player_names` | String |  |
-| `assisted_by_player_names` | String |  |
-| `forced_by_player_names` | String |  |
-| `tackler_player_ids` | String |  |
-| `assisted_by_player_ids` | String |  |
-| `forced_by_player_ids` | String |  |
-| `pat_passer_player_name` | String |  |
-| `pat_passer_player_id` | String |  |
-| `pat_passer_player_names` | String |  |
-| `pat_passer_player_ids` | String |  |
+| `recoverer_player_name` | String | Display name of the player who recovered the fumble -- the FIRST participant in that role on the play. |
+| `recoverer_player_id` | String | ESPN athlete id of the player who recovered the fumble -- the FIRST participant in that role on the play. |
+| `recoverer_player_names` | String | List of the display names of EVERY participant credited as the player who recovered the fumble on the play, so multi-entry roles such as split sacks or gang tackles are not collapsed to one. |
+| `recoverer_player_ids` | String | List of the athlete ids of EVERY participant credited as the player who recovered the fumble on the play, so multi-entry roles such as split sacks or gang tackles are not collapsed to one. |
+| `tackler_player_name` | String | Display name of a defender credited with the tackle -- the FIRST participant in that role on the play. |
+| `assisted_by_player_name` | String | Display name of a defender credited with an assisted tackle -- the FIRST participant in that role on the play. |
+| `forced_by_player_name` | String | Display name of the defender who forced the fumble -- the FIRST participant in that role on the play. |
+| `tackler_player_id` | String | ESPN athlete id of a defender credited with the tackle -- the FIRST participant in that role on the play. |
+| `assisted_by_player_id` | String | ESPN athlete id of a defender credited with an assisted tackle -- the FIRST participant in that role on the play. |
+| `forced_by_player_id` | String | ESPN athlete id of the defender who forced the fumble -- the FIRST participant in that role on the play. |
+| `tackler_player_names` | String | List of the display names of EVERY participant credited as a defender credited with the tackle on the play, so multi-entry roles such as split sacks or gang tackles are not collapsed to one. |
+| `assisted_by_player_names` | String | List of the display names of EVERY participant credited as a defender credited with an assisted tackle on the play, so multi-entry roles such as split sacks or gang tackles are not collapsed to one. |
+| `forced_by_player_names` | String | List of the display names of EVERY participant credited as the defender who forced the fumble on the play, so multi-entry roles such as split sacks or gang tackles are not collapsed to one. |
+| `tackler_player_ids` | String | List of the athlete ids of EVERY participant credited as a defender credited with the tackle on the play, so multi-entry roles such as split sacks or gang tackles are not collapsed to one. |
+| `assisted_by_player_ids` | String | List of the athlete ids of EVERY participant credited as a defender credited with an assisted tackle on the play, so multi-entry roles such as split sacks or gang tackles are not collapsed to one. |
+| `forced_by_player_ids` | String | List of the athlete ids of EVERY participant credited as the defender who forced the fumble on the play, so multi-entry roles such as split sacks or gang tackles are not collapsed to one. |
+| `pat_passer_player_name` | String | Display name of the passer on the point-after attempt -- the FIRST participant in that role on the play. |
+| `pat_passer_player_id` | String | ESPN athlete id of the passer on the point-after attempt -- the FIRST participant in that role on the play. |
+| `pat_passer_player_names` | String | List of the display names of EVERY participant credited as the passer on the point-after attempt on the play, so multi-entry roles such as split sacks or gang tackles are not collapsed to one. |
+| `pat_passer_player_ids` | String | List of the athlete ids of EVERY participant credited as the passer on the point-after attempt on the play, so multi-entry roles such as split sacks or gang tackles are not collapsed to one. |
 
 ```python
 load_cfb_play_participants(seasons=2024)
@@ -1067,35 +1067,35 @@ Release: [espn_cfb_adv_passing](https://github.com/sportsdataverse/sportsdataver
 
 | col_name | type | description |
 |---|---|---|
-| `pos_team_id` | Int64 |  |
+| `pos_team_id` | Int64 | ESPN team id of the team on offense. Present for every season 2004+. |
 | `pos_team` | String | Team name in possession at the start of the play (offense, kickoff-aware). |
-| `passer_player_name` | String | Name of the passer on a passing play. |
-| `Comp` | Int64 |  |
-| `Att` | Int64 |  |
-| `xComp` | Float64 |  |
-| `Yds` | Float64 |  |
-| `Pass_TD` | Int64 |  |
-| `Int` | Int64 |  |
-| `YPA` | Float64 |  |
+| `passer_player_name` | String | Display name of the passer -- the FIRST participant in that role on the play. |
+| `Comp` | Int64 | Completed passes recorded in the advanced box score. |
+| `Att` | Int64 | Pass attempts recorded in the advanced box score. |
+| `xComp` | Float64 | Expected completions, summed from the per-play completion model. |
+| `Yds` | Float64 | Passing yards from the advanced box score. |
+| `Pass_TD` | Int64 | Passing touchdowns. |
+| `Int` | Int64 | Interceptions thrown. |
+| `YPA` | Float64 | Yards per pass attempt. |
 | `EPA` | Float64 | Expected Points Added on the play (cfbfastR EPA model output). |
-| `EPA_per_Play` | Float64 |  |
+| `EPA_per_Play` | Float64 | EPA per play on the passer's plays. |
 | `WPA` | Float64 | Win Probability Added. |
-| `SR` | Float64 |  |
-| `Sck` | Int64 |  |
-| `CompPct` | Float64 |  |
-| `xCompPct` | Float64 |  |
-| `CPOE` | Float64 |  |
-| `qbr_epa` | Float64 |  |
-| `sack_epa` | Float64 |  |
-| `pass_epa` | Float64 |  |
-| `rush_epa` | Float64 |  |
-| `pen_epa` | Float64 |  |
+| `SR` | Float64 | Success rate on the passer's plays. |
+| `Sck` | Int64 | Times the passer was sacked. |
+| `CompPct` | Float64 | Completion percentage from the advanced box score. |
+| `xCompPct` | Float64 | Expected completion percentage from the per-play completion model. |
+| `CPOE` | Float64 | Completion percentage over expected -- actual minus modelled completion rate. |
+| `qbr_epa` | Float64 | EPA variant used as an input to the QBR calculation. |
+| `sack_epa` | Float64 | EPA credited to the player's sacks taken. |
+| `pass_epa` | Float64 | EPA credited to the player's pass plays. |
+| `rush_epa` | Float64 | EPA credited to the player's rush plays. |
+| `pen_epa` | Float64 | EPA attributable to penalties on the player's plays. |
 | `spread` | Float64 | Pre-game point spread from the selected provider. |
-| `era0` | Int64 |  |
-| `era1` | Int64 |  |
-| `era2` | Int64 |  |
-| `era3` | Int64 |  |
-| `exp_qbr` | Float64 |  |
+| `era0` | Int64 | Rule-era indicator for the earliest modelled era. |
+| `era1` | Int64 | Rule-era indicator for the second modelled era. |
+| `era2` | Int64 | Rule-era indicator for the third modelled era. |
+| `era3` | Int64 | Rule-era indicator for the most recent modelled era. |
+| `exp_qbr` | Float64 | Expected QBR for the passer. |
 | `game_id` | Int64 | ESPN game identifier. |
 | `season` | Int64 | Season (4-digit year). |
 | `week` | Int64 | Game week of the season. |
@@ -1111,17 +1111,17 @@ Release: [espn_cfb_adv_rushing](https://github.com/sportsdataverse/sportsdataver
 
 | col_name | type | description |
 |---|---|---|
-| `pos_team_id` | Int64 |  |
+| `pos_team_id` | Int64 | ESPN team id of the team on offense. Present for every season 2004+. |
 | `pos_team` | String | Team name in possession at the start of the play (offense, kickoff-aware). |
-| `rusher_player_name` | String | Name of the rusher on a rushing play. |
+| `rusher_player_name` | String | Display name of the ball carrier on a rush -- the FIRST participant in that role on the play. |
 | `Car` | Int64 |  |
-| `Yds` | Float64 |  |
+| `Yds` | Float64 | Passing yards from the advanced box score. |
 | `Rush_TD` | Int64 |  |
 | `YPC` | Float64 |  |
 | `EPA` | Float64 | Expected Points Added on the play (cfbfastR EPA model output). |
-| `EPA_per_Play` | Float64 |  |
+| `EPA_per_Play` | Float64 | EPA per play on the passer's plays. |
 | `WPA` | Float64 | Win Probability Added. |
-| `SR` | Float64 |  |
+| `SR` | Float64 | Success rate on the passer's plays. |
 | `Fum` | Int64 |  |
 | `Fum_Lost` | Int64 |  |
 | `game_id` | Int64 | ESPN game identifier. |
@@ -1139,18 +1139,18 @@ Release: [espn_cfb_adv_receiving](https://github.com/sportsdataverse/sportsdatav
 
 | col_name | type | description |
 |---|---|---|
-| `pos_team_id` | Int64 |  |
+| `pos_team_id` | Int64 | ESPN team id of the team on offense. Present for every season 2004+. |
 | `pos_team` | String | Team name in possession at the start of the play (offense, kickoff-aware). |
-| `receiver_player_name` | String | Name of the receiver on a passing play. |
+| `receiver_player_name` | String | Display name of the targeted receiver -- the FIRST participant in that role on the play. |
 | `Rec` | Int64 |  |
 | `Tar` | Int64 |  |
-| `Yds` | Float64 |  |
+| `Yds` | Float64 | Passing yards from the advanced box score. |
 | `Rec_TD` | Int64 |  |
 | `YPT` | Float64 |  |
 | `EPA` | Float64 | Expected Points Added on the play (cfbfastR EPA model output). |
-| `EPA_per_Play` | Float64 |  |
+| `EPA_per_Play` | Float64 | EPA per play on the passer's plays. |
 | `WPA` | Float64 | Win Probability Added. |
-| `SR` | Float64 |  |
+| `SR` | Float64 | Success rate on the passer's plays. |
 | `Fum` | Int64 |  |
 | `Fum_Lost` | Int64 |  |
 | `game_id` | Int64 | ESPN game identifier. |
@@ -1170,7 +1170,7 @@ Release: [espn_cfb_adv_defensive](https://github.com/sportsdataverse/sportsdatav
 |---|---|---|
 | `def_pos_team_id` | Int64 |  |
 | `def_pos_team` | String | Team name on defense at the start of the play. |
-| `scrimmage_plays` | Int64 |  |
+| `scrimmage_plays` | Int64 | Number of plays from scrimmage (rushes plus passes), excluding special teams. |
 | `TFL` | Int64 |  |
 | `TFL_pass` | Int64 |  |
 | `TFL_rush` | Int64 |  |
@@ -1228,7 +1228,7 @@ Release: [espn_cfb_adv_drives](https://github.com/sportsdataverse/sportsdatavers
 
 | col_name | type | description |
 |---|---|---|
-| `pos_team_id` | Int64 |  |
+| `pos_team_id` | Int64 | ESPN team id of the team on offense. Present for every season 2004+. |
 | `pos_team` | String | Team name in possession at the start of the play (offense, kickoff-aware). |
 | `drive_total_available_yards` | Float64 |  |
 | `drive_total_gained_yards` | Int64 |  |
@@ -1338,10 +1338,10 @@ Release: [espn_cfb_adv_specialists](https://github.com/sportsdataverse/sportsdat
 
 | col_name | type | description |
 |---|---|---|
-| `pos_team_id` | Int64 |  |
+| `pos_team_id` | Int64 | ESPN team id of the team on offense. Present for every season 2004+. |
 | `pos_team` | String | Team name in possession at the start of the play (offense, kickoff-aware). |
 | `player_name` | String | Player name. |
-| `punts` | Int64 |  |
+| `punts` | Int64 | Punts attempted. |
 | `punts_yards` | Int64 |  |
 | `kick_returns` | Int64 | Number of kick returns. |
 | `kick_returns_yards` | Int64 |  |
@@ -1350,7 +1350,7 @@ Release: [espn_cfb_adv_specialists](https://github.com/sportsdataverse/sportsdat
 | `game_id` | Int64 | ESPN game identifier. |
 | `season` | Int64 | Season (4-digit year). |
 | `week` | Int64 | Game week of the season. |
-| `field_goals` | Int64 |  |
+| `field_goals` | Int64 | Number of field-goal attempts. |
 | `field_goals_yards` | Int64 |  |
 
 ```python
@@ -1364,11 +1364,11 @@ Release: [espn_cfb_adv_turnover](https://github.com/sportsdataverse/sportsdatave
 
 | col_name | type | description |
 |---|---|---|
-| `pos_team_id` | Int64 |  |
+| `pos_team_id` | Int64 | ESPN team id of the team on offense. Present for every season 2004+. |
 | `pos_team` | String | Team name in possession at the start of the play (offense, kickoff-aware). |
 | `turnovers` | Int64 | Turnovers total. |
 | `st_turnovers_lost` | Int64 |  |
-| `Int` | Int64 |  |
+| `Int` | Int64 | Interceptions thrown. |
 | `fumbles_lost` | Int64 | Fumbles lost. |
 | `pass_breakups` | Int64 |  |
 | `total_fumbles` | Int64 | Team total fumbles. |
@@ -1429,20 +1429,20 @@ Release: [espn_cfb_model_pbp](https://github.com/sportsdataverse/sportsdataverse
 | `completion` | Boolean | Binary flag for a completed pass. |
 | `scoring_play` | Boolean | `TRUE` if the play resulted in a score. |
 | `statYardage` | Int64 |  |
-| `passer_player_name` | String | Name of the passer on a passing play. |
+| `passer_player_name` | String | Display name of the passer -- the FIRST participant in that role on the play. |
 | `ep_before` | Float64 | Expected points value before the play (cfbfastR EPA model). |
 | `ep_after` | Float64 | Expected points value after the play (cfbfastR EPA model). |
 | `epa` | Float64 | Expected points added (EPA) by the posteam for the given play. |
 | `wp_before` | Float64 | Win probability for the possession team before the play (0-1). |
 | `wp_after` | Float64 | Win probability for the possession team after the play (0-1). |
 | `wpa` | Float64 | Win Probability Added on the play (cfbfastR WP model output). |
-| `completion_prob` | Float64 |  |
+| `completion_prob` | Float64 | Modelled probability the pass is completed. |
 | `cpoe` | Float64 | For a single pass play this is 1 - cp when the pass was completed or 0 - cp when the pass was incomplete. Analyzed for a whole game or season an indicator for the passer how much over or under expectation his completion percentage was. |
-| `model_pbp_version` | String |  |
-| `cp_model_version` | String |  |
-| `ep_model_version` | String |  |
-| `wp_model_version` | String |  |
-| `scored_date` | String |  |
+| `model_pbp_version` | String | Version of the model-scored play-by-play build. |
+| `cp_model_version` | String | Version of the completion-probability model that scored the play. |
+| `ep_model_version` | String | Version of the expected-points model that scored the play. |
+| `wp_model_version` | String | Version of the win-probability model that scored the play. |
+| `scored_date` | String | Date on which the play was scored by the models. |
 
 ```python
 load_cfb_model_pbp(seasons=2024)
@@ -1461,43 +1461,43 @@ Release: [espn_cfb_passing](https://github.com/sportsdataverse/sportsdataverse-d
 | `conference` | String | Conference of the team. |
 | `season` | Int64 | Season (4-digit year). |
 | `player_id` | Int64 | ESPN player id from the roster entry. |
-| `passer_player_name` | String | Name of the passer on a passing play. |
+| `passer_player_name` | String | Display name of the passer -- the FIRST participant in that role on the play. |
 | `plays` | UInt32 | Total qualifying passing plays included in the WEPA calculation. |
 | `games` | UInt32 | Number of games included in the ATS summary. |
-| `team_games` | UInt32 |  |
-| `playsgame` | Float64 |  |
-| `TEPA` | Float64 |  |
-| `EPAplay` | Float64 |  |
-| `EPAgame` | Float64 |  |
+| `team_games` | UInt32 | Games the team played, used as the per-game denominator. |
+| `playsgame` | Float64 | Plays per game. |
+| `TEPA` | Float64 | Total EPA summed over every play. |
+| `EPAplay` | Float64 | EPA generated per play. |
+| `EPAgame` | Float64 | EPA generated per game. |
 | `yards` | Int64 | Total yards gained on the drive. |
-| `yardsplay` | Float64 |  |
-| `yardsgame` | Float64 |  |
-| `success` | Float64 | Binary success-rate flag using the 50/70/100 percent down-state thresholds. |
-| `comp` | Float64 |  |
-| `att` | Float64 |  |
-| `comppct` | Float64 |  |
+| `yardsplay` | Float64 | Yards per play. |
+| `yardsgame` | Float64 | Yards per game. |
+| `success` | Float64 | Success rate across the team plays. |
+| `comp` | Float64 | Completed passes. |
+| `att` | Float64 | Pass attempts thrown. |
+| `comppct` | Float64 | Completion percentage. |
 | `passing_td` | Float64 | Passing touchdowns thrown. |
-| `sacked` | UInt32 |  |
-| `sack_yds` | Int64 |  |
-| `pass_int` | UInt32 |  |
-| `detmer` | Float64 |  |
-| `detmergame` | Float64 |  |
-| `dropbacks` | Float64 |  |
-| `sack_adj_yards` | Int64 |  |
-| `yardsdropback` | Float64 |  |
-| `TEPA_rank` | Float64 |  |
-| `EPAgame_rank` | Float64 |  |
-| `EPAplay_rank` | Float64 |  |
-| `success_rank` | Float64 |  |
-| `comppct_rank` | Float64 |  |
-| `yards_rank` | Float64 |  |
-| `yardsplay_rank` | Float64 |  |
-| `yardsgame_rank` | Float64 |  |
-| `sack_adj_yards_rank` | Float64 |  |
-| `yardsdropback_rank` | Float64 |  |
-| `detmer_rank` | Float64 |  |
-| `detmergame_rank` | Float64 |  |
-| `fbs_class` | String |  |
+| `sacked` | UInt32 | Times the passer was sacked. |
+| `sack_yds` | Int64 | Yards lost to sacks. |
+| `pass_int` | UInt32 | Interceptions thrown. |
+| `detmer` | Float64 | Detmer rating -- the composite passing-efficiency measure this pipeline publishes, named for the college passing-efficiency tradition. |
+| `detmergame` | Float64 | Detmer rating expressed per game. |
+| `dropbacks` | Float64 | Dropbacks taken by the passer. |
+| `sack_adj_yards` | Int64 | Passing yards adjusted for sack yardage lost. |
+| `yardsdropback` | Float64 | Yards per dropback. |
+| `TEPA_rank` | Float64 | National rank of the team's total EPA summed over every play, where 1 is best. |
+| `EPAgame_rank` | Float64 | National rank of the team's EPA generated per game, where 1 is best. |
+| `EPAplay_rank` | Float64 | National rank of the team's EPA generated per play, where 1 is best. |
+| `success_rank` | Float64 | National rank of the team's success rate across the team plays, where 1 is best. |
+| `comppct_rank` | Float64 | National rank of the team's completion percentage, where 1 is best. |
+| `yards_rank` | Float64 | National rank of the team's total yards, where 1 is best. |
+| `yardsplay_rank` | Float64 | National rank of the team's yards per play, where 1 is best. |
+| `yardsgame_rank` | Float64 | National rank of the team's yards per game, where 1 is best. |
+| `sack_adj_yards_rank` | Float64 | National rank of the team's passing yards adjusted for sack yardage lost, where 1 is best. |
+| `yardsdropback_rank` | Float64 | National rank of the team's yards per dropback, where 1 is best. |
+| `detmer_rank` | Float64 | National rank of the team's detmer rating -- the composite passing-efficiency measure this pipeline publishes, named for the college passing-efficiency tradition, where 1 is best. |
+| `detmergame_rank` | Float64 | National rank of the team's detmer rating expressed per game, where 1 is best. |
+| `fbs_class` | String | Power/Group classification for the season: P4 or G6 from 2024 on, P5 or G5 through 2023, derived from conference membership. Null for teams outside FBS. |
 
 ```python
 load_cfb_passing(seasons=2024)
@@ -1510,33 +1510,33 @@ Release: [espn_cfb_percentiles](https://github.com/sportsdataverse/sportsdataver
 
 | col_name | type | description |
 |---|---|---|
-| `pctile` | Float64 |  |
-| `GEI` | Float64 |  |
-| `EPAplay` | Float64 |  |
-| `pass_success` | Float64 |  |
-| `rush_success` | Float64 |  |
-| `early_down_success` | Float64 |  |
-| `early_down_EPA` | Float64 |  |
-| `late_down_success` | Float64 |  |
-| `success` | Float64 | Binary success-rate flag using the 50/70/100 percent down-state thresholds. |
-| `yardsplay` | Float64 |  |
-| `dropbacks` | Float64 |  |
-| `rushes` | Float64 |  |
-| `EPAdropback` | Float64 |  |
-| `EPArush` | Float64 |  |
-| `yardsdropback` | Float64 |  |
-| `pass_explosive` | Float64 |  |
-| `rush_explosive` | Float64 |  |
-| `explosive` | Float64 |  |
-| `third_down_success` | Float64 |  |
-| `red_zone_success` | Float64 |  |
-| `play_stuffed` | Float64 |  |
-| `nonExplosiveEpaPerPlay` | Float64 |  |
-| `havoc` | Float64 |  |
-| `yardsrush` | Float64 |  |
-| `lineyards` | Float64 |  |
-| `opportunity_run` | Float64 |  |
-| `third_down_distance` | Float64 |  |
+| `pctile` | Float64 | Percentile bucket the row reports, from 0 to 100. |
+| `GEI` | Float64 | Value of game excitement index at the percentile this row reports. |
+| `EPAplay` | Float64 | Value of EPA generated per play at the percentile this row reports. |
+| `pass_success` | Float64 | Value of success rate on pass plays at the percentile this row reports. |
+| `rush_success` | Float64 | Value of success rate on rush plays at the percentile this row reports. |
+| `early_down_success` | Float64 | Value of success rate on early downs at the percentile this row reports. |
+| `early_down_EPA` | Float64 | Value of EPA per early-down play at the percentile this row reports. |
+| `late_down_success` | Float64 | Value of success rate on late downs at the percentile this row reports. |
+| `success` | Float64 | Value of success rate across the team plays at the percentile this row reports. |
+| `yardsplay` | Float64 | Value of yards per play at the percentile this row reports. |
+| `dropbacks` | Float64 | Value of dropbacks taken by the passer at the percentile this row reports. |
+| `rushes` | Float64 | Value of rushing attempts at the percentile this row reports. |
+| `EPAdropback` | Float64 | Value of EPA generated per dropback at the percentile this row reports. |
+| `EPArush` | Float64 | Value of EPA generated per rushing attempt at the percentile this row reports. |
+| `yardsdropback` | Float64 | Value of yards per dropback at the percentile this row reports. |
+| `pass_explosive` | Float64 | Value of explosive-play rate on pass plays at the percentile this row reports. |
+| `rush_explosive` | Float64 | Value of explosive-play rate on rush plays at the percentile this row reports. |
+| `explosive` | Float64 | Value of explosive-play rate at the percentile this row reports. |
+| `third_down_success` | Float64 | Value of success rate on third down at the percentile this row reports. |
+| `red_zone_success` | Float64 | Value of success rate in the red zone at the percentile this row reports. |
+| `play_stuffed` | Float64 | Value of stuffed-play rate at the percentile this row reports. |
+| `nonExplosiveEpaPerPlay` | Float64 | Value of EPA per play excluding explosive plays at the percentile this row reports. |
+| `havoc` | Float64 | Value of havoc rate at the percentile this row reports. |
+| `yardsrush` | Float64 | Value of yards per rush at the percentile this row reports. |
+| `lineyards` | Float64 | Value of line yards per rush at the percentile this row reports. |
+| `opportunity_run` | Float64 | Value of opportunity-run rate at the percentile this row reports. |
+| `third_down_distance` | Float64 | Value of average yards to go on third down at the percentile this row reports. |
 
 ```python
 load_cfb_percentiles(seasons=2024)
@@ -1555,32 +1555,32 @@ Release: [espn_cfb_receiving](https://github.com/sportsdataverse/sportsdataverse
 | `conference` | String | Conference of the team. |
 | `season` | Int64 | Season (4-digit year). |
 | `player_id` | Int64 | ESPN player id from the roster entry. |
-| `receiver_player_name` | String | Name of the receiver on a passing play. |
+| `receiver_player_name` | String | Display name of the targeted receiver -- the FIRST participant in that role on the play. |
 | `plays` | UInt32 | Total qualifying passing plays included in the WEPA calculation. |
 | `games` | UInt32 | Number of games included in the ATS summary. |
-| `team_games` | UInt32 |  |
-| `playsgame` | Float64 |  |
-| `TEPA` | Float64 |  |
-| `EPAplay` | Float64 |  |
-| `EPAgame` | Float64 |  |
+| `team_games` | UInt32 | Games the team played, used as the per-game denominator. |
+| `playsgame` | Float64 | Plays per game. |
+| `TEPA` | Float64 | Total EPA summed over every play. |
+| `EPAplay` | Float64 | EPA generated per play. |
+| `EPAgame` | Float64 | EPA generated per game. |
 | `yards` | Int64 | Total yards gained on the drive. |
-| `yardsplay` | Float64 |  |
-| `yardsgame` | Float64 |  |
-| `success` | Float64 | Binary success-rate flag using the 50/70/100 percent down-state thresholds. |
-| `comp` | UInt32 |  |
+| `yardsplay` | Float64 | Yards per play. |
+| `yardsgame` | Float64 | Yards per game. |
+| `success` | Float64 | Success rate across the team plays. |
+| `comp` | UInt32 | Completed passes. |
 | `targets` | UInt32 | The number of pass plays where the player was the targeted receiver. |
 | `catchpct` | Float64 |  |
 | `passing_td` | Float64 | Passing touchdowns thrown. |
 | `fumbles` | Float64 |  |
-| `TEPA_rank` | Float64 |  |
-| `EPAgame_rank` | Float64 |  |
-| `EPAplay_rank` | Float64 |  |
-| `success_rank` | Float64 |  |
+| `TEPA_rank` | Float64 | National rank of the team's total EPA summed over every play, where 1 is best. |
+| `EPAgame_rank` | Float64 | National rank of the team's EPA generated per game, where 1 is best. |
+| `EPAplay_rank` | Float64 | National rank of the team's EPA generated per play, where 1 is best. |
+| `success_rank` | Float64 | National rank of the team's success rate across the team plays, where 1 is best. |
 | `catchpct_rank` | Float64 |  |
-| `yards_rank` | Float64 |  |
-| `yardsplay_rank` | Float64 |  |
-| `yardsgame_rank` | Float64 |  |
-| `fbs_class` | String |  |
+| `yards_rank` | Float64 | National rank of the team's total yards, where 1 is best. |
+| `yardsplay_rank` | Float64 | National rank of the team's yards per play, where 1 is best. |
+| `yardsgame_rank` | Float64 | National rank of the team's yards per game, where 1 is best. |
+| `fbs_class` | String | Power/Group classification for the season: P4 or G6 from 2024 on, P5 or G5 through 2023, derived from conference membership. Null for teams outside FBS. |
 
 ```python
 load_cfb_receiving(seasons=2024)
@@ -1599,28 +1599,28 @@ Release: [espn_cfb_rushing](https://github.com/sportsdataverse/sportsdataverse-d
 | `conference` | String | Conference of the team. |
 | `season` | Int64 | Season (4-digit year). |
 | `player_id` | Int64 | ESPN player id from the roster entry. |
-| `rusher_player_name` | String | Name of the rusher on a rushing play. |
+| `rusher_player_name` | String | Display name of the ball carrier on a rush -- the FIRST participant in that role on the play. |
 | `plays` | UInt32 | Total qualifying passing plays included in the WEPA calculation. |
 | `games` | UInt32 | Number of games included in the ATS summary. |
-| `team_games` | UInt32 |  |
-| `playsgame` | Float64 |  |
-| `TEPA` | Float64 |  |
-| `EPAplay` | Float64 |  |
-| `EPAgame` | Float64 |  |
+| `team_games` | UInt32 | Games the team played, used as the per-game denominator. |
+| `playsgame` | Float64 | Plays per game. |
+| `TEPA` | Float64 | Total EPA summed over every play. |
+| `EPAplay` | Float64 | EPA generated per play. |
+| `EPAgame` | Float64 | EPA generated per game. |
 | `yards` | Int64 | Total yards gained on the drive. |
-| `yardsplay` | Float64 |  |
-| `yardsgame` | Float64 |  |
-| `success` | Float64 | Binary success-rate flag using the 50/70/100 percent down-state thresholds. |
+| `yardsplay` | Float64 | Yards per play. |
+| `yardsgame` | Float64 | Yards per game. |
+| `success` | Float64 | Success rate across the team plays. |
 | `rushing_td` | Float64 | Rushing touchdowns. |
 | `fumbles` | Float64 |  |
-| `TEPA_rank` | Float64 |  |
-| `EPAgame_rank` | Float64 |  |
-| `EPAplay_rank` | Float64 |  |
-| `success_rank` | Float64 |  |
-| `yards_rank` | Float64 |  |
-| `yardsplay_rank` | Float64 |  |
-| `yardsgame_rank` | Float64 |  |
-| `fbs_class` | String |  |
+| `TEPA_rank` | Float64 | National rank of the team's total EPA summed over every play, where 1 is best. |
+| `EPAgame_rank` | Float64 | National rank of the team's EPA generated per game, where 1 is best. |
+| `EPAplay_rank` | Float64 | National rank of the team's EPA generated per play, where 1 is best. |
+| `success_rank` | Float64 | National rank of the team's success rate across the team plays, where 1 is best. |
+| `yards_rank` | Float64 | National rank of the team's total yards, where 1 is best. |
+| `yardsplay_rank` | Float64 | National rank of the team's yards per play, where 1 is best. |
+| `yardsgame_rank` | Float64 | National rank of the team's yards per game, where 1 is best. |
+| `fbs_class` | String | Power/Group classification for the season: P4 or G6 from 2024 on, P5 or G5 through 2023, derived from conference membership. Null for teams outside FBS. |
 
 ```python
 load_cfb_rushing(seasons=2024)

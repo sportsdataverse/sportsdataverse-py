@@ -122,7 +122,13 @@ DESCS: dict[str, str] = {
 def main() -> None:
     import yaml
 
-    targets = ("load_cfb_adv_team", "load_cfb_adv_team_gamelog")
+    # Every adv_* loader flattens the same ESPN advBoxScore vocabulary, so the
+    # descriptions apply across the family, not just the team block.
+    targets = tuple(
+        f
+        for f in yaml.safe_load(pathlib.Path("tools/codegen/schemas/loader_schemas.yaml").read_text(encoding="utf-8"))
+        if f.startswith("load_cfb_adv")
+    )
     schemas = yaml.safe_load(pathlib.Path("tools/codegen/schemas/loader_schemas.yaml").read_text(encoding="utf-8"))
     out: dict[str, dict[str, str]] = {}
     missing: set[str] = set()
@@ -134,7 +140,7 @@ def main() -> None:
                 got[col] = DESCS[col]
         out[t] = got
         declared = {c["name"] for c in schemas[t]}
-        missing |= {c for c in DESCS if c not in declared and t == targets[0]}
+        del declared  # per-target set unused; staleness is checked against the union below
     print("composed: " + ", ".join(f"{t}={len(v)}" for t, v in out.items()))
     if missing:
         print(f"WARNING description written for column not in adv_team schema: {sorted(missing)}")

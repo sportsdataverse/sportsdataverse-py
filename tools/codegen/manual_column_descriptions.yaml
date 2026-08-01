@@ -2585,21 +2585,6 @@ fit_field_position_ep:
 load_fp_curve:
   ep: Bundled expected points for a drive starting at this yard line (2018-2021 fit).
   yardline_own: Starting yard line from the offense's own goal (1-99).
-load_cfb_adv_defensive_players:
-  def_pos_team: Display name of the team on defense (e.g. 'Ohio State Buckeyes'). Held an ESPN team id until the
-    2026-08 republish; the id now lives in def_pos_team_id.
-  def_pos_team_id: ESPN team id of the team on defense. Present for every season 2004+.
-  forced_fumbles: Fumbles forced by the defender. Available from 2005 on; null for 2004, which ESPN ships with only
-    the fumble-recovery statistics.
-  fumble_recoveries: Fumbles recovered by the defender. Available for every season 2004+.
-  fumble_recoveries_yards: Yards returned on the defender's fumble recoveries. Available for every season 2004+.
-  interceptions: Passes intercepted by the defender. Available from 2014 on; null for 2004-2013, which ESPN ships
-    without interception statistics in this block.
-  interceptions_yards: Yards returned on the defender's interceptions. Available from 2014 on; null for 2004-2013.
-  pass_breakups: Passes broken up by the defender. Available from 2005 on; null for 2004.
-  player_name: Display name of the defender.
-  sacks: Sacks recorded by the defender. Available from 2005 on; null for 2004.
-  sacks_yards: Yards lost by the offense on the defender's sacks. Available from 2005 on; null for 2004.
 load_cfb_betting_lines:
   abbr: Selection/side this odds row applies to — a team abbreviation for spread and moneyline markets, or 'over'/'under'
     for total markets (the data is long-format, one row per book per selection per market_type).
@@ -3808,246 +3793,6 @@ load_cfb_team_summaries_weekly:
   yardsplay_off_rush: Yards gained per play on rush plays, with the team on offense.
   yardsplay_off_rush_rank: National rank of the team's yards gained per play on rush plays with the team on offense, where
     1 is best.
-load_cfb_adv_team:
-  EPA_explosive: Count of explosive plays, per ESPN's advanced box score. Despite the EPA_ prefix this is a play COUNT, not
-    an EPA total.
-  EPA_explosive_passing: Count of explosive pass plays. A play count, not an EPA total.
-  EPA_explosive_passing_rate: Explosive-play rate on pass plays, over ESPN's qualifying-play denominator.
-  EPA_explosive_rate: Explosive-play rate. Note this is NOT EPA_explosive divided by EPA_plays -- ESPN divides by its own
-    smaller qualifying-play count, so deriving it yourself will not reproduce this value.
-  EPA_explosive_rushing: Count of explosive rush plays. A play count, not an EPA total.
-  EPA_explosive_rushing_rate: Explosive-play rate on rush plays, over ESPN's qualifying-play denominator.
-  EPA_fg: Total EPA on field-goal attempts.
-  EPA_kickoff: Total EPA on kickoff plays.
-  EPA_non_explosive: Total EPA with explosive plays excluded, isolating the team's routine-down production.
-  EPA_non_explosive_passing: Total EPA on pass plays with explosive plays excluded.
-  EPA_non_explosive_passing_per_play: EPA per pass play with explosive plays excluded.
-  EPA_non_explosive_per_play: EPA per play with explosive plays excluded.
-  EPA_non_explosive_rushing: Total EPA on rush plays with explosive plays excluded.
-  EPA_non_explosive_rushing_per_play: EPA per rush play with explosive plays excluded.
-  EPA_overall_off: Total offensive EPA for the team. Duplicated exactly by EPA_overall_offense in every published season checked
-    -- prefer one and ignore the other.
-  EPA_overall_offense: Total offensive EPA. An exact duplicate of EPA_overall_off.
-  EPA_overall_total: Total EPA across all phases, which is why it differs from the offense-only EPA_overall_off.
-  EPA_passing_overall: Total EPA on pass plays.
-  EPA_passing_per_play: EPA per pass play.
-  EPA_penalty: Total EPA attributed to penalties.
-  EPA_per_play: Offensive EPA per play.
-  EPA_plays: Number of plays ESPN's advanced box score scored for the team.
-  EPA_punt: Total EPA on punt plays.
-  EPA_rushing_overall: Total EPA on rush plays.
-  EPA_rushing_per_play: EPA per rush play.
-  EPA_rushing_power: Total EPA on power rushing situations, as classified by ESPN's advanced box score.
-  EPA_rushing_power_per_play: EPA per play on power rushing situations.
-  EPA_sp: Total special-teams EPA, ESPN's abbreviated field for the same phase.
-  EPA_special_teams: Total EPA generated on special-teams plays.
-  field_goals: Number of field-goal attempts.
-  first_downs_created: Number of first downs the team created.
-  first_downs_created_rate: Share of the team's plays that created a first down.
-  kickoff_plays: Number of kickoff plays.
-  line_yards: Line yards -- the portion of rushing yardage credited to the offensive line under the standard rushing decomposition.
-    ESPN applies its own qualifying threshold for the yardage split.
-  line_yards_per_carry: Line yards per rushing attempt.
-  off_yards: Offensive yards gained from scrimmage.
-  open_field_yards: Open-field yards -- rushing yardage earned well downfield, past the second level.
-  passes_rate: Share of the team's plays from scrimmage that were pass plays.
-  passing_first_downs_created: Number of first downs created on pass plays.
-  passing_first_downs_created_rate: Share of pass plays that created a first down.
-  penalty_first_downs_created: Number of first downs the team gained via opponent penalty.
-  penalty_first_downs_created_rate: Share of the team's first downs that came via opponent penalty.
-  pos_team_id: ESPN team id of the team on offense. Present for every season 2004+.
-  punt_plays: Number of punt plays.
-  rushes: Number of rushing attempts.
-  rushes_rate: Share of the team's plays from scrimmage that were rush plays.
-  rushing_first_downs_created: Number of first downs created on rush plays.
-  rushing_first_downs_created_rate: Share of rush plays that created a first down.
-  rushing_highlight: Highlight yards -- rushing yardage credited to the back rather than the offensive line.
-  rushing_highlight_rate: Share of rushing yardage that was highlight (back-credited) yardage.
-  rushing_highlight_yards_per_opp: Highlight yards per rushing opportunity.
-  rushing_opportunity: Count of rushing opportunities -- carries that reached ESPN's opportunity threshold.
-  rushing_opportunity_rate: Share of carries that qualified as rushing opportunities.
-  rushing_power: Count of power rushing attempts, in short-yardage situations as classified by ESPN's advanced box score.
-  rushing_power_rate: Share of carries that were power rushing attempts.
-  rushing_power_success_rate: Share of power rushing attempts that succeeded.
-  rushing_stopped: Count of rushing attempts stopped at or behind the line of scrimmage.
-  rushing_stopped_rate: Share of carries stopped at or behind the line of scrimmage.
-  rushing_stuff: Count of stuffed rushing attempts.
-  scrimmage_plays: Number of plays from scrimmage (rushes plus passes), excluding special teams.
-  second_level_yards: Second-level yards -- rushing yardage earned just beyond the line of scrimmage.
-  special_teams_plays: Number of special-teams plays.
-  total_off_yards: Total offensive yards across all plays.
-  total_pen_yards: Total penalty yards assessed.
-  yards_per_play: Yards gained per play.
-  yards_per_rush: Yards gained per rushing attempt.
-load_cfb_adv_team_gamelog:
-  EPA_explosive: Count of explosive plays, per ESPN's advanced box score. Despite the EPA_ prefix this is a play COUNT, not
-    an EPA total.
-  EPA_explosive_passing: Count of explosive pass plays. A play count, not an EPA total.
-  EPA_explosive_passing_rate: Explosive-play rate on pass plays, over ESPN's qualifying-play denominator.
-  EPA_explosive_rate: Explosive-play rate. Note this is NOT EPA_explosive divided by EPA_plays -- ESPN divides by its own
-    smaller qualifying-play count, so deriving it yourself will not reproduce this value.
-  EPA_explosive_rushing: Count of explosive rush plays. A play count, not an EPA total.
-  EPA_explosive_rushing_rate: Explosive-play rate on rush plays, over ESPN's qualifying-play denominator.
-  EPA_fg: Total EPA on field-goal attempts.
-  EPA_kickoff: Total EPA on kickoff plays.
-  EPA_non_explosive: Total EPA with explosive plays excluded, isolating the team's routine-down production.
-  EPA_non_explosive_passing: Total EPA on pass plays with explosive plays excluded.
-  EPA_non_explosive_passing_per_play: EPA per pass play with explosive plays excluded.
-  EPA_non_explosive_per_play: EPA per play with explosive plays excluded.
-  EPA_non_explosive_rushing: Total EPA on rush plays with explosive plays excluded.
-  EPA_non_explosive_rushing_per_play: EPA per rush play with explosive plays excluded.
-  EPA_overall_off: Total offensive EPA for the team. Duplicated exactly by EPA_overall_offense in every published season checked
-    -- prefer one and ignore the other.
-  EPA_overall_offense: Total offensive EPA. An exact duplicate of EPA_overall_off.
-  EPA_overall_total: Total EPA across all phases, which is why it differs from the offense-only EPA_overall_off.
-  EPA_passing_overall: Total EPA on pass plays.
-  EPA_passing_per_play: EPA per pass play.
-  EPA_penalty: Total EPA attributed to penalties.
-  EPA_per_play: Offensive EPA per play.
-  EPA_plays: Number of plays ESPN's advanced box score scored for the team.
-  EPA_punt: Total EPA on punt plays.
-  EPA_rushing_overall: Total EPA on rush plays.
-  EPA_rushing_per_play: EPA per rush play.
-  EPA_rushing_power: Total EPA on power rushing situations, as classified by ESPN's advanced box score.
-  EPA_rushing_power_per_play: EPA per play on power rushing situations.
-  EPA_sp: Total special-teams EPA, ESPN's abbreviated field for the same phase.
-  EPA_special_teams: Total EPA generated on special-teams plays.
-  field_goals: Number of field-goal attempts.
-  first_downs_created: Number of first downs the team created.
-  first_downs_created_rate: Share of the team's plays that created a first down.
-  kickoff_plays: Number of kickoff plays.
-  line_yards: Line yards -- the portion of rushing yardage credited to the offensive line under the standard rushing decomposition.
-    ESPN applies its own qualifying threshold for the yardage split.
-  line_yards_per_carry: Line yards per rushing attempt.
-  off_yards: Offensive yards gained from scrimmage.
-  open_field_yards: Open-field yards -- rushing yardage earned well downfield, past the second level.
-  passes_rate: Share of the team's plays from scrimmage that were pass plays.
-  passing_first_downs_created: Number of first downs created on pass plays.
-  passing_first_downs_created_rate: Share of pass plays that created a first down.
-  penalty_first_downs_created: Number of first downs the team gained via opponent penalty.
-  penalty_first_downs_created_rate: Share of the team's first downs that came via opponent penalty.
-  punt_plays: Number of punt plays.
-  rushes: Number of rushing attempts.
-  rushes_rate: Share of the team's plays from scrimmage that were rush plays.
-  rushing_first_downs_created: Number of first downs created on rush plays.
-  rushing_first_downs_created_rate: Share of rush plays that created a first down.
-  rushing_highlight: Highlight yards -- rushing yardage credited to the back rather than the offensive line.
-  rushing_highlight_rate: Share of rushing yardage that was highlight (back-credited) yardage.
-  rushing_highlight_yards_per_opp: Highlight yards per rushing opportunity.
-  rushing_opportunity: Count of rushing opportunities -- carries that reached ESPN's opportunity threshold.
-  rushing_opportunity_rate: Share of carries that qualified as rushing opportunities.
-  rushing_power: Count of power rushing attempts, in short-yardage situations as classified by ESPN's advanced box score.
-  rushing_power_rate: Share of carries that were power rushing attempts.
-  rushing_power_success_rate: Share of power rushing attempts that succeeded.
-  rushing_stopped: Count of rushing attempts stopped at or behind the line of scrimmage.
-  rushing_stopped_rate: Share of carries stopped at or behind the line of scrimmage.
-  rushing_stuff: Count of stuffed rushing attempts.
-  scrimmage_plays: Number of plays from scrimmage (rushes plus passes), excluding special teams.
-  second_level_yards: Second-level yards -- rushing yardage earned just beyond the line of scrimmage.
-  special_teams_plays: Number of special-teams plays.
-  total_off_yards: Total offensive yards across all plays.
-  total_pen_yards: Total penalty yards assessed.
-  yards_per_play: Yards gained per play.
-  yards_per_rush: Yards gained per rushing attempt.
-load_cfb_adv_situational:
-  EPA_early_down: Total EPA the team generated on early downs.
-  EPA_early_down_pass: Total EPA the team generated on early downs on pass plays.
-  EPA_early_down_pass_per_play: EPA per play on early downs on pass plays.
-  EPA_early_down_per_play: EPA per play on early downs.
-  EPA_early_down_rush: Total EPA the team generated on early downs on rush plays.
-  EPA_early_down_rush_per_play: EPA per play on early downs on rush plays.
-  EPA_late_down: Total EPA the team generated on late downs.
-  EPA_late_down_per_play: EPA per play on late downs.
-  EPA_middle_8: Total EPA the team generated on the middle eight -- the closing minutes of the first half and opening minutes
-    of the second.
-  EPA_middle_8_pass: Total EPA the team generated on the middle eight -- the closing minutes of the first half and opening
-    minutes of the second on pass plays.
-  EPA_middle_8_pass_per_play: EPA per play on the middle eight -- the closing minutes of the first half and opening minutes
-    of the second on pass plays.
-  EPA_middle_8_per_play: EPA per play on the middle eight -- the closing minutes of the first half and opening minutes of
-    the second.
-  EPA_middle_8_rush: Total EPA the team generated on the middle eight -- the closing minutes of the first half and opening
-    minutes of the second on rush plays.
-  EPA_middle_8_rush_per_play: EPA per play on the middle eight -- the closing minutes of the first half and opening minutes
-    of the second on rush plays.
-  EPA_middle_8_success: Count of successful plays on the middle eight -- the closing minutes of the first half and opening
-    minutes of the second. Despite the EPA_ prefix this is a play COUNT, not an EPA total.
-  EPA_middle_8_success_pass: Count of successful plays on the middle eight -- the closing minutes of the first half and opening
-    minutes of the second on pass plays. Despite the EPA_ prefix this is a play COUNT, not an EPA total.
-  EPA_middle_8_success_pass_rate: Success rate on the middle eight -- the closing minutes of the first half and opening minutes
-    of the second on pass plays -- the share of those plays ESPN scored as successful.
-  EPA_middle_8_success_rate: Success rate on the middle eight -- the closing minutes of the first half and opening minutes
-    of the second -- the share of those plays ESPN scored as successful.
-  EPA_middle_8_success_rush: Count of successful plays on the middle eight -- the closing minutes of the first half and opening
-    minutes of the second on rush plays. Despite the EPA_ prefix this is a play COUNT, not an EPA total.
-  EPA_middle_8_success_rush_rate: Success rate on the middle eight -- the closing minutes of the first half and opening minutes
-    of the second on rush plays -- the share of those plays ESPN scored as successful.
-  EPA_passing_down: Total EPA the team generated on passing downs (the team behind schedule for the series).
-  EPA_passing_down_per_play: EPA per play on passing downs (the team behind schedule for the series).
-  EPA_standard_down: Total EPA the team generated on standard downs (the team ahead of schedule for the series).
-  EPA_standard_down_per_play: EPA per play on standard downs (the team ahead of schedule for the series).
-  EPA_success: Count of successful plays. Despite the EPA_ prefix this is a play COUNT, not an EPA total.
-  EPA_success_early_down: Count of successful plays on early downs. Despite the EPA_ prefix this is a play COUNT, not an EPA
-    total.
-  EPA_success_early_down_pass: Count of successful plays on early downs on pass plays. Despite the EPA_ prefix this is a play
-    COUNT, not an EPA total.
-  EPA_success_early_down_pass_rate: Success rate on early downs on pass plays -- the share of those plays ESPN scored as successful.
-  EPA_success_early_down_rate: Success rate on early downs -- the share of those plays ESPN scored as successful.
-  EPA_success_early_down_rush: Count of successful plays on early downs on rush plays. Despite the EPA_ prefix this is a play
-    COUNT, not an EPA total.
-  EPA_success_early_down_rush_rate: Success rate on early downs on rush plays -- the share of those plays ESPN scored as successful.
-  EPA_success_late_down: Count of successful plays on late downs. Despite the EPA_ prefix this is a play COUNT, not an EPA
-    total.
-  EPA_success_late_down_pass: Count of successful plays on late downs on pass plays. Despite the EPA_ prefix this is a play
-    COUNT, not an EPA total.
-  EPA_success_late_down_pass_rate: Success rate on late downs on pass plays -- the share of those plays ESPN scored as successful.
-  EPA_success_late_down_rate: Success rate on late downs -- the share of those plays ESPN scored as successful.
-  EPA_success_late_down_rush: Count of successful plays on late downs on rush plays. Despite the EPA_ prefix this is a play
-    COUNT, not an EPA total.
-  EPA_success_late_down_rush_rate: Success rate on late downs on rush plays -- the share of those plays ESPN scored as successful.
-  EPA_success_pass: Count of successful plays on pass plays. Despite the EPA_ prefix this is a play COUNT, not an EPA total.
-  EPA_success_pass_rate: Success rate on pass plays -- the share of those plays ESPN scored as successful.
-  EPA_success_passing_down: Count of successful plays on passing downs (the team behind schedule for the series). Despite
-    the EPA_ prefix this is a play COUNT, not an EPA total.
-  EPA_success_passing_down_rate: Success rate on passing downs (the team behind schedule for the series) -- the share of those
-    plays ESPN scored as successful.
-  EPA_success_rate: Success rate -- the share of those plays ESPN scored as successful.
-  EPA_success_rate_rz: Success rate on the red zone -- the share of those plays ESPN scored as successful.
-  EPA_success_rate_third: Success rate on third down -- the share of those plays ESPN scored as successful.
-  EPA_success_rush: Count of successful plays on rush plays. Despite the EPA_ prefix this is a play COUNT, not an EPA total.
-  EPA_success_rush_rate: Success rate on rush plays -- the share of those plays ESPN scored as successful.
-  EPA_success_rz: Count of successful plays on the red zone. Despite the EPA_ prefix this is a play COUNT, not an EPA total.
-  EPA_success_standard_down: Count of successful plays on standard downs (the team ahead of schedule for the series). Despite
-    the EPA_ prefix this is a play COUNT, not an EPA total.
-  EPA_success_standard_down_rate: Success rate on standard downs (the team ahead of schedule for the series) -- the share
-    of those plays ESPN scored as successful.
-  EPA_success_third: Count of successful plays on third down. Despite the EPA_ prefix this is a play COUNT, not an EPA total.
-  early_down_first_down: Number of early-down plays that produced a first down.
-  early_down_first_down_rate: Share of early-down plays that produced a first down.
-  early_down_pass: Number of pass plays the team ran on early downs.
-  early_down_pass_rate: Share of the team's plays on early downs that were pass plays.
-  early_down_rush: Number of rush plays the team ran on early downs.
-  early_down_rush_rate: Share of the team's plays on early downs that were rush plays.
-  early_downs: Number of plays the team ran on early downs.
-  late_down_pass: Number of pass plays the team ran on late downs.
-  late_down_pass_rate: Share of the team's plays on late downs that were pass plays.
-  late_down_rush: Number of rush plays the team ran on late downs.
-  late_down_rush_rate: Share of the team's plays on late downs that were rush plays.
-  late_downs: Number of plays the team ran on late downs.
-  middle_8: Number of plays the team ran in the middle eight -- the closing minutes of the first half and opening minutes
-    of the second.
-  middle_8_pass: Number of pass plays the team ran on the middle eight -- the closing minutes of the first half and opening
-    minutes of the second.
-  middle_8_pass_rate: Share of the team's plays on the middle eight -- the closing minutes of the first half and opening minutes
-    of the second that were pass plays.
-  middle_8_rush: Number of rush plays the team ran on the middle eight -- the closing minutes of the first half and opening
-    minutes of the second.
-  middle_8_rush_rate: Share of the team's plays on the middle eight -- the closing minutes of the first half and opening minutes
-    of the second that were rush plays.
-  passing_downs: Number of plays the team ran on passing downs (the team behind schedule for the series).
-  pos_team: Display name of the team on offense (e.g. 'Ohio State Buckeyes').
-  pos_team_id: ESPN team id of the team on offense. Present for every season 2004+.
-  standard_downs: Number of plays the team ran on standard downs (the team ahead of schedule for the series).
 load_phf_pbp:
   away_goalie_jersey: Jersey number of the away goaltender on the ice.
   away_nickname: Nickname of the away team.
@@ -4462,6 +4207,577 @@ load_wnba_stats_rosters:
   team_id_lookup: Team id used to join the row back to the team tables.
 load_wnba_team_season_stats:
   stat_description: Human-readable description of the statistic the row reports.
+load_cfb_adv_defensive:
+  scrimmage_plays: Number of plays from scrimmage (rushes plus passes), excluding special teams.
+load_cfb_adv_defensive_players:
+  def_pos_team: Display name of the team on defense (e.g. 'Ohio State Buckeyes'). Held an ESPN team id until the 2026-08 republish;
+    the id now lives in def_pos_team_id.
+  def_pos_team_id: ESPN team id of the team on defense. Present for every season 2004+.
+  forced_fumbles: Fumbles forced by the defender. Available from 2005 on; null for 2004, which ESPN ships with only the fumble-recovery
+    statistics.
+  fumble_recoveries: Fumbles recovered by the defender. Available for every season 2004+.
+  fumble_recoveries_yards: Yards returned on the defender's fumble recoveries. Available for every season 2004+.
+  interceptions: Passes intercepted by the defender. Available from 2014 on; null for 2004-2013, which ESPN ships without
+    interception statistics in this block.
+  interceptions_yards: Yards returned on the defender's interceptions. Available from 2014 on; null for 2004-2013.
+  pass_breakups: Passes broken up by the defender. Available from 2005 on; null for 2004.
+  player_name: Display name of the defender.
+  sacks: Sacks recorded by the defender. Available from 2005 on; null for 2004.
+  sacks_yards: Yards lost by the offense on the defender's sacks. Available from 2005 on; null for 2004.
+load_cfb_adv_drives:
+  pos_team_id: ESPN team id of the team on offense. Present for every season 2004+.
+load_cfb_adv_passing:
+  Att: Pass attempts recorded in the advanced box score.
+  CPOE: Completion percentage over expected -- actual minus modelled completion rate.
+  Comp: Completed passes recorded in the advanced box score.
+  CompPct: Completion percentage from the advanced box score.
+  EPA_per_Play: EPA per play on the passer's plays.
+  Int: Interceptions thrown.
+  Pass_TD: Passing touchdowns.
+  SR: Success rate on the passer's plays.
+  Sck: Times the passer was sacked.
+  YPA: Yards per pass attempt.
+  Yds: Passing yards from the advanced box score.
+  era0: Rule-era indicator for the earliest modelled era.
+  era1: Rule-era indicator for the second modelled era.
+  era2: Rule-era indicator for the third modelled era.
+  era3: Rule-era indicator for the most recent modelled era.
+  exp_qbr: Expected QBR for the passer.
+  pass_epa: EPA credited to the player's pass plays.
+  passer_player_name: Display name of the passer -- the FIRST participant in that role on the play.
+  pen_epa: EPA attributable to penalties on the player's plays.
+  pos_team_id: ESPN team id of the team on offense. Present for every season 2004+.
+  qbr_epa: EPA variant used as an input to the QBR calculation.
+  rush_epa: EPA credited to the player's rush plays.
+  sack_epa: EPA credited to the player's sacks taken.
+  xComp: Expected completions, summed from the per-play completion model.
+  xCompPct: Expected completion percentage from the per-play completion model.
+load_cfb_adv_receiving:
+  EPA_per_Play: EPA per play on the passer's plays.
+  SR: Success rate on the passer's plays.
+  Yds: Passing yards from the advanced box score.
+  pos_team_id: ESPN team id of the team on offense. Present for every season 2004+.
+  receiver_player_name: Display name of the targeted receiver -- the FIRST participant in that role on the play.
+load_cfb_adv_rushing:
+  EPA_per_Play: EPA per play on the passer's plays.
+  SR: Success rate on the passer's plays.
+  Yds: Passing yards from the advanced box score.
+  pos_team_id: ESPN team id of the team on offense. Present for every season 2004+.
+  rusher_player_name: Display name of the ball carrier on a rush -- the FIRST participant in that role on the play.
+load_cfb_adv_situational:
+  EPA_early_down: Total EPA the team generated on early downs.
+  EPA_early_down_pass: Total EPA the team generated on early downs on pass plays.
+  EPA_early_down_pass_per_play: EPA per play on early downs on pass plays.
+  EPA_early_down_per_play: EPA per play on early downs.
+  EPA_early_down_rush: Total EPA the team generated on early downs on rush plays.
+  EPA_early_down_rush_per_play: EPA per play on early downs on rush plays.
+  EPA_late_down: Total EPA the team generated on late downs.
+  EPA_late_down_per_play: EPA per play on late downs.
+  EPA_middle_8: Total EPA the team generated on the middle eight -- the closing minutes of the first half and opening minutes
+    of the second.
+  EPA_middle_8_pass: Total EPA the team generated on the middle eight -- the closing minutes of the first half and opening
+    minutes of the second on pass plays.
+  EPA_middle_8_pass_per_play: EPA per play on the middle eight -- the closing minutes of the first half and opening minutes
+    of the second on pass plays.
+  EPA_middle_8_per_play: EPA per play on the middle eight -- the closing minutes of the first half and opening minutes of
+    the second.
+  EPA_middle_8_rush: Total EPA the team generated on the middle eight -- the closing minutes of the first half and opening
+    minutes of the second on rush plays.
+  EPA_middle_8_rush_per_play: EPA per play on the middle eight -- the closing minutes of the first half and opening minutes
+    of the second on rush plays.
+  EPA_middle_8_success: Count of successful plays on the middle eight -- the closing minutes of the first half and opening
+    minutes of the second. Despite the EPA_ prefix this is a play COUNT, not an EPA total.
+  EPA_middle_8_success_pass: Count of successful plays on the middle eight -- the closing minutes of the first half and opening
+    minutes of the second on pass plays. Despite the EPA_ prefix this is a play COUNT, not an EPA total.
+  EPA_middle_8_success_pass_rate: Success rate on the middle eight -- the closing minutes of the first half and opening minutes
+    of the second on pass plays -- the share of those plays ESPN scored as successful.
+  EPA_middle_8_success_rate: Success rate on the middle eight -- the closing minutes of the first half and opening minutes
+    of the second -- the share of those plays ESPN scored as successful.
+  EPA_middle_8_success_rush: Count of successful plays on the middle eight -- the closing minutes of the first half and opening
+    minutes of the second on rush plays. Despite the EPA_ prefix this is a play COUNT, not an EPA total.
+  EPA_middle_8_success_rush_rate: Success rate on the middle eight -- the closing minutes of the first half and opening minutes
+    of the second on rush plays -- the share of those plays ESPN scored as successful.
+  EPA_passing_down: Total EPA the team generated on passing downs (the team behind schedule for the series).
+  EPA_passing_down_per_play: EPA per play on passing downs (the team behind schedule for the series).
+  EPA_standard_down: Total EPA the team generated on standard downs (the team ahead of schedule for the series).
+  EPA_standard_down_per_play: EPA per play on standard downs (the team ahead of schedule for the series).
+  EPA_success: Count of successful plays. Despite the EPA_ prefix this is a play COUNT, not an EPA total.
+  EPA_success_early_down: Count of successful plays on early downs. Despite the EPA_ prefix this is a play COUNT, not an EPA
+    total.
+  EPA_success_early_down_pass: Count of successful plays on early downs on pass plays. Despite the EPA_ prefix this is a play
+    COUNT, not an EPA total.
+  EPA_success_early_down_pass_rate: Success rate on early downs on pass plays -- the share of those plays ESPN scored as successful.
+  EPA_success_early_down_rate: Success rate on early downs -- the share of those plays ESPN scored as successful.
+  EPA_success_early_down_rush: Count of successful plays on early downs on rush plays. Despite the EPA_ prefix this is a play
+    COUNT, not an EPA total.
+  EPA_success_early_down_rush_rate: Success rate on early downs on rush plays -- the share of those plays ESPN scored as successful.
+  EPA_success_late_down: Count of successful plays on late downs. Despite the EPA_ prefix this is a play COUNT, not an EPA
+    total.
+  EPA_success_late_down_pass: Count of successful plays on late downs on pass plays. Despite the EPA_ prefix this is a play
+    COUNT, not an EPA total.
+  EPA_success_late_down_pass_rate: Success rate on late downs on pass plays -- the share of those plays ESPN scored as successful.
+  EPA_success_late_down_rate: Success rate on late downs -- the share of those plays ESPN scored as successful.
+  EPA_success_late_down_rush: Count of successful plays on late downs on rush plays. Despite the EPA_ prefix this is a play
+    COUNT, not an EPA total.
+  EPA_success_late_down_rush_rate: Success rate on late downs on rush plays -- the share of those plays ESPN scored as successful.
+  EPA_success_pass: Count of successful plays on pass plays. Despite the EPA_ prefix this is a play COUNT, not an EPA total.
+  EPA_success_pass_rate: Success rate on pass plays -- the share of those plays ESPN scored as successful.
+  EPA_success_passing_down: Count of successful plays on passing downs (the team behind schedule for the series). Despite
+    the EPA_ prefix this is a play COUNT, not an EPA total.
+  EPA_success_passing_down_rate: Success rate on passing downs (the team behind schedule for the series) -- the share of those
+    plays ESPN scored as successful.
+  EPA_success_rate: Success rate -- the share of those plays ESPN scored as successful.
+  EPA_success_rate_rz: Success rate on the red zone -- the share of those plays ESPN scored as successful.
+  EPA_success_rate_third: Success rate on third down -- the share of those plays ESPN scored as successful.
+  EPA_success_rush: Count of successful plays on rush plays. Despite the EPA_ prefix this is a play COUNT, not an EPA total.
+  EPA_success_rush_rate: Success rate on rush plays -- the share of those plays ESPN scored as successful.
+  EPA_success_rz: Count of successful plays on the red zone. Despite the EPA_ prefix this is a play COUNT, not an EPA total.
+  EPA_success_standard_down: Count of successful plays on standard downs (the team ahead of schedule for the series). Despite
+    the EPA_ prefix this is a play COUNT, not an EPA total.
+  EPA_success_standard_down_rate: Success rate on standard downs (the team ahead of schedule for the series) -- the share
+    of those plays ESPN scored as successful.
+  EPA_success_third: Count of successful plays on third down. Despite the EPA_ prefix this is a play COUNT, not an EPA total.
+  early_down_first_down: Number of early-down plays that produced a first down.
+  early_down_first_down_rate: Share of early-down plays that produced a first down.
+  early_down_pass: Number of pass plays the team ran on early downs.
+  early_down_pass_rate: Share of the team's plays on early downs that were pass plays.
+  early_down_rush: Number of rush plays the team ran on early downs.
+  early_down_rush_rate: Share of the team's plays on early downs that were rush plays.
+  early_downs: Number of plays the team ran on early downs.
+  late_down_pass: Number of pass plays the team ran on late downs.
+  late_down_pass_rate: Share of the team's plays on late downs that were pass plays.
+  late_down_rush: Number of rush plays the team ran on late downs.
+  late_down_rush_rate: Share of the team's plays on late downs that were rush plays.
+  late_downs: Number of plays the team ran on late downs.
+  middle_8: Number of plays the team ran in the middle eight -- the closing minutes of the first half and opening minutes
+    of the second.
+  middle_8_pass: Number of pass plays the team ran on the middle eight -- the closing minutes of the first half and opening
+    minutes of the second.
+  middle_8_pass_rate: Share of the team's plays on the middle eight -- the closing minutes of the first half and opening minutes
+    of the second that were pass plays.
+  middle_8_rush: Number of rush plays the team ran on the middle eight -- the closing minutes of the first half and opening
+    minutes of the second.
+  middle_8_rush_rate: Share of the team's plays on the middle eight -- the closing minutes of the first half and opening minutes
+    of the second that were rush plays.
+  passing_downs: Number of plays the team ran on passing downs (the team behind schedule for the series).
+  pos_team: Display name of the team on offense (e.g. 'Ohio State Buckeyes').
+  pos_team_id: ESPN team id of the team on offense. Present for every season 2004+.
+  standard_downs: Number of plays the team ran on standard downs (the team ahead of schedule for the series).
+load_cfb_adv_specialists:
+  field_goals: Number of field-goal attempts.
+  pos_team_id: ESPN team id of the team on offense. Present for every season 2004+.
+  punts: Punts attempted.
+load_cfb_adv_team:
+  EPA_explosive: Count of explosive plays, per ESPN's advanced box score. Despite the EPA_ prefix this is a play COUNT, not
+    an EPA total.
+  EPA_explosive_passing: Count of explosive pass plays. A play count, not an EPA total.
+  EPA_explosive_passing_rate: Explosive-play rate on pass plays, over ESPN's qualifying-play denominator.
+  EPA_explosive_rate: Explosive-play rate. Note this is NOT EPA_explosive divided by EPA_plays -- ESPN divides by its own
+    smaller qualifying-play count, so deriving it yourself will not reproduce this value.
+  EPA_explosive_rushing: Count of explosive rush plays. A play count, not an EPA total.
+  EPA_explosive_rushing_rate: Explosive-play rate on rush plays, over ESPN's qualifying-play denominator.
+  EPA_fg: Total EPA on field-goal attempts.
+  EPA_kickoff: Total EPA on kickoff plays.
+  EPA_non_explosive: Total EPA with explosive plays excluded, isolating the team's routine-down production.
+  EPA_non_explosive_passing: Total EPA on pass plays with explosive plays excluded.
+  EPA_non_explosive_passing_per_play: EPA per pass play with explosive plays excluded.
+  EPA_non_explosive_per_play: EPA per play with explosive plays excluded.
+  EPA_non_explosive_rushing: Total EPA on rush plays with explosive plays excluded.
+  EPA_non_explosive_rushing_per_play: EPA per rush play with explosive plays excluded.
+  EPA_overall_off: Total offensive EPA for the team. Duplicated exactly by EPA_overall_offense in every published season checked
+    -- prefer one and ignore the other.
+  EPA_overall_offense: Total offensive EPA. An exact duplicate of EPA_overall_off.
+  EPA_overall_total: Total EPA across all phases, which is why it differs from the offense-only EPA_overall_off.
+  EPA_passing_overall: Total EPA on pass plays.
+  EPA_passing_per_play: EPA per pass play.
+  EPA_penalty: Total EPA attributed to penalties.
+  EPA_per_play: Offensive EPA per play.
+  EPA_plays: Number of plays ESPN's advanced box score scored for the team.
+  EPA_punt: Total EPA on punt plays.
+  EPA_rushing_overall: Total EPA on rush plays.
+  EPA_rushing_per_play: EPA per rush play.
+  EPA_rushing_power: Total EPA on power rushing situations, as classified by ESPN's advanced box score.
+  EPA_rushing_power_per_play: EPA per play on power rushing situations.
+  EPA_sp: Total special-teams EPA, ESPN's abbreviated field for the same phase.
+  EPA_special_teams: Total EPA generated on special-teams plays.
+  field_goals: Number of field-goal attempts.
+  first_downs_created: Number of first downs the team created.
+  first_downs_created_rate: Share of the team's plays that created a first down.
+  kickoff_plays: Number of kickoff plays.
+  line_yards: Line yards -- the portion of rushing yardage credited to the offensive line under the standard rushing decomposition.
+    ESPN applies its own qualifying threshold for the yardage split.
+  line_yards_per_carry: Line yards per rushing attempt.
+  off_yards: Offensive yards gained from scrimmage.
+  open_field_yards: Open-field yards -- rushing yardage earned well downfield, past the second level.
+  passes_rate: Share of the team's plays from scrimmage that were pass plays.
+  passing_first_downs_created: Number of first downs created on pass plays.
+  passing_first_downs_created_rate: Share of pass plays that created a first down.
+  penalty_first_downs_created: Number of first downs the team gained via opponent penalty.
+  penalty_first_downs_created_rate: Share of the team's first downs that came via opponent penalty.
+  pos_team_id: ESPN team id of the team on offense. Present for every season 2004+.
+  punt_plays: Number of punt plays.
+  rushes: Number of rushing attempts.
+  rushes_rate: Share of the team's plays from scrimmage that were rush plays.
+  rushing_first_downs_created: Number of first downs created on rush plays.
+  rushing_first_downs_created_rate: Share of rush plays that created a first down.
+  rushing_highlight: Highlight yards -- rushing yardage credited to the back rather than the offensive line.
+  rushing_highlight_rate: Share of rushing yardage that was highlight (back-credited) yardage.
+  rushing_highlight_yards_per_opp: Highlight yards per rushing opportunity.
+  rushing_opportunity: Count of rushing opportunities -- carries that reached ESPN's opportunity threshold.
+  rushing_opportunity_rate: Share of carries that qualified as rushing opportunities.
+  rushing_power: Count of power rushing attempts, in short-yardage situations as classified by ESPN's advanced box score.
+  rushing_power_rate: Share of carries that were power rushing attempts.
+  rushing_power_success_rate: Share of power rushing attempts that succeeded.
+  rushing_stopped: Count of rushing attempts stopped at or behind the line of scrimmage.
+  rushing_stopped_rate: Share of carries stopped at or behind the line of scrimmage.
+  rushing_stuff: Count of stuffed rushing attempts.
+  scrimmage_plays: Number of plays from scrimmage (rushes plus passes), excluding special teams.
+  second_level_yards: Second-level yards -- rushing yardage earned just beyond the line of scrimmage.
+  special_teams_plays: Number of special-teams plays.
+  total_off_yards: Total offensive yards across all plays.
+  total_pen_yards: Total penalty yards assessed.
+  yards_per_play: Yards gained per play.
+  yards_per_rush: Yards gained per rushing attempt.
+load_cfb_adv_team_gamelog:
+  EPA_explosive: Count of explosive plays, per ESPN's advanced box score. Despite the EPA_ prefix this is a play COUNT, not
+    an EPA total.
+  EPA_explosive_passing: Count of explosive pass plays. A play count, not an EPA total.
+  EPA_explosive_passing_rate: Explosive-play rate on pass plays, over ESPN's qualifying-play denominator.
+  EPA_explosive_rate: Explosive-play rate. Note this is NOT EPA_explosive divided by EPA_plays -- ESPN divides by its own
+    smaller qualifying-play count, so deriving it yourself will not reproduce this value.
+  EPA_explosive_rushing: Count of explosive rush plays. A play count, not an EPA total.
+  EPA_explosive_rushing_rate: Explosive-play rate on rush plays, over ESPN's qualifying-play denominator.
+  EPA_fg: Total EPA on field-goal attempts.
+  EPA_kickoff: Total EPA on kickoff plays.
+  EPA_non_explosive: Total EPA with explosive plays excluded, isolating the team's routine-down production.
+  EPA_non_explosive_passing: Total EPA on pass plays with explosive plays excluded.
+  EPA_non_explosive_passing_per_play: EPA per pass play with explosive plays excluded.
+  EPA_non_explosive_per_play: EPA per play with explosive plays excluded.
+  EPA_non_explosive_rushing: Total EPA on rush plays with explosive plays excluded.
+  EPA_non_explosive_rushing_per_play: EPA per rush play with explosive plays excluded.
+  EPA_overall_off: Total offensive EPA for the team. Duplicated exactly by EPA_overall_offense in every published season checked
+    -- prefer one and ignore the other.
+  EPA_overall_offense: Total offensive EPA. An exact duplicate of EPA_overall_off.
+  EPA_overall_total: Total EPA across all phases, which is why it differs from the offense-only EPA_overall_off.
+  EPA_passing_overall: Total EPA on pass plays.
+  EPA_passing_per_play: EPA per pass play.
+  EPA_penalty: Total EPA attributed to penalties.
+  EPA_per_play: Offensive EPA per play.
+  EPA_plays: Number of plays ESPN's advanced box score scored for the team.
+  EPA_punt: Total EPA on punt plays.
+  EPA_rushing_overall: Total EPA on rush plays.
+  EPA_rushing_per_play: EPA per rush play.
+  EPA_rushing_power: Total EPA on power rushing situations, as classified by ESPN's advanced box score.
+  EPA_rushing_power_per_play: EPA per play on power rushing situations.
+  EPA_sp: Total special-teams EPA, ESPN's abbreviated field for the same phase.
+  EPA_special_teams: Total EPA generated on special-teams plays.
+  field_goals: Number of field-goal attempts.
+  first_downs_created: Number of first downs the team created.
+  first_downs_created_rate: Share of the team's plays that created a first down.
+  kickoff_plays: Number of kickoff plays.
+  line_yards: Line yards -- the portion of rushing yardage credited to the offensive line under the standard rushing decomposition.
+    ESPN applies its own qualifying threshold for the yardage split.
+  line_yards_per_carry: Line yards per rushing attempt.
+  off_yards: Offensive yards gained from scrimmage.
+  open_field_yards: Open-field yards -- rushing yardage earned well downfield, past the second level.
+  passes_rate: Share of the team's plays from scrimmage that were pass plays.
+  passing_first_downs_created: Number of first downs created on pass plays.
+  passing_first_downs_created_rate: Share of pass plays that created a first down.
+  penalty_first_downs_created: Number of first downs the team gained via opponent penalty.
+  penalty_first_downs_created_rate: Share of the team's first downs that came via opponent penalty.
+  punt_plays: Number of punt plays.
+  rushes: Number of rushing attempts.
+  rushes_rate: Share of the team's plays from scrimmage that were rush plays.
+  rushing_first_downs_created: Number of first downs created on rush plays.
+  rushing_first_downs_created_rate: Share of rush plays that created a first down.
+  rushing_highlight: Highlight yards -- rushing yardage credited to the back rather than the offensive line.
+  rushing_highlight_rate: Share of rushing yardage that was highlight (back-credited) yardage.
+  rushing_highlight_yards_per_opp: Highlight yards per rushing opportunity.
+  rushing_opportunity: Count of rushing opportunities -- carries that reached ESPN's opportunity threshold.
+  rushing_opportunity_rate: Share of carries that qualified as rushing opportunities.
+  rushing_power: Count of power rushing attempts, in short-yardage situations as classified by ESPN's advanced box score.
+  rushing_power_rate: Share of carries that were power rushing attempts.
+  rushing_power_success_rate: Share of power rushing attempts that succeeded.
+  rushing_stopped: Count of rushing attempts stopped at or behind the line of scrimmage.
+  rushing_stopped_rate: Share of carries stopped at or behind the line of scrimmage.
+  rushing_stuff: Count of stuffed rushing attempts.
+  scrimmage_plays: Number of plays from scrimmage (rushes plus passes), excluding special teams.
+  second_level_yards: Second-level yards -- rushing yardage earned just beyond the line of scrimmage.
+  special_teams_plays: Number of special-teams plays.
+  total_off_yards: Total offensive yards across all plays.
+  total_pen_yards: Total penalty yards assessed.
+  yards_per_play: Yards gained per play.
+  yards_per_rush: Yards gained per rushing attempt.
+load_cfb_adv_turnover:
+  Int: Interceptions thrown.
+  pos_team_id: ESPN team id of the team on offense. Present for every season 2004+.
+load_cfb_model_pbp:
+  completion_prob: Modelled probability the pass is completed.
+  cp_model_version: Version of the completion-probability model that scored the play.
+  ep_model_version: Version of the expected-points model that scored the play.
+  model_pbp_version: Version of the model-scored play-by-play build.
+  passer_player_name: Display name of the passer -- the FIRST participant in that role on the play.
+  scored_date: Date on which the play was scored by the models.
+  wp_model_version: Version of the win-probability model that scored the play.
+load_cfb_passing:
+  EPAgame: EPA generated per game.
+  EPAgame_rank: National rank of the team's EPA generated per game, where 1 is best.
+  EPAplay: EPA generated per play.
+  EPAplay_rank: National rank of the team's EPA generated per play, where 1 is best.
+  TEPA: Total EPA summed over every play.
+  TEPA_rank: National rank of the team's total EPA summed over every play, where 1 is best.
+  att: Pass attempts thrown.
+  comp: Completed passes.
+  comppct: Completion percentage.
+  comppct_rank: National rank of the team's completion percentage, where 1 is best.
+  detmer: Detmer rating -- the composite passing-efficiency measure this pipeline publishes, named for the college passing-efficiency
+    tradition.
+  detmer_rank: National rank of the team's detmer rating -- the composite passing-efficiency measure this pipeline publishes,
+    named for the college passing-efficiency tradition, where 1 is best.
+  detmergame: Detmer rating expressed per game.
+  detmergame_rank: National rank of the team's detmer rating expressed per game, where 1 is best.
+  dropbacks: Dropbacks taken by the passer.
+  fbs_class: 'Power/Group classification for the season: P4 or G6 from 2024 on, P5 or G5 through 2023, derived from conference
+    membership. Null for teams outside FBS.'
+  pass_int: Interceptions thrown.
+  passer_player_name: Display name of the passer -- the FIRST participant in that role on the play.
+  playsgame: Plays per game.
+  sack_adj_yards: Passing yards adjusted for sack yardage lost.
+  sack_adj_yards_rank: National rank of the team's passing yards adjusted for sack yardage lost, where 1 is best.
+  sack_yds: Yards lost to sacks.
+  sacked: Times the passer was sacked.
+  success: Success rate across the team plays.
+  success_rank: National rank of the team's success rate across the team plays, where 1 is best.
+  team_games: Games the team played, used as the per-game denominator.
+  yards_rank: National rank of the team's total yards, where 1 is best.
+  yardsdropback: Yards per dropback.
+  yardsdropback_rank: National rank of the team's yards per dropback, where 1 is best.
+  yardsgame: Yards per game.
+  yardsgame_rank: National rank of the team's yards per game, where 1 is best.
+  yardsplay: Yards per play.
+  yardsplay_rank: National rank of the team's yards per play, where 1 is best.
+load_cfb_percentiles:
+  EPAdropback: Value of EPA generated per dropback at the percentile this row reports.
+  EPAplay: Value of EPA generated per play at the percentile this row reports.
+  EPArush: Value of EPA generated per rushing attempt at the percentile this row reports.
+  GEI: Value of game excitement index at the percentile this row reports.
+  dropbacks: Value of dropbacks taken by the passer at the percentile this row reports.
+  early_down_EPA: Value of EPA per early-down play at the percentile this row reports.
+  early_down_success: Value of success rate on early downs at the percentile this row reports.
+  explosive: Value of explosive-play rate at the percentile this row reports.
+  havoc: Value of havoc rate at the percentile this row reports.
+  late_down_success: Value of success rate on late downs at the percentile this row reports.
+  lineyards: Value of line yards per rush at the percentile this row reports.
+  nonExplosiveEpaPerPlay: Value of EPA per play excluding explosive plays at the percentile this row reports.
+  opportunity_run: Value of opportunity-run rate at the percentile this row reports.
+  pass_explosive: Value of explosive-play rate on pass plays at the percentile this row reports.
+  pass_success: Value of success rate on pass plays at the percentile this row reports.
+  pctile: Percentile bucket the row reports, from 0 to 100.
+  play_stuffed: Value of stuffed-play rate at the percentile this row reports.
+  red_zone_success: Value of success rate in the red zone at the percentile this row reports.
+  rush_explosive: Value of explosive-play rate on rush plays at the percentile this row reports.
+  rush_success: Value of success rate on rush plays at the percentile this row reports.
+  rushes: Value of rushing attempts at the percentile this row reports.
+  success: Value of success rate across the team plays at the percentile this row reports.
+  third_down_distance: Value of average yards to go on third down at the percentile this row reports.
+  third_down_success: Value of success rate on third down at the percentile this row reports.
+  yardsdropback: Value of yards per dropback at the percentile this row reports.
+  yardsplay: Value of yards per play at the percentile this row reports.
+  yardsrush: Value of yards per rush at the percentile this row reports.
+load_cfb_play_participants:
+  assisted_by_player_id: ESPN athlete id of a defender credited with an assisted tackle -- the FIRST participant in that role
+    on the play.
+  assisted_by_player_ids: List of the athlete ids of EVERY participant credited as a defender credited with an assisted tackle
+    on the play, so multi-entry roles such as split sacks or gang tackles are not collapsed to one.
+  assisted_by_player_name: Display name of a defender credited with an assisted tackle -- the FIRST participant in that role
+    on the play.
+  assisted_by_player_names: List of the display names of EVERY participant credited as a defender credited with an assisted
+    tackle on the play, so multi-entry roles such as split sacks or gang tackles are not collapsed to one.
+  forced_by_player_id: ESPN athlete id of the defender who forced the fumble -- the FIRST participant in that role on the
+    play.
+  forced_by_player_ids: List of the athlete ids of EVERY participant credited as the defender who forced the fumble on the
+    play, so multi-entry roles such as split sacks or gang tackles are not collapsed to one.
+  forced_by_player_name: Display name of the defender who forced the fumble -- the FIRST participant in that role on the play.
+  forced_by_player_names: List of the display names of EVERY participant credited as the defender who forced the fumble on
+    the play, so multi-entry roles such as split sacks or gang tackles are not collapsed to one.
+  kicker_player_id: ESPN athlete id of the kicker -- the FIRST participant in that role on the play.
+  kicker_player_ids: List of the athlete ids of EVERY participant credited as the kicker on the play, so multi-entry roles
+    such as split sacks or gang tackles are not collapsed to one.
+  kicker_player_name: Display name of the kicker -- the FIRST participant in that role on the play.
+  kicker_player_names: List of the display names of EVERY participant credited as the kicker on the play, so multi-entry roles
+    such as split sacks or gang tackles are not collapsed to one.
+  pass_defender_player_id: ESPN athlete id of the defender credited with defending the pass -- the FIRST participant in that
+    role on the play.
+  pass_defender_player_ids: List of the athlete ids of EVERY participant credited as the defender credited with defending
+    the pass on the play, so multi-entry roles such as split sacks or gang tackles are not collapsed to one.
+  pass_defender_player_name: Display name of the defender credited with defending the pass -- the FIRST participant in that
+    role on the play.
+  pass_defender_player_names: List of the display names of EVERY participant credited as the defender credited with defending
+    the pass on the play, so multi-entry roles such as split sacks or gang tackles are not collapsed to one.
+  passer_player_id: ESPN athlete id of the passer -- the FIRST participant in that role on the play.
+  passer_player_ids: List of the athlete ids of EVERY participant credited as the passer on the play, so multi-entry roles
+    such as split sacks or gang tackles are not collapsed to one.
+  passer_player_name: Display name of the passer -- the FIRST participant in that role on the play.
+  passer_player_names: List of the display names of EVERY participant credited as the passer on the play, so multi-entry roles
+    such as split sacks or gang tackles are not collapsed to one.
+  pat_passer_player_id: ESPN athlete id of the passer on the point-after attempt -- the FIRST participant in that role on
+    the play.
+  pat_passer_player_ids: List of the athlete ids of EVERY participant credited as the passer on the point-after attempt on
+    the play, so multi-entry roles such as split sacks or gang tackles are not collapsed to one.
+  pat_passer_player_name: Display name of the passer on the point-after attempt -- the FIRST participant in that role on the
+    play.
+  pat_passer_player_names: List of the display names of EVERY participant credited as the passer on the point-after attempt
+    on the play, so multi-entry roles such as split sacks or gang tackles are not collapsed to one.
+  pat_scorer_player_id: ESPN athlete id of the player credited with the point-after score -- the FIRST participant in that
+    role on the play.
+  pat_scorer_player_ids: List of the athlete ids of EVERY participant credited as the player credited with the point-after
+    score on the play, so multi-entry roles such as split sacks or gang tackles are not collapsed to one.
+  pat_scorer_player_name: Display name of the player credited with the point-after score -- the FIRST participant in that
+    role on the play.
+  pat_scorer_player_names: List of the display names of EVERY participant credited as the player credited with the point-after
+    score on the play, so multi-entry roles such as split sacks or gang tackles are not collapsed to one.
+  penalized_player_id: ESPN athlete id of the penalized player -- the FIRST participant in that role on the play.
+  penalized_player_ids: List of the athlete ids of EVERY participant credited as the penalized player on the play, so multi-entry
+    roles such as split sacks or gang tackles are not collapsed to one.
+  penalized_player_name: Display name of the penalized player -- the FIRST participant in that role on the play.
+  penalized_player_names: List of the display names of EVERY participant credited as the penalized player on the play, so
+    multi-entry roles such as split sacks or gang tackles are not collapsed to one.
+  punter_player_id: ESPN athlete id of the punter -- the FIRST participant in that role on the play.
+  punter_player_ids: List of the athlete ids of EVERY participant credited as the punter on the play, so multi-entry roles
+    such as split sacks or gang tackles are not collapsed to one.
+  punter_player_name: Display name of the punter -- the FIRST participant in that role on the play.
+  punter_player_names: List of the display names of EVERY participant credited as the punter on the play, so multi-entry roles
+    such as split sacks or gang tackles are not collapsed to one.
+  receiver_player_id: ESPN athlete id of the targeted receiver -- the FIRST participant in that role on the play.
+  receiver_player_ids: List of the athlete ids of EVERY participant credited as the targeted receiver on the play, so multi-entry
+    roles such as split sacks or gang tackles are not collapsed to one.
+  receiver_player_name: Display name of the targeted receiver -- the FIRST participant in that role on the play.
+  receiver_player_names: List of the display names of EVERY participant credited as the targeted receiver on the play, so
+    multi-entry roles such as split sacks or gang tackles are not collapsed to one.
+  recoverer_player_id: ESPN athlete id of the player who recovered the fumble -- the FIRST participant in that role on the
+    play.
+  recoverer_player_ids: List of the athlete ids of EVERY participant credited as the player who recovered the fumble on the
+    play, so multi-entry roles such as split sacks or gang tackles are not collapsed to one.
+  recoverer_player_name: Display name of the player who recovered the fumble -- the FIRST participant in that role on the
+    play.
+  recoverer_player_names: List of the display names of EVERY participant credited as the player who recovered the fumble on
+    the play, so multi-entry roles such as split sacks or gang tackles are not collapsed to one.
+  returner_player_id: ESPN athlete id of the player returning the kick or punt -- the FIRST participant in that role on the
+    play.
+  returner_player_ids: List of the athlete ids of EVERY participant credited as the player returning the kick or punt on the
+    play, so multi-entry roles such as split sacks or gang tackles are not collapsed to one.
+  returner_player_name: Display name of the player returning the kick or punt -- the FIRST participant in that role on the
+    play.
+  returner_player_names: List of the display names of EVERY participant credited as the player returning the kick or punt
+    on the play, so multi-entry roles such as split sacks or gang tackles are not collapsed to one.
+  rusher_player_id: ESPN athlete id of the ball carrier on a rush -- the FIRST participant in that role on the play.
+  rusher_player_ids: List of the athlete ids of EVERY participant credited as the ball carrier on a rush on the play, so multi-entry
+    roles such as split sacks or gang tackles are not collapsed to one.
+  rusher_player_name: Display name of the ball carrier on a rush -- the FIRST participant in that role on the play.
+  rusher_player_names: List of the display names of EVERY participant credited as the ball carrier on a rush on the play,
+    so multi-entry roles such as split sacks or gang tackles are not collapsed to one.
+  sacked_by_player_id: ESPN athlete id of a defender credited with the sack -- the FIRST participant in that role on the play.
+  sacked_by_player_ids: List of the athlete ids of EVERY participant credited as a defender credited with the sack on the
+    play, so multi-entry roles such as split sacks or gang tackles are not collapsed to one.
+  sacked_by_player_name: Display name of a defender credited with the sack -- the FIRST participant in that role on the play.
+  sacked_by_player_names: List of the display names of EVERY participant credited as a defender credited with the sack on
+    the play, so multi-entry roles such as split sacks or gang tackles are not collapsed to one.
+  scorer_player_id: ESPN athlete id of the player credited with the score -- the FIRST participant in that role on the play.
+  scorer_player_ids: List of the athlete ids of EVERY participant credited as the player credited with the score on the play,
+    so multi-entry roles such as split sacks or gang tackles are not collapsed to one.
+  scorer_player_name: Display name of the player credited with the score -- the FIRST participant in that role on the play.
+  scorer_player_names: List of the display names of EVERY participant credited as the player credited with the score on the
+    play, so multi-entry roles such as split sacks or gang tackles are not collapsed to one.
+  tackler_player_id: ESPN athlete id of a defender credited with the tackle -- the FIRST participant in that role on the play.
+  tackler_player_ids: List of the athlete ids of EVERY participant credited as a defender credited with the tackle on the
+    play, so multi-entry roles such as split sacks or gang tackles are not collapsed to one.
+  tackler_player_name: Display name of a defender credited with the tackle -- the FIRST participant in that role on the play.
+  tackler_player_names: List of the display names of EVERY participant credited as a defender credited with the tackle on
+    the play, so multi-entry roles such as split sacks or gang tackles are not collapsed to one.
+load_cfb_player_box:
+  adjQBR: Adjusted Total QBR for the quarterback.
+  completions/passingAttempts: Completions and pass attempts, as ESPN's combined string.
+  extraPointsMade/extraPointAttempts: Extra points made and attempted, as ESPN's combined string.
+  fieldGoalPct: Field-goal percentage.
+  fieldGoalsMade/fieldGoalAttempts: Field goals made and attempted, as ESPN's combined string.
+  grossAvgPuntYards: Gross average yards per punt, before return yardage.
+  interceptionTouchdowns: Touchdowns scored on interception returns.
+  interceptionYards: Yards returned on interceptions.
+  longFieldGoalMade: Longest field goal made, in yards.
+  longPunt: Longest punt of the game, in yards.
+  longPuntReturn: Longest punt return of the game, in yards.
+  longReception: Longest reception of the game, in yards.
+  longRushing: Longest rush of the game, in yards.
+  passingTouchdowns: Passing touchdowns.
+  passingYards: Net passing yards gained.
+  puntReturnTouchdowns: Touchdowns scored on punt returns.
+  puntReturnYards: Yards gained on punt returns.
+  puntReturns: Punt returns attempted.
+  puntYards: Total punt yards.
+  punts: Punts attempted.
+  puntsInside20: Punts downed inside the opponent 20-yard line.
+  receivingTouchdowns: Receiving touchdowns.
+  receivingYards: Receiving yards gained.
+  rushingAttempts: Rushing attempts.
+  rushingTouchdowns: Rushing touchdowns.
+  rushingYards: Net rushing yards gained.
+  totalKickingPoints: Total points scored by kicking.
+  touchbacks: Punts or kickoffs that resulted in a touchback.
+  yardsPerPassAttempt: Yards gained per pass attempt.
+  yardsPerPuntReturn: Yards gained per punt return.
+  yardsPerReception: Yards gained per reception.
+  yardsPerRushAttempt: Yards gained per rushing attempt.
+load_cfb_receiving:
+  EPAgame: EPA generated per game.
+  EPAgame_rank: National rank of the team's EPA generated per game, where 1 is best.
+  EPAplay: EPA generated per play.
+  EPAplay_rank: National rank of the team's EPA generated per play, where 1 is best.
+  TEPA: Total EPA summed over every play.
+  TEPA_rank: National rank of the team's total EPA summed over every play, where 1 is best.
+  comp: Completed passes.
+  fbs_class: 'Power/Group classification for the season: P4 or G6 from 2024 on, P5 or G5 through 2023, derived from conference
+    membership. Null for teams outside FBS.'
+  playsgame: Plays per game.
+  receiver_player_name: Display name of the targeted receiver -- the FIRST participant in that role on the play.
+  success: Success rate across the team plays.
+  success_rank: National rank of the team's success rate across the team plays, where 1 is best.
+  team_games: Games the team played, used as the per-game denominator.
+  yards_rank: National rank of the team's total yards, where 1 is best.
+  yardsgame: Yards per game.
+  yardsgame_rank: National rank of the team's yards per game, where 1 is best.
+  yardsplay: Yards per play.
+  yardsplay_rank: National rank of the team's yards per play, where 1 is best.
+load_cfb_rushing:
+  EPAgame: EPA generated per game.
+  EPAgame_rank: National rank of the team's EPA generated per game, where 1 is best.
+  EPAplay: EPA generated per play.
+  EPAplay_rank: National rank of the team's EPA generated per play, where 1 is best.
+  TEPA: Total EPA summed over every play.
+  TEPA_rank: National rank of the team's total EPA summed over every play, where 1 is best.
+  fbs_class: 'Power/Group classification for the season: P4 or G6 from 2024 on, P5 or G5 through 2023, derived from conference
+    membership. Null for teams outside FBS.'
+  playsgame: Plays per game.
+  rusher_player_name: Display name of the ball carrier on a rush -- the FIRST participant in that role on the play.
+  success: Success rate across the team plays.
+  success_rank: National rank of the team's success rate across the team plays, where 1 is best.
+  team_games: Games the team played, used as the per-game denominator.
+  yards_rank: National rank of the team's total yards, where 1 is best.
+  yardsgame: Yards per game.
+  yardsgame_rank: National rank of the team's yards per game, where 1 is best.
+  yardsplay: Yards per play.
+  yardsplay_rank: National rank of the team's yards per play, where 1 is best.
+load_cfb_schedule_crosswalk:
+  espn_game_id: ESPN game id for the crosswalk row.
+  fox_game_id: Fox Sports game id for the same game.
+  yahoo_game_id: Yahoo Sports game id for the same game.
+load_cfb_team_box:
+  rushingAttempts: Rushing attempts.
+  rushingYards: Net rushing yards gained.
+  yardsPerRushAttempt: Yards gained per rushing attempt.
+load_cfb_teams_crosswalk:
+  espn_team_id: ESPN team id for the crosswalk row.
+  fox_team_id: Fox Sports team id for the same team.
+  yahoo_team_id: Yahoo Sports team id for the same team.
 load_contracts:
   cols: Placeholder column retained in the contracts loader output schema; contains no meaningful data in this context.
 load_depth_charts:
