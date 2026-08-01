@@ -387,6 +387,7 @@ from sportsdataverse.cfb import load_cfb_adv_rushing as load_cfb_adv_rushing  # 
 from sportsdataverse.cfb import load_cfb_adv_situational as load_cfb_adv_situational  # noqa: F401
 from sportsdataverse.cfb import load_cfb_adv_specialists as load_cfb_adv_specialists  # noqa: F401
 from sportsdataverse.cfb import load_cfb_adv_team as load_cfb_adv_team  # noqa: F401
+from sportsdataverse.cfb import load_cfb_adv_team_gamelog as load_cfb_adv_team_gamelog  # noqa: F401
 from sportsdataverse.cfb import load_cfb_adv_turnover as load_cfb_adv_turnover  # noqa: F401
 from sportsdataverse.cfb import load_cfb_betting as load_cfb_betting  # noqa: F401
 from sportsdataverse.cfb import load_cfb_betting_lines as load_cfb_betting_lines  # noqa: F401
@@ -401,6 +402,7 @@ from sportsdataverse.cfb import load_cfb_play_participants as load_cfb_play_part
 from sportsdataverse.cfb import load_cfb_player_box as load_cfb_player_box  # noqa: F401
 from sportsdataverse.cfb import load_cfb_power_index as load_cfb_power_index  # noqa: F401
 from sportsdataverse.cfb import load_cfb_ratings as load_cfb_ratings  # noqa: F401
+from sportsdataverse.cfb import load_cfb_ratings_weekly as load_cfb_ratings_weekly  # noqa: F401
 from sportsdataverse.cfb import load_cfb_receiving as load_cfb_receiving  # noqa: F401
 from sportsdataverse.cfb import load_cfb_recruiting_proj as load_cfb_recruiting_proj  # noqa: F401
 from sportsdataverse.cfb import load_cfb_rosters as load_cfb_rosters  # noqa: F401
@@ -411,6 +413,7 @@ from sportsdataverse.cfb import load_cfb_schedule_crosswalk as load_cfb_schedule
 from sportsdataverse.cfb import load_cfb_team_box as load_cfb_team_box  # noqa: F401
 from sportsdataverse.cfb import load_cfb_team_info as load_cfb_team_info  # noqa: F401
 from sportsdataverse.cfb import load_cfb_team_summaries as load_cfb_team_summaries  # noqa: F401
+from sportsdataverse.cfb import load_cfb_team_summaries_weekly as load_cfb_team_summaries_weekly  # noqa: F401
 from sportsdataverse.cfb import load_cfb_teams_crosswalk as load_cfb_teams_crosswalk  # noqa: F401
 from sportsdataverse.cfb import load_draft_outcomes as load_draft_outcomes  # noqa: F401
 from sportsdataverse.cfb import load_fp_curve as load_fp_curve  # noqa: F401
@@ -623,6 +626,7 @@ __all__ = [
     "load_cfb_adv_situational",
     "load_cfb_adv_specialists",
     "load_cfb_adv_team",
+    "load_cfb_adv_team_gamelog",
     "load_cfb_adv_turnover",
     "load_cfb_betting",
     "load_cfb_betting_lines",
@@ -637,6 +641,7 @@ __all__ = [
     "load_cfb_player_box",
     "load_cfb_power_index",
     "load_cfb_ratings",
+    "load_cfb_ratings_weekly",
     "load_cfb_receiving",
     "load_cfb_recruiting_proj",
     "load_cfb_rosters",
@@ -647,6 +652,7 @@ __all__ = [
     "load_cfb_team_box",
     "load_cfb_team_info",
     "load_cfb_team_summaries",
+    "load_cfb_team_summaries_weekly",
     "load_cfb_teams_crosswalk",
     "load_draft_outcomes",
     "load_fp_curve",

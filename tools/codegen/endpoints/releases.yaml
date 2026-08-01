@@ -226,7 +226,7 @@ loaders:
   base: sdv_releases
   url: espn_cfb_passing/cfb_passing_{season}.parquet
   tag: espn_cfb_passing
-  min_season: 2014
+  min_season: 2004
   example_args:
     seasons: 2024
 - fn: load_cfb_percentiles
@@ -234,7 +234,7 @@ loaders:
   base: sdv_releases
   url: espn_cfb_percentiles/cfb_percentiles_{season}.parquet
   tag: espn_cfb_percentiles
-  min_season: 2014
+  min_season: 2004
   example_args:
     seasons: 2024
 - fn: load_cfb_receiving
@@ -242,7 +242,7 @@ loaders:
   base: sdv_releases
   url: espn_cfb_receiving/cfb_receiving_{season}.parquet
   tag: espn_cfb_receiving
-  min_season: 2014
+  min_season: 2004
   example_args:
     seasons: 2024
 - fn: load_cfb_rushing
@@ -250,7 +250,7 @@ loaders:
   base: sdv_releases
   url: espn_cfb_rushing/cfb_rushing_{season}.parquet
   tag: espn_cfb_rushing
-  min_season: 2014
+  min_season: 2004
   example_args:
     seasons: 2024
 - fn: load_cfb_team_summaries
@@ -258,7 +258,31 @@ loaders:
   base: sdv_releases
   url: espn_cfb_team_summaries/cfb_team_summaries_{season}.parquet
   tag: espn_cfb_team_summaries
-  min_season: 2014
+  min_season: 2004
+  example_args:
+    seasons: 2024
+- fn: load_cfb_adv_team_gamelog
+  league: cfb
+  base: sdv_releases
+  url: espn_cfb_adv_team_gamelog/adv_team_gamelog_{season}.parquet
+  tag: espn_cfb_adv_team_gamelog
+  min_season: 2004
+  example_args:
+    seasons: 2024
+- fn: load_cfb_ratings_weekly
+  league: cfb
+  base: sdv_releases
+  url: cfb_ratings_weekly/cfb_ratings_weekly_{season}.parquet
+  tag: cfb_ratings_weekly
+  min_season: 2004
+  example_args:
+    seasons: 2024
+- fn: load_cfb_team_summaries_weekly
+  league: cfb
+  base: sdv_releases
+  url: cfb_team_summaries_weekly/cfb_team_summaries_weekly_{season}.parquet
+  tag: cfb_team_summaries_weekly
+  min_season: 2004
   example_args:
     seasons: 2024
 - fn: load_mbb_pbp
