@@ -359,11 +359,11 @@ Release: [espn_nba_officials](https://github.com/sportsdataverse/sportsdataverse
 |---|---|---|
 | `season` | Int32 | Season year. |
 | `game_id` | Int32 | Unique game identifier. |
-| `official_full_name` | String |  |
-| `official_display_name` | String |  |
-| `official_position` | String |  |
-| `official_position_id` | Int32 |  |
-| `official_order` | Int32 |  |
+| `official_full_name` | String | Full name of an on-court game official as ESPN publishes it in the summary gameInfo.officials array; it is identical to official_display_name in every released NBA row. |
+| `official_display_name` | String | ESPN's display-form name for the official, falling back to the full name when ESPN omits it; it never diverges from official_full_name in the released NBA data. |
+| `official_position` | String | ESPN's label for the official's assignment slot; the NBA summary feed only ever ships Referee, so this reads the same on every released row. |
+| `official_position_id` | Int32 | ESPN's numeric identifier for the official's assignment slot, constant at 40 (Referee) across every released NBA season. |
+| `official_order` | Int32 | The official's listing index within the game's crew as ESPN orders them, normally 1 through 3 for a three-person crew; a fourth entry appears in a small share of recent-season games and the sequence is not guaranteed to be gap-free. |
 
 ```python
 load_nba_officials(seasons=2002)
@@ -407,7 +407,7 @@ Release: [espn_nba_standings](https://github.com/sportsdataverse/sportsdataverse
 | `group_id` | String | ESPN group id. |
 | `group_name` | String | Group name (conference / division). |
 | `group_abbreviation` | String | Group abbreviation. |
-| `group_short_name` | String |  |
+| `group_short_name` | String | ESPN's short name for the standings grouping the team sits in, read from the group node's shortName; the NBA standings payload supplies only the group name and abbreviation, so this is null throughout. |
 | `team_id` | Int32 | Unique team identifier. |
 | `team_uid` | String | ESPN universal team identifier (UID format 's:40~l:...~t:...'). |
 | `team_slug` | String | URL-safe team identifier (e.g. 'lasvegas-aces' / 'aces'). |
@@ -422,8 +422,8 @@ Release: [espn_nba_standings](https://github.com/sportsdataverse/sportsdataverse
 | `stat_name` | String | Stat key. |
 | `stat_display_name` | String | Stat display name (from `displayNames`). |
 | `stat_short_display_name` | String | Short human-readable stat name. |
-| `stat_description` | String |  |
-| `stat_abbreviation` | String |  |
+| `stat_description` | String | ESPN's prose gloss for the standings statistic on this row; for the clincher stat it is not a fixed label but the team's actual status text, such as Clinched Playoff Berth or Eliminated From Playoff. |
+| `stat_abbreviation` | String | ESPN's short code for the standings statistic, such as PCT, GB or OPP PPG; it is null for the four record-style splits (Home, Road, vs. Conf., vs. Div.), which ship no abbreviation. |
 | `stat_type` | String | Stat type code (e.g. "win", "loss"). |
 | `display_value` | String | Display-formatted value. |
 | `value` | Float64 | Numeric or string value field. |
@@ -451,7 +451,7 @@ Release: [espn_nba_player_season_stats](https://github.com/sportsdataverse/sport
 | `stat_label` | String | Human-readable label of the statistic (e.g. 'At bats'). |
 | `stat_name` | String | Stat key. |
 | `stat_display_name` | String | Stat display name (from `displayNames`). |
-| `stat_description` | String |  |
+| `stat_description` | String | ESPN's prose definition of the statistic on this row, for example the ratio of field goals made to field goals attempted; for the paired Made-Attempted stats it is the two definitions joined with a hyphen. |
 | `display_value` | String | Display-formatted value. |
 | `value` | Float64 | Numeric or string value field. |
 
@@ -479,7 +479,7 @@ Release: [espn_nba_team_season_stats](https://github.com/sportsdataverse/sportsd
 | `stat_label` | String | Human-readable label of the statistic (e.g. 'At bats'). |
 | `stat_name` | String | Stat key. |
 | `stat_display_name` | String | Stat display name (from `displayNames`). |
-| `stat_description` | String |  |
+| `stat_description` | String | ESPN's prose definition of the team statistic on this row, for example the average number of assists a team records per turnover. |
 | `display_value` | String | Display-formatted value. |
 | `value` | Float64 | Numeric or string value field. |
 
@@ -496,11 +496,11 @@ Release: [espn_nba_draft](https://github.com/sportsdataverse/sportsdataverse-dat
 |---|---|---|
 | `season` | Int32 | Season year. |
 | `round` | Int32 | Tournament / playoff round. |
-| `round_display_name` | String |  |
+| `round_display_name` | String | ESPN's display label for the draft round a pick belongs to, read from the round object's displayName; the NBA payload supplies no round metadata, so this is null for every released season 2003 through 2025. |
 | `pick` | Int32 | Pick number within the round. |
 | `overall_pick` | Int32 | Overall pick number in the draft. |
-| `pick_traded` | String |  |
-| `pick_notes` | String |  |
+| `pick_traded` | String | ESPN's traded flag for the pick, carried through as a string rather than a boolean; every released NBA row reads FALSE, so it does not currently identify traded picks. |
+| `pick_notes` | String | Free-text note ESPN can attach to a pick, read from the pick's notes or note field; the NBA draft payload never populates it, so it is null across all released seasons. |
 | `athlete_id` | Int32 | Unique athlete identifier (ESPN). |
 | `athlete_uid` | String | ESPN athlete UID (universal identifier). |
 | `athlete_guid` | String | ESPN athlete GUID. |
@@ -517,7 +517,7 @@ Release: [espn_nba_draft](https://github.com/sportsdataverse/sportsdataverse-dat
 | `college_id` | Int32 | Unique identifier for college. |
 | `college_name` | String | College / pre-draft team. |
 | `college_short_name` | String | College short name. |
-| `college_abbreviation` | String |  |
+| `college_abbreviation` | String | Abbreviation of the drafted player's college taken from the pick's nested college block; the ESPN NBA draft feed omits that block entirely, so this and the other college columns are null throughout. |
 | `team_id` | Int32 | Unique team identifier. |
 | `team_uid` | String | ESPN universal team identifier (UID format 's:40~l:...~t:...'). |
 | `team_slug` | String | URL-safe team identifier (e.g. 'lasvegas-aces' / 'aces'). |
@@ -609,7 +609,7 @@ Release: [nba_stats_schedules](https://github.com/sportsdataverse/sportsdatavers
 | `week_name` | String | Week name. |
 | `if_necessary` | String | If necessary. |
 | `series_game_number` | String | Series game number. |
-| `game_label` | String |  |
+| `game_label` | String | The stats.nba.com event label naming the round or special event a game belongs to, such as NBA Finals, East First Round, Emirates NBA Cup or NBA Mexico City Game; an empty string for an ordinary regular-season game. |
 | `game_sub_label` | String |  |
 | `series_text` | String | Series text. |
 | `arena_name` | String | Arena name. |
@@ -659,26 +659,26 @@ Release: [nba_player_impact](https://github.com/sportsdataverse/sportsdataverse-
 | `team_abbreviation` | Utf8 | Short team abbreviation (e.g. 'LAS'). |
 | `team_name` | Utf8 | Full team display name (e.g. 'Las Vegas Aces'). |
 | `teams` | Utf8 | Nested list of member-team membership spans. |
-| `o_rapm` | Float64 |  |
-| `d_rapm` | Float64 |  |
-| `rapm` | Float64 |  |
-| `off_poss` | Int64 |  |
-| `def_poss` | Int64 |  |
+| `o_rapm` | Float64 | Offensive regularized adjusted plus-minus per 100 possessions from the single-season ridge fit over possession-level lineup indicators; positive means the player raised his team's scoring rate while on offense. |
+| `d_rapm` | Float64 | Defensive regularized adjusted plus-minus per 100 possessions, negated from the raw points-allowed coefficient so a positive value marks a defender who suppresses opponent scoring. |
+| `rapm` | Float64 | Total regularized adjusted plus-minus per 100 possessions, exactly the sum of o_rapm and d_rapm. |
+| `off_poss` | Int64 | Number of possessions the player was on the floor on offense, the count of design-matrix rows carrying his offensive indicator and therefore the offensive-side sample size behind o_rapm. |
+| `def_poss` | Int64 | Number of possessions the player was on the floor on defense, the sample size behind d_rapm; it tracks off_poss almost exactly because substitutions rarely split an offense-defense pair. |
 | `o_adj_rapm` | Float64 |  |
 | `d_adj_rapm` | Float64 |  |
-| `adj_rapm` | Float64 |  |
-| `ospm` | Float64 |  |
-| `dspm` | Float64 |  |
-| `spm` | Float64 |  |
+| `adj_rapm` | Float64 | Total prior-informed RAPM per 100 possessions, exactly the sum of o_adj_rapm and d_adj_rapm. |
+| `ospm` | Float64 | Offensive statistical plus-minus per 100 possessions: the player's per-100 box-score feature vector scored through ridge coefficients trained on that season's o_rapm target. |
+| `dspm` | Float64 | Defensive statistical plus-minus per 100 possessions from the same box-score feature vector scored through coefficients trained on the d_rapm target. |
+| `spm` | Float64 | Total statistical plus-minus per 100 possessions, exactly the sum of ospm and dspm. |
 | `min` | Float64 | Minutes played. |
 | `gp` | Int64 | Games played. |
 | `obpm` | Float64 | Offensive box plus/minus. |
 | `dbpm` | Float64 | Defensive box plus/minus. |
 | `bpm` | Float64 | Career box plus/minus. |
-| `war` | Float64 |  |
-| `darko_filtered_skill` | Float64 |  |
-| `darko_projected_rating` | Float64 |  |
-| `darko_projected_sd` | Float64 |  |
+| `war` | Float64 | Wins above replacement, computed as (rapm minus a replacement level of -2.0 per 100) times total possessions divided by 100, divided by a points-per-win constant calibrated each season by regressing team wins on full-season point margin. |
+| `darko_filtered_skill` | Float64 | DARKO-style Kalman-filtered skill estimate at the end of the player's observed multi-season RAPM panel, i.e. his current-form rating after aging drift and possession-weighted observation noise. |
+| `darko_projected_rating` | Float64 | One-season-ahead DARKO forecast, the filtered skill plus the empirical aging-curve drift at the player's last observed age; both season_type rows of a player-season carry the same value because the projection is not playoff-specific. |
+| `darko_projected_sd` | Float64 | Standard deviation of the one-season-ahead DARKO forecast, the square root of the filtered state variance plus the Kalman process variance; it sits at roughly 10.19 for a player with only one season in the panel, whose diffuse prior variance was never updated. |
 | `season` | Int64 | Season year. |
 
 ```python

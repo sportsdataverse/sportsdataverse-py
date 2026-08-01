@@ -313,11 +313,11 @@ Release: [espn_wnba_draft](https://github.com/sportsdataverse/sportsdataverse-da
 |---|---|---|
 | `season` | Int32 | Season identifier (4-digit year or 'YYYY-YY' string). |
 | `round` | Int32 | Tournament / playoff round. |
-| `round_display_name` | String |  |
+| `round_display_name` | String | Human-readable label for the draft round, read from the ESPN round object's displayName falling back to its name; null whenever ESPN ships the modern flat picks array with no round objects, which is the case for every published season. |
 | `pick` | Int32 | Pick. |
 | `overall_pick` | Int32 | Overall pick. |
-| `pick_traded` | String |  |
-| `pick_notes` | String |  |
+| `pick_traded` | String | ESPN's pick-level traded flag stringified as TRUE or FALSE, marking selections made with a pick that had changed hands (17 of the 45 published 2026 picks are TRUE). |
+| `pick_notes` | String | Free-text annotation ESPN attaches to a pick, taken from notes and falling back to note; empty for every pick published so far. |
 | `athlete_id` | Int32 | Unique athlete identifier (ESPN). |
 | `athlete_uid` | String | ESPN athlete UID (universal identifier). |
 | `athlete_guid` | String | ESPN athlete GUID. |
@@ -334,7 +334,7 @@ Release: [espn_wnba_draft](https://github.com/sportsdataverse/sportsdataverse-da
 | `college_id` | Int32 | Unique identifier for college. |
 | `college_name` | String | College name. |
 | `college_short_name` | String | College short name. |
-| `college_abbreviation` | String |  |
+| `college_abbreviation` | String | Short code for the drafted player's school, read from the athlete's ESPN college block; null throughout the published data because ESPN ships no college block on these picks. |
 | `team_id` | Int32 | Unique team identifier. |
 | `team_uid` | String | ESPN universal team identifier (UID format 's:40~l:...~t:...'). |
 | `team_slug` | String | URL-safe team identifier (e.g. 'lasvegas-aces' / 'aces'). |
@@ -374,7 +374,7 @@ Release: [espn_wnba_game_rosters](https://github.com/sportsdataverse/sportsdatav
 | `athlete_last_name` | String | Athlete last name. |
 | `athlete_jersey` | String | Athlete jersey number. |
 | `athlete_position` | String | Athlete position. |
-| `athlete_headshot` | String |  |
+| `athlete_headshot` | String | Direct link to the player's ESPN headshot image, always of the form https://a.espncdn.com/i/headshots/wnba/players/full/{athlete_id}.png, and null for the few players ESPN has no photo for. |
 | `starter` | Boolean | TRUE if the player was in the starting lineup; FALSE otherwise. |
 | `did_not_play` | Boolean | TRUE if the player did not appear in the game. |
 | `active` | Boolean | TRUE if the row represents an active record (player / team / season). |
@@ -395,12 +395,12 @@ Release: [espn_wnba_officials](https://github.com/sportsdataverse/sportsdatavers
 | `season` | Int32 | Season identifier (4-digit year or 'YYYY-YY' string). |
 | `game_id` | String | Unique game identifier. |
 | `official_id` | Int32 | Unique official / referee identifier. |
-| `official_uid` | String |  |
-| `official_full_name` | String |  |
-| `official_display_name` | String |  |
-| `official_first_name` | String |  |
-| `official_last_name` | String |  |
-| `official_order` | Int32 |  |
+| `official_uid` | String | ESPN's global uid string for the official, carried straight through from the officials payload; the Core v2 items ESPN serves omit it, so it is null in every published season. |
+| `official_full_name` | String | The official's full name, taken from ESPN fullName and falling back to displayName; it equals first plus last name on every published row. |
+| `official_display_name` | String | ESPN's display rendering of the official's name, which is byte-identical to official_full_name on every published row and therefore adds nothing. |
+| `official_first_name` | String | Given name of the official as ESPN splits it out, the leading token of official_full_name. |
+| `official_last_name` | String | Family name of the official as ESPN splits it out, the trailing token of official_full_name, with hyphenated surnames kept intact. |
+| `official_order` | Int32 | ESPN's 1-based position of the official within that game's crew; most games run 1 through 3 for a three-person crew and 40 of 573 games in 2024-2025 add a fourth. |
 | `position_name` | String | Listed roster position ('Guard', 'Forward', 'Center'). |
 | `position_display_name` | String | Position display name. |
 
@@ -428,7 +428,7 @@ Release: [espn_wnba_player_season_stats](https://github.com/sportsdataverse/spor
 | `stat_label` | String | Human-readable label of the statistic (e.g. 'At bats'). |
 | `stat_name` | String | Internal stat key. |
 | `stat_display_name` | String | Stat display name. |
-| `stat_description` | String |  |
+| `stat_description` | String | ESPN's prose definition of the statistic on this row, for example The average number of points scored per game for avgPoints; combined made-attempted stats carry both halves joined by a hyphen. |
 | `display_value` | String | Display-formatted value. |
 | `value` | Float64 | Numeric or string value field. |
 
@@ -522,7 +522,7 @@ Release: [espn_wnba_standings](https://github.com/sportsdataverse/sportsdatavers
 | `group_id` | String | ESPN group id. |
 | `group_name` | String | Group name (conference / division). |
 | `group_abbreviation` | String | Group abbreviation. |
-| `group_short_name` | String |  |
+| `group_short_name` | String | Short label of the standings group node the team sits under, read from ESPN shortName; the WNBA conference nodes ship only name and abbreviation, so it is null on every published row. |
 | `team_id` | Int32 | Unique team identifier. |
 | `team_uid` | String | ESPN universal team identifier (UID format 's:40~l:...~t:...'). |
 | `team_slug` | String | URL-safe team identifier (e.g. 'lasvegas-aces' / 'aces'). |
@@ -537,8 +537,8 @@ Release: [espn_wnba_standings](https://github.com/sportsdataverse/sportsdatavers
 | `stat_name` | String | Internal stat key. |
 | `stat_display_name` | String | Stat display name. |
 | `stat_short_display_name` | String | Short human-readable stat name. |
-| `stat_description` | String |  |
-| `stat_abbreviation` | String |  |
+| `stat_description` | String | ESPN's long-form explanation of the standings stat, such as Clinched Best League Record for clincher or Record last 10 games for lasttengames. |
+| `stat_abbreviation` | String | ESPN's abbreviation for the standings stat, which can differ from stat_short_display_name (playoffSeed is SEED here but POS there) and is null on the record-split rows such as Home and vs. Conf. |
 | `stat_type` | String | Stat type code (e.g. "win", "loss"). |
 | `display_value` | String | Display-formatted value. |
 | `value` | Float64 | Numeric or string value field. |
@@ -587,11 +587,11 @@ Release: [wnba_stats_coaches](https://github.com/sportsdataverse/sportsdataverse
 | `coach_id` | String | Unique identifier for coach. |
 | `first_name` | String | Player's first name. |
 | `last_name` | String | Player's last name. |
-| `coach_name` | String |  |
-| `is_assistant` | String |  |
-| `coach_type` | String |  |
-| `sort_sequence` | String |  |
-| `sub_sort_sequence` | String |  |
+| `coach_name` | String | Full name of the staff member as the feed renders it, exactly first_name plus a space plus last_name on every published row. |
+| `is_assistant` | String | Numeric staff-role code rather than a boolean flag: 1 head coach, 2 assistant coach, 3 trainer, 9 associate head coach, mapping one-to-one onto coach_type. |
+| `coach_type` | String | Job title of the staff member, one of Head Coach, Associate Head Coach, Assistant Coach or Trainer in the published data. |
+| `sort_sequence` | String | Ordering field passed through unchanged from the stats.wnba.com coaches result set; it arrives empty, so every published row is null. |
+| `sub_sort_sequence` | String | Secondary display-ordering rank that tracks coach_type exactly: 1 head coach, 2 associate head coach, 5 assistant coach, 7 trainer. |
 | `season_2` | Int32 |  |
 | `team_id_lookup` | Int32 |  |
 

@@ -433,19 +433,19 @@ Release: [cfb_ratings](https://github.com/sportsdataverse/sportsdataverse-data/r
 |---|---|---|
 | `season` | Int64 | Season (4-digit year). |
 | `team_id` | Int64 | ESPN team id. |
-| `adj_off_epa` | Float64 |  |
-| `adj_def_epa` | Float64 |  |
-| `adj_st_epa` | Float64 |  |
-| `adj_net` | Float64 |  |
-| `fei_off` | Float64 |  |
-| `fei_def` | Float64 |  |
-| `fei_net` | Float64 |  |
+| `adj_off_epa` | Float64 | Opponent-adjusted offensive EPA per play: the team's raw per-game EPA on pass and rush plays net of each opponent's ridge-fitted defensive strength, averaged over its games. |
+| `adj_def_epa` | Float64 | Opponent-adjusted EPA per play allowed, netted the same way as the offensive rating, so lower is better because it measures EPA surrendered. |
+| `adj_st_epa` | Float64 | Special-teams composite in EPA units: per-play mean EPA on field goals, punts, and kick returns, each centered on that unit's league mean and summed across the three units. |
+| `adj_net` | Float64 | adj_off_epa minus adj_def_epa, the team's overall efficiency rating in EPA per play; special teams is deliberately excluded. |
+| `fei_off` | Float64 | Drive-level offensive rating from a ridge fit on per-drive EPA, the Fremeau-style drive-efficiency counterpart to adj_off_epa. |
+| `fei_def` | Float64 | Drive-level defensive rating from the same per-drive ridge fit, on the same scale as fei_off. |
+| `fei_net` | Float64 | fei_off minus fei_def, the team's overall drive-efficiency rating, with the ridge's dropped reference team pinned at zero. |
 | `games` | Int64 | Number of games included in the ATS summary. |
-| `off_pace` | Float64 |  |
-| `off_rank` | Int64 |  |
-| `def_rank` | Int64 |  |
-| `net_rank` | Int64 |  |
-| `net_z` | Float64 |  |
+| `off_pace` | Float64 | Tempo measure: scrimmage plays (pass plus rush) per game, centering near 65 and used as the pace input to the totals model. |
+| `off_rank` | Int64 | Dense rank of adj_off_epa in descending order, so rank 1 is the season's most efficient offense. |
+| `def_rank` | Int64 | Dense rank of adj_def_epa in ascending order, so rank 1 is the season's stingiest defense. |
+| `net_rank` | Int64 | Dense rank of adj_net in descending order, so rank 1 is the season's strongest overall team. |
+| `net_z` | Float64 | adj_net restated as a z-score against the mean and standard deviation of adj_net across the rated teams that season. |
 
 ```python
 load_cfb_ratings(seasons=2024)
@@ -460,9 +460,9 @@ Release: [cfb_recruiting_proj](https://github.com/sportsdataverse/sportsdatavers
 |---|---|---|
 | `season` | Int64 | Season (4-digit year). |
 | `team_id` | Int64 | ESPN team id. |
-| `pred_wins` | Float64 |  |
-| `pred_margin` | Float64 |  |
-| `pred_net_epa` | Float64 |  |
+| `pred_wins` | Float64 | Ridge projection of the team's season win total, fit strictly on prior seasons from talent composite, blue-chip ratio, offensive and defensive returning production, and prior wins. |
+| `pred_margin` | Float64 | Ridge projection of the team's average per-game scoring margin, from the same preseason-known feature set as pred_wins. |
+| `pred_net_epa` | Float64 | Reserved slot for a projected adjusted net EPA; it ships all-null because the adjusted-EPA training target is not currently loadable. |
 
 ```python
 load_cfb_recruiting_proj(seasons=2024)
@@ -490,7 +490,7 @@ Release: [cfbfastR-data](https://github.com/sportsdataverse/sportsdataverse-data
 | `home_latitude` | String | Hometown latitude. |
 | `home_longitude` | String | Hometown longitude. |
 | `home_county_fips` | String | Hometown FIPS code. |
-| `recruit_ids` | List(Int32) |  |
+| `recruit_ids` | List(Int32) | List of recruiting-database profile ids matched to the player; real ids run in the six-figure range and a lone 0 entry means no recruiting profile was matched. |
 | `headshot_url` | String | Player ESPN headshot url. |
 | `season` | Int32 | Season (4-digit year). |
 
@@ -560,8 +560,8 @@ Release: [cfbfastR-data](https://github.com/sportsdataverse/sportsdataverse-data
 | `color` | String | Primary team color (hex, no `#`). |
 | `alt_color` | String | Team color (alternate). |
 | `logo` | String | Team or league logo URL. |
-| `logo_2` | String |  |
-| `twitter` | String |  |
+| `logo_2` | String | URL of the team's alternate dark-background 500-pixel logo on ESPN's CDN, null for programs with no dark variant. |
+| `twitter` | String | The football program's Twitter/X handle including the leading at sign, populated for only a minority of listed teams. |
 | `venue_id` | Int32 | Referencing venue id. |
 | `venue_name` | String | Full name of the franchise's venue. |
 | `city` | String | Venue city. |
@@ -588,17 +588,17 @@ Release: [cfb_crosswalk](https://github.com/sportsdataverse/sportsdataverse-data
 
 | col_name | type | description |
 |---|---|---|
-| `norm_key` | String |  |
+| `norm_key` | String | Shared join key across providers: the team name lowercased, ASCII-folded, stripped of punctuation, whitespace-collapsed, and alias-mapped. |
 | `espn_team_id` | Int64 | ESPN team id for the crosswalk row. |
-| `espn_team` | String |  |
+| `espn_team` | String | ESPN's full team display name, school plus mascot, null when the row was anchored on a non-ESPN provider. |
 | `espn_abbreviation` | String | ESPN abbreviation. |
 | `fox_team_id` | String | Fox Sports team id for the same team. |
-| `fox_team` | String |  |
-| `fox_abbreviation` | String |  |
+| `fox_team` | String | Fox Sports' team name, which that feed ships in all capitals. |
+| `fox_abbreviation` | String | Fox Sports' short team code, which frequently differs from the ESPN abbreviation for the same school. |
 | `yahoo_team_id` | String | Yahoo Sports team id for the same team. |
-| `yahoo_team` | String |  |
-| `yahoo_abbreviation` | String |  |
-| `matched_sources` | String |  |
+| `yahoo_team` | String | Yahoo Sports' team display name, school plus mascot. |
+| `yahoo_abbreviation` | String | Yahoo Sports' short team code for the school. |
+| `matched_sources` | String | Plus-joined provenance tag naming which of espn, fox, and yahoo contributed a directory row for this team. |
 
 ```python
 load_cfb_teams_crosswalk(seasons=2024)
@@ -611,17 +611,17 @@ Release: [cfb_crosswalk](https://github.com/sportsdataverse/sportsdataverse-data
 
 | col_name | type | description |
 |---|---|---|
-| `matchup_key` | String |  |
+| `matchup_key` | String | Order-independent key for the game: the two normalized team names sorted alphabetically and joined with a pipe. |
 | `espn_game_id` | Int64 | ESPN game id for the crosswalk row. |
 | `fox_game_id` | String | Fox Sports game id for the same game. |
 | `yahoo_game_id` | String | Yahoo Sports game id for the same game. |
-| `yahoo_global_game_id` | String |  |
+| `yahoo_global_game_id` | String | Yahoo's cross-season global game key in ncaaf.g.<number> form, distinct from the date-encoded yahoo_game_id. |
 | `home_team` | String | Home team name. |
 | `away_team` | String | Away team name. |
-| `espn_date` | String |  |
-| `fox_date` | String |  |
-| `yahoo_date` | String |  |
-| `matched_sources` | String |  |
+| `espn_date` | String | Kickoff date as YYYY-MM-DD taken from ESPN's schedule, null on games that matched no ESPN row. |
+| `fox_date` | String | Kickoff date as YYYY-MM-DD taken from the Fox Sports schedule, null on games that matched no Fox row. |
+| `yahoo_date` | String | Kickoff date as YYYY-MM-DD, parsed from Yahoo's RFC-2822 start_time string. |
+| `matched_sources` | String | Plus-joined provenance tag naming which of espn, fox, and yahoo actually supplied a row for this game. |
 
 ```python
 load_cfb_schedule_crosswalk(seasons=2024)
@@ -634,21 +634,21 @@ Release: [espn_cfb_team_box](https://github.com/sportsdataverse/sportsdataverse-
 
 | col_name | type | description |
 |---|---|---|
-| `firstDowns` | String |  |
-| `thirdDownEff` | String |  |
-| `fourthDownEff` | String |  |
-| `totalYards` | String |  |
-| `netPassingYards` | String |  |
-| `completionAttempts` | String |  |
-| `yardsPerPass` | String |  |
+| `firstDowns` | String | Total first downs ESPN credits the team, carried verbatim from the box score as a string. |
+| `thirdDownEff` | String | Third-down efficiency as ESPN's conversions-attempts string, for example 5-15. |
+| `fourthDownEff` | String | Fourth-down efficiency as a conversions-attempts string, for example 3-4. |
+| `totalYards` | String | Total offensive yards for the team, matching rushingYards plus netPassingYards in about 99.8 percent of games. |
+| `netPassingYards` | String | Passing yards after yardage lost to sacks is deducted, the numerator behind yardsPerPass. |
+| `completionAttempts` | String | Completions and pass attempts as a slash-separated string, for example 23/41. |
+| `yardsPerPass` | String | Net passing yards per pass attempt, netPassingYards divided by the attempt count in completionAttempts and rounded to one decimal. |
 | `rushingYards` | String | Net rushing yards gained. |
 | `rushingAttempts` | String | Rushing attempts. |
 | `yardsPerRushAttempt` | String | Yards gained per rushing attempt. |
-| `totalPenaltiesYards` | String |  |
+| `totalPenaltiesYards` | String | Penalties and penalty yards as a hyphen-separated string, for example 7-64. |
 | `turnovers` | String | Turnovers total. |
-| `fumblesLost` | String |  |
+| `fumblesLost` | String | Number of fumbles the team lost to the opponent, carried as a string. |
 | `interceptions` | String | Passing interceptions. |
-| `possessionTime` | String |  |
+| `possessionTime` | String | Time of possession as mm:ss; the two teams' values add up to 60 minutes in a regulation game. |
 | `team_id` | Int64 | ESPN team id. |
 | `team_abbreviation` | String | Team abbreviation; `team_detail = TRUE` only. |
 | `team_name` | String | Team nickname; `team_detail = TRUE` only. |
@@ -708,11 +708,11 @@ Release: [espn_cfb_player_box](https://github.com/sportsdataverse/sportsdatavers
 | `longPunt` | String | Longest punt of the game, in yards. |
 | `game_id` | Int64 | ESPN game identifier. |
 | `season` | Int64 | Season (4-digit year). |
-| `stat_1` | String |  |
-| `stat_2` | String |  |
-| `stat_3` | String |  |
-| `stat_4` | String |  |
-| `stat_5` | String |  |
+| `stat_1` | String | First value of ESPN's raw athlete stats array, written only when the category's key list does not line up with the stats list; on those rows the named per-category columns are all null. |
+| `stat_2` | String | Second value of ESPN's raw athlete stats array, written only on rows where the category keys did not line up and the named columns could not be filled. |
+| `stat_3` | String | Third value of ESPN's raw athlete stats array, written only on rows where the category keys did not line up and the named columns could not be filled. |
+| `stat_4` | String | Fourth value of ESPN's raw athlete stats array, written only on rows where the category keys did not line up and the named columns could not be filled. |
+| `stat_5` | String | Fifth value of ESPN's raw athlete stats array, written only on rows where the category keys did not line up and the named columns could not be filled. |
 
 ```python
 load_cfb_player_box(seasons=2024)
@@ -742,7 +742,7 @@ Release: [espn_cfb_drives](https://github.com/sportsdataverse/sportsdataverse-da
 | `end_yard_line` | Int64 | Yard line at the end of the play. |
 | `end_clock` | String | Game clock display value at the end of the drive. |
 | `time_elapsed` | String | Elapsed game time for the drive (`MM:SS`). |
-| `n_plays` | Int64 |  |
+| `n_plays` | Int64 | Number of entries in ESPN's raw plays array for the drive, which is generally at least offensive_plays because it also counts penalties and other non-offensive snaps. |
 | `game_id` | Int64 | ESPN game identifier. |
 | `season` | Int64 | Season (4-digit year). |
 
@@ -867,17 +867,17 @@ Release: [espn_cfb_game_rosters](https://github.com/sportsdataverse/sportsdatave
 | `status_type` | String | Status type. |
 | `status_abbreviation` | String | Status abbreviation. |
 | `birth_place_country` | String | Birth place country. |
-| `birth_country_alternate_id` | String |  |
+| `birth_country_alternate_id` | String | ESPN's internal alternate identifier for the athlete's birth country, paired with birth_place_country and the flag fields. |
 | `birth_country_abbreviation` | String | Birth country abbreviation. |
-| `flag_href` | String |  |
-| `flag_alt` | String |  |
-| `flag_rel` | String |  |
+| `flag_href` | String | URL of the birth-country flag image hosted on ESPN's CDN under teamlogos/countries. |
+| `flag_alt` | String | Alt text ESPN attaches to the birth-country flag image, which is the country's name spelled out. |
+| `flag_rel` | String | Stringified relationship list ESPN ships with the flag image; the only non-null value observed is a single country-flag entry. |
 | `starter` | Boolean | `TRUE` if the athlete started the game. |
 | `valid` | Boolean | `TRUE` if the roster entry is flagged valid by ESPN. |
 | `did_not_play` | Boolean | `TRUE` if the athlete did not play. |
-| `athlete_href` | String |  |
-| `position_href` | String |  |
-| `statistics_href` | String |  |
+| `athlete_href` | String | ESPN Core v2 API reference URL for the athlete's season record, ending in the athlete id. |
+| `position_href` | String | ESPN Core v2 API reference URL for the position resource ESPN lists the athlete at. |
+| `statistics_href` | String | ESPN Core v2 API reference URL for this athlete's stat line in this game, null for the roughly 71 percent of listed players who recorded no stats. |
 | `team_id` | Int64 | ESPN team id. |
 | `order` | Int64 | Team order within the competition (0 = first). |
 | `home_away` | String | `home` or `away`. |
@@ -895,7 +895,7 @@ Release: [espn_cfb_game_rosters](https://github.com/sportsdataverse/sportsdatave
 | `team_alternate_color` | String | Alternate team color; `team_detail = TRUE` only. |
 | `is_active` | Boolean | Whether the team is currently active. |
 | `is_all_star` | Boolean | Whether the team is an all-star team. |
-| `team_alternate_ids_sdr` | String |  |
+| `team_alternate_ids_sdr` | String | The team's Sportradar alternate identifier, which maps one-to-one with team_id. |
 | `logo_href` | String | URL of the default team logo. |
 | `logo_dark_href` | String | URL of the dark-variant team logo. |
 | `game_id` | Int64 | ESPN game identifier. |
@@ -959,7 +959,7 @@ Release: [espn_cfb_power_index](https://github.com/sportsdataverse/sportsdataver
 
 | col_name | type | description |
 |---|---|---|
-| `$ref` | String |  |
+| `$ref` | String | ESPN Core v2 API URL for one team's FPI projection on this game; the published asset carries only these links, not the resolved projection numbers. |
 | `game_id` | Int64 | ESPN game identifier. |
 | `season` | Int64 | Season (4-digit year). |
 | `week` | Int64 | Game week of the season. |
@@ -1114,16 +1114,16 @@ Release: [espn_cfb_adv_rushing](https://github.com/sportsdataverse/sportsdataver
 | `pos_team_id` | Int64 | ESPN team id of the team on offense. Present for every season 2004+. |
 | `pos_team` | String | Team name in possession at the start of the play (offense, kickoff-aware). |
 | `rusher_player_name` | String | Display name of the ball carrier on a rush -- the FIRST participant in that role on the play. |
-| `Car` | Int64 |  |
+| `Car` | Int64 | Rushing attempts credited to this ball carrier in the game. |
 | `Yds` | Float64 | Passing yards from the advanced box score. |
-| `Rush_TD` | Int64 |  |
-| `YPC` | Float64 |  |
+| `Rush_TD` | Int64 | Rushing touchdowns scored by this ball carrier in the game. |
+| `YPC` | Float64 | Yards per carry, the mean rushing yardage across the player's attempts in the game. |
 | `EPA` | Float64 | Expected Points Added on the play (cfbfastR EPA model output). |
 | `EPA_per_Play` | Float64 | EPA per play on the passer's plays. |
 | `WPA` | Float64 | Win Probability Added. |
 | `SR` | Float64 | Success rate on the passer's plays. |
-| `Fum` | Int64 |  |
-| `Fum_Lost` | Int64 |  |
+| `Fum` | Int64 | Count of the carrier's rush attempts whose play text mentions a fumble; it is a play-level flag, not a fumble charged to this player. |
+| `Fum_Lost` | Int64 | Count of the carrier's rush attempts on which a fumble was lost to the opponent. |
 | `game_id` | Int64 | ESPN game identifier. |
 | `season` | Int64 | Season (4-digit year). |
 | `week` | Int64 | Game week of the season. |
@@ -1142,17 +1142,17 @@ Release: [espn_cfb_adv_receiving](https://github.com/sportsdataverse/sportsdatav
 | `pos_team_id` | Int64 | ESPN team id of the team on offense. Present for every season 2004+. |
 | `pos_team` | String | Team name in possession at the start of the play (offense, kickoff-aware). |
 | `receiver_player_name` | String | Display name of the targeted receiver -- the FIRST participant in that role on the play. |
-| `Rec` | Int64 |  |
-| `Tar` | Int64 |  |
+| `Rec` | Int64 | Receptions credited to the receiver, the number of completions on plays where this player was the targeted receiver. |
+| `Tar` | Int64 | Times the player was targeted on a pass attempt, the denominator behind YPT. |
 | `Yds` | Float64 | Passing yards from the advanced box score. |
-| `Rec_TD` | Int64 |  |
-| `YPT` | Float64 |  |
+| `Rec_TD` | Int64 | Receiving touchdowns, the count of the player's targeted plays that ended in a passing touchdown. |
+| `YPT` | Float64 | Receiving yards per target, the mean of receiving yardage over every target rather than over receptions only. |
 | `EPA` | Float64 | Expected Points Added on the play (cfbfastR EPA model output). |
 | `EPA_per_Play` | Float64 | EPA per play on the passer's plays. |
 | `WPA` | Float64 | Win Probability Added. |
 | `SR` | Float64 | Success rate on the passer's plays. |
-| `Fum` | Int64 |  |
-| `Fum_Lost` | Int64 |  |
+| `Fum` | Int64 | Count of the receiver's targeted pass plays whose text mentions a fumble; it is a play-level flag, not a fumble charged to this player. |
+| `Fum_Lost` | Int64 | Count of the receiver's targeted plays on which a fumble was lost to the opponent. |
 | `game_id` | Int64 | ESPN game identifier. |
 | `season` | Int64 | Season (4-digit year). |
 | `week` | Int64 | Game week of the season. |
@@ -1171,22 +1171,22 @@ Release: [espn_cfb_adv_defensive](https://github.com/sportsdataverse/sportsdatav
 | `def_pos_team_id` | Int64 |  |
 | `def_pos_team` | String | Team name on defense at the start of the play. |
 | `scrimmage_plays` | Int64 | Number of plays from scrimmage (rushes plus passes), excluding special teams. |
-| `TFL` | Int64 |  |
-| `TFL_pass` | Int64 |  |
-| `TFL_rush` | Int64 |  |
+| `TFL` | Int64 | Count of scrimmage plays the defense held to negative yardage (non-penalty, non-special-teams, ESPN statYardage below zero) plus every sack. |
+| `TFL_pass` | Int64 | The TFL count restricted to plays classified as passes, so it covers sacks together with completions and laterals stopped behind the line. |
+| `TFL_rush` | Int64 | The TFL count restricted to plays classified as rushes, that is rushing attempts the defense stopped for negative yardage. |
 | `havoc_total` | Int64 | Total havoc rate. |
-| `havoc_total_rate` | Float64 |  |
-| `fumbles` | Int64 |  |
-| `def_int` | Int64 |  |
-| `drive_stopped_rate` | Float64 |  |
-| `num_pass_plays` | Int64 |  |
-| `havoc_total_pass` | Int64 |  |
-| `havoc_total_pass_rate` | Float64 |  |
+| `havoc_total_rate` | Float64 | Share of the defense's scrimmage plays producing a havoc event, a 0-to-1 fraction equal to havoc_total divided by scrimmage_plays. |
+| `fumbles` | Int64 | Fumbles the defense forced, counted from plays whose narrative contains the phrase forced by, not the total number of fumbles on the play. |
+| `def_int` | Int64 | Interceptions the defense recorded, counted from plays ESPN types as Interception Return or Interception Return Touchdown. |
+| `drive_stopped_rate` | Float64 | Percentage from 0 to 100 of the defense's scrimmage plays that occurred on drives ending in a punt, fumble, interception, or turnover on downs; the denominator is plays, not drives. |
+| `num_pass_plays` | Int64 | Number of pass scrimmage plays the defense faced, the denominator behind havoc_total_pass_rate and sacks_rate. |
+| `havoc_total_pass` | Int64 | Havoc events (tackle for loss, sack, interception, forced fumble, or pass breakup) recorded on the pass plays the defense faced. |
+| `havoc_total_pass_rate` | Float64 | havoc_total_pass divided by num_pass_plays, the defense's havoc rate against the pass as a 0-to-1 fraction. |
 | `sacks` | Int64 | Team sacks. |
-| `sacks_rate` | Float64 |  |
-| `pass_breakups` | Int64 |  |
-| `havoc_total_rush` | Int64 |  |
-| `havoc_total_rush_rate` | Float64 |  |
+| `sacks_rate` | Float64 | Sacks divided by pass plays faced, the defense's per-pass-play sack rate as a 0-to-1 fraction. |
+| `pass_breakups` | Int64 | Passes the defense broke up, counted from plays whose narrative contains the phrase broken up by. |
+| `havoc_total_rush` | Int64 | Havoc events recorded on the rush plays the defense faced, in practice tackles for loss and forced fumbles. |
+| `havoc_total_rush_rate` | Float64 | Havoc events per rush play faced, the mean of the havoc flag over the defense's rush scrimmage plays. |
 | `game_id` | Int64 | ESPN game identifier. |
 | `season` | Int64 | Season (4-digit year). |
 | `week` | Int64 | Game week of the season. |
@@ -1230,13 +1230,13 @@ Release: [espn_cfb_adv_drives](https://github.com/sportsdataverse/sportsdatavers
 |---|---|---|
 | `pos_team_id` | Int64 | ESPN team id of the team on offense. Present for every season 2004+. |
 | `pos_team` | String | Team name in possession at the start of the play (offense, kickoff-aware). |
-| `drive_total_available_yards` | Float64 |  |
-| `drive_total_gained_yards` | Int64 |  |
-| `avg_field_position` | Float64 |  |
-| `plays_per_drive` | Float64 |  |
-| `yards_per_drive` | Float64 |  |
-| `drives` | Int64 |  |
-| `drive_total_gained_yards_rate` | Float64 |  |
+| `drive_total_available_yards` | Float64 | Sum of each drive's starting distance to the opponent end zone taken across every scrimmage play, so a drive contributes its available yards once per play rather than once per drive. |
+| `drive_total_gained_yards` | Int64 | Sum of ESPN's per-drive yardage repeated across every scrimmage play of that drive, so a drive contributes its yardage once per play. |
+| `avg_field_position` | Float64 | Mean distance to the opponent end zone at drive start averaged over the team's scrimmage plays, exactly drive_total_available_yards divided by that play count. |
+| `plays_per_drive` | Float64 | Mean of ESPN's per-drive offensivePlays taken over plays rather than over drives, which weights every drive by its own length. |
+| `yards_per_drive` | Float64 | Mean of ESPN's per-drive yardage taken over plays rather than over drives, exactly drive_total_gained_yards divided by the team's scrimmage-play count. |
+| `drives` | Int64 | Number of distinct ESPN drive ids on which the team ran at least one scrimmage play. |
+| `drive_total_gained_yards_rate` | Float64 | Available-yards conversion as a percentage, 100 times drive_total_gained_yards over drive_total_available_yards with both sums play-weighted. |
 | `game_id` | Int64 | ESPN game identifier. |
 | `season` | Int64 | Season (4-digit year). |
 | `week` | Int64 | Game week of the season. |
@@ -1342,16 +1342,16 @@ Release: [espn_cfb_adv_specialists](https://github.com/sportsdataverse/sportsdat
 | `pos_team` | String | Team name in possession at the start of the play (offense, kickoff-aware). |
 | `player_name` | String | Player name. |
 | `punts` | Int64 | Punts attempted. |
-| `punts_yards` | Int64 |  |
+| `punts_yards` | Int64 | Total gross punt yardage parsed from the play text for this punter, working out to roughly 42 yards per punt league-wide. |
 | `kick_returns` | Int64 | Number of kick returns. |
 | `kick_returns_yards` | Int64 |  |
 | `punt_returns` | Int64 | Number of punt returns. |
-| `punt_returns_yards` | Int64 |  |
+| `punt_returns_yards` | Int64 | Total punt-return yardage credited to this returner, with fair catches, downed punts, and out-of-bounds punts scored as zero. |
 | `game_id` | Int64 | ESPN game identifier. |
 | `season` | Int64 | Season (4-digit year). |
 | `week` | Int64 | Game week of the season. |
 | `field_goals` | Int64 | Number of field-goal attempts. |
-| `field_goals_yards` | Int64 |  |
+| `field_goals_yards` | Int64 | Sum of the field-goal attempt distances parsed out of the play text; it stays at zero when no distance could be parsed from the narrative. |
 
 ```python
 load_cfb_adv_specialists(seasons=2024)
@@ -1370,21 +1370,21 @@ Release: [espn_cfb_adv_turnover](https://github.com/sportsdataverse/sportsdatave
 | `st_turnovers_lost` | Int64 |  |
 | `Int` | Int64 | Interceptions thrown. |
 | `fumbles_lost` | Int64 | Fumbles lost. |
-| `pass_breakups` | Int64 |  |
+| `pass_breakups` | Int64 | Passes thrown by this offense that the opposing defense broke up; it equals the opponent's row in the advanced defensive table exactly. |
 | `total_fumbles` | Int64 | Team total fumbles. |
 | `fumbles_recovered` | Int64 | Team fumbles recovered. |
 | `team_id` | Int64 | ESPN team id. |
-| `turnovers_pbp` | Int64 |  |
-| `Int_pbp` | Int64 |  |
-| `fumbles_lost_pbp` | Int64 |  |
+| `turnovers_pbp` | Int64 | Turnover count derived from the play-by-play, retained unchanged so it can be reconciled against the ESPN-sourced turnovers total. |
+| `Int_pbp` | Int64 | Interception count derived from the play-by-play, kept alongside the ESPN-sourced Int for reconciliation. |
+| `fumbles_lost_pbp` | Int64 | Fumbles-lost count derived from the play-by-play, kept alongside the ESPN-sourced fumbles_lost for reconciliation. |
 | `espn_sourced` | Boolean |  |
-| `expected_turnovers` | Float64 |  |
-| `expected_turnover_margin` | Float64 |  |
-| `turnover_margin` | Int64 |  |
-| `turnover_luck` | Float64 |  |
+| `expected_turnovers` | Float64 | Turnover expectation for this team, computed as half its total fumbles plus 0.22 times the sum of its pass breakups and interceptions. |
+| `expected_turnover_margin` | Float64 | The opponent's expected_turnovers minus this team's, so positive means the team was expected to win the turnover battle. |
+| `turnover_margin` | Int64 | The opponent's turnovers minus this team's turnovers, positive when the team gained more possessions than it gave away. |
+| `turnover_luck` | Float64 | Points of scoring luck attributed to turnovers, five points per turnover times the gap between turnover_margin and expected_turnover_margin. |
 | `takeaways` | Int64 | Takeaways. |
-| `st_turnovers_gained` | Int64 |  |
-| `fumble_recoveries_gained` | Int64 |  |
+| `st_turnovers_gained` | Int64 | Special-teams turnovers this team recovered, taken as the opponent's st_turnovers_lost. |
+| `fumble_recoveries_gained` | Int64 | Opponent fumbles this team recovered, taken as the opponent's fumbles_lost. |
 | `game_id` | Int64 | ESPN game identifier. |
 | `season` | Int64 | Season (4-digit year). |
 | `week` | Int64 | Game week of the season. |
@@ -1404,31 +1404,31 @@ Release: [espn_cfb_model_pbp](https://github.com/sportsdataverse/sportsdataverse
 | `id` | String | 247Sports referencing id for the recruit. |
 | `sequenceNumber` | String | Broadcast sequence order number. |
 | `game_play_number` | Int64 | Sequential play number within the game (excludes timeouts/end markers). |
-| `drive.id` | String |  |
+| `drive.id` | String | ESPN's drive identifier, formed as the game id followed by the drive's sequence number within that game. |
 | `season` | Int64 | Season (4-digit year). |
 | `week` | Int64 | Game week of the season. |
 | `period` | Int64 | Period (quarter) number. |
 | `pos_team` | Int64 | Team name in possession at the start of the play (offense, kickoff-aware). |
 | `def_pos_team` | Int64 | Team name on defense at the start of the play. |
-| `start.pos_team.name` | String |  |
-| `homeTeamId` | Int64 |  |
-| `awayTeamId` | Int64 |  |
-| `homeTeamName` | String |  |
-| `awayTeamName` | String |  |
-| `type.text` | String |  |
+| `start.pos_team.name` | String | School name of the team with possession at the snap, taken from ESPN's team location field so it carries no mascot. |
+| `homeTeamId` | Int64 | ESPN team id of the home team, read off the game header and stamped on every play. |
+| `awayTeamId` | Int64 | ESPN team id of the away team, read off the game header and stamped on every play. |
+| `homeTeamName` | String | Home team's school name from ESPN's team location field, without the mascot. |
+| `awayTeamName` | String | Away team's school name from ESPN's team location field, without the mascot. |
+| `type.text` | String | ESPN's play-type label, for example Rush, Pass Reception, Sack, Punt, Penalty, or Timeout. |
 | `text` | String | Full play description. |
-| `start.down` | Int64 |  |
-| `start.distance` | Int64 |  |
-| `start.yardsToEndzone` | Int64 |  |
+| `start.down` | Int64 | Down at the snap as ESPN reports it; 0 marks the small share of rows ESPN leaves without a down, overwhelmingly timeouts and penalty administrations. |
+| `start.distance` | Int64 | Yards the offense needs for a first down at the snap, carried through from ESPN without correction. |
+| `start.yardsToEndzone` | Int64 | Distance in yards from the offense's spot at the snap to the opponent's end zone, ranging 0 to 100. |
 | `pos_score_diff_start` | Int64 | Score differential for the possession team at the start of the play. |
-| `start.TimeSecsRem` | Int64 |  |
-| `start.is_home` | Boolean |  |
-| `passing_down` | Boolean |  |
+| `start.TimeSecsRem` | Int64 | Seconds remaining in the half at the snap, so it tops out at 1800 rather than counting down from a full game. |
+| `start.is_home` | Boolean | True when the team holding possession at the snap is the home team. |
+| `passing_down` | Boolean | True on second and eight or longer, third and five or longer, or fourth and five or longer, the standard obvious-passing-situation flag. |
 | `pass` | Boolean | Binary flag for a passing play (includes sacks). |
 | `rush` | Boolean | Binary flag for a rushing play. |
 | `completion` | Boolean | Binary flag for a completed pass. |
 | `scoring_play` | Boolean | `TRUE` if the play resulted in a score. |
-| `statYardage` | Int64 |  |
+| `statYardage` | Int64 | Yards gained on the play as ESPN reports it, negative on plays that lost yardage. |
 | `passer_player_name` | String | Display name of the passer -- the FIRST participant in that role on the play. |
 | `ep_before` | Float64 | Expected points value before the play (cfbfastR EPA model). |
 | `ep_after` | Float64 | Expected points value after the play (cfbfastR EPA model). |
@@ -1569,14 +1569,14 @@ Release: [espn_cfb_receiving](https://github.com/sportsdataverse/sportsdataverse
 | `success` | Float64 | Success rate across the team plays. |
 | `comp` | UInt32 | Completed passes. |
 | `targets` | UInt32 | The number of pass plays where the player was the targeted receiver. |
-| `catchpct` | Float64 |  |
+| `catchpct` | Float64 | Catch rate on a 0-to-1 scale, receptions divided by targets for the season. |
 | `passing_td` | Float64 | Passing touchdowns thrown. |
-| `fumbles` | Float64 |  |
+| `fumbles` | Float64 | Count of the receiver's targeted pass plays across the season whose play text mentions a fumble by either team. |
 | `TEPA_rank` | Float64 | National rank of the team's total EPA summed over every play, where 1 is best. |
 | `EPAgame_rank` | Float64 | National rank of the team's EPA generated per game, where 1 is best. |
 | `EPAplay_rank` | Float64 | National rank of the team's EPA generated per play, where 1 is best. |
 | `success_rank` | Float64 | National rank of the team's success rate across the team plays, where 1 is best. |
-| `catchpct_rank` | Float64 |  |
+| `catchpct_rank` | Float64 | Season rank of catchpct with the best catch rate first, computed only for receivers clearing the leaderboard minimum of 1.875 targets per team game and using averaged ranks for ties. |
 | `yards_rank` | Float64 | National rank of the team's total yards, where 1 is best. |
 | `yardsplay_rank` | Float64 | National rank of the team's yards per play, where 1 is best. |
 | `yardsgame_rank` | Float64 | National rank of the team's yards per game, where 1 is best. |
@@ -1612,7 +1612,7 @@ Release: [espn_cfb_rushing](https://github.com/sportsdataverse/sportsdataverse-d
 | `yardsgame` | Float64 | Yards per game. |
 | `success` | Float64 | Success rate across the team plays. |
 | `rushing_td` | Float64 | Rushing touchdowns. |
-| `fumbles` | Float64 |  |
+| `fumbles` | Float64 | Count of the ball carrier's rush attempts across the season whose play text mentions a fumble by either team. |
 | `TEPA_rank` | Float64 | National rank of the team's total EPA summed over every play, where 1 is best. |
 | `EPAgame_rank` | Float64 | National rank of the team's EPA generated per game, where 1 is best. |
 | `EPAplay_rank` | Float64 | National rank of the team's EPA generated per play, where 1 is best. |
@@ -2041,7 +2041,7 @@ Release: [espn_cfb_adv_team_gamelog](https://github.com/sportsdataverse/sportsda
 | `neutral_site` | Boolean | TRUE/FALSE flag for if the game took place at a neutral site. |
 | `points_for` | Int64 | Goals/points scored. |
 | `points_against` | Int64 | Points allowed. |
-| `margin` | Int64 |  |
+| `margin` | Int64 | Final scoring margin from this team's perspective, exactly points_for minus points_against. |
 | `win` | Boolean | Whether the game was a win (goalie). |
 | `rushing_highlight_yards_per_opp` | Float64 | Highlight yards per rushing opportunity. |
 | `total_pen_yards` | Int64 | Total penalty yards assessed. |
@@ -2132,20 +2132,20 @@ Release: [cfb_ratings_weekly](https://github.com/sportsdataverse/sportsdataverse
 |---|---|---|
 | `season` | Int64 | Season (4-digit year). |
 | `team_id` | Int64 | ESPN team id. |
-| `adj_off_epa` | Float64 |  |
-| `adj_def_epa` | Float64 |  |
-| `adj_st_epa` | Float64 |  |
-| `adj_net` | Float64 |  |
-| `fei_off` | Float64 |  |
-| `fei_def` | Float64 |  |
-| `fei_net` | Float64 |  |
+| `adj_off_epa` | Float64 | Opponent-adjusted offensive EPA per play as of the snapshot week: raw per-game EPA on pass and rush plays net of each opponent's ridge-fitted defensive strength. |
+| `adj_def_epa` | Float64 | Opponent-adjusted EPA per play allowed as of the snapshot week, netted the same way as the offensive rating, so lower is better. |
+| `adj_st_epa` | Float64 | Special-teams composite in EPA units as of the snapshot week, summing the league-centered per-play EPA of the field goal, punt, and kick-return units. |
+| `adj_net` | Float64 | adj_off_epa minus adj_def_epa at the snapshot week, the team's overall efficiency rating in EPA per play with special teams excluded. |
+| `fei_off` | Float64 | Drive-level offensive rating at the snapshot week, from a ridge fit on per-drive EPA. |
+| `fei_def` | Float64 | Drive-level defensive rating at the snapshot week, from the same per-drive ridge fit and on the same scale as fei_off. |
+| `fei_net` | Float64 | fei_off minus fei_def at the snapshot week, the team's overall drive-efficiency rating. |
 | `games` | Int64 | Number of games included in the ATS summary. |
-| `off_pace` | Float64 |  |
-| `off_rank` | Int64 |  |
-| `def_rank` | Int64 |  |
-| `net_rank` | Int64 |  |
-| `net_z` | Float64 |  |
-| `through_week` | Int32 |  |
+| `off_pace` | Float64 | Scrimmage plays per game through the snapshot week, the tempo input consumed by the totals model. |
+| `off_rank` | Int64 | Dense rank of adj_off_epa in descending order within the snapshot week, so rank 1 is the most efficient offense at that point. |
+| `def_rank` | Int64 | Dense rank of adj_def_epa in ascending order within the snapshot week, so rank 1 is the stingiest defense at that point. |
+| `net_rank` | Int64 | Dense rank of adj_net in descending order within the snapshot week, so rank 1 is the strongest overall team at that point. |
+| `net_z` | Float64 | adj_net restated as a z-score against the mean and standard deviation of adj_net across the teams rated in that snapshot week. |
+| `through_week` | Int32 | Regular-season week the snapshot runs through; the ratings were refit using only games kicking off on or before that week's final kickoff date. |
 
 ```python
 load_cfb_ratings_weekly(seasons=2024)

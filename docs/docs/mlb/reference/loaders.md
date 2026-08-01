@@ -33,10 +33,10 @@ Release: [mlb_game_state](https://github.com/sportsdataverse/sportsdataverse-dat
 
 | col_name | type | description |
 |---|---|---|
-| `base_state` | String |  |
+| `base_state` | String | Three-character pre-play base occupancy where each slot carries its base number when occupied and an underscore when empty, so ___ is bases empty and 123 is bases loaded. |
 | `outs` | Int64 | Outs in the inning after the play. |
-| `re` | Float64 |  |
-| `n` | UInt32 |  |
+| `re` | Float64 | Mean runs the batting team went on to score from this base-out state through the end of the half-inning, with bottom-of-the-9th-and-later halves excluded to avoid walk-off selection bias. |
+| `n` | UInt32 | Plate appearances observed starting in this base-out state, the sample size behind re. |
 | `season` | Int64 | Season year. |
 
 ```python
@@ -50,13 +50,13 @@ Release: [mlb_game_state](https://github.com/sportsdataverse/sportsdataverse-dat
 
 | col_name | type | description |
 |---|---|---|
-| `inning_capped` | Int64 |  |
+| `inning_capped` | Int64 | Inning number with the ninth and every extra inning collapsed into 9, so extras share the ninth-inning win-expectancy cells. |
 | `half` | String | Half of the game (1 or 2). |
-| `base_state` | String |  |
-| `outs_start` | Int64 |  |
-| `score_diff_bucket` | Int64 |  |
+| `base_state` | String | Three-character pre-play base occupancy where each slot carries its base number when occupied and an underscore when empty, so ___ is bases empty and 123 is bases loaded. |
+| `outs_start` | Int64 | Outs already recorded when the plate appearance began, normally 0 through 2, though a handful of published rows carry a stale 3 that the RE24 matrix filters out but this table does not. |
+| `score_diff_bucket` | Int64 | Home score minus away score before the play, clipped to the range -6 through +6 so blowouts collapse into the end buckets. |
 | `home_win_exp` | Float64 | Home team win expectancy before the play. |
-| `n` | UInt32 |  |
+| `n` | UInt32 | Plate appearances observed in this state bucket, the sample size behind the Laplace-smoothed home_win_exp. |
 | `season` | Int64 | Season year. |
 
 ```python
@@ -88,11 +88,11 @@ Release: [mlb_hitting_models](https://github.com/sportsdataverse/sportsdataverse
 |---|---|---|
 | `batter` | Int64 | Full name of the batter for this swing record. |
 | `season` | Int64 | Season year. |
-| `pa` | Int64 |  |
+| `pa` | Int64 | Statcast rows charged to the batter for the season, counting balls in play carrying launch data plus every other pitch, so it is a pitch-row total rather than a true plate-appearance count. |
 | `ab` | Int64 | At-bats. |
-| `xwoba` | Float64 |  |
-| `xba` | Float64 |  |
-| `xslg` | Float64 |  |
+| `xwoba` | Float64 | Expected wOBA blending the exit-velocity by launch-angle grid's predicted contact value on balls in play with realized wOBA value on walks, hit-by-pitches and strikeouts, over the wOBA denominator; low-sample batters can exceed 1. |
+| `xba` | Float64 | Sum of grid-predicted hit probability over the batter's balls in play divided by ab, which lands far below conventional batting-average scale because ab counts pitch rows rather than at-bats. |
+| `xslg` | Float64 | Sum of grid-predicted total bases over the batter's balls in play divided by ab, which lands far below conventional slugging scale because ab counts pitch rows rather than at-bats. |
 
 ```python
 load_mlb_expected_stats(seasons=2024)
@@ -108,9 +108,9 @@ Release: [mlb_hitting_models](https://github.com/sportsdataverse/sportsdataverse
 | `batter` | Int64 | Full name of the batter for this swing record. |
 | `season` | Int64 | Season year. |
 | `hr` | Int64 | Park factor for home runs. |
-| `xhr_neutral` | Float64 |  |
-| `xhr_park_adj` | Float64 |  |
-| `hr_above_expected` | Float64 |  |
+| `xhr_neutral` | Float64 | Park-neutral expected home runs, summing over the batter's balls in play the home-run probability read off the exit-velocity by launch-angle by spray-angle grid. |
+| `xhr_park_adj` | Float64 | The same expected-home-run sum after scaling each ball by its ballpark's Savant home-run park factor over 100; published values run between 0.77 and 1.26 times xhr_neutral. |
+| `hr_above_expected` | Float64 | Home runs actually hit minus xhr_neutral, so it grades over- and under-performance against the park-neutral expectation rather than the park-adjusted one. |
 
 ```python
 load_mlb_expected_hr(seasons=2024)
@@ -126,7 +126,7 @@ Release: [mlb_hitting_models](https://github.com/sportsdataverse/sportsdataverse
 | `batter` | Int64 | Full name of the batter for this swing record. |
 | `age` | Int64 | Player age (in years). |
 | `proj_xwoba` | Float64 |  |
-| `proj_pa` | Float64 |  |
+| `proj_pa` | Float64 | Combined prior-three-season pa behind the projection, its effective sample size; it inherits the pitch-row counting of load_mlb_expected_stats pa rather than true plate appearances. |
 
 ```python
 load_mlb_batter_projection(seasons=2024)
@@ -139,10 +139,10 @@ Release: [mlb_fielding_models](https://github.com/sportsdataverse/sportsdatavers
 
 | col_name | type | description |
 |---|---|---|
-| `fielder_id` | String |  |
+| `fielder_id` | String | MLBAM identifier of the fielder charged with the ball in play, resolved from whichever fielder_N column matches the responsible position and published as a string rather than an integer. |
 | `position` | Int64 | Listed roster position (G, F, C, etc.). |
-| `opportunities` | UInt32 |  |
-| `oaa` | Float64 |  |
+| `opportunities` | UInt32 | Balls in play charged to this fielder at this position, the sample the oaa sum runs over. |
+| `oaa` | Float64 | Outs above average: outs the fielder actually recorded minus what a per-position catch-probability logistic expected from the same batted-ball trajectories, summed across their opportunities. |
 | `season` | Int64 | Season year. |
 
 ```python
@@ -156,10 +156,10 @@ Release: [mlb_fielding_models](https://github.com/sportsdataverse/sportsdatavers
 
 | col_name | type | description |
 |---|---|---|
-| `catcher_id` | String |  |
-| `takes` | UInt32 |  |
-| `framing_runs` | Float64 |  |
-| `strikes_gained` | Float64 |  |
+| `catcher_id` | String | MLBAM identifier of the receiving catcher, taken from Savant's fielder_2 and published as a string rather than an integer. |
+| `takes` | UInt32 | Called strikes plus balls the catcher received across the season, a pure workload count; the framing figures themselves sum only over the shadow-zone subset of these. |
+| `framing_runs` | Float64 | Runs saved by receiving, summing actual called strike minus modeled strike probability times that count's strike run value over shadow-zone takes only. |
+| `strikes_gained` | Float64 | The same shadow-zone sum of actual called strike minus modeled strike probability left unweighted by run value, so it measures stolen strikes rather than runs. |
 | `season` | Int64 | Season year. |
 
 ```python
@@ -176,7 +176,7 @@ Release: [mlb_pitching_models](https://github.com/sportsdataverse/sportsdatavers
 | `pitcher` | Int64 | Whether the position is a pitcher. |
 | `season` | Int64 | Season year. |
 | `x_woba` | Float64 |  |
-| `x_era` | Float64 |  |
+| `x_era` | Float64 | ERA-scale conversion of x_woba as league_era plus (x_woba minus league_woba) over woba_scale times pa_per_9, an exact linear function of x_woba that can go negative for extreme pitchers. |
 
 ```python
 load_mlb_xera(seasons=2024)
@@ -191,8 +191,8 @@ Release: [mlb_pitching_models](https://github.com/sportsdataverse/sportsdatavers
 |---|---|---|
 | `pitcher` | Int64 | Whether the position is a pitcher. |
 | `pitch_type` | String | Abbreviation of the pitch type thrown (e.g. FF, SL, CH). |
-| `stuff_rv_hat` | Float64 |  |
-| `stuff_plus` | Float64 |  |
+| `stuff_rv_hat` | Float64 | Mean predicted per-pitch run value from the bundled xgboost stuff model over this pitcher's pitches of this type, on Savant's batter-perspective delta_run_exp scale so lower is better for the pitcher. |
+| `stuff_plus` | Float64 | Stuff+ on the 100-is-average scale, exactly 100 minus 10 times (stuff_rv_hat minus the league mean) over the league SD, so higher is better and outlier run-value predictions can push it well below zero. |
 | `season` | Int64 | Season year. |
 
 ```python
@@ -207,8 +207,8 @@ Release: [mlb_pitching_models](https://github.com/sportsdataverse/sportsdatavers
 | col_name | type | description |
 |---|---|---|
 | `pitcher` | Int64 | Whether the position is a pitcher. |
-| `location_rv_hat` | Float64 |  |
-| `command_plus` | Float64 |  |
+| `location_rv_hat` | Float64 | Mean predicted per-pitch run value from the bundled location model, which sees plate location, count, handedness and pitch type but no raw pitch physics; lower is better for the pitcher. |
+| `command_plus` | Float64 | Command+/Location+ on the 100-is-average scale, exactly 100 minus 10 times (location_rv_hat minus the league mean) over the league SD; it grades where the pitch finished, not intent, since Statcast ships no catcher target. |
 | `season` | Int64 | Season year. |
 
 ```python

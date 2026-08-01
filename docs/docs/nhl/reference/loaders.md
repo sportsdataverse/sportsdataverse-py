@@ -559,16 +559,16 @@ Release: [nhl_penalties](https://github.com/sportsdataverse/sportsdataverse-data
 | `committedByPlayer.firstName.sv` | String |  |
 | `committedByPlayer.firstName.fr` | String |  |
 | `committedByPlayer.lastName.default` | String |  |
-| `committedByPlayer.lastName.cs` | String |  |
-| `committedByPlayer.lastName.fi` | String |  |
-| `committedByPlayer.lastName.sk` | String |  |
-| `committedByPlayer.lastName.sv` | String |  |
+| `committedByPlayer.lastName.cs` | String | Alternate rendering of the family name published under the NHL feed's Czech key. It differs from the default in orthography -- usually restoring diacritics the default folds to ASCII, though for some names it strips them instead -- so treat it as an alternate spelling, not a canonical one. |
+| `committedByPlayer.lastName.fi` | String | Alternate rendering of the family name published under the NHL feed's Finnish key. It differs from the default in orthography -- usually restoring diacritics the default folds to ASCII, though for some names it strips them instead -- so treat it as an alternate spelling, not a canonical one. |
+| `committedByPlayer.lastName.sk` | String | Alternate rendering of the family name published under the NHL feed's Slovak key. It differs from the default in orthography -- usually restoring diacritics the default folds to ASCII, though for some names it strips them instead -- so treat it as an alternate spelling, not a canonical one. |
+| `committedByPlayer.lastName.sv` | String | Alternate rendering of the family name published under the NHL feed's Swedish key. It differs from the default in orthography -- usually restoring diacritics the default folds to ASCII, though for some names it strips them instead -- so treat it as an alternate spelling, not a canonical one. |
 | `committedByPlayer.lastName.de` | String |  |
 | `committedByPlayer.lastName.es` | String |  |
 | `committedByPlayer.lastName.fr` | String |  |
-| `teamAbbrev.default` | String |  |
-| `drawnBy.sweaterNumber` | Int32 |  |
-| `drawnBy.firstName.default` | String |  |
+| `teamAbbrev.default` | String | Three-letter code of the team charged with the penalty, matching the committing player's boxscore team rather than the team that drew it. |
+| `drawnBy.sweaterNumber` | Int32 | Jersey number of the opposing player credited with drawing the infraction; null whenever no victim is credited, as on all bench and game-misconduct penalties. |
+| `drawnBy.firstName.default` | String | Given name, in the feed's default English locale, of the opposing player credited with drawing the penalty. |
 | `drawnBy.firstName.cs` | String |  |
 | `drawnBy.firstName.fi` | String |  |
 | `drawnBy.firstName.sk` | String |  |
@@ -576,21 +576,21 @@ Release: [nhl_penalties](https://github.com/sportsdataverse/sportsdataverse-data
 | `drawnBy.firstName.es` | String |  |
 | `drawnBy.firstName.sv` | String |  |
 | `drawnBy.firstName.fr` | String |  |
-| `drawnBy.lastName.default` | String |  |
-| `drawnBy.lastName.cs` | String |  |
-| `drawnBy.lastName.fi` | String |  |
-| `drawnBy.lastName.sk` | String |  |
-| `drawnBy.lastName.sv` | String |  |
+| `drawnBy.lastName.default` | String | Family name, in the feed's default English locale, of the opposing player credited with drawing the penalty. |
+| `drawnBy.lastName.cs` | String | Alternate rendering of the family name published under the NHL feed's Czech key. It differs from the default in orthography -- usually restoring diacritics the default folds to ASCII, though for some names it strips them instead -- so treat it as an alternate spelling, not a canonical one. |
+| `drawnBy.lastName.fi` | String | Alternate rendering of the family name published under the NHL feed's Finnish key. It differs from the default in orthography -- usually restoring diacritics the default folds to ASCII, though for some names it strips them instead -- so treat it as an alternate spelling, not a canonical one. |
+| `drawnBy.lastName.sk` | String | Alternate rendering of the family name published under the NHL feed's Slovak key. It differs from the default in orthography -- usually restoring diacritics the default folds to ASCII, though for some names it strips them instead -- so treat it as an alternate spelling, not a canonical one. |
+| `drawnBy.lastName.sv` | String | Alternate rendering of the family name published under the NHL feed's Swedish key. It differs from the default in orthography -- usually restoring diacritics the default folds to ASCII, though for some names it strips them instead -- so treat it as an alternate spelling, not a canonical one. |
 | `drawnBy.lastName.de` | String |  |
 | `drawnBy.lastName.es` | String |  |
 | `drawnBy.lastName.fr` | String |  |
 | `servedBy.default` | String |  |
-| `servedBy.cs` | String |  |
-| `servedBy.fi` | String |  |
-| `servedBy.sk` | String |  |
-| `servedBy.de` | String |  |
-| `servedBy.es` | String |  |
-| `servedBy.sv` | String |  |
+| `servedBy.cs` | String | Alternate abbreviated name (first initial plus family name) published under the NHL feed's Czech key, differing from the default by diacritics or by an alternate given-name form. |
+| `servedBy.fi` | String | Alternate abbreviated name (first initial plus family name) published under the NHL feed's Finnish key, differing from the default by diacritics or by an alternate given-name form. |
+| `servedBy.sk` | String | Alternate abbreviated name (first initial plus family name) published under the NHL feed's Slovak key, differing from the default by diacritics or by an alternate given-name form. |
+| `servedBy.de` | String | Alternate abbreviated name (first initial plus family name) published under the NHL feed's German key, differing from the default by diacritics or by an alternate given-name form. |
+| `servedBy.es` | String | Alternate abbreviated name (first initial plus family name) published under the NHL feed's Spanish key, differing from the default by diacritics or by an alternate given-name form. |
+| `servedBy.sv` | String | Alternate abbreviated name (first initial plus family name) published under the NHL feed's Swedish key, differing from the default by diacritics or by an alternate given-name form. |
 
 ```python
 load_nhl_penalties(seasons=2024)
@@ -724,8 +724,8 @@ Release: [nhl_scoring](https://github.com/sportsdataverse/sportsdataverse-data/r
 | `highlightClipSharingUrlFr` | String |  |
 | `highlightClipFr` | Float64 |  |
 | `discreteClip` | Float64 | Discrete clip identifier. |
-| `discreteClipFr` | Float64 |  |
-| `firstName.default` | String |  |
+| `discreteClipFr` | Float64 | Numeric NHL video identifier of the French-language standalone clip of the goal, always a different asset id from discreteClip. |
+| `firstName.default` | String | Given name of the goal scorer as rendered in the NHL feed's default English locale. |
 | `firstName.cs` | String |  |
 | `firstName.de` | String |  |
 | `firstName.es` | String |  |
@@ -733,24 +733,24 @@ Release: [nhl_scoring](https://github.com/sportsdataverse/sportsdataverse-data/r
 | `firstName.sk` | String |  |
 | `firstName.sv` | String |  |
 | `firstName.fr` | String |  |
-| `lastName.default` | String |  |
-| `lastName.cs` | String |  |
-| `lastName.fi` | String |  |
-| `lastName.sk` | String |  |
-| `lastName.sv` | String |  |
+| `lastName.default` | String | Family name of the goal scorer as rendered in the NHL feed's default English locale. |
+| `lastName.cs` | String | Alternate rendering of the family name published under the NHL feed's Czech key. It differs from the default in orthography -- usually restoring diacritics the default folds to ASCII, though for some names it strips them instead -- so treat it as an alternate spelling, not a canonical one. |
+| `lastName.fi` | String | Alternate rendering of the family name published under the NHL feed's Finnish key. It differs from the default in orthography -- usually restoring diacritics the default folds to ASCII, though for some names it strips them instead -- so treat it as an alternate spelling, not a canonical one. |
+| `lastName.sk` | String | Alternate rendering of the family name published under the NHL feed's Slovak key. It differs from the default in orthography -- usually restoring diacritics the default folds to ASCII, though for some names it strips them instead -- so treat it as an alternate spelling, not a canonical one. |
+| `lastName.sv` | String | Alternate rendering of the family name published under the NHL feed's Swedish key. It differs from the default in orthography -- usually restoring diacritics the default folds to ASCII, though for some names it strips them instead -- so treat it as an alternate spelling, not a canonical one. |
 | `lastName.de` | String |  |
 | `lastName.es` | String |  |
-| `lastName.fr` | String |  |
+| `lastName.fr` | String | Alternate rendering of the family name published under the NHL feed's French key. It differs from the default in orthography -- usually restoring diacritics the default folds to ASCII, though for some names it strips them instead -- so treat it as an alternate spelling, not a canonical one. |
 | `name.default` | String | Team name (default language). |
-| `name.cs` | String |  |
-| `name.fi` | String |  |
-| `name.sk` | String |  |
-| `name.sv` | String |  |
-| `name.de` | String |  |
-| `name.es` | String |  |
+| `name.cs` | String | Alternate abbreviated name (first initial plus family name) published under the NHL feed's Czech key, differing from the default by diacritics or by an alternate given-name form. |
+| `name.fi` | String | Alternate abbreviated name (first initial plus family name) published under the NHL feed's Finnish key, differing from the default by diacritics or by an alternate given-name form. |
+| `name.sk` | String | Alternate abbreviated name (first initial plus family name) published under the NHL feed's Slovak key, differing from the default by diacritics or by an alternate given-name form. |
+| `name.sv` | String | Alternate abbreviated name (first initial plus family name) published under the NHL feed's Swedish key, differing from the default by diacritics or by an alternate given-name form. |
+| `name.de` | String | Alternate abbreviated name (first initial plus family name) published under the NHL feed's German key, differing from the default by diacritics or by an alternate given-name form. |
+| `name.es` | String | Alternate abbreviated name (first initial plus family name) published under the NHL feed's Spanish key, differing from the default by diacritics or by an alternate given-name form. |
 | `name.fr` | String | Team name (French). |
-| `teamAbbrev.default` | String |  |
-| `leadingTeamAbbrev.default` | String |  |
+| `teamAbbrev.default` | String | Three-letter code of the team that scored the goal, resolving to the home club exactly when isHome is true and to the visitor otherwise. |
+| `leadingTeamAbbrev.default` | String | Three-letter code of the team ahead on the scoreboard immediately after this goal, null exactly when the goal tied the game and not always the scoring team. |
 
 ```python
 load_nhl_scoring(seasons=2024)
@@ -815,27 +815,27 @@ Release: [nhl_shootout](https://github.com/sportsdataverse/sportsdataverse-data/
 | `shotType` | String | Type of shot on the goal. |
 | `result` | String | Attempt result (goal/save/miss). |
 | `headshot` | String | URL to the player headshot image. |
-| `gameWinner` | Boolean |  |
+| `gameWinner` | Boolean | True on the single attempt per shootout credited as the game-deciding goal, false on every other attempt and null on the per-game summary row. |
 | `homeScore` | Int32 | Home team score after the goal. |
 | `awayScore` | Int32 | Away team score after the goal. |
 | `game_id` | Int32 | Unique game identifier. |
 | `season` | Int32 | Season year (echoed from arg). |
 | `game_date` | String | Game date. |
 | `discreteClip` | Float64 | Discrete clip identifier. |
-| `discreteClipFr` | Float64 |  |
-| `teamAbbrev.default` | String |  |
-| `firstName.default` | String |  |
-| `firstName.cs` | String |  |
-| `firstName.sk` | String |  |
-| `firstName.fi` | String |  |
-| `firstName.de` | String |  |
-| `firstName.es` | String |  |
-| `firstName.sv` | String |  |
-| `lastName.default` | String |  |
-| `lastName.cs` | String |  |
-| `lastName.fi` | String |  |
-| `lastName.sk` | String |  |
-| `lastName.sv` | String |  |
+| `discreteClipFr` | Float64 | Numeric NHL video identifier of the French-language clip of the shootout attempt, distinct from the id in discreteClip. |
+| `teamAbbrev.default` | String | Three-letter code of the shooting player's team; null on the per-game summary row that instead carries the home and away shootout goal totals. |
+| `firstName.default` | String | Given name of the shooter in the feed's default English locale; null on the per-game summary row. |
+| `firstName.cs` | String | Alternate given name published under the NHL feed's Czech key. Verified against the data it is frequently a different name form rather than a re-spelling (Joshua published as Josh, Aliaksei as Alexei), so it is not a reliable transliteration of the default. |
+| `firstName.sk` | String | Alternate given name published under the NHL feed's Slovak key. Verified against the data it is frequently a different name form rather than a re-spelling (Joshua published as Josh, Aliaksei as Alexei), so it is not a reliable transliteration of the default. |
+| `firstName.fi` | String | Alternate given name published under the NHL feed's Finnish key. Verified against the data it is frequently a different name form rather than a re-spelling (Joshua published as Josh, Aliaksei as Alexei), so it is not a reliable transliteration of the default. |
+| `firstName.de` | String | Alternate given name published under the NHL feed's German key. Verified against the data it is frequently a different name form rather than a re-spelling (Joshua published as Josh, Aliaksei as Alexei), so it is not a reliable transliteration of the default. |
+| `firstName.es` | String | Alternate given name published under the NHL feed's Spanish key. Verified against the data it is frequently a different name form rather than a re-spelling (Joshua published as Josh, Aliaksei as Alexei), so it is not a reliable transliteration of the default. |
+| `firstName.sv` | String | Alternate given name published under the NHL feed's Swedish key. Verified against the data it is frequently a different name form rather than a re-spelling (Joshua published as Josh, Aliaksei as Alexei), so it is not a reliable transliteration of the default. |
+| `lastName.default` | String | Family name of the shooter in the feed's default English locale; null on the per-game summary row. |
+| `lastName.cs` | String | Alternate rendering of the family name published under the NHL feed's Czech key. It differs from the default in orthography -- usually restoring diacritics the default folds to ASCII, though for some names it strips them instead -- so treat it as an alternate spelling, not a canonical one. |
+| `lastName.fi` | String | Alternate rendering of the family name published under the NHL feed's Finnish key. It differs from the default in orthography -- usually restoring diacritics the default folds to ASCII, though for some names it strips them instead -- so treat it as an alternate spelling, not a canonical one. |
+| `lastName.sk` | String | Alternate rendering of the family name published under the NHL feed's Slovak key. It differs from the default in orthography -- usually restoring diacritics the default folds to ASCII, though for some names it strips them instead -- so treat it as an alternate spelling, not a canonical one. |
+| `lastName.sv` | String | Alternate rendering of the family name published under the NHL feed's Swedish key. It differs from the default in orthography -- usually restoring diacritics the default folds to ASCII, though for some names it strips them instead -- so treat it as an alternate spelling, not a canonical one. |
 
 ```python
 load_nhl_shootout(seasons=2025)
@@ -855,8 +855,8 @@ Release: [nhl_shots_by_period](https://github.com/sportsdataverse/sportsdatavers
 | `game_date` | String | Game date. |
 | `period` | Int32 | Period number. |
 | `period_type` | String | Period type (REG/OT/SO). |
-| `max_regulation_periods` | Int32 |  |
-| `ot_periods` | Int32 |  |
+| `max_regulation_periods` | Int32 | Number of regulation periods the game format defines before overtime, constant at 3 for every row in the published seasons. |
+| `ot_periods` | Int32 | Overtime period ordinal taken from the NHL period descriptor, populated only from the second overtime onward so period 5 rows carry 2 and all other rows are null. |
 
 ```python
 load_nhl_shots_by_period(seasons=2025)
@@ -950,12 +950,12 @@ Release: [nhl_three_stars](https://github.com/sportsdataverse/sportsdataverse-da
 | `goalsAgainstAverage` | Float64 | Goals-against average (goalies). |
 | `savePctg` | Float64 | Save percentage (goalies). |
 | `name.default` | String | Team name (default language). |
-| `name.cs` | String |  |
-| `name.sk` | String |  |
-| `name.fi` | String |  |
-| `name.sv` | String |  |
-| `name.de` | String |  |
-| `name.es` | String |  |
+| `name.cs` | String | Alternate abbreviated name (first initial plus family name) published under the NHL feed's Czech key, differing from the default by diacritics or by an alternate given-name form. |
+| `name.sk` | String | Alternate abbreviated name (first initial plus family name) published under the NHL feed's Slovak key, differing from the default by diacritics or by an alternate given-name form. |
+| `name.fi` | String | Alternate abbreviated name (first initial plus family name) published under the NHL feed's Finnish key, differing from the default by diacritics or by an alternate given-name form. |
+| `name.sv` | String | Alternate abbreviated name (first initial plus family name) published under the NHL feed's Swedish key, differing from the default by diacritics or by an alternate given-name form. |
+| `name.de` | String | Alternate abbreviated name (first initial plus family name) published under the NHL feed's German key, differing from the default by diacritics or by an alternate given-name form. |
+| `name.es` | String | Alternate abbreviated name (first initial plus family name) published under the NHL feed's Spanish key, differing from the default by diacritics or by an alternate given-name form. |
 | `name.fr` | String | Team name (French). |
 
 ```python

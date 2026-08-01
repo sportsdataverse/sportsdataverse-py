@@ -75,13 +75,13 @@ Release: [espn_mens_college_basketball_pbp](https://github.com/sportsdataverse/s
 | `clock_seconds` | Int32 | Clock seconds split out for convenience. |
 | `home_timeout_called` | Boolean |  |
 | `away_timeout_called` | Boolean |  |
-| `lead_period` | Int32 |  |
+| `lead_period` | Int32 | Period number of the next play in the same game (period_number shifted back one row within game_id), and null on each game's final play. |
 | `lead_half` | Int32 | A lead column on the half |
-| `start_period_seconds_remaining` | Int32 |  |
+| `start_period_seconds_remaining` | Int32 | Seconds left in the current period when the play started, computed as 60 times the game clock minutes plus the seconds, so 1200 at the tip of each 20-minute half and 300 at the start of an overtime. |
 | `start_game_seconds_remaining` | Int32 | Seconds remaining in the game at the start of the play. |
 | `end_period_seconds_remaining` | Int32 |  |
 | `end_game_seconds_remaining` | Int32 | Seconds remaining in the game at the end of the play. |
-| `lag_period` | Int32 |  |
+| `lag_period` | Int32 | Period number of the previous play in the same game (period_number shifted forward one row within game_id), and null on each game's first play. |
 | `lag_half` | Int32 | A lag column on the half |
 | `athlete_id_2` | Int32 | Secondary athlete identifier (e.g. assister / fouler). |
 | `game_date` | Date | Game date (YYYY-MM-DD). |
@@ -329,12 +329,12 @@ Release: [mbb_ratings](https://github.com/sportsdataverse/sportsdataverse-data/r
 | `adj_o` | Float64 | Adj o. |
 | `adj_d` | Float64 | Adj d. |
 | `adj_em` | Float64 | Adj em. |
-| `adj_tempo` | Float64 |  |
+| `adj_tempo` | Float64 | Opponent-adjusted possessions per 40 minutes, solved by the same fixed point as the efficiency ratings under the additive model that a game's pace is the two teams' tempos less the league baseline; it averages about 71 in 2025. |
 | `raw_o` | Float64 | Raw o. |
 | `raw_d` | Float64 | Raw d. |
 | `games` | Int64 | Games played. |
 | `rank` | Int64 | Rank. |
-| `adj_em_z` | Float64 |  |
+| `adj_em_z` | Float64 | Within-season z-score of adj_em, computed as adj_em minus the season mean divided by the season standard deviation, so each season is centered at zero with unit spread. |
 
 ```python
 load_mbb_ratings(seasons=2025)
@@ -354,7 +354,7 @@ Release: [mbb_player_value](https://github.com/sportsdataverse/sportsdataverse-d
 | `min` | Float64 | Minutes played. |
 | `box_obpm` | Float64 |  |
 | `box_dbpm` | Float64 |  |
-| `box_bpm` | Float64 |  |
+| `box_bpm` | Float64 | Total box plus/minus in points per 100 possessions above an average player, exactly box_obpm plus box_dbpm (verified to zero residual across all 9,805 rows of 2025). |
 
 ```python
 load_mbb_player_value(seasons=2025)
@@ -398,7 +398,7 @@ Release: [espn_mens_college_basketball_standings](https://github.com/sportsdatav
 | `group_id` | String | ESPN group id. |
 | `group_name` | String | Group name (conference / division). |
 | `group_abbreviation` | String | Group abbreviation. |
-| `group_short_name` | String |  |
+| `group_short_name` | String | Abbreviated conference label ESPN prints in standings tables, such as ACC, Big Ten or Am. East, one value per group_id. |
 | `team_id` | Int32 | Unique team identifier. |
 | `team_uid` | String | ESPN universal team identifier (UID format 's:40~l:...~t:...'). |
 | `team_slug` | String | URL-safe team identifier (e.g. 'lasvegas-aces' / 'aces'). |
@@ -413,8 +413,8 @@ Release: [espn_mens_college_basketball_standings](https://github.com/sportsdatav
 | `stat_name` | String | Stat key. |
 | `stat_display_name` | String | Stat display name (from `displayNames`). |
 | `stat_short_display_name` | String | Short human-readable stat name. |
-| `stat_description` | String |  |
-| `stat_abbreviation` | String |  |
+| `stat_description` | String | ESPN's longer-form label for the standings statistic, which can differ from stat_display_name (streak is described as Current Streak and playoffSeed as Playoff Seed). |
+| `stat_abbreviation` | String | Short code ESPN prints for the standings statistic in a table header, such as W, L, PCT, GB or STRK; it diverges from stat_short_display_name for playoff seed and the home and conference record rows. |
 | `stat_type` | String | Stat type code (e.g. "win", "loss"). |
 | `display_value` | String | Display-formatted value. |
 | `value` | Float64 | Numeric or string value field. |
@@ -442,7 +442,7 @@ Release: [espn_mens_college_basketball_player_season_stats](https://github.com/s
 | `stat_label` | String | Human-readable label of the statistic (e.g. 'At bats'). |
 | `stat_name` | String | Stat key. |
 | `stat_display_name` | String | Stat display name (from `displayNames`). |
-| `stat_description` | String |  |
+| `stat_description` | String | ESPN's prose glossary definition of the statistic named in stat_name, for example defining assists as a pass to a teammate that leads directly to a field goal. |
 | `display_value` | String | Display-formatted value. |
 | `value` | Float64 | Numeric or string value field. |
 
@@ -507,10 +507,10 @@ Release: [espn_mens_college_basketball_officials](https://github.com/sportsdatav
 |---|---|---|
 | `season` | Int32 | Season year. |
 | `game_id` | Int32 | Unique game identifier. |
-| `official_full_name` | String |  |
-| `official_display_name` | String |  |
-| `official_position` | String |  |
-| `official_position_id` | Int32 |  |
+| `official_full_name` | String | Full name of the game official as published in ESPN's gameInfo officials list; in this release it is byte-identical to official_display_name on every row. |
+| `official_display_name` | String | Display form of the official's name used by ESPN's game feed, which duplicates official_full_name for all 18,284 rows of the 2025 release. |
+| `official_position` | String | ESPN's role label for the crew member, which is the constant Referee for every men's college basketball official in this release rather than a distinct crew chief or umpire designation. |
+| `official_position_id` | Int32 | ESPN's numeric code for the official's role, constant at 40 (Referee) across the entire men's college basketball officials release. |
 | `official_order` | Int32 |  |
 
 ```python
@@ -540,7 +540,7 @@ Release: [espn_mens_college_basketball_game_rosters](https://github.com/sportsda
 | `athlete_last_name` | String | Athlete last name. |
 | `athlete_jersey` | String | Athlete jersey number. |
 | `athlete_position` | String | Player position name; `athlete_detail = TRUE` only. |
-| `athlete_headshot` | String |  |
+| `athlete_headshot` | String | URL of the player's ESPN headshot image, whose filename is the athlete_id (verified equal for all 190,365 non-null rows in 2025); null when ESPN publishes no photo for that player. |
 | `starter` | Boolean | TRUE if the player was in the starting lineup; FALSE otherwise. |
 | `did_not_play` | Boolean | TRUE if the player did not appear in the game. |
 | `active` | Boolean | TRUE if the row represents an active record (player / team / season). |
@@ -571,7 +571,7 @@ Release: [espn_mens_college_basketball_team_season_stats](https://github.com/spo
 | `stat_label` | String | Human-readable label of the statistic (e.g. 'At bats'). |
 | `stat_name` | String | Stat key. |
 | `stat_display_name` | String | Stat display name (from `displayNames`). |
-| `stat_description` | String |  |
+| `stat_description` | String | ESPN's prose glossary definition of the statistic named in stat_name, for example defining field goal percentage as the ratio of field goals made to field goals attempted. |
 | `display_value` | String | Display-formatted value. |
 | `value` | Float64 | Numeric or string value field. |
 
