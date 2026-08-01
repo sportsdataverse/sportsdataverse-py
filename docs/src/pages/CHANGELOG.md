@@ -3,6 +3,8 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [Unreleased](#unreleased)
+  - [CFB — `opportunity_run` corrected, un-degenerating `opp_highlight_yards` (BREAKING)](#cfb--opportunity_run-corrected-un-degenerating-opp_highlight_yards-breaking)
+  - [CFB / PHF — 1,308 loader return-table columns described](#cfb--phf--1308-loader-return-table-columns-described)
   - [CFB — `team_id` canonicalized to `Int64` at the loader boundary](#cfb--team_id-canonicalized-to-int64-at-the-loader-boundary)
   - [Docs — loader returns tables now carry column descriptions](#docs--loader-returns-tables-now-carry-column-descriptions)
   - [CFB — `adv_*` `pos_team` now holds the team NAME, id moves to `pos_team_id` (BREAKING data change)](#cfb--adv_-pos_team-now-holds-the-team-name-id-moves-to-pos_team_id-breaking-data-change)
@@ -210,6 +212,70 @@
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Unreleased
+
+### CFB — `opportunity_run` corrected, un-degenerating `opp_highlight_yards` (BREAKING)
+
+Found while **writing column descriptions**, not by a failing test — nothing
+pinned either invariant, which is why both survived.
+
+`opportunity_run` was `rush AND yds_rushed <= 4`. The cfbfastR oracle
+(`espn_cfb_15_team_summaries_creation.R:606`) is
+`((rush == 1) & (yds_rushed >= 4))`, and the sibling cfb-data producer agrees. An
+"opportunity" is a carry where the blocking **did** its job — one that reached 4
+yards. sdv-py had it as a stuff.
+
+That silently degenerated a second column. `opp_highlight_yards` gates on
+`opportunity_run`, but `highlight_yards` only accrues from 4 rushing yards up, so
+the two conditions could never co-occur: the column was **identically 0 in every
+published row**, verified across 162,950 plays in the 2024 release. It now ranges
+0–16 on the same games.
+
+The regression test then caught a **second divergence**: these gated on
+`type.text == "Rush"`, the literal ESPN play-type string, which excludes
+`"Rushing Touchdown"` and `"Fumble Recovery (Own)"` rushes — so a 4-yard rushing
+touchdown was not counted as an opportunity. The oracle gates on `rush`, and so
+does `line_yards` two statements below, which meant `adj_rush_yardage` was left
+null on exactly the plays `line_yards` tried to consume. `opportunity_run`,
+`highlight_run` and `adj_rush_yardage` now all gate on `rush`.
+
+**Still divergent, deliberately untouched:** the line-yards *scale*. The R oracle
+caps `adj_rush_yardage` at 10 and splits 0–4 / 5–10 / 11+; sdv-py caps at 8 with a
+`3 + 0.5(adj-3)` ramp and a 5.5 ceiling. Changing that shifts published
+`line_yards` / `second_level_yards` / `open_field_yards`, so it needs its own
+decision rather than riding along with a bug fix.
+
+**Breaking:** published `espn_cfb_pbp` assets carry the old values until
+republished; the column descriptions say so explicitly.
+
+### CFB / PHF — 1,308 loader return-table columns described
+
+Continues the work started in #312. Loader deferred columns **2,407 → 1,099**,
+residual ratchet unchanged at **0**.
+
+| batch | cols | grounding |
+|---|---|---|
+| `team_summaries` + `_weekly` | 757 | producer arithmetic (`_summarize_team`) |
+| `adv_team` + `_gamelog` | 131 | empirical profile of published assets |
+| `adv_situational` | 71 | empirical profile |
+| `cfb_pbp` | 247 | transcribed from `cfb_pbp.py`, thresholds quoted |
+| PHF (4 loaders) | 114 | provider fields, described at face value |
+
+Descriptions are **composed from verified vocabularies** rather than hand-written
+per column, and the generators are committed (`tools/codegen/gen_*_descriptions.py`)
+so each derivation stays reproducible. They enumerate `loader_schemas.yaml`, so
+re-running is idempotent.
+
+Profiling the ESPN blocks against real data contradicted their naming in ways that
+would otherwise have shipped as wrong documentation:
+
+- the bare `EPA_explosive*` and `EPA_success*` columns are integer play **counts**,
+  not EPA totals, despite the `EPA_` prefix (~40 columns)
+- `EPA_overall_off` and `EPA_overall_offense` are **exact duplicates**
+- `EPA_explosive_rate` is **not** `EPA_explosive / EPA_plays` — ESPN divides by a
+  smaller qualifying-play count, so deriving it will not reproduce their value
+
+Anything a generator could not ground is left **blank and reported**, never
+invented.
 
 ### CFB — `team_id` canonicalized to `Int64` at the loader boundary
 

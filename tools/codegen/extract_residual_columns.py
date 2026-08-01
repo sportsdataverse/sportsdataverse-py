@@ -73,6 +73,27 @@ _DEFERRED_BUCKETS = {
 }
 
 
+def _rendering_loaders() -> set[str]:
+    """Loaders whose return table actually RENDERS a column/description table.
+
+    Only loaders declared in ``releases.yaml`` reach ``loaders_page.md.jinja`` via
+    ``_loader_schema_table``. Hand-written loaders are documented on the league's
+    ``additional`` page, whose Returns section is prose -- they have no column table
+    for a description to appear in. Counting their columns would let an authored
+    description register as "covered" while rendering nowhere, so they are excluded
+    from the accounting entirely rather than reported as blank.
+    """
+    import yaml
+
+    path = os.path.join(ROOT, "tools", "codegen", "endpoints", "releases.yaml")
+    try:
+        with open(path, encoding="utf-8") as fh:
+            raw = yaml.safe_load(fh) or {}
+    except (yaml.YAMLError, OSError):
+        return set()
+    return {ld["fn"] for ld in raw.get("loaders", []) if "fn" in ld}
+
+
 def _loader_schema_rows(d: dict) -> list[dict]:
     """Rows for ``loader_schemas.yaml`` — ``{loader_fn: [{name, type}]}``.
 
@@ -82,9 +103,10 @@ def _loader_schema_rows(d: dict) -> list[dict]:
     description, so ``blank`` is always True and coverage is decided purely by the
     manual dict + R dict.
     """
+    rendering = _rendering_loaders()
     rows: list[dict] = []
     for fn, cols in (d or {}).items():
-        if not isinstance(cols, list):
+        if not isinstance(cols, list) or fn not in rendering:
             continue
         parts = fn.split("_")
         league = parts[1] if len(parts) > 2 and parts[0] == "load" else None

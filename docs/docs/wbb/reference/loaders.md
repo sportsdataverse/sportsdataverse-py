@@ -327,12 +327,12 @@ Release: [wbb_ratings](https://github.com/sportsdataverse/sportsdataverse-data/r
 | `adj_o` | Float64 | Adj o. |
 | `adj_d` | Float64 | Adj d. |
 | `adj_em` | Float64 | Adj em. |
-| `adj_tempo` | Float64 |  |
+| `adj_tempo` | Float64 | Opponent-adjusted tempo in possessions per 40 minutes, produced by the same fixed-point adjustment as the efficiencies applied to game possessions under the additive model poss = tempo_i + tempo_j minus the league baseline. |
 | `raw_o` | Float64 | Raw o. |
 | `raw_d` | Float64 | Raw d. |
 | `games` | Int64 | Games played. |
 | `rank` | Int64 | Whether to include statistical ranks in the returned table. |
-| `adj_em_z` | Float64 |  |
+| `adj_em_z` | Float64 | Within-season z-score of adj_em, computed as adj_em minus the season mean divided by the season standard deviation over every team in the frame, so it is mean 0 and standard deviation 1 per season. |
 
 ```python
 load_wbb_ratings(seasons=2025)
@@ -352,7 +352,7 @@ Release: [wbb_player_value](https://github.com/sportsdataverse/sportsdataverse-d
 | `min` | Float64 | Minutes played. |
 | `box_obpm` | Float64 |  |
 | `box_dbpm` | Float64 |  |
-| `box_bpm` | Float64 |  |
+| `box_bpm` | Float64 | Total box plus/minus in points per 100 possessions above average, exactly box_obpm plus box_dbpm in every published row. |
 
 ```python
 load_wbb_player_value(seasons=2025)
@@ -381,7 +381,7 @@ Release: [espn_womens_college_basketball_game_rosters](https://github.com/sports
 | `athlete_last_name` | String | Athlete last name. |
 | `athlete_jersey` | String | Athlete jersey number. |
 | `athlete_position` | String | Athlete position. |
-| `athlete_headshot` | String |  |
+| `athlete_headshot` | String | URL of the player's ESPN headshot image on a.espncdn.com, whose filename is the athlete_id; null when ESPN publishes no headshot for that player. |
 | `starter` | Boolean | TRUE if the player was in the starting lineup; FALSE otherwise. |
 | `did_not_play` | Boolean | TRUE if the player did not appear in the game. |
 | `active` | Boolean | TRUE if the row represents an active record (player / team / season). |
@@ -402,12 +402,12 @@ Release: [espn_womens_college_basketball_officials](https://github.com/sportsdat
 | `season` | Int32 | Season identifier (4-digit year or 'YYYY-YY' string). |
 | `game_id` | String | Unique game identifier. |
 | `official_id` | Int32 | Unique official / referee identifier. |
-| `official_uid` | String |  |
-| `official_full_name` | String |  |
-| `official_display_name` | String |  |
-| `official_first_name` | String |  |
-| `official_last_name` | String |  |
-| `official_order` | Int32 |  |
+| `official_uid` | String | ESPN's globally unique resource identifier for the official, read from the core-api items[] uid key; that payload never ships it, so the column is null for every published row. |
+| `official_full_name` | String | ESPN's fullName for the official, falling back to displayName when fullName is absent; ESPN sometimes ships it with a middle initial or a doubled internal space, so it is not simply first plus last name. |
+| `official_display_name` | String | ESPN's displayName for the official, which is identical to official_full_name in every published row of the released data. |
+| `official_first_name` | String | The official's given name as ESPN splits it out separately from the full name, excluding any middle initial that appears in official_full_name. |
+| `official_last_name` | String | The official's surname as ESPN splits it out; joined to official_first_name it reconstructs roughly 98 percent of official_full_name values, the rest differing by middle initials or spacing. |
+| `official_order` | Int32 | ESPN's 1-based sequence of the official within that game's crew listing, unique within a game and running 1 to 3 for the standard three-person crew. |
 | `position_name` | String | Listed roster position ('Guard', 'Forward', 'Center'). |
 | `position_display_name` | String | Position display name. |
 
@@ -435,7 +435,7 @@ Release: [espn_womens_college_basketball_player_season_stats](https://github.com
 | `stat_label` | String | Human-readable label of the statistic (e.g. 'At bats'). |
 | `stat_name` | String | Internal stat key. |
 | `stat_display_name` | String | Stat display name. |
-| `stat_description` | String |  |
+| `stat_description` | String | ESPN's prose definition of the statistic named in stat_name, for example The average assists per game for avgAssists; combined made-attempted stats carry both definitions joined by a hyphen. |
 | `display_value` | String | Display-formatted value. |
 | `value` | Float64 | Numeric or string value field. |
 
@@ -544,8 +544,8 @@ Release: [espn_womens_college_basketball_standings](https://github.com/sportsdat
 | `stat_name` | String | Internal stat key. |
 | `stat_display_name` | String | Stat display name. |
 | `stat_short_display_name` | String | Short human-readable stat name. |
-| `stat_description` | String |  |
-| `stat_abbreviation` | String |  |
+| `stat_description` | String | ESPN's longer wording for the standings stat, for example Overall Record for the Team Season Record entry and Current Streak for Streak; null for stats ESPN ships without one, such as vs AP Top 25. |
+| `stat_abbreviation` | String | ESPN's abbreviation for the standings stat, such as GB, OPP PPG or VS CONF; always populated and matching stat_short_display_name for about 90 percent of rows. |
 | `stat_type` | String | Stat type code (e.g. "win", "loss"). |
 | `display_value` | String | Display-formatted value. |
 | `value` | Float64 | Numeric or string value field. |
@@ -574,7 +574,7 @@ Release: [espn_womens_college_basketball_team_season_stats](https://github.com/s
 | `stat_label` | String | Human-readable label of the statistic (e.g. 'At bats'). |
 | `stat_name` | String | Internal stat key. |
 | `stat_display_name` | String | Stat display name. |
-| `stat_description` | String |  |
+| `stat_description` | String | ESPN's prose definition of the team statistic named in stat_name, for example The average blocks per game for avgBlocks or the full sentence defining a blocked shot for blocks. |
 | `display_value` | String | Display-formatted value. |
 | `value` | Float64 | Numeric or string value field. |
 
