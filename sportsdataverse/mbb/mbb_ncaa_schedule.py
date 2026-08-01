@@ -92,7 +92,12 @@ _ROSTER_SCHEMA: Dict[str, type] = {
     "player": pl.Utf8,
     "clean_name": pl.Utf8,
     "ht_inches": pl.Int64,
+    # Python-only additive vs the bigballR oracle: the stats.ncaa.org player id
+    # from each row's ``/players/{id}`` link (Utf8 -- NCAA ids stay strings).
+    "player_id": pl.Utf8,
 }
+
+_PLAYER_HREF_RE = re.compile(r"/players/(\d+)")
 
 
 def _cell(el: "Tag") -> str:
@@ -331,10 +336,11 @@ def parse_ncaa_bb_team_roster(html: str, team_id: int) -> pl.DataFrame:
     """Parse a ``stats.ncaa.org/teams/{team_id}/roster`` page.
 
     Pure core of bigballR ``get_team_roster`` (all_functions.R:1709-1845):
-    the site's first 9 roster columns (snake_cased) plus the three derived
+    the site's first 9 roster columns (snake_cased) plus the four derived
     columns -- ``player`` (the normalized ``FIRST.LAST`` join key, byte-
     matching the play-by-play name normalization), ``clean_name`` (the raw
-    display name) and ``ht_inches``.
+    display name), ``ht_inches``, and ``player_id`` (from the row's
+    ``/players/{id}`` link).
 
     Rows are emitted in raw page order; the R oracle's chromote-rendered
     DataTable re-sorts alphabetically (see module docstring).
@@ -347,8 +353,10 @@ def parse_ncaa_bb_team_roster(html: str, team_id: int) -> pl.DataFrame:
     Returns:
         One row per player: ``gp``, ``gs``, ``jersey``, ``name``, ``class``,
         ``position``, ``height``, ``hometown``, ``high_school``, ``player``,
-        ``clean_name``, ``ht_inches``. Zero-row frame with the same schema
-        when the page has no roster table.
+        ``clean_name``, ``ht_inches``, ``player_id`` (the stats.ncaa.org id
+        from the row's ``/players/{id}`` link -- Utf8, Python-only additive
+        vs the bigballR oracle). Zero-row frame with the same schema when
+        the page has no roster table.
 
     Example:
         Parse an on-disk capture::
@@ -365,6 +373,7 @@ def parse_ncaa_bb_team_roster(html: str, team_id: int) -> pl.DataFrame:
     header = [_cell(th) for th in table.find_all("th")][:9]  # R [, 1:9]
     snake = [_ROSTER_HEADER_SNAKE.get(h, underscore(h.replace(" ", "_"))) for h in header]
     records: List[List[Optional[str]]] = []
+    player_ids: List[Optional[str]] = []
     for tr in table.find_all("tr"):
         cells = tr.find_all("td")
         if not cells:
@@ -372,15 +381,23 @@ def parse_ncaa_bb_team_roster(html: str, team_id: int) -> pl.DataFrame:
         values: List[Optional[str]] = [_cell(td) for td in cells[:9]]
         values.extend([None] * (len(header) - len(values)))
         records.append(values)
+        pid: Optional[str] = None
+        for a in tr.find_all("a", href=True):
+            m = _PLAYER_HREF_RE.search(a["href"])
+            if m:
+                pid = m.group(1)
+                break
+        player_ids.append(pid)
 
     data: Dict[str, List[Optional[str]]] = {col: [rec[i] for rec in records] for i, col in enumerate(snake)}
     names = data.get("name", [None] * len(records))
     heights = data.get("height", [None] * len(records))
     data["player"] = [_normalize_v2_name(n) if n is not None else None for n in names]
     data["clean_name"] = list(names)
-    df = pl.DataFrame(data, schema={c: pl.Utf8 for c in [*snake, "player", "clean_name"]})
+    data["player_id"] = player_ids
+    df = pl.DataFrame(data, schema={c: pl.Utf8 for c in [*snake, "player", "clean_name", "player_id"]})
     return df.with_columns(pl.Series("ht_inches", [_ht_inches(h) for h in heights], dtype=pl.Int64)).select(
-        [c for c in _ROSTER_SCHEMA if c in [*snake, "player", "clean_name", "ht_inches"]]
+        [c for c in _ROSTER_SCHEMA if c in [*snake, "player", "clean_name", "ht_inches", "player_id"]]
     )
 
 
