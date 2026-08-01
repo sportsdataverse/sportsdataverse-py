@@ -137,7 +137,11 @@ def test_ncaa_wbb_team_ids_table() -> None:
     # the CSV can't silently drop the season and re-block WBB discovery.
     latest = df.filter(pl.col("season") == "2025-26")
     assert latest.height == 359
-    assert latest.filter(pl.col("team") == "FDU").height == 1  # renamed upstream
+    # Renamed upstream: the new label must be present AND the legacy one gone.
+    # Asserting only the former would pass if a stale "Fairleigh Dickinson" row
+    # co-existed with "FDU" while some other team silently went missing.
+    assert latest.filter(pl.col("team") == "FDU").height == 1
+    assert latest.filter(pl.col("team") == "Fairleigh Dickinson").height == 0
 
 
 def test_ncaa_wbb_team_schedule_matches_core() -> None:
