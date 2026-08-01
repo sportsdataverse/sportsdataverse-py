@@ -6314,6 +6314,42 @@ misspellings(TeamId("Some Unlisted Team"))  # {} (generic fallback)
 misspellings(None)  # {} (generic fallback)
 ```
 
+### `ncaa_espn_team_crosswalk(league: 'str' = 'mbb', *, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#ncaa_espn_team_crosswalk}
+
+Season-keyed stats.ncaa.org -> ESPN team-id crosswalk.
+
+One row per `(season, ncaa_team_id)`. Teams that could not be resolved to
+an ESPN team are kept with a null `espn_team_id` and
+`match_method="unmatched"` -- never dropped -- so the row count always
+equals `ncaa_{league}_team_ids()`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `league` | `str` | `'mbb'` | `"mbb"` (men's, 2009-10 onward) or `"wbb"` (women's). |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+DataFrame with columns `season` (str, `"YYYY-YY"`), `ncaa_team_id` (Int64 -- the season-specific stats.ncaa.org id), `ncaa_team` / `ncaa_conference` (str), `espn_team_id` (str, nullable -- ESPN ids are strings throughout sdv-py), `espn_display_name` / `espn_location` / `espn_mascot` / `espn_abbreviation` / `espn_conference_name` / `espn_conference_id` (str, nullable), and `match_method` (str -- `"exact"`, `"dict"`, `"alias"` or `"unmatched"`).
+
+**Example**
+
+```python
+from sportsdataverse.mbb import ncaa_espn_team_crosswalk
+df = ncaa_espn_team_crosswalk()
+print(df.shape)
+
+# Women's crosswalk as pandas
+
+wdf = ncaa_espn_team_crosswalk(league="wbb", return_as_pandas=True)
+
+# Pipeline next step (one line)
+
+df.filter(pl.col("season") == "2025-26").select("ncaa_team_id", "espn_team_id")
+```
+
 ### `ncaa_wbb_box_scores(game_ids: 'Union[str, int, Iterable[Union[str, int]]]', *, multi_games: 'bool' = False, fetcher: 'Optional[Any]' = None, return_as_pandas: 'bool' = False) -> "Union['pl.DataFrame', 'pd.DataFrame']"` {#ncaa_wbb_box_scores}
 
 Scrape WBB per-player box scores (wbigballR `get_box_scores`/`scrape_box`).

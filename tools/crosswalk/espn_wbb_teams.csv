@@ -1,0 +1,372 @@
+team_id,location,display_name,short_name,mascot,nickname,abbreviation,conference_id,conference_name
+103,Boston College,Boston College Eagles,Boston College,Eagles,Boston College,BC,2,Atlantic Coast Conference
+104,Boston University,Boston University Terriers,Boston U,Terriers,Boston U,BU,22,Patriot League
+107,Holy Cross,Holy Cross Crusaders,Holy Cross,Crusaders,Holy Cross,HC,22,Patriot League
+108,Harvard,Harvard Crimson,Harvard,Crimson,Harvard,HARV,12,Ivy League
+111,Northeastern,Northeastern Huskies,Northeastern,Huskies,Northeastern,NE,10,Coastal Athletic Association
+112358,Long Island University,Long Island University Sharks,Long Island,Sharks,Long Island,LIU,19,Northeast Conference
+113,Massachusetts,Massachusetts Minutemen,UMass,Minutemen,UMass,MASS,3,Atlantic 10 Conference
+116,Mount St. Mary's,Mount St. Mary's Mountaineers,Mount St Marys,Mountaineers,Mount St Marys,MSM,13,Metro Conference
+119,Towson,Towson Tigers,Towson,Tigers,Towson,TOW,10,Coastal Athletic Association
+12,Arizona,Arizona Wildcats,Arizona,Wildcats,Arizona,ARIZ,8,Big 12 Conference
+120,Maryland,Maryland Terrapins,Maryland,Terrapins,Maryland,MD,7,Big Ten Conference
+127,Michigan State,Michigan State Spartans,Michigan St,Spartans,Michigan St,MSU,7,Big Ten Conference
+13,Cal Poly,Cal Poly Mustangs,Cal Poly,Mustangs,Cal Poly,CP,9,Big West Conference
+130,Michigan,Michigan Wolverines,Michigan,Wolverines,Michigan,MICH,7,Big Ten Conference
+135,Minnesota,Minnesota Golden Gophers,Minnesota,Golden Gophers,Minnesota,MINN,7,Big Ten Conference
+139,Saint Louis,Saint Louis Billikens,Saint Louis,Billikens,Saint Louis,SLU,3,Atlantic 10 Conference
+140,Kansas City,Kansas City Roos,Kansas City,Roos,Kansas City,KC,47,Summit League
+142,Missouri,Missouri Tigers,Missouri,Tigers,Missouri,MIZ,23,Southeastern Conference
+145,Ole Miss,Ole Miss Rebels,Ole Miss,Rebels,Ole Miss,MISS,23,Southeastern Conference
+147,Montana State,Montana State Bobcats,Montana St,Bobcats,Montana St,MTST,5,Big Sky Conference
+149,Montana,Montana Grizzlies,Montana,Grizzlies,Montana,MONT,5,Big Sky Conference
+150,Duke,Duke Blue Devils,Duke,Blue Devils,Duke,DUKE,2,Atlantic Coast Conference
+151,East Carolina,East Carolina Pirates,East Carolina,Pirates,East Carolina,ECU,62,American Conference
+152,NC State,NC State Wolfpack,NC State,Wolfpack,NC State,NCSU,2,Atlantic Coast Conference
+153,North Carolina,North Carolina Tar Heels,North Carolina,Tar Heels,North Carolina,UNC,2,Atlantic Coast Conference
+154,Wake Forest,Wake Forest Demon Deacons,Wake Forest,Demon Deacons,Wake Forest,WAKE,2,Atlantic Coast Conference
+155,North Dakota,North Dakota Fighting Hawks,North Dakota,Fighting Hawks,North Dakota,UND,47,Summit League
+156,Creighton,Creighton Bluejays,Creighton,Bluejays,Creighton,CREI,4,Big East Conference
+158,Nebraska,Nebraska Cornhuskers,Nebraska,Cornhuskers,Nebraska,NEB,7,Big Ten Conference
+159,Dartmouth,Dartmouth Big Green,Dartmouth,Big Green,Dartmouth,DART,12,Ivy League
+16,Sacramento State,Sacramento State Hornets,Sacramento St,Hornets,Sacramento St,SAC,5,Big Sky Conference
+160,New Hampshire,New Hampshire Wildcats,New Hampshire,Wildcats,New Hampshire,UNH,1,America East Conference
+161,Fairleigh Dickinson,Fairleigh Dickinson Knights,FDU,Knights,FDU,FDU,19,Northeast Conference
+163,Princeton,Princeton Tigers,Princeton,Tigers,Princeton,PRIN,12,Ivy League
+164,Rutgers,Rutgers Scarlet Knights,Rutgers,Scarlet Knights,Rutgers,RUTG,7,Big Ten Conference
+166,New Mexico State,New Mexico State Aggies,New Mexico St,Aggies,New Mexico St,NMSU,11,Conference USA
+167,New Mexico,New Mexico Lobos,New Mexico,Lobos,New Mexico,UNM,44,Mountain West Conference
+171,Columbia,Columbia Lions,Columbia,Lions,Columbia,COLU,12,Ivy League
+172,Cornell,Cornell Big Red,Cornell,Big Red,Cornell,COR,12,Ivy League
+179,St. Bonaventure,St. Bonaventure Bonnies,St Bonaventure,Bonnies,St Bonaventure,SBU,3,Atlantic 10 Conference
+183,Syracuse,Syracuse Orange,Syracuse,Orange,Syracuse,SYR,2,Atlantic Coast Conference
+189,Bowling Green,Bowling Green Falcons,Bowling Green,Falcons,Bowling Green,BGSU,14,Mid-American Conference
+193,Miami (OH),Miami (OH) RedHawks,Miami OH,RedHawks,Miami OH,M-OH,14,Mid-American Conference
+194,Ohio State,Ohio State Buckeyes,Ohio State,Buckeyes,Ohio State,OSU,7,Big Ten Conference
+195,Ohio,Ohio Bobcats,Ohio,Bobcats,Ohio,OHIO,14,Mid-American Conference
+197,Oklahoma State,Oklahoma State Cowboys,Oklahoma St,Cowboys,Oklahoma St,OKST,8,Big 12 Conference
+198,Oral Roberts,Oral Roberts Golden Eagles,Oral Roberts,Golden Eagles,Oral Roberts,ORU,47,Summit League
+2,Auburn,Auburn Tigers,Auburn,Tigers,Auburn,AUB,23,Southeastern Conference
+2000,Abilene Christian,Abilene Christian Wildcats,Abilene Chrstn,Wildcats,Abilene Chrstn,ACU,30,United Athletic Conference
+2005,Air Force,Air Force Falcons,Air Force,Falcons,Air Force,AF,44,Mountain West Conference
+2006,Akron,Akron Zips,Akron,Zips,Akron,AKR,14,Mid-American Conference
+201,Oklahoma,Oklahoma Sooners,Oklahoma,Sooners,Oklahoma,OU,23,Southeastern Conference
+2010,Alabama A&M,Alabama A&M Bulldogs,Alabama A&M,Bulldogs,Alabama A&M,AAMU,26,Southwestern Athletic Conference
+2011,Alabama State,Alabama State Hornets,Alabama St,Hornets,Alabama St,ALST,26,Southwestern Athletic Conference
+2016,Alcorn State,Alcorn State Braves,Alcorn St,Braves,Alcorn St,ALCN,26,Southwestern Athletic Conference
+202,Tulsa,Tulsa Golden Hurricane,Tulsa,Golden Hurricane,Tulsa,TLSA,62,American Conference
+2026,App State,App State Mountaineers,App State,Mountaineers,App State,APP,27,Sun Belt Conference
+2029,Arkansas-Pine Bluff,Arkansas-Pine Bluff Golden Lions,AR-Pine Bluff,Golden Lions,AR-Pine Bluff,UAPB,26,Southwestern Athletic Conference
+2031,Little Rock,Little Rock Trojans,Little Rock,Trojans,Little Rock,LR,20,Ohio Valley Conference
+2032,Arkansas State,Arkansas State Red Wolves,Arkansas St,Red Wolves,Arkansas St,ARST,27,Sun Belt Conference
+204,Oregon State,Oregon State Beavers,Oregon St,Beavers,Oregon St,ORST,29,West Coast Conference
+2046,Austin Peay,Austin Peay Governors,Austin Peay,Governors,Austin Peay,APSU,46,Atlantic Sun Conference
+2050,Ball State,Ball State Cardinals,Ball State,Cardinals,Ball State,BALL,14,Mid-American Conference
+2057,Belmont,Belmont Bruins,Belmont,Bruins,Belmont,BEL,18,Missouri Valley Conference
+2065,Bethune-Cookman,Bethune-Cookman Wildcats,Bethune,Wildcats,Bethune,BCU,26,Southwestern Athletic Conference
+2066,Binghamton,Binghamton Bearcats,Binghamton,Bearcats,Binghamton,BING,1,America East Conference
+2083,Bucknell,Bucknell Bison,Bucknell,Bison,Bucknell,BUCK,22,Patriot League
+2084,Buffalo,Buffalo Bulls,Buffalo,Bulls,Buffalo,BUF,14,Mid-American Conference
+2086,Butler,Butler Bulldogs,Butler,Bulldogs,Butler,BTLR,4,Big East Conference
+2097,Campbell,Campbell Fighting Camels,Campbell,Fighting Camels,Campbell,CAM,10,Coastal Athletic Association
+2099,Canisius,Canisius Golden Griffins,Canisius,Golden Griffins,Canisius,CAN,13,Metro Conference
+21,San Diego State,San Diego State Aztecs,San Diego St,Aztecs,San Diego St,SDSU,44,Mountain West Conference
+2110,Central Arkansas,Central Arkansas Bears,C Arkansas,Bears,C Arkansas,CARK,46,Atlantic Sun Conference
+2113,Centenary (LA),Centenary (LA) Gentlemen,Centenary (LA),Gentlemen,Centenary (LA),CTLA,,
+2115,Central Connecticut,Central Connecticut Blue Devils,C Connecticut,Blue Devils,C Connecticut,CCSU,19,Northeast Conference
+2116,UCF,UCF Knights,UCF,Knights,UCF,UCF,8,Big 12 Conference
+2117,Central Michigan,Central Michigan Chippewas,C Michigan,Chippewas,C Michigan,CMU,14,Mid-American Conference
+2127,Charleston Southern,Charleston Southern Buccaneers,Charleston So,Buccaneers,Charleston So,CHSO,6,Big South Conference
+213,Penn State,Penn State Nittany Lions,Penn State,Nittany Lions,Penn State,PSU,7,Big Ten Conference
+2130,Chicago State,Chicago State Cougars,Chicago St,Cougars,Chicago St,CHST,19,Northeast Conference
+2132,Cincinnati,Cincinnati Bearcats,Cincinnati,Bearcats,Cincinnati,CIN,8,Big 12 Conference
+2142,Colgate,Colgate Raiders,Colgate,Raiders,Colgate,COLG,22,Patriot League
+2154,Coppin State,Coppin State Eagles,Coppin St,Eagles,Coppin St,COPP,16,Mid-Eastern Athletic Conference
+2166,Davidson,Davidson Wildcats,Davidson,Wildcats,Davidson,DAV,3,Atlantic 10 Conference
+2168,Dayton,Dayton Flyers,Dayton,Flyers,Dayton,DAY,3,Atlantic 10 Conference
+2169,Delaware State,Delaware State Hornets,Delaware St,Hornets,Delaware St,DSU,16,Mid-Eastern Athletic Conference
+2172,Denver,Denver Pioneers,Denver,Pioneers,Denver,DEN,47,Summit League
+2174,Detroit Mercy,Detroit Mercy Titans,Detroit Mercy,Titans,Detroit Mercy,DETM,45,Horizon League
+218,Temple,Temple Owls,Temple,Owls,Temple,TEM,62,American Conference
+2181,Drake,Drake Bulldogs,Drake,Bulldogs,Drake,DRKE,18,Missouri Valley Conference
+2182,Drexel,Drexel Dragons,Drexel,Dragons,Drexel,DREX,10,Coastal Athletic Association
+2184,Duquesne,Duquesne Dukes,Duquesne,Dukes,Duquesne,DUQ,3,Atlantic 10 Conference
+219,Pennsylvania,Pennsylvania Quakers,Penn,Quakers,Penn,PENN,12,Ivy League
+2193,East Tennessee State,East Tennessee State Buccaneers,ETSU,Buccaneers,ETSU,ETSU,24,Southern Conference
+2197,Eastern Illinois,Eastern Illinois Panthers,E Illinois,Panthers,E Illinois,EIU,20,Ohio Valley Conference
+2198,Eastern Kentucky,Eastern Kentucky Colonels,E Kentucky,Colonels,E Kentucky,EKU,46,Atlantic Sun Conference
+2199,Eastern Michigan,Eastern Michigan Eagles,E Michigan,Eagles,E Michigan,EMU,14,Mid-American Conference
+221,Pittsburgh,Pittsburgh Panthers,Pitt,Panthers,Pitt,PITT,2,Atlantic Coast Conference
+2210,Elon,Elon Phoenix,Elon,Phoenix,Elon,ELON,10,Coastal Athletic Association
+2217,Fairfield,Fairfield Stags,Fairfield,Stags,Fairfield,FAIR,13,Metro Conference
+222,Villanova,Villanova Wildcats,Villanova,Wildcats,Villanova,VILL,4,Big East Conference
+2226,Florida Atlantic,Florida Atlantic Owls,FAU,Owls,FAU,FAU,62,American Conference
+2229,Florida International,Florida International Panthers,FIU,Panthers,FIU,FIU,11,Conference USA
+2230,Fordham,Fordham Rams,Fordham,Rams,Fordham,FOR,3,Atlantic 10 Conference
+2239,Cal State Fullerton,Cal State Fullerton Titans,Fullerton,Titans,Fullerton,CSUF,9,Big West Conference
+2241,Gardner-Webb,Gardner-Webb Runnin' Bulldogs,Gardner-Webb,Runnin' Bulldogs,Gardner-Webb,GWEB,6,Big South Conference
+2244,George Mason,George Mason Patriots,George Mason,Patriots,George Mason,GMU,3,Atlantic 10 Conference
+2247,Georgia State,Georgia State Panthers,Georgia St,Panthers,Georgia St,GAST,27,Sun Belt Conference
+225,Brown,Brown Bears,Brown,Bears,Brown,BRWN,12,Ivy League
+2250,Gonzaga,Gonzaga Bulldogs,Gonzaga,Bulldogs,Gonzaga,GONZ,29,West Coast Conference
+2253,Grand Canyon,Grand Canyon Lopes,Grand Canyon,Lopes,Grand Canyon,GCU,30,United Athletic Conference
+2261,Hampton,Hampton Pirates,Hampton,Pirates,Hampton,HAMP,10,Coastal Athletic Association
+227,Rhode Island,Rhode Island Rams,Rhode Island,Rams,Rhode Island,URI,3,Atlantic 10 Conference
+2272,High Point,High Point Panthers,High Point,Panthers,High Point,HPU,6,Big South Conference
+2275,Hofstra,Hofstra Pride,Hofstra,Pride,Hofstra,HOF,10,Coastal Athletic Association
+2277,Houston Christian,Houston Christian Huskies,Hou Christian,Huskies,Hou Christian,HCU,25,Southland Conference
+228,Clemson,Clemson Tigers,Clemson,Tigers,Clemson,CLEM,2,Atlantic Coast Conference
+2287,Illinois State,Illinois State Redbirds,Illinois St,Redbirds,Illinois St,ILST,18,Missouri Valley Conference
+2294,Iowa,Iowa Hawkeyes,Iowa,Hawkeyes,Iowa,IOWA,7,Big Ten Conference
+2296,Jackson State,Jackson State Tigers,Jackson St,Tigers,Jackson St,JKST,26,Southwestern Athletic Conference
+23,San José State,San José State Spartans,San José St,Spartans,San José St,SJSU,44,Mountain West Conference
+2305,Kansas,Kansas Jayhawks,Kansas,Jayhawks,Kansas,KU,8,Big 12 Conference
+2306,Kansas State,Kansas State Wildcats,Kansas St,Wildcats,Kansas St,KSU,8,Big 12 Conference
+2309,Kent State,Kent State Golden Flashes,Kent State,Golden Flashes,Kent State,KENT,14,Mid-American Conference
+231,Furman,Furman Paladins,Furman,Paladins,Furman,FUR,24,Southern Conference
+232,Charleston,Charleston Cougars,Charleston,Cougars,Charleston,COFC,10,Coastal Athletic Association
+2320,Lamar,Lamar Cardinals,Lamar,Cardinals,Lamar,LAM,25,Southland Conference
+2325,La Salle,La Salle Explorers,La Salle,Explorers,La Salle,LAS,3,Atlantic 10 Conference
+2329,Lehigh,Lehigh Mountain Hawks,Lehigh,Mountain Hawks,Lehigh,LEH,22,Patriot League
+233,South Dakota,South Dakota Coyotes,South Dakota,Coyotes,South Dakota,SDAK,47,Summit League
+2330,Le Moyne,Le Moyne Dolphins,Le Moyne,Dolphins,Le Moyne,LEM,19,Northeast Conference
+2335,Liberty,Liberty Flames,Liberty,Flames,Liberty,LIB,11,Conference USA
+2344,Longwood,Longwood Lancers,Longwood,Lancers,Longwood,LONG,6,Big South Conference
+2348,Louisiana Tech,Louisiana Tech Bulldogs,Louisiana Tech,Bulldogs,Louisiana Tech,LT,11,Conference USA
+2349,UMass Lowell,UMass Lowell River Hawks,UMass Lowell,River Hawks,UMass Lowell,UML,1,America East Conference
+235,Memphis,Memphis Tigers,Memphis,Tigers,Memphis,MEM,62,American Conference
+2350,Loyola Chicago,Loyola Chicago Ramblers,Loyola Chicago,Ramblers,Loyola Chicago,LUC,3,Atlantic 10 Conference
+2351,Loyola Marymount,Loyola Marymount Lions,LMU,Lions,LMU,LMU,29,West Coast Conference
+2352,Loyola Maryland,Loyola Maryland Greyhounds,Loyola MD,Greyhounds,Loyola MD,L-MD,22,Patriot League
+236,Chattanooga,Chattanooga Mocs,Chattanooga,Mocs,Chattanooga,UTC,24,Southern Conference
+2363,Manhattan,Manhattan Jaspers,Manhattan,Jaspers,Manhattan,MAN,13,Metro Conference
+2368,Marist,Marist Red Foxes,Marist,Red Foxes,Marist,MRST,13,Metro Conference
+2377,McNeese,McNeese Cowboys,McNeese,Cowboys,McNeese,MCN,25,Southland Conference
+2378,UMBC,UMBC Retrievers,UMBC,Retrievers,UMBC,UMBC,1,America East Conference
+2379,Maryland Eastern Shore,Maryland Eastern Shore Hawks,MD Eastern,Hawks,MD Eastern,UMES,16,Mid-Eastern Athletic Conference
+238,Vanderbilt,Vanderbilt Commodores,Vanderbilt,Commodores,Vanderbilt,VAN,23,Southeastern Conference
+2382,Mercer,Mercer Bears,Mercer,Bears,Mercer,MER,24,Southern Conference
+2385,Mercyhurst,Mercyhurst Lakers,Mercyhurst,Lakers,Mercyhurst,MERC,19,Northeast Conference
+239,Baylor,Baylor Bears,Baylor,Bears,Baylor,BAY,8,Big 12 Conference
+2390,Miami,Miami Hurricanes,Miami,Hurricanes,Miami,MIA,2,Atlantic Coast Conference
+2393,Middle Tennessee,Middle Tennessee Blue Raiders,MTSU,Blue Raiders,MTSU,MTSU,11,Conference USA
+24,Stanford,Stanford Cardinal,Stanford,Cardinal,Stanford,STAN,2,Atlantic Coast Conference
+2400,Mississippi Valley State,Mississippi Valley State Delta Devils,Miss Valley St,Delta Devils,Miss Valley St,MVSU,26,Southwestern Athletic Conference
+2405,Monmouth,Monmouth Hawks,Monmouth,Hawks,Monmouth,MONM,10,Coastal Athletic Association
+2413,Morehead State,Morehead State Eagles,Morehead St,Eagles,Morehead St,MORE,20,Ohio Valley Conference
+2415,Morgan State,Morgan State Bears,Morgan St,Bears,Morgan St,MORG,16,Mid-Eastern Athletic Conference
+242,Rice,Rice Owls,Rice,Owls,Rice,RICE,62,American Conference
+2426,Navy,Navy Midshipmen,Navy,Midshipmen,Navy,NAVY,22,Patriot League
+2427,UNC Asheville,UNC Asheville Bulldogs,UNC Asheville,Bulldogs,UNC Asheville,UNCA,6,Big South Conference
+2428,North Carolina Central,North Carolina Central Eagles,NC Central,Eagles,NC Central,NCCU,16,Mid-Eastern Athletic Conference
+2429,Charlotte,Charlotte 49ers,Charlotte,49ers,Charlotte,CLT,62,American Conference
+2430,UNC Greensboro,UNC Greensboro Spartans,UNC Greensboro,Spartans,UNC Greensboro,UNCG,24,Southern Conference
+2433,UL Monroe,UL Monroe Warhawks,UL Monroe,Warhawks,UL Monroe,ULM,27,Sun Belt Conference
+2437,Omaha,Omaha Mavericks,Omaha,Mavericks,Omaha,OMA,47,Summit League
+2439,UNLV,UNLV Rebels,UNLV,Rebels,UNLV,UNLV,44,Mountain West Conference
+2440,Nevada,Nevada Wolf Pack,Nevada,Wolf Pack,Nevada,NEV,44,Mountain West Conference
+2441,New Haven,New Haven Chargers,New Haven,Chargers,New Haven,NHVN,,
+2443,LSU New Orleans,LSU New Orleans Privateers,New Orleans,Privateers,New Orleans,NOLA,25,Southland Conference
+2447,Nicholls,Nicholls Colonels,Nicholls,Colonels,Nicholls,NICH,25,Southland Conference
+2448,North Carolina A&T,North Carolina A&T Aggies,NC A&T,Aggies,NC A&T,NCAT,10,Coastal Athletic Association
+2449,North Dakota State,North Dakota State Bison,N Dakota St,Bison,N Dakota St,NDSU,47,Summit League
+245,Texas A&M,Texas A&M Aggies,Texas A&M,Aggies,Texas A&M,TA&M,23,Southeastern Conference
+2450,Norfolk State,Norfolk State Spartans,Norfolk St,Spartans,Norfolk St,NORF,16,Mid-Eastern Athletic Conference
+2453,North Alabama,North Alabama Lions,North Alabama,Lions,North Alabama,UNA,46,Atlantic Sun Conference
+2454,North Florida,North Florida Ospreys,North Florida,Ospreys,North Florida,UNF,46,Atlantic Sun Conference
+2458,Northern Colorado,Northern Colorado Bears,N Colorado,Bears,N Colorado,UNCO,5,Big Sky Conference
+2459,Northern Illinois,Northern Illinois Huskies,N Illinois,Huskies,N Illinois,NIU,14,Mid-American Conference
+2460,Northern Iowa,Northern Iowa Panthers,Northern Iowa,Panthers,Northern Iowa,UNI,18,Missouri Valley Conference
+2463,Cal State Northridge,Cal State Northridge Matadors,CSU Northridge,Matadors,CSU Northridge,CSUN,9,Big West Conference
+2464,Northern Arizona,Northern Arizona Lumberjacks,N Arizona,Lumberjacks,N Arizona,NAU,5,Big Sky Conference
+2466,Northwestern State,Northwestern State Demons,N'Western St,Demons,N'Western St,NWST,25,Southland Conference
+2473,Oakland,Oakland Golden Grizzlies,Oakland,Golden Grizzlies,Oakland,OAK,45,Horizon League
+248,Houston,Houston Cougars,Houston,Cougars,Houston,HOU,8,Big 12 Conference
+2483,Oregon,Oregon Ducks,Oregon,Ducks,Oregon,ORE,7,Big Ten Conference
+249,North Texas,North Texas Mean Green,North Texas,Mean Green,North Texas,UNT,62,American Conference
+2492,Pepperdine,Pepperdine Waves,Pepperdine,Waves,Pepperdine,PEPP,29,West Coast Conference
+25,California,California Golden Bears,California,Golden Bears,California,CAL,2,Atlantic Coast Conference
+250,UT Arlington,UT Arlington Mavericks,UT Arlington,Mavericks,UT Arlington,UTA,30,United Athletic Conference
+2501,Portland,Portland Pilots,Portland,Pilots,Portland,PORT,29,West Coast Conference
+2502,Portland State,Portland State Vikings,Portland St,Vikings,Portland St,PRST,5,Big Sky Conference
+2504,Prairie View A&M,Prairie View A&M Panthers,Prairie View,Panthers,Prairie View,PV,26,Southwestern Athletic Conference
+2506,Presbyterian,Presbyterian Blue Hose,Presbyterian,Blue Hose,Presbyterian,PRES,6,Big South Conference
+2507,Providence,Providence Friars,Providence,Friars,Providence,PROV,4,Big East Conference
+2509,Purdue,Purdue Boilermakers,Purdue,Boilermakers,Purdue,PUR,7,Big Ten Conference
+251,Texas,Texas Longhorns,Texas,Longhorns,Texas,TEX,23,Southeastern Conference
+2511,Queens University,Queens University Royals,Queens,Royals,Queens,QUC,46,Atlantic Sun Conference
+2514,Quinnipiac,Quinnipiac Bobcats,Quinnipiac,Bobcats,Quinnipiac,QUIN,13,Metro Conference
+2515,Radford,Radford Highlanders,Radford,Highlanders,Radford,RAD,6,Big South Conference
+252,BYU,BYU Cougars,BYU,Cougars,BYU,BYU,8,Big 12 Conference
+2520,Rider,Rider Broncs,Rider,Broncs,Rider,RID,13,Metro Conference
+2523,Robert Morris,Robert Morris Colonials,Robert Morris,Colonials,Robert Morris,RMU,45,Horizon League
+2529,Sacred Heart,Sacred Heart Pioneers,Sacred Heart,Pioneers,Sacred Heart,SHU,13,Metro Conference
+253,Southern Utah,Southern Utah Thunderbirds,Southern Utah,Thunderbirds,Southern Utah,SUU,30,United Athletic Conference
+2534,Sam Houston,Sam Houston Bearkats,Sam Houston,Bearkats,Sam Houston,SHSU,11,Conference USA
+2535,Samford,Samford Bulldogs,Samford,Bulldogs,Samford,SAM,24,Southern Conference
+2539,San Francisco,San Francisco Dons,San Francisco,Dons,San Francisco,SF,29,West Coast Conference
+254,Utah,Utah Utes,Utah,Utes,Utah,UTAH,8,Big 12 Conference
+2540,UC Santa Barbara,UC Santa Barbara Gauchos,Santa Barbara,Gauchos,Santa Barbara,UCSB,9,Big West Conference
+2541,Santa Clara,Santa Clara Broncos,Santa Clara,Broncos,Santa Clara,SCU,29,West Coast Conference
+2542,Savannah State,Savannah State Tigers,Savannah St,Tigers,Savannah St,SAV,,
+2545,SE Louisiana,SE Louisiana Lions,SE Louisiana,Lions,SE Louisiana,SELA,25,Southland Conference
+2546,Southeast Missouri State,Southeast Missouri State Redhawks,SE Missouri,Redhawks,SE Missouri,SEMO,20,Ohio Valley Conference
+2547,Seattle U,Seattle U Redhawks,Seattle U,Redhawks,Seattle U,SEA,30,United Athletic Conference
+2550,Seton Hall,Seton Hall Pirates,Seton Hall,Pirates,Seton Hall,HALL,4,Big East Conference
+256,James Madison,James Madison Dukes,James Madison,Dukes,James Madison,JMU,27,Sun Belt Conference
+2561,Siena,Siena Saints,Siena,Saints,Siena,SIE,13,Metro Conference
+2565,SIU Edwardsville,SIU Edwardsville Cougars,SIUE,Cougars,SIUE,SIUE,20,Ohio Valley Conference
+2567,SMU,SMU Mustangs,SMU,Mustangs,SMU,SMU,2,Atlantic Coast Conference
+2569,South Carolina State,South Carolina State Bulldogs,SC State,Bulldogs,SC State,SCST,16,Mid-Eastern Athletic Conference
+257,Richmond,Richmond Spiders,Richmond,Spiders,Richmond,RICH,3,Atlantic 10 Conference
+2571,South Dakota State,South Dakota State Jackrabbits,S Dakota St,Jackrabbits,S Dakota St,SDST,47,Summit League
+2572,Southern Miss,Southern Miss Golden Eagles,Southern Miss,Golden Eagles,Southern Miss,USM,27,Sun Belt Conference
+2579,South Carolina,South Carolina Gamecocks,South Carolina,Gamecocks,South Carolina,SC,23,Southeastern Conference
+258,Virginia,Virginia Cavaliers,Virginia,Cavaliers,Virginia,UVA,2,Atlantic Coast Conference
+2582,Southern,Southern Jaguars,Southern,Jaguars,Southern,SOU,26,Southwestern Athletic Conference
+259,Virginia Tech,Virginia Tech Hokies,Virginia Tech,Hokies,Virginia Tech,VT,2,Atlantic Coast Conference
+2597,St. Francis Brooklyn,St. Francis Brooklyn Terriers,St Francis BK,Terriers,St Francis BK,SFNY,,
+2598,St. Francis (PA),St. Francis (PA) Red Flash,St Francis PA,Red Flash,St Francis PA,SFPA,19,Northeast Conference
+2599,St. John's,St. John's Red Storm,St John's,Red Storm,St John's,SJU,4,Big East Conference
+26,UCLA,UCLA Bruins,UCLA,Bruins,UCLA,UCLA,7,Big Ten Conference
+2603,Saint Joseph's,Saint Joseph's Hawks,Saint Joseph's,Hawks,Saint Joseph's,JOES,3,Atlantic 10 Conference
+2608,Saint Mary's,Saint Mary's Gaels,Saint Mary's,Gaels,Saint Mary's,SMC,29,West Coast Conference
+261,Vermont,Vermont Catamounts,Vermont,Catamounts,Vermont,UVM,1,America East Conference
+2612,Saint Peter's,Saint Peter's Peacocks,Saint Peter's,Peacocks,Saint Peter's,SPU,13,Metro Conference
+2617,Stephen F. Austin,Stephen F. Austin Lumberjacks,SF Austin,Lumberjacks,SF Austin,SFA,25,Southland Conference
+2619,Stony Brook,Stony Brook Seawolves,Stony Brook,Seawolves,Stony Brook,STBK,10,Coastal Athletic Association
+2623,Missouri State,Missouri State Bears,Missouri St,Bears,Missouri St,MOST,18,Missouri Valley Conference
+2627,Tarleton State,Tarleton State Texans,Tarleton St,Texans,Tarleton St,TAR,30,United Athletic Conference
+2628,TCU,TCU Horned Frogs,TCU,Horned Frogs,TCU,TCU,8,Big 12 Conference
+2630,UT Martin,UT Martin Skyhawks,UT Martin,Skyhawks,UT Martin,UTM,20,Ohio Valley Conference
+2633,Tennessee,Tennessee Volunteers,Tennessee,Volunteers,Tennessee,TENN,23,Southeastern Conference
+2634,Tennessee State,Tennessee State Tigers,Tennessee St,Tigers,Tennessee St,TNST,20,Ohio Valley Conference
+2635,Tennessee Tech,Tennessee Tech Golden Eagles,Tennessee Tech,Golden Eagles,Tennessee Tech,TNTC,20,Ohio Valley Conference
+2636,UTSA,UTSA Roadrunners,UTSA,Roadrunners,UTSA,UTSA,62,American Conference
+2638,UTEP,UTEP Miners,UTEP,Miners,UTEP,UTEP,11,Conference USA
+264,Washington,Washington Huskies,Washington,Huskies,Washington,WASH,7,Big Ten Conference
+2640,Texas Southern,Texas Southern Tigers,Texas Southern,Tigers,Texas Southern,TXSO,26,Southwestern Athletic Conference
+2641,Texas Tech,Texas Tech Red Raiders,Texas Tech,Red Raiders,Texas Tech,TTU,8,Big 12 Conference
+2643,The Citadel,The Citadel Bulldogs,The Citadel,Bulldogs,The Citadel,CIT,,
+2649,Toledo,Toledo Rockets,Toledo,Rockets,Toledo,TOL,14,Mid-American Conference
+265,Washington State,Washington State Cougars,Washington St,Cougars,Washington St,WSU,29,West Coast Conference
+2653,Troy,Troy Trojans,Troy,Trojans,Troy,TROY,27,Sun Belt Conference
+2655,Tulane,Tulane Green Wave,Tulane,Green Wave,Tulane,TULN,62,American Conference
+2670,VCU,VCU Rams,VCU,Rams,VCU,VCU,3,Atlantic 10 Conference
+2674,Valparaiso,Valparaiso Beacons,Valparaiso,Beacons,Valparaiso,VAL,18,Missouri Valley Conference
+2678,VMI,VMI Keydets,VMI,Keydets,VMI,VMI,,
+2681,Wagner,Wagner Seahawks,Wagner,Seahawks,Wagner,WAG,19,Northeast Conference
+269,Marquette,Marquette Golden Eagles,Marquette,Golden Eagles,Marquette,MARQ,4,Big East Conference
+2692,Weber State,Weber State Wildcats,Weber St,Wildcats,Weber St,WEB,5,Big Sky Conference
+2697,West Florida,West Florida Argonauts,West Florida,Argonauts,West Florida,WFL,,
+2698,West Georgia,West Georgia Wolves,West Georgia,Wolves,West Georgia,WGA,46,Atlantic Sun Conference
+27,UC Riverside,UC Riverside Highlanders,UC Riverside,Highlanders,UC Riverside,UCR,9,Big West Conference
+270,Milwaukee,Milwaukee Panthers,Milwaukee,Panthers,Milwaukee,MILW,45,Horizon League
+2710,Western Illinois,Western Illinois Leathernecks,W Illinois,Leathernecks,W Illinois,WIU,20,Ohio Valley Conference
+2711,Western Michigan,Western Michigan Broncos,W Michigan,Broncos,W Michigan,WMU,14,Mid-American Conference
+2717,Western Carolina,Western Carolina Catamounts,W Carolina,Catamounts,W Carolina,WCU,24,Southern Conference
+2724,Wichita State,Wichita State Shockers,Wichita St,Shockers,Wichita St,WICH,62,American Conference
+2729,William & Mary,William & Mary Tribe,William & Mary,Tribe,William & Mary,W&M,10,Coastal Athletic Association
+2736,Winston-Salem State,Winston-Salem State Rams,Winston-Salem,Rams,Winston-Salem,WSSU,,
+2737,Winthrop,Winthrop Eagles,Winthrop,Eagles,Winthrop,WIN,6,Big South Conference
+2739,Green Bay,Green Bay Phoenix,Green Bay,Phoenix,Green Bay,GB,45,Horizon League
+2747,Wofford,Wofford Terriers,Wofford,Terriers,Wofford,WOF,24,Southern Conference
+275,Wisconsin,Wisconsin Badgers,Wisconsin,Badgers,Wisconsin,WIS,7,Big Ten Conference
+2750,Wright State,Wright State Raiders,Wright St,Raiders,Wright St,WRST,45,Horizon League
+2751,Wyoming,Wyoming Cowboys,Wyoming,Cowboys,Wyoming,WYO,44,Mountain West Conference
+2752,Xavier,Xavier Musketeers,Xavier,Musketeers,Xavier,XAV,4,Big East Conference
+2754,Youngstown State,Youngstown State Penguins,Youngstown St,Penguins,Youngstown St,YSU,45,Horizon League
+2755,Grambling,Grambling Tigers,Grambling,Tigers,Grambling,GRAM,26,Southwestern Athletic Conference
+276,Marshall,Marshall Thundering Herd,Marshall,Thundering Herd,Marshall,MRSH,27,Sun Belt Conference
+277,West Virginia,West Virginia Mountaineers,West Virginia,Mountaineers,West Virginia,WVU,8,Big 12 Conference
+2771,Merrimack,Merrimack Warriors,Merrimack,Warriors,Merrimack,MRMK,13,Metro Conference
+278,Fresno State,Fresno State Bulldogs,Fresno St,Bulldogs,Fresno St,FRES,44,Mountain West Conference
+279,Pacific,Pacific Tigers,Pacific,Tigers,Pacific,PAC,29,West Coast Conference
+28,UC San Diego,UC San Diego Tritons,UC San Diego,Tritons,UC San Diego,UCSD,9,Big West Conference
+2803,Bryant,Bryant Bulldogs,Bryant,Bulldogs,Bryant,BRY,1,America East Conference
+2815,Lindenwood,Lindenwood Lions,Lindenwood,Lions,Lindenwood,LIN,20,Ohio Valley Conference
+282,Indiana State,Indiana State Sycamores,Indiana St,Sycamores,Indiana St,INST,18,Missouri Valley Conference
+2837,East Texas A&M,East Texas A&M Lions,E Texas A&M,Lions,E Texas A&M,ETAM,25,Southland Conference
+284,Stonehill,Stonehill Skyhawks,Stonehill,Skyhawks,Stonehill,STO,19,Northeast Conference
+2856,California Baptist,California Baptist Lancers,CA Baptist,Lancers,CA Baptist,CBU,30,United Athletic Conference
+2870,Purdue Fort Wayne,Purdue Fort Wayne Mastodons,Purdue FW,Mastodons,Purdue FW,PFW,45,Horizon League
+288,Lipscomb,Lipscomb Bisons,Lipscomb,Bisons,Lipscomb,LIP,46,Atlantic Sun Conference
+2885,NJIT,NJIT Highlanders,NJIT,Highlanders,NJIT,NJIT,1,America East Conference
+290,Georgia Southern,Georgia Southern Eagles,GA Southern,Eagles,GA Southern,GASO,27,Sun Belt Conference
+2900,St. Thomas,St. Thomas Tommies,St Thomas (MN),Tommies,St Thomas (MN),STMN,47,Summit League
+2908,South Carolina Upstate,South Carolina Upstate Spartans,SC Upstate,Spartans,SC Upstate,UPST,6,Big South Conference
+2916,Incarnate Word,Incarnate Word Cardinals,Incarnate Word,Cardinals,Incarnate Word,UIW,25,Southland Conference
+292,UT Rio Grande Valley,UT Rio Grande Valley Vaqueros,UT Rio Grande,Vaqueros,UT Rio Grande,RGV,25,Southland Conference
+2934,Cal State Bakersfield,Cal State Bakersfield Roadrunners,Bakersfield,Roadrunners,Bakersfield,CSUB,9,Big West Conference
+294,Jacksonville,Jacksonville Dolphins,Jacksonville,Dolphins,Jacksonville,JAX,46,Atlantic Sun Conference
+295,Old Dominion,Old Dominion Monarchs,Old Dominion,Monarchs,Old Dominion,ODU,27,Sun Belt Conference
+299,Long Beach State,Long Beach State Beach,Long Beach St,Beach,Long Beach St,LBSU,9,Big West Conference
+30,USC,USC Trojans,USC,Trojans,USC,USC,7,Big Ten Conference
+300,UC Irvine,UC Irvine Anteaters,UC Irvine,Anteaters,UC Irvine,UCI,9,Big West Conference
+301,San Diego,San Diego Toreros,San Diego,Toreros,San Diego,USD,29,West Coast Conference
+302,UC Davis,UC Davis Aggies,UC Davis,Aggies,UC Davis,UCD,9,Big West Conference
+304,Idaho State,Idaho State Bengals,Idaho St,Bengals,Idaho St,IDST,5,Big Sky Conference
+305,DePaul,DePaul Blue Demons,DePaul,Blue Demons,DePaul,DEP,4,Big East Conference
+3084,Utah Valley,Utah Valley Wolverines,Utah Valley,Wolverines,Utah Valley,UVU,30,United Athletic Conference
+309,Louisiana,Louisiana Ragin' Cajuns,Louisiana,Ragin' Cajuns,Louisiana,UL,27,Sun Belt Conference
+3101,Utah Tech,Utah Tech Trailblazers,Utah Tech,Trailblazers,Utah Tech,UTU,30,United Athletic Conference
+311,Maine,Maine Black Bears,Maine,Black Bears,Maine,ME,1,America East Conference
+314,Iona,Iona Gaels,Iona,Gaels,Iona,IONA,13,Metro Conference
+315,Niagara,Niagara Purple Eagles,Niagara,Purple Eagles,Niagara,NIA,13,Metro Conference
+322,Lafayette,Lafayette Leopards,Lafayette,Leopards,Lafayette,LAF,22,Patriot League
+324,Coastal Carolina,Coastal Carolina Chanticleers,Coastal,Chanticleers,Coastal,CCU,27,Sun Belt Conference
+325,Cleveland State,Cleveland State Vikings,Cleveland St,Vikings,Cleveland St,CLE,45,Horizon League
+326,Texas State,Texas State Bobcats,Texas St,Bobcats,Texas St,TXST,27,Sun Belt Conference
+328,Utah State,Utah State Aggies,Utah State,Aggies,Utah State,USU,44,Mountain West Conference
+331,Eastern Washington,Eastern Washington Eagles,E Washington,Eagles,E Washington,EWU,5,Big Sky Conference
+333,Alabama,Alabama Crimson Tide,Alabama,Crimson Tide,Alabama,ALA,23,Southeastern Conference
+338,Kennesaw State,Kennesaw State Owls,Kennesaw St,Owls,Kennesaw St,KENN,11,Conference USA
+339,Evansville,Evansville Purple Aces,Evansville,Purple Aces,Evansville,EVAN,18,Missouri Valley Conference
+344,Mississippi State,Mississippi State Bulldogs,Mississippi St,Bulldogs,Mississippi St,MSST,23,Southeastern Conference
+349,Army,Army Black Knights,Army,Black Knights,Army,ARMY,22,Patriot League
+350,UNC Wilmington,UNC Wilmington Seahawks,UNC Wilmington,Seahawks,UNC Wilmington,UNCW,10,Coastal Athletic Association
+356,Illinois,Illinois Fighting Illini,Illinois,Fighting Illini,Illinois,ILL,7,Big Ten Conference
+357,Texas A&M-Corpus Christi,Texas A&M-Corpus Christi Islanders,Texas A&M-CC,Islanders,Texas A&M-CC,AMCC,25,Southland Conference
+36,Colorado State,Colorado State Rams,Colorado St,Rams,Colorado St,CSU,44,Mountain West Conference
+38,Colorado,Colorado Buffaloes,Colorado,Buffaloes,Colorado,COLO,8,Big 12 Conference
+399,UAlbany,UAlbany Great Danes,UAlbany,Great Danes,UAlbany,UALB,1,America East Conference
+41,UConn,UConn Huskies,UConn,Huskies,UConn,CONN,4,Big East Conference
+42,Hartford,Hartford Hawks,Hartford,Hawks,Hartford,HART,,
+43,Yale,Yale Bulldogs,Yale,Bulldogs,Yale,YALE,12,Ivy League
+44,American University,American University Eagles,American,Eagles,American,AMER,22,Patriot League
+45,George Washington,George Washington Revolutionaries,G Washington,Revolutionaries,G Washington,GW,3,Atlantic 10 Conference
+46,Georgetown,Georgetown Hoyas,Georgetown,Hoyas,Georgetown,GTWN,4,Big East Conference
+47,Howard,Howard Bison,Howard,Bison,Howard,HOW,16,Mid-Eastern Athletic Conference
+48,Delaware,Delaware Blue Hens,Delaware,Blue Hens,Delaware,DEL,10,Coastal Athletic Association
+5,UAB,UAB Blazers,UAB,Blazers,UAB,UAB,62,American Conference
+50,Florida A&M,Florida A&M Rattlers,Florida A&M,Rattlers,Florida A&M,FAMU,26,Southwestern Athletic Conference
+52,Florida State,Florida State Seminoles,Florida St,Seminoles,Florida St,FSU,2,Atlantic Coast Conference
+526,Florida Gulf Coast,Florida Gulf Coast Eagles,FGCU,Eagles,FGCU,FGCU,46,Atlantic Sun Conference
+55,Jacksonville State,Jacksonville State Gamecocks,Jax State,Gamecocks,Jax State,JXST,11,Conference USA
+56,Stetson,Stetson Hatters,Stetson,Hatters,Stetson,STET,46,Atlantic Sun Conference
+57,Florida,Florida Gators,Florida,Gators,Florida,FLA,23,Southeastern Conference
+58,South Florida,South Florida Bulls,South Florida,Bulls,South Florida,USF,62,American Conference
+59,Georgia Tech,Georgia Tech Yellow Jackets,Georgia Tech,Yellow Jackets,Georgia Tech,GT,2,Atlantic Coast Conference
+6,South Alabama,South Alabama Jaguars,South Alabama,Jaguars,South Alabama,USA,27,Sun Belt Conference
+61,Georgia,Georgia Bulldogs,Georgia,Bulldogs,Georgia,UGA,23,Southeastern Conference
+62,Hawai'i,Hawai'i Rainbow Warriors,Hawai'i,Rainbow Warriors,Hawai'i,HAW,9,Big West Conference
+66,Iowa State,Iowa State Cyclones,Iowa State,Cyclones,Iowa State,ISU,8,Big 12 Conference
+68,Boise State,Boise State Broncos,Boise St,Broncos,Boise St,BOIS,44,Mountain West Conference
+70,Idaho,Idaho Vandals,Idaho,Vandals,Idaho,IDHO,5,Big Sky Conference
+71,Bradley,Bradley Braves,Bradley,Braves,Bradley,BRAD,18,Missouri Valley Conference
+77,Northwestern,Northwestern Wildcats,Northwestern,Wildcats,Northwestern,NU,7,Big Ten Conference
+79,Southern Illinois,Southern Illinois Salukis,S Illinois,Salukis,S Illinois,SIU,18,Missouri Valley Conference
+8,Arkansas,Arkansas Razorbacks,Arkansas,Razorbacks,Arkansas,ARK,23,Southeastern Conference
+82,UIC,UIC Flames,UIC,Flames,UIC,UIC,18,Missouri Valley Conference
+84,Indiana,Indiana Hoosiers,Indiana,Hoosiers,Indiana,IU,7,Big Ten Conference
+85,IU Indianapolis,IU Indianapolis Jaguars,IU Indy,Jaguars,IU Indy,IUIN,45,Horizon League
+87,Notre Dame,Notre Dame Fighting Irish,Notre Dame,Fighting Irish,Notre Dame,ND,2,Atlantic Coast Conference
+88,Southern Indiana,Southern Indiana Screaming Eagles,So Indiana,Screaming Eagles,So Indiana,USI,20,Ohio Valley Conference
+9,Arizona State,Arizona State Sun Devils,Arizona St,Sun Devils,Arizona St,ASU,8,Big 12 Conference
+91,Bellarmine,Bellarmine Knights,Bellarmine,Knights,Bellarmine,BELL,46,Atlantic Sun Conference
+93,Murray State,Murray State Racers,Murray St,Racers,Murray St,MUR,18,Missouri Valley Conference
+94,Northern Kentucky,Northern Kentucky Norse,N Kentucky,Norse,N Kentucky,NKU,45,Horizon League
+96,Kentucky,Kentucky Wildcats,Kentucky,Wildcats,Kentucky,UK,23,Southeastern Conference
+97,Louisville,Louisville Cardinals,Louisville,Cardinals,Louisville,LOU,2,Atlantic Coast Conference
+98,Western Kentucky,Western Kentucky Hilltoppers,Western KY,Hilltoppers,Western KY,WKU,11,Conference USA
+99,LSU,LSU Tigers,LSU,Tigers,LSU,LSU,23,Southeastern Conference

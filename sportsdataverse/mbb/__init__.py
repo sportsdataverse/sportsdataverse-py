@@ -44,6 +44,7 @@ from sportsdataverse.mbb.mbb_ncaa_schedule import *
 from sportsdataverse.mbb.mbb_ncaa_scoreboard import *
 from sportsdataverse.mbb.mbb_ncaa_shots import *
 from sportsdataverse.mbb.mbb_ncaa_stats_agg import *
+from sportsdataverse.mbb.mbb_ncaa_espn_crosswalk import *
 from sportsdataverse.mbb.mbb_ncaa_team_ids import *
 from sportsdataverse.mbb.mbb_archetypes import *
 from sportsdataverse.mbb.mbb_box_bpm import *

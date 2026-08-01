@@ -1,0 +1,14 @@
+ncaa_team,espn_team_id,note
+Albany (NY),399,ESPN brands it UAlbany; NCAA keeps the (NY) disambiguator
+CSU Bakersfield,2934,NCAA abbreviates Cal State; ESPN spells it out
+Centenary (LA),2113,left D-I after 2010-11; absent from both live team lists
+Dixie St.,3101,renamed Utah Tech in 2022; ESPN carries the new name on the old id
+Houston Baptist,2277,renamed Houston Christian in 2022
+IUPUI,85,split/rebranded IU Indianapolis in 2024; same ESPN id
+LIU Brooklyn,112358,LIU Brooklyn + LIU Post merged into Long Island University in 2019
+Saint Francis,2598,NCAA dropped the (PA) qualifier for 2024-25; ESPN id unchanged
+Savannah St.,2542,reclassified to D-II after 2018-19; absent from both live team lists
+Southern Ind.,88,NCAA abbreviates Indiana
+St. Thomas (MN),2900,ESPN drops the (MN); no other D-I St. Thomas
+Tex. A&M-Commerce,2837,renamed East Texas A&M in 2025; same ESPN id
+Winston-Salem,2736,Winston-Salem State; D-I only through 2009-10

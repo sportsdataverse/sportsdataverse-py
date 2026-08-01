@@ -381,6 +381,7 @@ from sportsdataverse.wbb import mae as mae  # noqa: F401
 from sportsdataverse.wbb import matching_player as matching_player  # noqa: F401
 from sportsdataverse.wbb import misspellings as misspellings  # noqa: F401
 from sportsdataverse.wbb import most_recent_wbb_season as most_recent_wbb_season  # noqa: F401
+from sportsdataverse.wbb import ncaa_espn_team_crosswalk as ncaa_espn_team_crosswalk  # noqa: F401
 from sportsdataverse.wbb import ncaa_wbb_box_scores as ncaa_wbb_box_scores  # noqa: F401
 from sportsdataverse.wbb import ncaa_wbb_date_games as ncaa_wbb_date_games  # noqa: F401
 from sportsdataverse.wbb import ncaa_wbb_game_pbp as ncaa_wbb_game_pbp  # noqa: F401
@@ -871,6 +872,7 @@ __all__ = [
     "matching_player",
     "misspellings",
     "most_recent_wbb_season",
+    "ncaa_espn_team_crosswalk",
     "ncaa_wbb_box_scores",
     "ncaa_wbb_date_games",
     "ncaa_wbb_game_pbp",

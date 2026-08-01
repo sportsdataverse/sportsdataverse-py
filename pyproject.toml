@@ -533,6 +533,7 @@ files = [
     "sportsdataverse/mbb/mbb_ncaa_scoreboard.py",
     "sportsdataverse/mbb/mbb_ncaa_shots.py",
     "sportsdataverse/mbb/mbb_ncaa_stats_agg.py",
+    "sportsdataverse/mbb/mbb_ncaa_espn_crosswalk.py",
     "sportsdataverse/mbb/mbb_ncaa_team_ids.py",
     "sportsdataverse/wbb/wbb_ncaa_box_stats.py",
     "sportsdataverse/wbb/wbb_ncaa_box_tabs.py",
