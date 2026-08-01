@@ -1,0 +1,51 @@
+name: espn_player_core
+description: >-
+  ESPN Core v2 athlete resource archived at
+  <lg>/player_core/json/<athlete_id>.json. Athlete identity and bio; the
+  payload is flat (no season segment) because a core record is per-athlete.
+# Derived from 200 randomly sampled wehoop-wbb-raw captures (2026-08-01).
+# `id` is a numeric STRING here -- the string->Int64 conversion belongs at the
+# build boundary, not in this schema, which describes what ESPN sends.
+additional_properties: true
+required:
+  id: str
+  displayName: str
+optional:
+  $ref: str
+  uid: str
+  guid: str
+  type: str
+  slug: str
+  firstName: str
+  lastName: str
+  fullName: str
+  shortName: str
+  middleName: str
+  alternateIds: dict
+  birthPlace: dict
+  position: dict
+  status: dict
+  linked: bool
+  active: bool
+  # Sparse in real captures: links 98%, team 98%, jersey 87%, statistics 86%,
+  # experience 86%, statisticslog 86%, height/displayHeight 80%,
+  # birthCountry/flag 78%, headshot 24%, hand 12%, and a long tail below 3%.
+  links: list
+  team: dict
+  jersey: str
+  statistics: dict
+  statisticslog: dict
+  experience: dict
+  height: float
+  displayHeight: str
+  weight: float
+  displayWeight: str
+  birthCountry: dict
+  flag: dict
+  headshot: dict
+  hand: dict
+  age: int
+  dateOfBirth: str
+  college: dict
+  proAthlete: dict
+  draft: dict

@@ -1,0 +1,16 @@
+name: espn_officials
+description: >-
+  ESPN Core v2 paginated collection archived at
+  <lg>/officials/json/<game_id>.json. NOT an {"officials": [...]} document --
+  it is the generic Core v2 envelope, so the officials live under `items` and
+  are read by the shared parse_items path.
+# Derived from 200 randomly sampled wehoop-wbb-raw captures (2026-08-01):
+# all five envelope keys present in every file.
+additional_properties: true
+required:
+  items: list
+  count: int
+optional:
+  pageIndex: int
+  pageSize: int
+  pageCount: int

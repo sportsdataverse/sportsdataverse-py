@@ -1,0 +1,15 @@
+name: espn_player_season_stats
+description: >-
+  ESPN Web v3 player season statistics archived at
+  <lg>/player_season_stats/json/<season>/<athlete_id>.json. Carries NO athlete
+  identity -- only the filename holds the athlete id, which is why the
+  player_core family exists alongside it.
+# Derived from 200 randomly sampled wehoop-wbb-raw captures (2026-08-01):
+# all four keys present in every file.
+additional_properties: true
+required:
+  categories: list
+  teams: dict
+optional:
+  filters: list
+  glossary: list
