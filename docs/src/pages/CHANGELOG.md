@@ -3,6 +3,7 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [Unreleased](#unreleased)
+  - [`scrape.ncaa.parse` — the parse stage is now re-runnable (`--season`, `--force`)](#scrapencaaparse--the-parse-stage-is-now-re-runnable---season---force)
   - [New — `sportsdataverse.scrape.ncaa`: shared stats.ncaa.org hoops sweep engine](#new--sportsdataversescrapencaa-shared-statsncaaorg-hoops-sweep-engine)
   - [`sportsdataverse.scrape.stats` — league-parameterized capture layer (Phase 2)](#sportsdataversescrapestats--league-parameterized-capture-layer-phase-2)
   - [Docs — offline full-text search on the documentation site](#docs--offline-full-text-search-on-the-documentation-site)
@@ -222,6 +223,20 @@
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Unreleased
+
+### `scrape.ncaa.parse` — the parse stage is now re-runnable (`--season`, `--force`)
+
+The stage skipped any contest whose JSON already existed, and globbed every
+season. Together that made a reprocess impossible: a parser fix or a later
+identity backfill could never reach already-parsed games. That is not
+hypothetical — the MBB tree carries null `player_id` / `clean_name` /
+`ncaa_team_id` for 2024-2026 because those seasons were parsed before the
+reference backfill taught the pipeline to fill them, and re-running the stage
+was a no-op on exactly those files.
+
+`--season` (repeatable) scopes the sweep; `--force` re-parses existing output.
+Default behavior is unchanged — omit both and the stage still skips existing
+files across every season, so resumability is intact.
 
 ### New — `sportsdataverse.scrape.ncaa`: shared stats.ncaa.org hoops sweep engine
 
