@@ -35,7 +35,7 @@ Facet report /defense/run (By Position leaderboard; add franchiseId for By Team,
 | `draft_season` | numeric |  |
 | `eligible_season` | numeric |  |
 | `forced_fumbles` | numeric |  |
-| `franchise_id` | numeric | ESPN franchise identifier. |
+| `franchise_id` | numeric | ESPN franchise id (parsed from `franchise_ref`). |
 | `grades_coverage_defense` | numeric |  |
 | `grades_defense` | numeric |  |
 | `grades_defense_penalty` | numeric |  |
@@ -56,7 +56,7 @@ Facet report /defense/run (By Position leaderboard; add franchiseId for By Team,
 | `stops` | numeric |  |
 | `tackles` | numeric | Team tackles. |
 | `team` | character | NFL team. Uses official abbreviations as per NFL.com |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `team_name` | character | Team nickname; `team_detail = TRUE` only. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -94,7 +94,7 @@ Facet report /field_goal/summary (By Position leaderboard; add franchiseId for B
 | `pat_percent` | numeric |  |
 | `draft_season` | numeric |  |
 | `forty_made` | numeric |  |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `team_name` | character | Team nickname; `team_detail = TRUE` only. |
 | `fifty_percent` | numeric |  |
 | `total_made` | numeric |  |
 | `jersey_number` | character | Jersey number. Often useful for joins by name/team/jersey. |
@@ -120,7 +120,7 @@ Facet report /field_goal/summary (By Position leaderboard; add franchiseId for B
 | `twenty_percent` | numeric |  |
 | `forty_percent` | numeric |  |
 | `player` | character | Player name |
-| `franchise_id` | numeric | ESPN franchise identifier. |
+| `franchise_id` | numeric | ESPN franchise id (parsed from `franchise_ref`). |
 | `fifty_made` | numeric |  |
 | `thirty_made` | numeric |  |
 | `player_id` | numeric | Player ID (aka GSIS ID) as defined by nflreadr::load_rosters |
@@ -162,7 +162,7 @@ Facet report /defense/coverage (By Position leaderboard; add franchiseId for By 
 | `draft_season` | numeric |  |
 | `missed_tackles` | numeric |  |
 | `catch_rate` | numeric |  |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `team_name` | character | Team nickname; `team_detail = TRUE` only. |
 | `tackles` | numeric | Team tackles. |
 | `coverage_percent` | numeric |  |
 | `jersey_number` | character | Jersey number. Often useful for joins by name/team/jersey. |
@@ -191,7 +191,7 @@ Facet report /defense/coverage (By Position leaderboard; add franchiseId for By 
 | `yards_per_reception` | numeric |  |
 | `grades_defense_penalty` | numeric |  |
 | `player` | character | Player name |
-| `franchise_id` | numeric | ESPN franchise identifier. |
+| `franchise_id` | numeric | ESPN franchise id (parsed from `franchise_ref`). |
 | `yards_after_catch` | numeric | Numeric value for distance in yards perpendicular to the yard line where the receiver made the reception to where the play ended. |
 | `avg_depth_of_target` | numeric |  |
 | `pass_break_ups` | numeric |  |
@@ -244,7 +244,7 @@ Facet report /kickoff/summary (By Position leaderboard; add franchiseId for By T
 | `draft_season` | numeric |  |
 | `eligible_season` | numeric |  |
 | `fair_catches` | numeric |  |
-| `franchise_id` | numeric | ESPN franchise identifier. |
+| `franchise_id` | numeric | ESPN franchise id (parsed from `franchise_ref`). |
 | `grades_kickoff_kicker` | numeric |  |
 | `jersey_number` | character | Jersey number. Often useful for joins by name/team/jersey. |
 | `kicked_yards` | numeric |  |
@@ -258,7 +258,7 @@ Facet report /kickoff/summary (By Position leaderboard; add franchiseId for By T
 | `position` | character | Primary position as reported by NFL.com |
 | `return_yards` | numeric | Yards gained by the return team. Returns may occur on any of: interception, fumble, kickoff, punt, or blocked kicks. |
 | `team` | character | NFL team. Uses official abbreviations as per NFL.com |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `team_name` | character | Team nickname; `team_detail = TRUE` only. |
 | `total_hangtime` | numeric |  |
 | `touchbacks` | numeric |  |
 
@@ -300,7 +300,7 @@ Facet report /offense/blocking (By Position leaderboard; add franchiseId for By 
 | `non_spike_pass_block_percentage` | numeric |  |
 | `draft_season` | numeric |  |
 | `snap_counts_rg` | numeric |  |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `team_name` | character | Team nickname; `team_detail = TRUE` only. |
 | `jersey_number` | character | Jersey number. Often useful for joins by name/team/jersey. |
 | `snap_counts_ce` | numeric |  |
 | `hits_allowed` | numeric |  |
@@ -324,7 +324,7 @@ Facet report /offense/blocking (By Position leaderboard; add franchiseId for By 
 | `non_spike_pass_block` | numeric |  |
 | `snap_counts_lt` | numeric |  |
 | `player` | character | Player name |
-| `franchise_id` | numeric | ESPN franchise identifier. |
+| `franchise_id` | numeric | ESPN franchise id (parsed from `franchise_ref`). |
 | `snap_counts_pass_block` | numeric |  |
 | `pass_block_percent` | numeric |  |
 | `snap_counts_lg` | numeric |  |
@@ -519,7 +519,7 @@ Facet report /passing/allowed_pressure (By Position leaderboard; add franchiseId
 | `draft_season` | numeric |  |
 | `pressures_lt` | numeric |  |
 | `pressures_rg` | numeric |  |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `team_name` | character | Team nickname; `team_detail = TRUE` only. |
 | `lt_percent` | numeric |  |
 | `jersey_number` | character | Jersey number. Often useful for joins by name/team/jersey. |
 | `hits_allowed` | numeric |  |
@@ -546,7 +546,7 @@ Facet report /passing/allowed_pressure (By Position leaderboard; add franchiseId
 | `lg_percent` | numeric |  |
 | `player` | character | Player name |
 | `rt_percent` | numeric |  |
-| `franchise_id` | numeric | ESPN franchise identifier. |
+| `franchise_id` | numeric | ESPN franchise id (parsed from `franchise_ref`). |
 | `other_percent` | numeric |  |
 | `pressures_off` | numeric |  |
 | `rg_percent` | numeric |  |
@@ -588,7 +588,7 @@ Facet report /defense/pass_rush (By Position leaderboard; add franchiseId for By
 | `draft_season` | numeric |  |
 | `true_pass_set_prp` | numeric |  |
 | `true_pass_set_hurries` | numeric |  |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `team_name` | character | Team nickname; `team_detail = TRUE` only. |
 | `prp` | numeric |  |
 | `true_pass_set_sacks` | numeric |  |
 | `pass_rush_win_rate` | numeric |  |
@@ -616,7 +616,7 @@ Facet report /defense/pass_rush (By Position leaderboard; add franchiseId for By
 | `true_pass_set_grades_pass_rush_defense` | numeric |  |
 | `true_pass_set_batted_passes` | numeric |  |
 | `player` | character | Player name |
-| `franchise_id` | numeric | ESPN franchise identifier. |
+| `franchise_id` | numeric | ESPN franchise id (parsed from `franchise_ref`). |
 | `pass_rush_percent` | numeric |  |
 | `true_pass_set_pass_rush_opp` | numeric |  |
 | `true_pass_set_pass_rush_percent` | numeric |  |
@@ -688,7 +688,7 @@ Facet report /passing/concept (By Position leaderboard; add franchiseId for By T
 | `screen_spikes` | numeric |  |
 | `pa_first_downs` | numeric |  |
 | `pa_big_time_throws` | numeric |  |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `team_name` | character | Team nickname; `team_detail = TRUE` only. |
 | `pa_spikes` | numeric |  |
 | `pa_sack_percent` | numeric |  |
 | `screen_dropbacks_percent` | numeric |  |
@@ -800,7 +800,7 @@ Facet report /passing/concept (By Position leaderboard; add franchiseId for By T
 | `player` | character | Player name |
 | `pa_drops` | numeric |  |
 | `pa_btt_rate` | numeric |  |
-| `franchise_id` | numeric | ESPN franchise identifier. |
+| `franchise_id` | numeric | ESPN franchise id (parsed from `franchise_ref`). |
 | `screen_big_time_throws` | numeric |  |
 | `screen_aimed_passes` | numeric |  |
 | `npa_touchdowns` | numeric |  |
@@ -911,7 +911,7 @@ Facet report /defense/coverage_scheme (By Position leaderboard; add franchiseId 
 | `draft_season` | numeric |  |
 | `zone_coverage_snaps_per_target` | numeric |  |
 | `man_yards_per_reception` | numeric |  |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `team_name` | character | Team nickname; `team_detail = TRUE` only. |
 | `jersey_number` | character | Jersey number. Often useful for joins by name/team/jersey. |
 | `man_snap_counts_coverage` | numeric |  |
 | `man_tackles` | numeric |  |
@@ -954,7 +954,7 @@ Facet report /defense/coverage_scheme (By Position leaderboard; add franchiseId 
 | `zone_avg_depth_of_target` | numeric |  |
 | `man_snap_counts_coverage_percent` | numeric |  |
 | `player` | character | Player name |
-| `franchise_id` | numeric | ESPN franchise identifier. |
+| `franchise_id` | numeric | ESPN franchise id (parsed from `franchise_ref`). |
 | `zone_forced_incompletes` | numeric |  |
 | `man_forced_incompletion_rate` | numeric |  |
 | `zone_targets` | numeric |  |
@@ -1155,7 +1155,7 @@ Facet report /passing/detail (By Position leaderboard; add franchiseId for By Te
 | `left_behind_los_btt_rate` | numeric |  |
 | `right_behind_los_btt_rate` | numeric |  |
 | `pa_big_time_throws` | numeric |  |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `team_name` | character | Team nickname; `team_detail = TRUE` only. |
 | `short_touchdowns` | numeric |  |
 | `pa_spikes` | numeric |  |
 | `center_medium_drops` | numeric |  |
@@ -1758,7 +1758,7 @@ Facet report /passing/detail (By Position leaderboard; add franchiseId for By Te
 | `right_medium_drop_rate` | numeric |  |
 | `blitz_passing_snaps` | numeric |  |
 | `center_medium_big_time_throws` | numeric |  |
-| `franchise_id` | numeric | ESPN franchise identifier. |
+| `franchise_id` | numeric | ESPN franchise id (parsed from `franchise_ref`). |
 | `left_short_completion_percent` | numeric |  |
 | `screen_big_time_throws` | numeric |  |
 | `left_short_drop_rate` | numeric |  |
@@ -1989,7 +1989,7 @@ Facet report /offense/run_blocking (By Position leaderboard; add franchiseId for
 | `declined_penalties` | numeric |  |
 | `draft_season` | numeric |  |
 | `eligible_season` | numeric |  |
-| `franchise_id` | numeric | ESPN franchise identifier. |
+| `franchise_id` | numeric | ESPN franchise id (parsed from `franchise_ref`). |
 | `gap_grades_run_block` | numeric |  |
 | `gap_run_block_percent` | numeric |  |
 | `gap_snap_counts_run_block` | numeric |  |
@@ -2006,7 +2006,7 @@ Facet report /offense/run_blocking (By Position leaderboard; add franchiseId for
 | `snap_counts_run_block` | numeric |  |
 | `snap_counts_run_play` | numeric |  |
 | `team` | character | NFL team. Uses official abbreviations as per NFL.com |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `team_name` | character | Team nickname; `team_detail = TRUE` only. |
 | `zone_grades_run_block` | numeric |  |
 | `zone_run_block_percent` | numeric |  |
 | `zone_snap_counts_run_block` | numeric |  |
@@ -2052,7 +2052,7 @@ Facet report /offense/pass_blocking (By Position leaderboard; add franchiseId fo
 | `pbe` | numeric |  |
 | `non_spike_pass_block_percentage` | numeric |  |
 | `draft_season` | numeric |  |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `team_name` | character | Team nickname; `team_detail = TRUE` only. |
 | `jersey_number` | character | Jersey number. Often useful for joins by name/team/jersey. |
 | `hits_allowed` | numeric |  |
 | `true_pass_set_non_spike_pass_block` | numeric |  |
@@ -2075,7 +2075,7 @@ Facet report /offense/pass_blocking (By Position leaderboard; add franchiseId fo
 | `true_pass_set_snap_counts_pass_block` | numeric |  |
 | `player` | character | Player name |
 | `true_pass_set_sacks_allowed` | numeric |  |
-| `franchise_id` | numeric | ESPN franchise identifier. |
+| `franchise_id` | numeric | ESPN franchise id (parsed from `franchise_ref`). |
 | `snap_counts_pass_block` | numeric |  |
 | `pass_block_percent` | numeric |  |
 | `player_id` | numeric | Player ID (aka GSIS ID) as defined by nflreadr::load_rosters |
@@ -2198,7 +2198,7 @@ Facet report /punting/summary (By Position leaderboard; add franchiseId for By T
 | `draft_season` | numeric |  |
 | `percent_returned` | numeric |  |
 | `fair_catches` | numeric |  |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `team_name` | character | Team nickname; `team_detail = TRUE` only. |
 | `jersey_number` | character | Jersey number. Often useful for joins by name/team/jersey. |
 | `player_game_count` | numeric |  |
 | `eligible_season` | numeric |  |
@@ -2220,7 +2220,7 @@ Facet report /punting/summary (By Position leaderboard; add franchiseId for By T
 | `blocks` | numeric | Total blocks. |
 | `average_yards_per_attempt` | numeric |  |
 | `player` | character | Player name |
-| `franchise_id` | numeric | ESPN franchise identifier. |
+| `franchise_id` | numeric | ESPN franchise id (parsed from `franchise_ref`). |
 | `grades_punter` | numeric |  |
 | `return_yards` | numeric | Yards gained by the return team. Returns may occur on any of: interception, fumble, kickoff, punt, or blocked kicks. |
 | `downeds` | numeric |  |
@@ -2344,7 +2344,7 @@ Facet report /passing/depth (By Position leaderboard; add franchiseId for By Tea
 | `center_behind_los_completion_percent` | numeric |  |
 | `left_behind_los_btt_rate` | numeric |  |
 | `right_behind_los_btt_rate` | numeric |  |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `team_name` | character | Team nickname; `team_detail = TRUE` only. |
 | `short_touchdowns` | numeric |  |
 | `center_medium_drops` | numeric |  |
 | `left_behind_los_aimed_passes` | numeric |  |
@@ -2726,7 +2726,7 @@ Facet report /passing/depth (By Position leaderboard; add franchiseId for By Tea
 | `right_medium_yards` | numeric |  |
 | `right_medium_drop_rate` | numeric |  |
 | `center_medium_big_time_throws` | numeric |  |
-| `franchise_id` | numeric | ESPN franchise identifier. |
+| `franchise_id` | numeric | ESPN franchise id (parsed from `franchise_ref`). |
 | `left_short_completion_percent` | numeric |  |
 | `left_short_drop_rate` | numeric |  |
 | `left_behind_los_scrambles` | numeric |  |
@@ -2880,7 +2880,7 @@ Facet report /passing/pressure (By Position leaderboard; add franchiseId for By 
 | `pressure_aimed_passes` | numeric |  |
 | `blitz_sacks` | numeric |  |
 | `no_pressure_interceptions` | numeric |  |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `team_name` | character | Team nickname; `team_detail = TRUE` only. |
 | `pressure_epa` | numeric |  |
 | `blitz_completions` | numeric |  |
 | `blitz_attempts` | numeric |  |
@@ -2998,7 +2998,7 @@ Facet report /passing/pressure (By Position leaderboard; add franchiseId for By 
 | `no_pressure_turnover_worthy_plays` | numeric |  |
 | `pressure_first_downs` | numeric |  |
 | `blitz_passing_snaps` | numeric |  |
-| `franchise_id` | numeric | ESPN franchise identifier. |
+| `franchise_id` | numeric | ESPN franchise id (parsed from `franchise_ref`). |
 | `no_pressure_twp_rate` | numeric |  |
 | `no_blitz_sacks` | numeric |  |
 | `no_blitz_grades_pass_route` | numeric |  |
@@ -3183,7 +3183,7 @@ Facet report /return/summary (By Position leaderboard; add franchiseId for By Te
 | `declined_penalties` | numeric |  |
 | `draft_season` | numeric |  |
 | `eligible_season` | numeric |  |
-| `franchise_id` | numeric | ESPN franchise identifier. |
+| `franchise_id` | numeric | ESPN franchise id (parsed from `franchise_ref`). |
 | `grades_kick_return` | numeric |  |
 | `grades_return` | numeric |  |
 | `jersey_number` | character | Jersey number. Often useful for joins by name/team/jersey. |
@@ -3207,7 +3207,7 @@ Facet report /return/summary (By Position leaderboard; add franchiseId for By Te
 | `punt_yards` | numeric |  |
 | `punt_ypa` | numeric |  |
 | `team` | character | NFL team. Uses official abbreviations as per NFL.com |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `team_name` | character | Team nickname; `team_detail = TRUE` only. |
 | `total_attempts` | numeric |  |
 | `grades_punt_return` | numeric |  |
 
@@ -3246,13 +3246,13 @@ Facet report /rushing/direction (By Position leaderboard; add franchiseId for By
 | `directions` | list |  |
 | `draft_season` | numeric |  |
 | `eligible_season` | numeric |  |
-| `franchise_id` | numeric | ESPN franchise identifier. |
+| `franchise_id` | numeric | ESPN franchise id (parsed from `franchise_ref`). |
 | `jersey_number` | character | Jersey number. Often useful for joins by name/team/jersey. |
 | `player` | character | Player name |
 | `player_id` | numeric | Player ID (aka GSIS ID) as defined by nflreadr::load_rosters |
 | `position` | character | Primary position as reported by NFL.com |
 | `team` | character | NFL team. Uses official abbreviations as per NFL.com |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `team_name` | character | Team nickname; `team_detail = TRUE` only. |
 | `total_attempts` | numeric |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
@@ -3406,7 +3406,7 @@ Facet report /signature/defense/slot_coverage (By Position leaderboard; add fran
 | `coverage_snaps_per_target` | numeric |  |
 | `draft_season` | numeric |  |
 | `eligible_season` | numeric |  |
-| `franchise_id` | numeric | ESPN franchise identifier. |
+| `franchise_id` | numeric | ESPN franchise id (parsed from `franchise_ref`). |
 | `interceptions` | numeric | The number of interceptions thrown. |
 | `jersey_number` | character | Jersey number. Often useful for joins by name/team/jersey. |
 | `player` | character | Player name |
@@ -3417,7 +3417,7 @@ Facet report /signature/defense/slot_coverage (By Position leaderboard; add fran
 | `receptions` | numeric | The number of pass receptions. Lateral receptions officially don't count as reception. |
 | `targets` | numeric | The number of pass plays where the player was the targeted receiver. |
 | `team` | character | NFL team. Uses official abbreviations as per NFL.com |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `team_name` | character | Team nickname; `team_detail = TRUE` only. |
 | `touchdowns` | numeric |  |
 | `yards` | numeric | The number of receiving yards |
 | `yards_after_catch` | numeric | Numeric value for distance in yards perpendicular to the yard line where the receiver made the reception to where the play ended. |
@@ -3456,7 +3456,7 @@ Facet report /signature/pass-blocking/efficiency/line (By Position leaderboard; 
 | col_name | type | description |
 |---|---|---|
 | `attempts` | numeric | The number of pass attempts as defined by the NFL. |
-| `franchise_id` | numeric | ESPN franchise identifier. |
+| `franchise_id` | numeric | ESPN franchise id (parsed from `franchise_ref`). |
 | `hits_allowed` | numeric |  |
 | `hurries_allowed` | numeric |  |
 | `pass_snaps` | numeric |  |
@@ -3465,7 +3465,7 @@ Facet report /signature/pass-blocking/efficiency/line (By Position leaderboard; 
 | `pressures_allowed` | numeric |  |
 | `sacks_allowed` | numeric | Opponent sacks. |
 | `season_id` | numeric | Unique season identifier. |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `team_name` | character | Team nickname; `team_detail = TRUE` only. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -3505,7 +3505,7 @@ Facet report /signature/defense/outside_pass_rush (By Position leaderboard; add 
 | `draft_season` | numeric |  |
 | `pass_snaps` | numeric |  |
 | `lhs_hurries` | numeric |  |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `team_name` | character | Team nickname; `team_detail = TRUE` only. |
 | `prp` | numeric |  |
 | `tackles` | numeric | Team tackles. |
 | `rhs_pressures` | numeric |  |
@@ -3534,7 +3534,7 @@ Facet report /signature/defense/outside_pass_rush (By Position leaderboard; add 
 | `misses` | numeric |  |
 | `player` | character | Player name |
 | `rhs_sacks` | numeric |  |
-| `franchise_id` | numeric | ESPN franchise identifier. |
+| `franchise_id` | numeric | ESPN franchise id (parsed from `franchise_ref`). |
 | `pass_rush_percent` | numeric |  |
 | `rhs_hurries` | numeric |  |
 | `rhs_assists` | numeric |  |
@@ -3589,7 +3589,7 @@ Facet report /receiving/scheme (By Position leaderboard; add franchiseId for By 
 | `zone_positive_epa_percent` | numeric |  |
 | `man_targets_percent` | numeric |  |
 | `man_yards_per_reception` | numeric |  |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `team_name` | character | Team nickname; `team_detail = TRUE` only. |
 | `man_drop_rate` | numeric |  |
 | `zone_grades_pass_route` | numeric |  |
 | `jersey_number` | character | Jersey number. Often useful for joins by name/team/jersey. |
@@ -3638,7 +3638,7 @@ Facet report /receiving/scheme (By Position leaderboard; add franchiseId for By 
 | `zone_yards_after_catch_per_reception` | numeric |  |
 | `zone_avg_depth_of_target` | numeric |  |
 | `player` | character | Player name |
-| `franchise_id` | numeric | ESPN franchise identifier. |
+| `franchise_id` | numeric | ESPN franchise id (parsed from `franchise_ref`). |
 | `zone_contested_targets` | numeric |  |
 | `zone_contested_receptions` | numeric |  |
 | `man_contested_receptions` | numeric |  |
@@ -3700,7 +3700,7 @@ Facet report /signature/passing/time_in_pocket (By Position leaderboard; add fra
 | `less_aimed_passes` | numeric |  |
 | `more_dropbacks_percent` | numeric |  |
 | `less_positive_epa_percent` | numeric |  |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `team_name` | character | Team nickname; `team_detail = TRUE` only. |
 | `avg_ttt_scrambles` | numeric |  |
 | `more_yards` | numeric |  |
 | `more_accuracy_percent` | numeric |  |
@@ -3760,7 +3760,7 @@ Facet report /signature/passing/time_in_pocket (By Position leaderboard; add fra
 | `more_drops` | numeric |  |
 | `player` | character | Player name |
 | `more_touchdowns` | numeric |  |
-| `franchise_id` | numeric | ESPN franchise identifier. |
+| `franchise_id` | numeric | ESPN franchise id (parsed from `franchise_ref`). |
 | `more_drop_rate` | numeric |  |
 | `less_twp_rate` | numeric |  |
 | `more_grades_offense` | numeric |  |
@@ -3840,7 +3840,7 @@ Facet report /receiving/concept (By Position leaderboard; add franchiseId for By
 | `screen_yprr` | numeric |  |
 | `draft_season` | numeric |  |
 | `slot_routes` | numeric |  |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `team_name` | character | Team nickname; `team_detail = TRUE` only. |
 | `screen_grades_hands_drop` | numeric |  |
 | `jersey_number` | character | Jersey number. Often useful for joins by name/team/jersey. |
 | `screen_contested_catch_rate` | numeric |  |
@@ -3892,7 +3892,7 @@ Facet report /receiving/concept (By Position leaderboard; add franchiseId for By
 | `player` | character | Player name |
 | `slot_epa` | numeric |  |
 | `slot_drop_rate` | numeric |  |
-| `franchise_id` | numeric | ESPN franchise identifier. |
+| `franchise_id` | numeric | ESPN franchise id (parsed from `franchise_ref`). |
 | `slot_touchdowns` | numeric |  |
 | `slot_yards_after_catch_per_reception` | numeric |  |
 | `screen_receptions` | numeric |  |
@@ -3944,7 +3944,7 @@ Facet report /special/summary (By Position leaderboard; add franchiseId for By T
 | `declined_penalties` | numeric |  |
 | `draft_season` | numeric |  |
 | `eligible_season` | numeric |  |
-| `franchise_id` | numeric | ESPN franchise identifier. |
+| `franchise_id` | numeric | ESPN franchise id (parsed from `franchise_ref`). |
 | `grades_fgep_kicker` | numeric |  |
 | `grades_kickoff_kicker` | numeric |  |
 | `grades_misc_st` | numeric |  |
@@ -3964,7 +3964,7 @@ Facet report /special/summary (By Position leaderboard; add franchiseId for By T
 | `snap_counts_punt_return` | numeric |  |
 | `tackles` | numeric | Team tackles. |
 | `team` | character | NFL team. Uses official abbreviations as per NFL.com |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `team_name` | character | Team nickname; `team_detail = TRUE` only. |
 | `grades_fgep_defense` | numeric |  |
 | `grades_fgep_offense` | numeric |  |
 | `grades_long_snap` | numeric |  |
@@ -4081,7 +4081,7 @@ Facet report /receiving/depth (By Position leaderboard; add franchiseId for By T
 | `deep_yards_after_catch_per_reception` | numeric |  |
 | `center_deep_contested_receptions` | numeric |  |
 | `center_short_pass_blocks` | numeric |  |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `team_name` | character | Team nickname; `team_detail = TRUE` only. |
 | `deep_pass_block_rate` | numeric |  |
 | `short_touchdowns` | numeric |  |
 | `center_medium_drops` | numeric |  |
@@ -4429,7 +4429,7 @@ Facet report /receiving/depth (By Position leaderboard; add franchiseId for By T
 | `medium_grades_hands_drop` | numeric |  |
 | `right_deep_pass_blocks` | numeric |  |
 | `medium_contested_catch_rate` | numeric |  |
-| `franchise_id` | numeric | ESPN franchise identifier. |
+| `franchise_id` | numeric | ESPN franchise id (parsed from `franchise_ref`). |
 | `center_behind_los_caught_percent` | numeric |  |
 | `right_behind_los_caught_percent` | numeric |  |
 | `short_pass_plays` | numeric |  |
@@ -4773,14 +4773,14 @@ Leagues + seasons + week groups (bootstrap)
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `abbreviation` | character | Short abbreviation. |
+| `abbreviation` | character | Metric abbreviation. |
 | `default_season` | numeric |  |
 | `default_week` | numeric |  |
 | `default_week_group` | character |  |
 | `id` | numeric | ID of the player in the 'name' column. |
 | `name` | character | Name, as reported by MFL but reordered into FirstName LastName instead of Last, First |
 | `seasons` | list | NBA seasons played. |
-| `slug` | character | URL-safe identifier. |
+| `slug` | character | URL slug for the team. |
 | `week_groups` | list |  |
 | `weeks` | list |  |
 
@@ -4815,7 +4815,7 @@ Teams / franchise groups + games for a league-season
 | `heirarchy` | list |  |
 | `id` | numeric | ID of the player in the 'name' column. |
 | `name` | character | Name, as reported by MFL but reordered into FirstName LastName instead of Last, First |
-| `slug` | character | URL-safe identifier. |
+| `slug` | character | URL slug for the team. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -4861,12 +4861,12 @@ Team overview table (By Team landing)
 | `grades_run_block` | numeric |  |
 | `grades_run_defense` | numeric |  |
 | `grades_tackle` | numeric |  |
-| `losses` | numeric | Total losses. |
+| `losses` | numeric | Losses against the spread in the split. |
 | `name` | character | Name, as reported by MFL but reordered into FirstName LastName instead of Last, First |
 | `points_allowed` | numeric | Points for the opponent. |
 | `points_scored` | numeric |  |
 | `ties` | numeric | Number of ties in the series. |
-| `wins` | numeric | Total wins. |
+| `wins` | numeric | Wins against the spread in the split. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

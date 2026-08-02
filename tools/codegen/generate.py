@@ -248,6 +248,30 @@ def _r_col_descs() -> dict:
     return yaml.safe_load(_R_DICT_FILE.read_text(encoding="utf-8")) or {}
 
 
+#: Sport family per R package — lets the fallback prefer SAME-SPORT text over
+#: the cross-sport ``_merged`` union (which put "Inning number" on jersey-number
+#: columns and NFL career text on basketball turnovers).
+_PACKAGE_SPORT = {
+    "hoopR": "basketball",
+    "wehoop": "basketball",
+    "cfbfastR": "football",
+    "nflreadr": "football",
+    "fastRhockey": "hockey",
+    "baseballr": "baseball",
+}
+
+
+@functools.lru_cache(maxsize=None)
+def _sport_merged(sport: str) -> dict:
+    """Union of the sport's package dicts (first package listed wins a tie)."""
+    out: dict = {}
+    for pkg, sp in _PACKAGE_SPORT.items():
+        if sp == sport:
+            for col, desc in (_r_col_descs().get(pkg) or {}).items():
+                out.setdefault(col, desc)
+    return out
+
+
 @functools.lru_cache(maxsize=None)
 def _r_pkg_dict(league: str | None) -> dict:
     """The per-league lookup dict: the league's R package map (cached per league).
@@ -287,10 +311,17 @@ def _r_col_desc(league: str | None, col: str) -> str:
     val = _r_pkg_dict(league).get(col)
     if val:
         return _fix_desc_typos(val)
-    # The cross-package ``_merged`` union CAN put another sport's phrasing on a
-    # column the league dict misses; known collisions are overridden in
-    # manual_column_descriptions.yaml (which wins over this fill) rather than
-    # dropping the fallback — blanket-blanking regressed ~800 described cells.
+    # Prefer SAME-SPORT sibling packages before the cross-sport ``_merged``
+    # union (wehoop text for an nba column beats nflreadr's). ``_merged`` stays
+    # as the last resort — dropping it blanked ~800 described cells and trips
+    # the residual ratchet; remaining wrong-sport fills are overridden in
+    # manual_column_descriptions.yaml as they are found (it wins over this).
+    pkg = _LEAGUE_R_PACKAGE.get(league or "")
+    sport = _PACKAGE_SPORT.get(pkg or "")
+    if sport:
+        val = _sport_merged(sport).get(col)
+        if val:
+            return _fix_desc_typos(val)
     return _fix_desc_typos(_r_col_descs().get("_merged", {}).get(col, "") or "")
 
 

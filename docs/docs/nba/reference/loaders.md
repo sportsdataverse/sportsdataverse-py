@@ -379,7 +379,7 @@ Release: [espn_nba_game_rosters](https://github.com/sportsdataverse/sportsdatave
 | `athlete_first_name` | String | Player first name; `athlete_detail = TRUE` only. |
 | `athlete_last_name` | String | Athlete last name. |
 | `athlete_jersey` | String | Athlete jersey number. |
-| `athlete_position` | String | Player position name; `athlete_detail = TRUE` only. |
+| `athlete_position` | String | Athlete position. |
 | `athlete_headshot` | String | URL of the player's headshot image. |
 | `starter` | Boolean | TRUE if the player was in the starting lineup; FALSE otherwise. |
 | `did_not_play` | Boolean | TRUE if the player did not appear in the game. |
@@ -466,7 +466,7 @@ Release: [espn_nba_standings](https://github.com/sportsdataverse/sportsdataverse
 | `team_alternate_color` | String | Team alternate color (hex without leading '#'). |
 | `team_logo` | String | Team logo image URL. |
 | `stat_name` | String | Stat key. |
-| `stat_display_name` | String | Stat display name (from `displayNames`). |
+| `stat_display_name` | String | Stat display name. |
 | `stat_short_display_name` | String | Short human-readable stat name. |
 | `stat_description` | String | ESPN's prose gloss for the standings statistic on this row; for the clincher stat it is not a fixed label but the team's actual status text, such as Clinched Playoff Berth or Eliminated From Playoff. |
 | `stat_abbreviation` | String | ESPN's short code for the standings statistic, such as PCT, GB or OPP PPG; it is null for the four record-style splits (Home, Road, vs. Conf., vs. Div.), which ship no abbreviation. |
@@ -496,7 +496,7 @@ Release: [espn_nba_player_season_stats](https://github.com/sportsdataverse/sport
 | `category` | String | Category label. |
 | `stat_label` | String | Human-readable label of the statistic (e.g. 'At bats'). |
 | `stat_name` | String | Stat key. |
-| `stat_display_name` | String | Stat display name (from `displayNames`). |
+| `stat_display_name` | String | Stat display name. |
 | `stat_description` | String | ESPN's prose definition of the statistic on this row, for example the ratio of field goals made to field goals attempted; for the paired Made-Attempted stats it is the two definitions joined with a hyphen. |
 | `display_value` | String | Display-formatted value. |
 | `value` | Float64 | Numeric or string value field. |
@@ -524,7 +524,7 @@ Release: [espn_nba_team_season_stats](https://github.com/sportsdataverse/sportsd
 | `category` | String | Category label. |
 | `stat_label` | String | Human-readable label of the statistic (e.g. 'At bats'). |
 | `stat_name` | String | Stat key. |
-| `stat_display_name` | String | Stat display name (from `displayNames`). |
+| `stat_display_name` | String | Stat display name. |
 | `stat_description` | String | ESPN's prose definition of the team statistic on this row, for example the average number of assists a team records per turnover. |
 | `display_value` | String | Display-formatted value. |
 | `value` | Float64 | Numeric or string value field. |
@@ -544,7 +544,7 @@ Release: [espn_nba_draft](https://github.com/sportsdataverse/sportsdataverse-dat
 | `round` | Int32 | Tournament / playoff round. |
 | `round_display_name` | String | ESPN's display label for the draft round a pick belongs to, read from the round object's displayName; the NBA payload supplies no round metadata, so this is null for every released season 2003 through 2025. |
 | `pick` | Int32 | Pick number within the round. |
-| `overall_pick` | Int32 | Overall pick number in the draft. |
+| `overall_pick` | Int32 | Overall pick. |
 | `pick_traded` | String | ESPN's traded flag for the pick, carried through as a string rather than a boolean; every released NBA row reads FALSE, so it does not currently identify traded picks. |
 | `pick_notes` | String | Free-text note ESPN can attach to a pick, read from the pick's notes or note field; the NBA draft payload never populates it, so it is null across all released seasons. |
 | `athlete_id` | Int32 | Unique athlete identifier (ESPN). |
@@ -1420,13 +1420,13 @@ Release: [nba_stats_rosters](https://github.com/sportsdataverse/sportsdataverse-
 | `player` | String | Player name. |
 | `nickname` | String | Team or athlete nickname. |
 | `player_slug` | String | URL-safe player identifier. |
-| `num` | String | Inning number. |
+| `num` | String | Jersey number worn by the player. |
 | `position` | String | Listed roster position (G, F, C, etc.). |
 | `height` | String | Player height (string e.g. '6-2' or inches). |
 | `weight` | String | Player weight in pounds. |
 | `birth_date` | String | Date of birth (YYYY-MM-DD). |
 | `age` | Float64 | Player age (in years). |
-| `exp` | String | Exp. |
+| `exp` | String | Years of NBA playing experience entering the season ('R' = rookie). |
 | `school` | String | Player school / pre-draft team. |
 | `player_id` | Int64 | Unique player identifier. |
 | `how_acquired` | String |  |

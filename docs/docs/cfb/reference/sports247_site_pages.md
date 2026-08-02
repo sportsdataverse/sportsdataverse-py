@@ -28,7 +28,7 @@ Coach identity detail.
 | `first_name` | character | Athlete first name. |
 | `last_name` | character | Athlete last name. |
 | `full_name` | character | Venue full name (e.g. `Tenney Stadium`). |
-| `birthdate` | character | Date of birth. |
+| `birthdate` | character | Birthdate |
 | `hometown` | integer | Prospect hometown. |
 | `alma_mater` | integer |  |
 | `cbs_key` | character |  |
@@ -166,7 +166,7 @@ Single CoachRanking row.
 | `scout_rating` | character |  |
 | `composite_rating` | character | Composite class rating for the coach's haul. |
 | `commits` | character | Number of commits in the position group. |
-| `total` | character | Total. |
+| `total` | character | The sum of each team's score in the game. Equals h_score + v_score. Is NA for games which haven't yet been played. Convenient for evaluating over/under total bets. |
 | `composite_total` | character |  |
 | `five_stars` | character |  |
 | `scout_five_stars` | character |  |
@@ -233,7 +233,7 @@ Coach's recruiting-ranking history (one row per Ranking snapshot).
 | `scout_rating` | character |  |
 | `composite_rating` | character | Composite class rating for the coach's haul. |
 | `commits` | character | Number of commits in the position group. |
-| `total` | character | Total. |
+| `total` | character | The sum of each team's score in the game. Equals h_score + v_score. Is NA for games which haven't yet been played. Convenient for evaluating over/under total bets. |
 | `composite_total` | character |  |
 | `five_stars` | character |  |
 | `scout_five_stars` | character |  |
@@ -507,8 +507,8 @@ Pro-draft picks embed for a league/year/round.
 | `pick` | character | Pick number within the round. |
 | `overall_pick` | character | Overall selection number in the draft. |
 | `player` | integer | Player name. |
-| `player_first_name` | character | Participant first name. |
-| `player_last_name` | character | Participant last name. |
+| `player_first_name` | character | Player's first name |
+| `player_last_name` | character | Player's last name |
 | `college_team` | integer | College team name. |
 | `college_team_name` | character |  |
 | `position_abbreviation` | character | Player's position at draft. |
@@ -636,7 +636,7 @@ Player detail (identity + primary-sport rating/ranks).
 | `weight` | numeric | Listed weight (lbs). |
 | `bio` | character |  |
 | `scout_evaluation` | character |  |
-| `birthdate` | character | Date of birth. |
+| `birthdate` | character | Birthdate |
 | `modified_user` | character |  |
 | `modified_date` | character |  |
 | `cbs_key` | integer | Cross-reference key into the CBS Sports id space. |
@@ -979,7 +979,7 @@ Player name search.
 | `weight` | numeric | Listed weight (lbs). |
 | `bio` | character |  |
 | `scout_evaluation` | character |  |
-| `birthdate` | character | Date of birth. |
+| `birthdate` | character | Birthdate |
 | `modified_user` | character |  |
 | `modified_date` | character |  |
 | `cbs_key` | integer | Cross-reference key into the CBS Sports id space. |
@@ -1763,8 +1763,8 @@ Recruit class rankings for a season (rich per-recruit rows with inlined Player).
 | `recruit_interest_count` | integer | Number of tracked school interests. |
 | `recruit_interests_url` | character | Site URL to the recruit's interest timeline. |
 | `player_key` | integer | Primary key of this entity (the id used in its `.json` route). |
-| `player_first_name` | character | Participant first name. |
-| `player_last_name` | character | Participant last name. |
+| `player_first_name` | character | Player's first name |
+| `player_last_name` | character | Player's last name |
 | `player_full_name` | character | Player full name. |
 | `player_height` | character | Participant height (e.g. "6' 5\""). |
 | `player_weight` | numeric | Participant weight in pounds. |

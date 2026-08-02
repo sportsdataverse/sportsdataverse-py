@@ -439,7 +439,7 @@ Release: [espn_mens_college_basketball_standings](https://github.com/sportsdatav
 | `team_alternate_color` | String | Team alternate color (hex without leading '#'). |
 | `team_logo` | String | Team logo image URL. |
 | `stat_name` | String | Stat key. |
-| `stat_display_name` | String | Stat display name (from `displayNames`). |
+| `stat_display_name` | String | Stat display name. |
 | `stat_short_display_name` | String | Short human-readable stat name. |
 | `stat_description` | String | ESPN's longer-form label for the standings statistic, which can differ from stat_display_name (streak is described as Current Streak and playoffSeed as Playoff Seed). |
 | `stat_abbreviation` | String | Short code ESPN prints for the standings statistic in a table header, such as W, L, PCT, GB or STRK; it diverges from stat_short_display_name for playoff seed and the home and conference record rows. |
@@ -469,7 +469,7 @@ Release: [espn_mens_college_basketball_player_season_stats](https://github.com/s
 | `category` | String | Category label. |
 | `stat_label` | String | Human-readable label of the statistic (e.g. 'At bats'). |
 | `stat_name` | String | Stat key. |
-| `stat_display_name` | String | Stat display name (from `displayNames`). |
+| `stat_display_name` | String | Stat display name. |
 | `stat_description` | String | ESPN's prose glossary definition of the statistic named in stat_name, for example defining assists as a pass to a teammate that leads directly to a field goal. |
 | `display_value` | String | Display-formatted value. |
 | `value` | Float64 | Numeric or string value field. |
@@ -567,7 +567,7 @@ Release: [espn_mens_college_basketball_game_rosters](https://github.com/sportsda
 | `athlete_first_name` | String | Player first name; `athlete_detail = TRUE` only. |
 | `athlete_last_name` | String | Athlete last name. |
 | `athlete_jersey` | String | Athlete jersey number. |
-| `athlete_position` | String | Player position name; `athlete_detail = TRUE` only. |
+| `athlete_position` | String | Athlete position. |
 | `athlete_headshot` | String | URL of the player's ESPN headshot image, whose filename is the athlete_id (verified equal for all 190,365 non-null rows in 2025); null when ESPN publishes no photo for that player. |
 | `starter` | Boolean | TRUE if the player was in the starting lineup; FALSE otherwise. |
 | `did_not_play` | Boolean | TRUE if the player did not appear in the game. |
@@ -598,7 +598,7 @@ Release: [espn_mens_college_basketball_team_season_stats](https://github.com/spo
 | `category` | String | Category label. |
 | `stat_label` | String | Human-readable label of the statistic (e.g. 'At bats'). |
 | `stat_name` | String | Stat key. |
-| `stat_display_name` | String | Stat display name (from `displayNames`). |
+| `stat_display_name` | String | Stat display name. |
 | `stat_description` | String | ESPN's prose glossary definition of the statistic named in stat_name, for example defining field goal percentage as the ratio of field goals made to field goals attempted. |
 | `display_value` | String | Display-formatted value. |
 | `value` | Float64 | Numeric or string value field. |

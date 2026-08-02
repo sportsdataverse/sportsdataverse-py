@@ -202,11 +202,11 @@ Release: [espn_wnba_schedules](https://github.com/sportsdataverse/sportsdatavers
 | `uid` | String | ESPN UID string. |
 | `date` | String | Date in YYYY-MM-DD format. |
 | `attendance` | Float64 | Reported attendance. |
-| `time_valid` | Boolean | Whether the start time is confirmed. |
+| `time_valid` | Boolean | Time valid. |
 | `neutral_site` | Boolean | Neutral site. |
 | `conference_competition` | Boolean | Conference competition. |
 | `play_by_play_available` | Boolean | Whether play-by-play data is available. |
-| `recent` | Boolean | Whether the game is recent. |
+| `recent` | Boolean | Recent. |
 | `start_date` | String | Start date (YYYY-MM-DD). |
 | `broadcast` | String | Broadcast information string. |
 | `highlights` | String | Game highlight urls. |
@@ -220,14 +220,14 @@ Release: [espn_wnba_schedules](https://github.com/sportsdataverse/sportsdatavers
 | `venue_full_name` | String | Venue full name. |
 | `venue_address_city` | String | Venue address city. |
 | `venue_address_state` | String | Venue address state / region. |
-| `venue_indoor` | Boolean | Whether the home venue is indoors. |
-| `status_clock` | Float64 | Game clock in seconds. |
+| `venue_indoor` | Boolean | TRUE if the venue is indoors. |
+| `status_clock` | Float64 | Status clock. |
 | `status_display_clock` | String | Status display clock. |
-| `status_period` | Float64 | Current period. |
+| `status_period` | Float64 | Status period. |
 | `status_type_id` | Int32 | Unique identifier for status type. |
 | `status_type_name` | String | Status type name. |
-| `status_type_state` | String | Status state (pre/in/post). |
-| `status_type_completed` | Boolean | Whether the game is complete. |
+| `status_type_state` | String | Status type state. |
+| `status_type_completed` | Boolean | Status type completed. |
 | `status_type_description` | String | Status type description. |
 | `status_type_detail` | String | Status type detail. |
 | `status_type_short_detail` | String | Status type short detail. |
@@ -235,33 +235,33 @@ Release: [espn_wnba_schedules](https://github.com/sportsdataverse/sportsdatavers
 | `home_id` | Int32 | Unique identifier for home. |
 | `home_uid` | String | Home team's uid. |
 | `home_location` | String | Home team's location. |
-| `home_name` | String | Home team display name. |
+| `home_name` | String | Home name. |
 | `home_abbreviation` | String | Home team's abbreviation. |
-| `home_display_name` | String | Home team display name. |
+| `home_display_name` | String | Home display name. |
 | `home_short_display_name` | String | Home short display name. |
-| `home_color` | String | Home team primary color hex. |
+| `home_color` | String | Color code (hex) for home. |
 | `home_alternate_color` | String | Color code (hex) for home alternate. |
 | `home_is_active` | Boolean | Home team's is active. |
 | `home_venue_id` | Int32 | Unique identifier for home venue. |
 | `home_logo` | String | Home team logo URL. |
 | `home_score` | Int32 | Home team score at the time of the play. |
-| `home_winner` | Boolean | Whether the home team won. |
+| `home_winner` | Boolean | Home team's winner. |
 | `home_linescores` | String |  |
 | `home_records` | String |  |
 | `away_id` | Int32 | Unique identifier for away. |
 | `away_uid` | String | Away team's uid. |
 | `away_location` | String | Away team's location. |
-| `away_name` | String | Away team display name. |
+| `away_name` | String | Away name. |
 | `away_abbreviation` | String | Away team's abbreviation. |
-| `away_display_name` | String | Away team display name. |
+| `away_display_name` | String | Away display name. |
 | `away_short_display_name` | String | Away short display name. |
-| `away_color` | String | Away team primary color hex. |
+| `away_color` | String | Color code (hex) for away. |
 | `away_alternate_color` | String | Color code (hex) for away alternate. |
 | `away_is_active` | Boolean | Away team's is active. |
 | `away_venue_id` | Int32 | Unique identifier for away venue. |
 | `away_logo` | String | Away team logo URL. |
 | `away_score` | Int32 | Away team score at the time of the play. |
-| `away_winner` | Boolean | Whether the away team won. |
+| `away_winner` | Boolean | Away team's winner. |
 | `away_linescores` | String |  |
 | `away_records` | String |  |
 | `game_id` | Int32 | Unique game identifier. |
@@ -273,8 +273,8 @@ Release: [espn_wnba_schedules](https://github.com/sportsdataverse/sportsdatavers
 | `game_date_time` | Datetime(time_unit='us', time_zone='America/New_York') | Game start date/time (ISO 8601). |
 | `game_date` | Date | Game date (YYYY-MM-DD). |
 | `PBP` | Boolean | Whether play-by-play data is available. |
-| `team_box` | Boolean | Whether team box score data is available. |
-| `player_box` | Boolean | Whether player box score data is available. |
+| `team_box` | Boolean | Team box. |
+| `player_box` | Boolean | Player box. |
 
 ```python
 load_wnba_schedule(seasons=2024)
@@ -1039,13 +1039,13 @@ Release: [wnba_stats_rosters](https://github.com/sportsdataverse/sportsdataverse
 | `player` | String | Player name. |
 | `nickname` | String | Team or athlete nickname. |
 | `player_slug` | String | URL-safe player identifier. |
-| `num` | String | Inning number. |
+| `num` | String | Jersey number worn by the player. |
 | `position` | String | Listed roster position (G, F, C, etc.). |
 | `height` | String | Player height (string e.g. '6-2' or inches). |
 | `weight` | String | Player weight in pounds. |
 | `birth_date` | String | Date of birth (YYYY-MM-DD). |
 | `age` | Float64 | Player age (in years). |
-| `exp` | String | Years of MLB service experience. |
+| `exp` | String | Years of WNBA playing experience entering the season ('R' = rookie). |
 | `school` | String | Player's school / college (when distinct from 'college'). |
 | `player_id` | Int64 | Unique player identifier. |
 | `how_acquired` | String | How the team acquired the player (draft, trade, free agency). |

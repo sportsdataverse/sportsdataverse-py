@@ -67,7 +67,7 @@ GET /rdb/v1/coaches/{personKey}/profile
 | col_name | type | description |
 |---|---|---|
 | `salary` | numeric | Total cap-counting salary for the season ($). |
-| `age` | integer | Player age (in years). |
+| `age` | integer | Age as of last pipeline build, rounded to one decimal. Pipeline is built on a weekly basis. |
 | `high_school_name` | character | Recruit high-school name. |
 | `home_town_name` | character |  |
 | `description` | character | ESPN's description of the stat. |
@@ -392,7 +392,7 @@ GET /rdb/v1/draft-organization-rank
 | `five_stars` | integer |  |
 | `four_stars` | integer |  |
 | `three_stars` | integer | Whether three stars data is available. |
-| `total` | integer | Total. |
+| `total` | integer | The sum of each team's score in the game. Equals h_score + v_score. Is NA for games which haven't yet been played. Convenient for evaluating over/under total bets. |
 | `percent_drafted` | numeric |  |
 | `draft_rate` | numeric |  |
 
@@ -432,7 +432,7 @@ GET /rdb/v1/draft-pick-organization-rank
 | `second_round` | integer |  |
 | `third_round` | integer |  |
 | `fourth_through_seventh_round` | integer |  |
-| `total` | integer | Total. |
+| `total` | integer | The sum of each team's score in the game. Equals h_score + v_score. Is NA for games which haven't yet been played. Convenient for evaluating over/under total bets. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -484,7 +484,7 @@ GET /rdb/v1/drafts
 | `overall_pick` | integer | Overall pick number in the draft. |
 | `person` | character |  |
 | `position` | character | Athlete position. |
-| `age` | numeric | Player age (in years). |
+| `age` | numeric | Age as of last pipeline build, rounded to one decimal. Pipeline is built on a weekly basis. |
 | `rating` | character | Overall SP+ rating (Bill Connelly methodology, in points per game). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
@@ -524,7 +524,7 @@ GET /rdb/v1/drafts-by-stars
 | `four_stars` | integer |  |
 | `three_stars` | integer | Whether three stars data is available. |
 | `zero_stars` | integer |  |
-| `total` | integer | Total. |
+| `total` | integer | The sum of each team's score in the game. Equals h_score + v_score. Is NA for games which haven't yet been played. Convenient for evaluating over/under total bets. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -610,7 +610,7 @@ GET /rdb/v1/drafts/{orgKey}/players
 | `overall_pick` | integer | Overall pick number in the draft. |
 | `person` | character |  |
 | `position` | character | Athlete position. |
-| `age` | numeric | Player age (in years). |
+| `age` | numeric | Age as of last pipeline build, rounded to one decimal. Pipeline is built on a weekly basis. |
 | `rating` | character | Overall SP+ rating (Bill Connelly methodology, in points per game). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
@@ -1042,7 +1042,7 @@ GET /rdb/v1/organizations/{organizationKey}/draft-count-by-stars
 | `four_stars` | integer |  |
 | `three_stars` | integer | Whether three stars data is available. |
 | `zero_stars` | integer |  |
-| `total` | integer | Total. |
+| `total` | integer | The sum of each team's score in the game. Equals h_score + v_score. Is NA for games which haven't yet been played. Convenient for evaluating over/under total bets. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -1080,7 +1080,7 @@ GET /rdb/v1/organizations/{organizationKey}/draft-count-by-year
 | `four_stars` | integer |  |
 | `three_stars` | integer | Whether three stars data is available. |
 | `zero_stars` | integer |  |
-| `total` | integer | Total. |
+| `total` | integer | The sum of each team's score in the game. Equals h_score + v_score. Is NA for games which haven't yet been played. Convenient for evaluating over/under total bets. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -1164,7 +1164,7 @@ GET /rdb/v1/organizations/{organizationKey}/drafted-players
 | `overall_pick` | integer | Overall pick number in the draft. |
 | `person` | character |  |
 | `position` | character | Athlete position. |
-| `age` | numeric | Player age (in years). |
+| `age` | numeric | Age as of last pipeline build, rounded to one decimal. Pipeline is built on a weekly basis. |
 | `rating` | character | Overall SP+ rating (Bill Connelly methodology, in points per game). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
@@ -2021,7 +2021,7 @@ GET /rdb/v1/player/{playerKey}/organizations/{orgKey}
 | `exp_min` | integer |  |
 | `exp_max` | integer |  |
 | `year` | character | Four-digit season year (e.g. 2019). |
-| `age` | integer | Player age (in years). |
+| `age` | integer | Age as of last pipeline build, rounded to one decimal. Pipeline is built on a weekly basis. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -2120,7 +2120,7 @@ GET /rdb/v1/player/{personKey}/profile
 | `weight` | integer | Listed weight (lbs). |
 | `class_year` | integer |  |
 | `degree` | character |  |
-| `age` | integer | Player age (in years). |
+| `age` | integer | Age as of last pipeline build, rounded to one decimal. Pipeline is built on a weekly basis. |
 | `default_sport` | character |  |
 | `sports` | character |  |
 | `description` | character | ESPN's description of the stat. |
@@ -2140,7 +2140,7 @@ GET /rdb/v1/player/{personKey}/profile
 | `visibility` | character |  |
 | `tier` | character |  |
 | `review_status` | character |  |
-| `jersey_number` | character | Jersey number. |
+| `jersey_number` | character | Jersey number. Often useful for joins by name/team/jersey. |
 | `badge` | character |  |
 | `ncaa_id` | character |  |
 | `managed_by_user` | logical |  |
@@ -2241,7 +2241,7 @@ GET /rdb/v1/player/verified
 | `weight` | integer | Listed weight (lbs). |
 | `class_year` | integer |  |
 | `degree` | character |  |
-| `age` | integer | Player age (in years). |
+| `age` | integer | Age as of last pipeline build, rounded to one decimal. Pipeline is built on a weekly basis. |
 | `default_sport` | character |  |
 | `sports` | character |  |
 | `description` | character | ESPN's description of the stat. |
@@ -2261,7 +2261,7 @@ GET /rdb/v1/player/verified
 | `visibility` | character |  |
 | `tier` | character |  |
 | `review_status` | character |  |
-| `jersey_number` | character | Jersey number. |
+| `jersey_number` | character | Jersey number. Often useful for joins by name/team/jersey. |
 | `badge` | character |  |
 | `ncaa_id` | character |  |
 | `managed_by_user` | logical |  |

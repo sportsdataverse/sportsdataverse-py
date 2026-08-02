@@ -6436,7 +6436,7 @@ GET /stats/shotchartdetail
 | `seconds_remaining` | character | Seconds remaining in the period. |
 | `event_type` | character | Event / play type code (V2 PBP). |
 | `action_type` | character | Action type label (e.g. 'Made Shot', 'Substitution'). |
-| `shot_type` | character | Type of shot taken (e.g. wrist, snap, backhand). |
+| `shot_type` | character | Shot type label (e.g. 'Jump Shot', 'Layup'). |
 | `shot_zone_basic` | character | Shot zone (e.g. 'Restricted Area', 'Mid-Range', 'Above the Break 3'). |
 | `shot_zone_area` | character | Shot zone area ('Left Side', 'Right Side', 'Center'). |
 | `shot_zone_range` | character | Shot zone range ('Less Than 8 ft.', '8-16 ft.', '16-24 ft.', etc.). |
@@ -6545,7 +6545,7 @@ GET /stats/shotchartlineupdetail
 | `seconds_remaining` | character | Seconds remaining in the period. |
 | `event_type` | character | Event / play type code (V2 PBP). |
 | `action_type` | character | Action type label (e.g. 'Made Shot', 'Substitution'). |
-| `shot_type` | character | Type of shot taken (e.g. wrist, snap, backhand). |
+| `shot_type` | character | Shot type label (e.g. 'Jump Shot', 'Layup'). |
 | `shot_zone_basic` | character | Shot zone (e.g. 'Restricted Area', 'Mid-Range', 'Above the Break 3'). |
 | `shot_zone_area` | character | Shot zone area ('Left Side', 'Right Side', 'Center'). |
 | `shot_zone_range` | character | Shot zone range ('Less Than 8 ft.', '8-16 ft.', '16-24 ft.', etc.). |

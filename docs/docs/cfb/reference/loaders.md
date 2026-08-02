@@ -1041,12 +1041,12 @@ Release: [espn_cfb_game_rosters](https://github.com/sportsdataverse/sportsdatave
 | `game_id` | Int64 | ESPN game identifier. |
 | `season` | Int64 | Season (4-digit year). |
 | `week` | Int64 | Game week of the season. |
-| `age` | Float64 | Player age (in years). |
+| `age` | Float64 | Age as of last pipeline build, rounded to one decimal. Pipeline is built on a weekly basis. |
 | `date_of_birth` | String | Player date of birth (if published). |
 | `citizenship` | String | Citizenship. |
 | `draft_display_text` | String | Draft display text. |
-| `draft_round` | Float64 | Round of the draft selection. |
-| `draft_year` | Float64 | Draft year (4-digit). |
+| `draft_round` | Float64 | Round that player was drafted in |
+| `draft_year` | Float64 | Year that player was drafted |
 | `draft_selection` | Float64 | Draft selection. |
 | `draft_team_href` | String | API link to the team that drafted the player. Sparse: absent entirely from the 2023 and 2024 assets and populated on only a small share of 2025 rows. |
 
@@ -1546,7 +1546,7 @@ Release: [espn_cfb_adv_specialists](https://github.com/sportsdataverse/sportsdat
 |---|---|---|
 | `pos_team_id` | Int64 | ESPN team id of the team on offense. Present for every season 2004+. |
 | `pos_team` | String | Team name in possession at the start of the play (offense, kickoff-aware). |
-| `player_name` | String | Player name. |
+| `player_name` | String | Full name of player |
 | `field_goals` | Int64 | Number of field-goal attempts. |
 | `field_goals_yards` | Int64 | Sum of the field-goal attempt distances parsed out of the play text; it stays at zero when no distance could be parsed from the narrative. |
 | `punts` | Int64 | Punts attempted. |
