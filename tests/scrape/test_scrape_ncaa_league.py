@@ -110,10 +110,34 @@ def test_parse_stage_can_target_a_season_and_reprocess() -> None:
 
     with mock.patch.object(argparse.ArgumentParser, "parse_args", fake_parse_args):
         with pytest.raises(SystemExit):
-            parse._main("mbb")
+            parse._main("mbb", "/tmp/root-not-used-by-this-test")
 
     opts = captured["opts"]
     assert "season" in opts, "parse stage cannot target a season"
     assert opts["season"].__class__.__name__ == "_AppendAction", "--season must be repeatable"
     assert "force" in opts, "parse stage cannot reprocess existing output"
     assert opts["force"].const is True, "--force must be a flag"
+
+
+def test_no_module_infers_a_repo_root_from_its_own_location() -> None:
+    """The engine lives in sdv-py; a -raw repo's root is NOT derivable from it.
+
+    The lifted modules originally defaulted `--root` to
+    ``Path(__file__).resolve().parents[1]`` -- correct when they lived in
+    ``<repo>/python/``, and silently wrong once they moved here: every stage
+    CLI pointed at ``sportsdataverse/scrape/`` and reported success having
+    done nothing (`bundles=0`, `EXIT=0`). The caller supplies the root.
+    """
+    offenders = []
+    for path in sorted(ENGINE_DIR.glob("*.py")):
+        for i, line in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
+            if "parents[1]" in line and not line.lstrip().startswith(("#", '"')):
+                offenders.append(f"{path.name}:{i}: {line.strip()[:80]}")
+    assert not offenders, "root must come from the caller:\n" + "\n".join(offenders)
+
+
+def test_cli_entry_points_require_a_root() -> None:
+    for mod in (capture, discover, parse, rosters, datasets, espn_game_xwalk):
+        param = inspect.signature(mod._main).parameters.get("default_root")
+        assert param is not None, f"{mod.__name__}._main takes no default_root"
+        assert param.default is inspect.Parameter.empty, f"{mod.__name__}._main defaults its root"

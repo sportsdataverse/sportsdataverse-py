@@ -50,7 +50,7 @@ def _season_str(season: int) -> str:
     return f"{season - 1}-{str(season)[-2:]}"
 
 
-def _default_fetch_fn(shard_i: int = 0, shard_n: int = 1) -> FetchFn:
+def _default_fetch_fn(root: "Optional[Union[str, Path]]", shard_i: int = 0, shard_n: int = 1) -> FetchFn:
     """Live fetch: one shared browser-transport session, ``teams/{id}``.
 
     ``NCAA_VENDOR`` (e.g. ``decodo_patchright``) routes discovery through a
@@ -64,7 +64,13 @@ def _default_fetch_fn(shard_i: int = 0, shard_n: int = 1) -> FetchFn:
     if vendor:
         from .capture import _vendor_fetcher
 
-        repo_root = Path(__file__).resolve().parents[1]
+        if root is None:
+            raise ValueError(
+                "root is required when NCAA_VENDOR is set: the vendor transport writes "
+                "session state under the -raw repo, and the engine cannot infer that "
+                "repo's location. Pass root=... (the shim's REPO_ROOT)."
+            )
+        repo_root = Path(root)
         fetcher = _vendor_fetcher(vendor, repo_root, shard_i=shard_i, shard_n=shard_n)
         return lambda team_id: fetcher.fetch_html(f"teams/{team_id}")
     from sportsdataverse.mbb.mbb_ncaa_fetch import NcaaFetcher
@@ -201,7 +207,7 @@ def discover_season(
         # schedule_master -- which is why shard runs pass write_master=False.
         ids = ids[shard_i::shard_n]
 
-    fn = fetch_fn if fetch_fn is not None else _default_fetch_fn(shard_i=shard_i, shard_n=shard_n)
+    fn = fetch_fn if fetch_fn is not None else _default_fetch_fn(root, shard_i=shard_i, shard_n=shard_n)
 
     # Per-team tolerance + a consecutive-failure ban detector. bm-verify
     # clearing is flaky per navigation (~5% per page on the canary-validated
@@ -326,7 +332,7 @@ def _write_master(result: pl.DataFrame, root: Union[str, Path], league: str) -> 
     return path
 
 
-def _main(default_league: str) -> None:
+def _main(default_league: str, default_root: str) -> None:
     import argparse
 
     parser = argparse.ArgumentParser(description="Discover a season's contest_ids and write schedule_master.parquet.")
@@ -338,7 +344,7 @@ def _main(default_league: str) -> None:
     )
     parser.add_argument(
         "--root",
-        default=str(Path(__file__).resolve().parents[1]),
+        default=default_root,
         help="Root of the raw data tree (default: repo root).",
     )
     parser.add_argument("--league", default=default_league, help="League slug: 'mbb' or 'wbb' (default: mbb).")

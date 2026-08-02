@@ -3,6 +3,7 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [Unreleased](#unreleased)
+  - [Fix — `scrape.ncaa` CLIs pointed at the wrong repo root (silent no-op)](#fix--scrapencaa-clis-pointed-at-the-wrong-repo-root-silent-no-op)
   - [`scrape.ncaa.parse` — the parse stage is now re-runnable (`--season`, `--force`)](#scrapencaaparse--the-parse-stage-is-now-re-runnable---season---force)
   - [New — `sportsdataverse.scrape.ncaa`: shared stats.ncaa.org hoops sweep engine](#new--sportsdataversescrapencaa-shared-statsncaaorg-hoops-sweep-engine)
   - [`sportsdataverse.scrape.stats` — league-parameterized capture layer (Phase 2)](#sportsdataversescrapestats--league-parameterized-capture-layer-phase-2)
@@ -223,6 +224,22 @@
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Unreleased
+
+### Fix — `scrape.ncaa` CLIs pointed at the wrong repo root (silent no-op)
+
+The lifted modules defaulted `--root` to `Path(__file__).resolve().parents[1]`.
+That meant "the -raw repo root" while they lived in `<repo>/python/`, and
+silently meant `sportsdataverse/scrape/` once they moved into sdv-py — so
+every stage CLI in both NCAA repos scanned an empty tree and **reported
+success having done nothing** (`bundles=0`, `EXIT=0`). No launcher passes
+`--root`, so all of them were affected.
+
+The engine cannot infer a caller's repo root, so it no longer tries: `_main`
+takes `default_root` from the shim (each repo's own `REPO_ROOT`), and the
+library-level fallbacks raise a message naming the fix instead of inventing a
+path. The parse stage now also exits non-zero when a run matches no bundles —
+the silent-success that let this hide in the first place.
+
 
 ### `scrape.ncaa.parse` — the parse stage is now re-runnable (`--season`, `--force`)
 

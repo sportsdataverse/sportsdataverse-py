@@ -329,7 +329,7 @@ def summarize(frame: pl.DataFrame) -> Dict[str, int]:
     return counts
 
 
-def _main(default_league: str) -> None:
+def _main(default_league: str, default_root: str) -> None:
     import argparse
 
     parser = argparse.ArgumentParser(
@@ -337,7 +337,7 @@ def _main(default_league: str) -> None:
     )
     parser.add_argument(
         "--root",
-        default=str(Path(__file__).resolve().parents[1]),
+        default=default_root,
         help="Root of the raw data tree (default: repo root).",
     )
     parser.add_argument("--league", default=default_league, help=f"League slug (default: {default_league}).")
