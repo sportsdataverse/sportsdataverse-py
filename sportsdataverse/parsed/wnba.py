@@ -209,16 +209,21 @@ from sportsdataverse.wnba import wnba_aging_curve as wnba_aging_curve  # noqa: F
 from sportsdataverse.wnba import wnba_availability as wnba_availability  # noqa: F401
 from sportsdataverse.wnba import wnba_career_trajectory as wnba_career_trajectory  # noqa: F401
 from sportsdataverse.wnba import wnba_draft_model as wnba_draft_model  # noqa: F401
+from sportsdataverse.wnba import wnba_enhanced_pbp as wnba_enhanced_pbp  # noqa: F401
 from sportsdataverse.wnba import wnba_expected_turnovers as wnba_expected_turnovers  # noqa: F401
 from sportsdataverse.wnba import wnba_foul_drawing as wnba_foul_drawing  # noqa: F401
 from sportsdataverse.wnba import wnba_in_game_win_prob as wnba_in_game_win_prob  # noqa: F401
 from sportsdataverse.wnba import wnba_matchup_drapm as wnba_matchup_drapm  # noqa: F401
+from sportsdataverse.wnba import wnba_on_court as wnba_on_court  # noqa: F401
 from sportsdataverse.wnba import wnba_pbp_disk as wnba_pbp_disk  # noqa: F401
+from sportsdataverse.wnba import wnba_play_context as wnba_play_context  # noqa: F401
 from sportsdataverse.wnba import wnba_player_props as wnba_player_props  # noqa: F401
 from sportsdataverse.wnba import wnba_playtype_ratings as wnba_playtype_ratings  # noqa: F401
+from sportsdataverse.wnba import wnba_possessions as wnba_possessions  # noqa: F401
 from sportsdataverse.wnba import wnba_predict_games as wnba_predict_games  # noqa: F401
 from sportsdataverse.wnba import wnba_predict_margin as wnba_predict_margin  # noqa: F401
 from sportsdataverse.wnba import wnba_predict_total as wnba_predict_total  # noqa: F401
+from sportsdataverse.wnba import wnba_rapm_from_games as wnba_rapm_from_games  # noqa: F401
 from sportsdataverse.wnba import wnba_rookie_projection as wnba_rookie_projection  # noqa: F401
 from sportsdataverse.wnba import wnba_shot_value as wnba_shot_value  # noqa: F401
 from sportsdataverse.wnba import wnba_team_clutch as wnba_team_clutch  # noqa: F401
@@ -419,16 +424,21 @@ __all__ = [
     "wnba_availability",
     "wnba_career_trajectory",
     "wnba_draft_model",
+    "wnba_enhanced_pbp",
     "wnba_expected_turnovers",
     "wnba_foul_drawing",
     "wnba_in_game_win_prob",
     "wnba_matchup_drapm",
+    "wnba_on_court",
     "wnba_pbp_disk",
+    "wnba_play_context",
     "wnba_player_props",
     "wnba_playtype_ratings",
+    "wnba_possessions",
     "wnba_predict_games",
     "wnba_predict_margin",
     "wnba_predict_total",
+    "wnba_rapm_from_games",
     "wnba_rookie_projection",
     "wnba_shot_value",
     "wnba_team_clutch",

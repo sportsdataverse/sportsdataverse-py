@@ -28,6 +28,13 @@ from sportsdataverse.wnba.wnba_teams import *
 # wrapper produces. The alphabetical import order above puts wnba_draft
 # *before* wnba_espn_ext, which is why this explicit override is needed.
 from sportsdataverse.wnba.wnba_draft import espn_wnba_draft  # noqa: E402,F401
+from sportsdataverse.wnba.wnba_engine import (  # noqa: F401
+    wnba_enhanced_pbp,
+    wnba_on_court,
+    wnba_play_context,
+    wnba_possessions,
+    wnba_rapm_from_games,
+)
 from sportsdataverse.wnba.wnba_shot_value import *
 from sportsdataverse.wnba.wnba_playtype_impact import *
 from sportsdataverse.wnba.wnba_team_ratings import wnba_team_ratings  # noqa: F401
