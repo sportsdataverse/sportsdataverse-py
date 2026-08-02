@@ -645,4 +645,9 @@ files = [
     "sportsdataverse/scrape/stats/proxy.py",
     "sportsdataverse/scrape/stats/session_transport.py",
     "sportsdataverse/scrape/stats/observability.py",
+    "sportsdataverse/scrape/stats/league_config.py",
+    "sportsdataverse/scrape/stats/periods.py",
+    "sportsdataverse/scrape/stats/endpoints.py",
+    "sportsdataverse/scrape/stats/season_capture.py",
+    "sportsdataverse/scrape/stats/refill.py",
 ]
