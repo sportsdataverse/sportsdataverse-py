@@ -580,6 +580,25 @@ def _parse_espn_player_box(boxscore):
     return rows
 
 
+def _fill_missing(df: "pl.DataFrame") -> "pl.DataFrame":
+    """Fill nulls for aggregation: 0.0 for numerics, False for booleans.
+
+    ``DataFrame.fill_null(0.0)`` is a SILENT NO-OP on Boolean columns -- polars
+    leaves boolean nulls untouched when the fill value is a float, with no error
+    and no warning. Any `.mean()` on such a column then averages over the
+    non-null rows only, which for a flag that is null-where-absent means it
+    averages over exactly the True rows and returns 1.0.
+
+    That is how `rushing_power_rate` shipped as 1.0 for every team in every
+    season: `power_rush_attempt` is null on the 159,513 non-power plays of 2024
+    and True on 3,437, so the rate read 1.0 instead of 3437/63017 = 0.055.
+    A rate pinned at exactly 1.0 is visible; the same bug on a less extreme flag
+    would not be, which is why the fill is centralized here rather than patched
+    at the one call site that happened to be caught.
+    """
+    return df.with_columns(pl.col(pl.Boolean).fill_null(False)).fill_null(0.0)
+
+
 class CFBPlayProcess(object):
     """Process ESPN college-football play-by-play feeds into a tidy game-level dictionary.
 
@@ -5660,7 +5679,7 @@ class CFBPlayProcess(object):
         rush_box = play_df.filter((pl.col("rush") == True) & (pl.col("scrimmage_play") == True))
         # pass_box.yds_receiving.fillna(0.0, inplace=True)
         passer_box = (
-            pass_box.fill_null(0.0)
+            _fill_missing(pass_box)
             .group_by(["pos_team", "passer_player_name"])
             .agg(
                 Comp=pl.col("completion").sum(),
@@ -5704,7 +5723,7 @@ class CFBPlayProcess(object):
                 pen_epa=(pl.col("pen_epa") * pl.col("pen_weight")).sum() / pl.col("pen_weight").sum(),
                 spread=(pl.col("start.pos_team_spread").first()),
             )
-            .fill_null(0.0)
+            .pipe(_fill_missing)
             .with_columns(pos_team=pl.col("pos_team").cast(pl.Int32))
         )
         # One-hot rule-era dummies (era0..era3, cuts 2006/2013/2020). Era is constant
@@ -5728,7 +5747,7 @@ class CFBPlayProcess(object):
         ).sort("Att", descending=True)  # 0.36-live: box tables sorted by volume
 
         rusher_box = (
-            rush_box.fill_null(0.0)
+            _fill_missing(rush_box)
             .group_by(["pos_team", "rusher_player_name"])
             .agg(
                 Car=pl.col("rush").sum(),
@@ -5749,7 +5768,7 @@ class CFBPlayProcess(object):
         # rusher_box = rusher_box.replace({np.nan: None})
 
         receiver_box = (
-            pass_box.fill_null(0.0)
+            _fill_missing(pass_box)
             .group_by(["pos_team", "receiver_player_name"])
             .agg(
                 Rec=pl.col("completion").sum(),
@@ -5870,7 +5889,7 @@ class CFBPlayProcess(object):
 
         team_scrimmage_box_pass = (
             play_df.filter((pl.col("pass") == True) & (pl.col("scrimmage_play") == True))
-            .fill_null(0.0)
+            .pipe(_fill_missing)
             .group_by(["pos_team"])
             .agg(
                 passes=pl.col("pass").sum(),
@@ -5891,7 +5910,7 @@ class CFBPlayProcess(object):
 
         team_scrimmage_box_rush = (
             play_df.filter((pl.col("rush") == True) & (pl.col("scrimmage_play") == True))
-            .fill_null(0.0)
+            .pipe(_fill_missing)
             .group_by(["pos_team"])
             .agg(
                 rushes=pl.col("rush").sum(),
@@ -5913,7 +5932,7 @@ class CFBPlayProcess(object):
 
         team_rush_base_box = (
             play_df.filter((pl.col("scrimmage_play") == True))
-            .fill_null(0.0)
+            .pipe(_fill_missing)
             .group_by(["pos_team"])
             .agg(
                 rushes_rate=pl.col("rush").mean(),
@@ -5926,7 +5945,7 @@ class CFBPlayProcess(object):
 
         team_rush_power_box = (
             play_df.filter((pl.col("power_rush_attempt") == True) & (pl.col("scrimmage_play") == True))
-            .fill_null(0.0)
+            .pipe(_fill_missing)
             .group_by(["pos_team"])
             .agg(
                 EPA_rushing_power=pl.col("EPA").sum(),
@@ -5949,7 +5968,7 @@ class CFBPlayProcess(object):
 
         team_rush_box = (
             play_df.filter((pl.col("rush") == True) & (pl.col("scrimmage_play") == True))
-            .fill_null(0.0)
+            .pipe(_fill_missing)
             .group_by(["pos_team"])
             .agg(
                 rushing_stuff=pl.col("stuffed_run").sum(),
@@ -5974,7 +5993,7 @@ class CFBPlayProcess(object):
             play_df.filter(
                 (pl.col("rush") == True) & (pl.col("scrimmage_play") == True) & (pl.col("opportunity_run") == True),
             )
-            .fill_null(0.0)
+            .pipe(_fill_missing)
             .group_by(["pos_team"])
             .agg(
                 rushing_highlight_yards_per_opp=pl.col("opp_highlight_yards").mean(),
