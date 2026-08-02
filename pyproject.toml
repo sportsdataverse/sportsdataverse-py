@@ -650,4 +650,12 @@ files = [
     "sportsdataverse/scrape/stats/endpoints.py",
     "sportsdataverse/scrape/stats/season_capture.py",
     "sportsdataverse/scrape/stats/refill.py",
+    "sportsdataverse/scrape/ncaa/__init__.py",
+    "sportsdataverse/scrape/ncaa/league_config.py",
+    "sportsdataverse/scrape/ncaa/bundle.py",
+    "sportsdataverse/scrape/ncaa/espn_game_xwalk.py",
+    "sportsdataverse/scrape/ncaa/rosters.py",
+    "sportsdataverse/scrape/ncaa/discover.py",
+    "sportsdataverse/scrape/ncaa/capture.py",
+    "sportsdataverse/scrape/ncaa/parse.py",
 ]

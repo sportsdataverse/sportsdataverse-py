@@ -3,6 +3,7 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [Unreleased](#unreleased)
+  - [New — `sportsdataverse.scrape.ncaa`: shared stats.ncaa.org hoops sweep engine](#new--sportsdataversescrapencaa-shared-statsncaaorg-hoops-sweep-engine)
   - [`sportsdataverse.scrape.stats` — league-parameterized capture layer (Phase 2)](#sportsdataversescrapestats--league-parameterized-capture-layer-phase-2)
   - [Docs — offline full-text search on the documentation site](#docs--offline-full-text-search-on-the-documentation-site)
   - [CI — docs site builds on GitHub Actions and publishes to `gh-pages`](#ci--docs-site-builds-on-github-actions-and-publishes-to-gh-pages)
@@ -221,6 +222,39 @@
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Unreleased
+
+### New — `sportsdataverse.scrape.ncaa`: shared stats.ncaa.org hoops sweep engine
+
+`ncaa-mbb-hoops-raw` and `ncaa-wbb-hoops-raw` were the same pipeline twice:
+27 shared files, ~4,000 LOC of production code, and only ~90 lines of real
+difference between them — the rest maintained by hand-porting each fix from one
+repo to the other. That stack now has one home:
+
+- `scrape/ncaa/discover.py` — team/season crosswalk → contest ids → the season
+  `schedule_master`.
+- `scrape/ncaa/capture.py` — the 3-page bundle per contest: sharded,
+  disk-is-checkpoint, ban-aware.
+- `scrape/ncaa/parse.py` — bundle → pbp / shots / lineups frames.
+- `scrape/ncaa/rosters.py`, `datasets.py`, `identity.py`,
+  `espn_game_xwalk.py`, `bundle.py`, `canary.py`.
+- `scrape/ncaa/league_config.py` — `MBB` / `WBB` identity.
+
+**`league` is a required keyword on every public entry point**, deliberately.
+The capture stack is league-agnostic (stats.ncaa.org serves one contest-id
+namespace, and sdv-py's NCAA parsers already select the period model and
+three-point arc by league), so a league is only ever a token threaded through
+calls — and a shared engine that *defaults* one is how a women's run silently
+reads men's data. That was not hypothetical: the men's repo's capture CLI
+hardcoded both the schedule-master path and the capture league to `"mbb"` and
+had no `--league` flag at all, so it could not be pointed at the other league.
+A source-level test guards the literal from creeping back, since the failure it
+causes is silent — a well-formed capture written to the wrong league's tree.
+
+Not re-exported at the top-level `sportsdataverse` namespace: this is
+producer-pipeline tooling, not the tidy-data API. The two `-raw` repos keep a
+thin league-binding shim per module, their launchers (which carry real
+per-league pacing), and their test suites — those suites are the engine's
+parity harness and stay repo-side.
 
 ### `sportsdataverse.scrape.stats` — league-parameterized capture layer (Phase 2)
 
