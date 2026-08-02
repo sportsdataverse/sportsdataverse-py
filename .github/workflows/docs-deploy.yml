@@ -26,6 +26,8 @@ permissions:
 
 jobs:
   build-deploy:
+    # workflow_dispatch can be launched from any branch; only main may publish.
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     timeout-minutes: 30
     defaults:
@@ -33,6 +35,10 @@ jobs:
         working-directory: docs
     steps:
       - uses: actions/checkout@v4
+        with:
+          # Job holds contents:write but the build runs third-party yarn
+          # scripts; the publish step passes its token explicitly instead.
+          persist-credentials: false
 
       - uses: actions/setup-node@v4
         with:
