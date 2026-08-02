@@ -29,7 +29,7 @@ ESPN endpoint.
 | col_name | type | description |
 |---|---|---|
 | `game_id` | character | ESPN event id. |
-| `uid` | character | ESPN UID string. |
+| `uid` | character | ESPN global unique identifier. |
 | `date` | character | Match start timestamp (ISO 8601, UTC). |
 | `name` | character | Full event name (e.g. 'Team A at Team B'). |
 | `short_name` | character | Abbreviated event name (e.g. 'TA @ TB'). |
@@ -48,15 +48,15 @@ ESPN endpoint.
 | `status_period` | integer | Current period. |
 | `neutral_site` | logical | Whether the match is played at a neutral venue. |
 | `conference_competition` | logical | Conference competition. |
-| `attendance` | integer | Reported attendance. |
-| `venue_id` | character | Unique venue identifier. |
+| `attendance` | integer | Reported attendance at the game. |
+| `venue_id` | character | Referencing venue id. |
 | `venue_full_name` | character | Venue full name. |
-| `venue_city` | character | Venue city. |
-| `venue_state` | character | Venue state / region. |
+| `venue_city` | character | City where the venue is located. |
+| `venue_state` | character | State (or province/country) where the venue is located. |
 | `venue_indoor` | logical | Whether the home venue is indoors. |
-| `broadcast` | character | Broadcast information string. |
+| `broadcast` | character | Broadcast network short name. |
 | `note` | character | Injury status and description. |
-| `home_id` | character | Unique identifier for home. |
+| `home_id` | character | Home team referencing id. |
 | `home_name` | character | Home team display name. |
 | `home_abbreviation` | character | Home team's abbreviation. |
 | `home_display_name` | character | Home team display name. |
@@ -67,7 +67,7 @@ ESPN endpoint.
 | `home_score` | character | Home team's score. For cricket, the innings string (e.g. '161/5 (18/20 ov, target 156)'). |
 | `home_winner` | logical | Whether the home team won. |
 | `home_rank` | character | Home team rank (if ranked). |
-| `away_id` | character | Unique identifier for away. |
+| `away_id` | character | Away team referencing id. |
 | `away_name` | character | Away team display name. |
 | `away_abbreviation` | character | Away team's abbreviation. |
 | `away_display_name` | character | Away team display name. |
@@ -277,7 +277,7 @@ ESPN endpoint.
 | `ties` | character | Number of ties in the series. |
 | `win_percent` | character | Win percent. |
 | `wins` | character | Wins. |
-| `overall` | character | Overall pick number. |
+| `overall` | character | Overall draft pick number. |
 
 **format**
 
@@ -380,7 +380,7 @@ ESPN endpoint.
 | `team_name` | character | Full display name of the team. |
 | `team_abbreviation` | character | Team abbreviation. |
 | `team_display_name` | character | Team display name. |
-| `team_short_display_name` | character | Short team display name (e.g. 'Aces'). |
+| `team_short_display_name` | character | Short team display name; `team_detail = TRUE` only. |
 | `team_logos` | character | Team logos. |
 | `start_period_type` | character | Period type at the start of the drive (e.g. `quarter`). |
 | `start_period_number` | integer | Period or quarter number in which the drive or sequence began. |
@@ -415,7 +415,7 @@ ESPN endpoint.
 | `is_turnover` | logical | `TRUE` if the play was a turnover. |
 | `type_id` | character | Type id. |
 | `type_text` | character | Type text. |
-| `type_abbreviation` | character | Play type abbreviation. |
+| `type_abbreviation` | character | Play-type abbreviation (e.g. `RUSH`, `TD`). |
 | `period_number` | integer | Period number. |
 | `clock_display_value` | character | Clock display value. |
 | `start_down` | integer | Down at the start of the play. |
@@ -452,7 +452,7 @@ ESPN endpoint.
 | `home_score` | integer | Home score. |
 | `type_id` | character | Type id. |
 | `type_text` | character | Type text. |
-| `type_abbreviation` | character | Play type abbreviation. |
+| `type_abbreviation` | character | Play-type abbreviation (e.g. `RUSH`, `TD`). |
 | `period_number` | integer | Period number. |
 | `clock_value` | double | Clock value in seconds. |
 | `clock_display_value` | character | Clock display value. |

@@ -257,7 +257,7 @@ GET /stats/boxscoreadvancedv3
 | `possessions` | numeric | Possessions used. |
 | `reboundpercentage` | numeric |  |
 | `teamcity` | character | Teamcity. |
-| `teamid` | integer | FanGraphs team ID. |
+| `teamid` | integer | Teamid. |
 | `teamname` | character | Teamname. |
 | `teamslug` | character |  |
 | `teamtricode` | character |  |
@@ -317,7 +317,7 @@ GET /stats/boxscoredefensivev2
 | `steals` | integer | Total steals. |
 | `switcheson` | integer | NBA or WNBA Stats value for switcheson in the boxscoredefensivev2 result set. |
 | `teamcity` | character | Teamcity. |
-| `teamid` | integer | FanGraphs team ID. |
+| `teamid` | integer | Teamid. |
 | `teamname` | character | Teamname. |
 | `teamslug` | character | URL slug for teamslug used by NBA or WNBA Stats pages. |
 | `teamtricode` | character | Three-letter team code used by NBA or WNBA Stats schedule and scoreboard feeds. |
@@ -372,7 +372,7 @@ GET /stats/boxscorefourfactorsv3
 | `playerslug` | character |  |
 | `position` | character | Listed roster position (G, F, C, etc.). |
 | `teamcity` | character | Teamcity. |
-| `teamid` | integer | FanGraphs team ID. |
+| `teamid` | integer | Teamid. |
 | `teamname` | character | Teamname. |
 | `teamslug` | character |  |
 | `teamtricode` | character |  |
@@ -415,7 +415,7 @@ GET /stats/boxscorematchupsv3
 | `playerslug` | character | URL slug for the player on NBA or WNBA Stats pages. |
 | `position` | character | Listed roster position (G, F, C, etc.). |
 | `teamcity` | character | Teamcity. |
-| `teamid` | integer | FanGraphs team ID. |
+| `teamid` | integer | Teamid. |
 | `teamname` | character | Teamname. |
 | `teamslug` | character | URL slug for teamslug used by NBA or WNBA Stats pages. |
 | `teamtricode` | character | Three-letter team code used by NBA or WNBA Stats schedule and scoreboard feeds. |
@@ -475,7 +475,7 @@ GET /stats/boxscoremiscv3
 | `pointssecondchance` | integer |  |
 | `position` | character | Listed roster position (G, F, C, etc.). |
 | `teamcity` | character | Teamcity. |
-| `teamid` | integer | FanGraphs team ID. |
+| `teamid` | integer | Teamid. |
 | `teamname` | character | Teamname. |
 | `teamslug` | character |  |
 | `teamtricode` | character |  |
@@ -534,7 +534,7 @@ GET /stats/boxscoreplayertrackv3
 | `secondaryassists` | integer | Passing or assist metric for secondaryassists in the requested NBA or WNBA Stats split. |
 | `speed` | numeric | Speed. |
 | `teamcity` | character | Teamcity. |
-| `teamid` | integer | FanGraphs team ID. |
+| `teamid` | integer | Teamid. |
 | `teamname` | character | Teamname. |
 | `teamslug` | character | URL slug for teamslug used by NBA or WNBA Stats pages. |
 | `teamtricode` | character | Three-letter team code used by NBA or WNBA Stats schedule and scoreboard feeds. |
@@ -601,7 +601,7 @@ GET /stats/boxscorescoringv3
 | `playerslug` | character |  |
 | `position` | character | Listed roster position (G, F, C, etc.). |
 | `teamcity` | character | Teamcity. |
-| `teamid` | integer | FanGraphs team ID. |
+| `teamid` | integer | Teamid. |
 | `teamname` | character | Teamname. |
 | `teamslug` | character |  |
 | `teamtricode` | character |  |
@@ -753,7 +753,7 @@ GET /stats/boxscoretraditionalv3
 | `starters_turnovers` | integer |  |
 | `steals` | integer | Total steals. |
 | `teamcity` | character | Teamcity. |
-| `teamid` | integer | FanGraphs team ID. |
+| `teamid` | integer | Teamid. |
 | `teamname` | character | Teamname. |
 | `teamslug` | character |  |
 | `teamtricode` | character |  |
@@ -822,7 +822,7 @@ GET /stats/boxscoreusagev3
 | `playerslug` | character |  |
 | `position` | character | Listed roster position (G, F, C, etc.). |
 | `teamcity` | character | Teamcity. |
-| `teamid` | integer | FanGraphs team ID. |
+| `teamid` | integer | Teamid. |
 | `teamname` | character | Teamname. |
 | `teamslug` | character |  |
 | `teamtricode` | character |  |
@@ -1002,7 +1002,7 @@ GET /stats/commonteamroster
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `teamid` | integer | FanGraphs team ID. |
+| `teamid` | integer | Teamid. |
 | `season` | character | Season identifier (4-digit year or 'YYYY-YY' string). |
 | `leagueid` | character |  |
 | `player` | character | Player name. |
@@ -1014,7 +1014,7 @@ GET /stats/commonteamroster
 | `weight` | character | Player weight in pounds. |
 | `birth_date` | character | Date of birth (YYYY-MM-DD). |
 | `age` | numeric | Player age (in years). |
-| `exp` | character | Years of MLB service experience. |
+| `exp` | character | Exp. |
 | `school` | character | Player's school / college (when distinct from 'college'). |
 | `player_id` | integer | Unique player identifier. |
 | `how_acquired` | character |  |
@@ -2421,7 +2421,7 @@ GET /stats/leaguedashptdefend
 | `player_position` | character | Position of the player accordinng to NGS |
 | `age` | numeric | Player age (in years). |
 | `gp` | integer | Games played. |
-| `g` | integer | Goals (skaters). |
+| `g` | integer | Games played. |
 | `freq` | numeric | NBA or WNBA Stats value for freq in the leaguedashptdefend result set. |
 | `d_fgm` | numeric | Shooting metric for d fgm in the requested NBA or WNBA Stats split. |
 | `d_fga` | numeric | Shooting metric for d fga in the requested NBA or WNBA Stats split. |
@@ -3286,7 +3286,7 @@ GET /stats/leaguestandingsv3
 |---|---|---|
 | `leagueid` | character | League identifier used in compact NBA Stats schedule and scoreboard result sets. |
 | `seasonid` | character | Stats API identifier for seasonid associated with this NBA or WNBA Stats row. |
-| `teamid` | integer | FanGraphs team ID. |
+| `teamid` | integer | Teamid. |
 | `teamcity` | character | Teamcity. |
 | `teamname` | character | Teamname. |
 | `teamslug` | character | URL slug for teamslug used by NBA or WNBA Stats pages. |
@@ -3307,7 +3307,7 @@ GET /stats/leaguestandingsv3
 | `l10` | character | L10. |
 | `last10home` | character | NBA or WNBA Stats value for last10home in the leaguestandingsv3 result set. |
 | `last10road` | character | NBA or WNBA Stats value for last10road in the leaguestandingsv3 result set. |
-| `ot` | character | Overtime results. |
+| `ot` | character | Ot. |
 | `threeptsorless` | character | Scoring or score-margin metric for threeptsorless in the requested NBA or WNBA Stats split. |
 | `tenptsormore` | character | Scoring or score-margin metric for tenptsormore in the requested NBA or WNBA Stats split. |
 | `longhomestreak` | integer | NBA or WNBA Stats value for longhomestreak in the leaguestandingsv3 result set. |
@@ -3425,7 +3425,7 @@ GET /stats/playbyplayv3
 | `shotresult` | character | Result of the shot attempt, such as made or missed. |
 | `shotvalue` | integer | Point value of the shot attempt, usually two or three points. |
 | `subtype` | character | Secondary play subtype reported by NBA or WNBA Stats. |
-| `teamid` | integer | FanGraphs team ID. |
+| `teamid` | integer | Teamid. |
 | `teamtricode` | character | Three-letter code for the team associated with the play event. |
 | `videoavailable` | integer | Flag indicating whether video is available for the play or game row. |
 | `xlegacy` | integer | Legacy NBA Stats x-coordinate for shot-location play events. |
@@ -4529,7 +4529,7 @@ GET /stats/playerdashptshotdefend
 |---|---|---|
 | `matchupid` | integer | Stats API identifier for matchupid associated with this NBA or WNBA Stats row. |
 | `gp` | integer | Games played. |
-| `g` | integer | Goals (skaters). |
+| `g` | integer | Games played. |
 | `defense_category` | character | NBA or WNBA Stats value for defense category in the playerdashptshotdefend result set. |
 | `freq` | numeric | NBA or WNBA Stats value for freq in the playerdashptshotdefend result set. |
 | `d_fgm` | numeric | Shooting metric for d fgm in the requested NBA or WNBA Stats split. |

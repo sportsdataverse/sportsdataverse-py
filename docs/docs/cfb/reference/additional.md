@@ -40,7 +40,7 @@ A single-row wide DataFrame (polars by default). When `raw=True` returns the raw
 |---|---|---|
 | `season` | integer | Season (4-digit year). |
 | `season_type` | character | ESPN season type (2 = regular, 3 = postseason). |
-| `total` | logical | Total. |
+| `total` | logical | The sum of each team's score in the game. Equals h_score + v_score. Is NA for games which haven't yet been played. Convenient for evaluating over/under total bets. |
 | `athlete_id` | integer | ESPN athlete id. |
 | `athlete_uid` | character | ESPN athlete UID (universal identifier). |
 | `athlete_guid` | character | ESPN athlete GUID. |
@@ -54,7 +54,7 @@ A single-row wide DataFrame (polars by default). When `raw=True` returns the raw
 | `display_weight` | character | Human-readable weight (e.g. `205 lbs`). |
 | `height` | double | Listed height (inches). |
 | `display_height` | character | Human-readable height (e.g. `6' 1"`). |
-| `age` | integer | Player age (in years). |
+| `age` | integer | Age as of last pipeline build, rounded to one decimal. Pipeline is built on a weekly basis. |
 | `date_of_birth` | character | Player date of birth (if published). |
 | `jersey` | character | Jersey number. |
 | `slug` | character | URL slug for the team. |
@@ -63,7 +63,7 @@ A single-row wide DataFrame (polars by default). When `raw=True` returns the raw
 | `position_name` | character | Position name (e.g. `Quarterback`); `position_detail = TRUE` only. |
 | `position_display_name` | character | Human-readable position name; `position_detail = TRUE` only. |
 | `position_abbreviation` | character | Position abbreviation (e.g. `QB`); `position_detail = TRUE` only. |
-| `college_name` | character | College name. |
+| `college_name` | character | Official college (usually the last one attended) |
 | `status_id` | integer | ESPN commitment status id. |
 | `status_name` | character | Status-type key (e.g. `STATUS_FINAL`). |
 | `general_fumbles` | double | Total number of fumbles committed by the player across all offensive and special-teams plays. |

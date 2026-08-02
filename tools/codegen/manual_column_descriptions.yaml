@@ -5512,6 +5512,8 @@ load_wnba_stats_draft:
   draft_type: 'CONSTANT in the published asset: every row reads ''Draft'', so it does not currently distinguish the main draft
     from any other selection event.'
 load_wnba_stats_rosters:
+  num: Jersey number worn by the player.
+  exp: Years of WNBA playing experience entering the season ('R' = rookie).
   how_acquired: How the team acquired the player (draft, trade, free agency).
 load_cfb_fpi_weekly:
   accomplishment: Reflects chance that an average Top 25 team would have team's record or better, given the schedule. On a
@@ -5621,6 +5623,9 @@ load_nfl_depth_charts:
   depth_team: Depth rank of the player at their position, stored as a string ('1' = starter, '2' = backup, etc.).
   elias_id: Elias Sports Bureau player identifier used for official NFL record-keeping and statistics attribution.
   formation: Offensive or defensive formation label (e.g., 'Base 3-4', 'Nickel') associated with this depth chart grouping.
+load_nba_stats_rosters:
+  num: Jersey number worn by the player.
+  exp: Years of NBA playing experience entering the season ('R' = rookie).
 load_nfl_espn_qbr:
   epa_total: Total expected points added across the quarterback's plays (ESPN QBR EPA component).
   exp_sack: QBR points contribution adjustment from expected sacks.

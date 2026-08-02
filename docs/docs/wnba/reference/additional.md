@@ -263,11 +263,11 @@ Polars dataframe containing schedule dates for the requested season. Returns Non
 | `uid` | character | ESPN UID string. |
 | `date` | character | Date in YYYY-MM-DD format. |
 | `attendance` | integer | Reported attendance. |
-| `time_valid` | logical | Whether the start time is confirmed. |
+| `time_valid` | logical | Time valid. |
 | `neutral_site` | logical | Neutral site. |
 | `conference_competition` | logical | Conference competition. |
 | `play_by_play_available` | logical | Whether play-by-play data is available. |
-| `recent` | logical | Whether the game is recent. |
+| `recent` | logical | Recent. |
 | `start_date` | character | Start date (YYYY-MM-DD). |
 | `broadcast` | character | Broadcast information string. |
 | `highlights` | integer | Game highlight urls. |
@@ -281,14 +281,14 @@ Polars dataframe containing schedule dates for the requested season. Returns Non
 | `venue_full_name` | character | Venue full name. |
 | `venue_address_city` | character | Venue address city. |
 | `venue_address_state` | character | Venue address state / region. |
-| `venue_indoor` | logical | Whether the home venue is indoors. |
-| `status_clock` | double | Game clock in seconds. |
+| `venue_indoor` | logical | TRUE if the venue is indoors. |
+| `status_clock` | double | Status clock. |
 | `status_display_clock` | character | Status display clock. |
-| `status_period` | integer | Current period. |
+| `status_period` | integer | Status period. |
 | `status_type_id` | character | Unique identifier for status type. |
 | `status_type_name` | character | Status type name. |
-| `status_type_state` | character | Status state (pre/in/post). |
-| `status_type_completed` | logical | Whether the game is complete. |
+| `status_type_state` | character | Status type state. |
+| `status_type_completed` | logical | Status type completed. |
 | `status_type_description` | character | Status type description. |
 | `status_type_detail` | character | Status type detail. |
 | `status_type_short_detail` | character | Status type short detail. |
@@ -296,33 +296,33 @@ Polars dataframe containing schedule dates for the requested season. Returns Non
 | `home_id` | character | Unique identifier for home. |
 | `home_uid` | character | Home team's uid. |
 | `home_location` | character | Home team's location. |
-| `home_name` | character | Home team display name. |
+| `home_name` | character | Home name. |
 | `home_abbreviation` | character | Home team's abbreviation. |
-| `home_display_name` | character | Home team display name. |
+| `home_display_name` | character | Home display name. |
 | `home_short_display_name` | character | Home short display name. |
-| `home_color` | character | Home team primary color hex. |
+| `home_color` | character | Color code (hex) for home. |
 | `home_alternate_color` | character | Color code (hex) for home alternate. |
 | `home_is_active` | logical | Home team's is active. |
 | `home_venue_id` | character | Unique identifier for home venue. |
 | `home_logo` | character | Home team logo URL. |
 | `home_score` | character | Home team score at the time of the play. |
-| `home_winner` | logical | Whether the home team won. |
+| `home_winner` | logical | Home team's winner. |
 | `home_linescores` | list | Period-by-period point totals for the home team, stored as a list of integer scores. |
 | `home_records` | character | Win-loss record strings for the home team across relevant splits (e.g., overall, home/away, conference). |
 | `away_id` | character | Unique identifier for away. |
 | `away_uid` | character | Away team's uid. |
 | `away_location` | character | Away team's location. |
-| `away_name` | character | Away team display name. |
+| `away_name` | character | Away name. |
 | `away_abbreviation` | character | Away team's abbreviation. |
-| `away_display_name` | character | Away team display name. |
+| `away_display_name` | character | Away display name. |
 | `away_short_display_name` | character | Away short display name. |
-| `away_color` | character | Away team primary color hex. |
+| `away_color` | character | Color code (hex) for away. |
 | `away_alternate_color` | character | Color code (hex) for away alternate. |
 | `away_is_active` | logical | Away team's is active. |
 | `away_venue_id` | character | Unique identifier for away venue. |
 | `away_logo` | character | Away team logo URL. |
 | `away_score` | character | Away team score at the time of the play. |
-| `away_winner` | logical | Whether the away team won. |
+| `away_winner` | logical | Away team's winner. |
 | `away_linescores` | list | Period-by-period point totals for the away team, stored as a list of integer scores. |
 | `away_records` | character | Win-loss record strings for the away team across relevant splits (e.g., overall, home/away, conference). |
 | `game_id` | integer | Unique game identifier. |
