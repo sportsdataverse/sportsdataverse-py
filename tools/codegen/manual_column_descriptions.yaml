@@ -2846,7 +2846,6 @@ load_cfb_player_box:
   yardsPerPuntReturn: Yards gained per punt return.
   yardsPerReception: Yards gained per reception.
   yardsPerRushAttempt: Yards gained per rushing attempt.
-load_cfb_power_index:
 load_cfb_ratings:
   adj_def_epa: Opponent-adjusted EPA per play allowed, netted the same way as the offensive rating, so lower is better because
     it measures EPA surrendered.
@@ -5551,6 +5550,94 @@ load_wnba_stats_rosters:
   how_acquired: How the team acquired the player (draft, trade, free agency).
   season_2: Season label in the league's second display form.
   team_id_lookup: Team id used to join the row back to the team tables.
+load_cfb_fpi_weekly:
+  accomplishment: Reflects chance that an average Top 25 team would have team's record or better, given the schedule. On a
+    0 to 100 scale, where 100 is best.
+  accomplishmentrank: Strength of Record rank. Reflects chance that an average Top 25 team would have team's record or better,
+    given the schedule.
+  adjavgingamewp: Team's average in-game win probability adjusted for chance that an average FBS team would control games
+    from start to end the way this team did, given the schedule.
+  adjavgingamewprank: Rank among FBS teams by adjavgingamewp (average in-game win probability adjusted for opponent). Null
+    for most pre-2019 snapshots. 0 is an unranked placeholder, not a rank.
+  adjlosses: Team's Losses adjusted for chance an average FBS team would have team's record or better, given the schedule.
+  adjwinpctrank: Rank among FBS teams by adjusted win percentage. ESPN publishes the rank without the underlying percentage;
+    derive it from adjwins and adjlosses. 0 is an unranked placeholder, not a rank -- it appears where the underlying value
+    is null.
+  adjwins: Team's Wins adjusted for chance an average FBS team would have team's record or better, given the schedule.
+  avgingamewp: Team's average in-game win probability across all plays of all games played, not adjusted for site or opponent.
+  avgingamewprank: Team's average in-game win probability rank adjusted for chance that an average FBS team would control
+    games from start to end the way this team did, given the schedule.
+  avgsosrank: Rank among all FBS teams of games already played schedule strength, from perspective of an average Top 25 team.
+  defefficiency: Defensive efficiency on 0-100 scale; based on defense's contribution to scoring margin on per-play basis,
+    adjusted for strength of opposing offenses faced.
+  defefficiencyrank: Team's defensive efficiency rank among all FBS teams.
+  epadefense: Defensive component of FPI. Defensive contribution to expected point margin vs average opponent on neutral field.
+  epaoffense: Offensive component of FPI. Offensive contribution to expected point margin vs average opponent on neutral field.
+  epaspecialteams: Special teams component of FPI. Special teams contribution to expected point margin vs average opponent
+    on neutral field.
+  fpi: Football Power Index that measures team's true strength on net points scale; expected point margin vs average opponent
+    on neutral field.
+  fpirank: ESPN's FPI rank field. Agrees with rank on 99.4% of rows; on the ~0.6% where they differ it is stale -- it never
+    matches the rank implied by the published fpi, while rank always does. Prefer rank.
+  gamecontrol: Reflects chance that an average Top 25 team would control games from start to end the way this team did, given
+    the schedule. On a 0 to 100 scale, where 100 is best.
+  gamecontrolrank: Game Control rank. Reflects chance that an average Top 25 team would control games from start to end the
+    way this team did, given the schedule.
+  numlosses: Actual losses to date at the time of the snapshot. Distinct from projectedl (full-season projection) and adjlosses
+    (opponent-adjusted).
+  numties: Actual ties to date. Never nonzero -- college football abolished ties in 1996; the column is null or 0 in every
+    published row.
+  numwins: Actual wins to date at the time of the snapshot. Distinct from projectedw (full-season projection) and adjwins
+    (opponent-adjusted).
+  offefficiency: Offensive efficiency on 0-100 scale; based on offense's contribution to scoring margin on per-play basis,
+    adjusted for strength of opposing defenses faced.
+  offefficiencyrank: Team's offensive efficiency rank among all FBS teams.
+  prob6wins: Percent of season simulations in which a team won at least 6 games (typically bowl-eligible).
+  probmakeplayoffs: Chance to make the CFB Playoff, according to the Playoff Predictor.
+  probmaketitlegame: Chance to make the CFB Playoff National Championship game, according to the Playoff Predictor.
+  probwinconf: Percent of season simulations in which team won its conference, incorporating chance of getting to and winning
+    conference championship game (if applicable). Accounts for shared conference titles in conferences that allow them.
+  probwindiv: Percent of season simulations in which team won its conference division, for those conferences that have divisions.
+  probwinout: Percent of season simulations in which team won all remaining scheduled games as well as conference championship
+    game (if applicable).
+  probwintitle: Chance to win the CFB Playoff National Championship, according to the Playoff Predictor.
+  projectedl: Projected overall Losses, accounting for results to date and FPI-based projections for remaining scheduled games
+    (including potential conference championship games). May not sum to a whole number because of differing number of games
+    played in each simulation.
+  projectedt: Projected ties. Always null -- college football abolished ties in 1996, and ESPN emits the key beside projectedw/projectedl
+    without ever populating it. Retained so the column set matches the upstream payload.
+  projectedw: Projected overall W-L, accounting for results to date and FPI-based projections for remaining scheduled games
+    (and potential conference championship games). May not sum to a whole number because of differing number of games played
+    in each simulation.
+  projectedwpctrank: Rank among FBS teams by projected win percentage. ESPN publishes the rank without the underlying percentage;
+    derive it from projectedw and projectedl.
+  rank: 'FPI rank among FBS teams for this snapshot (1 = best). Prefer this over fpirank: the two agree on 99.4% of rows,
+    and on the ~0.6% where they differ, rank is always the one consistent with the published fpi value.'
+  rankchange7days: FPI Rank change from previous week.
+  run_date_time_key: ESPN's run key for the snapshot, as an integer timestamp (e.g. 20241021040000). This is the AS-OF date
+    the snapshot represents, which is not the same as last_updated (when ESPN computed it); the gap between the two is what
+    snapshot_is_contemporaneous flags.
+  snapshot_is_contemporaneous: True when the snapshot was computed inside its own season's window (August of the season year
+    through February of the next), i.e. it is a live weekly run rather than a retrospective backfill. False for every row
+    before 2015, which ESPN computed in one pass afterwards. A retrospective row is a reconstruction, not an as-of-week rating.
+  snapshot_out_of_sequence: True when this snapshot was computed AFTER one belonging to a later week of the same season type
+    -- so it cannot be read as an as-of-that-week rating. Almost always the week-1 slot, which ESPN overwrites with a late-season
+    computation (2024 week 1 is stamped 2024-12-15). Filter these out for any point-in-time or backtest use.
+  sosremainingrank: Rank among all FBS teams of remaining schedule strength, from perspective of an average FBS team.
+  stefficiency: Special teams efficiency on 0-100 scale; based on special teams' contribution to scoring margin on per-play
+    basis, adjusted for strength of opposing special teams faced.
+  stefficiencyrank: Team's special teams efficiency rank among all FBS teams.
+  topsosrank: Rank among all FBS teams of games already played schedule strength, from perspective of an top FBS team.
+  totefficiency: Net efficiency on 0-100 scale; incorporates offense, defense and special teams efficiencies into a single
+    schedule-adjusted measure of per-play efficiency.
+  totefficiencyrank: Team's overall efficiency rank among all FBS teams.
+load_cfb_power_index:
+  gameprojection: Team's predicted win percentage in this game at time of given BPI run.
+  matchupquality: A measure of projected competitiveness and excitement in the game, using a 0 to 100 scale, with 100 as the
+    most exciting.
+  teamadjgamescore: A measure of how well a team performed compared to their expected performance and the expected performance
+    of a typical top 25 team.
+  teampredptdiff: Expected margin of victory for the FPI favorite.
 load_contracts:
   cols: Placeholder column retained in the contracts loader output schema; contains no meaningful data in this context.
 load_depth_charts:

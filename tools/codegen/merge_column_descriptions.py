@@ -21,7 +21,10 @@ p = pathlib.Path("tools/codegen/manual_column_descriptions.yaml")
 cur = yaml.safe_load(p.read_text(encoding="utf-8")) or {}
 added = 0
 for k, cols in new.items():
-    have = cur.get(k, {})
+    # `or {}` not `.get(k, {})`: a loader can be present in the yaml with an
+    # EMPTY block, which yaml parses to None. The two-arg default only covers a
+    # missing key, so the None case fell through and crashed on `c not in have`.
+    have = cur.get(k) or {}
     for c, d in cols.items():
         if c not in have:
             have[c] = d

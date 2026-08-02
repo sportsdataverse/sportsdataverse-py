@@ -965,52 +965,52 @@ Release: [cfb_fpi_weekly](https://github.com/sportsdataverse/sportsdataverse-dat
 | `week` | Int64 | Game week of the season. |
 | `team_id` | Int64 | ESPN team id. |
 | `last_updated` | String | Timestamp ESPN last refreshed the power index. |
-| `run_date_time_key` | Int64 |  |
-| `snapshot_out_of_sequence` | Boolean |  |
-| `fpi` | Float64 | ESPN Football Power Index rating (projected scoring margin vs. average team). |
-| `fpirank` | Float64 |  |
-| `projectedw` | Float64 |  |
-| `projectedl` | Float64 |  |
-| `projectedt` | Null |  |
-| `projectedwpctrank` | Float64 |  |
-| `probwinout` | Float64 |  |
-| `probwinconf` | Float64 |  |
-| `sosremainingrank` | Float64 |  |
-| `accomplishment` | Float64 |  |
-| `accomplishmentrank` | Float64 |  |
-| `adjwins` | Float64 |  |
-| `adjlosses` | Float64 |  |
-| `adjwinpctrank` | Float64 |  |
-| `gamecontrol` | Float64 |  |
-| `gamecontrolrank` | Float64 |  |
-| `adjavgingamewp` | Float64 |  |
-| `adjavgingamewprank` | Float64 |  |
-| `avgingamewp` | Float64 |  |
-| `avgingamewprank` | Float64 |  |
-| `avgsosrank` | Float64 |  |
-| `topsosrank` | Float64 |  |
-| `epaoffense` | Float64 |  |
-| `epadefense` | Float64 |  |
-| `epaspecialteams` | Float64 |  |
-| `probwindiv` | Float64 |  |
-| `probmakeplayoffs` | Float64 |  |
-| `probmaketitlegame` | Float64 |  |
-| `numwins` | Float64 |  |
-| `numlosses` | Float64 |  |
-| `numties` | Float64 |  |
-| `probwintitle` | Float64 |  |
-| `rankchange7days` | Float64 |  |
-| `prob6wins` | Float64 |  |
-| `rank` | Float64 | Position of the school within the poll for the given week (1 = top-ranked). |
-| `offefficiency` | Float64 |  |
-| `offefficiencyrank` | Float64 |  |
-| `defefficiency` | Float64 |  |
-| `defefficiencyrank` | Float64 |  |
-| `stefficiency` | Float64 |  |
-| `stefficiencyrank` | Float64 |  |
-| `totefficiency` | Float64 |  |
-| `totefficiencyrank` | Float64 |  |
-| `snapshot_is_contemporaneous` | Boolean |  |
+| `run_date_time_key` | Int64 | ESPN's run key for the snapshot, as an integer timestamp (e.g. 20241021040000). This is the AS-OF date the snapshot represents, which is not the same as last_updated (when ESPN computed it); the gap between the two is what snapshot_is_contemporaneous flags. |
+| `snapshot_out_of_sequence` | Boolean | True when this snapshot was computed AFTER one belonging to a later week of the same season type -- so it cannot be read as an as-of-that-week rating. Almost always the week-1 slot, which ESPN overwrites with a late-season computation (2024 week 1 is stamped 2024-12-15). Filter these out for any point-in-time or backtest use. |
+| `fpi` | Float64 | Football Power Index that measures team's true strength on net points scale; expected point margin vs average opponent on neutral field. |
+| `fpirank` | Float64 | ESPN's FPI rank field. Agrees with rank on 99.4% of rows; on the ~0.6% where they differ it is stale -- it never matches the rank implied by the published fpi, while rank always does. Prefer rank. |
+| `projectedw` | Float64 | Projected overall W-L, accounting for results to date and FPI-based projections for remaining scheduled games (and potential conference championship games). May not sum to a whole number because of differing number of games played in each simulation. |
+| `projectedl` | Float64 | Projected overall Losses, accounting for results to date and FPI-based projections for remaining scheduled games (including potential conference championship games). May not sum to a whole number because of differing number of games played in each simulation. |
+| `projectedt` | Null | Projected ties. Always null -- college football abolished ties in 1996, and ESPN emits the key beside projectedw/projectedl without ever populating it. Retained so the column set matches the upstream payload. |
+| `projectedwpctrank` | Float64 | Rank among FBS teams by projected win percentage. ESPN publishes the rank without the underlying percentage; derive it from projectedw and projectedl. |
+| `probwinout` | Float64 | Percent of season simulations in which team won all remaining scheduled games as well as conference championship game (if applicable). |
+| `probwinconf` | Float64 | Percent of season simulations in which team won its conference, incorporating chance of getting to and winning conference championship game (if applicable). Accounts for shared conference titles in conferences that allow them. |
+| `sosremainingrank` | Float64 | Rank among all FBS teams of remaining schedule strength, from perspective of an average FBS team. |
+| `accomplishment` | Float64 | Reflects chance that an average Top 25 team would have team's record or better, given the schedule. On a 0 to 100 scale, where 100 is best. |
+| `accomplishmentrank` | Float64 | Strength of Record rank. Reflects chance that an average Top 25 team would have team's record or better, given the schedule. |
+| `adjwins` | Float64 | Team's Wins adjusted for chance an average FBS team would have team's record or better, given the schedule. |
+| `adjlosses` | Float64 | Team's Losses adjusted for chance an average FBS team would have team's record or better, given the schedule. |
+| `adjwinpctrank` | Float64 | Rank among FBS teams by adjusted win percentage. ESPN publishes the rank without the underlying percentage; derive it from adjwins and adjlosses. 0 is an unranked placeholder, not a rank -- it appears where the underlying value is null. |
+| `gamecontrol` | Float64 | Reflects chance that an average Top 25 team would control games from start to end the way this team did, given the schedule. On a 0 to 100 scale, where 100 is best. |
+| `gamecontrolrank` | Float64 | Game Control rank. Reflects chance that an average Top 25 team would control games from start to end the way this team did, given the schedule. |
+| `adjavgingamewp` | Float64 | Team's average in-game win probability adjusted for chance that an average FBS team would control games from start to end the way this team did, given the schedule. |
+| `adjavgingamewprank` | Float64 | Rank among FBS teams by adjavgingamewp (average in-game win probability adjusted for opponent). Null for most pre-2019 snapshots. 0 is an unranked placeholder, not a rank. |
+| `avgingamewp` | Float64 | Team's average in-game win probability across all plays of all games played, not adjusted for site or opponent. |
+| `avgingamewprank` | Float64 | Team's average in-game win probability rank adjusted for chance that an average FBS team would control games from start to end the way this team did, given the schedule. |
+| `avgsosrank` | Float64 | Rank among all FBS teams of games already played schedule strength, from perspective of an average Top 25 team. |
+| `topsosrank` | Float64 | Rank among all FBS teams of games already played schedule strength, from perspective of an top FBS team. |
+| `epaoffense` | Float64 | Offensive component of FPI. Offensive contribution to expected point margin vs average opponent on neutral field. |
+| `epadefense` | Float64 | Defensive component of FPI. Defensive contribution to expected point margin vs average opponent on neutral field. |
+| `epaspecialteams` | Float64 | Special teams component of FPI. Special teams contribution to expected point margin vs average opponent on neutral field. |
+| `probwindiv` | Float64 | Percent of season simulations in which team won its conference division, for those conferences that have divisions. |
+| `probmakeplayoffs` | Float64 | Chance to make the CFB Playoff, according to the Playoff Predictor. |
+| `probmaketitlegame` | Float64 | Chance to make the CFB Playoff National Championship game, according to the Playoff Predictor. |
+| `numwins` | Float64 | Actual wins to date at the time of the snapshot. Distinct from projectedw (full-season projection) and adjwins (opponent-adjusted). |
+| `numlosses` | Float64 | Actual losses to date at the time of the snapshot. Distinct from projectedl (full-season projection) and adjlosses (opponent-adjusted). |
+| `numties` | Float64 | Actual ties to date. Never nonzero -- college football abolished ties in 1996; the column is null or 0 in every published row. |
+| `probwintitle` | Float64 | Chance to win the CFB Playoff National Championship, according to the Playoff Predictor. |
+| `rankchange7days` | Float64 | FPI Rank change from previous week. |
+| `prob6wins` | Float64 | Percent of season simulations in which a team won at least 6 games (typically bowl-eligible). |
+| `rank` | Float64 | FPI rank among FBS teams for this snapshot (1 = best). Prefer this over fpirank: the two agree on 99.4% of rows, and on the ~0.6% where they differ, rank is always the one consistent with the published fpi value. |
+| `offefficiency` | Float64 | Offensive efficiency on 0-100 scale; based on offense's contribution to scoring margin on per-play basis, adjusted for strength of opposing defenses faced. |
+| `offefficiencyrank` | Float64 | Team's offensive efficiency rank among all FBS teams. |
+| `defefficiency` | Float64 | Defensive efficiency on 0-100 scale; based on defense's contribution to scoring margin on per-play basis, adjusted for strength of opposing offenses faced. |
+| `defefficiencyrank` | Float64 | Team's defensive efficiency rank among all FBS teams. |
+| `stefficiency` | Float64 | Special teams efficiency on 0-100 scale; based on special teams' contribution to scoring margin on per-play basis, adjusted for strength of opposing special teams faced. |
+| `stefficiencyrank` | Float64 | Team's special teams efficiency rank among all FBS teams. |
+| `totefficiency` | Float64 | Net efficiency on 0-100 scale; incorporates offense, defense and special teams efficiencies into a single schedule-adjusted measure of per-play efficiency. |
+| `totefficiencyrank` | Float64 | Team's overall efficiency rank among all FBS teams. |
+| `snapshot_is_contemporaneous` | Boolean | True when the snapshot was computed inside its own season's window (August of the season year through February of the next), i.e. it is a live weekly run rather than a retrospective backfill. False for every row before 2015, which ESPN computed in one pass afterwards. A retrospective row is a reconstruction, not an as-of-week rating. |
 
 ```python
 load_cfb_fpi_weekly(seasons=2024)
@@ -1026,10 +1026,10 @@ Release: [espn_cfb_power_index](https://github.com/sportsdataverse/sportsdataver
 | `season` | Int64 | Season (4-digit year). |
 | `game_id` | Int64 | ESPN game identifier. |
 | `team_id` | Int64 | ESPN team id. |
-| `teampredptdiff` | Float64 |  |
-| `gameprojection` | Float64 |  |
-| `matchupquality` | Float64 |  |
-| `teamadjgamescore` | Float64 |  |
+| `teampredptdiff` | Float64 | Expected margin of victory for the FPI favorite. |
+| `gameprojection` | Float64 | Team's predicted win percentage in this game at time of given BPI run. |
+| `matchupquality` | Float64 | A measure of projected competitiveness and excitement in the game, using a 0 to 100 scale, with 100 as the most exciting. |
+| `teamadjgamescore` | Float64 | A measure of how well a team performed compared to their expected performance and the expected performance of a typical top 25 team. |
 
 ```python
 load_cfb_power_index(seasons=2024)
