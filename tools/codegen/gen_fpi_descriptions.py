@@ -127,7 +127,18 @@ def _get(url: str) -> dict[str, Any]:
 
 
 def espn_descriptions() -> dict[str, str]:
-    """Field name -> ESPN's own description, from both FPI payloads."""
+    """Collect ESPN's own FPI field descriptions from both payloads.
+
+    Returns:
+        Field name -> description, punctuation-normalized. Keys are ESPN's raw
+        field names (``gamecontrol``, ``epaoffense``, ...), which are already the
+        published column names, so the result can be looked up by column
+        directly. Merged across the weekly table and the per-event matchup entry;
+        neither payload alone covers every column.
+
+    Network errors and malformed JSON are left to propagate: this is a build
+    script, and a half-fetched vocabulary would silently emit a partial file.
+    """
     out: dict[str, str] = {}
 
     def take(name: Any, desc: Any) -> None:
@@ -150,6 +161,13 @@ def espn_descriptions() -> dict[str, str]:
 
 
 def main() -> int:
+    """Write the intermediate yaml the merge helper consumes.
+
+    Returns 0 always. Columns this file does not cover are not an error -- shared
+    keys are described once in codegen's cross-loader vocabulary, and the
+    coverage ratchet in ``extract_residual_columns`` is what decides whether
+    anything is genuinely undescribed.
+    """
     from tools.codegen.generate import _loader_schemas
 
     descriptions = {**espn_descriptions(), **_AUTHORED}
