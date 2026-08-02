@@ -82,10 +82,12 @@ _RATINGS_OUTPUT_SCHEMA: dict[str, pl.PolarsDataType] = {
 }
 
 # `load_cfb_pbp` serves the published `espn_cfb_pbp` asset, which ships ESPN's
-# dotted field names rather than the cfbfastR-canonical ones `_prepare`
-# requires. `home` maps to `homeTeamId` because the released `pos_team` is
-# itself a team *id* (Int64), not a name -- `_prepare`'s HFA test compares the
-# two directly, so they must share a namespace.
+# dotted field names rather than the cfbfastR-canonical ones `_prepare` requires.
+# `home` maps to `homeTeamId`; `_prepare`'s HFA test compares it against
+# `pos_team` directly, so the two must share a namespace. The released
+# `pos_team` used to BE a team id, which matched; it now carries the team name
+# (id moved to `pos_team_id`), so `_home_into_pos_team_namespace` translates the
+# id back through the frame's own id->name pairs before the comparison.
 _RELEASED_PBP_ALIASES: dict[str, str] = {
     "pos_team_id": "start.pos_team.id",
     "def_pos_team_id": "start.def_pos_team.id",
@@ -150,6 +152,45 @@ _ST_UNIT_PATTERNS: tuple[tuple[str, str], ...] = (
     ("punt", "(?i)punt"),
     ("kick_return", "(?i)kickoff"),  # pos_team on a kickoff is the receiving/return team
 )
+
+
+def _home_into_pos_team_namespace(plays: pl.DataFrame) -> pl.DataFrame:
+    """Re-express ``home`` in whatever namespace ``pos_team`` uses.
+
+    ``_prepare`` derives HFA from ``pos_team == home``, so the two must be
+    comparable. The released ``espn_cfb_pbp`` asset used to carry ``pos_team``
+    as a team *id*, which matched the ``homeTeamId`` alias directly. It now
+    carries the team NAME, with the id in ``pos_team_id`` -- so the alias lands
+    an Int64 beside a String and the guard below (correctly) refuses to run.
+
+    Aliasing ``home`` to ``homeTeamName`` instead does not work either: that
+    column is the SHORT name ("Delaware") while ``pos_team`` is the full display
+    name ("Delaware Blue Hens"), so the comparison would be false on every play
+    -- the silent every-play-is-a-road-play failure the guard exists to catch.
+
+    The frame carries both halves of the mapping, so translate through it:
+    ``(pos_team_id -> pos_team)`` pairs observed in the plays themselves give the
+    home team's name in exactly the vocabulary ``pos_team`` uses. No-op when the
+    namespaces already agree or the inputs are absent.
+    """
+    need = {"home", "pos_team", "pos_team_id"}
+    if not need.issubset(plays.columns):
+        return plays
+    if plays.schema["pos_team"] == plays.schema["home"]:
+        return plays
+    if not plays.schema["pos_team"] == pl.Utf8:
+        return plays
+    lookup = (
+        plays.select(pl.col("pos_team_id").alias("home"), pl.col("pos_team").alias("_home_name"))
+        .drop_nulls()
+        .unique(subset=["home"], keep="first")
+    )
+    if lookup.is_empty() or lookup.schema["home"] != plays.schema["home"]:
+        return plays
+    out = plays.join(lookup, on="home", how="left")
+    # Only swap where the translation actually resolved; an unmapped home id
+    # (a team that never possessed the ball) keeps no HFA rather than inventing one.
+    return out.with_columns(pl.col("_home_name").alias("home")).drop("_home_name")
 
 
 def _alias_released_pbp(plays: pl.DataFrame) -> pl.DataFrame:
@@ -589,6 +630,7 @@ def cfb_ratings(
     assert plays.schema["game_id"] == schedule.schema["game_id"]
 
     plays = _alias_released_pbp(plays)
+    plays = _home_into_pos_team_namespace(plays)
     if "home" in plays.columns and plays.schema["pos_team"] != plays.schema["home"]:
         # `_prepare` derives HFA from `pos_team == home`; mismatched namespaces
         # (a name on one side, an id on the other) never compare equal and would
