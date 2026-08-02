@@ -3,6 +3,8 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [Unreleased](#unreleased)
+  - [Docs — offline full-text search on the documentation site](#docs--offline-full-text-search-on-the-documentation-site)
+  - [CI — docs site builds on GitHub Actions and publishes to `gh-pages`](#ci--docs-site-builds-on-github-actions-and-publishes-to-gh-pages)
   - [New — `sportsdataverse.scrape.stats`: shared stats.nba.com / stats.wnba.com sweep engine (Phase 1)](#new--sportsdataversescrapestats-shared-statsnbacom--statswnbacom-sweep-engine-phase-1)
 - [0.0.74 Release: August 2, 2026](#0074-release-august-2-2026)
   - [CFB — the ridge opponent adjustment was a no-op (BREAKING rating change)](#cfb--the-ridge-opponent-adjustment-was-a-no-op-breaking-rating-change)
@@ -218,6 +220,24 @@
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Unreleased
+
+### Docs — offline full-text search on the documentation site
+
+The Docusaurus site now ships local full-text search
+(`@easyops-cn/docusaurus-search-local`) — the search index is generated into
+the static build itself, so there is no Algolia account, external crawler, or
+third-party service involved. With versioning enabled the plugin indexes only
+the rolling `main` version, so the index does not grow as release snapshots
+accumulate. Docusaurus ships no search by default; the site had simply never
+had one configured.
+
+### CI — docs site builds on GitHub Actions and publishes to `gh-pages`
+
+A new `docs-deploy` workflow builds the static site on pushes to `main` that
+touch `docs/**` and force-publishes the output as a single orphan commit on
+the `gh-pages` branch. Hosting can then serve `gh-pages` as a plain static
+deploy (no build step on the hosting provider), which removes the heavyweight
+per-push Docusaurus build from Vercel.
 
 ### New — `sportsdataverse.scrape.stats`: shared stats.nba.com / stats.wnba.com sweep engine (Phase 1)
 

@@ -101,6 +101,19 @@ const config: Config = {
       } satisfies Preset.Options,
     ],
   ],
+  // Offline/local full-text search (no Algolia account, no external crawler —
+  // the index is built into the static output at build time). With versioning
+  // enabled the plugin indexes only the preferred (`current`/`main`) version,
+  // so the index doesn't grow with each release snapshot.
+  themes: [
+    [
+      '@easyops-cn/docusaurus-search-local',
+      {
+        hashed: true,
+        indexBlog: false,
+      },
+    ],
+  ],
   themeConfig: {
     docs: {
       sidebar: {

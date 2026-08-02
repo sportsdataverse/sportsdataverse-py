@@ -1132,9 +1132,12 @@ def _loaders_stale() -> list[str]:
 
 
 # Legacy / display-name release tags that are not data-loader datasets (old ESPN
-# display tags carry spaces; cfbfastR_cfb_pbp is the pre-cutover CFB pbp tag).
+# display tags carry spaces). cfbfastR_cfb_pbp WAS excluded here as the
+# pre-cutover CFB pbp tag, but 0.0.73 gave it a real loader + releases.yaml
+# entry — keeping the exclusion made the audit report its own manifest entry
+# as an orphan pointing at a "dead" (actually filtered-out) release.
 def _is_loader_tag(tag: str) -> bool:
-    return " " not in tag and tag != "cfbfastR_cfb_pbp" and not tag.startswith("ESPN ")
+    return " " not in tag and not tag.startswith("ESPN ")
 
 
 def gh_release_tags(repo: str = "sportsdataverse/sportsdataverse-data", limit: int = 400) -> list[str]:

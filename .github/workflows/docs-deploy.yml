@@ -1,0 +1,66 @@
+# Builds the Docusaurus static site and publishes it to the `gh-pages` branch
+# as a single orphan commit (no history growth). Hosting serves that branch as
+# a plain static deploy — no build step runs on the hosting provider, which is
+# the point: the heavyweight rspack build (current + 3 versioned snapshots +
+# the local-search index) runs here on free public-repo Actions minutes.
+#
+# Path-filtered: most pushes to main don't touch docs/** and skip this entirely.
+# The codegen-generated reference pages land under docs/docs/, so a
+# `generate.py --docs` regeneration commit triggers a republish as intended.
+name: docs-deploy
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "docs/**"
+      - ".github/workflows/docs-deploy.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: docs-deploy
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  build-deploy:
+    # workflow_dispatch can be launched from any branch; only main may publish.
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: docs
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Job holds contents:write but the build runs third-party yarn
+          # scripts; the publish step passes its token explicitly instead.
+          persist-credentials: false
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: yarn
+          cache-dependency-path: docs/yarn.lock
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Build site
+        run: yarn build
+        env:
+          # The 4-version build peaked past default heap limits on Vercel's
+          # container; public-repo runners have 16GB, give node room to use it.
+          NODE_OPTIONS: --max-old-space-size=8192
+
+      - name: Publish to gh-pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs/build
+          # Single-commit branch: each deploy replaces the previous one, so the
+          # repo never accumulates built-site history.
+          force_orphan: true
