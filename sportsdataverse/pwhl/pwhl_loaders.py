@@ -417,7 +417,7 @@ def load_pwhl_game_info(seasons, return_as_pandas: bool = False):
 
         |col_name        |type   |
         |:---------------|:------|
-        |game_id         |Int32  |
+        |game_id         |Int64  |
         |game_number     |String |
         |game_date       |String |
         |game_date_iso   |String |
@@ -425,20 +425,20 @@ def load_pwhl_game_info(seasons, return_as_pandas: bool = False):
         |end_time        |String |
         |game_duration   |String |
         |game_venue      |String |
-        |attendance      |Int32  |
+        |attendance      |Int64  |
         |game_status     |String |
-        |game_season_id  |Int32  |
-        |started         |Int32  |
-        |final           |Int32  |
-        |home_team_id    |Int32  |
+        |game_season_id  |Int64  |
+        |started         |Int64  |
+        |final           |Int64  |
+        |home_team_id    |Int64  |
         |home_team       |String |
         |home_team_abbr  |String |
-        |home_score      |Int32  |
-        |away_team_id    |Int32  |
+        |home_score      |Int64  |
+        |away_team_id    |Int64  |
         |away_team       |String |
         |away_team_abbr  |String |
-        |away_score      |Int32  |
-        |has_shootout    |Int32  |
+        |away_score      |Int64  |
+        |has_shootout    |Int64  |
         |game_report_url |String |
         |boxscore_url    |String |
 
@@ -481,19 +481,19 @@ def load_pwhl_game_rosters(seasons, return_as_pandas: bool = False):
 
         |col_name      |type   |
         |:-------------|:------|
-        |game_id       |Int32  |
-        |team_id       |Int32  |
+        |game_id       |Int64  |
+        |team_id       |Int64  |
         |team          |String |
         |team_abbr     |String |
         |team_side     |String |
         |player_type   |String |
-        |player_id     |Int32  |
+        |player_id     |Int64  |
         |first_name    |String |
         |last_name     |String |
-        |jersey_number |Int32  |
+        |jersey_number |Int64  |
         |position      |String |
         |birth_date    |String |
-        |starting      |Int32  |
+        |starting      |Int64  |
         |status        |String |
 
     Example:
@@ -535,20 +535,20 @@ def load_pwhl_shifts(seasons, return_as_pandas: bool = False):
 
         |col_name         |type   |
         |:----------------|:------|
-        |game_id          |Int32  |
-        |player_id        |Int32  |
+        |game_id          |Int64  |
+        |player_id        |Int64  |
         |first_name       |String |
         |last_name        |String |
-        |jersey_number    |Int32  |
-        |home             |Int32  |
-        |period           |Int32  |
+        |jersey_number    |String |
+        |home             |Int64  |
+        |period           |Int64  |
         |start_time       |String |
         |end_time         |String |
         |length           |String |
-        |start_s          |Int32  |
-        |end_s            |Int32  |
-        |goal_on_shift    |Int32  |
-        |penalty_on_shift |Int32  |
+        |start_s          |Int64  |
+        |end_s            |Int64  |
+        |goal_on_shift    |Int64  |
+        |penalty_on_shift |Int64  |
 
     Example:
         Quick start::
@@ -593,23 +593,23 @@ def load_pwhl_goalie_boxscores(seasons, return_as_pandas: bool = False):
         |first_name       |String  |
         |last_name        |String  |
         |position         |String  |
-        |team_id          |Int32   |
-        |game_id          |Int32   |
+        |team_id          |Int64   |
+        |game_id          |Int64   |
         |league           |String  |
         |toi              |String  |
         |time_on_ice      |Float64 |
-        |saves            |Int32   |
-        |goals_against    |Int32   |
-        |shots_against    |Int32   |
-        |goals            |Int32   |
-        |assists          |Int32   |
-        |points           |Int32   |
-        |penalty_minutes  |Int32   |
-        |faceoff_attempts |Int32   |
-        |faceoff_wins     |Int32   |
-        |faceoff_losses   |Int32   |
-        |faceoff_pct      |Boolean |
-        |starting         |Int32   |
+        |saves            |Int64   |
+        |goals_against    |Int64   |
+        |shots_against    |Int64   |
+        |goals            |Int64   |
+        |assists          |Int64   |
+        |points           |Int64   |
+        |penalty_minutes  |Int64   |
+        |faceoff_attempts |Int64   |
+        |faceoff_wins     |Int64   |
+        |faceoff_losses   |Int64   |
+        |faceoff_pct      |Null    |
+        |starting         |Int64   |
 
     Example:
         Quick start::
@@ -650,11 +650,11 @@ def load_pwhl_officials(seasons, return_as_pandas: bool = False):
 
         |col_name      |type   |
         |:-------------|:------|
-        |game_id       |Int32  |
+        |game_id       |Int64  |
         |role          |String |
         |first_name    |String |
         |last_name     |String |
-        |jersey_number |Int32  |
+        |jersey_number |Int64  |
         |official_role |String |
 
     Example:
@@ -696,101 +696,110 @@ def load_pwhl_pbp(seasons, return_as_pandas: bool = False):
 
         |col_name                    |type    |
         |:---------------------------|:-------|
-        |game_id                     |Int32   |
+        |game_id                     |Int64   |
         |event                       |String  |
-        |team_id                     |Int32   |
+        |team_id                     |String  |
         |period_of_game              |String  |
         |time_of_period              |String  |
-        |player_id                   |Int32   |
+        |x_coord                     |Float64 |
+        |y_coord                     |Float64 |
+        |player_id                   |Int64   |
         |player_name_first           |String  |
         |player_name_last            |String  |
         |player_position             |String  |
-        |player_two_id               |Int32   |
-        |player_two_name_first       |String  |
-        |player_two_name_last        |String  |
-        |player_two_position         |String  |
-        |x_coord                     |Float64 |
-        |y_coord                     |Float64 |
-        |home_win                    |Int32   |
-        |player_team_id              |Int32   |
-        |event_type                  |String  |
-        |shot_quality                |String  |
         |goal                        |Boolean |
-        |goalie_id                   |Int32   |
+        |goalie_id                   |Int64   |
         |goalie_first                |String  |
         |goalie_last                 |String  |
-        |player_three_id             |Int32   |
-        |player_three_name_first     |String  |
-        |player_three_name_last      |String  |
-        |player_three_position       |String  |
+        |home_win                    |String  |
+        |player_team_id              |String  |
+        |event_type                  |String  |
+        |shot_quality                |String  |
         |empty_net                   |String  |
         |game_winner                 |String  |
         |penalty_shot                |String  |
         |insurance                   |String  |
-        |power_play                  |Int32   |
         |short_handed                |String  |
-        |plus_player_one_id          |Int32   |
+        |power_play                  |String  |
+        |player_two_id               |Int64   |
+        |player_two_name_first       |String  |
+        |player_two_name_last        |String  |
+        |player_two_position         |String  |
+        |player_three_id             |Int64   |
+        |player_three_name_first     |String  |
+        |player_three_name_last      |String  |
+        |player_three_position       |String  |
+        |plus_player_one_id          |Int64   |
         |plus_player_one_first       |String  |
         |plus_player_one_last        |String  |
         |plus_player_one_position    |String  |
-        |plus_player_two_id          |Int32   |
+        |plus_player_two_id          |Int64   |
         |plus_player_two_first       |String  |
         |plus_player_two_last        |String  |
         |plus_player_two_position    |String  |
-        |plus_player_three_id        |Int32   |
+        |plus_player_three_id        |Int64   |
         |plus_player_three_first     |String  |
         |plus_player_three_last      |String  |
         |plus_player_three_position  |String  |
-        |plus_player_four_id         |Int32   |
+        |plus_player_four_id         |Int64   |
         |plus_player_four_first      |String  |
         |plus_player_four_last       |String  |
         |plus_player_four_position   |String  |
-        |plus_player_five_id         |Int32   |
+        |plus_player_five_id         |Int64   |
         |plus_player_five_first      |String  |
         |plus_player_five_last       |String  |
         |plus_player_five_position   |String  |
-        |minus_player_one_id         |Int32   |
+        |minus_player_one_id         |Int64   |
         |minus_player_one_first      |String  |
         |minus_player_one_last       |String  |
         |minus_player_one_position   |String  |
-        |minus_player_two_id         |Int32   |
+        |minus_player_two_id         |Int64   |
         |minus_player_two_first      |String  |
         |minus_player_two_last       |String  |
         |minus_player_two_position   |String  |
-        |minus_player_three_id       |Int32   |
+        |minus_player_three_id       |Int64   |
         |minus_player_three_first    |String  |
         |minus_player_three_last     |String  |
         |minus_player_three_position |String  |
-        |minus_player_four_id        |Int32   |
+        |minus_player_four_id        |Int64   |
         |minus_player_four_first     |String  |
         |minus_player_four_last      |String  |
         |minus_player_four_position  |String  |
-        |minus_player_five_id        |Int32   |
+        |minus_player_five_id        |Int64   |
         |minus_player_five_first     |String  |
         |minus_player_five_last      |String  |
         |minus_player_five_position  |String  |
         |penalty_length              |String  |
         |game_date                   |String  |
-        |game_season                 |Int32   |
+        |game_season                 |Int64   |
         |game_season_id              |String  |
-        |home_team_id                |Int32   |
         |home_team                   |String  |
-        |away_team_id                |Int32   |
+        |home_team_id                |String  |
         |away_team                   |String  |
-        |x_coord_original            |Int32   |
-        |y_coord_original            |Int32   |
-        |x_coord_neutral             |Int32   |
-        |y_coord_neutral             |Int32   |
+        |away_team_id                |String  |
+        |x_coord_original            |Int64   |
+        |y_coord_original            |Int64   |
+        |x_coord_neutral             |Int64   |
+        |y_coord_neutral             |Int64   |
         |x_coord_fixed               |Float64 |
         |y_coord_fixed               |Float64 |
         |x_coord_right               |Float64 |
         |y_coord_right               |Float64 |
         |x_coord_vertical            |Float64 |
         |y_coord_vertical            |Float64 |
-        |minute_start                |Int32   |
-        |second_start                |Int32   |
+        |minute_start                |Int64   |
+        |second_start                |Int64   |
         |clock                       |String  |
-        |sec_from_start              |Int32   |
+        |sec_from_start              |Int64   |
+        |shot_distance               |Float64 |
+        |shot_angle                  |Float64 |
+        |scoring_chance              |Boolean |
+        |on_ice_home                 |String  |
+        |on_ice_away                 |String  |
+        |skaters_home                |Int64   |
+        |skaters_away                |Int64   |
+        |strength_state              |String  |
+        |strength_state_valid        |Boolean |
 
     Example:
         Quick start::
@@ -892,24 +901,24 @@ def load_pwhl_penalty_summary(seasons, return_as_pandas: bool = False):
 
         |col_name          |type   |
         |:-----------------|:------|
-        |game_id           |Int32  |
-        |period_id         |Int32  |
+        |game_id           |Int64  |
+        |period_id         |Int64  |
         |period            |String |
         |time              |String |
-        |team_id           |Int32  |
+        |team_id           |Int64  |
         |team              |String |
         |team_abbr         |String |
-        |game_penalty_id   |Int32  |
-        |minutes           |Int32  |
+        |game_penalty_id   |Int64  |
+        |minutes           |Int64  |
         |description       |String |
         |rule_number       |String |
-        |is_power_play     |Int32  |
-        |is_bench          |Int32  |
-        |taken_by_id       |Int32  |
+        |is_power_play     |Int64  |
+        |is_bench          |Int64  |
+        |taken_by_id       |Int64  |
         |taken_by_first    |String |
         |taken_by_last     |String |
         |taken_by_position |String |
-        |served_by_id      |Int32  |
+        |served_by_id      |Int64  |
         |served_by_first   |String |
         |served_by_last    |String |
 
@@ -956,28 +965,28 @@ def load_pwhl_player_boxscores(seasons, return_as_pandas: bool = False):
         |first_name       |String  |
         |last_name        |String  |
         |position         |String  |
-        |team_id          |Int32   |
-        |game_id          |Int32   |
+        |team_id          |Int64   |
+        |game_id          |Int64   |
         |league           |String  |
         |toi              |String  |
         |time_on_ice      |Float64 |
-        |goals            |Int32   |
-        |assists          |Int32   |
-        |points           |Int32   |
-        |shots            |Int32   |
-        |hits             |Int32   |
-        |blocked_shots    |Int32   |
-        |penalty_minutes  |Int32   |
-        |plus_minus       |Int32   |
-        |faceoff_attempts |Int32   |
-        |faceoff_wins     |Int32   |
-        |faceoff_losses   |Int32   |
+        |goals            |Int64   |
+        |assists          |Int64   |
+        |points           |Int64   |
+        |shots            |Int64   |
+        |hits             |Int64   |
+        |blocked_shots    |Int64   |
+        |penalty_minutes  |Int64   |
+        |plus_minus       |Int64   |
+        |faceoff_attempts |Int64   |
+        |faceoff_wins     |Int64   |
+        |faceoff_losses   |Int64   |
         |faceoff_pct      |Float64 |
-        |starting         |Int32   |
+        |starting         |Int64   |
         |player_type      |String  |
-        |saves            |Int32   |
-        |goals_against    |Int32   |
-        |shots_against    |Int32   |
+        |saves            |Int64   |
+        |goals_against    |Int64   |
+        |shots_against    |Int64   |
 
     Example:
         Quick start::
@@ -1137,35 +1146,35 @@ def load_pwhl_scoring_summary(seasons, return_as_pandas: bool = False):
         A polars (or pandas) DataFrame; seasons with no published asset are
         skipped with a warning rather than raising (404-safe).
 
-        |col_name           |type    |
-        |:------------------|:-------|
-        |game_id            |Int32   |
-        |period_id          |Int32   |
-        |period             |String  |
-        |time               |String  |
-        |team_id            |Int32   |
-        |team               |String  |
-        |team_abbr          |String  |
-        |game_goal_id       |Int32   |
-        |scorer_goal_number |Int32   |
-        |scorer_id          |Int32   |
-        |scorer_first       |String  |
-        |scorer_last        |String  |
-        |scorer_position    |String  |
-        |assist_1_id        |Int32   |
-        |assist_1_first     |String  |
-        |assist_1_last      |String  |
-        |assist_2_id        |Int32   |
-        |assist_2_first     |String  |
-        |assist_2_last      |String  |
-        |is_power_play      |Int32   |
-        |is_short_handed    |Int32   |
-        |is_empty_net       |Int32   |
-        |is_penalty_shot    |Int32   |
-        |is_insurance       |Int32   |
-        |is_game_winning    |Int32   |
-        |x_location         |Boolean |
-        |y_location         |Boolean |
+        |col_name           |type   |
+        |:------------------|:------|
+        |game_id            |Int64  |
+        |period_id          |Int64  |
+        |period             |String |
+        |time               |String |
+        |team_id            |Int64  |
+        |team               |String |
+        |team_abbr          |String |
+        |game_goal_id       |Int64  |
+        |scorer_goal_number |Int64  |
+        |scorer_id          |Int64  |
+        |scorer_first       |String |
+        |scorer_last        |String |
+        |scorer_position    |String |
+        |assist_1_id        |Int64  |
+        |assist_1_first     |String |
+        |assist_1_last      |String |
+        |assist_2_id        |Int64  |
+        |assist_2_first     |String |
+        |assist_2_last      |String |
+        |is_power_play      |Int64  |
+        |is_short_handed    |Int64  |
+        |is_empty_net       |Int64  |
+        |is_penalty_shot    |Int64  |
+        |is_insurance       |Int64  |
+        |is_game_winning    |Int64  |
+        |x_location         |Null   |
+        |y_location         |Null   |
 
     Example:
         Quick start::
@@ -1206,16 +1215,16 @@ def load_pwhl_shootout(seasons, return_as_pandas: bool = False):
 
         |col_name      |type   |
         |:-------------|:------|
-        |game_id       |Int32  |
-        |round         |Int32  |
+        |game_id       |Int64  |
+        |round         |Int64  |
         |team_side     |String |
-        |shooter_id    |Int32  |
+        |shooter_id    |Int64  |
         |shooter_first |String |
         |shooter_last  |String |
-        |goalie_id     |Int32  |
+        |goalie_id     |Int64  |
         |goalie_first  |String |
         |goalie_last   |String |
-        |is_goal       |Int32  |
+        |is_goal       |Int64  |
 
     Example:
         Quick start::
@@ -1256,13 +1265,13 @@ def load_pwhl_shots_by_period(seasons, return_as_pandas: bool = False):
 
         |col_name   |type   |
         |:----------|:------|
-        |game_id    |Int32  |
-        |period_id  |Int32  |
+        |game_id    |Int64  |
+        |period_id  |Int64  |
         |period     |String |
-        |home_goals |Int32  |
-        |home_shots |Int32  |
-        |away_goals |Int32  |
-        |away_shots |Int32  |
+        |home_goals |Int64  |
+        |home_shots |Int64  |
+        |away_goals |Int64  |
+        |away_shots |Int64  |
 
     Example:
         Quick start::
@@ -1307,24 +1316,24 @@ def load_pwhl_skater_boxscores(seasons, return_as_pandas: bool = False):
         |first_name       |String  |
         |last_name        |String  |
         |position         |String  |
-        |team_id          |Int32   |
-        |game_id          |Int32   |
+        |team_id          |Int64   |
+        |game_id          |Int64   |
         |league           |String  |
         |toi              |String  |
         |time_on_ice      |Float64 |
-        |goals            |Int32   |
-        |assists          |Int32   |
-        |points           |Int32   |
-        |shots            |Int32   |
-        |hits             |Int32   |
-        |blocked_shots    |Int32   |
-        |penalty_minutes  |Int32   |
-        |plus_minus       |Int32   |
-        |faceoff_attempts |Int32   |
-        |faceoff_wins     |Int32   |
-        |faceoff_losses   |Int32   |
+        |goals            |Int64   |
+        |assists          |Int64   |
+        |points           |Int64   |
+        |shots            |Int64   |
+        |hits             |Int64   |
+        |blocked_shots    |Int64   |
+        |penalty_minutes  |Int64   |
+        |plus_minus       |Int64   |
+        |faceoff_attempts |Int64   |
+        |faceoff_wins     |Int64   |
+        |faceoff_losses   |Int64   |
         |faceoff_pct      |Float64 |
-        |starting         |Int32   |
+        |starting         |Int64   |
 
     Example:
         Quick start::
@@ -1365,28 +1374,28 @@ def load_pwhl_team_boxscores(seasons, return_as_pandas: bool = False):
 
         |col_name         |type    |
         |:----------------|:-------|
-        |game_id          |Int32   |
-        |team_id          |Int32   |
+        |game_id          |Int64   |
+        |team_id          |Int64   |
         |team             |String  |
         |team_abbr        |String  |
         |team_side        |String  |
-        |shots            |Int32   |
-        |goals            |Int32   |
-        |hits             |Int32   |
-        |pp_goals         |Int32   |
-        |pp_opportunities |Int32   |
-        |goal_count       |Int32   |
-        |assist_count     |Int32   |
-        |penalty_minutes  |Int32   |
-        |infraction_count |Int32   |
-        |faceoff_attempts |Int32   |
-        |faceoff_wins     |Int32   |
+        |shots            |Int64   |
+        |goals            |Int64   |
+        |hits             |Int64   |
+        |pp_goals         |Int64   |
+        |pp_opportunities |Int64   |
+        |goal_count       |Int64   |
+        |assist_count     |Int64   |
+        |penalty_minutes  |Int64   |
+        |infraction_count |Int64   |
+        |faceoff_attempts |Int64   |
+        |faceoff_wins     |Int64   |
         |faceoff_win_pct  |Float64 |
-        |season_wins      |Int32   |
-        |season_losses    |Int32   |
-        |season_ot_wins   |Int32   |
-        |season_ot_losses |Int32   |
-        |season_so_losses |Int32   |
+        |season_wins      |Int64   |
+        |season_losses    |Int64   |
+        |season_ot_wins   |Int64   |
+        |season_ot_losses |Int64   |
+        |season_so_losses |Int64   |
         |season_record    |String  |
 
     Example:
@@ -1428,25 +1437,25 @@ def load_pwhl_three_stars(seasons, return_as_pandas: bool = False):
 
         |col_name      |type   |
         |:-------------|:------|
-        |game_id       |Int32  |
-        |star          |Int32  |
-        |team_id       |Int32  |
+        |game_id       |Int64  |
+        |star          |Int64  |
+        |team_id       |Int64  |
         |team          |String |
         |team_abbr     |String |
-        |player_id     |Int32  |
+        |player_id     |Int64  |
         |first_name    |String |
         |last_name     |String |
-        |jersey_number |Int32  |
+        |jersey_number |Int64  |
         |position      |String |
-        |is_goalie     |Int32  |
-        |is_home       |Int32  |
-        |goals         |Int32  |
-        |assists       |Int32  |
-        |points        |Int32  |
-        |shots         |Int32  |
-        |saves         |Int32  |
-        |shots_against |Int32  |
-        |goals_against |Int32  |
+        |is_goalie     |Int64  |
+        |is_home       |Int64  |
+        |goals         |Int64  |
+        |assists       |Int64  |
+        |points        |Int64  |
+        |shots         |Int64  |
+        |saves         |Int64  |
+        |shots_against |Int64  |
+        |goals_against |Int64  |
         |time_on_ice   |String |
 
     Example:

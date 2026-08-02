@@ -13,7 +13,7 @@ sidebar_label: NFL
 | [NFL.com API](reference/nfl_api) | 11 | `https://api.nfl.com` |
 | [PFF Premium Stats (premium.pff.com)](reference/pff_core) | 46 | `https://premium.pff.com` |
 | [Dataset loaders](reference/loaders) | 8 | nflverse data releases |
-| [Additional functions](reference/additional) | 147 | hand-written wrappers, loaders & helpers |
+| [Additional functions](reference/additional) | 146 | hand-written wrappers, loaders & helpers |
 
 ## Examples
 
@@ -68,7 +68,6 @@ Each `sportsdataverse` function and its equivalent in the sister R package, [`nf
 | [`load_nfl_weekly_rosters`](reference/loaders#load_nfl_weekly_rosters) | [`load_rosters_weekly`](https://nflreadr.nflverse.com/reference/load_rosters_weekly.html) |
 | [`load_officials`](reference/additional#load_officials) | [`load_officials`](https://nflreadr.nflverse.com/reference/load_officials.html) |
 | [`load_participation`](reference/additional#load_participation) | [`load_participation`](https://nflreadr.nflverse.com/reference/load_participation.html) |
-| [`load_pbp`](reference/additional#load_pbp) | [`load_pbp`](https://nflreadr.nflverse.com/reference/load_pbp.html) |
 | [`load_pfr_advstats`](reference/additional#load_pfr_advstats) | [`load_pfr_advstats`](https://nflreadr.nflverse.com/reference/load_pfr_advstats.html) |
 | [`load_player_stats`](reference/additional#load_player_stats) | [`load_player_stats`](https://nflreadr.nflverse.com/reference/load_player_stats.html) |
 | [`load_players`](reference/additional#load_players) | [`load_players`](https://nflreadr.nflverse.com/reference/load_players.html) |

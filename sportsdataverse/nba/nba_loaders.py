@@ -28,6 +28,26 @@ __all__ = [
     "load_nba_draft",
     "load_nba_rosters",
     "load_nba_stats_schedules",
+    "load_nba_stats_coaches",
+    "load_nba_stats_game_rosters",
+    "load_nba_stats_lineups",
+    "load_nba_stats_lineups_v3",
+    "load_nba_stats_officials",
+    "load_nba_stats_pbp",
+    "load_nba_stats_pbp_v3",
+    "load_nba_stats_player_boxscores",
+    "load_nba_stats_player_game_logs",
+    "load_nba_stats_player_season_stats",
+    "load_nba_stats_possessions_v3",
+    "load_nba_stats_rosters",
+    "load_nba_stats_shots",
+    "load_nba_stats_standings",
+    "load_nba_stats_team_boxscores",
+    "load_nba_stats_team_season_stats",
+    "load_nba_player_crosswalk",
+    "load_nba_schedule_crosswalk",
+    "load_nba_team_crosswalk",
+    "load_nba_player_core",
     "load_nba_player_impact",
 ]
 
@@ -47,8 +67,9 @@ def load_nba_pbp(seasons, return_as_pandas: bool = False):
 
         |col_name                        |type                                                   |
         |:-------------------------------|:------------------------------------------------------|
+        |game_play_number                |Int32                                                  |
         |id                              |Float64                                                |
-        |sequence_number                 |String                                                 |
+        |sequence_number                 |Int32                                                  |
         |type_id                         |Int32                                                  |
         |type_text                       |String                                                 |
         |text                            |String                                                 |
@@ -59,52 +80,59 @@ def load_nba_pbp(seasons, return_as_pandas: bool = False):
         |clock_display_value             |String                                                 |
         |scoring_play                    |Boolean                                                |
         |score_value                     |Int32                                                  |
+        |team_id                         |Int32                                                  |
+        |athlete_id_1                    |Int32                                                  |
+        |athlete_id_2                    |Int32                                                  |
+        |athlete_id_3                    |Int32                                                  |
+        |wallclock                       |String                                                 |
         |shooting_play                   |Boolean                                                |
         |coordinate_x_raw                |Float64                                                |
         |coordinate_y_raw                |Float64                                                |
+        |points_attempted                |Int32                                                  |
+        |short_description               |String                                                 |
+        |game_id                         |Int32                                                  |
         |season                          |Int32                                                  |
         |season_type                     |Int32                                                  |
-        |away_team_id                    |Int32                                                  |
-        |away_team_name                  |String                                                 |
-        |away_team_mascot                |String                                                 |
-        |away_team_abbrev                |String                                                 |
-        |away_team_name_alt              |String                                                 |
         |home_team_id                    |Int32                                                  |
         |home_team_name                  |String                                                 |
         |home_team_mascot                |String                                                 |
         |home_team_abbrev                |String                                                 |
         |home_team_name_alt              |String                                                 |
-        |home_team_spread                |Float64                                                |
+        |away_team_id                    |Int32                                                  |
+        |away_team_name                  |String                                                 |
+        |away_team_mascot                |String                                                 |
+        |away_team_abbrev                |String                                                 |
+        |away_team_name_alt              |String                                                 |
         |game_spread                     |Float64                                                |
         |home_favorite                   |Boolean                                                |
         |game_spread_available           |Boolean                                                |
-        |game_id                         |Int32                                                  |
+        |home_team_spread                |Float64                                                |
         |qtr                             |Int32                                                  |
         |time                            |String                                                 |
         |clock_minutes                   |Int32                                                  |
         |clock_seconds                   |Float64                                                |
-        |half                            |String                                                 |
-        |game_half                       |String                                                 |
+        |home_timeout_called             |Boolean                                                |
+        |away_timeout_called             |Boolean                                                |
+        |half                            |Int32                                                  |
+        |game_half                       |Int32                                                  |
         |lead_qtr                        |Int32                                                  |
-        |lead_game_half                  |String                                                 |
-        |start_quarter_seconds_remaining |Int32                                                  |
-        |start_half_seconds_remaining    |Int32                                                  |
-        |start_game_seconds_remaining    |Int32                                                  |
-        |game_play_number                |Int32                                                  |
-        |end_quarter_seconds_remaining   |Int32                                                  |
-        |end_half_seconds_remaining      |Int32                                                  |
-        |end_game_seconds_remaining      |Int32                                                  |
+        |lead_half                       |Int32                                                  |
+        |start_quarter_seconds_remaining |Float64                                                |
+        |start_half_seconds_remaining    |Float64                                                |
+        |start_game_seconds_remaining    |Float64                                                |
+        |end_quarter_seconds_remaining   |Float64                                                |
+        |end_half_seconds_remaining      |Float64                                                |
+        |end_game_seconds_remaining      |Float64                                                |
         |period                          |Int32                                                  |
-        |team_id                         |Int32                                                  |
-        |athlete_id_1                    |Int32                                                  |
-        |athlete_id_2                    |Int32                                                  |
-        |athlete_id_3                    |Int32                                                  |
         |lag_qtr                         |Int32                                                  |
-        |lag_game_half                   |String                                                 |
+        |lag_half                        |Int32                                                  |
         |coordinate_x                    |Float64                                                |
         |coordinate_y                    |Float64                                                |
         |game_date                       |Date                                                   |
         |game_date_time                  |Datetime(time_unit='us', time_zone='America/New_York') |
+        |athlete_name_1                  |String                                                 |
+        |athlete_name_2                  |String                                                 |
+        |athlete_name_3                  |String                                                 |
         |type_abbreviation               |String                                                 |
 
     Example:
@@ -177,6 +205,7 @@ def load_nba_player_boxscore(seasons, return_as_pandas: bool = False):
         |starter                           |Boolean                                                |
         |ejected                           |Boolean                                                |
         |did_not_play                      |Boolean                                                |
+        |reason                            |String                                                 |
         |active                            |Boolean                                                |
         |athlete_jersey                    |String                                                 |
         |athlete_short_name                |String                                                 |
@@ -249,12 +278,21 @@ def load_nba_schedule(seasons, return_as_pandas: bool = False):
         |time_valid                |Boolean                                                |
         |neutral_site              |Boolean                                                |
         |conference_competition    |Boolean                                                |
+        |play_by_play_available    |Boolean                                                |
         |recent                    |Boolean                                                |
         |start_date                |String                                                 |
+        |broadcast                 |String                                                 |
+        |highlights                |String                                                 |
         |notes_type                |String                                                 |
         |notes_headline            |String                                                 |
+        |broadcast_market          |String                                                 |
+        |broadcast_name            |String                                                 |
         |type_id                   |Int32                                                  |
         |type_abbreviation         |String                                                 |
+        |venue_id                  |Int32                                                  |
+        |venue_full_name           |String                                                 |
+        |venue_address_city        |String                                                 |
+        |venue_indoor              |Boolean                                                |
         |status_clock              |Float64                                                |
         |status_display_clock      |String                                                 |
         |status_period             |Float64                                                |
@@ -276,9 +314,12 @@ def load_nba_schedule(seasons, return_as_pandas: bool = False):
         |home_color                |String                                                 |
         |home_alternate_color      |String                                                 |
         |home_is_active            |Boolean                                                |
+        |home_venue_id             |Int32                                                  |
         |home_logo                 |String                                                 |
         |home_score                |Int32                                                  |
         |home_winner               |Boolean                                                |
+        |home_linescores           |String                                                 |
+        |home_records              |String                                                 |
         |away_id                   |Int32                                                  |
         |away_uid                  |String                                                 |
         |away_location             |String                                                 |
@@ -289,18 +330,16 @@ def load_nba_schedule(seasons, return_as_pandas: bool = False):
         |away_color                |String                                                 |
         |away_alternate_color      |String                                                 |
         |away_is_active            |Boolean                                                |
+        |away_venue_id             |Int32                                                  |
         |away_logo                 |String                                                 |
         |away_score                |Int32                                                  |
         |away_winner               |Boolean                                                |
+        |away_linescores           |String                                                 |
+        |away_records              |String                                                 |
         |game_id                   |Int32                                                  |
         |season                    |Int32                                                  |
         |season_type               |Int32                                                  |
-        |venue_id                  |Int32                                                  |
-        |venue_full_name           |String                                                 |
-        |venue_address_city        |String                                                 |
         |venue_address_state       |String                                                 |
-        |venue_capacity            |Float64                                                |
-        |venue_indoor              |Boolean                                                |
         |status_type_alt_detail    |String                                                 |
         |game_json                 |Boolean                                                |
         |game_json_url             |String                                                 |
@@ -380,6 +419,7 @@ def load_nba_team_boxscore(seasons, return_as_pandas: bool = False):
         |free_throw_pct                    |Float64                                                |
         |free_throws_made                  |Int32                                                  |
         |free_throws_attempted             |Int32                                                  |
+        |largest_lead                      |String                                                 |
         |offensive_rebounds                |Int32                                                  |
         |points_in_paint                   |String                                                 |
         |steals                            |Int32                                                  |
@@ -405,7 +445,8 @@ def load_nba_team_boxscore(seasons, return_as_pandas: bool = False):
         |opponent_team_alternate_color     |String                                                 |
         |opponent_team_logo                |String                                                 |
         |opponent_team_score               |Int32                                                  |
-        |largest_lead                      |String                                                 |
+        |lead_changes                      |String                                                 |
+        |lead_percentage                   |String                                                 |
 
     Example:
         Quick start::
@@ -570,6 +611,11 @@ def load_nba_shots(seasons, return_as_pandas: bool = False):
         |coordinate_y        |Float64 |
         |coordinate_x_raw    |Float64 |
         |coordinate_y_raw    |Float64 |
+        |athlete_name_1      |String  |
+        |athlete_name_2      |String  |
+        |team_name           |String  |
+        |team_mascot         |String  |
+        |team_abbrev         |String  |
 
     Example:
         Quick start::
@@ -927,6 +973,1049 @@ def load_nba_stats_schedules(seasons, return_as_pandas: bool = False):
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_schedules
 
     Args:
+        seasons: an int or iterable of seasons (>= 1996).
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; seasons with no published asset are
+        skipped with a warning rather than raising (404-safe).
+
+        |col_name          |type    |
+        |:-----------------|:-------|
+        |season_id         |String  |
+        |team_id           |Int64   |
+        |team_abbreviation |String  |
+        |team_name         |String  |
+        |game_id           |String  |
+        |game_date         |String  |
+        |matchup           |String  |
+        |wl                |String  |
+        |min               |Int64   |
+        |fgm               |Int64   |
+        |fga               |Int64   |
+        |fg_pct            |Float64 |
+        |fg3m              |Int64   |
+        |fg3a              |Int64   |
+        |fg3_pct           |Float64 |
+        |ftm               |Int64   |
+        |fta               |Int64   |
+        |ft_pct            |Float64 |
+        |oreb              |Int64   |
+        |dreb              |Int64   |
+        |reb               |Int64   |
+        |ast               |Int64   |
+        |stl               |Int64   |
+        |blk               |Int64   |
+        |tov               |Int64   |
+        |pf                |Int64   |
+        |pts               |Int64   |
+        |plus_minus        |Int64   |
+        |video_available   |Int64   |
+        |season            |Int32   |
+        |season_type       |String  |
+
+    Example:
+        Quick start::
+
+            load_nba_stats_schedules(seasons=2025)
+    """
+    frames, missing = [], []
+    for season in _as_season_list(seasons):
+        if int(season) < 1996:
+            raise SeasonNotFoundError("season cannot be less than 1996")
+        df = _read_release_parquet(
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_schedules/nba_stats_schedule_{season}.parquet"
+        )
+        if df is None:
+            missing.append(season)
+            continue
+        frames.append(df)
+    if missing:
+        cli_warn("load_nba_stats_schedules: no data for season(s) {missing} (skipped)".format(missing=missing))
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+def load_nba_stats_coaches(seasons, return_as_pandas: bool = False):
+    """Load nba_stats_coaches (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_coaches
+
+    Args:
+        seasons: an int or iterable of seasons (>= 1996).
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; seasons with no published asset are
+        skipped with a warning rather than raising (404-safe).
+
+        |col_name          |type   |
+        |:-----------------|:------|
+        |team_id           |Int64  |
+        |season            |Int32  |
+        |coach_id          |Int64  |
+        |first_name        |String |
+        |last_name         |String |
+        |coach_name        |String |
+        |is_assistant      |Int64  |
+        |coach_type        |String |
+        |sort_sequence     |Int64  |
+        |sub_sort_sequence |Int64  |
+        |season_type       |String |
+
+    Example:
+        Quick start::
+
+            load_nba_stats_coaches(seasons=2025)
+    """
+    frames, missing = [], []
+    for season in _as_season_list(seasons):
+        if int(season) < 1996:
+            raise SeasonNotFoundError("season cannot be less than 1996")
+        df = _read_release_parquet(
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_coaches/coaches_{season}.parquet"
+        )
+        if df is None:
+            missing.append(season)
+            continue
+        frames.append(df)
+    if missing:
+        cli_warn("load_nba_stats_coaches: no data for season(s) {missing} (skipped)".format(missing=missing))
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+def load_nba_stats_game_rosters(seasons, return_as_pandas: bool = False):
+    """Load nba_stats_game_rosters (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_game_rosters
+
+    Args:
+        seasons: an int or iterable of seasons (>= 1996).
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; seasons with no published asset are
+        skipped with a warning rather than raising (404-safe).
+
+        |col_name          |type   |
+        |:-----------------|:------|
+        |player_id         |Int64  |
+        |first_name        |String |
+        |last_name         |String |
+        |jersey_num        |String |
+        |team_id           |Int64  |
+        |team_city         |String |
+        |team_name         |String |
+        |team_abbreviation |String |
+        |season            |Int32  |
+        |game_id           |String |
+
+    Example:
+        Quick start::
+
+            load_nba_stats_game_rosters(seasons=2025)
+    """
+    frames, missing = [], []
+    for season in _as_season_list(seasons):
+        if int(season) < 1996:
+            raise SeasonNotFoundError("season cannot be less than 1996")
+        df = _read_release_parquet(
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_game_rosters/game_rosters_{season}.parquet"
+        )
+        if df is None:
+            missing.append(season)
+            continue
+        frames.append(df)
+    if missing:
+        cli_warn("load_nba_stats_game_rosters: no data for season(s) {missing} (skipped)".format(missing=missing))
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+def load_nba_stats_lineups(seasons, return_as_pandas: bool = False):
+    """Load nba_stats_lineups (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_lineups
+
+    Args:
+        seasons: an int or iterable of seasons (>= 2007).
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; seasons with no published asset are
+        skipped with a warning rather than raising (404-safe).
+
+        |col_name                |type    |
+        |:-----------------------|:-------|
+        |group_set               |String  |
+        |group_id                |String  |
+        |group_name              |String  |
+        |team_id                 |Int64   |
+        |team_abbreviation       |String  |
+        |gp                      |Int64   |
+        |w                       |Int64   |
+        |l                       |Int64   |
+        |w_pct                   |Float64 |
+        |min                     |Float64 |
+        |e_off_rating            |Float64 |
+        |off_rating              |Float64 |
+        |e_def_rating            |Float64 |
+        |def_rating              |Float64 |
+        |e_net_rating            |Float64 |
+        |net_rating              |Float64 |
+        |ast_pct                 |Float64 |
+        |ast_to                  |Float64 |
+        |ast_ratio               |Float64 |
+        |oreb_pct                |Float64 |
+        |dreb_pct                |Float64 |
+        |reb_pct                 |Float64 |
+        |tm_tov_pct              |Float64 |
+        |efg_pct                 |Float64 |
+        |ts_pct                  |Float64 |
+        |e_pace                  |Float64 |
+        |pace                    |Float64 |
+        |pace_per40              |Float64 |
+        |poss                    |Int64   |
+        |pie                     |Float64 |
+        |gp_rank                 |Int64   |
+        |w_rank                  |Int64   |
+        |l_rank                  |Int64   |
+        |w_pct_rank              |Int64   |
+        |min_rank                |Int64   |
+        |off_rating_rank         |Int64   |
+        |def_rating_rank         |Int64   |
+        |net_rating_rank         |Int64   |
+        |ast_pct_rank            |Int64   |
+        |ast_to_rank             |Int64   |
+        |ast_ratio_rank          |Int64   |
+        |oreb_pct_rank           |Int64   |
+        |dreb_pct_rank           |Int64   |
+        |reb_pct_rank            |Int64   |
+        |tm_tov_pct_rank         |Int64   |
+        |efg_pct_rank            |Int64   |
+        |ts_pct_rank             |Int64   |
+        |pace_rank               |Int64   |
+        |pie_rank                |Int64   |
+        |sum_time_played         |Int64   |
+        |season                  |Int32   |
+        |season_type             |String  |
+        |measure_type            |String  |
+        |per_mode                |String  |
+        |fgm                     |Float64 |
+        |fga                     |Float64 |
+        |fg_pct                  |Float64 |
+        |fg3m                    |Float64 |
+        |fg3a                    |Float64 |
+        |fg3_pct                 |Float64 |
+        |ftm                     |Float64 |
+        |fta                     |Float64 |
+        |ft_pct                  |Float64 |
+        |oreb                    |Float64 |
+        |dreb                    |Float64 |
+        |reb                     |Float64 |
+        |ast                     |Float64 |
+        |tov                     |Float64 |
+        |stl                     |Float64 |
+        |blk                     |Float64 |
+        |blka                    |Float64 |
+        |pf                      |Float64 |
+        |pfd                     |Float64 |
+        |pts                     |Float64 |
+        |plus_minus              |Float64 |
+        |fgm_rank                |Int64   |
+        |fga_rank                |Int64   |
+        |fg_pct_rank             |Int64   |
+        |fg3m_rank               |Int64   |
+        |fg3a_rank               |Int64   |
+        |fg3_pct_rank            |Int64   |
+        |ftm_rank                |Int64   |
+        |fta_rank                |Int64   |
+        |ft_pct_rank             |Int64   |
+        |oreb_rank               |Int64   |
+        |dreb_rank               |Int64   |
+        |reb_rank                |Int64   |
+        |ast_rank                |Int64   |
+        |tov_rank                |Int64   |
+        |stl_rank                |Int64   |
+        |blk_rank                |Int64   |
+        |blka_rank               |Int64   |
+        |pf_rank                 |Int64   |
+        |pfd_rank                |Int64   |
+        |pts_rank                |Int64   |
+        |plus_minus_rank         |Int64   |
+        |pts_off_tov             |Float64 |
+        |pts_2nd_chance          |Float64 |
+        |pts_fb                  |Float64 |
+        |pts_paint               |Float64 |
+        |opp_pts_off_tov         |Float64 |
+        |opp_pts_2nd_chance      |Float64 |
+        |opp_pts_fb              |Float64 |
+        |opp_pts_paint           |Float64 |
+        |pts_off_tov_rank        |Int64   |
+        |pts_2nd_chance_rank     |Int64   |
+        |pts_fb_rank             |Int64   |
+        |pts_paint_rank          |Int64   |
+        |opp_pts_off_tov_rank    |Int64   |
+        |opp_pts_2nd_chance_rank |Int64   |
+        |opp_pts_fb_rank         |Int64   |
+        |opp_pts_paint_rank      |Int64   |
+        |opp_fgm                 |Float64 |
+        |opp_fga                 |Float64 |
+        |opp_fg_pct              |Float64 |
+        |opp_fg3m                |Float64 |
+        |opp_fg3a                |Float64 |
+        |opp_fg3_pct             |Float64 |
+        |opp_ftm                 |Float64 |
+        |opp_fta                 |Float64 |
+        |opp_ft_pct              |Float64 |
+        |opp_oreb                |Float64 |
+        |opp_dreb                |Float64 |
+        |opp_reb                 |Float64 |
+        |opp_ast                 |Float64 |
+        |opp_tov                 |Float64 |
+        |opp_stl                 |Float64 |
+        |opp_blk                 |Float64 |
+        |opp_blka                |Float64 |
+        |opp_pf                  |Float64 |
+        |opp_pfd                 |Float64 |
+        |opp_pts                 |Float64 |
+        |opp_fgm_rank            |Int64   |
+        |opp_fga_rank            |Int64   |
+        |opp_fg_pct_rank         |Int64   |
+        |opp_fg3m_rank           |Int64   |
+        |opp_fg3a_rank           |Int64   |
+        |opp_fg3_pct_rank        |Int64   |
+        |opp_ftm_rank            |Int64   |
+        |opp_fta_rank            |Int64   |
+        |opp_ft_pct_rank         |Int64   |
+        |opp_oreb_rank           |Int64   |
+        |opp_dreb_rank           |Int64   |
+        |opp_reb_rank            |Int64   |
+        |opp_ast_rank            |Int64   |
+        |opp_tov_rank            |Int64   |
+        |opp_stl_rank            |Int64   |
+        |opp_blk_rank            |Int64   |
+        |opp_blka_rank           |Int64   |
+        |opp_pf_rank             |Int64   |
+        |opp_pfd_rank            |Int64   |
+        |opp_pts_rank            |Int64   |
+        |pct_fga_2pt             |Float64 |
+        |pct_fga_3pt             |Float64 |
+        |pct_pts_2pt             |Float64 |
+        |pct_pts_2pt_mr          |Float64 |
+        |pct_pts_3pt             |Float64 |
+        |pct_pts_fb              |Float64 |
+        |pct_pts_ft              |Float64 |
+        |pct_pts_off_tov         |Float64 |
+        |pct_pts_paint           |Float64 |
+        |pct_ast_2pm             |Float64 |
+        |pct_uast_2pm            |Float64 |
+        |pct_ast_3pm             |Float64 |
+        |pct_uast_3pm            |Float64 |
+        |pct_ast_fgm             |Float64 |
+        |pct_uast_fgm            |Float64 |
+        |pct_fga_2pt_rank        |Int64   |
+        |pct_fga_3pt_rank        |Int64   |
+        |pct_pts_2pt_rank        |Int64   |
+        |pct_pts_2pt_mr_rank     |Int64   |
+        |pct_pts_3pt_rank        |Int64   |
+        |pct_pts_fb_rank         |Int64   |
+        |pct_pts_ft_rank         |Int64   |
+        |pct_pts_off_tov_rank    |Int64   |
+        |pct_pts_paint_rank      |Int64   |
+        |pct_ast_2pm_rank        |Int64   |
+        |pct_uast_2pm_rank       |Int64   |
+        |pct_ast_3pm_rank        |Int64   |
+        |pct_uast_3pm_rank       |Int64   |
+        |pct_ast_fgm_rank        |Int64   |
+        |pct_uast_fgm_rank       |Int64   |
+
+    Example:
+        Quick start::
+
+            load_nba_stats_lineups(seasons=2025)
+    """
+    frames, missing = [], []
+    for season in _as_season_list(seasons):
+        if int(season) < 2007:
+            raise SeasonNotFoundError("season cannot be less than 2007")
+        df = _read_release_parquet(
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_lineups/lineups_{season}.parquet"
+        )
+        if df is None:
+            missing.append(season)
+            continue
+        frames.append(df)
+    if missing:
+        cli_warn("load_nba_stats_lineups: no data for season(s) {missing} (skipped)".format(missing=missing))
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+def load_nba_stats_lineups_v3(seasons, return_as_pandas: bool = False):
+    """Load nba_stats_lineups_v3 (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_lineups_v3
+
+    Args:
+        seasons: an int or iterable of seasons (>= 2025).
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; seasons with no published asset are
+        skipped with a warning rather than raising (404-safe).
+
+        |col_name      |type   |
+        |:-------------|:------|
+        |game_id       |String |
+        |action_number |Int64  |
+        |period        |Int64  |
+        |home_player_1 |Int64  |
+        |home_player_2 |Int64  |
+        |home_player_3 |Int64  |
+        |home_player_4 |Int64  |
+        |home_player_5 |Int64  |
+        |away_player_1 |Int64  |
+        |away_player_2 |Int64  |
+        |away_player_3 |Int64  |
+        |away_player_4 |Int64  |
+        |away_player_5 |Int64  |
+
+    Example:
+        Quick start::
+
+            load_nba_stats_lineups_v3(seasons=2025)
+    """
+    frames, missing = [], []
+    for season in _as_season_list(seasons):
+        if int(season) < 2025:
+            raise SeasonNotFoundError("season cannot be less than 2025")
+        df = _read_release_parquet(
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_lineups_v3/nba_lineups_v3_{season}.parquet"
+        )
+        if df is None:
+            missing.append(season)
+            continue
+        frames.append(df)
+    if missing:
+        cli_warn("load_nba_stats_lineups_v3: no data for season(s) {missing} (skipped)".format(missing=missing))
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+def load_nba_stats_officials(seasons, return_as_pandas: bool = False):
+    """Load nba_stats_officials (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_officials
+
+    Args:
+        seasons: an int or iterable of seasons (>= 1996).
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; seasons with no published asset are
+        skipped with a warning rather than raising (404-safe).
+
+        |col_name    |type   |
+        |:-----------|:------|
+        |official_id |Int64  |
+        |first_name  |String |
+        |last_name   |String |
+        |jersey_num  |String |
+        |season      |Int32  |
+        |game_id     |String |
+
+    Example:
+        Quick start::
+
+            load_nba_stats_officials(seasons=2025)
+    """
+    frames, missing = [], []
+    for season in _as_season_list(seasons):
+        if int(season) < 1996:
+            raise SeasonNotFoundError("season cannot be less than 1996")
+        df = _read_release_parquet(
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_officials/officials_{season}.parquet"
+        )
+        if df is None:
+            missing.append(season)
+            continue
+        frames.append(df)
+    if missing:
+        cli_warn("load_nba_stats_officials: no data for season(s) {missing} (skipped)".format(missing=missing))
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+def load_nba_stats_pbp(seasons, return_as_pandas: bool = False):
+    """Load nba_stats_pbp (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_pbp
+
+    Args:
+        seasons: an int or iterable of seasons (>= 1996).
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; seasons with no published asset are
+        skipped with a warning rather than raising (404-safe).
+
+        |col_name        |type   |
+        |:---------------|:------|
+        |action_number   |Int64  |
+        |clock           |String |
+        |period          |Int64  |
+        |team_id         |Int64  |
+        |team_tricode    |String |
+        |person_id       |Int64  |
+        |player_name     |String |
+        |player_name_i   |String |
+        |x_legacy        |Int64  |
+        |y_legacy        |Int64  |
+        |shot_distance   |Int64  |
+        |shot_result     |String |
+        |is_field_goal   |Int64  |
+        |score_home      |String |
+        |score_away      |String |
+        |points_total    |Int64  |
+        |location        |String |
+        |description     |String |
+        |action_type     |String |
+        |sub_type        |String |
+        |video_available |Int64  |
+        |shot_value      |Int64  |
+        |action_id       |Int64  |
+        |game_id         |String |
+        |season          |Int32  |
+
+    Example:
+        Quick start::
+
+            load_nba_stats_pbp(seasons=2025)
+    """
+    frames, missing = [], []
+    for season in _as_season_list(seasons):
+        if int(season) < 1996:
+            raise SeasonNotFoundError("season cannot be less than 1996")
+        df = _read_release_parquet(
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_pbp/play_by_play_{season}.parquet"
+        )
+        if df is None:
+            missing.append(season)
+            continue
+        frames.append(df)
+    if missing:
+        cli_warn("load_nba_stats_pbp: no data for season(s) {missing} (skipped)".format(missing=missing))
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+def load_nba_stats_pbp_v3(seasons, return_as_pandas: bool = False):
+    """Load nba_stats_pbpv3 (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_pbpv3
+
+    Args:
+        seasons: an int or iterable of seasons (>= 2025).
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; seasons with no published asset are
+        skipped with a warning rather than raising (404-safe).
+
+        |col_name          |type    |
+        |:-----------------|:-------|
+        |order_index       |Int64   |
+        |action_number     |Int64   |
+        |clock             |String  |
+        |period            |Int64   |
+        |team_id           |Int64   |
+        |team_tricode      |String  |
+        |person_id         |Int64   |
+        |player_name       |String  |
+        |player_name_i     |String  |
+        |x_legacy          |Int64   |
+        |y_legacy          |Int64   |
+        |shot_distance     |Int64   |
+        |shot_result       |String  |
+        |is_field_goal     |Int64   |
+        |score_home        |String  |
+        |score_away        |String  |
+        |points_total      |Int64   |
+        |location          |String  |
+        |description       |String  |
+        |action_type       |String  |
+        |sub_type          |String  |
+        |video_available   |Int64   |
+        |shot_value        |Int64   |
+        |action_id         |Int64   |
+        |game_id           |String  |
+        |seconds_remaining |Float64 |
+        |event_type        |String  |
+        |is_made_shot      |Boolean |
+        |is_missed_shot    |Boolean |
+        |is_free_throw     |Boolean |
+        |is_rebound        |Boolean |
+        |is_turnover       |Boolean |
+        |is_foul           |Boolean |
+        |is_substitution   |Boolean |
+        |is_jump_ball      |Boolean |
+        |is_timeout        |Boolean |
+        |is_period         |Boolean |
+        |possession_number |Int64   |
+        |off_player_1      |Int64   |
+        |off_player_2      |Int64   |
+        |off_player_3      |Int64   |
+        |off_player_4      |Int64   |
+        |off_player_5      |Int64   |
+        |def_player_1      |Int64   |
+        |def_player_2      |Int64   |
+        |def_player_3      |Int64   |
+        |def_player_4      |Int64   |
+        |def_player_5      |Int64   |
+
+    Example:
+        Quick start::
+
+            load_nba_stats_pbp_v3(seasons=2025)
+    """
+    frames, missing = [], []
+    for season in _as_season_list(seasons):
+        if int(season) < 2025:
+            raise SeasonNotFoundError("season cannot be less than 2025")
+        df = _read_release_parquet(
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_pbpv3/play_by_play_v3_{season}.parquet"
+        )
+        if df is None:
+            missing.append(season)
+            continue
+        frames.append(df)
+    if missing:
+        cli_warn("load_nba_stats_pbp_v3: no data for season(s) {missing} (skipped)".format(missing=missing))
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+def load_nba_stats_player_boxscores(seasons, return_as_pandas: bool = False):
+    """Load nba_stats_player_boxscores (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_player_boxscores
+
+    Args:
+        seasons: an int or iterable of seasons (>= 1996).
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; seasons with no published asset are
+        skipped with a warning rather than raising (404-safe).
+
+        |col_name                  |type    |
+        |:-------------------------|:-------|
+        |team_id                   |Int64   |
+        |team_name                 |String  |
+        |team_tricode              |String  |
+        |side                      |String  |
+        |person_id                 |Int64   |
+        |first_name                |String  |
+        |family_name               |String  |
+        |name_i                    |String  |
+        |player_slug               |String  |
+        |position                  |String  |
+        |comment                   |String  |
+        |jersey_num                |String  |
+        |minutes                   |String  |
+        |field_goals_made          |Int64   |
+        |field_goals_attempted     |Int64   |
+        |field_goals_percentage    |Float64 |
+        |three_pointers_made       |Int64   |
+        |three_pointers_attempted  |Int64   |
+        |three_pointers_percentage |Float64 |
+        |free_throws_made          |Int64   |
+        |free_throws_attempted     |Int64   |
+        |free_throws_percentage    |Float64 |
+        |rebounds_offensive        |Int64   |
+        |rebounds_defensive        |Int64   |
+        |rebounds_total            |Int64   |
+        |assists                   |Int64   |
+        |steals                    |Int64   |
+        |blocks                    |Int64   |
+        |turnovers                 |Int64   |
+        |fouls_personal            |Int64   |
+        |points                    |Int64   |
+        |plus_minus_points         |Float64 |
+        |game_id                   |String  |
+        |season                    |Int32   |
+
+    Example:
+        Quick start::
+
+            load_nba_stats_player_boxscores(seasons=2025)
+    """
+    frames, missing = [], []
+    for season in _as_season_list(seasons):
+        if int(season) < 1996:
+            raise SeasonNotFoundError("season cannot be less than 1996")
+        df = _read_release_parquet(
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_player_boxscores/player_boxscores_{season}.parquet"
+        )
+        if df is None:
+            missing.append(season)
+            continue
+        frames.append(df)
+    if missing:
+        cli_warn("load_nba_stats_player_boxscores: no data for season(s) {missing} (skipped)".format(missing=missing))
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+def load_nba_stats_player_game_logs(seasons, return_as_pandas: bool = False):
+    """Load nba_stats_player_game_logs (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_player_game_logs
+
+    Args:
+        seasons: an int or iterable of seasons (>= 1996).
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; seasons with no published asset are
+        skipped with a warning rather than raising (404-safe).
+
+        |col_name          |type    |
+        |:-----------------|:-------|
+        |season_id         |String  |
+        |team_id           |Int64   |
+        |team_abbreviation |String  |
+        |team_name         |String  |
+        |game_id           |String  |
+        |game_date         |String  |
+        |matchup           |String  |
+        |wl                |String  |
+        |min               |Int64   |
+        |fgm               |Int64   |
+        |fga               |Int64   |
+        |fg_pct            |Float64 |
+        |fg3m              |Int64   |
+        |fg3a              |Int64   |
+        |fg3_pct           |Float64 |
+        |ftm               |Int64   |
+        |fta               |Int64   |
+        |ft_pct            |Float64 |
+        |oreb              |Int64   |
+        |dreb              |Int64   |
+        |reb               |Int64   |
+        |ast               |Int64   |
+        |stl               |Int64   |
+        |blk               |Int64   |
+        |tov               |Int64   |
+        |pf                |Int64   |
+        |pts               |Int64   |
+        |plus_minus        |Int64   |
+        |video_available   |Int64   |
+        |season            |Int32   |
+        |season_type       |String  |
+
+    Example:
+        Quick start::
+
+            load_nba_stats_player_game_logs(seasons=2025)
+    """
+    frames, missing = [], []
+    for season in _as_season_list(seasons):
+        if int(season) < 1996:
+            raise SeasonNotFoundError("season cannot be less than 1996")
+        df = _read_release_parquet(
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_player_game_logs/player_game_logs_{season}.parquet"
+        )
+        if df is None:
+            missing.append(season)
+            continue
+        frames.append(df)
+    if missing:
+        cli_warn("load_nba_stats_player_game_logs: no data for season(s) {missing} (skipped)".format(missing=missing))
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+def load_nba_stats_player_season_stats(seasons, return_as_pandas: bool = False):
+    """Load nba_stats_player_season_stats (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_player_season_stats
+
+    Args:
+        seasons: an int or iterable of seasons (>= 1996).
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; seasons with no published asset are
+        skipped with a warning rather than raising (404-safe).
+
+        |col_name                |type    |
+        |:-----------------------|:-------|
+        |player_id               |Int64   |
+        |player_name             |String  |
+        |nickname                |String  |
+        |team_id                 |Int64   |
+        |team_abbreviation       |String  |
+        |age                     |Float64 |
+        |gp                      |Int64   |
+        |w                       |Int64   |
+        |l                       |Int64   |
+        |w_pct                   |Float64 |
+        |min                     |Float64 |
+        |e_off_rating            |Float64 |
+        |off_rating              |Float64 |
+        |sp_work_off_rating      |Float64 |
+        |e_def_rating            |Float64 |
+        |def_rating              |Float64 |
+        |sp_work_def_rating      |Float64 |
+        |e_net_rating            |Float64 |
+        |net_rating              |Float64 |
+        |sp_work_net_rating      |Float64 |
+        |ast_pct                 |Float64 |
+        |ast_to                  |Float64 |
+        |ast_ratio               |Float64 |
+        |oreb_pct                |Float64 |
+        |dreb_pct                |Float64 |
+        |reb_pct                 |Float64 |
+        |tm_tov_pct              |Float64 |
+        |e_tov_pct               |Float64 |
+        |efg_pct                 |Float64 |
+        |ts_pct                  |Float64 |
+        |usg_pct                 |Float64 |
+        |e_usg_pct               |Float64 |
+        |e_pace                  |Float64 |
+        |pace                    |Float64 |
+        |pace_per40              |Float64 |
+        |sp_work_pace            |Float64 |
+        |pie                     |Float64 |
+        |poss                    |Int64   |
+        |fgm                     |Float64 |
+        |fga                     |Float64 |
+        |fgm_pg                  |Float64 |
+        |fga_pg                  |Float64 |
+        |fg_pct                  |Float64 |
+        |gp_rank                 |Int64   |
+        |w_rank                  |Int64   |
+        |l_rank                  |Int64   |
+        |w_pct_rank              |Int64   |
+        |min_rank                |Int64   |
+        |e_off_rating_rank       |Int64   |
+        |off_rating_rank         |Int64   |
+        |sp_work_off_rating_rank |Int64   |
+        |e_def_rating_rank       |Int64   |
+        |def_rating_rank         |Int64   |
+        |sp_work_def_rating_rank |Int64   |
+        |e_net_rating_rank       |Int64   |
+        |net_rating_rank         |Int64   |
+        |sp_work_net_rating_rank |Int64   |
+        |ast_pct_rank            |Int64   |
+        |ast_to_rank             |Int64   |
+        |ast_ratio_rank          |Int64   |
+        |oreb_pct_rank           |Int64   |
+        |dreb_pct_rank           |Int64   |
+        |reb_pct_rank            |Int64   |
+        |tm_tov_pct_rank         |Int64   |
+        |e_tov_pct_rank          |Int64   |
+        |efg_pct_rank            |Int64   |
+        |ts_pct_rank             |Int64   |
+        |usg_pct_rank            |Int64   |
+        |e_usg_pct_rank          |Int64   |
+        |e_pace_rank             |Int64   |
+        |pace_rank               |Int64   |
+        |sp_work_pace_rank       |Int64   |
+        |pie_rank                |Int64   |
+        |fgm_rank                |Int64   |
+        |fga_rank                |Int64   |
+        |fgm_pg_rank             |Int64   |
+        |fga_pg_rank             |Int64   |
+        |fg_pct_rank             |Int64   |
+        |team_count              |Int64   |
+        |season                  |Int32   |
+        |season_type             |String  |
+        |measure_type            |String  |
+        |per_mode                |String  |
+        |fg3m                    |Float64 |
+        |fg3a                    |Float64 |
+        |fg3_pct                 |Float64 |
+        |ftm                     |Float64 |
+        |fta                     |Float64 |
+        |ft_pct                  |Float64 |
+        |oreb                    |Float64 |
+        |dreb                    |Float64 |
+        |reb                     |Float64 |
+        |ast                     |Float64 |
+        |tov                     |Float64 |
+        |stl                     |Float64 |
+        |blk                     |Float64 |
+        |blka                    |Float64 |
+        |pf                      |Float64 |
+        |pfd                     |Float64 |
+        |pts                     |Float64 |
+        |plus_minus              |Float64 |
+        |nba_fantasy_pts         |Float64 |
+        |dd2                     |Int64   |
+        |td3                     |Int64   |
+        |wnba_fantasy_pts        |Float64 |
+        |fg3m_rank               |Int64   |
+        |fg3a_rank               |Int64   |
+        |fg3_pct_rank            |Int64   |
+        |ftm_rank                |Int64   |
+        |fta_rank                |Int64   |
+        |ft_pct_rank             |Int64   |
+        |oreb_rank               |Int64   |
+        |dreb_rank               |Int64   |
+        |reb_rank                |Int64   |
+        |ast_rank                |Int64   |
+        |tov_rank                |Int64   |
+        |stl_rank                |Int64   |
+        |blk_rank                |Int64   |
+        |blka_rank               |Int64   |
+        |pf_rank                 |Int64   |
+        |pfd_rank                |Int64   |
+        |pts_rank                |Int64   |
+        |plus_minus_rank         |Int64   |
+        |nba_fantasy_pts_rank    |Int64   |
+        |dd2_rank                |Int64   |
+        |td3_rank                |Int64   |
+        |wnba_fantasy_pts_rank   |Int64   |
+        |pct_dreb                |Float64 |
+        |pct_stl                 |Float64 |
+        |pct_blk                 |Float64 |
+        |opp_pts_off_tov         |Float64 |
+        |opp_pts_2nd_chance      |Float64 |
+        |opp_pts_fb              |Float64 |
+        |opp_pts_paint           |Float64 |
+        |def_ws                  |Float64 |
+        |def_ws_raw              |Float64 |
+        |pct_dreb_rank           |Int64   |
+        |pct_stl_rank            |Int64   |
+        |pct_blk_rank            |Int64   |
+        |opp_pts_off_tov_rank    |Int64   |
+        |opp_pts_2nd_chance_rank |Int64   |
+        |opp_pts_fb_rank         |Int64   |
+        |opp_pts_paint_rank      |Int64   |
+        |def_ws_rank             |Int64   |
+        |pts_off_tov             |Float64 |
+        |pts_2nd_chance          |Float64 |
+        |pts_fb                  |Float64 |
+        |pts_paint               |Float64 |
+        |pts_off_tov_rank        |Int64   |
+        |pts_2nd_chance_rank     |Int64   |
+        |pts_fb_rank             |Int64   |
+        |pts_paint_rank          |Int64   |
+        |pct_fga_2pt             |Float64 |
+        |pct_fga_3pt             |Float64 |
+        |pct_pts_2pt             |Float64 |
+        |pct_pts_2pt_mr          |Float64 |
+        |pct_pts_3pt             |Float64 |
+        |pct_pts_fb              |Float64 |
+        |pct_pts_ft              |Float64 |
+        |pct_pts_off_tov         |Float64 |
+        |pct_pts_paint           |Float64 |
+        |pct_ast_2pm             |Float64 |
+        |pct_uast_2pm            |Float64 |
+        |pct_ast_3pm             |Float64 |
+        |pct_uast_3pm            |Float64 |
+        |pct_ast_fgm             |Float64 |
+        |pct_uast_fgm            |Float64 |
+        |pct_fga_2pt_rank        |Int64   |
+        |pct_fga_3pt_rank        |Int64   |
+        |pct_pts_2pt_rank        |Int64   |
+        |pct_pts_2pt_mr_rank     |Int64   |
+        |pct_pts_3pt_rank        |Int64   |
+        |pct_pts_fb_rank         |Int64   |
+        |pct_pts_ft_rank         |Int64   |
+        |pct_pts_off_tov_rank    |Int64   |
+        |pct_pts_paint_rank      |Int64   |
+        |pct_ast_2pm_rank        |Int64   |
+        |pct_uast_2pm_rank       |Int64   |
+        |pct_ast_3pm_rank        |Int64   |
+        |pct_uast_3pm_rank       |Int64   |
+        |pct_ast_fgm_rank        |Int64   |
+        |pct_uast_fgm_rank       |Int64   |
+        |pct_fgm                 |Float64 |
+        |pct_fga                 |Float64 |
+        |pct_fg3m                |Float64 |
+        |pct_fg3a                |Float64 |
+        |pct_ftm                 |Float64 |
+        |pct_fta                 |Float64 |
+        |pct_oreb                |Float64 |
+        |pct_reb                 |Float64 |
+        |pct_ast                 |Float64 |
+        |pct_tov                 |Float64 |
+        |pct_blka                |Float64 |
+        |pct_pf                  |Float64 |
+        |pct_pfd                 |Float64 |
+        |pct_pts                 |Float64 |
+        |pct_fgm_rank            |Int64   |
+        |pct_fga_rank            |Int64   |
+        |pct_fg3m_rank           |Int64   |
+        |pct_fg3a_rank           |Int64   |
+        |pct_ftm_rank            |Int64   |
+        |pct_fta_rank            |Int64   |
+        |pct_oreb_rank           |Int64   |
+        |pct_reb_rank            |Int64   |
+        |pct_ast_rank            |Int64   |
+        |pct_tov_rank            |Int64   |
+        |pct_blka_rank           |Int64   |
+        |pct_pf_rank             |Int64   |
+        |pct_pfd_rank            |Int64   |
+        |pct_pts_rank            |Int64   |
+
+    Example:
+        Quick start::
+
+            load_nba_stats_player_season_stats(seasons=2025)
+    """
+    frames, missing = [], []
+    for season in _as_season_list(seasons):
+        if int(season) < 1996:
+            raise SeasonNotFoundError("season cannot be less than 1996")
+        df = _read_release_parquet(
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_player_season_stats/player_season_stats_{season}.parquet"
+        )
+        if df is None:
+            missing.append(season)
+            continue
+        frames.append(df)
+    if missing:
+        cli_warn(
+            "load_nba_stats_player_season_stats: no data for season(s) {missing} (skipped)".format(missing=missing)
+        )
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+def load_nba_stats_possessions_v3(seasons, return_as_pandas: bool = False):
+    """Load nba_stats_possessions_v3 (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_possessions_v3
+
+    Args:
         seasons: an int or iterable of seasons (>= 2025).
         return_as_pandas: return a pandas DataFrame instead of polars.
 
@@ -936,77 +2025,846 @@ def load_nba_stats_schedules(seasons, return_as_pandas: bool = False):
 
         |col_name                |type    |
         |:-----------------------|:-------|
-        |game_date               |Date    |
         |game_id                 |String  |
-        |game_code               |String  |
-        |game_status             |Int32   |
-        |game_status_text        |String  |
-        |game_sequence           |Int32   |
-        |game_date_est           |String  |
-        |game_time_est           |String  |
-        |game_date_time_est      |String  |
-        |game_date_utc           |String  |
-        |game_time_utc           |String  |
-        |game_date_time_utc      |String  |
-        |away_team_time          |String  |
-        |home_team_time          |String  |
-        |day                     |String  |
-        |month_num               |Int32   |
-        |week_number             |Int32   |
-        |week_name               |String  |
-        |if_necessary            |String  |
-        |series_game_number      |String  |
-        |game_label              |String  |
-        |game_sub_label          |String  |
-        |series_text             |String  |
-        |arena_name              |String  |
-        |arena_state             |String  |
-        |arena_city              |String  |
-        |postponed_status        |String  |
-        |branch_link             |String  |
-        |game_subtype            |String  |
-        |is_neutral              |Boolean |
-        |home_team_id            |Int32   |
-        |home_team_name          |String  |
-        |home_team_city          |String  |
-        |home_team_tricode       |String  |
-        |home_team_slug          |String  |
-        |home_team_wins          |Int32   |
-        |home_team_losses        |Int32   |
-        |home_team_score         |Int32   |
-        |home_team_seed          |Int32   |
-        |away_team_id            |Int32   |
-        |away_team_name          |String  |
-        |away_team_city          |String  |
-        |away_team_tricode       |String  |
-        |away_team_slug          |String  |
-        |away_team_wins          |Int32   |
-        |away_team_losses        |Int32   |
-        |away_team_score         |Int32   |
-        |away_team_seed          |Int32   |
-        |season                  |Int32   |
-        |league_id               |String  |
-        |season_type_id          |String  |
-        |season_type_description |String  |
+        |period                  |Int64   |
+        |possession_number       |Int64   |
+        |offense_team_id         |Int64   |
+        |defense_team_id         |Int64   |
+        |start_order_index       |Int64   |
+        |end_order_index         |Int64   |
+        |start_seconds_remaining |Float64 |
+        |end_seconds_remaining   |Float64 |
+        |points                  |Int64   |
+        |is_second_chance        |Boolean |
+        |number_in_period        |Int64   |
+        |possession_start_type   |String  |
+        |count_as_possession     |Boolean |
+        |fg2a                    |Int64   |
+        |fg2m                    |Int64   |
+        |fg3a                    |Int64   |
+        |fg3m                    |Int64   |
+        |fta                     |Int64   |
+        |ftm                     |Int64   |
+        |oreb                    |Int64   |
+        |dreb                    |Int64   |
+        |tov                     |Int64   |
+        |off_player_1            |Int64   |
+        |off_player_2            |Int64   |
+        |off_player_3            |Int64   |
+        |off_player_4            |Int64   |
+        |off_player_5            |Int64   |
+        |def_player_1            |Int64   |
+        |def_player_2            |Int64   |
+        |def_player_3            |Int64   |
+        |def_player_4            |Int64   |
+        |def_player_5            |Int64   |
+        |lineup_source           |String  |
 
     Example:
         Quick start::
 
-            load_nba_stats_schedules(seasons=2025)
+            load_nba_stats_possessions_v3(seasons=2025)
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
         if int(season) < 2025:
             raise SeasonNotFoundError("season cannot be less than 2025")
         df = _read_release_parquet(
-            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_schedules/schedule_{season}-26.parquet"
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_possessions_v3/nba_possessions_v3_{season}.parquet"
         )
         if df is None:
             missing.append(season)
             continue
         frames.append(df)
     if missing:
-        cli_warn("load_nba_stats_schedules: no data for season(s) {missing} (skipped)".format(missing=missing))
+        cli_warn("load_nba_stats_possessions_v3: no data for season(s) {missing} (skipped)".format(missing=missing))
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+def load_nba_stats_rosters(seasons, return_as_pandas: bool = False):
+    """Load nba_stats_rosters (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_rosters
+
+    Args:
+        seasons: an int or iterable of seasons (>= 1996).
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; seasons with no published asset are
+        skipped with a warning rather than raising (404-safe).
+
+        |col_name     |type    |
+        |:------------|:-------|
+        |team_id      |Int64   |
+        |season       |Int32   |
+        |league_id    |String  |
+        |player       |String  |
+        |nickname     |String  |
+        |player_slug  |String  |
+        |num          |String  |
+        |position     |String  |
+        |height       |String  |
+        |weight       |String  |
+        |birth_date   |String  |
+        |age          |Float64 |
+        |exp          |String  |
+        |school       |String  |
+        |player_id    |Int64   |
+        |how_acquired |String  |
+        |season_type  |String  |
+
+    Example:
+        Quick start::
+
+            load_nba_stats_rosters(seasons=2025)
+    """
+    frames, missing = [], []
+    for season in _as_season_list(seasons):
+        if int(season) < 1996:
+            raise SeasonNotFoundError("season cannot be less than 1996")
+        df = _read_release_parquet(
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_rosters/rosters_{season}.parquet"
+        )
+        if df is None:
+            missing.append(season)
+            continue
+        frames.append(df)
+    if missing:
+        cli_warn("load_nba_stats_rosters: no data for season(s) {missing} (skipped)".format(missing=missing))
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+def load_nba_stats_shots(seasons, return_as_pandas: bool = False):
+    """Load nba_stats_shots (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_shots
+
+    Args:
+        seasons: an int or iterable of seasons (>= 1996).
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; seasons with no published asset are
+        skipped with a warning rather than raising (404-safe).
+
+        |col_name      |type   |
+        |:-------------|:------|
+        |game_id       |String |
+        |season        |Int32  |
+        |period        |Int64  |
+        |clock         |String |
+        |team_id       |Int64  |
+        |team_tricode  |String |
+        |person_id     |Int64  |
+        |player_name   |String |
+        |action_type   |String |
+        |sub_type      |String |
+        |shot_result   |String |
+        |shot_value    |Int64  |
+        |shot_distance |Int64  |
+        |x_legacy      |Int64  |
+        |y_legacy      |Int64  |
+        |description   |String |
+        |score_home    |String |
+        |score_away    |String |
+
+    Example:
+        Quick start::
+
+            load_nba_stats_shots(seasons=2025)
+    """
+    frames, missing = [], []
+    for season in _as_season_list(seasons):
+        if int(season) < 1996:
+            raise SeasonNotFoundError("season cannot be less than 1996")
+        df = _read_release_parquet(
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_shots/shots_{season}.parquet"
+        )
+        if df is None:
+            missing.append(season)
+            continue
+        frames.append(df)
+    if missing:
+        cli_warn("load_nba_stats_shots: no data for season(s) {missing} (skipped)".format(missing=missing))
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+def load_nba_stats_standings(seasons, return_as_pandas: bool = False):
+    """Load nba_stats_standings (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_standings
+
+    Args:
+        seasons: an int or iterable of seasons (>= 1996).
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; seasons with no published asset are
+        skipped with a warning rather than raising (404-safe).
+
+        |col_name                  |type    |
+        |:-------------------------|:-------|
+        |league_id                 |String  |
+        |season_id                 |String  |
+        |team_id                   |Int64   |
+        |team_city                 |String  |
+        |team_name                 |String  |
+        |team_slug                 |String  |
+        |conference                |String  |
+        |conference_record         |String  |
+        |playoff_rank              |Int64   |
+        |clinch_indicator          |String  |
+        |division                  |String  |
+        |division_record           |String  |
+        |division_rank             |Int64   |
+        |wins                      |Int64   |
+        |losses                    |Int64   |
+        |win_pct                   |Float64 |
+        |league_rank               |Int64   |
+        |record                    |String  |
+        |home                      |String  |
+        |road                      |String  |
+        |l10                       |String  |
+        |last10_home               |String  |
+        |last10_road               |String  |
+        |ot                        |String  |
+        |three_pts_or_less         |String  |
+        |ten_pts_or_more           |String  |
+        |long_home_streak          |Int64   |
+        |str_long_home_streak      |String  |
+        |long_road_streak          |Int64   |
+        |str_long_road_streak      |String  |
+        |long_win_streak           |Int64   |
+        |long_loss_streak          |Int64   |
+        |current_home_streak       |Int64   |
+        |str_current_home_streak   |String  |
+        |current_road_streak       |Int64   |
+        |str_current_road_streak   |String  |
+        |current_streak            |Int64   |
+        |str_current_streak        |String  |
+        |conference_games_back     |Float64 |
+        |division_games_back       |Float64 |
+        |clinched_conference_title |Int64   |
+        |clinched_division_title   |Int64   |
+        |clinched_playoff_birth    |Int64   |
+        |clinched_play_in          |Int64   |
+        |eliminated_conference     |Int64   |
+        |eliminated_division       |Int64   |
+        |ahead_at_half             |String  |
+        |behind_at_half            |String  |
+        |tied_at_half              |String  |
+        |ahead_at_third            |String  |
+        |behind_at_third           |String  |
+        |tied_at_third             |String  |
+        |score100_pts              |String  |
+        |opp_score100_pts          |String  |
+        |opp_over500               |String  |
+        |lead_in_fgpct             |String  |
+        |lead_in_reb               |String  |
+        |fewer_turnovers           |String  |
+        |points_pg                 |Float64 |
+        |opp_points_pg             |Float64 |
+        |diff_points_pg            |Float64 |
+        |vs_east                   |String  |
+        |vs_atlantic               |String  |
+        |vs_central                |String  |
+        |vs_southeast              |String  |
+        |vs_west                   |String  |
+        |vs_northwest              |String  |
+        |vs_pacific                |String  |
+        |vs_southwest              |String  |
+        |jan                       |String  |
+        |feb                       |String  |
+        |mar                       |String  |
+        |apr                       |String  |
+        |may                       |Null    |
+        |jun                       |Null    |
+        |jul                       |Null    |
+        |aug                       |Null    |
+        |sep                       |Null    |
+        |oct                       |String  |
+        |nov                       |String  |
+        |dec                       |String  |
+        |score_80_plus             |String  |
+        |opp_score_80_plus         |String  |
+        |score_below_80            |String  |
+        |opp_score_below_80        |String  |
+        |total_points              |Int64   |
+        |opp_total_points          |Int64   |
+        |diff_total_points         |Int64   |
+        |league_games_back         |Float64 |
+        |playoff_seeding           |Int64   |
+        |clinched_post_season      |Int64   |
+        |neutral                   |String  |
+        |season                    |Int32   |
+        |season_type               |String  |
+
+    Example:
+        Quick start::
+
+            load_nba_stats_standings(seasons=2025)
+    """
+    frames, missing = [], []
+    for season in _as_season_list(seasons):
+        if int(season) < 1996:
+            raise SeasonNotFoundError("season cannot be less than 1996")
+        df = _read_release_parquet(
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_standings/standings_{season}.parquet"
+        )
+        if df is None:
+            missing.append(season)
+            continue
+        frames.append(df)
+    if missing:
+        cli_warn("load_nba_stats_standings: no data for season(s) {missing} (skipped)".format(missing=missing))
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+def load_nba_stats_team_boxscores(seasons, return_as_pandas: bool = False):
+    """Load nba_stats_team_boxscores (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_team_boxscores
+
+    Args:
+        seasons: an int or iterable of seasons (>= 1996).
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; seasons with no published asset are
+        skipped with a warning rather than raising (404-safe).
+
+        |col_name                  |type    |
+        |:-------------------------|:-------|
+        |team_id                   |Int64   |
+        |team_name                 |String  |
+        |team_tricode              |String  |
+        |side                      |String  |
+        |minutes                   |String  |
+        |field_goals_made          |Int64   |
+        |field_goals_attempted     |Int64   |
+        |field_goals_percentage    |Float64 |
+        |three_pointers_made       |Int64   |
+        |three_pointers_attempted  |Int64   |
+        |three_pointers_percentage |Float64 |
+        |free_throws_made          |Int64   |
+        |free_throws_attempted     |Int64   |
+        |free_throws_percentage    |Float64 |
+        |rebounds_offensive        |Int64   |
+        |rebounds_defensive        |Int64   |
+        |rebounds_total            |Int64   |
+        |assists                   |Int64   |
+        |steals                    |Int64   |
+        |blocks                    |Int64   |
+        |turnovers                 |Int64   |
+        |fouls_personal            |Int64   |
+        |points                    |Int64   |
+        |plus_minus_points         |Float64 |
+        |game_id                   |String  |
+        |season                    |Int32   |
+
+    Example:
+        Quick start::
+
+            load_nba_stats_team_boxscores(seasons=2025)
+    """
+    frames, missing = [], []
+    for season in _as_season_list(seasons):
+        if int(season) < 1996:
+            raise SeasonNotFoundError("season cannot be less than 1996")
+        df = _read_release_parquet(
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_team_boxscores/team_boxscores_{season}.parquet"
+        )
+        if df is None:
+            missing.append(season)
+            continue
+        frames.append(df)
+    if missing:
+        cli_warn("load_nba_stats_team_boxscores: no data for season(s) {missing} (skipped)".format(missing=missing))
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+def load_nba_stats_team_season_stats(seasons, return_as_pandas: bool = False):
+    """Load nba_stats_team_season_stats (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_team_season_stats
+
+    Args:
+        seasons: an int or iterable of seasons (>= 1996).
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; seasons with no published asset are
+        skipped with a warning rather than raising (404-safe).
+
+        |col_name                |type    |
+        |:-----------------------|:-------|
+        |team_id                 |Int64   |
+        |team_name               |String  |
+        |gp                      |Int64   |
+        |w                       |Int64   |
+        |l                       |Int64   |
+        |w_pct                   |Float64 |
+        |min                     |Float64 |
+        |e_off_rating            |Float64 |
+        |off_rating              |Float64 |
+        |e_def_rating            |Float64 |
+        |def_rating              |Float64 |
+        |e_net_rating            |Float64 |
+        |net_rating              |Float64 |
+        |ast_pct                 |Float64 |
+        |ast_to                  |Float64 |
+        |ast_ratio               |Float64 |
+        |oreb_pct                |Float64 |
+        |dreb_pct                |Float64 |
+        |reb_pct                 |Float64 |
+        |tm_tov_pct              |Float64 |
+        |efg_pct                 |Float64 |
+        |ts_pct                  |Float64 |
+        |e_pace                  |Float64 |
+        |pace                    |Float64 |
+        |pace_per40              |Float64 |
+        |poss                    |Int64   |
+        |pie                     |Float64 |
+        |gp_rank                 |Int64   |
+        |w_rank                  |Int64   |
+        |l_rank                  |Int64   |
+        |w_pct_rank              |Int64   |
+        |min_rank                |Int64   |
+        |off_rating_rank         |Int64   |
+        |def_rating_rank         |Int64   |
+        |net_rating_rank         |Int64   |
+        |ast_pct_rank            |Int64   |
+        |ast_to_rank             |Int64   |
+        |ast_ratio_rank          |Int64   |
+        |oreb_pct_rank           |Int64   |
+        |dreb_pct_rank           |Int64   |
+        |reb_pct_rank            |Int64   |
+        |tm_tov_pct_rank         |Int64   |
+        |efg_pct_rank            |Int64   |
+        |ts_pct_rank             |Int64   |
+        |pace_rank               |Int64   |
+        |pie_rank                |Int64   |
+        |season                  |Int32   |
+        |season_type             |String  |
+        |measure_type            |String  |
+        |per_mode                |String  |
+        |fgm                     |Float64 |
+        |fga                     |Float64 |
+        |fg_pct                  |Float64 |
+        |fg3m                    |Float64 |
+        |fg3a                    |Float64 |
+        |fg3_pct                 |Float64 |
+        |ftm                     |Float64 |
+        |fta                     |Float64 |
+        |ft_pct                  |Float64 |
+        |oreb                    |Float64 |
+        |dreb                    |Float64 |
+        |reb                     |Float64 |
+        |ast                     |Float64 |
+        |tov                     |Float64 |
+        |stl                     |Float64 |
+        |blk                     |Float64 |
+        |blka                    |Float64 |
+        |pf                      |Float64 |
+        |pfd                     |Float64 |
+        |pts                     |Float64 |
+        |plus_minus              |Float64 |
+        |fgm_rank                |Int64   |
+        |fga_rank                |Int64   |
+        |fg_pct_rank             |Int64   |
+        |fg3m_rank               |Int64   |
+        |fg3a_rank               |Int64   |
+        |fg3_pct_rank            |Int64   |
+        |ftm_rank                |Int64   |
+        |fta_rank                |Int64   |
+        |ft_pct_rank             |Int64   |
+        |oreb_rank               |Int64   |
+        |dreb_rank               |Int64   |
+        |reb_rank                |Int64   |
+        |ast_rank                |Int64   |
+        |tov_rank                |Int64   |
+        |stl_rank                |Int64   |
+        |blk_rank                |Int64   |
+        |blka_rank               |Int64   |
+        |pf_rank                 |Int64   |
+        |pfd_rank                |Int64   |
+        |pts_rank                |Int64   |
+        |plus_minus_rank         |Int64   |
+        |opp_pts_off_tov         |Float64 |
+        |opp_pts_2nd_chance      |Float64 |
+        |opp_pts_fb              |Float64 |
+        |opp_pts_paint           |Float64 |
+        |opp_pts_off_tov_rank    |Int64   |
+        |opp_pts_2nd_chance_rank |Int64   |
+        |opp_pts_fb_rank         |Int64   |
+        |opp_pts_paint_rank      |Int64   |
+        |pts_off_tov             |Float64 |
+        |pts_2nd_chance          |Float64 |
+        |pts_fb                  |Float64 |
+        |pts_paint               |Float64 |
+        |pts_off_tov_rank        |Int64   |
+        |pts_2nd_chance_rank     |Int64   |
+        |pts_fb_rank             |Int64   |
+        |pts_paint_rank          |Int64   |
+        |opp_fgm                 |Float64 |
+        |opp_fga                 |Float64 |
+        |opp_fg_pct              |Float64 |
+        |opp_fg3m                |Float64 |
+        |opp_fg3a                |Float64 |
+        |opp_fg3_pct             |Float64 |
+        |opp_ftm                 |Float64 |
+        |opp_fta                 |Float64 |
+        |opp_ft_pct              |Float64 |
+        |opp_oreb                |Float64 |
+        |opp_dreb                |Float64 |
+        |opp_reb                 |Float64 |
+        |opp_ast                 |Float64 |
+        |opp_tov                 |Float64 |
+        |opp_stl                 |Float64 |
+        |opp_blk                 |Float64 |
+        |opp_blka                |Float64 |
+        |opp_pf                  |Float64 |
+        |opp_pfd                 |Float64 |
+        |opp_pts                 |Float64 |
+        |opp_fgm_rank            |Int64   |
+        |opp_fga_rank            |Int64   |
+        |opp_fg_pct_rank         |Int64   |
+        |opp_fg3m_rank           |Int64   |
+        |opp_fg3a_rank           |Int64   |
+        |opp_fg3_pct_rank        |Int64   |
+        |opp_ftm_rank            |Int64   |
+        |opp_fta_rank            |Int64   |
+        |opp_ft_pct_rank         |Int64   |
+        |opp_oreb_rank           |Int64   |
+        |opp_dreb_rank           |Int64   |
+        |opp_reb_rank            |Int64   |
+        |opp_ast_rank            |Int64   |
+        |opp_tov_rank            |Int64   |
+        |opp_stl_rank            |Int64   |
+        |opp_blk_rank            |Int64   |
+        |opp_blka_rank           |Int64   |
+        |opp_pf_rank             |Int64   |
+        |opp_pfd_rank            |Int64   |
+        |opp_pts_rank            |Int64   |
+        |pct_fga_2pt             |Float64 |
+        |pct_fga_3pt             |Float64 |
+        |pct_pts_2pt             |Float64 |
+        |pct_pts_2pt_mr          |Float64 |
+        |pct_pts_3pt             |Float64 |
+        |pct_pts_fb              |Float64 |
+        |pct_pts_ft              |Float64 |
+        |pct_pts_off_tov         |Float64 |
+        |pct_pts_paint           |Float64 |
+        |pct_ast_2pm             |Float64 |
+        |pct_uast_2pm            |Float64 |
+        |pct_ast_3pm             |Float64 |
+        |pct_uast_3pm            |Float64 |
+        |pct_ast_fgm             |Float64 |
+        |pct_uast_fgm            |Float64 |
+        |pct_fga_2pt_rank        |Int64   |
+        |pct_fga_3pt_rank        |Int64   |
+        |pct_pts_2pt_rank        |Int64   |
+        |pct_pts_2pt_mr_rank     |Int64   |
+        |pct_pts_3pt_rank        |Int64   |
+        |pct_pts_fb_rank         |Int64   |
+        |pct_pts_ft_rank         |Int64   |
+        |pct_pts_off_tov_rank    |Int64   |
+        |pct_pts_paint_rank      |Int64   |
+        |pct_ast_2pm_rank        |Int64   |
+        |pct_uast_2pm_rank       |Int64   |
+        |pct_ast_3pm_rank        |Int64   |
+        |pct_uast_3pm_rank       |Int64   |
+        |pct_ast_fgm_rank        |Int64   |
+        |pct_uast_fgm_rank       |Int64   |
+
+    Example:
+        Quick start::
+
+            load_nba_stats_team_season_stats(seasons=2025)
+    """
+    frames, missing = [], []
+    for season in _as_season_list(seasons):
+        if int(season) < 1996:
+            raise SeasonNotFoundError("season cannot be less than 1996")
+        df = _read_release_parquet(
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_team_season_stats/team_season_stats_{season}.parquet"
+        )
+        if df is None:
+            missing.append(season)
+            continue
+        frames.append(df)
+    if missing:
+        cli_warn("load_nba_stats_team_season_stats: no data for season(s) {missing} (skipped)".format(missing=missing))
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+def load_nba_player_crosswalk(seasons, return_as_pandas: bool = False):
+    """Load nba_crosswalk (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_crosswalk
+
+    Args:
+        seasons: an int or iterable of seasons (>= 2026).
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; seasons with no published asset are
+        skipped with a warning rather than raising (404-safe).
+
+        |col_name           |type    |
+        |:------------------|:-------|
+        |season             |Int32   |
+        |espn_team_id       |Int32   |
+        |team_abbreviation  |String  |
+        |player_name        |String  |
+        |espn_athlete_id    |String  |
+        |espn_full_name     |String  |
+        |espn_jersey        |String  |
+        |espn_position      |String  |
+        |nba_player_id      |String  |
+        |nba_player_name    |String  |
+        |nba_jersey_num     |String  |
+        |nba_position       |String  |
+        |fox_athlete_id     |String  |
+        |fox_player         |String  |
+        |fox_jersey         |String  |
+        |fox_position_group |String  |
+        |yahoo_player_id    |String  |
+        |yahoo_player_name  |String  |
+        |match_method       |String  |
+        |match_confidence   |Float64 |
+        |match_keys         |String  |
+
+    Example:
+        Quick start::
+
+            load_nba_player_crosswalk(seasons=2026)
+    """
+    frames, missing = [], []
+    for season in _as_season_list(seasons):
+        if int(season) < 2026:
+            raise SeasonNotFoundError("season cannot be less than 2026")
+        df = _read_release_parquet(
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_crosswalk/nba_player_crosswalk_{season}.parquet"
+        )
+        if df is None:
+            missing.append(season)
+            continue
+        frames.append(df)
+    if missing:
+        cli_warn("load_nba_player_crosswalk: no data for season(s) {missing} (skipped)".format(missing=missing))
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+def load_nba_schedule_crosswalk(seasons, return_as_pandas: bool = False):
+    """Load nba_crosswalk (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_crosswalk
+
+    Args:
+        seasons: an int or iterable of seasons (>= 2026).
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; seasons with no published asset are
+        skipped with a warning rather than raising (404-safe).
+
+        |col_name          |type    |
+        |:-----------------|:-------|
+        |season            |Int32   |
+        |season_type       |String  |
+        |game_date         |Date    |
+        |home_espn_team_id |Int32   |
+        |away_espn_team_id |Int32   |
+        |espn_game_id      |String  |
+        |nba_game_id       |String  |
+        |nba_game_code     |String  |
+        |nba_home_team_id  |String  |
+        |nba_away_team_id  |String  |
+        |fox_game_id       |String  |
+        |fox_home_team_id  |String  |
+        |fox_away_team_id  |String  |
+        |yahoo_game_id     |String  |
+        |match_method      |String  |
+        |match_confidence  |Float64 |
+
+    Example:
+        Quick start::
+
+            load_nba_schedule_crosswalk(seasons=2026)
+    """
+    frames, missing = [], []
+    for season in _as_season_list(seasons):
+        if int(season) < 2026:
+            raise SeasonNotFoundError("season cannot be less than 2026")
+        df = _read_release_parquet(
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_crosswalk/nba_schedule_crosswalk_{season}.parquet"
+        )
+        if df is None:
+            missing.append(season)
+            continue
+        frames.append(df)
+    if missing:
+        cli_warn("load_nba_schedule_crosswalk: no data for season(s) {missing} (skipped)".format(missing=missing))
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+def load_nba_team_crosswalk(seasons, return_as_pandas: bool = False):
+    """Load nba_crosswalk (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_crosswalk
+
+    Args:
+        seasons: an int or iterable of seasons (>= 2026).
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; seasons with no published asset are
+        skipped with a warning rather than raising (404-safe).
+
+        |col_name                |type    |
+        |:-----------------------|:-------|
+        |season                  |Int32   |
+        |espn_team_id            |Int32   |
+        |espn_abbreviation       |String  |
+        |espn_display_name       |String  |
+        |espn_short_name         |String  |
+        |espn_location           |String  |
+        |espn_mascot             |String  |
+        |nba_team_id             |String  |
+        |nba_team_abbreviation   |String  |
+        |nba_team_name           |String  |
+        |nba_team_city           |String  |
+        |nba_team_slug           |String  |
+        |nba_conference          |String  |
+        |nba_division            |String  |
+        |fox_team_id             |String  |
+        |fox_team_name           |String  |
+        |yahoo_team_id           |String  |
+        |yahoo_team_abbreviation |String  |
+        |yahoo_team_name         |String  |
+        |match_method            |String  |
+        |match_confidence        |Float64 |
+
+    Example:
+        Quick start::
+
+            load_nba_team_crosswalk(seasons=2026)
+    """
+    frames, missing = [], []
+    for season in _as_season_list(seasons):
+        if int(season) < 2026:
+            raise SeasonNotFoundError("season cannot be less than 2026")
+        df = _read_release_parquet(
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_crosswalk/nba_team_crosswalk_{season}.parquet"
+        )
+        if df is None:
+            missing.append(season)
+            continue
+        frames.append(df)
+    if missing:
+        cli_warn("load_nba_team_crosswalk: no data for season(s) {missing} (skipped)".format(missing=missing))
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+def load_nba_player_core(seasons, return_as_pandas: bool = False):
+    """Load espn_nba_player_core (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_nba_player_core
+
+    Args:
+        seasons: an int or iterable of seasons (>= 2002).
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; seasons with no published asset are
+        skipped with a warning rather than raising (404-safe).
+
+        |col_name              |type    |
+        |:---------------------|:-------|
+        |season                |Int32   |
+        |athlete_id            |Int64   |
+        |guid                  |String  |
+        |uid                   |String  |
+        |slug                  |String  |
+        |type                  |String  |
+        |first_name            |String  |
+        |last_name             |String  |
+        |full_name             |String  |
+        |display_name          |String  |
+        |short_name            |String  |
+        |height                |Float64 |
+        |display_height        |String  |
+        |weight                |Float64 |
+        |display_weight        |String  |
+        |age                   |Int32   |
+        |date_of_birth         |String  |
+        |birth_city            |String  |
+        |birth_state           |String  |
+        |birth_country         |String  |
+        |jersey                |String  |
+        |position_id           |Int32   |
+        |position_name         |String  |
+        |position_abbreviation |String  |
+        |position_display_name |String  |
+        |college_id            |Int32   |
+        |current_team_id       |Int32   |
+        |headshot_href         |String  |
+        |experience_years      |Int32   |
+        |status_id             |Int32   |
+        |status_name           |String  |
+        |status_type           |String  |
+        |draft_year            |Int32   |
+        |draft_round           |Int32   |
+        |draft_selection       |Int32   |
+        |active                |Boolean |
+
+    Example:
+        Quick start::
+
+            load_nba_player_core(seasons=2025)
+    """
+    frames, missing = [], []
+    for season in _as_season_list(seasons):
+        if int(season) < 2002:
+            raise SeasonNotFoundError("season cannot be less than 2002")
+        df = _read_release_parquet(
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_nba_player_core/player_core_{season}.parquet"
+        )
+        if df is None:
+            missing.append(season)
+            continue
+        frames.append(df)
+    if missing:
+        cli_warn("load_nba_player_core: no data for season(s) {missing} (skipped)".format(missing=missing))
     # diagonal: per-season release schemas can drift (columns added/dropped
     # over the years) -- union columns, null-fill gaps.
     out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
@@ -1029,11 +2887,13 @@ def load_nba_player_impact(seasons, return_as_pandas: bool = False):
         |col_name               |type    |
         |:----------------------|:-------|
         |player_id              |Int64   |
-        |player_name            |Utf8    |
+        |player_name            |String  |
         |team_id                |Int64   |
-        |team_abbreviation      |Utf8    |
-        |team_name              |Utf8    |
-        |teams                  |Utf8    |
+        |team_abbreviation      |String  |
+        |team_name              |String  |
+        |teams                  |String  |
+        |season                 |Int64   |
+        |season_type            |String  |
         |o_rapm                 |Float64 |
         |d_rapm                 |Float64 |
         |rapm                   |Float64 |
@@ -1054,7 +2914,6 @@ def load_nba_player_impact(seasons, return_as_pandas: bool = False):
         |darko_filtered_skill   |Float64 |
         |darko_projected_rating |Float64 |
         |darko_projected_sd     |Float64 |
-        |season                 |Int64   |
 
     Example:
         Quick start::

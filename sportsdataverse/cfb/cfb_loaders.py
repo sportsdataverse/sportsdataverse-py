@@ -51,6 +51,7 @@ __all__ = [
     "load_cfb_adv_team_gamelog",
     "load_cfb_ratings_weekly",
     "load_cfb_team_summaries_weekly",
+    "load_cfb_pbp_r",
 ]
 
 
@@ -67,370 +68,482 @@ def load_cfb_pbp(seasons, return_as_pandas: bool = False):
         A polars (or pandas) DataFrame; seasons with no published asset are
         skipped with a warning rather than raising (404-safe).
 
-        |col_name                                |type                                                   |
-        |:---------------------------------------|:------------------------------------------------------|
-        |id                                      |Int32                                                  |
-        |sequenceNumber                          |String                                                 |
-        |text                                    |String                                                 |
-        |awayScore                               |Int32                                                  |
-        |homeScore                               |Int32                                                  |
-        |scoringPlay                             |Boolean                                                |
-        |priority                                |Boolean                                                |
-        |modified                                |String                                                 |
-        |statYardage                             |Int32                                                  |
-        |type.id                                 |String                                                 |
-        |type.text                               |String                                                 |
-        |period.number                           |Int32                                                  |
-        |clock.displayValue                      |String                                                 |
-        |start.down                              |Int32                                                  |
-        |start.distance                          |Int32                                                  |
-        |start.yardLine                          |Int32                                                  |
-        |start.yardsToEndzone                    |Int32                                                  |
-        |start.downDistanceText                  |String                                                 |
-        |start.shortDownDistanceText             |String                                                 |
-        |start.possessionText                    |String                                                 |
-        |start.team.id                           |Int32                                                  |
-        |end.down                                |Int32                                                  |
-        |end.distance                            |Int32                                                  |
-        |end.yardLine                            |Int32                                                  |
-        |end.yardsToEndzone                      |Int32                                                  |
-        |end.downDistanceText                    |String                                                 |
-        |end.shortDownDistanceText               |String                                                 |
-        |end.possessionText                      |String                                                 |
-        |end.team.id                             |Int32                                                  |
-        |drive.id                                |String                                                 |
-        |drive.displayResult                     |String                                                 |
-        |drive.isScore                           |Boolean                                                |
-        |drive.team.shortDisplayName             |String                                                 |
-        |drive.team.displayName                  |String                                                 |
-        |drive.team.name                         |String                                                 |
-        |drive.team.abbreviation                 |String                                                 |
-        |drive.yards                             |Int32                                                  |
-        |drive.offensivePlays                    |Int32                                                  |
-        |drive.result                            |String                                                 |
-        |drive.description                       |String                                                 |
-        |drive.shortDisplayResult                |String                                                 |
-        |drive.timeElapsed.displayValue          |String                                                 |
-        |drive.start.period.number               |Int32                                                  |
-        |drive.start.period.type                 |String                                                 |
-        |drive.start.yardLine                    |Int32                                                  |
-        |drive.start.clock.displayValue          |String                                                 |
-        |drive.start.text                        |String                                                 |
-        |drive.end.period.number                 |Int32                                                  |
-        |drive.end.period.type                   |String                                                 |
-        |drive.end.yardLine                      |Int32                                                  |
-        |drive.end.clock.displayValue            |String                                                 |
-        |game_id                                 |Int32                                                  |
-        |season                                  |Int32                                                  |
-        |seasonType                              |Int32                                                  |
-        |homeTeamId                              |Int32                                                  |
-        |awayTeamId                              |Int32                                                  |
-        |homeTeamName                            |String                                                 |
-        |awayTeamName                            |String                                                 |
-        |homeTeamMascot                          |String                                                 |
-        |awayTeamMascot                          |String                                                 |
-        |homeTeamAbbrev                          |String                                                 |
-        |awayTeamAbbrev                          |String                                                 |
-        |homeTeamNameAlt                         |String                                                 |
-        |awayTeamNameAlt                         |String                                                 |
-        |homeTeamSpread                          |Float64                                                |
-        |gameSpread                              |Float64                                                |
-        |gameSpreadAvailable                     |Boolean                                                |
-        |overUnder                               |Float64                                                |
-        |homeFavorite                            |Boolean                                                |
-        |clock.minutes                           |String                                                 |
-        |clock.seconds                           |String                                                 |
-        |half                                    |Int32                                                  |
-        |lead_half                               |Int32                                                  |
-        |start.TimeSecsRem                       |Int32                                                  |
-        |start.adj_TimeSecsRem                   |Int32                                                  |
-        |lead_text                               |String                                                 |
-        |lead_start_team                         |String                                                 |
-        |lead_start_yardsToEndzone               |Int32                                                  |
-        |lead_start_down                         |Int32                                                  |
-        |lead_start_distance                     |Int32                                                  |
-        |lead_scoringPlay                        |Boolean                                                |
-        |text_dupe                               |Boolean                                                |
-        |game_play_number                        |Int32                                                  |
-        |start.pos_team.id                       |Int32                                                  |
-        |start.def_pos_team.id                   |Int32                                                  |
-        |end.def_team.id                         |Int32                                                  |
-        |end.pos_team.id                         |Int32                                                  |
-        |end.def_pos_team.id                     |Int32                                                  |
-        |start.pos_team.name                     |String                                                 |
-        |start.def_pos_team.name                 |String                                                 |
-        |end.pos_team.name                       |String                                                 |
-        |end.def_pos_team.name                   |String                                                 |
-        |start.is_home                           |Boolean                                                |
-        |end.is_home                             |Boolean                                                |
-        |homeTimeoutCalled                       |Boolean                                                |
-        |awayTimeoutCalled                       |Boolean                                                |
-        |end.homeTeamTimeouts                    |Int32                                                  |
-        |end.awayTeamTimeouts                    |Int32                                                  |
-        |start.homeTeamTimeouts                  |Int32                                                  |
-        |start.awayTeamTimeouts                  |Int32                                                  |
-        |end.TimeSecsRem                         |Int32                                                  |
-        |end.adj_TimeSecsRem                     |Int32                                                  |
-        |start.posTeamTimeouts                   |Int32                                                  |
-        |start.defPosTeamTimeouts                |Int32                                                  |
-        |end.posTeamTimeouts                     |Int32                                                  |
-        |end.defPosTeamTimeouts                  |Int32                                                  |
-        |firstHalfKickoffTeamId                  |Int32                                                  |
-        |period                                  |Int32                                                  |
-        |start.yard                              |Int32                                                  |
-        |end.yard                                |Int32                                                  |
-        |playType                                |String                                                 |
-        |week                                    |Int32                                                  |
-        |end_of_half                             |Boolean                                                |
-        |down_1                                  |Boolean                                                |
-        |down_2                                  |Boolean                                                |
-        |down_3                                  |Boolean                                                |
-        |down_4                                  |Boolean                                                |
-        |down_1_end                              |Boolean                                                |
-        |down_2_end                              |Boolean                                                |
-        |down_3_end                              |Boolean                                                |
-        |down_4_end                              |Boolean                                                |
-        |scoring_play                            |Boolean                                                |
-        |td_play                                 |Boolean                                                |
-        |touchdown                               |Boolean                                                |
-        |td_check                                |Boolean                                                |
-        |safety                                  |Boolean                                                |
-        |fumble_vec                              |Boolean                                                |
-        |forced_fumble                           |Boolean                                                |
-        |kickoff_play                            |Boolean                                                |
-        |kickoff_tb                              |Boolean                                                |
-        |kickoff_onside                          |Boolean                                                |
-        |kickoff_oob                             |Boolean                                                |
-        |kickoff_fair_catch                      |Boolean                                                |
-        |kickoff_downed                          |Boolean                                                |
-        |kick_play                               |Boolean                                                |
-        |kickoff_safety                          |Boolean                                                |
-        |punt                                    |Boolean                                                |
-        |punt_play                               |Boolean                                                |
-        |punt_tb                                 |Boolean                                                |
-        |punt_oob                                |Boolean                                                |
-        |punt_fair_catch                         |Boolean                                                |
-        |punt_downed                             |Boolean                                                |
-        |punt_safety                             |Boolean                                                |
-        |penalty_safety                          |Boolean                                                |
-        |punt_blocked                            |Boolean                                                |
-        |rush                                    |Boolean                                                |
-        |pass                                    |Boolean                                                |
-        |sack_vec                                |Boolean                                                |
-        |pos_team                                |Int32                                                  |
-        |def_pos_team                            |Int32                                                  |
-        |is_home                                 |Boolean                                                |
-        |HA_score_diff                           |Int32                                                  |
-        |lag_homeScore                           |Int32                                                  |
-        |lag_awayScore                           |Int32                                                  |
-        |start.homeScore                         |Int32                                                  |
-        |start.awayScore                         |Int32                                                  |
-        |end.homeScore                           |Int32                                                  |
-        |end.awayScore                           |Int32                                                  |
-        |pos_team_score                          |Int32                                                  |
-        |def_pos_team_score                      |Int32                                                  |
-        |start.pos_team_score                    |Int32                                                  |
-        |start.def_pos_team_score                |Int32                                                  |
-        |start.pos_score_diff                    |Int32                                                  |
-        |end.pos_team_score                      |Int32                                                  |
-        |end.def_pos_team_score                  |Int32                                                  |
-        |end.pos_score_diff                      |Int32                                                  |
-        |lag_pos_team                            |Int32                                                  |
-        |lead_pos_team                           |Int32                                                  |
-        |lead_pos_team2                          |Int32                                                  |
-        |pos_score_diff                          |Int32                                                  |
-        |lag_pos_score_diff                      |Int32                                                  |
-        |pos_score_pts                           |Int32                                                  |
-        |pos_score_diff_start                    |Int32                                                  |
-        |start.pos_team_receives_2H_kickoff      |Boolean                                                |
-        |end.pos_team_receives_2H_kickoff        |Boolean                                                |
-        |change_of_poss                          |Int32                                                  |
-        |penalty_flag                            |Boolean                                                |
-        |penalty_declined                        |Boolean                                                |
-        |penalty_no_play                         |Boolean                                                |
-        |penalty_offset                          |Boolean                                                |
-        |penalty_1st_conv                        |Boolean                                                |
-        |penalty_in_text                         |Boolean                                                |
-        |sack                                    |Boolean                                                |
-        |int                                     |Boolean                                                |
-        |int_td                                  |Boolean                                                |
-        |completion                              |Boolean                                                |
-        |pass_attempt                            |Boolean                                                |
-        |target                                  |Boolean                                                |
-        |pass_breakup                            |Boolean                                                |
-        |pass_td                                 |Boolean                                                |
-        |rush_td                                 |Boolean                                                |
-        |turnover_vec                            |Boolean                                                |
-        |offense_score_play                      |Boolean                                                |
-        |defense_score_play                      |Boolean                                                |
-        |downs_turnover                          |Boolean                                                |
-        |fg_attempt                              |Boolean                                                |
-        |fg_made                                 |Boolean                                                |
-        |pos_unit                                |String                                                 |
-        |def_pos_unit                            |String                                                 |
-        |lead_play_type                          |String                                                 |
-        |sp                                      |Boolean                                                |
-        |play                                    |Boolean                                                |
-        |scrimmage_play                          |Boolean                                                |
-        |change_of_pos_team                      |Boolean                                                |
-        |pos_score_diff_end                      |Int32                                                  |
-        |fumble_lost                             |Boolean                                                |
-        |fumble_recovered                        |Boolean                                                |
-        |receiver_player_name                    |String                                                 |
-        |passer_player_name                      |String                                                 |
-        |new_down                                |Int32                                                  |
-        |new_distance                            |Int32                                                  |
-        |middle_8                                |Boolean                                                |
-        |rz_play                                 |Boolean                                                |
-        |scoring_opp                             |Boolean                                                |
-        |stuffed_run                             |Boolean                                                |
-        |stopped_run                             |Boolean                                                |
-        |opportunity_run                         |Boolean                                                |
-        |highlight_run                           |Boolean                                                |
-        |short_rush_success                      |Boolean                                                |
-        |short_rush_attempt                      |Boolean                                                |
-        |power_rush_success                      |Boolean                                                |
-        |power_rush_attempt                      |Boolean                                                |
-        |early_down                              |Boolean                                                |
-        |late_down                               |Boolean                                                |
-        |early_down_pass                         |Boolean                                                |
-        |early_down_rush                         |Boolean                                                |
-        |late_down_pass                          |Boolean                                                |
-        |late_down_rush                          |Boolean                                                |
-        |standard_down                           |Boolean                                                |
-        |passing_down                            |Boolean                                                |
-        |TFL                                     |Boolean                                                |
-        |TFL_pass                                |Boolean                                                |
-        |TFL_rush                                |Boolean                                                |
-        |havoc                                   |Boolean                                                |
-        |start.pos_team_spread                   |Float64                                                |
-        |start.elapsed_share                     |Float64                                                |
-        |start.spread_time                       |Float64                                                |
-        |end.pos_team_spread                     |Float64                                                |
-        |end.elapsed_share                       |Float64                                                |
-        |end.spread_time                         |Float64                                                |
-        |start.yardsToEndzone.touchback          |Int32                                                  |
-        |EP_start_touchback                      |Float64                                                |
-        |EP_start                                |Float64                                                |
-        |EP_end                                  |Float64                                                |
-        |lag_change_of_pos_team                  |Boolean                                                |
-        |EPA                                     |Float64                                                |
-        |def_EPA                                 |Float64                                                |
-        |EPA_scrimmage                           |Float64                                                |
-        |EPA_pass                                |Float64                                                |
-        |EPA_explosive                           |Boolean                                                |
-        |EPA_non_explosive                       |Float64                                                |
-        |EPA_explosive_pass                      |Boolean                                                |
-        |EPA_explosive_rush                      |Boolean                                                |
-        |first_down_created                      |Boolean                                                |
-        |EPA_success                             |Boolean                                                |
-        |EPA_success_early_down                  |Boolean                                                |
-        |EPA_success_early_down_pass             |Boolean                                                |
-        |EPA_success_early_down_rush             |Boolean                                                |
-        |EPA_success_late_down                   |Boolean                                                |
-        |EPA_success_late_down_pass              |Boolean                                                |
-        |EPA_success_late_down_rush              |Boolean                                                |
-        |EPA_success_standard_down               |Boolean                                                |
-        |EPA_success_passing_down                |Boolean                                                |
-        |EPA_success_pass                        |Boolean                                                |
-        |EPA_success_rush                        |Boolean                                                |
-        |EPA_success_rush_EPA                    |Boolean                                                |
-        |EPA_middle_8_success                    |Boolean                                                |
-        |EPA_middle_8_success_pass               |Boolean                                                |
-        |EPA_middle_8_success_rush               |Boolean                                                |
-        |EPA_sp                                  |Float64                                                |
-        |start.ExpScoreDiff_touchback            |Float64                                                |
-        |start.ExpScoreDiff                      |Float64                                                |
-        |start.ExpScoreDiff_Time_Ratio_touchback |Float64                                                |
-        |start.ExpScoreDiff_Time_Ratio           |Float64                                                |
-        |end.ExpScoreDiff                        |Float64                                                |
-        |end.ExpScoreDiff_Time_Ratio             |Float64                                                |
-        |wp_before                               |Float64                                                |
-        |wp_touchback                            |Float64                                                |
-        |def_wp_before                           |Float64                                                |
-        |home_wp_before                          |Float64                                                |
-        |away_wp_before                          |Float64                                                |
-        |lead_wp_before                          |Float64                                                |
-        |lead_wp_before2                         |Float64                                                |
-        |wp_after                                |Float64                                                |
-        |def_wp_after                            |Float64                                                |
-        |home_wp_after                           |Float64                                                |
-        |away_wp_after                           |Float64                                                |
-        |wpa                                     |Float64                                                |
-        |drive_start                             |Int32                                                  |
-        |drive_stopped                           |Boolean                                                |
-        |drive_play_index                        |Int32                                                  |
-        |drive_offense_plays                     |Int32                                                  |
-        |prog_drive_EPA                          |Float64                                                |
-        |prog_drive_WPA                          |Float64                                                |
-        |drive_offense_yards                     |Int32                                                  |
-        |drive_total_yards                       |Int32                                                  |
-        |qbr_epa                                 |Float64                                                |
-        |weight                                  |Float64                                                |
-        |non_fumble_sack                         |Boolean                                                |
-        |pass_epa                                |Float64                                                |
-        |pass_weight                             |Float64                                                |
-        |action_play                             |Boolean                                                |
-        |athlete_name                            |String                                                 |
-        |type.abbreviation                       |String                                                 |
-        |lag_half                                |String                                                 |
-        |lag_scoringPlay                         |Boolean                                                |
-        |lag_HA_score_diff                       |Int32                                                  |
-        |net_HA_score_pts                        |Int32                                                  |
-        |H_score_diff                            |Int32                                                  |
-        |A_score_diff                            |Int32                                                  |
-        |yds_rushed                              |Int32                                                  |
-        |rusher_player_name                      |String                                                 |
-        |adj_rush_yardage                        |Int32                                                  |
-        |line_yards                              |Float64                                                |
-        |second_level_yards                      |Float64                                                |
-        |open_field_yards                        |Int32                                                  |
-        |highlight_yards                         |Float64                                                |
-        |opp_highlight_yards                     |Float64                                                |
-        |lag_EP_end                              |Float64                                                |
-        |EP_between                              |Float64                                                |
-        |EPA_rush                                |Float64                                                |
-        |EPA_success_EPA                         |Float64                                                |
-        |EPA_success_passing_down_EPA            |Float64                                                |
-        |rush_epa                                |Float64                                                |
-        |rush_weight                             |Float64                                                |
-        |penalty_detail                          |String                                                 |
-        |penalty_text                            |String                                                 |
-        |yds_penalty                             |Int32                                                  |
-        |EPA_penalty                             |Float64                                                |
-        |pen_epa                                 |Float64                                                |
-        |pen_weight                              |Float64                                                |
-        |yds_punt_gained                         |Int32                                                  |
-        |yds_punt_return                         |Int32                                                  |
-        |punter_player_name                      |String                                                 |
-        |punt_return_player_name                 |String                                                 |
-        |EPA_punt                                |Float64                                                |
-        |EPA_success_standard_down_EPA           |Float64                                                |
-        |yds_receiving                           |Int32                                                  |
-        |EPA_success_pass_EPA                    |Float64                                                |
-        |interception_player_name                |String                                                 |
-        |scoringType.name                        |String                                                 |
-        |scoringType.displayName                 |String                                                 |
-        |scoringType.abbreviation                |String                                                 |
-        |yds_kickoff_return                      |Int32                                                  |
-        |kickoff_player_name                     |String                                                 |
-        |kickoff_return_player_name              |String                                                 |
-        |down                                    |Int32                                                  |
-        |distance                                |Int32                                                  |
-        |EPA_kickoff                             |Float64                                                |
-        |yds_fg                                  |Int32                                                  |
-        |EPA_fg                                  |Float64                                                |
-        |fumble_player_name                      |String                                                 |
-        |fumble_recovered_player_name            |String                                                 |
-        |yds_sacked                              |Int32                                                  |
-        |sack_epa                                |Float64                                                |
-        |sack_weight                             |Float64                                                |
-        |date                                    |String                                                 |
-        |fg_kicker_player_name                   |String                                                 |
-        |yds_int_return                          |Int32                                                  |
-        |yds_punted                              |Int32                                                  |
-        |game_date_time                          |Datetime(time_unit='us', time_zone='America/New_York') |
-        |game_date                               |Date                                                   |
+        |col_name                                |type    |
+        |:---------------------------------------|:-------|
+        |season                                  |Int64   |
+        |game_id                                 |Int64   |
+        |game_play_number                        |Int64   |
+        |pos_team                                |Int64   |
+        |def_pos_team                            |Int64   |
+        |pos_team_score                          |Int64   |
+        |def_pos_team_score                      |Int64   |
+        |half                                    |Int64   |
+        |period                                  |Int64   |
+        |down                                    |Int64   |
+        |distance                                |Int64   |
+        |EPA                                     |Float64 |
+        |wpa                                     |Float64 |
+        |wp_before                               |Float64 |
+        |wp_after                                |Float64 |
+        |def_wp_before                           |Float64 |
+        |def_wp_after                            |Float64 |
+        |penalty_detail                          |String  |
+        |yds_penalty                             |String  |
+        |penalty_1st_conv                        |Boolean |
+        |def_EPA                                 |Float64 |
+        |rz_play                                 |Boolean |
+        |scoring_opp                             |Boolean |
+        |middle_8                                |Boolean |
+        |stuffed_run                             |Boolean |
+        |change_of_pos_team                      |Boolean |
+        |downs_turnover                          |Boolean |
+        |pos_score_diff_start                    |Int64   |
+        |pos_score_pts                           |Int64   |
+        |home_wp_before                          |Float64 |
+        |away_wp_before                          |Float64 |
+        |home_wp_after                           |Float64 |
+        |away_wp_after                           |Float64 |
+        |end_of_half                             |Boolean |
+        |lead_pos_team                           |Int64   |
+        |lead_play_type                          |String  |
+        |lag_pos_team                            |Int64   |
+        |orig_play_type                          |String  |
+        |offense_score_play                      |Boolean |
+        |defense_score_play                      |Boolean |
+        |pos_score_diff                          |Int64   |
+        |change_of_poss                          |Boolean |
+        |rusher_player_name                      |String  |
+        |yds_rushed                              |Int64   |
+        |passer_player_name                      |String  |
+        |receiver_player_name                    |String  |
+        |yds_receiving                           |Int64   |
+        |yds_sacked                              |Int64   |
+        |sack_players                            |String  |
+        |sack_player_name                        |String  |
+        |sack_player_name2                       |String  |
+        |pass_breakup_player_name                |String  |
+        |interception_player_name                |String  |
+        |yds_int_return                          |Int64   |
+        |fumble_player_name                      |String  |
+        |fumble_forced_player_name               |String  |
+        |fumble_recovered_player_name            |String  |
+        |yds_fumble_return                       |Int64   |
+        |punter_player_name                      |String  |
+        |yds_punted                              |Int64   |
+        |yds_punt_return                         |Int64   |
+        |yds_punt_gained                         |Int64   |
+        |punt_block_player_name                  |String  |
+        |punt_block_return_player_name           |String  |
+        |fg_kicker_player_name                   |String  |
+        |yds_fg                                  |Int64   |
+        |fg_block_player_name                    |String  |
+        |fg_return_player_name                   |String  |
+        |kickoff_player_name                     |String  |
+        |yds_kickoff                             |Int64   |
+        |yds_kickoff_return                      |Int64   |
+        |rush                                    |Boolean |
+        |rush_td                                 |Boolean |
+        |pass                                    |Boolean |
+        |pass_td                                 |Boolean |
+        |completion                              |Boolean |
+        |pass_attempt                            |Boolean |
+        |target                                  |Boolean |
+        |sack_vec                                |Boolean |
+        |sack                                    |Boolean |
+        |int                                     |Boolean |
+        |int_td                                  |Boolean |
+        |turnover_vec                            |Boolean |
+        |kickoff_play                            |Boolean |
+        |scoring_play                            |Boolean |
+        |td_play                                 |Boolean |
+        |touchdown                               |Boolean |
+        |safety                                  |Boolean |
+        |fumble_vec                              |Boolean |
+        |kickoff_tb                              |Boolean |
+        |kickoff_onside                          |Boolean |
+        |kickoff_oob                             |Boolean |
+        |kickoff_fair_catch                      |Boolean |
+        |kickoff_downed                          |Boolean |
+        |kickoff_safety                          |Boolean |
+        |kick_play                               |Boolean |
+        |punt                                    |Boolean |
+        |punt_play                               |Boolean |
+        |punt_tb                                 |Boolean |
+        |punt_oob                                |Boolean |
+        |punt_fair_catch                         |Boolean |
+        |punt_downed                             |Boolean |
+        |punt_safety                             |Boolean |
+        |punt_blocked                            |Boolean |
+        |penalty_safety                          |Boolean |
+        |fg_made                                 |Boolean |
+        |fg_make_prob                            |Float64 |
+        |penalty_flag                            |Boolean |
+        |penalty_declined                        |Boolean |
+        |penalty_no_play                         |Boolean |
+        |penalty_offset                          |Boolean |
+        |penalty_text                            |String  |
+        |lead_wp_before2                         |Float64 |
+        |lead_wp_before                          |Float64 |
+        |lead_pos_team2                          |Int64   |
+        |lag_change_of_pos_team                  |Boolean |
+        |lag_pos_score_diff                      |Int64   |
+        |id                                      |Int64   |
+        |sequenceNumber                          |Int64   |
+        |text                                    |String  |
+        |awayScore                               |Int64   |
+        |homeScore                               |Int64   |
+        |scoringPlay                             |Boolean |
+        |priority                                |Boolean |
+        |modified                                |String  |
+        |wallclock                               |String  |
+        |teamParticipants                        |String  |
+        |isPenalty                               |Boolean |
+        |statYardage                             |Int64   |
+        |isTurnover                              |Boolean |
+        |type.id                                 |String  |
+        |type.text                               |String  |
+        |type.abbreviation                       |String  |
+        |period.number                           |Int64   |
+        |clock.displayValue                      |String  |
+        |start.down                              |Int64   |
+        |start.distance                          |Int64   |
+        |start.yardLine                          |Int64   |
+        |start.yardsToEndzone                    |Int64   |
+        |start.team.id                           |Int64   |
+        |end.down                                |Int64   |
+        |end.distance                            |Int64   |
+        |end.yardLine                            |Int64   |
+        |end.yardsToEndzone                      |Int64   |
+        |end.downDistanceText                    |String  |
+        |end.shortDownDistanceText               |String  |
+        |end.possessionText                      |String  |
+        |end.team.id                             |Int64   |
+        |start.downDistanceText                  |String  |
+        |start.shortDownDistanceText             |String  |
+        |start.possessionText                    |String  |
+        |scoringType.name                        |String  |
+        |scoringType.displayName                 |String  |
+        |scoringType.abbreviation                |String  |
+        |pointAfterAttempt.id                    |Float64 |
+        |pointAfterAttempt.text                  |String  |
+        |pointAfterAttempt.abbreviation          |String  |
+        |pointAfterAttempt.value                 |Float64 |
+        |drive.id                                |String  |
+        |drive.displayResult                     |String  |
+        |drive.isScore                           |Boolean |
+        |drive.team.shortDisplayName             |String  |
+        |drive.team.displayName                  |String  |
+        |drive.team.name                         |String  |
+        |drive.team.abbreviation                 |String  |
+        |drive.yards                             |Int64   |
+        |drive.offensivePlays                    |Int64   |
+        |drive.result                            |String  |
+        |drive.description                       |String  |
+        |drive.shortDisplayResult                |String  |
+        |drive.timeElapsed.displayValue          |String  |
+        |drive.start.period.number               |Int64   |
+        |drive.start.period.type                 |String  |
+        |drive.start.yardLine                    |Int64   |
+        |drive.start.clock.displayValue          |String  |
+        |drive.start.text                        |String  |
+        |drive.end.period.number                 |Int64   |
+        |drive.end.period.type                   |String  |
+        |drive.end.yardLine                      |Int64   |
+        |drive.end.clock.displayValue            |String  |
+        |seasonType                              |Int64   |
+        |week                                    |Int64   |
+        |status_type_completed                   |Boolean |
+        |homeTeamId                              |Int64   |
+        |awayTeamId                              |Int64   |
+        |homeTeamName                            |String  |
+        |awayTeamName                            |String  |
+        |homeTeamMascot                          |String  |
+        |awayTeamMascot                          |String  |
+        |homeTeamAbbrev                          |String  |
+        |awayTeamAbbrev                          |String  |
+        |homeTeamNameAlt                         |String  |
+        |awayTeamNameAlt                         |String  |
+        |gameSpread                              |Float64 |
+        |homeFavorite                            |Boolean |
+        |gameSpreadAvailable                     |Boolean |
+        |overUnder                               |Float64 |
+        |homeTeamSpread                          |Float64 |
+        |clock.minutes                           |Int64   |
+        |clock.seconds                           |Int64   |
+        |lag_half                                |Int64   |
+        |lead_half                               |Int64   |
+        |start.TimeSecsRem                       |Int64   |
+        |start.adj_TimeSecsRem                   |Int64   |
+        |lead_text                               |String  |
+        |lead_start_team                         |String  |
+        |lead_start_yardsToEndzone               |Int64   |
+        |lead_start_down                         |Int64   |
+        |lead_start_distance                     |Int64   |
+        |lead_scoringPlay                        |Boolean |
+        |text_dupe                               |Boolean |
+        |end_state_missing                       |Boolean |
+        |start.pos_team.id                       |Int64   |
+        |start.def_pos_team.id                   |Int64   |
+        |end.def_pos_team.id                     |Int64   |
+        |end.pos_team.id                         |Int64   |
+        |start.pos_team.name                     |String  |
+        |start.def_pos_team.name                 |String  |
+        |end.pos_team.name                       |String  |
+        |end.def_pos_team.name                   |String  |
+        |start.is_home                           |Boolean |
+        |end.is_home                             |Boolean |
+        |homeTimeoutCalled                       |Boolean |
+        |awayTimeoutCalled                       |Boolean |
+        |end.homeTeamTimeouts                    |Int64   |
+        |end.awayTeamTimeouts                    |Int64   |
+        |start.homeTeamTimeouts                  |Int64   |
+        |start.awayTeamTimeouts                  |Int64   |
+        |end.TimeSecsRem                         |Int64   |
+        |end.adj_TimeSecsRem                     |Int64   |
+        |start.posTeamTimeouts                   |Int64   |
+        |start.defPosTeamTimeouts                |Int64   |
+        |end.posTeamTimeouts                     |Int64   |
+        |end.defPosTeamTimeouts                  |Int64   |
+        |firstHalfKickoffTeamId                  |Int64   |
+        |start.yard                              |Int64   |
+        |end.yard                                |Int64   |
+        |lag_scoringPlay                         |Boolean |
+        |down_1                                  |Boolean |
+        |down_2                                  |Boolean |
+        |down_3                                  |Boolean |
+        |down_4                                  |Boolean |
+        |down_1_end                              |Boolean |
+        |down_2_end                              |Boolean |
+        |down_3_end                              |Boolean |
+        |down_4_end                              |Boolean |
+        |td_check                                |Boolean |
+        |forced_fumble                           |Boolean |
+        |is_home                                 |Boolean |
+        |lag_HA_score_diff                       |Int64   |
+        |HA_score_diff                           |Int64   |
+        |net_HA_score_pts                        |Int64   |
+        |H_score_diff                            |Int64   |
+        |A_score_diff                            |Int64   |
+        |lag_homeScore                           |Int64   |
+        |lag_awayScore                           |Int64   |
+        |start.homeScore                         |Int64   |
+        |start.awayScore                         |Int64   |
+        |end.homeScore                           |Int64   |
+        |end.awayScore                           |Int64   |
+        |start.pos_team_score                    |Int64   |
+        |start.def_pos_team_score                |Int64   |
+        |start.pos_score_diff                    |Int64   |
+        |end.pos_team_score                      |Int64   |
+        |end.def_pos_team_score                  |Int64   |
+        |end.pos_score_diff                      |Int64   |
+        |start.pos_team_receives_2H_kickoff      |Boolean |
+        |end.pos_team_receives_2H_kickoff        |Boolean |
+        |penalty_in_text                         |Boolean |
+        |pass_breakup                            |Boolean |
+        |pass_depth                              |String  |
+        |pass_direction                          |String  |
+        |rush_direction                          |String  |
+        |qb_hurry                                |Boolean |
+        |fg_attempt                              |Boolean |
+        |pos_unit                                |String  |
+        |def_pos_unit                            |String  |
+        |sp                                      |Boolean |
+        |play                                    |Boolean |
+        |cleaned_text                            |String  |
+        |kneel_down                              |Boolean |
+        |scrimmage_play                          |Boolean |
+        |pos_score_diff_end                      |Int64   |
+        |fumble_lost                             |Boolean |
+        |fumble_recovered                        |Boolean |
+        |field_goal_result                       |String  |
+        |extra_point_result                      |String  |
+        |two_point_conv_result                   |String  |
+        |air_yardsToEndzone                      |Int64   |
+        |air_yards                               |Int64   |
+        |yards_after_catch                       |Int64   |
+        |kicking_team                            |Int64   |
+        |return_team                             |Int64   |
+        |fumble_or_muff                          |Boolean |
+        |recovery_team                           |Int64   |
+        |recovery_team_2                         |Int64   |
+        |fumbling_team                           |Int64   |
+        |int_turnover                            |Boolean |
+        |pos_fumble_lost                         |Boolean |
+        |def_fumble_lost                         |Boolean |
+        |is_pos_team_turnover                    |Boolean |
+        |is_def_pos_team_turnover                |Boolean |
+        |is_turnover                             |Boolean |
+        |turnover_team                           |Int64   |
+        |is_st_turnover                          |Boolean |
+        |is_blocked_punt_turnover                |Boolean |
+        |is_blocked_fg_turnover                  |Boolean |
+        |sack_team                               |Int64   |
+        |interception_team                       |Int64   |
+        |pass_breakup_team                       |Int64   |
+        |forced_fumble_team                      |Int64   |
+        |fumble_recovery_team                    |Int64   |
+        |punt_return_team                        |Int64   |
+        |kick_return_team                        |Int64   |
+        |fg_team                                 |Int64   |
+        |punt_team                               |Int64   |
+        |penalized_team                          |Int64   |
+        |penalty_yards_signed                    |Int64   |
+        |new_down                                |Int64   |
+        |new_distance                            |Int64   |
+        |under_2                                 |Boolean |
+        |goal_to_go                              |Boolean |
+        |stopped_run                             |Boolean |
+        |opportunity_run                         |Boolean |
+        |highlight_run                           |Boolean |
+        |adj_rush_yardage                        |Int64   |
+        |line_yards                              |Float64 |
+        |second_level_yards                      |Float64 |
+        |open_field_yards                        |Int64   |
+        |highlight_yards                         |Float64 |
+        |opp_highlight_yards                     |Float64 |
+        |short_rush_success                      |Boolean |
+        |short_rush_attempt                      |Boolean |
+        |power_rush_success                      |Boolean |
+        |power_rush_attempt                      |Boolean |
+        |early_down                              |Boolean |
+        |late_down                               |Boolean |
+        |early_down_pass                         |Boolean |
+        |early_down_rush                         |Boolean |
+        |late_down_pass                          |Boolean |
+        |late_down_rush                          |Boolean |
+        |standard_down                           |Boolean |
+        |passing_down                            |Boolean |
+        |TFL                                     |Boolean |
+        |TFL_pass                                |Boolean |
+        |TFL_rush                                |Boolean |
+        |havoc                                   |Boolean |
+        |start.pos_team_spread                   |Float64 |
+        |start.elapsed_share                     |Float64 |
+        |start.spread_time                       |Float64 |
+        |end.pos_team_spread                     |Float64 |
+        |end.elapsed_share                       |Float64 |
+        |end.spread_time                         |Float64 |
+        |penalty_assessed_on_kickoff             |Boolean |
+        |start.yardsToEndzone.touchback          |Int64   |
+        |EP_start_touchback                      |Float64 |
+        |EP_start                                |Float64 |
+        |EP_end                                  |Float64 |
+        |lag_EP_end                              |Float64 |
+        |EP_between                              |Float64 |
+        |EPA_scrimmage                           |Float64 |
+        |EPA_rush                                |Float64 |
+        |EPA_pass                                |Float64 |
+        |EPA_explosive                           |Boolean |
+        |EPA_non_explosive                       |Float64 |
+        |EPA_explosive_pass                      |Boolean |
+        |EPA_explosive_rush                      |Boolean |
+        |first_down_created                      |Boolean |
+        |EPA_success                             |Boolean |
+        |EPA_success_early_down                  |Boolean |
+        |EPA_success_early_down_pass             |Boolean |
+        |EPA_success_early_down_rush             |Boolean |
+        |EPA_success_late_down                   |Boolean |
+        |EPA_success_late_down_pass              |Boolean |
+        |EPA_success_late_down_rush              |Boolean |
+        |EPA_success_standard_down               |Boolean |
+        |EPA_success_passing_down                |Boolean |
+        |EPA_success_pass                        |Boolean |
+        |EPA_success_rush                        |Boolean |
+        |EPA_success_EPA                         |Float64 |
+        |EPA_success_standard_down_EPA           |Float64 |
+        |EPA_success_passing_down_EPA            |Float64 |
+        |EPA_success_pass_EPA                    |Float64 |
+        |EPA_success_rush_EPA                    |Float64 |
+        |EPA_middle_8_success                    |Boolean |
+        |EPA_middle_8_success_pass               |Boolean |
+        |EPA_middle_8_success_rush               |Boolean |
+        |EPA_penalty                             |Float64 |
+        |EPA_sp                                  |Float64 |
+        |EPA_fg                                  |Float64 |
+        |EPA_punt                                |Float64 |
+        |EPA_kickoff                             |Float64 |
+        |start.ExpScoreDiff_touchback            |Float64 |
+        |start.ExpScoreDiff                      |Float64 |
+        |start.ExpScoreDiff_Time_Ratio_touchback |Float64 |
+        |start.ExpScoreDiff_Time_Ratio           |Float64 |
+        |end.ExpScoreDiff                        |Float64 |
+        |end.ExpScoreDiff_Time_Ratio             |Float64 |
+        |wp_touchback                            |Float64 |
+        |wp_before_naive                         |Float64 |
+        |wp_touchback_naive                      |Float64 |
+        |wp_after_naive                          |Float64 |
+        |def_wp_before_naive                     |Float64 |
+        |home_wp_before_naive                    |Float64 |
+        |away_wp_before_naive                    |Float64 |
+        |lead_wp_before_naive                    |Float64 |
+        |lead_wp_before2_naive                   |Float64 |
+        |def_wp_after_naive                      |Float64 |
+        |home_wp_after_naive                     |Float64 |
+        |away_wp_after_naive                     |Float64 |
+        |wpa_naive                               |Float64 |
+        |cp                                      |Float64 |
+        |cpoe                                    |Float64 |
+        |era                                     |Int64   |
+        |xpass                                   |Float64 |
+        |pass_oe                                 |Float64 |
+        |drive_start                             |Float64 |
+        |drive_stopped                           |Boolean |
+        |drive_play_index                        |Int64   |
+        |drive_offense_plays                     |Int64   |
+        |prog_drive_EPA                          |Float64 |
+        |prog_drive_WPA                          |Float64 |
+        |drive_offense_yards                     |Int64   |
+        |drive_total_yards                       |Int64   |
+        |qbr_epa                                 |Float64 |
+        |weight                                  |Float64 |
+        |non_fumble_sack                         |Boolean |
+        |sack_epa                                |Float64 |
+        |pass_epa                                |Float64 |
+        |rush_epa                                |Float64 |
+        |pen_epa                                 |Float64 |
+        |sack_weight                             |Float64 |
+        |pass_weight                             |Float64 |
+        |rush_weight                             |Float64 |
+        |pen_weight                              |Float64 |
+        |action_play                             |Boolean |
+        |athlete_name                            |String  |
+        |rusher_player_id                        |Int64   |
+        |passer_player_id                        |Int64   |
+        |receiver_player_id                      |Int64   |
+        |fumble_player_id                        |Int64   |
+        |sack_player_id                          |Int64   |
+        |sack_player_id2                         |Int64   |
+        |interception_player_id                  |Int64   |
+        |pass_breakup_player_id                  |Int64   |
+        |fumble_forced_player_id                 |Int64   |
+        |fumble_recovered_player_id              |Int64   |
+        |fg_kicker_player_id                     |Int64   |
+        |punter_player_id                        |Int64   |
+        |kickoff_player_id                       |Int64   |
+        |kickoff_return_player_id                |Int64   |
+        |punt_return_player_id                   |Int64   |
+        |fg_block_player_id                      |Int64   |
+        |punt_block_player_id                    |Int64   |
+        |fg_return_player_id                     |Int64   |
+        |punt_block_return_player_id             |Null    |
+        |go_wp                                   |Float64 |
+        |first_down_prob                         |Float64 |
+        |wp_succeed                              |Float64 |
+        |wp_fail                                 |Float64 |
+        |make_fg_wp                              |Float64 |
+        |miss_fg_wp                              |Float64 |
+        |fg_wp                                   |Float64 |
+        |punt_wp                                 |Float64 |
+        |go_boost                                |Float64 |
+        |go_wp_diff                              |Float64 |
+        |fg_wp_diff                              |Float64 |
+        |punt_wp_diff                            |Float64 |
+        |fourth_down_recommendation              |String  |
+        |two_pt_wp                               |Float64 |
+        |xp_wp                                   |Float64 |
+        |prob_2pt                                |Float64 |
+        |two_pt_recommendation                   |String  |
+        |two_pt_wp_diff                          |Float64 |
 
     Example:
         Quick start::
@@ -589,12 +702,12 @@ def load_cfb_rosters(seasons, return_as_pandas: bool = False):
         |home_city        |String      |
         |home_state       |String      |
         |home_country     |String      |
-        |home_latitude    |String      |
-        |home_longitude   |String      |
+        |home_latitude    |Float64     |
+        |home_longitude   |Float64     |
         |home_county_fips |String      |
         |recruit_ids      |List(Int32) |
         |headshot_url     |String      |
-        |season           |Int32       |
+        |season           |Float64     |
 
     Example:
         Quick start::
@@ -644,27 +757,27 @@ def load_cfb_schedule(seasons, return_as_pandas: bool = False):
         |completed          |Boolean |
         |neutral_site       |Boolean |
         |conference_game    |Boolean |
-        |attendance         |Int32   |
+        |attendance         |Boolean |
         |venue_id           |Int32   |
         |venue              |String  |
         |home_id            |Int32   |
         |home_team          |String  |
-        |home_conference    |String  |
         |home_division      |String  |
+        |home_conference    |String  |
         |home_points        |Int32   |
-        |home_post_win_prob |Boolean |
+        |home_post_win_prob |Float64 |
         |home_pregame_elo   |Int32   |
         |home_postgame_elo  |Int32   |
         |away_id            |Int32   |
         |away_team          |String  |
-        |away_conference    |String  |
         |away_division      |String  |
+        |away_conference    |String  |
         |away_points        |Int32   |
-        |away_post_win_prob |Boolean |
+        |away_post_win_prob |Float64 |
         |away_pregame_elo   |Int32   |
         |away_postgame_elo  |Int32   |
-        |excitement_index   |Boolean |
-        |highlights         |Boolean |
+        |excitement_index   |Float64 |
+        |highlights         |String  |
         |notes              |String  |
 
     Example:
@@ -714,6 +827,7 @@ def load_cfb_team_info(seasons, return_as_pandas: bool = False):
         |alt_name2        |String  |
         |alt_name3        |String  |
         |conference       |String  |
+        |division         |String  |
         |classification   |String  |
         |color            |String  |
         |alt_color        |String  |
@@ -940,16 +1054,15 @@ def load_cfb_player_box(seasons, return_as_pandas: bool = False):
 
         |col_name                           |type   |
         |:----------------------------------|:------|
-        |completions/passingAttempts        |String |
-        |passingYards                       |String |
-        |yardsPerPassAttempt                |String |
-        |passingTouchdowns                  |String |
-        |interceptions                      |String |
-        |adjQBR                             |String |
+        |stat_1                             |String |
+        |stat_2                             |String |
+        |stat_3                             |String |
+        |stat_4                             |String |
+        |stat_5                             |String |
         |category                           |String |
         |athlete_id                         |Int64  |
         |athlete_name                       |String |
-        |jersey                             |Null   |
+        |jersey                             |String |
         |team_id                            |Int64  |
         |rushingAttempts                    |String |
         |rushingYards                       |String |
@@ -961,8 +1074,14 @@ def load_cfb_player_box(seasons, return_as_pandas: bool = False):
         |yardsPerReception                  |String |
         |receivingTouchdowns                |String |
         |longReception                      |String |
-        |interceptionYards                  |String |
-        |interceptionTouchdowns             |String |
+        |fumbles                            |String |
+        |fumblesLost                        |String |
+        |fumblesRecovered                   |String |
+        |kickReturns                        |String |
+        |kickReturnYards                    |String |
+        |yardsPerKickReturn                 |String |
+        |longKickReturn                     |String |
+        |kickReturnTouchdowns               |String |
         |puntReturns                        |String |
         |puntReturnYards                    |String |
         |yardsPerPuntReturn                 |String |
@@ -981,11 +1100,21 @@ def load_cfb_player_box(seasons, return_as_pandas: bool = False):
         |longPunt                           |String |
         |game_id                            |Int64  |
         |season                             |Int64  |
-        |stat_1                             |String |
-        |stat_2                             |String |
-        |stat_3                             |String |
-        |stat_4                             |String |
-        |stat_5                             |String |
+        |interceptions                      |String |
+        |interceptionYards                  |String |
+        |interceptionTouchdowns             |String |
+        |totalTackles                       |String |
+        |soloTackles                        |String |
+        |sacks                              |String |
+        |tacklesForLoss                     |String |
+        |passesDefended                     |String |
+        |hurries                            |String |
+        |defensiveTouchdowns                |String |
+        |completions/passingAttempts        |String |
+        |passingYards                       |String |
+        |yardsPerPassAttempt                |String |
+        |passingTouchdowns                  |String |
+        |adjQBR                             |String |
 
     Example:
         Quick start::
@@ -1089,66 +1218,70 @@ def load_cfb_play_participants(seasons, return_as_pandas: bool = False):
         |game_id                    |Int64  |
         |play_id                    |Int64  |
         |kicker_player_name         |String |
+        |tackler_player_name        |String |
         |returner_player_name       |String |
+        |rusher_player_name         |String |
         |passer_player_name         |String |
         |receiver_player_name       |String |
-        |rusher_player_name         |String |
+        |punter_player_name         |String |
+        |assisted_by_player_name    |String |
         |penalized_player_name      |String |
         |scorer_player_name         |String |
-        |pass_defender_player_name  |String |
-        |punter_player_name         |String |
         |pat_scorer_player_name     |String |
         |sacked_by_player_name      |String |
         |kicker_player_id           |String |
+        |tackler_player_id          |String |
         |returner_player_id         |String |
+        |rusher_player_id           |String |
         |passer_player_id           |String |
         |receiver_player_id         |String |
-        |rusher_player_id           |String |
+        |punter_player_id           |String |
+        |assisted_by_player_id      |String |
         |penalized_player_id        |String |
         |scorer_player_id           |String |
-        |pass_defender_player_id    |String |
-        |punter_player_id           |String |
         |pat_scorer_player_id       |String |
         |sacked_by_player_id        |String |
         |kicker_player_names        |String |
+        |tackler_player_names       |String |
         |returner_player_names      |String |
+        |rusher_player_names        |String |
         |passer_player_names        |String |
         |receiver_player_names      |String |
-        |rusher_player_names        |String |
+        |punter_player_names        |String |
+        |assisted_by_player_names   |String |
         |penalized_player_names     |String |
         |scorer_player_names        |String |
-        |pass_defender_player_names |String |
-        |punter_player_names        |String |
         |pat_scorer_player_names    |String |
         |sacked_by_player_names     |String |
         |kicker_player_ids          |String |
+        |tackler_player_ids         |String |
         |returner_player_ids        |String |
+        |rusher_player_ids          |String |
         |passer_player_ids          |String |
         |receiver_player_ids        |String |
-        |rusher_player_ids          |String |
+        |punter_player_ids          |String |
+        |assisted_by_player_ids     |String |
         |penalized_player_ids       |String |
         |scorer_player_ids          |String |
-        |pass_defender_player_ids   |String |
-        |punter_player_ids          |String |
         |pat_scorer_player_ids      |String |
         |sacked_by_player_ids       |String |
         |season                     |Int64  |
         |week                       |Int64  |
+        |pass_defender_player_name  |String |
+        |pass_defender_player_id    |String |
+        |pass_defender_player_names |String |
+        |pass_defender_player_ids   |String |
         |recoverer_player_name      |String |
+        |fumbler_player_name        |String |
         |recoverer_player_id        |String |
+        |fumbler_player_id          |String |
         |recoverer_player_names     |String |
+        |fumbler_player_names       |String |
         |recoverer_player_ids       |String |
-        |tackler_player_name        |String |
-        |assisted_by_player_name    |String |
+        |fumbler_player_ids         |String |
         |forced_by_player_name      |String |
-        |tackler_player_id          |String |
-        |assisted_by_player_id      |String |
         |forced_by_player_id        |String |
-        |tackler_player_names       |String |
-        |assisted_by_player_names   |String |
         |forced_by_player_names     |String |
-        |tackler_player_ids         |String |
-        |assisted_by_player_ids     |String |
         |forced_by_player_ids       |String |
         |pat_passer_player_name     |String |
         |pat_passer_player_id       |String |
@@ -1207,8 +1340,6 @@ def load_cfb_game_rosters(seasons, return_as_pandas: bool = False):
         |display_weight             |String  |
         |height                     |Float64 |
         |display_height             |String  |
-        |age                        |Float64 |
-        |date_of_birth              |String  |
         |slug                       |String  |
         |jersey                     |String  |
         |linked                     |Boolean |
@@ -1216,6 +1347,17 @@ def load_cfb_game_rosters(seasons, return_as_pandas: bool = False):
         |alternate_ids_sdr          |String  |
         |birth_place_city           |String  |
         |birth_place_state          |String  |
+        |birth_place_country        |String  |
+        |birth_country_alternate_id |String  |
+        |birth_country_abbreviation |String  |
+        |headshot_href              |String  |
+        |headshot_alt               |String  |
+        |hand_type                  |String  |
+        |hand_abbreviation          |String  |
+        |hand_display_value         |String  |
+        |flag_href                  |String  |
+        |flag_alt                   |String  |
+        |flag_rel                   |String  |
         |experience_years           |Float64 |
         |experience_display_value   |String  |
         |experience_abbreviation    |String  |
@@ -1223,15 +1365,12 @@ def load_cfb_game_rosters(seasons, return_as_pandas: bool = False):
         |status_name                |String  |
         |status_type                |String  |
         |status_abbreviation        |String  |
-        |birth_place_country        |String  |
-        |birth_country_alternate_id |String  |
-        |birth_country_abbreviation |String  |
-        |flag_href                  |String  |
-        |flag_alt                   |String  |
-        |flag_rel                   |String  |
+        |middle_name                |String  |
         |starter                    |Boolean |
+        |jersey_right               |String  |
         |valid                      |Boolean |
         |did_not_play               |Boolean |
+        |display_name               |String  |
         |athlete_href               |String  |
         |position_href              |String  |
         |statistics_href            |String  |
@@ -1258,14 +1397,14 @@ def load_cfb_game_rosters(seasons, return_as_pandas: bool = False):
         |game_id                    |Int64   |
         |season                     |Int64   |
         |week                       |Int64   |
+        |age                        |Float64 |
+        |date_of_birth              |String  |
+        |citizenship                |String  |
         |draft_display_text         |String  |
         |draft_round                |Float64 |
         |draft_year                 |Float64 |
         |draft_selection            |Float64 |
         |draft_team_href            |String  |
-        |middle_name                |String  |
-        |headshot_href              |String  |
-        |headshot_alt               |String  |
 
     Example:
         Quick start::
@@ -1914,17 +2053,17 @@ def load_cfb_adv_defensive_players(seasons, return_as_pandas: bool = False):
         |def_pos_team_id         |Int64  |
         |def_pos_team            |String |
         |player_name             |String |
+        |sacks                   |Int64  |
+        |sacks_yards             |Int64  |
         |fumble_recoveries       |Int64  |
         |fumble_recoveries_yards |Int64  |
         |game_id                 |Int64  |
         |season                  |Int64  |
         |week                    |Int64  |
-        |sacks                   |Int64  |
-        |sacks_yards             |Int64  |
         |pass_breakups           |Int64  |
-        |forced_fumbles          |Int64  |
         |interceptions           |Int64  |
         |interceptions_yards     |Int64  |
+        |forced_fumbles          |Int64  |
 
     Example:
         Quick start::
@@ -2134,6 +2273,8 @@ def load_cfb_adv_specialists(seasons, return_as_pandas: bool = False):
         |pos_team_id        |Int64  |
         |pos_team           |String |
         |player_name        |String |
+        |field_goals        |Int64  |
+        |field_goals_yards  |Int64  |
         |punts              |Int64  |
         |punts_yards        |Int64  |
         |kick_returns       |Int64  |
@@ -2143,8 +2284,6 @@ def load_cfb_adv_specialists(seasons, return_as_pandas: bool = False):
         |game_id            |Int64  |
         |season             |Int64  |
         |week               |Int64  |
-        |field_goals        |Int64  |
-        |field_goals_yards  |Int64  |
 
     Example:
         Quick start::
@@ -2342,18 +2481,18 @@ def load_cfb_passing(seasons, return_as_pandas: bool = False):
         |plays               |UInt32  |
         |games               |UInt32  |
         |team_games          |UInt32  |
-        |playsgame           |Float64 |
         |TEPA                |Float64 |
         |EPAplay             |Float64 |
-        |EPAgame             |Float64 |
         |yards               |Int64   |
-        |yardsplay           |Float64 |
-        |yardsgame           |Float64 |
         |success             |Float64 |
         |comp                |Float64 |
         |att                 |Float64 |
         |comppct             |Float64 |
         |passing_td          |Float64 |
+        |playsgame           |Float64 |
+        |EPAgame             |Float64 |
+        |yardsplay           |Float64 |
+        |yardsgame           |Float64 |
         |sacked              |UInt32  |
         |sack_yds            |Int64   |
         |pass_int            |UInt32  |
@@ -2495,19 +2634,19 @@ def load_cfb_receiving(seasons, return_as_pandas: bool = False):
         |plays                |UInt32  |
         |games                |UInt32  |
         |team_games           |UInt32  |
-        |playsgame            |Float64 |
         |TEPA                 |Float64 |
         |EPAplay              |Float64 |
-        |EPAgame              |Float64 |
         |yards                |Int64   |
-        |yardsplay            |Float64 |
-        |yardsgame            |Float64 |
         |success              |Float64 |
         |comp                 |UInt32  |
         |targets              |UInt32  |
-        |catchpct             |Float64 |
         |passing_td           |Float64 |
         |fumbles              |Float64 |
+        |playsgame            |Float64 |
+        |EPAgame              |Float64 |
+        |yardsplay            |Float64 |
+        |yardsgame            |Float64 |
+        |catchpct             |Float64 |
         |TEPA_rank            |Float64 |
         |EPAgame_rank         |Float64 |
         |EPAplay_rank         |Float64 |
@@ -2570,16 +2709,16 @@ def load_cfb_rushing(seasons, return_as_pandas: bool = False):
         |plays              |UInt32  |
         |games              |UInt32  |
         |team_games         |UInt32  |
-        |playsgame          |Float64 |
         |TEPA               |Float64 |
         |EPAplay            |Float64 |
-        |EPAgame            |Float64 |
         |yards              |Int64   |
-        |yardsplay          |Float64 |
-        |yardsgame          |Float64 |
         |success            |Float64 |
         |rushing_td         |Float64 |
         |fumbles            |Float64 |
+        |playsgame          |Float64 |
+        |EPAgame            |Float64 |
+        |yardsplay          |Float64 |
+        |yardsgame          |Float64 |
         |TEPA_rank          |Float64 |
         |EPAgame_rank       |Float64 |
         |EPAplay_rank       |Float64 |
@@ -2637,23 +2776,15 @@ def load_cfb_team_summaries(seasons, return_as_pandas: bool = False):
         |conference                           |String  |
         |season                               |Int64   |
         |plays_off                            |UInt32  |
-        |playsgame_off                        |Float64 |
         |passrate_off                         |Float64 |
         |rushrate_off                         |Float64 |
         |havoc_off                            |Float64 |
         |explosive_off                        |Float64 |
         |TEPA_off                             |Float64 |
         |EPAplay_off                          |Float64 |
-        |EPAdrive_off                         |Float64 |
-        |EPAgame_off                          |Float64 |
         |yards_off                            |Int64   |
         |yardsplay_off                        |Float64 |
-        |yardsgame_off                        |Float64 |
         |play_stuffed_off                     |Float64 |
-        |drives_off                           |UInt32  |
-        |drivesgame_off                       |Float64 |
-        |yardsdrive_off                       |Float64 |
-        |playsdrive_off                       |Float64 |
         |success_off                          |Float64 |
         |red_zone_success_off                 |Float64 |
         |third_down_success_off               |Float64 |
@@ -2664,6 +2795,14 @@ def load_cfb_team_summaries(seasons, return_as_pandas: bool = False):
         |nonExplosiveEpaPerPlay_off           |Float64 |
         |line_yards_off                       |Float64 |
         |opportunity_rate_off                 |Float64 |
+        |playsgame_off                        |Float64 |
+        |EPAdrive_off                         |Float64 |
+        |EPAgame_off                          |Float64 |
+        |yardsgame_off                        |Float64 |
+        |drives_off                           |UInt32  |
+        |drivesgame_off                       |Float64 |
+        |yardsdrive_off                       |Float64 |
+        |playsdrive_off                       |Float64 |
         |playsgame_off_rank                   |Float64 |
         |TEPA_off_rank                        |Float64 |
         |EPAgame_off_rank                     |Float64 |
@@ -2691,23 +2830,15 @@ def load_cfb_team_summaries(seasons, return_as_pandas: bool = False):
         |line_yards_off_rank                  |Float64 |
         |opportunity_rate_off_rank            |Float64 |
         |plays_def                            |UInt32  |
-        |playsgame_def                        |Float64 |
         |passrate_def                         |Float64 |
         |rushrate_def                         |Float64 |
         |havoc_def                            |Float64 |
         |explosive_def                        |Float64 |
         |TEPA_def                             |Float64 |
         |EPAplay_def                          |Float64 |
-        |EPAdrive_def                         |Float64 |
-        |EPAgame_def                          |Float64 |
         |yards_def                            |Int64   |
         |yardsplay_def                        |Float64 |
-        |yardsgame_def                        |Float64 |
         |play_stuffed_def                     |Float64 |
-        |drives_def                           |UInt32  |
-        |drivesgame_def                       |Float64 |
-        |yardsdrive_def                       |Float64 |
-        |playsdrive_def                       |Float64 |
         |success_def                          |Float64 |
         |red_zone_success_def                 |Float64 |
         |third_down_success_def               |Float64 |
@@ -2718,6 +2849,14 @@ def load_cfb_team_summaries(seasons, return_as_pandas: bool = False):
         |nonExplosiveEpaPerPlay_def           |Float64 |
         |line_yards_def                       |Float64 |
         |opportunity_rate_def                 |Float64 |
+        |playsgame_def                        |Float64 |
+        |EPAdrive_def                         |Float64 |
+        |EPAgame_def                          |Float64 |
+        |yardsgame_def                        |Float64 |
+        |drives_def                           |UInt32  |
+        |drivesgame_def                       |Float64 |
+        |yardsdrive_def                       |Float64 |
+        |playsdrive_def                       |Float64 |
         |playsgame_def_rank                   |Float64 |
         |TEPA_def_rank                        |Float64 |
         |EPAgame_def_rank                     |Float64 |
@@ -2751,9 +2890,9 @@ def load_cfb_team_summaries(seasons, return_as_pandas: bool = False):
         |success_margin                       |Float64 |
         |yardsplay_margin                     |Float64 |
         |TEPA_margin_rank                     |Float64 |
-        |EPAgame_margin_rank                  |Float64 |
-        |EPAdrive_margin_rank                 |Float64 |
         |EPAplay_margin_rank                  |Float64 |
+        |EPAdrive_margin_rank                 |Float64 |
+        |EPAgame_margin_rank                  |Float64 |
         |success_margin_rank                  |Float64 |
         |yardsplay_margin_rank                |Float64 |
         |start_position_margin                |Float64 |
@@ -2773,23 +2912,15 @@ def load_cfb_team_summaries(seasons, return_as_pandas: bool = False):
         |total_gained_yards_margin_rank       |Float64 |
         |available_yards_pct_margin_rank      |Float64 |
         |plays_off_pass                       |UInt32  |
-        |playsgame_off_pass                   |Float64 |
         |passrate_off_pass                    |Float64 |
         |rushrate_off_pass                    |Float64 |
         |havoc_off_pass                       |Float64 |
         |explosive_off_pass                   |Float64 |
         |TEPA_off_pass                        |Float64 |
         |EPAplay_off_pass                     |Float64 |
-        |EPAdrive_off_pass                    |Float64 |
-        |EPAgame_off_pass                     |Float64 |
         |yards_off_pass                       |Int64   |
         |yardsplay_off_pass                   |Float64 |
-        |yardsgame_off_pass                   |Float64 |
         |play_stuffed_off_pass                |Float64 |
-        |drives_off_pass                      |UInt32  |
-        |drivesgame_off_pass                  |Float64 |
-        |yardsdrive_off_pass                  |Float64 |
-        |playsdrive_off_pass                  |Float64 |
         |success_off_pass                     |Float64 |
         |red_zone_success_off_pass            |Float64 |
         |third_down_success_off_pass          |Float64 |
@@ -2799,6 +2930,14 @@ def load_cfb_team_summaries(seasons, return_as_pandas: bool = False):
         |nonExplosiveEpaPerPlay_off_pass      |Float64 |
         |line_yards_off_pass                  |Float64 |
         |opportunity_rate_off_pass            |Float64 |
+        |playsgame_off_pass                   |Float64 |
+        |EPAdrive_off_pass                    |Float64 |
+        |EPAgame_off_pass                     |Float64 |
+        |yardsgame_off_pass                   |Float64 |
+        |drives_off_pass                      |UInt32  |
+        |drivesgame_off_pass                  |Float64 |
+        |yardsdrive_off_pass                  |Float64 |
+        |playsdrive_off_pass                  |Float64 |
         |playsgame_off_pass_rank              |Float64 |
         |TEPA_off_pass_rank                   |Float64 |
         |EPAgame_off_pass_rank                |Float64 |
@@ -2825,23 +2964,15 @@ def load_cfb_team_summaries(seasons, return_as_pandas: bool = False):
         |line_yards_off_pass_rank             |Float64 |
         |opportunity_rate_off_pass_rank       |Float64 |
         |plays_def_pass                       |UInt32  |
-        |playsgame_def_pass                   |Float64 |
         |passrate_def_pass                    |Float64 |
         |rushrate_def_pass                    |Float64 |
         |havoc_def_pass                       |Float64 |
         |explosive_def_pass                   |Float64 |
         |TEPA_def_pass                        |Float64 |
         |EPAplay_def_pass                     |Float64 |
-        |EPAdrive_def_pass                    |Float64 |
-        |EPAgame_def_pass                     |Float64 |
         |yards_def_pass                       |Int64   |
         |yardsplay_def_pass                   |Float64 |
-        |yardsgame_def_pass                   |Float64 |
         |play_stuffed_def_pass                |Float64 |
-        |drives_def_pass                      |UInt32  |
-        |drivesgame_def_pass                  |Float64 |
-        |yardsdrive_def_pass                  |Float64 |
-        |playsdrive_def_pass                  |Float64 |
         |success_def_pass                     |Float64 |
         |red_zone_success_def_pass            |Float64 |
         |third_down_success_def_pass          |Float64 |
@@ -2851,6 +2982,14 @@ def load_cfb_team_summaries(seasons, return_as_pandas: bool = False):
         |nonExplosiveEpaPerPlay_def_pass      |Float64 |
         |line_yards_def_pass                  |Float64 |
         |opportunity_rate_def_pass            |Float64 |
+        |playsgame_def_pass                   |Float64 |
+        |EPAdrive_def_pass                    |Float64 |
+        |EPAgame_def_pass                     |Float64 |
+        |yardsgame_def_pass                   |Float64 |
+        |drives_def_pass                      |UInt32  |
+        |drivesgame_def_pass                  |Float64 |
+        |yardsdrive_def_pass                  |Float64 |
+        |playsdrive_def_pass                  |Float64 |
         |playsgame_def_pass_rank              |Float64 |
         |TEPA_def_pass_rank                   |Float64 |
         |EPAgame_def_pass_rank                |Float64 |
@@ -2883,29 +3022,21 @@ def load_cfb_team_summaries(seasons, return_as_pandas: bool = False):
         |success_margin_pass                  |Float64 |
         |yardsplay_margin_pass                |Float64 |
         |TEPA_margin_pass_rank                |Float64 |
-        |EPAgame_margin_pass_rank             |Float64 |
-        |EPAdrive_margin_pass_rank            |Float64 |
         |EPAplay_margin_pass_rank             |Float64 |
+        |EPAdrive_margin_pass_rank            |Float64 |
+        |EPAgame_margin_pass_rank             |Float64 |
         |success_margin_pass_rank             |Float64 |
         |yardsplay_margin_pass_rank           |Float64 |
         |plays_off_rush                       |UInt32  |
-        |playsgame_off_rush                   |Float64 |
         |passrate_off_rush                    |Float64 |
         |rushrate_off_rush                    |Float64 |
         |havoc_off_rush                       |Float64 |
         |explosive_off_rush                   |Float64 |
         |TEPA_off_rush                        |Float64 |
         |EPAplay_off_rush                     |Float64 |
-        |EPAdrive_off_rush                    |Float64 |
-        |EPAgame_off_rush                     |Float64 |
         |yards_off_rush                       |Int64   |
         |yardsplay_off_rush                   |Float64 |
-        |yardsgame_off_rush                   |Float64 |
         |play_stuffed_off_rush                |Float64 |
-        |drives_off_rush                      |UInt32  |
-        |drivesgame_off_rush                  |Float64 |
-        |yardsdrive_off_rush                  |Float64 |
-        |playsdrive_off_rush                  |Float64 |
         |success_off_rush                     |Float64 |
         |red_zone_success_off_rush            |Float64 |
         |third_down_success_off_rush          |Float64 |
@@ -2915,6 +3046,14 @@ def load_cfb_team_summaries(seasons, return_as_pandas: bool = False):
         |nonExplosiveEpaPerPlay_off_rush      |Float64 |
         |line_yards_off_rush                  |Float64 |
         |opportunity_rate_off_rush            |Float64 |
+        |playsgame_off_rush                   |Float64 |
+        |EPAdrive_off_rush                    |Float64 |
+        |EPAgame_off_rush                     |Float64 |
+        |yardsgame_off_rush                   |Float64 |
+        |drives_off_rush                      |UInt32  |
+        |drivesgame_off_rush                  |Float64 |
+        |yardsdrive_off_rush                  |Float64 |
+        |playsdrive_off_rush                  |Float64 |
         |playsgame_off_rush_rank              |Float64 |
         |TEPA_off_rush_rank                   |Float64 |
         |EPAgame_off_rush_rank                |Float64 |
@@ -2941,23 +3080,15 @@ def load_cfb_team_summaries(seasons, return_as_pandas: bool = False):
         |line_yards_off_rush_rank             |Float64 |
         |opportunity_rate_off_rush_rank       |Float64 |
         |plays_def_rush                       |UInt32  |
-        |playsgame_def_rush                   |Float64 |
         |passrate_def_rush                    |Float64 |
         |rushrate_def_rush                    |Float64 |
         |havoc_def_rush                       |Float64 |
         |explosive_def_rush                   |Float64 |
         |TEPA_def_rush                        |Float64 |
         |EPAplay_def_rush                     |Float64 |
-        |EPAdrive_def_rush                    |Float64 |
-        |EPAgame_def_rush                     |Float64 |
         |yards_def_rush                       |Int64   |
         |yardsplay_def_rush                   |Float64 |
-        |yardsgame_def_rush                   |Float64 |
         |play_stuffed_def_rush                |Float64 |
-        |drives_def_rush                      |UInt32  |
-        |drivesgame_def_rush                  |Float64 |
-        |yardsdrive_def_rush                  |Float64 |
-        |playsdrive_def_rush                  |Float64 |
         |success_def_rush                     |Float64 |
         |red_zone_success_def_rush            |Float64 |
         |third_down_success_def_rush          |Float64 |
@@ -2967,6 +3098,14 @@ def load_cfb_team_summaries(seasons, return_as_pandas: bool = False):
         |nonExplosiveEpaPerPlay_def_rush      |Float64 |
         |line_yards_def_rush                  |Float64 |
         |opportunity_rate_def_rush            |Float64 |
+        |playsgame_def_rush                   |Float64 |
+        |EPAdrive_def_rush                    |Float64 |
+        |EPAgame_def_rush                     |Float64 |
+        |yardsgame_def_rush                   |Float64 |
+        |drives_def_rush                      |UInt32  |
+        |drivesgame_def_rush                  |Float64 |
+        |yardsdrive_def_rush                  |Float64 |
+        |playsdrive_def_rush                  |Float64 |
         |playsgame_def_rush_rank              |Float64 |
         |TEPA_def_rush_rank                   |Float64 |
         |EPAgame_def_rush_rank                |Float64 |
@@ -2999,17 +3138,17 @@ def load_cfb_team_summaries(seasons, return_as_pandas: bool = False):
         |success_margin_rush                  |Float64 |
         |yardsplay_margin_rush                |Float64 |
         |TEPA_margin_rush_rank                |Float64 |
-        |EPAgame_margin_rush_rank             |Float64 |
-        |EPAdrive_margin_rush_rank            |Float64 |
         |EPAplay_margin_rush_rank             |Float64 |
+        |EPAdrive_margin_rush_rank            |Float64 |
+        |EPAgame_margin_rush_rank             |Float64 |
         |success_margin_rush_rank             |Float64 |
         |yardsplay_margin_rush_rank           |Float64 |
         |fbs_class                            |String  |
         |valid_games                          |UInt32  |
         |adj_off_epa                          |Float64 |
         |adj_def_epa                          |Float64 |
-        |def_strength_faced                   |Float64 |
         |off_strength_faced                   |Float64 |
+        |def_strength_faced                   |Float64 |
         |net_adj_epa                          |Float64 |
         |adj_off_epa_rank                     |Float64 |
         |adj_def_epa_rank                     |Float64 |
@@ -3655,4 +3794,406 @@ def load_cfb_team_summaries_weekly(seasons, return_as_pandas: bool = False):
     # Producers shipped this id with differing dtypes across releases; pin it here
     # so a cross-dataset join cannot silently match nothing.
     out = _cast_ids_int64(out, ["team_id"])
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+def load_cfb_pbp_r(seasons, return_as_pandas: bool = False):
+    """Load cfbfastR_cfb_pbp (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfbfastR_cfb_pbp
+
+    Args:
+        seasons: an int or iterable of seasons (>= 2014).
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; seasons with no published asset are
+        skipped with a warning rather than raising (404-safe).
+
+        |col_name                         |type    |
+        |:--------------------------------|:-------|
+        |year                             |Int32   |
+        |week                             |Int32   |
+        |id_play                          |Float64 |
+        |game_id                          |Int32   |
+        |game_play_number                 |Float64 |
+        |half_play_number                 |Float64 |
+        |drive_play_number                |Float64 |
+        |pos_team                         |String  |
+        |def_pos_team                     |String  |
+        |pos_team_score                   |Int32   |
+        |def_pos_team_score               |Int32   |
+        |half                             |Float64 |
+        |period                           |Int32   |
+        |clock_minutes                    |Int32   |
+        |clock_seconds                    |Int32   |
+        |play_type                        |String  |
+        |play_text                        |String  |
+        |down                             |Float64 |
+        |distance                         |Float64 |
+        |yards_to_goal                    |Float64 |
+        |yards_gained                     |Float64 |
+        |EPA                              |Float64 |
+        |ep_before                        |Float64 |
+        |ep_after                         |Float64 |
+        |wpa                              |Float64 |
+        |wp_before                        |Float64 |
+        |wp_after                         |Float64 |
+        |def_wp_before                    |Float64 |
+        |def_wp_after                     |Float64 |
+        |penalty_detail                   |String  |
+        |yds_penalty                      |Float64 |
+        |penalty_1st_conv                 |Boolean |
+        |new_series                       |Float64 |
+        |firstD_by_kickoff                |Float64 |
+        |firstD_by_poss                   |Float64 |
+        |firstD_by_penalty                |Float64 |
+        |firstD_by_yards                  |Float64 |
+        |def_EPA                          |Float64 |
+        |home_EPA                         |Float64 |
+        |away_EPA                         |Float64 |
+        |home_EPA_rush                    |Float64 |
+        |away_EPA_rush                    |Float64 |
+        |home_EPA_pass                    |Float64 |
+        |away_EPA_pass                    |Float64 |
+        |total_home_EPA                   |Float64 |
+        |total_away_EPA                   |Float64 |
+        |total_home_EPA_rush              |Float64 |
+        |total_away_EPA_rush              |Float64 |
+        |total_home_EPA_pass              |Float64 |
+        |total_away_EPA_pass              |Float64 |
+        |net_home_EPA                     |Float64 |
+        |net_away_EPA                     |Float64 |
+        |net_home_EPA_rush                |Float64 |
+        |net_away_EPA_rush                |Float64 |
+        |net_home_EPA_pass                |Float64 |
+        |net_away_EPA_pass                |Float64 |
+        |success                          |Float64 |
+        |epa_success                      |Float64 |
+        |rz_play                          |Float64 |
+        |scoring_opp                      |Float64 |
+        |middle_8                         |Boolean |
+        |stuffed_run                      |Float64 |
+        |change_of_pos_team               |Float64 |
+        |downs_turnover                   |Float64 |
+        |turnover                         |Float64 |
+        |pos_score_diff_start             |Float64 |
+        |pos_score_pts                    |Float64 |
+        |log_ydstogo                      |Float64 |
+        |ExpScoreDiff                     |Float64 |
+        |ExpScoreDiff_Time_Ratio          |Float64 |
+        |half_clock_minutes               |Float64 |
+        |TimeSecsRem                      |Float64 |
+        |adj_TimeSecsRem                  |Float64 |
+        |Goal_To_Go                       |Boolean |
+        |Under_two                        |Boolean |
+        |home                             |String  |
+        |away                             |String  |
+        |home_wp_before                   |Float64 |
+        |away_wp_before                   |Float64 |
+        |home_wp_after                    |Float64 |
+        |away_wp_after                    |Float64 |
+        |end_of_half                      |Float64 |
+        |pos_team_receives_2H_kickoff     |Float64 |
+        |lead_pos_team                    |String  |
+        |lead_play_type                   |String  |
+        |lag_pos_team                     |String  |
+        |lag_play_type                    |String  |
+        |orig_play_type                   |String  |
+        |Under_three                      |Boolean |
+        |row                              |Int32   |
+        |drive_event_number               |Float64 |
+        |play_number                      |Int32   |
+        |wallclock                        |String  |
+        |provider                         |String  |
+        |spread                           |Float64 |
+        |formatted_spread                 |String  |
+        |over_under                       |Float64 |
+        |drive_is_home_offense            |Boolean |
+        |drive_start_offense_score        |Int32   |
+        |drive_start_defense_score        |Int32   |
+        |drive_end_offense_score          |Int32   |
+        |drive_end_defense_score          |Int32   |
+        |play                             |Float64 |
+        |event                            |Float64 |
+        |game_event_number                |Float64 |
+        |game_row_number                  |Int32   |
+        |half_play                        |Float64 |
+        |half_event                       |Float64 |
+        |half_event_number                |Float64 |
+        |half_row_number                  |Int32   |
+        |pos_unit                         |String  |
+        |def_pos_unit                     |String  |
+        |drive_play                       |Float64 |
+        |drive_event                      |Float64 |
+        |venue_id                         |Int32   |
+        |venue                            |String  |
+        |neutral_site                     |Boolean |
+        |conference_game                  |Boolean |
+        |season_type                      |String  |
+        |start_date                       |String  |
+        |completed                        |Boolean |
+        |home_team_id                     |Int32   |
+        |home_team                        |String  |
+        |home_team_division               |String  |
+        |home_team_conference             |String  |
+        |home_team_pregame_elo            |Int32   |
+        |away_team_id                     |Int32   |
+        |away_team                        |String  |
+        |away_team_division               |String  |
+        |away_team_conference             |String  |
+        |away_team_pregame_elo            |Int32   |
+        |season                           |Int32   |
+        |team                             |String  |
+        |conference                       |String  |
+        |opponent                         |String  |
+        |team_score                       |Int32   |
+        |opponent_score                   |Int32   |
+        |down_end                         |Float64 |
+        |distance_end                     |Float64 |
+        |log_ydstogo_end                  |Float64 |
+        |yards_to_goal_end                |Float64 |
+        |TimeSecsRem_end                  |Float64 |
+        |Goal_To_Go_end                   |Boolean |
+        |Under_two_end                    |Boolean |
+        |offense_score_play               |Float64 |
+        |defense_score_play               |Float64 |
+        |ppa                              |Float64 |
+        |yard_line                        |Int32   |
+        |scoring                          |Boolean |
+        |pos_team_timeouts_rem_before     |Float64 |
+        |def_pos_team_timeouts_rem_before |Float64 |
+        |pos_team_timeouts                |Float64 |
+        |def_pos_team_timeouts            |Float64 |
+        |pos_score_diff                   |Int32   |
+        |pos_score_diff_start_end         |Float64 |
+        |offense_play                     |String  |
+        |defense_play                     |String  |
+        |offense_receives_2H_kickoff      |Float64 |
+        |change_of_poss                   |Float64 |
+        |score_pts                        |Float64 |
+        |score_diff_start                 |Float64 |
+        |score_diff                       |Int32   |
+        |offense_score                    |Int32   |
+        |defense_score                    |Int32   |
+        |offense_conference               |String  |
+        |defense_conference               |String  |
+        |off_timeout_called               |Float64 |
+        |def_timeout_called               |Float64 |
+        |offense_timeouts                 |Float64 |
+        |defense_timeouts                 |Float64 |
+        |off_timeouts_rem_before          |Float64 |
+        |def_timeouts_rem_before          |Float64 |
+        |rusher_player_name               |String  |
+        |yds_rushed                       |Float64 |
+        |passer_player_name               |String  |
+        |receiver_player_name             |String  |
+        |yds_receiving                    |Float64 |
+        |yds_sacked                       |Float64 |
+        |sack_players                     |String  |
+        |sack_player_name                 |String  |
+        |sack_player_name2                |String  |
+        |pass_breakup_player_name         |String  |
+        |interception_player_name         |String  |
+        |yds_int_return                   |Float64 |
+        |fumble_player_name               |String  |
+        |fumble_forced_player_name        |String  |
+        |fumble_recovered_player_name     |String  |
+        |yds_fumble_return                |Float64 |
+        |punter_player_name               |String  |
+        |yds_punted                       |Float64 |
+        |punt_returner_player_name        |String  |
+        |yds_punt_return                  |Float64 |
+        |yds_punt_gained                  |Float64 |
+        |punt_block_player_name           |String  |
+        |punt_block_return_player_name    |String  |
+        |fg_kicker_player_name            |String  |
+        |yds_fg                           |Float64 |
+        |fg_block_player_name             |String  |
+        |fg_return_player_name            |String  |
+        |kickoff_player_name              |String  |
+        |yds_kickoff                      |Float64 |
+        |kickoff_returner_player_name     |String  |
+        |yds_kickoff_return               |Float64 |
+        |new_id                           |Float64 |
+        |orig_drive_number                |Int32   |
+        |drive_number                     |Int32   |
+        |drive_result_detailed            |String  |
+        |new_drive_pts                    |Float64 |
+        |drive_id                         |Float64 |
+        |drive_result                     |String  |
+        |drive_start_yards_to_goal        |Float64 |
+        |drive_end_yards_to_goal          |Int32   |
+        |drive_yards                      |Int32   |
+        |drive_scoring                    |Float64 |
+        |drive_pts                        |Float64 |
+        |drive_start_period               |Int32   |
+        |drive_end_period                 |Int32   |
+        |drive_time_minutes_start         |Int32   |
+        |drive_time_seconds_start         |Int32   |
+        |drive_time_minutes_end           |Int32   |
+        |drive_time_seconds_end           |Int32   |
+        |drive_time_minutes_elapsed       |Int32   |
+        |drive_time_seconds_elapsed       |Int32   |
+        |drive_numbers                    |Float64 |
+        |number_of_drives                 |Float64 |
+        |pts_scored                       |Float64 |
+        |drive_result_detailed_flag       |String  |
+        |drive_result2                    |String  |
+        |drive_num                        |Float64 |
+        |lag_drive_result_detailed        |String  |
+        |lead_drive_result_detailed       |String  |
+        |lag_new_drive_pts                |Float64 |
+        |id_drive                         |Float64 |
+        |rush                             |Float64 |
+        |rush_td                          |Float64 |
+        |pass                             |Float64 |
+        |pass_td                          |Float64 |
+        |completion                       |Float64 |
+        |pass_attempt                     |Float64 |
+        |target                           |Float64 |
+        |sack_vec                         |Float64 |
+        |sack                             |Float64 |
+        |int                              |Float64 |
+        |int_td                           |Float64 |
+        |turnover_vec                     |Float64 |
+        |turnover_vec_lag                 |Float64 |
+        |turnover_indicator               |Float64 |
+        |kickoff_play                     |Float64 |
+        |receives_2H_kickoff              |Float64 |
+        |missing_yard_flag                |Boolean |
+        |scoring_play                     |Float64 |
+        |td_play                          |Float64 |
+        |touchdown                        |Float64 |
+        |safety                           |Float64 |
+        |fumble_vec                       |Float64 |
+        |kickoff_tb                       |Float64 |
+        |kickoff_onside                   |Float64 |
+        |kickoff_oob                      |Float64 |
+        |kickoff_fair_catch               |Float64 |
+        |kickoff_downed                   |Float64 |
+        |kickoff_safety                   |Float64 |
+        |kick_play                        |Float64 |
+        |punt                             |Float64 |
+        |punt_play                        |Float64 |
+        |punt_tb                          |Float64 |
+        |punt_oob                         |Float64 |
+        |punt_fair_catch                  |Float64 |
+        |punt_downed                      |Float64 |
+        |punt_safety                      |Float64 |
+        |punt_blocked                     |Float64 |
+        |penalty_safety                   |Float64 |
+        |fg_inds                          |Float64 |
+        |fg_made                          |Boolean |
+        |fg_make_prob                     |Float64 |
+        |No_Score_before                  |Float64 |
+        |FG_before                        |Float64 |
+        |Opp_FG_before                    |Float64 |
+        |Opp_Safety_before                |Float64 |
+        |Opp_TD_before                    |Float64 |
+        |Safety_before                    |Float64 |
+        |TD_before                        |Float64 |
+        |No_Score_after                   |Float64 |
+        |FG_after                         |Float64 |
+        |Opp_FG_after                     |Float64 |
+        |Opp_Safety_after                 |Float64 |
+        |Opp_TD_after                     |Float64 |
+        |Safety_after                     |Float64 |
+        |TD_after                         |Float64 |
+        |position_reception               |String  |
+        |position_target                  |String  |
+        |position_completion              |String  |
+        |position_incompletion            |String  |
+        |position_sack_taken              |String  |
+        |position_sack                    |String  |
+        |position_interception_thrown     |String  |
+        |position_interception            |String  |
+        |position_fumble                  |String  |
+        |position_fumble_forced           |String  |
+        |position_fumble_recovered        |String  |
+        |position_pass_breakup            |String  |
+        |position_rush                    |String  |
+        |position_touchdown               |String  |
+        |rush_player_id                   |Float64 |
+        |rush_player                      |String  |
+        |rush_yds                         |Int32   |
+        |reception_player_id              |Float64 |
+        |reception_player                 |String  |
+        |reception_yds                    |Int32   |
+        |completion_player_id             |Float64 |
+        |completion_player                |String  |
+        |completion_yds                   |Int32   |
+        |interception_player_id           |Float64 |
+        |interception_player              |String  |
+        |interception_stat                |Int32   |
+        |interception_thrown_player_id    |Float64 |
+        |interception_thrown_player       |String  |
+        |interception_thrown_stat         |Int32   |
+        |touchdown_player_id              |Float64 |
+        |touchdown_player                 |String  |
+        |touchdown_stat                   |Int32   |
+        |incompletion_player_id           |Float64 |
+        |incompletion_player              |String  |
+        |incompletion_stat                |Int32   |
+        |target_player_id                 |Float64 |
+        |target_player                    |String  |
+        |target_stat                      |Int32   |
+        |fumble_recovered_player_id       |Float64 |
+        |fumble_recovered_player          |String  |
+        |fumble_recovered_stat            |Int32   |
+        |fumble_forced_player_id          |Float64 |
+        |fumble_forced_player             |String  |
+        |fumble_forced_stat               |Int32   |
+        |fumble_player_id                 |Float64 |
+        |fumble_player                    |String  |
+        |fumble_stat                      |Int32   |
+        |sack_player_id                   |Float64 |
+        |sack_player                      |String  |
+        |sack_stat                        |Int32   |
+        |sack_taken_player_id             |Float64 |
+        |sack_taken_player                |String  |
+        |sack_taken_stat                  |Int32   |
+        |pass_breakup_player_id           |Float64 |
+        |pass_breakup_player              |String  |
+        |pass_breakup_stat                |Int32   |
+        |field_goal_attempt_player_id     |String  |
+        |field_goal_attempt_player        |String  |
+        |field_goal_attempt_stat          |Int32   |
+        |field_goal_made_player_id        |String  |
+        |field_goal_made_player           |String  |
+        |field_goal_made_stat             |Int32   |
+        |field_goal_missed_player_id      |String  |
+        |field_goal_missed_player         |String  |
+        |field_goal_missed_stat           |Int32   |
+        |field_goal_blocked_player_id     |String  |
+        |field_goal_blocked_player        |String  |
+        |field_goal_blocked_stat          |Int32   |
+        |penalty_flag                     |Boolean |
+        |penalty_declined                 |Boolean |
+        |penalty_no_play                  |Boolean |
+        |penalty_offset                   |Boolean |
+        |penalty_text                     |Boolean |
+        |penalty_play_text                |String  |
+
+    Example:
+        Quick start::
+
+            load_cfb_pbp_r(seasons=2024)
+    """
+    frames, missing = [], []
+    for season in _as_season_list(seasons):
+        if int(season) < 2014:
+            raise SeasonNotFoundError("season cannot be less than 2014")
+        df = _read_release_parquet(
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/cfbfastR_cfb_pbp/play_by_play_{season}.parquet"
+        )
+        if df is None:
+            missing.append(season)
+            continue
+        frames.append(df)
+    if missing:
+        cli_warn("load_cfb_pbp_r: no data for season(s) {missing} (skipped)".format(missing=missing))
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out

@@ -400,6 +400,7 @@ from sportsdataverse.cfb import load_cfb_linescores as load_cfb_linescores  # no
 from sportsdataverse.cfb import load_cfb_model_pbp as load_cfb_model_pbp  # noqa: F401
 from sportsdataverse.cfb import load_cfb_passing as load_cfb_passing  # noqa: F401
 from sportsdataverse.cfb import load_cfb_pbp as load_cfb_pbp  # noqa: F401
+from sportsdataverse.cfb import load_cfb_pbp_r as load_cfb_pbp_r  # noqa: F401
 from sportsdataverse.cfb import load_cfb_percentiles as load_cfb_percentiles  # noqa: F401
 from sportsdataverse.cfb import load_cfb_play_participants as load_cfb_play_participants  # noqa: F401
 from sportsdataverse.cfb import load_cfb_player_box as load_cfb_player_box  # noqa: F401
@@ -642,6 +643,7 @@ __all__ = [
     "load_cfb_model_pbp",
     "load_cfb_passing",
     "load_cfb_pbp",
+    "load_cfb_pbp_r",
     "load_cfb_percentiles",
     "load_cfb_play_participants",
     "load_cfb_player_box",

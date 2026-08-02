@@ -26,6 +26,8 @@ __all__ = [
     "load_mlb_xera",
     "load_mlb_stuff_plus",
     "load_mlb_command_plus",
+    "load_ncaa_baseball_pbp",
+    "load_ncaa_baseball_schedule",
 ]
 
 
@@ -520,6 +522,122 @@ def load_mlb_command_plus(seasons, return_as_pandas: bool = False):
         frames.append(df)
     if missing:
         cli_warn("load_mlb_command_plus: no data for season(s) {missing} (skipped)".format(missing=missing))
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+def load_ncaa_baseball_pbp(seasons, return_as_pandas: bool = False):
+    """Load ncaa_baseball_pbp (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_baseball_pbp
+
+    Args:
+        seasons: an int or iterable of seasons (>= 2017).
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; seasons with no published asset are
+        skipped with a warning rather than raising (404-safe).
+
+        |col_name       |type    |
+        |:--------------|:-------|
+        |game_date      |String  |
+        |location       |String  |
+        |attendance     |Boolean |
+        |inning         |String  |
+        |inning_top_bot |String  |
+        |score          |String  |
+        |batting        |String  |
+        |fielding       |String  |
+        |description    |String  |
+        |year           |Int32   |
+        |game_pbp_url   |String  |
+        |game_pbp_id    |Int32   |
+        |game_info_url  |String  |
+        |contest_id     |Int32   |
+
+    Example:
+        Quick start::
+
+            load_ncaa_baseball_pbp(seasons=2023)
+    """
+    frames, missing = [], []
+    for season in _as_season_list(seasons):
+        if int(season) < 2017:
+            raise SeasonNotFoundError("season cannot be less than 2017")
+        df = _read_release_parquet(
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/ncaa_baseball_pbp/ncaa_baseball_pbp_{season}.parquet"
+        )
+        if df is None:
+            missing.append(season)
+            continue
+        frames.append(df)
+    if missing:
+        cli_warn("load_ncaa_baseball_pbp: no data for season(s) {missing} (skipped)".format(missing=missing))
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+def load_ncaa_baseball_schedule(seasons, return_as_pandas: bool = False):
+    """Load ncaa_baseball_schedules (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_baseball_schedules
+
+    Args:
+        seasons: an int or iterable of seasons (>= 2012).
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; seasons with no published asset are
+        skipped with a warning rather than raising (404-safe).
+
+        |col_name                |type   |
+        |:-----------------------|:------|
+        |year                    |Int32  |
+        |season_id               |Int32  |
+        |date                    |String |
+        |home_team               |String |
+        |home_team_id            |Int32  |
+        |home_team_score         |Int32  |
+        |home_team_conference    |String |
+        |home_team_conference_id |Int32  |
+        |home_team_slug          |String |
+        |home_team_division      |Int32  |
+        |away_team               |String |
+        |away_team_id            |Int32  |
+        |away_team_score         |Int32  |
+        |away_team_conference    |String |
+        |away_team_conference_id |Int32  |
+        |away_team_slug          |String |
+        |away_team_division      |Int32  |
+        |neutral_site            |String |
+        |innings                 |Int32  |
+        |slug                    |String |
+        |game_info_url           |String |
+        |contest_id              |Int32  |
+
+    Example:
+        Quick start::
+
+            load_ncaa_baseball_schedule(seasons=2023)
+    """
+    frames, missing = [], []
+    for season in _as_season_list(seasons):
+        if int(season) < 2012:
+            raise SeasonNotFoundError("season cannot be less than 2012")
+        df = _read_release_parquet(
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/ncaa_baseball_schedules/ncaa_baseball_schedule_{season}.parquet"
+        )
+        if df is None:
+            missing.append(season)
+            continue
+        frames.append(df)
+    if missing:
+        cli_warn("load_ncaa_baseball_schedule: no data for season(s) {missing} (skipped)".format(missing=missing))
     # diagonal: per-season release schemas can drift (columns added/dropped
     # over the years) -- union columns, null-fill gaps.
     out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()

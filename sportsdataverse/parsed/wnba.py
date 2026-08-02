@@ -169,9 +169,13 @@ from sportsdataverse.wnba import load_wnba_game_rosters as load_wnba_game_roster
 from sportsdataverse.wnba import load_wnba_officials as load_wnba_officials  # noqa: F401
 from sportsdataverse.wnba import load_wnba_pbp as load_wnba_pbp  # noqa: F401
 from sportsdataverse.wnba import load_wnba_player_boxscore as load_wnba_player_boxscore  # noqa: F401
+from sportsdataverse.wnba import load_wnba_player_core as load_wnba_player_core  # noqa: F401
+from sportsdataverse.wnba import load_wnba_player_crosswalk as load_wnba_player_crosswalk  # noqa: F401
+from sportsdataverse.wnba import load_wnba_player_impact as load_wnba_player_impact  # noqa: F401
 from sportsdataverse.wnba import load_wnba_player_season_stats as load_wnba_player_season_stats  # noqa: F401
 from sportsdataverse.wnba import load_wnba_rosters as load_wnba_rosters  # noqa: F401
 from sportsdataverse.wnba import load_wnba_schedule as load_wnba_schedule  # noqa: F401
+from sportsdataverse.wnba import load_wnba_schedule_crosswalk as load_wnba_schedule_crosswalk  # noqa: F401
 from sportsdataverse.wnba import load_wnba_shots as load_wnba_shots  # noqa: F401
 from sportsdataverse.wnba import load_wnba_standings as load_wnba_standings  # noqa: F401
 from sportsdataverse.wnba import load_wnba_stats_coaches as load_wnba_stats_coaches  # noqa: F401
@@ -180,14 +184,17 @@ from sportsdataverse.wnba import load_wnba_stats_game_rosters as load_wnba_stats
 from sportsdataverse.wnba import load_wnba_stats_lineups as load_wnba_stats_lineups  # noqa: F401
 from sportsdataverse.wnba import load_wnba_stats_officials as load_wnba_stats_officials  # noqa: F401
 from sportsdataverse.wnba import load_wnba_stats_pbp as load_wnba_stats_pbp  # noqa: F401
+from sportsdataverse.wnba import load_wnba_stats_player_boxscores as load_wnba_stats_player_boxscores  # noqa: F401
 from sportsdataverse.wnba import load_wnba_stats_player_game_logs as load_wnba_stats_player_game_logs  # noqa: F401
 from sportsdataverse.wnba import load_wnba_stats_player_season_stats as load_wnba_stats_player_season_stats  # noqa: F401
 from sportsdataverse.wnba import load_wnba_stats_rosters as load_wnba_stats_rosters  # noqa: F401
 from sportsdataverse.wnba import load_wnba_stats_schedules as load_wnba_stats_schedules  # noqa: F401
 from sportsdataverse.wnba import load_wnba_stats_shots as load_wnba_stats_shots  # noqa: F401
 from sportsdataverse.wnba import load_wnba_stats_standings as load_wnba_stats_standings  # noqa: F401
+from sportsdataverse.wnba import load_wnba_stats_team_boxscores as load_wnba_stats_team_boxscores  # noqa: F401
 from sportsdataverse.wnba import load_wnba_stats_team_season_stats as load_wnba_stats_team_season_stats  # noqa: F401
 from sportsdataverse.wnba import load_wnba_team_boxscore as load_wnba_team_boxscore  # noqa: F401
+from sportsdataverse.wnba import load_wnba_team_crosswalk as load_wnba_team_crosswalk  # noqa: F401
 from sportsdataverse.wnba import load_wnba_team_season_stats as load_wnba_team_season_stats  # noqa: F401
 from sportsdataverse.wnba import make_prob_by_context as make_prob_by_context  # noqa: F401
 from sportsdataverse.wnba import make_prob_joint as make_prob_joint  # noqa: F401
@@ -377,9 +384,13 @@ __all__ = [
     "load_wnba_officials",
     "load_wnba_pbp",
     "load_wnba_player_boxscore",
+    "load_wnba_player_core",
+    "load_wnba_player_crosswalk",
+    "load_wnba_player_impact",
     "load_wnba_player_season_stats",
     "load_wnba_rosters",
     "load_wnba_schedule",
+    "load_wnba_schedule_crosswalk",
     "load_wnba_shots",
     "load_wnba_standings",
     "load_wnba_stats_coaches",
@@ -388,14 +399,17 @@ __all__ = [
     "load_wnba_stats_lineups",
     "load_wnba_stats_officials",
     "load_wnba_stats_pbp",
+    "load_wnba_stats_player_boxscores",
     "load_wnba_stats_player_game_logs",
     "load_wnba_stats_player_season_stats",
     "load_wnba_stats_rosters",
     "load_wnba_stats_schedules",
     "load_wnba_stats_shots",
     "load_wnba_stats_standings",
+    "load_wnba_stats_team_boxscores",
     "load_wnba_stats_team_season_stats",
     "load_wnba_team_boxscore",
+    "load_wnba_team_crosswalk",
     "load_wnba_team_season_stats",
     "make_prob_by_context",
     "make_prob_joint",

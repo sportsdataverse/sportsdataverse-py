@@ -25,6 +25,8 @@ flowchart LR
 | `load_mlb_xera` | [mlb_pitching_models](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/mlb_pitching_models) | — |
 | `load_mlb_stuff_plus` | [mlb_pitching_models](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/mlb_pitching_models) | — |
 | `load_mlb_command_plus` | [mlb_pitching_models](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/mlb_pitching_models) | — |
+| `load_ncaa_baseball_pbp` | [ncaa_baseball_pbp](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_baseball_pbp) | — |
+| `load_ncaa_baseball_schedule` | [ncaa_baseball_schedules](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_baseball_schedules) | — |
 
 ## `load_mlb_re24_matrix`
 
@@ -213,4 +215,64 @@ Release: [mlb_pitching_models](https://github.com/sportsdataverse/sportsdatavers
 
 ```python
 load_mlb_command_plus(seasons=2024)
+```
+
+## `load_ncaa_baseball_pbp`
+
+Release: [ncaa_baseball_pbp](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_baseball_pbp) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/ncaa_baseball_pbp/ncaa_baseball_pbp_{season}.parquet`
+### Returns
+
+| col_name | type | description |
+|---|---|---|
+| `game_date` | String | Game date (YYYY-MM-DD). |
+| `location` | String | Team city/region (e.g. "Los Angeles"). |
+| `attendance` | Boolean | Reported attendance (NA on the redesigned page). |
+| `inning` | String | Inning number. |
+| `inning_top_bot` | String | Half-inning ("top" or "bot"). |
+| `score` | String | Running score (away-home) after the play. |
+| `batting` | String | Whether the situation applies to batting stats. |
+| `fielding` | String | Whether the situation applies to fielding stats. |
+| `description` | String | Long-form description text. |
+| `year` | Int32 | Season (4-digit year). |
+| `game_pbp_url` | String | stats.ncaa.org play-by-play url for the game. |
+| `game_pbp_id` | Int32 | stats.ncaa.org play-by-play (contest) identifier. |
+| `game_info_url` | String | Full stats.ncaa.org box-score url for the game. |
+| `contest_id` | Int32 | stats.ncaa.org contest (game) identifier. |
+
+```python
+load_ncaa_baseball_pbp(seasons=2023)
+```
+
+## `load_ncaa_baseball_schedule`
+
+Release: [ncaa_baseball_schedules](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_baseball_schedules) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/ncaa_baseball_schedules/ncaa_baseball_schedule_{season}.parquet`
+### Returns
+
+| col_name | type | description |
+|---|---|---|
+| `year` | Int32 | Season (4-digit year). |
+| `season_id` | Int32 | stats.ncaa.org season identifier. |
+| `date` | String | Date in YYYY-MM-DD format. |
+| `home_team` | String | Home team name. |
+| `home_team_id` | Int32 | Home team id. |
+| `home_team_score` | Int32 | Home team score. |
+| `home_team_conference` | String | Home team conference name. |
+| `home_team_conference_id` | Int32 | Home team conference id. |
+| `home_team_slug` | String | Relative stats.ncaa.org url for the home team. |
+| `home_team_division` | Int32 | Home team NCAA division (1, 2, 3). |
+| `away_team` | String | Away team name. |
+| `away_team_id` | Int32 | Away team id. |
+| `away_team_score` | Int32 | Away team score. |
+| `away_team_conference` | String | Away team conference name. |
+| `away_team_conference_id` | Int32 | Away team conference id. |
+| `away_team_slug` | String | Relative stats.ncaa.org url for the away team. |
+| `away_team_division` | Int32 | Away team NCAA division (1, 2, 3). |
+| `neutral_site` | String | Neutral-site venue (when not hosted by either team). |
+| `innings` | Int32 | Innings played when other than regulation (extras). |
+| `slug` | String | URL-safe identifier. |
+| `game_info_url` | String | Full stats.ncaa.org box-score url for the game. |
+| `contest_id` | Int32 | stats.ncaa.org contest (game) identifier. |
+
+```python
+load_ncaa_baseball_schedule(seasons=2023)
 ```
