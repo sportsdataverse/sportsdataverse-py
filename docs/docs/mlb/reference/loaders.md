@@ -88,7 +88,7 @@ Release: [mlb_hitting_models](https://github.com/sportsdataverse/sportsdataverse
 
 | col_name | type | description |
 |---|---|---|
-| `batter` | Int64 | Full name of the batter for this swing record. |
+| `batter` | Int64 | MLBAM player id of the batter. |
 | `season` | Int64 | Season year. |
 | `pa` | Int64 | Statcast rows charged to the batter for the season, counting balls in play carrying launch data plus every other pitch, so it is a pitch-row total rather than a true plate-appearance count. |
 | `ab` | Int64 | At-bats. |
@@ -107,9 +107,9 @@ Release: [mlb_hitting_models](https://github.com/sportsdataverse/sportsdataverse
 
 | col_name | type | description |
 |---|---|---|
-| `batter` | Int64 | Full name of the batter for this swing record. |
+| `batter` | Int64 | MLBAM player id of the batter. |
 | `season` | Int64 | Season year. |
-| `hr` | Int64 | Park factor for home runs. |
+| `hr` | Int64 | Home runs hit by the batter over the covered sample. |
 | `xhr_neutral` | Float64 | Park-neutral expected home runs, summing over the batter's balls in play the home-run probability read off the exit-velocity by launch-angle by spray-angle grid. |
 | `xhr_park_adj` | Float64 | The same expected-home-run sum after scaling each ball by its ballpark's Savant home-run park factor over 100; published values run between 0.77 and 1.26 times xhr_neutral. |
 | `hr_above_expected` | Float64 | Home runs actually hit minus xhr_neutral, so it grades over- and under-performance against the park-neutral expectation rather than the park-adjusted one. |
@@ -125,7 +125,7 @@ Release: [mlb_hitting_models](https://github.com/sportsdataverse/sportsdataverse
 
 | col_name | type | description |
 |---|---|---|
-| `batter` | Int64 | Full name of the batter for this swing record. |
+| `batter` | Int64 | MLBAM player id of the batter. |
 | `age` | Int64 | Player age (in years). |
 | `proj_xwoba` | Float64 | Projected expected weighted on-base average for the batter. |
 | `proj_pa` | Float64 | Combined prior-three-season pa behind the projection, its effective sample size; it inherits the pitch-row counting of load_mlb_expected_stats pa rather than true plate appearances. |

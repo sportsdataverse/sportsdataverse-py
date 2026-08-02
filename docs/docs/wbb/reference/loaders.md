@@ -40,7 +40,7 @@ Release: [espn_womens_college_basketball_pbp](https://github.com/sportsdataverse
 | col_name | type | description |
 |---|---|---|
 | `game_play_number` | Int32 | Game play number |
-| `id` | Int64 | Unique play identifcation number |
+| `id` | Int64 | Unique play identification number |
 | `sequence_number` | Int32 | Sequence number representing a shot-possession (V3 PBP). |
 | `type_id` | Int32 | Type identifier (numeric). |
 | `type_text` | String | Display text for the type field. |
@@ -183,7 +183,7 @@ Release: [espn_womens_college_basketball_schedules](https://github.com/sportsdat
 
 | col_name | type | description |
 |---|---|---|
-| `id` | Int32 | Unique play identifcation number |
+| `id` | Int32 | Unique play identification number |
 | `uid` | String | ESPN UID string. |
 | `date` | String | Date in YYYY-MM-DD format. |
 | `attendance` | Float64 | Reported attendance. |
@@ -637,7 +637,7 @@ Release: [wbb_crosswalk](https://github.com/sportsdataverse/sportsdataverse-data
 | `fox_position_group` | String | Fox position group label (NA if unmatched). |
 | `yahoo_player_id` | String | Yahoo player id (NA placeholder). |
 | `yahoo_player_name` | String | Yahoo player name (NA placeholder). |
-| `match_method` | String | "fox+bart"/"fox_only"/"bart_only"/"espn_only". |
+| `match_method` | String | Combination of matched sources, e.g. "fox+bart" / "fox_only" / "bart_only" / "espn_only". |
 | `match_confidence` | Float64 | Jaro-Winkler score or 1 for exact (NA if none). |
 | `match_keys` | String | NA (reserved for future use). |
 
@@ -663,7 +663,7 @@ Release: [wbb_crosswalk](https://github.com/sportsdataverse/sportsdataverse-data
 | `bart_winner` | String | Torvik winner name (NA for espn-only rows). |
 | `fox_game_id` | String | Fox game id (NA placeholder). |
 | `yahoo_game_id` | String | Yahoo game id (NA placeholder). |
-| `match_method` | String | "fox+bart"/"fox_only"/"bart_only"/"espn_only". |
+| `match_method` | String | Combination of matched sources, e.g. "fox+bart" / "fox_only" / "bart_only" / "espn_only". |
 | `match_confidence` | Float64 | Jaro-Winkler score or 1 for exact (NA if none). |
 
 ```python
@@ -694,7 +694,7 @@ Release: [wbb_crosswalk](https://github.com/sportsdataverse/sportsdataverse-data
 | `yahoo_team_name` | String | Yahoo team name (NA placeholder). |
 | `fox_match_confidence` | Float64 | 1 for matched, NA for unmatched. |
 | `bart_match_confidence` | Float64 | 1 for matched, NA for unmatched. |
-| `match_method` | String | "fox+bart"/"fox_only"/"bart_only"/"espn_only". |
+| `match_method` | String | Combination of matched sources, e.g. "fox+bart" / "fox_only" / "bart_only" / "espn_only". |
 
 ```python
 load_wbb_team_crosswalk(seasons=2026)

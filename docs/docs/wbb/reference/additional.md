@@ -390,7 +390,7 @@ Polars dataframe containing schedule dates for the requested season. Returns Non
 
 | col_name | type | description |
 |---|---|---|
-| `id` | character | Unique play identifcation number |
+| `id` | character | Unique play identification number |
 | `uid` | character | ESPN UID string. |
 | `date` | character | Date in YYYY-MM-DD format. |
 | `attendance` | integer | Reported attendance. |

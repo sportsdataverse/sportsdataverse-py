@@ -122,7 +122,7 @@ Release: [pbp](https://github.com/nflverse/nflverse-data/releases/tag/pbp) · as
 | `total_away_raw_air_epa` | Float64 | Cumulative total raw air EPA for the away team in the game so far. |
 | `total_home_raw_yac_epa` | Float64 | Cumulative total raw yac EPA for the home team in the game so far. |
 | `total_away_raw_yac_epa` | Float64 | Cumulative total raw yac EPA for the away team in the game so far. |
-| `wp` | Float64 | Estimated win probabiity for the posteam given the current situation at the start of the given play. |
+| `wp` | Float64 | Estimated win probability for the posteam given the current situation at the start of the given play. |
 | `def_wp` | Float64 | Estimated win probability for the defteam. |
 | `home_wp` | Float64 | Estimated win probability for the home team. |
 | `away_wp` | Float64 | Estimated win probability for the away team. |
@@ -131,7 +131,7 @@ Release: [pbp](https://github.com/nflverse/nflverse-data/releases/tag/pbp) · as
 | `vegas_home_wpa` | Float64 | Win probability added (WPA) for the home team: spread_adjusted model. |
 | `home_wp_post` | Float64 | Estimated win probability for the home team at the end of the play. |
 | `away_wp_post` | Float64 | Estimated win probability for the away team at the end of the play. |
-| `vegas_wp` | Float64 | Estimated win probabiity for the posteam given the current situation at the start of the given play, incorporating pre-game Vegas line. |
+| `vegas_wp` | Float64 | Estimated win probability for the posteam given the current situation at the start of the given play, incorporating pre-game Vegas line. |
 | `vegas_home_wp` | Float64 | Estimated win probability for the home team incorporating pre-game Vegas line. |
 | `total_home_rush_wpa` | Float64 | Cumulative total rushing WPA for the home team in the game so far. |
 | `total_away_rush_wpa` | Float64 | Cumulative total rushing WPA for the away team in the game so far. |
@@ -219,7 +219,7 @@ Release: [pbp](https://github.com/nflverse/nflverse-data/releases/tag/pbp) · as
 | `lateral_sack_player_name` | String | String name for the player that received the lateral on a sack. |
 | `interception_player_id` | String | Unique identifier for the player that intercepted the pass. |
 | `interception_player_name` | String | String name for the player that intercepted the pass. |
-| `lateral_interception_player_id` | String | Unique indentifier for the player that received the lateral on an interception. |
+| `lateral_interception_player_id` | String | Unique identifier for the player that received the lateral on an interception. |
 | `lateral_interception_player_name` | String | String name for the player that received the lateral on an interception. |
 | `punt_returner_player_id` | String | Unique identifier for the punt returner. |
 | `punt_returner_player_name` | String | String name for the punt returner. |
@@ -370,7 +370,7 @@ Release: [pbp](https://github.com/nflverse/nflverse-data/releases/tag/pbp) · as
 | `stadium_id` | String | ID of the stadium the game was played in. (Source: Pro-Football-Reference) |
 | `game_stadium` | String | Name of the stadium the game was played in. (Source: Pro-Football-Reference) |
 | `aborted_play` | Float64 | Binary indicator if the play description indicates "Aborted". |
-| `success` | Float64 | Binary indicator wheter epa > 0 in the given play. |
+| `success` | Float64 | Binary indicator whether epa > 0 in the given play. |
 | `passer` | String | Name of the dropback player (scrambles included) including plays with penalties. |
 | `passer_jersey_number` | Int32 | Jersey number of the passer. |
 | `rusher` | String | Name of the rusher (no scrambles) including plays with penalties. |

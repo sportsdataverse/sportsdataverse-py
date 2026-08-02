@@ -134,6 +134,9 @@ def load_phf_pbp(seasons, return_as_pandas: bool = False):
         |offensive_player_jersey_6 |String |
         |season                    |Int32  |
 
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2016.
+
     Example:
         Quick start::
 
@@ -203,6 +206,9 @@ def load_phf_player_boxscores(seasons, return_as_pandas: bool = False):
         |save_percent      |Float64 |
         |goalies_href      |String  |
         |season            |Int32   |
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2016.
 
     Example:
         Quick start::
@@ -312,6 +318,9 @@ def load_phf_schedules(seasons, return_as_pandas: bool = False):
         |team_box                  |Boolean                                   |
         |player_box                |Boolean                                   |
 
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2016.
+
     Example:
         Quick start::
 
@@ -378,6 +387,9 @@ def load_phf_team_boxscores(seasons, return_as_pandas: bool = False):
         |shootout_missed_scoring  |Float64 |
         |season                   |Int32   |
 
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2016.
+
     Example:
         Quick start::
 
@@ -442,6 +454,9 @@ def load_pwhl_game_info(seasons, return_as_pandas: bool = False):
         |game_report_url |String |
         |boxscore_url    |String |
 
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2024.
+
     Example:
         Quick start::
 
@@ -496,6 +511,9 @@ def load_pwhl_game_rosters(seasons, return_as_pandas: bool = False):
         |starting      |Int64  |
         |status        |String |
 
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2024.
+
     Example:
         Quick start::
 
@@ -549,6 +567,9 @@ def load_pwhl_shifts(seasons, return_as_pandas: bool = False):
         |end_s            |Int64  |
         |goal_on_shift    |Int64  |
         |penalty_on_shift |Int64  |
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2024.
 
     Example:
         Quick start::
@@ -611,6 +632,9 @@ def load_pwhl_goalie_boxscores(seasons, return_as_pandas: bool = False):
         |faceoff_pct      |Null    |
         |starting         |Int64   |
 
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2024.
+
     Example:
         Quick start::
 
@@ -656,6 +680,9 @@ def load_pwhl_officials(seasons, return_as_pandas: bool = False):
         |last_name     |String |
         |jersey_number |Int64  |
         |official_role |String |
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2024.
 
     Example:
         Quick start::
@@ -801,6 +828,9 @@ def load_pwhl_pbp(seasons, return_as_pandas: bool = False):
         |strength_state              |String  |
         |strength_state_valid        |Boolean |
 
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2024.
+
     Example:
         Quick start::
 
@@ -862,6 +892,9 @@ def load_pwhl_xg_pbp(seasons, return_as_pandas: bool = False):
         |goal           |Boolean |
         |xg             |Float64 |
 
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2024.
+
     Example:
         Quick start::
 
@@ -921,6 +954,9 @@ def load_pwhl_penalty_summary(seasons, return_as_pandas: bool = False):
         |served_by_id      |Int64  |
         |served_by_first   |String |
         |served_by_last    |String |
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2024.
 
     Example:
         Quick start::
@@ -988,6 +1024,9 @@ def load_pwhl_player_boxscores(seasons, return_as_pandas: bool = False):
         |goals_against    |Int64   |
         |shots_against    |Int64   |
 
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2024.
+
     Example:
         Quick start::
 
@@ -1039,6 +1078,9 @@ def load_pwhl_rosters(seasons, return_as_pandas: bool = False):
         |position      |String |
         |birth_date    |String |
         |season        |Int32  |
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2024.
 
     Example:
         Quick start::
@@ -1109,6 +1151,9 @@ def load_pwhl_schedules(seasons, return_as_pandas: bool = False):
         |shots_by_period |Boolean |
         |shootout        |Boolean |
 
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2024.
+
     Example:
         Quick start::
 
@@ -1176,6 +1221,9 @@ def load_pwhl_scoring_summary(seasons, return_as_pandas: bool = False):
         |x_location         |Null   |
         |y_location         |Null   |
 
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2024.
+
     Example:
         Quick start::
 
@@ -1226,6 +1274,9 @@ def load_pwhl_shootout(seasons, return_as_pandas: bool = False):
         |goalie_last   |String |
         |is_goal       |Int64  |
 
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2026.
+
     Example:
         Quick start::
 
@@ -1272,6 +1323,9 @@ def load_pwhl_shots_by_period(seasons, return_as_pandas: bool = False):
         |home_shots |Int64  |
         |away_goals |Int64  |
         |away_shots |Int64  |
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2024.
 
     Example:
         Quick start::
@@ -1334,6 +1388,9 @@ def load_pwhl_skater_boxscores(seasons, return_as_pandas: bool = False):
         |faceoff_losses   |Int64   |
         |faceoff_pct      |Float64 |
         |starting         |Int64   |
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2024.
 
     Example:
         Quick start::
@@ -1398,6 +1455,9 @@ def load_pwhl_team_boxscores(seasons, return_as_pandas: bool = False):
         |season_so_losses |Int64   |
         |season_record    |String  |
 
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2024.
+
     Example:
         Quick start::
 
@@ -1457,6 +1517,9 @@ def load_pwhl_three_stars(seasons, return_as_pandas: bool = False):
         |shots_against |Int64  |
         |goals_against |Int64  |
         |time_on_ice   |String |
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2024.
 
     Example:
         Quick start::

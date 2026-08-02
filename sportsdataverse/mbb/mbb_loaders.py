@@ -111,6 +111,9 @@ def load_mbb_pbp(seasons, return_as_pandas: bool = False):
         |athlete_name_2                 |String                                                 |
         |athlete_name_3                 |String                                                 |
 
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2002.
+
     Example:
         Quick start::
 
@@ -205,6 +208,9 @@ def load_mbb_player_boxscore(seasons, return_as_pandas: bool = False):
         |opponent_team_alternate_color     |String                                                 |
         |opponent_team_score               |Int32                                                  |
         |active                            |Boolean                                                |
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2002.
 
     Example:
         Quick start::
@@ -332,6 +338,9 @@ def load_mbb_schedule(seasons, return_as_pandas: bool = False):
         |team_box                  |Boolean                                                |
         |player_box                |Boolean                                                |
 
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2002.
+
     Example:
         Quick start::
 
@@ -431,6 +440,9 @@ def load_mbb_team_boxscore(seasons, return_as_pandas: bool = False):
         |lead_changes                      |String                                                 |
         |lead_percentage                   |String                                                 |
 
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2002.
+
     Example:
         Quick start::
 
@@ -482,6 +494,9 @@ def load_mbb_ratings(seasons, return_as_pandas: bool = False):
         |rank      |Int64   |
         |adj_em_z  |Float64 |
 
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2006.
+
     Example:
         Quick start::
 
@@ -529,6 +544,9 @@ def load_mbb_player_value(seasons, return_as_pandas: bool = False):
         |box_obpm  |Float64 |
         |box_dbpm  |Float64 |
         |box_bpm   |Float64 |
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2006.
 
     Example:
         Quick start::
@@ -589,6 +607,9 @@ def load_mbb_shots(seasons, return_as_pandas: bool = False):
         |team_name           |String  |
         |team_mascot         |String  |
         |team_abbrev         |String  |
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2025.
 
     Example:
         Quick start::
@@ -654,6 +675,9 @@ def load_mbb_standings(seasons, return_as_pandas: bool = False):
         |display_value           |String  |
         |value                   |Float64 |
 
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2003.
+
     Example:
         Quick start::
 
@@ -708,6 +732,9 @@ def load_mbb_player_season_stats(seasons, return_as_pandas: bool = False):
         |stat_description              |String  |
         |display_value                 |String  |
         |value                         |Float64 |
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2025.
 
     Example:
         Quick start::
@@ -785,6 +812,9 @@ def load_mbb_rosters(seasons, return_as_pandas: bool = False):
         |status_name              |String |
         |status_type              |String |
 
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2025.
+
     Example:
         Quick start::
 
@@ -831,6 +861,9 @@ def load_mbb_officials(seasons, return_as_pandas: bool = False):
         |official_position     |String |
         |official_position_id  |Int32  |
         |official_order        |Int32  |
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2025.
 
     Example:
         Quick start::
@@ -894,6 +927,9 @@ def load_mbb_game_rosters(seasons, return_as_pandas: bool = False):
         |ejected              |Boolean |
         |reason               |String  |
 
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2025.
+
     Example:
         Quick start::
 
@@ -949,6 +985,9 @@ def load_mbb_team_season_stats(seasons, return_as_pandas: bool = False):
         |stat_description        |String  |
         |display_value           |String  |
         |value                   |Float64 |
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2003.
 
     Example:
         Quick start::
@@ -1007,6 +1046,9 @@ def load_mbb_player_crosswalk(seasons, return_as_pandas: bool = False):
         |match_confidence   |Float64 |
         |match_keys         |String  |
 
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2025.
+
     Example:
         Quick start::
 
@@ -1060,6 +1102,9 @@ def load_mbb_schedule_crosswalk(seasons, return_as_pandas: bool = False):
         |yahoo_game_id     |String  |
         |match_method      |String  |
         |match_confidence  |Float64 |
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2025.
 
     Example:
         Quick start::
@@ -1121,6 +1166,9 @@ def load_mbb_team_crosswalk(seasons, return_as_pandas: bool = False):
         |bart_match_confidence |Float64 |
         |kp_match_confidence   |Float64 |
         |match_method          |String  |
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2025.
 
     Example:
         Quick start::
@@ -1197,6 +1245,9 @@ def load_mbb_player_core(seasons, return_as_pandas: bool = False):
         |draft_round           |Int32   |
         |draft_selection       |Int32   |
         |active                |Boolean |
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2003.
 
     Example:
         Quick start::

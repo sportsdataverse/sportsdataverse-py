@@ -129,6 +129,9 @@ def load_wnba_pbp(seasons, return_as_pandas: bool = False):
         |athlete_name_3                  |String                                                 |
         |type_abbreviation               |String                                                 |
 
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2002.
+
     Example:
         Quick start::
 
@@ -225,6 +228,9 @@ def load_wnba_player_boxscore(seasons, return_as_pandas: bool = False):
         |opponent_team_color               |String                                                 |
         |opponent_team_alternate_color     |String                                                 |
         |opponent_team_score               |Int32                                                  |
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2002.
 
     Example:
         Quick start::
@@ -343,6 +349,9 @@ def load_wnba_schedule(seasons, return_as_pandas: bool = False):
         |team_box                  |Boolean                                                |
         |player_box                |Boolean                                                |
 
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2002.
+
     Example:
         Quick start::
 
@@ -442,6 +451,9 @@ def load_wnba_team_boxscore(seasons, return_as_pandas: bool = False):
         |opponent_team_logo                |String                                                 |
         |opponent_team_score               |Int32                                                  |
 
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2002.
+
     Example:
         Quick start::
 
@@ -517,6 +529,9 @@ def load_wnba_draft(seasons, return_as_pandas: bool = False):
         |team_alternate_color          |String |
         |team_logo                     |String |
 
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2026.
+
     Example:
         Quick start::
 
@@ -579,6 +594,9 @@ def load_wnba_game_rosters(seasons, return_as_pandas: bool = False):
         |ejected              |Boolean |
         |reason               |String  |
 
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2024.
+
     Example:
         Quick start::
 
@@ -629,6 +647,9 @@ def load_wnba_officials(seasons, return_as_pandas: bool = False):
         |official_order        |Int32  |
         |position_name         |String |
         |position_display_name |String |
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2024.
 
     Example:
         Quick start::
@@ -685,6 +706,9 @@ def load_wnba_player_season_stats(seasons, return_as_pandas: bool = False):
         |stat_description              |String  |
         |display_value                 |String  |
         |value                         |Float64 |
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2024.
 
     Example:
         Quick start::
@@ -762,6 +786,9 @@ def load_wnba_rosters(seasons, return_as_pandas: bool = False):
         |status_name              |String |
         |status_type              |String |
 
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2024.
+
     Example:
         Quick start::
 
@@ -821,6 +848,9 @@ def load_wnba_shots(seasons, return_as_pandas: bool = False):
         |team_name           |String  |
         |team_mascot         |String  |
         |team_abbrev         |String  |
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2024.
 
     Example:
         Quick start::
@@ -886,6 +916,9 @@ def load_wnba_standings(seasons, return_as_pandas: bool = False):
         |display_value           |String  |
         |value                   |Float64 |
 
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2024.
+
     Example:
         Quick start::
 
@@ -941,6 +974,9 @@ def load_wnba_team_season_stats(seasons, return_as_pandas: bool = False):
         |stat_description        |String  |
         |display_value           |String  |
         |value                   |Float64 |
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2024.
 
     Example:
         Quick start::
@@ -1003,6 +1039,9 @@ def load_wnba_player_crosswalk(seasons, return_as_pandas: bool = False):
         |match_confidence   |Float64 |
         |match_keys         |String  |
 
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2026.
+
     Example:
         Quick start::
 
@@ -1058,6 +1097,9 @@ def load_wnba_schedule_crosswalk(seasons, return_as_pandas: bool = False):
         |yahoo_game_id     |String  |
         |match_method      |String  |
         |match_confidence  |Float64 |
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2026.
 
     Example:
         Quick start::
@@ -1117,6 +1159,9 @@ def load_wnba_team_crosswalk(seasons, return_as_pandas: bool = False):
         |yahoo_team_name         |String  |
         |match_method            |String  |
         |match_confidence        |Float64 |
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2026.
 
     Example:
         Quick start::
@@ -1194,6 +1239,9 @@ def load_wnba_player_core(seasons, return_as_pandas: bool = False):
         |draft_selection       |Int32   |
         |active                |Boolean |
 
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2003.
+
     Example:
         Quick start::
 
@@ -1262,6 +1310,9 @@ def load_wnba_player_impact(seasons, return_as_pandas: bool = False):
         |darko_projected_rating |Float64 |
         |darko_projected_sd     |Float64 |
 
+    Raises:
+        SeasonNotFoundError: if a requested season is below 1997.
+
     Example:
         Quick start::
 
@@ -1312,6 +1363,9 @@ def load_wnba_stats_coaches(seasons, return_as_pandas: bool = False):
         |sort_sequence     |Null   |
         |sub_sort_sequence |Int64  |
         |season_type       |String |
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2026.
 
     Example:
         Quick start::
@@ -1367,6 +1421,9 @@ def load_wnba_stats_draft(seasons, return_as_pandas: bool = False):
         |organization_type   |String |
         |player_profile_flag |Int64  |
 
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2025.
+
     Example:
         Quick start::
 
@@ -1417,6 +1474,9 @@ def load_wnba_stats_game_rosters(seasons, return_as_pandas: bool = False):
         |season            |Int32  |
         |game_id           |String |
 
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2026.
+
     Example:
         Quick start::
 
@@ -1462,6 +1522,9 @@ def load_wnba_stats_officials(seasons, return_as_pandas: bool = False):
         |jersey_num  |String |
         |season      |Int32  |
         |game_id     |String |
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2026.
 
     Example:
         Quick start::
@@ -1527,6 +1590,9 @@ def load_wnba_stats_pbp(seasons, return_as_pandas: bool = False):
         |action_id       |Int64  |
         |game_id         |String |
         |season          |Int32  |
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2026.
 
     Example:
         Quick start::
@@ -1601,6 +1667,9 @@ def load_wnba_stats_player_boxscores(seasons, return_as_pandas: bool = False):
         |plus_minus_points         |Float64 |
         |game_id                   |String  |
         |season                    |Int32   |
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2026.
 
     Example:
         Quick start::
@@ -1677,6 +1746,9 @@ def load_wnba_stats_player_game_logs(seasons, return_as_pandas: bool = False):
         |fantasy_pts       |Float64 |
         |measure_type      |String  |
 
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2025.
+
     Example:
         Quick start::
 
@@ -1734,6 +1806,9 @@ def load_wnba_stats_rosters(seasons, return_as_pandas: bool = False):
         |how_acquired        |String  |
         |supplemental_status |Int64   |
         |season_type         |String  |
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2026.
 
     Example:
         Quick start::
@@ -1810,6 +1885,9 @@ def load_wnba_stats_schedules(seasons, return_as_pandas: bool = False):
         |fantasy_pts       |Float64 |
         |measure_type      |String  |
 
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2025.
+
     Example:
         Quick start::
 
@@ -1867,6 +1945,9 @@ def load_wnba_stats_shots(seasons, return_as_pandas: bool = False):
         |description   |String |
         |score_home    |String |
         |score_away    |String |
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2026.
 
     Example:
         Quick start::
@@ -1933,6 +2014,9 @@ def load_wnba_stats_team_boxscores(seasons, return_as_pandas: bool = False):
         |plus_minus_points         |Float64 |
         |game_id                   |String  |
         |season                    |Int32   |
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2026.
 
     Example:
         Quick start::

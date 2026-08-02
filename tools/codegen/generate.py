@@ -259,8 +259,26 @@ def _r_pkg_dict(league: str | None) -> dict:
     return d.get(pkg, {}) if pkg else {}
 
 
+#: Misspellings inherited from upstream R-package roxygen (nflfastR et al.).
+#: r_column_descriptions.yaml is REBUILT from those sources, so hand-editing it
+#: gets clobbered — correct at read time instead, one place for every render.
+_R_DESC_TYPO_FIXES = (
+    ("probabiity", "probability"),
+    ("indentifier", "identifier"),
+    ("identifcation", "identification"),
+    ("wheter", "whether"),
+)
+
+
+def _fix_desc_typos(text: str) -> str:
+    for bad, good in _R_DESC_TYPO_FIXES:
+        if bad in text:
+            text = text.replace(bad, good)
+    return text
+
+
 def _r_col_desc(league: str | None, col: str) -> str:
-    """Mined description for ``col`` for ``league``'s R package, else ``_merged``.
+    """Mined description for ``col`` for ``league``'s R package.
 
     Resolution: league package dict -> ``_merged`` union -> ``""``. ``league=None``
     (or a league with no package, e.g. pwhl) skips straight to ``_merged``."""
@@ -268,8 +286,12 @@ def _r_col_desc(league: str | None, col: str) -> str:
         return ""
     val = _r_pkg_dict(league).get(col)
     if val:
-        return val
-    return _r_col_descs().get("_merged", {}).get(col, "") or ""
+        return _fix_desc_typos(val)
+    # The cross-package ``_merged`` union CAN put another sport's phrasing on a
+    # column the league dict misses; known collisions are overridden in
+    # manual_column_descriptions.yaml (which wins over this fill) rather than
+    # dropping the fallback — blanket-blanking regressed ~800 described cells.
+    return _fix_desc_typos(_r_col_descs().get("_merged", {}).get(col, "") or "")
 
 
 _MANUAL_DESC_FILE = ROOT / "tools" / "codegen" / "manual_column_descriptions.yaml"
@@ -978,6 +1000,10 @@ def _build_loader_docstring(ld: spec.Loader) -> str:
         for c in cols:
             lines.append(f"    |{c['name'].ljust(width)} |{c['type'].ljust(twidth)} |")
     lines.append("")
+    if ld.min_season:
+        lines.append("Raises:")
+        lines.append(f"    SeasonNotFoundError: if a requested season is below {ld.min_season}.")
+        lines.append("")
     lines.append("Example:")
     lines.append("    Quick start::")
     lines.append("")
