@@ -5,6 +5,7 @@
 - [Unreleased](#unreleased)
   - [Docs — offline full-text search on the documentation site](#docs--offline-full-text-search-on-the-documentation-site)
   - [CI — docs site builds on GitHub Actions and publishes to `gh-pages`](#ci--docs-site-builds-on-github-actions-and-publishes-to-gh-pages)
+  - [New — `sportsdataverse.scrape.stats`: shared stats.nba.com / stats.wnba.com sweep engine (Phase 1)](#new--sportsdataversescrapestats-shared-statsnbacom--statswnbacom-sweep-engine-phase-1)
 - [0.0.74 Release: August 2, 2026](#0074-release-august-2-2026)
   - [CFB — the ridge opponent adjustment was a no-op (BREAKING rating change)](#cfb--the-ridge-opponent-adjustment-was-a-no-op-breaking-rating-change)
   - [CFB — ESPN's `-1` end-of-play yardline sentinel corrupted 2016 week 2](#cfb--espns--1-end-of-play-yardline-sentinel-corrupted-2016-week-2)
@@ -237,6 +238,30 @@ touch `docs/**` and force-publishes the output as a single orphan commit on
 the `gh-pages` branch. Hosting can then serve `gh-pages` as a plain static
 deploy (no build step on the hosting provider), which removes the heavyweight
 per-push Docusaurus build from Vercel.
+
+### New — `sportsdataverse.scrape.stats`: shared stats.nba.com / stats.wnba.com sweep engine (Phase 1)
+
+The scraping machinery that was copy-pasted between `hoopR-nba-stats-raw` and
+`wehoop-wnba-stats-raw` (and had drifted to byte-identical-or-nearly — 0–6 diff
+lines per file) now has one library home, per the 2026-08-02 pipeline audit's
+shared-engine decision:
+
+- `scrape/stats/proxy.py` — round-robin ProxyBonanza pool with quarantine +
+  outcome classification (`transport_err`/`blocked`/`blank` quarantine;
+  `server_err`/`notfound` never count against a proxy).
+- `scrape/stats/session_transport.py` — thread-local sticky-session
+  `curl_cffi` transport (Chrome impersonation; the hosts TLS/JA3-block plain
+  `requests` with a silent hang), in-session retry of the cheap `server_err`
+  class only.
+- `scrape/stats/observability.py` — sweep bookkeeping (endpoint outcome
+  ledger, degradation windows, progress heartbeat).
+
+Deliberately **not** re-exported at the top-level `sportsdataverse` namespace —
+this is producer-pipeline tooling, not the tidy-data API. The `-raw` twins
+migrate to these imports next (deleting their local copies); league-specific
+endpoint sets / season formats stay repo-side until Phase 2's `LeagueConfig`.
+All three modules are typed (mypy ratchet) and covered by the ported offline
+observability suite plus a proxy-classifier truth table (23 tests).
 
 ## 0.0.74 Release: August 2, 2026
 
