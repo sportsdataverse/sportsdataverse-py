@@ -1339,7 +1339,25 @@ class CFBPlayProcess(object):
                 .alias("end.yard"),
             )
             .with_columns(
-                pl.when(pl.col("end.yardLine").is_null() == False)
+                # ESPN uses -1 as a MISSING marker for end.yardsToEndzone, not as a
+                # yardline. Guarding only on `end.yardLine is not null` let that
+                # sentinel straight through, because ESPN populates end.yardLine
+                # perfectly well on exactly those plays -- the fallback below never
+                # fired for the case it exists to handle.
+                #
+                # 2016 week 2 shipped that way: 72 of 75 games carry -1 on ~every
+                # play (SMU @ Baylor: 238 of 238), while start.yardsToEndzone has 81
+                # distinct values and no sentinel, and end.yardLine has 83 distinct
+                # values and no nulls. Downstream that produced end.yardsToEndzone
+                # ~99, so EP_end was scored as if the offense were on its own 1-yard
+                # line after every snap and EPA ran about -2.6/play. It reached the
+                # published percentiles as a 1st-percentile early-down EPA of -2.97,
+                # roughly six times every neighbouring season.
+                #
+                # A re-scrape does NOT fix this -- the committed raw is byte-identical
+                # to what ESPN serves today. The recovery is local: `end.yard` is the
+                # possession-adjusted yardline this branch already falls back to.
+                pl.when((pl.col("end.yardLine").is_null() == False).and_(pl.col("end.yardsToEndzone") >= 0))
                 .then(pl.col("end.yardsToEndzone"))
                 .otherwise(pl.col("end.yard"))
                 .alias("end.yardsToEndzone"),
