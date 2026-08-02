@@ -300,6 +300,8 @@ from sportsdataverse.mlb import load_mlb_stuff_plus as load_mlb_stuff_plus  # no
 from sportsdataverse.mlb import load_mlb_we_table as load_mlb_we_table  # noqa: F401
 from sportsdataverse.mlb import load_mlb_wpa as load_mlb_wpa  # noqa: F401
 from sportsdataverse.mlb import load_mlb_xera as load_mlb_xera  # noqa: F401
+from sportsdataverse.mlb import load_ncaa_baseball_pbp as load_ncaa_baseball_pbp  # noqa: F401
+from sportsdataverse.mlb import load_ncaa_baseball_schedule as load_ncaa_baseball_schedule  # noqa: F401
 from sportsdataverse.mlb import mae as mae  # noqa: F401
 from sportsdataverse.mlb import mlb_attendance as mlb_attendance  # noqa: F401
 from sportsdataverse.mlb import mlb_baserunning_value as mlb_baserunning_value  # noqa: F401
@@ -527,6 +529,8 @@ __all__ = [
     "load_mlb_we_table",
     "load_mlb_wpa",
     "load_mlb_xera",
+    "load_ncaa_baseball_pbp",
+    "load_ncaa_baseball_schedule",
     "mae",
     "mlb_all_star_ballot",
     "mlb_all_star_final_vote",

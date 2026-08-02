@@ -220,14 +220,34 @@ from sportsdataverse.nba import load_nba_game_rosters as load_nba_game_rosters  
 from sportsdataverse.nba import load_nba_officials as load_nba_officials  # noqa: F401
 from sportsdataverse.nba import load_nba_pbp as load_nba_pbp  # noqa: F401
 from sportsdataverse.nba import load_nba_player_boxscore as load_nba_player_boxscore  # noqa: F401
+from sportsdataverse.nba import load_nba_player_core as load_nba_player_core  # noqa: F401
+from sportsdataverse.nba import load_nba_player_crosswalk as load_nba_player_crosswalk  # noqa: F401
 from sportsdataverse.nba import load_nba_player_impact as load_nba_player_impact  # noqa: F401
 from sportsdataverse.nba import load_nba_player_season_stats as load_nba_player_season_stats  # noqa: F401
 from sportsdataverse.nba import load_nba_rosters as load_nba_rosters  # noqa: F401
 from sportsdataverse.nba import load_nba_schedule as load_nba_schedule  # noqa: F401
+from sportsdataverse.nba import load_nba_schedule_crosswalk as load_nba_schedule_crosswalk  # noqa: F401
 from sportsdataverse.nba import load_nba_shots as load_nba_shots  # noqa: F401
 from sportsdataverse.nba import load_nba_standings as load_nba_standings  # noqa: F401
+from sportsdataverse.nba import load_nba_stats_coaches as load_nba_stats_coaches  # noqa: F401
+from sportsdataverse.nba import load_nba_stats_game_rosters as load_nba_stats_game_rosters  # noqa: F401
+from sportsdataverse.nba import load_nba_stats_lineups as load_nba_stats_lineups  # noqa: F401
+from sportsdataverse.nba import load_nba_stats_lineups_v3 as load_nba_stats_lineups_v3  # noqa: F401
+from sportsdataverse.nba import load_nba_stats_officials as load_nba_stats_officials  # noqa: F401
+from sportsdataverse.nba import load_nba_stats_pbp as load_nba_stats_pbp  # noqa: F401
+from sportsdataverse.nba import load_nba_stats_pbp_v3 as load_nba_stats_pbp_v3  # noqa: F401
+from sportsdataverse.nba import load_nba_stats_player_boxscores as load_nba_stats_player_boxscores  # noqa: F401
+from sportsdataverse.nba import load_nba_stats_player_game_logs as load_nba_stats_player_game_logs  # noqa: F401
+from sportsdataverse.nba import load_nba_stats_player_season_stats as load_nba_stats_player_season_stats  # noqa: F401
+from sportsdataverse.nba import load_nba_stats_possessions_v3 as load_nba_stats_possessions_v3  # noqa: F401
+from sportsdataverse.nba import load_nba_stats_rosters as load_nba_stats_rosters  # noqa: F401
 from sportsdataverse.nba import load_nba_stats_schedules as load_nba_stats_schedules  # noqa: F401
+from sportsdataverse.nba import load_nba_stats_shots as load_nba_stats_shots  # noqa: F401
+from sportsdataverse.nba import load_nba_stats_standings as load_nba_stats_standings  # noqa: F401
+from sportsdataverse.nba import load_nba_stats_team_boxscores as load_nba_stats_team_boxscores  # noqa: F401
+from sportsdataverse.nba import load_nba_stats_team_season_stats as load_nba_stats_team_season_stats  # noqa: F401
 from sportsdataverse.nba import load_nba_team_boxscore as load_nba_team_boxscore  # noqa: F401
+from sportsdataverse.nba import load_nba_team_crosswalk as load_nba_team_crosswalk  # noqa: F401
 from sportsdataverse.nba import load_nba_team_season_stats as load_nba_team_season_stats  # noqa: F401
 from sportsdataverse.nba import load_rapm_ryan_davis as load_rapm_ryan_davis  # noqa: F401
 from sportsdataverse.nba import luck_adjusted_response as luck_adjusted_response  # noqa: F401
@@ -503,14 +523,34 @@ __all__ = [
     "load_nba_officials",
     "load_nba_pbp",
     "load_nba_player_boxscore",
+    "load_nba_player_core",
+    "load_nba_player_crosswalk",
     "load_nba_player_impact",
     "load_nba_player_season_stats",
     "load_nba_rosters",
     "load_nba_schedule",
+    "load_nba_schedule_crosswalk",
     "load_nba_shots",
     "load_nba_standings",
+    "load_nba_stats_coaches",
+    "load_nba_stats_game_rosters",
+    "load_nba_stats_lineups",
+    "load_nba_stats_lineups_v3",
+    "load_nba_stats_officials",
+    "load_nba_stats_pbp",
+    "load_nba_stats_pbp_v3",
+    "load_nba_stats_player_boxscores",
+    "load_nba_stats_player_game_logs",
+    "load_nba_stats_player_season_stats",
+    "load_nba_stats_possessions_v3",
+    "load_nba_stats_rosters",
     "load_nba_stats_schedules",
+    "load_nba_stats_shots",
+    "load_nba_stats_standings",
+    "load_nba_stats_team_boxscores",
+    "load_nba_stats_team_season_stats",
     "load_nba_team_boxscore",
+    "load_nba_team_crosswalk",
     "load_nba_team_season_stats",
     "load_rapm_ryan_davis",
     "luck_adjusted_response",

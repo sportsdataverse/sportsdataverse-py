@@ -377,14 +377,18 @@ from sportsdataverse.mbb import load_mbb_game_rosters as load_mbb_game_rosters  
 from sportsdataverse.mbb import load_mbb_officials as load_mbb_officials  # noqa: F401
 from sportsdataverse.mbb import load_mbb_pbp as load_mbb_pbp  # noqa: F401
 from sportsdataverse.mbb import load_mbb_player_boxscore as load_mbb_player_boxscore  # noqa: F401
+from sportsdataverse.mbb import load_mbb_player_core as load_mbb_player_core  # noqa: F401
+from sportsdataverse.mbb import load_mbb_player_crosswalk as load_mbb_player_crosswalk  # noqa: F401
 from sportsdataverse.mbb import load_mbb_player_season_stats as load_mbb_player_season_stats  # noqa: F401
 from sportsdataverse.mbb import load_mbb_player_value as load_mbb_player_value  # noqa: F401
 from sportsdataverse.mbb import load_mbb_ratings as load_mbb_ratings  # noqa: F401
 from sportsdataverse.mbb import load_mbb_rosters as load_mbb_rosters  # noqa: F401
 from sportsdataverse.mbb import load_mbb_schedule as load_mbb_schedule  # noqa: F401
+from sportsdataverse.mbb import load_mbb_schedule_crosswalk as load_mbb_schedule_crosswalk  # noqa: F401
 from sportsdataverse.mbb import load_mbb_shots as load_mbb_shots  # noqa: F401
 from sportsdataverse.mbb import load_mbb_standings as load_mbb_standings  # noqa: F401
 from sportsdataverse.mbb import load_mbb_team_boxscore as load_mbb_team_boxscore  # noqa: F401
+from sportsdataverse.mbb import load_mbb_team_crosswalk as load_mbb_team_crosswalk  # noqa: F401
 from sportsdataverse.mbb import load_mbb_team_season_stats as load_mbb_team_season_stats  # noqa: F401
 from sportsdataverse.mbb import load_proxybonanza_pool as load_proxybonanza_pool  # noqa: F401
 from sportsdataverse.mbb import log_loss_score as log_loss_score  # noqa: F401
@@ -902,14 +906,18 @@ __all__ = [
     "load_mbb_officials",
     "load_mbb_pbp",
     "load_mbb_player_boxscore",
+    "load_mbb_player_core",
+    "load_mbb_player_crosswalk",
     "load_mbb_player_season_stats",
     "load_mbb_player_value",
     "load_mbb_ratings",
     "load_mbb_rosters",
     "load_mbb_schedule",
+    "load_mbb_schedule_crosswalk",
     "load_mbb_shots",
     "load_mbb_standings",
     "load_mbb_team_boxscore",
+    "load_mbb_team_crosswalk",
     "load_mbb_team_season_stats",
     "load_proxybonanza_pool",
     "log_loss_score",

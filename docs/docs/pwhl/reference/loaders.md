@@ -294,7 +294,7 @@ Release: [pwhl_game_info](https://github.com/sportsdataverse/sportsdataverse-dat
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | Int32 | Unique game identifier. |
+| `game_id` | Int64 | Unique game identifier. |
 | `game_number` | String | Game number within the schedule. |
 | `game_date` | String | Game date. |
 | `game_date_iso` | String | ISO-8601 game start datetime. |
@@ -302,20 +302,20 @@ Release: [pwhl_game_info](https://github.com/sportsdataverse/sportsdataverse-dat
 | `end_time` | String | Shift end time (MM:SS countdown clock). |
 | `game_duration` | String | Game length (H:MM). |
 | `game_venue` | String | Venue where the game was played. |
-| `attendance` | Int32 | Game attendance. |
+| `attendance` | Int64 | Game attendance. |
 | `game_status` | String | Game status text. |
-| `game_season_id` | Int32 | HockeyTech season identifier. |
-| `started` | Int32 | Flag for whether the game has started. |
-| `final` | Int32 | Flag for whether the game is final. |
-| `home_team_id` | Int32 | Home team identifier. |
+| `game_season_id` | Int64 | HockeyTech season identifier. |
+| `started` | Int64 | Flag for whether the game has started. |
+| `final` | Int64 | Flag for whether the game is final. |
+| `home_team_id` | Int64 | Home team identifier. |
 | `home_team` | String | Home team name. |
 | `home_team_abbr` | String | Home team abbreviation. |
-| `home_score` | Int32 | Home team final score. |
-| `away_team_id` | Int32 | Away team identifier. |
+| `home_score` | Int64 | Home team final score. |
+| `away_team_id` | Int64 | Away team identifier. |
 | `away_team` | String | Away team name. |
 | `away_team_abbr` | String | Away team abbreviation. |
-| `away_score` | Int32 | Away team final score. |
-| `has_shootout` | Int32 | Flag for whether the game went to shootout. |
+| `away_score` | Int64 | Away team final score. |
+| `has_shootout` | Int64 | Flag for whether the game went to shootout. |
 | `game_report_url` | String | URL to the game report. |
 | `boxscore_url` | String | URL to the boxscore. |
 
@@ -330,19 +330,19 @@ Release: [pwhl_game_rosters](https://github.com/sportsdataverse/sportsdataverse-
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | Int32 | Unique game identifier. |
-| `team_id` | Int32 | Unique team identifier. |
+| `game_id` | Int64 | Unique game identifier. |
+| `team_id` | Int64 | Unique team identifier. |
 | `team` | String | Team name. |
 | `team_abbr` | String | Team abbreviation. |
 | `team_side` | String | Home or away indicator. |
 | `player_type` | String | Player type (skater or goalie). |
-| `player_id` | Int32 | Unique player identifier. |
+| `player_id` | Int64 | Unique player identifier. |
 | `first_name` | String | Player first name. |
 | `last_name` | String | Player last name. |
-| `jersey_number` | Int32 | Jersey number. |
+| `jersey_number` | Int64 | Jersey number. |
 | `position` | String | Player position. |
 | `birth_date` | String | Player birth date. |
-| `starting` | Int32 | Whether the player started the game. |
+| `starting` | Int64 | Whether the player started the game. |
 | `status` | String | Status string (e.g. captain markers). |
 
 ```python
@@ -356,20 +356,20 @@ Release: [pwhl_shifts](https://github.com/sportsdataverse/sportsdataverse-data/r
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | Int32 | Unique game identifier. |
-| `player_id` | Int32 | Unique player identifier. |
+| `game_id` | Int64 | Unique game identifier. |
+| `player_id` | Int64 | Unique player identifier. |
 | `first_name` | String | Player first name. |
 | `last_name` | String | Player last name. |
-| `jersey_number` | Int32 | Jersey number. |
-| `home` | Int32 | Whether the player's team was home. |
-| `period` | Int32 | Period number. |
+| `jersey_number` | String | Jersey number. |
+| `home` | Int64 | Whether the player's team was home. |
+| `period` | Int64 | Period number. |
 | `start_time` | String | Shift start time (MM:SS countdown clock). |
 | `end_time` | String | Shift end time (MM:SS countdown clock). |
 | `length` | String | Length of the streak in games. |
-| `start_s` | Int32 | Shift start in countdown seconds. |
-| `end_s` | Int32 | Shift end in countdown seconds. |
-| `goal_on_shift` | Int32 | 1 if a goal occurred during this shift, else 0. |
-| `penalty_on_shift` | Int32 | 1 if a penalty occurred during this shift, else 0. |
+| `start_s` | Int64 | Shift start in countdown seconds. |
+| `end_s` | Int64 | Shift end in countdown seconds. |
+| `goal_on_shift` | Int64 | 1 if a goal occurred during this shift, else 0. |
+| `penalty_on_shift` | Int64 | 1 if a penalty occurred during this shift, else 0. |
 
 ```python
 load_pwhl_shifts(seasons=2025)
@@ -386,23 +386,23 @@ Release: [pwhl_goalie_boxscores](https://github.com/sportsdataverse/sportsdatave
 | `first_name` | String | Player first name. |
 | `last_name` | String | Player last name. |
 | `position` | String | Player position. |
-| `team_id` | Int32 | Unique team identifier. |
-| `game_id` | Int32 | Unique game identifier. |
+| `team_id` | Int64 | Unique team identifier. |
+| `game_id` | Int64 | Unique game identifier. |
 | `league` | String | League code. |
 | `toi` | String | Time on ice. |
 | `time_on_ice` | Float64 | Time on ice in seconds. |
-| `saves` | Int32 | Saves made. |
-| `goals_against` | Int32 | Goals against. |
-| `shots_against` | Int32 | Shots faced. |
-| `goals` | Int32 | Goals scored. |
-| `assists` | Int32 | Assists. |
-| `points` | Int32 | Total points (goals + assists). |
-| `penalty_minutes` | Int32 | Penalty minutes. |
-| `faceoff_attempts` | Int32 | Faceoff attempts. |
-| `faceoff_wins` | Int32 | Faceoff wins. |
-| `faceoff_losses` | Int32 | Faceoff losses. |
-| `faceoff_pct` | Boolean | Faceoff win percentage. |
-| `starting` | Int32 | Whether the player started the game. |
+| `saves` | Int64 | Saves made. |
+| `goals_against` | Int64 | Goals against. |
+| `shots_against` | Int64 | Shots faced. |
+| `goals` | Int64 | Goals scored. |
+| `assists` | Int64 | Assists. |
+| `points` | Int64 | Total points (goals + assists). |
+| `penalty_minutes` | Int64 | Penalty minutes. |
+| `faceoff_attempts` | Int64 | Faceoff attempts. |
+| `faceoff_wins` | Int64 | Faceoff wins. |
+| `faceoff_losses` | Int64 | Faceoff losses. |
+| `faceoff_pct` | Null | Faceoff win percentage. |
+| `starting` | Int64 | Whether the player started the game. |
 
 ```python
 load_pwhl_goalie_boxscores(seasons=2024)
@@ -415,11 +415,11 @@ Release: [pwhl_officials](https://github.com/sportsdataverse/sportsdataverse-dat
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | Int32 | Unique game identifier. |
+| `game_id` | Int64 | Unique game identifier. |
 | `role` | String | Grouped official role (Referee/Linesperson). |
 | `first_name` | String | Player first name. |
 | `last_name` | String | Player last name. |
-| `jersey_number` | Int32 | Jersey number. |
+| `jersey_number` | Int64 | Jersey number. |
 | `official_role` | String | Official's specific role. |
 
 ```python
@@ -433,101 +433,110 @@ Release: [pwhl_pbp](https://github.com/sportsdataverse/sportsdataverse-data/rele
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | Int32 | Unique game identifier. |
+| `game_id` | Int64 | Unique game identifier. |
 | `event` | String | Event description label. |
-| `team_id` | Int32 | Unique team identifier. |
+| `team_id` | String | Unique team identifier. |
 | `period_of_game` | String | Period in which the event occurred. |
 | `time_of_period` | String | Elapsed time within the period (MM:SS). |
-| `player_id` | Int32 | Unique player identifier. |
+| `x_coord` | Float64 | Transformed x-coordinate of the event (feet scale). |
+| `y_coord` | Float64 | Transformed y-coordinate of the event (feet scale). |
+| `player_id` | Int64 | Unique player identifier. |
 | `player_name_first` | String | Primary player first name. |
 | `player_name_last` | String | Primary player last name. |
 | `player_position` | String | Primary player position. |
-| `player_two_id` | Int32 | Second player's unique identifier. |
-| `player_two_name_first` | String | Second player first name. |
-| `player_two_name_last` | String | Second player last name. |
-| `player_two_position` | String | Second player position. |
-| `x_coord` | Float64 | Transformed x-coordinate of the event (feet scale). |
-| `y_coord` | Float64 | Transformed y-coordinate of the event (feet scale). |
-| `home_win` | Int32 | Whether the home player won the faceoff. |
-| `player_team_id` | Int32 | Unique team identifier of the primary player. |
-| `event_type` | String | Standardized event type code. |
-| `shot_quality` | String | Shot quality descriptor. |
 | `goal` | Boolean | Flag for whether the event was a goal. |
-| `goalie_id` | Int32 | Goalie identifier on the play. |
+| `goalie_id` | Int64 | Goalie identifier on the play. |
 | `goalie_first` | String | Goalie first name. |
 | `goalie_last` | String | Goalie last name. |
-| `player_three_id` | Int32 | Third player's unique identifier. |
-| `player_three_name_first` | String | Third player first name. |
-| `player_three_name_last` | String | Third player last name. |
-| `player_three_position` | String | Third player position. |
+| `home_win` | String | Whether the home player won the faceoff. |
+| `player_team_id` | String | Unique team identifier of the primary player. |
+| `event_type` | String | Standardized event type code. |
+| `shot_quality` | String | Shot quality descriptor. |
 | `empty_net` | String | Whether the net was empty. |
 | `game_winner` | String | Whether the goal was the game-winning goal. |
 | `penalty_shot` | String | Whether the goal came on a penalty shot. |
 | `insurance` | String | Whether the goal was an insurance goal. |
-| `power_play` | Int32 | Whether the event occurred on a power play. |
 | `short_handed` | String | Whether the event occurred while short-handed. |
-| `plus_player_one_id` | Int32 | On-ice plus player one unique identifier. |
+| `power_play` | String | Whether the event occurred on a power play. |
+| `player_two_id` | Int64 | Second player's unique identifier. |
+| `player_two_name_first` | String | Second player first name. |
+| `player_two_name_last` | String | Second player last name. |
+| `player_two_position` | String | Second player position. |
+| `player_three_id` | Int64 | Third player's unique identifier. |
+| `player_three_name_first` | String | Third player first name. |
+| `player_three_name_last` | String | Third player last name. |
+| `player_three_position` | String | Third player position. |
+| `plus_player_one_id` | Int64 | On-ice plus player one unique identifier. |
 | `plus_player_one_first` | String | On-ice plus player one first name. |
 | `plus_player_one_last` | String | On-ice plus player one last name. |
 | `plus_player_one_position` | String | On-ice plus player one position. |
-| `plus_player_two_id` | Int32 | On-ice plus player two unique identifier. |
+| `plus_player_two_id` | Int64 | On-ice plus player two unique identifier. |
 | `plus_player_two_first` | String | On-ice plus player two first name. |
 | `plus_player_two_last` | String | On-ice plus player two last name. |
 | `plus_player_two_position` | String | On-ice plus player two position. |
-| `plus_player_three_id` | Int32 | On-ice plus player three unique identifier. |
+| `plus_player_three_id` | Int64 | On-ice plus player three unique identifier. |
 | `plus_player_three_first` | String | On-ice plus player three first name. |
 | `plus_player_three_last` | String | On-ice plus player three last name. |
 | `plus_player_three_position` | String | On-ice plus player three position. |
-| `plus_player_four_id` | Int32 | On-ice plus player four unique identifier. |
+| `plus_player_four_id` | Int64 | On-ice plus player four unique identifier. |
 | `plus_player_four_first` | String | On-ice plus player four first name. |
 | `plus_player_four_last` | String | On-ice plus player four last name. |
 | `plus_player_four_position` | String | On-ice plus player four position. |
-| `plus_player_five_id` | Int32 | On-ice plus player five unique identifier. |
+| `plus_player_five_id` | Int64 | On-ice plus player five unique identifier. |
 | `plus_player_five_first` | String | On-ice plus player five first name. |
 | `plus_player_five_last` | String | On-ice plus player five last name. |
 | `plus_player_five_position` | String | On-ice plus player five position. |
-| `minus_player_one_id` | Int32 | On-ice minus player one unique identifier. |
+| `minus_player_one_id` | Int64 | On-ice minus player one unique identifier. |
 | `minus_player_one_first` | String | On-ice minus player one first name. |
 | `minus_player_one_last` | String | On-ice minus player one last name. |
 | `minus_player_one_position` | String | On-ice minus player one position. |
-| `minus_player_two_id` | Int32 | On-ice minus player two unique identifier. |
+| `minus_player_two_id` | Int64 | On-ice minus player two unique identifier. |
 | `minus_player_two_first` | String | On-ice minus player two first name. |
 | `minus_player_two_last` | String | On-ice minus player two last name. |
 | `minus_player_two_position` | String | On-ice minus player two position. |
-| `minus_player_three_id` | Int32 | On-ice minus player three unique identifier. |
+| `minus_player_three_id` | Int64 | On-ice minus player three unique identifier. |
 | `minus_player_three_first` | String | On-ice minus player three first name. |
 | `minus_player_three_last` | String | On-ice minus player three last name. |
 | `minus_player_three_position` | String | On-ice minus player three position. |
-| `minus_player_four_id` | Int32 | On-ice minus player four unique identifier. |
+| `minus_player_four_id` | Int64 | On-ice minus player four unique identifier. |
 | `minus_player_four_first` | String | On-ice minus player four first name. |
 | `minus_player_four_last` | String | On-ice minus player four last name. |
 | `minus_player_four_position` | String | On-ice minus player four position. |
-| `minus_player_five_id` | Int32 | On-ice minus player five unique identifier. |
+| `minus_player_five_id` | Int64 | On-ice minus player five unique identifier. |
 | `minus_player_five_first` | String | On-ice minus player five first name. |
 | `minus_player_five_last` | String | On-ice minus player five last name. |
 | `minus_player_five_position` | String | On-ice minus player five position. |
 | `penalty_length` | String | Penalty length in minutes. |
 | `game_date` | String | Game date. |
-| `game_season` | Int32 | Season (concluding year, YYYY). |
+| `game_season` | Int64 | Season (concluding year, YYYY). |
 | `game_season_id` | String | HockeyTech season identifier. |
-| `home_team_id` | Int32 | Home team identifier. |
 | `home_team` | String | Home team name. |
-| `away_team_id` | Int32 | Away team identifier. |
+| `home_team_id` | String | Home team identifier. |
 | `away_team` | String | Away team name. |
-| `x_coord_original` | Int32 | Original raw x-coordinate from the feed. |
-| `y_coord_original` | Int32 | Original raw y-coordinate from the feed. |
-| `x_coord_neutral` | Int32 | Neutral-zone-centered x-coordinate. |
-| `y_coord_neutral` | Int32 | Neutral-zone-centered y-coordinate. |
+| `away_team_id` | String | Away team identifier. |
+| `x_coord_original` | Int64 | Original raw x-coordinate from the feed. |
+| `y_coord_original` | Int64 | Original raw y-coordinate from the feed. |
+| `x_coord_neutral` | Int64 | Neutral-zone-centered x-coordinate. |
+| `y_coord_neutral` | Int64 | Neutral-zone-centered y-coordinate. |
 | `x_coord_fixed` | Float64 | Fixed-orientation x-coordinate. |
 | `y_coord_fixed` | Float64 | Fixed-orientation y-coordinate. |
 | `x_coord_right` | Float64 | Right-orientation x-coordinate. |
 | `y_coord_right` | Float64 | Right-orientation y-coordinate. |
 | `x_coord_vertical` | Float64 | Vertical-orientation x-coordinate. |
 | `y_coord_vertical` | Float64 | Vertical-orientation y-coordinate. |
-| `minute_start` | Int32 | Minute mark of the period when the event started. |
-| `second_start` | Int32 | Second mark of the period when the event started. |
+| `minute_start` | Int64 | Minute mark of the period when the event started. |
+| `second_start` | Int64 | Second mark of the period when the event started. |
 | `clock` | String | Game clock time remaining (MM:SS). |
-| `sec_from_start` | Int32 | Seconds elapsed since the start of the game. |
+| `sec_from_start` | Int64 | Seconds elapsed since the start of the game. |
+| `shot_distance` | Float64 | Distance of the shot from the net. |
+| `shot_angle` | Float64 | Angle of the shot relative to the net. |
+| `scoring_chance` | Boolean | TRUE when event is a shot-type within 25 ft of the net. |
+| `on_ice_home` | String | Comma-joined sorted player_ids on ice for the home team. |
+| `on_ice_away` | String | Comma-joined sorted player_ids on ice for the away team. |
+| `skaters_home` | Int64 |  |
+| `skaters_away` | Int64 |  |
+| `strength_state` | String | Strength state (e.g. 5v5, 5v4). |
+| `strength_state_valid` | Boolean |  |
 
 ```python
 load_pwhl_pbp(seasons=2024)
@@ -573,24 +582,24 @@ Release: [pwhl_penalty_summary](https://github.com/sportsdataverse/sportsdataver
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | Int32 | Unique game identifier. |
-| `period_id` | Int32 | Period identifier. |
+| `game_id` | Int64 | Unique game identifier. |
+| `period_id` | Int64 | Period identifier. |
 | `period` | String | Period number. |
 | `time` | String | Game clock at infraction (MM:SS). |
-| `team_id` | Int32 | Unique team identifier. |
+| `team_id` | Int64 | Unique team identifier. |
 | `team` | String | Team name. |
 | `team_abbr` | String | Team abbreviation. |
-| `game_penalty_id` | Int32 | Penalty identifier within the game. |
-| `minutes` | Int32 | Penalty length in minutes. |
+| `game_penalty_id` | Int64 | Penalty identifier within the game. |
+| `minutes` | Int64 | Penalty length in minutes. |
 | `description` | String | Full text description of the event. |
 | `rule_number` | String | Rulebook rule number. |
-| `is_power_play` | Int32 | Power-play flag. |
-| `is_bench` | Int32 | Bench-minor flag. |
-| `taken_by_id` | Int32 | Identifier of the player who took the penalty. |
+| `is_power_play` | Int64 | Power-play flag. |
+| `is_bench` | Int64 | Bench-minor flag. |
+| `taken_by_id` | Int64 | Identifier of the player who took the penalty. |
 | `taken_by_first` | String | Offender first name. |
 | `taken_by_last` | String | Offender last name. |
 | `taken_by_position` | String | Offender position. |
-| `served_by_id` | Int32 | Identifier of the player serving the penalty. |
+| `served_by_id` | Int64 | Identifier of the player serving the penalty. |
 | `served_by_first` | String | First name of the player serving. |
 | `served_by_last` | String | Last name of the player serving. |
 
@@ -609,28 +618,28 @@ Release: [pwhl_player_boxscores](https://github.com/sportsdataverse/sportsdatave
 | `first_name` | String | Player first name. |
 | `last_name` | String | Player last name. |
 | `position` | String | Player position. |
-| `team_id` | Int32 | Unique team identifier. |
-| `game_id` | Int32 | Unique game identifier. |
+| `team_id` | Int64 | Unique team identifier. |
+| `game_id` | Int64 | Unique game identifier. |
 | `league` | String | League code. |
 | `toi` | String | Time on ice. |
 | `time_on_ice` | Float64 | Time on ice in seconds. |
-| `goals` | Int32 | Goals scored. |
-| `assists` | Int32 | Assists. |
-| `points` | Int32 | Total points (goals + assists). |
-| `shots` | Int32 | Shots on goal. |
-| `hits` | Int32 | Hits. |
-| `blocked_shots` | Int32 | Blocked shots. |
-| `penalty_minutes` | Int32 | Penalty minutes. |
-| `plus_minus` | Int32 | Plus/minus rating. |
-| `faceoff_attempts` | Int32 | Faceoff attempts. |
-| `faceoff_wins` | Int32 | Faceoff wins. |
-| `faceoff_losses` | Int32 | Faceoff losses. |
+| `goals` | Int64 | Goals scored. |
+| `assists` | Int64 | Assists. |
+| `points` | Int64 | Total points (goals + assists). |
+| `shots` | Int64 | Shots on goal. |
+| `hits` | Int64 | Hits. |
+| `blocked_shots` | Int64 | Blocked shots. |
+| `penalty_minutes` | Int64 | Penalty minutes. |
+| `plus_minus` | Int64 | Plus/minus rating. |
+| `faceoff_attempts` | Int64 | Faceoff attempts. |
+| `faceoff_wins` | Int64 | Faceoff wins. |
+| `faceoff_losses` | Int64 | Faceoff losses. |
 | `faceoff_pct` | Float64 | Faceoff win percentage. |
-| `starting` | Int32 | Whether the player started the game. |
+| `starting` | Int64 | Whether the player started the game. |
 | `player_type` | String | Player type (skater or goalie). |
-| `saves` | Int32 | Saves made. |
-| `goals_against` | Int32 | Goals against. |
-| `shots_against` | Int32 | Shots faced. |
+| `saves` | Int64 | Saves made. |
+| `goals_against` | Int64 | Goals against. |
+| `shots_against` | Int64 | Shots faced. |
 
 ```python
 load_pwhl_player_boxscores(seasons=2024)
@@ -708,33 +717,33 @@ Release: [pwhl_scoring_summary](https://github.com/sportsdataverse/sportsdataver
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | Int32 | Unique game identifier. |
-| `period_id` | Int32 | Period identifier. |
+| `game_id` | Int64 | Unique game identifier. |
+| `period_id` | Int64 | Period identifier. |
 | `period` | String | Period number. |
 | `time` | String | Game clock at infraction (MM:SS). |
-| `team_id` | Int32 | Unique team identifier. |
+| `team_id` | Int64 | Unique team identifier. |
 | `team` | String | Team name. |
 | `team_abbr` | String | Team abbreviation. |
-| `game_goal_id` | Int32 | Goal identifier within the game. |
-| `scorer_goal_number` | Int32 | Scorer's season goal number. |
-| `scorer_id` | Int32 | Identifier of the goal scorer. |
+| `game_goal_id` | Int64 | Goal identifier within the game. |
+| `scorer_goal_number` | Int64 | Scorer's season goal number. |
+| `scorer_id` | Int64 | Identifier of the goal scorer. |
 | `scorer_first` | String | Scorer first name. |
 | `scorer_last` | String | Scorer last name. |
 | `scorer_position` | String | Scorer position. |
-| `assist_1_id` | Int32 | Primary assist player identifier. |
+| `assist_1_id` | Int64 | Primary assist player identifier. |
 | `assist_1_first` | String | Primary assist first name. |
 | `assist_1_last` | String | Primary assist last name. |
-| `assist_2_id` | Int32 | Secondary assist player identifier. |
+| `assist_2_id` | Int64 | Secondary assist player identifier. |
 | `assist_2_first` | String | Secondary assist first name. |
 | `assist_2_last` | String | Secondary assist last name. |
-| `is_power_play` | Int32 | Power-play flag. |
-| `is_short_handed` | Int32 | Short-handed flag. |
-| `is_empty_net` | Int32 | Empty-net flag. |
-| `is_penalty_shot` | Int32 | Penalty-shot flag. |
-| `is_insurance` | Int32 | Insurance-goal flag. |
-| `is_game_winning` | Int32 | Game-winning-goal flag. |
-| `x_location` | Boolean | Goal x-coordinate on the ice. |
-| `y_location` | Boolean | Goal y-coordinate on the ice. |
+| `is_power_play` | Int64 | Power-play flag. |
+| `is_short_handed` | Int64 | Short-handed flag. |
+| `is_empty_net` | Int64 | Empty-net flag. |
+| `is_penalty_shot` | Int64 | Penalty-shot flag. |
+| `is_insurance` | Int64 | Insurance-goal flag. |
+| `is_game_winning` | Int64 | Game-winning-goal flag. |
+| `x_location` | Null | Goal x-coordinate on the ice. |
+| `y_location` | Null | Goal y-coordinate on the ice. |
 
 ```python
 load_pwhl_scoring_summary(seasons=2024)
@@ -747,16 +756,16 @@ Release: [pwhl_shootout](https://github.com/sportsdataverse/sportsdataverse-data
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | Int32 | Unique game identifier. |
-| `round` | Int32 | Shootout round number. |
+| `game_id` | Int64 | Unique game identifier. |
+| `round` | Int64 | Shootout round number. |
 | `team_side` | String | Home or away indicator. |
-| `shooter_id` | Int32 | Shooter player identifier. |
+| `shooter_id` | Int64 | Shooter player identifier. |
 | `shooter_first` | String | Shooter first name. |
 | `shooter_last` | String | Shooter last name. |
-| `goalie_id` | Int32 | Goalie identifier on the play. |
+| `goalie_id` | Int64 | Goalie identifier on the play. |
 | `goalie_first` | String | Goalie first name. |
 | `goalie_last` | String | Goalie last name. |
-| `is_goal` | Int32 | Whether the attempt scored (1/0). |
+| `is_goal` | Int64 | Whether the attempt scored (1/0). |
 
 ```python
 load_pwhl_shootout(seasons=2026)
@@ -769,13 +778,13 @@ Release: [pwhl_shots_by_period](https://github.com/sportsdataverse/sportsdataver
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | Int32 | Unique game identifier. |
-| `period_id` | Int32 | Period identifier. |
+| `game_id` | Int64 | Unique game identifier. |
+| `period_id` | Int64 | Period identifier. |
 | `period` | String | Period number. |
-| `home_goals` | Int32 | Home goals in the period. |
-| `home_shots` | Int32 | Home team shots in the period. |
-| `away_goals` | Int32 | Away goals in the period. |
-| `away_shots` | Int32 | Away team shots in the period. |
+| `home_goals` | Int64 | Home goals in the period. |
+| `home_shots` | Int64 | Home team shots in the period. |
+| `away_goals` | Int64 | Away goals in the period. |
+| `away_shots` | Int64 | Away team shots in the period. |
 
 ```python
 load_pwhl_shots_by_period(seasons=2024)
@@ -792,24 +801,24 @@ Release: [pwhl_skater_boxscores](https://github.com/sportsdataverse/sportsdatave
 | `first_name` | String | Player first name. |
 | `last_name` | String | Player last name. |
 | `position` | String | Player position. |
-| `team_id` | Int32 | Unique team identifier. |
-| `game_id` | Int32 | Unique game identifier. |
+| `team_id` | Int64 | Unique team identifier. |
+| `game_id` | Int64 | Unique game identifier. |
 | `league` | String | League code. |
 | `toi` | String | Time on ice. |
 | `time_on_ice` | Float64 | Time on ice in seconds. |
-| `goals` | Int32 | Goals scored. |
-| `assists` | Int32 | Assists. |
-| `points` | Int32 | Total points (goals + assists). |
-| `shots` | Int32 | Shots on goal. |
-| `hits` | Int32 | Hits. |
-| `blocked_shots` | Int32 | Blocked shots. |
-| `penalty_minutes` | Int32 | Penalty minutes. |
-| `plus_minus` | Int32 | Plus/minus rating. |
-| `faceoff_attempts` | Int32 | Faceoff attempts. |
-| `faceoff_wins` | Int32 | Faceoff wins. |
-| `faceoff_losses` | Int32 | Faceoff losses. |
+| `goals` | Int64 | Goals scored. |
+| `assists` | Int64 | Assists. |
+| `points` | Int64 | Total points (goals + assists). |
+| `shots` | Int64 | Shots on goal. |
+| `hits` | Int64 | Hits. |
+| `blocked_shots` | Int64 | Blocked shots. |
+| `penalty_minutes` | Int64 | Penalty minutes. |
+| `plus_minus` | Int64 | Plus/minus rating. |
+| `faceoff_attempts` | Int64 | Faceoff attempts. |
+| `faceoff_wins` | Int64 | Faceoff wins. |
+| `faceoff_losses` | Int64 | Faceoff losses. |
 | `faceoff_pct` | Float64 | Faceoff win percentage. |
-| `starting` | Int32 | Whether the player started the game. |
+| `starting` | Int64 | Whether the player started the game. |
 
 ```python
 load_pwhl_skater_boxscores(seasons=2024)
@@ -822,28 +831,28 @@ Release: [pwhl_team_boxscores](https://github.com/sportsdataverse/sportsdatavers
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | Int32 | Unique game identifier. |
-| `team_id` | Int32 | Unique team identifier. |
+| `game_id` | Int64 | Unique game identifier. |
+| `team_id` | Int64 | Unique team identifier. |
 | `team` | String | Team name. |
 | `team_abbr` | String | Team abbreviation. |
 | `team_side` | String | Home or away indicator. |
-| `shots` | Int32 | Shots on goal. |
-| `goals` | Int32 | Goals scored. |
-| `hits` | Int32 | Hits. |
-| `pp_goals` | Int32 | Power-play goals. |
-| `pp_opportunities` | Int32 | Power-play opportunities. |
-| `goal_count` | Int32 | Total goals recorded. |
-| `assist_count` | Int32 | Total assists recorded. |
-| `penalty_minutes` | Int32 | Penalty minutes. |
-| `infraction_count` | Int32 | Number of infractions. |
-| `faceoff_attempts` | Int32 | Faceoff attempts. |
-| `faceoff_wins` | Int32 | Faceoff wins. |
+| `shots` | Int64 | Shots on goal. |
+| `goals` | Int64 | Goals scored. |
+| `hits` | Int64 | Hits. |
+| `pp_goals` | Int64 | Power-play goals. |
+| `pp_opportunities` | Int64 | Power-play opportunities. |
+| `goal_count` | Int64 | Total goals recorded. |
+| `assist_count` | Int64 | Total assists recorded. |
+| `penalty_minutes` | Int64 | Penalty minutes. |
+| `infraction_count` | Int64 | Number of infractions. |
+| `faceoff_attempts` | Int64 | Faceoff attempts. |
+| `faceoff_wins` | Int64 | Faceoff wins. |
 | `faceoff_win_pct` | Float64 | Faceoff win percentage. |
-| `season_wins` | Int32 | Season wins entering/after the game. |
-| `season_losses` | Int32 | Season losses entering/after the game. |
-| `season_ot_wins` | Int32 | Season overtime wins. |
-| `season_ot_losses` | Int32 | Season overtime losses. |
-| `season_so_losses` | Int32 | Season shootout losses. |
+| `season_wins` | Int64 | Season wins entering/after the game. |
+| `season_losses` | Int64 | Season losses entering/after the game. |
+| `season_ot_wins` | Int64 | Season overtime wins. |
+| `season_ot_losses` | Int64 | Season overtime losses. |
+| `season_so_losses` | Int64 | Season shootout losses. |
 | `season_record` | String | Season record after this game. |
 
 ```python
@@ -857,25 +866,25 @@ Release: [pwhl_three_stars](https://github.com/sportsdataverse/sportsdataverse-d
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | Int32 | Unique game identifier. |
-| `star` | Int32 | Star ranking (1, 2, or 3). |
-| `team_id` | Int32 | Unique team identifier. |
+| `game_id` | Int64 | Unique game identifier. |
+| `star` | Int64 | Star ranking (1, 2, or 3). |
+| `team_id` | Int64 | Unique team identifier. |
 | `team` | String | Team name. |
 | `team_abbr` | String | Team abbreviation. |
-| `player_id` | Int32 | Unique player identifier. |
+| `player_id` | Int64 | Unique player identifier. |
 | `first_name` | String | Player first name. |
 | `last_name` | String | Player last name. |
-| `jersey_number` | Int32 | Jersey number. |
+| `jersey_number` | Int64 | Jersey number. |
 | `position` | String | Player position. |
-| `is_goalie` | Int32 | Goalie flag. |
-| `is_home` | Int32 | Home-team flag. |
-| `goals` | Int32 | Goals scored. |
-| `assists` | Int32 | Assists. |
-| `points` | Int32 | Total points (goals + assists). |
-| `shots` | Int32 | Shots on goal. |
-| `saves` | Int32 | Saves made. |
-| `shots_against` | Int32 | Shots faced. |
-| `goals_against` | Int32 | Goals against. |
+| `is_goalie` | Int64 | Goalie flag. |
+| `is_home` | Int64 | Home-team flag. |
+| `goals` | Int64 | Goals scored. |
+| `assists` | Int64 | Assists. |
+| `points` | Int64 | Total points (goals + assists). |
+| `shots` | Int64 | Shots on goal. |
+| `saves` | Int64 | Saves made. |
+| `shots_against` | Int64 | Shots faced. |
+| `goals_against` | Int64 | Goals against. |
 | `time_on_ice` | String | Time on ice in seconds. |
 
 ```python

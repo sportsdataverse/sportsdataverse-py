@@ -1354,7 +1354,11 @@ def refresh_loader_schemas() -> int:
     for ld in rel.loaders:
         if ld.stub:
             continue
-        seasons = [ld.min_season or 2024, 2023, 2024, 2022, 2021]
+        # NEWEST season first: long-history loaders (cfb_pbp floor 2004,
+        # nba_stats floor 1996) have sparse early-era schemas, and capturing
+        # those shrinks the column inventory — orphaning manual descriptions
+        # and dropping columns from the docs. min_season is the last resort.
+        seasons = [2026, 2025, 2024, 2023, 2022, ld.min_season or 2024]
         got = None
         for s in dict.fromkeys(seasons):
             try:
@@ -1363,6 +1367,13 @@ def refresh_loader_schemas() -> int:
                 break
             except Exception:  # noqa: BLE001
                 continue
+        # id_int64 columns are cast at the loader boundary AFTER read, so the
+        # declared type is Int64 regardless of the parquet footer (enforced by
+        # tests/codegen/test_id_casts.py; a raw re-capture must not regress it).
+        if got is not None and getattr(ld, "id_int64", None):
+            for entry in got:
+                if entry["name"] in ld.id_int64:
+                    entry["type"] = "Int64"
         if got is None:
             failed.append(ld.fn)
         else:

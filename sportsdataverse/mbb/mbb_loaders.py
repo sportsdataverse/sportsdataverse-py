@@ -28,6 +28,10 @@ __all__ = [
     "load_mbb_officials",
     "load_mbb_game_rosters",
     "load_mbb_team_season_stats",
+    "load_mbb_player_crosswalk",
+    "load_mbb_schedule_crosswalk",
+    "load_mbb_team_crosswalk",
+    "load_mbb_player_core",
 ]
 
 
@@ -47,7 +51,7 @@ def load_mbb_pbp(seasons, return_as_pandas: bool = False):
         |col_name                       |type                                                   |
         |:------------------------------|:------------------------------------------------------|
         |game_play_number               |Int32                                                  |
-        |id                             |Float64                                                |
+        |id                             |Int64                                                  |
         |sequence_number                |Int32                                                  |
         |type_id                        |Int32                                                  |
         |type_text                      |String                                                 |
@@ -59,10 +63,15 @@ def load_mbb_pbp(seasons, return_as_pandas: bool = False):
         |clock_display_value            |String                                                 |
         |scoring_play                   |Boolean                                                |
         |score_value                    |Int32                                                  |
-        |team_id                        |Int32                                                  |
-        |athlete_id_1                   |Int32                                                  |
         |wallclock                      |String                                                 |
         |shooting_play                  |Boolean                                                |
+        |coordinate_x_raw               |Float64                                                |
+        |coordinate_y_raw               |Float64                                                |
+        |points_attempted               |Int32                                                  |
+        |short_description              |String                                                 |
+        |team_id                        |Int32                                                  |
+        |athlete_id_1                   |Int32                                                  |
+        |athlete_id_2                   |Int32                                                  |
         |game_id                        |Int32                                                  |
         |season                         |Int32                                                  |
         |season_type                    |Int32                                                  |
@@ -86,22 +95,21 @@ def load_mbb_pbp(seasons, return_as_pandas: bool = False):
         |clock_seconds                  |Int32                                                  |
         |home_timeout_called            |Boolean                                                |
         |away_timeout_called            |Boolean                                                |
+        |lag_period                     |Int32                                                  |
         |lead_period                    |Int32                                                  |
+        |lag_half                       |Int32                                                  |
         |lead_half                      |Int32                                                  |
         |start_period_seconds_remaining |Int32                                                  |
         |start_game_seconds_remaining   |Int32                                                  |
         |end_period_seconds_remaining   |Int32                                                  |
         |end_game_seconds_remaining     |Int32                                                  |
-        |lag_period                     |Int32                                                  |
-        |lag_half                       |Int32                                                  |
-        |athlete_id_2                   |Int32                                                  |
-        |game_date                      |Date                                                   |
-        |game_date_time                 |Datetime(time_unit='us', time_zone='America/New_York') |
-        |coordinate_x_raw               |Float64                                                |
-        |coordinate_y_raw               |Float64                                                |
         |coordinate_x                   |Float64                                                |
         |coordinate_y                   |Float64                                                |
-        |media_id                       |String                                                 |
+        |game_date                      |Date                                                   |
+        |game_date_time                 |Datetime(time_unit='us', time_zone='America/New_York') |
+        |athlete_name_1                 |String                                                 |
+        |athlete_name_2                 |String                                                 |
+        |athlete_name_3                 |String                                                 |
 
     Example:
         Quick start::
@@ -172,7 +180,6 @@ def load_mbb_player_boxscore(seasons, return_as_pandas: bool = False):
         |starter                           |Boolean                                                |
         |ejected                           |Boolean                                                |
         |did_not_play                      |Boolean                                                |
-        |active                            |Boolean                                                |
         |athlete_jersey                    |String                                                 |
         |athlete_short_name                |String                                                 |
         |athlete_headshot_href             |String                                                 |
@@ -197,6 +204,7 @@ def load_mbb_player_boxscore(seasons, return_as_pandas: bool = False):
         |opponent_team_color               |String                                                 |
         |opponent_team_alternate_color     |String                                                 |
         |opponent_team_score               |Int32                                                  |
+        |active                            |Boolean                                                |
 
     Example:
         Quick start::
@@ -244,17 +252,21 @@ def load_mbb_schedule(seasons, return_as_pandas: bool = False):
         |time_valid                |Boolean                                                |
         |neutral_site              |Boolean                                                |
         |conference_competition    |Boolean                                                |
+        |play_by_play_available    |Boolean                                                |
         |recent                    |Boolean                                                |
         |start_date                |String                                                 |
+        |broadcast                 |String                                                 |
+        |highlights                |String                                                 |
         |notes_type                |String                                                 |
         |notes_headline            |String                                                 |
+        |broadcast_market          |String                                                 |
+        |broadcast_name            |String                                                 |
         |type_id                   |Int32                                                  |
         |type_abbreviation         |String                                                 |
         |venue_id                  |Int32                                                  |
         |venue_full_name           |String                                                 |
         |venue_address_city        |String                                                 |
         |venue_address_state       |String                                                 |
-        |venue_capacity            |Float64                                                |
         |venue_indoor              |Boolean                                                |
         |status_clock              |Float64                                                |
         |status_display_clock      |String                                                 |
@@ -282,6 +294,9 @@ def load_mbb_schedule(seasons, return_as_pandas: bool = False):
         |home_conference_id        |Int32                                                  |
         |home_score                |Int32                                                  |
         |home_winner               |Boolean                                                |
+        |home_current_rank         |Float64                                                |
+        |home_linescores           |String                                                 |
+        |home_records              |String                                                 |
         |away_id                   |Int32                                                  |
         |away_uid                  |String                                                 |
         |away_location             |String                                                 |
@@ -297,17 +312,20 @@ def load_mbb_schedule(seasons, return_as_pandas: bool = False):
         |away_conference_id        |Int32                                                  |
         |away_score                |Int32                                                  |
         |away_winner               |Boolean                                                |
+        |away_current_rank         |Float64                                                |
+        |away_linescores           |String                                                 |
+        |away_records              |String                                                 |
         |game_id                   |Int32                                                  |
         |season                    |Int32                                                  |
         |season_type               |Int32                                                  |
         |status_type_alt_detail    |String                                                 |
+        |tournament_id             |Int32                                                  |
         |groups_id                 |Int32                                                  |
         |groups_name               |String                                                 |
         |groups_short_name         |String                                                 |
         |groups_is_conference      |Boolean                                                |
-        |tournament_id             |Int32                                                  |
         |game_json                 |Boolean                                                |
-        |game_json_url             |Boolean                                                |
+        |game_json_url             |String                                                 |
         |game_date_time            |Datetime(time_unit='us', time_zone='America/New_York') |
         |game_date                 |Date                                                   |
         |PBP                       |Boolean                                                |
@@ -375,6 +393,7 @@ def load_mbb_team_boxscore(seasons, return_as_pandas: bool = False):
         |assists                           |Int32                                                  |
         |blocks                            |Int32                                                  |
         |defensive_rebounds                |Int32                                                  |
+        |fast_break_points                 |String                                                 |
         |field_goal_pct                    |Float64                                                |
         |field_goals_made                  |Int32                                                  |
         |field_goals_attempted             |Int32                                                  |
@@ -385,6 +404,7 @@ def load_mbb_team_boxscore(seasons, return_as_pandas: bool = False):
         |free_throws_attempted             |Int32                                                  |
         |largest_lead                      |String                                                 |
         |offensive_rebounds                |Int32                                                  |
+        |points_in_paint                   |String                                                 |
         |steals                            |Int32                                                  |
         |team_turnovers                    |Int32                                                  |
         |technical_fouls                   |Int32                                                  |
@@ -394,6 +414,7 @@ def load_mbb_team_boxscore(seasons, return_as_pandas: bool = False):
         |total_rebounds                    |Int32                                                  |
         |total_technical_fouls             |Int32                                                  |
         |total_turnovers                   |Int32                                                  |
+        |turnover_points                   |String                                                 |
         |turnovers                         |Int32                                                  |
         |opponent_team_id                  |Int32                                                  |
         |opponent_team_uid                 |String                                                 |
@@ -407,6 +428,8 @@ def load_mbb_team_boxscore(seasons, return_as_pandas: bool = False):
         |opponent_team_alternate_color     |String                                                 |
         |opponent_team_logo                |String                                                 |
         |opponent_team_score               |Int32                                                  |
+        |lead_changes                      |String                                                 |
+        |lead_percentage                   |String                                                 |
 
     Example:
         Quick start::
@@ -561,6 +584,11 @@ def load_mbb_shots(seasons, return_as_pandas: bool = False):
         |coordinate_y        |Float64 |
         |coordinate_x_raw    |Float64 |
         |coordinate_y_raw    |Float64 |
+        |athlete_name_1      |String  |
+        |athlete_name_2      |String  |
+        |team_name           |String  |
+        |team_mascot         |String  |
+        |team_abbrev         |String  |
 
     Example:
         Quick start::
@@ -940,6 +968,254 @@ def load_mbb_team_season_stats(seasons, return_as_pandas: bool = False):
         frames.append(df)
     if missing:
         cli_warn("load_mbb_team_season_stats: no data for season(s) {missing} (skipped)".format(missing=missing))
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+def load_mbb_player_crosswalk(seasons, return_as_pandas: bool = False):
+    """Load mbb_crosswalk (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/mbb_crosswalk
+
+    Args:
+        seasons: an int or iterable of seasons (>= 2025).
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; seasons with no published asset are
+        skipped with a warning rather than raising (404-safe).
+
+        |col_name           |type    |
+        |:------------------|:-------|
+        |season             |Int32   |
+        |espn_team_id       |Int32   |
+        |team_abbreviation  |String  |
+        |player_name        |String  |
+        |espn_athlete_id    |String  |
+        |espn_full_name     |String  |
+        |espn_jersey        |String  |
+        |espn_position      |String  |
+        |fox_athlete_id     |String  |
+        |fox_player         |String  |
+        |fox_jersey         |String  |
+        |fox_position_group |String  |
+        |yahoo_player_id    |String  |
+        |yahoo_player_name  |String  |
+        |match_method       |String  |
+        |match_confidence   |Float64 |
+        |match_keys         |String  |
+
+    Example:
+        Quick start::
+
+            load_mbb_player_crosswalk(seasons=2026)
+    """
+    frames, missing = [], []
+    for season in _as_season_list(seasons):
+        if int(season) < 2025:
+            raise SeasonNotFoundError("season cannot be less than 2025")
+        df = _read_release_parquet(
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/mbb_crosswalk/mbb_player_crosswalk_{season}.parquet"
+        )
+        if df is None:
+            missing.append(season)
+            continue
+        frames.append(df)
+    if missing:
+        cli_warn("load_mbb_player_crosswalk: no data for season(s) {missing} (skipped)".format(missing=missing))
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+def load_mbb_schedule_crosswalk(seasons, return_as_pandas: bool = False):
+    """Load mbb_crosswalk (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/mbb_crosswalk
+
+    Args:
+        seasons: an int or iterable of seasons (>= 2025).
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; seasons with no published asset are
+        skipped with a warning rather than raising (404-safe).
+
+        |col_name          |type    |
+        |:-----------------|:-------|
+        |season            |Int32   |
+        |game_date         |Date    |
+        |home_espn_team_id |Int32   |
+        |away_espn_team_id |Int32   |
+        |espn_game_id      |String  |
+        |bart_muid         |String  |
+        |bart_team1        |String  |
+        |bart_team2        |String  |
+        |bart_winner       |String  |
+        |kp_game_id        |String  |
+        |fox_game_id       |String  |
+        |yahoo_game_id     |String  |
+        |match_method      |String  |
+        |match_confidence  |Float64 |
+
+    Example:
+        Quick start::
+
+            load_mbb_schedule_crosswalk(seasons=2026)
+    """
+    frames, missing = [], []
+    for season in _as_season_list(seasons):
+        if int(season) < 2025:
+            raise SeasonNotFoundError("season cannot be less than 2025")
+        df = _read_release_parquet(
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/mbb_crosswalk/mbb_schedule_crosswalk_{season}.parquet"
+        )
+        if df is None:
+            missing.append(season)
+            continue
+        frames.append(df)
+    if missing:
+        cli_warn("load_mbb_schedule_crosswalk: no data for season(s) {missing} (skipped)".format(missing=missing))
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+def load_mbb_team_crosswalk(seasons, return_as_pandas: bool = False):
+    """Load mbb_crosswalk (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/mbb_crosswalk
+
+    Args:
+        seasons: an int or iterable of seasons (>= 2025).
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; seasons with no published asset are
+        skipped with a warning rather than raising (404-safe).
+
+        |col_name              |type    |
+        |:---------------------|:-------|
+        |season                |Int32   |
+        |espn_team_id          |Int32   |
+        |espn_abbreviation     |String  |
+        |espn_display_name     |String  |
+        |espn_short_name       |String  |
+        |espn_location         |String  |
+        |espn_mascot           |String  |
+        |espn_conference       |String  |
+        |fox_team_id           |String  |
+        |fox_team_name         |String  |
+        |fox_section           |String  |
+        |bart_team             |String  |
+        |bart_conf             |String  |
+        |kp_team               |String  |
+        |kp_conf               |String  |
+        |yahoo_team_id         |String  |
+        |yahoo_team_name       |String  |
+        |fox_match_confidence  |Float64 |
+        |bart_match_confidence |Float64 |
+        |kp_match_confidence   |Float64 |
+        |match_method          |String  |
+
+    Example:
+        Quick start::
+
+            load_mbb_team_crosswalk(seasons=2026)
+    """
+    frames, missing = [], []
+    for season in _as_season_list(seasons):
+        if int(season) < 2025:
+            raise SeasonNotFoundError("season cannot be less than 2025")
+        df = _read_release_parquet(
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/mbb_crosswalk/mbb_team_crosswalk_{season}.parquet"
+        )
+        if df is None:
+            missing.append(season)
+            continue
+        frames.append(df)
+    if missing:
+        cli_warn("load_mbb_team_crosswalk: no data for season(s) {missing} (skipped)".format(missing=missing))
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+def load_mbb_player_core(seasons, return_as_pandas: bool = False):
+    """Load espn_mens_college_basketball_player_core (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_mens_college_basketball_player_core
+
+    Args:
+        seasons: an int or iterable of seasons (>= 2003).
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; seasons with no published asset are
+        skipped with a warning rather than raising (404-safe).
+
+        |col_name              |type    |
+        |:---------------------|:-------|
+        |season                |Int32   |
+        |athlete_id            |Int64   |
+        |guid                  |String  |
+        |uid                   |String  |
+        |slug                  |String  |
+        |type                  |String  |
+        |first_name            |String  |
+        |last_name             |String  |
+        |full_name             |String  |
+        |display_name          |String  |
+        |short_name            |String  |
+        |height                |Float64 |
+        |display_height        |String  |
+        |weight                |Float64 |
+        |display_weight        |String  |
+        |age                   |Int32   |
+        |date_of_birth         |String  |
+        |birth_city            |String  |
+        |birth_state           |String  |
+        |birth_country         |String  |
+        |jersey                |String  |
+        |position_id           |Int32   |
+        |position_name         |String  |
+        |position_abbreviation |String  |
+        |position_display_name |String  |
+        |college_id            |Int32   |
+        |current_team_id       |Int32   |
+        |headshot_href         |String  |
+        |experience_years      |Int32   |
+        |status_id             |Int32   |
+        |status_name           |String  |
+        |status_type           |String  |
+        |draft_year            |Int32   |
+        |draft_round           |Int32   |
+        |draft_selection       |Int32   |
+        |active                |Boolean |
+
+    Example:
+        Quick start::
+
+            load_mbb_player_core(seasons=2025)
+    """
+    frames, missing = [], []
+    for season in _as_season_list(seasons):
+        if int(season) < 2003:
+            raise SeasonNotFoundError("season cannot be less than 2003")
+        df = _read_release_parquet(
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_mens_college_basketball_player_core/player_core_{season}.parquet"
+        )
+        if df is None:
+            missing.append(season)
+            continue
+        frames.append(df)
+    if missing:
+        cli_warn("load_mbb_player_core: no data for season(s) {missing} (skipped)".format(missing=missing))
     # diagonal: per-season release schemas can drift (columns added/dropped
     # over the years) -- union columns, null-fill gaps.
     out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()

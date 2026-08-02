@@ -28,6 +28,10 @@ __all__ = [
     "load_wbb_shots",
     "load_wbb_standings",
     "load_wbb_team_season_stats",
+    "load_wbb_player_crosswalk",
+    "load_wbb_schedule_crosswalk",
+    "load_wbb_team_crosswalk",
+    "load_wbb_player_core",
 ]
 
 
@@ -46,8 +50,9 @@ def load_wbb_pbp(seasons, return_as_pandas: bool = False):
 
         |col_name                        |type                                                   |
         |:-------------------------------|:------------------------------------------------------|
-        |id                              |Float64                                                |
-        |sequence_number                 |String                                                 |
+        |game_play_number                |Int32                                                  |
+        |id                              |Int64                                                  |
+        |sequence_number                 |Int32                                                  |
         |type_id                         |Int32                                                  |
         |type_text                       |String                                                 |
         |text                            |String                                                 |
@@ -58,53 +63,58 @@ def load_wbb_pbp(seasons, return_as_pandas: bool = False):
         |clock_display_value             |String                                                 |
         |scoring_play                    |Boolean                                                |
         |score_value                     |Int32                                                  |
-        |team_id                         |Int32                                                  |
-        |athlete_id_1                    |Int32                                                  |
         |wallclock                       |String                                                 |
         |shooting_play                   |Boolean                                                |
+        |coordinate_x_raw                |Float64                                                |
+        |coordinate_y_raw                |Float64                                                |
+        |points_attempted                |Int32                                                  |
+        |short_description               |String                                                 |
+        |team_id                         |Int32                                                  |
+        |athlete_id_1                    |Int32                                                  |
+        |athlete_id_2                    |Int32                                                  |
+        |game_id                         |Int32                                                  |
         |season                          |Int32                                                  |
         |season_type                     |Int32                                                  |
-        |away_team_id                    |Int32                                                  |
-        |away_team_name                  |String                                                 |
-        |away_team_mascot                |String                                                 |
-        |away_team_abbrev                |String                                                 |
-        |away_team_name_alt              |String                                                 |
         |home_team_id                    |Int32                                                  |
         |home_team_name                  |String                                                 |
         |home_team_mascot                |String                                                 |
         |home_team_abbrev                |String                                                 |
         |home_team_name_alt              |String                                                 |
-        |home_team_spread                |Float64                                                |
+        |away_team_id                    |Int32                                                  |
+        |away_team_name                  |String                                                 |
+        |away_team_mascot                |String                                                 |
+        |away_team_abbrev                |String                                                 |
+        |away_team_name_alt              |String                                                 |
         |game_spread                     |Float64                                                |
         |home_favorite                   |Boolean                                                |
         |game_spread_available           |Boolean                                                |
-        |game_id                         |Int32                                                  |
+        |home_team_spread                |Float64                                                |
         |qtr                             |Int32                                                  |
         |time                            |String                                                 |
-        |clock_minutes                   |String                                                 |
-        |clock_seconds                   |String                                                 |
-        |half                            |String                                                 |
-        |game_half                       |String                                                 |
+        |clock_minutes                   |Int32                                                  |
+        |clock_seconds                   |Int32                                                  |
+        |home_timeout_called             |Boolean                                                |
+        |away_timeout_called             |Boolean                                                |
+        |half                            |Int32                                                  |
+        |game_half                       |Int32                                                  |
+        |lag_qtr                         |Int32                                                  |
         |lead_qtr                        |Int32                                                  |
-        |lead_game_half                  |String                                                 |
+        |lag_half                        |Int32                                                  |
+        |lead_half                       |Int32                                                  |
         |start_quarter_seconds_remaining |Int32                                                  |
         |start_half_seconds_remaining    |Int32                                                  |
         |start_game_seconds_remaining    |Int32                                                  |
-        |game_play_number                |Int32                                                  |
         |end_quarter_seconds_remaining   |Int32                                                  |
         |end_half_seconds_remaining      |Int32                                                  |
         |end_game_seconds_remaining      |Int32                                                  |
         |period                          |Int32                                                  |
-        |lag_qtr                         |Int32                                                  |
-        |lag_game_half                   |String                                                 |
-        |athlete_id_2                    |Int32                                                  |
-        |game_date                       |Date                                                   |
-        |game_date_time                  |Datetime(time_unit='us', time_zone='America/New_York') |
-        |coordinate_x_raw                |Float64                                                |
-        |coordinate_y_raw                |Float64                                                |
         |coordinate_x                    |Float64                                                |
         |coordinate_y                    |Float64                                                |
-        |media_id                        |String                                                 |
+        |game_date                       |Date                                                   |
+        |game_date_time                  |Datetime(time_unit='us', time_zone='America/New_York') |
+        |athlete_name_1                  |String                                                 |
+        |athlete_name_2                  |String                                                 |
+        |athlete_name_3                  |String                                                 |
 
     Example:
         Quick start::
@@ -238,79 +248,94 @@ def load_wbb_schedule(seasons, return_as_pandas: bool = False):
         A polars (or pandas) DataFrame; seasons with no published asset are
         skipped with a warning rather than raising (404-safe).
 
-        |col_name                  |type    |
-        |:-------------------------|:-------|
-        |id                        |Int32   |
-        |uid                       |String  |
-        |date                      |String  |
-        |attendance                |Int32   |
-        |time_valid                |Boolean |
-        |neutral_site              |Boolean |
-        |conference_competition    |Boolean |
-        |recent                    |Boolean |
-        |start_date                |String  |
-        |notes_type                |String  |
-        |notes_headline            |String  |
-        |type_id                   |Int32   |
-        |type_abbreviation         |String  |
-        |status_clock              |Int32   |
-        |status_display_clock      |String  |
-        |status_period             |Int32   |
-        |status_type_id            |Int32   |
-        |status_type_name          |String  |
-        |status_type_state         |String  |
-        |status_type_completed     |Boolean |
-        |status_type_description   |String  |
-        |status_type_detail        |String  |
-        |status_type_short_detail  |String  |
-        |format_regulation_periods |Int32   |
-        |home_id                   |Int32   |
-        |home_uid                  |String  |
-        |home_location             |String  |
-        |home_name                 |String  |
-        |home_abbreviation         |String  |
-        |home_display_name         |String  |
-        |home_short_display_name   |String  |
-        |home_color                |String  |
-        |home_alternate_color      |String  |
-        |home_is_active            |Boolean |
-        |home_venue_id             |Int32   |
-        |home_logo                 |String  |
-        |home_conference_id        |Int32   |
-        |home_score                |Int32   |
-        |home_winner               |Boolean |
-        |away_id                   |Int32   |
-        |away_uid                  |String  |
-        |away_location             |String  |
-        |away_name                 |String  |
-        |away_abbreviation         |String  |
-        |away_display_name         |String  |
-        |away_short_display_name   |String  |
-        |away_color                |String  |
-        |away_alternate_color      |String  |
-        |away_is_active            |Boolean |
-        |away_venue_id             |Int32   |
-        |away_logo                 |String  |
-        |away_conference_id        |Int32   |
-        |away_score                |Int32   |
-        |away_winner               |Boolean |
-        |game_id                   |Int32   |
-        |season                    |Int32   |
-        |season_type               |Int32   |
-        |groups_id                 |Int32   |
-        |groups_name               |String  |
-        |groups_short_name         |String  |
-        |groups_is_conference      |Boolean |
-        |status_type_alt_detail    |String  |
-        |venue_id                  |Int32   |
-        |venue_full_name           |String  |
-        |venue_address_city        |String  |
-        |venue_address_state       |String  |
-        |venue_capacity            |Int32   |
-        |venue_indoor              |Boolean |
-        |PBP                       |Boolean |
-        |team_box                  |Boolean |
-        |player_box                |Boolean |
+        |col_name                  |type                                                   |
+        |:-------------------------|:------------------------------------------------------|
+        |id                        |Int32                                                  |
+        |uid                       |String                                                 |
+        |date                      |String                                                 |
+        |attendance                |Float64                                                |
+        |time_valid                |Boolean                                                |
+        |neutral_site              |Boolean                                                |
+        |conference_competition    |Boolean                                                |
+        |play_by_play_available    |Boolean                                                |
+        |recent                    |Boolean                                                |
+        |start_date                |String                                                 |
+        |broadcast                 |String                                                 |
+        |highlights                |String                                                 |
+        |notes_type                |String                                                 |
+        |notes_headline            |String                                                 |
+        |broadcast_market          |String                                                 |
+        |broadcast_name            |String                                                 |
+        |type_id                   |Int32                                                  |
+        |type_abbreviation         |String                                                 |
+        |venue_id                  |Int32                                                  |
+        |venue_full_name           |String                                                 |
+        |venue_address_city        |String                                                 |
+        |venue_address_state       |String                                                 |
+        |venue_indoor              |Boolean                                                |
+        |status_clock              |Float64                                                |
+        |status_display_clock      |String                                                 |
+        |status_period             |Float64                                                |
+        |status_type_id            |Int32                                                  |
+        |status_type_name          |String                                                 |
+        |status_type_state         |String                                                 |
+        |status_type_completed     |Boolean                                                |
+        |status_type_description   |String                                                 |
+        |status_type_detail        |String                                                 |
+        |status_type_short_detail  |String                                                 |
+        |format_regulation_periods |Float64                                                |
+        |home_id                   |Int32                                                  |
+        |home_uid                  |String                                                 |
+        |home_location             |String                                                 |
+        |home_name                 |String                                                 |
+        |home_abbreviation         |String                                                 |
+        |home_display_name         |String                                                 |
+        |home_short_display_name   |String                                                 |
+        |home_color                |String                                                 |
+        |home_alternate_color      |String                                                 |
+        |home_is_active            |Boolean                                                |
+        |home_venue_id             |Int32                                                  |
+        |home_logo                 |String                                                 |
+        |home_conference_id        |Int32                                                  |
+        |home_score                |Int32                                                  |
+        |home_winner               |Boolean                                                |
+        |home_current_rank         |Float64                                                |
+        |home_linescores           |String                                                 |
+        |home_records              |String                                                 |
+        |away_id                   |Int32                                                  |
+        |away_uid                  |String                                                 |
+        |away_location             |String                                                 |
+        |away_name                 |String                                                 |
+        |away_abbreviation         |String                                                 |
+        |away_display_name         |String                                                 |
+        |away_short_display_name   |String                                                 |
+        |away_color                |String                                                 |
+        |away_alternate_color      |String                                                 |
+        |away_is_active            |Boolean                                                |
+        |away_venue_id             |Int32                                                  |
+        |away_logo                 |String                                                 |
+        |away_conference_id        |Int32                                                  |
+        |away_score                |Int32                                                  |
+        |away_winner               |Boolean                                                |
+        |away_current_rank         |Float64                                                |
+        |away_linescores           |String                                                 |
+        |away_records              |String                                                 |
+        |game_id                   |Int32                                                  |
+        |season                    |Int32                                                  |
+        |season_type               |Int32                                                  |
+        |status_type_alt_detail    |String                                                 |
+        |tournament_id             |Int32                                                  |
+        |groups_id                 |Int32                                                  |
+        |groups_name               |String                                                 |
+        |groups_short_name         |String                                                 |
+        |groups_is_conference      |Boolean                                                |
+        |game_json                 |Boolean                                                |
+        |game_json_url             |String                                                 |
+        |game_date_time            |Datetime(time_unit='us', time_zone='America/New_York') |
+        |game_date                 |Date                                                   |
+        |PBP                       |Boolean                                                |
+        |team_box                  |Boolean                                                |
+        |player_box                |Boolean                                                |
 
     Example:
         Quick start::
@@ -373,16 +398,19 @@ def load_wbb_team_boxscore(seasons, return_as_pandas: bool = False):
         |assists                           |Int32                                                  |
         |blocks                            |Int32                                                  |
         |defensive_rebounds                |Int32                                                  |
+        |fast_break_points                 |String                                                 |
         |field_goal_pct                    |Float64                                                |
         |field_goals_made                  |Int32                                                  |
         |field_goals_attempted             |Int32                                                  |
-        |flagrant_fouls                    |Int32                                                  |
         |fouls                             |Int32                                                  |
         |free_throw_pct                    |Float64                                                |
         |free_throws_made                  |Int32                                                  |
         |free_throws_attempted             |Int32                                                  |
         |largest_lead                      |String                                                 |
+        |lead_changes                      |String                                                 |
+        |lead_percentage                   |String                                                 |
         |offensive_rebounds                |Int32                                                  |
+        |points_in_paint                   |String                                                 |
         |steals                            |Int32                                                  |
         |team_turnovers                    |Int32                                                  |
         |technical_fouls                   |Int32                                                  |
@@ -392,6 +420,7 @@ def load_wbb_team_boxscore(seasons, return_as_pandas: bool = False):
         |total_rebounds                    |Int32                                                  |
         |total_technical_fouls             |Int32                                                  |
         |total_turnovers                   |Int32                                                  |
+        |turnover_points                   |String                                                 |
         |turnovers                         |Int32                                                  |
         |opponent_team_id                  |Int32                                                  |
         |opponent_team_uid                 |String                                                 |
@@ -804,6 +833,11 @@ def load_wbb_shots(seasons, return_as_pandas: bool = False):
         |coordinate_y        |Float64 |
         |coordinate_x_raw    |Float64 |
         |coordinate_y_raw    |Float64 |
+        |athlete_name_1      |String  |
+        |athlete_name_2      |String  |
+        |team_name           |String  |
+        |team_mascot         |String  |
+        |team_abbrev         |String  |
 
     Example:
         Quick start::
@@ -943,6 +977,250 @@ def load_wbb_team_season_stats(seasons, return_as_pandas: bool = False):
         frames.append(df)
     if missing:
         cli_warn("load_wbb_team_season_stats: no data for season(s) {missing} (skipped)".format(missing=missing))
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+def load_wbb_player_crosswalk(seasons, return_as_pandas: bool = False):
+    """Load wbb_crosswalk (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wbb_crosswalk
+
+    Args:
+        seasons: an int or iterable of seasons (>= 2014).
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; seasons with no published asset are
+        skipped with a warning rather than raising (404-safe).
+
+        |col_name           |type    |
+        |:------------------|:-------|
+        |season             |Int32   |
+        |espn_team_id       |Int32   |
+        |team_abbreviation  |String  |
+        |player_name        |String  |
+        |espn_athlete_id    |String  |
+        |espn_full_name     |String  |
+        |espn_jersey        |String  |
+        |espn_position      |String  |
+        |fox_athlete_id     |String  |
+        |fox_player         |String  |
+        |fox_jersey         |String  |
+        |fox_position_group |String  |
+        |yahoo_player_id    |String  |
+        |yahoo_player_name  |String  |
+        |match_method       |String  |
+        |match_confidence   |Float64 |
+        |match_keys         |String  |
+
+    Example:
+        Quick start::
+
+            load_wbb_player_crosswalk(seasons=2026)
+    """
+    frames, missing = [], []
+    for season in _as_season_list(seasons):
+        if int(season) < 2014:
+            raise SeasonNotFoundError("season cannot be less than 2014")
+        df = _read_release_parquet(
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/wbb_crosswalk/wbb_player_crosswalk_{season}.parquet"
+        )
+        if df is None:
+            missing.append(season)
+            continue
+        frames.append(df)
+    if missing:
+        cli_warn("load_wbb_player_crosswalk: no data for season(s) {missing} (skipped)".format(missing=missing))
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+def load_wbb_schedule_crosswalk(seasons, return_as_pandas: bool = False):
+    """Load wbb_crosswalk (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wbb_crosswalk
+
+    Args:
+        seasons: an int or iterable of seasons (>= 2026).
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; seasons with no published asset are
+        skipped with a warning rather than raising (404-safe).
+
+        |col_name          |type    |
+        |:-----------------|:-------|
+        |season            |Int32   |
+        |game_date         |Date    |
+        |home_espn_team_id |Int32   |
+        |away_espn_team_id |Int32   |
+        |espn_game_id      |String  |
+        |bart_muid         |String  |
+        |bart_team1        |String  |
+        |bart_team2        |String  |
+        |bart_winner       |String  |
+        |fox_game_id       |String  |
+        |yahoo_game_id     |String  |
+        |match_method      |String  |
+        |match_confidence  |Float64 |
+
+    Example:
+        Quick start::
+
+            load_wbb_schedule_crosswalk(seasons=2026)
+    """
+    frames, missing = [], []
+    for season in _as_season_list(seasons):
+        if int(season) < 2026:
+            raise SeasonNotFoundError("season cannot be less than 2026")
+        df = _read_release_parquet(
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/wbb_crosswalk/wbb_schedule_crosswalk_{season}.parquet"
+        )
+        if df is None:
+            missing.append(season)
+            continue
+        frames.append(df)
+    if missing:
+        cli_warn("load_wbb_schedule_crosswalk: no data for season(s) {missing} (skipped)".format(missing=missing))
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+def load_wbb_team_crosswalk(seasons, return_as_pandas: bool = False):
+    """Load wbb_crosswalk (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wbb_crosswalk
+
+    Args:
+        seasons: an int or iterable of seasons (>= 2014).
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; seasons with no published asset are
+        skipped with a warning rather than raising (404-safe).
+
+        |col_name              |type    |
+        |:---------------------|:-------|
+        |season                |Int32   |
+        |espn_team_id          |Int32   |
+        |espn_abbreviation     |String  |
+        |espn_display_name     |String  |
+        |espn_short_name       |String  |
+        |espn_location         |String  |
+        |espn_mascot           |String  |
+        |espn_conference       |String  |
+        |fox_team_id           |String  |
+        |fox_team_name         |String  |
+        |fox_section           |String  |
+        |bart_team             |String  |
+        |bart_conf             |String  |
+        |yahoo_team_id         |String  |
+        |yahoo_team_name       |String  |
+        |fox_match_confidence  |Float64 |
+        |bart_match_confidence |Float64 |
+        |match_method          |String  |
+
+    Example:
+        Quick start::
+
+            load_wbb_team_crosswalk(seasons=2026)
+    """
+    frames, missing = [], []
+    for season in _as_season_list(seasons):
+        if int(season) < 2014:
+            raise SeasonNotFoundError("season cannot be less than 2014")
+        df = _read_release_parquet(
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/wbb_crosswalk/wbb_team_crosswalk_{season}.parquet"
+        )
+        if df is None:
+            missing.append(season)
+            continue
+        frames.append(df)
+    if missing:
+        cli_warn("load_wbb_team_crosswalk: no data for season(s) {missing} (skipped)".format(missing=missing))
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+def load_wbb_player_core(seasons, return_as_pandas: bool = False):
+    """Load espn_womens_college_basketball_player_core (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_womens_college_basketball_player_core
+
+    Args:
+        seasons: an int or iterable of seasons (>= 2004).
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; seasons with no published asset are
+        skipped with a warning rather than raising (404-safe).
+
+        |col_name              |type    |
+        |:---------------------|:-------|
+        |season                |Int32   |
+        |athlete_id            |Int64   |
+        |guid                  |String  |
+        |uid                   |String  |
+        |slug                  |String  |
+        |type                  |String  |
+        |first_name            |String  |
+        |last_name             |String  |
+        |full_name             |String  |
+        |display_name          |String  |
+        |short_name            |String  |
+        |height                |Float64 |
+        |display_height        |String  |
+        |weight                |Float64 |
+        |display_weight        |String  |
+        |age                   |Int32   |
+        |date_of_birth         |String  |
+        |birth_city            |String  |
+        |birth_state           |String  |
+        |birth_country         |String  |
+        |jersey                |String  |
+        |position_id           |Int32   |
+        |position_name         |String  |
+        |position_abbreviation |String  |
+        |position_display_name |String  |
+        |college_id            |Int32   |
+        |current_team_id       |Int32   |
+        |headshot_href         |String  |
+        |experience_years      |Int32   |
+        |status_id             |Int32   |
+        |status_name           |String  |
+        |status_type           |String  |
+        |draft_year            |Int32   |
+        |draft_round           |Int32   |
+        |draft_selection       |Int32   |
+        |active                |Boolean |
+
+    Example:
+        Quick start::
+
+            load_wbb_player_core(seasons=2025)
+    """
+    frames, missing = [], []
+    for season in _as_season_list(seasons):
+        if int(season) < 2004:
+            raise SeasonNotFoundError("season cannot be less than 2004")
+        df = _read_release_parquet(
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_womens_college_basketball_player_core/player_core_{season}.parquet"
+        )
+        if df is None:
+            missing.append(season)
+            continue
+        frames.append(df)
+    if missing:
+        cli_warn("load_wbb_player_core: no data for season(s) {missing} (skipped)".format(missing=missing))
     # diagonal: per-season release schemas can drift (columns added/dropped
     # over the years) -- union columns, null-fill gaps.
     out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
