@@ -6,8 +6,7 @@ environment at call time -- never hardcoded, never logged in cleartext (use
 :func:`redact` before putting a proxy URL in a log line or error message).
 """
 
-from __future__ import annotations
-
+import io
 import json
 import os
 import random
@@ -70,7 +69,7 @@ class ProxyHealth:
         quarantine_fails: int = 5,
         quarantine_secs: float = 120.0,
         error_log: Optional[str] = None,
-    ):
+    ) -> None:
         self._lock = threading.Lock()
         self._per: dict[str, dict[str, Any]] = {}
         self.quarantine_fails = quarantine_fails
@@ -85,7 +84,7 @@ class ProxyHealth:
         # Optional append-only JSONL of every non-ok outcome (the queryable
         # by-endpoint/type/resource drill-down). One line: ts, endpoint,
         # resource (game_id/season), status, cat, latency, proxy.
-        self._elog = None
+        self._elog: Optional[io.TextIOBase] = None
         if error_log:
             try:
                 self._elog = open(error_log, "a", encoding="utf-8")  # noqa: SIM115
@@ -252,13 +251,15 @@ def load_proxies() -> list[dict[str, Any]]:
     pkg = os.environ.get("PROXY_PKG")
     if not endpoint or not key or not pkg:
         return []
+    if not endpoint.lower().startswith(("http://", "https://")):
+        return []  # refuse file:// / ftp:// etc. -- keeps the S310 suppression honest
 
     url = f"{endpoint.rstrip('/')}/{pkg}.json"
     req = urllib.request.Request(url, headers={"Authorization": key})
     try:
         with urllib.request.urlopen(req, timeout=15) as resp:  # noqa: S310 - fixed https proxy-vendor endpoint
             payload = json.loads(resp.read().decode("utf-8"))
-    except (urllib.error.URLError, TimeoutError, json.JSONDecodeError, ValueError):
+    except (OSError, json.JSONDecodeError, ValueError):
         return []
 
     data = payload.get("data") if isinstance(payload, dict) else None
@@ -344,5 +345,5 @@ def redact(url: str) -> str:
         return url
     scheme = url[: scheme_sep + 3]
     rest = url[scheme_sep + 3 :]
-    _, _, hostport = rest.partition("@")
+    _, _, hostport = rest.rpartition("@")
     return f"{scheme}{hostport}"

@@ -43,3 +43,5 @@ def test_redact_strips_credentials() -> None:
     out = redact("http://user:secret@1.2.3.4:8080")
     assert "secret" not in out
     assert "1.2.3.4" in out
+    # RFC 3986: userinfo ends at the LAST @ -- a password containing @ must not leak
+    assert redact("http://user:p@ss@1.2.3.4:8080") == "http://1.2.3.4:8080"

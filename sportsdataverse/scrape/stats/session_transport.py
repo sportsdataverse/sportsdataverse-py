@@ -24,8 +24,6 @@ so rebinding would be wasteful. Timeouts / blocks are NOT retried here: they sta
 single-shot and rotate, preserving the fast-on-faults contract.
 """
 
-from __future__ import annotations
-
 import itertools
 import os
 import threading
@@ -82,6 +80,9 @@ class SessionTransport:
         st.sid = self._next_id()
 
     def __call__(self, url: str, params: dict, headers: dict, proxy_url: Optional[str]) -> tuple:
+        # ``proxy_url`` is the shared wrapper-transport hook signature; this
+        # transport OWNS proxy selection (round-robin + quarantine) and
+        # deliberately ignores an explicit proxy.
         st = self._tls
         if (
             getattr(st, "sess", None) is None
@@ -110,7 +111,10 @@ class SessionTransport:
                 session_id=st.sid,
                 session_req=st_req,
             )
-            self._bind(st)  # a dead/slow proxy: drop the session and move on
+            try:
+                self._bind(st)  # a dead/slow proxy: drop the session and move on
+            except Exception:  # noqa: BLE001 - must not mask the original transport error
+                st.sess = None  # rebind lazily on the next call instead
             raise  # preserve the "timeout propagates" contract for the miss count
 
         st.n += 1
@@ -123,6 +127,7 @@ class SessionTransport:
         while cat == "server_err" and tries < self.server_err_retries:
             tries += 1
             st.n += 1
+            st_req = st.n  # the retry's ordinal -- keep throttle-after-N analysis honest
             t0 = time.monotonic()
             try:
                 r = st.sess.get(url, params=params, headers=headers, timeout=self.timeout)
@@ -140,7 +145,10 @@ class SessionTransport:
                     session_id=st.sid,
                     session_req=st_req,
                 )
-                self._bind(st)
+                try:
+                    self._bind(st)
+                except Exception:  # noqa: BLE001 - must not mask the original transport error
+                    st.sess = None
                 raise
             lat = (time.monotonic() - t0) * 1000
             cat = classify(status, text, None)
