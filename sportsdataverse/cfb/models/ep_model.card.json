@@ -1,0 +1,38 @@
+{
+  "model_type": "ep",
+  "xgboost_version": "3.2.0",
+  "objective": "multi:softprob",
+  "features": [
+    "TimeSecsRem",
+    "yards_to_goal",
+    "distance",
+    "down_1",
+    "down_2",
+    "down_3",
+    "down_4",
+    "pos_score_diff_start"
+  ],
+  "n_features": 8,
+  "label": "next_score_label",
+  "training_seasons": [
+    2004,
+    2025
+  ],
+  "n_training_rows": 2219971,
+  "hyperparameters": {
+    "booster": "gbtree",
+    "objective": "multi:softprob",
+    "eval_metric": "mlogloss",
+    "num_class": 7,
+    "eta": 0.025,
+    "gamma": 1,
+    "subsample": 0.8,
+    "colsample_bytree": 0.8,
+    "max_depth": 5,
+    "min_child_weight": 1
+  },
+  "source": "cfb_final_json",
+  "trained_date": "2026-08-02",
+  "num_boost_round": 525,
+  "training_frame": "artifacts/pbp_full_v2.parquet"
+}

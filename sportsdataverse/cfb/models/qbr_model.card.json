@@ -1,0 +1,37 @@
+{
+  "model_type": "qbr",
+  "xgboost_version": "3.2.0",
+  "objective": "reg:squarederror",
+  "features": [
+    "qbr_epa",
+    "sack_epa",
+    "pass_epa",
+    "rush_epa",
+    "pen_epa",
+    "spread",
+    "era0",
+    "era1",
+    "era2",
+    "era3"
+  ],
+  "n_features": 10,
+  "label": "qbr",
+  "training_seasons": [
+    2004,
+    2025
+  ],
+  "n_training_rows": null,
+  "hyperparameters": {
+    "booster": "gbtree",
+    "objective": "reg:squarederror",
+    "eta": 0.1,
+    "subsample": 0.8,
+    "colsample_bytree": 0.8,
+    "max_depth": 4,
+    "min_child_weight": 1
+  },
+  "source": "cfb_final_json",
+  "trained_date": "2026-08-02",
+  "num_boost_round": 45,
+  "training_frame": "artifacts/pbp_full_v2.parquet"
+}

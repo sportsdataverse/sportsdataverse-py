@@ -1,0 +1,30 @@
+{
+  "model_type": "two_pt",
+  "xgboost_version": "3.2.0",
+  "objective": "binary:logistic",
+  "features": [
+    "posteam_spread",
+    "posteam_total",
+    "pos_score_diff",
+    "era"
+  ],
+  "n_features": 4,
+  "label": "two_point_success",
+  "training_seasons": [
+    2004,
+    2025
+  ],
+  "n_training_rows": 2219971,
+  "hyperparameters": {
+    "objective": "binary:logistic",
+    "eval_metric": "logloss",
+    "max_depth": 2,
+    "eta": 0.05,
+    "subsample": 0.9,
+    "min_child_weight": 40
+  },
+  "source": "cfb_final_json",
+  "trained_date": "2026-08-02",
+  "num_boost_round": 40,
+  "training_frame": "artifacts/pbp_full_v2.parquet"
+}

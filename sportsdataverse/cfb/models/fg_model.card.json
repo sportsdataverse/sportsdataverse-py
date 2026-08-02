@@ -1,0 +1,31 @@
+{
+  "model_type": "fg",
+  "xgboost_version": "3.2.0",
+  "objective": "binary:logistic",
+  "features": [
+    "yards_to_goal",
+    "era0",
+    "era1",
+    "era2",
+    "era3"
+  ],
+  "n_features": 5,
+  "label": "fg_made",
+  "training_seasons": [
+    2004,
+    2025
+  ],
+  "n_training_rows": 2219971,
+  "hyperparameters": {
+    "objective": "binary:logistic",
+    "eval_metric": "logloss",
+    "max_depth": 3,
+    "eta": 0.1,
+    "subsample": 0.8,
+    "min_child_weight": 30
+  },
+  "source": "cfb_final_json",
+  "trained_date": "2026-08-02",
+  "num_boost_round": 60,
+  "training_frame": "artifacts/pbp_full_v2.parquet"
+}

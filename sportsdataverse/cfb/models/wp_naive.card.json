@@ -1,0 +1,41 @@
+{
+  "model_type": "wp_naive",
+  "xgboost_version": "3.2.0",
+  "objective": "binary:logistic",
+  "features": [
+    "pos_team_receives_2H_kickoff",
+    "TimeSecsRem",
+    "adj_TimeSecsRem",
+    "ExpScoreDiff_Time_Ratio",
+    "pos_score_diff_start",
+    "down",
+    "distance",
+    "yards_to_goal",
+    "is_home",
+    "pos_team_timeouts_rem_before",
+    "def_pos_team_timeouts_rem_before",
+    "period"
+  ],
+  "n_features": 12,
+  "label": "label",
+  "training_seasons": [
+    2004,
+    2025
+  ],
+  "n_training_rows": 2219971,
+  "hyperparameters": {
+    "booster": "gbtree",
+    "objective": "binary:logistic",
+    "eval_metric": "logloss",
+    "eta": 0.2,
+    "gamma": 0,
+    "subsample": 0.8,
+    "colsample_bytree": 0.8,
+    "max_depth": 4,
+    "min_child_weight": 1
+  },
+  "source": "cfb_final_json",
+  "trained_date": "2026-08-02",
+  "num_boost_round": 65,
+  "training_frame": "artifacts/pbp_full_v2.parquet"
+}
