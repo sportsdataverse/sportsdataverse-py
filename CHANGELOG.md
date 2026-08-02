@@ -3,6 +3,7 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [Unreleased](#unreleased)
+  - [`sportsdataverse.scrape.stats` — league-parameterized capture layer (Phase 2)](#sportsdataversescrapestats--league-parameterized-capture-layer-phase-2)
   - [Docs — offline full-text search on the documentation site](#docs--offline-full-text-search-on-the-documentation-site)
   - [CI — docs site builds on GitHub Actions and publishes to `gh-pages`](#ci--docs-site-builds-on-github-actions-and-publishes-to-gh-pages)
   - [New — `sportsdataverse.scrape.stats`: shared stats.nba.com / stats.wnba.com sweep engine (Phase 1)](#new--sportsdataversescrapestats-shared-statsnbacom--statswnbacom-sweep-engine-phase-1)
@@ -220,6 +221,34 @@
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Unreleased
+
+### `sportsdataverse.scrape.stats` — league-parameterized capture layer (Phase 2)
+
+Phase 1 gave the stats-raw twins one transport/proxy/observability engine; this
+moves the *capture planning* behind a `LeagueConfig` so the two `-raw` repos
+stop carrying near-duplicate copies of it (the remaining ~700 drift lines):
+
+- `league_config.py` — frozen `NBA` / `WNBA` identity (LeagueID, wrapper
+  module and prefix, store env var and subdir), resolvable by `by_league_id()`.
+- `endpoints.py` — the signature-derived capture registry. Season-string
+  spelling is now league-keyed: the NBA's two-year span (`"2023-24"`, without
+  which several endpoints silently return zero rows) vs the WNBA's bare
+  calendar year.
+- `season_capture.py` — atomic, resumable season-level captures with the
+  contentless-payload guard (an unparseable `{}` is never persisted, because
+  resume is `path.exists()` and one empty write is permanent).
+- `periods.py` — league- and era-aware per-period window math: NBA 12-minute
+  quarters, WNBA two 20-minute halves through 2005 and four 10-minute quarters
+  from 2006. Regulation totals 2400s in *both* WNBA eras, so only the period
+  boundaries reveal a mix-up; a regression test pins the NBA path to
+  `nba_lineups._period_start_range`, the function that reads these captures
+  back.
+- `refill.py` — the empty-`{}` repair pass, driven by a `LeagueConfig` instead
+  of per-repo constants.
+
+Resolving the wrapper module from the config fixed a latent crash: the WNBA
+repo's own refill shim imported `sportsdataverse.nba.wnba_stats`, which does
+not exist, so a real (non-`--check`) refill run raised `ModuleNotFoundError`.
 
 ### Docs — offline full-text search on the documentation site
 
