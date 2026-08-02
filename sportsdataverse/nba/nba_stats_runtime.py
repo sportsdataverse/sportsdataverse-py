@@ -149,6 +149,12 @@ def _get(
     clean: dict = {k: v for k, v in (params or {}).items() if v is not None}
     if "GameID" in clean:
         clean["GameID"] = str(clean["GameID"]).zfill(10)
+    # nba_api sorts query parameters alphabetically before sending -- their
+    # source carries the comment "for some reason this matters for some
+    # requests". Dict insertion order survives all the way through curl_cffi's
+    # query string, so match that canonical order. Free insurance against the
+    # order-sensitive endpoints; a no-op for everything else.
+    clean = dict(sorted(clean.items()))
 
     if path.startswith("http://") or path.startswith("https://"):
         url = path
