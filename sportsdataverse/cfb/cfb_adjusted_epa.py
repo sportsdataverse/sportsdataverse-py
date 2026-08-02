@@ -60,19 +60,23 @@ __all__ = ["cfb_adjusted_epa", "cfb_adjusted_epa_by_game"]
 # ranking by the MEAN, so a value that only wins on one year cannot take it.
 # Mean Spearman across those seasons:
 #
-#     lambda   10     2.0    0.5    0.2    0.1    0.05   0.03   0.02   0.01   1e-4
-#     rho      .792   .809   .848   .893   .917   .929   .930   .9307  .930   .927
+#     lambda   10     2.0    0.5    0.2    0.1    0.05   0.035  0.03   0.02   1e-4
+#     rho      .792   .809   .848   .893   .917   .929   .9303  .930   .9307  .927
 #
-# A genuine interior maximum at 0.02, which is also the best value on the
-# WORST season (0.9013), so it is robust rather than merely best-on-average.
-# The curve is flat either side -- anything in [0.001, 0.05] scores within 0.004
-# -- so the precise value matters far less than not being anywhere near 325.
+# The curve is flat across [0.001, 0.05] (spread 0.004), so the precise value
+# matters far less than not being anywhere near 325. 0.035 is chosen over the
+# nominal 0.02 peak because the two are statistically tied on the mean (.9303 vs
+# .9307) while 0.035 has the better WORST season (.9015 vs .9013) AND clears the
+# PFF-grade oracle gate, which 0.02 fails (0.7437 vs a 0.75 floor). PFF is a
+# player-grade aggregation rather than play-level EPA, so it prefers slightly
+# more shrinkage; 0.035 is the value that satisfies FPI, SP+ and PFF at once
+# rather than optimizing one oracle into another's red.
 #
 # Cross-checked for 2025 against four independent oracles (SP+, FEI, F+, FPI),
 # which agree with each other at 0.967-0.990: the old default scored rho 0.794
 # with a mean rank error of 20 places; the tuned value scores ~0.96 with ~8.
 # See tests/cfb/test_ridge_lambda_calibration.py.
-_RIDGE_LAMBDA = 0.02
+_RIDGE_LAMBDA = 0.035
 
 _REQUIRED_COLUMNS = (
     "game_id",
