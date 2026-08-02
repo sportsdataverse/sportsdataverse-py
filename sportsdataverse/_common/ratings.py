@@ -143,7 +143,8 @@ def dropped_level_ridge(clean: pl.DataFrame, ridge_lambda: float) -> tuple[pl.Da
     ``model.matrix``-style encoding: drops the first factor level per side
     (offense, defense) and fits a standardized :class:`sklearn.linear_model.Ridge`,
     then un-standardizes the coefficients. ``offense``/``defense`` carry one
-    row per *non-reference* team; ``intercept`` is the league baseline used
+    row per team **including the reference level**, whose effect is 0 by
+    construction so its strength is the intercept; ``intercept`` is the league baseline used
     as the fallback strength for not-yet-seen teams in CFB's walk-forward
     variant. Moved verbatim (T7.2) from
     ``sportsdataverse.cfb.cfb_adjusted_epa._fit_opponent_ridge`` -- a
@@ -155,7 +156,9 @@ def dropped_level_ridge(clean: pl.DataFrame, ridge_lambda: float) -> tuple[pl.Da
     Args:
         clean: Competitive-play frame with ``pos_team_id``, ``def_pos_team_id``,
             ``hfa``, ``EPA`` columns (see ``cfb_adjusted_epa._prepare``).
-        ridge_lambda: Ridge penalty (glmnet-scale).
+        ridge_lambda: Ridge penalty, PER OBSERVATION -- the sklearn penalty is
+            formed as ``alpha = ridge_lambda * n_plays``. Not a glmnet lambda;
+            see ``cfb_adjusted_epa._RIDGE_LAMBDA`` for why that mapping matters.
 
     Returns:
         ``(offense, defense, intercept)``: ``offense`` has ``team_id`` +
@@ -169,7 +172,7 @@ def dropped_level_ridge(clean: pl.DataFrame, ridge_lambda: float) -> tuple[pl.Da
         Quick start::
 
             from sportsdataverse._common.ratings import dropped_level_ridge
-            offense, defense, intercept = dropped_level_ridge(clean, 325.0)
+            offense, defense, intercept = dropped_level_ridge(clean, 0.02)
     """
     try:
         from sklearn.linear_model import Ridge
@@ -202,11 +205,25 @@ def dropped_level_ridge(clean: pl.DataFrame, ridge_lambda: float) -> tuple[pl.Da
     intercept = float(model.intercept_ - (coef_std * mu).sum())
     names = ["hfa"] + [f"pos_team_id{t}" for t in off_dummy] + [f"def_pos_team_id{t}" for t in def_dummy]
     coef = dict(zip(names, coef_std))
+    # The reference level belongs in the OUTPUT even though it has no column in
+    # the design matrix: under model.matrix encoding its effect is 0 and lives in
+    # the intercept, so its strength is `intercept + 0`. Emitting only the dummy
+    # columns silently dropped one team per side from every fit -- and because the
+    # season path joins opponent strength with fill_strength=None, that team's
+    # opponents got a null adjustment and were filtered out downstream too. Which
+    # team it hit was arbitrary: `sorted()` runs on the STRING id, so it is
+    # whichever id sorts first lexicographically ("100" < "1005" < "101").
     offense = pl.DataFrame(
-        {"team_id": off_dummy, "adjmodelOff": [coef[f"pos_team_id{t}"] + intercept for t in off_dummy]}
+        {
+            "team_id": off_ids,
+            "adjmodelOff": [intercept + (coef[f"pos_team_id{t}"] if t in set(off_dummy) else 0.0) for t in off_ids],
+        }
     )
     defense = pl.DataFrame(
-        {"team_id": def_dummy, "adjmodelDef": [coef[f"def_pos_team_id{t}"] + intercept for t in def_dummy]}
+        {
+            "team_id": def_ids,
+            "adjmodelDef": [intercept + (coef[f"def_pos_team_id{t}"] if t in set(def_dummy) else 0.0) for t in def_ids],
+        }
     )
     return offense, defense, intercept
 

@@ -38,8 +38,41 @@ if TYPE_CHECKING:
 
 __all__ = ["cfb_adjusted_epa", "cfb_adjusted_epa_by_game"]
 
-# Ridge penalty: cfbfastR uses glmnet at the grid's largest lambda (cv$lambda[[1]]).
-_RIDGE_LAMBDA = 325.0
+# Ridge penalty, PER OBSERVATION -- `dropped_level_ridge` forms the sklearn
+# penalty as `alpha = ridge_lambda * n_plays`.
+#
+# This was 325.0, ported from cfbfastR's glmnet call at `cv$lambda[[1]]`. Two
+# things were wrong with carrying that number across:
+#   1. `cv$lambda[[1]]` is the LARGEST lambda in glmnet's grid, which by
+#      construction is the value at which the null model wins -- every
+#      coefficient shrunk to zero.
+#   2. glmnet's lambda and sklearn's alpha are not the same parameter, and the
+#      solve multiplies by n on top, so 325 became alpha = 2.1e7 on a 64k-play
+#      season.
+# The result was a no-op: fitted team strengths spanned 0.0008 EPA/play across
+# all of FBS, and `spearman(raw_off_epa, adjusted_off_epa)` was 0.999982 -- the
+# "adjustment" did not reorder a single team, so G5 teams kept full credit for
+# weak schedules (Toledo 8th, James Madison 5th) while P5 teams were buried
+# (Florida 114th).
+#
+# 0.02 is tuned, not guessed: swept over five seasons (2021-2025) against ESPN
+# FPI joined on team_id (no name matching), scoring each lambda per season and
+# ranking by the MEAN, so a value that only wins on one year cannot take it.
+# Mean Spearman across those seasons:
+#
+#     lambda   10     2.0    0.5    0.2    0.1    0.05   0.03   0.02   0.01   1e-4
+#     rho      .792   .809   .848   .893   .917   .929   .930   .9307  .930   .927
+#
+# A genuine interior maximum at 0.02, which is also the best value on the
+# WORST season (0.9013), so it is robust rather than merely best-on-average.
+# The curve is flat either side -- anything in [0.001, 0.05] scores within 0.004
+# -- so the precise value matters far less than not being anywhere near 325.
+#
+# Cross-checked for 2025 against four independent oracles (SP+, FEI, F+, FPI),
+# which agree with each other at 0.967-0.990: the old default scored rho 0.794
+# with a mean rank error of 20 places; the tuned value scores ~0.96 with ~8.
+# See tests/cfb/test_ridge_lambda_calibration.py.
+_RIDGE_LAMBDA = 0.02
 
 _REQUIRED_COLUMNS = (
     "game_id",
@@ -92,9 +125,11 @@ def _prepare(plays: pl.DataFrame | pd.DataFrame, required: tuple[str, ...]) -> t
 def _fit_opponent_ridge(clean: pl.DataFrame, ridge_lambda: float) -> tuple[pl.DataFrame, pl.DataFrame, float]:
     """Fit the offense/defense ridge on competitive plays -> (offense, defense, intercept).
 
-    ``offense``/``defense`` carry one row per *non-reference* team (``model.matrix``
-    drops the first factor level); ``intercept`` is the league baseline used as the
-    fallback strength for not-yet-seen teams in the walk-forward variant.
+    ``offense``/``defense`` carry one row per team. ``model.matrix`` drops the first
+    factor level from the DESIGN, but that team's effect is 0 by construction, so it
+    is emitted at the intercept rather than omitted; ``intercept`` is the league
+    baseline used as the fallback strength for not-yet-seen teams in the
+    walk-forward variant.
 
     Thin wrapper (T7.2): the pure ridge solve moved verbatim to
     :func:`sportsdataverse._common.ratings.dropped_level_ridge`; this name
@@ -181,7 +216,8 @@ def cfb_adjusted_epa(
     Args:
         plays: A cfbfastR-schema play-by-play frame (polars or pandas) with the
             columns listed in the module docstring. One season at a time.
-        ridge_lambda: Ridge penalty (glmnet-scale; default 325).
+        ridge_lambda: Ridge penalty, per observation (``alpha = ridge_lambda *
+            n_plays``); default 0.02, tuned across 2021-2025 vs ESPN FPI.
         return_as_pandas: Return a pandas ``DataFrame`` instead of polars.
 
     Returns:
@@ -262,7 +298,8 @@ def cfb_adjusted_epa_by_game(
     Args:
         plays: A cfbfastR-schema play-by-play frame (polars or pandas) with the
             module-docstring columns **plus** ``week``. One season at a time.
-        ridge_lambda: Ridge penalty (glmnet-scale; default 325).
+        ridge_lambda: Ridge penalty, per observation (``alpha = ridge_lambda *
+            n_plays``); default 0.02, tuned across 2021-2025 vs ESPN FPI.
         return_as_pandas: Return a pandas ``DataFrame`` instead of polars.
 
     Returns:

@@ -101,18 +101,27 @@ def test_efficiency_ratings_orders_teams() -> None:
 
 
 def test_efficiency_ratings_reference_team_present_and_netted() -> None:
-    # "A" sorts first among {"A", "B"} so the ridge drops it as the reference
-    # level on both sides. Under the netted (R adjust_epa) semantics A still
-    # nets real values from its own games, while B -- whose EVERY opponent is
-    # the reference team, so no opponent strength exists for any of its games
-    # (only possible in a tiny synthetic league) -- falls back to the
-    # league-neutral 0.0, not a null and not a silent omission.
+    # "A" sorts first among {"A", "B"} so the ridge drops it from the DESIGN as
+    # the reference level on both sides. Its effect is 0 by construction and
+    # lives in the intercept, so `dropped_level_ridge` emits it at the intercept
+    # rather than omitting it.
+    #
+    # This previously asserted `b["adj_net"] == 0.0`: with the reference team
+    # missing from the strength tables, B -- whose every opponent is A -- had no
+    # opponent strength for any game and fell through to a league-neutral 0.0.
+    # That 0.0 was the signature of the missing row, not a rating. B now nets a
+    # real value from its own -0.30/play offense.
     out = efficiency_ratings(_mini_plays())
     assert set(out["team_id"].to_list()) == {"A", "B"}
     a = out.filter(pl.col("team_id") == "A").row(0, named=True)
     b = out.filter(pl.col("team_id") == "B").row(0, named=True)
     assert a["adj_net"] > 0.0  # A's +0.30/play offense nets positive vs B
-    assert b["adj_net"] == 0.0  # all-reference-opponent fallback
+    assert b["adj_net"] < 0.0  # B's -0.30/play offense nets negative -- not 0.0
+    # Magnitudes are NOT symmetric even though the fixture is (+0.30 / -0.30):
+    # under this parameterization the reference team sits at the intercept and is
+    # therefore unpenalized, while B's coefficient is shrunk toward it. The
+    # ordering is what carries meaning here, not the ratio.
+    assert a["adj_net"] > b["adj_net"]
 
 
 def test_efficiency_ratings_empty_input_returns_documented_schema() -> None:

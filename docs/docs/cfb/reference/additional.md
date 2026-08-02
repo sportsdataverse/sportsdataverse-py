@@ -865,7 +865,7 @@ bcr = blue_chip_ratio(load_recruit_classes([2020, 2021, 2022, 2023]))
 bcr.filter(pl.col("season") == 2023).sort("blue_chip_ratio", descending=True).head()
 ```
 
-### `cfb_adjusted_epa(plays: 'pl.DataFrame | pd.DataFrame', *, ridge_lambda: 'float' = 325.0, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#cfb_adjusted_epa}
+### `cfb_adjusted_epa(plays: 'pl.DataFrame | pd.DataFrame', *, ridge_lambda: 'float' = 0.02, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#cfb_adjusted_epa}
 
 Season opponent-adjusted per-team EPA from a season's play-by-play.
 
@@ -881,7 +881,7 @@ fit uses the whole season); for leak-free per-game values use
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `plays` | `DataFrame \| DataFrame` |  | A cfbfastR-schema play-by-play frame (polars or pandas) with the columns listed in the module docstring. One season at a time. |
-| `ridge_lambda` | `float` | `325.0` | Ridge penalty (glmnet-scale; default 325). |
+| `ridge_lambda` | `float` | `0.02` | Ridge penalty, per observation (`alpha = ridge_lambda * n_plays`); default 0.02, tuned across 2021-2025 vs ESPN FPI. |
 | `return_as_pandas` | `bool` | `False` | Return a pandas `DataFrame` instead of polars. |
 
 **Returns**
@@ -896,7 +896,7 @@ pbp = cfb.load_cfb_pbp(seasons=[2023])
 cfb.cfb_adjusted_epa(pbp).sort("net_adj_epa_rank").head()
 ```
 
-### `cfb_adjusted_epa_by_game(plays: 'pl.DataFrame | pd.DataFrame', *, ridge_lambda: 'float' = 325.0, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#cfb_adjusted_epa_by_game}
+### `cfb_adjusted_epa_by_game(plays: 'pl.DataFrame | pd.DataFrame', *, ridge_lambda: 'float' = 0.02, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#cfb_adjusted_epa_by_game}
 
 Walk-forward (point-in-time) opponent-adjusted EPA, one row per team-game.
 
@@ -912,7 +912,7 @@ heavy ridge penalty this is the intended early-season shrinkage to average).
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `plays` | `DataFrame \| DataFrame` |  | A cfbfastR-schema play-by-play frame (polars or pandas) with the module-docstring columns **plus** `week`. One season at a time. |
-| `ridge_lambda` | `float` | `325.0` | Ridge penalty (glmnet-scale; default 325). |
+| `ridge_lambda` | `float` | `0.02` | Ridge penalty, per observation (`alpha = ridge_lambda * n_plays`); default 0.02, tuned across 2021-2025 vs ESPN FPI. |
 | `return_as_pandas` | `bool` | `False` | Return a pandas `DataFrame` instead of polars. |
 
 **Returns**
