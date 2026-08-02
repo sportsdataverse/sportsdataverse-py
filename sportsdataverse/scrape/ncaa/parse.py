@@ -352,6 +352,23 @@ def _main(default_league: str) -> None:
         help="This process's shard as 'i/N' (default: 0/1, no sharding).",
     )
     parser.add_argument("--league", default=default_league, help="League slug (default: mbb).")
+    parser.add_argument(
+        "--season",
+        action="append",
+        default=None,
+        help=(
+            "Restrict to a season directory (repeatable, e.g. --season 2025 --season 2026). "
+            "Default: every season under the raw tree."
+        ),
+    )
+    parser.add_argument(
+        "--force",
+        action="store_true",
+        help=(
+            "Re-parse contests whose JSON already exists. Without this the stage skips them, "
+            "so a parser or enrichment improvement can never reach already-parsed games."
+        ),
+    )
     args = parser.parse_args()
     i, n = _parse_shard(args.shard)
 
@@ -359,16 +376,27 @@ def _main(default_league: str) -> None:
 
     root = Path(args.root)
     raw_dir = root / args.league / "raw"
-    bundle_paths = sorted(raw_dir.glob("**/*.json.gz"))
+    if args.season:
+        wanted = {str(s) for s in args.season}
+        bundle_paths = sorted(p for p in raw_dir.glob("**/*.json.gz") if p.parent.name in wanted)
+    else:
+        bundle_paths = sorted(raw_dir.glob("**/*.json.gz"))
 
     pending = []
     for p in bundle_paths:
         contest_id = p.name[: -len(".json.gz")]
-        if not (root / args.league / "json" / f"{contest_id}.json").exists():
+        # --force makes the stage genuinely re-runnable: identity enrichment and
+        # parser fixes land AFTER a season is parsed, and skip-if-exists means
+        # those games keep their stale output forever otherwise.
+        if args.force or not (root / args.league / "json" / f"{contest_id}.json").exists():
             pending.append(p)
 
     my_paths = shard([str(p) for p in pending], i, n)
-    print(f"bundles={len(bundle_paths)} pending={len(pending)} shard={i}/{n} assigned={len(my_paths)}")
+    scope = ",".join(sorted(args.season)) if args.season else "all"
+    print(
+        f"seasons={scope} bundles={len(bundle_paths)} pending={len(pending)} "
+        f"force={args.force} shard={i}/{n} assigned={len(my_paths)}"
+    )
 
     counts = {"parsed": 0, "failed": 0}
     for path_str in my_paths:

@@ -89,3 +89,31 @@ def test_cli_entry_points_take_their_binding_league() -> None:
         param = inspect.signature(main).parameters.get("default_league")
         assert param is not None, f"{mod.__name__}._main takes no default_league"
         assert param.default is inspect.Parameter.empty, f"{mod.__name__}._main defaults its league"
+
+
+def test_parse_stage_can_target_a_season_and_reprocess() -> None:
+    """The parse stage must be re-runnable, not just resumable.
+
+    Skip-if-exists alone means a parser fix or a later identity backfill can
+    never reach already-parsed games — which is exactly how the MBB tree ended
+    up with null player_ids/clean_names for 2024-2026 while the pipeline had
+    long since learned to fill them.
+    """
+    import argparse
+    from unittest import mock
+
+    captured: dict = {}
+
+    def fake_parse_args(self, *a, **k):
+        captured["opts"] = {act.dest: act for act in self._actions}
+        raise SystemExit(0)
+
+    with mock.patch.object(argparse.ArgumentParser, "parse_args", fake_parse_args):
+        with pytest.raises(SystemExit):
+            parse._main("mbb")
+
+    opts = captured["opts"]
+    assert "season" in opts, "parse stage cannot target a season"
+    assert opts["season"].__class__.__name__ == "_AppendAction", "--season must be repeatable"
+    assert "force" in opts, "parse stage cannot reprocess existing output"
+    assert opts["force"].const is True, "--force must be a flag"
