@@ -640,4 +640,9 @@ files = [
     "sportsdataverse/wnba/wnba_player_core.py",
     "sportsdataverse/wbb/wbb_player_core.py",
     "sportsdataverse/schemas/__init__.py",
+    "sportsdataverse/scrape/__init__.py",
+    "sportsdataverse/scrape/stats/__init__.py",
+    "sportsdataverse/scrape/stats/proxy.py",
+    "sportsdataverse/scrape/stats/session_transport.py",
+    "sportsdataverse/scrape/stats/observability.py",
 ]

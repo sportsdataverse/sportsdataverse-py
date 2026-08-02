@@ -2,6 +2,8 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
+- [Unreleased](#unreleased)
+  - [New — `sportsdataverse.scrape.stats`: shared stats.nba.com / stats.wnba.com sweep engine (Phase 1)](#new--sportsdataversescrapestats-shared-statsnbacom--statswnbacom-sweep-engine-phase-1)
 - [0.0.74 Release: August 2, 2026](#0074-release-august-2-2026)
   - [CFB — the ridge opponent adjustment was a no-op (BREAKING rating change)](#cfb--the-ridge-opponent-adjustment-was-a-no-op-breaking-rating-change)
   - [CFB — ESPN's `-1` end-of-play yardline sentinel corrupted 2016 week 2](#cfb--espns--1-end-of-play-yardline-sentinel-corrupted-2016-week-2)
@@ -214,6 +216,32 @@
 - [0.0.5 Release: October 20, 2021](#005-release-october-20-2021)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+## Unreleased
+
+### New — `sportsdataverse.scrape.stats`: shared stats.nba.com / stats.wnba.com sweep engine (Phase 1)
+
+The scraping machinery that was copy-pasted between `hoopR-nba-stats-raw` and
+`wehoop-wnba-stats-raw` (and had drifted to byte-identical-or-nearly — 0–6 diff
+lines per file) now has one library home, per the 2026-08-02 pipeline audit's
+shared-engine decision:
+
+- `scrape/stats/proxy.py` — round-robin ProxyBonanza pool with quarantine +
+  outcome classification (`transport_err`/`blocked`/`blank` quarantine;
+  `server_err`/`notfound` never count against a proxy).
+- `scrape/stats/session_transport.py` — thread-local sticky-session
+  `curl_cffi` transport (Chrome impersonation; the hosts TLS/JA3-block plain
+  `requests` with a silent hang), in-session retry of the cheap `server_err`
+  class only.
+- `scrape/stats/observability.py` — sweep bookkeeping (endpoint outcome
+  ledger, degradation windows, progress heartbeat).
+
+Deliberately **not** re-exported at the top-level `sportsdataverse` namespace —
+this is producer-pipeline tooling, not the tidy-data API. The `-raw` twins
+migrate to these imports next (deleting their local copies); league-specific
+endpoint sets / season formats stay repo-side until Phase 2's `LeagueConfig`.
+All three modules are typed (mypy ratchet) and covered by the ported offline
+observability suite plus a proxy-classifier truth table (23 tests).
 
 ## 0.0.74 Release: August 2, 2026
 
