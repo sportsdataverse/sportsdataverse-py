@@ -2,7 +2,11 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
-- [Unreleased](#unreleased)
+- [0.0.74 Release: August 2, 2026](#0074-release-august-2-2026)
+  - [CFB — the ridge opponent adjustment was a no-op (BREAKING rating change)](#cfb--the-ridge-opponent-adjustment-was-a-no-op-breaking-rating-change)
+  - [CFB — ESPN's `-1` end-of-play yardline sentinel corrupted 2016 week 2](#cfb--espns--1-end-of-play-yardline-sentinel-corrupted-2016-week-2)
+  - [CFB — `fill_null(0.0)` is a silent no-op on booleans, pinning `rushing_power_rate` at 1.0](#cfb--fill_null00-is-a-silent-no-op-on-booleans-pinning-rushing_power_rate-at-10)
+  - [Also in this release](#also-in-this-release)
   - [CFB — `opportunity_run` corrected, un-degenerating `opp_highlight_yards` (BREAKING)](#cfb--opportunity_run-corrected-un-degenerating-opp_highlight_yards-breaking)
   - [CFB / PHF — 1,308 loader return-table columns described](#cfb--phf--1308-loader-return-table-columns-described)
   - [CFB — `team_id` canonicalized to `Int64` at the loader boundary](#cfb--team_id-canonicalized-to-int64-at-the-loader-boundary)
@@ -211,7 +215,90 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-## Unreleased
+## 0.0.74 Release: August 2, 2026
+
+### CFB — the ridge opponent adjustment was a no-op (BREAKING rating change)
+
+`cfb_adjusted_epa._RIDGE_LAMBDA` was 325, carried over from cfbfastR's glmnet
+call at `cv$lambda[[1]]`. Two things were wrong with porting that number:
+`cv$lambda[[1]]` is the *largest* lambda in glmnet's grid — by construction the
+value at which the null model wins and every coefficient is zero — and glmnet's
+lambda is not sklearn's alpha, which `dropped_level_ridge` then multiplies by
+`n`. On a 64k-play season that landed at alpha = 2.1e7.
+
+The result was an adjustment that did not adjust. Fitted team strengths spanned
+0.0008 EPA/play across all of FBS, and `spearman(raw_off_epa, adj_off_epa)` was
+**0.999982** — not one team's ordering changed. Group of 5 teams kept full credit
+for weak schedules while Power conference teams were buried: Toledo 8th, James
+Madison 5th, Florida 114th, South Carolina 102nd.
+
+It survived review because raw EPA/play is itself correlated with quality, so
+rank checks on the *output* looked reasonable. The tell was the coefficient
+spread, not the ranking.
+
+The default is now `0.035`, tuned across 2021–2025 against ESPN FPI joined on
+`team_id` and cross-checked against SP+, FEI and F+ (which agree with each other
+at 0.967–0.990). Against their 2025 consensus:
+
+| | SP+ | FEI | F+ | FPI | consensus | mean rank error |
+|---|---|---|---|---|---|---|
+| before | 0.884 | 0.774 | 0.821 | 0.781 | 0.794 | 19.9 |
+| after | 0.930 | 0.966 | 0.956 | 0.965 | **0.967** | **7.8** |
+
+`RatingsConfig.ridge_lambda` (previously 0.05) shares the value — the two entry
+points had disagreed by 6,500x. 0.035 rather than the nominal 0.02 optimum
+because the two are statistically tied on the mean (.9303 vs .9307) while 0.035
+has the better worst season and clears the PFF-grade oracle gate, which 0.02
+fails. Optimizing one oracle into another's red would have meant lowering a gate.
+
+Also fixes the ridge dropping its reference level from the *output*.
+`model.matrix` drops it from the design, but its effect is 0 by construction and
+lives in the intercept, so it belongs in the returned table — one team per side
+was silently absent from every fit, and its opponents lost those games from the
+adjusted set. Which team it hit was arbitrary (lexicographic on the string id).
+
+### CFB — ESPN's `-1` end-of-play yardline sentinel corrupted 2016 week 2
+
+ESPN uses `-1` to mean "no end-state yards-to-endzone". The parser guarded only
+on `end.yardLine is not null` before trusting `end.yardsToEndzone` — and ESPN
+populates `end.yardLine` perfectly well on exactly the plays carrying the
+sentinel, so the guard passed and the fallback never fired for the case it exists
+to handle.
+
+2016 week 2 shipped that way: 72 of 75 games, with `-1` on ~every play (SMU @
+Baylor: all 238). `EP_end` was then scored as if the offense were on its own
+1-yard line after every snap, running EPA to about −2.6/play. It surfaced in the
+published percentiles as a 1st-percentile early-down EPA of −2.97 for 2016,
+roughly six times every neighbouring season, while the median and upper tail
+looked normal.
+
+Measured across all 19,749 committed raw payloads, plays carrying a negative
+`end.yardsToEndzone` total 13,632 in 88 games — 8.1% of 2016 and **12 plays
+across seven other seasons**. Reprocessed from raw, the three worst games move
+from −2.292/−1.894/−1.733 mean EPA to −0.158/−0.000/−0.041, while eight control
+games in 2019 and 2023 come out byte-identical.
+
+A re-scrape does not fix this: the committed raw is identical to what ESPN serves
+today. The recovery is local, from `end.yard`.
+
+### CFB — `fill_null(0.0)` is a silent no-op on booleans, pinning `rushing_power_rate` at 1.0
+
+polars leaves Boolean nulls untouched when the fill value is a float — no error,
+no warning. Aggregation frames prepared with `.fill_null(0.0)` therefore kept
+their boolean nulls, and `.mean()` on a flag that is null-where-absent averages
+over exactly the True rows and returns 1.0.
+
+`rushing_power_rate` has shipped as 1.0 for every team in every season. In 2024
+`power_rush_attempt` is null on 159,513 plays and True on 3,437, so the published
+rate read 1.0 where the real figure is 3437/63017 = 0.055.
+
+Of 44 boolean `.mean()` aggregations in the module, exactly one was wrong;
+`rushing_power_success_rate` looked like a second victim at 0.774 but is correct,
+since its frame is already filtered to power attempts. The fill is now
+centralized in `_fill_missing()` (booleans → False, numerics → 0.0) across all 10
+sites rather than patched at the one caught call site.
+
+### Also in this release
 
 ### CFB — `opportunity_run` corrected, un-degenerating `opp_highlight_yards` (BREAKING)
 
