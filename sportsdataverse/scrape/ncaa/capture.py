@@ -306,7 +306,7 @@ def _select_pending(master_path: Union[str, Path], season: int) -> "List[str]":
     )
 
 
-def _main(default_league: str) -> None:
+def _main(default_league: str, default_root: str) -> None:
     import argparse
 
     parser = argparse.ArgumentParser(description="Capture the 3-page bundle for a season's not-yet-captured contests.")
@@ -319,7 +319,7 @@ def _main(default_league: str) -> None:
     )
     parser.add_argument(
         "--root",
-        default=str(Path(__file__).resolve().parents[1]),
+        default=default_root,
         help="Root of the raw data tree (default: repo root).",
     )
     parser.add_argument(

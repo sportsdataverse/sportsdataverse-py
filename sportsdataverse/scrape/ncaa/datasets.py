@@ -665,7 +665,7 @@ def build_teams(season: int, *, league: str, root: Union[str, Path], overwrite: 
     return df
 
 
-def _main(default_league: str) -> None:
+def _main(default_league: str, default_root: str) -> None:
     parser = argparse.ArgumentParser(
         description="Build the committed schedules/teams/rosters trees (offline; no network)."
     )
@@ -673,7 +673,7 @@ def _main(default_league: str) -> None:
     parser.add_argument(
         "--league", default=default_league, help=f"League slug: 'mbb' or 'wbb' (default: {default_league})."
     )
-    parser.add_argument("--root", default=str(Path(__file__).resolve().parents[1]), help="Root of the raw data tree.")
+    parser.add_argument("--root", default=default_root, help="Root of the raw data tree.")
     parser.add_argument(
         "--what",
         default="all",

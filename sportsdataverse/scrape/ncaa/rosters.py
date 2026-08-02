@@ -30,7 +30,7 @@ import logging
 import os
 import time
 from pathlib import Path
-from typing import Callable, List, Optional
+from typing import Callable, List, Optional, Union
 
 import polars as pl
 
@@ -49,12 +49,12 @@ _MAX_CONSECUTIVE_TEAM_FAILURES = 5
 __all__ = ["capture_rosters"]
 
 
-def _default_fetch_fn(shard_i: int = 0, shard_n: int = 1) -> Callable[[str], str]:
+def _default_fetch_fn(root: "Union[str, Path]", shard_i: int = 0, shard_n: int = 1) -> Callable[[str], str]:
     vendor = os.environ.get("NCAA_VENDOR")
     if vendor:
         from .capture import _vendor_fetcher
 
-        repo_root = Path(__file__).resolve().parents[1]
+        repo_root = Path(root)
         fetcher = _vendor_fetcher(vendor, repo_root, shard_i=shard_i, shard_n=shard_n)
         return fetcher.fetch_html
     from sportsdataverse.mbb.mbb_ncaa_fetch import NcaaFetcher
@@ -73,7 +73,12 @@ def capture_rosters(
     shard: "tuple[int, int]" = (0, 1),
 ) -> "tuple[int, int, int]":
     """Capture every team roster for *season*. Returns (written, skipped_existing, failed)."""
-    root = Path(root) if root is not None else Path(__file__).resolve().parents[1]
+    if root is None:
+        raise ValueError(
+            "root is required: the engine cannot infer a -raw repo's location. "
+            "Pass root=... (the repo shim's `Path(__file__).resolve().parents[1]`)."
+        )
+    root = Path(root)
     out_dir = root / league / "team_rosters" / str(season)
 
     if team_ids is None:
@@ -90,7 +95,7 @@ def capture_rosters(
     i, n = shard
     pairs = pairs[i::n]  # disjoint slice per worker
 
-    fn = fetch_fn if fetch_fn is not None else _default_fetch_fn(shard_i=i, shard_n=n)
+    fn = fetch_fn if fetch_fn is not None else _default_fetch_fn(root, shard_i=i, shard_n=n)
     out_dir.mkdir(parents=True, exist_ok=True)
 
     written = skipped_existing = 0
@@ -156,7 +161,7 @@ def capture_rosters(
     return written, skipped_existing, len(failed)
 
 
-def _main(default_league: str) -> None:
+def _main(default_league: str, default_root: str) -> None:
     import argparse
 
     parser = argparse.ArgumentParser(description="Capture a season's team rosters.")
@@ -164,7 +169,7 @@ def _main(default_league: str) -> None:
     parser.add_argument("--league", default=default_league, help="League slug: 'mbb' or 'wbb'.")
     parser.add_argument(
         "--root",
-        default=str(Path(__file__).resolve().parents[1]),
+        default=default_root,
         help="Root of the raw data tree (default: repo root). Point a live smoke at a scratch dir to keep it out of the committed tree.",
     )
     parser.add_argument("--limit-teams", type=int, default=None)

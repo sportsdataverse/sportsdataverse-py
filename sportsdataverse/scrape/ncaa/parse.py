@@ -37,6 +37,7 @@ from __future__ import annotations
 
 import json
 import logging
+import sys
 import os
 import re
 from dataclasses import fields as dc_fields
@@ -295,7 +296,7 @@ def parse_bundle(
     try:
         enrich_parsed(
             result,
-            root=root if root is not None else Path(__file__).resolve().parents[1],
+            root=root,
             league=league,
             season=_ending_year(season),
         )
@@ -334,7 +335,7 @@ def _parse_shard(spec: str) -> "tuple[int, int]":
     return i, n
 
 
-def _main(default_league: str) -> None:
+def _main(default_league: str, default_root: str) -> None:
     import argparse
 
     from .bundle import read_bundle
@@ -343,7 +344,7 @@ def _main(default_league: str) -> None:
     parser = argparse.ArgumentParser(description="Parse raw captured bundles into combined per-contest JSON.")
     parser.add_argument(
         "--root",
-        default=str(Path(__file__).resolve().parents[1]),
+        default=default_root,
         help="Root of the raw data tree (default: repo root).",
     )
     parser.add_argument(
@@ -390,6 +391,15 @@ def _main(default_league: str) -> None:
         # those games keep their stale output forever otherwise.
         if args.force or not (root / args.league / "json" / f"{contest_id}.json").exists():
             pending.append(p)
+
+    if not bundle_paths:
+        scope_msg = ",".join(sorted(args.season)) if args.season else "all seasons"
+        print(
+            f"ERROR: no bundles under {raw_dir} for {scope_msg} -- nothing to parse. "
+            "Check --root (it must be the -raw repo root) and --season.",
+            file=sys.stderr,
+        )
+        raise SystemExit(2)
 
     my_paths = shard([str(p) for p in pending], i, n)
     scope = ",".join(sorted(args.season)) if args.season else "all"
