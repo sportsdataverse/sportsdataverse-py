@@ -2,7 +2,7 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
-- [Unreleased](#unreleased)
+- [0.0.75 Release: August 2, 2026](#0075-release-august-2-2026)
   - [Fix — `scrape.ncaa` CLIs pointed at the wrong repo root (silent no-op)](#fix--scrapencaa-clis-pointed-at-the-wrong-repo-root-silent-no-op)
   - [`scrape.ncaa.parse` — the parse stage is now re-runnable (`--season`, `--force`)](#scrapencaaparse--the-parse-stage-is-now-re-runnable---season---force)
   - [New — `sportsdataverse.scrape.ncaa`: shared stats.ncaa.org hoops sweep engine](#new--sportsdataversescrapencaa-shared-statsncaaorg-hoops-sweep-engine)
@@ -10,6 +10,8 @@
   - [Docs — offline full-text search on the documentation site](#docs--offline-full-text-search-on-the-documentation-site)
   - [CI — docs site builds on GitHub Actions and publishes to `gh-pages`](#ci--docs-site-builds-on-github-actions-and-publishes-to-gh-pages)
   - [New — `sportsdataverse.scrape.stats`: shared stats.nba.com / stats.wnba.com sweep engine (Phase 1)](#new--sportsdataversescrapestats-shared-statsnbacom--statswnbacom-sweep-engine-phase-1)
+  - [CFB — model suite retrained on the corrected corpus (BREAKING model change)](#cfb--model-suite-retrained-on-the-corrected-corpus-breaking-model-change)
+  - [CFB — model cards ship beside every artifact](#cfb--model-cards-ship-beside-every-artifact)
 - [0.0.74 Release: August 2, 2026](#0074-release-august-2-2026)
   - [CFB — the ridge opponent adjustment was a no-op (BREAKING rating change)](#cfb--the-ridge-opponent-adjustment-was-a-no-op-breaking-rating-change)
   - [CFB — ESPN's `-1` end-of-play yardline sentinel corrupted 2016 week 2](#cfb--espns--1-end-of-play-yardline-sentinel-corrupted-2016-week-2)
@@ -223,7 +225,7 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-## Unreleased
+## 0.0.75 Release: August 2, 2026
 
 ### Fix — `scrape.ncaa` CLIs pointed at the wrong repo root (silent no-op)
 
@@ -357,6 +359,43 @@ migrate to these imports next (deleting their local copies); league-specific
 endpoint sets / season formats stay repo-side until Phase 2's `LeagueConfig`.
 All three modules are typed (mypy ratchet) and covered by the ported offline
 observability suite plus a proxy-classifier truth table (23 tests).
+
+### CFB — model suite retrained on the corrected corpus (BREAKING model change)
+
+All seven bundled CFB artifacts — `ep_model`, `wp_spread`, `wp_naive`,
+`qbr_model`, `fg_model`, `xpass_model`, `two_pt_model` — are retrained on a
+training frame rebuilt from the repaired `cfbfastR-cfb-raw` corpus.
+
+The previous frame dated from 2026-06-24, before the ESPN `-1`
+`end.yardsToEndzone` sentinel fix (0.0.74) and 13 other `cfb_pbp.py` commits. In
+that frame, **46 of 2016's games carried an implausible mean EPA**; the rebuilt
+frame has 1.
+
+Both gated metrics improve under 22-fold LOSO — the same protocol the recorded
+baselines were measured with:
+
+| model | metric | before | after |
+|---|---|---:|---:|
+| `ep` | `ep_cal_mae` | 0.0140 | **0.0137** |
+| `wp_spread` | `logloss` | 0.3518 | **0.3486** |
+
+EP's `mlogloss` (1.2333) and accuracy (0.4997) land on the previously documented
+values, which is expected: the frame changed ~0.1% of rows and those metrics
+pool over 2.2M. What moved is *calibration* — precisely the metric a corrupt-EPA
+tail distorts. `mean_pred_ep` 1.6886 against `mean_realized` 1.6888 confirms it.
+
+**Feature contracts are unchanged** for all seven models (8/5/7/4/13/12/10
+features), so this is a weights-only change: no caller adjustment is needed.
+Downstream EPA/WPA values WILL move, so anything cached from an earlier release
+should be rebuilt.
+
+### CFB — model cards ship beside every artifact
+
+Each `.ubj` now has a `.card.json` recording objective, feature list, training
+season span, full hyperparameters, boost rounds and the source frame. The
+generated cards previously emitted `objective: None`, `training_seasons: None`
+and `hyperparameters: None`, so the only way to answer "what was this model
+trained on" was to read the training code.
 
 ## 0.0.74 Release: August 2, 2026
 
