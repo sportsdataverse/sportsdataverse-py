@@ -111,7 +111,7 @@ endpoints:
     name: month_nullable
     query_key: Month
     type: str
-  - default: null
+  - default: '0'
     name: opponent_team_id_nullable
     query_key: OpponentTeamID
     type: str
@@ -151,7 +151,7 @@ endpoints:
     name: starter_bench_nullable
     query_key: StarterBench
     type: str
-  - default: null
+  - default: '0'
     name: team_id_nullable
     query_key: TeamID
     type: str
@@ -553,7 +553,7 @@ endpoints:
     name: vs_division_nullable
     query_key: VsDivision
     type: str
-  - default: ''
+  - default: '0'
     name: vs_team_id_nullable
     query_key: VsTeamID
     type: str
@@ -629,7 +629,7 @@ endpoints:
     name: vs_division_nullable
     query_key: VsDivision
     type: str
-  - default: ''
+  - default: '0'
     name: vs_team_id_nullable
     query_key: VsTeamID
     type: str
@@ -749,7 +749,7 @@ endpoints:
     name: month_nullable
     query_key: Month
     type: str
-  - default: ''
+  - default: '0'
     name: opponent_team_id_nullable
     query_key: OpponentTeamID
     type: str
@@ -777,7 +777,7 @@ endpoints:
     name: season_type_all_star
     query_key: SeasonType
     type: str
-  - default: ''
+  - default: '0'
     name: team_id_nullable
     query_key: TeamID
     type: str
@@ -1000,7 +1000,7 @@ endpoints:
     name: shot_clock_range_nullable
     query_key: ShotClockRange
     type: str
-  - default: ''
+  - default: '0'
     name: team_id_nullable
     query_key: TeamID
     type: str
@@ -1108,7 +1108,7 @@ endpoints:
     name: shot_dist_range_nullable
     query_key: ShotDistRange
     type: str
-  - default: ''
+  - default: '0'
     name: team_id_nullable
     query_key: TeamID
     type: str
@@ -1240,7 +1240,7 @@ endpoints:
     name: starter_bench_nullable
     query_key: StarterBench
     type: str
-  - default: ''
+  - default: '0'
     name: team_id_nullable
     query_key: TeamID
     type: str
@@ -1400,7 +1400,7 @@ endpoints:
     name: starter_bench_nullable
     query_key: StarterBench
     type: str
-  - default: ''
+  - default: '0'
     name: team_id_nullable
     query_key: TeamID
     type: str
@@ -1544,7 +1544,7 @@ endpoints:
     name: starter_bench_nullable
     query_key: StarterBench
     type: str
-  - default: ''
+  - default: '0'
     name: team_id_nullable
     query_key: TeamID
     type: str
@@ -1700,7 +1700,7 @@ endpoints:
     name: starter_bench_nullable
     query_key: StarterBench
     type: str
-  - default: ''
+  - default: '0'
     name: team_id_nullable
     query_key: TeamID
     type: str
@@ -1848,7 +1848,7 @@ endpoints:
     name: starter_bench_nullable
     query_key: StarterBench
     type: str
-  - default: ''
+  - default: '0'
     name: team_id_nullable
     query_key: TeamID
     type: str
@@ -1984,7 +1984,7 @@ endpoints:
     name: starter_bench_nullable
     query_key: StarterBench
     type: str
-  - default: ''
+  - default: '0'
     name: team_id_nullable
     query_key: TeamID
     type: str
@@ -2112,7 +2112,7 @@ endpoints:
     name: starter_bench_nullable
     query_key: StarterBench
     type: str
-  - default: ''
+  - default: '0'
     name: team_id_nullable
     query_key: TeamID
     type: str
@@ -2208,7 +2208,7 @@ endpoints:
     name: season_type_all_star
     query_key: SeasonType
     type: str
-  - default: ''
+  - default: '0'
     name: team_id_nullable
     query_key: TeamID
     type: str
@@ -2344,7 +2344,7 @@ endpoints:
     name: starter_bench_nullable
     query_key: StarterBench
     type: str
-  - default: ''
+  - default: '0'
     name: team_id_nullable
     query_key: TeamID
     type: str
@@ -2452,7 +2452,7 @@ endpoints:
     name: shot_dist_range_nullable
     query_key: ShotDistRange
     type: str
-  - default: ''
+  - default: '0'
     name: team_id_nullable
     query_key: TeamID
     type: str
@@ -2584,7 +2584,7 @@ endpoints:
     name: starter_bench_nullable
     query_key: StarterBench
     type: str
-  - default: ''
+  - default: '0'
     name: team_id_nullable
     query_key: TeamID
     type: str
@@ -2708,7 +2708,7 @@ endpoints:
     name: starter_bench_nullable
     query_key: StarterBench
     type: str
-  - default: ''
+  - default: '0'
     name: team_id_nullable
     query_key: TeamID
     type: str
@@ -2756,7 +2756,7 @@ endpoints:
     name: draft_round_nullable
     query_key: DraftRound
     type: str
-  - default: ''
+  - default: '0'
     name: draft_team_id_nullable
     query_key: DraftTeamID
     type: str
@@ -3064,7 +3064,7 @@ endpoints:
     name: starter_bench_nullable
     query_key: StarterBench
     type: str
-  - default: ''
+  - default: '0'
     name: team_id_nullable
     query_key: TeamID
     type: str
@@ -3076,7 +3076,7 @@ endpoints:
     name: vs_division_nullable
     query_key: VsDivision
     type: str
-  - default: ''
+  - default: '0'
     name: vs_team_id_nullable
     query_key: VsTeamID
     type: str
@@ -3268,7 +3268,7 @@ endpoints:
     name: shot_clock_range_nullable
     query_key: ShotClockRange
     type: str
-  - default: ''
+  - default: '0'
     name: team_id_nullable
     query_key: TeamID
     type: str
@@ -3384,7 +3384,7 @@ endpoints:
     name: def_player_id_nullable
     query_key: DefPlayerID
     type: str
-  - default: ''
+  - default: '0'
     name: def_team_id_nullable
     query_key: DefTeamID
     type: str
@@ -3396,7 +3396,7 @@ endpoints:
     name: off_player_id_nullable
     query_key: OffPlayerID
     type: str
-  - default: ''
+  - default: '0'
     name: off_team_id_nullable
     query_key: OffTeamID
     type: str
@@ -3472,7 +3472,7 @@ endpoints:
     name: def_player_id_nullable
     query_key: DefPlayerID
     type: str
-  - default: ''
+  - default: '0'
     name: def_team_id_nullable
     query_key: DefTeamID
     type: str
@@ -3484,7 +3484,7 @@ endpoints:
     name: off_player_id_nullable
     query_key: OffPlayerID
     type: str
-  - default: ''
+  - default: '0'
     name: off_team_id_nullable
     query_key: OffTeamID
     type: str
@@ -4950,7 +4950,7 @@ endpoints:
     name: period_nullable
     query_key: Period
     type: str
-  - default: '1628932'
+  - default: ''
     name: player_id_nullable
     query_key: PlayerID
     type: str
@@ -4970,7 +4970,7 @@ endpoints:
     name: shot_clock_range_nullable
     query_key: ShotClockRange
     type: str
-  - default: ''
+  - default: '0'
     name: team_id_nullable
     query_key: TeamID
     type: str
@@ -5018,7 +5018,7 @@ endpoints:
     name: draft_round_nullable
     query_key: DraftRound
     type: str
-  - default: ''
+  - default: '0'
     name: draft_team_id_nullable
     query_key: DraftTeamID
     type: str
@@ -5326,7 +5326,7 @@ endpoints:
     name: starter_bench_nullable
     query_key: StarterBench
     type: str
-  - default: ''
+  - default: '0'
     name: team_id_nullable
     query_key: TeamID
     type: str
@@ -5338,7 +5338,7 @@ endpoints:
     name: vs_division_nullable
     query_key: VsDivision
     type: str
-  - default: ''
+  - default: '0'
     name: vs_team_id_nullable
     query_key: VsTeamID
     type: str
@@ -5810,7 +5810,7 @@ endpoints:
     name: season_type_all_star
     query_key: SeasonType
     type: str
-  - default: '1611661321'
+  - default: '0'
     name: team_id_nullable
     query_key: TeamID
     type: str
@@ -7089,7 +7089,7 @@ endpoints:
     name: month_nullable
     query_key: Month
     type: str
-  - default: null
+  - default: '0'
     name: opp_team_id_nullable
     query_key: OppTeamID
     type: str
@@ -7129,7 +7129,7 @@ endpoints:
     name: shot_clock_range_nullable
     query_key: ShotClockRange
     type: str
-  - default: '1611661328'
+  - default: '0'
     name: team_id_nullable
     query_key: TeamID
     type: str

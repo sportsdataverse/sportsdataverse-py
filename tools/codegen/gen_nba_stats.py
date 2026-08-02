@@ -90,6 +90,27 @@ def _stats_eps(league_id: str) -> List[dict]:
     )
 
 
+def _clean_default(name: str, query_key: str, default: Any) -> Any:
+    """Nullable entity-id filters must default to UNFILTERED, never to an entity.
+
+    The catalog's defaults are mined from hoopR/wehoop roxygen examples, and for
+    the league-wide log/detail endpoints those examples pin a specific entity:
+    ``teamgamelogs.team_id_nullable`` defaulted to a G-League team id, so every
+    NBA call silently filtered a league-wide endpoint to a team from ANOTHER
+    league and returned a valid zero-row envelope -- while the same default on
+    WNBA (where the id exists) silently narrowed the "league" dataset to one
+    team. A default that changes which league answers is a bug, not an example.
+
+    The API's own convention (from its 400 error text) is "pass 0 for all
+    teams"; player filters accept empty. Only NULLABLE filters are touched --
+    entity-KEYED endpoints (teamgamelog, playerprofilev2, the dashboards) keep
+    their example defaults, since they cannot answer without an entity at all.
+    """
+    if "nullable" in name and ("team_id" in name or "player_id" in name):
+        return "0" if "team_id" in name else ""
+    return default
+
+
 def _endpoint_entry(ep: dict, stem: str, default_league: str, parser_name: str) -> Dict[str, Any]:
     extra: List[Dict[str, Any]] = []
     has_league = False
@@ -99,7 +120,14 @@ def _endpoint_entry(ep: dict, stem: str, default_league: str, parser_name: str) 
             extra.append({"name": "league_id", "query_key": "LeagueID", "type": "str", "default": default_league})
             has_league = True
         else:
-            extra.append({"name": p["name"], "query_key": p["query_key"], "type": "str", "default": p.get("default")})
+            extra.append(
+                {
+                    "name": p["name"],
+                    "query_key": p["query_key"],
+                    "type": "str",
+                    "default": _clean_default(p["name"], p["query_key"], p.get("default")),
+                }
+            )
     return {
         "short": ep["slug"],
         "summary": f"GET /stats/{ep['slug']}",
