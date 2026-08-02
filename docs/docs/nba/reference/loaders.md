@@ -1825,7 +1825,7 @@ Release: [nba_crosswalk](https://github.com/sportsdataverse/sportsdataverse-data
 | `fox_position_group` | String | Fox position group label (NA if unmatched). |
 | `yahoo_player_id` | String | Yahoo player id (NA placeholder). |
 | `yahoo_player_name` | String | Yahoo player name (NA placeholder). |
-| `match_method` | String | Combination of matched sources, e.g. |
+| `match_method` | String | Combination of matched sources, e.g. "fox+bart" / "fox_only" / "bart_only" / "espn_only". |
 | `match_confidence` | Float64 | Jaro-Winkler score or 1 for exact (NA if none). |
 | `match_keys` | String | NA (reserved for future use). |
 
@@ -1854,7 +1854,7 @@ Release: [nba_crosswalk](https://github.com/sportsdataverse/sportsdataverse-data
 | `fox_home_team_id` | String |  |
 | `fox_away_team_id` | String |  |
 | `yahoo_game_id` | String | Yahoo game id (NA placeholder). |
-| `match_method` | String | Combination of matched sources, e.g. |
+| `match_method` | String | Combination of matched sources, e.g. "fox+bart" / "fox_only" / "bart_only" / "espn_only". |
 | `match_confidence` | Float64 | Jaro-Winkler score or 1 for exact (NA if none). |
 
 ```python
@@ -1887,7 +1887,7 @@ Release: [nba_crosswalk](https://github.com/sportsdataverse/sportsdataverse-data
 | `yahoo_team_id` | String | Yahoo team id (NA placeholder). |
 | `yahoo_team_abbreviation` | String | Yahoo abbreviation (NA placeholder). |
 | `yahoo_team_name` | String | Yahoo team name (NA placeholder). |
-| `match_method` | String | Combination of matched sources, e.g. |
+| `match_method` | String | Combination of matched sources, e.g. "fox+bart" / "fox_only" / "bart_only" / "espn_only". |
 | `match_confidence` | Float64 | Jaro-Winkler score or 1 for exact (NA if none). |
 
 ```python

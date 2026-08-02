@@ -545,6 +545,9 @@ def load_cfb_pbp(seasons, return_as_pandas: bool = False):
         |two_pt_recommendation                   |String  |
         |two_pt_wp_diff                          |Float64 |
 
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2004.
+
     Example:
         Quick start::
 
@@ -600,6 +603,9 @@ def load_cfb_ratings(seasons, return_as_pandas: bool = False):
         |net_rank    |Int64   |
         |net_z       |Float64 |
 
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2004.
+
     Example:
         Quick start::
 
@@ -647,6 +653,9 @@ def load_cfb_recruiting_proj(seasons, return_as_pandas: bool = False):
         |pred_wins    |Float64 |
         |pred_margin  |Float64 |
         |pred_net_epa |Float64 |
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2016.
 
     Example:
         Quick start::
@@ -708,6 +717,9 @@ def load_cfb_rosters(seasons, return_as_pandas: bool = False):
         |recruit_ids      |List(Int32) |
         |headshot_url     |String      |
         |season           |Float64     |
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2003.
 
     Example:
         Quick start::
@@ -780,6 +792,9 @@ def load_cfb_schedule(seasons, return_as_pandas: bool = False):
         |highlights         |String  |
         |notes              |String  |
 
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2003.
+
     Example:
         Quick start::
 
@@ -849,6 +864,9 @@ def load_cfb_team_info(seasons, return_as_pandas: bool = False):
         |grass            |Boolean |
         |dome             |Boolean |
 
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2003.
+
     Example:
         Quick start::
 
@@ -903,6 +921,9 @@ def load_cfb_teams_crosswalk(seasons, return_as_pandas: bool = False):
         |yahoo_abbreviation |String |
         |matched_sources    |String |
 
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2014.
+
     Example:
         Quick start::
 
@@ -953,6 +974,9 @@ def load_cfb_schedule_crosswalk(seasons, return_as_pandas: bool = False):
         |fox_date             |String |
         |yahoo_date           |String |
         |matched_sources      |String |
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2014.
 
     Example:
         Quick start::
@@ -1014,6 +1038,9 @@ def load_cfb_team_box(seasons, return_as_pandas: bool = False):
         |home_away           |String |
         |game_id             |Int64  |
         |season              |Int64  |
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2004.
 
     Example:
         Quick start::
@@ -1116,6 +1143,9 @@ def load_cfb_player_box(seasons, return_as_pandas: bool = False):
         |passingTouchdowns                  |String |
         |adjQBR                             |String |
 
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2004.
+
     Example:
         Quick start::
 
@@ -1175,6 +1205,9 @@ def load_cfb_drives(seasons, return_as_pandas: bool = False):
         |n_plays              |Int64   |
         |game_id              |Int64   |
         |season               |Int64   |
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2004.
 
     Example:
         Quick start::
@@ -1287,6 +1320,9 @@ def load_cfb_play_participants(seasons, return_as_pandas: bool = False):
         |pat_passer_player_id       |String |
         |pat_passer_player_names    |String |
         |pat_passer_player_ids      |String |
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2014.
 
     Example:
         Quick start::
@@ -1406,6 +1442,9 @@ def load_cfb_game_rosters(seasons, return_as_pandas: bool = False):
         |draft_selection            |Float64 |
         |draft_team_href            |String  |
 
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2004.
+
     Example:
         Quick start::
 
@@ -1450,6 +1489,9 @@ def load_cfb_linescores(seasons, return_as_pandas: bool = False):
         |value    |String |
         |game_id  |Int64  |
         |season   |Int64  |
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2004.
 
     Example:
         Quick start::
@@ -1499,6 +1541,9 @@ def load_cfb_betting(seasons, return_as_pandas: bool = False):
         |home_team_spread      |Float64 |
         |game_spread_available |Boolean |
         |odds_source           |String  |
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2004.
 
     Example:
         Quick start::
@@ -1591,6 +1636,9 @@ def load_cfb_fpi_weekly(seasons, return_as_pandas: bool = False):
         |totefficiencyrank           |Float64 |
         |snapshot_is_contemporaneous |Boolean |
 
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2005.
+
     Example:
         Quick start::
 
@@ -1640,6 +1688,9 @@ def load_cfb_power_index(seasons, return_as_pandas: bool = False):
         |gameprojection   |Float64 |
         |matchupquality   |Float64 |
         |teamadjgamescore |Float64 |
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2015.
 
     Example:
         Quick start::
@@ -1764,6 +1815,9 @@ def load_cfb_adv_team(seasons, return_as_pandas: bool = False):
         |season                             |Int64   |
         |week                               |Int64   |
 
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2004.
+
     Example:
         Quick start::
 
@@ -1836,6 +1890,9 @@ def load_cfb_adv_passing(seasons, return_as_pandas: bool = False):
         |season             |Int64   |
         |week               |Int64   |
 
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2004.
+
     Example:
         Quick start::
 
@@ -1891,6 +1948,9 @@ def load_cfb_adv_rushing(seasons, return_as_pandas: bool = False):
         |game_id            |Int64   |
         |season             |Int64   |
         |week               |Int64   |
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2004.
 
     Example:
         Quick start::
@@ -1948,6 +2008,9 @@ def load_cfb_adv_receiving(seasons, return_as_pandas: bool = False):
         |game_id              |Int64   |
         |season               |Int64   |
         |week                 |Int64   |
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2004.
 
     Example:
         Quick start::
@@ -2011,6 +2074,9 @@ def load_cfb_adv_defensive(seasons, return_as_pandas: bool = False):
         |season                |Int64   |
         |week                  |Int64   |
 
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2004.
+
     Example:
         Quick start::
 
@@ -2065,6 +2131,9 @@ def load_cfb_adv_defensive_players(seasons, return_as_pandas: bool = False):
         |interceptions_yards     |Int64  |
         |forced_fumbles          |Int64  |
 
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2004.
+
     Example:
         Quick start::
 
@@ -2116,6 +2185,9 @@ def load_cfb_adv_drives(seasons, return_as_pandas: bool = False):
         |game_id                       |Int64   |
         |season                        |Int64   |
         |week                          |Int64   |
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2004.
 
     Example:
         Quick start::
@@ -2231,6 +2303,9 @@ def load_cfb_adv_situational(seasons, return_as_pandas: bool = False):
         |season                           |Int64   |
         |week                             |Int64   |
 
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2004.
+
     Example:
         Quick start::
 
@@ -2284,6 +2359,9 @@ def load_cfb_adv_specialists(seasons, return_as_pandas: bool = False):
         |game_id            |Int64  |
         |season             |Int64  |
         |week               |Int64  |
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2004.
 
     Example:
         Quick start::
@@ -2348,6 +2426,9 @@ def load_cfb_adv_turnover(seasons, return_as_pandas: bool = False):
         |game_id                  |Int64   |
         |season                   |Int64   |
         |week                     |Int64   |
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2004.
 
     Example:
         Quick start::
@@ -2432,6 +2513,9 @@ def load_cfb_model_pbp(seasons, return_as_pandas: bool = False):
         |wp_model_version     |String  |
         |scored_date          |String  |
 
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2004.
+
     Example:
         Quick start::
 
@@ -2515,6 +2599,9 @@ def load_cfb_passing(seasons, return_as_pandas: bool = False):
         |detmergame_rank     |Float64 |
         |fbs_class           |String  |
 
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2004.
+
     Example:
         Quick start::
 
@@ -2584,6 +2671,9 @@ def load_cfb_percentiles(seasons, return_as_pandas: bool = False):
         |lineyards              |Float64 |
         |opportunity_run        |Float64 |
         |third_down_distance    |Float64 |
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2004.
 
     Example:
         Quick start::
@@ -2657,6 +2747,9 @@ def load_cfb_receiving(seasons, return_as_pandas: bool = False):
         |yardsgame_rank       |Float64 |
         |fbs_class            |String  |
 
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2004.
+
     Example:
         Quick start::
 
@@ -2727,6 +2820,9 @@ def load_cfb_rushing(seasons, return_as_pandas: bool = False):
         |yardsplay_rank     |Float64 |
         |yardsgame_rank     |Float64 |
         |fbs_class          |String  |
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2004.
 
     Example:
         Quick start::
@@ -3154,6 +3250,9 @@ def load_cfb_team_summaries(seasons, return_as_pandas: bool = False):
         |adj_def_epa_rank                     |Float64 |
         |net_adj_epa_rank                     |Float64 |
 
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2004.
+
     Example:
         Quick start::
 
@@ -3287,6 +3386,9 @@ def load_cfb_adv_team_gamelog(seasons, return_as_pandas: bool = False):
         |second_level_yards                 |Float64 |
         |open_field_yards                   |Float64 |
 
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2004.
+
     Example:
         Quick start::
 
@@ -3342,6 +3444,9 @@ def load_cfb_ratings_weekly(seasons, return_as_pandas: bool = False):
         |net_rank     |Int64   |
         |net_z        |Float64 |
         |through_week |Int32   |
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2004.
 
     Example:
         Quick start::
@@ -3770,6 +3875,9 @@ def load_cfb_team_summaries_weekly(seasons, return_as_pandas: bool = False):
         |net_adj_epa_rank                     |Float64 |
         |through_week                         |Int32   |
 
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2004.
+
     Example:
         Quick start::
 
@@ -4174,6 +4282,9 @@ def load_cfb_pbp_r(seasons, return_as_pandas: bool = False):
         |penalty_offset                   |Boolean |
         |penalty_text                     |Boolean |
         |penalty_play_text                |String  |
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2014.
 
     Example:
         Quick start::

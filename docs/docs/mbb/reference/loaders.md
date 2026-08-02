@@ -628,7 +628,7 @@ Release: [mbb_crosswalk](https://github.com/sportsdataverse/sportsdataverse-data
 | `fox_position_group` | String | Fox position group label (NA if unmatched). |
 | `yahoo_player_id` | String | Yahoo player id (NA placeholder). |
 | `yahoo_player_name` | String | Yahoo player name (NA placeholder). |
-| `match_method` | String | Combination of matched sources, e.g. |
+| `match_method` | String | Combination of matched sources, e.g. "fox+bart" / "fox_only" / "bart_only" / "espn_only". |
 | `match_confidence` | Float64 | Jaro-Winkler score or 1 for exact (NA if none). |
 | `match_keys` | String | NA (reserved for future use). |
 
@@ -655,7 +655,7 @@ Release: [mbb_crosswalk](https://github.com/sportsdataverse/sportsdataverse-data
 | `kp_game_id` | String | KenPom game id (NA unless kenpom enabled). |
 | `fox_game_id` | String | Fox game id (NA placeholder). |
 | `yahoo_game_id` | String | Yahoo game id (NA placeholder). |
-| `match_method` | String | Combination of matched sources, e.g. |
+| `match_method` | String | Combination of matched sources, e.g. "fox+bart" / "fox_only" / "bart_only" / "espn_only". |
 | `match_confidence` | Float64 | Jaro-Winkler score or 1 for exact (NA if none). |
 
 ```python
@@ -689,7 +689,7 @@ Release: [mbb_crosswalk](https://github.com/sportsdataverse/sportsdataverse-data
 | `fox_match_confidence` | Float64 | 1 for matched, NA for unmatched. |
 | `bart_match_confidence` | Float64 | 1 for matched, NA for unmatched. |
 | `kp_match_confidence` | Float64 | 1 for matched, NA for unmatched. |
-| `match_method` | String | Combination of matched sources, e.g. |
+| `match_method` | String | Combination of matched sources, e.g. "fox+bart" / "fox_only" / "bart_only" / "espn_only". |
 
 ```python
 load_mbb_team_crosswalk(seasons=2026)

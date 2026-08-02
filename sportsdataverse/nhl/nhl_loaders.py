@@ -151,6 +151,9 @@ def load_nhl_pbp(seasons, return_as_pandas: bool = False):
         |xg                       |Float64 |
         |game_date                |String  |
 
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2010.
+
     Example:
         Quick start::
 
@@ -228,6 +231,9 @@ def load_nhl_player_boxscore(seasons, return_as_pandas: bool = False):
         |shots_against               |Int64   |
         |saves                       |Int64   |
 
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2010.
+
     Example:
         Quick start::
 
@@ -303,6 +309,9 @@ def load_nhl_schedule(seasons, return_as_pandas: bool = False):
         |shots_by_period    |Boolean |
         |shootout           |Boolean |
 
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2010.
+
     Example:
         Quick start::
 
@@ -362,6 +371,9 @@ def load_nhl_team_boxscore(seasons, return_as_pandas: bool = False):
         |season           |Int64   |
         |game_date        |String  |
 
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2010.
+
     Example:
         Quick start::
 
@@ -411,6 +423,9 @@ def load_nhl_game_info(seasons, return_as_pandas: bool = False):
         |home_score     |Int64  |
         |away_score     |Int64  |
         |game_state     |String |
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2024.
 
     Example:
         Quick start::
@@ -462,6 +477,9 @@ def load_nhl_game_rosters(seasons, return_as_pandas: bool = False):
         |game_id        |Int64  |
         |season         |Int64  |
         |game_date      |String |
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2024.
 
     Example:
         Quick start::
@@ -527,6 +545,9 @@ def load_nhl_goalie_boxscores(seasons, return_as_pandas: bool = False):
         |season                      |Int64   |
         |game_date                   |String  |
 
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2024.
+
     Example:
         Quick start::
 
@@ -577,6 +598,9 @@ def load_nhl_linescore(seasons, return_as_pandas: bool = False):
         |away_shots     |Int64   |
         |has_shootout   |Boolean |
 
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2024.
+
     Example:
         Quick start::
 
@@ -621,6 +645,9 @@ def load_nhl_officials(seasons, return_as_pandas: bool = False):
         |game_id   |Int64  |
         |season    |Int64  |
         |game_date |String |
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2025.
 
     Example:
         Quick start::
@@ -756,6 +783,9 @@ def load_nhl_pbp_full(seasons, return_as_pandas: bool = False):
         |xg                       |Float64 |
         |game_date                |String  |
 
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2010.
+
     Example:
         Quick start::
 
@@ -889,6 +919,9 @@ def load_nhl_pbp_lite(seasons, return_as_pandas: bool = False):
         |away_goalie_id           |Int32   |
         |xg                       |Float64 |
 
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2010.
+
     Example:
         Quick start::
 
@@ -974,6 +1007,9 @@ def load_nhl_penalties(seasons, return_as_pandas: bool = False):
         |servedBy.sk                         |String |
         |servedBy.sv                         |String |
 
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2024.
+
     Example:
         Quick start::
 
@@ -1051,6 +1087,9 @@ def load_nhl_player_boxscores(seasons, return_as_pandas: bool = False):
         |shots_against               |Int64   |
         |saves                       |Int64   |
 
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2010.
+
     Example:
         Quick start::
 
@@ -1100,6 +1139,9 @@ def load_nhl_rosters(seasons, return_as_pandas: bool = False):
         |sweater_number |Int32  |
         |season         |Int32  |
         |game_date      |String |
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2010.
 
     Example:
         Quick start::
@@ -1175,6 +1217,9 @@ def load_nhl_schedules(seasons, return_as_pandas: bool = False):
         |officials          |Boolean |
         |shots_by_period    |Boolean |
         |shootout           |Boolean |
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2010.
 
     Example:
         Quick start::
@@ -1264,6 +1309,9 @@ def load_nhl_scoring(seasons, return_as_pandas: bool = False):
         |period_type               |String  |
         |goalInGame                |Int64   |
 
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2024.
+
     Example:
         Quick start::
 
@@ -1307,6 +1355,9 @@ def load_nhl_scratches(seasons, return_as_pandas: bool = False):
         |firstName |String |
         |lastName  |String |
         |game_id   |Int64  |
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2024.
 
     Example:
         Quick start::
@@ -1364,6 +1415,9 @@ def load_nhl_shifts(seasons, return_as_pandas: bool = False):
         |game_id                |Int64  |
         |season                 |Int64  |
         |game_date              |String |
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2025.
 
     Example:
         Quick start::
@@ -1437,6 +1491,9 @@ def load_nhl_shootout(seasons, return_as_pandas: bool = False):
         |highlightClip             |Int64   |
         |highlightClipFr           |Int64   |
 
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2025.
+
     Example:
         Quick start::
 
@@ -1485,6 +1542,9 @@ def load_nhl_shots_by_period(seasons, return_as_pandas: bool = False):
         |game_id                |Int64  |
         |season                 |Int64  |
         |game_date              |String |
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2025.
 
     Example:
         Quick start::
@@ -1550,6 +1610,9 @@ def load_nhl_skater_boxscores(seasons, return_as_pandas: bool = False):
         |season               |Int64   |
         |game_date            |String  |
 
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2024.
+
     Example:
         Quick start::
 
@@ -1608,6 +1671,9 @@ def load_nhl_team_boxscores(seasons, return_as_pandas: bool = False):
         |game_id          |Int64   |
         |season           |Int64   |
         |game_date        |String  |
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2010.
 
     Example:
         Quick start::
@@ -1670,6 +1736,9 @@ def load_nhl_three_stars(seasons, return_as_pandas: bool = False):
         |loser_name          |String  |
         |goalsAgainstAverage |Float64 |
         |savePctg            |Float64 |
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2024.
 
     Example:
         Quick start::

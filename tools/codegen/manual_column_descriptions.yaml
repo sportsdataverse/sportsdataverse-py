@@ -1,4 +1,12 @@
-_global: {}
+_global:
+  # The mined roxygen for the crosswalk loaders truncates at "e.g." — the full
+  # enumeration survives elsewhere in r_column_descriptions.yaml.
+  match_method: Combination of matched sources, e.g. "fox+bart" / "fox_only" / "bart_only"
+    / "espn_only".
+  # baseballr's Statcast-search phrasing ("Full name of the batter") is wrong for
+  # the Int64 MLBAM id these tables carry.
+  batter: MLBAM player id of the batter.
+  hr: Home runs hit by the batter over the covered sample.
 ahl_leaders:
   photo_small: URL of the small-format headshot image for the AHL leader-board player.
   stat_formatted: Human-readable string representation of the player's leading statistic value (e.g., "32G", "1.42").
@@ -3376,7 +3384,6 @@ load_cfb_pbp:
   end.def_pos_team.id: ESPN's `def_pos_team.id` value for the play state at the end of the play.
   end.def_pos_team.name: ESPN's `def_pos_team.name` value for the play state at the end of the play.
   end.def_pos_team_score: ESPN's `def_pos_team_score` value for the play state at the end of the play.
-  end.def_team.id: ESPN's `def_team.id` value for the play state at the end of the play.
   end.distance: ESPN's `distance` value for the play state at the end of the play.
   end.down: ESPN's `down` value for the play state at the end of the play.
   end.downDistanceText: ESPN's `downDistanceText` value for the play state at the end of the play.
@@ -3416,7 +3423,6 @@ load_cfb_pbp:
   homeTeamNameAlt: ESPN's home-team NameAlt for the game, stamped on every play.
   homeTeamSpread: ESPN's home-team Spread for the game, stamped on every play.
   homeTimeoutCalled: True when the home team called a timeout on the play.
-  kickoff_return_player_name: Name of the player returning the kickoff.
   lag_EP_end: Value of EP_end on the previous play, used for sequence-aware derivations.
   lag_HA_score_diff: Value of HA_score_diff on the previous play, used for sequence-aware derivations.
   lag_awayScore: Value of awayScore on the previous play, used for sequence-aware derivations.
@@ -3463,13 +3469,11 @@ load_cfb_pbp:
   pen_weight: Weighting applied to the penalty component of the play.
   penalty_in_text: True when the play description mentions a penalty.
   period.number: Period (quarter) number in which the play occurred.
-  playType: ESPN's play-type label for the play.
   pos_score_diff_end: Score differential from the possessing team's perspective at the end of the play.
   power_rush_attempt: True when the play is a short-yardage power rushing attempt.
   power_rush_success: True when a power rushing attempt gained the yardage needed.
   prog_drive_EPA: Cumulative EPA accrued by the drive up to and including this play.
   prog_drive_WPA: Cumulative win-probability added by the drive up to and including this play.
-  punt_return_player_name: Name of the player returning the punt.
   qbr_epa: EPA variant used as an input to the QBR calculation.
   rush_epa: EPA credited to the play when it is a rush.
   rush_weight: Weighting applied to the rush component of the play.
@@ -4842,17 +4846,6 @@ load_phf_team_boxscores:
   total_scoring: Goals the team scored in the game.
   total_shots: Shots the team took in the game.
 load_wnba_stats_pbp:
-  act_type: Action-type code for the play-by-play event.
-  msg_type: Message-type code for the play-by-play event.
-  number_event: Sequence number of the event within the game.
-  off_slug_team: Slug of the team on offense for the event.
-  secs_passed_game: Seconds elapsed in the game at the event.
-  shot_pts: Points scored on the shot, if the event was a made field goal.
-  slug_team: Slug of the team credited with the event.
-  team_away: Slug of the away team.
-  team_home: Slug of the home team.
-  total_starters_away: Number of the away team's starters on the floor for the event.
-  total_starters_home: Number of the home team's starters on the floor for the event.
 load_wnba_stats_player_game_logs:
   ast: Assists credited.
   blk: Total shots blocked.
@@ -5227,11 +5220,6 @@ load_nba_standings:
   stat_description: ESPN's prose gloss for the standings statistic on this row; for the clincher stat it is not a fixed label
     but the team's actual status text, such as Clinched Playoff Berth or Eliminated From Playoff.
 load_nba_stats_schedules:
-  game_label: The stats.nba.com event label naming the round or special event a game belongs to, such as NBA Finals, East
-    First Round, Emirates NBA Cup or NBA Mexico City Game; an empty string for an ordinary regular-season game.
-  game_sub_label: Secondary label for special-event games (e.g. 'NBA Abu Dhabi Game'); an empty string for ordinary games
-    rather than null.
-  is_neutral: True when the game was played at a neutral site.
 load_nhl_penalties:
   committedByPlayer.firstName.cs: Alternate given name for the penalized player under the NHL feed's Czech key. Verified against
     the data it is frequently a different name form rather than a re-spelling (Joshua published as Josh, Aliaksei as Alexei),
@@ -5268,9 +5256,6 @@ load_nhl_penalties:
   committedByPlayer.lastName.fi: Alternate rendering of the family name published under the NHL feed's Finnish key. It differs
     from the default in orthography -- usually restoring diacritics the default folds to ASCII, though for some names it strips
     them instead -- so treat it as an alternate spelling, not a canonical one.
-  committedByPlayer.lastName.fr: Alternate rendering of the penalized player's family name under the NHL feed's French key.
-    It differs from the default in orthography -- usually restoring diacritics the default folds to ASCII, though for some
-    names it strips them instead -- so treat it as an alternate spelling, not a canonical one.
   committedByPlayer.lastName.sk: Alternate rendering of the family name published under the NHL feed's Slovak key. It differs
     from the default in orthography -- usually restoring diacritics the default folds to ASCII, though for some names it strips
     them instead -- so treat it as an alternate spelling, not a canonical one.
@@ -5315,9 +5300,6 @@ load_nhl_penalties:
   drawnBy.lastName.fi: Alternate rendering of the family name published under the NHL feed's Finnish key. It differs from
     the default in orthography -- usually restoring diacritics the default folds to ASCII, though for some names it strips
     them instead -- so treat it as an alternate spelling, not a canonical one.
-  drawnBy.lastName.fr: Alternate rendering of the opposing player credited with drawing the penalty's family name under the
-    NHL feed's French key. It differs from the default in orthography -- usually restoring diacritics the default folds to
-    ASCII, though for some names it strips them instead -- so treat it as an alternate spelling, not a canonical one.
   drawnBy.lastName.sk: Alternate rendering of the family name published under the NHL feed's Slovak key. It differs from the
     default in orthography -- usually restoring diacritics the default folds to ASCII, though for some names it strips them
     instead -- so treat it as an alternate spelling, not a canonical one.
@@ -5328,11 +5310,7 @@ load_nhl_penalties:
     is credited, as on all bench and game-misconduct penalties.
   servedBy.cs: Alternate abbreviated name (first initial plus family name) published under the NHL feed's Czech key, differing
     from the default by diacritics or by an alternate given-name form.
-  servedBy.de: Alternate abbreviated name (first initial plus family name) published under the NHL feed's German key, differing
-    from the default by diacritics or by an alternate given-name form.
   servedBy.default: Abbreviated name, in the feed's default English locale, of the player serving the penalty.
-  servedBy.es: Alternate abbreviated name (first initial plus family name) published under the NHL feed's Spanish key, differing
-    from the default by diacritics or by an alternate given-name form.
   servedBy.fi: Alternate abbreviated name (first initial plus family name) published under the NHL feed's Finnish key, differing
     from the default by diacritics or by an alternate given-name form.
   servedBy.sk: Alternate abbreviated name (first initial plus family name) published under the NHL feed's Slovak key, differing
@@ -5403,9 +5381,6 @@ load_nhl_scoring:
   lastName.fi: Alternate rendering of the family name published under the NHL feed's Finnish key. It differs from the default
     in orthography -- usually restoring diacritics the default folds to ASCII, though for some names it strips them instead
     -- so treat it as an alternate spelling, not a canonical one.
-  lastName.fr: Alternate rendering of the family name published under the NHL feed's French key. It differs from the default
-    in orthography -- usually restoring diacritics the default folds to ASCII, though for some names it strips them instead
-    -- so treat it as an alternate spelling, not a canonical one.
   lastName.sk: Alternate rendering of the family name published under the NHL feed's Slovak key. It differs from the default
     in orthography -- usually restoring diacritics the default folds to ASCII, though for some names it strips them instead
     -- so treat it as an alternate spelling, not a canonical one.
@@ -5419,12 +5394,8 @@ load_nhl_scoring:
   name.de: Alternate abbreviated name (first initial plus family name) published under the NHL feed's German key, differing
     from the default by diacritics or by an alternate given-name form.
   name.default: Abbreviated name of the player as published in the NHL feed's default English locale.
-  name.es: Alternate abbreviated name (first initial plus family name) published under the NHL feed's Spanish key, differing
-    from the default by diacritics or by an alternate given-name form.
   name.fi: Alternate abbreviated name (first initial plus family name) published under the NHL feed's Finnish key, differing
     from the default by diacritics or by an alternate given-name form.
-  name.fr: Alternate abbreviated name for the player under the NHL feed's French key, differing from the default by diacritics
-    or by an alternate given-name form.
   name.sk: Alternate abbreviated name (first initial plus family name) published under the NHL feed's Slovak key, differing
     from the default by diacritics or by an alternate given-name form.
   name.sv: Alternate abbreviated name (first initial plus family name) published under the NHL feed's Swedish key, differing
@@ -5479,12 +5450,8 @@ load_nhl_three_stars:
   name.de: Alternate abbreviated name (first initial plus family name) published under the NHL feed's German key, differing
     from the default by diacritics or by an alternate given-name form.
   name.default: Abbreviated name of the player as published in the NHL feed's default English locale.
-  name.es: Alternate abbreviated name (first initial plus family name) published under the NHL feed's Spanish key, differing
-    from the default by diacritics or by an alternate given-name form.
   name.fi: Alternate abbreviated name (first initial plus family name) published under the NHL feed's Finnish key, differing
     from the default by diacritics or by an alternate given-name form.
-  name.fr: Alternate abbreviated name for the player under the NHL feed's French key, differing from the default by diacritics
-    or by an alternate given-name form.
   name.sk: Alternate abbreviated name (first initial plus family name) published under the NHL feed's Slovak key, differing
     from the default by diacritics or by an alternate given-name form.
   name.sv: Alternate abbreviated name (first initial plus family name) published under the NHL feed's Swedish key, differing
@@ -5544,12 +5511,8 @@ load_wnba_standings:
 load_wnba_stats_draft:
   draft_type: 'CONSTANT in the published asset: every row reads ''Draft'', so it does not currently distinguish the main draft
     from any other selection event.'
-  season_2: 'REDUNDANT: duplicates the season column on every published row. It exists because the upstream feed returns the
-    season under a second key.'
 load_wnba_stats_rosters:
   how_acquired: How the team acquired the player (draft, trade, free agency).
-  season_2: Season label in the league's second display form.
-  team_id_lookup: Team id used to join the row back to the team tables.
 load_cfb_fpi_weekly:
   accomplishment: Reflects chance that an average Top 25 team would have team's record or better, given the schedule. On a
     0 to 100 scale, where 100 is best.
@@ -5655,7 +5618,7 @@ load_nfl_contracts:
 load_nfl_depth_charts:
   club_code: Three-letter team abbreviation identifying the NFL club for this depth chart entry.
   depth_position: Specific positional slot on the depth chart (e.g., 'QB1', 'WR2') indicating where the player ranks.
-  depth_team: Numeric depth rank (1 = starter, 2 = backup, etc.) of the player at their position.
+  depth_team: Depth rank of the player at their position, stored as a string ('1' = starter, '2' = backup, etc.).
   elias_id: Elias Sports Bureau player identifier used for official NFL record-keeping and statistics attribution.
   formation: Offensive or defensive formation label (e.g., 'Base 3-4', 'Nickel') associated with this depth chart grouping.
 load_nfl_espn_qbr:

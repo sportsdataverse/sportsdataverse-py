@@ -52,6 +52,9 @@ def load_mlb_re24_matrix(seasons, return_as_pandas: bool = False):
         |n          |UInt32  |
         |season     |Int64   |
 
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2015.
+
     Example:
         Quick start::
 
@@ -100,6 +103,9 @@ def load_mlb_we_table(seasons, return_as_pandas: bool = False):
         |n                 |UInt32  |
         |season            |Int64   |
 
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2015.
+
     Example:
         Quick start::
 
@@ -143,6 +149,9 @@ def load_mlb_wpa(seasons, return_as_pandas: bool = False):
         |at_bat_index |Int64   |
         |wpa          |Float64 |
         |season       |Int64   |
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2015.
 
     Example:
         Quick start::
@@ -191,6 +200,9 @@ def load_mlb_expected_stats(seasons, return_as_pandas: bool = False):
         |xba      |Float64 |
         |xslg     |Float64 |
 
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2015.
+
     Example:
         Quick start::
 
@@ -237,6 +249,9 @@ def load_mlb_expected_hr(seasons, return_as_pandas: bool = False):
         |xhr_park_adj      |Float64 |
         |hr_above_expected |Float64 |
 
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2015.
+
     Example:
         Quick start::
 
@@ -280,6 +295,9 @@ def load_mlb_batter_projection(seasons, return_as_pandas: bool = False):
         |age        |Int64   |
         |proj_xwoba |Float64 |
         |proj_pa    |Float64 |
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2016.
 
     Example:
         Quick start::
@@ -326,6 +344,9 @@ def load_mlb_oaa(seasons, return_as_pandas: bool = False):
         |oaa           |Float64 |
         |season        |Int64   |
 
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2015.
+
     Example:
         Quick start::
 
@@ -371,6 +392,9 @@ def load_mlb_catcher_framing(seasons, return_as_pandas: bool = False):
         |strikes_gained |Float64 |
         |season         |Int64   |
 
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2015.
+
     Example:
         Quick start::
 
@@ -414,6 +438,9 @@ def load_mlb_xera(seasons, return_as_pandas: bool = False):
         |season   |Int64   |
         |x_woba   |Float64 |
         |x_era    |Float64 |
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2015.
 
     Example:
         Quick start::
@@ -460,6 +487,9 @@ def load_mlb_stuff_plus(seasons, return_as_pandas: bool = False):
         |stuff_plus   |Float64 |
         |season       |Int64   |
 
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2015.
+
     Example:
         Quick start::
 
@@ -503,6 +533,9 @@ def load_mlb_command_plus(seasons, return_as_pandas: bool = False):
         |location_rv_hat |Float64 |
         |command_plus    |Float64 |
         |season          |Int64   |
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2015.
 
     Example:
         Quick start::
@@ -557,6 +590,9 @@ def load_ncaa_baseball_pbp(seasons, return_as_pandas: bool = False):
         |game_pbp_id    |Int32   |
         |game_info_url  |String  |
         |contest_id     |Int32   |
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2017.
 
     Example:
         Quick start::
@@ -619,6 +655,9 @@ def load_ncaa_baseball_schedule(seasons, return_as_pandas: bool = False):
         |slug                    |String |
         |game_info_url           |String |
         |contest_id              |Int32  |
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2012.
 
     Example:
         Quick start::
