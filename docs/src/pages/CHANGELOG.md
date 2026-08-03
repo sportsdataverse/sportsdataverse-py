@@ -2,6 +2,8 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
+- [Unreleased](#unreleased)
+  - [New — `sportsdataverse.scrape.espn`: shared ESPN `-raw` archive engine](#new--sportsdataversescrapeespn-shared-espn--raw-archive-engine)
 - [0.0.75 Release: August 2, 2026](#0075-release-august-2-2026)
   - [Fix — `scrape.ncaa` CLIs pointed at the wrong repo root (silent no-op)](#fix--scrapencaa-clis-pointed-at-the-wrong-repo-root-silent-no-op)
   - [`scrape.ncaa.parse` — the parse stage is now re-runnable (`--season`, `--force`)](#scrapencaaparse--the-parse-stage-is-now-re-runnable---season---force)
@@ -224,6 +226,46 @@
 - [0.0.5 Release: October 20, 2021](#005-release-october-20-2021)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+## Unreleased
+
+### New — `sportsdataverse.scrape.espn`: shared ESPN `-raw` archive engine
+
+The fourth and last duplicated scrape stack in the ecosystem. `hoopR-nba-raw`,
+`hoopR-mbb-raw`, `wehoop-wnba-raw` and `wehoop-wbb-raw` run the same numbered
+stage sequence against the same tree shape — but only `wehoop-wbb-raw` had
+grown a shared package (`wbb_raw_scrape`, 451 LOC), a test suite, and the write
+guard. The other three inline those concerns in every numbered script: 22
+copy-pasted `str2bool` definitions between them, and no write guard at all.
+
+That package now lives here, parameterized on `LeagueConfig`:
+
+- `scrape/espn/persist.py` — the write guard. **The raw tree is the scrape
+  checkpoint, so a persisted provider error body is permanent**: it yields an
+  empty dataset for that key on every rebuild, forever, with nothing failing.
+  Refusing the write is the whole fix — a refused key simply looks un-scraped,
+  so the next run retries it and the archive self-heals.
+- `scrape/espn/cli.py` — the `str2bool` / `season_args` contract. `type=bool`
+  is a trap: bash passes the *string* `"false"`, and `bool("false")` is `True`.
+  `rescrape_default=` is exposed so the three repos that shipped `default=True`
+  can migrate without changing cron behavior, then flip it deliberately.
+- `scrape/espn/ids.py` — one id canonicalizer; a lossy cast raises rather than
+  silently producing an id that joins to the wrong row.
+- `scrape/espn/schedule.py` / `master.py` / `paths.py` — capture flags, URL
+  columns, the season→master union and coverage index.
+- `scrape/espn/league_config.py` — `NBA` / `MBB` / `WNBA` / `WBB` identity,
+  including which per-game families each league actually publishes (ESPN serves
+  an officials feed for the two women's leagues only).
+
+**`league` is a required keyword on every public entry point.** A defaulted
+league is how a well-formed capture ends up written under the wrong league's
+tree — wrong data, no error — which is exactly the bug the NCAA extraction
+found in `ncaa-mbb-hoops-raw`'s capture CLI. An AST-based test enforces that no
+module outside `league_config.py` names a league in executable code.
+
+86 offline tests, ported from `wehoop-wbb-raw`'s suite so the WBB assertions
+stand as the parity oracle for the lift, and extended with the league
+parameterization.
 
 ## 0.0.75 Release: August 2, 2026
 
