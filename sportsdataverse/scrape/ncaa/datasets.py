@@ -312,7 +312,7 @@ def _conform(df: pl.DataFrame, columns: List[str], types: Dict[str, pl.DataType]
     have = set(df.columns)
     return df.select(
         [pl.col(c) if c in have else pl.lit(None, dtype=types.get(c, pl.Utf8)).alias(c) for c in columns]
-    ).cast(types)  # type: ignore[arg-type]
+    ).cast(types)
 
 
 def _enrich_schedule(df: pl.DataFrame, team_id: Union[int, str], season: int, league: str) -> pl.DataFrame:
