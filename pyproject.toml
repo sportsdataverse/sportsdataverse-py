@@ -658,4 +658,7 @@ files = [
     "sportsdataverse/scrape/ncaa/discover.py",
     "sportsdataverse/scrape/ncaa/capture.py",
     "sportsdataverse/scrape/ncaa/parse.py",
+    "sportsdataverse/scrape/ncaa/identity.py",
+    "sportsdataverse/scrape/ncaa/datasets.py",
+    "sportsdataverse/scrape/ncaa/canary.py",
 ]

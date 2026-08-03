@@ -331,13 +331,17 @@ def _stamp_player(
         stats["player_hit" if hit else "player_miss"] += 1
 
 
-def _espn_game_id_for(root: Union[str, Path], league: str, season: Optional[int], contest_id: Any) -> Optional[str]:
+def _espn_game_id_for(
+    root: Optional[Union[str, Path]], league: str, season: Optional[int], contest_id: Any
+) -> Optional[str]:
     """This contest's ESPN event id from the offline crosswalk, or ``None``.
 
     Absence of a crosswalk is never an exception: an unbuilt season, an
     unmatched contest and an unreadable file all yield ``None``.
     """
-    if season is None or not contest_id:
+    # Explicit: a None root reached str() as the literal "None", which only
+    # happened to work because that path never exists.
+    if root is None or season is None or not contest_id:
         return None
     from .espn_game_xwalk import load_espn_game_index
 
@@ -357,7 +361,7 @@ def _team_name(value: Any) -> Optional[str]:
 def enrich_parsed(
     parsed: Dict[str, Any],
     *,
-    root: Union[str, Path],
+    root: Optional[Union[str, Path]],
     league: str,
     season: Optional[int] = None,
 ) -> Dict[str, Any]:
@@ -435,34 +439,36 @@ def enrich_parsed(
 
     for row in parsed.get("shots") or []:
         code = row.get("shooter_id")
-        hit = codes.get(code) if code else None
-        row[_SHOTS_PLAYER_KEYS[0]] = hit[0] if hit else None
-        row[_SHOTS_PLAYER_KEYS[1]] = hit[1] if hit else None
+        player_hit = codes.get(code) if code else None
+        row[_SHOTS_PLAYER_KEYS[0]] = player_hit[0] if player_hit else None
+        row[_SHOTS_PLAYER_KEYS[1]] = player_hit[1] if player_hit else None
         if code:
             stats["player_total"] += 1
-            stats["player_hit" if hit else "player_miss"] += 1
+            stats["player_hit" if player_hit else "player_miss"] += 1
 
     for lineup in parsed.get("lineups") or []:
         for side in LINEUP_TEAM_COLUMNS:
-            hit = teams.get(_team_name(lineup.get(side)))
+            side_name = _team_name(lineup.get(side))
+            team_hit = teams.get(side_name) if side_name else None
             for key in _TEAM_ID_KEYS:
-                lineup[f"{side}_{key}"] = hit[key] if hit else None
+                lineup[f"{side}_{key}"] = team_hit[key] if team_hit else None
             if _team_name(lineup.get(side)):
                 stats["team_total"] += 1
-                stats["team_hit" if hit else "team_miss"] += 1
+                stats["team_hit" if team_hit else "team_miss"] += 1
         for slot in ("players", "players_in", "players_out"):
             for player in lineup.get(slot) or []:
                 if not isinstance(player, dict):
                     continue
                 # `code` first (exact, team-scoped); the display name is the
                 # fallback for a player the roster spells differently.
-                hit = codes.get(player.get("code"))
-                if hit is None:
+                code = player.get("code")
+                player_hit = codes.get(code) if code else None
+                if player_hit is None:
                     display = (player.get("id") or {}).get("name") if isinstance(player.get("id"), dict) else None
-                    hit = names.get(_key_name(display)) if display else None
-                player["ncaa_id"] = hit[0] if hit else None
+                    player_hit = names.get(_key_name(display)) if display else None
+                player["ncaa_id"] = player_hit[0] if player_hit else None
                 stats["player_total"] += 1
-                stats["player_hit" if hit else "player_miss"] += 1
+                stats["player_hit" if player_hit else "player_miss"] += 1
 
     # The game-level ESPN event id, on every row of every family beside its
     # contest_id. A season with no crosswalk built (or a contest ESPN has no

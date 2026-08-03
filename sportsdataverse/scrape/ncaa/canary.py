@@ -380,10 +380,10 @@ def build_fetcher(vendor: dict, cache_dir: Path) -> NcaaFetcher:
         # fails a game in ~20s instead of ~40s; a real IP resolves well under it.
         return NcaaFetcher.with_browser(cfg, proxy_pool=list(vendor["proxies"]), nav_timeout_ms=20000)
     if vtype == "proxy_patchright":
-        cfg = NcaaFetchConfig(cache_dir=cache_dir, transport=_PatchrightTransport())  # type: ignore[arg-type]
+        cfg = NcaaFetchConfig(cache_dir=cache_dir, transport=_PatchrightTransport())
         return NcaaFetcher(cfg, proxy_pool=list(vendor["proxies"]))
     if vtype == "managed_cdp":
-        cfg = NcaaFetchConfig(cache_dir=cache_dir, transport=_ManagedCdpTransport(vendor["cdp_url"]))  # type: ignore[arg-type]
+        cfg = NcaaFetchConfig(cache_dir=cache_dir, transport=_ManagedCdpTransport(vendor["cdp_url"]))
         return NcaaFetcher(cfg, proxy_pool=None)
     if vtype == "unblocker_zyte":
         transport = _make_zyte_transport(vendor["api_key"], vendor.get("render", "browserHtml"))
@@ -391,7 +391,7 @@ def build_fetcher(vendor: dict, cache_dir: Path) -> NcaaFetcher:
         transport = _make_unblocker_proxy_transport(vendor["proxy"])
     else:  # pragma: no cover - guarded by _vendor_ready
         raise ValueError(f"unknown vendor type {vtype!r}")
-    cfg = NcaaFetchConfig(cache_dir=cache_dir, transport=transport)  # type: ignore[arg-type]
+    cfg = NcaaFetchConfig(cache_dir=cache_dir, transport=transport)
     return NcaaFetcher(cfg, proxy_pool=None)
 
 
