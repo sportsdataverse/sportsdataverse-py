@@ -661,4 +661,12 @@ files = [
     "sportsdataverse/scrape/ncaa/identity.py",
     "sportsdataverse/scrape/ncaa/datasets.py",
     "sportsdataverse/scrape/ncaa/canary.py",
+    "sportsdataverse/scrape/espn/__init__.py",
+    "sportsdataverse/scrape/espn/league_config.py",
+    "sportsdataverse/scrape/espn/paths.py",
+    "sportsdataverse/scrape/espn/ids.py",
+    "sportsdataverse/scrape/espn/persist.py",
+    "sportsdataverse/scrape/espn/cli.py",
+    "sportsdataverse/scrape/espn/master.py",
+    "sportsdataverse/scrape/espn/schedule.py",
 ]
