@@ -32,8 +32,21 @@ def test_ratings_compute_results_fills_and_favors_strong_team() -> None:
 
 
 def test_strong_home_team_wins_on_average() -> None:
-    """A (>> B) at home wins the large majority of a 400-sim batch of the same game."""
-    ratings = pl.DataFrame({"team_id": ["A", "B"], "adj_net": [0.35, -0.35]})
+    """A (>> B) at home wins the large majority of a 400-sim batch of the same game.
+
+    The rating differential is DERIVED from the target margin rather than
+    hardcoded. A previous version fixed adj_net at +/-0.35, which was a ~33
+    point favorite under net_points_scale=44.5367 and only ~20 under the
+    refit 24.6578 -- so the test silently changed what it was asserting when
+    the constants moved. Deriving it keeps the intent ("a 30-point home
+    favorite wins nearly always") stable across any future refit.
+    """
+    from sportsdataverse.cfb.cfb_prediction_constants import get_constants
+
+    c = get_constants()
+    target_margin = 30.0
+    half = (target_margin - c.hfa_points) / c.net_points_scale / 2.0
+    ratings = pl.DataFrame({"team_id": ["A", "B"], "adj_net": [half, -half]})
     cr = make_ratings_compute_results(ratings)
     n = 400
     teams = pl.DataFrame({"sim": [1], "team": ["A"], "conference": ["X"]})

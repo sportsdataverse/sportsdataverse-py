@@ -75,7 +75,18 @@ def make_ratings_compute_results(ratings: pl.DataFrame, *, era: str = "modern") 
     """
     c = get_constants(era)
     net = dict(zip(ratings["team_id"].to_list(), ratings["adj_net"].to_list()))
-    ns, hfa_epa, md = c.net_points_scale, c.hfa_epa, c.margin_sd
+    # A season simulation runs on FULL-SEASON ratings, which sit in the
+    # best-observed games-played bucket -- so it takes the top of the
+    # attenuation curve, not the flat average across all buckets.
+    #
+    # `net_points_scale` is the average slope over every stage of the season,
+    # appropriate when games-played is unknown. Using it here under-disperses
+    # the whole simulation: each game drifts toward a coin flip, elite teams
+    # never separate, and the 2023 CFP field's mean playoff probability fell
+    # from >=0.10 to 0.077. The curve exists to say "trust a well-observed
+    # rating more", and a 12-game rating is as well-observed as they get.
+    ns = max(c.slope_by_games.values()) if c.slope_by_games else c.net_points_scale
+    hfa_pts, md = c.hfa_points, c.margin_sd
 
     def compute_results(
         teams: pl.DataFrame, games: pl.DataFrame, week_num: int, *, rng: np.random.Generator, **kwargs: object
@@ -85,9 +96,11 @@ def make_ratings_compute_results(ratings: pl.DataFrame, *, era: str = "modern") 
         an = g["away_team"].replace_strict(net, default=0.0, return_dtype=pl.Float64).to_numpy()
         neutral = g["neutral"].to_numpy()
 
-        # exp_margin = predict_margin(home_adj_net, away_adj_net, neutral), vectorized:
-        # net_scale * (home_net - away_net + 2*hfa_epa on non-neutral fields).
-        exp = ns * ((hn - an) + np.where(neutral == 1, 0.0, 2.0 * hfa_epa))
+        # exp_margin = predict_margin(...), vectorized. HFA is added in POINTS,
+        # matching predict_margin -- routing it through the slope (the old
+        # `ns * 2*hfa_epa` form) tied the two together so a change to either
+        # silently moved the home-field advantage.
+        exp = ns * (hn - an) + np.where(neutral == 1, 0.0, hfa_pts)
         n = g.height
         raw = exp + rng.normal(0.0, md, n)
         # round away from zero (matches the engine's _round_out margin convention).
