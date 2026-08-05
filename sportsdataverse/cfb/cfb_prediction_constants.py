@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from sportsdataverse._common.metrics import (
     as_of_ratings_split as as_of_ratings_split,
@@ -98,20 +98,65 @@ class PredictConfig:
     points_per_epa: float
     quality_win_threshold: float
     bubble_adj_net: float
+    #: Home-field advantage in POINTS, added directly to the margin rather than
+    #: routed through ``net_points_scale``. ``hfa_epa`` is retained for callers
+    #: that read it, but the fit is on this one -- mixing an EPA-scale HFA with
+    #: a points-scale slope is what let the two drift apart unnoticed.
+    hfa_points: float = 3.0365
+    #: Points per unit of rating differential, BY GAMES PLAYED. See
+    #: :func:`cfb_game_predict.predict_margin`. A single slope is wrong because
+    #: an as-of rating built on two games is a far noisier predictor than one
+    #: built on twelve, and OLS slopes attenuate toward zero with predictor
+    #: noise. Keys are "lo-hi" games-played buckets.
+    slope_by_games: dict[str, float] = field(
+        default_factory=lambda: {
+            "0-3": 10.6201,
+            "4-5": 26.0576,
+            "6-7": 42.0032,
+            "8-20": 54.4874,
+        }
+    )
 
 
 CFB_CONSTANTS: dict[str, PredictConfig] = {
-    # net_points_scale / margin_sd / total_* fitted on the 2023 backtest by
-    # dev/cfb_prediction/fit_pregame.py; hfa_epa is the ratings ridge's own home
-    # coefficient (see that script for the exact procedure). Refit 2026-07-28
-    # after `efficiency_ratings` switched to the R adjust_epa NETTED scale
-    # (gameonpaper parity, ~1.8x smaller differentials at the top -> larger
-    # points slope). Achieved on the refit: brier 0.1416 (beats ESPN FPI
-    # 0.1436), spread MAE 3.23 (was 4.06), total MAE 4.88.
+    # Refit 2026-08-03 by `cfb_higher_models.fit_pregame` in cfbfastR-cfb-data
+    # (TRACKED code -- the previously cited `dev/cfb_prediction/fit_pregame.py`
+    # existed nowhere, on disk or in git, so the old numbers could not be
+    # reproduced or refreshed). Fitted walk-forward on 2014-2025, 6,790 games,
+    # against the corrected corpus.
+    #
+    # WHY THE OLD VALUES WERE WRONG. net_points_scale=44.5367 was fit against
+    # FULL-SEASON ratings and applied to AS-OF ratings. As-of ratings are the
+    # same quantity measured with more noise, and OLS slopes attenuate toward
+    # zero when the predictor is noisy -- so the correct multiplier is smaller,
+    # and it is not one number. The old claim (brier 0.1416, spread MAE 3.23)
+    # was an in-sample fit on full-season ratings; measured out-of-sample the
+    # shipped constants delivered MAE 15.17 with a calibration slope of 0.55,
+    # i.e. predictions stretched nearly 2x wider than reality.
+    #
+    # Measured on the corrected corpus, leakage-free (week W from ratings
+    # through W-1), n=5,655:
+    #     shipped                 MAE 15.17  slope 0.55  max_cal_err 0.309
+    #     refit, flat slope       MAE 14.62  slope 0.94  max_cal_err 0.448
+    #     refit + attenuation     MAE 14.01  slope 0.97  max_cal_err 0.198
     "modern": PredictConfig(
-        hfa_epa=0.01848,
-        margin_sd=17.2493,
-        net_points_scale=44.5367,
+        hfa_epa=0.01848,  # retained for back-compat; the fit uses hfa_points
+        hfa_points=3.0365,
+        margin_sd=18.7894,
+        net_points_scale=24.6578,
+        # TOTALS ARE UNTOUCHED BY THIS REFIT, deliberately. `predict_total`
+        # parameterises as `intercept + scale*sum4 + pace_scale*game_pace`
+        # where sum4 is FOUR ratings (both offences AND both defences) and
+        # game_pace is MULTIPLICATIVE and league-normalised
+        # (home_pace*away_pace/avg). The refit in cfb_higher_models fits a
+        # different model -- two offensive ratings, additive raw pace -- so its
+        # coefficients are not interchangeable with these names.
+        #
+        # A first pass here dropped them in anyway (total_scale 19.08 -> 8.06)
+        # and blew total MAE-vs-market from <=5.25 to 13.66. Identical field
+        # names, different meanings: the same unit confusion that let hfa_epa
+        # and net_points_scale drift apart. Refit these against THIS
+        # parameterisation before changing them.
         total_intercept=26.8933,
         total_scale=19.0816,
         total_pace_scale=0.4267,
@@ -119,6 +164,12 @@ CFB_CONSTANTS: dict[str, PredictConfig] = {
         points_per_epa=1.0,
         quality_win_threshold=0.0,
         bubble_adj_net=0.0,
+        slope_by_games={
+            "0-3": 10.6201,
+            "4-5": 26.0576,
+            "6-7": 42.0032,
+            "8-20": 54.4874,
+        },
     ),
 }
 
