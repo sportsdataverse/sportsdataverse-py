@@ -130,3 +130,53 @@ def test_td_play_excludes_negated_plays(text: str, expected: bool) -> None:
         & ~pl.col("text").str.contains(_PENALTY_NEGATED_TEXT)
     )
     assert df["td_play"][0] is expected
+
+
+def test_negated_touchdown_produces_no_td_flags() -> None:
+    """`td_play` alone was not enough (cfbfastR-cfb-data#32 review).
+
+    ESPN keeps the `Passing Touchdown` / `Rushing Touchdown` label on a play it
+    also says was nullified, and `pass_td` / `rush_td` fire off that label
+    directly -- so gating only `td_play` left them True. Measured on 2025: 15
+    `pass_td` and 15 `rush_td` on negated plays, every one reaching a player
+    leaderboard, where `summarize_passer` sums `pass_td` into `passing_td`.
+    """
+    from sportsdataverse.cfb.cfb_pbp import _PENALTY_NEGATED_TEXT
+
+    rows = [
+        ("Rushing Touchdown", "rush left for 8 yards TOUCHDOWN nullified by penalty PENALTY Holding", True),
+        ("Passing Touchdown", "pass complete for 20 yards TOUCHDOWN PENALTY Holding. NO PLAY.", True),
+        ("Rushing Touchdown", "rush left for 8 yards TOUCHDOWN", False),
+        ("Passing Touchdown", "pass complete for 20 yards TOUCHDOWN", False),
+    ]
+    df = pl.DataFrame(
+        {
+            "type.text": [r[0] for r in rows],
+            "text": [r[1] for r in rows],
+            "negated": [r[2] for r in rows],
+        }
+    )
+    neg = pl.col("text").str.contains(_PENALTY_NEGATED_TEXT)
+    out = df.with_columns(
+        td_play=pl.col("text").str.contains("(?i)touchdown|(?i)for a TD") & ~neg,
+        touchdown=pl.col("type.text").str.contains("(?i)touchdown") & ~neg,
+        td_check=pl.col("text").str.contains("(?i)touchdown") & ~neg,
+        pass_td=pl.when(neg)
+        .then(False)
+        .when(pl.col("type.text").is_in(["Passing Touchdown"]))
+        .then(True)
+        .otherwise(False),
+        rush_td=pl.when(neg)
+        .then(False)
+        .when(pl.col("type.text").is_in(["Rushing Touchdown"]))
+        .then(True)
+        .otherwise(False),
+    )
+    negated = out.filter(pl.col("negated"))
+    for col in ("td_play", "touchdown", "td_check", "pass_td", "rush_td"):
+        assert not any(negated[col].to_list()), f"{col} still True on a negated touchdown"
+    # and a real touchdown is untouched
+    real = out.filter(~pl.col("negated"))
+    assert all(real["td_play"].to_list())
+    assert real["pass_td"].to_list() == [False, True]
+    assert real["rush_td"].to_list() == [True, False]

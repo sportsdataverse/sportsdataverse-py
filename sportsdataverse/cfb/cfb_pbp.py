@@ -1793,9 +1793,11 @@ class CFBPlayProcess(object):
                 # rather than a second copy of the pattern.
                 td_play=pl.col("text").str.contains("(?i)touchdown|(?i)for a TD")
                 & ~pl.col("text").str.contains(_PENALTY_NEGATED_TEXT),
-                touchdown=pl.col("type.text").str.contains("(?i)touchdown"),
+                touchdown=pl.col("type.text").str.contains("(?i)touchdown")
+                & ~pl.col("text").str.contains(_PENALTY_NEGATED_TEXT),
                 ## Portion of touchdown check for plays where touchdown is not listed in the play_type--
-                td_check=pl.col("text").str.contains("(?i)touchdown"),
+                td_check=pl.col("text").str.contains("(?i)touchdown")
+                & ~pl.col("text").str.contains(_PENALTY_NEGATED_TEXT),
                 safety=pl.col("text").str.contains("(?i)safety"),
                 fumble_vec=pl.when(pl.col("text").str.contains("(?i)fumble"))
                 .then(True)
@@ -3037,12 +3039,22 @@ class CFBPlayProcess(object):
                 .otherwise(False),
                 pass_breakup=pl.when(pl.col("text").str.contains("(?i)broken up by")).then(True).otherwise(False),
                 # --- Pass/Rush TDs ------
-                pass_td=pl.when(pl.col("type.text").is_in(["Passing Touchdown"]))
+                # ESPN keeps the "Passing Touchdown" / "Rushing Touchdown" label
+                # on a play it also says was wiped out, so gating `td_play`
+                # alone is not enough -- the label branch below would still fire.
+                # Measured on 2025: 15 `pass_td` and 15 `rush_td` on negated
+                # plays, every one of them reaching a player leaderboard, where
+                # `summarize_passer` sums `pass_td` straight into `passing_td`.
+                pass_td=pl.when(pl.col("text").str.contains(_PENALTY_NEGATED_TEXT))
+                .then(False)
+                .when(pl.col("type.text").is_in(["Passing Touchdown"]))
                 .then(True)
                 .when((pl.col("pass") == True).and_(pl.col("td_play") == True))
                 .then(True)
                 .otherwise(False),
-                rush_td=pl.when(pl.col("type.text").is_in(["Rushing Touchdown"]))
+                rush_td=pl.when(pl.col("text").str.contains(_PENALTY_NEGATED_TEXT))
+                .then(False)
+                .when(pl.col("type.text").is_in(["Rushing Touchdown"]))
                 .then(True)
                 .when((pl.col("rush") == True).and_(pl.col("td_play") == True))
                 .then(True)
