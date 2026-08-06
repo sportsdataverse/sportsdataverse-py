@@ -1516,7 +1516,7 @@ rp = cfb_returning_production(2023)
 rp.sort("overall_returning", descending=True).head(10)
 ```
 
-### `cfb_roster_talent(seasons: 'int | list[int]', *, division: 'str' = 'fbs', composite_247: 'pl.DataFrame | None' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#cfb_roster_talent}
+### `cfb_roster_talent(seasons: 'int | list[int]', *, division: 'str' = 'fbs', composite_247: 'pl.DataFrame | None' = None, max_class_size: 'int' = 25, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#cfb_roster_talent}
 
 Team-talent composite per team-season (247 Team Talent Composite style).
 
@@ -1533,6 +1533,7 @@ team-seasons (the derived value remains the fallback).
 | `seasons` | `int \| list[int]` |  | Target season or list of seasons to rate. |
 | `division` | `str` | `'fbs'` | Division slug for `get_constants` (star points, weights). |
 | `composite_247` | `DataFrame \| None` | `None` | Optional frame with `season` (Int64), `team_id` (Utf8), `talent_247` (Float64). Join-key dtypes are asserted. |
+| `max_class_size` | `int` | `25` | Top-N recruits per class that count toward `talent_composite`, ranked by star points. Defaults to the FBS limit of 25 initial counters. Raise it only deliberately: an uncapped sum measures class VOLUME, which put Air Force 7th nationally on 200 signees at a 0.000 blue-chip ratio. |
 | `return_as_pandas` | `bool` | `False` | If True, return a pandas DataFrame; otherwise polars. |
 
 **Returns**

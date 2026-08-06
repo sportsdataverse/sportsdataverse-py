@@ -30,7 +30,20 @@ _RECRUIT_SCHEMA: dict[str, pl.PolarsDataType] = {
     "position": pl.Utf8,
 }
 
-_PAGE_SIZE = 500
+#: Recruits requested per RDB page. 500 EXCEEDS what 247 can serve inside the
+#: client's 3s timeout, so every page raised curl(28) and the loop returned an
+#: empty frame -- `cfb_roster_talent` had been yielding (0, 7) for every season.
+#: Measured against the live feed:
+#:     50 -> 50 rows   100 -> 100 rows   250 -> 250 rows   500 -> TIMEOUT
+#: 250 is the largest measured-good size; it halves the request count versus
+#: 100 while staying well inside the budget.
+#: Recruits per class that count toward ``talent_composite``. The FBS limit on
+#: initial counters is 25; 247 pages routinely list more (preferred walk-ons,
+#: service-academy classes of 200), and counting them measures volume, not
+#: talent. See the note in :func:`cfb_roster_talent`.
+_MAX_CLASS_SIZE = 25
+
+_PAGE_SIZE = 250
 
 
 def _int_id(col: str) -> pl.Expr:
@@ -55,8 +68,20 @@ def _normalize_recruit_page(raw: pl.DataFrame, season: int) -> pl.DataFrame:
         "composite_rating",
         "primary_position",
     }
-    if raw.height == 0 or not required <= set(raw.columns):
+    if raw.height == 0:
         return pl.DataFrame(schema=_RECRUIT_SCHEMA)
+    missing = required - set(raw.columns)
+    if missing:
+        # RAISE, do not return empty. This previously returned a well-formed
+        # zero-row frame on any schema drift, so one renamed 247 column would
+        # have produced an empty talent table forever -- no error, no warning,
+        # and every downstream consumer silently getting nothing.
+        raise ValueError(
+            f"247 recruit page is missing required columns {sorted(missing)}; "
+            f"got {sorted(raw.columns)[:12]}... The RDB schema has drifted -- "
+            "update _normalize_recruit_page rather than letting talent silently "
+            "return zero rows."
+        )
     has_signed = {"signed_institution_team_key", "signed_institution_full_name"} <= set(raw.columns)
     team_key = (
         pl.coalesce(pl.col("signed_institution_team_key"), pl.col("committed_institution_team_key"))
@@ -153,6 +178,7 @@ def cfb_roster_talent(
     *,
     division: str = "fbs",
     composite_247: pl.DataFrame | None = None,
+    max_class_size: int = _MAX_CLASS_SIZE,
     return_as_pandas: bool = False,
 ) -> pl.DataFrame | pd.DataFrame:
     """Team-talent composite per team-season (247 Team Talent Composite style).
@@ -168,6 +194,11 @@ def cfb_roster_talent(
         division: Division slug for :func:`get_constants` (star points, weights).
         composite_247: Optional frame with ``season`` (Int64), ``team_id`` (Utf8),
             ``talent_247`` (Float64). Join-key dtypes are asserted.
+        max_class_size: Top-N recruits per class that count toward
+            ``talent_composite``, ranked by star points. Defaults to the FBS
+            limit of 25 initial counters. Raise it only deliberately: an
+            uncapped sum measures class VOLUME, which put Air Force 7th
+            nationally on 200 signees at a 0.000 blue-chip ratio.
         return_as_pandas: If True, return a pandas DataFrame; otherwise polars.
 
     Returns:
@@ -215,8 +246,18 @@ def cfb_roster_talent(
     pointed = recruits.with_columns(
         pl.col("stars").replace_strict(consts.star_points, default=0.0, return_dtype=pl.Float64).alias("star_points")
     )
+    # Only the top `max_class_size` recruits count toward a class.
+    #
+    # An uncapped sum measures VOLUME, not talent, and the two diverge badly at
+    # the tail of the sport. Measured on the live 2021-2024 feed the uncapped
+    # form ranked Air Force 7th nationally off 200 signees with a blue-chip
+    # ratio of 0.000, and Washington State 6th off 142 at 0.035 -- service
+    # academies and teams whose 247 pages include preferred walk-ons accumulate
+    # more total star points than a 20-man class of blue chips. The FBS limit
+    # of 25 initial counters is the principled cap: signees past it are not
+    # scholarship talent, whatever the feed lists.
     per_class = pointed.group_by(["season", "team_id"]).agg(
-        pl.col("star_points").sum().alias("class_points"),
+        pl.col("star_points").sort(descending=True).head(max_class_size).sum().alias("class_points"),
         pl.col("team").drop_nulls().first().alias("team"),
     )
     weighted = pl.concat(
@@ -301,17 +342,35 @@ def load_recruit_classes(
     .. _247Sports Team Talent Composite: https://247sports.com/season/2023-football/collegeteamtalentcomposite/
     .. _recruitR: https://github.com/sportsdataverse/recruitR
     """
+    import warnings
+
     season_list = [seasons] if isinstance(seasons, int) else list(seasons)
     frames: list[pl.DataFrame] = []
     for season in season_list:
         page = 1
+        got = 0
         while True:
             raw = sports247_recruits(sport_key=1, year=season, page_size=_PAGE_SIZE, page=page)
             if raw is None or raw.height == 0:
                 break
             frames.append(_normalize_recruit_page(raw, season))
+            got += raw.height
             if raw.height < _PAGE_SIZE:
                 break
             page += 1
+        # A season that yields nothing is a FAILURE, not an empty class. Every
+        # request timing out (which is what _PAGE_SIZE=500 caused) looked
+        # identical to "247 has no recruits for 2023" -- so the whole talent
+        # surface returned zero rows for years without a single complaint.
+        if got == 0:
+            warnings.warn(
+                f"247 recruit feed returned no rows for {season}. Recruiting "
+                "classes are never empty, so this is a fetch or schema failure "
+                "-- talent metrics downstream will be silently absent. Check "
+                f"connectivity and _PAGE_SIZE (currently {_PAGE_SIZE}; 500 "
+                "exceeded the client timeout).",
+                UserWarning,
+                stacklevel=2,
+            )
     out = pl.concat(frames) if frames else pl.DataFrame(schema=_RECRUIT_SCHEMA)
     return out.to_pandas() if return_as_pandas else out

@@ -10,8 +10,9 @@ from __future__ import annotations
 import sys
 
 import polars as pl
+import pytest
 
-from sportsdataverse.cfb.cfb_roster_talent import load_recruit_classes
+from sportsdataverse.cfb.cfb_roster_talent import cfb_roster_talent, load_recruit_classes
 
 _mod = sys.modules["sportsdataverse.cfb.cfb_roster_talent"]
 
@@ -60,10 +61,60 @@ def test_loader_multi_season_concats(monkeypatch) -> None:
 
 
 def test_loader_empty_returns_documented_schema(monkeypatch) -> None:
+    """Empty in -> typed empty out, but it must NOT be silent (see below)."""
     monkeypatch.setattr(_mod, "sports247_recruits", lambda **k: pl.DataFrame(schema={"key": pl.Int64}))
-    out = load_recruit_classes(2023)
+    with pytest.warns(UserWarning, match="returned no rows"):
+        out = load_recruit_classes(2023)
     assert out.height == 0
     assert out.schema["team_id"] == pl.Utf8 and out.schema["stars"] == pl.Int64
+
+
+def test_empty_season_warns_because_classes_are_never_empty(monkeypatch) -> None:
+    """A season yielding zero recruits is a FETCH FAILURE, not an empty class.
+
+    This is the regression test for a bug that ran undetected: _PAGE_SIZE was
+    500, which exceeds what the 247 RDB serves inside the 3s client timeout, so
+    every page raised curl(28), no frames accumulated, and `cfb_roster_talent`
+    returned (0, 7) for every season -- indistinguishable from "247 has no
+    recruits". Every test here monkeypatches the feed, so none of them ever
+    exercised the real page size, and the failure was invisible.
+    """
+    monkeypatch.setattr(_mod, "sports247_recruits", lambda **k: pl.DataFrame(schema={"key": pl.Int64}))
+    with pytest.warns(UserWarning, match="fetch or schema failure"):
+        load_recruit_classes(2023)
+
+
+def test_schema_drift_raises_instead_of_returning_empty(monkeypatch) -> None:
+    """One renamed 247 column must fail loudly, not yield an empty talent table.
+
+    The predecessor returned a well-formed zero-row frame on any missing
+    required column, so a feed rename would have produced empty talent forever
+    with no error and no warning.
+    """
+    drifted = pl.DataFrame(
+        {
+            "key": [1],
+            "composite_star_rating": [4.0],
+            "composite_rating": [95.0],
+            "primary_position": ["QB"],
+            # committed_institution_* renamed away
+            "school_team_key": [71],
+            "school_full_name": ["Michigan Wolverines"],
+        }
+    )
+    monkeypatch.setattr(_mod, "sports247_recruits", lambda **k: drifted)
+    with pytest.raises(ValueError, match="missing required columns"):
+        load_recruit_classes(2023)
+
+
+def test_page_size_stays_within_the_measured_serving_limit() -> None:
+    """_PAGE_SIZE must stay at or below what 247 actually serves in time.
+
+    Measured against the live feed: 50/100/250 return in full, 500 times out at
+    the 3s client budget. A unit test cannot hit the network, but it can pin
+    the constant so the next person to "optimise" it upward has to read why.
+    """
+    assert _mod._PAGE_SIZE <= 250, _mod._PAGE_SIZE
 
 
 def test_blue_chip_window_rollup() -> None:
@@ -161,3 +212,59 @@ def test_loader_prefers_signed_institution_over_committed(monkeypatch) -> None:
     out = load_recruit_classes(2023)
     assert out["team_id"].unique().to_list() == ["71"]
     assert out["team"].unique().to_list() == ["Michigan Wolverines"]
+
+
+def test_excess_signees_do_not_inflate_talent(monkeypatch) -> None:
+    """Signees past the scholarship limit must not add to `talent_composite`.
+
+    Regression test for a bug that only REAL data exposed. `class_points` was
+    an uncapped sum of star points, so a team whose 247 page lists preferred
+    walk-ons out-earned one that lists only scholarship signees. On the live
+    2021-2024 feed that put Air Force 7th nationally off 200 signees at a
+    0.000 blue-chip ratio, and Washington State 6th off 142 at 0.035. Every
+    prior test used 1-2 recruits per class, where capped and uncapped agree
+    exactly, so nothing caught it.
+
+    The assertion is the cap's actual guarantee -- excess signees are inert --
+    NOT "quality beats quantity". A full class of 25 three-stars really does
+    carry more talent than five five-stars; encoding that opinion instead
+    would be a test of my assumption rather than of the code.
+    """
+    top25 = {
+        "season": [2023] * 25,
+        "team_id": ["T"] * 25,
+        "team": ["Team T"] * 25,
+        "recruit_id": [f"r{i}" for i in range(25)],
+        "stars": [4] * 25,
+        "grade": [92.0] * 25,
+        "position": ["OL"] * 25,
+    }
+    lean = pl.DataFrame(top25)
+    # Same top 25, plus 175 walk-on-tier signees appended.
+    padded = pl.concat(
+        [
+            lean,
+            pl.DataFrame(
+                {
+                    "season": [2023] * 175,
+                    "team_id": ["T"] * 175,
+                    "team": ["Team T"] * 175,
+                    "recruit_id": [f"w{i}" for i in range(175)],
+                    "stars": [2] * 175,
+                    "grade": [70.0] * 175,
+                    "position": ["OL"] * 175,
+                }
+            ),
+        ]
+    )
+
+    monkeypatch.setattr(_mod, "load_recruit_classes", lambda *a, **k: lean)
+    lean_pts = cfb_roster_talent(2023, division="fbs")["talent_composite"][0]
+    monkeypatch.setattr(_mod, "load_recruit_classes", lambda *a, **k: padded)
+    padded_pts = cfb_roster_talent(2023, division="fbs")["talent_composite"][0]
+
+    assert padded_pts == pytest.approx(lean_pts), f"175 walk-on signees moved talent from {lean_pts} to {padded_pts}"
+
+    # And the cap is load-bearing: uncapped, the padding inflates the total.
+    uncapped = cfb_roster_talent(2023, division="fbs", max_class_size=10_000)
+    assert uncapped["talent_composite"][0] > lean_pts, "cap is inert -- test proves nothing"
