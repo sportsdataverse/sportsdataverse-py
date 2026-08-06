@@ -243,6 +243,7 @@ def cfb_roster_talent(
     division: str = "fbs",
     composite_247: pl.DataFrame | None = None,
     max_class_size: int = _MAX_CLASS_SIZE,
+    recruits: pl.DataFrame | None = None,
     return_as_pandas: bool = False,
 ) -> pl.DataFrame | pd.DataFrame:
     """Team-talent composite per team-season (247 Team Talent Composite style).
@@ -263,6 +264,13 @@ def cfb_roster_talent(
             limit of 25 initial counters. Raise it only deliberately: an
             uncapped sum measures class VOLUME, which put Air Force 7th
             nationally on 200 signees at a 0.000 blue-chip ratio.
+        recruits: Pre-loaded per-recruit frame (the ``load_recruit_classes``
+            contract). Supplying it SKIPS the 247 fetch entirely, which is what
+            the cfbfastR-cfb-data producer does when compiling from the raw
+            store: a class is immutable once signed, but the composite spans a
+            4-season window, so fetching live re-pulled the same frozen classes
+            once per target season (~20 min per call). Callers passing this own
+            the frame's completeness.
         return_as_pandas: If True, return a pandas DataFrame; otherwise polars.
 
     Returns:
@@ -301,7 +309,8 @@ def cfb_roster_talent(
     window = len(weights)
     season_list = [seasons] if isinstance(seasons, int) else list(seasons)
     class_years = list(range(min(season_list) - window + 1, max(season_list) + 1))
-    recruits = load_recruit_classes(class_years, division=division)
+    if recruits is None:
+        recruits = load_recruit_classes(class_years, division=division)
     if isinstance(recruits, pd.DataFrame):  # defensive; loader defaults to polars
         recruits = pl.from_pandas(recruits)
     if recruits.height == 0:

@@ -421,3 +421,34 @@ def test_env_overrides_ignore_unusable_values(monkeypatch) -> None:
     with pytest.warns(UserWarning, match="is not numeric"):
         out = load_recruit_classes(2023)
     assert out.height == 2
+
+
+def test_recruits_injection_skips_the_feed(monkeypatch) -> None:
+    """`recruits=` bypasses the 247 fetch entirely.
+
+    This is the seam the cfbfastR-cfb-data producer compiles through: a class
+    is immutable once signed, but the composite spans 4 seasons, so fetching
+    live re-pulled the same frozen classes once per target season (~20 min a
+    call). Passing a pre-loaded frame must not touch the network at all.
+    """
+
+    def _boom(**kwargs):
+        raise AssertionError("the feed was called despite recruits= being supplied")
+
+    monkeypatch.setattr(_mod, "sports247_recruits", _boom)
+    monkeypatch.setattr(_mod, "load_recruit_classes", _boom)
+    out = cfb_roster_talent(2021, division="fbs", recruits=_two_class_recruits())
+    row_a = out.filter(pl.col("team_id") == "A").row(0, named=True)
+    assert abs(row_a["talent_composite"] - 223.0) < 1e-9  # same math as the live path
+
+
+def test_recruits_injection_matches_the_live_path(monkeypatch) -> None:
+    """Injected and fetched inputs must produce identical output.
+
+    If these ever diverge, the published dataset and a live call disagree --
+    which is the whole risk of having an offline producer at all.
+    """
+    monkeypatch.setattr(_mod, "load_recruit_classes", lambda *a, **k: _two_class_recruits())
+    fetched = cfb_roster_talent(2021, division="fbs")
+    injected = cfb_roster_talent(2021, division="fbs", recruits=_two_class_recruits())
+    assert fetched.sort("team_id").equals(injected.sort("team_id"))
