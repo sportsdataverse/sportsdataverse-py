@@ -60,14 +60,25 @@ class PredictConfig:
     negligible next to a points-scale HFA and the model is near-constant).
 
     Args:
-        hfa_epa: Home-field advantage on the EPA-per-play scale -- the ratings
-            ridge's native home coefficient (~0.0185). Applied component-wise
-            (home_off += hfa_epa, home_def -= hfa_epa), so the home team's net
-            rating gains ``2 * hfa_epa`` and the margin picks up
-            ``net_points_scale * 2 * hfa_epa`` (~1.65 pt on the netted scale) while the *total* is
-            unchanged (the offense/defense shifts cancel in the sum). This
-            EPA-scale form is why an additive constant works where a multiplicative
-            tilt cannot -- the ratings are per-play deviations near zero.
+        hfa_epa: COMPATIBILITY ONLY -- no longer reaches the margin. Home-field
+            advantage on the EPA-per-play scale (the ratings ridge's native home
+            coefficient, ~0.0185). It formerly entered the margin as
+            ``net_points_scale * 2 * hfa_epa``, which implied ~1.65 pt against a
+            measured ~3.0: routing an EPA-scale HFA through a points-scale slope
+            tied the two together, so refitting either silently moved the other.
+            :func:`cfb_game_predict.predict_margin` now adds ``hfa_points``
+            directly and ignores this field. Retained because callers read it and
+            because it remains the correct EPA-scale form for anything applying
+            HFA component-wise to the ratings themselves (home_off += hfa_epa,
+            home_def -= hfa_epa), where the offense/defense shifts cancel in the
+            sum and so leave the *total* unchanged.
+        hfa_points: Home-field advantage in POINTS, added directly to the
+            predicted margin. This is the fitted HFA -- ``hfa_epa`` is not.
+        slope_by_games: Points per unit of rating differential, keyed by
+            ``"lo-hi"`` games-played buckets. A single slope is wrong because
+            OLS slopes attenuate toward zero as the predictor gets noisier, and
+            a two-game-old rating is far noisier than a twelve-game-old one.
+            See :func:`cfb_game_predict.slope_for_games`.
         margin_sd: Standard deviation of the margin residuals, used to convert a
             predicted margin into a win probability via the Gaussian CDF (fitted).
         net_points_scale: Points per unit of net adjusted-EPA/play differential --

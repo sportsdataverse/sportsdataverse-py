@@ -333,6 +333,7 @@ from sportsdataverse.cfb import yahoo_cfb_team_season_stats as _raw_yahoo_cfb_te
 from sportsdataverse.cfb import yahoo_cfb_team_season_stats_legacy as _raw_yahoo_cfb_team_season_stats_legacy
 from sportsdataverse.cfb import yahoo_cfb_teams as _raw_yahoo_cfb_teams
 from sportsdataverse.cfb import CFBPlayProcess as CFBPlayProcess  # noqa: F401
+from sportsdataverse.cfb import assert_rating_scale as assert_rating_scale  # noqa: F401
 from sportsdataverse.cfb import blue_chip_ratio as blue_chip_ratio  # noqa: F401
 from sportsdataverse.cfb import cfb_adjusted_epa as cfb_adjusted_epa  # noqa: F401
 from sportsdataverse.cfb import cfb_adjusted_epa_by_game as cfb_adjusted_epa_by_game  # noqa: F401
@@ -441,12 +442,14 @@ from sportsdataverse.cfb import parse_sports247_teams as parse_sports247_teams  
 from sportsdataverse.cfb import predict_margin as predict_margin  # noqa: F401
 from sportsdataverse.cfb import predict_total as predict_total  # noqa: F401
 from sportsdataverse.cfb import scoreboard_event_parsing as scoreboard_event_parsing  # noqa: F401
+from sportsdataverse.cfb import slope_for_games as slope_for_games  # noqa: F401
 from sportsdataverse.cfb import special_teams_ratings as special_teams_ratings  # noqa: F401
 from sportsdataverse.cfb import underscore as underscore  # noqa: F401
 from sportsdataverse.cfb import win_prob_from_margin as win_prob_from_margin  # noqa: F401
 
 __all__ = [
     "CFBPlayProcess",
+    "assert_rating_scale",
     "blue_chip_ratio",
     "cfb_adjusted_epa",
     "cfb_adjusted_epa_by_game",
@@ -766,6 +769,7 @@ __all__ = [
     "predict_margin",
     "predict_total",
     "scoreboard_event_parsing",
+    "slope_for_games",
     "special_teams_ratings",
     "sports247_coaches",
     "sports247_composite_team_ranking_feed",

@@ -215,3 +215,32 @@ def test_cfb_predict_games_return_as_pandas() -> None:
     out = cfb_predict_games(_schedule_frame(), _ratings_frame(), return_as_pandas=True)
     assert isinstance(out, pd.DataFrame)
     assert list(out.columns)[:4] == ["game_id", "home_team_id", "away_team_id", "neutral_site"]
+
+
+def test_cfb_predict_games_applies_the_attenuation_curve() -> None:
+    """A ``games`` column in the ratings must actually change the prediction.
+
+    Regression test for a silently dead feature. ``rate_cols`` selected only
+    the rating columns, so the renamed join frames could never produce
+    ``home_games``/``away_games``, every row fell through to the flat
+    ``net_points_scale``, and the games-played curve never ran in the one
+    entry point most callers use. Every unit test passed: they all fed a
+    ratings fixture with no ``games`` column, which exercises exactly the
+    fallback path. Presence of a feature in a module is not evidence it runs.
+    """
+    early = _ratings_frame().with_columns(pl.Series("games", [2, 2, 2]))
+    late = _ratings_frame().with_columns(pl.Series("games", [11, 11, 11]))
+    sched = _schedule_frame()
+
+    m_early = cfb_predict_games(sched, early)["exp_margin"]
+    m_late = cfb_predict_games(sched, late)["exp_margin"]
+    m_flat = cfb_predict_games(sched, _ratings_frame())["exp_margin"]
+
+    # Same ratings, different games-played -> different margins.
+    assert m_early.to_list() != m_late.to_list()
+    assert m_early.to_list() != m_flat.to_list()
+    # And the direction is the fitted one: a 2-game rating is trusted less.
+    neutral_i = sched.with_row_index().filter(pl.col("neutral_site") == True)["index"][0]  # noqa: E712
+    assert abs(m_early[neutral_i]) < abs(m_late[neutral_i])
+    # The late-season row matches the bucket slope exactly (neutral -> no HFA).
+    assert m_late[neutral_i] == pytest.approx(slope_for_games(11) * (0.30 - (-0.20)))

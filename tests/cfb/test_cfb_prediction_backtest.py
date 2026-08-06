@@ -62,13 +62,14 @@ def _asof_predictions() -> pl.DataFrame:
     r = _RATINGS.select(
         pl.col("team_id"),
         (pl.col("through_week") + 1).alias("week"),  # the week it may be USED for
+        "through_week",  # carried so the leakage test can check the ACTUAL join
         "adj_net",
         "games",
     )
     g = _RES.filter(pl.col("week") >= _BURN_IN_WEEK)
     for side in ("home", "away"):
         g = g.join(
-            r.rename({c: f"{side}_{c}" for c in ("adj_net", "games")}),
+            r.rename({c: f"{side}_{c}" for c in ("adj_net", "games", "through_week")}),
             left_on=["week", f"{side}_team_id"],
             right_on=["week", "team_id"],
             how="inner",
@@ -100,11 +101,20 @@ def test_asof_uses_only_prior_weeks() -> None:
     """Every prediction draws on a strictly earlier ratings snapshot.
 
     `through_week == W` INCLUDES week W, so joining a week-W game to the W
-    snapshot would let it see its own result. The join adds 1; this asserts the
-    consequence rather than trusting the arithmetic.
+    snapshot would let it see its own result.
+
+    The assertion is made against the snapshot each PREDICTION actually landed
+    on, per side. An earlier version checked `_RATINGS` alone -- it recomputed
+    the same `through_week + 1` the join uses and confirmed the result was >= 2,
+    which is a property of the fixture, not of the join. Had the join been
+    changed to use same-week or future ratings, that version would still have
+    passed: it never touched a predicted row. Testing a proxy for the thing is
+    how leakage survives a green suite.
     """
-    used = _RATINGS.select((pl.col("through_week") + 1).alias("week"))
-    assert used["week"].min() >= 2
+    assert _PREDS.height > 0, "no predictions to check"
+    for side in ("home", "away"):
+        off = (_PREDS["week"] - _PREDS[f"{side}_through_week"]).unique().to_list()
+        assert off == [1], f"{side} ratings snapshot offset from game week: {sorted(off)} (want exactly [1])"
     assert _PREDS["week"].min() >= _BURN_IN_WEEK
 
 

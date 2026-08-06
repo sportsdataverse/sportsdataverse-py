@@ -20,10 +20,15 @@ import polars as pl
 from scipy.stats import norm
 
 from sportsdataverse.cfb.cfb_loaders import load_cfb_schedule
+from sportsdataverse.cfb.cfb_game_predict import slope_for_games
 from sportsdataverse.cfb.cfb_prediction_constants import get_constants
 from sportsdataverse.cfb.cfb_ratings import cfb_ratings
 from sportsdataverse.cfb.cfb_simulations import ComputeResultsFn, cfb_simulations
 from sportsdataverse.cfb.cfb_standings import cfb_games_from_schedule
+
+#: Games behind a full-season rating. Season sims run on end-of-season ratings,
+#: so they sit in the most-observed (least attenuated) bucket of the curve.
+_FULL_SEASON_GAMES = 12
 
 __all__ = ["cfb_season_odds", "make_ratings_compute_results"]
 
@@ -85,7 +90,13 @@ def make_ratings_compute_results(ratings: pl.DataFrame, *, era: str = "modern") 
     # never separate, and the 2023 CFP field's mean playoff probability fell
     # from >=0.10 to 0.077. The curve exists to say "trust a well-observed
     # rating more", and a 12-game rating is as well-observed as they get.
-    ns = max(c.slope_by_games.values()) if c.slope_by_games else c.net_points_scale
+    #
+    # Selected as the MOST-GAMES bucket, not `max(values())`: those coincide
+    # only while the curve is monotone, and the reason wanted here is "this
+    # rating is backed by a full season", not "this number is the largest". If
+    # the curve is ever reshaped or era-conditioned, taking the max would
+    # silently start meaning something else.
+    ns = slope_for_games(_FULL_SEASON_GAMES, era=era) if c.slope_by_games else c.net_points_scale
     hfa_pts, md = c.hfa_points, c.margin_sd
 
     def compute_results(

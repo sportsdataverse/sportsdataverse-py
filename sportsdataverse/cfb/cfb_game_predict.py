@@ -25,7 +25,14 @@ from scipy.stats import norm
 
 from sportsdataverse.cfb.cfb_prediction_constants import get_constants
 
-__all__ = ["cfb_predict_games", "predict_margin", "predict_total", "win_prob_from_margin"]
+__all__ = [
+    "assert_rating_scale",
+    "cfb_predict_games",
+    "predict_margin",
+    "predict_total",
+    "slope_for_games",
+    "win_prob_from_margin",
+]
 
 # Output column contract for :func:`cfb_predict_games`.
 _PREDICT_COLUMNS = [
@@ -64,10 +71,40 @@ def assert_rating_scale(ratings: pl.DataFrame, *, era: str = "modern", tol: floa
     calibration slope of 0.55 -- predictions stretched nearly 2x wider than
     reality -- for two days, undetected.
 
-    Returns the observed/fitted sd ratio and emits a ``UserWarning`` when it
-    leaves ``[1/tol, tol]``. Deliberately a warning, not an exception: a
-    legitimate rescale should not break every caller, but it must not pass in
-    silence either.
+    Args:
+        ratings: Team ratings frame carrying an ``adj_net`` column, as returned
+            by :func:`cfb_ratings.efficiency_ratings`. Frames without that
+            column, or with fewer than 30 rows, are too thin to judge and
+            return ``1.0`` unchecked.
+        era: Era key into :data:`cfb_prediction_constants.CFB_CONSTANTS`, used
+            only to name the era in the warning text.
+        tol: Fold-change tolerance. The check fires outside ``[1/tol, tol]``.
+
+    Returns:
+        The observed/fitted sd ratio. ``1.0`` when the frame is too thin to
+        judge, so a caller can treat "1.0" as "no evidence of drift" either way.
+
+    Warns:
+        UserWarning: When the ratio leaves ``[1/tol, tol]``. Deliberately a
+            warning, not an exception -- a legitimate rescale should not break
+            every caller, but it must not pass in silence either.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.cfb import cfb_ratings
+            from sportsdataverse.cfb.cfb_game_predict import assert_rating_scale
+            ratings = cfb_ratings.efficiency_ratings(2024)
+            ratio = assert_rating_scale(ratings)
+
+        Treat a large drift as a refit signal, not a nuisance warning::
+
+            assert ratio < 1.6, "refit the constants before trusting predictions"
+
+    See Also:
+        * `cfbfastR`_ -- the R sibling's ratings surface.
+
+    .. _cfbfastR: https://cfbfastR.sportsdataverse.org
     """
     import warnings
 
@@ -92,6 +129,32 @@ def assert_rating_scale(ratings: pl.DataFrame, *, era: str = "modern", tol: floa
     return ratio
 
 
+def _slope_buckets(era: str = "modern") -> list[tuple[int, int, float]]:
+    """Parse ``slope_by_games`` into sorted ``(lo, hi, slope)`` triples.
+
+    One parser, shared by the scalar :func:`slope_for_games` and the vectorised
+    expression in :func:`cfb_predict_games`, so the two can never disagree
+    about which bucket a game count falls in.
+
+    Keys are ``"lo-hi"`` with integer bounds. A malformed key raises here --
+    loudly, once, at the point the config is read -- rather than surfacing as a
+    confusing ``ValueError`` from deep inside a polars expression, or worse,
+    silently falling through to the flat scale for every row.
+    """
+    out: list[tuple[int, int, float]] = []
+    for key, slope in get_constants(era).slope_by_games.items():
+        lo_s, _, hi_s = str(key).strip().partition("-")
+        try:
+            lo, hi = int(lo_s), int(hi_s)
+        except ValueError as exc:  # noqa: PERF203 - config error, not a hot path
+            raise ValueError(
+                f"slope_by_games key {key!r} for era {era!r} is not the required "
+                "'lo-hi' integer-bounded form (e.g. '4-5', '8-20')."
+            ) from exc
+        out.append((lo, hi, float(slope)))
+    return sorted(out)
+
+
 def slope_for_games(games_played: float | None, *, era: str = "modern") -> float:
     """Points per unit of rating differential, given how many games back it.
 
@@ -104,14 +167,43 @@ def slope_for_games(games_played: float | None, *, era: str = "modern") -> float
         0-3 games -> 10.62      6-7 games -> 42.00
         4-5 games -> 26.06      8+  games -> 54.49
 
-    Passing ``None`` returns the flat ``net_points_scale``, which is the
-    average over that curve and the right choice when games-played is unknown.
+    Args:
+        games_played: Games behind the as-of rating. When two ratings back a
+            prediction this should be the WEAKER (smaller) of the two, since
+            the noisier rating binds the attenuation. ``None`` selects the flat
+            ``net_points_scale``.
+        era: Era key into :data:`cfb_prediction_constants.CFB_CONSTANTS`.
+
+    Returns:
+        The points-per-rating-unit slope for that bucket, or the flat
+        ``net_points_scale`` when ``games_played`` is ``None`` or falls outside
+        every bucket. The flat value is the average over the curve, so it is a
+        safe default rather than a silent zero.
+
+    Raises:
+        ValueError: If ``slope_by_games`` holds a key that is not ``"lo-hi"``
+            with integer bounds.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.cfb.cfb_game_predict import slope_for_games
+            slope_for_games(2)      # early season -- heavily attenuated
+            slope_for_games(11)     # late season -- near the full slope
+
+        Unknown game count falls back to the flat scale::
+
+            slope_for_games(None)
+
+    See Also:
+        * `cfbfastR`_ -- the R sibling's ratings + prediction surface.
+
+    .. _cfbfastR: https://cfbfastR.sportsdataverse.org
     """
     c = get_constants(era)
     if games_played is None:
         return c.net_points_scale
-    for key, slope in c.slope_by_games.items():
-        lo, hi = (int(x) for x in key.split("-"))
+    for lo, hi, slope in _slope_buckets(era):
         if lo <= games_played <= hi:
             return slope
     return c.net_points_scale
@@ -305,7 +397,15 @@ def cfb_predict_games(
     )
 
     c = get_constants(era)
-    rate_cols = ratings.select("team_id", "adj_net", "adj_off_epa", "adj_def_epa", "off_pace")
+    # `games` must be carried through, or the attenuation curve below can never
+    # fire: without it the renamed join frames have no home_games/away_games,
+    # every row takes the flat-scale fallback, and the games-played slope is
+    # silently inert. (Caught in review -- the feature was dead in this entry
+    # point while every unit test of `predict_margin` passed.)
+    _rate = ["team_id", "adj_net", "adj_off_epa", "adj_def_epa", "off_pace"]
+    if "games" in ratings.columns:
+        _rate.append("games")
+    rate_cols = ratings.select(_rate)
     home = rate_cols.rename({col: f"home_{col}" for col in rate_cols.columns if col != "team_id"})
     away = rate_cols.rename({col: f"away_{col}" for col in rate_cols.columns if col != "team_id"})
 
@@ -322,10 +422,13 @@ def cfb_predict_games(
 
     # `games` if present selects the attenuation-corrected slope per row; the
     # weaker (smaller) of the two ratings' game counts is the binding one.
+    # Built as a when/then chain rather than map_elements: a per-row Python
+    # lambda defeats polars' vectorisation, and the buckets are few and fixed.
     if "home_games" in joined.columns and "away_games" in joined.columns:
-        slope_expr = pl.min_horizontal("home_games", "away_games").map_elements(
-            lambda g: slope_for_games(g, era=era), return_dtype=pl.Float64
-        )
+        gp = pl.min_horizontal("home_games", "away_games")
+        slope_expr = pl.lit(c.net_points_scale, dtype=pl.Float64)
+        for lo, hi, slope in _slope_buckets(era):
+            slope_expr = pl.when(gp.is_between(lo, hi)).then(pl.lit(slope)).otherwise(slope_expr)
     else:
         slope_expr = pl.lit(c.net_points_scale)
 

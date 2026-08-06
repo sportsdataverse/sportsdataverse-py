@@ -828,6 +828,45 @@ sched = load_cfb_schedule(seasons=[most_recent_cfb_season()])
 
 ## Other
 
+### `assert_rating_scale(ratings: 'pl.DataFrame', *, era: 'str' = 'modern', tol: 'float' = 1.6) -> 'float'` {#assert_rating_scale}
+
+Warn if the ratings have drifted off the scale the constants were fit on.
+
+THE FAILURE THIS PREVENTS. `net_points_scale` is a frozen statement about
+a relationship between two things: rating units and points. When the
+ratings change -- a different ridge penalty, a rescale, a rebuilt corpus --
+the constant silently becomes wrong while every function keeps returning
+plausible numbers. That is exactly what happened: the shipped 44.5367 was
+fit on 2026-07-28, the ridge lambda moved on 08-01, the corpus was rebuilt
+on 08-02, and nothing failed. Measured out-of-sample the result was a
+calibration slope of 0.55 -- predictions stretched nearly 2x wider than
+reality -- for two days, undetected.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `ratings` | `DataFrame` |  | Team ratings frame carrying an `adj_net` column, as returned by `cfb_ratings.efficiency_ratings`. Frames without that column, or with fewer than 30 rows, are too thin to judge and return `1.0` unchecked. |
+| `era` | `str` | `'modern'` | Era key into `cfb_prediction_constants.CFB_CONSTANTS`, used only to name the era in the warning text. |
+| `tol` | `float` | `1.6` | Fold-change tolerance. The check fires outside `[1/tol, tol]`. |
+
+**Returns**
+
+The observed/fitted sd ratio. `1.0` when the frame is too thin to judge, so a caller can treat "1.0" as "no evidence of drift" either way.
+
+**Example**
+
+```python
+from sportsdataverse.cfb import cfb_ratings
+from sportsdataverse.cfb.cfb_game_predict import assert_rating_scale
+ratings = cfb_ratings.efficiency_ratings(2024)
+ratio = assert_rating_scale(ratings)
+
+# Treat a large drift as a refit signal, not a nuisance warning
+
+assert ratio < 1.6, "refit the constants before trusting predictions"
+```
+
 ### `blue_chip_ratio(recruits: 'pl.DataFrame', *, window: 'int' = 4, division: 'str' = 'fbs') -> 'pl.DataFrame'` {#blue_chip_ratio}
 
 Blue-chip ratio per team-season over a trailing window of recruiting classes.
@@ -2772,6 +2811,42 @@ The same event dict, mutated in place with `home`/`away` copies of the competito
 ```python
 from sportsdataverse.cfb import espn_cfb_schedule
 sched = espn_cfb_schedule(dates=2023, week=5)
+```
+
+### `slope_for_games(games_played: 'float | None', *, era: 'str' = 'modern') -> 'float'` {#slope_for_games}
+
+Points per unit of rating differential, given how many games back it.
+
+A single slope is wrong. An as-of rating built on two games is a far
+noisier predictor than one built on twelve, and OLS slopes attenuate
+toward zero as predictor noise grows -- so the correct multiplier is
+smaller early and grows through the season. Measured, walk-forward on
+2014-2025:
+
+    0-3 games -> 10.62      6-7 games -> 42.00
+    4-5 games -> 26.06      8+  games -> 54.49
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `games_played` | `float \| None` |  | Games behind the as-of rating. When two ratings back a prediction this should be the WEAKER (smaller) of the two, since the noisier rating binds the attenuation. `None` selects the flat `net_points_scale`. |
+| `era` | `str` | `'modern'` | Era key into `cfb_prediction_constants.CFB_CONSTANTS`. |
+
+**Returns**
+
+The points-per-rating-unit slope for that bucket, or the flat `net_points_scale` when `games_played` is `None` or falls outside every bucket. The flat value is the average over the curve, so it is a safe default rather than a silent zero.
+
+**Example**
+
+```python
+from sportsdataverse.cfb.cfb_game_predict import slope_for_games
+slope_for_games(2)      # early season -- heavily attenuated
+slope_for_games(11)     # late season -- near the full slope
+
+# Unknown game count falls back to the flat scale
+
+slope_for_games(None)
 ```
 
 ### `special_teams_ratings(plays: 'pl.DataFrame', *, config: 'RatingsConfig | None' = None) -> 'pl.DataFrame'` {#special_teams_ratings}
