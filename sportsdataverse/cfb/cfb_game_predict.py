@@ -17,6 +17,8 @@ only free knob for probabilities.
 
 from __future__ import annotations
 
+import warnings
+
 from typing import Literal, overload
 
 import pandas as pd
@@ -405,13 +407,46 @@ def cfb_predict_games(
     _rate = ["team_id", "adj_net", "adj_off_epa", "adj_def_epa", "off_pace"]
     if "games" in ratings.columns:
         _rate.append("games")
+    if "prior_off_pace" in ratings.columns:
+        _rate.append("prior_off_pace")
     rate_cols = ratings.select(_rate)
+    if "prior_off_pace" in rate_cols.columns and "games" in rate_cols.columns:
+        n = pl.col("games").cast(pl.Float64)
+        w = n / (n + c.pace_blend_k)
+        rate_cols = rate_cols.with_columns(
+            pl.when(pl.col("prior_off_pace").is_null())
+            .then(pl.col("off_pace"))  # a first-year team has no prior; leave it raw
+            .otherwise(w * pl.col("off_pace") + (1 - w) * pl.col("prior_off_pace"))
+            .alias("off_pace")
+        ).drop("prior_off_pace")
+    else:
+        warnings.warn(
+            "cfb_predict_games: ratings frame has no 'prior_off_pace' (and/or "
+            "'games'), so tempo is used RAW. total_intercept/total_scale/"
+            "total_pace_scale are fitted on the season-shrunk pace, so totals "
+            "will be mis-scaled -- measured 13.0891 vs 12.9186 MAE on a 2024 "
+            "holdout. Supply prior_off_pace (last season's final off_pace).",
+            UserWarning,
+            stacklevel=2,
+        )
+
     home = rate_cols.rename({col: f"home_{col}" for col in rate_cols.columns if col != "team_id"})
     away = rate_cols.rename({col: f"away_{col}" for col in rate_cols.columns if col != "team_id"})
 
+    # SHRINK the tempo toward last season before using it.
+    #
+    # A raw single-season pace is noisy -- a week-3 team has two games of it --
+    # and a noisy predictor's OLS coefficient attenuates toward zero. Blending
+    # toward the prior season de-noises the input and un-attenuates the
+    # coefficient: `total_pace_scale` moves 0.2246 -> 0.3785 across this
+    # change, and the 2024 holdout improves 13.0891 -> 12.9186.
+    #
+    # `total_*` are fitted ON THE BLEND, so a frame without `prior_off_pace`
+    # gets raw pace against blended-pace coefficients -- mis-scaled, not
+    # merely un-improved. That warrants a warning rather than silence.
     # League-average tempo for the pace factor, taken from the ratings frame itself
     # (no magic constant). game_pace = home_off_pace * away_off_pace / league_avg.
-    league_avg_pace = ratings["off_pace"].mean()
+    league_avg_pace = rate_cols["off_pace"].mean()
     league_avg_pace = float(league_avg_pace) if league_avg_pace else 1.0
 
     joined = games.join(home, left_on="home_team_id", right_on="team_id", how="left").join(

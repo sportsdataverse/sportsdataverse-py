@@ -33,12 +33,18 @@ runs in well under a second against the predecessor's ~10 ridge fits and ~20s.
 
 from __future__ import annotations
 
+import warnings
 from pathlib import Path
 
 import numpy as np
 import polars as pl
+import pytest
 
-from sportsdataverse.cfb.cfb_game_predict import predict_margin, win_prob_from_margin
+from sportsdataverse.cfb.cfb_game_predict import (
+    cfb_predict_games,
+    predict_margin,
+    win_prob_from_margin,
+)
 from sportsdataverse.cfb.cfb_prediction_constants import brier_score, mae
 
 _FIX = Path(__file__).resolve().parents[1] / "fixtures" / "cfb_prediction"
@@ -231,3 +237,88 @@ def test_win_prob_discriminates_favorites_from_dogs() -> None:
     fav_rate = float(favs["y"].mean())
     assert dog_rate < 0.5 < fav_rate, (dog_rate, fav_rate)
     assert fav_rate - dog_rate >= 0.22, (dog_rate, fav_rate)  # measured 0.255
+
+
+_PRIOR_PACE = pl.read_parquet(_FIX / "prior_pace_2023.parquet")
+
+#: Measured on this fixture with the pace blend live: 13.0469. Floor carries
+#: headroom. Raw (no prior) measures 13.2620, so the floor sits BELOW that --
+#: a regression that silently disables the blend cannot pass this.
+_TOTAL_MAE_FLOOR = 13.20
+
+
+def _totals_backtest(*, with_prior: bool) -> tuple[float, int]:
+    """Week-W totals from the W-1 snapshot, with or without the tempo prior."""
+    rat = _RATINGS.select(
+        "team_id",
+        (pl.col("through_week") + 1).alias("week"),
+        "adj_net",
+        "adj_off_epa",
+        "adj_def_epa",
+        "off_pace",
+        "games",
+    )
+    res = _RES.filter(pl.col("week") >= _BURN_IN_WEEK).with_columns(
+        (pl.col("home_score") + pl.col("away_score")).cast(pl.Float64).alias("actual_total")
+    )
+    outs = []
+    for wk in sorted(res["week"].unique().to_list()):
+        rw = rat.filter(pl.col("week") == wk).drop("week")
+        if with_prior:
+            rw = rw.join(_PRIOR_PACE, on="team_id", how="left")
+        g = res.filter(pl.col("week") == wk).select(
+            "game_id", "home_team_id", "away_team_id", "neutral_site", "actual_total"
+        )
+        if not rw.height or not g.height:
+            continue
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            p = cfb_predict_games(g, rw)
+        outs.append(p.select("game_id", "exp_total").join(g.select("game_id", "actual_total"), on="game_id"))
+    d = pl.concat(outs)
+    return float((d["exp_total"] - d["actual_total"]).abs().mean()), d.height
+
+
+def test_total_mae_within_floor() -> None:
+    """The totals model had NO accuracy gate at all before this.
+
+    Its three constants were refit on 2017-2023 against a 2024 holdout (the
+    superseded trio scored 13.3592 where a plain refit scores 13.0891), and
+    nothing would have caught a regression in them.
+    """
+    mae, n = _totals_backtest(with_prior=True)
+    assert n >= _MIN_GAMES, n
+    assert mae < _TOTAL_MAE_FLOOR, f"totals MAE {mae:.4f} >= floor {_TOTAL_MAE_FLOOR}"
+
+
+def test_pace_blend_actually_changes_the_totals() -> None:
+    """The tempo prior must MOVE the prediction, and move it the right way.
+
+    Regression test for an inert blend. The first implementation mutated
+    `rate_cols` AFTER `home`/`away` had already been derived from it, so the
+    blended pace reached nothing: totals moved 13.2620 -> 13.2622, a 0.0002
+    drift that was only `league_avg_pace` shifting. The null-fallback
+    (`when prior is null then raw`) made the failure silent.
+
+    A threshold alone would not catch that -- both arms sit under any floor
+    loose enough to pass. The COMPARISON is the test.
+    """
+    blended, n_b = _totals_backtest(with_prior=True)
+    raw, n_r = _totals_backtest(with_prior=False)
+    assert n_b == n_r, (n_b, n_r)  # same games, so this is like-for-like
+    assert blended < raw - 0.05, f"blend inert or harmful: blended={blended:.4f} raw={raw:.4f}"
+
+
+def test_missing_prior_pace_warns_because_constants_assume_the_blend() -> None:
+    """No prior => raw tempo against blended-pace coefficients. That is mis-scaled.
+
+    `total_pace_scale` was fitted on the shrunk pace (0.2246 -> 0.3785 across
+    the change), so silently accepting a frame without `prior_off_pace` hands
+    back totals that are wrong in a way nothing else would reveal.
+    """
+    rat = _RATINGS.filter(pl.col("through_week") == 8).select(
+        "team_id", "adj_net", "adj_off_epa", "adj_def_epa", "off_pace", "games"
+    )
+    g = _RES.filter(pl.col("week") == 9).select("game_id", "home_team_id", "away_team_id", "neutral_site")
+    with pytest.warns(UserWarning, match="prior_off_pace"):
+        cfb_predict_games(g, rat)

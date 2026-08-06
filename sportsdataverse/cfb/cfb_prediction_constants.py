@@ -113,6 +113,24 @@ class PredictConfig:
     #: routed through ``net_points_scale``. ``hfa_epa`` is retained for callers
     #: that read it, but the fit is on this one -- mixing an EPA-scale HFA with
     #: a points-scale slope is what let the two drift apart unnoticed.
+    #: Shrinkage constant for the tempo prior: a team's effective pace is
+    #: ``(n/(n+k))*current + (k/(n+k))*prior_season``, n = games played.
+    #:
+    #: MEASURED, not chosen. Swept against walk-forward totals MAE on
+    #: 2017-2024 using the ratings' own ``off_pace``:
+    #:     raw 13.4695 | k=2 13.3994 | k=4 13.3814 | k=6 13.3808 | k=8 13.3847
+    #: The 4-8 region is flat; k=6 is the walk-forward optimum. The 2024
+    #: holdout independently prefers k=8 (12.9133 vs 12.9186), i.e. inside the
+    #: same flat region -- k is selected on walk-forward, because picking it on
+    #: the holdout would be selecting on the test set.
+    #:
+    #: WHY IT HELPS: raw single-season pace is noisy, and a noisy predictor's
+    #: OLS coefficient attenuates toward zero. De-noising it un-attenuates the
+    #: coefficient -- ``total_pace_scale`` rises 0.2246 -> 0.3785 across this
+    #: change, the same errors-in-variables signature as the net_points_scale
+    #: refit. A control confirms it is the BLEND doing the work: last season's
+    #: pace ALONE ties raw (+0.002), so this is not "last year is better data".
+    pace_blend_k: float = 6.0
     hfa_points: float = 3.0365
     #: Points per unit of rating differential, BY GAMES PLAYED. See
     #: :func:`cfb_game_predict.predict_margin`. A single slope is wrong because
@@ -168,9 +186,14 @@ CFB_CONSTANTS: dict[str, PredictConfig] = {
         # names, different meanings: the same unit confusion that let hfa_epa
         # and net_points_scale drift apart. Refit these against THIS
         # parameterisation before changing them.
-        total_intercept=26.8933,
-        total_scale=19.0816,
-        total_pace_scale=0.4267,
+        # Refit 2026-08-06 on 2017-2023, validated on a 2024 holdout (n=616).
+        # The previous trio was stale: it scored 13.3592 where a plain refit on
+        # the same games scores 13.0891 (+0.270) and the pace-blend refit
+        # scores 12.9186 (+0.441). These assume the BLENDED pace -- feeding
+        # them a raw single-season pace mis-scales the tempo term.
+        total_intercept=29.2191,
+        total_scale=12.4216,
+        total_pace_scale=0.3785,
         avg_drives=12.0,
         points_per_epa=1.0,
         quality_win_threshold=0.0,
