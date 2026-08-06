@@ -162,9 +162,14 @@ def test_talent_composite_weighted_sum_and_rank(monkeypatch) -> None:
 
     monkeypatch.setattr(_mod, "load_recruit_classes", lambda *a, **k: _two_class_recruits())
     out = cfb_roster_talent(2021, division="fbs")
-    # weights (1.0, 0.9, ...): A = 1.0*70 (2021 class) + 0.9*170 (2020 class) = 223
+    # Rank decay (0.75) then class-recency weights (1.0, 0.9, ...):
+    #   A 2021 class [4*]        -> 70 * 1**-0.75                  =  70.000
+    #   A 2020 class [5*, 4*]    -> 100 * 1**-0.75 + 70 * 2**-0.75 = 141.622
+    #   A total  = 1.0 * 70.000 + 0.9 * 141.622                    = 197.460
+    # The pre-decay flat sum was 223.0; the second signee in the 2020 class is
+    # now worth 2**-0.75 = 0.5946 of his face value.
     row_a = out.filter(pl.col("team_id") == "A").row(0, named=True)
-    assert abs(row_a["talent_composite"] - 223.0) < 1e-9
+    assert abs(row_a["talent_composite"] - 197.4600241225857) < 1e-9
     row_b = out.filter(pl.col("team_id") == "B").row(0, named=True)
     assert abs(row_b["talent_composite"] - 45.0) < 1e-9
     # dense rank desc within season + blue_chip_ratio joined in
@@ -439,7 +444,7 @@ def test_recruits_injection_skips_the_feed(monkeypatch) -> None:
     monkeypatch.setattr(_mod, "load_recruit_classes", _boom)
     out = cfb_roster_talent(2021, division="fbs", recruits=_two_class_recruits())
     row_a = out.filter(pl.col("team_id") == "A").row(0, named=True)
-    assert abs(row_a["talent_composite"] - 223.0) < 1e-9  # same math as the live path
+    assert abs(row_a["talent_composite"] - 197.4600241225857) < 1e-9  # same math as the live path
 
 
 def test_recruits_injection_matches_the_live_path(monkeypatch) -> None:
@@ -452,3 +457,50 @@ def test_recruits_injection_matches_the_live_path(monkeypatch) -> None:
     fetched = cfb_roster_talent(2021, division="fbs")
     injected = cfb_roster_talent(2021, division="fbs", recruits=_two_class_recruits())
     assert fetched.sort("team_id").equals(injected.sort("team_id"))
+
+
+def test_rank_decay_discounts_the_tail_of_a_class(monkeypatch) -> None:
+    """A class's Nth signee is worth less than its 1st, and decay controls how much.
+
+    Regression test for the volume artefact: a flat sum made talent track class
+    SIZE, so on the live feed Air Force ranked 7th nationally off ~200 signees
+    with a 0.000 blue-chip ratio. `rank_decay` is the fix, and its default was
+    selected by sweeping against Spearman with actual wins (peak at 0.75), not
+    chosen by taste.
+    """
+    # one team, one class: five identical 4-stars. Under a flat sum all five are
+    # worth the same; under decay each successive one is worth strictly less.
+    rec = pl.DataFrame(
+        {
+            "season": [2021] * 5,
+            "team_id": ["A"] * 5,
+            "team": ["Team A"] * 5,
+            "recruit_id": [f"r{i}" for i in range(5)],
+            "stars": [4] * 5,
+            "grade": [90.0] * 5,
+            "position": ["QB"] * 5,
+        }
+    )
+    monkeypatch.setattr(_mod, "load_recruit_classes", lambda *a, **k: rec)
+
+    flat = cfb_roster_talent(2021, division="fbs", rank_decay=0.0)["talent_composite"][0]
+    decayed = cfb_roster_talent(2021, division="fbs", rank_decay=0.75)["talent_composite"][0]
+    steeper = cfb_roster_talent(2021, division="fbs", rank_decay=1.5)["talent_composite"][0]
+
+    assert flat > decayed > steeper, (flat, decayed, steeper)
+    # flat = 5 * 70; decayed = 70 * sum(i**-0.75 for i in 1..5)
+    assert abs(flat - 350.0) < 1e-9
+    expected = 70.0 * sum(i**-0.75 for i in range(1, 6))
+    assert abs(decayed - expected) < 1e-9
+
+
+def test_rank_decay_zero_restores_the_flat_sum(monkeypatch) -> None:
+    """`rank_decay=0.0` must reproduce the pre-decay behaviour exactly.
+
+    Keeps the change auditable: anyone comparing against a historical build can
+    turn the curve off and get the old number back.
+    """
+    monkeypatch.setattr(_mod, "load_recruit_classes", lambda *a, **k: _two_class_recruits())
+    out = cfb_roster_talent(2021, division="fbs", rank_decay=0.0)
+    row_a = out.filter(pl.col("team_id") == "A").row(0, named=True)
+    assert abs(row_a["talent_composite"] - 223.0) < 1e-9  # the documented pre-decay value

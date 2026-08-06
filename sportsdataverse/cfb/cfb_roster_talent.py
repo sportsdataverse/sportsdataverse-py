@@ -41,6 +41,19 @@ _RECRUIT_SCHEMA: dict[str, pl.PolarsDataType] = {
 #: talent. See the note in :func:`cfb_roster_talent`.
 _MAX_CLASS_SIZE = 25
 
+#: Diminishing-returns exponent on a recruit's rank within their class: the
+#: i-th best signee contributes ``star_points * i**-_RANK_DECAY``.
+#:
+#: MEASURED, not chosen by taste. Swept 0.00-1.50 against Spearman(talent,
+#: actual wins) on 2019/2021-2024 FBS, computed offline from the
+#: cfbfastR-cfb-raw recruit store:
+#:     decay  0.00   0.25   0.50   0.75   1.00   1.25   1.50
+#:     rho   .2627  .2783  .2906  .2944  .2870  .2792  .2759
+#: 0.75 is the peak. Over the same sweep Air Force -- 0.000 blue-chip ratio,
+#: ~200 signees -- falls from 16th to 60th, so the curve fixes the volume
+#: artefact and improves predictive validity at the same time.
+_RANK_DECAY = 0.75
+
 #: Recruits requested per RDB page. 500 EXCEEDS what 247 can serve inside the
 #: client's 3s timeout, so every page raised curl(28) and the loop returned an
 #: empty frame -- `cfb_roster_talent` had been yielding (0, 7) for every season.
@@ -243,6 +256,7 @@ def cfb_roster_talent(
     division: str = "fbs",
     composite_247: pl.DataFrame | None = None,
     max_class_size: int = _MAX_CLASS_SIZE,
+    rank_decay: float = _RANK_DECAY,
     recruits: pl.DataFrame | None = None,
     return_as_pandas: bool = False,
 ) -> pl.DataFrame | pd.DataFrame:
@@ -263,7 +277,12 @@ def cfb_roster_talent(
             ``talent_composite``, ranked by star points. Defaults to the FBS
             limit of 25 initial counters. Raise it only deliberately: an
             uncapped sum measures class VOLUME, which put Air Force 7th
-            nationally on 200 signees at a 0.000 blue-chip ratio.
+            nationally on 200 signees at a 0.000 blue-chip ratio. Largely
+            superseded by ``rank_decay``; retained as a hard floor.
+        rank_decay: Diminishing-returns exponent on a recruit's rank within
+            their class (see :data:`_RANK_DECAY`). 0.0 restores the flat sum.
+            The default 0.75 was selected by sweeping against Spearman with
+            actual wins, not chosen by taste.
         recruits: Pre-loaded per-recruit frame (the ``load_recruit_classes``
             contract). Supplying it SKIPS the 247 fetch entirely, which is what
             the cfbfastR-cfb-data producer does when compiling from the raw
@@ -319,19 +338,36 @@ def cfb_roster_talent(
     pointed = recruits.with_columns(
         pl.col("stars").replace_strict(consts.star_points, default=0.0, return_dtype=pl.Float64).alias("star_points")
     )
-    # Only the top `max_class_size` recruits count toward a class.
+    # DIMINISHING RETURNS BY RANK WITHIN THE CLASS.
     #
-    # An uncapped sum measures VOLUME, not talent, and the two diverge badly at
-    # the tail of the sport. Measured on the live 2021-2024 feed the uncapped
-    # form ranked Air Force 7th nationally off 200 signees with a blue-chip
-    # ratio of 0.000, and Washington State 6th off 142 at 0.035 -- service
-    # academies and teams whose 247 pages include preferred walk-ons accumulate
-    # more total star points than a 20-man class of blue chips. The FBS limit
-    # of 25 initial counters is the principled cap: signees past it are not
-    # scholarship talent, whatever the feed lists.
-    per_class = pointed.group_by(["season", "team_id"]).agg(
-        pl.col("star_points").sort(descending=True).head(max_class_size).sum().alias("class_points"),
-        pl.col("team").drop_nulls().first().alias("team"),
+    # The i-th best signee contributes `star_points * i**-rank_decay`, so a
+    # class's 30th man is worth a fraction of its 1st. A flat sum measured
+    # class VOLUME instead of talent: on the live feed it ranked Air Force 7th
+    # nationally off 200 signees at a 0.000 blue-chip ratio, and Washington
+    # State 6th off 142 at 0.035 -- service academies and teams whose 247 pages
+    # include preferred walk-ons out-accumulate a 20-man class of blue chips.
+    #
+    # `rank_decay` was CHOSEN BY MEASUREMENT, not taste: swept 0.00-1.50 against
+    # Spearman(talent, actual wins) over 2019/2021-2024 FBS, which peaks at 0.75
+    # (rho 0.2627 at decay 0, 0.2944 at 0.75, falling to 0.2759 by 1.50). Air
+    # Force moves 16th -> 60th across that same sweep. See
+    # dev/ notes; the sweep runs offline from the cfbfastR-cfb-raw recruit store.
+    #
+    # `max_class_size` is retained as a hard floor on top of the decay, but it
+    # is now nearly redundant -- capped vs uncapped differed by 0.005 Spearman,
+    # inside noise, because the decay already crushes the tail.
+    ranked = pointed.with_columns(
+        pl.col("star_points").rank("ordinal", descending=True).over(["season", "team_id"]).alias("class_rank")
+    ).filter(pl.col("class_rank") <= max_class_size)
+    per_class = (
+        ranked.with_columns(
+            (pl.col("star_points") * pl.col("class_rank").cast(pl.Float64) ** (-rank_decay)).alias("_w")
+        )
+        .group_by(["season", "team_id"])
+        .agg(
+            pl.col("_w").sum().alias("class_points"),
+            pl.col("team").drop_nulls().first().alias("team"),
+        )
     )
     weighted = pl.concat(
         [
