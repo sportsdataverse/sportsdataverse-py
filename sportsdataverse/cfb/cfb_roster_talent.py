@@ -60,17 +60,12 @@ def _normalize_recruit_page(raw: pl.DataFrame, season: int) -> pl.DataFrame:
     decommits and later transfers and systematically undercount signing classes.
     Recruits with neither (never signed/committed) are dropped.
     """
-    required = {
-        "key",
-        "committed_institution_team_key",
-        "committed_institution_full_name",
-        "composite_star_rating",
-        "composite_rating",
-        "primary_position",
-    }
     if raw.height == 0:
         return pl.DataFrame(schema=_RECRUIT_SCHEMA)
-    missing = required - set(raw.columns)
+
+    cols = set(raw.columns)
+    # Per-recruit fields the feed always ships. Their absence IS schema drift.
+    missing = {"key", "composite_star_rating", "composite_rating", "primary_position"} - cols
     if missing:
         # RAISE, do not return empty. This previously returned a well-formed
         # zero-row frame on any schema drift, so one renamed 247 column would
@@ -82,17 +77,32 @@ def _normalize_recruit_page(raw: pl.DataFrame, season: int) -> pl.DataFrame:
             "update _normalize_recruit_page rather than letting talent silently "
             "return zero rows."
         )
-    has_signed = {"signed_institution_team_key", "signed_institution_full_name"} <= set(raw.columns)
-    team_key = (
-        pl.coalesce(pl.col("signed_institution_team_key"), pl.col("committed_institution_team_key"))
-        if has_signed
-        else pl.col("committed_institution_team_key")
-    )
-    team_name = (
-        pl.coalesce(pl.col("signed_institution_full_name"), pl.col("committed_institution_full_name"))
-        if has_signed
-        else pl.col("committed_institution_full_name")
-    )
+
+    # The institution fields are NESTED objects, flattened by json_normalize into
+    # `<prefix>_team_key` / `<prefix>_full_name`. An object that is null for
+    # EVERY row on a page has nothing to expand, so the flattened columns are
+    # absent and only a bare all-null `<prefix>` column survives. That is what a
+    # page of entirely uncommitted recruits looks like -- ordinary data, not
+    # drift. Requiring the flattened names unconditionally turned such a page
+    # into a hard failure and took the whole loader down with it.
+    key_cols = [f"{p}_institution_team_key" for p in ("signed", "committed") if f"{p}_institution_team_key" in cols]
+    name_cols = [f"{p}_institution_full_name" for p in ("signed", "committed") if f"{p}_institution_full_name" in cols]
+    if not key_cols or not name_cols:
+        if cols & {"committed_institution", "signed_institution"}:
+            # Present but unexpanded => no recruit on this page has a school.
+            # Every row would be dropped below anyway; skip the page quietly.
+            return pl.DataFrame(schema=_RECRUIT_SCHEMA)
+        raise ValueError(
+            "247 recruit page has no recognisable institution columns (neither "
+            "flattened '<signed|committed>_institution_team_key'/'_full_name' nor "
+            f"a nested 'committed_institution'); got {sorted(raw.columns)[:12]}... "
+            "The RDB schema has drifted -- update _normalize_recruit_page rather "
+            "than letting talent silently return zero rows."
+        )
+    # Signed beats committed: committed_* trails decommits and later transfers
+    # and systematically undercounts signing classes.
+    team_key = pl.coalesce(*(pl.col(c) for c in key_cols))
+    team_name = pl.coalesce(*(pl.col(c) for c in name_cols))
     return (
         raw.select(
             pl.lit(season, dtype=pl.Int64).alias("season"),
@@ -349,12 +359,15 @@ def load_recruit_classes(
     for season in season_list:
         page = 1
         got = 0
+        usable = 0
         while True:
             raw = sports247_recruits(sport_key=1, year=season, page_size=_PAGE_SIZE, page=page)
             if raw is None or raw.height == 0:
                 break
-            frames.append(_normalize_recruit_page(raw, season))
+            norm = _normalize_recruit_page(raw, season)
+            frames.append(norm)
             got += raw.height
+            usable += norm.height
             if raw.height < _PAGE_SIZE:
                 break
             page += 1
@@ -369,6 +382,21 @@ def load_recruit_classes(
                 "-- talent metrics downstream will be silently absent. Check "
                 f"connectivity and _PAGE_SIZE (currently {_PAGE_SIZE}; 500 "
                 "exceeded the client timeout).",
+                UserWarning,
+                stacklevel=2,
+            )
+        elif usable == 0:
+            # The feed answered, but not one row resolved to a school. Distinct
+            # from the case above -- connectivity is fine, so the cause is in
+            # the payload (e.g. every page's institution object unexpanded).
+            # Counting raw rows alone would call this a success and hand back
+            # an empty frame, which is the failure mode this module exists to
+            # stop doing.
+            warnings.warn(
+                f"247 recruit feed returned {got} rows for {season} but none "
+                "resolved to a committed or signed school, so this season "
+                "contributes nothing to talent. Check whether the institution "
+                "fields arrived unexpanded.",
                 UserWarning,
                 stacklevel=2,
             )

@@ -103,7 +103,7 @@ def test_schema_drift_raises_instead_of_returning_empty(monkeypatch) -> None:
         }
     )
     monkeypatch.setattr(_mod, "sports247_recruits", lambda **k: drifted)
-    with pytest.raises(ValueError, match="missing required columns"):
+    with pytest.raises(ValueError, match="no recognisable institution columns"):
         load_recruit_classes(2023)
 
 
@@ -268,3 +268,85 @@ def test_excess_signees_do_not_inflate_talent(monkeypatch) -> None:
     # And the cap is load-bearing: uncapped, the padding inflates the total.
     uncapped = cfb_roster_talent(2023, division="fbs", max_class_size=10_000)
     assert uncapped["talent_composite"][0] > lean_pts, "cap is inert -- test proves nothing"
+
+
+def test_all_uncommitted_page_is_skipped_not_treated_as_drift(monkeypatch) -> None:
+    """A page where no recruit has committed is data, not schema drift.
+
+    The institution fields are nested objects that json_normalize expands into
+    `<prefix>_team_key` / `<prefix>_full_name`. When the object is null for
+    EVERY row on a page there is nothing to expand, so those flattened columns
+    are absent and only a bare all-null `committed_institution` survives.
+    Measured on the live feed: page 1 of 2024 carries
+    `committed_institution_full_name` (95/250 null) alongside an all-null
+    Float64 `committed_institution`; a deeper, all-uncommitted page carries
+    only the latter.
+
+    Requiring the flattened names unconditionally turned such a page into a
+    hard ValueError that took the whole loader down. The rows would all be
+    dropped anyway (null team), so the page is skipped quietly.
+    """
+    unexpanded = pl.DataFrame(
+        {
+            "key": [1, 2],
+            "composite_star_rating": [3.0, 3.0],
+            "composite_rating": [85.0, 84.0],
+            "primary_position": ["QB", "WR"],
+            "committed_institution": [None, None],  # all-null => never expanded
+            "current_institution_full_name": ["Some HS", "Other HS"],
+        },
+        schema_overrides={"committed_institution": pl.Float64},
+    )
+    monkeypatch.setattr(_mod, "sports247_recruits", lambda **k: unexpanded)
+    with pytest.warns(UserWarning, match="none resolved to a committed or signed school"):
+        out = load_recruit_classes(2023)
+    assert out.height == 0
+    assert out.schema["team_id"] == pl.Utf8  # documented schema preserved
+
+
+def test_signed_beats_committed_when_both_flattened(monkeypatch) -> None:
+    """The coalesce order survives the rewrite: signed_* wins over committed_*."""
+    both = pl.DataFrame(
+        {
+            "key": [1],
+            "composite_star_rating": [4.0],
+            "composite_rating": [95.0],
+            "primary_position": ["QB"],
+            "committed_institution_team_key": [99.0],
+            "committed_institution_full_name": ["Wrong U"],
+            "signed_institution_team_key": [71.0],
+            "signed_institution_full_name": ["Michigan Wolverines"],
+        }
+    )
+    calls = {"n": 0}
+
+    def _page(**k):
+        calls["n"] += 1
+        return both if calls["n"] == 1 else pl.DataFrame(schema={"key": pl.Int64})
+
+    monkeypatch.setattr(_mod, "sports247_recruits", _page)
+    out = load_recruit_classes(2023)
+    assert out["team_id"].to_list() == ["71"]
+    assert out["team"].to_list() == ["Michigan Wolverines"]
+
+
+def test_core_field_drift_still_raises(monkeypatch) -> None:
+    """A renamed per-recruit field raises on the core branch.
+
+    The institution branch and the core branch raise for different reasons and
+    with different messages; both need cover, or splitting the check silently
+    drops one of them.
+    """
+    drifted = pl.DataFrame(
+        {
+            "key": [1],
+            "star_rating": [4.0],  # composite_star_rating renamed away
+            "composite_rating": [95.0],
+            "primary_position": ["QB"],
+            "committed_institution_team_key": [71.0],
+            "committed_institution_full_name": ["Michigan Wolverines"],
+        }
+    )
+    monkeypatch.setattr(_mod, "sports247_recruits", lambda **k: drifted)
+    with pytest.raises(ValueError, match="missing required columns"):
+        load_recruit_classes(2023)
