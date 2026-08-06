@@ -350,3 +350,74 @@ def test_core_field_drift_still_raises(monkeypatch) -> None:
     monkeypatch.setattr(_mod, "sports247_recruits", lambda **k: drifted)
     with pytest.raises(ValueError, match="missing required columns"):
         load_recruit_classes(2023)
+
+
+def test_transient_fetch_failure_is_retried(monkeypatch) -> None:
+    """One connection reset must not abort a multi-page load.
+
+    A four-season load is 60+ requests; 247 resets connections under sustained
+    paging (`curl (56) Recv failure`), and without retry a single reset partway
+    through discarded the whole multi-minute fetch.
+    """
+    monkeypatch.setenv("SDV_PY_247_BACKOFF", "0")  # no real sleeping in tests
+    monkeypatch.setenv("SDV_PY_247_DELAY", "0")
+    calls = {"n": 0}
+
+    def _flaky(**kwargs):
+        calls["n"] += 1
+        if calls["n"] == 1:
+            raise ConnectionError("Failed to perform, curl: (56) Recv failure")
+        if calls["n"] == 2:
+            return _fake_recruit_page(year=2023, page=1)
+        return pl.DataFrame(schema={"key": pl.Int64})
+
+    monkeypatch.setattr(_mod, "sports247_recruits", _flaky)
+    out = load_recruit_classes(2023)
+    assert out.height == 2, out  # the retry recovered the page
+    assert calls["n"] >= 2
+
+
+def test_exhausted_retries_warn_rather_than_raise(monkeypatch) -> None:
+    """A page that never comes back degrades loudly, not silently or fatally."""
+    monkeypatch.setenv("SDV_PY_247_BACKOFF", "0")
+    monkeypatch.setenv("SDV_PY_247_RETRIES", "2")
+
+    def _dead(**kwargs):
+        raise ConnectionError("Failed to perform, curl: (56) Recv failure")
+
+    monkeypatch.setattr(_mod, "sports247_recruits", _dead)
+    with pytest.warns(UserWarning) as rec:
+        out = load_recruit_classes(2023)
+    msgs = " ".join(str(w.message) for w in rec)
+    assert "failed after 2 attempts" in msgs
+    assert "returned no rows" in msgs  # the season-level signal still fires
+    assert out.height == 0
+
+
+def test_retry_does_not_swallow_schema_drift(monkeypatch) -> None:
+    """Drift raises on the FIRST page -- the retry wraps the fetch only.
+
+    Retrying a ValueError would turn a loud, actionable schema error into three
+    slow attempts and then a confusing warning.
+    """
+    monkeypatch.setenv("SDV_PY_247_BACKOFF", "0")
+    calls = {"n": 0}
+
+    def _drifted(**kwargs):
+        calls["n"] += 1
+        return pl.DataFrame({"key": [1], "composite_rating": [95.0], "primary_position": ["QB"]})
+
+    monkeypatch.setattr(_mod, "sports247_recruits", _drifted)
+    with pytest.raises(ValueError, match="missing required columns"):
+        load_recruit_classes(2023)
+    assert calls["n"] == 1, f"drift was retried {calls['n']}x -- retry must wrap the fetch only"
+
+
+def test_env_overrides_ignore_unusable_values(monkeypatch) -> None:
+    """A typo'd env var warns and falls back; it must not crash the loader."""
+    monkeypatch.setenv("SDV_PY_247_RETRIES", "not-a-number")
+    monkeypatch.setenv("SDV_PY_247_DELAY", "0")
+    monkeypatch.setattr(_mod, "sports247_recruits", _fake_recruit_page)
+    with pytest.warns(UserWarning, match="is not numeric"):
+        out = load_recruit_classes(2023)
+    assert out.height == 2

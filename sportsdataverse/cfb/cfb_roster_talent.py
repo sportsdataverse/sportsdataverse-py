@@ -11,6 +11,11 @@ recruits endpoint only returns ``$ref`` links, impractical to resolve per recrui
 
 from __future__ import annotations
 
+import os
+import time
+import warnings
+from collections.abc import Callable
+
 import pandas as pd
 import polars as pl
 
@@ -30,6 +35,12 @@ _RECRUIT_SCHEMA: dict[str, pl.PolarsDataType] = {
     "position": pl.Utf8,
 }
 
+#: Recruits per class that count toward ``talent_composite``. The FBS limit on
+#: initial counters is 25; 247 pages routinely list more (preferred walk-ons,
+#: service-academy classes of 200), and counting them measures volume, not
+#: talent. See the note in :func:`cfb_roster_talent`.
+_MAX_CLASS_SIZE = 25
+
 #: Recruits requested per RDB page. 500 EXCEEDS what 247 can serve inside the
 #: client's 3s timeout, so every page raised curl(28) and the loop returned an
 #: empty frame -- `cfb_roster_talent` had been yielding (0, 7) for every season.
@@ -37,18 +48,61 @@ _RECRUIT_SCHEMA: dict[str, pl.PolarsDataType] = {
 #:     50 -> 50 rows   100 -> 100 rows   250 -> 250 rows   500 -> TIMEOUT
 #: 250 is the largest measured-good size; it halves the request count versus
 #: 100 while staying well inside the budget.
-#: Recruits per class that count toward ``talent_composite``. The FBS limit on
-#: initial counters is 25; 247 pages routinely list more (preferred walk-ons,
-#: service-academy classes of 200), and counting them measures volume, not
-#: talent. See the note in :func:`cfb_roster_talent`.
-_MAX_CLASS_SIZE = 25
-
 _PAGE_SIZE = 250
 
 
 def _int_id(col: str) -> pl.Expr:
     """Integer-origin id -> Utf8 (never float->str, so a Float64 247 key becomes "71" not "71.0")."""
     return pl.col(col).cast(pl.Int64).cast(pl.Utf8)
+
+
+def _env_num(name: str, default: float, cast: Callable[[str], float]) -> float:
+    """Read a numeric override from the environment, ignoring unusable values."""
+    raw = os.environ.get(name)
+    if raw is None:
+        return default
+    try:
+        val = cast(raw)
+    except (TypeError, ValueError):
+        warnings.warn(f"{name}={raw!r} is not numeric; using {default}.", UserWarning, stacklevel=2)
+        return default
+    return val if val >= 0 else default
+
+
+def _fetch_recruit_page(*, season: int, page: int) -> pl.DataFrame | None:
+    """Fetch one RDB page, retrying the transient network failures.
+
+    247 resets connections under sustained paging -- a full four-season load is
+    60+ requests, and one `curl (56) Recv failure` partway through aborted the
+    entire multi-minute fetch with nothing to show. Retry is bounded and the
+    pacing is env-tunable rather than hardcoded, so the next person to hit a
+    stricter rate limit can re-tune without editing code or going through a
+    release:
+
+        SDV_PY_247_RETRIES  attempts per page (default 3)
+        SDV_PY_247_DELAY    seconds between pages (default 0.5)
+        SDV_PY_247_BACKOFF  seconds added per failed attempt (default 2.0)
+
+    Only the FETCH is retried. Normalisation raises on genuine schema drift and
+    must not be swallowed by a retry loop.
+    """
+    attempts = max(1, int(_env_num("SDV_PY_247_RETRIES", 3, int)))
+    backoff = _env_num("SDV_PY_247_BACKOFF", 2.0, float)
+    last: Exception | None = None
+    for attempt in range(1, attempts + 1):
+        try:
+            return sports247_recruits(sport_key=1, year=season, page_size=_PAGE_SIZE, page=page)
+        except Exception as exc:  # noqa: BLE001 - transport errors vary by backend
+            last = exc
+            if attempt < attempts:
+                time.sleep(backoff * attempt)
+    warnings.warn(
+        f"247 recruit page {page} for {season} failed after {attempts} attempts "
+        f"({type(last).__name__}: {last}). That season's class is incomplete.",
+        UserWarning,
+        stacklevel=2,
+    )
+    return None
 
 
 def _normalize_recruit_page(raw: pl.DataFrame, season: int) -> pl.DataFrame:
@@ -352,7 +406,6 @@ def load_recruit_classes(
     .. _247Sports Team Talent Composite: https://247sports.com/season/2023-football/collegeteamtalentcomposite/
     .. _recruitR: https://github.com/sportsdataverse/recruitR
     """
-    import warnings
 
     season_list = [seasons] if isinstance(seasons, int) else list(seasons)
     frames: list[pl.DataFrame] = []
@@ -361,7 +414,7 @@ def load_recruit_classes(
         got = 0
         usable = 0
         while True:
-            raw = sports247_recruits(sport_key=1, year=season, page_size=_PAGE_SIZE, page=page)
+            raw = _fetch_recruit_page(season=season, page=page)
             if raw is None or raw.height == 0:
                 break
             norm = _normalize_recruit_page(raw, season)
@@ -371,6 +424,7 @@ def load_recruit_classes(
             if raw.height < _PAGE_SIZE:
                 break
             page += 1
+            time.sleep(_env_num("SDV_PY_247_DELAY", 0.5, float))
         # A season that yields nothing is a FAILURE, not an empty class. Every
         # request timing out (which is what _PAGE_SIZE=500 caused) looked
         # identical to "247 has no recruits for 2023" -- so the whole talent
