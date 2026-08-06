@@ -19,6 +19,7 @@ from collections.abc import Callable
 import pandas as pd
 import polars as pl
 
+from sportsdataverse.cfb.cfb_loaders import load_cfb_team_info
 from sportsdataverse.cfb.cfb_projection_constants import get_constants
 from sportsdataverse.cfb.sports247 import sports247_recruits
 
@@ -453,7 +454,6 @@ def _add_espn_team_id(recruits: pl.DataFrame) -> pl.DataFrame:
             + [pl.lit(None, dtype=t).alias(c) for c, t in _RECRUIT_SCHEMA.items() if c not in recruits.columns]
         ).select(list(_RECRUIT_SCHEMA))
     from sportsdataverse.cfb.cfb_crosswalk import _norm_team
-    from sportsdataverse.cfb.cfb_loaders import load_cfb_team_info
 
     # Resolve against team_info, NOT the teams crosswalk. The crosswalk floors
     # at 2014 while usable recruit classes start in 2002, so keying off it made
@@ -462,10 +462,33 @@ def _add_espn_team_id(recruits: pl.DataFrame) -> pl.DataFrame:
     # 2003 and carries `school` + `mascot`, which rebuild the same
     # "school mascot" shape 247 ships as the full team name.
     _TEAM_INFO_FLOOR = 2003
+    #: A signing class exists a year or more before its team table does, so the
+    #: CURRENT class -- the one people most want -- has no same-season
+    #: team_info. Walk back to the newest available table rather than failing:
+    #: team identity is stable year to year, and 2026 recruits are real data.
+    #: (Left unhandled this raised ColumnNotFoundError on an empty frame and
+    #: took the whole 2026 class down.)
+    _TEAM_INFO_LOOKBACK = 3
     season = max(int(recruits["season"].max()), _TEAM_INFO_FLOOR)
-    info = load_cfb_team_info(season)
-    if isinstance(info, pd.DataFrame):
-        info = pl.from_pandas(info)
+    info = None
+    for back in range(_TEAM_INFO_LOOKBACK + 1):
+        probe = season - back
+        if probe < _TEAM_INFO_FLOOR:
+            break
+        cand = load_cfb_team_info(probe)
+        if isinstance(cand, pd.DataFrame):
+            cand = pl.from_pandas(cand)
+        if cand is not None and cand.height and "school" in cand.columns:
+            info = cand
+            break
+    if info is None:
+        warnings.warn(
+            f"no team_info available within {_TEAM_INFO_LOOKBACK} seasons of {season}; "
+            "recruit team_id will be null and talent will drop every team.",
+            UserWarning,
+            stacklevel=2,
+        )
+        return recruits.select(list(_RECRUIT_SCHEMA))
 
     espn = pl.col("team_id").cast(pl.Int64).cast(pl.Utf8).alias("_espn")
     school = pl.col("school").cast(pl.Utf8)

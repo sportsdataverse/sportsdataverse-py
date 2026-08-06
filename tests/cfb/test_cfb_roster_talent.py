@@ -546,3 +546,60 @@ def test_normalized_pages_concat_with_empty_pages(monkeypatch) -> None:
     b = _mod._normalize_recruit_page(empty_shape, 2023)
     assert a.columns == b.columns, (a.columns, b.columns)
     assert pl.concat([a, b]).height == a.height  # b contributes no rows, but concats cleanly
+
+
+def test_current_class_resolves_without_same_season_team_info(monkeypatch) -> None:
+    """The current signing class has no team table yet and must still resolve.
+
+    A 2026 class exists well before 2026 team_info does. Requiring the same
+    season raised ColumnNotFoundError on an empty frame and took the whole
+    class down -- the CURRENT class, which is the one most consumers want.
+    """
+    calls: list[int] = []
+
+    def _info(season, *a, **k):
+        calls.append(season)
+        if season >= 2026:  # not published yet
+            return pl.DataFrame()
+        return pl.DataFrame({"team_id": [130], "school": ["Michigan"], "mascot": ["Wolverines"]})
+
+    monkeypatch.setattr(_mod, "load_cfb_team_info", _info)
+    rec = pl.DataFrame(
+        {
+            "season": [2026],
+            "team_id": [None],
+            "team_id_247": ["71"],
+            "team": ["Michigan Wolverines"],
+            "recruit_id": ["1"],
+            "player_name": ["X"],
+            "stars": [4],
+            "grade": [95.0],
+            "position": ["QB"],
+        },
+        schema_overrides={"team_id": pl.Utf8},
+    )
+    out = _mod._add_espn_team_id(rec)
+    assert out["team_id"].to_list() == ["130"], out.to_dicts()
+    assert calls[0] == 2026 and 2025 in calls, calls  # tried current, fell back
+
+
+def test_no_team_info_at_all_warns_rather_than_raising(monkeypatch) -> None:
+    """Exhausting the lookback degrades loudly instead of a confusing crash."""
+    monkeypatch.setattr(_mod, "load_cfb_team_info", lambda *a, **k: pl.DataFrame())
+    rec = pl.DataFrame(
+        {
+            "season": [2026],
+            "team_id": [None],
+            "team_id_247": ["71"],
+            "team": ["Michigan Wolverines"],
+            "recruit_id": ["1"],
+            "player_name": ["X"],
+            "stars": [4],
+            "grade": [95.0],
+            "position": ["QB"],
+        },
+        schema_overrides={"team_id": pl.Utf8},
+    )
+    with pytest.warns(UserWarning, match="no team_info available"):
+        out = _mod._add_espn_team_id(rec)
+    assert out.columns == list(_mod._RECRUIT_SCHEMA)
