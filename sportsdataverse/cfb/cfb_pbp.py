@@ -14,6 +14,45 @@ import pandas as pd
 import polars as pl
 from xgboost import Booster, DMatrix
 
+#: ESPN's OWN verdict that a play did not count. This is the reliable negation
+#: signal and it is deliberately preferred over deriving negation ourselves from
+#: the infraction name, for two reasons measured on the release (see
+#: ``dev/penalty-analysis/DESIGN.md``):
+#:
+#: * a play can carry two fouls on the same side where one is declined and the
+#:   other accepted, so "declined" in the text does NOT mean the play stood; and
+#: * a live-ball foul plus a dead-ball foul can BOTH be accepted, negating the
+#:   play *and* adding yardage.
+#:
+#: ESPN's marker already reflects the net enforcement outcome across every
+#: penalty on the play. Plays carrying it have a ``down_repeated`` rate of
+#: 0.727-0.782 against a 0.155 no-penalty baseline.
+_PENALTY_NEGATED_TEXT = r"(?i)no play|nullified by penalty"
+
+#: Infractions that WIPE OUT the play, measured by how often the down is
+#: replayed among plays with penalty text and no explicit outcome marker
+#: (no-penalty baseline 0.155): false start 0.976, ineligible downfield 0.968,
+#: delay of game 0.919, offside/encroachment 0.761, offensive holding 0.738,
+#: illegal formation/shift/motion 0.627.
+_PENALTY_NEGATING_FOUL = (
+    r"(?i)false start|ineligible|delay of game|offside|encroachment|neutral zone"
+    r"|holding|illegal (formation|shift|motion|substitution)|clipping|chop block"
+)
+
+#: Infractions after which the play STANDS and the down advances: intentional
+#: grounding 0.045 (it is a loss of down, so the down advancing is correct) and
+#: illegal forward pass 0.175 -- both at or below the 0.155 baseline.
+_PENALTY_PLAY_STANDS_FOUL = r"(?i)intentional grounding|illegal forward pass"
+
+#: Infractions carrying an AUTOMATIC FIRST DOWN. These are deliberately NOT
+#: classified. A negated play resets the down to 1 rather than repeating it, so
+#: the replay signal cannot distinguish "wiped out the play" from "dead-ball
+#: foul after a play that stood" -- pass interference measures 0.445 purely as
+#: an artefact of that. ~2,400 leaderboard-reaching plays and roughly +2,650 EPA
+#: sit here; they resolve to ``unknown`` until a valid instrument exists.
+#: Guessing is how cfbfastR-cfb-data#30 shipped.
+_PENALTY_AUTO_FIRST_DOWN_FOUL = r"(?i)pass interference|personal foul|face ?mask|roughing|targeting|unsportsmanlike"
+
 
 def _cfb_resource_filename(package: str, resource: str) -> str:
     """Drop-in replacement for the deprecated ``pkg_resources.resource_filename``.
@@ -1747,7 +1786,13 @@ class CFBPlayProcess(object):
         play_df = (
             play_df.with_columns(
                 scoring_play=pl.when(pl.col("type.text").is_in(scores_vec)).then(True).otherwise(False),
-                td_play=pl.col("text").str.contains("(?i)touchdown|(?i)for a TD"),
+                # A touchdown ESPN says was wiped out is not a touchdown. The
+                # marker has to be applied HERE, at the definition, because the
+                # scoring logic below consumes `td_play` long before
+                # `__setup_penalty_data` runs -- hence the shared constant
+                # rather than a second copy of the pattern.
+                td_play=pl.col("text").str.contains("(?i)touchdown|(?i)for a TD")
+                & ~pl.col("text").str.contains(_PENALTY_NEGATED_TEXT),
                 touchdown=pl.col("type.text").str.contains("(?i)touchdown"),
                 ## Portion of touchdown check for plays where touchdown is not listed in the play_type--
                 td_check=pl.col("text").str.contains("(?i)touchdown"),
@@ -2628,23 +2673,49 @@ class CFBPlayProcess(object):
                 .then(True)
                 .otherwise(False),
                 # -- T/F flag conditions penalty_declined
+                # The second branch is NOT redundant: ESPN labels most penalty
+                # plays as "Penalty", but writes plenty of them onto a normally
+                # labelled play ("Pass Incompletion", "Rush"). Gating only on
+                # the play label missed 576 of 894 "declined" texts in 2025.
                 penalty_declined=pl.when(
                     (pl.col("type.text") == "Penalty").and_(pl.col("text").str.contains("(?i)declined")),
                 )
                 .then(True)
+                .when((pl.col("text").str.contains("(?i)penalty")).and_(pl.col("text").str.contains("(?i)declined")))
+                .then(True)
                 .otherwise(False),
                 # -- T/F flag conditions penalty_no_play
+                # "nullified by penalty" is ESPN's own verdict that the play did
+                # not count, and it is the RELIABLE signal. Deriving negation
+                # ourselves from the infraction name is not safe: a play can
+                # carry two fouls on the same side where one is declined and the
+                # other accepted (so "declined" in the text does NOT mean the
+                # play stood), or a live-ball foul plus a dead-ball foul that are
+                # BOTH accepted. ESPN's marker already reflects the net
+                # enforcement outcome. 179 plays carry it in 2025; 26 of them
+                # say nothing about "no play".
                 penalty_no_play=pl.when(
-                    (pl.col("type.text") == "Penalty").and_(pl.col("text").str.contains("(?i)no play")),
+                    (pl.col("type.text") == "Penalty").and_(pl.col("text").str.contains(_PENALTY_NEGATED_TEXT)),
+                )
+                .then(True)
+                .when(
+                    (pl.col("text").str.contains("(?i)penalty")).and_(
+                        pl.col("text").str.contains(_PENALTY_NEGATED_TEXT)
+                    )
                 )
                 .then(True)
                 .otherwise(False),
                 # -- T/F flag conditions penalty_offset
+                # ESPN spells this BOTH ways and overwhelmingly without the
+                # hyphen: 44 "offsetting" vs 1 "off-setting" in 2025, of which
+                # the hyphen-only pattern matched exactly one.
                 penalty_offset=pl.when(
-                    (pl.col("type.text") == "Penalty").and_(pl.col("text").str.contains("(?i)off-setting")),
+                    (pl.col("type.text") == "Penalty").and_(pl.col("text").str.contains("(?i)off-?setting")),
                 )
                 .then(True)
-                .when((pl.col("text").str.contains("(?i)penalty")).and_(pl.col("text").str.contains("(?i)off-setting")))
+                .when(
+                    (pl.col("text").str.contains("(?i)penalty")).and_(pl.col("text").str.contains("(?i)off-?setting"))
+                )
                 .then(True)
                 .otherwise(False),
                 # -- T/F flag conditions penalty_1st_conv
@@ -2660,12 +2731,62 @@ class CFBPlayProcess(object):
                     (pl.col("text").str.contains("(?i)penalty")).and_(
                         pl.col("type.text") != "Penalty",
                         pl.col("text").str.contains("(?i)declined") == False,
-                        pl.col("text").str.contains("(?i)off-setting") == False,
-                        pl.col("text").str.contains("(?i)no play") == False,
+                        pl.col("text").str.contains("(?i)off-?setting") == False,
+                        pl.col("text").str.contains(_PENALTY_NEGATED_TEXT) == False,
                     ),
                 )
                 .then(True)
                 .otherwise(False),
+            )
+            .with_columns(
+                # ---- per-penalty state -------------------------------------
+                # A play can carry more than one penalty (398 plays across
+                # 2015/2021/2025), and a single boolean cannot represent that.
+                # 54 of those have SOME but not all penalties declined -- their
+                # down-replay rate is 0.231 against 0.813 when none are
+                # declined, so the two groups genuinely differ and collapsing
+                # them loses information.
+                penalty_count=pl.col("text").str.count_matches("(?i)penalty"),
+                penalty_declined_count=pl.col("text").str.count_matches("(?i)declined"),
+            )
+            .with_columns(
+                # Only when EVERY penalty was declined does the play stand.
+                # `penalty_declined` alone (>=1 declined) is not sufficient.
+                penalty_all_declined=(pl.col("penalty_count") > 0)
+                & (pl.col("penalty_count") == pl.col("penalty_declined_count")),
+            )
+            .with_columns(
+                # ---- enforcement class, resolved in priority order ---------
+                # `unknown` is a real answer, not a gap to be filled: the
+                # automatic-first-down fouls cannot be classified from the
+                # signals available (see _PENALTY_AUTO_FIRST_DOWN_FOUL).
+                penalty_enforcement=pl.when(pl.col("penalty_flag") == False)
+                .then(pl.lit(None, dtype=pl.Utf8))
+                .when(pl.col("penalty_no_play") == True)
+                .then(pl.lit("no_play"))
+                .when(pl.col("penalty_all_declined") == True)
+                .then(pl.lit("declined"))
+                .when(pl.col("penalty_offset") == True)
+                .then(pl.lit("offsetting"))
+                .when(pl.col("text").str.contains(_PENALTY_AUTO_FIRST_DOWN_FOUL))
+                .then(pl.lit("unknown"))
+                .when(pl.col("text").str.contains(_PENALTY_NEGATING_FOUL))
+                .then(pl.lit("negating_foul"))
+                .when(pl.col("text").str.contains(_PENALTY_PLAY_STANDS_FOUL))
+                .then(pl.lit("play_stands"))
+                .otherwise(pl.lit("unknown")),
+            )
+            .with_columns(
+                # The consumer-facing answer for the classes we can settle.
+                # NULL (not False) for `unknown`, so a caller cannot silently
+                # treat "we do not know" as "the play counted".
+                penalty_negated_play=pl.when(pl.col("penalty_enforcement").is_null())
+                .then(False)
+                .when(pl.col("penalty_enforcement").is_in(["no_play", "offsetting", "negating_foul"]))
+                .then(True)
+                .when(pl.col("penalty_enforcement").is_in(["declined", "play_stands"]))
+                .then(False)
+                .otherwise(pl.lit(None, dtype=pl.Boolean)),
             )
             .with_columns(
                 penalty_detail=pl.when(pl.col("penalty_offset") == 1)
