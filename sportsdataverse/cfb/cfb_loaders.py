@@ -693,7 +693,7 @@ def load_cfb_recruits(seasons, return_as_pandas: bool = False):
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_recruits
 
     Args:
-        seasons: an int or iterable of seasons (>= 2013).
+        seasons: an int or iterable of seasons (>= 2002).
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -713,7 +713,7 @@ def load_cfb_recruits(seasons, return_as_pandas: bool = False):
         |position    |String  |
 
     Raises:
-        SeasonNotFoundError: if a requested season is below 2013.
+        SeasonNotFoundError: if a requested season is below 2002.
 
     Example:
         Quick start::
@@ -722,8 +722,8 @@ def load_cfb_recruits(seasons, return_as_pandas: bool = False):
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
-        if int(season) < 2013:
-            raise SeasonNotFoundError("season cannot be less than 2013")
+        if int(season) < 2002:
+            raise SeasonNotFoundError("season cannot be less than 2002")
         df = _read_release_parquet(
             f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/cfb_recruits/cfb_recruits_{season}.parquet"
         )
@@ -748,7 +748,7 @@ def load_cfb_returning_production(seasons, return_as_pandas: bool = False):
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_returning_production
 
     Args:
-        seasons: an int or iterable of seasons (>= 2015).
+        seasons: an int or iterable of seasons (>= 2005).
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -765,7 +765,7 @@ def load_cfb_returning_production(seasons, return_as_pandas: bool = False):
         |n_returning       |Int64   |
 
     Raises:
-        SeasonNotFoundError: if a requested season is below 2015.
+        SeasonNotFoundError: if a requested season is below 2005.
 
     Example:
         Quick start::
@@ -774,8 +774,8 @@ def load_cfb_returning_production(seasons, return_as_pandas: bool = False):
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
-        if int(season) < 2015:
-            raise SeasonNotFoundError("season cannot be less than 2015")
+        if int(season) < 2005:
+            raise SeasonNotFoundError("season cannot be less than 2005")
         df = _read_release_parquet(
             f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/cfb_returning_production/cfb_returning_production_{season}.parquet"
         )
@@ -1010,7 +1010,7 @@ def load_cfb_team_talent(seasons, return_as_pandas: bool = False):
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_team_talent
 
     Args:
-        seasons: an int or iterable of seasons (>= 2016).
+        seasons: an int or iterable of seasons (>= 2005).
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -1028,7 +1028,7 @@ def load_cfb_team_talent(seasons, return_as_pandas: bool = False):
         |n_recruits       |Int64   |
 
     Raises:
-        SeasonNotFoundError: if a requested season is below 2016.
+        SeasonNotFoundError: if a requested season is below 2005.
 
     Example:
         Quick start::
@@ -1037,8 +1037,8 @@ def load_cfb_team_talent(seasons, return_as_pandas: bool = False):
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
-        if int(season) < 2016:
-            raise SeasonNotFoundError("season cannot be less than 2016")
+        if int(season) < 2005:
+            raise SeasonNotFoundError("season cannot be less than 2005")
         df = _read_release_parquet(
             f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/cfb_team_talent/cfb_team_talent_{season}.parquet"
         )

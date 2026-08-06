@@ -36,7 +36,7 @@ loaders:
   base: sdv_releases
   url: cfb_recruits/cfb_recruits_{season}.parquet
   tag: cfb_recruits
-  min_season: 2013
+  min_season: 2002
   example_args:
     seasons: 2024
   id_int64:
@@ -46,7 +46,7 @@ loaders:
   base: sdv_releases
   url: cfb_returning_production/cfb_returning_production_{season}.parquet
   tag: cfb_returning_production
-  min_season: 2015
+  min_season: 2005
   example_args:
     seasons: 2024
   id_int64:
@@ -82,7 +82,7 @@ loaders:
   base: sdv_releases
   url: cfb_team_talent/cfb_team_talent_{season}.parquet
   tag: cfb_team_talent
-  min_season: 2016
+  min_season: 2005
   example_args:
     seasons: 2024
   id_int64:
