@@ -18,9 +18,12 @@ __all__ = [
     "load_cfb_pbp",
     "load_cfb_ratings",
     "load_cfb_recruiting_proj",
+    "load_cfb_recruits",
+    "load_cfb_returning_production",
     "load_cfb_rosters",
     "load_cfb_schedule",
     "load_cfb_team_info",
+    "load_cfb_team_talent",
     "load_cfb_teams_crosswalk",
     "load_cfb_schedule_crosswalk",
     "load_cfb_team_box",
@@ -684,6 +687,113 @@ def load_cfb_recruiting_proj(seasons, return_as_pandas: bool = False):
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
+def load_cfb_recruits(seasons, return_as_pandas: bool = False):
+    """Load cfb_recruits (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_recruits
+
+    Args:
+        seasons: an int or iterable of seasons (>= 2013).
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; seasons with no published asset are
+        skipped with a warning rather than raising (404-safe).
+
+        |col_name    |type    |
+        |:-----------|:-------|
+        |season      |Int64   |
+        |team_id     |Int64   |
+        |team_id_247 |String  |
+        |team        |String  |
+        |recruit_id  |String  |
+        |player_name |String  |
+        |stars       |Int64   |
+        |grade       |Float64 |
+        |position    |String  |
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2013.
+
+    Example:
+        Quick start::
+
+            load_cfb_recruits(seasons=2024)
+    """
+    frames, missing = [], []
+    for season in _as_season_list(seasons):
+        if int(season) < 2013:
+            raise SeasonNotFoundError("season cannot be less than 2013")
+        df = _read_release_parquet(
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/cfb_recruits/cfb_recruits_{season}.parquet"
+        )
+        if df is None:
+            missing.append(season)
+            continue
+        frames.append(df)
+    if missing:
+        cli_warn("load_cfb_recruits: no data for season(s) {missing} (skipped)".format(missing=missing))
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    # Producers shipped this id with differing dtypes across releases; pin it here
+    # so a cross-dataset join cannot silently match nothing.
+    out = _cast_ids_int64(out, ["team_id"])
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+def load_cfb_returning_production(seasons, return_as_pandas: bool = False):
+    """Load cfb_returning_production (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_returning_production
+
+    Args:
+        seasons: an int or iterable of seasons (>= 2015).
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; seasons with no published asset are
+        skipped with a warning rather than raising (404-safe).
+
+        |col_name          |type    |
+        |:-----------------|:-------|
+        |season            |Int64   |
+        |team_id           |Int64   |
+        |off_returning     |Float64 |
+        |def_returning     |Float64 |
+        |overall_returning |Float64 |
+        |n_returning       |Int64   |
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2015.
+
+    Example:
+        Quick start::
+
+            load_cfb_returning_production(seasons=2024)
+    """
+    frames, missing = [], []
+    for season in _as_season_list(seasons):
+        if int(season) < 2015:
+            raise SeasonNotFoundError("season cannot be less than 2015")
+        df = _read_release_parquet(
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/cfb_returning_production/cfb_returning_production_{season}.parquet"
+        )
+        if df is None:
+            missing.append(season)
+            continue
+        frames.append(df)
+    if missing:
+        cli_warn("load_cfb_returning_production: no data for season(s) {missing} (skipped)".format(missing=missing))
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    # Producers shipped this id with differing dtypes across releases; pin it here
+    # so a cross-dataset join cannot silently match nothing.
+    out = _cast_ids_int64(out, ["team_id"])
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
 def load_cfb_rosters(seasons, return_as_pandas: bool = False):
     """Load cfbfastR-data (sportsdataverse-data release).
 
@@ -885,6 +995,59 @@ def load_cfb_team_info(seasons, return_as_pandas: bool = False):
         frames.append(df)
     if missing:
         cli_warn("load_cfb_team_info: no data for season(s) {missing} (skipped)".format(missing=missing))
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    # Producers shipped this id with differing dtypes across releases; pin it here
+    # so a cross-dataset join cannot silently match nothing.
+    out = _cast_ids_int64(out, ["team_id"])
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+def load_cfb_team_talent(seasons, return_as_pandas: bool = False):
+    """Load cfb_team_talent (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_team_talent
+
+    Args:
+        seasons: an int or iterable of seasons (>= 2016).
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; seasons with no published asset are
+        skipped with a warning rather than raising (404-safe).
+
+        |col_name         |type    |
+        |:----------------|:-------|
+        |season           |Int64   |
+        |team_id          |Int64   |
+        |team             |String  |
+        |talent_composite |Float64 |
+        |talent_rank      |Int64   |
+        |blue_chip_ratio  |Float64 |
+        |n_recruits       |Int64   |
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2016.
+
+    Example:
+        Quick start::
+
+            load_cfb_team_talent(seasons=2024)
+    """
+    frames, missing = [], []
+    for season in _as_season_list(seasons):
+        if int(season) < 2016:
+            raise SeasonNotFoundError("season cannot be less than 2016")
+        df = _read_release_parquet(
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/cfb_team_talent/cfb_team_talent_{season}.parquet"
+        )
+        if df is None:
+            missing.append(season)
+            continue
+        frames.append(df)
+    if missing:
+        cli_warn("load_cfb_team_talent: no data for season(s) {missing} (skipped)".format(missing=missing))
     # diagonal: per-season release schemas can drift (columns added/dropped
     # over the years) -- union columns, null-fill gaps.
     out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()

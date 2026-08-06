@@ -410,6 +410,8 @@ from sportsdataverse.cfb import load_cfb_ratings as load_cfb_ratings  # noqa: F4
 from sportsdataverse.cfb import load_cfb_ratings_weekly as load_cfb_ratings_weekly  # noqa: F401
 from sportsdataverse.cfb import load_cfb_receiving as load_cfb_receiving  # noqa: F401
 from sportsdataverse.cfb import load_cfb_recruiting_proj as load_cfb_recruiting_proj  # noqa: F401
+from sportsdataverse.cfb import load_cfb_recruits as load_cfb_recruits  # noqa: F401
+from sportsdataverse.cfb import load_cfb_returning_production as load_cfb_returning_production  # noqa: F401
 from sportsdataverse.cfb import load_cfb_rosters as load_cfb_rosters  # noqa: F401
 from sportsdataverse.cfb import load_cfb_rosters_crosswalk as load_cfb_rosters_crosswalk  # noqa: F401
 from sportsdataverse.cfb import load_cfb_rushing as load_cfb_rushing  # noqa: F401
@@ -419,6 +421,7 @@ from sportsdataverse.cfb import load_cfb_team_box as load_cfb_team_box  # noqa: 
 from sportsdataverse.cfb import load_cfb_team_info as load_cfb_team_info  # noqa: F401
 from sportsdataverse.cfb import load_cfb_team_summaries as load_cfb_team_summaries  # noqa: F401
 from sportsdataverse.cfb import load_cfb_team_summaries_weekly as load_cfb_team_summaries_weekly  # noqa: F401
+from sportsdataverse.cfb import load_cfb_team_talent as load_cfb_team_talent  # noqa: F401
 from sportsdataverse.cfb import load_cfb_teams_crosswalk as load_cfb_teams_crosswalk  # noqa: F401
 from sportsdataverse.cfb import load_draft_outcomes as load_draft_outcomes  # noqa: F401
 from sportsdataverse.cfb import load_fp_curve as load_fp_curve  # noqa: F401
@@ -655,6 +658,8 @@ __all__ = [
     "load_cfb_ratings_weekly",
     "load_cfb_receiving",
     "load_cfb_recruiting_proj",
+    "load_cfb_recruits",
+    "load_cfb_returning_production",
     "load_cfb_rosters",
     "load_cfb_rosters_crosswalk",
     "load_cfb_rushing",
@@ -664,6 +669,7 @@ __all__ = [
     "load_cfb_team_info",
     "load_cfb_team_summaries",
     "load_cfb_team_summaries_weekly",
+    "load_cfb_team_talent",
     "load_cfb_teams_crosswalk",
     "load_draft_outcomes",
     "load_fp_curve",

@@ -3456,6 +3456,38 @@ load_cfb_recruiting_proj:
   type: Float64
 - name: pred_net_epa
   type: Float64
+load_cfb_recruits:
+- name: season
+  type: Int64
+- name: team_id
+  type: Int64
+- name: team_id_247
+  type: String
+- name: team
+  type: String
+- name: recruit_id
+  type: String
+- name: player_name
+  type: String
+- name: stars
+  type: Int64
+- name: grade
+  type: Float64
+- name: position
+  type: String
+load_cfb_returning_production:
+- name: season
+  type: Int64
+- name: team_id
+  type: Int64
+- name: off_returning
+  type: Float64
+- name: def_returning
+  type: Float64
+- name: overall_returning
+  type: Float64
+- name: n_returning
+  type: Int64
 load_cfb_rosters:
 - name: athlete_id
   type: String
@@ -5274,6 +5306,21 @@ load_cfb_team_summaries_weekly:
   type: Float64
 - name: through_week
   type: Int32
+load_cfb_team_talent:
+- name: season
+  type: Int64
+- name: team_id
+  type: Int64
+- name: team
+  type: String
+- name: talent_composite
+  type: Float64
+- name: talent_rank
+  type: Int64
+- name: blue_chip_ratio
+  type: Float64
+- name: n_recruits
+  type: Int64
 load_cfb_teams_crosswalk:
 - name: norm_key
   type: String

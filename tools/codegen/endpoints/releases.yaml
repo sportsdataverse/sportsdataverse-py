@@ -31,6 +31,26 @@ loaders:
     seasons: 2024
   id_int64:
   - team_id
+- fn: load_cfb_recruits
+  league: cfb
+  base: sdv_releases
+  url: cfb_recruits/cfb_recruits_{season}.parquet
+  tag: cfb_recruits
+  min_season: 2013
+  example_args:
+    seasons: 2024
+  id_int64:
+  - team_id
+- fn: load_cfb_returning_production
+  league: cfb
+  base: sdv_releases
+  url: cfb_returning_production/cfb_returning_production_{season}.parquet
+  tag: cfb_returning_production
+  min_season: 2015
+  example_args:
+    seasons: 2024
+  id_int64:
+  - team_id
 - fn: load_cfb_rosters
   league: cfb
   base: raw_data
@@ -53,6 +73,16 @@ loaders:
   url: cfbfastR-data/main/team_info/parquet/cfb_team_info_{season}.parquet
   tag: cfbfastR-data
   min_season: 2003
+  example_args:
+    seasons: 2024
+  id_int64:
+  - team_id
+- fn: load_cfb_team_talent
+  league: cfb
+  base: sdv_releases
+  url: cfb_team_talent/cfb_team_talent_{season}.parquet
+  tag: cfb_team_talent
+  min_season: 2016
   example_args:
     seasons: 2024
   id_int64:

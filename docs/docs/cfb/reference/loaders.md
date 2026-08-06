@@ -17,9 +17,12 @@ flowchart LR
 | `load_cfb_pbp` | [espn_cfb_pbp](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_pbp) | — |
 | `load_cfb_ratings` | [cfb_ratings](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_ratings) | — |
 | `load_cfb_recruiting_proj` | [cfb_recruiting_proj](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_recruiting_proj) | — |
+| `load_cfb_recruits` | [cfb_recruits](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_recruits) | — |
+| `load_cfb_returning_production` | [cfb_returning_production](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_returning_production) | — |
 | `load_cfb_rosters` | [cfbfastR-data](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfbfastR-data) | — |
 | `load_cfb_schedule` | [cfbfastR-data](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfbfastR-data) | — |
 | `load_cfb_team_info` | [cfbfastR-data](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfbfastR-data) | — |
+| `load_cfb_team_talent` | [cfb_team_talent](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_team_talent) | — |
 | `load_cfb_teams_crosswalk` | [cfb_crosswalk](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_crosswalk) | — |
 | `load_cfb_schedule_crosswalk` | [cfb_crosswalk](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_crosswalk) | — |
 | `load_cfb_team_box` | [espn_cfb_team_box](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_team_box) | — |
@@ -582,6 +585,45 @@ Release: [cfb_recruiting_proj](https://github.com/sportsdataverse/sportsdatavers
 load_cfb_recruiting_proj(seasons=2024)
 ```
 
+## `load_cfb_recruits`
+
+Release: [cfb_recruits](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_recruits) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/cfb_recruits/cfb_recruits_{season}.parquet`
+### Returns
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season (4-digit year). |
+| `team_id` | Int64 | ESPN team id. |
+| `team_id_247` | String |  |
+| `team` | String | Team name. |
+| `recruit_id` | String | ESPN recruit id. |
+| `player_name` | String | Full name of player |
+| `stars` | Int64 | Recruit star rating on the 247Sports scale (2-5). |
+| `grade` | Float64 | ESPN recruit grade (0-100; `0` = not rated). |
+| `position` | String | Athlete position. |
+
+```python
+load_cfb_recruits(seasons=2024)
+```
+
+## `load_cfb_returning_production`
+
+Release: [cfb_returning_production](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_returning_production) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/cfb_returning_production/cfb_returning_production_{season}.parquet`
+### Returns
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season (4-digit year). |
+| `team_id` | Int64 | ESPN team id. |
+| `off_returning` | Float64 |  |
+| `def_returning` | Float64 |  |
+| `overall_returning` | Float64 |  |
+| `n_returning` | Int64 |  |
+
+```python
+load_cfb_returning_production(seasons=2024)
+```
+
 ## `load_cfb_rosters`
 
 Release: [cfbfastR-data](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfbfastR-data) · asset `https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/main/rosters/parquet/cfb_rosters_{season}.parquet`
@@ -694,6 +736,25 @@ Release: [cfbfastR-data](https://github.com/sportsdataverse/sportsdataverse-data
 
 ```python
 load_cfb_team_info(seasons=2024)
+```
+
+## `load_cfb_team_talent`
+
+Release: [cfb_team_talent](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_team_talent) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/cfb_team_talent/cfb_team_talent_{season}.parquet`
+### Returns
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season (4-digit year). |
+| `team_id` | Int64 | ESPN team id. |
+| `team` | String | Team name. |
+| `talent_composite` | Float64 |  |
+| `talent_rank` | Int64 |  |
+| `blue_chip_ratio` | Float64 |  |
+| `n_recruits` | Int64 |  |
+
+```python
+load_cfb_team_talent(seasons=2024)
 ```
 
 ## `load_cfb_teams_crosswalk`

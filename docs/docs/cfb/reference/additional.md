@@ -867,43 +867,6 @@ ratio = assert_rating_scale(ratings)
 assert ratio < 1.6, "refit the constants before trusting predictions"
 ```
 
-### `blue_chip_ratio(recruits: 'pl.DataFrame', *, window: 'int' = 4, division: 'str' = 'fbs') -> 'pl.DataFrame'` {#blue_chip_ratio}
-
-Blue-chip ratio per team-season over a trailing window of recruiting classes.
-
-Bud Elliott's blue-chip ratio: the share of a roster's recruits rated at or above
-the division's blue-chip star floor (4+ stars for FBS). Each recruiting class
-contributes to the `window` seasons it is roster-eligible for, so the season-S
-ratio aggregates classes S-window+1 .. S.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `recruits` | `DataFrame` |  | Per-recruit frame from `load_recruit_classes` (`season`, `team_id`, `recruit_id`, `stars`, ...). |
-| `window` | `int` | `4` | Number of trailing recruiting classes eligible per season. |
-| `division` | `str` | `'fbs'` | Division slug for `get_constants` (blue-chip star floor). |
-
-**Returns**
-
-Per `(season, team_id)`: `blue_chip_ratio` (Float64), `n_recruits` (Int64), `n_blue_chip` (Int64). Zero-row (typed) for empty input.
-
-| col_name | type | description |
-|---|---|---|
-| `season` | integer | Roster season the trailing-window ratio describes (each class counts toward its eligible seasons). |
-| `team_id` | character | 247Sports committed/signed-institution team key as a string (integer-origin; not an ESPN id). |
-| `blue_chip_ratio` | double | Share of the trailing four signing classes rated 4+ stars (Bud Elliott's blue-chip ratio). |
-| `n_recruits` | integer | Total signees across the trailing recruiting-class window. |
-| `n_blue_chip` | integer | Signees at or above the division's blue-chip star floor across the window. |
-
-**Example**
-
-```python
-from sportsdataverse.cfb.cfb_roster_talent import blue_chip_ratio, load_recruit_classes
-bcr = blue_chip_ratio(load_recruit_classes([2020, 2021, 2022, 2023]))
-bcr.filter(pl.col("season") == 2023).sort("blue_chip_ratio", descending=True).head()
-```
-
 ### `cfb_adjusted_epa(plays: 'pl.DataFrame | pd.DataFrame', *, ridge_lambda: 'float' = 0.035, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#cfb_adjusted_epa}
 
 Season opponent-adjusted per-team EPA from a season's play-by-play.
@@ -1477,43 +1440,6 @@ One row per team: `season`, `team_id` (Utf8), `sos`, `sos_rank` (Int64 dense ran
 from sportsdataverse.cfb.cfb_resume import cfb_resume
 resume = cfb_resume(2023)
 resume.sort("sos_rank").head()
-```
-
-### `cfb_returning_production(seasons: 'int | list[int]', *, division: 'str' = 'fbs', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#cfb_returning_production}
-
-Returning production per team-season (offense / defense / overall).
-
-For each requested season S, computes the fraction of season S-1 unit
-production attributable to players on the season-S roster (Bill Connelly's
-returning-production concept; unit weights from `get_constants`).
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `seasons` | `int \| list[int]` |  | Target season or list of seasons (production is drawn from S-1). |
-| `division` | `str` | `'fbs'` | Division slug for constants lookups. |
-| `return_as_pandas` | `bool` | `False` | If True, return a pandas DataFrame; otherwise polars. |
-
-**Returns**
-
-Per `(season, team_id)`: `off_returning`, `def_returning`, `overall_returning` (Float64 fractions in [0, 1]), `n_returning` (Int64 count of returning contributors). `team_id` is the ESPN team id as Utf8 -- BREAKING vs the previous release, which emitted a normalized team NAME under `team` and joined at 57.7%. Zero-row (typed) when the box data is unavailable.
-
-| col_name | type | description |
-|---|---|---|
-| `season` | integer | Season the returning fractions describe (production drawn from the prior season). |
-| `team` | character | Normalized school-name key (play-by-play team names are school-only; not an ESPN id). |
-| `off_returning` | double | Fraction of prior-season attributed offensive yardage (passing + rushing + receiving) returning on the current roster. |
-| `def_returning` | double | Fraction of prior-season defensive splash-event involvement (sacks, interceptions, pass breakups, forced fumbles) returning. |
-| `overall_returning` | double | Unit fractions combined with the fitted returning_prod_weights (offense-only per the 2018-2023 fit; see fit_returning_weights.py). |
-| `n_returning` | integer | Count of prior-season contributors present on the current roster. |
-
-**Example**
-
-```python
-from sportsdataverse.cfb import cfb_returning_production
-rp = cfb_returning_production(2023)
-rp.sort("overall_returning", descending=True).head(10)
 ```
 
 ### `cfb_roster_talent(seasons: 'int | list[int]', *, division: 'str' = 'fbs', composite_247: 'pl.DataFrame | None' = None, max_class_size: 'int' = 25, rank_decay: 'float' = 0.75, recruits: 'pl.DataFrame | None' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#cfb_roster_talent}
