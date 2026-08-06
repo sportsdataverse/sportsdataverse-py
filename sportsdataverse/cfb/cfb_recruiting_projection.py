@@ -30,7 +30,20 @@ from sportsdataverse.cfb.cfb_roster_talent import cfb_roster_talent
 
 __all__ = ["cfb_recruiting_projection"]
 
-FEATURES = ["talent_composite", "blue_chip_ratio", "off_returning", "def_returning", "prior_wins"]
+#: Model inputs. `def_returning` is DELIBERATELY ABSENT.
+#:
+#: It is a hard requirement via `drop_nulls(FEATURES)`, and its coverage is
+#: driven by ESPN's defensive player box, which is sparse before ~2023 --
+#: measured non-null teams: 2016 0, 2018 61, 2021 47, 2024 148, 2025 229.
+#: Requiring it made the projection's output track that column almost exactly
+#: (2016 -> 0 rows, 2018 -> 60, 2024 -> 144) and collapsed 2016/2017 entirely,
+#: because their training history has no defensive box at all.
+#:
+#: It also carries no weight downstream: `returning_prod_weights` is
+#: {offense: 1.0, defense: 0.0}, so `overall_returning` never saw it either. A
+#: feature that is null across most of the training history cannot inform a
+#: model fit across that history -- it can only delete rows.
+FEATURES = ["talent_composite", "blue_chip_ratio", "off_returning", "prior_wins"]
 
 _PROJECTION_SCHEMA: dict[str, pl.PolarsDataType] = {
     "season": pl.Int64,
