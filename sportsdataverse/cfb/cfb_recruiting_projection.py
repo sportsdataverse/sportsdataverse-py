@@ -16,6 +16,8 @@ pbp dataset, whose loader currently 404s (documented data block, not faked).
 
 from __future__ import annotations
 
+import warnings
+
 import numpy as np
 import pandas as pd
 import polars as pl
@@ -23,6 +25,7 @@ import polars as pl
 from sportsdataverse.cfb.cfb_loaders import load_cfb_schedule, load_cfb_teams_crosswalk
 from sportsdataverse.cfb.cfb_projection_constants import fit_ridge, predict_ridge
 from sportsdataverse.cfb.cfb_returning_production import cfb_returning_production
+from sportsdataverse.cfb.cfb_loaders import load_cfb_returning_production, load_cfb_team_talent
 from sportsdataverse.cfb.cfb_roster_talent import cfb_roster_talent
 
 __all__ = ["cfb_recruiting_projection"]
@@ -65,30 +68,58 @@ def _crosswalk_names_to_espn(seasons: list[int]) -> pl.DataFrame:
 
 
 def _load_talent(seasons: list[int], division: str) -> pl.DataFrame:
-    """Roster talent, already keyed on the ESPN team id.
+    """Roster talent for the projection, read from the PUBLISHED dataset.
 
-    This used to re-key by team name because ``cfb_roster_talent`` emitted
-    247's own team key under ``team_id``. It now emits the ESPN id there (with
-    247's key preserved as ``team_id_247``), so the remap is gone -- along with
-    the inner join that silently dropped every team the name match missed.
+    Reads `cfb_team_talent` rather than calling `cfb_roster_talent`, which
+    fetches 247 live: a 4-season talent window is ~96 pages / 20 minutes per
+    season, so a 20-season rebuild of this projection cost hours and hammered a
+    host that resets connections under sustained paging. The release is the
+    same computation over the same inputs -- the producer builds it through
+    `cfb_roster_talent(recruits=...)` -- so this is a cost change, not a
+    semantics change.
+
+    `cfb_roster_talent` itself stays live for callers who want the in-progress
+    signing cycle; only this producer path reads the release.
+
+    Falls back to the live call when the release has no rows for a season,
+    which is what happens for a season newer than the last publish.
     """
-    tal = cfb_roster_talent(seasons, division=division)
-    assert isinstance(tal, pl.DataFrame)
-    return tal
+    tal = load_cfb_team_talent(seasons)
+    if isinstance(tal, pd.DataFrame):
+        tal = pl.from_pandas(tal)
+    if tal is not None and tal.height:
+        return tal.with_columns(pl.col("team_id").cast(pl.Int64).cast(pl.Utf8))
+    warnings.warn(
+        f"cfb_team_talent has no rows for {seasons}; falling back to the live 247 "
+        "fetch (slow). Publish the release for these seasons to avoid it.",
+        UserWarning,
+        stacklevel=2,
+    )
+    out = cfb_roster_talent(seasons, division=division)
+    assert isinstance(out, pl.DataFrame)
+    return out
 
 
 def _load_returning(seasons: list[int], division: str) -> pl.DataFrame:
-    """Returning production, already keyed on the ESPN team id.
+    """Returning production for the projection, read from the PUBLISHED dataset.
 
-    This used to remap a school-name key onto ``team_id`` via the crosswalk's
-    ``norm_key`` prefix, because ``cfb_returning_production`` emitted a
-    normalized team NAME. It now emits the real ``team_id``, so the remap is
-    gone -- along with the second copy of name-matching logic it carried, and
-    the rows that silently dropped whenever a name failed to line up.
+    Same rationale as :func:`_load_talent`: the release is the same computation,
+    and reading it keeps a rebuild cheap and reproducible. Falls back to the
+    live computation when the release does not cover a season.
     """
-    rp = cfb_returning_production(seasons, division=division)
-    assert isinstance(rp, pl.DataFrame)
-    return rp
+    rp = load_cfb_returning_production(seasons)
+    if isinstance(rp, pd.DataFrame):
+        rp = pl.from_pandas(rp)
+    if rp is not None and rp.height:
+        return rp.with_columns(pl.col("team_id").cast(pl.Int64).cast(pl.Utf8))
+    warnings.warn(
+        f"cfb_returning_production has no rows for {seasons}; computing live.",
+        UserWarning,
+        stacklevel=2,
+    )
+    out = cfb_returning_production(seasons, division=division)
+    assert isinstance(out, pl.DataFrame)
+    return out
 
 
 def _load_results(seasons: list[int]) -> pl.DataFrame:
