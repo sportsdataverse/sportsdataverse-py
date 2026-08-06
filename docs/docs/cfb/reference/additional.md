@@ -1497,7 +1497,7 @@ returning-production concept; unit weights from `get_constants`).
 
 **Returns**
 
-Per `(season, team)`: `off_returning`, `def_returning`, `overall_returning` (Float64 fractions in [0, 1]), `n_returning` (Int64 count of returning contributors). `team` is the normalized team-name key (crosswalk `norm_key`). Zero-row (typed) when the hosted data is unavailable.
+Per `(season, team_id)`: `off_returning`, `def_returning`, `overall_returning` (Float64 fractions in [0, 1]), `n_returning` (Int64 count of returning contributors). `team_id` is the ESPN team id as Utf8 -- BREAKING vs the previous release, which emitted a normalized team NAME under `team` and joined at 57.7%. Zero-row (typed) when the box data is unavailable.
 
 | col_name | type | description |
 |---|---|---|

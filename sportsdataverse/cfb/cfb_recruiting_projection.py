@@ -81,29 +81,17 @@ def _load_talent(seasons: list[int], division: str) -> pl.DataFrame:
 
 
 def _load_returning(seasons: list[int], division: str) -> pl.DataFrame:
-    """Returning production re-keyed from the school-name key to the ESPN id.
+    """Returning production, already keyed on the ESPN team id.
 
-    ``cfb_returning_production``'s ``team`` is the school-only normalized name;
-    the crosswalk ``norm_key`` includes the mascot, so map via the school prefix
-    of ``norm_key`` (unique for FBS schools).
+    This used to remap a school-name key onto ``team_id`` via the crosswalk's
+    ``norm_key`` prefix, because ``cfb_returning_production`` emitted a
+    normalized team NAME. It now emits the real ``team_id``, so the remap is
+    gone -- along with the second copy of name-matching logic it carried, and
+    the rows that silently dropped whenever a name failed to line up.
     """
     rp = cfb_returning_production(seasons, division=division)
     assert isinstance(rp, pl.DataFrame)
-    if rp.height == 0:
-        return rp
-    from sportsdataverse.cfb.cfb_loaders import load_cfb_team_info
-
-    ti = load_cfb_team_info(max(seasons))
-    assert isinstance(ti, pl.DataFrame)
-    keys = (
-        ti.select(
-            pl.col("school").cast(pl.Utf8).map_elements(_norm_team, return_dtype=pl.Utf8).alias("_k"),
-            pl.col("team_id").cast(pl.Int64).cast(pl.Utf8).alias("team_id"),
-        )
-        .drop_nulls()
-        .unique(subset=["_k"])
-    )
-    return rp.join(keys, left_on="team", right_on="_k", how="inner").drop("team")
+    return rp
 
 
 def _load_results(seasons: list[int]) -> pl.DataFrame:
