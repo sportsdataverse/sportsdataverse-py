@@ -2686,7 +2686,7 @@ df = on3_team_ranking_team_rankings(sport_slug="football", year=2025)
 print(df.shape)
 ```
 
-### `predict_margin(home_adj_net: 'float', away_adj_net: 'float', neutral: 'bool', *, era: 'str' = 'modern') -> 'float'` {#predict_margin}
+### `predict_margin(home_adj_net: 'float', away_adj_net: 'float', neutral: 'bool', *, era: 'str' = 'modern', games_played: 'float | None' = None) -> 'float'` {#predict_margin}
 
 Expected home scoring margin from the two net ratings.
 
@@ -2697,17 +2697,22 @@ Expected home scoring margin from the two net ratings.
 | `home_adj_net` | `float` |  | Home team's opponent-adjusted net rating (`adj_net` from `cfb_ratings.efficiency_ratings`). |
 | `away_adj_net` | `float` |  | Away team's opponent-adjusted net rating. |
 | `neutral` | `bool` |  | Whether the game is at a neutral site (no home-field advantage). |
-| `era` | `str` | `'modern'` | Era key into `cfb_prediction_constants.CFB_CONSTANTS` supplying the fitted `net_points_scale` and `hfa_epa`. |
+| `era` | `str` | `'modern'` | Era key into `cfb_prediction_constants.CFB_CONSTANTS` supplying the fitted slope, `hfa_points` and the attenuation curve. |
+| `games_played` | `float \| None` | `None` | Games behind the WEAKER of the two as-of ratings. Supplying it selects the games-played slope (see `slope_for_games`) and is worth ~0.6 MAE; omitting it falls back to the flat `net_points_scale`, which is the average over the curve. |
 
 **Returns**
 
-The expected margin (home minus away), in points: `net_points_scale * (home_adj_net - away_adj_net + 2 * hfa_epa)` on a home field, or without the `2 * hfa_epa` term on a neutral one. `net_points_scale` converts the EPA-per-play rating differential into points; the HFA is the ratings ridge's native home coefficient applied component-wise (home_off +hfa_epa, home_def -hfa_epa => net +2*hfa_epa), an EPA-scale additive that lands in the margin (~1.27 pt) and leaves totals untouched. See `predict_total`.
+The expected margin (home minus away), in points: `slope * (home_adj_net - away_adj_net) + hfa_points` on a home field, or without the HFA term on a neutral one. HFA is added in POINTS, not routed through the slope. The previous form multiplied an EPA-scale `2 * hfa_epa` by `net_points_scale`, which tied the two together and let them drift apart unnoticed -- the shipped pair implied ~1.65 points against a measured ~3.0.
 
 **Example**
 
 ```python
 from sportsdataverse.cfb.cfb_game_predict import predict_margin
 predict_margin(0.30, 0.10, neutral=False)
+
+# With games-played, which selects the attenuation-corrected slope
+
+predict_margin(0.30, 0.10, neutral=False, games_played=9)
 ```
 
 ### `predict_total(home_adj_off: 'float', home_adj_def: 'float', away_adj_off: 'float', away_adj_def: 'float', game_pace: 'float', *, era: 'str' = 'modern') -> 'float'` {#predict_total}
