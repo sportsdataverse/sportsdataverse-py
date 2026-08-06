@@ -20,7 +20,6 @@ import numpy as np
 import pandas as pd
 import polars as pl
 
-from sportsdataverse.cfb.cfb_crosswalk import _norm_team
 from sportsdataverse.cfb.cfb_loaders import load_cfb_schedule, load_cfb_teams_crosswalk
 from sportsdataverse.cfb.cfb_projection_constants import fit_ridge, predict_ridge
 from sportsdataverse.cfb.cfb_returning_production import cfb_returning_production
@@ -66,18 +65,16 @@ def _crosswalk_names_to_espn(seasons: list[int]) -> pl.DataFrame:
 
 
 def _load_talent(seasons: list[int], division: str) -> pl.DataFrame:
-    """Roster talent re-keyed to the ESPN id via the crosswalk full-name norm_key."""
+    """Roster talent, already keyed on the ESPN team id.
+
+    This used to re-key by team name because ``cfb_roster_talent`` emitted
+    247's own team key under ``team_id``. It now emits the ESPN id there (with
+    247's key preserved as ``team_id_247``), so the remap is gone -- along with
+    the inner join that silently dropped every team the name match missed.
+    """
     tal = cfb_roster_talent(seasons, division=division)
     assert isinstance(tal, pl.DataFrame)
-    if tal.height == 0:
-        return tal
-    xw = _crosswalk_names_to_espn(seasons)
-    return (
-        tal.with_columns(pl.col("team").map_elements(_norm_team, return_dtype=pl.Utf8).alias("_k"))
-        .join(xw, left_on="_k", right_on="norm_key", how="inner")
-        .drop("team_id", "_k")
-        .rename({"espn_id": "team_id"})
-    )
+    return tal
 
 
 def _load_returning(seasons: list[int], division: str) -> pl.DataFrame:

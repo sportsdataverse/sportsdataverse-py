@@ -26,7 +26,8 @@ __all__ = ["blue_chip_ratio", "cfb_roster_talent", "load_recruit_classes"]
 
 _RECRUIT_SCHEMA: dict[str, pl.PolarsDataType] = {
     "season": pl.Int64,
-    "team_id": pl.Utf8,
+    "team_id": pl.Utf8,  # ESPN team id -- the ecosystem's join key
+    "team_id_247": pl.Utf8,  # 247's own team key; NOT interchangeable with the above
     "team": pl.Utf8,
     "recruit_id": pl.Utf8,
     "player_name": pl.Utf8,
@@ -173,7 +174,7 @@ def _normalize_recruit_page(raw: pl.DataFrame, season: int) -> pl.DataFrame:
     return (
         raw.select(
             pl.lit(season, dtype=pl.Int64).alias("season"),
-            team_key.cast(pl.Int64).cast(pl.Utf8).alias("team_id"),
+            team_key.cast(pl.Int64).cast(pl.Utf8).alias("team_id_247"),
             team_name.cast(pl.Utf8).alias("team"),
             _int_id("key").alias("recruit_id"),
             (
@@ -188,7 +189,7 @@ def _normalize_recruit_page(raw: pl.DataFrame, season: int) -> pl.DataFrame:
             pl.col("composite_star_rating").cast(pl.Int64).alias("stars"),
             pl.col("composite_rating").cast(pl.Float64).alias("grade"),
             pl.col("primary_position").cast(pl.Utf8).alias("position"),
-        ).drop_nulls(["team_id"])  # recruits without a signed/committed team don't count toward roster talent
+        ).drop_nulls(["team_id_247"])  # recruits without a signed/committed team don't count toward roster talent
     )
 
 
@@ -335,6 +336,10 @@ def cfb_roster_talent(
     if recruits.height == 0:
         empty = pl.DataFrame(schema=out_schema)
         return empty.to_pandas() if return_as_pandas else empty
+    # Drop rows with no ESPN id: 247 covers far more schools than the FBS
+    # crosswalk, and grouping them would mint a single bogus "team" holding
+    # every unmapped school's recruits.
+    recruits = recruits.filter(pl.col("team_id").is_not_null())
     pointed = recruits.with_columns(
         pl.col("stars").replace_strict(consts.star_points, default=0.0, return_dtype=pl.Float64).alias("star_points")
     )
@@ -419,6 +424,52 @@ def cfb_roster_talent(
     return out.to_pandas() if return_as_pandas else out
 
 
+def _add_espn_team_id(recruits: pl.DataFrame) -> pl.DataFrame:
+    """Attach the ESPN ``team_id`` alongside 247's ``team_id_247``.
+
+    WHY THIS EXISTS. 247's ``committed_institution_team_key`` is 247's OWN team
+    key, not an ESPN id, and publishing it as ``team_id`` invites a silent
+    wrong answer: an inner join against any ESPN-keyed table (schedule,
+    ratings, results) matches almost nothing and just drops rows. That is not
+    hypothetical -- a talent-vs-wins sweep returned NEGATIVE Spearman
+    (-0.15 to -0.20) until the keys were reconciled, and Air Force resolved to
+    nothing at all.
+
+    The bridge is the team NAME: 247 ships the full name with mascot
+    ("Michigan Wolverines"), which is exactly the crosswalk's ``norm_key``
+    shape. Unmatched teams keep a null ``team_id`` rather than being dropped --
+    247 covers far more schools than the FBS crosswalk, and silently discarding
+    them would understate nothing but would hide how much is unmapped.
+    """
+    if recruits.height == 0:
+        return recruits.select(
+            [pl.col(c).cast(t) for c, t in _RECRUIT_SCHEMA.items() if c in recruits.columns]
+            + [pl.lit(None, dtype=t).alias(c) for c, t in _RECRUIT_SCHEMA.items() if c not in recruits.columns]
+        ).select(list(_RECRUIT_SCHEMA))
+    from sportsdataverse.cfb.cfb_crosswalk import _norm_team
+    from sportsdataverse.cfb.cfb_loaders import load_cfb_teams_crosswalk
+
+    season = int(recruits["season"].max())
+    cw = load_cfb_teams_crosswalk(season)
+    if isinstance(cw, pd.DataFrame):
+        cw = pl.from_pandas(cw)
+    xw = (
+        cw.select(
+            pl.col("norm_key").cast(pl.Utf8),
+            pl.col("espn_team_id").cast(pl.Int64).cast(pl.Utf8).alias("_espn"),
+        )
+        .drop_nulls()
+        .unique(subset=["norm_key"], keep="first")
+    )
+    out = (
+        recruits.with_columns(pl.col("team").map_elements(_norm_team, return_dtype=pl.Utf8).alias("_k"))
+        .join(xw, left_on="_k", right_on="norm_key", how="left")
+        .with_columns(pl.col("_espn").alias("team_id"))
+        .drop("_k", "_espn")
+    )
+    return out.select(list(_RECRUIT_SCHEMA))
+
+
 def load_recruit_classes(
     seasons: int | list[int], *, division: str = "fbs", return_as_pandas: bool = False
 ) -> pl.DataFrame | pd.DataFrame:
@@ -500,4 +551,5 @@ def load_recruit_classes(
                 stacklevel=2,
             )
     out = pl.concat(frames) if frames else pl.DataFrame(schema=_RECRUIT_SCHEMA)
+    out = _add_espn_team_id(out)
     return out.to_pandas() if return_as_pandas else out

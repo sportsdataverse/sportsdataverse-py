@@ -40,14 +40,28 @@ def test_loader_normalizes_to_per_recruit_contract(monkeypatch) -> None:
     monkeypatch.setattr(_mod, "sports247_recruits", _fake_recruit_page)
     out = load_recruit_classes(2023, division="fbs")
 
-    assert out.columns == ["season", "team_id", "team", "recruit_id", "player_name", "stars", "grade", "position"]
+    assert out.columns == [
+        "season",
+        "team_id",
+        "team_id_247",
+        "team",
+        "recruit_id",
+        "player_name",
+        "stars",
+        "grade",
+        "position",
+    ]
     assert out.height == 2  # the uncommitted recruit (null team) is dropped
     assert out.schema["team_id"] == pl.Utf8
     assert out.schema["recruit_id"] == pl.Utf8
     assert out.schema["stars"] == pl.Int64
     assert out.schema["grade"] == pl.Float64
-    # float team key -> clean integer string, never "71.0"
-    assert out["team_id"].unique().to_list() == ["71"]
+    # float 247 key -> clean integer string, never "71.0"
+    assert out["team_id_247"].unique().to_list() == ["71"]
+    # ...and `team_id` is the ESPN id, resolved from the team NAME. 247 key 71
+    # is Michigan, whose ESPN id is 130 -- the two are NOT interchangeable, and
+    # publishing 247's key as `team_id` made every ESPN-keyed join drop rows.
+    assert out["team_id"].unique().to_list() == ["130"]
     assert out["recruit_id"].to_list() == ["46112955", "46133902"]
     assert out["player_name"].to_list() == ["Dante Moore", "Karmello English"]
     assert out["season"].unique().to_list() == [2023]
@@ -215,7 +229,8 @@ def test_loader_prefers_signed_institution_over_committed(monkeypatch) -> None:
 
     monkeypatch.setattr(_mod, "sports247_recruits", _page)
     out = load_recruit_classes(2023)
-    assert out["team_id"].unique().to_list() == ["71"]
+    assert out["team_id_247"].unique().to_list() == ["71"]
+    assert out["team_id"].unique().to_list() == ["130"]  # ESPN id for Michigan
     assert out["team"].unique().to_list() == ["Michigan Wolverines"]
 
 
@@ -331,7 +346,8 @@ def test_signed_beats_committed_when_both_flattened(monkeypatch) -> None:
 
     monkeypatch.setattr(_mod, "sports247_recruits", _page)
     out = load_recruit_classes(2023)
-    assert out["team_id"].to_list() == ["71"]
+    assert out["team_id_247"].to_list() == ["71"]
+    assert out["team_id"].to_list() == ["130"]  # ESPN id for Michigan
     assert out["team"].to_list() == ["Michigan Wolverines"]
 
 
