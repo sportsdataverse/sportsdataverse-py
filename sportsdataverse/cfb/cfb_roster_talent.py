@@ -174,6 +174,12 @@ def _normalize_recruit_page(raw: pl.DataFrame, season: int) -> pl.DataFrame:
     return (
         raw.select(
             pl.lit(season, dtype=pl.Int64).alias("season"),
+            # Placeholder so a page frame is the SAME WIDTH as the empty-page
+            # frame; `_add_espn_team_id` fills it once, in the loader. Without
+            # this, concatenating an all-uncommitted page (which returns the
+            # full schema) with a normal one raises ShapeError -- caught by the
+            # cfbfastR-cfb-data producer, which normalizes page by page.
+            pl.lit(None, dtype=pl.Utf8).alias("team_id"),
             team_key.cast(pl.Int64).cast(pl.Utf8).alias("team_id_247"),
             team_name.cast(pl.Utf8).alias("team"),
             _int_id("key").alias("recruit_id"),

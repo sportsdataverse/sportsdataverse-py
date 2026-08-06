@@ -520,3 +520,29 @@ def test_rank_decay_zero_restores_the_flat_sum(monkeypatch) -> None:
     out = cfb_roster_talent(2021, division="fbs", rank_decay=0.0)
     row_a = out.filter(pl.col("team_id") == "A").row(0, named=True)
     assert abs(row_a["talent_composite"] - 223.0) < 1e-9  # the documented pre-decay value
+
+
+def test_normalized_pages_concat_with_empty_pages(monkeypatch) -> None:
+    """A normal page and an all-uncommitted page must be the same width.
+
+    The normalizer emits `team_id` as a placeholder that the loader fills, so
+    both paths carry the full schema. When they diverged, polars raised
+    ShapeError on concat -- and only the cfbfastR-cfb-data producer hit it,
+    because it normalizes page by page while the loader's own paging happened
+    to stop before mixing the two.
+    """
+    normal = _fake_recruit_page(year=2023, page=1)
+    empty_shape = pl.DataFrame(
+        {
+            "key": [9],
+            "composite_star_rating": [3.0],
+            "composite_rating": [80.0],
+            "primary_position": ["WR"],
+            "committed_institution": [None],  # all-null => unexpanded page
+        },
+        schema_overrides={"committed_institution": pl.Float64},
+    )
+    a = _mod._normalize_recruit_page(normal, 2023)
+    b = _mod._normalize_recruit_page(empty_shape, 2023)
+    assert a.columns == b.columns, (a.columns, b.columns)
+    assert pl.concat([a, b]).height == a.height  # b contributes no rows, but concats cleanly
