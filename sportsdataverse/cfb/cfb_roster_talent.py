@@ -453,23 +453,38 @@ def _add_espn_team_id(recruits: pl.DataFrame) -> pl.DataFrame:
             + [pl.lit(None, dtype=t).alias(c) for c, t in _RECRUIT_SCHEMA.items() if c not in recruits.columns]
         ).select(list(_RECRUIT_SCHEMA))
     from sportsdataverse.cfb.cfb_crosswalk import _norm_team
-    from sportsdataverse.cfb.cfb_loaders import load_cfb_teams_crosswalk
+    from sportsdataverse.cfb.cfb_loaders import load_cfb_team_info
 
-    season = int(recruits["season"].max())
-    cw = load_cfb_teams_crosswalk(season)
-    if isinstance(cw, pd.DataFrame):
-        cw = pl.from_pandas(cw)
-    xw = (
-        cw.select(
-            pl.col("norm_key").cast(pl.Utf8),
-            pl.col("espn_team_id").cast(pl.Int64).cast(pl.Utf8).alias("_espn"),
-        )
+    # Resolve against team_info, NOT the teams crosswalk. The crosswalk floors
+    # at 2014 while usable recruit classes start in 2002, so keying off it made
+    # every class before 2014 fail outright (SeasonNotFoundError) -- caught
+    # publishing, where 2002-2016 all refused to build. team_info floors at
+    # 2003 and carries `school` + `mascot`, which rebuild the same
+    # "school mascot" shape 247 ships as the full team name.
+    _TEAM_INFO_FLOOR = 2003
+    season = max(int(recruits["season"].max()), _TEAM_INFO_FLOOR)
+    info = load_cfb_team_info(season)
+    if isinstance(info, pd.DataFrame):
+        info = pl.from_pandas(info)
+
+    espn = pl.col("team_id").cast(pl.Int64).cast(pl.Utf8).alias("_espn")
+    school = pl.col("school").cast(pl.Utf8)
+    keys = [info.select(school.alias("_raw"), espn)]
+    if "mascot" in info.columns:
+        full = school + pl.lit(" ") + pl.col("mascot").cast(pl.Utf8).fill_null("")
+        # full name first: 247 ships "Michigan Wolverines", and school alone
+        # ("Michigan") is ambiguous across a few schools that share a name
+        keys.insert(0, info.select(full.str.strip_chars().alias("_raw"), espn))
+    lookup = (
+        pl.concat(keys)
         .drop_nulls()
-        .unique(subset=["norm_key"], keep="first")
+        .with_columns(pl.col("_raw").map_elements(_norm_team, return_dtype=pl.Utf8).alias("norm_key"))
+        .drop("_raw")
+        .unique(subset=["norm_key"], keep="first", maintain_order=True)
     )
     out = (
         recruits.with_columns(pl.col("team").map_elements(_norm_team, return_dtype=pl.Utf8).alias("_k"))
-        .join(xw, left_on="_k", right_on="norm_key", how="left")
+        .join(lookup, left_on="_k", right_on="norm_key", how="left")
         .with_columns(pl.col("_espn").alias("team_id"))
         .drop("_k", "_espn")
     )

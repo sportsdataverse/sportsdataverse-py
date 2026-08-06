@@ -52,3 +52,8 @@ htmlcov/
 # intentionally NOT ignored so it can be committed for the team.
 .claude/settings.local.json
 /.omc
+
+# Local agent/skill tooling -- never part of the repo
+.omc/
+agent/
+.agents/
