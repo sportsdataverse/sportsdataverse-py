@@ -1,0 +1,33 @@
+api: torvik
+host: https://barttorvik.com
+name_pattern: torvik_{short}
+module: torvik
+parser_module: mbb.torvik_parsers
+getter_module: sportsdataverse.mbb.torvik_runtime
+qualifier: ''
+passthrough_query: false
+runtime_imports:
+- _get
+endpoints:
+- short: ratings
+  summary: "GET /{year}_team_results.csv — men's T-Rank team ratings (adjoe/adjde/barthag, one row per team; the team/conf pair feeds the MBB crosswalk)."
+  path: /{year}_team_results.csv
+  path_params:
+  - name: year
+    type: int
+    required: true
+  example_args:
+    year: 2025
+  parser: parse_torvik_csv
+  returns_schema: native/torvik/ratings
+- short: team_factors
+  summary: "GET /{year}_fffinal.csv — men's four-factors splits (eFG%/FTR/OR%/TO% offense + defense, with per-stat ranks)."
+  path: /{year}_fffinal.csv
+  path_params:
+  - name: year
+    type: int
+    required: true
+  example_args:
+    year: 2025
+  parser: parse_torvik_csv
+  returns_schema: native/torvik/team_factors

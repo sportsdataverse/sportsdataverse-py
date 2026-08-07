@@ -5187,6 +5187,247 @@ score's ending score, every lineup's `score_info` is un-transposed and
 
 `lineup` unchanged if the scores aren't transposed (or `lineup` is empty); otherwise a new list with every entry's score/pts/ plus_minus corrected.
 
+### `fox_wbb_boxscore(game_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_wbb_boxscore}
+
+WBB boxscore (long: one row per player-stat).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `game_id` | `Union[int, str]` |  | Fox Bifrost event id. |
+| `return_parsed` | `bool` | `True` | If `True` (default) flatten the per-team stat tables to long form; if `False` return the raw JSON `dict`. |
+| `return_as_pandas` | `bool` | `False` | If `True` return a pandas DataFrame; otherwise polars. Ignored when `return_parsed=False`. |
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.wbb import fox_wbb_boxscore
+df = fox_wbb_boxscore("...")
+```
+
+### `fox_wbb_league_leaders(category: 'str' = 'scoring', who: 'str' = 'player', page: 'int' = 0, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_wbb_league_leaders}
+
+WBB statistical leaders (`stats-con`); who=player|team.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `category` | `str` | `'scoring'` | Stat category. Defaults to `"scoring"`. |
+| `who` | `str` | `'player'` | `"player"` or `"team"`. Defaults to `"player"`. |
+| `page` | `int` | `0` | 0-based result page. Defaults to `0`. |
+| `return_parsed` | `bool` | `True` | If `True` (default) flatten the leader tables to a DataFrame; if `False` return the raw JSON `dict`. |
+| `return_as_pandas` | `bool` | `False` | If `True` return a pandas DataFrame; otherwise polars. Ignored when `return_parsed=False`. |
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.wbb import fox_wbb_league_leaders
+df = fox_wbb_league_leaders("scoring")
+```
+
+### `fox_wbb_odds(game_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_wbb_odds}
+
+WBB game odds six-pack (spread / to-win / total per team).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `game_id` | `Union[int, str]` |  | Fox Bifrost event id. |
+| `return_parsed` | `bool` | `True` | If `True` (default) flatten the six-pack market to a DataFrame; if `False` return the raw JSON `dict`. |
+| `return_as_pandas` | `bool` | `False` | If `True` return a pandas DataFrame; otherwise polars. Ignored when `return_parsed=False`. |
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.wbb import fox_wbb_odds
+df = fox_wbb_odds("...")
+```
+
+### `fox_wbb_pbp(game_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_wbb_pbp}
+
+WBB play-by-play (one row per play; period-based).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `game_id` | `Union[int, str]` |  | Fox Bifrost event id. |
+| `return_parsed` | `bool` | `True` | If `True` (default) flatten the pbp layout to a DataFrame; if `False` return the raw JSON `dict`. |
+| `return_as_pandas` | `bool` | `False` | If `True` return a pandas DataFrame; otherwise polars. Ignored when `return_parsed=False`. |
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.wbb import fox_wbb_pbp
+df = fox_wbb_pbp("...")
+```
+
+### `fox_wbb_standings(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_wbb_standings}
+
+WBB standings for a team's conference/division.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `team_id` | `Union[int, str]` |  | Fox Bifrost team id. |
+| `return_parsed` | `bool` | `True` | If `True` (default) flatten the standings tables to a DataFrame; if `False` return the raw JSON `dict`. |
+| `return_as_pandas` | `bool` | `False` | If `True` return a pandas DataFrame; otherwise polars. Ignored when `return_parsed=False`. |
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.wbb import fox_wbb_standings
+df = fox_wbb_standings("...")
+```
+
+### `fox_wbb_team_gamelog(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_wbb_team_gamelog}
+
+WBB team game log (long: one row per game-stat).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `team_id` | `Union[int, str]` |  | Fox Bifrost team id. |
+| `return_parsed` | `bool` | `True` | If `True` (default) flatten to long form; if `False` return the raw JSON `dict`. |
+| `return_as_pandas` | `bool` | `False` | If `True` return a pandas DataFrame; otherwise polars. Ignored when `return_parsed=False`. |
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.wbb import fox_wbb_team_gamelog
+df = fox_wbb_team_gamelog("...")
+```
+
+### `fox_wbb_team_roster(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_wbb_team_roster}
+
+WBB team roster (one row per player).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `team_id` | `Union[int, str]` |  | Fox Bifrost team id. |
+| `return_parsed` | `bool` | `True` | If `True` (default) flatten the position-group tables to a DataFrame; if `False` return the raw JSON `dict`. |
+| `return_as_pandas` | `bool` | `False` | If `True` return a pandas DataFrame; otherwise polars. Ignored when `return_parsed=False`. |
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.wbb import fox_wbb_team_roster
+df = fox_wbb_team_roster("...")
+```
+
+### `fox_wbb_team_stats(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_wbb_team_stats}
+
+WBB team stat leaders by category.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `team_id` | `Union[int, str]` |  | Fox Bifrost team id. |
+| `return_parsed` | `bool` | `True` | If `True` (default) flatten the leader sections to a DataFrame; if `False` return the raw JSON `dict`. |
+| `return_as_pandas` | `bool` | `False` | If `True` return a pandas DataFrame; otherwise polars. Ignored when `return_parsed=False`. |
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.wbb import fox_wbb_team_stats
+df = fox_wbb_team_stats("...")
+```
+
+### `fox_wbb_teams(team_id: 'Union[int, str]' = '11', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_wbb_teams}
+
+WBB team directory (`fox_team_id` / `fox_team_name` / `fox_section`).
+
+Derived from the seed team's standings endpoint, so a single call only
+covers that team's conference — see `fox_wbb_teams_all` for the full
+directory. This is the frame the wehoop WBB team crosswalk consumes.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `team_id` | `Union[int, str]` | `'11'` | Seed Fox Bifrost team id whose conference standings are read. Defaults to `"11"` (UConn, Big East). |
+| `return_parsed` | `bool` | `True` | If `True` (default) flatten the standings to the team directory; if `False` return the raw JSON `dict`. |
+| `return_as_pandas` | `bool` | `False` | If `True` return a pandas DataFrame; otherwise polars. Ignored when `return_parsed=False`. |
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.wbb import fox_wbb_teams
+df = fox_wbb_teams("11")
+```
+
+### `fox_wbb_teams_all(max_id: 'int' = 500, max_calls: 'int' = 60, *, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#fox_wbb_teams_all}
+
+Full WBB team directory by walking seed ids across conferences.
+
+A single `fox_wbb_teams` call only returns the seed team's
+conference, so this walks candidate team ids (skipping ids already seen in
+an earlier conference) and unions the results, spending at most
+`max_calls` standings fetches. Mirrors R `wehoop::fox_wbb_teams_all()`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `max_id` | `int` | `500` | Highest candidate team id to try. Defaults to `500`. |
+| `max_calls` | `int` | `60` | Budget of standings fetches. Defaults to `60`. |
+| `return_as_pandas` | `bool` | `False` | If `True` return a pandas DataFrame; otherwise polars. |
+
+**Returns**
+
+A polars DataFrame (default) or pandas DataFrame, one row per team: `fox_team_id` / `fox_team_name` / `fox_section`.
+
+**Example**
+
+```python
+from sportsdataverse.wbb import fox_wbb_teams_all
+df = fox_wbb_teams_all()
+```
+
 ### `fuzzy_box_match(candidate: 'str', unassigned_box_names: 'list[str]', team_context: 'str') -> 'Union[str, FuzzyMatchError]'` {#fuzzy_box_match}
 
 Pick the single unassigned box-score name a mis-spelled play-by-play

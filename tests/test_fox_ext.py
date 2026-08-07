@@ -107,3 +107,22 @@ def test_fox_mlb_standings():
 
 def test_fox_mlb_team_gamelog():
     _ok(fox_mlb_team_gamelog(MLB_TEAM, return_as_pandas=False), {"team_id", "category", "game_id", "stat", "value"})
+
+
+# ---- WNBA / WBB (crosswalk-prerequisite teams directory) ----
+def test_fox_wnba_teams():
+    from sportsdataverse.wnba import fox_wnba_teams
+
+    _ok(fox_wnba_teams(), {"fox_team_id", "fox_team_name", "fox_section"})
+
+
+def test_fox_wbb_teams():
+    from sportsdataverse.wbb import fox_wbb_teams
+
+    _ok(fox_wbb_teams("11"), {"fox_team_id", "fox_team_name", "fox_section"})
+
+
+def test_fox_wbb_team_roster():
+    from sportsdataverse.wbb import fox_wbb_team_roster
+
+    _ok(fox_wbb_team_roster("11"), ROSTER_COLS)

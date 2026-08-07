@@ -1,0 +1,22 @@
+api: bart_wbb
+host: https://barttorvik.com/ncaaw
+name_pattern: bart_wbb_{short}
+module: bart_wbb
+parser_module: mbb.torvik_parsers
+getter_module: sportsdataverse.mbb.torvik_runtime
+qualifier: ''
+passthrough_query: false
+runtime_imports:
+- _get
+endpoints:
+- short: ratings
+  summary: "GET /ncaaw/{year}_team_results.csv — women's T-Rank team ratings (adjoe/adjde/barthag, one row per team; the team/conf pair feeds the WBB crosswalk)."
+  path: /{year}_team_results.csv
+  path_params:
+  - name: year
+    type: int
+    required: true
+  example_args:
+    year: 2025
+  parser: parse_torvik_csv
+  returns_schema: native/bart_wbb/ratings

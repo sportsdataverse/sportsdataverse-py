@@ -148,6 +148,8 @@ from sportsdataverse.mbb import fox_mbb_standings as _raw_fox_mbb_standings
 from sportsdataverse.mbb import fox_mbb_team_gamelog as _raw_fox_mbb_team_gamelog
 from sportsdataverse.mbb import fox_mbb_team_roster as _raw_fox_mbb_team_roster
 from sportsdataverse.mbb import fox_mbb_team_stats as _raw_fox_mbb_team_stats
+from sportsdataverse.mbb import torvik_ratings as _raw_torvik_ratings
+from sportsdataverse.mbb import torvik_team_factors as _raw_torvik_team_factors
 from sportsdataverse.mbb import AssistEvent as AssistEvent  # noqa: F401
 from sportsdataverse.mbb import AssistInfo as AssistInfo  # noqa: F401
 from sportsdataverse.mbb import BadLineupClump as BadLineupClump  # noqa: F401
@@ -495,6 +497,7 @@ from sportsdataverse.mbb import parse_technical_foul as parse_technical_foul  # 
 from sportsdataverse.mbb import parse_three_pointer_made as parse_three_pointer_made  # noqa: F401
 from sportsdataverse.mbb import parse_three_pointer_missed as parse_three_pointer_missed  # noqa: F401
 from sportsdataverse.mbb import parse_timeout as parse_timeout  # noqa: F401
+from sportsdataverse.mbb import parse_torvik_csv as parse_torvik_csv  # noqa: F401
 from sportsdataverse.mbb import parse_turnover as parse_turnover  # noqa: F401
 from sportsdataverse.mbb import parse_two_pointer_made as parse_two_pointer_made  # noqa: F401
 from sportsdataverse.mbb import parse_two_pointer_missed as parse_two_pointer_missed  # noqa: F401
@@ -1024,6 +1027,7 @@ __all__ = [
     "parse_three_pointer_made",
     "parse_three_pointer_missed",
     "parse_timeout",
+    "parse_torvik_csv",
     "parse_turnover",
     "parse_two_pointer_made",
     "parse_two_pointer_missed",
@@ -1070,6 +1074,8 @@ __all__ = [
     "td_at",
     "test_positional_aware_filter",
     "tidy_player",
+    "torvik_ratings",
+    "torvik_team_factors",
     "transfer_cohort",
     "transform_shot_location",
     "underscore",
@@ -2830,3 +2836,31 @@ def fox_mbb_team_stats(*args, **kwargs):
     """
     kwargs.setdefault("return_parsed", True)
     return _raw_fox_mbb_team_stats(*args, **kwargs)
+
+
+def torvik_ratings(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mbb.torvik_ratings``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.mbb.torvik_ratings` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mbb.torvik_ratings` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_torvik_ratings(*args, **kwargs)
+
+
+def torvik_team_factors(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mbb.torvik_team_factors``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.mbb.torvik_team_factors` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mbb.torvik_team_factors` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_torvik_team_factors(*args, **kwargs)

@@ -1567,6 +1567,8 @@ FLAT_APIS = [
     ("sports247", "cfb"),
     ("sports247_site_pages", "cfb"),
     ("pff", "nfl"),
+    ("torvik", "mbb"),
+    ("bart_wbb", "wbb"),
 ]
 
 
@@ -2085,6 +2087,8 @@ _FLAT_API_DOC = {
     # module name the docs renderer looks up (api.module).
     "pff": "PFF Premium Stats (premium.pff.com)",
     "pff_core": "PFF Premium Stats (premium.pff.com)",
+    "torvik": "Bart Torvik T-Rank (barttorvik.com)",
+    "bart_wbb": "Bart Torvik Women's T-Rank (barttorvik.com/ncaaw)",
 }
 
 # Friendly label per releases.yaml base key, for the "Dataset loaders" row of a

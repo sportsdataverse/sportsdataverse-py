@@ -187,6 +187,47 @@ def parse_standings(raw: Dict, team_id=None) -> List[Dict]:
     return rows
 
 
+def _title_case(name: str) -> str:
+    """Per-word title case that keeps apostrophes lowercase (``ST. JOHN'S`` ->
+    ``St. John's``), matching R ``stringr::str_to_title`` on team names."""
+    return " ".join(w.capitalize() for w in name.lower().split())
+
+
+def parse_teams(raw: Dict) -> List[Dict]:
+    """team/{id}/standings -> team directory (``fox_team_id`` / ``fox_team_name``
+    / ``fox_section``), the shape the R basketball crosswalks consume.
+
+    ``fox_section`` prefers the conference name from
+    ``standingsSections[].metadata.parameters.groupName`` (e.g. ``"Big East"``),
+    falling back to ``pageTitle`` then the generic section ``title``.
+    ``fox_team_name`` comes from the row's ``entityLink.title`` (full team name,
+    title-cased), falling back to the second table cell (short name). Rows are
+    de-duplicated on ``fox_team_id`` keeping the first occurrence.
+    """
+    rows: List[Dict] = []
+    seen: set = set()
+    for sec in raw.get("standingsSections", []) or []:
+        params = (sec.get("metadata") or {}).get("parameters") or {}
+        group = params.get("groupName") if isinstance(params, dict) else None
+        section = (
+            group.strip()
+            if isinstance(group, str) and group.strip()
+            else (sec.get("pageTitle") or "").strip() or sec.get("title")
+        )
+        for tbl in sec.get("standings", []) or []:
+            for r in tbl.get("rows", []) or []:
+                link = r.get("entityLink") or {}
+                eid = _uri_id(link.get("contentUri"))
+                if eid is None or eid in seen:
+                    continue
+                seen.add(eid)
+                title = (link.get("title") or "").strip()
+                cells = _cells(r.get("columns"))
+                name = _title_case(title) if title else (cells[1] if len(cells) > 1 else None)
+                rows.append({"fox_team_id": eid, "fox_team_name": name, "fox_section": section})
+    return rows
+
+
 def parse_league_leaders(raw: Dict) -> List[Dict]:
     """league/stats-con sectionList tables -> one row per ranked entity."""
     rows: List[Dict] = []

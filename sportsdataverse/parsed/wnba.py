@@ -130,6 +130,15 @@ from sportsdataverse.wnba import espn_wnba_tournaments as _raw_espn_wnba_tournam
 from sportsdataverse.wnba import espn_wnba_transactions as _raw_espn_wnba_transactions
 from sportsdataverse.wnba import espn_wnba_venue as _raw_espn_wnba_venue
 from sportsdataverse.wnba import espn_wnba_venues as _raw_espn_wnba_venues
+from sportsdataverse.wnba import fox_wnba_boxscore as _raw_fox_wnba_boxscore
+from sportsdataverse.wnba import fox_wnba_league_leaders as _raw_fox_wnba_league_leaders
+from sportsdataverse.wnba import fox_wnba_odds as _raw_fox_wnba_odds
+from sportsdataverse.wnba import fox_wnba_pbp as _raw_fox_wnba_pbp
+from sportsdataverse.wnba import fox_wnba_standings as _raw_fox_wnba_standings
+from sportsdataverse.wnba import fox_wnba_team_gamelog as _raw_fox_wnba_team_gamelog
+from sportsdataverse.wnba import fox_wnba_team_roster as _raw_fox_wnba_team_roster
+from sportsdataverse.wnba import fox_wnba_team_stats as _raw_fox_wnba_team_stats
+from sportsdataverse.wnba import fox_wnba_teams as _raw_fox_wnba_teams
 from sportsdataverse.wnba import build_athlete_identity_lookup as build_athlete_identity_lookup  # noqa: F401
 from sportsdataverse.wnba import download as download  # noqa: F401
 from sportsdataverse.wnba import espn_wnba_calendar as espn_wnba_calendar  # noqa: F401
@@ -359,6 +368,15 @@ __all__ = [
     "espn_wnba_venue",
     "espn_wnba_venues",
     "flatten_json_iterative",
+    "fox_wnba_boxscore",
+    "fox_wnba_league_leaders",
+    "fox_wnba_odds",
+    "fox_wnba_pbp",
+    "fox_wnba_standings",
+    "fox_wnba_team_gamelog",
+    "fox_wnba_team_roster",
+    "fox_wnba_team_stats",
+    "fox_wnba_teams",
     "helper_wnba_athlete_items",
     "helper_wnba_draft",
     "helper_wnba_game_data",
@@ -1950,3 +1968,129 @@ def espn_wnba_venues(*args, **kwargs):
     """
     kwargs.setdefault("return_parsed", True)
     return _raw_espn_wnba_venues(*args, **kwargs)
+
+
+def fox_wnba_boxscore(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``wnba.fox_wnba_boxscore``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.wnba.fox_wnba_boxscore` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.wnba.fox_wnba_boxscore` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_fox_wnba_boxscore(*args, **kwargs)
+
+
+def fox_wnba_league_leaders(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``wnba.fox_wnba_league_leaders``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.wnba.fox_wnba_league_leaders` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.wnba.fox_wnba_league_leaders` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_fox_wnba_league_leaders(*args, **kwargs)
+
+
+def fox_wnba_odds(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``wnba.fox_wnba_odds``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.wnba.fox_wnba_odds` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.wnba.fox_wnba_odds` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_fox_wnba_odds(*args, **kwargs)
+
+
+def fox_wnba_pbp(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``wnba.fox_wnba_pbp``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.wnba.fox_wnba_pbp` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.wnba.fox_wnba_pbp` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_fox_wnba_pbp(*args, **kwargs)
+
+
+def fox_wnba_standings(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``wnba.fox_wnba_standings``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.wnba.fox_wnba_standings` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.wnba.fox_wnba_standings` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_fox_wnba_standings(*args, **kwargs)
+
+
+def fox_wnba_team_gamelog(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``wnba.fox_wnba_team_gamelog``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.wnba.fox_wnba_team_gamelog` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.wnba.fox_wnba_team_gamelog` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_fox_wnba_team_gamelog(*args, **kwargs)
+
+
+def fox_wnba_team_roster(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``wnba.fox_wnba_team_roster``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.wnba.fox_wnba_team_roster` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.wnba.fox_wnba_team_roster` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_fox_wnba_team_roster(*args, **kwargs)
+
+
+def fox_wnba_team_stats(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``wnba.fox_wnba_team_stats``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.wnba.fox_wnba_team_stats` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.wnba.fox_wnba_team_stats` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_fox_wnba_team_stats(*args, **kwargs)
+
+
+def fox_wnba_teams(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``wnba.fox_wnba_teams``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.wnba.fox_wnba_teams` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.wnba.fox_wnba_teams` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_fox_wnba_teams(*args, **kwargs)
