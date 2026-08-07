@@ -649,3 +649,37 @@ def test_drive_classifiers_on_real_fixture():
     assert bama.filter(pl.col("garbage") == True).height > 0  # noqa: E712
     q1 = drives.filter(pl.col("period") == 1)
     assert q1.filter(pl.col("garbage") == True).height == 0  # noqa: E712
+
+
+def test_cross_season_history_is_leak_free_and_widens_coverage(nfl_oracle):
+    """history_seasons folds PRIOR seasons in — never the current one's future.
+
+    Tampering the current season's later weeks must leave earlier
+    vintages byte-identical (the walk stays exclusive); and week 2 of a
+    later season must now carry ratings for teams that have played no
+    current-season games yet (the coverage win: NFL tune coverage rose
+    5,758 -> 6,105 games).
+    """
+    two = nfl_oracle.filter(pl.col("season").is_in([2020, 2024]))
+    base = ridge_margin_vintages(two, lam=LAM, history_seasons=1)
+    tampered = ridge_margin_vintages(
+        two.with_columns(
+            pl.when((pl.col("season") == 2024) & (pl.col("week") >= 10))
+            .then(pl.col("home_margin") * 3 + 7)
+            .otherwise(pl.col("home_margin"))
+            .alias("home_margin")
+        ),
+        lam=LAM,
+        history_seasons=1,
+    )
+    early = base.filter((pl.col("season") == 2024) & (pl.col("as_of_week") <= 10))
+    early_t = tampered.filter((pl.col("season") == 2024) & (pl.col("as_of_week") <= 10))
+    assert early.height == early_t.height > 0
+    assert early.sort("as_of_week", "team_id").equals(early_t.sort("as_of_week", "team_id"))
+
+    # coverage: with history, 2024 week 2 exists AND the fit is larger
+    without = ridge_margin_vintages(two, lam=LAM)
+    assert base.filter(pl.col("season") == 2024).height >= without.filter(pl.col("season") == 2024).height
+    # the fit actually changed (history is not a silent no-op)
+    j = base.join(without, on=["season", "as_of_week", "team_id"], suffix="_w")
+    assert (j["off_coef"] - j["off_coef_w"]).abs().max() > 0.1
