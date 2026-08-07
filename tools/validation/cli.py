@@ -5,12 +5,15 @@ import json
 import sys
 from types import ModuleType
 
+import polars as pl
+
 from tools.validation.checks import (
     boundary_leakage,
     constant_column,
     definitional,
     extraction,
     numeric_parity,
+    r_python_output_parity,
     schema_contract,
     sweep,
 )
@@ -38,6 +41,66 @@ def run_dataset(dataset: str, release: str | None = None) -> list[dict]:
     for mod in _CHECKS:
         findings.extend(mod.run(dataset, frame, ctx))
     return [f.to_dict() for f in findings]
+
+
+def compare_outputs(
+    dataset: str,
+    r_parquet: str,
+    py_parquet: str,
+    join_keys: tuple[str, ...],
+    domain: str,
+    *,
+    tolerance: float = 1e-6,
+    ignore_columns: tuple[str, ...] = (),
+) -> list[dict]:
+    """Compare an R-produced and a Python-produced artifact for one dataset.
+
+    Both `-data` chains write ``{dataset}/{rds,parquet}/`` to the SAME path, so
+    in practice the R side is the artifact already on its release tag (fetch it
+    with ``gh release download``) and the Python side a fresh local build. No R
+    runtime is involved — this reads two parquet files.
+
+    Args:
+        dataset: Dataset identifier recorded on each finding.
+        r_parquet: Path to the R-produced parquet.
+        py_parquet: Path to the Python-produced parquet.
+        join_keys: Columns identifying a row in both frames.
+        domain: Domain identifier recorded on each finding.
+        tolerance: Absolute tolerance for numeric divergence.
+        ignore_columns: Columns excluded from value comparison (build stamps etc.).
+
+    Returns:
+        A flat list of finding dicts.
+    """
+    findings = r_python_output_parity.run(
+        dataset,
+        pl.read_parquet(r_parquet),
+        pl.read_parquet(py_parquet),
+        join_keys,
+        domain,
+        tolerance=tolerance,
+        ignore_columns=ignore_columns,
+    )
+    return [f.to_dict() for f in findings]
+
+
+def _emit(out: list[dict], as_json: bool) -> int:
+    """Print findings and return the process exit code.
+
+    Args:
+        out: Finding dicts.
+        as_json: Emit JSON instead of the human-readable lines.
+
+    Returns:
+        1 if any ERROR finding is present, else 0.
+    """
+    if as_json:
+        json.dump(out, sys.stdout)
+        sys.stdout.write("\n")
+    else:
+        for f in out:
+            print(f"{f['severity'].upper():5} [{f['check']}] {f['dataset']} :: {f['message']}")
+    return 1 if any(f["severity"] == "error" for f in out) else 0
 
 
 def lint_target(name: str) -> list[dict]:
@@ -80,27 +143,39 @@ def main(argv: list[str] | None = None) -> int:
     lint = sub.add_parser("lint")
     lint.add_argument("--target", required=True)
     lint.add_argument("--json", action="store_true")
+    cmp_ = sub.add_parser(
+        "compare",
+        help="R-vs-Python output parity for one dataset (two parquet artifacts)",
+    )
+    cmp_.add_argument("--dataset", required=True)
+    cmp_.add_argument("--domain", required=True)
+    cmp_.add_argument("--r-parquet", required=True, help="R-produced artifact (usually the release asset)")
+    cmp_.add_argument("--py-parquet", required=True, help="Python-produced artifact (usually a fresh local build)")
+    cmp_.add_argument("--join-keys", required=True, nargs="+", metavar="COL")
+    cmp_.add_argument("--tolerance", type=float, default=1e-6)
+    cmp_.add_argument("--ignore-columns", nargs="*", default=[], metavar="COL")
+    cmp_.add_argument("--json", action="store_true")
     args = parser.parse_args(argv)
 
     if args.cmd == "run":
-        out = run_dataset(args.dataset, args.release)
-        if args.json:
-            json.dump(out, sys.stdout)
-            sys.stdout.write("\n")
-        else:
-            for f in out:
-                print(f"{f['severity'].upper():5} [{f['check']}] {f['dataset']} :: {f['message']}")
-        return 1 if any(f["severity"] == "error" for f in out) else 0
+        return _emit(run_dataset(args.dataset, args.release), args.json)
 
     if args.cmd == "lint":
-        out = lint_target(args.target)
-        if args.json:
-            json.dump(out, sys.stdout)
-            sys.stdout.write("\n")
-        else:
-            for f in out:
-                print(f"{f['severity'].upper():5} [{f['check']}] {f['dataset']} :: {f['message']}")
-        return 1 if any(f["severity"] == "error" for f in out) else 0
+        return _emit(lint_target(args.target), args.json)
+
+    if args.cmd == "compare":
+        return _emit(
+            compare_outputs(
+                args.dataset,
+                args.r_parquet,
+                args.py_parquet,
+                tuple(args.join_keys),
+                args.domain,
+                tolerance=args.tolerance,
+                ignore_columns=tuple(args.ignore_columns),
+            ),
+            args.json,
+        )
     return 0
 
 
