@@ -72,6 +72,23 @@ def run(dataset: str, frame: pl.DataFrame, ctx: CheckContext) -> list[Finding]:
 
     Returns:
         One Finding per (flag, season) collapse; empty when every season holds.
+        Never raises: an unregistered dataset, missing columns, too few seasons,
+        or a zero-median flag all short-circuit to an empty list, because a
+        check that aborts a run is worse than one that reports nothing.
+
+    Example:
+        Run the check over a registered dataset::
+
+            from tools.validation.checks import rate_anomaly
+            from tools.validation.registry import resolve
+
+            frame, ctx = resolve("cfb_pbp")
+            for finding in rate_anomaly.run("cfb_pbp", frame, ctx):
+                print(finding.severity.value, finding.message)
+
+        Tighten or loosen the collapse floor per run::
+
+            ctx = dataclasses.replace(ctx, thresholds={"season_rate_floor": 0.25})
     """
     spec = RATE_SPECS.get(dataset)
     if spec is None:
