@@ -90,8 +90,13 @@ class VariantConfig:
                 )
         if self.core == "market_only" and self.prior != "flat":
             raise ValueError("market_only takes no prior (prior must be 'flat')")
-        if self.core == "glickman_stern" and self.prior not in ("flat", "carryover"):
-            raise ValueError("glickman_stern's dual-timescale AR is its own prior; prior must be 'flat' or 'carryover'")
+        if self.core == "glickman_stern" and self.prior not in ("flat", "carryover", "carryover_continuity"):
+            # the AR IS the carryover; continuity shifts compose as
+            # season-boundary state means, but a market prior does not
+            raise ValueError(
+                "glickman_stern's dual-timescale AR is its own prior; "
+                "prior must be 'flat', 'carryover', or 'carryover_continuity'"
+            )
 
 
 def variant_hash(config: VariantConfig) -> str:

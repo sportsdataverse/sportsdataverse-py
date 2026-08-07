@@ -101,9 +101,7 @@ def ridge_margin_vintages(
                 off=pl.col("home_team"),
                 deft=pl.col("away_team"),
                 resp=pl.col(resp_col),
-                homeflag=pl.when(pl.col("neutral_site") == True)  # noqa: E712
-                .then(pl.lit(""))
-                .otherwise(pl.col("home_team")),
+                homeflag=pl.when(pl.col("neutral_site") == True).then(pl.lit("")).otherwise(pl.col("home_team")),
             ),
             base.select(
                 "season",
@@ -200,7 +198,7 @@ def ratings_predictor(
     def _expected_margin(games: pl.DataFrame, store: VintageStore) -> pl.DataFrame:
         g = store.join_asof(games, table, on={"home_team": "team_id"}, prefix="rt_home_")
         g = store.join_asof(g, table, on={"away_team": "team_id"}, prefix="rt_away_")
-        hfa = pl.when(pl.col("neutral_site") == True).then(0.0).otherwise(pl.col("rt_home_hfa"))  # noqa: E712
+        hfa = pl.when(pl.col("neutral_site") == True).then(0.0).otherwise(pl.col("rt_home_hfa"))
         return g.with_columns(
             __exp_margin=pl.col("rt_home_off_coef") + pl.col("rt_away_def_coef") + pl.col("rt_home_intercept") + hfa
         )
@@ -262,7 +260,9 @@ class GSConfig:
     init_sd: float = 5.0
 
 
-def glickman_stern_predictor(config: GSConfig = GSConfig()) -> WeekPredictor:
+def glickman_stern_predictor(
+    config: GSConfig = GSConfig(), season_priors: Optional[pl.DataFrame] = None
+) -> WeekPredictor:
     """Wrap the Glickman-Stern (1998) Kalman filter as a week predictor.
 
     Team strengths follow a weekly random walk (``sigma_w`` innovation)
@@ -276,6 +276,12 @@ def glickman_stern_predictor(config: GSConfig = GSConfig()) -> WeekPredictor:
 
     Args:
         config: Tunable parameters.
+        season_priors: Optional continuity table ``(season, team,
+            prior_shift)`` in MARGIN points (Axis D3 composed into A6):
+            each team's shift is added to its state mean at season entry
+            — the start season at filter init, then every boundary after
+            the AR shrink. Preseason knowledge only; never derive shifts
+            from the season they apply to.
 
     Returns:
         A predictor callable for :func:`~sportsdataverse.wexp.backtest.run_backtest`.
@@ -287,6 +293,14 @@ def glickman_stern_predictor(config: GSConfig = GSConfig()) -> WeekPredictor:
             from sportsdataverse.wexp.engines import GSConfig, glickman_stern_predictor
             probs, rows = run_backtest(oracle, glickman_stern_predictor(GSConfig()), model_id="gs")
     """
+    priors: dict[tuple[int, str], float] = {}
+    if season_priors is not None:
+        n_dup = season_priors.height - season_priors.unique(subset=["season", "team"]).height
+        if n_dup:
+            raise ValueError(f"season_priors has {n_dup} duplicate (season, team) row(s)")
+        priors = {
+            (int(r["season"]), str(r["team"])): float(r["prior_shift"]) for r in season_priors.iter_rows(named=True)
+        }
 
     def predict(history: pl.DataFrame, slate: pl.DataFrame, store: Optional[VintageStore]) -> pl.Series:
         from scipy.stats import norm
@@ -303,13 +317,22 @@ def glickman_stern_predictor(config: GSConfig = GSConfig()) -> WeekPredictor:
         p_cov = np.eye(n) * config.init_sd**2
         cur: Optional[tuple[int, int]] = None
 
+        def shift_vec(season: int) -> np.ndarray:
+            v = np.zeros(n)
+            for (s, team), val in priors.items():
+                if s == season and team in idx:
+                    v[idx[team]] = val
+            return v
+
         def advance(season: int, week: int) -> None:
             nonlocal x, p_cov, cur
-            if cur is not None:
+            if cur is None:
+                x = x + shift_vec(season)  # start-season continuity priors
+            else:
                 s0, w0 = cur
                 if season > s0:
-                    for _ in range(season - s0):
-                        x = config.season_shrink * x
+                    for s_new in range(s0 + 1, season + 1):
+                        x = config.season_shrink * x + shift_vec(s_new)
                         p_cov = config.season_shrink**2 * p_cov + config.sigma_s**2 * np.eye(n)
                     drift = max(week - 1, 0)
                 else:
@@ -470,6 +493,8 @@ def build_predictor(
         and config.wp_map == "margin_normal"  # native map: Phi(mu / predictive sd)
         and config.hfa == "fixed"
     ):
+        if config.prior == "carryover_continuity" and season_priors is None:
+            raise ValueError("prior='carryover_continuity' requires a season_priors table (cfb_continuity_shifts)")
         shrink = 0.0 if config.prior == "flat" else params.get("season_shrink", 0.82)
         return glickman_stern_predictor(
             GSConfig(
@@ -479,7 +504,8 @@ def build_predictor(
                 sigma_y=params.get("sigma_y", 13.45),
                 hfa=params.get("hfa", 2.3),
                 init_sd=params.get("init_sd", 5.0),
-            )
+            ),
+            season_priors=season_priors if config.prior == "carryover_continuity" else None,
         )
     if (
         config.core == "elo_margin"

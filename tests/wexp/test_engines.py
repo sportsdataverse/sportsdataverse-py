@@ -337,6 +337,64 @@ def test_per_era_hfa_changes_2020_only(nfl_oracle):
         build_predictor(VariantConfig(hfa="per_era", **base))
 
 
+def test_gs_continuity_composition():
+    """A6 + D3: continuity shifts as season-boundary state means in the filter.
+
+    Real CFB fixtures (2015 + 2024 — exercises both the start-season prior
+    and the multi-season boundary path). Observed: GS plain 0.1984; composed
+    bt=2/br=4 brier 0.1841 (gate < 0.19 and strictly better than plain).
+    Zero-beta shifts reduce exactly to the plain filter.
+    """
+    from sportsdataverse.wexp.engines import (
+        GSConfig,
+        build_predictor,
+        cfb_continuity_shifts,
+        glickman_stern_predictor,
+    )
+    from sportsdataverse.wexp.oracle_market import CFB_MARGIN_SIGMA, cfb_market_oracle_from_lines
+    from sportsdataverse.wexp.variants import VariantConfig
+
+    oracle = cfb_market_oracle_from_lines(
+        pl.read_parquet(FIXDIR / "cfb_line_odds_sample.parquet"),
+        pl.read_parquet(FIXDIR / "cfb_schedule_sample.parquet"),
+    )
+    talent = pl.read_parquet(FIXDIR / "cfb_talent_sample.parquet")
+    returning = pl.read_parquet(FIXDIR / "cfb_returning_sample.parquet")
+    cfg = GSConfig(sigma_w=1.5, sigma_y=CFB_MARGIN_SIGMA, hfa=3.0)
+
+    plain, plain_rows = run_backtest(oracle, glickman_stern_predictor(cfg), model_id="gs")
+    shifts = cfb_continuity_shifts(oracle, talent, returning, beta_talent=2.0, beta_returning=4.0)
+    composed, comp_rows = run_backtest(oracle, glickman_stern_predictor(cfg, shifts), model_id="gs_cont")
+    brier = {
+        r["model_id"]: r["value"]
+        for r in pl.concat([plain_rows, comp_rows])
+        .filter((pl.col("season") == -1) & (pl.col("metric") == "brier"))
+        .iter_rows(named=True)
+    }
+    assert brier["gs_cont"] < 0.19  # observed 0.1841
+    assert brier["gs_cont"] < brier["gs"]  # composition must help here (0.1984 plain)
+
+    zero = cfb_continuity_shifts(oracle, talent, returning)
+    zeroed, _ = run_backtest(oracle, glickman_stern_predictor(cfg, zero), model_id="gs")
+    assert (zeroed["p_home"] - plain["p_home"]).abs().max() < 1e-12
+
+    variant = VariantConfig(
+        core="glickman_stern",
+        response="raw",
+        opponent_adjust="none",
+        prior="carryover_continuity",
+        wp_map="margin_normal",
+        hfa="fixed",
+        params=(("hfa", 3.0), ("sigma_w", 1.5), ("sigma_y", CFB_MARGIN_SIGMA)),
+    )
+    dispatched, _ = run_backtest(
+        oracle, build_predictor(variant, season_priors=shifts), model_id="gs_cont", variant=variant
+    )
+    assert (dispatched["p_home"] - composed["p_home"]).abs().max() < 1e-12
+    with pytest.raises(ValueError, match="season_priors"):
+        build_predictor(variant)
+
+
 def test_continuity_prior_requires_table():
     from sportsdataverse.wexp.engines import build_predictor
     from sportsdataverse.wexp.variants import VariantConfig

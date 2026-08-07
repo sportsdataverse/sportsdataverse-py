@@ -31,6 +31,36 @@
     "response": "raw",
     "wp_map": "margin_normal"
   },
+  "0a0daa711610": {
+    "core": "glickman_stern",
+    "hfa": "fixed",
+    "opponent_adjust": "none",
+    "params": [
+      [
+        "beta_returning",
+        4.0
+      ],
+      [
+        "beta_talent",
+        2.0
+      ],
+      [
+        "hfa",
+        3.0
+      ],
+      [
+        "sigma_w",
+        1.5
+      ],
+      [
+        "sigma_y",
+        15.5
+      ]
+    ],
+    "prior": "carryover_continuity",
+    "response": "raw",
+    "wp_map": "margin_normal"
+  },
   "11beb1f46ca6": {
     "core": "elo_margin",
     "hfa": "fixed",
@@ -363,6 +393,36 @@
     "response": "raw",
     "wp_map": "elo_logistic"
   },
+  "6abd99144a11": {
+    "core": "glickman_stern",
+    "hfa": "fixed",
+    "opponent_adjust": "none",
+    "params": [
+      [
+        "beta_returning",
+        6.0
+      ],
+      [
+        "beta_talent",
+        3.0
+      ],
+      [
+        "hfa",
+        3.0
+      ],
+      [
+        "sigma_w",
+        1.5
+      ],
+      [
+        "sigma_y",
+        15.5
+      ]
+    ],
+    "prior": "carryover_continuity",
+    "response": "raw",
+    "wp_map": "margin_normal"
+  },
   "7107118efcd8": {
     "core": "elo_margin",
     "hfa": "fixed",
@@ -608,6 +668,66 @@
     "prior": "flat",
     "response": "raw",
     "wp_map": "isotonic"
+  },
+  "b4f04dd0ac2b": {
+    "core": "glickman_stern",
+    "hfa": "fixed",
+    "opponent_adjust": "none",
+    "params": [
+      [
+        "beta_returning",
+        4.0
+      ],
+      [
+        "beta_talent",
+        0.0
+      ],
+      [
+        "hfa",
+        3.0
+      ],
+      [
+        "sigma_w",
+        1.5
+      ],
+      [
+        "sigma_y",
+        15.5
+      ]
+    ],
+    "prior": "carryover_continuity",
+    "response": "raw",
+    "wp_map": "margin_normal"
+  },
+  "b7cda304ae7c": {
+    "core": "glickman_stern",
+    "hfa": "fixed",
+    "opponent_adjust": "none",
+    "params": [
+      [
+        "beta_returning",
+        0.0
+      ],
+      [
+        "beta_talent",
+        2.0
+      ],
+      [
+        "hfa",
+        3.0
+      ],
+      [
+        "sigma_w",
+        1.5
+      ],
+      [
+        "sigma_y",
+        15.5
+      ]
+    ],
+    "prior": "carryover_continuity",
+    "response": "raw",
+    "wp_map": "margin_normal"
   },
   "cf43c1d9c356": {
     "core": "elo_margin",
