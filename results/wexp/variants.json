@@ -31,6 +31,36 @@
     "response": "raw",
     "wp_map": "margin_normal"
   },
+  "11beb1f46ca6": {
+    "core": "elo_margin",
+    "hfa": "fixed",
+    "opponent_adjust": "none",
+    "params": [
+      [
+        "beta_returning",
+        50.0
+      ],
+      [
+        "beta_talent",
+        25.0
+      ],
+      [
+        "carryover",
+        0.82
+      ],
+      [
+        "k",
+        20.0
+      ],
+      [
+        "z",
+        400.0
+      ]
+    ],
+    "prior": "carryover_continuity",
+    "response": "raw",
+    "wp_map": "elo_logistic"
+  },
   "1b0c46df03f2": {
     "core": "ridge_epa",
     "hfa": "fixed",
@@ -52,6 +82,36 @@
     "prior": "flat",
     "response": "capped",
     "wp_map": "margin_normal"
+  },
+  "2406e6be69e2": {
+    "core": "elo_margin",
+    "hfa": "fixed",
+    "opponent_adjust": "none",
+    "params": [
+      [
+        "beta_returning",
+        0.0
+      ],
+      [
+        "beta_talent",
+        50.0
+      ],
+      [
+        "carryover",
+        0.82
+      ],
+      [
+        "k",
+        20.0
+      ],
+      [
+        "z",
+        400.0
+      ]
+    ],
+    "prior": "carryover_continuity",
+    "response": "raw",
+    "wp_map": "elo_logistic"
   },
   "317ff25bd4a2": {
     "core": "elo_margin",
@@ -259,6 +319,36 @@
     "response": "capped",
     "wp_map": "margin_normal"
   },
+  "a58cdf528730": {
+    "core": "elo_margin",
+    "hfa": "fixed",
+    "opponent_adjust": "none",
+    "params": [
+      [
+        "beta_returning",
+        100.0
+      ],
+      [
+        "beta_talent",
+        0.0
+      ],
+      [
+        "carryover",
+        0.82
+      ],
+      [
+        "k",
+        20.0
+      ],
+      [
+        "z",
+        400.0
+      ]
+    ],
+    "prior": "carryover_continuity",
+    "response": "raw",
+    "wp_map": "elo_logistic"
+  },
   "aebd671e9376": {
     "core": "ridge_epa",
     "hfa": "fixed",
@@ -286,6 +376,36 @@
     "prior": "flat",
     "response": "raw",
     "wp_map": "isotonic"
+  },
+  "cf43c1d9c356": {
+    "core": "elo_margin",
+    "hfa": "fixed",
+    "opponent_adjust": "none",
+    "params": [
+      [
+        "beta_returning",
+        100.0
+      ],
+      [
+        "beta_talent",
+        50.0
+      ],
+      [
+        "carryover",
+        0.82
+      ],
+      [
+        "k",
+        20.0
+      ],
+      [
+        "z",
+        400.0
+      ]
+    ],
+    "prior": "carryover_continuity",
+    "response": "raw",
+    "wp_map": "elo_logistic"
   },
   "d1e160c3cd39": {
     "core": "ridge_epa",
@@ -368,6 +488,36 @@
       ]
     ],
     "prior": "carryover",
+    "response": "raw",
+    "wp_map": "elo_logistic"
+  },
+  "e6fc658dd6a1": {
+    "core": "elo_margin",
+    "hfa": "fixed",
+    "opponent_adjust": "none",
+    "params": [
+      [
+        "beta_returning",
+        0.0
+      ],
+      [
+        "beta_talent",
+        25.0
+      ],
+      [
+        "carryover",
+        0.82
+      ],
+      [
+        "k",
+        20.0
+      ],
+      [
+        "z",
+        400.0
+      ]
+    ],
+    "prior": "carryover_continuity",
     "response": "raw",
     "wp_map": "elo_logistic"
   },

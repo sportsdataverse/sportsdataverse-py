@@ -29,7 +29,7 @@ from sportsdataverse.wexp.elo import EloConfig
 from sportsdataverse.wexp.store import VintageStore
 from sportsdataverse.wexp.variants import VariantConfig
 
-__all__ = ["build_predictor", "ratings_predictor", "ridge_margin_vintages"]
+__all__ = ["build_predictor", "cfb_continuity_shifts", "ratings_predictor", "ridge_margin_vintages"]
 
 _VINTAGE_SCHEMA: dict[str, type[pl.DataType]] = {
     "season": pl.Int32,
@@ -232,7 +232,86 @@ def ratings_predictor(
     return predict
 
 
-def build_predictor(config: VariantConfig, *, table: str = "ridge", sigma: float = 13.45) -> WeekPredictor:
+def cfb_continuity_shifts(
+    oracle: pl.DataFrame,
+    talent: pl.DataFrame,
+    returning: pl.DataFrame,
+    *,
+    beta_talent: float = 0.0,
+    beta_returning: float = 0.0,
+) -> pl.DataFrame:
+    """Compile CFB talent + returning production into Elo prior shifts (Axis D3).
+
+    ``prior_shift = beta_talent * talent_z + beta_returning * returning_c``
+    in rating points, where ``talent_z`` is the within-season z-score of
+    the 247 talent composite and ``returning_c`` is the within-season
+    centered overall returning-production share. Both are preseason
+    knowledge for their season (leak-free by construction). Teams missing
+    one input take 0 for that term — a neutral default, never imputed
+    from games. The id -> display-name map comes from the oracle itself
+    (``home_team_id``/``home_team`` pairs), so no external crosswalk.
+
+    Args:
+        oracle: Market-oracle frame (contract columns incl. team ids).
+        talent: ``load_cfb_team_talent`` frame (``season``, ``team_id``,
+            ``talent_composite``).
+        returning: ``load_cfb_returning_production`` frame (``season``,
+            ``team_id``, ``overall_returning``).
+        beta_talent: Rating points per talent z-score.
+        beta_returning: Rating points per centered returning share.
+
+    Returns:
+        ``(season, team, prior_shift)`` for
+        :func:`~sportsdataverse.wexp.elo.elo_ratings` — one row per
+        oracle team with at least one input.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.wexp.engines import cfb_continuity_shifts
+            shifts = cfb_continuity_shifts(oracle, talent, returning,
+                                           beta_talent=50.0, beta_returning=100.0)
+    """
+    id_map = pl.concat(
+        [
+            oracle.select(team_id=pl.col("home_team_id"), team=pl.col("home_team")),
+            oracle.select(team_id=pl.col("away_team_id"), team=pl.col("away_team")),
+        ]
+    ).unique()
+    t = talent.select(
+        season=pl.col("season").cast(pl.Int32),
+        team_id=pl.col("team_id").cast(pl.Int64).cast(pl.Utf8),
+        talent_z=(pl.col("talent_composite") - pl.col("talent_composite").mean().over("season"))
+        / pl.col("talent_composite").std().over("season"),
+    )
+    r = returning.select(
+        season=pl.col("season").cast(pl.Int32),
+        team_id=pl.col("team_id").cast(pl.Int64).cast(pl.Utf8),
+        returning_c=pl.col("overall_returning") - pl.col("overall_returning").mean().over("season"),
+    )
+    feat = t.join(r, on=["season", "team_id"], how="full", coalesce=True)
+    assert feat.schema["team_id"] == id_map.schema["team_id"]
+    out = (
+        feat.join(id_map, on="team_id", how="inner")
+        .with_columns(
+            prior_shift=beta_talent * pl.col("talent_z").fill_null(0.0)
+            + beta_returning * pl.col("returning_c").fill_null(0.0)
+        )
+        .select("season", "team", "prior_shift")
+    )
+    n_dup = out.height - out.unique(subset=["season", "team"]).height
+    if n_dup:
+        raise ValueError(f"continuity shifts have {n_dup} duplicate (season, team) row(s) — id map is not 1:1")
+    return out
+
+
+def build_predictor(
+    config: VariantConfig,
+    *,
+    table: str = "ridge",
+    sigma: float = 13.45,
+    season_priors: Optional[pl.DataFrame] = None,
+) -> WeekPredictor:
     """Dispatch a variant config to its implemented week predictor.
 
     Implemented cells: ``elo_margin`` (prior ``flat`` = full season reset,
@@ -249,6 +328,9 @@ def build_predictor(config: VariantConfig, *, table: str = "ridge", sigma: float
         table: Ratings vintage table name (EPA-family cores).
         sigma: Default margin SD for the normal link (``sigma`` in
             ``config.params`` wins).
+        season_priors: Continuity-prior table (from
+            :func:`cfb_continuity_shifts`); REQUIRED when
+            ``prior="carryover_continuity"`` and ignored otherwise.
 
     Returns:
         A predictor callable for :func:`~sportsdataverse.wexp.backtest.run_backtest`.
@@ -271,8 +353,10 @@ def build_predictor(config: VariantConfig, *, table: str = "ridge", sigma: float
         config.core == "elo_margin"
         and config.wp_map == "elo_logistic"
         and config.hfa == "fixed"
-        and config.prior in ("flat", "carryover")  # continuity/market priors have no engine yet
+        and config.prior in ("flat", "carryover", "carryover_continuity")  # market_open_informed: no engine yet
     ):
+        if config.prior == "carryover_continuity" and season_priors is None:
+            raise ValueError("prior='carryover_continuity' requires a season_priors table (cfb_continuity_shifts)")
         carryover = 0.0 if config.prior == "flat" else params.get("carryover", 0.67)
         return elo_predictor(
             EloConfig(
@@ -280,7 +364,8 @@ def build_predictor(config: VariantConfig, *, table: str = "ridge", sigma: float
                 z=params.get("z", 400.0),
                 hfa=params.get("hfa", 65.0),
                 carryover=carryover,
-            )
+            ),
+            season_priors=season_priors if config.prior == "carryover_continuity" else None,
         )
     if (
         config.core == "ridge_epa"

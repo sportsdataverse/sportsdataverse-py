@@ -16,6 +16,7 @@ from __future__ import annotations
 
 import math
 from dataclasses import dataclass
+from typing import Optional
 
 import polars as pl
 
@@ -44,7 +45,11 @@ class EloConfig:
     mov_mult: bool = True
 
 
-def elo_ratings(games: pl.DataFrame, config: EloConfig = EloConfig()) -> pl.DataFrame:
+def elo_ratings(
+    games: pl.DataFrame,
+    config: EloConfig = EloConfig(),
+    season_priors: Optional[pl.DataFrame] = None,
+) -> pl.DataFrame:
     """Walk games chronologically and emit pre-game Elo ratings + P(home).
 
     Games are processed in ``(season, week)`` order; the emitted rating for
@@ -56,6 +61,13 @@ def elo_ratings(games: pl.DataFrame, config: EloConfig = EloConfig()) -> pl.Data
         games: Frame with ``game_id``, ``season``, ``week``, ``home_team``,
             ``away_team``, ``neutral_site``, ``home_margin``.
         config: Tunable parameters.
+        season_priors: Optional continuity-prior table with ``season``,
+            ``team``, ``prior_shift`` (rating points). The shift is added
+            ONCE per team at its season entry (first appearance or season
+            boundary, after the carryover reversion) — the Axis D3/D4
+            hook. Teams absent from the table shift by 0. Priors are
+            preseason knowledge for their ``season``; never derive them
+            from that season's games.
 
     Returns:
         The input rows (original order) with ``home_elo_pre``,
@@ -69,6 +81,14 @@ def elo_ratings(games: pl.DataFrame, config: EloConfig = EloConfig()) -> pl.Data
     """
     ratings: dict[str, float] = {}
     last_season: dict[str, int] = {}
+    shifts: dict[tuple[int, str], float] = {}
+    if season_priors is not None:
+        n_dup = season_priors.height - season_priors.unique(subset=["season", "team"]).height
+        if n_dup:
+            raise ValueError(f"season_priors has {n_dup} duplicate (season, team) row(s)")
+        shifts = {
+            (int(r["season"]), str(r["team"])): float(r["prior_shift"]) for r in season_priors.iter_rows(named=True)
+        }
     ordered = games.with_row_index("__order").sort("season", "week", "__order")
 
     home_pre: list[float] = []
@@ -79,11 +99,13 @@ def elo_ratings(games: pl.DataFrame, config: EloConfig = EloConfig()) -> pl.Data
         season = row["season"]
         for team in (row["home_team"], row["away_team"]):
             if team not in ratings:
-                ratings[team] = config.init
+                ratings[team] = config.init + shifts.get((season, team), 0.0)
                 last_season[team] = season
             elif last_season[team] != season:
                 # season boundary: revert toward init, once per team per season
-                ratings[team] = config.init + config.carryover * (ratings[team] - config.init)
+                ratings[team] = (
+                    config.init + config.carryover * (ratings[team] - config.init) + shifts.get((season, team), 0.0)
+                )
                 last_season[team] = season
 
         h, a = ratings[row["home_team"]], ratings[row["away_team"]]

@@ -41,6 +41,8 @@ ORACLE_COLUMNS = [
     "season_type",
     "home_team",
     "away_team",
+    "home_team_id",
+    "away_team_id",
     "neutral_site",
     "fbs_vs_fbs",
     "home_margin",

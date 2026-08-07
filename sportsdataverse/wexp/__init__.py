@@ -30,6 +30,8 @@ from sportsdataverse.wexp.elo import (
     elo_ratings,
 )
 from sportsdataverse.wexp.engines import (
+    build_predictor,
+    cfb_continuity_shifts,
     ratings_predictor,
     ridge_margin_vintages,
 )
@@ -81,6 +83,8 @@ __all__ = [
     "baseline_probs",
     "build_cfb_market_oracle",
     "build_nfl_market_oracle",
+    "build_predictor",
+    "cfb_continuity_shifts",
     "cfb_market_oracle_from_lines",
     "nfl_market_oracle_from_schedule",
     "brier_score",

@@ -240,11 +240,54 @@ def test_build_predictor_unimplemented_combo():
                 core="elo_margin",
                 response="raw",
                 opponent_adjust="none",
-                prior="carryover_continuity",
+                prior="market_open_informed",
                 wp_map="elo_logistic",
                 hfa="fixed",
             )
         )
+
+
+CONTINUITY_VARIANT_KW = dict(
+    core="elo_margin", response="raw", opponent_adjust="none", wp_map="elo_logistic", hfa="fixed"
+)
+
+
+def test_continuity_prior_shifts_change_predictions():
+    """Axis D3: shifts provably move preseason predictions; zero-beta == plain carryover.
+
+    Real fixtures: CFB oracle (2015 + 2024) + captured talent/returning.
+    """
+    from sportsdataverse.wexp.engines import build_predictor, cfb_continuity_shifts
+    from sportsdataverse.wexp.oracle_market import cfb_market_oracle_from_lines
+    from sportsdataverse.wexp.variants import VariantConfig
+
+    oracle = cfb_market_oracle_from_lines(
+        pl.read_parquet(FIXDIR / "cfb_line_odds_sample.parquet"),
+        pl.read_parquet(FIXDIR / "cfb_schedule_sample.parquet"),
+    )
+    talent = pl.read_parquet(FIXDIR / "cfb_talent_sample.parquet")
+    returning = pl.read_parquet(FIXDIR / "cfb_returning_sample.parquet")
+    shifts = cfb_continuity_shifts(oracle, talent, returning, beta_talent=50.0, beta_returning=100.0)
+    assert shifts.height > 200  # observed 429 (215 oracle teams x 2 seasons, minus unmatched)
+    assert shifts["prior_shift"].abs().max() > 10.0  # the betas actually move ratings
+
+    cont = VariantConfig(prior="carryover_continuity", **CONTINUITY_VARIANT_KW)
+    plain = VariantConfig(prior="carryover", **CONTINUITY_VARIANT_KW)
+    p_cont, _ = run_backtest(oracle, build_predictor(cont, season_priors=shifts), model_id="e", variant=cont)
+    p_plain, _ = run_backtest(oracle, build_predictor(plain), model_id="e", variant=plain)
+    assert (p_cont["p_home"] - p_plain["p_home"]).abs().max() > 1e-3  # not a silent no-op
+    # zero-beta shifts reduce exactly to plain carryover
+    zero = cfb_continuity_shifts(oracle, talent, returning)
+    p_zero, _ = run_backtest(oracle, build_predictor(cont, season_priors=zero), model_id="e", variant=cont)
+    assert (p_zero["p_home"] - p_plain["p_home"]).abs().max() < 1e-12
+
+
+def test_continuity_prior_requires_table():
+    from sportsdataverse.wexp.engines import build_predictor
+    from sportsdataverse.wexp.variants import VariantConfig
+
+    with pytest.raises(ValueError, match="season_priors"):
+        build_predictor(VariantConfig(prior="carryover_continuity", **CONTINUITY_VARIANT_KW))
 
 
 def test_unknown_wp_map_refused():

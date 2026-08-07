@@ -16,7 +16,9 @@ Captured 2026-08-06.
 |---|---|---|---|
 | `nfl_schedule_sample.parquet` | 821 | `load_nfl_schedule` (nflverse `schedules/games.parquet`) | Full seasons 2009 / 2020 / 2024, 16 cols: keys, teams, `result`, closing `spread_line` / `total_line` / moneylines (PFR closing lines; **no opens exist for NFL pre-2020 anywhere in our stack**), rest days, QB ids. Null closing ML: 14 games (all 2009). |
 | `cfb_line_odds_sample.parquet` | 73,775 | `cfbfastR-data/betting/parquet/cfb_line_odds.parquet` (local archive, 2006–2025) | Per-side per-book line rows for a deterministic sample (first 400 sorted non-null `game_id`s per season) of seasons 2015 (68,785 rows — many-book archive era) and 2024 (4,990 rows — CFBD era). `season` cast to Int32 (source stores f64). |
-| `cfb_schedule_sample.parquet` | 799 | `load_cfb_schedule` (`espn_cfb_schedules` release) | Outcome + slice columns (`home_points`/`away_points`, divisions, `neutral_site`) for the sampled games; 799/800 archive games matched. |
+| `cfb_schedule_sample.parquet` | 799 | `load_cfb_schedule` (`espn_cfb_schedules` release) | Outcome + slice columns (`home_points`/`away_points`, divisions, `neutral_site`) plus `home_id`/`away_id` (ESPN team ids, added at the 2026-08-06 re-capture for the oracle's `home_team_id`/`away_team_id` contract columns) for the sampled games; 799/800 archive games matched. |
+| `cfb_talent_sample.parquet` | 601 | `load_cfb_team_talent` (cfbfastR-data release) | 247 talent composite for seasons 2015 + 2024 (293 + 308 teams, 0 null composites). Keys: `season`, `team_id` (ESPN, Int64), display `team`. D3 continuity-prior input; preseason knowledge for its season. |
+| `cfb_returning_sample.parquet` | 443 | `load_cfb_returning_production` (cfbfastR-data release) | Returning production for seasons 2015 + 2024 (214 + 229 teams, 0 null `overall_returning`). Only `overall_returning` feeds D3 (`def_returning` unusable pre-2023). |
 
 Notes:
 

@@ -5,7 +5,10 @@ captured fixtures) plus thin loading wrappers. Output contract (both
 leagues; one row per game):
 
 - ``league`` Utf8, ``game_id`` Utf8, ``season`` Int32, ``week`` Int32,
-  ``season_type`` Utf8, ``home_team`` Utf8, ``away_team`` Utf8
+  ``season_type`` Utf8, ``home_team`` Utf8, ``away_team`` Utf8,
+  ``home_team_id`` / ``away_team_id`` Utf8 (NFL: the nflverse abbr IS the
+  canonical id; CFB: ESPN numeric id cast Int64->Utf8) — the join keys for
+  continuity/prior feature tables (talent, returning production, QB logs)
 - ``home_win`` Int8 (null on ties), ``home_margin`` Float64
 - ``spread_close`` Float64 (expected HOME margin: positive = home favored),
   ``total_close`` Float64, ``ml_home_close`` / ``ml_away_close`` Float64
@@ -55,6 +58,8 @@ ORACLE_COLUMNS: list[str] = [
     "season_type",
     "home_team",
     "away_team",
+    "home_team_id",
+    "away_team_id",
     "neutral_site",
     "fbs_vs_fbs",
     "home_margin",
@@ -135,6 +140,8 @@ def nfl_market_oracle_from_schedule(
         season_type=pl.col("game_type").cast(pl.Utf8),
         home_team=pl.col("home_team").cast(pl.Utf8),
         away_team=pl.col("away_team").cast(pl.Utf8),
+        home_team_id=pl.col("home_team").cast(pl.Utf8),
+        away_team_id=pl.col("away_team").cast(pl.Utf8),
         neutral_site=(pl.col("location") == "Neutral"),
         fbs_vs_fbs=pl.lit(True),
         home_margin=pl.col("result").cast(pl.Float64),
@@ -252,6 +259,8 @@ def cfb_market_oracle_from_lines(
         season_type=pl.col("season_type").cast(pl.Utf8),
         home_team=pl.col("home_team").cast(pl.Utf8),
         away_team=pl.col("away_team").cast(pl.Utf8),
+        home_team_id=pl.col("home_id").cast(pl.Int64).cast(pl.Utf8),
+        away_team_id=pl.col("away_id").cast(pl.Int64).cast(pl.Utf8),
         neutral_site=pl.col("neutral_site").cast(pl.Boolean),
         fbs_vs_fbs=((pl.col("home_division") == "fbs") & (pl.col("away_division") == "fbs")),
         home_margin=(pl.col("home_points") - pl.col("away_points")).cast(pl.Float64),
