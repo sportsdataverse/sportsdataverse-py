@@ -312,12 +312,17 @@ def build_nfl_market_oracle(seasons: list[int], **kwargs: float) -> pl.DataFrame
     return nfl_market_oracle_from_schedule(load_nfl_schedule(seasons=seasons), **kwargs)
 
 
-def build_cfb_market_oracle(line_odds_path: str | Path, seasons: list[int], **kwargs: float) -> pl.DataFrame:
-    """Read the cfb_line_odds archive + ESPN schedules and build the CFB oracle.
+def build_cfb_market_oracle(
+    seasons: list[int], *, line_odds_path: str | Path | None = None, **kwargs: float
+) -> pl.DataFrame:
+    """Load the cfb_line_odds archive + ESPN schedules and build the CFB oracle.
 
     Args:
-        line_odds_path: Path to ``cfb_line_odds.parquet``.
         seasons: Seasons to include.
+        line_odds_path: Optional local path to ``cfb_line_odds.parquet``;
+            by default the published archive is loaded via
+            :func:`sportsdataverse.cfb.load_cfb_betting_lines` (the
+            cfbfastR-data raw-main asset).
         **kwargs: Forwarded to :func:`cfb_market_oracle_from_lines`.
 
     Returns:
@@ -327,10 +332,12 @@ def build_cfb_market_oracle(line_odds_path: str | Path, seasons: list[int], **kw
         Quick start::
 
             from sportsdataverse.wexp.oracle_market import build_cfb_market_oracle
-            oracle = build_cfb_market_oracle("cfb_line_odds.parquet", [2024])
+            oracle = build_cfb_market_oracle([2024])
     """
     from sportsdataverse.cfb import load_cfb_schedule
+    from sportsdataverse.cfb.cfb_loaders_extra import load_cfb_betting_lines
 
-    lines = pl.read_parquet(line_odds_path).filter(pl.col("season").cast(pl.Int32).is_in(seasons))
+    lines = load_cfb_betting_lines() if line_odds_path is None else pl.read_parquet(line_odds_path)
+    lines = lines.filter(pl.col("season").cast(pl.Int32).is_in(seasons))
     schedules = load_cfb_schedule(seasons=seasons)
     return cfb_market_oracle_from_lines(lines, schedules, **kwargs)
