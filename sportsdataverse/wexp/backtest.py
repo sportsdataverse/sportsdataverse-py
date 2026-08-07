@@ -199,6 +199,11 @@ def run_backtest(
             raise ValueError(f"predictor emitted probabilities outside [0, 1] in {season} week {week}")
         preds.append(slate.select("game_id").with_columns(p))
     probs = oracle.join(pl.concat(preds), on="game_id", how="left")
+    if probs["p_home"].null_count() == probs.height:
+        # partial nulls are legitimate (uncovered weeks / unrated teams);
+        # ZERO predictions across the whole walk means broken wiring — a
+        # same-dtype wrong join key fails as exactly this, silently
+        raise ValueError("predictor produced no predictions at all — check the feature-table join keys")
     rows = score_probs(
         probs,
         "p_home",

@@ -367,6 +367,42 @@ def test_true_epa_ridge_arm(nfl_oracle):
     assert (p1["p_home"] - p2["p_home"]).abs().max() < 1e-9
 
 
+def test_cfb_epa_and_fei_arms_join_by_id():
+    """CFB vintage arms join by ESPN team ID — the name join is a silent
+    zero-match trap (same dtype, disjoint values) the driver must refuse.
+
+    Real fixtures: cfb_ratings_weekly (2015 + 2024) through the store's
+    guarded through->as_of shift. Observed (scale 8.7 / hfa 2.71 from the
+    tune fit): fei_net margin_normal brier 0.1844 / acc 0.7331 on n=487;
+    the wrong (name) join raises the driver's no-predictions error.
+    """
+    from sportsdataverse.wexp.engines import net_vintages_view
+    from sportsdataverse.wexp.oracle_market import CFB_MARGIN_SIGMA, cfb_market_oracle_from_lines
+
+    oracle = cfb_market_oracle_from_lines(
+        pl.read_parquet(FIXDIR / "cfb_line_odds_sample.parquet"),
+        pl.read_parquet(FIXDIR / "cfb_schedule_sample.parquet"),
+    )
+    raw = pl.read_parquet(FIXDIR / "cfb_ratings_weekly_sample.parquet")
+    view = net_vintages_view(raw.rename({"through_week": "as_of_week"}), net_col="fei_net", scale=8.7, hfa=2.71)
+    store = VintageStore()
+    store.register("fei", view.rename({"as_of_week": "through_week"}), entity_key="team_id", week_semantics="through")
+
+    probs, rows = run_backtest(
+        oracle,
+        ratings_predictor("fei", sigma=CFB_MARGIN_SIGMA, join_on=("home_team_id", "away_team_id")),
+        model_id="fei",
+        store=store,
+    )
+    pooled = {r["metric"]: r["value"] for r in rows.filter(pl.col("season") == -1).iter_rows(named=True)}
+    assert rows.filter(pl.col("season") == -1)["n"][0] >= 480  # observed 487
+    assert pooled["brier"] < 0.20  # observed 0.1844 (fixture, favorite-heavy sample)
+
+    # the default NAME join matches nothing on CFB — must fail loudly
+    with pytest.raises(ValueError, match="no predictions"):
+        run_backtest(oracle, ratings_predictor("fei", sigma=CFB_MARGIN_SIGMA), model_id="fei", store=store)
+
+
 def test_gs_continuity_composition():
     """A6 + D3: continuity shifts as season-boundary state means in the filter.
 

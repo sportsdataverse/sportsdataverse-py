@@ -144,7 +144,14 @@ def ridge_margin_vintages(
     return pl.concat(frames, how="vertical")
 
 
-def net_vintages_view(vintages: pl.DataFrame, *, scale: float = 1.0, hfa: float = 0.0) -> pl.DataFrame:
+def net_vintages_view(
+    vintages: pl.DataFrame,
+    *,
+    scale: float = 1.0,
+    hfa: float = 0.0,
+    st_weight: float = 0.0,
+    net_col: str = "adj_net",
+) -> pl.DataFrame:
     """Adapt a net-rating vintage table to the :func:`ratings_predictor` contract.
 
     For tables like ``load_nfl_ratings_weekly`` (one ``adj_net`` per team
@@ -160,6 +167,10 @@ def net_vintages_view(vintages: pl.DataFrame, *, scale: float = 1.0, hfa: float 
         scale: Margin points per unit of net-rating difference (fit on the
             tune window; a tunable in the variant hash).
         hfa: Home-field advantage in margin points.
+        st_weight: Weight on ``adj_st_epa`` added to the net (``adj_net``
+            excludes special teams; 0 = ignore ST).
+        net_col: The net-rating column (``"adj_net"`` for the A3 EPA core;
+            ``"fei_net"`` on the CFB vintages for the A5 FEI core).
 
     Returns:
         A vintage table registrable on :class:`~sportsdataverse.wexp.store.VintageStore`.
@@ -174,12 +185,15 @@ def net_vintages_view(vintages: pl.DataFrame, *, scale: float = 1.0, hfa: float 
             store.register("epa", net_vintages_view(load_nfl_ratings_weekly(seasons=[2024]),
                                                     scale=24.0, hfa=2.3), entity_key="team_id")
     """
+    net = pl.col(net_col)
+    if st_weight:
+        net = net + st_weight * pl.col("adj_st_epa")
     return vintages.select(
         season=pl.col("season").cast(pl.Int32),
         as_of_week=pl.col("as_of_week").cast(pl.Int32),
         team_id=pl.col("team_id").cast(pl.Utf8),
-        off_coef=scale * pl.col("adj_net"),
-        def_coef=-scale * pl.col("adj_net"),
+        off_coef=scale * net,
+        def_coef=-scale * net,
         intercept=pl.lit(0.0),
         hfa=pl.lit(hfa, dtype=pl.Float64),
     )
@@ -193,6 +207,7 @@ def ratings_predictor(
     iso_min_fit: int = 100,
     lam: Optional[float] = None,
     cap: Optional[float] = None,
+    join_on: tuple[str, str] = ("home_team", "away_team"),
 ) -> WeekPredictor:
     """Wrap a registered ratings vintage table as a week predictor.
 
@@ -218,6 +233,13 @@ def ratings_predictor(
             response). Checked BIDIRECTIONALLY against the table's ``cap``
             stamp when present — a raw variant served from a capped table
             is just as mislabeled as the reverse.
+        join_on: The (home, away) oracle columns matched against the
+            table's ``team_id``. Default team-NAME columns fit tables
+            keyed by name (ridge_margin_vintages; NFL, where the abbr IS
+            the id). Tables keyed by provider id (CFB ratings vintages)
+            need ``("home_team_id", "away_team_id")`` — same dtype either
+            way, so a wrong choice fails as zero matches, which the
+            driver refuses loudly.
 
     Returns:
         A predictor callable for :func:`~sportsdataverse.wexp.backtest.run_backtest`.
@@ -238,8 +260,8 @@ def ratings_predictor(
         raise ValueError(f"unknown wp_map {wp_map!r}; one of ('margin_normal', 'isotonic')")
 
     def _expected_margin(games: pl.DataFrame, store: VintageStore) -> pl.DataFrame:
-        g = store.join_asof(games, table, on={"home_team": "team_id"}, prefix="rt_home_")
-        g = store.join_asof(g, table, on={"away_team": "team_id"}, prefix="rt_away_")
+        g = store.join_asof(games, table, on={join_on[0]: "team_id"}, prefix="rt_home_")
+        g = store.join_asof(g, table, on={join_on[1]: "team_id"}, prefix="rt_away_")
         hfa = pl.when(pl.col("neutral_site") == True).then(0.0).otherwise(pl.col("rt_home_hfa"))
         return g.with_columns(
             __exp_margin=pl.col("rt_home_off_coef") + pl.col("rt_away_def_coef") + pl.col("rt_home_intercept") + hfa
