@@ -812,6 +812,151 @@ _CFB_PBP_RULES: tuple[Rule, ...] = (
     _range_rule("yds_fumble_return", 0, 100),
     _range_rule("air_yards", -99, 99),
     _range_rule("yards_after_catch", -99, 100),
+    # --- play-mechanics grammar -------------------------------------------
+    # Measured 2026-08-07 across all 3,145,840 rows / 22 seasons. The eight
+    # ERROR rules below held at EXACTLY zero violations; everything that
+    # fired at all is a WARN carrying its measured count, so a regression
+    # shows up as a count change rather than a silent pass.
+    Rule(
+        "sack_implies_pass",
+        ("sack", "pass"),
+        (_c("sack") == True) & (_c("pass") == False),  # noqa: E712
+        "a sack is a pass play",
+    ),
+    Rule(
+        "completion_implies_pass",
+        ("completion", "pass"),
+        (_c("completion") == True) & (_c("pass") == False),  # noqa: E712
+        "a completion requires pass=True",
+    ),
+    Rule(
+        "target_implies_pass",
+        ("target", "pass"),
+        (_c("target") == True) & (_c("pass") == False),  # noqa: E712
+        "a target requires pass=True",
+    ),
+    Rule(
+        "fumble_lost_implies_fumble",
+        ("fumble_lost", "fumble_vec"),
+        (_c("fumble_lost") == True) & (_c("fumble_vec") == False),  # noqa: E712
+        "a lost fumble requires a fumble",
+    ),
+    Rule(
+        "fg_made_implies_fg_attempt",
+        ("fg_made", "fg_attempt"),
+        (_c("fg_made") == True) & (_c("fg_attempt") == False),  # noqa: E712
+        "a made field goal requires a field goal attempt",
+    ),
+    Rule(
+        "int_implies_turnover",
+        ("int", "turnover_vec"),
+        (_c("int") == True) & (_c("turnover_vec") == False),  # noqa: E712
+        "an interception is a turnover",
+    ),
+    Rule(
+        "kneel_implies_rush",
+        ("kneel_down", "rush"),
+        (_c("kneel_down") == True) & (_c("rush") == False),  # noqa: E712
+        "a kneel-down is a rush play",
+    ),
+    Rule(
+        "kickoff_scrimmage_exclusive",
+        ("kickoff_play", "scrimmage_play"),
+        (_c("kickoff_play") == True) & (_c("scrimmage_play") == True),  # noqa: E712
+        "a kickoff is not a scrimmage play",
+    ),
+    # --- measured-nonzero: WARN with the count observed on publish ---------
+    Rule(
+        "rush_pass_exclusive",
+        ("rush", "pass"),
+        (_c("rush") == True) & (_c("pass") == True),  # noqa: E712
+        "a play cannot be flagged both rush and pass (7 measured)",
+        severity=Severity.WARN,
+        needs_judgment=True,
+    ),
+    Rule(
+        "kickoff_punt_exclusive",
+        ("kickoff_play", "punt_play"),
+        (_c("kickoff_play") == True) & (_c("punt_play") == True),  # noqa: E712
+        "a play cannot be both a kickoff and a punt (3 measured)",
+        severity=Severity.WARN,
+        needs_judgment=True,
+    ),
+    Rule(
+        "punt_scrimmage_exclusive",
+        ("punt_play", "scrimmage_play"),
+        (_c("punt_play") == True) & (_c("scrimmage_play") == True),  # noqa: E712
+        "a punt is not a scrimmage play (116 measured)",
+        severity=Severity.WARN,
+        needs_judgment=True,
+    ),
+    Rule(
+        "pass_implies_scrimmage",
+        ("pass", "scrimmage_play"),
+        (_c("pass") == True) & (_c("scrimmage_play") == False),  # noqa: E712
+        "a pass is a scrimmage play (12 measured)",
+        severity=Severity.WARN,
+        needs_judgment=True,
+    ),
+    Rule(
+        "rush_implies_scrimmage",
+        ("rush", "scrimmage_play"),
+        (_c("rush") == True) & (_c("scrimmage_play") == False),  # noqa: E712
+        "a rush is a scrimmage play (7,249 measured)",
+        severity=Severity.WARN,
+        needs_judgment=True,
+    ),
+    # This is the rule that would have caught the 2013 sack outage: that
+    # season carries 52 sacks (2012: 3,254 / 2014: 3,537) and yds_sacked is
+    # 100% null, so every surviving sack row violates the pairing.
+    Rule(
+        "sack_requires_yds_sacked",
+        ("sack", "yds_sacked"),
+        (_c("sack") == True) & _c("yds_sacked").is_null(),  # noqa: E712
+        "a sack must carry sack yardage (105 measured; 52 are the 2013 outage)",
+        severity=Severity.WARN,
+        needs_judgment=True,
+    ),
+    Rule(
+        "td_play_implies_scoring",
+        ("td_play", "scoring_play"),
+        (_c("td_play") == True) & (_c("scoring_play") == False),  # noqa: E712
+        "a touchdown play should be a scoring play (3,031 measured)",
+        severity=Severity.WARN,
+        needs_judgment=True,
+    ),
+    Rule(
+        "fumble_lost_implies_turnover",
+        ("fumble_lost", "turnover_vec"),
+        (_c("fumble_lost") == True) & (_c("turnover_vec") == False),  # noqa: E712
+        "a lost fumble is a turnover (3,514 measured)",
+        severity=Severity.WARN,
+        needs_judgment=True,
+    ),
+    Rule(
+        "int_implies_pass",
+        ("int", "pass"),
+        (_c("int") == True) & (_c("pass") == False),  # noqa: E712
+        "an interception is a pass play (12,890 measured)",
+        severity=Severity.WARN,
+        needs_judgment=True,
+    ),
+    Rule(
+        "completion_requires_yds_receiving",
+        ("completion", "yds_receiving"),
+        (_c("completion") == True) & _c("yds_receiving").is_null(),  # noqa: E712
+        "a completion must carry receiving yardage (3,377 measured)",
+        severity=Severity.WARN,
+        needs_judgment=True,
+    ),
+    Rule(
+        "rush_requires_yds_rushed",
+        ("rush", "yds_rushed"),
+        (_c("rush") == True) & _c("yds_rushed").is_null(),  # noqa: E712
+        "a rush must carry rushing yardage (35,369 measured)",
+        severity=Severity.WARN,
+        needs_judgment=True,
+    ),
 )
 
 

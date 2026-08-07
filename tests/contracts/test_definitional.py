@@ -339,3 +339,82 @@ def test_nfl_clock_hierarchy_skips_overtime():
     by_rule = _findings_by_rule(definitional.run("nfl_model_pbp", frame, ctx))
     f = by_rule["clock_hierarchy_regulation"]
     assert f.metric == 1.0  # only the qtr=2 row; the OT row is out of scope
+
+
+# --- cfb_pbp play-mechanics grammar ----------------------------------------
+# The eight ERROR rules below were measured at EXACTLY zero violations across
+# all 3,145,840 published rows (2004-2025); anything that fired at all ships
+# as WARN needs_judgment carrying its measured count.
+
+
+def _pbp_ctx():
+    return _ctx(dataset="cfb_pbp", join_keys=())
+
+
+def test_cfb_pbp_zero_violation_rules_are_errors():
+    frame = pl.DataFrame(
+        [
+            {
+                "sack": True,
+                "pass": False,
+                "completion": True,
+                "target": True,
+                "fumble_lost": True,
+                "fumble_vec": False,
+                "fg_made": True,
+                "fg_attempt": False,
+                "int": True,
+                "turnover_vec": False,
+                "kneel_down": True,
+                "rush": False,
+                "kickoff_play": True,
+                "scrimmage_play": True,
+            }
+        ]
+    )
+    by_rule = _findings_by_rule(definitional.run("cfb_pbp", frame, _pbp_ctx()))
+    for rule in (
+        "sack_implies_pass",
+        "completion_implies_pass",
+        "target_implies_pass",
+        "fumble_lost_implies_fumble",
+        "fg_made_implies_fg_attempt",
+        "int_implies_turnover",
+        "kneel_implies_rush",
+        "kickoff_scrimmage_exclusive",
+    ):
+        assert rule in by_rule, f"{rule} did not fire"
+        assert by_rule[rule].severity is Severity.ERROR, f"{rule} must be ERROR"
+
+
+def test_cfb_pbp_clean_row_fires_nothing():
+    frame = pl.DataFrame(
+        [
+            {
+                "sack": False,
+                "pass": True,
+                "completion": True,
+                "target": True,
+                "fumble_lost": False,
+                "fumble_vec": False,
+                "fg_made": False,
+                "fg_attempt": False,
+                "int": False,
+                "turnover_vec": False,
+                "kneel_down": False,
+                "rush": False,
+                "kickoff_play": False,
+                "scrimmage_play": True,
+                "yds_receiving": 12,
+            }
+        ]
+    )
+    assert definitional.run("cfb_pbp", frame, _pbp_ctx()) == []
+
+
+def test_cfb_pbp_sack_without_yardage_is_warn():
+    """The rule that would have caught the 2013 sack outage (yds_sacked 100% null)."""
+    frame = pl.DataFrame([{"sack": True, "pass": True, "yds_sacked": None}])
+    by_rule = _findings_by_rule(definitional.run("cfb_pbp", frame, _pbp_ctx()))
+    f = by_rule["sack_requires_yds_sacked"]
+    assert f.severity is Severity.WARN and f.needs_judgment and f.metric == 1.0
