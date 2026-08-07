@@ -1794,7 +1794,7 @@ def load_nfl_espn_qbr(
 
 @cached_loader
 def load_nfl_ratings_weekly(seasons: List[int], return_as_pandas: bool = False) -> pl.DataFrame:
-    """Load per-week as-of vintages of the SDV NFL ratings spine (2009+).
+    """Load per-week as-of vintages of the SDV NFL ratings spine (1999+).
 
     SDV-native dataset (no nflreadpy equivalent), built by nfl-data's
     ``nfl_ratings_weekly`` job: for each week ``W`` the ratings spine
@@ -1805,15 +1805,15 @@ def load_nfl_ratings_weekly(seasons: List[int], return_as_pandas: bool = False) 
     the CFB ``through_week`` convention, which is inclusive of its week).
 
     Args:
-        seasons (List[int]): Seasons to load (2009 through the current season).
+        seasons (List[int]): Seasons to load (1999 through the current season).
         return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
     Returns:
         pl.DataFrame: One row per ``(season, as_of_week, team_id)`` — the
         ``nfl_ratings`` columns (``adj_off_epa`` / ``adj_def_epa`` /
         ``adj_st_epa`` / ``adj_net``, ranks, ``net_z``, ``games``) plus
-        ``as_of_week`` (Int32). Weeks run 2-22; week 1 has no prior games
-        and emits no vintage.
+        ``as_of_week`` (Int32). Weeks run 2-21 (2-22 from the 2021
+        18-game era); week 1 has no prior games and emits no vintage.
 
     Example:
         Quick start::
@@ -1838,7 +1838,7 @@ def load_nfl_ratings_weekly(seasons: List[int], return_as_pandas: bool = False) 
         seasons = [seasons]
     frames = []
     for i in seasons:
-        season_not_found_error(int(i), 2009)
+        season_not_found_error(int(i), 1999)
         frames.append(pl.read_parquet(NFL_RATINGS_WEEKLY_URL.format(season=i), use_pyarrow=True, columns=None))
     data = pl.concat(frames, how="vertical_relaxed")
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data

@@ -173,6 +173,36 @@
     "response": "raw",
     "wp_map": "margin_normal"
   },
+  "207aae0e86d8": {
+    "core": "glickman_stern",
+    "hfa": "fixed",
+    "opponent_adjust": "none",
+    "params": [
+      [
+        "beta_returning",
+        8.0
+      ],
+      [
+        "beta_talent",
+        4.0
+      ],
+      [
+        "hfa",
+        3.0
+      ],
+      [
+        "sigma_w",
+        1.5
+      ],
+      [
+        "sigma_y",
+        15.5
+      ]
+    ],
+    "prior": "carryover_continuity",
+    "response": "raw",
+    "wp_map": "margin_normal"
+  },
   "20df189e6cc1": {
     "core": "glickman_stern",
     "hfa": "fixed",
@@ -525,6 +555,36 @@
     "response": "raw",
     "wp_map": "elo_logistic"
   },
+  "851a459c4af3": {
+    "core": "glickman_stern",
+    "hfa": "fixed",
+    "opponent_adjust": "none",
+    "params": [
+      [
+        "beta_returning",
+        8.0
+      ],
+      [
+        "beta_talent",
+        8.0
+      ],
+      [
+        "hfa",
+        3.0
+      ],
+      [
+        "sigma_w",
+        1.5
+      ],
+      [
+        "sigma_y",
+        15.5
+      ]
+    ],
+    "prior": "carryover_continuity",
+    "response": "raw",
+    "wp_map": "margin_normal"
+  },
   "8d0de51e7b67": {
     "core": "ridge_epa",
     "hfa": "fixed",
@@ -561,6 +621,96 @@
     "response": "raw",
     "wp_map": "elo_logistic"
   },
+  "9086420cfa9c": {
+    "core": "glickman_stern",
+    "hfa": "fixed",
+    "opponent_adjust": "none",
+    "params": [
+      [
+        "beta_returning",
+        10.0
+      ],
+      [
+        "beta_talent",
+        3.0
+      ],
+      [
+        "hfa",
+        3.0
+      ],
+      [
+        "sigma_w",
+        1.5
+      ],
+      [
+        "sigma_y",
+        15.5
+      ]
+    ],
+    "prior": "carryover_continuity",
+    "response": "raw",
+    "wp_map": "margin_normal"
+  },
+  "91f2df5896e3": {
+    "core": "glickman_stern",
+    "hfa": "fixed",
+    "opponent_adjust": "none",
+    "params": [
+      [
+        "beta_returning",
+        4.0
+      ],
+      [
+        "beta_talent",
+        4.0
+      ],
+      [
+        "hfa",
+        3.0
+      ],
+      [
+        "sigma_w",
+        1.5
+      ],
+      [
+        "sigma_y",
+        15.5
+      ]
+    ],
+    "prior": "carryover_continuity",
+    "response": "raw",
+    "wp_map": "margin_normal"
+  },
+  "99fc7f3b33ee": {
+    "core": "glickman_stern",
+    "hfa": "fixed",
+    "opponent_adjust": "none",
+    "params": [
+      [
+        "beta_returning",
+        20.0
+      ],
+      [
+        "beta_talent",
+        6.0
+      ],
+      [
+        "hfa",
+        3.0
+      ],
+      [
+        "sigma_w",
+        1.5
+      ],
+      [
+        "sigma_y",
+        15.5
+      ]
+    ],
+    "prior": "carryover_continuity",
+    "response": "raw",
+    "wp_map": "margin_normal"
+  },
   "9fc63f98350e": {
     "core": "ridge_epa",
     "hfa": "fixed",
@@ -576,6 +726,36 @@
       ]
     ],
     "prior": "flat",
+    "response": "raw",
+    "wp_map": "margin_normal"
+  },
+  "a1010e69be48": {
+    "core": "glickman_stern",
+    "hfa": "fixed",
+    "opponent_adjust": "none",
+    "params": [
+      [
+        "beta_returning",
+        20.0
+      ],
+      [
+        "beta_talent",
+        10.0
+      ],
+      [
+        "hfa",
+        3.0
+      ],
+      [
+        "sigma_w",
+        1.5
+      ],
+      [
+        "sigma_y",
+        15.5
+      ]
+    ],
+    "prior": "carryover_continuity",
     "response": "raw",
     "wp_map": "margin_normal"
   },
@@ -640,6 +820,36 @@
     "prior": "carryover_continuity",
     "response": "raw",
     "wp_map": "elo_logistic"
+  },
+  "a82fa98d7c52": {
+    "core": "glickman_stern",
+    "hfa": "fixed",
+    "opponent_adjust": "none",
+    "params": [
+      [
+        "beta_returning",
+        10.0
+      ],
+      [
+        "beta_talent",
+        5.0
+      ],
+      [
+        "hfa",
+        3.0
+      ],
+      [
+        "sigma_w",
+        1.5
+      ],
+      [
+        "sigma_y",
+        15.5
+      ]
+    ],
+    "prior": "carryover_continuity",
+    "response": "raw",
+    "wp_map": "margin_normal"
   },
   "aebd671e9376": {
     "core": "ridge_epa",
@@ -881,6 +1091,36 @@
     "response": "capped",
     "wp_map": "margin_normal"
   },
+  "d8f838c7635b": {
+    "core": "glickman_stern",
+    "hfa": "fixed",
+    "opponent_adjust": "none",
+    "params": [
+      [
+        "beta_returning",
+        16.0
+      ],
+      [
+        "beta_talent",
+        8.0
+      ],
+      [
+        "hfa",
+        3.0
+      ],
+      [
+        "sigma_w",
+        1.5
+      ],
+      [
+        "sigma_y",
+        15.5
+      ]
+    ],
+    "prior": "carryover_continuity",
+    "response": "raw",
+    "wp_map": "margin_normal"
+  },
   "df61292b4fba": {
     "core": "elo_margin",
     "hfa": "fixed",
@@ -932,6 +1172,36 @@
     "prior": "carryover_continuity",
     "response": "raw",
     "wp_map": "elo_logistic"
+  },
+  "f038381b5220": {
+    "core": "glickman_stern",
+    "hfa": "fixed",
+    "opponent_adjust": "none",
+    "params": [
+      [
+        "beta_returning",
+        12.0
+      ],
+      [
+        "beta_talent",
+        6.0
+      ],
+      [
+        "hfa",
+        3.0
+      ],
+      [
+        "sigma_w",
+        1.5
+      ],
+      [
+        "sigma_y",
+        15.5
+      ]
+    ],
+    "prior": "carryover_continuity",
+    "response": "raw",
+    "wp_map": "margin_normal"
   },
   "f100d9ff74a0": {
     "core": "ridge_epa",

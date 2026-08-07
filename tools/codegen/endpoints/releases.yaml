@@ -1606,7 +1606,7 @@ loaders:
   base: sdv_releases
   url: nfl_ratings_weekly/nfl_ratings_weekly_{season}.parquet
   tag: nfl_ratings_weekly
-  min_season: 2009
+  min_season: 1999
   example_args:
     seasons: 2024
 # load_nfl_rosters also accepts source="sdv" to read the SDV-native nfl_rosters
