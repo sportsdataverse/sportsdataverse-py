@@ -19,6 +19,12 @@ from sportsdataverse.wexp.baselines import (
     baseline_probs,
     score_baselines,
 )
+from sportsdataverse.wexp.backtest import (
+    OUTCOME_COLUMNS,
+    POSTSEASON_WEEK_OFFSET,
+    elo_predictor,
+    run_backtest,
+)
 from sportsdataverse.wexp.elo import (
     EloConfig,
     elo_ratings,
@@ -51,6 +57,7 @@ from sportsdataverse.wexp.scoring import (
     log_loss_score,
     mae,
     result_rows,
+    score_probs,
     spearman_corr,
     winner_accuracy,
 )
@@ -60,6 +67,8 @@ __all__ = [
     "BASELINE_HOME_RATE",
     "EloConfig",
     "ORACLE_COLUMNS",
+    "OUTCOME_COLUMNS",
+    "POSTSEASON_WEEK_OFFSET",
     "RESULT_SCHEMA",
     "VINTAGE_KEYS",
     "VariantConfig",
@@ -76,6 +85,7 @@ __all__ = [
     "devig_multiplicative",
     "devig_shin",
     "ece",
+    "elo_predictor",
     "elo_ratings",
     "enumerate_variants",
     "favorite_bucket_table",
@@ -86,7 +96,9 @@ __all__ = [
     "prob_from_american",
     "prob_from_decimal",
     "result_rows",
+    "run_backtest",
     "score_baselines",
+    "score_probs",
     "spearman_corr",
     "spread_to_prob",
     "variant_hash",

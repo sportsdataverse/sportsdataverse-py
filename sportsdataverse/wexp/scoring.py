@@ -43,6 +43,7 @@ __all__ = [
     "log_loss_score",
     "mae",
     "result_rows",
+    "score_probs",
     "spearman_corr",
     "winner_accuracy",
 ]
@@ -189,6 +190,78 @@ def closing_line_value(p_model: np.ndarray, p_bet: np.ndarray, p_close: np.ndarr
     pc = np.asarray(p_close, dtype=float)
     side = np.sign(pm - pb)
     return float(np.mean(side * (pc - pb)))
+
+
+def score_probs(
+    frame: pl.DataFrame,
+    prob_col: str,
+    *,
+    league: str,
+    model_id: str,
+    variant_hash: str,
+    vintage_policy: str,
+    week_slice: str = "all",
+    era: str = "all",
+) -> pl.DataFrame:
+    """Score one probability column per season and pooled into result rows.
+
+    The canonical scoring loop shared by the baseline driver and the
+    walk-forward backtest. Pooled rows use ``season = -1``. Ties (null
+    ``home_win``) and null probabilities are dropped, so a model scored on
+    a partial-coverage column (e.g. the open-market baseline) is scored
+    only on the games it actually predicted.
+
+    Args:
+        frame: Frame with ``season``, ``home_win``, and ``prob_col``.
+        prob_col: The probability column to score.
+        league: League slug for the result rows.
+        model_id: Stable model family identifier.
+        variant_hash: Stable hash of the variant config.
+        vintage_policy: Vintage label for the result rows.
+        week_slice: Game-slice label.
+        era: Era label.
+
+    Returns:
+        Result rows (long format, :data:`RESULT_SCHEMA`); empty frame with
+        that schema if no season has a scorable game.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.wexp.scoring import score_probs
+            rows = score_probs(probs, "p_home", league="nfl", model_id="elo",
+                               variant_hash="a1", vintage_policy="V2")
+    """
+    frames: list[pl.DataFrame] = []
+    seasons: list[int] = [-1, *sorted(frame["season"].unique().to_list())]
+    for season in seasons:
+        sub = frame if season == -1 else frame.filter(pl.col("season") == season)
+        sub = sub.drop_nulls(["home_win", prob_col])
+        if sub.height == 0:
+            continue
+        y = sub["home_win"].to_numpy()
+        p = sub[prob_col].to_numpy()
+        frames.append(
+            result_rows(
+                league=league,
+                model_id=model_id,
+                variant_hash=variant_hash,
+                vintage_policy=vintage_policy,
+                season=season,
+                week_slice=week_slice,
+                era=era,
+                metrics={
+                    "brier": brier_score(y, p),
+                    "log_loss": log_loss_score(y, p),
+                    "winner_accuracy": winner_accuracy(y, p),
+                    "ece": ece(y, p),
+                },
+                n=sub.height,
+            )
+        )
+    if not frames:
+        return pl.DataFrame(schema=RESULT_SCHEMA)
+    return pl.concat(frames, how="vertical")
 
 
 def result_rows(

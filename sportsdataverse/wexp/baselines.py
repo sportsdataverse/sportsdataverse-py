@@ -17,14 +17,7 @@ from sportsdataverse.wexp.oracle_market import (
     NFL_MARGIN_SIGMA,
     _p_spread_series,
 )
-from sportsdataverse.wexp.scoring import (
-    append_results,
-    brier_score,
-    ece,
-    log_loss_score,
-    result_rows,
-    winner_accuracy,
-)
+from sportsdataverse.wexp.scoring import append_results, score_probs
 
 __all__ = ["BASELINE_HOME_RATE", "baseline_probs", "score_baselines"]
 
@@ -126,36 +119,22 @@ def score_baselines(
     model_cols = [
         c for c in probs.columns if c.startswith("p_") and c not in ("p_close_spread", "p_close_ml", "p_close")
     ]
-    frames: list[pl.DataFrame] = []
-    seasons: list[int] = [-1, *sorted(probs["season"].unique().to_list())]
-    for col in model_cols:
-        model_id = col.removeprefix("p_")
-        for season in seasons:
-            sub = probs if season == -1 else probs.filter(pl.col("season") == season)
-            sub = sub.drop_nulls(["home_win", col])
-            if sub.height == 0:
-                continue
-            y = sub["home_win"].to_numpy()
-            p = sub[col].to_numpy()
-            frames.append(
-                result_rows(
-                    league=league,
-                    model_id=model_id,
-                    variant_hash="baseline",
-                    vintage_policy=vintage_policy,
-                    season=season,
-                    week_slice=week_slice,
-                    era=era,
-                    metrics={
-                        "brier": brier_score(y, p),
-                        "log_loss": log_loss_score(y, p),
-                        "winner_accuracy": winner_accuracy(y, p),
-                        "ece": ece(y, p),
-                    },
-                    n=sub.height,
-                )
+    rows = pl.concat(
+        [
+            score_probs(
+                probs,
+                col,
+                league=league,
+                model_id=col.removeprefix("p_"),
+                variant_hash="baseline",
+                vintage_policy=vintage_policy,
+                week_slice=week_slice,
+                era=era,
             )
-    rows = pl.concat(frames, how="vertical")
+            for col in model_cols
+        ],
+        how="vertical",
+    )
     if path is not None:
         append_results(rows, path)
     return rows
