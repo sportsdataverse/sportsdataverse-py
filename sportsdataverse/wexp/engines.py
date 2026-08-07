@@ -161,6 +161,43 @@ def ridge_margin_vintages(
     return pl.concat(frames, how="vertical")
 
 
+def cfb_drive_deltas(pbp: pl.DataFrame) -> pl.DataFrame:
+    """Per-drive EP deltas from play-by-play (the shared drive substrate).
+
+    Per drive: ``delta = sum of play EPA`` (perspective-corrected — see
+    :func:`cfb_drive_ep_responses`), plus the drive's starting EP and the
+    share-of-available ``pct``. Feeds both the team-game response
+    aggregation and the post-game WE resampling (G2/G3).
+
+    Args:
+        pbp: Play frame with ``game_id``, ``pos_team``, ``def_pos_team``,
+            ``drive.id``, ``EPA``, ``EP_start``, ``game_play_number``.
+
+    Returns:
+        One row per (game, drive): ``game_id`` / ``drive.id``, ``off`` /
+        ``deft`` (raw Int64 ids), ``delta``, ``start_ep``, ``pct``.
+
+    Example:
+        Quick start::
+
+            import polars as pl
+            from sportsdataverse.wexp.engines import cfb_drive_deltas
+            drives = cfb_drive_deltas(pl.read_parquet("pbp_2019.parquet"))
+    """
+    return (
+        pbp.drop_nulls(["EPA", "EP_start", "drive.id", "pos_team", "def_pos_team"])
+        .sort("game_play_number")
+        .group_by("game_id", "drive.id", maintain_order=True)
+        .agg(
+            off=pl.col("pos_team").first(),
+            deft=pl.col("def_pos_team").first(),
+            delta=pl.col("EPA").sum(),
+            start_ep=pl.col("EP_start").first(),
+        )
+        .with_columns(pct=pl.col("delta") / (7.0 - pl.col("start_ep")).clip(lower_bound=0.5))
+    )
+
+
 def cfb_drive_ep_responses(pbp: pl.DataFrame) -> pl.DataFrame:
     """Per team-game drive-EP efficiency from play-by-play (both sides rated).
 
@@ -204,18 +241,7 @@ def cfb_drive_ep_responses(pbp: pl.DataFrame) -> pl.DataFrame:
             from sportsdataverse.wexp.engines import cfb_drive_ep_responses
             rows = cfb_drive_ep_responses(pl.read_parquet("pbp_2019.parquet"))
     """
-    drives = (
-        pbp.drop_nulls(["EPA", "EP_start", "drive.id", "pos_team", "def_pos_team"])
-        .sort("game_play_number")
-        .group_by("game_id", "drive.id", maintain_order=True)
-        .agg(
-            off=pl.col("pos_team").first(),
-            deft=pl.col("def_pos_team").first(),
-            delta=pl.col("EPA").sum(),
-            start_ep=pl.col("EP_start").first(),
-        )
-        .with_columns(pct=pl.col("delta") / (7.0 - pl.col("start_ep")).clip(lower_bound=0.5))
-    )
+    drives = cfb_drive_deltas(pbp)
     return (
         drives.group_by("game_id", "off", "deft")
         .agg(resp=pl.col("delta").mean(), resp_pct=pl.col("pct").mean(), drives=pl.len())

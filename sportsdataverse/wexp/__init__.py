@@ -33,12 +33,16 @@ from sportsdataverse.wexp.engines import (
     GSConfig,
     build_predictor,
     cfb_continuity_shifts,
+    cfb_drive_deltas,
     cfb_drive_ep_responses,
     glickman_stern_predictor,
     net_vintages_view,
     ratings_predictor,
     response_ridge_vintages,
     ridge_margin_vintages,
+)
+from sportsdataverse.wexp.postgame import (
+    postgame_we,
 )
 from sportsdataverse.wexp.oracle_market import (
     ORACLE_COLUMNS,
@@ -91,6 +95,7 @@ __all__ = [
     "build_nfl_market_oracle",
     "build_predictor",
     "cfb_continuity_shifts",
+    "cfb_drive_deltas",
     "cfb_drive_ep_responses",
     "cfb_market_oracle_from_lines",
     "nfl_market_oracle_from_schedule",
@@ -110,6 +115,7 @@ __all__ = [
     "mae",
     "moneyline_pair_prob",
     "net_vintages_view",
+    "postgame_we",
     "prob_from_american",
     "prob_from_decimal",
     "ratings_predictor",
