@@ -269,22 +269,32 @@ def test_cfb_pbp_epa_contract_excludes_documented_overlays():
 
 
 def test_cfb_model_pbp_epa_contract_derived_exclusions():
-    # game 1: play 1 ordinary violating (fires); play 2 last-of-half violating
-    # (excluded); play 3 in period 3 penalty-text violating (excluded)
+    # Half buckets: periods 1-2 -> bucket 1, periods 3+ -> bucket 2. All four
+    # rows violate the raw identity; each exclusion clause is exercised in
+    # ISOLATION: row 0 (bucket 1, not last, clean text) fires; row 1 is
+    # excluded ONLY as last-of-bucket-1; row 2 is excluded ONLY by its
+    # penalty text (row 3 holds bucket 2's max gpn); row 3 is excluded ONLY
+    # as last-of-bucket-2.
     frame = pl.DataFrame(
         {
-            "game_id": [1, 1, 1],
-            "game_play_number": [1, 2, 3],
-            "period": [1, 2, 3],
-            "epa": [9.0, 9.0, 9.0],
-            "ep_after": [1.0, 1.0, 1.0],
-            "ep_before": [0.5, 0.5, 0.5],
-            "text": ["rush for 5 yds", "rush for 5 yds", "Penalty on the play, declined"],
-            "type.text": ["Rush", "Rush", "Rush"],
+            "game_id": [1, 1, 1, 1],
+            "game_play_number": [1, 2, 3, 4],
+            "period": [1, 2, 3, 4],
+            "epa": [9.0, 9.0, 9.0, 9.0],
+            "ep_after": [1.0, 1.0, 1.0, 1.0],
+            "ep_before": [0.5, 0.5, 0.5, 0.5],
+            "text": ["rush for 5 yds", "rush for 5 yds", "Penalty on the play, declined", "rush for 5 yds"],
+            "type.text": ["Rush", "Rush", "Rush", "Rush"],
         }
     )
     by_rule = _findings_by_rule(definitional.run("cfb_model_pbp", frame, _ctx()))
     assert by_rule["epa_snapshot_identity_outside_overlays"].metric == 1.0
+
+    # negative control for the penalty clause: with clean text on row 2 the
+    # same frame fires twice
+    clean = frame.with_columns(pl.lit("rush for 5 yds").alias("text"))
+    by_rule = _findings_by_rule(definitional.run("cfb_model_pbp", clean, _ctx()))
+    assert by_rule["epa_snapshot_identity_outside_overlays"].metric == 2.0
 
 
 def test_nfl_penalty_desc_rules():
