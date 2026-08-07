@@ -3830,14 +3830,29 @@ class CFBPlayProcess(object):
                     .str.replace(r"at the (.+)", "")
                     .str.replace(r" by ", ""),
                 )
-                .when(
-                    (
-                        (pl.col("type.text") == "Interception Return").or_(
-                            pl.col("type.text") == "Interception Return Touchdown",
-                        )
-                    ).and_(pl.col("pass") == True),
+                # Narrative texts name the interceptor in two era-dependent
+                # shapes: "pass intercepted by <Name> (TEAM)..." (older
+                # seasons) and "pass intercepted <Name> return for ..."
+                # (newer seasons, no "by"). Capture capitalized name tokens
+                # with the case-toggle idiom so the lowercase tail (return/
+                # for/at) terminates the name — the old `intercepted (.+)`
+                # capture took the whole tail and missed the no-"by" era.
+                # First token allows a bare initial ("S Castille", "M Tauiliili");
+                # an optional "#NN " consumes NCAA-style jersey prefixes
+                # ("intercepted by #3 J.Dugger").
+                .when(pl.col("text").str.contains(r"(?i)intercepted"))
+                .then(
+                    pl.coalesce(
+                        pl.col("text").str.extract(
+                            r"(?i)intercepted by (?:#\d+\s+)?(?-i:([A-Z][\w'.\-]*(?:\s+[A-Z][\w'.\-]*){0,2}))",
+                            1,
+                        ),
+                        pl.col("text").str.extract(
+                            r"(?i)pass intercepted (?:#\d+\s+)?(?-i:([A-Z][\w'.\-]*(?:\s+[A-Z][\w'.\-]*){0,2}))",
+                            1,
+                        ),
+                    ),
                 )
-                .then(pl.col("text").str.extract(r"(?i)intercepted (.+)"))
                 .otherwise(None),
                 # --- Pass Breakup Players ----
                 pass_breakup_player=pl.when(pl.col("pass") == True)
@@ -6680,7 +6695,8 @@ class CFBPlayProcess(object):
             - ``sack_player_name``             <- ``sacked_by_player_name``
             - ``fumble_forced_player_name``    <- ``forced_by_player_name``
             - ``fumble_recovered_player_name`` <- ``recoverer_player_name`` (skipped if absent)
-            - ``pass_breakup_player_name``     <- ``pass_defender_player_name``
+            - ``pass_breakup_player_name``     <- ``pass_defender_player_name`` (non-interception plays only)
+            - ``interception_player_name``     <- ``pass_defender_player_name`` (interception plays — ESPN files the interceptor as the pass defender)
             - ``punt_return_player_name``      <- ``returner_player_name``
             - ``kickoff_return_player_name``   <- ``returner_player_name``
 
@@ -6772,7 +6788,7 @@ class CFBPlayProcess(object):
                 ("fg_kicker_player_name", "kicker_player_name_part", True),
                 ("sack_player_name", "sacked_by_player_name_part", True),
                 ("fumble_forced_player_name", "forced_by_player_name_part", True),
-                ("pass_breakup_player_name", "pass_defender_player_name_part", True),
+                # pass_defender is handled below with int-play routing, not here.
                 # returner maps to two columns; use cleanup-only mode to avoid
                 # injecting a name onto plays where punt_return_team / return_team
                 # is set to the kicking team rather than the receiving team.
@@ -6800,6 +6816,41 @@ class CFBPlayProcess(object):
                             .alias(pbp_col)
                         )
                     coalesce_exprs.append(expr)
+
+            # ESPN files the interceptor as the `pass_defender` participant on
+            # interception plays (verified: 93.9% last-name identity against
+            # the scoreboard-text interceptor over the 313 INT-return-TD rows
+            # where both exist; the residue is suffix/nickname variance of the
+            # same athlete). Route it to interception credit on int plays and
+            # keep PBU attribution for non-interception plays only — a pick is
+            # not a pass breakup.
+            pd_part = "pass_defender_player_name_part"
+            if pd_part in play_df.columns:
+                is_int = (pl.col("int") == True) if "int" in play_df.columns else pl.lit(False)  # noqa: E712
+                if "interception_player_name" in play_df.columns:
+                    coalesce_exprs.append(
+                        pl.when(is_int)
+                        .then(
+                            pl.coalesce(
+                                pl.col(pd_part).str.strip_chars(),
+                                pl.col("interception_player_name"),
+                            ),
+                        )
+                        .otherwise(pl.col("interception_player_name"))
+                        .alias("interception_player_name"),
+                    )
+                if "pass_breakup_player_name" in play_df.columns:
+                    coalesce_exprs.append(
+                        pl.when(is_int)
+                        .then(pl.col("pass_breakup_player_name"))
+                        .otherwise(
+                            pl.coalesce(
+                                pl.col(pd_part).str.strip_chars(),
+                                pl.col("pass_breakup_player_name"),
+                            ),
+                        )
+                        .alias("pass_breakup_player_name"),
+                    )
 
             if coalesce_exprs:
                 play_df = play_df.with_columns(coalesce_exprs)

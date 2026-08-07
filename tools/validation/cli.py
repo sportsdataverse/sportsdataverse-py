@@ -9,6 +9,7 @@ import polars as pl
 
 from tools.validation.checks import (
     boundary_leakage,
+    combo_drift,
     constant_column,
     definitional,
     extraction,
@@ -21,7 +22,16 @@ from tools.validation.findings import Finding, Severity
 from tools.validation.lint import leakage_python, leakage_r
 from tools.validation.registry import LINT_TARGETS, resolve
 
-_CHECKS = (schema_contract, extraction, numeric_parity, sweep, boundary_leakage, constant_column, definitional)
+_CHECKS = (
+    schema_contract,
+    extraction,
+    numeric_parity,
+    sweep,
+    boundary_leakage,
+    constant_column,
+    definitional,
+    combo_drift,
+)
 
 _LINTERS: dict[str, ModuleType] = {"python": leakage_python, "r": leakage_r}
 
