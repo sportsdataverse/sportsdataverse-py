@@ -8,6 +8,7 @@ from types import ModuleType
 from tools.validation.checks import (
     boundary_leakage,
     constant_column,
+    definitional,
     extraction,
     numeric_parity,
     schema_contract,
@@ -17,7 +18,7 @@ from tools.validation.findings import Finding
 from tools.validation.lint import leakage_python, leakage_r
 from tools.validation.registry import LINT_TARGETS, resolve
 
-_CHECKS = (schema_contract, extraction, numeric_parity, sweep, boundary_leakage, constant_column)
+_CHECKS = (schema_contract, extraction, numeric_parity, sweep, boundary_leakage, constant_column, definitional)
 
 _LINTERS: dict[str, ModuleType] = {"python": leakage_python, "r": leakage_r}
 
