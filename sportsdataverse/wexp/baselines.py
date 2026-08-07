@@ -119,22 +119,38 @@ def score_baselines(
     model_cols = [
         c for c in probs.columns if c.startswith("p_") and c not in ("p_close_spread", "p_close_ml", "p_close")
     ]
-    rows = pl.concat(
-        [
+    frames = [
+        score_probs(
+            probs,
+            col,
+            league=league,
+            model_id=col.removeprefix("p_"),
+            variant_hash="baseline",
+            vintage_policy=vintage_policy,
+            week_slice=week_slice,
+            era=era,
+        )
+        for col in model_cols
+    ]
+    # like-for-like rows on the market-covered subset (see run_backtest);
+    # market columns restrict themselves via their own nulls, but the
+    # always-covered baselines (coin flip, home rule, elo) need the slice
+    if week_slice == "all" and 0 < probs["p_close"].null_count() < probs.height:
+        lined = probs.filter(pl.col("p_close").is_not_null())
+        frames += [
             score_probs(
-                probs,
+                lined,
                 col,
                 league=league,
                 model_id=col.removeprefix("p_"),
                 variant_hash="baseline",
                 vintage_policy=vintage_policy,
-                week_slice=week_slice,
+                week_slice="lined",
                 era=era,
             )
             for col in model_cols
-        ],
-        how="vertical",
-    )
+        ]
+    rows = pl.concat(frames, how="vertical")
     if path is not None:
         append_results(rows, path)
     return rows

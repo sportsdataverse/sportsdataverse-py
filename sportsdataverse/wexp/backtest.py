@@ -204,16 +204,38 @@ def run_backtest(
         # ZERO predictions across the whole walk means broken wiring — a
         # same-dtype wrong join key fails as exactly this, silently
         raise ValueError("predictor produced no predictions at all — check the feature-table join keys")
+    vh = variant_hash(variant) if variant is not None else "none"
     rows = score_probs(
         probs,
         "p_home",
         league=league,
         model_id=model_id,
-        variant_hash=variant_hash(variant) if variant is not None else "none",
+        variant_hash=vh,
         vintage_policy=vintage_policy,
         week_slice=week_slice,
         era=era,
     )
+    # like-for-like model-vs-market rows: when the oracle's market coverage
+    # is partial (left-join contract), also score the model restricted to
+    # the LINED games — the only subset where a market comparison is fair.
+    # Full coverage would duplicate the "all" rows, so skip it there.
+    if week_slice == "all" and "p_close" in probs.columns and 0 < probs["p_close"].null_count() < probs.height:
+        rows = pl.concat(
+            [
+                rows,
+                score_probs(
+                    probs.filter(pl.col("p_close").is_not_null()),
+                    "p_home",
+                    league=league,
+                    model_id=model_id,
+                    variant_hash=vh,
+                    vintage_policy=vintage_policy,
+                    week_slice="lined",
+                    era=era,
+                ),
+            ],
+            how="vertical",
+        )
     if path is not None:
         append_results(rows, path)
     return probs, rows

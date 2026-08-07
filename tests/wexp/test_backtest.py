@@ -77,6 +77,30 @@ def test_result_rows_keyed_by_variant(nfl_oracle, tmp_path):
     assert pl.read_parquet(path).height == rows.height
 
 
+def test_lined_slice_rows(nfl_oracle):
+    """Partial market coverage emits like-for-like week_slice='lined' rows.
+
+    The NFL fixture has FULL close coverage -> no lined rows (they would
+    duplicate 'all'). The CFB fixture has 16 line-less games -> lined rows
+    appear with n == the covered count (observed 767 of 783 scorable).
+    """
+    from sportsdataverse.wexp.oracle_market import cfb_market_oracle_from_lines
+
+    _, nfl_rows = run_backtest(nfl_oracle, lambda h, s, st: [0.5] * s.height, model_id="spy")
+    assert nfl_rows.filter(pl.col("week_slice") == "lined").height == 0
+
+    cfb = cfb_market_oracle_from_lines(
+        pl.read_parquet(FIXDIR / "cfb_line_odds_sample.parquet"),
+        pl.read_parquet(FIXDIR / "cfb_schedule_sample.parquet"),
+    )
+    _, cfb_rows = run_backtest(cfb, lambda h, s, st: [0.5] * s.height, model_id="spy")
+    lined = cfb_rows.filter((pl.col("week_slice") == "lined") & (pl.col("season") == -1))
+    full = cfb_rows.filter((pl.col("week_slice") == "all") & (pl.col("season") == -1))
+    assert lined.height > 0
+    assert lined["n"][0] < full["n"][0]  # strictly the covered subset
+    assert lined["n"][0] >= 760  # observed 767
+
+
 def test_prob_validation(nfl_oracle):
     with pytest.raises(ValueError, match="length"):
         run_backtest(nfl_oracle, lambda h, s, st: [0.5], model_id="bad")
