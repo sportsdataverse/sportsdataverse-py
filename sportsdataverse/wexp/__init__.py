@@ -14,6 +14,11 @@ from sportsdataverse.wexp.market import (
     prob_from_decimal,
     spread_to_prob,
 )
+from sportsdataverse.wexp.baselines import (
+    BASELINE_HOME_RATE,
+    baseline_probs,
+    score_baselines,
+)
 from sportsdataverse.wexp.elo import (
     EloConfig,
     elo_ratings,
@@ -45,12 +50,14 @@ from sportsdataverse.wexp.scoring import (
 )
 
 __all__ = [
+    "BASELINE_HOME_RATE",
     "EloConfig",
     "ORACLE_COLUMNS",
     "RESULT_SCHEMA",
     "VINTAGE_KEYS",
     "VintageStore",
     "append_results",
+    "baseline_probs",
     "build_cfb_market_oracle",
     "build_nfl_market_oracle",
     "cfb_market_oracle_from_lines",
@@ -70,6 +77,7 @@ __all__ = [
     "prob_from_american",
     "prob_from_decimal",
     "result_rows",
+    "score_baselines",
     "spearman_corr",
     "spread_to_prob",
     "winner_accuracy",
