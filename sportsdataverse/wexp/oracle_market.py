@@ -265,8 +265,14 @@ def cfb_market_oracle_from_lines(
         fbs_vs_fbs=((pl.col("home_division") == "fbs") & (pl.col("away_division") == "fbs")),
         home_margin=(pl.col("home_points") - pl.col("away_points")).cast(pl.Float64),
     )
+    # LEFT join (2026-08-07 contract change, user-directed full-window
+    # comparison): schedule games without a resolvable close survive with
+    # null market columns — models are scored on them (Brier needs
+    # outcomes, not lines) while the market baseline scores only where a
+    # line exists, never imputed. Market coverage floors at 2006
+    # (cfb_line_odds start; espn_cfb_betting is default-filled pre-2012).
     out = (
-        games.join(home_spread, on="game_id", how="inner")
+        games.join(home_spread, on="game_id", how="left")
         .join(totals, on="game_id", how="left")
         .join(ml, on="game_id", how="left")
     )

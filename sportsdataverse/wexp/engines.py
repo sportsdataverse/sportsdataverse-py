@@ -34,9 +34,11 @@ __all__ = [
     "GSConfig",
     "build_predictor",
     "cfb_continuity_shifts",
+    "cfb_drive_ep_responses",
     "glickman_stern_predictor",
     "net_vintages_view",
     "ratings_predictor",
+    "response_ridge_vintages",
     "ridge_margin_vintages",
 ]
 
@@ -50,11 +52,17 @@ _VINTAGE_SCHEMA: dict[str, type[pl.DataType]] = {
     "hfa": pl.Float64,
     "lam": pl.Float64,
     "cap": pl.Float64,
+    "close_filter": pl.Float64,
 }
 
 
 def ridge_margin_vintages(
-    oracle: pl.DataFrame, *, lam: float, resp_col: str = "home_margin", cap: Optional[float] = None
+    oracle: pl.DataFrame,
+    *,
+    lam: float,
+    resp_col: str = "home_margin",
+    cap: Optional[float] = None,
+    close_filter: Optional[float] = None,
 ) -> pl.DataFrame:
     """Build per-week opponent-adjusted ridge rating vintages from an oracle frame.
 
@@ -71,6 +79,12 @@ def ridge_margin_vintages(
             EPA margin column slots in unchanged).
         cap: Axis B2 capped response — clip the response to ``[-cap, cap]``
             before the fit (blowout damping). ``None`` = raw (B1).
+        close_filter: Axis B4 garbage filter at game granularity — DROP
+            games with ``|response| > close_filter`` from the fit entirely
+            (both mirrored rows, so offense and defense sides go
+            together), rating teams on competitive games only. Distinct
+            from ``cap``: a filtered blowout contributes nothing; a capped
+            one still contributes at the cap. ``None`` = keep all.
 
     Returns:
         A vintage table — ``season`` / ``as_of_week`` / ``team_id`` (Utf8)
@@ -88,6 +102,8 @@ def ridge_margin_vintages(
             store.register("ridge", ridge_margin_vintages(oracle, lam=100.0), entity_key="team_id")
     """
     base = normalize_walk_weeks(oracle).filter(pl.col(resp_col).is_not_null())
+    if close_filter is not None:
+        base = base.filter(pl.col(resp_col).abs() <= close_filter)
     if cap is not None:
         base = base.with_columns(pl.col(resp_col).clip(-cap, cap))
     # Symmetrize: each game from both perspectives. With offense always the
@@ -137,10 +153,142 @@ def ridge_margin_vintages(
                 hfa=pl.lit(hfa, dtype=pl.Float64),
                 lam=pl.lit(lam, dtype=pl.Float64),
                 cap=pl.lit(cap, dtype=pl.Float64),
+                close_filter=pl.lit(close_filter, dtype=pl.Float64),
             ).select(list(_VINTAGE_SCHEMA))
         )
     if not frames:
         return pl.DataFrame(schema=_VINTAGE_SCHEMA)
+    return pl.concat(frames, how="vertical")
+
+
+def cfb_drive_ep_responses(pbp: pl.DataFrame) -> pl.DataFrame:
+    """Per team-game drive-EP efficiency from play-by-play (both sides rated).
+
+    The user-specified "starting drive EP to end drive EP" perspective:
+    per drive, ``delta = EP_end of the drive's last play - EP_start of its
+    first play``; per team-game, the response is the MEAN delta over that
+    offense's drives (per-drive efficiency — pace-free, the FEI-style
+    granularity). Each game emits one row per offense with the defense
+    alongside, so the weekly ridge downstream fits an ``off_coef`` AND a
+    ``def_coef`` for every team.
+
+    Args:
+        pbp: Play frame with ``game_id``, ``pos_team``, ``def_pos_team``,
+            ``drive.id``, ``EP_start``, ``EP_end``, ``game_play_number``
+            (the espn_cfb_pbp release columns; prune before loading).
+
+    Returns:
+        One row per (game, offense): ``game_id`` (Utf8), ``off_team_id`` /
+        ``def_team_id`` (Utf8, cast from the raw Int64 ESPN ids),
+        ``resp`` (mean drive EP delta), ``drives`` (Int64 count).
+
+    Example:
+        Quick start::
+
+            import polars as pl
+            from sportsdataverse.wexp.engines import cfb_drive_ep_responses
+            rows = cfb_drive_ep_responses(pl.read_parquet("pbp_2019.parquet"))
+    """
+    drives = (
+        pbp.drop_nulls(["EP_start", "EP_end", "drive.id", "pos_team", "def_pos_team"])
+        .sort("game_play_number")
+        .group_by("game_id", "drive.id", maintain_order=True)
+        .agg(
+            off=pl.col("pos_team").first(),
+            deft=pl.col("def_pos_team").first(),
+            delta=pl.col("EP_end").last() - pl.col("EP_start").first(),
+        )
+    )
+    return (
+        drives.group_by("game_id", "off", "deft")
+        .agg(resp=pl.col("delta").mean(), drives=pl.len())
+        .select(
+            game_id=pl.col("game_id").cast(pl.Int64).cast(pl.Utf8),
+            off_team_id=pl.col("off").cast(pl.Int64).cast(pl.Utf8),
+            def_team_id=pl.col("deft").cast(pl.Int64).cast(pl.Utf8),
+            resp=pl.col("resp"),
+            drives=pl.col("drives").cast(pl.Int64),
+        )
+    )
+
+
+def response_ridge_vintages(
+    responses: pl.DataFrame,
+    oracle: pl.DataFrame,
+    *,
+    lam: float,
+    close_filter: Optional[float] = None,
+) -> pl.DataFrame:
+    """Weekly opponent-adjusted ridge on per-team-game responses (off + def).
+
+    Joins the responses to the oracle by ``game_id`` (walk-normalized
+    week, home flag, final margin), then per ``(season, week)`` fits
+    :func:`~sportsdataverse._common.ratings.opponent_adjusted_ridge` on
+    that season's rows from strictly earlier weeks — EXCLUSIVE vintages,
+    same convention as :func:`ridge_margin_vintages`. Each game
+    contributes one row per side, so offense and defense are separately
+    identified; ``adj_net = off_coef - def_coef`` is the margin-driving
+    team strength (register the output and serve it through
+    :func:`net_vintages_view`).
+
+    Args:
+        responses: Frame from :func:`cfb_drive_ep_responses` (``game_id``,
+            ``off_team_id``, ``def_team_id``, ``resp``).
+        oracle: Market-oracle frame (contract columns incl. team ids).
+        lam: Ridge penalty on the team coefficients.
+        close_filter: Axis B4 — drop games with final ``|home_margin| >
+            close_filter`` from the fit (both sides go together).
+
+    Returns:
+        Vintage table: ``season`` / ``as_of_week`` / ``team_id`` (Utf8) /
+        ``off_coef`` / ``def_coef`` / ``adj_net`` plus per-vintage
+        ``intercept`` / ``hfa`` and the ``lam`` / ``close_filter`` stamps.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.wexp.engines import response_ridge_vintages
+            vint = response_ridge_vintages(rows, oracle, lam=1.0)
+    """
+    games = normalize_walk_weeks(oracle).select(
+        "game_id", "season", "week", "home_team_id", "neutral_site", "home_margin"
+    )
+    rows = responses.join(games, on="game_id", how="inner").filter(pl.col("home_margin").is_not_null())
+    if close_filter is not None:
+        rows = rows.filter(pl.col("home_margin").abs() <= close_filter)
+    rows = rows.with_columns(
+        homeflag=pl.when((pl.col("off_team_id") == pl.col("home_team_id")) & (pl.col("neutral_site") == False))  # noqa: E712
+        .then(pl.col("off_team_id"))
+        .otherwise(pl.lit(""))
+    )
+    frames: list[pl.DataFrame] = []
+    for season, week in (
+        normalize_walk_weeks(oracle).select("season", "week").unique().sort("season", "week").iter_rows()
+    ):
+        fit = rows.filter((pl.col("season") == season) & (pl.col("week") < week))
+        if fit.height == 0:
+            continue
+        coefs, intercept, hfa = opponent_adjusted_ridge(
+            fit,
+            off_col="off_team_id",
+            def_col="def_team_id",
+            home_col="homeflag",
+            resp_col="resp",
+            lam=lam,
+        )
+        frames.append(
+            coefs.with_columns(
+                adj_net=pl.col("off_coef") - pl.col("def_coef"),
+                season=pl.lit(season, dtype=pl.Int32),
+                as_of_week=pl.lit(week, dtype=pl.Int32),
+                intercept=pl.lit(intercept, dtype=pl.Float64),
+                hfa=pl.lit(hfa, dtype=pl.Float64),
+                lam=pl.lit(lam, dtype=pl.Float64),
+                close_filter=pl.lit(close_filter, dtype=pl.Float64),
+            )
+        )
+    if not frames:
+        return pl.DataFrame()
     return pl.concat(frames, how="vertical")
 
 
@@ -188,7 +336,7 @@ def net_vintages_view(
     net = pl.col(net_col)
     if st_weight:
         net = net + st_weight * pl.col("adj_st_epa")
-    return vintages.select(
+    out = vintages.select(
         season=pl.col("season").cast(pl.Int32),
         as_of_week=pl.col("as_of_week").cast(pl.Int32),
         team_id=pl.col("team_id").cast(pl.Utf8),
@@ -197,6 +345,12 @@ def net_vintages_view(
         intercept=pl.lit(0.0),
         hfa=pl.lit(hfa, dtype=pl.Float64),
     )
+    # pass build-param stamps through so the predictor's mismatch refusal
+    # still protects tables served via this view
+    stamps = [c for c in ("lam", "cap", "close_filter") if c in vintages.columns]
+    if stamps:
+        out = pl.concat([out, vintages.select(stamps)], how="horizontal")
+    return out
 
 
 def ratings_predictor(
@@ -207,6 +361,7 @@ def ratings_predictor(
     iso_min_fit: int = 100,
     lam: Optional[float] = None,
     cap: Optional[float] = None,
+    close_filter: Optional[float] = None,
     join_on: tuple[str, str] = ("home_team", "away_team"),
 ) -> WeekPredictor:
     """Wrap a registered ratings vintage table as a week predictor.
@@ -233,6 +388,9 @@ def ratings_predictor(
             response). Checked BIDIRECTIONALLY against the table's ``cap``
             stamp when present — a raw variant served from a capped table
             is just as mislabeled as the reverse.
+        close_filter: The Axis B4 close-game fit filter the variant
+            claims (``None`` = unfiltered). Same bidirectional stamp
+            check as ``cap``.
         join_on: The (home, away) oracle columns matched against the
             table's ``team_id``. Default team-NAME columns fit tables
             keyed by name (ridge_margin_vintages; NFL, where the abbr IS
@@ -279,6 +437,11 @@ def ratings_predictor(
         if "cap" in tbl.columns and tbl["cap"].unique().to_list() != [cap]:
             raise ValueError(
                 f"variant claims cap={cap} but table {table!r} was built with cap={tbl['cap'].unique().to_list()}"
+            )
+        if "close_filter" in tbl.columns and tbl["close_filter"].unique().to_list() != [close_filter]:
+            raise ValueError(
+                f"variant claims close_filter={close_filter} but table {table!r} was built with "
+                f"close_filter={tbl['close_filter'].unique().to_list()}"
             )
         margins = _expected_margin(slate, store)["__exp_margin"].to_numpy()
         if wp_map == "margin_normal":
@@ -598,18 +761,26 @@ def build_predictor(
         )
     if (
         config.core == "ridge_epa"
-        and config.response in ("raw", "capped")
+        and config.response in ("raw", "capped", "garbage_filtered")
         and config.opponent_adjust == "ridge"
         and config.prior == "flat"
         and config.hfa == "fixed"
         and config.wp_map in ("margin_normal", "isotonic")
     ):
         cap = params.get("cap")
+        close = params.get("close_filter")
         if config.response == "capped" and cap is None:
             raise ValueError("response='capped' requires a 'cap' entry in params")
-        if config.response == "raw" and cap is not None:
-            raise ValueError("response='raw' must not carry a 'cap' param")
+        if config.response == "garbage_filtered" and close is None:
+            raise ValueError("response='garbage_filtered' requires a 'close_filter' entry in params")
+        if config.response == "raw" and (cap is not None or close is not None):
+            raise ValueError("response='raw' must not carry a 'cap' or 'close_filter' param")
         return ratings_predictor(
-            table, wp_map=config.wp_map, sigma=params.get("sigma", sigma), lam=params.get("lam"), cap=cap
+            table,
+            wp_map=config.wp_map,
+            sigma=params.get("sigma", sigma),
+            lam=params.get("lam"),
+            cap=cap,
+            close_filter=close,
         )
     raise NotImplementedError(f"no engine landed yet for variant {config}")

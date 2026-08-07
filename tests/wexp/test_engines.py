@@ -105,6 +105,115 @@ def test_capped_response_changes_fit_and_scores(nfl_oracle):
         run_backtest(nfl_oracle, ratings_predictor("ridge_capped", cap=21.0), model_id="r", store=store)
 
 
+def test_drive_ep_responses_extraction():
+    """Drive-EP extraction on real 2019 pbp (2 games, 324 plays).
+
+    Per drive: EP_end(last play) - EP_start(first play); per team-game the
+    mean over that offense's drives. Every game emits BOTH offenses, so
+    the downstream ridge rates offense and defense for every team.
+    """
+    from sportsdataverse.wexp.engines import cfb_drive_ep_responses
+
+    pbp = pl.read_parquet(FIXDIR / "cfb_pbp_drive_sample.parquet")
+    rows = cfb_drive_ep_responses(pbp)
+    assert rows.height == 4  # 2 games x 2 offenses
+    assert rows.schema["off_team_id"] == pl.Utf8 and rows.schema["game_id"] == pl.Utf8
+    assert set(rows["game_id"].unique().to_list()) == {"401110720", "401112224"}
+    # hand-check one drive against the raw plays: first drive of 401110720
+    g = pbp.filter(pl.col("game_id") == 401110720).sort("game_play_number")
+    d0 = g.filter(pl.col("drive.id") == g["drive.id"][0])
+    expected_delta = d0["EP_end"][-1] - d0["EP_start"][0]
+    off = str(d0["pos_team"][0])
+    team_row = rows.filter((pl.col("game_id") == "401110720") & (pl.col("off_team_id") == off))
+    # the team's mean includes this drive; with one-drive teams impossible,
+    # check the mean lies within the min/max of its drive deltas incl. this one
+    assert team_row.height == 1
+    assert team_row["drives"][0] >= 5  # real game: several drives per side
+    deltas = (
+        g.group_by("drive.id", maintain_order=True)
+        .agg(off=pl.col("pos_team").first(), delta=pl.col("EP_end").last() - pl.col("EP_start").first())
+        .filter(pl.col("off") == int(off))
+    )
+    assert abs(team_row["resp"][0] - deltas["delta"].mean()) < 1e-12
+    assert abs(expected_delta - deltas["delta"][0]) < 1e-12
+
+
+def test_response_ridge_vintages_walk(nfl_oracle):
+    """The response-ridge walk is EXCLUSIVE and future-invariant.
+
+    Reuses the NFL fixture oracle as the game spine with a margin-derived
+    response (real data; the drive-EP response plugs in identically):
+    tampering weeks >= 10 must not change earlier vintages.
+    """
+    from sportsdataverse.wexp.engines import response_ridge_vintages
+
+    season = nfl_oracle.filter(pl.col("season") == 2024)
+    resp = pl.concat(
+        [
+            season.select(
+                game_id=pl.col("game_id"),
+                off_team_id=pl.col("home_team_id"),
+                def_team_id=pl.col("away_team_id"),
+                resp=pl.col("home_margin") / 10.0,
+            ),
+            season.select(
+                game_id=pl.col("game_id"),
+                off_team_id=pl.col("away_team_id"),
+                def_team_id=pl.col("home_team_id"),
+                resp=-pl.col("home_margin") / 10.0,
+            ),
+        ]
+    ).drop_nulls("resp")
+    vint = response_ridge_vintages(resp, season, lam=1.0)
+    assert vint.filter(pl.col("as_of_week") == 1).height == 0  # exclusive: week 1 empty
+    assert "adj_net" in vint.columns and vint.schema["team_id"] == pl.Utf8
+    tampered = season.with_columns(
+        pl.when(pl.col("week") >= 10)
+        .then(pl.col("home_margin") * 3 + 7)
+        .otherwise(pl.col("home_margin"))
+        .alias("home_margin")
+    )
+    resp_t = resp  # responses unchanged; the oracle's margins feed only close_filter
+    a = response_ridge_vintages(resp_t, season, lam=1.0, close_filter=24.0).filter(pl.col("as_of_week") <= 10)
+    b = response_ridge_vintages(resp_t, tampered, lam=1.0, close_filter=24.0).filter(pl.col("as_of_week") <= 10)
+    assert a.height == b.height > 0
+    assert a.sort("as_of_week", "team_id").equals(b.sort("as_of_week", "team_id"))
+
+
+def test_close_filter_changes_fit_and_is_stamped(nfl_oracle):
+    """Axis B4 game-level garbage filter: blowouts leave the fit entirely.
+
+    Observed (lam=5, close_filter=24): fit keeps 723/821 fixture games,
+    brier 0.2213 (~neutral vs raw on NFL). The filter provably changes
+    the fit, and mismatched claims are refused both ways.
+    """
+    filtered = ridge_margin_vintages(nfl_oracle, lam=5.0, close_filter=24.0)
+    raw = ridge_margin_vintages(nfl_oracle, lam=5.0)
+    # keyed join — the filtered table legitimately loses vintage rows for
+    # teams whose entire early history was blowouts (observed 1942 vs 1952)
+    joined = filtered.select("season", "as_of_week", "team_id", fc=pl.col("off_coef")).join(
+        raw.select("season", "as_of_week", "team_id", rc=pl.col("off_coef")),
+        on=["season", "as_of_week", "team_id"],
+    )
+    assert joined.height >= 1900  # observed 1942
+    assert (joined["fc"] - joined["rc"]).abs().max() > 2.0  # observed 8.76 — not a silent no-op
+    store = VintageStore()
+    store.register("ridge_cf", filtered, entity_key="team_id")
+    _, rows = run_backtest(
+        nfl_oracle, ratings_predictor("ridge_cf", close_filter=24.0), model_id="ridge_cf", store=store
+    )
+    pooled = {r["metric"]: r["value"] for r in rows.filter(pl.col("season") == -1).iter_rows(named=True)}
+    assert pooled["brier"] < 0.24  # observed 0.2213
+    with pytest.raises(ValueError, match="close_filter"):
+        run_backtest(nfl_oracle, ratings_predictor("ridge_cf"), model_id="r", store=store)
+    from sportsdataverse.wexp.engines import build_predictor
+    from sportsdataverse.wexp.variants import VariantConfig
+
+    base = dict(core="ridge_epa", opponent_adjust="ridge", prior="flat", wp_map="margin_normal", hfa="fixed")
+    with pytest.raises(ValueError, match="close_filter"):
+        build_predictor(VariantConfig(response="garbage_filtered", **base))
+
+
 def test_build_predictor_capped_param_contract():
     from sportsdataverse.wexp.engines import build_predictor
     from sportsdataverse.wexp.variants import VariantConfig

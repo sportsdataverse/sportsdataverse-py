@@ -106,24 +106,26 @@ def test_nfl_spread_sign_matches_ml_favorite(nfl_oracle):
 
 def test_cfb_oracle_contract_and_coverage(cfb_oracle):
     assert cfb_oracle.columns == ORACLE_COLUMNS
-    # min-size guard: 783 of the 800 sampled archive games resolve
-    assert cfb_oracle.height >= 780
-    assert cfb_oracle["p_close"].null_count() == 0
+    # LEFT-join contract (full-window comparison): every sampled schedule
+    # game survives (observed 799); the close resolves for 783 of them and
+    # stays null-never-imputed on the rest
+    assert cfb_oracle.height >= 795
+    assert cfb_oracle["p_close"].is_not_null().sum() >= 780  # observed 783
     assert cfb_oracle.schema["game_id"] == pl.Utf8
     # moneyline consensus resolves for most games (observed 584)
     assert cfb_oracle["p_close_ml"].is_not_null().sum() >= 570
-    _assert_blend_applied(cfb_oracle)
+    _assert_blend_applied(cfb_oracle.drop_nulls("p_close"))
 
 
-def test_cfb_join_drops_are_not_a_season_wide_class(cfb_oracle):
-    """The ~16 abbr-resolution drops must not concentrate in one season.
+def test_cfb_close_resolution_is_not_a_season_wide_class(cfb_oracle):
+    """The ~16 abbr-resolution misses must not concentrate in one season.
 
-    Observed keeps: 2015 -> 388/399 matched schedule games, 2024 -> 395/400.
-    A season keeping < 95% would mean the modal abbr->name inference broke
-    for a whole era — the systematic-class failure, not one-off irregulars
-    (drops itemized in tests/fixtures/wexp/README.md).
+    Observed resolved closes: 2015 -> 388/399 sampled games, 2024 ->
+    395/400. A season resolving < 95% would mean the modal abbr->name
+    inference broke for a whole era — the systematic-class failure, not
+    one-off irregulars (misses itemized in tests/fixtures/wexp/README.md).
     """
-    keeps = cfb_oracle.group_by("season").len().sort("season")
+    keeps = cfb_oracle.filter(pl.col("spread_close").is_not_null()).group_by("season").len().sort("season")
     by = {r["season"]: r["len"] for r in keeps.iter_rows(named=True)}
     assert by[2015] >= 380
     assert by[2024] >= 380
