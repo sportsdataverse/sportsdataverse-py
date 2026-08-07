@@ -186,6 +186,15 @@ def cfb_drive_deltas(pbp: pl.DataFrame) -> pl.DataFrame:
     """
     return (
         pbp.drop_nulls(["EPA", "EP_start", "drive.id", "pos_team", "def_pos_team"])
+        # dtype boundary: early-season releases ship ids as Float64 — pin
+        # Int64 here so multi-season concats agree (never stringify a float)
+        .with_columns(
+            pl.col("game_id").cast(pl.Int64),
+            pl.col("pos_team").cast(pl.Int64),
+            pl.col("def_pos_team").cast(pl.Int64),
+            pl.col("EPA").cast(pl.Float64),
+            pl.col("EP_start").cast(pl.Float64),
+        )
         .sort("game_play_number")
         .group_by("game_id", "drive.id", maintain_order=True)
         .agg(
