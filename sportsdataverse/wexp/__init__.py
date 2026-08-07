@@ -42,6 +42,10 @@ from sportsdataverse.wexp.engines import (
     response_ridge_vintages,
     ridge_margin_vintages,
 )
+from sportsdataverse.wexp.features import (
+    carry_forward_weights,
+    sos_sor_vintages,
+)
 from sportsdataverse.wexp.postgame import (
     postgame_we,
 )
@@ -102,6 +106,7 @@ __all__ = [
     "nfl_market_oracle_from_schedule",
     "brier_score",
     "calibration_table",
+    "carry_forward_weights",
     "closing_line_value",
     "devig_multiplicative",
     "devig_shin",
@@ -125,6 +130,7 @@ __all__ = [
     "result_rows",
     "run_backtest",
     "score_baselines",
+    "sos_sor_vintages",
     "score_probs",
     "spearman_corr",
     "spread_to_prob",
