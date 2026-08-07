@@ -147,6 +147,32 @@
     "response": "capped",
     "wp_map": "margin_normal"
   },
+  "1bdc7ace356b": {
+    "core": "glickman_stern",
+    "hfa": "fixed",
+    "opponent_adjust": "none",
+    "params": [
+      [
+        "fit_fcs",
+        1.0
+      ],
+      [
+        "hfa",
+        3.0
+      ],
+      [
+        "sigma_w",
+        1.5
+      ],
+      [
+        "sigma_y",
+        15.5
+      ]
+    ],
+    "prior": "carryover",
+    "response": "raw",
+    "wp_map": "margin_normal"
+  },
   "1e2d09d59f91": {
     "core": "glickman_stern",
     "hfa": "fixed",
@@ -693,6 +719,40 @@
     "response": "raw",
     "wp_map": "margin_normal"
   },
+  "5d7bf2fcc4dc": {
+    "core": "glickman_stern",
+    "hfa": "fixed",
+    "opponent_adjust": "none",
+    "params": [
+      [
+        "beta_returning",
+        10.0
+      ],
+      [
+        "beta_talent",
+        3.0
+      ],
+      [
+        "fit_fcs",
+        1.0
+      ],
+      [
+        "hfa",
+        3.0
+      ],
+      [
+        "sigma_w",
+        1.5
+      ],
+      [
+        "sigma_y",
+        15.5
+      ]
+    ],
+    "prior": "carryover_continuity",
+    "response": "raw",
+    "wp_map": "margin_normal"
+  },
   "696b4f7ba318": {
     "core": "ridge_epa",
     "hfa": "fixed",
@@ -915,6 +975,32 @@
       [
         "scale",
         20.9
+      ],
+      [
+        "sigma",
+        15.5
+      ]
+    ],
+    "prior": "flat",
+    "response": "raw",
+    "wp_map": "margin_normal"
+  },
+  "77ea4d96fc6c": {
+    "core": "ridge_epa",
+    "hfa": "fixed",
+    "opponent_adjust": "ridge",
+    "params": [
+      [
+        "history_seasons",
+        1.0
+      ],
+      [
+        "lam",
+        5.0
+      ],
+      [
+        "season_decay",
+        0.5
       ],
       [
         "sigma",
@@ -2017,6 +2103,58 @@
     "response": "raw",
     "wp_map": "elo_logistic"
   },
+  "ecb8d1221b8d": {
+    "core": "elo_margin",
+    "hfa": "fixed",
+    "opponent_adjust": "none",
+    "params": [
+      [
+        "carryover",
+        0.82
+      ],
+      [
+        "fit_fcs",
+        1.0
+      ],
+      [
+        "k",
+        20.0
+      ],
+      [
+        "z",
+        400.0
+      ]
+    ],
+    "prior": "carryover",
+    "response": "raw",
+    "wp_map": "elo_logistic"
+  },
+  "ed110b3e5144": {
+    "core": "ridge_epa",
+    "hfa": "fixed",
+    "opponent_adjust": "ridge",
+    "params": [
+      [
+        "history_seasons",
+        2.0
+      ],
+      [
+        "lam",
+        5.0
+      ],
+      [
+        "season_decay",
+        0.5
+      ],
+      [
+        "sigma",
+        15.5
+      ]
+    ],
+    "prior": "flat",
+    "response": "raw",
+    "wp_map": "margin_normal"
+  },
   "f038381b5220": {
     "core": "glickman_stern",
     "hfa": "fixed",
@@ -2093,6 +2231,32 @@
       [
         "sigma",
         15.5
+      ]
+    ],
+    "prior": "flat",
+    "response": "raw",
+    "wp_map": "margin_normal"
+  },
+  "f864c3c55642": {
+    "core": "ridge_epa",
+    "hfa": "fixed",
+    "opponent_adjust": "ridge",
+    "params": [
+      [
+        "history_seasons",
+        1.0
+      ],
+      [
+        "lam",
+        5.0
+      ],
+      [
+        "season_decay",
+        0.5
+      ],
+      [
+        "sigma",
+        13.45
       ]
     ],
     "prior": "flat",
