@@ -1,4 +1,22 @@
 {
+  "0137b0d48b7b": {
+    "core": "ridge_epa",
+    "hfa": "fixed",
+    "opponent_adjust": "ridge",
+    "params": [
+      [
+        "lam",
+        5.0
+      ],
+      [
+        "cap",
+        28.0
+      ]
+    ],
+    "prior": "flat",
+    "response": "capped",
+    "wp_map": "isotonic"
+  },
   "05a4ab180ac1": {
     "core": "ridge_epa",
     "hfa": "fixed",
@@ -11,6 +29,28 @@
     ],
     "prior": "flat",
     "response": "raw",
+    "wp_map": "margin_normal"
+  },
+  "1b0c46df03f2": {
+    "core": "ridge_epa",
+    "hfa": "fixed",
+    "opponent_adjust": "ridge",
+    "params": [
+      [
+        "lam",
+        5.0
+      ],
+      [
+        "sigma",
+        15.5
+      ],
+      [
+        "cap",
+        21.0
+      ]
+    ],
+    "prior": "flat",
+    "response": "capped",
     "wp_map": "margin_normal"
   },
   "317ff25bd4a2": {
@@ -78,6 +118,24 @@
     "prior": "carryover",
     "response": "raw",
     "wp_map": "elo_logistic"
+  },
+  "71ea2819a798": {
+    "core": "ridge_epa",
+    "hfa": "fixed",
+    "opponent_adjust": "ridge",
+    "params": [
+      [
+        "lam",
+        5.0
+      ],
+      [
+        "cap",
+        28.0
+      ]
+    ],
+    "prior": "flat",
+    "response": "capped",
+    "wp_map": "margin_normal"
   },
   "78455072ac64": {
     "core": "elo_margin",
@@ -183,6 +241,24 @@
     "response": "raw",
     "wp_map": "isotonic"
   },
+  "a58656031390": {
+    "core": "ridge_epa",
+    "hfa": "fixed",
+    "opponent_adjust": "ridge",
+    "params": [
+      [
+        "lam",
+        5.0
+      ],
+      [
+        "cap",
+        21.0
+      ]
+    ],
+    "prior": "flat",
+    "response": "capped",
+    "wp_map": "margin_normal"
+  },
   "aebd671e9376": {
     "core": "ridge_epa",
     "hfa": "fixed",
@@ -211,6 +287,24 @@
     "response": "raw",
     "wp_map": "isotonic"
   },
+  "d1e160c3cd39": {
+    "core": "ridge_epa",
+    "hfa": "fixed",
+    "opponent_adjust": "ridge",
+    "params": [
+      [
+        "lam",
+        5.0
+      ],
+      [
+        "cap",
+        21.0
+      ]
+    ],
+    "prior": "flat",
+    "response": "capped",
+    "wp_map": "isotonic"
+  },
   "d205d12732d7": {
     "core": "elo_margin",
     "hfa": "fixed",
@@ -232,6 +326,28 @@
     "prior": "carryover",
     "response": "raw",
     "wp_map": "elo_logistic"
+  },
+  "d843422fe420": {
+    "core": "ridge_epa",
+    "hfa": "fixed",
+    "opponent_adjust": "ridge",
+    "params": [
+      [
+        "lam",
+        5.0
+      ],
+      [
+        "sigma",
+        15.5
+      ],
+      [
+        "cap",
+        28.0
+      ]
+    ],
+    "prior": "flat",
+    "response": "capped",
+    "wp_map": "margin_normal"
   },
   "df61292b4fba": {
     "core": "elo_margin",

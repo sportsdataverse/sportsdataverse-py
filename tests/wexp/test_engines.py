@@ -84,6 +84,38 @@ def test_lam_mismatch_refused(nfl_oracle, store):
         run_backtest(nfl_oracle, build_predictor(variant, table="ridge"), model_id="r", variant=variant, store=store)
 
 
+def test_capped_response_changes_fit_and_scores(nfl_oracle):
+    """Axis B2: the cap provably alters the fit (observed max coef delta
+    1.85 at cap=28, brier 0.2233) and mismatched cap claims are refused
+    both ways."""
+    capped = ridge_margin_vintages(nfl_oracle, lam=LAM, cap=28.0)
+    raw = ridge_margin_vintages(nfl_oracle, lam=LAM)
+    assert (capped["off_coef"] - raw["off_coef"]).abs().max() > 1.0  # not a silent no-op
+    store = VintageStore()
+    store.register("ridge_capped", capped, entity_key="team_id")
+    _, rows = run_backtest(
+        nfl_oracle, ratings_predictor("ridge_capped", cap=28.0), model_id="ridge_capped", store=store
+    )
+    pooled = {r["metric"]: r["value"] for r in rows.filter(pl.col("season") == -1).iter_rows(named=True)}
+    assert pooled["brier"] < 0.24  # observed 0.2233
+    # a raw-claiming predictor must refuse the capped table, and vice versa
+    with pytest.raises(ValueError, match="cap"):
+        run_backtest(nfl_oracle, ratings_predictor("ridge_capped", cap=None), model_id="r", store=store)
+    with pytest.raises(ValueError, match="cap"):
+        run_backtest(nfl_oracle, ratings_predictor("ridge_capped", cap=21.0), model_id="r", store=store)
+
+
+def test_build_predictor_capped_param_contract():
+    from sportsdataverse.wexp.engines import build_predictor
+    from sportsdataverse.wexp.variants import VariantConfig
+
+    base = dict(core="ridge_epa", opponent_adjust="ridge", prior="flat", wp_map="margin_normal", hfa="fixed")
+    with pytest.raises(ValueError, match="cap"):
+        build_predictor(VariantConfig(response="capped", **base))  # capped needs a cap param
+    with pytest.raises(ValueError, match="cap"):
+        build_predictor(VariantConfig(response="raw", params=(("cap", 28.0),), **base))
+
+
 def test_vintage_builder_ignores_future_games(nfl_oracle):
     """A vintage at as_of_week W must be invariant to games in weeks >= W."""
     season = nfl_oracle.filter(pl.col("season") == 2024)

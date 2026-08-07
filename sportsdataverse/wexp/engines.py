@@ -40,10 +40,13 @@ _VINTAGE_SCHEMA: dict[str, type[pl.DataType]] = {
     "intercept": pl.Float64,
     "hfa": pl.Float64,
     "lam": pl.Float64,
+    "cap": pl.Float64,
 }
 
 
-def ridge_margin_vintages(oracle: pl.DataFrame, *, lam: float, resp_col: str = "home_margin") -> pl.DataFrame:
+def ridge_margin_vintages(
+    oracle: pl.DataFrame, *, lam: float, resp_col: str = "home_margin", cap: Optional[float] = None
+) -> pl.DataFrame:
     """Build per-week opponent-adjusted ridge rating vintages from an oracle frame.
 
     For every ``(season, week)`` present, fits the ridge on that season's
@@ -57,6 +60,8 @@ def ridge_margin_vintages(oracle: pl.DataFrame, *, lam: float, resp_col: str = "
         lam: Ridge penalty on the team coefficients.
         resp_col: Response column (default ``"home_margin"``; a team-game
             EPA margin column slots in unchanged).
+        cap: Axis B2 capped response — clip the response to ``[-cap, cap]``
+            before the fit (blowout damping). ``None`` = raw (B1).
 
     Returns:
         A vintage table — ``season`` / ``as_of_week`` / ``team_id`` (Utf8)
@@ -74,6 +79,8 @@ def ridge_margin_vintages(oracle: pl.DataFrame, *, lam: float, resp_col: str = "
             store.register("ridge", ridge_margin_vintages(oracle, lam=100.0), entity_key="team_id")
     """
     base = normalize_walk_weeks(oracle).filter(pl.col(resp_col).is_not_null())
+    if cap is not None:
+        base = base.with_columns(pl.col(resp_col).clip(-cap, cap))
     # Symmetrize: each game from both perspectives. With offense always the
     # home team the HFA indicator would be constant 1 and collinear with the
     # unpenalized intercept (singular normal equations); the mirrored away
@@ -122,6 +129,7 @@ def ridge_margin_vintages(oracle: pl.DataFrame, *, lam: float, resp_col: str = "
                 intercept=pl.lit(intercept, dtype=pl.Float64),
                 hfa=pl.lit(hfa, dtype=pl.Float64),
                 lam=pl.lit(lam, dtype=pl.Float64),
+                cap=pl.lit(cap, dtype=pl.Float64),
             ).select(list(_VINTAGE_SCHEMA))
         )
     if not frames:
@@ -136,6 +144,7 @@ def ratings_predictor(
     sigma: float = 13.45,
     iso_min_fit: int = 100,
     lam: Optional[float] = None,
+    cap: Optional[float] = None,
 ) -> WeekPredictor:
     """Wrap a registered ratings vintage table as a week predictor.
 
@@ -157,6 +166,10 @@ def ratings_predictor(
             predictor refuses (ValueError) a table stamped with a
             different ``lam`` — a store/variant mismatch must error, not
             write mislabeled leaderboard rows.
+        cap: The Axis B2 response cap the variant claims (``None`` = raw
+            response). Checked BIDIRECTIONALLY against the table's ``cap``
+            stamp when present — a raw variant served from a capped table
+            is just as mislabeled as the reverse.
 
     Returns:
         A predictor callable for :func:`~sportsdataverse.wexp.backtest.run_backtest`.
@@ -187,12 +200,16 @@ def ratings_predictor(
     def predict(history: pl.DataFrame, slate: pl.DataFrame, store: Optional[VintageStore]) -> pl.Series:
         if store is None:
             raise ValueError("ratings_predictor requires a VintageStore")
-        if lam is not None:
-            # the variant hash claims this lam; refuse a mismatched table
-            # rather than writing wrong-but-plausible leaderboard rows
-            served = store.table(table)["lam"].unique().to_list() if "lam" in store.table(table).columns else []
-            if served != [lam]:
-                raise ValueError(f"variant claims lam={lam} but table {table!r} was built with lam={served}")
+        tbl = store.table(table)
+        # the variant hash claims these build params; refuse a mismatched
+        # table rather than writing wrong-but-plausible leaderboard rows
+        if lam is not None and ("lam" not in tbl.columns or tbl["lam"].unique().to_list() != [lam]):
+            served = tbl["lam"].unique().to_list() if "lam" in tbl.columns else []
+            raise ValueError(f"variant claims lam={lam} but table {table!r} was built with lam={served}")
+        if "cap" in tbl.columns and tbl["cap"].unique().to_list() != [cap]:
+            raise ValueError(
+                f"variant claims cap={cap} but table {table!r} was built with cap={tbl['cap'].unique().to_list()}"
+            )
         margins = _expected_margin(slate, store)["__exp_margin"].to_numpy()
         if wp_map == "margin_normal":
             from scipy.stats import norm
@@ -267,11 +284,18 @@ def build_predictor(config: VariantConfig, *, table: str = "ridge", sigma: float
         )
     if (
         config.core == "ridge_epa"
-        and config.response == "raw"
+        and config.response in ("raw", "capped")
         and config.opponent_adjust == "ridge"
         and config.prior == "flat"
         and config.hfa == "fixed"
         and config.wp_map in ("margin_normal", "isotonic")
     ):
-        return ratings_predictor(table, wp_map=config.wp_map, sigma=params.get("sigma", sigma), lam=params.get("lam"))
+        cap = params.get("cap")
+        if config.response == "capped" and cap is None:
+            raise ValueError("response='capped' requires a 'cap' entry in params")
+        if config.response == "raw" and cap is not None:
+            raise ValueError("response='raw' must not carry a 'cap' param")
+        return ratings_predictor(
+            table, wp_map=config.wp_map, sigma=params.get("sigma", sigma), lam=params.get("lam"), cap=cap
+        )
     raise NotImplementedError(f"no engine landed yet for variant {config}")
