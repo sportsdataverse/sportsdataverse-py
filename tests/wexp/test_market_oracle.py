@@ -113,6 +113,20 @@ def test_cfb_oracle_contract_and_coverage(cfb_oracle):
     _assert_blend_applied(cfb_oracle)
 
 
+def test_cfb_join_drops_are_not_a_season_wide_class(cfb_oracle):
+    """The ~16 abbr-resolution drops must not concentrate in one season.
+
+    Observed keeps: 2015 -> 388/399 matched schedule games, 2024 -> 395/400.
+    A season keeping < 95% would mean the modal abbr->name inference broke
+    for a whole era — the systematic-class failure, not one-off irregulars
+    (drops itemized in tests/fixtures/wexp/README.md).
+    """
+    keeps = cfb_oracle.group_by("season").len().sort("season")
+    by = {r["season"]: r["len"] for r in keeps.iter_rows(named=True)}
+    assert by[2015] >= 380
+    assert by[2024] >= 380
+
+
 def test_cfb_close_is_a_sane_oracle(cfb_oracle):
     y, p = _scored(cfb_oracle)
     # observed brier 0.1528, acc 0.7995, ece 0.0732 (biased first-400 sample)

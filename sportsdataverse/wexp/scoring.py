@@ -165,6 +165,9 @@ def closing_line_value(p_model: np.ndarray, p_bet: np.ndarray, p_close: np.ndarr
     move of the vig-removed close toward that side:
     ``sign(p_model - p_bet) * (p_close - p_bet)``. Positive mean = the
     close moved toward the model's picks (the model bought value).
+    Games where ``p_model == p_bet`` are no-bets that contribute 0 and
+    DILUTE the mean toward zero (deliberate: the mean is per-game, not
+    per-bet; divide by nonzero sides yourself for a per-bet CLV).
 
     Args:
         p_model: Model home win probabilities.

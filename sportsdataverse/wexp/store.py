@@ -15,6 +15,7 @@ future vintages are structurally unreachable).
 from __future__ import annotations
 
 import warnings
+from typing import Literal
 
 import polars as pl
 
@@ -41,20 +42,41 @@ class VintageStore:
     def __init__(self) -> None:
         self._tables: dict[str, tuple[pl.DataFrame, str]] = {}
 
-    def register(self, name: str, frame: pl.DataFrame, *, entity_key: str) -> None:
+    def register(
+        self,
+        name: str,
+        frame: pl.DataFrame,
+        *,
+        entity_key: str,
+        week_semantics: Literal["as_of", "through"] = "as_of",
+    ) -> None:
         """Register a feature frame; refuse anything not vintage-keyed.
 
         Args:
             name: Table name.
-            frame: Frame carrying ``season``, ``as_of_week``, and
-                ``entity_key`` columns; ``as_of_week == W`` rows must be
-                built from weeks strictly before ``W``.
+            frame: Frame carrying vintage keys + ``entity_key``. With
+                ``week_semantics="as_of"`` the frame has an ``as_of_week``
+                column whose row ``W`` was built from weeks strictly before
+                ``W``. With ``week_semantics="through"`` the frame has a
+                ``through_week`` column INCLUSIVE of its week (the CFB
+                ``cfb_ratings_weekly`` / ``cfb_team_summaries_weekly``
+                convention) and the store performs the
+                ``as_of_week = through_week + 1`` shift itself — so
+                reintroducing the inclusive-week leak requires a deliberate
+                wrong argument, not a forgotten ingest comment.
             entity_key: The entity column (e.g. ``"team_id"``).
+            week_semantics: ``"as_of"`` (default) or ``"through"``.
 
         Raises:
             ValueError: If a vintage key or the entity column is missing, or
                 ``(season, as_of_week, entity)`` rows are duplicated.
         """
+        if week_semantics == "through":
+            if "through_week" not in frame.columns:
+                raise ValueError(f"table {name!r}: week_semantics='through' requires a 'through_week' column")
+            frame = frame.rename({"through_week": "as_of_week"}).with_columns(
+                (pl.col("as_of_week") + 1).alias("as_of_week")
+            )
         missing = [k for k in (*VINTAGE_KEYS, entity_key) if k not in frame.columns]
         if missing:
             raise ValueError(
@@ -102,11 +124,14 @@ class VintageStore:
             week_col: Week column on ``games``.
 
         Returns:
-            ``games`` with the vintage's feature columns appended.
+            ``games`` with the vintage's feature columns appended, plus
+            ``{prefix}as_of_week`` recording which vintage served each game
+            (leak forensics: it is always ``<=`` the game's week).
 
         Raises:
             KeyError: If ``name`` is not registered.
-            ValueError: If join-key dtypes disagree.
+            ValueError: If join-key dtypes disagree, or a joined feature
+                column would collide with an existing games column.
         """
         if name not in self._tables:
             raise KeyError(f"table {name!r} not registered")
@@ -125,6 +150,12 @@ class VintageStore:
                 f"vs {name}[as_of_week]={frame.schema['as_of_week']}"
             )
         feature_cols = [c for c in frame.columns if c not in (*VINTAGE_KEYS, entity_key)]
+        out_names = [f"{prefix}{c}" for c in feature_cols] + [f"{prefix}as_of_week"]
+        collisions = sorted(set(out_names) & set(games.columns))
+        if collisions:
+            raise ValueError(
+                f"joined column(s) {collisions} collide with existing games columns — pass a distinct prefix"
+            )
         right = frame.select(
             pl.col("season"),
             pl.col("as_of_week"),
@@ -144,4 +175,6 @@ class VintageStore:
                 by=["season", games_key],
                 strategy="backward",
             )
-        return out.sort("__order").drop("__order", "as_of_week")
+        # keep the serving vintage as {prefix}as_of_week (leak forensics)
+        rename = {"as_of_week": f"{prefix}as_of_week"} if prefix else {}
+        return out.sort("__order").drop("__order").rename(rename)

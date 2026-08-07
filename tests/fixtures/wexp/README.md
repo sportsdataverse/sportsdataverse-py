@@ -30,3 +30,15 @@ Notes:
 - Game-level opening-spread coverage (any book): 2015 100%, 2024 68.9% —
   much higher than row-level coverage because the median ignores books
   without an open.
+- CFB oracle inner-join drops (16 of 799; itemized so a reviewer can see
+  they are one-off irregulars, not a systematic class): game_ids
+  400603836, 400756901, 400756914, 400756925, 400756943, 400756969,
+  400756993, 400756997, 400760500, 400763470, 400763497 (2015, 11 games)
+  and 401628336, 401628624, 401628637, 401629045, 401632069 (2024,
+  5 games). All 16 HAVE spread rows; the drop cause is the modal
+  abbr→name inference failing on this small 400-game sample
+  (single-game/ambiguous abbrs: `MSU`, `NC`, FCS one-offs like
+  Lindenwood/Merrimack). On the full 8k-game corpus the modal inference
+  is unambiguous (per the ported cfb-data docstring); the test floor
+  (>=780) plus a per-season keep-rate check guard against a season-wide
+  resolution failure.
