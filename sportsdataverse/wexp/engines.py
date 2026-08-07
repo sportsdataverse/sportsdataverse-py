@@ -165,22 +165,37 @@ def cfb_drive_ep_responses(pbp: pl.DataFrame) -> pl.DataFrame:
     """Per team-game drive-EP efficiency from play-by-play (both sides rated).
 
     The user-specified "starting drive EP to end drive EP" perspective:
-    per drive, ``delta = EP_end of the drive's last play - EP_start of its
-    first play``; per team-game, the response is the MEAN delta over that
-    offense's drives (per-drive efficiency — pace-free, the FEI-style
-    granularity). Each game emits one row per offense with the defense
-    alongside, so the weekly ridge downstream fits an ``off_coef`` AND a
-    ``def_coef`` for every team.
+    per drive, ``delta = sum of play EPA over the drive`` — the telescoped
+    start-to-end EP change WITH the library's possession-perspective
+    corrections. (A naive ``EP_end(last) - EP_start(first)`` is wrong:
+    on drive-ending plays the raw ``EP_end`` is stated from the NEW
+    possession team's perspective, which flips the sign on punt/turnover
+    drives — it fit a NEGATIVE margin scale on the real tune window.)
+    Two responses per team-game, both MEANS over that offense's drives:
+
+    - ``resp`` — the raw per-drive delta (per-drive efficiency,
+      pace-free, the FEI-style granularity).
+    - ``resp_pct`` — the user-specified share of AVAILABLE drive EP:
+      ``delta / (7 - EP_start of the drive's first play)`` (7 = max drive
+      EP). A drive starting at the opponent 5 has little left to gain, so
+      capturing it counts more per point. ``available`` is floored at 0.5
+      so goal-line starts cannot blow the ratio up. Rate x possessions
+      carries the volume downstream (the fitted margin scale absorbs the
+      average pace).
+
+    Each game emits one row per offense with the defense alongside, so
+    the weekly ridge downstream fits an ``off_coef`` AND a ``def_coef``
+    for every team, on either response.
 
     Args:
         pbp: Play frame with ``game_id``, ``pos_team``, ``def_pos_team``,
-            ``drive.id``, ``EP_start``, ``EP_end``, ``game_play_number``
+            ``drive.id``, ``EPA``, ``EP_start``, ``game_play_number``
             (the espn_cfb_pbp release columns; prune before loading).
 
     Returns:
         One row per (game, offense): ``game_id`` (Utf8), ``off_team_id`` /
         ``def_team_id`` (Utf8, cast from the raw Int64 ESPN ids),
-        ``resp`` (mean drive EP delta), ``drives`` (Int64 count).
+        ``resp`` / ``resp_pct`` (Float64), ``drives`` (Int64 count).
 
     Example:
         Quick start::
@@ -190,23 +205,26 @@ def cfb_drive_ep_responses(pbp: pl.DataFrame) -> pl.DataFrame:
             rows = cfb_drive_ep_responses(pl.read_parquet("pbp_2019.parquet"))
     """
     drives = (
-        pbp.drop_nulls(["EP_start", "EP_end", "drive.id", "pos_team", "def_pos_team"])
+        pbp.drop_nulls(["EPA", "EP_start", "drive.id", "pos_team", "def_pos_team"])
         .sort("game_play_number")
         .group_by("game_id", "drive.id", maintain_order=True)
         .agg(
             off=pl.col("pos_team").first(),
             deft=pl.col("def_pos_team").first(),
-            delta=pl.col("EP_end").last() - pl.col("EP_start").first(),
+            delta=pl.col("EPA").sum(),
+            start_ep=pl.col("EP_start").first(),
         )
+        .with_columns(pct=pl.col("delta") / (7.0 - pl.col("start_ep")).clip(lower_bound=0.5))
     )
     return (
         drives.group_by("game_id", "off", "deft")
-        .agg(resp=pl.col("delta").mean(), drives=pl.len())
+        .agg(resp=pl.col("delta").mean(), resp_pct=pl.col("pct").mean(), drives=pl.len())
         .select(
             game_id=pl.col("game_id").cast(pl.Int64).cast(pl.Utf8),
             off_team_id=pl.col("off").cast(pl.Int64).cast(pl.Utf8),
             def_team_id=pl.col("deft").cast(pl.Int64).cast(pl.Utf8),
             resp=pl.col("resp"),
+            resp_pct=pl.col("resp_pct"),
             drives=pl.col("drives").cast(pl.Int64),
         )
     )
@@ -218,6 +236,7 @@ def response_ridge_vintages(
     *,
     lam: float,
     close_filter: Optional[float] = None,
+    resp_col: str = "resp",
 ) -> pl.DataFrame:
     """Weekly opponent-adjusted ridge on per-team-game responses (off + def).
 
@@ -238,6 +257,8 @@ def response_ridge_vintages(
         lam: Ridge penalty on the team coefficients.
         close_filter: Axis B4 — drop games with final ``|home_margin| >
             close_filter`` from the fit (both sides go together).
+        resp_col: Which response to fit (``"resp"`` = raw per-drive delta;
+            ``"resp_pct"`` = share of available drive EP).
 
     Returns:
         Vintage table: ``season`` / ``as_of_week`` / ``team_id`` (Utf8) /
@@ -273,7 +294,7 @@ def response_ridge_vintages(
             off_col="off_team_id",
             def_col="def_team_id",
             home_col="homeflag",
-            resp_col="resp",
+            resp_col=resp_col,
             lam=lam,
         )
         frames.append(

@@ -108,9 +108,13 @@ def test_capped_response_changes_fit_and_scores(nfl_oracle):
 def test_drive_ep_responses_extraction():
     """Drive-EP extraction on real 2019 pbp (2 games, 324 plays).
 
-    Per drive: EP_end(last play) - EP_start(first play); per team-game the
-    mean over that offense's drives. Every game emits BOTH offenses, so
-    the downstream ridge rates offense and defense for every team.
+    Per drive: sum of play EPA (the perspective-corrected start-to-end EP
+    change — the naive EP_end(last) - EP_start(first) flips sign on
+    punt/turnover drives because raw EP_end switches to the NEW possession
+    team's perspective, and fit a NEGATIVE margin scale on real data).
+    resp_pct = delta / (7 - drive start EP), the share of available drive
+    EP, floored at 0.5 available. Every game emits BOTH offenses, so the
+    downstream ridge rates offense and defense for every team.
     """
     from sportsdataverse.wexp.engines import cfb_drive_ep_responses
 
@@ -119,23 +123,27 @@ def test_drive_ep_responses_extraction():
     assert rows.height == 4  # 2 games x 2 offenses
     assert rows.schema["off_team_id"] == pl.Utf8 and rows.schema["game_id"] == pl.Utf8
     assert set(rows["game_id"].unique().to_list()) == {"401110720", "401112224"}
-    # hand-check one drive against the raw plays: first drive of 401110720
+    # hand-check against the raw plays for one offense of 401110720
     g = pbp.filter(pl.col("game_id") == 401110720).sort("game_play_number")
-    d0 = g.filter(pl.col("drive.id") == g["drive.id"][0])
-    expected_delta = d0["EP_end"][-1] - d0["EP_start"][0]
-    off = str(d0["pos_team"][0])
+    off = str(g["pos_team"][0])
     team_row = rows.filter((pl.col("game_id") == "401110720") & (pl.col("off_team_id") == off))
-    # the team's mean includes this drive; with one-drive teams impossible,
-    # check the mean lies within the min/max of its drive deltas incl. this one
     assert team_row.height == 1
     assert team_row["drives"][0] >= 5  # real game: several drives per side
-    deltas = (
-        g.group_by("drive.id", maintain_order=True)
-        .agg(off=pl.col("pos_team").first(), delta=pl.col("EP_end").last() - pl.col("EP_start").first())
+    per_drive = (
+        g.drop_nulls(["EPA", "EP_start"])
+        .group_by("drive.id", maintain_order=True)
+        .agg(off=pl.col("pos_team").first(), delta=pl.col("EPA").sum(), start=pl.col("EP_start").first())
         .filter(pl.col("off") == int(off))
+        .with_columns(pct=pl.col("delta") / (7.0 - pl.col("start")).clip(lower_bound=0.5))
     )
-    assert abs(team_row["resp"][0] - deltas["delta"].mean()) < 1e-12
-    assert abs(expected_delta - deltas["delta"][0]) < 1e-12
+    assert abs(team_row["resp"][0] - per_drive["delta"].mean()) < 1e-12
+    assert abs(team_row["resp_pct"][0] - per_drive["pct"].mean()) < 1e-12
+    # winner sanity on real data: Alabama (333) blew out Duke 42-3 in
+    # 401110720 — its per-drive EPA efficiency must exceed Duke's
+    resp_by_team = {
+        r["off_team_id"]: r["resp"] for r in rows.filter(pl.col("game_id") == "401110720").iter_rows(named=True)
+    }
+    assert resp_by_team["333"] > resp_by_team["150"]
 
 
 def test_response_ridge_vintages_walk(nfl_oracle):
