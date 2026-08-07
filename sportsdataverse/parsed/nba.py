@@ -272,6 +272,7 @@ from sportsdataverse.nba import nba_matchup_drapm as nba_matchup_drapm  # noqa: 
 from sportsdataverse.nba import nba_pbp_disk as nba_pbp_disk  # noqa: F401
 from sportsdataverse.nba import nba_play_context as nba_play_context  # noqa: F401
 from sportsdataverse.nba import nba_player_ages as nba_player_ages  # noqa: F401
+from sportsdataverse.nba import nba_player_crosswalk as nba_player_crosswalk  # noqa: F401
 from sportsdataverse.nba import nba_player_identity as nba_player_identity  # noqa: F401
 from sportsdataverse.nba import nba_player_positions as nba_player_positions  # noqa: F401
 from sportsdataverse.nba import nba_player_props as nba_player_props  # noqa: F401
@@ -280,10 +281,12 @@ from sportsdataverse.nba import nba_predict_games as nba_predict_games  # noqa: 
 from sportsdataverse.nba import nba_ratings_panel as nba_ratings_panel  # noqa: F401
 from sportsdataverse.nba import nba_raw_store_season_frame as nba_raw_store_season_frame  # noqa: F401
 from sportsdataverse.nba import nba_rookie_projection as nba_rookie_projection  # noqa: F401
+from sportsdataverse.nba import nba_schedule_crosswalk as nba_schedule_crosswalk  # noqa: F401
 from sportsdataverse.nba import nba_shot_value as nba_shot_value  # noqa: F401
 from sportsdataverse.nba import nba_shot_value_lineups as nba_shot_value_lineups  # noqa: F401
 from sportsdataverse.nba import nba_spm as nba_spm  # noqa: F401
 from sportsdataverse.nba import nba_team_clutch as nba_team_clutch  # noqa: F401
+from sportsdataverse.nba import nba_team_crosswalk as nba_team_crosswalk  # noqa: F401
 from sportsdataverse.nba import nba_team_ratings as nba_team_ratings  # noqa: F401
 from sportsdataverse.nba import nba_tracking_drive_value as nba_tracking_drive_value  # noqa: F401
 from sportsdataverse.nba import nba_tracking_pass_value as nba_tracking_pass_value  # noqa: F401
@@ -575,6 +578,7 @@ __all__ = [
     "nba_pbp_disk",
     "nba_play_context",
     "nba_player_ages",
+    "nba_player_crosswalk",
     "nba_player_identity",
     "nba_player_positions",
     "nba_player_props",
@@ -583,11 +587,13 @@ __all__ = [
     "nba_ratings_panel",
     "nba_raw_store_season_frame",
     "nba_rookie_projection",
+    "nba_schedule_crosswalk",
     "nba_shot_value",
     "nba_shot_value_lineups",
     "nba_spm",
     "nba_stats_leaguedashptstats",
     "nba_team_clutch",
+    "nba_team_crosswalk",
     "nba_team_ratings",
     "nba_tracking_drive_value",
     "nba_tracking_pass_value",

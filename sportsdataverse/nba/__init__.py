@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from sportsdataverse.nba.nba_crosswalk import *
 from sportsdataverse.nba.nba_draft import *
 from sportsdataverse.nba.nba_espn_ext import *
 from sportsdataverse.nba.nba_fox_ext import *
