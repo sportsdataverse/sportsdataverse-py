@@ -82,11 +82,25 @@ def fox_wnba_pbp(
         ``return_as_pandas=True``, or the raw JSON ``dict`` when
         ``return_parsed=False``.
 
+    Raises:
+        sportsdataverse.errors.NoESPNDataError: Fox returned 404 for the requested id.
+        requests.exceptions.RequestException: Connection-level failure after
+            ``dl_utils.download`` exhausts its retries.
+
     Example:
         Fetch a game's plays as a polars frame::
 
             from sportsdataverse.wnba import fox_wnba_pbp
-            df = fox_wnba_pbp("...")
+            df = fox_wnba_pbp("2278")
+
+        See Also:
+            * `wehoop`_ - R sister package for the WNBA
+            * `nba_api`_ - Python alternative (stats.wnba.com)
+            * `Fox Sports`_ - data origin
+
+        .. _wehoop: https://wehoop.sportsdataverse.org
+        .. _nba_api: https://github.com/swar/nba_api
+        .. _Fox Sports: https://www.foxsports.com
     """
     raw = fox_get(f"{_SPORT}/event/{game_id}/data", **kwargs)
     return frame(parse_period_pbp(raw, game_id), return_as_pandas) if return_parsed else raw
@@ -130,11 +144,25 @@ def fox_wnba_boxscore(
         ``return_as_pandas=True``, or the raw JSON ``dict`` when
         ``return_parsed=False``.
 
+    Raises:
+        sportsdataverse.errors.NoESPNDataError: Fox returned 404 for the requested id.
+        requests.exceptions.RequestException: Connection-level failure after
+            ``dl_utils.download`` exhausts its retries.
+
     Example:
         Fetch a game's boxscore in long form::
 
             from sportsdataverse.wnba import fox_wnba_boxscore
-            df = fox_wnba_boxscore("...")
+            df = fox_wnba_boxscore("2278")
+
+        See Also:
+            * `wehoop`_ - R sister package for the WNBA
+            * `nba_api`_ - Python alternative (stats.wnba.com)
+            * `Fox Sports`_ - data origin
+
+        .. _wehoop: https://wehoop.sportsdataverse.org
+        .. _nba_api: https://github.com/swar/nba_api
+        .. _Fox Sports: https://www.foxsports.com
     """
     raw = fox_get(f"{_SPORT}/event/{game_id}/data", **kwargs)
     return frame(parse_boxscore(raw, game_id), return_as_pandas) if return_parsed else raw
@@ -178,11 +206,25 @@ def fox_wnba_odds(
         ``return_as_pandas=True``, or the raw JSON ``dict`` when
         ``return_parsed=False``.
 
+    Raises:
+        sportsdataverse.errors.NoESPNDataError: Fox returned 404 for the requested id.
+        requests.exceptions.RequestException: Connection-level failure after
+            ``dl_utils.download`` exhausts its retries.
+
     Example:
         Fetch a game's odds six-pack::
 
             from sportsdataverse.wnba import fox_wnba_odds
-            df = fox_wnba_odds("...")
+            df = fox_wnba_odds("2278")
+
+        See Also:
+            * `wehoop`_ - R sister package for the WNBA
+            * `nba_api`_ - Python alternative (stats.wnba.com)
+            * `Fox Sports`_ - data origin
+
+        .. _wehoop: https://wehoop.sportsdataverse.org
+        .. _nba_api: https://github.com/swar/nba_api
+        .. _Fox Sports: https://www.foxsports.com
     """
     raw = fox_get(f"{_SPORT}/event/{game_id}/odds", **kwargs)
     return frame(parse_odds(raw, game_id), return_as_pandas) if return_parsed else raw
@@ -226,11 +268,25 @@ def fox_wnba_team_roster(
         ``return_as_pandas=True``, or the raw JSON ``dict`` when
         ``return_parsed=False``.
 
+    Raises:
+        sportsdataverse.errors.NoESPNDataError: Fox returned 404 for the requested id.
+        requests.exceptions.RequestException: Connection-level failure after
+            ``dl_utils.download`` exhausts its retries.
+
     Example:
         Fetch a team's roster::
 
             from sportsdataverse.wnba import fox_wnba_team_roster
-            df = fox_wnba_team_roster("...")
+            df = fox_wnba_team_roster("3")
+
+        See Also:
+            * `wehoop`_ - R sister package for the WNBA
+            * `nba_api`_ - Python alternative (stats.wnba.com)
+            * `Fox Sports`_ - data origin
+
+        .. _wehoop: https://wehoop.sportsdataverse.org
+        .. _nba_api: https://github.com/swar/nba_api
+        .. _Fox Sports: https://www.foxsports.com
     """
     raw = fox_get(f"{_SPORT}/team/{team_id}/roster", **kwargs)
     return frame(parse_roster(raw, team_id), return_as_pandas) if return_parsed else raw
@@ -274,11 +330,25 @@ def fox_wnba_team_stats(
         ``return_as_pandas=True``, or the raw JSON ``dict`` when
         ``return_parsed=False``.
 
+    Raises:
+        sportsdataverse.errors.NoESPNDataError: Fox returned 404 for the requested id.
+        requests.exceptions.RequestException: Connection-level failure after
+            ``dl_utils.download`` exhausts its retries.
+
     Example:
         Fetch a team's stat leaders::
 
             from sportsdataverse.wnba import fox_wnba_team_stats
-            df = fox_wnba_team_stats("...")
+            df = fox_wnba_team_stats("3")
+
+        See Also:
+            * `wehoop`_ - R sister package for the WNBA
+            * `nba_api`_ - Python alternative (stats.wnba.com)
+            * `Fox Sports`_ - data origin
+
+        .. _wehoop: https://wehoop.sportsdataverse.org
+        .. _nba_api: https://github.com/swar/nba_api
+        .. _Fox Sports: https://www.foxsports.com
     """
     raw = fox_get(f"{_SPORT}/team/{team_id}/stats", **kwargs)
     return frame(parse_team_stats(raw, team_id), return_as_pandas) if return_parsed else raw
@@ -322,11 +392,25 @@ def fox_wnba_team_gamelog(
         ``return_as_pandas=True``, or the raw JSON ``dict`` when
         ``return_parsed=False``.
 
+    Raises:
+        sportsdataverse.errors.NoESPNDataError: Fox returned 404 for the requested id.
+        requests.exceptions.RequestException: Connection-level failure after
+            ``dl_utils.download`` exhausts its retries.
+
     Example:
         Fetch a team's per-game stat log::
 
             from sportsdataverse.wnba import fox_wnba_team_gamelog
-            df = fox_wnba_team_gamelog("...")
+            df = fox_wnba_team_gamelog("3")
+
+        See Also:
+            * `wehoop`_ - R sister package for the WNBA
+            * `nba_api`_ - Python alternative (stats.wnba.com)
+            * `Fox Sports`_ - data origin
+
+        .. _wehoop: https://wehoop.sportsdataverse.org
+        .. _nba_api: https://github.com/swar/nba_api
+        .. _Fox Sports: https://www.foxsports.com
     """
     raw = fox_get(f"{_SPORT}/team/{team_id}/gamelog", **kwargs)
     return frame(parse_team_gamelog(raw, team_id), return_as_pandas) if return_parsed else raw
@@ -370,11 +454,25 @@ def fox_wnba_standings(
         ``return_as_pandas=True``, or the raw JSON ``dict`` when
         ``return_parsed=False``.
 
+    Raises:
+        sportsdataverse.errors.NoESPNDataError: Fox returned 404 for the requested id.
+        requests.exceptions.RequestException: Connection-level failure after
+            ``dl_utils.download`` exhausts its retries.
+
     Example:
         Fetch a team's conference standings::
 
             from sportsdataverse.wnba import fox_wnba_standings
-            df = fox_wnba_standings("...")
+            df = fox_wnba_standings("3")
+
+        See Also:
+            * `wehoop`_ - R sister package for the WNBA
+            * `nba_api`_ - Python alternative (stats.wnba.com)
+            * `Fox Sports`_ - data origin
+
+        .. _wehoop: https://wehoop.sportsdataverse.org
+        .. _nba_api: https://github.com/swar/nba_api
+        .. _Fox Sports: https://www.foxsports.com
     """
     raw = fox_get(f"{_SPORT}/team/{team_id}/standings", **kwargs)
     return frame(parse_standings(raw, team_id), return_as_pandas) if return_parsed else raw
@@ -436,11 +534,25 @@ def fox_wnba_league_leaders(
         ``return_as_pandas=True``, or the raw JSON ``dict`` when
         ``return_parsed=False``.
 
+    Raises:
+        sportsdataverse.errors.NoESPNDataError: Fox returned 404 for the requested id.
+        requests.exceptions.RequestException: Connection-level failure after
+            ``dl_utils.download`` exhausts its retries.
+
     Example:
         Fetch the scoring leaders::
 
             from sportsdataverse.wnba import fox_wnba_league_leaders
             df = fox_wnba_league_leaders("scoring")
+
+        See Also:
+            * `wehoop`_ - R sister package for the WNBA
+            * `nba_api`_ - Python alternative (stats.wnba.com)
+            * `Fox Sports`_ - data origin
+
+        .. _wehoop: https://wehoop.sportsdataverse.org
+        .. _nba_api: https://github.com/swar/nba_api
+        .. _Fox Sports: https://www.foxsports.com
     """
     raw = fox_get(f"{_SPORT}/league/stats-con/{who}/{category}/{page}", **kwargs)
     return frame(parse_league_leaders(raw), return_as_pandas) if return_parsed else raw
@@ -495,11 +607,25 @@ def fox_wnba_teams(
         ``return_as_pandas=True``, or the raw JSON ``dict`` when
         ``return_parsed=False``.
 
+    Raises:
+        sportsdataverse.errors.NoESPNDataError: Fox returned 404 for the requested id.
+        requests.exceptions.RequestException: Connection-level failure after
+            ``dl_utils.download`` exhausts its retries.
+
     Example:
         Fetch the league team directory::
 
             from sportsdataverse.wnba import fox_wnba_teams
             df = fox_wnba_teams()
+
+        See Also:
+            * `wehoop`_ - R sister package for the WNBA
+            * `nba_api`_ - Python alternative (stats.wnba.com)
+            * `Fox Sports`_ - data origin
+
+        .. _wehoop: https://wehoop.sportsdataverse.org
+        .. _nba_api: https://github.com/swar/nba_api
+        .. _Fox Sports: https://www.foxsports.com
     """
     raw = fox_get(f"{_SPORT}/team/{team_id}/standings", **kwargs)
     if not return_parsed:

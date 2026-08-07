@@ -361,6 +361,7 @@ files = [
     "sportsdataverse/nfl/pff_league.py",
     "sportsdataverse/nfl/utils_date.py",
     "sportsdataverse/mlb/mlb_statcast_runtime.py",
+    "sportsdataverse/_fox_layout.py",
     "sportsdataverse/mbb/torvik_runtime.py",
     "sportsdataverse/mbb/torvik_parsers.py",
     "sportsdataverse/mlb/mlb_statcast_parsers.py",

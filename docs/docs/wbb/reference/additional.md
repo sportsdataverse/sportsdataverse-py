@@ -5207,7 +5207,7 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 
 ```python
 from sportsdataverse.wbb import fox_wbb_boxscore
-df = fox_wbb_boxscore("...")
+df = fox_wbb_boxscore("389046")
 ```
 
 ### `fox_wbb_league_leaders(category: 'str' = 'scoring', who: 'str' = 'player', page: 'int' = 0, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_wbb_league_leaders}
@@ -5255,7 +5255,7 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 
 ```python
 from sportsdataverse.wbb import fox_wbb_odds
-df = fox_wbb_odds("...")
+df = fox_wbb_odds("389046")
 ```
 
 ### `fox_wbb_pbp(game_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_wbb_pbp}
@@ -5278,7 +5278,7 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 
 ```python
 from sportsdataverse.wbb import fox_wbb_pbp
-df = fox_wbb_pbp("...")
+df = fox_wbb_pbp("389046")
 ```
 
 ### `fox_wbb_standings(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_wbb_standings}
@@ -5301,7 +5301,7 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 
 ```python
 from sportsdataverse.wbb import fox_wbb_standings
-df = fox_wbb_standings("...")
+df = fox_wbb_standings("11")
 ```
 
 ### `fox_wbb_team_gamelog(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_wbb_team_gamelog}
@@ -5324,7 +5324,7 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 
 ```python
 from sportsdataverse.wbb import fox_wbb_team_gamelog
-df = fox_wbb_team_gamelog("...")
+df = fox_wbb_team_gamelog("11")
 ```
 
 ### `fox_wbb_team_roster(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_wbb_team_roster}
@@ -5347,7 +5347,7 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 
 ```python
 from sportsdataverse.wbb import fox_wbb_team_roster
-df = fox_wbb_team_roster("...")
+df = fox_wbb_team_roster("11")
 ```
 
 ### `fox_wbb_team_stats(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_wbb_team_stats}
@@ -5370,7 +5370,7 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 
 ```python
 from sportsdataverse.wbb import fox_wbb_team_stats
-df = fox_wbb_team_stats("...")
+df = fox_wbb_team_stats("11")
 ```
 
 ### `fox_wbb_teams(team_id: 'Union[int, str]' = '11', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_wbb_teams}
