@@ -53,11 +53,11 @@ def test_null_inputs_do_not_fire_identity_rules():
     assert definitional.run("cfb_model_pbp", frame, _ctx()) == []
 
 
-def test_epa_identity_violation_is_warn_needs_judgment():
+def test_epa_rule_skipped_without_overlay_scope_columns():
+    # the scoped contract rule needs text/type.text/period/etc; a frame
+    # with only the numeric columns must skip it, not crash or fire
     frame = pl.DataFrame({"epa": [9.0], "ep_after": [1.0], "ep_before": [0.5]})
-    by_rule = _findings_by_rule(definitional.run("cfb_model_pbp", frame, _ctx()))
-    f = by_rule["epa_is_ep_after_minus_ep_before"]
-    assert f.severity is Severity.WARN and f.needs_judgment
+    assert definitional.run("cfb_model_pbp", frame, _ctx()) == []
 
 
 def test_wpa_identity_violation_is_error():
@@ -222,6 +222,108 @@ def test_null_dtype_column_skips_string_rules_instead_of_crashing():
     frame = pl.DataFrame({"passer_player_id": [None, None]})
     ctx = _ctx(dataset="nfl_model_pbp", domain="nfl", join_keys=())
     assert definitional.run("nfl_model_pbp", frame, ctx) == []
+
+
+def test_range_rule_flags_both_bounds_and_allows_null():
+    frame = pl.DataFrame({"yds_rushed": [-100, -99, 99, 100, None]})  # rows 0+3 violate
+    by_rule = _findings_by_rule(definitional.run("cfb_pbp", frame, _ctx(dataset="cfb_pbp", join_keys=())))
+    assert by_rule["yds_rushed_range"].metric == 2.0
+
+
+def test_cfb_pbp_penalty_subtype_requires_flag():
+    frame = pl.DataFrame(
+        {
+            "penalty_declined": [True, True, False],
+            "penalty_flag": [False, True, False],  # row0 violates
+        }
+    )
+    by_rule = _findings_by_rule(definitional.run("cfb_pbp", frame, _ctx(dataset="cfb_pbp", join_keys=())))
+    assert by_rule["penalty_declined_requires_penalty_flag"].metric == 1.0
+
+
+def test_cfb_pbp_yds_penalty_numeric_string_is_warn():
+    frame = pl.DataFrame({"yds_penalty": ["15", "-10", "U (", "k 8", None]})  # rows 2+3
+    by_rule = _findings_by_rule(definitional.run("cfb_pbp", frame, _ctx(dataset="cfb_pbp", join_keys=())))
+    f = by_rule["yds_penalty_numeric_string"]
+    assert f.metric == 2.0 and f.severity is Severity.WARN and f.needs_judgment
+
+
+def test_cfb_pbp_epa_contract_excludes_documented_overlays():
+    # row0: end-of-half overlay (excluded); row1: penalty-in-text overlay
+    # (excluded); row2: ordinary play violating the identity (fires)
+    frame = pl.DataFrame(
+        {
+            "EPA": [-1.5, 0.9, 2.0],
+            "EP_end": [1.0, 1.0, 1.0],
+            "EP_start": [1.5, 0.5, 0.5],
+            "end_of_half": [True, False, False],
+            "scoring_play": [False, False, False],
+            "penalty_in_text": [False, True, False],
+            "type.text": ["Rush", "Rush", "Rush"],
+            "kickoff_play": [False, False, False],
+        }
+    )
+    by_rule = _findings_by_rule(definitional.run("cfb_pbp", frame, _ctx(dataset="cfb_pbp", join_keys=())))
+    f = by_rule["epa_snapshot_identity_outside_overlays"]
+    assert f.metric == 1.0 and f.severity is Severity.ERROR
+
+
+def test_cfb_model_pbp_epa_contract_derived_exclusions():
+    # Half buckets: periods 1-2 -> bucket 1, periods 3+ -> bucket 2. All four
+    # rows violate the raw identity; each exclusion clause is exercised in
+    # ISOLATION: row 0 (bucket 1, not last, clean text) fires; row 1 is
+    # excluded ONLY as last-of-bucket-1; row 2 is excluded ONLY by its
+    # penalty text (row 3 holds bucket 2's max gpn); row 3 is excluded ONLY
+    # as last-of-bucket-2.
+    frame = pl.DataFrame(
+        {
+            "game_id": [1, 1, 1, 1],
+            "game_play_number": [1, 2, 3, 4],
+            "period": [1, 2, 3, 4],
+            "epa": [9.0, 9.0, 9.0, 9.0],
+            "ep_after": [1.0, 1.0, 1.0, 1.0],
+            "ep_before": [0.5, 0.5, 0.5, 0.5],
+            "text": ["rush for 5 yds", "rush for 5 yds", "Penalty on the play, declined", "rush for 5 yds"],
+            "type.text": ["Rush", "Rush", "Rush", "Rush"],
+        }
+    )
+    by_rule = _findings_by_rule(definitional.run("cfb_model_pbp", frame, _ctx()))
+    assert by_rule["epa_snapshot_identity_outside_overlays"].metric == 1.0
+
+    # negative control for the penalty clause: with clean text on row 2 the
+    # same frame fires twice
+    clean = frame.with_columns(pl.lit("rush for 5 yds").alias("text"))
+    by_rule = _findings_by_rule(definitional.run("cfb_model_pbp", clean, _ctx()))
+    assert by_rule["epa_snapshot_identity_outside_overlays"].metric == 2.0
+
+
+def test_nfl_penalty_desc_rules():
+    frame = pl.DataFrame(
+        {
+            "penalty": [1, 0, 1],
+            "desc": ["rush, PENALTY holding", "PENALTY declined", "clean rush"],  # r1 WARN, r2 ERROR
+        }
+    )
+    ctx = _ctx(dataset="nfl_model_pbp", domain="nfl", join_keys=())
+    by_rule = _findings_by_rule(definitional.run("nfl_model_pbp", frame, ctx))
+    assert by_rule["penalty_implies_desc_mention"].metric == 1.0
+    f = by_rule["desc_penalty_mention_without_flag"]
+    assert f.metric == 1.0 and f.severity is Severity.WARN
+
+
+def test_nfl_kick_distance_rules():
+    frame = pl.DataFrame(
+        {
+            "kick_distance": [45, None, 50],
+            "punt_attempt": [0, 0, 0],
+            "kickoff_attempt": [1, 1, 0],
+            "field_goal_attempt": [0, 0, 0],  # row1: kickoff missing distance; row2: distance w/o kick
+        }
+    )
+    ctx = _ctx(dataset="nfl_model_pbp", domain="nfl", join_keys=())
+    by_rule = _findings_by_rule(definitional.run("nfl_model_pbp", frame, ctx))
+    assert by_rule["kick_distance_populated_on_kickoff"].metric == 1.0
+    assert by_rule["kick_distance_requires_kick_play"].metric == 1.0
 
 
 def test_nfl_clock_hierarchy_skips_overtime():
