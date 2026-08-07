@@ -523,9 +523,12 @@ from sportsdataverse.wbb import wbb_bracket_sim as wbb_bracket_sim  # noqa: F401
 from sportsdataverse.wbb import wbb_bracketology as wbb_bracketology  # noqa: F401
 from sportsdataverse.wbb import wbb_in_game_win_prob as wbb_in_game_win_prob  # noqa: F401
 from sportsdataverse.wbb import wbb_pbp_disk as wbb_pbp_disk  # noqa: F401
+from sportsdataverse.wbb import wbb_player_crosswalk as wbb_player_crosswalk  # noqa: F401
 from sportsdataverse.wbb import wbb_predict_games as wbb_predict_games  # noqa: F401
+from sportsdataverse.wbb import wbb_schedule_crosswalk as wbb_schedule_crosswalk  # noqa: F401
 from sportsdataverse.wbb import wbb_season_sim as wbb_season_sim  # noqa: F401
 from sportsdataverse.wbb import wbb_strength_of_schedule as wbb_strength_of_schedule  # noqa: F401
+from sportsdataverse.wbb import wbb_team_crosswalk as wbb_team_crosswalk  # noqa: F401
 from sportsdataverse.wbb import wbb_team_ratings as wbb_team_ratings  # noqa: F401
 from sportsdataverse.wbb import weighted_avg as weighted_avg  # noqa: F401
 from sportsdataverse.wbb import win_prob_from_margin as win_prob_from_margin  # noqa: F401
@@ -1031,9 +1034,12 @@ __all__ = [
     "wbb_bracketology",
     "wbb_in_game_win_prob",
     "wbb_pbp_disk",
+    "wbb_player_crosswalk",
     "wbb_predict_games",
+    "wbb_schedule_crosswalk",
     "wbb_season_sim",
     "wbb_strength_of_schedule",
+    "wbb_team_crosswalk",
     "wbb_team_ratings",
     "weighted_avg",
     "win_prob_from_margin",

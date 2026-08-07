@@ -404,8 +404,10 @@ from sportsdataverse.mbb import mbb_bracketology as mbb_bracketology  # noqa: F4
 from sportsdataverse.mbb import mbb_draft_projection as mbb_draft_projection  # noqa: F401
 from sportsdataverse.mbb import mbb_in_game_win_prob as mbb_in_game_win_prob  # noqa: F401
 from sportsdataverse.mbb import mbb_pbp_disk as mbb_pbp_disk  # noqa: F401
+from sportsdataverse.mbb import mbb_player_crosswalk as mbb_player_crosswalk  # noqa: F401
 from sportsdataverse.mbb import mbb_predict_games as mbb_predict_games  # noqa: F401
 from sportsdataverse.mbb import mbb_recruiting_projection as mbb_recruiting_projection  # noqa: F401
+from sportsdataverse.mbb import mbb_schedule_crosswalk as mbb_schedule_crosswalk  # noqa: F401
 from sportsdataverse.mbb import mbb_season_sim as mbb_season_sim  # noqa: F401
 from sportsdataverse.mbb import mbb_shooter_talent as mbb_shooter_talent  # noqa: F401
 from sportsdataverse.mbb import mbb_shot_data as mbb_shot_data  # noqa: F401
@@ -413,6 +415,7 @@ from sportsdataverse.mbb import mbb_shot_quality as mbb_shot_quality  # noqa: F4
 from sportsdataverse.mbb import mbb_shot_quality_model as mbb_shot_quality_model  # noqa: F401
 from sportsdataverse.mbb import mbb_shot_selection as mbb_shot_selection  # noqa: F401
 from sportsdataverse.mbb import mbb_strength_of_schedule as mbb_strength_of_schedule  # noqa: F401
+from sportsdataverse.mbb import mbb_team_crosswalk as mbb_team_crosswalk  # noqa: F401
 from sportsdataverse.mbb import mbb_team_ratings as mbb_team_ratings  # noqa: F401
 from sportsdataverse.mbb import mbb_transfer_projection as mbb_transfer_projection  # noqa: F401
 from sportsdataverse.mbb import misspellings as misspellings  # noqa: F401
@@ -934,8 +937,10 @@ __all__ = [
     "mbb_draft_projection",
     "mbb_in_game_win_prob",
     "mbb_pbp_disk",
+    "mbb_player_crosswalk",
     "mbb_predict_games",
     "mbb_recruiting_projection",
+    "mbb_schedule_crosswalk",
     "mbb_season_sim",
     "mbb_shooter_talent",
     "mbb_shot_data",
@@ -943,6 +948,7 @@ __all__ = [
     "mbb_shot_quality_model",
     "mbb_shot_selection",
     "mbb_strength_of_schedule",
+    "mbb_team_crosswalk",
     "mbb_team_ratings",
     "mbb_transfer_projection",
     "misspellings",

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from sportsdataverse.wbb.wbb_bracketology import *
+from sportsdataverse.wbb.wbb_crosswalk import *
 from sportsdataverse.wbb.wbb_espn_ext import *
 from sportsdataverse.wbb.wbb_fox_ext import *
 from sportsdataverse.wbb.bart_wbb import *

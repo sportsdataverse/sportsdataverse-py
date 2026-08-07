@@ -8600,6 +8600,43 @@ _No description available._
 | `game_id` |  |  |  |
 | `path_to_json` |  |  |  |
 
+### `wbb_player_crosswalk(season: 'Optional[int]' = None, min_confidence: 'float' = 0.92, *, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#wbb_player_crosswalk}
+
+Build the WBB cross-source player crosswalk (ESPN / Fox).
+
+One row per ESPN athlete per team. Fox is matched by normalized name
+within each team block -- exact first, then Jaro-Winkler at or above
+`min_confidence` with a jersey tiebreak. Torvik has no per-player table
+for WBB, so it is not joined; Yahoo columns are null placeholders.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `Optional[int]` | `None` | Season year (e.g. `2026`). Defaults to the most recent WBB season. |
+| `min_confidence` | `float` | `0.92` | Jaro-Winkler floor for fuzzy matches (R default 0.92). |
+| `return_as_pandas` | `bool` | `False` | Return pandas instead of polars. |
+
+**Returns**
+
+`pl.DataFrame` (or pandas), one row per ESPN athlete, 17 columns ending in `match_method` / `match_confidence` / `match_keys`.
+
+**Example**
+
+```python
+from sportsdataverse.wbb import wbb_player_crosswalk
+df = wbb_player_crosswalk(season=2026)
+print(df["match_method"].value_counts())
+
+# Tighten the fuzzy floor
+
+strict = wbb_player_crosswalk(season=2026, min_confidence=0.97)
+
+# Pipeline next step (one line)
+
+df.filter(pl.col("match_method") == "fuzzy_jw").head()
+```
+
 ### `wbb_predict_games(games: 'pl.DataFrame', ratings: 'pl.DataFrame', *, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#wbb_predict_games}
 
 Women's vectorized pregame predictions over a schedule.
@@ -8623,6 +8660,38 @@ One row per input game: `game_id, home_team_id, away_team_id, exp_margin, home_w
 ```python
 from sportsdataverse.wbb import wbb_predict_games, wbb_team_ratings
 preds = wbb_predict_games(games, wbb_team_ratings(2024))
+```
+
+### `wbb_schedule_crosswalk(season: 'Optional[int]' = None, *, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#wbb_schedule_crosswalk}
+
+Build the WBB cross-source schedule crosswalk (ESPN / Torvik).
+
+One row per game. Dates are reduced to the Eastern-Time game date before
+joining and Torvik's unordered `team1`/`team2` join through a sorted
+ESPN team-pair key, so home/away is taken from the ESPN side only. Torvik
+games whose teams cannot be resolved to ESPN ids survive as `bart_only`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `Optional[int]` | `None` | Season year (e.g. `2026`). Defaults to the most recent WBB season. |
+| `return_as_pandas` | `bool` | `False` | Return pandas instead of polars. |
+
+**Returns**
+
+`pl.DataFrame` (or pandas) with `SCHEDULE_COLUMNS`.
+
+**Example**
+
+```python
+from sportsdataverse.wbb import wbb_schedule_crosswalk
+df = wbb_schedule_crosswalk(season=2026)
+print(df["match_method"].value_counts())
+
+# Pipeline next step (one line)
+
+df.filter(pl.col("match_method") == "both").select("espn_game_id", "bart_muid").head()
 ```
 
 ### `wbb_season_sim(ratings: 'pl.DataFrame', remaining_schedule: 'pl.DataFrame', *, n_sims: 'int' = 10000, seed: 'int' = 0, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#wbb_season_sim}
@@ -8674,6 +8743,45 @@ One row per (season, team_id): `season, team_id, sos, sos_rank, wab, quad1_w .. 
 ```python
 from sportsdataverse.wbb import wbb_strength_of_schedule
 wbb_strength_of_schedule([2024]).sort("wab", descending=True).head(20)
+```
+
+### `wbb_team_crosswalk(season: 'Optional[int]' = None, *, fox: 'Optional[pl.DataFrame]' = None, bart: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#wbb_team_crosswalk}
+
+Build the WBB cross-source team crosswalk (ESPN / Fox / Torvik).
+
+One row per ESPN team, keyed on `espn_team_id`. Fox is joined on the
+normalized full mascot name (with the curated `FOX_DISPLAY_ALIAS`
+bridge); Torvik on the normalized school name after the
+`BART_ALIAS` pass. Yahoo columns are null placeholders.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `Optional[int]` | `None` | Season year (e.g. `2026`). Defaults to the most recent WBB season. |
+| `fox` | `Optional[DataFrame]` | `None` | Pre-fetched `fox_wbb_teams_all()` frame. `None` fetches live (~60 s); pass an empty frame to skip Fox entirely. |
+| `bart` | `Optional[DataFrame]` | `None` | Pre-fetched `bart_wbb_ratings()` frame. `None` fetches live. |
+| `return_as_pandas` | `bool` | `False` | Return pandas instead of polars. |
+
+**Returns**
+
+`pl.DataFrame` (or pandas), one row per ESPN team, with `TEAM_COLUMNS`.
+
+**Example**
+
+```python
+from sportsdataverse.wbb import wbb_team_crosswalk
+df = wbb_team_crosswalk(season=2026)
+print(df.shape)
+
+# Skip the slow Fox enumeration
+
+import polars as pl
+df = wbb_team_crosswalk(season=2026, fox=pl.DataFrame())
+
+# Pipeline next step (one line)
+
+df.filter(pl.col("match_method") == "fox+bart").head()
 ```
 
 ### `wbb_team_ratings(seasons: 'Union[int, list[int]]', *, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#wbb_team_ratings}

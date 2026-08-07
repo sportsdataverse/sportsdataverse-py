@@ -6700,6 +6700,43 @@ _No description available._
 | `game_id` |  |  |  |
 | `path_to_json` |  |  |  |
 
+### `mbb_player_crosswalk(season: 'Optional[int]' = None, min_confidence: 'float' = 0.92, *, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#mbb_player_crosswalk}
+
+Build the MBB cross-source player crosswalk (ESPN / Fox).
+
+One row per ESPN athlete per team. Fox is matched by normalized name
+within each team block -- exact first (jersey-tiebroken, per hoopR), then
+Jaro-Winkler at or above `min_confidence`. KenPom and Torvik publish no
+per-player tables, so neither is joined.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `Optional[int]` | `None` | Season year (e.g. `2026`). Defaults to the most recent MBB season. |
+| `min_confidence` | `float` | `0.92` | Jaro-Winkler floor for fuzzy matches (R default 0.92). |
+| `return_as_pandas` | `bool` | `False` | Return pandas instead of polars. |
+
+**Returns**
+
+`pl.DataFrame` (or pandas), one row per ESPN athlete, 17 columns.
+
+**Example**
+
+```python
+from sportsdataverse.mbb import mbb_player_crosswalk
+df = mbb_player_crosswalk(season=2026)
+print(df["match_method"].value_counts())
+
+# Tighten the fuzzy floor
+
+strict = mbb_player_crosswalk(season=2026, min_confidence=0.97)
+
+# Pipeline next step (one line)
+
+df.filter(pl.col("match_method") == "fuzzy_jw").head()
+```
+
 ### `mbb_predict_games(games: 'pl.DataFrame', ratings: 'pl.DataFrame', *, league: 'str' = 'mens', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#mbb_predict_games}
 
 Vectorized pregame predictions for a schedule of games.
@@ -6761,6 +6798,40 @@ proj = mbb_recruiting_projection(2026)
 # Pipeline next step (one line)
 
 proj.sort("exp_box_bpm", descending=True).head(15)
+```
+
+### `mbb_schedule_crosswalk(season: 'Optional[int]' = None, *, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#mbb_schedule_crosswalk}
+
+Build the MBB cross-source schedule crosswalk (ESPN / Torvik).
+
+One row per game. Dates reduce to the Eastern-Time game date before
+joining and Torvik's unordered `team1`/`team2` join through a sorted
+ESPN team-pair key. Torvik games whose teams cannot be resolved to ESPN
+ids are dropped (the MBB variant differs from WBB here). `kp_game_id` is
+a null placeholder -- the R builder's optional KenPom enrichment needs a
+paid subscription and is not ported.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `Optional[int]` | `None` | Season year (e.g. `2026`). Defaults to the most recent MBB season. |
+| `return_as_pandas` | `bool` | `False` | Return pandas instead of polars. |
+
+**Returns**
+
+`pl.DataFrame` (or pandas) with `SCHEDULE_COLUMNS`.
+
+**Example**
+
+```python
+from sportsdataverse.mbb import mbb_schedule_crosswalk
+df = mbb_schedule_crosswalk(season=2026)
+print(df["match_method"].value_counts())
+
+# Pipeline next step (one line)
+
+df.filter(pl.col("match_method") == "both").select("espn_game_id", "bart_muid").head()
 ```
 
 ### `mbb_season_sim(ratings: 'pl.DataFrame', remaining_schedule: 'pl.DataFrame', *, n_sims: 'int' = 10000, seed: 'int' = 0, league: 'str' = 'mens', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#mbb_season_sim}
@@ -6968,6 +7039,46 @@ resume = mbb_strength_of_schedule([2024])
 # Pipeline next step (one line)
 
 resume.sort("wab", descending=True).head(20)
+```
+
+### `mbb_team_crosswalk(season: 'Optional[int]' = None, *, fox: 'Optional[pl.DataFrame]' = None, bart: 'Optional[pl.DataFrame]' = None, kenpom: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#mbb_team_crosswalk}
+
+Build the MBB cross-source team crosswalk (ESPN / Fox / Torvik / KenPom).
+
+One row per ESPN team, keyed on `espn_team_id`. Fox joins on the
+normalized mascot name via `FOX_DISPLAY_ALIAS`; Torvik and KenPom
+each join on the normalized school name after `BART_ALIAS` /
+`KP_ALIAS`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `Optional[int]` | `None` | Season year (e.g. `2026`). Defaults to the most recent MBB season. |
+| `fox` | `Optional[DataFrame]` | `None` | Pre-fetched `fox_mbb_teams_all()`-shaped frame. `None` fetches live; pass an empty frame to skip Fox. |
+| `bart` | `Optional[DataFrame]` | `None` | Pre-fetched `torvik_ratings()` frame. `None` fetches live. |
+| `kenpom` | `Optional[DataFrame]` | `None` | KenPom teams frame with `Team` / `Conf`. KenPom is a paid subscription and sdv-py bundles no KenPom data, so this is `None` (KenPom columns null) unless you supply a frame. |
+| `return_as_pandas` | `bool` | `False` | Return pandas instead of polars. |
+
+**Returns**
+
+`pl.DataFrame` (or pandas), one row per ESPN team, with `TEAM_COLUMNS`.
+
+**Example**
+
+```python
+from sportsdataverse.mbb import mbb_team_crosswalk
+df = mbb_team_crosswalk(season=2026)
+print(df.shape)
+
+# Skip the slow Fox enumeration
+
+import polars as pl
+df = mbb_team_crosswalk(season=2026, fox=pl.DataFrame())
+
+# Pipeline next step (one line)
+
+df.filter(pl.col("match_method") == "espn_only").select("espn_display_name").head()
 ```
 
 ### `mbb_team_ratings(seasons: 'int | list[int]', *, league: 'str' = 'mens', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#mbb_team_ratings}
