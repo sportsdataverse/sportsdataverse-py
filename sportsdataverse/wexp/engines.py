@@ -24,10 +24,12 @@ import numpy as np
 import polars as pl
 
 from sportsdataverse._common.ratings import opponent_adjusted_ridge
-from sportsdataverse.wexp.backtest import WeekPredictor, normalize_walk_weeks
+from sportsdataverse.wexp.backtest import WeekPredictor, elo_predictor, normalize_walk_weeks
+from sportsdataverse.wexp.elo import EloConfig
 from sportsdataverse.wexp.store import VintageStore
+from sportsdataverse.wexp.variants import VariantConfig
 
-__all__ = ["ratings_predictor", "ridge_margin_vintages"]
+__all__ = ["build_predictor", "ratings_predictor", "ridge_margin_vintages"]
 
 _VINTAGE_SCHEMA: dict[str, type[pl.DataType]] = {
     "season": pl.Int32,
@@ -198,3 +200,60 @@ def ratings_predictor(
         return pl.Series(out).fill_nan(None)
 
     return predict
+
+
+def build_predictor(config: VariantConfig, *, table: str = "ridge", sigma: float = 13.45) -> WeekPredictor:
+    """Dispatch a variant config to its implemented week predictor.
+
+    Implemented cells: ``elo_margin`` (prior ``flat`` = full season reset,
+    ``carryover`` = the ``carryover`` tunable; ``wp_map`` must be
+    ``elo_logistic``) and ``ridge_epa`` with ``response="raw"`` /
+    ``opponent_adjust="ridge"`` / ``prior="flat"`` served from a
+    registered ridge vintage table with ``wp_map`` in ``margin_normal`` /
+    ``isotonic``. Every other valid config cell raises
+    ``NotImplementedError`` until its engine lands — never a silent
+    fallback to a different model.
+
+    Args:
+        config: The variant to build.
+        table: Ratings vintage table name (EPA-family cores).
+        sigma: Default margin SD for the normal link (``sigma`` in
+            ``config.params`` wins).
+
+    Returns:
+        A predictor callable for :func:`~sportsdataverse.wexp.backtest.run_backtest`.
+
+    Raises:
+        NotImplementedError: For a valid config cell whose engine has not
+            landed yet.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.wexp.engines import build_predictor
+            from sportsdataverse.wexp.variants import VariantConfig
+            predict = build_predictor(VariantConfig(
+                core="elo_margin", response="raw", opponent_adjust="none",
+                prior="carryover", wp_map="elo_logistic", hfa="fixed"))
+    """
+    params = dict(config.params)
+    if config.core == "elo_margin" and config.wp_map == "elo_logistic" and config.hfa == "fixed":
+        carryover = 0.0 if config.prior == "flat" else params.get("carryover", 0.67)
+        return elo_predictor(
+            EloConfig(
+                k=params.get("k", 20.0),
+                z=params.get("z", 400.0),
+                hfa=params.get("hfa", 65.0),
+                carryover=carryover,
+            )
+        )
+    if (
+        config.core == "ridge_epa"
+        and config.response == "raw"
+        and config.opponent_adjust == "ridge"
+        and config.prior == "flat"
+        and config.hfa == "fixed"
+        and config.wp_map in ("margin_normal", "isotonic")
+    ):
+        return ratings_predictor(table, wp_map=config.wp_map, sigma=params.get("sigma", sigma))
+    raise NotImplementedError(f"no engine landed yet for variant {config}")

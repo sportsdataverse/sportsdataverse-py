@@ -78,6 +78,90 @@ def test_ridge_isotonic_backtest(nfl_oracle, store):
     assert pooled["brier"] < 0.24  # observed 0.2276
 
 
+def test_build_predictor_elo_matches_direct(nfl_oracle):
+    from sportsdataverse.wexp.backtest import elo_predictor
+    from sportsdataverse.wexp.elo import EloConfig
+    from sportsdataverse.wexp.engines import build_predictor
+    from sportsdataverse.wexp.variants import VariantConfig
+
+    variant = VariantConfig(
+        core="elo_margin",
+        response="raw",
+        opponent_adjust="none",
+        prior="carryover",
+        wp_map="elo_logistic",
+        hfa="fixed",
+        params=(("k", 9.1), ("z", 402.0), ("carryover", 0.53)),
+    )
+    got, _ = run_backtest(nfl_oracle, build_predictor(variant), model_id="elo", variant=variant)
+    want, _ = run_backtest(
+        nfl_oracle,
+        elo_predictor(EloConfig(k=9.1, z=402.0, carryover=0.53)),
+        model_id="elo",
+        variant=variant,
+    )
+    assert (got["p_home"] - want["p_home"]).abs().max() < 1e-12
+    # prior="flat" means full season reset (carryover 0), a different walk
+    flat = VariantConfig(
+        core="elo_margin",
+        response="raw",
+        opponent_adjust="none",
+        prior="flat",
+        wp_map="elo_logistic",
+        hfa="fixed",
+    )
+    got_flat, _ = run_backtest(nfl_oracle, build_predictor(flat), model_id="elo", variant=flat)
+    assert (got_flat["p_home"] - got["p_home"]).abs().max() > 1e-6
+
+
+def test_build_predictor_ridge_dispatch(nfl_oracle, store):
+    from sportsdataverse.wexp.engines import build_predictor
+    from sportsdataverse.wexp.variants import VariantConfig
+
+    variant = VariantConfig(
+        core="ridge_epa",
+        response="raw",
+        opponent_adjust="ridge",
+        prior="flat",
+        wp_map="margin_normal",
+        hfa="fixed",
+    )
+    probs, _ = run_backtest(
+        nfl_oracle, build_predictor(variant, table="ridge"), model_id="r", variant=variant, store=store
+    )
+    direct, _ = run_backtest(nfl_oracle, ratings_predictor("ridge"), model_id="r", store=store)
+    assert probs["p_home"].fill_null(-1.0).equals(direct["p_home"].fill_null(-1.0))
+
+
+def test_build_predictor_unimplemented_combo():
+    from sportsdataverse.wexp.engines import build_predictor
+    from sportsdataverse.wexp.variants import VariantConfig
+
+    with pytest.raises(NotImplementedError):
+        build_predictor(
+            VariantConfig(
+                core="glickman_stern",
+                response="raw",
+                opponent_adjust="none",
+                prior="flat",
+                wp_map="elo_logistic",
+                hfa="fixed",
+            )
+        )
+    with pytest.raises(NotImplementedError):
+        # valid config cell, engine for the wepa response not yet landed
+        build_predictor(
+            VariantConfig(
+                core="ridge_epa",
+                response="wepa",
+                opponent_adjust="ridge",
+                prior="flat",
+                wp_map="margin_normal",
+                hfa="fixed",
+            )
+        )
+
+
 def test_unknown_wp_map_refused():
     with pytest.raises(ValueError, match="wp_map"):
         ratings_predictor("ridge", wp_map="monte_carlo")
