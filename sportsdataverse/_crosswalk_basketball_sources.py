@@ -19,15 +19,48 @@ from typing import Any, Callable, Dict, List, Optional, Sequence
 import polars as pl
 
 from sportsdataverse._common_crosswalk_basketball import str_id, to_eastern
+from sportsdataverse.errors import SportsDataverseError
 
 __all__ = [
+    "CrosswalkSourceError",
     "espn_team_directory",
     "espn_scoreboard_games",
     "espn_rosters",
     "fox_rosters",
     "stats_rosters",
     "bart_super_sked",
+    "stats_schedule_games",
 ]
+
+
+class CrosswalkSourceError(SportsDataverseError):
+    """Raised when a whole-source crosswalk fetch produced nothing usable.
+
+    A crosswalk join against a source that returned nothing degrades every row
+    to ``unmatched`` — a well-formed, entirely wrong output. These adapters
+    therefore distinguish *provably empty* (the provider answered, and the
+    answer had no games) from *unproduced* (the fetch failed, or the payload
+    could not be rendered): the first returns a typed empty frame, the second
+    raises this.
+
+    Only whole-source fetches raise. The per-item loops (one scoreboard call
+    per date, one roster call per team) keep tolerating an individual failure,
+    matching the R producers.
+
+    Example:
+        Fail loudly instead of publishing an all-null crosswalk::
+
+            from sportsdataverse._crosswalk_basketball_sources import (
+                CrosswalkSourceError,
+                stats_schedule_games,
+            )
+
+            try:
+                games = stats_schedule_games("wnba", 2026)
+            except CrosswalkSourceError as exc:
+                print(f"refusing to build a crosswalk: {exc}")
+    """
+
 
 # The 55 positional fields of barttorvik's {year}_super_sked.json, per Torvik's
 # documentation (https://adamcwisports.blogspot.com/p/data.html). Transcribed
@@ -204,7 +237,12 @@ def espn_rosters(
     Returns:
         ``pl.DataFrame`` with ``espn_team_id``, ``team_abbreviation``,
         ``espn_athlete_id``, ``espn_full_name``, ``espn_jersey``,
-        ``espn_position``, ``espn_birth_date``; empty on any fetch failure.
+        ``espn_position``, ``espn_birth_date``; empty on any fetch failure (a
+        single team's roster is per-item tolerant, as in the R producers).
+
+    Raises:
+        CrosswalkSourceError: The roster had rows but no resolvable athlete id,
+            which would silently break every join keyed on it.
 
     Example:
         Quick start::
@@ -229,15 +267,30 @@ def espn_rosters(
         return empty
     if raw is None or not isinstance(raw, pl.DataFrame) or raw.height == 0:
         return empty
-    return raw.select(
+    # The wbb/wnba roster module names the athlete key `athlete_id`; the generic
+    # ESPN wrappers behind mbb/nba name it `id`. Looking for only one of the two
+    # yielded an all-null join key -- a full roster whose every row then failed to
+    # rejoin its own match, which is why every NBA player row came back with a
+    # null match_method instead of exact_name/unmatched.
+    athlete_key = next((c for c in ("athlete_id", "id") if c in raw.columns), "athlete_id")
+    out = raw.select(
         pl.lit(int(espn_team_id), dtype=pl.Int32).alias("espn_team_id"),
         pl.lit(abbreviation, dtype=pl.Utf8).alias("team_abbreviation"),
-        str_id(raw, "athlete_id").alias("espn_athlete_id"),
+        str_id(raw, athlete_key).alias("espn_athlete_id"),
         _pick(raw, "full_name", "display_name").cast(pl.Utf8).alias("espn_full_name"),
         str_id(raw, "jersey").alias("espn_jersey"),
         _pick(raw, "position_abbreviation", "position_abbrev").cast(pl.Utf8).alias("espn_position"),
         _pick(raw, "birth_date", "date_of_birth").cast(pl.Utf8).alias("espn_birth_date"),
     )
+    if out["espn_athlete_id"].null_count() == out.height:
+        # A populated roster with no athlete id is a renamed upstream column, not
+        # a roster of anonymous players. Fail here rather than downstream, where
+        # it only shows up as a silently unjoinable crosswalk.
+        raise CrosswalkSourceError(
+            f"espn_{league}_team_roster(team_id={espn_team_id}) returned {out.height} rows "
+            f"with no resolvable athlete id (columns: {sorted(raw.columns)[:15]}...)"
+        )
+    return out
 
 
 def fox_rosters(league: str, espn_team_id: Any, fox_team_id: Optional[str], **kwargs: Any) -> pl.DataFrame:
@@ -424,7 +477,14 @@ def bart_super_sked(league: str, year: int, **kwargs: Any) -> pl.DataFrame:
 
     Returns:
         ``pl.DataFrame`` from :func:`parse_super_sked`, with unparseable dates
-        dropped (as the R readers do).
+        dropped (as the R readers do). Empty only when Torvik served an empty
+        schedule.
+
+    Raises:
+        CrosswalkSourceError: The fetch raised, or the payload could not be
+            parsed into any game row. Same contract as
+            :func:`stats_schedule_games`: an unavailable source must not pass
+            for an empty one.
 
     Example:
         Quick start::
@@ -435,11 +495,17 @@ def bart_super_sked(league: str, year: int, **kwargs: Any) -> pl.DataFrame:
     """
     from sportsdataverse.mbb.torvik_runtime import _get
 
+    url = f"{_TORVIK_HOST[league]}/{year}_super_sked.json"
     try:
-        payload = _get(f"{_TORVIK_HOST[league]}/{year}_super_sked.json", **kwargs)
-    except Exception:
-        payload = "[]"
-    return parse_super_sked(payload, year).filter(pl.col("game_date").is_not_null())
+        payload = _get(url, **kwargs)
+    except Exception as exc:
+        raise CrosswalkSourceError(f"{url} failed: {type(exc).__name__}: {exc}") from exc
+    parsed = parse_super_sked(payload, year)
+    if parsed.height == 0 and payload not in (None, "", "[]", []):
+        raise CrosswalkSourceError(
+            f"{url} returned a payload that parsed to zero games ({type(payload).__name__}, {len(payload)} items/chars)"
+        )
+    return parsed.filter(pl.col("game_date").is_not_null())
 
 
 def stats_schedule_games(league: str, season: int, *, teams: bool = False, **kwargs: Any) -> pl.DataFrame:
@@ -454,8 +520,14 @@ def stats_schedule_games(league: str, season: int, *, teams: bool = False, **kwa
         **kwargs: Forwarded to the wrapper.
 
     Returns:
-        ``pl.DataFrame`` of games (or teams when ``teams=True``); a typed
-        empty frame when the fetch fails.
+        ``pl.DataFrame`` of games (or teams when ``teams=True``). A typed empty
+        frame **only** when the endpoint answered with a valid but game-less
+        schedule — an unavailable source raises instead of degrading every
+        downstream join to ``unmatched``.
+
+    Raises:
+        CrosswalkSourceError: The fetch raised, or returned a payload the
+            ``scheduleleaguev2`` parser could not render into a frame.
 
     Note:
         ``stats.{nba,wnba}.com`` hangs on datacenter IPs. Prefer passing a
@@ -483,6 +555,8 @@ def stats_schedule_games(league: str, season: int, *, teams: bool = False, **kwa
         f"{p}_team_city": pl.Utf8,
         f"{p}_team_slug": pl.Utf8,
     }
+    from sportsdataverse.nba.nba_stats_parsers import parse_nba_stats_result_sets
+
     if league == "nba":
         from sportsdataverse.nba.nba_stats import nba_stats_scheduleleaguev2 as fetch
 
@@ -491,13 +565,30 @@ def stats_schedule_games(league: str, season: int, *, teams: bool = False, **kwa
         from sportsdataverse.wnba.wnba_stats import wnba_stats_scheduleleaguev2 as fetch
 
         stats_season = str(season)
+    endpoint = f"{league}_stats_scheduleleaguev2(season={stats_season!r})"
     try:
-        raw = fetch(season=stats_season, **kwargs)
-    except Exception:
-        raw = None
-    if isinstance(raw, dict):
-        raw = next((v for v in raw.values() if isinstance(v, pl.DataFrame) and v.height), None)
-    if raw is None or not isinstance(raw, pl.DataFrame) or raw.height == 0:
+        # return_parsed=False so the envelope itself is inspectable: only a
+        # payload that really carries `leagueSchedule.gameDates` can be called
+        # empty. Anything else is unproduced, and must not pass for empty.
+        payload = fetch(season=stats_season, return_parsed=False, **kwargs)
+    except Exception as exc:
+        raise CrosswalkSourceError(f"{endpoint} failed: {type(exc).__name__}: {exc}") from exc
+    if not isinstance(payload, dict) or not isinstance(payload.get("leagueSchedule"), dict):
+        raise CrosswalkSourceError(
+            f"{endpoint} returned no leagueSchedule envelope "
+            f"(got {type(payload).__name__} with keys {sorted(payload)[:10] if isinstance(payload, dict) else '-'})"
+        )
+    game_dates = payload["leagueSchedule"].get("gameDates")
+    if not isinstance(game_dates, list):
+        raise CrosswalkSourceError(
+            f"{endpoint}: leagueSchedule.gameDates is {type(game_dates).__name__}, expected a list"
+        )
+    raw = parse_nba_stats_result_sets(payload)
+    if not isinstance(raw, pl.DataFrame):  # pragma: no cover - single result set by construction
+        raise CrosswalkSourceError(f"{endpoint}: parser returned {type(raw).__name__}, expected a DataFrame")
+    if raw.height == 0:
+        # gameDates was present and genuinely carried no games (e.g. a season
+        # published before its schedule drops) — provably empty, not a failure.
         return pl.DataFrame(schema=team_schema if teams else game_schema)
 
     if teams:

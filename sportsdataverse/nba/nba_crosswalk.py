@@ -267,11 +267,15 @@ def _stats_team_directory(season: int, **kwargs: Any) -> Optional[pl.DataFrame]:
         pl.col("conference").cast(pl.Utf8).alias("nba_conference"),
         pl.col("division").cast(pl.Utf8).alias("nba_division"),
     ).with_columns(
+        # espn_team_directory ships team_id as Utf8 for every league, so build the
+        # series at that dtype and let polars cast -- a direct dtype=pl.Int32
+        # construction from those strings raises TypeError, which is what blocked
+        # every NBA team/player crosswalk. Matches the wnba_crosswalk cast.
         pl.Series(
             "espn_team_id",
             [espn_by_short.get(normalize_team(n)) for n in names],
-            dtype=pl.Int32,
-        )
+            dtype=pl.Utf8,
+        ).cast(pl.Int32)
     )
 
 
