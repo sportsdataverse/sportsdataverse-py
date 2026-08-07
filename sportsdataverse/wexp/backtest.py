@@ -27,7 +27,14 @@ from sportsdataverse.wexp.scoring import append_results, score_probs
 from sportsdataverse.wexp.store import VintageStore
 from sportsdataverse.wexp.variants import VariantConfig, variant_hash
 
-__all__ = ["OUTCOME_COLUMNS", "POSTSEASON_WEEK_OFFSET", "WeekPredictor", "elo_predictor", "run_backtest"]
+__all__ = [
+    "OUTCOME_COLUMNS",
+    "POSTSEASON_WEEK_OFFSET",
+    "WeekPredictor",
+    "elo_predictor",
+    "normalize_walk_weeks",
+    "run_backtest",
+]
 
 # Columns stripped from the slate before an engine sees it.
 OUTCOME_COLUMNS = ("home_margin", "home_win")
@@ -37,6 +44,36 @@ OUTCOME_COLUMNS = ("home_margin", "home_win")
 POSTSEASON_WEEK_OFFSET = 25
 
 _REGULAR_LABELS = ("REG", "regular")
+
+
+def normalize_walk_weeks(games: pl.DataFrame) -> pl.DataFrame:
+    """Offset non-regular ``season_type`` weeks so walk order is monotone.
+
+    CFB postseason weeks reset to 1 in ESPN schedules; adding
+    :data:`POSTSEASON_WEEK_OFFSET` to any non-regular week makes
+    ``(season, week)`` a strict play-order key in both leagues. Vintage
+    builders must apply the same normalization so their ``as_of_week``
+    axis matches the weeks the driver hands to engines.
+
+    Args:
+        games: Frame with ``week`` and ``season_type`` columns.
+
+    Returns:
+        The frame with ``week`` replaced by the normalized week.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.wexp.backtest import normalize_walk_weeks
+            walk = normalize_walk_weeks(oracle)
+    """
+    return games.with_columns(
+        pl.when(pl.col("season_type").is_in(_REGULAR_LABELS))
+        .then(pl.col("week"))
+        .otherwise(pl.col("week") + POSTSEASON_WEEK_OFFSET)
+        .alias("week")
+    )
+
 
 WeekPredictor = Callable[
     [pl.DataFrame, pl.DataFrame, Optional[VintageStore]],
@@ -131,12 +168,7 @@ def run_backtest(
     if oracle["game_id"].n_unique() != oracle.height:
         raise ValueError("oracle has duplicate game_id rows — the prediction join would fan out")
     league = oracle["league"][0]
-    walk = oracle.with_columns(
-        pl.when(pl.col("season_type").is_in(_REGULAR_LABELS))
-        .then(pl.col("week"))
-        .otherwise(pl.col("week") + POSTSEASON_WEEK_OFFSET)
-        .alias("week")
-    )
+    walk = normalize_walk_weeks(oracle)
     preds: list[pl.DataFrame] = []
     for season, week in walk.select("season", "week").unique().sort("season", "week").iter_rows():
         history = walk.filter(

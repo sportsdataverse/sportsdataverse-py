@@ -29,6 +29,10 @@ from sportsdataverse.wexp.elo import (
     EloConfig,
     elo_ratings,
 )
+from sportsdataverse.wexp.engines import (
+    ratings_predictor,
+    ridge_margin_vintages,
+)
 from sportsdataverse.wexp.oracle_market import (
     ORACLE_COLUMNS,
     build_cfb_market_oracle,
@@ -95,6 +99,8 @@ __all__ = [
     "moneyline_pair_prob",
     "prob_from_american",
     "prob_from_decimal",
+    "ratings_predictor",
+    "ridge_margin_vintages",
     "result_rows",
     "run_backtest",
     "score_baselines",
