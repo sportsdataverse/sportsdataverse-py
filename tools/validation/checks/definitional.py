@@ -587,17 +587,19 @@ def run(dataset: str, frame: pl.DataFrame, ctx: CheckContext) -> list[Finding]:
 
     try:
         counts = frame.select([r.violation.sum().cast(pl.Int64).alias(r.name) for r in rules]).row(0, named=True)
-    except pl.exceptions.SchemaError:
+    except (pl.exceptions.SchemaError, pl.exceptions.InvalidOperationError):
         # A degenerate column dtype (e.g. an all-null series polars typed as
-        # Null) breaks schema resolution for string-op rules. Fall back to
-        # per-rule evaluation and skip the unresolvable ones — the dtype
-        # divergence itself is schema_contract's finding, not a definitional
-        # violation.
+        # Null) breaks expression resolution for string-op and arithmetic
+        # rules — as SchemaError for str.strip_chars but
+        # InvalidOperationError for str.contains and abs on polars 1.42.
+        # Fall back to per-rule evaluation and skip the unresolvable ones —
+        # the dtype divergence itself is schema_contract's finding, not a
+        # definitional violation.
         counts = {}
         for r in rules:
             try:
                 counts[r.name] = frame.select(r.violation.sum().cast(pl.Int64)).item()
-            except pl.exceptions.SchemaError:
+            except (pl.exceptions.SchemaError, pl.exceptions.InvalidOperationError):
                 counts[r.name] = 0
 
     findings: list[Finding] = []

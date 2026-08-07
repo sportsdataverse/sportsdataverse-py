@@ -215,6 +215,15 @@ def test_nfl_posteam_participant_rules_allow_null_posteam():
     assert "defteam_is_a_participant" not in by_rule
 
 
+def test_null_dtype_column_skips_string_rules_instead_of_crashing():
+    # an all-null series polars types as Null; str.contains on it raises
+    # InvalidOperationError (not SchemaError) on 1.42 — the fallback must
+    # skip the rule, not crash run()
+    frame = pl.DataFrame({"passer_player_id": [None, None]})
+    ctx = _ctx(dataset="nfl_model_pbp", domain="nfl", join_keys=())
+    assert definitional.run("nfl_model_pbp", frame, ctx) == []
+
+
 def test_nfl_clock_hierarchy_skips_overtime():
     frame = pl.DataFrame(
         {
