@@ -9,6 +9,7 @@ import polars as pl
 
 from tools.validation.checks import (
     boundary_leakage,
+    combo_drift,
     constant_column,
     definitional,
     extraction,
@@ -28,7 +29,16 @@ from tools.validation.lint import leakage_python, leakage_r
 # pin the package from git and have no dev group. `compare` needs neither the
 # dataset registry nor the thresholds, so it must not pay for them.
 
-_CHECKS = (schema_contract, extraction, numeric_parity, sweep, boundary_leakage, constant_column, definitional)
+_CHECKS = (
+    schema_contract,
+    extraction,
+    numeric_parity,
+    sweep,
+    boundary_leakage,
+    constant_column,
+    definitional,
+    combo_drift,
+)
 
 _LINTERS: dict[str, ModuleType] = {"python": leakage_python, "r": leakage_r}
 

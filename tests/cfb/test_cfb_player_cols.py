@@ -418,3 +418,73 @@ def test_real_surname_not_damaged_by_tail_stripper():
     )
     out = proc._CFBPlayProcess__attach_player_ids(df)
     assert out["rusher_player_name"].to_list() == ["Middleton Banks", "Deep Patel", "LenDale White"]
+
+
+# --- Interceptor extraction -------------------------------------------------
+#
+# The pre-fix pattern was `intercepted (.+)` gated on type.text in
+# ("Interception Return", "Interception Return Touchdown") AND pass == True.
+# Measured against 22 published seasons it missed 99.2% of interception
+# returns and, where it did fire, captured the whole narrative tail
+# ("by Hosea Wheeler at the WKU 47") instead of the name. These tests lock in
+# the era-shaped replacement: an optional "by", an optional "#NN" jersey
+# prefix, and case-toggle termination so the lowercase narrative tail
+# (return/at/broken) cannot be folded into the captured name.
+
+
+def _int_row(text: str) -> dict[str, str | bool]:
+    return _row(text, pass_=True, type_text="Interception Return")
+
+
+def test_interceptor_extracted_old_era_by_clause():
+    out = _run_player_cols(
+        [
+            _int_row(
+                "Bryan Randall (VT) pass across the middle intercepted by Lofa Tatupu (USC). Returned for 32 yards."
+            ),
+            _int_row("Paul Peterson (BC) pass right side intercepted by David Gater (BALL). Returned for 29 yards."),
+        ]
+    )
+    assert out["interception_player_name"].to_list() == ["Lofa Tatupu", "David Gater"]
+
+
+def test_interceptor_extracted_modern_spot_clause_not_narrative_tail():
+    """Regression: the old pattern returned 'by Hosea Wheeler at the WKU 47'."""
+    out = _run_player_cols(
+        [
+            _int_row("Devin Brown pass intercepted by Hosea Wheeler at the WKU 47"),
+            _int_row("Caleb Williams pass intercepted by Xavier Watts at USC 50, returned 38 yds to USC 12"),
+        ]
+    )
+    assert out["interception_player_name"].to_list() == ["Hosea Wheeler", "Xavier Watts"]
+
+
+def test_interceptor_extracted_without_by_clause():
+    """Newer ESPN texts drop the 'by': '<QB> pass intercepted <Name> return ...'."""
+    out = _run_player_cols([_int_row("Diego Pavia pass intercepted Michael Oppong return for 8 yds to the NMSU 35")])
+    assert out["interception_player_name"][0] == "Michael Oppong"
+
+
+def test_interceptor_extracted_with_jersey_prefix_and_initial():
+    """NCAA-style '#NN F.Last' and bare-initial names must both extract."""
+    out = _run_player_cols(
+        [
+            _int_row("(01:30) Shotgun #4 B.Davenport pass intercepted by #3 J.Dugger at UL 38, End Of Play"),
+            _int_row(
+                "Travis Cox (USU) pass across the middle intercepted by S Castille (ALA). Returned for a 31 yard touchdown."
+            ),
+        ]
+    )
+    assert out["interception_player_name"].to_list() == ["J.Dugger", "S Castille"]
+
+
+def test_interceptor_null_when_text_names_nobody():
+    """Texts that never name the interceptor stay null -- the participants
+    endpoint (pass_defender routing) is what fills these, not a guess."""
+    out = _run_player_cols(
+        [
+            _int_row("Grayson James pass intercepted, touchback."),
+            _int_row("Mike Diliello pass intercepted"),
+        ]
+    )
+    assert out["interception_player_name"].to_list() == [None, None]

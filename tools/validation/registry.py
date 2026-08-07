@@ -432,6 +432,32 @@ _CFB_PBP_READ_COLUMNS = (
     "end_of_half",
     "kickoff_play",
     "scoring_play",
+    # Mechanics flags -- the combo_drift check's signature alphabet. These
+    # define the play-type grammar (which flag combinations can co-occur);
+    # the committed snapshot enumerates every combination observed across
+    # 2004-2025 so a genuinely new one surfaces instead of passing silently.
+    "rush",
+    "pass",
+    "completion",
+    "pass_attempt",
+    "target",
+    "sack",
+    "int",
+    "punt_play",
+    "fg_attempt",
+    "fg_made",
+    "fumble_vec",
+    "fumble_lost",
+    "safety",
+    "td_play",
+    "kneel_down",
+    "scrimmage_play",
+    "punt_blocked",
+    "kickoff_onside",
+    "kickoff_tb",
+    "punt_tb",
+    "turnover_vec",
+    "change_of_pos_team",
 )
 
 DATASETS["cfb_pbp"] = DatasetSpec(
