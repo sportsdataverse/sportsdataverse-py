@@ -25,6 +25,7 @@ import numpy as np
 import polars as pl
 
 from sportsdataverse._common.ratings import opponent_adjusted_ridge
+from sportsdataverse.cfb.cfb_advanced_constants import GARBAGE_TIME_MARGIN
 from sportsdataverse.wexp.backtest import WeekPredictor, elo_predictor, normalize_walk_weeks
 from sportsdataverse.wexp.elo import EloConfig
 from sportsdataverse.wexp.store import VintageStore
@@ -170,13 +171,26 @@ def cfb_drive_deltas(pbp: pl.DataFrame) -> pl.DataFrame:
     share-of-available ``pct``. Feeds both the team-game response
     aggregation and the post-game WE resampling (G2/G3).
 
+    Inclusion/exclusion classifiers (callers filter, the substrate keeps
+    every drive):
+
+    - ``garbage`` — the drive STARTED in Connelly garbage time
+      (``|margin_start|`` exceeds the documented per-quarter
+      :data:`~sportsdataverse.cfb.cfb_advanced_constants.GARBAGE_TIME_MARGIN`
+      band; OT clipped to the Q4 band).
+    - ``clock_kill`` — the half's final drive with <= 3 plays and a
+      non-positive delta (kneel / clock-kill signature).
+
     Args:
         pbp: Play frame with ``game_id``, ``pos_team``, ``def_pos_team``,
-            ``drive.id``, ``EPA``, ``EP_start``, ``game_play_number``.
+            ``drive.id``, ``EPA``, ``EP_start``, ``game_play_number``,
+            ``period``, ``pos_team_score``, ``def_pos_team_score``.
 
     Returns:
         One row per (game, drive): ``game_id`` / ``drive.id``, ``off`` /
-        ``deft`` (raw Int64 ids), ``delta``, ``start_ep``, ``pct``.
+        ``deft`` (raw Int64 ids), ``delta``, ``start_ep``, ``pct``,
+        ``period`` / ``margin_start`` / ``plays``, and the ``garbage`` /
+        ``clock_kill`` flags.
 
     Example:
         Quick start::
@@ -203,8 +217,24 @@ def cfb_drive_deltas(pbp: pl.DataFrame) -> pl.DataFrame:
             deft=pl.col("def_pos_team").first(),
             delta=pl.col("EPA").sum(),
             start_ep=pl.col("EP_start").first(),
+            period=pl.col("period").cast(pl.Int64).first(),
+            margin_start=(pl.col("pos_team_score") - pl.col("def_pos_team_score")).cast(pl.Int64).first(),
+            plays=pl.len().cast(pl.Int64),
+            last_play=pl.col("game_play_number").max(),
         )
-        .with_columns(pct=pl.col("delta") / (7.0 - pl.col("start_ep")).clip(lower_bound=0.5))
+        .with_columns(
+            pct=pl.col("delta") / (7.0 - pl.col("start_ep")).clip(lower_bound=0.5),
+            half=pl.when(pl.col("period") <= 2).then(1).otherwise(2),
+            # the documented Connelly per-quarter bands; OT clipped to Q4's
+            garbage=pl.col("margin_start").abs()
+            > pl.col("period").clip(1, 4).replace_strict(GARBAGE_TIME_MARGIN, return_dtype=pl.Int64),
+        )
+        .with_columns(
+            clock_kill=(pl.col("last_play") == pl.col("last_play").max().over("game_id", "half"))
+            & (pl.col("plays") <= 3)
+            & (pl.col("delta") <= 0.0)
+        )
+        .drop("last_play", "half")
     )
 
 
