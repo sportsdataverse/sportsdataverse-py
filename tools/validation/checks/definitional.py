@@ -210,11 +210,15 @@ _CFB_RULES: tuple[Rule, ...] = (
         ),
         "passing_down must equal (down 2 & dist>=8) | (down 3/4 & dist>=5) on scrimmage plays",
     ),
+    # Deliberately order-dependent: the harness contract (see
+    # boundary_leakage) is that frames arrive in play order within each
+    # game, and this rule VERIFIES that stored order — sorting by
+    # game_play_number first would make it tautological.
     Rule(
         "game_play_number_strictly_increasing",
         ("game_id", "game_play_number"),
         _c("game_play_number").diff().over("game_id") <= 0,
-        "game_play_number must strictly increase within a game",
+        "game_play_number must strictly increase within a game (in stored row order)",
     ),
     # Participant columns (measured 2026-08-07 on the published sample):
     # passer is populated on 3141/3141 pass plays -> hard invariant; the
@@ -587,19 +591,21 @@ def run(dataset: str, frame: pl.DataFrame, ctx: CheckContext) -> list[Finding]:
 
     try:
         counts = frame.select([r.violation.sum().cast(pl.Int64).alias(r.name) for r in rules]).row(0, named=True)
-    except (pl.exceptions.SchemaError, pl.exceptions.InvalidOperationError):
+    except pl.exceptions.PolarsError:
         # A degenerate column dtype (e.g. an all-null series polars typed as
-        # Null) breaks expression resolution for string-op and arithmetic
-        # rules — as SchemaError for str.strip_chars but
-        # InvalidOperationError for str.contains and abs on polars 1.42.
-        # Fall back to per-rule evaluation and skip the unresolvable ones —
+        # Null) breaks expression resolution — as SchemaError for
+        # str.strip_chars but InvalidOperationError for str.contains and abs
+        # on polars 1.42, and ComputeError for other shapes. Fall back to
+        # per-rule evaluation and skip only the unresolvable rules so one
+        # degenerate column cannot suppress every other rule's findings —
         # the dtype divergence itself is schema_contract's finding, not a
-        # definitional violation.
+        # definitional violation. (Rule-authoring errors are covered by the
+        # per-rule unit tests, not this handler.)
         counts = {}
         for r in rules:
             try:
                 counts[r.name] = frame.select(r.violation.sum().cast(pl.Int64)).item()
-            except (pl.exceptions.SchemaError, pl.exceptions.InvalidOperationError):
+            except pl.exceptions.PolarsError:
                 counts[r.name] = 0
 
     findings: list[Finding] = []
