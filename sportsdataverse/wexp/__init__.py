@@ -14,6 +14,10 @@ from sportsdataverse.wexp.market import (
     prob_from_decimal,
     spread_to_prob,
 )
+from sportsdataverse.wexp.elo import (
+    EloConfig,
+    elo_ratings,
+)
 from sportsdataverse.wexp.oracle_market import (
     ORACLE_COLUMNS,
     build_cfb_market_oracle,
@@ -41,6 +45,7 @@ from sportsdataverse.wexp.scoring import (
 )
 
 __all__ = [
+    "EloConfig",
     "ORACLE_COLUMNS",
     "RESULT_SCHEMA",
     "VINTAGE_KEYS",
@@ -56,6 +61,7 @@ __all__ = [
     "devig_multiplicative",
     "devig_shin",
     "ece",
+    "elo_ratings",
     "favorite_bucket_table",
     "log_loss_score",
     "logit_blend",
