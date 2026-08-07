@@ -58,19 +58,29 @@ def test_elo_prefers_home_and_learns(nfl_games):
 
 
 def test_elo_no_future_leak(nfl_games):
-    """Poisoning the LAST game's result must not change any earlier pre-game rating."""
-    base = elo_ratings(nfl_games, EloConfig())
-    poisoned = nfl_games.sort("season", "week").with_columns(
-        pl.when(pl.int_range(pl.len()) == pl.len() - 1)
-        .then(pl.lit(-70.0))
-        .otherwise(pl.col("home_margin"))
-        .alias("home_margin")
-    )
+    """Poisoning a MID-WALK game's result must not change any pre-game value
+    up to AND INCLUDING the poisoned game itself.
+
+    A game's own margin can never affect its own pre-game rating — this is
+    the through_week-INCLUSIVE production-bug class. Rows after the poisoned
+    game legitimately differ (walk-forward propagation).
+    """
+    ordered = nfl_games.sort("season", "week", "game_id").with_row_index("__i")
+    # poison the first week-8 game of 2020 — mid-walk, with downstream games
+    target = ordered.filter((pl.col("season") == 2020) & (pl.col("week") == 8))
+    assert target.height > 0
+    idx = target["__i"][0]
+    poisoned = ordered.with_columns(
+        pl.when(pl.col("__i") == idx).then(pl.lit(-70.0)).otherwise(pl.col("home_margin")).alias("home_margin")
+    ).drop("__i")
+    base = elo_ratings(ordered.drop("__i"), EloConfig())
     out2 = elo_ratings(poisoned, EloConfig())
-    a = base.sort("season", "week", "game_id").head(base.height - 1)
-    b = out2.sort("season", "week", "game_id").head(base.height - 1)
-    assert a["home_elo_pre"].to_list() == b["home_elo_pre"].to_list()
-    assert a["p_home"].to_list() == b["p_home"].to_list()
+    # every row up to and including the poisoned game is byte-identical
+    n = int(idx) + 1
+    for col in ("home_elo_pre", "away_elo_pre", "p_home"):
+        assert base[col].head(n).to_list() == out2[col].head(n).to_list()
+    # and the poison DID propagate afterward (the walk is not a no-op)
+    assert base["home_elo_pre"].to_list() != out2["home_elo_pre"].to_list()
 
 
 def test_elo_season_carryover_reverts_toward_mean(nfl_games):

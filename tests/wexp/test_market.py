@@ -45,9 +45,10 @@ def test_devig_shin_sums_to_one_and_shrinks_longshot():
     mult = devig_multiplicative(raw)
     shin = devig_shin(raw)
     assert sum(shin) == pytest.approx(1.0, abs=1e-9)
-    # Shin attributes overround disproportionately to the longshot:
-    # its devigged longshot prob must be <= the multiplicative one.
-    assert shin[1] <= mult[1] + 1e-12
+    # Shin attributes overround disproportionately to the longshot. STRICT
+    # inequality: equality would mean the silent multiplicative fallback ran
+    # instead of the Shin solver (observed real gap on this input: 0.00552).
+    assert shin[1] < mult[1] - 1e-4
     # And with zero vig, Shin == raw.
     novig = devig_shin([0.7, 0.3])
     assert novig[0] == pytest.approx(0.7, abs=1e-9)
@@ -80,5 +81,7 @@ def test_moneyline_pair_prob_multiplicative_default():
     assert p == pytest.approx(raw_h / (raw_h + raw_a))
     p_shin = moneyline_pair_prob(-150, 130, method="shin")
     assert 0.5 < p_shin < 1.0
+    # strict: the Shin path must actually differ from the multiplicative one
+    assert p_shin != p
     with pytest.raises(ValueError):
         moneyline_pair_prob(-150, 130, method="nope")

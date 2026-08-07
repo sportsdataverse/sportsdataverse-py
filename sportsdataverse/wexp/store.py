@@ -134,8 +134,9 @@ class VintageStore:
         out = games.with_row_index("__order").sort(week_col)
         with warnings.catch_warnings():
             # polars cannot verify per-group sortedness with `by`; both sides
-            # are sorted on the asof key above.
-            warnings.simplefilter("ignore", UserWarning)
+            # are sorted on the asof key above. Scope the filter to that one
+            # message — do not swallow unrelated UserWarnings.
+            warnings.filterwarnings("ignore", message="Sortedness", category=UserWarning)
             out = out.join_asof(
                 right,
                 left_on=week_col,

@@ -13,6 +13,7 @@ blend. Conventions:
 from __future__ import annotations
 
 import math
+import warnings
 from collections.abc import Sequence
 
 from scipy.optimize import brentq
@@ -133,6 +134,12 @@ def devig_shin(p_raw: Sequence[float]) -> list[float]:
     try:
         z_star = float(brentq(_excess, 0.0, 1.0 - 1e-9, xtol=1e-12))
     except ValueError:
+        # provenance matters: a harness sweep must be able to see that the
+        # "Shin" variant actually degraded to multiplicative on this input.
+        warnings.warn(
+            f"Shin solver failed to bracket (booksum={booksum:.4f}); falling back to multiplicative devig",
+            stacklevel=2,
+        )
         return devig_multiplicative(p_raw)
     probs = _shin_probs(z_star)
     total = sum(probs)
