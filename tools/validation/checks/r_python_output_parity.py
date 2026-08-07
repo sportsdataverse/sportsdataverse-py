@@ -30,8 +30,10 @@ import polars as pl
 
 from tools.validation.findings import Finding, Severity
 
-#: Columns that legitimately differ and should never be value-compared. Build
-#: stamps are wall-clock, so they differ on every run of either pipeline.
+#: Default columns excluded from value comparison — empty ON PURPOSE. Stamp
+#: column names vary by repo and dataset (``built_at``, ``last_updated``, …), so
+#: the caller names them; nothing is skipped implicitly. A silent default here
+#: would hide a genuinely diverging column that happened to share a name.
 _DEFAULT_IGNORE: tuple[str, ...] = ()
 
 #: Suffix polars appends to the RIGHT frame's overlapping columns. ``r_frame`` is
@@ -65,6 +67,30 @@ def run(
 
     Returns:
         A list of Finding records; empty when the two pipelines agree.
+
+    Raises:
+        polars.exceptions.ColumnNotFoundError: If a name in ``ignore_columns``
+            is absent from both frames is NOT raised — unknown names are simply
+            inert. This function raises nothing of its own: every disagreement,
+            including a structurally uncomparable pair, is reported as a Finding
+            so a caller can chain without try/except.
+
+    Example:
+        Compare two frames::
+
+            import polars as pl
+            from tools.validation.checks import r_python_output_parity
+
+            r = pl.DataFrame({"game_id": [1, 2], "epa": [0.5, 0.2]})
+            py = pl.DataFrame({"game_id": [1, 2], "epa": [0.5, 0.9]})
+            for f in r_python_output_parity.run("pbp", r, py, ("game_id",), "nfl"):
+                print(f.severity.value, f.message)
+
+        Exclude a build stamp from the value comparison::
+
+            r_python_output_parity.run(
+                "pbp", r, py, ("game_id",), "nfl", ignore_columns=("built_at",)
+            )
     """
     findings: list[Finding] = []
     keys = list(join_keys)
@@ -147,6 +173,31 @@ def run(
         )
         return findings
 
+    # The keys must IDENTIFY a row. If either side repeats one, the inner join
+    # fans that key out into a cross product, and the "N of M shared row(s)"
+    # denominator at level 4 stops meaning shared key groups — a wrong number
+    # reported with full confidence. Stop here, as the dtype clash does.
+    dup_r = r_frame.height - r_keys.height
+    dup_py = py_frame.height - py_keys.height
+    if dup_r or dup_py:
+        findings.append(
+            Finding(
+                "r_python_output_parity",
+                Severity.ERROR,
+                domain,
+                dataset,
+                f"join keys do not identify a row — {dup_r} duplicate row(s) in R, "
+                f"{dup_py} in Python. The join would fan out and every count below "
+                "would be inflated, so the value comparison was skipped. Widen "
+                "--join-keys until both sides are unique.",
+                locator={"join_keys": keys},
+                expected=0,
+                actual=dup_r + dup_py,
+                metric=float(dup_r + dup_py),
+            )
+        )
+        return findings
+
     # ---- level 2: same columns? ------------------------------------------
     ignore = set(ignore_columns) | set(keys)
     r_cols = set(r_frame.columns) - ignore
@@ -182,7 +233,10 @@ def run(
                 domain,
                 dataset,
                 f"{len(dtype_clashes)} shared column(s) differ in dtype: "
-                + ", ".join(f"{c} (R={rd}, python={pd})" for c, rd, pd in dtype_clashes[:8]),
+                + ", ".join(f"{c} (R={rd}, python={pd})" for c, rd, pd in dtype_clashes[:8])
+                + ". Mixed-kind pairs (e.g. String vs Int64) are excluded from the "
+                "value comparison below — polars cannot compare them, and this "
+                "finding already names the divergence.",
                 locator={"columns": [c for c, _rd, _pd in dtype_clashes]},
                 needs_judgment=True,
             )
@@ -194,10 +248,17 @@ def run(
         pcol = f"{col}{_PY}"
         if pcol not in joined.columns:
             continue
-        r_expr, py_expr = pl.col(col), pl.col(pcol)
+        r_dtype, py_dtype = r_frame.schema[col], py_frame.schema[col]
+        both_numeric = r_dtype.is_numeric() and py_dtype.is_numeric()
+        if not both_numeric and r_dtype != py_dtype:
+            # polars raises on a mixed-kind comparison (String vs Int64), which
+            # would abort the whole run over one column. The level-3 WARN above
+            # already reports the divergence, so skip rather than crash.
+            continue
 
+        r_expr, py_expr = pl.col(col), pl.col(pcol)
         null_mismatch = r_expr.is_null() != py_expr.is_null()
-        if r_frame.schema[col].is_numeric() and py_frame.schema[col].is_numeric():
+        if both_numeric:
             differs = ((r_expr - py_expr).abs() > tolerance) | null_mismatch
         else:
             differs = (r_expr != py_expr) | null_mismatch

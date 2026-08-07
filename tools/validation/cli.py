@@ -71,6 +71,25 @@ def compare_outputs(
 
     Returns:
         A flat list of finding dicts.
+
+    Raises:
+        FileNotFoundError: If either parquet path does not exist.
+        polars.exceptions.ComputeError: If either path is not readable as parquet.
+
+    Example:
+        Compare a released R artifact against a fresh Python build::
+
+            from tools.validation.cli import compare_outputs
+
+            findings = compare_outputs(
+                "wnba_pbp", "r_side.parquet", "py_side.parquet", ("game_id",), "wnba"
+            )
+            print(len(findings), "divergence(s)")
+
+        From the shell, exiting 1 when the pipelines disagree::
+
+            python -m tools.validation.cli compare --dataset wnba_pbp --domain wnba \\
+                --r-parquet r.parquet --py-parquet py.parquet --join-keys game_id
     """
     findings = r_python_output_parity.run(
         dataset,

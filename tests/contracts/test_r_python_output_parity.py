@@ -117,6 +117,41 @@ def test_ignored_columns_are_not_compared():
     assert _run(r, py, ignore_columns=("built_at",)) == []
 
 
+def test_duplicate_join_keys_stop_before_the_counts_get_inflated():
+    """A repeated key fans the inner join into a cross product, so 'N of M shared
+    row(s)' would stop meaning key groups — a wrong number stated confidently."""
+    r = pl.DataFrame({"game_id": [1, 1], "epa": [0.1, 0.2]})
+    py = pl.DataFrame({"game_id": [1], "epa": [0.1]})
+    findings = _run(r, py)
+    dup = next(f for f in findings if "do not identify a row" in f.message)
+    assert dup.severity.value == "error"
+    assert "1 duplicate row(s) in R" in dup.message
+    # and it must not have gone on to report per-column counts
+    assert not any("disagrees" in f.message for f in findings)
+
+
+def test_mixed_kind_dtype_column_is_skipped_not_crashed_on():
+    """polars raises comparing String to Int64; one such column must not abort
+    the whole comparison. The dtype WARN already names it."""
+    r = pl.DataFrame({"game_id": [1], "code": ["7"], "epa": [0.1]})
+    py = pl.DataFrame({"game_id": [1], "code": [7], "epa": [0.9]})
+    findings = _run(r, py)  # must not raise
+    assert any("differ in dtype" in f.message for f in findings)
+    # the comparable column is still compared — the skip is surgical
+    assert any("'epa' disagrees" in f.message for f in findings)
+    assert not any("'code' disagrees" in f.message for f in findings)
+
+
+def test_int_vs_float_still_compares_numerically():
+    """Int64-vs-Float64 is a dtype clash but both are numeric, so 10 == 10.0
+    must NOT be reported as a value divergence."""
+    r = pl.DataFrame({"game_id": [1], "yards": [10]})
+    py = pl.DataFrame({"game_id": [1], "yards": [10.0]})
+    findings = _run(r, py)
+    assert any("differ in dtype" in f.message for f in findings)
+    assert not any("disagrees" in f.message for f in findings)
+
+
 def _write_pair(tmp_path, r, py):
     rp, pp = tmp_path / "r.parquet", tmp_path / "py.parquet"
     r.write_parquet(rp)
