@@ -672,4 +672,5 @@ files = [
     "sportsdataverse/wexp/__init__.py",
     "sportsdataverse/wexp/market.py",
     "sportsdataverse/wexp/scoring.py",
+    "sportsdataverse/wexp/store.py",
 ]

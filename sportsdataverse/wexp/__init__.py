@@ -14,6 +14,10 @@ from sportsdataverse.wexp.market import (
     prob_from_decimal,
     spread_to_prob,
 )
+from sportsdataverse.wexp.store import (
+    VINTAGE_KEYS,
+    VintageStore,
+)
 from sportsdataverse.wexp.scoring import (
     RESULT_SCHEMA,
     append_results,
@@ -31,6 +35,8 @@ from sportsdataverse.wexp.scoring import (
 
 __all__ = [
     "RESULT_SCHEMA",
+    "VINTAGE_KEYS",
+    "VintageStore",
     "append_results",
     "brier_score",
     "calibration_table",
