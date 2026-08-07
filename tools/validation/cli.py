@@ -14,6 +14,7 @@ from tools.validation.checks import (
     definitional,
     extraction,
     numeric_parity,
+    rate_anomaly,
     r_python_output_parity,
     schema_contract,
     sweep,
@@ -38,6 +39,7 @@ _CHECKS = (
     constant_column,
     definitional,
     combo_drift,
+    rate_anomaly,
 )
 
 _LINTERS: dict[str, ModuleType] = {"python": leakage_python, "r": leakage_r}
