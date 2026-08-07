@@ -4,8 +4,9 @@ One generic parser handles every endpoint. Most responses use the uniform
 ``{resultSets: [{name, headers, rowSet}]}`` envelope (a few use singular ``resultSet``);
 the parser also normalizes the family's two non-uniform shapes — the shot-location
 endpoints' single-dict ``resultSets`` with 2-level grouped headers (flattened to
-composite columns like ``less_than_5_ft_fgm``) and ``scoreboardv3``'s ``scoreboard.games``
-feed (one row per game). Honors the universal parser contract: polars by default, pandas
+composite columns like ``less_than_5_ft_fgm``), ``scoreboardv3``'s ``scoreboard.games``
+feed (one row per game), and ``scheduleleaguev2``'s ``leagueSchedule.gameDates[].games[]``
+feed (also one row per game). Honors the universal parser contract: polars by default, pandas
 via flag, empty/malformed returns a zero-row frame, columns snake_cased via dl_utils.underscore.
 """
 
@@ -53,6 +54,10 @@ def _result_sets(raw: dict) -> list:
     if isinstance(sb, dict) and isinstance(sb.get("games"), list):
         # scoreboardv3 has no resultSets envelope — synthesize one from scoreboard.games
         return [_scoreboard_result_set(sb)]
+    ls = raw.get("leagueSchedule")
+    if isinstance(ls, dict) and isinstance(ls.get("gameDates"), list):
+        # scheduleleaguev2 has no resultSets envelope either — see below
+        return [_league_schedule_result_set(ls)]
     return []
 
 
@@ -119,6 +124,66 @@ def _scoreboard_result_set(sb: dict) -> dict:
     ]
     headers = sorted({k for r in rows for k in r})
     return {"name": "GameHeader", "headers": headers, "rowSet": [[r.get(h) for h in headers] for r in rows]}
+
+
+_SEASON_TYPE_BY_ID = {
+    "1": "Pre-Season",
+    "2": "Regular Season",
+    "3": "All-Star",
+    "4": "Playoffs",
+    "5": "Play-In Game",
+}
+
+
+def _nested_name(outer: str, inner: str) -> str:
+    """Snake-case a nested key pair, collapsing the ``team_team`` stutter.
+
+    ``homeTeam.teamId`` -> ``home_team_id`` (not ``home_team_team_id``), matching
+    ``hoopR::nba_schedule()`` / ``wehoop::wnba_schedule()``, which do the same via
+    ``janitor::clean_names()`` + ``gsub("team_team", "team", ...)``.
+    """
+    return f"{underscore(outer)}_{underscore(inner)}".replace("team_team", "team")
+
+
+def _league_schedule_result_set(ls: dict) -> dict:
+    """Build a ``{name, headers, rowSet}`` result-set from the ``leagueSchedule`` feed.
+
+    ``scheduleleaguev2`` (and the CDN mirror the R packages now read,
+    ``cdn.{nba,wnba}.com/static/json/staticData/scheduleLeagueV2.json``) ships
+    ``{leagueSchedule: {seasonYear, leagueId, gameDates: [{gameDate, games: [...]}]}}``
+    — no ``resultSets`` envelope at all. This unrolls it to one row per game so the
+    generic parser can render it, reproducing the R accessors' column contract:
+    ``homeTeam``/``awayTeam`` inlined as ``home_team_*``/``away_team_*``, the
+    list-valued ``broadcasters``/``pointsLeaders`` dropped, and ``season_type_id`` /
+    ``season_type_description`` derived from the 3rd character of ``game_id``.
+    """
+    season, league_id = ls.get("seasonYear"), ls.get("leagueId")
+    rows: list = []
+    for game_date in ls.get("gameDates") or []:
+        if not isinstance(game_date, dict):
+            continue
+        day = {underscore(k): v for k, v in game_date.items() if k != "games" and not isinstance(v, (dict, list))}
+        for game in game_date.get("games") or []:
+            if not isinstance(game, dict):
+                continue
+            row = dict(day)
+            for key, value in game.items():
+                if isinstance(value, list):
+                    continue  # broadcasters / pointsLeaders — dropped, as the R readers do
+                if isinstance(value, dict):
+                    row.update({_nested_name(key, k): v for k, v in value.items() if not isinstance(v, (dict, list))})
+                else:
+                    row[underscore(key)] = value
+            gid = row.get("game_id")
+            season_type_id = str(gid)[2:3] if gid else None
+            row["season_type_id"] = season_type_id
+            row["season_type_description"] = _SEASON_TYPE_BY_ID.get(season_type_id or "")
+            row["season"] = season
+            row["league_id"] = league_id
+            rows.append(row)
+    headers = sorted({k for r in rows for k in r})
+    # "SeasonGames" is the name the canonical catalog / returns-table schema uses.
+    return {"name": "SeasonGames", "headers": headers, "rowSet": [[r.get(h) for h in headers] for r in rows]}
 
 
 def _to_frame(rs: dict) -> pl.DataFrame:
