@@ -42,9 +42,9 @@ def {{ ep.fn_name }}(
 {% endif %}
     **kwargs,
 {% if ep.parser %}
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+) -> Union[pl.DataFrame, pd.DataFrame, {{ ep.raw_hint }}]:
 {% else %}
-) -> Dict:
+) -> {{ ep.raw_annotation }}:
 {% endif %}
 {{ ep.docstring }}
 {% if ep.has_dynamic_path %}

@@ -79,6 +79,16 @@ class FlatApi:
     # When True, each wrapper gains an optional ``headers`` arg threaded into the
     # getter so callers can reuse a minted-token dict across calls (NFL.com auth).
     auth: bool = False
+    # Raw (``return_parsed=False``) response types this family's getter can return.
+    # Defaults to JSON-only. A content-type-aware getter that hands back CSV/HTML
+    # bodies as text declares ``raw_types: [Dict, str]`` so the generated wrappers
+    # annotate + document the union they actually return (Torvik data files).
+    raw_types: List[str] = field(default_factory=lambda: ["Dict"])
+    # Optional per-family docstring extras merged into every generated wrapper:
+    # ``raw_doc`` (prose for the return_parsed=False payload), ``raises`` (list of
+    # "Exception: description"), ``see_also`` (list of {name, url, note}) and
+    # ``example_import`` (bool -- prepend the import line to the Example block).
+    docstring: Dict[str, object] = field(default_factory=dict)
 
     @property
     def prefix(self) -> str:
@@ -283,4 +293,6 @@ def load_flat_api(path: Path, registry: Dict[str, Param]) -> FlatApi:
         passthrough_query=bool(raw.get("passthrough_query", False)),
         getter_module=raw.get("getter_module", "sportsdataverse._codegen_runtime"),
         auth=bool(raw.get("auth", False)),
+        raw_types=list(raw.get("raw_types") or ["Dict"]),
+        docstring=dict(raw.get("docstring") or {}),
     )

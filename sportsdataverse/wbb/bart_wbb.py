@@ -24,7 +24,7 @@ def bart_wbb_ratings(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict, str]:
     """GET /ncaaw/{year}_team_results.csv — women's T-Rank team ratings (adjoe/adjde/barthag, one row per team; the team/conf pair feeds the WBB crosswalk).
 
     Endpoint: ``GET https://barttorvik.com/ncaaw/{year}_team_results.csv``
@@ -32,16 +32,29 @@ def bart_wbb_ratings(
 
     Args:
         year: year path parameter.
-        return_parsed: parse the payload through parse_torvik_csv -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_parsed: parse the payload through parse_torvik_csv -> polars DataFrame (default True). Pass return_parsed=False for the raw CSV response body (``str``).
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+        A polars/pandas DataFrame by default; the raw CSV response body (``str``) when ``return_parsed=False``.
+
+    Raises:
+        sportsdataverse.errors.NoESPNDataError: barttorvik.com returned 404 (no data file for that season).
+        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
 
     Example:
         Quick start::
 
+            from sportsdataverse.wbb import bart_wbb_ratings
             bart_wbb_ratings(year=2025)
+
+        See Also:
+            * `wehoop`_ - R sister package for women's basketball
+            * `Bart Torvik`_ - data origin (women's T-Rank)
+
+        .. _wehoop: https://wehoop.sportsdataverse.org
+        .. _Bart Torvik: https://barttorvik.com/ncaaw
     """
     raw = _get(
         f"https://barttorvik.com/ncaaw/{year}_team_results.csv",

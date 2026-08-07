@@ -70,7 +70,7 @@ GET /ncaaw/{year}_team_results.csv — women's T-Rank team ratings (adjoe/adjde/
 | `fun_rk` | integer | National rank of the FUN index. |
 | `adjt` | numeric | Adjusted tempo (possessions per 40 minutes). |
 
-**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+**`return_parsed=False`** — the raw CSV response body (`str`).
 
 ### Example
 

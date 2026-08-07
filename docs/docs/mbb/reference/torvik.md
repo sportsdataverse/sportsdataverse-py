@@ -70,7 +70,7 @@ GET /{year}_team_results.csv — men's T-Rank team ratings (adjoe/adjde/barthag,
 | `fun_rk` | integer | National rank of the FUN index. |
 | `adjt` | numeric | Adjusted tempo (possessions per 40 minutes). |
 
-**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+**`return_parsed=False`** — the raw CSV response body (`str`).
 
 ### Example
 
@@ -139,7 +139,7 @@ GET /{year}_fffinal.csv — men's four-factors splits (eFG%/FTR/OR%/TO% offense 
 | `unnamed_3` | numeric | Headerless trailing column shipped in the source CSV (undocumented upstream). |
 | `unnamed_4` | integer | Headerless trailing column shipped in the source CSV (undocumented upstream). |
 
-**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+**`return_parsed=False`** — the raw CSV response body (`str`).
 
 ### Example
 

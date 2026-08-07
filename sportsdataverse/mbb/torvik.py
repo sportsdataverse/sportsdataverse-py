@@ -25,7 +25,7 @@ def torvik_ratings(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict, str]:
     """GET /{year}_team_results.csv — men's T-Rank team ratings (adjoe/adjde/barthag, one row per team; the team/conf pair feeds the MBB crosswalk).
 
     Endpoint: ``GET https://barttorvik.com/{year}_team_results.csv``
@@ -33,16 +33,29 @@ def torvik_ratings(
 
     Args:
         year: year path parameter.
-        return_parsed: parse the payload through parse_torvik_csv -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_parsed: parse the payload through parse_torvik_csv -> polars DataFrame (default True). Pass return_parsed=False for the raw CSV response body (``str``).
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+        A polars/pandas DataFrame by default; the raw CSV response body (``str``) when ``return_parsed=False``.
+
+    Raises:
+        sportsdataverse.errors.NoESPNDataError: barttorvik.com returned 404 (no data file for that season).
+        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
 
     Example:
         Quick start::
 
+            from sportsdataverse.mbb import torvik_ratings
             torvik_ratings(year=2025)
+
+        See Also:
+            * `hoopR`_ - R sister package for men's college basketball
+            * `Bart Torvik`_ - data origin (T-Rank)
+
+        .. _hoopR: https://hoopR.sportsdataverse.org
+        .. _Bart Torvik: https://barttorvik.com
     """
     raw = _get(
         f"https://barttorvik.com/{year}_team_results.csv",
@@ -60,7 +73,7 @@ def torvik_team_factors(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict, str]:
     """GET /{year}_fffinal.csv — men's four-factors splits (eFG%/FTR/OR%/TO% offense + defense, with per-stat ranks).
 
     Endpoint: ``GET https://barttorvik.com/{year}_fffinal.csv``
@@ -68,16 +81,29 @@ def torvik_team_factors(
 
     Args:
         year: year path parameter.
-        return_parsed: parse the payload through parse_torvik_csv -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_parsed: parse the payload through parse_torvik_csv -> polars DataFrame (default True). Pass return_parsed=False for the raw CSV response body (``str``).
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+        A polars/pandas DataFrame by default; the raw CSV response body (``str``) when ``return_parsed=False``.
+
+    Raises:
+        sportsdataverse.errors.NoESPNDataError: barttorvik.com returned 404 (no data file for that season).
+        requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download`` exhausts its retries.
 
     Example:
         Quick start::
 
+            from sportsdataverse.mbb import torvik_team_factors
             torvik_team_factors(year=2025)
+
+        See Also:
+            * `hoopR`_ - R sister package for men's college basketball
+            * `Bart Torvik`_ - data origin (T-Rank)
+
+        .. _hoopR: https://hoopR.sportsdataverse.org
+        .. _Bart Torvik: https://barttorvik.com
     """
     raw = _get(
         f"https://barttorvik.com/{year}_fffinal.csv",
