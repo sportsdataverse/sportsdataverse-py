@@ -198,7 +198,14 @@ def run_backtest(
         if ((p < 0) | (p > 1)).any():
             raise ValueError(f"predictor emitted probabilities outside [0, 1] in {season} week {week}")
         preds.append(slate.select("game_id").with_columns(p))
-    probs = oracle.join(pl.concat(preds), on="game_id", how="left")
+    # polars joins do not guarantee row order — restore the caller's
+    # explicitly, since the docstring promises original row order
+    probs = (
+        oracle.with_row_index("__order")
+        .join(pl.concat(preds), on="game_id", how="left")
+        .sort("__order")
+        .drop("__order")
+    )
     if probs.height > 0 and probs["p_home"].null_count() == probs.height:
         # partial nulls are legitimate (uncovered weeks / unrated teams);
         # ZERO predictions across the whole walk means broken wiring — a

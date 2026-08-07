@@ -81,7 +81,8 @@ def test_leaderboard_ordering_nfl(nfl_probs, tmp_path):
 
 def test_leaderboard_ordering_cfb(cfb_probs):
     rows = score_baselines(cfb_probs)
-    pooled = rows.filter((pl.col("season") == -1) & (pl.col("metric") == "brier"))
+    # partial market coverage emits lined rows too; pin the slice explicitly
+    pooled = rows.filter((pl.col("season") == -1) & (pl.col("metric") == "brier") & (pl.col("week_slice") == "all"))
     brier = {r["model_id"]: r["value"] for r in pooled.iter_rows(named=True)}
     assert brier["market_close"] < brier["home_rule"] < brier["coin_flip"]
     # open exists for CFB and must be worse than (or ~equal to) close, never better

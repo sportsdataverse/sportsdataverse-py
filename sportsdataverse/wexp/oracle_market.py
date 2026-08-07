@@ -76,8 +76,12 @@ ORACLE_COLUMNS: list[str] = [
 
 
 def _p_american(col: pl.Expr) -> pl.Expr:
-    """Raw implied probability from an American price expression."""
-    return pl.when(col < 0).then(-col / (-col + 100)).otherwise(100 / (col + 100))
+    """Raw implied probability from an American price expression.
+
+    ``|price| < 100`` is not a valid American quote (0.0 has been observed
+    in archives) — those return null rather than an implied probability.
+    """
+    return pl.when(col.abs() < 100).then(None).when(col < 0).then(-col / (-col + 100)).otherwise(100 / (col + 100))
 
 
 def _logit(p: pl.Expr) -> pl.Expr:
@@ -142,7 +146,7 @@ def nfl_market_oracle_from_schedule(
         away_team=pl.col("away_team").cast(pl.Utf8),
         home_team_id=pl.col("home_team").cast(pl.Utf8),
         away_team_id=pl.col("away_team").cast(pl.Utf8),
-        neutral_site=(pl.col("location") == "Neutral"),
+        neutral_site=(pl.col("location") == "Neutral").fill_null(False),
         fbs_vs_fbs=pl.lit(True),
         home_margin=pl.col("result").cast(pl.Float64),
         home_win=pl.when(pl.col("result") > 0).then(1).when(pl.col("result") < 0).then(0).otherwise(None).cast(pl.Int8),

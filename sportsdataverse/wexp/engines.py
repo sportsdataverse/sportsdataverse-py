@@ -34,6 +34,7 @@ __all__ = [
     "GSConfig",
     "build_predictor",
     "cfb_continuity_shifts",
+    "cfb_drive_deltas",
     "cfb_drive_ep_responses",
     "glickman_stern_predictor",
     "net_vintages_view",
@@ -118,7 +119,7 @@ def ridge_margin_vintages(
                 off=pl.col("home_team"),
                 deft=pl.col("away_team"),
                 resp=pl.col(resp_col),
-                homeflag=pl.when(pl.col("neutral_site") == True).then(pl.lit("")).otherwise(pl.col("home_team")),
+                homeflag=pl.when(pl.col("neutral_site") == True).then(pl.lit("")).otherwise(pl.col("home_team")),  # noqa: E712
             ),
             base.select(
                 "season",
@@ -490,7 +491,7 @@ def ratings_predictor(
     def _expected_margin(games: pl.DataFrame, store: VintageStore) -> pl.DataFrame:
         g = store.join_asof(games, table, on={join_on[0]: "team_id"}, prefix="rt_home_")
         g = store.join_asof(g, table, on={join_on[1]: "team_id"}, prefix="rt_away_")
-        hfa = pl.when(pl.col("neutral_site") == True).then(0.0).otherwise(pl.col("rt_home_hfa"))
+        hfa = pl.when(pl.col("neutral_site") == True).then(0.0).otherwise(pl.col("rt_home_hfa"))  # noqa: E712
         return g.with_columns(
             __exp_margin=pl.col("rt_home_off_coef") + pl.col("rt_away_def_coef") + pl.col("rt_home_intercept") + hfa
         )

@@ -1,8 +1,9 @@
 """Win-expectancy bake-off harness (NFL + CFB).
 
-Vintage-keyed feature store, market oracle, scoring, baseline oracles, and
-the walk-forward backtest driver. See
-``ClaudeCowork/plans/win-expectancy-bakeoff.md`` for the program plan.
+Vintage-keyed feature store, market oracles, scoring, baseline oracles,
+axis engines, the walk-forward backtest driver, and post-game deserved-win
+estimation. Committed tune-window leaderboards live under
+``results/wexp/`` on the development branch.
 """
 
 from sportsdataverse.wexp.market import (

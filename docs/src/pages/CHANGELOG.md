@@ -271,7 +271,7 @@ parameter is stamped on its table and refused on mismatch.
 ### New — `load_nfl_ratings_weekly`: per-week as-of NFL ratings vintages
 
 Loads the new `nfl_ratings_weekly` release on sportsdataverse-data
-(per-season assets, 1999-present, built by nfl-data's producer): one row
+(per-season assets, 1999-2025 at publish; the producer cron refreshes the current season in-season): one row
 per `(season, as_of_week, team_id)` with STRICTLY EXCLUSIVE semantics —
 a row at `as_of_week = W` was fit only on games before week W's first
 kickoff, safe to join onto week-W games with no leakage. SDV-native (no

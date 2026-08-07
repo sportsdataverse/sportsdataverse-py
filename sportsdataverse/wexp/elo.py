@@ -128,7 +128,9 @@ def elo_ratings(
             continue
         s_home = 1.0 if margin > 0 else 0.0 if margin < 0 else 0.5
         mult = 1.0
-        if config.mov_mult:
+        if config.mov_mult and margin != 0:
+            # ties keep mult=1: log(|0|+1)=0 would zero the update and
+            # silently discard the s_home=0.5 signal (review find)
             winner_diff = diff if margin > 0 else -diff
             mult = math.log(abs(margin) + 1.0) * 2.2 / (winner_diff * 0.001 + 2.2)
             mult = max(mult, 0.0)
