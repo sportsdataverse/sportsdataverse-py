@@ -34,6 +34,12 @@ from sportsdataverse.wexp.store import (
     VINTAGE_KEYS,
     VintageStore,
 )
+from sportsdataverse.wexp.variants import (
+    AXES,
+    VariantConfig,
+    enumerate_variants,
+    variant_hash,
+)
 from sportsdataverse.wexp.scoring import (
     RESULT_SCHEMA,
     append_results,
@@ -50,11 +56,13 @@ from sportsdataverse.wexp.scoring import (
 )
 
 __all__ = [
+    "AXES",
     "BASELINE_HOME_RATE",
     "EloConfig",
     "ORACLE_COLUMNS",
     "RESULT_SCHEMA",
     "VINTAGE_KEYS",
+    "VariantConfig",
     "VintageStore",
     "append_results",
     "baseline_probs",
@@ -69,6 +77,7 @@ __all__ = [
     "devig_shin",
     "ece",
     "elo_ratings",
+    "enumerate_variants",
     "favorite_bucket_table",
     "log_loss_score",
     "logit_blend",
@@ -80,5 +89,6 @@ __all__ = [
     "score_baselines",
     "spearman_corr",
     "spread_to_prob",
+    "variant_hash",
     "winner_accuracy",
 ]

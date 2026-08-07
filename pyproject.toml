@@ -676,4 +676,5 @@ files = [
     "sportsdataverse/wexp/oracle_market.py",
     "sportsdataverse/wexp/elo.py",
     "sportsdataverse/wexp/baselines.py",
+    "sportsdataverse/wexp/variants.py",
 ]
