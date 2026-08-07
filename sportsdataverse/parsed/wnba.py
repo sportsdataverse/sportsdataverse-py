@@ -226,6 +226,7 @@ from sportsdataverse.wnba import wnba_matchup_drapm as wnba_matchup_drapm  # noq
 from sportsdataverse.wnba import wnba_on_court as wnba_on_court  # noqa: F401
 from sportsdataverse.wnba import wnba_pbp_disk as wnba_pbp_disk  # noqa: F401
 from sportsdataverse.wnba import wnba_play_context as wnba_play_context  # noqa: F401
+from sportsdataverse.wnba import wnba_player_crosswalk as wnba_player_crosswalk  # noqa: F401
 from sportsdataverse.wnba import wnba_player_props as wnba_player_props  # noqa: F401
 from sportsdataverse.wnba import wnba_playtype_ratings as wnba_playtype_ratings  # noqa: F401
 from sportsdataverse.wnba import wnba_possessions as wnba_possessions  # noqa: F401
@@ -234,8 +235,10 @@ from sportsdataverse.wnba import wnba_predict_margin as wnba_predict_margin  # n
 from sportsdataverse.wnba import wnba_predict_total as wnba_predict_total  # noqa: F401
 from sportsdataverse.wnba import wnba_rapm_from_games as wnba_rapm_from_games  # noqa: F401
 from sportsdataverse.wnba import wnba_rookie_projection as wnba_rookie_projection  # noqa: F401
+from sportsdataverse.wnba import wnba_schedule_crosswalk as wnba_schedule_crosswalk  # noqa: F401
 from sportsdataverse.wnba import wnba_shot_value as wnba_shot_value  # noqa: F401
 from sportsdataverse.wnba import wnba_team_clutch as wnba_team_clutch  # noqa: F401
+from sportsdataverse.wnba import wnba_team_crosswalk as wnba_team_crosswalk  # noqa: F401
 from sportsdataverse.wnba import wnba_team_ratings as wnba_team_ratings  # noqa: F401
 from sportsdataverse.wnba import wnba_tracking_drive_value as wnba_tracking_drive_value  # noqa: F401
 from sportsdataverse.wnba import wnba_tracking_pass_value as wnba_tracking_pass_value  # noqa: F401
@@ -450,6 +453,7 @@ __all__ = [
     "wnba_on_court",
     "wnba_pbp_disk",
     "wnba_play_context",
+    "wnba_player_crosswalk",
     "wnba_player_props",
     "wnba_playtype_ratings",
     "wnba_possessions",
@@ -458,8 +462,10 @@ __all__ = [
     "wnba_predict_total",
     "wnba_rapm_from_games",
     "wnba_rookie_projection",
+    "wnba_schedule_crosswalk",
     "wnba_shot_value",
     "wnba_team_clutch",
+    "wnba_team_crosswalk",
     "wnba_team_ratings",
     "wnba_tracking_drive_value",
     "wnba_tracking_pass_value",

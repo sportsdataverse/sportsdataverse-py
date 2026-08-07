@@ -1306,6 +1306,43 @@ clean = poss.filter(
 print(clean["is_transition"].mean())
 ```
 
+### `wnba_player_crosswalk(season: 'Optional[int]' = None, min_confidence: 'float' = 0.92, *, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#wnba_player_crosswalk}
+
+Build the WNBA cross-source player crosswalk (ESPN / WNBA Stats / Fox).
+
+One row per ESPN athlete per team. `match_method` / `match_confidence`
+describe the **Stats API** match (normalized exact name, then
+Jaro-Winkler with jersey and DOB tiebreaks); Fox contributes
+`fox_athlete_id` only.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `Optional[int]` | `None` | Season year (e.g. `2026`). Defaults to the most recent WNBA season. |
+| `min_confidence` | `float` | `0.92` | Jaro-Winkler floor for fuzzy matches (R default 0.92). |
+| `return_as_pandas` | `bool` | `False` | Return pandas instead of polars. |
+
+**Returns**
+
+`pl.DataFrame` (or pandas), one row per ESPN athlete, 21 columns.
+
+**Example**
+
+```python
+from sportsdataverse.wnba import wnba_player_crosswalk
+df = wnba_player_crosswalk(season=2026)
+print(df["match_method"].value_counts())
+
+# Tighten the fuzzy floor
+
+strict = wnba_player_crosswalk(season=2026, min_confidence=0.97)
+
+# Pipeline next step (one line)
+
+df.filter(pl.col("match_method") == "fuzzy_jw").head()
+```
+
 ### `wnba_player_props(season: 'int', game_id: 'str', home_team_id: 'str', away_team_id: 'str', *, league_id: 'str' = '00', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#wnba_player_props}
 
 WNBA player props (league_id='10'). See sportsdataverse.nba.nba_player_props.nba_player_props.
@@ -1502,6 +1539,39 @@ from sportsdataverse.wnba import wnba_rookie_projection
 board = wnba_rookie_projection(2023)
 ```
 
+### `wnba_schedule_crosswalk(season: 'Optional[int]' = None, *, stats_games: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#wnba_schedule_crosswalk}
+
+Build the WNBA cross-source schedule crosswalk (ESPN / WNBA Stats).
+
+One row per game, joined on `(game_date, home_espn_team_id,
+away_espn_team_id)` after both sides reduce to the Eastern-Time date. The
+Stats CDN serves the current season only, so the live builder is
+effectively current-season.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `Optional[int]` | `None` | Season year (e.g. `2026`). Defaults to the most recent WNBA season. |
+| `stats_games` | `Optional[DataFrame]` | `None` | Pre-fetched Stats schedule frame; `None` fetches live. |
+| `return_as_pandas` | `bool` | `False` | Return pandas instead of polars. |
+
+**Returns**
+
+`pl.DataFrame` (or pandas) with `SCHEDULE_COLUMNS`.
+
+**Example**
+
+```python
+from sportsdataverse.wnba import wnba_schedule_crosswalk
+df = wnba_schedule_crosswalk(season=2026)
+print(df["match_method"].value_counts())
+
+# Pipeline next step (one line)
+
+df.filter(pl.col("match_method") == "both").select("espn_game_id", "wnba_game_id").head()
+```
+
 ### `wnba_shot_value(player_ids: "'list[int]'", season: 'str', *, include_context: 'bool' = False, return_as_pandas: 'bool' = False) -> "'dict[str, Union[pl.DataFrame, pd.DataFrame]]'"` {#wnba_shot_value}
 
 WNBA one-call shot-value spine (`league_id="10"`).
@@ -1546,6 +1616,43 @@ WNBA clutch skill (league_id='10'). See sportsdataverse.nba.nba_clutch.nba_team_
 | `season` | `int` |  |  |
 | `league_id` | `str` | `'00'` |  |
 | `return_as_pandas` | `bool` | `False` |  |
+
+### `wnba_team_crosswalk(season: 'Optional[int]' = None, *, stats: 'Optional[pl.DataFrame]' = None, fox: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#wnba_team_crosswalk}
+
+Build the WNBA cross-source team crosswalk (ESPN / WNBA Stats / Fox).
+
+One row per ESPN team, keyed on `espn_team_id`. The Stats side is
+derived from the season schedule's home/away team fields (as in wehoop)
+and joined on the normalized `city + name`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `Optional[int]` | `None` | Season year (e.g. `2026`). Defaults to the most recent WNBA season. |
+| `stats` | `Optional[DataFrame]` | `None` | Pre-fetched Stats team directory. `None` derives it from the Stats schedule. |
+| `fox` | `Optional[DataFrame]` | `None` | Pre-fetched `fox_wnba_teams()` frame. `None` fetches live. |
+| `return_as_pandas` | `bool` | `False` | Return pandas instead of polars. |
+
+**Returns**
+
+`pl.DataFrame` (or pandas), one row per ESPN team, with `TEAM_COLUMNS`.
+
+**Example**
+
+```python
+from sportsdataverse.wnba import wnba_team_crosswalk
+df = wnba_team_crosswalk(season=2026)
+print(df.shape)
+
+# Offline with pre-fetched provider frames
+
+df = wnba_team_crosswalk(season=2026, stats=my_stats, fox=my_fox)
+
+# Pipeline next step (one line)
+
+df.select("espn_team_id", "wnba_team_id", "match_method").head()
+```
 
 ### `wnba_team_ratings(seasons: 'Union[int, list[int]]', *, league_id: 'str' = '00', as_of_date: 'Union[dt.date, None]' = None, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#wnba_team_ratings}
 

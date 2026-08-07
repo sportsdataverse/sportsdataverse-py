@@ -2694,6 +2694,43 @@ ages = nba_player_ages("2023-24")
 print(ages.head())
 ```
 
+### `nba_player_crosswalk(season: 'Optional[int]' = None, min_confidence: 'float' = 0.92, *, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#nba_player_crosswalk}
+
+Build the NBA cross-source player crosswalk (ESPN / NBA Stats / Fox).
+
+One row per ESPN athlete per team. `match_method` / `match_confidence`
+describe the **Stats API** match (normalized exact name, then
+Jaro-Winkler with jersey and DOB tiebreaks); Fox contributes
+`fox_athlete_id` only.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `Optional[int]` | `None` | Season year per hoopR convention. Defaults to the most recent NBA season. |
+| `min_confidence` | `float` | `0.92` | Jaro-Winkler floor for fuzzy matches (R default 0.92). |
+| `return_as_pandas` | `bool` | `False` | Return pandas instead of polars. |
+
+**Returns**
+
+`pl.DataFrame` (or pandas), one row per ESPN athlete, 21 columns.
+
+**Example**
+
+```python
+from sportsdataverse.nba import nba_player_crosswalk
+df = nba_player_crosswalk(season=2026)
+print(df["match_method"].value_counts())
+
+# Tighten the fuzzy floor
+
+strict = nba_player_crosswalk(season=2026, min_confidence=0.97)
+
+# Pipeline next step (one line)
+
+df.filter(pl.col("match_method") == "fuzzy_jw").head()
+```
+
 ### `nba_player_identity(player_logs: 'pl.DataFrame') -> 'pl.DataFrame'` {#nba_player_identity}
 
 Human-readable identity for every player in a season's box logs.
@@ -2995,6 +3032,39 @@ board = nba_rookie_projection(2019)
 print(board.sort("proj_rookie_value", descending=True).head())
 ```
 
+### `nba_schedule_crosswalk(season: 'Optional[int]' = None, *, stats_games: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#nba_schedule_crosswalk}
+
+Build the NBA cross-source schedule crosswalk (ESPN / NBA Stats).
+
+One row per game. Both sides reduce to the Eastern-Time game date before
+joining on `(game_date, home_espn_team_id, away_espn_team_id)`. The
+Stats CDN serves the current season only, so the live builder is
+effectively current-season.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `Optional[int]` | `None` | Season year per hoopR convention. Defaults to the most recent NBA season. |
+| `stats_games` | `Optional[DataFrame]` | `None` | Pre-fetched Stats schedule frame; `None` fetches live. |
+| `return_as_pandas` | `bool` | `False` | Return pandas instead of polars. |
+
+**Returns**
+
+`pl.DataFrame` (or pandas) with `SCHEDULE_COLUMNS`.
+
+**Example**
+
+```python
+from sportsdataverse.nba import nba_schedule_crosswalk
+df = nba_schedule_crosswalk(season=2026)
+print(df["match_method"].value_counts())
+
+# Pipeline next step (one line)
+
+df.filter(pl.col("match_method") == "both").select("espn_game_id", "nba_game_id").head()
+```
+
 ### `nba_shot_value(player_ids: "'list[int]'", season: 'str', *, league_id: 'str' = '00', include_context: 'bool' = False, return_as_pandas: 'bool' = False) -> "'dict[str, Union[pl.DataFrame, pd.DataFrame]]'"` {#nba_shot_value}
 
 One-call shot-value spine: fetch, score, and run all five models.
@@ -3113,6 +3183,43 @@ One row per team: `season, team_id, clutch_net_rating, adj_net_rtg, clutch_delta
 from sportsdataverse.nba.nba_clutch import nba_team_clutch
 skill = nba_team_clutch(2024)
 skill.sort("clutch_skill_shrunk", descending=True).head()
+```
+
+### `nba_team_crosswalk(season: 'Optional[int]' = None, *, stats: 'Optional[pl.DataFrame]' = None, fox: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#nba_team_crosswalk}
+
+Build the NBA cross-source team crosswalk (ESPN / NBA Stats / Fox).
+
+One row per ESPN team, keyed on `espn_team_id`. ESPN and Stats team
+endpoints are current-season snapshots, so `season` is a stamp;
+historical relocations are not back-modelled.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `Optional[int]` | `None` | Season year per hoopR convention (`2026` = 2025-26). Defaults to the most recent NBA season. |
+| `stats` | `Optional[DataFrame]` | `None` | Pre-fetched Stats team directory (`espn_team_id` + `nba_team_*`). `None` derives it from `nba_stats_leaguestandingsv3` joined to ESPN on the normalized team nickname. |
+| `fox` | `Optional[DataFrame]` | `None` | Pre-fetched Fox directory. `None` fetches live. |
+| `return_as_pandas` | `bool` | `False` | Return pandas instead of polars. |
+
+**Returns**
+
+`pl.DataFrame` (or pandas), one row per ESPN team, with `TEAM_COLUMNS`.
+
+**Example**
+
+```python
+from sportsdataverse.nba import nba_team_crosswalk
+df = nba_team_crosswalk(season=2026)
+print(df.shape)
+
+# Offline with a pre-fetched Stats frame
+
+df = nba_team_crosswalk(season=2026, stats=my_stats, fox=my_fox)
+
+# Pipeline next step (one line)
+
+df.select("espn_team_id", "nba_team_id", "match_method").head()
 ```
 
 ### `nba_team_ratings(seasons: 'Union[int, list[int]]', *, league_id: 'str' = '00', as_of_date: 'Union[dt.date, None]' = None, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#nba_team_ratings}
