@@ -19,7 +19,14 @@ from tools.validation.checks import (
 )
 from tools.validation.findings import Finding, Severity
 from tools.validation.lint import leakage_python, leakage_r
-from tools.validation.registry import LINT_TARGETS, resolve
+
+# NOTE: `tools.validation.registry` is imported lazily, inside the two functions
+# that need it, rather than here. It pulls in `yaml` (for thresholds.yaml), and
+# pyyaml lives in [dependency-groups] -- dev-only, NOT a runtime dependency. A
+# module-level import therefore makes this whole CLI unimportable from an
+# installed sportsdataverse, which is how every `-data` repo consumes it: they
+# pin the package from git and have no dev group. `compare` needs neither the
+# dataset registry nor the thresholds, so it must not pay for them.
 
 _CHECKS = (schema_contract, extraction, numeric_parity, sweep, boundary_leakage, constant_column, definitional)
 
@@ -36,6 +43,8 @@ def run_dataset(dataset: str, release: str | None = None) -> list[dict]:
     Returns:
         A flat list of finding dicts (each from ``Finding.to_dict()``).
     """
+    from tools.validation.registry import resolve
+
     frame, ctx = resolve(dataset, release=release)
     findings: list[Finding] = []
     for mod in _CHECKS:
@@ -196,6 +205,8 @@ def lint_target(name: str) -> list[dict]:
             ("python" and "r" are both registered; this fires only for some other
             unregistered language).
     """
+    from tools.validation.registry import LINT_TARGETS
+
     target = LINT_TARGETS[name]
     linter = _LINTERS.get(target.language)
     if linter is None:

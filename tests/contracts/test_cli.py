@@ -2,8 +2,14 @@ from __future__ import annotations
 
 import polars as pl
 
-from tools.validation import cli
+from tools.validation import cli, registry
 from tools.validation.findings import CheckContext
+
+# `cli` imports `resolve` / `LINT_TARGETS` lazily, inside the functions that use
+# them, so that `compare` does not drag in pyyaml (a dev-only dependency -- see
+# test_cli_importable_without_yaml.py). That means there is no `cli.resolve` to
+# patch; the owner is `registry`, and patching it there works precisely because
+# the import happens at call time.
 
 
 def test_run_dataset_aggregates_findings(monkeypatch):
@@ -15,7 +21,7 @@ def test_run_dataset_aggregates_findings(monkeypatch):
         required_columns=("game_id",),
         join_keys=("game_id",),
     )
-    monkeypatch.setattr(cli, "resolve", lambda dataset, release=None: (frame, ctx))
+    monkeypatch.setattr(registry, "resolve", lambda dataset, release=None: (frame, ctx))
     out = cli.run_dataset("nfl_pbp")
     assert any(d["check"] == "schema_contract" and d["severity"] == "error" for d in out)
 
@@ -43,7 +49,7 @@ def test_lint_target_dispatches_python(monkeypatch):
     from tools.validation.registry import LintTarget
 
     monkeypatch.setitem(
-        cli.LINT_TARGETS,
+        registry.LINT_TARGETS,
         "t",
         LintTarget(name="t", path=str(_LEAKY_DIR()), language="python"),
     )
@@ -74,7 +80,7 @@ def test_lint_target_r_dispatches_to_r_linter(monkeypatch):
     # no live R needed: force the graceful "Rscript absent" path and assert it
     # dispatched (INFO finding) rather than raising NotImplementedError.
     monkeypatch.setattr(leakage_r, "rscript_path", lambda: None)
-    monkeypatch.setitem(cli.LINT_TARGETS, "rtgt", LintTarget(name="rtgt", path=".", language="r"))
+    monkeypatch.setitem(registry.LINT_TARGETS, "rtgt", LintTarget(name="rtgt", path=".", language="r"))
     out = cli.lint_target("rtgt")
     assert any(d["severity"] == "info" for d in out)
     assert any(d["severity"] == "info" and d["message"] == "R lint skipped: Rscript not found" for d in out)
