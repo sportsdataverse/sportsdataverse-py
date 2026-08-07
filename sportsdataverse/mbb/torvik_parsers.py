@@ -61,26 +61,45 @@ def parse_torvik_csv(payload: object, return_as_pandas: bool = False) -> Union[p
         A polars (or pandas) DataFrame, one row per team, with snake-cased,
         de-duplicated column names; zero rows on empty/malformed input.
 
+    Raises:
+        None: malformed input (non-text payload, header-only body, unterminated
+            quoted field) yields a zero-row frame rather than raising, so callers
+            can chain without a null-check. Only a ``pandas`` import failure under
+            ``return_as_pandas=True`` propagates.
+
     Example:
         Quick start::
 
             from sportsdataverse.mbb import torvik_ratings
             from sportsdataverse.mbb.torvik_parsers import parse_torvik_csv
             df = parse_torvik_csv(torvik_ratings(year=2025, return_parsed=False))
+
+        See Also:
+            * `hoopR`_ - R sister package for men's college basketball
+            * `wehoop`_ - R sister package for women's basketball (``/ncaaw`` mirror)
+            * `Bart Torvik`_ - data origin (T-Rank)
+
+        .. _hoopR: https://hoopR.sportsdataverse.org
+        .. _wehoop: https://wehoop.sportsdataverse.org
+        .. _Bart Torvik: https://barttorvik.com
     """
     text = payload if isinstance(payload, str) else ""
     if not text.strip() or "\n" not in text.strip():
         df = pl.DataFrame()
     else:
-        header = next(iter(pl.read_csv(io.StringIO(text), has_header=False, n_rows=1).rows()))
-        names = _clean_cols([str(h) if h is not None and str(h).strip() else "unnamed" for h in header])
-        df = pl.read_csv(
-            io.StringIO(text),
-            has_header=False,
-            skip_rows=1,
-            new_columns=names,
-            infer_schema_length=10000,
-        )
+        try:
+            header = next(iter(pl.read_csv(io.StringIO(text), has_header=False, n_rows=1).rows()))
+            names = _clean_cols([str(h) if h is not None and str(h).strip() else "unnamed" for h in header])
+            df = pl.read_csv(
+                io.StringIO(text),
+                has_header=False,
+                skip_rows=1,
+                new_columns=names,
+                infer_schema_length=10000,
+            )
+        except Exception:  # noqa: BLE001 -- structurally broken CSV (e.g. unterminated
+            # quoted field) is "no data", same contract as an empty payload above.
+            df = pl.DataFrame()
     if return_as_pandas:
         return df.to_pandas()
     return df
