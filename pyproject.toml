@@ -669,4 +669,7 @@ files = [
     "sportsdataverse/scrape/espn/cli.py",
     "sportsdataverse/scrape/espn/master.py",
     "sportsdataverse/scrape/espn/schedule.py",
+    "sportsdataverse/wexp/__init__.py",
+    "sportsdataverse/wexp/market.py",
+    "sportsdataverse/wexp/scoring.py",
 ]
