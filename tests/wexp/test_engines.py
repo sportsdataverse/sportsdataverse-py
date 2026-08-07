@@ -683,3 +683,72 @@ def test_cross_season_history_is_leak_free_and_widens_coverage(nfl_oracle):
     # the fit actually changed (history is not a silent no-op)
     j = base.join(without, on=["season", "as_of_week", "team_id"], suffix="_w")
     assert (j["off_coef"] - j["off_coef_w"]).abs().max() > 0.1
+
+
+def test_market_prior_shifts_contract_and_seed_isolation():
+    """D4 market priors: seeded ONLY by the seed weeks, shaped like D3 shifts.
+
+    Real CFB fixture (2015 + 2024). Tampering the market lines of weeks
+    AFTER the seed window must leave the priors byte-identical — the
+    prior is a season seed, not a rolling market tracker.
+    """
+    from sportsdataverse.wexp.engines import market_prior_shifts
+    from sportsdataverse.wexp.oracle_market import cfb_market_oracle_from_lines
+
+    oracle = cfb_market_oracle_from_lines(
+        pl.read_parquet(FIXDIR / "cfb_line_odds_sample.parquet"),
+        pl.read_parquet(FIXDIR / "cfb_schedule_sample.parquet"),
+    )
+    shifts = market_prior_shifts(oracle, seed_weeks=3)
+    assert set(shifts.columns) == {"season", "team", "prior_shift"}
+    assert shifts.schema["team"] == pl.Utf8 and shifts.schema["season"] == pl.Int32
+    assert shifts.height > 0
+    # one row per (season, team) — the GS prior loader refuses duplicates
+    assert shifts.unique(subset=["season", "team"]).height == shifts.height
+    # market strengths must actually spread teams apart, not collapse
+    assert shifts["prior_shift"].std() > 1.0
+
+    tampered = oracle.with_columns(
+        pl.when(pl.col("week") > 3)
+        .then(pl.col("spread_close") * 5 - 20)
+        .otherwise(pl.col("spread_close"))
+        .alias("spread_close")
+    )
+    after = market_prior_shifts(tampered, seed_weeks=3)
+    assert shifts.sort("season", "team").equals(after.sort("season", "team"))
+
+
+def test_market_prior_dispatch_requires_table():
+    from sportsdataverse.wexp.engines import build_predictor
+    from sportsdataverse.wexp.variants import VariantConfig
+
+    v = VariantConfig(
+        core="glickman_stern",
+        response="raw",
+        opponent_adjust="none",
+        prior="market_open_informed",
+        wp_map="margin_normal",
+        hfa="fixed",
+    )
+    with pytest.raises(ValueError, match="season_priors"):
+        build_predictor(v)
+
+
+def test_season_priors_wrong_entity_space_refused(nfl_oracle):
+    """A prior keyed on ids (not the filter's name space) matches nothing.
+
+    This is the silent-degrade bug that shipped in the first D4 draft:
+    market priors keyed on ESPN team ids applied to zero teams and the
+    arm scored identically to no-prior. It must fail loudly instead.
+    """
+    from sportsdataverse.wexp.engines import GSConfig, glickman_stern_predictor
+
+    bogus = pl.DataFrame(
+        {
+            "season": pl.Series([2024, 2024], dtype=pl.Int32),
+            "team": ["99999", "88888"],  # ids, not the oracle's team names
+            "prior_shift": [3.0, -3.0],
+        }
+    )
+    with pytest.raises(ValueError, match="state space"):
+        run_backtest(nfl_oracle, glickman_stern_predictor(GSConfig(), bogus), model_id="gs")

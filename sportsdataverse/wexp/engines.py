@@ -38,6 +38,7 @@ __all__ = [
     "cfb_drive_deltas",
     "cfb_drive_ep_responses",
     "glickman_stern_predictor",
+    "market_prior_shifts",
     "net_vintages_view",
     "nfl_qb_change_events",
     "ratings_predictor",
@@ -684,6 +685,14 @@ def glickman_stern_predictor(
         )
         idx = {t: i for i, t in enumerate(teams)}
         n = len(teams)
+        # a prior table keyed on the wrong entity space (ids vs names) matches
+        # NOTHING and silently degrades to the no-prior filter — refuse it
+        if priors and not any(team in idx for _season, team in priors):
+            raise ValueError(
+                "season_priors matched no team in the filter's state space — "
+                "priors must be keyed on the same team column as the oracle's "
+                "home_team/away_team (names), not team ids"
+            )
         x = np.zeros(n)
         p_cov = np.eye(n) * config.init_sd**2
         cur: Optional[tuple[int, int]] = None
@@ -746,6 +755,91 @@ def glickman_stern_predictor(
         return pl.Series(norm.cdf(mu / np.sqrt(var)))
 
     return predict
+
+
+def market_prior_shifts(
+    oracle: pl.DataFrame,
+    *,
+    seed_weeks: int = 3,
+    lam: float = 5.0,
+    market_col: str = "spread_close",
+) -> pl.DataFrame:
+    """Season-entry priors distilled from the market's early-season lines (Axis D4).
+
+    For each season, fits the shared opponent-adjusted ridge on the
+    MARKET'S expected margin (the line, not the observed result) over
+    that season's first ``seed_weeks`` weeks, yielding a market-implied
+    strength per team in margin points. Shaped like
+    :func:`cfb_continuity_shifts` so it drops straight into
+    :func:`glickman_stern_predictor`'s ``season_priors``.
+
+    **Scoring contract (the caller's responsibility):** the seed weeks
+    are NOT pre-game knowledge for themselves — a week-2 line reflects
+    week-1 results. Score only games in weeks ``> seed_weeks`` when using
+    these priors, or the early games are predicted by a prior their own
+    lines built. The ablation driver enforces this.
+
+    Args:
+        oracle: Market-oracle frame (contract columns incl. the market
+            column and team ids).
+        seed_weeks: Weeks of lines distilled into the prior. Week 1 alone
+            is too thin once FCS opponents are excluded (691 FBS-vs-FBS
+            week-1 games across 2004-2021), so the default reaches 3.
+        lam: Ridge penalty on the team coefficients.
+        market_col: Market expected-margin column (``spread_close`` has
+            the widest coverage; ``spread_open`` is thin pre-2021).
+
+    Returns:
+        ``(season, team, prior_shift)`` — one row per team the market
+        priced in the seed window. Teams the market did not price get no
+        row and therefore no shift (never imputed).
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.wexp.engines import market_prior_shifts
+            shifts = market_prior_shifts(oracle, seed_weeks=3)
+    """
+    # NOTE: keyed on team NAME, not id — glickman_stern_predictor's state
+    # vector is built from home_team/away_team, and cfb_continuity_shifts
+    # uses the same space. An id-keyed prior matches nothing, silently.
+    base = normalize_walk_weeks(oracle).drop_nulls([market_col, "home_team", "away_team"])
+    frames: list[pl.DataFrame] = []
+    for season in sorted(base["season"].unique().to_list()):
+        seed = base.filter((pl.col("season") == season) & (pl.col("week") <= seed_weeks))
+        if seed.height == 0:
+            continue
+        rows = pl.concat(
+            [
+                seed.select(
+                    off=pl.col("home_team"),
+                    deft=pl.col("away_team"),
+                    resp=pl.col(market_col),
+                    homeflag=pl.when(pl.col("neutral_site") == True)  # noqa: E712
+                    .then(pl.lit(""))
+                    .otherwise(pl.col("home_team")),
+                ),
+                seed.select(
+                    off=pl.col("away_team"),
+                    deft=pl.col("home_team"),
+                    resp=-pl.col(market_col),
+                    homeflag=pl.lit(""),
+                ),
+            ]
+        )
+        coefs, _intercept, _hfa = opponent_adjusted_ridge(
+            rows, off_col="off", def_col="deft", home_col="homeflag", resp_col="resp", lam=lam
+        )
+        frames.append(
+            coefs.select(
+                season=pl.lit(season, dtype=pl.Int32),
+                team=pl.col("team_id"),
+                prior_shift=pl.col("off_coef") - pl.col("def_coef"),
+            )
+        )
+    if not frames:
+        return pl.DataFrame(schema={"season": pl.Int32, "team": pl.Utf8, "prior_shift": pl.Float64})
+    return pl.concat(frames, how="vertical")
 
 
 def cfb_continuity_shifts(
@@ -923,8 +1017,8 @@ def build_predictor(
         and config.wp_map == "margin_normal"  # native map: Phi(mu / predictive sd)
         and config.hfa == "fixed"
     ):
-        if config.prior == "carryover_continuity" and season_priors is None:
-            raise ValueError("prior='carryover_continuity' requires a season_priors table (cfb_continuity_shifts)")
+        if config.prior in ("carryover_continuity", "market_open_informed") and season_priors is None:
+            raise ValueError(f"prior={config.prior!r} requires a season_priors table")
         shrink = 0.0 if config.prior == "flat" else params.get("season_shrink", 0.82)
         return glickman_stern_predictor(
             GSConfig(
@@ -935,7 +1029,7 @@ def build_predictor(
                 hfa=params.get("hfa", 2.3),
                 init_sd=params.get("init_sd", 5.0),
             ),
-            season_priors=season_priors if config.prior == "carryover_continuity" else None,
+            season_priors=season_priors if config.prior in ("carryover_continuity", "market_open_informed") else None,
             variance_events=variance_events,
         )
     if (

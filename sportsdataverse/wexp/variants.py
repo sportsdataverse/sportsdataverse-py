@@ -13,8 +13,10 @@ cannot exist):
   to the EPA-family cores (A3 ridge_epa, A4 five_factor, A5 fei_possession);
   other cores carry the ``raw``/``none`` placeholders.
 - ``market_only`` (A7) takes no preseason prior — it IS the market.
-- ``glickman_stern`` (A6) carries its own dual-timescale prior, so only
-  ``flat`` or ``carryover`` are meaningful (the AR *is* the carryover).
+- ``glickman_stern`` (A6) carries its own dual-timescale AR, so ``carryover``
+  is the AR itself; ``carryover_continuity`` and ``market_open_informed``
+  compose on top of it as season-boundary state means (D3 talent/returning,
+  D4 market-distilled) rather than replacing it.
 """
 
 from __future__ import annotations
@@ -90,13 +92,6 @@ class VariantConfig:
                 )
         if self.core == "market_only" and self.prior != "flat":
             raise ValueError("market_only takes no prior (prior must be 'flat')")
-        if self.core == "glickman_stern" and self.prior not in ("flat", "carryover", "carryover_continuity"):
-            # the AR IS the carryover; continuity shifts compose as
-            # season-boundary state means, but a market prior does not
-            raise ValueError(
-                "glickman_stern's dual-timescale AR is its own prior; "
-                "prior must be 'flat', 'carryover', or 'carryover_continuity'"
-            )
 
 
 def variant_hash(config: VariantConfig) -> str:
