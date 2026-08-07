@@ -3,6 +3,8 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [Unreleased](#unreleased)
+  - [New — `sportsdataverse.wexp`: win-expectancy bake-off harness (NFL + CFB)](#new--sportsdataversewexp-win-expectancy-bake-off-harness-nfl--cfb)
+  - [New — `load_nfl_ratings_weekly`: per-week as-of NFL ratings vintages](#new--load_nfl_ratings_weekly-per-week-as-of-nfl-ratings-vintages)
   - [New — `sportsdataverse.scrape.espn`: shared ESPN `-raw` archive engine](#new--sportsdataversescrapeespn-shared-espn--raw-archive-engine)
 - [0.0.75 Release: August 2, 2026](#0075-release-august-2-2026)
   - [Fix — `scrape.ncaa` CLIs pointed at the wrong repo root (silent no-op)](#fix--scrapencaa-clis-pointed-at-the-wrong-repo-root-silent-no-op)
@@ -228,6 +230,52 @@
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Unreleased
+
+### New — `sportsdataverse.wexp`: win-expectancy bake-off harness (NFL + CFB)
+
+A typed, mypy-ratcheted harness for walk-forward pre-game win-expectancy
+modeling across NFL (1999+) and CFB (2004+), built on a structural
+leakage-proofing philosophy: features flow only through a vintage-keyed
+store, engines receive outcome-stripped slates, and every fitted build
+parameter is stamped on its table and refused on mismatch.
+
+- `wexp.store.VintageStore` — vintage-keyed feature store with EXCLUSIVE
+  `as_of_week` semantics (`week_semantics="through"` shifts inclusive CFB
+  assets at ingest); leak-free `join_asof` with dtype guards on entity,
+  week, AND season keys.
+- `wexp.backtest.run_backtest` — the walk-forward driver: engines see only
+  completed prior games plus an outcome-stripped slate; CFB postseason
+  week-reset normalized; predictions validated; per-season + pooled result
+  rows keyed by `variant_hash`, plus like-for-like `week_slice="lined"`
+  rows wherever market coverage is partial.
+- `wexp.oracle_market` — vig-removed market oracles: NFL close from
+  nflverse schedules; CFB close/open consensus from the `cfb_line_odds`
+  archive (loaded via `load_cfb_betting_lines` by default) with a
+  LEFT-join contract so every schedule game stays model-scorable.
+- Engines (`wexp.engines` / `wexp.elo`): margin-Elo (carryover, per-era
+  HFA, continuity priors from talent + returning production), per-week
+  opponent-adjusted ridge vintages (raw / capped / close-game-filtered
+  responses), a Glickman–Stern walk-forward Kalman filter (with
+  continuity-prior composition), net-rating vintage adapters for the
+  published `nfl_ratings_weekly` / `cfb_ratings_weekly` datasets, and
+  drive-EP response extraction (`cfb_drive_deltas`).
+- `wexp.postgame.postgame_we` — post-game deserved-win probability (G3
+  analytic normal + G2 drive bootstrap, fixed-seed reproducible).
+- `wexp.variants` — the axis config system: 1,860 valid variants across
+  cores/response/adjustment/priors/wp-map/HFA axes, stable-hashed;
+  `wexp.engines.build_predictor` dispatches implemented cells and raises
+  on unbuilt ones (never a silent fallback).
+- Committed tune-window leaderboards + variant registry under
+  `results/wexp/` (tune <= 2021; the 2022-2025 holdout is never scored).
+
+### New — `load_nfl_ratings_weekly`: per-week as-of NFL ratings vintages
+
+Loads the new `nfl_ratings_weekly` release on sportsdataverse-data
+(per-season assets, 1999-present, built by nfl-data's producer): one row
+per `(season, as_of_week, team_id)` with STRICTLY EXCLUSIVE semantics —
+a row at `as_of_week = W` was fit only on games before week W's first
+kickoff, safe to join onto week-W games with no leakage. SDV-native (no
+nflreadpy equivalent).
 
 ### New — `sportsdataverse.scrape.espn`: shared ESPN `-raw` archive engine
 

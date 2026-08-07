@@ -135,6 +135,7 @@ def score_baselines(
     # like-for-like rows on the market-covered subset (see run_backtest);
     # market columns restrict themselves via their own nulls, but the
     # always-covered baselines (coin flip, home rule, elo) need the slice
+    # p_close membership is guaranteed by baseline_probs (oracle contract)
     if week_slice == "all" and 0 < probs["p_close"].null_count() < probs.height:
         lined = probs.filter(pl.col("p_close").is_not_null())
         frames += [

@@ -344,7 +344,21 @@ def response_ridge_vintages(
             )
         )
     if not frames:
-        return pl.DataFrame()
+        # empty frames carry the documented schema (project convention)
+        return pl.DataFrame(
+            schema={
+                "team_id": pl.Utf8,
+                "off_coef": pl.Float64,
+                "def_coef": pl.Float64,
+                "adj_net": pl.Float64,
+                "season": pl.Int32,
+                "as_of_week": pl.Int32,
+                "intercept": pl.Float64,
+                "hfa": pl.Float64,
+                "lam": pl.Float64,
+                "close_filter": pl.Float64,
+            }
+        )
     return pl.concat(frames, how="vertical")
 
 
