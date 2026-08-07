@@ -30,8 +30,10 @@ from sportsdataverse.wexp.elo import (
     elo_ratings,
 )
 from sportsdataverse.wexp.engines import (
+    GSConfig,
     build_predictor,
     cfb_continuity_shifts,
+    glickman_stern_predictor,
     ratings_predictor,
     ridge_margin_vintages,
 )
@@ -72,6 +74,7 @@ __all__ = [
     "AXES",
     "BASELINE_HOME_RATE",
     "EloConfig",
+    "GSConfig",
     "ORACLE_COLUMNS",
     "OUTCOME_COLUMNS",
     "POSTSEASON_WEEK_OFFSET",
@@ -97,6 +100,7 @@ __all__ = [
     "elo_ratings",
     "enumerate_variants",
     "favorite_bucket_table",
+    "glickman_stern_predictor",
     "log_loss_score",
     "logit_blend",
     "mae",

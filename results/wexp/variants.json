@@ -83,6 +83,96 @@
     "response": "capped",
     "wp_map": "margin_normal"
   },
+  "1e2d09d59f91": {
+    "core": "glickman_stern",
+    "hfa": "fixed",
+    "opponent_adjust": "none",
+    "params": [
+      [
+        "hfa",
+        2.3
+      ],
+      [
+        "season_shrink",
+        0.6
+      ],
+      [
+        "sigma_s",
+        2.35
+      ],
+      [
+        "sigma_w",
+        0.9
+      ],
+      [
+        "sigma_y",
+        13.45
+      ]
+    ],
+    "prior": "carryover",
+    "response": "raw",
+    "wp_map": "margin_normal"
+  },
+  "1f478370dbf9": {
+    "core": "glickman_stern",
+    "hfa": "fixed",
+    "opponent_adjust": "none",
+    "params": [
+      [
+        "hfa",
+        3.0
+      ],
+      [
+        "season_shrink",
+        0.82
+      ],
+      [
+        "sigma_s",
+        2.35
+      ],
+      [
+        "sigma_w",
+        0.9
+      ],
+      [
+        "sigma_y",
+        15.5
+      ]
+    ],
+    "prior": "carryover",
+    "response": "raw",
+    "wp_map": "margin_normal"
+  },
+  "20df189e6cc1": {
+    "core": "glickman_stern",
+    "hfa": "fixed",
+    "opponent_adjust": "none",
+    "params": [
+      [
+        "hfa",
+        2.3
+      ],
+      [
+        "season_shrink",
+        0.82
+      ],
+      [
+        "sigma_s",
+        2.35
+      ],
+      [
+        "sigma_w",
+        0.9
+      ],
+      [
+        "sigma_y",
+        13.45
+      ]
+    ],
+    "prior": "carryover",
+    "response": "raw",
+    "wp_map": "margin_normal"
+  },
   "2406e6be69e2": {
     "core": "elo_margin",
     "hfa": "fixed",
@@ -113,6 +203,66 @@
     "response": "raw",
     "wp_map": "elo_logistic"
   },
+  "25dc4a48ef94": {
+    "core": "glickman_stern",
+    "hfa": "fixed",
+    "opponent_adjust": "none",
+    "params": [
+      [
+        "hfa",
+        2.3
+      ],
+      [
+        "season_shrink",
+        0.82
+      ],
+      [
+        "sigma_s",
+        2.35
+      ],
+      [
+        "sigma_w",
+        1.5
+      ],
+      [
+        "sigma_y",
+        13.45
+      ]
+    ],
+    "prior": "carryover",
+    "response": "raw",
+    "wp_map": "margin_normal"
+  },
+  "265d9bb3cacc": {
+    "core": "glickman_stern",
+    "hfa": "fixed",
+    "opponent_adjust": "none",
+    "params": [
+      [
+        "hfa",
+        3.0
+      ],
+      [
+        "season_shrink",
+        0.82
+      ],
+      [
+        "sigma_s",
+        3.5
+      ],
+      [
+        "sigma_w",
+        0.9
+      ],
+      [
+        "sigma_y",
+        15.5
+      ]
+    ],
+    "prior": "carryover",
+    "response": "raw",
+    "wp_map": "margin_normal"
+  },
   "317ff25bd4a2": {
     "core": "elo_margin",
     "hfa": "fixed",
@@ -134,6 +284,36 @@
     "prior": "carryover",
     "response": "raw",
     "wp_map": "elo_logistic"
+  },
+  "363528c7ef80": {
+    "core": "glickman_stern",
+    "hfa": "fixed",
+    "opponent_adjust": "none",
+    "params": [
+      [
+        "hfa",
+        2.3
+      ],
+      [
+        "season_shrink",
+        0.82
+      ],
+      [
+        "sigma_s",
+        3.5
+      ],
+      [
+        "sigma_w",
+        0.9
+      ],
+      [
+        "sigma_y",
+        13.45
+      ]
+    ],
+    "prior": "carryover",
+    "response": "raw",
+    "wp_map": "margin_normal"
   },
   "3a4d3e3df0cd": {
     "core": "elo_margin",
@@ -446,6 +626,66 @@
     "prior": "carryover",
     "response": "raw",
     "wp_map": "elo_logistic"
+  },
+  "d2277d9bbc9c": {
+    "core": "glickman_stern",
+    "hfa": "fixed",
+    "opponent_adjust": "none",
+    "params": [
+      [
+        "hfa",
+        3.0
+      ],
+      [
+        "season_shrink",
+        0.6
+      ],
+      [
+        "sigma_s",
+        2.35
+      ],
+      [
+        "sigma_w",
+        0.9
+      ],
+      [
+        "sigma_y",
+        15.5
+      ]
+    ],
+    "prior": "carryover",
+    "response": "raw",
+    "wp_map": "margin_normal"
+  },
+  "d785acb17bd8": {
+    "core": "glickman_stern",
+    "hfa": "fixed",
+    "opponent_adjust": "none",
+    "params": [
+      [
+        "hfa",
+        3.0
+      ],
+      [
+        "season_shrink",
+        0.82
+      ],
+      [
+        "sigma_s",
+        2.35
+      ],
+      [
+        "sigma_w",
+        1.5
+      ],
+      [
+        "sigma_y",
+        15.5
+      ]
+    ],
+    "prior": "carryover",
+    "response": "raw",
+    "wp_map": "margin_normal"
   },
   "d843422fe420": {
     "core": "ridge_epa",

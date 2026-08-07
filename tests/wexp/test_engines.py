@@ -282,6 +282,42 @@ def test_continuity_prior_shifts_change_predictions():
     assert (p_zero["p_home"] - p_plain["p_home"]).abs().max() < 1e-12
 
 
+def test_glickman_stern_backtest(nfl_oracle):
+    """Axis A6: walk-forward Kalman filter on the real NFL fixture.
+
+    Observed (default seeds sw=0.9 ss=2.35 shrink=0.82): brier 0.2233 /
+    acc 0.639, full 821-game coverage (the prior rates week 1). The
+    frozen no-dynamics config (sw=0, ss=0, shrink=1) scored 0.2425 —
+    the dynamics must keep beating it (silent-no-op ordering gate).
+    """
+    from sportsdataverse.wexp.engines import GSConfig, build_predictor, glickman_stern_predictor
+    from sportsdataverse.wexp.variants import VariantConfig
+
+    probs, rows = run_backtest(nfl_oracle, glickman_stern_predictor(), model_id="gs")
+    pooled = {r["metric"]: r["value"] for r in rows.filter(pl.col("season") == -1).iter_rows(named=True)}
+    assert probs["p_home"].null_count() == 0 and probs.height == 821
+    assert pooled["brier"] < 0.235  # observed 0.2233
+    assert pooled["winner_accuracy"] > 0.62  # observed 0.639
+    _, frozen_rows = run_backtest(
+        nfl_oracle,
+        glickman_stern_predictor(GSConfig(sigma_w=0.0, sigma_s=0.0, season_shrink=1.0)),
+        model_id="gs_frozen",
+    )
+    frozen = {r["metric"]: r["value"] for r in frozen_rows.filter(pl.col("season") == -1).iter_rows(named=True)}
+    assert pooled["brier"] < frozen["brier"] - 0.01  # observed gap 0.019
+
+    variant = VariantConfig(
+        core="glickman_stern",
+        response="raw",
+        opponent_adjust="none",
+        prior="carryover",
+        wp_map="margin_normal",
+        hfa="fixed",
+    )
+    dispatched, _ = run_backtest(nfl_oracle, build_predictor(variant), model_id="gs", variant=variant)
+    assert (dispatched["p_home"] - probs["p_home"]).abs().max() < 1e-12
+
+
 def test_continuity_prior_requires_table():
     from sportsdataverse.wexp.engines import build_predictor
     from sportsdataverse.wexp.variants import VariantConfig

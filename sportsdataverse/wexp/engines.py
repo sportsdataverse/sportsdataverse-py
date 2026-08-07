@@ -18,6 +18,7 @@ margins).
 
 from __future__ import annotations
 
+from dataclasses import dataclass
 from typing import Optional
 
 import numpy as np
@@ -29,7 +30,14 @@ from sportsdataverse.wexp.elo import EloConfig
 from sportsdataverse.wexp.store import VintageStore
 from sportsdataverse.wexp.variants import VariantConfig
 
-__all__ = ["build_predictor", "cfb_continuity_shifts", "ratings_predictor", "ridge_margin_vintages"]
+__all__ = [
+    "GSConfig",
+    "build_predictor",
+    "cfb_continuity_shifts",
+    "glickman_stern_predictor",
+    "ratings_predictor",
+    "ridge_margin_vintages",
+]
 
 _VINTAGE_SCHEMA: dict[str, type[pl.DataType]] = {
     "season": pl.Int32,
@@ -232,6 +240,114 @@ def ratings_predictor(
     return predict
 
 
+@dataclass(frozen=True)
+class GSConfig:
+    """Glickman-Stern state-space tunables (Axis A6; all seeds, none sacred).
+
+    Attributes:
+        sigma_w: Week-to-week strength innovation SD (RESEARCH seed ~0.9).
+        sigma_s: Season-to-season innovation SD (seed ~2.35).
+        season_shrink: AR(1) shrink toward the league mean at each season
+            boundary (the model's own carryover; 0 = full reset).
+        sigma_y: Observation noise SD on the game margin.
+        hfa: Home-field advantage in margin points (0 at neutral sites).
+        init_sd: Prior SD for a team's first-ever strength state.
+    """
+
+    sigma_w: float = 0.9
+    sigma_s: float = 2.35
+    season_shrink: float = 0.82
+    sigma_y: float = 13.45
+    hfa: float = 2.3
+    init_sd: float = 5.0
+
+
+def glickman_stern_predictor(config: GSConfig = GSConfig()) -> WeekPredictor:
+    """Wrap the Glickman-Stern (1998) Kalman filter as a week predictor.
+
+    Team strengths follow a weekly random walk (``sigma_w`` innovation)
+    with an AR(1) season transition (``season_shrink`` + ``sigma_s``);
+    each week the filter batch-updates on that week's observed margins.
+    The filter re-runs FORWARD over the driver's history every week —
+    filtering only, never smoothing, so predictions are walk-forward by
+    construction. P(home) uses the model's own predictive margin
+    distribution: ``Phi(mu / sqrt(state var + sigma_y^2))`` — the
+    margin_normal map with a per-game predictive SD.
+
+    Args:
+        config: Tunable parameters.
+
+    Returns:
+        A predictor callable for :func:`~sportsdataverse.wexp.backtest.run_backtest`.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.wexp.backtest import run_backtest
+            from sportsdataverse.wexp.engines import GSConfig, glickman_stern_predictor
+            probs, rows = run_backtest(oracle, glickman_stern_predictor(GSConfig()), model_id="gs")
+    """
+
+    def predict(history: pl.DataFrame, slate: pl.DataFrame, store: Optional[VintageStore]) -> pl.Series:
+        from scipy.stats import norm
+
+        teams = sorted(
+            set(history["home_team"].to_list())
+            | set(history["away_team"].to_list())
+            | set(slate["home_team"].to_list())
+            | set(slate["away_team"].to_list())
+        )
+        idx = {t: i for i, t in enumerate(teams)}
+        n = len(teams)
+        x = np.zeros(n)
+        p_cov = np.eye(n) * config.init_sd**2
+        cur: Optional[tuple[int, int]] = None
+
+        def advance(season: int, week: int) -> None:
+            nonlocal x, p_cov, cur
+            if cur is not None:
+                s0, w0 = cur
+                if season > s0:
+                    for _ in range(season - s0):
+                        x = config.season_shrink * x
+                        p_cov = config.season_shrink**2 * p_cov + config.sigma_s**2 * np.eye(n)
+                    drift = max(week - 1, 0)
+                else:
+                    drift = week - w0
+                p_cov = p_cov + config.sigma_w**2 * drift * np.eye(n)
+            cur = (season, week)
+
+        def design(games: pl.DataFrame) -> tuple[np.ndarray, np.ndarray]:
+            m = games.height
+            h_mat = np.zeros((m, n))
+            rows = games.select("home_team", "away_team", "neutral_site").iter_rows()
+            hfa_vec = np.zeros(m)
+            for i, (home, away, neutral) in enumerate(rows):
+                h_mat[i, idx[home]] = 1.0
+                h_mat[i, idx[away]] = -1.0
+                hfa_vec[i] = 0.0 if neutral else config.hfa
+            return h_mat, hfa_vec
+
+        for season, week in history.select("season", "week").unique().sort("season", "week").iter_rows():
+            group = history.filter((pl.col("season") == season) & (pl.col("week") == week))
+            advance(season, week)
+            h_mat, hfa_vec = design(group)
+            y = group["home_margin"].to_numpy() - hfa_vec
+            s_mat = h_mat @ p_cov @ h_mat.T + config.sigma_y**2 * np.eye(group.height)
+            k_gain = np.linalg.solve(s_mat, h_mat @ p_cov).T
+            x = x + k_gain @ (y - h_mat @ x)
+            p_cov = p_cov - k_gain @ h_mat @ p_cov
+            p_cov = (p_cov + p_cov.T) / 2.0  # enforce symmetry
+
+        advance(int(slate["season"][0]), int(slate["week"][0]))
+        h_mat, hfa_vec = design(slate)
+        mu = h_mat @ x + hfa_vec
+        var = np.einsum("ij,jk,ik->i", h_mat, p_cov, h_mat) + config.sigma_y**2
+        return pl.Series(norm.cdf(mu / np.sqrt(var)))
+
+    return predict
+
+
 def cfb_continuity_shifts(
     oracle: pl.DataFrame,
     talent: pl.DataFrame,
@@ -349,6 +465,22 @@ def build_predictor(
                 prior="carryover", wp_map="elo_logistic", hfa="fixed"))
     """
     params = dict(config.params)
+    if (
+        config.core == "glickman_stern"
+        and config.wp_map == "margin_normal"  # native map: Phi(mu / predictive sd)
+        and config.hfa == "fixed"
+    ):
+        shrink = 0.0 if config.prior == "flat" else params.get("season_shrink", 0.82)
+        return glickman_stern_predictor(
+            GSConfig(
+                sigma_w=params.get("sigma_w", 0.9),
+                sigma_s=params.get("sigma_s", 2.35),
+                season_shrink=shrink,
+                sigma_y=params.get("sigma_y", 13.45),
+                hfa=params.get("hfa", 2.3),
+                init_sd=params.get("init_sd", 5.0),
+            )
+        )
     if (
         config.core == "elo_margin"
         and config.wp_map == "elo_logistic"
