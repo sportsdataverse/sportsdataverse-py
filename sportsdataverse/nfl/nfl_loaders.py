@@ -38,6 +38,7 @@ from sportsdataverse.config import (
     NFL_PLAYER_KICKING_STATS_URL,
     NFL_PLAYER_STATS_URL,
     NFL_PLAYER_URL,
+    NFL_RATINGS_WEEKLY_URL,
     NFL_ROSTER_URL,
     NFL_SDV_ESPN_QBR_SEASON_URL,
     NFL_SDV_ESPN_QBR_WEEK_URL,
@@ -1788,4 +1789,56 @@ def load_nfl_espn_qbr(
     if "season" in data.columns and seasons:
         season_ints = [int(s) for s in seasons]
         data = data.filter(pl.col("season").is_in(season_ints))
+    return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
+
+
+@cached_loader
+def load_nfl_ratings_weekly(seasons: List[int], return_as_pandas: bool = False) -> pl.DataFrame:
+    """Load per-week as-of vintages of the SDV NFL ratings spine (2009+).
+
+    SDV-native dataset (no nflreadpy equivalent), built by nfl-data's
+    ``nfl_ratings_weekly`` job: for each week ``W`` the ratings spine
+    (:func:`sportsdataverse.nfl.nfl_ratings`) is refit as of week ``W``'s
+    FIRST kickoff. A row with ``as_of_week = W`` therefore contains ONLY
+    information from games strictly before week ``W`` — STRICTLY EXCLUSIVE
+    semantics, safe to join onto week-``W`` games with no leakage (contrast
+    the CFB ``through_week`` convention, which is inclusive of its week).
+
+    Args:
+        seasons (List[int]): Seasons to load (2009 through the current season).
+        return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
+
+    Returns:
+        pl.DataFrame: One row per ``(season, as_of_week, team_id)`` — the
+        ``nfl_ratings`` columns (``adj_off_epa`` / ``adj_def_epa`` /
+        ``adj_st_epa`` / ``adj_net``, ranks, ``net_z``, ``games``) plus
+        ``as_of_week`` (Int32). Weeks run 2-22; week 1 has no prior games
+        and emits no vintage.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nfl import load_nfl_ratings_weekly
+            vintages = load_nfl_ratings_weekly(seasons=[2024])
+            print(vintages.shape)
+
+        Leak-free join for week-10 games::
+
+            import polars as pl
+            wk10 = load_nfl_ratings_weekly(seasons=[2024]).filter(pl.col("as_of_week") == 10)
+
+        See Also:
+            * `nflverse`_ -- companion data ecosystem for the NFL
+            * `nflfastR`_ -- R sister package for NFL play-by-play
+
+        .. _nflverse: https://nflverse.nflverse.com
+        .. _nflfastR: https://www.nflfastr.com
+    """
+    if type(seasons) is int:
+        seasons = [seasons]
+    frames = []
+    for i in seasons:
+        season_not_found_error(int(i), 2009)
+        frames.append(pl.read_parquet(NFL_RATINGS_WEEKLY_URL.format(season=i), use_pyarrow=True, columns=None))
+    data = pl.concat(frames, how="vertical_relaxed")
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
