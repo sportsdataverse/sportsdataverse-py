@@ -397,6 +397,32 @@
     "response": "raw",
     "wp_map": "elo_logistic"
   },
+  "4022a0797470": {
+    "core": "ridge_epa",
+    "hfa": "fixed",
+    "opponent_adjust": "ridge",
+    "params": [
+      [
+        "epa_vintage",
+        1.0
+      ],
+      [
+        "hfa",
+        2.14
+      ],
+      [
+        "scale",
+        24.8
+      ],
+      [
+        "sigma",
+        13.45
+      ]
+    ],
+    "prior": "flat",
+    "response": "raw",
+    "wp_map": "margin_normal"
+  },
   "50038e7bcc1e": {
     "core": "elo_margin",
     "hfa": "per_era",
@@ -938,6 +964,28 @@
     "prior": "carryover_continuity",
     "response": "raw",
     "wp_map": "margin_normal"
+  },
+  "c82fe726bc49": {
+    "core": "ridge_epa",
+    "hfa": "fixed",
+    "opponent_adjust": "ridge",
+    "params": [
+      [
+        "epa_vintage",
+        1.0
+      ],
+      [
+        "hfa",
+        2.14
+      ],
+      [
+        "scale",
+        24.8
+      ]
+    ],
+    "prior": "flat",
+    "response": "raw",
+    "wp_map": "isotonic"
   },
   "cf43c1d9c356": {
     "core": "elo_margin",
