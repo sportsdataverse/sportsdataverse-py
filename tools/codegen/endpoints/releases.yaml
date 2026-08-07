@@ -1598,6 +1598,17 @@ loaders:
   min_season: 1999
   example_args:
     seasons: 2024
+# SDV-native: per-week as-of vintages of the ratings spine (nfl-data
+# nfl_ratings_weekly job). as_of_week is STRICTLY EXCLUSIVE — a row at
+# as_of_week=W was fit only on games before week W's first kickoff.
+- fn: load_nfl_ratings_weekly
+  league: nfl
+  base: sdv_releases
+  url: nfl_ratings_weekly/nfl_ratings_weekly_{season}.parquet
+  tag: nfl_ratings_weekly
+  min_season: 1999
+  example_args:
+    seasons: 2024
 # load_nfl_rosters also accepts source="sdv" to read the SDV-native nfl_rosters
 # release (public Shield/ESPN build; 30-col subset; published seasons 2022+).
 # The default source="nflverse" maps to the asset below and is documented here.

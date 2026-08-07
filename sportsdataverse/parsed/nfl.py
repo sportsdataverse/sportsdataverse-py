@@ -232,6 +232,7 @@ from sportsdataverse.nfl import load_nfl_pfr_weekly_rec as load_nfl_pfr_weekly_r
 from sportsdataverse.nfl import load_nfl_pfr_weekly_rush as load_nfl_pfr_weekly_rush  # noqa: F401
 from sportsdataverse.nfl import load_nfl_player_stats as load_nfl_player_stats  # noqa: F401
 from sportsdataverse.nfl import load_nfl_players as load_nfl_players  # noqa: F401
+from sportsdataverse.nfl import load_nfl_ratings_weekly as load_nfl_ratings_weekly  # noqa: F401
 from sportsdataverse.nfl import load_nfl_rosters as load_nfl_rosters  # noqa: F401
 from sportsdataverse.nfl import load_nfl_schedule as load_nfl_schedule  # noqa: F401
 from sportsdataverse.nfl import load_nfl_snap_counts as load_nfl_snap_counts  # noqa: F401
@@ -512,6 +513,7 @@ __all__ = [
     "load_nfl_pfr_weekly_rush",
     "load_nfl_player_stats",
     "load_nfl_players",
+    "load_nfl_ratings_weekly",
     "load_nfl_rosters",
     "load_nfl_schedule",
     "load_nfl_snap_counts",

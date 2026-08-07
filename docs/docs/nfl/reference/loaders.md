@@ -15,6 +15,7 @@ flowchart LR
 | Dataset | Release tag | Pipeline |
 |---|---|---|
 | `load_nfl_pbp` | [pbp](https://github.com/nflverse/nflverse-data/releases/tag/pbp) | — |
+| `load_nfl_ratings_weekly` | [nfl_ratings_weekly](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nfl_ratings_weekly) | — |
 | `load_nfl_rosters` | [rosters](https://github.com/nflverse/nflverse-data/releases/tag/rosters) | — |
 | `load_nfl_weekly_rosters` | [weekly_rosters](https://github.com/nflverse/nflverse-data/releases/tag/weekly_rosters) | — |
 | `load_nfl_depth_charts` | [depth_charts](https://github.com/nflverse/nflverse-data/releases/tag/depth_charts) | — |
@@ -405,6 +406,13 @@ Release: [pbp](https://github.com/nflverse/nflverse-data/releases/tag/pbp) · as
 
 ```python
 load_nfl_pbp(seasons=2024)
+```
+
+## `load_nfl_ratings_weekly`
+
+Release: [nfl_ratings_weekly](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nfl_ratings_weekly) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nfl_ratings_weekly/nfl_ratings_weekly_{season}.parquet`
+```python
+load_nfl_ratings_weekly(seasons=2024)
 ```
 
 ## `load_nfl_rosters`

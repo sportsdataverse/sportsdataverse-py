@@ -106,6 +106,7 @@ NFL_ESPN_QBR_WEEK_URL = f"{NFLVERSEGITHUB}espn_data/qbr_week_level.parquet"
 # SDV-native QBR (forthcoming `nfl_espn_qbr` release; see CFB<->NFL parity backlog).
 NFL_SDV_ESPN_QBR_SEASON_URL = SDVRELEASES + "nfl_espn_qbr/qbr_season_level.parquet"
 NFL_SDV_ESPN_QBR_WEEK_URL = SDVRELEASES + "nfl_espn_qbr/qbr_week_level.parquet"
+NFL_RATINGS_WEEKLY_URL = SDVRELEASES + "nfl_ratings_weekly/nfl_ratings_weekly_{season}.parquet"
 NFL_FTN_CHARTING_URL = NFLVERSEGITHUB + "ftn_charting/ftn_charting_{season}.parquet"
 NFL_TRADES_URL = f"{NFLVERSEGITHUB}trades/trades.parquet"
 NFL_FF_PLAYERIDS_URL = f"{DYNASTYPROCESSGITHUB}db_playerids.csv"
