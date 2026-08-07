@@ -1,0 +1,42 @@
+api: bart_wbb
+host: https://barttorvik.com/ncaaw
+name_pattern: bart_wbb_{short}
+module: bart_wbb
+parser_module: mbb.torvik_parsers
+getter_module: sportsdataverse.mbb.torvik_runtime
+qualifier: ''
+passthrough_query: false
+# barttorvik.com serves CSV data files, not JSON: torvik_runtime._get is
+# content-type aware and hands back the raw body TEXT for these endpoints.
+raw_types:
+- Dict
+- str
+docstring:
+  raw_doc: 'the raw CSV response body (``str``)'
+  example_import: true
+  raises:
+  - 'sportsdataverse.errors.NoESPNDataError: barttorvik.com returned 404 (no data file
+    for that season).'
+  - 'requests.exceptions.RequestException: Connection-level failure after
+    ``dl_utils.download`` exhausts its retries.'
+  see_also:
+  - name: wehoop
+    url: https://wehoop.sportsdataverse.org
+    note: R sister package for women's basketball
+  - name: Bart Torvik
+    url: https://barttorvik.com/ncaaw
+    note: data origin (women's T-Rank)
+runtime_imports:
+- _get
+endpoints:
+- short: ratings
+  summary: "GET /ncaaw/{year}_team_results.csv — women's T-Rank team ratings (adjoe/adjde/barthag, one row per team; the team/conf pair feeds the WBB crosswalk)."
+  path: /{year}_team_results.csv
+  path_params:
+  - name: year
+    type: int
+    required: true
+  example_args:
+    year: 2025
+  parser: parse_torvik_csv
+  returns_schema: native/bart_wbb/ratings

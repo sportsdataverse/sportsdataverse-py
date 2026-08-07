@@ -1,0 +1,138 @@
+schema: ratings
+kind: dataframe
+columns:
+- name: rank
+  type: integer
+  description: T-Rank position (overall barthag rank).
+- name: team
+  type: character
+  description: Torvik team name (the crosswalk join key).
+- name: conf
+  type: character
+  description: Torvik conference abbreviation (e.g. B12, ACC, BE).
+- name: record
+  type: character
+  description: Overall win-loss record to date.
+- name: adjoe
+  type: numeric
+  description: Adjusted offensive efficiency (points per 100 possessions vs an average defense).
+- name: oe_rank
+  type: integer
+  description: National rank of adjusted offensive efficiency.
+- name: adjde
+  type: numeric
+  description: Adjusted defensive efficiency (points allowed per 100 possessions vs an average offense).
+- name: de_rank
+  type: integer
+  description: National rank of adjusted defensive efficiency.
+- name: barthag
+  type: numeric
+  description: 'Torvik power rating: win probability vs an average team on a neutral floor.'
+- name: rank_2
+  type: integer
+  description: Barthag rank repeated as shipped in the source CSV (duplicate of rank).
+- name: proj_w
+  type: numeric
+  description: Projected full-season wins.
+- name: proj_l
+  type: numeric
+  description: Projected full-season losses.
+- name: pro_con_w
+  type: numeric
+  description: Projected conference wins.
+- name: pro_con_l
+  type: numeric
+  description: Projected conference losses.
+- name: con_rec
+  type: character
+  description: Conference win-loss record to date.
+- name: sos
+  type: numeric
+  description: Strength of schedule faced to date.
+- name: ncsos
+  type: numeric
+  description: Non-conference strength of schedule.
+- name: consos
+  type: numeric
+  description: Conference strength of schedule.
+- name: proj_sos
+  type: numeric
+  description: Projected full-season strength of schedule.
+- name: proj_noncon_sos
+  type: numeric
+  description: Projected non-conference strength of schedule.
+- name: proj_con_sos
+  type: numeric
+  description: Projected conference strength of schedule.
+- name: elite_sos
+  type: numeric
+  description: Elite strength of schedule (share of schedule vs elite opponents).
+- name: elite_noncon_sos
+  type: numeric
+  description: Elite non-conference strength of schedule.
+- name: opp_oe
+  type: numeric
+  description: Average opponent offensive efficiency.
+- name: opp_de
+  type: numeric
+  description: Average opponent defensive efficiency.
+- name: opp_proj_oe
+  type: numeric
+  description: Projected average opponent offensive efficiency.
+- name: opp_proj_de
+  type: numeric
+  description: Projected average opponent defensive efficiency.
+- name: con_adj_oe
+  type: numeric
+  description: Adjusted offensive efficiency in conference games only.
+- name: con_adj_de
+  type: numeric
+  description: Adjusted defensive efficiency in conference games only.
+- name: qual_o
+  type: numeric
+  description: Offensive efficiency vs quality (top-tier) opponents.
+- name: qual_d
+  type: numeric
+  description: Defensive efficiency vs quality (top-tier) opponents.
+- name: qual_barthag
+  type: numeric
+  description: Barthag computed from the quality-opponent efficiency splits.
+- name: qual_games
+  type: numeric
+  description: Number of quality games underlying the qual_* splits.
+- name: fun
+  type: numeric
+  description: Torvik's FUN style/entertainment index.
+- name: con_pf
+  type: numeric
+  description: Points scored in conference play.
+- name: con_pa
+  type: numeric
+  description: Points allowed in conference play.
+- name: con_poss
+  type: numeric
+  description: Possessions played in conference play.
+- name: con_oe
+  type: numeric
+  description: Raw offensive efficiency in conference play.
+- name: con_de
+  type: numeric
+  description: Raw defensive efficiency in conference play.
+- name: con_sos_remain
+  type: numeric
+  description: Strength of the remaining conference schedule.
+- name: conf_win_percent
+  type: numeric
+  description: Conference win percentage.
+- name: wab
+  type: numeric
+  description: Wins above bubble (resume quality vs a bubble-level team).
+- name: wab_rk
+  type: integer
+  description: National rank of wins above bubble.
+- name: fun_rk
+  type: integer
+  description: National rank of the FUN index.
+- name: adjt
+  type: numeric
+  description: Adjusted tempo (possessions per 40 minutes).

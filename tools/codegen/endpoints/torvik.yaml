@@ -1,0 +1,53 @@
+api: torvik
+host: https://barttorvik.com
+name_pattern: torvik_{short}
+module: torvik
+parser_module: mbb.torvik_parsers
+getter_module: sportsdataverse.mbb.torvik_runtime
+qualifier: ''
+passthrough_query: false
+# barttorvik.com serves CSV data files, not JSON: torvik_runtime._get is
+# content-type aware and hands back the raw body TEXT for these endpoints.
+raw_types:
+- Dict
+- str
+docstring:
+  raw_doc: 'the raw CSV response body (``str``)'
+  example_import: true
+  raises:
+  - 'sportsdataverse.errors.NoESPNDataError: barttorvik.com returned 404 (no data file
+    for that season).'
+  - 'requests.exceptions.RequestException: Connection-level failure after
+    ``dl_utils.download`` exhausts its retries.'
+  see_also:
+  - name: hoopR
+    url: https://hoopR.sportsdataverse.org
+    note: R sister package for men's college basketball
+  - name: Bart Torvik
+    url: https://barttorvik.com
+    note: data origin (T-Rank)
+runtime_imports:
+- _get
+endpoints:
+- short: ratings
+  summary: "GET /{year}_team_results.csv — men's T-Rank team ratings (adjoe/adjde/barthag, one row per team; the team/conf pair feeds the MBB crosswalk)."
+  path: /{year}_team_results.csv
+  path_params:
+  - name: year
+    type: int
+    required: true
+  example_args:
+    year: 2025
+  parser: parse_torvik_csv
+  returns_schema: native/torvik/ratings
+- short: team_factors
+  summary: "GET /{year}_fffinal.csv — men's four-factors splits (eFG%/FTR/OR%/TO% offense + defense, with per-stat ranks)."
+  path: /{year}_fffinal.csv
+  path_params:
+  - name: year
+    type: int
+    required: true
+  example_args:
+    year: 2025
+  parser: parse_torvik_csv
+  returns_schema: native/torvik/team_factors

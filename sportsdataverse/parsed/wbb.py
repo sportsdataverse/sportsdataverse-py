@@ -23,6 +23,7 @@ warnings.warn(
     stacklevel=2,
 )
 
+from sportsdataverse.wbb import bart_wbb_ratings as _raw_bart_wbb_ratings
 from sportsdataverse.wbb import espn_wbb_award as _raw_espn_wbb_award
 from sportsdataverse.wbb import espn_wbb_awards as _raw_espn_wbb_awards
 from sportsdataverse.wbb import espn_wbb_coach as _raw_espn_wbb_coach
@@ -137,6 +138,15 @@ from sportsdataverse.wbb import espn_wbb_tournaments as _raw_espn_wbb_tournament
 from sportsdataverse.wbb import espn_wbb_transactions as _raw_espn_wbb_transactions
 from sportsdataverse.wbb import espn_wbb_venue as _raw_espn_wbb_venue
 from sportsdataverse.wbb import espn_wbb_venues as _raw_espn_wbb_venues
+from sportsdataverse.wbb import fox_wbb_boxscore as _raw_fox_wbb_boxscore
+from sportsdataverse.wbb import fox_wbb_league_leaders as _raw_fox_wbb_league_leaders
+from sportsdataverse.wbb import fox_wbb_odds as _raw_fox_wbb_odds
+from sportsdataverse.wbb import fox_wbb_pbp as _raw_fox_wbb_pbp
+from sportsdataverse.wbb import fox_wbb_standings as _raw_fox_wbb_standings
+from sportsdataverse.wbb import fox_wbb_team_gamelog as _raw_fox_wbb_team_gamelog
+from sportsdataverse.wbb import fox_wbb_team_roster as _raw_fox_wbb_team_roster
+from sportsdataverse.wbb import fox_wbb_team_stats as _raw_fox_wbb_team_stats
+from sportsdataverse.wbb import fox_wbb_teams as _raw_fox_wbb_teams
 from sportsdataverse.wbb import AssistEvent as AssistEvent  # noqa: F401
 from sportsdataverse.wbb import AssistInfo as AssistInfo  # noqa: F401
 from sportsdataverse.wbb import BadLineupClump as BadLineupClump  # noqa: F401
@@ -309,6 +319,7 @@ from sportsdataverse.wbb import fit_shrinkage_k as fit_shrinkage_k  # noqa: F401
 from sportsdataverse.wbb import fix_combos as fix_combos  # noqa: F401
 from sportsdataverse.wbb import fix_possible_score_swap_bug as fix_possible_score_swap_bug  # noqa: F401
 from sportsdataverse.wbb import flatten_json_iterative as flatten_json_iterative  # noqa: F401
+from sportsdataverse.wbb import fox_wbb_teams_all as fox_wbb_teams_all  # noqa: F401
 from sportsdataverse.wbb import fuzzy_box_match as fuzzy_box_match  # noqa: F401
 from sportsdataverse.wbb import get_ascending_time as get_ascending_time  # noqa: F401
 from sportsdataverse.wbb import get_box_lineup as get_box_lineup  # noqa: F401
@@ -599,6 +610,7 @@ __all__ = [
     "as_of_season_split",
     "assign_to_right_lineup",
     "attr_regex_filter",
+    "bart_wbb_ratings",
     "bootstrap_ari",
     "box_aware_compare",
     "brier_score",
@@ -806,6 +818,16 @@ __all__ = [
     "fix_combos",
     "fix_possible_score_swap_bug",
     "flatten_json_iterative",
+    "fox_wbb_boxscore",
+    "fox_wbb_league_leaders",
+    "fox_wbb_odds",
+    "fox_wbb_pbp",
+    "fox_wbb_standings",
+    "fox_wbb_team_gamelog",
+    "fox_wbb_team_roster",
+    "fox_wbb_team_stats",
+    "fox_wbb_teams",
+    "fox_wbb_teams_all",
     "fuzzy_box_match",
     "get_ascending_time",
     "get_box_lineup",
@@ -1016,6 +1038,20 @@ __all__ = [
     "weighted_avg",
     "win_prob_from_margin",
 ]
+
+
+def bart_wbb_ratings(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``wbb.bart_wbb_ratings``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.wbb.bart_wbb_ratings` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.wbb.bart_wbb_ratings` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_bart_wbb_ratings(*args, **kwargs)
 
 
 def espn_wbb_award(*args, **kwargs):
@@ -2612,3 +2648,129 @@ def espn_wbb_venues(*args, **kwargs):
     """
     kwargs.setdefault("return_parsed", True)
     return _raw_espn_wbb_venues(*args, **kwargs)
+
+
+def fox_wbb_boxscore(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``wbb.fox_wbb_boxscore``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.wbb.fox_wbb_boxscore` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.wbb.fox_wbb_boxscore` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_fox_wbb_boxscore(*args, **kwargs)
+
+
+def fox_wbb_league_leaders(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``wbb.fox_wbb_league_leaders``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.wbb.fox_wbb_league_leaders` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.wbb.fox_wbb_league_leaders` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_fox_wbb_league_leaders(*args, **kwargs)
+
+
+def fox_wbb_odds(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``wbb.fox_wbb_odds``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.wbb.fox_wbb_odds` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.wbb.fox_wbb_odds` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_fox_wbb_odds(*args, **kwargs)
+
+
+def fox_wbb_pbp(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``wbb.fox_wbb_pbp``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.wbb.fox_wbb_pbp` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.wbb.fox_wbb_pbp` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_fox_wbb_pbp(*args, **kwargs)
+
+
+def fox_wbb_standings(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``wbb.fox_wbb_standings``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.wbb.fox_wbb_standings` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.wbb.fox_wbb_standings` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_fox_wbb_standings(*args, **kwargs)
+
+
+def fox_wbb_team_gamelog(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``wbb.fox_wbb_team_gamelog``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.wbb.fox_wbb_team_gamelog` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.wbb.fox_wbb_team_gamelog` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_fox_wbb_team_gamelog(*args, **kwargs)
+
+
+def fox_wbb_team_roster(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``wbb.fox_wbb_team_roster``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.wbb.fox_wbb_team_roster` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.wbb.fox_wbb_team_roster` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_fox_wbb_team_roster(*args, **kwargs)
+
+
+def fox_wbb_team_stats(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``wbb.fox_wbb_team_stats``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.wbb.fox_wbb_team_stats` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.wbb.fox_wbb_team_stats` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_fox_wbb_team_stats(*args, **kwargs)
+
+
+def fox_wbb_teams(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``wbb.fox_wbb_teams``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.wbb.fox_wbb_teams` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.wbb.fox_wbb_teams` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_fox_wbb_teams(*args, **kwargs)

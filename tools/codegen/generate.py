@@ -76,6 +76,8 @@ def _build_docstring(
     flat: bool = False,
     auth: bool = False,
     league_param: bool = False,
+    doc_extras: dict | None = None,
+    import_from: str = "",
 ) -> str:
     """Build a function docstring as a 4-space-indented block (precise indentation).
 
@@ -84,7 +86,16 @@ def _build_docstring(
     the sport/league binding line for the non-sport/league NHL/MLB APIs. ``auth``
     documents the extra ``headers`` arg the template adds for token-authed families
     (NFL.com), keeping the public ``Args`` block complete.
+
+    ``doc_extras`` carries the optional per-family ``docstring:`` block from the
+    endpoint YAML (``raw_doc`` / ``raises`` / ``see_also`` / ``example_import``).
+    It is opt-in so families that don't declare it render byte-identically to
+    before; new families declare it to meet the repo's Google-style contract
+    (``Args`` / ``Returns`` / ``Raises`` + a runnable ``Example`` + ``See Also``).
+    ``import_from`` is the importable module the Example's import line names.
     """
+    extras = doc_extras or {}
+    raw_doc = str(extras.get("raw_doc") or "")
     lines = [f'"""{ep.summary}', ""]
     if not flat:
         if league_param:
@@ -110,20 +121,42 @@ def _build_docstring(
     if ep.parser:
         lines.append(
             f"    return_parsed: parse the payload through {ep.parser} -> polars DataFrame "
-            "(default True). Pass return_parsed=False for the raw JSON Dict."
+            f"(default True). Pass return_parsed=False for {raw_doc or 'the raw JSON Dict'}."
         )
         lines.append("    return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.")
+    if extras:
+        # Only families that opted into the extended docstring contract document
+        # **kwargs -- adding it unconditionally would rewrite ~1,800 already-shipped
+        # generated docstrings for no behavioural gain.
+        lines.append("    **kwargs: Forwarded to the underlying HTTP getter.")
     lines.append("")
     lines.append("Returns:")
     if ep.parser:
-        lines.append("    A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.")
+        lines.append(
+            "    A polars/pandas DataFrame by default; "
+            f"{raw_doc or 'the raw JSON ``Dict``'} when ``return_parsed=False``."
+        )
     else:
-        lines.append("    The raw JSON ``Dict``.")
+        lines.append(f"    {raw_doc.capitalize() if raw_doc else 'The raw JSON ``Dict``'}.")
+    raises = list(extras.get("raises") or [])
+    if raises:
+        lines.append("")
+        lines.append("Raises:")
+        lines += [f"    {r}" for r in raises]
     lines.append("")
     lines.append("Example:")
     lines.append("    Quick start::")
     lines.append("")
+    if extras.get("example_import") and import_from:
+        lines.append(f"        from {import_from} import {example_call.split('(', 1)[0]}")
     lines.append(f"        {example_call}")
+    see_also = list(extras.get("see_also") or [])
+    if see_also:
+        lines.append("")
+        lines.append("    See Also:")
+        lines += [f"        * `{s['name']}`_ - {s['note']}" for s in see_also]
+        lines.append("")
+        lines += [f"    .. _{s['name']}: {s['url']}" for s in see_also]
     lines.append('"""')
     return "\n".join(("    " + ln) if ln else "" for ln in lines)
 
@@ -525,7 +558,16 @@ class _EndpointView:
         league: spec.League,
         flat: bool = False,
         auth: bool = False,
+        raw_types: list[str] | None = None,
+        doc_extras: dict | None = None,
     ):
+        # Raw (``return_parsed=False``) payload types: JSON-only unless the family's
+        # getter is content-type aware (Torvik CSV data files -> ``Dict | str``).
+        rt = list(raw_types or ["Dict"])
+        self.raw_hint = ", ".join(rt)  # spliced INTO the parser Union[...]
+        self.raw_annotation = rt[0] if len(rt) == 1 else f"Union[{self.raw_hint}]"
+        # markdown flavour of the same prose for the docs reference block
+        self.raw_doc_md = str((doc_extras or {}).get("raw_doc") or "").replace("``", "`")
         self.fn_name = fn_name
         self.short = ep.short
         self.summary = _normalize_rst(ep.summary or "")
@@ -581,6 +623,8 @@ class _EndpointView:
             flat=flat,
             auth=auth,
             league_param=league.league_param,
+            doc_extras=doc_extras,
+            import_from=f"sportsdataverse.{league.prefix}" if league.prefix else "",
         )
 
         # ---- docs-rendering fields (consumed by _reference_block.jinja) ----
@@ -930,7 +974,18 @@ def _flat_views(api: spec.FlatApi, league_prefix: str = "") -> list[_EndpointVie
             fn_name = api.name_pattern.format(short=ep.short)
         used.add(fn_name)
         ep_host = ep.host or api.host
-        views.append(_EndpointView(ep, fn_name, ep_host, stub_league, flat=True, auth=api.auth))
+        views.append(
+            _EndpointView(
+                ep,
+                fn_name,
+                ep_host,
+                stub_league,
+                flat=True,
+                auth=api.auth,
+                raw_types=api.raw_types,
+                doc_extras=api.docstring,
+            )
+        )
     return views
 
 
@@ -1567,6 +1622,8 @@ FLAT_APIS = [
     ("sports247", "cfb"),
     ("sports247_site_pages", "cfb"),
     ("pff", "nfl"),
+    ("torvik", "mbb"),
+    ("bart_wbb", "wbb"),
 ]
 
 
@@ -2085,6 +2142,8 @@ _FLAT_API_DOC = {
     # module name the docs renderer looks up (api.module).
     "pff": "PFF Premium Stats (premium.pff.com)",
     "pff_core": "PFF Premium Stats (premium.pff.com)",
+    "torvik": "Bart Torvik T-Rank (barttorvik.com)",
+    "bart_wbb": "Bart Torvik Women's T-Rank (barttorvik.com/ncaaw)",
 }
 
 # Friendly label per releases.yaml base key, for the "Dataset loaders" row of a

@@ -68,7 +68,7 @@ def frame(rows: List[Dict[str, Any]], return_as_pandas: bool) -> Union[pl.DataFr
     return pl.DataFrame(rows)
 
 
-def _cells(columns) -> List[Optional[str]]:
+def _cells(columns: Any) -> List[Optional[str]]:
     return [c.get("text") if isinstance(c, dict) else c for c in (columns or [])]
 
 
@@ -79,7 +79,7 @@ def _uri_id(uri: Optional[str]) -> Optional[str]:
     return m.group(1) if m else None
 
 
-def _clean(name) -> str:
+def _clean(name: Any) -> str:
     return re.sub(r"\W+", "_", str(name)).strip("_").lower() or "v"
 
 
@@ -102,7 +102,7 @@ def _table_rows(tbl: Optional[dict], extra: Optional[dict] = None) -> List[Dict]
 
 
 # ---- entity/league parsers (generic across sports) ------------------------
-def parse_roster(raw: Dict, team_id) -> List[Dict]:
+def parse_roster(raw: Dict, team_id: Union[int, str]) -> List[Dict]:
     """team/{id}/roster groups -> one row per player (athletes only)."""
     rows: List[Dict] = []
     for g in raw.get("groups", []) or []:
@@ -122,7 +122,7 @@ def parse_roster(raw: Dict, team_id) -> List[Dict]:
     return rows
 
 
-def parse_team_stats(raw: Dict, team_id) -> List[Dict]:
+def parse_team_stats(raw: Dict, team_id: Union[int, str]) -> List[Dict]:
     """team/{id}/stats leadersSections -> one row per category stat leader."""
     rows: List[Dict] = []
     for sec in raw.get("leadersSections", []) or []:
@@ -140,7 +140,7 @@ def parse_team_stats(raw: Dict, team_id) -> List[Dict]:
     return rows
 
 
-def parse_team_gamelog(raw: Dict, team_id) -> List[Dict]:
+def parse_team_gamelog(raw: Dict, team_id: Union[int, str]) -> List[Dict]:
     """sectionList -> tables; long: one row per (game, category, stat)."""
     rows: List[Dict] = []
     for sec in raw.get("sectionList", []) or []:
@@ -148,7 +148,8 @@ def parse_team_gamelog(raw: Dict, team_id) -> List[Dict]:
         for tbl in sec.get("tables", []) or []:
             headers = _cells((tbl.get("headers") or [{}])[0].get("columns"))
             season_type = headers[0] if headers else None
-            stat_names, seen = [], {}
+            stat_names: List[str] = []
+            seen: Dict[str, int] = {}
             for h in headers[2:]:  # skip date + opponent columns
                 base = _clean(h)
                 seen[base] = seen.get(base, 0) + 1
@@ -174,7 +175,7 @@ def parse_team_gamelog(raw: Dict, team_id) -> List[Dict]:
     return rows
 
 
-def parse_standings(raw: Dict, team_id=None) -> List[Dict]:
+def parse_standings(raw: Dict, team_id: Optional[Union[int, str]] = None) -> List[Dict]:
     """team/{id}/standings (or league/standings): standingsSections[].standings
     is a *list* of tables."""
     rows: List[Dict] = []
@@ -187,6 +188,80 @@ def parse_standings(raw: Dict, team_id=None) -> List[Dict]:
     return rows
 
 
+def _title_case(name: str) -> str:
+    """Per-word title case that keeps apostrophes lowercase (``ST. JOHN'S`` ->
+    ``St. John's``), matching R ``stringr::str_to_title`` on team names."""
+    return " ".join(w.capitalize() for w in name.lower().split())
+
+
+def parse_teams(raw: Dict[str, Any]) -> List[Dict[str, Any]]:
+    """team/{id}/standings -> team directory, the shape the R basketball crosswalks consume.
+
+    ``fox_section`` prefers the conference name from
+    ``standingsSections[].metadata.parameters.groupName`` (e.g. ``"Big East"``),
+    falling back to ``pageTitle`` then the generic section ``title``.
+    ``fox_team_name`` comes from the row's ``entityLink.title`` (full team name,
+    title-cased), falling back to the second table cell (short name). Rows are
+    de-duplicated on ``fox_team_id`` keeping the first occurrence.
+
+    Args:
+        raw: Decoded ``team/{id}/standings`` Bifrost payload (as returned by
+            :func:`fox_get`). A missing / empty ``standingsSections`` yields ``[]``.
+
+    Returns:
+        One dict per team with keys ``fox_team_id`` (``str``), ``fox_team_name``
+        (``str`` or ``None``) and ``fox_section`` (``str`` or ``None``). Feed it to
+        :func:`frame` (or the league wrappers' ``_teams_frame``) for a DataFrame.
+
+    Raises:
+        None: a malformed or empty payload returns ``[]`` rather than raising --
+        transport failures surface from :func:`fox_get`, not from this parser.
+
+    Example:
+        Parse a seed team's conference directory::
+
+            from sportsdataverse._fox_layout import fox_get, parse_teams
+            rows = parse_teams(fox_get("wcbk/team/11/standings"))
+            rows[0]
+
+        Or go straight to the public wrappers::
+
+            from sportsdataverse.wbb import fox_wbb_teams
+            df = fox_wbb_teams("11")
+
+        See Also:
+            * `wehoop`_ - R sister package whose basketball crosswalk consumes this frame
+            * `hoopR`_ - R sister package for men's basketball
+            * `Fox Sports`_ - data origin
+
+        .. _wehoop: https://wehoop.sportsdataverse.org
+        .. _hoopR: https://hoopR.sportsdataverse.org
+        .. _Fox Sports: https://www.foxsports.com
+    """
+    rows: List[Dict[str, Any]] = []
+    seen: set = set()
+    for sec in raw.get("standingsSections", []) or []:
+        params = (sec.get("metadata") or {}).get("parameters") or {}
+        group = params.get("groupName") if isinstance(params, dict) else None
+        section = (
+            group.strip()
+            if isinstance(group, str) and group.strip()
+            else (sec.get("pageTitle") or "").strip() or sec.get("title")
+        )
+        for tbl in sec.get("standings", []) or []:
+            for r in tbl.get("rows", []) or []:
+                link = r.get("entityLink") or {}
+                eid = _uri_id(link.get("contentUri"))
+                if eid is None or eid in seen:
+                    continue
+                seen.add(eid)
+                title = (link.get("title") or "").strip()
+                cells = _cells(r.get("columns"))
+                name = _title_case(title) if title else (cells[1] if len(cells) > 1 else None)
+                rows.append({"fox_team_id": eid, "fox_team_name": name, "fox_section": section})
+    return rows
+
+
 def parse_league_leaders(raw: Dict) -> List[Dict]:
     """league/stats-con sectionList tables -> one row per ranked entity."""
     rows: List[Dict] = []
@@ -195,7 +270,7 @@ def parse_league_leaders(raw: Dict) -> List[Dict]:
     return rows
 
 
-def parse_odds(raw: Dict, game_id) -> List[Dict]:
+def parse_odds(raw: Dict, game_id: Union[int, str]) -> List[Dict]:
     """event/{id}/odds sixPack -> one row per team (spread/to-win/total)."""
     rows: List[Dict] = []
     odds = (raw.get("sixPack") or {}).get("odds")
@@ -209,7 +284,7 @@ def parse_odds(raw: Dict, game_id) -> List[Dict]:
     return rows
 
 
-def parse_boxscore(raw: Dict, game_id) -> List[Dict]:
+def parse_boxscore(raw: Dict, game_id: Union[int, str]) -> List[Dict]:
     """event/{id}/data boxscore -> long (one row per player-stat). Sections with
     no boxscoreItems (e.g. the "MATCHUP" summary in nba/nhl) are skipped."""
     rows: List[Dict] = []
@@ -241,7 +316,7 @@ def parse_boxscore(raw: Dict, game_id) -> List[Dict]:
     return rows
 
 
-def parse_period_pbp(raw: Dict, game_id) -> List[Dict]:
+def parse_period_pbp(raw: Dict, game_id: Union[int, str]) -> List[Dict]:
     """event/{id}/data pbp for period sports (nba/mbb/nhl): one row per play.
 
     Structure: ``pbp.sections[0].groups[]`` are periods (1ST QUARTER / 1ST HALF /

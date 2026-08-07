@@ -1,0 +1,126 @@
+schema: team_factors
+kind: dataframe
+columns:
+- name: team_name
+  type: character
+  description: Torvik team name.
+- name: e_fg_percent
+  type: numeric
+  description: Effective field-goal percentage on offense.
+- name: rk
+  type: integer
+  description: National rank of offensive eFG%.
+- name: e_fg_percent_def
+  type: numeric
+  description: Effective field-goal percentage allowed on defense.
+- name: rk_2
+  type: integer
+  description: National rank of defensive eFG% allowed.
+- name: ftr
+  type: numeric
+  description: Free-throw rate on offense (FTA per FGA).
+- name: rk_3
+  type: integer
+  description: National rank of offensive free-throw rate.
+- name: ftr_def
+  type: numeric
+  description: Free-throw rate allowed on defense.
+- name: rk_4
+  type: integer
+  description: National rank of defensive free-throw rate allowed.
+- name: or_percent
+  type: numeric
+  description: Offensive rebound percentage.
+- name: rk_5
+  type: integer
+  description: National rank of offensive rebound percentage.
+- name: dr_percent
+  type: numeric
+  description: Defensive rebound percentage.
+- name: rk_6
+  type: integer
+  description: National rank of defensive rebound percentage.
+- name: to_percent
+  type: numeric
+  description: Turnover percentage on offense.
+- name: rk_7
+  type: integer
+  description: National rank of offensive turnover percentage.
+- name: to_percent_def
+  type: numeric
+  description: Turnover percentage forced on defense.
+- name: rk_8
+  type: integer
+  description: National rank of defensive turnover percentage forced.
+- name: x3p_percent
+  type: numeric
+  description: Three-point percentage on offense.
+- name: rk_9
+  type: integer
+  description: National rank of offensive three-point percentage.
+- name: x3p_d_percent
+  type: numeric
+  description: Three-point percentage allowed on defense.
+- name: rk_10
+  type: integer
+  description: National rank of three-point percentage allowed.
+- name: x2p_percent
+  type: numeric
+  description: Two-point percentage on offense.
+- name: rk_11
+  type: integer
+  description: National rank of offensive two-point percentage.
+- name: x2p_percent_d
+  type: numeric
+  description: Two-point percentage allowed on defense.
+- name: rk_12
+  type: integer
+  description: National rank of two-point percentage allowed.
+- name: ft_percent
+  type: numeric
+  description: Free-throw percentage.
+- name: rk_13
+  type: integer
+  description: National rank of free-throw percentage.
+- name: ft_percent_d
+  type: numeric
+  description: Opponent free-throw percentage.
+- name: rk_14
+  type: integer
+  description: National rank of opponent free-throw percentage.
+- name: x3p_rate
+  type: numeric
+  description: Three-point attempt rate on offense (3PA per FGA).
+- name: rk_15
+  type: integer
+  description: National rank of offensive three-point attempt rate.
+- name: x3p_rate_d
+  type: numeric
+  description: Three-point attempt rate allowed on defense.
+- name: rk_16
+  type: integer
+  description: National rank of three-point attempt rate allowed.
+- name: arate
+  type: numeric
+  description: Assist rate on offense (assists per made field goal).
+- name: rk_17
+  type: integer
+  description: National rank of offensive assist rate.
+- name: arate_d
+  type: numeric
+  description: Assist rate allowed on defense.
+- name: rk_18
+  type: integer
+  description: National rank of assist rate allowed.
+- name: unnamed
+  type: numeric
+  description: Headerless trailing column shipped in the source CSV (undocumented upstream).
+- name: unnamed_2
+  type: integer
+  description: Headerless trailing column shipped in the source CSV (undocumented upstream).
+- name: unnamed_3
+  type: numeric
+  description: Headerless trailing column shipped in the source CSV (undocumented upstream).
+- name: unnamed_4
+  type: integer
+  description: Headerless trailing column shipped in the source CSV (undocumented upstream).
