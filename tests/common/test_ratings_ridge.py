@@ -106,9 +106,14 @@ def test_dropped_level_ridge_emits_the_reference_team_at_the_intercept() -> None
     assert sorted(offense["team_id"].to_list()) == teams
     assert sorted(defense["team_id"].to_list()) == teams
 
-    # "Alpha" sorts first, so it is the reference level: effect 0, strength == intercept.
+    # "Alpha" sorts first, so it is the reference level on BOTH sides: effect 0,
+    # strength == intercept. Checked on offense and defense separately -- the two
+    # sides are built from separate coefficient blocks, so a wrong value on one
+    # would otherwise ride through on the other's assertion.
     alpha_off = offense.filter(pl.col("team_id") == "Alpha")["adjmodelOff"].item()
+    alpha_def = defense.filter(pl.col("team_id") == "Alpha")["adjmodelDef"].item()
     assert alpha_off == pytest.approx(intercept, abs=1e-12)
+    assert alpha_def == pytest.approx(intercept, abs=1e-12)
 
     # The fit still recovers the injected ordering (Alpha 0.15 > Beta 0.0 > Gamma -0.15),
     # so keeping the reference row has not distorted the ratings it sits alongside.
