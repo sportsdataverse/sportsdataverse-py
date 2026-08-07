@@ -66,6 +66,8 @@ def ridge_margin_vintages(
     resp_col: str = "home_margin",
     cap: Optional[float] = None,
     close_filter: Optional[float] = None,
+    history_seasons: int = 0,
+    season_decay: float = 0.5,
 ) -> pl.DataFrame:
     """Build per-week opponent-adjusted ridge rating vintages from an oracle frame.
 
@@ -88,6 +90,15 @@ def ridge_margin_vintages(
             together), rating teams on competitive games only. Distinct
             from ``cap``: a filtered blowout contributes nothing; a capped
             one still contributes at the cap. ``None`` = keep all.
+        history_seasons: Prior seasons folded into each fit (default 0 =
+            the within-season-only convention, which rates week 2 off a
+            single week of games). Prior-season games enter down-weighted
+            by ``season_decay ** seasons_back``, applied as integer row
+            replication of the CURRENT season (weight 1 -> the current
+            season repeats ``1/season_decay ** history_seasons`` times),
+            so the shared unweighted solver is reused unchanged.
+        season_decay: Per-season-back weight for ``history_seasons``
+            (0.5 = last season counts half).
 
     Returns:
         A vintage table — ``season`` / ``as_of_week`` / ``team_id`` (Utf8)
@@ -137,7 +148,21 @@ def ridge_margin_vintages(
     for season, week in (
         normalize_walk_weeks(oracle).select("season", "week").unique().sort("season", "week").iter_rows()
     ):
-        fit = games.filter((pl.col("season") == season) & (pl.col("week") < week))
+        in_season = games.filter((pl.col("season") == season) & (pl.col("week") < week))
+        if history_seasons <= 0:
+            fit = in_season
+        else:
+            # integer-replication weighting: current season repeats
+            # `reps` times, each season back one decay step fewer, so the
+            # unweighted shared solver sees the intended relative weights
+            reps = max(1, round(1.0 / max(season_decay, 1e-6) ** history_seasons))
+            parts = [in_season] * reps
+            for back in range(1, history_seasons + 1):
+                prior = games.filter(pl.col("season") == season - back)
+                if prior.height == 0:
+                    continue
+                parts += [prior] * max(1, round(reps * season_decay**back))
+            fit = pl.concat(parts, how="vertical")
         if fit.height == 0:
             continue
         coefs, intercept, hfa = opponent_adjusted_ridge(
