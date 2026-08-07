@@ -594,3 +594,58 @@ def test_unknown_wp_map_refused():
 def test_predictor_requires_store(nfl_oracle):
     with pytest.raises(ValueError, match="VintageStore"):
         run_backtest(nfl_oracle, ratings_predictor("ridge"), model_id="ridge_margin", store=None)
+
+
+def test_qb_change_events_and_variance_knob(nfl_oracle):
+    """QB-change events are within-season, opener-exempt, and only widen
+    variance (zero/no events reduce exactly to the plain filter).
+
+    Real fixture: 156 starter changes across 2009/2020/2024.
+    """
+    from sportsdataverse.wexp.engines import GSConfig, glickman_stern_predictor, nfl_qb_change_events
+
+    sch = pl.read_parquet(FIXDIR / "nfl_schedule_sample.parquet")
+    events = nfl_qb_change_events(sch, extra_var=9.0)
+    assert events.height == 156  # observed on the fixture
+    # opener-exempt: no event at any (season, team)'s first game week
+    firsts = (
+        pl.concat(
+            [
+                sch.select(season="season", week="week", team="home_team"),
+                sch.select(season="season", week="week", team="away_team"),
+            ]
+        )
+        .group_by("season", "team")
+        .agg(first_week=pl.col("week").min())
+    )
+    joined = events.join(firsts, left_on=["season", "team"], right_on=["season", "team"], how="inner")
+    assert joined.filter(pl.col("week") == pl.col("first_week")).height == 0
+
+    plain, _ = run_backtest(nfl_oracle, glickman_stern_predictor(GSConfig()), model_id="gs")
+    with_events, _ = run_backtest(
+        nfl_oracle, glickman_stern_predictor(GSConfig(), variance_events=events), model_id="gs"
+    )
+    assert (plain["p_home"] - with_events["p_home"]).abs().max() > 1e-6  # knob does something
+    none_events, _ = run_backtest(
+        nfl_oracle, glickman_stern_predictor(GSConfig(), variance_events=events.head(0)), model_id="gs"
+    )
+    assert (plain["p_home"] - none_events["p_home"]).abs().max() < 1e-12  # empty == plain
+    with pytest.raises(ValueError, match="duplicate"):
+        glickman_stern_predictor(GSConfig(), variance_events=pl.concat([events.head(1), events.head(1)]))
+
+
+def test_drive_classifiers_on_real_fixture():
+    """Garbage + clock-kill flags on the real 2-game fixture.
+
+    Alabama 42-3 Duke necessarily produced garbage-time drives (Q4 margin
+    39 > the 21-point Connelly band); the competitive Wisconsin-Michigan
+    first half produced none in Q1.
+    """
+    from sportsdataverse.wexp.engines import cfb_drive_deltas
+
+    drives = cfb_drive_deltas(pl.read_parquet(FIXDIR / "cfb_pbp_drive_sample.parquet"))
+    assert {"garbage", "clock_kill", "period", "margin_start", "plays"} <= set(drives.columns)
+    bama = drives.filter(pl.col("game_id") == 401110720)  # deltas keep the raw Int64 id
+    assert bama.filter(pl.col("garbage") == True).height > 0  # noqa: E712
+    q1 = drives.filter(pl.col("period") == 1)
+    assert q1.filter(pl.col("garbage") == True).height == 0  # noqa: E712

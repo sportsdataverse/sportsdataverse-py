@@ -39,6 +39,7 @@ __all__ = [
     "cfb_drive_ep_responses",
     "glickman_stern_predictor",
     "net_vintages_view",
+    "nfl_qb_change_events",
     "ratings_predictor",
     "response_ridge_vintages",
     "ridge_margin_vintages",
@@ -589,7 +590,9 @@ class GSConfig:
 
 
 def glickman_stern_predictor(
-    config: GSConfig = GSConfig(), season_priors: Optional[pl.DataFrame] = None
+    config: GSConfig = GSConfig(),
+    season_priors: Optional[pl.DataFrame] = None,
+    variance_events: Optional[pl.DataFrame] = None,
 ) -> WeekPredictor:
     """Wrap the Glickman-Stern (1998) Kalman filter as a week predictor.
 
@@ -610,6 +613,12 @@ def glickman_stern_predictor(
             — the start season at filter init, then every boundary after
             the AR shrink. Preseason knowledge only; never derive shifts
             from the season they apply to.
+        variance_events: Optional ``(season, week, team, extra_var)``
+            table of state-uncertainty events in squared margin points —
+            e.g. a starting-QB change known at kickoff. The team's state
+            VARIANCE is inflated by ``extra_var`` when the filter arrives
+            at that week, widening the update gate without moving the
+            mean. Events must be pre-game knowledge for their week.
 
     Returns:
         A predictor callable for :func:`~sportsdataverse.wexp.backtest.run_backtest`.
@@ -628,6 +637,15 @@ def glickman_stern_predictor(
             raise ValueError(f"season_priors has {n_dup} duplicate (season, team) row(s)")
         priors = {
             (int(r["season"]), str(r["team"])): float(r["prior_shift"]) for r in season_priors.iter_rows(named=True)
+        }
+    var_events: dict[tuple[int, int, str], float] = {}
+    if variance_events is not None:
+        n_dup = variance_events.height - variance_events.unique(subset=["season", "week", "team"]).height
+        if n_dup:
+            raise ValueError(f"variance_events has {n_dup} duplicate (season, week, team) row(s)")
+        var_events = {
+            (int(r["season"]), int(r["week"]), str(r["team"])): float(r["extra_var"])
+            for r in variance_events.iter_rows(named=True)
         }
 
     def predict(history: pl.DataFrame, slate: pl.DataFrame, store: Optional[VintageStore]) -> pl.Series:
@@ -666,6 +684,12 @@ def glickman_stern_predictor(
                 else:
                     drift = week - w0
                 p_cov = p_cov + config.sigma_w**2 * drift * np.eye(n)
+            if var_events:
+                # state-uncertainty events for the arrival week (e.g. QB
+                # change): inflate the team's variance, not its mean
+                for (s, w, team), extra in var_events.items():
+                    if s == season and w == week and team in idx:
+                        p_cov[idx[team], idx[team]] += extra
             cur = (season, week)
 
         def design(games: pl.DataFrame) -> tuple[np.ndarray, np.ndarray]:
@@ -772,12 +796,65 @@ def cfb_continuity_shifts(
     return out
 
 
+def nfl_qb_change_events(schedule: pl.DataFrame, *, extra_var: float) -> pl.DataFrame:
+    """Within-season starting-QB changes as GS state-uncertainty events.
+
+    From an nflverse schedule frame (``season``, ``week``, ``home_team`` /
+    ``away_team``, ``home_qb_id`` / ``away_qb_id``): a team-week is an
+    event when its starter differs from the SAME team's previous game in
+    the SAME season (openers exempt — the season transition already
+    carries offseason uncertainty). The starter ids are pre-game
+    knowledge, so the events are walk-forward safe.
+
+    Args:
+        schedule: nflverse schedule frame.
+        extra_var: Variance added to the team's state at the event week
+            (squared margin points; FPI's ~3.3-pt QB adjustments suggest
+            seeds around 9-16).
+
+    Returns:
+        ``(season, week, team, extra_var)`` — one row per changed
+        team-week, for
+        :func:`glickman_stern_predictor`'s ``variance_events``.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nfl import load_nfl_schedule
+            from sportsdataverse.wexp.engines import nfl_qb_change_events
+            events = nfl_qb_change_events(load_nfl_schedule([2024]), extra_var=9.0)
+    """
+    team_games = pl.concat(
+        [
+            schedule.select(
+                season=pl.col("season").cast(pl.Int32),
+                week=pl.col("week").cast(pl.Int32),
+                team=pl.col("home_team").cast(pl.Utf8),
+                qb=pl.col("home_qb_id").cast(pl.Utf8),
+            ),
+            schedule.select(
+                season=pl.col("season").cast(pl.Int32),
+                week=pl.col("week").cast(pl.Int32),
+                team=pl.col("away_team").cast(pl.Utf8),
+                qb=pl.col("away_qb_id").cast(pl.Utf8),
+            ),
+        ]
+    ).sort("season", "team", "week")
+    return (
+        team_games.with_columns(prev_qb=pl.col("qb").shift(1).over("season", "team"))
+        .filter(pl.col("qb").is_not_null() & pl.col("prev_qb").is_not_null() & (pl.col("qb") != pl.col("prev_qb")))
+        .select("season", "week", "team")
+        .with_columns(extra_var=pl.lit(extra_var, dtype=pl.Float64))
+    )
+
+
 def build_predictor(
     config: VariantConfig,
     *,
     table: str = "ridge",
     sigma: float = 13.45,
     season_priors: Optional[pl.DataFrame] = None,
+    variance_events: Optional[pl.DataFrame] = None,
 ) -> WeekPredictor:
     """Dispatch a variant config to its implemented week predictor.
 
@@ -834,6 +911,7 @@ def build_predictor(
                 init_sd=params.get("init_sd", 5.0),
             ),
             season_priors=season_priors if config.prior == "carryover_continuity" else None,
+            variance_events=variance_events,
         )
     if (
         config.core == "elo_margin"
