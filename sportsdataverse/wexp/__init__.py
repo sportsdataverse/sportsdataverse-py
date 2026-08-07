@@ -14,6 +14,13 @@ from sportsdataverse.wexp.market import (
     prob_from_decimal,
     spread_to_prob,
 )
+from sportsdataverse.wexp.oracle_market import (
+    ORACLE_COLUMNS,
+    build_cfb_market_oracle,
+    build_nfl_market_oracle,
+    cfb_market_oracle_from_lines,
+    nfl_market_oracle_from_schedule,
+)
 from sportsdataverse.wexp.store import (
     VINTAGE_KEYS,
     VintageStore,
@@ -34,10 +41,15 @@ from sportsdataverse.wexp.scoring import (
 )
 
 __all__ = [
+    "ORACLE_COLUMNS",
     "RESULT_SCHEMA",
     "VINTAGE_KEYS",
     "VintageStore",
     "append_results",
+    "build_cfb_market_oracle",
+    "build_nfl_market_oracle",
+    "cfb_market_oracle_from_lines",
+    "nfl_market_oracle_from_schedule",
     "brier_score",
     "calibration_table",
     "closing_line_value",
