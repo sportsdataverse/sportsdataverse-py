@@ -17,7 +17,7 @@ from tools.validation.checks import (
     schema_contract,
     sweep,
 )
-from tools.validation.findings import Finding
+from tools.validation.findings import Finding, Severity
 from tools.validation.lint import leakage_python, leakage_r
 from tools.validation.registry import LINT_TARGETS, resolve
 
@@ -91,16 +91,71 @@ def compare_outputs(
             python -m tools.validation.cli compare --dataset wnba_pbp --domain wnba \\
                 --r-parquet r.parquet --py-parquet py.parquet --join-keys game_id
     """
+    # Both paths come from the command line and a release-download path is easy
+    # to mistype. A traceback here would lose the documented exit code and, in
+    # --json mode, print something unparseable after the caller asked for JSON.
+    frames = []
+    for side, path in (("R", r_parquet), ("Python", py_parquet)):
+        try:
+            frames.append(pl.read_parquet(path))
+        # Narrow on purpose. A bare `except Exception` here caught a NameError
+        # during development and reported it as "could not read the parquet" —
+        # a code defect wearing a data defect's clothes, which is the exact
+        # masking this whole check exists to prevent.
+        except (OSError, pl.exceptions.PolarsError) as exc:
+            return [
+                Finding(
+                    "r_python_output_parity",
+                    Severity.ERROR,
+                    domain,
+                    dataset,
+                    f"could not read the {side} parquet at {path!r}: {type(exc).__name__}: {exc}",
+                    locator={"side": side, "path": str(path)},
+                ).to_dict()
+            ]
+
     findings = r_python_output_parity.run(
         dataset,
-        pl.read_parquet(r_parquet),
-        pl.read_parquet(py_parquet),
+        frames[0],
+        frames[1],
         join_keys,
         domain,
         tolerance=tolerance,
         ignore_columns=ignore_columns,
     )
     return [f.to_dict() for f in findings]
+
+
+def _non_negative_float(raw: str) -> float:
+    """argparse type for ``--tolerance``.
+
+    A negative tolerance makes ``abs(r - py) > tolerance`` true for every
+    non-null numeric pair, so the run would report a divergence on every row of
+    every column — a total failure that looks like a thorough one.
+
+    Args:
+        raw: The raw command-line string.
+
+    Returns:
+        The parsed value.
+
+    Raises:
+        argparse.ArgumentTypeError: If ``raw`` is not a number, or is negative.
+
+    Example:
+        Parse a tolerance::
+
+            _non_negative_float("1e-6")
+    """
+    try:
+        value = float(raw)
+    except ValueError:
+        raise argparse.ArgumentTypeError(f"{raw!r} is not a number") from None
+    if value < 0:
+        raise argparse.ArgumentTypeError(
+            f"tolerance must be >= 0, got {value} — a negative tolerance flags every row as diverging"
+        )
+    return value
 
 
 def _emit(out: list[dict], as_json: bool) -> int:
@@ -114,7 +169,11 @@ def _emit(out: list[dict], as_json: bool) -> int:
         1 if any ERROR finding is present, else 0.
     """
     if as_json:
-        json.dump(out, sys.stdout)
+        # Findings can carry `sample` rows straight from `DataFrame.to_dicts()`,
+        # so a Date / Datetime / Decimal / Duration column yields values the
+        # default encoder rejects — which would raise AFTER all the comparison
+        # work was done. Sports frames are full of dates; stringify instead.
+        json.dump(out, sys.stdout, default=str)
         sys.stdout.write("\n")
     else:
         for f in out:
@@ -171,7 +230,12 @@ def main(argv: list[str] | None = None) -> int:
     cmp_.add_argument("--r-parquet", required=True, help="R-produced artifact (usually the release asset)")
     cmp_.add_argument("--py-parquet", required=True, help="Python-produced artifact (usually a fresh local build)")
     cmp_.add_argument("--join-keys", required=True, nargs="+", metavar="COL")
-    cmp_.add_argument("--tolerance", type=float, default=1e-6)
+    cmp_.add_argument(
+        "--tolerance",
+        type=_non_negative_float,
+        default=1e-6,
+        help="absolute tolerance for numeric divergence (must be >= 0)",
+    )
     cmp_.add_argument("--ignore-columns", nargs="*", default=[], metavar="COL")
     cmp_.add_argument("--json", action="store_true")
     args = parser.parse_args(argv)

@@ -1,4 +1,7 @@
+import json
+
 import polars as pl
+import pytest
 
 from tools.validation import cli
 from tools.validation.checks import r_python_output_parity as rpp
@@ -226,6 +229,85 @@ def test_cli_compare_honours_ignore_columns(tmp_path):
     ]
     assert cli.main(argv) == 1, "sanity: the stamp diverges when not ignored"
     assert cli.main([*argv, "--ignore-columns", "built_at"]) == 0
+
+
+def test_cli_compare_reports_an_unreadable_parquet_as_a_finding(tmp_path, capsys):
+    """A mistyped release-download path must not lose the documented exit code
+    to a traceback, nor print a traceback where the caller asked for JSON."""
+    good = tmp_path / "good.parquet"
+    pl.DataFrame({"game_id": [1]}).write_parquet(good)
+    code = cli.main(
+        [
+            "compare",
+            "--dataset",
+            "d",
+            "--domain",
+            "nfl",
+            "--r-parquet",
+            str(tmp_path / "nope.parquet"),
+            "--py-parquet",
+            str(good),
+            "--join-keys",
+            "game_id",
+        ]
+    )
+    assert code == 1
+    assert "could not read the R parquet" in capsys.readouterr().out
+
+
+def test_cli_compare_json_survives_date_columns(tmp_path, capsys):
+    """Sample rows come from to_dicts(), so a Date column yields objects the
+    default JSON encoder rejects — after all the comparison work is done."""
+    import datetime as _dt
+
+    rp, pp = _write_pair(
+        tmp_path,
+        pl.DataFrame({"game_id": [1], "d": [_dt.date(2026, 1, 1)]}),
+        pl.DataFrame({"game_id": [1], "d": [_dt.date(2026, 8, 6)]}),
+    )
+    code = cli.main(
+        [
+            "compare",
+            "--dataset",
+            "d",
+            "--domain",
+            "nfl",
+            "--r-parquet",
+            rp,
+            "--py-parquet",
+            pp,
+            "--join-keys",
+            "game_id",
+            "--json",
+        ]
+    )
+    assert code == 1
+    json.loads(capsys.readouterr().out)  # must be parseable, not a traceback
+
+
+def test_cli_compare_rejects_a_negative_tolerance(tmp_path):
+    """abs(diff) > negative is true for every pair, so the run would report a
+    divergence on every row — total failure wearing the costume of thoroughness."""
+    frame = pl.DataFrame({"game_id": [1], "epa": [0.5]})
+    rp, pp = _write_pair(tmp_path, frame, frame.clone())
+    with pytest.raises(SystemExit):
+        cli.main(
+            [
+                "compare",
+                "--dataset",
+                "d",
+                "--domain",
+                "nfl",
+                "--r-parquet",
+                rp,
+                "--py-parquet",
+                pp,
+                "--join-keys",
+                "game_id",
+                "--tolerance",
+                "-1",
+            ]
+        )
 
 
 def test_neither_side_is_described_as_wrong():
