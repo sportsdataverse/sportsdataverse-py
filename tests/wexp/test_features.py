@@ -11,7 +11,7 @@ import polars as pl
 import pytest
 
 from sportsdataverse.wexp.engines import ridge_margin_vintages
-from sportsdataverse.wexp.features import carry_forward_weights, sos_sor_vintages
+from sportsdataverse.wexp.features import cfb_scoring_opportunities, carry_forward_weights, sos_sor_vintages
 from sportsdataverse.wexp.oracle_market import nfl_market_oracle_from_schedule
 
 FIXDIR = Path(__file__).resolve().parents[1] / "fixtures" / "wexp"
@@ -126,3 +126,48 @@ def test_carry_forward_missing_continuity_is_neutral():
     explicit = pl.DataFrame({"season": [2019], "team_id": ["1"], "hc_continuity": [0.5]})
     with_half = carry_forward_weights(ret, hc_continuity=explicit).filter(pl.col("week") == 1)["carry_weight"][0]
     assert abs(with_none - with_half) < 1e-12
+
+
+def test_scoring_opportunities_splits_creation_from_finishing():
+    """A drive counts as an opportunity at its CLOSEST approach, not its end."""
+    plays = pl.DataFrame(
+        {
+            "game_id": [1] * 7,
+            "pos_team": [10, 10, 10, 10, 20, 20, 20],
+            "def_pos_team": [20, 20, 20, 20, 10, 10, 10],
+            "drive.id": ["a", "a", "b", "b", "c", "c", "d"],
+            # drive a reaches the 25 then gets sacked back to the 55 -> still an opp
+            "start.yardsToEndzone": [70.0, 25.0, 80.0, 62.0, 44.0, 12.0, 90.0],
+            "touchdown": [False, True, False, False, False, False, False],
+            "fg_made": [False, False, False, False, False, True, False],
+        }
+    )
+    out = cfb_scoring_opportunities(plays).sort("off_team_id")
+    off10 = out.row(0, named=True)
+    assert off10["drives"] == 2
+    assert off10["scoring_opps"] == 1  # drive a only; drive b never got inside 40
+    assert off10["opp_rate"] == 0.5
+    assert off10["points_per_opp"] == 7.0
+
+    off20 = out.row(1, named=True)
+    assert off20["scoring_opps"] == 1  # drive c; drive d stalled at the 90
+    assert off20["points_per_opp"] == 3.0
+
+
+def test_scoring_opportunities_no_opportunity_is_null_not_zero():
+    """No opportunity means finishing is UNMEASURED, never measured-as-zero."""
+    plays = pl.DataFrame(
+        {
+            "game_id": [1, 1],
+            "pos_team": [10, 10],
+            "def_pos_team": [20, 20],
+            "drive.id": ["a", "b"],
+            "start.yardsToEndzone": [90.0, 75.0],
+            "touchdown": [False, False],
+            "fg_made": [False, False],
+        }
+    )
+    out = cfb_scoring_opportunities(plays)
+    assert out["scoring_opps"][0] == 0
+    assert out["opp_rate"][0] == 0.0
+    assert out["points_per_opp"][0] is None

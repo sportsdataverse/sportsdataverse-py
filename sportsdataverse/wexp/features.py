@@ -26,7 +26,7 @@ import polars as pl
 
 from sportsdataverse.wexp.backtest import normalize_walk_weeks
 
-__all__ = ["carry_forward_weights", "sos_sor_vintages"]
+__all__ = ["carry_forward_weights", "cfb_scoring_opportunities", "sos_sor_vintages"]
 
 
 def sos_sor_vintages(
@@ -248,6 +248,87 @@ def carry_forward_weights(
         .with_columns(carry_weight=pl.col("credence") * pl.col("ramp"))
         .select("season", "team_id", "week", "carry_weight")
         .sort("season", "team_id", "week")
+    )
+
+
+# A drive that reaches this many yards from the goal line is a "scoring
+# opportunity" — the standard finishing-drives threshold (the opponent's
+# 40-yard line).
+SCORING_OPP_YARDS = 40.0
+_TD_POINTS = 7.0  # TD + expected PAT; 2-pt / missed-PAT variance is noise here
+_FG_POINTS = 3.0
+
+
+def cfb_scoring_opportunities(pbp: pl.DataFrame) -> pl.DataFrame:
+    """Per team-game scoring-opportunity rate and finishing efficiency.
+
+    Splits offensive quality into the two questions margin conflates:
+    how often does an offense reach scoring range, and how many points
+    does it take away once there. Two teams with identical yards-per-play
+    can differ enormously on the second.
+
+    - ``scoring_opps`` — drives whose closest approach is within
+      :data:`SCORING_OPP_YARDS` of the goal line.
+    - ``opp_rate`` — scoring opportunities per drive.
+    - ``points_per_opp`` — points scored per scoring opportunity
+      (finishing). Teams with no opportunity get a null, never a 0.
+
+    Args:
+        pbp: Play frame carrying ``game_id``, ``pos_team``,
+            ``def_pos_team``, ``drive.id``, ``start.yardsToEndzone``,
+            ``touchdown`` and ``fg_made``.
+
+    Returns:
+        One row per (game, offense): ``game_id`` / ``off_team_id`` /
+        ``def_team_id`` (Utf8), ``drives``, ``scoring_opps``,
+        ``opp_rate``, ``points``, ``points_per_opp``.
+
+    Example:
+        Quick start::
+
+            import polars as pl
+            from sportsdataverse.wexp.features import cfb_scoring_opportunities
+            eff = cfb_scoring_opportunities(pl.read_parquet("pbp_2019.parquet"))
+    """
+    plays = pbp.drop_nulls(["drive.id", "pos_team", "def_pos_team"]).with_columns(
+        pl.col("game_id").cast(pl.Int64),
+        pl.col("pos_team").cast(pl.Int64),
+        pl.col("def_pos_team").cast(pl.Int64),
+        pl.col("start.yardsToEndzone").cast(pl.Float64).alias("ytg"),
+        pl.col("touchdown").cast(pl.Boolean).fill_null(False).alias("td"),
+        pl.col("fg_made").cast(pl.Boolean).fill_null(False).alias("fg"),
+    )
+    drives = plays.group_by("game_id", "drive.id").agg(
+        off=pl.col("pos_team").first(),
+        deft=pl.col("def_pos_team").first(),
+        closest=pl.col("ytg").min(),
+        pts=_TD_POINTS * pl.col("td").sum() + _FG_POINTS * pl.col("fg").sum(),
+    )
+    drives = drives.with_columns(is_opp=(pl.col("closest") <= SCORING_OPP_YARDS))
+    return (
+        drives.group_by("game_id", "off", "deft")
+        .agg(
+            drives=pl.len(),
+            scoring_opps=pl.col("is_opp").sum(),
+            points=pl.col("pts").sum(),
+            opp_points=pl.col("pts").filter(pl.col("is_opp") == True).sum(),  # noqa: E712
+        )
+        .with_columns(
+            opp_rate=pl.col("scoring_opps") / pl.col("drives"),
+            points_per_opp=pl.when(pl.col("scoring_opps") > 0)
+            .then(pl.col("opp_points") / pl.col("scoring_opps"))
+            .otherwise(None),
+        )
+        .select(
+            game_id=pl.col("game_id").cast(pl.Utf8),
+            off_team_id=pl.col("off").cast(pl.Utf8),
+            def_team_id=pl.col("deft").cast(pl.Utf8),
+            drives=pl.col("drives").cast(pl.Int64),
+            scoring_opps=pl.col("scoring_opps").cast(pl.Int64),
+            opp_rate=pl.col("opp_rate"),
+            points=pl.col("points"),
+            points_per_opp=pl.col("points_per_opp"),
+        )
     )
 
 
