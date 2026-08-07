@@ -34,6 +34,7 @@ from sportsdataverse.wexp.engines import (
     build_predictor,
     cfb_continuity_shifts,
     glickman_stern_predictor,
+    net_vintages_view,
     ratings_predictor,
     ridge_margin_vintages,
 )
@@ -105,6 +106,7 @@ __all__ = [
     "logit_blend",
     "mae",
     "moneyline_pair_prob",
+    "net_vintages_view",
     "prob_from_american",
     "prob_from_decimal",
     "ratings_predictor",

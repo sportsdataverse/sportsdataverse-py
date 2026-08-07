@@ -149,6 +149,11 @@ class VintageStore:
                 f"join-key dtype mismatch: games[{week_col!r}]={games.schema[week_col]} "
                 f"vs {name}[as_of_week]={frame.schema['as_of_week']}"
             )
+        if games.schema["season"] != frame.schema["season"]:
+            raise ValueError(
+                f"join-key dtype mismatch: games[season]={games.schema['season']} "
+                f"vs {name}[season]={frame.schema['season']}"
+            )
         feature_cols = [c for c in frame.columns if c not in (*VINTAGE_KEYS, entity_key)]
         out_names = [f"{prefix}{c}" for c in feature_cols] + [f"{prefix}as_of_week"]
         collisions = sorted(set(out_names) & set(games.columns))

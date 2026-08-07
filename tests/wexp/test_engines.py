@@ -337,6 +337,36 @@ def test_per_era_hfa_changes_2020_only(nfl_oracle):
         build_predictor(VariantConfig(hfa="per_era", **base))
 
 
+def test_true_epa_ridge_arm(nfl_oracle):
+    """A3 true-EPA arm: published nfl_ratings_weekly vintages via net_vintages_view.
+
+    Observed (scale 26.4 / hfa 1.57, OLS on this fixture): margin_normal
+    brier 0.2212 on n=727 — better than the margin-ridge's 0.2239, the
+    EPA-response signal the RESEARCH doc predicted. Isotonic 0.2216 on
+    n=622. Under isotonic with hfa=0 the scale is provably irrelevant
+    (monotone transform) — a property gate, not a tuned floor.
+    """
+    from sportsdataverse.wexp.engines import net_vintages_view
+
+    vintages = pl.read_parquet(FIXDIR / "nfl_ratings_weekly_sample.parquet")
+    view = net_vintages_view(vintages, scale=26.4, hfa=1.57)
+    assert view.schema["season"] == pl.Int32 and view.schema["team_id"] == pl.Utf8
+    store = VintageStore()
+    store.register("epa", view, entity_key="team_id")
+    _, rows = run_backtest(nfl_oracle, ratings_predictor("epa"), model_id="ridge_epa", store=store)
+    pooled = {r["metric"]: r["value"] for r in rows.filter(pl.col("season") == -1).iter_rows(named=True)}
+    assert rows.filter(pl.col("season") == -1)["n"][0] >= 720  # observed 727
+    assert pooled["brier"] < 0.23  # observed 0.2212
+
+    # isotonic is invariant to the scale tunable (monotone in the net diff)
+    s1, s2 = VintageStore(), VintageStore()
+    s1.register("epa", net_vintages_view(vintages, scale=1.0), entity_key="team_id")
+    s2.register("epa", net_vintages_view(vintages, scale=26.4), entity_key="team_id")
+    p1, _ = run_backtest(nfl_oracle, ratings_predictor("epa", wp_map="isotonic"), model_id="e", store=s1)
+    p2, _ = run_backtest(nfl_oracle, ratings_predictor("epa", wp_map="isotonic"), model_id="e", store=s2)
+    assert (p1["p_home"] - p2["p_home"]).abs().max() < 1e-9
+
+
 def test_gs_continuity_composition():
     """A6 + D3: continuity shifts as season-boundary state means in the filter.
 

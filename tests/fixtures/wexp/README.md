@@ -19,6 +19,7 @@ Captured 2026-08-06.
 | `cfb_schedule_sample.parquet` | 799 | `load_cfb_schedule` (`espn_cfb_schedules` release) | Outcome + slice columns (`home_points`/`away_points`, divisions, `neutral_site`) plus `home_id`/`away_id` (ESPN team ids, added at the 2026-08-06 re-capture for the oracle's `home_team_id`/`away_team_id` contract columns) for the sampled games; 799/800 archive games matched. |
 | `cfb_talent_sample.parquet` | 601 | `load_cfb_team_talent` (cfbfastR-data release) | 247 talent composite for seasons 2015 + 2024 (293 + 308 teams, 0 null composites). Keys: `season`, `team_id` (ESPN, Int64), display `team`. D3 continuity-prior input; preseason knowledge for its season. |
 | `cfb_returning_sample.parquet` | 443 | `load_cfb_returning_production` (cfbfastR-data release) | Returning production for seasons 2015 + 2024 (214 + 229 teams, 0 null `overall_returning`). Only `overall_returning` feeds D3 (`def_returning` unusable pre-2023). |
+| `nfl_ratings_weekly_sample.parquet` | 1,952 | `load_nfl_ratings_weekly` (sportsdataverse-data release, captured 2026-08-07) | Per-week as-of ratings vintages for seasons 2009 / 2020 / 2024 (32 teams x weeks 2-21/22; STRICTLY EXCLUSIVE `as_of_week`). Feeds the true-EPA ridge arm via `net_vintages_view`. `season` is Int64 at source (view casts Int32). |
 
 Notes:
 

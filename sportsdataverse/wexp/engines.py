@@ -35,6 +35,7 @@ __all__ = [
     "build_predictor",
     "cfb_continuity_shifts",
     "glickman_stern_predictor",
+    "net_vintages_view",
     "ratings_predictor",
     "ridge_margin_vintages",
 ]
@@ -141,6 +142,47 @@ def ridge_margin_vintages(
     if not frames:
         return pl.DataFrame(schema=_VINTAGE_SCHEMA)
     return pl.concat(frames, how="vertical")
+
+
+def net_vintages_view(vintages: pl.DataFrame, *, scale: float = 1.0, hfa: float = 0.0) -> pl.DataFrame:
+    """Adapt a net-rating vintage table to the :func:`ratings_predictor` contract.
+
+    For tables like ``load_nfl_ratings_weekly`` (one ``adj_net`` per team
+    per vintage): expected margin becomes ``scale * (net_h - net_a) + hfa``
+    via ``off_coef = scale*net``, ``def_coef = -scale*net``, ``intercept =
+    0``. Under the isotonic map ``scale`` is irrelevant (monotone); it
+    matters only for ``margin_normal``. Keys are normalized to the store
+    contract (``season`` Int32, ``team_id`` Utf8).
+
+    Args:
+        vintages: Frame with ``season``, ``as_of_week``, ``team_id``,
+            ``adj_net``.
+        scale: Margin points per unit of net-rating difference (fit on the
+            tune window; a tunable in the variant hash).
+        hfa: Home-field advantage in margin points.
+
+    Returns:
+        A vintage table registrable on :class:`~sportsdataverse.wexp.store.VintageStore`.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nfl import load_nfl_ratings_weekly
+            from sportsdataverse.wexp.engines import net_vintages_view
+            from sportsdataverse.wexp.store import VintageStore
+            store = VintageStore()
+            store.register("epa", net_vintages_view(load_nfl_ratings_weekly(seasons=[2024]),
+                                                    scale=24.0, hfa=2.3), entity_key="team_id")
+    """
+    return vintages.select(
+        season=pl.col("season").cast(pl.Int32),
+        as_of_week=pl.col("as_of_week").cast(pl.Int32),
+        team_id=pl.col("team_id").cast(pl.Utf8),
+        off_coef=scale * pl.col("adj_net"),
+        def_coef=-scale * pl.col("adj_net"),
+        intercept=pl.lit(0.0),
+        hfa=pl.lit(hfa, dtype=pl.Float64),
+    )
 
 
 def ratings_predictor(
