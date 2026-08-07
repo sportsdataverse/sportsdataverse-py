@@ -42,7 +42,7 @@ def espn_cfb_teams(groups=None, return_as_pandas=False, **kwargs) -> pl.DataFram
             * `cfbfastR <https://cfbfastR.sportsdataverse.org>`_ -- R sister package for CFB team data
             * `recruitR <https://github.com/sportsdataverse/recruitR>`_ -- recruiting data companion
     """
-    url = "http://site.api.espn.com/apis/site/v2/sports/football/college-football/teams"
+    url = "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams"
     params = {"groups": groups if groups is not None else "80", "limit": 1000}
     resp = download(url=url, params=params, **kwargs)
     if resp is not None:

@@ -15,7 +15,7 @@ def mlbam_copyright_info(saveFile=False, returnFile=False, **kwargs):
             If returnFile is set to True, the copyright file is returned.
 
     """
-    url = "http://gdx.mlb.com/components/copyright.txt"
+    url = "https://gdx.mlb.com/components/copyright.txt"
     resp = download(url=url, **kwargs)
     try:
         if resp is not None:
