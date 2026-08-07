@@ -133,6 +133,26 @@ def test_duplicate_join_keys_stop_before_the_counts_get_inflated():
     assert not any("disagrees" in f.message for f in findings)
 
 
+def test_empty_join_keys_is_reported_not_raised():
+    """polars rejects `on=[]`, and a row comparison with no notion of row
+    identity has nothing to say."""
+    f = pl.DataFrame({"game_id": [1], "epa": [0.1]})
+    findings = rpp.run("d", f, f.clone(), (), "nfl")  # must not raise
+    assert len(findings) == 1
+    assert "no join keys given" in findings[0].message
+
+
+def test_duplicate_keys_are_caught_even_when_no_keys_are_shared():
+    """Duplicates invalidate the premise that a key group is a row, so they must
+    be reported ahead of the row-set and no-shared-keys results, which are
+    computed on deduplicated keys."""
+    r = pl.DataFrame({"game_id": [1, 1], "epa": [0.1, 0.2]})
+    py = pl.DataFrame({"game_id": [9], "epa": [0.5]})
+    findings = _run(r, py)
+    assert any("do not identify a row" in f.message for f in findings)
+    assert not any("no shared key groups" in f.message for f in findings)
+
+
 def test_mixed_kind_dtype_column_is_skipped_not_crashed_on():
     """polars raises comparing String to Int64; one such column must not abort
     the whole comparison. The dtype WARN already names it."""

@@ -96,6 +96,22 @@ def run(
     keys = list(join_keys)
 
     # ---- level 0: can we even compare? -----------------------------------
+    if not keys:
+        # polars rejects an empty `on=[]`, and a comparison with no notion of
+        # row identity has nothing to say anyway.
+        findings.append(
+            Finding(
+                "r_python_output_parity",
+                Severity.ERROR,
+                domain,
+                dataset,
+                "no join keys given — a row-level comparison needs at least one column "
+                "that identifies a row in both frames",
+                locator={"join_keys": []},
+            )
+        )
+        return findings
+
     missing_r = [k for k in keys if k not in r_frame.columns]
     missing_py = [k for k in keys if k not in py_frame.columns]
     if missing_r or missing_py:
@@ -133,9 +149,35 @@ def run(
         )
         return findings
 
-    # ---- level 1: same rows? ---------------------------------------------
+    # ---- level 1a: do the keys identify a row at all? ---------------------
+    # Ahead of every row-set result below, because those are computed on
+    # DEDUPLICATED keys: if a key repeats, the premise that a key group is a row
+    # is already false, and both the shared/only counts and the level-4
+    # denominator would describe something other than what they claim.
     r_keys = r_frame.select(keys).unique()
     py_keys = py_frame.select(keys).unique()
+    dup_r = r_frame.height - r_keys.height
+    dup_py = py_frame.height - py_keys.height
+    if dup_r or dup_py:
+        findings.append(
+            Finding(
+                "r_python_output_parity",
+                Severity.ERROR,
+                domain,
+                dataset,
+                f"join keys do not identify a row — {dup_r} duplicate row(s) in R, "
+                f"{dup_py} in Python. The join would fan out and every count below "
+                "would be inflated, so the comparison was skipped. Widen the join "
+                "keys until both sides are unique.",
+                locator={"join_keys": keys},
+                expected=0,
+                actual=dup_r + dup_py,
+                metric=float(dup_r + dup_py),
+            )
+        )
+        return findings
+
+    # ---- level 1b: same rows? --------------------------------------------
     only_r = r_keys.join(py_keys, on=keys, how="anti").height
     only_py = py_keys.join(r_keys, on=keys, how="anti").height
     shared = r_keys.join(py_keys, on=keys, how="semi").height
@@ -169,31 +211,6 @@ def run(
                 dataset,
                 "no shared key groups — the value comparison below would pass vacuously, so it was skipped entirely",
                 locator={"join_keys": keys},
-            )
-        )
-        return findings
-
-    # The keys must IDENTIFY a row. If either side repeats one, the inner join
-    # fans that key out into a cross product, and the "N of M shared row(s)"
-    # denominator at level 4 stops meaning shared key groups — a wrong number
-    # reported with full confidence. Stop here, as the dtype clash does.
-    dup_r = r_frame.height - r_keys.height
-    dup_py = py_frame.height - py_keys.height
-    if dup_r or dup_py:
-        findings.append(
-            Finding(
-                "r_python_output_parity",
-                Severity.ERROR,
-                domain,
-                dataset,
-                f"join keys do not identify a row — {dup_r} duplicate row(s) in R, "
-                f"{dup_py} in Python. The join would fan out and every count below "
-                "would be inflated, so the value comparison was skipped. Widen "
-                "--join-keys until both sides are unique.",
-                locator={"join_keys": keys},
-                expected=0,
-                actual=dup_r + dup_py,
-                metric=float(dup_r + dup_py),
             )
         )
         return findings
