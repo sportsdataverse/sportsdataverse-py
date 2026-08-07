@@ -49,6 +49,7 @@ def elo_ratings(
     games: pl.DataFrame,
     config: EloConfig = EloConfig(),
     season_priors: Optional[pl.DataFrame] = None,
+    hfa_by_season: Optional[dict[int, float]] = None,
 ) -> pl.DataFrame:
     """Walk games chronologically and emit pre-game Elo ratings + P(home).
 
@@ -68,6 +69,11 @@ def elo_ratings(
             hook. Teams absent from the table shift by 0. Priors are
             preseason knowledge for their ``season``; never derive them
             from that season's games.
+        hfa_by_season: Optional season -> HFA override in rating points
+            (Axis F ``per_era``; e.g. ``{2020: 0.0}`` for the no-fans
+            COVID season). Seasons absent from the map use ``config.hfa``.
+            Values are a-priori/tuned parameters — never fit them from
+            the season they apply to inside a walk-forward run.
 
     Returns:
         The input rows (original order) with ``home_elo_pre``,
@@ -109,7 +115,8 @@ def elo_ratings(
                 last_season[team] = season
 
         h, a = ratings[row["home_team"]], ratings[row["away_team"]]
-        hfa = 0.0 if row["neutral_site"] else config.hfa
+        season_hfa = config.hfa if hfa_by_season is None else hfa_by_season.get(season, config.hfa)
+        hfa = 0.0 if row["neutral_site"] else season_hfa
         diff = h + hfa - a
         p_home = 1.0 / (10.0 ** (-diff / config.z) + 1.0)
         home_pre.append(h)

@@ -83,7 +83,11 @@ WeekPredictor = Callable[
 ]
 
 
-def elo_predictor(config: EloConfig = EloConfig(), season_priors: Optional[pl.DataFrame] = None) -> WeekPredictor:
+def elo_predictor(
+    config: EloConfig = EloConfig(),
+    season_priors: Optional[pl.DataFrame] = None,
+    hfa_by_season: Optional[dict[int, float]] = None,
+) -> WeekPredictor:
     """Wrap the margin-Elo engine (Axis A1) as a week predictor.
 
     Each week the engine replays Elo over the completed history plus the
@@ -96,6 +100,8 @@ def elo_predictor(config: EloConfig = EloConfig(), season_priors: Optional[pl.Da
         season_priors: Optional ``(season, team, prior_shift)`` continuity
             table forwarded to :func:`~sportsdataverse.wexp.elo.elo_ratings`
             (Axis D3/D4).
+        hfa_by_season: Optional season -> HFA override map forwarded to
+            the engine (Axis F ``per_era``).
 
     Returns:
         A predictor callable for :func:`run_backtest`.
@@ -115,7 +121,7 @@ def elo_predictor(config: EloConfig = EloConfig(), season_priors: Optional[pl.Da
                 slate.select(*cols).with_columns(home_margin=pl.lit(None, dtype=pl.Float64)),
             ]
         )
-        return elo_ratings(combined, config, season_priors).tail(slate.height)["p_home"]
+        return elo_ratings(combined, config, season_priors, hfa_by_season).tail(slate.height)["p_home"]
 
     return predict
 

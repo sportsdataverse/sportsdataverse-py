@@ -484,11 +484,17 @@ def build_predictor(
     if (
         config.core == "elo_margin"
         and config.wp_map == "elo_logistic"
-        and config.hfa == "fixed"
+        and config.hfa in ("fixed", "per_era")  # team_specific: no engine yet
         and config.prior in ("flat", "carryover", "carryover_continuity")  # market_open_informed: no engine yet
     ):
         if config.prior == "carryover_continuity" and season_priors is None:
             raise ValueError("prior='carryover_continuity' requires a season_priors table (cfb_continuity_shifts)")
+        hfa_map: Optional[dict[int, float]] = None
+        if config.hfa == "per_era":
+            # minimal era split: the no-fans COVID season gets its own HFA
+            if "hfa_covid" not in params:
+                raise ValueError("hfa='per_era' requires an 'hfa_covid' entry in params")
+            hfa_map = {2020: params["hfa_covid"]}
         carryover = 0.0 if config.prior == "flat" else params.get("carryover", 0.67)
         return elo_predictor(
             EloConfig(
@@ -498,6 +504,7 @@ def build_predictor(
                 carryover=carryover,
             ),
             season_priors=season_priors if config.prior == "carryover_continuity" else None,
+            hfa_by_season=hfa_map,
         )
     if (
         config.core == "ridge_epa"

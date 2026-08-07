@@ -337,6 +337,32 @@
     "response": "raw",
     "wp_map": "elo_logistic"
   },
+  "50038e7bcc1e": {
+    "core": "elo_margin",
+    "hfa": "per_era",
+    "opponent_adjust": "none",
+    "params": [
+      [
+        "carryover",
+        0.67
+      ],
+      [
+        "hfa_covid",
+        33.0
+      ],
+      [
+        "k",
+        20.0
+      ],
+      [
+        "z",
+        400.0
+      ]
+    ],
+    "prior": "carryover",
+    "response": "raw",
+    "wp_map": "elo_logistic"
+  },
   "7107118efcd8": {
     "core": "elo_margin",
     "hfa": "fixed",
@@ -412,6 +438,32 @@
     "prior": "flat",
     "response": "raw",
     "wp_map": "margin_normal"
+  },
+  "7f733491dc34": {
+    "core": "elo_margin",
+    "hfa": "per_era",
+    "opponent_adjust": "none",
+    "params": [
+      [
+        "carryover",
+        0.67
+      ],
+      [
+        "hfa_covid",
+        0.0
+      ],
+      [
+        "k",
+        20.0
+      ],
+      [
+        "z",
+        400.0
+      ]
+    ],
+    "prior": "carryover",
+    "response": "raw",
+    "wp_map": "elo_logistic"
   },
   "8d0de51e7b67": {
     "core": "ridge_epa",

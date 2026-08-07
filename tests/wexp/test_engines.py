@@ -318,6 +318,25 @@ def test_glickman_stern_backtest(nfl_oracle):
     assert (dispatched["p_home"] - probs["p_home"]).abs().max() < 1e-12
 
 
+def test_per_era_hfa_changes_2020_only(nfl_oracle):
+    """Axis F per_era: the COVID override moves ONLY 2020 non-neutral games."""
+    from sportsdataverse.wexp.engines import build_predictor
+    from sportsdataverse.wexp.variants import VariantConfig
+
+    base = dict(core="elo_margin", response="raw", opponent_adjust="none", prior="carryover", wp_map="elo_logistic")
+    per_era = VariantConfig(hfa="per_era", params=(("hfa_covid", 0.0),), **base)
+    fixed = VariantConfig(hfa="fixed", **base)
+    p_era, _ = run_backtest(nfl_oracle, build_predictor(per_era), model_id="e", variant=per_era)
+    p_fix, _ = run_backtest(nfl_oracle, build_predictor(fixed), model_id="e", variant=fixed)
+    diff = (p_era["p_home"] - p_fix["p_home"]).abs()
+    joined = nfl_oracle.with_columns(diff=diff)
+    assert joined.filter(pl.col("season") == 2020)["diff"].max() > 0.01  # override applied
+    # pre-2020 seasons are untouched (post-2020 ratings may drift via updates)
+    assert joined.filter(pl.col("season") < 2020)["diff"].max() == 0.0
+    with pytest.raises(ValueError, match="hfa_covid"):
+        build_predictor(VariantConfig(hfa="per_era", **base))
+
+
 def test_continuity_prior_requires_table():
     from sportsdataverse.wexp.engines import build_predictor
     from sportsdataverse.wexp.variants import VariantConfig
