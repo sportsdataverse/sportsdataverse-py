@@ -33,6 +33,7 @@ class DatasetSpec:
     cumulative_columns: tuple[str, ...] = ()
     group_key: str = "game_id"
     expected_constant_columns: tuple[str, ...] = ()
+    read_columns: tuple[str, ...] = ()
 
 
 DATASETS: dict[str, DatasetSpec] = {}  # registered incrementally; see spec §11
@@ -140,6 +141,41 @@ def _read_parquet_glob(glob_expanded: str) -> pl.DataFrame:
         return pl.concat((pl.read_parquet(p) for p in paths), how="vertical_relaxed")
 
 
+def _read_parquet_glob_projected(glob_expanded: str, columns: tuple[str, ...]) -> pl.DataFrame:
+    """Read only ``columns`` from a multi-file parquet glob, era-tolerant.
+
+    For wide datasets whose column sets drift across season files (the full
+    ``cfb_pbp`` has five distinct column sets over 2004-2025), a whole-frame
+    read is impossible (``vertical_relaxed`` still rejects differing column
+    sets) and unnecessary. Reads each file's intersection with ``columns``,
+    fills the columns a file lacks with nulls, and relaxed-concats so a
+    sparse all-null season (``Null`` dtype) supertypes against the others.
+
+    Args:
+        glob_expanded: A parquet path or glob (env vars already expanded).
+        columns: The projected column set, in output order.
+
+    Returns:
+        The concatenated frame carrying exactly ``columns``.
+
+    Raises:
+        FileNotFoundError: If the glob matches no files.
+    """
+    paths = sorted(_glob.glob(glob_expanded))
+    if not paths:
+        raise FileNotFoundError(f"no parquet files match {glob_expanded!r}")
+    frames = []
+    for p in paths:
+        have = pl.read_parquet_schema(p)
+        present = [c for c in columns if c in have]
+        frame = pl.read_parquet(p, columns=present)
+        missing = [c for c in columns if c not in have]
+        if missing:
+            frame = frame.with_columns([pl.lit(None).alias(c) for c in missing])
+        frames.append(frame.select(columns))
+    return pl.concat(frames, how="vertical_relaxed")
+
+
 def _resolve_spec(spec: DatasetSpec, release: str | None = None) -> tuple[pl.DataFrame, CheckContext]:
     """Resolve a DatasetSpec to its frame and check context.
 
@@ -157,7 +193,10 @@ def _resolve_spec(spec: DatasetSpec, release: str | None = None) -> tuple[pl.Dat
         FileNotFoundError: If the resolved parquet glob matches no files.
     """
     glob_expanded = os.path.expandvars(spec.parquet_glob)
-    frame = _read_parquet_glob(glob_expanded)
+    if spec.read_columns:
+        frame = _read_parquet_glob_projected(glob_expanded, spec.read_columns)
+    else:
+        frame = _read_parquet_glob(glob_expanded)
     ctx = CheckContext(
         domain=spec.domain,
         dataset=spec.name,
@@ -346,6 +385,65 @@ DATASETS["cfb_rosters_crosswalk"] = DatasetSpec(
     join_keys=("person_key", "espn_team_id"),
     oracle_domain="cfb",
     expected_constant_columns=("yahoo_athlete_id", "yahoo_position"),
+)
+
+# Projected registration of the FULL play_by_play dataset (469-477 cols,
+# 22 season files, 5 distinct column sets across eras — a whole-frame read
+# is impossible AND ~1GB compressed). read_columns scopes the read to the
+# keys + penalty/yardage/EPA-contract columns the definitional rules cover;
+# the snapshot mirrors that projection.
+_CFB_PBP_READ_COLUMNS = (
+    "game_id",
+    "id",
+    "season",
+    "game_play_number",
+    "period",
+    "type.text",
+    "text",
+    "penalty_flag",
+    "penalty_in_text",
+    "isPenalty",
+    "penalty_declined",
+    "penalty_no_play",
+    "penalty_offset",
+    "penalty_1st_conv",
+    "penalty_safety",
+    "penalty_assessed_on_kickoff",
+    "penalty_text",
+    "penalty_detail",
+    "yds_penalty",
+    "penalty_yards_signed",
+    "statYardage",
+    "yds_rushed",
+    "yds_receiving",
+    "yds_sacked",
+    "yds_punted",
+    "yds_fg",
+    "yds_kickoff",
+    "yds_kickoff_return",
+    "yds_punt_return",
+    "yds_int_return",
+    "yds_fumble_return",
+    "air_yards",
+    "yards_after_catch",
+    "EPA",
+    "EP_start",
+    "EP_end",
+    "end_of_half",
+    "kickoff_play",
+    "scoring_play",
+)
+
+DATASETS["cfb_pbp"] = DatasetSpec(
+    name="cfb_pbp",
+    domain="cfb",
+    parquet_glob="${SDV_VALIDATION_DATA_ROOT}/cfb/pbp/parquet/play_by_play_*.parquet",
+    schema=load_schema("cfb_pbp"),
+    required_columns=("game_id", "id"),
+    join_keys=("game_id", "id"),
+    oracle_domain="cfb",
+    cumulative_columns=("game_play_number",),
+    read_columns=_CFB_PBP_READ_COLUMNS,
 )
 
 DATASETS["cfb_rb_eval"] = DatasetSpec(

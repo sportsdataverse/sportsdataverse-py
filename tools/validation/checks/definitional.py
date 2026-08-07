@@ -75,6 +75,25 @@ def _clean_string_rule(col: str) -> Rule:
     )
 
 
+def _range_rule(
+    col: str,
+    lo: float,
+    hi: float,
+    *,
+    severity: Severity = Severity.ERROR,
+    needs_judgment: bool = False,
+) -> Rule:
+    """A numeric column must lie within its definitional bounds when non-null."""
+    return Rule(
+        f"{col}_range",
+        (col,),
+        ~_c(col).is_between(lo, hi),
+        f"{col} must be within [{lo:g}, {hi:g}]",
+        severity=severity,
+        needs_judgment=needs_judgment,
+    )
+
+
 def _id_format_rule(col: str, pattern: str, label: str) -> Rule:
     """A non-null string id must match its canonical format.
 
@@ -160,19 +179,32 @@ _CFB_RULES: tuple[Rule, ...] = (
         _c("period") < 1,
         "period must be >= 1",
     ),
-    # Measured 2026-08-06 on the published sample: fires on ~1.2% of rows
-    # (47/101 last-play-of-period, rest ordinary plays, deviations up to
-    # ~1.4 EP) while the wpa twin holds exactly — epa appears to have its
-    # own computation path in the cfb-data producer rather than being the
-    # snapshot diff. Routed to triage instead of hard-failing.
+    # The producer's ACTUAL epa contract (triaged 2026-08-07, verdict
+    # dismissed-as-designed with 0.88 confidence; verified 0 residual on
+    # both this dataset and the 3.1M-row full pbp): sdv-py
+    # cfb_pbp.py:5289-5302 deliberately overlays EPA beyond the snapshot
+    # diff on two play classes — non-scoring end-of-half plays get
+    # EPA = -EP_start, and penalty-in-text plays (non-Penalty type,
+    # non-kickoff) get EPA += EP_between. cfb-data carries the columns
+    # verbatim (CARRY_RENAME). Outside those two classes the snapshot
+    # identity is exact; the classes are derived here because model_pbp
+    # does not ship the producer's end_of_half/penalty_in_text flags.
     Rule(
-        "epa_is_ep_after_minus_ep_before",
-        ("epa", "ep_after", "ep_before"),
-        (_c("ep_after") - _c("ep_before") - _c("epa")).abs() > _EPS,
-        "epa is expected to equal ep_after - ep_before",
-        severity=Severity.WARN,
-        needs_judgment=True,
+        "epa_snapshot_identity_outside_overlays",
+        ("epa", "ep_after", "ep_before", "text", "type.text", "period", "game_play_number", "game_id"),
+        ((_c("ep_after") - _c("ep_before") - _c("epa")).abs() > _EPS)
+        & ~(
+            _c("game_play_number")
+            == _c("game_play_number").max().over("game_id", pl.when(_c("period") <= 2).then(1).otherwise(2))
+        )
+        & ~(
+            _c("text").str.contains("(?i)penalt")
+            & (_c("type.text") != "Penalty")
+            & ~_c("type.text").str.contains("(?i)kickoff")
+        ),
+        "epa must equal ep_after - ep_before outside the end-of-half and penalty-in-text overlays",
     ),
+    _range_rule("statYardage", -99, 99, severity=Severity.WARN, needs_judgment=True),
     Rule(
         "wpa_is_wp_after_minus_wp_before",
         ("wpa", "wp_after", "wp_before"),
@@ -557,11 +589,235 @@ _NFL_RULES: tuple[Rule, ...] = (
         _c("posteam") == _c("defteam"),
         "a team cannot possess and defend on the same play",
     ),
+    # Penalty + yardage relationships (measured 2026-08-07 on 94,978
+    # published rows). penalty=1 always has a desc mention, penalty_yards
+    # both ways, and first_down_penalty=>penalty all held at 100%. The
+    # reverse desc direction has 962 legit firings (declined/offsetting
+    # penalties narrated without penalty=1) -> triage. Play types observed
+    # on penalty=1 rows: no_play dominates (4,935) but run/pass/punt/
+    # kickoff accepted-penalty plays are legitimate, so no play_type rule.
+    Rule(
+        "penalty_implies_desc_mention",
+        ("penalty", "desc"),
+        (_c("penalty") == 1) & ~_c("desc").str.contains("(?i)penalty"),
+        "penalty=1 requires a penalty mention in desc",
+    ),
+    Rule(
+        "desc_penalty_mention_without_flag",
+        ("penalty", "desc"),
+        _c("desc").str.contains("(?i)penalty") & (_c("penalty") != 1),
+        "desc mentions a penalty but penalty!=1 (declined/offset narrations are known-legit)",
+        severity=Severity.WARN,
+        needs_judgment=True,
+    ),
+    Rule(
+        "penalty_yards_populated_on_penalty",
+        ("penalty", "penalty_yards"),
+        (_c("penalty") == 1) & _c("penalty_yards").is_null(),
+        "a penalty play must carry penalty_yards",
+    ),
+    Rule(
+        "penalty_yards_nonzero_requires_penalty",
+        ("penalty", "penalty_yards"),
+        (_c("penalty_yards") != 0) & (_c("penalty") != 1),
+        "nonzero penalty_yards requires penalty=1",
+    ),
+    Rule(
+        "first_down_penalty_requires_penalty",
+        ("first_down_penalty", "penalty"),
+        (_c("first_down_penalty") == 1) & (_c("penalty") != 1),
+        "a penalty first down requires penalty=1",
+    ),
+    Rule(
+        "rushing_yards_requires_rush_attempt",
+        ("rushing_yards", "rush_attempt"),
+        _c("rushing_yards").is_not_null() & (_c("rush_attempt") != 1),
+        "rushing_yards requires a rush attempt",
+    ),
+    Rule(
+        "passing_yards_requires_pass_attempt",
+        ("passing_yards", "pass_attempt"),
+        _c("passing_yards").is_not_null() & (_c("pass_attempt") != 1),
+        "passing_yards requires a pass attempt",
+    ),
+    Rule(
+        "receiving_equals_passing_on_completion",
+        ("complete_pass", "receiving_yards", "passing_yards"),
+        (_c("complete_pass") == 1) & (_c("receiving_yards") != _c("passing_yards")),
+        "receiving_yards should equal passing_yards on a completion (laterals diverge)",
+        severity=Severity.WARN,
+        needs_judgment=True,
+    ),
+    Rule(
+        "passing_yards_equals_yards_gained_on_completion",
+        ("complete_pass", "passing_yards", "yards_gained"),
+        (_c("complete_pass") == 1) & (_c("passing_yards") != _c("yards_gained")),
+        "passing_yards should equal yards_gained on a completion (laterals diverge)",
+        severity=Severity.WARN,
+        needs_judgment=True,
+    ),
+    Rule(
+        "rushing_yards_equals_yards_gained_on_rush",
+        ("rush_attempt", "rushing_yards", "yards_gained"),
+        (_c("rush_attempt") == 1) & (_c("rushing_yards") != _c("yards_gained")),
+        "rushing_yards should equal yards_gained on a rush (laterals diverge)",
+        severity=Severity.WARN,
+        needs_judgment=True,
+    ),
+    Rule(
+        "kick_distance_requires_kick_play",
+        ("kick_distance", "punt_attempt", "kickoff_attempt", "field_goal_attempt"),
+        _c("kick_distance").is_not_null()
+        & (_c("punt_attempt") != 1)
+        & (_c("kickoff_attempt") != 1)
+        & (_c("field_goal_attempt") != 1),
+        "kick_distance requires a punt, kickoff, or field goal attempt",
+    ),
+    Rule(
+        "kick_distance_populated_on_kickoff",
+        ("kick_distance", "kickoff_attempt"),
+        (_c("kickoff_attempt") == 1) & _c("kick_distance").is_null(),
+        "a kickoff must carry kick_distance",
+    ),
+    Rule(
+        "kick_distance_populated_on_punt",
+        ("kick_distance", "punt_attempt"),
+        (_c("punt_attempt") == 1) & _c("kick_distance").is_null(),
+        "a punt should carry kick_distance (blocked punts are known-legit nulls)",
+        severity=Severity.WARN,
+        needs_judgment=True,
+    ),
+    _range_rule("penalty_yards", 0, 99),
+    _range_rule("yards_gained", -99, 99),
+    _range_rule("air_yards", -99, 99),
+    _range_rule("yards_after_catch", -99, 99),
+    _range_rule("passing_yards", -99, 99),
+    _range_rule("rushing_yards", -99, 99),
+    _range_rule("receiving_yards", -99, 99),
+    _range_rule("kick_distance", 0, 99),
+)
+
+
+def _cfb_penalty_subtype_rule(flag: str) -> Rule:
+    """A penalty subtype/outcome flag requires the base penalty_flag."""
+    return Rule(
+        f"{flag}_requires_penalty_flag",
+        (flag, "penalty_flag"),
+        (_c(flag) == True) & (_c("penalty_flag") == False),  # noqa: E712
+        f"{flag}=True requires penalty_flag=True",
+    )
+
+
+# Full play_by_play dataset (projected read; see registry read_columns).
+# All measured 2026-08-07 across 3,145,840 rows / 22 seasons. ERROR rules
+# held at 100%; WARN rules fire on real data and carry the measured count:
+# yds_penalty is non-numeric on 80,478 of 200,177 non-null rows (samples
+# 'U (', 'k 8', ' 37' — a real producer extraction bug), statYardage has
+# impossible outliers (-5114..11131), yds_fg max 109, yds_kickoff has a
+# 999 sentinel, penalty_yards_signed max 131 (>99 is impossible on a
+# football field), declined&no_play co-fire on 409 rows, and penalty_text
+# is null on 45 penalty_flag rows. isPenalty vs penalty_flag disagree on
+# 55,479 rows and penalty_in_text is narrower than a text regex by design
+# (167,776 rows) — different contracts, deliberately NOT ruled.
+_CFB_PBP_RULES: tuple[Rule, ...] = (
+    _cfb_penalty_subtype_rule("penalty_declined"),
+    _cfb_penalty_subtype_rule("penalty_no_play"),
+    _cfb_penalty_subtype_rule("penalty_offset"),
+    _cfb_penalty_subtype_rule("penalty_1st_conv"),
+    _cfb_penalty_subtype_rule("penalty_safety"),
+    _cfb_penalty_subtype_rule("penalty_assessed_on_kickoff"),
+    Rule(
+        "penalty_type_play_has_flag",
+        ("type.text", "penalty_flag"),
+        (_c("type.text") == "Penalty") & (_c("penalty_flag") == False),  # noqa: E712
+        "a Penalty-type play must carry penalty_flag=True",
+    ),
+    Rule(
+        "penalty_text_requires_flag",
+        ("penalty_text", "penalty_flag"),
+        _c("penalty_text").is_not_null() & (_c("penalty_flag") == False),  # noqa: E712
+        "penalty_text requires penalty_flag=True",
+    ),
+    Rule(
+        "penalty_text_populated_on_flag",
+        ("penalty_text", "penalty_flag"),
+        (_c("penalty_flag") == True) & _c("penalty_text").is_null(),  # noqa: E712
+        "a flagged penalty should carry penalty_text (45 known gaps)",
+        severity=Severity.WARN,
+        needs_judgment=True,
+    ),
+    Rule(
+        "penalty_in_text_means_text_mentions",
+        ("penalty_in_text", "text"),
+        (_c("penalty_in_text") == True) & ~_c("text").str.contains("(?i)penalt"),  # noqa: E712
+        "penalty_in_text=True requires a penalty mention in the play text",
+    ),
+    Rule(
+        "penalty_yards_signed_nonzero_requires_flag",
+        ("penalty_yards_signed", "penalty_flag"),
+        (_c("penalty_yards_signed") != 0) & (_c("penalty_flag") == False),  # noqa: E712
+        "nonzero penalty_yards_signed requires penalty_flag=True",
+    ),
+    Rule(
+        "penalty_yards_signed_populated_on_flag",
+        ("penalty_yards_signed", "penalty_flag"),
+        (_c("penalty_flag") == True) & _c("penalty_yards_signed").is_null(),  # noqa: E712
+        "a flagged penalty must carry penalty_yards_signed",
+    ),
+    _range_rule("penalty_yards_signed", -99, 99, severity=Severity.WARN, needs_judgment=True),
+    Rule(
+        "yds_penalty_numeric_string",
+        ("yds_penalty",),
+        ~_c("yds_penalty").str.contains(r"^-?\d+$"),
+        "yds_penalty should be a signed numeric string (40% garbage measured — real extraction bug)",
+        severity=Severity.WARN,
+        needs_judgment=True,
+    ),
+    Rule(
+        "penalty_declined_no_play_exclusive",
+        ("penalty_declined", "penalty_no_play"),
+        (_c("penalty_declined") == True) & (_c("penalty_no_play") == True),  # noqa: E712
+        "a declined penalty should not also be a no-play (409 measured co-fires)",
+        severity=Severity.WARN,
+        needs_judgment=True,
+    ),
+    Rule(
+        "epa_snapshot_identity_outside_overlays",
+        ("EPA", "EP_end", "EP_start", "end_of_half", "scoring_play", "penalty_in_text", "type.text", "kickoff_play"),
+        ((_c("EP_end") - _c("EP_start") - _c("EPA")).abs() > _EPS)
+        & ~((_c("end_of_half") == True) & (_c("scoring_play") == False))  # noqa: E712
+        & ~(
+            (_c("penalty_in_text") == True)  # noqa: E712
+            & (_c("type.text") != "Penalty")
+            & (_c("kickoff_play") == False)  # noqa: E712
+        ),
+        "EPA must equal EP_end - EP_start outside the end-of-half and penalty-in-text overlays",
+    ),
+    Rule(
+        "game_play_number_strictly_increasing",
+        ("game_id", "game_play_number"),
+        _c("game_play_number").diff().over("game_id") <= 0,
+        "game_play_number must strictly increase within a game (in stored row order)",
+    ),
+    _range_rule("statYardage", -99, 99, severity=Severity.WARN, needs_judgment=True),
+    _range_rule("yds_rushed", -99, 99),
+    _range_rule("yds_receiving", -99, 99),
+    _range_rule("yds_sacked", -99, 0),
+    _range_rule("yds_punted", 0, 99),
+    _range_rule("yds_fg", 0, 99, severity=Severity.WARN, needs_judgment=True),
+    _range_rule("yds_kickoff", 0, 99, severity=Severity.WARN, needs_judgment=True),
+    _range_rule("yds_kickoff_return", 0, 100),
+    _range_rule("yds_punt_return", 0, 100),
+    _range_rule("yds_int_return", -100, 100),
+    _range_rule("yds_fumble_return", 0, 100),
+    _range_rule("air_yards", -99, 99),
+    _range_rule("yards_after_catch", -99, 100),
 )
 
 
 RULES: dict[str, tuple[Rule, ...]] = {
     "cfb_model_pbp": _CFB_RULES,
+    "cfb_pbp": _CFB_PBP_RULES,
     "nfl_model_pbp": _NFL_RULES,
 }
 
