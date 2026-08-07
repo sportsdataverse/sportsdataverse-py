@@ -67,8 +67,10 @@ def normalize_walk_weeks(games: pl.DataFrame) -> pl.DataFrame:
             from sportsdataverse.wexp.backtest import normalize_walk_weeks
             walk = normalize_walk_weeks(oracle)
     """
+    # idempotent: an already-offset postseason week (>= OFFSET) is kept as-is,
+    # so double-normalizing (driver + vintage builder) cannot shift it again
     return games.with_columns(
-        pl.when(pl.col("season_type").is_in(_REGULAR_LABELS))
+        pl.when(pl.col("season_type").is_in(_REGULAR_LABELS) | (pl.col("week") >= POSTSEASON_WEEK_OFFSET))
         .then(pl.col("week"))
         .otherwise(pl.col("week") + POSTSEASON_WEEK_OFFSET)
         .alias("week")
@@ -165,6 +167,10 @@ def run_backtest(
             probs, rows = run_backtest(oracle, elo_predictor(), model_id="elo",
                                        path="results/wexp/leaderboard.parquet")
     """
+    if oracle.height == 0:
+        raise ValueError("oracle is empty")
+    if oracle["league"].n_unique() != 1:
+        raise ValueError("oracle mixes leagues — run one league per backtest")
     if oracle["game_id"].n_unique() != oracle.height:
         raise ValueError("oracle has duplicate game_id rows — the prediction join would fan out")
     league = oracle["league"][0]

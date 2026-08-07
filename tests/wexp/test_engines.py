@@ -4,6 +4,10 @@ Observed at gate-setting time (2026-08-06, 821-game fixture, seasons
 2009/2020/2024): lam=10 margin_normal brier 0.2239 / acc 0.6425 on n=772
 (weeks 2+); isotonic brier 0.2276 on n=672 (iso_min_fit=100 warm-up).
 Floors carry margin off those values — never lower them to pass.
+
+The fixture pools 2024, which sits inside the sweep's 2022+ holdout.
+These numbers are STRUCTURAL sanity gates only and must never inform
+variant selection — tuning reads results/wexp (tune window <= 2021).
 """
 
 from pathlib import Path
@@ -41,6 +45,43 @@ def test_vintage_table_shape(nfl_oracle, store):
     assert vint.filter(pl.col("as_of_week") == 1).height == 0
     assert vint.schema["team_id"] == pl.Utf8
     assert vint.schema["as_of_week"] == pl.Int32
+
+
+def test_vintage_fit_identifies_hfa_and_spread(store):
+    """The symmetrized fit must identify HFA and spread the team coefs.
+
+    Observed final-vintage values (lam=10): hfa 5.05 (2009), 3.78 (2024),
+    0.24 (2020 — the COVID no-fans season, a real-world identification
+    check); off_coef std 4.44 / 4.02 / 3.68. A collapsed fit (hfa -> 0,
+    coefs shrunk flat) fails these without failing the brier gate.
+    """
+    vint = store.table("ridge")
+    finals = {s: vint.filter(pl.col("season") == s).sort("as_of_week").tail(32) for s in (2009, 2020, 2024)}
+    for s in (2009, 2024):
+        assert 1.0 < finals[s]["hfa"][0] < 7.0
+    # 2020 played without fans: fitted HFA collapses toward zero
+    assert finals[2020]["hfa"][0] < finals[2009]["hfa"][0]
+    assert finals[2020]["hfa"][0] < finals[2024]["hfa"][0]
+    for s, f in finals.items():
+        assert f["off_coef"].std() > 2.0, s
+
+
+def test_lam_mismatch_refused(nfl_oracle, store):
+    """A variant claiming a different lam than the served table must error."""
+    from sportsdataverse.wexp.engines import build_predictor
+    from sportsdataverse.wexp.variants import VariantConfig
+
+    variant = VariantConfig(
+        core="ridge_epa",
+        response="raw",
+        opponent_adjust="ridge",
+        prior="flat",
+        wp_map="margin_normal",
+        hfa="fixed",
+        params=(("lam", 25.0),),  # store fixture was built with lam=10
+    )
+    with pytest.raises(ValueError, match="lam"):
+        run_backtest(nfl_oracle, build_predictor(variant, table="ridge"), model_id="r", variant=variant, store=store)
 
 
 def test_vintage_builder_ignores_future_games(nfl_oracle):
@@ -157,6 +198,18 @@ def test_build_predictor_unimplemented_combo():
                 opponent_adjust="ridge",
                 prior="flat",
                 wp_map="margin_normal",
+                hfa="fixed",
+            )
+        )
+    with pytest.raises(NotImplementedError):
+        # unbuilt priors on the elo core must NOT silently serve carryover Elo
+        build_predictor(
+            VariantConfig(
+                core="elo_margin",
+                response="raw",
+                opponent_adjust="none",
+                prior="carryover_continuity",
+                wp_map="elo_logistic",
                 hfa="fixed",
             )
         )

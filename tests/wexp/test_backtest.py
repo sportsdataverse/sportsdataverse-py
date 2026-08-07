@@ -4,7 +4,8 @@ The driver owns the leakage boundary: engines see only completed prior
 games plus an outcome-stripped slate. The Elo parity gate proves the
 week loop reconstructs the exact chronological walk on the real NFL
 fixture (821 games); the postseason test proves the CFB week-reset
-cannot reorder the walk.
+cannot reorder the walk. Never lower a gate to make it pass — debug the
+driver instead.
 """
 
 from pathlib import Path

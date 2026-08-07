@@ -39,6 +39,7 @@ _VINTAGE_SCHEMA: dict[str, type[pl.DataType]] = {
     "def_coef": pl.Float64,
     "intercept": pl.Float64,
     "hfa": pl.Float64,
+    "lam": pl.Float64,
 }
 
 
@@ -120,6 +121,7 @@ def ridge_margin_vintages(oracle: pl.DataFrame, *, lam: float, resp_col: str = "
                 as_of_week=pl.lit(week, dtype=pl.Int32),
                 intercept=pl.lit(intercept, dtype=pl.Float64),
                 hfa=pl.lit(hfa, dtype=pl.Float64),
+                lam=pl.lit(lam, dtype=pl.Float64),
             ).select(list(_VINTAGE_SCHEMA))
         )
     if not frames:
@@ -133,6 +135,7 @@ def ratings_predictor(
     wp_map: str = "margin_normal",
     sigma: float = 13.45,
     iso_min_fit: int = 100,
+    lam: Optional[float] = None,
 ) -> WeekPredictor:
     """Wrap a registered ratings vintage table as a week predictor.
 
@@ -150,6 +153,10 @@ def ratings_predictor(
         sigma: Margin SD for the normal link.
         iso_min_fit: Minimum history games with a rated margin before the
             isotonic map will fit; below it the week predicts null.
+        lam: The ridge penalty the variant hash claims. When given, the
+            predictor refuses (ValueError) a table stamped with a
+            different ``lam`` — a store/variant mismatch must error, not
+            write mislabeled leaderboard rows.
 
     Returns:
         A predictor callable for :func:`~sportsdataverse.wexp.backtest.run_backtest`.
@@ -180,6 +187,12 @@ def ratings_predictor(
     def predict(history: pl.DataFrame, slate: pl.DataFrame, store: Optional[VintageStore]) -> pl.Series:
         if store is None:
             raise ValueError("ratings_predictor requires a VintageStore")
+        if lam is not None:
+            # the variant hash claims this lam; refuse a mismatched table
+            # rather than writing wrong-but-plausible leaderboard rows
+            served = store.table(table)["lam"].unique().to_list() if "lam" in store.table(table).columns else []
+            if served != [lam]:
+                raise ValueError(f"variant claims lam={lam} but table {table!r} was built with lam={served}")
         margins = _expected_margin(slate, store)["__exp_margin"].to_numpy()
         if wp_map == "margin_normal":
             from scipy.stats import norm
@@ -237,7 +250,12 @@ def build_predictor(config: VariantConfig, *, table: str = "ridge", sigma: float
                 prior="carryover", wp_map="elo_logistic", hfa="fixed"))
     """
     params = dict(config.params)
-    if config.core == "elo_margin" and config.wp_map == "elo_logistic" and config.hfa == "fixed":
+    if (
+        config.core == "elo_margin"
+        and config.wp_map == "elo_logistic"
+        and config.hfa == "fixed"
+        and config.prior in ("flat", "carryover")  # continuity/market priors have no engine yet
+    ):
         carryover = 0.0 if config.prior == "flat" else params.get("carryover", 0.67)
         return elo_predictor(
             EloConfig(
@@ -255,5 +273,5 @@ def build_predictor(config: VariantConfig, *, table: str = "ridge", sigma: float
         and config.hfa == "fixed"
         and config.wp_map in ("margin_normal", "isotonic")
     ):
-        return ratings_predictor(table, wp_map=config.wp_map, sigma=params.get("sigma", sigma))
+        return ratings_predictor(table, wp_map=config.wp_map, sigma=params.get("sigma", sigma), lam=params.get("lam"))
     raise NotImplementedError(f"no engine landed yet for variant {config}")
