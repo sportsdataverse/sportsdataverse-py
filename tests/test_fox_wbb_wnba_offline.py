@@ -101,6 +101,26 @@ def test_fox_wbb_teams_all_budget_and_dedupe(monkeypatch):
     assert calls[1] == "wcbk/team/2/standings"
 
 
+def test_teams_all_skips_404_but_propagates_transport_errors(monkeypatch):
+    """A missing candidate id is skipped; a transport failure must NOT become an
+    empty directory the caller cannot distinguish from a valid scan."""
+    import pytest
+    import requests
+
+    import sportsdataverse.wbb.wbb_fox_ext as ext
+    from sportsdataverse.errors import NoESPNDataError
+
+    monkeypatch.setattr(ext, "fox_get", lambda path, **kw: (_ for _ in ()).throw(NoESPNDataError("404")))
+    assert len(ext.fox_wbb_teams_all(max_id=5, max_calls=3)) == 0
+
+    def boom(path, **kw):
+        raise requests.exceptions.ConnectionError("network down")
+
+    monkeypatch.setattr(ext, "fox_get", boom)
+    with pytest.raises(requests.exceptions.ConnectionError):
+        ext.fox_wbb_teams_all(max_id=5, max_calls=3)
+
+
 def test_fox_wbb_wnba_wrappers_registered():
     import sportsdataverse.wbb as wbb
     import sportsdataverse.wnba as wnba
