@@ -156,6 +156,21 @@ def run(dataset: str, frame: pl.DataFrame, ctx: CheckContext) -> list[Finding]:
 
     observed = frame.with_columns(_signature_expr(type_col, snap_flags)).group_by("_combo").agg(pl.len().alias("n"))
     known = set(snap.get("combos", {}))
+    if not known:
+        # An empty snapshot is corrupt, not "nothing is known": comparing
+        # against it would mark every row in the frame as drift.
+        return [
+            Finding(
+                "combo_drift",
+                Severity.WARN,
+                ctx.domain,
+                dataset,
+                f"snapshot {snapshot_path(dataset).name} contains no combinations -- "
+                "regenerate it with --refresh; comparison skipped",
+                locator={"snapshot": str(snapshot_path(dataset))},
+                needs_judgment=True,
+            )
+        ]
     new = observed.filter(~pl.col("_combo").is_in(list(known))).sort("n", descending=True)
     if new.height == 0:
         return []

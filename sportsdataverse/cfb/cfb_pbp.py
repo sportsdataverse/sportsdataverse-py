@@ -6840,6 +6840,12 @@ class CFBPlayProcess(object):
                         .alias("interception_player_name"),
                     )
                 if "pass_breakup_player_name" in play_df.columns:
+                    # On an interception the participant name IS the interceptor,
+                    # so it must not be injected here. A regex-extracted PBU is
+                    # KEPT though: 78 interception plays across 2004-2025 name two
+                    # distinct defenders in the text ("intercepted by #25 K.Bretz
+                    # ... broken up by #2 M.Taylor") -- a tip-drill pick, where the
+                    # breakup credit is real. Nulling it would destroy that.
                     coalesce_exprs.append(
                         pl.when(is_int)
                         .then(pl.col("pass_breakup_player_name"))

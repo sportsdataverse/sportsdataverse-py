@@ -90,3 +90,20 @@ def test_committed_cfb_pbp_snapshot_is_loadable_and_populated():
     assert snapshot["type_column"] == "type.text"
     assert len(snapshot["combos"]) > 100
     assert snapshot["n_rows"] > 1_000_000
+
+
+def test_empty_snapshot_reports_instead_of_flagging_every_row(tmp_path, monkeypatch):
+    """An empty snapshot is corrupt, not 'nothing known' -- comparing against it
+    would mark every row as drift."""
+    import json as _json
+
+    monkeypatch.setattr(combo_drift, "_SNAPSHOT_DIR", tmp_path)
+    monkeypatch.setitem(combo_drift.SIGNATURES, "toy", ("type.text", ("rush",)))
+    (tmp_path / "toy.json").write_text(
+        _json.dumps({"type_column": "type.text", "flags": ["rush"], "combos": {}}), encoding="utf-8"
+    )
+    frame = _frame([{"type.text": "Rush", "rush": True}, {"type.text": "Rush", "rush": False}])
+    findings = combo_drift.run("toy", frame, _ctx("toy"))
+    assert len(findings) == 1
+    assert "no combinations" in findings[0].message
+    assert findings[0].metric is None  # not a per-combination count
