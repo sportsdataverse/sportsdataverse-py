@@ -26,7 +26,9 @@ from sportsdataverse._fox_layout import (
     parse_standings,
     parse_team_gamelog,
     parse_team_stats,
+    parse_teams,
 )
+from sportsdataverse.errors import NoESPNDataError
 
 __all__ = [
     "fox_mbb_pbp",
@@ -37,6 +39,8 @@ __all__ = [
     "fox_mbb_team_gamelog",
     "fox_mbb_standings",
     "fox_mbb_league_leaders",
+    "fox_mbb_teams",
+    "fox_mbb_teams_all",
 ]
 
 _SPORT = "cbk"
@@ -414,3 +418,159 @@ def fox_mbb_league_leaders(
     """
     raw = fox_get(f"{_SPORT}/league/stats-con/{who}/{category}/{page}", **kwargs)
     return frame(parse_league_leaders(raw), return_as_pandas) if return_parsed else raw
+
+
+_TEAMS_SCHEMA = {"fox_team_id": pl.Utf8, "fox_team_name": pl.Utf8, "fox_section": pl.Utf8}
+
+
+def _teams_frame(rows: "list[dict[str, Any]]", return_as_pandas: bool) -> Union[pl.DataFrame, "pd.DataFrame"]:
+    # Schema on EVERY path: parse_teams can emit None for fox_team_name /
+    # fox_section, and an all-null column would otherwise infer Null while the
+    # empty path infers Utf8 -- an unstable schema for crosswalk consumers.
+    df = pl.DataFrame(rows, schema=_TEAMS_SCHEMA)
+    return df.to_pandas() if return_as_pandas else df
+
+
+@overload
+def fox_mbb_teams(
+    team_id: Union[int, str] = ..., *, return_parsed: Literal[False], return_as_pandas: bool = ..., **kwargs: Any
+) -> Dict[str, Any]: ...
+@overload
+def fox_mbb_teams(
+    team_id: Union[int, str] = ...,
+    *,
+    return_parsed: Literal[True] = ...,
+    return_as_pandas: Literal[True],
+    **kwargs: Any,
+) -> "pd.DataFrame": ...
+@overload
+def fox_mbb_teams(
+    team_id: Union[int, str] = ...,
+    *,
+    return_parsed: Literal[True] = ...,
+    return_as_pandas: Literal[False] = ...,
+    **kwargs: Any,
+) -> pl.DataFrame: ...
+def fox_mbb_teams(
+    team_id: Union[int, str] = "150",
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs: Any,
+) -> Union[pl.DataFrame, "pd.DataFrame", Dict[str, Any]]:
+    """MBB team directory for one seed team's conference.
+
+    College basketball standings are per-conference, so one call returns only
+    the seed team's league. Use :func:`fox_mbb_teams_all` for the full
+    directory the hoopR MBB team crosswalk consumes.
+
+    Args:
+        team_id: Seed Fox Bifrost team id whose standings page is read.
+            Defaults to ``"150"``.
+        return_parsed: If ``True`` (default) flatten the standings to the team
+            directory; if ``False`` return the raw JSON ``dict``.
+        return_as_pandas: If ``True`` return a pandas DataFrame; otherwise
+            polars. Ignored when ``return_parsed=False``.
+        **kwargs: Forwarded to the underlying HTTP getter.
+
+    Returns:
+        A polars DataFrame (default), a pandas DataFrame when
+        ``return_as_pandas=True``, or the raw JSON ``dict`` when
+        ``return_parsed=False``.
+
+    Raises:
+        sportsdataverse.errors.NoESPNDataError: Fox returned 404 for the requested id.
+        requests.exceptions.RequestException: Connection-level failure after
+            ``dl_utils.download`` exhausts its retries.
+
+    Example:
+        Fetch one conference's team directory::
+
+            from sportsdataverse.mbb import fox_mbb_teams
+            df = fox_mbb_teams("150")
+
+        See Also:
+            * :func:`fox_mbb_teams_all` - Python alternative in this package for
+              the full cross-conference directory (this call covers one league)
+            * `hoopR`_ - R sister package for men's college basketball
+            * `Fox Sports`_ - data origin
+
+        .. _hoopR: https://hoopR.sportsdataverse.org
+        .. _Fox Sports: https://www.foxsports.com
+    """
+    raw = fox_get(f"{_SPORT}/team/{team_id}/standings", **kwargs)
+    return _teams_frame(parse_teams(raw), return_as_pandas) if return_parsed else raw
+
+
+def fox_mbb_teams_all(
+    max_id: int = 500,
+    max_calls: int = 60,
+    *,
+    return_as_pandas: bool = False,
+    **kwargs: Any,
+) -> Union[pl.DataFrame, "pd.DataFrame"]:
+    """Full MBB team directory by walking seed ids across conferences.
+
+    A single :func:`fox_mbb_teams` call only returns the seed team's
+    conference, so this walks candidate team ids (skipping ids already seen in
+    an earlier conference) and unions the results, spending at most
+    ``max_calls`` standings fetches. Mirrors ``fox_wbb_teams_all``.
+
+    Args:
+        max_id: Highest candidate team id to try. Defaults to ``500``.
+        max_calls: Budget of standings fetches. Defaults to ``60``.
+        return_as_pandas: If ``True`` return a pandas DataFrame; otherwise
+            polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
+
+    Returns:
+        A polars DataFrame (default) or pandas DataFrame, one row per team:
+        ``fox_team_id`` / ``fox_team_name`` / ``fox_section``.
+
+    Raises:
+        requests.exceptions.RequestException: Connection-level failure after
+            ``dl_utils.download`` exhausts its retries. A 404 on an individual
+            candidate id (``NoESPNDataError``) is expected during the scan and is
+            skipped; every other failure propagates rather than silently
+            truncating the directory.
+
+    Example:
+        Build the full directory::
+
+            from sportsdataverse.mbb import fox_mbb_teams_all
+            df = fox_mbb_teams_all()
+
+        Pipeline next step (one line)::
+
+            df.group_by("fox_section").len().sort("len", descending=True).head()
+
+        See Also:
+            * :func:`fox_mbb_teams` - Python alternative in this package for a
+              single conference (one fetch instead of this scan)
+            * `hoopR`_ - R sister package for men's college basketball
+            * `Fox Sports`_ - data origin
+
+        .. _hoopR: https://hoopR.sportsdataverse.org
+        .. _Fox Sports: https://www.foxsports.com
+    """
+    seen: "set[str]" = set()
+    rows: "list[dict[str, Any]]" = []
+    calls = 0
+    for cand in range(1, max_id + 1):
+        if calls >= max_calls:
+            break
+        if str(cand) in seen:
+            continue
+        try:
+            part = parse_teams(fox_get(f"{_SPORT}/team/{cand}/standings", **kwargs))
+        except NoESPNDataError:
+            # Only "this candidate id does not exist" is expected while scanning.
+            # Transport / auth / rate-limit failures must NOT be laundered into an
+            # empty directory the caller can't tell apart from a valid scan.
+            part = []
+        calls += 1
+        for r in part:
+            if r["fox_team_id"] not in seen:
+                seen.add(r["fox_team_id"])
+                rows.append(r)
+    return _teams_frame(rows, return_as_pandas)

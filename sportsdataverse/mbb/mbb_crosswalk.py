@@ -35,6 +35,7 @@ from sportsdataverse._crosswalk_basketball_sources import (
     bart_super_sked,
     espn_scoreboard_games,
     espn_team_directory,
+    require_source,
 )
 
 __all__ = [
@@ -451,6 +452,13 @@ def mbb_team_crosswalk(
         ``conference_name`` column -- sdv-py's ``espn_mbb_teams()`` does not
         ship conference labels.
 
+    Raises:
+        CrosswalkSourceError: A source that was not passed in pre-fetched could
+            not be produced (Fox or Torvik). Building on a missing source would
+            emit a well-formed crosswalk whose ``fox_*`` / ``bart_*`` columns
+            are silently all-null, so it fails here instead. Pass an explicit
+            empty frame (``fox=pl.DataFrame()``) to opt a source out.
+
     Example:
         Quick start::
 
@@ -475,22 +483,27 @@ def mbb_team_crosswalk(
         .. _Bart Torvik: https://barttorvik.com
     """
     from sportsdataverse.mbb.mbb_schedule import most_recent_mbb_season
-    from sportsdataverse.mbb.torvik import torvik_ratings
 
     season = int(season) if season is not None else most_recent_mbb_season()
     espn = espn_team_directory("mbb", season=season, **kwargs)
     if fox is None:
-        try:
+
+        def _fox() -> Any:
             from sportsdataverse.mbb.mbb_fox_ext import fox_mbb_teams_all
 
-            fox = fox_mbb_teams_all(**kwargs)
-        except Exception:
-            fox = None
+            return fox_mbb_teams_all(**kwargs)
+
+        fox = require_source("fox_mbb_teams_all()", _fox)
     if bart is None:
-        try:
-            bart = torvik_ratings(year=season, **kwargs)
-        except Exception:
-            bart = None
+        # The provider import lives inside the callable so a missing/broken
+        # torvik module surfaces as CrosswalkSourceError, and so a caller who
+        # supplied `bart` never pays for (or trips over) the import at all.
+        def _bart() -> Any:
+            from sportsdataverse.mbb.torvik import torvik_ratings
+
+            return torvik_ratings(year=season, **kwargs)
+
+        bart = require_source(f"torvik_ratings(year={season})", _bart)
     out = _assemble_team_crosswalk(espn, fox, bart, kenpom, season)
     return out.to_pandas() if return_as_pandas else out
 

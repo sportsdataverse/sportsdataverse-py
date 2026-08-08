@@ -25,7 +25,11 @@ from sportsdataverse._common_crosswalk_basketball import (
     normalize_team,
     str_id,
 )
-from sportsdataverse._crosswalk_basketball_sources import espn_scoreboard_games, espn_team_directory
+from sportsdataverse._crosswalk_basketball_sources import (
+    espn_scoreboard_games,
+    espn_team_directory,
+    require_source,
+)
 
 __all__ = [
     "wnba_team_crosswalk",
@@ -261,6 +265,12 @@ def wnba_team_crosswalk(
         ``pl.DataFrame`` (or pandas), one row per ESPN team, with
         :data:`TEAM_COLUMNS`.
 
+    Raises:
+        CrosswalkSourceError: A source that was not passed in pre-fetched could
+            not be produced (Fox or the Stats schedule). Building on a missing
+            source would emit a well-formed crosswalk whose ``fox_*`` /
+            ``wnba_*`` columns are silently all-null, so it fails here instead.
+
     Note:
         ``stats.wnba.com`` TLS-fingerprint-blocks plain ``requests`` and hangs
         on datacenter IPs; the live path needs ``curl_cffi`` and a residential
@@ -296,12 +306,13 @@ def wnba_team_crosswalk(
     if stats is None:
         stats = stats_schedule_games("wnba", season, teams=True, **kwargs)
     if fox is None:
-        try:
+
+        def _fox() -> Any:
             from sportsdataverse.wnba.wnba_fox_ext import fox_wnba_teams
 
-            fox = fox_wnba_teams(**kwargs)
-        except Exception:
-            fox = None
+            return fox_wnba_teams(**kwargs)
+
+        fox = require_source("fox_wnba_teams()", _fox)
     out = _assemble_team_crosswalk(espn, stats, fox, season)
     return out.to_pandas() if return_as_pandas else out
 

@@ -1,4 +1,4 @@
-"""Offline tests for the Fox Bifrost WBB/WNBA extensions (crosswalk prerequisites).
+"""Offline tests for the Fox Bifrost WBB/WNBA/NBA extensions (crosswalk prerequisites).
 
 Run against committed real captures (see ``tests/fixtures/fox/README.md``) —
 no network. The teams frame (``fox_team_id`` / ``fox_team_name`` /
@@ -11,6 +11,7 @@ import json
 from pathlib import Path
 
 import polars as pl
+import pytest
 
 import sportsdataverse._fox_layout as fox_layout
 from sportsdataverse._fox_layout import parse_teams
@@ -31,6 +32,33 @@ def test_parse_teams_wnba_full_league():
     assert len(ids) == len(set(ids)), "fox_team_id must be de-duplicated"
     assert {"Atlanta Dream", "Minnesota Lynx"}.issubset({r["fox_team_name"] for r in rows})
     assert all(set(r) == set(TEAMS_COLS) for r in rows)
+
+
+def test_parse_teams_nba_full_league():
+    rows = parse_teams(_load("nba_team_1_standings.json"))
+    assert len(rows) == 30, "one NBA standings payload carries the whole league"
+    ids = [r["fox_team_id"] for r in rows]
+    assert len(ids) == len(set(ids)), "fox_team_id must be de-duplicated"
+    # The crosswalk joins on the normalized full name, so both must be populated
+    # for every team -- an all-null fox_team_name is what a missing wrapper looked
+    # like downstream.
+    assert all(r["fox_team_id"] and r["fox_team_name"] for r in rows)
+    assert {"Boston Celtics", "Los Angeles Lakers"}.issubset({r["fox_team_name"] for r in rows})
+
+
+def test_fox_nba_teams_offline(monkeypatch):
+    from sportsdataverse.nba import fox_nba_teams
+
+    payload = _load("nba_team_1_standings.json")
+    monkeypatch.setattr(fox_layout, "_get", lambda url, **kw: payload)
+    df = fox_nba_teams()
+    assert isinstance(df, pl.DataFrame)
+    assert df.columns == TEAMS_COLS
+    assert df.height == 30
+    assert df.schema["fox_team_id"] == pl.Utf8
+    assert df["fox_team_id"].null_count() == 0
+    assert df["fox_team_name"].null_count() == 0
+    assert isinstance(fox_nba_teams(return_parsed=False), dict)
 
 
 def test_parse_teams_wcbk_conference_section():
@@ -78,6 +106,43 @@ def test_fox_teams_empty_payload_keeps_schema(monkeypatch):
     df = fox_wnba_teams()
     assert df.columns == TEAMS_COLS
     assert len(df) == 0
+
+
+TEAMS_SCHEMA = {"fox_team_id": pl.Utf8, "fox_team_name": pl.Utf8, "fox_section": pl.Utf8}
+
+
+@pytest.mark.parametrize(
+    ("league", "getter"),
+    [
+        ("mbb", "fox_mbb_teams"),
+        ("nba", "fox_nba_teams"),
+        ("wbb", "fox_wbb_teams"),
+        ("wnba", "fox_wnba_teams"),
+    ],
+)
+@pytest.mark.parametrize("shape", ["empty", "all_null", "populated"])
+def test_fox_teams_dtypes_are_stable_across_shapes(monkeypatch, league, getter, shape):
+    """Same dtypes whether the result is empty, all-null, or fully populated.
+
+    ``parse_teams`` emits ``None`` for ``fox_team_name`` / ``fox_section`` when the
+    payload omits them; without an explicit schema an all-null column infers
+    ``Null`` while the empty path infers ``Utf8`` -- an unstable schema that
+    breaks the crosswalk joins keyed on these columns.
+    """
+    import importlib
+
+    ext = importlib.import_module(f"sportsdataverse.{league}.{league}_fox_ext")
+    rows = {
+        "empty": [],
+        "all_null": [{"fox_team_id": "1", "fox_team_name": None, "fox_section": None}],
+        "populated": [{"fox_team_id": "1", "fox_team_name": "Some Team", "fox_section": "Some Conf"}],
+    }[shape]
+    monkeypatch.setattr(ext, "parse_teams", lambda raw: rows)
+    monkeypatch.setattr(fox_layout, "_get", lambda url, **kw: {})
+    df = getattr(ext, getter)("1")
+    assert df.columns == TEAMS_COLS
+    assert dict(df.schema) == TEAMS_SCHEMA
+    assert df.height == len(rows)
 
 
 def test_fox_wbb_teams_all_budget_and_dedupe(monkeypatch):

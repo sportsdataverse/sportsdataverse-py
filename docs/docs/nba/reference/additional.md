@@ -1851,6 +1851,36 @@ from sportsdataverse.nba import fox_nba_team_stats
 df = fox_nba_team_stats("...")
 ```
 
+### `fox_nba_teams(team_id: 'Union[int, str]' = '1', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_nba_teams}
+
+NBA team directory (`fox_team_id` / `fox_team_name` / `fox_section`).
+
+Derived from the standings endpoint (one league-wide payload of all 30
+teams), this is the frame the hoopR NBA team crosswalk consumes.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `team_id` | `Union[int, str]` | `'1'` | Seed Fox Bifrost team id whose standings page is read. Defaults to `"1"` -- any NBA team id returns the whole league. |
+| `return_parsed` | `bool` | `True` | If `True` (default) flatten the standings to the team directory; if `False` return the raw JSON `dict`. |
+| `return_as_pandas` | `bool` | `False` | If `True` return a pandas DataFrame; otherwise polars. Ignored when `return_parsed=False`. |
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.nba import fox_nba_teams
+df = fox_nba_teams()
+
+# Pipeline next step (one line)
+
+df.select("fox_team_id", "fox_team_name").head()
+```
+
 ### `get_constants(league_id: 'str') -> 'LeagueConstants'` {#get_constants}
 
 Return the `LeagueConstants` for a `league_id`.

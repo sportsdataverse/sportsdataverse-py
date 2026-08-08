@@ -12,7 +12,7 @@ sidebar_label: NBA
 | [ESPN FPI API (fitt v3)](reference/fitt) | 1 | `https://site.web.api.espn.com/apis/fitt/v3/sports` |
 | [NBA Stats API (stats.nba.com)](reference/nba_stats) | 112 | `https://stats.nba.com` |
 | [Dataset loaders](reference/loaders) | 34 | sportsdataverse-data releases |
-| [Additional functions](reference/additional) | 131 | hand-written wrappers, loaders & helpers |
+| [Additional functions](reference/additional) | 132 | hand-written wrappers, loaders & helpers |
 
 ## Examples
 
