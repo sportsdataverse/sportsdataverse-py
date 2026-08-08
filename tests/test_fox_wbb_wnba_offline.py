@@ -1,4 +1,4 @@
-"""Offline tests for the Fox Bifrost WBB/WNBA extensions (crosswalk prerequisites).
+"""Offline tests for the Fox Bifrost WBB/WNBA/NBA extensions (crosswalk prerequisites).
 
 Run against committed real captures (see ``tests/fixtures/fox/README.md``) —
 no network. The teams frame (``fox_team_id`` / ``fox_team_name`` /
@@ -31,6 +31,33 @@ def test_parse_teams_wnba_full_league():
     assert len(ids) == len(set(ids)), "fox_team_id must be de-duplicated"
     assert {"Atlanta Dream", "Minnesota Lynx"}.issubset({r["fox_team_name"] for r in rows})
     assert all(set(r) == set(TEAMS_COLS) for r in rows)
+
+
+def test_parse_teams_nba_full_league():
+    rows = parse_teams(_load("nba_team_1_standings.json"))
+    assert len(rows) == 30, "one NBA standings payload carries the whole league"
+    ids = [r["fox_team_id"] for r in rows]
+    assert len(ids) == len(set(ids)), "fox_team_id must be de-duplicated"
+    # The crosswalk joins on the normalized full name, so both must be populated
+    # for every team -- an all-null fox_team_name is what a missing wrapper looked
+    # like downstream.
+    assert all(r["fox_team_id"] and r["fox_team_name"] for r in rows)
+    assert {"Boston Celtics", "Los Angeles Lakers"}.issubset({r["fox_team_name"] for r in rows})
+
+
+def test_fox_nba_teams_offline(monkeypatch):
+    from sportsdataverse.nba import fox_nba_teams
+
+    payload = _load("nba_team_1_standings.json")
+    monkeypatch.setattr(fox_layout, "_get", lambda url, **kw: payload)
+    df = fox_nba_teams()
+    assert isinstance(df, pl.DataFrame)
+    assert df.columns == TEAMS_COLS
+    assert df.height == 30
+    assert df.schema["fox_team_id"] == pl.Utf8
+    assert df["fox_team_id"].null_count() == 0
+    assert df["fox_team_name"].null_count() == 0
+    assert isinstance(fox_nba_teams(return_parsed=False), dict)
 
 
 def test_parse_teams_wcbk_conference_section():

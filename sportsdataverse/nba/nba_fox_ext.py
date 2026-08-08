@@ -26,6 +26,7 @@ from sportsdataverse._fox_layout import (
     parse_standings,
     parse_team_gamelog,
     parse_team_stats,
+    parse_teams,
 )
 
 __all__ = [
@@ -37,6 +38,7 @@ __all__ = [
     "fox_nba_team_gamelog",
     "fox_nba_standings",
     "fox_nba_league_leaders",
+    "fox_nba_teams",
 ]
 
 _SPORT = "nba"
@@ -442,3 +444,84 @@ def fox_nba_league_leaders(
     """
     raw = fox_get(f"{_SPORT}/league/stats-con/{who}/{category}/{page}", **kwargs)
     return frame(parse_league_leaders(raw), return_as_pandas) if return_parsed else raw
+
+
+_TEAMS_SCHEMA = {"fox_team_id": pl.Utf8, "fox_team_name": pl.Utf8, "fox_section": pl.Utf8}
+
+
+@overload
+def fox_nba_teams(
+    team_id: Union[int, str] = ..., *, return_parsed: Literal[False], return_as_pandas: bool = ..., **kwargs: Any
+) -> Dict[str, Any]: ...
+@overload
+def fox_nba_teams(
+    team_id: Union[int, str] = ...,
+    *,
+    return_parsed: Literal[True] = ...,
+    return_as_pandas: Literal[True],
+    **kwargs: Any,
+) -> "pd.DataFrame": ...
+@overload
+def fox_nba_teams(
+    team_id: Union[int, str] = ...,
+    *,
+    return_parsed: Literal[True] = ...,
+    return_as_pandas: Literal[False] = ...,
+    **kwargs: Any,
+) -> pl.DataFrame: ...
+def fox_nba_teams(
+    team_id: Union[int, str] = "1",
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs: Any,
+) -> Union[pl.DataFrame, "pd.DataFrame", Dict[str, Any]]:
+    """NBA team directory (``fox_team_id`` / ``fox_team_name`` / ``fox_section``).
+
+    Derived from the standings endpoint (one league-wide payload of all 30
+    teams), this is the frame the hoopR NBA team crosswalk consumes.
+
+    Args:
+        team_id: Seed Fox Bifrost team id whose standings page is read.
+            Defaults to ``"1"`` -- any NBA team id returns the whole league.
+        return_parsed: If ``True`` (default) flatten the standings to the team
+            directory; if ``False`` return the raw JSON ``dict``.
+        return_as_pandas: If ``True`` return a pandas DataFrame; otherwise
+            polars. Ignored when ``return_parsed=False``.
+        **kwargs: Forwarded to the underlying HTTP getter.
+
+    Returns:
+        A polars DataFrame (default), a pandas DataFrame when
+        ``return_as_pandas=True``, or the raw JSON ``dict`` when
+        ``return_parsed=False``.
+
+    Raises:
+        sportsdataverse.errors.NoESPNDataError: Fox returned 404 for the requested id.
+        requests.exceptions.RequestException: Connection-level failure after
+            ``dl_utils.download`` exhausts its retries.
+
+    Example:
+        Fetch the league team directory::
+
+            from sportsdataverse.nba import fox_nba_teams
+            df = fox_nba_teams()
+
+        Pipeline next step (one line)::
+
+            df.select("fox_team_id", "fox_team_name").head()
+
+        See Also:
+            * `hoopR`_ - R sister package for the NBA
+            * `nba_api`_ - Python alternative (stats.nba.com)
+            * `Fox Sports`_ - data origin
+
+        .. _hoopR: https://hoopR.sportsdataverse.org
+        .. _nba_api: https://github.com/swar/nba_api
+        .. _Fox Sports: https://www.foxsports.com
+    """
+    raw = fox_get(f"{_SPORT}/team/{team_id}/standings", **kwargs)
+    if not return_parsed:
+        return raw
+    rows = parse_teams(raw)
+    df = pl.DataFrame(rows, schema=_TEAMS_SCHEMA) if not rows else pl.DataFrame(rows)
+    return df.to_pandas() if return_as_pandas else df

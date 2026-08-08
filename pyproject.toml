@@ -435,6 +435,8 @@ files = [
     "sportsdataverse/wnba/wnba_stats_runtime.py",
     "sportsdataverse/wnba/wnba_stats_parsers.py",
     "sportsdataverse/wnba/wnba_fox_ext.py",
+    "sportsdataverse/nba/nba_fox_ext.py",
+    "sportsdataverse/mbb/mbb_fox_ext.py",
     "sportsdataverse/wnba/wnba_engine.py",
     "sportsdataverse/nbagl/nbagl_engine.py",
     "sportsdataverse/nhl/nhl_prediction_constants.py",

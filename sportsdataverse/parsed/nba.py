@@ -142,6 +142,7 @@ from sportsdataverse.nba import fox_nba_standings as _raw_fox_nba_standings
 from sportsdataverse.nba import fox_nba_team_gamelog as _raw_fox_nba_team_gamelog
 from sportsdataverse.nba import fox_nba_team_roster as _raw_fox_nba_team_roster
 from sportsdataverse.nba import fox_nba_team_stats as _raw_fox_nba_team_stats
+from sportsdataverse.nba import fox_nba_teams as _raw_fox_nba_teams
 from sportsdataverse.nba import nba_stats_leaguedashptstats as _raw_nba_stats_leaguedashptstats
 from sportsdataverse.nba import AdjRapmModel as AdjRapmModel  # noqa: F401
 from sportsdataverse.nba import AgingCurve as AgingCurve  # noqa: F401
@@ -492,6 +493,7 @@ __all__ = [
     "fox_nba_team_gamelog",
     "fox_nba_team_roster",
     "fox_nba_team_stats",
+    "fox_nba_teams",
     "get_constants",
     "get_shrinkage_k",
     "helper_nba_athlete_items",
@@ -2302,6 +2304,20 @@ def fox_nba_team_stats(*args, **kwargs):
     """
     kwargs.setdefault("return_parsed", True)
     return _raw_fox_nba_team_stats(*args, **kwargs)
+
+
+def fox_nba_teams(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nba.fox_nba_teams``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.nba.fox_nba_teams` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nba.fox_nba_teams` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_fox_nba_teams(*args, **kwargs)
 
 
 def nba_stats_leaguedashptstats(*args, **kwargs):

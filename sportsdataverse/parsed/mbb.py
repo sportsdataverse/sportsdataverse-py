@@ -148,6 +148,7 @@ from sportsdataverse.mbb import fox_mbb_standings as _raw_fox_mbb_standings
 from sportsdataverse.mbb import fox_mbb_team_gamelog as _raw_fox_mbb_team_gamelog
 from sportsdataverse.mbb import fox_mbb_team_roster as _raw_fox_mbb_team_roster
 from sportsdataverse.mbb import fox_mbb_team_stats as _raw_fox_mbb_team_stats
+from sportsdataverse.mbb import fox_mbb_teams as _raw_fox_mbb_teams
 from sportsdataverse.mbb import torvik_ratings as _raw_torvik_ratings
 from sportsdataverse.mbb import torvik_team_factors as _raw_torvik_team_factors
 from sportsdataverse.mbb import AssistEvent as AssistEvent  # noqa: F401
@@ -319,6 +320,7 @@ from sportsdataverse.mbb import fit_shrinkage_k as fit_shrinkage_k  # noqa: F401
 from sportsdataverse.mbb import fix_combos as fix_combos  # noqa: F401
 from sportsdataverse.mbb import fix_possible_score_swap_bug as fix_possible_score_swap_bug  # noqa: F401
 from sportsdataverse.mbb import flatten_json_iterative as flatten_json_iterative  # noqa: F401
+from sportsdataverse.mbb import fox_mbb_teams_all as fox_mbb_teams_all  # noqa: F401
 from sportsdataverse.mbb import fuzzy_box_match as fuzzy_box_match  # noqa: F401
 from sportsdataverse.mbb import get_ascending_time as get_ascending_time  # noqa: F401
 from sportsdataverse.mbb import get_box_lineup as get_box_lineup  # noqa: F401
@@ -852,6 +854,8 @@ __all__ = [
     "fox_mbb_team_gamelog",
     "fox_mbb_team_roster",
     "fox_mbb_team_stats",
+    "fox_mbb_teams",
+    "fox_mbb_teams_all",
     "fuzzy_box_match",
     "get_ascending_time",
     "get_box_lineup",
@@ -2842,6 +2846,20 @@ def fox_mbb_team_stats(*args, **kwargs):
     """
     kwargs.setdefault("return_parsed", True)
     return _raw_fox_mbb_team_stats(*args, **kwargs)
+
+
+def fox_mbb_teams(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mbb.fox_mbb_teams``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.mbb.fox_mbb_teams` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mbb.fox_mbb_teams` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_fox_mbb_teams(*args, **kwargs)
 
 
 def torvik_ratings(*args, **kwargs):

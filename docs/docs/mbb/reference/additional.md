@@ -5332,6 +5332,65 @@ from sportsdataverse.mbb import fox_mbb_team_stats
 df = fox_mbb_team_stats("...")
 ```
 
+### `fox_mbb_teams(team_id: 'Union[int, str]' = '150', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_mbb_teams}
+
+MBB team directory for one seed team's conference.
+
+College basketball standings are per-conference, so one call returns only
+the seed team's league. Use `fox_mbb_teams_all` for the full
+directory the hoopR MBB team crosswalk consumes.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `team_id` | `Union[int, str]` | `'150'` | Seed Fox Bifrost team id whose standings page is read. Defaults to `"150"`. |
+| `return_parsed` | `bool` | `True` | If `True` (default) flatten the standings to the team directory; if `False` return the raw JSON `dict`. |
+| `return_as_pandas` | `bool` | `False` | If `True` return a pandas DataFrame; otherwise polars. Ignored when `return_parsed=False`. |
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.mbb import fox_mbb_teams
+df = fox_mbb_teams("150")
+```
+
+### `fox_mbb_teams_all(max_id: 'int' = 500, max_calls: 'int' = 60, *, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#fox_mbb_teams_all}
+
+Full MBB team directory by walking seed ids across conferences.
+
+A single `fox_mbb_teams` call only returns the seed team's
+conference, so this walks candidate team ids (skipping ids already seen in
+an earlier conference) and unions the results, spending at most
+`max_calls` standings fetches. Mirrors `fox_wbb_teams_all`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `max_id` | `int` | `500` | Highest candidate team id to try. Defaults to `500`. |
+| `max_calls` | `int` | `60` | Budget of standings fetches. Defaults to `60`. |
+| `return_as_pandas` | `bool` | `False` | If `True` return a pandas DataFrame; otherwise polars. |
+
+**Returns**
+
+A polars DataFrame (default) or pandas DataFrame, one row per team: `fox_team_id` / `fox_team_name` / `fox_section`.
+
+**Example**
+
+```python
+from sportsdataverse.mbb import fox_mbb_teams_all
+df = fox_mbb_teams_all()
+
+# Pipeline next step (one line)
+
+df.group_by("fox_section").len().sort("len", descending=True).head()
+```
+
 ### `fuzzy_box_match(candidate: 'str', unassigned_box_names: 'list[str]', team_context: 'str') -> 'Union[str, FuzzyMatchError]'` {#fuzzy_box_match}
 
 Pick the single unassigned box-score name a mis-spelled play-by-play
