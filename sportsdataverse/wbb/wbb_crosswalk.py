@@ -36,6 +36,7 @@ from sportsdataverse._crosswalk_basketball_sources import (
     bart_super_sked,
     espn_scoreboard_games,
     espn_team_directory,
+    require_source,
 )
 
 __all__ = [
@@ -372,6 +373,13 @@ def wbb_team_crosswalk(
         ``conference_name`` column -- sdv-py's ``espn_wbb_teams()`` does not
         ship conference labels.
 
+    Raises:
+        CrosswalkSourceError: A source that was not passed in pre-fetched could
+            not be produced (Fox or Torvik). Building on a missing source would
+            emit a well-formed crosswalk whose ``fox_*`` / ``bart_*`` columns
+            are silently all-null, so it fails here instead. Pass an explicit
+            empty frame (``fox=pl.DataFrame()``) to opt a source out.
+
     Example:
         Quick start::
 
@@ -401,17 +409,15 @@ def wbb_team_crosswalk(
     season = int(season) if season is not None else most_recent_wbb_season()
     espn = espn_team_directory("wbb", season=season, **kwargs)
     if fox is None:
-        from sportsdataverse.wbb.wbb_fox_ext import fox_wbb_teams_all
 
-        try:
-            fox = fox_wbb_teams_all(**kwargs)
-        except Exception:
-            fox = None
+        def _fox() -> Any:
+            from sportsdataverse.wbb.wbb_fox_ext import fox_wbb_teams_all
+
+            return fox_wbb_teams_all(**kwargs)
+
+        fox = require_source("fox_wbb_teams_all()", _fox)
     if bart is None:
-        try:
-            bart = bart_wbb_ratings(year=season, **kwargs)
-        except Exception:
-            bart = None
+        bart = require_source(f"bart_wbb_ratings(year={season})", lambda: bart_wbb_ratings(year=season, **kwargs))
     out = _assemble_team_crosswalk(espn, fox, bart, season)
     return out.to_pandas() if return_as_pandas else out
 

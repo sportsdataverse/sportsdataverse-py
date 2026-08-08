@@ -26,7 +26,11 @@ from sportsdataverse._common_crosswalk_basketball import (
     normalize_team,
     str_id,
 )
-from sportsdataverse._crosswalk_basketball_sources import espn_scoreboard_games, espn_team_directory
+from sportsdataverse._crosswalk_basketball_sources import (
+    espn_scoreboard_games,
+    espn_team_directory,
+    require_source,
+)
 
 __all__ = [
     "nba_team_crosswalk",
@@ -239,18 +243,69 @@ def _assemble_schedule_crosswalk(
     )
 
 
-def _stats_team_directory(season: int, **kwargs: Any) -> Optional[pl.DataFrame]:
-    """NBA Stats team directory joined to ESPN ids (hoopR ``nba_teams()`` recipe)."""
-    from sportsdataverse.nba.nba_stats import nba_stats_leaguestandingsv3
+def _stats_team_tricodes(season: int, **kwargs: Any) -> Dict[str, str]:
+    """``{stats_team_id: tricode}`` from ``leaguegamelog`` (hoopR's join source).
 
-    try:
-        standings = nba_stats_leaguestandingsv3(season=f"{season - 1}-{str(season)[-2:]}", **kwargs)
-    except Exception:
-        return None
-    if isinstance(standings, dict):
-        standings = standings.get("Standings")
-    if standings is None or not isinstance(standings, pl.DataFrame) or standings.height == 0:
-        return None
+    ``leaguestandingsv3`` has no abbreviation column, so hoopR's ``nba_teams()``
+    picks the tricode up from the game log. An empty log means the season has
+    not tipped off yet; hoopR falls back one season for exactly that case and so
+    does this.
+
+    Raises:
+        CrosswalkSourceError: The game log could not be produced.
+    """
+    from sportsdataverse.nba.nba_stats import nba_stats_leaguegamelog
+
+    out: Dict[str, str] = {}
+    for year in (season, season - 1):
+        stats_season = f"{year - 1}-{str(year)[-2:]}"
+
+        # Default-bound so the closure captures this iteration's season, not the
+        # loop variable's final value.
+        def _fetch(s: str = stats_season) -> Any:
+            raw = nba_stats_leaguegamelog(league_id="00", season=s, **kwargs)
+            return raw.get("LeagueGameLog") if isinstance(raw, dict) else raw
+
+        log = require_source(f"nba_stats_leaguegamelog(season={stats_season!r})", _fetch)
+        if log.height == 0 or "team_abbreviation" not in log.columns:
+            continue
+        ids = log.select(str_id(log, "team_id")).to_series().to_list()
+        for team_id, abbr in zip(ids, log["team_abbreviation"].cast(pl.Utf8).to_list()):
+            if team_id is not None and abbr is not None:
+                out.setdefault(team_id, abbr)
+        break
+    return out
+
+
+def _stats_team_directory(season: int, **kwargs: Any) -> pl.DataFrame:
+    """NBA Stats team directory joined to ESPN ids (hoopR ``nba_teams()`` recipe).
+
+    Follows ``hoopR::nba_teams()``: ``leaguestandingsv3`` carries the city /
+    nickname / slug / conference / division, and ``leaguegamelog`` is joined on
+    ``team_id`` for the tricode -- ``leaguestandingsv3`` publishes no
+    abbreviation column at all (92 columns, none of them a tricode), which is
+    why the abbreviation needs the second call rather than being a projection
+    of the standings payload.
+
+    Raises:
+        CrosswalkSourceError: ``leaguestandingsv3`` or ``leaguegamelog`` could
+            not be produced. A standings payload that renders to zero rows is
+            provably empty (a season whose standings have not opened) and
+            returns a typed empty frame instead.
+    """
+    stats_season = f"{season - 1}-{str(season)[-2:]}"
+    label = f"nba_stats_leaguestandingsv3(season={stats_season!r})"
+
+    def _fetch() -> Any:
+        from sportsdataverse.nba.nba_stats import nba_stats_leaguestandingsv3
+
+        raw = nba_stats_leaguestandingsv3(season=stats_season, **kwargs)
+        return raw.get("Standings") if isinstance(raw, dict) else raw
+
+    standings = require_source(label, _fetch)
+    if standings.height == 0:
+        return pl.DataFrame(schema=_STATS_SCHEMA)
+    tricode = _stats_team_tricodes(season, **kwargs)
     espn = espn_team_directory("nba", **kwargs)
     espn_by_short = {
         normalize_team(name): tid
@@ -258,9 +313,10 @@ def _stats_team_directory(season: int, **kwargs: Any) -> Optional[pl.DataFrame]:
         if name is not None
     }
     names = standings.select(pl.col("team_name")).to_series().to_list()
+    stats_ids = standings.select(str_id(standings, "team_id")).to_series().to_list()
     return standings.select(
         str_id(standings, "team_id").alias("nba_team_id"),
-        pl.lit(None, dtype=pl.Utf8).alias("nba_team_abbreviation"),
+        pl.Series("nba_team_abbreviation", [tricode.get(v) for v in stats_ids], dtype=pl.Utf8),
         (pl.col("team_city") + pl.lit(" ") + pl.col("team_name")).cast(pl.Utf8).alias("nba_team_name"),
         pl.col("team_city").cast(pl.Utf8).alias("nba_team_city"),
         pl.col("team_slug").cast(pl.Utf8).alias("nba_team_slug"),
@@ -308,6 +364,12 @@ def nba_team_crosswalk(
         ``pl.DataFrame`` (or pandas), one row per ESPN team, with
         :data:`TEAM_COLUMNS`.
 
+    Raises:
+        CrosswalkSourceError: A source that was not passed in pre-fetched could
+            not be produced (Fox or the Stats endpoints). Building on a missing
+            source would emit a well-formed crosswalk whose ``fox_*`` /
+            ``nba_*`` columns are silently all-null, so it fails here instead.
+
     Note:
         ``stats.nba.com`` TLS-fingerprint-blocks plain ``requests`` and hangs
         on datacenter IPs; the live path needs ``curl_cffi`` and a residential
@@ -342,12 +404,13 @@ def nba_team_crosswalk(
     if stats is None:
         stats = _stats_team_directory(season, **kwargs)
     if fox is None:
-        try:
+
+        def _fox() -> Any:
             from sportsdataverse.nba.nba_fox_ext import fox_nba_teams
 
-            fox = fox_nba_teams(**kwargs)
-        except Exception:
-            fox = None
+            return fox_nba_teams(**kwargs)
+
+        fox = require_source("fox_nba_teams()", _fox)
     out = _assemble_team_crosswalk(espn, stats, fox, season)
     return out.to_pandas() if return_as_pandas else out
 

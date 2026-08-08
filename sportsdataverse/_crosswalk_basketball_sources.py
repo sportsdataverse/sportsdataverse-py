@@ -23,6 +23,7 @@ from sportsdataverse.errors import SportsDataverseError
 
 __all__ = [
     "CrosswalkSourceError",
+    "require_source",
     "espn_team_directory",
     "espn_scoreboard_games",
     "espn_rosters",
@@ -80,6 +81,67 @@ _TORVIK_HOST = {
     "mbb": "https://barttorvik.com",
     "wbb": "https://barttorvik.com/ncaaw",
 }
+
+
+def require_source(label: str, fetch: Callable[[], Any]) -> pl.DataFrame:
+    """Run a whole-source provider fetch, raising instead of swallowing failure.
+
+    The guard the crosswalk builders use in place of ``except Exception: x =
+    None``. A provider that *cannot be produced* -- the module is missing, the
+    import fails, the request errors, the payload will not render -- is a build
+    failure, because every downstream row then joins to nothing and the
+    crosswalk ships well-formed and entirely null. A provider that *answered
+    with no rows* is legitimate and passes straight through as a typed empty
+    frame.
+
+    Args:
+        label: Human-readable name of the fetch, quoted into the error message
+            so the failure names what was missing (e.g.
+            ``"fox_nba_teams()"``).
+        fetch: Zero-argument callable performing the fetch. Put the provider's
+            ``import`` inside it so a missing module raises here too.
+
+    Returns:
+        The ``pl.DataFrame`` the callable produced, zero rows included.
+
+    Raises:
+        CrosswalkSourceError: The callable raised, or returned something other
+            than a ``pl.DataFrame``. An inner :class:`CrosswalkSourceError`
+            (from an adapter that already reported precisely) propagates
+            unwrapped.
+
+    Example:
+        Fail loudly when a provider module is missing::
+
+            from sportsdataverse._crosswalk_basketball_sources import (
+                CrosswalkSourceError,
+                require_source,
+            )
+
+            def _fox():
+                from sportsdataverse.nba.nba_fox_ext import fox_nba_teams
+
+                return fox_nba_teams()
+
+            try:
+                fox = require_source("fox_nba_teams()", _fox)
+            except CrosswalkSourceError as exc:
+                print(f"refusing to build a crosswalk: {exc}")
+
+        See Also:
+            * `hoopR`_ -- R sister package whose crosswalks these port
+
+        .. _hoopR: https://hoopR.sportsdataverse.org
+    """
+    try:
+        out = fetch()
+    except CrosswalkSourceError:
+        raise
+    except Exception as exc:
+        raise CrosswalkSourceError(f"{label} could not be produced: {type(exc).__name__}: {exc}") from exc
+    if not isinstance(out, pl.DataFrame):
+        raise CrosswalkSourceError(f"{label} returned {type(out).__name__}, expected a polars DataFrame")
+    return out
 
 
 def _pick(df: pl.DataFrame, *candidates: str) -> pl.Expr:

@@ -28,6 +28,7 @@ from sportsdataverse._crosswalk_basketball_sources import (
     CrosswalkSourceError,
     bart_super_sked,
     espn_rosters,
+    require_source,
     stats_schedule_games,
 )
 from sportsdataverse.nba.nba_stats_parsers import parse_nba_stats_result_sets
@@ -256,3 +257,96 @@ def test_bart_super_sked_raises_when_a_payload_parses_to_nothing(monkeypatch: py
 def test_bart_super_sked_allows_a_provably_empty_season(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr("sportsdataverse.mbb.torvik_runtime._get", lambda url, **kw: "[]", raising=True)
     assert bart_super_sked("mbb", 2026).height == 0
+
+
+# ---------------------------------------------------------------------------
+# require_source -- the guard that replaced `except Exception: source = None`.
+#
+# The swallow it replaces is what hid a *missing provider module*: with no
+# `fox_nba_teams` in the package at all, the ImportError was caught and the
+# crosswalk built cleanly with silently-null fox_* columns for every team.
+# ---------------------------------------------------------------------------
+
+
+def test_require_source_passes_a_frame_through_including_an_empty_one() -> None:
+    """A source that answered with no rows is legitimate -- no raise."""
+    empty = pl.DataFrame(schema={"fox_team_id": pl.Utf8})
+    assert require_source("provider()", lambda: empty).height == 0
+    assert require_source("provider()", lambda: pl.DataFrame({"a": [1]})).height == 1
+
+
+def test_require_source_raises_on_a_missing_provider_module() -> None:
+    """The exact defect: an absent module read as a clean build."""
+
+    def _fetch() -> Any:
+        from sportsdataverse.nba.nba_fox_ext import fox_nba_teams_that_do_not_exist  # type: ignore[attr-defined]
+
+        return fox_nba_teams_that_do_not_exist()
+
+    with pytest.raises(CrosswalkSourceError, match="fox_nba_teams") as exc:
+        require_source("fox_nba_teams()", _fetch)
+    assert "ImportError" in str(exc.value), "the error must name why the source was missing"
+
+
+@pytest.mark.parametrize("boom", [TimeoutError("down"), ValueError("bad payload")])
+def test_require_source_raises_on_any_fetch_failure(boom: Exception) -> None:
+    def _fetch() -> Any:
+        raise boom
+
+    with pytest.raises(CrosswalkSourceError, match=type(boom).__name__):
+        require_source("provider()", _fetch)
+
+
+@pytest.mark.parametrize("bad", [None, {}, [], "not a frame"])
+def test_require_source_raises_when_the_result_is_not_a_frame(bad: Any) -> None:
+    with pytest.raises(CrosswalkSourceError, match="expected a polars DataFrame"):
+        require_source("provider()", lambda: bad)
+
+
+def test_require_source_propagates_an_inner_source_error_unwrapped() -> None:
+    """An adapter that already reported precisely must not be re-wrapped."""
+    inner = CrosswalkSourceError("scheduleleaguev2 returned no leagueSchedule envelope")
+
+    def _fetch() -> Any:
+        raise inner
+
+    with pytest.raises(CrosswalkSourceError) as exc:
+        require_source("provider()", _fetch)
+    assert exc.value is inner
+
+
+_ESPN_DIR_COLS = ["team_id", "abbreviation", "display_name", "short_name", "team", "mascot"]
+
+
+def _boom(*args: Any, **kwargs: Any) -> Any:
+    raise TimeoutError("fox is down")
+
+
+@pytest.mark.parametrize(
+    ("league", "target", "extra"),
+    [
+        # nba/wnba resolve Stats before Fox, so hand those in pre-fetched: only
+        # the Fox leg is under test here.
+        ("nba", "fox_nba_teams", {"stats": pl.DataFrame()}),
+        ("wnba", "fox_wnba_teams", {"stats": pl.DataFrame()}),
+        ("mbb", "fox_mbb_teams_all", {"bart": pl.DataFrame()}),
+        ("wbb", "fox_wbb_teams_all", {"bart": pl.DataFrame()}),
+    ],
+)
+def test_team_crosswalk_raises_when_fox_cannot_be_produced(
+    monkeypatch: pytest.MonkeyPatch, league: str, target: str, extra: dict
+) -> None:
+    """A dead Fox source must fail the build, not ship all-null fox_* columns."""
+    import importlib
+
+    monkeypatch.setattr(importlib.import_module(f"sportsdataverse.{league}.{league}_fox_ext"), target, _boom)
+    crosswalk = importlib.import_module(f"sportsdataverse.{league}.{league}_crosswalk")
+    # Bind the ESPN stub in the crosswalk module's own namespace -- it imported
+    # espn_team_directory by value, so patching the source module is a no-op.
+    monkeypatch.setattr(
+        crosswalk,
+        "espn_team_directory",
+        lambda *a, **k: pl.DataFrame(schema={c: pl.Utf8 for c in _ESPN_DIR_COLS}),
+    )
+    with pytest.raises(CrosswalkSourceError, match=target):
+        getattr(crosswalk, f"{league}_team_crosswalk")(season=2026, **extra)
