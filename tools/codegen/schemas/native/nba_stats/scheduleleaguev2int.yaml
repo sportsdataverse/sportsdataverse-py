@@ -1,147 +1,159 @@
 columns:
 - description: ''
-  name: arenacity
+  name: arena_city
   type: character
 - description: ''
-  name: arenaname
+  name: arena_name
   type: character
 - description: ''
-  name: arenastate
+  name: arena_state
   type: character
 - description: ''
-  name: awayteamtime
+  name: away_team_city
   type: character
 - description: ''
-  name: awayteam_losses
+  name: away_team_id
   type: integer
 - description: ''
-  name: awayteam_score
+  name: away_team_losses
   type: integer
 - description: ''
-  name: awayteam_seed
+  name: away_team_name
+  type: character
+- description: ''
+  name: away_team_score
   type: integer
 - description: ''
-  name: awayteam_teamcity
-  type: character
-- description: ''
-  name: awayteam_teamid
+  name: away_team_seed
   type: integer
 - description: ''
-  name: awayteam_teamname
+  name: away_team_slug
   type: character
 - description: ''
-  name: awayteam_teamslug
+  name: away_team_time
   type: character
 - description: ''
-  name: awayteam_teamtricode
+  name: away_team_tricode
   type: character
 - description: ''
-  name: awayteam_wins
+  name: away_team_wins
   type: integer
 - description: ''
-  name: branchlink
+  name: branch_link
   type: character
 - description: ''
   name: day
   type: character
 - description: ''
-  name: gamecode
+  name: game_code
   type: character
 - description: ''
-  name: gamedate
+  name: game_date
   type: character
 - description: ''
-  name: gamedateest
+  name: game_date_est
   type: character
 - description: ''
-  name: gamedatetimeest
+  name: game_date_time_est
   type: character
 - description: ''
-  name: gamedatetimeutc
+  name: game_date_time_utc
   type: character
 - description: ''
-  name: gamedateutc
+  name: game_date_utc
   type: character
 - description: ''
-  name: gameid
+  name: game_id
   type: character
 - description: ''
-  name: gamelabel
+  name: game_label
   type: character
 - description: ''
-  name: gamesequence
+  name: game_sequence
   type: integer
 - description: ''
-  name: gamestatus
+  name: game_status
   type: integer
 - description: ''
-  name: gamestatustext
+  name: game_status_text
   type: character
 - description: ''
-  name: gamesublabel
+  name: game_sub_label
   type: character
 - description: ''
-  name: gamesubtype
+  name: game_subtype
   type: character
 - description: ''
-  name: gametimeest
+  name: game_time_est
   type: character
 - description: ''
-  name: gametimeutc
+  name: game_time_utc
   type: character
 - description: ''
-  name: hometeamtime
+  name: home_team_city
   type: character
 - description: ''
-  name: hometeam_losses
+  name: home_team_id
   type: integer
 - description: ''
-  name: hometeam_score
+  name: home_team_losses
   type: integer
 - description: ''
-  name: hometeam_seed
+  name: home_team_name
+  type: character
+- description: ''
+  name: home_team_score
   type: integer
 - description: ''
-  name: hometeam_teamcity
-  type: character
-- description: ''
-  name: hometeam_teamid
+  name: home_team_seed
   type: integer
 - description: ''
-  name: hometeam_teamname
+  name: home_team_slug
   type: character
 - description: ''
-  name: hometeam_teamslug
+  name: home_team_time
   type: character
 - description: ''
-  name: hometeam_teamtricode
+  name: home_team_tricode
   type: character
 - description: ''
-  name: hometeam_wins
+  name: home_team_wins
   type: integer
 - description: ''
-  name: ifnecessary
+  name: if_necessary
   type: character
 - description: ''
-  name: isneutral
+  name: is_neutral
   type: logical
 - description: ''
-  name: monthnum
+  name: league_id
+  type: character
+- description: ''
+  name: month_num
   type: integer
 - description: ''
-  name: postponedstatus
+  name: postponed_status
   type: character
 - description: ''
-  name: seriesgamenumber
+  name: season
   type: character
 - description: ''
-  name: seriestext
+  name: season_type_description
   type: character
 - description: ''
-  name: weekname
+  name: season_type_id
   type: character
 - description: ''
-  name: weeknumber
+  name: series_game_number
+  type: character
+- description: ''
+  name: series_text
+  type: character
+- description: ''
+  name: week_name
+  type: character
+- description: ''
+  name: week_number
   type: integer
 kind: dataframe
 schema: scheduleleaguev2int

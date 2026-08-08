@@ -8660,97 +8660,113 @@ schedule_tied:
   schedule_date: The calendar date grouping tied (suspended and resumed) games in this response row, as returned by the MLB
     Stats API schedule endpoint.
 scheduleleaguev2:
-  arenacity: Schedule metadata for arenacity in the NBA or WNBA Stats schedule feed.
-  arenaname: Display name for arenaname associated with this NBA or WNBA Stats row.
-  arenastate: Schedule metadata for arenastate in the NBA or WNBA Stats schedule feed.
-  awayteam_losses: Losses for the away team in this NBA or WNBA Stats row.
-  awayteam_score: Score for the away team in this NBA or WNBA Stats row.
-  awayteam_seed: Seed for the away team in this NBA or WNBA Stats row.
-  awayteam_teamcity: Teamcity for the away team in this NBA or WNBA Stats row.
-  awayteam_teamid: Teamid for the away team in this NBA or WNBA Stats row.
-  awayteam_teamname: Teamname for the away team in this NBA or WNBA Stats row.
-  awayteam_teamslug: Teamslug for the away team in this NBA or WNBA Stats row.
-  awayteam_teamtricode: Teamtricode for the away team in this NBA or WNBA Stats row.
-  awayteam_wins: Wins for the away team in this NBA or WNBA Stats row.
-  awayteamtime: Time value for awayteamtime in the NBA or WNBA Stats result set.
-  branchlink: NBA or WNBA Stats value for branchlink in the scheduleleaguev2 result set.
-  gamedateest: Date or timestamp for gamedateest in the NBA or WNBA Stats result set.
-  gamedatetimeest: Date or timestamp for gamedatetimeest in the NBA or WNBA Stats result set.
-  gamedatetimeutc: Date or timestamp for gamedatetimeutc in the NBA or WNBA Stats result set.
-  gamedateutc: Date or timestamp for gamedateutc in the NBA or WNBA Stats result set.
-  gameid: Unique stats.nba.com game identifier in endpoints that use compact schedule field names.
-  gamelabel: Schedule metadata for gamelabel in the NBA or WNBA Stats schedule feed.
-  gamesequence: Schedule metadata for gamesequence in the NBA or WNBA Stats schedule feed.
-  gamestatus: Schedule metadata for gamestatus in the NBA or WNBA Stats schedule feed.
-  gamestatustext: Schedule metadata for gamestatustext in the NBA or WNBA Stats schedule feed.
-  gamesublabel: Schedule metadata for gamesublabel in the NBA or WNBA Stats schedule feed.
-  gamesubtype: Schedule metadata for gamesubtype in the NBA or WNBA Stats schedule feed.
-  gametimeest: Time value for gametimeest in the NBA or WNBA Stats result set.
-  gametimeutc: Time value for gametimeutc in the NBA or WNBA Stats result set.
-  hometeam_losses: Losses for the home team in this NBA or WNBA Stats row.
-  hometeam_score: Score for the home team in this NBA or WNBA Stats row.
-  hometeam_seed: Seed for the home team in this NBA or WNBA Stats row.
-  hometeam_teamcity: Teamcity for the home team in this NBA or WNBA Stats row.
-  hometeam_teamid: Teamid for the home team in this NBA or WNBA Stats row.
-  hometeam_teamname: Teamname for the home team in this NBA or WNBA Stats row.
-  hometeam_teamslug: Teamslug for the home team in this NBA or WNBA Stats row.
-  hometeam_teamtricode: Teamtricode for the home team in this NBA or WNBA Stats row.
-  hometeam_wins: Wins for the home team in this NBA or WNBA Stats row.
-  hometeamtime: Time value for hometeamtime in the NBA or WNBA Stats result set.
-  ifnecessary: NBA or WNBA Stats value for ifnecessary in the scheduleleaguev2 result set.
-  isneutral: Flag indicating isneutral for the requested NBA or WNBA Stats context.
-  monthnum: NBA or WNBA Stats value for monthnum in the scheduleleaguev2 result set.
-  postponedstatus: NBA or WNBA Stats value for postponedstatus in the scheduleleaguev2 result set.
-  seriesgamenumber: Schedule metadata for seriesgamenumber in the NBA or WNBA Stats schedule feed.
-  seriestext: NBA or WNBA Stats value for seriestext in the scheduleleaguev2 result set.
-  weekname: Display name for weekname associated with this NBA or WNBA Stats row.
-  weeknumber: Schedule metadata for weeknumber in the NBA or WNBA Stats schedule feed.
+  arena_city: City hosting the game's arena.
+  arena_name: Name of the arena hosting the game.
+  arena_state: State or province of the game's arena (blank for international sites).
+  away_team_city: City of the away team.
+  away_team_id: stats.nba.com / stats.wnba.com team id of the away team.
+  away_team_losses: Away team's losses entering the game.
+  away_team_name: Away team nickname (e.g. Fever).
+  away_team_score: Away team's final score, 0 before the game is played.
+  away_team_seed: Away team's playoff seed, 0 outside the postseason.
+  away_team_slug: URL slug of the away team.
+  away_team_time: Scheduled tip-off in the away team's local time zone.
+  away_team_tricode: Three-letter abbreviation of the away team.
+  away_team_wins: Away team's wins entering the game.
+  branch_link: Deep link for the game, blank when not published.
+  day: Three-letter day of week of the game date.
+  game_code: Provider game code, ``YYYYMMDD/AWYHOM``.
+  game_date: Game date as served by the schedule feed (``MM/DD/YYYY HH:MM:SS``).
+  game_date_est: Game date at midnight Eastern, ISO-8601.
+  game_date_time_est: Scheduled tip-off in Eastern time, ISO-8601.
+  game_date_time_utc: Scheduled tip-off in UTC, ISO-8601. The timestamp to reduce to a calendar date.
+  game_date_utc: Game date at midnight UTC, ISO-8601.
+  game_id: Unique stats.nba.com / stats.wnba.com game id; its 3rd character encodes the season type.
+  game_label: Human-readable round or event label (e.g. Preseason, Conf. Finals).
+  game_sequence: Ordinal of the game within its date.
+  game_status: 'Game status code: 1 scheduled, 2 in progress, 3 final.'
+  game_status_text: Human-readable game status (e.g. Final, 7:00 pm ET).
+  game_sub_label: Secondary event label (e.g. NBA Abu Dhabi Game).
+  game_subtype: Game subtype tag (e.g. Global Games), blank for standard games.
+  game_time_est: Scheduled tip-off time of day, Eastern.
+  game_time_utc: Scheduled tip-off time of day, UTC.
+  home_team_city: City of the home team.
+  home_team_id: stats.nba.com / stats.wnba.com team id of the home team.
+  home_team_losses: Home team's losses entering the game.
+  home_team_name: Home team nickname (e.g. Liberty).
+  home_team_score: Home team's final score, 0 before the game is played.
+  home_team_seed: Home team's playoff seed, 0 outside the postseason.
+  home_team_slug: URL slug of the home team.
+  home_team_time: Scheduled tip-off in the home team's local time zone.
+  home_team_tricode: Three-letter abbreviation of the home team.
+  home_team_wins: Home team's wins entering the game.
+  if_necessary: Whether the game is a conditional series game that may not be played.
+  is_neutral: Whether the game is played at a neutral site.
+  league_id: 'League id of the schedule: ''00'' NBA, ''10'' WNBA, ''20'' G-League.'
+  month_num: Calendar month number of the game date.
+  postponed_status: Postponement status; 'N' when the game is on as scheduled.
+  season: Season the schedule covers, as published by the feed ('2025-26' for the NBA, '2026' for the WNBA).
+  season_type_description: 'Season type label derived from season_type_id: Pre-Season, Regular Season, All-Star, Playoffs, Play-In
+    Game.'
+  season_type_id: Season type digit, the 3rd character of game_id.
+  series_game_number: Game number within a playoff series, blank outside a series.
+  series_text: Series context line (e.g. series tied 1-1), blank when not applicable.
+  week_name: Name of the schedule week, blank outside the regular season.
+  week_number: Schedule week number, 0 outside the regular season.
 scheduleleaguev2int:
-  arenacity: Schedule metadata for arenacity in the NBA or WNBA Stats schedule feed.
-  arenaname: Display name for arenaname associated with this NBA or WNBA Stats row.
-  arenastate: Schedule metadata for arenastate in the NBA or WNBA Stats schedule feed.
-  awayteam_losses: Losses for the away team in this NBA or WNBA Stats row.
-  awayteam_score: Score for the away team in this NBA or WNBA Stats row.
-  awayteam_seed: Seed for the away team in this NBA or WNBA Stats row.
-  awayteam_teamcity: Teamcity for the away team in this NBA or WNBA Stats row.
-  awayteam_teamid: Teamid for the away team in this NBA or WNBA Stats row.
-  awayteam_teamname: Teamname for the away team in this NBA or WNBA Stats row.
-  awayteam_teamslug: Teamslug for the away team in this NBA or WNBA Stats row.
-  awayteam_teamtricode: Teamtricode for the away team in this NBA or WNBA Stats row.
-  awayteam_wins: Wins for the away team in this NBA or WNBA Stats row.
-  awayteamtime: Time value for awayteamtime in the NBA or WNBA Stats result set.
-  branchlink: NBA or WNBA Stats value for branchlink in the scheduleleaguev2 result set.
-  gamedateest: Date or timestamp for gamedateest in the NBA or WNBA Stats result set.
-  gamedatetimeest: Date or timestamp for gamedatetimeest in the NBA or WNBA Stats result set.
-  gamedatetimeutc: Date or timestamp for gamedatetimeutc in the NBA or WNBA Stats result set.
-  gamedateutc: Date or timestamp for gamedateutc in the NBA or WNBA Stats result set.
-  gameid: Unique stats.nba.com game identifier in endpoints that use compact schedule field names.
-  gamelabel: Schedule metadata for gamelabel in the NBA or WNBA Stats schedule feed.
-  gamesequence: Schedule metadata for gamesequence in the NBA or WNBA Stats schedule feed.
-  gamestatus: Schedule metadata for gamestatus in the NBA or WNBA Stats schedule feed.
-  gamestatustext: Schedule metadata for gamestatustext in the NBA or WNBA Stats schedule feed.
-  gamesublabel: Schedule metadata for gamesublabel in the NBA or WNBA Stats schedule feed.
-  gamesubtype: Schedule metadata for gamesubtype in the NBA or WNBA Stats schedule feed.
-  gametimeest: Time value for gametimeest in the NBA or WNBA Stats result set.
-  gametimeutc: Time value for gametimeutc in the NBA or WNBA Stats result set.
-  hometeam_losses: Losses for the home team in this NBA or WNBA Stats row.
-  hometeam_score: Score for the home team in this NBA or WNBA Stats row.
-  hometeam_seed: Seed for the home team in this NBA or WNBA Stats row.
-  hometeam_teamcity: Teamcity for the home team in this NBA or WNBA Stats row.
-  hometeam_teamid: Teamid for the home team in this NBA or WNBA Stats row.
-  hometeam_teamname: Teamname for the home team in this NBA or WNBA Stats row.
-  hometeam_teamslug: Teamslug for the home team in this NBA or WNBA Stats row.
-  hometeam_teamtricode: Teamtricode for the home team in this NBA or WNBA Stats row.
-  hometeam_wins: Wins for the home team in this NBA or WNBA Stats row.
-  hometeamtime: Time value for hometeamtime in the NBA or WNBA Stats result set.
-  ifnecessary: NBA or WNBA Stats value for ifnecessary in the scheduleleaguev2 result set.
-  isneutral: Flag indicating isneutral for the requested NBA or WNBA Stats context.
-  monthnum: NBA or WNBA Stats value for monthnum in the scheduleleaguev2 result set.
-  postponedstatus: NBA or WNBA Stats value for postponedstatus in the scheduleleaguev2 result set.
-  seriesgamenumber: Schedule metadata for seriesgamenumber in the NBA or WNBA Stats schedule feed.
-  seriestext: NBA or WNBA Stats value for seriestext in the scheduleleaguev2 result set.
-  weekname: Display name for weekname associated with this NBA or WNBA Stats row.
-  weeknumber: Schedule metadata for weeknumber in the NBA or WNBA Stats schedule feed.
+  arena_city: City hosting the game's arena.
+  arena_name: Name of the arena hosting the game.
+  arena_state: State or province of the game's arena (blank for international sites).
+  away_team_city: City of the away team.
+  away_team_id: stats.nba.com / stats.wnba.com team id of the away team.
+  away_team_losses: Away team's losses entering the game.
+  away_team_name: Away team nickname (e.g. Fever).
+  away_team_score: Away team's final score, 0 before the game is played.
+  away_team_seed: Away team's playoff seed, 0 outside the postseason.
+  away_team_slug: URL slug of the away team.
+  away_team_time: Scheduled tip-off in the away team's local time zone.
+  away_team_tricode: Three-letter abbreviation of the away team.
+  away_team_wins: Away team's wins entering the game.
+  branch_link: Deep link for the game, blank when not published.
+  day: Three-letter day of week of the game date.
+  game_code: Provider game code, ``YYYYMMDD/AWYHOM``.
+  game_date: Game date as served by the schedule feed (``MM/DD/YYYY HH:MM:SS``).
+  game_date_est: Game date at midnight Eastern, ISO-8601.
+  game_date_time_est: Scheduled tip-off in Eastern time, ISO-8601.
+  game_date_time_utc: Scheduled tip-off in UTC, ISO-8601. The timestamp to reduce to a calendar date.
+  game_date_utc: Game date at midnight UTC, ISO-8601.
+  game_id: Unique stats.nba.com / stats.wnba.com game id; its 3rd character encodes the season type.
+  game_label: Human-readable round or event label (e.g. Preseason, Conf. Finals).
+  game_sequence: Ordinal of the game within its date.
+  game_status: 'Game status code: 1 scheduled, 2 in progress, 3 final.'
+  game_status_text: Human-readable game status (e.g. Final, 7:00 pm ET).
+  game_sub_label: Secondary event label (e.g. NBA Abu Dhabi Game).
+  game_subtype: Game subtype tag (e.g. Global Games), blank for standard games.
+  game_time_est: Scheduled tip-off time of day, Eastern.
+  game_time_utc: Scheduled tip-off time of day, UTC.
+  home_team_city: City of the home team.
+  home_team_id: stats.nba.com / stats.wnba.com team id of the home team.
+  home_team_losses: Home team's losses entering the game.
+  home_team_name: Home team nickname (e.g. Liberty).
+  home_team_score: Home team's final score, 0 before the game is played.
+  home_team_seed: Home team's playoff seed, 0 outside the postseason.
+  home_team_slug: URL slug of the home team.
+  home_team_time: Scheduled tip-off in the home team's local time zone.
+  home_team_tricode: Three-letter abbreviation of the home team.
+  home_team_wins: Home team's wins entering the game.
+  if_necessary: Whether the game is a conditional series game that may not be played.
+  is_neutral: Whether the game is played at a neutral site.
+  league_id: 'League id of the schedule: ''00'' NBA, ''10'' WNBA, ''20'' G-League.'
+  month_num: Calendar month number of the game date.
+  postponed_status: Postponement status; 'N' when the game is on as scheduled.
+  season: Season the schedule covers, as published by the feed ('2025-26' for the NBA, '2026' for the WNBA).
+  season_type_description: 'Season type label derived from season_type_id: Pre-Season, Regular Season, All-Star, Playoffs, Play-In
+    Game.'
+  season_type_id: Season type digit, the 3rd character of game_id.
+  series_game_number: Game number within a playoff series, blank outside a series.
+  series_text: Series context line (e.g. series tied 1-1), blank when not applicable.
+  week_name: Name of the schedule week, blank outside the regular season.
+  week_number: Schedule week number, 0 outside the regular season.
 score:
   away_team_name_default: Default-language full team name for the away team in this game, as provided by the NHL api-web scoreboard
     endpoint.

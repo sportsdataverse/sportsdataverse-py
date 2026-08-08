@@ -5251,54 +5251,58 @@ GET /stats/scheduleleaguev2
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `arenacity` | character | Schedule metadata for arenacity in the NBA or WNBA Stats schedule feed. |
-| `arenaname` | character | Display name for arenaname associated with this NBA or WNBA Stats row. |
-| `arenastate` | character | Schedule metadata for arenastate in the NBA or WNBA Stats schedule feed. |
-| `awayteamtime` | character | Time value for awayteamtime in the NBA or WNBA Stats result set. |
-| `awayteam_losses` | integer | Losses for the away team in this NBA or WNBA Stats row. |
-| `awayteam_score` | integer | Score for the away team in this NBA or WNBA Stats row. |
-| `awayteam_seed` | integer | Seed for the away team in this NBA or WNBA Stats row. |
-| `awayteam_teamcity` | character | Teamcity for the away team in this NBA or WNBA Stats row. |
-| `awayteam_teamid` | integer | Teamid for the away team in this NBA or WNBA Stats row. |
-| `awayteam_teamname` | character | Teamname for the away team in this NBA or WNBA Stats row. |
-| `awayteam_teamslug` | character | Teamslug for the away team in this NBA or WNBA Stats row. |
-| `awayteam_teamtricode` | character | Teamtricode for the away team in this NBA or WNBA Stats row. |
-| `awayteam_wins` | integer | Wins for the away team in this NBA or WNBA Stats row. |
-| `branchlink` | character | NBA or WNBA Stats value for branchlink in the scheduleleaguev2 result set. |
-| `day` | character | Day number within the month. |
-| `gamecode` | character | Gamecode. |
-| `gamedate` | character | Game date as parsed from the source feed. |
-| `gamedateest` | character | Date or timestamp for gamedateest in the NBA or WNBA Stats result set. |
-| `gamedatetimeest` | character | Date or timestamp for gamedatetimeest in the NBA or WNBA Stats result set. |
-| `gamedatetimeutc` | character | Date or timestamp for gamedatetimeutc in the NBA or WNBA Stats result set. |
-| `gamedateutc` | character | Date or timestamp for gamedateutc in the NBA or WNBA Stats result set. |
-| `gameid` | character | Unique stats.nba.com game identifier in endpoints that use compact schedule field names. |
-| `gamelabel` | character | Schedule metadata for gamelabel in the NBA or WNBA Stats schedule feed. |
-| `gamesequence` | integer | Schedule metadata for gamesequence in the NBA or WNBA Stats schedule feed. |
-| `gamestatus` | integer | Schedule metadata for gamestatus in the NBA or WNBA Stats schedule feed. |
-| `gamestatustext` | character | Schedule metadata for gamestatustext in the NBA or WNBA Stats schedule feed. |
-| `gamesublabel` | character | Schedule metadata for gamesublabel in the NBA or WNBA Stats schedule feed. |
-| `gamesubtype` | character | Schedule metadata for gamesubtype in the NBA or WNBA Stats schedule feed. |
-| `gametimeest` | character | Time value for gametimeest in the NBA or WNBA Stats result set. |
-| `gametimeutc` | character | Time value for gametimeutc in the NBA or WNBA Stats result set. |
-| `hometeamtime` | character | Time value for hometeamtime in the NBA or WNBA Stats result set. |
-| `hometeam_losses` | integer | Losses for the home team in this NBA or WNBA Stats row. |
-| `hometeam_score` | integer | Score for the home team in this NBA or WNBA Stats row. |
-| `hometeam_seed` | integer | Seed for the home team in this NBA or WNBA Stats row. |
-| `hometeam_teamcity` | character | Teamcity for the home team in this NBA or WNBA Stats row. |
-| `hometeam_teamid` | integer | Teamid for the home team in this NBA or WNBA Stats row. |
-| `hometeam_teamname` | character | Teamname for the home team in this NBA or WNBA Stats row. |
-| `hometeam_teamslug` | character | Teamslug for the home team in this NBA or WNBA Stats row. |
-| `hometeam_teamtricode` | character | Teamtricode for the home team in this NBA or WNBA Stats row. |
-| `hometeam_wins` | integer | Wins for the home team in this NBA or WNBA Stats row. |
-| `ifnecessary` | character | NBA or WNBA Stats value for ifnecessary in the scheduleleaguev2 result set. |
-| `isneutral` | logical | Flag indicating isneutral for the requested NBA or WNBA Stats context. |
-| `monthnum` | integer | NBA or WNBA Stats value for monthnum in the scheduleleaguev2 result set. |
-| `postponedstatus` | character | NBA or WNBA Stats value for postponedstatus in the scheduleleaguev2 result set. |
-| `seriesgamenumber` | character | Schedule metadata for seriesgamenumber in the NBA or WNBA Stats schedule feed. |
-| `seriestext` | character | NBA or WNBA Stats value for seriestext in the scheduleleaguev2 result set. |
-| `weekname` | character | Display name for weekname associated with this NBA or WNBA Stats row. |
-| `weeknumber` | integer | Schedule metadata for weeknumber in the NBA or WNBA Stats schedule feed. |
+| `arena_city` | character | City hosting the game's arena. |
+| `arena_name` | character | Name of the arena hosting the game. |
+| `arena_state` | character | State or province of the game's arena (blank for international sites). |
+| `away_team_city` | character | City of the away team. |
+| `away_team_id` | integer | stats.nba.com / stats.wnba.com team id of the away team. |
+| `away_team_losses` | integer | Away team's losses entering the game. |
+| `away_team_name` | character | Away team nickname (e.g. Fever). |
+| `away_team_score` | integer | Away team's final score, 0 before the game is played. |
+| `away_team_seed` | integer | Away team's playoff seed, 0 outside the postseason. |
+| `away_team_slug` | character | URL slug of the away team. |
+| `away_team_time` | character | Scheduled tip-off in the away team's local time zone. |
+| `away_team_tricode` | character | Three-letter abbreviation of the away team. |
+| `away_team_wins` | integer | Away team's wins entering the game. |
+| `branch_link` | character | Deep link for the game, blank when not published. |
+| `day` | character | Three-letter day of week of the game date. |
+| `game_code` | character | Provider game code, `YYYYMMDD/AWYHOM`. |
+| `game_date` | character | Game date as served by the schedule feed (`MM/DD/YYYY HH:MM:SS`). |
+| `game_date_est` | character | Game date at midnight Eastern, ISO-8601. |
+| `game_date_time_est` | character | Scheduled tip-off in Eastern time, ISO-8601. |
+| `game_date_time_utc` | character | Scheduled tip-off in UTC, ISO-8601. The timestamp to reduce to a calendar date. |
+| `game_date_utc` | character | Game date at midnight UTC, ISO-8601. |
+| `game_id` | character | Unique stats.nba.com / stats.wnba.com game id; its 3rd character encodes the season type. |
+| `game_label` | character | Human-readable round or event label (e.g. Preseason, Conf. Finals). |
+| `game_sequence` | integer | Ordinal of the game within its date. |
+| `game_status` | integer | Game status code: 1 scheduled, 2 in progress, 3 final. |
+| `game_status_text` | character | Human-readable game status (e.g. Final, 7:00 pm ET). |
+| `game_sub_label` | character | Secondary event label (e.g. NBA Abu Dhabi Game). |
+| `game_subtype` | character | Game subtype tag (e.g. Global Games), blank for standard games. |
+| `game_time_est` | character | Scheduled tip-off time of day, Eastern. |
+| `game_time_utc` | character | Scheduled tip-off time of day, UTC. |
+| `home_team_city` | character | City of the home team. |
+| `home_team_id` | integer | stats.nba.com / stats.wnba.com team id of the home team. |
+| `home_team_losses` | integer | Home team's losses entering the game. |
+| `home_team_name` | character | Home team nickname (e.g. Liberty). |
+| `home_team_score` | integer | Home team's final score, 0 before the game is played. |
+| `home_team_seed` | integer | Home team's playoff seed, 0 outside the postseason. |
+| `home_team_slug` | character | URL slug of the home team. |
+| `home_team_time` | character | Scheduled tip-off in the home team's local time zone. |
+| `home_team_tricode` | character | Three-letter abbreviation of the home team. |
+| `home_team_wins` | integer | Home team's wins entering the game. |
+| `if_necessary` | character | Whether the game is a conditional series game that may not be played. |
+| `is_neutral` | logical | Whether the game is played at a neutral site. |
+| `league_id` | character | League id of the schedule: '00' NBA, '10' WNBA, '20' G-League. |
+| `month_num` | integer | Calendar month number of the game date. |
+| `postponed_status` | character | Postponement status; 'N' when the game is on as scheduled. |
+| `season` | character | Season the schedule covers, as published by the feed ('2025-26' for the NBA, '2026' for the WNBA). |
+| `season_type_description` | character | Season type label derived from season_type_id: Pre-Season, Regular Season, All-Star, Playoffs, Play-In Game. |
+| `season_type_id` | character | Season type digit, the 3rd character of game_id. |
+| `series_game_number` | character | Game number within a playoff series, blank outside a series. |
+| `series_text` | character | Series context line (e.g. series tied 1-1), blank when not applicable. |
+| `week_name` | character | Name of the schedule week, blank outside the regular season. |
+| `week_number` | integer | Schedule week number, 0 outside the regular season. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -5328,54 +5332,58 @@ GET /stats/scheduleleaguev2int
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `arenacity` | character | Schedule metadata for arenacity in the NBA or WNBA Stats schedule feed. |
-| `arenaname` | character | Display name for arenaname associated with this NBA or WNBA Stats row. |
-| `arenastate` | character | Schedule metadata for arenastate in the NBA or WNBA Stats schedule feed. |
-| `awayteamtime` | character | Time value for awayteamtime in the NBA or WNBA Stats result set. |
-| `awayteam_losses` | integer | Losses for the away team in this NBA or WNBA Stats row. |
-| `awayteam_score` | integer | Score for the away team in this NBA or WNBA Stats row. |
-| `awayteam_seed` | integer | Seed for the away team in this NBA or WNBA Stats row. |
-| `awayteam_teamcity` | character | Teamcity for the away team in this NBA or WNBA Stats row. |
-| `awayteam_teamid` | integer | Teamid for the away team in this NBA or WNBA Stats row. |
-| `awayteam_teamname` | character | Teamname for the away team in this NBA or WNBA Stats row. |
-| `awayteam_teamslug` | character | Teamslug for the away team in this NBA or WNBA Stats row. |
-| `awayteam_teamtricode` | character | Teamtricode for the away team in this NBA or WNBA Stats row. |
-| `awayteam_wins` | integer | Wins for the away team in this NBA or WNBA Stats row. |
-| `branchlink` | character | NBA or WNBA Stats value for branchlink in the scheduleleaguev2 result set. |
-| `day` | character | Day number within the month. |
-| `gamecode` | character | Gamecode. |
-| `gamedate` | character | Game date as parsed from the source feed. |
-| `gamedateest` | character | Date or timestamp for gamedateest in the NBA or WNBA Stats result set. |
-| `gamedatetimeest` | character | Date or timestamp for gamedatetimeest in the NBA or WNBA Stats result set. |
-| `gamedatetimeutc` | character | Date or timestamp for gamedatetimeutc in the NBA or WNBA Stats result set. |
-| `gamedateutc` | character | Date or timestamp for gamedateutc in the NBA or WNBA Stats result set. |
-| `gameid` | character | Unique stats.nba.com game identifier in endpoints that use compact schedule field names. |
-| `gamelabel` | character | Schedule metadata for gamelabel in the NBA or WNBA Stats schedule feed. |
-| `gamesequence` | integer | Schedule metadata for gamesequence in the NBA or WNBA Stats schedule feed. |
-| `gamestatus` | integer | Schedule metadata for gamestatus in the NBA or WNBA Stats schedule feed. |
-| `gamestatustext` | character | Schedule metadata for gamestatustext in the NBA or WNBA Stats schedule feed. |
-| `gamesublabel` | character | Schedule metadata for gamesublabel in the NBA or WNBA Stats schedule feed. |
-| `gamesubtype` | character | Schedule metadata for gamesubtype in the NBA or WNBA Stats schedule feed. |
-| `gametimeest` | character | Time value for gametimeest in the NBA or WNBA Stats result set. |
-| `gametimeutc` | character | Time value for gametimeutc in the NBA or WNBA Stats result set. |
-| `hometeamtime` | character | Time value for hometeamtime in the NBA or WNBA Stats result set. |
-| `hometeam_losses` | integer | Losses for the home team in this NBA or WNBA Stats row. |
-| `hometeam_score` | integer | Score for the home team in this NBA or WNBA Stats row. |
-| `hometeam_seed` | integer | Seed for the home team in this NBA or WNBA Stats row. |
-| `hometeam_teamcity` | character | Teamcity for the home team in this NBA or WNBA Stats row. |
-| `hometeam_teamid` | integer | Teamid for the home team in this NBA or WNBA Stats row. |
-| `hometeam_teamname` | character | Teamname for the home team in this NBA or WNBA Stats row. |
-| `hometeam_teamslug` | character | Teamslug for the home team in this NBA or WNBA Stats row. |
-| `hometeam_teamtricode` | character | Teamtricode for the home team in this NBA or WNBA Stats row. |
-| `hometeam_wins` | integer | Wins for the home team in this NBA or WNBA Stats row. |
-| `ifnecessary` | character | NBA or WNBA Stats value for ifnecessary in the scheduleleaguev2 result set. |
-| `isneutral` | logical | Flag indicating isneutral for the requested NBA or WNBA Stats context. |
-| `monthnum` | integer | NBA or WNBA Stats value for monthnum in the scheduleleaguev2 result set. |
-| `postponedstatus` | character | NBA or WNBA Stats value for postponedstatus in the scheduleleaguev2 result set. |
-| `seriesgamenumber` | character | Schedule metadata for seriesgamenumber in the NBA or WNBA Stats schedule feed. |
-| `seriestext` | character | NBA or WNBA Stats value for seriestext in the scheduleleaguev2 result set. |
-| `weekname` | character | Display name for weekname associated with this NBA or WNBA Stats row. |
-| `weeknumber` | integer | Schedule metadata for weeknumber in the NBA or WNBA Stats schedule feed. |
+| `arena_city` | character | City hosting the game's arena. |
+| `arena_name` | character | Name of the arena hosting the game. |
+| `arena_state` | character | State or province of the game's arena (blank for international sites). |
+| `away_team_city` | character | City of the away team. |
+| `away_team_id` | integer | stats.nba.com / stats.wnba.com team id of the away team. |
+| `away_team_losses` | integer | Away team's losses entering the game. |
+| `away_team_name` | character | Away team nickname (e.g. Fever). |
+| `away_team_score` | integer | Away team's final score, 0 before the game is played. |
+| `away_team_seed` | integer | Away team's playoff seed, 0 outside the postseason. |
+| `away_team_slug` | character | URL slug of the away team. |
+| `away_team_time` | character | Scheduled tip-off in the away team's local time zone. |
+| `away_team_tricode` | character | Three-letter abbreviation of the away team. |
+| `away_team_wins` | integer | Away team's wins entering the game. |
+| `branch_link` | character | Deep link for the game, blank when not published. |
+| `day` | character | Three-letter day of week of the game date. |
+| `game_code` | character | Provider game code, `YYYYMMDD/AWYHOM`. |
+| `game_date` | character | Game date as served by the schedule feed (`MM/DD/YYYY HH:MM:SS`). |
+| `game_date_est` | character | Game date at midnight Eastern, ISO-8601. |
+| `game_date_time_est` | character | Scheduled tip-off in Eastern time, ISO-8601. |
+| `game_date_time_utc` | character | Scheduled tip-off in UTC, ISO-8601. The timestamp to reduce to a calendar date. |
+| `game_date_utc` | character | Game date at midnight UTC, ISO-8601. |
+| `game_id` | character | Unique stats.nba.com / stats.wnba.com game id; its 3rd character encodes the season type. |
+| `game_label` | character | Human-readable round or event label (e.g. Preseason, Conf. Finals). |
+| `game_sequence` | integer | Ordinal of the game within its date. |
+| `game_status` | integer | Game status code: 1 scheduled, 2 in progress, 3 final. |
+| `game_status_text` | character | Human-readable game status (e.g. Final, 7:00 pm ET). |
+| `game_sub_label` | character | Secondary event label (e.g. NBA Abu Dhabi Game). |
+| `game_subtype` | character | Game subtype tag (e.g. Global Games), blank for standard games. |
+| `game_time_est` | character | Scheduled tip-off time of day, Eastern. |
+| `game_time_utc` | character | Scheduled tip-off time of day, UTC. |
+| `home_team_city` | character | City of the home team. |
+| `home_team_id` | integer | stats.nba.com / stats.wnba.com team id of the home team. |
+| `home_team_losses` | integer | Home team's losses entering the game. |
+| `home_team_name` | character | Home team nickname (e.g. Liberty). |
+| `home_team_score` | integer | Home team's final score, 0 before the game is played. |
+| `home_team_seed` | integer | Home team's playoff seed, 0 outside the postseason. |
+| `home_team_slug` | character | URL slug of the home team. |
+| `home_team_time` | character | Scheduled tip-off in the home team's local time zone. |
+| `home_team_tricode` | character | Three-letter abbreviation of the home team. |
+| `home_team_wins` | integer | Home team's wins entering the game. |
+| `if_necessary` | character | Whether the game is a conditional series game that may not be played. |
+| `is_neutral` | logical | Whether the game is played at a neutral site. |
+| `league_id` | character | League id of the schedule: '00' NBA, '10' WNBA, '20' G-League. |
+| `month_num` | integer | Calendar month number of the game date. |
+| `postponed_status` | character | Postponement status; 'N' when the game is on as scheduled. |
+| `season` | character | Season the schedule covers, as published by the feed ('2025-26' for the NBA, '2026' for the WNBA). |
+| `season_type_description` | character | Season type label derived from season_type_id: Pre-Season, Regular Season, All-Star, Playoffs, Play-In Game. |
+| `season_type_id` | character | Season type digit, the 3rd character of game_id. |
+| `series_game_number` | character | Game number within a playoff series, blank outside a series. |
+| `series_text` | character | Series context line (e.g. series tied 1-1), blank when not applicable. |
+| `week_name` | character | Name of the schedule week, blank outside the regular season. |
+| `week_number` | integer | Schedule week number, 0 outside the regular season. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
