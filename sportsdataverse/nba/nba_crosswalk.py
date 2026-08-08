@@ -254,15 +254,16 @@ def _stats_team_tricodes(season: int, **kwargs: Any) -> Dict[str, str]:
     Raises:
         CrosswalkSourceError: The game log could not be produced.
     """
-    from sportsdataverse.nba.nba_stats import nba_stats_leaguegamelog
-
     out: Dict[str, str] = {}
     for year in (season, season - 1):
         stats_season = f"{year - 1}-{str(year)[-2:]}"
 
         # Default-bound so the closure captures this iteration's season, not the
-        # loop variable's final value.
+        # loop variable's final value. The provider import is inside the callable
+        # so a missing/broken nba_stats module raises CrosswalkSourceError too.
         def _fetch(s: str = stats_season) -> Any:
+            from sportsdataverse.nba.nba_stats import nba_stats_leaguegamelog
+
             raw = nba_stats_leaguegamelog(league_id="00", season=s, **kwargs)
             return raw.get("LeagueGameLog") if isinstance(raw, dict) else raw
 

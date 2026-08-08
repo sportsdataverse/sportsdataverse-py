@@ -483,7 +483,6 @@ def mbb_team_crosswalk(
         .. _Bart Torvik: https://barttorvik.com
     """
     from sportsdataverse.mbb.mbb_schedule import most_recent_mbb_season
-    from sportsdataverse.mbb.torvik import torvik_ratings
 
     season = int(season) if season is not None else most_recent_mbb_season()
     espn = espn_team_directory("mbb", season=season, **kwargs)
@@ -496,7 +495,15 @@ def mbb_team_crosswalk(
 
         fox = require_source("fox_mbb_teams_all()", _fox)
     if bart is None:
-        bart = require_source(f"torvik_ratings(year={season})", lambda: torvik_ratings(year=season, **kwargs))
+        # The provider import lives inside the callable so a missing/broken
+        # torvik module surfaces as CrosswalkSourceError, and so a caller who
+        # supplied `bart` never pays for (or trips over) the import at all.
+        def _bart() -> Any:
+            from sportsdataverse.mbb.torvik import torvik_ratings
+
+            return torvik_ratings(year=season, **kwargs)
+
+        bart = require_source(f"torvik_ratings(year={season})", _bart)
     out = _assemble_team_crosswalk(espn, fox, bart, kenpom, season)
     return out.to_pandas() if return_as_pandas else out
 

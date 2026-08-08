@@ -631,5 +631,8 @@ def fox_wnba_teams(
     if not return_parsed:
         return raw
     rows = parse_teams(raw)
-    df = pl.DataFrame(rows, schema=_TEAMS_SCHEMA) if not rows else pl.DataFrame(rows)
+    # Schema on EVERY path: parse_teams can emit None for fox_team_name /
+    # fox_section, and an all-null column would otherwise infer Null while the
+    # empty path infers Utf8 -- an unstable schema for crosswalk consumers.
+    df = pl.DataFrame(rows, schema=_TEAMS_SCHEMA)
     return df.to_pandas() if return_as_pandas else df

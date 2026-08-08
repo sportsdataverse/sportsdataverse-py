@@ -403,7 +403,6 @@ def wbb_team_crosswalk(
         .. _wehoop: https://wehoop.sportsdataverse.org
         .. _Bart Torvik: https://barttorvik.com/ncaaw
     """
-    from sportsdataverse.wbb.bart_wbb import bart_wbb_ratings
     from sportsdataverse.wbb.wbb_schedule import most_recent_wbb_season
 
     season = int(season) if season is not None else most_recent_wbb_season()
@@ -417,7 +416,15 @@ def wbb_team_crosswalk(
 
         fox = require_source("fox_wbb_teams_all()", _fox)
     if bart is None:
-        bart = require_source(f"bart_wbb_ratings(year={season})", lambda: bart_wbb_ratings(year=season, **kwargs))
+        # The provider import lives inside the callable so a missing/broken
+        # bart_wbb module surfaces as CrosswalkSourceError, and so a caller who
+        # supplied `bart` never pays for (or trips over) the import at all.
+        def _bart() -> Any:
+            from sportsdataverse.wbb.bart_wbb import bart_wbb_ratings
+
+            return bart_wbb_ratings(year=season, **kwargs)
+
+        bart = require_source(f"bart_wbb_ratings(year={season})", _bart)
     out = _assemble_team_crosswalk(espn, fox, bart, season)
     return out.to_pandas() if return_as_pandas else out
 

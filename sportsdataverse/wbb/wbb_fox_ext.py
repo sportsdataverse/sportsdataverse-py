@@ -536,7 +536,10 @@ _TEAMS_SCHEMA = {"fox_team_id": pl.Utf8, "fox_team_name": pl.Utf8, "fox_section"
 
 
 def _teams_frame(rows: "list[dict[str, Any]]", return_as_pandas: bool) -> Union[pl.DataFrame, "pd.DataFrame"]:
-    df = pl.DataFrame(rows, schema=_TEAMS_SCHEMA) if not rows else pl.DataFrame(rows)
+    # Schema on EVERY path: parse_teams can emit None for fox_team_name /
+    # fox_section, and an all-null column would otherwise infer Null while the
+    # empty path infers Utf8 -- an unstable schema for crosswalk consumers.
+    df = pl.DataFrame(rows, schema=_TEAMS_SCHEMA)
     return df.to_pandas() if return_as_pandas else df
 
 

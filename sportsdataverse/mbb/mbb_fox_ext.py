@@ -424,7 +424,10 @@ _TEAMS_SCHEMA = {"fox_team_id": pl.Utf8, "fox_team_name": pl.Utf8, "fox_section"
 
 
 def _teams_frame(rows: "list[dict[str, Any]]", return_as_pandas: bool) -> Union[pl.DataFrame, "pd.DataFrame"]:
-    df = pl.DataFrame(rows, schema=_TEAMS_SCHEMA) if not rows else pl.DataFrame(rows)
+    # Schema on EVERY path: parse_teams can emit None for fox_team_name /
+    # fox_section, and an all-null column would otherwise infer Null while the
+    # empty path infers Utf8 -- an unstable schema for crosswalk consumers.
+    df = pl.DataFrame(rows, schema=_TEAMS_SCHEMA)
     return df.to_pandas() if return_as_pandas else df
 
 
@@ -487,6 +490,8 @@ def fox_mbb_teams(
             df = fox_mbb_teams("150")
 
         See Also:
+            * :func:`fox_mbb_teams_all` - Python alternative in this package for
+              the full cross-conference directory (this call covers one league)
             * `hoopR`_ - R sister package for men's college basketball
             * `Fox Sports`_ - data origin
 
@@ -540,6 +545,8 @@ def fox_mbb_teams_all(
             df.group_by("fox_section").len().sort("len", descending=True).head()
 
         See Also:
+            * :func:`fox_mbb_teams` - Python alternative in this package for a
+              single conference (one fetch instead of this scan)
             * `hoopR`_ - R sister package for men's college basketball
             * `Fox Sports`_ - data origin
 

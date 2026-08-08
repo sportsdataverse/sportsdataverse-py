@@ -350,3 +350,58 @@ def test_team_crosswalk_raises_when_fox_cannot_be_produced(
     )
     with pytest.raises(CrosswalkSourceError, match=target):
         getattr(crosswalk, f"{league}_team_crosswalk")(season=2026, **extra)
+
+
+# ---------------------------------------------------------------------------
+# Provider imports must live INSIDE the guarded callable.
+#
+# Hoisting `from ...torvik import torvik_ratings` to the top of the builder
+# defeated the guard twice over: a missing provider module raised a raw
+# ImportError instead of CrosswalkSourceError, and a caller who supplied a
+# pre-fetched `bart` frame still had to have the module installed.
+# ---------------------------------------------------------------------------
+
+_RATINGS_PROVIDER = {
+    "mbb": ("sportsdataverse.mbb.torvik", "torvik_ratings"),
+    "wbb": ("sportsdataverse.wbb.bart_wbb", "bart_wbb_ratings"),
+}
+
+
+def _stub_espn(monkeypatch: pytest.MonkeyPatch, crosswalk: Any) -> None:
+    monkeypatch.setattr(
+        crosswalk,
+        "espn_team_directory",
+        lambda *a, **k: pl.DataFrame(schema={c: pl.Utf8 for c in _ESPN_DIR_COLS}),
+    )
+
+
+@pytest.mark.parametrize("league", ["mbb", "wbb"])
+def test_team_crosswalk_raises_when_the_ratings_module_is_missing(monkeypatch: pytest.MonkeyPatch, league: str) -> None:
+    """An absent Torvik provider must name itself as a CrosswalkSourceError."""
+    import importlib
+    import sys
+
+    module_path, provider = _RATINGS_PROVIDER[league]
+    monkeypatch.setitem(sys.modules, module_path, None)  # import of this module now raises
+    crosswalk = importlib.import_module(f"sportsdataverse.{league}.{league}_crosswalk")
+    _stub_espn(monkeypatch, crosswalk)
+    with pytest.raises(CrosswalkSourceError, match=provider) as exc:
+        getattr(crosswalk, f"{league}_team_crosswalk")(season=2026, fox=pl.DataFrame())
+    assert module_path in str(exc.value), "the error must name the module that was missing"
+
+
+@pytest.mark.parametrize("league", ["mbb", "wbb"])
+def test_team_crosswalk_supplied_ratings_frame_needs_no_provider_module(
+    monkeypatch: pytest.MonkeyPatch, league: str
+) -> None:
+    """A pre-fetched `bart` frame must bypass the provider import entirely."""
+    import importlib
+    import sys
+
+    module_path, _ = _RATINGS_PROVIDER[league]
+    monkeypatch.setitem(sys.modules, module_path, None)
+    crosswalk = importlib.import_module(f"sportsdataverse.{league}.{league}_crosswalk")
+    _stub_espn(monkeypatch, crosswalk)
+    out = getattr(crosswalk, f"{league}_team_crosswalk")(season=2026, fox=pl.DataFrame(), bart=pl.DataFrame())
+    assert isinstance(out, pl.DataFrame)
+    assert out.height == 0

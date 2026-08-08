@@ -11,6 +11,7 @@ import json
 from pathlib import Path
 
 import polars as pl
+import pytest
 
 import sportsdataverse._fox_layout as fox_layout
 from sportsdataverse._fox_layout import parse_teams
@@ -105,6 +106,43 @@ def test_fox_teams_empty_payload_keeps_schema(monkeypatch):
     df = fox_wnba_teams()
     assert df.columns == TEAMS_COLS
     assert len(df) == 0
+
+
+TEAMS_SCHEMA = {"fox_team_id": pl.Utf8, "fox_team_name": pl.Utf8, "fox_section": pl.Utf8}
+
+
+@pytest.mark.parametrize(
+    ("league", "getter"),
+    [
+        ("mbb", "fox_mbb_teams"),
+        ("nba", "fox_nba_teams"),
+        ("wbb", "fox_wbb_teams"),
+        ("wnba", "fox_wnba_teams"),
+    ],
+)
+@pytest.mark.parametrize("shape", ["empty", "all_null", "populated"])
+def test_fox_teams_dtypes_are_stable_across_shapes(monkeypatch, league, getter, shape):
+    """Same dtypes whether the result is empty, all-null, or fully populated.
+
+    ``parse_teams`` emits ``None`` for ``fox_team_name`` / ``fox_section`` when the
+    payload omits them; without an explicit schema an all-null column infers
+    ``Null`` while the empty path infers ``Utf8`` -- an unstable schema that
+    breaks the crosswalk joins keyed on these columns.
+    """
+    import importlib
+
+    ext = importlib.import_module(f"sportsdataverse.{league}.{league}_fox_ext")
+    rows = {
+        "empty": [],
+        "all_null": [{"fox_team_id": "1", "fox_team_name": None, "fox_section": None}],
+        "populated": [{"fox_team_id": "1", "fox_team_name": "Some Team", "fox_section": "Some Conf"}],
+    }[shape]
+    monkeypatch.setattr(ext, "parse_teams", lambda raw: rows)
+    monkeypatch.setattr(fox_layout, "_get", lambda url, **kw: {})
+    df = getattr(ext, getter)("1")
+    assert df.columns == TEAMS_COLS
+    assert dict(df.schema) == TEAMS_SCHEMA
+    assert df.height == len(rows)
 
 
 def test_fox_wbb_teams_all_budget_and_dedupe(monkeypatch):
