@@ -383,6 +383,10 @@ def test_team_crosswalk_raises_when_the_ratings_module_is_missing(monkeypatch: p
 
     module_path, provider = _RATINGS_PROVIDER[league]
     monkeypatch.setitem(sys.modules, module_path, None)  # import of this module now raises
+    # Drop any cached crosswalk module: import_module would otherwise hand back one
+    # imported before the poison, which could still hold a top-level provider import
+    # and let this test pass without proving the import happens inside the guard.
+    monkeypatch.delitem(sys.modules, f"sportsdataverse.{league}.{league}_crosswalk", raising=False)
     crosswalk = importlib.import_module(f"sportsdataverse.{league}.{league}_crosswalk")
     _stub_espn(monkeypatch, crosswalk)
     with pytest.raises(CrosswalkSourceError, match=provider) as exc:
@@ -400,6 +404,9 @@ def test_team_crosswalk_supplied_ratings_frame_needs_no_provider_module(
 
     module_path, _ = _RATINGS_PROVIDER[league]
     monkeypatch.setitem(sys.modules, module_path, None)
+    # Same reason as above: a cached crosswalk module would not exercise the
+    # supplied-frame short-circuit against a genuinely absent provider.
+    monkeypatch.delitem(sys.modules, f"sportsdataverse.{league}.{league}_crosswalk", raising=False)
     crosswalk = importlib.import_module(f"sportsdataverse.{league}.{league}_crosswalk")
     _stub_espn(monkeypatch, crosswalk)
     out = getattr(crosswalk, f"{league}_team_crosswalk")(season=2026, fox=pl.DataFrame(), bart=pl.DataFrame())
