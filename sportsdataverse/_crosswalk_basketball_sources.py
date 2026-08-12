@@ -314,9 +314,12 @@ def espn_conference_map(league: str, season: int, **kwargs: Any) -> pl.DataFrame
         raise CrosswalkSourceError(
             f"espn_conference_map({league!r}, {season}) walked {len(group_ids)} conference groups and resolved no teams"
         )
-    return pl.DataFrame({"team_id": team_ids, "conference_name": names}).unique(
-        subset=["team_id"], keep="first", maintain_order=True
-    )
+    # Pinned, not inferred: ``team_id`` is a join key, so every return path of
+    # this function hands back the same Utf8 dtype the empty frame declares.
+    return pl.DataFrame(
+        {"team_id": team_ids, "conference_name": names},
+        schema={"team_id": pl.Utf8, "conference_name": pl.Utf8},
+    ).unique(subset=["team_id"], keep="first", maintain_order=True)
 
 
 def espn_team_directory(league: str, season: Optional[int] = None, **kwargs: Any) -> pl.DataFrame:
@@ -378,8 +381,15 @@ def espn_team_directory(league: str, season: Optional[int] = None, **kwargs: Any
     # take a different parameter set.
     conferences = espn_conference_map(league, int(season))
     # Join on Utf8 both sides -- as_str_id keeps a numeric id off the float
-    # path, so an Int64 team_id stringifies as "123" and never "123.0".
-    return out.with_columns(str_id(out, "team_id")).join(conferences, on="team_id", how="left")
+    # path, so an Int64 team_id stringifies as "123" and never "123.0". The
+    # assert makes that agreement a checked precondition instead of an
+    # inference both sides happen to share today.
+    out = out.with_columns(str_id(out, "team_id"))
+    assert out.schema["team_id"] == conferences.schema["team_id"] == pl.Utf8, (
+        f"team_id join-key dtype mismatch: directory={out.schema['team_id']}, "
+        f"conferences={conferences.schema['team_id']} (both must be {pl.Utf8})"
+    )
+    return out.join(conferences, on="team_id", how="left")
 
 
 def espn_scoreboard_games(league: str, dates: Sequence[date], **kwargs: Any) -> pl.DataFrame:

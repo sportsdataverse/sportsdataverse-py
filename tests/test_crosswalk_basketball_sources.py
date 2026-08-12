@@ -496,7 +496,9 @@ def test_espn_conference_map_is_empty_for_non_ncaa_leagues(monkeypatch: pytest.M
     for league in ("nba", "wnba"):
         out = espn_conference_map(league, 2026)
         assert out.height == 0
-        assert out.columns == ["team_id", "conference_name"]
+        # Full schema, not just names: a Null-dtyped ``team_id`` is an unusable
+        # join key that a columns-only assertion would wave through.
+        assert dict(out.schema) == {"team_id": pl.Utf8, "conference_name": pl.Utf8}
 
 
 def test_espn_team_directory_joins_conference_on_a_clean_utf8_id(monkeypatch: pytest.MonkeyPatch) -> None:

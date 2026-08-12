@@ -373,15 +373,22 @@ def wbb_team_crosswalk(
         ``espn_conference`` is reconstructed from ESPN's Core v2 season group
         tree (see
         :func:`~sportsdataverse._crosswalk_basketball_sources.espn_conference_map`),
-        the same walk the R producer does. A pre-fetched ``espn`` frame that
-        already carries ``conference_name`` is used as-is.
+        the same walk the R producer does. There is no ``espn`` parameter --
+        the directory is always fetched here; when the upstream ESPN response
+        does carry ``conference_name``,
+        :func:`~sportsdataverse._crosswalk_basketball_sources.espn_team_directory`
+        preserves it and the group walk is skipped.
 
     Raises:
         CrosswalkSourceError: A source that was not passed in pre-fetched could
             not be produced (Fox or Torvik). Building on a missing source would
             emit a well-formed crosswalk whose ``fox_*`` / ``bart_*`` columns
             are silently all-null, so it fails here instead. Pass an explicit
-            empty frame (``fox=pl.DataFrame()``) to opt a source out.
+            empty frame (``fox=pl.DataFrame()``) to opt a source out. Also
+            raised, and propagated from
+            :func:`~sportsdataverse._crosswalk_basketball_sources.espn_conference_map`,
+            when the ESPN conference walk resolves no teams at all -- the ESPN
+            directory is not opt-out-able.
 
     Example:
         Quick start::
