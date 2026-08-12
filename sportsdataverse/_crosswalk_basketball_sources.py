@@ -13,6 +13,7 @@ These adapters own that rename so the assemblers can stay a literal port.
 from __future__ import annotations
 
 import json
+import re
 from datetime import date, datetime
 from typing import Any, Callable, Dict, List, Optional, Sequence
 
@@ -24,6 +25,7 @@ from sportsdataverse.errors import SportsDataverseError
 __all__ = [
     "CrosswalkSourceError",
     "require_source",
+    "espn_conference_map",
     "espn_team_directory",
     "espn_scoreboard_games",
     "espn_rosters",
@@ -190,6 +192,136 @@ def _espn_accessors(league: str) -> Dict[str, Callable[..., Any]]:
     raise ValueError(f"unknown league {league!r}")
 
 
+# ESPN's "NCAA Division I" parent group; its children are the conferences.
+_NCAA_ROOT_GROUP = 50
+# Trailing numeric id of a Core v2 ``.../groups/{id}`` or ``.../teams/{id}`` $ref.
+_REF_ID = re.compile(r"/(?:groups|teams)/(\d+)")
+
+
+def _ncaa_group_accessors(league: str) -> Optional[Dict[str, Callable[..., Any]]]:
+    """The three Core v2 group wrappers for an NCAA league, else ``None``."""
+    if league == "wbb":
+        from sportsdataverse.wbb.wbb_espn_ext import (
+            espn_wbb_season_group,
+            espn_wbb_season_group_children,
+            espn_wbb_season_group_teams,
+        )
+
+        return {
+            "group": espn_wbb_season_group,
+            "children": espn_wbb_season_group_children,
+            "teams": espn_wbb_season_group_teams,
+        }
+    if league == "mbb":
+        from sportsdataverse.mbb.mbb_espn_ext import (
+            espn_mbb_season_group,
+            espn_mbb_season_group_children,
+            espn_mbb_season_group_teams,
+        )
+
+        return {
+            "group": espn_mbb_season_group,
+            "children": espn_mbb_season_group_children,
+            "teams": espn_mbb_season_group_teams,
+        }
+    return None
+
+
+def _ref_ids(frame: Any) -> List[int]:
+    """Numeric ids parsed out of a Core v2 ``{items: [{$ref}]}`` parsed frame."""
+    if not isinstance(frame, pl.DataFrame) or frame.height == 0 or "$ref" not in frame.columns:
+        return []
+    return [int(m.group(1)) for ref in frame["$ref"].drop_nulls() if (m := _REF_ID.search(str(ref)))]
+
+
+def espn_conference_map(league: str, season: int, **kwargs: Any) -> pl.DataFrame:
+    """ESPN team -> conference name for one NCAA season, via the Core v2 group tree.
+
+    The Site v2 ``teams`` directory carries no conference, so the R producers
+    (``wehoop::espn_wbb_teams()`` / ``hoopR::espn_mbb_teams()``) reconstruct it
+    by walking ESPN's season group tree: the children of group
+    ``50`` ("NCAA Division I") are the conferences, and each conference group
+    lists its member teams. This is the same walk, through sdv-py's existing
+    ``espn_{lg}_season_group*`` wrappers.
+
+    One conference that fails to fetch is skipped rather than fatal, matching
+    the R producers' per-item tolerance; a walk that yields nothing at all
+    raises, because a silently empty map would ship an all-null
+    ``espn_conference`` column.
+
+    Args:
+        league: ``"mbb"`` or ``"wbb"``. Any other league has no NCAA group
+            tree and yields a typed empty frame.
+        season: Season year (4-digit, e.g. ``2026``).
+        **kwargs: Forwarded to the group wrappers.
+
+    Returns:
+        ``pl.DataFrame`` with ``team_id`` (``Utf8``, the crosswalk join dtype)
+        and ``conference_name`` (``Utf8``), one row per team.
+
+    Raises:
+        CrosswalkSourceError: ``league`` is an NCAA league but the walk
+            produced no team-to-conference rows at all.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse._crosswalk_basketball_sources import espn_conference_map
+            df = espn_conference_map("wbb", 2026)
+            print(df.height, df["conference_name"].n_unique())
+
+        Look one team up::
+
+            df.filter(pl.col("team_id") == "2579")
+
+        See Also:
+            * `wehoop`_ -- R sister package whose ``espn_wbb_teams()`` walk this ports
+            * `hoopR`_ -- the men's-side equivalent
+
+        .. _wehoop: https://wehoop.sportsdataverse.org
+        .. _hoopR: https://hoopR.sportsdataverse.org
+    """
+    empty = pl.DataFrame(schema={"team_id": pl.Utf8, "conference_name": pl.Utf8})
+    accessors = _ncaa_group_accessors(league)
+    if accessors is None:
+        return empty
+
+    group_ids = _ref_ids(
+        require_source(
+            f"espn_{league}_season_group_children({season}, 2, {_NCAA_ROOT_GROUP})",
+            lambda: accessors["children"](season, 2, _NCAA_ROOT_GROUP, limit=1000, return_parsed=True, **kwargs),
+        )
+    )
+
+    team_ids: List[str] = []
+    names: List[str] = []
+    for group_id in group_ids:
+        try:
+            group = accessors["group"](season, 2, group_id, return_parsed=True, **kwargs)
+            members = accessors["teams"](season, 2, group_id, limit=500, return_parsed=True, **kwargs)
+        except Exception:
+            continue
+        if not isinstance(group, pl.DataFrame) or group.height == 0 or "name" not in group.columns:
+            continue
+        name = group["name"][0]
+        if name is None:
+            continue
+        for team_id in _ref_ids(members):
+            team_ids.append(str(team_id))
+            names.append(str(name))
+
+    if not team_ids:
+        raise CrosswalkSourceError(
+            f"espn_conference_map({league!r}, {season}) walked {len(group_ids)} conference groups and resolved no teams"
+        )
+    # Pinned, not inferred: ``team_id`` is a join key, so every return path of
+    # this function hands back the same Utf8 dtype the empty frame declares.
+    return pl.DataFrame(
+        {"team_id": team_ids, "conference_name": names},
+        schema={"team_id": pl.Utf8, "conference_name": pl.Utf8},
+    ).unique(subset=["team_id"], keep="first", maintain_order=True)
+
+
 def espn_team_directory(league: str, season: Optional[int] = None, **kwargs: Any) -> pl.DataFrame:
     """ESPN team directory projected onto the R accessor's column names.
 
@@ -198,20 +330,35 @@ def espn_team_directory(league: str, season: Optional[int] = None, **kwargs: Any
     ``abbreviation`` / ``display_name`` / ``short_name`` / ``team`` /
     ``mascot``. This renames one to the other.
 
+    ``conference_name`` is taken from the upstream frame when it carries one.
+    It does not for any sdv-py league, so for the NCAA leagues (``"mbb"`` /
+    ``"wbb"``) with a ``season`` given it is instead reconstructed through
+    :func:`espn_conference_map`, matching what the R producers do.
+
     Args:
         league: ``"mbb"``, ``"wbb"``, ``"nba"`` or ``"wnba"``.
-        season: Unused by the ESPN teams endpoint; accepted for symmetry.
+        season: Season year. Required to resolve ``conference_name`` for the
+            NCAA leagues; unused by the ESPN teams endpoint itself.
         **kwargs: Forwarded to the accessor.
 
     Returns:
-        ``pl.DataFrame``, one row per team. ``conference_name`` is present only
-        when the upstream frame carries it (sdv-py's does not).
+        ``pl.DataFrame``, one row per team, with ``conference_name`` populated
+        for the NCAA leagues and null for ``"nba"`` / ``"wnba"`` (whose
+        crosswalks do not carry it).
+
+    Raises:
+        CrosswalkSourceError: The NCAA conference walk produced nothing.
 
     Example:
         Quick start::
 
             from sportsdataverse._crosswalk_basketball_sources import espn_team_directory
             print(espn_team_directory("wnba").columns)
+
+        With conferences resolved::
+
+            df = espn_team_directory("wbb", season=2026)
+            print(df["conference_name"].drop_nulls().len(), "of", df.height)
     """
     raw = _espn_accessors(league)["teams"](**kwargs)
     if not isinstance(raw, pl.DataFrame):
@@ -226,9 +373,23 @@ def espn_team_directory(league: str, season: Optional[int] = None, **kwargs: Any
     )
     for candidate in ("team_conference_name", "conference_name", "group_name"):
         if candidate in raw.columns:
-            out = out.with_columns(raw[candidate].cast(pl.Utf8).alias("conference_name"))
-            break
-    return out
+            return out.with_columns(raw[candidate].cast(pl.Utf8).alias("conference_name"))
+
+    if season is None or _ncaa_group_accessors(league) is None:
+        return out
+    # Not **kwargs: those are the *teams* accessor's, and the group endpoints
+    # take a different parameter set.
+    conferences = espn_conference_map(league, int(season))
+    # Join on Utf8 both sides -- as_str_id keeps a numeric id off the float
+    # path, so an Int64 team_id stringifies as "123" and never "123.0". The
+    # assert makes that agreement a checked precondition instead of an
+    # inference both sides happen to share today.
+    out = out.with_columns(str_id(out, "team_id"))
+    assert out.schema["team_id"] == conferences.schema["team_id"] == pl.Utf8, (
+        f"team_id join-key dtype mismatch: directory={out.schema['team_id']}, "
+        f"conferences={conferences.schema['team_id']} (both must be {pl.Utf8})"
+    )
+    return out.join(conferences, on="team_id", how="left")
 
 
 def espn_scoreboard_games(league: str, dates: Sequence[date], **kwargs: Any) -> pl.DataFrame:
