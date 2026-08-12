@@ -9,6 +9,7 @@ import json
 
 import pytest
 
+from sportsdataverse.errors import RawStoreMissError
 from sportsdataverse.nba.nba_possessions import (
     _fetch_pbp,
     _raw_store_path,
@@ -105,26 +106,59 @@ def test_per_endpoint_env_beats_generic_env(monkeypatch, tmp_path):
 def test_explicit_readonly_beats_env(monkeypatch, tmp_path):
     monkeypatch.setenv("SDV_PY_NBA_RAW_JSON_DIR", str(tmp_path))
     monkeypatch.delenv("SDV_PY_NBA_RAW_JSON_READONLY", raising=False)
-    # readonly=True with the env var unset: fetches, writes nothing.
-    _through_raw_store("playbyplayv3", "0022300001", _fetch_ok, readonly=True)
+    # readonly=True with the env var unset: offline, so a miss raises.
+    with pytest.raises(RawStoreMissError):
+        _through_raw_store("playbyplayv3", "0022300001", _fetch_boom, readonly=True)
     assert not (tmp_path / "playbyplayv3").exists()
-    # readonly=False with the env var SET: writes anyway (arg wins).
+    # readonly=False with the env var SET: fetches + writes anyway (arg wins).
     monkeypatch.setenv("SDV_PY_NBA_RAW_JSON_READONLY", "1")
     _through_raw_store("playbyplayv3", "0022300001", _fetch_ok, readonly=False)
     assert (tmp_path / "playbyplayv3" / "2024" / "0022300001.json").exists()
 
 
-def test_readonly_reads_but_never_writes(monkeypatch, tmp_path):
+def test_readonly_miss_raises_instead_of_fetching(monkeypatch, tmp_path):
+    # Read-only means OFFLINE. Before 0.0.76 it suppressed only the persist, so
+    # a miss silently hit the live API and a "reproducible offline build" was
+    # partly live. _fetch_boom asserts the network is never reached.
     monkeypatch.setenv("SDV_PY_NBA_RAW_JSON_DIR", str(tmp_path))
     monkeypatch.setenv("SDV_PY_NBA_RAW_JSON_READONLY", "1")
-    # Miss: fetches, but persists nothing (compile jobs are pure consumers).
-    assert _through_raw_store("playbyplayv3", "0022300001", _fetch_ok) == PAYLOAD
-    assert not (tmp_path / "playbyplayv3").exists()
-    # Hit: still served from the store without a fetch.
+    with pytest.raises(RawStoreMissError) as exc:
+        _through_raw_store("gamerotation", "0022300001", _fetch_boom)
+    # The message names the endpoint and the key that was absent.
+    assert "gamerotation" in str(exc.value)
+    assert "0022300001" in str(exc.value)
+    assert not (tmp_path / "gamerotation").exists()
+
+
+def test_readonly_unreadable_file_raises_not_refetches(monkeypatch, tmp_path):
+    # A torn file is a miss too — under read-only it must not fall back to the
+    # network the way the writable path does.
+    monkeypatch.setenv("SDV_PY_NBA_RAW_JSON_DIR", str(tmp_path))
+    monkeypatch.setenv("SDV_PY_NBA_RAW_JSON_READONLY", "1")
+    stored = tmp_path / "playbyplayv3" / "2024" / "0022300001.json"
+    stored.parent.mkdir(parents=True)
+    stored.write_text("{torn", encoding="utf-8")
+    with pytest.raises(RawStoreMissError):
+        _through_raw_store("playbyplayv3", "0022300001", _fetch_boom)
+    assert stored.read_text(encoding="utf-8") == "{torn"  # not rewritten
+
+
+def test_readonly_hit_serves_from_store_without_network(monkeypatch, tmp_path):
+    monkeypatch.setenv("SDV_PY_NBA_RAW_JSON_DIR", str(tmp_path))
+    monkeypatch.setenv("SDV_PY_NBA_RAW_JSON_READONLY", "1")
     stored = tmp_path / "playbyplayv3" / "2024" / "0022300001.json"
     stored.parent.mkdir(parents=True)
     stored.write_text(json.dumps(PAYLOAD), encoding="utf-8")
     assert _through_raw_store("playbyplayv3", "0022300001", _fetch_boom) == PAYLOAD
+
+
+def test_writable_miss_still_fetches_and_persists(monkeypatch, tmp_path):
+    # The non-read-only path is unchanged: miss -> fetch -> persist.
+    monkeypatch.setenv("SDV_PY_NBA_RAW_JSON_DIR", str(tmp_path))
+    monkeypatch.delenv("SDV_PY_NBA_RAW_JSON_READONLY", raising=False)
+    assert _through_raw_store("playbyplayv3", "0022300001", _fetch_ok) == PAYLOAD
+    stored = tmp_path / "playbyplayv3" / "2024" / "0022300001.json"
+    assert json.loads(stored.read_text(encoding="utf-8")) == PAYLOAD
 
 
 def test_corrupt_file_refetches_and_rewrites(monkeypatch, tmp_path):

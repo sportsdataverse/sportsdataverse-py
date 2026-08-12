@@ -8,8 +8,11 @@ into the NBA one.
 
 import json
 
+import pytest
+
 import sportsdataverse.wnba.wnba_engine as W
 import sportsdataverse.wnba.wnba_stats as wnba_stats
+from sportsdataverse.errors import RawStoreMissError
 
 PAYLOAD = {"meta": {"code": 200}, "game": {"gameId": "1022600071"}}
 GID = "1022600071"  # WNBA 2026 -> calendar-year dir, no shift
@@ -46,13 +49,29 @@ def test_miss_persists_then_hits_without_network(monkeypatch, tmp_path):
     assert calls["n"] == 1  # transport hit exactly once
 
 
-def test_readonly_reads_but_never_writes(monkeypatch, tmp_path):
+def test_readonly_miss_raises_and_never_fetches(monkeypatch, tmp_path):
+    # SDV_PY_WNBA_RAW_JSON_READONLY=1 means offline. It used to suppress only
+    # the persist, so a WNBA compile over a partially-captured store fired one
+    # live stats.wnba.com request per uncaptured game (the gamerotation 2010
+    # hang) and finished "offline" with network-sourced rows.
     monkeypatch.setenv("SDV_PY_WNBA_RAW_JSON_DIR", str(tmp_path))
     monkeypatch.setenv("SDV_PY_WNBA_RAW_JSON_READONLY", "1")
     calls = _patch_pbp(monkeypatch)
-    assert W._fetch_pbp(GID) == PAYLOAD  # miss -> fetch, no persist
-    assert calls["n"] == 1
+    with pytest.raises(RawStoreMissError):
+        W._fetch_pbp(GID)
+    assert calls["n"] == 0  # transport never invoked
     assert not (tmp_path / "playbyplayv3").exists()
+
+
+def test_readonly_hit_serves_from_store(monkeypatch, tmp_path):
+    monkeypatch.setenv("SDV_PY_WNBA_RAW_JSON_DIR", str(tmp_path))
+    monkeypatch.setenv("SDV_PY_WNBA_RAW_JSON_READONLY", "1")
+    calls = _patch_pbp(monkeypatch)
+    stored = tmp_path / "playbyplayv3" / "2026" / f"{GID}.json"
+    stored.parent.mkdir(parents=True)
+    stored.write_text(json.dumps(PAYLOAD), encoding="utf-8")
+    assert W._fetch_pbp(GID) == PAYLOAD
+    assert calls["n"] == 0
 
 
 def test_no_bleed_from_nba_env(monkeypatch, tmp_path):

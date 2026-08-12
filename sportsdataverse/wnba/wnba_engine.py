@@ -46,6 +46,9 @@ _WNBA_LEAGUE_ID = "10"
 # with WNBA env vars, so a WNBA compile can read a wehoop-wnba-stats-raw
 # checkout offline via SDV_PY_WNBA_RAW_JSON_DIR as a pure consumer
 # (SDV_PY_WNBA_RAW_JSON_READONLY=1) — the -raw sweep stays the only writer.
+# Read-only is OFFLINE: an uncaptured game raises RawStoreMissError from every
+# function in this module rather than reaching stats.wnba.com, so a "read the
+# committed store" compile can't silently complete itself over the network.
 # Resolving the WNBA env here (not via the store's own NBA-named fallback)
 # keeps the namespaces separate: unset -> store off, never an NBA-env bleed.
 
@@ -56,7 +59,12 @@ def _wnba_store_dir() -> str:
 
 
 def _wnba_readonly() -> bool:
-    """Whether the WNBA store is read-only (consumer mode); default write-on-miss."""
+    """Whether the WNBA store is read-only, i.e. fully offline (consumer mode).
+
+    Read-only means the committed store is the only source: an uncaptured game
+    raises :class:`~sportsdataverse.errors.RawStoreMissError` instead of hitting
+    stats.wnba.com. Default is write-on-miss (fetch + persist).
+    """
     return bool(os.environ.get("SDV_PY_WNBA_RAW_JSON_READONLY"))
 
 

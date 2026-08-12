@@ -755,6 +755,14 @@ same store.
   `SDV_PY_NBA_RAW_JSON_DIR_{ENDPOINT}` (upper-cased slug, beats the generic);
   `SDV_PY_NBA_RAW_JSON_READONLY=1` for read-only. Explicit
   `raw_store_dir` / `raw_store_readonly` args beat env; `""` force-disables.
+- **`readonly` means OFFLINE — no writes AND no fetches** (0.0.76 BREAKING).
+  A hit is served from the store; a miss raises `errors.RawStoreMissError`
+  naming the endpoint + game id. It used to suppress only the persist, so a
+  partially-captured store completed itself over the network and an "offline"
+  build was neither offline nor reproducible. Per-game compile loops catch and
+  skip, so an uncaptured game is now a visible log line. URL store roots keep
+  their own contract (offline by construction; a miss returns `{}` so a
+  partial tree still compiles).
 - **Season dirs use the league-aware END-year convention** (0.0.72 BREAKING:
   `compile_nba_season(2024)` = 2023-24; external callers passing a start year
   must add 1).

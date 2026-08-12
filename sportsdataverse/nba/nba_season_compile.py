@@ -238,9 +238,12 @@ def compile_nba_season(
             ``SDV_PY_NBA_RAW_JSON_DIR_{ENDPOINT}``, then the generic
             ``SDV_PY_NBA_RAW_JSON_DIR``); ``""`` force-disables. Same
             spirit as ``cache_dir``'s arg-over-env precedence.
-        raw_store_readonly: If ``True``, per-game fetches read the store but
-            never persist misses (pure-consumer mode); ``None`` defers to
-            ``SDV_PY_NBA_RAW_JSON_READONLY``.
+        raw_store_readonly: If ``True``, per-game fetches are fully offline —
+            the store is the only source, and a game with no capture raises
+            :class:`~sportsdataverse.errors.RawStoreMissError`, which this
+            loop's per-game handler logs and skips (so an uncaptured game is
+            visibly skipped instead of silently completed from the live API).
+            ``None`` defers to ``SDV_PY_NBA_RAW_JSON_READONLY``.
         return_as_pandas: Return pandas instead of polars.
 
     Returns:
