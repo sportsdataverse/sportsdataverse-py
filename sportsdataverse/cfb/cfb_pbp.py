@@ -5070,6 +5070,243 @@ class CFBPlayProcess(object):
         )
         return play_df
 
+    def __add_series_data(self, play_df):
+        """Port of cfbfastR's series / first-down decomposition.
+
+        Provenance (verbatim port, bug-for-bug):
+            * ``cfbfastR/R/pbp_prep_epa_df_after.R`` L194-298 --
+              ``first_by_penalty`` / ``first_by_yards`` row flags, their lag
+              ladder, ``new_series``, and the four ``firstD_by_*`` outputs.
+            * ``cfbfastR/R/pbp_clean_drive_dat.R`` L18-66 + L300-312 -- the
+              half-scoped ``lag(1..3)`` event-flag lags (0-filled at half
+              starts) and ``drive_event_number`` (within-drive cumsum of
+              non-End rows).
+            * ``cfbfastR/R/pbp_clean_pbp_dat.R`` L388-390 -- ``lag_play_type``
+              is UNGROUPED on the per-game frame ("End of Half" is not in the
+              Timeout/End-Period skip set, so crossing the half boundary is
+              inert).
+
+        Emits ``firstD_by_kickoff`` / ``firstD_by_poss`` / ``firstD_by_penalty``
+        / ``firstD_by_yards`` + ``new_series`` as Boolean columns. ESPN's box
+        ``firstDowns`` counts earned + penalty only, so box reconstruction is
+        ``firstD_by_yards + firstD_by_penalty`` (``_poss`` / ``_kickoff`` mark
+        unearned series starts and are excluded).
+
+        Known divergence from R (documented, benign): R leaves ``firstD_by_yards``
+        ``NA`` on rows 1-2 of a half (unfilled lag2/lag3); we emit ``False``.
+        """
+        to_ep = ["Timeout", "End Period"]
+        end_rows = ["End Period", "End of Half", "End of Game"]
+        play_df = (
+            play_df.with_columns(
+                first_by_penalty=pl.when(
+                    (pl.col("type.text").is_in(penalty)).and_(pl.col("penalty_1st_conv") == True),
+                )
+                .then(True)
+                .when(
+                    (pl.col("type.text").is_in(penalty))
+                    .and_(pl.col("penalty_declined") == True)
+                    .and_(pl.col("penalty_offset") == True)
+                    .and_(pl.col("penalty_1st_conv") == False)
+                    .and_(pl.col("statYardage") > pl.col("start.distance")),
+                )
+                .then(True)
+                .when(
+                    (pl.col("type.text").is_in(penalty))
+                    .and_(pl.col("penalty_declined") == True)
+                    .and_(pl.col("penalty_offset") == False)
+                    .and_(pl.col("penalty_1st_conv") == False)
+                    .and_(pl.col("statYardage") >= pl.col("start.distance")),
+                )
+                .then(True)
+                .otherwise(False),
+                first_by_yards=(
+                    (pl.col("type.text").is_in(normalplay)).or_(pl.col("type.text") == "Fumble Recovery (Own)")
+                ).and_(pl.col("statYardage") >= pl.col("start.distance")),
+                drive_event=pl.col("type.text").is_in(end_rows) == False,
+            )
+            .with_columns(
+                drive_event_number=pl.col("drive_event").cast(pl.Int32).cum_sum().over("drive.id"),
+                # lag_play_type is ungrouped in R (pbp_clean_pbp_dat.R L388-390);
+                # fill "" so is_in() is False like R's NA %in% -> FALSE.
+                lag_play_type=pl.col("type.text").shift(1).fill_null(""),
+                lag_play_type2=pl.col("type.text").shift(2).fill_null(""),
+                # Half-scoped event-flag lags, 0-filled at half starts. R fills
+                # via half_event_number %in% 1..k; within-half shift(k) is null
+                # exactly on those rows (End rows carry all-False flags, so the
+                # half_play_number nuance on scoring_play is inert).
+                lag_first_by_penalty=pl.col("first_by_penalty").shift(1).over("half").fill_null(False),
+                lag_first_by_penalty2=pl.col("first_by_penalty").shift(2).over("half").fill_null(False),
+                lag_first_by_penalty3=pl.col("first_by_penalty").shift(3).over("half").fill_null(False),
+                lag_first_by_yards=pl.col("first_by_yards").shift(1).over("half").fill_null(False),
+                lag_first_by_yards2=pl.col("first_by_yards").shift(2).over("half").fill_null(False),
+                lag_first_by_yards3=pl.col("first_by_yards").shift(3).over("half").fill_null(False),
+                lag_change_of_pos_team_srs=pl.col("change_of_pos_team").shift(1).over("half").fill_null(False),
+                lag_change_of_pos_team2_srs=pl.col("change_of_pos_team").shift(2).over("half").fill_null(False),
+                lag_change_of_pos_team3_srs=pl.col("change_of_pos_team").shift(3).over("half").fill_null(False),
+                lag_kickoff_play=pl.col("kickoff_play").shift(1).over("half").fill_null(False),
+                lag_kickoff_play2=pl.col("kickoff_play").shift(2).over("half").fill_null(False),
+                lag_punt=pl.col("punt").shift(1).over("half").fill_null(False),
+                lag_punt2=pl.col("punt").shift(2).over("half").fill_null(False),
+                lag_downs_turnover=pl.col("downs_turnover").shift(1).over("half").fill_null(False),
+                lag_downs_turnover2=pl.col("downs_turnover").shift(2).over("half").fill_null(False),
+                lag_turnover_vec=pl.col("turnover_vec").shift(1).over("half").fill_null(False),
+                lag_turnover_vec2=pl.col("turnover_vec").shift(2).over("half").fill_null(False),
+                lag_scoring_play=pl.col("scoring_play").shift(1).over("half").fill_null(False),
+                lag_scoring_play2=pl.col("scoring_play").shift(2).over("half").fill_null(False),
+                half_row=pl.int_range(pl.len()).over("half"),
+                lag_drive_id=pl.col("drive.id").shift(1).over("half"),
+            )
+            .with_columns(
+                new_series=pl.when(pl.col("half_row") == 0)
+                .then(True)
+                .when(pl.col("drive.id") != pl.col("lag_drive_id"))
+                .then(True)
+                .when(pl.col("lag_first_by_yards") == True)
+                .then(True)
+                .when(pl.col("lag_first_by_penalty") == True)
+                .then(True)
+                .otherwise(False),
+                # R: kickoff_play == 1 & down == 1. ESPN's raw start.down on
+                # kickoff rows is era-dependent junk (0 pre-normalization) and
+                # __process_epa's kick_mask later substitutes down=1 on every
+                # kickoff row -- the normalized-down semantics the R engine
+                # sees natively on CFBD input -- so the down guard is vacuous.
+                firstD_by_kickoff=pl.col("kickoff_play") == True,
+                firstD_by_poss=pl.when(
+                    # 1-L.I) start by play after kickoff
+                    (pl.col("lag_play_type").is_in(to_ep) == False)
+                    .and_(pl.col("drive_event_number") == 2)
+                    .and_(pl.col("lag_kickoff_play") == True)
+                    .and_(pl.col("kickoff_play") == False),
+                )
+                .then(True)
+                .when(
+                    # 1-L.II) same, one non-play event in between
+                    (pl.col("lag_play_type").is_in(to_ep))
+                    .and_(pl.col("lag_play_type2").is_in(to_ep) == False)
+                    .and_(pl.col("drive_event_number") == 3)
+                    .and_(pl.col("lag_kickoff_play2") == True)
+                    .and_(pl.col("kickoff_play") == False),
+                )
+                .then(True)
+                .when(
+                    # 2-L.I) start by change of pos_team
+                    (pl.col("lag_play_type").is_in(to_ep) == False)
+                    .and_(pl.col("lag_change_of_pos_team_srs") == True)
+                    .and_(
+                        (pl.col("lag_punt") == True)
+                        .or_(pl.col("lag_downs_turnover") == True)
+                        .or_(pl.col("lag_turnover_vec") == True),
+                    ),
+                )
+                .then(True)
+                .when(
+                    # 2-L.II) same, one non-play event in between
+                    (pl.col("lag_play_type").is_in(to_ep))
+                    .and_(pl.col("lag_change_of_pos_team2_srs") == True)
+                    .and_(pl.col("lag_play_type2").is_in(to_ep) == False)
+                    .and_(
+                        (pl.col("lag_punt2") == True)
+                        .or_(pl.col("lag_downs_turnover2") == True)
+                        .or_(pl.col("lag_turnover_vec2") == True),
+                    ),
+                )
+                .then(True)
+                .when(
+                    # 3-L.I) start by opponent scoring play
+                    (pl.col("lag_play_type").is_in(to_ep) == False)
+                    .and_(pl.col("lag_scoring_play") == True)
+                    .and_(pl.col("kickoff_play") == False),
+                )
+                .then(True)
+                .when(
+                    # 3-L.II) same, one non-play event in between
+                    (pl.col("lag_play_type").is_in(to_ep))
+                    .and_(pl.col("lag_play_type2").is_in(to_ep) == False)
+                    .and_(pl.col("lag_scoring_play2") == True)
+                    .and_(pl.col("kickoff_play") == False),
+                )
+                .then(True)
+                .when(
+                    # 4) start-of-half plays start drives
+                    (pl.col("drive_event_number") == 1).and_(pl.col("kickoff_play") == False),
+                )
+                .then(True)
+                .otherwise(False),
+                firstD_by_penalty=pl.when(
+                    (pl.col("lag_first_by_penalty") == True)
+                    .and_(pl.col("lag_change_of_pos_team_srs") == False)
+                    .and_(pl.col("lag_play_type").is_in(to_ep) == False),
+                )
+                .then(True)
+                .when(
+                    (pl.col("lag_first_by_penalty2") == True)
+                    .and_(pl.col("lag_change_of_pos_team2_srs") == False)
+                    .and_(pl.col("lag_play_type").is_in(to_ep)),
+                )
+                .then(True)
+                .when(
+                    (pl.col("lag_first_by_penalty3") == True)
+                    .and_(pl.col("lag_change_of_pos_team3_srs") == False)
+                    .and_(pl.col("lag_play_type").is_in(to_ep))
+                    .and_(pl.col("lag_play_type2").is_in(to_ep)),
+                )
+                .then(True)
+                .otherwise(False),
+                firstD_by_yards=pl.when(
+                    (pl.col("lag_first_by_yards") == True)
+                    .and_(pl.col("lag_change_of_pos_team_srs") == False)
+                    .and_(pl.col("lag_play_type").is_in(to_ep) == False),
+                )
+                .then(True)
+                .when(
+                    (pl.col("lag_first_by_yards2") == True)
+                    .and_(pl.col("lag_change_of_pos_team2_srs") == False)
+                    .and_(pl.col("lag_play_type").is_in(to_ep)),
+                )
+                .then(True)
+                .when(
+                    (pl.col("lag_first_by_yards3") == True)
+                    .and_(pl.col("lag_change_of_pos_team3_srs") == False)
+                    .and_(pl.col("lag_play_type").is_in(to_ep))
+                    .and_(pl.col("lag_play_type2").is_in(to_ep)),
+                )
+                .then(True)
+                .otherwise(False),
+            )
+            .drop(
+                "first_by_penalty",
+                "first_by_yards",
+                "drive_event",
+                "drive_event_number",
+                "lag_play_type",
+                "lag_play_type2",
+                "lag_first_by_penalty",
+                "lag_first_by_penalty2",
+                "lag_first_by_penalty3",
+                "lag_first_by_yards",
+                "lag_first_by_yards2",
+                "lag_first_by_yards3",
+                "lag_change_of_pos_team_srs",
+                "lag_change_of_pos_team2_srs",
+                "lag_change_of_pos_team3_srs",
+                "lag_kickoff_play",
+                "lag_kickoff_play2",
+                "lag_punt",
+                "lag_punt2",
+                "lag_downs_turnover",
+                "lag_downs_turnover2",
+                "lag_turnover_vec",
+                "lag_turnover_vec2",
+                "lag_scoring_play",
+                "lag_scoring_play2",
+                "half_row",
+                "lag_drive_id",
+            )
+        )
+        return play_df
+
     def __add_spread_time(self, play_df):
         play_df = (
             play_df.with_columns(
@@ -7537,6 +7774,7 @@ class CFBPlayProcess(object):
                     .pipe(self.__add_attribution_cols)
                     .pipe(self.__refine_play_types_post_attribution)
                     .pipe(self.__after_cols)
+                    .pipe(self.__add_series_data)
                     .pipe(self.__add_spread_time)
                     .pipe(self.__process_epa)
                     .pipe(self.__process_wpa)
@@ -7773,6 +8011,7 @@ class CFBPlayProcess(object):
                     .pipe(self.__add_player_cols)
                     .pipe(self.__add_xp_suffix_cols)
                     .pipe(self.__after_cols)
+                    .pipe(self.__add_series_data)
                     .pipe(self.__add_spread_time)
                 )
                 self.plays_json = self.plays_json.to_dicts()
