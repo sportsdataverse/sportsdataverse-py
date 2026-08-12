@@ -440,7 +440,10 @@ _DEFENSIVE_PENALTIES = frozenset(
         "Roughing the Snapper",
         "12 Men on the Field",
         "Neutral Zone Infraction",
-        "Encroachment",
+        # NOTE: "Encroachment" is NOT here -- in NCAA usage encroachment is an
+        # OFFENSIVE foul (lineman in the neutral zone), unlike the NFL's
+        # defensive usage. The 2025-season taxonomy corroborates (10 OFF / 3
+        # DEF among text-resolved rows).
         "Targeting",
         "Pass Interference",
     },
@@ -2888,21 +2891,23 @@ class CFBPlayProcess(object):
                 .otherwise(pl.lit(None, dtype=pl.Boolean)),
             )
             .with_columns(
-                penalty_detail=pl.when(pl.col("penalty_offset") == 1)
-                .then(pl.lit("Offsetting"))
-                .when(pl.col("penalty_declined") == 1)
-                .then(pl.lit("Declined"))
-                .when(pl.col("text").str.contains("(?i)roughing passer"))
+                # Foul-name branches FIRST: a declined/offset penalty keeps its
+                # foul name (the disposition already lives in penalty_declined /
+                # penalty_offset), instead of the label swallowing it -- the
+                # 2025-season taxonomy measured 318 "Declined" + 844 "Missing"
+                # rows whose foul names were recoverable from text.
+                penalty_detail=pl.when(pl.col("text").str.contains("(?i)roughing (?:the )?passer"))
                 .then(pl.lit("Roughing the Passer"))
                 .when(pl.col("text").str.contains("(?i)offensive holding"))
                 .then(pl.lit("Offensive Holding"))
-                .when(pl.col("text").str.contains("(?i)pass interference"))
+                # inter?ference: ESPN ships a literal "Inteference" typo
+                .when(pl.col("text").str.contains("(?i)pass inter?ference"))
                 .then(pl.lit("Pass Interference"))
                 .when(pl.col("text").str.contains("(?i)encroachment"))
                 .then(pl.lit("Encroachment"))
-                .when(pl.col("text").str.contains("(?i)defensive pass interference"))
+                .when(pl.col("text").str.contains("(?i)defensive pass inter?ference"))
                 .then(pl.lit("Defensive Pass Interference"))
-                .when(pl.col("text").str.contains("(?i)offensive pass interference"))
+                .when(pl.col("text").str.contains("(?i)offensive pass inter?ference"))
                 .then(pl.lit("Offensive Pass Interference"))
                 .when(pl.col("text").str.contains("(?i)illegal procedure"))
                 .then(pl.lit("Illegal Procedure"))
@@ -2910,19 +2915,21 @@ class CFBPlayProcess(object):
                 .then(pl.lit("Defensive Holding"))
                 .when(pl.col("text").str.contains("(?i)holding"))
                 .then(pl.lit("Holding"))
-                .when(pl.col("text").str.contains("(?i)offensive offside|(?i)offside offense"))
+                .when(pl.col("text").str.contains("(?i)offensive off-?side|(?i)off-?side offense"))
                 .then(pl.lit("Offensive Offside"))
-                .when(pl.col("text").str.contains("(?i)defensive offside|(?i)offside defense"))
+                .when(pl.col("text").str.contains("(?i)defensive off-?side|(?i)off-?side defense"))
                 .then(pl.lit("Defensive Offside"))
-                .when(pl.col("text").str.contains("(?i)offside"))
+                # off-?side: hyphenated vendor spelling ("off-side") observed 44x in 2025
+                .when(pl.col("text").str.contains("(?i)off-?side"))
                 .then(pl.lit("Offside"))
-                .when(pl.col("text").str.contains("(?i)illegal fair catch signal"))
+                .when(pl.col("text").str.contains("(?i)(?:illegal|invalid) fair catch signal"))
                 .then(pl.lit("Illegal Fair Catch Signal"))
-                .when(pl.col("text").str.contains("(?i)illegal batting"))
+                .when(pl.col("text").str.contains(r"(?i)illegal bat(?:ting)?\b"))
                 .then(pl.lit("Illegal Batting"))
                 .when(pl.col("text").str.contains("(?i)neutral zone infraction"))
                 .then(pl.lit("Neutral Zone Infraction"))
-                .when(pl.col("text").str.contains("(?i)ineligible downfield"))
+                # inelgible: another literal vendor typo
+                .when(pl.col("text").str.contains("(?i)inel[ei]gible downfield|(?i)inelgible downfield"))
                 .then(pl.lit("Ineligible Downfield"))
                 .when(pl.col("text").str.contains("(?i)illegal use of hands"))
                 .then(pl.lit("Illegal Use of Hands"))
@@ -2930,19 +2937,24 @@ class CFBPlayProcess(object):
                 .then(pl.lit("Kickoff Out of Bounds"))
                 .when(pl.col("text").str.contains("(?i)12 men on the field"))
                 .then(pl.lit("12 Men on the Field"))
-                .when(pl.col("text").str.contains("(?i)illegal block"))
+                .when(pl.col("text").str.contains("(?i)block(?:ing)? below (?:the )?waist"))
+                .then(pl.lit("Block Below the Waist"))
+                .when(pl.col("text").str.contains("(?i)chop block"))
+                .then(pl.lit("Chop Block"))
+                .when(pl.col("text").str.contains("(?i)illegal block|(?i)low block"))
                 .then(pl.lit("Illegal Block"))
                 .when(pl.col("text").str.contains("(?i)personal foul"))
                 .then(pl.lit("Personal Foul"))
                 .when(pl.col("text").str.contains("(?i)false start"))
                 .then(pl.lit("False Start"))
-                .when(pl.col("text").str.contains("(?i)substitution infraction"))
+                .when(pl.col("text").str.contains("(?i)substitution infraction|(?i)illegal substitution"))
                 .then(pl.lit("Substitution Infraction"))
                 .when(pl.col("text").str.contains("(?i)illegal formation"))
                 .then(pl.lit("Illegal Formation"))
-                .when(pl.col("text").str.contains("(?i)illegal touching"))
+                # prefix covers "Illegal Touching" / "Illegal Touch Pass" / "Illegal Touch-Pass"
+                .when(pl.col("text").str.contains("(?i)illegal touch"))
                 .then(pl.lit("Illegal Touching"))
-                .when(pl.col("text").str.contains("(?i)sideline interference"))
+                .when(pl.col("text").str.contains("(?i)sideline inter?ference"))
                 .then(pl.lit("Sideline Interference"))
                 .when(pl.col("text").str.contains("(?i)clipping"))
                 .then(pl.lit("Clipping"))
@@ -2996,12 +3008,22 @@ class CFBPlayProcess(object):
                 .then(pl.lit("Illegal Blindside Block"))
                 .when(pl.col("text").str.contains("(?i)unsportsmanlike conduct"))
                 .then(pl.lit("Unsportsmanlike Conduct"))
-                .when(pl.col("text").str.contains("(?i)running into kicker"))
+                .when(pl.col("text").str.contains("(?i)running into (?:the )?kicker"))
                 .then(pl.lit("Running Into Kicker"))
                 .when(pl.col("text").str.contains("(?i)failure to wear required equipment"))
                 .then(pl.lit("Failure to Wear Required Equipment"))
                 .when(pl.col("text").str.contains("(?i)player disqualification"))
                 .then(pl.lit("Player Disqualification"))
+                .when(pl.col("text").str.contains("(?i)disconcerting"))
+                .then(pl.lit("Disconcerting Signals"))
+                .when(pl.col("text").str.contains(r"(?i)\bleaping\b"))
+                .then(pl.lit("Leaping"))
+                # disposition-only labels LAST: they fire only when no foul name
+                # was recognizable in the text
+                .when(pl.col("penalty_offset") == 1)
+                .then(pl.lit("Offsetting"))
+                .when(pl.col("penalty_declined") == 1)
+                .then(pl.lit("Declined"))
                 .when(pl.col("penalty_flag") == True)
                 .then(pl.lit("Missing")),
             )
