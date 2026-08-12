@@ -171,3 +171,40 @@ def test_scoring_opportunities_no_opportunity_is_null_not_zero():
     assert out["scoring_opps"][0] == 0
     assert out["opp_rate"][0] == 0.0
     assert out["points_per_opp"][0] is None
+
+
+def test_carry_forward_weights_accepts_string_team_ids():
+    """NFL ids are abbreviations — the abbr IS the canonical id, not a number."""
+    ret = pl.DataFrame({"season": [2019, 2019], "team_id": ["KC", "SF"], "overall_returning": [0.8, 0.4]})
+    qb = pl.DataFrame({"season": [2019, 2019], "team_id": ["KC", "SF"], "qb_continuity": [1, 0]})
+    out = carry_forward_weights(ret, qb_continuity=qb)
+    wk1 = out.filter(pl.col("week") == 1).sort("team_id")
+    assert wk1.height == 2
+    # KC: more returning production AND continuity -> strictly higher credence
+    assert wk1["carry_weight"][0] > wk1["carry_weight"][1]
+
+
+def test_carry_forward_weights_rejects_non_matching_id_namespace():
+    """A continuity key that matches NOTHING must raise, not return 0.5.
+
+    The silent-degrade this guards: the left join misses on every row,
+    `fill_null(0.5)` hands the neutral credence to the whole league, and
+    the output looks like a plausible answer. A Float64-origin id that
+    stringified to "52.0" used to land here; `_team_id_utf8` now rules
+    out the dtype half, leaving a genuinely wrong id namespace.
+    """
+    ret = pl.DataFrame({"season": [2019], "team_id": ["KC"], "overall_returning": [0.8]})
+    qb = pl.DataFrame({"season": [2019], "team_id": [52.0], "qb_continuity": [1]})
+    with pytest.raises(ValueError, match="shares no"):
+        carry_forward_weights(ret, qb_continuity=qb)
+
+
+def test_carry_forward_weights_numeric_ids_do_not_stringify_as_float():
+    """Float-origin ids must become "52", never "52.0"."""
+    ret = pl.DataFrame({"season": [2019], "team_id": [52.0], "overall_returning": [0.8]})
+    qb = pl.DataFrame({"season": [2019], "team_id": [52], "qb_continuity": [1]})
+    out = carry_forward_weights(ret, qb_continuity=qb)
+    assert out["team_id"].unique().to_list() == ["52"]
+    # the qb=1 signal actually landed rather than falling back to neutral 0.5
+    neutral = carry_forward_weights(ret)
+    assert out.filter(pl.col("week") == 1)["carry_weight"][0] > (neutral.filter(pl.col("week") == 1)["carry_weight"][0])

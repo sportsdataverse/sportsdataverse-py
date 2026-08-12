@@ -261,12 +261,25 @@ parameter is stamped on its table and refused on mismatch.
   drive-EP response extraction (`cfb_drive_deltas`).
 - `wexp.postgame.postgame_we` — post-game deserved-win probability (G3
   analytic normal + G2 drive bootstrap, fixed-seed reproducible).
+- `wexp.features` — walk-forward team features, all keyed
+  `(season, as_of_week, team_id)` under the same EXCLUSIVE-vintage
+  contract as the engines: `sos_sor_vintages` (strength of schedule
+  faced and remaining, plus strength of record as wins above what a
+  league-average team would take from the same slate at the same
+  sites), `carry_forward_weights` (how much of last season's metrics to
+  still believe given returning production and QB / head-coach
+  continuity, ramped to zero once the current season carries its own
+  evidence), and `cfb_scoring_opportunities` (per team-game scoring
+  opportunities — drives reaching inside the opponent 40 — split into
+  `opp_rate` for creation and `points_per_opp` for finishing; a team
+  with no opportunity gets a null finishing value, never a 0).
 - `wexp.variants` — the axis config system: 1,860 valid variants across
   cores/response/adjustment/priors/wp-map/HFA axes, stable-hashed;
   `wexp.engines.build_predictor` dispatches implemented cells and raises
   on unbuilt ones (never a silent fallback).
 - Committed tune-window leaderboards + variant registry under
-  `results/wexp/` (tune <= 2021; the 2022-2025 holdout is never scored).
+  `results/wexp/` — every committed row is tune-window (season <= 2021);
+  no 2022-2025 holdout result is written to the leaderboard.
 
 ### New — `load_nfl_ratings_weekly`: per-week as-of NFL ratings vintages
 

@@ -367,7 +367,17 @@ def response_ridge_vintages(
     games = normalize_walk_weeks(oracle).select(
         "game_id", "season", "week", "home_team_id", "neutral_site", "home_margin"
     )
-    rows = responses.join(games, on="game_id", how="inner").filter(pl.col("home_margin").is_not_null())
+    # Drop null RESPONSES as well as null margins. The ridge solver has no
+    # null handling: one null response makes every coefficient in that
+    # vintage NaN, and NaN survives the downstream `drop_nulls` guards
+    # (polars null != NaN), so the run finishes with silently-missing
+    # predictions instead of raising. `cfb_scoring_opportunities` emits a
+    # deliberate null `points_per_opp` for teams with no scoring
+    # opportunity, which is exactly this path. `ridge_margin_vintages`
+    # already filters its response; these two must not be asymmetric.
+    rows = responses.join(games, on="game_id", how="inner").filter(
+        pl.col("home_margin").is_not_null() & pl.col(resp_col).is_not_null()
+    )
     if close_filter is not None:
         rows = rows.filter(pl.col("home_margin").abs() <= close_filter)
     rows = rows.with_columns(

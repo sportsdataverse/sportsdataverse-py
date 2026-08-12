@@ -752,3 +752,47 @@ def test_season_priors_wrong_entity_space_refused(nfl_oracle):
     )
     with pytest.raises(ValueError, match="state space"):
         run_backtest(nfl_oracle, glickman_stern_predictor(GSConfig(), bogus), model_id="gs")
+
+
+def test_response_ridge_vintages_tolerates_null_responses(nfl_oracle):
+    """A null response must be DROPPED, not NaN-poison the whole vintage.
+
+    The ridge solver has no null handling: one null response makes every
+    coefficient in that vintage NaN, and NaN survives the downstream
+    `drop_nulls` guards because polars null != NaN — so the run finishes
+    with silently-missing predictions instead of raising.
+    `cfb_scoring_opportunities` emits a deliberate null `points_per_opp`
+    for teams that never reached scoring range, which lands here.
+    """
+    from sportsdataverse.wexp.engines import response_ridge_vintages
+
+    season = nfl_oracle.filter(pl.col("season") == 2024)
+    base = pl.concat(
+        [
+            season.select(
+                game_id=pl.col("game_id"),
+                off_team_id=pl.col("home_team_id"),
+                def_team_id=pl.col("away_team_id"),
+                resp=pl.col("home_margin") / 10.0,
+            ),
+            season.select(
+                game_id=pl.col("game_id"),
+                off_team_id=pl.col("away_team_id"),
+                def_team_id=pl.col("home_team_id"),
+                resp=-pl.col("home_margin") / 10.0,
+            ),
+        ]
+    ).drop_nulls("resp")
+
+    clean = response_ridge_vintages(base, season, lam=1.0)
+    # null out a handful of responses; every OTHER row still carries signal
+    holed = base.with_columns(resp=pl.when(pl.int_range(pl.len()) < 5).then(None).otherwise(pl.col("resp")))
+    out = response_ridge_vintages(holed, season, lam=1.0)
+
+    assert out.height > 0, "null responses wiped the vintage table entirely"
+    for col in ("off_coef", "def_coef", "adj_net"):
+        assert out[col].is_nan().sum() == 0, f"{col} was NaN-poisoned by a null response"
+        assert out[col].is_null().sum() == 0
+    # and it is genuinely still fitting, not degenerate
+    assert out["adj_net"].std() > 0
+    assert set(out["as_of_week"].unique()) == set(clean["as_of_week"].unique())

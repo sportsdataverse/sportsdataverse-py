@@ -21,7 +21,6 @@ from __future__ import annotations
 
 from typing import Optional
 
-import numpy as np
 import polars as pl
 
 from sportsdataverse.wexp.backtest import normalize_walk_weeks
@@ -152,6 +151,23 @@ def sos_sor_vintages(
     )
 
 
+def _team_id_utf8(frame: pl.DataFrame) -> pl.Expr:
+    """Canonicalize a ``team_id`` column to Utf8 without inventing digits.
+
+    Both league contracts have to work here: CFB carries numeric ESPN ids,
+    NFL carries the nflverse abbreviation, and that abbreviation IS the
+    canonical id. A blanket ``cast(Int64).cast(Utf8)`` raises on ``"KC"``;
+    a blanket ``cast(Utf8)`` turns a Float64-origin ``52.0`` into
+    ``"52.0"``, which then matches nothing and degrades silently.
+
+    So branch on the incoming dtype: numeric ids go through Int64 first
+    (never float -> string), string ids pass through untouched.
+    """
+    if frame.schema["team_id"].is_numeric():
+        return pl.col("team_id").cast(pl.Int64).cast(pl.Utf8)
+    return pl.col("team_id").cast(pl.Utf8)
+
+
 def _norm_cdf(expr: pl.Expr) -> pl.Expr:
     """Normal CDF via the logistic approximation (polars has no erf).
 
@@ -214,7 +230,7 @@ def carry_forward_weights(
     """
     base_frame = returning.select(
         season=pl.col("season").cast(pl.Int32),
-        team_id=pl.col("team_id").cast(pl.Int64).cast(pl.Utf8),
+        team_id=_team_id_utf8(returning),
         ret=pl.col("overall_returning").cast(pl.Float64).clip(0.0, 1.0),
     )
     for frame, col, name in (
@@ -226,9 +242,21 @@ def carry_forward_weights(
             continue
         tidy = frame.select(
             season=pl.col("season").cast(pl.Int32),
-            team_id=pl.col("team_id").cast(pl.Utf8),
+            team_id=_team_id_utf8(frame),
             **{name: pl.col(col).cast(pl.Float64)},
         )
+        # A key that matches NOTHING degrades silently: the left join misses
+        # on every row, `fill_null(0.5)` hands back the neutral credence for
+        # the whole league, and the result looks like a plausible answer.
+        # `_team_id_utf8` rules out the dtype half of this; what remains is a
+        # genuinely different id namespace (ESPN numeric ids vs nflverse
+        # abbreviations) or a season range that does not overlap.
+        if tidy.height and base_frame.join(tidy, on=["season", "team_id"], how="inner").height == 0:
+            raise ValueError(
+                f"{name}_continuity shares no (season, team_id) key with `returning` — "
+                "every team would silently receive the neutral 0.5 weight. Check that both "
+                "frames use the same id namespace and overlapping seasons."
+            )
         base_frame = base_frame.join(tidy, on=["season", "team_id"], how="left").with_columns(
             pl.col(name).fill_null(0.5)
         )
@@ -330,6 +358,3 @@ def cfb_scoring_opportunities(pbp: pl.DataFrame) -> pl.DataFrame:
             points_per_opp=pl.col("points_per_opp"),
         )
     )
-
-
-_ = np  # numpy stays imported for downstream matchup work
