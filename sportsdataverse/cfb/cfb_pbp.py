@@ -482,9 +482,15 @@ def _parse_recovery_abbrevs(text):
 #: Form 2 (leading/mid-sentence): "{TEAM} Penalty, {foul} ..." -- team phrase
 #: immediately before "Penalty," ("TCU Penalty, sideline interference",
 #: "ARIZONA ST Penalty, Face Mask", "Notre Dame Penalty, Defensive Holding").
+#: (regex, direction). Direction controls the word-shrink order in the
+#: matcher: form 1 puts the team FIRST after "PENALTY" (shrink from the left,
+#: "BAYLOR Pass Interference" -> "BAYLOR"); form 2 puts the team LAST before
+#: "Penalty," (shrink from the right, "for a TD Vanderbilt Penalty," ->
+#: "Vanderbilt"). Form 2's inner words also admit "(" so "Miami (OH) Penalty,"
+#: captures whole.
 _PENALTY_TOKEN_RES = [
-    re.compile(r"PENALTY[,:]?\s+(?:on\s+)?([A-Z][\w.&'-]*(?:\s+[A-Z][\w.&'-]*){0,2})"),
-    re.compile(r"([A-Z][\w.&'-]*(?:\s+[A-Z][\w.&'-]*){0,2})\s+Penalty,"),
+    (re.compile(r"PENALTY[,:]?\s+(?:on\s+)?([A-Z][\w.&'-]*(?:\s+[A-Z][\w.&'-]*){0,2})"), "prefix"),
+    (re.compile(r"([A-Z(][\w.&'()-]*(?:\s+[A-Z(][\w.&'()-]*){0,2})\s+Penalty,"), "suffix"),
 ]
 
 _SQUASH_RE = re.compile(r"[^A-Z0-9]")
@@ -515,7 +521,10 @@ def _score_team_match(tok: str, cands: list) -> int:
             return 3
         if c.startswith(tok) or tok.startswith(c):
             best = max(best, 2)
-        elif len(tok) >= 4 and _is_char_subseq(tok, c):
+        elif len(tok) >= 3 and _is_char_subseq(tok, c):
+            # consonant-skeleton vendor codes ("TLN" = Tulane, "MTN" = Middle
+            # Tennessee); length >= 3, and the binary home-vs-away contest
+            # still requires a strict winner
             best = max(best, 1)
     return best
 
@@ -536,7 +545,9 @@ def _team_alias_initialisms(name):
     out = []
     if len(words) == 1:
         if not name.isupper():
+            # both orders: "UT" (Texas), "VU" (Vanderbilt), "LU" (Liberty)
             out.append("U" + _squash_team(name)[:1])
+            out.append(_squash_team(name)[:1] + "U")
     else:
         initials = "".join(w[0] for w in words if w).upper()
         out.extend([initials, initials + "U", "U" + initials])
@@ -570,23 +581,27 @@ def _parse_penalty_team_side(row):
     ]
     home_alias = _team_alias_initialisms(row["homeTeamName"])
     away_alias = _team_alias_initialisms(row["awayTeamName"])
-    for rx in _PENALTY_TOKEN_RES:
+    for rx, direction in _PENALTY_TOKEN_RES:
         for m in rx.finditer(text):
             words = m.group(1).split()
             for k in range(len(words), 0, -1):
-                tok = _squash_team(" ".join(words[:k]))
+                run = words[:k] if direction == "prefix" else words[-k:]
+                tok = _squash_team(" ".join(run))
                 if len(tok) < 2:
                     continue
-                hs = _score_team_match(tok, home)
-                aws = _score_team_match(tok, away)
-                if hs == aws:
-                    # weak tier: derived initialism aliases, exact-match only
-                    hs = int(tok in home_alias)
-                    aws = int(tok in away_alias)
-                if hs > aws:
-                    return "home"
-                if aws > hs:
-                    return "away"
+                # also try the U-university prefix stripped ("UMass" -> "MASS")
+                toks = [tok] + ([tok[1:]] if tok.startswith("U") and len(tok) >= 4 else [])
+                for t in toks:
+                    hs = _score_team_match(t, home)
+                    aws = _score_team_match(t, away)
+                    if hs == aws:
+                        # weak tier: derived initialism aliases, exact-match only
+                        hs = int(t in home_alias)
+                        aws = int(t in away_alias)
+                    if hs > aws:
+                        return "home"
+                    if aws > hs:
+                        return "away"
     return None
 
 
@@ -2978,7 +2993,7 @@ class CFBPlayProcess(object):
                 .then(pl.lit("Illegal Shift"))
                 .when(pl.col("text").str.contains("(?i)illegal motion"))
                 .then(pl.lit("Illegal Motion"))
-                .when(pl.col("text").str.contains("(?i)roughing the kicker"))
+                .when(pl.col("text").str.contains("(?i)roughing (?:the )?kicker"))
                 .then(pl.lit("Roughing the Kicker"))
                 .when(pl.col("text").str.contains("(?i)delay of game"))
                 .then(pl.lit("Delay of Game"))

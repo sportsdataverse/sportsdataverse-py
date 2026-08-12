@@ -956,3 +956,50 @@ def test_penalty_side_longest_prefix_shrinks_to_team():
 
 def test_penalty_side_none_when_no_token():
     assert _pen_side("Jalen Milroe run for 8 yds to the LSU 22") is None
+
+
+def test_penalty_side_suffix_direction_leading_form():
+    # the team is the LAST word run before "Penalty," -- junk prefix words
+    # ("for a TD") must not defeat the match
+    side = _pen_side(
+        "Sedrick Alexander run for 2 yds for a TD Vanderbilt Penalty, (Yards) declined",
+        home=("VAN", "Vanderbilt", None, "Commodores"),
+        away=("AUB", "Auburn", None, "Tigers"),
+    )
+    assert side == "home"
+
+
+def test_penalty_side_parenthesized_team_name():
+    side = _pen_side(
+        "Kevin Davis run for 3 yds Miami (OH) Penalty, Holding (10 Yards) to the M-OH 25",
+        home=("M-OH", "Miami (OH)", None, "RedHawks"),
+        away=("BGSU", "Bowling Green", None, "Falcons"),
+    )
+    assert side == "home"
+
+
+def test_penalty_side_u_prefix_stripped():
+    side = _pen_side(
+        "PENALTY UMass Pass Interference (Bailey,Brennen) 15 yards from UMA35 to UMA20",
+        home=("MASS", "Massachusetts", None, "Minutemen"),
+        away=("URI", "Rhode Island", None, "Rams"),
+    )
+    assert side == "home"
+
+
+def test_penalty_side_initial_plus_u_alias():
+    side = _pen_side(
+        "PENALTY VU Ineligible Downfield on Pass 5 yards from VU40 to VU35",
+        home=("VAN", "Vanderbilt", None, "Commodores"),
+        away=("BAMA", "Alabama", None, "Crimson Tide"),
+    )
+    assert side == "home"
+
+
+def test_penalty_side_three_letter_consonant_skeleton():
+    side = _pen_side(
+        "PENALTY TLN Pass Interference (White,Javion) 15 yards from TLN30 to TLN15",
+        home=("TULN", "Tulane", None, "Green Wave"),
+        away=("MEM", "Memphis", None, "Tigers"),
+    )
+    assert side == "home"
