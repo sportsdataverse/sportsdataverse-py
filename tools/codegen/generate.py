@@ -147,8 +147,12 @@ def _build_docstring(
     lines.append("Example:")
     lines.append("    Quick start::")
     lines.append("")
-    if extras.get("example_import") and import_from:
-        lines.append(f"        from {import_from} import {example_call.split('(', 1)[0]}")
+    # ``example_import_from`` overrides the default league-package import path for
+    # families the league package does NOT re-export (the wrapper lives only in its
+    # own module) -- without it the Example's import line is not runnable.
+    example_module = str(extras.get("example_import_from") or import_from)
+    if extras.get("example_import") and example_module:
+        lines.append(f"        from {example_module} import {example_call.split('(', 1)[0]}")
     lines.append(f"        {example_call}")
     see_also = list(extras.get("see_also") or [])
     if see_also:
@@ -983,7 +987,9 @@ def _flat_views(api: spec.FlatApi, league_prefix: str = "") -> list[_EndpointVie
                 flat=True,
                 auth=api.auth,
                 raw_types=api.raw_types,
-                doc_extras=api.docstring,
+                # Per-endpoint extras win over the family block, so a large family
+                # can document one wrapper without rewriting all of its siblings.
+                doc_extras=ep.docstring or api.docstring,
             )
         )
     return views

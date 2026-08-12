@@ -135,7 +135,21 @@ def measure_types_for(fn_name: str, param: str, default: tuple[str, ...]) -> tup
 #: (playergamelogs, teamgamelogs) were called with NO season filter at all --
 #: the API answered nothing and 100% of those captures were empty in both
 #: leagues.
-_SEASON_PARAMS = ("season", "season_nullable", "season_year", "season_all_time")
+#:
+#: ``season_year_nullable`` is the same bug one spelling further out, and it
+#: fails LOUDER than an empty capture: drafthistory is the only endpoint that
+#: spells it that way, and unfiltered it answers with the FULL draft history
+#: (1947-2026) rather than nothing. A season sweep that drops the filter writes
+#: that same payload under every season -- which is exactly the state
+#: wehoop-wnba-stats-raw is in (30 byte-identical drafthistory/{season}.json,
+#: all md5 b682aa93cc, "Season": null in each one's echoed parameters).
+_SEASON_PARAMS = (
+    "season",
+    "season_nullable",
+    "season_year",
+    "season_year_nullable",
+    "season_all_time",
+)
 _LEAGUE_PARAMS = ("league_id", "league_id_nullable")
 
 PER_MODES = ("Totals", "PerGame")

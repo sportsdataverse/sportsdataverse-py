@@ -1382,7 +1382,7 @@ GET /stats/drafthistory
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/drafthistory`
 
-**Valid URL:** [https://stats.wnba.com/stats/drafthistory?LeagueID=10](https://stats.wnba.com/stats/drafthistory?LeagueID=10)
+**Valid URL:** [https://stats.wnba.com/stats/drafthistory?LeagueID=10&Season=2024](https://stats.wnba.com/stats/drafthistory?LeagueID=10&Season=2024)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -1420,7 +1420,7 @@ GET /stats/drafthistory
 ### Example
 
 ```python
-wnba_stats_drafthistory(league_id='10')
+wnba_stats_drafthistory(league_id='10', season_year_nullable='2024')
 ```
 
 _Last validated n/a._

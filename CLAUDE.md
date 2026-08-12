@@ -643,7 +643,7 @@ Savant surface** (`baseballsavant.mlb.com`) under the canonical naming
 
 Two codegen-generated flat-API stems wrap the official stats API surface:
 
-- **`nba_stats`** — 112 wrappers at `stats.nba.com`. League is chosen per call via `league_id`: `"00"` → NBA, `"20"` → G-League, `"15"` → Summer League. One stem, one host. Named `nba_stats_<slug>` (e.g. `nba_stats_leaguedashplayerstats`, `nba_stats_playercareerstats`).
+- **`nba_stats`** — 113 wrappers at `stats.nba.com`. League is chosen per call via `league_id`: `"00"` → NBA, `"20"` → G-League, `"15"` → Summer League. One stem, one host. Named `nba_stats_<slug>` (e.g. `nba_stats_leaguedashplayerstats`, `nba_stats_playercareerstats`).
 - **`wnba_stats`** — 95 wrappers at `stats.wnba.com` (WNBA `LeagueID=10`). Thin shim re-exporting the NBA-stats runtime with the WNBA host. Named `wnba_stats_<slug>`.
 - **Codegen surface = capture-confirmed `live`, non-deprecated only.** `gen_nba_stats._stats_eps()` keeps an endpoint for a league iff `league_applicability[league_id] == "live"` AND no source marks it deprecated. `untested`/`barren`/`dead` and the 26 deprecated endpoints are dropped. The wrapper counts therefore track the committed capture sweep (`sdv-internal-refs/nba/ENDPOINT_HEALTH.md`); a fresh sweep that resolves more `untested` endpoints raises the counts on the next `gen_nba_stats.py` + re-vendor of `tools/codegen/inputs/nba_canonical_catalog.json`.
 

@@ -1,0 +1,45 @@
+columns:
+- description: ''
+  name: person_id
+  type: integer
+- description: ''
+  name: player_name
+  type: character
+- description: ''
+  name: season
+  type: character
+- description: ''
+  name: round_number
+  type: integer
+- description: ''
+  name: round_pick
+  type: integer
+- description: ''
+  name: overall_pick
+  type: integer
+- description: ''
+  name: draft_type
+  type: character
+- description: ''
+  name: team_id
+  type: integer
+- description: ''
+  name: team_city
+  type: character
+- description: ''
+  name: team_name
+  type: character
+- description: ''
+  name: team_abbreviation
+  type: character
+- description: ''
+  name: organization
+  type: character
+- description: ''
+  name: organization_type
+  type: character
+- description: ''
+  name: player_profile_flag
+  type: integer
+kind: dataframe
+schema: drafthistory

@@ -718,6 +718,68 @@ endpoints:
   returns_schema: native/nba_stats/draftcombinestats
   short: draftcombinestats
   summary: GET /stats/draftcombinestats
+- docstring:
+    example_import: true
+    example_import_from: sportsdataverse.nba.nba_stats
+    raises:
+    - 'ImportError: ``curl_cffi`` is not installed. stats.nba.com/stats.wnba.com TLS-fingerprint-block
+      plain ``requests``, so the live transport requires it (``pip install curl_cffi``,
+      or ``pip install sportsdataverse[all]``).'
+    - 'curl_cffi.requests.errors.RequestsError: Connection-level failure (timeout,
+      reset) raised by the transport once ``SDV_PY_NBA_STATS_RETRIES`` retries are
+      exhausted. A non-200 or empty body does NOT raise -- ``_get`` returns ``{}``
+      and the parser yields a zero-row frame.'
+    see_also:
+    - name: wnba_stats_drafthistory
+      note: the WNBA sibling wrapper (same resultSets envelope, LeagueID=10)
+      url: https://sportsdataverse-py.sportsdataverse.org/docs/wnba/reference/wnba_stats
+    - name: hoopR
+      note: R sister package for the NBA stats API
+      url: https://hoopR.sportsdataverse.org
+    - name: nba_api
+      note: Python alternative client
+      url: https://github.com/swar/nba_api
+  example_args:
+    league_id: '00'
+    season_year_nullable: '2024'
+  extra_params:
+  - default: ''
+    name: college_nullable
+    query_key: College
+    type: str
+  - default: '00'
+    name: league_id
+    query_key: LeagueID
+    type: str
+  - default: ''
+    name: overall_pick_nullable
+    query_key: OverallPick
+    type: str
+  - default: ''
+    name: round_num_nullable
+    query_key: RoundNum
+    type: str
+  - default: ''
+    name: round_pick_nullable
+    query_key: RoundPick
+    type: str
+  - default: null
+    name: season_year_nullable
+    query_key: Season
+    type: str
+  - default: '0'
+    name: team_id_nullable
+    query_key: TeamID
+    type: str
+  - default: ''
+    name: topx_nullable
+    query_key: TopX
+    type: str
+  parser: parse_nba_stats_result_sets
+  path: /stats/drafthistory
+  returns_schema: native/nba_stats/drafthistory
+  short: drafthistory
+  summary: GET /stats/drafthistory
 - example_args:
     league_id: '00'
   extra_params:

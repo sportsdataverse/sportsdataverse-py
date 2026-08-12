@@ -13,7 +13,10 @@ def test_nba_stats_module_imports_and_has_workhorse():
     # upstream-deprecated endpoints stay excluded from codegen
     assert not hasattr(mod, "nba_stats_scoreboardv2")
     assert not hasattr(mod, "nba_stats_boxscoretraditionalv2")
-    assert len(mod.__all__) == 112  # live, non-deprecated stats endpoints
+    # drafthistory joined at 113: LeagueID=00 was mis-marked "barren" in the
+    # catalog, so it had never been generated for the NBA side.
+    assert hasattr(mod, "nba_stats_drafthistory")
+    assert len(mod.__all__) == 113  # live, non-deprecated stats endpoints
 
 
 def test_wnba_stats_module_imports():

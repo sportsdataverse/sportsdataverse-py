@@ -5,7 +5,7 @@ sidebar_position: 10
 ---
 # NBA — NBA Stats API (stats.nba.com)
 
-`sportsdataverse.nba` — 112 endpoints.
+`sportsdataverse.nba` — 113 endpoints.
 
 ## `nba_stats_alltimeleadersgrids`
 
@@ -1534,6 +1534,55 @@ GET /stats/draftcombinestats
 
 ```python
 nba_stats_draftcombinestats(league_id='00')
+```
+
+_Last validated n/a._
+
+## `nba_stats_drafthistory`
+
+GET /stats/drafthistory
+
+**Endpoint URL:** `GET https://stats.nba.com/stats/drafthistory`
+
+**Valid URL:** [https://stats.nba.com/stats/drafthistory?LeagueID=00&Season=2024](https://stats.nba.com/stats/drafthistory?LeagueID=00&Season=2024)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `College` | `college_nullable` |  |  | `Y` |  |
+| `LeagueID` | `league_id` |  |  | `Y` |  |
+| `OverallPick` | `overall_pick_nullable` |  |  | `Y` |  |
+| `RoundNum` | `round_num_nullable` |  |  | `Y` |  |
+| `RoundPick` | `round_pick_nullable` |  |  | `Y` |  |
+| `Season` | `season_year_nullable` |  |  | `Y` |  |
+| `TeamID` | `team_id_nullable` |  |  | `Y` |  |
+| `TopX` | `topx_nullable` |  |  | `Y` |  |
+
+### Returns
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `person_id` | integer | Unique player identifier (V3 endpoints). |
+| `player_name` | character | Player name. |
+| `season` | character | Season year. |
+| `round_number` | integer | Numeric round. |
+| `round_pick` | integer | Round pick. |
+| `overall_pick` | integer | Overall pick. |
+| `draft_type` | character | NBA or WNBA Stats value for draft type in the drafthistory result set. |
+| `team_id` | integer | Unique team identifier. |
+| `team_city` | character | Team city or region (e.g. 'Las Vegas'). |
+| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
+| `organization` | character | Organization. |
+| `organization_type` | character | Organization type. |
+| `player_profile_flag` | integer | Player profile flag. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example
+
+```python
+nba_stats_drafthistory(league_id='00', season_year_nullable='2024')
 ```
 
 _Last validated n/a._

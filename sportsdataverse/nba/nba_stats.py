@@ -41,6 +41,7 @@ __all__ = [
     "nba_stats_draftcombineplayeranthro",
     "nba_stats_draftcombinespotshooting",
     "nba_stats_draftcombinestats",
+    "nba_stats_drafthistory",
     "nba_stats_fantasywidget",
     "nba_stats_franchisehistory",
     "nba_stats_franchiseleaders",
@@ -1423,6 +1424,79 @@ def nba_stats_draftcombinestats(
         params={
             "LeagueID": league_id,
             "SeasonYear": season_all_time,
+        },
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_nba_stats_result_sets(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def nba_stats_drafthistory(
+    college_nullable: Optional[str] = "",
+    league_id: Optional[str] = "00",
+    overall_pick_nullable: Optional[str] = "",
+    round_num_nullable: Optional[str] = "",
+    round_pick_nullable: Optional[str] = "",
+    season_year_nullable: Optional[str] = None,
+    team_id_nullable: Optional[str] = "0",
+    topx_nullable: Optional[str] = "",
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """GET /stats/drafthistory
+
+    Endpoint: ``GET https://stats.nba.com/stats/drafthistory``
+    Example URL: https://stats.nba.com/stats/drafthistory?LeagueID=00&Season=2024
+
+    Args:
+        college_nullable: College query parameter.
+        league_id: LeagueID query parameter.
+        overall_pick_nullable: OverallPick query parameter.
+        round_num_nullable: RoundNum query parameter.
+        round_pick_nullable: RoundPick query parameter.
+        season_year_nullable: Season query parameter.
+        team_id_nullable: TeamID query parameter.
+        topx_nullable: TopX query parameter.
+        return_parsed: parse the payload through parse_nba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        ImportError: ``curl_cffi`` is not installed. stats.nba.com/stats.wnba.com TLS-fingerprint-block plain ``requests``, so the live transport requires it (``pip install curl_cffi``, or ``pip install sportsdataverse[all]``).
+        curl_cffi.requests.errors.RequestsError: Connection-level failure (timeout, reset) raised by the transport once ``SDV_PY_NBA_STATS_RETRIES`` retries are exhausted. A non-200 or empty body does NOT raise -- ``_get`` returns ``{}`` and the parser yields a zero-row frame.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nba.nba_stats import nba_stats_drafthistory
+            nba_stats_drafthistory(league_id='00', season_year_nullable='2024')
+
+        See Also:
+            * `wnba_stats_drafthistory`_ - the WNBA sibling wrapper (same resultSets envelope, LeagueID=10)
+            * `hoopR`_ - R sister package for the NBA stats API
+            * `nba_api`_ - Python alternative client
+
+        .. _wnba_stats_drafthistory: https://sportsdataverse-py.sportsdataverse.org/docs/wnba/reference/wnba_stats
+        .. _hoopR: https://hoopR.sportsdataverse.org
+        .. _nba_api: https://github.com/swar/nba_api
+    """
+    raw = _get(
+        "https://stats.nba.com/stats/drafthistory",
+        params={
+            "College": college_nullable,
+            "LeagueID": league_id,
+            "OverallPick": overall_pick_nullable,
+            "RoundNum": round_num_nullable,
+            "RoundPick": round_pick_nullable,
+            "Season": season_year_nullable,
+            "TeamID": team_id_nullable,
+            "TopX": topx_nullable,
         },
         **kwargs,
     )

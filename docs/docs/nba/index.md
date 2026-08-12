@@ -10,7 +10,7 @@ sidebar_label: NBA
 | [ESPN web API (v3)](reference/web) | 5 | `https://site.web.api.espn.com/apis/common/v3/sports` |
 | [ESPN core API (v2)](reference/core) | 82 | `https://sports.core.api.espn.com/v2/sports` |
 | [ESPN FPI API (fitt v3)](reference/fitt) | 1 | `https://site.web.api.espn.com/apis/fitt/v3/sports` |
-| [NBA Stats API (stats.nba.com)](reference/nba_stats) | 112 | `https://stats.nba.com` |
+| [NBA Stats API (stats.nba.com)](reference/nba_stats) | 113 | `https://stats.nba.com` |
 | [Dataset loaders](reference/loaders) | 36 | sportsdataverse-data releases |
 | [Additional functions](reference/additional) | 132 | hand-written wrappers, loaders & helpers |
 
