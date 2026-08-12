@@ -1,15 +1,27 @@
-# Run the full test suite (live API tests included) on every PR, push to
-# main, and workflow_dispatch. Live tests are gated by SDV_PY_LIVE_TESTS=1
-# and run by default; the workflow_dispatch input can flip them off
-# (live_tests: "false") for runs where third-party API churn would
-# produce false-negative failures.
+# Run the full test suite (live API tests included) on push to main and
+# workflow_dispatch. Live tests are gated by SDV_PY_LIVE_TESTS=1 and run by
+# default; the workflow_dispatch input can flip them off (live_tests:
+# "false") for runs where third-party API churn would produce
+# false-negative failures.
+#
+# SCOPE (deliberately narrowed 2026-08-12, operator decision): a SINGLE job —
+# macos-latest on the canonical interpreter — running ONLY on main. Two
+# consequences to know about, because neither is caught anywhere else:
+#   - Python 3.9 (the declared floor) and Linux/Windows are no longer
+#     exercised. CONTRIBUTING.md promises the floor is covered; it is not.
+#     A 3.9-incompatible construct or a platform-specific regression now
+#     ships and surfaces at release time.
+#   - PRs no longer run tests. Merge-time signal is the codegen drift gate
+#     plus whatever ran locally, so `uv run pytest` before pushing is now
+#     load-bearing rather than a convenience.
+# Restore by re-adding the matrix `include:` block and the `pull_request:`
+# trigger below.
 #
 # Uses `uv sync --all-extras --all-groups` against the committed uv.lock for
 # reproducible installs, then `uv run --frozen pytest` for execution. See
 # CONTRIBUTING.md.
 name: tests
 on:
-  pull_request:
   push:
     branches: [main]
   workflow_dispatch:
@@ -31,21 +43,14 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # CONTRIBUTING.md promises CI runs against the floor (3.9) and the
-        # canonical version (3.13.2). 3.14 is intentionally NOT included
-        # yet — pyarrow / polars wheels for cp314 are still landing across
-        # the index.
-        os: [ubuntu-latest]
-        python-version: ["3.9", "3.13.2"]
-        include:
-          # Sanity-check the canonical interpreter on macOS + Windows so
-          # platform-specific regressions surface in CI rather than at
-          # release time. The matrix stays small (3 ubuntu-runs cost
-          # nothing; macos / windows runners are billed at higher rates).
-          - os: macos-latest
-            python-version: "3.13.2"
-          - os: windows-latest
-            python-version: "3.13.2"
+        # Single job by operator decision (2026-08-12): macOS on the
+        # canonical interpreter. 3.14 is still excluded — pyarrow / polars
+        # wheels for cp314 are landing across the index. The dropped legs
+        # were ubuntu 3.9 (the declared floor), ubuntu 3.13.2, and windows
+        # 3.13.2; see the scope note in the header before assuming a green
+        # run means the floor or Linux/Windows are covered.
+        os: [macos-latest]
+        python-version: ["3.13.2"]
     steps:
       - uses: actions/checkout@v5
       - name: Install uv
