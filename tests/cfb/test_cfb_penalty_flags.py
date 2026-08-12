@@ -180,3 +180,79 @@ def test_negated_touchdown_produces_no_td_flags() -> None:
     assert all(real["td_play"].to_list())
     assert real["pass_td"].to_list() == [False, True]
     assert real["rush_td"].to_list() == [True, False]
+
+
+# --- penalty_detail labeler: gaps measured by the 2025-season taxonomy ---
+
+
+def _details(rows):
+    return _run(rows)["penalty_detail"].to_list()
+
+
+def test_detail_roughing_the_passer_with_the() -> None:
+    """'Roughing The Passer' (with 'the') was 242 of the 844 'Missing' rows in
+    2025; the old pattern required the literal 'roughing passer'."""
+    assert _details(
+        [
+            ("Penalty", "PENALTY OSU Roughing The Passer (Jack Sawyer) 15 yards to the OSU 40"),
+            ("Penalty", "PENALTY MICH roughing passer 15 yards"),
+        ]
+    ) == ["Roughing the Passer", "Roughing the Passer"]
+
+
+def test_detail_declined_keeps_foul_name() -> None:
+    """A declined penalty keeps its foul name; the disposition lives in
+    penalty_declined. The old chain labeled 318 rows just 'Declined'."""
+    out = _run([("Pass Incompletion", "Smith pass incomplete Penalty, Holding declined")])
+    assert out["penalty_detail"][0] == "Holding"
+    assert out["penalty_declined"][0] is True
+
+
+def test_detail_disposition_fires_only_without_foul_name() -> None:
+    out = _run([("Penalty", "PENALTY declined")])
+    assert out["penalty_detail"][0] == "Declined"
+
+
+def test_detail_illegal_substitution_maps_to_substitution_infraction() -> None:
+    assert _details([("Penalty", "PENALTY UGA Illegal Substitution 5 yards to the UGA 30")]) == [
+        "Substitution Infraction",
+    ]
+
+
+def test_detail_hyphenated_offside() -> None:
+    """44 'off-side' spellings in 2025 fell to Missing."""
+    assert _details([("Penalty", "PENALTY ARK off-side 5 yards to the ARK 35")]) == ["Offside"]
+
+
+def test_detail_vendor_typos() -> None:
+    """ESPN ships literal 'Inteference' and 'inelgible' typos."""
+    assert _details(
+        [
+            ("Penalty", "USC Penalty, Sideline Inteference (15 Yards) to the MOST 38"),
+            ("Pass Reception", "Anderson pass complete Wyoming Penalty, inelgible downfield on pass (-5 Yards)"),
+        ]
+    ) == ["Sideline Interference", "Ineligible Downfield"]
+
+
+def test_detail_block_below_waist_and_chop_block() -> None:
+    assert _details(
+        [
+            ("Rush", "Old Dominion Penalty, Block Below Waist (TJ Johnson) to the ODU 5 for a 1ST down"),
+            ("Rush", "Montgomery rush middle for 1 yard PENALTY UCF Chop Block (King) 15 yards"),
+        ]
+    ) == ["Block Below the Waist", "Chop Block"]
+
+
+def test_detail_running_into_the_kicker_and_touch_pass() -> None:
+    assert _details(
+        [
+            ("Punt", "Jones punt for 40 yds PENALTY ISU Running Into The Kicker 5 yards"),
+            ("Pass Incompletion", "PENALTY USD Illegal Touch-Pass (5 yards) to the USD 25"),
+        ]
+    ) == ["Running Into Kicker", "Illegal Touching"]
+
+
+def test_detail_disconcerting_signals() -> None:
+    assert _details(
+        [("Penalty", "PENALTY PUR Disconcerting Signals (Powell,Mani) 5 yards from BSU25 to BSU30. NO PLAY.")]
+    ) == ["Disconcerting Signals"]
