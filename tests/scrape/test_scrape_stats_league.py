@@ -40,6 +40,7 @@ def test_unknown_league_id_raises() -> None:
 
 def _fake_endpoint_span(season: str = "", league_id: str = "") -> None: ...
 def _fake_endpoint_year(season_year: str = "", league_id: str = "") -> None: ...
+def _fake_endpoint_year_nullable(season_year_nullable: str = "", league_id: str = "") -> None: ...
 
 
 def test_nba_spans_the_season_string_wnba_stays_bare() -> None:
@@ -57,6 +58,22 @@ def test_season_year_is_bare_in_both_leagues() -> None:
     for league_id in ("00", "10"):
         (variant,) = list(season_variants(_fake_endpoint_year, 2019, league_id))
         assert variant[1]["season_year"] == "2019"
+
+
+def test_season_year_nullable_is_still_a_season_filter() -> None:
+    """drafthistory's spelling must not fall through to "no season".
+
+    _SEASON_PARAMS is matched by EXACT name, so `season_year_nullable` did not
+    match `season_year` and the sweep sent league_id alone. Unfiltered,
+    drafthistory answers with the whole 1947-2026 history, so the miss does not
+    surface as an empty capture — it writes the identical full-history payload
+    under every season (the state wehoop-wnba-stats-raw is in today).
+    """
+    for league_id in ("00", "10"):
+        (variant,) = list(season_variants(_fake_endpoint_year_nullable, 2003, league_id))
+        assert variant[1]["season_year_nullable"] == "2003", (
+            "season_year_nullable dropped -> every season captures the full draft history"
+        )
 
 
 def test_season_string_spelling() -> None:

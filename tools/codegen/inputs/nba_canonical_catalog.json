@@ -12204,7 +12204,7 @@
         "stats.wnba.com"
       ],
       "league_applicability": {
-        "00": "barren",
+        "00": "live",
         "10": "live",
         "15": "barren",
         "20": "barren"

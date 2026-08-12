@@ -721,6 +721,46 @@ endpoints:
 - example_args:
     league_id: '00'
   extra_params:
+  - default: ''
+    name: college_nullable
+    query_key: College
+    type: str
+  - default: '00'
+    name: league_id
+    query_key: LeagueID
+    type: str
+  - default: ''
+    name: overall_pick_nullable
+    query_key: OverallPick
+    type: str
+  - default: ''
+    name: round_num_nullable
+    query_key: RoundNum
+    type: str
+  - default: ''
+    name: round_pick_nullable
+    query_key: RoundPick
+    type: str
+  - default: null
+    name: season_year_nullable
+    query_key: Season
+    type: str
+  - default: '0'
+    name: team_id_nullable
+    query_key: TeamID
+    type: str
+  - default: ''
+    name: topx_nullable
+    query_key: TopX
+    type: str
+  parser: parse_nba_stats_result_sets
+  path: /stats/drafthistory
+  returns_schema: native/nba_stats/drafthistory
+  short: drafthistory
+  summary: GET /stats/drafthistory
+- example_args:
+    league_id: '00'
+  extra_params:
   - default: N
     name: active_players
     query_key: ActivePlayers
