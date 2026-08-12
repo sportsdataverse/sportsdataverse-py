@@ -129,7 +129,9 @@ def load_nfl_pbp(seasons: List[int], return_as_pandas=False, *, source: str = "n
     for i in tqdm(seasons):
         season_not_found_error(int(i), 1999)
         i_data = pl.read_parquet(base_url.format(season=i), use_pyarrow=True, columns=None)
-        data = pl.concat([data, i_data], how="vertical")
+        # diagonal_relaxed: per-season release schemas drift (columns added or
+        # dropped, and dtypes widened) -- union columns, null-fill gaps.
+        data = pl.concat([data, i_data], how="diagonal_relaxed")
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
 
 
@@ -559,7 +561,9 @@ def load_nfl_pfr_advstats(
     elif len(frames) == 1:
         data = frames[0]
     else:
-        data = pl.concat(frames, how="vertical")
+        # diagonal_relaxed: per-season release schemas drift (columns added or
+        # dropped, and dtypes widened) -- union columns, null-fill gaps.
+        data = pl.concat(frames, how="diagonal_relaxed")
 
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
 
@@ -838,7 +842,9 @@ def load_nfl_rosters(seasons: List[int], return_as_pandas=False, *, source: str 
     for i in tqdm(seasons):
         season_not_found_error(int(i), 1920)
         i_data = pl.read_parquet(base_url.format(season=i), use_pyarrow=True, columns=None)
-        data = pl.concat([data, i_data], how="vertical")
+        # diagonal_relaxed: per-season release schemas drift (columns added or
+        # dropped, and dtypes widened) -- union columns, null-fill gaps.
+        data = pl.concat([data, i_data], how="diagonal_relaxed")
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
 
 
@@ -903,7 +909,9 @@ def load_nfl_weekly_rosters(seasons: List[int], return_as_pandas=False) -> pl.Da
     for i in tqdm(seasons):
         season_not_found_error(int(i), 2002)
         i_data = pl.read_parquet(NFL_WEEKLY_ROSTER_URL.format(season=i), use_pyarrow=True, columns=None)
-        data = pl.concat([data, i_data], how="vertical")
+        # diagonal_relaxed: per-season release schemas drift (columns added or
+        # dropped, and dtypes widened) -- union columns, null-fill gaps.
+        data = pl.concat([data, i_data], how="diagonal_relaxed")
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
 
 
@@ -1066,7 +1074,9 @@ def load_nfl_snap_counts(seasons: List[int], return_as_pandas=False) -> pl.DataF
     for i in tqdm(seasons):
         season_not_found_error(int(i), 2012)
         i_data = pl.read_parquet(NFL_SNAP_COUNTS_URL.format(season=i), use_pyarrow=True, columns=None)
-        data = pl.concat([data, i_data], how="vertical")
+        # diagonal_relaxed: per-season release schemas drift (columns added or
+        # dropped, and dtypes widened) -- union columns, null-fill gaps.
+        data = pl.concat([data, i_data], how="diagonal_relaxed")
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
 
 
@@ -1104,7 +1114,16 @@ def load_nfl_pbp_participation(seasons: List[int], return_as_pandas=False) -> pl
     for i in tqdm(seasons):
         season_not_found_error(int(i), 2016)
         i_data = pl.read_parquet(NFL_PBP_PARTICIPATION_URL.format(season=i), use_pyarrow=True, columns=None)
-        data = pl.concat([data, i_data], how="vertical")
+        # play_id is a join key against load_nfl_pbp, and the release parquets
+        # ship it as Int32 through 2022 then Float64 from 2023. Pin it to the
+        # pbp dtype HERE rather than letting the diagonal_relaxed supertype
+        # rule decide -- otherwise the column's dtype depends on which seasons
+        # happen to be in the span, and a pre-2023-only load won't join.
+        if i_data.schema.get("play_id") is not None:
+            i_data = i_data.with_columns(pl.col("play_id").cast(pl.Float64))
+        # diagonal_relaxed: per-season release schemas drift (columns added or
+        # dropped, and dtypes widened) -- union columns, null-fill gaps.
+        data = pl.concat([data, i_data], how="diagonal_relaxed")
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
 
 
@@ -1146,7 +1165,9 @@ def load_nfl_injuries(seasons: List[int], return_as_pandas=False) -> pl.DataFram
     for i in tqdm(seasons):
         season_not_found_error(int(i), 2009)
         i_data = pl.read_parquet(NFL_INJURIES_URL.format(season=i), use_pyarrow=True, columns=None)
-        data = pl.concat([data, i_data], how="vertical")
+        # diagonal_relaxed: per-season release schemas drift (columns added or
+        # dropped, and dtypes widened) -- union columns, null-fill gaps.
+        data = pl.concat([data, i_data], how="diagonal_relaxed")
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
 
 
@@ -1184,7 +1205,9 @@ def load_nfl_depth_charts(seasons: List[int], return_as_pandas=False) -> pl.Data
     for i in tqdm(seasons):
         season_not_found_error(int(i), 2001)
         i_data = pl.read_parquet(NFL_DEPTH_CHARTS_URL.format(season=i), use_pyarrow=True, columns=None)
-        data = pl.concat([data, i_data], how="vertical")
+        # diagonal_relaxed: per-season release schemas drift (columns added or
+        # dropped, and dtypes widened) -- union columns, null-fill gaps.
+        data = pl.concat([data, i_data], how="diagonal_relaxed")
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
 
 
@@ -1412,7 +1435,9 @@ def load_nfl_team_stats(
             use_pyarrow=True,
             columns=None,
         )
-        data = pl.concat([data, i_data], how="vertical")
+        # diagonal_relaxed: per-season release schemas drift (columns added or
+        # dropped, and dtypes widened) -- union columns, null-fill gaps.
+        data = pl.concat([data, i_data], how="diagonal_relaxed")
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
 
 
@@ -1461,7 +1486,9 @@ def load_nfl_ftn_charting(seasons: List[int], return_as_pandas=False) -> pl.Data
     for i in tqdm(seasons):
         season_not_found_error(int(i), 2022)
         i_data = pl.read_parquet(NFL_FTN_CHARTING_URL.format(season=i), use_pyarrow=True, columns=None)
-        data = pl.concat([data, i_data], how="vertical")
+        # diagonal_relaxed: per-season release schemas drift (columns added or
+        # dropped, and dtypes widened) -- union columns, null-fill gaps.
+        data = pl.concat([data, i_data], how="diagonal_relaxed")
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
 
 
@@ -1692,7 +1719,9 @@ def load_nfl_ff_opportunity(
             use_pyarrow=True,
             columns=None,
         )
-        data = pl.concat([data, i_data], how="vertical")
+        # diagonal_relaxed: per-season release schemas drift (columns added or
+        # dropped, and dtypes widened) -- union columns, null-fill gaps.
+        data = pl.concat([data, i_data], how="diagonal_relaxed")
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
 
 
