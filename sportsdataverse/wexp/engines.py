@@ -25,6 +25,7 @@ import numpy as np
 import polars as pl
 
 from sportsdataverse._common.ratings import opponent_adjusted_ridge
+from sportsdataverse.cfb.cfb_advanced_constants import GARBAGE_TIME_MARGIN
 from sportsdataverse.wexp.backtest import WeekPredictor, elo_predictor, normalize_walk_weeks
 from sportsdataverse.wexp.elo import EloConfig
 from sportsdataverse.wexp.store import VintageStore
@@ -37,7 +38,9 @@ __all__ = [
     "cfb_drive_deltas",
     "cfb_drive_ep_responses",
     "glickman_stern_predictor",
+    "market_prior_shifts",
     "net_vintages_view",
+    "nfl_qb_change_events",
     "ratings_predictor",
     "response_ridge_vintages",
     "ridge_margin_vintages",
@@ -64,6 +67,8 @@ def ridge_margin_vintages(
     resp_col: str = "home_margin",
     cap: Optional[float] = None,
     close_filter: Optional[float] = None,
+    history_seasons: int = 0,
+    season_decay: float = 0.5,
 ) -> pl.DataFrame:
     """Build per-week opponent-adjusted ridge rating vintages from an oracle frame.
 
@@ -86,6 +91,15 @@ def ridge_margin_vintages(
             together), rating teams on competitive games only. Distinct
             from ``cap``: a filtered blowout contributes nothing; a capped
             one still contributes at the cap. ``None`` = keep all.
+        history_seasons: Prior seasons folded into each fit (default 0 =
+            the within-season-only convention, which rates week 2 off a
+            single week of games). Prior-season games enter down-weighted
+            by ``season_decay ** seasons_back``, applied as integer row
+            replication of the CURRENT season (weight 1 -> the current
+            season repeats ``1/season_decay ** history_seasons`` times),
+            so the shared unweighted solver is reused unchanged.
+        season_decay: Per-season-back weight for ``history_seasons``
+            (0.5 = last season counts half).
 
     Returns:
         A vintage table — ``season`` / ``as_of_week`` / ``team_id`` (Utf8)
@@ -135,7 +149,21 @@ def ridge_margin_vintages(
     for season, week in (
         normalize_walk_weeks(oracle).select("season", "week").unique().sort("season", "week").iter_rows()
     ):
-        fit = games.filter((pl.col("season") == season) & (pl.col("week") < week))
+        in_season = games.filter((pl.col("season") == season) & (pl.col("week") < week))
+        if history_seasons <= 0:
+            fit = in_season
+        else:
+            # integer-replication weighting: current season repeats
+            # `reps` times, each season back one decay step fewer, so the
+            # unweighted shared solver sees the intended relative weights
+            reps = max(1, round(1.0 / max(season_decay, 1e-6) ** history_seasons))
+            parts = [in_season] * reps
+            for back in range(1, history_seasons + 1):
+                prior = games.filter(pl.col("season") == season - back)
+                if prior.height == 0:
+                    continue
+                parts += [prior] * max(1, round(reps * season_decay**back))
+            fit = pl.concat(parts, how="vertical")
         if fit.height == 0:
             continue
         coefs, intercept, hfa = opponent_adjusted_ridge(
@@ -170,13 +198,26 @@ def cfb_drive_deltas(pbp: pl.DataFrame) -> pl.DataFrame:
     share-of-available ``pct``. Feeds both the team-game response
     aggregation and the post-game WE resampling (G2/G3).
 
+    Inclusion/exclusion classifiers (callers filter, the substrate keeps
+    every drive):
+
+    - ``garbage`` — the drive STARTED in Connelly garbage time
+      (``|margin_start|`` exceeds the documented per-quarter
+      :data:`~sportsdataverse.cfb.cfb_advanced_constants.GARBAGE_TIME_MARGIN`
+      band; OT clipped to the Q4 band).
+    - ``clock_kill`` — the half's final drive with <= 3 plays and a
+      non-positive delta (kneel / clock-kill signature).
+
     Args:
         pbp: Play frame with ``game_id``, ``pos_team``, ``def_pos_team``,
-            ``drive.id``, ``EPA``, ``EP_start``, ``game_play_number``.
+            ``drive.id``, ``EPA``, ``EP_start``, ``game_play_number``,
+            ``period``, ``pos_team_score``, ``def_pos_team_score``.
 
     Returns:
         One row per (game, drive): ``game_id`` / ``drive.id``, ``off`` /
-        ``deft`` (raw Int64 ids), ``delta``, ``start_ep``, ``pct``.
+        ``deft`` (raw Int64 ids), ``delta``, ``start_ep``, ``pct``,
+        ``period`` / ``margin_start`` / ``plays``, and the ``garbage`` /
+        ``clock_kill`` flags.
 
     Example:
         Quick start::
@@ -203,8 +244,24 @@ def cfb_drive_deltas(pbp: pl.DataFrame) -> pl.DataFrame:
             deft=pl.col("def_pos_team").first(),
             delta=pl.col("EPA").sum(),
             start_ep=pl.col("EP_start").first(),
+            period=pl.col("period").cast(pl.Int64).first(),
+            margin_start=(pl.col("pos_team_score") - pl.col("def_pos_team_score")).cast(pl.Int64).first(),
+            plays=pl.len().cast(pl.Int64),
+            last_play=pl.col("game_play_number").max(),
         )
-        .with_columns(pct=pl.col("delta") / (7.0 - pl.col("start_ep")).clip(lower_bound=0.5))
+        .with_columns(
+            pct=pl.col("delta") / (7.0 - pl.col("start_ep")).clip(lower_bound=0.5),
+            half=pl.when(pl.col("period") <= 2).then(1).otherwise(2),
+            # the documented Connelly per-quarter bands; OT clipped to Q4's
+            garbage=pl.col("margin_start").abs()
+            > pl.col("period").clip(1, 4).replace_strict(GARBAGE_TIME_MARGIN, return_dtype=pl.Int64),
+        )
+        .with_columns(
+            clock_kill=(pl.col("last_play") == pl.col("last_play").max().over("game_id", "half"))
+            & (pl.col("plays") <= 3)
+            & (pl.col("delta") <= 0.0)
+        )
+        .drop("last_play", "half")
     )
 
 
@@ -310,7 +367,17 @@ def response_ridge_vintages(
     games = normalize_walk_weeks(oracle).select(
         "game_id", "season", "week", "home_team_id", "neutral_site", "home_margin"
     )
-    rows = responses.join(games, on="game_id", how="inner").filter(pl.col("home_margin").is_not_null())
+    # Drop null RESPONSES as well as null margins. The ridge solver has no
+    # null handling: one null response makes every coefficient in that
+    # vintage NaN, and NaN survives the downstream `drop_nulls` guards
+    # (polars null != NaN), so the run finishes with silently-missing
+    # predictions instead of raising. `cfb_scoring_opportunities` emits a
+    # deliberate null `points_per_opp` for teams with no scoring
+    # opportunity, which is exactly this path. `ridge_margin_vintages`
+    # already filters its response; these two must not be asymmetric.
+    rows = responses.join(games, on="game_id", how="inner").filter(
+        pl.col("home_margin").is_not_null() & pl.col(resp_col).is_not_null()
+    )
     if close_filter is not None:
         rows = rows.filter(pl.col("home_margin").abs() <= close_filter)
     rows = rows.with_columns(
@@ -559,7 +626,9 @@ class GSConfig:
 
 
 def glickman_stern_predictor(
-    config: GSConfig = GSConfig(), season_priors: Optional[pl.DataFrame] = None
+    config: GSConfig = GSConfig(),
+    season_priors: Optional[pl.DataFrame] = None,
+    variance_events: Optional[pl.DataFrame] = None,
 ) -> WeekPredictor:
     """Wrap the Glickman-Stern (1998) Kalman filter as a week predictor.
 
@@ -580,6 +649,12 @@ def glickman_stern_predictor(
             — the start season at filter init, then every boundary after
             the AR shrink. Preseason knowledge only; never derive shifts
             from the season they apply to.
+        variance_events: Optional ``(season, week, team, extra_var)``
+            table of state-uncertainty events in squared margin points —
+            e.g. a starting-QB change known at kickoff. The team's state
+            VARIANCE is inflated by ``extra_var`` when the filter arrives
+            at that week, widening the update gate without moving the
+            mean. Events must be pre-game knowledge for their week.
 
     Returns:
         A predictor callable for :func:`~sportsdataverse.wexp.backtest.run_backtest`.
@@ -599,6 +674,15 @@ def glickman_stern_predictor(
         priors = {
             (int(r["season"]), str(r["team"])): float(r["prior_shift"]) for r in season_priors.iter_rows(named=True)
         }
+    var_events: dict[tuple[int, int, str], float] = {}
+    if variance_events is not None:
+        n_dup = variance_events.height - variance_events.unique(subset=["season", "week", "team"]).height
+        if n_dup:
+            raise ValueError(f"variance_events has {n_dup} duplicate (season, week, team) row(s)")
+        var_events = {
+            (int(r["season"]), int(r["week"]), str(r["team"])): float(r["extra_var"])
+            for r in variance_events.iter_rows(named=True)
+        }
 
     def predict(history: pl.DataFrame, slate: pl.DataFrame, store: Optional[VintageStore]) -> pl.Series:
         from scipy.stats import norm
@@ -611,6 +695,14 @@ def glickman_stern_predictor(
         )
         idx = {t: i for i, t in enumerate(teams)}
         n = len(teams)
+        # a prior table keyed on the wrong entity space (ids vs names) matches
+        # NOTHING and silently degrades to the no-prior filter — refuse it
+        if priors and not any(team in idx for _season, team in priors):
+            raise ValueError(
+                "season_priors matched no team in the filter's state space — "
+                "priors must be keyed on the same team column as the oracle's "
+                "home_team/away_team (names), not team ids"
+            )
         x = np.zeros(n)
         p_cov = np.eye(n) * config.init_sd**2
         cur: Optional[tuple[int, int]] = None
@@ -636,6 +728,12 @@ def glickman_stern_predictor(
                 else:
                     drift = week - w0
                 p_cov = p_cov + config.sigma_w**2 * drift * np.eye(n)
+            if var_events:
+                # state-uncertainty events for the arrival week (e.g. QB
+                # change): inflate the team's variance, not its mean
+                for (s, w, team), extra in var_events.items():
+                    if s == season and w == week and team in idx:
+                        p_cov[idx[team], idx[team]] += extra
             cur = (season, week)
 
         def design(games: pl.DataFrame) -> tuple[np.ndarray, np.ndarray]:
@@ -667,6 +765,91 @@ def glickman_stern_predictor(
         return pl.Series(norm.cdf(mu / np.sqrt(var)))
 
     return predict
+
+
+def market_prior_shifts(
+    oracle: pl.DataFrame,
+    *,
+    seed_weeks: int = 3,
+    lam: float = 5.0,
+    market_col: str = "spread_close",
+) -> pl.DataFrame:
+    """Season-entry priors distilled from the market's early-season lines (Axis D4).
+
+    For each season, fits the shared opponent-adjusted ridge on the
+    MARKET'S expected margin (the line, not the observed result) over
+    that season's first ``seed_weeks`` weeks, yielding a market-implied
+    strength per team in margin points. Shaped like
+    :func:`cfb_continuity_shifts` so it drops straight into
+    :func:`glickman_stern_predictor`'s ``season_priors``.
+
+    **Scoring contract (the caller's responsibility):** the seed weeks
+    are NOT pre-game knowledge for themselves — a week-2 line reflects
+    week-1 results. Score only games in weeks ``> seed_weeks`` when using
+    these priors, or the early games are predicted by a prior their own
+    lines built. The ablation driver enforces this.
+
+    Args:
+        oracle: Market-oracle frame (contract columns incl. the market
+            column and team ids).
+        seed_weeks: Weeks of lines distilled into the prior. Week 1 alone
+            is too thin once FCS opponents are excluded (691 FBS-vs-FBS
+            week-1 games across 2004-2021), so the default reaches 3.
+        lam: Ridge penalty on the team coefficients.
+        market_col: Market expected-margin column (``spread_close`` has
+            the widest coverage; ``spread_open`` is thin pre-2021).
+
+    Returns:
+        ``(season, team, prior_shift)`` — one row per team the market
+        priced in the seed window. Teams the market did not price get no
+        row and therefore no shift (never imputed).
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.wexp.engines import market_prior_shifts
+            shifts = market_prior_shifts(oracle, seed_weeks=3)
+    """
+    # NOTE: keyed on team NAME, not id — glickman_stern_predictor's state
+    # vector is built from home_team/away_team, and cfb_continuity_shifts
+    # uses the same space. An id-keyed prior matches nothing, silently.
+    base = normalize_walk_weeks(oracle).drop_nulls([market_col, "home_team", "away_team"])
+    frames: list[pl.DataFrame] = []
+    for season in sorted(base["season"].unique().to_list()):
+        seed = base.filter((pl.col("season") == season) & (pl.col("week") <= seed_weeks))
+        if seed.height == 0:
+            continue
+        rows = pl.concat(
+            [
+                seed.select(
+                    off=pl.col("home_team"),
+                    deft=pl.col("away_team"),
+                    resp=pl.col(market_col),
+                    homeflag=pl.when(pl.col("neutral_site") == True)  # noqa: E712
+                    .then(pl.lit(""))
+                    .otherwise(pl.col("home_team")),
+                ),
+                seed.select(
+                    off=pl.col("away_team"),
+                    deft=pl.col("home_team"),
+                    resp=-pl.col(market_col),
+                    homeflag=pl.lit(""),
+                ),
+            ]
+        )
+        coefs, _intercept, _hfa = opponent_adjusted_ridge(
+            rows, off_col="off", def_col="deft", home_col="homeflag", resp_col="resp", lam=lam
+        )
+        frames.append(
+            coefs.select(
+                season=pl.lit(season, dtype=pl.Int32),
+                team=pl.col("team_id"),
+                prior_shift=pl.col("off_coef") - pl.col("def_coef"),
+            )
+        )
+    if not frames:
+        return pl.DataFrame(schema={"season": pl.Int32, "team": pl.Utf8, "prior_shift": pl.Float64})
+    return pl.concat(frames, how="vertical")
 
 
 def cfb_continuity_shifts(
@@ -742,12 +925,65 @@ def cfb_continuity_shifts(
     return out
 
 
+def nfl_qb_change_events(schedule: pl.DataFrame, *, extra_var: float) -> pl.DataFrame:
+    """Within-season starting-QB changes as GS state-uncertainty events.
+
+    From an nflverse schedule frame (``season``, ``week``, ``home_team`` /
+    ``away_team``, ``home_qb_id`` / ``away_qb_id``): a team-week is an
+    event when its starter differs from the SAME team's previous game in
+    the SAME season (openers exempt — the season transition already
+    carries offseason uncertainty). The starter ids are pre-game
+    knowledge, so the events are walk-forward safe.
+
+    Args:
+        schedule: nflverse schedule frame.
+        extra_var: Variance added to the team's state at the event week
+            (squared margin points; FPI's ~3.3-pt QB adjustments suggest
+            seeds around 9-16).
+
+    Returns:
+        ``(season, week, team, extra_var)`` — one row per changed
+        team-week, for
+        :func:`glickman_stern_predictor`'s ``variance_events``.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nfl import load_nfl_schedule
+            from sportsdataverse.wexp.engines import nfl_qb_change_events
+            events = nfl_qb_change_events(load_nfl_schedule([2024]), extra_var=9.0)
+    """
+    team_games = pl.concat(
+        [
+            schedule.select(
+                season=pl.col("season").cast(pl.Int32),
+                week=pl.col("week").cast(pl.Int32),
+                team=pl.col("home_team").cast(pl.Utf8),
+                qb=pl.col("home_qb_id").cast(pl.Utf8),
+            ),
+            schedule.select(
+                season=pl.col("season").cast(pl.Int32),
+                week=pl.col("week").cast(pl.Int32),
+                team=pl.col("away_team").cast(pl.Utf8),
+                qb=pl.col("away_qb_id").cast(pl.Utf8),
+            ),
+        ]
+    ).sort("season", "team", "week")
+    return (
+        team_games.with_columns(prev_qb=pl.col("qb").shift(1).over("season", "team"))
+        .filter(pl.col("qb").is_not_null() & pl.col("prev_qb").is_not_null() & (pl.col("qb") != pl.col("prev_qb")))
+        .select("season", "week", "team")
+        .with_columns(extra_var=pl.lit(extra_var, dtype=pl.Float64))
+    )
+
+
 def build_predictor(
     config: VariantConfig,
     *,
     table: str = "ridge",
     sigma: float = 13.45,
     season_priors: Optional[pl.DataFrame] = None,
+    variance_events: Optional[pl.DataFrame] = None,
 ) -> WeekPredictor:
     """Dispatch a variant config to its implemented week predictor.
 
@@ -791,8 +1027,8 @@ def build_predictor(
         and config.wp_map == "margin_normal"  # native map: Phi(mu / predictive sd)
         and config.hfa == "fixed"
     ):
-        if config.prior == "carryover_continuity" and season_priors is None:
-            raise ValueError("prior='carryover_continuity' requires a season_priors table (cfb_continuity_shifts)")
+        if config.prior in ("carryover_continuity", "market_open_informed") and season_priors is None:
+            raise ValueError(f"prior={config.prior!r} requires a season_priors table")
         shrink = 0.0 if config.prior == "flat" else params.get("season_shrink", 0.82)
         return glickman_stern_predictor(
             GSConfig(
@@ -803,7 +1039,8 @@ def build_predictor(
                 hfa=params.get("hfa", 2.3),
                 init_sd=params.get("init_sd", 5.0),
             ),
-            season_priors=season_priors if config.prior == "carryover_continuity" else None,
+            season_priors=season_priors if config.prior in ("carryover_continuity", "market_open_informed") else None,
+            variance_events=variance_events,
         )
     if (
         config.core == "elo_margin"

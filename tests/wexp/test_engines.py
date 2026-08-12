@@ -594,3 +594,205 @@ def test_unknown_wp_map_refused():
 def test_predictor_requires_store(nfl_oracle):
     with pytest.raises(ValueError, match="VintageStore"):
         run_backtest(nfl_oracle, ratings_predictor("ridge"), model_id="ridge_margin", store=None)
+
+
+def test_qb_change_events_and_variance_knob(nfl_oracle):
+    """QB-change events are within-season, opener-exempt, and only widen
+    variance (zero/no events reduce exactly to the plain filter).
+
+    Real fixture: 156 starter changes across 2009/2020/2024.
+    """
+    from sportsdataverse.wexp.engines import GSConfig, glickman_stern_predictor, nfl_qb_change_events
+
+    sch = pl.read_parquet(FIXDIR / "nfl_schedule_sample.parquet")
+    events = nfl_qb_change_events(sch, extra_var=9.0)
+    assert events.height == 156  # observed on the fixture
+    # opener-exempt: no event at any (season, team)'s first game week
+    firsts = (
+        pl.concat(
+            [
+                sch.select(season="season", week="week", team="home_team"),
+                sch.select(season="season", week="week", team="away_team"),
+            ]
+        )
+        .group_by("season", "team")
+        .agg(first_week=pl.col("week").min())
+    )
+    joined = events.join(firsts, left_on=["season", "team"], right_on=["season", "team"], how="inner")
+    assert joined.filter(pl.col("week") == pl.col("first_week")).height == 0
+
+    plain, _ = run_backtest(nfl_oracle, glickman_stern_predictor(GSConfig()), model_id="gs")
+    with_events, _ = run_backtest(
+        nfl_oracle, glickman_stern_predictor(GSConfig(), variance_events=events), model_id="gs"
+    )
+    assert (plain["p_home"] - with_events["p_home"]).abs().max() > 1e-6  # knob does something
+    none_events, _ = run_backtest(
+        nfl_oracle, glickman_stern_predictor(GSConfig(), variance_events=events.head(0)), model_id="gs"
+    )
+    assert (plain["p_home"] - none_events["p_home"]).abs().max() < 1e-12  # empty == plain
+    with pytest.raises(ValueError, match="duplicate"):
+        glickman_stern_predictor(GSConfig(), variance_events=pl.concat([events.head(1), events.head(1)]))
+
+
+def test_drive_classifiers_on_real_fixture():
+    """Garbage + clock-kill flags on the real 2-game fixture.
+
+    Alabama 42-3 Duke necessarily produced garbage-time drives (Q4 margin
+    39 > the 21-point Connelly band); the competitive Wisconsin-Michigan
+    first half produced none in Q1.
+    """
+    from sportsdataverse.wexp.engines import cfb_drive_deltas
+
+    drives = cfb_drive_deltas(pl.read_parquet(FIXDIR / "cfb_pbp_drive_sample.parquet"))
+    assert {"garbage", "clock_kill", "period", "margin_start", "plays"} <= set(drives.columns)
+    bama = drives.filter(pl.col("game_id") == 401110720)  # deltas keep the raw Int64 id
+    assert bama.filter(pl.col("garbage") == True).height > 0  # noqa: E712
+    q1 = drives.filter(pl.col("period") == 1)
+    assert q1.filter(pl.col("garbage") == True).height == 0  # noqa: E712
+
+
+def test_cross_season_history_is_leak_free_and_widens_coverage(nfl_oracle):
+    """history_seasons folds PRIOR seasons in — never the current one's future.
+
+    Tampering the current season's later weeks must leave earlier
+    vintages byte-identical (the walk stays exclusive); and week 2 of a
+    later season must now carry ratings for teams that have played no
+    current-season games yet (the coverage win: NFL tune coverage rose
+    5,758 -> 6,105 games).
+    """
+    two = nfl_oracle.filter(pl.col("season").is_in([2020, 2024]))
+    base = ridge_margin_vintages(two, lam=LAM, history_seasons=1)
+    tampered = ridge_margin_vintages(
+        two.with_columns(
+            pl.when((pl.col("season") == 2024) & (pl.col("week") >= 10))
+            .then(pl.col("home_margin") * 3 + 7)
+            .otherwise(pl.col("home_margin"))
+            .alias("home_margin")
+        ),
+        lam=LAM,
+        history_seasons=1,
+    )
+    early = base.filter((pl.col("season") == 2024) & (pl.col("as_of_week") <= 10))
+    early_t = tampered.filter((pl.col("season") == 2024) & (pl.col("as_of_week") <= 10))
+    assert early.height == early_t.height > 0
+    assert early.sort("as_of_week", "team_id").equals(early_t.sort("as_of_week", "team_id"))
+
+    # coverage: with history, 2024 week 2 exists AND the fit is larger
+    without = ridge_margin_vintages(two, lam=LAM)
+    assert base.filter(pl.col("season") == 2024).height >= without.filter(pl.col("season") == 2024).height
+    # the fit actually changed (history is not a silent no-op)
+    j = base.join(without, on=["season", "as_of_week", "team_id"], suffix="_w")
+    assert (j["off_coef"] - j["off_coef_w"]).abs().max() > 0.1
+
+
+def test_market_prior_shifts_contract_and_seed_isolation():
+    """D4 market priors: seeded ONLY by the seed weeks, shaped like D3 shifts.
+
+    Real CFB fixture (2015 + 2024). Tampering the market lines of weeks
+    AFTER the seed window must leave the priors byte-identical — the
+    prior is a season seed, not a rolling market tracker.
+    """
+    from sportsdataverse.wexp.engines import market_prior_shifts
+    from sportsdataverse.wexp.oracle_market import cfb_market_oracle_from_lines
+
+    oracle = cfb_market_oracle_from_lines(
+        pl.read_parquet(FIXDIR / "cfb_line_odds_sample.parquet"),
+        pl.read_parquet(FIXDIR / "cfb_schedule_sample.parquet"),
+    )
+    shifts = market_prior_shifts(oracle, seed_weeks=3)
+    assert set(shifts.columns) == {"season", "team", "prior_shift"}
+    assert shifts.schema["team"] == pl.Utf8 and shifts.schema["season"] == pl.Int32
+    assert shifts.height > 0
+    # one row per (season, team) — the GS prior loader refuses duplicates
+    assert shifts.unique(subset=["season", "team"]).height == shifts.height
+    # market strengths must actually spread teams apart, not collapse
+    assert shifts["prior_shift"].std() > 1.0
+
+    tampered = oracle.with_columns(
+        pl.when(pl.col("week") > 3)
+        .then(pl.col("spread_close") * 5 - 20)
+        .otherwise(pl.col("spread_close"))
+        .alias("spread_close")
+    )
+    after = market_prior_shifts(tampered, seed_weeks=3)
+    assert shifts.sort("season", "team").equals(after.sort("season", "team"))
+
+
+def test_market_prior_dispatch_requires_table():
+    from sportsdataverse.wexp.engines import build_predictor
+    from sportsdataverse.wexp.variants import VariantConfig
+
+    v = VariantConfig(
+        core="glickman_stern",
+        response="raw",
+        opponent_adjust="none",
+        prior="market_open_informed",
+        wp_map="margin_normal",
+        hfa="fixed",
+    )
+    with pytest.raises(ValueError, match="season_priors"):
+        build_predictor(v)
+
+
+def test_season_priors_wrong_entity_space_refused(nfl_oracle):
+    """A prior keyed on ids (not the filter's name space) matches nothing.
+
+    This is the silent-degrade bug that shipped in the first D4 draft:
+    market priors keyed on ESPN team ids applied to zero teams and the
+    arm scored identically to no-prior. It must fail loudly instead.
+    """
+    from sportsdataverse.wexp.engines import GSConfig, glickman_stern_predictor
+
+    bogus = pl.DataFrame(
+        {
+            "season": pl.Series([2024, 2024], dtype=pl.Int32),
+            "team": ["99999", "88888"],  # ids, not the oracle's team names
+            "prior_shift": [3.0, -3.0],
+        }
+    )
+    with pytest.raises(ValueError, match="state space"):
+        run_backtest(nfl_oracle, glickman_stern_predictor(GSConfig(), bogus), model_id="gs")
+
+
+def test_response_ridge_vintages_tolerates_null_responses(nfl_oracle):
+    """A null response must be DROPPED, not NaN-poison the whole vintage.
+
+    The ridge solver has no null handling: one null response makes every
+    coefficient in that vintage NaN, and NaN survives the downstream
+    `drop_nulls` guards because polars null != NaN — so the run finishes
+    with silently-missing predictions instead of raising.
+    `cfb_scoring_opportunities` emits a deliberate null `points_per_opp`
+    for teams that never reached scoring range, which lands here.
+    """
+    from sportsdataverse.wexp.engines import response_ridge_vintages
+
+    season = nfl_oracle.filter(pl.col("season") == 2024)
+    base = pl.concat(
+        [
+            season.select(
+                game_id=pl.col("game_id"),
+                off_team_id=pl.col("home_team_id"),
+                def_team_id=pl.col("away_team_id"),
+                resp=pl.col("home_margin") / 10.0,
+            ),
+            season.select(
+                game_id=pl.col("game_id"),
+                off_team_id=pl.col("away_team_id"),
+                def_team_id=pl.col("home_team_id"),
+                resp=-pl.col("home_margin") / 10.0,
+            ),
+        ]
+    ).drop_nulls("resp")
+
+    clean = response_ridge_vintages(base, season, lam=1.0)
+    # null out a handful of responses; every OTHER row still carries signal
+    holed = base.with_columns(resp=pl.when(pl.int_range(pl.len()) < 5).then(None).otherwise(pl.col("resp")))
+    out = response_ridge_vintages(holed, season, lam=1.0)
+
+    assert out.height > 0, "null responses wiped the vintage table entirely"
+    for col in ("off_coef", "def_coef", "adj_net"):
+        assert out[col].is_nan().sum() == 0, f"{col} was NaN-poisoned by a null response"
+        assert out[col].is_null().sum() == 0
+    # and it is genuinely still fitting, not degenerate
+    assert out["adj_net"].std() > 0
+    assert set(out["as_of_week"].unique()) == set(clean["as_of_week"].unique())
