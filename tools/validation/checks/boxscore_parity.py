@@ -94,15 +94,68 @@ _REQUIRED = [
 
 
 def oracle_path(dataset: str) -> Path:
+    """Path to the committed ESPN team-box oracle for ``dataset``.
+
+    Args:
+        dataset: Registered dataset name.
+
+    Returns:
+        The oracle parquet path; may not exist.
+
+    Example:
+        Read the shipped oracle::
+
+            import polars as pl
+            from tools.validation.checks import boxscore_parity
+
+            pl.read_parquet(boxscore_parity.oracle_path("cfb_pbp"))
+    """
     return _ORACLE_DIR / f"{dataset}_espn_team_box.parquet"
 
 
 def floor_path(dataset: str) -> Path:
+    """Path to the committed per-(stat, season) parity floors for ``dataset``.
+
+    Args:
+        dataset: Registered dataset name.
+
+    Returns:
+        The floors JSON path; may not exist.
+
+    Example:
+        Inspect the shipped floors::
+
+            import json
+            from tools.validation.checks import boxscore_parity
+
+            json.loads(boxscore_parity.floor_path("cfb_pbp").read_text())["floors"].keys()
+    """
     return _FLOOR_DIR / f"{dataset}.json"
 
 
 def aggregate(frame: pl.DataFrame) -> pl.DataFrame:
-    """Aggregate pbp to one row per (game_id, team) using the proven definitions."""
+    """Aggregate pbp to one row per ``(game_id, team_key)`` using proven definitions.
+
+    Encodes the conventions measured against the box score: NCAA charges sacks
+    to rushing, pass attempts exclude sacks, and penalties are charged to the
+    team that committed them (a positive ``penalty_yards_signed`` means the
+    offense gained, so the defense was flagged).
+
+    Args:
+        frame: Play-by-play frame carrying the columns in ``_REQUIRED``.
+
+    Returns:
+        One row per ``(game_id, team_key)`` with every tracked stat.
+
+    Example:
+        Aggregate a season::
+
+            from tools.validation.checks import boxscore_parity
+            from tools.validation.registry import resolve
+
+            frame, _ = resolve("cfb_pbp")
+            boxscore_parity.aggregate(frame).head()
+    """
     is_rush, is_sack, is_pass = c("rush") == True, c("sack") == True, c("pass") == True  # noqa: E712
     off = (
         frame.filter(c("pos_team_id").is_not_null())
@@ -135,9 +188,52 @@ def aggregate(frame: pl.DataFrame) -> pl.DataFrame:
     return off.join(pen, on=["game_id", "team_key"], how="left")
 
 
+class JoinKeyError(RuntimeError):
+    """A team join key could not be represented as canonical ``Int64``.
+
+    Raised rather than silently dropping the affected rows: a null join key is
+    removed by the inner join, which SHIFTS the measured parity rate without any
+    finding being emitted -- the check would quietly grade itself on a subset.
+    """
+
+
 def measure(frame: pl.DataFrame, oracle: pl.DataFrame) -> pl.DataFrame:
-    """Return per (stat, season) exact-match percentage."""
-    agg = aggregate(frame).with_columns(team_id=c("team_key").cast(pl.Int64, strict=False)).drop("team_key")
+    """Compute per (stat, season) exact-match percentage against the ESPN box.
+
+    Args:
+        frame: Play-by-play frame carrying the columns in ``_REQUIRED``.
+        oracle: ESPN team box, one row per ``(game_id, team_id)``.
+
+    Returns:
+        One row per (stat, season) with ``n`` and ``exact_pct``; an empty frame
+        when no tracked stat is present on both sides.
+
+    Raises:
+        JoinKeyError: If a non-null team key fails to cast to ``Int64``, or the
+            oracle's ``team_id`` is not ``Int64``. Both would silently shrink
+            the joined population and bias the measured rate.
+
+    Example:
+        Measure against the committed oracle::
+
+            import polars as pl
+            from tools.validation.checks import boxscore_parity
+            from tools.validation.registry import resolve
+
+            frame, _ = resolve("cfb_pbp")
+            oracle = pl.read_parquet(boxscore_parity.oracle_path("cfb_pbp"))
+            print(boxscore_parity.measure(frame, oracle).head())
+    """
+    agg = aggregate(frame)
+    # ID-dtype discipline: assert the cast is lossless instead of letting
+    # `strict=False` null malformed ids that the inner join then drops.
+    before = int(agg.get_column("team_key").is_not_null().sum())
+    agg = agg.with_columns(team_id=c("team_key").cast(pl.Int64, strict=False)).drop("team_key")
+    after = int(agg.get_column("team_id").is_not_null().sum())
+    if after != before:
+        raise JoinKeyError(f"{before - after} team key(s) did not survive the Int64 cast; refusing to measure a subset")
+    if oracle.schema["team_id"] != pl.Int64:
+        raise JoinKeyError(f"oracle team_id must be Int64, got {oracle.schema['team_id']}")
     joined = agg.join(oracle.drop("season"), on=["game_id", "team_id"], how="inner")
     rows = []
     for stat, (mine, theirs) in STATS.items():
@@ -171,6 +267,11 @@ def run(dataset: str, frame: pl.DataFrame, ctx: CheckContext) -> list[Finding]:
     Returns:
         One WARN Finding per (stat, season) that fell below floor minus
         tolerance; empty when every season holds.
+
+    Raises:
+        JoinKeyError: Propagated from :func:`measure` when a team join key
+            cannot be represented as canonical ``Int64`` -- a silent subset is
+            worse than a loud failure, because it biases the measured rate.
 
     Example:
         Run over the registered dataset::

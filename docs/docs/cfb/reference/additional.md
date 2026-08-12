@@ -850,6 +850,7 @@ The frame with the canonical column(s) appended. Returned unchanged when `source
 import polars as pl
 from sportsdataverse.cfb import add_play_type_canonical
 
+pbp = pl.DataFrame({"type.text": ["Rush", "Pass Reception", "Timeout"]})
 out = add_play_type_canonical(pbp)
 out.group_by("play_type_family").agg(pl.len())
 ```
@@ -910,9 +911,11 @@ A `pl.Expr` aliased `play_type_canonical`. Values absent from `PLAY_TYPE_CANONIC
 **Example**
 
 ```python
+import polars as pl
 from sportsdataverse.cfb import canonical_play_type_expr
 
-pbp = pbp.with_columns(canonical_play_type_expr())
+pbp = pl.DataFrame({"type.text": ["Pass Reception", "Punt Return"]})
+pbp.with_columns(canonical_play_type_expr())
 ```
 
 ### `cfb_adjusted_epa(plays: 'pl.DataFrame | pd.DataFrame', *, ridge_lambda: 'float' = 0.035, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#cfb_adjusted_epa}
@@ -2722,7 +2725,8 @@ A `pl.Expr` aliased `play_type_family`; unmapped values yield null.
 import polars as pl
 from sportsdataverse.cfb import add_play_type_canonical
 
-plays = add_play_type_canonical(pbp).filter(
+pbp = pl.DataFrame({"type.text": ["Rush", "Timeout"]})
+add_play_type_canonical(pbp).filter(
     pl.col("play_type_family") != "administrative"
 )
 ```

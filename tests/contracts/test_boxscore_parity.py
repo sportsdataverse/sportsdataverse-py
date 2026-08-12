@@ -131,3 +131,25 @@ def test_committed_cfb_pbp_floors_are_real():
     assert len(floors) >= 8, "expected a floor per tracked stat"
     assert len(floors["completions"]) >= 20, "expected ~22 seasons of completion floors"
     assert boxscore_parity.oracle_path("cfb_pbp").exists(), "ESPN team-box oracle missing"
+
+
+def test_uncastable_team_key_raises_instead_of_measuring_a_subset(wired):
+    """ID-dtype discipline: a key that cannot become Int64 must fail loudly.
+
+    `strict=False` would null it, the inner join would drop the row, and the
+    measured parity rate would shift with no finding emitted -- the check would
+    quietly grade itself on a subset of the data.
+    """
+    wired(_oracle(1), {"completions": {"2024": 100.0}})
+    frame = _plays([{"pass": True, "completion": True}]).with_columns(pl.lit("not-an-id").alias("pos_team_id"))
+    with pytest.raises(boxscore_parity.JoinKeyError, match="did not survive"):
+        boxscore_parity.measure(frame, pl.read_parquet(boxscore_parity.oracle_path("toy")))
+
+
+def test_non_int64_oracle_team_id_raises(wired):
+    """The oracle side of the join key must be canonical Int64 too."""
+    oracle = pl.DataFrame([{"game_id": 1, "team_id": "10", "season": 2024, "espn_completions": 1}])
+    wired(oracle, {"completions": {"2024": 100.0}})
+    frame = _plays([{"pass": True, "completion": True}])
+    with pytest.raises(boxscore_parity.JoinKeyError, match="must be Int64"):
+        boxscore_parity.measure(frame, pl.read_parquet(boxscore_parity.oracle_path("toy")))

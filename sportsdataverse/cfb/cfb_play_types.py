@@ -196,12 +196,26 @@ def canonical_play_type_expr(source: str = "type.text") -> pl.Expr:
         :data:`PLAY_TYPE_CANONICAL` (and nulls) yield null, so upstream
         vocabulary drift surfaces rather than silently creating a category.
 
+    Raises:
+        polars.exceptions.ColumnNotFoundError: At collection time if ``source``
+            is absent from the frame. Use :func:`add_play_type_canonical`, which
+            checks first and returns the frame unchanged.
+
     Example:
         Add just the canonical column to an existing frame::
 
+            import polars as pl
             from sportsdataverse.cfb import canonical_play_type_expr
 
-            pbp = pbp.with_columns(canonical_play_type_expr())
+            pbp = pl.DataFrame({"type.text": ["Pass Reception", "Punt Return"]})
+            pbp.with_columns(canonical_play_type_expr())
+
+    See Also:
+        * `cfbfastR`_ -- the R sibling, whose pbp carries the same ``type.text``
+        * `nflfastR`_ -- NFL play typing, which does NOT share this vocabulary
+
+    .. _cfbfastR: https://cfbfastR.sportsdataverse.org
+    .. _nflfastR: https://www.nflfastr.com
     """
     return pl.col(source).replace_strict(PLAY_TYPE_CANONICAL, default=None).alias("play_type_canonical")
 
@@ -215,15 +229,27 @@ def play_type_family_expr(source: str = "play_type_canonical") -> pl.Expr:
     Returns:
         A ``pl.Expr`` aliased ``play_type_family``; unmapped values yield null.
 
+    Raises:
+        polars.exceptions.ColumnNotFoundError: At collection time if ``source``
+            is absent from the frame.
+
     Example:
         Drop administrative rows before computing per-play rates::
 
             import polars as pl
             from sportsdataverse.cfb import add_play_type_canonical
 
-            plays = add_play_type_canonical(pbp).filter(
+            pbp = pl.DataFrame({"type.text": ["Rush", "Timeout"]})
+            add_play_type_canonical(pbp).filter(
                 pl.col("play_type_family") != "administrative"
             )
+
+    See Also:
+        * `cfbfastR`_ -- the R sibling, whose pbp carries the same ``type.text``
+        * `nflfastR`_ -- NFL play typing, which does NOT share this vocabulary
+
+    .. _cfbfastR: https://cfbfastR.sportsdataverse.org
+    .. _nflfastR: https://www.nflfastr.com
     """
     return pl.col(source).replace_strict(PLAY_TYPE_FAMILY, default=None).alias("play_type_family")
 
@@ -246,14 +272,26 @@ def add_play_type_canonical(
         ``source`` is absent, so the helper is safe to apply to frames that have
         already been projected down.
 
+    Raises:
+        None. A missing ``source`` column returns the frame unchanged rather
+        than raising, because this is routinely applied to projected frames.
+
     Example:
         Count plays per family for a season, era-agnostically::
 
             import polars as pl
             from sportsdataverse.cfb import add_play_type_canonical
 
+            pbp = pl.DataFrame({"type.text": ["Rush", "Pass Reception", "Timeout"]})
             out = add_play_type_canonical(pbp)
             out.group_by("play_type_family").agg(pl.len())
+
+    See Also:
+        * `cfbfastR`_ -- the R sibling, whose pbp carries the same ``type.text``
+        * `nflfastR`_ -- NFL play typing, which does NOT share this vocabulary
+
+    .. _cfbfastR: https://cfbfastR.sportsdataverse.org
+    .. _nflfastR: https://www.nflfastr.com
     """
     if source not in df.columns:
         return df
