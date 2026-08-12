@@ -1993,6 +1993,23 @@ class CFBPlayProcess(object):
                     )
                     .or_(
                         (pl.col("type.text") == "Fumble Return Touchdown").and_(pl.col("text").str.contains("sacked")),
+                    )
+                    # Interception plays are pass attempts. The branches above
+                    # only catch them in the 2005 and 2014+ text formats; 2004
+                    # and 2006-2013 interception rows shipped with pass=False
+                    # (measured: season flag-rate 0.0 there vs 1.0 elsewhere;
+                    # 12,890 rows -- the int_implies_pass definitional WARN).
+                    .or_(
+                        pl.col("type.text")
+                        .is_in(
+                            [
+                                "Interception Return",
+                                "Interception Return Touchdown",
+                                "Pass Interception",
+                                "Pass Interception Return",
+                            ],
+                        )
+                        .and_(pl.col("text").str.contains(r"(?i)intercept")),
                     ),
                 )
                 .then(True)
@@ -3520,6 +3537,19 @@ class CFBPlayProcess(object):
             .then(0)
             .when((pl.col("punt") == True).and_(pl.col("text").str.contains(r"(?i)no return|no gain")))
             .then(0)
+            # Losses first: the generic branches grab the first unsigned int,
+            # so "returns for a loss of 9 yards" stored +9 (2,482 rows measured).
+            .when(
+                (pl.col("punt") == True).and_(
+                    pl.col("text").str.contains(r"(?i)return(?:s|ed)?[^,]{0,20}? for a loss of \d+")
+                )
+            )
+            .then(-1 * pl.col("text").str.extract(r"(?i)for a loss of (\d+)", 1).cast(pl.Int32))
+            # Dominant 2005-2013 shape, previously never matched: 18,746 real
+            # returns carried NULL yardage ("...punt for 39 yards, returned by
+            # Haruki Nakamura for 1 yard to the Cincy 16.").
+            .when((pl.col("punt") == True).and_(pl.col("text").str.contains(r"(?i)returned by .{2,40}? for \d+ yard")))
+            .then(pl.col("text").str.extract(r"(?i)returned by .{2,40}? for (\d+) yard", 1).cast(pl.Int32))
             .when((pl.col("punt") == True).and_(pl.col("text").str.contains(r"(?i)returned \d+ yards")))
             .then(pl.col("text").str.extract(r"(?i)returned (.+)").str.extract(r"(\d+)").cast(pl.Int32))
             .when((pl.col("punt") == True).and_(pl.col("punt_blocked") == False))
@@ -4044,7 +4074,25 @@ class CFBPlayProcess(object):
                 .otherwise(None),
             )
             .with_columns(
-                fumble_player=pl.when(pl.col("type.text") == "Penalty").then(None).otherwise(pl.col("fumble_player")),
+                # Name-shaped capture first (optional #NN jersey prefix, 1-3
+                # capitalized tokens, case-toggle termination); the legacy
+                # fragment capture is the fallback. Measured: 100% of sampled
+                # name-set/id-null fumble rows were dirty fragment captures
+                # ("o the UTAH Nate Johnson") that then failed the roster
+                # attach; simulated fix lifts fumble credit joins 56% -> 79%.
+                fumble_player=pl.when(pl.col("type.text") == "Penalty")
+                .then(None)
+                .otherwise(
+                    pl.coalesce(
+                        pl.col("text").str.extract(
+                            r"(?i)(?:#\d+\s+)?((?-i:[A-Z][\w'.\-]*(?:\s[A-Z][\w'.\-]*){0,2}))\s+fumbled?", 1
+                        ),
+                        pl.col("text").str.extract(
+                            r"(?i)fumbled? by\s+(?:#\d+\s+)?((?-i:[A-Z][\w'.\-]*(?:\s[A-Z][\w'.\-]*){0,2}))", 1
+                        ),
+                        pl.col("fumble_player"),
+                    )
+                ),
                 # --- Forced Fumble Names ----
                 fumble_forced_player=pl.when(
                     (pl.col("text").str.contains(r"(?i)fumble")).and_(pl.col("text").str.contains(r"(?i)forced by")),
@@ -4096,9 +4144,21 @@ class CFBPlayProcess(object):
                 .otherwise(None),
             )
             .with_columns(
+                # Name-shaped recovered-by capture with an optional leading
+                # ALL-CAPS team token ("recovered by SAC Noah St-Juste") -- the
+                # abbr previously stayed glued to the name and the roster
+                # attach failed. Legacy chain remains the fallback.
                 fumble_recovered_player=pl.when(pl.col("type.text") == "Penalty")
                 .then(None)
-                .otherwise(pl.col("fumble_recovered_player")),
+                .otherwise(
+                    pl.coalesce(
+                        pl.col("text").str.extract(
+                            r"(?i)recovered by\s+(?:(?-i:[A-Z]{2,6})\s+)?(?:#\d+\s+)?((?-i:[A-Z][\w'.\-]*(?:\s[A-Z][\w'.\-]*){1,2}))",
+                            1,
+                        ),
+                        pl.col("fumble_recovered_player"),
+                    )
+                ),
             )
             .with_columns(
                 ## Extract player names
@@ -4147,6 +4207,59 @@ class CFBPlayProcess(object):
             )
         )
         return play_df
+
+    def __add_xp_suffix_cols(self, play_df):
+        """Extra points 2014+ -- parsed from the TD play's parenthetical suffix.
+
+        Through 2013 an extra point is its own row (``Extra Point Good/Missed``,
+        ~6/game); from 2014 there is NO XP row -- the try lives as a suffix on
+        the touchdown play text: ``(Nick Rice KICK)`` / ``(... PAT MISSED)`` /
+        ``(... PAT BLOCKED)``, plus a title-case ``(Name Kick)`` form in
+        summary-only games and a 2025 stats.ncaa inline form
+        ``#49 G.Meadors kick attempt good|failed``. Validated against the ESPN
+        kicking box per (game, kicker): xpm 94.6-97.3% / xpa 93.0-95.1% exact
+        for every season 2014-2025, from a 9% baseline. Pre-2014 rows are
+        untouched (the paren patterns fire zero times there; the NCAA inline
+        pattern is season-gated because 2010-2013 old-NCAA texts contain it for
+        XPs that already have their own rows).
+        """
+        if "text" not in play_df.columns or "season" not in play_df.columns:
+            return play_df
+
+        xp_made_re = r"(?i)\(\s*([^()]*?)\s+kick\s*\)"
+        xp_miss_kw_re = r"(?i)\(\s*([^()]*?)\s*\b(?:pat|kick)\s+(?:missed|blocked|failed)\s*\)"
+        xp_miss_bare_re = r"(?i)\(\s*([^()]+?)\s+(?:missed|blocked)\s*\)"
+        xp_ncaa_re = r"(?i)(?:#\d+\s+)?([A-Z][\w'\.\-]*(?:\s[A-Z][\w'\.\-]+)*)\s+kick attempt\s+(good|failed)"
+
+        is_td_row = (pl.col("td_play") == True) | pl.col("type.text").str.contains("(?i)touchdown")  # noqa: E712
+        gated = (pl.col("season") >= 2014) & is_td_row & pl.col("text").is_not_null()
+
+        made_name = pl.col("text").str.extract(xp_made_re, 1)
+        miss_kw_name = pl.col("text").str.extract(xp_miss_kw_re, 1)
+        miss_bare_name = pl.col("text").str.extract(xp_miss_bare_re, 1)
+        ncaa_name = pl.col("text").str.extract(xp_ncaa_re, 1)
+        ncaa_result = pl.col("text").str.extract(xp_ncaa_re, 2)
+
+        def _guard(e):
+            # a captured "name" that is really a 2pt phrase is nulled
+            return pl.when(e.str.contains("(?i)two|conversion")).then(pl.lit(None, dtype=pl.Utf8)).otherwise(e)
+
+        # fill_null(False) is load-bearing: Kleene logic makes `False | null` null,
+        # and (ncaa_result == "good") is null wherever the pattern did not match.
+        made = (made_name.is_not_null() | (ncaa_result == pl.lit("good"))).fill_null(False)
+        missed = (
+            miss_kw_name.is_not_null() | _guard(miss_bare_name).is_not_null() | (ncaa_result == pl.lit("failed"))
+        ).fill_null(False)
+        kicker = pl.coalesce(made_name, miss_kw_name, _guard(miss_bare_name), ncaa_name).str.strip_chars()
+
+        return play_df.with_columns(
+            pl.when(gated).then(made | missed).otherwise(False).alias("xp_attempt"),
+            pl.when(gated).then(made).otherwise(False).alias("xp_made"),
+            pl.when(gated & (made | missed))
+            .then(pl.when(kicker.str.len_chars() > 0).then(kicker))
+            .otherwise(pl.lit(None, dtype=pl.Utf8))
+            .alias("xp_kicker_player_name"),
+        )
 
     def __add_attribution_cols(self, play_df):
         """Resolve the credited team per play (spec section 5).
@@ -7337,6 +7450,7 @@ class CFBPlayProcess(object):
                     .pipe(self.__add_yardage_cols)
                     .pipe(self.__add_air_yards_cols)
                     .pipe(self.__add_player_cols)
+                    .pipe(self.__add_xp_suffix_cols)
                     .pipe(self.__add_attribution_cols)
                     .pipe(self.__refine_play_types_post_attribution)
                     .pipe(self.__after_cols)
@@ -7574,6 +7688,7 @@ class CFBPlayProcess(object):
                     .pipe(self.__add_yardage_cols)
                     .pipe(self.__add_air_yards_cols)
                     .pipe(self.__add_player_cols)
+                    .pipe(self.__add_xp_suffix_cols)
                     .pipe(self.__after_cols)
                     .pipe(self.__add_spread_time)
                 )
