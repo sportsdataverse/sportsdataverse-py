@@ -502,10 +502,10 @@ def mbb_team_crosswalk(
             live; pass an empty frame to skip Fox.
         bart: Pre-fetched ``torvik_ratings()`` frame. ``None`` fetches live.
         kenpom: KenPom teams frame with ``Team`` / ``Conf``. ``None`` (the
-            default) uses the bundled KenPom team/conference directory
-            (:func:`_kenpom_teams` -- hoopR's ``teams_links``, 2002-2026),
-            filtered to *season*; pass an empty frame to skip KenPom and get
-            null ``kp_*`` columns. No KenPom subscription or credential is
+            default) uses the KenPom team/conference directory bundled with
+            sdv-py (hoopR's ``teams_links``, seasons 2002-2026), filtered to
+            *season*; pass an empty frame to skip KenPom and get null
+            ``kp_*`` columns. No KenPom subscription or credential is
             involved: the bundled data is the public directory, not ratings.
         return_as_pandas: Return pandas instead of polars.
         **kwargs: Forwarded to the underlying HTTP calls.
