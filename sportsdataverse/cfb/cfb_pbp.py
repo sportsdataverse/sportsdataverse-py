@@ -1108,6 +1108,12 @@ class CFBPlayProcess(object):
                 .otherwise(pl.lit(False)),
             )
         )
+        # The dupe rows are removed HERE, so the text_dupe column that reaches
+        # the output is always False by construction -- it is the residue of a
+        # filter that already ran, not a marker consumers can use to dedupe.
+        # Rows with identical text but DIFFERENT start states (e.g. repeated
+        # degenerate feed texts advancing the yardline) are deliberately kept:
+        # they are distinct plays with bad text, not duplicates.
         pbp_txt["plays"] = pbp_txt["plays"].filter(pl.col("text_dupe") == False)
         pbp_txt["plays"] = pbp_txt["plays"].with_row_index("game_play_number", 1)
         pbp_txt["plays"] = (
@@ -2987,6 +2993,17 @@ class CFBPlayProcess(object):
                 # --- Pass Completions, Attempts and Targets -------
                 completion=pl.when(
                     pl.col("type.text").is_in(["Pass Reception", "Pass Completion", "Passing Touchdown"]),
+                )
+                .then(True)
+                # A completion on a penalty play COUNTS when the play stood
+                # (penalty_no_play False). ESPN's box includes these; measured
+                # against the team box this is a +0.1 to +0.4pp monotone gain
+                # in every season, never negative. Nullified plays stay
+                # excluded -- counting those is catastrophic in every season.
+                .when(
+                    (pl.col("type.text") == "Penalty")
+                    .and_(pl.col("text").str.contains(r"(?i)pass complete"))
+                    .and_(pl.col("penalty_no_play") == False),
                 )
                 .then(True)
                 .when(
