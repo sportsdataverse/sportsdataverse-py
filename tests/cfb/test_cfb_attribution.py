@@ -888,3 +888,118 @@ def test_refine_recomputes_downs_turnover_and_pos_score_diff_end():
     assert r["type.text"] == "Fumble Recovery (Own)"
     assert r["downs_turnover"] is True
     assert r["pos_score_diff_end"] == -3
+
+
+# --- penalized-team text resolution (binary home/away matcher) ---
+
+
+def _pen_side(text, home=("TEX", "Texas", None, "Longhorns"), away=("TCU", "TCU", None, "Horned Frogs")):
+    from sportsdataverse.cfb.cfb_pbp import _parse_penalty_team_side
+
+    return _parse_penalty_team_side(
+        {
+            "text": text,
+            "homeTeamAbbrev": home[0],
+            "homeTeamName": home[1],
+            "homeTeamNameAlt": home[2],
+            "homeTeamMascot": home[3],
+            "awayTeamAbbrev": away[0],
+            "awayTeamName": away[1],
+            "awayTeamNameAlt": away[2],
+            "awayTeamMascot": away[3],
+        },
+    )
+
+
+def test_penalty_side_uppercase_form_abbrev():
+    assert _pen_side("pass incomplete, PENALTY TCU pass interference (Washington, A.) 10 yards") == "away"
+
+
+def test_penalty_side_university_initialism_alias():
+    # "UT" appears in neither payload string; the U+initial alias resolves it,
+    # and TCU (an all-caps initialism name) must NOT also generate "UT".
+    assert _pen_side("pass complete for 34 yards, PENALTY UT pass interference (K. Boyd)") == "home"
+
+
+def test_penalty_side_leading_form():
+    assert _pen_side("TCU Penalty, sideline interference (15 Yards) to the TCU 15 for a 1ST down") == "away"
+
+
+def test_penalty_side_leading_form_two_words():
+    side = _pen_side(
+        "ARIZONA ST Penalty, Face Mask (4 yards) (Henry Hattis) to the ArzSt 5",
+        home=("ASU", "Arizona State", None, "Sun Devils"),
+        away=("BYU", "BYU", None, "Cougars"),
+    )
+    assert side == "home"
+
+
+def test_penalty_side_vowel_dropped_subsequence():
+    side = _pen_side(
+        "WESTRN MICHIGAN Penalty, Defensive Holding (Drake Spears) to the WMich 8 for a 1ST down",
+        home=("WMU", "Western Michigan", None, "Broncos"),
+        away=("SYR", "Syracuse", None, "Orange"),
+    )
+    assert side == "home"
+
+
+def test_penalty_side_longest_prefix_shrinks_to_team():
+    # the capture grabs "BAYLOR Pass Interference"; word-prefix shrinking must
+    # still land on BAYLOR
+    side = _pen_side(
+        "pass incomplete, PENALTY BAYLOR Pass Interference (R.J. Sneed) 15 yards",
+        home=("BAY", "Baylor", None, "Bears"),
+        away=("TCU", "TCU", None, "Horned Frogs"),
+    )
+    assert side == "home"
+
+
+def test_penalty_side_none_when_no_token():
+    assert _pen_side("Jalen Milroe run for 8 yds to the LSU 22") is None
+
+
+def test_penalty_side_suffix_direction_leading_form():
+    # the team is the LAST word run before "Penalty," -- junk prefix words
+    # ("for a TD") must not defeat the match
+    side = _pen_side(
+        "Sedrick Alexander run for 2 yds for a TD Vanderbilt Penalty, (Yards) declined",
+        home=("VAN", "Vanderbilt", None, "Commodores"),
+        away=("AUB", "Auburn", None, "Tigers"),
+    )
+    assert side == "home"
+
+
+def test_penalty_side_parenthesized_team_name():
+    side = _pen_side(
+        "Kevin Davis run for 3 yds Miami (OH) Penalty, Holding (10 Yards) to the M-OH 25",
+        home=("M-OH", "Miami (OH)", None, "RedHawks"),
+        away=("BGSU", "Bowling Green", None, "Falcons"),
+    )
+    assert side == "home"
+
+
+def test_penalty_side_u_prefix_stripped():
+    side = _pen_side(
+        "PENALTY UMass Pass Interference (Bailey,Brennen) 15 yards from UMA35 to UMA20",
+        home=("MASS", "Massachusetts", None, "Minutemen"),
+        away=("URI", "Rhode Island", None, "Rams"),
+    )
+    assert side == "home"
+
+
+def test_penalty_side_initial_plus_u_alias():
+    side = _pen_side(
+        "PENALTY VU Ineligible Downfield on Pass 5 yards from VU40 to VU35",
+        home=("VAN", "Vanderbilt", None, "Commodores"),
+        away=("BAMA", "Alabama", None, "Crimson Tide"),
+    )
+    assert side == "home"
+
+
+def test_penalty_side_three_letter_consonant_skeleton():
+    side = _pen_side(
+        "PENALTY TLN Pass Interference (White,Javion) 15 yards from TLN30 to TLN15",
+        home=("TULN", "Tulane", None, "Green Wave"),
+        away=("MEM", "Memphis", None, "Tigers"),
+    )
+    assert side == "home"

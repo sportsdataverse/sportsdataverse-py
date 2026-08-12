@@ -440,7 +440,10 @@ _DEFENSIVE_PENALTIES = frozenset(
         "Roughing the Snapper",
         "12 Men on the Field",
         "Neutral Zone Infraction",
-        "Encroachment",
+        # NOTE: "Encroachment" is NOT here -- in NCAA usage encroachment is an
+        # OFFENSIVE foul (lineman in the neutral zone), unlike the NFL's
+        # defensive usage. The 2025-season taxonomy corroborates (10 OFF / 3
+        # DEF among text-resolved rows).
         "Targeting",
         "Pass Interference",
     },
@@ -472,22 +475,129 @@ def _parse_recovery_abbrevs(text):
     return [m.upper() for m in _RECOVERY_ABBREV_RE.findall(text)]
 
 
-_PENALTY_ABBREV_RE = re.compile(r"PENALTY\s+([A-Z&]{2,})\b")
+#: (regex, direction). Direction controls the word-shrink order in the
+#: matcher: form 1 puts the team FIRST after "PENALTY" (shrink from the left,
+#: "BAYLOR Pass Interference" -> "BAYLOR"); form 2 puts the team LAST before
+#: "Penalty," (shrink from the right, "for a TD Vanderbilt Penalty," ->
+#: "Vanderbilt"). Form 2's inner words also admit "(" so "Miami (OH) Penalty,"
+#: captures whole.
+_PENALTY_TOKEN_RES = [
+    (re.compile(r"PENALTY[,:]?\s+(?:on\s+)?([A-Z][\w.&'-]*(?:\s+[A-Z][\w.&'-]*){0,2})"), "prefix"),
+    (re.compile(r"([A-Z(][\w.&'()-]*(?:\s+[A-Z(][\w.&'()-]*){0,2})\s+Penalty,"), "suffix"),
+]
+
+_SQUASH_RE = re.compile(r"[^A-Z0-9]")
 
 
-def _parse_penalty_abbrev(text):
-    """Return the uppercase team abbreviation of the PENALIZED team, or None.
+def _squash_team(s):
+    """Uppercase and strip non-alphanumerics for team-token comparison."""
+    return _SQUASH_RE.sub("", s.upper()) if s else ""
 
-    ESPN writes ``PENALTY {TEAM_ABBR} {foul} …`` where ``{TEAM_ABBR}`` is the team that
-    committed the foul (e.g. ``"PENALTY FSU Pass Interference (#15 S.Arnoux)"``). This is the
-    authoritative penalized team and correctly distinguishes offensive vs defensive fouls
-    (e.g. offensive vs defensive pass interference), which the ``penalty_detail`` label alone
-    does not. Returns the first match; ``None`` when no ``PENALTY {ABBR}`` token is present.
+
+def _is_char_subseq(needle: str, hay: str) -> bool:
+    """True when ``needle``'s characters appear in ``hay`` in order.
+
+    Handles ESPN's vowel-dropped / truncated team spellings ("WESTRN MICHIGAN",
+    "WESTMICH" vs "Western Michigan") that neither equality nor prefix match.
     """
+    it = iter(hay)
+    return all(c in it for c in needle)
+
+
+def _score_team_match(tok: str, cands: list) -> int:
+    """0 = no match, 1 = subsequence/alias, 2 = prefix either way, 3 = exact."""
+    best = 0
+    for c in cands:
+        if not c:
+            continue
+        if tok == c:
+            return 3
+        if c.startswith(tok) or tok.startswith(c):
+            best = max(best, 2)
+        elif len(tok) >= 3 and _is_char_subseq(tok, c):
+            # consonant-skeleton vendor codes ("TLN" = Tulane, "MTN" = Middle
+            # Tennessee); length >= 3, and the binary home-vs-away contest
+            # still requires a strict winner
+            best = max(best, 1)
+    return best
+
+
+def _team_alias_initialisms(name):
+    """Derived initialism aliases for a school name (weak-tier candidates).
+
+    Vendor texts use university-style initialisms the payload never carries:
+    "UT" for Texas, "VU" for Vanderbilt, "OSU" for Ohio State. Generate both
+    U+initial and initial+U for single-word names (skipping names that are
+    already all-caps initialisms like "TCU" -- prefixing those invents the
+    OPPONENT's alias) and word-initials / initials+U / U+initials for
+    multi-word names. Matched at the weak tier so real abbreviation matches
+    always win.
+    """
+    if not name:
+        return []
+    words = name.split()
+    out = []
+    if len(words) == 1:
+        if not name.isupper():
+            # both orders: "UT" (Texas), "VU" (Vanderbilt), "LU" (Liberty)
+            out.append("U" + _squash_team(name)[:1])
+            out.append(_squash_team(name)[:1] + "U")
+    else:
+        initials = "".join(w[0] for w in words if w).upper()
+        out.extend([initials, initials + "U", "U" + initials])
+    return out
+
+
+def _parse_penalty_team_side(row):
+    """Resolve the PENALIZED team from play text to ``"home"`` / ``"away"`` / None.
+
+    Attribution is a binary choice per game, so the extracted team token only
+    has to match ONE side's candidate strings (abbreviation, school name, alt
+    name, name+mascot) better than the other's. Ambiguous or unmatched tokens
+    return None so the caller can fall back to the penalty-label heuristic
+    instead of guessing wrong. Measured on the published 2025 season: 98.6%
+    of penalty rows resolve, with rule-identity precision (False Start 99.0%
+    offense, Roughing the Passer 99.3% defense, Defensive Offside 100%).
+    """
+    text = row["text"]
     if not text:
         return None
-    m = _PENALTY_ABBREV_RE.search(text)
-    return m.group(1).upper() if m else None
+    home = [
+        _squash_team(row["homeTeamAbbrev"]),
+        _squash_team(row["homeTeamName"]),
+        _squash_team(row["homeTeamNameAlt"]),
+        _squash_team((row["homeTeamName"] or "") + (row["homeTeamMascot"] or "")),
+    ]
+    away = [
+        _squash_team(row["awayTeamAbbrev"]),
+        _squash_team(row["awayTeamName"]),
+        _squash_team(row["awayTeamNameAlt"]),
+        _squash_team((row["awayTeamName"] or "") + (row["awayTeamMascot"] or "")),
+    ]
+    home_alias = _team_alias_initialisms(row["homeTeamName"])
+    away_alias = _team_alias_initialisms(row["awayTeamName"])
+    for rx, direction in _PENALTY_TOKEN_RES:
+        for m in rx.finditer(text):
+            words = m.group(1).split()
+            for k in range(len(words), 0, -1):
+                run = words[:k] if direction == "prefix" else words[-k:]
+                tok = _squash_team(" ".join(run))
+                if len(tok) < 2:
+                    continue
+                # also try the U-university prefix stripped ("UMass" -> "MASS")
+                toks = [tok] + ([tok[1:]] if tok.startswith("U") and len(tok) >= 4 else [])
+                for t in toks:
+                    hs = _score_team_match(t, home)
+                    aws = _score_team_match(t, away)
+                    if hs == aws:
+                        # weak tier: derived initialism aliases, exact-match only
+                        hs = int(t in home_alias)
+                        aws = int(t in away_alias)
+                    if hs > aws:
+                        return "home"
+                    if aws > hs:
+                        return "away"
+    return None
 
 
 def _abbr_compat(abbr_col: pl.Expr, team_u: pl.Expr) -> pl.Expr:
@@ -2814,21 +2924,23 @@ class CFBPlayProcess(object):
                 .otherwise(pl.lit(None, dtype=pl.Boolean)),
             )
             .with_columns(
-                penalty_detail=pl.when(pl.col("penalty_offset") == 1)
-                .then(pl.lit("Offsetting"))
-                .when(pl.col("penalty_declined") == 1)
-                .then(pl.lit("Declined"))
-                .when(pl.col("text").str.contains("(?i)roughing passer"))
+                # Foul-name branches FIRST: a declined/offset penalty keeps its
+                # foul name (the disposition already lives in penalty_declined /
+                # penalty_offset), instead of the label swallowing it -- the
+                # 2025-season taxonomy measured 318 "Declined" + 844 "Missing"
+                # rows whose foul names were recoverable from text.
+                penalty_detail=pl.when(pl.col("text").str.contains("(?i)roughing (?:the )?passer"))
                 .then(pl.lit("Roughing the Passer"))
                 .when(pl.col("text").str.contains("(?i)offensive holding"))
                 .then(pl.lit("Offensive Holding"))
-                .when(pl.col("text").str.contains("(?i)pass interference"))
+                # inter?ference: ESPN ships a literal "Inteference" typo
+                .when(pl.col("text").str.contains("(?i)pass inter?ference"))
                 .then(pl.lit("Pass Interference"))
                 .when(pl.col("text").str.contains("(?i)encroachment"))
                 .then(pl.lit("Encroachment"))
-                .when(pl.col("text").str.contains("(?i)defensive pass interference"))
+                .when(pl.col("text").str.contains("(?i)defensive pass inter?ference"))
                 .then(pl.lit("Defensive Pass Interference"))
-                .when(pl.col("text").str.contains("(?i)offensive pass interference"))
+                .when(pl.col("text").str.contains("(?i)offensive pass inter?ference"))
                 .then(pl.lit("Offensive Pass Interference"))
                 .when(pl.col("text").str.contains("(?i)illegal procedure"))
                 .then(pl.lit("Illegal Procedure"))
@@ -2836,19 +2948,21 @@ class CFBPlayProcess(object):
                 .then(pl.lit("Defensive Holding"))
                 .when(pl.col("text").str.contains("(?i)holding"))
                 .then(pl.lit("Holding"))
-                .when(pl.col("text").str.contains("(?i)offensive offside|(?i)offside offense"))
+                .when(pl.col("text").str.contains("(?i)offensive off-?side|(?i)off-?side offense"))
                 .then(pl.lit("Offensive Offside"))
-                .when(pl.col("text").str.contains("(?i)defensive offside|(?i)offside defense"))
+                .when(pl.col("text").str.contains("(?i)defensive off-?side|(?i)off-?side defense"))
                 .then(pl.lit("Defensive Offside"))
-                .when(pl.col("text").str.contains("(?i)offside"))
+                # off-?side: hyphenated vendor spelling ("off-side") observed 44x in 2025
+                .when(pl.col("text").str.contains("(?i)off-?side"))
                 .then(pl.lit("Offside"))
-                .when(pl.col("text").str.contains("(?i)illegal fair catch signal"))
+                .when(pl.col("text").str.contains("(?i)(?:illegal|invalid) fair catch signal"))
                 .then(pl.lit("Illegal Fair Catch Signal"))
-                .when(pl.col("text").str.contains("(?i)illegal batting"))
+                .when(pl.col("text").str.contains(r"(?i)illegal bat(?:ting)?\b"))
                 .then(pl.lit("Illegal Batting"))
                 .when(pl.col("text").str.contains("(?i)neutral zone infraction"))
                 .then(pl.lit("Neutral Zone Infraction"))
-                .when(pl.col("text").str.contains("(?i)ineligible downfield"))
+                # inelgible: another literal vendor typo
+                .when(pl.col("text").str.contains("(?i)inel[ei]gible downfield|(?i)inelgible downfield"))
                 .then(pl.lit("Ineligible Downfield"))
                 .when(pl.col("text").str.contains("(?i)illegal use of hands"))
                 .then(pl.lit("Illegal Use of Hands"))
@@ -2856,19 +2970,24 @@ class CFBPlayProcess(object):
                 .then(pl.lit("Kickoff Out of Bounds"))
                 .when(pl.col("text").str.contains("(?i)12 men on the field"))
                 .then(pl.lit("12 Men on the Field"))
-                .when(pl.col("text").str.contains("(?i)illegal block"))
+                .when(pl.col("text").str.contains("(?i)block(?:ing)? below (?:the )?waist"))
+                .then(pl.lit("Block Below the Waist"))
+                .when(pl.col("text").str.contains("(?i)chop block"))
+                .then(pl.lit("Chop Block"))
+                .when(pl.col("text").str.contains("(?i)illegal block|(?i)low block"))
                 .then(pl.lit("Illegal Block"))
                 .when(pl.col("text").str.contains("(?i)personal foul"))
                 .then(pl.lit("Personal Foul"))
                 .when(pl.col("text").str.contains("(?i)false start"))
                 .then(pl.lit("False Start"))
-                .when(pl.col("text").str.contains("(?i)substitution infraction"))
+                .when(pl.col("text").str.contains("(?i)substitution infraction|(?i)illegal substitution"))
                 .then(pl.lit("Substitution Infraction"))
                 .when(pl.col("text").str.contains("(?i)illegal formation"))
                 .then(pl.lit("Illegal Formation"))
-                .when(pl.col("text").str.contains("(?i)illegal touching"))
+                # prefix covers "Illegal Touching" / "Illegal Touch Pass" / "Illegal Touch-Pass"
+                .when(pl.col("text").str.contains("(?i)illegal touch"))
                 .then(pl.lit("Illegal Touching"))
-                .when(pl.col("text").str.contains("(?i)sideline interference"))
+                .when(pl.col("text").str.contains("(?i)sideline inter?ference"))
                 .then(pl.lit("Sideline Interference"))
                 .when(pl.col("text").str.contains("(?i)clipping"))
                 .then(pl.lit("Clipping"))
@@ -2892,7 +3011,7 @@ class CFBPlayProcess(object):
                 .then(pl.lit("Illegal Shift"))
                 .when(pl.col("text").str.contains("(?i)illegal motion"))
                 .then(pl.lit("Illegal Motion"))
-                .when(pl.col("text").str.contains("(?i)roughing the kicker"))
+                .when(pl.col("text").str.contains("(?i)roughing (?:the )?kicker"))
                 .then(pl.lit("Roughing the Kicker"))
                 .when(pl.col("text").str.contains("(?i)delay of game"))
                 .then(pl.lit("Delay of Game"))
@@ -2922,12 +3041,22 @@ class CFBPlayProcess(object):
                 .then(pl.lit("Illegal Blindside Block"))
                 .when(pl.col("text").str.contains("(?i)unsportsmanlike conduct"))
                 .then(pl.lit("Unsportsmanlike Conduct"))
-                .when(pl.col("text").str.contains("(?i)running into kicker"))
+                .when(pl.col("text").str.contains("(?i)running into (?:the )?kicker"))
                 .then(pl.lit("Running Into Kicker"))
                 .when(pl.col("text").str.contains("(?i)failure to wear required equipment"))
                 .then(pl.lit("Failure to Wear Required Equipment"))
                 .when(pl.col("text").str.contains("(?i)player disqualification"))
                 .then(pl.lit("Player Disqualification"))
+                .when(pl.col("text").str.contains("(?i)disconcerting"))
+                .then(pl.lit("Disconcerting Signals"))
+                .when(pl.col("text").str.contains(r"(?i)\bleaping\b"))
+                .then(pl.lit("Leaping"))
+                # disposition-only labels LAST: they fire only when no foul name
+                # was recognizable in the text
+                .when(pl.col("penalty_offset") == 1)
+                .then(pl.lit("Offsetting"))
+                .when(pl.col("penalty_declined") == 1)
+                .then(pl.lit("Declined"))
                 .when(pl.col("penalty_flag") == True)
                 .then(pl.lit("Missing")),
             )
@@ -4224,6 +4353,397 @@ class CFBPlayProcess(object):
         )
         return play_df
 
+    def __add_series_data(self, play_df):
+        """Port of cfbfastR's series / first-down decomposition.
+
+        Provenance (verbatim port, bug-for-bug):
+            * ``cfbfastR/R/pbp_prep_epa_df_after.R`` L194-298 --
+              ``first_by_penalty`` / ``first_by_yards`` row flags, their lag
+              ladder, ``new_series``, and the four ``firstD_by_*`` outputs.
+            * ``cfbfastR/R/pbp_clean_drive_dat.R`` L18-66 + L300-312 -- the
+              half-scoped ``lag(1..3)`` event-flag lags (0-filled at half
+              starts) and ``drive_event_number`` (within-drive cumsum of
+              non-End rows).
+            * ``cfbfastR/R/pbp_clean_pbp_dat.R`` L388-390 -- ``lag_play_type``
+              is UNGROUPED on the per-game frame ("End of Half" is not in the
+              Timeout/End-Period skip set, so crossing the half boundary is
+              inert).
+
+        Emits TWO first-down representations, both Boolean:
+
+        * **Earned family** (``first_down_yards`` / ``first_down_penalty`` /
+          ``first_down_earned``) -- flagged on the play that EARNED the first
+          down, so the row's own ``pos_team`` is the crediting team. This is
+          the COUNTING surface: box/team aggregation sums these grouped by
+          ``pos_team``. Mutually exclusive buckets; yards takes precedence.
+        * **Series-start family** (``firstD_by_kickoff`` / ``firstD_by_poss``
+          / ``firstD_by_penalty`` / ``firstD_by_yards`` + ``new_series``) --
+          the verbatim cfbfastR port: flags the first play of the NEW series
+          with the cause it began (1-3 rows after an earning conversion, via
+          the Timeout/End-Period lag ladder). ``_poss`` / ``_kickoff`` mark
+          UNEARNED (happenstance) series starts -- possession change, drive
+          start, kickoff -- and must never be counted as earned first downs.
+          Not a counting surface: the ladder drops drive-ending conversions
+          (TDs, end-of-half) and can double-fire across a Timeout row (the
+          Timeout row takes the lag1 branch, the next play the lag2 branch) --
+          both faithful to R.
+
+        Known divergence from R (documented, benign): R leaves ``firstD_by_yards``
+        ``NA`` on rows 1-2 of a half (unfilled lag2/lag3); we emit ``False``.
+        """
+        to_ep = ["Timeout", "End Period"]
+        end_rows = ["End Period", "End of Half", "End of Game"]
+        # the Fox cleaning pipeline reaches this stage without the attribution
+        # columns; a null penalized_team simply disables the auto-first-down
+        # foul branch (penalty_1st_conv still counts)
+        if "penalized_team" not in play_df.columns:
+            play_df = play_df.with_columns(penalized_team=pl.lit(None, dtype=pl.Int32))
+        play_df = (
+            play_df.with_columns(
+                first_by_penalty=pl.when(
+                    (pl.col("type.text").is_in(penalty)).and_(pl.col("penalty_1st_conv") == True),
+                )
+                .then(True)
+                .when(
+                    (pl.col("type.text").is_in(penalty))
+                    .and_(pl.col("penalty_declined") == True)
+                    .and_(pl.col("penalty_offset") == True)
+                    .and_(pl.col("penalty_1st_conv") == False)
+                    .and_(pl.col("statYardage") > pl.col("start.distance")),
+                )
+                .then(True)
+                .when(
+                    (pl.col("type.text").is_in(penalty))
+                    .and_(pl.col("penalty_declined") == True)
+                    .and_(pl.col("penalty_offset") == False)
+                    .and_(pl.col("penalty_1st_conv") == False)
+                    .and_(pl.col("statYardage") >= pl.col("start.distance")),
+                )
+                .then(True)
+                .otherwise(False),
+                first_by_yards=(
+                    (pl.col("type.text").is_in(normalplay)).or_(pl.col("type.text") == "Fumble Recovery (Own)")
+                ).and_(pl.col("statYardage") >= pl.col("start.distance")),
+                drive_event=pl.col("type.text").is_in(end_rows) == False,
+            )
+            .with_columns(
+                # --- Earned-first-down family (conversion-row, snap-attributed) ---
+                # Unlike the series-start firstD_by_* family below (which flags
+                # the first play of the NEW series, 1-3 rows after the fact),
+                # these flag the play that EARNED the first down, so the row's
+                # own pos_team is the crediting team -- no lag attribution
+                # ambiguity, and drive-ending conversions (TDs, end-of-half)
+                # are captured. Kickoffs / punts / PATs / non-play rows are
+                # excluded by the play-type lists. Buckets are mutually
+                # exclusive; yards takes precedence (official scoring: if the
+                # play reached the line to gain, penalty yardage is moot).
+                first_down_yards=pl.when(
+                    # 1) vendor text marker -- ESPN's play text writes an
+                    # explicit "1ST down"/"1ST DOWN" on converting plays; where
+                    # present it is per-play ground truth and overrides the
+                    # derived rule (it counts spot/distance-data mismatches and
+                    # the occasional goal-to-go TD the stat crew credited).
+                    # Penalty-involved rows are excluded here so accepted-penalty
+                    # conversions keep routing to the penalty bucket.
+                    (pl.col("text").str.contains(r"(?i)\b1st down\b").fill_null(False))
+                    .and_(pl.col("text").str.contains("(?i)short of") == False)
+                    .and_(pl.col("text").str.contains("(?i)penalty") == False)
+                    .and_(
+                        (
+                            pl.col("type.text").is_in(
+                                [
+                                    *normalplay,
+                                    "Passing Touchdown",
+                                    "Rushing Touchdown",
+                                    "Pass Reception Touchdown",
+                                    "Fumble Recovery (Own) Touchdown",
+                                ],
+                            )
+                        ).or_(
+                            # fumble rows keep the marker only when possession
+                            # was retained (own recovery)
+                            (pl.col("type.text").is_in(["Fumble", "Fumble Recovery (Own)"])).and_(
+                                pl.col("change_of_pos_team") == False,
+                            ),
+                        ),
+                    ),
+                )
+                .then(True)
+                .when(
+                    # 2) derived rule
+                    (
+                        (pl.col("type.text").is_in(normalplay)).or_(
+                            # offensive scrimmage TDs reach the line to gain but
+                            # sit outside normalplay (own play-type strings) --
+                            # the structural miss of both first_down_created
+                            # (end.down != 1 after a TD) and the series ladder
+                            # (next row is a kickoff / new possession).
+                            pl.col("type.text").is_in(
+                                [
+                                    "Passing Touchdown",
+                                    "Rushing Touchdown",
+                                    "Pass Reception Touchdown",
+                                    "Fumble Recovery (Own) Touchdown",
+                                ],
+                            ),
+                        )
+                    )
+                    .and_(pl.col("statYardage") >= pl.col("start.distance"))
+                    # goal-to-go has NO line to gain, so nothing can earn a
+                    # first down there (a goal-to-go TD scores without one) --
+                    # verified vs the ESPN box: e.g. 401032062/BYU is exact
+                    # only when the 4 goal-to-go TDs are excluded.
+                    .and_(pl.col("start.distance") < pl.col("start.yardsToEndzone"))
+                    # a penalty-wiped play earns nothing by yards (the accepted
+                    # penalty path below handles any awarded first down).
+                    # penalty_negated_play is TRI-STATE: null means the
+                    # enforcement class is unknown, not that the play was
+                    # wiped -- only a CONFIRMED wipe blocks the yards credit
+                    # (null == False is null in polars and would silently
+                    # drop the whole branch).
+                    .and_(pl.col("penalty_negated_play").fill_null(False) == False)
+                    .and_(pl.col("penalty_no_play").fill_null(False) == False),
+                )
+                .then(True)
+                .when(
+                    # 3) declined / offset penalty where the play result stood and
+                    # converted (cfbfastR first_by_penalty branches 2-3; officially
+                    # these are first downs by yards, so they bucket here)
+                    (pl.col("type.text").is_in(penalty))
+                    .and_(pl.col("penalty_declined") == True)
+                    .and_(pl.col("penalty_1st_conv") == False)
+                    .and_(
+                        ((pl.col("penalty_offset") == True).and_(pl.col("statYardage") > pl.col("start.distance"))).or_(
+                            (pl.col("penalty_offset") == False).and_(
+                                pl.col("statYardage") >= pl.col("start.distance"),
+                            ),
+                        ),
+                    ),
+                )
+                .then(True)
+                .otherwise(False),
+            )
+            .with_columns(
+                first_down_penalty=(
+                    (pl.col("penalty_1st_conv") == True).or_(
+                        # accepted automatic-first-down foul by the DEFENSE whose
+                        # text lacks the "1st down" phrase (era/vendor dependent).
+                        # NCAA automatic-first-down fouls ONLY: DPI, roughing the
+                        # passer/kicker/snapper, targeting. Personal foul /
+                        # facemask / horse collar are 15 yards WITHOUT an
+                        # automatic first down in NCAA (unlike the NFL) and were
+                        # measured to over-fire. Gated on the text-resolved
+                        # penalized_team (binary home/away match) -- this branch
+                        # was rejected while attribution ran ~50% reliable and
+                        # re-added once the token matcher fixed it.
+                        (
+                            pl.col("text")
+                            .str.contains(
+                                r"(?i)pass interference|roughing the (?:passer|kicker|snapper)|targeting",
+                            )
+                            .fill_null(False)
+                        )
+                        .and_(pl.col("text").str.contains("(?i)penalty").fill_null(False))
+                        .and_(pl.col("penalty_declined") == False)
+                        .and_(pl.col("penalty_offset") == False)
+                        .and_(pl.col("penalized_team").is_not_null())
+                        .and_(pl.col("penalized_team") != pl.col("pos_team"))
+                        .and_(pl.col("change_of_pos_team") == False)
+                        .and_(pl.col("type.text").is_in([*end_rows, "Timeout"]) == False),
+                    )
+                )
+                .and_(pl.col("first_down_yards") == False)
+                # kickoff rows only: pos_team flips on kickoffs so a penalty
+                # first down there would mis-credit. Punt rows are NOT
+                # excluded -- roughing the kicker/snapper happens on punts and
+                # awards the KICKING team (= pos_team at snap) the first down.
+                .and_(pl.col("kickoff_play") == False),
+            )
+            .with_columns(
+                first_down_earned=(pl.col("first_down_yards") == True).or_(pl.col("first_down_penalty") == True),
+            )
+            .with_columns(
+                drive_event_number=pl.col("drive_event").cast(pl.Int32).cum_sum().over("drive.id"),
+                # lag_play_type is ungrouped in R (pbp_clean_pbp_dat.R L388-390);
+                # fill "" so is_in() is False like R's NA %in% -> FALSE.
+                lag_play_type=pl.col("type.text").shift(1).fill_null(""),
+                lag_play_type2=pl.col("type.text").shift(2).fill_null(""),
+                # Half-scoped event-flag lags, 0-filled at half starts. R fills
+                # via half_event_number %in% 1..k; within-half shift(k) is null
+                # exactly on those rows (End rows carry all-False flags, so the
+                # half_play_number nuance on scoring_play is inert).
+                lag_first_by_penalty=pl.col("first_by_penalty").shift(1).over("half").fill_null(False),
+                lag_first_by_penalty2=pl.col("first_by_penalty").shift(2).over("half").fill_null(False),
+                lag_first_by_penalty3=pl.col("first_by_penalty").shift(3).over("half").fill_null(False),
+                lag_first_by_yards=pl.col("first_by_yards").shift(1).over("half").fill_null(False),
+                lag_first_by_yards2=pl.col("first_by_yards").shift(2).over("half").fill_null(False),
+                lag_first_by_yards3=pl.col("first_by_yards").shift(3).over("half").fill_null(False),
+                lag_change_of_pos_team_srs=pl.col("change_of_pos_team").shift(1).over("half").fill_null(False),
+                lag_change_of_pos_team2_srs=pl.col("change_of_pos_team").shift(2).over("half").fill_null(False),
+                lag_change_of_pos_team3_srs=pl.col("change_of_pos_team").shift(3).over("half").fill_null(False),
+                lag_kickoff_play=pl.col("kickoff_play").shift(1).over("half").fill_null(False),
+                lag_kickoff_play2=pl.col("kickoff_play").shift(2).over("half").fill_null(False),
+                lag_punt=pl.col("punt").shift(1).over("half").fill_null(False),
+                lag_punt2=pl.col("punt").shift(2).over("half").fill_null(False),
+                lag_downs_turnover=pl.col("downs_turnover").shift(1).over("half").fill_null(False),
+                lag_downs_turnover2=pl.col("downs_turnover").shift(2).over("half").fill_null(False),
+                lag_turnover_vec=pl.col("turnover_vec").shift(1).over("half").fill_null(False),
+                lag_turnover_vec2=pl.col("turnover_vec").shift(2).over("half").fill_null(False),
+                lag_scoring_play=pl.col("scoring_play").shift(1).over("half").fill_null(False),
+                lag_scoring_play2=pl.col("scoring_play").shift(2).over("half").fill_null(False),
+                half_row=pl.int_range(pl.len()).over("half"),
+                lag_drive_id=pl.col("drive.id").shift(1).over("half"),
+            )
+            .with_columns(
+                new_series=pl.when(pl.col("half_row") == 0)
+                .then(True)
+                .when(pl.col("drive.id") != pl.col("lag_drive_id"))
+                .then(True)
+                .when(pl.col("lag_first_by_yards") == True)
+                .then(True)
+                .when(pl.col("lag_first_by_penalty") == True)
+                .then(True)
+                .otherwise(False),
+                # R: kickoff_play == 1 & down == 1. ESPN's raw start.down on
+                # kickoff rows is era-dependent junk (0 pre-normalization) and
+                # __process_epa's kick_mask later substitutes down=1 on every
+                # kickoff row -- the normalized-down semantics the R engine
+                # sees natively on CFBD input -- so the down guard is vacuous.
+                firstD_by_kickoff=pl.col("kickoff_play") == True,
+                firstD_by_poss=pl.when(
+                    # 1-L.I) start by play after kickoff
+                    (pl.col("lag_play_type").is_in(to_ep) == False)
+                    .and_(pl.col("drive_event_number") == 2)
+                    .and_(pl.col("lag_kickoff_play") == True)
+                    .and_(pl.col("kickoff_play") == False),
+                )
+                .then(True)
+                .when(
+                    # 1-L.II) same, one non-play event in between
+                    (pl.col("lag_play_type").is_in(to_ep))
+                    .and_(pl.col("lag_play_type2").is_in(to_ep) == False)
+                    .and_(pl.col("drive_event_number") == 3)
+                    .and_(pl.col("lag_kickoff_play2") == True)
+                    .and_(pl.col("kickoff_play") == False),
+                )
+                .then(True)
+                .when(
+                    # 2-L.I) start by change of pos_team
+                    (pl.col("lag_play_type").is_in(to_ep) == False)
+                    .and_(pl.col("lag_change_of_pos_team_srs") == True)
+                    .and_(
+                        (pl.col("lag_punt") == True)
+                        .or_(pl.col("lag_downs_turnover") == True)
+                        .or_(pl.col("lag_turnover_vec") == True),
+                    ),
+                )
+                .then(True)
+                .when(
+                    # 2-L.II) same, one non-play event in between
+                    (pl.col("lag_play_type").is_in(to_ep))
+                    .and_(pl.col("lag_change_of_pos_team2_srs") == True)
+                    .and_(pl.col("lag_play_type2").is_in(to_ep) == False)
+                    .and_(
+                        (pl.col("lag_punt2") == True)
+                        .or_(pl.col("lag_downs_turnover2") == True)
+                        .or_(pl.col("lag_turnover_vec2") == True),
+                    ),
+                )
+                .then(True)
+                .when(
+                    # 3-L.I) start by opponent scoring play
+                    (pl.col("lag_play_type").is_in(to_ep) == False)
+                    .and_(pl.col("lag_scoring_play") == True)
+                    .and_(pl.col("kickoff_play") == False),
+                )
+                .then(True)
+                .when(
+                    # 3-L.II) same, one non-play event in between
+                    (pl.col("lag_play_type").is_in(to_ep))
+                    .and_(pl.col("lag_play_type2").is_in(to_ep) == False)
+                    .and_(pl.col("lag_scoring_play2") == True)
+                    .and_(pl.col("kickoff_play") == False),
+                )
+                .then(True)
+                .when(
+                    # 4) start-of-half plays start drives
+                    (pl.col("drive_event_number") == 1).and_(pl.col("kickoff_play") == False),
+                )
+                .then(True)
+                .otherwise(False),
+                firstD_by_penalty=pl.when(
+                    (pl.col("lag_first_by_penalty") == True)
+                    .and_(pl.col("lag_change_of_pos_team_srs") == False)
+                    .and_(pl.col("lag_play_type").is_in(to_ep) == False),
+                )
+                .then(True)
+                .when(
+                    (pl.col("lag_first_by_penalty2") == True)
+                    .and_(pl.col("lag_change_of_pos_team2_srs") == False)
+                    .and_(pl.col("lag_play_type").is_in(to_ep)),
+                )
+                .then(True)
+                .when(
+                    (pl.col("lag_first_by_penalty3") == True)
+                    .and_(pl.col("lag_change_of_pos_team3_srs") == False)
+                    .and_(pl.col("lag_play_type").is_in(to_ep))
+                    .and_(pl.col("lag_play_type2").is_in(to_ep)),
+                )
+                .then(True)
+                .otherwise(False),
+                firstD_by_yards=pl.when(
+                    (pl.col("lag_first_by_yards") == True)
+                    .and_(pl.col("lag_change_of_pos_team_srs") == False)
+                    .and_(pl.col("lag_play_type").is_in(to_ep) == False),
+                )
+                .then(True)
+                .when(
+                    (pl.col("lag_first_by_yards2") == True)
+                    .and_(pl.col("lag_change_of_pos_team2_srs") == False)
+                    .and_(pl.col("lag_play_type").is_in(to_ep)),
+                )
+                .then(True)
+                .when(
+                    (pl.col("lag_first_by_yards3") == True)
+                    .and_(pl.col("lag_change_of_pos_team3_srs") == False)
+                    .and_(pl.col("lag_play_type").is_in(to_ep))
+                    .and_(pl.col("lag_play_type2").is_in(to_ep)),
+                )
+                .then(True)
+                .otherwise(False),
+            )
+            .drop(
+                "first_by_penalty",
+                "first_by_yards",
+                "drive_event",
+                "drive_event_number",
+                "lag_play_type",
+                "lag_play_type2",
+                "lag_first_by_penalty",
+                "lag_first_by_penalty2",
+                "lag_first_by_penalty3",
+                "lag_first_by_yards",
+                "lag_first_by_yards2",
+                "lag_first_by_yards3",
+                "lag_change_of_pos_team_srs",
+                "lag_change_of_pos_team2_srs",
+                "lag_change_of_pos_team3_srs",
+                "lag_kickoff_play",
+                "lag_kickoff_play2",
+                "lag_punt",
+                "lag_punt2",
+                "lag_downs_turnover",
+                "lag_downs_turnover2",
+                "lag_turnover_vec",
+                "lag_turnover_vec2",
+                "lag_scoring_play",
+                "lag_scoring_play2",
+                "half_row",
+                "lag_drive_id",
+            )
+        )
+        return play_df
+
     def __add_xp_suffix_cols(self, play_df):
         """Extra points 2014+ -- parsed from the TD play's parenthetical suffix.
 
@@ -4342,59 +4862,51 @@ class CFBPlayProcess(object):
                 .otherwise(pl.lit(None, dtype=pl.Int64))
             )
 
-        # Era-form penalty-team token: "<Team> Penalty," (2014+), "PENALTY ABR"
-        # (NCAA dialect), "<team> penalty N yard" (2005-2013), "N yard penalty
-        # on <Mascot>" (2004). Narrative fragments are blacklisted; matching is
-        # against the game's own identifier columns, normalized to letters
-        # only, with containment (len>=5) and vowel-stripped equality for
-        # truncated forms ("EASTRN MICHIGAN").
-        _pen_blacklist = ["BEFORE", "AFTER", "DECLINED", "OFFSETTING", "THE", "NULLIFIED", "BALL", "PLAY"]
-
-        def _pen_cand(pattern: str) -> pl.Expr:
-            tok = pl.col("text").str.extract(pattern, 1).str.strip_chars()
-            return pl.when(tok.str.to_uppercase().is_in(_pen_blacklist)).then(None).otherwise(tok)
-
-        def _pen_norm(expr: pl.Expr) -> pl.Expr:
-            return expr.str.to_uppercase().str.replace_all(r"[^A-Z]", "")
-
-        def _pen_side(side: str) -> pl.Expr:
-            tokn = pl.col("_pen_tokn")
-            tokv = tokn.str.replace_all(r"[AEIOU]", "")
-            checks: list[pl.Expr] = []
-            for ident in (f"{side}TeamName", f"{side}TeamMascot", f"{side}TeamAbbrev", f"{side}TeamNameAlt"):
-                if ident not in play_df.columns:
-                    continue
-                idn = _pen_norm(pl.col(ident))
-                idv = idn.str.replace_all(r"[AEIOU]", "")
-                checks += [
-                    (tokn == idn),
-                    ((tokn.str.len_chars() >= 5) & idn.str.contains(tokn, literal=True)),
-                    ((idn.str.len_chars() >= 5) & tokn.str.contains(idn, literal=True)),
-                    ((tokv.str.len_chars() >= 5) & (tokv == idv)),
-                ]
-            if not checks:
-                return pl.lit(False)
-            return pl.any_horizontal(checks).fill_null(False)
-
-        play_df = play_df.with_columns(
-            _pen_tokn=_pen_norm(
-                pl.coalesce(
-                    _pen_cand(r"([A-Za-z][A-Za-z .&'\-]{1,28}?) Penalty,"),
-                    _pen_cand(r"PENALTY\s+([A-Z][A-Za-z&\-]{1,11})\s"),
-                    _pen_cand(r"(?i)([A-Za-z][A-Za-z .&'\-]{1,28}?) penalty \d{1,3} yard"),
-                    _pen_cand(r"(?i)\d+ yard penalty on ([A-Za-z .&'\-]{2,28})"),
-                ),
-            ),
-        ).with_columns(_pen_txt_home=_pen_side("home"), _pen_txt_away=_pen_side("away"))
+        # The penalty-side matcher consumes the team NAME columns too; synthetic
+        # test frames only carry the abbrevs, so null-fill any that are absent
+        # (matching then degrades gracefully to abbrev-only).
+        for _c in (
+            "homeTeamName",
+            "awayTeamName",
+            "homeTeamNameAlt",
+            "awayTeamNameAlt",
+            "homeTeamMascot",
+            "awayTeamMascot",
+        ):
+            if _c not in play_df.columns:
+                play_df = play_df.with_columns(pl.lit(None, dtype=pl.Utf8).alias(_c))
 
         play_df = play_df.with_columns(
             recovery_team=_abbrev_to_team_id(pl.col("_recovery_abbrev")),
             recovery_team_2=_abbrev_to_team_id(pl.col("_recovery_abbrev_2")),
-            # Penalized team parsed from the authoritative "PENALTY {ABBR}" text token --
-            # correctly distinguishes offensive vs defensive fouls (incl. OPI vs DPI).
-            _penalty_team=_abbrev_to_team_id(
-                pl.col("text").map_elements(_parse_penalty_abbrev, return_dtype=pl.Utf8),
-            ),
+            # Penalized team parsed from the penalty-team text token (both vendor
+            # forms: "PENALTY {TEAM} ..." and "{TEAM} Penalty, ..."). Matched
+            # binary home-vs-away against abbrev/name/alt/mascot candidates, so
+            # it correctly distinguishes offensive vs defensive fouls (incl.
+            # OPI vs DPI) even when the token is a vowel-dropped vendor
+            # spelling. Replaces the earlier expression-based era-form matcher:
+            # measured on the 13-game box oracle, this resolver scores 61.5%
+            # count / 73.1% yards exact vs 46.2% / 50.0% for the era-form one,
+            # and resolves 98.6% of the 2025 season's 11,844 penalty rows.
+            _penalty_side=pl.struct(
+                [
+                    "text",
+                    "homeTeamAbbrev",
+                    "awayTeamAbbrev",
+                    "homeTeamName",
+                    "awayTeamName",
+                    "homeTeamNameAlt",
+                    "awayTeamNameAlt",
+                    "homeTeamMascot",
+                    "awayTeamMascot",
+                ],
+            ).map_elements(_parse_penalty_team_side, return_dtype=pl.Utf8),
+        ).with_columns(
+            _penalty_team=pl.when(pl.col("_penalty_side") == "home")
+            .then(pl.col("homeTeamId"))
+            .when(pl.col("_penalty_side") == "away")
+            .then(pl.col("awayTeamId"))
+            .otherwise(pl.lit(None, dtype=pl.Int64)),
         )
 
         # Special-teams RETURN detection (flag OR text). ESPN sometimes reclassifies a
@@ -4567,21 +5079,15 @@ class CFBPlayProcess(object):
             kick_return_team=pl.col("return_team"),
             fg_team=pl.col("kicking_team"),
             punt_team=pl.col("kicking_team"),
-            # Team resolution, best evidence first (measured on 2004-2025,
-            # 213,641 penalty rows; each layer only fills what the prior left):
-            #   1. era-form token from the play text matched against the game's
-            #      own identifiers (name/mascot/abbrev/alt, home vs away) --
-            #      resolves 85.5% with byte-level evidence
-            #   2. the legacy "PENALTY {ABBR}" parse (_penalty_team)
-            #   3. foul-direction heuristic (_DEFENSIVE_PENALTIES)
-            # Hybrid measured at team-box parity 46.7% penalties / 27.3% yards
-            # vs 22.5% / 13.0% for the pre-upgrade column.
+            # Team resolution, best evidence first (each layer only fills what
+            # the prior left):
+            #   1. the binary home/away text resolver (_penalty_team via
+            #      _parse_penalty_team_side) -- resolves 98.6% of 2025 rows
+            #   2. foul-direction heuristic (_DEFENSIVE_PENALTIES)
+            # Measured at 13-game team-box parity: 61.5% penalties / 73.1%
+            # yards exact vs the era-form matcher's 46.2% / 50.0%.
             penalized_team=pl.when(pl.col("penalty_detail").is_null())
             .then(pl.lit(None, dtype=pl.Int32))
-            .when(pl.col("_pen_txt_home") & ~pl.col("_pen_txt_away"))
-            .then(pl.col("homeTeamId").cast(pl.Int32, strict=False))
-            .when(pl.col("_pen_txt_away") & ~pl.col("_pen_txt_home"))
-            .then(pl.col("awayTeamId").cast(pl.Int32, strict=False))
             .when(pl.col("_penalty_team").is_not_null())
             .then(pl.col("_penalty_team"))
             .when(pl.col("penalty_detail").is_in(list(_DEFENSIVE_PENALTIES)))
@@ -4610,9 +5116,7 @@ class CFBPlayProcess(object):
                 "_recovery_abbrev",
                 "_recovery_abbrev_2",
                 "_penalty_team",
-                "_pen_tokn",
-                "_pen_txt_home",
-                "_pen_txt_away",
+                "_penalty_side",
                 "_is_kick_return",
                 "_is_punt_return",
                 "_loser_1",
@@ -7537,6 +8041,7 @@ class CFBPlayProcess(object):
                     .pipe(self.__add_attribution_cols)
                     .pipe(self.__refine_play_types_post_attribution)
                     .pipe(self.__after_cols)
+                    .pipe(self.__add_series_data)
                     .pipe(self.__add_spread_time)
                     .pipe(self.__process_epa)
                     .pipe(self.__process_wpa)
@@ -7773,6 +8278,7 @@ class CFBPlayProcess(object):
                     .pipe(self.__add_player_cols)
                     .pipe(self.__add_xp_suffix_cols)
                     .pipe(self.__after_cols)
+                    .pipe(self.__add_series_data)
                     .pipe(self.__add_spread_time)
                 )
                 self.plays_json = self.plays_json.to_dicts()
