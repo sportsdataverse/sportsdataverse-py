@@ -194,6 +194,50 @@ def test_mbb_team_crosswalk_parity() -> None:
     same(got, want, ["espn_team_id"])
 
 
+def test_mbb_team_crosswalk_bundled_kenpom_reproduces_the_golden() -> None:
+    """The **bundled** KenPom directory is the R producer's KenPom input.
+
+    :func:`test_mbb_team_crosswalk_parity` reconstructs KenPom out of the
+    golden, so it proves the matcher but says nothing about
+    ``sportsdataverse/mbb/data/kp_team_info.csv`` -- a stale or wrong bundle
+    would sail through it. This feeds the real bundled directory instead
+    (hoopR's ``teams_links``, filtered to the season by
+    :func:`~sportsdataverse.mbb.mbb_crosswalk._kenpom_teams`) and asserts the
+    assembler still reproduces the golden exactly, ``kp_team`` / ``kp_conf`` /
+    ``kp_match_confidence`` / ``match_method`` included.
+
+    Torvik is passed in empty on purpose: the 2026 golden's ``bart_*`` columns
+    are all-null because the R builder's ``torvik_ratings()`` call returned
+    nothing the day it was frozen (it is wrapped in ``tryCatch(..., = NULL)``),
+    so an empty frame is what reproduces that golden. It is not a claim that
+    Torvik is unavailable -- a live build joins it and reports
+    ``fox+bart+kp``.
+    """
+    want = golden("mbb_team")
+    got = mbb_crosswalk._assemble_team_crosswalk(
+        espn_from(want),
+        distinct_where(
+            want,
+            "fox_team_id",
+            {"fox_team_id": "fox_team_id", "fox_team_name": "fox_team_name", "fox_section": "fox_section"},
+        ),
+        pl.DataFrame(),
+        mbb_crosswalk._kenpom_teams(SEASON),
+        SEASON,
+    )
+    same(got, want, ["espn_team_id"])
+    assert got["kp_team"].is_not_null().sum() == 359
+
+
+def test_kenpom_teams_falls_back_to_the_newest_bundled_year() -> None:
+    """Out-of-range seasons reuse the newest capture (``mbb_crosswalk.R:349-354``)."""
+    newest = mbb_crosswalk._kenpom_teams(2026)
+    assert newest.height == 365
+    assert mbb_crosswalk._kenpom_teams(2002).height == 327
+    assert mbb_crosswalk._kenpom_teams(1999).to_dicts() == newest.to_dicts()
+    assert mbb_crosswalk._kenpom_teams(2030).to_dicts() == newest.to_dicts()
+
+
 def test_wnba_team_crosswalk_parity() -> None:
     want = golden("wnba_team")
     got = wnba_crosswalk._assemble_team_crosswalk(

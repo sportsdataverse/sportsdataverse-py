@@ -7116,7 +7116,7 @@ each join on the normalized school name after `BART_ALIAS` /
 | `season` | `Optional[int]` | `None` | Season year (e.g. `2026`). Defaults to the most recent MBB season. |
 | `fox` | `Optional[DataFrame]` | `None` | Pre-fetched `fox_mbb_teams_all()`-shaped frame. `None` fetches live; pass an empty frame to skip Fox. |
 | `bart` | `Optional[DataFrame]` | `None` | Pre-fetched `torvik_ratings()` frame. `None` fetches live. |
-| `kenpom` | `Optional[DataFrame]` | `None` | KenPom teams frame with `Team` / `Conf`. KenPom is a paid subscription and sdv-py bundles no KenPom data, so this is `None` (KenPom columns null) unless you supply a frame. |
+| `kenpom` | `Optional[DataFrame]` | `None` | KenPom teams frame with `Team` / `Conf`. `None` (the default) uses the bundled KenPom team/conference directory (kenpom_teams` -- hoopR's `teams_links`, 2002-2026), filtered to *season*; pass an empty frame to skip KenPom and get null `kp_*` columns. No KenPom subscription or credential is involved: the bundled data is the public directory, not ratings. |
 | `return_as_pandas` | `bool` | `False` | Return pandas instead of polars. |
 
 **Returns**
