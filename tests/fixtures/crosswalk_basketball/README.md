@@ -45,14 +45,18 @@ Every one of its 362 rows has `bart_team` / `bart_conf` /
 `bart_match_confidence` **null**, and `match_method` reads `fox+kp` (359) /
 `fox_only` (2) / `espn_only` (1). That is **not** intended behaviour and not a
 statement about Torvik coverage — the R builder wraps its Torvik fetch in
-`tryCatch(..., error = ~ NULL)`, and that fetch failed on the day the R
+`tryCatch(torvik_ratings(year = season), error = function(e) NULL)`
+(`hoopR/R/mbb_crosswalk.R:346-347`), and that fetch failed on the day the R
 producer ran. The golden froze a transient upstream outage.
 
 sdv-py deliberately **diverges**: `mbb_team_crosswalk()` has no such swallow (a
 failed Torvik fetch raises `CrosswalkSourceError`), so it joins Torvik and
 reports `fox+bart+kp` for the same 359 rows. Do not "fix" Python to reproduce
-the nulls, and do not drop `bart_*` from the comparison — dropping it silently
-permits a regression back to all-null.
+the nulls. The `bart_*` columns and `match_method` must be **positively
+asserted** — populated counts and `match_method` composition — before the
+column-by-column exactness diff excludes them; excluding them from that diff is
+correct, since the golden is known-wrong there, but excluding them *and
+asserting nothing about them* silently permits a regression back to all-null.
 
 `mbb_torvik_teams_2026.parquet` exists to make that assertable offline:
 
@@ -78,7 +82,9 @@ Copy the file again from the sibling checkout; do not edit in place. If the R
 producer's schema changes, update the parity test in the same commit and say
 which columns moved.
 
-`mbb_torvik_teams_2026.parquet` is not an R output — re-capture it with:
+`mbb_torvik_teams_2026.parquet` is not an R output — re-capture it by running
+this **from the repository root**, so it overwrites the committed fixture
+instead of dropping a stray file wherever the shell happened to be:
 
 ```python
 import polars as pl
@@ -86,7 +92,7 @@ from sportsdataverse.mbb.torvik import torvik_ratings
 
 torvik_ratings(year=2026).select(
     pl.col("team").cast(pl.Utf8), pl.col("conf").cast(pl.Utf8)
-).write_parquet("mbb_torvik_teams_2026.parquet")
+).write_parquet("tests/fixtures/crosswalk_basketball/mbb_torvik_teams_2026.parquet")
 ```
 
 Update the capture date in the table above and re-measure `BART_JOINED` in the

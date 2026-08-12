@@ -219,7 +219,8 @@ def test_mbb_team_crosswalk_bundled_kenpom_reproduces_the_golden() -> None:
 
     Torvik is passed in empty on purpose: the 2026 golden's ``bart_*`` columns
     are all-null because the R builder's ``torvik_ratings()`` call returned
-    nothing the day it was frozen (it is wrapped in ``tryCatch(..., = NULL)``),
+    nothing the day it was frozen (it is wrapped in
+    ``tryCatch(torvik_ratings(year = season), error = function(e) NULL)``),
     so an empty frame is what reproduces that golden. It is not a claim that
     Torvik is unavailable -- see
     :func:`test_mbb_team_crosswalk_joins_torvik_where_the_golden_froze_an_outage`,
@@ -247,7 +248,8 @@ def test_mbb_team_crosswalk_joins_torvik_where_the_golden_froze_an_outage() -> N
 
     The 2026 MBB golden's ``bart_*`` columns are all-null and its
     ``match_method`` reads ``fox+kp``, because the R builder wraps its Torvik
-    fetch in ``tryCatch(..., error = ~ NULL)`` and that fetch failed the day
+    fetch in ``tryCatch(torvik_ratings(year = season), error = function(e)
+    NULL)`` (``hoopR/R/mbb_crosswalk.R:346-347``) and that fetch failed the day
     the fixture was frozen. The golden therefore records a **transient
     upstream outage, not intended behaviour** -- reproducing it would be a
     regression. The Python builder has no such swallow (a Torvik failure
@@ -263,9 +265,13 @@ def test_mbb_team_crosswalk_joins_torvik_where_the_golden_froze_an_outage() -> N
     want = golden("mbb_team")
     bart = pl.read_parquet(FIXTURES / f"mbb_torvik_teams_{SEASON}.parquet")
 
-    # The golden's recorded defect. If a re-capture ever fixes it, this fails
-    # and the whole test should collapse back into the plain parity gate.
-    assert want["bart_team"].is_not_null().sum() == 0
+    # The golden's recorded defect -- every Torvik-sourced column, not just
+    # ``bart_team``: a partially populated golden is no longer a clean record
+    # of the outage and must not be used as the reference. If a re-capture ever
+    # fixes it, this fails and the whole test should collapse back into the
+    # plain parity gate.
+    for column in ("bart_team", "bart_conf", "bart_match_confidence"):
+        assert want[column].is_null().all(), f"{column} is not all-null in the frozen golden"
     assert want.filter(pl.col("match_method") == "fox+kp").height == BART_JOINED
 
     got = mbb_crosswalk._assemble_team_crosswalk(
