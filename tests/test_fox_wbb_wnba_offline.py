@@ -74,6 +74,24 @@ def test_parse_teams_title_case_keeps_apostrophes():
     assert fox_layout._title_case("ST. JOHN'S RED STORM") == "St. John's Red Storm"
 
 
+def test_parse_teams_title_case_matches_r_str_to_title_boundaries():
+    # &, -, ( and ) are word boundaries for R's stringr::str_to_title (ICU
+    # word-break rules) -- verified against the real Fox payload + the
+    # committed wehoop golden crosswalk (wbb_team_crosswalk_2026.parquet).
+    # A whitespace-only split + single capitalize() per token (the prior
+    # sdv-py implementation) mangled every one of these to A&t / (oh) /
+    # -eastern.
+    cases = {
+        "NORTH CAROLINA A&T AGGIES": "North Carolina A&T Aggies",
+        "MIAMI (OH) REDHAWKS": "Miami (Oh) Redhawks",
+        "MARYLAND-EASTERN SHORE HAWKS": "Maryland-Eastern Shore Hawks",
+        "WILLIAM & MARY TRIBE": "William & Mary Tribe",
+        "TEXAS A&M-CORPUS CHRISTI": "Texas A&M-Corpus Christi",
+    }
+    for raw, expected in cases.items():
+        assert fox_layout._title_case(raw) == expected
+
+
 def test_fox_wbb_teams_offline(monkeypatch):
     from sportsdataverse.wbb import fox_wbb_teams
 

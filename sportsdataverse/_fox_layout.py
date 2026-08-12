@@ -189,9 +189,16 @@ def parse_standings(raw: Dict, team_id: Optional[Union[int, str]] = None) -> Lis
 
 
 def _title_case(name: str) -> str:
-    """Per-word title case that keeps apostrophes lowercase (``ST. JOHN'S`` ->
-    ``St. John's``), matching R ``stringr::str_to_title`` on team names."""
-    return " ".join(w.capitalize() for w in name.lower().split())
+    """Title case matching R ``stringr::str_to_title`` on team names.
+
+    ``str.title()`` capitalizes each *alphabetic run*, treating ``&``/``-``/
+    ``(``/``)`` as word boundaries the same way R's ICU-backed
+    ``str_to_title`` does (``A&T`` -> ``A&T``, ``(OH)`` -> ``(Oh)``,
+    ``MARYLAND-EASTERN`` -> ``Maryland-Eastern``) -- but it also
+    (re-)capitalizes the letter right after an apostrophe (``ST. JOHN'S`` ->
+    ``St. John'S``), which R does not. Undo just that one artifact.
+    """
+    return re.sub(r"(?<=[A-Za-z]')[A-Z]", lambda m: m.group(0).lower(), name.lower().title())
 
 
 def parse_teams(raw: Dict[str, Any]) -> List[Dict[str, Any]]:
