@@ -31,6 +31,14 @@ What this does and does not cover:
   the key and drop the row.
 * ``espn_birth_date`` is not published in the player goldens, so the NBA/WNBA
   DOB tiebreak is exercised only through the jersey tiebreak that precedes it.
+
+**Where the golden is wrong.** The MBB team golden's ``bart_*`` columns are
+all-null -- the R builder swallowed a Torvik outage in a ``tryCatch`` the day
+it was frozen. Reconstruction-from-golden therefore hands the MBB assembler an
+empty Torvik frame, which cannot distinguish a working join from a broken one.
+:func:`test_mbb_team_crosswalk_joins_torvik_where_the_golden_froze_an_outage`
+feeds the committed Torvik capture instead and pins the corrected output; the
+golden is not the authority on that column.
 """
 
 from __future__ import annotations
@@ -50,6 +58,9 @@ FUZZY_FLOOR = 0.92
 # Unmatched rows whose best *rejected* score the ESPN-anchored golden cannot
 # carry (the losing provider players are not published). Measured, not chosen.
 UNRECOVERABLE = {"wbb": 27, "mbb": 27, "wnba": 0, "nba": 149}
+# ESPN MBB teams the committed Torvik capture (and the bundled KenPom
+# directory) both carry, of 362. Measured, not chosen.
+BART_JOINED = 359
 FIXTURES = Path(__file__).parent / "fixtures" / "crosswalk_basketball"
 SEASON = 2026
 
@@ -208,10 +219,13 @@ def test_mbb_team_crosswalk_bundled_kenpom_reproduces_the_golden() -> None:
 
     Torvik is passed in empty on purpose: the 2026 golden's ``bart_*`` columns
     are all-null because the R builder's ``torvik_ratings()`` call returned
-    nothing the day it was frozen (it is wrapped in ``tryCatch(..., = NULL)``),
+    nothing the day it was frozen (it is wrapped in
+    ``tryCatch(torvik_ratings(year = season), error = function(e) NULL)``),
     so an empty frame is what reproduces that golden. It is not a claim that
-    Torvik is unavailable -- a live build joins it and reports
-    ``fox+bart+kp``.
+    Torvik is unavailable -- see
+    :func:`test_mbb_team_crosswalk_joins_torvik_where_the_golden_froze_an_outage`,
+    which feeds the real captured Torvik directory and is what pins the
+    *correct* behaviour. This test deliberately does not.
     """
     want = golden("mbb_team")
     got = mbb_crosswalk._assemble_team_crosswalk(
@@ -227,6 +241,73 @@ def test_mbb_team_crosswalk_bundled_kenpom_reproduces_the_golden() -> None:
     )
     same(got, want, ["espn_team_id"])
     assert got["kp_team"].is_not_null().sum() == 359
+
+
+def test_mbb_team_crosswalk_joins_torvik_where_the_golden_froze_an_outage() -> None:
+    """Python populating ``bart_*`` is the PASSING state, not a parity break.
+
+    The 2026 MBB golden's ``bart_*`` columns are all-null and its
+    ``match_method`` reads ``fox+kp``, because the R builder wraps its Torvik
+    fetch in ``tryCatch(torvik_ratings(year = season), error = function(e)
+    NULL)`` (``hoopR/R/mbb_crosswalk.R:346-347``) and that fetch failed the day
+    the fixture was frozen. The golden therefore records a **transient
+    upstream outage, not intended behaviour** -- reproducing it would be a
+    regression. The Python builder has no such swallow (a Torvik failure
+    raises ``CrosswalkSourceError``), so it joins Torvik for real.
+
+    Every other test in this file reconstructs the provider inputs out of the
+    golden, which for MBB Torvik yields an empty frame -- so none of them can
+    tell a working Torvik join from a broken one. This one feeds the committed
+    Torvik capture (``mbb_torvik_teams_2026.parquet``, provenance in the
+    fixture README) and pins the divergence in both directions: the golden's
+    defect and Python's corrected output.
+    """
+    want = golden("mbb_team")
+    bart = pl.read_parquet(FIXTURES / f"mbb_torvik_teams_{SEASON}.parquet")
+
+    # The golden's recorded defect -- every Torvik-sourced column, not just
+    # ``bart_team``: a partially populated golden is no longer a clean record
+    # of the outage and must not be used as the reference. If a re-capture ever
+    # fixes it, this fails and the whole test should collapse back into the
+    # plain parity gate.
+    for column in ("bart_team", "bart_conf", "bart_match_confidence"):
+        assert want[column].is_null().all(), f"{column} is not all-null in the frozen golden"
+    assert want.filter(pl.col("match_method") == "fox+kp").height == BART_JOINED
+
+    got = mbb_crosswalk._assemble_team_crosswalk(
+        espn_from(want),
+        distinct_where(
+            want,
+            "fox_team_id",
+            {"fox_team_id": "fox_team_id", "fox_team_name": "fox_team_name", "fox_section": "fox_section"},
+        ),
+        bart,
+        mbb_crosswalk._kenpom_teams(SEASON),
+        SEASON,
+    )
+
+    # Floor on the populated rate + Torvik's participation in match_method.
+    # Measured against the committed capture, not chosen.
+    assert got["bart_team"].is_not_null().sum() == BART_JOINED
+    assert got["bart_conf"].is_not_null().sum() == BART_JOINED
+    assert got["bart_match_confidence"].is_not_null().sum() == BART_JOINED
+    assert got.filter(pl.col("match_method") == "fox+bart+kp").height == BART_JOINED
+    assert got.filter(pl.col("match_method") == "fox+kp").height == 0
+    # The three ESPN teams Torvik's directory genuinely does not carry.
+    assert sorted(got.filter(pl.col("bart_team").is_null())["espn_location"].to_list()) == [
+        "LSU New Orleans",
+        "St. Thomas",
+        "West Florida",
+    ]
+
+    # ...and nothing else moved: strip Torvik back out and the golden returns,
+    # column order, dtypes and every other match_method included.
+    diverging = ["bart_team", "bart_conf", "bart_match_confidence", "match_method"]
+    same(got.drop(diverging), want.drop(diverging), ["espn_team_id"])
+    assert (
+        got.sort("espn_team_id")["match_method"].str.replace("+bart", "", literal=True).to_list()
+        == want.sort("espn_team_id")["match_method"].to_list()
+    )
 
 
 def test_kenpom_teams_falls_back_to_the_newest_bundled_year() -> None:
