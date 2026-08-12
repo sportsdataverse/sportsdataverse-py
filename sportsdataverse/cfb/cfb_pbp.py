@@ -4464,10 +4464,13 @@ class CFBPlayProcess(object):
             .fill_null(0),
         )
 
-        # Canonical Int64 export of the penalized team, under the naming every
-        # other join key uses. penalized_team (Int32) is retained for
-        # compatibility; new consumers should join on penalty_team_id.
-        play_df = play_df.with_columns(penalty_team_id=pl.col("penalized_team").cast(pl.Int64, strict=False))
+        # penalty_team_id: same value as penalized_team, exported under the
+        # *_team_id naming every other join key uses. Kept Int32 to match the
+        # frame's team keys (homeTeamId/awayTeamId/pos_team are Int32) -- one
+        # canonical dtype per id within a dataset; consumers casting to Int64
+        # at a boundary must cast BOTH sides and assert, as the validation
+        # harness does.
+        play_df = play_df.with_columns(penalty_team_id=pl.col("penalized_team"))
 
         # drop temp columns that must not leak into the output frame
         play_df = play_df.drop(
