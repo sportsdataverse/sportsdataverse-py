@@ -1,0 +1,264 @@
+{
+ "leagues": [
+  {
+   "calendar": [
+    {
+     "label": "Preseason",
+     "value": "1",
+     "startDate": "2024-08-01T07:00Z",
+     "endDate": "2024-09-05T06:59Z",
+     "entries": [
+      {
+       "label": "Hall of Fame Weekend",
+       "alternateLabel": "HOF",
+       "detail": "Aug 1-7",
+       "value": "1",
+       "startDate": "2024-08-01T07:00Z",
+       "endDate": "2024-08-08T06:59Z"
+      },
+      {
+       "label": "Preseason Week 1",
+       "alternateLabel": "Pre Wk 1",
+       "detail": "Aug 8-14",
+       "value": "2",
+       "startDate": "2024-08-08T07:00Z",
+       "endDate": "2024-08-15T06:59Z"
+      },
+      {
+       "label": "Preseason Week 2",
+       "alternateLabel": "Pre Wk 2",
+       "detail": "Aug 15-21",
+       "value": "3",
+       "startDate": "2024-08-15T07:00Z",
+       "endDate": "2024-08-22T06:59Z"
+      },
+      {
+       "label": "Preseason Week 3",
+       "alternateLabel": "Pre Wk 3",
+       "detail": "Aug 22-Sep 4",
+       "value": "4",
+       "startDate": "2024-08-22T07:00Z",
+       "endDate": "2024-09-05T06:59Z"
+      }
+     ]
+    },
+    {
+     "label": "Regular Season",
+     "value": "2",
+     "startDate": "2024-09-05T07:00Z",
+     "endDate": "2025-01-08T07:59Z",
+     "entries": [
+      {
+       "label": "Week 1",
+       "alternateLabel": "Week 1",
+       "detail": "Sep 5-10",
+       "value": "1",
+       "startDate": "2024-09-05T07:00Z",
+       "endDate": "2024-09-11T06:59Z"
+      },
+      {
+       "label": "Week 2",
+       "alternateLabel": "Week 2",
+       "detail": "Sep 11-17",
+       "value": "2",
+       "startDate": "2024-09-11T07:00Z",
+       "endDate": "2024-09-18T06:59Z"
+      },
+      {
+       "label": "Week 3",
+       "alternateLabel": "Week 3",
+       "detail": "Sep 18-24",
+       "value": "3",
+       "startDate": "2024-09-18T07:00Z",
+       "endDate": "2024-09-25T06:59Z"
+      },
+      {
+       "label": "Week 4",
+       "alternateLabel": "Week 4",
+       "detail": "Sep 25-Oct 1",
+       "value": "4",
+       "startDate": "2024-09-25T07:00Z",
+       "endDate": "2024-10-02T06:59Z"
+      },
+      {
+       "label": "Week 5",
+       "alternateLabel": "Week 5",
+       "detail": "Oct 2-8",
+       "value": "5",
+       "startDate": "2024-10-02T07:00Z",
+       "endDate": "2024-10-09T06:59Z"
+      },
+      {
+       "label": "Week 6",
+       "alternateLabel": "Week 6",
+       "detail": "Oct 9-15",
+       "value": "6",
+       "startDate": "2024-10-09T07:00Z",
+       "endDate": "2024-10-16T06:59Z"
+      },
+      {
+       "label": "Week 7",
+       "alternateLabel": "Week 7",
+       "detail": "Oct 16-22",
+       "value": "7",
+       "startDate": "2024-10-16T07:00Z",
+       "endDate": "2024-10-23T06:59Z"
+      },
+      {
+       "label": "Week 8",
+       "alternateLabel": "Week 8",
+       "detail": "Oct 23-29",
+       "value": "8",
+       "startDate": "2024-10-23T07:00Z",
+       "endDate": "2024-10-30T06:59Z"
+      },
+      {
+       "label": "Week 9",
+       "alternateLabel": "Week 9",
+       "detail": "Oct 30-Nov 5",
+       "value": "9",
+       "startDate": "2024-10-30T07:00Z",
+       "endDate": "2024-11-06T07:59Z"
+      },
+      {
+       "label": "Week 10",
+       "alternateLabel": "Week 10",
+       "detail": "Nov 6-12",
+       "value": "10",
+       "startDate": "2024-11-06T08:00Z",
+       "endDate": "2024-11-13T07:59Z"
+      },
+      {
+       "label": "Week 11",
+       "alternateLabel": "Week 11",
+       "detail": "Nov 13-19",
+       "value": "11",
+       "startDate": "2024-11-13T08:00Z",
+       "endDate": "2024-11-20T07:59Z"
+      },
+      {
+       "label": "Week 12",
+       "alternateLabel": "Week 12",
+       "detail": "Nov 20-26",
+       "value": "12",
+       "startDate": "2024-11-20T08:00Z",
+       "endDate": "2024-11-27T07:59Z"
+      },
+      {
+       "label": "Week 13",
+       "alternateLabel": "Week 13",
+       "detail": "Nov 27-Dec 3",
+       "value": "13",
+       "startDate": "2024-11-27T08:00Z",
+       "endDate": "2024-12-04T07:59Z"
+      },
+      {
+       "label": "Week 14",
+       "alternateLabel": "Week 14",
+       "detail": "Dec 4-10",
+       "value": "14",
+       "startDate": "2024-12-04T08:00Z",
+       "endDate": "2024-12-11T07:59Z"
+      },
+      {
+       "label": "Week 15",
+       "alternateLabel": "Week 15",
+       "detail": "Dec 11-17",
+       "value": "15",
+       "startDate": "2024-12-11T08:00Z",
+       "endDate": "2024-12-18T07:59Z"
+      },
+      {
+       "label": "Week 16",
+       "alternateLabel": "Week 16",
+       "detail": "Dec 18-24",
+       "value": "16",
+       "startDate": "2024-12-18T08:00Z",
+       "endDate": "2024-12-25T07:59Z"
+      },
+      {
+       "label": "Week 17",
+       "alternateLabel": "Week 17",
+       "detail": "Dec 25-31",
+       "value": "17",
+       "startDate": "2024-12-25T08:00Z",
+       "endDate": "2025-01-01T07:59Z"
+      },
+      {
+       "label": "Week 18",
+       "alternateLabel": "Week 18",
+       "detail": "Jan 1-7",
+       "value": "18",
+       "startDate": "2025-01-01T08:00Z",
+       "endDate": "2025-01-08T07:59Z"
+      }
+     ]
+    },
+    {
+     "label": "Postseason",
+     "value": "3",
+     "startDate": "2025-01-08T08:00Z",
+     "endDate": "2025-02-15T07:59Z",
+     "entries": [
+      {
+       "label": "Wild Card",
+       "alternateLabel": "Wild Card",
+       "detail": "Jan 8-15",
+       "value": "1",
+       "startDate": "2025-01-08T08:00Z",
+       "endDate": "2025-01-16T07:59Z"
+      },
+      {
+       "label": "Divisional Round",
+       "alternateLabel": "Div Rd",
+       "detail": "Jan 16-22",
+       "value": "2",
+       "startDate": "2025-01-16T08:00Z",
+       "endDate": "2025-01-23T07:59Z"
+      },
+      {
+       "label": "Conference Championship",
+       "alternateLabel": "Conf Champ",
+       "detail": "Jan 23-29",
+       "value": "3",
+       "startDate": "2025-01-23T08:00Z",
+       "endDate": "2025-01-30T07:59Z"
+      },
+      {
+       "label": "Pro Bowl",
+       "alternateLabel": "Pro Bowl",
+       "detail": "Jan 30-Feb 5",
+       "value": "4",
+       "startDate": "2025-01-30T08:00Z",
+       "endDate": "2025-02-06T07:59Z"
+      },
+      {
+       "label": "Super Bowl",
+       "alternateLabel": "Super Bowl",
+       "detail": "Feb 6-13",
+       "value": "5",
+       "startDate": "2025-02-06T08:00Z",
+       "endDate": "2025-02-14T07:59Z"
+      }
+     ]
+    },
+    {
+     "label": "Off Season",
+     "value": "4",
+     "startDate": "2025-02-15T08:00Z",
+     "endDate": "2025-07-31T06:59Z",
+     "entries": [
+      {
+       "label": "Week 1",
+       "alternateLabel": "Week 1",
+       "detail": "Feb 14-Jul 30",
+       "value": "1",
+       "startDate": "2025-02-14T08:00Z",
+       "endDate": "2025-07-31T06:59Z"
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

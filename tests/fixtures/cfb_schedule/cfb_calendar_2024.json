@@ -1,0 +1,184 @@
+{
+ "leagues": [
+  {
+   "calendar": [
+    {
+     "label": "Regular Season",
+     "value": "2",
+     "startDate": "2024-08-24T07:00Z",
+     "endDate": "2024-12-15T07:59Z",
+     "entries": [
+      {
+       "label": "Week 1",
+       "alternateLabel": "Week 1",
+       "detail": "Aug 24-Sep 2",
+       "value": "1",
+       "startDate": "2024-08-24T07:00Z",
+       "endDate": "2024-09-03T06:59Z"
+      },
+      {
+       "label": "Week 2",
+       "alternateLabel": "Week 2",
+       "detail": "Sep 3-8",
+       "value": "2",
+       "startDate": "2024-09-03T07:00Z",
+       "endDate": "2024-09-09T06:59Z"
+      },
+      {
+       "label": "Week 3",
+       "alternateLabel": "Week 3",
+       "detail": "Sep 9-15",
+       "value": "3",
+       "startDate": "2024-09-09T07:00Z",
+       "endDate": "2024-09-16T06:59Z"
+      },
+      {
+       "label": "Week 4",
+       "alternateLabel": "Week 4",
+       "detail": "Sep 16-22",
+       "value": "4",
+       "startDate": "2024-09-16T07:00Z",
+       "endDate": "2024-09-23T06:59Z"
+      },
+      {
+       "label": "Week 5",
+       "alternateLabel": "Week 5",
+       "detail": "Sep 23-29",
+       "value": "5",
+       "startDate": "2024-09-23T07:00Z",
+       "endDate": "2024-09-30T06:59Z"
+      },
+      {
+       "label": "Week 6",
+       "alternateLabel": "Week 6",
+       "detail": "Sep 30-Oct 6",
+       "value": "6",
+       "startDate": "2024-09-30T07:00Z",
+       "endDate": "2024-10-07T06:59Z"
+      },
+      {
+       "label": "Week 7",
+       "alternateLabel": "Week 7",
+       "detail": "Oct 7-13",
+       "value": "7",
+       "startDate": "2024-10-07T07:00Z",
+       "endDate": "2024-10-14T06:59Z"
+      },
+      {
+       "label": "Week 8",
+       "alternateLabel": "Week 8",
+       "detail": "Oct 14-20",
+       "value": "8",
+       "startDate": "2024-10-14T07:00Z",
+       "endDate": "2024-10-21T06:59Z"
+      },
+      {
+       "label": "Week 9",
+       "alternateLabel": "Week 9",
+       "detail": "Oct 21-27",
+       "value": "9",
+       "startDate": "2024-10-21T07:00Z",
+       "endDate": "2024-10-28T06:59Z"
+      },
+      {
+       "label": "Week 10",
+       "alternateLabel": "Week 10",
+       "detail": "Oct 28-Nov 3",
+       "value": "10",
+       "startDate": "2024-10-28T07:00Z",
+       "endDate": "2024-11-04T07:59Z"
+      },
+      {
+       "label": "Week 11",
+       "alternateLabel": "Week 11",
+       "detail": "Nov 4-10",
+       "value": "11",
+       "startDate": "2024-11-04T08:00Z",
+       "endDate": "2024-11-11T07:59Z"
+      },
+      {
+       "label": "Week 12",
+       "alternateLabel": "Week 12",
+       "detail": "Nov 11-17",
+       "value": "12",
+       "startDate": "2024-11-11T08:00Z",
+       "endDate": "2024-11-18T07:59Z"
+      },
+      {
+       "label": "Week 13",
+       "alternateLabel": "Week 13",
+       "detail": "Nov 18-24",
+       "value": "13",
+       "startDate": "2024-11-18T08:00Z",
+       "endDate": "2024-11-25T07:59Z"
+      },
+      {
+       "label": "Week 14",
+       "alternateLabel": "Week 14",
+       "detail": "Nov 25-Dec 1",
+       "value": "14",
+       "startDate": "2024-11-25T08:00Z",
+       "endDate": "2024-12-02T07:59Z"
+      },
+      {
+       "label": "Week 15",
+       "alternateLabel": "Week 15",
+       "detail": "Dec 2-8",
+       "value": "15",
+       "startDate": "2024-12-02T08:00Z",
+       "endDate": "2024-12-09T07:59Z"
+      },
+      {
+       "label": "Week 16",
+       "alternateLabel": "Week 16",
+       "detail": "Dec 9-13",
+       "value": "16",
+       "startDate": "2024-12-09T08:00Z",
+       "endDate": "2024-12-14T07:59Z"
+      }
+     ]
+    },
+    {
+     "label": "Postseason",
+     "value": "3",
+     "startDate": "2024-12-15T08:00Z",
+     "endDate": "2025-01-22T07:59Z",
+     "entries": [
+      {
+       "label": "Bowls",
+       "alternateLabel": "Bowls",
+       "detail": "Dec 14-Jan 21",
+       "value": "1",
+       "startDate": "2024-12-14T08:00Z",
+       "endDate": "2025-01-22T07:59Z"
+      },
+      {
+       "label": "CFP",
+       "alternateLabel": "CFP",
+       "detail": "Dec 20-Jan 21",
+       "value": "999",
+       "startDate": "2024-12-21T04:00Z",
+       "endDate": "2025-01-21T07:00Z"
+      }
+     ]
+    },
+    {
+     "label": "Off Season",
+     "value": "4",
+     "startDate": "2025-01-22T08:00Z",
+     "endDate": "2025-02-01T07:59Z",
+     "entries": [
+      {
+       "label": "All-Star",
+       "alternateLabel": "All-Star",
+       "detail": "Jan 22-31",
+       "value": "1",
+       "startDate": "2025-01-22T08:00Z",
+       "endDate": "2025-02-01T07:59Z"
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

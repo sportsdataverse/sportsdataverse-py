@@ -296,7 +296,12 @@ def espn_cfb_calendar(season=None, groups=None, ondays=None, return_as_pandas=Fa
                     sep="_",
                 )
 
-                full_schedule = pl.concat([full_schedule, pl.from_pandas(reg)], how="vertical")
+                # diagonal_relaxed: each season-type block is flattened by its
+                # own json_normalize(errors="ignore") call, so the column set is
+                # decided by the payload rather than fixed by construction -- a
+                # key absent from every entry in one block silently drops that
+                # column. Today's payloads are uniform; this is defensive.
+                full_schedule = pl.concat([full_schedule, pl.from_pandas(reg)], how="diagonal_relaxed")
 
         full_schedule = full_schedule.with_columns(season=season)
 
