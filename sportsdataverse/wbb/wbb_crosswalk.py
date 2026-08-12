@@ -369,9 +369,12 @@ def wbb_team_crosswalk(
         :data:`TEAM_COLUMNS`.
 
     Note:
-        ``espn_conference`` is null unless the ESPN frame carries a
-        ``conference_name`` column -- sdv-py's ``espn_wbb_teams()`` does not
-        ship conference labels.
+        sdv-py's ``espn_wbb_teams()`` ships no conference labels, so
+        ``espn_conference`` is reconstructed from ESPN's Core v2 season group
+        tree (see
+        :func:`~sportsdataverse._crosswalk_basketball_sources.espn_conference_map`),
+        the same walk the R producer does. A pre-fetched ``espn`` frame that
+        already carries ``conference_name`` is used as-is.
 
     Raises:
         CrosswalkSourceError: A source that was not passed in pre-fetched could

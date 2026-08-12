@@ -27,7 +27,9 @@ import pytest
 from sportsdataverse._crosswalk_basketball_sources import (
     CrosswalkSourceError,
     bart_super_sked,
+    espn_conference_map,
     espn_rosters,
+    espn_team_directory,
     require_source,
     stats_schedule_games,
 )
@@ -412,3 +414,134 @@ def test_team_crosswalk_supplied_ratings_frame_needs_no_provider_module(
     out = getattr(crosswalk, f"{league}_team_crosswalk")(season=2026, fox=pl.DataFrame(), bart=pl.DataFrame())
     assert isinstance(out, pl.DataFrame)
     assert out.height == 0
+
+
+# ---------------------------------------------------------------------------
+# ESPN conference labels (the Track X-B blocker).
+#
+# The Site v2 `teams` directory carries no conference, so `espn_conference`
+# shipped 0/362 where the R producer ships 361/361. It is reconstructed from
+# the Core v2 season group tree instead. Locked in here: the $ref id parsing,
+# the raise on an empty walk, and -- the latent one -- that the join key is a
+# clean Utf8 id, since a float-origin id stringifies as "123.0" and would match
+# nothing.
+# ---------------------------------------------------------------------------
+
+_CORE = "http://sports.core.api.espn.com/v2/sports/basketball/leagues/womens-college-basketball/seasons/2026"
+
+
+def _group_stubs(tree: dict[int, tuple[str, list[int]]]) -> dict[str, Any]:
+    """Stub the three Core v2 group wrappers from a {gid: (name, [team ids])}."""
+
+    def children(season: Any, stype: Any, gid: Any, **kw: Any) -> pl.DataFrame:
+        return pl.DataFrame({"$ref": [f"{_CORE}/types/2/groups/{g}?lang=en" for g in tree]})
+
+    def group(season: Any, stype: Any, gid: Any, **kw: Any) -> pl.DataFrame:
+        return pl.DataFrame({"id": [str(gid)], "name": [tree[int(gid)][0]]})
+
+    def teams(season: Any, stype: Any, gid: Any, **kw: Any) -> pl.DataFrame:
+        return pl.DataFrame({"$ref": [f"{_CORE}/teams/{t}?lang=en" for t in tree[int(gid)][1]]})
+
+    return {"children": children, "group": group, "teams": teams}
+
+
+def _patch_tree(monkeypatch: pytest.MonkeyPatch, tree: dict[int, tuple[str, list[int]]]) -> None:
+    import sportsdataverse._crosswalk_basketball_sources as src
+
+    monkeypatch.setattr(src, "_ncaa_group_accessors", lambda league: _group_stubs(tree))
+
+
+def test_espn_conference_map_walks_the_group_tree(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Every conference's members carry that conference's name, keyed on Utf8 ids."""
+    _patch_tree(monkeypatch, {2: ("Atlantic Coast Conference", [52, 152]), 8: ("Southeastern Conference", [2579])})
+
+    out = espn_conference_map("wbb", 2026)
+
+    assert out.schema == {"team_id": pl.Utf8, "conference_name": pl.Utf8}
+    assert dict(zip(out["team_id"], out["conference_name"])) == {
+        "52": "Atlantic Coast Conference",
+        "152": "Atlantic Coast Conference",
+        "2579": "Southeastern Conference",
+    }
+
+
+def test_espn_conference_map_raises_when_the_walk_resolves_nothing(monkeypatch: pytest.MonkeyPatch) -> None:
+    """An all-null espn_conference column must fail the build, not ship."""
+    _patch_tree(monkeypatch, {})
+    with pytest.raises(CrosswalkSourceError, match="resolved no teams"):
+        espn_conference_map("wbb", 2026)
+
+
+def test_espn_conference_map_tolerates_one_dead_conference(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Per-item tolerance, as in the R producer: one bad group is skipped."""
+    stubs = _group_stubs({2: ("Atlantic Coast Conference", [52]), 8: ("Southeastern Conference", [2579])})
+    healthy = stubs["teams"]
+
+    def flaky(season: Any, stype: Any, gid: Any, **kw: Any) -> pl.DataFrame:
+        if int(gid) == 8:
+            raise RuntimeError("ESPN 403")
+        return healthy(season, stype, gid, **kw)
+
+    stubs["teams"] = flaky
+    import sportsdataverse._crosswalk_basketball_sources as src
+
+    monkeypatch.setattr(src, "_ncaa_group_accessors", lambda league: stubs)
+
+    out = espn_conference_map("wbb", 2026)
+    assert out["team_id"].to_list() == ["52"]
+
+
+def test_espn_conference_map_is_empty_for_non_ncaa_leagues(monkeypatch: pytest.MonkeyPatch) -> None:
+    """NBA/WNBA have no group-50 tree; their crosswalks carry no conference."""
+    for league in ("nba", "wnba"):
+        out = espn_conference_map(league, 2026)
+        assert out.height == 0
+        assert out.columns == ["team_id", "conference_name"]
+
+
+def test_espn_team_directory_joins_conference_on_a_clean_utf8_id(monkeypatch: pytest.MonkeyPatch) -> None:
+    """An Int64 team_id must join as "52", never the float-origin "52.0"."""
+    import sportsdataverse._crosswalk_basketball_sources as src
+
+    monkeypatch.setattr(
+        src,
+        "_espn_accessors",
+        lambda league: {
+            "teams": lambda **kw: pl.DataFrame(
+                {
+                    "team_id": pl.Series([52, 2579], dtype=pl.Int64),
+                    "team_abbreviation": ["ND", "UT"],
+                    "team_display_name": ["Notre Dame Fighting Irish", "Texas Longhorns"],
+                    "team_short_display_name": ["Notre Dame", "Texas"],
+                    "team_location": ["Notre Dame", "Texas"],
+                    "team_name": ["Fighting Irish", "Longhorns"],
+                }
+            )
+        },
+    )
+    _patch_tree(monkeypatch, {2: ("Atlantic Coast Conference", [52]), 8: ("Southeastern Conference", [2579])})
+
+    out = espn_team_directory("wbb", season=2026)
+
+    assert out["team_id"].to_list() == ["52", "2579"], "a float-origin id would read '52.0'"
+    assert out["conference_name"].to_list() == ["Atlantic Coast Conference", "Southeastern Conference"]
+
+
+def test_espn_team_directory_prefers_an_upstream_conference_column(monkeypatch: pytest.MonkeyPatch) -> None:
+    """A directory that already carries conference is not re-walked."""
+    import sportsdataverse._crosswalk_basketball_sources as src
+
+    monkeypatch.setattr(
+        src,
+        "_espn_accessors",
+        lambda league: {
+            "teams": lambda **kw: pl.DataFrame({"team_id": ["52"], "conference_name": ["Big Ten Conference"]})
+        },
+    )
+
+    def _boom(league: str) -> Any:  # pragma: no cover - must not be reached
+        raise AssertionError("the group tree must not be walked when upstream ships conference")
+
+    monkeypatch.setattr(src, "_ncaa_group_accessors", _boom)
+
+    assert espn_team_directory("wbb", season=2026)["conference_name"].to_list() == ["Big Ten Conference"]
