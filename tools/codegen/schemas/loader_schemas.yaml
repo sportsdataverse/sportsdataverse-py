@@ -7459,6 +7459,35 @@ load_nba_stats_coaches:
   type: Int64
 - name: season_type
   type: String
+load_nba_stats_game_lineups:
+- name: game_id
+  type: String
+- name: action_number
+  type: Int64
+- name: period
+  type: Int64
+- name: home_player_1
+  type: Int64
+- name: home_player_2
+  type: Int64
+- name: home_player_3
+  type: Int64
+- name: home_player_4
+  type: Int64
+- name: home_player_5
+  type: Int64
+- name: away_player_1
+  type: Int64
+- name: away_player_2
+  type: Int64
+- name: away_player_3
+  type: Int64
+- name: away_player_4
+  type: Int64
+- name: away_player_5
+  type: Int64
+- name: season
+  type: Int64
 load_nba_stats_game_rosters:
 - name: player_id
   type: Int64
@@ -7886,6 +7915,8 @@ load_nba_stats_officials:
 - name: game_id
   type: String
 load_nba_stats_pbp:
+- name: order_index
+  type: Int64
 - name: action_number
   type: Int64
 - name: clock
@@ -7934,8 +7965,54 @@ load_nba_stats_pbp:
   type: Int64
 - name: game_id
   type: String
+- name: seconds_remaining
+  type: Float64
+- name: event_type
+  type: String
+- name: is_made_shot
+  type: Boolean
+- name: is_missed_shot
+  type: Boolean
+- name: is_free_throw
+  type: Boolean
+- name: is_rebound
+  type: Boolean
+- name: is_turnover
+  type: Boolean
+- name: is_foul
+  type: Boolean
+- name: is_substitution
+  type: Boolean
+- name: is_jump_ball
+  type: Boolean
+- name: is_timeout
+  type: Boolean
+- name: is_period
+  type: Boolean
+- name: possession_number
+  type: Int64
+- name: off_player_1
+  type: Int64
+- name: off_player_2
+  type: Int64
+- name: off_player_3
+  type: Int64
+- name: off_player_4
+  type: Int64
+- name: off_player_5
+  type: Int64
+- name: def_player_1
+  type: Int64
+- name: def_player_2
+  type: Int64
+- name: def_player_3
+  type: Int64
+- name: def_player_4
+  type: Int64
+- name: def_player_5
+  type: Int64
 - name: season
-  type: Int32
+  type: Int64
 load_nba_stats_pbp_v3:
 - name: order_index
   type: Int64
@@ -8586,6 +8663,77 @@ load_nba_stats_player_season_stats:
   type: Int64
 - name: pct_pts_rank
   type: Int64
+load_nba_stats_possessions:
+- name: game_id
+  type: String
+- name: period
+  type: Int64
+- name: possession_number
+  type: Int64
+- name: offense_team_id
+  type: Int64
+- name: defense_team_id
+  type: Int64
+- name: start_order_index
+  type: Int64
+- name: end_order_index
+  type: Int64
+- name: start_seconds_remaining
+  type: Float64
+- name: end_seconds_remaining
+  type: Float64
+- name: points
+  type: Int64
+- name: is_second_chance
+  type: Boolean
+- name: number_in_period
+  type: Int64
+- name: possession_start_type
+  type: String
+- name: count_as_possession
+  type: Boolean
+- name: fg2a
+  type: Int64
+- name: fg2m
+  type: Int64
+- name: fg3a
+  type: Int64
+- name: fg3m
+  type: Int64
+- name: fta
+  type: Int64
+- name: ftm
+  type: Int64
+- name: oreb
+  type: Int64
+- name: dreb
+  type: Int64
+- name: tov
+  type: Int64
+- name: off_player_1
+  type: Int64
+- name: off_player_2
+  type: Int64
+- name: off_player_3
+  type: Int64
+- name: off_player_4
+  type: Int64
+- name: off_player_5
+  type: Int64
+- name: def_player_1
+  type: Int64
+- name: def_player_2
+  type: Int64
+- name: def_player_3
+  type: Int64
+- name: def_player_4
+  type: Int64
+- name: def_player_5
+  type: Int64
+- name: lineup_source
+  type: String
+- name: season
+  type: Int64
 load_nba_stats_possessions_v3:
 - name: game_id
   type: String
@@ -8691,67 +8839,35 @@ load_nba_stats_rosters:
 - name: season_type
   type: String
 load_nba_stats_schedules:
-- name: season_id
-  type: String
-- name: team_id
-  type: Int64
-- name: team_abbreviation
-  type: String
-- name: team_name
-  type: String
 - name: game_id
+  type: String
+- name: season
+  type: Int64
+- name: season_type
   type: String
 - name: game_date
   type: String
 - name: matchup
   type: String
-- name: wl
+- name: home_team_id
+  type: Int64
+- name: home_team_abbreviation
   type: String
-- name: min
+- name: home_team_name
+  type: String
+- name: home_pts
   type: Int64
-- name: fgm
+- name: home_wl
+  type: String
+- name: away_team_id
   type: Int64
-- name: fga
+- name: away_team_abbreviation
+  type: String
+- name: away_team_name
+  type: String
+- name: away_pts
   type: Int64
-- name: fg_pct
-  type: Float64
-- name: fg3m
-  type: Int64
-- name: fg3a
-  type: Int64
-- name: fg3_pct
-  type: Float64
-- name: ftm
-  type: Int64
-- name: fta
-  type: Int64
-- name: ft_pct
-  type: Float64
-- name: oreb
-  type: Int64
-- name: dreb
-  type: Int64
-- name: reb
-  type: Int64
-- name: ast
-  type: Int64
-- name: stl
-  type: Int64
-- name: blk
-  type: Int64
-- name: tov
-  type: Int64
-- name: pf
-  type: Int64
-- name: pts
-  type: Int64
-- name: plus_minus
-  type: Int64
-- name: video_available
-  type: Int64
-- name: season
-  type: Int32
-- name: season_type
+- name: away_wl
   type: String
 load_nba_stats_shots:
 - name: game_id
@@ -15509,6 +15625,35 @@ load_wnba_stats_draft:
   type: String
 - name: player_profile_flag
   type: Int64
+load_wnba_stats_game_lineups:
+- name: game_id
+  type: String
+- name: action_number
+  type: Int64
+- name: period
+  type: Int64
+- name: home_player_1
+  type: Int64
+- name: home_player_2
+  type: Int64
+- name: home_player_3
+  type: Int64
+- name: home_player_4
+  type: Int64
+- name: home_player_5
+  type: Int64
+- name: away_player_1
+  type: Int64
+- name: away_player_2
+  type: Int64
+- name: away_player_3
+  type: Int64
+- name: away_player_4
+  type: Int64
+- name: away_player_5
+  type: Int64
+- name: season
+  type: Int64
 load_wnba_stats_game_rosters:
 - name: player_id
   type: Int64
@@ -15544,6 +15689,8 @@ load_wnba_stats_officials:
 - name: game_id
   type: String
 load_wnba_stats_pbp:
+- name: order_index
+  type: Int64
 - name: action_number
   type: Int64
 - name: clock
@@ -15592,8 +15739,32 @@ load_wnba_stats_pbp:
   type: Int64
 - name: game_id
   type: String
+- name: seconds_remaining
+  type: Float64
+- name: event_type
+  type: String
+- name: is_made_shot
+  type: Boolean
+- name: is_missed_shot
+  type: Boolean
+- name: is_free_throw
+  type: Boolean
+- name: is_rebound
+  type: Boolean
+- name: is_turnover
+  type: Boolean
+- name: is_foul
+  type: Boolean
+- name: is_substitution
+  type: Boolean
+- name: is_jump_ball
+  type: Boolean
+- name: is_timeout
+  type: Boolean
+- name: is_period
+  type: Boolean
 - name: season
-  type: Int32
+  type: Int64
 load_wnba_stats_player_boxscores:
 - name: team_id
   type: Int64
@@ -15734,6 +15905,75 @@ load_wnba_stats_player_game_logs:
   type: Float64
 - name: measure_type
   type: String
+load_wnba_stats_possessions:
+- name: game_id
+  type: String
+- name: period
+  type: Int64
+- name: possession_number
+  type: Int64
+- name: offense_team_id
+  type: Int64
+- name: defense_team_id
+  type: Int64
+- name: start_order_index
+  type: Int64
+- name: end_order_index
+  type: Int64
+- name: start_seconds_remaining
+  type: Float64
+- name: end_seconds_remaining
+  type: Float64
+- name: points
+  type: Int64
+- name: is_second_chance
+  type: Boolean
+- name: number_in_period
+  type: Int64
+- name: possession_start_type
+  type: String
+- name: count_as_possession
+  type: Boolean
+- name: fg2a
+  type: Int64
+- name: fg2m
+  type: Int64
+- name: fg3a
+  type: Int64
+- name: fg3m
+  type: Int64
+- name: fta
+  type: Int64
+- name: ftm
+  type: Int64
+- name: oreb
+  type: Int64
+- name: dreb
+  type: Int64
+- name: tov
+  type: Int64
+- name: off_player_1
+  type: Int64
+- name: off_player_2
+  type: Int64
+- name: off_player_3
+  type: Int64
+- name: off_player_4
+  type: Int64
+- name: off_player_5
+  type: Int64
+- name: def_player_1
+  type: Int64
+- name: def_player_2
+  type: Int64
+- name: def_player_3
+  type: Int64
+- name: def_player_4
+  type: Int64
+- name: def_player_5
+  type: Int64
+- name: season
+  type: Int64
 load_wnba_stats_rosters:
 - name: team_id
   type: Int64
@@ -15772,75 +16012,35 @@ load_wnba_stats_rosters:
 - name: season_type
   type: String
 load_wnba_stats_schedules:
-- name: season_id
-  type: String
-- name: team_id
-  type: Int64
-- name: team_abbreviation
-  type: String
-- name: team_name
-  type: String
 - name: game_id
+  type: String
+- name: season
+  type: Int64
+- name: season_type
   type: String
 - name: game_date
   type: String
 - name: matchup
   type: String
-- name: wl
+- name: home_team_id
+  type: Int64
+- name: home_team_abbreviation
   type: String
-- name: min
-  type: Int64
-- name: fgm
-  type: Int64
-- name: fga
-  type: Int64
-- name: fg_pct
-  type: Float64
-- name: fg3m
-  type: Int64
-- name: fg3a
-  type: Int64
-- name: fg3_pct
-  type: Float64
-- name: ftm
-  type: Int64
-- name: fta
-  type: Int64
-- name: ft_pct
-  type: Float64
-- name: oreb
-  type: Int64
-- name: dreb
-  type: Int64
-- name: reb
-  type: Int64
-- name: ast
-  type: Int64
-- name: stl
-  type: Int64
-- name: blk
-  type: Int64
-- name: tov
-  type: Int64
-- name: pf
-  type: Int64
-- name: pts
-  type: Int64
-- name: plus_minus
-  type: Int64
-- name: video_available
-  type: Int64
-- name: season
-  type: Int32
-- name: season_type
+- name: home_team_name
   type: String
-- name: player_id
+- name: home_pts
   type: Int64
-- name: player_name
+- name: home_wl
   type: String
-- name: fantasy_pts
-  type: Float64
-- name: measure_type
+- name: away_team_id
+  type: Int64
+- name: away_team_abbreviation
+  type: String
+- name: away_team_name
+  type: String
+- name: away_pts
+  type: Int64
+- name: away_wl
   type: String
 load_wnba_stats_shots:
 - name: game_id

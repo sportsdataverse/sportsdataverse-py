@@ -33,6 +33,8 @@ flowchart LR
 | `load_nba_stats_lineups_v3` | [nba_stats_lineups_v3](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_lineups_v3) | — |
 | `load_nba_stats_officials` | [nba_stats_officials](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_officials) | — |
 | `load_nba_stats_pbp` | [nba_stats_pbp](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_pbp) | — |
+| `load_nba_stats_possessions` | [nba_stats_possessions](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_possessions) | — |
+| `load_nba_stats_game_lineups` | [nba_stats_game_lineups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_game_lineups) | — |
 | `load_nba_stats_pbp_v3` | [nba_stats_pbpv3](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_pbpv3) | — |
 | `load_nba_stats_player_boxscores` | [nba_stats_player_boxscores](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_player_boxscores) | — |
 | `load_nba_stats_player_game_logs` | [nba_stats_player_game_logs](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_player_game_logs) | — |
@@ -630,42 +632,26 @@ load_nba_rosters(seasons=2025)
 
 ## `load_nba_stats_schedules`
 
-Release: [nba_stats_schedules](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_schedules) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_schedules/nba_stats_schedule_{season}.parquet`
+Release: [nba_stats_schedules](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_schedules) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_schedules/nba_schedule_{season + 1}.parquet`
 ### Returns
 
 | col_name | type | description |
 |---|---|---|
-| `season_id` | String | Unique season identifier. |
-| `team_id` | Int64 | Unique team identifier. |
-| `team_abbreviation` | String | Short team abbreviation (e.g. 'LAS'). |
-| `team_name` | String | Full team display name (e.g. 'Las Vegas Aces'). |
 | `game_id` | String | Unique game identifier. |
+| `season` | Int64 | Season year. |
+| `season_type` | String | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
 | `game_date` | String | Game date (YYYY-MM-DD). |
 | `matchup` | String | Matchup. |
-| `wl` | String | Wl. |
-| `min` | Int64 | Minutes played. |
-| `fgm` | Int64 | Field goals made. |
-| `fga` | Int64 | Field goal attempts. |
-| `fg_pct` | Float64 | Field goal percentage (0-1). |
-| `fg3m` | Int64 | Three-point field goals made. |
-| `fg3a` | Int64 | Three-point field goal attempts. |
-| `fg3_pct` | Float64 | Three-point field goal percentage (0-1). |
-| `ftm` | Int64 | Free throws made. |
-| `fta` | Int64 | Free throw attempts. |
-| `ft_pct` | Float64 | Free throw percentage (0-1). |
-| `oreb` | Int64 | Offensive rebounds. |
-| `dreb` | Int64 | Defensive rebounds. |
-| `reb` | Int64 | Rebounds per game. |
-| `ast` | Int64 | Assists. |
-| `stl` | Int64 | Steals. |
-| `blk` | Int64 | Blocks. |
-| `tov` | Int64 | Turnovers. |
-| `pf` | Int64 | Personal fouls. |
-| `pts` | Int64 | Points scored. |
-| `plus_minus` | Int64 | Plus/minus point differential while on court. |
-| `video_available` | Int64 | Video available. |
-| `season` | Int32 | Season year. |
-| `season_type` | String | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
+| `home_team_id` | Int64 | Unique identifier for the home team. |
+| `home_team_abbreviation` | String | Home team abbreviation; `team_detail = TRUE` only. |
+| `home_team_name` | String | Home team name. |
+| `home_pts` | Int64 |  |
+| `home_wl` | String |  |
+| `away_team_id` | Int64 | Unique identifier for the away team. |
+| `away_team_abbreviation` | String | Away team abbreviation; `team_detail = TRUE` only. |
+| `away_team_name` | String | Away team name. |
+| `away_pts` | Int64 |  |
+| `away_wl` | String |  |
 
 ```python
 load_nba_stats_schedules(seasons=2025)
@@ -955,11 +941,12 @@ load_nba_stats_officials(seasons=2025)
 
 ## `load_nba_stats_pbp`
 
-Release: [nba_stats_pbp](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_pbp) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_pbp/play_by_play_{season}.parquet`
+Release: [nba_stats_pbp](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_pbp) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_pbp/nba_play_by_play_{season + 1}.parquet`
 ### Returns
 
 | col_name | type | description |
 |---|---|---|
+| `order_index` | Int64 |  |
 | `action_number` | Int64 | Sequential action number within a game (V3 PBP). |
 | `clock` | String | Game clock value. |
 | `period` | Int64 | Period of the game (1-4 quarters; 5+ for OT). |
@@ -984,10 +971,106 @@ Release: [nba_stats_pbp](https://github.com/sportsdataverse/sportsdataverse-data
 | `shot_value` | Int64 | Point value of the shot (2 or 3). |
 | `action_id` | Int64 | Unique action identifier within a game (V3 PBP). |
 | `game_id` | String | Unique game identifier. |
-| `season` | Int32 | Season year. |
+| `seconds_remaining` | Float64 | Seconds remaining in the period. |
+| `event_type` | String | Event / play type code (V2 PBP). |
+| `is_made_shot` | Boolean |  |
+| `is_missed_shot` | Boolean |  |
+| `is_free_throw` | Boolean |  |
+| `is_rebound` | Boolean |  |
+| `is_turnover` | Boolean | `TRUE` if the play was a turnover. |
+| `is_foul` | Boolean |  |
+| `is_substitution` | Boolean |  |
+| `is_jump_ball` | Boolean |  |
+| `is_timeout` | Boolean |  |
+| `is_period` | Boolean |  |
+| `possession_number` | Int64 | Possession number. |
+| `off_player_1` | Int64 |  |
+| `off_player_2` | Int64 |  |
+| `off_player_3` | Int64 |  |
+| `off_player_4` | Int64 |  |
+| `off_player_5` | Int64 |  |
+| `def_player_1` | Int64 |  |
+| `def_player_2` | Int64 |  |
+| `def_player_3` | Int64 |  |
+| `def_player_4` | Int64 |  |
+| `def_player_5` | Int64 |  |
+| `season` | Int64 | Season year. |
 
 ```python
 load_nba_stats_pbp(seasons=2025)
+```
+
+## `load_nba_stats_possessions`
+
+Release: [nba_stats_possessions](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_possessions) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_possessions/nba_possessions_{season + 1}.parquet`
+### Returns
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | String | Unique game identifier. |
+| `period` | Int64 | Period of the game (1-4 quarters; 5+ for OT). |
+| `possession_number` | Int64 | Possession number. |
+| `offense_team_id` | Int64 | Unique identifier for offense team. |
+| `defense_team_id` | Int64 |  |
+| `start_order_index` | Int64 |  |
+| `end_order_index` | Int64 |  |
+| `start_seconds_remaining` | Float64 |  |
+| `end_seconds_remaining` | Float64 |  |
+| `points` | Int64 | Points scored. |
+| `is_second_chance` | Boolean |  |
+| `number_in_period` | Int64 |  |
+| `possession_start_type` | String |  |
+| `count_as_possession` | Boolean |  |
+| `fg2a` | Int64 |  |
+| `fg2m` | Int64 |  |
+| `fg3a` | Int64 | Three-point field goal attempts. |
+| `fg3m` | Int64 | Three-point field goals made. |
+| `fta` | Int64 | Free throw attempts. |
+| `ftm` | Int64 | Free throws made. |
+| `oreb` | Int64 | Offensive rebounds. |
+| `dreb` | Int64 | Defensive rebounds. |
+| `tov` | Int64 | Turnovers. |
+| `off_player_1` | Int64 |  |
+| `off_player_2` | Int64 |  |
+| `off_player_3` | Int64 |  |
+| `off_player_4` | Int64 |  |
+| `off_player_5` | Int64 |  |
+| `def_player_1` | Int64 |  |
+| `def_player_2` | Int64 |  |
+| `def_player_3` | Int64 |  |
+| `def_player_4` | Int64 |  |
+| `def_player_5` | Int64 |  |
+| `lineup_source` | String |  |
+| `season` | Int64 | Season year. |
+
+```python
+load_nba_stats_possessions(seasons=2025)
+```
+
+## `load_nba_stats_game_lineups`
+
+Release: [nba_stats_game_lineups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_game_lineups) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_game_lineups/nba_lineups_{season + 1}.parquet`
+### Returns
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | String | Unique game identifier. |
+| `action_number` | Int64 | Sequential action number within a game (V3 PBP). |
+| `period` | Int64 | Period of the game (1-4 quarters; 5+ for OT). |
+| `home_player_1` | Int64 |  |
+| `home_player_2` | Int64 |  |
+| `home_player_3` | Int64 |  |
+| `home_player_4` | Int64 |  |
+| `home_player_5` | Int64 |  |
+| `away_player_1` | Int64 |  |
+| `away_player_2` | Int64 |  |
+| `away_player_3` | Int64 |  |
+| `away_player_4` | Int64 |  |
+| `away_player_5` | Int64 |  |
+| `season` | Int64 | Season year. |
+
+```python
+load_nba_stats_game_lineups(seasons=2025)
 ```
 
 ## `load_nba_stats_pbp_v3`

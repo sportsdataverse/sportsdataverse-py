@@ -52,7 +52,7 @@ def test_generated_loader_urls_match_existing():
     for ld in rel.loaders:
         if ld.stub:
             continue
-        gen_url = f"{rel.bases[ld.base]}{ld.url}".replace("{season}", "2024")
+        gen_url = spec.fill_season(f"{rel.bases[ld.base]}{ld.url}", 2024)
         existing = _existing_url(ld.fn, ld.league)
         if existing is None:
             continue  # historical loader not URL-capturable (different mechanism); skip

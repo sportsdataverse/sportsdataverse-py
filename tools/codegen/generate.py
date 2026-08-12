@@ -1071,6 +1071,13 @@ def _build_loader_docstring(ld: spec.Loader) -> str:
     lines.append("Args:")
     rng = f" (>= {ld.min_season})" if ld.min_season else ""
     lines.append(f"    seasons: an int or iterable of seasons{rng}.")
+    # Driven off the URL token so the documented convention cannot drift from the
+    # asset path it describes.
+    token = spec.SEASON_TOKEN.search(ld.url)
+    if token and token.group(1):
+        lines.append("        Pass the season's START year (e.g. ``1996`` for the 1996-97")
+        lines.append("        season); the published asset is keyed by the END year and the")
+        lines.append("        loader translates internally.")
     lines.append("    return_as_pandas: return a pandas DataFrame instead of polars.")
     lines.append("")
     lines.append("Returns:")
@@ -1477,7 +1484,7 @@ def refresh_loader_schemas() -> int:
         got = None
         for s in dict.fromkeys(seasons):
             try:
-                sch = pl.read_parquet_schema(f"{rel.bases[ld.base]}{ld.url}".replace("{season}", str(s)))
+                sch = pl.read_parquet_schema(spec.fill_season(f"{rel.bases[ld.base]}{ld.url}", s))
                 got = [{"name": k, "type": str(v)} for k, v in sch.items()]
                 break
             except Exception:  # noqa: BLE001

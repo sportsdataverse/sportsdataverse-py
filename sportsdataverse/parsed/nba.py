@@ -231,6 +231,7 @@ from sportsdataverse.nba import load_nba_schedule_crosswalk as load_nba_schedule
 from sportsdataverse.nba import load_nba_shots as load_nba_shots  # noqa: F401
 from sportsdataverse.nba import load_nba_standings as load_nba_standings  # noqa: F401
 from sportsdataverse.nba import load_nba_stats_coaches as load_nba_stats_coaches  # noqa: F401
+from sportsdataverse.nba import load_nba_stats_game_lineups as load_nba_stats_game_lineups  # noqa: F401
 from sportsdataverse.nba import load_nba_stats_game_rosters as load_nba_stats_game_rosters  # noqa: F401
 from sportsdataverse.nba import load_nba_stats_lineups as load_nba_stats_lineups  # noqa: F401
 from sportsdataverse.nba import load_nba_stats_lineups_v3 as load_nba_stats_lineups_v3  # noqa: F401
@@ -240,6 +241,7 @@ from sportsdataverse.nba import load_nba_stats_pbp_v3 as load_nba_stats_pbp_v3  
 from sportsdataverse.nba import load_nba_stats_player_boxscores as load_nba_stats_player_boxscores  # noqa: F401
 from sportsdataverse.nba import load_nba_stats_player_game_logs as load_nba_stats_player_game_logs  # noqa: F401
 from sportsdataverse.nba import load_nba_stats_player_season_stats as load_nba_stats_player_season_stats  # noqa: F401
+from sportsdataverse.nba import load_nba_stats_possessions as load_nba_stats_possessions  # noqa: F401
 from sportsdataverse.nba import load_nba_stats_possessions_v3 as load_nba_stats_possessions_v3  # noqa: F401
 from sportsdataverse.nba import load_nba_stats_rosters as load_nba_stats_rosters  # noqa: F401
 from sportsdataverse.nba import load_nba_stats_schedules as load_nba_stats_schedules  # noqa: F401
@@ -538,6 +540,7 @@ __all__ = [
     "load_nba_shots",
     "load_nba_standings",
     "load_nba_stats_coaches",
+    "load_nba_stats_game_lineups",
     "load_nba_stats_game_rosters",
     "load_nba_stats_lineups",
     "load_nba_stats_lineups_v3",
@@ -547,6 +550,7 @@ __all__ = [
     "load_nba_stats_player_boxscores",
     "load_nba_stats_player_game_logs",
     "load_nba_stats_player_season_stats",
+    "load_nba_stats_possessions",
     "load_nba_stats_possessions_v3",
     "load_nba_stats_rosters",
     "load_nba_stats_schedules",

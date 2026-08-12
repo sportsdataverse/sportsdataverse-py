@@ -34,6 +34,8 @@ __all__ = [
     "load_nba_stats_lineups_v3",
     "load_nba_stats_officials",
     "load_nba_stats_pbp",
+    "load_nba_stats_possessions",
+    "load_nba_stats_game_lineups",
     "load_nba_stats_pbp_v3",
     "load_nba_stats_player_boxscores",
     "load_nba_stats_player_game_logs",
@@ -1010,45 +1012,32 @@ def load_nba_stats_schedules(seasons, return_as_pandas: bool = False):
 
     Args:
         seasons: an int or iterable of seasons (>= 1996).
+            Pass the season's START year (e.g. ``1996`` for the 1996-97
+            season); the published asset is keyed by the END year and the
+            loader translates internally.
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
         A polars (or pandas) DataFrame; seasons with no published asset are
         skipped with a warning rather than raising (404-safe).
 
-        |col_name          |type    |
-        |:-----------------|:-------|
-        |season_id         |String  |
-        |team_id           |Int64   |
-        |team_abbreviation |String  |
-        |team_name         |String  |
-        |game_id           |String  |
-        |game_date         |String  |
-        |matchup           |String  |
-        |wl                |String  |
-        |min               |Int64   |
-        |fgm               |Int64   |
-        |fga               |Int64   |
-        |fg_pct            |Float64 |
-        |fg3m              |Int64   |
-        |fg3a              |Int64   |
-        |fg3_pct           |Float64 |
-        |ftm               |Int64   |
-        |fta               |Int64   |
-        |ft_pct            |Float64 |
-        |oreb              |Int64   |
-        |dreb              |Int64   |
-        |reb               |Int64   |
-        |ast               |Int64   |
-        |stl               |Int64   |
-        |blk               |Int64   |
-        |tov               |Int64   |
-        |pf                |Int64   |
-        |pts               |Int64   |
-        |plus_minus        |Int64   |
-        |video_available   |Int64   |
-        |season            |Int32   |
-        |season_type       |String  |
+        |col_name               |type   |
+        |:----------------------|:------|
+        |game_id                |String |
+        |season                 |Int64  |
+        |season_type            |String |
+        |game_date              |String |
+        |matchup                |String |
+        |home_team_id           |Int64  |
+        |home_team_abbreviation |String |
+        |home_team_name         |String |
+        |home_pts               |Int64  |
+        |home_wl                |String |
+        |away_team_id           |Int64  |
+        |away_team_abbreviation |String |
+        |away_team_name         |String |
+        |away_pts               |Int64  |
+        |away_wl                |String |
 
     Raises:
         SeasonNotFoundError: if a requested season is below 1996.
@@ -1063,7 +1052,7 @@ def load_nba_stats_schedules(seasons, return_as_pandas: bool = False):
         if int(season) < 1996:
             raise SeasonNotFoundError("season cannot be less than 1996")
         df = _read_release_parquet(
-            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_schedules/nba_stats_schedule_{season}.parquet"
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_schedules/nba_schedule_{season + 1}.parquet"
         )
         if df is None:
             missing.append(season)
@@ -1521,39 +1510,66 @@ def load_nba_stats_pbp(seasons, return_as_pandas: bool = False):
 
     Args:
         seasons: an int or iterable of seasons (>= 1996).
+            Pass the season's START year (e.g. ``1996`` for the 1996-97
+            season); the published asset is keyed by the END year and the
+            loader translates internally.
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
         A polars (or pandas) DataFrame; seasons with no published asset are
         skipped with a warning rather than raising (404-safe).
 
-        |col_name        |type   |
-        |:---------------|:------|
-        |action_number   |Int64  |
-        |clock           |String |
-        |period          |Int64  |
-        |team_id         |Int64  |
-        |team_tricode    |String |
-        |person_id       |Int64  |
-        |player_name     |String |
-        |player_name_i   |String |
-        |x_legacy        |Int64  |
-        |y_legacy        |Int64  |
-        |shot_distance   |Int64  |
-        |shot_result     |String |
-        |is_field_goal   |Int64  |
-        |score_home      |String |
-        |score_away      |String |
-        |points_total    |Int64  |
-        |location        |String |
-        |description     |String |
-        |action_type     |String |
-        |sub_type        |String |
-        |video_available |Int64  |
-        |shot_value      |Int64  |
-        |action_id       |Int64  |
-        |game_id         |String |
-        |season          |Int32  |
+        |col_name          |type    |
+        |:-----------------|:-------|
+        |order_index       |Int64   |
+        |action_number     |Int64   |
+        |clock             |String  |
+        |period            |Int64   |
+        |team_id           |Int64   |
+        |team_tricode      |String  |
+        |person_id         |Int64   |
+        |player_name       |String  |
+        |player_name_i     |String  |
+        |x_legacy          |Int64   |
+        |y_legacy          |Int64   |
+        |shot_distance     |Int64   |
+        |shot_result       |String  |
+        |is_field_goal     |Int64   |
+        |score_home        |String  |
+        |score_away        |String  |
+        |points_total      |Int64   |
+        |location          |String  |
+        |description       |String  |
+        |action_type       |String  |
+        |sub_type          |String  |
+        |video_available   |Int64   |
+        |shot_value        |Int64   |
+        |action_id         |Int64   |
+        |game_id           |String  |
+        |seconds_remaining |Float64 |
+        |event_type        |String  |
+        |is_made_shot      |Boolean |
+        |is_missed_shot    |Boolean |
+        |is_free_throw     |Boolean |
+        |is_rebound        |Boolean |
+        |is_turnover       |Boolean |
+        |is_foul           |Boolean |
+        |is_substitution   |Boolean |
+        |is_jump_ball      |Boolean |
+        |is_timeout        |Boolean |
+        |is_period         |Boolean |
+        |possession_number |Int64   |
+        |off_player_1      |Int64   |
+        |off_player_2      |Int64   |
+        |off_player_3      |Int64   |
+        |off_player_4      |Int64   |
+        |off_player_5      |Int64   |
+        |def_player_1      |Int64   |
+        |def_player_2      |Int64   |
+        |def_player_3      |Int64   |
+        |def_player_4      |Int64   |
+        |def_player_5      |Int64   |
+        |season            |Int64   |
 
     Raises:
         SeasonNotFoundError: if a requested season is below 1996.
@@ -1568,7 +1584,7 @@ def load_nba_stats_pbp(seasons, return_as_pandas: bool = False):
         if int(season) < 1996:
             raise SeasonNotFoundError("season cannot be less than 1996")
         df = _read_release_parquet(
-            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_pbp/play_by_play_{season}.parquet"
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_pbp/nba_play_by_play_{season + 1}.parquet"
         )
         if df is None:
             missing.append(season)
@@ -1576,6 +1592,147 @@ def load_nba_stats_pbp(seasons, return_as_pandas: bool = False):
         frames.append(df)
     if missing:
         cli_warn("load_nba_stats_pbp: no data for season(s) {missing} (skipped)".format(missing=missing))
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+def load_nba_stats_possessions(seasons, return_as_pandas: bool = False):
+    """Load nba_stats_possessions (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_possessions
+
+    Args:
+        seasons: an int or iterable of seasons (>= 1996).
+            Pass the season's START year (e.g. ``1996`` for the 1996-97
+            season); the published asset is keyed by the END year and the
+            loader translates internally.
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; seasons with no published asset are
+        skipped with a warning rather than raising (404-safe).
+
+        |col_name                |type    |
+        |:-----------------------|:-------|
+        |game_id                 |String  |
+        |period                  |Int64   |
+        |possession_number       |Int64   |
+        |offense_team_id         |Int64   |
+        |defense_team_id         |Int64   |
+        |start_order_index       |Int64   |
+        |end_order_index         |Int64   |
+        |start_seconds_remaining |Float64 |
+        |end_seconds_remaining   |Float64 |
+        |points                  |Int64   |
+        |is_second_chance        |Boolean |
+        |number_in_period        |Int64   |
+        |possession_start_type   |String  |
+        |count_as_possession     |Boolean |
+        |fg2a                    |Int64   |
+        |fg2m                    |Int64   |
+        |fg3a                    |Int64   |
+        |fg3m                    |Int64   |
+        |fta                     |Int64   |
+        |ftm                     |Int64   |
+        |oreb                    |Int64   |
+        |dreb                    |Int64   |
+        |tov                     |Int64   |
+        |off_player_1            |Int64   |
+        |off_player_2            |Int64   |
+        |off_player_3            |Int64   |
+        |off_player_4            |Int64   |
+        |off_player_5            |Int64   |
+        |def_player_1            |Int64   |
+        |def_player_2            |Int64   |
+        |def_player_3            |Int64   |
+        |def_player_4            |Int64   |
+        |def_player_5            |Int64   |
+        |lineup_source           |String  |
+        |season                  |Int64   |
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 1996.
+
+    Example:
+        Quick start::
+
+            load_nba_stats_possessions(seasons=2025)
+    """
+    frames, missing = [], []
+    for season in _as_season_list(seasons):
+        if int(season) < 1996:
+            raise SeasonNotFoundError("season cannot be less than 1996")
+        df = _read_release_parquet(
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_possessions/nba_possessions_{season + 1}.parquet"
+        )
+        if df is None:
+            missing.append(season)
+            continue
+        frames.append(df)
+    if missing:
+        cli_warn("load_nba_stats_possessions: no data for season(s) {missing} (skipped)".format(missing=missing))
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+def load_nba_stats_game_lineups(seasons, return_as_pandas: bool = False):
+    """Load nba_stats_game_lineups (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_game_lineups
+
+    Args:
+        seasons: an int or iterable of seasons (>= 1996).
+            Pass the season's START year (e.g. ``1996`` for the 1996-97
+            season); the published asset is keyed by the END year and the
+            loader translates internally.
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; seasons with no published asset are
+        skipped with a warning rather than raising (404-safe).
+
+        |col_name      |type   |
+        |:-------------|:------|
+        |game_id       |String |
+        |action_number |Int64  |
+        |period        |Int64  |
+        |home_player_1 |Int64  |
+        |home_player_2 |Int64  |
+        |home_player_3 |Int64  |
+        |home_player_4 |Int64  |
+        |home_player_5 |Int64  |
+        |away_player_1 |Int64  |
+        |away_player_2 |Int64  |
+        |away_player_3 |Int64  |
+        |away_player_4 |Int64  |
+        |away_player_5 |Int64  |
+        |season        |Int64  |
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 1996.
+
+    Example:
+        Quick start::
+
+            load_nba_stats_game_lineups(seasons=2025)
+    """
+    frames, missing = [], []
+    for season in _as_season_list(seasons):
+        if int(season) < 1996:
+            raise SeasonNotFoundError("season cannot be less than 1996")
+        df = _read_release_parquet(
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_game_lineups/nba_lineups_{season + 1}.parquet"
+        )
+        if df is None:
+            missing.append(season)
+            continue
+        frames.append(df)
+    if missing:
+        cli_warn("load_nba_stats_game_lineups: no data for season(s) {missing} (skipped)".format(missing=missing))
     # diagonal: per-season release schemas can drift (columns added/dropped
     # over the years) -- union columns, null-fill gaps.
     out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
