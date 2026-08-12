@@ -189,6 +189,7 @@ from sportsdataverse.wnba import load_wnba_shots as load_wnba_shots  # noqa: F40
 from sportsdataverse.wnba import load_wnba_standings as load_wnba_standings  # noqa: F401
 from sportsdataverse.wnba import load_wnba_stats_coaches as load_wnba_stats_coaches  # noqa: F401
 from sportsdataverse.wnba import load_wnba_stats_draft as load_wnba_stats_draft  # noqa: F401
+from sportsdataverse.wnba import load_wnba_stats_game_lineups as load_wnba_stats_game_lineups  # noqa: F401
 from sportsdataverse.wnba import load_wnba_stats_game_rosters as load_wnba_stats_game_rosters  # noqa: F401
 from sportsdataverse.wnba import load_wnba_stats_lineups as load_wnba_stats_lineups  # noqa: F401
 from sportsdataverse.wnba import load_wnba_stats_officials as load_wnba_stats_officials  # noqa: F401
@@ -196,6 +197,7 @@ from sportsdataverse.wnba import load_wnba_stats_pbp as load_wnba_stats_pbp  # n
 from sportsdataverse.wnba import load_wnba_stats_player_boxscores as load_wnba_stats_player_boxscores  # noqa: F401
 from sportsdataverse.wnba import load_wnba_stats_player_game_logs as load_wnba_stats_player_game_logs  # noqa: F401
 from sportsdataverse.wnba import load_wnba_stats_player_season_stats as load_wnba_stats_player_season_stats  # noqa: F401
+from sportsdataverse.wnba import load_wnba_stats_possessions as load_wnba_stats_possessions  # noqa: F401
 from sportsdataverse.wnba import load_wnba_stats_rosters as load_wnba_stats_rosters  # noqa: F401
 from sportsdataverse.wnba import load_wnba_stats_schedules as load_wnba_stats_schedules  # noqa: F401
 from sportsdataverse.wnba import load_wnba_stats_shots as load_wnba_stats_shots  # noqa: F401
@@ -416,6 +418,7 @@ __all__ = [
     "load_wnba_standings",
     "load_wnba_stats_coaches",
     "load_wnba_stats_draft",
+    "load_wnba_stats_game_lineups",
     "load_wnba_stats_game_rosters",
     "load_wnba_stats_lineups",
     "load_wnba_stats_officials",
@@ -423,6 +426,7 @@ __all__ = [
     "load_wnba_stats_player_boxscores",
     "load_wnba_stats_player_game_logs",
     "load_wnba_stats_player_season_stats",
+    "load_wnba_stats_possessions",
     "load_wnba_stats_rosters",
     "load_wnba_stats_schedules",
     "load_wnba_stats_shots",

@@ -96,6 +96,20 @@ class FlatApi:
         return self.name_pattern.split("_{", 1)[0]
 
 
+SEASON_TOKEN = re.compile(r"\{season(?:\s*\+\s*(\d+))?\}")
+
+
+def fill_season(url: str, season: int) -> str:
+    """Resolve a loader asset URL's ``{season}`` / ``{season + N}`` token.
+
+    The ``+ N`` form is the START-year -> END-year translation used by leagues whose
+    published assets are keyed by the season's END year (NBA: ``1996`` = 1996-97 =
+    ``nba_play_by_play_1997.parquet``). The public ``seasons`` argument stays the
+    START year -- the offset lives only in the asset path.
+    """
+    return SEASON_TOKEN.sub(lambda m: str(season + int(m.group(1) or 0)), url)
+
+
 @dataclass(frozen=True)
 class Loader:
     """A 404-safe dataset loader over a sportsdataverse-data release asset."""

@@ -868,7 +868,9 @@ loaders:
 - fn: load_nba_stats_schedules
   league: nba
   base: sdv_releases
-  url: nba_stats_schedules/nba_stats_schedule_{season}.parquet
+  # {season} stays the START year (1996 = 1996-97); the Program V asset is keyed
+  # by the END year, so the +1 is the translation -- NOT a change to the arg.
+  url: nba_stats_schedules/nba_schedule_{season + 1}.parquet
   tag: nba_stats_schedules
   min_season: 1996
   example_args:
@@ -916,8 +918,24 @@ loaders:
 - fn: load_nba_stats_pbp
   league: nba
   base: sdv_releases
-  url: nba_stats_pbp/play_by_play_{season}.parquet
+  url: nba_stats_pbp/nba_play_by_play_{season + 1}.parquet
   tag: nba_stats_pbp
+  min_season: 1996
+  example_args:
+    seasons: 2025
+- fn: load_nba_stats_possessions
+  league: nba
+  base: sdv_releases
+  url: nba_stats_possessions/nba_possessions_{season + 1}.parquet
+  tag: nba_stats_possessions
+  min_season: 1996
+  example_args:
+    seasons: 2025
+- fn: load_nba_stats_game_lineups
+  league: nba
+  base: sdv_releases
+  url: nba_stats_game_lineups/nba_lineups_{season + 1}.parquet
+  tag: nba_stats_game_lineups
   min_season: 1996
   example_args:
     seasons: 2025
@@ -1528,11 +1546,28 @@ loaders:
 - fn: load_wnba_stats_pbp
   league: wnba
   base: sdv_releases
-  url: wnba_stats_pbp/play_by_play_{season}.parquet
+  # WNBA seasons are single-calendar-year, so start year == end year: no +1 here.
+  url: wnba_stats_pbp/wnba_play_by_play_{season}.parquet
   tag: wnba_stats_pbp
-  min_season: 2026
+  min_season: 1997
   example_args:
-    seasons: 2026
+    seasons: 2025
+- fn: load_wnba_stats_possessions
+  league: wnba
+  base: sdv_releases
+  url: wnba_stats_possessions/wnba_possessions_{season}.parquet
+  tag: wnba_stats_possessions
+  min_season: 1997
+  example_args:
+    seasons: 2025
+- fn: load_wnba_stats_game_lineups
+  league: wnba
+  base: sdv_releases
+  url: wnba_stats_game_lineups/wnba_lineups_{season}.parquet
+  tag: wnba_stats_game_lineups
+  min_season: 1997
+  example_args:
+    seasons: 2025
 - fn: load_wnba_stats_player_boxscores
   league: wnba
   base: sdv_releases
@@ -1560,9 +1595,9 @@ loaders:
 - fn: load_wnba_stats_schedules
   league: wnba
   base: sdv_releases
-  url: wnba_stats_schedules/wnba_stats_schedule_{season}.parquet
+  url: wnba_stats_schedules/wnba_schedule_{season}.parquet
   tag: wnba_stats_schedules
-  min_season: 2025
+  min_season: 1997
   example_args:
     seasons: 2025
 - fn: load_wnba_stats_shots
