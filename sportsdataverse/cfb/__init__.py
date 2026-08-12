@@ -16,6 +16,7 @@ from sportsdataverse.cfb.cfb_fourth_down import *
 from sportsdataverse.cfb.cfb_two_point import *
 from sportsdataverse.cfb.cfb_pbp_fox import *
 from sportsdataverse.cfb.cfb_play_participants import *
+from sportsdataverse.cfb.cfb_play_types import *
 from sportsdataverse.cfb.cfb_player_stats import *
 from sportsdataverse.cfb.cfb_ratings import *
 from sportsdataverse.cfb.cfb_game_predict import *
