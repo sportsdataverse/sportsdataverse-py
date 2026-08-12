@@ -188,7 +188,9 @@ bm-verify solve) — don't hand-roll stats.ncaa.org requests.
 a read-through store (`SDV_PY_NBA_RAW_JSON_DIR`, per-endpoint
 `SDV_PY_NBA_RAW_JSON_DIR_{ENDPOINT}`, `SDV_PY_NBA_RAW_JSON_READONLY`); season
 dirs use the league-aware END-year convention, and an empty `{}` payload is
-never persisted. WNBA engine fetchers share the store.
+never persisted. WNBA engine fetchers share the store. Read-only means OFFLINE:
+no writes and no fetches — a miss raises `errors.RawStoreMissError` instead of
+silently completing the build from the live API.
 
 ## NFL — nflreadpy Parity
 

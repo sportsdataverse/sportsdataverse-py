@@ -80,6 +80,37 @@ def season_not_found_error(season: int, min_season: int) -> None:
         raise SeasonNotFoundError(f"Season {season} not found, season cannot be less than {min_season}")
 
 
+class RawStoreMissError(SportsDataverseError):
+    """Raised when a read-only raw store has no capture for a requested payload.
+
+    Read-only mode (``SDV_PY_NBA_RAW_JSON_READONLY`` /
+    ``SDV_PY_WNBA_RAW_JSON_READONLY``, or ``raw_store_readonly=True``) means
+    *offline*: the committed store is the only source. A miss therefore cannot
+    be filled — silently falling back to the live API would make a build that
+    looks reproducible partly live, and returning an empty payload would make
+    an incomplete compile look complete. Both are the failure mode this error
+    exists to prevent, mirroring
+    :class:`~sportsdataverse._crosswalk_basketball_sources.CrosswalkSourceError`:
+    a source that cannot produce data fails loudly.
+
+    Per-game compile loops (:func:`~sportsdataverse.nba.nba_season_compile.compile_nba_season`)
+    already catch per game, so an uncaptured game is logged and skipped rather
+    than aborting the season — but the skip is now visible in the log instead
+    of being papered over by a live fetch.
+
+    Example:
+        Distinguish "not captured" from a real failure::
+
+            from sportsdataverse.errors import RawStoreMissError
+            from sportsdataverse.nba import nba_possessions
+
+            try:
+                poss = nba_possessions("0022300001", raw_store_readonly=True)
+            except RawStoreMissError as exc:
+                print(f"not in the raw store: {exc}")
+    """
+
+
 class NoESPNDataError(SportsDataverseError):
     """Raised when an ESPN endpoint has no payload for the request.
 

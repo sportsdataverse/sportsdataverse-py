@@ -21,6 +21,7 @@ from typing import Callable, Dict, Mapping, Optional, Union
 import pandas as pd
 import polars as pl
 
+from sportsdataverse.errors import RawStoreMissError
 from sportsdataverse.nba.nba_possession_rules import (
     build_event_context,
     is_possession_ending_event,
@@ -1347,18 +1348,32 @@ def _through_raw_store(
     A present-but-unreadable file falls back to ``fetch()`` and is rewritten;
     a persist failure logs a warning and never fails the pipeline.
 
-    Read-only mode disables the persist half: reads still hit the store, but
-    misses fetch without writing. This is the mode for compile/build
-    consumers (e.g. the hoopR-nba-stats-data possession warm) so that only
-    the raw repo's own scrape sweep ever fills the store — separation of
-    concerns between the -raw (scrape + push) and -data (compile + release)
+    **Read-only mode means OFFLINE — no writes AND no fetches.** The committed
+    store is the only source: a hit is returned, a miss raises
+    :class:`~sportsdataverse.errors.RawStoreMissError`. This is the mode for
+    compile/build consumers (e.g. the hoopR-nba-stats-data possession warm) so
+    that only the raw repo's own scrape sweep ever fills the store — separation
+    of concerns between the -raw (scrape + push) and -data (compile + release)
     repos. Enabled per call via *readonly* or ambiently via
     ``SDV_PY_NBA_RAW_JSON_READONLY=1`` (explicit arg > env).
+
+    .. versionchanged:: 0.0.76
+        Read-only used to suppress only the *persist*, so a miss still hit the
+        live API. A partially-captured store therefore completed itself from
+        the network and the "offline" build was neither offline nor
+        reproducible. A miss now raises.
+
+    URL store roots are offline by construction (nothing can be written to a
+    URL) and keep their own contract: a miss returns ``{}`` so a compile over a
+    partially-captured tree served from raw.githubusercontent / a CDN skips the
+    absent game exactly as it skips a genuinely dataless one. That path never
+    reaches the live API, so it was never part of this trap.
 
     Args:
         endpoint: stats.nba.com endpoint slug (store subdirectory).
         game_id: Ten-character NBA game identifier.
-        fetch: Zero-arg callable performing the live fetch.
+        fetch: Zero-arg callable performing the live fetch. Not called at all
+            when *readonly* resolves true.
         suffix: Optional filename suffix forwarded to :func:`_raw_store_path`.
         store_dir: Explicit store root spec — single path or per-endpoint
             mapping (``None`` -> env vars; ``""`` -> disabled), forwarded
@@ -1366,7 +1381,12 @@ def _through_raw_store(
         readonly: Explicit read-only flag; ``None`` defers to the env var.
 
     Returns:
-        Raw payload ``dict`` (from disk on hit, from ``fetch()`` on miss).
+        Raw payload ``dict`` (from disk on hit, from ``fetch()`` on miss when
+        writes are allowed).
+
+    Raises:
+        RawStoreMissError: Read-only, and the store holds no readable capture
+            for this endpoint/game.
     """
     root = _resolve_store_root(endpoint, store_dir)
     if root is None:
@@ -1385,11 +1405,18 @@ def _through_raw_store(
         try:
             return json.loads(path.read_text(encoding="utf-8"))
         except (OSError, ValueError):
-            logger.warning("raw store: unreadable %s -- refetching", path)
-    payload = fetch()
+            logger.warning("raw store: unreadable %s", path)
     ro = bool(os.environ.get("SDV_PY_NBA_RAW_JSON_READONLY")) if readonly is None else readonly
     if ro:
-        return payload
+        # Read-only == offline. Fetching here (the pre-0.0.76 behavior) made a
+        # partially-captured store complete itself over the network, so a build
+        # that looked reproducible was partly live; returning {} instead would
+        # make an incomplete compile look complete. Fail loudly, name the key.
+        raise RawStoreMissError(
+            f"raw store read-only: no usable capture for endpoint {endpoint!r}, game {game_id!r} "
+            f"(expected {path}). Capture it in the -raw repo, or drop read-only to allow a live fetch."
+        )
+    payload = fetch()
     # Never persist an empty/dataless payload. A stats.nba.com fetch that
     # returns a bare ``{}`` (a transient failure, an empty envelope, or a
     # genuinely-dataless endpoint like gamerotation for very old games) is
@@ -1687,9 +1714,11 @@ def nba_possessions(
             then ``SDV_PY_NBA_RAW_JSON_DIR``); ``""`` force-disables.
             Mapping entry > scalar arg > per-endpoint env > generic env —
             same spirit as ``compile_nba_season``'s ``cache_dir``.
-        raw_store_readonly: If ``True``, store hits are read but misses are
-            never persisted (pure-consumer mode). ``None`` (default) defers
-            to ``SDV_PY_NBA_RAW_JSON_READONLY``.
+        raw_store_readonly: If ``True``, the store is the ONLY source: hits are
+            read and a miss raises :class:`~sportsdataverse.errors.RawStoreMissError`
+            rather than falling back to the live API (pure-consumer, fully
+            offline mode). ``None`` (default) defers to
+            ``SDV_PY_NBA_RAW_JSON_READONLY``.
         return_as_pandas: If ``True``, return a :class:`pandas.DataFrame`
             instead of :class:`polars.DataFrame`.
 
@@ -1698,7 +1727,15 @@ def nba_possessions(
         :data:`POSSESSIONS_SCHEMA`, the ten lineup columns
         ``off_player_1..5`` / ``def_player_1..5``, and a ``lineup_source``
         Utf8 column.  One row per possession.
-        Empty or malformed payloads return a zero-row frame (never raises).
+        Empty or malformed payloads return a zero-row frame.
+
+    Raises:
+        ValueError: *lineup_source* is not one of ``"auto"`` / ``"rotation"`` /
+            ``"pbp"`` / ``"quarter_box"``.
+        RawStoreMissError: Read-only raw store with no capture for a payload
+            this call needs. Under ``lineup_source="auto"`` an uncaptured
+            ``gamerotation`` only triggers the quarter_box / pbp fallback; the
+            error escapes when the pbp or boxscore payload itself is absent.
 
     Example:
         Quick start (rotation, default)::
