@@ -5086,11 +5086,24 @@ class CFBPlayProcess(object):
               Timeout/End-Period skip set, so crossing the half boundary is
               inert).
 
-        Emits ``firstD_by_kickoff`` / ``firstD_by_poss`` / ``firstD_by_penalty``
-        / ``firstD_by_yards`` + ``new_series`` as Boolean columns. ESPN's box
-        ``firstDowns`` counts earned + penalty only, so box reconstruction is
-        ``firstD_by_yards + firstD_by_penalty`` (``_poss`` / ``_kickoff`` mark
-        unearned series starts and are excluded).
+        Emits TWO first-down representations, both Boolean:
+
+        * **Earned family** (``first_down_yards`` / ``first_down_penalty`` /
+          ``first_down_earned``) -- flagged on the play that EARNED the first
+          down, so the row's own ``pos_team`` is the crediting team. This is
+          the COUNTING surface: box/team aggregation sums these grouped by
+          ``pos_team``. Mutually exclusive buckets; yards takes precedence.
+        * **Series-start family** (``firstD_by_kickoff`` / ``firstD_by_poss``
+          / ``firstD_by_penalty`` / ``firstD_by_yards`` + ``new_series``) --
+          the verbatim cfbfastR port: flags the first play of the NEW series
+          with the cause it began (1-3 rows after an earning conversion, via
+          the Timeout/End-Period lag ladder). ``_poss`` / ``_kickoff`` mark
+          UNEARNED (happenstance) series starts -- possession change, drive
+          start, kickoff -- and must never be counted as earned first downs.
+          Not a counting surface: the ladder drops drive-ending conversions
+          (TDs, end-of-half) and can double-fire across a Timeout row (the
+          Timeout row takes the lag1 branch, the next play the lag2 branch) --
+          both faithful to R.
 
         Known divergence from R (documented, benign): R leaves ``firstD_by_yards``
         ``NA`` on rows 1-2 of a half (unfilled lag2/lag3); we emit ``False``.
@@ -5124,6 +5137,69 @@ class CFBPlayProcess(object):
                     (pl.col("type.text").is_in(normalplay)).or_(pl.col("type.text") == "Fumble Recovery (Own)")
                 ).and_(pl.col("statYardage") >= pl.col("start.distance")),
                 drive_event=pl.col("type.text").is_in(end_rows) == False,
+            )
+            .with_columns(
+                # --- Earned-first-down family (conversion-row, snap-attributed) ---
+                # Unlike the series-start firstD_by_* family below (which flags
+                # the first play of the NEW series, 1-3 rows after the fact),
+                # these flag the play that EARNED the first down, so the row's
+                # own pos_team is the crediting team -- no lag attribution
+                # ambiguity, and drive-ending conversions (TDs, end-of-half)
+                # are captured. Kickoffs / punts / PATs / non-play rows are
+                # excluded by the play-type lists. Buckets are mutually
+                # exclusive; yards takes precedence (official scoring: if the
+                # play reached the line to gain, penalty yardage is moot).
+                first_down_yards=pl.when(
+                    (
+                        (pl.col("type.text").is_in(normalplay)).or_(
+                            # offensive scrimmage TDs reach the line to gain but
+                            # sit outside normalplay (own play-type strings) --
+                            # the structural miss of both first_down_created
+                            # (end.down != 1 after a TD) and the series ladder
+                            # (next row is a kickoff / new possession).
+                            pl.col("type.text").is_in(
+                                [
+                                    "Passing Touchdown",
+                                    "Rushing Touchdown",
+                                    "Pass Reception Touchdown",
+                                    "Fumble Recovery (Own) Touchdown",
+                                ],
+                            ),
+                        )
+                    )
+                    .and_(pl.col("statYardage") >= pl.col("start.distance"))
+                    # goal-to-go has NO line to gain, so nothing can earn a
+                    # first down there (a goal-to-go TD scores without one) --
+                    # verified vs the ESPN box: e.g. 401032062/BYU is exact
+                    # only when the 4 goal-to-go TDs are excluded.
+                    .and_(pl.col("start.distance") < pl.col("start.yardsToEndzone")),
+                )
+                .then(True)
+                .when(
+                    # declined / offset penalty where the play result stood and
+                    # converted (cfbfastR first_by_penalty branches 2-3; officially
+                    # these are first downs by yards, so they bucket here)
+                    (pl.col("type.text").is_in(penalty))
+                    .and_(pl.col("penalty_declined") == True)
+                    .and_(pl.col("penalty_1st_conv") == False)
+                    .and_(
+                        ((pl.col("penalty_offset") == True).and_(pl.col("statYardage") > pl.col("start.distance"))).or_(
+                            (pl.col("penalty_offset") == False).and_(
+                                pl.col("statYardage") >= pl.col("start.distance"),
+                            ),
+                        ),
+                    ),
+                )
+                .then(True)
+                .otherwise(False),
+            )
+            .with_columns(
+                first_down_penalty=(pl.col("penalty_1st_conv") == True)
+                .and_(pl.col("first_down_yards") == False)
+                .and_(pl.col("kickoff_play") == False),
+            )
+            .with_columns(
+                first_down_earned=(pl.col("first_down_yards") == True).or_(pl.col("first_down_penalty") == True),
             )
             .with_columns(
                 drive_event_number=pl.col("drive_event").cast(pl.Int32).cum_sum().over("drive.id"),

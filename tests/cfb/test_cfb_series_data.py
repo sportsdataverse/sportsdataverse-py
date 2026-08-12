@@ -56,6 +56,8 @@ def _input_frame(gid: int) -> pl.DataFrame:
             "turnover_vec": [r["turnover_vec"] == "1" for r in rows],
             "scoring_play": [r["scoring_play"] == "1" for r in rows],
             "change_of_pos_team": [r["change_of_pos_team"] == "1" for r in rows],
+            "start.yardsToEndzone": [int(r["yards_to_goal"]) for r in rows],
+            "pos_team": [int(r["pos_team"]) for r in rows],
         },
     )
 
@@ -96,3 +98,75 @@ def test_series_columns_in_pipeline(monkeypatch):
         assert df.schema[col] == pl.Boolean, f"{col} is {df.schema[col]}, expected Boolean"
     # every drive's first row starts a new series
     assert df.get_column("new_series").any()
+    # earned family present, Boolean, and consistent
+    for col in ["first_down_yards", "first_down_penalty", "first_down_earned"]:
+        assert col in df.columns, f"missing {col}"
+        assert df.schema[col] == pl.Boolean
+
+
+TO_EP = ["Timeout", "End Period"]
+
+
+@pytest.mark.parametrize("gid", GIDS)
+def test_earned_family_delineation(gid: int):
+    """Earned first downs are cleanly delineated from happenstance rows.
+
+    * buckets are mutually exclusive; ``first_down_earned`` is their union
+    * no earned flag ever lands on a kickoff / punt / non-play row -- those
+      are series-start causes (``firstD_by_kickoff`` / ``firstD_by_poss``),
+      never earned first downs
+    """
+    df = _input_frame(gid)
+    proc = CFBPlayProcess(gameId=gid)
+    out = proc._CFBPlayProcess__add_series_data(df)
+    both = out.filter((pl.col("first_down_yards") == True) & (pl.col("first_down_penalty") == True))
+    assert both.height == 0, "yards/penalty buckets must be mutually exclusive"
+    union_diff = out.filter(
+        pl.col("first_down_earned") != ((pl.col("first_down_yards") == True) | (pl.col("first_down_penalty") == True)),
+    )
+    assert union_diff.height == 0
+    happenstance = out.filter(
+        (pl.col("kickoff_play") == True)
+        | (pl.col("punt") == True)
+        | pl.col("type.text").is_in(["Timeout", "End Period", "End of Half", "End of Game"]),
+    )
+    assert happenstance.filter(pl.col("first_down_yards") == True).height == 0
+    flagged_ko = happenstance.filter((pl.col("first_down_penalty") == True) & (pl.col("kickoff_play") == True))
+    assert flagged_ko.height == 0, "kickoff rows must never earn a first down"
+
+
+@pytest.mark.parametrize("gid", GIDS)
+def test_series_flags_attribute_to_conversion_pos_team(gid: int):
+    """pos_team contract: a ``firstD_by_yards`` / ``firstD_by_penalty``
+    series-start row credits the SAME team that earned the conversion 1-3
+    rows earlier (the nearest prior non-Timeout/End-Period row), and that
+    conversion row carries ``first_down_earned``.
+
+    Timeout/End-Period rows themselves are skipped: the R ladder also fires
+    on them (and can double-fire across them), which is why the earned
+    (conversion-row) family -- snap-attributed by construction -- is the
+    counting surface.
+    """
+    df = _input_frame(gid)
+    proc = CFBPlayProcess(gameId=gid)
+    out = proc._CFBPlayProcess__add_series_data(df)
+    rows = out.to_dicts()
+    checked = 0
+    for i, r in enumerate(rows):
+        if r["type.text"] in TO_EP:
+            continue
+        if not (r["firstD_by_yards"] or r["firstD_by_penalty"]):
+            continue
+        j = i - 1
+        while j >= 0 and rows[j]["type.text"] in TO_EP:
+            j -= 1
+        assert j >= 0, f"row {i}: no prior play row"
+        conv = rows[j]
+        assert conv["first_down_earned"], (
+            f"row {i} ({r['type.text']}): prior play row {j} ({conv['type.text']}) is not earned-flagged"
+        )
+        assert conv["pos_team"] == r["pos_team"], (
+            f"row {i}: series credit pos_team {r['pos_team']} != conversion pos_team {conv['pos_team']}"
+        )
+        checked += 1
+    assert checked > 0, "no series-start rows found to check"
