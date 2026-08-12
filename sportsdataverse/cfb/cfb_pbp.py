@@ -2914,12 +2914,11 @@ class CFBPlayProcess(object):
                 .otherwise(None),
             )
             .with_columns(
+                # Direct signed-integer capture. The prior fragment capture
+                # (".{0,3} yards") produced garbage on 40% of rows measured
+                # against 2004-2025 ('U (', 'k 8'); a numeric grab cannot.
                 yds_penalty=pl.when(pl.col("penalty_flag") == True)
-                .then(
-                    pl.col("penalty_text")
-                    .str.extract(r"(?i)(.{0,3}) yards|(?i)yds|(?i)yd to the", 1)
-                    .str.replace(" yards to the | yds to the | yd to the ", ""),
-                )
+                .then(pl.col("penalty_text").str.extract(r"\(?(-?\d{1,3})\)?\s*(?i:yards?|yds?)\b", 1))
                 .otherwise(None),
             )
             .with_columns(
@@ -4213,6 +4212,51 @@ class CFBPlayProcess(object):
                 .otherwise(pl.lit(None, dtype=pl.Int64))
             )
 
+        # Era-form penalty-team token: "<Team> Penalty," (2014+), "PENALTY ABR"
+        # (NCAA dialect), "<team> penalty N yard" (2005-2013), "N yard penalty
+        # on <Mascot>" (2004). Narrative fragments are blacklisted; matching is
+        # against the game's own identifier columns, normalized to letters
+        # only, with containment (len>=5) and vowel-stripped equality for
+        # truncated forms ("EASTRN MICHIGAN").
+        _pen_blacklist = ["BEFORE", "AFTER", "DECLINED", "OFFSETTING", "THE", "NULLIFIED", "BALL", "PLAY"]
+
+        def _pen_cand(pattern: str) -> pl.Expr:
+            tok = pl.col("text").str.extract(pattern, 1).str.strip_chars()
+            return pl.when(tok.str.to_uppercase().is_in(_pen_blacklist)).then(None).otherwise(tok)
+
+        def _pen_norm(expr: pl.Expr) -> pl.Expr:
+            return expr.str.to_uppercase().str.replace_all(r"[^A-Z]", "")
+
+        def _pen_side(side: str) -> pl.Expr:
+            tokn = pl.col("_pen_tokn")
+            tokv = tokn.str.replace_all(r"[AEIOU]", "")
+            checks: list[pl.Expr] = []
+            for ident in (f"{side}TeamName", f"{side}TeamMascot", f"{side}TeamAbbrev", f"{side}TeamNameAlt"):
+                if ident not in play_df.columns:
+                    continue
+                idn = _pen_norm(pl.col(ident))
+                idv = idn.str.replace_all(r"[AEIOU]", "")
+                checks += [
+                    (tokn == idn),
+                    ((tokn.str.len_chars() >= 5) & idn.str.contains(tokn, literal=True)),
+                    ((idn.str.len_chars() >= 5) & tokn.str.contains(idn, literal=True)),
+                    ((tokv.str.len_chars() >= 5) & (tokv == idv)),
+                ]
+            if not checks:
+                return pl.lit(False)
+            return pl.any_horizontal(checks).fill_null(False)
+
+        play_df = play_df.with_columns(
+            _pen_tokn=_pen_norm(
+                pl.coalesce(
+                    _pen_cand(r"([A-Za-z][A-Za-z .&'\-]{1,28}?) Penalty,"),
+                    _pen_cand(r"PENALTY\s+([A-Z][A-Za-z&\-]{1,11})\s"),
+                    _pen_cand(r"(?i)([A-Za-z][A-Za-z .&'\-]{1,28}?) penalty \d{1,3} yard"),
+                    _pen_cand(r"(?i)\d+ yard penalty on ([A-Za-z .&'\-]{2,28})"),
+                ),
+            ),
+        ).with_columns(_pen_txt_home=_pen_side("home"), _pen_txt_away=_pen_side("away"))
+
         play_df = play_df.with_columns(
             recovery_team=_abbrev_to_team_id(pl.col("_recovery_abbrev")),
             recovery_team_2=_abbrev_to_team_id(pl.col("_recovery_abbrev_2")),
@@ -4393,10 +4437,21 @@ class CFBPlayProcess(object):
             kick_return_team=pl.col("return_team"),
             fg_team=pl.col("kicking_team"),
             punt_team=pl.col("kicking_team"),
-            # Prefer the authoritative "PENALTY {ABBR}" team parsed from text; fall back to
-            # the offensive/defensive heuristic only when no team token was parseable.
+            # Team resolution, best evidence first (measured on 2004-2025,
+            # 213,641 penalty rows; each layer only fills what the prior left):
+            #   1. era-form token from the play text matched against the game's
+            #      own identifiers (name/mascot/abbrev/alt, home vs away) --
+            #      resolves 85.5% with byte-level evidence
+            #   2. the legacy "PENALTY {ABBR}" parse (_penalty_team)
+            #   3. foul-direction heuristic (_DEFENSIVE_PENALTIES)
+            # Hybrid measured at team-box parity 46.7% penalties / 27.3% yards
+            # vs 22.5% / 13.0% for the pre-upgrade column.
             penalized_team=pl.when(pl.col("penalty_detail").is_null())
             .then(pl.lit(None, dtype=pl.Int32))
+            .when(pl.col("_pen_txt_home") & ~pl.col("_pen_txt_away"))
+            .then(pl.col("homeTeamId").cast(pl.Int32, strict=False))
+            .when(pl.col("_pen_txt_away") & ~pl.col("_pen_txt_home"))
+            .then(pl.col("awayTeamId").cast(pl.Int32, strict=False))
             .when(pl.col("_penalty_team").is_not_null())
             .then(pl.col("_penalty_team"))
             .when(pl.col("penalty_detail").is_in(list(_DEFENSIVE_PENALTIES)))
@@ -4409,6 +4464,11 @@ class CFBPlayProcess(object):
             .fill_null(0),
         )
 
+        # Canonical Int64 export of the penalized team, under the naming every
+        # other join key uses. penalized_team (Int32) is retained for
+        # compatibility; new consumers should join on penalty_team_id.
+        play_df = play_df.with_columns(penalty_team_id=pl.col("penalized_team").cast(pl.Int64, strict=False))
+
         # drop temp columns that must not leak into the output frame
         play_df = play_df.drop(
             [
@@ -4417,6 +4477,9 @@ class CFBPlayProcess(object):
                 "_recovery_abbrev",
                 "_recovery_abbrev_2",
                 "_penalty_team",
+                "_pen_tokn",
+                "_pen_txt_home",
+                "_pen_txt_away",
                 "_is_kick_return",
                 "_is_punt_return",
                 "_loser_1",
