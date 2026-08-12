@@ -458,6 +458,10 @@ _CFB_PBP_READ_COLUMNS = (
     "punt_tb",
     "turnover_vec",
     "change_of_pos_team",
+    # Team keys + yardage the boxscore_parity check aggregates on. `pos_team`
+    # in this dataset is a DISPLAY NAME, so only the *_id columns are join keys.
+    "pos_team_id",
+    "def_pos_team_id",
 )
 
 DATASETS["cfb_pbp"] = DatasetSpec(

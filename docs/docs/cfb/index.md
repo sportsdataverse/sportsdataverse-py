@@ -14,7 +14,7 @@ sidebar_label: CFB
 | [247Sports Recruit Database (ipa.247sports.com)](reference/sports247) | 12 | `https://ipa.247sports.com` |
 | [247Sports Site Pages (247sports.com)](reference/sports247_site_pages) | 35 | `https://247sports.com` |
 | [Dataset loaders](reference/loaders) | 40 | sportsdataverse raw data / sportsdataverse-data releases |
-| [Additional functions](reference/additional) | 72 | hand-written wrappers, loaders & helpers |
+| [Additional functions](reference/additional) | 75 | hand-written wrappers, loaders & helpers |
 
 ## Examples
 

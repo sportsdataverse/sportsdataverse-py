@@ -828,6 +828,33 @@ sched = load_cfb_schedule(seasons=[most_recent_cfb_season()])
 
 ## Other
 
+### `add_play_type_canonical(df: 'pl.DataFrame', *, source: 'str' = 'type.text', with_family: 'bool' = True) -> 'pl.DataFrame'` {#add_play_type_canonical}
+
+Append `play_type_canonical` (and optionally `play_type_family`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `df` | `DataFrame` |  | A play-by-play frame. |
+| `source` | `str` | `'type.text'` | Name of the raw play-type column. |
+| `with_family` | `bool` | `True` | Also append the coarse `play_type_family` column. |
+
+**Returns**
+
+The frame with the canonical column(s) appended. Returned unchanged when `source` is absent, so the helper is safe to apply to frames that have already been projected down.
+
+**Example**
+
+```python
+import polars as pl
+from sportsdataverse.cfb import add_play_type_canonical
+
+pbp = pl.DataFrame({"type.text": ["Rush", "Pass Reception", "Timeout"]})
+out = add_play_type_canonical(pbp)
+out.group_by("play_type_family").agg(pl.len())
+```
+
 ### `assert_rating_scale(ratings: 'pl.DataFrame', *, era: 'str' = 'modern', tol: 'float' = 1.6) -> 'float'` {#assert_rating_scale}
 
 Warn if the ratings have drifted off the scale the constants were fit on.
@@ -865,6 +892,30 @@ ratio = assert_rating_scale(ratings)
 # Treat a large drift as a refit signal, not a nuisance warning
 
 assert ratio < 1.6, "refit the constants before trusting predictions"
+```
+
+### `canonical_play_type_expr(source: 'str' = 'type.text') -> 'pl.Expr'` {#canonical_play_type_expr}
+
+Build the polars expression mapping raw `type.text` to a canonical type.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `source` | `str` | `'type.text'` | Name of the raw play-type column. |
+
+**Returns**
+
+A `pl.Expr` aliased `play_type_canonical`. Values absent from `PLAY_TYPE_CANONICAL` (and nulls) yield null, so upstream vocabulary drift surfaces rather than silently creating a category.
+
+**Example**
+
+```python
+import polars as pl
+from sportsdataverse.cfb import canonical_play_type_expr
+
+pbp = pl.DataFrame({"type.text": ["Pass Reception", "Punt Return"]})
+pbp.with_columns(canonical_play_type_expr())
 ```
 
 ### `cfb_adjusted_epa(plays: 'pl.DataFrame | pd.DataFrame', *, ridge_lambda: 'float' = 0.035, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#cfb_adjusted_epa}
@@ -2652,6 +2703,32 @@ One row per team class (On3 ratings). Zero-row frame on empty payload.
 from sportsdataverse.cfb import on3_team_ranking_team_rankings  # forward RDB native
 df = on3_team_ranking_team_rankings(sport_slug="football", year=2025)
 print(df.shape)
+```
+
+### `play_type_family_expr(source: 'str' = 'play_type_canonical') -> 'pl.Expr'` {#play_type_family_expr}
+
+Build the polars expression mapping a canonical type to its phase family.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `source` | `str` | `'play_type_canonical'` | Name of the canonical play-type column. |
+
+**Returns**
+
+A `pl.Expr` aliased `play_type_family`; unmapped values yield null.
+
+**Example**
+
+```python
+import polars as pl
+from sportsdataverse.cfb import add_play_type_canonical
+
+pbp = pl.DataFrame({"type.text": ["Rush", "Timeout"]})
+add_play_type_canonical(pbp).filter(
+    pl.col("play_type_family") != "administrative"
+)
 ```
 
 ### `predict_margin(home_adj_net: 'float', away_adj_net: 'float', neutral: 'bool', *, era: 'str' = 'modern', games_played: 'float | None' = None) -> 'float'` {#predict_margin}

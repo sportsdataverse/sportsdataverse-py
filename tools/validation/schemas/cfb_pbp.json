@@ -59,5 +59,7 @@
  "kickoff_tb": "Boolean",
  "punt_tb": "Boolean",
  "turnover_vec": "Boolean",
- "change_of_pos_team": "Boolean"
+ "change_of_pos_team": "Boolean",
+ "pos_team_id": "Int64",
+ "def_pos_team_id": "Int64"
 }
