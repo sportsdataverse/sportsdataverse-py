@@ -18,8 +18,9 @@ was attempted and aborted:
 from __future__ import annotations
 
 import json
+from datetime import date
 from pathlib import Path
-from typing import Any
+from typing import Any, List, Optional
 
 import polars as pl
 import pytest
@@ -29,6 +30,7 @@ from sportsdataverse._crosswalk_basketball_sources import (
     bart_super_sked,
     espn_conference_map,
     espn_rosters,
+    espn_scoreboard_games,
     espn_team_directory,
     require_source,
     stats_schedule_games,
@@ -188,6 +190,48 @@ def test_stats_schedule_games_allows_a_provably_empty_season(monkeypatch: pytest
         else ["game_date", "season_type", "wnba_game_id", "wnba_game_code", "wnba_home_team_id", "wnba_away_team_id"]
     )
     assert out.columns == expected
+
+
+@pytest.mark.parametrize(
+    ("league", "expected"),
+    [("wbb", 50), ("mbb", 50), ("nba", None), ("wnba", None)],
+)
+def test_espn_scoreboard_games_sends_the_ncaa_root_group(
+    monkeypatch: pytest.MonkeyPatch, league: str, expected: Optional[int]
+) -> None:
+    """College scoreboards without ``groups`` return a featured subset, not the slate.
+
+    ESPN answered 2026-01-15 with 10 WBB events bare and 82 with ``groups=50``,
+    which is why the ESPN side of the college crosswalks collapsed. Pro leagues
+    have no group axis, so they must stay bare.
+    """
+    seen: List[dict] = []
+
+    def fake_scoreboard(**kwargs: Any) -> pl.DataFrame:
+        seen.append(kwargs)
+        return pl.DataFrame()
+
+    monkeypatch.setattr(
+        "sportsdataverse._crosswalk_basketball_sources._espn_accessors",
+        lambda lg: {"scoreboard": fake_scoreboard},
+    )
+    espn_scoreboard_games(league, [date(2026, 1, 15)])
+    assert seen and seen[0].get("groups") == expected
+
+
+def test_espn_scoreboard_games_lets_the_caller_override_groups(monkeypatch: pytest.MonkeyPatch) -> None:
+    seen: List[dict] = []
+
+    def fake_scoreboard(**kwargs: Any) -> pl.DataFrame:
+        seen.append(kwargs)
+        return pl.DataFrame()
+
+    monkeypatch.setattr(
+        "sportsdataverse._crosswalk_basketball_sources._espn_accessors",
+        lambda lg: {"scoreboard": fake_scoreboard},
+    )
+    espn_scoreboard_games("wbb", [date(2026, 1, 15)], groups=100)
+    assert seen[0]["groups"] == 100
 
 
 @pytest.mark.parametrize("athlete_key", ["athlete_id", "id"])

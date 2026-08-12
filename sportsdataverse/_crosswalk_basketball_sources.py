@@ -398,7 +398,9 @@ def espn_scoreboard_games(league: str, dates: Sequence[date], **kwargs: Any) -> 
     Args:
         league: ``"mbb"``, ``"wbb"``, ``"nba"`` or ``"wnba"``.
         dates: ET calendar dates to fetch.
-        **kwargs: Forwarded to the scoreboard wrapper.
+        **kwargs: Forwarded to the scoreboard wrapper. For ``"mbb"`` / ``"wbb"``
+            ``groups`` defaults to ESPN's Division I root group (50) so the full
+            slate is returned; pass ``groups=`` explicitly to override.
 
     Returns:
         ``pl.DataFrame`` with ``espn_game_id``, ``game_date`` (ET),
@@ -413,6 +415,12 @@ def espn_scoreboard_games(league: str, dates: Sequence[date], **kwargs: Any) -> 
             df = espn_scoreboard_games("wnba", [dt.date(2025, 6, 1)])
     """
     scoreboard = _espn_accessors(league)["scoreboard"]
+    # ESPN's college scoreboard defaults to a small featured/ranked subset, not the
+    # day's full Division I slate (2026-01-15: 10 events bare vs 82 with groups=50).
+    # The R producers always send groups=50, which is why the ESPN side of the
+    # college crosswalks collapsed without it. Pro leagues have no group axis.
+    if _ncaa_group_accessors(league) is not None:
+        kwargs.setdefault("groups", _NCAA_ROOT_GROUP)
     frames: List[pl.DataFrame] = []
     for day in dates:
         try:
