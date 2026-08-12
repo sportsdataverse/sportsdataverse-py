@@ -1869,5 +1869,8 @@ def load_nfl_ratings_weekly(seasons: List[int], return_as_pandas: bool = False) 
     for i in seasons:
         season_not_found_error(int(i), 1999)
         frames.append(pl.read_parquet(NFL_RATINGS_WEEKLY_URL.format(season=i), use_pyarrow=True, columns=None))
-    data = pl.concat(frames, how="vertical_relaxed")
+    # diagonal_relaxed: per-season release schemas drift (columns added or
+    # dropped, and dtypes widened) -- union columns, null-fill gaps.
+    # vertical_relaxed tolerated the dtype half of that but not the columns.
+    data = pl.concat(frames, how="diagonal_relaxed")
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data

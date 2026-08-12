@@ -25,6 +25,7 @@ import pytest
 
 from sportsdataverse.nfl import clear_cache, load_nfl_pbp_participation, reset_config, update_config
 from sportsdataverse.nfl import nfl_loaders as _loaders
+from sportsdataverse.nfl import nfl_schedule as _schedule
 from tests.conftest import skip_if_no_live
 
 FIXTURES = Path(__file__).resolve().parents[1] / "fixtures" / "nfl_loaders"
@@ -106,10 +107,19 @@ def test_participation_play_id_dtype_is_span_independent(seasons, no_cache, offl
     assert df.schema["play_id"] == pl.Float64
 
 
-def test_no_vertical_concat_left_in_nfl_loaders():
-    """The other nine multi-season loaders share this fix; don't let one regress."""
-    source = Path(_loaders.__file__).read_text(encoding="utf-8")
-    assert ', how="vertical")' not in source
+@pytest.mark.parametrize("module", [_loaders, _schedule])
+def test_no_vertical_concat_left_in_multi_season_modules(module):
+    """The other multi-season sites share this fix; don't let one regress.
+
+    ``vertical_relaxed`` is caught too — it tolerates the dtype half of the
+    drift but still raises when the column sets disagree.
+    """
+    offenders = [
+        line.strip()
+        for line in Path(module.__file__).read_text(encoding="utf-8").splitlines()
+        if "pl.concat(" in line and 'how="vertical' in line
+    ]
+    assert offenders == []
 
 
 @skip_if_no_live
