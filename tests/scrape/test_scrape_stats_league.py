@@ -38,9 +38,20 @@ def test_unknown_league_id_raises() -> None:
 # -- endpoints: span vs bare season spelling -----------------------------------
 
 
-def _fake_endpoint_span(season: str = "", league_id: str = "") -> None: ...
-def _fake_endpoint_year(season_year: str = "", league_id: str = "") -> None: ...
-def _fake_endpoint_year_nullable(season_year_nullable: str = "", league_id: str = "") -> None: ...
+# Signature-only stubs: season_variants() introspects the parameter NAMES to pick
+# the season spelling, so a docstring body is all these need. (A bare ``...`` body
+# would be collapsed back onto the ``def`` line by ruff format, which trips E704 in
+# formatter-unaware linters -- ruff itself documents E704 as formatter-conflicting.)
+def _fake_endpoint_span(season: str = "", league_id: str = "") -> None:
+    """Stub taking the span-spelled ``season`` param."""
+
+
+def _fake_endpoint_year(season_year: str = "", league_id: str = "") -> None:
+    """Stub taking the bare-year ``season_year`` param."""
+
+
+def _fake_endpoint_year_nullable(season_year_nullable: str = "", league_id: str = "") -> None:
+    """Stub taking the nullable bare-year ``season_year_nullable`` param."""
 
 
 def test_nba_spans_the_season_string_wnba_stays_bare() -> None:

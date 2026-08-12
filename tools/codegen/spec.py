@@ -44,6 +44,11 @@ class Endpoint:
     now_variant: Optional[str] = None  # alternate path when the now_toggle param is None
     now_toggle: Optional[str] = None  # the path param whose None selects now_variant
     exclude_leagues: List[str] = field(default_factory=list)
+    # Same shape as FlatApi.docstring, scoped to ONE endpoint. Declared per
+    # endpoint when a family is too large to opt in wholesale: the family-level
+    # block rewrites every wrapper in the family, this one changes only its own.
+    # Takes precedence over the family block when both are present.
+    docstring: Dict[str, object] = field(default_factory=dict)
 
 
 @dataclass(frozen=True)
@@ -249,6 +254,7 @@ def _parse_endpoint(e: dict, registry: Dict[str, Param], path: Path) -> Endpoint
         now_variant=e.get("now_variant"),
         now_toggle=e.get("now_toggle"),
         exclude_leagues=list(e.get("exclude_leagues", [])),
+        docstring=dict(e.get("docstring") or {}),
     )
     # validate path tokens (excluding the {sport}/{league} slugs) have a known param;
     # strip optional-segment brackets first so "[/{token}]" tokens are seen.

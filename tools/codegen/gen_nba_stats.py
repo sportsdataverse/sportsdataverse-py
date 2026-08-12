@@ -77,6 +77,57 @@ _REPRESENTATIVE_RESULT_SETS = {
 }
 
 
+# What actually propagates out of nba_stats_runtime._get. A non-200 / blank /
+# undecodable body is NOT an exception there -- it returns {} and the parser
+# yields a zero-row frame -- so only these two reach the caller.
+_STATS_RAISES = [
+    "ImportError: ``curl_cffi`` is not installed. stats.nba.com/stats.wnba.com "
+    "TLS-fingerprint-block plain ``requests``, so the live transport requires it "
+    "(``pip install curl_cffi``, or ``pip install sportsdataverse[all]``).",
+    "curl_cffi.requests.errors.RequestsError: Connection-level failure (timeout, "
+    "reset) raised by the transport once ``SDV_PY_NBA_STATS_RETRIES`` retries are "
+    "exhausted. A non-200 or empty body does NOT raise -- ``_get`` returns ``{}`` "
+    "and the parser yields a zero-row frame.",
+]
+_SIBLING = {"nba_stats": ("wnba_stats", "wnba", "10"), "wnba_stats": ("nba_stats", "nba", "00")}
+_R_COMPANION = {
+    "nba_stats": ("hoopR", "https://hoopR.sportsdataverse.org", "R sister package for the NBA stats API"),
+    "wnba_stats": ("wehoop", "https://wehoop.sportsdataverse.org", "R sister package for the WNBA stats API"),
+}
+# Endpoints that opt into the extended docstring contract (Raises + See Also +
+# an import-bearing Example). Declared PER ENDPOINT: the family-level
+# ``docstring:`` block would rewrite all ~112 wrappers in this family.
+_DOCSTRING_ENDPOINTS = ("drafthistory",)
+# Curated example args for those endpoints, so the Example block is a real,
+# copy-pasteable call rather than the whole draft history.
+_EXAMPLE_ARGS = {"drafthistory": {"season_year_nullable": "2024"}}
+
+
+def _docstring_extras(slug: str, stem: str) -> Dict[str, Any]:
+    """Per-endpoint ``docstring:`` extras consumed by ``generate._build_docstring``."""
+    if slug not in _DOCSTRING_ENDPOINTS:
+        return {}
+    sib_stem, sib_league, sib_league_id = _SIBLING[stem]
+    r_name, r_url, r_note = _R_COMPANION[stem]
+    return {
+        "example_import": True,
+        # sportsdataverse.{nba,wnba} does NOT re-export these wrappers -- they are
+        # reachable only through their own module, so the Example imports from there.
+        "example_import_from": f"sportsdataverse.{STEMS[stem]['league']}.{stem}",
+        "raises": list(_STATS_RAISES),
+        "see_also": [
+            {
+                "name": f"{sib_stem}_{slug}",
+                "url": f"https://sportsdataverse-py.sportsdataverse.org/docs/{sib_league}/reference/{sib_stem}",
+                "note": f"the {sib_league.upper()} sibling wrapper (same resultSets "
+                f"envelope, LeagueID={sib_league_id})",
+            },
+            {"name": r_name, "url": r_url, "note": r_note},
+            {"name": "nba_api", "url": "https://github.com/swar/nba_api", "note": "Python alternative client"},
+        ],
+    }
+
+
 def _stats_eps(league_id: str) -> List[dict]:
     return sorted(
         (
@@ -128,15 +179,21 @@ def _endpoint_entry(ep: dict, stem: str, default_league: str, parser_name: str) 
                     "default": _clean_default(p["name"], p["query_key"], p.get("default")),
                 }
             )
-    return {
+    example_args: Dict[str, Any] = {"league_id": default_league} if has_league else {}
+    example_args.update(_EXAMPLE_ARGS.get(ep["slug"], {}))
+    entry: Dict[str, Any] = {
         "short": ep["slug"],
         "summary": f"GET /stats/{ep['slug']}",
         "path": f"/stats/{ep['slug']}",
         "extra_params": extra,
         "parser": parser_name,
         "returns_schema": f"native/{stem}/{ep['slug']}",
-        "example_args": {"league_id": default_league} if has_league else {},
+        "example_args": example_args,
     }
+    extras = _docstring_extras(ep["slug"], stem)
+    if extras:
+        entry["docstring"] = extras
+    return entry
 
 
 def _write_yaml(path: Path, obj: Any) -> None:

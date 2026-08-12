@@ -1323,7 +1323,7 @@ def wnba_stats_drafthistory(
     """GET /stats/drafthistory
 
     Endpoint: ``GET https://stats.wnba.com/stats/drafthistory``
-    Example URL: https://stats.wnba.com/stats/drafthistory?LeagueID=10
+    Example URL: https://stats.wnba.com/stats/drafthistory?LeagueID=10&Season=2024
 
     Args:
         college_nullable: College query parameter.
@@ -1336,14 +1336,29 @@ def wnba_stats_drafthistory(
         topx_nullable: TopX query parameter.
         return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
+    Raises:
+        ImportError: ``curl_cffi`` is not installed. stats.nba.com/stats.wnba.com TLS-fingerprint-block plain ``requests``, so the live transport requires it (``pip install curl_cffi``, or ``pip install sportsdataverse[all]``).
+        curl_cffi.requests.errors.RequestsError: Connection-level failure (timeout, reset) raised by the transport once ``SDV_PY_NBA_STATS_RETRIES`` retries are exhausted. A non-200 or empty body does NOT raise -- ``_get`` returns ``{}`` and the parser yields a zero-row frame.
+
     Example:
         Quick start::
 
-            wnba_stats_drafthistory(league_id='10')
+            from sportsdataverse.wnba.wnba_stats import wnba_stats_drafthistory
+            wnba_stats_drafthistory(league_id='10', season_year_nullable='2024')
+
+        See Also:
+            * `nba_stats_drafthistory`_ - the NBA sibling wrapper (same resultSets envelope, LeagueID=00)
+            * `wehoop`_ - R sister package for the WNBA stats API
+            * `nba_api`_ - Python alternative client
+
+        .. _nba_stats_drafthistory: https://sportsdataverse-py.sportsdataverse.org/docs/nba/reference/nba_stats
+        .. _wehoop: https://wehoop.sportsdataverse.org
+        .. _nba_api: https://github.com/swar/nba_api
     """
     raw = _get(
         "https://stats.wnba.com/stats/drafthistory",
