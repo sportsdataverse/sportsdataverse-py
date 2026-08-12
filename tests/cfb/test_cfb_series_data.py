@@ -61,6 +61,7 @@ def _input_frame(gid: int) -> pl.DataFrame:
             "text": [r["text"] for r in rows],
             "penalty_negated_play": [r["penalty_negated_play"] == "true" for r in rows],
             "penalty_no_play": [r["penalty_no_play"] == "true" for r in rows],
+            "penalized_team": [int(r["penalized_team"]) if r["penalized_team"] else None for r in rows],
         },
     )
 

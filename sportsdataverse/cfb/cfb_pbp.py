@@ -472,22 +472,119 @@ def _parse_recovery_abbrevs(text):
     return [m.upper() for m in _RECOVERY_ABBREV_RE.findall(text)]
 
 
-_PENALTY_ABBREV_RE = re.compile(r"PENALTY\s+([A-Z&]{2,})\b")
+#: The two vendor spellings of the penalized-team token. Form 1 (modern +
+#: legacy uppercase): "... PENALTY {TEAM} {foul} ..." -- team token follows the
+#: literal uppercase PENALTY, 1-3 capitalized words ("PENALTY FSU Pass
+#: Interference", "PENALTY WESTMICH holding", "PENALTY UT pass interference").
+#: Form 2 (leading/mid-sentence): "{TEAM} Penalty, {foul} ..." -- team phrase
+#: immediately before "Penalty," ("TCU Penalty, sideline interference",
+#: "ARIZONA ST Penalty, Face Mask", "Notre Dame Penalty, Defensive Holding").
+_PENALTY_TOKEN_RES = [
+    re.compile(r"PENALTY[,:]?\s+(?:on\s+)?([A-Z][\w.&'-]*(?:\s+[A-Z][\w.&'-]*){0,2})"),
+    re.compile(r"([A-Z][\w.&'-]*(?:\s+[A-Z][\w.&'-]*){0,2})\s+Penalty,"),
+]
+
+_SQUASH_RE = re.compile(r"[^A-Z0-9]")
 
 
-def _parse_penalty_abbrev(text):
-    """Return the uppercase team abbreviation of the PENALIZED team, or None.
+def _squash_team(s):
+    """Uppercase and strip non-alphanumerics for team-token comparison."""
+    return _SQUASH_RE.sub("", s.upper()) if s else ""
 
-    ESPN writes ``PENALTY {TEAM_ABBR} {foul} …`` where ``{TEAM_ABBR}`` is the team that
-    committed the foul (e.g. ``"PENALTY FSU Pass Interference (#15 S.Arnoux)"``). This is the
-    authoritative penalized team and correctly distinguishes offensive vs defensive fouls
-    (e.g. offensive vs defensive pass interference), which the ``penalty_detail`` label alone
-    does not. Returns the first match; ``None`` when no ``PENALTY {ABBR}`` token is present.
+
+def _is_char_subseq(needle: str, hay: str) -> bool:
+    """True when ``needle``'s characters appear in ``hay`` in order.
+
+    Handles ESPN's vowel-dropped / truncated team spellings ("WESTRN MICHIGAN",
+    "WESTMICH" vs "Western Michigan") that neither equality nor prefix match.
     """
+    it = iter(hay)
+    return all(c in it for c in needle)
+
+
+def _score_team_match(tok: str, cands: list) -> int:
+    """0 = no match, 1 = subsequence/alias, 2 = prefix either way, 3 = exact."""
+    best = 0
+    for c in cands:
+        if not c:
+            continue
+        if tok == c:
+            return 3
+        if c.startswith(tok) or tok.startswith(c):
+            best = max(best, 2)
+        elif len(tok) >= 4 and _is_char_subseq(tok, c):
+            best = max(best, 1)
+    return best
+
+
+def _team_alias_initialisms(name):
+    """Derived initialism aliases for a school name (weak-tier candidates).
+
+    Vendor texts use university-style initialisms the payload never carries:
+    "UT" for Texas, "ND" for Notre Dame, "OSU" for Ohio State. Generate
+    ``U+initial`` for single-word names (skipping names that are already
+    all-caps initialisms like "TCU" -- prefixing those invents the OPPONENT's
+    alias) and word-initials / initials+U / U+initials for multi-word names.
+    Matched at the weak tier so real abbreviation matches always win.
+    """
+    if not name:
+        return []
+    words = name.split()
+    out = []
+    if len(words) == 1:
+        if not name.isupper():
+            out.append("U" + _squash_team(name)[:1])
+    else:
+        initials = "".join(w[0] for w in words if w).upper()
+        out.extend([initials, initials + "U", "U" + initials])
+    return out
+
+
+def _parse_penalty_team_side(row):
+    """Resolve the PENALIZED team from play text to ``"home"`` / ``"away"`` / None.
+
+    Attribution is a binary choice per game, so the extracted team token only
+    has to match ONE side's candidate strings (abbreviation, school name, alt
+    name, name+mascot) better than the other's. Tokens are tried longest word
+    prefix first ("BAYLOR Pass Interference" -> "BAYLOR"); ambiguous or
+    unmatched tokens return None so the caller can fall back to the
+    penalty-label heuristic instead of guessing wrong.
+    """
+    text = row["text"]
     if not text:
         return None
-    m = _PENALTY_ABBREV_RE.search(text)
-    return m.group(1).upper() if m else None
+    home = [
+        _squash_team(row["homeTeamAbbrev"]),
+        _squash_team(row["homeTeamName"]),
+        _squash_team(row["homeTeamNameAlt"]),
+        _squash_team((row["homeTeamName"] or "") + (row["homeTeamMascot"] or "")),
+    ]
+    away = [
+        _squash_team(row["awayTeamAbbrev"]),
+        _squash_team(row["awayTeamName"]),
+        _squash_team(row["awayTeamNameAlt"]),
+        _squash_team((row["awayTeamName"] or "") + (row["awayTeamMascot"] or "")),
+    ]
+    home_alias = _team_alias_initialisms(row["homeTeamName"])
+    away_alias = _team_alias_initialisms(row["awayTeamName"])
+    for rx in _PENALTY_TOKEN_RES:
+        for m in rx.finditer(text):
+            words = m.group(1).split()
+            for k in range(len(words), 0, -1):
+                tok = _squash_team(" ".join(words[:k]))
+                if len(tok) < 2:
+                    continue
+                hs = _score_team_match(tok, home)
+                aws = _score_team_match(tok, away)
+                if hs == aws:
+                    # weak tier: derived initialism aliases, exact-match only
+                    hs = int(tok in home_alias)
+                    aws = int(tok in away_alias)
+                if hs > aws:
+                    return "home"
+                if aws > hs:
+                    return "away"
+    return None
 
 
 def _abbr_compat(abbr_col: pl.Expr, team_u: pl.Expr) -> pl.Expr:
@@ -1108,12 +1205,6 @@ class CFBPlayProcess(object):
                 .otherwise(pl.lit(False)),
             )
         )
-        # The dupe rows are removed HERE, so the text_dupe column that reaches
-        # the output is always False by construction -- it is the residue of a
-        # filter that already ran, not a marker consumers can use to dedupe.
-        # Rows with identical text but DIFFERENT start states (e.g. repeated
-        # degenerate feed texts advancing the yardline) are deliberately kept:
-        # they are distinct plays with bad text, not duplicates.
         pbp_txt["plays"] = pbp_txt["plays"].filter(pl.col("text_dupe") == False)
         pbp_txt["plays"] = pbp_txt["plays"].with_row_index("game_play_number", 1)
         pbp_txt["plays"] = (
@@ -1999,23 +2090,6 @@ class CFBPlayProcess(object):
                     )
                     .or_(
                         (pl.col("type.text") == "Fumble Return Touchdown").and_(pl.col("text").str.contains("sacked")),
-                    )
-                    # Interception plays are pass attempts. The branches above
-                    # only catch them in the 2005 and 2014+ text formats; 2004
-                    # and 2006-2013 interception rows shipped with pass=False
-                    # (measured: season flag-rate 0.0 there vs 1.0 elsewhere;
-                    # 12,890 rows -- the int_implies_pass definitional WARN).
-                    .or_(
-                        pl.col("type.text")
-                        .is_in(
-                            [
-                                "Interception Return",
-                                "Interception Return Touchdown",
-                                "Pass Interception",
-                                "Pass Interception Return",
-                            ],
-                        )
-                        .and_(pl.col("text").str.contains(r"(?i)intercept")),
                     ),
                 )
                 .then(True)
@@ -2937,11 +3011,12 @@ class CFBPlayProcess(object):
                 .otherwise(None),
             )
             .with_columns(
-                # Direct signed-integer capture. The prior fragment capture
-                # (".{0,3} yards") produced garbage on 40% of rows measured
-                # against 2004-2025 ('U (', 'k 8'); a numeric grab cannot.
                 yds_penalty=pl.when(pl.col("penalty_flag") == True)
-                .then(pl.col("penalty_text").str.extract(r"\(?(-?\d{1,3})\)?\s*(?i:yards?|yds?)\b", 1))
+                .then(
+                    pl.col("penalty_text")
+                    .str.extract(r"(?i)(.{0,3}) yards|(?i)yds|(?i)yd to the", 1)
+                    .str.replace(" yards to the | yds to the | yd to the ", ""),
+                )
                 .otherwise(None),
             )
             .with_columns(
@@ -2993,17 +3068,6 @@ class CFBPlayProcess(object):
                 # --- Pass Completions, Attempts and Targets -------
                 completion=pl.when(
                     pl.col("type.text").is_in(["Pass Reception", "Pass Completion", "Passing Touchdown"]),
-                )
-                .then(True)
-                # A completion on a penalty play COUNTS when the play stood
-                # (penalty_no_play False). ESPN's box includes these; measured
-                # against the team box this is a +0.1 to +0.4pp monotone gain
-                # in every season, never negative. Nullified plays stay
-                # excluded -- counting those is catastrophic in every season.
-                .when(
-                    (pl.col("type.text") == "Penalty")
-                    .and_(pl.col("text").str.contains(r"(?i)pass complete"))
-                    .and_(pl.col("penalty_no_play") == False),
                 )
                 .then(True)
                 .when(
@@ -3553,19 +3617,6 @@ class CFBPlayProcess(object):
             .then(0)
             .when((pl.col("punt") == True).and_(pl.col("text").str.contains(r"(?i)no return|no gain")))
             .then(0)
-            # Losses first: the generic branches grab the first unsigned int,
-            # so "returns for a loss of 9 yards" stored +9 (2,482 rows measured).
-            .when(
-                (pl.col("punt") == True).and_(
-                    pl.col("text").str.contains(r"(?i)return(?:s|ed)?[^,]{0,20}? for a loss of \d+")
-                )
-            )
-            .then(-1 * pl.col("text").str.extract(r"(?i)for a loss of (\d+)", 1).cast(pl.Int32))
-            # Dominant 2005-2013 shape, previously never matched: 18,746 real
-            # returns carried NULL yardage ("...punt for 39 yards, returned by
-            # Haruki Nakamura for 1 yard to the Cincy 16.").
-            .when((pl.col("punt") == True).and_(pl.col("text").str.contains(r"(?i)returned by .{2,40}? for \d+ yard")))
-            .then(pl.col("text").str.extract(r"(?i)returned by .{2,40}? for (\d+) yard", 1).cast(pl.Int32))
             .when((pl.col("punt") == True).and_(pl.col("text").str.contains(r"(?i)returned \d+ yards")))
             .then(pl.col("text").str.extract(r"(?i)returned (.+)").str.extract(r"(\d+)").cast(pl.Int32))
             .when((pl.col("punt") == True).and_(pl.col("punt_blocked") == False))
@@ -3876,29 +3927,14 @@ class CFBPlayProcess(object):
                     .str.replace(r"at the (.+)", "")
                     .str.replace(r" by ", ""),
                 )
-                # Narrative texts name the interceptor in two era-dependent
-                # shapes: "pass intercepted by <Name> (TEAM)..." (older
-                # seasons) and "pass intercepted <Name> return for ..."
-                # (newer seasons, no "by"). Capture capitalized name tokens
-                # with the case-toggle idiom so the lowercase tail (return/
-                # for/at) terminates the name — the old `intercepted (.+)`
-                # capture took the whole tail and missed the no-"by" era.
-                # First token allows a bare initial ("S Castille", "M Tauiliili");
-                # an optional "#NN " consumes NCAA-style jersey prefixes
-                # ("intercepted by #3 J.Dugger").
-                .when(pl.col("text").str.contains(r"(?i)intercepted"))
-                .then(
-                    pl.coalesce(
-                        pl.col("text").str.extract(
-                            r"(?i)intercepted by (?:#\d+\s+)?(?-i:([A-Z][\w'.\-]*(?:\s+[A-Z][\w'.\-]*){0,2}))",
-                            1,
-                        ),
-                        pl.col("text").str.extract(
-                            r"(?i)pass intercepted (?:#\d+\s+)?(?-i:([A-Z][\w'.\-]*(?:\s+[A-Z][\w'.\-]*){0,2}))",
-                            1,
-                        ),
-                    ),
+                .when(
+                    (
+                        (pl.col("type.text") == "Interception Return").or_(
+                            pl.col("type.text") == "Interception Return Touchdown",
+                        )
+                    ).and_(pl.col("pass") == True),
                 )
+                .then(pl.col("text").str.extract(r"(?i)intercepted (.+)"))
                 .otherwise(None),
                 # --- Pass Breakup Players ----
                 pass_breakup_player=pl.when(pl.col("pass") == True)
@@ -4090,25 +4126,7 @@ class CFBPlayProcess(object):
                 .otherwise(None),
             )
             .with_columns(
-                # Name-shaped capture first (optional #NN jersey prefix, 1-3
-                # capitalized tokens, case-toggle termination); the legacy
-                # fragment capture is the fallback. Measured: 100% of sampled
-                # name-set/id-null fumble rows were dirty fragment captures
-                # ("o the UTAH Nate Johnson") that then failed the roster
-                # attach; simulated fix lifts fumble credit joins 56% -> 79%.
-                fumble_player=pl.when(pl.col("type.text") == "Penalty")
-                .then(None)
-                .otherwise(
-                    pl.coalesce(
-                        pl.col("text").str.extract(
-                            r"(?i)(?:#\d+\s+)?((?-i:[A-Z][\w'.\-]*(?:\s[A-Z][\w'.\-]*){0,2}))\s+fumbled?", 1
-                        ),
-                        pl.col("text").str.extract(
-                            r"(?i)fumbled? by\s+(?:#\d+\s+)?((?-i:[A-Z][\w'.\-]*(?:\s[A-Z][\w'.\-]*){0,2}))", 1
-                        ),
-                        pl.col("fumble_player"),
-                    )
-                ),
+                fumble_player=pl.when(pl.col("type.text") == "Penalty").then(None).otherwise(pl.col("fumble_player")),
                 # --- Forced Fumble Names ----
                 fumble_forced_player=pl.when(
                     (pl.col("text").str.contains(r"(?i)fumble")).and_(pl.col("text").str.contains(r"(?i)forced by")),
@@ -4160,21 +4178,9 @@ class CFBPlayProcess(object):
                 .otherwise(None),
             )
             .with_columns(
-                # Name-shaped recovered-by capture with an optional leading
-                # ALL-CAPS team token ("recovered by SAC Noah St-Juste") -- the
-                # abbr previously stayed glued to the name and the roster
-                # attach failed. Legacy chain remains the fallback.
                 fumble_recovered_player=pl.when(pl.col("type.text") == "Penalty")
                 .then(None)
-                .otherwise(
-                    pl.coalesce(
-                        pl.col("text").str.extract(
-                            r"(?i)recovered by\s+(?:(?-i:[A-Z]{2,6})\s+)?(?:#\d+\s+)?((?-i:[A-Z][\w'.\-]*(?:\s[A-Z][\w'.\-]*){1,2}))",
-                            1,
-                        ),
-                        pl.col("fumble_recovered_player"),
-                    )
-                ),
+                .otherwise(pl.col("fumble_recovered_player")),
             )
             .with_columns(
                 ## Extract player names
@@ -4223,59 +4229,6 @@ class CFBPlayProcess(object):
             )
         )
         return play_df
-
-    def __add_xp_suffix_cols(self, play_df):
-        """Extra points 2014+ -- parsed from the TD play's parenthetical suffix.
-
-        Through 2013 an extra point is its own row (``Extra Point Good/Missed``,
-        ~6/game); from 2014 there is NO XP row -- the try lives as a suffix on
-        the touchdown play text: ``(Nick Rice KICK)`` / ``(... PAT MISSED)`` /
-        ``(... PAT BLOCKED)``, plus a title-case ``(Name Kick)`` form in
-        summary-only games and a 2025 stats.ncaa inline form
-        ``#49 G.Meadors kick attempt good|failed``. Validated against the ESPN
-        kicking box per (game, kicker): xpm 94.6-97.3% / xpa 93.0-95.1% exact
-        for every season 2014-2025, from a 9% baseline. Pre-2014 rows are
-        untouched (the paren patterns fire zero times there; the NCAA inline
-        pattern is season-gated because 2010-2013 old-NCAA texts contain it for
-        XPs that already have their own rows).
-        """
-        if "text" not in play_df.columns or "season" not in play_df.columns:
-            return play_df
-
-        xp_made_re = r"(?i)\(\s*([^()]*?)\s+kick\s*\)"
-        xp_miss_kw_re = r"(?i)\(\s*([^()]*?)\s*\b(?:pat|kick)\s+(?:missed|blocked|failed)\s*\)"
-        xp_miss_bare_re = r"(?i)\(\s*([^()]+?)\s+(?:missed|blocked)\s*\)"
-        xp_ncaa_re = r"(?i)(?:#\d+\s+)?([A-Z][\w'\.\-]*(?:\s[A-Z][\w'\.\-]+)*)\s+kick attempt\s+(good|failed)"
-
-        is_td_row = (pl.col("td_play") == True) | pl.col("type.text").str.contains("(?i)touchdown")  # noqa: E712
-        gated = (pl.col("season") >= 2014) & is_td_row & pl.col("text").is_not_null()
-
-        made_name = pl.col("text").str.extract(xp_made_re, 1)
-        miss_kw_name = pl.col("text").str.extract(xp_miss_kw_re, 1)
-        miss_bare_name = pl.col("text").str.extract(xp_miss_bare_re, 1)
-        ncaa_name = pl.col("text").str.extract(xp_ncaa_re, 1)
-        ncaa_result = pl.col("text").str.extract(xp_ncaa_re, 2)
-
-        def _guard(e):
-            # a captured "name" that is really a 2pt phrase is nulled
-            return pl.when(e.str.contains("(?i)two|conversion")).then(pl.lit(None, dtype=pl.Utf8)).otherwise(e)
-
-        # fill_null(False) is load-bearing: Kleene logic makes `False | null` null,
-        # and (ncaa_result == "good") is null wherever the pattern did not match.
-        made = (made_name.is_not_null() | (ncaa_result == pl.lit("good"))).fill_null(False)
-        missed = (
-            miss_kw_name.is_not_null() | _guard(miss_bare_name).is_not_null() | (ncaa_result == pl.lit("failed"))
-        ).fill_null(False)
-        kicker = pl.coalesce(made_name, miss_kw_name, _guard(miss_bare_name), ncaa_name).str.strip_chars()
-
-        return play_df.with_columns(
-            pl.when(gated).then(made | missed).otherwise(False).alias("xp_attempt"),
-            pl.when(gated).then(made).otherwise(False).alias("xp_made"),
-            pl.when(gated & (made | missed))
-            .then(pl.when(kicker.str.len_chars() > 0).then(kicker))
-            .otherwise(pl.lit(None, dtype=pl.Utf8))
-            .alias("xp_kicker_player_name"),
-        )
 
     def __add_attribution_cols(self, play_df):
         """Resolve the credited team per play (spec section 5).
@@ -4342,59 +4295,47 @@ class CFBPlayProcess(object):
                 .otherwise(pl.lit(None, dtype=pl.Int64))
             )
 
-        # Era-form penalty-team token: "<Team> Penalty," (2014+), "PENALTY ABR"
-        # (NCAA dialect), "<team> penalty N yard" (2005-2013), "N yard penalty
-        # on <Mascot>" (2004). Narrative fragments are blacklisted; matching is
-        # against the game's own identifier columns, normalized to letters
-        # only, with containment (len>=5) and vowel-stripped equality for
-        # truncated forms ("EASTRN MICHIGAN").
-        _pen_blacklist = ["BEFORE", "AFTER", "DECLINED", "OFFSETTING", "THE", "NULLIFIED", "BALL", "PLAY"]
-
-        def _pen_cand(pattern: str) -> pl.Expr:
-            tok = pl.col("text").str.extract(pattern, 1).str.strip_chars()
-            return pl.when(tok.str.to_uppercase().is_in(_pen_blacklist)).then(None).otherwise(tok)
-
-        def _pen_norm(expr: pl.Expr) -> pl.Expr:
-            return expr.str.to_uppercase().str.replace_all(r"[^A-Z]", "")
-
-        def _pen_side(side: str) -> pl.Expr:
-            tokn = pl.col("_pen_tokn")
-            tokv = tokn.str.replace_all(r"[AEIOU]", "")
-            checks: list[pl.Expr] = []
-            for ident in (f"{side}TeamName", f"{side}TeamMascot", f"{side}TeamAbbrev", f"{side}TeamNameAlt"):
-                if ident not in play_df.columns:
-                    continue
-                idn = _pen_norm(pl.col(ident))
-                idv = idn.str.replace_all(r"[AEIOU]", "")
-                checks += [
-                    (tokn == idn),
-                    ((tokn.str.len_chars() >= 5) & idn.str.contains(tokn, literal=True)),
-                    ((idn.str.len_chars() >= 5) & tokn.str.contains(idn, literal=True)),
-                    ((tokv.str.len_chars() >= 5) & (tokv == idv)),
-                ]
-            if not checks:
-                return pl.lit(False)
-            return pl.any_horizontal(checks).fill_null(False)
-
-        play_df = play_df.with_columns(
-            _pen_tokn=_pen_norm(
-                pl.coalesce(
-                    _pen_cand(r"([A-Za-z][A-Za-z .&'\-]{1,28}?) Penalty,"),
-                    _pen_cand(r"PENALTY\s+([A-Z][A-Za-z&\-]{1,11})\s"),
-                    _pen_cand(r"(?i)([A-Za-z][A-Za-z .&'\-]{1,28}?) penalty \d{1,3} yard"),
-                    _pen_cand(r"(?i)\d+ yard penalty on ([A-Za-z .&'\-]{2,28})"),
-                ),
-            ),
-        ).with_columns(_pen_txt_home=_pen_side("home"), _pen_txt_away=_pen_side("away"))
+        # The penalty-side matcher consumes the team NAME columns too; synthetic
+        # test frames only carry the abbrevs, so null-fill any that are absent
+        # (matching then degrades gracefully to abbrev-only).
+        for _c in (
+            "homeTeamName",
+            "awayTeamName",
+            "homeTeamNameAlt",
+            "awayTeamNameAlt",
+            "homeTeamMascot",
+            "awayTeamMascot",
+        ):
+            if _c not in play_df.columns:
+                play_df = play_df.with_columns(pl.lit(None, dtype=pl.Utf8).alias(_c))
 
         play_df = play_df.with_columns(
             recovery_team=_abbrev_to_team_id(pl.col("_recovery_abbrev")),
             recovery_team_2=_abbrev_to_team_id(pl.col("_recovery_abbrev_2")),
-            # Penalized team parsed from the authoritative "PENALTY {ABBR}" text token --
-            # correctly distinguishes offensive vs defensive fouls (incl. OPI vs DPI).
-            _penalty_team=_abbrev_to_team_id(
-                pl.col("text").map_elements(_parse_penalty_abbrev, return_dtype=pl.Utf8),
-            ),
+            # Penalized team parsed from the authoritative penalty-team text token
+            # (both vendor forms: "PENALTY {TEAM} ..." and "{TEAM} Penalty, ...").
+            # Matched binary home-vs-away against abbrev/name/alt/mascot candidates,
+            # so it correctly distinguishes offensive vs defensive fouls (incl.
+            # OPI vs DPI) even when the token is a vowel-dropped vendor spelling.
+            _penalty_side=pl.struct(
+                [
+                    "text",
+                    "homeTeamAbbrev",
+                    "awayTeamAbbrev",
+                    "homeTeamName",
+                    "awayTeamName",
+                    "homeTeamNameAlt",
+                    "awayTeamNameAlt",
+                    "homeTeamMascot",
+                    "awayTeamMascot",
+                ],
+            ).map_elements(_parse_penalty_team_side, return_dtype=pl.Utf8),
+        ).with_columns(
+            _penalty_team=pl.when(pl.col("_penalty_side") == "home")
+            .then(pl.col("homeTeamId"))
+            .when(pl.col("_penalty_side") == "away")
+            .then(pl.col("awayTeamId"))
+            .otherwise(pl.lit(None, dtype=pl.Int64)),
         )
 
         # Special-teams RETURN detection (flag OR text). ESPN sometimes reclassifies a
@@ -4567,21 +4508,10 @@ class CFBPlayProcess(object):
             kick_return_team=pl.col("return_team"),
             fg_team=pl.col("kicking_team"),
             punt_team=pl.col("kicking_team"),
-            # Team resolution, best evidence first (measured on 2004-2025,
-            # 213,641 penalty rows; each layer only fills what the prior left):
-            #   1. era-form token from the play text matched against the game's
-            #      own identifiers (name/mascot/abbrev/alt, home vs away) --
-            #      resolves 85.5% with byte-level evidence
-            #   2. the legacy "PENALTY {ABBR}" parse (_penalty_team)
-            #   3. foul-direction heuristic (_DEFENSIVE_PENALTIES)
-            # Hybrid measured at team-box parity 46.7% penalties / 27.3% yards
-            # vs 22.5% / 13.0% for the pre-upgrade column.
+            # Prefer the authoritative "PENALTY {ABBR}" team parsed from text; fall back to
+            # the offensive/defensive heuristic only when no team token was parseable.
             penalized_team=pl.when(pl.col("penalty_detail").is_null())
             .then(pl.lit(None, dtype=pl.Int32))
-            .when(pl.col("_pen_txt_home") & ~pl.col("_pen_txt_away"))
-            .then(pl.col("homeTeamId").cast(pl.Int32, strict=False))
-            .when(pl.col("_pen_txt_away") & ~pl.col("_pen_txt_home"))
-            .then(pl.col("awayTeamId").cast(pl.Int32, strict=False))
             .when(pl.col("_penalty_team").is_not_null())
             .then(pl.col("_penalty_team"))
             .when(pl.col("penalty_detail").is_in(list(_DEFENSIVE_PENALTIES)))
@@ -4594,14 +4524,6 @@ class CFBPlayProcess(object):
             .fill_null(0),
         )
 
-        # penalty_team_id: same value as penalized_team, exported under the
-        # *_team_id naming every other join key uses. Kept Int32 to match the
-        # frame's team keys (homeTeamId/awayTeamId/pos_team are Int32) -- one
-        # canonical dtype per id within a dataset; consumers casting to Int64
-        # at a boundary must cast BOTH sides and assert, as the validation
-        # harness does.
-        play_df = play_df.with_columns(penalty_team_id=pl.col("penalized_team"))
-
         # drop temp columns that must not leak into the output frame
         play_df = play_df.drop(
             [
@@ -4610,9 +4532,7 @@ class CFBPlayProcess(object):
                 "_recovery_abbrev",
                 "_recovery_abbrev_2",
                 "_penalty_team",
-                "_pen_tokn",
-                "_pen_txt_home",
-                "_pen_txt_away",
+                "_penalty_side",
                 "_is_kick_return",
                 "_is_punt_return",
                 "_loser_1",
@@ -5110,6 +5030,11 @@ class CFBPlayProcess(object):
         """
         to_ep = ["Timeout", "End Period"]
         end_rows = ["End Period", "End of Half", "End of Game"]
+        # the Fox cleaning pipeline reaches this stage without the attribution
+        # columns; a null penalized_team simply disables the auto-first-down
+        # foul branch (penalty_1st_conv still counts)
+        if "penalized_team" not in play_df.columns:
+            play_df = play_df.with_columns(penalized_team=pl.lit(None, dtype=pl.Int32))
         play_df = (
             play_df.with_columns(
                 first_by_penalty=pl.when(
@@ -5231,15 +5156,34 @@ class CFBPlayProcess(object):
                 .otherwise(False),
             )
             .with_columns(
-                # NOTE: an accepted automatic-first-down foul (DPI, roughing,
-                # personal foul, ...) without "1st down" in the text is a KNOWN
-                # miss class (~a handful per 26 team-games). A branch keying on
-                # penalized_team != pos_team was measured and REJECTED: the
-                # penalized_team attribution is itself only ~50% reliable
-                # (see PARITY_CATALOG 4.5), so the branch added mis-attributed
-                # offensive fouls faster than it recovered real ones. Revisit
-                # after penalty attribution improves.
-                first_down_penalty=(pl.col("penalty_1st_conv") == True)
+                first_down_penalty=(
+                    (pl.col("penalty_1st_conv") == True).or_(
+                        # accepted automatic-first-down foul by the DEFENSE whose
+                        # text lacks the "1st down" phrase (era/vendor dependent).
+                        # NCAA automatic-first-down fouls ONLY: DPI, roughing the
+                        # passer/kicker/snapper, targeting. Personal foul /
+                        # facemask / horse collar are 15 yards WITHOUT an
+                        # automatic first down in NCAA (unlike the NFL) and were
+                        # measured to over-fire. Gated on the text-resolved
+                        # penalized_team (binary home/away match) -- this branch
+                        # was rejected while attribution ran ~50% reliable and
+                        # re-added once the token matcher fixed it.
+                        (
+                            pl.col("text")
+                            .str.contains(
+                                r"(?i)pass interference|roughing the (?:passer|kicker|snapper)|targeting",
+                            )
+                            .fill_null(False)
+                        )
+                        .and_(pl.col("text").str.contains("(?i)penalty").fill_null(False))
+                        .and_(pl.col("penalty_declined") == False)
+                        .and_(pl.col("penalty_offset") == False)
+                        .and_(pl.col("penalized_team").is_not_null())
+                        .and_(pl.col("penalized_team") != pl.col("pos_team"))
+                        .and_(pl.col("change_of_pos_team") == False)
+                        .and_(pl.col("type.text").is_in([*end_rows, "Timeout"]) == False),
+                    )
+                )
                 .and_(pl.col("first_down_yards") == False)
                 .and_(pl.col("kickoff_play") == False)
                 .and_(pl.col("punt") == False),
@@ -7250,8 +7194,7 @@ class CFBPlayProcess(object):
             - ``sack_player_name``             <- ``sacked_by_player_name``
             - ``fumble_forced_player_name``    <- ``forced_by_player_name``
             - ``fumble_recovered_player_name`` <- ``recoverer_player_name`` (skipped if absent)
-            - ``pass_breakup_player_name``     <- ``pass_defender_player_name`` (non-interception plays only)
-            - ``interception_player_name``     <- ``pass_defender_player_name`` (interception plays — ESPN files the interceptor as the pass defender)
+            - ``pass_breakup_player_name``     <- ``pass_defender_player_name``
             - ``punt_return_player_name``      <- ``returner_player_name``
             - ``kickoff_return_player_name``   <- ``returner_player_name``
 
@@ -7343,7 +7286,7 @@ class CFBPlayProcess(object):
                 ("fg_kicker_player_name", "kicker_player_name_part", True),
                 ("sack_player_name", "sacked_by_player_name_part", True),
                 ("fumble_forced_player_name", "forced_by_player_name_part", True),
-                # pass_defender is handled below with int-play routing, not here.
+                ("pass_breakup_player_name", "pass_defender_player_name_part", True),
                 # returner maps to two columns; use cleanup-only mode to avoid
                 # injecting a name onto plays where punt_return_team / return_team
                 # is set to the kicking team rather than the receiving team.
@@ -7371,47 +7314,6 @@ class CFBPlayProcess(object):
                             .alias(pbp_col)
                         )
                     coalesce_exprs.append(expr)
-
-            # ESPN files the interceptor as the `pass_defender` participant on
-            # interception plays (verified: 93.9% last-name identity against
-            # the scoreboard-text interceptor over the 313 INT-return-TD rows
-            # where both exist; the residue is suffix/nickname variance of the
-            # same athlete). Route it to interception credit on int plays and
-            # keep PBU attribution for non-interception plays only — a pick is
-            # not a pass breakup.
-            pd_part = "pass_defender_player_name_part"
-            if pd_part in play_df.columns:
-                is_int = (pl.col("int") == True) if "int" in play_df.columns else pl.lit(False)  # noqa: E712
-                if "interception_player_name" in play_df.columns:
-                    coalesce_exprs.append(
-                        pl.when(is_int)
-                        .then(
-                            pl.coalesce(
-                                pl.col(pd_part).str.strip_chars(),
-                                pl.col("interception_player_name"),
-                            ),
-                        )
-                        .otherwise(pl.col("interception_player_name"))
-                        .alias("interception_player_name"),
-                    )
-                if "pass_breakup_player_name" in play_df.columns:
-                    # On an interception the participant name IS the interceptor,
-                    # so it must not be injected here. A regex-extracted PBU is
-                    # KEPT though: 78 interception plays across 2004-2025 name two
-                    # distinct defenders in the text ("intercepted by #25 K.Bretz
-                    # ... broken up by #2 M.Taylor") -- a tip-drill pick, where the
-                    # breakup credit is real. Nulling it would destroy that.
-                    coalesce_exprs.append(
-                        pl.when(is_int)
-                        .then(pl.col("pass_breakup_player_name"))
-                        .otherwise(
-                            pl.coalesce(
-                                pl.col(pd_part).str.strip_chars(),
-                                pl.col("pass_breakup_player_name"),
-                            ),
-                        )
-                        .alias("pass_breakup_player_name"),
-                    )
 
             if coalesce_exprs:
                 play_df = play_df.with_columns(coalesce_exprs)
@@ -7892,7 +7794,6 @@ class CFBPlayProcess(object):
                     .pipe(self.__add_yardage_cols)
                     .pipe(self.__add_air_yards_cols)
                     .pipe(self.__add_player_cols)
-                    .pipe(self.__add_xp_suffix_cols)
                     .pipe(self.__add_attribution_cols)
                     .pipe(self.__refine_play_types_post_attribution)
                     .pipe(self.__after_cols)
@@ -8131,7 +8032,6 @@ class CFBPlayProcess(object):
                     .pipe(self.__add_yardage_cols)
                     .pipe(self.__add_air_yards_cols)
                     .pipe(self.__add_player_cols)
-                    .pipe(self.__add_xp_suffix_cols)
                     .pipe(self.__after_cols)
                     .pipe(self.__add_series_data)
                     .pipe(self.__add_spread_time)

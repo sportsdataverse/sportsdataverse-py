@@ -1,172 +1,172 @@
-id_play,game_id,half,id_drive,play_type,yards_gained,distance,down,penalty_1st_conv,penalty_offset,penalty_declined,kickoff_play,punt,downs_turnover,turnover_vec,scoring_play,change_of_pos_team,yards_to_goal,pos_team,text,penalty_negated_play,penalty_no_play,py_firstD_by_kickoff,py_firstD_by_poss,py_firstD_by_penalty,py_firstD_by_yards,py_new_series
-401309854101849902,401309854,1,4013098541,Kickoff Team Fumble Recovery,12,10,1,false,false,false,1,0,0,1,0,1,65,9,"Justen Smith kickoff for 65 yds , Geordon Porter return for 12 yds to the ArzSt 12 Geordon Porter fumbled, recovered by BYU Hayden Livingston",false,false,1,0,0,0,1
-401309854101854901,401309854,1,4013098541,Pass Reception,9,10,1,false,false,false,0,0,0,0,0,0,12,252,Jaren Hall pass complete to Gunner Romney for 9 yds to the ArzSt 3,false,false,0,1,0,0,0
-401309854101855901,401309854,1,4013098541,Rush,-1,1,2,false,false,false,0,0,0,0,0,0,3,252,Tyler Allgeier run for a loss of 1 yard to the ArzSt 4,false,false,0,0,0,0,0
-401309854101857601,401309854,1,4013098541,Rushing Touchdown,4,2,3,false,false,false,0,0,0,0,1,1,4,252,"Tyler Allgeier run for 4 yds for a TD, (Justen Smith KICK)",false,false,0,0,0,0,0
-401309854101857603,401309854,1,4013098542,Kickoff,0,10,1,false,false,false,1,0,0,0,0,0,65,9,Justen Smith kickoff for 65 yds for a touchback,false,false,1,0,0,0,1
-401309854101864601,401309854,1,4013098542,Rush,4,10,1,false,false,false,0,0,0,0,0,0,75,9,Rachaad White run for 4 yds to the ArzSt 29,false,false,0,1,0,0,0
-401309854101866401,401309854,1,4013098542,Penalty,-5,6,2,false,false,false,0,0,0,0,0,0,71,9,"ARIZONA ST Penalty, False Start (-5 Yards) to the ArzSt 24",true,false,0,0,0,0,0
-401309854101867001,401309854,1,4013098542,Pass Reception,21,11,2,false,false,false,0,0,0,0,0,0,76,9,Jayden Daniels pass complete to LV Bunkley-Shelton for 21 yds to the ArzSt 45 for a 1ST down,false,false,0,0,0,0,0
-401309854101874501,401309854,1,4013098542,Rush,-2,10,1,false,false,false,0,0,0,0,0,0,55,9,Rachaad White run for a loss of 2 yards to the ArzSt 43,false,false,0,0,0,1,1
-401309854101878601,401309854,1,4013098542,Pass Reception,-2,12,2,false,false,false,0,0,0,0,0,0,57,9,Jayden Daniels pass complete to Rachaad White for a loss of 2 yards to the ArzSt 41,false,false,0,0,0,0,0
-401309854101886901,401309854,1,4013098542,Pass Reception,58,14,3,false,false,false,0,0,0,0,0,0,59,9,Jayden Daniels pass complete to Andre Johnson for 58 yds to the BYU 1 for a 1ST down,false,false,0,0,0,0,0
-401309854101888901,401309854,1,4013098542,Rushing Touchdown,1,1,1,false,false,false,0,0,0,0,1,1,1,9,"Rachaad White run for 1 yd for a TD, (Cristian Zendejas KICK)",false,false,0,0,0,1,1
-401309854101888903,401309854,1,4013098543,Kickoff,0,10,1,false,false,false,1,0,0,0,0,0,65,252,Logan Tyler kickoff for 65 yds for a touchback,false,false,1,0,0,0,1
-401309854101889701,401309854,1,4013098543,Pass Incompletion,0,10,1,false,false,false,0,0,0,0,0,0,75,252,Jaren Hall pass incomplete to Neil Pau'u,false,false,0,1,0,0,0
-401309854101889901,401309854,1,4013098543,Pass Incompletion,0,10,2,false,false,false,0,0,0,0,0,0,75,252,Jaren Hall pass incomplete to Puka Nacua,false,false,0,0,0,0,0
-401309854101894301,401309854,1,4013098543,Penalty,-5,10,3,false,false,false,0,0,0,0,0,0,75,252,"BYU Penalty, False Start (Isaac Rex) to the BYU 20",true,false,0,0,0,0,0
-401309854101895201,401309854,1,4013098543,Rush,2,15,3,false,false,false,0,0,0,0,0,0,80,252,Tyler Allgeier run for 2 yds to the BYU 22,false,false,0,0,0,0,0
-401309854101897601,401309854,1,4013098543,Punt,5,13,4,false,false,false,0,1,0,0,0,1,78,252,"Ryan Rehkow punt for 51 yds , LV Bunkley-Shelton returns for 5 yds to the ArzSt 32",false,false,0,0,0,0,0
-401309854101904601,401309854,1,4013098544,Rush,4,10,1,false,false,false,0,0,0,0,0,0,68,9,Rachaad White run for 4 yds to the ArzSt 36,false,false,0,1,0,0,1
-401309854101908401,401309854,1,4013098544,Pass Reception,13,6,2,false,false,false,0,0,0,0,0,0,64,9,Jayden Daniels pass complete to LV Bunkley-Shelton for 13 yds to the ArzSt 49 for a 1ST down,false,false,0,0,0,0,0
-401309854101915301,401309854,1,4013098544,Pass Reception,0,10,1,false,false,false,0,0,0,0,0,0,51,9,Jayden Daniels pass complete to Ricky Pearsall for no gain to the ArzSt 49,false,false,0,0,0,1,1
-401309854101917701,401309854,1,4013098544,Pass Incompletion,0,10,2,false,false,false,0,0,0,0,0,0,51,9,Jayden Daniels pass incomplete to Elijhah Badger,false,false,0,0,0,0,0
-401309854101924501,401309854,1,4013098544,Pass Reception,9,10,3,false,false,false,0,0,0,0,0,0,51,9,Jayden Daniels pass complete to Rachaad White for 9 yds to the BYU 42,false,false,0,0,0,0,0
-401309854101928402,401309854,1,4013098544,Penalty,-5,1,4,false,false,false,0,0,0,0,0,0,42,9,"ARIZONA ST Penalty, Offensive Offside (Curtis Hodges) to the BYU 47",true,false,0,0,0,0,0
-401309854101929301,401309854,1,4013098544,Punt,0,6,4,false,false,false,0,1,0,0,0,1,47,9,"Eddie Czaplicki punt for 46 yds, downed at the BYU 1",false,false,0,0,0,0,0
-401309854101935401,401309854,1,4013098545,Rush,0,10,1,false,false,false,0,0,0,0,0,0,99,252,Tyler Allgeier run for no gain to the BYU 1,false,false,0,1,0,0,1
-401309854101937501,401309854,1,4013098545,Rush,0,10,2,false,false,false,0,0,0,0,0,0,99,252,Tyler Allgeier run for no gain to the BYU 1,false,false,0,0,0,0,0
-401309854101946201,401309854,1,4013098545,Rush,1,10,3,false,false,false,0,0,0,0,0,0,99,252,Masen Wake run for 1 yd to the BYU 2,false,false,0,0,0,0,0
-401309854101954001,401309854,1,4013098545,Punt,0,9,4,false,false,false,0,1,0,0,0,1,98,252,"Ryan Rehkow punt for 50 yds, downed at the ArzSt 48",false,false,0,0,0,0,0
-401309854101955402,401309854,1,4013098546,Pass Reception,11,10,1,false,false,false,0,0,0,0,0,0,52,9,Jayden Daniels pass complete to Ricky Pearsall for 11 yds to the BYU 41 for a 1ST down,false,false,0,1,0,0,1
-401309854101959401,401309854,1,4013098546,Rush,9,10,1,false,false,false,0,0,0,0,0,0,41,9,Rachaad White run for 9 yds to the BYU 32 for a 1ST down,false,false,0,0,0,1,1
-401309854101965401,401309854,1,4013098546,Penalty,-5,10,1,false,false,false,0,0,0,0,0,0,32,9,"ARIZONA ST Penalty, Ineligible Downfield on Pass (-5 Yards) to the BYU 37",true,false,0,0,0,0,0
-401309854101969901,401309854,1,4013098546,Rush,1,15,1,false,false,false,0,0,0,0,0,0,37,9,Jayden Daniels run for 1 yd to the BYU 36,false,false,0,0,0,0,0
-401309854101976501,401309854,1,4013098546,Sack,-2,14,2,false,false,false,0,0,0,0,0,0,36,9,Jayden Daniels sacked by Keenan Pili for a loss of 2 yards to the BYU 38,false,false,0,0,0,0,0
-401309854101977901,401309854,1,4013098546,Punt,0,16,3,false,false,false,0,1,0,0,0,1,38,9,Eddie Czaplicki punt for 38 yds for a touchback,false,false,0,0,0,0,0
-401309854101984701,401309854,1,4013098547,Rush,3,10,1,false,false,false,0,0,0,0,0,0,80,252,Tyler Allgeier run for 3 yds to the BYU 23,false,false,0,1,0,0,1
-401309854101986501,401309854,1,4013098547,Rush,3,7,2,false,false,false,0,0,0,0,0,0,77,252,Tyler Allgeier run for 3 yds to the BYU 26,false,false,0,0,0,0,0
-401309854101995401,401309854,1,4013098547,Sack,-9,4,3,false,false,false,0,0,0,0,0,0,74,252,Jaren Hall sacked by D.J. Davidson and Michael Matus for a loss of 9 yards to the BYU 17,false,false,0,0,0,0,0
-401309854101997001,401309854,1,4013098547,Punt,0,13,4,false,false,false,0,1,0,0,0,1,83,252,Ryan Rehkow punt for 83 yds for a touchback,false,false,0,0,0,0,0
-401309854101999901,401309854,1,4013098548,Rush,12,10,1,false,false,false,0,0,0,0,0,0,80,9,Rachaad White run for 12 yds to the ArzSt 32 for a 1ST down,false,false,0,1,0,0,1
-401309854102855901,401309854,1,4013098548,Rush,1,10,1,false,false,false,0,0,0,0,0,0,68,9,Rachaad White run for 1 yd to the ArzSt 33,false,false,0,0,0,1,1
-401309854102858401,401309854,1,4013098548,Pass Reception,6,9,2,false,false,false,0,0,0,0,0,0,67,9,Jayden Daniels pass complete to Rachaad White for 6 yds to the ArzSt 39,false,false,0,0,0,0,0
-401309854102864901,401309854,1,4013098548,Penalty,5,9,2,false,false,false,0,0,0,0,0,0,55,9,"BYU Penalty, 12 Men on the Field (5 Yards) to the 50 yard line",,false,0,0,0,0,0
-401309854102865901,401309854,1,4013098548,Pass Reception,5,3,3,false,false,false,0,0,0,0,0,0,61,9,Jayden Daniels pass complete to Johnny Wilson for 5 yds to the ArzSt 44 for a 1ST down,false,false,0,0,0,0,0
-401309854102868901,401309854,1,4013098548,Pass Reception,1,10,1,false,false,false,0,0,0,0,0,0,56,9,Jayden Daniels pass complete to Rachaad White for 1 yd to the ArzSt 45,false,false,0,0,0,1,1
-401309854102879901,401309854,1,4013098548,Pass Reception,29,4,2,false,false,false,0,0,0,0,0,0,50,9,Jayden Daniels pass complete to Curtis Hodges for 29 yds to the BYU 21 for a 1ST down,false,false,0,0,0,0,0
-401309854102888001,401309854,1,4013098548,Rush,2,10,1,false,false,false,0,0,0,0,0,0,21,9,Rachaad White run for 2 yds to the BYU 19,false,false,0,0,0,1,1
-401309854102889901,401309854,1,4013098548,Interception Return,0,8,2,false,false,false,0,0,0,1,0,1,19,9,Jayden Daniels pass intercepted Max Tooley return for no gain to the BYU 17,false,false,0,0,0,0,0
-401309854102895901,401309854,1,4013098549,Pass Reception,9,10,1,false,false,false,0,0,0,0,0,0,83,252,Jaren Hall pass complete to Dallin Holker for 9 yds to the BYU 26,false,false,0,1,0,0,1
-401309854102897901,401309854,1,4013098549,Rush,-11,1,2,false,false,false,0,0,0,0,0,0,74,252,"Tyler Allgeier run for 4 yds to the BYU 30 BYU Penalty, Personal Foul (Neil Pau'u) to the BYU 15",,false,0,0,0,0,0
-401309854102904901,401309854,1,4013098549,Pass Reception,31,12,2,false,false,false,0,0,0,0,0,0,85,252,Jaren Hall pass complete to Dallin Holker for 31 yds to the BYU 46 for a 1ST down,false,false,0,0,0,0,0
-401309854102906201,401309854,1,4013098549,Pass Incompletion,0,10,1,false,false,false,0,0,0,0,0,0,54,252,Jaren Hall pass incomplete to Isaac Rex,false,false,0,0,0,1,1
-401309854102908901,401309854,1,4013098549,Pass Reception,20,10,2,false,false,false,0,0,0,0,0,0,54,252,Jaren Hall pass complete to Neil Pau'u for 20 yds to the ArzSt 34 for a 1ST down,false,false,0,0,0,0,0
-401309854102914501,401309854,1,4013098549,Passing Touchdown,34,10,1,false,false,false,0,0,0,0,1,1,34,252,"Jaren Hall pass complete to Gunner Romney for 34 yds for a TD, (Justen Smith KICK)",false,false,0,0,0,1,1
-401309854102914503,401309854,1,40130985410,Kickoff,25,10,1,false,false,false,1,0,0,0,0,0,65,9,"Justen Smith kickoff for 63 yds , Rachaad White return for 25 yds to the ARIZONAST 40 ARIZONA ST Penalty, Offensive Holding (10 Yards) to the ArzSt 17",true,false,1,0,0,0,1
-401309854102916902,401309854,1,40130985410,Rush,6,10,1,false,false,false,0,0,0,0,0,0,83,9,Rachaad White run for 6 yds to the ArzSt 23,false,false,0,1,0,0,0
-401309854102925901,401309854,1,40130985410,Rush,-1,4,2,false,false,false,0,0,0,0,0,0,77,9,Jayden Daniels run for a loss of 1 yard to the ArzSt 22,false,false,0,0,0,0,0
-401309854102927102,401309854,1,40130985410,Timeout,0,5,3,false,false,false,0,0,0,0,0,0,78,9,"Timeout ARIZONA ST, clock 07:28",false,false,0,0,0,0,0
-401309854102927602,401309854,1,40130985410,Pass Incompletion,0,5,3,false,false,false,0,0,0,0,0,0,78,9,Jayden Daniels pass incomplete to Johnny Wilson,false,false,0,0,0,0,0
-401309854102928601,401309854,1,40130985410,Punt,51,5,4,false,false,false,0,1,0,0,0,1,78,9,"Eddie Czaplicki punt for 51 yds , Hobbs Nyberg returns for a loss of 1 yard to the BYU 26",false,false,0,0,0,0,0
-401309854102929901,401309854,1,40130985411,Pass Reception,34,10,1,false,false,false,0,0,0,0,0,0,74,252,Jaren Hall pass complete to Gunner Romney for 34 yds to the ArzSt 40 for a 1ST down,false,false,0,1,0,0,1
-401309854102935301,401309854,1,40130985411,Pass Incompletion,0,10,1,false,false,false,0,0,0,0,0,0,40,252,Jaren Hall pass incomplete to Puka Nacua,false,false,0,0,0,1,1
-401309854102936001,401309854,1,40130985411,Pass Incompletion,0,10,2,false,false,false,0,0,0,0,0,0,40,252,Jaren Hall pass incomplete to Tyler Allgeier,false,false,0,0,0,0,0
-401309854102938601,401309854,1,40130985411,Pass Reception,11,10,3,false,false,false,0,0,0,0,0,0,40,252,Jaren Hall pass complete to Samson Nacua for 11 yds to the ArzSt 29 for a 1ST down,false,false,0,0,0,0,0
-401309854102939701,401309854,1,40130985411,Timeout,0,10,1,false,false,false,0,0,0,0,0,0,29,252,"Timeout BYU, clock 06:02",false,false,0,0,0,1,1
-401309854102946101,401309854,1,40130985411,Pass Incompletion,0,10,1,false,false,false,0,0,0,0,0,0,29,252,Jaren Hall pass incomplete to Lopini Katoa,false,false,0,0,0,1,0
-401309854102947401,401309854,1,40130985411,Rush,11,10,2,false,false,false,0,0,0,0,0,0,29,252,Jaren Hall run for 11 yds to the ArzSt 18 for a 1ST down,false,false,0,0,0,0,0
-401309854102954401,401309854,1,40130985411,Rush,3,10,1,false,false,false,0,0,0,0,0,0,18,252,Lopini Katoa run for 3 yds to the ArzSt 15,false,false,0,0,0,1,1
-401309854102955901,401309854,1,40130985411,Passing Touchdown,15,7,2,false,false,false,0,0,0,0,1,1,15,252,"Jaren Hall pass complete to Isaac Rex for 15 yds for a TD, (Justen Smith KICK)",false,false,0,0,0,0,0
-401309854102955903,401309854,1,40130985412,Kickoff,20,10,1,false,false,false,1,0,0,0,0,0,65,9,"Justen Smith kickoff for 57 yds , Tommi Hill return for 20 yds to the ArzSt 28",false,false,1,0,0,0,1
-401309854102956701,401309854,1,40130985412,Pass Incompletion,0,10,1,false,false,false,0,0,0,0,0,0,72,9,Jayden Daniels pass incomplete to Ricky Pearsall,false,false,0,1,0,0,0
-401309854102958001,401309854,1,40130985412,Pass Reception,16,10,2,false,false,false,0,0,0,0,0,0,72,9,Jayden Daniels pass complete to Rachaad White for 16 yds to the ArzSt 44 for a 1ST down,false,false,0,0,0,0,0
-401309854102959301,401309854,1,40130985412,Pass Reception,9,10,1,false,false,false,0,0,0,0,0,0,56,9,Jayden Daniels pass complete to Ricky Pearsall for 9 yds to the BYU 47,false,false,0,0,0,1,1
-401309854102964501,401309854,1,40130985412,Sack,-11,1,2,false,false,false,0,0,0,0,0,0,47,9,"Jayden Daniels sacked by TEAM for a loss of 11 yards to the BYU 42 ARIZONA ST Penalty, Intentional Grounding ( Yards) to the ArzSt 42",false,false,0,0,0,0,0
-401309854102965501,401309854,1,40130985412,Interception Return,0,12,3,false,false,false,0,0,0,1,0,1,58,9,Jayden Daniels pass intercepted Malik Moore return for no gain to the BYU 32,false,false,0,0,0,0,0
-401309854102966902,401309854,1,40130985413,Rush,20,10,1,true,false,false,0,0,0,0,0,0,68,252,"Neil Pau'u run for 5 yds to the ArzSt 37 for a 1ST down ARIZONA ST Penalty, Personal Foul (Merlin Robertson) to the ArzSt 48 for a 1ST down",,false,0,1,0,0,1
-401309854102969902,401309854,1,40130985413,Pass Reception,11,10,1,false,false,false,0,0,0,0,0,0,48,252,Jaren Hall pass complete to Neil Pau'u for 11 yds to the ArzSt 37 for a 1ST down,false,false,0,0,0,1,1
-401309854102975401,401309854,1,40130985413,Rush,3,10,1,false,false,false,0,0,0,0,0,0,37,252,Tyler Allgeier run for 3 yds to the ArzSt 34,false,false,0,0,0,1,1
-401309854102977901,401309854,1,40130985413,Penalty,5,7,2,false,false,false,0,0,0,0,0,0,34,252,"ARIZONA ST Penalty, Defensive Offside (Chase Lucas) to the ArzSt 29",true,false,0,0,0,0,0
-401309854102984901,401309854,1,40130985413,Rush,2,2,2,false,false,false,0,0,0,0,0,0,29,252,Puka Nacua run for 2 yds to the ArzSt 27 for a 1ST down,false,false,0,0,0,0,0
-401309854102989301,401309854,1,40130985413,Rush,3,10,1,false,false,false,0,0,0,0,0,0,27,252,Tyler Allgeier run for 3 yds to the ArzSt 24,false,false,0,0,0,1,1
-401309854102997601,401309854,1,40130985413,Rush,-5,7,2,false,false,false,0,0,0,0,0,0,24,252,Jaren Hall run for a loss of 5 yards to the ArzSt 29,false,false,0,0,0,0,0
-401309854102997602,401309854,1,40130985413,Timeout,0,12,3,false,false,false,0,0,0,0,0,0,29,252,"Timeout BYU, clock 00:23",false,false,0,0,0,0,0
-401309854102997603,401309854,1,40130985413,Timeout,0,12,3,false,false,false,0,0,0,0,0,0,29,252,"Timeout ARIZONA ST, clock 00:23",false,false,0,0,0,0,0
-401309854102998301,401309854,1,40130985413,Interception Return,0,12,3,false,false,false,0,0,0,1,0,1,29,252,"Jaren Hall pass intercepted, touchback. Jack Jones return for no gain",false,false,0,0,0,0,0
-401309854102999901,401309854,1,40130985414,Rush,0,10,1,false,false,false,0,0,0,0,0,1,80,9,Jayden Daniels run for no gain to the ArzSt 20,false,false,0,1,0,0,1
-401309854103849901,401309854,2,40130985415,Kickoff,0,10,1,false,false,false,1,0,0,0,0,0,65,252,Logan Tyler kickoff for 65 yds for a touchback,false,false,1,0,0,0,1
-401309854103854901,401309854,2,40130985415,Pass Reception,14,10,1,false,false,false,0,0,0,0,0,0,75,252,Jaren Hall pass complete to Neil Pau'u for 14 yds to the BYU 39 for a 1ST down,false,false,0,1,0,0,0
-401309854103855901,401309854,2,40130985415,Pass Incompletion,0,10,1,false,false,false,0,0,0,0,0,0,61,252,Jaren Hall pass incomplete to Dallin Holker,false,false,0,0,0,1,1
-401309854103857201,401309854,2,40130985415,Rush,1,10,2,false,false,false,0,0,0,0,0,0,61,252,Tyler Allgeier run for 1 yd to the BYU 40,false,false,0,0,0,0,0
-401309854103858601,401309854,2,40130985415,Pass Incompletion,0,9,3,false,false,false,0,0,0,0,0,0,60,252,Jaren Hall pass incomplete to Neil Pau'u,false,false,0,0,0,0,0
-401309854103859401,401309854,2,40130985415,Punt,0,9,4,false,false,false,0,1,0,0,0,1,60,252,Ryan Rehkow punt for 60 yds for a touchback,false,false,0,0,0,0,0
-401309854103866201,401309854,2,40130985416,Rush,14,10,1,false,false,false,0,0,0,0,0,0,80,9,Rachaad White run for 14 yds to the ArzSt 34 for a 1ST down,false,false,0,1,0,0,1
-401309854103869001,401309854,2,40130985416,Rush,-1,10,1,false,false,false,0,0,0,0,0,0,66,9,Jayden Daniels run for a loss of 1 yard to the ArzSt 33,false,false,0,0,0,1,1
-401309854103874201,401309854,2,40130985416,Timeout,0,11,2,false,false,false,0,0,0,0,0,0,67,9,"Timeout ARIZONA ST, clock 12:57",false,false,0,0,0,0,0
-401309854103876701,401309854,2,40130985416,Pass Reception,6,11,2,false,false,false,0,0,0,0,0,0,67,9,Jayden Daniels pass complete to Rachaad White for 6 yds to the ArzSt 39,false,false,0,0,0,0,0
-401309854103884201,401309854,2,40130985416,Rush,8,5,3,false,false,false,0,0,0,0,0,0,61,9,Jayden Daniels run for 8 yds to the ArzSt 47 for a 1ST down,false,false,0,0,0,0,0
-401309854103886201,401309854,2,40130985416,Rush,2,10,1,false,false,false,0,0,0,0,0,0,53,9,Rachaad White run for 2 yds to the ArzSt 49,false,false,0,0,0,1,1
-401309854103894401,401309854,2,40130985416,Rush,12,8,2,false,false,false,0,0,0,0,0,0,51,9,Daniyel Ngata run for 12 yds to the BYU 39 for a 1ST down,false,false,0,0,0,0,0
-401309854103896201,401309854,2,40130985416,Rush,26,10,1,false,false,false,0,0,0,0,0,0,39,9,Daniyel Ngata run for 26 yds to the BYU 13 for a 1ST down,false,false,0,0,0,1,1
-401309854103898501,401309854,2,40130985416,Rush,3,10,1,false,false,false,0,0,0,0,0,0,13,9,Daniyel Ngata run for 3 yds to the BYU 10,false,false,0,0,0,1,1
-401309854103905701,401309854,2,40130985416,Rushing Touchdown,10,7,2,false,false,false,0,0,0,0,1,1,10,9,"Daniyel Ngata run for 10 yds for a TD, (Cristian Zendejas KICK)",false,false,0,0,0,0,0
-401309854103905703,401309854,2,40130985417,Kickoff,0,10,1,false,false,false,1,0,0,0,0,0,65,252,Logan Tyler kickoff for 65 yds for a touchback,false,false,1,0,0,0,1
-401309854103908201,401309854,2,40130985417,Rush,-1,10,1,false,false,false,0,0,0,0,0,0,75,252,Tyler Allgeier run for a loss of 1 yard to the BYU 24,false,false,0,1,0,0,0
-401309854103909201,401309854,2,40130985417,Pass Incompletion,0,11,2,false,false,false,0,0,0,0,0,0,76,252,Jaren Hall pass incomplete to Isaac Rex,false,false,0,0,0,0,0
-401309854103914101,401309854,2,40130985417,Pass Incompletion,0,11,3,false,false,false,0,0,0,0,0,0,76,252,Jaren Hall pass incomplete to Keanu Hill,false,false,0,0,0,0,0
-401309854103914102,401309854,2,40130985417,Punt,0,11,4,false,false,false,0,1,0,0,0,1,76,252,"Ryan Rehkow punt for 41 yds , LV Bunkley-Shelton returns for no gain to the ArzSt 35 LV Bunkley-Shelton fumbled, recovered by ArzSt LV Bunkley-Shelton",false,false,0,0,0,0,0
-401309854103917001,401309854,2,40130985418,Rush,21,10,1,false,false,false,0,0,0,0,0,0,65,9,Daniyel Ngata run for 21 yds to the BYU 44 for a 1ST down,false,false,0,1,0,0,1
-401309854103918201,401309854,2,40130985418,Rush,2,10,1,false,false,false,0,0,0,0,0,0,44,9,Daniyel Ngata run for 2 yds to the BYU 42,false,false,0,0,0,1,1
-401309854103925501,401309854,2,40130985418,Rush,6,8,2,false,false,false,0,0,0,0,0,0,42,9,Daniyel Ngata run for 6 yds to the BYU 36,false,false,0,0,0,0,0
-401309854103928401,401309854,2,40130985418,Rush,10,2,3,false,false,false,0,0,0,0,0,0,36,9,Rachaad White run for 10 yds to the BYU 26 for a 1ST down,false,false,0,0,0,0,0
-401309854103935501,401309854,2,40130985418,Rush,4,10,1,false,false,false,0,0,0,0,0,0,26,9,Rachaad White run for 4 yds to the BYU 22,false,false,0,0,0,1,1
-401309854103937801,401309854,2,40130985418,Penalty,-5,6,2,false,false,false,0,0,0,0,0,0,22,9,"ARIZONA ST Penalty, Illegal Motion (Jayden Daniels) to the BYU 27",true,false,0,0,0,0,0
-401309854103939701,401309854,2,40130985418,Rush,2,11,2,false,false,false,0,0,0,0,0,0,27,9,Daniyel Ngata run for 2 yds to the BYU 25,false,false,0,0,0,0,0
-401309854103947701,401309854,2,40130985418,Pass Reception,11,9,3,false,false,false,0,0,0,0,0,0,25,9,Jayden Daniels pass complete to LV Bunkley-Shelton for 11 yds to the BYU 14 for a 1ST down,false,false,0,0,0,0,0
-401309854103954001,401309854,2,40130985418,Penalty,-10,10,1,false,false,false,0,0,0,0,0,0,14,9,"ARIZONA ST Penalty, Offensive Holding (John Stivers) to the BYU 24",true,false,0,0,0,1,1
-401309854103954401,401309854,2,40130985418,Penalty,-5,20,1,false,false,false,0,0,0,0,0,0,24,9,"ARIZONA ST Penalty, False Start (Ben Scott) to the BYU 29",true,false,0,0,0,0,0
-401309854103956901,401309854,2,40130985418,Pass Incompletion,0,25,1,false,false,false,0,0,0,0,0,0,29,9,Jayden Daniels pass incomplete to Curtis Hodges,false,false,0,0,0,0,0
-401309854103957401,401309854,2,40130985418,Pass Incompletion,0,25,2,false,false,false,0,0,0,0,0,0,29,9,Jayden Daniels pass incomplete to Johnny Wilson,false,false,0,0,0,0,0
-401309854103959701,401309854,2,40130985418,Pass Reception,7,25,3,false,false,false,0,0,0,0,0,0,29,9,Jayden Daniels pass complete to Ricky Pearsall for 7 yds to the BYU 22,false,false,0,0,0,0,0
-401309854103965901,401309854,2,40130985418,Field Goal Good,40,18,4,false,false,false,0,0,0,0,1,1,23,9,Cristian Zendejas 40 yd FG GOOD,false,false,0,0,0,0,0
-401309854103965902,401309854,2,40130985419,Kickoff,0,10,1,false,false,false,1,0,0,0,0,0,65,252,Logan Tyler kickoff for 65 yds for a touchback,false,false,1,0,0,0,1
-401309854103968101,401309854,2,40130985419,Pass Reception,-2,10,1,false,false,false,0,0,0,0,0,0,75,252,Jaren Hall pass complete to Gunner Romney for a loss of 2 yards to the BYU 23,false,false,0,1,0,0,0
-401309854103975101,401309854,2,40130985419,Rush,3,12,2,false,false,false,0,0,0,0,0,0,77,252,Tyler Allgeier run for 3 yds to the BYU 26,false,false,0,0,0,0,0
-401309854103979501,401309854,2,40130985419,Pass Reception,17,9,3,false,false,false,0,0,0,0,0,0,74,252,Jaren Hall pass complete to Gunner Romney for 17 yds to the BYU 43 for a 1ST down,false,false,0,0,0,0,0
-401309854103986901,401309854,2,40130985419,Rush,3,10,1,false,false,false,0,0,0,0,0,0,57,252,Tyler Allgeier run for 3 yds to the BYU 46,false,false,0,0,0,1,1
-401309854103995801,401309854,2,40130985419,Rush,28,7,2,false,false,false,0,0,0,0,0,0,54,252,Jaren Hall run for 28 yds to the ArzSt 26 for a 1ST down,false,false,0,0,0,0,0
-401309854103998701,401309854,2,40130985419,Interception Return,60,10,1,false,false,false,0,0,0,1,0,0,26,252,"Jaren Hall pass intercepted Merlin Robertson return for 60 yds to the BYU 15 Merlin Robertson fumbled, recovered by BYU Tyler Allgeier",false,false,0,0,0,1,1
-401309854103999901,401309854,2,40130985420,Pass Reception,7,10,1,false,false,false,0,0,0,0,0,0,85,252,Jaren Hall pass complete to Masen Wake for 7 yds to the BYU 22,false,false,0,1,0,0,1
-401309854104854901,401309854,2,40130985420,Rush,18,3,2,true,false,false,0,0,0,0,0,0,78,252,"Lopini Katoa run for 3 yds to the BYU 25 for a 1ST down ARIZONA ST Penalty, Face Mask (15 yards) (Omarr Norman-Lott) to the BYU 40 for a 1ST down",,false,0,0,0,0,0
-401309854104857601,401309854,2,40130985420,Pass Reception,3,10,1,false,false,false,0,0,0,0,0,0,60,252,Jaren Hall pass complete to Gunner Romney for 3 yds to the BYU 43,false,false,0,0,0,1,1
-401309854104858901,401309854,2,40130985420,Rush,15,7,2,false,false,false,0,0,0,0,0,0,57,252,Tyler Allgeier run for 15 yds to the ArzSt 42 for a 1ST down,false,false,0,0,0,0,0
-401309854104865801,401309854,2,40130985420,Rush,4,10,1,false,false,false,0,0,0,0,0,0,42,252,Tyler Allgeier run for 4 yds to the ArzSt 38,false,false,0,0,0,1,1
-401309854104868001,401309854,2,40130985420,Rush,8,6,2,false,false,false,0,0,0,0,0,0,38,252,Lopini Katoa run for 8 yds to the ArzSt 30 for a 1ST down,false,false,0,0,0,0,0
-401309854104874201,401309854,2,40130985420,Rush,-1,10,1,false,false,false,0,0,0,0,0,0,30,252,Lopini Katoa run for a loss of 1 yard to the ArzSt 31,false,false,0,0,0,1,1
-401309854104876701,401309854,2,40130985420,Pass Reception,1,11,2,false,false,false,0,0,0,0,0,0,31,252,Jaren Hall pass complete to Lopini Katoa for 1 yd to the ArzSt 30,false,false,0,0,0,0,0
-401309854104884601,401309854,2,40130985420,Sack,-7,10,3,false,false,false,0,0,0,0,0,0,30,252,Jaren Hall sacked by Omarr Norman-Lott for a loss of 7 yards to the ArzSt 37,false,false,0,0,0,0,0
-401309854104886501,401309854,2,40130985420,Punt,0,17,4,false,false,false,0,1,0,0,0,1,37,252,"Ryan Rehkow punt for 32 yds, fair catch by LV Bunkley-Shelton at the ArzSt 5",false,false,0,0,0,0,0
-401309854104887901,401309854,2,40130985421,Rush,4,10,1,false,false,false,0,0,0,0,0,0,95,9,Rachaad White run for 4 yds to the ArzSt 9,false,false,0,1,0,0,1
-401309854104896001,401309854,2,40130985421,Rush,0,6,2,false,false,false,0,0,0,0,0,0,91,9,Rachaad White run for no gain to the ArzSt 9,false,false,0,0,0,0,0
-401309854104897901,401309854,2,40130985421,Penalty,-4,6,3,false,false,false,0,0,0,0,0,0,91,9,"ARIZONA ST Penalty, Face Mask (4 yards) (Henry Hattis) to the ArzSt 5",,false,0,0,0,0,0
-401309854104899801,401309854,2,40130985421,Penalty,-2,10,3,false,false,false,0,0,0,0,0,0,95,9,"ARIZONA ST Penalty, False Start (Andre Johnson) to the ArzSt 3",true,false,0,0,0,0,0
-401309854104905601,401309854,2,40130985421,Pass Reception,17,12,3,false,false,false,0,0,0,0,0,0,97,9,Jayden Daniels pass complete to Ricky Pearsall for 17 yds to the ArzSt 20 for a 1ST down,false,false,0,0,0,0,0
-401309854104909501,401309854,2,40130985421,Rush,4,10,1,false,false,false,0,0,0,0,0,0,80,9,Jayden Daniels run for 4 yds to the ArzSt 24,false,false,0,0,0,1,1
-401309854104916501,401309854,2,40130985421,Penalty,-5,6,2,false,false,false,0,0,0,0,0,0,76,9,"ARIZONA ST Penalty, False Start (Dohnovan West) to the ArzSt 19",true,false,0,0,0,0,0
-401309854104919001,401309854,2,40130985421,Penalty,-5,11,2,false,false,false,0,0,0,0,0,0,81,9,"ARIZONA ST Penalty, False Start (Henry Hattis) to the ArzSt 14",true,false,0,0,0,0,0
-401309854104926901,401309854,2,40130985421,Sack,-8,16,2,false,false,false,0,0,0,0,0,0,86,9,Jayden Daniels sacked by Pepe Tanuvasa for a loss of 8 yards to the ArzSt 6,false,false,0,0,0,0,0
-401309854104929601,401309854,2,40130985421,Pass Reception,8,24,3,false,false,false,0,0,0,0,0,0,94,9,Jayden Daniels pass complete to Rachaad White for 8 yds to the ArzSt 14,false,false,0,0,0,0,0
-401309854104936201,401309854,2,40130985421,Punt,-4,16,4,false,false,false,0,1,0,0,0,1,86,9,"Eddie Czaplicki punt for 59 yds , Hobbs Nyberg returns for a loss of 4 yards to the BYU 23 Hobbs Nyberg fumbled, recovered by BYU",false,false,0,0,0,0,0
-401309854104938001,401309854,2,40130985422,Rush,17,10,1,false,false,false,0,0,0,0,0,0,77,252,Tyler Allgeier run for 17 yds to the BYU 40 for a 1ST down,false,false,0,1,0,0,1
-401309854104945501,401309854,2,40130985422,Rush,7,10,1,false,false,false,0,0,0,0,0,0,60,252,Jaren Hall run for 7 yds to the BYU 47,false,false,0,0,0,1,1
-401309854104948401,401309854,2,40130985422,Rush,4,3,2,false,false,false,0,0,0,0,0,0,53,252,Tyler Allgeier run for 4 yds to the ArzSt 49 for a 1ST down,false,false,0,0,0,0,0
-401309854104954401,401309854,2,40130985422,Rush,4,10,1,false,false,false,0,0,0,0,0,0,49,252,Lopini Katoa run for 4 yds to the ArzSt 45,false,false,0,0,0,1,1
-401309854104964901,401309854,2,40130985422,Rush,16,6,2,true,false,false,0,0,0,0,0,0,45,252,"Tyler Allgeier run for 1 yd to the ArzSt 44 for a 1ST down ARIZONA ST Penalty, Face Mask (15 yards) (Omarr Norman-Lott) to the ArzSt 29 for a 1ST down",,false,0,0,0,0,0
-401309854104966601,401309854,2,40130985422,Rush,9,10,1,false,false,false,0,0,0,0,0,0,29,252,Lopini Katoa run for 9 yds to the ArzSt 20,false,false,0,0,0,1,1
-401309854104969901,401309854,2,40130985422,Rush,5,1,2,false,false,false,0,0,0,0,0,0,20,252,Lopini Katoa run for 5 yds to the ArzSt 15 for a 1ST down,false,false,0,0,0,0,0
-401309854104975901,401309854,2,40130985422,Rush,-2,10,1,false,false,false,0,0,0,0,0,0,15,252,Lopini Katoa run for a loss of 2 yards to the ArzSt 17,false,false,0,0,0,1,1
-401309854104975902,401309854,2,40130985422,Timeout,0,12,2,false,false,false,0,0,0,0,0,0,17,252,"Timeout ARIZONA ST, clock 02:40",false,false,0,0,0,0,0
-401309854104976401,401309854,2,40130985422,Rush,13,12,2,false,false,false,0,0,0,0,0,0,17,252,Jaren Hall run for 13 yds to the ArzSt 4 for a 1ST down,false,false,0,0,0,0,0
-401309854104979801,401309854,2,40130985422,Rush,0,4,1,false,false,false,0,0,0,0,0,0,4,252,Tyler Allgeier run for no gain to the ArzSt 4,false,false,0,0,0,1,1
-401309854104987401,401309854,2,40130985422,Rush,1,4,2,false,false,false,0,0,0,0,0,0,4,252,Tyler Allgeier run for 1 yd to the ArzSt 3,false,false,0,0,0,0,0
-401309854104988001,401309854,2,40130985422,Passing Touchdown,3,3,3,false,false,false,0,0,0,0,1,0,3,252,"Baylor Romney pass complete to Isaac Rex for 3 yds for a TD, (Two-Point Conversion failed)",false,false,0,0,0,0,0
-401309854104988002,401309854,2,40130985422,Timeout,0,0,3,false,false,false,0,0,0,0,0,1,3,252,"Timeout BYU, clock 01:19",false,false,0,1,0,0,0
-401309854104988004,401309854,2,40130985423,Kickoff,0,10,1,false,false,false,1,0,0,0,0,0,65,9,Justen Smith kickoff for 65 yds for a touchback,false,false,1,0,0,0,1
-401309854104988801,401309854,2,40130985423,Pass Incompletion,0,10,1,false,false,false,0,0,0,0,0,0,75,9,Jayden Daniels pass incomplete to LV Bunkley-Shelton,false,false,0,1,0,0,0
-401309854104994801,401309854,2,40130985423,Pass Reception,3,10,2,false,false,false,0,0,0,0,0,0,75,9,Jayden Daniels pass complete to Rachaad White for 3 yds to the ArzSt 28,false,false,0,0,0,0,0
-401309854104996401,401309854,2,40130985423,Pass Reception,19,7,3,false,false,false,0,0,0,0,0,0,72,9,Jayden Daniels pass complete to Johnny Wilson for 19 yds to the ArzSt 47 for a 1ST down,false,false,0,0,0,0,0
-401309854104997101,401309854,2,40130985423,Penalty,-10,10,1,false,false,false,0,0,0,0,0,0,53,9,"ARIZONA ST Penalty, Offensive Holding (Ben Scott) to the ArzSt 37",true,false,0,0,0,1,1
-401309854104999101,401309854,2,40130985423,Rush,18,20,1,false,false,false,0,0,0,0,0,0,63,9,Jayden Daniels run for 18 yds to the BYU 45,false,false,0,0,0,0,0
-401309854104999102,401309854,2,40130985423,Timeout,0,2,2,false,false,false,0,0,0,0,0,0,45,9,"Timeout BYU, clock 00:08",false,false,0,0,0,0,0
-401309854104999901,401309854,2,40130985423,Pass Reception,18,2,2,false,false,false,0,0,0,0,0,1,45,9,Jayden Daniels pass complete to Rachaad White for 18 yds to the BYU 27 for a 1ST down,false,false,0,0,0,0,0
+id_play,game_id,half,id_drive,play_type,yards_gained,distance,down,penalty_1st_conv,penalty_offset,penalty_declined,kickoff_play,punt,downs_turnover,turnover_vec,scoring_play,change_of_pos_team,yards_to_goal,pos_team,text,penalty_negated_play,penalty_no_play,penalized_team,py_firstD_by_kickoff,py_firstD_by_poss,py_firstD_by_penalty,py_firstD_by_yards,py_new_series
+401309854101849902,401309854,1,4013098541,Kickoff Team Fumble Recovery,12,10,1,false,false,false,1,0,0,1,0,1,65,9,"Justen Smith kickoff for 65 yds , Geordon Porter return for 12 yds to the ArzSt 12 Geordon Porter fumbled, recovered by BYU Hayden Livingston",false,false,,1,0,0,0,1
+401309854101854901,401309854,1,4013098541,Pass Reception,9,10,1,false,false,false,0,0,0,0,0,0,12,252,Jaren Hall pass complete to Gunner Romney for 9 yds to the ArzSt 3,false,false,,0,1,0,0,0
+401309854101855901,401309854,1,4013098541,Rush,-1,1,2,false,false,false,0,0,0,0,0,0,3,252,Tyler Allgeier run for a loss of 1 yard to the ArzSt 4,false,false,,0,0,0,0,0
+401309854101857601,401309854,1,4013098541,Rushing Touchdown,4,2,3,false,false,false,0,0,0,0,1,1,4,252,"Tyler Allgeier run for 4 yds for a TD, (Justen Smith KICK)",false,false,,0,0,0,0,0
+401309854101857603,401309854,1,4013098542,Kickoff,0,10,1,false,false,false,1,0,0,0,0,0,65,9,Justen Smith kickoff for 65 yds for a touchback,false,false,,1,0,0,0,1
+401309854101864601,401309854,1,4013098542,Rush,4,10,1,false,false,false,0,0,0,0,0,0,75,9,Rachaad White run for 4 yds to the ArzSt 29,false,false,,0,1,0,0,0
+401309854101866401,401309854,1,4013098542,Penalty,-5,6,2,false,false,false,0,0,0,0,0,0,71,9,"ARIZONA ST Penalty, False Start (-5 Yards) to the ArzSt 24",true,false,9,0,0,0,0,0
+401309854101867001,401309854,1,4013098542,Pass Reception,21,11,2,false,false,false,0,0,0,0,0,0,76,9,Jayden Daniels pass complete to LV Bunkley-Shelton for 21 yds to the ArzSt 45 for a 1ST down,false,false,,0,0,0,0,0
+401309854101874501,401309854,1,4013098542,Rush,-2,10,1,false,false,false,0,0,0,0,0,0,55,9,Rachaad White run for a loss of 2 yards to the ArzSt 43,false,false,,0,0,0,1,1
+401309854101878601,401309854,1,4013098542,Pass Reception,-2,12,2,false,false,false,0,0,0,0,0,0,57,9,Jayden Daniels pass complete to Rachaad White for a loss of 2 yards to the ArzSt 41,false,false,,0,0,0,0,0
+401309854101886901,401309854,1,4013098542,Pass Reception,58,14,3,false,false,false,0,0,0,0,0,0,59,9,Jayden Daniels pass complete to Andre Johnson for 58 yds to the BYU 1 for a 1ST down,false,false,,0,0,0,0,0
+401309854101888901,401309854,1,4013098542,Rushing Touchdown,1,1,1,false,false,false,0,0,0,0,1,1,1,9,"Rachaad White run for 1 yd for a TD, (Cristian Zendejas KICK)",false,false,,0,0,0,1,1
+401309854101888903,401309854,1,4013098543,Kickoff,0,10,1,false,false,false,1,0,0,0,0,0,65,252,Logan Tyler kickoff for 65 yds for a touchback,false,false,,1,0,0,0,1
+401309854101889701,401309854,1,4013098543,Pass Incompletion,0,10,1,false,false,false,0,0,0,0,0,0,75,252,Jaren Hall pass incomplete to Neil Pau'u,false,false,,0,1,0,0,0
+401309854101889901,401309854,1,4013098543,Pass Incompletion,0,10,2,false,false,false,0,0,0,0,0,0,75,252,Jaren Hall pass incomplete to Puka Nacua,false,false,,0,0,0,0,0
+401309854101894301,401309854,1,4013098543,Penalty,-5,10,3,false,false,false,0,0,0,0,0,0,75,252,"BYU Penalty, False Start (Isaac Rex) to the BYU 20",true,false,252,0,0,0,0,0
+401309854101895201,401309854,1,4013098543,Rush,2,15,3,false,false,false,0,0,0,0,0,0,80,252,Tyler Allgeier run for 2 yds to the BYU 22,false,false,,0,0,0,0,0
+401309854101897601,401309854,1,4013098543,Punt,5,13,4,false,false,false,0,1,0,0,0,1,78,252,"Ryan Rehkow punt for 51 yds , LV Bunkley-Shelton returns for 5 yds to the ArzSt 32",false,false,,0,0,0,0,0
+401309854101904601,401309854,1,4013098544,Rush,4,10,1,false,false,false,0,0,0,0,0,0,68,9,Rachaad White run for 4 yds to the ArzSt 36,false,false,,0,1,0,0,1
+401309854101908401,401309854,1,4013098544,Pass Reception,13,6,2,false,false,false,0,0,0,0,0,0,64,9,Jayden Daniels pass complete to LV Bunkley-Shelton for 13 yds to the ArzSt 49 for a 1ST down,false,false,,0,0,0,0,0
+401309854101915301,401309854,1,4013098544,Pass Reception,0,10,1,false,false,false,0,0,0,0,0,0,51,9,Jayden Daniels pass complete to Ricky Pearsall for no gain to the ArzSt 49,false,false,,0,0,0,1,1
+401309854101917701,401309854,1,4013098544,Pass Incompletion,0,10,2,false,false,false,0,0,0,0,0,0,51,9,Jayden Daniels pass incomplete to Elijhah Badger,false,false,,0,0,0,0,0
+401309854101924501,401309854,1,4013098544,Pass Reception,9,10,3,false,false,false,0,0,0,0,0,0,51,9,Jayden Daniels pass complete to Rachaad White for 9 yds to the BYU 42,false,false,,0,0,0,0,0
+401309854101928402,401309854,1,4013098544,Penalty,-5,1,4,false,false,false,0,0,0,0,0,0,42,9,"ARIZONA ST Penalty, Offensive Offside (Curtis Hodges) to the BYU 47",true,false,9,0,0,0,0,0
+401309854101929301,401309854,1,4013098544,Punt,0,6,4,false,false,false,0,1,0,0,0,1,47,9,"Eddie Czaplicki punt for 46 yds, downed at the BYU 1",false,false,,0,0,0,0,0
+401309854101935401,401309854,1,4013098545,Rush,0,10,1,false,false,false,0,0,0,0,0,0,99,252,Tyler Allgeier run for no gain to the BYU 1,false,false,,0,1,0,0,1
+401309854101937501,401309854,1,4013098545,Rush,0,10,2,false,false,false,0,0,0,0,0,0,99,252,Tyler Allgeier run for no gain to the BYU 1,false,false,,0,0,0,0,0
+401309854101946201,401309854,1,4013098545,Rush,1,10,3,false,false,false,0,0,0,0,0,0,99,252,Masen Wake run for 1 yd to the BYU 2,false,false,,0,0,0,0,0
+401309854101954001,401309854,1,4013098545,Punt,0,9,4,false,false,false,0,1,0,0,0,1,98,252,"Ryan Rehkow punt for 50 yds, downed at the ArzSt 48",false,false,,0,0,0,0,0
+401309854101955402,401309854,1,4013098546,Pass Reception,11,10,1,false,false,false,0,0,0,0,0,0,52,9,Jayden Daniels pass complete to Ricky Pearsall for 11 yds to the BYU 41 for a 1ST down,false,false,,0,1,0,0,1
+401309854101959401,401309854,1,4013098546,Rush,9,10,1,false,false,false,0,0,0,0,0,0,41,9,Rachaad White run for 9 yds to the BYU 32 for a 1ST down,false,false,,0,0,0,1,1
+401309854101965401,401309854,1,4013098546,Penalty,-5,10,1,false,false,false,0,0,0,0,0,0,32,9,"ARIZONA ST Penalty, Ineligible Downfield on Pass (-5 Yards) to the BYU 37",true,false,9,0,0,0,0,0
+401309854101969901,401309854,1,4013098546,Rush,1,15,1,false,false,false,0,0,0,0,0,0,37,9,Jayden Daniels run for 1 yd to the BYU 36,false,false,,0,0,0,0,0
+401309854101976501,401309854,1,4013098546,Sack,-2,14,2,false,false,false,0,0,0,0,0,0,36,9,Jayden Daniels sacked by Keenan Pili for a loss of 2 yards to the BYU 38,false,false,,0,0,0,0,0
+401309854101977901,401309854,1,4013098546,Punt,0,16,3,false,false,false,0,1,0,0,0,1,38,9,Eddie Czaplicki punt for 38 yds for a touchback,false,false,,0,0,0,0,0
+401309854101984701,401309854,1,4013098547,Rush,3,10,1,false,false,false,0,0,0,0,0,0,80,252,Tyler Allgeier run for 3 yds to the BYU 23,false,false,,0,1,0,0,1
+401309854101986501,401309854,1,4013098547,Rush,3,7,2,false,false,false,0,0,0,0,0,0,77,252,Tyler Allgeier run for 3 yds to the BYU 26,false,false,,0,0,0,0,0
+401309854101995401,401309854,1,4013098547,Sack,-9,4,3,false,false,false,0,0,0,0,0,0,74,252,Jaren Hall sacked by D.J. Davidson and Michael Matus for a loss of 9 yards to the BYU 17,false,false,,0,0,0,0,0
+401309854101997001,401309854,1,4013098547,Punt,0,13,4,false,false,false,0,1,0,0,0,1,83,252,Ryan Rehkow punt for 83 yds for a touchback,false,false,,0,0,0,0,0
+401309854101999901,401309854,1,4013098548,Rush,12,10,1,false,false,false,0,0,0,0,0,0,80,9,Rachaad White run for 12 yds to the ArzSt 32 for a 1ST down,false,false,,0,1,0,0,1
+401309854102855901,401309854,1,4013098548,Rush,1,10,1,false,false,false,0,0,0,0,0,0,68,9,Rachaad White run for 1 yd to the ArzSt 33,false,false,,0,0,0,1,1
+401309854102858401,401309854,1,4013098548,Pass Reception,6,9,2,false,false,false,0,0,0,0,0,0,67,9,Jayden Daniels pass complete to Rachaad White for 6 yds to the ArzSt 39,false,false,,0,0,0,0,0
+401309854102864901,401309854,1,4013098548,Penalty,5,9,2,false,false,false,0,0,0,0,0,0,55,9,"BYU Penalty, 12 Men on the Field (5 Yards) to the 50 yard line",,false,252,0,0,0,0,0
+401309854102865901,401309854,1,4013098548,Pass Reception,5,3,3,false,false,false,0,0,0,0,0,0,61,9,Jayden Daniels pass complete to Johnny Wilson for 5 yds to the ArzSt 44 for a 1ST down,false,false,,0,0,0,0,0
+401309854102868901,401309854,1,4013098548,Pass Reception,1,10,1,false,false,false,0,0,0,0,0,0,56,9,Jayden Daniels pass complete to Rachaad White for 1 yd to the ArzSt 45,false,false,,0,0,0,1,1
+401309854102879901,401309854,1,4013098548,Pass Reception,29,4,2,false,false,false,0,0,0,0,0,0,50,9,Jayden Daniels pass complete to Curtis Hodges for 29 yds to the BYU 21 for a 1ST down,false,false,,0,0,0,0,0
+401309854102888001,401309854,1,4013098548,Rush,2,10,1,false,false,false,0,0,0,0,0,0,21,9,Rachaad White run for 2 yds to the BYU 19,false,false,,0,0,0,1,1
+401309854102889901,401309854,1,4013098548,Interception Return,0,8,2,false,false,false,0,0,0,1,0,1,19,9,Jayden Daniels pass intercepted Max Tooley return for no gain to the BYU 17,false,false,,0,0,0,0,0
+401309854102895901,401309854,1,4013098549,Pass Reception,9,10,1,false,false,false,0,0,0,0,0,0,83,252,Jaren Hall pass complete to Dallin Holker for 9 yds to the BYU 26,false,false,,0,1,0,0,1
+401309854102897901,401309854,1,4013098549,Rush,-11,1,2,false,false,false,0,0,0,0,0,0,74,252,"Tyler Allgeier run for 4 yds to the BYU 30 BYU Penalty, Personal Foul (Neil Pau'u) to the BYU 15",,false,252,0,0,0,0,0
+401309854102904901,401309854,1,4013098549,Pass Reception,31,12,2,false,false,false,0,0,0,0,0,0,85,252,Jaren Hall pass complete to Dallin Holker for 31 yds to the BYU 46 for a 1ST down,false,false,,0,0,0,0,0
+401309854102906201,401309854,1,4013098549,Pass Incompletion,0,10,1,false,false,false,0,0,0,0,0,0,54,252,Jaren Hall pass incomplete to Isaac Rex,false,false,,0,0,0,1,1
+401309854102908901,401309854,1,4013098549,Pass Reception,20,10,2,false,false,false,0,0,0,0,0,0,54,252,Jaren Hall pass complete to Neil Pau'u for 20 yds to the ArzSt 34 for a 1ST down,false,false,,0,0,0,0,0
+401309854102914501,401309854,1,4013098549,Passing Touchdown,34,10,1,false,false,false,0,0,0,0,1,1,34,252,"Jaren Hall pass complete to Gunner Romney for 34 yds for a TD, (Justen Smith KICK)",false,false,,0,0,0,1,1
+401309854102914503,401309854,1,40130985410,Kickoff,25,10,1,false,false,false,1,0,0,0,0,0,65,9,"Justen Smith kickoff for 63 yds , Rachaad White return for 25 yds to the ARIZONAST 40 ARIZONA ST Penalty, Offensive Holding (10 Yards) to the ArzSt 17",true,false,9,1,0,0,0,1
+401309854102916902,401309854,1,40130985410,Rush,6,10,1,false,false,false,0,0,0,0,0,0,83,9,Rachaad White run for 6 yds to the ArzSt 23,false,false,,0,1,0,0,0
+401309854102925901,401309854,1,40130985410,Rush,-1,4,2,false,false,false,0,0,0,0,0,0,77,9,Jayden Daniels run for a loss of 1 yard to the ArzSt 22,false,false,,0,0,0,0,0
+401309854102927102,401309854,1,40130985410,Timeout,0,5,3,false,false,false,0,0,0,0,0,0,78,9,"Timeout ARIZONA ST, clock 07:28",false,false,,0,0,0,0,0
+401309854102927602,401309854,1,40130985410,Pass Incompletion,0,5,3,false,false,false,0,0,0,0,0,0,78,9,Jayden Daniels pass incomplete to Johnny Wilson,false,false,,0,0,0,0,0
+401309854102928601,401309854,1,40130985410,Punt,51,5,4,false,false,false,0,1,0,0,0,1,78,9,"Eddie Czaplicki punt for 51 yds , Hobbs Nyberg returns for a loss of 1 yard to the BYU 26",false,false,,0,0,0,0,0
+401309854102929901,401309854,1,40130985411,Pass Reception,34,10,1,false,false,false,0,0,0,0,0,0,74,252,Jaren Hall pass complete to Gunner Romney for 34 yds to the ArzSt 40 for a 1ST down,false,false,,0,1,0,0,1
+401309854102935301,401309854,1,40130985411,Pass Incompletion,0,10,1,false,false,false,0,0,0,0,0,0,40,252,Jaren Hall pass incomplete to Puka Nacua,false,false,,0,0,0,1,1
+401309854102936001,401309854,1,40130985411,Pass Incompletion,0,10,2,false,false,false,0,0,0,0,0,0,40,252,Jaren Hall pass incomplete to Tyler Allgeier,false,false,,0,0,0,0,0
+401309854102938601,401309854,1,40130985411,Pass Reception,11,10,3,false,false,false,0,0,0,0,0,0,40,252,Jaren Hall pass complete to Samson Nacua for 11 yds to the ArzSt 29 for a 1ST down,false,false,,0,0,0,0,0
+401309854102939701,401309854,1,40130985411,Timeout,0,10,1,false,false,false,0,0,0,0,0,0,29,252,"Timeout BYU, clock 06:02",false,false,,0,0,0,1,1
+401309854102946101,401309854,1,40130985411,Pass Incompletion,0,10,1,false,false,false,0,0,0,0,0,0,29,252,Jaren Hall pass incomplete to Lopini Katoa,false,false,,0,0,0,1,0
+401309854102947401,401309854,1,40130985411,Rush,11,10,2,false,false,false,0,0,0,0,0,0,29,252,Jaren Hall run for 11 yds to the ArzSt 18 for a 1ST down,false,false,,0,0,0,0,0
+401309854102954401,401309854,1,40130985411,Rush,3,10,1,false,false,false,0,0,0,0,0,0,18,252,Lopini Katoa run for 3 yds to the ArzSt 15,false,false,,0,0,0,1,1
+401309854102955901,401309854,1,40130985411,Passing Touchdown,15,7,2,false,false,false,0,0,0,0,1,1,15,252,"Jaren Hall pass complete to Isaac Rex for 15 yds for a TD, (Justen Smith KICK)",false,false,,0,0,0,0,0
+401309854102955903,401309854,1,40130985412,Kickoff,20,10,1,false,false,false,1,0,0,0,0,0,65,9,"Justen Smith kickoff for 57 yds , Tommi Hill return for 20 yds to the ArzSt 28",false,false,,1,0,0,0,1
+401309854102956701,401309854,1,40130985412,Pass Incompletion,0,10,1,false,false,false,0,0,0,0,0,0,72,9,Jayden Daniels pass incomplete to Ricky Pearsall,false,false,,0,1,0,0,0
+401309854102958001,401309854,1,40130985412,Pass Reception,16,10,2,false,false,false,0,0,0,0,0,0,72,9,Jayden Daniels pass complete to Rachaad White for 16 yds to the ArzSt 44 for a 1ST down,false,false,,0,0,0,0,0
+401309854102959301,401309854,1,40130985412,Pass Reception,9,10,1,false,false,false,0,0,0,0,0,0,56,9,Jayden Daniels pass complete to Ricky Pearsall for 9 yds to the BYU 47,false,false,,0,0,0,1,1
+401309854102964501,401309854,1,40130985412,Sack,-11,1,2,false,false,false,0,0,0,0,0,0,47,9,"Jayden Daniels sacked by TEAM for a loss of 11 yards to the BYU 42 ARIZONA ST Penalty, Intentional Grounding ( Yards) to the ArzSt 42",false,false,9,0,0,0,0,0
+401309854102965501,401309854,1,40130985412,Interception Return,0,12,3,false,false,false,0,0,0,1,0,1,58,9,Jayden Daniels pass intercepted Malik Moore return for no gain to the BYU 32,false,false,,0,0,0,0,0
+401309854102966902,401309854,1,40130985413,Rush,20,10,1,true,false,false,0,0,0,0,0,0,68,252,"Neil Pau'u run for 5 yds to the ArzSt 37 for a 1ST down ARIZONA ST Penalty, Personal Foul (Merlin Robertson) to the ArzSt 48 for a 1ST down",,false,9,0,1,0,0,1
+401309854102969902,401309854,1,40130985413,Pass Reception,11,10,1,false,false,false,0,0,0,0,0,0,48,252,Jaren Hall pass complete to Neil Pau'u for 11 yds to the ArzSt 37 for a 1ST down,false,false,,0,0,0,1,1
+401309854102975401,401309854,1,40130985413,Rush,3,10,1,false,false,false,0,0,0,0,0,0,37,252,Tyler Allgeier run for 3 yds to the ArzSt 34,false,false,,0,0,0,1,1
+401309854102977901,401309854,1,40130985413,Penalty,5,7,2,false,false,false,0,0,0,0,0,0,34,252,"ARIZONA ST Penalty, Defensive Offside (Chase Lucas) to the ArzSt 29",true,false,9,0,0,0,0,0
+401309854102984901,401309854,1,40130985413,Rush,2,2,2,false,false,false,0,0,0,0,0,0,29,252,Puka Nacua run for 2 yds to the ArzSt 27 for a 1ST down,false,false,,0,0,0,0,0
+401309854102989301,401309854,1,40130985413,Rush,3,10,1,false,false,false,0,0,0,0,0,0,27,252,Tyler Allgeier run for 3 yds to the ArzSt 24,false,false,,0,0,0,1,1
+401309854102997601,401309854,1,40130985413,Rush,-5,7,2,false,false,false,0,0,0,0,0,0,24,252,Jaren Hall run for a loss of 5 yards to the ArzSt 29,false,false,,0,0,0,0,0
+401309854102997602,401309854,1,40130985413,Timeout,0,12,3,false,false,false,0,0,0,0,0,0,29,252,"Timeout BYU, clock 00:23",false,false,,0,0,0,0,0
+401309854102997603,401309854,1,40130985413,Timeout,0,12,3,false,false,false,0,0,0,0,0,0,29,252,"Timeout ARIZONA ST, clock 00:23",false,false,,0,0,0,0,0
+401309854102998301,401309854,1,40130985413,Interception Return,0,12,3,false,false,false,0,0,0,1,0,1,29,252,"Jaren Hall pass intercepted, touchback. Jack Jones return for no gain",false,false,,0,0,0,0,0
+401309854102999901,401309854,1,40130985414,Rush,0,10,1,false,false,false,0,0,0,0,0,1,80,9,Jayden Daniels run for no gain to the ArzSt 20,false,false,,0,1,0,0,1
+401309854103849901,401309854,2,40130985415,Kickoff,0,10,1,false,false,false,1,0,0,0,0,0,65,252,Logan Tyler kickoff for 65 yds for a touchback,false,false,,1,0,0,0,1
+401309854103854901,401309854,2,40130985415,Pass Reception,14,10,1,false,false,false,0,0,0,0,0,0,75,252,Jaren Hall pass complete to Neil Pau'u for 14 yds to the BYU 39 for a 1ST down,false,false,,0,1,0,0,0
+401309854103855901,401309854,2,40130985415,Pass Incompletion,0,10,1,false,false,false,0,0,0,0,0,0,61,252,Jaren Hall pass incomplete to Dallin Holker,false,false,,0,0,0,1,1
+401309854103857201,401309854,2,40130985415,Rush,1,10,2,false,false,false,0,0,0,0,0,0,61,252,Tyler Allgeier run for 1 yd to the BYU 40,false,false,,0,0,0,0,0
+401309854103858601,401309854,2,40130985415,Pass Incompletion,0,9,3,false,false,false,0,0,0,0,0,0,60,252,Jaren Hall pass incomplete to Neil Pau'u,false,false,,0,0,0,0,0
+401309854103859401,401309854,2,40130985415,Punt,0,9,4,false,false,false,0,1,0,0,0,1,60,252,Ryan Rehkow punt for 60 yds for a touchback,false,false,,0,0,0,0,0
+401309854103866201,401309854,2,40130985416,Rush,14,10,1,false,false,false,0,0,0,0,0,0,80,9,Rachaad White run for 14 yds to the ArzSt 34 for a 1ST down,false,false,,0,1,0,0,1
+401309854103869001,401309854,2,40130985416,Rush,-1,10,1,false,false,false,0,0,0,0,0,0,66,9,Jayden Daniels run for a loss of 1 yard to the ArzSt 33,false,false,,0,0,0,1,1
+401309854103874201,401309854,2,40130985416,Timeout,0,11,2,false,false,false,0,0,0,0,0,0,67,9,"Timeout ARIZONA ST, clock 12:57",false,false,,0,0,0,0,0
+401309854103876701,401309854,2,40130985416,Pass Reception,6,11,2,false,false,false,0,0,0,0,0,0,67,9,Jayden Daniels pass complete to Rachaad White for 6 yds to the ArzSt 39,false,false,,0,0,0,0,0
+401309854103884201,401309854,2,40130985416,Rush,8,5,3,false,false,false,0,0,0,0,0,0,61,9,Jayden Daniels run for 8 yds to the ArzSt 47 for a 1ST down,false,false,,0,0,0,0,0
+401309854103886201,401309854,2,40130985416,Rush,2,10,1,false,false,false,0,0,0,0,0,0,53,9,Rachaad White run for 2 yds to the ArzSt 49,false,false,,0,0,0,1,1
+401309854103894401,401309854,2,40130985416,Rush,12,8,2,false,false,false,0,0,0,0,0,0,51,9,Daniyel Ngata run for 12 yds to the BYU 39 for a 1ST down,false,false,,0,0,0,0,0
+401309854103896201,401309854,2,40130985416,Rush,26,10,1,false,false,false,0,0,0,0,0,0,39,9,Daniyel Ngata run for 26 yds to the BYU 13 for a 1ST down,false,false,,0,0,0,1,1
+401309854103898501,401309854,2,40130985416,Rush,3,10,1,false,false,false,0,0,0,0,0,0,13,9,Daniyel Ngata run for 3 yds to the BYU 10,false,false,,0,0,0,1,1
+401309854103905701,401309854,2,40130985416,Rushing Touchdown,10,7,2,false,false,false,0,0,0,0,1,1,10,9,"Daniyel Ngata run for 10 yds for a TD, (Cristian Zendejas KICK)",false,false,,0,0,0,0,0
+401309854103905703,401309854,2,40130985417,Kickoff,0,10,1,false,false,false,1,0,0,0,0,0,65,252,Logan Tyler kickoff for 65 yds for a touchback,false,false,,1,0,0,0,1
+401309854103908201,401309854,2,40130985417,Rush,-1,10,1,false,false,false,0,0,0,0,0,0,75,252,Tyler Allgeier run for a loss of 1 yard to the BYU 24,false,false,,0,1,0,0,0
+401309854103909201,401309854,2,40130985417,Pass Incompletion,0,11,2,false,false,false,0,0,0,0,0,0,76,252,Jaren Hall pass incomplete to Isaac Rex,false,false,,0,0,0,0,0
+401309854103914101,401309854,2,40130985417,Pass Incompletion,0,11,3,false,false,false,0,0,0,0,0,0,76,252,Jaren Hall pass incomplete to Keanu Hill,false,false,,0,0,0,0,0
+401309854103914102,401309854,2,40130985417,Punt,0,11,4,false,false,false,0,1,0,0,0,1,76,252,"Ryan Rehkow punt for 41 yds , LV Bunkley-Shelton returns for no gain to the ArzSt 35 LV Bunkley-Shelton fumbled, recovered by ArzSt LV Bunkley-Shelton",false,false,,0,0,0,0,0
+401309854103917001,401309854,2,40130985418,Rush,21,10,1,false,false,false,0,0,0,0,0,0,65,9,Daniyel Ngata run for 21 yds to the BYU 44 for a 1ST down,false,false,,0,1,0,0,1
+401309854103918201,401309854,2,40130985418,Rush,2,10,1,false,false,false,0,0,0,0,0,0,44,9,Daniyel Ngata run for 2 yds to the BYU 42,false,false,,0,0,0,1,1
+401309854103925501,401309854,2,40130985418,Rush,6,8,2,false,false,false,0,0,0,0,0,0,42,9,Daniyel Ngata run for 6 yds to the BYU 36,false,false,,0,0,0,0,0
+401309854103928401,401309854,2,40130985418,Rush,10,2,3,false,false,false,0,0,0,0,0,0,36,9,Rachaad White run for 10 yds to the BYU 26 for a 1ST down,false,false,,0,0,0,0,0
+401309854103935501,401309854,2,40130985418,Rush,4,10,1,false,false,false,0,0,0,0,0,0,26,9,Rachaad White run for 4 yds to the BYU 22,false,false,,0,0,0,1,1
+401309854103937801,401309854,2,40130985418,Penalty,-5,6,2,false,false,false,0,0,0,0,0,0,22,9,"ARIZONA ST Penalty, Illegal Motion (Jayden Daniels) to the BYU 27",true,false,9,0,0,0,0,0
+401309854103939701,401309854,2,40130985418,Rush,2,11,2,false,false,false,0,0,0,0,0,0,27,9,Daniyel Ngata run for 2 yds to the BYU 25,false,false,,0,0,0,0,0
+401309854103947701,401309854,2,40130985418,Pass Reception,11,9,3,false,false,false,0,0,0,0,0,0,25,9,Jayden Daniels pass complete to LV Bunkley-Shelton for 11 yds to the BYU 14 for a 1ST down,false,false,,0,0,0,0,0
+401309854103954001,401309854,2,40130985418,Penalty,-10,10,1,false,false,false,0,0,0,0,0,0,14,9,"ARIZONA ST Penalty, Offensive Holding (John Stivers) to the BYU 24",true,false,9,0,0,0,1,1
+401309854103954401,401309854,2,40130985418,Penalty,-5,20,1,false,false,false,0,0,0,0,0,0,24,9,"ARIZONA ST Penalty, False Start (Ben Scott) to the BYU 29",true,false,9,0,0,0,0,0
+401309854103956901,401309854,2,40130985418,Pass Incompletion,0,25,1,false,false,false,0,0,0,0,0,0,29,9,Jayden Daniels pass incomplete to Curtis Hodges,false,false,,0,0,0,0,0
+401309854103957401,401309854,2,40130985418,Pass Incompletion,0,25,2,false,false,false,0,0,0,0,0,0,29,9,Jayden Daniels pass incomplete to Johnny Wilson,false,false,,0,0,0,0,0
+401309854103959701,401309854,2,40130985418,Pass Reception,7,25,3,false,false,false,0,0,0,0,0,0,29,9,Jayden Daniels pass complete to Ricky Pearsall for 7 yds to the BYU 22,false,false,,0,0,0,0,0
+401309854103965901,401309854,2,40130985418,Field Goal Good,40,18,4,false,false,false,0,0,0,0,1,1,23,9,Cristian Zendejas 40 yd FG GOOD,false,false,,0,0,0,0,0
+401309854103965902,401309854,2,40130985419,Kickoff,0,10,1,false,false,false,1,0,0,0,0,0,65,252,Logan Tyler kickoff for 65 yds for a touchback,false,false,,1,0,0,0,1
+401309854103968101,401309854,2,40130985419,Pass Reception,-2,10,1,false,false,false,0,0,0,0,0,0,75,252,Jaren Hall pass complete to Gunner Romney for a loss of 2 yards to the BYU 23,false,false,,0,1,0,0,0
+401309854103975101,401309854,2,40130985419,Rush,3,12,2,false,false,false,0,0,0,0,0,0,77,252,Tyler Allgeier run for 3 yds to the BYU 26,false,false,,0,0,0,0,0
+401309854103979501,401309854,2,40130985419,Pass Reception,17,9,3,false,false,false,0,0,0,0,0,0,74,252,Jaren Hall pass complete to Gunner Romney for 17 yds to the BYU 43 for a 1ST down,false,false,,0,0,0,0,0
+401309854103986901,401309854,2,40130985419,Rush,3,10,1,false,false,false,0,0,0,0,0,0,57,252,Tyler Allgeier run for 3 yds to the BYU 46,false,false,,0,0,0,1,1
+401309854103995801,401309854,2,40130985419,Rush,28,7,2,false,false,false,0,0,0,0,0,0,54,252,Jaren Hall run for 28 yds to the ArzSt 26 for a 1ST down,false,false,,0,0,0,0,0
+401309854103998701,401309854,2,40130985419,Interception Return,60,10,1,false,false,false,0,0,0,1,0,0,26,252,"Jaren Hall pass intercepted Merlin Robertson return for 60 yds to the BYU 15 Merlin Robertson fumbled, recovered by BYU Tyler Allgeier",false,false,,0,0,0,1,1
+401309854103999901,401309854,2,40130985420,Pass Reception,7,10,1,false,false,false,0,0,0,0,0,0,85,252,Jaren Hall pass complete to Masen Wake for 7 yds to the BYU 22,false,false,,0,1,0,0,1
+401309854104854901,401309854,2,40130985420,Rush,18,3,2,true,false,false,0,0,0,0,0,0,78,252,"Lopini Katoa run for 3 yds to the BYU 25 for a 1ST down ARIZONA ST Penalty, Face Mask (15 yards) (Omarr Norman-Lott) to the BYU 40 for a 1ST down",,false,9,0,0,0,0,0
+401309854104857601,401309854,2,40130985420,Pass Reception,3,10,1,false,false,false,0,0,0,0,0,0,60,252,Jaren Hall pass complete to Gunner Romney for 3 yds to the BYU 43,false,false,,0,0,0,1,1
+401309854104858901,401309854,2,40130985420,Rush,15,7,2,false,false,false,0,0,0,0,0,0,57,252,Tyler Allgeier run for 15 yds to the ArzSt 42 for a 1ST down,false,false,,0,0,0,0,0
+401309854104865801,401309854,2,40130985420,Rush,4,10,1,false,false,false,0,0,0,0,0,0,42,252,Tyler Allgeier run for 4 yds to the ArzSt 38,false,false,,0,0,0,1,1
+401309854104868001,401309854,2,40130985420,Rush,8,6,2,false,false,false,0,0,0,0,0,0,38,252,Lopini Katoa run for 8 yds to the ArzSt 30 for a 1ST down,false,false,,0,0,0,0,0
+401309854104874201,401309854,2,40130985420,Rush,-1,10,1,false,false,false,0,0,0,0,0,0,30,252,Lopini Katoa run for a loss of 1 yard to the ArzSt 31,false,false,,0,0,0,1,1
+401309854104876701,401309854,2,40130985420,Pass Reception,1,11,2,false,false,false,0,0,0,0,0,0,31,252,Jaren Hall pass complete to Lopini Katoa for 1 yd to the ArzSt 30,false,false,,0,0,0,0,0
+401309854104884601,401309854,2,40130985420,Sack,-7,10,3,false,false,false,0,0,0,0,0,0,30,252,Jaren Hall sacked by Omarr Norman-Lott for a loss of 7 yards to the ArzSt 37,false,false,,0,0,0,0,0
+401309854104886501,401309854,2,40130985420,Punt,0,17,4,false,false,false,0,1,0,0,0,1,37,252,"Ryan Rehkow punt for 32 yds, fair catch by LV Bunkley-Shelton at the ArzSt 5",false,false,,0,0,0,0,0
+401309854104887901,401309854,2,40130985421,Rush,4,10,1,false,false,false,0,0,0,0,0,0,95,9,Rachaad White run for 4 yds to the ArzSt 9,false,false,,0,1,0,0,1
+401309854104896001,401309854,2,40130985421,Rush,0,6,2,false,false,false,0,0,0,0,0,0,91,9,Rachaad White run for no gain to the ArzSt 9,false,false,,0,0,0,0,0
+401309854104897901,401309854,2,40130985421,Penalty,-4,6,3,false,false,false,0,0,0,0,0,0,91,9,"ARIZONA ST Penalty, Face Mask (4 yards) (Henry Hattis) to the ArzSt 5",,false,9,0,0,0,0,0
+401309854104899801,401309854,2,40130985421,Penalty,-2,10,3,false,false,false,0,0,0,0,0,0,95,9,"ARIZONA ST Penalty, False Start (Andre Johnson) to the ArzSt 3",true,false,9,0,0,0,0,0
+401309854104905601,401309854,2,40130985421,Pass Reception,17,12,3,false,false,false,0,0,0,0,0,0,97,9,Jayden Daniels pass complete to Ricky Pearsall for 17 yds to the ArzSt 20 for a 1ST down,false,false,,0,0,0,0,0
+401309854104909501,401309854,2,40130985421,Rush,4,10,1,false,false,false,0,0,0,0,0,0,80,9,Jayden Daniels run for 4 yds to the ArzSt 24,false,false,,0,0,0,1,1
+401309854104916501,401309854,2,40130985421,Penalty,-5,6,2,false,false,false,0,0,0,0,0,0,76,9,"ARIZONA ST Penalty, False Start (Dohnovan West) to the ArzSt 19",true,false,9,0,0,0,0,0
+401309854104919001,401309854,2,40130985421,Penalty,-5,11,2,false,false,false,0,0,0,0,0,0,81,9,"ARIZONA ST Penalty, False Start (Henry Hattis) to the ArzSt 14",true,false,9,0,0,0,0,0
+401309854104926901,401309854,2,40130985421,Sack,-8,16,2,false,false,false,0,0,0,0,0,0,86,9,Jayden Daniels sacked by Pepe Tanuvasa for a loss of 8 yards to the ArzSt 6,false,false,,0,0,0,0,0
+401309854104929601,401309854,2,40130985421,Pass Reception,8,24,3,false,false,false,0,0,0,0,0,0,94,9,Jayden Daniels pass complete to Rachaad White for 8 yds to the ArzSt 14,false,false,,0,0,0,0,0
+401309854104936201,401309854,2,40130985421,Punt,-4,16,4,false,false,false,0,1,0,0,0,1,86,9,"Eddie Czaplicki punt for 59 yds , Hobbs Nyberg returns for a loss of 4 yards to the BYU 23 Hobbs Nyberg fumbled, recovered by BYU",false,false,,0,0,0,0,0
+401309854104938001,401309854,2,40130985422,Rush,17,10,1,false,false,false,0,0,0,0,0,0,77,252,Tyler Allgeier run for 17 yds to the BYU 40 for a 1ST down,false,false,,0,1,0,0,1
+401309854104945501,401309854,2,40130985422,Rush,7,10,1,false,false,false,0,0,0,0,0,0,60,252,Jaren Hall run for 7 yds to the BYU 47,false,false,,0,0,0,1,1
+401309854104948401,401309854,2,40130985422,Rush,4,3,2,false,false,false,0,0,0,0,0,0,53,252,Tyler Allgeier run for 4 yds to the ArzSt 49 for a 1ST down,false,false,,0,0,0,0,0
+401309854104954401,401309854,2,40130985422,Rush,4,10,1,false,false,false,0,0,0,0,0,0,49,252,Lopini Katoa run for 4 yds to the ArzSt 45,false,false,,0,0,0,1,1
+401309854104964901,401309854,2,40130985422,Rush,16,6,2,true,false,false,0,0,0,0,0,0,45,252,"Tyler Allgeier run for 1 yd to the ArzSt 44 for a 1ST down ARIZONA ST Penalty, Face Mask (15 yards) (Omarr Norman-Lott) to the ArzSt 29 for a 1ST down",,false,9,0,0,0,0,0
+401309854104966601,401309854,2,40130985422,Rush,9,10,1,false,false,false,0,0,0,0,0,0,29,252,Lopini Katoa run for 9 yds to the ArzSt 20,false,false,,0,0,0,1,1
+401309854104969901,401309854,2,40130985422,Rush,5,1,2,false,false,false,0,0,0,0,0,0,20,252,Lopini Katoa run for 5 yds to the ArzSt 15 for a 1ST down,false,false,,0,0,0,0,0
+401309854104975901,401309854,2,40130985422,Rush,-2,10,1,false,false,false,0,0,0,0,0,0,15,252,Lopini Katoa run for a loss of 2 yards to the ArzSt 17,false,false,,0,0,0,1,1
+401309854104975902,401309854,2,40130985422,Timeout,0,12,2,false,false,false,0,0,0,0,0,0,17,252,"Timeout ARIZONA ST, clock 02:40",false,false,,0,0,0,0,0
+401309854104976401,401309854,2,40130985422,Rush,13,12,2,false,false,false,0,0,0,0,0,0,17,252,Jaren Hall run for 13 yds to the ArzSt 4 for a 1ST down,false,false,,0,0,0,0,0
+401309854104979801,401309854,2,40130985422,Rush,0,4,1,false,false,false,0,0,0,0,0,0,4,252,Tyler Allgeier run for no gain to the ArzSt 4,false,false,,0,0,0,1,1
+401309854104987401,401309854,2,40130985422,Rush,1,4,2,false,false,false,0,0,0,0,0,0,4,252,Tyler Allgeier run for 1 yd to the ArzSt 3,false,false,,0,0,0,0,0
+401309854104988001,401309854,2,40130985422,Passing Touchdown,3,3,3,false,false,false,0,0,0,0,1,0,3,252,"Baylor Romney pass complete to Isaac Rex for 3 yds for a TD, (Two-Point Conversion failed)",false,false,,0,0,0,0,0
+401309854104988002,401309854,2,40130985422,Timeout,0,0,3,false,false,false,0,0,0,0,0,1,3,252,"Timeout BYU, clock 01:19",false,false,,0,1,0,0,0
+401309854104988004,401309854,2,40130985423,Kickoff,0,10,1,false,false,false,1,0,0,0,0,0,65,9,Justen Smith kickoff for 65 yds for a touchback,false,false,,1,0,0,0,1
+401309854104988801,401309854,2,40130985423,Pass Incompletion,0,10,1,false,false,false,0,0,0,0,0,0,75,9,Jayden Daniels pass incomplete to LV Bunkley-Shelton,false,false,,0,1,0,0,0
+401309854104994801,401309854,2,40130985423,Pass Reception,3,10,2,false,false,false,0,0,0,0,0,0,75,9,Jayden Daniels pass complete to Rachaad White for 3 yds to the ArzSt 28,false,false,,0,0,0,0,0
+401309854104996401,401309854,2,40130985423,Pass Reception,19,7,3,false,false,false,0,0,0,0,0,0,72,9,Jayden Daniels pass complete to Johnny Wilson for 19 yds to the ArzSt 47 for a 1ST down,false,false,,0,0,0,0,0
+401309854104997101,401309854,2,40130985423,Penalty,-10,10,1,false,false,false,0,0,0,0,0,0,53,9,"ARIZONA ST Penalty, Offensive Holding (Ben Scott) to the ArzSt 37",true,false,9,0,0,0,1,1
+401309854104999101,401309854,2,40130985423,Rush,18,20,1,false,false,false,0,0,0,0,0,0,63,9,Jayden Daniels run for 18 yds to the BYU 45,false,false,,0,0,0,0,0
+401309854104999102,401309854,2,40130985423,Timeout,0,2,2,false,false,false,0,0,0,0,0,0,45,9,"Timeout BYU, clock 00:08",false,false,,0,0,0,0,0
+401309854104999901,401309854,2,40130985423,Pass Reception,18,2,2,false,false,false,0,0,0,0,0,1,45,9,Jayden Daniels pass complete to Rachaad White for 18 yds to the BYU 27 for a 1ST down,false,false,,0,0,0,0,0

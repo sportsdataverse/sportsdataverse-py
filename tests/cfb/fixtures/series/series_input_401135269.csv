@@ -1,200 +1,200 @@
-id_play,game_id,half,id_drive,play_type,yards_gained,distance,down,penalty_1st_conv,penalty_offset,penalty_declined,kickoff_play,punt,downs_turnover,turnover_vec,scoring_play,change_of_pos_team,yards_to_goal,pos_team,text,penalty_negated_play,penalty_no_play,py_firstD_by_kickoff,py_firstD_by_poss,py_firstD_by_penalty,py_firstD_by_yards,py_new_series
-401135269101849902,401135269,1,4011352691,Kickoff Return (Offense),19,10,1,false,false,false,1,0,0,0,0,0,65,62,"Skyler Southam kickoff for 57 yds , Lincoln Victor return for 19 yds to the Hawa 27",false,false,1,0,0,0,1
-401135269101854402,401135269,1,4011352691,Pass Reception,5,10,1,false,false,false,0,0,0,0,0,0,73,62,Cole McDonald pass complete to Miles Reed for 5 yds to the Hawa 32,false,false,0,1,0,0,0
-401135269101858902,401135269,1,4011352691,Rush,3,5,2,false,false,false,0,0,0,0,0,0,68,62,Miles Reed run for 3 yds to the Hawa 35,false,false,0,0,0,0,0
-401135269101865602,401135269,1,4011352691,Pass Incompletion,0,2,3,false,false,false,0,0,0,0,0,0,65,62,Cole McDonald pass incomplete,false,false,0,0,0,0,0
-401135269101866801,401135269,1,4011352691,Punt,0,2,4,false,false,false,0,1,0,0,0,1,65,62,"Ben Scruton punt for 39 yds, fair catch by Aleva Hifo at the BYU 26",false,false,0,0,0,0,0
-401135269101866802,401135269,1,4011352692,Rush,0,10,1,false,false,false,0,0,0,0,0,0,74,252,Lopini Katoa run for no gain to the BYU 26,false,false,0,1,0,0,1
-401135269101869801,401135269,1,4011352692,Pass Incompletion,0,10,2,false,false,false,0,0,0,0,0,0,74,252,Zach Wilson pass incomplete to Dax Milne,false,false,0,0,0,0,0
-401135269101874201,401135269,1,4011352692,Pass Incompletion,0,10,3,false,false,false,0,0,0,0,0,0,74,252,Zach Wilson pass incomplete to Matt Bushman,false,false,0,0,0,0,0
-401135269101875801,401135269,1,4011352692,Punt,0,10,4,false,false,false,0,1,0,0,0,1,74,252,"Jake Oldroyd punt for 56 yds, downed at the Hawa 18",false,false,0,0,0,0,0
-401135269101875802,401135269,1,4011352693,Pass Reception,16,10,1,false,false,false,0,0,0,0,0,0,82,62,Cole McDonald pass complete to Jason-Matthew Sharsh for 16 yds to the Hawa 34 for a 1ST down,false,false,0,1,0,0,1
-401135269101879001,401135269,1,4011352693,Pass Reception,9,10,1,false,false,false,0,0,0,0,0,0,66,62,Cole McDonald pass complete to JoJo Ward for 9 yds to the Hawa 43,false,false,0,0,0,1,1
-401135269101885501,401135269,1,4011352693,Rush,2,1,2,false,false,false,0,0,0,0,0,0,57,62,Cedric Byrd II run for 2 yds to the Hawa 45 for a 1ST down,false,false,0,0,0,0,0
-401135269101888101,401135269,1,4011352693,Pass Reception,16,10,1,false,false,false,0,0,0,0,0,0,55,62,Cole McDonald pass complete to JoJo Ward for 16 yds to the BYU 39 for a 1ST down,false,false,0,0,0,1,1
-401135269101896701,401135269,1,4011352693,Rush,4,10,1,false,false,false,0,0,0,0,0,0,39,62,Miles Reed run for 4 yds to the BYU 35,false,false,0,0,0,1,1
-401135269101904801,401135269,1,4011352693,Pass Reception,4,6,2,false,false,false,0,0,0,0,0,0,35,62,Cole McDonald pass complete to Cedric Byrd II for 4 yds to the BYU 31,false,false,0,0,0,0,0
-401135269101908201,401135269,1,4011352693,Pass Reception,21,2,3,false,false,false,0,0,0,0,0,0,31,62,Cole McDonald pass complete to Jared Smart for 21 yds to the BYU 10 for a 1ST down,false,false,0,0,0,0,0
-401135269101914101,401135269,1,4011352693,Rush,-3,10,1,false,false,false,0,0,0,0,0,0,10,62,Miles Reed run for a loss of 3 yards to the BYU 13,false,false,0,0,0,1,1
-401135269101918401,401135269,1,4011352693,Pass Reception,6,0,2,false,false,false,0,0,0,0,0,0,13,62,Cole McDonald pass complete to Lincoln Victor for 6 yds to the BYU 7,false,false,0,0,0,0,0
-401135269101926701,401135269,1,4011352693,Passing Touchdown,7,7,3,false,false,false,0,0,0,0,1,1,7,62,"Cole McDonald pass complete to Jared Smart for 7 yds for a TD, (Ryan Meskell KICK)",false,false,0,0,0,1,1
-401135269101926703,401135269,1,4011352694,Kickoff,0,10,1,false,false,false,1,0,0,0,0,0,65,252,Ryan Meskell kickoff for 62 yds for a touchback,false,false,1,0,0,0,1
-401135269101927101,401135269,1,4011352694,Rush,1,10,1,false,false,false,0,0,0,0,0,0,75,252,Lopini Katoa run for 1 yd to the BYU 26,false,false,0,1,0,0,0
-401135269101934601,401135269,1,4011352694,Rush,5,9,2,false,false,false,0,0,0,0,0,0,74,252,Lopini Katoa run for 5 yds to the BYU 31,false,false,0,0,0,0,0
-401135269101938201,401135269,1,4011352694,Pass Reception,10,4,3,false,false,false,0,0,0,0,0,0,69,252,Zach Wilson pass complete to Aleva Hifo for 10 yds to the BYU 41 for a 1ST down,false,false,0,0,0,0,0
-401135269101945301,401135269,1,4011352694,Interception Return,21,10,1,false,false,false,0,0,0,1,0,1,59,252,Zach Wilson pass intercepted Khoury Bethley return for 21 yds to the BYU 40,false,false,0,0,0,1,1
-401135269101945302,401135269,1,4011352695,Rush,0,10,1,false,false,false,0,0,0,0,0,0,40,62,Miles Reed run for no gain to the BYU 40,false,false,0,1,0,0,1
-401135269101954401,401135269,1,4011352695,Passing Touchdown,40,10,2,false,false,false,0,0,0,0,1,1,40,62,"Cole McDonald pass complete to Jared Smart for 40 yds for a TD, (Ryan Meskell KICK)",false,false,0,0,0,0,0
-401135269101954403,401135269,1,4011352696,Kickoff Return (Offense),15,10,1,false,false,false,1,0,0,0,0,0,65,252,"Ryan Meskell kickoff for 53 yds , Dayan Ghanwoloku return for 15 yds to the BYU 27",false,false,1,0,0,0,1
-401135269101954801,401135269,1,4011352696,Pass Reception,6,10,1,false,false,false,0,0,0,0,0,0,73,252,Zach Wilson pass complete to Matt Bushman for 6 yds to the BYU 33,false,false,0,1,0,0,0
-401135269101957501,401135269,1,4011352696,Pass Incompletion,0,4,2,false,false,false,0,0,0,0,0,0,67,252,Zach Wilson pass incomplete to Aleva Hifo,false,false,0,0,0,0,0
-401135269101958001,401135269,1,4011352696,Pass Reception,8,4,3,false,false,false,0,0,0,0,0,0,67,252,Zach Wilson pass complete to Talon Shumway for 8 yds to the BYU 41 for a 1ST down,false,false,0,0,0,0,0
-401135269101964701,401135269,1,4011352696,Pass Reception,11,10,1,false,false,false,0,0,0,0,0,0,59,252,Zach Wilson pass complete to Micah Simon for 11 yds to the Hawa 48 for a 1ST down,false,false,0,0,0,1,1
-401135269101967601,401135269,1,4011352696,Pass Incompletion,0,10,1,false,false,false,0,0,0,0,0,0,48,252,Zach Wilson pass incomplete to Matt Bushman,false,false,0,0,0,1,1
-401135269101968401,401135269,1,4011352696,Rush,8,10,2,false,false,false,0,0,0,0,0,0,48,252,Zach Wilson run for 8 yds to the Hawa 40,false,false,0,0,0,0,0
-401135269101976201,401135269,1,4011352696,Pass Reception,6,2,3,false,false,false,0,0,0,0,0,0,40,252,Zach Wilson pass complete to Aleva Hifo for 6 yds to the Hawa 34 for a 1ST down,false,false,0,0,0,0,0
-401135269101979801,401135269,1,4011352696,Pass Reception,31,10,1,false,false,false,0,0,0,0,0,0,34,252,Zach Wilson pass complete to Matt Bushman for 31 yds to the Hawa 3 for a 1ST down,false,false,0,0,0,1,1
-401135269101987001,401135269,1,4011352696,Rush,2,3,1,false,false,false,0,0,0,0,0,0,3,252,Masen Wake run for 2 yds to the Hawa 1,false,false,0,0,0,1,1
-401135269101994501,401135269,1,4011352696,Rushing Touchdown,1,1,2,false,false,false,0,0,0,0,1,1,1,252,"Lopini Katoa run for 1 yd for a TD, (Jake Oldroyd KICK)",false,false,0,0,0,0,0
-401135269101994503,401135269,1,4011352697,Kickoff Return (Offense),18,10,1,false,false,false,1,0,0,0,0,0,65,62,"Skyler Southam kickoff for 61 yds , Lincoln Victor return for 18 yds to the Hawa 22",false,false,1,0,0,0,1
-401135269101995101,401135269,1,4011352697,Pass Reception,17,10,1,false,false,false,0,0,0,0,0,0,78,62,Cole McDonald pass complete to JoJo Ward for 17 yds to the Hawa 39 for a 1ST down,false,false,0,1,0,0,0
-401135269101997701,401135269,1,4011352697,Pass Incompletion,0,10,1,false,false,false,0,0,0,0,0,0,61,62,Cole McDonald pass incomplete to Cedric Byrd II,false,false,0,0,0,1,1
-401135269101999901,401135269,1,4011352697,Pass Reception,58,10,2,false,false,false,0,0,0,0,0,0,61,62,Cole McDonald pass complete to Jared Smart for 58 yds to the BYU 3 for a 1ST down,false,false,0,0,0,0,0
-401135269102849901,401135269,1,4011352697,Rush,1,3,1,false,false,false,0,0,0,0,0,0,3,62,Dayton Furuta run for 1 yd to the BYU 2,false,false,0,0,0,1,1
-401135269102857301,401135269,1,4011352697,Rush,1,2,2,false,false,false,0,0,0,0,0,0,2,62,Cole McDonald run for 1 yd to the BYU 1,false,false,0,0,0,0,0
-401135269102866301,401135269,1,4011352697,Timeout,0,0,3,false,false,false,0,0,0,0,0,0,1,62,"Timeout HAWAII, clock 13:36",false,false,0,0,0,0,0
-401135269102866601,401135269,1,4011352697,Rushing Touchdown,1,1,3,false,false,false,0,0,0,0,1,1,1,62,"Cole McDonald run for 1 yd for a TD, (Ryan Meskell KICK)",false,false,0,0,0,0,0
-401135269102866603,401135269,1,4011352698,Kickoff,0,10,1,false,false,false,1,0,0,0,0,0,65,252,Ryan Meskell kickoff for 65 yds for a touchback,false,false,1,0,0,0,1
-401135269102866801,401135269,1,4011352698,Pass Reception,1,10,1,false,false,false,0,0,0,0,0,0,75,252,Zach Wilson pass complete to Matt Bushman for 1 yd to the BYU 26,false,false,0,1,0,0,0
-401135269102874001,401135269,1,4011352698,Rush,12,9,2,false,false,false,0,0,0,0,0,0,74,252,Lopini Katoa run for 12 yds to the BYU 38 for a 1ST down,false,false,0,0,0,0,0
-401135269102876601,401135269,1,4011352698,Pass Reception,22,10,1,false,false,false,0,0,0,0,0,0,62,252,Zach Wilson pass complete to Matt Bushman for 22 yds to the Hawa 40 for a 1ST down,false,false,0,0,0,1,1
-401135269102884701,401135269,1,4011352698,Rush,1,10,1,false,false,false,0,0,0,0,0,0,40,252,Tyler Allgeier run for 1 yd to the Hawa 39,false,false,0,0,0,1,1
-401135269102887901,401135269,1,4011352698,Pass Reception,26,9,2,false,false,false,0,0,0,0,0,0,39,252,Zach Wilson pass complete to Dax Milne for 26 yds to the Hawa 13 for a 1ST down,false,false,0,0,0,0,0
-401135269102894501,401135269,1,4011352698,Pass Reception,4,10,1,false,false,false,0,0,0,0,0,0,13,252,Zach Wilson pass complete to Lopini Katoa for 4 yds to the Hawa 9,false,false,0,0,0,1,1
-401135269102898401,401135269,1,4011352698,Rush,8,6,2,false,false,false,0,0,0,0,0,0,9,252,Lopini Katoa run for 8 yds to the Hawa 1 for a 1ST down,false,false,0,0,0,0,0
-401135269102905701,401135269,1,4011352698,Rushing Touchdown,1,1,1,false,false,false,0,0,0,0,1,1,1,252,"Zach Wilson run for 1 yd for a TD, (Jake Oldroyd KICK)",false,false,0,0,0,1,1
-401135269102905703,401135269,1,4011352699,Kickoff Return (Offense),8,10,1,false,false,false,1,0,0,0,0,0,65,62,"Skyler Southam kickoff for 50 yds , Lincoln Victor return for 8 yds to the Hawa 23",false,false,1,0,0,0,1
-401135269102906301,401135269,1,4011352699,Pass Incompletion,0,10,1,false,false,false,0,0,0,0,0,0,77,62,Cole McDonald pass incomplete to Lincoln Victor,false,false,0,1,0,0,0
-401135269102907501,401135269,1,4011352699,Rush,3,10,2,false,false,false,0,0,0,0,0,0,77,62,Miles Reed run for 3 yds to the Hawa 26,false,false,0,0,0,0,0
-401135269102915401,401135269,1,4011352699,Pass Reception,15,7,3,false,false,false,0,0,0,0,0,0,74,62,Cole McDonald pass complete to Jason-Matthew Sharsh for 15 yds to the Hawa 41 for a 1ST down,false,false,0,0,0,0,0
-401135269102918601,401135269,1,4011352699,Pass Incompletion,0,10,1,false,false,false,0,0,0,0,0,0,59,62,Cole McDonald pass incomplete to Cedric Byrd II,false,false,0,0,0,1,1
-401135269102919201,401135269,1,4011352699,Pass Reception,47,10,2,false,false,false,0,0,0,0,0,0,59,62,Cole McDonald pass complete to JoJo Ward for 47 yds to the BYU 12 for a 1ST down,false,false,0,0,0,0,0
-401135269102926501,401135269,1,4011352699,Sack,-10,10,1,false,false,false,0,0,0,0,0,0,12,62,Cole McDonald sacked by JJ Nwigwe for a loss of 10 yards to the BYU 22,false,false,0,0,0,1,1
-401135269102934201,401135269,1,4011352699,Rush,4,20,2,false,false,false,0,0,0,0,0,0,22,62,Miles Reed run for 4 yds to the BYU 18,false,false,0,0,0,0,0
-401135269102939801,401135269,1,4011352699,Sack,-10,16,3,false,false,false,0,0,0,0,0,0,18,62,Cole McDonald sacked by Zac Dawe for a loss of 10 yards to the BYU 28,false,false,0,0,0,0,0
-401135269102944901,401135269,1,4011352699,Field Goal Good,46,26,4,false,false,false,0,0,0,0,1,1,29,62,Ryan Meskell 46 yd FG GOOD,false,false,0,0,0,0,0
-401135269102944902,401135269,1,40113526910,Kickoff,0,10,1,false,false,false,1,0,0,0,0,0,65,252,Ryan Meskell kickoff for 65 yds for a touchback,false,false,1,0,0,0,1
-401135269102945401,401135269,1,40113526910,Pass Reception,24,10,1,false,false,false,0,0,0,0,0,0,75,252,Zach Wilson pass complete to Aleva Hifo for 24 yds to the BYU 49 for a 1ST down,false,false,0,1,0,0,0
-401135269102947001,401135269,1,40113526910,Pass Reception,16,10,1,false,false,false,0,0,0,0,0,0,51,252,Zach Wilson pass complete to Matt Bushman for 16 yds to the Hawa 35 for a 1ST down,false,false,0,0,0,1,1
-401135269102949801,401135269,1,40113526910,Pass Incompletion,0,10,1,false,false,false,0,0,0,0,0,0,35,252,Micah Simon pass incomplete to Talon Shumway,false,false,0,0,0,1,1
-401135269102954701,401135269,1,40113526910,Rush,6,10,2,false,false,false,0,0,0,0,0,0,35,252,Lopini Katoa run for 6 yds to the Hawa 29,false,false,0,0,0,0,0
-401135269102958301,401135269,1,40113526910,Rush,12,4,3,false,false,false,0,0,0,0,0,0,29,252,Zach Wilson run for 12 yds to the Hawa 17 for a 1ST down,false,false,0,0,0,0,0
-401135269102966901,401135269,1,40113526910,Pass Reception,6,10,1,false,false,false,0,0,0,0,0,0,17,252,Zach Wilson pass complete to Dax Milne for 6 yds to the Hawa 11,false,false,0,0,0,1,1
-401135269102968301,401135269,1,40113526910,Rushing Touchdown,11,4,2,false,false,false,0,0,0,0,1,1,11,252,"Micah Simon run for 11 yds for a TD, (Jake Oldroyd KICK)",false,false,0,0,0,0,0
-401135269102968303,401135269,1,40113526911,Kickoff Return (Offense),22,10,1,false,false,false,1,0,0,0,0,0,65,62,"Skyler Southam kickoff for 58 yds , Lincoln Victor return for 22 yds to the Hawa 29",false,false,1,0,0,0,1
-401135269102968801,401135269,1,40113526911,Pass Reception,7,10,1,false,false,false,0,0,0,0,0,0,71,62,Cole McDonald pass complete to Jared Smart for 7 yds to the Hawa 36,false,false,0,1,0,0,0
-401135269102975801,401135269,1,40113526911,Rush,-1,3,2,false,false,false,0,0,0,0,0,0,64,62,Cole McDonald run for a loss of 1 yard to the Hawa 35,false,false,0,0,0,0,0
-401135269102979101,401135269,1,40113526911,Pass Reception,21,4,3,false,false,false,0,0,0,0,0,0,65,62,Cole McDonald pass complete to Jason-Matthew Sharsh for 21 yds to the BYU 44 for a 1ST down,false,false,0,0,0,0,0
-401135269102984801,401135269,1,40113526911,Pass Incompletion,0,10,1,false,false,false,0,0,0,0,0,0,44,62,Cole McDonald pass incomplete to Lincoln Victor,false,false,0,0,0,1,1
-401135269102985701,401135269,1,40113526911,Pass Reception,11,10,2,false,false,false,0,0,0,0,0,0,44,62,Cole McDonald pass complete to JoJo Ward for 11 yds to the BYU 33 for a 1ST down,false,false,0,0,0,0,0
-401135269102986301,401135269,1,40113526911,Pass Incompletion,0,10,1,false,false,false,0,0,0,0,0,0,33,62,Cole McDonald pass incomplete to Jared Smart,false,false,0,0,0,1,1
-401135269102986701,401135269,1,40113526911,Penalty,-5,10,2,false,false,false,0,0,0,0,0,0,33,62,"HAWAII Penalty, False Start (Taaga Tuulima) to the BYU 38",true,false,0,0,0,0,0
-401135269102986901,401135269,1,40113526911,Pass Reception,13,15,2,false,false,false,0,0,0,0,0,0,38,62,Cole McDonald pass complete to JoJo Ward for 13 yds to the BYU 25,false,false,0,0,0,0,0
-401135269102987501,401135269,1,40113526911,Rush,7,2,3,false,false,false,0,0,0,0,0,0,25,62,Cole McDonald run for 7 yds to the BYU 18 for a 1ST down,false,false,0,0,0,0,0
-401135269102988301,401135269,1,40113526911,Passing Touchdown,18,10,1,false,false,false,0,0,0,0,1,1,18,62,"Cole McDonald pass complete to Jason-Matthew Sharsh for 18 yds for a TD, (Ryan Meskell KICK)",false,false,0,0,0,1,1
-401135269102988303,401135269,1,40113526912,Kickoff,60,10,1,false,false,false,1,0,0,0,0,0,65,252,"Ryan Meskell kickoff for 65 yds for a touchback HAWAII Penalty, Defensive Offside (-5 Yards)",true,false,1,0,0,0,1
-401135269102988401,401135269,1,40113526912,Pass Incompletion,0,10,1,false,false,false,0,0,0,0,0,0,70,252,Zach Wilson pass incomplete,false,false,0,1,0,0,0
-401135269102988801,401135269,1,40113526912,Pass Reception,6,10,2,false,false,false,0,0,0,0,0,0,70,252,Zach Wilson pass complete to Aleva Hifo for 6 yds to the BYU 36,false,false,0,0,0,0,0
-401135269102989601,401135269,1,40113526912,Timeout,0,4,3,false,false,false,0,0,0,0,0,0,64,252,"Timeout BYU, clock 01:03",false,false,0,0,0,0,0
-401135269102989701,401135269,1,40113526912,Pass Reception,12,4,3,false,false,false,0,0,0,0,0,0,64,252,Zach Wilson pass complete to Micah Simon for 12 yds to the BYU 48 for a 1ST down,false,false,0,0,0,0,0
-401135269102994801,401135269,1,40113526912,Pass Reception,37,10,1,true,false,false,0,0,0,0,0,0,52,252,"Zach Wilson pass complete to Dax Milne for 22 yds to the HAWAII 30 for a 1ST down HAWAII Penalty, Roughing Passer (Jeremiah Pritchard) to the Hawa 15 for a 1ST down",,false,0,0,0,1,1
-401135269102995901,401135269,1,40113526912,Timeout,0,10,1,false,false,false,0,0,0,0,0,0,15,252,"Timeout HAWAII, clock 00:40",false,false,0,0,0,1,1
-401135269102996001,401135269,1,40113526912,Sack,-3,10,1,false,false,false,0,0,0,0,0,0,15,252,Zach Wilson sacked by Derek Thomas for a loss of 3 yards to the Hawa 18,false,false,0,0,0,1,0
-401135269102996501,401135269,1,40113526912,Timeout,0,13,2,false,false,false,0,0,0,0,0,0,18,252,"Timeout BYU, clock 00:34",false,false,0,0,0,0,0
-401135269102996601,401135269,1,40113526912,Pass Reception,-2,13,2,false,false,false,0,0,0,0,0,0,18,252,Zach Wilson pass complete to Aleva Hifo for a loss of 2 yards to the Hawa 20,false,false,0,0,0,0,0
-401135269102997201,401135269,1,40113526912,Timeout,0,15,3,false,false,false,0,0,0,0,0,0,20,252,"Timeout BYU, clock 00:27",false,false,0,0,0,0,0
-401135269102997301,401135269,1,40113526912,Pass Incompletion,0,15,3,false,false,false,0,0,0,0,0,0,20,252,Zach Wilson pass incomplete to Micah Simon,false,false,0,0,0,0,0
-401135269102997501,401135269,1,40113526912,Timeout,0,15,4,false,false,false,0,0,0,0,0,0,20,252,"Timeout HAWAII, clock 00:24",false,false,0,0,0,0,0
-401135269102998101,401135269,1,40113526912,Field Goal Good,37,15,4,false,false,false,0,0,0,0,1,1,20,252,Jake Oldroyd 37 yd FG GOOD,false,false,0,0,0,0,0
-401135269102998102,401135269,1,40113526913,Kickoff Return (Offense),28,10,1,false,false,false,1,0,0,0,0,0,65,62,"Skyler Southam kickoff for 57 yds , Lincoln Victor return for 28 yds to the Hawa 36",false,false,1,0,0,0,1
-401135269102999901,401135269,1,40113526913,Rush,-2,10,1,false,false,false,0,0,0,0,0,1,64,62,TEAM run for a loss of 2 yards to the Hawa 34,false,false,0,1,0,0,0
-401135269103849901,401135269,2,40113526914,Kickoff,0,10,1,false,false,false,1,0,0,0,0,0,65,252,Ryan Meskell kickoff for 65 yds for a touchback,false,false,1,0,0,0,1
-401135269103854001,401135269,2,40113526914,Rush,10,10,1,false,false,false,0,0,0,0,0,0,75,252,Zach Wilson run for 10 yds to the BYU 35 for a 1ST down,false,false,0,1,0,0,0
-401135269103856701,401135269,2,40113526914,Rush,15,10,1,false,false,false,0,0,0,0,0,0,65,252,Lopini Katoa run for 15 yds to the 50 yard line for a 1ST down,false,false,0,0,0,1,1
-401135269103864101,401135269,2,40113526914,Rush,6,10,1,false,false,false,0,0,0,0,0,0,50,252,Dax Milne run for 6 yds to the Hawa 44,false,false,0,0,0,1,1
-401135269103867501,401135269,2,40113526914,Pass Incompletion,0,4,2,false,false,false,0,0,0,0,0,0,44,252,Zach Wilson pass incomplete to Dax Milne,false,false,0,0,0,0,0
-401135269103868201,401135269,2,40113526914,Pass Incompletion,0,4,3,false,false,false,0,0,0,0,0,0,44,252,Zach Wilson pass incomplete to Aleva Hifo,false,false,0,0,0,0,0
-401135269103869101,401135269,2,40113526914,Punt,0,4,4,false,false,false,0,1,0,0,0,1,44,252,"Jake Oldroyd punt for 34 yds, fair catch by JoJo Ward at the Hawa 10",false,false,0,0,0,0,0
-401135269103869102,401135269,2,40113526915,Pass Incompletion,0,10,1,false,false,false,0,0,0,0,0,0,90,62,Cole McDonald pass incomplete to Dayton Furuta,false,false,0,1,0,0,1
-401135269103869601,401135269,2,40113526915,Pass Incompletion,0,10,2,false,false,false,0,0,0,0,0,0,90,62,Cole McDonald pass incomplete to Jared Smart,false,false,0,0,0,0,0
-401135269103874001,401135269,2,40113526915,Pass Incompletion,0,10,3,false,false,false,0,0,0,0,0,0,90,62,Cole McDonald pass incomplete to JoJo Ward,false,false,0,0,0,0,0
-401135269103876201,401135269,2,40113526915,Punt,52,10,4,false,false,false,0,1,0,0,0,1,90,62,"Stan Gaudion punt for 48 yds , Aleva Hifo returns for 52 yds to the Hawa 6",false,false,0,0,0,0,0
-401135269103876202,401135269,2,40113526916,Rush,4,6,1,false,false,false,0,0,0,0,0,0,6,252,Zach Wilson run for 4 yds to the Hawa 2,false,false,0,1,0,0,1
-401135269103884101,401135269,2,40113526916,Rushing Touchdown,2,2,2,false,false,false,0,0,0,0,1,1,2,252,"Zach Wilson run for 2 yds for a TD, (Jake Oldroyd KICK)",false,false,0,0,0,0,0
-401135269103884103,401135269,2,40113526917,Kickoff Return (Offense),13,10,1,false,false,false,1,0,0,0,0,0,65,62,"Skyler Southam kickoff for 50 yds , Justice Augafa return for 13 yds to the Hawa 28",false,false,1,0,0,0,1
-401135269103884701,401135269,2,40113526917,Rush,0,10,1,false,false,false,0,0,0,0,0,0,72,62,Cole McDonald run for no gain to the Hawa 28,false,false,0,1,0,0,0
-401135269103888601,401135269,2,40113526917,Pass Incompletion,0,10,2,false,false,false,0,0,0,0,0,0,72,62,Cole McDonald pass incomplete to Lincoln Victor,false,false,0,0,0,0,0
-401135269103889201,401135269,2,40113526917,Pass Reception,6,10,3,false,false,false,0,0,0,0,0,0,72,62,Cole McDonald pass complete to Jason-Matthew Sharsh for 6 yds to the Hawa 34,false,false,0,0,0,0,0
-401135269103898901,401135269,2,40113526917,Punt,31,4,4,false,false,false,0,1,0,0,0,1,66,62,"Ben Scruton punt for 51 yds , Aleva Hifo returns for 31 yds to the BYU 46",false,false,0,0,0,0,0
-401135269103898902,401135269,2,40113526918,Pass Incompletion,0,10,1,false,false,false,0,0,0,0,0,0,54,252,Zach Wilson pass incomplete to Matt Bushman,false,false,0,1,0,0,1
-401135269103899801,401135269,2,40113526918,Pass Reception,3,10,2,false,false,false,0,0,0,0,0,0,54,252,Zach Wilson pass complete to Lopini Katoa for 3 yds to the BYU 49,false,false,0,0,0,0,0
-401135269103907201,401135269,2,40113526918,Pass Incompletion,0,7,3,false,false,false,0,0,0,0,0,0,51,252,Zach Wilson pass incomplete to Dax Milne,false,false,0,0,0,0,0
-401135269103908401,401135269,2,40113526918,Punt,0,7,4,false,false,false,0,1,0,0,0,1,51,252,"Jake Oldroyd punt for 38 yds, fair catch by JoJo Ward at the Hawa 13",false,false,0,0,0,0,0
-401135269103908402,401135269,2,40113526919,Rush,-2,10,1,false,false,false,0,0,0,0,0,0,87,62,Miles Reed run for a loss of 2 yards to the Hawa 11,false,false,0,1,0,0,1
-401135269103917201,401135269,2,40113526919,Sack,-7,12,2,false,false,false,0,0,0,0,0,0,89,62,Chevan Cordeiro sacked by Atunaisa Mahe for a loss of 7 yards to the Hawa 4,false,false,0,0,0,0,0
-401135269103925301,401135269,2,40113526919,Pass Incompletion,0,19,3,false,false,false,0,0,0,0,0,0,96,62,Chevan Cordeiro pass incomplete to Nick Mardner,false,false,0,0,0,0,0
-401135269103926601,401135269,2,40113526919,Punt,0,19,4,false,false,false,0,1,0,0,0,1,96,62,"Ben Scruton punt for 30 yds, punt out-of-bounds at the Hawa 34",false,false,0,0,0,0,0
-401135269103926602,401135269,2,40113526920,Rush,1,10,1,false,false,false,0,0,0,0,0,0,34,252,Lopini Katoa run for 1 yd to the Hawa 33,false,false,0,1,0,0,1
-401135269103929801,401135269,2,40113526920,Pass Reception,9,9,2,false,false,false,0,0,0,0,0,0,33,252,Zach Wilson pass complete to Talon Shumway for 9 yds to the Hawa 24 for a 1ST down,false,false,0,0,0,0,0
-401135269103936101,401135269,2,40113526920,Rush,5,10,1,false,false,false,0,0,0,0,0,0,24,252,Aleva Hifo run for 5 yds to the Hawa 19,false,false,0,0,0,1,1
-401135269103944301,401135269,2,40113526920,Rush,12,5,2,false,false,false,0,0,0,0,0,0,19,252,Zach Wilson run for 12 yds to the Hawa 7 for a 1ST down,false,false,0,0,0,0,0
-401135269103948501,401135269,2,40113526920,Rush,3,7,1,false,false,false,0,0,0,0,0,0,7,252,Lopini Katoa run for 3 yds to the Hawa 4,false,false,0,0,0,1,1
-401135269103956001,401135269,2,40113526920,Rush,-1,4,2,false,false,false,0,0,0,0,0,0,4,252,Lopini Katoa run for a loss of 1 yard to the Hawa 5,false,false,0,0,0,0,0
-401135269103964801,401135269,2,40113526920,Fumble Recovery (Opponent),4,5,3,false,false,false,0,0,0,1,0,1,5,252,"Zach Wilson run for 4 yds Zach Wilson fumbled, forced by Eugene Ford, recovered by Hawa Manly Williams",false,false,0,0,0,0,0
-401135269103964802,401135269,2,40113526921,Pass Incompletion,0,10,1,false,false,false,0,0,0,0,0,0,80,62,Cole McDonald pass incomplete,false,false,0,1,0,0,1
-401135269103965201,401135269,2,40113526921,Sack,-1,10,2,false,false,false,0,0,0,0,0,0,80,62,Cole McDonald sacked by Seleti Fevaleaki for a loss of 1 yard to the Hawa 19,false,false,0,0,0,0,0
-401135269103969701,401135269,2,40113526921,Pass Incompletion,0,11,3,false,false,false,0,0,0,0,0,0,81,62,Cole McDonald pass incomplete to Jared Smart,false,false,0,0,0,0,0
-401135269103975301,401135269,2,40113526921,Punt,14,11,4,false,false,false,0,1,0,0,0,1,81,62,"Ben Scruton punt for 52 yds , Aleva Hifo returns for 14 yds to the BYU 43",false,false,0,0,0,0,0
-401135269103975302,401135269,2,40113526922,Pass Reception,15,10,1,false,false,false,0,0,0,0,0,0,57,252,Zach Wilson pass complete to Matt Bushman for 15 yds to the Hawa 42 for a 1ST down,false,false,0,1,0,0,1
-401135269103977501,401135269,2,40113526922,Pass Reception,5,10,1,false,false,false,0,0,0,0,0,0,42,252,Zach Wilson pass complete to Talon Shumway for 5 yds to the Hawa 37,false,false,0,0,0,1,1
-401135269103984201,401135269,2,40113526922,Rush,15,5,2,false,false,false,0,0,0,0,0,0,37,252,Tyler Allgeier run for 15 yds to the Hawa 22 for a 1ST down,false,false,0,0,0,0,0
-401135269103987801,401135269,2,40113526922,Rush,13,10,1,false,false,false,0,0,0,0,0,0,22,252,Tyler Allgeier run for 13 yds to the Hawa 9 for a 1ST down,false,false,0,0,0,1,1
-401135269103995101,401135269,2,40113526922,Rush,6,9,1,false,false,false,0,0,0,0,0,0,9,252,Tyler Allgeier run for 6 yds to the Hawa 3,false,false,0,0,0,1,1
-401135269103999901,401135269,2,40113526922,Rush,0,3,2,false,false,false,0,0,0,0,0,0,3,252,Emmanuel Esukpa run for no gain to the Hawa 3,false,false,0,0,0,0,0
-401135269104849901,401135269,2,40113526922,Rush,0,3,3,false,false,false,0,0,0,0,0,0,3,252,Aleva Hifo run for no gain to the Hawa 3,false,false,0,0,0,0,0
-401135269104856201,401135269,2,40113526922,Field Goal Good,20,3,4,false,false,false,0,0,0,0,1,1,3,252,Jake Oldroyd 20 yd FG GOOD,false,false,0,0,0,0,0
-401135269104856202,401135269,2,40113526923,Kickoff Return (Offense),21,10,1,false,false,false,1,0,0,0,0,0,65,62,"Skyler Southam kickoff for 65 yds , Jonah Panoke return for 21 yds to the Hawa 21",false,false,1,0,0,0,1
-401135269104856801,401135269,2,40113526923,Rush,3,10,1,false,false,false,0,0,0,0,0,0,79,62,Jason-Matthew Sharsh run for 3 yds to the Hawa 24,false,false,0,1,0,0,0
-401135269104859301,401135269,2,40113526923,Rush,4,7,2,false,false,false,0,0,0,0,0,0,76,62,Miles Reed run for 4 yds to the Hawa 28,false,false,0,0,0,0,0
-401135269104864801,401135269,2,40113526923,Pass Reception,46,3,3,true,false,true,0,0,0,0,0,0,72,62,"Cole McDonald pass complete to JoJo Ward for 46 yds to the BYU 26 for a 1ST down BYU Penalty, Defensive Offside (Lorenzo Fauatea) declined for a 1ST down",false,false,0,0,0,0,0
-401135269104866901,401135269,2,40113526923,Rush,3,10,1,false,false,false,0,0,0,0,0,0,26,62,Miles Reed run for 3 yds to the BYU 23,false,false,0,0,0,1,1
-401135269104869301,401135269,2,40113526923,Pass Incompletion,0,7,2,false,false,false,0,0,0,0,0,0,23,62,Cole McDonald pass incomplete to JoJo Ward,false,false,0,0,0,0,0
-401135269104874001,401135269,2,40113526923,Rush,1,7,3,false,false,false,0,0,0,0,0,0,23,62,Miles Reed run for 1 yd to the BYU 22,false,false,0,0,0,0,0
-401135269104878001,401135269,2,40113526923,Field Goal Missed,40,6,4,false,false,false,0,0,0,1,0,1,23,62,Ryan Meskell 40 yd FG MISSED,false,false,0,0,0,0,0
-401135269104878002,401135269,2,40113526924,Pass Incompletion,0,10,1,false,false,false,0,0,0,0,0,0,78,252,Zach Wilson pass incomplete to Talon Shumway,false,false,0,1,0,0,1
-401135269104879001,401135269,2,40113526924,Rush,36,10,2,false,false,false,0,0,0,0,0,0,78,252,Tyler Allgeier run for 36 yds to the Hawa 42 for a 1ST down,false,false,0,0,0,0,0
-401135269104885701,401135269,2,40113526924,Rush,5,10,1,false,false,false,0,0,0,0,0,0,42,252,Zach Wilson run for 5 yds to the Hawa 37,false,false,0,0,0,1,1
-401135269104888501,401135269,2,40113526924,Penalty,-5,5,2,false,false,false,0,0,0,0,0,0,37,252,"BYU Penalty, False Start (Jackson McChesney) to the Hawa 42",true,false,0,0,0,0,0
-401135269104894001,401135269,2,40113526924,Rush,-1,10,2,false,false,false,0,0,0,0,0,0,42,252,Tyler Allgeier run for a loss of 1 yard to the Hawa 43,false,false,0,0,0,0,0
-401135269104898301,401135269,2,40113526924,Penalty,15,11,3,true,false,false,0,0,0,0,0,0,43,252,"Wilson, Zach pass incomplete to Shumway, Talon, PENALTY HAWAII pass interference (Davis, Cortez) 15 yards to the HAWAII28, NO PLAY, 1ST DOWN BYU.",true,true,0,0,0,0,0
-401135269104898701,401135269,2,40113526924,Pass Incompletion,0,10,1,false,false,false,0,0,0,0,0,0,28,252,Zach Wilson pass incomplete to Micah Simon,false,false,0,0,1,0,1
-401135269104899301,401135269,2,40113526924,Rush,-1,10,2,false,false,false,0,0,0,0,0,0,28,252,Zach Wilson run for a loss of 1 yard to the Hawa 29,false,false,0,0,0,0,0
-401135269104907501,401135269,2,40113526924,Rush,5,11,3,false,false,false,0,0,0,0,0,0,29,252,Zach Wilson run for 5 yds to the Hawa 24,false,false,0,0,0,0,0
-401135269104909601,401135269,2,40113526924,Field Goal Missed,41,6,4,false,false,false,0,0,0,1,0,1,24,252,Jake Oldroyd 41 yd FG MISSED,false,false,0,0,0,0,0
-401135269104909602,401135269,2,40113526925,Pass Incompletion,0,10,1,false,false,false,0,0,0,0,0,0,76,62,Cole McDonald pass incomplete to Jason-Matthew Sharsh,false,false,0,1,0,0,1
-401135269104914301,401135269,2,40113526925,Pass Reception,7,10,2,false,false,false,0,0,0,0,0,0,76,62,Cole McDonald pass complete to Jason-Matthew Sharsh for 7 yds to the Hawa 31,false,false,0,0,0,0,0
-401135269104917101,401135269,2,40113526925,Pass Reception,4,3,3,false,false,false,0,0,0,0,0,0,69,62,Cole McDonald pass complete to Jared Smart for 4 yds to the Hawa 35 for a 1ST down,false,false,0,0,0,0,0
-401135269104924001,401135269,2,40113526925,Pass Reception,5,10,1,false,false,false,0,0,0,0,0,0,65,62,Cole McDonald pass complete to Cedric Byrd II for 5 yds to the Hawa 40,false,false,0,0,0,1,1
-401135269104926701,401135269,2,40113526925,Pass Reception,7,5,2,false,false,false,0,0,0,0,0,0,60,62,Cole McDonald pass complete to Jason-Matthew Sharsh for 7 yds to the Hawa 47 for a 1ST down,false,false,0,0,0,0,0
-401135269104934001,401135269,2,40113526925,Pass Reception,5,10,1,false,false,false,0,0,0,0,0,0,53,62,Cole McDonald pass complete to Jared Smart for 5 yds to the BYU 48,false,false,0,0,0,1,1
-401135269104937301,401135269,2,40113526925,Rush,2,5,2,false,false,false,0,0,0,0,0,0,48,62,Cole McDonald run for 2 yds to the BYU 46,false,false,0,0,0,0,0
-401135269104945501,401135269,2,40113526925,Pass Incompletion,0,3,3,false,false,false,0,0,0,0,0,0,46,62,Cole McDonald pass incomplete to Jared Smart,false,false,0,0,0,0,0
-401135269104946001,401135269,2,40113526925,Pass Reception,20,3,4,false,false,false,0,0,0,0,0,0,46,62,Cole McDonald pass complete to Cedric Byrd II for 20 yds to the BYU 26 for a 1ST down,false,false,0,0,0,0,0
-401135269104948301,401135269,2,40113526925,Penalty,-5,10,1,false,false,false,0,0,0,0,0,0,26,62,"HAWAII Penalty, False Start (-5 Yards) to the BYU 31",true,false,0,0,0,1,1
-401135269104954501,401135269,2,40113526925,Pass Incompletion,0,15,1,false,false,false,0,0,0,0,0,0,31,62,Cole McDonald pass incomplete to Nick Mardner,false,false,0,0,0,0,0
-401135269104955001,401135269,2,40113526925,Pass Incompletion,0,15,2,false,false,false,0,0,0,0,0,0,31,62,Cole McDonald pass incomplete to Jason-Matthew Sharsh,false,false,0,0,0,0,0
-401135269104955501,401135269,2,40113526925,Sack,-8,15,3,false,false,false,0,0,0,0,0,0,31,62,Cole McDonald sacked by JJ Nwigwe for a loss of 8 yards to the BYU 39,false,false,0,0,0,0,0
-401135269104958502,401135269,2,40113526925,Timeout,0,23,4,false,false,false,0,0,0,0,0,0,39,62,"Timeout HAWAII, clock 04:14",false,false,0,0,0,0,0
-401135269104959201,401135269,2,40113526925,Punt,0,23,4,false,false,false,0,1,0,0,0,1,39,62,"Stan Gaudion punt for 33 yds, fair catch by Aleva Hifo at the BYU 6",false,false,0,0,0,0,0
-401135269104959202,401135269,2,40113526926,Pass Incompletion,0,10,1,false,false,false,0,0,0,0,0,0,94,252,Zach Wilson pass incomplete to Aleva Hifo,false,false,0,1,0,0,1
-401135269104959701,401135269,2,40113526926,Rush,6,10,2,false,false,false,0,0,0,0,0,0,94,252,Tyler Allgeier run for 6 yds to the BYU 12,false,false,0,0,0,0,0
-401135269104968101,401135269,2,40113526926,Rush,6,4,3,false,false,false,0,0,0,0,0,0,88,252,Zach Wilson run for 6 yds to the BYU 18 for a 1ST down,false,false,0,0,0,0,0
-401135269104976601,401135269,2,40113526926,Rush,1,10,1,false,false,false,0,0,0,0,0,0,82,252,Tyler Allgeier run for 1 yd to the BYU 19,false,false,0,0,0,1,1
-401135269104977301,401135269,2,40113526926,Timeout,0,9,2,false,false,false,0,0,0,0,0,0,81,252,"Timeout HAWAII, clock 02:26",false,false,0,0,0,0,0
-401135269104977401,401135269,2,40113526926,Rush,7,9,2,false,false,false,0,0,0,0,0,0,81,252,Aleva Hifo run for 7 yds to the BYU 26,false,false,0,0,0,0,0
-401135269104978201,401135269,2,40113526926,Timeout,0,2,3,false,false,false,0,0,0,0,0,0,74,252,"Timeout HAWAII, clock 02:17",false,false,0,0,0,0,0
-401135269104978202,401135269,2,40113526926,Timeout,0,2,3,false,false,false,0,0,0,0,0,0,74,252,"Timeout BYU, clock 02:17",false,false,0,0,0,0,0
-401135269104978301,401135269,2,40113526926,Pass Incompletion,0,2,3,false,false,false,0,0,0,0,0,0,74,252,Zach Wilson pass incomplete to Micah Simon,false,false,0,0,0,0,0
-401135269104979801,401135269,2,40113526926,Punt,-9,2,4,false,false,false,0,1,0,0,0,1,74,252,"Jake Oldroyd punt for 37 yds , JoJo Ward returns for a loss of 9 yards to the Hawa 17 HAWAII Penalty, Illegal Block (14 Yards) to the Hawa 14",,false,0,0,0,0,0
-401135269104979802,401135269,2,40113526927,Penalty,15,10,1,true,false,false,0,0,0,0,0,0,86,62,"BYU Penalty, Personal Foul (Max Tooley) to the Hawa 29 for a 1ST down",,false,0,1,0,0,1
-401135269104979901,401135269,2,40113526927,Pass Incompletion,0,10,1,false,false,false,0,0,0,0,0,0,71,62,Cole McDonald pass incomplete to JoJo Ward,false,false,0,0,1,0,1
-401135269104984401,401135269,2,40113526927,Rush,9,10,2,false,false,false,0,0,0,0,0,0,71,62,Cole McDonald run for 9 yds to the Hawa 38,false,false,0,0,0,0,0
-401135269104986201,401135269,2,40113526927,Pass Reception,38,1,3,false,false,false,0,0,0,0,0,0,62,62,Cole McDonald pass complete to Nick Mardner for 38 yds to the BYU 24 for a 1ST down,false,false,0,0,0,0,0
-401135269104988201,401135269,2,40113526927,Passing Touchdown,24,10,1,false,false,false,0,0,0,0,1,1,24,62,"Cole McDonald pass complete to Nick Mardner for 24 yds for a TD, (Ryan Meskell KICK)",false,false,0,0,0,1,1
-401135269104988203,401135269,2,40113526928,Kickoff Return (Offense),12,10,1,false,false,false,1,0,0,0,0,0,65,252,"Ryan Meskell kickoff for 55 yds , Dayan Ghanwoloku return for 12 yds to the BYU 22 Dayan Ghanwoloku fumbled, recovered by BYU Dayan Ghanwoloku",false,false,1,0,0,0,1
-401135269104988301,401135269,2,40113526928,Pass Reception,17,10,1,false,false,false,0,0,0,0,0,0,78,252,Zach Wilson pass complete to Micah Simon for 17 yds to the BYU 39 for a 1ST down,false,false,0,1,0,0,0
-401135269104994001,401135269,2,40113526928,Pass Reception,11,10,1,false,false,false,0,0,0,0,0,0,61,252,Zach Wilson pass complete to Micah Simon for 11 yds to the 50 yard line for a 1ST down,false,false,0,0,0,1,1
-401135269104995501,401135269,2,40113526928,Rush,6,10,1,false,false,false,0,0,0,0,0,0,50,252,Zach Wilson run for 6 yds to the Hawa 44,false,false,0,0,0,1,1
-401135269104996101,401135269,2,40113526928,Pass Reception,5,4,2,false,false,false,0,0,0,0,0,0,44,252,Zach Wilson pass complete to Micah Simon for 5 yds to the Hawa 39 for a 1ST down,false,false,0,0,0,0,0
-401135269104997401,401135269,2,40113526928,Interception Return,8,10,1,false,false,false,0,0,0,1,0,1,39,252,Zach Wilson pass intercepted Khoury Bethley return for 8 yds to the Hawa 38,false,false,0,0,0,1,1
-401135269104999901,401135269,2,40113526929,Rush,-2,10,1,false,false,false,0,0,0,0,0,1,62,62,TEAM run for a loss of 2 yards to the Hawa 36,false,false,0,1,0,0,1
+id_play,game_id,half,id_drive,play_type,yards_gained,distance,down,penalty_1st_conv,penalty_offset,penalty_declined,kickoff_play,punt,downs_turnover,turnover_vec,scoring_play,change_of_pos_team,yards_to_goal,pos_team,text,penalty_negated_play,penalty_no_play,penalized_team,py_firstD_by_kickoff,py_firstD_by_poss,py_firstD_by_penalty,py_firstD_by_yards,py_new_series
+401135269101849902,401135269,1,4011352691,Kickoff Return (Offense),19,10,1,false,false,false,1,0,0,0,0,0,65,62,"Skyler Southam kickoff for 57 yds , Lincoln Victor return for 19 yds to the Hawa 27",false,false,,1,0,0,0,1
+401135269101854402,401135269,1,4011352691,Pass Reception,5,10,1,false,false,false,0,0,0,0,0,0,73,62,Cole McDonald pass complete to Miles Reed for 5 yds to the Hawa 32,false,false,,0,1,0,0,0
+401135269101858902,401135269,1,4011352691,Rush,3,5,2,false,false,false,0,0,0,0,0,0,68,62,Miles Reed run for 3 yds to the Hawa 35,false,false,,0,0,0,0,0
+401135269101865602,401135269,1,4011352691,Pass Incompletion,0,2,3,false,false,false,0,0,0,0,0,0,65,62,Cole McDonald pass incomplete,false,false,,0,0,0,0,0
+401135269101866801,401135269,1,4011352691,Punt,0,2,4,false,false,false,0,1,0,0,0,1,65,62,"Ben Scruton punt for 39 yds, fair catch by Aleva Hifo at the BYU 26",false,false,,0,0,0,0,0
+401135269101866802,401135269,1,4011352692,Rush,0,10,1,false,false,false,0,0,0,0,0,0,74,252,Lopini Katoa run for no gain to the BYU 26,false,false,,0,1,0,0,1
+401135269101869801,401135269,1,4011352692,Pass Incompletion,0,10,2,false,false,false,0,0,0,0,0,0,74,252,Zach Wilson pass incomplete to Dax Milne,false,false,,0,0,0,0,0
+401135269101874201,401135269,1,4011352692,Pass Incompletion,0,10,3,false,false,false,0,0,0,0,0,0,74,252,Zach Wilson pass incomplete to Matt Bushman,false,false,,0,0,0,0,0
+401135269101875801,401135269,1,4011352692,Punt,0,10,4,false,false,false,0,1,0,0,0,1,74,252,"Jake Oldroyd punt for 56 yds, downed at the Hawa 18",false,false,,0,0,0,0,0
+401135269101875802,401135269,1,4011352693,Pass Reception,16,10,1,false,false,false,0,0,0,0,0,0,82,62,Cole McDonald pass complete to Jason-Matthew Sharsh for 16 yds to the Hawa 34 for a 1ST down,false,false,,0,1,0,0,1
+401135269101879001,401135269,1,4011352693,Pass Reception,9,10,1,false,false,false,0,0,0,0,0,0,66,62,Cole McDonald pass complete to JoJo Ward for 9 yds to the Hawa 43,false,false,,0,0,0,1,1
+401135269101885501,401135269,1,4011352693,Rush,2,1,2,false,false,false,0,0,0,0,0,0,57,62,Cedric Byrd II run for 2 yds to the Hawa 45 for a 1ST down,false,false,,0,0,0,0,0
+401135269101888101,401135269,1,4011352693,Pass Reception,16,10,1,false,false,false,0,0,0,0,0,0,55,62,Cole McDonald pass complete to JoJo Ward for 16 yds to the BYU 39 for a 1ST down,false,false,,0,0,0,1,1
+401135269101896701,401135269,1,4011352693,Rush,4,10,1,false,false,false,0,0,0,0,0,0,39,62,Miles Reed run for 4 yds to the BYU 35,false,false,,0,0,0,1,1
+401135269101904801,401135269,1,4011352693,Pass Reception,4,6,2,false,false,false,0,0,0,0,0,0,35,62,Cole McDonald pass complete to Cedric Byrd II for 4 yds to the BYU 31,false,false,,0,0,0,0,0
+401135269101908201,401135269,1,4011352693,Pass Reception,21,2,3,false,false,false,0,0,0,0,0,0,31,62,Cole McDonald pass complete to Jared Smart for 21 yds to the BYU 10 for a 1ST down,false,false,,0,0,0,0,0
+401135269101914101,401135269,1,4011352693,Rush,-3,10,1,false,false,false,0,0,0,0,0,0,10,62,Miles Reed run for a loss of 3 yards to the BYU 13,false,false,,0,0,0,1,1
+401135269101918401,401135269,1,4011352693,Pass Reception,6,0,2,false,false,false,0,0,0,0,0,0,13,62,Cole McDonald pass complete to Lincoln Victor for 6 yds to the BYU 7,false,false,,0,0,0,0,0
+401135269101926701,401135269,1,4011352693,Passing Touchdown,7,7,3,false,false,false,0,0,0,0,1,1,7,62,"Cole McDonald pass complete to Jared Smart for 7 yds for a TD, (Ryan Meskell KICK)",false,false,,0,0,0,1,1
+401135269101926703,401135269,1,4011352694,Kickoff,0,10,1,false,false,false,1,0,0,0,0,0,65,252,Ryan Meskell kickoff for 62 yds for a touchback,false,false,,1,0,0,0,1
+401135269101927101,401135269,1,4011352694,Rush,1,10,1,false,false,false,0,0,0,0,0,0,75,252,Lopini Katoa run for 1 yd to the BYU 26,false,false,,0,1,0,0,0
+401135269101934601,401135269,1,4011352694,Rush,5,9,2,false,false,false,0,0,0,0,0,0,74,252,Lopini Katoa run for 5 yds to the BYU 31,false,false,,0,0,0,0,0
+401135269101938201,401135269,1,4011352694,Pass Reception,10,4,3,false,false,false,0,0,0,0,0,0,69,252,Zach Wilson pass complete to Aleva Hifo for 10 yds to the BYU 41 for a 1ST down,false,false,,0,0,0,0,0
+401135269101945301,401135269,1,4011352694,Interception Return,21,10,1,false,false,false,0,0,0,1,0,1,59,252,Zach Wilson pass intercepted Khoury Bethley return for 21 yds to the BYU 40,false,false,,0,0,0,1,1
+401135269101945302,401135269,1,4011352695,Rush,0,10,1,false,false,false,0,0,0,0,0,0,40,62,Miles Reed run for no gain to the BYU 40,false,false,,0,1,0,0,1
+401135269101954401,401135269,1,4011352695,Passing Touchdown,40,10,2,false,false,false,0,0,0,0,1,1,40,62,"Cole McDonald pass complete to Jared Smart for 40 yds for a TD, (Ryan Meskell KICK)",false,false,,0,0,0,0,0
+401135269101954403,401135269,1,4011352696,Kickoff Return (Offense),15,10,1,false,false,false,1,0,0,0,0,0,65,252,"Ryan Meskell kickoff for 53 yds , Dayan Ghanwoloku return for 15 yds to the BYU 27",false,false,,1,0,0,0,1
+401135269101954801,401135269,1,4011352696,Pass Reception,6,10,1,false,false,false,0,0,0,0,0,0,73,252,Zach Wilson pass complete to Matt Bushman for 6 yds to the BYU 33,false,false,,0,1,0,0,0
+401135269101957501,401135269,1,4011352696,Pass Incompletion,0,4,2,false,false,false,0,0,0,0,0,0,67,252,Zach Wilson pass incomplete to Aleva Hifo,false,false,,0,0,0,0,0
+401135269101958001,401135269,1,4011352696,Pass Reception,8,4,3,false,false,false,0,0,0,0,0,0,67,252,Zach Wilson pass complete to Talon Shumway for 8 yds to the BYU 41 for a 1ST down,false,false,,0,0,0,0,0
+401135269101964701,401135269,1,4011352696,Pass Reception,11,10,1,false,false,false,0,0,0,0,0,0,59,252,Zach Wilson pass complete to Micah Simon for 11 yds to the Hawa 48 for a 1ST down,false,false,,0,0,0,1,1
+401135269101967601,401135269,1,4011352696,Pass Incompletion,0,10,1,false,false,false,0,0,0,0,0,0,48,252,Zach Wilson pass incomplete to Matt Bushman,false,false,,0,0,0,1,1
+401135269101968401,401135269,1,4011352696,Rush,8,10,2,false,false,false,0,0,0,0,0,0,48,252,Zach Wilson run for 8 yds to the Hawa 40,false,false,,0,0,0,0,0
+401135269101976201,401135269,1,4011352696,Pass Reception,6,2,3,false,false,false,0,0,0,0,0,0,40,252,Zach Wilson pass complete to Aleva Hifo for 6 yds to the Hawa 34 for a 1ST down,false,false,,0,0,0,0,0
+401135269101979801,401135269,1,4011352696,Pass Reception,31,10,1,false,false,false,0,0,0,0,0,0,34,252,Zach Wilson pass complete to Matt Bushman for 31 yds to the Hawa 3 for a 1ST down,false,false,,0,0,0,1,1
+401135269101987001,401135269,1,4011352696,Rush,2,3,1,false,false,false,0,0,0,0,0,0,3,252,Masen Wake run for 2 yds to the Hawa 1,false,false,,0,0,0,1,1
+401135269101994501,401135269,1,4011352696,Rushing Touchdown,1,1,2,false,false,false,0,0,0,0,1,1,1,252,"Lopini Katoa run for 1 yd for a TD, (Jake Oldroyd KICK)",false,false,,0,0,0,0,0
+401135269101994503,401135269,1,4011352697,Kickoff Return (Offense),18,10,1,false,false,false,1,0,0,0,0,0,65,62,"Skyler Southam kickoff for 61 yds , Lincoln Victor return for 18 yds to the Hawa 22",false,false,,1,0,0,0,1
+401135269101995101,401135269,1,4011352697,Pass Reception,17,10,1,false,false,false,0,0,0,0,0,0,78,62,Cole McDonald pass complete to JoJo Ward for 17 yds to the Hawa 39 for a 1ST down,false,false,,0,1,0,0,0
+401135269101997701,401135269,1,4011352697,Pass Incompletion,0,10,1,false,false,false,0,0,0,0,0,0,61,62,Cole McDonald pass incomplete to Cedric Byrd II,false,false,,0,0,0,1,1
+401135269101999901,401135269,1,4011352697,Pass Reception,58,10,2,false,false,false,0,0,0,0,0,0,61,62,Cole McDonald pass complete to Jared Smart for 58 yds to the BYU 3 for a 1ST down,false,false,,0,0,0,0,0
+401135269102849901,401135269,1,4011352697,Rush,1,3,1,false,false,false,0,0,0,0,0,0,3,62,Dayton Furuta run for 1 yd to the BYU 2,false,false,,0,0,0,1,1
+401135269102857301,401135269,1,4011352697,Rush,1,2,2,false,false,false,0,0,0,0,0,0,2,62,Cole McDonald run for 1 yd to the BYU 1,false,false,,0,0,0,0,0
+401135269102866301,401135269,1,4011352697,Timeout,0,0,3,false,false,false,0,0,0,0,0,0,1,62,"Timeout HAWAII, clock 13:36",false,false,,0,0,0,0,0
+401135269102866601,401135269,1,4011352697,Rushing Touchdown,1,1,3,false,false,false,0,0,0,0,1,1,1,62,"Cole McDonald run for 1 yd for a TD, (Ryan Meskell KICK)",false,false,,0,0,0,0,0
+401135269102866603,401135269,1,4011352698,Kickoff,0,10,1,false,false,false,1,0,0,0,0,0,65,252,Ryan Meskell kickoff for 65 yds for a touchback,false,false,,1,0,0,0,1
+401135269102866801,401135269,1,4011352698,Pass Reception,1,10,1,false,false,false,0,0,0,0,0,0,75,252,Zach Wilson pass complete to Matt Bushman for 1 yd to the BYU 26,false,false,,0,1,0,0,0
+401135269102874001,401135269,1,4011352698,Rush,12,9,2,false,false,false,0,0,0,0,0,0,74,252,Lopini Katoa run for 12 yds to the BYU 38 for a 1ST down,false,false,,0,0,0,0,0
+401135269102876601,401135269,1,4011352698,Pass Reception,22,10,1,false,false,false,0,0,0,0,0,0,62,252,Zach Wilson pass complete to Matt Bushman for 22 yds to the Hawa 40 for a 1ST down,false,false,,0,0,0,1,1
+401135269102884701,401135269,1,4011352698,Rush,1,10,1,false,false,false,0,0,0,0,0,0,40,252,Tyler Allgeier run for 1 yd to the Hawa 39,false,false,,0,0,0,1,1
+401135269102887901,401135269,1,4011352698,Pass Reception,26,9,2,false,false,false,0,0,0,0,0,0,39,252,Zach Wilson pass complete to Dax Milne for 26 yds to the Hawa 13 for a 1ST down,false,false,,0,0,0,0,0
+401135269102894501,401135269,1,4011352698,Pass Reception,4,10,1,false,false,false,0,0,0,0,0,0,13,252,Zach Wilson pass complete to Lopini Katoa for 4 yds to the Hawa 9,false,false,,0,0,0,1,1
+401135269102898401,401135269,1,4011352698,Rush,8,6,2,false,false,false,0,0,0,0,0,0,9,252,Lopini Katoa run for 8 yds to the Hawa 1 for a 1ST down,false,false,,0,0,0,0,0
+401135269102905701,401135269,1,4011352698,Rushing Touchdown,1,1,1,false,false,false,0,0,0,0,1,1,1,252,"Zach Wilson run for 1 yd for a TD, (Jake Oldroyd KICK)",false,false,,0,0,0,1,1
+401135269102905703,401135269,1,4011352699,Kickoff Return (Offense),8,10,1,false,false,false,1,0,0,0,0,0,65,62,"Skyler Southam kickoff for 50 yds , Lincoln Victor return for 8 yds to the Hawa 23",false,false,,1,0,0,0,1
+401135269102906301,401135269,1,4011352699,Pass Incompletion,0,10,1,false,false,false,0,0,0,0,0,0,77,62,Cole McDonald pass incomplete to Lincoln Victor,false,false,,0,1,0,0,0
+401135269102907501,401135269,1,4011352699,Rush,3,10,2,false,false,false,0,0,0,0,0,0,77,62,Miles Reed run for 3 yds to the Hawa 26,false,false,,0,0,0,0,0
+401135269102915401,401135269,1,4011352699,Pass Reception,15,7,3,false,false,false,0,0,0,0,0,0,74,62,Cole McDonald pass complete to Jason-Matthew Sharsh for 15 yds to the Hawa 41 for a 1ST down,false,false,,0,0,0,0,0
+401135269102918601,401135269,1,4011352699,Pass Incompletion,0,10,1,false,false,false,0,0,0,0,0,0,59,62,Cole McDonald pass incomplete to Cedric Byrd II,false,false,,0,0,0,1,1
+401135269102919201,401135269,1,4011352699,Pass Reception,47,10,2,false,false,false,0,0,0,0,0,0,59,62,Cole McDonald pass complete to JoJo Ward for 47 yds to the BYU 12 for a 1ST down,false,false,,0,0,0,0,0
+401135269102926501,401135269,1,4011352699,Sack,-10,10,1,false,false,false,0,0,0,0,0,0,12,62,Cole McDonald sacked by JJ Nwigwe for a loss of 10 yards to the BYU 22,false,false,,0,0,0,1,1
+401135269102934201,401135269,1,4011352699,Rush,4,20,2,false,false,false,0,0,0,0,0,0,22,62,Miles Reed run for 4 yds to the BYU 18,false,false,,0,0,0,0,0
+401135269102939801,401135269,1,4011352699,Sack,-10,16,3,false,false,false,0,0,0,0,0,0,18,62,Cole McDonald sacked by Zac Dawe for a loss of 10 yards to the BYU 28,false,false,,0,0,0,0,0
+401135269102944901,401135269,1,4011352699,Field Goal Good,46,26,4,false,false,false,0,0,0,0,1,1,29,62,Ryan Meskell 46 yd FG GOOD,false,false,,0,0,0,0,0
+401135269102944902,401135269,1,40113526910,Kickoff,0,10,1,false,false,false,1,0,0,0,0,0,65,252,Ryan Meskell kickoff for 65 yds for a touchback,false,false,,1,0,0,0,1
+401135269102945401,401135269,1,40113526910,Pass Reception,24,10,1,false,false,false,0,0,0,0,0,0,75,252,Zach Wilson pass complete to Aleva Hifo for 24 yds to the BYU 49 for a 1ST down,false,false,,0,1,0,0,0
+401135269102947001,401135269,1,40113526910,Pass Reception,16,10,1,false,false,false,0,0,0,0,0,0,51,252,Zach Wilson pass complete to Matt Bushman for 16 yds to the Hawa 35 for a 1ST down,false,false,,0,0,0,1,1
+401135269102949801,401135269,1,40113526910,Pass Incompletion,0,10,1,false,false,false,0,0,0,0,0,0,35,252,Micah Simon pass incomplete to Talon Shumway,false,false,,0,0,0,1,1
+401135269102954701,401135269,1,40113526910,Rush,6,10,2,false,false,false,0,0,0,0,0,0,35,252,Lopini Katoa run for 6 yds to the Hawa 29,false,false,,0,0,0,0,0
+401135269102958301,401135269,1,40113526910,Rush,12,4,3,false,false,false,0,0,0,0,0,0,29,252,Zach Wilson run for 12 yds to the Hawa 17 for a 1ST down,false,false,,0,0,0,0,0
+401135269102966901,401135269,1,40113526910,Pass Reception,6,10,1,false,false,false,0,0,0,0,0,0,17,252,Zach Wilson pass complete to Dax Milne for 6 yds to the Hawa 11,false,false,,0,0,0,1,1
+401135269102968301,401135269,1,40113526910,Rushing Touchdown,11,4,2,false,false,false,0,0,0,0,1,1,11,252,"Micah Simon run for 11 yds for a TD, (Jake Oldroyd KICK)",false,false,,0,0,0,0,0
+401135269102968303,401135269,1,40113526911,Kickoff Return (Offense),22,10,1,false,false,false,1,0,0,0,0,0,65,62,"Skyler Southam kickoff for 58 yds , Lincoln Victor return for 22 yds to the Hawa 29",false,false,,1,0,0,0,1
+401135269102968801,401135269,1,40113526911,Pass Reception,7,10,1,false,false,false,0,0,0,0,0,0,71,62,Cole McDonald pass complete to Jared Smart for 7 yds to the Hawa 36,false,false,,0,1,0,0,0
+401135269102975801,401135269,1,40113526911,Rush,-1,3,2,false,false,false,0,0,0,0,0,0,64,62,Cole McDonald run for a loss of 1 yard to the Hawa 35,false,false,,0,0,0,0,0
+401135269102979101,401135269,1,40113526911,Pass Reception,21,4,3,false,false,false,0,0,0,0,0,0,65,62,Cole McDonald pass complete to Jason-Matthew Sharsh for 21 yds to the BYU 44 for a 1ST down,false,false,,0,0,0,0,0
+401135269102984801,401135269,1,40113526911,Pass Incompletion,0,10,1,false,false,false,0,0,0,0,0,0,44,62,Cole McDonald pass incomplete to Lincoln Victor,false,false,,0,0,0,1,1
+401135269102985701,401135269,1,40113526911,Pass Reception,11,10,2,false,false,false,0,0,0,0,0,0,44,62,Cole McDonald pass complete to JoJo Ward for 11 yds to the BYU 33 for a 1ST down,false,false,,0,0,0,0,0
+401135269102986301,401135269,1,40113526911,Pass Incompletion,0,10,1,false,false,false,0,0,0,0,0,0,33,62,Cole McDonald pass incomplete to Jared Smart,false,false,,0,0,0,1,1
+401135269102986701,401135269,1,40113526911,Penalty,-5,10,2,false,false,false,0,0,0,0,0,0,33,62,"HAWAII Penalty, False Start (Taaga Tuulima) to the BYU 38",true,false,62,0,0,0,0,0
+401135269102986901,401135269,1,40113526911,Pass Reception,13,15,2,false,false,false,0,0,0,0,0,0,38,62,Cole McDonald pass complete to JoJo Ward for 13 yds to the BYU 25,false,false,,0,0,0,0,0
+401135269102987501,401135269,1,40113526911,Rush,7,2,3,false,false,false,0,0,0,0,0,0,25,62,Cole McDonald run for 7 yds to the BYU 18 for a 1ST down,false,false,,0,0,0,0,0
+401135269102988301,401135269,1,40113526911,Passing Touchdown,18,10,1,false,false,false,0,0,0,0,1,1,18,62,"Cole McDonald pass complete to Jason-Matthew Sharsh for 18 yds for a TD, (Ryan Meskell KICK)",false,false,,0,0,0,1,1
+401135269102988303,401135269,1,40113526912,Kickoff,60,10,1,false,false,false,1,0,0,0,0,0,65,252,"Ryan Meskell kickoff for 65 yds for a touchback HAWAII Penalty, Defensive Offside (-5 Yards)",true,false,62,1,0,0,0,1
+401135269102988401,401135269,1,40113526912,Pass Incompletion,0,10,1,false,false,false,0,0,0,0,0,0,70,252,Zach Wilson pass incomplete,false,false,,0,1,0,0,0
+401135269102988801,401135269,1,40113526912,Pass Reception,6,10,2,false,false,false,0,0,0,0,0,0,70,252,Zach Wilson pass complete to Aleva Hifo for 6 yds to the BYU 36,false,false,,0,0,0,0,0
+401135269102989601,401135269,1,40113526912,Timeout,0,4,3,false,false,false,0,0,0,0,0,0,64,252,"Timeout BYU, clock 01:03",false,false,,0,0,0,0,0
+401135269102989701,401135269,1,40113526912,Pass Reception,12,4,3,false,false,false,0,0,0,0,0,0,64,252,Zach Wilson pass complete to Micah Simon for 12 yds to the BYU 48 for a 1ST down,false,false,,0,0,0,0,0
+401135269102994801,401135269,1,40113526912,Pass Reception,37,10,1,true,false,false,0,0,0,0,0,0,52,252,"Zach Wilson pass complete to Dax Milne for 22 yds to the HAWAII 30 for a 1ST down HAWAII Penalty, Roughing Passer (Jeremiah Pritchard) to the Hawa 15 for a 1ST down",,false,62,0,0,0,1,1
+401135269102995901,401135269,1,40113526912,Timeout,0,10,1,false,false,false,0,0,0,0,0,0,15,252,"Timeout HAWAII, clock 00:40",false,false,,0,0,0,1,1
+401135269102996001,401135269,1,40113526912,Sack,-3,10,1,false,false,false,0,0,0,0,0,0,15,252,Zach Wilson sacked by Derek Thomas for a loss of 3 yards to the Hawa 18,false,false,,0,0,0,1,0
+401135269102996501,401135269,1,40113526912,Timeout,0,13,2,false,false,false,0,0,0,0,0,0,18,252,"Timeout BYU, clock 00:34",false,false,,0,0,0,0,0
+401135269102996601,401135269,1,40113526912,Pass Reception,-2,13,2,false,false,false,0,0,0,0,0,0,18,252,Zach Wilson pass complete to Aleva Hifo for a loss of 2 yards to the Hawa 20,false,false,,0,0,0,0,0
+401135269102997201,401135269,1,40113526912,Timeout,0,15,3,false,false,false,0,0,0,0,0,0,20,252,"Timeout BYU, clock 00:27",false,false,,0,0,0,0,0
+401135269102997301,401135269,1,40113526912,Pass Incompletion,0,15,3,false,false,false,0,0,0,0,0,0,20,252,Zach Wilson pass incomplete to Micah Simon,false,false,,0,0,0,0,0
+401135269102997501,401135269,1,40113526912,Timeout,0,15,4,false,false,false,0,0,0,0,0,0,20,252,"Timeout HAWAII, clock 00:24",false,false,,0,0,0,0,0
+401135269102998101,401135269,1,40113526912,Field Goal Good,37,15,4,false,false,false,0,0,0,0,1,1,20,252,Jake Oldroyd 37 yd FG GOOD,false,false,,0,0,0,0,0
+401135269102998102,401135269,1,40113526913,Kickoff Return (Offense),28,10,1,false,false,false,1,0,0,0,0,0,65,62,"Skyler Southam kickoff for 57 yds , Lincoln Victor return for 28 yds to the Hawa 36",false,false,,1,0,0,0,1
+401135269102999901,401135269,1,40113526913,Rush,-2,10,1,false,false,false,0,0,0,0,0,1,64,62,TEAM run for a loss of 2 yards to the Hawa 34,false,false,,0,1,0,0,0
+401135269103849901,401135269,2,40113526914,Kickoff,0,10,1,false,false,false,1,0,0,0,0,0,65,252,Ryan Meskell kickoff for 65 yds for a touchback,false,false,,1,0,0,0,1
+401135269103854001,401135269,2,40113526914,Rush,10,10,1,false,false,false,0,0,0,0,0,0,75,252,Zach Wilson run for 10 yds to the BYU 35 for a 1ST down,false,false,,0,1,0,0,0
+401135269103856701,401135269,2,40113526914,Rush,15,10,1,false,false,false,0,0,0,0,0,0,65,252,Lopini Katoa run for 15 yds to the 50 yard line for a 1ST down,false,false,,0,0,0,1,1
+401135269103864101,401135269,2,40113526914,Rush,6,10,1,false,false,false,0,0,0,0,0,0,50,252,Dax Milne run for 6 yds to the Hawa 44,false,false,,0,0,0,1,1
+401135269103867501,401135269,2,40113526914,Pass Incompletion,0,4,2,false,false,false,0,0,0,0,0,0,44,252,Zach Wilson pass incomplete to Dax Milne,false,false,,0,0,0,0,0
+401135269103868201,401135269,2,40113526914,Pass Incompletion,0,4,3,false,false,false,0,0,0,0,0,0,44,252,Zach Wilson pass incomplete to Aleva Hifo,false,false,,0,0,0,0,0
+401135269103869101,401135269,2,40113526914,Punt,0,4,4,false,false,false,0,1,0,0,0,1,44,252,"Jake Oldroyd punt for 34 yds, fair catch by JoJo Ward at the Hawa 10",false,false,,0,0,0,0,0
+401135269103869102,401135269,2,40113526915,Pass Incompletion,0,10,1,false,false,false,0,0,0,0,0,0,90,62,Cole McDonald pass incomplete to Dayton Furuta,false,false,,0,1,0,0,1
+401135269103869601,401135269,2,40113526915,Pass Incompletion,0,10,2,false,false,false,0,0,0,0,0,0,90,62,Cole McDonald pass incomplete to Jared Smart,false,false,,0,0,0,0,0
+401135269103874001,401135269,2,40113526915,Pass Incompletion,0,10,3,false,false,false,0,0,0,0,0,0,90,62,Cole McDonald pass incomplete to JoJo Ward,false,false,,0,0,0,0,0
+401135269103876201,401135269,2,40113526915,Punt,52,10,4,false,false,false,0,1,0,0,0,1,90,62,"Stan Gaudion punt for 48 yds , Aleva Hifo returns for 52 yds to the Hawa 6",false,false,,0,0,0,0,0
+401135269103876202,401135269,2,40113526916,Rush,4,6,1,false,false,false,0,0,0,0,0,0,6,252,Zach Wilson run for 4 yds to the Hawa 2,false,false,,0,1,0,0,1
+401135269103884101,401135269,2,40113526916,Rushing Touchdown,2,2,2,false,false,false,0,0,0,0,1,1,2,252,"Zach Wilson run for 2 yds for a TD, (Jake Oldroyd KICK)",false,false,,0,0,0,0,0
+401135269103884103,401135269,2,40113526917,Kickoff Return (Offense),13,10,1,false,false,false,1,0,0,0,0,0,65,62,"Skyler Southam kickoff for 50 yds , Justice Augafa return for 13 yds to the Hawa 28",false,false,,1,0,0,0,1
+401135269103884701,401135269,2,40113526917,Rush,0,10,1,false,false,false,0,0,0,0,0,0,72,62,Cole McDonald run for no gain to the Hawa 28,false,false,,0,1,0,0,0
+401135269103888601,401135269,2,40113526917,Pass Incompletion,0,10,2,false,false,false,0,0,0,0,0,0,72,62,Cole McDonald pass incomplete to Lincoln Victor,false,false,,0,0,0,0,0
+401135269103889201,401135269,2,40113526917,Pass Reception,6,10,3,false,false,false,0,0,0,0,0,0,72,62,Cole McDonald pass complete to Jason-Matthew Sharsh for 6 yds to the Hawa 34,false,false,,0,0,0,0,0
+401135269103898901,401135269,2,40113526917,Punt,31,4,4,false,false,false,0,1,0,0,0,1,66,62,"Ben Scruton punt for 51 yds , Aleva Hifo returns for 31 yds to the BYU 46",false,false,,0,0,0,0,0
+401135269103898902,401135269,2,40113526918,Pass Incompletion,0,10,1,false,false,false,0,0,0,0,0,0,54,252,Zach Wilson pass incomplete to Matt Bushman,false,false,,0,1,0,0,1
+401135269103899801,401135269,2,40113526918,Pass Reception,3,10,2,false,false,false,0,0,0,0,0,0,54,252,Zach Wilson pass complete to Lopini Katoa for 3 yds to the BYU 49,false,false,,0,0,0,0,0
+401135269103907201,401135269,2,40113526918,Pass Incompletion,0,7,3,false,false,false,0,0,0,0,0,0,51,252,Zach Wilson pass incomplete to Dax Milne,false,false,,0,0,0,0,0
+401135269103908401,401135269,2,40113526918,Punt,0,7,4,false,false,false,0,1,0,0,0,1,51,252,"Jake Oldroyd punt for 38 yds, fair catch by JoJo Ward at the Hawa 13",false,false,,0,0,0,0,0
+401135269103908402,401135269,2,40113526919,Rush,-2,10,1,false,false,false,0,0,0,0,0,0,87,62,Miles Reed run for a loss of 2 yards to the Hawa 11,false,false,,0,1,0,0,1
+401135269103917201,401135269,2,40113526919,Sack,-7,12,2,false,false,false,0,0,0,0,0,0,89,62,Chevan Cordeiro sacked by Atunaisa Mahe for a loss of 7 yards to the Hawa 4,false,false,,0,0,0,0,0
+401135269103925301,401135269,2,40113526919,Pass Incompletion,0,19,3,false,false,false,0,0,0,0,0,0,96,62,Chevan Cordeiro pass incomplete to Nick Mardner,false,false,,0,0,0,0,0
+401135269103926601,401135269,2,40113526919,Punt,0,19,4,false,false,false,0,1,0,0,0,1,96,62,"Ben Scruton punt for 30 yds, punt out-of-bounds at the Hawa 34",false,false,,0,0,0,0,0
+401135269103926602,401135269,2,40113526920,Rush,1,10,1,false,false,false,0,0,0,0,0,0,34,252,Lopini Katoa run for 1 yd to the Hawa 33,false,false,,0,1,0,0,1
+401135269103929801,401135269,2,40113526920,Pass Reception,9,9,2,false,false,false,0,0,0,0,0,0,33,252,Zach Wilson pass complete to Talon Shumway for 9 yds to the Hawa 24 for a 1ST down,false,false,,0,0,0,0,0
+401135269103936101,401135269,2,40113526920,Rush,5,10,1,false,false,false,0,0,0,0,0,0,24,252,Aleva Hifo run for 5 yds to the Hawa 19,false,false,,0,0,0,1,1
+401135269103944301,401135269,2,40113526920,Rush,12,5,2,false,false,false,0,0,0,0,0,0,19,252,Zach Wilson run for 12 yds to the Hawa 7 for a 1ST down,false,false,,0,0,0,0,0
+401135269103948501,401135269,2,40113526920,Rush,3,7,1,false,false,false,0,0,0,0,0,0,7,252,Lopini Katoa run for 3 yds to the Hawa 4,false,false,,0,0,0,1,1
+401135269103956001,401135269,2,40113526920,Rush,-1,4,2,false,false,false,0,0,0,0,0,0,4,252,Lopini Katoa run for a loss of 1 yard to the Hawa 5,false,false,,0,0,0,0,0
+401135269103964801,401135269,2,40113526920,Fumble Recovery (Opponent),4,5,3,false,false,false,0,0,0,1,0,1,5,252,"Zach Wilson run for 4 yds Zach Wilson fumbled, forced by Eugene Ford, recovered by Hawa Manly Williams",false,false,,0,0,0,0,0
+401135269103964802,401135269,2,40113526921,Pass Incompletion,0,10,1,false,false,false,0,0,0,0,0,0,80,62,Cole McDonald pass incomplete,false,false,,0,1,0,0,1
+401135269103965201,401135269,2,40113526921,Sack,-1,10,2,false,false,false,0,0,0,0,0,0,80,62,Cole McDonald sacked by Seleti Fevaleaki for a loss of 1 yard to the Hawa 19,false,false,,0,0,0,0,0
+401135269103969701,401135269,2,40113526921,Pass Incompletion,0,11,3,false,false,false,0,0,0,0,0,0,81,62,Cole McDonald pass incomplete to Jared Smart,false,false,,0,0,0,0,0
+401135269103975301,401135269,2,40113526921,Punt,14,11,4,false,false,false,0,1,0,0,0,1,81,62,"Ben Scruton punt for 52 yds , Aleva Hifo returns for 14 yds to the BYU 43",false,false,,0,0,0,0,0
+401135269103975302,401135269,2,40113526922,Pass Reception,15,10,1,false,false,false,0,0,0,0,0,0,57,252,Zach Wilson pass complete to Matt Bushman for 15 yds to the Hawa 42 for a 1ST down,false,false,,0,1,0,0,1
+401135269103977501,401135269,2,40113526922,Pass Reception,5,10,1,false,false,false,0,0,0,0,0,0,42,252,Zach Wilson pass complete to Talon Shumway for 5 yds to the Hawa 37,false,false,,0,0,0,1,1
+401135269103984201,401135269,2,40113526922,Rush,15,5,2,false,false,false,0,0,0,0,0,0,37,252,Tyler Allgeier run for 15 yds to the Hawa 22 for a 1ST down,false,false,,0,0,0,0,0
+401135269103987801,401135269,2,40113526922,Rush,13,10,1,false,false,false,0,0,0,0,0,0,22,252,Tyler Allgeier run for 13 yds to the Hawa 9 for a 1ST down,false,false,,0,0,0,1,1
+401135269103995101,401135269,2,40113526922,Rush,6,9,1,false,false,false,0,0,0,0,0,0,9,252,Tyler Allgeier run for 6 yds to the Hawa 3,false,false,,0,0,0,1,1
+401135269103999901,401135269,2,40113526922,Rush,0,3,2,false,false,false,0,0,0,0,0,0,3,252,Emmanuel Esukpa run for no gain to the Hawa 3,false,false,,0,0,0,0,0
+401135269104849901,401135269,2,40113526922,Rush,0,3,3,false,false,false,0,0,0,0,0,0,3,252,Aleva Hifo run for no gain to the Hawa 3,false,false,,0,0,0,0,0
+401135269104856201,401135269,2,40113526922,Field Goal Good,20,3,4,false,false,false,0,0,0,0,1,1,3,252,Jake Oldroyd 20 yd FG GOOD,false,false,,0,0,0,0,0
+401135269104856202,401135269,2,40113526923,Kickoff Return (Offense),21,10,1,false,false,false,1,0,0,0,0,0,65,62,"Skyler Southam kickoff for 65 yds , Jonah Panoke return for 21 yds to the Hawa 21",false,false,,1,0,0,0,1
+401135269104856801,401135269,2,40113526923,Rush,3,10,1,false,false,false,0,0,0,0,0,0,79,62,Jason-Matthew Sharsh run for 3 yds to the Hawa 24,false,false,,0,1,0,0,0
+401135269104859301,401135269,2,40113526923,Rush,4,7,2,false,false,false,0,0,0,0,0,0,76,62,Miles Reed run for 4 yds to the Hawa 28,false,false,,0,0,0,0,0
+401135269104864801,401135269,2,40113526923,Pass Reception,46,3,3,true,false,true,0,0,0,0,0,0,72,62,"Cole McDonald pass complete to JoJo Ward for 46 yds to the BYU 26 for a 1ST down BYU Penalty, Defensive Offside (Lorenzo Fauatea) declined for a 1ST down",false,false,252,0,0,0,0,0
+401135269104866901,401135269,2,40113526923,Rush,3,10,1,false,false,false,0,0,0,0,0,0,26,62,Miles Reed run for 3 yds to the BYU 23,false,false,,0,0,0,1,1
+401135269104869301,401135269,2,40113526923,Pass Incompletion,0,7,2,false,false,false,0,0,0,0,0,0,23,62,Cole McDonald pass incomplete to JoJo Ward,false,false,,0,0,0,0,0
+401135269104874001,401135269,2,40113526923,Rush,1,7,3,false,false,false,0,0,0,0,0,0,23,62,Miles Reed run for 1 yd to the BYU 22,false,false,,0,0,0,0,0
+401135269104878001,401135269,2,40113526923,Field Goal Missed,40,6,4,false,false,false,0,0,0,1,0,1,23,62,Ryan Meskell 40 yd FG MISSED,false,false,,0,0,0,0,0
+401135269104878002,401135269,2,40113526924,Pass Incompletion,0,10,1,false,false,false,0,0,0,0,0,0,78,252,Zach Wilson pass incomplete to Talon Shumway,false,false,,0,1,0,0,1
+401135269104879001,401135269,2,40113526924,Rush,36,10,2,false,false,false,0,0,0,0,0,0,78,252,Tyler Allgeier run for 36 yds to the Hawa 42 for a 1ST down,false,false,,0,0,0,0,0
+401135269104885701,401135269,2,40113526924,Rush,5,10,1,false,false,false,0,0,0,0,0,0,42,252,Zach Wilson run for 5 yds to the Hawa 37,false,false,,0,0,0,1,1
+401135269104888501,401135269,2,40113526924,Penalty,-5,5,2,false,false,false,0,0,0,0,0,0,37,252,"BYU Penalty, False Start (Jackson McChesney) to the Hawa 42",true,false,252,0,0,0,0,0
+401135269104894001,401135269,2,40113526924,Rush,-1,10,2,false,false,false,0,0,0,0,0,0,42,252,Tyler Allgeier run for a loss of 1 yard to the Hawa 43,false,false,,0,0,0,0,0
+401135269104898301,401135269,2,40113526924,Penalty,15,11,3,true,false,false,0,0,0,0,0,0,43,252,"Wilson, Zach pass incomplete to Shumway, Talon, PENALTY HAWAII pass interference (Davis, Cortez) 15 yards to the HAWAII28, NO PLAY, 1ST DOWN BYU.",true,true,62,0,0,0,0,0
+401135269104898701,401135269,2,40113526924,Pass Incompletion,0,10,1,false,false,false,0,0,0,0,0,0,28,252,Zach Wilson pass incomplete to Micah Simon,false,false,,0,0,1,0,1
+401135269104899301,401135269,2,40113526924,Rush,-1,10,2,false,false,false,0,0,0,0,0,0,28,252,Zach Wilson run for a loss of 1 yard to the Hawa 29,false,false,,0,0,0,0,0
+401135269104907501,401135269,2,40113526924,Rush,5,11,3,false,false,false,0,0,0,0,0,0,29,252,Zach Wilson run for 5 yds to the Hawa 24,false,false,,0,0,0,0,0
+401135269104909601,401135269,2,40113526924,Field Goal Missed,41,6,4,false,false,false,0,0,0,1,0,1,24,252,Jake Oldroyd 41 yd FG MISSED,false,false,,0,0,0,0,0
+401135269104909602,401135269,2,40113526925,Pass Incompletion,0,10,1,false,false,false,0,0,0,0,0,0,76,62,Cole McDonald pass incomplete to Jason-Matthew Sharsh,false,false,,0,1,0,0,1
+401135269104914301,401135269,2,40113526925,Pass Reception,7,10,2,false,false,false,0,0,0,0,0,0,76,62,Cole McDonald pass complete to Jason-Matthew Sharsh for 7 yds to the Hawa 31,false,false,,0,0,0,0,0
+401135269104917101,401135269,2,40113526925,Pass Reception,4,3,3,false,false,false,0,0,0,0,0,0,69,62,Cole McDonald pass complete to Jared Smart for 4 yds to the Hawa 35 for a 1ST down,false,false,,0,0,0,0,0
+401135269104924001,401135269,2,40113526925,Pass Reception,5,10,1,false,false,false,0,0,0,0,0,0,65,62,Cole McDonald pass complete to Cedric Byrd II for 5 yds to the Hawa 40,false,false,,0,0,0,1,1
+401135269104926701,401135269,2,40113526925,Pass Reception,7,5,2,false,false,false,0,0,0,0,0,0,60,62,Cole McDonald pass complete to Jason-Matthew Sharsh for 7 yds to the Hawa 47 for a 1ST down,false,false,,0,0,0,0,0
+401135269104934001,401135269,2,40113526925,Pass Reception,5,10,1,false,false,false,0,0,0,0,0,0,53,62,Cole McDonald pass complete to Jared Smart for 5 yds to the BYU 48,false,false,,0,0,0,1,1
+401135269104937301,401135269,2,40113526925,Rush,2,5,2,false,false,false,0,0,0,0,0,0,48,62,Cole McDonald run for 2 yds to the BYU 46,false,false,,0,0,0,0,0
+401135269104945501,401135269,2,40113526925,Pass Incompletion,0,3,3,false,false,false,0,0,0,0,0,0,46,62,Cole McDonald pass incomplete to Jared Smart,false,false,,0,0,0,0,0
+401135269104946001,401135269,2,40113526925,Pass Reception,20,3,4,false,false,false,0,0,0,0,0,0,46,62,Cole McDonald pass complete to Cedric Byrd II for 20 yds to the BYU 26 for a 1ST down,false,false,,0,0,0,0,0
+401135269104948301,401135269,2,40113526925,Penalty,-5,10,1,false,false,false,0,0,0,0,0,0,26,62,"HAWAII Penalty, False Start (-5 Yards) to the BYU 31",true,false,62,0,0,0,1,1
+401135269104954501,401135269,2,40113526925,Pass Incompletion,0,15,1,false,false,false,0,0,0,0,0,0,31,62,Cole McDonald pass incomplete to Nick Mardner,false,false,,0,0,0,0,0
+401135269104955001,401135269,2,40113526925,Pass Incompletion,0,15,2,false,false,false,0,0,0,0,0,0,31,62,Cole McDonald pass incomplete to Jason-Matthew Sharsh,false,false,,0,0,0,0,0
+401135269104955501,401135269,2,40113526925,Sack,-8,15,3,false,false,false,0,0,0,0,0,0,31,62,Cole McDonald sacked by JJ Nwigwe for a loss of 8 yards to the BYU 39,false,false,,0,0,0,0,0
+401135269104958502,401135269,2,40113526925,Timeout,0,23,4,false,false,false,0,0,0,0,0,0,39,62,"Timeout HAWAII, clock 04:14",false,false,,0,0,0,0,0
+401135269104959201,401135269,2,40113526925,Punt,0,23,4,false,false,false,0,1,0,0,0,1,39,62,"Stan Gaudion punt for 33 yds, fair catch by Aleva Hifo at the BYU 6",false,false,,0,0,0,0,0
+401135269104959202,401135269,2,40113526926,Pass Incompletion,0,10,1,false,false,false,0,0,0,0,0,0,94,252,Zach Wilson pass incomplete to Aleva Hifo,false,false,,0,1,0,0,1
+401135269104959701,401135269,2,40113526926,Rush,6,10,2,false,false,false,0,0,0,0,0,0,94,252,Tyler Allgeier run for 6 yds to the BYU 12,false,false,,0,0,0,0,0
+401135269104968101,401135269,2,40113526926,Rush,6,4,3,false,false,false,0,0,0,0,0,0,88,252,Zach Wilson run for 6 yds to the BYU 18 for a 1ST down,false,false,,0,0,0,0,0
+401135269104976601,401135269,2,40113526926,Rush,1,10,1,false,false,false,0,0,0,0,0,0,82,252,Tyler Allgeier run for 1 yd to the BYU 19,false,false,,0,0,0,1,1
+401135269104977301,401135269,2,40113526926,Timeout,0,9,2,false,false,false,0,0,0,0,0,0,81,252,"Timeout HAWAII, clock 02:26",false,false,,0,0,0,0,0
+401135269104977401,401135269,2,40113526926,Rush,7,9,2,false,false,false,0,0,0,0,0,0,81,252,Aleva Hifo run for 7 yds to the BYU 26,false,false,,0,0,0,0,0
+401135269104978201,401135269,2,40113526926,Timeout,0,2,3,false,false,false,0,0,0,0,0,0,74,252,"Timeout HAWAII, clock 02:17",false,false,,0,0,0,0,0
+401135269104978202,401135269,2,40113526926,Timeout,0,2,3,false,false,false,0,0,0,0,0,0,74,252,"Timeout BYU, clock 02:17",false,false,,0,0,0,0,0
+401135269104978301,401135269,2,40113526926,Pass Incompletion,0,2,3,false,false,false,0,0,0,0,0,0,74,252,Zach Wilson pass incomplete to Micah Simon,false,false,,0,0,0,0,0
+401135269104979801,401135269,2,40113526926,Punt,-9,2,4,false,false,false,0,1,0,0,0,1,74,252,"Jake Oldroyd punt for 37 yds , JoJo Ward returns for a loss of 9 yards to the Hawa 17 HAWAII Penalty, Illegal Block (14 Yards) to the Hawa 14",,false,62,0,0,0,0,0
+401135269104979802,401135269,2,40113526927,Penalty,15,10,1,true,false,false,0,0,0,0,0,0,86,62,"BYU Penalty, Personal Foul (Max Tooley) to the Hawa 29 for a 1ST down",,false,252,0,1,0,0,1
+401135269104979901,401135269,2,40113526927,Pass Incompletion,0,10,1,false,false,false,0,0,0,0,0,0,71,62,Cole McDonald pass incomplete to JoJo Ward,false,false,,0,0,1,0,1
+401135269104984401,401135269,2,40113526927,Rush,9,10,2,false,false,false,0,0,0,0,0,0,71,62,Cole McDonald run for 9 yds to the Hawa 38,false,false,,0,0,0,0,0
+401135269104986201,401135269,2,40113526927,Pass Reception,38,1,3,false,false,false,0,0,0,0,0,0,62,62,Cole McDonald pass complete to Nick Mardner for 38 yds to the BYU 24 for a 1ST down,false,false,,0,0,0,0,0
+401135269104988201,401135269,2,40113526927,Passing Touchdown,24,10,1,false,false,false,0,0,0,0,1,1,24,62,"Cole McDonald pass complete to Nick Mardner for 24 yds for a TD, (Ryan Meskell KICK)",false,false,,0,0,0,1,1
+401135269104988203,401135269,2,40113526928,Kickoff Return (Offense),12,10,1,false,false,false,1,0,0,0,0,0,65,252,"Ryan Meskell kickoff for 55 yds , Dayan Ghanwoloku return for 12 yds to the BYU 22 Dayan Ghanwoloku fumbled, recovered by BYU Dayan Ghanwoloku",false,false,,1,0,0,0,1
+401135269104988301,401135269,2,40113526928,Pass Reception,17,10,1,false,false,false,0,0,0,0,0,0,78,252,Zach Wilson pass complete to Micah Simon for 17 yds to the BYU 39 for a 1ST down,false,false,,0,1,0,0,0
+401135269104994001,401135269,2,40113526928,Pass Reception,11,10,1,false,false,false,0,0,0,0,0,0,61,252,Zach Wilson pass complete to Micah Simon for 11 yds to the 50 yard line for a 1ST down,false,false,,0,0,0,1,1
+401135269104995501,401135269,2,40113526928,Rush,6,10,1,false,false,false,0,0,0,0,0,0,50,252,Zach Wilson run for 6 yds to the Hawa 44,false,false,,0,0,0,1,1
+401135269104996101,401135269,2,40113526928,Pass Reception,5,4,2,false,false,false,0,0,0,0,0,0,44,252,Zach Wilson pass complete to Micah Simon for 5 yds to the Hawa 39 for a 1ST down,false,false,,0,0,0,0,0
+401135269104997401,401135269,2,40113526928,Interception Return,8,10,1,false,false,false,0,0,0,1,0,1,39,252,Zach Wilson pass intercepted Khoury Bethley return for 8 yds to the Hawa 38,false,false,,0,0,0,1,1
+401135269104999901,401135269,2,40113526929,Rush,-2,10,1,false,false,false,0,0,0,0,0,1,62,62,TEAM run for a loss of 2 yards to the Hawa 36,false,false,,0,1,0,0,1
