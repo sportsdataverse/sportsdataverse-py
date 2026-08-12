@@ -1,174 +1,174 @@
-id_play,game_id,half,id_drive,play_type,yards_gained,distance,down,penalty_1st_conv,penalty_offset,penalty_declined,kickoff_play,punt,downs_turnover,turnover_vec,scoring_play,change_of_pos_team,yards_to_goal,pos_team,py_firstD_by_kickoff,py_firstD_by_poss,py_firstD_by_penalty,py_firstD_by_yards,py_new_series
-4017545983,401754598,1,4017545982,Kickoff,0,10,1,false,false,false,1,0,0,0,0,0,65,152,1,0,0,0,1
-40175459812,401754598,1,4017545982,Pass Reception,1,10,1,false,false,false,0,0,0,0,0,0,75,152,0,1,0,0,0
-40175459817,401754598,1,4017545982,Rush,27,9,2,false,false,false,0,0,0,0,0,0,74,152,0,0,0,0,0
-40175459821,401754598,1,4017545982,Pass Reception,-7,10,1,false,false,false,0,0,0,0,0,0,47,152,0,0,0,1,1
-40175459826,401754598,1,4017545982,Rush,5,17,2,false,false,false,0,0,0,0,0,0,54,152,0,0,0,0,0
-40175459830,401754598,1,4017545982,Sack,0,12,3,false,false,false,0,0,0,0,0,0,49,152,0,0,0,0,0
-40175459834,401754598,1,4017545982,Punt,0,17,4,false,false,false,0,1,0,0,0,1,54,152,0,0,0,0,0
-40175459838,401754598,1,4017545983,Pass Incompletion,0,10,1,false,false,false,0,0,0,0,0,0,90,52,0,1,0,0,1
-40175459841,401754598,1,4017545983,Pass Reception,18,10,2,false,false,false,0,0,0,0,0,0,90,52,0,0,0,0,0
-40175459848,401754598,1,4017545983,Rush,3,10,1,false,false,false,0,0,0,0,0,0,72,52,0,0,0,1,1
-40175459852,401754598,1,4017545983,Rush,5,7,2,false,false,false,0,0,0,0,0,0,69,52,0,0,0,0,0
-40175459856,401754598,1,4017545983,Rush,7,2,3,false,false,false,0,0,0,0,0,0,64,52,0,0,0,0,0
-40175459860,401754598,1,4017545983,Pass Incompletion,0,10,1,false,false,false,0,0,0,0,0,0,57,52,0,0,0,1,1
-40175459865,401754598,1,4017545983,Pass Reception,22,10,2,false,false,false,0,0,0,0,0,0,57,52,0,0,0,0,0
-40175459867,401754598,1,4017545983,Timeout,0,10,1,false,false,false,0,0,0,0,0,0,57,52,0,0,0,1,1
-40175459874,401754598,1,4017545983,Rush,1,10,1,false,false,false,0,0,0,0,0,0,35,52,0,0,0,1,0
-40175459878,401754598,1,4017545983,Interception Return,18,9,2,false,false,false,0,0,0,1,0,1,34,52,0,0,0,0,0
-40175459887,401754598,1,4017545984,Rush,2,10,1,false,false,false,0,0,0,0,0,0,73,152,0,1,0,0,1
-40175459891,401754598,1,4017545984,Pass Reception,6,8,2,false,false,false,0,0,0,0,0,0,71,152,0,0,0,0,0
-40175459896,401754598,1,4017545984,Rush,5,2,3,false,false,false,0,0,0,0,0,0,65,152,0,0,0,0,0
-401754598100,401754598,1,4017545984,Rush,5,10,1,false,false,false,0,0,0,0,0,0,60,152,0,0,0,1,1
-401754598106,401754598,1,4017545984,Pass Reception,8,5,2,false,false,false,0,0,0,0,0,0,55,152,0,0,0,0,0
-401754598113,401754598,1,4017545984,Pass Reception,13,10,1,false,false,false,0,0,0,0,0,0,47,152,0,0,0,1,1
-401754598118,401754598,1,4017545984,Rush,2,10,1,false,false,false,0,0,0,0,0,0,34,152,0,0,0,1,1
-401754598122,401754598,1,4017545984,Rush,5,8,2,false,false,false,0,0,0,0,0,0,32,152,0,0,0,0,0
-401754598126,401754598,1,4017545984,Penalty,4,3,3,true,false,false,0,0,0,0,0,0,27,152,0,0,0,0,0
-401754598130,401754598,1,4017545984,Passing Touchdown,23,10,1,false,false,false,0,0,0,0,1,0,23,152,0,0,1,0,1
-401754598132,401754598,1,4017545984,Timeout,0,3,3,false,false,false,0,0,0,0,0,1,27,152,0,1,0,0,0
-401754598139,401754598,1,4017545986,Kickoff,16,10,1,false,false,false,1,0,0,0,0,0,65,52,1,0,0,0,1
-401754598144,401754598,1,4017545986,Pass Reception,5,10,1,false,false,false,0,0,0,0,0,0,80,52,0,1,0,0,0
-401754598150,401754598,1,4017545986,Penalty,5,5,2,false,false,false,0,0,0,0,0,0,75,52,0,0,0,0,0
-401754598153,401754598,1,4017545986,Rush,10,10,2,false,false,false,0,0,0,0,0,0,80,52,0,0,0,0,0
-401754598158,401754598,1,4017545986,Pass Reception,10,10,1,false,false,false,0,0,0,0,0,0,70,52,0,0,0,1,1
-401754598164,401754598,1,4017545986,Rush,11,10,1,false,false,false,0,0,0,0,0,0,60,52,0,0,0,1,1
-401754598168,401754598,1,4017545986,Rush,2,10,1,false,false,false,0,0,0,0,0,0,49,52,0,0,0,1,1
-401754598172,401754598,1,4017545986,Rush,14,8,2,false,false,false,0,0,0,0,0,0,47,52,0,0,0,0,0
-401754598182,401754598,1,4017545986,Pass Incompletion,0,10,1,false,false,false,0,0,0,0,0,0,33,52,0,0,0,1,1
-401754598187,401754598,1,4017545986,Pass Reception,5,10,2,false,false,false,0,0,0,0,0,0,33,52,0,0,0,0,0
-401754598192,401754598,1,4017545986,Pass Incompletion,0,5,3,false,false,false,0,0,0,0,0,0,28,52,0,0,0,0,0
-401754598195,401754598,1,4017545986,Field Goal Good,46,5,4,false,false,false,0,0,0,0,1,1,28,52,0,0,0,0,0
-401754598198,401754598,1,4017545988,Kickoff,0,10,1,false,false,false,1,0,0,0,0,0,65,152,1,0,0,0,1
-401754598201,401754598,1,4017545988,Rush,-4,10,1,false,false,false,0,0,0,0,0,0,75,152,0,1,0,0,0
-401754598205,401754598,1,4017545988,Pass Reception,27,14,2,false,false,false,0,0,0,0,0,0,79,152,0,0,0,0,0
-401754598210,401754598,1,4017545988,Rush,1,10,1,false,false,false,0,0,0,0,0,0,52,152,0,0,0,1,1
-401754598214,401754598,1,4017545988,Rush,4,9,2,false,false,false,0,0,0,0,0,0,51,152,0,0,0,0,0
-401754598229,401754598,1,4017545988,Sack,-2,5,3,false,false,false,0,0,0,0,0,0,47,152,0,0,0,0,0
-401754598234,401754598,1,4017545988,Punt,0,7,4,false,false,false,0,1,0,0,0,1,49,152,0,0,0,0,0
-401754598238,401754598,1,4017545989,Rush,1,10,1,false,false,false,0,0,0,0,0,0,85,52,0,1,0,0,1
-401754598242,401754598,1,4017545989,Rush,15,9,2,false,false,false,0,0,0,0,0,0,84,52,0,0,0,0,0
-401754598246,401754598,1,4017545989,Rush,3,10,1,false,false,false,0,0,0,0,0,0,69,52,0,0,0,1,1
-401754598250,401754598,1,4017545989,Rush,5,7,2,false,false,false,0,0,0,0,0,0,66,52,0,0,0,0,0
-401754598254,401754598,1,4017545989,Rush,2,2,3,false,false,false,0,0,0,0,0,0,61,52,0,0,0,0,0
-401754598258,401754598,1,4017545989,Rush,5,10,1,false,false,false,0,0,0,0,0,0,59,52,0,0,0,1,1
-401754598260,401754598,1,4017545989,Timeout,0,2,3,false,false,false,0,0,0,0,0,0,61,52,0,0,0,0,0
-401754598263,401754598,1,4017545989,Rush,9,5,2,false,false,false,0,0,0,0,0,0,54,52,0,0,0,0,0
-401754598267,401754598,1,4017545989,Rush,5,10,1,false,false,false,0,0,0,0,0,0,45,52,0,0,0,1,1
-401754598271,401754598,1,4017545989,Pass Incompletion,0,5,2,false,false,false,0,0,0,0,0,0,40,52,0,0,0,0,0
-401754598274,401754598,1,4017545989,Rush,2,5,3,false,false,false,0,0,0,0,0,1,40,52,0,0,0,0,0
-401754598276,401754598,1,4017545989,Timeout,0,5,2,false,false,false,0,0,0,0,0,1,60,152,0,0,0,0,0
-401754598279,401754598,1,4017545989,Rush,7,3,4,false,false,false,0,0,0,0,0,0,38,52,0,0,0,0,0
-401754598283,401754598,1,4017545989,Rush,7,10,1,false,false,false,0,0,0,0,0,0,31,52,0,0,0,1,1
-401754598287,401754598,1,4017545989,Rush,7,3,2,false,false,false,0,0,0,0,0,0,24,52,0,0,0,0,0
-401754598291,401754598,1,4017545989,Penalty,5,10,1,false,false,false,0,0,0,0,0,0,17,52,0,0,0,1,1
-401754598296,401754598,1,4017545989,Penalty,5,15,1,false,false,false,0,0,0,0,0,0,22,52,0,0,0,0,0
-401754598299,401754598,1,4017545989,Rush,8,20,1,false,false,false,0,0,0,0,0,0,27,52,0,0,0,0,0
-401754598303,401754598,1,4017545989,Rush,2,12,2,false,false,false,0,0,0,0,0,0,19,52,0,0,0,0,0
-401754598307,401754598,1,4017545989,Pass Reception,5,10,3,false,false,false,0,0,0,0,0,0,17,52,0,0,0,0,0
-401754598312,401754598,1,4017545989,Penalty,5,5,4,false,false,false,0,0,0,0,0,0,12,52,0,0,0,0,0
-401754598315,401754598,1,4017545989,Field Goal Missed,35,10,4,false,false,false,0,0,0,1,0,1,17,52,0,0,0,0,0
-401754598319,401754598,1,40175459810,Rush,2,10,1,false,false,false,0,0,0,0,0,0,80,152,0,1,0,0,1
-401754598323,401754598,1,40175459810,Penalty,13,8,2,false,false,false,0,0,0,0,0,0,78,152,0,0,0,0,0
-401754598328,401754598,1,40175459810,Rush,2,15,2,false,false,false,0,0,0,0,0,0,85,152,0,0,0,0,0
-401754598332,401754598,1,40175459810,Pass Incompletion,0,13,3,false,false,false,0,0,0,0,0,0,83,152,0,0,0,0,0
-401754598335,401754598,1,40175459810,Punt,0,13,4,false,false,false,0,1,0,0,0,1,83,152,0,0,0,0,0
-401754598339,401754598,1,40175459811,Pass Incompletion,0,10,1,false,false,false,0,0,0,0,0,0,53,52,0,1,0,0,1
-401754598342,401754598,1,40175459811,Pass Reception,5,10,2,false,false,false,0,0,0,0,0,0,53,52,0,0,0,0,0
-401754598347,401754598,1,40175459811,Rush,1,5,3,false,false,false,0,0,0,0,0,0,48,52,0,0,0,0,0
-401754598351,401754598,1,40175459811,Punt,0,4,4,false,false,false,0,1,0,0,0,1,47,52,0,0,0,0,0
-401754598355,401754598,1,40175459812,Rush,11,10,1,false,false,false,0,0,0,0,0,0,92,152,0,1,0,0,1
-401754598359,401754598,1,40175459812,Pass Reception,6,10,1,false,false,false,0,0,0,0,0,0,81,152,0,0,0,1,1
-401754598364,401754598,1,40175459812,Pass Incompletion,0,4,2,false,false,false,0,0,0,0,0,0,75,152,0,0,0,0,0
-401754598366,401754598,1,40175459812,Timeout,0,10,1,false,false,false,0,0,0,0,0,0,81,152,0,0,0,0,0
-401754598368,401754598,1,40175459812,Pass Reception,6,4,3,false,false,false,0,0,0,0,0,0,75,152,0,0,0,0,0
-401754598373,401754598,1,40175459812,Pass Incompletion,0,10,1,false,false,false,0,0,0,0,0,0,69,152,0,0,0,1,1
-401754598376,401754598,1,40175459812,Pass Incompletion,0,10,2,false,false,false,0,0,0,0,0,0,69,152,0,0,0,0,0
-401754598379,401754598,1,40175459812,Penalty,24,10,3,true,false,true,0,0,0,0,0,1,69,152,0,0,0,0,0
-401754598391,401754598,2,40175459814,Kickoff,0,10,1,false,false,false,1,0,0,0,0,0,65,52,1,0,0,0,1
-401754598396,401754598,2,40175459814,Rush,6,10,1,false,false,false,0,0,0,0,0,0,75,52,0,1,0,0,0
-401754598400,401754598,2,40175459814,Penalty,10,4,2,false,false,false,0,0,0,0,0,0,69,52,0,0,0,0,0
-401754598405,401754598,2,40175459814,Pass Incompletion,0,14,2,false,false,false,0,0,0,0,0,0,79,52,0,0,0,0,0
-401754598408,401754598,2,40175459814,Pass Reception,9,14,3,false,false,false,0,0,0,0,0,0,79,52,0,0,0,0,0
-401754598413,401754598,2,40175459814,Punt Return,1,5,4,false,false,false,0,1,0,0,0,1,70,52,0,0,0,0,0
-401754598419,401754598,2,40175459815,Pass Incompletion,0,10,1,false,false,false,0,0,0,0,0,0,79,152,0,1,0,0,1
-401754598422,401754598,2,40175459815,Pass Reception,9,10,2,false,false,false,0,0,0,0,0,0,79,152,0,0,0,0,0
-401754598427,401754598,2,40175459815,Rush,0,1,3,false,false,false,0,0,0,0,0,0,70,152,0,0,0,0,0
-401754598433,401754598,2,40175459815,Rush,4,1,4,false,false,false,0,0,0,0,0,0,70,152,0,0,0,0,0
-401754598437,401754598,2,40175459815,Rush,2,10,1,false,false,false,0,0,0,0,0,0,66,152,0,0,0,1,1
-401754598441,401754598,2,40175459815,Rush,7,8,2,false,false,false,0,0,0,0,0,0,64,152,0,0,0,0,0
-401754598445,401754598,2,40175459815,Rush,16,1,3,false,false,false,0,0,0,0,0,0,57,152,0,0,0,0,0
-401754598449,401754598,2,40175459815,Rush,2,10,1,false,false,false,0,0,0,0,0,0,41,152,0,0,0,1,1
-401754598453,401754598,2,40175459815,Pass Reception,6,8,2,false,false,false,0,0,0,0,0,0,39,152,0,0,0,0,0
-401754598458,401754598,2,40175459815,Rush,5,2,3,false,false,false,0,0,0,0,0,0,33,152,0,0,0,0,0
-401754598462,401754598,2,40175459815,Pass Reception,10,10,1,false,false,false,0,0,0,0,0,0,28,152,0,0,0,1,1
-401754598467,401754598,2,40175459815,Rush,2,10,1,false,false,false,0,0,0,0,0,0,18,152,0,0,0,1,1
-401754598471,401754598,2,40175459815,Pass Reception,12,8,2,false,false,false,0,0,0,0,0,0,16,152,0,0,0,0,0
-401754598476,401754598,2,40175459815,Penalty,2,4,1,true,false,false,0,0,0,0,0,0,4,152,0,0,0,1,1
-401754598483,401754598,2,40175459815,Penalty,1,2,1,false,false,false,0,0,0,0,0,0,2,152,0,0,1,0,1
-401754598488,401754598,2,40175459815,Rush,0,1,1,false,false,false,0,0,0,0,0,0,1,152,0,0,0,0,0
-401754598495,401754598,2,40175459815,Rushing Touchdown,1,1,2,false,false,false,0,0,0,0,1,1,1,152,0,0,0,0,0
-401754598502,401754598,2,40175459817,Kickoff,17,10,1,false,false,false,1,0,0,0,0,0,65,52,1,0,0,0,1
-401754598507,401754598,2,40175459817,Rush,5,10,1,false,false,false,0,0,0,0,0,0,83,52,0,1,0,0,0
-401754598511,401754598,2,40175459817,Rush,7,5,2,false,false,false,0,0,0,0,0,0,78,52,0,0,0,0,0
-401754598515,401754598,2,40175459817,Pass Incompletion,0,10,1,false,false,false,0,0,0,0,0,0,71,52,0,0,0,1,1
-401754598518,401754598,2,40175459817,Rush,4,10,2,false,false,false,0,0,0,0,0,0,71,52,0,0,0,0,0
-401754598522,401754598,2,40175459817,Rush,13,6,3,false,false,false,0,0,0,0,0,0,67,52,0,0,0,0,0
-401754598526,401754598,2,40175459817,Rush,4,10,1,false,false,false,0,0,0,0,0,0,54,52,0,0,0,1,1
-401754598530,401754598,2,40175459817,Pass Incompletion,0,6,2,false,false,false,0,0,0,0,0,0,50,52,0,0,0,0,0
-401754598533,401754598,2,40175459817,Pass Incompletion,0,6,3,false,false,false,0,0,0,0,0,0,50,52,0,0,0,0,0
-401754598536,401754598,2,40175459817,Pass Incompletion,0,6,4,false,false,false,0,0,1,0,0,1,50,52,0,0,0,0,0
-401754598540,401754598,2,40175459818,Rush,5,10,1,false,false,false,0,0,0,0,0,0,50,152,0,1,0,0,1
-401754598544,401754598,2,40175459818,Rush,4,5,2,false,false,false,0,0,0,0,0,0,45,152,0,0,0,0,0
-401754598548,401754598,2,40175459818,Rush,4,1,3,false,false,false,0,0,0,0,0,0,41,152,0,0,0,0,0
-401754598558,401754598,2,40175459818,Rush,2,10,1,false,false,false,0,0,0,0,0,0,37,152,0,0,0,1,1
-401754598564,401754598,2,40175459818,Pass Reception,-1,8,2,false,false,false,0,0,0,0,0,0,35,152,0,0,0,0,0
-401754598569,401754598,2,40175459818,Sack,-11,9,3,false,false,false,0,0,0,0,0,0,36,152,0,0,0,0,0
-401754598571,401754598,2,40175459818,Timeout,0,8,2,false,false,false,0,0,0,0,0,0,35,152,0,0,0,0,0
-401754598574,401754598,2,40175459818,Punt,0,20,4,false,false,false,0,1,0,0,0,1,47,152,0,0,0,0,0
-401754598578,401754598,2,40175459819,Rush,4,10,1,false,false,false,0,0,0,0,0,0,86,52,0,1,0,0,1
-401754598582,401754598,2,40175459819,Pass Reception,6,6,2,false,false,false,0,0,0,0,0,0,82,52,0,0,0,0,0
-401754598587,401754598,2,40175459819,Penalty,15,10,1,true,false,false,0,0,0,0,0,0,76,52,0,0,0,1,1
-401754598591,401754598,2,40175459819,Rush,3,10,1,false,false,false,0,0,0,0,0,0,61,52,0,0,1,0,1
-401754598595,401754598,2,40175459819,Pass Reception,10,7,2,false,false,false,0,0,0,0,0,0,58,52,0,0,0,0,0
-401754598600,401754598,2,40175459819,Pass Reception,3,10,1,false,false,false,0,0,0,0,0,0,48,52,0,0,0,1,1
-401754598605,401754598,2,40175459819,Rush,1,7,2,false,false,false,0,0,0,0,0,0,45,52,0,0,0,0,0
-401754598609,401754598,2,40175459819,Pass Reception,34,6,3,false,false,false,0,0,0,0,0,0,44,52,0,0,0,0,0
-401754598614,401754598,2,40175459819,Rush,-2,10,1,false,false,false,0,0,0,0,0,0,10,52,0,0,0,1,1
-401754598618,401754598,2,40175459819,Rush,3,12,2,false,false,false,0,0,0,0,0,0,12,52,0,0,0,0,0
-401754598622,401754598,2,40175459819,Passing Touchdown,9,9,3,false,false,false,0,0,0,0,1,1,9,52,0,0,0,0,0
-401754598634,401754598,2,40175459821,Kickoff,0,10,1,false,false,false,1,0,0,0,0,0,65,152,1,0,0,0,1
-401754598637,401754598,2,40175459821,Pass Reception,12,10,1,false,false,false,0,0,0,0,0,0,75,152,0,1,0,0,0
-401754598644,401754598,2,40175459821,Pass Reception,3,10,1,false,false,false,0,0,0,0,0,0,63,152,0,0,0,1,1
-401754598649,401754598,2,40175459821,Pass Reception,6,7,2,false,false,false,0,0,0,0,0,0,60,152,0,0,0,0,0
-401754598654,401754598,2,40175459821,Rush,1,1,3,false,false,false,0,0,0,0,0,0,54,152,0,0,0,0,0
-401754598658,401754598,2,40175459821,Rush,3,10,1,false,false,false,0,0,0,0,0,0,53,152,0,0,0,1,1
-401754598662,401754598,2,40175459821,Pass Incompletion,0,7,2,false,false,false,0,0,0,0,0,0,50,152,0,0,0,0,0
-401754598665,401754598,2,40175459821,Sack,-10,7,3,false,false,false,0,0,0,0,0,0,50,152,0,0,0,0,0
-401754598669,401754598,2,40175459821,Punt Team Fumble Recovery,25,17,4,false,false,false,0,1,0,0,0,0,60,152,0,0,0,0,0
-401754598677,401754598,2,40175459822,Rush,2,10,1,false,false,false,0,0,0,0,0,0,60,152,0,1,0,0,1
-401754598681,401754598,2,40175459822,Rush,7,8,2,false,false,false,0,0,0,0,0,0,58,152,0,0,0,0,0
-401754598685,401754598,2,40175459822,Penalty,5,1,3,false,false,false,0,0,0,0,0,0,51,152,0,0,0,0,0
-401754598688,401754598,2,40175459822,Pass Incompletion,0,6,3,false,false,false,0,0,0,0,0,0,56,152,0,0,0,0,0
-401754598699,401754598,2,40175459823,Rush,1,10,1,false,false,false,0,0,0,0,0,0,16,152,0,1,0,0,1
-401754598703,401754598,2,40175459823,Rush,3,9,2,false,false,false,0,0,0,0,0,0,15,152,0,0,0,0,0
-401754598705,401754598,2,40175459822,Fumble Recovery (Opponent),2,6,4,false,false,false,0,0,0,1,0,0,56,152,0,0,0,0,1
-401754598719,401754598,2,40175459823,Timeout,0,6,3,false,false,false,0,0,0,0,0,0,12,152,0,0,0,0,1
-401754598720,401754598,2,40175459823,Passing Touchdown,12,6,4,false,false,false,0,0,0,0,1,1,12,152,0,0,0,0,0
-401754598728,401754598,2,40175459825,Kickoff,0,10,1,false,false,false,1,0,0,0,0,0,65,52,1,0,0,0,1
-401754598733,401754598,2,40175459825,Pass Reception,25,10,1,false,false,false,0,0,0,0,0,0,64,52,0,1,0,0,0
-401754598738,401754598,2,40175459825,Pass Reception,6,10,1,false,false,false,0,0,0,0,0,0,39,52,0,0,0,1,1
-401754598743,401754598,2,40175459825,Pass Incompletion,0,4,2,false,false,false,0,0,0,0,0,0,33,52,0,0,0,0,0
-401754598761,401754598,2,40175459825,Field Goal Missed,51,4,4,false,false,false,0,0,0,1,0,1,33,52,0,0,0,0,0
-401754598765,401754598,2,40175459826,Rush,4,10,1,false,false,false,0,0,0,0,0,0,67,152,0,1,0,0,1
-401754598769,401754598,2,40175459826,Rush,1,6,2,false,false,false,0,0,0,0,0,1,63,152,0,0,0,0,0
-401754598771,401754598,2,40175459826,Timeout,0,10,1,false,false,false,0,0,0,0,0,0,33,52,0,0,0,0,0
-401754598772,401754598,2,40175459826,Timeout,0,10,1,false,false,false,0,0,0,0,0,1,33,52,0,0,0,0,0
-401754598775,401754598,2,40175459826,Rush,2,5,3,false,false,false,0,0,0,0,0,1,62,152,0,0,0,0,0
-401754598777,401754598,2,40175459826,Timeout,0,6,2,false,false,false,0,0,0,0,0,1,37,52,0,0,0,0,0
-401754598780,401754598,2,40175459826,Punt,0,3,4,false,false,false,0,1,0,0,0,0,60,152,0,0,0,0,0
-401754598782,401754598,2,40175459826,Timeout,0,5,3,false,false,false,0,0,0,0,0,1,62,152,0,0,0,0,0
-401754598785,401754598,2,40175459827,Pass Reception,31,10,1,false,false,false,0,0,0,0,0,0,74,52,0,1,0,0,1
-401754598790,401754598,2,40175459827,Pass Incompletion,0,10,1,false,false,false,0,0,0,0,0,0,43,52,0,0,0,1,1
-401754598793,401754598,2,40175459827,Interception Return,8,10,2,false,false,false,0,0,0,1,0,0,43,52,0,0,0,0,0
-401754598806,401754598,2,40175459825,Pass Incompletion,0,4,3,false,false,false,0,0,0,0,0,1,33,52,0,0,0,0,1
+id_play,game_id,half,id_drive,play_type,yards_gained,distance,down,penalty_1st_conv,penalty_offset,penalty_declined,kickoff_play,punt,downs_turnover,turnover_vec,scoring_play,change_of_pos_team,yards_to_goal,pos_team,text,penalty_negated_play,penalty_no_play,py_firstD_by_kickoff,py_firstD_by_poss,py_firstD_by_penalty,py_firstD_by_yards,py_new_series
+4017545983,401754598,1,4017545982,Kickoff,0,10,1,false,false,false,1,0,0,0,0,0,65,152,"(15:00) #22 J.Weinberg kickoff 65 yards to the NCSU00, Touchback",false,false,1,0,0,0,1
+40175459812,401754598,1,4017545982,Pass Reception,1,10,1,false,false,false,0,0,0,0,0,0,75,152,"(14:59) Shotgun #11 C.Bailey pass complete short middle to #3 H.Smothers caught at NCSU26, for 1 yard to the NCSU26 (#28 J.Cryer; #20 B.Nichelson)",false,false,0,1,0,0,0
+40175459817,401754598,1,4017545982,Rush,27,9,2,false,false,false,0,0,0,0,0,0,74,152,"(14:31) No Huddle-Shotgun #3 H.Smothers rush middle for 27 yards gain to the FSU47 (#15 S.Arnoux), 1ST DOWN",false,false,0,0,0,0,0
+40175459821,401754598,1,4017545982,Pass Reception,-7,10,1,false,false,false,0,0,0,0,0,0,47,152,"(13:54) No Huddle-Shotgun #11 C.Bailey pass complete short right to #3 H.Smothers caught at NCSU46, for 7 yards loss to the NCSU46 (#20 B.Nichelson)",false,false,0,0,0,1,1
+40175459826,401754598,1,4017545982,Rush,5,17,2,false,false,false,0,0,0,0,0,0,54,152,(13:14) No Huddle-Shotgun #4 J.Scott rush left for 5 yards gain to the FSU49 (#7 S.Thompson; #19 J.Wilson),false,false,0,0,0,0,0
+40175459830,401754598,1,4017545982,Sack,0,12,3,false,false,false,0,0,0,0,0,0,49,152,"(12:42) No Huddle-Shotgun #11 C.Bailey sacked for loss of 5 yards to the NCSU46 (#7 S.Thompson, #10 J.Williams)",false,false,0,0,0,0,0
+40175459834,401754598,1,4017545982,Punt,0,17,4,false,false,false,0,1,0,0,0,1,54,152,(11:56) #98 C.Noonkester punt 44 yards to the FSU10 fair catch by #4 S.White at FSU10,false,false,0,0,0,0,0
+40175459838,401754598,1,4017545983,Pass Incompletion,0,10,1,false,false,false,0,0,0,0,0,0,90,52,(11:49) Shotgun #1 T.Castellanos pass incomplete deep left to #0 D.Robinson thrown to FSU50 broken up by #6 D.Marshall,false,false,0,1,0,0,1
+40175459841,401754598,1,4017545983,Pass Reception,18,10,2,false,false,false,0,0,0,0,0,0,90,52,"(11:42) Shotgun #1 T.Castellanos pass complete short right to #7 L.McCoy caught at FSU28, for 18 yards to the FSU28 (#19 T.Teasdell), 1ST DOWN",false,false,0,0,0,0,0
+40175459848,401754598,1,4017545983,Rush,3,10,1,false,false,false,0,0,0,0,0,0,72,52,(11:13) No Huddle-Shotgun #5 R.Williams rush right for 3 yards gain to the FSU31 (#1 C.Fordham),false,false,0,0,0,1,1
+40175459852,401754598,1,4017545983,Rush,5,7,2,false,false,false,0,0,0,0,0,0,69,52,(10:40) No Huddle-Shotgun #5 R.Williams rush middle for 5 yards gain to the FSU36 (#44 B.Cleveland),false,false,0,0,0,0,0
+40175459856,401754598,1,4017545983,Rush,7,2,3,false,false,false,0,0,0,0,0,0,64,52,"(10:09) No Huddle-Shotgun #12 J.Lucas rush middle for 7 yards gain to the FSU43 (#26 A.Brown Jr.), 1ST DOWN",false,false,0,0,0,0,0
+40175459860,401754598,1,4017545983,Pass Incompletion,0,10,1,false,false,false,0,0,0,0,0,0,57,52,(09:21) No Huddle-Shotgun #1 T.Castellanos pass incomplete deep middle to #19 M.Danzy thrown to NCSU06 broken up by #6 D.Marshall,false,false,0,0,0,1,1
+40175459865,401754598,1,4017545983,Pass Reception,22,10,2,false,false,false,0,0,0,0,0,0,57,52,"(09:13) No Huddle-Shotgun #1 T.Castellanos pass complete deep right to #7 L.McCoy caught at NCSU35, for 22 yards to the NCSU35, out of bounds at NCSU35, 1ST DOWN",false,false,0,0,0,0,0
+40175459867,401754598,1,4017545983,Timeout,0,10,1,false,false,false,0,0,0,0,0,0,57,52,"Timeout Florida State, clock 09:13",false,false,0,0,0,1,1
+40175459874,401754598,1,4017545983,Rush,1,10,1,false,false,false,0,0,0,0,0,0,35,52,(08:43) No Huddle-Shotgun #27 G.Sawchuk rush left for 1 yard gain to the NCSU34 (#1 C.Fordham; #19 T.Teasdell),false,false,0,0,0,1,0
+40175459878,401754598,1,4017545983,Interception Return,18,9,2,false,false,false,0,0,0,1,0,1,34,52,(08:11) No Huddle-Shotgun #1 T.Castellanos pass intercepted by #6 D.Marshall at NCSU09 QB hurried by #54 S.Harsh #6 D.Marshall return 18 yards to the NCSU27 (#0 D.Robinson),false,false,0,0,0,0,0
+40175459887,401754598,1,4017545984,Rush,2,10,1,false,false,false,0,0,0,0,0,0,73,152,(08:00) Shotgun #3 H.Smothers rush middle for 2 yards gain to the NCSU29 (#6 D.Jackson Jr.; #28 J.Cryer),false,false,0,1,0,0,1
+40175459891,401754598,1,4017545984,Pass Reception,6,8,2,false,false,false,0,0,0,0,0,0,71,152,"(07:25) No Huddle-Shotgun #11 C.Bailey pass complete short right to #3 H.Smothers caught at NCSU24, for 6 yards to the NCSU35 QB hurried by #90 D.Desir (#6 D.Jackson Jr.; #28 J.Cryer)",false,false,0,0,0,0,0
+40175459896,401754598,1,4017545984,Rush,5,2,3,false,false,false,0,0,0,0,0,0,65,152,"(06:51) No Huddle-Shotgun #4 J.Scott rush middle for 5 yards gain to the NCSU40 (#15 S.Arnoux; #0 E.Little Jr.), 1ST DOWN",false,false,0,0,0,0,0
+401754598100,401754598,1,4017545984,Rush,5,10,1,false,false,false,0,0,0,0,0,0,60,152,(05:55) No Huddle-Shotgun #3 H.Smothers rush middle for 5 yards gain to the NCSU45 (#90 D.Desir),false,false,0,0,0,1,1
+401754598106,401754598,1,4017545984,Pass Reception,8,5,2,false,false,false,0,0,0,0,0,0,55,152,"(05:22) No Huddle-Shotgun #11 C.Bailey pass complete short middle to #7 J.Joly caught at NCSU50, for 8 yards to the FSU47 (#28 J.Cryer; #3 E.Joseph), 1ST DOWN",false,false,0,0,0,0,0
+401754598113,401754598,1,4017545984,Pass Reception,13,10,1,false,false,false,0,0,0,0,0,0,47,152,"(04:46) No Huddle-Shotgun #11 C.Bailey pass complete short middle to #7 J.Joly caught at FSU36, for 13 yards to the FSU34 (#0 E.Little Jr.), 1ST DOWN",false,false,0,0,0,1,1
+401754598118,401754598,1,4017545984,Rush,2,10,1,false,false,false,0,0,0,0,0,0,34,152,(04:11) No Huddle-Shotgun #3 H.Smothers rush middle for 2 yards gain to the FSU32 (#10 J.Williams; #28 J.Cryer),false,false,0,0,0,1,1
+401754598122,401754598,1,4017545984,Rush,5,8,2,false,false,false,0,0,0,0,0,0,32,152,(03:38) No Huddle-Shotgun #11 C.Bailey rush left for 5 yards gain to the FSU27 (#15 S.Arnoux; #24 K.Kirkland),false,false,0,0,0,0,0
+401754598126,401754598,1,4017545984,Penalty,4,3,3,true,false,false,0,0,0,0,0,0,27,152,"(03:05) No Huddle-Shotgun #11 C.Bailey pass incomplete short left to #87 D.Daniels thrown to FSU24 broken up by #27 A.Barker, 1ST DOWN, PENALTY FSU Pass Interference (#27 A.Barker) 4 yards from FSU27 to FSU23, 1ST DOWN. NO PLAY",true,true,0,0,0,0,0
+401754598130,401754598,1,4017545984,Passing Touchdown,23,10,1,false,false,false,0,0,0,0,1,0,23,152,"(03:01) Shotgun #11 C.Bailey pass complete deep right to #9 T.Anderson caught at FSU00, for 23 yards to the FSU00 TOUCHDOWN, clock 02:56, 1ST DOWN #94 K.Vinesett kick attempt good (H: #98 C.Noonkester, LS: #95 J.Mann)",false,false,0,0,1,0,1
+401754598132,401754598,1,4017545984,Timeout,0,3,3,false,false,false,0,0,0,0,0,1,27,152,"Timeout NC State, clock 03:02",false,false,0,1,0,0,0
+401754598139,401754598,1,4017545986,Kickoff,16,10,1,false,false,false,1,0,0,0,0,0,65,52,(02:56) #91 N.Konieczynski kickoff 61 yards to the FSU04 #12 J.Lucas return 16 yards to the FSU20 (#47 A.Farrow; #36 K.McBride),false,false,1,0,0,0,1
+401754598144,401754598,1,4017545986,Pass Reception,5,10,1,false,false,false,0,0,0,0,0,0,80,52,"(02:49) No Huddle-Shotgun #1 T.Castellanos pass complete short left to #7 L.McCoy caught at FSU25, for 5 yards to the FSU25 (#22 J.Vick)",false,false,0,1,0,0,0
+401754598150,401754598,1,4017545986,Penalty,5,5,2,false,false,false,0,0,0,0,0,0,75,52,PENALTY FSU False Start (#13 R.Pittman Jr.) 5 yards from FSU25 to FSU20. NO PLAY,true,true,0,0,0,0,0
+401754598153,401754598,1,4017545986,Rush,10,10,2,false,false,false,0,0,0,0,0,0,80,52,"(02:21) No Huddle-Shotgun #1 T.Castellanos rush middle for 10 yards gain to the FSU30 (#1 C.Fordham), 1ST DOWN",false,false,0,0,0,0,0
+401754598158,401754598,1,4017545986,Pass Reception,10,10,1,false,false,false,0,0,0,0,0,0,70,52,"(01:52) No Huddle-Shotgun #1 T.Castellanos pass complete short right to #15 J.Boggs caught at FSU40, for 10 yards to the FSU40 (#26 A.Brown Jr.), 1ST DOWN",false,false,0,0,0,1,1
+401754598164,401754598,1,4017545986,Rush,11,10,1,false,false,false,0,0,0,0,0,0,60,52,"(01:24) No Huddle-Shotgun #1 T.Castellanos rush right for 11 yards gain to the NCSU49 (#26 A.Brown Jr.; #1 C.Fordham), 1ST DOWN",false,false,0,0,0,1,1
+401754598168,401754598,1,4017545986,Rush,2,10,1,false,false,false,0,0,0,0,0,0,49,52,(00:59) No Huddle-Shotgun #32 O.Kromah rush middle for 2 yards gain to the NCSU47 (#1 C.Fordham; #19 T.Teasdell),false,false,0,0,0,1,1
+401754598172,401754598,1,4017545986,Rush,14,8,2,false,false,false,0,0,0,0,0,0,47,52,"(00:28) No Huddle-Shotgun #13 R.Pittman Jr. rush right for 14 yards gain to the NCSU33 (#26 A.Brown Jr.), 1ST DOWN",false,false,0,0,0,0,0
+401754598182,401754598,1,4017545986,Pass Incompletion,0,10,1,false,false,false,0,0,0,0,0,0,33,52,"(15:00) No Huddle-Shotgun #1 T.Castellanos pass incomplete short right thrown to NCSU29 broken up by #33 K.Soares, Jr.",false,false,0,0,0,1,1
+401754598187,401754598,1,4017545986,Pass Reception,5,10,2,false,false,false,0,0,0,0,0,0,33,52,"(14:57) No Huddle-Shotgun #1 T.Castellanos pass complete short left to #27 G.Sawchuk caught at NCSU30, for 5 yards to the NCSU28 (#8 C.Slone; #7 B.Nelson, II)",false,false,0,0,0,0,0
+401754598192,401754598,1,4017545986,Pass Incompletion,0,5,3,false,false,false,0,0,0,0,0,0,28,52,(14:17) No Huddle-Shotgun #1 T.Castellanos pass incomplete deep left to #15 J.Boggs thrown to NCSU00 broken up by #6 D.Marshall QB hurried by #8 C.Slone,false,false,0,0,0,0,0
+401754598195,401754598,1,4017545986,Field Goal Good,46,5,4,false,false,false,0,0,0,0,1,1,28,52,"(14:10) #22 J.Weinberg field goal attempt from 46 yards GOOD (H: #43 M.Chiumento, LS: #32 M.Arnold), clock 14:06",false,false,0,0,0,0,0
+401754598198,401754598,1,4017545988,Kickoff,0,10,1,false,false,false,1,0,0,0,0,0,65,152,"(14:06) #22 J.Weinberg kickoff 65 yards to the NCSU00, Touchback",false,false,1,0,0,0,1
+401754598201,401754598,1,4017545988,Rush,-4,10,1,false,false,false,0,0,0,0,0,0,75,152,(14:06) Shotgun #3 H.Smothers rush middle for 4 yards loss to the NCSU21 (#24 K.Kirkland; #90 D.Desir),false,false,0,1,0,0,0
+401754598205,401754598,1,4017545988,Pass Reception,27,14,2,false,false,false,0,0,0,0,0,0,79,152,"(13:24) No Huddle-Shotgun #11 C.Bailey pass complete short right to #7 J.Joly caught at NCSU36, for 27 yards to the NCSU48 (#24 K.Kirkland; #3 E.Joseph), out of bounds, 1ST DOWN",false,false,0,0,0,0,0
+401754598210,401754598,1,4017545988,Rush,1,10,1,false,false,false,0,0,0,0,0,0,52,152,(12:45) No Huddle-Shotgun #3 H.Smothers rush middle for 1 yard gain to the NCSU49 (#5 D.Lyons),false,false,0,0,0,1,1
+401754598214,401754598,1,4017545988,Rush,4,9,2,false,false,false,0,0,0,0,0,0,51,152,(12:12) No Huddle-Shotgun #3 H.Smothers rush middle for 4 yards gain to the FSU47 (#7 S.Thompson; #90 D.Desir),false,false,0,0,0,0,0
+401754598229,401754598,1,4017545988,Sack,-2,5,3,false,false,false,0,0,0,0,0,0,47,152,"(11:34) No Huddle-Shotgun #11 C.Bailey sacked for loss of 2 yards to the FSU49 (#7 S.Thompson). The previous play is under automatic review - ""Runner was down by contact"". CALL OVERTURNED. (Original Play: (11:34) No Huddle-Shotgun #11 C.Bailey sacked for loss of 1 yard to the FSU48 (#7 S.Thompson), fumble by #11 C.Bailey recovered by FSU #40 A.Williams at FSU48, End Of Play)",false,false,0,0,0,0,0
+401754598234,401754598,1,4017545988,Punt,0,7,4,false,false,false,0,1,0,0,0,1,49,152,(10:59) #98 C.Noonkester punt 34 yards to the FSU15 fair catch by #4 S.White at FSU15,false,false,0,0,0,0,0
+401754598238,401754598,1,4017545989,Rush,1,10,1,false,false,false,0,0,0,0,0,0,85,52,(10:52) No Huddle-Shotgun #12 J.Lucas rush left for 1 yard gain to the FSU16 (#1 C.Fordham),false,false,0,1,0,0,1
+401754598242,401754598,1,4017545989,Rush,15,9,2,false,false,false,0,0,0,0,0,0,84,52,"(10:14) No Huddle-Shotgun #1 T.Castellanos rush middle for 15 yards gain to the FSU31 (#19 T.Teasdell), 1ST DOWN",false,false,0,0,0,0,0
+401754598246,401754598,1,4017545989,Rush,3,10,1,false,false,false,0,0,0,0,0,0,69,52,"(09:54) No Huddle-Shotgun #12 J.Lucas rush middle for 3 yards gain to the FSU34 (#1 C.Fordham; #33 K.Soares, Jr.)",false,false,0,0,0,1,1
+401754598250,401754598,1,4017545989,Rush,5,7,2,false,false,false,0,0,0,0,0,0,66,52,(09:18) No Huddle-Shotgun #27 G.Sawchuk rush left for 5 yards gain to the FSU39 (#26 A.Brown Jr.; #6 D.Marshall),false,false,0,0,0,0,0
+401754598254,401754598,1,4017545989,Rush,2,2,3,false,false,false,0,0,0,0,0,0,61,52,"(08:43) No Huddle-Shotgun #27 G.Sawchuk rush middle for 2 yards gain to the FSU41 (#1 C.Fordham; #19 T.Teasdell), 1ST DOWN",false,false,0,0,0,0,0
+401754598258,401754598,1,4017545989,Rush,5,10,1,false,false,false,0,0,0,0,0,0,59,52,(07:59) Shotgun #5 R.Williams rush middle for 5 yards gain to the FSU46 (#44 B.Cleveland; #54 S.Harsh),false,false,0,0,0,1,1
+401754598260,401754598,1,4017545989,Timeout,0,2,3,false,false,false,0,0,0,0,0,0,61,52,"Timeout Florida State, clock 08:01",false,false,0,0,0,0,0
+401754598263,401754598,1,4017545989,Rush,9,5,2,false,false,false,0,0,0,0,0,0,54,52,"(07:38) No Huddle-Shotgun #5 R.Williams rush middle for 9 yards gain to the NCSU45 (#26 A.Brown Jr.), 1ST DOWN",false,false,0,0,0,0,0
+401754598267,401754598,1,4017545989,Rush,5,10,1,false,false,false,0,0,0,0,0,0,45,52,(07:19) No Huddle-Shotgun #1 T.Castellanos rush left for 5 yards gain to the NCSU40 (#26 A.Brown Jr.; #4 T.Thomas),false,false,0,0,0,1,1
+401754598271,401754598,1,4017545989,Pass Incompletion,0,5,2,false,false,false,0,0,0,0,0,0,40,52,(07:02) No Huddle-Shotgun #1 T.Castellanos pass incomplete short left to #0 D.Robinson thrown to NCSU30,false,false,0,0,0,0,0
+401754598274,401754598,1,4017545989,Rush,2,5,3,false,false,false,0,0,0,0,0,1,40,52,(06:58) No Huddle-Shotgun #1 T.Castellanos rush middle for 2 yards gain to the NCSU38 (#54 S.Harsh),false,false,0,0,0,0,0
+401754598276,401754598,1,4017545989,Timeout,0,5,2,false,false,false,0,0,0,0,0,1,60,152,"Timeout NC State, clock 06:59",false,false,0,0,0,0,0
+401754598279,401754598,1,4017545989,Rush,7,3,4,false,false,false,0,0,0,0,0,0,38,52,"(06:20) No Huddle-Shotgun #1 T.Castellanos rush right for 7 yards gain to the NCSU31 (#1 C.Fordham; #8 C.Slone), 1ST DOWN",false,false,0,0,0,0,0
+401754598283,401754598,1,4017545989,Rush,7,10,1,false,false,false,0,0,0,0,0,0,31,52,"(05:57) No Huddle-Shotgun #1 T.Castellanos rush left for 7 yards gain to the NCSU24 (#19 T.Teasdell), out of bounds",false,false,0,0,0,1,1
+401754598287,401754598,1,4017545989,Rush,7,3,2,false,false,false,0,0,0,0,0,0,24,52,"(05:20) No Huddle-Shotgun #27 G.Sawchuk rush middle for 7 yards gain to the NCSU17 (#1 C.Fordham; #25 J.Adedire), 1ST DOWN",false,false,0,0,0,0,0
+401754598291,401754598,1,4017545989,Penalty,5,10,1,false,false,false,0,0,0,0,0,0,17,52,"(05:02) No Huddle-Shotgun #27 G.Sawchuk rush middle for 0 yards to the NCSU17 (#1 C.Fordham; #33 K.Soares, Jr.) PENALTY FSU Illegal Formation 5 yards from NCSU17 to NCSU22. NO PLAY",true,true,0,0,0,1,1
+401754598296,401754598,1,4017545989,Penalty,5,15,1,false,false,false,0,0,0,0,0,0,22,52,(04:44) PENALTY FSU False Start (#76 A.Medley) 5 yards from NCSU22 to NCSU27. NO PLAY,true,true,0,0,0,0,0
+401754598299,401754598,1,4017545989,Rush,8,20,1,false,false,false,0,0,0,0,0,0,27,52,(04:35) No Huddle-Shotgun #5 R.Williams rush left for 8 yards gain to the NCSU19 (#26 A.Brown Jr.),false,false,0,0,0,0,0
+401754598303,401754598,1,4017545989,Rush,2,12,2,false,false,false,0,0,0,0,0,0,19,52,"(04:15) No Huddle-Shotgun #1 T.Castellanos rush left for 2 yards gain to the NCSU17 (#33 K.Soares, Jr.; #26 A.Brown Jr.)",false,false,0,0,0,0,0
+401754598307,401754598,1,4017545989,Pass Reception,5,10,3,false,false,false,0,0,0,0,0,0,17,52,"(03:48) No Huddle-Shotgun #1 T.Castellanos pass complete short right to #15 J.Boggs caught at NCSU12, for 5 yards to the NCSU12, End Of Play",false,false,0,0,0,0,0
+401754598312,401754598,1,4017545989,Penalty,5,5,4,false,false,false,0,0,0,0,0,0,12,52,PENALTY FSU Delay Of Game  5 yards from NCSU12 to NCSU17. NO PLAY,true,true,0,0,0,0,0
+401754598315,401754598,1,4017545989,Field Goal Missed,35,10,4,false,false,false,0,0,0,1,0,1,17,52,"(02:56) #22 J.Weinberg field goal attempt from 35 yards NO GOOD (H: #43 M.Chiumento, LS: #32 M.Arnold), clock 02:56",false,false,0,0,0,0,0
+401754598319,401754598,1,40175459810,Rush,2,10,1,false,false,false,0,0,0,0,0,0,80,152,(02:55) Shotgun #3 H.Smothers rush middle for 2 yards gain to the NCSU22 (#6 D.Jackson Jr.),false,false,0,1,0,0,1
+401754598323,401754598,1,40175459810,Penalty,13,8,2,false,false,false,0,0,0,0,0,0,78,152,(02:17) No Huddle-Shotgun #3 H.Smothers rush left for 3 yards gain (3) to the NCSU25 (#27 A.Barker; #9 O.Graham Jr.) PENALTY NCSU Holding (#65 J.Peak) 10 yards from NCSU25 to NCSU15,true,false,0,0,0,0,0
+401754598328,401754598,1,40175459810,Rush,2,15,2,false,false,false,0,0,0,0,0,0,85,152,(02:10) No Huddle-Shotgun #3 H.Smothers rush left for 2 yards gain to the NCSU17 (#44 J.Jones; #15 S.Arnoux),false,false,0,0,0,0,0
+401754598332,401754598,1,40175459810,Pass Incompletion,0,13,3,false,false,false,0,0,0,0,0,0,83,152,(02:00) Shotgun #11 C.Bailey pass incomplete short right to #3 H.Smothers thrown to NCSU15 QB hurried by #40 A.Williams,false,false,0,0,0,0,0
+401754598335,401754598,1,40175459810,Punt,0,13,4,false,false,false,0,1,0,0,0,1,83,152,(01:54) #98 C.Noonkester punt 36 yards to the FSU47 fair catch by #4 S.White at FSU47,false,false,0,0,0,0,0
+401754598339,401754598,1,40175459811,Pass Incompletion,0,10,1,false,false,false,0,0,0,0,0,0,53,52,(01:48) No Huddle-Shotgun #1 T.Castellanos pass incomplete short right to #0 D.Robinson thrown to NCSU45 broken up by #6 D.Marshall,false,false,0,1,0,0,1
+401754598342,401754598,1,40175459811,Pass Reception,5,10,2,false,false,false,0,0,0,0,0,0,53,52,"(01:43) No Huddle-Shotgun #1 T.Castellanos pass complete short middle to #13 R.Pittman Jr. caught at FSU50, for 5 yards to the NCSU48 (#1 C.Fordham)",false,false,0,0,0,0,0
+401754598347,401754598,1,40175459811,Rush,1,5,3,false,false,false,0,0,0,0,0,0,48,52,(01:25) No Huddle-Shotgun #1 T.Castellanos rush middle for 1 yard gain to the NCSU47 (#22 J.Vick),false,false,0,0,0,0,0
+401754598351,401754598,1,40175459811,Punt,0,4,4,false,false,false,0,1,0,0,0,1,47,52,(00:48) #43 M.Chiumento punt 39 yards to the NCSU08 fair catch by #9 T.Anderson at NCSU08,false,false,0,0,0,0,0
+401754598355,401754598,1,40175459812,Rush,11,10,1,false,false,false,0,0,0,0,0,0,92,152,"(00:42) Shotgun #11 C.Bailey rush middle for 11 yards gain to the NCSU19 (#3 E.Joseph; #7 S.Thompson), 1ST DOWN",false,false,0,1,0,0,1
+401754598359,401754598,1,40175459812,Pass Reception,6,10,1,false,false,false,0,0,0,0,0,0,81,152,"(00:25) No Huddle-Shotgun #11 C.Bailey pass complete short middle to #8 K.Jackson caught at NCSU24, for 6 yards to the NCSU25, End Of Play",false,false,0,0,0,1,1
+401754598364,401754598,1,40175459812,Pass Incompletion,0,4,2,false,false,false,0,0,0,0,0,0,75,152,(00:19) No Huddle-Shotgun #11 C.Bailey pass incomplete short left thrown to NCSU28,false,false,0,0,0,0,0
+401754598366,401754598,1,40175459812,Timeout,0,10,1,false,false,false,0,0,0,0,0,0,81,152,"Timeout NC State, clock 00:19",false,false,0,0,0,0,0
+401754598368,401754598,1,40175459812,Pass Reception,6,4,3,false,false,false,0,0,0,0,0,0,75,152,"(00:15) No Huddle-Shotgun #11 C.Bailey pass complete short middle to #7 J.Joly caught at NCSU31, for 6 yards to the NCSU31 (#7 S.Thompson), 1ST DOWN",false,false,0,0,0,0,0
+401754598373,401754598,1,40175459812,Pass Incompletion,0,10,1,false,false,false,0,0,0,0,0,0,69,152,"(00:09) No Huddle #11 C.Bailey pass incomplete, Spike",false,false,0,0,0,1,1
+401754598376,401754598,1,40175459812,Pass Incompletion,0,10,2,false,false,false,0,0,0,0,0,0,69,152,(00:08) No Huddle-Shotgun #11 C.Bailey pass incomplete deep left to #8 K.Jackson thrown to FSU45,false,false,0,0,0,0,0
+401754598379,401754598,1,40175459812,Penalty,24,10,3,true,false,true,0,0,0,0,0,1,69,152,"(00:03) No Huddle-Shotgun #3 H.Smothers rush left for 14 yards gain to the NCSU45 (#7 S.Thompson), 1ST DOWN, PENALTY NCSU Holding declined",false,false,0,0,0,0,0
+401754598391,401754598,2,40175459814,Kickoff,0,10,1,false,false,false,1,0,0,0,0,0,65,52,"(15:00) #91 N.Konieczynski kickoff 65 yards to the FSU00, Touchback",false,false,1,0,0,0,1
+401754598396,401754598,2,40175459814,Rush,6,10,1,false,false,false,0,0,0,0,0,0,75,52,(14:59) No Huddle-Shotgun #32 O.Kromah rush middle for 6 yards gain to the FSU31 (#1 C.Fordham; #44 B.Cleveland),false,false,0,1,0,0,0
+401754598400,401754598,2,40175459814,Penalty,10,4,2,false,false,false,0,0,0,0,0,0,69,52,(14:26) No Huddle-Shotgun #5 R.Williams rush left for 1 yard loss to the FSU30 (#26 A.Brown Jr.) PENALTY FSU Holding (#13 R.Pittman Jr.) 10 yards from FSU31 to FSU21. NO PLAY,true,true,0,0,0,0,0
+401754598405,401754598,2,40175459814,Pass Incompletion,0,14,2,false,false,false,0,0,0,0,0,0,79,52,(14:16) No Huddle-Shotgun #1 T.Castellanos pass incomplete short left to #5 R.Williams thrown to FSU39 QB hurried by #54 S.Harsh,false,false,0,0,0,0,0
+401754598408,401754598,2,40175459814,Pass Reception,9,14,3,false,false,false,0,0,0,0,0,0,79,52,"(14:09) No Huddle-Shotgun #1 T.Castellanos pass complete short middle to #5 R.Williams caught at FSU25, for 9 yards to the FSU30 QB hurried by #92 C.Bond (#1 C.Fordham; #33 K.Soares, Jr.)",false,false,0,0,0,0,0
+401754598413,401754598,2,40175459814,Punt Return,1,5,4,false,false,false,0,1,0,0,0,1,70,52,(13:25) #43 M.Chiumento punt 50 yards to the NCSU20 #9 T.Anderson return 1 yard to the NCSU21 (#3 E.Joseph; #1 S.Brown),false,false,0,0,0,0,0
+401754598419,401754598,2,40175459815,Pass Incompletion,0,10,1,false,false,false,0,0,0,0,0,0,79,152,(13:15) Shotgun #11 C.Bailey pass incomplete short right to #9 T.Anderson thrown to NCSU34,false,false,0,1,0,0,1
+401754598422,401754598,2,40175459815,Pass Reception,9,10,2,false,false,false,0,0,0,0,0,0,79,152,"(13:10) No Huddle-Shotgun #11 C.Bailey pass complete short middle to #8 K.Jackson caught at NCSU25, for 9 yards to the NCSU30 (#24 K.Kirkland)",false,false,0,0,0,0,0
+401754598427,401754598,2,40175459815,Rush,0,1,3,false,false,false,0,0,0,0,0,0,70,152,(12:30) No Huddle-Shotgun #10 W.Wilson rush middle for 0 yards to the NCSU30 (#27 A.Barker; #90 D.Desir),false,false,0,0,0,0,0
+401754598433,401754598,2,40175459815,Rush,4,1,4,false,false,false,0,0,0,0,0,0,70,152,"(11:50) No Huddle-Shotgun #10 W.Wilson rush middle for 4 yards gain to the NCSU34 (#20 B.Nichelson), 1ST DOWN",false,false,0,0,0,0,0
+401754598437,401754598,2,40175459815,Rush,2,10,1,false,false,false,0,0,0,0,0,0,66,152,(11:22) No Huddle-Shotgun #3 H.Smothers rush middle for 2 yards gain to the NCSU36 (#93 M.Desir),false,false,0,0,0,1,1
+401754598441,401754598,2,40175459815,Rush,7,8,2,false,false,false,0,0,0,0,0,0,64,152,(10:45) No Huddle-Shotgun #11 C.Bailey rush right for 7 yards gain to the NCSU43 (#93 M.Desir),false,false,0,0,0,0,0
+401754598445,401754598,2,40175459815,Rush,16,1,3,false,false,false,0,0,0,0,0,0,57,152,"(09:58) Shotgun #10 W.Wilson rush middle for 16 yards gain to the FSU41 (#27 A.Barker), 1ST DOWN",false,false,0,0,0,0,0
+401754598449,401754598,2,40175459815,Rush,2,10,1,false,false,false,0,0,0,0,0,0,41,152,(09:21) No Huddle-Shotgun #4 J.Scott rush middle for 2 yards gain to the FSU39 (#27 A.Barker; #8 D.McCray),false,false,0,0,0,1,1
+401754598453,401754598,2,40175459815,Pass Reception,6,8,2,false,false,false,0,0,0,0,0,0,39,152,"(08:47) No Huddle-Shotgun #11 C.Bailey pass complete short right to #12 T.Hoffmann caught at FSU33, for 6 yards to the FSU33, End Of Play",false,false,0,0,0,0,0
+401754598458,401754598,2,40175459815,Rush,5,2,3,false,false,false,0,0,0,0,0,0,33,152,"(08:05) Shotgun #10 W.Wilson rush middle for 5 yards gain to the FSU28 (#0 E.Little Jr.; #20 B.Nichelson), 1ST DOWN. #44 C.Hardy injured on the play",false,false,0,0,0,0,0
+401754598462,401754598,2,40175459815,Pass Reception,10,10,1,false,false,false,0,0,0,0,0,0,28,152,"(07:43) Shotgun #11 C.Bailey pass complete short left to #87 D.Daniels caught at FSU25, for 10 yards to the FSU18 (#9 O.Graham Jr.), out of bounds, 1ST DOWN",false,false,0,0,0,1,1
+401754598467,401754598,2,40175459815,Rush,2,10,1,false,false,false,0,0,0,0,0,0,18,152,(07:06) Shotgun #3 H.Smothers rush middle for 2 yards gain to the FSU16 (#90 D.Desir),false,false,0,0,0,1,1
+401754598471,401754598,2,40175459815,Pass Reception,12,8,2,false,false,false,0,0,0,0,0,0,16,152,"(06:32) No Huddle-Shotgun #11 C.Bailey pass complete short right to #6 W.Grimes caught at FSU12, for 12 yards to the FSU04 (#0 E.Little Jr.), out of bounds, 1ST DOWN",false,false,0,0,0,0,0
+401754598476,401754598,2,40175459815,Penalty,2,4,1,true,false,false,0,0,0,0,0,0,4,152,"(05:52) No Huddle-Shotgun #11 C.Bailey pass incomplete short right to #7 J.Joly thrown to FSU00 PENALTY FSU Pass Interference (#15 S.Arnoux) 2 yards from FSU04 to FSU02, 1ST DOWN. NO PLAY",true,true,0,0,0,1,1
+401754598483,401754598,2,40175459815,Penalty,1,2,1,false,false,false,0,0,0,0,0,0,2,152,(05:39) No Huddle-Shotgun #10 W.Wilson rush middle for 1 yard gain to the FSU01 (#7 S.Thompson; #27 A.Barker) PENALTY FSU Illegal Substitution 1 yard from FSU02 to FSU01. NO PLAY,true,true,0,0,1,0,1
+401754598488,401754598,2,40175459815,Rush,0,1,1,false,false,false,0,0,0,0,0,0,1,152,"(05:18) No Huddle-Shotgun #10 W.Wilson rush middle for 0 yards to the FSU01 (#7 S.Thompson). The previous play is under automatic review - ""Runner was down by contact"". CALL UPHELD",false,false,0,0,0,0,0
+401754598495,401754598,2,40175459815,Rushing Touchdown,1,1,2,false,false,false,0,0,0,0,1,1,1,152,"(04:23) Shotgun #10 W.Wilson rush middle for 1 yard gain to the FSU00 TOUCHDOWN, clock 04:17 #94 K.Vinesett kick attempt good (H: #98 C.Noonkester, LS: #95 J.Mann)",false,false,0,0,0,0,0
+401754598502,401754598,2,40175459817,Kickoff,17,10,1,false,false,false,1,0,0,0,0,0,65,52,(04:17) #91 N.Konieczynski kickoff 65 yards to the FSU00 #12 J.Lucas return 17 yards to the FSU17 (#4 T.Thomas),false,false,1,0,0,0,1
+401754598507,401754598,2,40175459817,Rush,5,10,1,false,false,false,0,0,0,0,0,0,83,52,(04:11) No Huddle-Shotgun #27 G.Sawchuk rush middle for 5 yards gain to the FSU22 (#1 C.Fordham; #54 S.Harsh),false,false,0,1,0,0,0
+401754598511,401754598,2,40175459817,Rush,7,5,2,false,false,false,0,0,0,0,0,0,78,52,"(03:46) No Huddle-Shotgun #27 G.Sawchuk rush right for 7 yards gain to the FSU29 (#54 S.Harsh; #26 A.Brown Jr.), 1ST DOWN",false,false,0,0,0,0,0
+401754598515,401754598,2,40175459817,Pass Incompletion,0,10,1,false,false,false,0,0,0,0,0,0,71,52,(03:15) No Huddle-Shotgun #1 T.Castellanos pass incomplete deep right to #0 D.Robinson thrown to NCSU38. #0 D.Robinson injured on the play,false,false,0,0,0,1,1
+401754598518,401754598,2,40175459817,Rush,4,10,2,false,false,false,0,0,0,0,0,0,71,52,(03:11) No Huddle-Shotgun #27 G.Sawchuk rush middle for 4 yards gain to the FSU33 (#54 S.Harsh),false,false,0,0,0,0,0
+401754598522,401754598,2,40175459817,Rush,13,6,3,false,false,false,0,0,0,0,0,0,67,52,"(02:31) No Huddle-Shotgun #1 T.Castellanos rush middle for 13 yards gain to the FSU46 (#33 K.Soares, Jr.), 1ST DOWN",false,false,0,0,0,0,0
+401754598526,401754598,2,40175459817,Rush,4,10,1,false,false,false,0,0,0,0,0,0,54,52,(01:57) No Huddle-Shotgun #27 G.Sawchuk rush middle for 4 yards gain to the FSU50 (#54 S.Harsh),false,false,0,0,0,1,1
+401754598530,401754598,2,40175459817,Pass Incompletion,0,6,2,false,false,false,0,0,0,0,0,0,50,52,(01:29) No Huddle-Shotgun #1 T.Castellanos pass incomplete deep right to #0 D.Robinson thrown to NCSU21 QB hurried by #8 C.Slone,false,false,0,0,0,0,0
+401754598533,401754598,2,40175459817,Pass Incompletion,0,6,3,false,false,false,0,0,0,0,0,0,50,52,(01:22) No Huddle-Shotgun #1 T.Castellanos pass incomplete short right to #0 D.Robinson thrown to NCSU35 broken up by #6 D.Marshall,false,false,0,0,0,0,0
+401754598536,401754598,2,40175459817,Pass Incompletion,0,6,4,false,false,false,0,0,1,0,0,1,50,52,"(01:18) No Huddle-Shotgun #1 T.Castellanos pass incomplete deep left to #19 M.Danzy thrown to NCSU18, TURNOVER ON DOWNS",false,false,0,0,0,0,0
+401754598540,401754598,2,40175459818,Rush,5,10,1,false,false,false,0,0,0,0,0,0,50,152,(01:11) Shotgun #3 H.Smothers rush left for 5 yards gain to the FSU45 (#7 S.Thompson),false,false,0,1,0,0,1
+401754598544,401754598,2,40175459818,Rush,4,5,2,false,false,false,0,0,0,0,0,0,45,152,(00:49) No Huddle-Shotgun #3 H.Smothers rush middle for 4 yards gain to the FSU41 (#3 E.Joseph; #8 D.McCray),false,false,0,0,0,0,0
+401754598548,401754598,2,40175459818,Rush,4,1,3,false,false,false,0,0,0,0,0,0,41,152,"(00:11) Shotgun #10 W.Wilson rush middle for 4 yards gain to the FSU37 (#0 E.Little Jr.; #6 D.Jackson Jr.), 1ST DOWN",false,false,0,0,0,0,0
+401754598558,401754598,2,40175459818,Rush,2,10,1,false,false,false,0,0,0,0,0,0,37,152,(14:59) Shotgun #3 H.Smothers rush middle for 2 yards gain to the FSU35 (#20 B.Nichelson),false,false,0,0,0,1,1
+401754598564,401754598,2,40175459818,Pass Reception,-1,8,2,false,false,false,0,0,0,0,0,0,35,152,"(14:25) No Huddle-Shotgun #11 C.Bailey pass complete short right to #8 K.Jackson caught at FSU38, for 1 yard loss to the FSU36 (#3 E.Joseph), out of bounds",false,false,0,0,0,0,0
+401754598569,401754598,2,40175459818,Sack,-11,9,3,false,false,false,0,0,0,0,0,0,36,152,(13:49) Shotgun #11 C.Bailey sacked for loss of 11 yards to the FSU47 (#93 M.Desir),false,false,0,0,0,0,0
+401754598571,401754598,2,40175459818,Timeout,0,8,2,false,false,false,0,0,0,0,0,0,35,152,"Timeout NC State, clock 13:49",false,false,0,0,0,0,0
+401754598574,401754598,2,40175459818,Punt,0,20,4,false,false,false,0,1,0,0,0,1,47,152,(13:04) #98 C.Noonkester punt 33 yards to the FSU14 fair catch by #4 S.White at FSU14,false,false,0,0,0,0,0
+401754598578,401754598,2,40175459819,Rush,4,10,1,false,false,false,0,0,0,0,0,0,86,52,(12:58) No Huddle-Shotgun #5 R.Williams rush middle for 4 yards gain to the FSU18 (#1 C.Fordham; #8 C.Slone),false,false,0,1,0,0,1
+401754598582,401754598,2,40175459819,Pass Reception,6,6,2,false,false,false,0,0,0,0,0,0,82,52,"(12:24) No Huddle-Shotgun #1 T.Castellanos pass complete short left to #0 D.Robinson caught at FSU23, for 6 yards to the FSU24 (#6 D.Marshall; #26 A.Brown Jr.), 1ST DOWN",false,false,0,0,0,0,0
+401754598587,401754598,2,40175459819,Penalty,15,10,1,true,false,false,0,0,0,0,0,0,76,52,"(11:49) No Huddle-Shotgun #1 T.Castellanos pass incomplete deep middle to #0 D.Robinson thrown to NCSU33 PENALTY NCSU Pass Interference (#26 A.Brown Jr.) 15 yards from FSU24 to FSU39, 1ST DOWN. NO PLAY",true,true,0,0,0,1,1
+401754598591,401754598,2,40175459819,Rush,3,10,1,false,false,false,0,0,0,0,0,0,61,52,(11:41) No Huddle-Shotgun #32 O.Kromah rush middle for 3 yards gain to the FSU42 (#8 C.Slone),false,false,0,0,1,0,1
+401754598595,401754598,2,40175459819,Pass Reception,10,7,2,false,false,false,0,0,0,0,0,0,58,52,"(11:23) No Huddle-Shotgun #1 T.Castellanos pass complete short right to #15 J.Boggs caught at NCSU47, for 10 yards to the NCSU48 (#22 J.Vick), 1ST DOWN",false,false,0,0,0,0,0
+401754598600,401754598,2,40175459819,Pass Reception,3,10,1,false,false,false,0,0,0,0,0,0,48,52,"(10:56) No Huddle-Shotgun #1 T.Castellanos pass complete short middle to #32 O.Kromah caught at NCSU45, for 3 yards to the NCSU45 (#33 K.Soares, Jr.)",false,false,0,0,0,1,1
+401754598605,401754598,2,40175459819,Rush,1,7,2,false,false,false,0,0,0,0,0,0,45,52,"(10:36) No Huddle-Shotgun #32 O.Kromah rush right for 1 yard gain to the NCSU44 (#33 K.Soares, Jr.), out of bounds",false,false,0,0,0,0,0
+401754598609,401754598,2,40175459819,Pass Reception,34,6,3,false,false,false,0,0,0,0,0,0,44,52,"(09:59) No Huddle-Shotgun #1 T.Castellanos pass complete deep left to #0 D.Robinson caught at NCSU14, for 34 yards to the NCSU10 (#6 D.Marshall), out of bounds, 1ST DOWN",false,false,0,0,0,0,0
+401754598614,401754598,2,40175459819,Rush,-2,10,1,false,false,false,0,0,0,0,0,0,10,52,(09:42) No Huddle-Shotgun #5 R.Williams rush middle for 2 yards loss to the NCSU12 (#8 C.Slone),false,false,0,0,0,1,1
+401754598618,401754598,2,40175459819,Rush,3,12,2,false,false,false,0,0,0,0,0,0,12,52,"(09:04) No Huddle-Shotgun #1 T.Castellanos rush middle for 3 yards gain to the NCSU09 (#33 K.Soares, Jr.)",false,false,0,0,0,0,0
+401754598622,401754598,2,40175459819,Passing Touchdown,9,9,3,false,false,false,0,0,0,0,1,1,9,52,"(08:20) No Huddle-Shotgun #1 T.Castellanos pass complete short middle to #0 D.Robinson caught at NCSU00, for 9 yards to the NCSU00 TOUCHDOWN, clock 08:17, 1ST DOWN #15 J.Boggs pass attempt Successful",false,false,0,0,0,0,0
+401754598634,401754598,2,40175459821,Kickoff,0,10,1,false,false,false,1,0,0,0,0,0,65,152,"(08:17) #22 J.Weinberg kickoff 65 yards to the NCSU00, Touchback",false,false,1,0,0,0,1
+401754598637,401754598,2,40175459821,Pass Reception,12,10,1,false,false,false,0,0,0,0,0,0,75,152,"(08:17) Shotgun #11 C.Bailey pass complete short middle to #9 T.Anderson caught at NCSU37, for 12 yards to the NCSU37, End Of Play, 1ST DOWN",false,false,0,1,0,0,0
+401754598644,401754598,2,40175459821,Pass Reception,3,10,1,false,false,false,0,0,0,0,0,0,63,152,"(07:45) Shotgun #11 C.Bailey pass complete short left to #9 T.Anderson caught at NCSU40, for 3 yards to the NCSU40 (#19 J.Wilson)",false,false,0,0,0,1,1
+401754598649,401754598,2,40175459821,Pass Reception,6,7,2,false,false,false,0,0,0,0,0,0,60,152,"(07:13) No Huddle-Shotgun #11 C.Bailey pass complete short middle to #9 T.Anderson caught at NCSU42, for 6 yards to the NCSU46 (#15 S.Arnoux; #0 E.Little Jr.)",false,false,0,0,0,0,0
+401754598654,401754598,2,40175459821,Rush,1,1,3,false,false,false,0,0,0,0,0,0,54,152,"(06:30) Shotgun #10 W.Wilson rush middle for 1 yard gain to the NCSU47 (#6 D.Jackson Jr.; #90 D.Desir), 1ST DOWN",false,false,0,0,0,0,0
+401754598658,401754598,2,40175459821,Rush,3,10,1,false,false,false,0,0,0,0,0,0,53,152,(05:51) No Huddle-Shotgun #4 J.Scott rush middle for 3 yards gain to the NCSU50 (#5 D.Lyons; #90 D.Desir),false,false,0,0,0,1,1
+401754598662,401754598,2,40175459821,Pass Incompletion,0,7,2,false,false,false,0,0,0,0,0,0,50,152,(05:09) No Huddle-Shotgun #11 C.Bailey pass incomplete deep left to #12 T.Hoffmann thrown to FSU17 QB hurried by #90 D.Desir,false,false,0,0,0,0,0
+401754598665,401754598,2,40175459821,Sack,-10,7,3,false,false,false,0,0,0,0,0,0,50,152,(05:00) No Huddle-Shotgun #11 C.Bailey sacked for loss of 10 yards to the NCSU40 (#8 D.McCray),false,false,0,0,0,0,0
+401754598669,401754598,2,40175459821,Punt Team Fumble Recovery,25,17,4,false,false,false,0,1,0,0,0,0,60,152,"(04:01) #98 C.Noonkester punt 25 yards to the FSU35 muffed by #24 K.Kirkland at FSU35 recovered by NCSU #98 C.Noonkester at NCSU40, End Of Play",false,false,0,0,0,0,0
+401754598677,401754598,2,40175459822,Rush,2,10,1,false,false,false,0,0,0,0,0,0,60,152,"(03:50) No Huddle-Shotgun #3 H.Smothers rush left for 2 yards gain to the NCSU42 (#27 A.Barker), out of bounds",false,false,0,1,0,0,1
+401754598681,401754598,2,40175459822,Rush,7,8,2,false,false,false,0,0,0,0,0,0,58,152,(03:20) Shotgun #11 C.Bailey rush middle for 7 yards gain to the NCSU49 (#15 S.Arnoux),false,false,0,0,0,0,0
+401754598685,401754598,2,40175459822,Penalty,5,1,3,false,false,false,0,0,0,0,0,0,51,152,PENALTY NCSU False Start (#65 J.Peak) 5 yards from NCSU49 to NCSU44. NO PLAY,true,true,0,0,0,0,0
+401754598688,401754598,2,40175459822,Pass Incompletion,0,6,3,false,false,false,0,0,0,0,0,0,56,152,(02:34) Shotgun #11 C.Bailey pass incomplete short right to #12 T.Hoffmann thrown to FSU38 broken up by #3 E.Joseph,false,false,0,0,0,0,0
+401754598699,401754598,2,40175459823,Rush,1,10,1,false,false,false,0,0,0,0,0,0,16,152,(02:17) Shotgun #3 H.Smothers rush middle for 1 yard gain to the FSU15 (#6 D.Jackson Jr.),false,false,0,1,0,0,1
+401754598703,401754598,2,40175459823,Rush,3,9,2,false,false,false,0,0,0,0,0,0,15,152,(02:15) Shotgun #3 H.Smothers rush middle for 3 yards gain to the FSU12 (#31 E.Herring),false,false,0,0,0,0,0
+401754598705,401754598,2,40175459822,Fumble Recovery (Opponent),2,6,4,false,false,false,0,0,0,1,0,0,56,152,"(02:28) #98 C.Noonkester punt 42 yards to the FSU14 #4 S.White return 2 yards to the FSU14 fumbled by #4 S.White at FSU14 recovered by NCSU #4 T.Thomas at FSU16, End Of Play",false,false,0,0,0,0,1
+401754598719,401754598,2,40175459823,Timeout,0,6,3,false,false,false,0,0,0,0,0,0,12,152,"Timeout NC State, clock 01:53",false,false,0,0,0,0,1
+401754598720,401754598,2,40175459823,Passing Touchdown,12,6,4,false,false,false,0,0,0,0,1,1,12,152,"(01:52) Shotgun #11 C.Bailey pass complete short left to #7 J.Joly caught at FSU00, for 12 yards to the FSU00 TOUCHDOWN, clock 01:47, 1ST DOWN #94 K.Vinesett kick attempt good (H: #98 C.Noonkester, LS: #95 J.Mann)",false,false,0,0,0,0,0
+401754598728,401754598,2,40175459825,Kickoff,0,10,1,false,false,false,1,0,0,0,0,0,65,52,"(01:47) #91 N.Konieczynski kickoff 29 yards to the FSU36 #40 A.Williams return 0 yards to the FSU36, End Of Play",false,false,1,0,0,0,1
+401754598733,401754598,2,40175459825,Pass Reception,25,10,1,false,false,false,0,0,0,0,0,0,64,52,"(01:46) No Huddle-Shotgun #1 T.Castellanos pass complete short middle to #0 D.Robinson caught at NCSU46, for 25 yards to the NCSU39 (#8 C.Slone; #26 A.Brown Jr.), 1ST DOWN",false,false,0,1,0,0,0
+401754598738,401754598,2,40175459825,Pass Reception,6,10,1,false,false,false,0,0,0,0,0,0,39,52,"(01:32) No Huddle-Shotgun #1 T.Castellanos pass complete short right to #13 R.Pittman Jr. caught at NCSU35, for 6 yards to the NCSU33 (#6 D.Marshall), out of bounds",false,false,0,0,0,1,1
+401754598743,401754598,2,40175459825,Pass Incompletion,0,4,2,false,false,false,0,0,0,0,0,0,33,52,(01:31) No Huddle-Shotgun #1 T.Castellanos pass incomplete short left to #15 J.Boggs thrown to NCSU23 QB hurried by #54 S.Harsh,false,false,0,0,0,0,0
+401754598761,401754598,2,40175459825,Field Goal Missed,51,4,4,false,false,false,0,0,0,1,0,1,33,52,"(01:16) #22 J.Weinberg field goal attempt from 51 yards NO GOOD (H: #43 M.Chiumento, LS: #32 M.Arnold), clock 01:16",false,false,0,0,0,0,0
+401754598765,401754598,2,40175459826,Rush,4,10,1,false,false,false,0,0,0,0,0,0,67,152,(01:15) Shotgun #3 H.Smothers rush middle for 4 yards gain to the NCSU37 (#5 D.Lyons; #93 M.Desir),false,false,0,1,0,0,1
+401754598769,401754598,2,40175459826,Rush,1,6,2,false,false,false,0,0,0,0,0,1,63,152,(01:08) Shotgun #3 H.Smothers rush middle for 1 yard gain to the NCSU38 (#6 D.Jackson Jr.; #93 M.Desir),false,false,0,0,0,0,0
+401754598771,401754598,2,40175459826,Timeout,0,10,1,false,false,false,0,0,0,0,0,0,33,52,"Timeout Florida State, clock 01:12",false,false,0,0,0,0,0
+401754598772,401754598,2,40175459826,Timeout,0,10,1,false,false,false,0,0,0,0,0,1,33,52,"Timeout Florida State, clock 01:16",false,false,0,0,0,0,0
+401754598775,401754598,2,40175459826,Rush,2,5,3,false,false,false,0,0,0,0,0,1,62,152,(01:06) Shotgun #10 W.Wilson rush right for 2 yards gain to the NCSU40 (#8 D.McCray),false,false,0,0,0,0,0
+401754598777,401754598,2,40175459826,Timeout,0,6,2,false,false,false,0,0,0,0,0,1,37,52,"Timeout Florida State, clock 01:08",false,false,0,0,0,0,0
+401754598780,401754598,2,40175459826,Punt,0,3,4,false,false,false,0,1,0,0,0,0,60,152,(00:23) #98 C.Noonkester punt 34 yards to the FSU26 fair catch by #4 S.White at FSU26,false,false,0,0,0,0,0
+401754598782,401754598,2,40175459826,Timeout,0,5,3,false,false,false,0,0,0,0,0,1,62,152,"Timeout NC State, clock 00:24",false,false,0,0,0,0,0
+401754598785,401754598,2,40175459827,Pass Reception,31,10,1,false,false,false,0,0,0,0,0,0,74,52,"(00:17) No Huddle-Shotgun #1 T.Castellanos pass complete short middle to #15 J.Boggs caught at FSU42, for 31 yards to the NCSU43 (#2 R.Royal, III), out of bounds, 1ST DOWN",false,false,0,1,0,0,1
+401754598790,401754598,2,40175459827,Pass Incompletion,0,10,1,false,false,false,0,0,0,0,0,0,43,52,(00:04) No Huddle-Shotgun #1 T.Castellanos pass incomplete deep right to #0 D.Robinson thrown to NCSU00,false,false,0,0,0,1,1
+401754598793,401754598,2,40175459827,Interception Return,8,10,2,false,false,false,0,0,0,1,0,0,43,52,"(00:00) No Huddle-Shotgun #1 T.Castellanos pass intercepted by #6 D.Marshall at NCSU04 QB hurried by #8 C.Slone #6 D.Marshall return 8 yards to the NCSU12, End Of Play",false,false,0,0,0,0,0
+401754598806,401754598,2,40175459825,Pass Incompletion,0,4,3,false,false,false,0,0,0,0,0,1,33,52,(01:23) No Huddle-Shotgun #1 T.Castellanos pass incomplete short right to #0 D.Robinson thrown to NCSU27 broken up by #6 D.Marshall,false,false,0,0,0,0,1

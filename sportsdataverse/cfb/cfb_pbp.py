@@ -5150,6 +5150,39 @@ class CFBPlayProcess(object):
                 # exclusive; yards takes precedence (official scoring: if the
                 # play reached the line to gain, penalty yardage is moot).
                 first_down_yards=pl.when(
+                    # 1) vendor text marker -- ESPN's play text writes an
+                    # explicit "1ST down"/"1ST DOWN" on converting plays; where
+                    # present it is per-play ground truth and overrides the
+                    # derived rule (it counts spot/distance-data mismatches and
+                    # the occasional goal-to-go TD the stat crew credited).
+                    # Penalty-involved rows are excluded here so accepted-penalty
+                    # conversions keep routing to the penalty bucket.
+                    (pl.col("text").str.contains(r"(?i)\b1st down\b").fill_null(False))
+                    .and_(pl.col("text").str.contains("(?i)short of") == False)
+                    .and_(pl.col("text").str.contains("(?i)penalty") == False)
+                    .and_(
+                        (
+                            pl.col("type.text").is_in(
+                                [
+                                    *normalplay,
+                                    "Passing Touchdown",
+                                    "Rushing Touchdown",
+                                    "Pass Reception Touchdown",
+                                    "Fumble Recovery (Own) Touchdown",
+                                ],
+                            )
+                        ).or_(
+                            # fumble rows keep the marker only when possession
+                            # was retained (own recovery)
+                            (pl.col("type.text").is_in(["Fumble", "Fumble Recovery (Own)"])).and_(
+                                pl.col("change_of_pos_team") == False,
+                            ),
+                        ),
+                    ),
+                )
+                .then(True)
+                .when(
+                    # 2) derived rule
                     (
                         (pl.col("type.text").is_in(normalplay)).or_(
                             # offensive scrimmage TDs reach the line to gain but
@@ -5172,11 +5205,15 @@ class CFBPlayProcess(object):
                     # first down there (a goal-to-go TD scores without one) --
                     # verified vs the ESPN box: e.g. 401032062/BYU is exact
                     # only when the 4 goal-to-go TDs are excluded.
-                    .and_(pl.col("start.distance") < pl.col("start.yardsToEndzone")),
+                    .and_(pl.col("start.distance") < pl.col("start.yardsToEndzone"))
+                    # a penalty-wiped play earns nothing by yards (the accepted
+                    # penalty path below handles any awarded first down)
+                    .and_(pl.col("penalty_negated_play") == False)
+                    .and_(pl.col("penalty_no_play") == False),
                 )
                 .then(True)
                 .when(
-                    # declined / offset penalty where the play result stood and
+                    # 3) declined / offset penalty where the play result stood and
                     # converted (cfbfastR first_by_penalty branches 2-3; officially
                     # these are first downs by yards, so they bucket here)
                     (pl.col("type.text").is_in(penalty))
@@ -5194,9 +5231,18 @@ class CFBPlayProcess(object):
                 .otherwise(False),
             )
             .with_columns(
+                # NOTE: an accepted automatic-first-down foul (DPI, roughing,
+                # personal foul, ...) without "1st down" in the text is a KNOWN
+                # miss class (~a handful per 26 team-games). A branch keying on
+                # penalized_team != pos_team was measured and REJECTED: the
+                # penalized_team attribution is itself only ~50% reliable
+                # (see PARITY_CATALOG 4.5), so the branch added mis-attributed
+                # offensive fouls faster than it recovered real ones. Revisit
+                # after penalty attribution improves.
                 first_down_penalty=(pl.col("penalty_1st_conv") == True)
                 .and_(pl.col("first_down_yards") == False)
-                .and_(pl.col("kickoff_play") == False),
+                .and_(pl.col("kickoff_play") == False)
+                .and_(pl.col("punt") == False),
             )
             .with_columns(
                 first_down_earned=(pl.col("first_down_yards") == True).or_(pl.col("first_down_penalty") == True),

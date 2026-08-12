@@ -58,6 +58,9 @@ def _input_frame(gid: int) -> pl.DataFrame:
             "change_of_pos_team": [r["change_of_pos_team"] == "1" for r in rows],
             "start.yardsToEndzone": [int(r["yards_to_goal"]) for r in rows],
             "pos_team": [int(r["pos_team"]) for r in rows],
+            "text": [r["text"] for r in rows],
+            "penalty_negated_play": [r["penalty_negated_play"] == "true" for r in rows],
+            "penalty_no_play": [r["penalty_no_play"] == "true" for r in rows],
         },
     )
 

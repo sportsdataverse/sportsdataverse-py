@@ -1,180 +1,180 @@
-id_play,game_id,half,id_drive,play_type,yards_gained,distance,down,penalty_1st_conv,penalty_offset,penalty_declined,kickoff_play,punt,downs_turnover,turnover_vec,scoring_play,change_of_pos_team,yards_to_goal,pos_team,py_firstD_by_kickoff,py_firstD_by_poss,py_firstD_by_penalty,py_firstD_by_yards,py_new_series
-400869270101849902,400869270,1,4008692701,Kickoff,0,10,1,false,false,false,1,0,0,0,0,0,65,197,1,0,0,0,1
-400869270101849903,400869270,1,4008692701,Pass Reception,7,10,1,false,false,false,0,0,0,0,0,0,75,197,0,1,0,0,0
-400869270101849904,400869270,1,4008692701,Pass Reception,4,3,2,false,false,false,0,0,0,0,0,0,68,197,0,0,0,0,0
-400869270101849905,400869270,1,4008692701,Rush,1,10,1,false,false,false,0,0,0,0,0,0,64,197,0,0,0,1,1
-400869270101849906,400869270,1,4008692701,Pass Reception,1,9,2,false,false,false,0,0,0,0,0,0,63,197,0,0,0,0,0
-400869270101849907,400869270,1,4008692701,Penalty,15,8,3,true,false,false,0,0,0,0,0,0,62,197,0,0,0,0,0
-400869270101849908,400869270,1,4008692701,Pass Reception,0,10,1,false,false,false,0,0,0,0,0,0,47,197,0,0,1,0,1
-400869270101849909,400869270,1,4008692701,Pass Reception,1,10,2,false,false,false,0,0,0,0,0,0,47,197,0,0,0,0,0
-400869270101849910,400869270,1,4008692701,Pass Incompletion,0,9,3,false,false,false,0,0,0,0,0,0,46,197,0,0,0,0,0
-400869270101849911,400869270,1,4008692701,Punt,0,9,4,false,false,false,0,1,0,0,0,1,46,197,0,0,0,0,0
-400869270101887001,400869270,1,4008692702,Rush,2,10,1,false,false,false,0,0,0,0,0,0,87,2117,0,1,0,0,1
-400869270101887002,400869270,1,4008692702,Pass Reception,6,8,2,false,false,false,0,0,0,0,0,0,85,2117,0,0,0,0,0
-400869270101898801,400869270,1,4008692702,Timeout,0,2,3,false,false,false,0,0,0,0,0,0,79,2117,0,0,0,0,0
-400869270101898802,400869270,1,4008692702,Pass Incompletion,0,2,3,false,false,false,0,0,0,0,0,0,79,2117,0,0,0,0,0
-400869270101898803,400869270,1,4008692702,Punt,0,2,4,false,false,false,0,1,0,0,0,1,79,2117,0,0,0,0,0
-400869270101904001,400869270,1,4008692703,Sack,-8,10,1,false,false,false,0,0,0,0,0,0,67,197,0,1,0,0,1
-400869270101904002,400869270,1,4008692703,Pass Reception,5,18,2,false,false,false,0,0,0,0,0,0,75,197,0,0,0,0,0
-400869270101904003,400869270,1,4008692703,Pass Incompletion,0,13,3,false,false,false,0,0,0,0,0,0,70,197,0,0,0,0,0
-400869270101904017,400869270,1,4008692703,Penalty,15,13,4,true,false,false,0,0,0,0,0,0,70,197,0,0,0,0,0
-400869270101904018,400869270,1,4008692703,Rush,7,10,1,false,false,false,0,0,0,0,0,0,55,197,0,0,1,0,1
-400869270101904019,400869270,1,4008692703,Rush,1,3,2,false,false,false,0,0,0,0,0,0,48,197,0,0,0,0,0
-400869270101904020,400869270,1,4008692703,Pass Incompletion,0,2,3,false,false,false,0,0,0,0,0,0,47,197,0,0,0,0,0
-400869270101904021,400869270,1,4008692703,Punt,0,2,4,false,false,false,0,1,0,0,0,1,47,197,0,0,0,0,0
-400869270101928101,400869270,1,4008692704,Rush,-2,10,1,false,false,false,0,0,0,0,0,0,85,2117,0,1,0,0,1
-400869270101928102,400869270,1,4008692704,Pass Reception,1,12,2,false,false,false,0,0,0,0,0,0,87,2117,0,0,0,0,0
-400869270101928103,400869270,1,4008692704,Pass Incompletion,0,11,3,false,false,false,0,0,0,0,0,0,86,2117,0,0,0,0,0
-400869270101928104,400869270,1,4008692704,Penalty,0,11,4,false,false,true,0,0,0,0,0,0,86,2117,0,0,0,0,0
-400869270101928105,400869270,1,4008692704,Punt,0,11,4,false,false,false,0,1,0,0,0,1,86,2117,0,0,0,0,0
-400869270101944701,400869270,1,4008692705,Rush,1,10,1,false,false,false,0,0,0,0,0,0,57,197,0,1,0,0,1
-400869270101944702,400869270,1,4008692705,Pass Incompletion,0,9,2,false,false,false,0,0,0,0,0,0,56,197,0,0,0,0,0
-400869270101944703,400869270,1,4008692705,Pass Reception,13,9,3,false,false,false,0,0,0,0,0,0,56,197,0,0,0,0,0
-400869270101944704,400869270,1,4008692705,Pass Reception,17,10,1,false,false,false,0,0,0,0,0,0,43,197,0,0,0,1,1
-400869270101955003,400869270,1,4008692705,Passing Touchdown,26,10,1,false,false,false,0,0,0,0,1,1,26,197,0,0,0,1,1
-400869270101955004,400869270,1,4008692706,Kickoff Return (Offense),15,10,1,false,false,false,1,0,0,0,0,0,65,2117,1,0,0,0,1
-400869270101955005,400869270,1,4008692706,Penalty,-10,10,1,false,false,false,0,0,0,0,0,0,80,2117,0,1,0,0,0
-400869270101955006,400869270,1,4008692706,Pass Incompletion,0,20,1,false,false,false,0,0,0,0,0,0,90,2117,0,0,0,0,0
-400869270101955007,400869270,1,4008692706,Pass Reception,8,20,2,false,false,false,0,0,0,0,0,0,90,2117,0,0,0,0,0
-400869270101955008,400869270,1,4008692706,Pass Incompletion,0,12,3,false,false,false,0,0,0,0,0,0,82,2117,0,0,0,0,0
-400869270101955009,400869270,1,4008692706,Punt,0,12,4,false,false,false,0,1,0,0,0,1,82,2117,0,0,0,0,0
-400869270101968901,400869270,1,4008692707,Pass Reception,32,10,1,false,false,false,0,0,0,0,0,0,63,197,0,1,0,0,1
-400869270101968902,400869270,1,4008692707,Rush,0,10,1,false,false,false,0,0,0,0,0,0,31,197,0,0,0,1,1
-400869270101968903,400869270,1,4008692707,Pass Reception,13,10,2,false,false,false,0,0,0,0,0,0,31,197,0,0,0,0,0
-400869270101977603,400869270,1,4008692707,Passing Touchdown,18,10,1,false,false,false,0,0,0,0,1,1,18,197,0,0,0,1,1
-400869270101977604,400869270,1,4008692708,Kickoff Return (Offense),16,10,1,false,false,false,1,0,0,0,0,0,65,2117,1,0,0,0,1
-400869270101978103,400869270,1,4008692708,Pass Reception,6,10,2,false,false,false,0,0,0,0,0,0,67,2117,0,1,0,0,0
-400869270101978107,400869270,1,4008692708,Pass Reception,12,10,1,false,false,false,0,0,0,0,0,0,79,2117,0,0,0,0,0
-400869270101978108,400869270,1,4008692708,Pass Incompletion,0,10,1,false,false,false,0,0,0,0,0,0,67,2117,0,0,0,1,1
-400869270101978109,400869270,1,4008692708,Pass Reception,11,4,3,false,false,false,0,0,0,0,0,0,61,2117,0,0,0,0,0
-400869270101978110,400869270,1,4008692708,Pass Reception,4,10,1,false,false,false,0,0,0,0,0,0,50,2117,0,0,0,1,1
-400869270102849901,400869270,1,4008692708,Pass Reception,19,6,2,false,false,false,0,0,0,0,0,0,46,2117,0,0,0,0,0
-400869270102849902,400869270,1,4008692708,Pass Reception,7,10,1,false,false,false,0,0,0,0,0,0,27,2117,0,0,0,1,1
-400869270102849903,400869270,1,4008692708,Rush,6,3,2,false,false,false,0,0,0,0,0,0,20,2117,0,0,0,0,0
-400869270102849904,400869270,1,4008692708,Pass Incompletion,0,10,1,false,false,false,0,0,0,0,0,0,14,2117,0,0,0,1,1
-400869270102849905,400869270,1,4008692708,Sack,-10,10,2,false,false,false,0,0,0,0,0,1,14,2117,0,0,0,0,0
-400869270102878603,400869270,1,4008692709,Kickoff Return (Offense),9,10,1,false,false,false,1,0,0,0,0,1,65,197,1,0,0,0,1
-400869270102878604,400869270,1,4008692708,Passing Touchdown,24,20,3,false,false,false,0,0,0,0,1,1,24,2117,0,0,0,0,1
-400869270102878605,400869270,1,4008692709,Rush,8,10,1,false,false,false,0,0,0,0,0,0,67,197,0,1,0,0,1
-400869270102878606,400869270,1,4008692709,Rush,7,2,2,false,false,false,0,0,0,0,0,0,59,197,0,0,0,0,0
-400869270102878607,400869270,1,4008692709,Pass Incompletion,0,10,1,false,false,false,0,0,0,0,0,0,52,197,0,0,0,1,1
-400869270102878608,400869270,1,4008692709,Pass Reception,11,10,2,false,false,false,0,0,0,0,0,0,52,197,0,0,0,0,0
-400869270102878609,400869270,1,4008692709,Pass Reception,1,10,1,false,false,false,0,0,0,0,0,0,41,197,0,0,0,1,1
-400869270102878610,400869270,1,4008692709,Rush,4,9,2,false,false,false,0,0,0,0,0,0,40,197,0,0,0,0,0
-400869270102878611,400869270,1,4008692709,Pass Incompletion,0,5,3,false,false,false,0,0,0,0,0,0,36,197,0,0,0,0,0
-400869270102907401,400869270,1,4008692709,Field Goal Good,53,5,4,false,false,false,0,0,0,0,1,1,36,197,0,0,0,0,0
-400869270102907402,400869270,1,40086927010,Kickoff,30,10,1,false,false,false,1,0,0,0,0,0,65,2117,1,0,0,0,1
-400869270102907403,400869270,1,40086927010,Rush,11,10,1,false,false,false,0,0,0,0,0,0,65,2117,0,1,0,0,0
-400869270102907404,400869270,1,40086927010,Pass Reception,29,10,1,true,false,false,0,0,0,0,0,0,54,2117,0,0,0,1,1
-400869270102907405,400869270,1,40086927010,Rush,4,10,1,false,false,false,0,0,0,0,0,0,25,2117,0,0,0,1,1
-400869270102907406,400869270,1,40086927010,Rush,8,6,2,false,false,false,0,0,0,0,0,0,21,2117,0,0,0,0,0
-400869270102907407,400869270,1,40086927010,Pass Reception,9,10,1,false,false,false,0,0,0,0,0,0,13,2117,0,0,0,1,1
-400869270102907408,400869270,1,40086927010,Rush,1,1,2,false,false,false,0,0,0,0,0,0,4,2117,0,0,0,0,0
-400869270102907409,400869270,1,40086927010,Rush,0,3,1,false,false,false,0,0,0,0,0,0,3,2117,0,0,0,1,1
-400869270102907410,400869270,1,40086927010,Pass Incompletion,0,3,2,false,false,false,0,0,0,0,0,0,3,2117,0,0,0,0,0
-400869270102949901,400869270,1,40086927010,Timeout,0,0,3,false,false,false,0,0,0,0,0,0,3,2117,0,0,0,0,0
-400869270102949902,400869270,1,40086927010,Fumble Recovery (Own),-6,3,3,false,false,false,0,0,0,0,0,0,3,2117,0,0,0,0,0
-400869270102949903,400869270,1,40086927010,Penalty,-5,7,4,false,false,false,0,0,0,0,0,0,7,2117,0,0,0,0,0
-400869270102959101,400869270,1,40086927010,Field Goal Good,30,0,4,false,false,false,0,0,0,0,1,1,13,2117,0,0,0,0,0
-400869270102959102,400869270,1,40086927011,Kickoff,30,10,1,false,false,false,1,0,0,0,0,0,65,197,1,0,0,0,1
-400869270102959103,400869270,1,40086927011,Rush,5,10,1,false,false,false,0,0,0,0,0,0,65,197,0,1,0,0,0
-400869270102959106,400869270,1,40086927011,Punt,0,5,4,false,false,false,0,1,0,0,0,0,60,197,0,0,0,0,0
-400869270102959107,400869270,1,40086927011,Pass Incompletion,0,5,2,false,false,false,0,0,0,0,0,0,60,197,0,0,0,0,0
-400869270102959108,400869270,1,40086927011,Pass Incompletion,0,5,3,false,false,false,0,0,0,0,0,1,60,197,0,0,0,0,0
-400869270102966601,400869270,1,40086927012,Rush,7,10,1,false,false,false,0,0,0,0,0,0,89,2117,0,1,0,0,1
-400869270102966602,400869270,1,40086927012,Pass Reception,3,3,2,false,false,false,0,0,0,0,0,0,82,2117,0,0,0,0,0
-400869270102966603,400869270,1,40086927012,Pass Reception,17,10,1,false,false,false,0,0,0,0,0,0,79,2117,0,0,0,1,1
-400869270102966604,400869270,1,40086927012,Pass Reception,3,10,1,false,false,false,0,0,0,0,0,0,62,2117,0,0,0,1,1
-400869270102966605,400869270,1,40086927012,Pass Reception,2,7,2,false,false,false,0,0,0,0,0,0,59,2117,0,0,0,0,0
-400869270102966606,400869270,1,40086927012,Pass Incompletion,0,5,3,false,false,false,0,0,0,0,0,0,57,2117,0,0,0,0,0
-400869270102966607,400869270,1,40086927012,Punt,0,5,4,false,false,false,0,1,0,0,0,1,57,2117,0,0,0,0,0
-400869270102994001,400869270,1,40086927013,Pass Incompletion,0,10,1,false,false,false,0,0,0,0,0,0,85,197,0,1,0,0,1
-400869270102994002,400869270,1,40086927013,Rush,12,10,2,false,false,false,0,0,0,0,0,0,85,197,0,0,0,0,0
-400869270102994003,400869270,1,40086927013,Pass Reception,3,10,1,false,false,false,0,0,0,0,0,0,73,197,0,0,0,1,1
-400869270102994004,400869270,1,40086927013,Sack,-6,7,2,false,false,false,0,0,0,0,0,1,70,197,0,0,0,0,0
-400869270103849901,400869270,2,40086927014,Kickoff,0,10,1,false,false,false,1,0,0,0,0,0,65,2117,1,0,0,0,1
-400869270103849902,400869270,2,40086927014,Rush,17,10,1,false,false,false,0,0,0,0,0,0,75,2117,0,1,0,0,0
-400869270103849903,400869270,2,40086927014,Pass Incompletion,0,10,1,false,false,false,0,0,0,0,0,0,58,2117,0,0,0,1,1
-400869270103849904,400869270,2,40086927014,Rush,1,10,2,false,false,false,0,0,0,0,0,0,58,2117,0,0,0,0,0
-400869270103849905,400869270,2,40086927014,Pass Incompletion,0,9,3,false,false,false,0,0,0,0,0,0,57,2117,0,0,0,0,0
-400869270103849906,400869270,2,40086927014,Punt,18,9,4,false,false,false,0,1,0,0,0,1,57,2117,0,0,0,0,0
-400869270103867802,400869270,2,40086927015,Rush,-1,10,1,false,false,false,0,0,0,0,0,0,62,197,0,1,0,0,1
-400869270103867803,400869270,2,40086927015,Pass Reception,6,11,2,false,false,false,0,0,0,0,0,0,63,197,0,0,0,0,0
-400869270103867804,400869270,2,40086927015,Pass Incompletion,0,5,3,false,false,false,0,0,0,0,0,0,57,197,0,0,0,0,0
-400869270103867805,400869270,2,40086927015,Punt,0,5,4,false,false,false,0,1,0,0,0,1,57,197,0,0,0,0,0
-400869270103879901,400869270,2,40086927016,Pass Incompletion,0,10,1,false,false,false,0,0,0,0,0,0,89,2117,0,1,0,0,1
-400869270103879902,400869270,2,40086927016,Pass Reception,3,10,2,false,false,false,0,0,0,0,0,0,89,2117,0,0,0,0,0
-400869270103879903,400869270,2,40086927016,Pass Reception,17,7,3,false,false,false,0,0,0,0,0,0,86,2117,0,0,0,0,0
-400869270103879904,400869270,2,40086927016,Rush,5,10,1,false,false,false,0,0,0,0,0,0,69,2117,0,0,0,1,1
-400869270103879905,400869270,2,40086927016,Rush,0,5,2,false,false,false,0,0,0,0,0,0,64,2117,0,0,0,0,0
-400869270103879906,400869270,2,40086927016,Pass Reception,22,5,3,false,false,false,0,0,0,0,0,0,64,2117,0,0,0,0,0
-400869270103879907,400869270,2,40086927016,Sack,-9,10,1,false,false,false,0,0,0,0,0,0,42,2117,0,0,0,1,1
-400869270103879908,400869270,2,40086927016,Pass Reception,5,19,2,false,false,false,0,0,0,0,0,0,51,2117,0,0,0,0,0
-400869270103879909,400869270,2,40086927016,Penalty,15,14,3,true,false,false,0,0,0,0,0,0,46,2117,0,0,0,0,0
-400869270103879910,400869270,2,40086927016,Rush,19,10,1,false,false,false,0,0,0,0,0,0,31,2117,0,0,1,0,1
-400869270103879911,400869270,2,40086927016,Rush,4,10,1,false,false,false,0,0,0,0,0,0,12,2117,0,0,0,1,1
-400869270103879912,400869270,2,40086927016,Rush,3,6,2,false,false,false,0,0,0,0,0,0,8,2117,0,0,0,0,0
-400869270103947701,400869270,2,40086927016,Timeout,0,3,3,false,false,false,0,0,0,0,0,0,5,2117,0,0,0,0,0
-400869270103948303,400869270,2,40086927016,Passing Touchdown,5,3,3,false,false,false,0,0,0,0,1,1,5,2117,0,0,0,0,0
-400869270103948304,400869270,2,40086927017,Kickoff,0,10,1,false,false,false,1,0,0,0,0,0,65,197,1,0,0,0,1
-400869270103948305,400869270,2,40086927017,Rush,5,10,1,false,false,false,0,0,0,0,0,0,75,197,0,1,0,0,0
-400869270103948306,400869270,2,40086927017,Rush,17,5,2,false,false,false,0,0,0,0,0,0,70,197,0,0,0,0,0
-400869270103948307,400869270,2,40086927017,Pass Reception,8,10,1,false,false,false,0,0,0,0,0,0,53,197,0,0,0,1,1
-400869270103948308,400869270,2,40086927017,Pass Reception,28,2,2,false,false,false,0,0,0,0,0,0,45,197,0,0,0,0,0
-400869270103948309,400869270,2,40086927017,Pass Incompletion,0,10,1,false,false,false,0,0,0,0,0,0,17,197,0,0,0,1,1
-400869270103948310,400869270,2,40086927017,Rush,-1,10,2,false,false,false,0,0,0,0,0,0,17,197,0,0,0,0,0
-400869270103948311,400869270,2,40086927017,Pass Incompletion,0,11,3,false,false,false,0,0,0,0,0,0,18,197,0,0,0,0,0
-400869270103974101,400869270,2,40086927017,Field Goal Good,35,11,4,false,false,false,0,0,0,0,1,1,18,197,0,0,0,0,0
-400869270103974102,400869270,2,40086927018,Kickoff,0,10,1,false,false,false,1,0,0,0,0,0,65,2117,1,0,0,0,1
-400869270103974301,400869270,2,40086927018,Sack,-8,10,1,false,false,false,0,0,0,0,0,0,75,2117,0,1,0,0,0
-400869270103974302,400869270,2,40086927018,Pass Reception,4,18,2,false,false,false,0,0,0,0,0,0,83,2117,0,0,0,0,0
-400869270103974303,400869270,2,40086927018,Pass Reception,7,14,3,false,false,false,0,0,0,0,0,0,79,2117,0,0,0,0,0
-400869270103974304,400869270,2,40086927018,Punt,18,7,4,false,false,false,0,1,0,0,0,1,72,2117,0,0,0,0,0
-400869270103996401,400869270,2,40086927019,Rush,7,10,1,false,false,false,0,0,0,0,0,0,56,197,0,1,0,0,1
-400869270103996402,400869270,2,40086927019,Pass Reception,7,3,2,false,false,false,0,0,0,0,0,0,49,197,0,0,0,0,0
-400869270104849901,400869270,2,40086927019,Pass Incompletion,0,10,1,false,false,false,0,0,0,0,0,0,42,197,0,0,0,1,1
-400869270104849902,400869270,2,40086927019,Pass Incompletion,0,10,2,false,false,false,0,0,0,0,0,0,42,197,0,0,0,0,0
-400869270104849903,400869270,2,40086927019,Pass Reception,1,10,3,false,false,false,0,0,0,0,0,0,42,197,0,0,0,0,0
-400869270104849904,400869270,2,40086927019,Punt,0,9,4,false,false,false,0,1,0,0,0,1,41,197,0,0,0,0,0
-400869270104859901,400869270,2,40086927020,Rush,0,10,1,false,false,false,0,0,0,0,0,0,95,2117,0,1,0,0,1
-400869270104859902,400869270,2,40086927020,Rush,7,10,2,false,false,false,0,0,0,0,0,0,95,2117,0,0,0,0,0
-400869270104859903,400869270,2,40086927020,Pass Reception,5,3,3,false,false,false,0,0,0,0,0,0,88,2117,0,0,0,0,0
-400869270104859904,400869270,2,40086927020,Pass Reception,15,10,1,true,false,true,0,0,0,0,0,0,83,2117,0,0,0,1,1
-400869270104859905,400869270,2,40086927020,Rush,0,10,1,false,false,false,0,0,0,0,0,0,68,2117,0,0,0,1,1
-400869270104859906,400869270,2,40086927020,Rush,-3,10,2,false,false,false,0,0,0,0,0,0,68,2117,0,0,0,0,0
-400869270104897802,400869270,2,40086927020,Timeout,0,13,3,false,false,false,0,0,0,0,0,0,71,2117,0,0,0,0,0
-400869270104897803,400869270,2,40086927020,Pass Reception,40,13,3,false,false,false,0,0,0,0,0,0,71,2117,0,0,0,0,0
-400869270104905901,400869270,2,40086927020,Passing Touchdown,31,10,1,false,false,false,0,0,0,0,1,1,31,2117,0,0,0,1,1
-400869270104905903,400869270,2,40086927021,Kickoff,0,10,1,false,false,false,1,0,0,0,0,0,65,197,1,0,0,0,1
-400869270104905904,400869270,2,40086927021,Pass Reception,17,10,1,false,false,false,0,0,0,0,0,0,75,197,0,1,0,0,0
-400869270104905905,400869270,2,40086927021,Pass Reception,11,10,1,false,false,false,0,0,0,0,0,0,58,197,0,0,0,1,1
-400869270104905906,400869270,2,40086927021,Pass Reception,12,10,1,false,false,false,0,0,0,0,0,0,47,197,0,0,0,1,1
-400869270104905907,400869270,2,40086927021,Pass Reception,10,10,1,false,false,false,0,0,0,0,0,0,35,197,0,0,0,1,1
-400869270104905908,400869270,2,40086927021,Rush,1,10,1,false,false,false,0,0,0,0,0,0,25,197,0,0,0,1,1
-400869270104905909,400869270,2,40086927021,Sack,-7,9,2,false,false,false,0,0,0,0,0,0,24,197,0,0,0,0,0
-400869270104905910,400869270,2,40086927021,Penalty,15,16,3,true,false,false,0,0,0,0,0,0,31,197,0,0,0,0,0
-400869270104905911,400869270,2,40086927021,Penalty,-5,10,1,false,false,false,0,0,0,0,0,0,16,197,0,0,1,0,1
-400869270104905912,400869270,2,40086927021,Pass Reception,7,15,1,false,false,false,0,0,0,0,0,0,21,197,0,0,0,0,0
-400869270104905913,400869270,2,40086927021,Pass Reception,9,8,2,false,false,false,0,0,0,0,0,0,14,197,0,0,0,0,0
-400869270104905914,400869270,2,40086927021,Interception Return,0,5,1,false,false,false,0,0,0,1,0,1,5,197,0,0,0,1,1
-400869270104936601,400869270,2,40086927022,Fumble Recovery (Opponent),9,10,1,false,false,false,0,0,0,1,0,1,80,2117,0,1,0,0,1
-400869270104937401,400869270,2,40086927023,Rush,5,10,1,false,false,false,0,0,0,0,0,0,11,197,0,1,0,0,1
-400869270104937402,400869270,2,40086927023,Pass Incompletion,0,5,2,false,false,false,0,0,0,0,0,0,6,197,0,0,0,0,0
-400869270104937403,400869270,2,40086927023,Rush,4,5,3,false,false,false,0,0,0,0,0,0,6,197,0,0,0,0,0
-400869270104948201,400869270,2,40086927023,Timeout,0,1,4,false,false,false,0,0,0,0,0,0,2,197,0,0,0,0,0
-400869270104948701,400869270,2,40086927023,Passing Touchdown,2,1,4,false,false,false,0,0,0,0,1,1,2,197,0,0,0,0,0
-400869270104948703,400869270,2,40086927024,Kickoff Return (Offense),26,10,1,false,false,false,1,0,0,0,0,0,65,2117,1,0,0,0,1
-400869270104949501,400869270,2,40086927024,Pass Reception,7,10,1,false,false,false,0,0,0,0,0,0,74,2117,0,1,0,0,0
-400869270104949502,400869270,2,40086927024,Rush,-2,3,2,false,false,false,0,0,0,0,0,0,67,2117,0,0,0,0,0
-400869270104949503,400869270,2,40086927024,Pass Reception,8,5,3,false,false,false,0,0,0,0,0,0,69,2117,0,0,0,0,0
-400869270104949504,400869270,2,40086927024,Interception Return,-1,10,1,false,false,false,0,0,0,1,0,1,61,2117,0,0,0,1,1
-400869270104968901,400869270,2,40086927025,Rush,-1,10,1,false,false,false,0,0,0,0,0,0,55,197,0,1,0,0,1
-400869270104974301,400869270,2,40086927025,Timeout,0,11,2,false,false,false,0,0,0,0,0,0,56,197,0,0,0,0,0
-400869270104974302,400869270,2,40086927025,Pass Reception,18,11,2,false,false,false,0,0,0,0,0,0,56,197,0,0,0,0,0
-400869270104974303,400869270,2,40086927025,Rush,1,10,1,false,false,false,0,0,0,0,0,0,38,197,0,0,0,1,1
-400869270104986601,400869270,2,40086927025,Timeout,0,9,2,false,false,false,0,0,0,0,0,0,37,197,0,0,0,0,0
-400869270104986602,400869270,2,40086927025,Rush,-2,9,2,false,false,false,0,0,0,0,0,0,37,197,0,0,0,0,0
-400869270104986603,400869270,2,40086927025,Rush,-2,11,3,false,false,false,0,0,0,0,0,0,39,197,0,0,0,0,0
-400869270104999501,400869270,2,40086927025,Timeout,0,13,4,false,false,false,0,0,0,0,0,0,41,197,0,0,0,0,0
-400869270104999502,400869270,2,40086927025,Pass Incompletion,-8,13,4,false,false,false,0,0,1,0,0,1,41,197,0,0,0,0,0
-400869270104999901,400869270,2,40086927026,Passing Touchdown,9,10,1,false,false,false,0,0,0,0,1,1,51,2117,0,1,0,0,1
+id_play,game_id,half,id_drive,play_type,yards_gained,distance,down,penalty_1st_conv,penalty_offset,penalty_declined,kickoff_play,punt,downs_turnover,turnover_vec,scoring_play,change_of_pos_team,yards_to_goal,pos_team,text,penalty_negated_play,penalty_no_play,py_firstD_by_kickoff,py_firstD_by_poss,py_firstD_by_penalty,py_firstD_by_yards,py_new_series
+400869270101849902,400869270,1,4008692701,Kickoff,0,10,1,false,false,false,1,0,0,0,0,0,65,197,Brian Eavey kickoff for 65 yds for a touchback,false,false,1,0,0,0,1
+400869270101849903,400869270,1,4008692701,Pass Reception,7,10,1,false,false,false,0,0,0,0,0,0,75,197,Mason Rudolph pass complete to James Washington for 7 yds to the OKSt 32,false,false,0,1,0,0,0
+400869270101849904,400869270,1,4008692701,Pass Reception,4,3,2,false,false,false,0,0,0,0,0,0,68,197,Mason Rudolph pass complete to Jalen McCleskey for 4 yds to the OKSt 36 for a 1ST down,false,false,0,0,0,0,0
+400869270101849905,400869270,1,4008692701,Rush,1,10,1,false,false,false,0,0,0,0,0,0,64,197,Chris Carson run for 1 yd to the OKSt 37,false,false,0,0,0,1,1
+400869270101849906,400869270,1,4008692701,Pass Reception,1,9,2,false,false,false,0,0,0,0,0,0,63,197,Mason Rudolph pass complete to Jalen McCleskey for 1 yd to the OKSt 38,false,false,0,0,0,0,0
+400869270101849907,400869270,1,4008692701,Penalty,15,8,3,true,false,false,0,0,0,0,0,0,62,197,"Rudolph, Mason pass incomplete to Washington, J., PENALTY CMU pass interference (Coleman, Amari) 15 yards to the CMU47, 1ST DOWN OSU, NO PLAY.",true,true,0,0,0,0,0
+400869270101849908,400869270,1,4008692701,Pass Reception,0,10,1,false,false,false,0,0,0,0,0,0,47,197,Mason Rudolph pass complete to Jalen McCleskey for no gain to the CMich 47,false,false,0,0,1,0,1
+400869270101849909,400869270,1,4008692701,Pass Reception,1,10,2,false,false,false,0,0,0,0,0,0,47,197,Mason Rudolph pass complete to Jalen McCleskey for 1 yd to the CMich 46,false,false,0,0,0,0,0
+400869270101849910,400869270,1,4008692701,Pass Incompletion,0,9,3,false,false,false,0,0,0,0,0,0,46,197,Mason Rudolph pass incomplete,false,false,0,0,0,0,0
+400869270101849911,400869270,1,4008692701,Punt,0,9,4,false,false,false,0,1,0,0,0,1,46,197,Zach Sinor punt for 33 yds,false,false,0,0,0,0,0
+400869270101887001,400869270,1,4008692702,Rush,2,10,1,false,false,false,0,0,0,0,0,0,87,2117,Devon Spalding run for 2 yds to the CMich 15,false,false,0,1,0,0,1
+400869270101887002,400869270,1,4008692702,Pass Reception,6,8,2,false,false,false,0,0,0,0,0,0,85,2117,Cooper Rush pass complete to Tyler Conklin for 6 yds to the CMich 21,false,false,0,0,0,0,0
+400869270101898801,400869270,1,4008692702,Timeout,0,2,3,false,false,false,0,0,0,0,0,0,79,2117,"Timeout CENTRAL MICH, clock 10:11",false,false,0,0,0,0,0
+400869270101898802,400869270,1,4008692702,Pass Incompletion,0,2,3,false,false,false,0,0,0,0,0,0,79,2117,Cooper Rush pass incomplete,false,false,0,0,0,0,0
+400869270101898803,400869270,1,4008692702,Punt,0,2,4,false,false,false,0,1,0,0,0,1,79,2117,"Cooper Mojsiejenko punt for 46 yds, fair catch by Jalen McCleskey at the OKSt 33",false,false,0,0,0,0,0
+400869270101904001,400869270,1,4008692703,Sack,-8,10,1,false,false,false,0,0,0,0,0,0,67,197,Mason Rudolph sacked by Kelby Latta for a loss of 8 yards to the OKSt 25,false,false,0,1,0,0,1
+400869270101904002,400869270,1,4008692703,Pass Reception,5,18,2,false,false,false,0,0,0,0,0,0,75,197,Mason Rudolph pass complete to Jalen McCleskey for 5 yds to the OKSt 30,false,false,0,0,0,0,0
+400869270101904003,400869270,1,4008692703,Pass Incompletion,0,13,3,false,false,false,0,0,0,0,0,0,70,197,Mason Rudolph pass incomplete,false,false,0,0,0,0,0
+400869270101904017,400869270,1,4008692703,Penalty,15,13,4,true,false,false,0,0,0,0,0,0,70,197,"Sinor, Zach punt 38 yards to the CMU32, out-of-bounds, PENALTY CMU 1B 15 yards to the OSU45, 1ST DOWN OSU, NO PLAY.",true,true,0,0,0,0,0
+400869270101904018,400869270,1,4008692703,Rush,7,10,1,false,false,false,0,0,0,0,0,0,55,197,Chris Carson run for 7 yds to the CMich 48,false,false,0,0,1,0,1
+400869270101904019,400869270,1,4008692703,Rush,1,3,2,false,false,false,0,0,0,0,0,0,48,197,Mason Rudolph run for 1 yd to the CMich 47,false,false,0,0,0,0,0
+400869270101904020,400869270,1,4008692703,Pass Incompletion,0,2,3,false,false,false,0,0,0,0,0,0,47,197,"Mason Rudolph pass incomplete to Jalen McCleskey, broken up by Tony Annese",false,false,0,0,0,0,0
+400869270101904021,400869270,1,4008692703,Punt,0,2,4,false,false,false,0,1,0,0,0,1,47,197,Zach Sinor punt for 32 yds,false,false,0,0,0,0,0
+400869270101928101,400869270,1,4008692704,Rush,-2,10,1,false,false,false,0,0,0,0,0,0,85,2117,Devon Spalding run for a loss of 2 yards to the CMich 13,false,false,0,1,0,0,1
+400869270101928102,400869270,1,4008692704,Pass Reception,1,12,2,false,false,false,0,0,0,0,0,0,87,2117,Cooper Rush pass complete to Devon Spalding for 1 yd to the CMich 14,false,false,0,0,0,0,0
+400869270101928103,400869270,1,4008692704,Pass Incompletion,0,11,3,false,false,false,0,0,0,0,0,0,86,2117,Cooper Rush pass incomplete to Tyler Conklin,false,false,0,0,0,0,0
+400869270101928104,400869270,1,4008692704,Penalty,0,11,4,false,false,true,0,0,0,0,0,0,86,2117,"CENTRAL MICH Penalty, illegal motion ( Yards) declined",false,false,0,0,0,0,0
+400869270101928105,400869270,1,4008692704,Punt,0,11,4,false,false,false,0,1,0,0,0,1,86,2117,"Cooper Mojsiejenko punt for 43 yds, fair catch by Jalen McCleskey at the OKSt 43",false,false,0,0,0,0,0
+400869270101944701,400869270,1,4008692705,Rush,1,10,1,false,false,false,0,0,0,0,0,0,57,197,Justice Hill run for 1 yd to the OKSt 44,false,false,0,1,0,0,1
+400869270101944702,400869270,1,4008692705,Pass Incompletion,0,9,2,false,false,false,0,0,0,0,0,0,56,197,Mason Rudolph pass incomplete,false,false,0,0,0,0,0
+400869270101944703,400869270,1,4008692705,Pass Reception,13,9,3,false,false,false,0,0,0,0,0,0,56,197,Mason Rudolph pass complete to Chris Carson for 13 yds to the CMich 43 for a 1ST down,false,false,0,0,0,0,0
+400869270101944704,400869270,1,4008692705,Pass Reception,17,10,1,false,false,false,0,0,0,0,0,0,43,197,Mason Rudolph pass complete to James Washington for 17 yds to the CMich 26 for a 1ST down,false,false,0,0,0,1,1
+400869270101955003,400869270,1,4008692705,Passing Touchdown,26,10,1,false,false,false,0,0,0,0,1,1,26,197,Jalen McCleskey 26 Yd pass from Mason Rudolph (Ben Grogan Kick),false,false,0,0,0,1,1
+400869270101955004,400869270,1,4008692706,Kickoff Return (Offense),15,10,1,false,false,false,1,0,0,0,0,0,65,2117,"Max Allan kickoff for 60 yds , Mark Chapman return for 15 yds to the CMich 20",false,false,1,0,0,0,1
+400869270101955005,400869270,1,4008692706,Penalty,-10,10,1,false,false,false,0,0,0,0,0,0,80,2117,"Rush, Cooper pass complete to Willis, Corey for 8 yards to the CMU28 (Averette, D.), PENALTY CMU pass interference (Willis, Corey) 10 yards to the CMU10, NO PLAY.",true,true,0,1,0,0,0
+400869270101955006,400869270,1,4008692706,Pass Incompletion,0,20,1,false,false,false,0,0,0,0,0,0,90,2117,Cooper Rush pass incomplete,false,false,0,0,0,0,0
+400869270101955007,400869270,1,4008692706,Pass Reception,8,20,2,false,false,false,0,0,0,0,0,0,90,2117,Cooper Rush pass complete to Devon Spalding for 8 yds to the CMich 18,false,false,0,0,0,0,0
+400869270101955008,400869270,1,4008692706,Pass Incompletion,0,12,3,false,false,false,0,0,0,0,0,0,82,2117,Cooper Rush pass incomplete to Devon Spalding,false,false,0,0,0,0,0
+400869270101955009,400869270,1,4008692706,Punt,0,12,4,false,false,false,0,1,0,0,0,1,82,2117,"Cooper Mojsiejenko punt for 45 yds, downed at the OKSt 37",false,false,0,0,0,0,0
+400869270101968901,400869270,1,4008692707,Pass Reception,32,10,1,false,false,false,0,0,0,0,0,0,63,197,Mason Rudolph pass complete to James Washington for 32 yds to the CMich 31 for a 1ST down,false,false,0,1,0,0,1
+400869270101968902,400869270,1,4008692707,Rush,0,10,1,false,false,false,0,0,0,0,0,0,31,197,Mason Rudolph run for no gain to the CMich 31,false,false,0,0,0,1,1
+400869270101968903,400869270,1,4008692707,Pass Reception,13,10,2,false,false,false,0,0,0,0,0,0,31,197,Mason Rudolph pass complete to Jalen McCleskey for 13 yds to the CMich 18 for a 1ST down,false,false,0,0,0,0,0
+400869270101977603,400869270,1,4008692707,Passing Touchdown,18,10,1,false,false,false,0,0,0,0,1,1,18,197,Zac Veatch 18 Yd pass from Mason Rudolph (Ben Grogan Kick),false,false,0,0,0,1,1
+400869270101977604,400869270,1,4008692708,Kickoff Return (Offense),16,10,1,false,false,false,1,0,0,0,0,0,65,2117,"Max Allan kickoff for 60 yds , Mark Chapman return for 16 yds to the CMich 21",false,false,1,0,0,0,1
+400869270101978103,400869270,1,4008692708,Pass Reception,6,10,2,false,false,false,0,0,0,0,0,0,67,2117,Cooper Rush pass complete to Corey Willis for 6 yds to the CMich 39,false,false,0,1,0,0,0
+400869270101978107,400869270,1,4008692708,Pass Reception,12,10,1,false,false,false,0,0,0,0,0,0,79,2117,Cooper Rush pass complete to Jesse Kroll for 12 yds to the CMich 33 for a 1ST down,false,false,0,0,0,0,0
+400869270101978108,400869270,1,4008692708,Pass Incompletion,0,10,1,false,false,false,0,0,0,0,0,0,67,2117,"Cooper Rush pass incomplete to Jesse Kroll, broken up by Jordan Sterns",false,false,0,0,0,1,1
+400869270101978109,400869270,1,4008692708,Pass Reception,11,4,3,false,false,false,0,0,0,0,0,0,61,2117,Cooper Rush pass complete to Eric Cooper for 11 yds to the 50 yard line for a 1ST down,false,false,0,0,0,0,0
+400869270101978110,400869270,1,4008692708,Pass Reception,4,10,1,false,false,false,0,0,0,0,0,0,50,2117,Cooper Rush pass complete to Corey Willis for 4 yds to the OKSt 46,false,false,0,0,0,1,1
+400869270102849901,400869270,1,4008692708,Pass Reception,19,6,2,false,false,false,0,0,0,0,0,0,46,2117,Cooper Rush pass complete to Tyler Conklin for 19 yds to the OKSt 27 for a 1ST down,false,false,0,0,0,0,0
+400869270102849902,400869270,1,4008692708,Pass Reception,7,10,1,false,false,false,0,0,0,0,0,0,27,2117,Cooper Rush pass complete to Jahray Hayes for 7 yds to the OKSt 20,false,false,0,0,0,1,1
+400869270102849903,400869270,1,4008692708,Rush,6,3,2,false,false,false,0,0,0,0,0,0,20,2117,Jahray Hayes run for 6 yds to the OKSt 14 for a 1ST down,false,false,0,0,0,0,0
+400869270102849904,400869270,1,4008692708,Pass Incompletion,0,10,1,false,false,false,0,0,0,0,0,0,14,2117,"Cooper Rush pass incomplete to Tyler Conklin, broken up by Jordan Sterns",false,false,0,0,0,1,1
+400869270102849905,400869270,1,4008692708,Sack,-10,10,2,false,false,false,0,0,0,0,0,1,14,2117,Cooper Rush sacked by Tralund Webber for a loss of 10 yards to the OKSt 24,false,false,0,0,0,0,0
+400869270102878603,400869270,1,4008692709,Kickoff Return (Offense),9,10,1,false,false,false,1,0,0,0,0,1,65,197,"Brian Eavey kickoff for 41 yds , Blake Jarwin return for 9 yds to the OKSt 33",false,false,1,0,0,0,1
+400869270102878604,400869270,1,4008692708,Passing Touchdown,24,20,3,false,false,false,0,0,0,0,1,1,24,2117,Tyler Conklin 24 Yd pass from Cooper Rush (Brian Eavey Kick),false,false,0,0,0,0,1
+400869270102878605,400869270,1,4008692709,Rush,8,10,1,false,false,false,0,0,0,0,0,0,67,197,Jalen McCleskey run for 8 yds to the OKSt 41,false,false,0,1,0,0,1
+400869270102878606,400869270,1,4008692709,Rush,7,2,2,false,false,false,0,0,0,0,0,0,59,197,Justice Hill run for 7 yds to the OKSt 48 for a 1ST down,false,false,0,0,0,0,0
+400869270102878607,400869270,1,4008692709,Pass Incompletion,0,10,1,false,false,false,0,0,0,0,0,0,52,197,Mason Rudolph pass incomplete to Dillon Stoner,false,false,0,0,0,1,1
+400869270102878608,400869270,1,4008692709,Pass Reception,11,10,2,false,false,false,0,0,0,0,0,0,52,197,Mason Rudolph pass complete to James Washington for 11 yds to the CMich 41 for a 1ST down,false,false,0,0,0,0,0
+400869270102878609,400869270,1,4008692709,Pass Reception,1,10,1,false,false,false,0,0,0,0,0,0,41,197,Mason Rudolph pass complete to Barry Sanders for 1 yd to the CMich 40,false,false,0,0,0,1,1
+400869270102878610,400869270,1,4008692709,Rush,4,9,2,false,false,false,0,0,0,0,0,0,40,197,Barry Sanders run for 4 yds to the CMich 36,false,false,0,0,0,0,0
+400869270102878611,400869270,1,4008692709,Pass Incompletion,0,5,3,false,false,false,0,0,0,0,0,0,36,197,Mason Rudolph pass incomplete to James Washington,false,false,0,0,0,0,0
+400869270102907401,400869270,1,4008692709,Field Goal Good,53,5,4,false,false,false,0,0,0,0,1,1,36,197,Matt Ammendola 53 yd FG GOOD,false,false,0,0,0,0,0
+400869270102907402,400869270,1,40086927010,Kickoff,30,10,1,false,false,false,1,0,0,0,0,0,65,2117,"Max Allan kickoff for 63 yds OKLAHOMA ST Penalty, illegal kicking (Max Allan) to the CMich 35",,false,1,0,0,0,1
+400869270102907403,400869270,1,40086927010,Rush,11,10,1,false,false,false,0,0,0,0,0,0,65,2117,Devon Spalding run for 11 yds to the CMich 46 for a 1ST down,false,false,0,1,0,0,0
+400869270102907404,400869270,1,40086927010,Pass Reception,29,10,1,true,false,false,0,0,0,0,0,0,54,2117,"Cooper Rush pass complete to Jesse Kroll for 9 yds to the OKLAST 45 for a 1ST down OKLAHOMA ST Penalty, face mask (20 yards) (20 Yards) to the OKSt 25 for a 1ST down",,false,0,0,0,1,1
+400869270102907405,400869270,1,40086927010,Rush,4,10,1,false,false,false,0,0,0,0,0,0,25,2117,Devon Spalding run for 4 yds to the OKSt 21,false,false,0,0,0,1,1
+400869270102907406,400869270,1,40086927010,Rush,8,6,2,false,false,false,0,0,0,0,0,0,21,2117,Cooper Rush run for 8 yds to the OKSt 13 for a 1ST down,false,false,0,0,0,0,0
+400869270102907407,400869270,1,40086927010,Pass Reception,9,10,1,false,false,false,0,0,0,0,0,0,13,2117,Cooper Rush pass complete to Jesse Kroll for 9 yds to the OKSt 4,false,false,0,0,0,1,1
+400869270102907408,400869270,1,40086927010,Rush,1,1,2,false,false,false,0,0,0,0,0,0,4,2117,Devon Spalding run for 1 yd to the OKSt 3 for a 1ST down,false,false,0,0,0,0,0
+400869270102907409,400869270,1,40086927010,Rush,0,3,1,false,false,false,0,0,0,0,0,0,3,2117,Devon Spalding run for no gain to the OKSt 3,false,false,0,0,0,1,1
+400869270102907410,400869270,1,40086927010,Pass Incompletion,0,3,2,false,false,false,0,0,0,0,0,0,3,2117,"Cooper Rush pass incomplete to Tyler Conklin, broken up by Jordan Sterns",false,false,0,0,0,0,0
+400869270102949901,400869270,1,40086927010,Timeout,0,0,3,false,false,false,0,0,0,0,0,0,3,2117,"Timeout CENTRAL MICH, clock 05:00",false,false,0,0,0,0,0
+400869270102949902,400869270,1,40086927010,Fumble Recovery (Own),-6,3,3,false,false,false,0,0,0,0,0,0,3,2117,"Cooper Rush run for a loss of 6 yards to the OKSt 7 Cooper Rush fumbled, recovered by CMich Cooper Rush",false,false,0,0,0,0,0
+400869270102949903,400869270,1,40086927010,Penalty,-5,7,4,false,false,false,0,0,0,0,0,0,7,2117,"CENTRAL MICH Penalty, delay of game (-5 Yards) to the OKSt 12",true,false,0,0,0,0,0
+400869270102959101,400869270,1,40086927010,Field Goal Good,30,0,4,false,false,false,0,0,0,0,1,1,13,2117,Brian Eavey 30 yd FG GOOD,false,false,0,0,0,0,0
+400869270102959102,400869270,1,40086927011,Kickoff,30,10,1,false,false,false,1,0,0,0,0,0,65,197,"Brian Eavey kickoff for 57 yds CENTRAL MICH Penalty, illegal kicking (Brian Eavey) to the OKSt 35",,false,1,0,0,0,1
+400869270102959103,400869270,1,40086927011,Rush,5,10,1,false,false,false,0,0,0,0,0,0,65,197,Chris Carson run for 5 yds to the OKSt 40,false,false,0,1,0,0,0
+400869270102959106,400869270,1,40086927011,Punt,0,5,4,false,false,false,0,1,0,0,0,0,60,197,"Zach Sinor punt for 43 yds , Emmett Thomas returns for no gain to the CMich 11 Emmett Thomas fumbled,",false,false,0,0,0,0,0
+400869270102959107,400869270,1,40086927011,Pass Incompletion,0,5,2,false,false,false,0,0,0,0,0,0,60,197,Mason Rudolph pass incomplete to Jalen McCleskey,false,false,0,0,0,0,0
+400869270102959108,400869270,1,40086927011,Pass Incompletion,0,5,3,false,false,false,0,0,0,0,0,1,60,197,Mason Rudolph pass incomplete to Chris Carson,false,false,0,0,0,0,0
+400869270102966601,400869270,1,40086927012,Rush,7,10,1,false,false,false,0,0,0,0,0,0,89,2117,Mark Chapman run for 7 yds to the CMich 18,false,false,0,1,0,0,1
+400869270102966602,400869270,1,40086927012,Pass Reception,3,3,2,false,false,false,0,0,0,0,0,0,82,2117,Cooper Rush pass complete to Mark Chapman for 3 yds to the CMich 21 for a 1ST down,false,false,0,0,0,0,0
+400869270102966603,400869270,1,40086927012,Pass Reception,17,10,1,false,false,false,0,0,0,0,0,0,79,2117,Cooper Rush pass complete to Jesse Kroll for 17 yds to the CMich 38 for a 1ST down,false,false,0,0,0,1,1
+400869270102966604,400869270,1,40086927012,Pass Reception,3,10,1,false,false,false,0,0,0,0,0,0,62,2117,Cooper Rush pass complete to Anthony Rice for 3 yds to the CMich 41,false,false,0,0,0,1,1
+400869270102966605,400869270,1,40086927012,Pass Reception,2,7,2,false,false,false,0,0,0,0,0,0,59,2117,Cooper Rush pass complete to Jesse Kroll for 2 yds to the CMich 43,false,false,0,0,0,0,0
+400869270102966606,400869270,1,40086927012,Pass Incompletion,0,5,3,false,false,false,0,0,0,0,0,0,57,2117,Cooper Rush pass incomplete to Corey Willis,false,false,0,0,0,0,0
+400869270102966607,400869270,1,40086927012,Punt,0,5,4,false,false,false,0,1,0,0,0,1,57,2117,"Cooper Mojsiejenko punt for 42 yds, downed at the OKSt 15",false,false,0,0,0,0,0
+400869270102994001,400869270,1,40086927013,Pass Incompletion,0,10,1,false,false,false,0,0,0,0,0,0,85,197,Mason Rudolph pass incomplete to James Washington,false,false,0,1,0,0,1
+400869270102994002,400869270,1,40086927013,Rush,12,10,2,false,false,false,0,0,0,0,0,0,85,197,Chris Carson run for 12 yds to the OKSt 27 for a 1ST down,false,false,0,0,0,0,0
+400869270102994003,400869270,1,40086927013,Pass Reception,3,10,1,false,false,false,0,0,0,0,0,0,73,197,Mason Rudolph pass complete to Chris Lacy for 3 yds to the OKSt 30,false,false,0,0,0,1,1
+400869270102994004,400869270,1,40086927013,Sack,-6,7,2,false,false,false,0,0,0,0,0,1,70,197,Mason Rudolph sacked by Joe Ostman for a loss of 6 yards to the OKSt 24,false,false,0,0,0,0,0
+400869270103849901,400869270,2,40086927014,Kickoff,0,10,1,false,false,false,1,0,0,0,0,0,65,2117,Matt Ammendola kickoff for 65 yds for a touchback,false,false,1,0,0,0,1
+400869270103849902,400869270,2,40086927014,Rush,17,10,1,false,false,false,0,0,0,0,0,0,75,2117,Devon Spalding run for 17 yds to the CMich 42 for a 1ST down,false,false,0,1,0,0,0
+400869270103849903,400869270,2,40086927014,Pass Incompletion,0,10,1,false,false,false,0,0,0,0,0,0,58,2117,"Cooper Rush pass incomplete to Tyler Conklin, broken up by Motekiai Maile",false,false,0,0,0,1,1
+400869270103849904,400869270,2,40086927014,Rush,1,10,2,false,false,false,0,0,0,0,0,0,58,2117,Devon Spalding run for 1 yd to the CMich 43,false,false,0,0,0,0,0
+400869270103849905,400869270,2,40086927014,Pass Incompletion,0,9,3,false,false,false,0,0,0,0,0,0,57,2117,Cooper Rush pass incomplete to Anthony Rice,false,false,0,0,0,0,0
+400869270103849906,400869270,2,40086927014,Punt,18,9,4,false,false,false,0,1,0,0,0,1,57,2117,"Cooper Mojsiejenko punt for 37 yds , Jalen McCleskey returns for 18 yds to the OKSt 38",false,false,0,0,0,0,0
+400869270103867802,400869270,2,40086927015,Rush,-1,10,1,false,false,false,0,0,0,0,0,0,62,197,Chris Carson run for a loss of 1 yard to the OKSt 37,false,false,0,1,0,0,1
+400869270103867803,400869270,2,40086927015,Pass Reception,6,11,2,false,false,false,0,0,0,0,0,0,63,197,Mason Rudolph pass complete to Jhajuan Seales for 6 yds to the OKSt 43,false,false,0,0,0,0,0
+400869270103867804,400869270,2,40086927015,Pass Incompletion,0,5,3,false,false,false,0,0,0,0,0,0,57,197,"Mason Rudolph pass incomplete to Jalen McCleskey, broken up by Winslow Chapman",false,false,0,0,0,0,0
+400869270103867805,400869270,2,40086927015,Punt,0,5,4,false,false,false,0,1,0,0,0,1,57,197,"Zach Sinor punt for 46 yds, downed at the CMich 11",false,false,0,0,0,0,0
+400869270103879901,400869270,2,40086927016,Pass Incompletion,0,10,1,false,false,false,0,0,0,0,0,0,89,2117,Cooper Rush pass incomplete,false,false,0,1,0,0,1
+400869270103879902,400869270,2,40086927016,Pass Reception,3,10,2,false,false,false,0,0,0,0,0,0,89,2117,Cooper Rush pass complete to Mark Chapman for 3 yds to the CMich 14,false,false,0,0,0,0,0
+400869270103879903,400869270,2,40086927016,Pass Reception,17,7,3,false,false,false,0,0,0,0,0,0,86,2117,Cooper Rush pass complete to Jonathan Ward for 17 yds to the CMich 31 for a 1ST down,false,false,0,0,0,0,0
+400869270103879904,400869270,2,40086927016,Rush,5,10,1,false,false,false,0,0,0,0,0,0,69,2117,Jonathan Ward run for 5 yds to the CMich 36,false,false,0,0,0,1,1
+400869270103879905,400869270,2,40086927016,Rush,0,5,2,false,false,false,0,0,0,0,0,0,64,2117,Jonathan Ward run for no gain to the CMich 36,false,false,0,0,0,0,0
+400869270103879906,400869270,2,40086927016,Pass Reception,22,5,3,false,false,false,0,0,0,0,0,0,64,2117,Cooper Rush pass complete to Tyler Conklin for 22 yds to the OKSt 42 for a 1ST down,false,false,0,0,0,0,0
+400869270103879907,400869270,2,40086927016,Sack,-9,10,1,false,false,false,0,0,0,0,0,0,42,2117,Cooper Rush sacked by DeQuinton Osborne for a loss of 9 yards to the CMich 49,false,false,0,0,0,1,1
+400869270103879908,400869270,2,40086927016,Pass Reception,5,19,2,false,false,false,0,0,0,0,0,0,51,2117,Cooper Rush pass complete to Zach Crouch for 5 yds to the OKSt 46,false,false,0,0,0,0,0
+400869270103879909,400869270,2,40086927016,Penalty,15,14,3,true,false,false,0,0,0,0,0,0,46,2117,"Rush, Cooper pass incomplete to Cooper, Eric (Lampkin, Ashton), PENALTY OSU personal foul (Carter, Trey) 15 yards to the OSU31, 1ST DOWN CMU, NO PLAY.",true,true,0,0,0,0,0
+400869270103879910,400869270,2,40086927016,Rush,19,10,1,false,false,false,0,0,0,0,0,0,31,2117,Cooper Rush run for 19 yds to the OKSt 12 for a 1ST down,false,false,0,0,1,0,1
+400869270103879911,400869270,2,40086927016,Rush,4,10,1,false,false,false,0,0,0,0,0,0,12,2117,Jahray Hayes run for 4 yds to the OKSt 8,false,false,0,0,0,1,1
+400869270103879912,400869270,2,40086927016,Rush,3,6,2,false,false,false,0,0,0,0,0,0,8,2117,Jahray Hayes run for 3 yds to the OKSt 5,false,false,0,0,0,0,0
+400869270103947701,400869270,2,40086927016,Timeout,0,3,3,false,false,false,0,0,0,0,0,0,5,2117,"Timeout CENTRAL MICH, clock 05:22",false,false,0,0,0,0,0
+400869270103948303,400869270,2,40086927016,Passing Touchdown,5,3,3,false,false,false,0,0,0,0,1,1,5,2117,Tyler Conklin 5 Yd pass from Cooper Rush (Brian Eavey Kick),false,false,0,0,0,0,0
+400869270103948304,400869270,2,40086927017,Kickoff,0,10,1,false,false,false,1,0,0,0,0,0,65,197,Brian Eavey kickoff for 65 yds for a touchback,false,false,1,0,0,0,1
+400869270103948305,400869270,2,40086927017,Rush,5,10,1,false,false,false,0,0,0,0,0,0,75,197,Justice Hill run for 5 yds to the OKSt 30,false,false,0,1,0,0,0
+400869270103948306,400869270,2,40086927017,Rush,17,5,2,false,false,false,0,0,0,0,0,0,70,197,Justice Hill run for 17 yds to the OKSt 47 for a 1ST down,false,false,0,0,0,0,0
+400869270103948307,400869270,2,40086927017,Pass Reception,8,10,1,false,false,false,0,0,0,0,0,0,53,197,Mason Rudolph pass complete to Jalen McCleskey for 8 yds to the CMich 45,false,false,0,0,0,1,1
+400869270103948308,400869270,2,40086927017,Pass Reception,28,2,2,false,false,false,0,0,0,0,0,0,45,197,Mason Rudolph pass complete to Jalen McCleskey for 28 yds to the CMich 17 for a 1ST down,false,false,0,0,0,0,0
+400869270103948309,400869270,2,40086927017,Pass Incompletion,0,10,1,false,false,false,0,0,0,0,0,0,17,197,"Mason Rudolph pass incomplete to James Washington, broken up by Amari Coleman",false,false,0,0,0,1,1
+400869270103948310,400869270,2,40086927017,Rush,-1,10,2,false,false,false,0,0,0,0,0,0,17,197,Chris Carson run for a loss of 1 yard to the CMich 18,false,false,0,0,0,0,0
+400869270103948311,400869270,2,40086927017,Pass Incompletion,0,11,3,false,false,false,0,0,0,0,0,0,18,197,Mason Rudolph pass incomplete to Jalen McCleskey,false,false,0,0,0,0,0
+400869270103974101,400869270,2,40086927017,Field Goal Good,35,11,4,false,false,false,0,0,0,0,1,1,18,197,Ben Grogan 35 yd FG GOOD,false,false,0,0,0,0,0
+400869270103974102,400869270,2,40086927018,Kickoff,0,10,1,false,false,false,1,0,0,0,0,0,65,2117,Matt Ammendola kickoff for 65 yds for a touchback,false,false,1,0,0,0,1
+400869270103974301,400869270,2,40086927018,Sack,-8,10,1,false,false,false,0,0,0,0,0,0,75,2117,Cooper Rush sacked by Jarrell Owens for a loss of 8 yards to the CMich 17,false,false,0,1,0,0,0
+400869270103974302,400869270,2,40086927018,Pass Reception,4,18,2,false,false,false,0,0,0,0,0,0,83,2117,Cooper Rush pass complete to Malik Fountain for 4 yds to the CMich 21,false,false,0,0,0,0,0
+400869270103974303,400869270,2,40086927018,Pass Reception,7,14,3,false,false,false,0,0,0,0,0,0,79,2117,Cooper Rush pass complete to Corey Willis for 7 yds to the CMich 28,false,false,0,0,0,0,0
+400869270103974304,400869270,2,40086927018,Punt,18,7,4,false,false,false,0,1,0,0,0,1,72,2117,"Cooper Mojsiejenko punt for 46 yds , Jalen McCleskey returns for 18 yds to the OKSt 44",false,false,0,0,0,0,0
+400869270103996401,400869270,2,40086927019,Rush,7,10,1,false,false,false,0,0,0,0,0,0,56,197,Mason Rudolph run for 7 yds to the CMich 49,false,false,0,1,0,0,1
+400869270103996402,400869270,2,40086927019,Pass Reception,7,3,2,false,false,false,0,0,0,0,0,0,49,197,Mason Rudolph pass complete to Jalen McCleskey for 7 yds to the CMich 42 for a 1ST down,false,false,0,0,0,0,0
+400869270104849901,400869270,2,40086927019,Pass Incompletion,0,10,1,false,false,false,0,0,0,0,0,0,42,197,"Mason Rudolph pass incomplete to James Washington, broken up by Nathan Ricketts",false,false,0,0,0,1,1
+400869270104849902,400869270,2,40086927019,Pass Incompletion,0,10,2,false,false,false,0,0,0,0,0,0,42,197,Mason Rudolph pass incomplete to Jalen McCleskey,false,false,0,0,0,0,0
+400869270104849903,400869270,2,40086927019,Pass Reception,1,10,3,false,false,false,0,0,0,0,0,0,42,197,Mason Rudolph pass complete to Barry Sanders for 1 yd to the CMich 41,false,false,0,0,0,0,0
+400869270104849904,400869270,2,40086927019,Punt,0,9,4,false,false,false,0,1,0,0,0,1,41,197,"Zach Sinor punt for 36 yds, downed at the CMich 5",false,false,0,0,0,0,0
+400869270104859901,400869270,2,40086927020,Rush,0,10,1,false,false,false,0,0,0,0,0,0,95,2117,Jahray Hayes run for no gain to the CMich 5,false,false,0,1,0,0,1
+400869270104859902,400869270,2,40086927020,Rush,7,10,2,false,false,false,0,0,0,0,0,0,95,2117,Jahray Hayes run for 7 yds to the CMich 12,false,false,0,0,0,0,0
+400869270104859903,400869270,2,40086927020,Pass Reception,5,3,3,false,false,false,0,0,0,0,0,0,88,2117,Cooper Rush pass complete to Tyler Conklin for 5 yds to the CMich 17 for a 1ST down,false,false,0,0,0,0,0
+400869270104859904,400869270,2,40086927020,Pass Reception,15,10,1,true,false,true,0,0,0,0,0,0,83,2117,"Cooper Rush pass complete to Tyler Conklin for 15 yds to the CMich 32 for a 1ST down OKLAHOMA ST Penalty, Defensive holding ( Yards) declined for a 1ST down",false,false,0,0,0,1,1
+400869270104859905,400869270,2,40086927020,Rush,0,10,1,false,false,false,0,0,0,0,0,0,68,2117,Jonathan Ward run for no gain to the CMich 32,false,false,0,0,0,1,1
+400869270104859906,400869270,2,40086927020,Rush,-3,10,2,false,false,false,0,0,0,0,0,0,68,2117,Devon Spalding run for a loss of 3 yards to the CMich 29,false,false,0,0,0,0,0
+400869270104897802,400869270,2,40086927020,Timeout,0,13,3,false,false,false,0,0,0,0,0,0,71,2117,"Timeout CENTRAL MICH, clock 10:21",false,false,0,0,0,0,0
+400869270104897803,400869270,2,40086927020,Pass Reception,40,13,3,false,false,false,0,0,0,0,0,0,71,2117,Cooper Rush pass complete to Mark Chapman for 40 yds to the OKSt 31 for a 1ST down,false,false,0,0,0,0,0
+400869270104905901,400869270,2,40086927020,Passing Touchdown,31,10,1,false,false,false,0,0,0,0,1,1,31,2117,"Cooper Rush pass complete to Devon Spalding for 31 yds for a TD, (Brian Eavey KICK)",false,false,0,0,0,1,1
+400869270104905903,400869270,2,40086927021,Kickoff,0,10,1,false,false,false,1,0,0,0,0,0,65,197,Brian Eavey kickoff for 65 yds for a touchback,false,false,1,0,0,0,1
+400869270104905904,400869270,2,40086927021,Pass Reception,17,10,1,false,false,false,0,0,0,0,0,0,75,197,Mason Rudolph pass complete to Jhajuan Seales for 17 yds to the OKSt 42 for a 1ST down,false,false,0,1,0,0,0
+400869270104905905,400869270,2,40086927021,Pass Reception,11,10,1,false,false,false,0,0,0,0,0,0,58,197,Mason Rudolph pass complete to Jhajuan Seales for 11 yds to the CMich 47 for a 1ST down,false,false,0,0,0,1,1
+400869270104905906,400869270,2,40086927021,Pass Reception,12,10,1,false,false,false,0,0,0,0,0,0,47,197,Mason Rudolph pass complete to Chris Carson for 12 yds to the CMich 35 for a 1ST down,false,false,0,0,0,1,1
+400869270104905907,400869270,2,40086927021,Pass Reception,10,10,1,false,false,false,0,0,0,0,0,0,35,197,Mason Rudolph pass complete to Jalen McCleskey for 10 yds to the CMich 25 for a 1ST down,false,false,0,0,0,1,1
+400869270104905908,400869270,2,40086927021,Rush,1,10,1,false,false,false,0,0,0,0,0,0,25,197,Justice Hill run for 1 yd to the CMich 24,false,false,0,0,0,1,1
+400869270104905909,400869270,2,40086927021,Sack,-7,9,2,false,false,false,0,0,0,0,0,0,24,197,Mason Rudolph sacked by Nate Brisson-Fast for a loss of 7 yards to the CMich 31,false,false,0,0,0,0,0
+400869270104905910,400869270,2,40086927021,Penalty,15,16,3,true,false,false,0,0,0,0,0,0,31,197,"Rudolph, Mason pass incomplete to Lacy, Chris, PENALTY CMU pass interference (Bunting, Sean) 15 yards to the CMU16, 1ST DOWN OSU, NO PLAY.",true,true,0,0,0,0,0
+400869270104905911,400869270,2,40086927021,Penalty,-5,10,1,false,false,false,0,0,0,0,0,0,16,197,"OKLAHOMA ST Penalty, false start (James Washington) to the CMich 21",true,false,0,0,1,0,1
+400869270104905912,400869270,2,40086927021,Pass Reception,7,15,1,false,false,false,0,0,0,0,0,0,21,197,Mason Rudolph pass complete to Chris Lacy for 7 yds to the CMich 14,false,false,0,0,0,0,0
+400869270104905913,400869270,2,40086927021,Pass Reception,9,8,2,false,false,false,0,0,0,0,0,0,14,197,Mason Rudolph pass complete to Chris Carson for 9 yds to the CMich 5 for a 1ST down,false,false,0,0,0,0,0
+400869270104905914,400869270,2,40086927021,Interception Return,0,5,1,false,false,false,0,0,0,1,0,1,5,197,"Mason Rudolph pass intercepted, touchback. Josh Cox return for no gain",false,false,0,0,0,1,1
+400869270104936601,400869270,2,40086927022,Fumble Recovery (Opponent),9,10,1,false,false,false,0,0,0,1,0,1,80,2117,"Devon Spalding run for no gain to the CMich 11 Devon Spalding fumbled, forced by Ashton Lampkin, recovered by OKSt Devante Averette  , return for 9 yds to the CMich 11",false,false,0,1,0,0,1
+400869270104937401,400869270,2,40086927023,Rush,5,10,1,false,false,false,0,0,0,0,0,0,11,197,Chris Carson run for 5 yds to the CMich 6,false,false,0,1,0,0,1
+400869270104937402,400869270,2,40086927023,Pass Incompletion,0,5,2,false,false,false,0,0,0,0,0,0,6,197,Mason Rudolph pass incomplete to James Washington,false,false,0,0,0,0,0
+400869270104937403,400869270,2,40086927023,Rush,4,5,3,false,false,false,0,0,0,0,0,0,6,197,Mason Rudolph run for 4 yds to the CMich 2,false,false,0,0,0,0,0
+400869270104948201,400869270,2,40086927023,Timeout,0,1,4,false,false,false,0,0,0,0,0,0,2,197,"Timeout OKLAHOMA ST, clock 05:17",false,false,0,0,0,0,0
+400869270104948701,400869270,2,40086927023,Passing Touchdown,2,1,4,false,false,false,0,0,0,0,1,1,2,197,"Dillon Stoner pass complete to James Washington for 2 yds for a TD, (Ben Grogan KICK)",false,false,0,0,0,0,0
+400869270104948703,400869270,2,40086927024,Kickoff Return (Offense),26,10,1,false,false,false,1,0,0,0,0,0,65,2117,"Matt Ammendola kickoff for 65 yds , Mark Chapman return for 26 yds to the CMich 26",false,false,1,0,0,0,1
+400869270104949501,400869270,2,40086927024,Pass Reception,7,10,1,false,false,false,0,0,0,0,0,0,74,2117,Cooper Rush pass complete to Joe Bacci for 7 yds to the CMich 33,false,false,0,1,0,0,0
+400869270104949502,400869270,2,40086927024,Rush,-2,3,2,false,false,false,0,0,0,0,0,0,67,2117,Devon Spalding run for a loss of 2 yards to the CMich 31,false,false,0,0,0,0,0
+400869270104949503,400869270,2,40086927024,Pass Reception,8,5,3,false,false,false,0,0,0,0,0,0,69,2117,Cooper Rush pass complete to Devon Spalding for 8 yds to the CMich 39 for a 1ST down,false,false,0,0,0,0,0
+400869270104949504,400869270,2,40086927024,Interception Return,-1,10,1,false,false,false,0,0,0,1,0,1,61,2117,Cooper Rush pass intercepted Ramon Richards return for a loss of 1 yard to the OKSt 45,false,false,0,0,0,1,1
+400869270104968901,400869270,2,40086927025,Rush,-1,10,1,false,false,false,0,0,0,0,0,0,55,197,Chris Carson run for a loss of 1 yard to the OKSt 44,false,false,0,1,0,0,1
+400869270104974301,400869270,2,40086927025,Timeout,0,11,2,false,false,false,0,0,0,0,0,0,56,197,"Timeout CENTRAL MICH, clock 02:56",false,false,0,0,0,0,0
+400869270104974302,400869270,2,40086927025,Pass Reception,18,11,2,false,false,false,0,0,0,0,0,0,56,197,Mason Rudolph pass complete to Chris Carson for 18 yds to the CMich 38 for a 1ST down,false,false,0,0,0,0,0
+400869270104974303,400869270,2,40086927025,Rush,1,10,1,false,false,false,0,0,0,0,0,0,38,197,Rennie Childs run for 1 yd to the CMich 37,false,false,0,0,0,1,1
+400869270104986601,400869270,2,40086927025,Timeout,0,9,2,false,false,false,0,0,0,0,0,0,37,197,"Timeout OKLAHOMA ST, clock 01:33",false,false,0,0,0,0,0
+400869270104986602,400869270,2,40086927025,Rush,-2,9,2,false,false,false,0,0,0,0,0,0,37,197,TEAM run for a loss of 2 yards to the CMich 39,false,false,0,0,0,0,0
+400869270104986603,400869270,2,40086927025,Rush,-2,11,3,false,false,false,0,0,0,0,0,0,39,197,Mason Rudolph run for a loss of 2 yards to the CMich 41,false,false,0,0,0,0,0
+400869270104999501,400869270,2,40086927025,Timeout,0,13,4,false,false,false,0,0,0,0,0,0,41,197,"Timeout OKLAHOMA ST, clock 00:04",false,false,0,0,0,0,0
+400869270104999502,400869270,2,40086927025,Pass Incompletion,-8,13,4,false,false,false,0,0,1,0,0,1,41,197,"Mason Rudolph pass incomplete OKLAHOMA ST Penalty, intentional grounding (Mason Rudolph) to the CMich 49",false,false,0,0,0,0,0
+400869270104999901,400869270,2,40086927026,Passing Touchdown,9,10,1,false,false,false,0,0,0,0,1,1,51,2117,Cooper Rush pass complete to Jesse Kroll for 42 yds lat. to Corey Willis for 9 yds for a TD (no attempt),false,false,0,1,0,0,1
