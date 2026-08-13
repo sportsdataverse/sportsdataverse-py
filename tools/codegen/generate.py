@@ -1119,10 +1119,11 @@ def _build_loader_docstring(ld: spec.Loader) -> str:
         # league-agnostic and must not assert NBA table names over a future
         # {season + N} loader in some other league.
         if ld.league == "nba":
-            lines.append("       Unshifted ``nba_stats`` siblings (``team_boxscores``,")
-            lines.append("       ``officials``, ``rosters``) stamp the START year for that same")
-            lines.append("       real season, so do not join on ``season`` across the two groups")
-            lines.append("       without normalizing first.")
+            lines.append("       Every ``nba_stats`` loader stamps the END year as of the")
+            lines.append("       2026-08-13 republish, so they agree with each other and with")
+            lines.append("       the ``nba`` (ESPN) schema. Football (``cfb``, ``nfl``) still")
+            lines.append("       names a season by its STARTING year, so normalize before")
+            lines.append("       joining on ``season`` across those.")
         else:
             lines.append("       Unshifted sibling loaders in this league stamp the START year")
             lines.append("       for that same real season, so do not join on ``season`` across")

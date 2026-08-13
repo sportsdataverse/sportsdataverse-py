@@ -878,7 +878,7 @@ loaders:
 - fn: load_nba_stats_coaches
   league: nba
   base: sdv_releases
-  url: nba_stats_coaches/coaches_{season}.parquet
+  url: nba_stats_coaches/coaches_{season + 1}.parquet
   tag: nba_stats_coaches
   min_season: 1996
   example_args:
@@ -886,7 +886,7 @@ loaders:
 - fn: load_nba_stats_game_rosters
   league: nba
   base: sdv_releases
-  url: nba_stats_game_rosters/game_rosters_{season}.parquet
+  url: nba_stats_game_rosters/game_rosters_{season + 1}.parquet
   tag: nba_stats_game_rosters
   min_season: 1996
   example_args:
@@ -894,7 +894,7 @@ loaders:
 - fn: load_nba_stats_lineups
   league: nba
   base: sdv_releases
-  url: nba_stats_lineups/lineups_{season}.parquet
+  url: nba_stats_lineups/lineups_{season + 1}.parquet
   tag: nba_stats_lineups
   min_season: 2007
   example_args:
@@ -911,7 +911,7 @@ loaders:
 - fn: load_nba_stats_officials
   league: nba
   base: sdv_releases
-  url: nba_stats_officials/officials_{season}.parquet
+  url: nba_stats_officials/officials_{season + 1}.parquet
   tag: nba_stats_officials
   min_season: 1996
   example_args:
@@ -952,7 +952,7 @@ loaders:
 - fn: load_nba_stats_player_boxscores
   league: nba
   base: sdv_releases
-  url: nba_stats_player_boxscores/player_boxscores_{season}.parquet
+  url: nba_stats_player_boxscores/player_boxscores_{season + 1}.parquet
   tag: nba_stats_player_boxscores
   min_season: 1996
   example_args:
@@ -960,7 +960,7 @@ loaders:
 - fn: load_nba_stats_player_game_logs
   league: nba
   base: sdv_releases
-  url: nba_stats_player_game_logs/player_game_logs_{season}.parquet
+  url: nba_stats_player_game_logs/player_game_logs_{season + 1}.parquet
   tag: nba_stats_player_game_logs
   min_season: 1996
   example_args:
@@ -968,7 +968,7 @@ loaders:
 - fn: load_nba_stats_player_season_stats
   league: nba
   base: sdv_releases
-  url: nba_stats_player_season_stats/player_season_stats_{season}.parquet
+  url: nba_stats_player_season_stats/player_season_stats_{season + 1}.parquet
   tag: nba_stats_player_season_stats
   min_season: 1996
   example_args:
@@ -985,7 +985,7 @@ loaders:
 - fn: load_nba_stats_rosters
   league: nba
   base: sdv_releases
-  url: nba_stats_rosters/rosters_{season}.parquet
+  url: nba_stats_rosters/rosters_{season + 1}.parquet
   tag: nba_stats_rosters
   min_season: 1996
   example_args:
@@ -993,7 +993,7 @@ loaders:
 - fn: load_nba_stats_shots
   league: nba
   base: sdv_releases
-  url: nba_stats_shots/shots_{season}.parquet
+  url: nba_stats_shots/shots_{season + 1}.parquet
   tag: nba_stats_shots
   min_season: 1996
   example_args:
@@ -1001,7 +1001,7 @@ loaders:
 - fn: load_nba_stats_standings
   league: nba
   base: sdv_releases
-  url: nba_stats_standings/standings_{season}.parquet
+  url: nba_stats_standings/standings_{season + 1}.parquet
   tag: nba_stats_standings
   min_season: 1996
   example_args:
@@ -1009,7 +1009,7 @@ loaders:
 - fn: load_nba_stats_team_boxscores
   league: nba
   base: sdv_releases
-  url: nba_stats_team_boxscores/team_boxscores_{season}.parquet
+  url: nba_stats_team_boxscores/team_boxscores_{season + 1}.parquet
   tag: nba_stats_team_boxscores
   min_season: 1996
   example_args:
@@ -1017,7 +1017,7 @@ loaders:
 - fn: load_nba_stats_team_season_stats
   league: nba
   base: sdv_releases
-  url: nba_stats_team_season_stats/team_season_stats_{season}.parquet
+  url: nba_stats_team_season_stats/team_season_stats_{season + 1}.parquet
   tag: nba_stats_team_season_stats
   min_season: 1996
   example_args:
