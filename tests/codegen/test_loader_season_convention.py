@@ -97,7 +97,14 @@ def test_only_nba_stats_families_carry_the_end_year_offset():
     8 wnba urls by accident, because ``wnba_stats_`` contains ``nba_stats_``.
     Asserting the exact set, rather than "all nba_stats", is what catches it.
     """
-    offset = {ld.fn for ld in spec.load_releases(REL).loaders if (m := spec.SEASON_TOKEN.search(ld.url)) and m.group(1)}
+    # `== "1"`, not truthiness: SEASON_TOKEN captures the N in `{season + N}`, so
+    # a bare truth test would accept `{season + 2}` as satisfying the END-year
+    # contract. The contract is exactly one year.
+    offset = {
+        ld.fn
+        for ld in spec.load_releases(REL).loaders
+        if (m := spec.SEASON_TOKEN.search(ld.url)) and m.group(1) == "1"
+    }
     assert offset == {
         "load_nba_stats_schedules",
         "load_nba_stats_pbp",

@@ -1013,9 +1013,9 @@ def load_nba_stats_schedules(seasons, return_as_pandas: bool = False):
 
     Args:
         seasons: an int or iterable of seasons (>= 1996).
-            Pass the season's START year (e.g. ``1996`` for the 1996-97
-            season); the published asset is keyed by the END year and the
-            loader translates internally.
+            Pass the season's START year (e.g. ``1996`` for the
+            1996-97 season); the published asset is keyed by the
+            END year and the loader translates internally.
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -1084,9 +1084,9 @@ def load_nba_stats_coaches(seasons, return_as_pandas: bool = False):
 
     Args:
         seasons: an int or iterable of seasons (>= 1996).
-            Pass the season's START year (e.g. ``1996`` for the 1996-97
-            season); the published asset is keyed by the END year and the
-            loader translates internally.
+            Pass the season's START year (e.g. ``1996`` for the
+            1996-97 season); the published asset is keyed by the
+            END year and the loader translates internally.
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -1151,9 +1151,9 @@ def load_nba_stats_game_rosters(seasons, return_as_pandas: bool = False):
 
     Args:
         seasons: an int or iterable of seasons (>= 1996).
-            Pass the season's START year (e.g. ``1996`` for the 1996-97
-            season); the published asset is keyed by the END year and the
-            loader translates internally.
+            Pass the season's START year (e.g. ``1996`` for the
+            1996-97 season); the published asset is keyed by the
+            END year and the loader translates internally.
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -1217,9 +1217,9 @@ def load_nba_stats_lineups(seasons, return_as_pandas: bool = False):
 
     Args:
         seasons: an int or iterable of seasons (>= 2007).
-            Pass the season's START year (e.g. ``1996`` for the 1996-97
-            season); the published asset is keyed by the END year and the
-            loader translates internally.
+            Pass the season's START year (e.g. ``2007`` for the
+            2007-08 season); the published asset is keyed by the
+            END year and the loader translates internally.
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -1460,9 +1460,9 @@ def load_nba_stats_lineups_v3(seasons, return_as_pandas: bool = False):
 
     Args:
         seasons: an int or iterable of seasons (>= 1996).
-            Pass the season's START year (e.g. ``1996`` for the 1996-97
-            season); the published asset is keyed by the END year and the
-            loader translates internally.
+            Pass the season's START year (e.g. ``1996`` for the
+            1996-97 season); the published asset is keyed by the
+            END year and the loader translates internally.
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -1522,9 +1522,9 @@ def load_nba_stats_officials(seasons, return_as_pandas: bool = False):
 
     Args:
         seasons: an int or iterable of seasons (>= 1996).
-            Pass the season's START year (e.g. ``1996`` for the 1996-97
-            season); the published asset is keyed by the END year and the
-            loader translates internally.
+            Pass the season's START year (e.g. ``1996`` for the
+            1996-97 season); the published asset is keyed by the
+            END year and the loader translates internally.
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -1584,9 +1584,9 @@ def load_nba_stats_pbp(seasons, return_as_pandas: bool = False):
 
     Args:
         seasons: an int or iterable of seasons (>= 1996).
-            Pass the season's START year (e.g. ``1996`` for the 1996-97
-            season); the published asset is keyed by the END year and the
-            loader translates internally.
+            Pass the season's START year (e.g. ``1996`` for the
+            1996-97 season); the published asset is keyed by the
+            END year and the loader translates internally.
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -1689,9 +1689,9 @@ def load_nba_stats_possessions(seasons, return_as_pandas: bool = False):
 
     Args:
         seasons: an int or iterable of seasons (>= 1996).
-            Pass the season's START year (e.g. ``1996`` for the 1996-97
-            season); the published asset is keyed by the END year and the
-            loader translates internally.
+            Pass the season's START year (e.g. ``1996`` for the
+            1996-97 season); the published asset is keyed by the
+            END year and the loader translates internally.
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -1780,9 +1780,9 @@ def load_nba_stats_game_lineups(seasons, return_as_pandas: bool = False):
 
     Args:
         seasons: an int or iterable of seasons (>= 1996).
-            Pass the season's START year (e.g. ``1996`` for the 1996-97
-            season); the published asset is keyed by the END year and the
-            loader translates internally.
+            Pass the season's START year (e.g. ``1996`` for the
+            1996-97 season); the published asset is keyed by the
+            END year and the loader translates internally.
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -1855,9 +1855,9 @@ def load_nba_stats_pbp_v3(seasons, return_as_pandas: bool = False):
 
     Args:
         seasons: an int or iterable of seasons (>= 1996).
-            Pass the season's START year (e.g. ``1996`` for the 1996-97
-            season); the published asset is keyed by the END year and the
-            loader translates internally.
+            Pass the season's START year (e.g. ``1996`` for the
+            1996-97 season); the published asset is keyed by the
+            END year and the loader translates internally.
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -1952,9 +1952,9 @@ def load_nba_stats_player_boxscores(seasons, return_as_pandas: bool = False):
 
     Args:
         seasons: an int or iterable of seasons (>= 1996).
-            Pass the season's START year (e.g. ``1996`` for the 1996-97
-            season); the published asset is keyed by the END year and the
-            loader translates internally.
+            Pass the season's START year (e.g. ``1996`` for the
+            1996-97 season); the published asset is keyed by the
+            END year and the loader translates internally.
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -2042,9 +2042,9 @@ def load_nba_stats_player_game_logs(seasons, return_as_pandas: bool = False):
 
     Args:
         seasons: an int or iterable of seasons (>= 1996).
-            Pass the season's START year (e.g. ``1996`` for the 1996-97
-            season); the published asset is keyed by the END year and the
-            loader translates internally.
+            Pass the season's START year (e.g. ``1996`` for the
+            1996-97 season); the published asset is keyed by the
+            END year and the loader translates internally.
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -2129,9 +2129,9 @@ def load_nba_stats_player_season_stats(seasons, return_as_pandas: bool = False):
 
     Args:
         seasons: an int or iterable of seasons (>= 1996).
-            Pass the season's START year (e.g. ``1996`` for the 1996-97
-            season); the published asset is keyed by the END year and the
-            loader translates internally.
+            Pass the season's START year (e.g. ``1996`` for the
+            1996-97 season); the published asset is keyed by the
+            END year and the loader translates internally.
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -2402,9 +2402,9 @@ def load_nba_stats_possessions_v3(seasons, return_as_pandas: bool = False):
 
     Args:
         seasons: an int or iterable of seasons (>= 1996).
-            Pass the season's START year (e.g. ``1996`` for the 1996-97
-            season); the published asset is keyed by the END year and the
-            loader translates internally.
+            Pass the season's START year (e.g. ``1996`` for the
+            1996-97 season); the published asset is keyed by the
+            END year and the loader translates internally.
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -2485,9 +2485,9 @@ def load_nba_stats_rosters(seasons, return_as_pandas: bool = False):
 
     Args:
         seasons: an int or iterable of seasons (>= 1996).
-            Pass the season's START year (e.g. ``1996`` for the 1996-97
-            season); the published asset is keyed by the END year and the
-            loader translates internally.
+            Pass the season's START year (e.g. ``1996`` for the
+            1996-97 season); the published asset is keyed by the
+            END year and the loader translates internally.
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -2558,9 +2558,9 @@ def load_nba_stats_shots(seasons, return_as_pandas: bool = False):
 
     Args:
         seasons: an int or iterable of seasons (>= 1996).
-            Pass the season's START year (e.g. ``1996`` for the 1996-97
-            season); the published asset is keyed by the END year and the
-            loader translates internally.
+            Pass the season's START year (e.g. ``1996`` for the
+            1996-97 season); the published asset is keyed by the
+            END year and the loader translates internally.
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -2632,9 +2632,9 @@ def load_nba_stats_standings(seasons, return_as_pandas: bool = False):
 
     Args:
         seasons: an int or iterable of seasons (>= 1996).
-            Pass the season's START year (e.g. ``1996`` for the 1996-97
-            season); the published asset is keyed by the END year and the
-            loader translates internally.
+            Pass the season's START year (e.g. ``1996`` for the
+            1996-97 season); the published asset is keyed by the
+            END year and the loader translates internally.
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -2782,9 +2782,9 @@ def load_nba_stats_team_boxscores(seasons, return_as_pandas: bool = False):
 
     Args:
         seasons: an int or iterable of seasons (>= 1996).
-            Pass the season's START year (e.g. ``1996`` for the 1996-97
-            season); the published asset is keyed by the END year and the
-            loader translates internally.
+            Pass the season's START year (e.g. ``1996`` for the
+            1996-97 season); the published asset is keyed by the
+            END year and the loader translates internally.
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -2864,9 +2864,9 @@ def load_nba_stats_team_season_stats(seasons, return_as_pandas: bool = False):
 
     Args:
         seasons: an int or iterable of seasons (>= 1996).
-            Pass the season's START year (e.g. ``1996`` for the 1996-97
-            season); the published asset is keyed by the END year and the
-            loader translates internally.
+            Pass the season's START year (e.g. ``1996`` for the
+            1996-97 season); the published asset is keyed by the
+            END year and the loader translates internally.
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:

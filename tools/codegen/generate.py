@@ -1094,9 +1094,13 @@ def _build_loader_docstring(ld: spec.Loader) -> str:
     # asset path it describes.
     token = spec.SEASON_TOKEN.search(ld.url)
     if token and token.group(1):
-        lines.append("        Pass the season's START year (e.g. ``1996`` for the 1996-97")
-        lines.append("        season); the published asset is keyed by the END year and the")
-        lines.append("        loader translates internally.")
+        # Example year comes from the loader's own floor, not a hard-coded 1996:
+        # load_nba_stats_lineups starts at 2007 and RAISES SeasonNotFoundError
+        # below it, so a fixed example told users to make a call that errors.
+        ex = ld.min_season or 1996
+        lines.append(f"        Pass the season's START year (e.g. ``{ex}`` for the")
+        lines.append(f"        {ex}-{str(ex + 1)[-2:]} season); the published asset is keyed by the")
+        lines.append("        END year and the loader translates internally.")
     lines.append("    return_as_pandas: return a pandas DataFrame instead of polars.")
     lines.append("")
     lines.append("Returns:")
