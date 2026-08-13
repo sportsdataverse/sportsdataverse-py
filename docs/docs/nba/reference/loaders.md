@@ -30,16 +30,16 @@ flowchart LR
 | `load_nba_stats_coaches` | [nba_stats_coaches](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_coaches) | — |
 | `load_nba_stats_game_rosters` | [nba_stats_game_rosters](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_game_rosters) | — |
 | `load_nba_stats_lineups` | [nba_stats_lineups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_lineups) | — |
-| `load_nba_stats_lineups_v3` | [nba_stats_lineups_v3](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_lineups_v3) | — |
+| `load_nba_stats_lineups_v3` | [nba_stats_game_lineups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_game_lineups) | — |
 | `load_nba_stats_officials` | [nba_stats_officials](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_officials) | — |
 | `load_nba_stats_pbp` | [nba_stats_pbp](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_pbp) | — |
 | `load_nba_stats_possessions` | [nba_stats_possessions](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_possessions) | — |
 | `load_nba_stats_game_lineups` | [nba_stats_game_lineups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_game_lineups) | — |
-| `load_nba_stats_pbp_v3` | [nba_stats_pbpv3](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_pbpv3) | — |
+| `load_nba_stats_pbp_v3` | [nba_stats_pbp](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_pbp) | — |
 | `load_nba_stats_player_boxscores` | [nba_stats_player_boxscores](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_player_boxscores) | — |
 | `load_nba_stats_player_game_logs` | [nba_stats_player_game_logs](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_player_game_logs) | — |
 | `load_nba_stats_player_season_stats` | [nba_stats_player_season_stats](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_player_season_stats) | — |
-| `load_nba_stats_possessions_v3` | [nba_stats_possessions_v3](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_possessions_v3) | — |
+| `load_nba_stats_possessions_v3` | [nba_stats_possessions](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_possessions) | — |
 | `load_nba_stats_rosters` | [nba_stats_rosters](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_rosters) | — |
 | `load_nba_stats_shots` | [nba_stats_shots](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_shots) | — |
 | `load_nba_stats_standings` | [nba_stats_standings](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_standings) | — |
@@ -898,7 +898,7 @@ load_nba_stats_lineups(seasons=2025)
 
 ## `load_nba_stats_lineups_v3`
 
-Release: [nba_stats_lineups_v3](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_lineups_v3) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_lineups_v3/nba_lineups_v3_{season}.parquet`
+Release: [nba_stats_game_lineups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_game_lineups) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_game_lineups/nba_lineups_{season + 1}.parquet`
 ### Returns
 
 | col_name | type | description |
@@ -916,6 +916,7 @@ Release: [nba_stats_lineups_v3](https://github.com/sportsdataverse/sportsdataver
 | `away_player_3` | Int64 |  |
 | `away_player_4` | Int64 |  |
 | `away_player_5` | Int64 |  |
+| `season` | Int64 | Season year. |
 
 ```python
 load_nba_stats_lineups_v3(seasons=2025)
@@ -1075,7 +1076,7 @@ load_nba_stats_game_lineups(seasons=2025)
 
 ## `load_nba_stats_pbp_v3`
 
-Release: [nba_stats_pbpv3](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_pbpv3) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_pbpv3/play_by_play_v3_{season}.parquet`
+Release: [nba_stats_pbp](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_pbp) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_pbp/nba_play_by_play_{season + 1}.parquet`
 ### Returns
 
 | col_name | type | description |
@@ -1128,6 +1129,7 @@ Release: [nba_stats_pbpv3](https://github.com/sportsdataverse/sportsdataverse-da
 | `def_player_3` | Int64 |  |
 | `def_player_4` | Int64 |  |
 | `def_player_5` | Int64 |  |
+| `season` | Int64 | Season year. |
 
 ```python
 load_nba_stats_pbp_v3(seasons=2025)
@@ -1446,7 +1448,7 @@ load_nba_stats_player_season_stats(seasons=2025)
 
 ## `load_nba_stats_possessions_v3`
 
-Release: [nba_stats_possessions_v3](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_possessions_v3) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_possessions_v3/nba_possessions_v3_{season}.parquet`
+Release: [nba_stats_possessions](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_possessions) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_possessions/nba_possessions_{season + 1}.parquet`
 ### Returns
 
 | col_name | type | description |
@@ -1485,6 +1487,7 @@ Release: [nba_stats_possessions_v3](https://github.com/sportsdataverse/sportsdat
 | `def_player_4` | Int64 |  |
 | `def_player_5` | Int64 |  |
 | `lineup_source` | String |  |
+| `season` | Int64 | Season year. |
 
 ```python
 load_nba_stats_possessions_v3(seasons=2025)

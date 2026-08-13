@@ -39,6 +39,20 @@ CASES = [
     ("load_wnba_stats_possessions", "wnba", 2025, "wnba_possessions_2025.parquet"),
     ("load_wnba_stats_game_lineups", "wnba", 1997, "wnba_lineups_1997.parquet"),
     ("load_wnba_stats_game_lineups", "wnba", 2025, "wnba_lineups_2025.parquet"),
+    # Retired-tag shims. These used to read START-year-keyed ``*_v3_{season}``
+    # assets off their own tags; they now forward to the production loaders. The
+    # public ``seasons`` argument was START-year before and must stay START-year,
+    # so 2025 has to keep meaning 2025-26 -- i.e. the SAME asset the target picks.
+    ("load_nba_stats_pbp_v3", "nba", 2025, "nba_play_by_play_2026.parquet"),
+    ("load_nba_stats_possessions_v3", "nba", 2025, "nba_possessions_2026.parquet"),
+    ("load_nba_stats_lineups_v3", "nba", 2025, "nba_lineups_2026.parquet"),
+]
+
+# Deprecated shim -> the loader it forwards to.
+SHIMS = [
+    ("load_nba_stats_pbp_v3", "load_nba_stats_pbp"),
+    ("load_nba_stats_possessions_v3", "load_nba_stats_possessions"),
+    ("load_nba_stats_lineups_v3", "load_nba_stats_game_lineups"),
 ]
 
 
@@ -82,4 +96,67 @@ def test_only_nba_stats_families_carry_the_end_year_offset():
         "load_nba_stats_pbp",
         "load_nba_stats_possessions",
         "load_nba_stats_game_lineups",
+        # The retired-tag shims inherit their target's END-year asset path.
+        "load_nba_stats_pbp_v3",
+        "load_nba_stats_possessions_v3",
+        "load_nba_stats_lineups_v3",
     }
+
+
+@pytest.mark.parametrize(("shim", "target"), SHIMS)
+def test_shim_is_a_pure_pass_through(shim, target):
+    """The shim must not apply its own year arithmetic.
+
+    Both sides take the START year, so the shim forwards ``seasons`` untouched.
+    Adding an offset at this boundary would double-count the ``{season + 1}``
+    already in the target's asset path and shift every caller by a year.
+    """
+    for season in (1996, 2010, 2025):
+        assert _requested_url(shim, "nba", season) == _requested_url(target, "nba", season)
+
+
+@pytest.mark.parametrize(("shim", "target"), SHIMS)
+def test_shim_warns_and_names_its_replacement(shim, target):
+    import importlib
+
+    mod = importlib.import_module("sportsdataverse.nba.nba_loaders")
+    with patch.object(mod.pl, "read_parquet", side_effect=FileNotFoundError("404")):
+        with pytest.warns(DeprecationWarning, match=target):
+            getattr(mod, shim)(seasons=2025)
+
+
+def test_shifted_loaders_document_the_season_column_divergence():
+    """A ``{season + N}`` loader whose frame has a ``season`` column MUST say so.
+
+    The asset is END-year keyed and the frame carries the asset's own stamp, so
+    ``load_nba_stats_pbp(seasons=2024)`` returns rows reading ``season == 2025``
+    while unshifted siblings read ``2024`` for that same real season. Silence
+    here reads as "season means the same thing everywhere", which is false --
+    and downstream partitioners key off this column, so the wrong reading
+    overwrites the neighbouring season rather than duplicating it.
+    """
+    import importlib
+
+    import yaml
+
+    schemas = yaml.safe_load((ROOT / "tools" / "codegen" / "schemas" / "loader_schemas.yaml").read_text("utf-8"))
+    offenders = []
+    for ld in spec.load_releases(REL).loaders:
+        m = spec.SEASON_TOKEN.search(ld.url)
+        if not (m and m.group(1)):
+            continue
+        if not any(c["name"] == "season" for c in schemas.get(ld.fn) or []):
+            continue
+        mod = importlib.import_module(f"sportsdataverse.{ld.league}.{ld.league}_loaders")
+        doc = getattr(mod, ld.fn).__doc__ or ""
+        if "COLUMN carries the END year" not in doc:
+            offenders.append(ld.fn)
+    assert not offenders, f"shifted loaders missing the season-column warning: {offenders}"
+
+
+def test_retired_v3_tags_are_unreferenced():
+    """No loader may still point at a retired ``*_v3`` release tag."""
+    retired = {"nba_stats_pbpv3", "nba_stats_possessions_v3", "nba_stats_lineups_v3"}
+    for ld in spec.load_releases(REL).loaders:
+        assert ld.tag not in retired, f"{ld.fn} still reads retired tag {ld.tag}"
+        assert not any(t in ld.url for t in retired), f"{ld.fn} url still reads a retired tag: {ld.url}"

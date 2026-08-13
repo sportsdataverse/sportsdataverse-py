@@ -13,6 +13,7 @@ from sportsdataverse._codegen_runtime import (
     _read_release_parquet,
     cli_warn,
 )
+from sportsdataverse._deprecation import warn_deprecated  # noqa: F401  (used only by deprecated_for shims)
 
 __all__ = [
     "load_mlb_re24_matrix",

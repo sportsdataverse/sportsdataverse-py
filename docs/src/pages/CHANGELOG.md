@@ -3,6 +3,8 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [Unreleased](#unreleased)
+  - [Deprecated — the three NBA `*_v3` loaders now read the production releases](#deprecated--the-three-nba-_v3-loaders-now-read-the-production-releases)
+  - [Docs — NBA shifted loaders: the `season` COLUMN is the END year](#docs--nba-shifted-loaders-the-season-column-is-the-end-year)
   - [New — `sportsdataverse.wexp`: win-expectancy bake-off harness (NFL + CFB)](#new--sportsdataversewexp-win-expectancy-bake-off-harness-nfl--cfb)
   - [New — `load_nfl_ratings_weekly`: per-week as-of NFL ratings vintages](#new--load_nfl_ratings_weekly-per-week-as-of-nfl-ratings-vintages)
   - [New — `sportsdataverse.scrape.espn`: shared ESPN `-raw` archive engine](#new--sportsdataversescrapeespn-shared-espn--raw-archive-engine)
@@ -230,6 +232,54 @@
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Unreleased
+
+### Deprecated — the three NBA `*_v3` loaders now read the production releases
+
+`load_nba_stats_pbp_v3`, `load_nba_stats_possessions_v3` and
+`load_nba_stats_lineups_v3` read one-asset, season-2025-only release tags
+(`nba_stats_pbpv3`, `nba_stats_possessions_v3`, `nba_stats_lineups_v3`) that are
+being retired. Those assets were built before the 2025-26 Finals ended and are
+missing six games (`0042500317`, `0042500401`–`0405`).
+
+The Program V pipeline now admits every game type (preseason `001`, regular
+`002`, All-Star `003`, playoffs `004`, play-in `005`, NBA Cup `006`) across all
+30 seasons, so the production tags carry a **strict superset** — verified live
+for the overlapping season: 707,440 rows / 1,400 games vs 704,314 / 1,394, with
+zero games lost, zero games short a row, and no column dropped (production adds
+`season`).
+
+All three keep working and are now **`DeprecationWarning` shims** (removal in
+`0.1.0`) forwarding to their production successors:
+
+| Deprecated | Use instead | Release now read |
+|---|---|---|
+| `load_nba_stats_pbp_v3` | `load_nba_stats_pbp` | `nba_stats_pbp` |
+| `load_nba_stats_possessions_v3` | `load_nba_stats_possessions` | `nba_stats_possessions` |
+| `load_nba_stats_lineups_v3` | `load_nba_stats_game_lineups` | `nba_stats_game_lineups` |
+
+**The `seasons` argument is unchanged.** It was the season's START year before
+and still is: `load_nba_stats_pbp_v3(seasons=2025)` meant 2025-26 when it read
+`play_by_play_v3_2025.parquet` and still means 2025-26 now that it reads
+`nba_play_by_play_2026.parquet`. The retired assets were START-year keyed and the
+production assets are END-year keyed; that translation lives in the loader's
+`{season + 1}` asset-path template, so the shims forward `seasons` untouched.
+
+### Docs — NBA shifted loaders: the `season` COLUMN is the END year
+
+The four NBA loaders whose asset path carries `{season + 1}`
+(`load_nba_stats_schedules`, `load_nba_stats_pbp`, `load_nba_stats_possessions`,
+`load_nba_stats_game_lineups`) return frames stamped with the **asset's** year,
+so the `season` column does not equal the `seasons` argument:
+`load_nba_stats_schedules(seasons=2024)` returns rows reading `season == 2025`.
+Unshifted NBA siblings (`team_boxscores`, `officials`, `rosters`) stamp `2024`
+for that same real season.
+
+This was undocumented and is load-bearing — a partitioner keying off the column
+writes the 2024-25 season over the 2025-26 partition. The divergence is now
+documented in all four docstrings (and the three shims that inherit it), with a
+codegen test that fails if a future shifted loader ships silent. The column is
+**documented, not restamped**: it is the published asset's own identity, and
+rewriting it would make the frame disagree with the file it came from.
 
 ### New — `sportsdataverse.wexp`: win-expectancy bake-off harness (NFL + CFB)
 

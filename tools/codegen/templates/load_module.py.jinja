@@ -12,6 +12,7 @@ from sportsdataverse._codegen_runtime import (
     _read_release_parquet,
     cli_warn,
 )
+from sportsdataverse._deprecation import warn_deprecated  # noqa: F401  (used only by deprecated_for shims)
 
 __all__ = [
 {% for ld in loaders %}
@@ -25,6 +26,16 @@ def {{ ld.fn }}(seasons, return_as_pandas: bool = False):
 {{ ld.docstring }}
 {% if ld.stub %}
     raise NotImplementedError({{ ld.stub_message|py_repr }})
+{% elif ld.deprecated_for %}
+    warn_deprecated(
+        {{ ld.fn|py_repr }},
+        replacement={{ ld.deprecated_for|py_repr }},
+        removed_in={{ ld.removed_in|py_repr }},
+    )
+    # Pure pass-through: both loaders take the season's START year, so no offset
+    # is applied here. The START -> END year translation lives in the target's
+    # own asset-path template ({season + N}), not at this boundary.
+    return {{ ld.deprecated_for }}(seasons, return_as_pandas=return_as_pandas)
 {% else %}
     frames, missing = [], []
     for season in _as_season_list(seasons):

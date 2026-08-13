@@ -1065,6 +1065,12 @@ def _loader_schemas() -> dict:
     return schemas
 
 
+# Release named in every generated loader deprecation. Per sportsdataverse
+# ._deprecation policy a deprecated API survives >= 2 minor releases, so this
+# stays 0.1.0 until the removals actually land.
+LOADER_DEPRECATION_REMOVED_IN = "0.1.0"
+
+
 def _build_loader_docstring(ld: spec.Loader) -> str:
     """4-space-indented docstring block for a generated dataset loader.
 
@@ -1072,6 +1078,13 @@ def _build_loader_docstring(ld: spec.Loader) -> str:
     schema was introspected for ``ld.fn``, so the generated docstrings carry the
     same column documentation the hand-written loaders lacked."""
     lines = [f'"""Load {ld.tag} (sportsdataverse-data release).', ""]
+    if ld.deprecated_for:
+        lines[0] = f'"""Deprecated alias for ``{ld.deprecated_for}``.'
+        lines.append(f"Forwards to :func:`{ld.deprecated_for}`, which reads the ``{ld.tag}``")
+        lines.append("release -- a superset of the retired tag this loader used to read.")
+        lines.append(f"Will be removed in {LOADER_DEPRECATION_REMOVED_IN}; migrate callers to")
+        lines.append(f"``{ld.deprecated_for}``. The ``seasons`` argument is unchanged.")
+        lines.append("")
     lines.append(f"Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/{ld.tag}")
     lines.append("")
     lines.append("Args:")
@@ -1089,6 +1102,21 @@ def _build_loader_docstring(ld: spec.Loader) -> str:
     lines.append("Returns:")
     lines.append("    A polars (or pandas) DataFrame; seasons with no published asset are")
     lines.append("    skipped with a warning rather than raising (404-safe).")
+    # Same token, same reason as the Args note: when the asset year is shifted, the
+    # frame carries the ASSET's stamp, so the `season` column does NOT equal the
+    # `seasons` argument. Documented rather than restamped -- rewriting the column
+    # would make the frame disagree with the file it was read from, and downstream
+    # partitioners key off this value.
+    if token and token.group(1) and any(c["name"] == "season" for c in _loader_schemas().get(ld.fn) or []):
+        off = int(token.group(1))
+        lines.append("")
+        lines.append("    .. warning:: The ``season`` COLUMN carries the END year -- it is the")
+        lines.append("       published asset's own stamp and is **not** the ``seasons`` argument")
+        lines.append(f"       you passed. ``{ld.fn}(seasons=2024)`` returns rows whose")
+        lines.append(f"       ``season`` reads ``{2024 + off}`` (the 2024-25 season). Unshifted NBA")
+        lines.append("       siblings (team_boxscores, officials, rosters) stamp the START year")
+        lines.append("       for that same real season, so do not join on ``season`` across the")
+        lines.append("       two groups without normalizing first.")
     cols = _loader_schemas().get(ld.fn) or []
     if cols:
         width = max([len("col_name")] + [len(c["name"]) for c in cols])
@@ -1121,6 +1149,8 @@ class _LoaderView:
         self.example_args = ld.example_args
         self.stub = ld.stub
         self.stub_message = ld.stub_message
+        self.deprecated_for = ld.deprecated_for
+        self.removed_in = LOADER_DEPRECATION_REMOVED_IN
         self.abs_url = "" if ld.stub else f"{bases[ld.base]}{ld.url}"
         self.docstring = _build_loader_docstring(ld)
         self.id_int64 = ld.id_int64

@@ -902,9 +902,10 @@ loaders:
 - fn: load_nba_stats_lineups_v3
   league: nba
   base: sdv_releases
-  url: nba_stats_lineups_v3/nba_lineups_v3_{season}.parquet
-  tag: nba_stats_lineups_v3
-  min_season: 2025
+  url: nba_stats_game_lineups/nba_lineups_{season + 1}.parquet
+  tag: nba_stats_game_lineups
+  deprecated_for: load_nba_stats_game_lineups
+  min_season: 1996
   example_args:
     seasons: 2025
 - fn: load_nba_stats_officials
@@ -942,9 +943,10 @@ loaders:
 - fn: load_nba_stats_pbp_v3
   league: nba
   base: sdv_releases
-  url: nba_stats_pbpv3/play_by_play_v3_{season}.parquet
-  tag: nba_stats_pbpv3
-  min_season: 2025
+  url: nba_stats_pbp/nba_play_by_play_{season + 1}.parquet
+  tag: nba_stats_pbp
+  deprecated_for: load_nba_stats_pbp
+  min_season: 1996
   example_args:
     seasons: 2025
 - fn: load_nba_stats_player_boxscores
@@ -974,9 +976,10 @@ loaders:
 - fn: load_nba_stats_possessions_v3
   league: nba
   base: sdv_releases
-  url: nba_stats_possessions_v3/nba_possessions_v3_{season}.parquet
-  tag: nba_stats_possessions_v3
-  min_season: 2025
+  url: nba_stats_possessions/nba_possessions_{season + 1}.parquet
+  tag: nba_stats_possessions
+  deprecated_for: load_nba_stats_possessions
+  min_season: 1996
   example_args:
     seasons: 2025
 - fn: load_nba_stats_rosters
