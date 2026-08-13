@@ -13,7 +13,7 @@ from sportsdataverse._codegen_runtime import (
     _read_release_parquet,
     cli_warn,
 )
-from sportsdataverse._deprecation import warn_deprecated  # noqa: F401  (used only by deprecated_for shims)
+from sportsdataverse._deprecation import warn_deprecated
 
 __all__ = [
     "load_nba_pbp",
@@ -1025,10 +1025,11 @@ def load_nba_stats_schedules(seasons, return_as_pandas: bool = False):
         .. warning:: The ``season`` COLUMN carries the END year -- it is the
            published asset's own stamp and is **not** the ``seasons`` argument
            you passed. ``load_nba_stats_schedules(seasons=2024)`` returns rows whose
-           ``season`` reads ``2025`` (the 2024-25 season). Unshifted NBA
-           siblings (team_boxscores, officials, rosters) stamp the START year
-           for that same real season, so do not join on ``season`` across the
-           two groups without normalizing first.
+           ``season`` reads ``2025`` (the 2024-25 season).
+           Unshifted ``nba_stats`` siblings (``team_boxscores``,
+           ``officials``, ``rosters``) stamp the START year for that same
+           real season, so do not join on ``season`` across the two groups
+           without normalizing first.
 
         |col_name               |type   |
         |:----------------------|:------|
@@ -1431,10 +1432,11 @@ def load_nba_stats_lineups_v3(seasons, return_as_pandas: bool = False):
         .. warning:: The ``season`` COLUMN carries the END year -- it is the
            published asset's own stamp and is **not** the ``seasons`` argument
            you passed. ``load_nba_stats_lineups_v3(seasons=2024)`` returns rows whose
-           ``season`` reads ``2025`` (the 2024-25 season). Unshifted NBA
-           siblings (team_boxscores, officials, rosters) stamp the START year
-           for that same real season, so do not join on ``season`` across the
-           two groups without normalizing first.
+           ``season`` reads ``2025`` (the 2024-25 season).
+           Unshifted ``nba_stats`` siblings (``team_boxscores``,
+           ``officials``, ``rosters``) stamp the START year for that same
+           real season, so do not join on ``season`` across the two groups
+           without normalizing first.
 
         |col_name      |type   |
         |:-------------|:------|
@@ -1540,10 +1542,11 @@ def load_nba_stats_pbp(seasons, return_as_pandas: bool = False):
         .. warning:: The ``season`` COLUMN carries the END year -- it is the
            published asset's own stamp and is **not** the ``seasons`` argument
            you passed. ``load_nba_stats_pbp(seasons=2024)`` returns rows whose
-           ``season`` reads ``2025`` (the 2024-25 season). Unshifted NBA
-           siblings (team_boxscores, officials, rosters) stamp the START year
-           for that same real season, so do not join on ``season`` across the
-           two groups without normalizing first.
+           ``season`` reads ``2025`` (the 2024-25 season).
+           Unshifted ``nba_stats`` siblings (``team_boxscores``,
+           ``officials``, ``rosters``) stamp the START year for that same
+           real season, so do not join on ``season`` across the two groups
+           without normalizing first.
 
         |col_name          |type    |
         |:-----------------|:-------|
@@ -1643,10 +1646,11 @@ def load_nba_stats_possessions(seasons, return_as_pandas: bool = False):
         .. warning:: The ``season`` COLUMN carries the END year -- it is the
            published asset's own stamp and is **not** the ``seasons`` argument
            you passed. ``load_nba_stats_possessions(seasons=2024)`` returns rows whose
-           ``season`` reads ``2025`` (the 2024-25 season). Unshifted NBA
-           siblings (team_boxscores, officials, rosters) stamp the START year
-           for that same real season, so do not join on ``season`` across the
-           two groups without normalizing first.
+           ``season`` reads ``2025`` (the 2024-25 season).
+           Unshifted ``nba_stats`` siblings (``team_boxscores``,
+           ``officials``, ``rosters``) stamp the START year for that same
+           real season, so do not join on ``season`` across the two groups
+           without normalizing first.
 
         |col_name                |type    |
         |:-----------------------|:-------|
@@ -1732,10 +1736,11 @@ def load_nba_stats_game_lineups(seasons, return_as_pandas: bool = False):
         .. warning:: The ``season`` COLUMN carries the END year -- it is the
            published asset's own stamp and is **not** the ``seasons`` argument
            you passed. ``load_nba_stats_game_lineups(seasons=2024)`` returns rows whose
-           ``season`` reads ``2025`` (the 2024-25 season). Unshifted NBA
-           siblings (team_boxscores, officials, rosters) stamp the START year
-           for that same real season, so do not join on ``season`` across the
-           two groups without normalizing first.
+           ``season`` reads ``2025`` (the 2024-25 season).
+           Unshifted ``nba_stats`` siblings (``team_boxscores``,
+           ``officials``, ``rosters``) stamp the START year for that same
+           real season, so do not join on ``season`` across the two groups
+           without normalizing first.
 
         |col_name      |type   |
         |:-------------|:------|
@@ -1805,10 +1810,11 @@ def load_nba_stats_pbp_v3(seasons, return_as_pandas: bool = False):
         .. warning:: The ``season`` COLUMN carries the END year -- it is the
            published asset's own stamp and is **not** the ``seasons`` argument
            you passed. ``load_nba_stats_pbp_v3(seasons=2024)`` returns rows whose
-           ``season`` reads ``2025`` (the 2024-25 season). Unshifted NBA
-           siblings (team_boxscores, officials, rosters) stamp the START year
-           for that same real season, so do not join on ``season`` across the
-           two groups without normalizing first.
+           ``season`` reads ``2025`` (the 2024-25 season).
+           Unshifted ``nba_stats`` siblings (``team_boxscores``,
+           ``officials``, ``rosters``) stamp the START year for that same
+           real season, so do not join on ``season`` across the two groups
+           without normalizing first.
 
         |col_name          |type    |
         |:-----------------|:-------|
@@ -2311,10 +2317,11 @@ def load_nba_stats_possessions_v3(seasons, return_as_pandas: bool = False):
         .. warning:: The ``season`` COLUMN carries the END year -- it is the
            published asset's own stamp and is **not** the ``seasons`` argument
            you passed. ``load_nba_stats_possessions_v3(seasons=2024)`` returns rows whose
-           ``season`` reads ``2025`` (the 2024-25 season). Unshifted NBA
-           siblings (team_boxscores, officials, rosters) stamp the START year
-           for that same real season, so do not join on ``season`` across the
-           two groups without normalizing first.
+           ``season`` reads ``2025`` (the 2024-25 season).
+           Unshifted ``nba_stats`` siblings (``team_boxscores``,
+           ``officials``, ``rosters``) stamp the START year for that same
+           real season, so do not join on ``season`` across the two groups
+           without normalizing first.
 
         |col_name                |type    |
         |:-----------------------|:-------|
