@@ -13,6 +13,7 @@ from sportsdataverse._codegen_runtime import (
     _read_release_parquet,
     cli_warn,
 )
+from sportsdataverse._deprecation import warn_deprecated  # noqa: F401  (used only by deprecated_for shims)
 
 __all__ = [
     "load_nba_pbp",
@@ -1021,6 +1022,14 @@ def load_nba_stats_schedules(seasons, return_as_pandas: bool = False):
         A polars (or pandas) DataFrame; seasons with no published asset are
         skipped with a warning rather than raising (404-safe).
 
+        .. warning:: The ``season`` COLUMN carries the END year -- it is the
+           published asset's own stamp and is **not** the ``seasons`` argument
+           you passed. ``load_nba_stats_schedules(seasons=2024)`` returns rows whose
+           ``season`` reads ``2025`` (the 2024-25 season). Unshifted NBA
+           siblings (team_boxscores, officials, rosters) stamp the START year
+           for that same real season, so do not join on ``season`` across the
+           two groups without normalizing first.
+
         |col_name               |type   |
         |:----------------------|:------|
         |game_id                |String |
@@ -1399,17 +1408,33 @@ def load_nba_stats_lineups(seasons, return_as_pandas: bool = False):
 
 
 def load_nba_stats_lineups_v3(seasons, return_as_pandas: bool = False):
-    """Load nba_stats_lineups_v3 (sportsdataverse-data release).
+    """Deprecated alias for ``load_nba_stats_game_lineups``.
 
-    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_lineups_v3
+    Forwards to :func:`load_nba_stats_game_lineups`, which reads the ``nba_stats_game_lineups``
+    release -- a superset of the retired tag this loader used to read.
+    Will be removed in 0.1.0; migrate callers to
+    ``load_nba_stats_game_lineups``. The ``seasons`` argument is unchanged.
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_game_lineups
 
     Args:
-        seasons: an int or iterable of seasons (>= 2025).
+        seasons: an int or iterable of seasons (>= 1996).
+            Pass the season's START year (e.g. ``1996`` for the 1996-97
+            season); the published asset is keyed by the END year and the
+            loader translates internally.
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
         A polars (or pandas) DataFrame; seasons with no published asset are
         skipped with a warning rather than raising (404-safe).
+
+        .. warning:: The ``season`` COLUMN carries the END year -- it is the
+           published asset's own stamp and is **not** the ``seasons`` argument
+           you passed. ``load_nba_stats_lineups_v3(seasons=2024)`` returns rows whose
+           ``season`` reads ``2025`` (the 2024-25 season). Unshifted NBA
+           siblings (team_boxscores, officials, rosters) stamp the START year
+           for that same real season, so do not join on ``season`` across the
+           two groups without normalizing first.
 
         |col_name      |type   |
         |:-------------|:------|
@@ -1426,32 +1451,25 @@ def load_nba_stats_lineups_v3(seasons, return_as_pandas: bool = False):
         |away_player_3 |Int64  |
         |away_player_4 |Int64  |
         |away_player_5 |Int64  |
+        |season        |Int64  |
 
     Raises:
-        SeasonNotFoundError: if a requested season is below 2025.
+        SeasonNotFoundError: if a requested season is below 1996.
 
     Example:
         Quick start::
 
             load_nba_stats_lineups_v3(seasons=2025)
     """
-    frames, missing = [], []
-    for season in _as_season_list(seasons):
-        if int(season) < 2025:
-            raise SeasonNotFoundError("season cannot be less than 2025")
-        df = _read_release_parquet(
-            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_lineups_v3/nba_lineups_v3_{season}.parquet"
-        )
-        if df is None:
-            missing.append(season)
-            continue
-        frames.append(df)
-    if missing:
-        cli_warn("load_nba_stats_lineups_v3: no data for season(s) {missing} (skipped)".format(missing=missing))
-    # diagonal: per-season release schemas can drift (columns added/dropped
-    # over the years) -- union columns, null-fill gaps.
-    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
-    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+    warn_deprecated(
+        "load_nba_stats_lineups_v3",
+        replacement="load_nba_stats_game_lineups",
+        removed_in="0.1.0",
+    )
+    # Pure pass-through: both loaders take the season's START year, so no offset
+    # is applied here. The START -> END year translation lives in the target's
+    # own asset-path template ({season + N}), not at this boundary.
+    return load_nba_stats_game_lineups(seasons, return_as_pandas=return_as_pandas)
 
 
 def load_nba_stats_officials(seasons, return_as_pandas: bool = False):
@@ -1518,6 +1536,14 @@ def load_nba_stats_pbp(seasons, return_as_pandas: bool = False):
     Returns:
         A polars (or pandas) DataFrame; seasons with no published asset are
         skipped with a warning rather than raising (404-safe).
+
+        .. warning:: The ``season`` COLUMN carries the END year -- it is the
+           published asset's own stamp and is **not** the ``seasons`` argument
+           you passed. ``load_nba_stats_pbp(seasons=2024)`` returns rows whose
+           ``season`` reads ``2025`` (the 2024-25 season). Unshifted NBA
+           siblings (team_boxscores, officials, rosters) stamp the START year
+           for that same real season, so do not join on ``season`` across the
+           two groups without normalizing first.
 
         |col_name          |type    |
         |:-----------------|:-------|
@@ -1614,6 +1640,14 @@ def load_nba_stats_possessions(seasons, return_as_pandas: bool = False):
         A polars (or pandas) DataFrame; seasons with no published asset are
         skipped with a warning rather than raising (404-safe).
 
+        .. warning:: The ``season`` COLUMN carries the END year -- it is the
+           published asset's own stamp and is **not** the ``seasons`` argument
+           you passed. ``load_nba_stats_possessions(seasons=2024)`` returns rows whose
+           ``season`` reads ``2025`` (the 2024-25 season). Unshifted NBA
+           siblings (team_boxscores, officials, rosters) stamp the START year
+           for that same real season, so do not join on ``season`` across the
+           two groups without normalizing first.
+
         |col_name                |type    |
         |:-----------------------|:-------|
         |game_id                 |String  |
@@ -1695,6 +1729,14 @@ def load_nba_stats_game_lineups(seasons, return_as_pandas: bool = False):
         A polars (or pandas) DataFrame; seasons with no published asset are
         skipped with a warning rather than raising (404-safe).
 
+        .. warning:: The ``season`` COLUMN carries the END year -- it is the
+           published asset's own stamp and is **not** the ``seasons`` argument
+           you passed. ``load_nba_stats_game_lineups(seasons=2024)`` returns rows whose
+           ``season`` reads ``2025`` (the 2024-25 season). Unshifted NBA
+           siblings (team_boxscores, officials, rosters) stamp the START year
+           for that same real season, so do not join on ``season`` across the
+           two groups without normalizing first.
+
         |col_name      |type   |
         |:-------------|:------|
         |game_id       |String |
@@ -1740,17 +1782,33 @@ def load_nba_stats_game_lineups(seasons, return_as_pandas: bool = False):
 
 
 def load_nba_stats_pbp_v3(seasons, return_as_pandas: bool = False):
-    """Load nba_stats_pbpv3 (sportsdataverse-data release).
+    """Deprecated alias for ``load_nba_stats_pbp``.
 
-    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_pbpv3
+    Forwards to :func:`load_nba_stats_pbp`, which reads the ``nba_stats_pbp``
+    release -- a superset of the retired tag this loader used to read.
+    Will be removed in 0.1.0; migrate callers to
+    ``load_nba_stats_pbp``. The ``seasons`` argument is unchanged.
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_pbp
 
     Args:
-        seasons: an int or iterable of seasons (>= 2025).
+        seasons: an int or iterable of seasons (>= 1996).
+            Pass the season's START year (e.g. ``1996`` for the 1996-97
+            season); the published asset is keyed by the END year and the
+            loader translates internally.
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
         A polars (or pandas) DataFrame; seasons with no published asset are
         skipped with a warning rather than raising (404-safe).
+
+        .. warning:: The ``season`` COLUMN carries the END year -- it is the
+           published asset's own stamp and is **not** the ``seasons`` argument
+           you passed. ``load_nba_stats_pbp_v3(seasons=2024)`` returns rows whose
+           ``season`` reads ``2025`` (the 2024-25 season). Unshifted NBA
+           siblings (team_boxscores, officials, rosters) stamp the START year
+           for that same real season, so do not join on ``season`` across the
+           two groups without normalizing first.
 
         |col_name          |type    |
         |:-----------------|:-------|
@@ -1802,32 +1860,25 @@ def load_nba_stats_pbp_v3(seasons, return_as_pandas: bool = False):
         |def_player_3      |Int64   |
         |def_player_4      |Int64   |
         |def_player_5      |Int64   |
+        |season            |Int64   |
 
     Raises:
-        SeasonNotFoundError: if a requested season is below 2025.
+        SeasonNotFoundError: if a requested season is below 1996.
 
     Example:
         Quick start::
 
             load_nba_stats_pbp_v3(seasons=2025)
     """
-    frames, missing = [], []
-    for season in _as_season_list(seasons):
-        if int(season) < 2025:
-            raise SeasonNotFoundError("season cannot be less than 2025")
-        df = _read_release_parquet(
-            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_pbpv3/play_by_play_v3_{season}.parquet"
-        )
-        if df is None:
-            missing.append(season)
-            continue
-        frames.append(df)
-    if missing:
-        cli_warn("load_nba_stats_pbp_v3: no data for season(s) {missing} (skipped)".format(missing=missing))
-    # diagonal: per-season release schemas can drift (columns added/dropped
-    # over the years) -- union columns, null-fill gaps.
-    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
-    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+    warn_deprecated(
+        "load_nba_stats_pbp_v3",
+        replacement="load_nba_stats_pbp",
+        removed_in="0.1.0",
+    )
+    # Pure pass-through: both loaders take the season's START year, so no offset
+    # is applied here. The START -> END year translation lives in the target's
+    # own asset-path template ({season + N}), not at this boundary.
+    return load_nba_stats_pbp(seasons, return_as_pandas=return_as_pandas)
 
 
 def load_nba_stats_player_boxscores(seasons, return_as_pandas: bool = False):
@@ -2237,17 +2288,33 @@ def load_nba_stats_player_season_stats(seasons, return_as_pandas: bool = False):
 
 
 def load_nba_stats_possessions_v3(seasons, return_as_pandas: bool = False):
-    """Load nba_stats_possessions_v3 (sportsdataverse-data release).
+    """Deprecated alias for ``load_nba_stats_possessions``.
 
-    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_possessions_v3
+    Forwards to :func:`load_nba_stats_possessions`, which reads the ``nba_stats_possessions``
+    release -- a superset of the retired tag this loader used to read.
+    Will be removed in 0.1.0; migrate callers to
+    ``load_nba_stats_possessions``. The ``seasons`` argument is unchanged.
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_possessions
 
     Args:
-        seasons: an int or iterable of seasons (>= 2025).
+        seasons: an int or iterable of seasons (>= 1996).
+            Pass the season's START year (e.g. ``1996`` for the 1996-97
+            season); the published asset is keyed by the END year and the
+            loader translates internally.
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
         A polars (or pandas) DataFrame; seasons with no published asset are
         skipped with a warning rather than raising (404-safe).
+
+        .. warning:: The ``season`` COLUMN carries the END year -- it is the
+           published asset's own stamp and is **not** the ``seasons`` argument
+           you passed. ``load_nba_stats_possessions_v3(seasons=2024)`` returns rows whose
+           ``season`` reads ``2025`` (the 2024-25 season). Unshifted NBA
+           siblings (team_boxscores, officials, rosters) stamp the START year
+           for that same real season, so do not join on ``season`` across the
+           two groups without normalizing first.
 
         |col_name                |type    |
         |:-----------------------|:-------|
@@ -2285,32 +2352,25 @@ def load_nba_stats_possessions_v3(seasons, return_as_pandas: bool = False):
         |def_player_4            |Int64   |
         |def_player_5            |Int64   |
         |lineup_source           |String  |
+        |season                  |Int64   |
 
     Raises:
-        SeasonNotFoundError: if a requested season is below 2025.
+        SeasonNotFoundError: if a requested season is below 1996.
 
     Example:
         Quick start::
 
             load_nba_stats_possessions_v3(seasons=2025)
     """
-    frames, missing = [], []
-    for season in _as_season_list(seasons):
-        if int(season) < 2025:
-            raise SeasonNotFoundError("season cannot be less than 2025")
-        df = _read_release_parquet(
-            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_possessions_v3/nba_possessions_v3_{season}.parquet"
-        )
-        if df is None:
-            missing.append(season)
-            continue
-        frames.append(df)
-    if missing:
-        cli_warn("load_nba_stats_possessions_v3: no data for season(s) {missing} (skipped)".format(missing=missing))
-    # diagonal: per-season release schemas can drift (columns added/dropped
-    # over the years) -- union columns, null-fill gaps.
-    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
-    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+    warn_deprecated(
+        "load_nba_stats_possessions_v3",
+        replacement="load_nba_stats_possessions",
+        removed_in="0.1.0",
+    )
+    # Pure pass-through: both loaders take the season's START year, so no offset
+    # is applied here. The START -> END year translation lives in the target's
+    # own asset-path template ({season + N}), not at this boundary.
+    return load_nba_stats_possessions(seasons, return_as_pandas=return_as_pandas)
 
 
 def load_nba_stats_rosters(seasons, return_as_pandas: bool = False):

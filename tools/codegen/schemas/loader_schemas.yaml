@@ -7901,6 +7901,8 @@ load_nba_stats_lineups_v3:
   type: Int64
 - name: away_player_5
   type: Int64
+- name: season
+  type: Int64
 load_nba_stats_officials:
 - name: official_id
   type: Int64
@@ -8109,6 +8111,8 @@ load_nba_stats_pbp_v3:
 - name: def_player_4
   type: Int64
 - name: def_player_5
+  type: Int64
+- name: season
   type: Int64
 load_nba_stats_player_boxscores:
 - name: team_id
@@ -8803,6 +8807,8 @@ load_nba_stats_possessions_v3:
   type: Int64
 - name: lineup_source
   type: String
+- name: season
+  type: Int64
 load_nba_stats_rosters:
 - name: team_id
   type: Int64

@@ -131,6 +131,13 @@ class Loader:
     notebook: Optional[str] = None
     stub: bool = False
     stub_message: Optional[str] = None
+    # Name of the loader that supersedes this one. When set, the generated body is
+    # a DeprecationWarning shim that forwards to that loader instead of reading
+    # ``url`` itself -- used when a release tag is retired and its content is
+    # already carried by another (superset) tag. Both loaders must expose the same
+    # public ``seasons`` convention so forwarding needs no year arithmetic; the
+    # ``{season + N}`` offset in ``url`` is what keeps the two aligned.
+    deprecated_for: Optional[str] = None
     # Id columns to canonicalize to Int64 at the loader boundary. Producers have
     # shipped the same ESPN id as String, Int32 and Int64 across releases, which
     # makes a cross-dataset join on that id silently match nothing. Declaring the
@@ -290,6 +297,7 @@ def load_releases(path: Path) -> ReleasesConfig:
             notebook=ld.get("notebook"),
             stub=ld.get("stub", False),
             stub_message=ld.get("stub_message"),
+            deprecated_for=ld.get("deprecated_for"),
             id_int64=list(ld.get("id_int64", []) or []),
         )
         for ld in raw["loaders"]
