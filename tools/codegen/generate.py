@@ -1113,10 +1113,20 @@ def _build_loader_docstring(ld: spec.Loader) -> str:
         lines.append("    .. warning:: The ``season`` COLUMN carries the END year -- it is the")
         lines.append("       published asset's own stamp and is **not** the ``seasons`` argument")
         lines.append(f"       you passed. ``{ld.fn}(seasons=2024)`` returns rows whose")
-        lines.append(f"       ``season`` reads ``{2024 + off}`` (the 2024-25 season). Unshifted NBA")
-        lines.append("       siblings (team_boxscores, officials, rosters) stamp the START year")
-        lines.append("       for that same real season, so do not join on ``season`` across the")
-        lines.append("       two groups without normalizing first.")
+        lines.append(f"       ``season`` reads ``{2024 + off}`` (the 2024-25 season).")
+        # Concrete sibling names are league-specific, so only name them for the
+        # league whose siblings were actually verified. The codegen is
+        # league-agnostic and must not assert NBA table names over a future
+        # {season + N} loader in some other league.
+        if ld.league == "nba":
+            lines.append("       Unshifted ``nba_stats`` siblings (``team_boxscores``,")
+            lines.append("       ``officials``, ``rosters``) stamp the START year for that same")
+            lines.append("       real season, so do not join on ``season`` across the two groups")
+            lines.append("       without normalizing first.")
+        else:
+            lines.append("       Unshifted sibling loaders in this league stamp the START year")
+            lines.append("       for that same real season, so do not join on ``season`` across")
+            lines.append("       the two groups without normalizing first.")
     cols = _loader_schemas().get(ld.fn) or []
     if cols:
         width = max([len("col_name")] + [len(c["name"]) for c in cols])
