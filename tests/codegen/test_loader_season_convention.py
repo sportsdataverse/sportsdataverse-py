@@ -101,9 +101,7 @@ def test_only_nba_stats_families_carry_the_end_year_offset():
     # a bare truth test would accept `{season + 2}` as satisfying the END-year
     # contract. The contract is exactly one year.
     offset = {
-        ld.fn
-        for ld in spec.load_releases(REL).loaders
-        if (m := spec.SEASON_TOKEN.search(ld.url)) and m.group(1) == "1"
+        ld.fn for ld in spec.load_releases(REL).loaders if (m := spec.SEASON_TOKEN.search(ld.url)) and m.group(1) == "1"
     }
     assert offset == {
         "load_nba_stats_schedules",
