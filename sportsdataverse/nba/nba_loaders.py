@@ -1013,9 +1013,9 @@ def load_nba_stats_schedules(seasons, return_as_pandas: bool = False):
 
     Args:
         seasons: an int or iterable of seasons (>= 1996).
-            Pass the season's START year (e.g. ``1996`` for the 1996-97
-            season); the published asset is keyed by the END year and the
-            loader translates internally.
+            Pass the season's START year (e.g. ``1996`` for the
+            1996-97 season); the published asset is keyed by the
+            END year and the loader translates internally.
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -1026,10 +1026,11 @@ def load_nba_stats_schedules(seasons, return_as_pandas: bool = False):
            published asset's own stamp and is **not** the ``seasons`` argument
            you passed. ``load_nba_stats_schedules(seasons=2024)`` returns rows whose
            ``season`` reads ``2025`` (the 2024-25 season).
-           Unshifted ``nba_stats`` siblings (``team_boxscores``,
-           ``officials``, ``rosters``) stamp the START year for that same
-           real season, so do not join on ``season`` across the two groups
-           without normalizing first.
+           Every ``nba_stats`` loader stamps the END year as of the
+           2026-08-13 republish, so they agree with each other and with
+           the ``nba`` (ESPN) schema. Football (``cfb``, ``nfl``) still
+           names a season by its STARTING year, so normalize before
+           joining on ``season`` across those.
 
         |col_name               |type   |
         |:----------------------|:------|
@@ -1083,11 +1084,24 @@ def load_nba_stats_coaches(seasons, return_as_pandas: bool = False):
 
     Args:
         seasons: an int or iterable of seasons (>= 1996).
+            Pass the season's START year (e.g. ``1996`` for the
+            1996-97 season); the published asset is keyed by the
+            END year and the loader translates internally.
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
         A polars (or pandas) DataFrame; seasons with no published asset are
         skipped with a warning rather than raising (404-safe).
+
+        .. warning:: The ``season`` COLUMN carries the END year -- it is the
+           published asset's own stamp and is **not** the ``seasons`` argument
+           you passed. ``load_nba_stats_coaches(seasons=2024)`` returns rows whose
+           ``season`` reads ``2025`` (the 2024-25 season).
+           Every ``nba_stats`` loader stamps the END year as of the
+           2026-08-13 republish, so they agree with each other and with
+           the ``nba`` (ESPN) schema. Football (``cfb``, ``nfl``) still
+           names a season by its STARTING year, so normalize before
+           joining on ``season`` across those.
 
         |col_name          |type   |
         |:-----------------|:------|
@@ -1116,7 +1130,7 @@ def load_nba_stats_coaches(seasons, return_as_pandas: bool = False):
         if int(season) < 1996:
             raise SeasonNotFoundError("season cannot be less than 1996")
         df = _read_release_parquet(
-            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_coaches/coaches_{season}.parquet"
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_coaches/coaches_{season + 1}.parquet"
         )
         if df is None:
             missing.append(season)
@@ -1137,11 +1151,24 @@ def load_nba_stats_game_rosters(seasons, return_as_pandas: bool = False):
 
     Args:
         seasons: an int or iterable of seasons (>= 1996).
+            Pass the season's START year (e.g. ``1996`` for the
+            1996-97 season); the published asset is keyed by the
+            END year and the loader translates internally.
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
         A polars (or pandas) DataFrame; seasons with no published asset are
         skipped with a warning rather than raising (404-safe).
+
+        .. warning:: The ``season`` COLUMN carries the END year -- it is the
+           published asset's own stamp and is **not** the ``seasons`` argument
+           you passed. ``load_nba_stats_game_rosters(seasons=2024)`` returns rows whose
+           ``season`` reads ``2025`` (the 2024-25 season).
+           Every ``nba_stats`` loader stamps the END year as of the
+           2026-08-13 republish, so they agree with each other and with
+           the ``nba`` (ESPN) schema. Football (``cfb``, ``nfl``) still
+           names a season by its STARTING year, so normalize before
+           joining on ``season`` across those.
 
         |col_name          |type   |
         |:-----------------|:------|
@@ -1169,7 +1196,7 @@ def load_nba_stats_game_rosters(seasons, return_as_pandas: bool = False):
         if int(season) < 1996:
             raise SeasonNotFoundError("season cannot be less than 1996")
         df = _read_release_parquet(
-            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_game_rosters/game_rosters_{season}.parquet"
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_game_rosters/game_rosters_{season + 1}.parquet"
         )
         if df is None:
             missing.append(season)
@@ -1190,11 +1217,24 @@ def load_nba_stats_lineups(seasons, return_as_pandas: bool = False):
 
     Args:
         seasons: an int or iterable of seasons (>= 2007).
+            Pass the season's START year (e.g. ``2007`` for the
+            2007-08 season); the published asset is keyed by the
+            END year and the loader translates internally.
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
         A polars (or pandas) DataFrame; seasons with no published asset are
         skipped with a warning rather than raising (404-safe).
+
+        .. warning:: The ``season`` COLUMN carries the END year -- it is the
+           published asset's own stamp and is **not** the ``seasons`` argument
+           you passed. ``load_nba_stats_lineups(seasons=2024)`` returns rows whose
+           ``season`` reads ``2025`` (the 2024-25 season).
+           Every ``nba_stats`` loader stamps the END year as of the
+           2026-08-13 republish, so they agree with each other and with
+           the ``nba`` (ESPN) schema. Football (``cfb``, ``nfl``) still
+           names a season by its STARTING year, so normalize before
+           joining on ``season`` across those.
 
         |col_name                |type    |
         |:-----------------------|:-------|
@@ -1394,7 +1434,7 @@ def load_nba_stats_lineups(seasons, return_as_pandas: bool = False):
         if int(season) < 2007:
             raise SeasonNotFoundError("season cannot be less than 2007")
         df = _read_release_parquet(
-            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_lineups/lineups_{season}.parquet"
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_lineups/lineups_{season + 1}.parquet"
         )
         if df is None:
             missing.append(season)
@@ -1420,9 +1460,9 @@ def load_nba_stats_lineups_v3(seasons, return_as_pandas: bool = False):
 
     Args:
         seasons: an int or iterable of seasons (>= 1996).
-            Pass the season's START year (e.g. ``1996`` for the 1996-97
-            season); the published asset is keyed by the END year and the
-            loader translates internally.
+            Pass the season's START year (e.g. ``1996`` for the
+            1996-97 season); the published asset is keyed by the
+            END year and the loader translates internally.
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -1433,10 +1473,11 @@ def load_nba_stats_lineups_v3(seasons, return_as_pandas: bool = False):
            published asset's own stamp and is **not** the ``seasons`` argument
            you passed. ``load_nba_stats_lineups_v3(seasons=2024)`` returns rows whose
            ``season`` reads ``2025`` (the 2024-25 season).
-           Unshifted ``nba_stats`` siblings (``team_boxscores``,
-           ``officials``, ``rosters``) stamp the START year for that same
-           real season, so do not join on ``season`` across the two groups
-           without normalizing first.
+           Every ``nba_stats`` loader stamps the END year as of the
+           2026-08-13 republish, so they agree with each other and with
+           the ``nba`` (ESPN) schema. Football (``cfb``, ``nfl``) still
+           names a season by its STARTING year, so normalize before
+           joining on ``season`` across those.
 
         |col_name      |type   |
         |:-------------|:------|
@@ -1481,11 +1522,24 @@ def load_nba_stats_officials(seasons, return_as_pandas: bool = False):
 
     Args:
         seasons: an int or iterable of seasons (>= 1996).
+            Pass the season's START year (e.g. ``1996`` for the
+            1996-97 season); the published asset is keyed by the
+            END year and the loader translates internally.
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
         A polars (or pandas) DataFrame; seasons with no published asset are
         skipped with a warning rather than raising (404-safe).
+
+        .. warning:: The ``season`` COLUMN carries the END year -- it is the
+           published asset's own stamp and is **not** the ``seasons`` argument
+           you passed. ``load_nba_stats_officials(seasons=2024)`` returns rows whose
+           ``season`` reads ``2025`` (the 2024-25 season).
+           Every ``nba_stats`` loader stamps the END year as of the
+           2026-08-13 republish, so they agree with each other and with
+           the ``nba`` (ESPN) schema. Football (``cfb``, ``nfl``) still
+           names a season by its STARTING year, so normalize before
+           joining on ``season`` across those.
 
         |col_name    |type   |
         |:-----------|:------|
@@ -1509,7 +1563,7 @@ def load_nba_stats_officials(seasons, return_as_pandas: bool = False):
         if int(season) < 1996:
             raise SeasonNotFoundError("season cannot be less than 1996")
         df = _read_release_parquet(
-            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_officials/officials_{season}.parquet"
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_officials/officials_{season + 1}.parquet"
         )
         if df is None:
             missing.append(season)
@@ -1530,9 +1584,9 @@ def load_nba_stats_pbp(seasons, return_as_pandas: bool = False):
 
     Args:
         seasons: an int or iterable of seasons (>= 1996).
-            Pass the season's START year (e.g. ``1996`` for the 1996-97
-            season); the published asset is keyed by the END year and the
-            loader translates internally.
+            Pass the season's START year (e.g. ``1996`` for the
+            1996-97 season); the published asset is keyed by the
+            END year and the loader translates internally.
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -1543,10 +1597,11 @@ def load_nba_stats_pbp(seasons, return_as_pandas: bool = False):
            published asset's own stamp and is **not** the ``seasons`` argument
            you passed. ``load_nba_stats_pbp(seasons=2024)`` returns rows whose
            ``season`` reads ``2025`` (the 2024-25 season).
-           Unshifted ``nba_stats`` siblings (``team_boxscores``,
-           ``officials``, ``rosters``) stamp the START year for that same
-           real season, so do not join on ``season`` across the two groups
-           without normalizing first.
+           Every ``nba_stats`` loader stamps the END year as of the
+           2026-08-13 republish, so they agree with each other and with
+           the ``nba`` (ESPN) schema. Football (``cfb``, ``nfl``) still
+           names a season by its STARTING year, so normalize before
+           joining on ``season`` across those.
 
         |col_name          |type    |
         |:-----------------|:-------|
@@ -1634,9 +1689,9 @@ def load_nba_stats_possessions(seasons, return_as_pandas: bool = False):
 
     Args:
         seasons: an int or iterable of seasons (>= 1996).
-            Pass the season's START year (e.g. ``1996`` for the 1996-97
-            season); the published asset is keyed by the END year and the
-            loader translates internally.
+            Pass the season's START year (e.g. ``1996`` for the
+            1996-97 season); the published asset is keyed by the
+            END year and the loader translates internally.
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -1647,10 +1702,11 @@ def load_nba_stats_possessions(seasons, return_as_pandas: bool = False):
            published asset's own stamp and is **not** the ``seasons`` argument
            you passed. ``load_nba_stats_possessions(seasons=2024)`` returns rows whose
            ``season`` reads ``2025`` (the 2024-25 season).
-           Unshifted ``nba_stats`` siblings (``team_boxscores``,
-           ``officials``, ``rosters``) stamp the START year for that same
-           real season, so do not join on ``season`` across the two groups
-           without normalizing first.
+           Every ``nba_stats`` loader stamps the END year as of the
+           2026-08-13 republish, so they agree with each other and with
+           the ``nba`` (ESPN) schema. Football (``cfb``, ``nfl``) still
+           names a season by its STARTING year, so normalize before
+           joining on ``season`` across those.
 
         |col_name                |type    |
         |:-----------------------|:-------|
@@ -1724,9 +1780,9 @@ def load_nba_stats_game_lineups(seasons, return_as_pandas: bool = False):
 
     Args:
         seasons: an int or iterable of seasons (>= 1996).
-            Pass the season's START year (e.g. ``1996`` for the 1996-97
-            season); the published asset is keyed by the END year and the
-            loader translates internally.
+            Pass the season's START year (e.g. ``1996`` for the
+            1996-97 season); the published asset is keyed by the
+            END year and the loader translates internally.
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -1737,10 +1793,11 @@ def load_nba_stats_game_lineups(seasons, return_as_pandas: bool = False):
            published asset's own stamp and is **not** the ``seasons`` argument
            you passed. ``load_nba_stats_game_lineups(seasons=2024)`` returns rows whose
            ``season`` reads ``2025`` (the 2024-25 season).
-           Unshifted ``nba_stats`` siblings (``team_boxscores``,
-           ``officials``, ``rosters``) stamp the START year for that same
-           real season, so do not join on ``season`` across the two groups
-           without normalizing first.
+           Every ``nba_stats`` loader stamps the END year as of the
+           2026-08-13 republish, so they agree with each other and with
+           the ``nba`` (ESPN) schema. Football (``cfb``, ``nfl``) still
+           names a season by its STARTING year, so normalize before
+           joining on ``season`` across those.
 
         |col_name      |type   |
         |:-------------|:------|
@@ -1798,9 +1855,9 @@ def load_nba_stats_pbp_v3(seasons, return_as_pandas: bool = False):
 
     Args:
         seasons: an int or iterable of seasons (>= 1996).
-            Pass the season's START year (e.g. ``1996`` for the 1996-97
-            season); the published asset is keyed by the END year and the
-            loader translates internally.
+            Pass the season's START year (e.g. ``1996`` for the
+            1996-97 season); the published asset is keyed by the
+            END year and the loader translates internally.
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -1811,10 +1868,11 @@ def load_nba_stats_pbp_v3(seasons, return_as_pandas: bool = False):
            published asset's own stamp and is **not** the ``seasons`` argument
            you passed. ``load_nba_stats_pbp_v3(seasons=2024)`` returns rows whose
            ``season`` reads ``2025`` (the 2024-25 season).
-           Unshifted ``nba_stats`` siblings (``team_boxscores``,
-           ``officials``, ``rosters``) stamp the START year for that same
-           real season, so do not join on ``season`` across the two groups
-           without normalizing first.
+           Every ``nba_stats`` loader stamps the END year as of the
+           2026-08-13 republish, so they agree with each other and with
+           the ``nba`` (ESPN) schema. Football (``cfb``, ``nfl``) still
+           names a season by its STARTING year, so normalize before
+           joining on ``season`` across those.
 
         |col_name          |type    |
         |:-----------------|:-------|
@@ -1894,11 +1952,24 @@ def load_nba_stats_player_boxscores(seasons, return_as_pandas: bool = False):
 
     Args:
         seasons: an int or iterable of seasons (>= 1996).
+            Pass the season's START year (e.g. ``1996`` for the
+            1996-97 season); the published asset is keyed by the
+            END year and the loader translates internally.
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
         A polars (or pandas) DataFrame; seasons with no published asset are
         skipped with a warning rather than raising (404-safe).
+
+        .. warning:: The ``season`` COLUMN carries the END year -- it is the
+           published asset's own stamp and is **not** the ``seasons`` argument
+           you passed. ``load_nba_stats_player_boxscores(seasons=2024)`` returns rows whose
+           ``season`` reads ``2025`` (the 2024-25 season).
+           Every ``nba_stats`` loader stamps the END year as of the
+           2026-08-13 republish, so they agree with each other and with
+           the ``nba`` (ESPN) schema. Football (``cfb``, ``nfl``) still
+           names a season by its STARTING year, so normalize before
+           joining on ``season`` across those.
 
         |col_name                  |type    |
         |:-------------------------|:-------|
@@ -1950,7 +2021,7 @@ def load_nba_stats_player_boxscores(seasons, return_as_pandas: bool = False):
         if int(season) < 1996:
             raise SeasonNotFoundError("season cannot be less than 1996")
         df = _read_release_parquet(
-            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_player_boxscores/player_boxscores_{season}.parquet"
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_player_boxscores/player_boxscores_{season + 1}.parquet"
         )
         if df is None:
             missing.append(season)
@@ -1971,11 +2042,24 @@ def load_nba_stats_player_game_logs(seasons, return_as_pandas: bool = False):
 
     Args:
         seasons: an int or iterable of seasons (>= 1996).
+            Pass the season's START year (e.g. ``1996`` for the
+            1996-97 season); the published asset is keyed by the
+            END year and the loader translates internally.
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
         A polars (or pandas) DataFrame; seasons with no published asset are
         skipped with a warning rather than raising (404-safe).
+
+        .. warning:: The ``season`` COLUMN carries the END year -- it is the
+           published asset's own stamp and is **not** the ``seasons`` argument
+           you passed. ``load_nba_stats_player_game_logs(seasons=2024)`` returns rows whose
+           ``season`` reads ``2025`` (the 2024-25 season).
+           Every ``nba_stats`` loader stamps the END year as of the
+           2026-08-13 republish, so they agree with each other and with
+           the ``nba`` (ESPN) schema. Football (``cfb``, ``nfl``) still
+           names a season by its STARTING year, so normalize before
+           joining on ``season`` across those.
 
         |col_name          |type    |
         |:-----------------|:-------|
@@ -2024,7 +2108,7 @@ def load_nba_stats_player_game_logs(seasons, return_as_pandas: bool = False):
         if int(season) < 1996:
             raise SeasonNotFoundError("season cannot be less than 1996")
         df = _read_release_parquet(
-            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_player_game_logs/player_game_logs_{season}.parquet"
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_player_game_logs/player_game_logs_{season + 1}.parquet"
         )
         if df is None:
             missing.append(season)
@@ -2045,11 +2129,24 @@ def load_nba_stats_player_season_stats(seasons, return_as_pandas: bool = False):
 
     Args:
         seasons: an int or iterable of seasons (>= 1996).
+            Pass the season's START year (e.g. ``1996`` for the
+            1996-97 season); the published asset is keyed by the
+            END year and the loader translates internally.
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
         A polars (or pandas) DataFrame; seasons with no published asset are
         skipped with a warning rather than raising (404-safe).
+
+        .. warning:: The ``season`` COLUMN carries the END year -- it is the
+           published asset's own stamp and is **not** the ``seasons`` argument
+           you passed. ``load_nba_stats_player_season_stats(seasons=2024)`` returns rows whose
+           ``season`` reads ``2025`` (the 2024-25 season).
+           Every ``nba_stats`` loader stamps the END year as of the
+           2026-08-13 republish, so they agree with each other and with
+           the ``nba`` (ESPN) schema. Football (``cfb``, ``nfl``) still
+           names a season by its STARTING year, so normalize before
+           joining on ``season`` across those.
 
         |col_name                |type    |
         |:-----------------------|:-------|
@@ -2277,7 +2374,7 @@ def load_nba_stats_player_season_stats(seasons, return_as_pandas: bool = False):
         if int(season) < 1996:
             raise SeasonNotFoundError("season cannot be less than 1996")
         df = _read_release_parquet(
-            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_player_season_stats/player_season_stats_{season}.parquet"
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_player_season_stats/player_season_stats_{season + 1}.parquet"
         )
         if df is None:
             missing.append(season)
@@ -2305,9 +2402,9 @@ def load_nba_stats_possessions_v3(seasons, return_as_pandas: bool = False):
 
     Args:
         seasons: an int or iterable of seasons (>= 1996).
-            Pass the season's START year (e.g. ``1996`` for the 1996-97
-            season); the published asset is keyed by the END year and the
-            loader translates internally.
+            Pass the season's START year (e.g. ``1996`` for the
+            1996-97 season); the published asset is keyed by the
+            END year and the loader translates internally.
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -2318,10 +2415,11 @@ def load_nba_stats_possessions_v3(seasons, return_as_pandas: bool = False):
            published asset's own stamp and is **not** the ``seasons`` argument
            you passed. ``load_nba_stats_possessions_v3(seasons=2024)`` returns rows whose
            ``season`` reads ``2025`` (the 2024-25 season).
-           Unshifted ``nba_stats`` siblings (``team_boxscores``,
-           ``officials``, ``rosters``) stamp the START year for that same
-           real season, so do not join on ``season`` across the two groups
-           without normalizing first.
+           Every ``nba_stats`` loader stamps the END year as of the
+           2026-08-13 republish, so they agree with each other and with
+           the ``nba`` (ESPN) schema. Football (``cfb``, ``nfl``) still
+           names a season by its STARTING year, so normalize before
+           joining on ``season`` across those.
 
         |col_name                |type    |
         |:-----------------------|:-------|
@@ -2387,11 +2485,24 @@ def load_nba_stats_rosters(seasons, return_as_pandas: bool = False):
 
     Args:
         seasons: an int or iterable of seasons (>= 1996).
+            Pass the season's START year (e.g. ``1996`` for the
+            1996-97 season); the published asset is keyed by the
+            END year and the loader translates internally.
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
         A polars (or pandas) DataFrame; seasons with no published asset are
         skipped with a warning rather than raising (404-safe).
+
+        .. warning:: The ``season`` COLUMN carries the END year -- it is the
+           published asset's own stamp and is **not** the ``seasons`` argument
+           you passed. ``load_nba_stats_rosters(seasons=2024)`` returns rows whose
+           ``season`` reads ``2025`` (the 2024-25 season).
+           Every ``nba_stats`` loader stamps the END year as of the
+           2026-08-13 republish, so they agree with each other and with
+           the ``nba`` (ESPN) schema. Football (``cfb``, ``nfl``) still
+           names a season by its STARTING year, so normalize before
+           joining on ``season`` across those.
 
         |col_name     |type    |
         |:------------|:-------|
@@ -2426,7 +2537,7 @@ def load_nba_stats_rosters(seasons, return_as_pandas: bool = False):
         if int(season) < 1996:
             raise SeasonNotFoundError("season cannot be less than 1996")
         df = _read_release_parquet(
-            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_rosters/rosters_{season}.parquet"
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_rosters/rosters_{season + 1}.parquet"
         )
         if df is None:
             missing.append(season)
@@ -2447,11 +2558,24 @@ def load_nba_stats_shots(seasons, return_as_pandas: bool = False):
 
     Args:
         seasons: an int or iterable of seasons (>= 1996).
+            Pass the season's START year (e.g. ``1996`` for the
+            1996-97 season); the published asset is keyed by the
+            END year and the loader translates internally.
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
         A polars (or pandas) DataFrame; seasons with no published asset are
         skipped with a warning rather than raising (404-safe).
+
+        .. warning:: The ``season`` COLUMN carries the END year -- it is the
+           published asset's own stamp and is **not** the ``seasons`` argument
+           you passed. ``load_nba_stats_shots(seasons=2024)`` returns rows whose
+           ``season`` reads ``2025`` (the 2024-25 season).
+           Every ``nba_stats`` loader stamps the END year as of the
+           2026-08-13 republish, so they agree with each other and with
+           the ``nba`` (ESPN) schema. Football (``cfb``, ``nfl``) still
+           names a season by its STARTING year, so normalize before
+           joining on ``season`` across those.
 
         |col_name      |type   |
         |:-------------|:------|
@@ -2487,7 +2611,7 @@ def load_nba_stats_shots(seasons, return_as_pandas: bool = False):
         if int(season) < 1996:
             raise SeasonNotFoundError("season cannot be less than 1996")
         df = _read_release_parquet(
-            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_shots/shots_{season}.parquet"
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_shots/shots_{season + 1}.parquet"
         )
         if df is None:
             missing.append(season)
@@ -2508,11 +2632,24 @@ def load_nba_stats_standings(seasons, return_as_pandas: bool = False):
 
     Args:
         seasons: an int or iterable of seasons (>= 1996).
+            Pass the season's START year (e.g. ``1996`` for the
+            1996-97 season); the published asset is keyed by the
+            END year and the loader translates internally.
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
         A polars (or pandas) DataFrame; seasons with no published asset are
         skipped with a warning rather than raising (404-safe).
+
+        .. warning:: The ``season`` COLUMN carries the END year -- it is the
+           published asset's own stamp and is **not** the ``seasons`` argument
+           you passed. ``load_nba_stats_standings(seasons=2024)`` returns rows whose
+           ``season`` reads ``2025`` (the 2024-25 season).
+           Every ``nba_stats`` loader stamps the END year as of the
+           2026-08-13 republish, so they agree with each other and with
+           the ``nba`` (ESPN) schema. Football (``cfb``, ``nfl``) still
+           names a season by its STARTING year, so normalize before
+           joining on ``season`` across those.
 
         |col_name                  |type    |
         |:-------------------------|:-------|
@@ -2624,7 +2761,7 @@ def load_nba_stats_standings(seasons, return_as_pandas: bool = False):
         if int(season) < 1996:
             raise SeasonNotFoundError("season cannot be less than 1996")
         df = _read_release_parquet(
-            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_standings/standings_{season}.parquet"
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_standings/standings_{season + 1}.parquet"
         )
         if df is None:
             missing.append(season)
@@ -2645,11 +2782,24 @@ def load_nba_stats_team_boxscores(seasons, return_as_pandas: bool = False):
 
     Args:
         seasons: an int or iterable of seasons (>= 1996).
+            Pass the season's START year (e.g. ``1996`` for the
+            1996-97 season); the published asset is keyed by the
+            END year and the loader translates internally.
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
         A polars (or pandas) DataFrame; seasons with no published asset are
         skipped with a warning rather than raising (404-safe).
+
+        .. warning:: The ``season`` COLUMN carries the END year -- it is the
+           published asset's own stamp and is **not** the ``seasons`` argument
+           you passed. ``load_nba_stats_team_boxscores(seasons=2024)`` returns rows whose
+           ``season`` reads ``2025`` (the 2024-25 season).
+           Every ``nba_stats`` loader stamps the END year as of the
+           2026-08-13 republish, so they agree with each other and with
+           the ``nba`` (ESPN) schema. Football (``cfb``, ``nfl``) still
+           names a season by its STARTING year, so normalize before
+           joining on ``season`` across those.
 
         |col_name                  |type    |
         |:-------------------------|:-------|
@@ -2693,7 +2843,7 @@ def load_nba_stats_team_boxscores(seasons, return_as_pandas: bool = False):
         if int(season) < 1996:
             raise SeasonNotFoundError("season cannot be less than 1996")
         df = _read_release_parquet(
-            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_team_boxscores/team_boxscores_{season}.parquet"
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_team_boxscores/team_boxscores_{season + 1}.parquet"
         )
         if df is None:
             missing.append(season)
@@ -2714,11 +2864,24 @@ def load_nba_stats_team_season_stats(seasons, return_as_pandas: bool = False):
 
     Args:
         seasons: an int or iterable of seasons (>= 1996).
+            Pass the season's START year (e.g. ``1996`` for the
+            1996-97 season); the published asset is keyed by the
+            END year and the loader translates internally.
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
         A polars (or pandas) DataFrame; seasons with no published asset are
         skipped with a warning rather than raising (404-safe).
+
+        .. warning:: The ``season`` COLUMN carries the END year -- it is the
+           published asset's own stamp and is **not** the ``seasons`` argument
+           you passed. ``load_nba_stats_team_season_stats(seasons=2024)`` returns rows whose
+           ``season`` reads ``2025`` (the 2024-25 season).
+           Every ``nba_stats`` loader stamps the END year as of the
+           2026-08-13 republish, so they agree with each other and with
+           the ``nba`` (ESPN) schema. Football (``cfb``, ``nfl``) still
+           names a season by its STARTING year, so normalize before
+           joining on ``season`` across those.
 
         |col_name                |type    |
         |:-----------------------|:-------|
@@ -2914,7 +3077,7 @@ def load_nba_stats_team_season_stats(seasons, return_as_pandas: bool = False):
         if int(season) < 1996:
             raise SeasonNotFoundError("season cannot be less than 1996")
         df = _read_release_parquet(
-            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_team_season_stats/team_season_stats_{season}.parquet"
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_team_season_stats/team_season_stats_{season + 1}.parquet"
         )
         if df is None:
             missing.append(season)

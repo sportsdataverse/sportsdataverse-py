@@ -86,21 +86,47 @@ def test_fill_season_offset_and_identity():
 
 
 def test_only_nba_stats_families_carry_the_end_year_offset():
-    """Guard the blast radius: the +1 belongs to the four NBA stats families only.
+    """Guard the blast radius: the +1 belongs to nba_stats, and to nothing else.
 
-    WNBA seasons are single-calendar-year, so an offset there would be an off-by-one.
+    Every nba_stats release loader carries it as of the 2026-08-13 republish,
+    which moved the remaining START-year-named assets onto END-year names. Before
+    it, only four did — one schema publishing two conventions.
+
+    WNBA seasons are single-calendar-year, so an offset there would be an
+    off-by-one. That is not theoretical: the first cut of the republish shifted
+    8 wnba urls by accident, because ``wnba_stats_`` contains ``nba_stats_``.
+    Asserting the exact set, rather than "all nba_stats", is what catches it.
     """
-    offset = {ld.fn for ld in spec.load_releases(REL).loaders if (m := spec.SEASON_TOKEN.search(ld.url)) and m.group(1)}
+    # `== "1"`, not truthiness: SEASON_TOKEN captures the N in `{season + N}`, so
+    # a bare truth test would accept `{season + 2}` as satisfying the END-year
+    # contract. The contract is exactly one year.
+    offset = {
+        ld.fn for ld in spec.load_releases(REL).loaders if (m := spec.SEASON_TOKEN.search(ld.url)) and m.group(1) == "1"
+    }
     assert offset == {
         "load_nba_stats_schedules",
         "load_nba_stats_pbp",
         "load_nba_stats_possessions",
         "load_nba_stats_game_lineups",
+        # moved onto END-year assets by the 2026-08-13 republish
+        "load_nba_stats_coaches",
+        "load_nba_stats_game_rosters",
+        "load_nba_stats_lineups",
+        "load_nba_stats_officials",
+        "load_nba_stats_player_boxscores",
+        "load_nba_stats_player_game_logs",
+        "load_nba_stats_player_season_stats",
+        "load_nba_stats_rosters",
+        "load_nba_stats_shots",
+        "load_nba_stats_standings",
+        "load_nba_stats_team_boxscores",
+        "load_nba_stats_team_season_stats",
         # The retired-tag shims inherit their target's END-year asset path.
         "load_nba_stats_pbp_v3",
         "load_nba_stats_possessions_v3",
         "load_nba_stats_lineups_v3",
     }
+    assert not any(fn.startswith("load_wnba") for fn in offset)
 
 
 @pytest.mark.parametrize(("shim", "target"), SHIMS)

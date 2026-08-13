@@ -1094,9 +1094,13 @@ def _build_loader_docstring(ld: spec.Loader) -> str:
     # asset path it describes.
     token = spec.SEASON_TOKEN.search(ld.url)
     if token and token.group(1):
-        lines.append("        Pass the season's START year (e.g. ``1996`` for the 1996-97")
-        lines.append("        season); the published asset is keyed by the END year and the")
-        lines.append("        loader translates internally.")
+        # Example year comes from the loader's own floor, not a hard-coded 1996:
+        # load_nba_stats_lineups starts at 2007 and RAISES SeasonNotFoundError
+        # below it, so a fixed example told users to make a call that errors.
+        ex = ld.min_season or 1996
+        lines.append(f"        Pass the season's START year (e.g. ``{ex}`` for the")
+        lines.append(f"        {ex}-{str(ex + 1)[-2:]} season); the published asset is keyed by the")
+        lines.append("        END year and the loader translates internally.")
     lines.append("    return_as_pandas: return a pandas DataFrame instead of polars.")
     lines.append("")
     lines.append("Returns:")
@@ -1119,10 +1123,11 @@ def _build_loader_docstring(ld: spec.Loader) -> str:
         # league-agnostic and must not assert NBA table names over a future
         # {season + N} loader in some other league.
         if ld.league == "nba":
-            lines.append("       Unshifted ``nba_stats`` siblings (``team_boxscores``,")
-            lines.append("       ``officials``, ``rosters``) stamp the START year for that same")
-            lines.append("       real season, so do not join on ``season`` across the two groups")
-            lines.append("       without normalizing first.")
+            lines.append("       Every ``nba_stats`` loader stamps the END year as of the")
+            lines.append("       2026-08-13 republish, so they agree with each other and with")
+            lines.append("       the ``nba`` (ESPN) schema. Football (``cfb``, ``nfl``) still")
+            lines.append("       names a season by its STARTING year, so normalize before")
+            lines.append("       joining on ``season`` across those.")
         else:
             lines.append("       Unshifted sibling loaders in this league stamp the START year")
             lines.append("       for that same real season, so do not join on ``season`` across")
