@@ -89,9 +89,44 @@ _SEASON_RE = re.compile(r"^(\d{4})-(\d{2})$")
 def wbb_period_model(season: Optional[str]) -> "tuple[int, int, int]":
     """Period model for a WBB season: halves through 2015, quarters from 2016.
 
-    An unparseable/absent season falls back to quarters, matching the modern
-    era: the raw bundles carry ``season``, so this only bites on a hand-made
-    payload, and guessing modern is the smaller error for new data.
+    NCAA women's basketball moved from two 20-minute halves to four 10-minute
+    quarters for the 2015-16 season; the men's game never switched. Feeding the
+    wrong model to :func:`~sportsdataverse.mbb.mbb_ncaa_game_pbp.parse_ncaa_bb_game_pbp`
+    does not raise -- it silently yields a frame with no rows -- so the era must
+    be resolved from the season rather than discovered on failure.
+
+    Args:
+        season: Season as an ending year (``"2015"``) or hyphenated span
+            (``"2014-15"``); both forms appear in captured raw bundles.
+            ``None`` or an unparseable value is treated as the modern era.
+
+    Returns:
+        ``(periods, regulation_period_seconds, overtime_seconds)`` --
+        ``(2, 1200, 300)`` for seasons before 2016, ``(4, 600, 300)`` otherwise.
+        Never raises: an unrecognised season falls back to quarters, since the
+        raw bundles always carry ``season`` and guessing modern is the smaller
+        error for new data.
+
+    Example:
+        Resolve the model for either era::
+
+            from sportsdataverse.scrape.ncaa.parse import wbb_period_model
+
+            wbb_period_model("2015")     # (2, 1200, 300) -- halves
+            wbb_period_model("2015-16")  # (4, 600, 300)  -- quarters
+
+        Parse a captured bundle's play-by-play with the right model::
+
+            from sportsdataverse.mbb.mbb_ncaa_game_pbp import parse_ncaa_bb_game_pbp
+
+            df = parse_ncaa_bb_game_pbp(
+                pbp_html, contest_id, period_model=wbb_period_model(season)
+            )
+
+        See Also:
+            * `wehoop`_ -- the R women's-basketball package this feed backs.
+
+        .. _wehoop: https://wehoop.sportsdataverse.org
     """
     year = _ending_year(season)
     if year and year < _WBB_FIRST_QUARTERS_SEASON:
