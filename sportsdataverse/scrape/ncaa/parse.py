@@ -65,10 +65,74 @@ from sportsdataverse.mbb.mbb_shots_adapter import shot_events_to_frame
 
 logger = logging.getLogger(__name__)
 
-__all__ = ["parse_bundle", "write_parsed", "parse_and_write"]
+__all__ = ["parse_bundle", "write_parsed", "parse_and_write", "wbb_period_model"]
 
-_WBB_PERIOD_MODEL: "tuple[int, int, int]" = (4, 600, 300)
+#: NCAA women's basketball moved from two 20-minute halves to four 10-minute
+#: quarters for the **2015-16** season. Seasons are ending-year, so 2016 is the
+#: first quarters season and 2015 the last halves season. Men's basketball never
+#: switched, which is why only the women's side needs an era split.
+#:
+#: Applying the wrong model does NOT fail loudly -- it silently yields a frame
+#: with no rows. The quarters model was applied to every WBB season until
+#: 2026-08-18, so every pre-2016 game parsed to an EMPTY record while the parse
+#: stage reported success (it counted files written, not rows extracted), and
+#: seasons 2010-2015 were published as ~0.6%-populated datasets. Measured on
+#: real bundles: 2015 quarters=0 rows / halves=520; 2012 quarters=0 / halves=566;
+#: 2010 quarters=0 / halves=527. The reverse also degrades -- 2016 quarters=550
+#: / halves=262 -- so this is a real discriminator, not a fallback.
+_WBB_QUARTERS_MODEL: "tuple[int, int, int]" = (4, 600, 300)
+_WBB_HALVES_MODEL: "tuple[int, int, int]" = (2, 1200, 300)
+_WBB_FIRST_QUARTERS_SEASON = 2016
 _SEASON_RE = re.compile(r"^(\d{4})-(\d{2})$")
+
+
+def wbb_period_model(season: Optional[str]) -> "tuple[int, int, int]":
+    """Period model for a WBB season: halves through 2015, quarters from 2016.
+
+    NCAA women's basketball moved from two 20-minute halves to four 10-minute
+    quarters for the 2015-16 season; the men's game never switched. Feeding the
+    wrong model to :func:`~sportsdataverse.mbb.mbb_ncaa_game_pbp.parse_ncaa_bb_game_pbp`
+    does not raise -- it silently yields a frame with no rows -- so the era must
+    be resolved from the season rather than discovered on failure.
+
+    Args:
+        season: Season as an ending year (``"2015"``) or hyphenated span
+            (``"2014-15"``); both forms appear in captured raw bundles.
+            ``None`` or an unparseable value is treated as the modern era.
+
+    Returns:
+        ``(periods, regulation_period_seconds, overtime_seconds)`` --
+        ``(2, 1200, 300)`` for seasons before 2016, ``(4, 600, 300)`` otherwise.
+        Never raises: an unrecognised season falls back to quarters, since the
+        raw bundles always carry ``season`` and guessing modern is the smaller
+        error for new data.
+
+    Example:
+        Resolve the model for either era::
+
+            from sportsdataverse.scrape.ncaa.parse import wbb_period_model
+
+            wbb_period_model("2015")     # (2, 1200, 300) -- halves
+            wbb_period_model("2015-16")  # (4, 600, 300)  -- quarters
+
+        Parse a captured bundle's play-by-play with the right model::
+
+            from sportsdataverse.mbb.mbb_ncaa_game_pbp import parse_ncaa_bb_game_pbp
+
+            df = parse_ncaa_bb_game_pbp(
+                pbp_html, contest_id, period_model=wbb_period_model(season)
+            )
+
+        See Also:
+            * `wehoop`_ -- the R women's-basketball package this feed backs.
+
+        .. _wehoop: https://wehoop.sportsdataverse.org
+    """
+    year = _ending_year(season)
+    if year and year < _WBB_FIRST_QUARTERS_SEASON:
+        return _WBB_HALVES_MODEL
+    return _WBB_QUARTERS_MODEL
+
 
 #: The six per-game families, i.e. every key of the parsed record that is a list
 #: of game rows. ``teams`` is deliberately absent: it is per-game reference data
@@ -230,7 +294,7 @@ def parse_bundle(
         # parameter (here `fix_technicals: bool`) and the men's path loses its
         # signature check entirely.
         if league == "wbb":
-            pbp_df = parse_ncaa_bb_game_pbp(pbp_html, contest_id, period_model=_WBB_PERIOD_MODEL)
+            pbp_df = parse_ncaa_bb_game_pbp(pbp_html, contest_id, period_model=wbb_period_model(season))
         else:
             pbp_df = parse_ncaa_bb_game_pbp(pbp_html, contest_id)
         result["pbp"] = pbp_df.to_dicts()
