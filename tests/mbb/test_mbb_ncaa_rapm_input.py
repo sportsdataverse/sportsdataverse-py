@@ -143,3 +143,96 @@ class TestResolvePossessions:
         out = resolve_possessions(empty, build_player_xwalk(_ROSTERS))
         assert out.height == 0
         assert "home_1_id" in out.columns
+
+
+# --- alias expansion ---------------------------------------------------------
+#
+# Possessions and rosters render the same person differently. Measured on real
+# WBB data, three patterns account for nearly all of it:
+#
+#   possessions            roster                  pattern
+#   ANAELLE.DUTAT          ANAËLLE.DUTAT           diacritics
+#   PAULA.REUS             PAULA.REUS.PIZA         truncated compound surname
+#   MELANNIE.DALEY         MEL.DALEY               shortened first name
+#
+# Expansion is only safe when the candidate is UNIQUE on that team. Purdue 2024
+# carries both MADISON.LAYDENZAY and MCKENNA.LAYDEN -- a loose surname match
+# would attach possessions to the wrong sibling, and a silent wrong match is
+# worse than a drop because it corrupts two players' coefficients at once.
+
+from sportsdataverse.mbb.mbb_ncaa_rapm_input import expand_xwalk_aliases  # noqa: E402
+
+
+def _obs(pairs):
+    return pl.DataFrame({"team": [t for t, _ in pairs], "player": [p for _, p in pairs]})
+
+
+class TestFolding:
+    def test_diacritics_fold_in_the_exact_path(self):
+        r = pl.DataFrame(
+            {
+                "season": ["2024"],
+                "team": ["Rhode Island"],
+                "player": ["ANAËLLE.DUTAT"],
+                "player_id": ["7"],
+            }
+        )
+        x = build_player_xwalk(r)
+        assert x["player_key"][0] == "ANAELLE.DUTAT"
+
+
+class TestExpandXwalkAliases:
+    _R = pl.DataFrame(
+        {
+            "season": ["2024"] * 4,
+            "team": ["New Mexico", "Northwestern", "Purdue", "Purdue"],
+            "player": [
+                "PAULA.REUS.PIZA",
+                "MEL.DALEY",
+                "MADISON.LAYDENZAY",
+                "MCKENNA.LAYDEN",
+            ],
+            "player_id": ["10", "11", "12", "13"],
+        }
+    )
+
+    def _ids(self, observed):
+        x = build_player_xwalk(self._R)
+        out = expand_xwalk_aliases(x, _obs(observed))
+        return {(t, k): i for t, k, i in zip(out["team"], out["player_key"], out["player_id"])}
+
+    def test_truncated_compound_surname(self):
+        ids = self._ids([("New Mexico", "PAULA.REUS")])
+        assert ids[("New Mexico", "PAULA.REUS")] == "10"
+
+    def test_shortened_first_name(self):
+        ids = self._ids([("Northwestern", "MELANNIE.DALEY")])
+        assert ids[("Northwestern", "MELANNIE.DALEY")] == "11"
+
+    def test_ambiguous_surname_is_dropped_not_guessed(self):
+        """Two LAYDENs on Purdue: LAYDEN must NOT bind to either."""
+        x = build_player_xwalk(self._R)
+        out = expand_xwalk_aliases(x, _obs([("Purdue", "SOMEONE.LAYDEN")]))
+        assert out.filter(pl.col("player_key") == "SOMEONE.LAYDEN").height == 0
+
+    def test_unique_first_name_disambiguates_the_siblings(self):
+        """MADISON.LAYDEN -> LAYDENZAY only; MCKENNA is a different first name."""
+        ids = self._ids([("Purdue", "MADISON.LAYDEN")])
+        assert ids[("Purdue", "MADISON.LAYDEN")] == "12"
+
+    def test_genuinely_absent_player_stays_absent(self):
+        x = build_player_xwalk(self._R)
+        out = expand_xwalk_aliases(x, _obs([("New Mexico", "MIAH.MONAHAN")]))
+        assert out.filter(pl.col("player_key") == "MIAH.MONAHAN").height == 0
+
+    def test_expansion_never_drops_original_rows(self):
+        x = build_player_xwalk(self._R)
+        out = expand_xwalk_aliases(x, _obs([("New Mexico", "PAULA.REUS")]))
+        assert out.height >= x.height
+        assert out.filter(pl.col("player_id") == "10").height >= 1
+
+    def test_is_idempotent(self):
+        x = build_player_xwalk(self._R)
+        o = _obs([("New Mexico", "PAULA.REUS")])
+        once = expand_xwalk_aliases(x, o)
+        assert expand_xwalk_aliases(once, o).height == once.height
