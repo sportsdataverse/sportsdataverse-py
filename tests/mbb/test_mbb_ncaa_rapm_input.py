@@ -236,3 +236,101 @@ class TestExpandXwalkAliases:
         o = _obs([("New Mexico", "PAULA.REUS")])
         once = expand_xwalk_aliases(x, o)
         assert expand_xwalk_aliases(once, o).height == once.height
+
+
+# --- name-change crosswalk ---------------------------------------------------
+#
+# stats.ncaa.org re-renders roster/box pages with a player's CURRENT name while
+# the play-by-play preserves the game-time name, so a player who changes their
+# name never matches -- and no safe string rule bridges KATELYNN.LIMARDO ->
+# KATELYNN.MARTIN or MICHELLE.DUCHEMIN -> SHELLEY.DUCHEMIN.
+#
+# The box_score page binds both renderings to one numeric player id, which is
+# where the crosswalk comes from (dev/ncaa_rapm/build_name_changes.py). Here it
+# is injected, so the library stays pure and testable.
+
+
+def _changes(rows):
+    return pl.DataFrame(
+        {
+            "team": [r[0] for r in rows],
+            "name_game_time": [r[1] for r in rows],
+            "name_current": [r[2] for r in rows],
+        }
+    )
+
+
+class TestNameChangeCrosswalk:
+    _R = pl.DataFrame(
+        {
+            "season": ["2024", "2024"],
+            "team": ["Montana St.", "Purdue"],
+            "player": ["KATELYNN.MARTIN", "MADISON.LAYDENZAY"],
+            "player_id": ["20", "21"],
+        }
+    )
+
+    def test_resolves_a_surname_change(self):
+        x = build_player_xwalk(self._R)
+        out = expand_xwalk_aliases(
+            x,
+            _obs([("Montana St.", "KATELYNN.LIMARDO")]),
+            name_changes=_changes([("Montana St.", "KATELYNN.LIMARDO", "KATELYNN.MARTIN")]),
+        )
+        got = out.filter(pl.col("player_key") == "KATELYNN.LIMARDO")
+        assert got.height == 1 and got["player_id"][0] == "20"
+
+    def test_change_pointing_at_an_unknown_player_is_ignored(self):
+        """A mapping whose target is not on the roster resolves to nothing."""
+        x = build_player_xwalk(self._R)
+        out = expand_xwalk_aliases(
+            x,
+            _obs([("Montana St.", "OLD.NAME")]),
+            name_changes=_changes([("Montana St.", "OLD.NAME", "NOT.ON.ROSTER")]),
+        )
+        assert out.filter(pl.col("player_key") == "OLD.NAME").height == 0
+
+    def test_conflicting_mappings_are_dropped(self):
+        """One game-time name mapping to two different people is ambiguous."""
+        x = build_player_xwalk(self._R)
+        out = expand_xwalk_aliases(
+            x,
+            _obs([("Montana St.", "AMBIG.NAME")]),
+            name_changes=_changes(
+                [
+                    ("Montana St.", "AMBIG.NAME", "KATELYNN.MARTIN"),
+                    ("Montana St.", "AMBIG.NAME", "SOMEONE.ELSE"),
+                ]
+            ),
+        )
+        assert out.filter(pl.col("player_key") == "AMBIG.NAME").height == 0
+
+    def test_crosswalk_beats_the_prefix_tiers(self):
+        """An authoritative id-bound mapping wins over a heuristic prefix match."""
+        r = pl.concat(
+            [
+                self._R,
+                pl.DataFrame(
+                    {
+                        "season": ["2024"],
+                        "team": ["Montana St."],
+                        "player": ["KATELYNN.LIM"],
+                        "player_id": ["22"],
+                    }
+                ),
+            ]
+        )
+        x = build_player_xwalk(r)
+        out = expand_xwalk_aliases(
+            x,
+            _obs([("Montana St.", "KATELYNN.LIMARDO")]),
+            name_changes=_changes([("Montana St.", "KATELYNN.LIMARDO", "KATELYNN.MARTIN")]),
+        )
+        got = out.filter(pl.col("player_key") == "KATELYNN.LIMARDO")
+        assert got["player_id"][0] == "20", "crosswalk must win, not the LIM prefix"
+
+    def test_none_crosswalk_is_the_previous_behaviour(self):
+        x = build_player_xwalk(self._R)
+        a = expand_xwalk_aliases(x, _obs([("Purdue", "MADISON.LAYDEN")]))
+        b = expand_xwalk_aliases(x, _obs([("Purdue", "MADISON.LAYDEN")]), name_changes=None)
+        assert a.height == b.height

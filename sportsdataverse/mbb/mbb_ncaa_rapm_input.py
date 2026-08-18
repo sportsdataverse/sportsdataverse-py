@@ -218,13 +218,22 @@ def _prefix_either(a: str, b: str) -> bool:
     return bool(a) and bool(b) and (a.startswith(b) or b.startswith(a))
 
 
-def expand_xwalk_aliases(xwalk: pl.DataFrame, observed: pl.DataFrame) -> pl.DataFrame:
+def expand_xwalk_aliases(
+    xwalk: pl.DataFrame,
+    observed: pl.DataFrame,
+    *,
+    name_changes: "pl.DataFrame | None" = None,
+) -> pl.DataFrame:
     """Add alias rows for on-floor names the exact key misses.
 
     Args:
         xwalk: Output of :func:`build_player_xwalk`.
         observed: Frame with ``team`` and ``player`` -- the distinct
             (team, player) pairs seen in the possessions slots.
+        name_changes: Optional frame with ``team``, ``name_game_time`` and
+            ``name_current`` -- the id-bound crosswalk built from the
+            ``box_score`` page (``dev/ncaa_rapm/build_name_changes.py``).
+            Injected rather than loaded so this stays pure and testable.
 
     Returns:
         ``xwalk`` plus one row per confidently-resolved alias. Never fewer rows
@@ -270,10 +279,38 @@ def expand_xwalk_aliases(xwalk: pl.DataFrame, observed: pl.DataFrame) -> pl.Data
         normalize_player_key(pl.col("player").cast(pl.Utf8)).alias("player_key"),
     ).unique()
 
+    # (team, game-time name) -> current name, from the id-bound crosswalk.
+    # A game-time name mapping to MORE THAN ONE current name is two different
+    # people sharing a rendering; drop it rather than pick one.
+    renames: "dict[tuple[str, str], str]" = {}
+    if name_changes is not None and name_changes.height:
+        nc = name_changes.select(
+            pl.col("team").cast(pl.Utf8),
+            normalize_player_key(pl.col("name_game_time").cast(pl.Utf8)).alias("old"),
+            normalize_player_key(pl.col("name_current").cast(pl.Utf8)).alias("new"),
+        ).unique()
+        seen: "dict[tuple[str, str], set[str]]" = {}
+        for team, old, new in nc.rows():
+            seen.setdefault((team, old), set()).add(new)
+        renames = {k: next(iter(v)) for k, v in seen.items() if len(v) == 1}
+
+    by_key = {(t, k): pid for t, k, pid in xwalk.select("team", "player_key", "player_id").rows()}
+
     rows: "list[dict[str, str]]" = []
     for team, key in obs.rows():
         if not key or key == TEAM_PSEUDO_PLAYER or (team, key) in known:
             continue
+
+        # Tier 0: the id-bound name change. Authoritative -- it comes from the
+        # provider binding both renderings to one player id -- so it outranks
+        # the string-prefix heuristics below.
+        cur = renames.get((team, key))
+        if cur is not None:
+            pid = by_key.get((team, cur))
+            if pid is not None:
+                rows.append({"team": team, "player_key": key, "player_id": pid})
+            continue
+
         cands = by_team.get(team, [])
         first, sur = _split(key)
 
