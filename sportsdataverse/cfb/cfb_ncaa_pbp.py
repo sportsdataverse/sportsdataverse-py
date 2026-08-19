@@ -29,30 +29,38 @@ from bs4 import BeautifulSoup
 if TYPE_CHECKING:
     import pandas as pd
 
-__all__ = ["PBP_SCHEMA", "parse_cfb_ncaa_pbp"]
+__all__ = ["DRIVE_TITLES_SCHEMA", "PBP_SCHEMA", "parse_cfb_ncaa_drive_titles", "parse_cfb_ncaa_pbp"]
 
 # NCAA official "Last,First", incl. suffixes ("Wilborn Jr.,James", "Jordan III,Tre").
 _NAME = r"[A-Z][\w.'\-]+(?:\s(?:Jr|Sr|II|III|IV)\.?)?,\s?[A-Z][\w.'\-]+"
 
-# h5 drive title: "{team} {result} {clock},{yardline}, {n} plays, {yards} yards, {top} {a} - {h}"
+# Yard-line side code. NOT upper-case only: "Ric25" (Rice), "W&M25" (William &
+# Mary) -- an [A-Z]-only class silently drops every such team's drives/plays.
+_SIDE = r"[A-Za-z&]{1,4}"
+
+# h5 drive title: "{team} {RESULT} {clock},{yardline}, {n} plays, {yards} yards, {top} {a} - {h}".
+# RESULT is an OPTIONAL all-caps token (TD/FG/FGA/PUNT/INT/FUMB/DOWNS/HALF/...);
+# anchoring on that keeps multi-word team names intact when it is missing (a
+# lazy `.+?` team + mandatory result donates "Carolina" -> "East Carolina" = "East").
 _DRIVE_RE = re.compile(
-    r"^(?P<team>.+?)\s+(?P<result>[A-Za-z/]+)\s+(?P<start_clock>\d+:\d+),(?P<start_yard_line>[A-Z]{1,4}\d+),\s+"
+    rf"^(?P<team>.+?)(?:\s+(?P<result>[A-Z/]{{2,10}}))?\s+"
+    rf"(?P<start_clock>\d+:\d+),(?P<start_yard_line>{_SIDE}\d+),\s+"
     r"(?P<n_plays>\d+)\s+plays?,\s+(?P<yards>-?\d+)\s+yards?,\s+(?P<top>\d+:\d+)\s+"
     r"(?P<score_away>\d+)\s*-\s*(?P<score_home>\d+)\s*$"
 )
 _DD_RE = re.compile(
-    r"^(?P<down>1st|2nd|3rd|4th)\s+&\s+(?P<distance>\d+|Goal)\s+at\s+(?P<yard_line>[A-Z]{1,4}\d+)",
+    rf"^(?P<down>1st|2nd|3rd|4th)\s+&\s+(?P<distance>\d+|Goal)\s+at\s+(?P<yard_line>{_SIDE}\d+)",
     re.I,
 )
 _DOWN = {"1st": 1, "2nd": 2, "3rd": 3, "4th": 4}
-_YL_SPLIT_RE = re.compile(r"^([A-Z]{1,4})(\d+)$")
+_YL_SPLIT_RE = re.compile(rf"^({_SIDE})(\d+)$")
 
 # --- play_text field regexes ----------------------------------------------
 _CLOCK_RE = re.compile(r"^\((\d{1,2}:\d{2})\)\s*")  # some games prefix each play with "(MM:SS)"
 _FORMATION_RE = re.compile(r"^(No Huddle(?:-Shotgun)?|Shotgun|Wildcat|Pistol)\s+")
 _YARDS_RE = re.compile(r"for (\d+) yards? (gain|loss)", re.I)
 _YARDS_PLAIN_RE = re.compile(r"for (\d+) yards? to the", re.I)  # completed pass / 0-yard run: positive
-_END_YL_RE = re.compile(r"to the ([A-Z]{1,4}\d+)")
+_END_YL_RE = re.compile(rf"to the ({_SIDE}\d+)")
 _RUSH_RE = re.compile(
     rf"(?P<rusher>{_NAME}) rush(?:es)?(?:\s+(?P<dir>left|right|middle|up the middle))?",
     re.I,
@@ -71,7 +79,7 @@ _PUNT_RE = re.compile(
 _SACK_RE = re.compile(rf"(?P<passer>{_NAME}) sacked", re.I)
 _FG_RE = re.compile(rf"(?P<kicker>{_NAME}) field goal", re.I)
 _XP_RE = re.compile(rf"(?P<kicker>{_NAME}) kick attempt", re.I)
-_POSSESSION_RE = re.compile(r"^[A-Z]{2,4} ball on [A-Z]{1,4}\d+")  # "AKR ball on AKR20." drive marker
+_POSSESSION_RE = re.compile(rf"^{_SIDE} ball on {_SIDE}\d+")  # "AKR ball on AKR20." / "Ore ball on Ore25." drive marker
 _TWOPT_RE = re.compile(
     rf"(?P<player>{_NAME}) (?P<kind>pass|run|rush) attempt (?P<result>Successful|failed)",
     re.I,
@@ -447,4 +455,98 @@ def parse_cfb_ncaa_pbp(
             .otherwise(None)
             .alias("qb_scramble")
         )
+    return df.to_pandas() if return_as_pandas else df
+
+
+# --- drive titles (running-score checkpoints) -----------------------------
+
+DRIVE_TITLES_SCHEMA: "dict[str, pl.DataType]" = {
+    "contest_id": pl.Utf8,
+    "drive_number": pl.Int64,
+    "team": pl.Utf8,
+    "result": pl.Utf8,
+    "start_clock": pl.Utf8,
+    "start_yard_line": pl.Utf8,
+    "n_plays": pl.Int64,
+    "yards": pl.Int64,
+    "top": pl.Utf8,
+    "score_away": pl.Int64,
+    "score_home": pl.Int64,
+}
+
+
+def parse_cfb_ncaa_drive_titles(
+    html: str,
+    contest_id: "str | int | None" = None,
+    *,
+    return_as_pandas: bool = False,
+) -> "Union[pl.DataFrame, pd.DataFrame]":
+    """Parse the drive ``h5`` titles of a ``play_by_play`` page -> one row per drive.
+
+    Each drive header on the stats.ncaa.org pbp page reads
+    ``"{team} {RESULT} {clock},{yardline}, {n} plays, {yards} yards, {top} {away} - {home}"``.
+    This lifts it into a frame of per-drive team/result/start/length plus the
+    game score **after** the drive (``score_away`` / ``score_home``) -- an
+    authoritative running-score checkpoint a play-level score can snap to.
+
+    The ``RESULT`` token is optional on some pages and side codes can be mixed
+    case (``Ric25``, ``W&M25``); both variants parse. A title that still does not
+    match yields a row with only ``drive_number`` populated, so drive numbering
+    stays aligned with :func:`parse_cfb_ncaa_pbp`.
+
+    Args:
+        html: Raw HTML of the ``/contests/{id}/play_by_play`` page.
+        contest_id: Optional stats.ncaa.org contest id, written to every row's
+            ``contest_id`` column. Coerced to ``str``.
+        return_as_pandas: Return a ``pandas.DataFrame`` instead of ``polars``.
+
+    Returns:
+        A ``polars.DataFrame`` (or ``pandas.DataFrame`` when ``return_as_pandas``)
+        with one row per drive. Empty/unparseable input returns a **zero-row frame
+        carrying the documented schema**.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.cfb import parse_cfb_ncaa_drive_titles
+            df = parse_cfb_ncaa_drive_titles(open("contest_6386335.html").read(), contest_id=6386335)
+            print(df.shape)
+
+        Running-score checkpoints::
+
+            df.select("drive_number", "team", "result", "score_away", "score_home")
+
+        See Also:
+            * `cfbfastR`_ -- ESPN-sourced college-football drives (R)
+
+        .. _cfbfastR: https://cfbfastR.sportsdataverse.org
+    """
+    soup = BeautifulSoup(html or "", "html.parser")
+    cid = str(contest_id) if contest_id is not None else None
+    rows: "list[dict]" = []
+    n = 0
+    for container in soup.select("div.drives"):
+        for h5 in container.find_all("h5", recursive=False):
+            classes = h5.get("class") or []
+            if not ("scoring_play" in classes or "non_scoring_play" in classes):
+                continue
+            n += 1
+            m = _DRIVE_RE.match(_spaces(h5.get_text(" ", strip=True)))
+            g = m.groupdict() if m else {}
+            rows.append(
+                {
+                    "contest_id": cid,
+                    "drive_number": n,
+                    "team": g.get("team"),
+                    "result": g.get("result"),
+                    "start_clock": g.get("start_clock"),
+                    "start_yard_line": g.get("start_yard_line"),
+                    "n_plays": int(g["n_plays"]) if m else None,
+                    "yards": int(g["yards"]) if m else None,
+                    "top": g.get("top"),
+                    "score_away": int(g["score_away"]) if m else None,
+                    "score_home": int(g["score_home"]) if m else None,
+                }
+            )
+    df = pl.DataFrame(rows, schema=DRIVE_TITLES_SCHEMA) if rows else pl.DataFrame(schema=DRIVE_TITLES_SCHEMA)
     return df.to_pandas() if return_as_pandas else df

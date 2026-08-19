@@ -5,6 +5,8 @@ One parser per stats.ncaa.org tab of a contest (all bm-verify-gated, fetched via
 the shared browser transport in :mod:`sportsdataverse.mbb.mbb_ncaa_fetch`):
 
 * :func:`parse_cfb_ncaa_drives` -- ``/contests/{id}/drives`` (drive-level box).
+* :func:`parse_cfb_ncaa_scoring_summary` -- the ``/contests/{id}/box_score``
+  scoring-summary table (one row per score, running score, OT as period 5+).
 * :func:`parse_cfb_ncaa_team_stats` -- ``/contests/{id}/team_stats`` (team box,
   **with per-quarter breakdown** -- one row per category/stat/period).
 * :func:`parse_cfb_ncaa_player_stats` -- ``/contests/{id}/individual_stats``
@@ -34,15 +36,23 @@ __all__ = [
     "DRIVES_SCHEMA",
     "LINESCORE_SCHEMA",
     "OFFICIALS_SCHEMA",
+    "SCORING_SUMMARY_SCHEMA",
     "TEAM_STATS_SCHEMA",
     "parse_cfb_ncaa_drives",
     "parse_cfb_ncaa_linescore",
     "parse_cfb_ncaa_officials",
     "parse_cfb_ncaa_player_stats",
+    "parse_cfb_ncaa_scoring_summary",
     "parse_cfb_ncaa_team_stats",
 ]
 
-_QUARTER_RE = re.compile(r"^(?:(\d+)(?:st|nd|rd|th)\s+Quarter|OT\s*\d*)$", re.I)
+# Period-row labels: "1st Quarter", and every OT spelling stats.ncaa.org emits
+# ("OT", "OT2", "1OT", "2OT", any case). _QUARTER_RE classifies period rows
+# (team stats / linescore); _OT_PERIOD_RE numbers them -- they MUST accept the
+# same OT forms or a "1OT" row gets classified as a team/stat name.
+_OT_LABEL = r"(?:\d*\s*OT\s*\d*)"
+_QUARTER_RE = re.compile(rf"^(?:(\d+)(?:st|nd|rd|th)\s+Quarter|{_OT_LABEL})$", re.I)
+_OT_PERIOD_RE = re.compile(r"^(?:(\d+)\s*OT|OT\s*(\d*))$", re.I)
 _COMPETITOR_ID_RE = re.compile(r"competitor_(\d+)_year_stat_category_(\d+)_data_table")
 
 
@@ -93,6 +103,7 @@ DRIVES_SCHEMA: "dict[str, pl.DataType]" = {
     "contest_id": pl.Utf8,
     "drive_number": pl.Int64,
     "quarter": pl.Int64,
+    "period": pl.Int64,
     "team": pl.Utf8,
     "start_period": pl.Int64,
     "start_how": pl.Utf8,
@@ -109,14 +120,32 @@ def _int(v: str) -> "int | None":
     return int(v) if v and v.lstrip("-").isdigit() else None
 
 
+def _period_num(v: "str | None") -> "int | None":
+    """``"3"`` -> 3, ``"1OT"``/``"OT"`` -> 5, ``"2OT"``/``"OT2"`` -> 6 (OT periods continue
+    after the 4th; case-insensitive, an unnumbered ``OT`` is the first one)."""
+    if not v:
+        return None
+    v = v.strip()
+    m = _OT_PERIOD_RE.match(v)
+    if m:
+        n = m.group(1) or m.group(2) or "1"
+        return 4 + int(n)
+    return int(v) if v.isdigit() else None
+
+
 def parse_cfb_ncaa_drives(
     html: str, contest_id: "str | int | None" = None, *, return_as_pandas: bool = False
 ) -> "Union[pl.DataFrame, pd.DataFrame]":
     """Parse the ``/contests/{id}/drives`` page -> one row per drive.
 
-    Columns: ``drive_number``, ``quarter``, ``team``, ``start_period``/``start_how``
-    (KO/PUNT/DOWNS/…)/``start_clock``/``start_yard_line``, and the ``end_*``
-    equivalents (``end_how`` = TD/FGA/PUNT/DOWNS/…).
+    Columns: ``drive_number``, ``quarter``, ``period``, ``team``,
+    ``start_period``/``start_how`` (KO/PUNT/DOWNS/…)/``start_clock``/
+    ``start_yard_line``, and the ``end_*`` equivalents (``end_how`` =
+    TD/FGA/PUNT/DOWNS/…).
+
+    ``quarter`` is the page's Quarter cell as an int and is **null for overtime
+    drives** (the cell reads ``"1OT"``/``"2OT"``); ``period`` preserves those as
+    5, 6, … so OT drives stay addressable.
     """
     soup = BeautifulSoup(html or "", "html.parser")
     cid = _cid(contest_id)
@@ -131,6 +160,7 @@ def parse_cfb_ncaa_drives(
                     "contest_id": cid,
                     "drive_number": _int(r[0]),
                     "quarter": _int(r[1]),
+                    "period": _period_num(r[1]),
                     "team": r[2] or None,
                     "start_period": _int(r[3]),
                     "start_how": r[4] or None,
@@ -143,6 +173,94 @@ def parse_cfb_ncaa_drives(
                 }
             )
     return _finish(rows, DRIVES_SCHEMA, return_as_pandas)
+
+
+# --- scoring summary ------------------------------------------------------
+
+SCORING_SUMMARY_SCHEMA: "dict[str, pl.DataType]" = {
+    "contest_id": pl.Utf8,
+    "period": pl.Int64,
+    "clock": pl.Utf8,
+    "team": pl.Utf8,
+    "play_text": pl.Utf8,
+    "n_plays": pl.Int64,
+    "yards": pl.Int64,
+    "top": pl.Utf8,
+    "score_away": pl.Int64,
+    "score_home": pl.Int64,
+}
+
+
+def parse_cfb_ncaa_scoring_summary(
+    html: str, contest_id: "str | int | None" = None, *, return_as_pandas: bool = False
+) -> "Union[pl.DataFrame, pd.DataFrame]":
+    """Parse the ``/contests/{id}/box_score`` scoring-summary table -> one row per score.
+
+    The ``scoring_summary_table`` ``tr`` elements concatenate logical rows, so the
+    cells are flattened and re-chunked by the 9-column header (Period, Time,
+    Has Ball, Play, Plays, Yards, TOP, away, home) and de-duplicated preserving
+    order. ``period`` keeps overtime as 5, 6, … (``"1OT"`` -> 5); ``team`` ("Has
+    Ball") and ``play_text`` are null when the page leaves them blank (common on
+    OT rows); ``score_away`` / ``score_home`` are the running score after the play.
+
+    Args:
+        html: Raw HTML of the ``/contests/{id}/box_score`` page.
+        contest_id: Optional stats.ncaa.org contest id, written to every row's
+            ``contest_id`` column. Coerced to ``str``.
+        return_as_pandas: Return a ``pandas.DataFrame`` instead of ``polars``.
+
+    Returns:
+        A ``polars.DataFrame`` (or ``pandas.DataFrame`` when ``return_as_pandas``)
+        with one row per scoring play. Empty/unparseable input returns a
+        **zero-row frame carrying the documented schema**.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.cfb import parse_cfb_ncaa_scoring_summary
+            df = parse_cfb_ncaa_scoring_summary(open("box_score_6386512.html").read(), contest_id=6386512)
+            print(df.shape)
+
+        Overtime scores only::
+
+            df.filter(pl.col("period") > 4).select("period", "play_text", "score_away", "score_home")
+
+        See Also:
+            * `cfbfastR`_ -- ESPN-sourced college-football scoring plays (R)
+
+        .. _cfbfastR: https://cfbfastR.sportsdataverse.org
+    """
+    soup = BeautifulSoup(html or "", "html.parser")
+    cid = _cid(contest_id)
+    table = soup.find("table", id="scoring_summary_table")
+    rows: "list[dict]" = []
+    if table is not None:
+        cells = [c.get_text(" ", strip=True) for c in table.find_all(["th", "td"])]
+        flat = [c for c in cells if c != "Scoring Summary"]  # drop the title cell
+        if len(flat) >= 9 and flat[0] == "Period":  # drop the 9-cell header
+            flat = flat[9:]
+        for i in range(0, len(flat) - 8, 9):
+            chunk = flat[i : i + 9]
+            period = _period_num(chunk[0])
+            if period is None:
+                continue
+            rows.append(
+                {
+                    "contest_id": cid,
+                    "period": period,
+                    "clock": chunk[1] or None,
+                    "team": chunk[2] or None,
+                    "play_text": chunk[3] or None,
+                    "n_plays": _int(chunk[4]),
+                    "yards": _int(chunk[5]),
+                    "top": chunk[6] or None,
+                    "score_away": _int(chunk[7]),
+                    "score_home": _int(chunk[8]),
+                }
+            )
+    df = pl.DataFrame(rows, schema=SCORING_SUMMARY_SCHEMA) if rows else pl.DataFrame(schema=SCORING_SUMMARY_SCHEMA)
+    df = df.unique(maintain_order=True)  # the tr-concatenation duplicates rows
+    return df.to_pandas() if return_as_pandas else df
 
 
 # --- officials ------------------------------------------------------------
