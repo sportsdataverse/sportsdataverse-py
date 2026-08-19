@@ -46,9 +46,12 @@ __all__ = [
     "parse_cfb_ncaa_team_stats",
 ]
 
-_QUARTER_RE = re.compile(r"^(?:(\d+)(?:st|nd|rd|th)\s+Quarter|OT\s*\d*)$", re.I)
-# "1OT"/"2OT", bare "OT" (= 1OT), "OT2", any case -- the same label variants
-# _QUARTER_RE already accepts, so the two never disagree on an OT cell.
+# Period-row labels: "1st Quarter", and every OT spelling stats.ncaa.org emits
+# ("OT", "OT2", "1OT", "2OT", any case). _QUARTER_RE classifies period rows
+# (team stats / linescore); _OT_PERIOD_RE numbers them -- they MUST accept the
+# same OT forms or a "1OT" row gets classified as a team/stat name.
+_OT_LABEL = r"(?:\d*\s*OT\s*\d*)"
+_QUARTER_RE = re.compile(rf"^(?:(\d+)(?:st|nd|rd|th)\s+Quarter|{_OT_LABEL})$", re.I)
 _OT_PERIOD_RE = re.compile(r"^(?:(\d+)\s*OT|OT\s*(\d*))$", re.I)
 _COMPETITOR_ID_RE = re.compile(r"competitor_(\d+)_year_stat_category_(\d+)_data_table")
 

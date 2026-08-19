@@ -194,6 +194,17 @@ def test_period_num_overtime_label_variants() -> None:
     assert _period_num("Final") is None
 
 
+def test_quarter_re_and_period_num_agree_on_ot_labels() -> None:
+    """A period row _QUARTER_RE classifies must also be one _period_num numbers."""
+    from sportsdataverse.cfb.cfb_ncaa_box import _QUARTER_RE, _period_num
+
+    for label in ("OT", "OT2", "1OT", "2OT", "1ot", "ot"):
+        assert _QUARTER_RE.match(label), label
+        assert _period_num(label) is not None, label
+    for label in ("Total Offense", "Rushing", "Rice", "OTTO"):
+        assert not _QUARTER_RE.match(label), label
+
+
 def test_scoring_summary_empty() -> None:
     df = parse_cfb_ncaa_scoring_summary("")
     assert df.height == 0 and df.columns == list(SCORING_SUMMARY_SCHEMA.keys())
