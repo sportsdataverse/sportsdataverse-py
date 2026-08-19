@@ -265,7 +265,29 @@ def _parse_lineups(contest_id: str, pbp_df: pl.DataFrame, pbp_html: str, stats_h
         if isinstance(lineup_result, list):  # list[ParseError]
             _log_family_skip("lineups", contest_id, team_name, lineup_result)
             continue
-        good, _bad = lineup_result
+        good, bad = lineup_result
+        if not good:
+            # THE THIRD SILENT PATH. The two branches above cover a returned
+            # ParseError, and `parse_bundle` catches exceptions -- but a team
+            # whose box lineup parses cleanly and whose stints ALL come back
+            # bad reaches here with `good == []`, extends nothing, and is
+            # dropped without an error, an exception, or a skip line.
+            #
+            # That is exactly the sibling-code signature (every stint flagged
+            # `player_count_error`), and it is how Kansas 2010/2011 came out
+            # of a corpus re-parse at 1/36 and 0/38 games while the run
+            # reported EXIT=0, failed=0 on every shard and zero skip warnings.
+            #
+            # An empty result is not always wrong -- a team can legitimately
+            # have no usable stint -- so this is a warning, not an error.
+            logger.warning(
+                "ncaa_parse: family=lineups contest_id=%s team=%s produced NO good stints "
+                "(%d bad, roster=%d) -- parsed successfully but contributed nothing",
+                contest_id,
+                team_name,
+                len(bad),
+                len(box_lineup.players),
+            )
         events.extend(good)
     return [_jsonable(ev) for ev in events]
 
