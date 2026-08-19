@@ -38,3 +38,18 @@ game, for the box/drives/officials parsers in `cfb/cfb_ncaa_box.py`:
 | `mfb_individual_stats_5362283.html` | Individual Stats | <https://stats.ncaa.org/contests/5362283/individual_stats> |
 | `mfb_officials_5362283.html` | Officials | <https://stats.ncaa.org/contests/5362283/officials> |
 | `mfb_box_score_5362283.html` | Box Score (linescore + game info) | <https://stats.ncaa.org/contests/5362283/box_score> |
+
+## 2025-season page variants (captured 2026-08-19)
+
+Single tabs extracted from the `ncaa-mfb-football-raw` producer's per-game
+bundles (`mfb/json/{id}.json.gz`), captured 2026-08-19 via the same browser
+transport. They pin the page variants surfaced by the full 2025-season sweep
+(1,685 games, 1,685/1,685 exact-final QA) that the original FBS fixtures never
+exercised. Consumed by `tests/cfb/test_cfb_ncaa_pbp.py` + `test_cfb_ncaa_box.py`.
+
+| file | contest_id | game | variant pinned | source URL |
+|---|---|---|---|---|
+| `mfb_play_by_play_6386335.html` | 6386335 | Tulsa @ East Carolina, 2025-10-16 | multi-word team name + a drive title with no result token (`"East Carolina"` was truncated to `"East"`) | <https://stats.ncaa.org/contests/6386335/play_by_play> |
+| `mfb_play_by_play_6386574.html` | 6386574 | Rice @ South Fla., 2025-11-29 | mixed-case yard-line side code (`Ric25`) | <https://stats.ncaa.org/contests/6386574/play_by_play> |
+| `mfb_drives_6386512.html` | 6386512 | Houston @ Oregon St., 2025-09-26 (1OT) | drives tab with `1OT` quarter rows (`period` = 5) | <https://stats.ncaa.org/contests/6386512/drives> |
+| `mfb_box_score_6386512.html` | 6386512 | Houston @ Oregon St., 2025-09-26 (1OT) | `scoring_summary_table` with an OT row (concatenated `tr`s, re-chunked by 9) | <https://stats.ncaa.org/contests/6386512/box_score> |

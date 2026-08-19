@@ -15,11 +15,13 @@ from sportsdataverse.cfb.cfb_ncaa_box import (
     DRIVES_SCHEMA,
     LINESCORE_SCHEMA,
     OFFICIALS_SCHEMA,
+    SCORING_SUMMARY_SCHEMA,
     TEAM_STATS_SCHEMA,
     parse_cfb_ncaa_drives,
     parse_cfb_ncaa_linescore,
     parse_cfb_ncaa_officials,
     parse_cfb_ncaa_player_stats,
+    parse_cfb_ncaa_scoring_summary,
     parse_cfb_ncaa_team_stats,
 )
 
@@ -141,3 +143,41 @@ def test_linescore_teams_periods_meta() -> None:
 def test_linescore_empty() -> None:
     df = parse_cfb_ncaa_linescore("")
     assert df.height == 0 and df.columns == list(LINESCORE_SCHEMA.keys())
+
+
+# --- overtime variant (contest 6386512 -- Houston @ Oregon St., 1OT, 2025-09-26) --
+
+
+def _ot(tab: str) -> str:
+    return (FIX / f"mfb_{tab}_6386512.html").read_text(encoding="utf-8")
+
+
+def test_drives_period_preserves_overtime() -> None:
+    df = parse_cfb_ncaa_drives(_ot("drives"), contest_id="6386512")
+    assert df.columns == list(DRIVES_SCHEMA.keys())
+    ot = df.filter(pl.col("period") > 4)
+    assert ot.height == 2  # one possession each in 1OT
+    assert ot.get_column("period").unique().to_list() == [5]
+    assert ot.get_column("quarter").is_null().all()  # existing semantics untouched ("1OT" -> null)
+    reg = df.filter(pl.col("period") <= 4)
+    assert (reg.get_column("period") == reg.get_column("quarter")).all()
+
+
+def test_scoring_summary_rows_and_running_score() -> None:
+    df = parse_cfb_ncaa_scoring_summary(_ot("box_score"), contest_id="6386512")
+    assert df.columns == list(SCORING_SUMMARY_SCHEMA.keys())
+    # the table's trs nest/concatenate (81 cells in one tr); re-chunked by 9 -> 9 scores
+    assert df.height == 9
+    assert df.get_column("contest_id").unique().to_list() == ["6386512"]
+    assert df.get_column("period").to_list() == [1, 2, 2, 2, 3, 4, 4, 4, 5]  # "1OT" -> 5
+    assert df.get_column("n_plays").null_count() == 0
+    total = df.get_column("score_away") + df.get_column("score_home")
+    assert (total.diff().drop_nulls() > 0).all()  # strictly running
+    assert (df.item(-1, "score_away"), df.item(-1, "score_home")) == (27, 24)  # final
+    assert df.filter(pl.col("period") <= 4).get_column("play_text").is_not_null().all()
+
+
+def test_scoring_summary_empty() -> None:
+    df = parse_cfb_ncaa_scoring_summary("")
+    assert df.height == 0 and df.columns == list(SCORING_SUMMARY_SCHEMA.keys())
+    assert parse_cfb_ncaa_scoring_summary(_rd("officials")).height == 0  # no table on that tab

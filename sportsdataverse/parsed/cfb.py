@@ -431,11 +431,13 @@ from sportsdataverse.cfb import load_recruit_classes as load_recruit_classes  # 
 from sportsdataverse.cfb import make_ratings_compute_results as make_ratings_compute_results  # noqa: F401
 from sportsdataverse.cfb import most_recent_cfb_season as most_recent_cfb_season  # noqa: F401
 from sportsdataverse.cfb import normalize_team_roster_columns as normalize_team_roster_columns  # noqa: F401
+from sportsdataverse.cfb import parse_cfb_ncaa_drive_titles as parse_cfb_ncaa_drive_titles  # noqa: F401
 from sportsdataverse.cfb import parse_cfb_ncaa_drives as parse_cfb_ncaa_drives  # noqa: F401
 from sportsdataverse.cfb import parse_cfb_ncaa_linescore as parse_cfb_ncaa_linescore  # noqa: F401
 from sportsdataverse.cfb import parse_cfb_ncaa_officials as parse_cfb_ncaa_officials  # noqa: F401
 from sportsdataverse.cfb import parse_cfb_ncaa_pbp as parse_cfb_ncaa_pbp  # noqa: F401
 from sportsdataverse.cfb import parse_cfb_ncaa_player_stats as parse_cfb_ncaa_player_stats  # noqa: F401
+from sportsdataverse.cfb import parse_cfb_ncaa_scoring_summary as parse_cfb_ncaa_scoring_summary  # noqa: F401
 from sportsdataverse.cfb import parse_cfb_ncaa_team_stats as parse_cfb_ncaa_team_stats  # noqa: F401
 from sportsdataverse.cfb import parse_on3_rankings as parse_on3_rankings  # noqa: F401
 from sportsdataverse.cfb import parse_on3_rdb as parse_on3_rdb  # noqa: F401
@@ -764,11 +766,13 @@ __all__ = [
     "on3_transfers_best_available",
     "on3_transfers_latest",
     "on3_videos_video_key",
+    "parse_cfb_ncaa_drive_titles",
     "parse_cfb_ncaa_drives",
     "parse_cfb_ncaa_linescore",
     "parse_cfb_ncaa_officials",
     "parse_cfb_ncaa_pbp",
     "parse_cfb_ncaa_player_stats",
+    "parse_cfb_ncaa_scoring_summary",
     "parse_cfb_ncaa_team_stats",
     "parse_on3_rankings",
     "parse_on3_rdb",

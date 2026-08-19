@@ -14,7 +14,12 @@ from pathlib import Path
 
 import polars as pl
 
-from sportsdataverse.cfb.cfb_ncaa_pbp import PBP_SCHEMA, parse_cfb_ncaa_pbp
+from sportsdataverse.cfb.cfb_ncaa_pbp import (
+    DRIVE_TITLES_SCHEMA,
+    PBP_SCHEMA,
+    parse_cfb_ncaa_drive_titles,
+    parse_cfb_ncaa_pbp,
+)
 
 FIX = Path(__file__).resolve().parents[1] / "fixtures" / "cfb_ncaa"
 GAME = FIX / "cfb_ncaa_pbp_5362535.html"
@@ -196,3 +201,63 @@ def test_parser_generalizes_across_fixtures() -> None:
             & pl.col("play_text").str.contains(r",[A-Z][\w.'\-]+ rush")
         )
         assert bad.height == 0, f.name
+
+
+# --- 2025-season page variants (FCS/G5 captures, 2026-08-19) ---------------
+# Regression fixtures from the 1,685-game 2025 sweep in ncaa-mfb-football-raw:
+#   6386335 Tulsa @ East Carolina -- multi-word team + a drive title with NO result token
+#   6386574 Rice @ South Fla.     -- mixed-case yard-line side code ("Ric25")
+
+
+def _variant(cid: str) -> str:
+    return (FIX / f"mfb_play_by_play_{cid}.html").read_text(encoding="utf-8")
+
+
+def test_multiword_team_not_truncated_when_result_missing() -> None:
+    # lazy `.+?` + mandatory result used to donate "Carolina" to result -> offense "East"
+    df = parse_cfb_ncaa_pbp(_variant("6386335"), contest_id="6386335")
+    assert set(df.get_column("offense").unique().to_list()) == {"Tulsa", "East Carolina"}
+
+
+def test_mixed_case_side_code_parses() -> None:
+    # [A-Z]-only side codes nulled every Rice drive + yard line
+    df = parse_cfb_ncaa_pbp(_variant("6386574"), contest_id="6386574")
+    assert set(df.get_column("offense").unique().to_list()) == {"Rice", "South Fla."}
+    assert df.get_column("yard_line_side").null_count() == 0
+    assert "Ric" in df.get_column("yard_line_side").unique().to_list()
+    assert df.filter(pl.col("end_yard_line").str.starts_with("Ric")).height > 0
+
+
+def test_drive_titles_schema_and_checkpoints() -> None:
+    df = parse_cfb_ncaa_drive_titles(_variant("6386335"), contest_id="6386335")
+    assert df.columns == list(DRIVE_TITLES_SCHEMA.keys())
+    assert df.get_column("drive_number").to_list() == list(range(1, df.height + 1))
+    assert set(df.get_column("team").unique().to_list()) == {"Tulsa", "East Carolina"}
+    assert df.get_column("contest_id").unique().to_list() == ["6386335"]
+    # every title parsed: checkpoints + drive stats populated on every row
+    for c in ("start_clock", "start_yard_line", "n_plays", "yards", "top", "score_away", "score_home"):
+        assert df.get_column(c).null_count() == 0, c
+    # the missing-result variant: one drive has result null but team intact
+    no_result = df.filter(pl.col("result").is_null())
+    assert no_result.height == 1 and no_result.item(0, "team") == "East Carolina"
+    # running score is a monotone checkpoint ending at the final (27-41)
+    total = df.get_column("score_away") + df.get_column("score_home")
+    assert (total.diff().fill_null(0) >= 0).all()
+    assert (df.item(-1, "score_away"), df.item(-1, "score_home")) == (27, 41)
+    # drive numbering aligns with the play-level frame
+    pbp = parse_cfb_ncaa_pbp(_variant("6386335"))
+    assert df.height == pbp.get_column("drive_number").max()
+
+
+def test_drive_titles_mixed_case_side_and_pandas() -> None:
+    import pandas as pd
+
+    df = parse_cfb_ncaa_drive_titles(_variant("6386574"))
+    assert df.filter(pl.col("start_yard_line").str.starts_with("Ric")).height > 0
+    pdf = parse_cfb_ncaa_drive_titles(_variant("6386574"), return_as_pandas=True)
+    assert isinstance(pdf, pd.DataFrame) and list(pdf.columns) == list(DRIVE_TITLES_SCHEMA.keys())
+
+
+def test_drive_titles_empty() -> None:
+    df = parse_cfb_ncaa_drive_titles("")
+    assert df.height == 0 and df.columns == list(DRIVE_TITLES_SCHEMA.keys())
