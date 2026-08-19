@@ -143,6 +143,7 @@ from sportsdataverse.mbb.mbb_ncaa_stints import (
     remove_html_encoding,
 )
 from sportsdataverse.mbb.mbb_ncaa_names import code_from_box
+from sportsdataverse.mbb.mbb_ncaa_stints import sides_from_box
 
 __all__ = [
     "ShotMapDimensions",
@@ -476,7 +477,10 @@ def create_shot_event_data(
     except Exception as exc:  # pragma: no cover - bs4/lxml is lenient; mirrors Scala's Try(request)
         return _build_request_error(filename, exc)
 
-    team_info = parse_team_name(builders.team_finder(doc), box_lineup.team.team, box_lineup.team.year)
+    home_hint, away_hint = sides_from_box(box_lineup)
+    team_info = parse_team_name(
+        builders.team_finder(doc), box_lineup.team.team, box_lineup.team.year, home_hint, away_hint
+    )
     if isinstance(team_info, ParseError):
         return enrich_sub_error(_LOCATION_PARSE_SHOTEVENT, filename, team_info)
     _, _, target_team_first = team_info

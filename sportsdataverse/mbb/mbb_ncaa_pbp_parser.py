@@ -180,6 +180,7 @@ from sportsdataverse.mbb.mbb_ncaa_stints import (
     duration_from_period,
     parse_team_name,
 )
+from sportsdataverse.mbb.mbb_ncaa_stints import sides_from_box
 
 __all__ = [
     "PbpBuilders",
@@ -662,6 +663,8 @@ def parse_game_events(
     year: Year,
     builders: PbpBuilders,
     enrich: bool = True,
+    home_team: Optional[str] = None,
+    away_team: Optional[str] = None,
 ) -> Union[list[PlayByPlayEvent], list[ParseError]]:
     """Creates a list of raw play-by-play events from the HTML, fixes the
     dates, and injects game breaks (``PlayByPlayParser.parse_game_events``,
@@ -707,7 +710,7 @@ def parse_game_events(
             )
         ]
 
-    team_info = parse_team_name(builders.team_finder(doc), target_team, year)
+    team_info = parse_team_name(builders.team_finder(doc), target_team, year, home_team, away_team)
     if isinstance(team_info, ParseError):
         return enrich_sub_error(_LOCATION_PARSE_PBP, filename, team_info)
     _, _, target_team_first = team_info
@@ -768,7 +771,17 @@ def get_sorted_pbp_events(
             events = get_sorted_pbp_events("test.html", pbp_html, box_lineup, format_version=0)
     """
     builders = _BUILDERS_FROM_VERSION[format_version]
-    result = parse_game_events(filename, in_html, box_lineup.team.team, box_lineup.team.year, builders, enrich=True)
+    home_hint, away_hint = sides_from_box(box_lineup)
+    result = parse_game_events(
+        filename,
+        in_html,
+        box_lineup.team.team,
+        box_lineup.team.year,
+        builders,
+        enrich=True,
+        home_team=home_hint,
+        away_team=away_hint,
+    )
     if result and isinstance(result[0], ParseError):
         return result
     return list(reversed(cast("list[PlayByPlayEvent]", result)))
@@ -851,7 +864,16 @@ def create_lineup_data(
     player_codes = {p.code for p in box_lineup.players}
     builders = _BUILDERS_FROM_VERSION[format_version]
 
-    reversed_events = parse_game_events(filename, in_html, box_lineup.team.team, box_lineup.team.year, builders)
+    home_hint, away_hint = sides_from_box(box_lineup)
+    reversed_events = parse_game_events(
+        filename,
+        in_html,
+        box_lineup.team.team,
+        box_lineup.team.year,
+        builders,
+        home_team=home_hint,
+        away_team=away_hint,
+    )
     if reversed_events and isinstance(reversed_events[0], ParseError):
         return reversed_events
 

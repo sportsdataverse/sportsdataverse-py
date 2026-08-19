@@ -240,6 +240,8 @@ def _parse_lineups(contest_id: str, pbp_df: pl.DataFrame, pbp_html: str, stats_h
             stats_html,
             TeamId(team_name),
             format_version=1,
+            home_team=home_team,
+            away_team=away_team,
         )
         if isinstance(box_lineup, list):  # list[ParseError]
             _log_family_skip("lineups", contest_id, team_name, box_lineup)
@@ -270,6 +272,8 @@ def _parse_shots(
         stats_html,
         TeamId(home_team),
         format_version=1,
+        home_team=home_team,
+        away_team=pbp_df["away"][0],
     )
     if isinstance(box_lineup, list):
         _log_family_skip("shots", contest_id, home_team, box_lineup)

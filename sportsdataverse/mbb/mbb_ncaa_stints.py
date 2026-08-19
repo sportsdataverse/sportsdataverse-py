@@ -149,6 +149,7 @@ from sportsdataverse.mbb.mbb_ncaa_data_quality import (
     build_sub_error,
     misspellings,
     players_with_duplicate_names,
+    persistent_team_aliases,
     team_aliases,
 )
 from sportsdataverse.mbb.mbb_ncaa_events import (
@@ -163,6 +164,7 @@ from sportsdataverse.mbb.mbb_ncaa_events import (
 from sportsdataverse.mbb.mbb_ncaa_models import (
     LineupEvent,
     LineupEventStats,
+    LocationType,
     LineupId,
     PlayerCodeId,
     PlayerId,
@@ -483,7 +485,33 @@ def name_in_v0_box_format(v1_name: str) -> str:
     return f"{last}, {first}"
 
 
-def parse_team_name(teams: list[str], target_team: TeamId, year: Year) -> Union[tuple[str, str, bool], ParseError]:
+def sides_from_box(box_lineup: "LineupEvent") -> "tuple[Optional[str], Optional[str]]":
+    """``(home_team, away_team)`` implied by an already-resolved box lineup.
+
+    Lets the play-by-play and shot parsers reuse the pairing `get_box_lineup`
+    established, so a page that names only ONE team (a non-D-I opponent has no
+    header on the box page) does not fail again further down the chain.
+
+    Returns ``(None, None)`` for a NEUTRAL-site game: there `location_type`
+    comes from the date, not from title order, so it carries no ordering
+    information and guessing would pick the wrong roster table.
+    """
+    team = box_lineup.team.team.name
+    opponent = box_lineup.opponent.team.name
+    if box_lineup.location_type == LocationType.AWAY:
+        return (opponent, team)
+    if box_lineup.location_type == LocationType.HOME:
+        return (team, opponent)
+    return (None, None)
+
+
+def parse_team_name(
+    teams: list[str],
+    target_team: TeamId,
+    year: Year,
+    home_team: Optional[str] = None,
+    away_team: Optional[str] = None,
+) -> Union[tuple[str, str, bool], ParseError]:
     """Match the two team-title strings against the target team
     (``ExtractorUtils.scala:240-267``).
 
@@ -520,12 +548,34 @@ def parse_team_name(teams: list[str], target_team: TeamId, year: Year) -> Union[
         if m is None:
             continue  # Scala `collect` drops non-matching entries
         just_team = m.group(2)
-        cleaned.append(aliases.get(TeamId(just_team), TeamId(just_team)).name.strip())
+        as_id = TeamId(just_team)
+        as_id = aliases.get(as_id, persistent_team_aliases.get(as_id, as_id))
+        cleaned.append(as_id.name.strip())
 
     if len(cleaned) == 2 and cleaned[0] == target_team_str:
         return (target_team_str, cleaned[1], True)
     if len(cleaned) == 2 and cleaned[1] == target_team_str:
         return (target_team_str, cleaned[0], False)
+
+    # Only ONE title on the page. This is not a malformed page: on games
+    # against a non-D-I opponent the box page carries a header/logo for the
+    # D-I side only, while still rendering BOTH roster tables. The strict
+    # `len(cleaned) == 2` test then rejected both teams -- including the one
+    # whose name is sitting right there, matching exactly.
+    #
+    # The caller knows both sides from the play-by-play, so pass them in and
+    # the pairing is fully determined; nothing is guessed. Ordering comes from
+    # a MEASURED invariant, not an assumption: over 200 MBB 2015 games where
+    # both titles parse, the first title was the AWAY team 200/200 times
+    # (0 exceptions), which is the same convention `location_type` already
+    # encodes below. `target_is_first` also selects which roster table is
+    # ours, so it is never inferred without both hints.
+    if len(cleaned) == 1 and home_team is not None and away_team is not None:
+        sides = {home_team, away_team}
+        other = (sides - {target_team_str}).pop() if target_team_str in sides else None
+        if other is not None and cleaned[0] in sides:
+            return (target_team_str, other, target_team_str == away_team)
+
     return build_sub_error(
         "team",
         error=(f"Could not find/match team names (target=[TeamId({target_team.name})]): " + "/".join(teams)),

@@ -5535,7 +5535,7 @@ from sportsdataverse.mbb.mbb_ncaa_shot_parser import get_ascending_time
 get_ascending_time(shot_with_min_4, period=1, is_women_game=False)  # 16.0
 ```
 
-### `get_box_lineup(filename: 'str', in_html: 'str', team_id: 'TeamId', format_version: 'int', external_roster: 'tuple[list[str], list[RosterEntry]]' = ([], []), neutral_game_dates: 'AbstractSet[str]' = frozenset()) -> 'Union[LineupEvent, list[ParseError]]'` {#get_box_lineup}
+### `get_box_lineup(filename: 'str', in_html: 'str', team_id: 'TeamId', format_version: 'int', external_roster: 'tuple[list[str], list[RosterEntry]]' = ([], []), neutral_game_dates: 'AbstractSet[str]' = frozenset(), home_team: 'Optional[str]' = None, away_team: 'Optional[str]' = None) -> 'Union[LineupEvent, list[ParseError]]'` {#get_box_lineup}
 
 Gets the boxscore lineup from the HTML page (``BoxscoreParser
 
@@ -5551,6 +5551,8 @@ Gets the boxscore lineup from the HTML page (``BoxscoreParser
 | `format_version` | `int` |  | `0` for the legacy layout, `1` for the 2018+ layout (see the module docstring's selector-translation notes). |
 | `external_roster` | `tuple[list[str], list[RosterEntry]]` | `([], [])` | `(other_players, roster_players)` -- either just names, or a full roster, to validate/fuzzy-correct box names against (see `inject_validated_players`). Also seeds `~sportsdataverse.mbb.mbb_ncaa_models.LineupEvent.players_out` on the interim lineup (`roster_players`, each's `code` replaced by its jersey `number`). |
 | `neutral_game_dates` | `AbstractSet[str]` | `frozenset()` | Date strings (the first whitespace-separated token of the raw date-cell text) known to be neutral-site games -- overrides the default home/away inference. |
+| `home_team` | `Optional[str]` | `None` |  |
+| `away_team` | `Optional[str]` | `None` |  |
 
 **Returns**
 

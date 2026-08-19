@@ -760,6 +760,8 @@ def get_box_lineup(
     format_version: int,
     external_roster: tuple[list[str], list[RosterEntry]] = ([], []),
     neutral_game_dates: AbstractSet[str] = frozenset(),
+    home_team: Optional[str] = None,
+    away_team: Optional[str] = None,
 ) -> Union[LineupEvent, list[ParseError]]:
     """Gets the boxscore lineup from the HTML page (``BoxscoreParser
     .get_box_lineup``, ``:122-222``).
@@ -825,7 +827,7 @@ def get_box_lineup(
 
     year = Year(date.year if date.month >= 6 else date.year - 1)
 
-    team_info = parse_team_name(builders.team_finder(doc), team_id, year)
+    team_info = parse_team_name(builders.team_finder(doc), team_id, year, home_team, away_team)
     if isinstance(team_info, ParseError):
         return _completer(team_info)
     team, opponent, target_team_first = team_info
