@@ -530,6 +530,7 @@ from sportsdataverse.mbb import ridge_fit as ridge_fit  # noqa: F401
 from sportsdataverse.mbb import right_kind_of_shot as right_kind_of_shot  # noqa: F401
 from sportsdataverse.mbb import roc_auc as roc_auc  # noqa: F401
 from sportsdataverse.mbb import run_iterative_adjustment_with_hca as run_iterative_adjustment_with_hca  # noqa: F401
+from sportsdataverse.mbb import same_school as same_school  # noqa: F401
 from sportsdataverse.mbb import save_artifact as save_artifact  # noqa: F401
 from sportsdataverse.mbb import score_to_tuple as score_to_tuple  # noqa: F401
 from sportsdataverse.mbb import scoreboard_event_parsing as scoreboard_event_parsing  # noqa: F401
@@ -1066,6 +1067,7 @@ __all__ = [
     "right_kind_of_shot",
     "roc_auc",
     "run_iterative_adjustment_with_hca",
+    "same_school",
     "save_artifact",
     "score_to_tuple",
     "scoreboard_event_parsing",

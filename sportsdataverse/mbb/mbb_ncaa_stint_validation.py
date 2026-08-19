@@ -158,8 +158,8 @@ from sportsdataverse.mbb.mbb_ncaa_names import build_tidy_player_context, tidy_p
 from sportsdataverse.mbb.mbb_ncaa_stints import (
     build_lineup_id,
     build_new_player_list,
-    build_player_code,
 )
+from sportsdataverse.mbb.mbb_ncaa_names import code_from_box
 
 __all__ = [
     "ValidationError",
@@ -261,7 +261,7 @@ def validate_lineup(
         if player is None or player.lower() == "team":
             continue
         resolved_name = tidy_player(player, tidy_ctx)[0]
-        code = build_player_code(resolved_name, lineup_event.team.team).code
+        code = code_from_box(resolved_name, box_lineup, lineup_event.team.team).code
         if code not in valid_player_codes:
             inactive_players_mentioned.append(code)
 
@@ -612,7 +612,7 @@ def find_missing_subs(
             player = parse_any_play(raw.team)
             if player is None:
                 continue
-            code = build_player_code(tidy_player(player, tidy_ctx)[0], ev.team.team)
+            code = code_from_box(tidy_player(player, tidy_ctx)[0], tidy_ctx.box_lineup, ev.team.team)
             if code in curr_candidates:
                 candidates_who_are_in_plays.append(code)
         curr_candidates = [
@@ -714,7 +714,7 @@ def add_missing_players(
             player = parse_any_play(raw.team)
             if player is None:
                 continue
-            code = build_player_code(tidy_player(player, tidy_ctx)[0], ev.team.team)
+            code = code_from_box(tidy_player(player, tidy_ctx)[0], tidy_ctx.box_lineup, ev.team.team)
             if code in new_candidates and code not in players_to_add:
                 players_to_add.append(code)
         curr_candidates = new_candidates

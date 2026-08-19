@@ -9,7 +9,13 @@ datasets: ``pbp``, ``lineups``, ``player_box``, ``team_box``, ``shots``,
 **Robustness contract:** each of the six families is computed in its own
 ``try/except`` -- a parser bug in one family (e.g. a legacy box-score layout
 tripping ``get_box_lineup``) logs a warning and yields ``[]`` for that family
-only; it never aborts the other five. Across ~6k real games some games WILL
+only; it never aborts the other five.
+
+There are TWO distinct skip paths and both now log. An *exception* is caught
+per family in :func:`parse_bundle`. A returned ``list[ParseError]`` is not an
+exception, and used to be dropped by a bare ``continue`` with no record --
+:func:`_log_family_skip` covers that path. It is per TEAM, so a skipped game
+still writes the other team's rows and never registers as empty. Across ~6k real games some games WILL
 hit parser edge cases -- a game with 5/6 families populated is a success, a
 crashed run is not.
 
@@ -184,6 +190,58 @@ def _jsonable(obj: Any) -> Any:
     return obj
 
 
+#: First season in which the box-score SVG shot chart is effectively universal.
+#: Before it, a missing chart is absent DATA rather than a parse failure; from
+#: it, absence is a real gap worth a warning.
+#:
+#: MEASURED, not assumed -- the chart phased in gradually, so a cutover at the
+#: first season that has ANY charts would warn on a known rollout. Share of 60
+#: sampled MBB games per season whose shots parse:
+#:
+#:     2018   0/60      2019  15/60 (25%)
+#:     2020  49/60      2021  58/60 (97%)
+#:
+#: 2021 is where "no chart" stops being normal.
+_FIRST_SHOT_CHART_SEASON = 2021
+
+
+def _clip(message: str, limit: int = 160) -> str:
+    """One-line, length-capped form of a parser message for logging."""
+    flat = " ".join(str(message).split())
+    return flat if len(flat) <= limit else flat[:limit] + "..."
+
+
+def _is_no_shot_map(err: ParseError) -> bool:
+    """Whether a shots ParseError is just "this page has no shot chart"."""
+    return any("no shot events found" in str(m).lower() for m in (err.messages or []))
+
+
+def _log_family_skip(family: str, contest_id: str, team: str, errors: "list[ParseError]") -> None:
+    """Record a family dropped for one TEAM via a returned ``ParseError``.
+
+    The per-family ``try/except`` in :func:`parse_bundle` logs a warning, but
+    only for an *exception*. These parsers do not raise -- they RETURN
+    ``list[ParseError]`` -- so the caller took a bare ``continue`` and the
+    family was emitted as ``[]`` with no record at all.
+
+    That silence is why three separate defects (sibling player codes, player
+    name changes, and re-derived codes) each deleted whole team-seasons
+    unnoticed: the skip is per TEAM, so the game still writes the OTHER
+    team's rows and never looks empty. Counting empty games cannot see it.
+    """
+    # Parser messages can embed the whole offending page; truncate hard or a
+    # season's log is HTML.
+    messages = [_clip(m) for err in errors[:2] for m in (err.messages or [])][:2]
+    logger.warning(
+        "ncaa_parse: family=%s contest_id=%s team=%s SKIPPED (%d parse error(s)): %s",
+        family,
+        contest_id,
+        team,
+        len(errors),
+        "; ".join(messages) or "<no message>",
+    )
+
+
 def _parse_lineups(contest_id: str, pbp_df: pl.DataFrame, pbp_html: str, stats_html: str) -> "list[dict[str, Any]]":
     """Both teams' box lineups -> stint events (good stints only)."""
     home_team = pbp_df["home"][0]
@@ -197,11 +255,15 @@ def _parse_lineups(contest_id: str, pbp_df: pl.DataFrame, pbp_html: str, stats_h
             stats_html,
             TeamId(team_name),
             format_version=1,
+            home_team=home_team,
+            away_team=away_team,
         )
         if isinstance(box_lineup, list):  # list[ParseError]
+            _log_family_skip("lineups", contest_id, team_name, box_lineup)
             continue
         lineup_result = create_lineup_data(f"pbp_{contest_id}.html", pbp_html, box_lineup, format_version=1)
         if isinstance(lineup_result, list):  # list[ParseError]
+            _log_family_skip("lineups", contest_id, team_name, lineup_result)
             continue
         good, _bad = lineup_result
         events.extend(good)
@@ -225,11 +287,28 @@ def _parse_shots(
         stats_html,
         TeamId(home_team),
         format_version=1,
+        home_team=home_team,
+        away_team=pbp_df["away"][0],
     )
     if isinstance(box_lineup, list):
+        _log_family_skip("shots", contest_id, home_team, box_lineup)
         return []
     shots = create_shot_event_data(f"box_score_{contest_id}.html", box_html, box_lineup)
     if not shots or isinstance(shots[0], ParseError):
+        # A missing SVG shot map is EXPECTED before 2019 (the page carries no
+        # shot chart at all), so it is absent data rather than a dropped
+        # family -- warning on it floods every pre-2019 season and buries the
+        # real signal. From 2019 the chart SHOULD be there, so its absence is
+        # a real gap and must still be logged: the season gate is what keeps
+        # this an era carve-out instead of a blanket silencer.
+        first = shots[0] if shots else None
+        # `_ending_year` never returns None -- it falls back to the current
+        # year on drift, which lands in the post-2019 era and therefore LOGS.
+        # An unparseable season is treated as recent, so a real gap is not
+        # silenced by a malformed season string.
+        pre_shot_chart_era = _ending_year(season) < _FIRST_SHOT_CHART_SEASON
+        if isinstance(first, ParseError) and not (pre_shot_chart_era and _is_no_shot_map(first)):
+            _log_family_skip("shots", contest_id, home_team, [first])
         return []
     frame = shot_events_to_frame(
         shots,

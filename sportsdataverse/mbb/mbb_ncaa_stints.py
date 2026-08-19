@@ -149,6 +149,7 @@ from sportsdataverse.mbb.mbb_ncaa_data_quality import (
     build_sub_error,
     misspellings,
     players_with_duplicate_names,
+    same_school,
     team_aliases,
 )
 from sportsdataverse.mbb.mbb_ncaa_events import (
@@ -163,6 +164,7 @@ from sportsdataverse.mbb.mbb_ncaa_events import (
 from sportsdataverse.mbb.mbb_ncaa_models import (
     LineupEvent,
     LineupEventStats,
+    LocationType,
     LineupId,
     PlayerCodeId,
     PlayerId,
@@ -483,7 +485,54 @@ def name_in_v0_box_format(v1_name: str) -> str:
     return f"{last}, {first}"
 
 
-def parse_team_name(teams: list[str], target_team: TeamId, year: Year) -> Union[tuple[str, str, bool], ParseError]:
+def sides_from_box(box_lineup: "LineupEvent") -> "tuple[Optional[str], Optional[str]]":
+    """``(home_team, away_team)`` implied by an already-resolved box lineup.
+
+    Lets the play-by-play and shot parsers reuse the pairing `get_box_lineup`
+    established, so a page that names only ONE team (a non-D-I opponent has no
+    header on the box page) does not fail again further down the chain.
+
+    Args:
+        box_lineup: A box lineup already resolved by
+            :func:`~sportsdataverse.mbb.mbb_ncaa_boxscore_parser.get_box_lineup`.
+
+    Returns:
+        ``(home_team, away_team)``, or ``(None, None)`` for a NEUTRAL-site
+        game: there ``location_type`` comes from the date rather than title
+        order, so it carries no ordering information and guessing would pick
+        the wrong roster table.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.mbb.mbb_ncaa_boxscore_parser import get_box_lineup
+            from sportsdataverse.mbb.mbb_ncaa_models import TeamId
+            from sportsdataverse.mbb.mbb_ncaa_stints import sides_from_box
+
+            box = get_box_lineup("individual_stats.html", stats_html, TeamId("Kansas"), format_version=1)
+            home, away = sides_from_box(box)
+
+        Feeding the hints back into a later parse::
+
+            from sportsdataverse.mbb.mbb_ncaa_stints import parse_team_name
+            parse_team_name(["Kansas"], TeamId("Kansas"), box.team.year, home, away)
+    """
+    team = box_lineup.team.team.name
+    opponent = box_lineup.opponent.team.name
+    if box_lineup.location_type == LocationType.AWAY:
+        return (opponent, team)
+    if box_lineup.location_type == LocationType.HOME:
+        return (team, opponent)
+    return (None, None)
+
+
+def parse_team_name(
+    teams: list[str],
+    target_team: TeamId,
+    year: Year,
+    home_team: Optional[str] = None,
+    away_team: Optional[str] = None,
+) -> Union[tuple[str, str, bool], ParseError]:
     """Match the two team-title strings against the target team
     (``ExtractorUtils.scala:240-267``).
 
@@ -496,6 +545,13 @@ def parse_team_name(teams: list[str], target_team: TeamId, year: Year) -> Union[
         teams: The two team-title strings from the game page.
         target_team: The team we are building lineups for.
         year: Season, for the ``team_aliases`` data-quality overrides.
+        home_team: The game's home team, if the caller already knows it (the
+            play-by-play does). Used ONLY when the page yields a single
+            title, to pair the missing side without guessing.
+        away_team: The game's away team, same source. Both hints are required
+            together: the returned ``target_is_first`` also selects which
+            roster TABLE belongs to the target, so it is never inferred from
+            one hint alone.
 
     Returns:
         ``(target_name, opponent_name, target_is_first)`` on success, or a
@@ -520,12 +576,33 @@ def parse_team_name(teams: list[str], target_team: TeamId, year: Year) -> Union[
         if m is None:
             continue  # Scala `collect` drops non-matching entries
         just_team = m.group(2)
-        cleaned.append(aliases.get(TeamId(just_team), TeamId(just_team)).name.strip())
+        as_id = TeamId(just_team)
+        cleaned.append(aliases.get(as_id, as_id).name.strip())
 
-    if len(cleaned) == 2 and cleaned[0] == target_team_str:
+    if len(cleaned) == 2 and same_school(cleaned[0], target_team_str):
         return (target_team_str, cleaned[1], True)
-    if len(cleaned) == 2 and cleaned[1] == target_team_str:
+    if len(cleaned) == 2 and same_school(cleaned[1], target_team_str):
         return (target_team_str, cleaned[0], False)
+
+    # Only ONE title on the page. This is not a malformed page: on games
+    # against a non-D-I opponent the box page carries a header/logo for the
+    # D-I side only, while still rendering BOTH roster tables. The strict
+    # `len(cleaned) == 2` test then rejected both teams -- including the one
+    # whose name is sitting right there, matching exactly.
+    #
+    # The caller knows both sides from the play-by-play, so pass them in and
+    # the pairing is fully determined; nothing is guessed. Ordering comes from
+    # a MEASURED invariant, not an assumption: over 200 MBB 2015 games where
+    # both titles parse, the first title was the AWAY team 200/200 times
+    # (0 exceptions), which is the same convention `location_type` already
+    # encodes below. `target_is_first` also selects which roster table is
+    # ours, so it is never inferred without both hints.
+    if len(cleaned) == 1 and home_team is not None and away_team is not None:
+        sides = {home_team, away_team}
+        other = (sides - {target_team_str}).pop() if target_team_str in sides else None
+        if other is not None and any(same_school(cleaned[0], side) for side in sides):
+            return (target_team_str, other, target_team_str == away_team)
+
     return build_sub_error(
         "team",
         error=(f"Could not find/match team names (target=[TeamId({target_team.name})]): " + "/".join(teams)),
@@ -767,7 +844,7 @@ class LineupBuildingState:
             self,
             curr=replace(
                 self.curr,
-                players_in=[build_player_code(player_name, self.curr.team.team)] + self.curr.players_in,
+                players_in=[_code(player_name, self.tidy_ctx.box_lineup, self.curr.team.team)] + self.curr.players_in,
             ),
         )
 
@@ -777,7 +854,7 @@ class LineupBuildingState:
             self,
             curr=replace(
                 self.curr,
-                players_out=[build_player_code(player_name, self.curr.team.team)] + self.curr.players_out,
+                players_out=[_code(player_name, self.tidy_ctx.box_lineup, self.curr.team.team)] + self.curr.players_out,
             ),
         )
 
@@ -1122,7 +1199,29 @@ def build_new_player_list(curr: LineupEvent, prev: LineupEvent) -> list[PlayerCo
     return sorted(new_player_list, key=lambda p: p.code)
 
 
-def _new_lineup_event(prev: LineupEvent, in_name: Optional[str] = None, out_name: Optional[str] = None) -> LineupEvent:
+def _code(name: str, box_lineup: "Optional[LineupEvent]", team: "Optional[TeamId]") -> PlayerCodeId:
+    """Roster-resolved code when a box lineup is available, else derived.
+
+    `_new_lineup_event` is reachable without a roster in tests, so the
+    fallback stays -- but every production caller passes one, because a
+    re-derived code silently un-widens sibling codes (see `code_from_box`).
+    """
+    # Deferred import, and NOT a style choice: mbb_ncaa_names imports
+    # build_player_code from THIS module at module scope, so importing it back
+    # at module scope is a genuine cycle (ImportError at package import).
+    from sportsdataverse.mbb.mbb_ncaa_names import code_from_box
+
+    if box_lineup is not None:
+        return code_from_box(name, box_lineup, team)
+    return build_player_code(name, team)
+
+
+def _new_lineup_event(
+    prev: LineupEvent,
+    in_name: Optional[str] = None,
+    out_name: Optional[str] = None,
+    box_lineup: Optional[LineupEvent] = None,
+) -> LineupEvent:
     """Creates an "empty" new lineup following ``prev`` (``ExtractorUtils.scala:611-649``).
     ``prev`` is expected to have already been through :func:`_complete_lineup`.
 
@@ -1155,8 +1254,8 @@ def _new_lineup_event(prev: LineupEvent, in_name: Optional[str] = None, out_name
         opponent=prev.opponent,
         lineup_id=LineupId.unknown,  # (will calc once we have all the subs)
         players=prev.players,  # (will re-calc once we have all the subs)
-        players_in=[build_player_code(in_name, prev.team.team)] if in_name is not None else [],
-        players_out=[build_player_code(out_name, prev.team.team)] if out_name is not None else [],
+        players_in=[_code(in_name, box_lineup, prev.team.team)] if in_name is not None else [],
+        players_out=[_code(out_name, box_lineup, prev.team.team)] if out_name is not None else [],
         raw_game_events=[],
         team_stats=LineupEventStats.empty(),  # (calculate these 2 later)
         opponent_stats=LineupEventStats.empty(),
@@ -1295,7 +1394,7 @@ def build_partial_lineup_list(
             completed_curr = _complete_lineup(state.curr, state.prev, event.min)
             state = replace(
                 state,
-                curr=_new_lineup_event(completed_curr, in_name=tidier_name),
+                curr=_new_lineup_event(completed_curr, in_name=tidier_name, box_lineup=box_lineup),
                 tidy_ctx=new_ctx,
                 prev=[completed_curr] + state.prev,
                 old_format=new_old_format,
@@ -1306,7 +1405,7 @@ def build_partial_lineup_list(
             completed_curr = _complete_lineup(state.curr, state.prev, event.min)
             state = replace(
                 state,
-                curr=_new_lineup_event(completed_curr, out_name=tidier_name),
+                curr=_new_lineup_event(completed_curr, out_name=tidier_name, box_lineup=box_lineup),
                 tidy_ctx=new_ctx,
                 prev=[completed_curr] + state.prev,
                 old_format=new_old_format,
@@ -1334,7 +1433,11 @@ def build_partial_lineup_list(
                 new_lineup_id, new_players = completed_curr.lineup_id, completed_curr.players
             state = replace(
                 state,
-                curr=replace(_new_lineup_event(completed_curr), lineup_id=new_lineup_id, players=new_players),
+                curr=replace(
+                    _new_lineup_event(completed_curr, box_lineup=box_lineup),
+                    lineup_id=new_lineup_id,
+                    players=new_players,
+                ),
                 prev=[completed_curr] + state.prev,
             )
         elif isinstance(event, GameEndEvent):

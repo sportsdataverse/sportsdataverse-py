@@ -142,6 +142,8 @@ from sportsdataverse.mbb.mbb_ncaa_stints import (
     parse_team_name,
     remove_html_encoding,
 )
+from sportsdataverse.mbb.mbb_ncaa_names import code_from_box
+from sportsdataverse.mbb.mbb_ncaa_stints import sides_from_box
 
 __all__ = [
     "ShotMapDimensions",
@@ -475,7 +477,10 @@ def create_shot_event_data(
     except Exception as exc:  # pragma: no cover - bs4/lxml is lenient; mirrors Scala's Try(request)
         return _build_request_error(filename, exc)
 
-    team_info = parse_team_name(builders.team_finder(doc), box_lineup.team.team, box_lineup.team.year)
+    home_hint, away_hint = sides_from_box(box_lineup)
+    team_info = parse_team_name(
+        builders.team_finder(doc), box_lineup.team.team, box_lineup.team.year, home_hint, away_hint
+    )
     if isinstance(team_info, ParseError):
         return enrich_sub_error(_LOCATION_PARSE_SHOTEVENT, filename, team_info)
     _, _, target_team_first = team_info
@@ -669,7 +674,7 @@ def parse_shot_html(
 
     if is_offensive:
         tidier_player_name, _ = tidy_player(player_name, tidy_ctx)
-        player_code_id = build_player_code(tidier_player_name, box_lineup.team.team)
+        player_code_id = code_from_box(tidier_player_name, box_lineup, box_lineup.team.team)
     else:
         # Still extract the opponent's player name (best-effort, to help
         # correlate with the play-by-play data later).

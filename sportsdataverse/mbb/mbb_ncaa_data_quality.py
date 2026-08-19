@@ -84,6 +84,8 @@ __all__ = [
     "players_with_duplicate_names",
     "players_missing_from_boxscore",
     "team_aliases",
+    "team_name_equivalents",
+    "same_school",
 ]
 
 
@@ -289,6 +291,63 @@ team_aliases: dict[Year, dict[TeamId, TeamId]] = {
     Year(2021): {TeamId("NIU"): TeamId("Northern Ill.")},
 }
 """Season-scoped team renames (``DataQualityIssues.team_aliases``)."""
+
+
+team_name_equivalents: tuple[frozenset[str], ...] = (frozenset({"New Orleans", "LSU New Orleans"}),)
+"""Names that denote the SAME school, as an equivalence -- not a rewrite.
+
+Distinct from :data:`team_aliases`, which models a mid-season RENAME and
+rewrites one name to another. These are two spellings that coexist: the
+box-score page and the schedule disagree, and WHICH side uses WHICH varies by
+season. A directional rewrite therefore fixes one era and breaks another --
+mapping page `New Orleans` -> `LSU New Orleans` repaired 2015 (schedule says
+`LSU New Orleans`) and immediately broke 2024, where the schedule itself says
+`New Orleans`. Equivalence has no direction, so it holds in both eras without
+a season key.
+
+Every entry was MEASURED. Bucketing team-match failures across 2,800 sampled
+games (MBB + WBB, seasons 2011/2015/2019/2023) found exactly one genuine name
+mismatch in either league:
+
+    MBB   0 distinct mismatches
+    WBB   6 distinct, ALL `LSU New Orleans` -- the page says `New Orleans`
+          against `McNeese`, `West Ala.`, `Centenary (LA)`, `ULM`,
+          `Pittsburgh`, `UTEP`
+
+The far more common failure (456 MBB / 333 WBB events) was NOT an alias at
+all: the box page names only ONE team when the opponent is non-D-I, handled
+in :func:`~sportsdataverse.mbb.mbb_ncaa_stints.parse_team_name` with the
+caller's known sides.
+
+Do NOT add a fuzzy team matcher here. `Miami (FL)` / `Miami (OH)`,
+`New Orleans` / `Southern-N.O.` and `Loyola (IL)` / `Loyola (MD)` are
+distinct schools whose names differ by less than a typo, and a silently wrong
+team is far worse than a dropped game.
+"""
+
+
+def same_school(a: str, b: str) -> bool:
+    """Whether two team-name spellings denote the same school.
+
+    Exact match, or both names inside one :data:`team_name_equivalents` class.
+
+    Args:
+        a: One team-name spelling.
+        b: The other team-name spelling.
+
+    Returns:
+        ``True`` if the two names refer to the same school.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.mbb.mbb_ncaa_data_quality import same_school
+            same_school("New Orleans", "LSU New Orleans")  # True
+            same_school("Miami (FL)", "Miami (OH)")        # False
+    """
+    if a == b:
+        return True
+    return any(a in cls and b in cls for cls in team_name_equivalents)
 
 
 # ---------------------------------------------------------------------------

@@ -760,6 +760,8 @@ def get_box_lineup(
     format_version: int,
     external_roster: tuple[list[str], list[RosterEntry]] = ([], []),
     neutral_game_dates: AbstractSet[str] = frozenset(),
+    home_team: Optional[str] = None,
+    away_team: Optional[str] = None,
 ) -> Union[LineupEvent, list[ParseError]]:
     """Gets the boxscore lineup from the HTML page (``BoxscoreParser
     .get_box_lineup``, ``:122-222``).
@@ -781,6 +783,11 @@ def get_box_lineup(
         neutral_game_dates: Date strings (the first whitespace-separated
             token of the raw date-cell text) known to be neutral-site games
             -- overrides the default home/away inference.
+        home_team: The game's home team when the caller already knows it,
+            forwarded to team-name resolution so a box page that names only
+            one side (a non-D-I opponent has no header) still resolves.
+        away_team: The game's away team, same purpose. Both are required
+            together or neither is used.
 
     Returns:
         A :class:`~sportsdataverse.mbb.mbb_ncaa_models.LineupEvent` whose
@@ -825,7 +832,7 @@ def get_box_lineup(
 
     year = Year(date.year if date.month >= 6 else date.year - 1)
 
-    team_info = parse_team_name(builders.team_finder(doc), team_id, year)
+    team_info = parse_team_name(builders.team_finder(doc), team_id, year, home_team, away_team)
     if isinstance(team_info, ParseError):
         return _completer(team_info)
     team, opponent, target_team_first = team_info
