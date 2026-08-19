@@ -131,10 +131,24 @@ class TestValidateBoxScore:
         assert isinstance(result, list)
         assert len(result) == 2
 
-    def test_duplicate_codes_is_an_error(self) -> None:
+    def test_colliding_codes_are_disambiguated_not_rejected(self) -> None:
         # "Pete One" and "Peter One" both truncate their first-name fragment
-        # to "Pe" (build_player_code caps the first-name transform at 2
-        # chars) and share the last-name fragment "One" -- a genuine code
-        # collision, matching the oracle's bad_lineup expectation.
+        # to "Pe" (build_player_code caps the first-name transform at 2 chars)
+        # and share the last-name fragment "One".
+        #
+        # DELIBERATE DIVERGENCE FROM THE SCALA ORACLE. Upstream
+        # ExtractorUtils.scala treats this as bad_lineup and rejects the game;
+        # this test asserted that behaviour. Rejecting is catastrophic rather
+        # than cautious, because every game a team plays carries the same
+        # roster -- so one colliding pair deleted the team's ENTIRE season from
+        # `lineups`, `matchup_stints` and `possessions`. Measured across
+        # 2010-2026, that cost 79 D-I team-seasons; Kansas published 0 of 36
+        # games in 2010 because it rostered the Morris twins.
+        #
+        # Only the colliding players are re-coded, so every other player keeps
+        # the ported code and `lineup_key`s churn only for affected teams. A
+        # genuinely identical full name still raises -- see
+        # tests/mbb/test_mbb_ncaa_sibling_codes.py.
         result = validate_box_score(TeamId("Team"), ["Pete One", "Peter One"])
-        assert isinstance(result, ParseError)
+        assert not isinstance(result, ParseError), result
+        assert len({c.code for c in result}) == 2, result

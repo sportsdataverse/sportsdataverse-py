@@ -523,8 +523,69 @@ def validate_box_score(team: TeamId, lineup: list[str]) -> Union[list[PlayerCode
     """
     codes = [build_player_code(name, team) for name in lineup]
     if len(codes) != len({c.code for c in codes}):
+        codes = _disambiguate_sibling_codes(codes)
+    if len(codes) != len({c.code for c in codes}):
         return build_sub_error(error=f"Duplicate players: [{codes}]")
     return codes
+
+
+_FIRST_PREFIX_LEN = 2
+
+
+def _first_last(full_name: str) -> "tuple[str, str]":
+    """``"Morris, Markieff"`` -> ``("Markieff", "Morris")``; also ``"First Last"``."""
+    if "," in full_name:
+        last, _, rest = full_name.partition(",")
+        first = rest.strip().split(" ")[0] if rest.strip() else ""
+        return first.strip(), last.strip()
+    parts = [p for p in full_name.split(" ") if p]
+    if len(parts) < 2:
+        return (parts[0] if parts else ""), ""
+    return parts[0], parts[-1]
+
+
+def _disambiguate_sibling_codes(codes: "list[PlayerCodeId]") -> "list[PlayerCodeId]":
+    """Re-code teammates whose player codes collide, instead of failing the game.
+
+    ``build_player_code`` is a faithful port of ``ExtractorUtils.scala`` and
+    keys a player as ``{first-two-letters}{Surname}``. Teammates sharing a
+    surname AND their first two initials therefore collide -- which in practice
+    means SIBLINGS, and college basketball is full of them:
+
+        Kansas 2010     MaMorris     Markieff / Marcus Morris
+        San Diego 2015  SoEderaine   Sophie / Sophia Ederaine
+        Green Bay 2019  MaWolf       Madison / Mackenzie Wolf
+
+    Rejecting the game was catastrophic rather than cautious: every game a team
+    plays has the same roster, so ONE sibling pair deleted the team's whole
+    season from `lineups` (and so from `matchup_stints` and `possessions`).
+    Measured across 2010-2026, 79 D-I team-seasons were affected -- Kansas 2010
+    published 0 of 36 games.
+
+    Only the colliding players are re-coded, to the full first name plus
+    surname (``MarkieffMorris`` / ``MarcusMorris``); every other player keeps
+    the ported code untouched, so `lineup_key`s change ONLY for affected teams.
+    The rule is a pure function of the name, so the play-by-play side derives
+    the same code from the same roster and the join still lands.
+
+    Two players with an identical full name still collide and still raise --
+    that is a genuine ambiguity, not a coding artefact.
+    """
+    from collections import Counter
+
+    counts = Counter(c.code for c in codes)
+    out: "list[PlayerCodeId]" = []
+    for c in codes:
+        if counts[c.code] < 2:
+            out.append(c)
+            continue
+        first, last = _first_last(c.id.name)
+        if not first or not last:
+            out.append(c)
+            continue
+        widened = f"{first[:1].upper()}{first[1:].lower()}{last[:1].upper()}{last[1:].lower()}"
+        out.append(replace(c, code=widened))
+    return out
 
 
 # ---------------------------------------------------------------------------
