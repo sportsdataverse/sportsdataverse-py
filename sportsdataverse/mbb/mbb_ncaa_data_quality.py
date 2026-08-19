@@ -293,7 +293,10 @@ team_aliases: dict[Year, dict[TeamId, TeamId]] = {
 """Season-scoped team renames (``DataQualityIssues.team_aliases``)."""
 
 
-team_name_equivalents: tuple[frozenset[str], ...] = (frozenset({"New Orleans", "LSU New Orleans"}),)
+team_name_equivalents: tuple[frozenset[str], ...] = (
+    frozenset({"New Orleans", "LSU New Orleans"}),
+    frozenset({"NIU", "Northern Ill."}),
+)
 """Names that denote the SAME school, as an equivalence -- not a rewrite.
 
 Distinct from :data:`team_aliases`, which models a mid-season RENAME and
@@ -318,6 +321,26 @@ The far more common failure (456 MBB / 333 WBB events) was NOT an alias at
 all: the box page names only ONE team when the opponent is non-D-I, handled
 in :func:`~sportsdataverse.mbb.mbb_ncaa_stints.parse_team_name` with the
 caller's known sides.
+
+The `NIU` / `Northern Ill.` class fixes the INHERITED :data:`team_aliases`
+entry ``Year(2021): {NIU -> Northern Ill.}``, which has this exact
+directional flaw. Measured on real games, that rewrite is a perfect trade --
+it repairs one direction by breaking the other:
+
+    season 2021-22 (alias active)  target `NIU` FAIL x3   `Northern Ill.` OK x3
+    season 2015    (no alias)      target `NIU` OK        `Northern Ill.` FAIL
+
+Both targets occur in the SAME season, so no directional rewrite can be
+right. The class is ADDITIVE: the rewrite still fires and `same_school` then
+matches the rewritten name against either spelling, so the inherited entry is
+left untouched rather than diverging further from the Scala oracle.
+
+Surfaced by the skip ledger during the corpus re-parse -- 6 events, all NIU,
+all with BOTH titles present and one exactly equal to the target.
+
+Every remaining `team_aliases` entry is a directional rewrite and can fail the
+same way in the season its target uses the other spelling; auditing them all
+is tracked separately.
 
 Do NOT add a fuzzy team matcher here. `Miami (FL)` / `Miami (OH)`,
 `New Orleans` / `Southern-N.O.` and `Loyola (IL)` / `Loyola (MD)` are
