@@ -308,17 +308,60 @@ def test_fuzzy_box_match_multiple_weak_error() -> None:
     assert "ERROR.2A" in result.message
 
 
-def test_fuzzy_box_match_first_name_only_retired() -> None:
-    """utest ``:232-241`` -- "3C" support was retired upstream; the single
-    first-name-only match always errors, even though it's the only
-    candidate."""
+def test_fuzzy_box_match_unique_first_name_resolves() -> None:
+    """utest ``:232-241``, INVERTED -- a DELIBERATE divergence from the Scala
+    oracle, which retired this branch ("3C") and errored on a unique
+    first-name-only match.
+
+    The upstream fixture argues our side: `FINKLEA,AMAYA` against a box
+    carrying `Guity, Amaya` is Amaya **Finklea-Guity** -- one compound
+    surname, split across the two pages. The oracle rejected a correct match.
+
+    Rejecting is not the conservative choice. It is how name-changed players
+    are deleted: the NCAA retro-updates the box to a player's CURRENT
+    surname while the play-by-play keeps the surname as of the game, so the
+    surname gate scores zero and the first name is the only signal left.
+    An unresolved sub leaves the on-court set at 4 or 6, every stint is
+    flagged, and the team yields zero good stints for that game.
+
+    Measured over 800 real games before flipping: 13 unique bindings, all
+    correct (9 surname changes, 3 misspellings, 1 scorer typo), 0 false
+    positives. See the comment in `fuzzy_box_match` for the full table.
+    """
     result = fuzzy_box_match(
         "FINKLEA,AMAYA",
         ["Guity, Amaya", "Pryor, DeArica", "Guity, Robison"],
         "test3c",
     )
+    assert result == "Guity, Amaya", result
+
+
+def test_fuzzy_box_match_ambiguous_first_name_still_errors() -> None:
+    """The guards that make the divergence above safe are still guards.
+
+    Two players sharing the first name is genuinely ambiguous, so it must
+    keep erroring -- enabling 3C must not weaken 3A.
+    """
+    result = fuzzy_box_match(
+        "EATON,LEXI",
+        ["Rydalch, Lexi", "Bailey, Lexi"],
+        "test3a",
+    )
     assert isinstance(result, FuzzyMatchError)
-    assert "ERROR.3C" in result.message
+    assert "ERROR.3A" in result.message
+
+
+def test_fuzzy_box_match_surname_change_resolves_by_first_name() -> None:
+    """The real BYU 2014-15 case: three name changes on one roster.
+
+    `EATON` / `BROADHEAD` / `FULLER` are the play-by-play surnames;
+    `Rydalch` / `Devashrayee` / `Nielson` are what the box calls the same
+    three women. Before this change BYU produced lineups for 9 of 33 games.
+    """
+    box = ["Rydalch, Lexi", "Devashrayee, Cassie", "Nielson, Kristine", "Bailey, Morgan"]
+    assert fuzzy_box_match("EATON,LEXI", box, "byu") == "Rydalch, Lexi"
+    assert fuzzy_box_match("BROADHEAD,CASSIE", box, "byu") == "Devashrayee, Cassie"
+    assert fuzzy_box_match("FULLER,KRISTINE", box, "byu") == "Nielson, Kristine"
 
 
 def test_fuzzy_box_match_multiple_first_name_error() -> None:

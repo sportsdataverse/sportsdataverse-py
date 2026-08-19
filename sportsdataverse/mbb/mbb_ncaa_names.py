@@ -704,10 +704,42 @@ def fuzzy_box_match(candidate: str, unassigned_box_names: list[str], team_contex
         if any(m.near_first_name is not None for m in no_match):
             bad_l2 = [m for m in no_match if m.near_first_name is not None]
             return FuzzyMatchError(f"ERROR.3B: multiple near first name matches: [{candidate}] vs {bad_l2}")
-        # NOTE (Scala ":890-897"): 'first name only' matches were deliberately
-        # retired due to false positives -- this branch always errors, it
-        # never returns the match, even though it's the only candidate.
-        return FuzzyMatchError(f"ERROR.3C: 'first name only' match: [{first_name_only[0]}]")
+        # DELIBERATE DIVERGENCE from Scala ":890-897", which retired this
+        # branch as a false-positive risk and always errored -- even though
+        # it had already established a UNIQUE exact-first-name match with no
+        # near-miss rivals. That rejection is what deletes name-changed
+        # players: the NCAA retro-updates the roster/box to a player's
+        # CURRENT surname while the play-by-play keeps the surname as of the
+        # game, so `EATON, LEXI` (pbp) never matches `Rydalch, Lexi` (box).
+        # The surname gate scores those at zero, so the first name is the
+        # only signal left -- and the two guards above already require it to
+        # be unique and unrivalled.
+        #
+        # Measured before flipping, over an 800-game sample (WBB 2015 + MBB
+        # 2015, ~4.3k and ~4.0k successful matches respectively). The branch
+        # fires on 13 unique (team, pbp_name, box_name) triples, ALL correct:
+        #
+        #   9  surname changes  EATON->Rydalch, BROADHEAD->Devashrayee,
+        #                       FULLER->Nielson, MORRISON->Pulsipher,
+        #                       OWENS->Mitchell, GORDON->Christensen,
+        #                       SIMS->Harris, HERZBERG->Howell,
+        #                       MCDOWELL->Michael
+        #   3  misspellings     QEDAN->Qeden, ADEJINI->Adeniji, GRAY->Gary
+        #   1  scorer typo      `KELLEY,RYAN Enters Game` (once) on a Siena
+        #                       roster carrying `Oliver, Ryan` (31 pbp
+        #                       mentions) and no Kelley on EITHER roster
+        #
+        # Zero false positives. The men's side is the control: far fewer
+        # surname changes, and it fired only twice in 400 games.
+        #
+        # Rejecting these is not the safe option -- it is its own corruption.
+        # An unmatched sub leaves the on-court set at 4 or 6, every stint is
+        # flagged `player_count_error`, and the team yields ZERO good stints
+        # for the game. BYU 2014-15 had three name-changed players at once
+        # and produced lineups for only 9 of 33 games.
+        #
+        # ERROR.3A (ambiguous) and ERROR.3B (near-miss rival) still reject.
+        return first_name_only[0].box_name
 
     return FuzzyMatchError("ERROR.4A: no good matches")
 
