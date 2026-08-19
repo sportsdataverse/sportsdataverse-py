@@ -38,6 +38,7 @@ __all__ = [
     "NON_DI_PLAYER",
     "NON_DI_TEAM",
     "TEAM_PSEUDO_PLAYER",
+    "build_person_keys",
     "build_player_xwalk",
     "expand_xwalk_aliases",
     "normalize_player_key",
@@ -353,3 +354,140 @@ def observed_pairs(possessions: pl.DataFrame) -> pl.DataFrame:
             for s in _SLOTS
         ]
     ).unique()
+
+
+_CLASS_ORDER = {"FR.": 1, "SO.": 2, "JR.": 3, "SR.": 4, "GR.": 5}
+_HT_TOLERANCE_IN = 1
+
+
+class _Union:
+    """Minimal union-find over roster-row indices."""
+
+    def __init__(self, n: int) -> None:
+        self._p = list(range(n))
+
+    def find(self, a: int) -> int:
+        while self._p[a] != a:
+            self._p[a] = self._p[self._p[a]]
+            a = self._p[a]
+        return a
+
+    def union(self, a: int, b: int) -> None:
+        ra, rb = self.find(a), self.find(b)
+        if ra != rb:
+            self._p[max(ra, rb)] = min(ra, rb)
+
+
+def build_person_keys(
+    team_rosters: pl.DataFrame,
+    *,
+    name_changes: "pl.DataFrame | None" = None,
+) -> pl.DataFrame:
+    """Synthesize a cross-season ``person_id`` for roster rows.
+
+    Args:
+        team_rosters: Concatenated ``ncaa_{lg}_team_rosters`` across seasons;
+            needs ``season``, ``team``, ``player``, ``player_id``,
+            ``ht_inches`` and ``class``.
+        name_changes: Optional crosswalk (see :func:`expand_xwalk_aliases`) so a
+            player who changed their name is one person, not two.
+
+    Returns:
+        The input columns plus ``player_key`` and a ``Utf8`` ``person_id`` that
+        is stable across seasons and teams. ``player_id`` is preserved -- the
+        synthetic key ADDS to the provider's id, never replaces it.
+
+    **Why this has to exist.** ``player_id`` is a per-season roster-ENTRY id.
+    Across 17 seasons, 83,518 roster rows carry 83,518 distinct ids, none
+    appearing in more than one season; of 23,302 ``(team, player)`` pairs
+    spanning seasons, 23,286 receive a new id every season and 0 are stable.
+    RAPM conventionally pools 2-3 seasons, so pooling on ``player_id`` would
+    treat every player as a new person each year.
+
+    **The rule, and the measurements behind it.** Rows are linked across
+    ADJACENT seasons on the canonical name (after ``name_changes``), validated
+    by height and gated on uniqueness:
+
+    * ``name`` is 99.4% nationally unique within a season (0.59% collide), so
+      it carries the link.
+    * ``ht_inches`` is identical across 99.4% of consecutive-season links and
+      within one inch across 99.5%, so it is the validator
+      (:data:`_HT_TOLERANCE_IN`).
+    * ``class`` is NOT required to advance. Only 88.8% of real links advance by
+      +1; 10.5% stay flat (redshirt and medical years), so demanding +1 would
+      break one link in ten. Only BACKWARDS movement (0.1%) disqualifies.
+    * Two candidates in the following season -> no link. Same-season namesakes
+      never merge, since linking is strictly across adjacent seasons.
+
+    Example:
+        ::
+
+            from sportsdataverse.mbb.mbb_ncaa_rapm_input import build_person_keys
+
+            keys = build_person_keys(all_season_rosters, name_changes=changes)
+    """
+    df = team_rosters.with_columns(
+        pl.col("season").cast(pl.Utf8),
+        pl.col("team").cast(pl.Utf8),
+        normalize_player_key(pl.col("player").cast(pl.Utf8)).alias("player_key"),
+    )
+
+    # Fold renamed players onto their CURRENT name so both spellings land in
+    # the same link group.
+    if name_changes is not None and name_changes.height:
+        nc = name_changes.select(
+            pl.col("team").cast(pl.Utf8),
+            normalize_player_key(pl.col("name_game_time").cast(pl.Utf8)).alias("old"),
+            normalize_player_key(pl.col("name_current").cast(pl.Utf8)).alias("new"),
+        ).unique()
+        seen: "dict[tuple[str, str], set[str]]" = {}
+        for team, old, new in nc.rows():
+            seen.setdefault((team, old), set()).add(new)
+        ren = {k: next(iter(v)) for k, v in seen.items() if len(v) == 1}
+        if ren:
+            df = df.with_columns(
+                pl.struct(["team", "player_key"])
+                .map_elements(
+                    lambda s: ren.get((s["team"], s["player_key"]), s["player_key"]),
+                    return_dtype=pl.Utf8,
+                )
+                .alias("canon_key")
+            )
+        else:
+            df = df.with_columns(pl.col("player_key").alias("canon_key"))
+    else:
+        df = df.with_columns(pl.col("player_key").alias("canon_key"))
+
+    rows = df.select("season", "canon_key", "ht_inches", "class").rows()
+    by_name: "dict[str, list[int]]" = {}
+    for i, (_s, key, _h, _c) in enumerate(rows):
+        by_name.setdefault(key, []).append(i)
+
+    uf = _Union(len(rows))
+    for idxs in by_name.values():
+        if len(idxs) < 2:
+            continue
+        by_season: "dict[int, list[int]]" = {}
+        for i in idxs:
+            try:
+                by_season.setdefault(int(rows[i][0]), []).append(i)
+            except (TypeError, ValueError):
+                continue
+        for season in sorted(by_season):
+            nxt = by_season.get(season + 1)
+            cur = by_season[season]
+            if not nxt or len(cur) != 1 or len(nxt) != 1:
+                continue  # ambiguous on either side -> do not link
+            a, b = cur[0], nxt[0]
+            ha, hb = rows[a][2], rows[b][2]
+            if ha is not None and hb is not None and abs(ha - hb) > _HT_TOLERANCE_IN:
+                continue
+            ca = _CLASS_ORDER.get(str(rows[a][3]).upper())
+            cb = _CLASS_ORDER.get(str(rows[b][3]).upper())
+            if ca is not None and cb is not None and cb < ca:
+                continue  # class cannot go backwards
+            uf.union(a, b)
+
+    return df.drop("canon_key").with_columns(
+        pl.Series("person_id", [f"p{uf.find(i)}" for i in range(len(rows))], dtype=pl.Utf8)
+    )

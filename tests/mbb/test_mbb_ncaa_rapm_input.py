@@ -334,3 +334,129 @@ class TestNameChangeCrosswalk:
         a = expand_xwalk_aliases(x, _obs([("Purdue", "MADISON.LAYDEN")]))
         b = expand_xwalk_aliases(x, _obs([("Purdue", "MADISON.LAYDEN")]), name_changes=None)
         assert a.height == b.height
+
+
+# --- cross-season person key -------------------------------------------------
+#
+# `player_id` is a per-season ROSTER-ENTRY id, not a person id: across 17
+# seasons, 83,518 roster rows carry 83,518 distinct ids, none appearing twice.
+# RAPM conventionally pools 2-3 seasons, so pooling on player_id would treat
+# every player as a new person each year. The key therefore has to be
+# synthesized.
+#
+# Measured invariants driving the rule:
+#   name        99.4% nationally unique within a season (0.59% collide)
+#   ht_inches   99.4% identical / 99.5% within 1in across consecutive seasons
+#   class       only 88.8% advance by +1; 10.5% stay flat (redshirt/medical),
+#               so a "+1 required" rule would break one link in ten. Only
+#               BACKWARDS movement (0.1%) is treated as disqualifying.
+
+from sportsdataverse.mbb.mbb_ncaa_rapm_input import build_person_keys  # noqa: E402
+
+
+def _ros(rows):
+    return pl.DataFrame(
+        {
+            "season": [r[0] for r in rows],
+            "team": [r[1] for r in rows],
+            "player": [r[2] for r in rows],
+            "player_id": [r[3] for r in rows],
+            "ht_inches": [r[4] for r in rows],
+            "class": [r[5] for r in rows],
+        }
+    )
+
+
+def _pid(df, season, player):
+    return df.filter((pl.col("season") == season) & (pl.col("player_key") == player))["person_id"][0]
+
+
+class TestBuildPersonKeys:
+    def test_same_player_across_seasons_gets_one_person_id(self):
+        r = _ros(
+            [
+                ("2023", "Duke", "KIA.SMITH", "1", 70, "Fr."),
+                ("2024", "Duke", "KIA.SMITH", "2", 70, "So."),
+            ]
+        )
+        out = build_person_keys(r)
+        assert _pid(out, "2023", "KIA.SMITH") == _pid(out, "2024", "KIA.SMITH")
+
+    def test_per_season_player_id_is_preserved(self):
+        """The synthetic key ADDS to the provider id, never replaces it."""
+        out = build_person_keys(_ros([("2023", "Duke", "KIA.SMITH", "1", 70, "Fr.")]))
+        assert out["player_id"][0] == "1"
+
+    def test_transfer_keeps_one_person_id(self):
+        """Team is not part of the key -- a transfer is the same person."""
+        r = _ros(
+            [
+                ("2023", "Duke", "KIA.SMITH", "1", 70, "Fr."),
+                ("2024", "Iowa", "KIA.SMITH", "2", 70, "So."),
+            ]
+        )
+        out = build_person_keys(r)
+        assert _pid(out, "2023", "KIA.SMITH") == _pid(out, "2024", "KIA.SMITH")
+
+    def test_redshirt_flat_class_still_links(self):
+        """10.5% of real links do not advance class -- must not break them."""
+        r = _ros(
+            [
+                ("2023", "Duke", "KIA.SMITH", "1", 70, "Fr."),
+                ("2024", "Duke", "KIA.SMITH", "2", 70, "Fr."),
+            ]
+        )
+        out = build_person_keys(r)
+        assert _pid(out, "2023", "KIA.SMITH") == _pid(out, "2024", "KIA.SMITH")
+
+    def test_height_mismatch_splits_two_people(self):
+        """Same name, very different height -> two different people."""
+        r = _ros(
+            [
+                ("2023", "Duke", "KIA.SMITH", "1", 62, "Sr."),
+                ("2024", "Iowa", "KIA.SMITH", "2", 78, "Fr."),
+            ]
+        )
+        out = build_person_keys(r)
+        assert _pid(out, "2023", "KIA.SMITH") != _pid(out, "2024", "KIA.SMITH")
+
+    def test_one_inch_drift_still_links(self):
+        r = _ros(
+            [
+                ("2023", "Duke", "KIA.SMITH", "1", 70, "Fr."),
+                ("2024", "Duke", "KIA.SMITH", "2", 71, "So."),
+            ]
+        )
+        out = build_person_keys(r)
+        assert _pid(out, "2023", "KIA.SMITH") == _pid(out, "2024", "KIA.SMITH")
+
+    def test_two_same_named_players_in_one_season_stay_distinct(self):
+        r = _ros(
+            [
+                ("2024", "Duke", "KIA.SMITH", "1", 70, "Fr."),
+                ("2024", "Iowa", "KIA.SMITH", "2", 70, "Fr."),
+            ]
+        )
+        out = build_person_keys(r)
+        ids = out.filter(pl.col("player_key") == "KIA.SMITH")["person_id"].to_list()
+        assert len(set(ids)) == 2, "same-season namesakes must not merge"
+
+    def test_name_change_unifies_one_person(self):
+        r = _ros(
+            [
+                ("2023", "Montana St.", "KATELYNN.LIMARDO", "1", 70, "Jr."),
+                ("2024", "Montana St.", "KATELYNN.MARTIN", "2", 70, "Sr."),
+            ]
+        )
+        out = build_person_keys(
+            r,
+            name_changes=_changes([("Montana St.", "KATELYNN.LIMARDO", "KATELYNN.MARTIN")]),
+        )
+        a = _pid(out, "2023", "KATELYNN.LIMARDO")
+        b = _pid(out, "2024", "KATELYNN.MARTIN")
+        assert a == b
+
+    def test_person_id_is_utf8_and_never_null(self):
+        out = build_person_keys(_ros([("2024", "Duke", "KIA.SMITH", "1", 70, "Fr.")]))
+        assert out.schema["person_id"] == pl.Utf8
+        assert out["person_id"].null_count() == 0
