@@ -190,6 +190,21 @@ def _jsonable(obj: Any) -> Any:
     return obj
 
 
+#: First season in which the box-score SVG shot chart is effectively universal.
+#: Before it, a missing chart is absent DATA rather than a parse failure; from
+#: it, absence is a real gap worth a warning.
+#:
+#: MEASURED, not assumed -- the chart phased in gradually, so a cutover at the
+#: first season that has ANY charts would warn on a known rollout. Share of 60
+#: sampled MBB games per season whose shots parse:
+#:
+#:     2018   0/60      2019  15/60 (25%)
+#:     2020  49/60      2021  58/60 (97%)
+#:
+#: 2021 is where "no chart" stops being normal.
+_FIRST_SHOT_CHART_SEASON = 2021
+
+
 def _clip(message: str, limit: int = 160) -> str:
     """One-line, length-capped form of a parser message for logging."""
     flat = " ".join(str(message).split())
@@ -283,9 +298,16 @@ def _parse_shots(
         # A missing SVG shot map is EXPECTED before 2019 (the page carries no
         # shot chart at all), so it is absent data rather than a dropped
         # family -- warning on it floods every pre-2019 season and buries the
-        # real signal. Only a genuine parse failure is worth a warning.
+        # real signal. From 2019 the chart SHOULD be there, so its absence is
+        # a real gap and must still be logged: the season gate is what keeps
+        # this an era carve-out instead of a blanket silencer.
         first = shots[0] if shots else None
-        if isinstance(first, ParseError) and not _is_no_shot_map(first):
+        # `_ending_year` never returns None -- it falls back to the current
+        # year on drift, which lands in the post-2019 era and therefore LOGS.
+        # An unparseable season is treated as recent, so a real gap is not
+        # silenced by a malformed season string.
+        pre_shot_chart_era = _ending_year(season) < _FIRST_SHOT_CHART_SEASON
+        if isinstance(first, ParseError) and not (pre_shot_chart_era and _is_no_shot_map(first)):
             _log_family_skip("shots", contest_id, home_team, [first])
         return []
     frame = shot_events_to_frame(

@@ -149,7 +149,7 @@ from sportsdataverse.mbb.mbb_ncaa_data_quality import (
     build_sub_error,
     misspellings,
     players_with_duplicate_names,
-    persistent_team_aliases,
+    same_school,
     team_aliases,
 )
 from sportsdataverse.mbb.mbb_ncaa_events import (
@@ -492,9 +492,30 @@ def sides_from_box(box_lineup: "LineupEvent") -> "tuple[Optional[str], Optional[
     established, so a page that names only ONE team (a non-D-I opponent has no
     header on the box page) does not fail again further down the chain.
 
-    Returns ``(None, None)`` for a NEUTRAL-site game: there `location_type`
-    comes from the date, not from title order, so it carries no ordering
-    information and guessing would pick the wrong roster table.
+    Args:
+        box_lineup: A box lineup already resolved by
+            :func:`~sportsdataverse.mbb.mbb_ncaa_boxscore_parser.get_box_lineup`.
+
+    Returns:
+        ``(home_team, away_team)``, or ``(None, None)`` for a NEUTRAL-site
+        game: there ``location_type`` comes from the date rather than title
+        order, so it carries no ordering information and guessing would pick
+        the wrong roster table.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.mbb.mbb_ncaa_boxscore_parser import get_box_lineup
+            from sportsdataverse.mbb.mbb_ncaa_models import TeamId
+            from sportsdataverse.mbb.mbb_ncaa_stints import sides_from_box
+
+            box = get_box_lineup("individual_stats.html", stats_html, TeamId("Kansas"), format_version=1)
+            home, away = sides_from_box(box)
+
+        Feeding the hints back into a later parse::
+
+            from sportsdataverse.mbb.mbb_ncaa_stints import parse_team_name
+            parse_team_name(["Kansas"], TeamId("Kansas"), box.team.year, home, away)
     """
     team = box_lineup.team.team.name
     opponent = box_lineup.opponent.team.name
@@ -524,6 +545,13 @@ def parse_team_name(
         teams: The two team-title strings from the game page.
         target_team: The team we are building lineups for.
         year: Season, for the ``team_aliases`` data-quality overrides.
+        home_team: The game's home team, if the caller already knows it (the
+            play-by-play does). Used ONLY when the page yields a single
+            title, to pair the missing side without guessing.
+        away_team: The game's away team, same source. Both hints are required
+            together: the returned ``target_is_first`` also selects which
+            roster TABLE belongs to the target, so it is never inferred from
+            one hint alone.
 
     Returns:
         ``(target_name, opponent_name, target_is_first)`` on success, or a
@@ -549,12 +577,11 @@ def parse_team_name(
             continue  # Scala `collect` drops non-matching entries
         just_team = m.group(2)
         as_id = TeamId(just_team)
-        as_id = aliases.get(as_id, persistent_team_aliases.get(as_id, as_id))
-        cleaned.append(as_id.name.strip())
+        cleaned.append(aliases.get(as_id, as_id).name.strip())
 
-    if len(cleaned) == 2 and cleaned[0] == target_team_str:
+    if len(cleaned) == 2 and same_school(cleaned[0], target_team_str):
         return (target_team_str, cleaned[1], True)
-    if len(cleaned) == 2 and cleaned[1] == target_team_str:
+    if len(cleaned) == 2 and same_school(cleaned[1], target_team_str):
         return (target_team_str, cleaned[0], False)
 
     # Only ONE title on the page. This is not a malformed page: on games
@@ -573,7 +600,7 @@ def parse_team_name(
     if len(cleaned) == 1 and home_team is not None and away_team is not None:
         sides = {home_team, away_team}
         other = (sides - {target_team_str}).pop() if target_team_str in sides else None
-        if other is not None and cleaned[0] in sides:
+        if other is not None and any(same_school(cleaned[0], side) for side in sides):
             return (target_team_str, other, target_team_str == away_team)
 
     return build_sub_error(

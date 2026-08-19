@@ -783,6 +783,11 @@ def get_box_lineup(
         neutral_game_dates: Date strings (the first whitespace-separated
             token of the raw date-cell text) known to be neutral-site games
             -- overrides the default home/away inference.
+        home_team: The game's home team when the caller already knows it,
+            forwarded to team-name resolution so a box page that names only
+            one side (a non-D-I opponent has no header) still resolves.
+        away_team: The game's away team, same purpose. Both are required
+            together or neither is used.
 
     Returns:
         A :class:`~sportsdataverse.mbb.mbb_ncaa_models.LineupEvent` whose

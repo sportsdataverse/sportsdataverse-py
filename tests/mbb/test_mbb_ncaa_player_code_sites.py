@@ -51,12 +51,29 @@ _ALLOWED: "dict[tuple[str, str], tuple[int, str]]" = {
 }
 
 
+_TARGET = "build_player_code"
+
+
 class _Collector(ast.NodeVisitor):
-    """Records every `build_player_code` call with its enclosing qualname."""
+    """Records every `build_player_code` call with its enclosing qualname.
+
+    Resolves LOCAL ALIASES first (`from ... import build_player_code as bpc`),
+    because matching only the literal name would let `bpc(...)` slip past the
+    guard entirely -- a guard with a trivially-evadable detector is worse than
+    none, since it reads as coverage. Attribute calls (`mod.build_player_code`)
+    are matched on the attribute name.
+    """
 
     def __init__(self) -> None:
         self.stack: "list[str]" = []
         self.sites: "list[str]" = []
+        self.aliases: "set[str]" = {_TARGET}
+
+    def visit_ImportFrom(self, node: ast.ImportFrom) -> None:
+        for a in node.names:
+            if a.name == _TARGET:
+                self.aliases.add(a.asname or a.name)
+        self.generic_visit(node)
 
     def _scoped(self, node: "ast.AST") -> None:
         self.stack.append(getattr(node, "name", "?"))
@@ -69,8 +86,11 @@ class _Collector(ast.NodeVisitor):
 
     def visit_Call(self, node: ast.Call) -> None:
         fn = node.func
-        name = fn.id if isinstance(fn, ast.Name) else getattr(fn, "attr", None)
-        if name == "build_player_code":
+        if isinstance(fn, ast.Name):
+            hit = fn.id in self.aliases
+        else:
+            hit = getattr(fn, "attr", None) == _TARGET
+        if hit:
             self.sites.append(".".join(self.stack) if self.stack else "<module>")
         self.generic_visit(node)
 
@@ -117,3 +137,27 @@ def test_the_guard_can_actually_fail() -> None:
     found = _call_sites()
     assert sum(found.values()) >= 8, f"expected the known call sites, found {sum(found.values())}"
     assert ("mbb/mbb_ncaa_names.py", "code_from_box") in found
+
+
+def test_an_aliased_import_cannot_evade_the_guard() -> None:
+    """`from ... import build_player_code as bpc` then `bpc(...)` must count.
+
+    Matching only the literal name would make the guard trivially evadable,
+    which is worse than no guard: it reads as coverage while catching nothing.
+    """
+    src = (
+        "from sportsdataverse.mbb.mbb_ncaa_stints import build_player_code as bpc\n"
+        "def sneaky(name, team):\n"
+        "    return bpc(name, team)\n"
+    )
+    c = _Collector()
+    c.visit(ast.parse(src))
+    assert c.sites == ["sneaky"], c.sites
+
+
+def test_module_qualified_calls_are_detected() -> None:
+    """`mod.build_player_code(...)` counts too."""
+    src = "import sportsdataverse.mbb.mbb_ncaa_stints as m\ndef f(n, t):\n    return m.build_player_code(n, t)\n"
+    c = _Collector()
+    c.visit(ast.parse(src))
+    assert c.sites == ["f"], c.sites

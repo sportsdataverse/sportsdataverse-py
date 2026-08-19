@@ -680,6 +680,10 @@ def parse_game_events(
             :data:`v1_builders`).
         enrich: Whether to run :func:`enrich_and_reverse_game_events` (game
             breaks + ascending minutes + reversal) over the parsed events.
+        home_team: Known home team, forwarded to team-name resolution so a
+            page naming a single team still resolves (see
+            :func:`~sportsdataverse.mbb.mbb_ncaa_stints.sides_from_box`).
+        away_team: Known away team, same purpose.
 
     Returns:
         The play-by-play events (reversed, latest-to-earliest, if

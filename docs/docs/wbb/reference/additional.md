@@ -5551,8 +5551,8 @@ Gets the boxscore lineup from the HTML page (``BoxscoreParser
 | `format_version` | `int` |  | `0` for the legacy layout, `1` for the 2018+ layout (see the module docstring's selector-translation notes). |
 | `external_roster` | `tuple[list[str], list[RosterEntry]]` | `([], [])` | `(other_players, roster_players)` -- either just names, or a full roster, to validate/fuzzy-correct box names against (see `inject_validated_players`). Also seeds `~sportsdataverse.mbb.mbb_ncaa_models.LineupEvent.players_out` on the interim lineup (`roster_players`, each's `code` replaced by its jersey `number`). |
 | `neutral_game_dates` | `AbstractSet[str]` | `frozenset()` | Date strings (the first whitespace-separated token of the raw date-cell text) known to be neutral-site games -- overrides the default home/away inference. |
-| `home_team` | `Optional[str]` | `None` |  |
-| `away_team` | `Optional[str]` | `None` |  |
+| `home_team` | `Optional[str]` | `None` | The game's home team when the caller already knows it, forwarded to team-name resolution so a box page that names only one side (a non-D-I opponent has no header) still resolves. |
+| `away_team` | `Optional[str]` | `None` | The game's away team, same purpose. Both are required together or neither is used. |
 
 **Returns**
 
