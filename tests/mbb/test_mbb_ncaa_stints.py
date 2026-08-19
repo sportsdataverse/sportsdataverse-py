@@ -798,3 +798,46 @@ def test_duration_from_period_is_next_periods_start() -> None:
     assert duration_from_period(1, is_women_game=False) == 20.0  # end of men's 1st half
     assert duration_from_period(2, is_women_game=False) == start_time_from_period(3, is_women_game=False) == 40.0
     assert duration_from_period(4, is_women_game=True) == start_time_from_period(5, is_women_game=True) == 40.0
+
+
+class TestTeamNameEquivalence:
+    """A directional alias fixes one spelling by breaking the other.
+
+    `team_aliases` rewrites a page name to a canonical one. That works only
+    while every game in the season targets the canonical spelling -- and both
+    spellings occur in the SAME season, so the rewrite is a perfect trade.
+    Measured on the inherited `Year(2021): {NIU -> Northern Ill.}` entry
+    before the equivalence class existed:
+
+        season 2021-22 (alias active)  target `NIU` FAIL x3  `Northern Ill.` OK x3
+        season 2015    (no alias)      target `NIU` OK       `Northern Ill.` FAIL
+
+    Six of these reached the skip ledger during the corpus re-parse, every one
+    with BOTH titles present and one exactly equal to the target.
+    """
+
+    @staticmethod
+    def _ok(titles, target, year):
+        from sportsdataverse.mbb.mbb_ncaa_data_quality import ParseError
+
+        return not isinstance(parse_team_name(titles, TeamId(target), Year(year)), ParseError)
+
+    def test_both_spellings_resolve_in_the_aliased_season(self):
+        """Year 2021 has the rewrite active; both targets must still match."""
+        for target in ("NIU", "Northern Ill."):
+            for titles in (["Bradley", "NIU"], ["NIU", "Drake"], ["Bradley", "Northern Ill."]):
+                assert self._ok(titles, target, 2021), (target, titles)
+
+    def test_both_spellings_resolve_in_an_unaliased_season(self):
+        """Year 2015 has no rewrite; the equivalence must carry it alone."""
+        for target in ("NIU", "Northern Ill."):
+            for titles in (["Bradley", "NIU"], ["Bradley", "Northern Ill."]):
+                assert self._ok(titles, target, 2015), (target, titles)
+
+    def test_distinct_schools_are_not_merged(self):
+        """The guard on the whole approach: near-identical names stay distinct."""
+        from sportsdataverse.mbb.mbb_ncaa_data_quality import same_school
+
+        assert not same_school("Miami (FL)", "Miami (OH)")
+        assert not same_school("New Orleans", "Southern-N.O.")
+        assert not same_school("Loyola (IL)", "Loyola (MD)")
