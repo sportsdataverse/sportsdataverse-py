@@ -4112,6 +4112,52 @@ clumps = clump_bad_lineups([(bad_ev, good_ev)])
 clumps[0].evs  # [bad_ev]
 ```
 
+### `code_from_box(name: 'str', box_lineup: 'LineupEvent', team: 'Optional[TeamId]' = None) -> 'PlayerCodeId'` {#code_from_box}
+
+Resolve a tidied player NAME to the box roster's own `PlayerCodeId`.
+
+`~sportsdataverse.mbb.mbb_ncaa_stints.build_player_code` is a
+faithful `ExtractorUtils.scala` port and keys a player as
+`{first-two-letters}{Surname}`. When two teammates collide on that --
+siblings, overwhelmingly --
+`~sportsdataverse.mbb.mbb_ncaa_boxscore_parser.validate_box_score`
+widens BOTH to full-name codes so the game is not thrown away.
+
+Re-deriving a code from the tidied name after that point silently undoes
+the widening: both Morris twins code back to `MaMorris`, one of them
+wins the match, and the other DISAPPEARS from the lineup events. Kansas
+2010 parsed 110 events with `MarcusMorris` present 18 times and
+`MarkieffMorris` present ZERO times -- a game that looks healthy by
+every count while a starter is missing.
+
+So the roster is the authority. **Every PBP-side path that needs a code
+for a name must call this, never** `build_player_code`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `name` | `str` |  | The tidied player name, as produced by `tidy_player`. |
+| `box_lineup` | `LineupEvent` |  | The team's box-score `~sportsdataverse.mbb.mbb_ncaa_models.LineupEvent`, whose `players` carry the (possibly widened) codes. |
+| `team` | `Optional[TeamId]` | `None` | Team context for the fallback `build_player_code` call, used only when `name` is not on the roster. |
+
+**Returns**
+
+The roster's `~sportsdataverse.mbb.mbb_ncaa_models.PlayerCodeId` when `name` is on it, else a freshly built one.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_names import code_from_box
+code_from_box("Morris, Markieff", box_lineup, box_lineup.team.team)
+
+# The distinction that matters
+
+from sportsdataverse.mbb.mbb_ncaa_stints import build_player_code
+build_player_code("Morris, Markieff", team).code  # "MaMorris" -- collides
+code_from_box("Morris, Markieff", box_lineup, team).code  # "MarkieffMorris"
+```
+
 ### `combos(first: 'str', last: 'str') -> 'list[str]'` {#combos}
 
 Generate the three name-string variants NCAA sources use for one
@@ -9449,7 +9495,7 @@ Checks there are no duplicates in the lineup (``BoxscoreParser
 
 **Returns**
 
-`lineup`, mapped to `~sportsdataverse.mbb.mbb_ncaa_models.PlayerCodeId` (same order, no sort -- see the module docstring's "not sorted" note), or a `~sportsdataverse.mbb.mbb_ncaa_data_quality.ParseError` if two DIFFERENT names collide on the same player code.
+`lineup`, mapped to `~sportsdataverse.mbb.mbb_ncaa_models.PlayerCodeId` (same order, no sort -- see the module docstring's "not sorted" note). When two teammates collide on the `{first-two-letters}{Surname}` scheme -- siblings, in practice -- **only the colliding players** are re-coded to `{First}{Last}` by disambiguate_sibling_codes`; every other player keeps the Scala-faithful code. This is a DELIBERATE divergence from `ExtractorUtils.scala`, which rejects the game: since a team's roster is the same all season, one sibling pair cost the team its ENTIRE season of lineups. A `~sportsdataverse.mbb.mbb_ncaa_data_quality.ParseError` is returned only when widening cannot separate them, i.e. two players with the SAME full name -- genuinely ambiguous, so still an error. Callers must not re-derive a code from a name after this point: `build_player_code` would undo the widening and silently drop one twin. Use `~sportsdataverse.mbb.mbb_ncaa_names.code_from_box`, which resolves against this roster.
 
 **Example**
 

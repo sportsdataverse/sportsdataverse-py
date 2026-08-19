@@ -197,7 +197,7 @@ from sportsdataverse.mbb.mbb_ncaa_possessions import (
     concurrent_event_handler,
     lineup_as_raw_clumps,
 )
-from sportsdataverse.mbb.mbb_ncaa_stints import build_player_code
+from sportsdataverse.mbb.mbb_ncaa_names import code_from_box
 
 __all__ = [
     "enrich_lineup",
@@ -1485,7 +1485,7 @@ def _player_tidier(
         else ``[]`` (Scala's ``flatMap``-friendly single-or-none list).
     """
     tidy_name, _ = tidy_player(player.id.name, tidy_ctx)
-    tidy_player_code = build_player_code(tidy_name, box_lineup.team.team)
+    tidy_player_code = code_from_box(tidy_name, box_lineup, box_lineup.team.team)
     if tidy_player_code.code in valid_player_codes:
         return [tidy_player_code]
     return []
@@ -1564,7 +1564,7 @@ def create_player_events(lineup_event_maybe_bad: LineupEvent, box_lineup: Lineup
 
     def player_filter(player_id: PlayerCodeId) -> PlayerFilterCoder:
         def f(player_str: str) -> "tuple[bool, str]":
-            code = build_player_code(tidy_player(player_str, tidy_ctx)[0], lineup_event.team.team).code
+            code = code_from_box(tidy_player(player_str, tidy_ctx)[0], lineup_event, lineup_event.team.team).code
             return (code == player_id.code, code)
 
         return f

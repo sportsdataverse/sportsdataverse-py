@@ -165,6 +165,7 @@ from sportsdataverse.mbb.mbb_ncaa_names import (
     build_tidy_player_context,
     tidy_player,
 )
+from sportsdataverse.mbb.mbb_ncaa_names import code_from_box
 from sportsdataverse.mbb.mbb_ncaa_stints import (
     GameBreakEvent,
     MiscGameEvent,
@@ -428,7 +429,7 @@ def extract_player_from_ev(
     player_name = name_in_v0_box_format(v1_player_name)
     if shot.is_off:
         tidier_player_name, _ = tidy_player(player_name, tidy_ctx)
-        return build_player_code(tidier_player_name, tidy_ctx.box_lineup.team.team)
+        return code_from_box(tidier_player_name, tidy_ctx.box_lineup, tidy_ctx.box_lineup.team.team)
     return build_player_code(player_name, None)
 
 
@@ -916,7 +917,7 @@ def inject_starting_lineup_into_box(
 
     def pbp_name_to_code(player_name: str) -> str:
         tidier_player_name, _ = tidy_player(player_name, tidy_ctx)
-        return build_player_code(tidier_player_name, box_lineup.team.team).code
+        return code_from_box(tidier_player_name, box_lineup, box_lineup.team.team).code
 
     valid_player_codes_set = {p.code for p in box_lineup.players}
 

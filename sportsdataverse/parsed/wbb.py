@@ -278,6 +278,7 @@ from sportsdataverse.wbb import classify_point_value as classify_point_value  # 
 from sportsdataverse.wbb import classify_zone_geometry as classify_zone_geometry  # noqa: F401
 from sportsdataverse.wbb import classify_zone_type as classify_zone_type  # noqa: F401
 from sportsdataverse.wbb import clump_bad_lineups as clump_bad_lineups  # noqa: F401
+from sportsdataverse.wbb import code_from_box as code_from_box  # noqa: F401
 from sportsdataverse.wbb import combos as combos  # noqa: F401
 from sportsdataverse.wbb import complete_weighted_avg as complete_weighted_avg  # noqa: F401
 from sportsdataverse.wbb import compute_league_averages_from_per_game as compute_league_averages_from_per_game  # noqa: F401
@@ -666,6 +667,7 @@ __all__ = [
     "classify_zone_geometry",
     "classify_zone_type",
     "clump_bad_lineups",
+    "code_from_box",
     "combos",
     "complete_weighted_avg",
     "compute_league_averages_from_per_game",

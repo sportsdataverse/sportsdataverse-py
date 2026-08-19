@@ -12,7 +12,7 @@ sidebar_label: MBB
 | [ESPN FPI API (fitt v3)](reference/fitt) | 1 | `https://site.web.api.espn.com/apis/fitt/v3/sports` |
 | [Bart Torvik T-Rank (barttorvik.com)](reference/torvik) | 2 | `https://barttorvik.com` |
 | [Dataset loaders](reference/loaders) | 17 | sportsdataverse-data releases |
-| [Additional functions](reference/additional) | 310 | hand-written wrappers, loaders & helpers |
+| [Additional functions](reference/additional) | 311 | hand-written wrappers, loaders & helpers |
 
 ## Examples
 
