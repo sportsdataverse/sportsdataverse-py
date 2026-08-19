@@ -142,6 +142,7 @@ from sportsdataverse.mbb.mbb_ncaa_stints import (
     parse_team_name,
     remove_html_encoding,
 )
+from sportsdataverse.mbb.mbb_ncaa_names import code_from_box
 
 __all__ = [
     "ShotMapDimensions",
@@ -669,7 +670,7 @@ def parse_shot_html(
 
     if is_offensive:
         tidier_player_name, _ = tidy_player(player_name, tidy_ctx)
-        player_code_id = build_player_code(tidier_player_name, box_lineup.team.team)
+        player_code_id = code_from_box(tidier_player_name, box_lineup, box_lineup.team.team)
     else:
         # Still extract the opponent's player name (best-effort, to help
         # correlate with the play-by-play data later).

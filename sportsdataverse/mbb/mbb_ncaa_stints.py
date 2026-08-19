@@ -767,7 +767,7 @@ class LineupBuildingState:
             self,
             curr=replace(
                 self.curr,
-                players_in=[build_player_code(player_name, self.curr.team.team)] + self.curr.players_in,
+                players_in=[_code(player_name, self.tidy_ctx.box_lineup, self.curr.team.team)] + self.curr.players_in,
             ),
         )
 
@@ -777,7 +777,7 @@ class LineupBuildingState:
             self,
             curr=replace(
                 self.curr,
-                players_out=[build_player_code(player_name, self.curr.team.team)] + self.curr.players_out,
+                players_out=[_code(player_name, self.tidy_ctx.box_lineup, self.curr.team.team)] + self.curr.players_out,
             ),
         )
 
@@ -1122,7 +1122,29 @@ def build_new_player_list(curr: LineupEvent, prev: LineupEvent) -> list[PlayerCo
     return sorted(new_player_list, key=lambda p: p.code)
 
 
-def _new_lineup_event(prev: LineupEvent, in_name: Optional[str] = None, out_name: Optional[str] = None) -> LineupEvent:
+def _code(name: str, box_lineup: "Optional[LineupEvent]", team: "Optional[TeamId]") -> PlayerCodeId:
+    """Roster-resolved code when a box lineup is available, else derived.
+
+    `_new_lineup_event` is reachable without a roster in tests, so the
+    fallback stays -- but every production caller passes one, because a
+    re-derived code silently un-widens sibling codes (see `code_from_box`).
+    """
+    # Deferred import, and NOT a style choice: mbb_ncaa_names imports
+    # build_player_code from THIS module at module scope, so importing it back
+    # at module scope is a genuine cycle (ImportError at package import).
+    from sportsdataverse.mbb.mbb_ncaa_names import code_from_box
+
+    if box_lineup is not None:
+        return code_from_box(name, box_lineup, team)
+    return build_player_code(name, team)
+
+
+def _new_lineup_event(
+    prev: LineupEvent,
+    in_name: Optional[str] = None,
+    out_name: Optional[str] = None,
+    box_lineup: Optional[LineupEvent] = None,
+) -> LineupEvent:
     """Creates an "empty" new lineup following ``prev`` (``ExtractorUtils.scala:611-649``).
     ``prev`` is expected to have already been through :func:`_complete_lineup`.
 
@@ -1155,8 +1177,8 @@ def _new_lineup_event(prev: LineupEvent, in_name: Optional[str] = None, out_name
         opponent=prev.opponent,
         lineup_id=LineupId.unknown,  # (will calc once we have all the subs)
         players=prev.players,  # (will re-calc once we have all the subs)
-        players_in=[build_player_code(in_name, prev.team.team)] if in_name is not None else [],
-        players_out=[build_player_code(out_name, prev.team.team)] if out_name is not None else [],
+        players_in=[_code(in_name, box_lineup, prev.team.team)] if in_name is not None else [],
+        players_out=[_code(out_name, box_lineup, prev.team.team)] if out_name is not None else [],
         raw_game_events=[],
         team_stats=LineupEventStats.empty(),  # (calculate these 2 later)
         opponent_stats=LineupEventStats.empty(),
@@ -1295,7 +1317,7 @@ def build_partial_lineup_list(
             completed_curr = _complete_lineup(state.curr, state.prev, event.min)
             state = replace(
                 state,
-                curr=_new_lineup_event(completed_curr, in_name=tidier_name),
+                curr=_new_lineup_event(completed_curr, in_name=tidier_name, box_lineup=box_lineup),
                 tidy_ctx=new_ctx,
                 prev=[completed_curr] + state.prev,
                 old_format=new_old_format,
@@ -1306,7 +1328,7 @@ def build_partial_lineup_list(
             completed_curr = _complete_lineup(state.curr, state.prev, event.min)
             state = replace(
                 state,
-                curr=_new_lineup_event(completed_curr, out_name=tidier_name),
+                curr=_new_lineup_event(completed_curr, out_name=tidier_name, box_lineup=box_lineup),
                 tidy_ctx=new_ctx,
                 prev=[completed_curr] + state.prev,
                 old_format=new_old_format,
@@ -1334,7 +1356,11 @@ def build_partial_lineup_list(
                 new_lineup_id, new_players = completed_curr.lineup_id, completed_curr.players
             state = replace(
                 state,
-                curr=replace(_new_lineup_event(completed_curr), lineup_id=new_lineup_id, players=new_players),
+                curr=replace(
+                    _new_lineup_event(completed_curr, box_lineup=box_lineup),
+                    lineup_id=new_lineup_id,
+                    players=new_players,
+                ),
                 prev=[completed_curr] + state.prev,
             )
         elif isinstance(event, GameEndEvent):
