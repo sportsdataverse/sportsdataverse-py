@@ -510,9 +510,24 @@ def validate_box_score(team: TeamId, lineup: list[str]) -> Union[list[PlayerCode
     Returns:
         ``lineup``, mapped to
         :class:`~sportsdataverse.mbb.mbb_ncaa_models.PlayerCodeId` (same
-        order, no sort -- see the module docstring's "not sorted" note), or
-        a :class:`~sportsdataverse.mbb.mbb_ncaa_data_quality.ParseError` if
-        two DIFFERENT names collide on the same player code.
+        order, no sort -- see the module docstring's "not sorted" note).
+
+        When two teammates collide on the ``{first-two-letters}{Surname}``
+        scheme -- siblings, in practice -- **only the colliding players** are
+        re-coded to ``{First}{Last}`` by :func:`_disambiguate_sibling_codes`;
+        every other player keeps the Scala-faithful code. This is a
+        DELIBERATE divergence from ``ExtractorUtils.scala``, which rejects
+        the game: since a team's roster is the same all season, one sibling
+        pair cost the team its ENTIRE season of lineups.
+
+        A :class:`~sportsdataverse.mbb.mbb_ncaa_data_quality.ParseError` is
+        returned only when widening cannot separate them, i.e. two players
+        with the SAME full name -- genuinely ambiguous, so still an error.
+
+        Callers must not re-derive a code from a name after this point:
+        ``build_player_code`` would undo the widening and silently drop one
+        twin. Use :func:`~sportsdataverse.mbb.mbb_ncaa_names.code_from_box`,
+        which resolves against this roster.
 
     Example:
         Quick start::
@@ -570,6 +585,22 @@ def _disambiguate_sibling_codes(codes: "list[PlayerCodeId]") -> "list[PlayerCode
 
     Two players with an identical full name still collide and still raise --
     that is a genuine ambiguity, not a coding artefact.
+
+    **The widening is per-GAME, not per-season, and that is fine.** It fires
+    only when both siblings appear on the SAME box, so in a game where only
+    one of them dressed there is no collision and that player keeps the
+    narrow code. Stanford 2015 shows it exactly: 18 games with
+    ``KaileeJohnson`` + ``KayleeJohnson``, and 2 games where one sat, coded
+    ``KaJohnson``. Nothing downstream keys on ``code``, so this does not
+    split a player: the published ``lineups`` / ``possessions`` slots carry
+    full names (``Johnson, Kaylee``), and the RAPM path keys on
+    ``p["id"]`` -- also the full name -- with the code only carried
+    alongside. ``code``'s job is within-game box-to-PBP matching, and within
+    a game it is unique, which is the whole contract.
+
+    Do NOT "fix" this by widening every code unconditionally: that would
+    rewrite every player code in the corpus and break parity with the Scala
+    oracle everywhere, to stabilise a field nothing reads across games.
     """
     from collections import Counter
 

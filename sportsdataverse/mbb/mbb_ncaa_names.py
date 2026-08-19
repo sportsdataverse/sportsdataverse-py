@@ -143,7 +143,7 @@ from typing import Optional, Union
 
 from rapidfuzz import fuzz, utils
 
-from sportsdataverse.mbb.mbb_ncaa_models import LineupEvent, PlayerCodeId
+from sportsdataverse.mbb.mbb_ncaa_models import LineupEvent, PlayerCodeId, TeamId
 from sportsdataverse.mbb.mbb_ncaa_stints import build_player_code
 
 __all__ = [
@@ -155,6 +155,7 @@ __all__ = [
     "TidyPlayerContext",
     "build_tidy_player_context",
     "tidy_player",
+    "code_from_box",
     "name_is_initials",
     "convert_from_initials",
     "convert_from_digits",
@@ -709,3 +710,59 @@ def fuzzy_box_match(candidate: str, unassigned_box_names: list[str], team_contex
         return FuzzyMatchError(f"ERROR.3C: 'first name only' match: [{first_name_only[0]}]")
 
     return FuzzyMatchError("ERROR.4A: no good matches")
+
+
+def code_from_box(name: str, box_lineup: LineupEvent, team: Optional[TeamId] = None) -> PlayerCodeId:
+    """Resolve a tidied player NAME to the box roster's own ``PlayerCodeId``.
+
+    :func:`~sportsdataverse.mbb.mbb_ncaa_stints.build_player_code` is a
+    faithful ``ExtractorUtils.scala`` port and keys a player as
+    ``{first-two-letters}{Surname}``. When two teammates collide on that --
+    siblings, overwhelmingly --
+    :func:`~sportsdataverse.mbb.mbb_ncaa_boxscore_parser.validate_box_score`
+    widens BOTH to full-name codes so the game is not thrown away.
+
+    Re-deriving a code from the tidied name after that point silently undoes
+    the widening: both Morris twins code back to ``MaMorris``, one of them
+    wins the match, and the other DISAPPEARS from the lineup events. Kansas
+    2010 parsed 110 events with ``MarcusMorris`` present 18 times and
+    ``MarkieffMorris`` present ZERO times -- a game that looks healthy by
+    every count while a starter is missing.
+
+    So the roster is the authority. **Every PBP-side path that needs a code
+    for a name must call this, never** ``build_player_code``.
+
+    Args:
+        name: The tidied player name, as produced by :func:`tidy_player`.
+        box_lineup: The team's box-score
+            :class:`~sportsdataverse.mbb.mbb_ncaa_models.LineupEvent`, whose
+            ``players`` carry the (possibly widened) codes.
+        team: Team context for the fallback ``build_player_code`` call, used
+            only when ``name`` is not on the roster.
+
+    Returns:
+        The roster's
+        :class:`~sportsdataverse.mbb.mbb_ncaa_models.PlayerCodeId` when
+        ``name`` is on it, else a freshly built one.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.mbb.mbb_ncaa_names import code_from_box
+            code_from_box("Morris, Markieff", box_lineup, box_lineup.team.team)
+
+        The distinction that matters::
+
+            from sportsdataverse.mbb.mbb_ncaa_stints import build_player_code
+            build_player_code("Morris, Markieff", team).code  # "MaMorris" -- collides
+            code_from_box("Morris, Markieff", box_lineup, team).code  # "MarkieffMorris"
+
+    See Also:
+        * `bigballR`_ -- the R sibling whose NCAA lineup engine this ports.
+
+    .. _bigballR: https://github.com/jflancer/bigballR
+    """
+    for player in box_lineup.players or []:
+        if player.id.name == name:
+            return player
+    return build_player_code(name, team)

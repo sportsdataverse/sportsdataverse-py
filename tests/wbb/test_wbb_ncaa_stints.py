@@ -52,7 +52,9 @@ def test_wbb_ncaa_names_all_matches_reexported_symbols():
     from sportsdataverse.wbb import wbb_ncaa_names as w
 
     assert set(w.__all__) == {name for name in w.__all__ if hasattr(w, name)}
-    assert len(w.__all__) == 17
+    # 18 since the sibling-code fix added `code_from_box` -- the boundary helper
+    # every PBP path must use instead of re-deriving with `build_player_code`.
+    assert len(w.__all__) == 18
 
 
 def test_wbb_ncaa_stints_shim_is_mbb_core():
