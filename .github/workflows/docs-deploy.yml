@@ -34,13 +34,13 @@ jobs:
       run:
         working-directory: docs
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           # Job holds contents:write but the build runs third-party yarn
           # scripts; the publish step passes its token explicitly instead.
           persist-credentials: false
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
           node-version: 22
           cache: yarn
