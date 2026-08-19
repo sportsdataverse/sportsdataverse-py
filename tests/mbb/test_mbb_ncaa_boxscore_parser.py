@@ -231,3 +231,26 @@ class TestCodeFromBox:
     def test_name_absent_from_the_roster_falls_back_to_a_derived_code(self):
         box = self._box(["Aldrich, Cole"])
         assert code_from_box("Nobody, Ann", box, _TEAM).code == build_player_code("Nobody, Ann", _TEAM).code
+
+    def test_play_by_play_name_format_still_resolves(self):
+        """The roster and the play-by-play spell the same person differently.
+
+        Roster: `Woods, Trevin`. Play-by-play: `WOODS,TREVIN` -- case and the
+        space after the comma. An exact-only comparison sends that to
+        `build_player_code`, which re-collapses BOTH Woods brothers onto
+        `TrWoods` -- the exact re-derivation this function exists to prevent.
+        LIU 2014-15 lost 42% of its stints to it.
+        """
+        box = self._box(["Woods, Trevin", "Woods, Trevon", "Hood, Jamal"])
+        assert code_from_box("WOODS,TREVIN", box, _TEAM).code == "TrevinWoods"
+        assert code_from_box("WOODS,TREVON", box, _TEAM).code == "TrevonWoods"
+        # a non-colliding teammate is unaffected by the normalization
+        assert code_from_box("HOOD,JAMAL", box, _TEAM).code == "JaHood"
+
+    def test_normalization_does_not_invent_a_match(self):
+        """A name genuinely absent from the roster must still derive.
+
+        The looser comparison must not let an unrelated player bind.
+        """
+        box = self._box(["Woods, Trevin", "Hood, Jamal"])
+        assert code_from_box("NOBODY,SAM", box, _TEAM).code == build_player_code("NOBODY,SAM", _TEAM).code

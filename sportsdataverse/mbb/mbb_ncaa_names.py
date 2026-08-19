@@ -744,6 +744,15 @@ def fuzzy_box_match(candidate: str, unassigned_box_names: list[str], team_contex
     return FuzzyMatchError("ERROR.4A: no good matches")
 
 
+def _name_key(name: str) -> str:
+    """Case- and spacing-insensitive key for roster/pbp name comparison.
+
+    `Woods, Trevin` (roster) and `WOODS,TREVIN` (play-by-play) are the same
+    person; only case and the space after the comma differ.
+    """
+    return re.sub(r"\s+", "", name).casefold()
+
+
 def code_from_box(name: str, box_lineup: LineupEvent, team: Optional[TeamId] = None) -> PlayerCodeId:
     """Resolve a tidied player NAME to the box roster's own ``PlayerCodeId``.
 
@@ -797,4 +806,16 @@ def code_from_box(name: str, box_lineup: LineupEvent, team: Optional[TeamId] = N
     for player in box_lineup.players or []:
         if player.id.name == name:
             return player
+
+    # Fall back to a case/space-insensitive comparison before deriving. The
+    # roster spells a player `Woods, Trevin`; the play-by-play spells the same
+    # person `WOODS,TREVIN`, and not every caller hands us a tidied name. An
+    # exact-only match sends those straight to `build_player_code`, which is
+    # precisely the re-derivation this function exists to prevent -- LIU
+    # 2014-15's Woods brothers both landed back on `TrWoods` that way.
+    # Case is not load-bearing in NCAA player names (see CLAUDE.md).
+    key = _name_key(name)
+    hits = [p for p in box_lineup.players or [] if _name_key(p.id.name) == key]
+    if len(hits) == 1:
+        return hits[0]
     return build_player_code(name, team)
