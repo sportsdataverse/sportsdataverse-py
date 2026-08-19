@@ -47,7 +47,9 @@ __all__ = [
 ]
 
 _QUARTER_RE = re.compile(r"^(?:(\d+)(?:st|nd|rd|th)\s+Quarter|OT\s*\d*)$", re.I)
-_OT_PERIOD_RE = re.compile(r"^(\d+)OT$")
+# "1OT"/"2OT", bare "OT" (= 1OT), "OT2", any case -- the same label variants
+# _QUARTER_RE already accepts, so the two never disagree on an OT cell.
+_OT_PERIOD_RE = re.compile(r"^(?:(\d+)\s*OT|OT\s*(\d*))$", re.I)
 _COMPETITOR_ID_RE = re.compile(r"competitor_(\d+)_year_stat_category_(\d+)_data_table")
 
 
@@ -116,12 +118,15 @@ def _int(v: str) -> "int | None":
 
 
 def _period_num(v: "str | None") -> "int | None":
-    """``"3"`` -> 3, ``"1OT"`` -> 5, ``"2OT"`` -> 6 (OT periods continue after the 4th)."""
+    """``"3"`` -> 3, ``"1OT"``/``"OT"`` -> 5, ``"2OT"``/``"OT2"`` -> 6 (OT periods continue
+    after the 4th; case-insensitive, an unnumbered ``OT`` is the first one)."""
     if not v:
         return None
+    v = v.strip()
     m = _OT_PERIOD_RE.match(v)
     if m:
-        return 4 + int(m.group(1))
+        n = m.group(1) or m.group(2) or "1"
+        return 4 + int(n)
     return int(v) if v.isdigit() else None
 
 

@@ -175,6 +175,23 @@ def test_scoring_summary_rows_and_running_score() -> None:
     assert (total.diff().drop_nulls() > 0).all()  # strictly running
     assert (df.item(-1, "score_away"), df.item(-1, "score_home")) == (27, 24)  # final
     assert df.filter(pl.col("period") <= 4).get_column("play_text").is_not_null().all()
+    assert df.filter(pl.col("period") == 5).get_column("play_text").is_null().all()  # blank OT Play cell
+
+
+def test_period_num_overtime_label_variants() -> None:
+    from sportsdataverse.cfb.cfb_ncaa_box import _period_num
+
+    assert _period_num("3") == 3
+    assert _period_num("1OT") == 5
+    assert _period_num("2OT") == 6
+    assert _period_num("OT") == 5  # unnumbered = first OT
+    assert _period_num("ot") == 5
+    assert _period_num("1ot") == 5
+    assert _period_num("OT2") == 6
+    assert _period_num(" 1OT ") == 5
+    assert _period_num("") is None
+    assert _period_num(None) is None
+    assert _period_num("Final") is None
 
 
 def test_scoring_summary_empty() -> None:
