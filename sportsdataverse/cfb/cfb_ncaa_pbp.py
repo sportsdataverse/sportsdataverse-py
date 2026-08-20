@@ -36,7 +36,7 @@ _NAME = r"[A-Z][\w.'\-]+(?:\s(?:Jr|Sr|II|III|IV)\.?)?,\s?[A-Z][\w.'\-]+"
 
 # Yard-line side code. NOT upper-case only: "Ric25" (Rice), "W&M25" (William &
 # Mary) -- an [A-Z]-only class silently drops every such team's drives/plays.
-_SIDE = r"[A-Za-z&]{1,4}"
+_SIDE = r"[A-Za-z&]{1,8}"  # abbrev/mixed-case/&, or a nickname ("BEARS38", "SPARTANS25")
 
 # h5 drive title: "{team} {RESULT} {clock},{yardline}, {n} plays, {yards} yards, {top} {a} - {h}".
 # RESULT is an OPTIONAL all-caps token (TD/FG/FGA/PUNT/INT/FUMB/DOWNS/HALF/...);

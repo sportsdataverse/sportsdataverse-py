@@ -261,3 +261,17 @@ def test_drive_titles_mixed_case_side_and_pandas() -> None:
 def test_drive_titles_empty() -> None:
     df = parse_cfb_ncaa_drive_titles("")
     assert df.height == 0 and df.columns == list(DRIVE_TITLES_SCHEMA.keys())
+
+
+def test_drive_titles_nickname_side_codes() -> None:
+    """Some pages use team NICKNAMES as yard-line side codes (up to 8 letters)."""
+    html = (
+        '<div class="drives">'
+        '<h5 class="non_scoring_play">Morgan St. FUMB 15:00,BEARS38, 2 plays, -7 yards, 1:29 0 - 0</h5>'
+        '<h5 class="non_scoring_play">Norfolk St. FG 13:31,SPARTANS25, 16 plays, 3 yards, 8:10 3 - 3</h5>'
+        "</div>"
+    )
+    df = parse_cfb_ncaa_drive_titles(html)
+    assert df.get_column("team").to_list() == ["Morgan St.", "Norfolk St."]
+    assert df.get_column("start_yard_line").to_list() == ["BEARS38", "SPARTANS25"]
+    assert df.get_column("yards").to_list() == [-7, 3]
