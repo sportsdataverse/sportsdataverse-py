@@ -46,10 +46,19 @@ def test_empty_but_successful_parse_is_logged(monkeypatch, caplog, pbp_df) -> No
 
     assert out == []
     msgs = [r.getMessage() for r in caplog.records]
-    assert any("NO good stints" in m for m in msgs), msgs
-    assert any("team=Kansas" in m for m in msgs), msgs
-    assert any("team=Hofstra" in m for m in msgs), msgs
-    assert any("3 bad" in m for m in msgs), msgs
+    # Assert the COMPLETE diagnostic payload, not just that something warned.
+    # Each field is what makes the line actionable: without contest_id you
+    # cannot find the game, without the team you cannot tell which side was
+    # dropped (the skip is per-team), without the counts you cannot tell an
+    # all-bad parse from an empty roster.
+    for team in ("Kansas", "Hofstra"):
+        hit = [m for m in msgs if f"team={team}" in m]
+        assert hit, f"no warning naming {team}: {msgs}"
+        line = hit[0]
+        assert "NO good stints" in line, line
+        assert "contest_id=999" in line, line
+        assert "3 bad" in line, line
+        assert "roster=5" in line, line
 
 
 def test_a_healthy_team_logs_nothing(monkeypatch, caplog, pbp_df) -> None:
