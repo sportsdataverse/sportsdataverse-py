@@ -296,6 +296,7 @@ team_aliases: dict[Year, dict[TeamId, TeamId]] = {
 team_name_equivalents: tuple[frozenset[str], ...] = (
     frozenset({"New Orleans", "LSU New Orleans"}),
     frozenset({"NIU", "Northern Ill."}),
+    frozenset({"UAH", "Alabama Huntsville"}),
 )
 """Names that denote the SAME school, as an equivalence -- not a rewrite.
 
@@ -334,6 +335,10 @@ Both targets occur in the SAME season, so no directional rewrite can be
 right. The class is ADDITIVE: the rewrite still fires and `same_school` then
 matches the rewritten name against either spelling, so the inherited entry is
 left untouched rather than diverging further from the Scala oracle.
+
+`UAH` / `Alabama Huntsville` was the last team-name failure left in the WBB
+corpus after the NIU fix -- one event, a D-II school playing a D-I opponent
+(`Alabama Huntsville/Troy` against target `UAH`).
 
 Surfaced by the skip ledger during the corpus re-parse -- 6 events, all NIU,
 all with BOTH titles present and one exactly equal to the target.
