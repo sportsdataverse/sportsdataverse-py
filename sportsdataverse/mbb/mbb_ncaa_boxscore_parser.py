@@ -540,7 +540,21 @@ def validate_box_score(team: TeamId, lineup: list[str]) -> Union[list[PlayerCode
     if len(codes) != len({c.code for c in codes}):
         codes = _disambiguate_sibling_codes(codes)
     if len(codes) != len({c.code for c in codes}):
-        return build_sub_error(error=f"Duplicate players: [{codes}]")
+        # Report ONLY the colliding players. Dumping the whole roster (the
+        # previous behaviour) buries the one thing the reader needs -- and
+        # the parse-stage skip ledger clips messages to 160 chars, so the
+        # actual duplicate fell off the end every time.
+        seen: "dict[str, list[str]]" = {}
+        for c in codes:
+            seen.setdefault(c.code, []).append(c.id.name)
+        collisions = {code: names for code, names in seen.items() if len(names) > 1}
+        return build_sub_error(
+            error=(
+                "Duplicate players after widening: "
+                + "; ".join(f"{code} <- {names}" for code, names in sorted(collisions.items()))
+                + f" (roster of {len(codes)})"
+            )
+        )
     return codes
 
 
