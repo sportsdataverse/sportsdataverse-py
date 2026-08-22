@@ -46,6 +46,40 @@ def test_the_guard_can_actually_fail() -> None:
     assert team_name_equivalents, "team_name_equivalents is empty"
 
 
+def test_every_equivalence_class_resolves_in_both_directions() -> None:
+    """Each declared class must actually work, in either argument order.
+
+    The alias guard above only inspects pairs drawn from `team_aliases`, so an
+    equivalence added for a school that is NOT in that table -- `UAH` /
+    `Alabama Huntsville`, the last WBB team-name failure -- would be silently
+    unprotected: deleting it would leave every other test green.
+
+    Driven off `team_name_equivalents` itself, so a class added later is
+    covered without touching this test.
+    """
+    from itertools import permutations
+
+    assert team_name_equivalents, "no classes declared"
+    for cls in team_name_equivalents:
+        assert len(cls) >= 2, f"a one-name class equates nothing: {cls}"
+        for a, b in permutations(sorted(cls), 2):
+            assert same_school(a, b), f"{a} / {b} declared equivalent but same_school says no"
+
+
+def test_the_known_equivalences_are_present() -> None:
+    """Pin the three measured pairs by name, so a deletion is loud.
+
+    Each was found by the skip ledger during the corpus re-parse, not guessed.
+    """
+    for a, b in (
+        ("UAH", "Alabama Huntsville"),
+        ("NIU", "Northern Ill."),
+        ("New Orleans", "LSU New Orleans"),
+    ):
+        assert same_school(a, b), f"{a} / {b} equivalence missing"
+        assert same_school(b, a), f"{b} / {a} not symmetric"
+
+
 def test_distinct_schools_stay_distinct() -> None:
     """The constraint the whole equivalence approach rests on.
 
