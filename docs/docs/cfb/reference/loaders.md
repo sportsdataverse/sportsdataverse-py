@@ -1734,7 +1734,7 @@ Release: [espn_cfb_passing](https://github.com/sportsdataverse/sportsdataverse-d
 | `team_games` | UInt32 | Games the team played, used as the per-game denominator. |
 | `TEPA` | Float64 | Total EPA summed over every play. |
 | `EPAplay` | Float64 | EPA generated per play. |
-| `yards` | Int64 | Total yards gained on the drive. |
+| `yards` | Float64 | Total yards gained on the drive. |
 | `success` | Float64 | Success rate across the team plays. |
 | `comp` | Float64 | Completed passes. |
 | `att` | Float64 | Pass attempts thrown. |
@@ -1746,11 +1746,13 @@ Release: [espn_cfb_passing](https://github.com/sportsdataverse/sportsdataverse-d
 | `yardsgame` | Float64 | Yards per game. |
 | `sacked` | UInt32 | Times the passer was sacked. |
 | `sack_yds` | Int64 | Yards lost to sacks. |
+| `sack_epa` | Float64 | EPA lost on the sacks the team's passers took -- the expected-points cost of those plays. |
 | `pass_int` | UInt32 | Interceptions thrown. |
+| `int_epa` | Float64 | EPA lost on the team's interceptions thrown -- the expected-points cost of the turnovers, not a count. |
 | `detmer` | Float64 | Detmer rating -- the composite passing-efficiency measure this pipeline publishes, named for the college passing-efficiency tradition. |
 | `detmergame` | Float64 | Detmer rating expressed per game. |
 | `dropbacks` | Float64 | Dropbacks taken by the passer. |
-| `sack_adj_yards` | Int64 | Passing yards adjusted for sack yardage lost. |
+| `sack_adj_yards` | Float64 | Passing yards adjusted for sack yardage lost. |
 | `yardsdropback` | Float64 | Yards per dropback. |
 | `TEPA_rank` | Float64 | National rank of the team's total EPA summed over every play, where 1 is best. |
 | `EPAgame_rank` | Float64 | National rank of the team's EPA generated per game, where 1 is best. |
