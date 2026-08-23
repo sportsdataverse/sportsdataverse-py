@@ -223,8 +223,15 @@ def helper_wnba_pbp_features(game_id, pbp_txt, init):
     pbp_txt["plays"] = pl.from_pandas(pd.json_normalize(pbp_txt, "plays_mod"))
     # WNBA played 2x20-minute halves through 2005 and switched to 10-minute
     # quarters in 2006 (OT is 5:00 in both eras). Pre-2006 ESPN's period IS
-    # the half, so the half/seconds-remaining columns need era-aware math.
-    is_halves_era = int(pbp_txt["header"]["season"]["year"]) < 2006
+    # the half, so the half/seconds-remaining columns need era-aware math. The summary
+    # format.regulation.periods field (2 = halves, 4 = quarters) is authoritative
+    # when present; the season-year cutoff is the fallback.
+    fmt = pbp_txt.get("format")
+    reg_periods = (fmt.get("regulation") or {}).get("periods") if isinstance(fmt, dict) else None
+    if reg_periods in (2, 4):
+        is_halves_era = reg_periods == 2
+    else:
+        is_halves_era = int(pbp_txt["header"]["season"]["year"]) < 2006
     first_half_periods = 1 if is_halves_era else 2
     clock_sec = 60 * pl.col("clock.minutes") + pl.col("clock.seconds")
     if is_halves_era:

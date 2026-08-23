@@ -10,7 +10,7 @@ from sportsdataverse.wnba import espn_wnba_pbp
 from tests.conftest import skip_if_no_live
 
 
-def _plays(game_id):
+def _plays(game_id: int) -> pl.DataFrame:
     plays = espn_wnba_pbp(game_id=game_id)["plays"]
     if not plays:
         pytest.skip(f"ESPN returned no plays for {game_id}")
@@ -18,7 +18,7 @@ def _plays(game_id):
 
 
 @skip_if_no_live
-def test_wnba_pre2006_halves_model():
+def test_wnba_pre2006_halves_model() -> None:
     df = _plays(250506017)  # 2005 regular-season game
     p1 = df.filter(pl.col("period.number") == 1)
     p2 = df.filter(pl.col("period.number") == 2)
@@ -31,7 +31,7 @@ def test_wnba_pre2006_halves_model():
 
 
 @skip_if_no_live
-def test_wnba_2006plus_quarters_model_unchanged():
+def test_wnba_2006plus_quarters_model_unchanged() -> None:
     df = _plays(401649378)  # 2024 regular-season game
     p2 = df.filter(pl.col("period.number") == 2)
     assert p2.get_column("half").unique().to_list() == [1]
