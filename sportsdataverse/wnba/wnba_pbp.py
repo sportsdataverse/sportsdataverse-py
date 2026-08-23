@@ -221,6 +221,28 @@ def helper_wnba_pbp_features(game_id, pbp_txt, init):
         p = flatten_json_iterative(play)
         pbp_txt["plays_mod"].append(p)
     pbp_txt["plays"] = pl.from_pandas(pd.json_normalize(pbp_txt, "plays_mod"))
+    # WNBA played 2x20-minute halves through 2005 and switched to 10-minute
+    # quarters in 2006 (OT is 5:00 in both eras). Pre-2006 ESPN's period IS
+    # the half, so the half/seconds-remaining columns need era-aware math.
+    is_halves_era = int(pbp_txt["header"]["season"]["year"]) < 2006
+    first_half_periods = 1 if is_halves_era else 2
+    clock_sec = 60 * pl.col("clock.minutes") + pl.col("clock.seconds")
+    if is_halves_era:
+        half_expr = pl.when(pl.col("qtr") <= 1).then(1).otherwise(2)
+        start_half_expr = clock_sec
+        start_game_expr = pl.when(pl.col("qtr") == 1).then(1200 + clock_sec).otherwise(clock_sec)
+    else:
+        half_expr = pl.when(pl.col("qtr") <= 2).then(1).otherwise(2)
+        start_half_expr = pl.when(pl.col("qtr").is_in([1, 3])).then(600 + clock_sec).otherwise(clock_sec)
+        start_game_expr = (
+            pl.when(pl.col("qtr") == 1)
+            .then(1800 + clock_sec)
+            .when(pl.col("qtr") == 2)
+            .then(1200 + clock_sec)
+            .when(pl.col("qtr") == 3)
+            .then(600 + clock_sec)
+            .otherwise(clock_sec)
+        )
     pbp_txt["plays"] = (
         pbp_txt["plays"]
         .with_columns(
@@ -310,8 +332,8 @@ def helper_wnba_pbp_features(game_id, pbp_txt, init):
             .alias("awayTimeoutCalled"),
         )
         .with_columns(
-            half=pl.when(pl.col("qtr") <= 2).then(1).otherwise(2),
-            game_half=pl.when(pl.col("qtr") <= 2).then(1).otherwise(2),
+            half=half_expr,
+            game_half=half_expr,
         )
         .with_columns(
             lag_qtr=pl.col("qtr").shift(1),
@@ -320,19 +342,9 @@ def helper_wnba_pbp_features(game_id, pbp_txt, init):
             lead_half=pl.col("half").shift(-1),
         )
         .with_columns(
-            (60 * pl.col("clock.minutes") + pl.col("clock.seconds")).alias("start.quarter_seconds_remaining"),
-            pl.when(pl.col("qtr").is_in([1, 3]))
-            .then(600 + 60 * pl.col("clock.minutes") + pl.col("clock.seconds"))
-            .otherwise(60 * pl.col("clock.minutes") + pl.col("clock.seconds"))
-            .alias("start.half_seconds_remaining"),
-            pl.when(pl.col("qtr") == 1)
-            .then(1800 + 60 * pl.col("clock.minutes") + pl.col("clock.seconds"))
-            .when(pl.col("qtr") == 2)
-            .then(1200 + 60 * pl.col("clock.minutes") + pl.col("clock.seconds"))
-            .when(pl.col("qtr") == 3)
-            .then(600 + 60 * pl.col("clock.minutes") + pl.col("clock.seconds"))
-            .otherwise(60 * pl.col("clock.minutes") + pl.col("clock.seconds"))
-            .alias("start.game_seconds_remaining"),
+            clock_sec.alias("start.quarter_seconds_remaining"),
+            start_half_expr.alias("start.half_seconds_remaining"),
+            start_game_expr.alias("start.game_seconds_remaining"),
         )
         .with_columns(
             pl.col("start.quarter_seconds_remaining").shift(-1).alias("end.quarter_seconds_remaining"),
@@ -348,69 +360,98 @@ def helper_wnba_pbp_features(game_id, pbp_txt, init):
     }
     pbp_txt["timeouts"][init["homeTeamId"]]["1"] = (
         pbp_txt["plays"]
-        .filter((pl.col("homeTimeoutCalled") == True).and_(pl.col("period.number") <= 2))
+        .filter((pl.col("homeTimeoutCalled") == True).and_(pl.col("period.number") <= first_half_periods))
         .get_column("id")
         .to_list()
     )
     pbp_txt["timeouts"][init["homeTeamId"]]["2"] = (
         pbp_txt["plays"]
-        .filter((pl.col("homeTimeoutCalled") == True).and_(pl.col("period.number") > 2))
+        .filter((pl.col("homeTimeoutCalled") == True).and_(pl.col("period.number") > first_half_periods))
         .get_column("id")
         .to_list()
     )
     pbp_txt["timeouts"][init["awayTeamId"]]["1"] = (
         pbp_txt["plays"]
-        .filter((pl.col("awayTimeoutCalled") == True).and_(pl.col("period.number") <= 2))
+        .filter((pl.col("awayTimeoutCalled") == True).and_(pl.col("period.number") <= first_half_periods))
         .get_column("id")
         .to_list()
     )
     pbp_txt["timeouts"][init["awayTeamId"]]["2"] = (
         pbp_txt["plays"]
-        .filter((pl.col("awayTimeoutCalled") == True).and_(pl.col("period.number") > 2))
+        .filter((pl.col("awayTimeoutCalled") == True).and_(pl.col("period.number") > first_half_periods))
         .get_column("id")
         .to_list()
     )
     # Pos Team - Start and End Id
-    pbp_txt["plays"] = pbp_txt["plays"].with_columns(
-        pl.when(
-            (pl.col("game_play_number") == 1)
-            .or_((pl.col("lag_qtr") == 1).and_(pl.col("period.number") == 2))
-            .or_((pl.col("lag_qtr") == 2).and_(pl.col("period.number") == 3))
-            .or_((pl.col("lag_qtr") == 3).and_(pl.col("period.number") == 4)),
+    if is_halves_era:
+        pbp_txt["plays"] = pbp_txt["plays"].with_columns(
+            pl.when(
+                (pl.col("game_play_number") == 1).or_((pl.col("lag_qtr") == 1).and_(pl.col("period.number") == 2)),
+            )
+            .then(1200)
+            .when((pl.col("lag_qtr") == (pl.col("period.number") - 1)).and_(pl.col("period.number") >= 3))
+            .then(300)
+            .otherwise(pl.col("end.quarter_seconds_remaining"))
+            .alias("end.quarter_seconds_remaining"),
+            pl.when((pl.col("game_play_number") == 1))
+            .then(1200)
+            .when((pl.col("lag_half") == 1).and_(pl.col("half") == 2))
+            .then(1200)
+            .when((pl.col("lag_qtr") == (pl.col("period.number") - 1)).and_(pl.col("period.number") >= 3))
+            .then(300)
+            .otherwise(pl.col("end.half_seconds_remaining"))
+            .alias("end.half_seconds_remaining"),
+            pl.when((pl.col("game_play_number") == 1))
+            .then(2400)
+            .when((pl.col("lag_qtr") == 1).and_(pl.col("period.number") == 2))
+            .then(1200)
+            .when((pl.col("lag_qtr") == (pl.col("period.number") - 1)).and_(pl.col("period.number") >= 3))
+            .then(300)
+            .otherwise(pl.col("end.game_seconds_remaining"))
+            .alias("end.game_seconds_remaining"),
+            pl.col("qtr").cast(pl.Int32).alias("period"),
         )
-        .then(600)
-        .when((pl.col("lag_qtr") == (pl.col("period.number") - 1)).and_(pl.col("period.number") >= 5))
-        .then(300)
-        .otherwise(pl.col("end.quarter_seconds_remaining"))
-        .alias("end.quarter_seconds_remaining"),
-        pl.when((pl.col("game_play_number") == 1))
-        .then(1200)
-        .when((pl.col("lag_half") == 1).and_(pl.col("half") == 2))
-        .then(1200)
-        .when((pl.col("lag_qtr") == 1).and_(pl.col("period.number") == 2))
-        .then(600)
-        .when((pl.col("lag_qtr") == 2).and_(pl.col("period.number") == 3))
-        .then(1200)
-        .when((pl.col("lag_qtr") == 3).and_(pl.col("period.number") == 4))
-        .then(600)
-        .when((pl.col("lag_qtr") == (pl.col("period.number") - 1)).and_(pl.col("period.number") >= 5))
-        .then(300)
-        .otherwise(pl.col("end.half_seconds_remaining"))
-        .alias("end.half_seconds_remaining"),
-        pl.when((pl.col("game_play_number") == 1))
-        .then(2400)
-        .when((pl.col("lag_qtr") == 1).and_(pl.col("period.number") == 2))
-        .then(1800)
-        .when((pl.col("lag_qtr") == 2).and_(pl.col("period.number") == 3))
-        .then(1200)
-        .when((pl.col("lag_qtr") == 3).and_(pl.col("period.number") == 4))
-        .then(600)
-        .when((pl.col("lag_qtr") == (pl.col("period.number") - 1)).and_(pl.col("period.number") >= 5))
-        .then(300)
-        .otherwise(pl.col("end.game_seconds_remaining"))
-        .alias("end.game_seconds_remaining"),
-        pl.col("qtr").cast(pl.Int32).alias("period"),
-    )
+    else:
+        pbp_txt["plays"] = pbp_txt["plays"].with_columns(
+            pl.when(
+                (pl.col("game_play_number") == 1)
+                .or_((pl.col("lag_qtr") == 1).and_(pl.col("period.number") == 2))
+                .or_((pl.col("lag_qtr") == 2).and_(pl.col("period.number") == 3))
+                .or_((pl.col("lag_qtr") == 3).and_(pl.col("period.number") == 4)),
+            )
+            .then(600)
+            .when((pl.col("lag_qtr") == (pl.col("period.number") - 1)).and_(pl.col("period.number") >= 5))
+            .then(300)
+            .otherwise(pl.col("end.quarter_seconds_remaining"))
+            .alias("end.quarter_seconds_remaining"),
+            pl.when((pl.col("game_play_number") == 1))
+            .then(1200)
+            .when((pl.col("lag_half") == 1).and_(pl.col("half") == 2))
+            .then(1200)
+            .when((pl.col("lag_qtr") == 1).and_(pl.col("period.number") == 2))
+            .then(600)
+            .when((pl.col("lag_qtr") == 2).and_(pl.col("period.number") == 3))
+            .then(1200)
+            .when((pl.col("lag_qtr") == 3).and_(pl.col("period.number") == 4))
+            .then(600)
+            .when((pl.col("lag_qtr") == (pl.col("period.number") - 1)).and_(pl.col("period.number") >= 5))
+            .then(300)
+            .otherwise(pl.col("end.half_seconds_remaining"))
+            .alias("end.half_seconds_remaining"),
+            pl.when((pl.col("game_play_number") == 1))
+            .then(2400)
+            .when((pl.col("lag_qtr") == 1).and_(pl.col("period.number") == 2))
+            .then(1800)
+            .when((pl.col("lag_qtr") == 2).and_(pl.col("period.number") == 3))
+            .then(1200)
+            .when((pl.col("lag_qtr") == 3).and_(pl.col("period.number") == 4))
+            .then(600)
+            .when((pl.col("lag_qtr") == (pl.col("period.number") - 1)).and_(pl.col("period.number") >= 5))
+            .then(300)
+            .otherwise(pl.col("end.game_seconds_remaining"))
+            .alias("end.game_seconds_remaining"),
+            pl.col("qtr").cast(pl.Int32).alias("period"),
+        )
 
     return pbp_txt
 
