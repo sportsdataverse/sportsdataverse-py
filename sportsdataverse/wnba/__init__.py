@@ -47,6 +47,7 @@ from sportsdataverse.wnba.wnba_game_predict import (  # noqa: F401
     wnba_predict_total,
     wnba_win_prob_from_margin,
 )
+from sportsdataverse.wnba.wnba_win_prob import build_wnba_season_wp  # noqa: F401
 from sportsdataverse.wnba.wnba_clutch import wnba_team_clutch  # noqa: F401
 from sportsdataverse.wnba.wnba_player_props import wnba_player_props  # noqa: F401
 from sportsdataverse.wnba.wnba_aging_curve import wnba_aging_curve, wnba_career_trajectory  # noqa: F401
