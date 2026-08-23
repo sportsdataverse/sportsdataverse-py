@@ -43,7 +43,7 @@ Release: [espn_womens_college_basketball_pbp](https://github.com/sportsdataverse
 | `id` | Int64 | Unique play identification number |
 | `sequence_number` | Int32 | Sequence number representing a shot-possession (V3 PBP). |
 | `type_id` | Int32 | Type identifier (numeric). |
-| `type_text` | String | Display text for the type field. |
+| `type_text` | String | Play type text, passed through verbatim from ESPN. ESPN labels the free-throw play type "MadeFreeThrow" for made AND missed free throws; filter makes vs. misses with scoring_play, not type_text. |
 | `text` | String | Text description of the play / record. |
 | `away_score` | Int32 | Away team score at the time of the play. |
 | `home_score` | Int32 | Home team score at the time of the play. |
@@ -51,7 +51,7 @@ Release: [espn_womens_college_basketball_pbp](https://github.com/sportsdataverse
 | `period_display_value` | String | Period display label (e.g. '1st Quarter', 'OT'). |
 | `clock_display_value` | String | Game clock display string (e.g. '8:32'). |
 | `scoring_play` | Boolean | TRUE if the play resulted in points scored. |
-| `score_value` | Int32 | Point value of the play (2 / 3 / 1). |
+| `score_value` | Int32 | Point value of the attempt (1 / 2 / 3), carried even on misses (a missed free throw still shows 1); use scoring_play to identify points actually scored. |
 | `wallclock` | String | Wallclock. |
 | `shooting_play` | Boolean | TRUE if the play was a shooting attempt. |
 | `coordinate_x_raw` | Float64 | X coordinate as returned by the API before any adjustment. |

@@ -4847,6 +4847,24 @@ load_phf_team_boxscores:
   successful_power_play: Number of power plays on which the team scored.
   total_scoring: Goals the team scored in the game.
   total_shots: Shots the team took in the game.
+load_wbb_pbp:
+  type_text: >-
+    Play type text, passed through verbatim from ESPN. ESPN labels the
+    free-throw play type "MadeFreeThrow" for made AND missed free throws;
+    filter makes vs. misses with scoring_play, not type_text.
+  score_value: >-
+    Point value of the attempt (1 / 2 / 3), carried even on misses (a missed
+    free throw still shows 1); use scoring_play to identify points actually
+    scored.
+load_wnba_pbp:
+  type_text: >-
+    Play type text, passed through verbatim from ESPN. ESPN labels the
+    free-throw play type "MadeFreeThrow" for made AND missed free throws;
+    filter makes vs. misses with scoring_play, not type_text.
+  score_value: >-
+    Point value of the attempt (1 / 2 / 3), carried even on misses (a missed
+    free throw still shows 1); use scoring_play to identify points actually
+    scored.
 load_wnba_stats_pbp:
 load_wnba_stats_player_game_logs:
   ast: Assists credited.
