@@ -2627,11 +2627,13 @@ load_cfb_passing:
   dropbacks: Dropbacks taken by the passer.
   fbs_class: 'Power/Group classification for the season: P4 or G6 from 2024 on, P5 or G5 through 2023, derived from conference
     membership. Null for teams outside FBS.'
+  int_epa: EPA lost on the team's interceptions thrown -- the expected-points cost of the turnovers, not a count.
   pass_int: Interceptions thrown.
   passer_player_name: Display name of the passer -- the FIRST participant in that role on the play.
   playsgame: Plays per game.
   sack_adj_yards: Passing yards adjusted for sack yardage lost.
   sack_adj_yards_rank: National rank of the team's passing yards adjusted for sack yardage lost, where 1 is best.
+  sack_epa: EPA lost on the sacks the team's passers took -- the expected-points cost of those plays.
   sack_yds: Yards lost to sacks.
   sacked: Times the passer was sacked.
   success: Success rate across the team plays.

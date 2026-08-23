@@ -1746,9 +1746,9 @@ Release: [espn_cfb_passing](https://github.com/sportsdataverse/sportsdataverse-d
 | `yardsgame` | Float64 | Yards per game. |
 | `sacked` | UInt32 | Times the passer was sacked. |
 | `sack_yds` | Int64 | Yards lost to sacks. |
-| `sack_epa` | Float64 |  |
+| `sack_epa` | Float64 | EPA lost on the sacks the team's passers took -- the expected-points cost of those plays. |
 | `pass_int` | UInt32 | Interceptions thrown. |
-| `int_epa` | Float64 |  |
+| `int_epa` | Float64 | EPA lost on the team's interceptions thrown -- the expected-points cost of the turnovers, not a count. |
 | `detmer` | Float64 | Detmer rating -- the composite passing-efficiency measure this pipeline publishes, named for the college passing-efficiency tradition. |
 | `detmergame` | Float64 | Detmer rating expressed per game. |
 | `dropbacks` | Float64 | Dropbacks taken by the passer. |
