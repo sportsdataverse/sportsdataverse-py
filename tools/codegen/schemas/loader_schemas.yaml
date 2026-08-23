@@ -1243,7 +1243,7 @@ load_cfb_passing:
 - name: EPAplay
   type: Float64
 - name: yards
-  type: Int64
+  type: Float64
 - name: success
   type: Float64
 - name: comp
@@ -1266,8 +1266,12 @@ load_cfb_passing:
   type: UInt32
 - name: sack_yds
   type: Int64
+- name: sack_epa
+  type: Float64
 - name: pass_int
   type: UInt32
+- name: int_epa
+  type: Float64
 - name: detmer
   type: Float64
 - name: detmergame
@@ -1275,7 +1279,7 @@ load_cfb_passing:
 - name: dropbacks
   type: Float64
 - name: sack_adj_yards
-  type: Int64
+  type: Float64
 - name: yardsdropback
   type: Float64
 - name: TEPA_rank

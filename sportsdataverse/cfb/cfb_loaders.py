@@ -2730,7 +2730,7 @@ def load_cfb_passing(seasons, return_as_pandas: bool = False):
         |team_games          |UInt32  |
         |TEPA                |Float64 |
         |EPAplay             |Float64 |
-        |yards               |Int64   |
+        |yards               |Float64 |
         |success             |Float64 |
         |comp                |Float64 |
         |att                 |Float64 |
@@ -2742,11 +2742,13 @@ def load_cfb_passing(seasons, return_as_pandas: bool = False):
         |yardsgame           |Float64 |
         |sacked              |UInt32  |
         |sack_yds            |Int64   |
+        |sack_epa            |Float64 |
         |pass_int            |UInt32  |
+        |int_epa             |Float64 |
         |detmer              |Float64 |
         |detmergame          |Float64 |
         |dropbacks           |Float64 |
-        |sack_adj_yards      |Int64   |
+        |sack_adj_yards      |Float64 |
         |yardsdropback       |Float64 |
         |TEPA_rank           |Float64 |
         |EPAgame_rank        |Float64 |
