@@ -4554,6 +4554,35 @@ box_lineup = get_box_lineup("test_p1.html", box_html, TeamId("TeamA"), format_ve
 shots = create_shot_event_data("test_p1.html", box_html, box_lineup)
 ```
 
+### `display_name_to_roster_key(name: 'Optional[str]') -> 'str'` {#display_name_to_roster_key}
+
+`"Ballisager Webb, Jermaine"` -> `"JERMAINE.BALLISAGER.WEBB"`.
+
+Box-score and shot-chart pages render a player as `"Surname, First"`,
+while `team_rosters` renders the same person as `FIRST.MIDDLE.LAST`
+uppercase -- whitespace becomes dots, hyphens collapse, diacritics fold.
+Joining the two needs one canonical direction, and this is it.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `name` | `Optional[str]` |  | The display name (`"Surname, First"`), or `None`. |
+
+**Returns**
+
+The roster-style key, or `""` when the name cannot be split into at least a surname and a first name. An empty key never matches, which is the intended outcome -- an unresolved row beats a wrong join.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_names import display_name_to_roster_key
+
+display_name_to_roster_key("Clark, Garry")            # "GARRY.CLARK"
+display_name_to_roster_key("Wrightsell Jr., Latrell") # "LATRELL.WRIGHTSELL"
+display_name_to_roster_key('"TJ" Madlock, Antonio')   # "ANTONIO.MADLOCK"
+```
+
 ### `duration_from_period(period: 'int', is_women_game: 'bool') -> 'float'` {#duration_from_period}
 
 The game duration (minutes elapsed) once `period` has completed

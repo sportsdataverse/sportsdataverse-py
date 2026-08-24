@@ -251,9 +251,20 @@ def display_name_to_roster_key(name: Optional[str]) -> str:
     if len(parts) < 2:
         return ""
     first, last = parts[-1], " ".join(parts[:-1])
-    toks = [_roster_key_token(t) for t in (first.split() + last.split())]
-    toks = [t for t in toks if t and not _ROSTER_KEY_SUFFIX.fullmatch(t)]
-    return ".".join(toks)
+
+    def _tokens(field: str) -> "list[str]":
+        out = [_roster_key_token(t) for t in field.split()]
+        return [t for t in out if t and not _ROSTER_KEY_SUFFIX.fullmatch(t)]
+
+    # BOTH components must survive normalization. Filtering the combined token
+    # list instead would happily emit a surname-only key when the given-name
+    # field held nothing usable -- "Smith, Jr. III" and "Smith, 123" both
+    # collapse to "SMITH", a partial key that JOINS, which is worse than no
+    # key at all. Fail closed: an empty key never matches.
+    first_toks, last_toks = _tokens(first), _tokens(last)
+    if not first_toks or not last_toks:
+        return ""
+    return ".".join(first_toks + last_toks)
 
 
 def _truncate_code_1(code: str) -> str:
