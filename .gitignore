@@ -57,3 +57,6 @@ htmlcov/
 .omc/
 agent/
 .agents/
+
+# Stray local debug output (actively appended by local tooling)
+debug.log
