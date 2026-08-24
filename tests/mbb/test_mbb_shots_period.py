@@ -20,16 +20,18 @@ class TestMensHalves:
         "minute,period,sec_left",
         [
             (0.0, 1, 1200.0),  # tip
-            (19.99, 1, 0.6),  # end of the 1st half
-            (20.0, 2, 1200.0),  # start of the 2nd
+            (19.99, 1, 0.6),  # just before the horn
+            (20.0, 1, 0.0),  # ON the horn -- the period that ENDED
+            (20.01, 2, 1199.4),  # start of the 2nd
             (25.0, 2, 900.0),
             (39.5, 2, 30.0),
+            (40.0, 2, 0.0),  # end of regulation, NOT overtime
         ],
     )
     def test_regulation(self, minute: float, period: int, sec_left: float) -> None:
         assert period_and_sec_left(minute, league="mbb", season=2024) == (period, sec_left)
 
-    @pytest.mark.parametrize("minute,period", [(40.0, 3), (44.9, 3), (45.0, 4), (50.0, 5)])
+    @pytest.mark.parametrize("minute,period", [(40.01, 3), (44.9, 3), (45.0, 3), (45.01, 4), (50.0, 4)])
     def test_overtimes_are_five_minutes(self, minute: float, period: int) -> None:
         assert period_and_sec_left(minute, league="mbb", season=2024)[0] == period
 
@@ -61,9 +63,14 @@ class TestWomensEraSplit:
         assert halves != quarters
 
     def test_womens_regulation_still_ends_at_40_minutes(self) -> None:
-        """Both eras play 40 minutes; only the subdivision changed."""
-        for season in (2014, 2024):
-            assert period_and_sec_left(40.0, league="wbb", season=season)[0] > (2 if season < 2016 else 4)
+        """Both eras play 40 minutes; only the subdivision changed.
+
+        40.0 is the END of regulation, so it belongs to the LAST regulation
+        period at 0 seconds -- half 2 pre-2016, quarter 4 after.
+        """
+        assert period_and_sec_left(40.0, league="wbb", season=2014) == (2, 0.0)
+        assert period_and_sec_left(40.0, league="wbb", season=2024) == (4, 0.0)
+        assert period_and_sec_left(40.01, league="wbb", season=2024)[0] == 5
 
 
 class TestBadClockStaysUnresolved:
@@ -94,3 +101,38 @@ class TestLeagueVocabulary:
         assert period_and_sec_left(25.0, league="womens", season=2024) != period_and_sec_left(
             25.0, league="mens", season=2024
         )
+
+
+class TestPeriodBoundaries:
+    """A shot ON the horn belongs to the period that ENDED, at 0 seconds.
+
+    The naive floor-division put 20.0 in period 2 with a full 1200s clock, so
+    every buzzer-beater was attributed to the following period as though it had
+    just started. Caught in review; these pin it.
+    """
+
+    @pytest.mark.parametrize(
+        "minute,expected",
+        [
+            (20.0, (1, 0.0)),  # end of the men's 1st half
+            (40.0, (2, 0.0)),  # end of men's regulation, NOT overtime
+            (45.0, (3, 0.0)),  # end of OT1, NOT OT2
+        ],
+    )
+    def test_mens_boundaries_close_the_period(self, minute, expected) -> None:
+        assert period_and_sec_left(minute, league="mbb", season=2024) == expected
+
+    @pytest.mark.parametrize("minute,expected", [(10.0, (1, 0.0)), (30.0, (3, 0.0))])
+    def test_womens_quarter_boundaries(self, minute, expected) -> None:
+        assert period_and_sec_left(minute, league="wbb", season=2024) == expected
+
+    def test_a_hair_past_the_boundary_opens_the_next_period(self) -> None:
+        assert period_and_sec_left(20.01, league="mbb", season=2024) == (2, 1199.4)
+
+
+class TestNonFiniteClock:
+    """NaN passed the ``< 0`` guard and then crashed the floor division."""
+
+    @pytest.mark.parametrize("bad", [float("nan"), float("inf"), float("-inf")])
+    def test_non_finite_returns_none_rather_than_raising(self, bad: float) -> None:
+        assert period_and_sec_left(bad, league="mbb", season=2024) == (None, None)

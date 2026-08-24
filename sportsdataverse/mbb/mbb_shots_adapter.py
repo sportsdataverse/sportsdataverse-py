@@ -9,6 +9,8 @@ shot_type, made, point_value, period, sec_left, source``).
 
 from __future__ import annotations
 
+import math
+
 from typing import TYPE_CHECKING
 
 import pandas as pd
@@ -186,7 +188,9 @@ def period_and_sec_left(minute: float, *, league: str, season: int) -> "tuple[in
         m = float(minute)
     except (TypeError, ValueError):
         return None, None
-    if m < 0:
+    # NaN passes `m < 0` and then explodes in the floor division; +inf
+    # overflows. Both must honour the (None, None) contract, not crash.
+    if not math.isfinite(m) or m < 0:
         return None, None
 
     # This module speaks "mens"/"womens"; the release/league layer speaks
@@ -203,16 +207,22 @@ def period_and_sec_left(minute: float, *, league: str, season: int) -> "tuple[in
     ot_len = ot_seconds / 60.0
     reg_total = periods * reg_len
 
-    if m < reg_total:
-        idx = int(m // reg_len)
-        period = idx + 1
-        start = idx * reg_len
+    # A period BOUNDARY belongs to the period that just ended, at 0 seconds --
+    # a buzzer-beater at 0:00 of the first half is period 1 / 0.0, not period 2
+    # with a full clock. `ceil` puts the boundary on the closing period;
+    # `m == 0` is the only tip-off case and needs the explicit branch.
+    if m == 0.0:
+        return 1, round(reg_len * 60.0, 1)
+
+    if m <= reg_total:
+        period = math.ceil(m / reg_len)
+        start = (period - 1) * reg_len
         return period, round((reg_len - (m - start)) * 60.0, 1)
 
     over = m - reg_total
-    ot_idx = int(over // ot_len)
-    period = periods + ot_idx + 1
-    start = reg_total + ot_idx * ot_len
+    ot_idx = math.ceil(over / ot_len)
+    period = periods + ot_idx
+    start = reg_total + (ot_idx - 1) * ot_len
     return period, round((ot_len - (m - start)) * 60.0, 1)
 
 
