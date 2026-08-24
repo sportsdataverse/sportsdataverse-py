@@ -212,6 +212,16 @@ def team_aggregate(stints: pl.DataFrame, players: pl.DataFrame) -> pl.DataFrame:
     """
     if stints.height == 0:
         return pl.DataFrame(schema=_TEAM_AGG_SCHEMA)
+    if players.schema["player_id"] != pl.Utf8:
+        # A wrong-dtype key would left-join to all-null, fill_null(0.0) every
+        # coefficient, and emit all-zero team ratings with no error.
+        raise TypeError(f"players.player_id must be Utf8, got {players.schema['player_id']}")
+    on_floor = set(stints["off_ids"].explode().to_list()) | set(stints["def_ids"].explode().to_list())
+    if players.height and not (set(players["player_id"].to_list()) & on_floor):
+        raise ValueError(
+            "zero player_id overlap between stints and players -- wrong frames "
+            "or an upstream id mismatch; refusing to emit all-zero team ratings"
+        )
     off = _side_aggregate(stints, players, "off_ids", "off_team", "orapm", "team_orapm")
     dfn = _side_aggregate(stints, players, "def_ids", "def_team", "drapm", "team_drapm")
     return (
@@ -233,7 +243,7 @@ def solve_rapm_league(
     *,
     ridge_lambda: float = DEFAULT_RIDGE_LAMBDA,
     return_as_pandas: bool = False,
-) -> "tuple[pl.DataFrame, dict[str, float]]":
+) -> tuple[pl.DataFrame, dict[str, float]]:
     """Weighted sparse joint O/D ridge over matchup stints.
 
     Args:
@@ -300,8 +310,8 @@ def solve_rapm_league(
     # entries (so positive drapm = fewer points allowed), hca column at 2P.
     off_rows = off["_row"].to_numpy().astype(np.int64)
     dfn_rows = dfn["_row"].to_numpy().astype(np.int64)
-    off_cols: "np.ndarray" = np.fromiter((idx[p] for p in off["pid"].to_list()), np.int64, len(off_rows))
-    dfn_cols: "np.ndarray" = np.fromiter((n_players + idx[p] for p in dfn["pid"].to_list()), np.int64, len(dfn_rows))
+    off_cols: np.ndarray = np.fromiter((idx[p] for p in off["pid"].to_list()), np.int64, len(off_rows))
+    dfn_cols: np.ndarray = np.fromiter((n_players + idx[p] for p in dfn["pid"].to_list()), np.int64, len(dfn_rows))
     side = np.where(s["is_home_offense"].to_numpy(), 1.0, -1.0)
 
     rows = np.concatenate([off_rows, dfn_rows, np.arange(n_stints)])
@@ -309,7 +319,11 @@ def solve_rapm_league(
     vals = np.concatenate([sw[off_rows], -sw[dfn_rows], side * sw])
     x = coo_matrix((vals, (rows, cols)), shape=(n_stints, 2 * n_players + 1)).tocsr()
 
-    beta = lsqr(x, (y - mu) * sw, damp=float(np.sqrt(ridge_lambda)))[0]
+    beta, istop, itn = lsqr(x, (y - mu) * sw, damp=float(np.sqrt(ridge_lambda)))[:3]
+    if istop not in (0, 1, 2):
+        # istop=7 is the iteration limit: lsqr hands back a PARTIAL iterate
+        # with no error, which must never flow silently into the gate.
+        raise RuntimeError(f"lsqr did not converge (istop={istop}, itn={itn}) -- refusing to return a partial solve")
     orapm = beta[:n_players]
     drapm = beta[n_players : 2 * n_players]
     hca = float(beta[2 * n_players])
@@ -351,5 +365,7 @@ def solve_rapm_league(
         "ridge_lambda": float(ridge_lambda),
         "n_stints": n_stints,
         "n_poss": int(w.sum()),
+        "lsqr_istop": int(istop),
+        "lsqr_itn": int(itn),
     }
     return (out.to_pandas() if return_as_pandas else out), info

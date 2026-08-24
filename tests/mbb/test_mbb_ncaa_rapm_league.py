@@ -238,6 +238,31 @@ class TestSolveRapmLeague:
         }
         assert info["n_stints"] == 0
 
+    def test_nonconverged_solve_raises_not_returns_partial(self, monkeypatch):
+        # lsqr can hit iter_lim (istop=7) and hand back a partial iterate with
+        # no error; that must never flow silently into the gate.
+        import scipy.sparse.linalg as sla
+
+        real = sla.lsqr
+
+        def fake(*a, **k):
+            out = list(real(*a, **k))
+            out[1] = 7  # istop: iteration limit reached
+            return tuple(out)
+
+        monkeypatch.setattr("scipy.sparse.linalg.lsqr", fake)
+        s = _balanced_stints(n=5)
+        with pytest.raises(RuntimeError, match="istop"):
+            solve_rapm_league(s, ridge_lambda=100.0)
+
+    def test_info_reports_solver_diagnostics(self):
+        s = _balanced_stints(n=5)
+        _players_frame, info = solve_rapm_league(s, ridge_lambda=100.0)
+        # 0 = x=0 is the exact solution (this fixture has zero centered
+        # signal), 1/2 = converged.
+        assert info["lsqr_istop"] in (0, 1, 2)
+        assert info["lsqr_itn"] >= 0
+
     def test_net_is_o_plus_d(self):
         s = _balanced_stints(ppp_starter=2.0, ppp_sub=1.0, n=50)
         players, _ = solve_rapm_league(s, ridge_lambda=50.0)
@@ -308,6 +333,20 @@ class TestTeamAggregate:
         t = team_aggregate(s, players)
         duke = t.filter(pl.col("team") == "Duke")
         assert abs(duke["team_orapm"][0] - 5.0) < 1e-12
+
+    def test_non_utf8_player_id_raises_not_silently_zeroes(self):
+        # An Int64-keyed players frame would left-join to all-null -> every
+        # coefficient fill_null(0.0) -> all-zero team ratings with no error.
+        s = aggregate_stints(_poss([("Duke", "Iowa", "Duke", 2, _H, _A)]))
+        bad = _players(h1=1).with_columns(pl.lit(1).alias("player_id"))
+        with pytest.raises(TypeError, match="player_id"):
+            team_aggregate(s, bad)
+
+    def test_zero_overlap_between_stints_and_players_raises(self):
+        s = aggregate_stints(_poss([("Duke", "Iowa", "Duke", 2, _H, _A)]))
+        strangers = _players(x1=1, x2=2)
+        with pytest.raises(ValueError, match="overlap"):
+            team_aggregate(s, strangers)
 
     def test_empty_stints_return_documented_schema(self):
         t = team_aggregate(aggregate_stints(_poss([])), _players())
