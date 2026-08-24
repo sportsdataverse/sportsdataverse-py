@@ -1706,3 +1706,195 @@ loaders:
   min_season: 2022
   example_args:
     seasons: 2024
+- fn: load_ncaa_mbb_pbp
+  league: mbb
+  base: sdv_releases
+  url: ncaa_mbb_pbp/ncaa_mbb_pbp_{season}.parquet
+  tag: ncaa_mbb_pbp
+  min_season: 2010
+  example_args:
+    seasons: 2024
+- fn: load_ncaa_mbb_schedule
+  league: mbb
+  base: sdv_releases
+  url: ncaa_mbb_schedule/ncaa_mbb_schedule_{season}.parquet
+  tag: ncaa_mbb_schedule
+  min_season: 2010
+  example_args:
+    seasons: 2024
+- fn: load_ncaa_mbb_player_box
+  league: mbb
+  base: sdv_releases
+  url: ncaa_mbb_player_box/ncaa_mbb_player_box_{season}.parquet
+  tag: ncaa_mbb_player_box
+  min_season: 2010
+  example_args:
+    seasons: 2024
+- fn: load_ncaa_mbb_team_box
+  league: mbb
+  base: sdv_releases
+  url: ncaa_mbb_team_box/ncaa_mbb_team_box_{season}.parquet
+  tag: ncaa_mbb_team_box
+  min_season: 2010
+  example_args:
+    seasons: 2024
+- fn: load_ncaa_mbb_rosters
+  league: mbb
+  base: sdv_releases
+  url: ncaa_mbb_rosters/ncaa_mbb_rosters_{season}.parquet
+  tag: ncaa_mbb_rosters
+  min_season: 2010
+  example_args:
+    seasons: 2024
+- fn: load_ncaa_mbb_team_rosters
+  league: mbb
+  base: sdv_releases
+  url: ncaa_mbb_team_rosters/ncaa_mbb_team_rosters_{season}.parquet
+  tag: ncaa_mbb_team_rosters
+  min_season: 2010
+  example_args:
+    seasons: 2024
+- fn: load_ncaa_mbb_team_ids
+  league: mbb
+  base: sdv_releases
+  url: ncaa_mbb_team_ids/ncaa_mbb_team_ids_{season}.parquet
+  tag: ncaa_mbb_team_ids
+  min_season: 2010
+  example_args:
+    seasons: 2024
+- fn: load_ncaa_mbb_possessions
+  league: mbb
+  base: sdv_releases
+  url: ncaa_mbb_possessions/ncaa_mbb_possessions_{season}.parquet
+  tag: ncaa_mbb_possessions
+  min_season: 2010
+  example_args:
+    seasons: 2024
+- fn: load_ncaa_mbb_lineups
+  league: mbb
+  base: sdv_releases
+  url: ncaa_mbb_lineups/ncaa_mbb_lineups_{season}.parquet
+  tag: ncaa_mbb_lineups
+  min_season: 2010
+  example_args:
+    seasons: 2024
+- fn: load_ncaa_mbb_matchup_stints
+  league: mbb
+  base: sdv_releases
+  url: ncaa_mbb_matchup_stints/ncaa_mbb_matchup_stints_{season}.parquet
+  tag: ncaa_mbb_matchup_stints
+  min_season: 2010
+  example_args:
+    seasons: 2024
+- fn: load_ncaa_mbb_shots
+  league: mbb
+  base: sdv_releases
+  url: ncaa_mbb_shots/ncaa_mbb_shots_{season}.parquet
+  tag: ncaa_mbb_shots
+  min_season: 2019
+  example_args:
+    seasons: 2024
+- fn: load_ncaa_mbb_rapm_within_team
+  league: mbb
+  base: sdv_releases
+  url: ncaa_mbb_rapm_within_team/ncaa_mbb_rapm_within_team_{season}.parquet
+  tag: ncaa_mbb_rapm_within_team
+  min_season: 2010
+  example_args:
+    seasons: 2024
+- fn: load_ncaa_wbb_pbp
+  league: wbb
+  base: sdv_releases
+  url: ncaa_wbb_pbp/ncaa_wbb_pbp_{season}.parquet
+  tag: ncaa_wbb_pbp
+  min_season: 2010
+  example_args:
+    seasons: 2024
+- fn: load_ncaa_wbb_schedule
+  league: wbb
+  base: sdv_releases
+  url: ncaa_wbb_schedule/ncaa_wbb_schedule_{season}.parquet
+  tag: ncaa_wbb_schedule
+  min_season: 2010
+  example_args:
+    seasons: 2024
+- fn: load_ncaa_wbb_player_box
+  league: wbb
+  base: sdv_releases
+  url: ncaa_wbb_player_box/ncaa_wbb_player_box_{season}.parquet
+  tag: ncaa_wbb_player_box
+  min_season: 2010
+  example_args:
+    seasons: 2024
+- fn: load_ncaa_wbb_team_box
+  league: wbb
+  base: sdv_releases
+  url: ncaa_wbb_team_box/ncaa_wbb_team_box_{season}.parquet
+  tag: ncaa_wbb_team_box
+  min_season: 2010
+  example_args:
+    seasons: 2024
+- fn: load_ncaa_wbb_rosters
+  league: wbb
+  base: sdv_releases
+  url: ncaa_wbb_rosters/ncaa_wbb_rosters_{season}.parquet
+  tag: ncaa_wbb_rosters
+  min_season: 2010
+  example_args:
+    seasons: 2024
+- fn: load_ncaa_wbb_team_rosters
+  league: wbb
+  base: sdv_releases
+  url: ncaa_wbb_team_rosters/ncaa_wbb_team_rosters_{season}.parquet
+  tag: ncaa_wbb_team_rosters
+  min_season: 2010
+  example_args:
+    seasons: 2024
+- fn: load_ncaa_wbb_team_ids
+  league: wbb
+  base: sdv_releases
+  url: ncaa_wbb_team_ids/ncaa_wbb_team_ids_{season}.parquet
+  tag: ncaa_wbb_team_ids
+  min_season: 2010
+  example_args:
+    seasons: 2024
+- fn: load_ncaa_wbb_possessions
+  league: wbb
+  base: sdv_releases
+  url: ncaa_wbb_possessions/ncaa_wbb_possessions_{season}.parquet
+  tag: ncaa_wbb_possessions
+  min_season: 2010
+  example_args:
+    seasons: 2024
+- fn: load_ncaa_wbb_lineups
+  league: wbb
+  base: sdv_releases
+  url: ncaa_wbb_lineups/ncaa_wbb_lineups_{season}.parquet
+  tag: ncaa_wbb_lineups
+  min_season: 2010
+  example_args:
+    seasons: 2024
+- fn: load_ncaa_wbb_matchup_stints
+  league: wbb
+  base: sdv_releases
+  url: ncaa_wbb_matchup_stints/ncaa_wbb_matchup_stints_{season}.parquet
+  tag: ncaa_wbb_matchup_stints
+  min_season: 2010
+  example_args:
+    seasons: 2024
+- fn: load_ncaa_wbb_shots
+  league: wbb
+  base: sdv_releases
+  url: ncaa_wbb_shots/ncaa_wbb_shots_{season}.parquet
+  tag: ncaa_wbb_shots
+  min_season: 2019
+  example_args:
+    seasons: 2024
+- fn: load_ncaa_wbb_rapm_within_team
+  league: wbb
+  base: sdv_releases
+  url: ncaa_wbb_rapm_within_team/ncaa_wbb_rapm_within_team_{season}.parquet
+  tag: ncaa_wbb_rapm_within_team
+  min_season: 2010
+  example_args:
+    seasons: 2024
