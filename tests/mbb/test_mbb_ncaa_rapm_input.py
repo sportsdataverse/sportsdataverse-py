@@ -250,9 +250,13 @@ class TestExpandXwalkAliases:
 # is injected, so the library stays pure and testable.
 
 
-def _changes(rows):
+def _changes(rows, season="2023"):
+    """Crosswalk fixture. Carries ``season`` because the real
+    ``ncaa_{lg}_name_changes`` parquet does -- the fold is season-scoped, so a
+    fixture without it would not model the contract."""
     return pl.DataFrame(
         {
+            "season": [(r[3] if len(r) > 3 else season) for r in rows],
             "team": [r[0] for r in rows],
             "name_game_time": [r[1] for r in rows],
             "name_current": [r[2] for r in rows],
@@ -460,3 +464,57 @@ class TestBuildPersonKeys:
         out = build_person_keys(_ros([("2024", "Duke", "KIA.SMITH", "1", 70, "Fr.")]))
         assert out.schema["person_id"] == pl.Utf8
         assert out["person_id"].null_count() == 0
+
+
+class TestReviewRegressions:
+    """One test per real finding from the #382 review."""
+
+    def test_ambiguous_roster_key_is_omitted_not_arbitrarily_picked(self):
+        """Two people normalizing to one key must yield NO xwalk row.
+
+        Keeping an arbitrary row assigns every possession for that name to a
+        coin-flip player -- the wrong-attribution class this whole stack
+        exists to avoid.
+        """
+        ros = pl.DataFrame(
+            {
+                "team": ["Duke", "Duke", "Duke"],
+                "player": ["KIA.SMITH", "KIA.SMITH", "JOE.BLOGGS"],
+                "player_id": ["11", "22", "33"],
+            }
+        )
+        out = build_player_xwalk(ros)
+        keys = set(zip(out["team"], out["player_key"]))
+        assert ("Duke", "KIA.SMITH") not in keys, "ambiguous key must be dropped"
+        assert ("Duke", "JOE.BLOGGS") in keys, "unambiguous key must survive"
+
+    def test_person_id_is_independent_of_row_order(self):
+        """A published person_id must survive a reordered roster extract."""
+        rows = [
+            ("2023", "Duke", "KIA.SMITH", "1", 70, "Jr."),
+            ("2024", "Duke", "KIA.SMITH", "2", 70, "Sr."),
+            ("2023", "Iowa", "ANN.LEE", "3", 68, "Fr."),
+        ]
+        fwd = build_person_keys(_ros(rows))
+        rev = build_person_keys(_ros(list(reversed(rows))))
+
+        def mapping(df):
+            return dict(zip(zip(df["season"], df["player_key"]), df["person_id"]))
+
+        assert mapping(fwd) == mapping(rev)
+
+    def test_rename_does_not_leak_into_another_season(self):
+        """A 2023 rename must not rewrite a 2019 player with the same name."""
+        ros = _ros(
+            [
+                ("2019", "Montana St.", "KATELYNN.LIMARDO", "9", 62, "Fr."),
+                ("2023", "Montana St.", "KATELYNN.LIMARDO", "1", 70, "Jr."),
+                ("2024", "Montana St.", "KATELYNN.MARTIN", "2", 70, "Sr."),
+            ]
+        )
+        out = build_person_keys(
+            ros,
+            name_changes=_changes([("Montana St.", "KATELYNN.LIMARDO", "KATELYNN.MARTIN", "2023")]),
+        )
+        assert _pid(out, "2023", "KATELYNN.LIMARDO") == _pid(out, "2024", "KATELYNN.MARTIN")
+        assert _pid(out, "2019", "KATELYNN.LIMARDO") != _pid(out, "2024", "KATELYNN.MARTIN")

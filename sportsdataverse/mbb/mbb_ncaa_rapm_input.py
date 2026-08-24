@@ -30,6 +30,8 @@ corrupt RAPM silently rather than loudly:
 
 from __future__ import annotations
 
+import hashlib
+
 from typing import Literal
 
 import polars as pl
@@ -112,14 +114,27 @@ def build_player_xwalk(team_rosters: pl.DataFrame) -> pl.DataFrame:
 
             xwalk = build_player_xwalk(team_rosters)
     """
-    return (
+    base = (
         team_rosters.select(
             pl.col("team").cast(pl.Utf8),
             normalize_player_key(pl.col("player").cast(pl.Utf8)).alias("player_key"),
             pl.col("player_id").cast(pl.Utf8),
         )
         .filter(pl.col("player_key") != TEAM_PSEUDO_PLAYER)
-        .unique(subset=["team", "player_key"], keep="first")
+        .unique()
+    )
+    # A normalized key that resolves to MORE THAN ONE player_id is two people
+    # sharing a rendering. OMIT the key rather than keeping an arbitrary row:
+    # an unresolved possession is recoverable, a silent wrong attribution is
+    # not. Same gate as the sibling-code and same-full-name rejections.
+    unambiguous = (
+        base.group_by(["team", "player_key"])
+        .agg(pl.col("player_id").n_unique().alias("_n_ids"))
+        .filter(pl.col("_n_ids") == 1)
+        .select(["team", "player_key"])
+    )
+    return base.join(unambiguous, on=["team", "player_key"], how="inner").unique(
+        subset=["team", "player_key"], keep="first"
     )
 
 
@@ -436,19 +451,24 @@ def build_person_keys(
     # the same link group.
     if name_changes is not None and name_changes.height:
         nc = name_changes.select(
+            pl.col("season").cast(pl.Utf8),
             pl.col("team").cast(pl.Utf8),
             normalize_player_key(pl.col("name_game_time").cast(pl.Utf8)).alias("old"),
             normalize_player_key(pl.col("name_current").cast(pl.Utf8)).alias("new"),
         ).unique()
-        seen: "dict[tuple[str, str], set[str]]" = {}
-        for team, old, new in nc.rows():
-            seen.setdefault((team, old), set()).add(new)
+        # Scope the fold by SEASON. A (team, game-time name) -> current name
+        # mapping is evidence about ONE season's roster; applied to every
+        # season it would rewrite an unrelated player who happens to share the
+        # team and old rendering, merging two identities.
+        seen: "dict[tuple[str, str, str], set[str]]" = {}
+        for season_, team_, old_, new_ in nc.rows():
+            seen.setdefault((season_, team_, old_), set()).add(new_)
         ren = {k: next(iter(v)) for k, v in seen.items() if len(v) == 1}
         if ren:
             df = df.with_columns(
-                pl.struct(["team", "player_key"])
+                pl.struct(["season", "team", "player_key"])
                 .map_elements(
-                    lambda s: ren.get((s["team"], s["player_key"]), s["player_key"]),
+                    lambda s: ren.get((s["season"], s["team"], s["player_key"]), s["player_key"]),
                     return_dtype=pl.Utf8,
                 )
                 .alias("canon_key")
@@ -458,9 +478,9 @@ def build_person_keys(
     else:
         df = df.with_columns(pl.col("player_key").alias("canon_key"))
 
-    rows = df.select("season", "canon_key", "ht_inches", "class").rows()
+    rows = df.select("season", "canon_key", "ht_inches", "class", "team").rows()
     by_name: "dict[str, list[int]]" = {}
-    for i, (_s, key, _h, _c) in enumerate(rows):
+    for i, (_s, key, _h, _c, _t) in enumerate(rows):
         by_name.setdefault(key, []).append(i)
 
     uf = _Union(len(rows))
@@ -488,6 +508,20 @@ def build_person_keys(
                 continue  # class cannot go backwards
             uf.union(a, b)
 
+    # The person key must NOT depend on input row order -- a published
+    # person_id has to survive a regenerated or differently-ordered roster
+    # extract, or nothing can join to it later. Derive it from a canonical
+    # property of the component instead of the union-find row index: every
+    # member shares `canon_key`, so anchor on that plus the lexicographically
+    # smallest "season:team" the component contains.
+    components: "dict[int, list[int]]" = {}
+    for i in range(len(rows)):
+        components.setdefault(uf.find(i), []).append(i)
+    person_of_root: "dict[int, str]" = {}
+    for root, members in components.items():
+        anchor = min(f"{rows[m][0]}:{rows[m][4]}" for m in members)
+        ident = f"{rows[members[0]][1]}|{anchor}"
+        person_of_root[root] = "p" + hashlib.sha1(ident.encode("utf-8")).hexdigest()[:12]
     return df.drop("canon_key").with_columns(
-        pl.Series("person_id", [f"p{uf.find(i)}" for i in range(len(rows))], dtype=pl.Utf8)
+        pl.Series("person_id", [person_of_root[uf.find(i)] for i in range(len(rows))], dtype=pl.Utf8)
     )
