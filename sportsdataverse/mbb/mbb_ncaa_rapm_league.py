@@ -300,8 +300,8 @@ def solve_rapm_league(
     # entries (so positive drapm = fewer points allowed), hca column at 2P.
     off_rows = off["_row"].to_numpy().astype(np.int64)
     dfn_rows = dfn["_row"].to_numpy().astype(np.int64)
-    off_cols = np.fromiter((idx[p] for p in off["pid"].to_list()), np.int64, len(off_rows))
-    dfn_cols = np.fromiter((n_players + idx[p] for p in dfn["pid"].to_list()), np.int64, len(dfn_rows))
+    off_cols: "np.ndarray" = np.fromiter((idx[p] for p in off["pid"].to_list()), np.int64, len(off_rows))
+    dfn_cols: "np.ndarray" = np.fromiter((n_players + idx[p] for p in dfn["pid"].to_list()), np.int64, len(dfn_rows))
     side = np.where(s["is_home_offense"].to_numpy(), 1.0, -1.0)
 
     rows = np.concatenate([off_rows, dfn_rows, np.arange(n_stints)])
