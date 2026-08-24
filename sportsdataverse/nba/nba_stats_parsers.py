@@ -12,6 +12,7 @@ via flag, empty/malformed returns a zero-row frame, columns snake_cased via dl_u
 
 from __future__ import annotations
 
+import json
 from typing import TYPE_CHECKING, Optional, Union
 
 import polars as pl
@@ -58,7 +59,68 @@ def _result_sets(raw: dict) -> list:
     if isinstance(ls, dict) and isinstance(ls.get("gameDates"), list):
         # scheduleleaguev2 has no resultSets envelope either — see below
         return [_league_schedule_result_set(ls)]
+    for key, val in raw.items():
+        # the stats *v3 boxscore family (boxScoreTraditional/Advanced/Misc/
+        # Scoring/Usage/PlayerTrack/Matchups/Summary) has no resultSets
+        # envelope: the payload nests under a single boxScore* key
+        if key.startswith("boxScore") and isinstance(val, dict):
+            return _boxscore_v3_result_sets(val)
     return []
+
+
+def _boxscore_v3_result_sets(box: dict) -> list:
+    """Synthesize result-set dicts from a stats ``*v3`` boxscore payload.
+
+    The v3 boxscore family nests per-player ``statistics`` under
+    ``homeTeam``/``awayTeam`` instead of shipping ``resultSets``. Emits
+    ``PlayerStats`` + ``TeamStats`` sets (mirroring the v2 names); a payload
+    without team blocks (``boxscoresummaryv3``) becomes a single-row
+    ``BoxScoreSummary`` set with nested structures stringified.
+
+    Args:
+        box: The dict under the payload's ``boxScore*`` key.
+
+    Returns:
+        A list of result-set dicts (``name``/``headers``/``rowSet``).
+    """
+    game_meta = {k: v for k, v in box.items() if not isinstance(v, (dict, list))}
+    teams = [box[side] for side in ("homeTeam", "awayTeam") if isinstance(box.get(side), dict)]
+
+    def _set(name: str, rows: list) -> dict:
+        headers = list(dict.fromkeys(k for r in rows for k in r))
+        return {"name": name, "headers": headers, "rowSet": [[r.get(h) for h in headers] for r in rows]}
+
+    if not teams:
+        row = {k: (json.dumps(v) if isinstance(v, (dict, list)) else v) for k, v in box.items()}
+        return [_set("BoxScoreSummary", [row])]
+
+    player_rows: list = []
+    team_rows: list = []
+    for team in teams:
+        ident = dict(game_meta)
+        ident.update({k: v for k, v in team.items() if not isinstance(v, (dict, list))})
+        tstats = team.get("statistics") or {}
+        team_rows.append({**ident, **{k: v for k, v in tstats.items() if not isinstance(v, (dict, list))}})
+        for player in team.get("players") or []:
+            row = dict(ident)
+            for k, v in player.items():
+                if k == "statistics" and isinstance(v, dict):
+                    row.update({sk: sv for sk, sv in v.items() if not isinstance(sv, (dict, list))})
+                elif isinstance(v, (dict, list)):
+                    row[k] = json.dumps(v)
+                else:
+                    row[k] = v
+            player_rows.append(row)
+    sets = [_set("PlayerStats", player_rows), _set("TeamStats", team_rows)]
+    # summary-style payloads also carry top-level list-of-dict sections
+    # (officials, line scores, last meetings, ...) -- emit each as its own set
+    for k, v in box.items():
+        if isinstance(v, list) and v and isinstance(v[0], dict):
+            rows = [
+                {rk: (json.dumps(rv) if isinstance(rv, (dict, list)) else rv) for rk, rv in rec.items()} for rec in v
+            ]
+            sets.append(_set(k[:1].upper() + k[1:], rows))
+    return sets
 
 
 def _flatten_headers(headers: list) -> list:
