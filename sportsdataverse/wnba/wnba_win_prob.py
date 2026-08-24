@@ -135,7 +135,8 @@ def _compile_season_wp(pbp: pl.DataFrame, schedule: pl.DataFrame, team_box: pl.D
         team_box: Per-team boxscore for the same season.
 
     Returns:
-        The pbp frame with :data:`_WP_COLS` appended (both ``Float64``), sorted
+        The pbp frame with ``pregame_home_prob`` + ``home_win_prob`` appended
+        (both ``Float64``), sorted
         by ``game_id`` then ``game_play_number``. Empty pbp returns unchanged.
     """
     if pbp.height == 0:
@@ -196,7 +197,8 @@ def build_wnba_season_wp(season: int, *, return_as_pandas: bool = False) -> Unio
 
     Returns:
         The season's ``load_wnba_pbp`` frame (every column preserved) with the
-        two :data:`_WP_COLS` appended (both ``Float64``), sorted by ``game_id``
+        two WP columns ``pregame_home_prob`` + ``home_win_prob`` appended (both
+        ``Float64``), sorted by ``game_id``
         then ``game_play_number``.
 
     Example:

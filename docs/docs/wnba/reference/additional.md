@@ -548,7 +548,7 @@ enrich-in-place shape that overwrites the season's
 
 **Returns**
 
-The season's `load_wnba_pbp` frame (every column preserved) with the two WP_COLS` appended (both `Float64`), sorted by `game_id` then `game_play_number`.
+The season's `load_wnba_pbp` frame (every column preserved) with the two WP columns `pregame_home_prob` + `home_win_prob` appended (both `Float64`), sorted by `game_id` then `game_play_number`.
 
 **Example**
 
