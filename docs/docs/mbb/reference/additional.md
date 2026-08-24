@@ -6208,43 +6208,6 @@ from sportsdataverse.mbb.mbb_ncaa_shot_parser import is_team_shooting_left_to_st
 is_team_shooting_left_to_start([(1, shot_a), (1, shot_b)])
 ```
 
-### `is_transition(curr_clump: 'ConcurrentClump', prev_clumps: 'list[ConcurrentClump]', event_parser: 'PossessionEvent', player_version: 'bool') -> 'tuple[Callable[[RawGameEvent, bool], bool], str]'` {#is_transition}
-
-Figure out if the current clump is part of a transition offense
-
-following opponent offense (or a marked-fastbreak play) (`is_transition`,
-`LineupUtils.scala:668-927`).
-
-Returns a `(predicate, debug_tag)` tuple mirroring `is_scramble`
--- the oracle asserts the debug tag directly (`"N/A"`/`"0a.X"`/
-`"1a.a"`/`"1a.b"`/`"1b.a"`/`"1b.b"`/`"1b.X"`/`"NOT"`).
-Unlike `is_scramble`'s predicate, this one takes a *second*
-argument -- `is_scramble` -- so **scramble always wins**: an event
-already classified as a scramble is never additionally tagged
-transition (`!is_scramble && is_transition_event`).
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `curr_clump` | `ConcurrentClump` |  | The clump to classify. |
-| `prev_clumps` | `list[ConcurrentClump]` |  | Prior merged clumps, most-recent-first. |
-| `event_parser` | `PossessionEvent` |  | Selects which side of each event is "attacking" (and, for this heuristic, "defending"). |
-| `player_version` | `bool` |  | Unused -- see `is_scramble`'s port notes in the module docstring (the Scala's debug-print gate this flag controls is permanently `false` regardless of its value). |
-
-**Returns**
-
-`(predicate, debug_tag)` where `predicate(ev, is_scramble)` reports whether `ev` is part of a transition play, given whether it was already classified as a scramble.
-
-**Example**
-
-```python
-from sportsdataverse.mbb.mbb_ncaa_lineup_enrich import is_transition
-
-predicate, tag = is_transition(curr_clump, prev_clumps, event_parser, player_version=False)
-[predicate(ev, is_scramble=False) for ev in curr_clump.evs]
-```
-
 ### `is_women_game(sorted_very_raw_events: 'list[tuple[int, ShotEvent]]') -> 'bool'` {#is_women_game}
 
 Infers men's vs. women's game from timing evidence
@@ -7535,46 +7498,6 @@ joined = ncaa_mbb_join_pbp_shots(pbp, shots)
 joined.filter(pl.col("x").is_not_null()).head()
 ```
 
-### `ncaa_mbb_lineups(pbp: 'pl.DataFrame', *, include_transition: 'bool' = False, fix_tip_in: 'bool' = True, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#ncaa_mbb_lineups}
-
-Aggregate bigballR-contract play-by-play into per-lineup stats.
-
-Port of bigballR `get_lineups` (`all_functions.R:1945-2521`). Rows
-with any missing on-court player and substitution rows are dropped, each
-row's home/away five are byte-sorted so a lineup always occupies the same
-columns, and the home + away passes are combined per `(p1..p5, team)`.
-Ratios are derived from the summed counters, rounded to 3 decimals, and
-NA/Inf are zeroed exactly where R does it.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `pbp` | `DataFrame` |  | Play-by-play frame in the sdv-py 35-column snake_case bigballR contract (`parse_ncaa_bb_game_pbp` output). May span multiple games. |
-| `include_transition` | `bool` | `False` | When True, append the trans`/half` split surface plus `o_trans_pct`/`d_trans_pct` (213 columns total). |
-| `fix_tip_in` | `bool` | `True` | When True (default), rim stats count the scrape engine's real `"Tip In"` vocabulary. When False, reproduce R's literal `"Tip-In"` test (`all_functions.R:2012`) — tip-ins silently excluded — for oracle parity. |
-| `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
-
-**Returns**
-
-`pl.DataFrame` (or `pd.DataFrame`) with one row per lineup+team — 75 columns (`LINEUPS_COLUMNS`) or 213 with `include_transition=True` (`LINEUPS_TRANSITION_COLUMNS`), rows sorted by `p1..p5, team`. Empty input yields an empty frame with the documented schema.
-
-**Example**
-
-```python
-from sportsdataverse.mbb.mbb_ncaa_lineups import ncaa_mbb_lineups
-lineups = ncaa_mbb_lineups(pbp)
-print(lineups.shape)
-
-# Transition/half-court splits, pandas out
-
-df_pd = ncaa_mbb_lineups(pbp, include_transition=True, return_as_pandas=True)
-
-# Pipeline next step (one line)
-
-lineups.filter(pl.col("mins") > 10).sort("netrtg", descending=True).head()
-```
-
 ### `ncaa_mbb_on_off(players: 'Union[str, Sequence[str]]', lineups: 'pl.DataFrame', *, included: 'Union[str, Sequence[str], None]' = None, excluded: 'Union[str, Sequence[str], None]' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#ncaa_mbb_on_off}
 
 Team stats for every on/off combination of the given players.
@@ -7788,46 +7711,6 @@ df_pd = ncaa_mbb_player_stats(pbp, multi_games=True, simple=True, return_as_pand
 season.filter(pl.col("mins") > 50).sort("pts", descending=True).head()
 ```
 
-### `ncaa_mbb_possessions(pbp: 'pl.DataFrame', *, simple: 'bool' = False, fix_cross_game_leak: 'bool' = True, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#ncaa_mbb_possessions}
-
-Aggregate bigballR-contract play-by-play into one row per possession.
-
-Port of bigballR `get_possessions` (`all_functions.R:3686-3745`).
-Groups by the possession keys stamped upstream by the scrape engine
-(`poss_num`, `poss_team`, the ten on-court lineup columns, plus game
-identity), drops possessions with any missing on-court player, and — in
-the full variant — sorts each row's home/away lineup alphabetically so a
-given lineup always occupies the same columns.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `pbp` | `DataFrame` |  | Play-by-play frame in the sdv-py 35-column snake_case bigballR contract (`parse_ncaa_bb_game_pbp` output). May span multiple games; rows must be in scrape order. |
-| `simple` | `bool` | `False` | When True, return only the 17-column possession/points frame (`all_functions.R:3687-3694`) with lineups in on-court order. When False (default), return the full 28-column frame with per-possession context columns and alpha-sorted lineups. |
-| `fix_cross_game_leak` | `bool` | `True` | When True (default, and the CORRECT behavior), window the `start_event_type` lag with `.over("game_id")` so a game's first possession has a null start event instead of inheriting the PREVIOUS game's last event. When False, reproduce R's ungrouped `dplyr::lag` (`all_functions.R:3698`) and its cross-game leak. Parity tests pass False. Ignored when `simple=True` (that variant emits no `start_event_type`). |
-| `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
-
-**Returns**
-
-`pl.DataFrame` (or `pd.DataFrame`) with one row per possession — 28 columns per `POSSESSION_SEG_SCHEMA` (full) or 17 per `POSSESSIONS_SIMPLE_SCHEMA` (simple). Empty input yields an empty frame carrying the documented schema.
-
-**Example**
-
-```python
-from sportsdataverse.mbb.mbb_ncaa_possession_seg import ncaa_mbb_possessions
-poss = ncaa_mbb_possessions(pbp)
-print(poss.shape)
-
-# Simple points-per-possession variant
-
-poss_pd = ncaa_mbb_possessions(pbp, simple=True, return_as_pandas=True)
-
-# Pipeline next step (one line)
-
-poss.group_by("poss_team").agg(pl.col("pts").mean())
-```
-
 ### `ncaa_mbb_shot_locations(game_ids: "'Sequence[object]'", *, fetcher: 'Optional[_SupportsFetchGameBox]' = None, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, Any]'"` {#ncaa_mbb_shot_locations}
 
 Scrape MBB shot locations for one or more games (bigballR
@@ -7865,35 +7748,6 @@ df = ncaa_mbb_shot_locations(["6470186"], fetcher=my_fetcher)
 # Pipeline next step (one line)
 
 df.group_by("team").agg(pl.col("shot_dist").mean()).head()
-```
-
-### `ncaa_mbb_team_ids(*, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#ncaa_mbb_team_ids}
-
-Men's-basketball `(team, season) -> stats.ncaa.org id` crosswalk.
-
-Port of bigballR's bundled `teamids` data asset (one row per team per
-season, 2009-10 through 2025-26).
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
-
-**Returns**
-
-DataFrame with columns `team` (str), `conference` (str), `id` (Int64 -- the season-specific stats.ncaa.org team id) and `season` (str, `"YYYY-YY"`).
-
-**Example**
-
-```python
-from sportsdataverse.mbb import ncaa_mbb_team_ids
-df = ncaa_mbb_team_ids()
-print(df.shape)
-
-# Pipeline next step (one line)
-
-df.filter(pl.col("season") == "2025-26").head()
 ```
 
 ### `ncaa_mbb_team_roster(team_id: 'Optional[int]' = None, *, team: 'Optional[str]' = None, season: 'Optional[str]' = None, fetcher: "Optional['NcaaFetcher']" = None, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#ncaa_mbb_team_roster}
@@ -9062,35 +8916,6 @@ The `circle.shot` elements reconstructed from every matching line (non-matching 
 from sportsdataverse.mbb.mbb_ncaa_shot_parser import shot_js_to_html
 js = "addShot(27.0, 77.0, 392, false, 1, 'title text', 'class', false);"
 circles = shot_js_to_html(js)
-```
-
-### `shot_value(event_str: 'str') -> 'int'` {#shot_value}
-
-Classify a play-by-play event string as a 3, a 2, or an assist
-
-(`ShotEnrichmentUtils.shot_value`, `PlayByPlayUtils.scala:534-542`).
-
-Ported as an ordered first-match cascade, exactly mirroring the Scala
-`match` arm order (assist is tested first, so an assist string never
-falls through to a shot classifier).
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `event_str` | `str` |  | The raw play-by-play event string. |
-
-**Returns**
-
-`0` for an assist, `3` for any 3-pointer (made or missed), `2` for any 2-pointer (made or missed), or `-1` for anything else (rebounds, turnovers, unparseable, ...).
-
-**Example**
-
-```python
-from sportsdataverse.mbb.mbb_ncaa_pbp_glue import shot_value
-shot_value("18:28:00,0-0,Eric Ayala, 3pt jumpshot made")   # 3
-shot_value("18:28:00,0-0,Kyle Guy, assist")                # 0
-shot_value("04:28:0,52-59,Team, rebound deadballdeadball")  # -1
 ```
 
 ### `simulate_game(home_em: 'float', away_em: 'float', neutral: 'bool', rng: 'np.random.Generator', *, league: 'str' = 'mens') -> 'bool'` {#simulate_game}

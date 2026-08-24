@@ -31,6 +31,18 @@ flowchart LR
 | `load_mbb_schedule_crosswalk` | [mbb_crosswalk](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/mbb_crosswalk) | — |
 | `load_mbb_team_crosswalk` | [mbb_crosswalk](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/mbb_crosswalk) | — |
 | `load_mbb_player_core` | [espn_mens_college_basketball_player_core](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_mens_college_basketball_player_core) | — |
+| `load_ncaa_mbb_pbp` | [ncaa_mbb_pbp](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_mbb_pbp) | — |
+| `load_ncaa_mbb_schedule` | [ncaa_mbb_schedule](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_mbb_schedule) | — |
+| `load_ncaa_mbb_player_box` | [ncaa_mbb_player_box](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_mbb_player_box) | — |
+| `load_ncaa_mbb_team_box` | [ncaa_mbb_team_box](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_mbb_team_box) | — |
+| `load_ncaa_mbb_rosters` | [ncaa_mbb_rosters](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_mbb_rosters) | — |
+| `load_ncaa_mbb_team_rosters` | [ncaa_mbb_team_rosters](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_mbb_team_rosters) | — |
+| `load_ncaa_mbb_team_ids` | [ncaa_mbb_team_ids](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_mbb_team_ids) | — |
+| `load_ncaa_mbb_possessions` | [ncaa_mbb_possessions](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_mbb_possessions) | — |
+| `load_ncaa_mbb_lineups` | [ncaa_mbb_lineups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_mbb_lineups) | — |
+| `load_ncaa_mbb_matchup_stints` | [ncaa_mbb_matchup_stints](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_mbb_matchup_stints) | — |
+| `load_ncaa_mbb_shots` | [ncaa_mbb_shots](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_mbb_shots) | — |
+| `load_ncaa_mbb_rapm_within_team` | [ncaa_mbb_rapm_within_team](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_mbb_rapm_within_team) | — |
 
 ## `load_mbb_pbp`
 
@@ -741,4 +753,668 @@ Release: [espn_mens_college_basketball_player_core](https://github.com/sportsdat
 
 ```python
 load_mbb_player_core(seasons=2025)
+```
+
+## `load_ncaa_mbb_pbp`
+
+Release: [ncaa_mbb_pbp](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_mbb_pbp) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/ncaa_mbb_pbp/ncaa_mbb_pbp_{season}.parquet`
+### Returns
+
+| col_name | type | description |
+|---|---|---|
+| `game_date` | String | Game date (YYYY-MM-DD). |
+| `home` | String | Home. |
+| `away` | String | Away record. |
+| `period` | Int64 | Period of the game (1-4 quarters; 5+ for OT). |
+| `clock` | String | Game clock value. |
+| `game_time` | String | Game start time. |
+| `game_seconds` | Int64 | Elapsed seconds in the game. |
+| `home_score` | Int64 | Home team score at the time of the play. |
+| `away_score` | Int64 | Away team score at the time of the play. |
+| `event_team` | String | Team associated with the shift change. |
+| `event_description` | String | Human-readable event description. |
+| `player_1` | String |  |
+| `player_2` | String |  |
+| `event_type` | String | Event / play type code (V2 PBP). |
+| `event_result` | String |  |
+| `shot_value` | Int64 | Point value of the shot (2 or 3). |
+| `event_length` | Int64 |  |
+| `poss_num` | Int64 |  |
+| `poss_team` | String |  |
+| `poss_length` | Int64 |  |
+| `is_transition` | Boolean |  |
+| `home_1` | String |  |
+| `home_2` | String |  |
+| `home_3` | String |  |
+| `home_4` | String |  |
+| `home_5` | String |  |
+| `away_1` | String |  |
+| `away_2` | String |  |
+| `away_3` | String |  |
+| `away_4` | String |  |
+| `away_5` | String |  |
+| `status` | String | Status label. |
+| `is_garbage_time` | Boolean |  |
+| `sub_deviate` | Int64 |  |
+| `contest_id` | String | stats.ncaa.org contest (game) identifier. |
+| `home_ncaa_team_id` | String |  |
+| `home_espn_team_id` | String | ESPN home team id (NA for bart-only rows). |
+| `away_ncaa_team_id` | String |  |
+| `away_espn_team_id` | String | ESPN away team id (NA for bart-only rows). |
+| `event_team_ncaa_team_id` | String |  |
+| `event_team_espn_team_id` | String |  |
+| `poss_team_ncaa_team_id` | String |  |
+| `poss_team_espn_team_id` | String |  |
+| `player_1_id` | String |  |
+| `player_1_clean_name` | String |  |
+| `player_2_id` | String |  |
+| `player_2_clean_name` | String |  |
+| `home_1_player_id` | String |  |
+| `home_1_clean_name` | String |  |
+| `home_2_player_id` | String |  |
+| `home_2_clean_name` | String |  |
+| `home_3_player_id` | String |  |
+| `home_3_clean_name` | String |  |
+| `home_4_player_id` | String |  |
+| `home_4_clean_name` | String |  |
+| `home_5_player_id` | String |  |
+| `home_5_clean_name` | String |  |
+| `away_1_player_id` | String |  |
+| `away_1_clean_name` | String |  |
+| `away_2_player_id` | String |  |
+| `away_2_clean_name` | String |  |
+| `away_3_player_id` | String |  |
+| `away_3_clean_name` | String |  |
+| `away_4_player_id` | String |  |
+| `away_4_clean_name` | String |  |
+| `away_5_player_id` | String |  |
+| `away_5_clean_name` | String |  |
+| `espn_game_id` | String | ESPN game id (NA for bart-only rows). |
+| `is_fastbreak` | Boolean |  |
+| `is_from_turnover` | Boolean |  |
+| `is_paint` | Boolean |  |
+| `is_second_chance` | Boolean |  |
+| `assist_player` | String |  |
+| `ft_number` | Int64 |  |
+| `ft_attempts` | Int64 |  |
+| `foul_class` | String |  |
+| `is_shooting_foul` | Boolean |  |
+| `is_looseball_foul` | Boolean |  |
+| `is_one_and_one` | Boolean |  |
+| `is_flagrant` | Boolean |  |
+| `foul_tech_class` | String |  |
+| `ft_awarded` | Int64 |  |
+| `turnover_type` | String |  |
+| `is_team_turnover` | Boolean |  |
+| `timeout_type` | String |  |
+| `challenge_outcome` | String |  |
+| `season` | Int64 | Season year. |
+
+```python
+load_ncaa_mbb_pbp(seasons=2024)
+```
+
+## `load_ncaa_mbb_schedule`
+
+Release: [ncaa_mbb_schedule](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_mbb_schedule) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/ncaa_mbb_schedule/ncaa_mbb_schedule_{season}.parquet`
+### Returns
+
+| col_name | type | description |
+|---|---|---|
+| `contest_id` | String | stats.ncaa.org contest (game) identifier. |
+| `game_date` | String | Game date (YYYY-MM-DD). |
+| `home` | String | Home. |
+| `away` | String | Away record. |
+| `home_score` | Int64 | Home team score at the time of the play. |
+| `away_score` | Int64 | Away team score at the time of the play. |
+| `season` | Int64 | Season year. |
+
+```python
+load_ncaa_mbb_schedule(seasons=2024)
+```
+
+## `load_ncaa_mbb_player_box`
+
+Release: [ncaa_mbb_player_box](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_mbb_player_box) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/ncaa_mbb_player_box/ncaa_mbb_player_box_{season}.parquet`
+### Returns
+
+| col_name | type | description |
+|---|---|---|
+| `game_date` | String | Game date (YYYY-MM-DD). |
+| `home` | String | Home. |
+| `away` | String | Away record. |
+| `team` | String | Team-side label or team identifier. |
+| `player` | String | Player name. |
+| `mins` | Float64 |  |
+| `o_poss` | Float64 |  |
+| `pts` | Float64 | Points scored. |
+| `orb` | Float64 |  |
+| `drb` | Float64 |  |
+| `ast` | Float64 | Assists. |
+| `stl` | Float64 | Steals. |
+| `blk` | Float64 | Blocks. |
+| `tov` | Float64 | Turnovers. |
+| `pf` | Float64 | Personal fouls. |
+| `ts_pct` | Float64 | True shooting percentage (0-1). |
+| `efg_pct` | Float64 |  |
+| `fgm` | Float64 | Field goals made. |
+| `fga` | Float64 | Field goal attempts. |
+| `fg_pct` | Float64 | Field goal percentage (0-1). |
+| `tpm` | Float64 |  |
+| `tpa` | Float64 |  |
+| `tp_pct` | Float64 |  |
+| `ftm` | Float64 | Free throws made. |
+| `fta` | Float64 | Free throw attempts. |
+| `ft_pct` | Float64 | Free throw percentage (0-1). |
+| `rimm` | Float64 |  |
+| `rima` | Float64 |  |
+| `rim_pct` | Float64 |  |
+| `midm` | Float64 |  |
+| `mida` | Float64 |  |
+| `mid_pct` | Float64 |  |
+| `pbackm` | Float64 |  |
+| `pbacka` | Float64 |  |
+| `pback_pct` | Float64 |  |
+| `blk_rim` | Float64 |  |
+| `blk_mid` | Float64 |  |
+| `blk_three` | Float64 |  |
+| `pct_fga_trans` | Float64 |  |
+| `pct_tpa_trans` | Float64 |  |
+| `pct_rima_trans` | Float64 |  |
+| `pct_fgm_trans` | Float64 |  |
+| `pct_tpm_trans` | Float64 |  |
+| `pct_rimm_trans` | Float64 |  |
+| `pct_fgm_ast` | Float64 |  |
+| `pct_tpm_ast` | Float64 |  |
+| `pct_rimm_ast` | Float64 |  |
+| `pts_trans` | Float64 |  |
+| `orb_trans` | Float64 |  |
+| `drb_trans` | Float64 |  |
+| `ast_trans` | Float64 |  |
+| `stl_trans` | Float64 |  |
+| `blk_trans` | Float64 |  |
+| `tov_trans` | Float64 |  |
+| `ts_pct_trans` | Float64 |  |
+| `efg_pct_trans` | Float64 |  |
+| `fgm_trans` | Float64 |  |
+| `fga_trans` | Float64 |  |
+| `fg_pct_trans` | Float64 |  |
+| `tpm_trans` | Float64 |  |
+| `tpa_trans` | Float64 |  |
+| `tp_pct_trans` | Float64 |  |
+| `ftm_trans` | Float64 |  |
+| `fta_trans` | Float64 |  |
+| `ft_pct_trans` | Float64 |  |
+| `rimm_trans` | Float64 |  |
+| `rima_trans` | Float64 |  |
+| `rim_pct_trans` | Float64 |  |
+| `midm_trans` | Float64 |  |
+| `mida_trans` | Float64 |  |
+| `mid_pct_trans` | Float64 |  |
+| `pts_half` | Float64 |  |
+| `orb_half` | Float64 |  |
+| `drb_half` | Float64 |  |
+| `ast_half` | Float64 |  |
+| `stl_half` | Float64 |  |
+| `blk_half` | Float64 |  |
+| `tov_half` | Float64 |  |
+| `ts_pct_half` | Float64 |  |
+| `efg_pct_half` | Float64 |  |
+| `fgm_half` | Float64 |  |
+| `fga_half` | Float64 |  |
+| `fg_pct_half` | Float64 |  |
+| `tpm_half` | Float64 |  |
+| `tpa_half` | Float64 |  |
+| `tp_pct_half` | Float64 |  |
+| `ftm_half` | Float64 |  |
+| `fta_half` | Float64 |  |
+| `ft_pct_half` | Float64 |  |
+| `rimm_half` | Float64 |  |
+| `rima_half` | Float64 |  |
+| `rim_pct_half` | Float64 |  |
+| `midm_half` | Float64 |  |
+| `mida_half` | Float64 |  |
+| `mid_pct_half` | Float64 |  |
+| `pts_ast` | Float64 |  |
+| `fgm_ast` | Float64 |  |
+| `tpm_ast` | Float64 |  |
+| `rimm_ast` | Float64 |  |
+| `midm_ast` | Float64 |  |
+| `pts_unast` | Float64 |  |
+| `efg_pct_unast` | Float64 |  |
+| `fgm_unast` | Float64 |  |
+| `fga_unast` | Float64 |  |
+| `fg_pct_unast` | Float64 |  |
+| `tpm_unast` | Float64 |  |
+| `tpa_unast` | Float64 |  |
+| `tp_pct_unast` | Float64 |  |
+| `rimm_unast` | Float64 |  |
+| `rima_unast` | Float64 |  |
+| `rim_pct_unast` | Float64 |  |
+| `midm_unast` | Float64 |  |
+| `mida_unast` | Float64 |  |
+| `mid_pct_unast` | Float64 |  |
+| `contest_id` | String | stats.ncaa.org contest (game) identifier. |
+| `home_ncaa_team_id` | String |  |
+| `home_espn_team_id` | String | ESPN home team id (NA for bart-only rows). |
+| `away_ncaa_team_id` | String |  |
+| `away_espn_team_id` | String | ESPN away team id (NA for bart-only rows). |
+| `team_ncaa_team_id` | String |  |
+| `team_espn_team_id` | String |  |
+| `player_id` | String | Unique player identifier. |
+| `clean_name` | String |  |
+| `espn_game_id` | String | ESPN game id (NA for bart-only rows). |
+| `season` | Int64 | Season year. |
+
+```python
+load_ncaa_mbb_player_box(seasons=2024)
+```
+
+## `load_ncaa_mbb_team_box`
+
+Release: [ncaa_mbb_team_box](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_mbb_team_box) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/ncaa_mbb_team_box/ncaa_mbb_team_box_{season}.parquet`
+### Returns
+
+| col_name | type | description |
+|---|---|---|
+| `home` | String | Home. |
+| `away` | String | Away record. |
+| `team` | String | Team-side label or team identifier. |
+| `mins` | Float64 |  |
+| `o_mins` | Float64 |  |
+| `d_mins` | Float64 |  |
+| `o_poss` | Float64 |  |
+| `d_poss` | Float64 |  |
+| `ortg` | Float64 |  |
+| `drtg` | Float64 |  |
+| `netrtg` | Float64 |  |
+| `pts` | Float64 | Points scored. |
+| `d_pts` | Float64 |  |
+| `fga` | Float64 | Field goal attempts. |
+| `d_fga` | Float64 |  |
+| `fgm` | Float64 | Field goals made. |
+| `d_fgm` | Float64 |  |
+| `tpa` | Float64 |  |
+| `d_tpa` | Float64 |  |
+| `tpm` | Float64 |  |
+| `d_tpm` | Float64 |  |
+| `fta` | Float64 | Free throw attempts. |
+| `d_fta` | Float64 |  |
+| `ftm` | Float64 | Free throws made. |
+| `d_ftm` | Float64 |  |
+| `rima` | Float64 |  |
+| `d_rima` | Float64 |  |
+| `rimm` | Float64 |  |
+| `d_rimm` | Float64 |  |
+| `orb` | Float64 |  |
+| `d_orb` | Float64 |  |
+| `drb` | Float64 |  |
+| `d_drb` | Float64 |  |
+| `blk` | Float64 | Blocks. |
+| `d_blk` | Float64 |  |
+| `to` | Float64 | To. |
+| `d_to` | Float64 |  |
+| `ast` | Float64 | Assists. |
+| `d_ast` | Float64 |  |
+| `e_poss` | Float64 |  |
+| `fg_pct` | Float64 | Field goal percentage (0-1). |
+| `d_fg_pct` | Float64 |  |
+| `tpp` | Float64 |  |
+| `d_tpp` | Float64 |  |
+| `ftp` | Float64 |  |
+| `d_ftp` | Float64 |  |
+| `efg_pct` | Float64 |  |
+| `d_efg_pct` | Float64 |  |
+| `ts_pct` | Float64 | True shooting percentage (0-1). |
+| `d_ts_pct` | Float64 |  |
+| `rim_pct` | Float64 |  |
+| `d_rim_pct` | Float64 |  |
+| `mid_pct` | Float64 |  |
+| `d_mid_pct` | Float64 |  |
+| `tp_rate` | Float64 |  |
+| `d_tp_rate` | Float64 |  |
+| `rim_rate` | Float64 |  |
+| `d_rim_rate` | Float64 |  |
+| `mid_rate` | Float64 |  |
+| `d_mid_rate` | Float64 |  |
+| `ft_rate` | Float64 | Ft rate. |
+| `d_ft_rate` | Float64 |  |
+| `ast_rate` | Float64 |  |
+| `d_ast_rate` | Float64 |  |
+| `to_rate` | Float64 | To rate. |
+| `d_to_rate` | Float64 |  |
+| `blk_rate` | Float64 |  |
+| `o_blk_rate` | Float64 |  |
+| `orb_pct` | Float64 | Offensive rebound percentage. |
+| `drb_pct` | Float64 | Defensive rebound percentage. |
+| `time_per_poss` | Float64 |  |
+| `d_time_per_poss` | Float64 |  |
+| `contest_id` | String | stats.ncaa.org contest (game) identifier. |
+| `home_ncaa_team_id` | String |  |
+| `home_espn_team_id` | String | ESPN home team id (NA for bart-only rows). |
+| `away_ncaa_team_id` | String |  |
+| `away_espn_team_id` | String | ESPN away team id (NA for bart-only rows). |
+| `team_ncaa_team_id` | String |  |
+| `team_espn_team_id` | String |  |
+| `espn_game_id` | String | ESPN game id (NA for bart-only rows). |
+| `season` | Int64 | Season year. |
+
+```python
+load_ncaa_mbb_team_box(seasons=2024)
+```
+
+## `load_ncaa_mbb_rosters`
+
+Release: [ncaa_mbb_rosters](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_mbb_rosters) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/ncaa_mbb_rosters/ncaa_mbb_rosters_{season}.parquet`
+### Returns
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season year. |
+| `team` | String | Team-side label or team identifier. |
+| `player` | String | Player name. |
+| `games` | Int64 | Games played. |
+
+```python
+load_ncaa_mbb_rosters(seasons=2024)
+```
+
+## `load_ncaa_mbb_team_rosters`
+
+Release: [ncaa_mbb_team_rosters](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_mbb_team_rosters) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/ncaa_mbb_team_rosters/ncaa_mbb_team_rosters_{season}.parquet`
+### Returns
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season year. |
+| `team_id` | String | Unique team identifier. |
+| `team` | String | Team-side label or team identifier. |
+| `player_id` | String | Unique player identifier. |
+| `player` | String | Player name. |
+| `clean_name` | String |  |
+| `name` | String | Display name. |
+| `jersey` | String | Jersey number worn by the player. |
+| `class` | String | College class / draft eligibility note. |
+| `position` | String | Listed roster position (G, F, C, etc.). |
+| `height` | String | Player height (string e.g. '6-2' or inches). |
+| `ht_inches` | Int64 |  |
+| `hometown` | String | Player hometown. |
+| `high_school` | String | High school |
+| `gp` | String | Games played. |
+| `gs` | String | Games started. |
+
+```python
+load_ncaa_mbb_team_rosters(seasons=2024)
+```
+
+## `load_ncaa_mbb_team_ids`
+
+Release: [ncaa_mbb_team_ids](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_mbb_team_ids) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/ncaa_mbb_team_ids/ncaa_mbb_team_ids_{season}.parquet`
+### Returns
+
+| col_name | type | description |
+|---|---|---|
+| `team` | String | Team-side label or team identifier. |
+| `conference` | String | Conference name. |
+| `id` | String | Id. |
+| `season` | Int64 | Season year. |
+
+```python
+load_ncaa_mbb_team_ids(seasons=2024)
+```
+
+## `load_ncaa_mbb_possessions`
+
+Release: [ncaa_mbb_possessions](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_mbb_possessions) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/ncaa_mbb_possessions/ncaa_mbb_possessions_{season}.parquet`
+### Returns
+
+| col_name | type | description |
+|---|---|---|
+| `game_date` | String | Game date (YYYY-MM-DD). |
+| `home` | String | Home. |
+| `away` | String | Away record. |
+| `period` | Int64 | Period of the game (1-4 quarters; 5+ for OT). |
+| `poss_num` | Int64 |  |
+| `poss_team` | String |  |
+| `home_1` | String |  |
+| `home_2` | String |  |
+| `home_3` | String |  |
+| `home_4` | String |  |
+| `home_5` | String |  |
+| `away_1` | String |  |
+| `away_2` | String |  |
+| `away_3` | String |  |
+| `away_4` | String |  |
+| `away_5` | String |  |
+| `home_score` | Int64 | Home team score at the time of the play. |
+| `away_score` | Int64 | Away team score at the time of the play. |
+| `pts` | Int64 | Points scored. |
+| `is_assisted` | Int64 |  |
+| `is_transition` | Int64 |  |
+| `is_garbage_time` | Int64 |  |
+| `start_event_type` | String |  |
+| `first_shot_time` | Int64 |  |
+| `first_shot_type` | String |  |
+| `last_event_time` | Int64 |  |
+| `last_event_type` | String |  |
+| `contest_id` | String | stats.ncaa.org contest (game) identifier. |
+| `home_ncaa_team_id` | String |  |
+| `home_espn_team_id` | String | ESPN home team id (NA for bart-only rows). |
+| `away_ncaa_team_id` | String |  |
+| `away_espn_team_id` | String | ESPN away team id (NA for bart-only rows). |
+| `poss_team_ncaa_team_id` | String |  |
+| `poss_team_espn_team_id` | String |  |
+| `home_1_player_id` | String |  |
+| `home_1_clean_name` | String |  |
+| `home_2_player_id` | String |  |
+| `home_2_clean_name` | String |  |
+| `home_3_player_id` | String |  |
+| `home_3_clean_name` | String |  |
+| `home_4_player_id` | String |  |
+| `home_4_clean_name` | String |  |
+| `home_5_player_id` | String |  |
+| `home_5_clean_name` | String |  |
+| `away_1_player_id` | String |  |
+| `away_1_clean_name` | String |  |
+| `away_2_player_id` | String |  |
+| `away_2_clean_name` | String |  |
+| `away_3_player_id` | String |  |
+| `away_3_clean_name` | String |  |
+| `away_4_player_id` | String |  |
+| `away_4_clean_name` | String |  |
+| `away_5_player_id` | String |  |
+| `away_5_clean_name` | String |  |
+| `espn_game_id` | String | ESPN game id (NA for bart-only rows). |
+| `season` | Int64 | Season year. |
+
+```python
+load_ncaa_mbb_possessions(seasons=2024)
+```
+
+## `load_ncaa_mbb_lineups`
+
+Release: [ncaa_mbb_lineups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_mbb_lineups) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/ncaa_mbb_lineups/ncaa_mbb_lineups_{season}.parquet`
+### Returns
+
+| col_name | type | description |
+|---|---|---|
+| `lineup_key` | String |  |
+| `date` | String | Date in YYYY-MM-DD format. |
+| `location_type` | String |  |
+| `team` | String | Team-side label or team identifier. |
+| `team_year` | Int64 |  |
+| `opponent` | String | Opponent. |
+| `lineup_id` | String |  |
+| `start_min` | Float64 |  |
+| `end_min` | Float64 |  |
+| `duration_mins` | Float64 |  |
+| `player_1` | String |  |
+| `player_2` | String |  |
+| `player_3` | String |  |
+| `player_4` | String |  |
+| `player_5` | String |  |
+| `players_in` | String |  |
+| `players_out` | String |  |
+| `start_scored` | Int64 |  |
+| `start_allowed` | Int64 |  |
+| `end_scored` | Int64 |  |
+| `end_allowed` | Int64 |  |
+| `start_diff` | Int64 |  |
+| `end_diff` | Int64 |  |
+| `player_count_error` | Null |  |
+| `poss` | Int64 | Poss. |
+| `pts` | Int64 | Points scored. |
+| `plus_minus` | Int64 | Plus/minus point differential while on court. |
+| `fga` | Int64 | Field goal attempts. |
+| `fgm` | Int64 | Field goals made. |
+| `rima` | Int64 |  |
+| `rimm` | Int64 |  |
+| `rim_ast` | Int64 |  |
+| `mida` | Int64 |  |
+| `midm` | Int64 |  |
+| `mid_ast` | Int64 |  |
+| `fg2a` | Int64 |  |
+| `fg2m` | Int64 |  |
+| `tpa` | Int64 |  |
+| `tpm` | Int64 |  |
+| `tp_ast` | Int64 |  |
+| `fta` | Int64 | Free throw attempts. |
+| `ftm` | Int64 | Free throws made. |
+| `orb` | Int64 |  |
+| `drb` | Int64 |  |
+| `to` | Int64 | To. |
+| `stl` | Int64 | Steals. |
+| `blk` | Int64 | Blocks. |
+| `ast` | Int64 | Assists. |
+| `foul` | Int64 |  |
+| `opp_poss` | Int64 |  |
+| `opp_pts` | Int64 | Opponent points. |
+| `opp_plus_minus` | Int64 |  |
+| `opp_fga` | Int64 |  |
+| `opp_fgm` | Int64 |  |
+| `opp_rima` | Int64 |  |
+| `opp_rimm` | Int64 |  |
+| `opp_rim_ast` | Int64 |  |
+| `opp_mida` | Int64 |  |
+| `opp_midm` | Int64 |  |
+| `opp_mid_ast` | Int64 |  |
+| `opp_fg2a` | Int64 |  |
+| `opp_fg2m` | Int64 |  |
+| `opp_tpa` | Int64 |  |
+| `opp_tpm` | Int64 |  |
+| `opp_tp_ast` | Int64 |  |
+| `opp_fta` | Int64 |  |
+| `opp_ftm` | Int64 |  |
+| `opp_orb` | Int64 |  |
+| `opp_drb` | Int64 |  |
+| `opp_to` | Int64 |  |
+| `opp_stl` | Int64 |  |
+| `opp_blk` | Int64 |  |
+| `opp_ast` | Int64 |  |
+| `opp_foul` | Int64 |  |
+| `stint_num` | Int64 |  |
+| `contest_id` | String | stats.ncaa.org contest (game) identifier. |
+| `season` | Int64 | Season year. |
+
+```python
+load_ncaa_mbb_lineups(seasons=2024)
+```
+
+## `load_ncaa_mbb_matchup_stints`
+
+Release: [ncaa_mbb_matchup_stints](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_mbb_matchup_stints) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/ncaa_mbb_matchup_stints/ncaa_mbb_matchup_stints_{season}.parquet`
+### Returns
+
+| col_name | type | description |
+|---|---|---|
+| `contest_id` | String | stats.ncaa.org contest (game) identifier. |
+| `season` | Int64 | Season year. |
+| `game_date` | String | Game date (YYYY-MM-DD). |
+| `home` | String | Home. |
+| `away` | String | Away record. |
+| `game_stint_num` | Int64 |  |
+| `period` | Int64 | Period of the game (1-4 quarters; 5+ for OT). |
+| `start_seconds` | Int64 |  |
+| `end_seconds` | Int64 |  |
+| `duration_seconds` | Int64 | Streak duration in seconds. |
+| `matchup_key` | String |  |
+| `home_lineup_key` | String |  |
+| `away_lineup_key` | String |  |
+| `home_lineup` | String |  |
+| `away_lineup` | String |  |
+| `end_home_score` | Int64 |  |
+| `end_away_score` | Int64 |  |
+| `n_events` | Int64 |  |
+| `n_possessions` | Int64 |  |
+| `start_home_score` | Int64 |  |
+| `start_away_score` | Int64 |  |
+| `home_pts` | Int64 |  |
+| `away_pts` | Int64 |  |
+| `home_1` | String |  |
+| `home_2` | String |  |
+| `home_3` | String |  |
+| `home_4` | String |  |
+| `home_5` | String |  |
+| `away_1` | String |  |
+| `away_2` | String |  |
+| `away_3` | String |  |
+| `away_4` | String |  |
+| `away_5` | String |  |
+
+```python
+load_ncaa_mbb_matchup_stints(seasons=2024)
+```
+
+## `load_ncaa_mbb_shots`
+
+Release: [ncaa_mbb_shots](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_mbb_shots) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/ncaa_mbb_shots/ncaa_mbb_shots_{season}.parquet`
+### Returns
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season year. |
+| `team_id` | String | Unique team identifier. |
+| `shooter_id` | String | Unique identifier for shooter. |
+| `shot_x` | Float64 |  |
+| `shot_y` | Float64 |  |
+| `dist_ft` | Float64 |  |
+| `shot_zone` | String |  |
+| `shot_type` | String | Shot type label (e.g. 'Jump Shot', 'Layup'). |
+| `made` | Boolean |  |
+| `point_value` | Int64 |  |
+| `period` | Null | Period of the game (1-4 quarters; 5+ for OT). |
+| `sec_left` | Null |  |
+| `source` | String | News source. |
+| `contest_id` | String | stats.ncaa.org contest (game) identifier. |
+| `ncaa_team_id` | String |  |
+| `espn_team_id` | String | ESPN team id (canonical key). |
+| `shooter_player_id` | String |  |
+| `shooter_clean_name` | String |  |
+| `espn_game_id` | String | ESPN game id (NA for bart-only rows). |
+
+```python
+load_ncaa_mbb_shots(seasons=2024)
+```
+
+## `load_ncaa_mbb_rapm_within_team`
+
+Release: [ncaa_mbb_rapm_within_team](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_mbb_rapm_within_team) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/ncaa_mbb_rapm_within_team/ncaa_mbb_rapm_within_team_{season}.parquet`
+### Returns
+
+| col_name | type | description |
+|---|---|---|
+| `team` | String | Team-side label or team identifier. |
+| `player_code` | String |  |
+| `rapm_off` | Float64 |  |
+| `rapm_def` | Float64 |  |
+| `team_off_poss` | Float64 |  |
+| `num_players` | Int64 |  |
+| `rapm_net` | Float64 |  |
+| `season` | Int32 | Season year. |
+| `player_id` | String | Unique player identifier. |
+| `team_id` | String | Unique team identifier. |
+| `person_id` | String | Unique player identifier (V3 endpoints). |
+
+```python
+load_ncaa_mbb_rapm_within_team(seasons=2024)
 ```

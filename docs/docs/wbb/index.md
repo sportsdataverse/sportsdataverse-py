@@ -11,8 +11,8 @@ sidebar_label: WBB
 | [ESPN core API (v2)](reference/core) | 86 | `https://sports.core.api.espn.com/v2/sports` |
 | [ESPN FPI API (fitt v3)](reference/fitt) | 1 | `https://site.web.api.espn.com/apis/fitt/v3/sports` |
 | [Bart Torvik Women's T-Rank (barttorvik.com/ncaaw)](reference/bart_wbb) | 1 | `https://barttorvik.com/ncaaw` |
-| [Dataset loaders](reference/loaders) | 17 | sportsdataverse-data releases |
-| [Additional functions](reference/additional) | 296 | hand-written wrappers, loaders & helpers |
+| [Dataset loaders](reference/loaders) | 29 | sportsdataverse-data releases |
+| [Additional functions](reference/additional) | 291 | hand-written wrappers, loaders & helpers |
 
 ## Examples
 

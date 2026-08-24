@@ -375,6 +375,18 @@ from sportsdataverse.wbb import lineup_balancer as lineup_balancer  # noqa: F401
 from sportsdataverse.wbb import lineup_fixer as lineup_fixer  # noqa: F401
 from sportsdataverse.wbb import lineup_to_team_report as lineup_to_team_report  # noqa: F401
 from sportsdataverse.wbb import load_artifact as load_artifact  # noqa: F401
+from sportsdataverse.wbb import load_ncaa_wbb_lineups as load_ncaa_wbb_lineups  # noqa: F401
+from sportsdataverse.wbb import load_ncaa_wbb_matchup_stints as load_ncaa_wbb_matchup_stints  # noqa: F401
+from sportsdataverse.wbb import load_ncaa_wbb_pbp as load_ncaa_wbb_pbp  # noqa: F401
+from sportsdataverse.wbb import load_ncaa_wbb_player_box as load_ncaa_wbb_player_box  # noqa: F401
+from sportsdataverse.wbb import load_ncaa_wbb_possessions as load_ncaa_wbb_possessions  # noqa: F401
+from sportsdataverse.wbb import load_ncaa_wbb_rapm_within_team as load_ncaa_wbb_rapm_within_team  # noqa: F401
+from sportsdataverse.wbb import load_ncaa_wbb_rosters as load_ncaa_wbb_rosters  # noqa: F401
+from sportsdataverse.wbb import load_ncaa_wbb_schedule as load_ncaa_wbb_schedule  # noqa: F401
+from sportsdataverse.wbb import load_ncaa_wbb_shots as load_ncaa_wbb_shots  # noqa: F401
+from sportsdataverse.wbb import load_ncaa_wbb_team_box as load_ncaa_wbb_team_box  # noqa: F401
+from sportsdataverse.wbb import load_ncaa_wbb_team_ids as load_ncaa_wbb_team_ids  # noqa: F401
+from sportsdataverse.wbb import load_ncaa_wbb_team_rosters as load_ncaa_wbb_team_rosters  # noqa: F401
 from sportsdataverse.wbb import load_proxybonanza_pool as load_proxybonanza_pool  # noqa: F401
 from sportsdataverse.wbb import load_wbb_game_rosters as load_wbb_game_rosters  # noqa: F401
 from sportsdataverse.wbb import load_wbb_officials as load_wbb_officials  # noqa: F401
@@ -887,6 +899,18 @@ __all__ = [
     "lineup_fixer",
     "lineup_to_team_report",
     "load_artifact",
+    "load_ncaa_wbb_lineups",
+    "load_ncaa_wbb_matchup_stints",
+    "load_ncaa_wbb_pbp",
+    "load_ncaa_wbb_player_box",
+    "load_ncaa_wbb_possessions",
+    "load_ncaa_wbb_rapm_within_team",
+    "load_ncaa_wbb_rosters",
+    "load_ncaa_wbb_schedule",
+    "load_ncaa_wbb_shots",
+    "load_ncaa_wbb_team_box",
+    "load_ncaa_wbb_team_ids",
+    "load_ncaa_wbb_team_rosters",
     "load_proxybonanza_pool",
     "load_wbb_game_rosters",
     "load_wbb_officials",

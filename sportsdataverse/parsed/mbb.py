@@ -395,6 +395,18 @@ from sportsdataverse.mbb import load_mbb_standings as load_mbb_standings  # noqa
 from sportsdataverse.mbb import load_mbb_team_boxscore as load_mbb_team_boxscore  # noqa: F401
 from sportsdataverse.mbb import load_mbb_team_crosswalk as load_mbb_team_crosswalk  # noqa: F401
 from sportsdataverse.mbb import load_mbb_team_season_stats as load_mbb_team_season_stats  # noqa: F401
+from sportsdataverse.mbb import load_ncaa_mbb_lineups as load_ncaa_mbb_lineups  # noqa: F401
+from sportsdataverse.mbb import load_ncaa_mbb_matchup_stints as load_ncaa_mbb_matchup_stints  # noqa: F401
+from sportsdataverse.mbb import load_ncaa_mbb_pbp as load_ncaa_mbb_pbp  # noqa: F401
+from sportsdataverse.mbb import load_ncaa_mbb_player_box as load_ncaa_mbb_player_box  # noqa: F401
+from sportsdataverse.mbb import load_ncaa_mbb_possessions as load_ncaa_mbb_possessions  # noqa: F401
+from sportsdataverse.mbb import load_ncaa_mbb_rapm_within_team as load_ncaa_mbb_rapm_within_team  # noqa: F401
+from sportsdataverse.mbb import load_ncaa_mbb_rosters as load_ncaa_mbb_rosters  # noqa: F401
+from sportsdataverse.mbb import load_ncaa_mbb_schedule as load_ncaa_mbb_schedule  # noqa: F401
+from sportsdataverse.mbb import load_ncaa_mbb_shots as load_ncaa_mbb_shots  # noqa: F401
+from sportsdataverse.mbb import load_ncaa_mbb_team_box as load_ncaa_mbb_team_box  # noqa: F401
+from sportsdataverse.mbb import load_ncaa_mbb_team_ids as load_ncaa_mbb_team_ids  # noqa: F401
+from sportsdataverse.mbb import load_ncaa_mbb_team_rosters as load_ncaa_mbb_team_rosters  # noqa: F401
 from sportsdataverse.mbb import load_proxybonanza_pool as load_proxybonanza_pool  # noqa: F401
 from sportsdataverse.mbb import log_loss_score as log_loss_score  # noqa: F401
 from sportsdataverse.mbb import logistic_fit as logistic_fit  # noqa: F401
@@ -932,6 +944,18 @@ __all__ = [
     "load_mbb_team_boxscore",
     "load_mbb_team_crosswalk",
     "load_mbb_team_season_stats",
+    "load_ncaa_mbb_lineups",
+    "load_ncaa_mbb_matchup_stints",
+    "load_ncaa_mbb_pbp",
+    "load_ncaa_mbb_player_box",
+    "load_ncaa_mbb_possessions",
+    "load_ncaa_mbb_rapm_within_team",
+    "load_ncaa_mbb_rosters",
+    "load_ncaa_mbb_schedule",
+    "load_ncaa_mbb_shots",
+    "load_ncaa_mbb_team_box",
+    "load_ncaa_mbb_team_ids",
+    "load_ncaa_mbb_team_rosters",
     "load_proxybonanza_pool",
     "log_loss_score",
     "logistic_fit",
