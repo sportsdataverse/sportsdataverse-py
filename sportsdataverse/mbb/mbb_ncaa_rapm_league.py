@@ -41,8 +41,17 @@ imputed. Callers should report the usable fraction.
 
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
+
 import numpy as np
 import polars as pl
+
+if TYPE_CHECKING:
+    import pandas as pd
+
+if TYPE_CHECKING:
+    pass
 
 __all__ = [
     "DEFAULT_RIDGE_LAMBDA",
@@ -243,7 +252,7 @@ def solve_rapm_league(
     *,
     ridge_lambda: float = DEFAULT_RIDGE_LAMBDA,
     return_as_pandas: bool = False,
-) -> tuple[pl.DataFrame, dict[str, float]]:
+) -> "tuple[pl.DataFrame | pd.DataFrame, dict[str, float]]":
     """Weighted sparse joint O/D ridge over matchup stints.
 
     Args:
