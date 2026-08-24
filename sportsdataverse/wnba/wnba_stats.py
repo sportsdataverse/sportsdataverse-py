@@ -20,13 +20,20 @@ __all__ = [
     "wnba_stats_boxscoreadvancedv2",
     "wnba_stats_boxscoreadvancedv3",
     "wnba_stats_boxscoredefensivev2",
+    "wnba_stats_boxscorefourfactorsv2",
     "wnba_stats_boxscorefourfactorsv3",
+    "wnba_stats_boxscorehustlev2",
     "wnba_stats_boxscorematchupsv3",
+    "wnba_stats_boxscoremiscv2",
     "wnba_stats_boxscoremiscv3",
     "wnba_stats_boxscoreplayertrackv3",
+    "wnba_stats_boxscorescoringv2",
     "wnba_stats_boxscorescoringv3",
     "wnba_stats_boxscoresummaryv2",
+    "wnba_stats_boxscoresummaryv3",
+    "wnba_stats_boxscoretraditionalv2",
     "wnba_stats_boxscoretraditionalv3",
+    "wnba_stats_boxscoreusagev2",
     "wnba_stats_boxscoreusagev3",
     "wnba_stats_commonallplayers",
     "wnba_stats_commonplayerinfo",
@@ -45,7 +52,11 @@ __all__ = [
     "wnba_stats_franchiseleaderswrank",
     "wnba_stats_franchiseplayers",
     "wnba_stats_gamerotation",
+    "wnba_stats_homepageleaders",
+    "wnba_stats_homepagev2",
+    "wnba_stats_hustlestatsboxscore",
     "wnba_stats_infographicfanduelplayer",
+    "wnba_stats_leaderstiles",
     "wnba_stats_leaguedashlineups",
     "wnba_stats_leaguedashplayerbiostats",
     "wnba_stats_leaguedashplayerclutch",
@@ -62,8 +73,10 @@ __all__ = [
     "wnba_stats_leagueplayerondetails",
     "wnba_stats_leagueseasonmatchups",
     "wnba_stats_leaguestandingsv3",
+    "wnba_stats_playbyplayv2",
     "wnba_stats_playbyplayv3",
     "wnba_stats_playerawards",
+    "wnba_stats_playercareerbycollegerollup",
     "wnba_stats_playercareerstats",
     "wnba_stats_playercompare",
     "wnba_stats_playerdashboardbyclutch",
@@ -82,10 +95,12 @@ __all__ = [
     "wnba_stats_playergamelogs",
     "wnba_stats_playergamestreakfinder",
     "wnba_stats_playerindex",
+    "wnba_stats_playernextngames",
     "wnba_stats_playerprofilev2",
     "wnba_stats_playervsplayer",
     "wnba_stats_scheduleleaguev2",
     "wnba_stats_scheduleleaguev2int",
+    "wnba_stats_scoreboardv2",
     "wnba_stats_scoreboardv3",
     "wnba_stats_shotchartdetail",
     "wnba_stats_shotchartleaguewide",
@@ -109,6 +124,7 @@ __all__ = [
     "wnba_stats_teamplayeronoffsummary",
     "wnba_stats_teamvsplayer",
     "wnba_stats_teamyearbyyearstats",
+    "wnba_stats_videostatus",
 ]
 
 
@@ -466,6 +482,58 @@ def wnba_stats_boxscoredefensivev2(
     return raw
 
 
+def wnba_stats_boxscorefourfactorsv2(
+    end_period: Optional[str] = "14",
+    end_range: Optional[str] = "0",
+    game_id: Optional[str] = "1022200034",
+    range_type: Optional[str] = "0",
+    start_period: Optional[str] = "0",
+    start_range: Optional[str] = "0",
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """GET /stats/boxscorefourfactorsv2
+
+    Endpoint: ``GET https://stats.wnba.com/stats/boxscorefourfactorsv2``
+    Example URL: https://stats.wnba.com/stats/boxscorefourfactorsv2
+
+    Args:
+        end_period: EndPeriod query parameter.
+        end_range: EndRange query parameter.
+        game_id: GameID query parameter.
+        range_type: RangeType query parameter.
+        start_period: StartPeriod query parameter.
+        start_range: StartRange query parameter.
+        return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        Quick start::
+
+            wnba_stats_boxscorefourfactorsv2()
+    """
+    raw = _get(
+        "https://stats.wnba.com/stats/boxscorefourfactorsv2",
+        params={
+            "EndPeriod": end_period,
+            "EndRange": end_range,
+            "GameID": game_id,
+            "RangeType": range_type,
+            "StartPeriod": start_period,
+            "StartRange": start_range,
+        },
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_wnba_stats_result_sets(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
 def wnba_stats_boxscorefourfactorsv3(
     end_period: Optional[str] = "14",
     end_range: Optional[str] = "0",
@@ -518,6 +586,43 @@ def wnba_stats_boxscorefourfactorsv3(
     return raw
 
 
+def wnba_stats_boxscorehustlev2(
+    gameid: Optional[str] = "0022200021",
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """GET /stats/boxscorehustlev2
+
+    Endpoint: ``GET https://stats.wnba.com/stats/boxscorehustlev2``
+    Example URL: https://stats.wnba.com/stats/boxscorehustlev2
+
+    Args:
+        gameid: GameID query parameter.
+        return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        Quick start::
+
+            wnba_stats_boxscorehustlev2()
+    """
+    raw = _get(
+        "https://stats.wnba.com/stats/boxscorehustlev2",
+        params={
+            "GameID": gameid,
+        },
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_wnba_stats_result_sets(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
 def wnba_stats_boxscorematchupsv3(
     game_id: Optional[str] = "1022200034",
     *,
@@ -547,6 +652,58 @@ def wnba_stats_boxscorematchupsv3(
         "https://stats.wnba.com/stats/boxscorematchupsv3",
         params={
             "GameID": game_id,
+        },
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_wnba_stats_result_sets(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def wnba_stats_boxscoremiscv2(
+    end_period: Optional[str] = "14",
+    end_range: Optional[str] = "0",
+    game_id: Optional[str] = "1022200034",
+    range_type: Optional[str] = "0",
+    start_period: Optional[str] = "0",
+    start_range: Optional[str] = "0",
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """GET /stats/boxscoremiscv2
+
+    Endpoint: ``GET https://stats.wnba.com/stats/boxscoremiscv2``
+    Example URL: https://stats.wnba.com/stats/boxscoremiscv2
+
+    Args:
+        end_period: EndPeriod query parameter.
+        end_range: EndRange query parameter.
+        game_id: GameID query parameter.
+        range_type: RangeType query parameter.
+        start_period: StartPeriod query parameter.
+        start_range: StartRange query parameter.
+        return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        Quick start::
+
+            wnba_stats_boxscoremiscv2()
+    """
+    raw = _get(
+        "https://stats.wnba.com/stats/boxscoremiscv2",
+        params={
+            "EndPeriod": end_period,
+            "EndRange": end_range,
+            "GameID": game_id,
+            "RangeType": range_type,
+            "StartPeriod": start_period,
+            "StartRange": start_range,
         },
         **kwargs,
     )
@@ -644,6 +801,58 @@ def wnba_stats_boxscoreplayertrackv3(
     return raw
 
 
+def wnba_stats_boxscorescoringv2(
+    end_period: Optional[str] = "14",
+    end_range: Optional[str] = "0",
+    game_id: Optional[str] = "1022200034",
+    range_type: Optional[str] = "0",
+    start_period: Optional[str] = "0",
+    start_range: Optional[str] = "0",
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """GET /stats/boxscorescoringv2
+
+    Endpoint: ``GET https://stats.wnba.com/stats/boxscorescoringv2``
+    Example URL: https://stats.wnba.com/stats/boxscorescoringv2
+
+    Args:
+        end_period: EndPeriod query parameter.
+        end_range: EndRange query parameter.
+        game_id: GameID query parameter.
+        range_type: RangeType query parameter.
+        start_period: StartPeriod query parameter.
+        start_range: StartRange query parameter.
+        return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        Quick start::
+
+            wnba_stats_boxscorescoringv2()
+    """
+    raw = _get(
+        "https://stats.wnba.com/stats/boxscorescoringv2",
+        params={
+            "EndPeriod": end_period,
+            "EndRange": end_range,
+            "GameID": game_id,
+            "RangeType": range_type,
+            "StartPeriod": start_period,
+            "StartRange": start_range,
+        },
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_wnba_stats_result_sets(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
 def wnba_stats_boxscorescoringv3(
     end_period: Optional[str] = "14",
     end_range: Optional[str] = "0",
@@ -733,6 +942,95 @@ def wnba_stats_boxscoresummaryv2(
     return raw
 
 
+def wnba_stats_boxscoresummaryv3(
+    gameid: Optional[str] = "1022200034",
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """GET /stats/boxscoresummaryv3
+
+    Endpoint: ``GET https://stats.wnba.com/stats/boxscoresummaryv3``
+    Example URL: https://stats.wnba.com/stats/boxscoresummaryv3
+
+    Args:
+        gameid: GameID query parameter.
+        return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        Quick start::
+
+            wnba_stats_boxscoresummaryv3()
+    """
+    raw = _get(
+        "https://stats.wnba.com/stats/boxscoresummaryv3",
+        params={
+            "GameID": gameid,
+        },
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_wnba_stats_result_sets(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def wnba_stats_boxscoretraditionalv2(
+    end_period: Optional[str] = "14",
+    end_range: Optional[str] = "0",
+    game_id: Optional[str] = "1022200034",
+    range_type: Optional[str] = "0",
+    start_period: Optional[str] = "0",
+    start_range: Optional[str] = "0",
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """GET /stats/boxscoretraditionalv2
+
+    Endpoint: ``GET https://stats.wnba.com/stats/boxscoretraditionalv2``
+    Example URL: https://stats.wnba.com/stats/boxscoretraditionalv2
+
+    Args:
+        end_period: EndPeriod query parameter.
+        end_range: EndRange query parameter.
+        game_id: GameID query parameter.
+        range_type: RangeType query parameter.
+        start_period: StartPeriod query parameter.
+        start_range: StartRange query parameter.
+        return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        Quick start::
+
+            wnba_stats_boxscoretraditionalv2()
+    """
+    raw = _get(
+        "https://stats.wnba.com/stats/boxscoretraditionalv2",
+        params={
+            "EndPeriod": end_period,
+            "EndRange": end_range,
+            "GameID": game_id,
+            "RangeType": range_type,
+            "StartPeriod": start_period,
+            "StartRange": start_range,
+        },
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_wnba_stats_result_sets(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
 def wnba_stats_boxscoretraditionalv3(
     end_period: Optional[str] = "14",
     end_range: Optional[str] = "0",
@@ -770,6 +1068,58 @@ def wnba_stats_boxscoretraditionalv3(
     """
     raw = _get(
         "https://stats.wnba.com/stats/boxscoretraditionalv3",
+        params={
+            "EndPeriod": end_period,
+            "EndRange": end_range,
+            "GameID": game_id,
+            "RangeType": range_type,
+            "StartPeriod": start_period,
+            "StartRange": start_range,
+        },
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_wnba_stats_result_sets(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def wnba_stats_boxscoreusagev2(
+    end_period: Optional[str] = "14",
+    end_range: Optional[str] = "0",
+    game_id: Optional[str] = "1022200034",
+    range_type: Optional[str] = "0",
+    start_period: Optional[str] = "0",
+    start_range: Optional[str] = "0",
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """GET /stats/boxscoreusagev2
+
+    Endpoint: ``GET https://stats.wnba.com/stats/boxscoreusagev2``
+    Example URL: https://stats.wnba.com/stats/boxscoreusagev2
+
+    Args:
+        end_period: EndPeriod query parameter.
+        end_range: EndRange query parameter.
+        game_id: GameID query parameter.
+        range_type: RangeType query parameter.
+        start_period: StartPeriod query parameter.
+        start_range: StartRange query parameter.
+        return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        Quick start::
+
+            wnba_stats_boxscoreusagev2()
+    """
+    raw = _get(
+        "https://stats.wnba.com/stats/boxscoreusagev2",
         params={
             "EndPeriod": end_period,
             "EndRange": end_range,
@@ -1679,6 +2029,153 @@ def wnba_stats_gamerotation(
     return raw
 
 
+def wnba_stats_homepageleaders(
+    game_scope_detailed: Optional[str] = "Season",
+    league_id: Optional[str] = "10",
+    player_or_team: Optional[str] = "Team",
+    player_scope: Optional[str] = "All Players",
+    season: Optional[str] = None,
+    season_type_playoffs: Optional[str] = "Regular Season",
+    stat_category: Optional[str] = "Points",
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """GET /stats/homepageleaders
+
+    Endpoint: ``GET https://stats.wnba.com/stats/homepageleaders``
+    Example URL: https://stats.wnba.com/stats/homepageleaders?LeagueID=10
+
+    Args:
+        game_scope_detailed: GameScope query parameter.
+        league_id: LeagueID query parameter.
+        player_or_team: PlayerOrTeam query parameter.
+        player_scope: PlayerScope query parameter.
+        season: Season query parameter.
+        season_type_playoffs: SeasonType query parameter.
+        stat_category: StatCategory query parameter.
+        return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        Quick start::
+
+            wnba_stats_homepageleaders(league_id='10')
+    """
+    raw = _get(
+        "https://stats.wnba.com/stats/homepageleaders",
+        params={
+            "GameScope": game_scope_detailed,
+            "LeagueID": league_id,
+            "PlayerOrTeam": player_or_team,
+            "PlayerScope": player_scope,
+            "Season": season,
+            "SeasonType": season_type_playoffs,
+            "StatCategory": stat_category,
+        },
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_wnba_stats_result_sets(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def wnba_stats_homepagev2(
+    game_scope_detailed: Optional[str] = "Season",
+    league_id: Optional[str] = "10",
+    player_or_team: Optional[str] = "Team",
+    player_scope: Optional[str] = "All Players",
+    season: Optional[str] = None,
+    season_type_playoffs: Optional[str] = "Regular Season",
+    stat_type: Optional[str] = "Traditional",
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """GET /stats/homepagev2
+
+    Endpoint: ``GET https://stats.wnba.com/stats/homepagev2``
+    Example URL: https://stats.wnba.com/stats/homepagev2?LeagueID=10
+
+    Args:
+        game_scope_detailed: GameScope query parameter.
+        league_id: LeagueID query parameter.
+        player_or_team: PlayerOrTeam query parameter.
+        player_scope: PlayerScope query parameter.
+        season: Season query parameter.
+        season_type_playoffs: SeasonType query parameter.
+        stat_type: StatType query parameter.
+        return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        Quick start::
+
+            wnba_stats_homepagev2(league_id='10')
+    """
+    raw = _get(
+        "https://stats.wnba.com/stats/homepagev2",
+        params={
+            "GameScope": game_scope_detailed,
+            "LeagueID": league_id,
+            "PlayerOrTeam": player_or_team,
+            "PlayerScope": player_scope,
+            "Season": season,
+            "SeasonType": season_type_playoffs,
+            "StatType": stat_type,
+        },
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_wnba_stats_result_sets(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def wnba_stats_hustlestatsboxscore(
+    game_id: Optional[str] = "0022200021",
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """GET /stats/hustlestatsboxscore
+
+    Endpoint: ``GET https://stats.wnba.com/stats/hustlestatsboxscore``
+    Example URL: https://stats.wnba.com/stats/hustlestatsboxscore
+
+    Args:
+        game_id: GameID query parameter.
+        return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        Quick start::
+
+            wnba_stats_hustlestatsboxscore()
+    """
+    raw = _get(
+        "https://stats.wnba.com/stats/hustlestatsboxscore",
+        params={
+            "GameID": game_id,
+        },
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_wnba_stats_result_sets(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
 def wnba_stats_infographicfanduelplayer(
     game_id: Optional[str] = "1022200034",
     *,
@@ -1708,6 +2205,61 @@ def wnba_stats_infographicfanduelplayer(
         "https://stats.wnba.com/stats/infographicfanduelplayer",
         params={
             "GameID": game_id,
+        },
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_wnba_stats_result_sets(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def wnba_stats_leaderstiles(
+    game_scope_detailed: Optional[str] = "Season",
+    league_id: Optional[str] = "10",
+    player_or_team: Optional[str] = "Team",
+    player_scope: Optional[str] = "All Players",
+    season: Optional[str] = None,
+    season_type_playoffs: Optional[str] = "Regular Season",
+    stat: Optional[str] = "PTS",
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """GET /stats/leaderstiles
+
+    Endpoint: ``GET https://stats.wnba.com/stats/leaderstiles``
+    Example URL: https://stats.wnba.com/stats/leaderstiles?LeagueID=10
+
+    Args:
+        game_scope_detailed: GameScope query parameter.
+        league_id: LeagueID query parameter.
+        player_or_team: PlayerOrTeam query parameter.
+        player_scope: PlayerScope query parameter.
+        season: Season query parameter.
+        season_type_playoffs: SeasonType query parameter.
+        stat: Stat query parameter.
+        return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        Quick start::
+
+            wnba_stats_leaderstiles(league_id='10')
+    """
+    raw = _get(
+        "https://stats.wnba.com/stats/leaderstiles",
+        params={
+            "GameScope": game_scope_detailed,
+            "LeagueID": league_id,
+            "PlayerOrTeam": player_or_team,
+            "PlayerScope": player_scope,
+            "Season": season,
+            "SeasonType": season_type_playoffs,
+            "Stat": stat,
         },
         **kwargs,
     )
@@ -3622,6 +4174,49 @@ def wnba_stats_leaguestandingsv3(
     return raw
 
 
+def wnba_stats_playbyplayv2(
+    end_period: Optional[str] = None,
+    game_id: Optional[str] = "1022200034",
+    start_period: Optional[str] = None,
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """GET /stats/playbyplayv2
+
+    Endpoint: ``GET https://stats.wnba.com/stats/playbyplayv2``
+    Example URL: https://stats.wnba.com/stats/playbyplayv2
+
+    Args:
+        end_period: EndPeriod query parameter.
+        game_id: GameID query parameter.
+        start_period: StartPeriod query parameter.
+        return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        Quick start::
+
+            wnba_stats_playbyplayv2()
+    """
+    raw = _get(
+        "https://stats.wnba.com/stats/playbyplayv2",
+        params={
+            "EndPeriod": end_period,
+            "GameID": game_id,
+            "StartPeriod": start_period,
+        },
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_wnba_stats_result_sets(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
 def wnba_stats_playbyplayv3(
     end_period: Optional[str] = "0",
     game_id: Optional[str] = "1022200034",
@@ -3694,6 +4289,52 @@ def wnba_stats_playerawards(
         "https://stats.wnba.com/stats/playerawards",
         params={
             "PlayerID": player_id,
+        },
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_wnba_stats_result_sets(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def wnba_stats_playercareerbycollegerollup(
+    league_id: Optional[str] = "10",
+    per_mode_simple: Optional[str] = "Totals",
+    season_nullable: Optional[str] = None,
+    season_type_all_star: Optional[str] = "Regular Season",
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """GET /stats/playercareerbycollegerollup
+
+    Endpoint: ``GET https://stats.wnba.com/stats/playercareerbycollegerollup``
+    Example URL: https://stats.wnba.com/stats/playercareerbycollegerollup?LeagueID=10
+
+    Args:
+        league_id: LeagueID query parameter.
+        per_mode_simple: PerMode query parameter.
+        season_nullable: Season query parameter.
+        season_type_all_star: SeasonType query parameter.
+        return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        Quick start::
+
+            wnba_stats_playercareerbycollegerollup(league_id='10')
+    """
+    raw = _get(
+        "https://stats.wnba.com/stats/playercareerbycollegerollup",
+        params={
+            "LeagueID": league_id,
+            "PerMode": per_mode_simple,
+            "Season": season_nullable,
+            "SeasonType": season_type_all_star,
         },
         **kwargs,
     )
@@ -5439,6 +6080,55 @@ def wnba_stats_playerindex(
     return raw
 
 
+def wnba_stats_playernextngames(
+    league_id: Optional[str] = "10",
+    number_of_games: Optional[str] = "2147483647",
+    player_id: Optional[str] = "1628932",
+    season_all: Optional[str] = None,
+    season_type_all_star: Optional[str] = "Regular Season",
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """GET /stats/playernextngames
+
+    Endpoint: ``GET https://stats.wnba.com/stats/playernextngames``
+    Example URL: https://stats.wnba.com/stats/playernextngames?LeagueID=10
+
+    Args:
+        league_id: LeagueID query parameter.
+        number_of_games: NumberOfGames query parameter.
+        player_id: PlayerID query parameter.
+        season_all: Season query parameter.
+        season_type_all_star: SeasonType query parameter.
+        return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        Quick start::
+
+            wnba_stats_playernextngames(league_id='10')
+    """
+    raw = _get(
+        "https://stats.wnba.com/stats/playernextngames",
+        params={
+            "LeagueID": league_id,
+            "NumberOfGames": number_of_games,
+            "PlayerID": player_id,
+            "Season": season_all,
+            "SeasonType": season_type_all_star,
+        },
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_wnba_stats_result_sets(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
 def wnba_stats_playerprofilev2(
     league_id: Optional[str] = "10",
     per_mode36: Optional[str] = "Totals",
@@ -5654,6 +6344,49 @@ def wnba_stats_scheduleleaguev2int(
         params={
             "LeagueID": league_id,
             "Season": season,
+        },
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_wnba_stats_result_sets(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def wnba_stats_scoreboardv2(
+    day_offset: Optional[str] = "0",
+    game_date: Optional[str] = "2022-07-20",
+    league_id: Optional[str] = "10",
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """GET /stats/scoreboardv2
+
+    Endpoint: ``GET https://stats.wnba.com/stats/scoreboardv2``
+    Example URL: https://stats.wnba.com/stats/scoreboardv2?LeagueID=10
+
+    Args:
+        day_offset: DayOffset query parameter.
+        game_date: GameDate query parameter.
+        league_id: LeagueID query parameter.
+        return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        Quick start::
+
+            wnba_stats_scoreboardv2(league_id='10')
+    """
+    raw = _get(
+        "https://stats.wnba.com/stats/scoreboardv2",
+        params={
+            "DayOffset": day_offset,
+            "GameDate": game_date,
+            "LeagueID": league_id,
         },
         **kwargs,
     )
@@ -7609,6 +8342,46 @@ def wnba_stats_teamyearbyyearstats(
             "PerMode": per_mode_simple,
             "SeasonType": season_type_all_star,
             "TeamID": team_id,
+        },
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_wnba_stats_result_sets(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def wnba_stats_videostatus(
+    game_date: Optional[str] = "2022-06-10",
+    league_id: Optional[str] = "10",
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """GET /stats/videostatus
+
+    Endpoint: ``GET https://stats.wnba.com/stats/videostatus``
+    Example URL: https://stats.wnba.com/stats/videostatus?LeagueID=10
+
+    Args:
+        game_date: GameDate query parameter.
+        league_id: LeagueID query parameter.
+        return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        Quick start::
+
+            wnba_stats_videostatus(league_id='10')
+    """
+    raw = _get(
+        "https://stats.wnba.com/stats/videostatus",
+        params={
+            "GameDate": game_date,
+            "LeagueID": league_id,
         },
         **kwargs,
     )

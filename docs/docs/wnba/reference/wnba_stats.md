@@ -5,7 +5,7 @@ sidebar_position: 10
 ---
 # WNBA — WNBA Stats API (stats.wnba.com)
 
-`sportsdataverse.wnba` — 95 endpoints.
+`sportsdataverse.wnba` — 111 endpoints.
 
 ## `wnba_stats_alltimeleadersgrids`
 
@@ -332,6 +332,57 @@ wnba_stats_boxscoredefensivev2()
 
 _Last validated n/a._
 
+## `wnba_stats_boxscorefourfactorsv2`
+
+GET /stats/boxscorefourfactorsv2
+
+**Endpoint URL:** `GET https://stats.wnba.com/stats/boxscorefourfactorsv2`
+
+**Valid URL:** [https://stats.wnba.com/stats/boxscorefourfactorsv2](https://stats.wnba.com/stats/boxscorefourfactorsv2)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `EndPeriod` | `end_period` |  |  | `Y` |  |
+| `EndRange` | `end_range` |  |  | `Y` |  |
+| `GameID` | `game_id` |  |  | `Y` |  |
+| `RangeType` | `range_type` |  |  | `Y` |  |
+| `StartPeriod` | `start_period` |  |  | `Y` |  |
+| `StartRange` | `start_range` |  |  | `Y` |  |
+
+### Returns
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `game_id` | character | Unique game identifier. |
+| `team_id` | integer | Unique team identifier. |
+| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
+| `team_city` | character | Team city or region (e.g. 'Las Vegas'). |
+| `player_id` | integer | Unique player identifier. |
+| `player_name` | character | Player name. |
+| `nickname` | character | Team or athlete nickname. |
+| `start_position` | character |  |
+| `comment` | character | Player status / inactive reason (e.g. 'DNP - Coach's Decision', 'Inactive'). |
+| `min` | character | Minutes played. |
+| `efg_pct` | numeric |  |
+| `fta_rate` | numeric |  |
+| `tm_tov_pct` | numeric |  |
+| `oreb_pct` | numeric |  |
+| `opp_efg_pct` | numeric |  |
+| `opp_fta_rate` | numeric |  |
+| `opp_tov_pct` | numeric |  |
+| `opp_oreb_pct` | numeric |  |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example
+
+```python
+wnba_stats_boxscorefourfactorsv2()
+```
+
+_Last validated n/a._
+
 ## `wnba_stats_boxscorefourfactorsv3`
 
 GET /stats/boxscorefourfactorsv3
@@ -388,6 +439,65 @@ wnba_stats_boxscorefourfactorsv3()
 
 _Last validated n/a._
 
+## `wnba_stats_boxscorehustlev2`
+
+GET /stats/boxscorehustlev2
+
+**Endpoint URL:** `GET https://stats.wnba.com/stats/boxscorehustlev2`
+
+**Valid URL:** [https://stats.wnba.com/stats/boxscorehustlev2](https://stats.wnba.com/stats/boxscorehustlev2)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `GameID` | `gameid` |  |  | `Y` |  |
+
+### Returns
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `boxoutplayerrebounds` | integer |  |
+| `boxoutplayerteamrebounds` | integer |  |
+| `boxouts` | integer |  |
+| `chargesdrawn` | integer |  |
+| `comment` | character | Player status / inactive reason (e.g. 'DNP - Coach's Decision', 'Inactive'). |
+| `contestedshots` | integer |  |
+| `contestedshots2pt` | integer |  |
+| `contestedshots3pt` | integer |  |
+| `defensiveboxouts` | integer |  |
+| `deflections` | integer | Defensive deflections. |
+| `familyname` | character |  |
+| `firstname` | character | Firstname. |
+| `gameid` | character |  |
+| `jerseynum` | character |  |
+| `looseballsrecovereddefensive` | integer |  |
+| `looseballsrecoveredoffensive` | integer |  |
+| `looseballsrecoveredtotal` | integer |  |
+| `minutes` | character | Minutes played, formatted MM:SS (V3 PT-duration parsed) or decimal minutes (V2). |
+| `namei` | character |  |
+| `offensiveboxouts` | integer |  |
+| `personid` | integer |  |
+| `playerslug` | character |  |
+| `points` | integer | Points scored. |
+| `position` | character | Listed roster position (G, F, C, etc.). |
+| `screenassistpoints` | integer |  |
+| `screenassists` | integer |  |
+| `teamcity` | character | Teamcity. |
+| `teamid` | integer | Teamid. |
+| `teamname` | character | Teamname. |
+| `teamslug` | character |  |
+| `teamtricode` | character |  |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example
+
+```python
+wnba_stats_boxscorehustlev2()
+```
+
+_Last validated n/a._
+
 ## `wnba_stats_boxscorematchupsv3`
 
 GET /stats/boxscorematchupsv3
@@ -426,6 +536,61 @@ GET /stats/boxscorematchupsv3
 
 ```python
 wnba_stats_boxscorematchupsv3()
+```
+
+_Last validated n/a._
+
+## `wnba_stats_boxscoremiscv2`
+
+GET /stats/boxscoremiscv2
+
+**Endpoint URL:** `GET https://stats.wnba.com/stats/boxscoremiscv2`
+
+**Valid URL:** [https://stats.wnba.com/stats/boxscoremiscv2](https://stats.wnba.com/stats/boxscoremiscv2)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `EndPeriod` | `end_period` |  |  | `Y` |  |
+| `EndRange` | `end_range` |  |  | `Y` |  |
+| `GameID` | `game_id` |  |  | `Y` |  |
+| `RangeType` | `range_type` |  |  | `Y` |  |
+| `StartPeriod` | `start_period` |  |  | `Y` |  |
+| `StartRange` | `start_range` |  |  | `Y` |  |
+
+### Returns
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `game_id` | character | Unique game identifier. |
+| `team_id` | integer | Unique team identifier. |
+| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
+| `team_city` | character | Team city or region (e.g. 'Las Vegas'). |
+| `player_id` | integer | Unique player identifier. |
+| `player_name` | character | Player name. |
+| `nickname` | character | Team or athlete nickname. |
+| `start_position` | character |  |
+| `comment` | character | Player status / inactive reason (e.g. 'DNP - Coach's Decision', 'Inactive'). |
+| `min` | character | Minutes played. |
+| `pts_off_tov` | integer |  |
+| `pts_2nd_chance` | integer |  |
+| `pts_fb` | integer |  |
+| `pts_paint` | integer |  |
+| `opp_pts_off_tov` | numeric |  |
+| `opp_pts_2nd_chance` | numeric |  |
+| `opp_pts_fb` | numeric |  |
+| `opp_pts_paint` | numeric |  |
+| `blk` | integer | Blocks. |
+| `blka` | integer |  |
+| `pf` | integer | Personal fouls. |
+| `pfd` | integer |  |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example
+
+```python
+wnba_stats_boxscoremiscv2()
 ```
 
 _Last validated n/a._
@@ -553,6 +718,64 @@ wnba_stats_boxscoreplayertrackv3()
 
 _Last validated n/a._
 
+## `wnba_stats_boxscorescoringv2`
+
+GET /stats/boxscorescoringv2
+
+**Endpoint URL:** `GET https://stats.wnba.com/stats/boxscorescoringv2`
+
+**Valid URL:** [https://stats.wnba.com/stats/boxscorescoringv2](https://stats.wnba.com/stats/boxscorescoringv2)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `EndPeriod` | `end_period` |  |  | `Y` |  |
+| `EndRange` | `end_range` |  |  | `Y` |  |
+| `GameID` | `game_id` |  |  | `Y` |  |
+| `RangeType` | `range_type` |  |  | `Y` |  |
+| `StartPeriod` | `start_period` |  |  | `Y` |  |
+| `StartRange` | `start_range` |  |  | `Y` |  |
+
+### Returns
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `game_id` | character | Unique game identifier. |
+| `team_id` | integer | Unique team identifier. |
+| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
+| `team_city` | character | Team city or region (e.g. 'Las Vegas'). |
+| `player_id` | integer | Unique player identifier. |
+| `player_name` | character | Player name. |
+| `nickname` | character | Team or athlete nickname. |
+| `start_position` | character |  |
+| `comment` | character | Player status / inactive reason (e.g. 'DNP - Coach's Decision', 'Inactive'). |
+| `min` | character | Minutes played. |
+| `pct_fga_2pt` | numeric |  |
+| `pct_fga_3pt` | numeric |  |
+| `pct_pts_2pt` | numeric |  |
+| `pct_pts_2pt_mr` | numeric |  |
+| `pct_pts_3pt` | numeric |  |
+| `pct_pts_fb` | numeric |  |
+| `pct_pts_ft` | numeric |  |
+| `pct_pts_off_tov` | numeric |  |
+| `pct_pts_paint` | numeric |  |
+| `pct_ast_2pm` | numeric |  |
+| `pct_uast_2pm` | numeric |  |
+| `pct_ast_3pm` | numeric |  |
+| `pct_uast_3pm` | numeric |  |
+| `pct_ast_fgm` | numeric |  |
+| `pct_uast_fgm` | numeric |  |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example
+
+```python
+wnba_stats_boxscorescoringv2()
+```
+
+_Last validated n/a._
+
 ## `wnba_stats_boxscorescoringv3`
 
 GET /stats/boxscorescoringv3
@@ -667,6 +890,109 @@ wnba_stats_boxscoresummaryv2()
 
 _Last validated n/a._
 
+## `wnba_stats_boxscoresummaryv3`
+
+GET /stats/boxscoresummaryv3
+
+**Endpoint URL:** `GET https://stats.wnba.com/stats/boxscoresummaryv3`
+
+**Valid URL:** [https://stats.wnba.com/stats/boxscoresummaryv3](https://stats.wnba.com/stats/boxscoresummaryv3)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `GameID` | `gameid` |  |  | `Y` |  |
+
+### Returns
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `dummykey` | character |  |
+| `gameid` | character |  |
+| `inbonus` | character |  |
+| `score` | integer | Final score. |
+| `seed` | integer |  |
+| `teamcity` | character | Teamcity. |
+| `teamid` | integer | Teamid. |
+| `teamlosses` | integer |  |
+| `teamname` | character | Teamname. |
+| `teamslug` | character |  |
+| `teamtricode` | character |  |
+| `teamwins` | integer |  |
+| `timeoutsremaining` | integer |  |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example
+
+```python
+wnba_stats_boxscoresummaryv3()
+```
+
+_Last validated n/a._
+
+## `wnba_stats_boxscoretraditionalv2`
+
+GET /stats/boxscoretraditionalv2
+
+**Endpoint URL:** `GET https://stats.wnba.com/stats/boxscoretraditionalv2`
+
+**Valid URL:** [https://stats.wnba.com/stats/boxscoretraditionalv2](https://stats.wnba.com/stats/boxscoretraditionalv2)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `EndPeriod` | `end_period` |  |  | `Y` |  |
+| `EndRange` | `end_range` |  |  | `Y` |  |
+| `GameID` | `game_id` |  |  | `Y` |  |
+| `RangeType` | `range_type` |  |  | `Y` |  |
+| `StartPeriod` | `start_period` |  |  | `Y` |  |
+| `StartRange` | `start_range` |  |  | `Y` |  |
+
+### Returns
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `game_id` | character | Unique game identifier. |
+| `team_id` | integer | Unique team identifier. |
+| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
+| `team_city` | character | Team city or region (e.g. 'Las Vegas'). |
+| `player_id` | integer | Unique player identifier. |
+| `player_name` | character | Player name. |
+| `nickname` | character | Team or athlete nickname. |
+| `start_position` | character |  |
+| `comment` | character | Player status / inactive reason (e.g. 'DNP - Coach's Decision', 'Inactive'). |
+| `min` | character | Minutes played. |
+| `fgm` | integer | Field goals made. |
+| `fga` | integer | Field goal attempts. |
+| `fg_pct` | numeric | Field goal percentage (0-1). |
+| `fg3m` | integer | Three-point field goals made. |
+| `fg3a` | integer | Three-point field goal attempts. |
+| `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
+| `ftm` | integer | Free throws made. |
+| `fta` | integer | Free throw attempts. |
+| `ft_pct` | numeric | Free throw percentage (0-1). |
+| `oreb` | integer | Offensive rebounds. |
+| `dreb` | integer | Defensive rebounds. |
+| `reb` | integer | Total rebounds. |
+| `ast` | integer | Assists. |
+| `stl` | integer | Steals. |
+| `blk` | integer | Blocks. |
+| `to` | integer | To. |
+| `pf` | integer | Personal fouls. |
+| `pts` | integer | Points scored. |
+| `plus_minus` | integer | Plus/minus point differential while on court. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example
+
+```python
+wnba_stats_boxscoretraditionalv2()
+```
+
+_Last validated n/a._
+
 ## `wnba_stats_boxscoretraditionalv3`
 
 GET /stats/boxscoretraditionalv3
@@ -768,6 +1094,67 @@ GET /stats/boxscoretraditionalv3
 
 ```python
 wnba_stats_boxscoretraditionalv3()
+```
+
+_Last validated n/a._
+
+## `wnba_stats_boxscoreusagev2`
+
+GET /stats/boxscoreusagev2
+
+**Endpoint URL:** `GET https://stats.wnba.com/stats/boxscoreusagev2`
+
+**Valid URL:** [https://stats.wnba.com/stats/boxscoreusagev2](https://stats.wnba.com/stats/boxscoreusagev2)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `EndPeriod` | `end_period` |  |  | `Y` |  |
+| `EndRange` | `end_range` |  |  | `Y` |  |
+| `GameID` | `game_id` |  |  | `Y` |  |
+| `RangeType` | `range_type` |  |  | `Y` |  |
+| `StartPeriod` | `start_period` |  |  | `Y` |  |
+| `StartRange` | `start_range` |  |  | `Y` |  |
+
+### Returns
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `game_id` | character | Unique game identifier. |
+| `team_id` | integer | Unique team identifier. |
+| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
+| `team_city` | character | Team city or region (e.g. 'Las Vegas'). |
+| `player_id` | integer | Unique player identifier. |
+| `player_name` | character | Player name. |
+| `nickname` | character | Team or athlete nickname. |
+| `start_position` | character |  |
+| `comment` | character | Player status / inactive reason (e.g. 'DNP - Coach's Decision', 'Inactive'). |
+| `min` | character | Minutes played. |
+| `usg_pct` | numeric |  |
+| `pct_fgm` | numeric |  |
+| `pct_fga` | numeric |  |
+| `pct_fg3m` | numeric |  |
+| `pct_fg3a` | numeric |  |
+| `pct_ftm` | numeric |  |
+| `pct_fta` | numeric |  |
+| `pct_oreb` | numeric |  |
+| `pct_dreb` | numeric |  |
+| `pct_reb` | numeric |  |
+| `pct_ast` | numeric |  |
+| `pct_tov` | numeric |  |
+| `pct_stl` | numeric |  |
+| `pct_blk` | numeric |  |
+| `pct_blka` | numeric |  |
+| `pct_pf` | numeric |  |
+| `pct_pfd` | numeric |  |
+| `pct_pts` | numeric |  |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example
+
+```python
+wnba_stats_boxscoreusagev2()
 ```
 
 _Last validated n/a._
@@ -1755,6 +2142,147 @@ wnba_stats_gamerotation(league_id='10')
 
 _Last validated n/a._
 
+## `wnba_stats_homepageleaders`
+
+GET /stats/homepageleaders
+
+**Endpoint URL:** `GET https://stats.wnba.com/stats/homepageleaders`
+
+**Valid URL:** [https://stats.wnba.com/stats/homepageleaders?LeagueID=10](https://stats.wnba.com/stats/homepageleaders?LeagueID=10)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `GameScope` | `game_scope_detailed` |  |  | `Y` |  |
+| `LeagueID` | `league_id` |  |  | `Y` |  |
+| `PlayerOrTeam` | `player_or_team` |  |  | `Y` |  |
+| `PlayerScope` | `player_scope` |  |  | `Y` |  |
+| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+| `SeasonType` | `season_type_playoffs` |  |  | `Y` |  |
+| `StatCategory` | `stat_category` |  |  | `Y` |  |
+
+### Returns
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `rank` | character | Whether to include statistical ranks in the returned table. |
+| `team_id` | integer | Unique team identifier. |
+| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
+| `pts` | character | Points scored. |
+| `fg_pct` | numeric | Field goal percentage (0-1). |
+| `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
+| `ft_pct` | numeric | Free throw percentage (0-1). |
+| `efg_pct` | numeric |  |
+| `ts_pct` | numeric | True shooting percentage (0-1). |
+| `pts_per48` | character |  |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example
+
+```python
+wnba_stats_homepageleaders(league_id='10')
+```
+
+_Last validated n/a._
+
+## `wnba_stats_homepagev2`
+
+GET /stats/homepagev2
+
+**Endpoint URL:** `GET https://stats.wnba.com/stats/homepagev2`
+
+**Valid URL:** [https://stats.wnba.com/stats/homepagev2?LeagueID=10](https://stats.wnba.com/stats/homepagev2?LeagueID=10)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `GameScope` | `game_scope_detailed` |  |  | `Y` |  |
+| `LeagueID` | `league_id` |  |  | `Y` |  |
+| `PlayerOrTeam` | `player_or_team` |  |  | `Y` |  |
+| `PlayerScope` | `player_scope` |  |  | `Y` |  |
+| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+| `SeasonType` | `season_type_playoffs` |  |  | `Y` |  |
+| `StatType` | `stat_type` |  |  | `Y` |  |
+
+### Returns
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `rank` | integer | Whether to include statistical ranks in the returned table. |
+| `player_id` | integer | Unique player identifier. |
+| `player` | character | Player name. |
+| `team_id` | integer | Unique team identifier. |
+| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
+| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `jersey_num` | character | Jersey number worn by the player. |
+| `player_position` | character | Position of the player accordinng to NGS |
+| `blk` | numeric | Blocks. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example
+
+```python
+wnba_stats_homepagev2(league_id='10')
+```
+
+_Last validated n/a._
+
+## `wnba_stats_hustlestatsboxscore`
+
+GET /stats/hustlestatsboxscore
+
+**Endpoint URL:** `GET https://stats.wnba.com/stats/hustlestatsboxscore`
+
+**Valid URL:** [https://stats.wnba.com/stats/hustlestatsboxscore](https://stats.wnba.com/stats/hustlestatsboxscore)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `GameID` | `game_id` |  |  | `Y` |  |
+
+### Returns
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `game_id` | character | Unique game identifier. |
+| `team_id` | character | Unique team identifier. |
+| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
+| `team_city` | character | Team city or region (e.g. 'Las Vegas'). |
+| `player_id` | character | Unique player identifier. |
+| `player_name` | character | Player name. |
+| `start_position` | character |  |
+| `comment` | character | Player status / inactive reason (e.g. 'DNP - Coach's Decision', 'Inactive'). |
+| `minutes` | character | Minutes played, formatted MM:SS (V3 PT-duration parsed) or decimal minutes (V2). |
+| `pts` | integer | Points scored. |
+| `contested_shots` | numeric | Defensively contested shots. |
+| `contested_shots_2pt` | numeric |  |
+| `contested_shots_3pt` | numeric |  |
+| `deflections` | numeric | Defensive deflections. |
+| `charges_drawn` | numeric | Charges drawn. |
+| `screen_assists` | numeric | Screen assists (resulting in a basket). |
+| `screen_ast_pts` | numeric |  |
+| `off_loose_balls_recovered` | numeric |  |
+| `def_loose_balls_recovered` | numeric |  |
+| `loose_balls_recovered` | numeric |  |
+| `off_boxouts` | numeric |  |
+| `def_boxouts` | numeric |  |
+| `box_out_player_team_rebs` | numeric |  |
+| `box_out_player_rebs` | numeric |  |
+| `box_outs` | numeric | Box-outs executed. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example
+
+```python
+wnba_stats_hustlestatsboxscore()
+```
+
+_Last validated n/a._
+
 ## `wnba_stats_infographicfanduelplayer`
 
 GET /stats/infographicfanduelplayer
@@ -1812,6 +2340,47 @@ GET /stats/infographicfanduelplayer
 
 ```python
 wnba_stats_infographicfanduelplayer()
+```
+
+_Last validated n/a._
+
+## `wnba_stats_leaderstiles`
+
+GET /stats/leaderstiles
+
+**Endpoint URL:** `GET https://stats.wnba.com/stats/leaderstiles`
+
+**Valid URL:** [https://stats.wnba.com/stats/leaderstiles?LeagueID=10](https://stats.wnba.com/stats/leaderstiles?LeagueID=10)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `GameScope` | `game_scope_detailed` |  |  | `Y` |  |
+| `LeagueID` | `league_id` |  |  | `Y` |  |
+| `PlayerOrTeam` | `player_or_team` |  |  | `Y` |  |
+| `PlayerScope` | `player_scope` |  |  | `Y` |  |
+| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+| `SeasonType` | `season_type_playoffs` |  |  | `Y` |  |
+| `Stat` | `stat` |  |  | `Y` |  |
+
+### Returns
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `rank` | integer | Whether to include statistical ranks in the returned table. |
+| `player_id` | integer | Unique player identifier. |
+| `player` | character | Player name. |
+| `team_id` | integer | Unique team identifier. |
+| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
+| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `pts` | numeric | Points scored. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example
+
+```python
+wnba_stats_leaderstiles(league_id='10')
 ```
 
 _Last validated n/a._
@@ -3387,6 +3956,70 @@ wnba_stats_leaguestandingsv3(league_id='10')
 
 _Last validated n/a._
 
+## `wnba_stats_playbyplayv2`
+
+GET /stats/playbyplayv2
+
+**Endpoint URL:** `GET https://stats.wnba.com/stats/playbyplayv2`
+
+**Valid URL:** [https://stats.wnba.com/stats/playbyplayv2](https://stats.wnba.com/stats/playbyplayv2)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `EndPeriod` | `end_period` |  |  | `Y` |  |
+| `GameID` | `game_id` |  |  | `Y` |  |
+| `StartPeriod` | `start_period` |  |  | `Y` |  |
+
+### Returns
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `game_id` | character | Unique game identifier. |
+| `eventnum` | integer |  |
+| `eventmsgtype` | integer |  |
+| `eventmsgactiontype` | integer |  |
+| `period` | integer | Period of the game (1-4 quarters; 5+ for OT). |
+| `wctimestring` | character |  |
+| `pctimestring` | character |  |
+| `homedescription` | character |  |
+| `neutraldescription` | character |  |
+| `visitordescription` | character |  |
+| `score` | character | Final score. |
+| `scoremargin` | character |  |
+| `person1type` | integer | Person1type. |
+| `player1_id` | integer | V2 PBP primary player ID (e.g. shooter / fouler). |
+| `player1_name` | character | V2 PBP primary player name. |
+| `player1_team_id` | integer | Team ID of player1. |
+| `player1_team_city` | character | Player1 team city. |
+| `player1_team_nickname` | character | Player1 team nickname. |
+| `player1_team_abbreviation` | character | Player1 team abbreviation. |
+| `person2type` | integer | Person2type. |
+| `player2_id` | integer | V2 PBP secondary player ID (e.g. assister / fouled-by). |
+| `player2_name` | character | V2 PBP secondary player name. |
+| `player2_team_id` | integer | Team ID of player2. |
+| `player2_team_city` | character | Player2 team city. |
+| `player2_team_nickname` | character | Player2 team nickname. |
+| `player2_team_abbreviation` | character | Player2 team abbreviation. |
+| `person3type` | integer | Person3type. |
+| `player3_id` | integer | V2 PBP tertiary player ID (e.g. blocker). |
+| `player3_name` | character | V2 PBP tertiary player name. |
+| `player3_team_id` | integer | Team ID of player3. |
+| `player3_team_city` | character | Player3 team city. |
+| `player3_team_nickname` | character | Player3 team nickname. |
+| `player3_team_abbreviation` | character | Player3 team abbreviation. |
+| `video_available_flag` | integer | Video available flag. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example
+
+```python
+wnba_stats_playbyplayv2()
+```
+
+_Last validated n/a._
+
 ## `wnba_stats_playbyplayv3`
 
 GET /stats/playbyplayv3
@@ -3479,6 +4112,61 @@ GET /stats/playerawards
 
 ```python
 wnba_stats_playerawards()
+```
+
+_Last validated n/a._
+
+## `wnba_stats_playercareerbycollegerollup`
+
+GET /stats/playercareerbycollegerollup
+
+**Endpoint URL:** `GET https://stats.wnba.com/stats/playercareerbycollegerollup`
+
+**Valid URL:** [https://stats.wnba.com/stats/playercareerbycollegerollup?LeagueID=10](https://stats.wnba.com/stats/playercareerbycollegerollup?LeagueID=10)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `LeagueID` | `league_id` |  |  | `Y` |  |
+| `PerMode` | `per_mode_simple` |  |  | `Y` |  |
+| `Season` | `season_nullable` |  |  | `Y` |  |
+| `SeasonType` | `season_type_all_star` |  |  | `Y` |  |
+
+### Returns
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `region` | character | Region label. |
+| `seed` | character |  |
+| `college` | character | College or school attended. |
+| `players` | character | Nested list of per-player box scores. |
+| `gp` | integer | Games played. |
+| `min` | integer | Minutes played. |
+| `fgm` | character | Field goals made. |
+| `fga` | character | Field goal attempts. |
+| `fg_pct` | numeric | Field goal percentage (0-1). |
+| `fg3m` | character | Three-point field goals made. |
+| `fg3a` | character | Three-point field goal attempts. |
+| `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
+| `ftm` | character | Free throws made. |
+| `fta` | character | Free throw attempts. |
+| `ft_pct` | numeric | Free throw percentage (0-1). |
+| `oreb` | character | Offensive rebounds. |
+| `dreb` | character | Defensive rebounds. |
+| `reb` | character | Total rebounds. |
+| `ast` | character | Assists. |
+| `stl` | character | Steals. |
+| `blk` | character | Blocks. |
+| `tov` | character | Turnovers. |
+| `pf` | character | Personal fouls. |
+| `pts` | character | Points scored. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example
+
+```python
+wnba_stats_playercareerbycollegerollup(league_id='10')
 ```
 
 _Last validated n/a._
@@ -5094,6 +5782,51 @@ wnba_stats_playerindex(league_id='10')
 
 _Last validated n/a._
 
+## `wnba_stats_playernextngames`
+
+GET /stats/playernextngames
+
+**Endpoint URL:** `GET https://stats.wnba.com/stats/playernextngames`
+
+**Valid URL:** [https://stats.wnba.com/stats/playernextngames?LeagueID=10](https://stats.wnba.com/stats/playernextngames?LeagueID=10)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `LeagueID` | `league_id` |  |  | `Y` |  |
+| `NumberOfGames` | `number_of_games` |  |  | `Y` |  |
+| `PlayerID` | `player_id` |  |  | `Y` |  |
+| `Season` | `season_all` |  |  | `Y` |  |
+| `SeasonType` | `season_type_all_star` |  |  | `Y` |  |
+
+### Returns
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `game_id` | character | Unique game identifier. |
+| `game_date` | character | Game date (YYYY-MM-DD). |
+| `home_team_id` | integer | Unique identifier for the home team. |
+| `visitor_team_id` | integer | Unique identifier for visitor team. |
+| `home_team_name` | character | Home team name. |
+| `visitor_team_name` | character |  |
+| `home_team_abbreviation` | character | Home team abbreviation; `team_detail = TRUE` only. |
+| `visitor_team_abbreviation` | character |  |
+| `home_team_nickname` | character | Home team nickname label; `team_detail = TRUE` only. |
+| `visitor_team_nickname` | character |  |
+| `game_time` | character | Game start time. |
+| `home_wl` | character |  |
+| `visitor_wl` | character |  |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example
+
+```python
+wnba_stats_playernextngames(league_id='10')
+```
+
+_Last validated n/a._
+
 ## `wnba_stats_playerprofilev2`
 
 GET /stats/playerprofilev2
@@ -5391,6 +6124,65 @@ GET /stats/scheduleleaguev2int
 
 ```python
 wnba_stats_scheduleleaguev2int(league_id='10')
+```
+
+_Last validated n/a._
+
+## `wnba_stats_scoreboardv2`
+
+GET /stats/scoreboardv2
+
+**Endpoint URL:** `GET https://stats.wnba.com/stats/scoreboardv2`
+
+**Valid URL:** [https://stats.wnba.com/stats/scoreboardv2?LeagueID=10](https://stats.wnba.com/stats/scoreboardv2?LeagueID=10)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `DayOffset` | `day_offset` |  |  | `Y` |  |
+| `GameDate` | `game_date` |  |  | `Y` |  |
+| `LeagueID` | `league_id` |  |  | `Y` |  |
+
+### Returns
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `game_date_est` | character | Game date est. |
+| `game_sequence` | character | Game sequence. |
+| `game_id` | integer | Unique game identifier. |
+| `team_id` | integer | Unique team identifier. |
+| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
+| `team_city_name` | character | Team city name. |
+| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `team_wins_losses` | character | Team wins losses. |
+| `pts_qtr1` | character | Pts qtr1. |
+| `pts_qtr2` | character | Pts qtr2. |
+| `pts_qtr3` | character | Pts qtr3. |
+| `pts_qtr4` | character | Pts qtr4. |
+| `pts_ot1` | character | Pts ot1. |
+| `pts_ot2` | character |  |
+| `pts_ot3` | character |  |
+| `pts_ot4` | character |  |
+| `pts_ot5` | character |  |
+| `pts_ot6` | character |  |
+| `pts_ot7` | character |  |
+| `pts_ot8` | character |  |
+| `pts_ot9` | character |  |
+| `pts_ot10` | character |  |
+| `pts` | character | Points scored. |
+| `fg_pct` | numeric | Field goal percentage (0-1). |
+| `ft_pct` | numeric | Free throw percentage (0-1). |
+| `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
+| `ast` | character | Assists. |
+| `reb` | character | Total rebounds. |
+| `tov` | character | Turnovers. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example
+
+```python
+wnba_stats_scoreboardv2(league_id='10')
 ```
 
 _Last validated n/a._
@@ -7429,6 +8221,49 @@ GET /stats/teamyearbyyearstats
 
 ```python
 wnba_stats_teamyearbyyearstats(league_id='10')
+```
+
+_Last validated n/a._
+
+## `wnba_stats_videostatus`
+
+GET /stats/videostatus
+
+**Endpoint URL:** `GET https://stats.wnba.com/stats/videostatus`
+
+**Valid URL:** [https://stats.wnba.com/stats/videostatus?LeagueID=10](https://stats.wnba.com/stats/videostatus?LeagueID=10)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `GameDate` | `game_date` |  |  | `Y` |  |
+| `LeagueID` | `league_id` |  |  | `Y` |  |
+
+### Returns
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `game_id` | integer | Unique game identifier. |
+| `game_date` | character | Game date (YYYY-MM-DD). |
+| `visitor_team_id` | integer | Unique identifier for visitor team. |
+| `visitor_team_city` | character |  |
+| `visitor_team_name` | character |  |
+| `visitor_team_abbreviation` | character |  |
+| `home_team_id` | integer | Unique identifier for the home team. |
+| `home_team_city` | character | Home team city / location. |
+| `home_team_name` | character | Home team name. |
+| `home_team_abbreviation` | character | Home team abbreviation; `team_detail = TRUE` only. |
+| `game_status` | character | Game status label. |
+| `game_status_text` | character | Game status display text (e.g. 'Final', '4:32 - 4th'). |
+| `is_available` | character |  |
+| `pt_xyz_available` | character | Pt xyz available. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example
+
+```python
+wnba_stats_videostatus(league_id='10')
 ```
 
 _Last validated n/a._

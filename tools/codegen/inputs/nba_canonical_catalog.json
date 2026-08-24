@@ -3926,7 +3926,7 @@
       ],
       "league_applicability": {
         "00": "untested",
-        "10": "untested"
+        "10": "dead"
       },
       "params": [
         {
@@ -13980,6 +13980,7 @@
     },
     {
       "deprecation": {
+        "capture": "live",
         "hoopR": "deprecated",
         "nba_api": "live",
         "wehoop": "deprecated"
@@ -13990,8 +13991,8 @@
         "stats.wnba.com"
       ],
       "league_applicability": {
-        "00": "untested",
-        "10": "untested",
+        "00": "live",
+        "10": "live",
         "15": "untested",
         "20": "untested"
       },
@@ -29565,8 +29566,8 @@
         "stats.wnba.com"
       ],
       "league_applicability": {
-        "00": "untested",
-        "10": "untested",
+        "00": "dead",
+        "10": "dead",
         "15": "untested",
         "20": "untested"
       },
@@ -29755,7 +29756,7 @@
     },
     {
       "deprecation": {
-        "capture": "dead",
+        "capture": "live",
         "hoopR": "unknown",
         "nba_api": "live",
         "wehoop": "unknown"
@@ -29766,8 +29767,8 @@
         "stats.wnba.com"
       ],
       "league_applicability": {
-        "00": "dead",
-        "10": "dead",
+        "00": "live",
+        "10": "live",
         "15": "dead",
         "20": "dead"
       },
@@ -58427,7 +58428,7 @@
       ],
       "league_applicability": {
         "00": "untested",
-        "10": "untested",
+        "10": "dead",
         "15": "untested",
         "20": "untested"
       },
@@ -58475,6 +58476,7 @@
     },
     {
       "deprecation": {
+        "capture": "live",
         "hoopR": "deprecated",
         "nba_api": "deprecated",
         "wehoop": "unknown"
@@ -58485,8 +58487,8 @@
         "stats.wnba.com"
       ],
       "league_applicability": {
-        "00": "untested",
-        "10": "untested",
+        "00": "live",
+        "10": "live",
         "15": "untested",
         "20": "untested"
       },
@@ -79482,7 +79484,7 @@
       ],
       "league_applicability": {
         "00": "untested",
-        "10": "untested",
+        "10": "dead",
         "15": "untested",
         "20": "untested"
       },
@@ -81630,7 +81632,7 @@
       ],
       "league_applicability": {
         "00": "untested",
-        "10": "untested",
+        "10": "dead",
         "15": "untested",
         "20": "untested"
       },
@@ -87249,6 +87251,7 @@
     },
     {
       "deprecation": {
+        "capture": "live",
         "hoopR": "unknown",
         "nba_api": "live",
         "wehoop": "unknown"
@@ -87259,8 +87262,8 @@
         "stats.wnba.com"
       ],
       "league_applicability": {
-        "00": "untested",
-        "10": "untested",
+        "00": "live",
+        "10": "live",
         "15": "untested",
         "20": "untested"
       },

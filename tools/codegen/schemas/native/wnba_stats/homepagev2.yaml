@@ -1,0 +1,30 @@
+columns:
+- description: ''
+  name: rank
+  type: integer
+- description: ''
+  name: player_id
+  type: integer
+- description: ''
+  name: player
+  type: character
+- description: ''
+  name: team_id
+  type: integer
+- description: ''
+  name: team_abbreviation
+  type: character
+- description: ''
+  name: team_name
+  type: character
+- description: ''
+  name: jersey_num
+  type: character
+- description: ''
+  name: player_position
+  type: character
+- description: ''
+  name: blk
+  type: numeric
+kind: dataframe
+schema: homepagev2

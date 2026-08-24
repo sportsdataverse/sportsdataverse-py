@@ -1,0 +1,42 @@
+columns:
+- description: ''
+  name: dummykey
+  type: character
+- description: ''
+  name: gameid
+  type: character
+- description: ''
+  name: inbonus
+  type: character
+- description: ''
+  name: score
+  type: integer
+- description: ''
+  name: seed
+  type: integer
+- description: ''
+  name: teamcity
+  type: character
+- description: ''
+  name: teamid
+  type: integer
+- description: ''
+  name: teamlosses
+  type: integer
+- description: ''
+  name: teamname
+  type: character
+- description: ''
+  name: teamslug
+  type: character
+- description: ''
+  name: teamtricode
+  type: character
+- description: ''
+  name: teamwins
+  type: integer
+- description: ''
+  name: timeoutsremaining
+  type: integer
+kind: dataframe
+schema: boxscoresummaryv3

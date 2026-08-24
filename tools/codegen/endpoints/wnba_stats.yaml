@@ -272,10 +272,52 @@ endpoints:
     query_key: StartRange
     type: str
   parser: parse_wnba_stats_result_sets
+  path: /stats/boxscorefourfactorsv2
+  returns_schema: native/wnba_stats/boxscorefourfactorsv2
+  short: boxscorefourfactorsv2
+  summary: GET /stats/boxscorefourfactorsv2
+- example_args: {}
+  extra_params:
+  - default: '14'
+    name: end_period
+    query_key: EndPeriod
+    type: str
+  - default: '0'
+    name: end_range
+    query_key: EndRange
+    type: str
+  - default: '1022200034'
+    name: game_id
+    query_key: GameID
+    type: str
+  - default: '0'
+    name: range_type
+    query_key: RangeType
+    type: str
+  - default: '0'
+    name: start_period
+    query_key: StartPeriod
+    type: str
+  - default: '0'
+    name: start_range
+    query_key: StartRange
+    type: str
+  parser: parse_wnba_stats_result_sets
   path: /stats/boxscorefourfactorsv3
   returns_schema: native/wnba_stats/boxscorefourfactorsv3
   short: boxscorefourfactorsv3
   summary: GET /stats/boxscorefourfactorsv3
+- example_args: {}
+  extra_params:
+  - default: '0022200021'
+    name: gameid
+    query_key: GameID
+    type: str
+  parser: parse_wnba_stats_result_sets
+  path: /stats/boxscorehustlev2
+  returns_schema: native/wnba_stats/boxscorehustlev2
+  short: boxscorehustlev2
+  summary: GET /stats/boxscorehustlev2
 - example_args: {}
   extra_params:
   - default: '1022200034'
@@ -287,6 +329,37 @@ endpoints:
   returns_schema: native/wnba_stats/boxscorematchupsv3
   short: boxscorematchupsv3
   summary: GET /stats/boxscorematchupsv3
+- example_args: {}
+  extra_params:
+  - default: '14'
+    name: end_period
+    query_key: EndPeriod
+    type: str
+  - default: '0'
+    name: end_range
+    query_key: EndRange
+    type: str
+  - default: '1022200034'
+    name: game_id
+    query_key: GameID
+    type: str
+  - default: '0'
+    name: range_type
+    query_key: RangeType
+    type: str
+  - default: '0'
+    name: start_period
+    query_key: StartPeriod
+    type: str
+  - default: '0'
+    name: start_range
+    query_key: StartRange
+    type: str
+  parser: parse_wnba_stats_result_sets
+  path: /stats/boxscoremiscv2
+  returns_schema: native/wnba_stats/boxscoremiscv2
+  short: boxscoremiscv2
+  summary: GET /stats/boxscoremiscv2
 - example_args: {}
   extra_params:
   - default: '14'
@@ -356,6 +429,37 @@ endpoints:
     query_key: StartRange
     type: str
   parser: parse_wnba_stats_result_sets
+  path: /stats/boxscorescoringv2
+  returns_schema: native/wnba_stats/boxscorescoringv2
+  short: boxscorescoringv2
+  summary: GET /stats/boxscorescoringv2
+- example_args: {}
+  extra_params:
+  - default: '14'
+    name: end_period
+    query_key: EndPeriod
+    type: str
+  - default: '0'
+    name: end_range
+    query_key: EndRange
+    type: str
+  - default: '1022200034'
+    name: game_id
+    query_key: GameID
+    type: str
+  - default: '0'
+    name: range_type
+    query_key: RangeType
+    type: str
+  - default: '0'
+    name: start_period
+    query_key: StartPeriod
+    type: str
+  - default: '0'
+    name: start_range
+    query_key: StartRange
+    type: str
+  parser: parse_wnba_stats_result_sets
   path: /stats/boxscorescoringv3
   returns_schema: native/wnba_stats/boxscorescoringv3
   short: boxscorescoringv3
@@ -371,6 +475,48 @@ endpoints:
   returns_schema: native/wnba_stats/boxscoresummaryv2
   short: boxscoresummaryv2
   summary: GET /stats/boxscoresummaryv2
+- example_args: {}
+  extra_params:
+  - default: '1022200034'
+    name: gameid
+    query_key: GameID
+    type: str
+  parser: parse_wnba_stats_result_sets
+  path: /stats/boxscoresummaryv3
+  returns_schema: native/wnba_stats/boxscoresummaryv3
+  short: boxscoresummaryv3
+  summary: GET /stats/boxscoresummaryv3
+- example_args: {}
+  extra_params:
+  - default: '14'
+    name: end_period
+    query_key: EndPeriod
+    type: str
+  - default: '0'
+    name: end_range
+    query_key: EndRange
+    type: str
+  - default: '1022200034'
+    name: game_id
+    query_key: GameID
+    type: str
+  - default: '0'
+    name: range_type
+    query_key: RangeType
+    type: str
+  - default: '0'
+    name: start_period
+    query_key: StartPeriod
+    type: str
+  - default: '0'
+    name: start_range
+    query_key: StartRange
+    type: str
+  parser: parse_wnba_stats_result_sets
+  path: /stats/boxscoretraditionalv2
+  returns_schema: native/wnba_stats/boxscoretraditionalv2
+  short: boxscoretraditionalv2
+  summary: GET /stats/boxscoretraditionalv2
 - example_args: {}
   extra_params:
   - default: '14'
@@ -402,6 +548,37 @@ endpoints:
   returns_schema: native/wnba_stats/boxscoretraditionalv3
   short: boxscoretraditionalv3
   summary: GET /stats/boxscoretraditionalv3
+- example_args: {}
+  extra_params:
+  - default: '14'
+    name: end_period
+    query_key: EndPeriod
+    type: str
+  - default: '0'
+    name: end_range
+    query_key: EndRange
+    type: str
+  - default: '1022200034'
+    name: game_id
+    query_key: GameID
+    type: str
+  - default: '0'
+    name: range_type
+    query_key: RangeType
+    type: str
+  - default: '0'
+    name: start_period
+    query_key: StartPeriod
+    type: str
+  - default: '0'
+    name: start_range
+    query_key: StartRange
+    type: str
+  parser: parse_wnba_stats_result_sets
+  path: /stats/boxscoreusagev2
+  returns_schema: native/wnba_stats/boxscoreusagev2
+  short: boxscoreusagev2
+  summary: GET /stats/boxscoreusagev2
 - example_args: {}
   extra_params:
   - default: '14'
@@ -923,6 +1100,89 @@ endpoints:
   returns_schema: native/wnba_stats/gamerotation
   short: gamerotation
   summary: GET /stats/gamerotation
+- example_args:
+    league_id: '10'
+  extra_params:
+  - default: Season
+    name: game_scope_detailed
+    query_key: GameScope
+    type: str
+  - default: '10'
+    name: league_id
+    query_key: LeagueID
+    type: str
+  - default: Team
+    name: player_or_team
+    query_key: PlayerOrTeam
+    type: str
+  - default: All Players
+    name: player_scope
+    query_key: PlayerScope
+    type: str
+  - default: null
+    name: season
+    query_key: Season
+    type: str
+  - default: Regular Season
+    name: season_type_playoffs
+    query_key: SeasonType
+    type: str
+  - default: Points
+    name: stat_category
+    query_key: StatCategory
+    type: str
+  parser: parse_wnba_stats_result_sets
+  path: /stats/homepageleaders
+  returns_schema: native/wnba_stats/homepageleaders
+  short: homepageleaders
+  summary: GET /stats/homepageleaders
+- example_args:
+    league_id: '10'
+  extra_params:
+  - default: Season
+    name: game_scope_detailed
+    query_key: GameScope
+    type: str
+  - default: '10'
+    name: league_id
+    query_key: LeagueID
+    type: str
+  - default: Team
+    name: player_or_team
+    query_key: PlayerOrTeam
+    type: str
+  - default: All Players
+    name: player_scope
+    query_key: PlayerScope
+    type: str
+  - default: null
+    name: season
+    query_key: Season
+    type: str
+  - default: Regular Season
+    name: season_type_playoffs
+    query_key: SeasonType
+    type: str
+  - default: Traditional
+    name: stat_type
+    query_key: StatType
+    type: str
+  parser: parse_wnba_stats_result_sets
+  path: /stats/homepagev2
+  returns_schema: native/wnba_stats/homepagev2
+  short: homepagev2
+  summary: GET /stats/homepagev2
+- example_args: {}
+  extra_params:
+  - default: '0022200021'
+    name: game_id
+    query_key: GameID
+    type: str
+  parser: parse_wnba_stats_result_sets
+  path: /stats/hustlestatsboxscore
+  returns_schema: native/wnba_stats/hustlestatsboxscore
+  short: hustlestatsboxscore
+  summary: GET /stats/hustlestatsboxscore
 - example_args: {}
   extra_params:
   - default: '1022200034'
@@ -934,6 +1194,42 @@ endpoints:
   returns_schema: native/wnba_stats/infographicfanduelplayer
   short: infographicfanduelplayer
   summary: GET /stats/infographicfanduelplayer
+- example_args:
+    league_id: '10'
+  extra_params:
+  - default: Season
+    name: game_scope_detailed
+    query_key: GameScope
+    type: str
+  - default: '10'
+    name: league_id
+    query_key: LeagueID
+    type: str
+  - default: Team
+    name: player_or_team
+    query_key: PlayerOrTeam
+    type: str
+  - default: All Players
+    name: player_scope
+    query_key: PlayerScope
+    type: str
+  - default: null
+    name: season
+    query_key: Season
+    type: str
+  - default: Regular Season
+    name: season_type_playoffs
+    query_key: SeasonType
+    type: str
+  - default: PTS
+    name: stat
+    query_key: Stat
+    type: str
+  parser: parse_wnba_stats_result_sets
+  path: /stats/leaderstiles
+  returns_schema: native/wnba_stats/leaderstiles
+  short: leaderstiles
+  summary: GET /stats/leaderstiles
 - example_args:
     league_id: '10'
   extra_params:
@@ -2880,6 +3176,25 @@ endpoints:
   summary: GET /stats/leaguestandingsv3
 - example_args: {}
   extra_params:
+  - default: null
+    name: end_period
+    query_key: EndPeriod
+    type: str
+  - default: '1022200034'
+    name: game_id
+    query_key: GameID
+    type: str
+  - default: null
+    name: start_period
+    query_key: StartPeriod
+    type: str
+  parser: parse_wnba_stats_result_sets
+  path: /stats/playbyplayv2
+  returns_schema: native/wnba_stats/playbyplayv2
+  short: playbyplayv2
+  summary: GET /stats/playbyplayv2
+- example_args: {}
+  extra_params:
   - default: '0'
     name: end_period
     query_key: EndPeriod
@@ -2908,6 +3223,30 @@ endpoints:
   returns_schema: native/wnba_stats/playerawards
   short: playerawards
   summary: GET /stats/playerawards
+- example_args:
+    league_id: '10'
+  extra_params:
+  - default: '10'
+    name: league_id
+    query_key: LeagueID
+    type: str
+  - default: Totals
+    name: per_mode_simple
+    query_key: PerMode
+    type: str
+  - default: null
+    name: season_nullable
+    query_key: Season
+    type: str
+  - default: Regular Season
+    name: season_type_all_star
+    query_key: SeasonType
+    type: str
+  parser: parse_wnba_stats_result_sets
+  path: /stats/playercareerbycollegerollup
+  returns_schema: native/wnba_stats/playercareerbycollegerollup
+  short: playercareerbycollegerollup
+  summary: GET /stats/playercareerbycollegerollup
 - example_args:
     league_id: '10'
   extra_params:
@@ -4559,6 +4898,34 @@ endpoints:
     name: league_id
     query_key: LeagueID
     type: str
+  - default: '2147483647'
+    name: number_of_games
+    query_key: NumberOfGames
+    type: str
+  - default: '1628932'
+    name: player_id
+    query_key: PlayerID
+    type: str
+  - default: null
+    name: season_all
+    query_key: Season
+    type: str
+  - default: Regular Season
+    name: season_type_all_star
+    query_key: SeasonType
+    type: str
+  parser: parse_wnba_stats_result_sets
+  path: /stats/playernextngames
+  returns_schema: native/wnba_stats/playernextngames
+  short: playernextngames
+  summary: GET /stats/playernextngames
+- example_args:
+    league_id: '10'
+  extra_params:
+  - default: '10'
+    name: league_id
+    query_key: LeagueID
+    type: str
   - default: Totals
     name: per_mode36
     query_key: PerMode
@@ -4700,6 +5067,26 @@ endpoints:
   returns_schema: native/wnba_stats/scheduleleaguev2int
   short: scheduleleaguev2int
   summary: GET /stats/scheduleleaguev2int
+- example_args:
+    league_id: '10'
+  extra_params:
+  - default: '0'
+    name: day_offset
+    query_key: DayOffset
+    type: str
+  - default: '2022-07-20'
+    name: game_date
+    query_key: GameDate
+    type: str
+  - default: '10'
+    name: league_id
+    query_key: LeagueID
+    type: str
+  parser: parse_wnba_stats_result_sets
+  path: /stats/scoreboardv2
+  returns_schema: native/wnba_stats/scoreboardv2
+  short: scoreboardv2
+  summary: GET /stats/scoreboardv2
 - example_args:
     league_id: '10'
   extra_params:
@@ -6447,6 +6834,22 @@ endpoints:
   returns_schema: native/wnba_stats/teamyearbyyearstats
   short: teamyearbyyearstats
   summary: GET /stats/teamyearbyyearstats
+- example_args:
+    league_id: '10'
+  extra_params:
+  - default: '2022-06-10'
+    name: game_date
+    query_key: GameDate
+    type: str
+  - default: '10'
+    name: league_id
+    query_key: LeagueID
+    type: str
+  parser: parse_wnba_stats_result_sets
+  path: /stats/videostatus
+  returns_schema: native/wnba_stats/videostatus
+  short: videostatus
+  summary: GET /stats/videostatus
 getter_module: sportsdataverse.wnba.wnba_stats_runtime
 host: https://stats.wnba.com
 module: wnba_stats

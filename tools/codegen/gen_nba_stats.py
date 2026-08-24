@@ -135,7 +135,15 @@ def _stats_eps(league_id: str) -> List[dict]:
             for e in CAT["endpoints"]
             if e["family"] == "stats"
             and e["league_applicability"].get(league_id) in _APPLICABLE
-            and not any(status == "deprecated" for status in e.get("deprecation", {}).values())
+            # A capture-confirmed-live endpoint ships regardless of source
+            # opinions (hoopR/nba_api/wehoop "deprecated" flags are opinions,
+            # not liveness -- the 2026-08 probe sweep found e.g. playbyplayv2,
+            # boxscoresummaryv3, homepagev2 live under those flags). Only
+            # source-deprecated endpoints the sweep did NOT confirm live drop.
+            and not (
+                e.get("deprecation", {}).get("capture") != "live"
+                and any(status == "deprecated" for status in e.get("deprecation", {}).values())
+            )
         ),
         key=lambda e: e["slug"],
     )
