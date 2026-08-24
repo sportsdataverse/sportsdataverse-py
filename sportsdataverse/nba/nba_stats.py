@@ -20,11 +20,14 @@ __all__ = [
     "nba_stats_boxscoreadvancedv3",
     "nba_stats_boxscoredefensivev2",
     "nba_stats_boxscorefourfactorsv3",
+    "nba_stats_boxscorehustlev2",
     "nba_stats_boxscorematchupsv3",
     "nba_stats_boxscoremiscv3",
     "nba_stats_boxscoreplayertrackv3",
     "nba_stats_boxscorescoringv3",
     "nba_stats_boxscoresummaryv2",
+    "nba_stats_boxscoresummaryv3",
+    "nba_stats_boxscoretraditionalv2",
     "nba_stats_boxscoretraditionalv3",
     "nba_stats_boxscoreusagev3",
     "nba_stats_commonallplayers",
@@ -48,7 +51,11 @@ __all__ = [
     "nba_stats_franchiseleaderswrank",
     "nba_stats_franchiseplayers",
     "nba_stats_gamerotation",
+    "nba_stats_homepageleaders",
+    "nba_stats_homepagev2",
+    "nba_stats_hustlestatsboxscore",
     "nba_stats_infographicfanduelplayer",
+    "nba_stats_leaderstiles",
     "nba_stats_leaguedashlineups",
     "nba_stats_leaguedashoppptshot",
     "nba_stats_leaguedashplayerbiostats",
@@ -65,6 +72,8 @@ __all__ = [
     "nba_stats_leaguedashteamstats",
     "nba_stats_leaguegamefinder",
     "nba_stats_leaguegamelog",
+    "nba_stats_leaguehustlestatsplayer",
+    "nba_stats_leaguehustlestatsteam",
     "nba_stats_leagueleaders",
     "nba_stats_leaguelineupviz",
     "nba_stats_leagueplayerondetails",
@@ -74,6 +83,7 @@ __all__ = [
     "nba_stats_matchupsrollup",
     "nba_stats_playbyplayv3",
     "nba_stats_playerawards",
+    "nba_stats_playercareerbycollegerollup",
     "nba_stats_playercareerstats",
     "nba_stats_playercompare",
     "nba_stats_playerdashboardbyclutch",
@@ -100,6 +110,7 @@ __all__ = [
     "nba_stats_playoffpicture",
     "nba_stats_scheduleleaguev2",
     "nba_stats_scheduleleaguev2int",
+    "nba_stats_scoreboardv2",
     "nba_stats_scoreboardv3",
     "nba_stats_shotchartdetail",
     "nba_stats_shotchartleaguewide",
@@ -127,6 +138,7 @@ __all__ = [
     "nba_stats_teamplayeronoffsummary",
     "nba_stats_teamvsplayer",
     "nba_stats_teamyearbyyearstats",
+    "nba_stats_videostatus",
 ]
 
 
@@ -484,6 +496,43 @@ def nba_stats_boxscorefourfactorsv3(
     return raw
 
 
+def nba_stats_boxscorehustlev2(
+    gameid: Optional[str] = "0022200021",
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """GET /stats/boxscorehustlev2
+
+    Endpoint: ``GET https://stats.nba.com/stats/boxscorehustlev2``
+    Example URL: https://stats.nba.com/stats/boxscorehustlev2
+
+    Args:
+        gameid: GameID query parameter.
+        return_parsed: parse the payload through parse_nba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        Quick start::
+
+            nba_stats_boxscorehustlev2()
+    """
+    raw = _get(
+        "https://stats.nba.com/stats/boxscorehustlev2",
+        params={
+            "GameID": gameid,
+        },
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_nba_stats_result_sets(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
 def nba_stats_boxscorematchupsv3(
     game_id: Optional[str] = "1022200034",
     *,
@@ -691,6 +740,95 @@ def nba_stats_boxscoresummaryv2(
         "https://stats.nba.com/stats/boxscoresummaryv2",
         params={
             "GameID": game_id,
+        },
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_nba_stats_result_sets(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def nba_stats_boxscoresummaryv3(
+    gameid: Optional[str] = "1022200034",
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """GET /stats/boxscoresummaryv3
+
+    Endpoint: ``GET https://stats.nba.com/stats/boxscoresummaryv3``
+    Example URL: https://stats.nba.com/stats/boxscoresummaryv3
+
+    Args:
+        gameid: GameID query parameter.
+        return_parsed: parse the payload through parse_nba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        Quick start::
+
+            nba_stats_boxscoresummaryv3()
+    """
+    raw = _get(
+        "https://stats.nba.com/stats/boxscoresummaryv3",
+        params={
+            "GameID": gameid,
+        },
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_nba_stats_result_sets(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def nba_stats_boxscoretraditionalv2(
+    end_period: Optional[str] = "14",
+    end_range: Optional[str] = "0",
+    game_id: Optional[str] = "1022200034",
+    range_type: Optional[str] = "0",
+    start_period: Optional[str] = "0",
+    start_range: Optional[str] = "0",
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """GET /stats/boxscoretraditionalv2
+
+    Endpoint: ``GET https://stats.nba.com/stats/boxscoretraditionalv2``
+    Example URL: https://stats.nba.com/stats/boxscoretraditionalv2
+
+    Args:
+        end_period: EndPeriod query parameter.
+        end_range: EndRange query parameter.
+        game_id: GameID query parameter.
+        range_type: RangeType query parameter.
+        start_period: StartPeriod query parameter.
+        start_range: StartRange query parameter.
+        return_parsed: parse the payload through parse_nba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        Quick start::
+
+            nba_stats_boxscoretraditionalv2()
+    """
+    raw = _get(
+        "https://stats.nba.com/stats/boxscoretraditionalv2",
+        params={
+            "EndPeriod": end_period,
+            "EndRange": end_range,
+            "GameID": game_id,
+            "RangeType": range_type,
+            "StartPeriod": start_period,
+            "StartRange": start_range,
         },
         **kwargs,
     )
@@ -1805,6 +1943,153 @@ def nba_stats_gamerotation(
     return raw
 
 
+def nba_stats_homepageleaders(
+    game_scope_detailed: Optional[str] = "Season",
+    league_id: Optional[str] = "00",
+    player_or_team: Optional[str] = "Team",
+    player_scope: Optional[str] = "All Players",
+    season: Optional[str] = None,
+    season_type_playoffs: Optional[str] = "Regular Season",
+    stat_category: Optional[str] = "Points",
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """GET /stats/homepageleaders
+
+    Endpoint: ``GET https://stats.nba.com/stats/homepageleaders``
+    Example URL: https://stats.nba.com/stats/homepageleaders?LeagueID=00
+
+    Args:
+        game_scope_detailed: GameScope query parameter.
+        league_id: LeagueID query parameter.
+        player_or_team: PlayerOrTeam query parameter.
+        player_scope: PlayerScope query parameter.
+        season: Season query parameter.
+        season_type_playoffs: SeasonType query parameter.
+        stat_category: StatCategory query parameter.
+        return_parsed: parse the payload through parse_nba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        Quick start::
+
+            nba_stats_homepageleaders(league_id='00')
+    """
+    raw = _get(
+        "https://stats.nba.com/stats/homepageleaders",
+        params={
+            "GameScope": game_scope_detailed,
+            "LeagueID": league_id,
+            "PlayerOrTeam": player_or_team,
+            "PlayerScope": player_scope,
+            "Season": season,
+            "SeasonType": season_type_playoffs,
+            "StatCategory": stat_category,
+        },
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_nba_stats_result_sets(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def nba_stats_homepagev2(
+    game_scope_detailed: Optional[str] = "Season",
+    league_id: Optional[str] = "00",
+    player_or_team: Optional[str] = "Team",
+    player_scope: Optional[str] = "All Players",
+    season: Optional[str] = None,
+    season_type_playoffs: Optional[str] = "Regular Season",
+    stat_type: Optional[str] = "Traditional",
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """GET /stats/homepagev2
+
+    Endpoint: ``GET https://stats.nba.com/stats/homepagev2``
+    Example URL: https://stats.nba.com/stats/homepagev2?LeagueID=00
+
+    Args:
+        game_scope_detailed: GameScope query parameter.
+        league_id: LeagueID query parameter.
+        player_or_team: PlayerOrTeam query parameter.
+        player_scope: PlayerScope query parameter.
+        season: Season query parameter.
+        season_type_playoffs: SeasonType query parameter.
+        stat_type: StatType query parameter.
+        return_parsed: parse the payload through parse_nba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        Quick start::
+
+            nba_stats_homepagev2(league_id='00')
+    """
+    raw = _get(
+        "https://stats.nba.com/stats/homepagev2",
+        params={
+            "GameScope": game_scope_detailed,
+            "LeagueID": league_id,
+            "PlayerOrTeam": player_or_team,
+            "PlayerScope": player_scope,
+            "Season": season,
+            "SeasonType": season_type_playoffs,
+            "StatType": stat_type,
+        },
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_nba_stats_result_sets(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def nba_stats_hustlestatsboxscore(
+    game_id: Optional[str] = "0022200021",
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """GET /stats/hustlestatsboxscore
+
+    Endpoint: ``GET https://stats.nba.com/stats/hustlestatsboxscore``
+    Example URL: https://stats.nba.com/stats/hustlestatsboxscore
+
+    Args:
+        game_id: GameID query parameter.
+        return_parsed: parse the payload through parse_nba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        Quick start::
+
+            nba_stats_hustlestatsboxscore()
+    """
+    raw = _get(
+        "https://stats.nba.com/stats/hustlestatsboxscore",
+        params={
+            "GameID": game_id,
+        },
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_nba_stats_result_sets(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
 def nba_stats_infographicfanduelplayer(
     game_id: Optional[str] = "1022200034",
     *,
@@ -1834,6 +2119,61 @@ def nba_stats_infographicfanduelplayer(
         "https://stats.nba.com/stats/infographicfanduelplayer",
         params={
             "GameID": game_id,
+        },
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_nba_stats_result_sets(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def nba_stats_leaderstiles(
+    game_scope_detailed: Optional[str] = "Season",
+    league_id: Optional[str] = "00",
+    player_or_team: Optional[str] = "Team",
+    player_scope: Optional[str] = "All Players",
+    season: Optional[str] = None,
+    season_type_playoffs: Optional[str] = "Regular Season",
+    stat: Optional[str] = "PTS",
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """GET /stats/leaderstiles
+
+    Endpoint: ``GET https://stats.nba.com/stats/leaderstiles``
+    Example URL: https://stats.nba.com/stats/leaderstiles?LeagueID=00
+
+    Args:
+        game_scope_detailed: GameScope query parameter.
+        league_id: LeagueID query parameter.
+        player_or_team: PlayerOrTeam query parameter.
+        player_scope: PlayerScope query parameter.
+        season: Season query parameter.
+        season_type_playoffs: SeasonType query parameter.
+        stat: Stat query parameter.
+        return_parsed: parse the payload through parse_nba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        Quick start::
+
+            nba_stats_leaderstiles(league_id='00')
+    """
+    raw = _get(
+        "https://stats.nba.com/stats/leaderstiles",
+        params={
+            "GameScope": game_scope_detailed,
+            "LeagueID": league_id,
+            "PlayerOrTeam": player_or_team,
+            "PlayerScope": player_scope,
+            "Season": season,
+            "SeasonType": season_type_playoffs,
+            "Stat": stat,
         },
         **kwargs,
     )
@@ -3961,6 +4301,224 @@ def nba_stats_leaguegamelog(
     return raw
 
 
+def nba_stats_leaguehustlestatsplayer(
+    college_nullable: Optional[str] = "",
+    conference_nullable: Optional[str] = "",
+    country_nullable: Optional[str] = "",
+    date_from_nullable: Optional[str] = "",
+    date_to_nullable: Optional[str] = "",
+    division_simple_nullable: Optional[str] = "",
+    draft_pick_nullable: Optional[str] = "",
+    draft_year_nullable: Optional[str] = "",
+    height_nullable: Optional[str] = "",
+    league_id: Optional[str] = "00",
+    location_nullable: Optional[str] = "",
+    month_nullable: Optional[str] = "0",
+    opponent_team_id_nullable: Optional[str] = "0",
+    outcome_nullable: Optional[str] = "",
+    po_round_nullable: Optional[str] = "",
+    per_mode_time: Optional[str] = "Totals",
+    player_experience_nullable: Optional[str] = "",
+    player_position_nullable: Optional[str] = "",
+    season: Optional[str] = None,
+    season_segment_nullable: Optional[str] = "",
+    season_type_all_star: Optional[str] = "Regular Season",
+    team_id_nullable: Optional[str] = "0",
+    vs_conference_nullable: Optional[str] = "",
+    vs_division_nullable: Optional[str] = "",
+    weight_nullable: Optional[str] = "",
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """GET /stats/leaguehustlestatsplayer
+
+    Endpoint: ``GET https://stats.nba.com/stats/leaguehustlestatsplayer``
+    Example URL: https://stats.nba.com/stats/leaguehustlestatsplayer?LeagueID=00
+
+    Args:
+        college_nullable: College query parameter.
+        conference_nullable: Conference query parameter.
+        country_nullable: Country query parameter.
+        date_from_nullable: DateFrom query parameter.
+        date_to_nullable: DateTo query parameter.
+        division_simple_nullable: Division query parameter.
+        draft_pick_nullable: DraftPick query parameter.
+        draft_year_nullable: DraftYear query parameter.
+        height_nullable: Height query parameter.
+        league_id: LeagueID query parameter.
+        location_nullable: Location query parameter.
+        month_nullable: Month query parameter.
+        opponent_team_id_nullable: OpponentTeamID query parameter.
+        outcome_nullable: Outcome query parameter.
+        po_round_nullable: PORound query parameter.
+        per_mode_time: PerMode query parameter.
+        player_experience_nullable: PlayerExperience query parameter.
+        player_position_nullable: PlayerPosition query parameter.
+        season: Season query parameter.
+        season_segment_nullable: SeasonSegment query parameter.
+        season_type_all_star: SeasonType query parameter.
+        team_id_nullable: TeamID query parameter.
+        vs_conference_nullable: VsConference query parameter.
+        vs_division_nullable: VsDivision query parameter.
+        weight_nullable: Weight query parameter.
+        return_parsed: parse the payload through parse_nba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        Quick start::
+
+            nba_stats_leaguehustlestatsplayer(league_id='00')
+    """
+    raw = _get(
+        "https://stats.nba.com/stats/leaguehustlestatsplayer",
+        params={
+            "College": college_nullable,
+            "Conference": conference_nullable,
+            "Country": country_nullable,
+            "DateFrom": date_from_nullable,
+            "DateTo": date_to_nullable,
+            "Division": division_simple_nullable,
+            "DraftPick": draft_pick_nullable,
+            "DraftYear": draft_year_nullable,
+            "Height": height_nullable,
+            "LeagueID": league_id,
+            "Location": location_nullable,
+            "Month": month_nullable,
+            "OpponentTeamID": opponent_team_id_nullable,
+            "Outcome": outcome_nullable,
+            "PORound": po_round_nullable,
+            "PerMode": per_mode_time,
+            "PlayerExperience": player_experience_nullable,
+            "PlayerPosition": player_position_nullable,
+            "Season": season,
+            "SeasonSegment": season_segment_nullable,
+            "SeasonType": season_type_all_star,
+            "TeamID": team_id_nullable,
+            "VsConference": vs_conference_nullable,
+            "VsDivision": vs_division_nullable,
+            "Weight": weight_nullable,
+        },
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_nba_stats_result_sets(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def nba_stats_leaguehustlestatsteam(
+    college_nullable: Optional[str] = "",
+    conference_nullable: Optional[str] = "",
+    country_nullable: Optional[str] = "",
+    date_from_nullable: Optional[str] = "",
+    date_to_nullable: Optional[str] = "",
+    division_simple_nullable: Optional[str] = "",
+    draft_pick_nullable: Optional[str] = "",
+    draft_year_nullable: Optional[str] = "",
+    height_nullable: Optional[str] = "",
+    league_id: Optional[str] = "00",
+    location_nullable: Optional[str] = "",
+    month_nullable: Optional[str] = "0",
+    opponent_team_id_nullable: Optional[str] = "0",
+    outcome_nullable: Optional[str] = "",
+    po_round_nullable: Optional[str] = "",
+    per_mode_time: Optional[str] = "Totals",
+    player_experience_nullable: Optional[str] = "",
+    player_position_nullable: Optional[str] = "",
+    season: Optional[str] = None,
+    season_segment_nullable: Optional[str] = "",
+    season_type_all_star: Optional[str] = "Regular Season",
+    team_id_nullable: Optional[str] = "0",
+    vs_conference_nullable: Optional[str] = "",
+    vs_division_nullable: Optional[str] = "",
+    weight_nullable: Optional[str] = "",
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """GET /stats/leaguehustlestatsteam
+
+    Endpoint: ``GET https://stats.nba.com/stats/leaguehustlestatsteam``
+    Example URL: https://stats.nba.com/stats/leaguehustlestatsteam?LeagueID=00
+
+    Args:
+        college_nullable: College query parameter.
+        conference_nullable: Conference query parameter.
+        country_nullable: Country query parameter.
+        date_from_nullable: DateFrom query parameter.
+        date_to_nullable: DateTo query parameter.
+        division_simple_nullable: Division query parameter.
+        draft_pick_nullable: DraftPick query parameter.
+        draft_year_nullable: DraftYear query parameter.
+        height_nullable: Height query parameter.
+        league_id: LeagueID query parameter.
+        location_nullable: Location query parameter.
+        month_nullable: Month query parameter.
+        opponent_team_id_nullable: OpponentTeamID query parameter.
+        outcome_nullable: Outcome query parameter.
+        po_round_nullable: PORound query parameter.
+        per_mode_time: PerMode query parameter.
+        player_experience_nullable: PlayerExperience query parameter.
+        player_position_nullable: PlayerPosition query parameter.
+        season: Season query parameter.
+        season_segment_nullable: SeasonSegment query parameter.
+        season_type_all_star: SeasonType query parameter.
+        team_id_nullable: TeamID query parameter.
+        vs_conference_nullable: VsConference query parameter.
+        vs_division_nullable: VsDivision query parameter.
+        weight_nullable: Weight query parameter.
+        return_parsed: parse the payload through parse_nba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        Quick start::
+
+            nba_stats_leaguehustlestatsteam(league_id='00')
+    """
+    raw = _get(
+        "https://stats.nba.com/stats/leaguehustlestatsteam",
+        params={
+            "College": college_nullable,
+            "Conference": conference_nullable,
+            "Country": country_nullable,
+            "DateFrom": date_from_nullable,
+            "DateTo": date_to_nullable,
+            "Division": division_simple_nullable,
+            "DraftPick": draft_pick_nullable,
+            "DraftYear": draft_year_nullable,
+            "Height": height_nullable,
+            "LeagueID": league_id,
+            "Location": location_nullable,
+            "Month": month_nullable,
+            "OpponentTeamID": opponent_team_id_nullable,
+            "Outcome": outcome_nullable,
+            "PORound": po_round_nullable,
+            "PerMode": per_mode_time,
+            "PlayerExperience": player_experience_nullable,
+            "PlayerPosition": player_position_nullable,
+            "Season": season,
+            "SeasonSegment": season_segment_nullable,
+            "SeasonType": season_type_all_star,
+            "TeamID": team_id_nullable,
+            "VsConference": vs_conference_nullable,
+            "VsDivision": vs_division_nullable,
+            "Weight": weight_nullable,
+        },
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_nba_stats_result_sets(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
 def nba_stats_leagueleaders(
     active_flag_nullable: Optional[str] = "",
     league_id: Optional[str] = "00",
@@ -4508,6 +5066,52 @@ def nba_stats_playerawards(
         "https://stats.nba.com/stats/playerawards",
         params={
             "PlayerID": player_id,
+        },
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_nba_stats_result_sets(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def nba_stats_playercareerbycollegerollup(
+    league_id: Optional[str] = "00",
+    per_mode_simple: Optional[str] = "Totals",
+    season_nullable: Optional[str] = None,
+    season_type_all_star: Optional[str] = "Regular Season",
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """GET /stats/playercareerbycollegerollup
+
+    Endpoint: ``GET https://stats.nba.com/stats/playercareerbycollegerollup``
+    Example URL: https://stats.nba.com/stats/playercareerbycollegerollup?LeagueID=00
+
+    Args:
+        league_id: LeagueID query parameter.
+        per_mode_simple: PerMode query parameter.
+        season_nullable: Season query parameter.
+        season_type_all_star: SeasonType query parameter.
+        return_parsed: parse the payload through parse_nba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        Quick start::
+
+            nba_stats_playercareerbycollegerollup(league_id='00')
+    """
+    raw = _get(
+        "https://stats.nba.com/stats/playercareerbycollegerollup",
+        params={
+            "LeagueID": league_id,
+            "PerMode": per_mode_simple,
+            "Season": season_nullable,
+            "SeasonType": season_type_all_star,
         },
         **kwargs,
     )
@@ -6774,6 +7378,49 @@ def nba_stats_scheduleleaguev2int(
     return raw
 
 
+def nba_stats_scoreboardv2(
+    day_offset: Optional[str] = "0",
+    game_date: Optional[str] = "2022-07-20",
+    league_id: Optional[str] = "00",
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """GET /stats/scoreboardv2
+
+    Endpoint: ``GET https://stats.nba.com/stats/scoreboardv2``
+    Example URL: https://stats.nba.com/stats/scoreboardv2?LeagueID=00
+
+    Args:
+        day_offset: DayOffset query parameter.
+        game_date: GameDate query parameter.
+        league_id: LeagueID query parameter.
+        return_parsed: parse the payload through parse_nba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        Quick start::
+
+            nba_stats_scoreboardv2(league_id='00')
+    """
+    raw = _get(
+        "https://stats.nba.com/stats/scoreboardv2",
+        params={
+            "DayOffset": day_offset,
+            "GameDate": game_date,
+            "LeagueID": league_id,
+        },
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_nba_stats_result_sets(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
 def nba_stats_scoreboardv3(
     game_date: Optional[str] = "2022-06-26",
     league_id: Optional[str] = "00",
@@ -9025,6 +9672,46 @@ def nba_stats_teamyearbyyearstats(
             "PerMode": per_mode_simple,
             "SeasonType": season_type_all_star,
             "TeamID": team_id,
+        },
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_nba_stats_result_sets(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def nba_stats_videostatus(
+    game_date: Optional[str] = "2022-06-10",
+    league_id: Optional[str] = "00",
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """GET /stats/videostatus
+
+    Endpoint: ``GET https://stats.nba.com/stats/videostatus``
+    Example URL: https://stats.nba.com/stats/videostatus?LeagueID=00
+
+    Args:
+        game_date: GameDate query parameter.
+        league_id: LeagueID query parameter.
+        return_parsed: parse the payload through parse_nba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        Quick start::
+
+            nba_stats_videostatus(league_id='00')
+    """
+    raw = _get(
+        "https://stats.nba.com/stats/videostatus",
+        params={
+            "GameDate": game_date,
+            "LeagueID": league_id,
         },
         **kwargs,
     )

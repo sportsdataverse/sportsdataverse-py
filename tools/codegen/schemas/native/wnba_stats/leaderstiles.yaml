@@ -1,0 +1,24 @@
+columns:
+- description: ''
+  name: rank
+  type: integer
+- description: ''
+  name: player_id
+  type: integer
+- description: ''
+  name: player
+  type: character
+- description: ''
+  name: team_id
+  type: integer
+- description: ''
+  name: team_abbreviation
+  type: character
+- description: ''
+  name: team_name
+  type: character
+- description: ''
+  name: pts
+  type: numeric
+kind: dataframe
+schema: leaderstiles
