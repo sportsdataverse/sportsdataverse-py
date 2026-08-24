@@ -140,6 +140,7 @@ from sportsdataverse.wnba import fox_wnba_team_roster as _raw_fox_wnba_team_rost
 from sportsdataverse.wnba import fox_wnba_team_stats as _raw_fox_wnba_team_stats
 from sportsdataverse.wnba import fox_wnba_teams as _raw_fox_wnba_teams
 from sportsdataverse.wnba import build_athlete_identity_lookup as build_athlete_identity_lookup  # noqa: F401
+from sportsdataverse.wnba import build_wnba_season_wp as build_wnba_season_wp  # noqa: F401
 from sportsdataverse.wnba import download as download  # noqa: F401
 from sportsdataverse.wnba import espn_wnba_calendar as espn_wnba_calendar  # noqa: F401
 from sportsdataverse.wnba import espn_wnba_draft as espn_wnba_draft  # noqa: F401
@@ -253,6 +254,7 @@ from sportsdataverse.wnba import zone_value_map as zone_value_map  # noqa: F401
 
 __all__ = [
     "build_athlete_identity_lookup",
+    "build_wnba_season_wp",
     "download",
     "espn_wnba_award",
     "espn_wnba_awards",

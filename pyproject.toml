@@ -430,6 +430,7 @@ files = [
     "sportsdataverse/nba/nba_player_props.py",
     "sportsdataverse/wnba/wnba_team_ratings.py",
     "sportsdataverse/wnba/wnba_game_predict.py",
+    "sportsdataverse/wnba/wnba_win_prob.py",
     "sportsdataverse/wnba/wnba_clutch.py",
     "sportsdataverse/wnba/wnba_player_props.py",
     "sportsdataverse/wnba/wnba_stats_runtime.py",

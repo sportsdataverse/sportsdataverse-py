@@ -527,6 +527,41 @@ R `build_athlete_identity_lookup`: athlete_id -> identity from team rosters.
 
 athlete_id (str) -> identity fields for `helper_wbb_player_season_stats`.
 
+### `build_wnba_season_wp(season: 'int', *, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#build_wnba_season_wp}
+
+A WNBA season's play-by-play with win-probability columns joined in.
+
+Loads the season's play-by-play, schedule, and team boxscores, builds a
+leakage-free weekly as-of pregame anchor per game from the WNBA ratings
+engine (`league_id="10"`), scores every play through the bundled
+in-game win-probability artifact, and returns the full `load_wnba_pbp`
+frame with `pregame_home_prob` + `home_win_prob` appended -- the
+enrich-in-place shape that overwrites the season's
+`play_by_play_<season>.parquet` release asset.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `int` |  | Season year (e.g. `2024`); bounded by `load_wnba_pbp` release availability. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+The season's `load_wnba_pbp` frame (every column preserved) with the two WP columns `pregame_home_prob` + `home_win_prob` appended (both `Float64`), sorted by `game_id` then `game_play_number`.
+
+**Example**
+
+```python
+from sportsdataverse.wnba import build_wnba_season_wp
+wp = build_wnba_season_wp(2024)
+wp.select("game_id", "game_play_number", "home_win_prob").head()
+
+# Pandas output
+
+wp_pd = build_wnba_season_wp(2024, return_as_pandas=True)
+```
+
 ### `espn_wnba_teams(return_as_pandas=False, **kwargs) -> 'pl.DataFrame'` {#espn_wnba_teams}
 
 espn_wnba_teams - look up WNBA teams
