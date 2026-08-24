@@ -139,6 +139,83 @@ def classify_zone_type(type_text: "str | None") -> "str | None":
     return None
 
 
+def period_and_sec_left(minute: float, *, league: str, season: int) -> "tuple[int | None, float | None]":
+    """Derive ``(period, sec_left)`` from a shot's ascending game-clock minute.
+
+    ``ShotEvent.min`` is ascending ELAPSED minutes for the whole game, so the
+    period has to be recovered from the era's period schedule -- and the era is
+    not a constant.
+
+    **WBB is HALVES before season 2016**, quarters from 2016; MBB has always
+    been halves. :func:`~sportsdataverse.mbb.mbb_ncaa_stints.start_time_from_period`
+    takes a BOOLEAN ``is_women_game`` and unconditionally assumes quarters for
+    women, so using it here would silently label a pre-2016 WBB game's first
+    half as "quarter 1" and put ``sec_left`` on a 10-minute clock that ran for
+    20. The season-aware model is resolved through
+    :func:`~sportsdataverse.scrape.ncaa.parse.wbb_period_model` instead.
+
+    Args:
+        minute: Ascending elapsed game time in minutes (``ShotEvent.min``).
+        league: ``"mbb"`` or ``"wbb"``.
+        season: Season-ending year.
+
+    Returns:
+        ``(period, sec_left)`` -- 1-indexed period and seconds remaining IN that
+        period. ``(None, None)`` when ``minute`` is missing or negative, so a
+        bad clock stays unresolved rather than becoming a confident wrong period.
+
+    **Seconds-left-in-PERIOD, matching the ESPN path.** This is not an
+    assumption: :func:`espn_shots_to_canonical` builds ``sec_left`` from
+    ESPN's ``clock_display_value`` (``"12:34"`` -> ``12*60 + 34``), which is the
+    DESCENDING clock within the current period, paired with ``period_number``.
+    Both sources land in the same frame distinguished only by ``source``, so a
+    consumer filtering across ESPN and NCAA rows would silently mix two
+    definitions if these disagreed.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.mbb.mbb_shots_adapter import period_and_sec_left
+            period_and_sec_left(25.0, league="mbb", season=2024)   # (2, 900.0)
+            period_and_sec_left(25.0, league="wbb", season=2024)   # (3, 300.0)
+            period_and_sec_left(25.0, league="wbb", season=2014)   # (2, 900.0) -- halves era
+    """
+    if minute is None:
+        return None, None
+    try:
+        m = float(minute)
+    except (TypeError, ValueError):
+        return None, None
+    if m < 0:
+        return None, None
+
+    # This module speaks "mens"/"womens"; the release/league layer speaks
+    # "mbb"/"wbb". Accept BOTH -- matching only one vocabulary would silently
+    # give women's games the men's halves schedule and mislabel every quarter.
+    if str(league).lower() in ("wbb", "womens", "women", "w"):
+        from sportsdataverse.scrape.ncaa.parse import wbb_period_model
+
+        periods, reg_seconds, ot_seconds = wbb_period_model(str(season))
+    else:
+        periods, reg_seconds, ot_seconds = 2, 1200, 300
+
+    reg_len = reg_seconds / 60.0
+    ot_len = ot_seconds / 60.0
+    reg_total = periods * reg_len
+
+    if m < reg_total:
+        idx = int(m // reg_len)
+        period = idx + 1
+        start = idx * reg_len
+        return period, round((reg_len - (m - start)) * 60.0, 1)
+
+    over = m - reg_total
+    ot_idx = int(over // ot_len)
+    period = periods + ot_idx + 1
+    start = reg_total + ot_idx * ot_len
+    return period, round((ot_len - (m - start)) * 60.0, 1)
+
+
 def shot_events_to_frame(
     events: list[ShotEvent],
     *,
@@ -190,8 +267,12 @@ def shot_events_to_frame(
                 "shot_type": "unknown",
                 "made": e.pts == 1,
                 "point_value": classify_point_value(dist, x, y, league=league, season=season),
-                "period": None,
-                "sec_left": None,
+                **dict(
+                    zip(
+                        ("period", "sec_left"),
+                        period_and_sec_left(e.min, league=league, season=season),
+                    )
+                ),
                 "source": "ncaa",
             }
         )
