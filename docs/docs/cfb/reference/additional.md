@@ -2910,6 +2910,41 @@ st = special_teams_ratings(pbp)
 st.sort("adj_st_epa", descending=True).head()
 ```
 
+### `to_cfbfastr(pbp: 'pl.DataFrame', *, season: "'Optional[int]'" = None, week: "'Optional[int]'" = None, drives: "'Optional[pl.DataFrame]'" = None, linescore: "'Optional[pl.DataFrame]'" = None, drive_titles: "'Optional[pl.DataFrame]'" = None, ot_drives: "'Optional[pl.DataFrame]'" = None, scoring_summary: "'Optional[pl.DataFrame]'" = None, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#to_cfbfastr}
+
+cfbfastR-named play frame from the NCAA structural pbp frame.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pbp` | `DataFrame` |  | Output of `sportsdataverse.cfb.cfb_ncaa_pbp.parse_cfb_ncaa_pbp` (one game). |
+| `season` | `Optional[int]` | `None` | Season year (2025 = fall-2025), written to `season`/`year`. |
+| `week` | `Optional[int]` | `None` | Optional week number (from the schedule master). |
+| `drives` | `Optional[DataFrame]` | `None` | Optional `sportsdataverse.cfb.cfb_ncaa_box.parse_cfb_ncaa_drives` frame -- refines `period` per drive when quarter markers are missing from the pbp page. |
+| `linescore` | `Optional[DataFrame]` | `None` | Optional `sportsdataverse.cfb.cfb_ncaa_box.parse_cfb_ncaa_linescore` frame -- provides `home`/`away` team names and the official per-team finals. |
+| `drive_titles` | `Optional[DataFrame]` | `None` | Optional `sportsdataverse.cfb.cfb_ncaa_pbp.parse_cfb_ncaa_drive_titles` frame -- authoritative per-drive team labels (fixes graduated-parser team truncation) and running-score checkpoints the play-level score snaps to at each drive boundary (self-heals OT scoring rules + missed events). |
+| `ot_drives` | `Optional[DataFrame]` | `None` | Optional `sportsdataverse.cfb.cfb_ncaa_box.parse_cfb_ncaa_drives` frame for the OT-synthesis pass -- overtime rows (`period > 4`) are selected internally, so the full drives frame can be passed as-is. |
+| `scoring_summary` | `Optional[DataFrame]` | `None` | Optional `sportsdataverse.cfb.cfb_ncaa_box.parse_cfb_ncaa_scoring_summary` frame -- running-score checkpoints for the synthesized OT rows and the final-drive snap. |
+| `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of `polars`. |
+
+**Returns**
+
+A `polars.DataFrame` (or `pandas.DataFrame` when `return_as_pandas`) with one row per play (markers/furniture dropped) and the columns of `CFBFASTR_SCHEMA`. Empty input returns a **zero-row frame carrying the documented schema**.
+
+**Example**
+
+```python
+from sportsdataverse.cfb import parse_cfb_ncaa_pbp, to_cfbfastr
+pbp = parse_cfb_ncaa_pbp(open("play_by_play_5362431.html").read(), contest_id=5362431)
+df = to_cfbfastr(pbp, season=2024)
+print(df.shape)
+
+# Final score from the running-score columns
+
+df.select("pos_team", "pos_team_score", "def_pos_team", "def_pos_team_score").row(-1)
+```
+
 ### `win_prob_from_margin(exp_margin: 'float', *, era: 'str' = 'modern') -> 'float'` {#win_prob_from_margin}
 
 Home win probability from an expected margin via the Gaussian CDF.
