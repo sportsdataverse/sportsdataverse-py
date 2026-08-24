@@ -49,13 +49,15 @@ __all__ = [
     "STINT_SCHEMA",
     "aggregate_stints",
     "solve_rapm_league",
+    "team_aggregate",
 ]
 
-#: Ridge penalty on the possession-weighted per-100 scale. Placeholder pending
-#: the Phase-4 fitting script (game-grouped CV on real 2024 seasons, both
-#: leagues); the gate phase overwrites this with the fitted value and cites
-#: the script. Do not tune ad hoc.
-DEFAULT_RIDGE_LAMBDA = 500.0
+#: Ridge penalty on the possession-weighted per-100 scale. Fitted by
+#: game-grouped 5-fold CV (``dev/ncaa_rapm/fit_lambda_league.py``) on the
+#: real 2024 seasons: BOTH leagues minimize weighted OOS MSE at 1000
+#: (mbb 5145.33 over a 50..5000 grid; wbb 4910.74). Refit with that script;
+#: do not tune ad hoc.
+DEFAULT_RIDGE_LAMBDA = 1000.0
 
 #: The ten id slots emitted by ``resolve_possessions`` (``"<slot>_id"``).
 _SLOT_IDS = [f"{side}_{i}_id" for side in ("home", "away") for i in range(1, 6)]
@@ -149,6 +151,80 @@ def aggregate_stints(resolved: pl.DataFrame) -> pl.DataFrame:
             pl.col("pts").cast(pl.Int64).sum().alias("pts"),
         )
         .select(list(STINT_SCHEMA))
+    )
+
+
+_TEAM_AGG_SCHEMA: dict[str, pl.DataType] = {
+    "team": pl.Utf8,
+    "team_orapm": pl.Float64,
+    "team_drapm": pl.Float64,
+    "team_net": pl.Float64,
+    "off_poss": pl.Int64,
+    "def_poss": pl.Int64,
+}
+
+
+def _side_aggregate(
+    stints: pl.DataFrame, players: pl.DataFrame, ids: str, team: str, coef: str, out: str
+) -> pl.DataFrame:
+    per_stint = (
+        stints.with_row_index("_r")
+        .select("_r", pl.col(team).alias("team"), "n_poss", pl.col(ids).alias("player_id"))
+        .explode("player_id", empty_as_null=False)
+        .join(players.select("player_id", coef), on="player_id", how="left")
+        .group_by("_r", "team", "n_poss")
+        .agg(pl.col(coef).fill_null(0.0).sum().alias("_sum"))
+    )
+    poss_col = "off_poss" if ids == "off_ids" else "def_poss"
+    return per_stint.group_by("team").agg(
+        ((pl.col("_sum") * pl.col("n_poss")).sum() / pl.col("n_poss").sum()).alias(out),
+        pl.col("n_poss").sum().cast(pl.Int64).alias(poss_col),
+    )
+
+
+def team_aggregate(stints: pl.DataFrame, players: pl.DataFrame) -> pl.DataFrame:
+    """Model-implied team ratings from player coefficients.
+
+    For each team: ``team_orapm`` is the possession-weighted mean over its
+    offensive stints of the on-floor five's ``orapm`` sum; ``team_drapm``
+    likewise with ``drapm`` over its defensive stints; ``team_net`` is their
+    sum. This is exactly what the fitted model predicts for the team's
+    average possession (excluding opponent terms and home-court), so it is
+    the faithful aggregate to hold against an external team rating (Torvik
+    AdjEM) in the oracle gate.
+
+    Args:
+        stints: Output of :func:`aggregate_stints`.
+        players: Players frame from :func:`solve_rapm_league` (needs
+            ``player_id``, ``orapm``, ``drapm``). A player absent from it
+            contributes 0 -- the model's own convention for an unrated
+            column.
+
+    Returns:
+        One row per team: ``team``, ``team_orapm``, ``team_drapm``,
+        ``team_net``, ``off_poss``, ``def_poss``.
+
+    Example:
+        Gate a season against Torvik::
+
+            teams = team_aggregate(stints, players)
+            joined = teams.join(torvik, on="team", how="inner")
+    """
+    if stints.height == 0:
+        return pl.DataFrame(schema=_TEAM_AGG_SCHEMA)
+    off = _side_aggregate(stints, players, "off_ids", "off_team", "orapm", "team_orapm")
+    dfn = _side_aggregate(stints, players, "def_ids", "def_team", "drapm", "team_drapm")
+    return (
+        off.join(dfn, on="team", how="full", coalesce=True)
+        .with_columns(
+            pl.col("team_orapm").fill_null(0.0),
+            pl.col("team_drapm").fill_null(0.0),
+            pl.col("off_poss").fill_null(0).cast(pl.Int64),
+            pl.col("def_poss").fill_null(0).cast(pl.Int64),
+        )
+        .with_columns((pl.col("team_orapm") + pl.col("team_drapm")).alias("team_net"))
+        .select(list(_TEAM_AGG_SCHEMA))
+        .sort("team")
     )
 
 

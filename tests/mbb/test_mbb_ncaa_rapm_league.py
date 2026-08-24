@@ -19,6 +19,7 @@ from sportsdataverse.mbb.mbb_ncaa_rapm_league import (
     STINT_SCHEMA,
     aggregate_stints,
     solve_rapm_league,
+    team_aggregate,
 )
 
 # Ten id slots in resolve_possessions' output naming: "<slot>_id".
@@ -248,3 +249,74 @@ class TestSolveRapmLeague:
         s = _balanced_stints(n=5)
         players, _ = solve_rapm_league(s, ridge_lambda=100.0, return_as_pandas=True)
         assert isinstance(players, pd.DataFrame)
+
+
+def _players(**net):
+    """players frame with orapm = value, drapm = 0 for each id."""
+    ids = sorted(net)
+    return pl.DataFrame(
+        {
+            "player_id": ids,
+            "orapm": [float(net[p]) for p in ids],
+            "drapm": [0.0] * len(ids),
+            "rapm_net": [float(net[p]) for p in ids],
+            "off_poss": [0] * len(ids),
+            "def_poss": [0] * len(ids),
+        }
+    )
+
+
+class TestTeamAggregate:
+    def test_weighted_mean_of_on_floor_sums(self):
+        # Duke offense: stint A (sum orapm 5.0, 30 poss), stint B (sum 0.0,
+        # 10 poss) -> team_orapm = (5*30 + 0*10) / 40 = 3.75.
+        rows = [("Duke", "Iowa", "Duke", 0, _H, _A)] * 30 + [("Duke", "Iowa", "Duke", 0, _H[:4] + ["h6"], _A)] * 10
+        s = aggregate_stints(_poss(rows))
+        players = _players(h1=1, h2=1, h3=1, h4=1, h5=1, h6=-4)
+        t = team_aggregate(s, players)
+        duke = t.filter(pl.col("team") == "Duke")
+        assert abs(duke["team_orapm"][0] - 3.75) < 1e-12
+
+    def test_defense_side_uses_drapm(self):
+        rows = [("Duke", "Iowa", "Duke", 0, _H, _A)] * 10
+        s = aggregate_stints(_poss(rows))
+        players = _players(h1=0, h2=0, h3=0, h4=0, h5=0)
+        players = pl.concat(
+            [
+                players,
+                pl.DataFrame(
+                    {
+                        "player_id": _A,
+                        "orapm": [0.0] * 5,
+                        "drapm": [2.0] * 5,
+                        "rapm_net": [2.0] * 5,
+                        "off_poss": [0] * 5,
+                        "def_poss": [0] * 5,
+                    }
+                ),
+            ]
+        )
+        t = team_aggregate(s, players)
+        iowa = t.filter(pl.col("team") == "Iowa")
+        assert abs(iowa["team_drapm"][0] - 10.0) < 1e-12
+        assert abs(iowa["team_net"][0] - 10.0) < 1e-12
+
+    def test_player_missing_from_ratings_counts_zero(self):
+        rows = [("Duke", "Iowa", "Duke", 0, _H, _A)] * 5
+        s = aggregate_stints(_poss(rows))
+        players = _players(h1=5)  # h2..h5, a1..a5 absent
+        t = team_aggregate(s, players)
+        duke = t.filter(pl.col("team") == "Duke")
+        assert abs(duke["team_orapm"][0] - 5.0) < 1e-12
+
+    def test_empty_stints_return_documented_schema(self):
+        t = team_aggregate(aggregate_stints(_poss([])), _players())
+        assert t.height == 0
+        assert set(t.columns) == {
+            "team",
+            "team_orapm",
+            "team_drapm",
+            "team_net",
+            "off_poss",
+            "def_poss",
+        }
