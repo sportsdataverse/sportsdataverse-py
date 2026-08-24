@@ -3,6 +3,7 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [Unreleased](#unreleased)
+  - [Added — league-wide NCAA RAPM solver (`mbb_ncaa_rapm_league`, #389)](#added--league-wide-ncaa-rapm-solver-mbb_ncaa_rapm_league-389)
   - [Deprecated — the three NBA `*_v3` loaders now read the production releases](#deprecated--the-three-nba-_v3-loaders-now-read-the-production-releases)
   - [Docs — NBA shifted loaders: the `season` COLUMN is the END year](#docs--nba-shifted-loaders-the-season-column-is-the-end-year)
   - [New — `sportsdataverse.wexp`: win-expectancy bake-off harness (NFL + CFB)](#new--sportsdataversewexp-win-expectancy-bake-off-harness-nfl--cfb)
@@ -232,6 +233,34 @@
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Unreleased
+
+### Added — league-wide NCAA RAPM solver (`mbb_ncaa_rapm_league`, #389)
+
+The league-wide half of the NCAA RAPM program ("Path B"): one joint
+offense/defense ridge per (league, season) putting every Division-I player on
+a common scale — complementing the published `ncaa_{lg}_rapm_within_team`
+datasets, which estimate a DIFFERENT quantity (value relative to teammates)
+and must never be cross-joined with these.
+
+- `aggregate_stints` collapses id-resolved possessions (the #382
+  `mbb_ncaa_rapm_input` adapter output) into matchup stints; a
+  possession-weighted stint ridge is mathematically identical to the
+  per-possession ridge at ~1/3 the rows. Possessions with any unresolved
+  on-floor slot are dropped, never imputed.
+- `solve_rapm_league` runs the sparse joint solve (per-100 scale, positive
+  `drapm` = good defense, ±1 home-offense column). `DEFAULT_RIDGE_LAMBDA =
+  1000` was fitted by game-grouped 5-fold CV on the real 2024 corpora — both
+  leagues minimize there independently. Non-converged solves raise instead
+  of returning a partial iterate.
+- `team_aggregate` produces the model-implied team ratings used by the
+  external oracle gate. Validated on the full corpus: Torvik AdjEM Spearman
+  ≥ 0.9434 (MBB 2011–2026, median 0.9653) and ≥ 0.9723 (WBB 2022–2026;
+  0.9039 in the COVID 2021 season).
+
+The module is league-blind (frames in, frames out) — WBB passes its own
+frames; there is deliberately no `wbb_` twin. Companion `sportsdataverse.mbb`
+adapter fixes from the same program: cross-season `person_id` resolution
+(#382) and the canonical `display_name_to_roster_key` (#388).
 
 ### Deprecated — the three NBA `*_v3` loaders now read the production releases
 
