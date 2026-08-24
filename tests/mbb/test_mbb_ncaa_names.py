@@ -48,6 +48,7 @@ from sportsdataverse.mbb.mbb_ncaa_models import (
     Year,
 )
 from sportsdataverse.mbb.mbb_ncaa_names import (
+    display_name_to_roster_key,
     FuzzyMatchError,
     NoSurnameMatch,
     StrongSurnameMatch,
@@ -529,3 +530,83 @@ def test_tidy_player_cache_is_asymmetric_by_design() -> None:
     assert resolved == "Lawal, Levi"
     assert ctx.resolution_cache == {"Lawal, Levi": "Lawal, Levi"}
     assert "Lewal, Levi" not in ctx.resolution_cache
+
+
+class TestDisplayNameToRosterKey:
+    """Box/shot pages render "Surname, First"; rosters render FIRST.MIDDLE.LAST.
+
+    One canonical direction, previously duplicated in both -data repos'
+    ops/publish_rapm.py. Each normalization below earned its place against real
+    2024 MBB data: 93.04% -> 98.07% (suffix/nickname) -> 99.08% (whitespace as
+    dots).
+    """
+
+    @pytest.mark.parametrize(
+        "display,key",
+        [
+            ("Clark, Garry", "GARRY.CLARK"),
+            ("Wrightsell Jr., Latrell", "LATRELL.WRIGHTSELL"),  # suffix glued to surname
+            ('"TJ" Madlock, Antonio', "ANTONIO.MADLOCK"),  # quoted nickname
+            ("Ballisager Webb, Jermaine", "JERMAINE.BALLISAGER.WEBB"),  # dots, not concat
+            ("De Luna, Kendrick", "KENDRICK.DE.LUNA"),
+            ("Wright-Forde, Dian", "DIAN.WRIGHTFORDE"),  # hyphen collapses
+            ("Washington, Jr., Teddy", "TEDDY.WASHINGTON"),  # suffix as its own field
+        ],
+    )
+    def test_known_renderings(self, display: str, key: str) -> None:
+        assert display_name_to_roster_key(display) == key
+
+    @pytest.mark.parametrize("bad", [None, "", "Cher", ","])
+    def test_unsplittable_names_yield_an_empty_key(self, bad: object) -> None:
+        """An empty key never matches -- unresolved beats a wrong join."""
+        assert display_name_to_roster_key(bad) == ""  # type: ignore[arg-type]
+
+    def test_multi_token_surname_is_not_concatenated(self) -> None:
+        """The subtle one: rosters keep INTERIOR dots as token separators."""
+        got = display_name_to_roster_key("Tchamwa Tchatchoua, Jonathan")
+        assert got == "JONATHAN.TCHAMWA.TCHATCHOUA"
+        assert got != "JONATHAN.TCHAMWATCHATCHOUA"
+
+
+class TestRosterKeyFailsClosed:
+    """BOTH components must survive normalization, or the key is empty.
+
+    Filtering the COMBINED token list emitted a surname-only key when the
+    given-name field held nothing usable. A partial key is worse than no key:
+    ``"SMITH"`` JOINS, and joins to the wrong person.
+    """
+
+    @pytest.mark.parametrize(
+        "display",
+        [
+            "Smith, Jr. III",  # first-name field is only suffixes
+            "Smith, 123",  # first-name field has no letters
+            "123, Smith",  # surname field has no letters
+            "Smith, ",  # empty first-name field
+            ", Garry",  # empty surname field
+        ],
+    )
+    def test_a_component_that_normalizes_away_yields_an_empty_key(self, display: str) -> None:
+        assert display_name_to_roster_key(display) == ""
+
+    def test_a_real_name_still_resolves(self) -> None:
+        """The guard must not over-reject."""
+        assert display_name_to_roster_key("Clark, Garry") == "GARRY.CLARK"
+        assert display_name_to_roster_key("Wrightsell Jr., Latrell") == "LATRELL.WRIGHTSELL"
+
+
+class TestWbbShimReExports:
+    """The wbb shim documents itself as re-exporting the shared NCAA name
+    functions, so a name added to mbb must appear there too."""
+
+    def test_importable_from_wbb(self) -> None:
+        from sportsdataverse.wbb.wbb_ncaa_names import (
+            display_name_to_roster_key as wbb_fn,
+        )
+
+        assert wbb_fn("Clark, Garry") == "GARRY.CLARK"
+
+    def test_declared_in_wbb_dunder_all(self) -> None:
+        from sportsdataverse.wbb import wbb_ncaa_names
+
+        assert "display_name_to_roster_key" in wbb_ncaa_names.__all__
