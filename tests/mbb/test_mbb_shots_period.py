@@ -136,3 +136,45 @@ class TestNonFiniteClock:
     @pytest.mark.parametrize("bad", [float("nan"), float("inf"), float("-inf")])
     def test_non_finite_returns_none_rather_than_raising(self, bad: float) -> None:
         assert period_and_sec_left(bad, league="mbb", season=2024) == (None, None)
+
+
+class TestDisplayNameToRosterKey:
+    """Box/shot pages render "Surname, First"; rosters render FIRST.MIDDLE.LAST.
+
+    One canonical direction, previously duplicated in both -data repos'
+    ops/publish_rapm.py. Each normalization below earned its place against real
+    2024 MBB data: 93.04% -> 98.07% (suffix/nickname) -> 99.08% (whitespace as
+    dots).
+    """
+
+    @pytest.mark.parametrize(
+        "display,key",
+        [
+            ("Clark, Garry", "GARRY.CLARK"),
+            ("Wrightsell Jr., Latrell", "LATRELL.WRIGHTSELL"),  # suffix glued to surname
+            ('"TJ" Madlock, Antonio', "ANTONIO.MADLOCK"),  # quoted nickname
+            ("Ballisager Webb, Jermaine", "JERMAINE.BALLISAGER.WEBB"),  # dots, not concat
+            ("De Luna, Kendrick", "KENDRICK.DE.LUNA"),
+            ("Wright-Forde, Dian", "DIAN.WRIGHTFORDE"),  # hyphen collapses
+            ("Washington, Jr., Teddy", "TEDDY.WASHINGTON"),  # suffix as its own field
+        ],
+    )
+    def test_known_renderings(self, display: str, key: str) -> None:
+        from sportsdataverse.mbb.mbb_ncaa_names import display_name_to_roster_key
+
+        assert display_name_to_roster_key(display) == key
+
+    @pytest.mark.parametrize("bad", [None, "", "Cher", ","])
+    def test_unsplittable_names_yield_an_empty_key(self, bad: object) -> None:
+        """An empty key never matches -- unresolved beats a wrong join."""
+        from sportsdataverse.mbb.mbb_ncaa_names import display_name_to_roster_key
+
+        assert display_name_to_roster_key(bad) == ""  # type: ignore[arg-type]
+
+    def test_multi_token_surname_is_not_concatenated(self) -> None:
+        """The subtle one: rosters keep INTERIOR dots as token separators."""
+        from sportsdataverse.mbb.mbb_ncaa_names import display_name_to_roster_key
+
+        got = display_name_to_roster_key("Tchamwa Tchatchoua, Jonathan")
+        assert got == "JONATHAN.TCHAMWA.TCHATCHOUA"
+        assert got != "JONATHAN.TCHAMWATCHATCHOUA"
