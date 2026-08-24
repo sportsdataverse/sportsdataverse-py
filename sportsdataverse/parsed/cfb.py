@@ -452,6 +452,7 @@ from sportsdataverse.cfb import predict_total as predict_total  # noqa: F401
 from sportsdataverse.cfb import scoreboard_event_parsing as scoreboard_event_parsing  # noqa: F401
 from sportsdataverse.cfb import slope_for_games as slope_for_games  # noqa: F401
 from sportsdataverse.cfb import special_teams_ratings as special_teams_ratings  # noqa: F401
+from sportsdataverse.cfb import to_cfbfastr as to_cfbfastr  # noqa: F401
 from sportsdataverse.cfb import underscore as underscore  # noqa: F401
 from sportsdataverse.cfb import win_prob_from_margin as win_prob_from_margin  # noqa: F401
 
@@ -834,6 +835,7 @@ __all__ = [
     "sports247_transfer_portal_player_feed",
     "sports247_transfer_portal_team_feed",
     "sports247_transfers",
+    "to_cfbfastr",
     "underscore",
     "win_prob_from_margin",
     "yahoo_cfb_boxscore",

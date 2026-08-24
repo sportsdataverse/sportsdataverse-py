@@ -113,6 +113,8 @@ DRIVES_SCHEMA: "dict[str, pl.DataType]" = {
     "end_how": pl.Utf8,
     "end_clock": pl.Utf8,
     "end_yard_line": pl.Utf8,
+    "n_plays": pl.Int64,
+    "yards": pl.Int64,
 }
 
 
@@ -140,8 +142,9 @@ def parse_cfb_ncaa_drives(
 
     Columns: ``drive_number``, ``quarter``, ``period``, ``team``,
     ``start_period``/``start_how`` (KO/PUNT/DOWNS/…)/``start_clock``/
-    ``start_yard_line``, and the ``end_*`` equivalents (``end_how`` =
-    TD/FGA/PUNT/DOWNS/…).
+    ``start_yard_line``, the ``end_*`` equivalents (``end_how`` =
+    TD/FGA/PUNT/DOWNS/…), and the drive totals ``n_plays`` / ``yards``
+    (``yards`` keeps its sign; both null when the page omits the cells).
 
     ``quarter`` is the page's Quarter cell as an int and is **null for overtime
     drives** (the cell reads ``"1OT"``/``"2OT"``); ``period`` preserves those as
@@ -170,6 +173,8 @@ def parse_cfb_ncaa_drives(
                     "end_how": r[8] or None,
                     "end_clock": r[9] or None,
                     "end_yard_line": r[10] or None,
+                    "n_plays": _int(r[11]) if len(r) > 11 else None,
+                    "yards": _int(r[12]) if len(r) > 12 else None,
                 }
             )
     return _finish(rows, DRIVES_SCHEMA, return_as_pandas)

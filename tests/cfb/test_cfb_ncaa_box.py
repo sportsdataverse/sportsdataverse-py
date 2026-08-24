@@ -54,6 +54,15 @@ def test_drives_start_end_vocab() -> None:
     assert yl.get_column("start_yard_line").str.contains(r"^[A-Z]{2,4}\d+$").all()
 
 
+def test_drives_totals_populated() -> None:
+    df = parse_cfb_ncaa_drives(_rd("drives"), contest_id="5362283")
+    # the drives table's trailing "# Plays"/"Yards" cells; a lost-yardage
+    # drive keeps its sign, so only n_plays is strictly positive
+    assert df.get_column("n_plays").is_not_null().all()
+    assert (df.get_column("n_plays") >= 1).all()
+    assert df.get_column("yards").is_not_null().all()
+
+
 def test_drives_empty() -> None:
     df = parse_cfb_ncaa_drives("")
     assert df.height == 0 and df.columns == list(DRIVES_SCHEMA.keys())
