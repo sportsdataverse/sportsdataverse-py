@@ -35,13 +35,20 @@ from bs4 import BeautifulSoup
 if TYPE_CHECKING:
     import pandas as pd
 
-__all__ = ["PBP_SCHEMA", "parse_college_baseball_ncaa_pbp"]
+__all__ = [
+    "PBP_SCHEMA",
+    "decompose_college_baseball_plays",
+    "parse_college_baseball_ncaa_pbp",
+]
 
 # NCAA "Last, F" / "Last, First" incl. hyphens and apostrophes ("S-Johnson, C").
 # NCAA batter/runner name. Baseball writes "Last, First" (Brooks, M.); softball
 # writes last-name only (Hasapis). The ", First" part is therefore OPTIONAL so one
 # parser handles both -- verified e2e against a real WSB game (contest 6548848).
-_NAME = r"[A-Z][A-Za-z'.\-]+(?:,\s*[A-Z][A-Za-z'.\-]*\.?)?"
+# Three era/site spellings: modern "Last, F." (Canci, A.), legacy R-era
+# "First Last" (Andres Canci -- multi-word, verbs are lowercase so additional
+# capitalized words are safely part of the name), softball bare "Last".
+_NAME = r"[A-Z][A-Za-z'.\-]+(?:\s+[A-Z][A-Za-z'.\-]+)*(?:,\s*[A-Z][A-Za-z'.\-]*\.?)?"
 
 # Clause separator inside a description (literal "3a", always followed by a
 # capital-led clause). Python re -> lookahead is fine here (not a polars expr).
@@ -61,8 +68,8 @@ _SCORED_RE = re.compile(rf"^({_NAME})\s+scored")
 _ADVANCED_RE = re.compile(rf"^({_NAME})\s+advanced to (\w+)")
 _OUT_RE = re.compile(r"\bout (?:at|on)\b")
 _POS_CODES = r"(?:p|1b|2b|3b|ss|lf|cf|rf|c|dh|ph|pr|dp|flex)"
-# A single "Last" or "Last, F" name (no intervening spaces/verbs).
-_SUB_NAME = r"[A-Z][A-Za-z'.\-]+(?:,\s*[A-Z][A-Za-z'.\-]*\.?)?"
+# A "Last", "Last, F", or legacy "First Last" name (no intervening verbs).
+_SUB_NAME = r"[A-Z][A-Za-z'.\-]+(?:\s+[A-Z][A-Za-z'.\-]+)*(?:,\s*[A-Z][A-Za-z'.\-]*\.?)?"
 # A substitution clause = "<player> to <pos>" (optionally "for <player>") and the
 # WHOLE clause is just that. The player name sits DIRECTLY before "to <pos>" -- no
 # action verb between -- which separates it both from a batted ball ("singled to
@@ -265,6 +272,76 @@ PBP_SCHEMA: "dict[str, pl.DataType]" = {
 }
 
 
+def decompose_college_baseball_plays(
+    rows: "list[dict]",
+    *,
+    return_as_pandas: bool = False,
+) -> "Union[pl.DataFrame, pd.DataFrame]":
+    """Decompose pre-extracted play rows into the full :data:`PBP_SCHEMA` frame.
+
+    The row-level half of :func:`parse_college_baseball_ncaa_pbp` -- the play-text
+    decomposition engine without the HTML extraction. This is the entry point
+    for sources that already hold the base play fields, e.g. the legacy R-era
+    ``baseballr-data`` trees (2012-2023: ``description``/``inning``/
+    ``inning_top_bot``/``batting``/``fielding``/``score``), so legacy and
+    freshly captured games resolve into IDENTICAL pbp columns.
+
+    Args:
+        rows: One dict per play. Recognized keys (all optional except
+            ``description``): ``contest_id``, ``inning`` (int),
+            ``inning_top_bot`` (``"top"``/``"bot"``), ``batting``, ``fielding``,
+            ``play_number``, ``score_away``/``score_home`` (ints) or a combined
+            ``score`` string (``"3-2"``, away-home), and ``description``.
+            Unrecognized keys are ignored; ``play_number`` defaults to the
+            1-based position in *rows*.
+        return_as_pandas: Return a ``pandas.DataFrame`` instead of ``polars``.
+
+    Returns:
+        One row per input play with every text-derivable :data:`PBP_SCHEMA`
+        column populated (``play_type``, hit/out flags, ``rbi``,
+        ``pitch_sequence``, runner movement, ...). Empty input returns a
+        zero-row frame with the documented schema.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.baseball.college_baseball import decompose_college_baseball_plays
+            df = decompose_college_baseball_plays(
+                [{"inning": 1, "inning_top_bot": "top", "score": "0-0",
+                  "description": "Jack Moss singled to left field (1-2 KBFX)."}]
+            )
+            print(df.select("play_type", "is_hit", "pitch_sequence").row(0))
+
+        See Also:
+            * `baseballr`_ -- NCAA baseball via R (table-scrape pbp)
+
+        .. _baseballr: https://billpetti.github.io/baseballr/
+    """
+    out: "list[dict]" = []
+    for i, r in enumerate(rows, start=1):
+        sa, sh = r.get("score_away"), r.get("score_home")
+        if sa is None and sh is None:
+            sm = re.match(r"^\s*(\d+)\s*-\s*(\d+)\s*$", str(r.get("score") or ""))
+            if sm:
+                sa, sh = int(sm.group(1)), int(sm.group(2))
+        desc = r.get("description") or ""
+        row = {
+            "contest_id": str(r["contest_id"]) if r.get("contest_id") is not None else None,
+            "inning": int(r["inning"]) if r.get("inning") is not None else None,
+            "inning_top_bot": r.get("inning_top_bot"),
+            "batting": r.get("batting"),
+            "fielding": r.get("fielding"),
+            "play_number": int(r.get("play_number") or i),
+            "score_away": sa,
+            "score_home": sh,
+            "description": desc,
+        }
+        row.update(_decompose(desc))
+        out.append(row)
+    df = pl.DataFrame(out, schema=PBP_SCHEMA) if out else pl.DataFrame(schema=PBP_SCHEMA)
+    return df.to_pandas() if return_as_pandas else df
+
+
 def parse_college_baseball_ncaa_pbp(
     html: str,
     contest_id: "str | int | None" = None,
@@ -328,23 +405,19 @@ def parse_college_baseball_ncaa_pbp(
             else:
                 continue
             play_number += 1
-            sa, sh = None, None
-            sm = re.match(r"^\s*(\d+)\s*-\s*(\d+)\s*$", score or "")
-            if sm:
-                sa, sh = int(sm.group(1)), int(sm.group(2))
-            row = {
-                "contest_id": cid,
-                "inning": inning_idx,
-                "inning_top_bot": half,
-                "batting": batting,
-                "fielding": fielding,
-                "play_number": play_number,
-                "score_away": sa,
-                "score_home": sh,
-                "description": desc,
-            }
-            row.update(_decompose(desc))
-            rows.append(row)
+            rows.append(
+                {
+                    "contest_id": cid,
+                    "inning": inning_idx,
+                    "inning_top_bot": half,
+                    "batting": batting,
+                    "fielding": fielding,
+                    "play_number": play_number,
+                    "score": score,
+                    "description": desc,
+                }
+            )
 
-    df = pl.DataFrame(rows, schema=PBP_SCHEMA) if rows else pl.DataFrame(schema=PBP_SCHEMA)
-    return df.to_pandas() if return_as_pandas else df
+    # extraction above, decomposition below -- one engine for HTML captures and
+    # pre-extracted rows (the legacy R-era trees) alike
+    return decompose_college_baseball_plays(rows, return_as_pandas=return_as_pandas)

@@ -267,6 +267,39 @@ wpa = cricket_wpa(cricket_win_probability(state))
 wpa.select("wpa_batting", "wpa_bowling").head()
 ```
 
+### `decompose_college_baseball_plays(rows: "'list[dict]'", *, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#decompose_college_baseball_plays}
+
+Decompose pre-extracted play rows into the full `PBP_SCHEMA` frame.
+
+The row-level half of `parse_college_baseball_ncaa_pbp` -- the play-text
+decomposition engine without the HTML extraction. This is the entry point
+for sources that already hold the base play fields, e.g. the legacy R-era
+`baseballr-data` trees (2012-2023: `description`/`inning`/
+`inning_top_bot`/`batting`/`fielding`/`score`), so legacy and
+freshly captured games resolve into IDENTICAL pbp columns.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `rows` | `list[dict]` |  | One dict per play. Recognized keys (all optional except `description`): `contest_id`, `inning` (int), `inning_top_bot` (`"top"`/`"bot"`), `batting`, `fielding`, `play_number`, `score_away`/`score_home` (ints) or a combined `score` string (`"3-2"`, away-home), and `description`. Unrecognized keys are ignored; `play_number` defaults to the 1-based position in *rows*. |
+| `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of `polars`. |
+
+**Returns**
+
+One row per input play with every text-derivable `PBP_SCHEMA` column populated (`play_type`, hit/out flags, `rbi`, `pitch_sequence`, runner movement, ...). Empty input returns a zero-row frame with the documented schema.
+
+**Example**
+
+```python
+from sportsdataverse.baseball.college_baseball import decompose_college_baseball_plays
+df = decompose_college_baseball_plays(
+    [{"inning": 1, "inning_top_bot": "top", "score": "0-0",
+      "description": "Jack Moss singled to left field (1-2 KBFX)."}]
+)
+print(df.select("play_type", "is_hit", "pitch_sequence").row(0))
+```
+
 ### `get_cache_mode() -> 'str'` {#get_cache_mode}
 
 Return the current cache mode.
