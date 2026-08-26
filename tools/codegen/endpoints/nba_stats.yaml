@@ -8075,6 +8075,164 @@ endpoints:
 - example_args:
     league_id: '00'
   extra_params:
+  - default: FGA
+    name: context_measure_detailed
+    query_key: ContextMeasure
+    type: str
+  - default: '0'
+    name: last_n_games
+    query_key: LastNGames
+    type: str
+  - default: '0'
+    name: month
+    query_key: Month
+    type: str
+  - default: '0'
+    name: opponent_team_id
+    query_key: OpponentTeamID
+    type: str
+  - default: '0'
+    name: period
+    query_key: Period
+    type: str
+  - default: '2544'
+    name: player_id
+    query_key: PlayerID
+    type: str
+  - default: null
+    name: season
+    query_key: Season
+    type: str
+  - default: Regular Season
+    name: season_type_all_star
+    query_key: SeasonType
+    type: str
+  - default: '1610612747'
+    name: team_id
+    query_key: TeamID
+    type: str
+  - default: ''
+    name: vs_division_nullable
+    query_key: VsDivision
+    type: str
+  - default: ''
+    name: vs_conference_nullable
+    query_key: VsConference
+    type: str
+  - default: ''
+    name: start_range_nullable
+    query_key: StartRange
+    type: str
+  - default: ''
+    name: start_period_nullable
+    query_key: StartPeriod
+    type: str
+  - default: ''
+    name: season_segment_nullable
+    query_key: SeasonSegment
+    type: str
+  - default: ''
+    name: rookie_year_nullable
+    query_key: RookieYear
+    type: str
+  - default: ''
+    name: range_type_nullable
+    query_key: RangeType
+    type: str
+  - default: ''
+    name: position_nullable
+    query_key: Position
+    type: str
+  - default: ''
+    name: point_diff_nullable
+    query_key: PointDiff
+    type: str
+  - default: ''
+    name: outcome_nullable
+    query_key: Outcome
+    type: str
+  - default: ''
+    name: location_nullable
+    query_key: Location
+    type: str
+  - default: '00'
+    name: league_id
+    query_key: LeagueID
+    type: str
+  - default: ''
+    name: game_segment_nullable
+    query_key: GameSegment
+    type: str
+  - default: ''
+    name: game_id_nullable
+    query_key: GameID
+    type: str
+  - default: ''
+    name: end_range_nullable
+    query_key: EndRange
+    type: str
+  - default: ''
+    name: end_period_nullable
+    query_key: EndPeriod
+    type: str
+  - default: ''
+    name: date_to_nullable
+    query_key: DateTo
+    type: str
+  - default: ''
+    name: date_from_nullable
+    query_key: DateFrom
+    type: str
+  - default: ''
+    name: context_filter_nullable
+    query_key: ContextFilter
+    type: str
+  - default: ''
+    name: clutch_time_nullable
+    query_key: ClutchTime
+    type: str
+  - default: ''
+    name: ahead_behind_nullable
+    query_key: AheadBehind
+    type: str
+  parser: parse_nba_stats_result_sets
+  path: /stats/videodetailsasset
+  returns_schema: native/nba_stats/videodetailsasset
+  short: videodetailsasset
+  summary: GET /stats/videodetailsasset
+- example_args: {}
+  extra_params:
+  - default: '10'
+    name: game_event_id
+    query_key: GameEventID
+    type: str
+  - default: '1022200075'
+    name: game_id
+    query_key: GameID
+    type: str
+  parser: parse_nba_stats_result_sets
+  path: /stats/videoevents
+  returns_schema: native/nba_stats/videoevents
+  short: videoevents
+  summary: GET /stats/videoevents
+- example_args: {}
+  extra_params:
+  - default: '0'
+    name: game_event_id
+    query_key: GameEventID
+    type: str
+  - default: 0021700807
+    name: game_id
+    query_key: GameID
+    type: str
+  parser: parse_nba_stats_result_sets
+  path: /stats/videoeventsasset
+  returns_schema: native/nba_stats/videoeventsasset
+  short: videoeventsasset
+  summary: GET /stats/videoeventsasset
+- example_args:
+    league_id: '00'
+  extra_params:
   - default: '2022-06-10'
     name: game_date
     query_key: GameDate

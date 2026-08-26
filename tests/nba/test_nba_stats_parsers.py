@@ -86,6 +86,43 @@ def test_parse_ragged_rows_returns_zero_row_frame():
     assert isinstance(df, pl.DataFrame) and df.height == 0
 
 
+def test_parse_video_envelope_videodetailsasset():
+    # video endpoints ship resultSets as {Meta: {videoUrls: [...]}, playlist: [...]}
+    # (a dict, not the tabular list) — the 2026-08 capture sweep misread that as dead.
+    raw = _load("cap_videodetailsasset_nba.json")
+    out = parse_nba_stats_result_sets(raw)
+    assert isinstance(out, dict)
+    assert set(out) == {"videoUrls", "playlist"}
+    assert isinstance(out["videoUrls"], pl.DataFrame) and out["videoUrls"].height == 3
+    assert isinstance(out["playlist"], pl.DataFrame) and out["playlist"].height == 3
+    assert {"uuid", "surl"} <= set(out["videoUrls"].columns)
+    assert {"gi", "ei", "dsc"} <= set(out["playlist"].columns)
+
+
+def test_parse_video_envelope_named_set():
+    raw = _load("cap_videoevents_nba.json")
+    df = parse_nba_stats_result_sets(raw, result_set="playlist")
+    assert isinstance(df, pl.DataFrame) and df.height == 1
+    assert "gi" in df.columns
+
+
+def test_parse_video_envelope_return_as_pandas():
+    import pandas as pd
+
+    raw = _load("cap_videoeventsasset_nba.json")
+    out = parse_nba_stats_result_sets(raw, return_as_pandas=True)
+    assert isinstance(out, dict)
+    assert all(isinstance(v, pd.DataFrame) for v in out.values())
+    assert out["videoUrls"].shape[0] == 1
+
+
+def test_parse_video_envelope_empty_lists_zero_row_frames():
+    raw = {"resultSets": {"Meta": {"videoUrls": []}, "playlist": []}}
+    out = parse_nba_stats_result_sets(raw)
+    assert isinstance(out, dict)
+    assert out["videoUrls"].height == 0 and out["playlist"].height == 0
+
+
 def test_parse_null_prefix_column_keeps_all_rows():
     # A column that is null for the first 100+ rows and numeric later must not
     # collapse the whole set to an empty frame (polars' default

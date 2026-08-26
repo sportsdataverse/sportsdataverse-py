@@ -1,0 +1,48 @@
+{
+ "resource": "videoevents",
+ "parameters": {
+  "GameID": "0022201086",
+  "GameEventID": 7
+ },
+ "resultSets": {
+  "Meta": {
+   "videoUrls": [
+    {
+     "uuid": "4549dfbf-fde2-4dcc-8065-afade5ada267",
+     "dur": null,
+     "stt": null,
+     "stp": null,
+     "sth": null,
+     "stw": null,
+     "mtt": null,
+     "mtp": null,
+     "mth": null,
+     "mtw": null,
+     "ltt": null,
+     "ltp": null,
+     "lth": null,
+     "ltw": null
+    }
+   ]
+  },
+  "playlist": [
+   {
+    "gi": "0022201086",
+    "ei": 7,
+    "y": 2023,
+    "m": "03",
+    "d": "22",
+    "gc": "2023-03-22/GSWDAL",
+    "p": 1,
+    "dsc": "DiVincenzo 26' 3PT Jump Shot (3 PTS) (D. Green 1 AST)",
+    "ha": "DAL",
+    "va": "GSW",
+    "hpb": 0,
+    "hpa": 0,
+    "vpb": 0,
+    "vpa": 3,
+    "pta": 0
+   }
+  ]
+ }
+}

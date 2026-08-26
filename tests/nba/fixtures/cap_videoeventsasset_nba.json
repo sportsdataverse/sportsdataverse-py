@@ -1,0 +1,49 @@
+{
+ "resource": "videoevents",
+ "parameters": {
+  "GameID": "0022201086",
+  "GameEventID": 7
+ },
+ "resultSets": {
+  "Meta": {
+   "videoUrls": [
+    {
+     "uuid": "d8b00929-b431-5811-6687-9cd14c97b183",
+     "sdur": 11300,
+     "surl": "https://videos.nba.com/nba/pbp/media/2023/03/22/0022201086/7/d8b00929-b431-5811-6687-9cd14c97b183_320x180.mp4",
+     "sth": "https://videos.nba.com/nba/pbp/media/2023/03/22/0022201086/7/d8b00929-b431-5811-6687-9cd14c97b183_320x180.jpg",
+     "mdur": 11300,
+     "murl": "https://videos.nba.com/nba/pbp/media/2023/03/22/0022201086/7/d8b00929-b431-5811-6687-9cd14c97b183_960x540.mp4",
+     "mth": "https://videos.nba.com/nba/pbp/media/2023/03/22/0022201086/7/d8b00929-b431-5811-6687-9cd14c97b183_960x540.jpg",
+     "ldur": 11300,
+     "lurl": "https://videos.nba.com/nba/pbp/media/2023/03/22/0022201086/7/d8b00929-b431-5811-6687-9cd14c97b183_1280x720.mp4",
+     "lth": "https://videos.nba.com/nba/pbp/media/2023/03/22/0022201086/7/d8b00929-b431-5811-6687-9cd14c97b183_1280x720.jpg",
+     "vtt": "https://videos.nba.com/nba/pbp/media/2023/03/22/0022201086/7/d8b00929-b431-5811-6687-9cd14c97b183.vtt",
+     "scc": "https://videos.nba.com/nba/pbp/media/2023/03/22/0022201086/7/d8b00929-b431-5811-6687-9cd14c97b183.scc",
+     "srt": "https://videos.nba.com/nba/pbp/media/2023/03/22/0022201086/7/d8b00929-b431-5811-6687-9cd14c97b183.srt"
+    }
+   ]
+  },
+  "playlist": [
+   {
+    "gi": "0022201086",
+    "ei": 7,
+    "y": 2023,
+    "m": "03",
+    "d": "22",
+    "gc": "2023-03-22/GSWDAL",
+    "p": 1,
+    "dsc": "DiVincenzo 26' 3PT Jump Shot (3 PTS) (D. Green 1 AST)",
+    "ha": "DAL",
+    "hid": 1610612742,
+    "va": "GSW",
+    "vid": 1610612744,
+    "hpb": 0,
+    "hpa": 0,
+    "vpb": 0,
+    "vpa": 3,
+    "pta": 0
+   }
+  ]
+ }
+}
