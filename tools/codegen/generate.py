@@ -123,11 +123,18 @@ def _build_docstring(
             "minted when omitted."
         )
     if ep.parser:
+        parsed_kind = "dict of polars DataFrames" if parsed_doc else "polars DataFrame"
         lines.append(
-            f"    return_parsed: parse the payload through {ep.parser} -> polars DataFrame "
+            f"    return_parsed: parse the payload through {ep.parser} -> {parsed_kind} "
             f"(default True). Pass return_parsed=False for {raw_doc or 'the raw JSON Dict'}."
         )
-        lines.append("    return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.")
+        if parsed_doc:
+            lines.append(
+                "    return_as_pandas: with return_parsed, return a dict of pandas "
+                "DataFrames (same keys) instead of polars."
+            )
+        else:
+            lines.append("    return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.")
     if extras:
         # Only families that opted into the extended docstring contract document
         # **kwargs -- adding it unconditionally would rewrite ~1,800 already-shipped

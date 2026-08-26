@@ -9755,8 +9755,8 @@ def nba_stats_videodetailsasset(
         context_filter_nullable: ContextFilter query parameter.
         clutch_time_nullable: ClutchTime query parameter.
         ahead_behind_nullable: AheadBehind query parameter.
-        return_parsed: parse the payload through parse_nba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
-        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        return_parsed: parse the payload through parse_nba_stats_result_sets -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
@@ -9824,8 +9824,8 @@ def nba_stats_videoevents(
     Args:
         game_event_id: GameEventID query parameter.
         game_id: GameID query parameter.
-        return_parsed: parse the payload through parse_nba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
-        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        return_parsed: parse the payload through parse_nba_stats_result_sets -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
@@ -9865,8 +9865,8 @@ def nba_stats_videoeventsasset(
     Args:
         game_event_id: GameEventID query parameter.
         game_id: GameID query parameter.
-        return_parsed: parse the payload through parse_nba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
-        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        return_parsed: parse the payload through parse_nba_stats_result_sets -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
