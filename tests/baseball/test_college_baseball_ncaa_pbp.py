@@ -121,3 +121,47 @@ def test_return_as_pandas() -> None:
     df = parse_college_baseball_ncaa_pbp(GAMES[0].read_text(encoding="utf-8"), return_as_pandas=True)
     assert isinstance(df, pd.DataFrame)
     assert list(df.columns) == list(PBP_SCHEMA.keys())
+
+
+# --- decompose_college_baseball_plays (row-level entry point) --------------
+
+
+def test_decompose_rows_matches_html_parse() -> None:
+    """Legacy-shaped rows (combined ``score`` string) resolve into the same
+    columns/values the HTML path produces -- the reconciliation contract for
+    the R-era baseballr-data trees."""
+    from sportsdataverse.baseball.college_baseball import decompose_college_baseball_plays
+
+    rows = [
+        {
+            "inning": 1,
+            "inning_top_bot": "top",
+            "batting": "Texas A&M",
+            "fielding": "Florida",
+            "score": "0-0",
+            "description": "Moss, J. singled to left field (1-2 KBFX).",
+        },
+        {
+            "inning": 9,
+            "inning_top_bot": "bot",
+            "score": "3-2",
+            "description": "Langford struck out swinging (2-2 FBKS).",
+        },
+    ]
+    df = decompose_college_baseball_plays(rows)
+    assert df.columns == list(PBP_SCHEMA.keys())
+    assert df.get_column("play_number").to_list() == [1, 2]
+    r0 = df.row(0, named=True)
+    assert r0["play_type"] == "single" and r0["is_hit"] is True
+    assert (r0["score_away"], r0["score_home"]) == (0, 0)
+    assert r0["pitch_sequence"] == "KBFX"
+    r1 = df.row(1, named=True)
+    assert r1["play_type"] == "strikeout" and r1["strikeout_type"] == "swinging"
+    assert (r1["score_away"], r1["score_home"]) == (3, 2)
+
+
+def test_decompose_empty_is_zero_row_with_schema() -> None:
+    from sportsdataverse.baseball.college_baseball import decompose_college_baseball_plays
+
+    df = decompose_college_baseball_plays([])
+    assert df.height == 0 and df.columns == list(PBP_SCHEMA.keys())
