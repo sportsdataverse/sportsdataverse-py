@@ -45,7 +45,10 @@ __all__ = [
 # NCAA batter/runner name. Baseball writes "Last, First" (Brooks, M.); softball
 # writes last-name only (Hasapis). The ", First" part is therefore OPTIONAL so one
 # parser handles both -- verified e2e against a real WSB game (contest 6548848).
-_NAME = r"[A-Z][A-Za-z'.\-]+(?:,\s*[A-Z][A-Za-z'.\-]*\.?)?"
+# Three era/site spellings: modern "Last, F." (Canci, A.), legacy R-era
+# "First Last" (Andres Canci -- multi-word, verbs are lowercase so additional
+# capitalized words are safely part of the name), softball bare "Last".
+_NAME = r"[A-Z][A-Za-z'.\-]+(?:\s+[A-Z][A-Za-z'.\-]+)*(?:,\s*[A-Z][A-Za-z'.\-]*\.?)?"
 
 # Clause separator inside a description (literal "3a", always followed by a
 # capital-led clause). Python re -> lookahead is fine here (not a polars expr).
@@ -65,8 +68,8 @@ _SCORED_RE = re.compile(rf"^({_NAME})\s+scored")
 _ADVANCED_RE = re.compile(rf"^({_NAME})\s+advanced to (\w+)")
 _OUT_RE = re.compile(r"\bout (?:at|on)\b")
 _POS_CODES = r"(?:p|1b|2b|3b|ss|lf|cf|rf|c|dh|ph|pr|dp|flex)"
-# A single "Last" or "Last, F" name (no intervening spaces/verbs).
-_SUB_NAME = r"[A-Z][A-Za-z'.\-]+(?:,\s*[A-Z][A-Za-z'.\-]*\.?)?"
+# A "Last", "Last, F", or legacy "First Last" name (no intervening verbs).
+_SUB_NAME = r"[A-Z][A-Za-z'.\-]+(?:\s+[A-Z][A-Za-z'.\-]+)*(?:,\s*[A-Z][A-Za-z'.\-]*\.?)?"
 # A substitution clause = "<player> to <pos>" (optionally "for <player>") and the
 # WHOLE clause is just that. The player name sits DIRECTLY before "to <pos>" -- no
 # action verb between -- which separates it both from a batted ball ("singled to
