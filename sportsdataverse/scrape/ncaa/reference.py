@@ -174,7 +174,11 @@ def parse_ncaa_team_schedule(
     header = soup.select_one("div.card-header")
     team_name = None
     if header:
-        team_name = re.sub(r"\s*\([\d\-]+\)\s*$", "", header.get_text(" ", strip=True)) or None
+        # strip from the W-L record on -- the header can continue past it
+        # ("A&M-Corpus Christi (23-28) RPI Ranking - 202"), so an end-anchored
+        # sub keeps the junk. Names with letter parentheticals (St. Thomas (MN))
+        # survive because the record marker requires digits.
+        team_name = re.sub(r"\s*\([\d\-]+\).*$", "", header.get_text(" ", strip=True)) or None
     table = soup.find("table")
     rows: "list[dict]" = []
     if table is not None:

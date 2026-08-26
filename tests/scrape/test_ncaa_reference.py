@@ -57,3 +57,12 @@ def test_empty_inputs_zero_row_with_schema() -> None:
     assert parse_ncaa_team_list("").columns == list(TEAM_LIST_SCHEMA.keys())
     assert parse_ncaa_team_schedule("").height == 0
     assert parse_ncaa_team_roster("").height == 0
+
+
+def test_team_name_strips_record_and_trailing_junk() -> None:
+    # CodeRabbit PR #390: header continues past the W-L record
+    # ("A&M-Corpus Christi (23-28) RPI Ranking - 202") -- name only survives
+    df = parse_ncaa_team_schedule(_rd("mba_team_page_614839"), team_id="614839")
+    assert df.get_column("team_name").unique().to_list() == ["A&M-Corpus Christi Islanders"]
+    ro = parse_ncaa_team_roster(_rd("mba_roster_614839"), team_id="614839")
+    assert ro.get_column("team_name").unique().to_list() == ["A&M-Corpus Christi Islanders"]
