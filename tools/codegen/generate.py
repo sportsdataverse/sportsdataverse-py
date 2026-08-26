@@ -96,6 +96,10 @@ def _build_docstring(
     """
     extras = doc_extras or {}
     raw_doc = str(extras.get("raw_doc") or "")
+    # ``parsed_doc`` overrides the generic parsed-return phrase for endpoints whose
+    # parser returns something other than a single DataFrame (e.g. the video
+    # endpoints' dict of ``videoUrls``/``playlist`` frames).
+    parsed_doc = str(extras.get("parsed_doc") or "")
     lines = [f'"""{ep.summary}', ""]
     if not flat:
         if league_param:
@@ -133,7 +137,7 @@ def _build_docstring(
     lines.append("Returns:")
     if ep.parser:
         lines.append(
-            "    A polars/pandas DataFrame by default; "
+            f"    {parsed_doc or 'A polars/pandas DataFrame'} by default; "
             f"{raw_doc or 'the raw JSON ``Dict``'} when ``return_parsed=False``."
         )
     else:
@@ -572,6 +576,7 @@ class _EndpointView:
         self.raw_annotation = rt[0] if len(rt) == 1 else f"Union[{self.raw_hint}]"
         # markdown flavour of the same prose for the docs reference block
         self.raw_doc_md = str((doc_extras or {}).get("raw_doc") or "").replace("``", "`")
+        self.parsed_doc_md = str((doc_extras or {}).get("parsed_doc") or "").replace("``", "`")
         self.fn_name = fn_name
         self.short = ep.short
         self.summary = _normalize_rst(ep.summary or "")

@@ -9757,9 +9757,10 @@ def nba_stats_videodetailsasset(
         ahead_behind_nullable: AheadBehind query parameter.
         return_parsed: parse the payload through parse_nba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+        A dict of two DataFrames keyed ``videoUrls`` (clip URLs, durations, thumbnails) and ``playlist`` (per-event game metadata) by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         Quick start::
@@ -9825,9 +9826,10 @@ def nba_stats_videoevents(
         game_id: GameID query parameter.
         return_parsed: parse the payload through parse_nba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+        A dict of two DataFrames keyed ``videoUrls`` (clip URLs, durations, thumbnails) and ``playlist`` (per-event game metadata) by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         Quick start::
@@ -9865,9 +9867,10 @@ def nba_stats_videoeventsasset(
         game_id: GameID query parameter.
         return_parsed: parse the payload through parse_nba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+        A dict of two DataFrames keyed ``videoUrls`` (clip URLs, durations, thumbnails) and ``playlist`` (per-event game metadata) by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         Quick start::

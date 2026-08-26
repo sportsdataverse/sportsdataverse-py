@@ -23,7 +23,7 @@
 
 ### Returns
 
-{% if ep.parser %}**`return_parsed=True`** (default) — a tidy `polars.DataFrame`{% if ep.return_table %} with the columns below{% else %} (parser: `{{ ep.parser }}`){% endif %}; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+{% if ep.parser %}**`return_parsed=True`** (default) — {% if ep.parsed_doc_md %}{{ ep.parsed_doc_md }}{% if ep.return_table %} (representative columns below){% endif %}{% else %}a tidy `polars.DataFrame`{% if ep.return_table %} with the columns below{% else %} (parser: `{{ ep.parser }}`){% endif %}{% endif %}; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 {% if ep.return_table %}
 {{ ep.return_table }}
 {% endif %}

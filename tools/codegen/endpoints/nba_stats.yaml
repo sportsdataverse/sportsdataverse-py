@@ -8072,7 +8072,10 @@ endpoints:
   returns_schema: native/nba_stats/teamyearbyyearstats
   short: teamyearbyyearstats
   summary: GET /stats/teamyearbyyearstats
-- example_args:
+- docstring:
+    parsed_doc: A dict of two DataFrames keyed ``videoUrls`` (clip URLs, durations,
+      thumbnails) and ``playlist`` (per-event game metadata)
+  example_args:
     league_id: '00'
   extra_params:
   - default: FGA
@@ -8200,7 +8203,10 @@ endpoints:
   returns_schema: native/nba_stats/videodetailsasset
   short: videodetailsasset
   summary: GET /stats/videodetailsasset
-- example_args: {}
+- docstring:
+    parsed_doc: A dict of two DataFrames keyed ``videoUrls`` (clip URLs, durations,
+      thumbnails) and ``playlist`` (per-event game metadata)
+  example_args: {}
   extra_params:
   - default: '10'
     name: game_event_id
@@ -8215,7 +8221,10 @@ endpoints:
   returns_schema: native/nba_stats/videoevents
   short: videoevents
   summary: GET /stats/videoevents
-- example_args: {}
+- docstring:
+    parsed_doc: A dict of two DataFrames keyed ``videoUrls`` (clip URLs, durations,
+      thumbnails) and ``playlist`` (per-event game metadata)
+  example_args: {}
   extra_params:
   - default: '0'
     name: game_event_id
