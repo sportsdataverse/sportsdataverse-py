@@ -1,3 +1,42 @@
-columns: []
+columns:
+- description: ''
+  name: uuid
+  type: character
+- description: ''
+  name: sdur
+  type: integer
+- description: ''
+  name: surl
+  type: character
+- description: ''
+  name: sth
+  type: character
+- description: ''
+  name: mdur
+  type: integer
+- description: ''
+  name: murl
+  type: character
+- description: ''
+  name: mth
+  type: character
+- description: ''
+  name: ldur
+  type: integer
+- description: ''
+  name: lurl
+  type: character
+- description: ''
+  name: lth
+  type: character
+- description: ''
+  name: vtt
+  type: character
+- description: ''
+  name: scc
+  type: character
+- description: ''
+  name: srt
+  type: character
 kind: dataframe
 schema: videoeventsasset

@@ -73,6 +73,9 @@ _REPRESENTATIVE_RESULT_SETS = {
     "shotchartlineupdetail": "ShotChartLineupDetail",
     "teamdetails": "TeamBackground",
     "teamplayerdashboard": "PlayersSeasonTotals",
+    "videodetailsasset": "videoUrls",
+    "videoevents": "videoUrls",
+    "videoeventsasset": "videoUrls",
     "winprobabilitypbp": "WinProbPBP",
 }
 

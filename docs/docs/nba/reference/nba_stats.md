@@ -9257,7 +9257,23 @@ GET /stats/videodetailsasset
 
 ### Returns
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_nba_stats_result_sets`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `uuid` | character | Uuid. |
+| `sdur` | integer | Sdur. |
+| `surl` | character | Surl. |
+| `sth` | character | Sth. |
+| `mdur` | integer | Mdur. |
+| `murl` | character | Murl. |
+| `mth` | character | Mth. |
+| `ldur` | integer | Ldur. |
+| `lurl` | character | Lurl. |
+| `lth` | character | Lth. |
+| `vtt` | character | Vtt. |
+| `scc` | character | Scc. |
+| `srt` | character | Srt. |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
@@ -9283,7 +9299,24 @@ GET /stats/videoevents
 
 ### Returns
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_nba_stats_result_sets`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `uuid` | character | Uuid. |
+| `dur` | character | Dur. |
+| `stt` | character | Stt. |
+| `stp` | character | Stp. |
+| `sth` | character | Sth. |
+| `stw` | character | Stw. |
+| `mtt` | character | Mtt. |
+| `mtp` | character | Mtp. |
+| `mth` | character | Mth. |
+| `mtw` | character | Mtw. |
+| `ltt` | character | Ltt. |
+| `ltp` | character | Ltp. |
+| `lth` | character | Lth. |
+| `ltw` | character | Ltw. |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
@@ -9309,7 +9342,23 @@ GET /stats/videoeventsasset
 
 ### Returns
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_nba_stats_result_sets`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `uuid` | character | Uuid. |
+| `sdur` | integer | Sdur. |
+| `surl` | character | Surl. |
+| `sth` | character | Sth. |
+| `mdur` | integer | Mdur. |
+| `murl` | character | Murl. |
+| `mth` | character | Mth. |
+| `ldur` | integer | Ldur. |
+| `lurl` | character | Lurl. |
+| `lth` | character | Lth. |
+| `vtt` | character | Vtt. |
+| `scc` | character | Scc. |
+| `srt` | character | Srt. |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example

@@ -86882,7 +86882,7 @@
           "type": "str"
         },
         {
-          "default": null,
+          "default": "2022-23",
           "enum": null,
           "example": null,
           "name": "season",
@@ -87146,7 +87146,162 @@
           "type": "str"
         }
       ],
-      "result_sets": {},
+      "result_sets": {
+        "playlist": [
+          {
+            "description": "",
+            "name": "gi",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "ei",
+            "type": "integer"
+          },
+          {
+            "description": "",
+            "name": "y",
+            "type": "integer"
+          },
+          {
+            "description": "",
+            "name": "m",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "d",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "gc",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "p",
+            "type": "integer"
+          },
+          {
+            "description": "",
+            "name": "dsc",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "ha",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "hid",
+            "type": "integer"
+          },
+          {
+            "description": "",
+            "name": "va",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "vid",
+            "type": "integer"
+          },
+          {
+            "description": "",
+            "name": "hpb",
+            "type": "integer"
+          },
+          {
+            "description": "",
+            "name": "hpa",
+            "type": "integer"
+          },
+          {
+            "description": "",
+            "name": "vpb",
+            "type": "integer"
+          },
+          {
+            "description": "",
+            "name": "vpa",
+            "type": "integer"
+          },
+          {
+            "description": "",
+            "name": "pta",
+            "type": "integer"
+          }
+        ],
+        "videoUrls": [
+          {
+            "description": "",
+            "name": "uuid",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "sdur",
+            "type": "integer"
+          },
+          {
+            "description": "",
+            "name": "surl",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "sth",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "mdur",
+            "type": "integer"
+          },
+          {
+            "description": "",
+            "name": "murl",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "mth",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "ldur",
+            "type": "integer"
+          },
+          {
+            "description": "",
+            "name": "lurl",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "lth",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "vtt",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "scc",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "srt",
+            "type": "string"
+          }
+        ]
+      },
       "slug": "videodetailsasset",
       "sources": [
         "hoopR",
@@ -87196,7 +87351,157 @@
           "type": "str"
         }
       ],
-      "result_sets": {},
+      "result_sets": {
+        "playlist": [
+          {
+            "description": "",
+            "name": "gi",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "ei",
+            "type": "integer"
+          },
+          {
+            "description": "",
+            "name": "y",
+            "type": "integer"
+          },
+          {
+            "description": "",
+            "name": "m",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "d",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "gc",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "p",
+            "type": "integer"
+          },
+          {
+            "description": "",
+            "name": "dsc",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "ha",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "va",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "hpb",
+            "type": "integer"
+          },
+          {
+            "description": "",
+            "name": "hpa",
+            "type": "integer"
+          },
+          {
+            "description": "",
+            "name": "vpb",
+            "type": "integer"
+          },
+          {
+            "description": "",
+            "name": "vpa",
+            "type": "integer"
+          },
+          {
+            "description": "",
+            "name": "pta",
+            "type": "integer"
+          }
+        ],
+        "videoUrls": [
+          {
+            "description": "",
+            "name": "uuid",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "dur",
+            "type": "unknown"
+          },
+          {
+            "description": "",
+            "name": "stt",
+            "type": "unknown"
+          },
+          {
+            "description": "",
+            "name": "stp",
+            "type": "unknown"
+          },
+          {
+            "description": "",
+            "name": "sth",
+            "type": "unknown"
+          },
+          {
+            "description": "",
+            "name": "stw",
+            "type": "unknown"
+          },
+          {
+            "description": "",
+            "name": "mtt",
+            "type": "unknown"
+          },
+          {
+            "description": "",
+            "name": "mtp",
+            "type": "unknown"
+          },
+          {
+            "description": "",
+            "name": "mth",
+            "type": "unknown"
+          },
+          {
+            "description": "",
+            "name": "mtw",
+            "type": "unknown"
+          },
+          {
+            "description": "",
+            "name": "ltt",
+            "type": "unknown"
+          },
+          {
+            "description": "",
+            "name": "ltp",
+            "type": "unknown"
+          },
+          {
+            "description": "",
+            "name": "lth",
+            "type": "unknown"
+          },
+          {
+            "description": "",
+            "name": "ltw",
+            "type": "unknown"
+          }
+        ]
+      },
       "slug": "videoevents",
       "sources": [
         "hoopR",
@@ -87243,7 +87548,162 @@
           "type": "int"
         }
       ],
-      "result_sets": {},
+      "result_sets": {
+        "playlist": [
+          {
+            "description": "",
+            "name": "gi",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "ei",
+            "type": "integer"
+          },
+          {
+            "description": "",
+            "name": "y",
+            "type": "integer"
+          },
+          {
+            "description": "",
+            "name": "m",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "d",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "gc",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "p",
+            "type": "integer"
+          },
+          {
+            "description": "",
+            "name": "dsc",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "ha",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "hid",
+            "type": "integer"
+          },
+          {
+            "description": "",
+            "name": "va",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "vid",
+            "type": "integer"
+          },
+          {
+            "description": "",
+            "name": "hpb",
+            "type": "integer"
+          },
+          {
+            "description": "",
+            "name": "hpa",
+            "type": "integer"
+          },
+          {
+            "description": "",
+            "name": "vpb",
+            "type": "integer"
+          },
+          {
+            "description": "",
+            "name": "vpa",
+            "type": "integer"
+          },
+          {
+            "description": "",
+            "name": "pta",
+            "type": "integer"
+          }
+        ],
+        "videoUrls": [
+          {
+            "description": "",
+            "name": "uuid",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "sdur",
+            "type": "integer"
+          },
+          {
+            "description": "",
+            "name": "surl",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "sth",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "mdur",
+            "type": "integer"
+          },
+          {
+            "description": "",
+            "name": "murl",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "mth",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "ldur",
+            "type": "integer"
+          },
+          {
+            "description": "",
+            "name": "lurl",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "lth",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "vtt",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "scc",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "srt",
+            "type": "string"
+          }
+        ]
+      },
       "slug": "videoeventsasset",
       "sources": [
         "hoopR"

@@ -9690,7 +9690,7 @@ def nba_stats_videodetailsasset(
     opponent_team_id: Optional[str] = "0",
     period: Optional[str] = "0",
     player_id: Optional[str] = "2544",
-    season: Optional[str] = None,
+    season: Optional[str] = "2022-23",
     season_type_all_star: Optional[str] = "Regular Season",
     team_id: Optional[str] = "1610612747",
     vs_division_nullable: Optional[str] = "",

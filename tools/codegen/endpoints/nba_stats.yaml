@@ -8099,7 +8099,7 @@ endpoints:
     name: player_id
     query_key: PlayerID
     type: str
-  - default: null
+  - default: 2022-23
     name: season
     query_key: Season
     type: str
