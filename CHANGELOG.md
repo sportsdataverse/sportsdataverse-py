@@ -584,6 +584,180 @@ module outside `league_config.py` names a league in executable code.
 stand as the parity oracle for the lift, and extended with the league
 parameterization.
 
+### Fixed — `cfb_season_odds` simulated 571 non-FBS teams as league-average (#333)
+
+The season Monte Carlo built its team set from the schedule, which carries
+every opponent an FBS team played — 704 teams for 2023 against the 133 in
+`cfb_ratings`. `make_ratings_compute_results` scores a team absent from the
+ratings as league-average (0.0), so 571 FCS/D2/D3/NAIA programs were
+simulated as median FBS teams and took **21.2% of the championship
+probability**, with rows as incoherent as `exp_wins 1.000` alongside
+`playoff_prob 1.000`. "Missing → league average" is a sound default for a
+team with sparse data and a catastrophic one for a team that does not belong
+in the population; at the lookup the two are indistinguishable.
+
+The fix turns on *which* frame gets filtered. `teams` is the engine's entire
+standings / seeding / output universe (`cfb_simulations` builds it as
+`sims.join(teams, how="cross")`) while win-loss records are computed
+separately from `games` — so restricting `teams`, and deliberately not
+`games`, removes non-FBS programs as **contenders** while keeping them as
+**opponents**, leaving every FBS team's record untouched. The FBS universe
+comes from the schedule's `home_division`/`away_division == "fbs"` markers,
+falling back to ratings membership only for schedule shapes predating those
+columns: division markers do not move with `as_of_date`, whereas an
+early-season boundary leaves a real FBS team unrated, and dropping it would
+be this same bug in reverse. An emptied filter now raises rather than
+shipping a zero-row board — empty there means the id namespaces disagreed,
+not that no team qualified. On the real 2023 slate the output goes 704 → 133
+rows with 0.0% of championship mass off the FBS field, and the board reads
+Oregon 0.251 / Georgia 0.197 / Michigan 0.169 / Ohio State 0.138.
+
+This changes the shipped team set. No deprecation path was added: the removed
+rows were incoherent on their face, so there is no correct consumer of them.
+
+### Fixed — `cfb_season_odds` `as_of_date` bounded only the ratings, never the game set (#334)
+
+`as_of_date` was forwarded to `cfb_ratings` alone. Every schedule row still
+carried its final score, so `cfb_games_from_schedule` derived a non-null
+`result` for all of them and the engine's week loop — which fills only
+`result.is_null()` games — had nothing to simulate. A historical as-of run
+replayed the season it was supposed to forecast: on 2024 at `2024-11-10`,
+**93.1% of `exp_wins` were exact integers** and only 4 teams had a
+`playoff_prob` anywhere between 2% and 98%. The engine could not be validated
+on history, which is the only way to check playoff-odds calibration.
+
+Scores from `start_date` on/after the boundary are now masked, so those games
+are simulated instead of replayed, and masked postseason rows are dropped
+rather than kept — a bowl / conference-championship / CFP **matchup is itself
+an outcome** of the season, so an unplayed bracket row would leak the real
+bracket into the forecast; `cfb_simulations` regenerates both from each sim's
+own standings. The boundary is exclusive of the future, matching
+`cfb_ratings`' `date < as_of_date`: a game kicking off *on* `as_of_date` is
+unknowable and gets simulated. The same 2024 run now shows 0.0% integer
+`exp_wins` and 30 teams inside the (0.02, 0.98) playoff band.
+
+Validated by perturbation on real data rather than by inspection: flipping
+all 657 post-boundary games on the 2024 schedule to a 999-0 home blowout
+leaves the engine's input frame byte-identical (3652 rows, 510 unplayed) and
+moves `exp_wins` and `playoff_prob` by 0.000000, against a control without
+`as_of_date` that moves them by 3.0 and 1.0.
+
+### Known — `cfb_season_odds` is not bit-reproducible across runs (#392)
+
+Surfaced while validating the above, and pre-existing. `seed=` does not make
+the function reproducible run to run: `teams` is built with polars `.unique()`,
+which promises no row order, and that order feeds the engine's seeded RNG
+alignment — so tiebreak-sensitive probabilities move by roughly `1/n_sims`
+between two identical calls while `exp_wins` stays stable. Compare boards
+keyed on `team_id` rather than with `DataFrame.equals`.
+
+### PWHL / HockeyTech data-quality fixes
+
+- **`pwhl_pbp` goal double-rowing is now flagged (#368).** The HockeyTech
+  gamecenter feed emits two rows for (nearly) every goal — the `goal` event plus
+  a twin `shot` event carrying `isGoal` for the same play — which inflated naive
+  shot counts and every metric derived from them (shooting %, Corsi-style
+  aggregates, xG training corpora, where the goal's location was seen twice,
+  once labelled goal and once as a non-goal shot). Neither row is dropped,
+  because the shot rows *including* the twins are what reconcile with the
+  official boxscore shots-on-goal totals; instead the twin shot row now carries
+  **`is_goal_twin = True`**. Drop the flagged rows for a deduplicated event
+  stream; count `shot` rows as-is for boxscore-consistent SOG. The flag lands in
+  the shared parser, so all 20 HockeyTech league families get it.
+
+- **Goal-instant on-ice personnel are evaluated 2 seconds early (#369).**
+  HockeyTech shift-chart boundaries are unreliable at the exact second of a
+  goal: the chart is typically already rolled to the post-goal deployment, so
+  the previous at-the-instant (`eps=0`) lookup returned the line that came over
+  the boards *after* the goal. `strength_state` consequently mislabelled goals —
+  precisely the rows where strength context matters most for EV/PP/SH goal
+  attribution. `build_on_ice` now evaluates `goal` rows `GOAL_EPSILON_S` (2)
+  seconds before the goal instant, clamped to the period's start so an
+  opening-seconds goal still resolves; non-goal events are untouched and
+  `goal_epsilon_s=0` restores the old behavior. Measured against the feed's own
+  ground truth (the goal payload's official `plus_players`/`minus_players`
+  on-ice lists) on the committed game-42 fixture: **0/4 goals agreed at `eps=0`,
+  4/4 agree at `eps=2`**.
+
+- **Dead HockeyTech views now warn instead of returning a silent empty frame
+  (#238).** HockeyTech reports an unknown view with HTTP 200 and an error in the
+  body, which parsed straight through to a zero-row frame — making a dead view
+  indistinguishable from "no data" across all 20 league families. The shared
+  client now detects both envelope shapes (`"Undefined Tab <view>"` under
+  `SiteKit`/`GC`, and `{"error": "InvalidView error: <view>"}`) and warns, while
+  still returning the payload unchanged so parsers keep their never-raise
+  contract. `pwhl_streaks` is the known casualty: the `streaks` view exists on
+  neither transport and the API recon found no replacement (the PWHL site
+  appears to compute its Streaks page client-side from schedule data), so the
+  function has never returned data. It is kept — removing a published export
+  would break callers — but now emits a `DeprecationWarning` naming the upstream
+  removal and pointing at `pwhl_schedule()` / `pwhl_standings()`.
+
+### Fixed — CFB box score per-player defensive/specialist attribution (#93)
+
+- **CFB box score — per-player defensive/specialist attribution edge cases**
+  (`CFBPlayProcess.create_box_score()`). Split sacks now follow the official
+  0.5/0.5 convention: an assisted sack (`sack_player_name2` populated) credits
+  half a sack — and half the sack yardage — to each participant instead of
+  dropping the second sacker, so per-player sacks sum to the team's sack-play
+  count. `defensive_players.fumble_recoveries` counts takeaways only, so an
+  offensive or return-team self-recovery no longer appears in a defender row.
+  `forced_fumble_team` resolves to the side opposite the fumbling player rather
+  than always `def_pos_team`, and `defensive_players.forced_fumbles` groups by
+  it, correctly crediting a coverage player who forces a punt- or kick-return
+  fumble. Kickoff returns are credited via `kick_return_team` (coalesced to
+  `pos_team`), matching the punt-return convention. Team-level totals are
+  unchanged. (#93)
+
+### Fixed — NFL play-by-play raised `KeyError: 'name'` for mascot-less franchises (#23)
+
+ESPN omits `team.name` for franchises without a mascot — the 2020-2021
+Washington Football Team (id 28) ships only `location`, `abbreviation`, and
+`displayName` — and `NFLPlayProcess` read `competitors[i]["team"]["name"]`
+unguarded at four sites, so **every** Washington game from that era raised
+`KeyError` rather than parsing. All four lookups now route through a
+`_team_mascot()` helper that derives the mascot from `displayName` with the
+location prefix removed, falling back to `displayName` then `location`. The
+guard is franchise-agnostic, so any future mascot-less team is covered.
+Verified on the real 2021 games `401326312` (167 plays) and `401326127`
+(190 plays), both of which previously raised.
+
+### Fixed — Yahoo CFB crosswalk live tests no longer red the matrix on a blocked runner (#229)
+
+Yahoo serves an empty payload to some CI runner IPs (observed on
+`macos-latest` while ubuntu and windows passed in the same run) — runner-
+specific upstream blocking, not schema drift. Both live crosswalk tests now
+skip explicitly when the fetch returns a zero-row frame; real schema drift
+still fails through the existing shape and match-rate assertions whenever data
+*is* returned.
+
+### Housekeeping — the open-issue backlog was swept to zero
+
+Every issue open at the 0.1.0 cut was triaged against current `main` with a
+reproduction rather than assumption, and 36 of 38 were closed. Beyond the
+fixes above, the bulk were **already resolved** by the modernization arc and
+simply never verified shut: the 2022-2024 loader reports (`load_nfl_pbp`,
+`load_nfl_schedule`, `load_nfl_rosters`, `load_nfl_weekly_rosters`,
+`load_nfl_injuries`, `load_nfl_depth_charts`, `load_cfb_pbp`,
+`load_cfb_schedule`, `load_cfb_rosters`, `load_mbb_schedule`,
+`load_nba_player_boxscore`, `espn_nfl_schedule`) all reproduce clean now that
+the loaders read published release assets under polars 1.x; the MLB surface
+was rebuilt wholesale (#62); the CFB name-linkage and missing-team complaints
+resolve against the 2004-2025 raw backfill. The remaining closures were
+out-of-scope CFBD feature asks (sdv-py wraps ESPN and stats.ncaa.org; CFBD has
+its own client), an upstream ESPN gap, and one report that traced to the
+reporter's own AWS CDK config. Two cron trackers (#90, #230) were stale — the
+workflows have since run green — and the recent red streak on the live-tests
+cron was a single offline assertion left behind by #388, fixed in #391.
+
+Two items stay open on purpose: **#9** (bowl games missing from
+`load_cfb_schedule` for early seasons) is real but producer-side — 44 of 866
+2015 games have no schedule row because early `cfb_schedule` release assets
+carry `season_type ['regular']` only, so the fix is a postseason backfill and
+republish in the data repo, not a package change — and **#392**, filed from
+this sweep, records that `cfb_season_odds` is not bit-reproducible despite
+`seed=` because a polars `.unique()` ordering feeds the seeded RNG.
+
 ### Also in this release
 
 The post-0.0.75 window also landed, grouped by theme:
