@@ -874,6 +874,7 @@ def load_cfb_schedule(seasons, return_as_pandas: bool = False):
         |season                 |Int64   |
         |week                   |Int64   |
         |season_type            |String  |
+        |season_type_id         |Int64   |
         |start_date             |String  |
         |start_time_tbd         |Boolean |
         |completed              |Boolean |
@@ -910,7 +911,6 @@ def load_cfb_schedule(seasons, return_as_pandas: bool = False):
         |playoff_home_seed      |Int64   |
         |playoff_away_seed      |Int64   |
         |playoff_bowl_name      |String  |
-        |source                 |String  |
 
     Raises:
         SeasonNotFoundError: if a requested season is below 2001.

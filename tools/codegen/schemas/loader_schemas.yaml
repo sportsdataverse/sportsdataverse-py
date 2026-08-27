@@ -3595,6 +3595,8 @@ load_cfb_schedule:
   type: Int64
 - name: season_type
   type: String
+- name: season_type_id
+  type: Int64
 - name: start_date
   type: String
 - name: start_time_tbd
@@ -3666,8 +3668,6 @@ load_cfb_schedule:
 - name: playoff_away_seed
   type: Int64
 - name: playoff_bowl_name
-  type: String
-- name: source
   type: String
 load_cfb_schedule_crosswalk:
 - name: matchup_key
