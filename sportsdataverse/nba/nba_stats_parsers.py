@@ -6,7 +6,10 @@ the parser also normalizes the family's two non-uniform shapes — the shot-loca
 endpoints' single-dict ``resultSets`` with 2-level grouped headers (flattened to
 composite columns like ``less_than_5_ft_fgm``), ``scoreboardv3``'s ``scoreboard.games``
 feed (one row per game), and ``scheduleleaguev2``'s ``leagueSchedule.gameDates[].games[]``
-feed (also one row per game). Honors the universal parser contract: polars by default, pandas
+feed (also one row per game), and the video endpoints'
+(``videodetailsasset``/``videoevents``/``videoeventsasset``) dict envelope
+``{Meta: {videoUrls: [...]}, playlist: [...]}`` (returned as a
+``{"videoUrls": ..., "playlist": ...}`` dict of frames). Honors the universal parser contract: polars by default, pandas
 via flag, empty/malformed returns a zero-row frame, columns snake_cased via dl_utils.underscore.
 """
 
@@ -44,8 +47,14 @@ def _result_sets(raw: dict) -> list:
     if isinstance(raw.get("resultSets"), list):
         return raw["resultSets"]
     if isinstance(raw.get("resultSets"), dict):
+        rs_dict = raw["resultSets"]
+        if "Meta" in rs_dict or "playlist" in rs_dict:
+            # video family (videodetailsasset/videoevents/videoeventsasset) ships
+            # a dict envelope {Meta: {videoUrls: [...]}, playlist: [...]} instead
+            # of the tabular [{name, headers, rowSet}] list
+            return _video_result_sets(rs_dict)
         # shot-location family ships a single result set as a dict (with 2-level headers)
-        return [raw["resultSets"]]
+        return [rs_dict]
     rs = raw.get("resultSet")
     if isinstance(rs, dict):
         return [rs]
@@ -121,6 +130,36 @@ def _boxscore_v3_result_sets(box: dict) -> list:
             ]
             sets.append(_set(k[:1].upper() + k[1:], rows))
     return sets
+
+
+def _video_result_sets(rs: dict) -> list:
+    """Synthesize result-set dicts from the video-envelope ``resultSets``.
+
+    The video endpoints (``videodetailsasset``/``videoevents``/``videoeventsasset``)
+    ship ``resultSets`` as ``{"Meta": {"videoUrls": [...]}, "playlist": [...]}`` —
+    two lists of dicts, not the tabular ``[{name, headers, rowSet}]`` list. Emits
+    a ``videoUrls`` set (clip URLs/durations/thumbnails) and a ``playlist`` set
+    (per-event game/description metadata) so the generic parser renders both.
+
+    Args:
+        rs: The dict under the payload's ``resultSets`` key.
+
+    Returns:
+        A 2-element list of result-set dicts (``name``/``headers``/``rowSet``).
+    """
+
+    def _set(name: str, rows: list) -> dict:
+        rows = [r for r in rows if isinstance(r, dict)]
+        headers = list(dict.fromkeys(k for r in rows for k in r))
+        return {"name": name, "headers": headers, "rowSet": [[r.get(h) for h in headers] for r in rows]}
+
+    meta = rs.get("Meta")
+    video_urls = meta.get("videoUrls") if isinstance(meta, dict) else None
+    playlist = rs.get("playlist")
+    return [
+        _set("videoUrls", video_urls if isinstance(video_urls, list) else []),
+        _set("playlist", playlist if isinstance(playlist, list) else []),
+    ]
 
 
 def _flatten_headers(headers: list) -> list:

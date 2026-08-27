@@ -138,6 +138,9 @@ __all__ = [
     "nba_stats_teamplayeronoffsummary",
     "nba_stats_teamvsplayer",
     "nba_stats_teamyearbyyearstats",
+    "nba_stats_videodetailsasset",
+    "nba_stats_videoevents",
+    "nba_stats_videoeventsasset",
     "nba_stats_videostatus",
 ]
 
@@ -9672,6 +9675,213 @@ def nba_stats_teamyearbyyearstats(
             "PerMode": per_mode_simple,
             "SeasonType": season_type_all_star,
             "TeamID": team_id,
+        },
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_nba_stats_result_sets(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def nba_stats_videodetailsasset(
+    context_measure_detailed: Optional[str] = "FGA",
+    last_n_games: Optional[str] = "0",
+    month: Optional[str] = "0",
+    opponent_team_id: Optional[str] = "0",
+    period: Optional[str] = "0",
+    player_id: Optional[str] = "2544",
+    season: Optional[str] = "2022-23",
+    season_type_all_star: Optional[str] = "Regular Season",
+    team_id: Optional[str] = "1610612747",
+    vs_division_nullable: Optional[str] = "",
+    vs_conference_nullable: Optional[str] = "",
+    start_range_nullable: Optional[str] = "",
+    start_period_nullable: Optional[str] = "",
+    season_segment_nullable: Optional[str] = "",
+    rookie_year_nullable: Optional[str] = "",
+    range_type_nullable: Optional[str] = "",
+    position_nullable: Optional[str] = "",
+    point_diff_nullable: Optional[str] = "",
+    outcome_nullable: Optional[str] = "",
+    location_nullable: Optional[str] = "",
+    league_id: Optional[str] = "00",
+    game_segment_nullable: Optional[str] = "",
+    game_id_nullable: Optional[str] = "",
+    end_range_nullable: Optional[str] = "",
+    end_period_nullable: Optional[str] = "",
+    date_to_nullable: Optional[str] = "",
+    date_from_nullable: Optional[str] = "",
+    context_filter_nullable: Optional[str] = "",
+    clutch_time_nullable: Optional[str] = "",
+    ahead_behind_nullable: Optional[str] = "",
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """GET /stats/videodetailsasset
+
+    Endpoint: ``GET https://stats.nba.com/stats/videodetailsasset``
+    Example URL: https://stats.nba.com/stats/videodetailsasset?LeagueID=00
+
+    Args:
+        context_measure_detailed: ContextMeasure query parameter.
+        last_n_games: LastNGames query parameter.
+        month: Month query parameter.
+        opponent_team_id: OpponentTeamID query parameter.
+        period: Period query parameter.
+        player_id: PlayerID query parameter.
+        season: Season query parameter.
+        season_type_all_star: SeasonType query parameter.
+        team_id: TeamID query parameter.
+        vs_division_nullable: VsDivision query parameter.
+        vs_conference_nullable: VsConference query parameter.
+        start_range_nullable: StartRange query parameter.
+        start_period_nullable: StartPeriod query parameter.
+        season_segment_nullable: SeasonSegment query parameter.
+        rookie_year_nullable: RookieYear query parameter.
+        range_type_nullable: RangeType query parameter.
+        position_nullable: Position query parameter.
+        point_diff_nullable: PointDiff query parameter.
+        outcome_nullable: Outcome query parameter.
+        location_nullable: Location query parameter.
+        league_id: LeagueID query parameter.
+        game_segment_nullable: GameSegment query parameter.
+        game_id_nullable: GameID query parameter.
+        end_range_nullable: EndRange query parameter.
+        end_period_nullable: EndPeriod query parameter.
+        date_to_nullable: DateTo query parameter.
+        date_from_nullable: DateFrom query parameter.
+        context_filter_nullable: ContextFilter query parameter.
+        clutch_time_nullable: ClutchTime query parameter.
+        ahead_behind_nullable: AheadBehind query parameter.
+        return_parsed: parse the payload through parse_nba_stats_result_sets -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
+
+    Returns:
+        A dict of two DataFrames keyed ``videoUrls`` (clip URLs, durations, thumbnails) and ``playlist`` (per-event game metadata) by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        Quick start::
+
+            nba_stats_videodetailsasset(league_id='00')
+    """
+    raw = _get(
+        "https://stats.nba.com/stats/videodetailsasset",
+        params={
+            "ContextMeasure": context_measure_detailed,
+            "LastNGames": last_n_games,
+            "Month": month,
+            "OpponentTeamID": opponent_team_id,
+            "Period": period,
+            "PlayerID": player_id,
+            "Season": season,
+            "SeasonType": season_type_all_star,
+            "TeamID": team_id,
+            "VsDivision": vs_division_nullable,
+            "VsConference": vs_conference_nullable,
+            "StartRange": start_range_nullable,
+            "StartPeriod": start_period_nullable,
+            "SeasonSegment": season_segment_nullable,
+            "RookieYear": rookie_year_nullable,
+            "RangeType": range_type_nullable,
+            "Position": position_nullable,
+            "PointDiff": point_diff_nullable,
+            "Outcome": outcome_nullable,
+            "Location": location_nullable,
+            "LeagueID": league_id,
+            "GameSegment": game_segment_nullable,
+            "GameID": game_id_nullable,
+            "EndRange": end_range_nullable,
+            "EndPeriod": end_period_nullable,
+            "DateTo": date_to_nullable,
+            "DateFrom": date_from_nullable,
+            "ContextFilter": context_filter_nullable,
+            "ClutchTime": clutch_time_nullable,
+            "AheadBehind": ahead_behind_nullable,
+        },
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_nba_stats_result_sets(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def nba_stats_videoevents(
+    game_event_id: Optional[str] = "10",
+    game_id: Optional[str] = "1022200075",
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """GET /stats/videoevents
+
+    Endpoint: ``GET https://stats.nba.com/stats/videoevents``
+    Example URL: https://stats.nba.com/stats/videoevents
+
+    Args:
+        game_event_id: GameEventID query parameter.
+        game_id: GameID query parameter.
+        return_parsed: parse the payload through parse_nba_stats_result_sets -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
+
+    Returns:
+        A dict of two DataFrames keyed ``videoUrls`` (clip URLs, durations, thumbnails) and ``playlist`` (per-event game metadata) by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        Quick start::
+
+            nba_stats_videoevents()
+    """
+    raw = _get(
+        "https://stats.nba.com/stats/videoevents",
+        params={
+            "GameEventID": game_event_id,
+            "GameID": game_id,
+        },
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_nba_stats_result_sets(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def nba_stats_videoeventsasset(
+    game_event_id: Optional[str] = "0",
+    game_id: Optional[str] = "0021700807",
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """GET /stats/videoeventsasset
+
+    Endpoint: ``GET https://stats.nba.com/stats/videoeventsasset``
+    Example URL: https://stats.nba.com/stats/videoeventsasset
+
+    Args:
+        game_event_id: GameEventID query parameter.
+        game_id: GameID query parameter.
+        return_parsed: parse the payload through parse_nba_stats_result_sets -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
+
+    Returns:
+        A dict of two DataFrames keyed ``videoUrls`` (clip URLs, durations, thumbnails) and ``playlist`` (per-event game metadata) by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        Quick start::
+
+            nba_stats_videoeventsasset()
+    """
+    raw = _get(
+        "https://stats.nba.com/stats/videoeventsasset",
+        params={
+            "GameEventID": game_event_id,
+            "GameID": game_id,
         },
         **kwargs,
     )

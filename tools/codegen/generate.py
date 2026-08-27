@@ -96,6 +96,10 @@ def _build_docstring(
     """
     extras = doc_extras or {}
     raw_doc = str(extras.get("raw_doc") or "")
+    # ``parsed_doc`` overrides the generic parsed-return phrase for endpoints whose
+    # parser returns something other than a single DataFrame (e.g. the video
+    # endpoints' dict of ``videoUrls``/``playlist`` frames).
+    parsed_doc = str(extras.get("parsed_doc") or "")
     lines = [f'"""{ep.summary}', ""]
     if not flat:
         if league_param:
@@ -119,11 +123,18 @@ def _build_docstring(
             "minted when omitted."
         )
     if ep.parser:
+        parsed_kind = "dict of polars DataFrames" if parsed_doc else "polars DataFrame"
         lines.append(
-            f"    return_parsed: parse the payload through {ep.parser} -> polars DataFrame "
+            f"    return_parsed: parse the payload through {ep.parser} -> {parsed_kind} "
             f"(default True). Pass return_parsed=False for {raw_doc or 'the raw JSON Dict'}."
         )
-        lines.append("    return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.")
+        if parsed_doc:
+            lines.append(
+                "    return_as_pandas: with return_parsed, return a dict of pandas "
+                "DataFrames (same keys) instead of polars."
+            )
+        else:
+            lines.append("    return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.")
     if extras:
         # Only families that opted into the extended docstring contract document
         # **kwargs -- adding it unconditionally would rewrite ~1,800 already-shipped
@@ -133,7 +144,7 @@ def _build_docstring(
     lines.append("Returns:")
     if ep.parser:
         lines.append(
-            "    A polars/pandas DataFrame by default; "
+            f"    {parsed_doc or 'A polars/pandas DataFrame'} by default; "
             f"{raw_doc or 'the raw JSON ``Dict``'} when ``return_parsed=False``."
         )
     else:
@@ -572,6 +583,7 @@ class _EndpointView:
         self.raw_annotation = rt[0] if len(rt) == 1 else f"Union[{self.raw_hint}]"
         # markdown flavour of the same prose for the docs reference block
         self.raw_doc_md = str((doc_extras or {}).get("raw_doc") or "").replace("``", "`")
+        self.parsed_doc_md = str((doc_extras or {}).get("parsed_doc") or "").replace("``", "`")
         self.fn_name = fn_name
         self.short = ep.short
         self.summary = _normalize_rst(ep.summary or "")

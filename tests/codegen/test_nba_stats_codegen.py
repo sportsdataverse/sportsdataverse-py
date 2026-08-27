@@ -22,7 +22,15 @@ def test_nba_stats_module_imports_and_has_workhorse():
     # drafthistory joined at 113: LeagueID=00 was mis-marked "barren" in the
     # catalog, so it had never been generated for the NBA side.
     assert hasattr(mod, "nba_stats_drafthistory")
-    assert len(mod.__all__) == 125  # live or capture-confirmed-live stats endpoints
+    # video endpoints joined at 128: the 2026-08 capture sweep's shape detector
+    # misread their dict resultSets envelope ({Meta:{videoUrls},playlist}) as dead;
+    # a 2026-08-26 re-probe confirmed all three live on stats.nba.com.
+    assert hasattr(mod, "nba_stats_videodetailsasset")
+    assert hasattr(mod, "nba_stats_videoevents")
+    assert hasattr(mod, "nba_stats_videoeventsasset")
+    # videodetails (no "asset") is genuinely dead (500-empty) and stays excluded
+    assert not hasattr(mod, "nba_stats_videodetails")
+    assert len(mod.__all__) == 128  # live or capture-confirmed-live stats endpoints
 
 
 def test_wnba_stats_module_imports():

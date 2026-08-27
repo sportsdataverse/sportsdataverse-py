@@ -73,6 +73,9 @@ _REPRESENTATIVE_RESULT_SETS = {
     "shotchartlineupdetail": "ShotChartLineupDetail",
     "teamdetails": "TeamBackground",
     "teamplayerdashboard": "PlayersSeasonTotals",
+    "videodetailsasset": "videoUrls",
+    "videoevents": "videoUrls",
+    "videoeventsasset": "videoUrls",
     "winprobabilitypbp": "WinProbPBP",
 }
 
@@ -101,10 +104,23 @@ _DOCSTRING_ENDPOINTS = ("drafthistory",)
 # Curated example args for those endpoints, so the Example block is a real,
 # copy-pasteable call rather than the whole draft history.
 _EXAMPLE_ARGS = {"drafthistory": {"season_year_nullable": "2024"}}
+# Parsed-return phrase override for endpoints whose parser returns a dict of
+# frames rather than a single DataFrame (video envelope: {Meta:{videoUrls},playlist}).
+_VIDEO_PARSED_DOC = (
+    "A dict of two DataFrames keyed ``videoUrls`` (clip URLs, durations, "
+    "thumbnails) and ``playlist`` (per-event game metadata)"
+)
+_PARSED_DOC_ENDPOINTS = {
+    "videodetailsasset": _VIDEO_PARSED_DOC,
+    "videoevents": _VIDEO_PARSED_DOC,
+    "videoeventsasset": _VIDEO_PARSED_DOC,
+}
 
 
 def _docstring_extras(slug: str, stem: str) -> Dict[str, Any]:
     """Per-endpoint ``docstring:`` extras consumed by ``generate._build_docstring``."""
+    if slug in _PARSED_DOC_ENDPOINTS:
+        return {"parsed_doc": _PARSED_DOC_ENDPOINTS[slug]}
     if slug not in _DOCSTRING_ENDPOINTS:
         return {}
     sib_stem, sib_league, sib_league_id = _SIBLING[stem]

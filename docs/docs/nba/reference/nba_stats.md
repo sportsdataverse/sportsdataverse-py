@@ -5,7 +5,7 @@ sidebar_position: 10
 ---
 # NBA — NBA Stats API (stats.nba.com)
 
-`sportsdataverse.nba` — 125 endpoints.
+`sportsdataverse.nba` — 128 endpoints.
 
 ## `nba_stats_alltimeleadersgrids`
 
@@ -9210,6 +9210,161 @@ GET /stats/teamyearbyyearstats
 
 ```python
 nba_stats_teamyearbyyearstats(league_id='00')
+```
+
+_Last validated n/a._
+
+## `nba_stats_videodetailsasset`
+
+GET /stats/videodetailsasset
+
+**Endpoint URL:** `GET https://stats.nba.com/stats/videodetailsasset`
+
+**Valid URL:** [https://stats.nba.com/stats/videodetailsasset?LeagueID=00](https://stats.nba.com/stats/videodetailsasset?LeagueID=00)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `ContextMeasure` | `context_measure_detailed` |  |  | `Y` |  |
+| `LastNGames` | `last_n_games` |  |  | `Y` |  |
+| `Month` | `month` |  |  | `Y` |  |
+| `OpponentTeamID` | `opponent_team_id` |  |  | `Y` |  |
+| `Period` | `period` |  |  | `Y` |  |
+| `PlayerID` | `player_id` |  |  | `Y` |  |
+| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+| `SeasonType` | `season_type_all_star` |  |  | `Y` |  |
+| `TeamID` | `team_id` |  |  | `Y` |  |
+| `VsDivision` | `vs_division_nullable` |  |  | `Y` |  |
+| `VsConference` | `vs_conference_nullable` |  |  | `Y` |  |
+| `StartRange` | `start_range_nullable` |  |  | `Y` |  |
+| `StartPeriod` | `start_period_nullable` |  |  | `Y` |  |
+| `SeasonSegment` | `season_segment_nullable` |  |  | `Y` |  |
+| `RookieYear` | `rookie_year_nullable` |  |  | `Y` |  |
+| `RangeType` | `range_type_nullable` |  |  | `Y` |  |
+| `Position` | `position_nullable` |  |  | `Y` |  |
+| `PointDiff` | `point_diff_nullable` |  |  | `Y` |  |
+| `Outcome` | `outcome_nullable` |  |  | `Y` |  |
+| `Location` | `location_nullable` |  |  | `Y` |  |
+| `LeagueID` | `league_id` |  |  | `Y` |  |
+| `GameSegment` | `game_segment_nullable` |  |  | `Y` |  |
+| `GameID` | `game_id_nullable` |  |  | `Y` |  |
+| `EndRange` | `end_range_nullable` |  |  | `Y` |  |
+| `EndPeriod` | `end_period_nullable` |  |  | `Y` |  |
+| `DateTo` | `date_to_nullable` |  |  | `Y` |  |
+| `DateFrom` | `date_from_nullable` |  |  | `Y` |  |
+| `ContextFilter` | `context_filter_nullable` |  |  | `Y` |  |
+| `ClutchTime` | `clutch_time_nullable` |  |  | `Y` |  |
+| `AheadBehind` | `ahead_behind_nullable` |  |  | `Y` |  |
+
+### Returns
+
+**`return_parsed=True`** (default) — A dict of two DataFrames keyed `videoUrls` (clip URLs, durations, thumbnails) and `playlist` (per-event game metadata) (representative columns below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+| col_name | type | description |
+|---|---|---|
+| `uuid` | character | Uuid. |
+| `sdur` | integer | Sdur. |
+| `surl` | character | Surl. |
+| `sth` | character | Sth. |
+| `mdur` | integer | Mdur. |
+| `murl` | character | Murl. |
+| `mth` | character | Mth. |
+| `ldur` | integer | Ldur. |
+| `lurl` | character | Lurl. |
+| `lth` | character | Lth. |
+| `vtt` | character | Vtt. |
+| `scc` | character | Scc. |
+| `srt` | character | Srt. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example
+
+```python
+nba_stats_videodetailsasset(league_id='00')
+```
+
+_Last validated n/a._
+
+## `nba_stats_videoevents`
+
+GET /stats/videoevents
+
+**Endpoint URL:** `GET https://stats.nba.com/stats/videoevents`
+
+**Valid URL:** [https://stats.nba.com/stats/videoevents](https://stats.nba.com/stats/videoevents)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `GameEventID` | `game_event_id` |  |  | `Y` |  |
+| `GameID` | `game_id` |  |  | `Y` |  |
+
+### Returns
+
+**`return_parsed=True`** (default) — A dict of two DataFrames keyed `videoUrls` (clip URLs, durations, thumbnails) and `playlist` (per-event game metadata) (representative columns below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+| col_name | type | description |
+|---|---|---|
+| `uuid` | character | Uuid. |
+| `dur` | character | Dur. |
+| `stt` | character | Stt. |
+| `stp` | character | Stp. |
+| `sth` | character | Sth. |
+| `stw` | character | Stw. |
+| `mtt` | character | Mtt. |
+| `mtp` | character | Mtp. |
+| `mth` | character | Mth. |
+| `mtw` | character | Mtw. |
+| `ltt` | character | Ltt. |
+| `ltp` | character | Ltp. |
+| `lth` | character | Lth. |
+| `ltw` | character | Ltw. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example
+
+```python
+nba_stats_videoevents()
+```
+
+_Last validated n/a._
+
+## `nba_stats_videoeventsasset`
+
+GET /stats/videoeventsasset
+
+**Endpoint URL:** `GET https://stats.nba.com/stats/videoeventsasset`
+
+**Valid URL:** [https://stats.nba.com/stats/videoeventsasset](https://stats.nba.com/stats/videoeventsasset)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `GameEventID` | `game_event_id` |  |  | `Y` |  |
+| `GameID` | `game_id` |  |  | `Y` |  |
+
+### Returns
+
+**`return_parsed=True`** (default) — A dict of two DataFrames keyed `videoUrls` (clip URLs, durations, thumbnails) and `playlist` (per-event game metadata) (representative columns below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+| col_name | type | description |
+|---|---|---|
+| `uuid` | character | Uuid. |
+| `sdur` | integer | Sdur. |
+| `surl` | character | Surl. |
+| `sth` | character | Sth. |
+| `mdur` | integer | Mdur. |
+| `murl` | character | Murl. |
+| `mth` | character | Mth. |
+| `ldur` | integer | Ldur. |
+| `lurl` | character | Lurl. |
+| `lth` | character | Lth. |
+| `vtt` | character | Vtt. |
+| `scc` | character | Scc. |
+| `srt` | character | Srt. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example
+
+```python
+nba_stats_videoeventsasset()
 ```
 
 _Last validated n/a._

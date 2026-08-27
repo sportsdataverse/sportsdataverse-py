@@ -4,6 +4,7 @@
 
 - [stats.nba.com / stats.wnba.com capture fixtures](#statsnbacom--statswnbacom-capture-fixtures)
   - [2026-08-23 stats-surface expansion captures](#2026-08-23-stats-surface-expansion-captures)
+  - [2026-08-26 video-endpoint re-probe captures](#2026-08-26-video-endpoint-re-probe-captures)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -23,3 +24,18 @@ Captured live from a residential IP with curl_cffi `impersonate="chrome"`:
 | cap_homepagev2_wnba.json | stats.wnba.com/stats/homepagev2 | Season=2024, Team, Traditional |
 | cap_playercareerbycollegerollup_wnba.json | stats.wnba.com/stats/playercareerbycollegerollup | Season=2024, Totals |
 | cap_scoreboardv2_nba.json | stats.nba.com/stats/scoreboardv2 | GameDate=2025-01-15 |
+
+## 2026-08-26 video-endpoint re-probe captures
+
+Captured live from a residential IP with curl_cffi `impersonate="chrome"`. These
+three endpoints ship `resultSets` as the video envelope
+`{Meta: {videoUrls: [...]}, playlist: [...]}` (a dict, not the tabular
+`[{name, headers, rowSet}]` list) — the earlier capture sweep's shape detector
+misread that as dead. `cap_videodetailsasset_nba.json` is truncated to the first
+3 of 609 `videoUrls`/`playlist` items (the full payload is ~838KB).
+
+| fixture | endpoint / host | request |
+|---|---|---|
+| cap_videodetailsasset_nba.json | stats.nba.com/stats/videodetailsasset | ContextMeasure=FGM, PlayerID=2544, TeamID=1610612747, Season=2022-23, SeasonType=Regular Season, LastNGames=0, Month=0, OpponentTeamID=0, Period=0 |
+| cap_videoevents_nba.json | stats.nba.com/stats/videoevents | GameID=0022201086, GameEventID=7 |
+| cap_videoeventsasset_nba.json | stats.nba.com/stats/videoeventsasset | GameID=0022201086, GameEventID=7 |

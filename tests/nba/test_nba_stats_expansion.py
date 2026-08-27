@@ -90,6 +90,21 @@ def test_boxscoresummaryv3_envelope_synthesis():
     assert all(isinstance(v, pl.DataFrame) for v in out.values())
 
 
+def test_videoevents_nba_wrapper():
+    # 2026-08-26 revival: video endpoints ship the dict envelope
+    # {Meta: {videoUrls: [...]}, playlist: [...]} the sweep misread as dead
+    captured: dict = {}
+    out = nba_stats.nba_stats_videoevents(
+        game_id="0022201086",
+        game_event_id="7",
+        transport=_transport("cap_videoevents_nba.json", captured),
+    )
+    assert captured["url"] == "https://stats.nba.com/stats/videoevents"
+    assert isinstance(out, dict)
+    assert set(out) == {"videoUrls", "playlist"}
+    assert out["playlist"].height == 1 and "gi" in out["playlist"].columns
+
+
 def test_result_sets_envelope_still_default():
     """A plain resultSets payload keeps its exact previous behavior."""
     raw = {"resultSets": [{"name": "A", "headers": ["GAME_ID", "PTS"], "rowSet": [["1", 10], ["2", 12]]}]}
