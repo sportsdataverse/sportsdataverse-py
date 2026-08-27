@@ -1641,14 +1641,17 @@ with `cfb_ratings.cfb_ratings`, converts the schedule to the engine format
 with `cfb_standings.cfb_games_from_schedule` (re-keyed on ESPN `team_id` so
 the ratings align), and feeds `make_ratings_compute_results` as the sampler.
 All season / standings / bracket machinery is reused; unplayed games are simulated,
-played games (before `as_of_date`) are kept.
+played games (before `as_of_date`) are kept. Only FBS programs (schedule
+`division == "fbs"`) enter the simulated universe; non-FBS opponents stay in the
+game set -- their games still count toward FBS records -- but can never reach the
+standings, the playoff field, or the output.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `seasons` | `int \| list[int]` |  | A single season (an `int`, or a one-element list). Multiple seasons raise `ValueError` -- the simulation engine is single-season. |
-| `as_of_date` | `date \| None` | `None` | Leakage boundary forwarded to `cfb_ratings.cfb_ratings`; games are kept/simulated from the schedule as-is. `None` uses the full season. |
+| `as_of_date` | `date \| None` | `None` | Leakage boundary applied to BOTH the ratings vintage and the game set. Ratings are fit only on plays from games with `date < as_of_date` (`cfb_ratings.cfb_ratings`), and schedule results from `start_date` on/after `as_of_date` are masked so those games are simulated instead of replayed; masked postseason rows are dropped (the matchup is itself an outcome) and regenerated from each sim's own standings. `None` uses the full season as-is. |
 | `n_sims` | `int` | `10000` | Number of simulated seasons. |
 | `playoff_seeds` | `int` | `12` | CFP field size. |
 | `seed` | `int` | `0` | RNG seed for reproducibility. |

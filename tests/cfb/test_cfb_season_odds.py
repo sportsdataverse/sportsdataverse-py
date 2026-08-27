@@ -369,6 +369,17 @@ def test_as_of_date_simulates_post_boundary_games(monkeypatch: pytest.MonkeyPatc
     assert spread.height > 0, "playoff_prob is degenerate -- the post-boundary slate was replayed"
 
 
+def _same_board(a: pl.DataFrame, b: pl.DataFrame) -> bool:
+    """Compare two odds frames by VALUE, keyed on team_id, ignoring row order.
+
+    ``cfb_season_odds`` sorts on probabilities alone, so tied teams come back in an
+    arbitrary order run to run (polars ``unique`` does not promise input order either).
+    ``DataFrame.equals`` therefore reports a difference where none exists -- comparing
+    it directly makes a leakage assertion flaky in both directions.
+    """
+    return a.sort("team_id").equals(b.sort("team_id"))
+
+
 def test_as_of_date_ignores_post_boundary_results(monkeypatch: pytest.MonkeyPatch) -> None:
     """THE leakage gate: flipping every post-boundary score changes nothing.
 
@@ -383,8 +394,8 @@ def test_as_of_date_ignores_post_boundary_results(monkeypatch: pytest.MonkeyPatc
     forecast_flipped = cfb_season_odds(2023, as_of_date=_AS_OF, n_sims=200, playoff_seeds=2, seed=0)
     replay_flipped = cfb_season_odds(2023, n_sims=200, playoff_seeds=2, seed=0)
 
-    assert forecast.equals(forecast_flipped), "post-as_of_date results leaked into the forecast"
-    assert not replay.equals(replay_flipped), "control failed: the perturbation is a no-op"
+    assert _same_board(forecast, forecast_flipped), "post-as_of_date results leaked into the forecast"
+    assert not _same_board(replay, replay_flipped), "control failed: the perturbation is a no-op"
 
 
 def test_as_of_date_boundary_is_exclusive_of_the_future() -> None:
