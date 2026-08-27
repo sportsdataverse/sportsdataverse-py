@@ -672,18 +672,18 @@ Release: [cfb_schedules](https://github.com/sportsdataverse/sportsdataverse-data
 | `conference_game` | Boolean | Whether CollegeFootballData considers this a conference matchup (derived from the two teams' conference membership). Falls back to ESPN's conference_competition where CFBD has no row. |
 | `conference_competition` | Boolean | ESPN's own conference-matchup flag. Kept alongside conference_game because the two measurably disagree on a small number of games; null for games ESPN does not carry. |
 | `attendance` | Int64 | Reported attendance. |
-| `venue_id` | Int64 | CollegeFootballData venue id. |
-| `venue` | String | Venue name. |
+| `venue_id` | Int64 | CollegeFootballData's identifier for the stadium hosting the game; stable across seasons, so it joins venue metadata from cfb_team_info. Null for games with no recorded venue. |
+| `venue` | String | Stadium the game was played in, as spelled by CollegeFootballData. Prefer venue_id for joins -- venue spellings drift between sources and seasons. |
 | `status` | String | ESPN game-status enum ("STATUS_FINAL", "STATUS_POSTPONED", "STATUS_CANCELED", ...). The signal that distinguishes a scheduled-then-cancelled game from an unplayed future one; null for games ESPN does not carry. |
 | `home_id` | Int64 | Team id of the home team. |
-| `home_team` | String | Home team name. |
+| `home_team` | String | School name of the home team as CollegeFootballData spells it. Join on home_id rather than this string; spellings differ between CFBD and ESPN. |
 | `home_abbreviation` | String | Home team abbreviation (ESPN-native; null for games ESPN does not carry). |
 | `home_division` | String | Home team division: "fbs", "fcs", "ii", "iii", or null for a team outside that classification. A null is a genuinely non-FBS team, not missing data - filter on fbs_game / fbs_participant rather than comparing this column, since a null comparison yields null in polars. |
 | `home_conference` | String | Home team conference name. |
 | `home_points` | Int64 | Points scored by the home team. CollegeFootballData's homePoints, falling back to ESPN's home_score. |
 | `home_winner` | Boolean | Whether the home team won. ESPN's winner flag where present, otherwise derived from the points of a completed game; null when the game is not completed or carries no score. |
 | `away_id` | Int64 | Team id of the away team. |
-| `away_team` | String | Away team name. |
+| `away_team` | String | School name of the away team as CollegeFootballData spells it. Join on away_id rather than this string; spellings differ between CFBD and ESPN. |
 | `away_abbreviation` | String | Away team abbreviation (ESPN-native; null for games ESPN does not carry). |
 | `away_division` | String | Away team division; same vocabulary and same null caveat as home_division. |
 | `away_conference` | String | Away team conference name. |
