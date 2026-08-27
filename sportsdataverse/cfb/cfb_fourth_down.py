@@ -338,6 +338,7 @@ def _end_game_clamp(
     adj: np.ndarray,
     period: np.ndarray,
     def_to: np.ndarray,
+    value: float = 0.0,
 ) -> np.ndarray:
     """cfb4th ``end_game_fn``: leading + late + defense out of timeouts -> WP clamps.
 
@@ -350,12 +351,19 @@ def _end_game_clamp(
 
     Feeding the original team's own columns inverts the rule -- it pins the win
     probability of the team that is AHEAD to zero. See #395.
+
+    ``value`` is what a clamped row is pinned to, and it depends on WHOSE win
+    probability ``wp`` holds. When possession changed, ``wp`` belongs to the team
+    that gave the ball up, so the kneel-out is a loss (``0.0``, the default).
+    When possession did not change -- a punt return touchdown hands the ball
+    straight back -- ``wp`` belongs to the team doing the kneeling, so the same
+    situation is a win (``1.0``).
     """
     lead = pos_diff > 0
     p4 = period == 4
-    wp = np.where(lead & (adj < 120) & p4 & (def_to == 0), 0.0, wp)
-    wp = np.where(lead & (adj < 80) & p4 & (def_to == 1), 0.0, wp)
-    wp = np.where(lead & (adj < 40) & p4 & (def_to == 2), 0.0, wp)
+    wp = np.where(lead & (adj < 120) & p4 & (def_to == 0), value, wp)
+    wp = np.where(lead & (adj < 80) & p4 & (def_to == 1), value, wp)
+    wp = np.where(lead & (adj < 40) & p4 & (def_to == 2), value, wp)
     return wp
 
 
@@ -403,6 +411,15 @@ def get_go_wp(pbp_df) -> pd.DataFrame:
         ``go_wp`` is always in [0, 1]; the conditional columns are in [0, 1] but
         can be NaN for degenerate goal-line plays where one outcome bucket is
         empty (matches the R reference ``pivot_wider`` NA behavior).
+
+    Raises:
+        KeyError: If ``pbp_df`` is missing a required state column from
+            :data:`_PBP_COLS`. The frame is validated up front rather than
+            substituting ``NaN``, which used to surface far downstream as
+            ``AttributeError: 'float' object has no attribute 'to_numpy'``.
+        ValueError: If ``season`` is absent or all-null. The era-aware models
+            would otherwise score against an all-zero one-hot -- a rule era that
+            never existed -- and return a plausible number.
 
     Example:
         Quick start::
@@ -596,6 +613,12 @@ def get_punt_wp(pbp_df) -> pd.DataFrame:
         end-yardline distribution has no support for the play's ``yards_to_goal``
         (e.g. inside the 31, where punting is dominated and the cfb4th table is
         empty -- matching the R reference's left-join NA behavior).
+
+    Raises:
+        KeyError: If ``pbp_df`` is missing a required state column from
+            :data:`_PBP_COLS`. The frame is validated up front rather than
+            substituting ``NaN``, which used to surface far downstream as
+            ``AttributeError: 'float' object has no attribute 'to_numpy'``.
     """
     n_plays = len(pbp_df)
     base = (pbp_df.to_pandas() if hasattr(pbp_df, "to_pandas") else pd.DataFrame(pbp_df)).reset_index(drop=True)
@@ -675,12 +698,24 @@ def get_punt_wp(pbp_df) -> pd.DataFrame:
     # receiving team leads and the punting team is out of timeouts, so the
     # punting team's win probability is zero. Passing `orig`'s differential here
     # inverted it and pinned the team that was AHEAD to zero (#395).
-    wp = _end_game_clamp(
-        wp,
+    #
+    # The kneel-out is only a LOSS for the team being asked about when the ball
+    # actually changed hands. A punt return touchdown hands it straight back, so
+    # on those rows `wp` already belongs to the kneeling team and the same
+    # situation is a WIN. cfb4th clamps both to zero, which pins a punting team
+    # still leading after conceding the score to a certain loss; return-TD rows
+    # carry under 0.2% of the mass, so this is a small deliberate divergence
+    # rather than a faithful port.
+    clamp_args = (
         flipped_state["pos_score_diff_start"].to_numpy().astype(float),
         flipped_state["adj_TimeSecsRem"].to_numpy().astype(float),
         flipped_state["period"].to_numpy().astype(float),
         flipped_state["def_pos_team_timeouts_rem_before"].to_numpy().astype(float),
+    )
+    wp = np.where(
+        possession_changed,
+        _end_game_clamp(wp, *clamp_args, value=0.0),
+        _end_game_clamp(wp, *clamp_args, value=1.0),
     )
 
     agg = (
@@ -745,6 +780,15 @@ def get_fg_wp(pbp_df) -> pd.DataFrame:
         from the kicking team's perspective). All four are NaN when the FG model
         is not bundled (:data:`FG_MODEL_AVAILABLE` is False) -- probabilities are
         never fabricated.
+
+    Raises:
+        KeyError: If ``pbp_df`` is missing a required state column from
+            :data:`_PBP_COLS`. The frame is validated up front rather than
+            substituting ``NaN``, which used to surface far downstream as
+            ``AttributeError: 'float' object has no attribute 'to_numpy'``.
+        ValueError: If ``season`` is absent or all-null. The era-aware models
+            would otherwise score against an all-zero one-hot -- a rule era that
+            never existed -- and return a plausible number.
     """
     n_plays = len(pbp_df)
     base = (pbp_df.to_pandas() if hasattr(pbp_df, "to_pandas") else pd.DataFrame(pbp_df)).reset_index(drop=True)
@@ -840,6 +884,15 @@ def get_4th_down_probs(pbp_df) -> pd.DataFrame:
     Returns:
         A pandas copy of ``pbp_df`` with the decision columns added. Empty input
         returns the input plus empty decision columns.
+
+    Raises:
+        KeyError: If ``pbp_df`` is missing a required state column from
+            :data:`_PBP_COLS`. The frame is validated up front rather than
+            substituting ``NaN``, which used to surface far downstream as
+            ``AttributeError: 'float' object has no attribute 'to_numpy'``.
+        ValueError: If ``season`` is absent or all-null. The era-aware models
+            would otherwise score against an all-zero one-hot -- a rule era that
+            never existed -- and return a plausible number.
 
     Example:
         Quick start::

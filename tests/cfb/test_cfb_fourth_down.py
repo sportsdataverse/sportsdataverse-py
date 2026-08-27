@@ -382,3 +382,27 @@ def test_go_path_requires_season_like_the_fg_path_does():
     rows = pl.DataFrame([_row(4, 2, 45)]).drop("season")
     with pytest.raises(ValueError, match="season"):
         get_go_wp(rows)
+
+
+def test_return_touchdown_rows_clamp_toward_a_win_not_a_loss():
+    # A punt return TD hands the ball straight back, so on those rows `wp` is
+    # already the punting team's and possession never changed. cfb4th clamps
+    # every row to 0, which pins a punting team still LEADING after conceding
+    # the score to a certain loss. Those rows must clamp to 1 instead.
+    #
+    # Asserted through the clamp helper directly: return-TD rows carry under
+    # 0.2% of the punt distribution's mass, so an aggregate would hide the sign.
+    from sportsdataverse.cfb.cfb_fourth_down import _end_game_clamp
+
+    wp = np.array([0.5])
+    lead, adj, period, def_to = (
+        np.array([3.0]),
+        np.array([60.0]),
+        np.array([4.0]),
+        np.array([0.0]),
+    )
+    assert _end_game_clamp(wp, lead, adj, period, def_to) == pytest.approx(0.0)
+    assert _end_game_clamp(wp, lead, adj, period, def_to, value=1.0) == pytest.approx(1.0)
+    # Trailing is not a kneel-out for anyone, whichever value is passed.
+    trailing = np.array([-3.0])
+    assert _end_game_clamp(wp, trailing, adj, period, def_to, value=1.0) == pytest.approx(0.5)
