@@ -13,8 +13,8 @@ sidebar_label: CFB
 | [On3 Recruit Database (api.on3.com)](reference/on3) | 78 | `https://api.on3.com/public/rdb/v1` |
 | [247Sports Recruit Database (ipa.247sports.com)](reference/sports247) | 12 | `https://ipa.247sports.com` |
 | [247Sports Site Pages (247sports.com)](reference/sports247_site_pages) | 35 | `https://247sports.com` |
-| [Dataset loaders](reference/loaders) | 40 | sportsdataverse raw data / sportsdataverse-data releases |
-| [Additional functions](reference/additional) | 76 | hand-written wrappers, loaders & helpers |
+| [Dataset loaders](reference/loaders) | 41 | sportsdataverse raw data / sportsdataverse-data releases |
+| [Additional functions](reference/additional) | 75 | hand-written wrappers, loaders & helpers |
 
 ## Examples
 
@@ -77,9 +77,9 @@ Each `sportsdataverse` function and its equivalent in the sister R package, [`cf
 | [`espn_cfb_team_record`](reference/site#espn_cfb_team_record) | [`espn_cfb_team_record`](https://cfbfastR.sportsdataverse.org/reference/espn_cfb_team_record.html) |
 | [`espn_cfb_team_roster`](reference/site#espn_cfb_team_roster) | [`espn_cfb_team_roster`](https://cfbfastR.sportsdataverse.org/reference/espn_cfb_team_roster.html) |
 | [`espn_cfb_team_schedule`](reference/site#espn_cfb_team_schedule) | [`espn_cfb_team_schedule`](https://cfbfastR.sportsdataverse.org/reference/espn_cfb_team_schedule.html) |
-| [`espn_cfb_teams`](reference/additional#espn_cfb_teams) | [`espn_cfb_teams`](https://cfbfastR.sportsdataverse.org/reference/espn_cfb_teams.html) |
 | [`espn_cfb_venue`](reference/core#espn_cfb_venue) | [`espn_cfb_venue`](https://cfbfastR.sportsdataverse.org/reference/espn_cfb_venue.html) |
 | [`espn_cfb_venues`](reference/core#espn_cfb_venues) | [`espn_cfb_venues`](https://cfbfastR.sportsdataverse.org/reference/espn_cfb_venues.html) |
 | [`espn_cfb_week_rankings`](reference/core#espn_cfb_week_rankings) | [`espn_cfb_week_rankings`](https://cfbfastR.sportsdataverse.org/reference/espn_cfb_week_rankings.html) |
 | [`load_cfb_pbp`](reference/loaders#load_cfb_pbp) | [`load_cfb_pbp`](https://cfbfastR.sportsdataverse.org/reference/load_cfb_pbp.html) |
 | [`load_cfb_rosters`](reference/loaders#load_cfb_rosters) | [`load_cfb_rosters`](https://cfbfastR.sportsdataverse.org/reference/load_cfb_rosters.html) |
+| [`load_cfb_teams`](reference/loaders#load_cfb_teams) | [`load_cfb_teams`](https://cfbfastR.sportsdataverse.org/reference/load_cfb_teams.html) |

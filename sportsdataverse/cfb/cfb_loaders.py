@@ -23,6 +23,7 @@ __all__ = [
     "load_cfb_rosters",
     "load_cfb_schedule",
     "load_cfb_team_info",
+    "load_cfb_teams",
     "load_cfb_team_talent",
     "load_cfb_teams_crosswalk",
     "load_cfb_schedule_crosswalk",
@@ -1019,6 +1020,106 @@ def load_cfb_team_info(seasons, return_as_pandas: bool = False):
         frames.append(df)
     if missing:
         cli_warn("load_cfb_team_info: no data for season(s) {missing} (skipped)".format(missing=missing))
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    # Producers shipped this id with differing dtypes across releases; pin it here
+    # so a cross-dataset join cannot silently match nothing.
+    out = _cast_ids_int64(out, ["team_id"])
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+def load_cfb_teams(seasons, return_as_pandas: bool = False):
+    """Load espn_cfb_teams (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_teams
+
+    Args:
+        seasons: an int or iterable of seasons (>= 2001).
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; seasons with no published asset are
+        skipped with a warning rather than raising (404-safe).
+
+        |col_name                 |type    |
+        |:------------------------|:-------|
+        |season                   |Int64   |
+        |team_id                  |Int64   |
+        |uid                      |String  |
+        |guid                     |String  |
+        |slug                     |String  |
+        |abbreviation             |String  |
+        |display_name             |String  |
+        |short_display_name       |String  |
+        |name                     |String  |
+        |nickname                 |String  |
+        |location                 |String  |
+        |color                    |String  |
+        |alternate_color          |String  |
+        |is_active                |Boolean |
+        |is_all_star              |Boolean |
+        |is_exhibition            |Boolean |
+        |division                 |String  |
+        |is_fbs                   |Boolean |
+        |team_group_id            |Int64   |
+        |team_group_name          |String  |
+        |conference_id            |Int64   |
+        |conference_name          |String  |
+        |conference_short_name    |String  |
+        |conference_abbreviation  |String  |
+        |conference_midsize_name  |String  |
+        |conference_slug          |String  |
+        |conference_is_conference |Boolean |
+        |conference_parent_id     |Int64   |
+        |team_logo                |String  |
+        |team_logo_dark           |String  |
+        |conference_logo          |String  |
+        |venue_id                 |Int64   |
+        |venue_name               |String  |
+        |venue_city               |String  |
+        |venue_state              |String  |
+        |venue_indoor             |Boolean |
+        |venue_grass              |Boolean |
+        |school                   |String  |
+        |mascot                   |String  |
+        |alt_name1                |String  |
+        |alt_name2                |String  |
+        |alt_name3                |String  |
+        |cfbd_conference          |String  |
+        |classification           |String  |
+        |city                     |String  |
+        |state                    |String  |
+        |country_code             |String  |
+        |timezone                 |String  |
+        |latitude                 |Float64 |
+        |longitude                |Float64 |
+        |elevation                |String  |
+        |capacity                 |Int64   |
+        |dome                     |Boolean |
+        |grass                    |Boolean |
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2001.
+
+    Example:
+        Quick start::
+
+            load_cfb_teams(seasons=2024)
+    """
+    frames, missing = [], []
+    for season in _as_season_list(seasons):
+        if int(season) < 2001:
+            raise SeasonNotFoundError("season cannot be less than 2001")
+        df = _read_release_parquet(
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_teams/cfb_teams_{season}.parquet"
+        )
+        if df is None:
+            missing.append(season)
+            continue
+        frames.append(df)
+    if missing:
+        cli_warn("load_cfb_teams: no data for season(s) {missing} (skipped)".format(missing=missing))
     # diagonal: per-season release schemas can drift (columns added/dropped
     # over the years) -- union columns, null-fill gaps.
     out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()

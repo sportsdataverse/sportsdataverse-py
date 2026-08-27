@@ -1952,56 +1952,6 @@ from sportsdataverse.cfb.cfb_prediction_constants import RatingsConfig
 ratings = efficiency_ratings(pbp, config=RatingsConfig(ridge_lambda=100.0))
 ```
 
-### `espn_cfb_teams(groups=None, return_as_pandas=False, **kwargs) -> 'pl.DataFrame'` {#espn_cfb_teams}
-
-espn_cfb_teams - look up the college football teams
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `groups` | `int` | `None` | Used to define different divisions. 80 is FBS, 81 is FCS. |
-| `return_as_pandas` | `bool` | `False` | If True, returns a pandas dataframe. If False, returns a polars dataframe. |
-
-**Returns**
-
-Polars dataframe containing schedule dates for the requested season. This function caches by default, so if you want to refresh the data, use the command sportsdataverse.cfb.espn_cfb_teams.clear_cache().
-
-| col_name | type | description |
-|---|---|---|
-| `team_abbreviation` | character | Team abbreviation; `team_detail = TRUE` only. |
-| `team_alternate_color` | character | Alternate team color; `team_detail = TRUE` only. |
-| `team_color` | character | Primary team color; `team_detail = TRUE` only. |
-| `team_display_name` | character | Full team display name; `team_detail = TRUE` only. |
-| `team_id` | character | ESPN team id. |
-| `team_is_active` | logical | TRUE if the team is currently active. |
-| `team_is_all_star` | logical | TRUE if the row represents an All-Star team. |
-| `team_location` | character | Team location / school name; `team_detail = TRUE` only. |
-| `team_logos` | integer | Team logo metadata. |
-| `team_name` | character | Team nickname; `team_detail = TRUE` only. |
-| `team_nickname` | character | Team nickname label; `team_detail = TRUE` only. |
-| `team_short_display_name` | character | Short team display name; `team_detail = TRUE` only. |
-| `team_slug` | character | Team slug for the stat row. |
-| `team_uid` | character | ESPN universal team identifier (UID format 's:40~l:...~t:...'). |
-
-**Example**
-
-```python
-from sportsdataverse.cfb import espn_cfb_teams
-teams = espn_cfb_teams()
-print(teams.shape)
-
-# Pull FCS teams (group 81)
-
-fcs = espn_cfb_teams(groups=81, return_as_pandas=True)
-fcs.head()
-
-# Pipeline next step (build an abbreviation lookup)
-
-teams = espn_cfb_teams()
-abbr_map = dict(zip(teams["team_id"], teams["team_abbreviation"]))
-```
-
 ### `fei_ratings(plays: 'pl.DataFrame', *, config: 'RatingsConfig | None' = None) -> 'pl.DataFrame'` {#fei_ratings}
 
 One row per team: opponent-adjusted per-drive efficiency (FEI-style).

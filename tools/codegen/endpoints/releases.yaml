@@ -77,6 +77,16 @@ loaders:
     seasons: 2024
   id_int64:
   - team_id
+- fn: load_cfb_teams
+  league: cfb
+  base: sdv_releases
+  url: espn_cfb_teams/cfb_teams_{season}.parquet
+  tag: espn_cfb_teams
+  min_season: 2001
+  example_args:
+    seasons: 2024
+  id_int64:
+  - team_id
 - fn: load_cfb_team_talent
   league: cfb
   base: sdv_releases

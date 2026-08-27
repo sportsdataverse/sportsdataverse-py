@@ -424,6 +424,7 @@ from sportsdataverse.cfb import load_cfb_team_info as load_cfb_team_info  # noqa
 from sportsdataverse.cfb import load_cfb_team_summaries as load_cfb_team_summaries  # noqa: F401
 from sportsdataverse.cfb import load_cfb_team_summaries_weekly as load_cfb_team_summaries_weekly  # noqa: F401
 from sportsdataverse.cfb import load_cfb_team_talent as load_cfb_team_talent  # noqa: F401
+from sportsdataverse.cfb import load_cfb_teams as load_cfb_teams  # noqa: F401
 from sportsdataverse.cfb import load_cfb_teams_crosswalk as load_cfb_teams_crosswalk  # noqa: F401
 from sportsdataverse.cfb import load_draft_outcomes as load_draft_outcomes  # noqa: F401
 from sportsdataverse.cfb import load_fp_curve as load_fp_curve  # noqa: F401
@@ -678,6 +679,7 @@ __all__ = [
     "load_cfb_team_summaries",
     "load_cfb_team_summaries_weekly",
     "load_cfb_team_talent",
+    "load_cfb_teams",
     "load_cfb_teams_crosswalk",
     "load_draft_outcomes",
     "load_fp_curve",
