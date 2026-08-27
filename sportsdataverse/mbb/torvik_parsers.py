@@ -24,6 +24,12 @@ from sportsdataverse.dl_utils import underscore
 __all__ = ["parse_torvik_csv"]
 
 
+#: Document markers that mean "this body is markup, not a data file". Matched
+#: against the start of the payload, so a CSV cell containing "<html>" mid-file
+#: is unaffected.
+_HTML_MARKERS = ("<!doctype", "<html", "<?xml", "<head", "<body")
+
+
 def _clean_col(name: str) -> str:
     """janitor::make_clean_names-style cleaner for a single Torvik CSV header."""
     s = str(name).strip().replace("%", " percent ")
@@ -97,7 +103,10 @@ def parse_torvik_csv(payload: object, return_as_pandas: bool = False) -> Union[p
     # from here. The crosswalk builders wrap this in require_source(), whose
     # contract is exactly that a payload which will not render is a build
     # failure rather than a silently empty source.
-    if text.lstrip()[:1] == "<":
+    # Match real document markers, not a bare "<": a CSV whose first header
+    # cell is "<team>" is still a CSV, and a lone "<" belongs on the zero-row
+    # path below. A UTF-8 BOM ahead of the DOCTYPE is stripped first.
+    if text.lstrip("﻿").lstrip()[:200].lower().startswith(_HTML_MARKERS):
         snippet = " ".join(text.split())[:120]
         raise ValueError(
             "expected a barttorvik.com CSV data file but received an HTML "

@@ -86,6 +86,29 @@ def test_parse_leading_whitespace_html_also_raises():
         parse_torvik_csv("\n  <!DOCTYPE html>\n<html><body>nope</body></html>\n")
 
 
+def test_parse_html_detection_does_not_swallow_a_csv_starting_with_a_bracket():
+    """Only document markers count as HTML -- a bare "<" is not one.
+
+    A CSV whose first header cell is ``<team>`` is still a CSV, and a lone
+    ``<`` belongs on the documented zero-row path, not the raising one.
+    """
+    df = parse_torvik_csv("<team>,conf\nHouston,B12\n")
+    assert df.columns == ["team", "conf"]
+    assert df.height == 1
+    assert parse_torvik_csv("<").height == 0
+
+
+def test_parse_html_detection_sees_past_a_utf8_bom():
+    """A BOM ahead of the DOCTYPE must not hide the markup."""
+    with pytest.raises(ValueError, match="HTML document"):
+        parse_torvik_csv("\ufeff<!DOCTYPE html>\n<html><body>x</body></html>\n")
+
+
+def test_parse_xml_error_document_also_raises():
+    with pytest.raises(ValueError, match="HTML document"):
+        parse_torvik_csv('<?xml version="1.0"?>\n<error/>\n')
+
+
 def test_wrapper_routes_through_parser(monkeypatch):
     import sportsdataverse.mbb.torvik as gen
 
