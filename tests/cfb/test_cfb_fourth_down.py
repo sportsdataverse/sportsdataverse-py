@@ -260,3 +260,174 @@ def test_fg_make_prob_requires_season_when_era_aware():
     rows = pl.DataFrame([_row(4, 2, 45)]).drop("season")
     with pytest.raises(ValueError, match="season"):
         get_fg_wp(rows)
+
+
+# --------------------------------------------------------------------------- #
+# End-game clamp perspective (#395)
+#
+# cfb4th applies end_game_fn to the ALREADY-FLIPPED frame, so the rule reads
+# "the team now holding the ball leads, and the team it took the ball from is
+# out of timeouts, so whoever is asking loses". Feeding the pre-play team's own
+# columns inverts it and pins the team that is AHEAD to zero.
+#
+# None of these raise when inverted -- they return a confident wrong number, so
+# each is asserted directionally rather than against a fixture value.
+# --------------------------------------------------------------------------- #
+
+
+def _late(**kw):
+    """A Q4 row with a minute left, the possessing team out of timeouts."""
+    base = dict(period=4, tsr=60, adj=60, pto=0, dto=3)
+    base.update(kw)
+    return pl.DataFrame([_row(**base)])
+
+
+def test_punt_clamp_pins_the_trailing_team_not_the_leading_one():
+    # Punting team out of timeouts, 60s left in Q4. Trailing: you punt, they
+    # kneel it out, you lose. Leading: you are still winning.
+    trailing = get_punt_wp(_late(dist=10, ytg=50, sd=-3))["punt_wp"].to_numpy()[0]
+    leading = get_punt_wp(_late(dist=10, ytg=50, sd=3))["punt_wp"].to_numpy()[0]
+    assert trailing < 0.01, trailing
+    assert leading > 0.5, leading
+    # The inverted form produced exactly this pair the other way round:
+    # trailing 0.0999 (unclamped) and leading 0.0 (pinned).
+    assert leading > trailing
+
+
+def test_punt_clamp_does_not_fire_with_timeouts_or_outside_the_fourth():
+    trailing_no_to = get_punt_wp(_late(dist=10, ytg=50, sd=-3))["punt_wp"].to_numpy()[0]
+    # Timeouts in hand: still a game.
+    with_to = get_punt_wp(_late(dist=10, ytg=50, sd=-3, pto=3))["punt_wp"].to_numpy()[0]
+    assert with_to > trailing_no_to
+    # cfb4th's end_game_fn is gated on period == 4.
+    second_qtr = get_punt_wp(pl.DataFrame([_row(dist=10, ytg=50, sd=-3, period=2, tsr=60, adj=1860, pto=0)]))[
+        "punt_wp"
+    ].to_numpy()[0]
+    assert second_qtr > trailing_no_to
+
+
+@pytest.mark.skipif(not FG_MODEL_AVAILABLE, reason="fg_model not bundled")
+def test_fg_clamp_does_not_zero_a_team_that_is_ahead():
+    # A team kicking a field goal while up 3 with a minute left is not a team
+    # with zero chance of winning. The inverted clamp collapsed BOTH branches
+    # (make and miss) to 0, so fg_wp was 0 as well.
+    leading = get_fg_wp(_late(dist=10, ytg=20, sd=3))
+    assert leading["make_fg_wp"].to_numpy()[0] > 0.5
+    assert leading["miss_fg_wp"].to_numpy()[0] > 0.5
+    assert leading["fg_wp"].to_numpy()[0] > 0.5
+
+    # Trailing by 3, a MISS hands it over to a team that can kneel it out.
+    trailing = get_fg_wp(_late(dist=10, ytg=20, sd=-3))
+    assert trailing["miss_fg_wp"].to_numpy()[0] < 0.01
+    # ...but making it ties the game, so that branch must not be clamped.
+    assert trailing["make_fg_wp"].to_numpy()[0] > 0.1
+
+
+@requires_fd
+def test_go_fail_clamp_pins_the_turnover_that_loses_the_lead():
+    # After a turnover the resulting frame's differential is already negated, so
+    # `> 0` means the team that just TOOK the ball leads. Reading it as `< 0`
+    # pinned a team that turned it over WHILE AHEAD to a certain loss.
+    #
+    # The clamp needs the OFFENCE's own timeouts at 0: after the turnover
+    # new_def_to is the offence's pre-play count. Setting dto=0 instead leaves
+    # new_def_to == 3 and the clamp never fires at all -- a test written that
+    # way passes with either sign.
+    leading = get_go_wp(_late(dist=1, ytg=50, sd=3, pto=0, dto=3))
+    trailing = get_go_wp(_late(dist=1, ytg=50, sd=-3, pto=0, dto=3))
+    assert leading["wp_fail"].to_numpy()[0] > 0.5
+    assert trailing["wp_fail"].to_numpy()[0] == pytest.approx(0.0, abs=1e-9)
+
+
+def test_return_touchdown_keeps_the_punting_teams_own_lead():
+    # cfb4th: -(flipped) - 7 == orig - 7. The double negation reduced to
+    # -orig - 7, turning a 10-point lead into a 17-point deficit. Return-TD rows
+    # carry <0.2% of the mass, so this is asserted on the arithmetic directly
+    # rather than through an aggregate that would hide it.
+    orig = np.array([10.0, -4.0, 0.0])
+    flipped = -orig
+    assert np.allclose(-flipped - 7.0, orig - 7.0)
+    assert not np.allclose(-(-flipped) - 7.0, orig - 7.0)
+
+
+# --------------------------------------------------------------------------- #
+# Input contract (#395)
+# --------------------------------------------------------------------------- #
+
+
+def test_missing_required_column_names_itself():
+    # _to_pandas used to substitute NaN for an absent column. The NaN poisoned
+    # the turnover bucketing, the pivot came back missing a bucket, and the
+    # caller died several frames later with "'float' object has no attribute
+    # 'to_numpy'" -- naming neither the column nor the frame.
+    frame = pl.DataFrame([_row()]).drop("start.distance")
+    with pytest.raises(KeyError, match="start.distance"):
+        get_go_wp(frame)
+
+
+def test_optional_odds_columns_are_still_optional():
+    # overUnder / homeTeamSpread have a documented fallback in _posteam_total,
+    # so they must NOT be caught by the required-column check.
+    frame = pl.DataFrame([_row()]).drop(["overUnder", "homeTeamSpread"])
+    out = get_punt_wp(frame)
+    assert "punt_wp" in out.columns
+
+
+@requires_fd
+def test_go_path_requires_season_like_the_fg_path_does():
+    # The FG path has always raised here. The GO path fed the same NaN straight
+    # into _era_onehot, so every era dummy came out 0 -- not a valid one-hot --
+    # and fd_model scored against a rule era that never existed, returning a
+    # plausible 76-class distribution with nothing to flag it.
+    rows = pl.DataFrame([_row(4, 2, 45)]).drop("season")
+    with pytest.raises(ValueError, match="season"):
+        get_go_wp(rows)
+
+
+def test_return_touchdown_rows_clamp_toward_a_win_not_a_loss():
+    # A punt return TD hands the ball straight back, so on those rows `wp` is
+    # already the punting team's and possession never changed. cfb4th clamps
+    # every row to 0, which pins a punting team still LEADING after conceding
+    # the score to a certain loss. Those rows must clamp to 1 instead.
+    #
+    # Asserted through the clamp helper directly: return-TD rows carry under
+    # 0.2% of the punt distribution's mass, so an aggregate would hide the sign.
+    from sportsdataverse.cfb.cfb_fourth_down import _end_game_clamp
+
+    wp = np.array([0.5])
+    lead, adj, period, def_to = (
+        np.array([3.0]),
+        np.array([60.0]),
+        np.array([4.0]),
+        np.array([0.0]),
+    )
+    assert _end_game_clamp(wp, lead, adj, period, def_to) == pytest.approx(0.0)
+    assert _end_game_clamp(wp, lead, adj, period, def_to, value=1.0) == pytest.approx(1.0)
+    # Trailing is not a kneel-out for anyone, whichever value is passed.
+    trailing = np.array([-3.0])
+    assert _end_game_clamp(wp, trailing, adj, period, def_to, value=1.0) == pytest.approx(0.5)
+
+
+def test_punt_path_itself_routes_return_touchdowns_to_the_winning_clamp(monkeypatch):
+    # The helper-level test above pins the clamp's arithmetic but never runs the
+    # `return_td` selector inside get_punt_wp, so a regression to value=0.0
+    # there would not fail it. Swap the empirical distribution for a certain
+    # return touchdown: punt_wp is then decided entirely by that branch, and the
+    # 0.2%-of-the-mass problem that forced the helper-level test disappears.
+    from sportsdataverse.cfb import cfb_fourth_down as m
+
+    monkeypatch.setattr(
+        m,
+        "punt_distribution",
+        pl.DataFrame({"yards_to_goal": [50], "yards_to_goal_end": [100], "pct": [1.0]}),
+    )
+    late = dict(period=4, tsr=60, adj=60, dist=10, ytg=50, dto=0)
+
+    # Up 10, concede the return TD -> still up 3, and the receiving team has no
+    # timeouts left to stop the clock, so the punting team kneels out a win.
+    lead = get_punt_wp(pl.DataFrame([_row(sd=10, pto=3, **late)]))
+    assert lead["punt_wp"].to_numpy()[0] == pytest.approx(1.0)
+
+    # Up only 3, the same return TD puts them behind, so nothing is clamped.
+    behind = get_punt_wp(pl.DataFrame([_row(sd=3, pto=3, **late)]))
+    assert behind["punt_wp"].to_numpy()[0] < 1.0

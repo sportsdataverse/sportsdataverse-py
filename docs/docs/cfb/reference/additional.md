@@ -2416,6 +2416,34 @@ A pandas copy of `pbp_df` with the decision columns added. Empty input returns t
 
 ```python
 from sportsdataverse.cfb.cfb_fourth_down import get_4th_down_probs
+
+import polars as pl
+
+# The `start.*` state contract -- a 4th & 10 from midfield, tied,
+# early in the 2nd quarter. Every column here is required; a missing
+# one raises KeyError naming it.
+fourth_down_rows = pl.DataFrame(
+    [
+        {
+            "start.down": 4,
+            "start.distance": 10,
+            "start.yardsToEndzone": 50,
+            "start.pos_team_spread": 3.0,
+            "pos_score_diff_start": 0,
+            "start.TimeSecsRem": 900,
+            "start.adj_TimeSecsRem": 1800,
+            "start.pos_team_receives_2H_kickoff": 1,
+            "start.posTeamTimeouts": 3,
+            "start.defPosTeamTimeouts": 3,
+            "start.is_home": 1,
+            "period": 2,
+            "season": 2023,
+            "overUnder": 55.5,
+            "homeTeamSpread": -3.0,
+        }
+    ]
+)
+
 out = get_4th_down_probs(fourth_down_rows)
 print(out[["go_wp", "punt_wp", "fg_wp", "fourth_down_recommendation"]].head())
 ```
@@ -2482,6 +2510,42 @@ Expected win probability of attempting a field goal (cfb4th `get_fg_wp`).
 
 A pandas copy of `pbp_df` plus `fg_make_prob`, `make_fg_wp`, `miss_fg_wp` and `fg_wp` (= make_prob*make_wp + (1-make_prob)*miss_wp, from the kicking team's perspective). All four are NaN when the FG model is not bundled (`FG_MODEL_AVAILABLE` is False) -- probabilities are never fabricated.
 
+**Example**
+
+```python
+from sportsdataverse.cfb.cfb_fourth_down import get_fg_wp
+
+import polars as pl
+
+# The `start.*` state contract -- a 4th & 10 from midfield, tied,
+# early in the 2nd quarter. Every column here is required; a missing
+# one raises KeyError naming it.
+fourth_down_rows = pl.DataFrame(
+    [
+        {
+            "start.down": 4,
+            "start.distance": 10,
+            "start.yardsToEndzone": 50,
+            "start.pos_team_spread": 3.0,
+            "pos_score_diff_start": 0,
+            "start.TimeSecsRem": 900,
+            "start.adj_TimeSecsRem": 1800,
+            "start.pos_team_receives_2H_kickoff": 1,
+            "start.posTeamTimeouts": 3,
+            "start.defPosTeamTimeouts": 3,
+            "start.is_home": 1,
+            "period": 2,
+            "season": 2023,
+            "overUnder": 55.5,
+            "homeTeamSpread": -3.0,
+        }
+    ]
+)
+
+out = get_fg_wp(fourth_down_rows)
+print(out[["fg_make_prob", "fg_wp"]].head())
+```
+
 ### `get_go_wp(pbp_df) -> 'pd.DataFrame'` {#get_go_wp}
 
 Expected win probability of going for it on 4th down (cfb4th `get_go_wp`).
@@ -2500,6 +2564,34 @@ A pandas copy of `pbp_df` plus `go_wp` (prob-weighted WP of going for it), `firs
 
 ```python
 from sportsdataverse.cfb.cfb_fourth_down import get_go_wp
+
+import polars as pl
+
+# The `start.*` state contract -- a 4th & 10 from midfield, tied,
+# early in the 2nd quarter. Every column here is required; a missing
+# one raises KeyError naming it.
+fourth_down_rows = pl.DataFrame(
+    [
+        {
+            "start.down": 4,
+            "start.distance": 10,
+            "start.yardsToEndzone": 50,
+            "start.pos_team_spread": 3.0,
+            "pos_score_diff_start": 0,
+            "start.TimeSecsRem": 900,
+            "start.adj_TimeSecsRem": 1800,
+            "start.pos_team_receives_2H_kickoff": 1,
+            "start.posTeamTimeouts": 3,
+            "start.defPosTeamTimeouts": 3,
+            "start.is_home": 1,
+            "period": 2,
+            "season": 2023,
+            "overUnder": 55.5,
+            "homeTeamSpread": -3.0,
+        }
+    ]
+)
+
 out = get_go_wp(fourth_down_rows)
 print(out[["go_wp", "first_down_prob"]].head())
 ```
@@ -2517,6 +2609,42 @@ Expected win probability of punting on 4th down (cfb4th `get_punt_wp`).
 **Returns**
 
 A pandas copy of `pbp_df` plus `punt_wp` (prob-weighted WP of punting, from the punting team's perspective). `punt_wp` is NaN where the punt end-yardline distribution has no support for the play's `yards_to_goal` (e.g. inside the 31, where punting is dominated and the cfb4th table is empty -- matching the R reference's left-join NA behavior).
+
+**Example**
+
+```python
+from sportsdataverse.cfb.cfb_fourth_down import get_punt_wp
+
+import polars as pl
+
+# The `start.*` state contract -- a 4th & 10 from midfield, tied,
+# early in the 2nd quarter. Every column here is required; a missing
+# one raises KeyError naming it.
+fourth_down_rows = pl.DataFrame(
+    [
+        {
+            "start.down": 4,
+            "start.distance": 10,
+            "start.yardsToEndzone": 50,
+            "start.pos_team_spread": 3.0,
+            "pos_score_diff_start": 0,
+            "start.TimeSecsRem": 900,
+            "start.adj_TimeSecsRem": 1800,
+            "start.pos_team_receives_2H_kickoff": 1,
+            "start.posTeamTimeouts": 3,
+            "start.defPosTeamTimeouts": 3,
+            "start.is_home": 1,
+            "period": 2,
+            "season": 2023,
+            "overUnder": 55.5,
+            "homeTeamSpread": -3.0,
+        }
+    ]
+)
+
+out = get_punt_wp(fourth_down_rows)
+print(out[["punt_wp"]].head())
+```
 
 ### `make_ratings_compute_results(ratings: 'pl.DataFrame', *, era: 'str' = 'modern') -> 'ComputeResultsFn'` {#make_ratings_compute_results}
 

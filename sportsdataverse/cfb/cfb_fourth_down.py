@@ -202,10 +202,55 @@ FG_MODEL_AVAILABLE: bool = fg_model is not None
 # --------------------------------------------------------------------------- #
 # state -> EP / WP scorers (shared by go / punt / fg paths)
 # --------------------------------------------------------------------------- #
+#: Source columns of :data:`_PBP_COLS` the models cannot be scored without.
+#:
+#: ``overUnder`` / ``homeTeamSpread`` are excluded because :func:`_posteam_total`
+#: has a documented fallback for them. ``season`` is excluded because both model
+#: paths already raise their own, more specific error naming the era features it
+#: feeds -- see :func:`_require_season`.
+_REQUIRED_PBP_COLS = tuple(
+    src for short, src in _PBP_COLS.items() if short not in ("overUnder", "homeTeamSpread", "season")
+)
+
+
+def _require_season(st: pd.DataFrame, model: str) -> np.ndarray:
+    """The season column, or a loud error naming what it feeds.
+
+    A missing ``season`` makes every era dummy zero, which is not a valid
+    one-hot -- the model then scores against a rule era that never existed and
+    returns a plausible number. The field-goal path has always failed loudly
+    here; the go-for-it path did not, and silently degraded instead.
+    """
+    if "season" not in st.columns or st["season"].isna().all():
+        raise ValueError(
+            f"the era-aware {model} requires a non-null 'season' column "
+            "(era features would otherwise silently degrade to all-zero); pass "
+            "'season' in the input frame -- see "
+            "sportsdataverse.cfb.cfb_fourth_down._PBP_COLS"
+        )
+    return st["season"].to_numpy().astype(float)
+
+
 def _to_pandas(df) -> pd.DataFrame:
-    """Accept polars or pandas; return a pandas copy with the cfb4th-named state cols."""
+    """Accept polars or pandas; return a pandas copy with the cfb4th-named state cols.
+
+    Raises:
+        KeyError: when a required source column is absent. Substituting ``NaN``
+            instead -- the previous behaviour -- did not fail anywhere near the
+            mistake: the NaN poisoned the turnover bucketing, the pivot came back
+            missing a bucket, and the caller died several frames later with
+            ``AttributeError: 'float' object has no attribute 'to_numpy'``, which
+            names neither the column nor the frame. See #395.
+    """
     if hasattr(df, "to_pandas"):  # polars.DataFrame
         df = df.to_pandas()
+    missing = [src for src in _REQUIRED_PBP_COLS if src not in df.columns]
+    if missing:
+        raise KeyError(
+            "cfb_fourth_down: play-by-play frame is missing required column(s) "
+            f"{missing}. Expected the cfb4th state contract "
+            "(sportsdataverse.cfb.cfb_fourth_down._PBP_COLS)."
+        )
     out = pd.DataFrame(index=range(len(df)))
     for short, src in _PBP_COLS.items():
         out[short] = df[src].to_numpy() if src in df.columns else np.nan
@@ -293,19 +338,32 @@ def _end_game_clamp(
     adj: np.ndarray,
     period: np.ndarray,
     def_to: np.ndarray,
+    value: float = 0.0,
 ) -> np.ndarray:
     """cfb4th ``end_game_fn``: leading + late + defense out of timeouts -> WP clamps.
 
-    When the *possessing* team is leading and the defense can no longer stop the
-    clock, WP is pinned to the kneel-out outcome. Note this is the WP from the
-    perspective of whoever holds the ball in ``state`` (already possession-correct
-    for the punt / fg ensuing-drive frames before the final flip back).
+    Every argument must come from the **resulting** (already-flipped) frame, not
+    from the pre-play one. cfb4th applies this after ``flip_team()``, so
+    ``pos_diff`` belongs to the team that just *received* the ball and ``def_to``
+    to the team that just gave it up: *the team now holding the ball leads, and
+    the team it took the ball from cannot stop the clock, so whoever is asking
+    loses.*
+
+    Feeding the original team's own columns inverts the rule -- it pins the win
+    probability of the team that is AHEAD to zero. See #395.
+
+    ``value`` is what a clamped row is pinned to, and it depends on WHOSE win
+    probability ``wp`` holds. When possession changed, ``wp`` belongs to the team
+    that gave the ball up, so the kneel-out is a loss (``0.0``, the default).
+    When possession did not change -- a punt return touchdown hands the ball
+    straight back -- ``wp`` belongs to the team doing the kneeling, so the same
+    situation is a win (``1.0``).
     """
     lead = pos_diff > 0
     p4 = period == 4
-    wp = np.where(lead & (adj < 120) & p4 & (def_to == 0), 0.0, wp)
-    wp = np.where(lead & (adj < 80) & p4 & (def_to == 1), 0.0, wp)
-    wp = np.where(lead & (adj < 40) & p4 & (def_to == 2), 0.0, wp)
+    wp = np.where(lead & (adj < 120) & p4 & (def_to == 0), value, wp)
+    wp = np.where(lead & (adj < 80) & p4 & (def_to == 1), value, wp)
+    wp = np.where(lead & (adj < 40) & p4 & (def_to == 2), value, wp)
     return wp
 
 
@@ -354,10 +412,47 @@ def get_go_wp(pbp_df) -> pd.DataFrame:
         can be NaN for degenerate goal-line plays where one outcome bucket is
         empty (matches the R reference ``pivot_wider`` NA behavior).
 
+    Raises:
+        KeyError: If ``pbp_df`` is missing a required state column from
+            :data:`_PBP_COLS`. The frame is validated up front rather than
+            substituting ``NaN``, which used to surface far downstream as
+            ``AttributeError: 'float' object has no attribute 'to_numpy'``.
+        ValueError: If ``season`` is absent or all-null. The era-aware models
+            would otherwise score against an all-zero one-hot -- a rule era that
+            never existed -- and return a plausible number.
+
     Example:
         Quick start::
 
             from sportsdataverse.cfb.cfb_fourth_down import get_go_wp
+
+            import polars as pl
+
+            # The `start.*` state contract -- a 4th & 10 from midfield, tied,
+            # early in the 2nd quarter. Every column here is required; a missing
+            # one raises KeyError naming it.
+            fourth_down_rows = pl.DataFrame(
+                [
+                    {
+                        "start.down": 4,
+                        "start.distance": 10,
+                        "start.yardsToEndzone": 50,
+                        "start.pos_team_spread": 3.0,
+                        "pos_score_diff_start": 0,
+                        "start.TimeSecsRem": 900,
+                        "start.adj_TimeSecsRem": 1800,
+                        "start.pos_team_receives_2H_kickoff": 1,
+                        "start.posTeamTimeouts": 3,
+                        "start.defPosTeamTimeouts": 3,
+                        "start.is_home": 1,
+                        "period": 2,
+                        "season": 2023,
+                        "overUnder": 55.5,
+                        "homeTeamSpread": -3.0,
+                    }
+                ]
+            )
+
             out = get_go_wp(fourth_down_rows)
             print(out[["go_wp", "first_down_prob"]].head())
     """
@@ -379,7 +474,7 @@ def get_go_wp(pbp_df) -> pd.DataFrame:
             "yards_to_goal": st["yards_to_goal"].to_numpy().astype(float),
             "posteam_total": _posteam_total(st),
             "posteam_spread": st["pos_team_spread"].to_numpy().astype(float),
-            **_era_onehot(st["season"].to_numpy().astype(float)),
+            **_era_onehot(_require_season(st, "fd_model")),
         }
     )[FD_FEATURES]
     fd_probs = _load_fd_model().predict(DMatrix(fd_X))
@@ -477,7 +572,12 @@ def get_go_wp(pbp_df) -> pd.DataFrame:
     wp = np.where(succ_alive & (adj < 120) & (new_def_to == 0), 1.0, wp)
     wp = np.where(succ_alive & (adj < 80) & (new_def_to == 1), 1.0, wp)
     wp = np.where(succ_alive & (adj < 40) & (new_def_to == 2), 1.0, wp)
-    fail_lead = (turnover == 1) & (pos_diff < 0)
+    # `pos_diff` here is the POST-turnover value, already negated above, so
+    # `> 0` means the team that just TOOK the ball leads and can kneel it out --
+    # which is why the offence's win probability goes to zero. `< 0` inverted
+    # it and pinned a team that turned the ball over while LEADING to a certain
+    # loss (cfb4th decision_functions.R:365-367, #395).
+    fail_lead = (turnover == 1) & (pos_diff > 0)
     wp = np.where(fail_lead & (adj < 120) & (new_def_to == 0), 0.0, wp)
     wp = np.where(fail_lead & (adj < 80) & (new_def_to == 1), 0.0, wp)
     wp = np.where(fail_lead & (adj < 40) & (new_def_to == 2), 0.0, wp)
@@ -497,9 +597,21 @@ def get_go_wp(pbp_df) -> pd.DataFrame:
     wp0 = piv["wp"].get(0)
     wp1 = piv["wp"].get(1)
     report = pd.DataFrame({"play_idx": piv.index})
-    report["first_down_prob"] = (pct0 if pct0 is not None else 0.0).to_numpy()
-    report["wp_succeed"] = (wp0 if wp0 is not None else np.nan).to_numpy()
-    report["wp_fail"] = (wp1 if wp1 is not None else np.nan).to_numpy()
+
+    def _bucket(col, fill):
+        """A turnover bucket that no outcome landed in, as a full-length column.
+
+        `.to_numpy()` used to be applied to the scalar fallback rather than to
+        the Series, so an absent bucket raised `AttributeError: 'float' object
+        has no attribute 'to_numpy'` instead of filling (#395).
+        """
+        if col is None:
+            return np.full(len(piv.index), fill, dtype=float)
+        return col.to_numpy()
+
+    report["first_down_prob"] = _bucket(pct0, 0.0)
+    report["wp_succeed"] = _bucket(wp0, np.nan)
+    report["wp_fail"] = _bucket(wp1, np.nan)
 
     merged = (
         pd.DataFrame({"play_idx": np.arange(n_plays)})
@@ -529,6 +641,47 @@ def get_punt_wp(pbp_df) -> pd.DataFrame:
         end-yardline distribution has no support for the play's ``yards_to_goal``
         (e.g. inside the 31, where punting is dominated and the cfb4th table is
         empty -- matching the R reference's left-join NA behavior).
+
+    Raises:
+        KeyError: If ``pbp_df`` is missing a required state column from
+            :data:`_PBP_COLS`. The frame is validated up front rather than
+            substituting ``NaN``, which used to surface far downstream as
+            ``AttributeError: 'float' object has no attribute 'to_numpy'``.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.cfb.cfb_fourth_down import get_punt_wp
+
+            import polars as pl
+
+            # The `start.*` state contract -- a 4th & 10 from midfield, tied,
+            # early in the 2nd quarter. Every column here is required; a missing
+            # one raises KeyError naming it.
+            fourth_down_rows = pl.DataFrame(
+                [
+                    {
+                        "start.down": 4,
+                        "start.distance": 10,
+                        "start.yardsToEndzone": 50,
+                        "start.pos_team_spread": 3.0,
+                        "pos_score_diff_start": 0,
+                        "start.TimeSecsRem": 900,
+                        "start.adj_TimeSecsRem": 1800,
+                        "start.pos_team_receives_2H_kickoff": 1,
+                        "start.posTeamTimeouts": 3,
+                        "start.defPosTeamTimeouts": 3,
+                        "start.is_home": 1,
+                        "period": 2,
+                        "season": 2023,
+                        "overUnder": 55.5,
+                        "homeTeamSpread": -3.0,
+                    }
+                ]
+            )
+
+            out = get_punt_wp(fourth_down_rows)
+            print(out[["punt_wp"]].head())
     """
     n_plays = len(pbp_df)
     base = (pbp_df.to_pandas() if hasattr(pbp_df, "to_pandas") else pd.DataFrame(pbp_df)).reset_index(drop=True)
@@ -572,9 +725,12 @@ def get_punt_wp(pbp_df) -> pd.DataFrame:
     # punt distance distribution already excludes muffs; on a return TD undo the
     # one flip so the punting team is the possessing team again (receives kickoff)
     pos_diff_flipped = flipped_state["pos_score_diff_start"].to_numpy().astype(float)
-    # return TD: receiving team got 7; from punting-team perspective score diff is
-    # -(orig_pos_diff) - 7. orig pos_diff (punting team) = -pos_diff_flipped.
-    rtd_pos_diff = -(-pos_diff_flipped) - 7.0
+    # cfb4th negates the ALREADY-FLIPPED differential and then subtracts seven,
+    # which leaves the punting team's own lead minus the return touchdown:
+    # -(-orig) - 7 == orig - 7. The previous `-(-pos_diff_flipped) - 7` was a
+    # double negation that reduced to `-orig - 7`, turning a 10-point lead into
+    # a 17-point deficit (#395).
+    rtd_pos_diff = -pos_diff_flipped - 7.0
     flipped_state["pos_score_diff_start"] = np.where(return_td, rtd_pos_diff, pos_diff_flipped)
     # on a return TD restore is_home / spread / timeouts / kickoff to the punting team
     orig = state[list(_PBP_COLS.keys())]
@@ -601,13 +757,28 @@ def get_punt_wp(pbp_df) -> pd.DataFrame:
     possession_changed = new_is_home != orig_is_home
     wp = np.where(possession_changed, 1.0 - wp, wp)
 
-    # end_game_fn clamp from the punting team's perspective
-    wp = _end_game_clamp(
-        wp,
-        orig["pos_score_diff_start"].to_numpy().astype(float),
-        np.maximum(orig["adj_TimeSecsRem"].to_numpy().astype(float) - 6.0, 0.0),
-        orig["period"].to_numpy().astype(float),
-        flipped_state["pos_team_timeouts_rem_before"].to_numpy().astype(float),
+    # end_game_fn, read off the RESULTING frame exactly as cfb4th does: the
+    # receiving team leads and the punting team is out of timeouts, so the
+    # punting team's win probability is zero. Passing `orig`'s differential here
+    # inverted it and pinned the team that was AHEAD to zero (#395).
+    #
+    # The kneel-out is only a LOSS for the team being asked about when the ball
+    # actually changed hands. A punt return touchdown hands it straight back, so
+    # on those rows `wp` already belongs to the kneeling team and the same
+    # situation is a WIN. cfb4th clamps both to zero, which pins a punting team
+    # still leading after conceding the score to a certain loss; return-TD rows
+    # carry under 0.2% of the mass, so this is a small deliberate divergence
+    # rather than a faithful port.
+    clamp_args = (
+        flipped_state["pos_score_diff_start"].to_numpy().astype(float),
+        flipped_state["adj_TimeSecsRem"].to_numpy().astype(float),
+        flipped_state["period"].to_numpy().astype(float),
+        flipped_state["def_pos_team_timeouts_rem_before"].to_numpy().astype(float),
+    )
+    wp = np.where(
+        possession_changed,
+        _end_game_clamp(wp, *clamp_args, value=0.0),
+        _end_game_clamp(wp, *clamp_args, value=1.0),
     )
 
     agg = (
@@ -672,6 +843,50 @@ def get_fg_wp(pbp_df) -> pd.DataFrame:
         from the kicking team's perspective). All four are NaN when the FG model
         is not bundled (:data:`FG_MODEL_AVAILABLE` is False) -- probabilities are
         never fabricated.
+
+    Raises:
+        KeyError: If ``pbp_df`` is missing a required state column from
+            :data:`_PBP_COLS`. The frame is validated up front rather than
+            substituting ``NaN``, which used to surface far downstream as
+            ``AttributeError: 'float' object has no attribute 'to_numpy'``.
+        ValueError: If ``season`` is absent or all-null. The era-aware models
+            would otherwise score against an all-zero one-hot -- a rule era that
+            never existed -- and return a plausible number.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.cfb.cfb_fourth_down import get_fg_wp
+
+            import polars as pl
+
+            # The `start.*` state contract -- a 4th & 10 from midfield, tied,
+            # early in the 2nd quarter. Every column here is required; a missing
+            # one raises KeyError naming it.
+            fourth_down_rows = pl.DataFrame(
+                [
+                    {
+                        "start.down": 4,
+                        "start.distance": 10,
+                        "start.yardsToEndzone": 50,
+                        "start.pos_team_spread": 3.0,
+                        "pos_score_diff_start": 0,
+                        "start.TimeSecsRem": 900,
+                        "start.adj_TimeSecsRem": 1800,
+                        "start.pos_team_receives_2H_kickoff": 1,
+                        "start.posTeamTimeouts": 3,
+                        "start.defPosTeamTimeouts": 3,
+                        "start.is_home": 1,
+                        "period": 2,
+                        "season": 2023,
+                        "overUnder": 55.5,
+                        "homeTeamSpread": -3.0,
+                    }
+                ]
+            )
+
+            out = get_fg_wp(fourth_down_rows)
+            print(out[["fg_make_prob", "fg_wp"]].head())
     """
     n_plays = len(pbp_df)
     base = (pbp_df.to_pandas() if hasattr(pbp_df, "to_pandas") else pd.DataFrame(pbp_df)).reset_index(drop=True)
@@ -704,12 +919,14 @@ def get_fg_wp(pbp_df) -> pd.DataFrame:
     wp_make = _predict_wp(make_state, ep_make)
     make_changed = make_state["is_home"].to_numpy().astype(float) != orig_is_home
     wp_make = np.where(make_changed, 1.0 - wp_make, wp_make)
+    # Read off the RESULTING frame, as cfb4th does -- see _end_game_clamp. The
+    # pre-play columns pinned a team kicking while AHEAD to zero (#395).
     wp_make = _end_game_clamp(
         wp_make,
-        orig["pos_score_diff_start"].to_numpy().astype(float),
-        np.maximum(orig["adj_TimeSecsRem"].to_numpy().astype(float) - 6.0, 0.0),
-        orig["period"].to_numpy().astype(float),
-        make_state["pos_team_timeouts_rem_before"].to_numpy().astype(float),
+        make_state["pos_score_diff_start"].to_numpy().astype(float),
+        make_state["adj_TimeSecsRem"].to_numpy().astype(float),
+        make_state["period"].to_numpy().astype(float),
+        make_state["def_pos_team_timeouts_rem_before"].to_numpy().astype(float),
     )
 
     # missed FG: opponent takes over at the spot (ytg = 100 - kicking ytg, capped 80).
@@ -725,10 +942,10 @@ def get_fg_wp(pbp_df) -> pd.DataFrame:
     wp_miss = np.where(miss_changed, 1.0 - wp_miss, wp_miss)
     wp_miss = _end_game_clamp(
         wp_miss,
-        orig["pos_score_diff_start"].to_numpy().astype(float),
-        np.maximum(orig["adj_TimeSecsRem"].to_numpy().astype(float) - 6.0, 0.0),
-        orig["period"].to_numpy().astype(float),
-        miss_state["pos_team_timeouts_rem_before"].to_numpy().astype(float),
+        miss_state["pos_score_diff_start"].to_numpy().astype(float),
+        miss_state["adj_TimeSecsRem"].to_numpy().astype(float),
+        miss_state["period"].to_numpy().astype(float),
+        miss_state["def_pos_team_timeouts_rem_before"].to_numpy().astype(float),
     )
 
     fg_wp = make_prob * wp_make + (1.0 - make_prob) * wp_miss
@@ -766,10 +983,47 @@ def get_4th_down_probs(pbp_df) -> pd.DataFrame:
         A pandas copy of ``pbp_df`` with the decision columns added. Empty input
         returns the input plus empty decision columns.
 
+    Raises:
+        KeyError: If ``pbp_df`` is missing a required state column from
+            :data:`_PBP_COLS`. The frame is validated up front rather than
+            substituting ``NaN``, which used to surface far downstream as
+            ``AttributeError: 'float' object has no attribute 'to_numpy'``.
+        ValueError: If ``season`` is absent or all-null. The era-aware models
+            would otherwise score against an all-zero one-hot -- a rule era that
+            never existed -- and return a plausible number.
+
     Example:
         Quick start::
 
             from sportsdataverse.cfb.cfb_fourth_down import get_4th_down_probs
+
+            import polars as pl
+
+            # The `start.*` state contract -- a 4th & 10 from midfield, tied,
+            # early in the 2nd quarter. Every column here is required; a missing
+            # one raises KeyError naming it.
+            fourth_down_rows = pl.DataFrame(
+                [
+                    {
+                        "start.down": 4,
+                        "start.distance": 10,
+                        "start.yardsToEndzone": 50,
+                        "start.pos_team_spread": 3.0,
+                        "pos_score_diff_start": 0,
+                        "start.TimeSecsRem": 900,
+                        "start.adj_TimeSecsRem": 1800,
+                        "start.pos_team_receives_2H_kickoff": 1,
+                        "start.posTeamTimeouts": 3,
+                        "start.defPosTeamTimeouts": 3,
+                        "start.is_home": 1,
+                        "period": 2,
+                        "season": 2023,
+                        "overUnder": 55.5,
+                        "homeTeamSpread": -3.0,
+                    }
+                ]
+            )
+
             out = get_4th_down_probs(fourth_down_rows)
             print(out[["go_wp", "punt_wp", "fg_wp", "fourth_down_recommendation"]].head())
     """
