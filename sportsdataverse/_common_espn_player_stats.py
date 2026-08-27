@@ -135,7 +135,7 @@ def _espn_player_stats(
 
     Raises:
         ValueError: ``season_type`` is not ``"regular"``/``"postseason"``.
-        sportsdataverse.errors.NoESPNDataError: ESPN returned 404 for the
+        sportsdataverse.errors.NoDataError: ESPN returned 404 for the
             statistics node (no season line for that athlete/season).
     """
     st = season_type.strip().lower()
@@ -148,7 +148,7 @@ def _espn_player_stats(
     stats_url = f"{base}/{season}/types/{s_type}/athletes/{athlete_id}/statistics/{totals}"
     athlete_url = f"{base}/{season}/athletes/{athlete_id}"
 
-    # Statistics node is authoritative: a 404 here raises (NoESPNDataError).
+    # Statistics node is authoritative: a 404 here raises (NoDataError).
     stats_payload: dict[str, Any] = download(stats_url, **kwargs).json()
 
     if raw:

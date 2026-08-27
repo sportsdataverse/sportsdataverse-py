@@ -94,7 +94,7 @@ def espn_wbb_player_stats(
 
     Raises:
         ValueError: ``season_type`` is not ``"regular"``/``"postseason"``.
-        sportsdataverse.errors.NoESPNDataError: ESPN returned 404 (no season
+        sportsdataverse.errors.NoDataError: ESPN returned 404 (no season
             line for that athlete/season).
 
     Example:

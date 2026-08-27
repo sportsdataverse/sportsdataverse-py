@@ -28,7 +28,7 @@ continuity. The RDB natives are the forward path.
   rankings HTML page and cached at module level for the process lifetime.
 * **stale-buildId retry** — a rotated buildId makes the data route return
   HTTP 404 (which :func:`sportsdataverse.dl_utils.download` surfaces as
-  :class:`~sportsdataverse.errors.NoESPNDataError`). ``_scrape_get`` treats that
+  :class:`~sportsdataverse.errors.NoDataError`). ``_scrape_get`` treats that
   as "re-discover the buildId and retry once", so a deploy mid-process degrades
   to one extra page fetch instead of an error.
 
@@ -43,7 +43,7 @@ import re
 from typing import Any, Dict, Optional
 
 from sportsdataverse.dl_utils import download
-from sportsdataverse.errors import NoESPNDataError
+from sportsdataverse.errors import NoDataError
 
 _HOST = "https://www.on3.com"
 _BUILD_ID_RE = re.compile(r'"buildId":"([A-Za-z0-9_-]+)"')
@@ -89,7 +89,7 @@ def _discover_build_id(page_url: str, **kwargs: Any) -> Optional[str]:
     headers = {**_headers(), **kwargs.pop("headers", {})}
     try:
         resp = download(url=page_url, headers=headers, **kwargs)
-    except NoESPNDataError:
+    except NoDataError:
         return None
     return _extract_build_id(getattr(resp, "text", "") or "")
 
@@ -110,13 +110,13 @@ def _get(url: str, params: Optional[Dict[str, Any]] = None, **kwargs: Any) -> An
 
     Returns:
         The parsed JSON ``dict`` or ``list``; ``{}`` when the route is
-        unreachable (``NoESPNDataError``) or the body is not JSON.
+        unreachable (``NoDataError``) or the body is not JSON.
     """
     headers = {**_headers(), **kwargs.pop("headers", {})}
     query = {k: v for k, v in (params or {}).items() if v is not None}
     try:
         resp = download(url=url, params=query, headers=headers, **kwargs)
-    except NoESPNDataError:
+    except NoDataError:
         return {}
     try:
         body = resp.json()
@@ -176,7 +176,7 @@ def _scrape_get(url: str, params: Optional[Dict[str, Any]] = None, **kwargs: Any
         data_url = f"{_HOST}/_next/data/{_build_id}{path}"
         try:
             resp = download(url=data_url, params=query, headers=headers, **kwargs)
-        except NoESPNDataError:
+        except NoDataError:
             if attempt == 1:
                 return {}
             # 404 on the data route == buildId rotated (On3 deployed). Refresh once;

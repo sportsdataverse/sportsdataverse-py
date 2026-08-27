@@ -5,6 +5,8 @@ from __future__ import annotations
 import pytest
 
 from sportsdataverse.errors import (
+    AssetFetchError,
+    NoDataError,
     NoESPNDataError,
     SeasonNotFoundError,
     SportsDataverseError,
@@ -21,6 +23,36 @@ def test_error_hierarchy_under_base() -> None:
     assert issubclass(SportsDataverseError, Exception)
     with pytest.raises(SportsDataverseError):
         raise NoESPNDataError("no data")
+
+
+def test_no_espn_data_error_alias_is_the_canonical_class() -> None:
+    """``NoESPNDataError`` must stay a true alias, not a parallel class.
+
+    The error was named when it was ESPN-only, but ``download`` raises it for any
+    404 -- release assets included -- so the canonical name is ``NoDataError``. If
+    a refactor ever makes these two distinct classes, existing
+    ``except NoESPNDataError`` code silently stops catching, which is exactly the
+    failure this locks out.
+    """
+    assert NoESPNDataError is NoDataError
+    # catchable in both directions, whichever name the caller happens to use
+    with pytest.raises(NoESPNDataError):
+        raise NoDataError("missing")
+    with pytest.raises(NoDataError):
+        raise NoESPNDataError("missing")
+
+
+def test_failed_fetch_is_not_missing_data() -> None:
+    """A fetch that FAILED must not be catchable as "there is no data".
+
+    Collapsing the two would let a rate-limited (403) season be recorded as an
+    empty one -- silent data loss rather than a visible error.
+    """
+    assert issubclass(AssetFetchError, SportsDataverseError)
+    assert not issubclass(AssetFetchError, NoDataError)
+    assert not issubclass(NoDataError, AssetFetchError)
+    with pytest.raises(AssetFetchError):
+        raise AssetFetchError("HTTP 403")
 
 
 @pytest.mark.parametrize(

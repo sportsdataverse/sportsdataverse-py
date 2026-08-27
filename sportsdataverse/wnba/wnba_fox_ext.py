@@ -83,7 +83,7 @@ def fox_wnba_pbp(
         ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoESPNDataError: Fox returned 404 for the requested id.
+        sportsdataverse.errors.NoDataError: Fox returned 404 for the requested id.
         requests.exceptions.RequestException: Connection-level failure after
             ``dl_utils.download`` exhausts its retries.
 
@@ -145,7 +145,7 @@ def fox_wnba_boxscore(
         ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoESPNDataError: Fox returned 404 for the requested id.
+        sportsdataverse.errors.NoDataError: Fox returned 404 for the requested id.
         requests.exceptions.RequestException: Connection-level failure after
             ``dl_utils.download`` exhausts its retries.
 
@@ -207,7 +207,7 @@ def fox_wnba_odds(
         ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoESPNDataError: Fox returned 404 for the requested id.
+        sportsdataverse.errors.NoDataError: Fox returned 404 for the requested id.
         requests.exceptions.RequestException: Connection-level failure after
             ``dl_utils.download`` exhausts its retries.
 
@@ -269,7 +269,7 @@ def fox_wnba_team_roster(
         ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoESPNDataError: Fox returned 404 for the requested id.
+        sportsdataverse.errors.NoDataError: Fox returned 404 for the requested id.
         requests.exceptions.RequestException: Connection-level failure after
             ``dl_utils.download`` exhausts its retries.
 
@@ -331,7 +331,7 @@ def fox_wnba_team_stats(
         ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoESPNDataError: Fox returned 404 for the requested id.
+        sportsdataverse.errors.NoDataError: Fox returned 404 for the requested id.
         requests.exceptions.RequestException: Connection-level failure after
             ``dl_utils.download`` exhausts its retries.
 
@@ -393,7 +393,7 @@ def fox_wnba_team_gamelog(
         ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoESPNDataError: Fox returned 404 for the requested id.
+        sportsdataverse.errors.NoDataError: Fox returned 404 for the requested id.
         requests.exceptions.RequestException: Connection-level failure after
             ``dl_utils.download`` exhausts its retries.
 
@@ -455,7 +455,7 @@ def fox_wnba_standings(
         ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoESPNDataError: Fox returned 404 for the requested id.
+        sportsdataverse.errors.NoDataError: Fox returned 404 for the requested id.
         requests.exceptions.RequestException: Connection-level failure after
             ``dl_utils.download`` exhausts its retries.
 
@@ -535,7 +535,7 @@ def fox_wnba_league_leaders(
         ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoESPNDataError: Fox returned 404 for the requested id.
+        sportsdataverse.errors.NoDataError: Fox returned 404 for the requested id.
         requests.exceptions.RequestException: Connection-level failure after
             ``dl_utils.download`` exhausts its retries.
 
@@ -608,7 +608,7 @@ def fox_wnba_teams(
         ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoESPNDataError: Fox returned 404 for the requested id.
+        sportsdataverse.errors.NoDataError: Fox returned 404 for the requested id.
         requests.exceptions.RequestException: Connection-level failure after
             ``dl_utils.download`` exhausts its retries.
 

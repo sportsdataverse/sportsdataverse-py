@@ -28,7 +28,7 @@ from sportsdataverse._fox_layout import (
     parse_team_stats,
     parse_teams,
 )
-from sportsdataverse.errors import NoESPNDataError
+from sportsdataverse.errors import NoDataError
 
 __all__ = [
     "fox_mbb_pbp",
@@ -479,7 +479,7 @@ def fox_mbb_teams(
         ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoESPNDataError: Fox returned 404 for the requested id.
+        sportsdataverse.errors.NoDataError: Fox returned 404 for the requested id.
         requests.exceptions.RequestException: Connection-level failure after
             ``dl_utils.download`` exhausts its retries.
 
@@ -530,7 +530,7 @@ def fox_mbb_teams_all(
     Raises:
         requests.exceptions.RequestException: Connection-level failure after
             ``dl_utils.download`` exhausts its retries. A 404 on an individual
-            candidate id (``NoESPNDataError``) is expected during the scan and is
+            candidate id (``NoDataError``) is expected during the scan and is
             skipped; every other failure propagates rather than silently
             truncating the directory.
 
@@ -563,7 +563,7 @@ def fox_mbb_teams_all(
             continue
         try:
             part = parse_teams(fox_get(f"{_SPORT}/team/{cand}/standings", **kwargs))
-        except NoESPNDataError:
+        except NoDataError:
             # Only "this candidate id does not exist" is expected while scanning.
             # Transport / auth / rate-limit failures must NOT be laundered into an
             # empty directory the caller can't tell apart from a valid scan.
