@@ -406,3 +406,28 @@ def test_return_touchdown_rows_clamp_toward_a_win_not_a_loss():
     # Trailing is not a kneel-out for anyone, whichever value is passed.
     trailing = np.array([-3.0])
     assert _end_game_clamp(wp, trailing, adj, period, def_to, value=1.0) == pytest.approx(0.5)
+
+
+def test_punt_path_itself_routes_return_touchdowns_to_the_winning_clamp(monkeypatch):
+    # The helper-level test above pins the clamp's arithmetic but never runs the
+    # `return_td` selector inside get_punt_wp, so a regression to value=0.0
+    # there would not fail it. Swap the empirical distribution for a certain
+    # return touchdown: punt_wp is then decided entirely by that branch, and the
+    # 0.2%-of-the-mass problem that forced the helper-level test disappears.
+    from sportsdataverse.cfb import cfb_fourth_down as m
+
+    monkeypatch.setattr(
+        m,
+        "punt_distribution",
+        pl.DataFrame({"yards_to_goal": [50], "yards_to_goal_end": [100], "pct": [1.0]}),
+    )
+    late = dict(period=4, tsr=60, adj=60, dist=10, ytg=50, dto=0)
+
+    # Up 10, concede the return TD -> still up 3, and the receiving team has no
+    # timeouts left to stop the clock, so the punting team kneels out a win.
+    lead = get_punt_wp(pl.DataFrame([_row(sd=10, pto=3, **late)]))
+    assert lead["punt_wp"].to_numpy()[0] == pytest.approx(1.0)
+
+    # Up only 3, the same return TD puts them behind, so nothing is clamped.
+    behind = get_punt_wp(pl.DataFrame([_row(sd=3, pto=3, **late)]))
+    assert behind["punt_wp"].to_numpy()[0] < 1.0
