@@ -661,37 +661,47 @@ Release: [cfb_schedules](https://github.com/sportsdataverse/sportsdataverse-data
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | Int32 | ESPN game identifier. |
-| `season` | Int32 | Season (4-digit year). |
-| `week` | Int32 | Game week of the season. |
-| `season_type` | String | ESPN season type (2 = regular, 3 = postseason). |
-| `start_date` | String | Season start timestamp (ISO 8601, UTC). |
-| `start_time_tbd` | Boolean | TRUE/FALSE flag for if the game's start time is to be determined. |
-| `completed` | Boolean | `TRUE` if the game is complete. |
-| `neutral_site` | Boolean | TRUE/FALSE flag for if the game took place at a neutral site. |
-| `conference_game` | Boolean | TRUE/FALSE flag for this game qualifying as a conference game. |
-| `attendance` | Boolean | Reported attendance at the game. |
-| `venue_id` | Int32 | Referencing venue id. |
+| `game_id` | Int64 | Game id, ESPN-style and shared by both source feeds. Primary key: one row per game. Pinned to Int64 on every build path so a join against any other CFB table agrees on dtype. |
+| `season` | Int64 | Season year the game belongs to. |
+| `week` | Int64 | Week number within the season. |
+| `season_type` | String | Season-type label in the CollegeFootballData vocabulary: "regular", "postseason", and 2020's COVID "spring_regular" / "spring_postseason". Rows only ESPN carries have their integer season-type code mapped into this vocabulary. |
+| `start_date` | String | Scheduled kickoff datetime, ISO-8601 UTC. CollegeFootballData's startDate, falling back to ESPN's game_date (the same instant at coarser string precision) for rows CFBD does not carry. |
+| `start_time_tbd` | Boolean | Whether the kickoff time is still to be determined. |
+| `completed` | Boolean | Whether the game has been played. CollegeFootballData's completed flag, falling back to ESPN status == "STATUS_FINAL". |
+| `neutral_site` | Boolean | Whether the game was played at a neutral site. |
+| `conference_game` | Boolean | Whether CollegeFootballData considers this a conference matchup (derived from the two teams' conference membership). Falls back to ESPN's conference_competition where CFBD has no row. |
+| `conference_competition` | Boolean | ESPN's own conference-matchup flag. Kept alongside conference_game because the two measurably disagree on a small number of games; null for games ESPN does not carry. |
+| `attendance` | Int64 | Reported attendance. |
+| `venue_id` | Int64 | CollegeFootballData venue id. |
 | `venue` | String | Venue name. |
-| `home_id` | Int32 | Home team referencing id. |
+| `status` | String | ESPN game-status enum ("STATUS_FINAL", "STATUS_POSTPONED", "STATUS_CANCELED", ...). The signal that distinguishes a scheduled-then-cancelled game from an unplayed future one; null for games ESPN does not carry. |
+| `home_id` | Int64 | Team id of the home team. |
 | `home_team` | String | Home team name. |
-| `home_division` | String | Home team division. |
-| `home_conference` | String | Home team conference. |
-| `home_points` | Int32 | Home team total points scored in the game so far. |
-| `home_post_win_prob` | Float64 | Home team post-game win probability. |
-| `home_pregame_elo` | Int32 | Home team pre-game ELO rating. |
-| `home_postgame_elo` | Int32 | Home team post-game ELO rating. |
-| `away_id` | Int32 | Away team referencing id. |
+| `home_abbreviation` | String | Home team abbreviation (ESPN-native; null for games ESPN does not carry). |
+| `home_division` | String | Home team division: "fbs", "fcs", "ii", "iii", or null for a team outside that classification. A null is a genuinely non-FBS team, not missing data - filter on fbs_game / fbs_participant rather than comparing this column, since a null comparison yields null in polars. |
+| `home_conference` | String | Home team conference name. |
+| `home_points` | Int64 | Points scored by the home team. CollegeFootballData's homePoints, falling back to ESPN's home_score. |
+| `home_winner` | Boolean | Whether the home team won. ESPN's winner flag where present, otherwise derived from the points of a completed game; null when the game is not completed or carries no score. |
+| `away_id` | Int64 | Team id of the away team. |
 | `away_team` | String | Away team name. |
-| `away_division` | String | Away team division. |
-| `away_conference` | String | Away team conference. |
-| `away_points` | Int32 | Away team total points scored in the game so far. |
-| `away_post_win_prob` | Float64 | Away team post-game win probability. |
-| `away_pregame_elo` | Int32 | Away team pre-game ELO rating. |
-| `away_postgame_elo` | Int32 | Away team post-game ELO rating. |
-| `excitement_index` | Float64 | Game excitement index. |
-| `highlights` | String | Game highlight urls. |
-| `notes` | String | Game notes. |
+| `away_abbreviation` | String | Away team abbreviation (ESPN-native; null for games ESPN does not carry). |
+| `away_division` | String | Away team division; same vocabulary and same null caveat as home_division. |
+| `away_conference` | String | Away team conference name. |
+| `away_points` | Int64 | Points scored by the away team. CollegeFootballData's awayPoints, falling back to ESPN's away_score. |
+| `away_winner` | Boolean | Whether the away team won; same derivation as home_winner. |
+| `fbs_game` | Boolean | True when BOTH teams are FBS. A null division reads False, never null, so this column is directly usable as a filter mask. |
+| `fbs_participant` | Boolean | True when AT LEAST ONE team is FBS. A null division reads False, never null. |
+| `highlights` | String | CollegeFootballData highlights link. |
+| `notes` | String | CollegeFootballData free-text game note. |
+| `playoff_competition` | String | Playoff competition the game belongs to (e.g. "cfp"); null for non-playoff games. |
+| `playoff_format` | String | Playoff format in effect (e.g. "four_team", "twelve_team_2025"). |
+| `playoff_round` | String | Playoff round slug (e.g. "first_round", "semifinal"). |
+| `playoff_round_name` | String | Playoff round display name (e.g. "Semifinal"). |
+| `playoff_bracket_slot` | String | Playoff bracket slot (e.g. "SF1", "FR4"). |
+| `playoff_home_seed` | Int64 | Home team's playoff seed. |
+| `playoff_away_seed` | Int64 | Away team's playoff seed. |
+| `playoff_bowl_name` | String | Bowl hosting the playoff game (e.g. "Rose Bowl"). |
+| `source` | String | Which source contributed the row: "cfbd+espn" (both), "cfbd" (CollegeFootballData only - typically a non-FBS matchup ESPN's FBS-scoped feed omits), "espn" (ESPN only - a scheduled game CFBD dropped because it was never played). |
 
 ```python
 load_cfb_schedule(seasons=2024)

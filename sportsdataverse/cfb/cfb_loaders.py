@@ -868,39 +868,49 @@ def load_cfb_schedule(seasons, return_as_pandas: bool = False):
         A polars (or pandas) DataFrame; seasons with no published asset are
         skipped with a warning rather than raising (404-safe).
 
-        |col_name           |type    |
-        |:------------------|:-------|
-        |game_id            |Int32   |
-        |season             |Int32   |
-        |week               |Int32   |
-        |season_type        |String  |
-        |start_date         |String  |
-        |start_time_tbd     |Boolean |
-        |completed          |Boolean |
-        |neutral_site       |Boolean |
-        |conference_game    |Boolean |
-        |attendance         |Boolean |
-        |venue_id           |Int32   |
-        |venue              |String  |
-        |home_id            |Int32   |
-        |home_team          |String  |
-        |home_division      |String  |
-        |home_conference    |String  |
-        |home_points        |Int32   |
-        |home_post_win_prob |Float64 |
-        |home_pregame_elo   |Int32   |
-        |home_postgame_elo  |Int32   |
-        |away_id            |Int32   |
-        |away_team          |String  |
-        |away_division      |String  |
-        |away_conference    |String  |
-        |away_points        |Int32   |
-        |away_post_win_prob |Float64 |
-        |away_pregame_elo   |Int32   |
-        |away_postgame_elo  |Int32   |
-        |excitement_index   |Float64 |
-        |highlights         |String  |
-        |notes              |String  |
+        |col_name               |type    |
+        |:----------------------|:-------|
+        |game_id                |Int64   |
+        |season                 |Int64   |
+        |week                   |Int64   |
+        |season_type            |String  |
+        |start_date             |String  |
+        |start_time_tbd         |Boolean |
+        |completed              |Boolean |
+        |neutral_site           |Boolean |
+        |conference_game        |Boolean |
+        |conference_competition |Boolean |
+        |attendance             |Int64   |
+        |venue_id               |Int64   |
+        |venue                  |String  |
+        |status                 |String  |
+        |home_id                |Int64   |
+        |home_team              |String  |
+        |home_abbreviation      |String  |
+        |home_division          |String  |
+        |home_conference        |String  |
+        |home_points            |Int64   |
+        |home_winner            |Boolean |
+        |away_id                |Int64   |
+        |away_team              |String  |
+        |away_abbreviation      |String  |
+        |away_division          |String  |
+        |away_conference        |String  |
+        |away_points            |Int64   |
+        |away_winner            |Boolean |
+        |fbs_game               |Boolean |
+        |fbs_participant        |Boolean |
+        |highlights             |String  |
+        |notes                  |String  |
+        |playoff_competition    |String  |
+        |playoff_format         |String  |
+        |playoff_round          |String  |
+        |playoff_round_name     |String  |
+        |playoff_bracket_slot   |String  |
+        |playoff_home_seed      |Int64   |
+        |playoff_away_seed      |Int64   |
+        |playoff_bowl_name      |String  |
+        |source                 |String  |
 
     Raises:
         SeasonNotFoundError: if a requested season is below 2001.

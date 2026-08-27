@@ -3588,11 +3588,11 @@ load_cfb_rushing:
   type: String
 load_cfb_schedule:
 - name: game_id
-  type: Int32
+  type: Int64
 - name: season
-  type: Int32
+  type: Int64
 - name: week
-  type: Int32
+  type: Int64
 - name: season_type
   type: String
 - name: start_date
@@ -3605,49 +3605,69 @@ load_cfb_schedule:
   type: Boolean
 - name: conference_game
   type: Boolean
-- name: attendance
+- name: conference_competition
   type: Boolean
+- name: attendance
+  type: Int64
 - name: venue_id
-  type: Int32
+  type: Int64
 - name: venue
   type: String
+- name: status
+  type: String
 - name: home_id
-  type: Int32
+  type: Int64
 - name: home_team
+  type: String
+- name: home_abbreviation
   type: String
 - name: home_division
   type: String
 - name: home_conference
   type: String
 - name: home_points
-  type: Int32
-- name: home_post_win_prob
-  type: Float64
-- name: home_pregame_elo
-  type: Int32
-- name: home_postgame_elo
-  type: Int32
+  type: Int64
+- name: home_winner
+  type: Boolean
 - name: away_id
-  type: Int32
+  type: Int64
 - name: away_team
+  type: String
+- name: away_abbreviation
   type: String
 - name: away_division
   type: String
 - name: away_conference
   type: String
 - name: away_points
-  type: Int32
-- name: away_post_win_prob
-  type: Float64
-- name: away_pregame_elo
-  type: Int32
-- name: away_postgame_elo
-  type: Int32
-- name: excitement_index
-  type: Float64
+  type: Int64
+- name: away_winner
+  type: Boolean
+- name: fbs_game
+  type: Boolean
+- name: fbs_participant
+  type: Boolean
 - name: highlights
   type: String
 - name: notes
+  type: String
+- name: playoff_competition
+  type: String
+- name: playoff_format
+  type: String
+- name: playoff_round
+  type: String
+- name: playoff_round_name
+  type: String
+- name: playoff_bracket_slot
+  type: String
+- name: playoff_home_seed
+  type: Int64
+- name: playoff_away_seed
+  type: Int64
+- name: playoff_bowl_name
+  type: String
+- name: source
   type: String
 load_cfb_schedule_crosswalk:
 - name: matchup_key
