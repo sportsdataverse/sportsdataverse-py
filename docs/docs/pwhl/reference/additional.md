@@ -1038,13 +1038,17 @@ PWHL aggregate stats by season and position.
 
 ### `pwhl_streaks(return_as_pandas: 'bool' = False) -> 'Any'` {#pwhl_streaks}
 
-Current PWHL player/team streaks.
+Current PWHL player/team streaks — **non-functional: no such upstream view**.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `return_as_pandas` | `bool` | `False` |  |
+| `return_as_pandas` | `bool` | `False` | If `True` return a `pandas.DataFrame` instead of a `polars.DataFrame`. |
+
+**Returns**
+
+An empty frame (the upstream view does not exist).
 
 ### `pwhl_team_ratings(seasons: 'Any', *, league: 'str' = 'pwhl', **kwargs: 'Any') -> 'Any'` {#pwhl_team_ratings}
 

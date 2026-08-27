@@ -39,6 +39,30 @@ def _strip_jsonp(text: str) -> str:
     return text.strip()
 
 
+def _invalid_view_reason(payload: Any) -> Optional[str]:
+    """Return a human reason when ``payload`` is a HockeyTech invalid-view sentinel.
+
+    HockeyTech reports an unknown view with **HTTP 200 and an error in the body**,
+    so a sentinel response is otherwise indistinguishable from "no data" -- it
+    parses straight through to a zero-row frame. Two shapes exist:
+
+    - ``modulekit`` / ``gc``: ``{"SiteKit"|"GC": {..., "Undefined": "Undefined Tab <view>"}}``
+    - ``statviewfeed``: ``{"error": "InvalidView error: <view>"}``
+
+    Returns ``None`` for any healthy payload.
+    """
+    if not isinstance(payload, dict):
+        return None
+    err = payload.get("error")
+    if isinstance(err, str) and "invalidview" in err.replace(" ", "").lower():
+        return err
+    for root in ("SiteKit", "GC"):
+        node = payload.get(root)
+        if isinstance(node, dict) and node.get("Undefined"):
+            return str(node["Undefined"])
+    return None
+
+
 def _build_url(league: str, feed: str, view: str, params: Optional[Dict[str, Any]] = None) -> str:
     cfg = get_config(league)
     merged = {
@@ -84,7 +108,17 @@ def hockeytech_api(
     try:
         resp = download(url, headers=headers, timeout=timeout, num_retries=max_retries)
         _last_request_ts = time.monotonic()
-        return json.loads(_strip_jsonp(resp.text))
+        payload = json.loads(_strip_jsonp(resp.text))
+        reason = _invalid_view_reason(payload)
+        if reason:
+            from sportsdataverse._codegen_runtime import cli_warn
+
+            cli_warn(
+                f"hockeytech_api({league}/{feed}/{view}): upstream rejected the view "
+                f"({reason!r}). The response is an error sentinel, NOT an empty result -- "
+                "any frame parsed from it will be empty for that reason."
+            )
+        return payload
     except Exception as exc:  # noqa: BLE001
         _last_request_ts = time.monotonic()
         from sportsdataverse._codegen_runtime import cli_warn

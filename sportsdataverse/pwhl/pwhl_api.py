@@ -9,6 +9,7 @@ fastRhockey; they are resolved to the integer HockeyTech ``season_id``.
 
 from __future__ import annotations
 
+import warnings
 from typing import Any, Optional
 
 
@@ -289,7 +290,41 @@ def pwhl_stats(
 
 
 def pwhl_streaks(return_as_pandas: bool = False) -> Any:
-    """Current PWHL player/team streaks."""
+    """Current PWHL player/team streaks — **non-functional: no such upstream view**.
+
+    .. deprecated::
+        The HockeyTech feed has no ``streaks`` view. ``modulekit&view=streaks``
+        answers HTTP 200 with the in-body ``"Undefined Tab streaks"`` sentinel and
+        ``statviewfeed&view=streaks`` answers ``{"error": "InvalidView error: streaks"}``
+        (both captured 2026-07-12 during the HockeyTech API recon; see
+        ``sdv-internal-refs/hockeytech/captures/``). No replacement view was found —
+        the PWHL site appears to compute its Streaks page client-side from schedule
+        data. fastRhockey's equivalent carries the same defect.
+
+        This function has therefore never returned data. It now emits a
+        :class:`DeprecationWarning` and still returns an empty frame rather than
+        failing silently, so the empty result is no longer mistakable for "the
+        league currently has no streaks". Derive streaks from
+        :func:`pwhl_schedule` / :func:`pwhl_standings` instead.
+
+    Args:
+        return_as_pandas: If ``True`` return a :class:`pandas.DataFrame`
+            instead of a :class:`polars.DataFrame`.
+
+    Returns:
+        An empty frame (the upstream view does not exist).
+
+    Warns:
+        DeprecationWarning: always — the upstream view is gone.
+    """
+    warnings.warn(
+        "pwhl_streaks() is non-functional: the HockeyTech feed has no 'streaks' view "
+        "(modulekit returns the 'Undefined Tab streaks' sentinel; statviewfeed returns "
+        "'InvalidView error: streaks'). No replacement view exists upstream, so this "
+        "returns an empty frame. Derive streaks from pwhl_schedule()/pwhl_standings().",
+        DeprecationWarning,
+        stacklevel=2,
+    )
     return P.parse_streaks(hockeytech_api(_LG, "modulekit", "streaks", {"league_id": 1}), return_as_pandas)
 
 

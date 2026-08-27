@@ -54,3 +54,80 @@ def test_hockeytech_api_bad_status_returns_none_and_warns(monkeypatch):
     out = client.hockeytech_api("pwhl", "modulekit", "seasons", {}, max_retries=2)
     assert out is None
     assert "HTTP 500" in warned.get("msg", "")
+
+
+# ---------------------------------------------------------------------------
+# Issue #238: HockeyTech reports an unknown view with HTTP 200 + error-in-body,
+# so a sentinel response is otherwise indistinguishable from "no data".
+# Payload shapes below are the real captures committed under
+# sdv-internal-refs/hockeytech/captures/samples/pwhl/{streaks,svf_streaks}.json
+# ---------------------------------------------------------------------------
+
+_MODULEKIT_STREAKS_SENTINEL = {
+    "SiteKit": {
+        "Parameters": {"feed": "modulekit", "client_code": "pwhl", "view": "streaks"},
+        "Undefined": "Undefined Tab streaks",
+    }
+}
+_STATVIEWFEED_STREAKS_SENTINEL = {"error": "InvalidView error: streaks"}
+
+
+def test_invalid_view_reason_detects_both_sentinel_shapes():
+    from sportsdataverse.hockeytech._client import _invalid_view_reason
+
+    assert _invalid_view_reason(_MODULEKIT_STREAKS_SENTINEL) == "Undefined Tab streaks"
+    assert _invalid_view_reason(_STATVIEWFEED_STREAKS_SENTINEL) == "InvalidView error: streaks"
+    # gc feed nests under "GC"
+    assert _invalid_view_reason({"GC": {"Undefined": "Undefined Tab bogus"}}) == "Undefined Tab bogus"
+
+
+def test_invalid_view_reason_passes_healthy_payloads():
+    from sportsdataverse.hockeytech._client import _invalid_view_reason
+
+    assert _invalid_view_reason({"SiteKit": {"Seasons": [{"season_id": "1"}]}}) is None
+    assert _invalid_view_reason({"SiteKit": {"Streaks": []}}) is None  # genuinely empty != sentinel
+    assert _invalid_view_reason([]) is None
+    assert _invalid_view_reason(None) is None
+
+
+def test_hockeytech_api_warns_on_invalid_view_sentinel(monkeypatch):
+    """A sentinel must warn -- silently returning an empty frame hides a dead view."""
+    import json
+
+    from sportsdataverse.hockeytech import _client as client
+
+    class _Resp:
+        text = json.dumps(_MODULEKIT_STREAKS_SENTINEL)
+
+    monkeypatch.setattr(client, "download", lambda *a, **k: _Resp())
+    monkeypatch.setattr(client.time, "sleep", lambda *_a, **_k: None)
+    warned = {}
+    import sportsdataverse._codegen_runtime as rt
+
+    monkeypatch.setattr(rt, "cli_warn", lambda msg: warned.setdefault("msg", msg))
+
+    out = client.hockeytech_api("pwhl", "modulekit", "streaks", {"league_id": 1})
+    # payload still returned unchanged (parsers keep yielding a zero-row frame)
+    assert out == _MODULEKIT_STREAKS_SENTINEL
+    msg = warned.get("msg", "")
+    assert "Undefined Tab streaks" in msg
+    assert "NOT an empty result" in msg
+
+
+def test_hockeytech_api_silent_on_healthy_payload(monkeypatch):
+    import json
+
+    from sportsdataverse.hockeytech import _client as client
+
+    class _Resp:
+        text = json.dumps({"SiteKit": {"Seasons": [{"season_id": "1"}]}})
+
+    monkeypatch.setattr(client, "download", lambda *a, **k: _Resp())
+    monkeypatch.setattr(client.time, "sleep", lambda *_a, **_k: None)
+    warned = {}
+    import sportsdataverse._codegen_runtime as rt
+
+    monkeypatch.setattr(rt, "cli_warn", lambda msg: warned.setdefault("msg", msg))
+
+    client.hockeytech_api("pwhl", "modulekit", "seasons", {})
+    assert not warned, f"healthy payload must not warn, got {warned}"

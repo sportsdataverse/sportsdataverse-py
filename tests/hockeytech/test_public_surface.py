@@ -176,3 +176,26 @@ def test_junior_family_core_surface(lg):
     ):
         assert hasattr(mod, f"{lg}_{stem}"), f"missing {lg}_{stem}"
     assert hasattr(mod, f"most_recent_{lg}_season")
+
+
+def test_pwhl_streaks_warns_instead_of_silently_returning_empty(monkeypatch):
+    """Issue #238: the upstream 'streaks' view does not exist on either feed.
+
+    modulekit answers HTTP 200 with the 'Undefined Tab streaks' sentinel (the
+    real capture asserted here). Returning an empty frame silently was
+    indistinguishable from 'the league has no streaks right now', so the
+    function must warn that it is non-functional upstream.
+    """
+    import pytest
+
+    import sportsdataverse.pwhl.pwhl_api as api
+
+    sentinel = {"SiteKit": {"Undefined": "Undefined Tab streaks"}}
+    monkeypatch.setattr(api, "hockeytech_api", lambda *a, **k: sentinel)
+
+    with pytest.warns(DeprecationWarning, match="no 'streaks' view"):
+        df = api.pwhl_streaks()
+
+    # still returns a frame (empty) rather than raising
+    assert isinstance(df, pl.DataFrame)
+    assert df.height == 0
