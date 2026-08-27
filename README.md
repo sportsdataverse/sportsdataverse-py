@@ -50,14 +50,14 @@ The goal of [sportsdataverse-py](https://py.sportsdataverse.org) is to provide t
 | Minor & junior hockey | `sportsdataverse.hockey.<lg>` | HockeyTech — 20 registry-driven league families (`ahl`, `echl`, `ohl`, `whl`, `qmjhl`, `ushl`, `bchl`, …), 13 callables each |
 | College hockey (M/W) | `sportsdataverse.hockey.mch` / `.wch` | ESPN |
 | College baseball & softball | `sportsdataverse.baseball` | ESPN + **stats.ncaa.org** pbp parsers + run-expectancy helpers |
-| Soccer | `sportsdataverse.soccer` | ESPN (league-parameterized wrappers — MLS, NWSL, EPL, …) |
+| Soccer | `sportsdataverse.soccer` | ESPN (league-parameterized wrappers) + **12 per-league families** (`espn_mls_*`, `espn_epl_*`, `espn_ucl_*`, …), 112 wrappers each |
 | Cricket | `sportsdataverse.cricket` | ESPN (league-parameterized) + bundled win-probability models |
 | UFL / XFL / CFL | `sportsdataverse.football` | ESPN |
 | Odds | `sportsdataverse.odds` | Odds & betting-lines wrappers and loaders |
 
 The big-league modules export roughly 240–680 public functions each (ESPN
 wrappers + that league's native-API wrappers + dataset loaders + parsers) —
-about 4,650 exported names package-wide. **Fox Sports** adds `fox_<league>_*`
+about 6,180 exported names package-wide. **Fox Sports** adds `fox_<league>_*`
 Bifrost wrappers (pbp / boxscore / odds / roster / stats / standings / leaders)
 for nba, mbb, cfb, mlb, nhl; **Yahoo Sports** adds `yahoo_cfb_*` season-stats /
 scoreboard wrappers for college football. `sportsdataverse.release` ports the

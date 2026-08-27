@@ -374,3 +374,46 @@ html[data-theme='dark'] .docusaurus-highlight-code-line {
     overflow-y: visible;
   }
 }
+
+/* ---------------------------------------------------------------------------
+ * Mobile: make reference tables readable instead of one-column-wide.
+ *
+ * The generated `@return` tables are three columns (col_name / type /
+ * description) whose max-content width is ~800px. Docusaurus renders a wide
+ * table as `display: block; overflow-x: auto`, so it scrolls -- but on a 375px
+ * phone the first column alone is 386px, so a reader sees a list of column
+ * names and NONE of the types or descriptions they came for, with no visual
+ * hint that the rest exists off-screen.
+ *
+ * Below the tablet breakpoint, fit the table to the viewport and let the cells
+ * wrap instead. Three cramped-but-visible columns beat one column plus an
+ * undiscoverable horizontal swipe. Code identifiers have no break opportunities,
+ * so `overflow-wrap: anywhere` is what stops a long name from forcing the old
+ * overflow back; it hard-breaks mid-identifier, which is the deliberate trade.
+ * ------------------------------------------------------------------------- */
+@media (max-width: 768px) {
+  .theme-doc-markdown table {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+  }
+
+  .theme-doc-markdown table th,
+  .theme-doc-markdown table td {
+    overflow-wrap: anywhere;
+    padding-left: 0.4rem;
+    padding-right: 0.4rem;
+    font-size: 0.82rem;
+  }
+
+  .theme-doc-markdown table td code {
+    font-size: 0.78rem;
+  }
+
+  /* `type` holds short dtype names (Int64, Utf8) -- give the space to the
+     column names and the descriptions instead. */
+  .theme-doc-markdown table th:nth-child(2),
+  .theme-doc-markdown table td:nth-child(2) {
+    width: 4.5rem;
+  }
+}

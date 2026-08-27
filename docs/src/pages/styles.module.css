@@ -22,6 +22,20 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  /* Without wrapping, the two button--lg links total ~470px and cannot fit a
+     phone. `.heroBanner` sets `overflow: hidden`, so instead of scrolling they
+     were silently CLIPPED -- at 320px each lost ~80px, leaving "etting Started"
+     and "Ecosystem & philosoph". Wrap them and let a long label break across
+     lines rather than spill past its own border. */
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.buttons .button {
+  max-width: 100%;
+  /* Infima sets `white-space: nowrap` on buttons; on a narrow screen that pushes
+     the label outside the button box once the box is capped at 100%. */
+  white-space: normal;
 }
 
 .features {

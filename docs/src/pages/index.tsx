@@ -116,7 +116,6 @@ function HomepageHeader(): ReactNode {
             to="/docs/intro">
             Getting Started
           </Link>
-          &nbsp;&nbsp;
           <Link
             className="button button--outline button--secondary button--lg"
             to="/docs/ecosystem">

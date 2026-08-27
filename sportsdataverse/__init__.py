@@ -75,10 +75,29 @@ from sportsdataverse.odds import *  # noqa: F401,F403,E402
 # --- ESPN additional leagues — sport param-families stay top-level; minor/alias
 #     leagues are nested under sport-group packages (0.0.65+). ---
 from sportsdataverse.soccer import *  # noqa: F401,F403,E402
+from sportsdataverse.pff import *  # noqa: F401,F403,E402
 from sportsdataverse.cricket import *  # noqa: F401,F403,E402
 from sportsdataverse.football.ufl import *  # noqa: F401,F403,E402
 from sportsdataverse.football.xfl import *  # noqa: F401,F403,E402
 from sportsdataverse.football.cfl import *  # noqa: F401,F403,E402
+
+# Soccer sub-leagues, star-imported the same way the football ones are directly
+# above. `from sportsdataverse.soccer import *` only re-exports the generic
+# soccer_espn_ext wrappers plus the sub-league packages as attributes, so without
+# these 12 lines `espn_mls_scoreboard` and its 1,343 siblings were reachable only
+# by deep import while every other ESPN league family sat at the top level.
+from sportsdataverse.soccer.bundesliga import *  # noqa: F401,F403,E402
+from sportsdataverse.soccer.epl import *  # noqa: F401,F403,E402
+from sportsdataverse.soccer.laliga import *  # noqa: F401,F403,E402
+from sportsdataverse.soccer.ligamx import *  # noqa: F401,F403,E402
+from sportsdataverse.soccer.ligue1 import *  # noqa: F401,F403,E402
+from sportsdataverse.soccer.mls import *  # noqa: F401,F403,E402
+from sportsdataverse.soccer.nwsl import *  # noqa: F401,F403,E402
+from sportsdataverse.soccer.seriea import *  # noqa: F401,F403,E402
+from sportsdataverse.soccer.ucl import *  # noqa: F401,F403,E402
+from sportsdataverse.soccer.uel import *  # noqa: F401,F403,E402
+from sportsdataverse.soccer.wc import *  # noqa: F401,F403,E402
+from sportsdataverse.soccer.wwc import *  # noqa: F401,F403,E402
 from sportsdataverse.baseball.college_baseball import *  # noqa: F401,F403,E402
 from sportsdataverse.baseball.college_softball import *  # noqa: F401,F403,E402
 from sportsdataverse.hockey.mch import *  # noqa: F401,F403,E402

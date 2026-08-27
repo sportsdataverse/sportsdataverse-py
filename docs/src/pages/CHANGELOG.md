@@ -2,7 +2,10 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
-- [0.1.0 Release: August 27, 2026](#010-release-august-27-2026)
+- [0.1.1 Release: August 27, 2026](#011-release-august-27-2026)
+  - [Fixed — every source family now reaches the top-level namespace](#fixed--every-source-family-now-reaches-the-top-level-namespace)
+  - [Fixed — the distribution shipped `dev/` and `tools/` as top-level packages](#fixed--the-distribution-shipped-dev-and-tools-as-top-level-packages)
+  - [Fixed — docs site layout on phones](#fixed--docs-site-layout-on-phones)
   - [Changed — release-asset reads classify failures through the HTTP gateway (#397, #402, #404)](#changed--release-asset-reads-classify-failures-through-the-http-gateway-397-402-404)
   - [Added — the CFB dataset surface: teams, rosters, schedules, team info (#393, #394, #396, #399)](#added--the-cfb-dataset-surface-teams-rosters-schedules-team-info-393-394-396-399)
   - [Fixed — CFB fourth-down clamps, reproducibility, and a Torvik HTML body (#398, #400, #401)](#fixed--cfb-fourth-down-clamps-reproducibility-and-a-torvik-html-body-398-400-401)
@@ -261,7 +264,62 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-## 0.1.0 Release: August 27, 2026
+## 0.1.1 Release: August 27, 2026
+
+Supersedes 0.1.0, released the same day; everything below shipped in this
+release. 0.1.0 remains on PyPI, but 0.1.1 is the one to install.
+
+### Fixed — every source family now reaches the top-level namespace
+
+`import sportsdataverse as sdv` exposed 4,655 names; an audit of every module's
+`__all__` found **2,027 more that were reachable only by deep import**. Two real
+gaps, now closed (top-level exports: 4,655 -> ~6,180):
+
+- **Soccer, 1,344 names.** `sportsdataverse/soccer/__init__.py` imported the 12
+  sub-league *packages* so `sportsdataverse.soccer.mls` resolved as an attribute,
+  but never re-exported their wrappers -- so `espn_mls_scoreboard` and its 1,343
+  siblings never reached the top level, while `espn_nba_*`, `espn_cfb_*`,
+  `espn_nhl_*` and the cricket and hockey families all did. All 12 leagues
+  (bundesliga, epl, laliga, ligamx, ligue1, mls, nwsl, seriea, ucl, uel, wc, wwc)
+  are now star-exported. The names are league-prefixed, so there were no
+  collisions to resolve.
+- **PFF, 184 new aliases.** PFF could not simply be star-exported: the `cfb`,
+  `nfl`, `ufl` and `aaf` shims each install the SAME 46 bare names bound to a
+  different league, so a bare export would collide and last-import-wins would
+  silently return another league's data. New `sportsdataverse/pff.py` mints
+  `pff_<slug>_<rest>` aliases instead -- `pff_nfl_facet_blocking_summary`,
+  `pff_ncaa_facet_blocking_summary`, `pff_ufl_*`, `pff_aaf_*` -- matching the
+  `espn_<league>_*` / `fox_<league>_*` convention. Purely additive: the bare
+  module-scoped names are untouched.
+
+`nba_stats` / `wnba_stats` deliberately stay module-scoped
+(`from sportsdataverse.nba import nba_stats`), as do the bare `pff_*` names.
+
+### Fixed — the distribution shipped `dev/` and `tools/` as top-level packages
+
+`[tool.setuptools.packages.find]` excluded `tests*/docs*/examples*/archive*` but
+not `dev*` or `tools*`, so setuptools auto-discovery installed the repo's scratch
+scripts and the codegen toolchain as **importable top-level packages**. 0.0.75
+and 0.1.0 ship 84 `dev/` and 86 `tools/` files, which means `import tools` in a
+downstream project could resolve to ours. Now an allowlist
+(`include = ["sportsdataverse*"]`), so a new top-level directory cannot leak in by
+being forgotten. Nothing under `sportsdataverse/` imported either at runtime.
+
+### Fixed — docs site layout on phones
+
+The landing page's two hero buttons sat in a non-wrapping flex row totalling
+~470px inside a `overflow: hidden` hero, so on a phone they were silently
+**clipped** -- at 320px each lost ~80px, rendering "etting Started" and
+"Ecosystem & philosoph". They now wrap, and a long label wraps inside its button
+instead of spilling past the border.
+
+Reference `@return` tables (col_name / type / description) have a ~800px
+max-content width, so Docusaurus made them horizontally scrollable -- but at
+375px the first column alone is 386px, so a reader saw a list of column names,
+none of the types or descriptions, and no hint the rest existed. Below the tablet
+breakpoint they now fit the viewport with wrapped cells: three cramped-but-visible
+columns instead of one.
+
 
 ### Changed — release-asset reads classify failures through the HTTP gateway (#397, #402, #404)
 
