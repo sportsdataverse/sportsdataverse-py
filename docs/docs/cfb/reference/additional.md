@@ -2532,6 +2532,14 @@ Expected win probability of attempting a field goal (cfb4th `get_fg_wp`).
 
 A pandas copy of `pbp_df` plus `fg_make_prob`, `make_fg_wp`, `miss_fg_wp` and `fg_wp` (= make_prob*make_wp + (1-make_prob)*miss_wp, from the kicking team's perspective). All four are NaN when the FG model is not bundled (`FG_MODEL_AVAILABLE` is False) -- probabilities are never fabricated.
 
+**Example**
+
+```python
+from sportsdataverse.cfb.cfb_fourth_down import get_fg_wp
+out = get_fg_wp(fourth_down_rows)
+print(out[["fg_make_prob", "fg_wp"]].head())
+```
+
 ### `get_go_wp(pbp_df) -> 'pd.DataFrame'` {#get_go_wp}
 
 Expected win probability of going for it on 4th down (cfb4th `get_go_wp`).
@@ -2567,6 +2575,14 @@ Expected win probability of punting on 4th down (cfb4th `get_punt_wp`).
 **Returns**
 
 A pandas copy of `pbp_df` plus `punt_wp` (prob-weighted WP of punting, from the punting team's perspective). `punt_wp` is NaN where the punt end-yardline distribution has no support for the play's `yards_to_goal` (e.g. inside the 31, where punting is dominated and the cfb4th table is empty -- matching the R reference's left-join NA behavior).
+
+**Example**
+
+```python
+from sportsdataverse.cfb.cfb_fourth_down import get_punt_wp
+out = get_punt_wp(fourth_down_rows)
+print(out[["yards_to_goal", "punt_wp"]].head())
+```
 
 ### `make_ratings_compute_results(ratings: 'pl.DataFrame', *, era: 'str' = 'modern') -> 'ComputeResultsFn'` {#make_ratings_compute_results}
 
