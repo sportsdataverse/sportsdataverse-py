@@ -2466,6 +2466,34 @@ A pandas copy of `pbp_df` with the decision columns added. Empty input returns t
 
 ```python
 from sportsdataverse.cfb.cfb_fourth_down import get_4th_down_probs
+
+import polars as pl
+
+# The `start.*` state contract -- a 4th & 10 from midfield, tied,
+# early in the 2nd quarter. Every column here is required; a missing
+# one raises KeyError naming it.
+fourth_down_rows = pl.DataFrame(
+    [
+        {
+            "start.down": 4,
+            "start.distance": 10,
+            "start.yardsToEndzone": 50,
+            "start.pos_team_spread": 3.0,
+            "pos_score_diff_start": 0,
+            "start.TimeSecsRem": 900,
+            "start.adj_TimeSecsRem": 1800,
+            "start.pos_team_receives_2H_kickoff": 1,
+            "start.posTeamTimeouts": 3,
+            "start.defPosTeamTimeouts": 3,
+            "start.is_home": 1,
+            "period": 2,
+            "season": 2023,
+            "overUnder": 55.5,
+            "homeTeamSpread": -3.0,
+        }
+    ]
+)
+
 out = get_4th_down_probs(fourth_down_rows)
 print(out[["go_wp", "punt_wp", "fg_wp", "fourth_down_recommendation"]].head())
 ```
@@ -2536,6 +2564,34 @@ A pandas copy of `pbp_df` plus `fg_make_prob`, `make_fg_wp`, `miss_fg_wp` and `f
 
 ```python
 from sportsdataverse.cfb.cfb_fourth_down import get_fg_wp
+
+import polars as pl
+
+# The `start.*` state contract -- a 4th & 10 from midfield, tied,
+# early in the 2nd quarter. Every column here is required; a missing
+# one raises KeyError naming it.
+fourth_down_rows = pl.DataFrame(
+    [
+        {
+            "start.down": 4,
+            "start.distance": 10,
+            "start.yardsToEndzone": 50,
+            "start.pos_team_spread": 3.0,
+            "pos_score_diff_start": 0,
+            "start.TimeSecsRem": 900,
+            "start.adj_TimeSecsRem": 1800,
+            "start.pos_team_receives_2H_kickoff": 1,
+            "start.posTeamTimeouts": 3,
+            "start.defPosTeamTimeouts": 3,
+            "start.is_home": 1,
+            "period": 2,
+            "season": 2023,
+            "overUnder": 55.5,
+            "homeTeamSpread": -3.0,
+        }
+    ]
+)
+
 out = get_fg_wp(fourth_down_rows)
 print(out[["fg_make_prob", "fg_wp"]].head())
 ```
@@ -2558,6 +2614,34 @@ A pandas copy of `pbp_df` plus `go_wp` (prob-weighted WP of going for it), `firs
 
 ```python
 from sportsdataverse.cfb.cfb_fourth_down import get_go_wp
+
+import polars as pl
+
+# The `start.*` state contract -- a 4th & 10 from midfield, tied,
+# early in the 2nd quarter. Every column here is required; a missing
+# one raises KeyError naming it.
+fourth_down_rows = pl.DataFrame(
+    [
+        {
+            "start.down": 4,
+            "start.distance": 10,
+            "start.yardsToEndzone": 50,
+            "start.pos_team_spread": 3.0,
+            "pos_score_diff_start": 0,
+            "start.TimeSecsRem": 900,
+            "start.adj_TimeSecsRem": 1800,
+            "start.pos_team_receives_2H_kickoff": 1,
+            "start.posTeamTimeouts": 3,
+            "start.defPosTeamTimeouts": 3,
+            "start.is_home": 1,
+            "period": 2,
+            "season": 2023,
+            "overUnder": 55.5,
+            "homeTeamSpread": -3.0,
+        }
+    ]
+)
+
 out = get_go_wp(fourth_down_rows)
 print(out[["go_wp", "first_down_prob"]].head())
 ```
@@ -2580,8 +2664,36 @@ A pandas copy of `pbp_df` plus `punt_wp` (prob-weighted WP of punting, from the 
 
 ```python
 from sportsdataverse.cfb.cfb_fourth_down import get_punt_wp
+
+import polars as pl
+
+# The `start.*` state contract -- a 4th & 10 from midfield, tied,
+# early in the 2nd quarter. Every column here is required; a missing
+# one raises KeyError naming it.
+fourth_down_rows = pl.DataFrame(
+    [
+        {
+            "start.down": 4,
+            "start.distance": 10,
+            "start.yardsToEndzone": 50,
+            "start.pos_team_spread": 3.0,
+            "pos_score_diff_start": 0,
+            "start.TimeSecsRem": 900,
+            "start.adj_TimeSecsRem": 1800,
+            "start.pos_team_receives_2H_kickoff": 1,
+            "start.posTeamTimeouts": 3,
+            "start.defPosTeamTimeouts": 3,
+            "start.is_home": 1,
+            "period": 2,
+            "season": 2023,
+            "overUnder": 55.5,
+            "homeTeamSpread": -3.0,
+        }
+    ]
+)
+
 out = get_punt_wp(fourth_down_rows)
-print(out[["yards_to_goal", "punt_wp"]].head())
+print(out[["punt_wp"]].head())
 ```
 
 ### `make_ratings_compute_results(ratings: 'pl.DataFrame', *, era: 'str' = 'modern') -> 'ComputeResultsFn'` {#make_ratings_compute_results}
