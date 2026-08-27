@@ -930,12 +930,12 @@ def load_cfb_schedule(seasons, return_as_pandas: bool = False):
 
 
 def load_cfb_team_info(seasons, return_as_pandas: bool = False):
-    """Load cfbfastR-data (sportsdataverse-data release).
+    """Load cfb_team_info (sportsdataverse-data release).
 
-    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfbfastR-data
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_team_info
 
     Args:
-        seasons: an int or iterable of seasons (>= 2003).
+        seasons: an int or iterable of seasons (>= 2001).
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -958,6 +958,20 @@ def load_cfb_team_info(seasons, return_as_pandas: bool = False):
         |alt_color        |String  |
         |logo             |String  |
         |logo_2           |String  |
+        |logos_3          |String  |
+        |logos_4          |String  |
+        |logos_5          |String  |
+        |logos_6          |String  |
+        |logos_7          |String  |
+        |logos_8          |String  |
+        |logos_9          |String  |
+        |logos_10         |String  |
+        |logos_11         |String  |
+        |logos_12         |String  |
+        |logos_13         |String  |
+        |logos_14         |String  |
+        |logos_15         |String  |
+        |logos_16         |String  |
         |twitter          |String  |
         |venue_id         |Int32   |
         |venue_name       |String  |
@@ -975,7 +989,7 @@ def load_cfb_team_info(seasons, return_as_pandas: bool = False):
         |dome             |Boolean |
 
     Raises:
-        SeasonNotFoundError: if a requested season is below 2003.
+        SeasonNotFoundError: if a requested season is below 2001.
 
     Example:
         Quick start::
@@ -984,10 +998,10 @@ def load_cfb_team_info(seasons, return_as_pandas: bool = False):
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
-        if int(season) < 2003:
-            raise SeasonNotFoundError("season cannot be less than 2003")
+        if int(season) < 2001:
+            raise SeasonNotFoundError("season cannot be less than 2001")
         df = _read_release_parquet(
-            f"https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/main/team_info/parquet/cfb_team_info_{season}.parquet"
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/cfb_team_info/cfb_team_info_{season}.parquet"
         )
         if df is None:
             missing.append(season)
