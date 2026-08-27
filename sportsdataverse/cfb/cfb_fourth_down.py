@@ -619,6 +619,13 @@ def get_punt_wp(pbp_df) -> pd.DataFrame:
             :data:`_PBP_COLS`. The frame is validated up front rather than
             substituting ``NaN``, which used to surface far downstream as
             ``AttributeError: 'float' object has no attribute 'to_numpy'``.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.cfb.cfb_fourth_down import get_punt_wp
+            out = get_punt_wp(fourth_down_rows)
+            print(out[["yards_to_goal", "punt_wp"]].head())
     """
     n_plays = len(pbp_df)
     base = (pbp_df.to_pandas() if hasattr(pbp_df, "to_pandas") else pd.DataFrame(pbp_df)).reset_index(drop=True)
@@ -789,6 +796,13 @@ def get_fg_wp(pbp_df) -> pd.DataFrame:
         ValueError: If ``season`` is absent or all-null. The era-aware models
             would otherwise score against an all-zero one-hot -- a rule era that
             never existed -- and return a plausible number.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.cfb.cfb_fourth_down import get_fg_wp
+            out = get_fg_wp(fourth_down_rows)
+            print(out[["fg_make_prob", "fg_wp"]].head())
     """
     n_plays = len(pbp_df)
     base = (pbp_df.to_pandas() if hasattr(pbp_df, "to_pandas") else pd.DataFrame(pbp_df)).reset_index(drop=True)
