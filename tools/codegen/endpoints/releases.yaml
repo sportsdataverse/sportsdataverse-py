@@ -61,10 +61,10 @@ loaders:
     seasons: 2024
 - fn: load_cfb_schedule
   league: cfb
-  base: raw_data
-  url: cfbfastR-data/main/schedules/parquet/cfb_schedules_{season}.parquet
-  tag: cfbfastR-data
-  min_season: 2003
+  base: sdv_releases
+  url: cfb_schedules/cfb_schedules_{season}.parquet
+  tag: cfb_schedules
+  min_season: 2001
   example_args:
     seasons: 2024
 - fn: load_cfb_team_info

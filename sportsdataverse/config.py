@@ -12,7 +12,7 @@ SDVRELEASES = "https://github.com/sportsdataverse/sportsdataverse-data/releases/
 CFB_BASE_URL = SGITHUB + "cfbfastR-data/main/pbp/parquet/play_by_play_{season}.parquet"
 CFB_ROSTER_URL = SGITHUB + "cfbfastR-data/main/rosters/parquet/cfb_rosters_{season}.parquet"
 CFB_TEAM_LOGO_URL = f"{SGITHUB}cfbfastR-data/main/teams/teams_colors_logos.parquet"
-CFB_TEAM_SCHEDULE_URL = SGITHUB + "cfbfastR-data/main/schedules/parquet/cfb_schedules_{season}.parquet"
+CFB_TEAM_SCHEDULE_URL = SDVRELEASES + "cfb_schedules/cfb_schedules_{season}.parquet"
 CFB_TEAM_INFO_URL = SGITHUB + "cfbfastR-data/main/team_info/parquet/cfb_team_info_{season}.parquet"
 CFB_BETTING_LINES_URL = f"{SGITHUB}cfbfastR-data/main/betting/parquet/cfb_line_odds.parquet"
 # Rosters crosswalk is a single current snapshot (ESPN/Fox roster endpoints are
