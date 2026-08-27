@@ -436,3 +436,29 @@ def test_as_of_date_drops_unplayed_postseason_matchups(monkeypatch: pytest.Monke
     assert set(out["team_id"].to_list()) == set(_FBS_IDS)
     assert out["cfp_champ_prob"].sum() == pytest.approx(1.0, abs=1e-9)
     assert out.filter((pl.col("playoff_prob") > 0.02) & (pl.col("playoff_prob") < 0.98)).height > 0
+
+
+def test_season_odds_is_bit_reproducible_under_row_order(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Same seed + same teams + DIFFERENT schedule row order => identical odds.
+
+    The team universe is built with polars `.unique()`, which carries no order
+    guarantee, and that row order is what the seeded RNG draws map onto. So the
+    seed makes the DRAWS reproducible while the ORDERING stays free, and a
+    tiebreak-sensitive team can move by ~1/n_sims between identical calls.
+
+    Shuffling the input rows is a deterministic stand-in for that: it changes
+    what `.unique(keep='first')` sees first, exactly as a different scan order
+    would. Reproducibility is what `seed=` promises callers."""
+    sched = _fake_schedule()
+
+    monkeypatch.setattr(_mod, "cfb_ratings", lambda *a, **k: _fake_ratings())
+    monkeypatch.setattr(_mod, "load_cfb_schedule", lambda *a, **k: sched)
+    first = cfb_season_odds(2023, n_sims=200, playoff_seeds=4, seed=7)
+
+    reversed_sched = sched.reverse()
+    monkeypatch.setattr(_mod, "load_cfb_schedule", lambda *a, **k: reversed_sched)
+    second = cfb_season_odds(2023, n_sims=200, playoff_seeds=4, seed=7)
+
+    assert first.sort("team_id").equals(second.sort("team_id")), (
+        "identical seed produced different odds under a different input row order"
+    )

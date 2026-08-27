@@ -287,6 +287,12 @@ def cfb_season_odds(
     games = cfb_games_from_schedule(schedule).select(
         "season", "week", "game_type", "home_team", "away_team", "result", "neutral"
     )
+    # Canonical order, for the same reason `teams` is sorted below: the sampler draws
+    # `rng.normal(..., n)` ACROSS THIS FRAME, so row order decides which game gets
+    # which number out of the seeded stream. Whatever order the schedule arrived in
+    # would otherwise leak into the results, and `seed=` would not survive a loader
+    # change or a re-sorted input. (season, week, home, away) is unique per game.
+    games = games.sort("season", "week", "home_team", "away_team")
     if as_of_date is not None:
         # A postseason MATCHUP is itself an outcome of the season, so an unplayed
         # conf-champ / bowl / CFP row would leak the real bracket into the forecast.
@@ -297,6 +303,14 @@ def cfb_season_odds(
         .vstack(schedule.select(team=pl.col("away_team"), conference=pl.col("away_conference")))
         .drop_nulls("team")
         .unique(subset=["team"], keep="first")
+        # polars `.unique()` gives NO order guarantee, and this frame's row order is
+        # what the seeded RNG draws map onto (`sims.join(teams, how="cross")` below).
+        # So `seed=` made the DRAWS reproducible while leaving the ORDERING free, and
+        # a tiebreak-sensitive team could move by ~1/n_sims between two identical
+        # calls. `team` is unique here, so sorting on it is a total, stable order and
+        # makes `seed=` mean what callers -- backtests, published season odds --
+        # already assume it means.
+        .sort("team")
     )
     # Restrict the SIMULATED UNIVERSE to the FBS field (issue #333). The schedule carries
     # every opponent an FBS team played, and the sampler scores a team absent from
