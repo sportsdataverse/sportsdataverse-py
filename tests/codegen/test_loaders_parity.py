@@ -6,6 +6,9 @@ import importlib
 from pathlib import Path
 from unittest.mock import patch
 
+from sportsdataverse import _codegen_runtime as runtime
+from sportsdataverse.errors import NoDataError
+
 from tools.codegen import generate, spec
 
 REL = Path("tools/codegen/endpoints/releases.yaml")
@@ -39,10 +42,13 @@ def _existing_url(fn_name: str, league: str):
         raise FileNotFoundError("404")  # short-circuit after first fetch
 
     with patch.object(mod.pl, "read_parquet", side_effect=fake):
-        try:
-            getattr(mod, fn_name)(seasons=2024)
-        except Exception:  # noqa: BLE001
-            pass
+        # `_read_release_parquet` classifies a failed read by asking the transport
+        # what the server said, so keep that lookup offline too.
+        with patch.object(runtime, "download", side_effect=NoDataError("404")):
+            try:
+                getattr(mod, fn_name)(seasons=2024)
+            except Exception:  # noqa: BLE001
+                pass
     return box.get("url")
 
 

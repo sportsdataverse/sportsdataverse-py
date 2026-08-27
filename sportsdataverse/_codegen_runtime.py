@@ -112,28 +112,56 @@ def cli_warn(msg: str) -> None:
 def _read_release_parquet(url: str) -> Optional[pl.DataFrame]:
     """Read a release parquet; return ``None`` on 404 / missing asset (404-safe loaders).
 
-    Re-raises anything that isn't a missing-asset error so genuine parse/schema bugs
-    aren't silently swallowed. The token list is deliberately narrow: ``403/forbidden``
-    (rate-limit / auth) and generic ``could not`` (parse/type failures) are NOT treated
-    as missing assets, so they surface instead of being masked as "no data".
+    The read itself stays a direct Arrow fetch, and the bytes deliberately do NOT go
+    through the HTTP gateway. Arrow overlaps the fetch with decoding and range-reads
+    column chunks; buffering the asset first serializes the two and holds an extra copy
+    of the compressed file. Measured on the 59 MB ``play_by_play_2025.parquet`` (best of
+    3, one read per process, identical imports): direct 1010 MB / 6.0s versus buffered
+    1081 MB / 10.5s -- +7% peak RSS and +75% wall. Routing through a temp file or a
+    zero-copy ``pa.py_buffer`` was no better. See issue #397.
+
+    What DOES go through the gateway is the *classification* of a failure. When the
+    direct read fails we ask ``download`` what the server actually said instead of
+    pattern-matching the reader's exception message:
+
+    * a 404 (``NoDataError``) means the asset is genuinely absent -- return ``None``
+      so the caller skips that season;
+    * any other non-200 -- notably a 403 or a rate-limit that outlived the retry
+      budget -- raises :class:`~sportsdataverse.errors.AssetFetchError`, so a fetch
+      that FAILED is never recorded as a season that is EMPTY;
+    * a reachable, readable asset means the failure was a genuine parse/schema error,
+      which is re-raised untouched.
+
+    The extra round trip happens only on the failure path and costs ~0.1s per missing
+    season, versus the several seconds a buffered success path would cost every time.
 
     R-producer assets can carry an ``arrow.r.vctrs`` field-extension whose metadata is
-    raw RDS bytes (not UTF-8) — e.g. a ``glue`` character column. polars' arrow-FFI
-    import panics on that metadata (``pyo3 PanicException``, a ``BaseException`` the
-    404 classifier never sees), so on panic we re-read via pyarrow with all
-    field/schema metadata stripped; the storage types are plain, so this is lossless.
+    raw RDS bytes (not UTF-8) -- e.g. a ``glue`` character column. polars' arrow-FFI
+    import panics on that metadata (``pyo3 PanicException``, a ``BaseException`` that
+    an ``except Exception`` handler never sees), so on panic we re-read via pyarrow
+    with all field/schema metadata stripped; the storage types are plain, so this is
+    lossless.
     """
+    from sportsdataverse.errors import AssetFetchError, NoDataError
+
     try:
         return pl.read_parquet(url, use_pyarrow=True)
-    except Exception as e:  # noqa: BLE001 -- classify fetch/parse failures
-        msg = str(e).lower()
-        if any(tok in msg for tok in ("404", "not found", "no such")):
-            return None
-        raise
+    except Exception as e:  # noqa: BLE001 -- classified below, by the server not the message
+        original: BaseException = e
     except BaseException as e:  # pyo3 PanicException does not subclass Exception
         if type(e).__name__ != "PanicException":
-            raise
+            raise  # never swallow KeyboardInterrupt / SystemExit into an HTTP call
         return _read_parquet_stripped_metadata(url)
+
+    try:
+        resp = download(url)
+    except NoDataError:
+        return None
+
+    status = getattr(resp, "status_code", None)
+    if status is not None and status != 200:
+        raise AssetFetchError(f"release asset fetch failed with HTTP {status}: {url}") from original
+    raise original
 
 
 def _read_parquet_stripped_metadata(url: str) -> pl.DataFrame:
