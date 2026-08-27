@@ -425,3 +425,115 @@ def test_backfill_power_play_sets_flags_during_penalty():
     )
     out_no_pen = backfill_power_play(df_no_pen)
     assert out_no_pen["power_play"][0] is None  # unchanged
+
+
+def _official_onice_agreement(goal_epsilon_s):
+    """Count fixture goals whose official plus/minus lists match shift-derived on-ice.
+
+    The goal payload's ``plus_players`` / ``minus_players`` are the league's own
+    on-ice lists -- ground truth in-feed. Returns ``(agreeing, total)``.
+    """
+    from sportsdataverse.hockeytech import _parsers as P
+    from sportsdataverse.hockeytech._analytics import add_clock_columns, build_on_ice
+
+    pbp = P.parse_pbp(load_fixture("hockeytech", "pwhl_pbp_42"), pbp_style="hockeytech_a", game_id=42)
+    shifts = P.parse_shifts(load_fixture("hockeytech", "pwhl_gameshifts_42"), game_id=42)
+    pbp = add_clock_columns(pbp)
+
+    period_len = {
+        int(r["period"]): int(r["plen"])
+        for r in shifts.group_by("period").agg(pl.col("start_s").max().alias("plen")).iter_rows(named=True)
+    }
+    period_int = pl.col("period_of_game").cast(pl.Int64, strict=False)
+    plen_expr = pl.lit(1200, dtype=pl.Int64)
+    for pv, lv in period_len.items():
+        plen_expr = pl.when(period_int == pv).then(pl.lit(lv, dtype=pl.Int64)).otherwise(plen_expr)
+
+    prepped = pbp.with_columns(
+        period_of_game=period_int,
+        time_s=(plen_expr - (pl.col("minute_start") * 60 + pl.col("second_start"))).cast(pl.Int64, strict=False),
+    )
+    out = build_on_ice(prepped, shifts, goal_epsilon_s=goal_epsilon_s)
+
+    goals = out.filter(pl.col("event") == "goal")
+    plus_cols = [c for c in goals.columns if c.startswith("plus_player_") and c.endswith("_id")]
+    minus_cols = [c for c in goals.columns if c.startswith("minus_player_") and c.endswith("_id")]
+
+    def _ids(row, cols):
+        # official plus/minus ids arrive Float64 ("163.0"); on-ice ids are Utf8 ints
+        return {str(int(float(row[c]))) for c in cols if row[c] is not None}
+
+    agree = 0
+    for row in goals.iter_rows(named=True):
+        plus = _ids(row, plus_cols)
+        minus = _ids(row, minus_cols)
+        on_home = set((row["on_ice_home"] or "").split(",")) - {""}
+        on_away = set((row["on_ice_away"] or "").split(",")) - {""}
+        # the scoring side may be either home or away; accept whichever side covers it
+        if (plus <= on_home or plus <= on_away) and (minus <= on_home or minus <= on_away):
+            agree += 1
+    return agree, goals.height
+
+
+def test_build_on_ice_goal_epsilon_fixes_shift_boundary_disagreement():
+    """Issue #369: shift boundaries are unreliable at the goal instant.
+
+    At ``goal_epsilon_s=0`` the shift chart has already rolled to the post-goal
+    deployment, so the league's own ``plus_players``/``minus_players`` on-ice
+    lists match NONE of the four goals in the committed game-42 fixture. The
+    epsilon convention (evaluate 2s BEFORE the goal) recovers all four.
+    """
+    before_agree, total = _official_onice_agreement(goal_epsilon_s=0)
+    after_agree, _ = _official_onice_agreement(goal_epsilon_s=2)
+
+    assert total == 4
+    assert before_agree == 0, f"expected the eps=0 defect on this fixture, got {before_agree}/{total}"
+    assert after_agree == total, f"epsilon convention should fix all goals, got {after_agree}/{total}"
+
+
+def test_build_on_ice_goal_epsilon_leaves_non_goal_events_untouched():
+    """The epsilon shift applies to goal rows only -- every other event is unchanged."""
+    from sportsdataverse.hockeytech._analytics import build_on_ice
+
+    pbp = pl.DataFrame(
+        {"event": ["shot", "goal"], "period_of_game": [1, 1], "time_s": [1000, 1000]},
+        schema={"event": pl.Utf8, "period_of_game": pl.Int64, "time_s": pl.Int64},
+    )
+    # player 1 is on ice only in (1002, 1001]; player 2 only in (1000, 999].
+    shifts = pl.DataFrame(
+        {"player_id": [1, 2], "home": [1, 1], "period": [1, 1], "start_s": [1002, 1000], "end_s": [1001, 999]},
+        schema={
+            "player_id": pl.Int64,
+            "home": pl.Int64,
+            "period": pl.Int64,
+            "start_s": pl.Int64,
+            "end_s": pl.Int64,
+        },
+    )
+    out = build_on_ice(pbp, shifts, goal_epsilon_s=2)
+    # shot stays at t=1000 -> player 2; goal moves to t=1002 -> player 1
+    assert out.filter(pl.col("event") == "shot")["on_ice_home"][0] == "2"
+    assert out.filter(pl.col("event") == "goal")["on_ice_home"][0] == "1"
+
+
+def test_build_on_ice_goal_epsilon_clamped_to_period_start():
+    """A goal in the opening seconds must not be pushed outside every shift."""
+    from sportsdataverse.hockeytech._analytics import build_on_ice
+
+    pbp = pl.DataFrame(
+        {"event": ["goal"], "period_of_game": [1], "time_s": [1200]},
+        schema={"event": pl.Utf8, "period_of_game": pl.Int64, "time_s": pl.Int64},
+    )
+    shifts = pl.DataFrame(
+        {"player_id": [7], "home": [1], "period": [1], "start_s": [1200], "end_s": [1150]},
+        schema={
+            "player_id": pl.Int64,
+            "home": pl.Int64,
+            "period": pl.Int64,
+            "start_s": pl.Int64,
+            "end_s": pl.Int64,
+        },
+    )
+    out = build_on_ice(pbp, shifts, goal_epsilon_s=2)
+    # unclamped this would look up t=1202 and find nothing
+    assert out["on_ice_home"][0] == "7"

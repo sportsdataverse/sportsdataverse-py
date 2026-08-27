@@ -345,7 +345,14 @@ def scoring_chances(pbp: pl.DataFrame, threshold_ft: float = _SCORING_CHANCE_FT)
     )
 
 
-def build_on_ice(pbp: pl.DataFrame, shifts: pl.DataFrame) -> pl.DataFrame:
+#: Seconds BEFORE a goal instant at which on-ice personnel are evaluated.
+#: The HockeyTech shift chart is frequently already rolled to the POST-goal
+#: deployment at the goal's own timestamp, so evaluating at eps=0 reads the
+#: line that came over the boards after the goal. See :func:`build_on_ice`.
+GOAL_EPSILON_S = 2
+
+
+def build_on_ice(pbp: pl.DataFrame, shifts: pl.DataFrame, goal_epsilon_s: int = GOAL_EPSILON_S) -> pl.DataFrame:
     """Attach ``on_ice_home``/``on_ice_away`` (comma-joined player_ids) per event.
 
     ``pbp`` must carry integer ``period_of_game`` and ``time_s`` (seconds remaining,
@@ -355,7 +362,26 @@ def build_on_ice(pbp: pl.DataFrame, shifts: pl.DataFrame) -> pl.DataFrame:
     ``time_s``) is owned only by the incoming shift, not double-counted across
     both lines (which produced impossible 10-v-10 on-ice counts). ``shifts``
     carries ``home`` (1/0).
-    Returns ``pbp`` with two added columns, one row per original event, order preserved.
+
+    **Goal-instant epsilon convention.** HockeyTech shift boundaries are
+    unreliable at the exact second of a goal: the chart is often already rolled
+    to the post-goal deployment, so an eps=0 lookup returns the line that came
+    over the boards *after* the goal rather than the one that was on for it.
+    Rows whose ``event`` is ``"goal"`` are therefore evaluated ``goal_epsilon_s``
+    seconds BEFORE the goal instant (a larger countdown value), clamped to the
+    period's start so an opening-seconds goal still resolves. Pass
+    ``goal_epsilon_s=0`` to restore the old at-the-instant behavior. Non-goal
+    events are unaffected.
+
+    Args:
+        pbp: event frame carrying ``period_of_game`` and ``time_s``.
+        shifts: parsed shift frame (``player_id``, ``home``, ``period``,
+            ``start_s``, ``end_s``).
+        goal_epsilon_s: seconds before a goal instant at which to evaluate
+            on-ice personnel. Defaults to :data:`GOAL_EPSILON_S` (2).
+
+    Returns:
+        ``pbp`` with two added columns, one row per original event, order preserved.
     """
     if pbp.height == 0 or shifts.height == 0:
         return pbp.with_columns(
@@ -364,6 +390,26 @@ def build_on_ice(pbp: pl.DataFrame, shifts: pl.DataFrame) -> pl.DataFrame:
         )
 
     indexed = pbp.with_row_index("_eidx")
+
+    # Goal-instant epsilon: look up goals `goal_epsilon_s` seconds earlier
+    # (countdown clock -> larger value), clamped to the period's own start so a
+    # goal in the opening seconds does not fall outside every shift.
+    if goal_epsilon_s and "event" in indexed.columns:
+        period_start = shifts.group_by("period").agg(pl.col("start_s").max().alias("_period_start_s"))
+        indexed = (
+            indexed.join(period_start, left_on="period_of_game", right_on="period", how="left")
+            .with_columns(
+                time_s=pl.when(pl.col("event") == "goal")
+                .then(
+                    pl.min_horizontal(
+                        pl.col("time_s") + goal_epsilon_s,
+                        pl.col("_period_start_s").fill_null(pl.col("time_s") + goal_epsilon_s),
+                    )
+                )
+                .otherwise(pl.col("time_s"))
+            )
+            .drop("_period_start_s")
+        )
     # Rename shifts player_id to avoid collision with any player_id column in pbp.
     shifts_sel = shifts.select(
         [
@@ -429,6 +475,12 @@ def add_strength_state(pbp: pl.DataFrame, goalie_ids: "list | set | None" = None
         implausible (skaters < 3 or > 6) -- the HockeyTech shift-boundary noise
         that survives the :func:`build_on_ice` fix (~5% of events). Downstream
         should drop/clamp invalid rows rather than trust the count.
+
+    At goal instants the on-ice lists this reads are evaluated a couple of
+    seconds BEFORE the goal (see :func:`build_on_ice`'s goal-epsilon
+    convention), because the HockeyTech shift chart is typically already rolled
+    to the post-goal deployment at the goal's own timestamp. That is what makes
+    EV/PP/SH goal attribution derived from ``strength_state`` trustworthy.
 
     Args:
         pbp: frame carrying ``on_ice_home`` / ``on_ice_away``.
