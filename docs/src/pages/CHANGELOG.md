@@ -2,7 +2,11 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
-- [0.1.0 Release: August 26, 2026](#010-release-august-26-2026)
+- [0.1.0 Release: August 27, 2026](#010-release-august-27-2026)
+  - [Changed — release-asset reads classify failures through the HTTP gateway (#397, #402, #404)](#changed--release-asset-reads-classify-failures-through-the-http-gateway-397-402-404)
+  - [Added — the CFB dataset surface: teams, rosters, schedules, team info (#393, #394, #396, #399)](#added--the-cfb-dataset-surface-teams-rosters-schedules-team-info-393-394-396-399)
+  - [Fixed — CFB fourth-down clamps, reproducibility, and a Torvik HTML body (#398, #400, #401)](#fixed--cfb-fourth-down-clamps-reproducibility-and-a-torvik-html-body-398-400-401)
+  - [Fixed — MBB player-code resolution and crosswalk sources (#348, #372, #373)](#fixed--mbb-player-code-resolution-and-crosswalk-sources-348-372-373)
   - [New — the three NBA video endpoints revived (`nba_stats` 125 → 128, #391)](#new--the-three-nba-video-endpoints-revived-nba_stats-125-%E2%86%92-128-391)
   - [New — NCAA baseball reconciliation seam + sport-generic reference parsers (#390)](#new--ncaa-baseball-reconciliation-seam--sport-generic-reference-parsers-390)
   - [Added — league-wide NCAA RAPM solver (`mbb_ncaa_rapm_league`, #389)](#added--league-wide-ncaa-rapm-solver-mbb_ncaa_rapm_league-389)
@@ -23,6 +27,15 @@
   - [New — `sportsdataverse.wexp`: win-expectancy bake-off harness (NFL + CFB)](#new--sportsdataversewexp-win-expectancy-bake-off-harness-nfl--cfb)
   - [New — `load_nfl_ratings_weekly`: per-week as-of NFL ratings vintages](#new--load_nfl_ratings_weekly-per-week-as-of-nfl-ratings-vintages)
   - [New — `sportsdataverse.scrape.espn`: shared ESPN `-raw` archive engine](#new--sportsdataversescrapeespn-shared-espn--raw-archive-engine)
+  - [Fixed — `cfb_season_odds` simulated 571 non-FBS teams as league-average (#333)](#fixed--cfb_season_odds-simulated-571-non-fbs-teams-as-league-average-333)
+  - [Fixed — `cfb_season_odds` `as_of_date` bounded only the ratings, never the game set (#334)](#fixed--cfb_season_odds-as_of_date-bounded-only-the-ratings-never-the-game-set-334)
+  - [Known — `cfb_season_odds` is not bit-reproducible across runs (#392)](#known--cfb_season_odds-is-not-bit-reproducible-across-runs-392)
+  - [PWHL / HockeyTech data-quality fixes](#pwhl--hockeytech-data-quality-fixes)
+  - [Fixed — CFB box score per-player defensive/specialist attribution (#93)](#fixed--cfb-box-score-per-player-defensivespecialist-attribution-93)
+  - [Fixed — NFL play-by-play raised `KeyError: 'name'` for mascot-less franchises (#23)](#fixed--nfl-play-by-play-raised-keyerror-name-for-mascot-less-franchises-23)
+  - [Fixed — Yahoo CFB crosswalk live tests no longer red the matrix on a blocked runner (#229)](#fixed--yahoo-cfb-crosswalk-live-tests-no-longer-red-the-matrix-on-a-blocked-runner-229)
+  - [Housekeeping — the open-issue backlog was swept to zero](#housekeeping--the-open-issue-backlog-was-swept-to-zero)
+  - [Fixed — dead and malformed source URLs in `config.py` (#9 follow-up)](#fixed--dead-and-malformed-source-urls-in-configpy-9-follow-up)
   - [Also in this release](#also-in-this-release)
   - [Road to 0.1.0 — highlights since 0.0.40](#road-to-010--highlights-since-0040)
 - [0.0.75 Release: August 2, 2026](#0075-release-august-2-2026)
@@ -248,7 +261,77 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-## 0.1.0 Release: August 26, 2026
+## 0.1.0 Release: August 27, 2026
+
+### Changed — release-asset reads classify failures through the HTTP gateway (#397, #402, #404)
+
+`CLAUDE.md` said all HTTP goes through `dl_utils.download()`; release parquet
+reads handed the URL straight to Arrow. Routing the **bytes** through the gateway
+turned out to be the wrong fix and was measured rather than assumed: on the 59 MB
+`play_by_play_2025.parquet`, buffering cost **+7% peak RSS and +75% wall**
+(1010 MB / 6.0s direct versus 1081 MB / 10.5s buffered, best of 3, one read per
+process). A temp file and a zero-copy `pa.py_buffer` were both worse. Arrow
+overlaps the fetch with decoding and range-reads column chunks; any
+fetch-then-parse design co-resides the compressed asset with the decoded frame.
+So the read stays direct, and `CLAUDE.md` now scopes the guideline instead of the
+code contradicting it.
+
+What *did* move to the gateway is the **classification** of a failure. A missing
+asset was previously detected by searching the reader's exception message for
+`"404"` / `"not found"` / `"no such"`. Now the server is asked:
+
+- **404** → `NoDataError` → the caller skips that season;
+- **any other non-200** → the new `AssetFetchError`, so a 403 or an exhausted
+  retry budget can never be recorded as "this season is empty";
+- **reachable and readable** → the original parse error is re-raised untouched.
+
+Two entry points share one implementation: `_fetch_release_parquet` **raises** on
+an absent asset (the hand-written `nfl_loaders.py` and `cfb_loaders_extra.py`,
+44 call sites, where a missing season is an error) and `_read_release_parquet`
+returns **`None`** (the 226 generated call sites, where a season gap is routine).
+Only "absent" differs — `AssetFetchError` propagates from both.
+
+Two latent bugs fell out. The `PanicException` recovery caught `BaseException`
+broadly, so a **Ctrl-C during a read was swallowed into an HTTP request** instead
+of interrupting. And that recovery path issues its *own* refetch, which was
+parsed without checking status — a 403 body surfaced as a corrupt-parquet error
+rather than `AssetFetchError`. Both fixed and regression-covered.
+
+**`NoESPNDataError` is renamed `NoDataError`**, since `download()` raises it for
+any 404 including release assets. The old name remains a true alias and a test
+asserts the two are the same object, so every existing `raise` / `except` keeps
+working.
+
+### Added — the CFB dataset surface: teams, rosters, schedules, team info (#393, #394, #396, #399)
+
+Four ESPN-sourced CFB datasets gain first-class loaders:
+
+- **`load_cfb_teams`** — `espn_cfb_teams`, the whole ESPN CFB group tree per
+  season (FBS, FCS, D-II/III and the parentless NAIA group 186), filterable to
+  FBS alone.
+- **`load_cfb_rosters`** — **BREAKING**: repointed from the CFBD-derived
+  cfbfastR-data asset to the ESPN `espn_cfb_rosters` release. The CFBD-backed
+  frame is still available as `load_cfb_rosters_cfbd`.
+- **`load_cfb_schedule`** — re-documented for the unified `cfb_schedules`
+  dataset, which reconciles the ESPN and CFBD schedule surfaces and carries an
+  FBS filter.
+- **`load_cfb_team_info`** — served from the `cfb_team_info` release.
+
+### Fixed — CFB fourth-down clamps, reproducibility, and a Torvik HTML body (#398, #400, #401)
+
+`cfb_fourth_down` end-game clamps and the documented input contract are
+corrected. `cfb_season_odds` is bit-reproducible under `seed=`. The Torvik
+loader now rejects an HTML error body instead of parsing it as a CSV — the same
+"a failed fetch must not masquerade as data" rule the transport work applies at
+the release layer.
+
+### Fixed — MBB player-code resolution and crosswalk sources (#348, #372, #373)
+
+A unique first-name-only match now resolves instead of being rejected, every
+player-code derivation routes through the box roster, and the basketball
+crosswalk sources fail loudly rather than silently — plus the
+`scheduleleaguev2` envelope is parsed correctly.
+
 
 ### New — the three NBA video endpoints revived (`nba_stats` 125 → 128, #391)
 

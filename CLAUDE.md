@@ -29,6 +29,7 @@
     - [NBA / WNBA — read-through raw JSON store (0.0.72+)](#nba--wnba--read-through-raw-json-store-0072)
     - [Release utilities — `sportsdataverse.release` (0.0.72+)](#release-utilities--sportsdataverserelease-0072)
     - [HTTP / retry layer](#http--retry-layer)
+    - [Error vocabulary (0.1.0)](#error-vocabulary-010)
     - [Polars version](#polars-version)
     - [Type hints](#type-hints)
     - [Test gating](#test-gating)
@@ -190,7 +191,7 @@ sportsdataverse/
   nbagl/      # NBA G-League engine helpers
   release.py  # sportsdataversedata R-package port (release assets + RDS writer)
   dl_utils.py # download() retry + janitor + (under|kebab|camel)ize helpers
-  errors.py   # NoESPNDataError, SeasonNotFoundError
+  errors.py   # NoDataError (alias NoESPNDataError), AssetFetchError, SeasonNotFoundError
   config.py   # Per-sport URL constants pointing at sportsdataverse-data releases
   __init__.py
 tests/
@@ -806,6 +807,22 @@ were no better. `download()` is still used there to **classify** a failed read �
 season that is EMPTY. Don't "fix" this to route the bytes through `download()`;
 `tests/codegen/test_runtime_release.py::test_success_path_never_calls_the_transport`
 guards it. See issue #397.
+
+### Error vocabulary (0.1.0)
+
+`NoDataError` means the fetch **succeeded** and the answer is "nothing here" — a
+404 from any host, or ESPN's 200-with-`code:404` body. `AssetFetchError` means the
+fetch **failed** and the answer is **unknown** — a 403, a rate limit, an exhausted
+retry budget. Never collapse the two: a failed fetch recorded as an empty season
+is silent data loss, and a test asserts neither is a subclass of the other.
+
+`NoESPNDataError` remains a true alias of `NoDataError` (the error was named when
+it was ESPN-only, but `download()` raises it for any 404, release assets
+included). A test asserts they are the same object, so existing
+`except NoESPNDataError` keeps catching. Prefer `NoDataError` in new code.
+
+When a loader reads an optional upstream asset, decide deliberately which of the
+two a missing file is — and never let a 403 take the "absent" branch.
 
 ### Polars version
 

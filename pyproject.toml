@@ -215,7 +215,15 @@ include-package-data = true
 
 [tool.setuptools.packages.find]
 where = ["."]
-exclude = ["tests*", "docs*", "examples*", "archive*"]
+# Allowlist, not a denylist. The previous exclude list omitted `dev*` and
+# `tools*`, so auto-discovery installed the repo's scratch scripts and the
+# codegen toolchain as TOP-LEVEL importable packages: 0.0.75 on PyPI ships 84
+# `dev/` and 86 `tools/` files, meaning `import tools` in a downstream project
+# could resolve to ours. Nothing under `sportsdataverse/` imports either at
+# runtime, and the tests that import `tools` run against the source tree rather
+# than the wheel. An allowlist also means a new top-level directory cannot leak
+# into the distribution by being forgotten here.
+include = ["sportsdataverse*"]
 
 [tool.setuptools.package-data]
 # ``py.typed`` is the PEP 561 marker that tells downstream type checkers this

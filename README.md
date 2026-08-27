@@ -38,11 +38,11 @@ The goal of [sportsdataverse-py](https://py.sportsdataverse.org) is to provide t
 
 | League | Module | Surfaces covered |
 |---|---|---|
-| NBA | `sportsdataverse.nba` | ESPN (Site v2 + Web v3 + Core v2) + **stats.nba.com** (`nba_stats_*`, 112 wrappers; G-League `league_id="20"` / Summer League `"15"`) + Fox Sports (Bifrost) |
-| WNBA | `sportsdataverse.wnba` | ESPN + **stats.wnba.com** (`wnba_stats_*`, 95 wrappers) |
+| NBA | `sportsdataverse.nba` | ESPN (Site v2 + Web v3 + Core v2) + **stats.nba.com** (`nba_stats_*`, 128 wrappers; G-League `league_id="20"` / Summer League `"15"`) + Fox Sports (Bifrost) |
+| WNBA | `sportsdataverse.wnba` | ESPN + **stats.wnba.com** (`wnba_stats_*`, 111 wrappers) |
 | MBB (NCAA M) | `sportsdataverse.mbb` | ESPN + NCAA-only (rankings, recruits) + **stats.ncaa.org** (`ncaa_mbb_*` bigballR-parity family + `mbb_ncaa_*` pbp/lineup/stint engine) + Fox Sports (Bifrost) |
 | WBB (NCAA W) | `sportsdataverse.wbb` | ESPN + NCAA-only + **stats.ncaa.org** (`ncaa_wbb_*` family) |
-| CFB | `sportsdataverse.cfb` | ESPN + NCAA + **stats.ncaa.org** (`cfb_ncaa_pbp` + box/drives/officials parsers) + football-only (QBR) + Fox Sports (Bifrost) + Yahoo Sports |
+| CFB | `sportsdataverse.cfb` | ESPN + NCAA + **stats.ncaa.org** (`cfb_ncaa_pbp` + box/drives/officials parsers) + football-only (QBR) + Fox Sports (Bifrost) + Yahoo Sports + **ESPN dataset loaders** (teams / rosters / unified schedules / team info) |
 | NFL | `sportsdataverse.nfl` | ESPN + **NFL.com API** (`api.nfl.com` "Shield") + **nflverse loaders** (nflreadpy parity) + football-only (QBR) |
 | MLB | `sportsdataverse.mlb` | ESPN + MLB Stats API (`statsapi.mlb.com`) + Baseball Savant / Statcast (43-endpoint `mlb_statcast_*` surface) + Fox Sports (Bifrost) |
 | NHL | `sportsdataverse.nhl` | `api-web.nhle.com/v1/` (game-feed) + NHL EDGE (player tracking) + Stats REST + Records site + Fox Sports (Bifrost) |
@@ -57,7 +57,7 @@ The goal of [sportsdataverse-py](https://py.sportsdataverse.org) is to provide t
 
 The big-league modules export roughly 240–680 public functions each (ESPN
 wrappers + that league's native-API wrappers + dataset loaders + parsers) —
-about 4,400 exported names package-wide. **Fox Sports** adds `fox_<league>_*`
+about 4,650 exported names package-wide. **Fox Sports** adds `fox_<league>_*`
 Bifrost wrappers (pbp / boxscore / odds / roster / stats / standings / leaders)
 for nba, mbb, cfb, mlb, nhl; **Yahoo Sports** adds `yahoo_cfb_*` season-stats /
 scoreboard wrappers for college football. `sportsdataverse.release` ports the

@@ -115,14 +115,28 @@ all legacy modules were migrated in May 2026.
 
 ## HTTP Layer
 
-All HTTP goes through `sportsdataverse.dl_utils.download()`. It is
+All **payload** HTTP goes through `sportsdataverse.dl_utils.download()`. It is
 type-hinted, iterative (no recursion), initializes `response = None`
 defensively, and re-raises the most recent exception when the retry budget
 is exhausted (instead of returning an unbound variable).
 
 Wrappers do NOT wrap `download()` calls in try/except — they trust it to
 either return a usable `requests.Response` or raise
-`sportsdataverse.errors.NoESPNDataError` / `requests.exceptions.*`.
+`sportsdataverse.errors.NoDataError` / `requests.exceptions.*`.
+
+**Error vocabulary (0.1.0).** `NoDataError` means the fetch SUCCEEDED and the
+answer is "nothing here" — a 404 from any host, or ESPN's 200-with-`code:404`
+body. `AssetFetchError` means the fetch FAILED and the answer is UNKNOWN — a 403,
+a rate limit, an exhausted retry budget. Never collapse the two: a failed fetch
+recorded as an empty season is silent data loss. `NoESPNDataError` remains as a
+back-compat alias of `NoDataError`; prefer the new name in new code.
+
+**Exception — remote columnar reads.** Release parquet is read DIRECTLY by Arrow
+(`_fetch_release_parquet` / `_read_release_parquet` in `_codegen_runtime.py`), not
+buffered through `download()`. This is measured, not an oversight: buffering cost
++7% peak RSS and +75% wall on a 59 MB asset. `download()` is still used there to
+CLASSIFY a failed read (404 → `NoDataError`, other non-200 → `AssetFetchError`).
+Do not "fix" this to route the bytes through the gateway — a test guards it.
 
 ## Module Naming
 
