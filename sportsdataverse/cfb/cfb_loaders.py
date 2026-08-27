@@ -21,6 +21,7 @@ __all__ = [
     "load_cfb_recruits",
     "load_cfb_returning_production",
     "load_cfb_rosters",
+    "load_cfb_rosters_cfbd",
     "load_cfb_schedule",
     "load_cfb_team_info",
     "load_cfb_teams",
@@ -796,6 +797,137 @@ def load_cfb_returning_production(seasons, return_as_pandas: bool = False):
 
 
 def load_cfb_rosters(seasons, return_as_pandas: bool = False):
+    """Load espn_cfb_rosters (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_rosters
+
+    Args:
+        seasons: an int or iterable of seasons (>= 2004).
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; seasons with no published asset are
+        skipped with a warning rather than raising (404-safe).
+
+        |col_name                   |type    |
+        |:--------------------------|:-------|
+        |season                     |Int64   |
+        |team_id                    |Int64   |
+        |athlete_id                 |Int64   |
+        |division                   |String  |
+        |position_id                |Int64   |
+        |position                   |String  |
+        |position_abbreviation      |String  |
+        |position_name              |String  |
+        |position_leaf              |Boolean |
+        |position_parent_id         |Int64   |
+        |games_rostered             |Int64   |
+        |athlete_uid                |String  |
+        |athlete_guid               |String  |
+        |athlete_type               |String  |
+        |first_name                 |String  |
+        |middle_name                |String  |
+        |last_name                  |String  |
+        |full_name                  |String  |
+        |display_name               |String  |
+        |athlete_display_name       |String  |
+        |short_name                 |String  |
+        |nickname                   |String  |
+        |slug                       |String  |
+        |jersey                     |String  |
+        |jersey_right               |String  |
+        |weight                     |Float64 |
+        |display_weight             |String  |
+        |height                     |Float64 |
+        |display_height             |String  |
+        |age                        |Float64 |
+        |date_of_birth              |String  |
+        |hand_type                  |String  |
+        |hand_abbreviation          |String  |
+        |hand_display_value         |String  |
+        |linked                     |Boolean |
+        |active                     |Boolean |
+        |alternate_ids_sdr          |String  |
+        |birth_place_city           |String  |
+        |birth_place_state          |String  |
+        |birth_place_country        |String  |
+        |birth_country_alternate_id |String  |
+        |birth_country_abbreviation |String  |
+        |citizenship                |String  |
+        |flag_href                  |String  |
+        |flag_alt                   |String  |
+        |flag_rel                   |String  |
+        |headshot_href              |String  |
+        |headshot_alt               |String  |
+        |experience_years           |Float64 |
+        |experience_display_value   |String  |
+        |experience_abbreviation    |String  |
+        |status_id                  |String  |
+        |status_name                |String  |
+        |status_type                |String  |
+        |status_abbreviation        |String  |
+        |draft_display_text         |String  |
+        |draft_round                |String  |
+        |draft_year                 |String  |
+        |draft_selection            |String  |
+        |draft_team_href            |String  |
+        |team_guid                  |String  |
+        |team_uid                   |String  |
+        |team_slug                  |String  |
+        |team_location              |String  |
+        |team_name                  |String  |
+        |team_nickname              |String  |
+        |team_abbreviation          |String  |
+        |team_display_name          |String  |
+        |team_short_display_name    |String  |
+        |team_color                 |String  |
+        |team_alternate_color       |String  |
+        |team_alternate_ids_sdr     |String  |
+        |is_active                  |Boolean |
+        |is_all_star                |Boolean |
+        |logo_href                  |String  |
+        |logo_dark_href             |String  |
+        |athlete_href               |String  |
+        |position_href              |String  |
+        |cfbd_recruit_ids           |String  |
+        |cfbd_home_city             |String  |
+        |cfbd_home_state            |String  |
+        |cfbd_home_country          |String  |
+        |cfbd_home_latitude         |String  |
+        |cfbd_home_longitude        |String  |
+        |cfbd_home_county_fips      |String  |
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2004.
+
+    Example:
+        Quick start::
+
+            load_cfb_rosters(seasons=2024)
+    """
+    frames, missing = [], []
+    for season in _as_season_list(seasons):
+        if int(season) < 2004:
+            raise SeasonNotFoundError("season cannot be less than 2004")
+        df = _read_release_parquet(
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_rosters/cfb_rosters_{season}.parquet"
+        )
+        if df is None:
+            missing.append(season)
+            continue
+        frames.append(df)
+    if missing:
+        cli_warn("load_cfb_rosters: no data for season(s) {missing} (skipped)".format(missing=missing))
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    # Producers shipped this id with differing dtypes across releases; pin it here
+    # so a cross-dataset join cannot silently match nothing.
+    out = _cast_ids_int64(out, ["team_id", "athlete_id"])
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+def load_cfb_rosters_cfbd(seasons, return_as_pandas: bool = False):
     """Load cfbfastR-data (sportsdataverse-data release).
 
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfbfastR-data
@@ -835,7 +967,7 @@ def load_cfb_rosters(seasons, return_as_pandas: bool = False):
     Example:
         Quick start::
 
-            load_cfb_rosters(seasons=2024)
+            load_cfb_rosters_cfbd(seasons=2024)
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
@@ -849,7 +981,7 @@ def load_cfb_rosters(seasons, return_as_pandas: bool = False):
             continue
         frames.append(df)
     if missing:
-        cli_warn("load_cfb_rosters: no data for season(s) {missing} (skipped)".format(missing=missing))
+        cli_warn("load_cfb_rosters_cfbd: no data for season(s) {missing} (skipped)".format(missing=missing))
     # diagonal: per-season release schemas can drift (columns added/dropped
     # over the years) -- union columns, null-fill gaps.
     out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
