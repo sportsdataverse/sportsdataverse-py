@@ -43,6 +43,45 @@ _ODDS_SCHEMA: dict[str, pl.PolarsDataType] = {
 }
 
 
+def _mask_after(schedule: pl.DataFrame, as_of_date: datetime.date) -> pl.DataFrame:
+    """Null the scores of games kicking off on/after ``as_of_date`` (leakage boundary).
+
+    ``cfb_games_from_schedule`` derives ``result`` from ``home_points - away_points``,
+    so nulling the points is what makes the engine treat a game as unplayed. The
+    boundary is EXCLUSIVE of the future and mirrors :func:`cfb_ratings.cfb_ratings`
+    (``date < as_of_date`` is knowable). ``start_date`` is an ISO timestamp string
+    (``2023-08-26T18:30:00.000Z``); the leading 10 chars are the date, which answers a
+    date-granularity question without a timezone-aware parse. A row with no
+    ``start_date`` is left alone -- unknown is not evidence of being in the past.
+    """
+    if "start_date" not in schedule.columns:
+        return schedule
+    future = pl.col("start_date").cast(pl.Utf8).str.slice(0, 10).str.to_date(strict=False) >= pl.lit(as_of_date)
+    return schedule.with_columns(
+        pl.when(future.fill_null(False)).then(None).otherwise(pl.col(c)).alias(c)
+        for c in ("home_points", "away_points")
+    )
+
+
+def _fbs_team_ids(schedule: pl.DataFrame, ratings: pl.DataFrame) -> set[str]:
+    """The FBS team-id universe: schedule division markers, else ratings membership.
+
+    ``home_division`` / ``away_division`` (values ``fbs`` / ``fcs`` / ``ii`` / ``iii``)
+    are the authoritative classification and, unlike ratings membership, do not move
+    with ``as_of_date`` -- an early-season boundary leaves a real FBS team with no plays
+    yet and therefore no rating, and dropping it would be the same class of bug in
+    reverse. The ratings ids are the fallback for schedule shapes predating the division
+    columns (:func:`cfb_ratings.cfb_ratings` defaults to ``fbs_only=True``, so its team
+    set is the FBS field).
+    """
+    ids: set[str] = set()
+    for side in ("home", "away"):
+        div, tid = f"{side}_division", f"{side}_team"
+        if div in schedule.columns:
+            ids |= set(schedule.filter(pl.col(div).cast(pl.Utf8).str.to_lowercase() == "fbs")[tid].to_list())
+    return ids or set(ratings["team_id"].to_list())
+
+
 def make_ratings_compute_results(ratings: pl.DataFrame, *, era: str = "modern") -> ComputeResultsFn:
     """Build a ``cfb_simulations`` ``compute_results`` closure from fixed ratings.
 
@@ -174,13 +213,21 @@ def cfb_season_odds(
     with :func:`cfb_standings.cfb_games_from_schedule` (re-keyed on ESPN ``team_id`` so
     the ratings align), and feeds :func:`make_ratings_compute_results` as the sampler.
     All season / standings / bracket machinery is reused; unplayed games are simulated,
-    played games (before ``as_of_date``) are kept.
+    played games (before ``as_of_date``) are kept. Only FBS programs (schedule
+    ``division == "fbs"``) enter the simulated universe; non-FBS opponents stay in the
+    game set -- their games still count toward FBS records -- but can never reach the
+    standings, the playoff field, or the output.
 
     Args:
         seasons: A single season (an ``int``, or a one-element list). Multiple
             seasons raise ``ValueError`` -- the simulation engine is single-season.
-        as_of_date: Leakage boundary forwarded to :func:`cfb_ratings.cfb_ratings`;
-            games are kept/simulated from the schedule as-is. ``None`` uses the full season.
+        as_of_date: Leakage boundary applied to BOTH the ratings vintage and the game
+            set. Ratings are fit only on plays from games with ``date < as_of_date``
+            (:func:`cfb_ratings.cfb_ratings`), and schedule results from ``start_date``
+            on/after ``as_of_date`` are masked so those games are simulated instead of
+            replayed; masked postseason rows are dropped (the matchup is itself an
+            outcome) and regenerated from each sim's own standings. ``None`` uses the
+            full season as-is.
         n_sims: Number of simulated seasons.
         playoff_seeds: CFP field size.
         seed: RNG seed for reproducibility.
@@ -226,6 +273,13 @@ def cfb_season_odds(
         pl.col("home_id").cast(pl.Utf8).alias("home_team"),
         pl.col("away_id").cast(pl.Utf8).alias("away_team"),
     )
+    # `as_of_date` bounds the GAME SET, not just the ratings vintage. Without this a
+    # historical as-of run conditions on the whole season's realized results and
+    # "simulates" nothing -- every probability comes back 0.0/1.0 (issue #334). The
+    # boundary matches cfb_ratings (`date < as_of_date` is knowable), so a game
+    # kicking off ON as_of_date is FUTURE and must be simulated.
+    if as_of_date is not None:
+        schedule = _mask_after(schedule, as_of_date)
     # Keep only the engine's core columns: cfb_games_from_schedule also emits
     # home_points/away_points (SEC capped-scoring tiebreaker), but cfb_simulations
     # concatenates generated conf-champ/bracket games that lack them -> width mismatch.
@@ -233,12 +287,32 @@ def cfb_season_odds(
     games = cfb_games_from_schedule(schedule).select(
         "season", "week", "game_type", "home_team", "away_team", "result", "neutral"
     )
+    if as_of_date is not None:
+        # A postseason MATCHUP is itself an outcome of the season, so an unplayed
+        # conf-champ / bowl / CFP row would leak the real bracket into the forecast.
+        # Drop them; cfb_simulations regenerates both from each sim's own standings.
+        games = games.filter((pl.col("game_type") == "REG") | pl.col("result").is_not_null())
     teams = (
         schedule.select(team=pl.col("home_team"), conference=pl.col("home_conference"))
         .vstack(schedule.select(team=pl.col("away_team"), conference=pl.col("away_conference")))
         .drop_nulls("team")
         .unique(subset=["team"], keep="first")
     )
+    # Restrict the SIMULATED UNIVERSE to the FBS field (issue #333). The schedule carries
+    # every opponent an FBS team played, and the sampler scores a team absent from
+    # `ratings` as league-average -- so 571 FCS/D2/D3/NAIA programs were simulated as
+    # median FBS teams and took ~21% of the championship probability. `teams` is the
+    # engine's whole standings/seeding/output universe (`sims.join(teams, how="cross")`)
+    # while records are computed from `games`, so filtering HERE and not there keeps
+    # non-FBS opponents as opponents without letting them reach the playoff field.
+    teams = teams.filter(pl.col("team").is_in(list(_fbs_team_ids(schedule, ratings))))
+    if teams.is_empty():
+        # Empty here means the id namespaces disagreed, not that no team qualified --
+        # a silent pass-through would ship a zero-row board as if it were a result.
+        raise ValueError(
+            "cfb_season_odds: the FBS filter emptied the team set -- schedule team ids do "
+            "not intersect the FBS/ratings id namespace. Check the id dtypes."
+        )
     assert ratings.schema["team_id"] == teams.schema["team"] == pl.Utf8, (
         f"ratings team_id {ratings.schema['team_id']} != engine team {teams.schema['team']}"
     )

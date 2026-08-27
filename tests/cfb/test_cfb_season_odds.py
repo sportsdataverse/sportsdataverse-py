@@ -7,6 +7,7 @@ Task 4.1 exercises the ratings-driven ``compute_results`` closure against the
 
 from __future__ import annotations
 
+import datetime
 import sys
 
 import numpy as np
@@ -215,3 +216,212 @@ def test_season_odds_rejects_multiple_seasons() -> None:
     single-season and would otherwise mix weeks across seasons."""
     with pytest.raises(ValueError, match="one season at a time"):
         cfb_season_odds([2022, 2023])
+
+
+# --- #333: the simulated universe is the FBS field ---------------------------
+
+_FBS_IDS = [str(i) for i in range(1, 5)]  # "1".."4" -- a two-conference FBS field
+_NON_FBS_IDS = ["90", "91", "92", "93"]  # FCS/D2 cupcakes on the FBS schedule
+_FBS_CONF = {**{i: "X" for i in _FBS_IDS[:2]}, **{i: "Y" for i in _FBS_IDS[2:]}}
+
+
+def _mixed_schedule() -> pl.DataFrame:
+    """FBS round-robin (unplayed) plus one played non-FBS body-bag game per FBS team.
+
+    Mirrors the real shape from issue #333: the schedule carries every opponent an FBS
+    team played, and those non-FBS programs are unrated -- so the sampler scored them
+    as median FBS teams and the engine let them into the playoff field.
+    """
+    rows: list[tuple[str, str, int, str, object, object]] = []
+    wk = 1
+    for i in range(len(_FBS_IDS)):
+        for j in range(i + 1, len(_FBS_IDS)):
+            rows.append((_FBS_IDS[i], _FBS_IDS[j], wk, "fbs", None, None))
+            wk = wk % 10 + 1
+    for k, fid in enumerate(_FBS_IDS):
+        rows.append((fid, _NON_FBS_IDS[k], 11, "fcs", 42, 7))
+    return pl.DataFrame(
+        {
+            "season": [2023] * len(rows),
+            "week": [w for _, _, w, _, _, _ in rows],
+            "season_type": ["regular"] * len(rows),
+            "start_date": ["2023-09-02T18:00:00.000Z"] * len(rows),
+            "home_id": [int(h) for h, _, _, _, _, _ in rows],
+            "away_id": [int(a) for _, a, _, _, _, _ in rows],
+            "home_division": ["fbs"] * len(rows),
+            "away_division": [ad for _, _, _, ad, _, _ in rows],
+            "home_conference": [_FBS_CONF.get(h) for h, _, _, _, _, _ in rows],
+            "away_conference": [_FBS_CONF.get(a) for _, a, _, _, _, _ in rows],
+            "home_points": [hp for _, _, _, _, hp, _ in rows],
+            "away_points": [ap for _, _, _, _, _, ap in rows],
+            "neutral_site": [False] * len(rows),
+        }
+    )
+
+
+def _fbs_ratings() -> pl.DataFrame:
+    return pl.DataFrame({"season": [2023] * 4, "team_id": _FBS_IDS, "adj_net": [0.45, 0.20, 0.05, -0.05]})
+
+
+def _patch_fbs(monkeypatch: pytest.MonkeyPatch, sched: pl.DataFrame | None = None) -> None:
+    monkeypatch.setattr(_mod, "cfb_ratings", lambda *a, **k: _fbs_ratings())
+    monkeypatch.setattr(_mod, "load_cfb_schedule", lambda *a, **k: sched if sched is not None else _mixed_schedule())
+
+
+def test_non_fbs_teams_are_not_simulated(monkeypatch: pytest.MonkeyPatch) -> None:
+    """No unrated non-FBS program reaches the output or the championship board.
+
+    Regression for #333, where 571 FCS/D2/D3/NAIA teams were scored as league-average
+    (0.0) and took ~21% of the championship probability on the real 2023 slate.
+    """
+    _patch_fbs(monkeypatch)
+    out = cfb_season_odds(2023, n_sims=200, playoff_seeds=2, seed=0)
+    assert set(out["team_id"].to_list()) == set(_FBS_IDS)
+    assert out.filter(pl.col("team_id").is_in(_NON_FBS_IDS)).height == 0
+    # The whole championship mass now lands on the FBS field.
+    assert out["cfp_champ_prob"].sum() == pytest.approx(1.0, abs=1e-9)
+
+
+def test_non_fbs_games_still_count_toward_fbs_records(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Non-FBS opponents are dropped as CONTENDERS, not as opponents.
+
+    Asserted as a DIFFERENTIAL against the same slate with the body-bag games deleted.
+    Both runs share a team/conference structure, so the engine generates the same
+    postseason games and adds the same total wins -- the only remaining difference is
+    the one banked non-FBS win per team. Filtering `games` instead of `teams` would
+    erase those wins.
+    """
+    _patch_fbs(monkeypatch)
+    with_non = cfb_season_odds(2023, n_sims=200, playoff_seeds=2, seed=0)
+
+    monkeypatch.setattr(
+        _mod, "load_cfb_schedule", lambda *a, **k: _mixed_schedule().filter(pl.col("away_division") == "fbs")
+    )
+    without = cfb_season_odds(2023, n_sims=200, playoff_seeds=2, seed=0)
+
+    delta = with_non["exp_wins"].mean() - without["exp_wins"].mean()
+    assert delta == pytest.approx(1.0, abs=1e-9), "the banked non-FBS win vanished"
+
+
+def test_empty_fbs_filter_raises_rather_than_shipping_an_empty_board(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """An id-namespace mismatch must raise, not silently return a zero-row board.
+
+    Exercises the ratings-membership fallback (schedule without division columns)
+    against ratings whose ids do not intersect the schedule's -- the float-origin
+    ``"123.0"`` / zero-padding class of id bug. Without the guard it surfaces as an
+    empty board presented as a result.
+    """
+    sched = _mixed_schedule().drop("home_division", "away_division")
+    ratings = pl.DataFrame({"season": [2023] * 4, "team_id": ["1.0", "2.0", "3.0", "4.0"], "adj_net": [0.0] * 4})
+    monkeypatch.setattr(_mod, "cfb_ratings", lambda *a, **k: ratings)
+    monkeypatch.setattr(_mod, "load_cfb_schedule", lambda *a, **k: sched)
+    with pytest.raises(ValueError, match="FBS filter emptied"):
+        cfb_season_odds(2023, n_sims=10, playoff_seeds=2, seed=0)
+
+
+# --- #334: as_of_date bounds the GAME SET, not just the ratings vintage ------
+
+_AS_OF = datetime.date(2023, 10, 1)
+
+
+def _dated_schedule(*, late_home: int = 42, late_away: int = 7) -> pl.DataFrame:
+    """A COMPLETED season: FBS round-robin played before the boundary, return leg after.
+
+    Every game carries a real score -- that is the #334 setup. The post-boundary scores
+    are parameterized so a test can flip them and assert the forecast does not move.
+    """
+    pairs = [(a, b) for i, a in enumerate(_FBS_IDS) for b in _FBS_IDS[i + 1 :]]
+    rows = [(h, a, w, f"2023-09-0{min(w, 9)}") for w, (h, a) in enumerate(pairs, start=1)]
+    rows += [(a, h, w + 6, f"2023-11-0{min(w, 9)}") for w, (h, a) in enumerate(pairs, start=1)]
+    is_late = [d >= "2023-10" for _, _, _, d in rows]
+    return pl.DataFrame(
+        {
+            "season": [2023] * len(rows),
+            "week": [w for _, _, w, _ in rows],
+            "season_type": ["regular"] * len(rows),
+            "start_date": [f"{d}T18:00:00.000Z" for _, _, _, d in rows],
+            "home_id": [int(h) for h, _, _, _ in rows],
+            "away_id": [int(a) for _, a, _, _ in rows],
+            "home_division": ["fbs"] * len(rows),
+            "away_division": ["fbs"] * len(rows),
+            "home_conference": [_FBS_CONF[h] for h, _, _, _ in rows],
+            "away_conference": [_FBS_CONF[a] for _, a, _, _ in rows],
+            "home_points": [late_home if late else 21 for late in is_late],
+            "away_points": [late_away if late else 14 for late in is_late],
+            "neutral_site": [False] * len(rows),
+        }
+    )
+
+
+def test_as_of_date_simulates_post_boundary_games(monkeypatch: pytest.MonkeyPatch) -> None:
+    """A completed-season forecast from mid-season is a FORECAST, not a replay.
+
+    Regression for #334: with every score present, probabilities came back exactly
+    0.0/1.0 and exp_wins were exact integers -- the signature of nothing simulated.
+    """
+    _patch_fbs(monkeypatch, _dated_schedule())
+    out = cfb_season_odds(2023, as_of_date=_AS_OF, n_sims=300, playoff_seeds=2, seed=0)
+    non_integer = out.filter(pl.col("exp_wins") != pl.col("exp_wins").round(0))
+    assert non_integer.height > 0, "no game was simulated -- as_of_date did not bound the game set"
+    spread = out.filter((pl.col("playoff_prob") > 0.02) & (pl.col("playoff_prob") < 0.98))
+    assert spread.height > 0, "playoff_prob is degenerate -- the post-boundary slate was replayed"
+
+
+def test_as_of_date_ignores_post_boundary_results(monkeypatch: pytest.MonkeyPatch) -> None:
+    """THE leakage gate: flipping every post-boundary score changes nothing.
+
+    Asserts on the OUTPUT, not that a filter ran. The control half proves the
+    perturbation is real -- without ``as_of_date`` the same flip moves the board.
+    """
+    _patch_fbs(monkeypatch, _dated_schedule(late_home=42, late_away=7))
+    forecast = cfb_season_odds(2023, as_of_date=_AS_OF, n_sims=200, playoff_seeds=2, seed=0)
+    replay = cfb_season_odds(2023, n_sims=200, playoff_seeds=2, seed=0)
+
+    _patch_fbs(monkeypatch, _dated_schedule(late_home=7, late_away=42))  # every result flipped
+    forecast_flipped = cfb_season_odds(2023, as_of_date=_AS_OF, n_sims=200, playoff_seeds=2, seed=0)
+    replay_flipped = cfb_season_odds(2023, n_sims=200, playoff_seeds=2, seed=0)
+
+    assert forecast.equals(forecast_flipped), "post-as_of_date results leaked into the forecast"
+    assert not replay.equals(replay_flipped), "control failed: the perturbation is a no-op"
+
+
+def test_as_of_date_boundary_is_exclusive_of_the_future() -> None:
+    """A game kicking off ON ``as_of_date`` is unknowable and must be simulated.
+
+    Matches ``cfb_ratings``, which fits on ``date < as_of_date``. An inclusive boundary
+    would hand the forecast a day of real results.
+    """
+    sched = _dated_schedule().with_columns(
+        pl.when(pl.col("week") == 1)
+        .then(pl.lit("2023-10-01T18:00:00.000Z"))
+        .otherwise(pl.col("start_date"))
+        .alias("start_date"),
+        # the wrapper re-keys home_team/away_team onto the ESPN ids before conversion
+        pl.col("home_id").cast(pl.Utf8).alias("home_team"),
+        pl.col("away_id").cast(pl.Utf8).alias("away_team"),
+    )
+    games = _mod.cfb_games_from_schedule(_mod._mask_after(sched, _AS_OF))
+    wk1 = games.filter(pl.col("week") == 1)
+    assert wk1.height > 0
+    assert wk1["result"].null_count() == wk1.height, "a game ON as_of_date was treated as played"
+    # ...while a game the day before stays played.
+    wk2 = games.filter(pl.col("week") == 2)
+    assert wk2["result"].null_count() == 0, "a game BEFORE as_of_date was masked"
+
+
+def test_as_of_date_drops_unplayed_postseason_matchups(monkeypatch: pytest.MonkeyPatch) -> None:
+    """A masked bowl/CFP row is removed -- the matchup is itself an outcome.
+
+    Keeping it would leak the real bracket into the forecast; the engine regenerates
+    the postseason from each sim's own standings.
+    """
+    sched = _dated_schedule().with_columns(
+        pl.when(pl.col("week") > 6).then(pl.lit("postseason")).otherwise(pl.col("season_type")).alias("season_type")
+    )
+    _patch_fbs(monkeypatch, sched)
+    out = cfb_season_odds(2023, as_of_date=_AS_OF, n_sims=100, playoff_seeds=2, seed=0)
+    assert set(out["team_id"].to_list()) == set(_FBS_IDS)
+    assert out["cfp_champ_prob"].sum() == pytest.approx(1.0, abs=1e-9)
+    assert out.filter((pl.col("playoff_prob") > 0.02) & (pl.col("playoff_prob") < 0.98)).height > 0
