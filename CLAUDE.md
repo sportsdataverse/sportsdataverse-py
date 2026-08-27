@@ -778,12 +778,28 @@ publish/download helpers plus a pure-Python **byte-parity RDS writer**
 
 ### HTTP / retry layer
 
-All HTTP goes through `sportsdataverse.dl_utils.download()`. As of May 2026
-it's type-hinted, iterative (no recursion), initializes `response = None`
-defensively, and re-raises the most recent exception when the retry budget
-is exhausted (instead of returning an unbound variable). Wrappers do NOT
-wrap the call in try/except — they trust `download()` to either return a
-usable `requests.Response` or raise.
+All **payload HTTP** goes through `sportsdataverse.dl_utils.download()` — the
+JSON-fetching wrapper layer (ESPN, MLB, NHL, NFL.com, HockeyTech, stats.ncaa.org)
+and every hand-rolled `requests` call. As of May 2026 it's type-hinted, iterative
+(no recursion), initializes `response = None` defensively, and re-raises the most
+recent exception when the retry budget is exhausted (instead of returning an
+unbound variable). Wrappers do NOT wrap the call in try/except — they trust
+`download()` to either return a usable `requests.Response` or raise.
+
+**Exception — remote columnar reads.** `_read_release_parquet()` in
+`_codegen_runtime.py` (backing 226 generated-loader call sites) hands the release
+URL straight to Arrow rather than buffering it through `download()`. This is
+deliberate and measured, not an oversight: Arrow overlaps the fetch with decoding
+and range-reads column chunks, while any fetch-then-parse path serializes the two
+and holds an extra copy of the compressed asset. On the 59 MB
+`play_by_play_2025.parquet` the buffered variant cost **+7% peak RSS and +75% wall**
+(1010 MB / 6.0s → 1081 MB / 10.5s); temp-file and zero-copy `pa.py_buffer` variants
+were no better. `download()` is still used there to **classify** a failed read — a
+404 becomes `NoDataError` (skip the season), any other non-200 becomes
+`AssetFetchError` (surface it), so a fetch that FAILED is never recorded as a
+season that is EMPTY. Don't "fix" this to route the bytes through `download()`;
+`tests/codegen/test_runtime_release.py::test_success_path_never_calls_the_transport`
+guards it. See issue #397.
 
 ### Polars version
 

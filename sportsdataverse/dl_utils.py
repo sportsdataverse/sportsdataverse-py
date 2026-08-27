@@ -14,7 +14,7 @@ import polars as pl
 import requests
 from requests.adapters import HTTPAdapter
 
-from sportsdataverse.errors import NoESPNDataError, no_espn_data
+from sportsdataverse.errors import NoDataError, no_espn_data
 
 logger = logging.getLogger("sdv.dl_utils")
 logger.addHandler(logging.NullHandler())
@@ -125,7 +125,8 @@ def download(
 
     Canonical HTTP gateway used by every wrapper in the package. Wraps
     :mod:`requests` with an exponential-style retry loop, raises
-    :class:`~sportsdataverse.errors.NoESPNDataError` on ESPN 404 payloads,
+    :class:`~sportsdataverse.errors.NoDataError` on any 404 -- an ESPN
+    200-with-``code:404`` body included, and release assets on GitHub too --
     and surfaces transient failures through the supplied ``logger`` rather
     than raising.
 
@@ -277,7 +278,7 @@ def download(
                 except Exception:  # noqa: BLE001
                     pass
             return response
-        except NoESPNDataError:
+        except NoDataError:
             # A 404 (or ESPN's 200-with-`code:404` body) is a definitive "no data"
             # answer — retrying cannot change it and only amplifies load against a
             # rate-limited host. Fail fast instead of burning the retry budget.

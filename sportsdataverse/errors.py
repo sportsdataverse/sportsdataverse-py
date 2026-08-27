@@ -15,7 +15,7 @@ class SportsDataverseError(Exception):
 
     Catch this to handle any package-specific failure with one ``except``
     clause, while still being able to catch the narrower subclasses
-    (:class:`SeasonNotFoundError`, :class:`NoESPNDataError`) individually::
+    (:class:`SeasonNotFoundError`, :class:`NoDataError`) individually::
 
         from sportsdataverse.errors import SportsDataverseError
 
@@ -111,23 +111,55 @@ class RawStoreMissError(SportsDataverseError):
     """
 
 
-class NoESPNDataError(SportsDataverseError):
-    """Raised when an ESPN endpoint has no payload for the request.
+class AssetFetchError(SportsDataverseError):
+    """Raised when fetching a published data asset returns an unusable response.
 
-    Triggered both by a raw HTTP 404 and by the legacy ESPN convention of
-    returning a JSON body with ``{"code": 404, ...}`` and a 200 status.
-    Both cases mean the same thing for callers: there is no data for the
-    requested game / team / season.
+    Covers any hosted artifact the package reads over HTTP -- a release parquet,
+    a producer-repo file, a bundled JSON capture -- when the transport comes back
+    with a status that is neither success nor a definitive "no data". The common
+    cases are a 403 that outlived the retry budget (rate limit, or a private
+    asset) and a 5xx the host never recovered from.
+
+    Deliberately distinct from :class:`NoDataError`, which means the asset is
+    genuinely absent and the caller should skip it. This one means the fetch
+    FAILED and the answer is unknown, so it must never be swallowed into an empty
+    frame: a rate-limited season is not an empty season.
+
+    Example:
+        Tell a missing season apart from a failed fetch::
+
+            from sportsdataverse.errors import AssetFetchError
+            from sportsdataverse.cfb import load_cfb_schedule
+
+            try:
+                sched = load_cfb_schedule([2024])
+            except AssetFetchError as exc:
+                print(f"fetch failed, retry later: {exc}")
+    """
+
+
+class NoDataError(SportsDataverseError):
+    """Raised when a source has no payload for the request.
+
+    Means the fetch SUCCEEDED and the answer is "nothing here" -- the game,
+    team, season or asset does not exist upstream. Triggered by a raw HTTP 404
+    from any host (an ESPN endpoint, a published release asset, a producer-repo
+    file) and by the legacy ESPN convention of returning ``{"code": 404, ...}``
+    with a 200 status. Callers treat all of these the same way: skip it.
+
+    Contrast :class:`AssetFetchError`, which means the fetch FAILED and the
+    answer is unknown. Keeping them apart is what stops a rate-limited season
+    from being recorded as an empty one.
 
     Example:
         Catch missing-data responses around an ESPN call::
 
-            from sportsdataverse.errors import NoESPNDataError
+            from sportsdataverse.errors import NoDataError
             from sportsdataverse.cfb import espn_cfb_pbp
 
             try:
                 pbp = espn_cfb_pbp(game_id=1)  # not a real ESPN game id
-            except NoESPNDataError as exc:
+            except NoDataError as exc:
                 print(f"no data: {exc}")
                 pbp = None
     """
@@ -135,8 +167,15 @@ class NoESPNDataError(SportsDataverseError):
     pass
 
 
+#: Back-compat alias. The error was ESPN-only when it was named, but
+#: :func:`sportsdataverse.dl_utils.download` raises it for any 404 -- including
+#: release assets on GitHub -- so the name misdescribes it. Existing
+#: ``raise``/``except NoESPNDataError`` code keeps working unchanged.
+NoESPNDataError = NoDataError
+
+
 def no_espn_data(response: "requests.Response") -> "requests.Response":
-    """Validate an ESPN response, raising :class:`NoESPNDataError` if empty.
+    """Validate an ESPN response, raising :class:`NoDataError` if empty.
 
     Used by :func:`sportsdataverse.dl_utils.download` to normalize ESPN's
     two flavors of "no data" (HTTP 404 and 200-with-``code=404``-body)
@@ -151,24 +190,24 @@ def no_espn_data(response: "requests.Response") -> "requests.Response":
         The same ``response`` object unchanged when the payload is valid.
 
     Raises:
-        NoESPNDataError: When the response is a 404 or carries a
+        NoDataError: When the response is a 404 or carries a
             ``code: 404`` JSON body.
 
     Example:
         Use directly when you have a hand-rolled ``requests`` call::
 
             import requests
-            from sportsdataverse.errors import NoESPNDataError, no_espn_data
+            from sportsdataverse.errors import NoDataError, no_espn_data
 
             try:
                 resp = no_espn_data(
                     requests.get("https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard")
                 )
-            except NoESPNDataError:
+            except NoDataError:
                 resp = None
     """
     if response.status_code == 404:
-        raise NoESPNDataError(_format_404(response.url))
+        raise NoDataError(_format_404(response.url))
 
     # ESPN's "200-but-empty" envelope is `{"code": 404, ...}`. Other
     # endpoints (e.g. jsonplaceholder.typicode.com/posts, stats.wnba.com
@@ -184,7 +223,7 @@ def no_espn_data(response: "requests.Response") -> "requests.Response":
         return response
 
     if isinstance(body, dict) and body.get("code") == 404:
-        raise NoESPNDataError(_format_404(response.url, body=body))
+        raise NoDataError(_format_404(response.url, body=body))
     return response
 
 
@@ -277,8 +316,8 @@ def suggest_next_action(url: str) -> str | None:
 
 
 def _format_404(url: str, body: object | None = None) -> str:
-    """Build a NoESPNDataError message with an optional next-action hint."""
-    base = f"NoESPNDataError: No data found for {url}"
+    """Build a NoDataError message with an optional next-action hint."""
+    base = f"NoDataError: No data found for {url}"
     if body is not None:
         base += f", response: {body}"
     hint = suggest_next_action(url)

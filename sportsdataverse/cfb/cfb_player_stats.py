@@ -88,7 +88,7 @@ def espn_cfb_player_stats(
 
     Raises:
         ValueError: ``season_type`` is not ``"regular"``/``"postseason"``.
-        sportsdataverse.errors.NoESPNDataError: ESPN returned 404.
+        sportsdataverse.errors.NoDataError: ESPN returned 404.
 
     Example:
         Pull a player's 2023 season line as a single wide row::

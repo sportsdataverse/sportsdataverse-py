@@ -47,7 +47,7 @@ def _load_recruits(seasons: "list[int]", league: str = "mens") -> pl.DataFrame:
     bogus low ranks), so it is nulled there.
     """
     from sportsdataverse.dl_utils import download  # noqa: PLC0415
-    from sportsdataverse.errors import NoESPNDataError  # noqa: PLC0415
+    from sportsdataverse.errors import NoDataError  # noqa: PLC0415
 
     if league == "womens":
         from sportsdataverse.wbb import espn_wbb_season_recruits as season_recruits  # noqa: PLC0415
@@ -61,7 +61,7 @@ def _load_recruits(seasons: "list[int]", league: str = "mens") -> pl.DataFrame:
         for url in ref_list:
             try:
                 payload = download(url).json()
-            except NoESPNDataError:  # $ref resolves to no data — skip this recruit
+            except NoDataError:  # $ref resolves to no data — skip this recruit
                 continue
             ath = payload.get("athlete") or {}
             school_ref = ((payload.get("schools") or [{}])[0].get("team") or {}).get("$ref", "")

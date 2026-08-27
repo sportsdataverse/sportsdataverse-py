@@ -153,7 +153,7 @@ def espn_cfb_play_participants(
         If ``raw=True``, returns the parsed JSON list of play dicts.
 
     Raises:
-        sportsdataverse.errors.NoESPNDataError: ESPN returned 404.
+        sportsdataverse.errors.NoDataError: ESPN returned 404.
         requests.exceptions.RequestException: Other network failures after retries.
 
     Example:

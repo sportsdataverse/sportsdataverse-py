@@ -183,7 +183,7 @@ def helper_cfb_roster_items(items, summary_url, **kwargs):
             from sportsdataverse.cfb import espn_cfb_game_rosters
             rosters = espn_cfb_game_rosters(game_id=401628334)
     """
-    from sportsdataverse.errors import NoESPNDataError
+    from sportsdataverse.errors import NoDataError
 
     team_ids = list(items["team_id"])
     game_rosters = pl.DataFrame()
@@ -191,7 +191,7 @@ def helper_cfb_roster_items(items, summary_url, **kwargs):
         team_roster_url = "{x}/{t}/roster".format(x=summary_url, t=tm)
         try:
             team_roster_resp = download(team_roster_url, **kwargs)
-        except NoESPNDataError:
+        except NoDataError:
             # ESPN has no roster resource for this team in this game (a 404 —
             # common for older games and FCS opponents). Skip it so the other
             # team's roster is still recovered instead of failing the whole game.
@@ -206,7 +206,7 @@ def helper_cfb_roster_items(items, summary_url, **kwargs):
         game_rosters = pl.concat([game_rosters, team_roster], how="diagonal")
     if game_rosters.is_empty():
         # No team in this game exposes a roster resource — genuinely no data.
-        raise NoESPNDataError(f"NoESPNDataError: No roster data found for any team at {summary_url}")
+        raise NoDataError(f"NoDataError: No roster data found for any team at {summary_url}")
     game_rosters = game_rosters.drop([c for c in ["period", "for_player_id", "active"] if c in game_rosters.columns])
     game_rosters = game_rosters.with_columns(
         player_id=pl.col("player_id").cast(pl.Int64),

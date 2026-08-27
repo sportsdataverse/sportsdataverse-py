@@ -11,6 +11,9 @@ import sys
 from pathlib import Path
 from unittest.mock import patch
 
+from sportsdataverse import _codegen_runtime as runtime
+from sportsdataverse.errors import NoDataError
+
 import pytest
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -68,8 +71,11 @@ def _requested_url(fn_name: str, league: str, season: int) -> str:
         raise FileNotFoundError("404 not found")  # 404-safe path: warn + skip
 
     with patch.object(mod.pl, "read_parquet", side_effect=fake):
-        with pytest.warns(UserWarning):
-            getattr(mod, fn_name)(seasons=season)
+        # `_read_release_parquet` classifies a failed read by asking the transport
+        # what the server said, so keep that lookup offline too.
+        with patch.object(runtime, "download", side_effect=NoDataError("404")):
+            with pytest.warns(UserWarning):
+                getattr(mod, fn_name)(seasons=season)
     return box["url"]
 
 
@@ -147,8 +153,9 @@ def test_shim_warns_and_names_its_replacement(shim, target):
 
     mod = importlib.import_module("sportsdataverse.nba.nba_loaders")
     with patch.object(mod.pl, "read_parquet", side_effect=FileNotFoundError("404")):
-        with pytest.warns(DeprecationWarning, match=target):
-            getattr(mod, shim)(seasons=2025)
+        with patch.object(runtime, "download", side_effect=NoDataError("404")):
+            with pytest.warns(DeprecationWarning, match=target):
+                getattr(mod, shim)(seasons=2025)
 
 
 def test_shifted_loaders_document_the_season_column_divergence():

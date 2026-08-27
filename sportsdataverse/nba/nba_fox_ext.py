@@ -496,7 +496,7 @@ def fox_nba_teams(
         ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoESPNDataError: Fox returned 404 for the requested id.
+        sportsdataverse.errors.NoDataError: Fox returned 404 for the requested id.
         requests.exceptions.RequestException: Connection-level failure after
             ``dl_utils.download`` exhausts its retries.
 

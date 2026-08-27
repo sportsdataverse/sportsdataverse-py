@@ -108,7 +108,7 @@ def espn_wbb_team_roster(
         If ``raw=True``, returns the raw response dict.
 
     Raises:
-        sportsdataverse.errors.NoESPNDataError: ESPN returned 404.
+        sportsdataverse.errors.NoDataError: ESPN returned 404.
         requests.exceptions.RequestException: Other network failures after retries.
 
     Example:
