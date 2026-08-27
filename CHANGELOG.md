@@ -2,7 +2,7 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
-- [1.0.0 Release: August 26, 2026](#100-release-august-26-2026)
+- [0.1.0 Release: August 26, 2026](#010-release-august-26-2026)
   - [New — the three NBA video endpoints revived (`nba_stats` 125 → 128, #391)](#new--the-three-nba-video-endpoints-revived-nba_stats-125-%E2%86%92-128-391)
   - [New — NCAA baseball reconciliation seam + sport-generic reference parsers (#390)](#new--ncaa-baseball-reconciliation-seam--sport-generic-reference-parsers-390)
   - [Added — league-wide NCAA RAPM solver (`mbb_ncaa_rapm_league`, #389)](#added--league-wide-ncaa-rapm-solver-mbb_ncaa_rapm_league-389)
@@ -24,7 +24,7 @@
   - [New — `load_nfl_ratings_weekly`: per-week as-of NFL ratings vintages](#new--load_nfl_ratings_weekly-per-week-as-of-nfl-ratings-vintages)
   - [New — `sportsdataverse.scrape.espn`: shared ESPN `-raw` archive engine](#new--sportsdataversescrapeespn-shared-espn--raw-archive-engine)
   - [Also in this release](#also-in-this-release)
-  - [Road to 1.0.0 — highlights since 0.0.40](#road-to-100--highlights-since-0040)
+  - [Road to 0.1.0 — highlights since 0.0.40](#road-to-010--highlights-since-0040)
 - [0.0.75 Release: August 2, 2026](#0075-release-august-2-2026)
   - [Fix — `scrape.ncaa` CLIs pointed at the wrong repo root (silent no-op)](#fix--scrapencaa-clis-pointed-at-the-wrong-repo-root-silent-no-op)
   - [`scrape.ncaa.parse` — the parse stage is now re-runnable (`--season`, `--force`)](#scrapencaaparse--the-parse-stage-is-now-re-runnable---season---force)
@@ -248,7 +248,7 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-## 1.0.0 Release: August 26, 2026
+## 0.1.0 Release: August 26, 2026
 
 ### New — the three NBA video endpoints revived (`nba_stats` 125 → 128, #391)
 
@@ -630,9 +630,9 @@ The post-0.0.75 window also landed, grouped by theme:
 - **WBB**: the halves period model applies to pre-2016 NCAA women's seasons
   on the loader side too (#370).
 
-### Road to 1.0.0 — highlights since 0.0.40
+### Road to 0.1.0 — highlights since 0.0.40
 
-Nine months (0.0.41 → 1.0.0, December 2025 → August 2026) separate this
+Nine months (0.0.41 → 0.1.0, December 2025 → August 2026) separate this
 release from the last of the 0.0.x-era snapshots. Compressed from the
 release-by-release entries below:
 
@@ -678,7 +678,7 @@ release-by-release entries below:
   Records families, and the HockeyTech core whose registry now drives 20
   league families (PWHL flagship + 19 minor/junior) with on-ice, Corsi,
   TOI, and coordinate-based xG analytics.
-- **NCAA MBB / WBB (0.0.72 → 1.0.0):** the bigballR / wbigballR port
+- **NCAA MBB / WBB (0.0.72 → 0.1.0):** the bigballR / wbigballR port
   (`ncaa_mbb_*` / `ncaa_wbb_*`), the college computational core (lineups →
   stints → possessions → ratings), the prediction & tournament stack,
   player-value spines, within-team and league-wide RAPM, and loaders for
@@ -689,7 +689,7 @@ release-by-release entries below:
   `scrape.stats` engines with the proxy pool + sticky-session transport
   that power the `-raw` producer repos.
 
-At 1.0.0 the top-level `sportsdataverse` namespace exports **4,653 public
+At 0.1.0 the top-level `sportsdataverse` namespace exports **4,653 public
 names** across 20+ leagues.
 
 ## 0.0.75 Release: August 2, 2026
