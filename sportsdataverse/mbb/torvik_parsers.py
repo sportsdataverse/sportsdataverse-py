@@ -24,6 +24,12 @@ from sportsdataverse.dl_utils import underscore
 __all__ = ["parse_torvik_csv"]
 
 
+#: Document markers that mean "this body is markup, not a data file". Matched
+#: against the start of the payload, so a CSV cell containing "<html>" mid-file
+#: is unaffected.
+_HTML_MARKERS = ("<!doctype", "<html", "<?xml", "<head", "<body")
+
+
 def _clean_col(name: str) -> str:
     """janitor::make_clean_names-style cleaner for a single Torvik CSV header."""
     s = str(name).strip().replace("%", " percent ")
@@ -62,10 +68,17 @@ def parse_torvik_csv(payload: object, return_as_pandas: bool = False) -> Union[p
         de-duplicated column names; zero rows on empty/malformed input.
 
     Raises:
-        None: malformed input (non-text payload, header-only body, unterminated
-            quoted field) yields a zero-row frame rather than raising, so callers
-            can chain without a null-check. Only a ``pandas`` import failure under
-            ``return_as_pandas=True`` propagates.
+        ValueError: The payload is an HTML document rather than a data file.
+            barttorvik.com answers a transient outage with an HTML page and
+            HTTP 200, and an HTML body parses as a one-column CSV whose header
+            is the DOCTYPE -- which reaches the caller as a baffling
+            ``ColumnNotFoundError: unable to find column "team"`` several
+            frames away. Say what actually happened instead.
+        None: other malformed input (non-text payload, header-only body,
+            unterminated quoted field) yields a zero-row frame rather than
+            raising, so callers can chain without a null-check. Only a
+            ``pandas`` import failure under ``return_as_pandas=True``
+            propagates.
 
     Example:
         Quick start::
@@ -84,6 +97,23 @@ def parse_torvik_csv(payload: object, return_as_pandas: bool = False) -> Union[p
         .. _Bart Torvik: https://barttorvik.com
     """
     text = payload if isinstance(payload, str) else ""
+    # An HTML body is not an empty data file and must not be read as one.
+    # barttorvik.com serves an HTML page with HTTP 200 during an outage; the
+    # DOCTYPE then becomes the sole column name and the failure surfaces far
+    # from here. The crosswalk builders wrap this in require_source(), whose
+    # contract is exactly that a payload which will not render is a build
+    # failure rather than a silently empty source.
+    # Match real document markers, not a bare "<": a CSV whose first header
+    # cell is "<team>" is still a CSV, and a lone "<" belongs on the zero-row
+    # path below. A UTF-8 BOM ahead of the DOCTYPE is stripped first.
+    if text.lstrip("﻿").lstrip()[:200].lower().startswith(_HTML_MARKERS):
+        snippet = " ".join(text.split())[:120]
+        raise ValueError(
+            "expected a barttorvik.com CSV data file but received an HTML "
+            f"document (starts: {snippet!r}). The host answers a transient "
+            "outage with an HTML page and HTTP 200; retry, or check the "
+            "endpoint URL for that season."
+        )
     if not text.strip() or "\n" not in text.strip():
         df = pl.DataFrame()
     else:

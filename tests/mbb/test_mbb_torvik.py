@@ -10,6 +10,7 @@ from __future__ import annotations
 from pathlib import Path
 
 import polars as pl
+import pytest
 
 from sportsdataverse.mbb.torvik_parsers import parse_torvik_csv
 
@@ -58,6 +59,54 @@ def test_parse_malformed_csv_returns_zero_rows():
     df = parse_torvik_csv('team,conf\nHouston,"B12\n')
     assert isinstance(df, pl.DataFrame)
     assert len(df) == 0
+
+
+def test_parse_html_outage_page_raises_rather_than_pretending_to_be_data():
+    """An HTML body must not be read as a one-column CSV named after the DOCTYPE.
+
+    barttorvik.com answers a transient outage with an HTML page and HTTP 200.
+    Parsing it produced a frame whose only columns were the snake-cased
+    DOCTYPE, so the failure surfaced far away as
+    ``ColumnNotFoundError: unable to find column "team"`` inside
+    ``wbb_team_crosswalk`` -- which is how the nightly wehoop-wbb-data build
+    broke on 2026-08-24.
+    """
+    html = (
+        '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"'
+        ' "http://www.w3.org/TR/html4/loose.dtd">\n'
+        "<html><body>Service Unavailable</body></html>\n"
+    )
+    with pytest.raises(ValueError, match="HTML document"):
+        parse_torvik_csv(html)
+
+
+def test_parse_leading_whitespace_html_also_raises():
+    """The guard looks past leading whitespace, as a real body may have some."""
+    with pytest.raises(ValueError, match="HTML document"):
+        parse_torvik_csv("\n  <!DOCTYPE html>\n<html><body>nope</body></html>\n")
+
+
+def test_parse_html_detection_does_not_swallow_a_csv_starting_with_a_bracket():
+    """Only document markers count as HTML -- a bare "<" is not one.
+
+    A CSV whose first header cell is ``<team>`` is still a CSV, and a lone
+    ``<`` belongs on the documented zero-row path, not the raising one.
+    """
+    df = parse_torvik_csv("<team>,conf\nHouston,B12\n")
+    assert df.columns == ["team", "conf"]
+    assert df.height == 1
+    assert parse_torvik_csv("<").height == 0
+
+
+def test_parse_html_detection_sees_past_a_utf8_bom():
+    """A BOM ahead of the DOCTYPE must not hide the markup."""
+    with pytest.raises(ValueError, match="HTML document"):
+        parse_torvik_csv("\ufeff<!DOCTYPE html>\n<html><body>x</body></html>\n")
+
+
+def test_parse_xml_error_document_also_raises():
+    with pytest.raises(ValueError, match="HTML document"):
+        parse_torvik_csv('<?xml version="1.0"?>\n<error/>\n')
 
 
 def test_wrapper_routes_through_parser(monkeypatch):
