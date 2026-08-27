@@ -109,10 +109,10 @@ def cli_warn(msg: str) -> None:
     warnings.warn(msg, stacklevel=2)
 
 
-def _read_release_parquet(url: str) -> Optional[pl.DataFrame]:
-    """Read a release parquet; return ``None`` on 404 / missing asset (404-safe loaders).
+def _fetch_release_parquet(url: str) -> pl.DataFrame:
+    """Read a release parquet, RAISING when the asset is missing.
 
-    The read itself stays a direct Arrow fetch, and the bytes deliberately do NOT go
+    The read stays a direct Arrow fetch, and the bytes deliberately do NOT go
     through the HTTP gateway. Arrow overlaps the fetch with decoding and range-reads
     column chunks; buffering the asset first serializes the two and holds an extra copy
     of the compressed file. Measured on the 59 MB ``play_by_play_2025.parquet`` (best of
@@ -124,16 +124,15 @@ def _read_release_parquet(url: str) -> Optional[pl.DataFrame]:
     direct read fails we ask ``download`` what the server actually said instead of
     pattern-matching the reader's exception message:
 
-    * a 404 (``NoDataError``) means the asset is genuinely absent -- return ``None``
-      so the caller skips that season;
-    * any other non-200 -- notably a 403 or a rate-limit that outlived the retry
+    * a 404 raises :class:`~sportsdataverse.errors.NoDataError` -- the asset is
+      genuinely absent;
+    * any other non-200 -- notably a 403 or a rate limit that outlived the retry
       budget -- raises :class:`~sportsdataverse.errors.AssetFetchError`, so a fetch
-      that FAILED is never recorded as a season that is EMPTY;
+      that FAILED is never confused with an asset that is ABSENT;
     * a reachable, readable asset means the failure was a genuine parse/schema error,
       which is re-raised untouched.
 
-    The extra round trip happens only on the failure path and costs ~0.1s per missing
-    season, versus the several seconds a buffered success path would cost every time.
+    The extra round trip happens only on the failure path and costs ~0.1s.
 
     R-producer assets can carry an ``arrow.r.vctrs`` field-extension whose metadata is
     raw RDS bytes (not UTF-8) -- e.g. a ``glue`` character column. polars' arrow-FFI
@@ -141,8 +140,11 @@ def _read_release_parquet(url: str) -> Optional[pl.DataFrame]:
     an ``except Exception`` handler never sees), so on panic we re-read via pyarrow
     with all field/schema metadata stripped; the storage types are plain, so this is
     lossless.
+
+    Use :func:`_read_release_parquet` instead when a missing season should be skipped
+    rather than raised.
     """
-    from sportsdataverse.errors import AssetFetchError, NoDataError
+    from sportsdataverse.errors import AssetFetchError
 
     try:
         return pl.read_parquet(url, use_pyarrow=True)
@@ -153,15 +155,29 @@ def _read_release_parquet(url: str) -> Optional[pl.DataFrame]:
             raise  # never swallow KeyboardInterrupt / SystemExit into an HTTP call
         return _read_parquet_stripped_metadata(url)
 
-    try:
-        resp = download(url)
-    except NoDataError:
-        return None
+    resp = download(url)  # raises NoDataError on a 404 -- the "absent" signal
 
     status = getattr(resp, "status_code", None)
     if status is not None and status != 200:
         raise AssetFetchError(f"release asset fetch failed with HTTP {status}: {url}") from original
     raise original
+
+
+def _read_release_parquet(url: str) -> Optional[pl.DataFrame]:
+    """404-safe read: ``None`` when the asset is absent (season-gap-tolerant loaders).
+
+    Thin wrapper over :func:`_fetch_release_parquet` -- identical read path and
+    identical failure classification. The ONLY difference is that a genuinely missing
+    asset becomes ``None`` so the caller can skip that season, while a failed fetch
+    (``AssetFetchError``) still propagates. Keeping the two apart in one place is what
+    stops a rate-limited season from being recorded as an empty one.
+    """
+    from sportsdataverse.errors import NoDataError
+
+    try:
+        return _fetch_release_parquet(url)
+    except NoDataError:
+        return None
 
 
 def _read_parquet_stripped_metadata(url: str) -> pl.DataFrame:

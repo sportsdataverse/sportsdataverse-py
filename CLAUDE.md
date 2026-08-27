@@ -786,9 +786,15 @@ recent exception when the retry budget is exhausted (instead of returning an
 unbound variable). Wrappers do NOT wrap the call in try/except — they trust
 `download()` to either return a usable `requests.Response` or raise.
 
-**Exception — remote columnar reads.** `_read_release_parquet()` in
-`_codegen_runtime.py` (backing 226 generated-loader call sites) hands the release
-URL straight to Arrow rather than buffering it through `download()`. This is
+**Exception — remote columnar reads.** `_fetch_release_parquet()` in
+`_codegen_runtime.py` hands the release URL straight to Arrow rather than
+buffering it through `download()`. Two variants share that one implementation:
+`_fetch_release_parquet` **raises** `NoDataError` when an asset is absent (used by
+the hand-written `nfl_loaders.py` and `cfb_loaders_extra.py`, where a missing
+season is an error), and `_read_release_parquet` returns **`None`** instead (used
+by the 226 generated call sites, where a season gap is routine). Only "absent"
+differs — a failed fetch raises `AssetFetchError` from both, so the wrapper can
+never soften a rate limit into an empty frame. This is
 deliberate and measured, not an oversight: Arrow overlaps the fetch with decoding
 and range-reads column chunks, while any fetch-then-parse path serializes the two
 and holds an extra copy of the compressed asset. On the 59 MB

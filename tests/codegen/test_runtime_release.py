@@ -138,3 +138,52 @@ def test_failed_fetch_is_not_a_missing_asset():
     """
     assert not issubclass(AssetFetchError, NoDataError)
     assert not issubclass(NoDataError, AssetFetchError)
+
+
+# --------------------------------------------------------------------------
+# raise-vs-skip: two semantics, one implementation
+#
+# `_fetch_release_parquet` raises on a missing asset; `_read_release_parquet`
+# returns None. Hand-written loaders (nfl_loaders, cfb_loaders_extra) use the
+# raising form because a missing NFL season is an error there, while the 226
+# generated call sites use the wrapper because a season gap is routine. Both must
+# classify failures identically -- only "absent" is allowed to differ.
+# --------------------------------------------------------------------------
+
+
+def test_fetch_raises_where_read_skips():
+    """The same missing asset: one raises, the other returns ``None``."""
+    with patch.object(rt.pl, "read_parquet", side_effect=OSError("arrow could not open")):
+        with patch.object(rt, "download", side_effect=NoDataError("404")):
+            with pytest.raises(NoDataError):
+                rt._fetch_release_parquet("https://x/missing.parquet")
+            assert rt._read_release_parquet("https://x/missing.parquet") is None
+
+
+def test_both_variants_surface_a_failed_fetch():
+    """A 403 must NOT be softened by either variant.
+
+    The wrapper only converts "absent" to ``None``. If it also swallowed
+    ``AssetFetchError``, a rate-limited season would silently become an empty
+    frame -- the exact failure the split exists to prevent.
+    """
+    for fn in (rt._fetch_release_parquet, rt._read_release_parquet):
+        with patch.object(rt.pl, "read_parquet", side_effect=OSError("arrow could not open")):
+            with patch.object(rt, "download", return_value=_Resp(b"", status_code=403)):
+                with pytest.raises(AssetFetchError, match="403"):
+                    fn("https://x/forbidden.parquet")
+
+
+def test_fetch_success_path_never_calls_the_transport():
+    """The raising variant keeps the direct-read fast path too."""
+    calls = {"n": 0}
+
+    def counting(*a, **k):
+        calls["n"] += 1
+        return _Resp(b"")
+
+    with patch.object(rt.pl, "read_parquet", return_value=pl.DataFrame({"a": [1]})):
+        with patch.object(rt, "download", side_effect=counting):
+            rt._fetch_release_parquet("https://x/ok.parquet")
+
+    assert calls["n"] == 0
