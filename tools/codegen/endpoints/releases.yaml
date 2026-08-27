@@ -69,10 +69,10 @@ loaders:
     seasons: 2024
 - fn: load_cfb_team_info
   league: cfb
-  base: raw_data
-  url: cfbfastR-data/main/team_info/parquet/cfb_team_info_{season}.parquet
-  tag: cfbfastR-data
-  min_season: 2003
+  base: sdv_releases
+  url: cfb_team_info/cfb_team_info_{season}.parquet
+  tag: cfb_team_info
+  min_season: 2001
   example_args:
     seasons: 2024
   id_int64:

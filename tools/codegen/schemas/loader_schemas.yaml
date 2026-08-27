@@ -3744,6 +3744,34 @@ load_cfb_team_info:
   type: String
 - name: logo_2
   type: String
+- name: logos_3
+  type: String
+- name: logos_4
+  type: String
+- name: logos_5
+  type: String
+- name: logos_6
+  type: String
+- name: logos_7
+  type: String
+- name: logos_8
+  type: String
+- name: logos_9
+  type: String
+- name: logos_10
+  type: String
+- name: logos_11
+  type: String
+- name: logos_12
+  type: String
+- name: logos_13
+  type: String
+- name: logos_14
+  type: String
+- name: logos_15
+  type: String
+- name: logos_16
+  type: String
 - name: twitter
   type: String
 - name: venue_id

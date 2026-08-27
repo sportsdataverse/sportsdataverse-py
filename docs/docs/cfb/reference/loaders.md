@@ -21,7 +21,7 @@ flowchart LR
 | `load_cfb_returning_production` | [cfb_returning_production](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_returning_production) | — |
 | `load_cfb_rosters` | [cfbfastR-data](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfbfastR-data) | — |
 | `load_cfb_schedule` | [cfb_schedules](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_schedules) | — |
-| `load_cfb_team_info` | [cfbfastR-data](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfbfastR-data) | — |
+| `load_cfb_team_info` | [cfb_team_info](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_team_info) | — |
 | `load_cfb_team_talent` | [cfb_team_talent](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_team_talent) | — |
 | `load_cfb_teams_crosswalk` | [cfb_crosswalk](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_crosswalk) | — |
 | `load_cfb_schedule_crosswalk` | [cfb_crosswalk](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_crosswalk) | — |
@@ -699,7 +699,7 @@ load_cfb_schedule(seasons=2024)
 
 ## `load_cfb_team_info`
 
-Release: [cfbfastR-data](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfbfastR-data) · asset `https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/main/team_info/parquet/cfb_team_info_{season}.parquet`
+Release: [cfb_team_info](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_team_info) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/cfb_team_info/cfb_team_info_{season}.parquet`
 ### Returns
 
 | col_name | type | description |
@@ -718,6 +718,20 @@ Release: [cfbfastR-data](https://github.com/sportsdataverse/sportsdataverse-data
 | `alt_color` | String | Team color (alternate). |
 | `logo` | String | Team or league logo URL. |
 | `logo_2` | String | URL of the team's alternate dark-background 500-pixel logo on ESPN's CDN, null for programs with no dark variant. |
+| `logos_3` | String |  |
+| `logos_4` | String |  |
+| `logos_5` | String |  |
+| `logos_6` | String |  |
+| `logos_7` | String |  |
+| `logos_8` | String |  |
+| `logos_9` | String |  |
+| `logos_10` | String |  |
+| `logos_11` | String |  |
+| `logos_12` | String |  |
+| `logos_13` | String |  |
+| `logos_14` | String |  |
+| `logos_15` | String |  |
+| `logos_16` | String |  |
 | `twitter` | String | The football program's Twitter/X handle including the leading at sign, populated for only a minority of listed teams. |
 | `venue_id` | Int32 | Referencing venue id. |
 | `venue_name` | String | Full name of the franchise's venue. |
