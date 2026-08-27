@@ -85,6 +85,12 @@ def pwhl_pbp(game_id: int, return_as_pandas: bool = False) -> Any:
     - On-ice player strings (``on_ice_home``, ``on_ice_away``) derived from
       shift data.
 
+    Goal double-rowing: the HockeyTech feed emits both a ``goal`` row and a
+    twin ``shot`` row for (nearly) every goal. The twin shot row is flagged
+    ``is_goal_twin = True`` — shot rows (twins included) match the official
+    boxscore shots-on-goal totals, while dropping flagged rows yields a
+    deduplicated event stream. See :func:`sportsdataverse.hockeytech._parsers.parse_pbp`.
+
     The three network fetches (PBP payload, game summary meta, and shift data)
     all go through the module-level ``hockeytech_api`` reference so tests can
     monkeypatch ``sportsdataverse.pwhl.pwhl_api.hockeytech_api`` to intercept

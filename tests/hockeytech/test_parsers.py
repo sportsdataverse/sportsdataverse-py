@@ -307,3 +307,48 @@ def test_parse_pbp_b_dialect_one_row_per_event():
         "goalie_id",
     ):
         assert col in df.columns, f"missing shared-schema column: {col}"
+
+
+def test_parse_pbp_flags_goal_shot_twins_real_fixture():
+    """Issue #368: the feed double-rows every goal (goal row + twin shot row).
+
+    On the committed PWHL game-42 fixture: 66 shot rows (matching the boxscore
+    total of 31+35 SOG), 4 goal rows, and exactly 4 shot rows carrying the
+    feed's ``isGoal`` flag. Those 4 twins must be flagged ``is_goal_twin`` so
+    downstream users can dedupe deliberately; no rows are dropped, so shot
+    totals stay boxscore-consistent.
+    """
+    from sportsdataverse.hockeytech._parsers import parse_pbp
+
+    df = parse_pbp(_load("pwhl_pbp_42"), pbp_style="hockeytech_a", game_id=42)
+    assert "is_goal_twin" in df.columns
+
+    shots = df.filter(pl.col("event") == "shot")
+    goals = df.filter(pl.col("event") == "goal")
+    twins = shots.filter(pl.col("is_goal_twin") == True)  # noqa: E712
+
+    # boxscore consistency: shotsByPeriod in pwhl_game_summary_42 sums to 66
+    assert shots.height == 66
+    assert goals.height == 4
+    # one twin per goal on this game
+    assert twins.height == goals.height == 4
+
+    # every twin matches a goal row on (period, time, shooter)
+    goal_keys = set(
+        zip(
+            goals["period_of_game"].to_list(),
+            goals["time_of_period"].to_list(),
+            goals["player_id"].to_list(),
+        )
+    )
+    twin_keys = set(
+        zip(
+            twins["period_of_game"].to_list(),
+            twins["time_of_period"].to_list(),
+            twins["player_id"].to_list(),
+        )
+    )
+    assert twin_keys == goal_keys
+
+    # non-shot rows are never flagged
+    assert df.filter((pl.col("event") != "shot") & (pl.col("is_goal_twin") == True)).height == 0  # noqa: E712

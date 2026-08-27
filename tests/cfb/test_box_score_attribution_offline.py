@@ -115,14 +115,98 @@ def test_turnover_margin_antisymmetric_offline(monkeypatch):
     assert all("team_id" in r for r in box["turnover"])
 
 
-def test_kickoff_own_recovery_credits_receiving_team(monkeypatch):
-    # BYU (252) returner recovered his own kickoff fumble -> must be credited to BYU,
-    # NOT Hawaii (62, the kicking team). Previously grouped by def_pos_team => Hawaii.
+def test_own_recovery_excluded_from_defensive_players(monkeypatch):
+    # #93: `defensive_players.fumble_recoveries` counts TAKEAWAYS only. In 401135269
+    # BYU's (252) returner recovered his own kickoff fumble -- an own recovery, not a
+    # defensive event, so it must NOT appear in any defensive_players row. Hawaii's
+    # (62) Manly Williams recovery of a BYU fumble IS a takeaway and must remain.
     box = _box(monkeypatch, 401135269)
     byu_recs = [
         d for d in box["defensive_players"] if d.get("def_pos_team") == 252 and d.get("fumble_recoveries", 0) > 0
     ]
-    assert byu_recs, "BYU own kickoff-return recovery not credited to BYU (252)"
+    assert not byu_recs, "BYU own kickoff-return recovery leaked into defensive_players"
+    haw_recs = [
+        d for d in box["defensive_players"] if d.get("def_pos_team") == 62 and d.get("fumble_recoveries", 0) > 0
+    ]
+    assert haw_recs, "Hawaii takeaway recovery dropped from defensive_players"
+
+
+def test_split_sacks_credit_half_each(monkeypatch):
+    # #93: an assisted sack (`sack_player_name2` populated) splits 0.5/0.5 so per-player
+    # sacks sum to the team's sack-play count. 401032062 has 3 sack plays per side, two
+    # of Western Michigan's (2711) and two of BYU's (252) being assisted.
+    box = _box(monkeypatch, 401032062)
+    sacks = {
+        (d["def_pos_team"], d["player_name"]): d.get("sacks", 0) for d in box["defensive_players"] if d.get("sacks", 0)
+    }
+    assert sacks[(2711, "Corvin Moment")] == 0.5
+    assert sacks[(2711, "Ali Fayad")] == 0.5
+    assert sacks[(2711, "Eric Assoua")] == 1.0
+    assert sacks[(252, "Lorenzo Fauatea")] == 1.5  # one solo + one assisted
+    # team totals stay whole -- 3 sack plays per side
+    for team in (2711, 252):
+        assert sum(v for (t, _), v in sacks.items() if t == team) == 3.0
+
+
+def test_split_sack_yards_split_half_each(monkeypatch):
+    # Sack yardage follows the same 0.5/0.5 convention as the sack credit itself.
+    box = _box(monkeypatch, 401032062)
+    yards = {
+        (d["def_pos_team"], d["player_name"]): d.get("sacks_yards", 0)
+        for d in box["defensive_players"]
+        if d.get("sacks", 0)
+    }
+    assert yards[(2711, "Corvin Moment")] == -5.5  # half of the -11 yard split sack
+    assert yards[(2711, "Ali Fayad")] == -5.5
+
+
+def test_forced_fumble_on_punt_return_credits_covering_team(monkeypatch):
+    # #93: on a punt return the fumbler is the RETURNER, so the forcing player is on
+    # the covering (punting) team. 401754571: Georgia Tech (59) punts, Syracuse (183)
+    # returns and fumbles, forced by a GT coverage player -> credit GT, not SU.
+    box = _box(monkeypatch, 401754571)
+    ff = {
+        (d["def_pos_team"], d["player_name"]): d.get("forced_fumbles", 0)
+        for d in box["defensive_players"]
+        if d.get("forced_fumbles", 0)
+    }
+    hamilton = [k for k in ff if "Hamilton" in k[1]]
+    assert hamilton, "punt-return forced fumble missing from defensive_players"
+    assert hamilton[0][0] == 59, "punt-return forced fumble credited to the fumbling team"
+
+
+def test_kick_returns_credited_to_receiving_team(monkeypatch):
+    # #93: kickoff returns are credited to the receiving team, the same convention punt
+    # returns use. ESPN files a kickoff under the receiving team's possession, so
+    # `kick_return_team` and `pos_team` agree on every kick-return play here; the
+    # specialists section must never file a returner under the kicking team.
+    import polars as pl
+
+    summary = _load(401135269)
+
+    class _Resp:
+        def json(self):
+            return summary
+
+    monkeypatch.setattr("sportsdataverse.cfb.cfb_pbp.download", lambda *a, **k: _Resp())
+    proc = CFBPlayProcess(gameId=401135269)
+    proc.join_participants = False
+    proc.espn_cfb_pbp()
+    out = proc.run_processing_pipeline()
+    df = pl.from_dicts(proc.plays_json, infer_schema_length=None)
+    kr = df.filter(pl.col("kickoff_return_player_name").is_not_null())
+    assert kr.height > 0, "expected kickoff returns in this game"
+    assert (kr["kick_return_team"] == kr["pos_team"]).all()
+    assert (kr["kick_return_team"] != kr["def_pos_team"]).all()
+    returners = {
+        (d["pos_team"], d["player_name"]) for d in out["advBoxScore"]["specialists"] if d.get("kick_returns", 0)
+    }
+    assert returners, "kick returners missing from specialists"
+    per_play = {
+        (r["pos_team"], r["kickoff_return_player_name"])
+        for r in kr.select("pos_team", "kickoff_return_player_name").to_dicts()
+    }
+    assert returners == per_play
 
 
 def test_punt_returns_not_credited_to_punting_team(monkeypatch):

@@ -7362,6 +7362,9 @@ ohl_leaders:
   type_formatted: Human-readable label describing the statistical category for which the player appears on the leaders list
     (e.g., 'Points', 'Goals', 'Save Percentage').
 ohl_pbp:
+  is_goal_twin: Boolean flag marking a shot row that duplicates a goal event on the same play — the HockeyTech feed
+    emits both a shot row and a goal row for every goal. Shot rows (twins included) match the official boxscore
+    shots-on-goal totals; drop rows with this flag set to get a deduplicated event stream.
   on_ice_away: Jersey numbers or player IDs of away-team skaters on the ice at the time of this play.
   on_ice_home: Jersey numbers or player IDs of home-team skaters on the ice at the time of this play.
   scoring_chance: Boolean flag indicating whether this play was classified as a scoring chance by the HockeyTech data feed.

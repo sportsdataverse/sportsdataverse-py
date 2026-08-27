@@ -125,6 +125,7 @@ OHL play-by-play — one row per event, fully enriched.
 | `player_name_last` | character | Primary player last name. |
 | `player_position` | character | Primary player position. |
 | `goal` | logical | Flag for whether the event was a goal. |
+| `is_goal_twin` | logical | Boolean flag marking a shot row that duplicates a goal event on the same play — the HockeyTech feed emits both a shot row and a goal row for every goal. Shot rows (twins included) match the official boxscore shots-on-goal totals; drop rows with this flag set to get a deduplicated event stream. |
 | `goalie_id` | double | Goalie identifier on the play. |
 | `goalie_first` | character | Goalie first name. |
 | `goalie_last` | character | Goalie last name. |

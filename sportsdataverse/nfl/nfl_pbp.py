@@ -23,6 +23,27 @@ def _nfl_resource_filename(package: str, resource: str) -> str:
     return str(_resource_files(package).joinpath(resource))
 
 
+def _team_mascot(team: dict) -> str:
+    """Return a team's mascot, tolerating franchises ESPN ships without one.
+
+    ESPN omits ``team.name`` for mascot-less franchises -- the 2020-2021
+    Washington Football Team (id 28) is the canonical case, shipping only
+    ``location`` / ``abbreviation`` / ``displayName``. Derive the mascot from
+    ``displayName`` with the location prefix removed, then fall back to
+    ``displayName`` and finally ``location`` so a team always has a label.
+    """
+    name = team.get("name")
+    if name:
+        return str(name)
+    display = str(team.get("displayName") or "")
+    location = str(team.get("location") or "")
+    if display and location and display.startswith(location):
+        remainder = display[len(location) :].strip()
+        if remainder:
+            return remainder
+    return display or location
+
+
 from sportsdataverse.dl_utils import download
 from sportsdataverse.nfl.ep_wp import (
     CP_FEATURES,
@@ -939,7 +960,7 @@ class NFLPlayProcess(object):
                 "team"
             ]
             homeTeamId = int(pbp_txt["header"]["competitions"][0]["competitors"][0]["team"]["id"])
-            homeTeamMascot = str(pbp_txt["header"]["competitions"][0]["competitors"][0]["team"]["name"])
+            homeTeamMascot = _team_mascot(pbp_txt["header"]["competitions"][0]["competitors"][0]["team"])
             homeTeamName = str(pbp_txt["header"]["competitions"][0]["competitors"][0]["team"]["location"])
             homeTeamAbbrev = str(pbp_txt["header"]["competitions"][0]["competitors"][0]["team"]["abbreviation"])
             homeTeamNameAlt = re.sub("Stat(.+)", "St", homeTeamName)
@@ -947,7 +968,7 @@ class NFLPlayProcess(object):
                 "team"
             ]
             awayTeamId = int(pbp_txt["header"]["competitions"][0]["competitors"][1]["team"]["id"])
-            awayTeamMascot = str(pbp_txt["header"]["competitions"][0]["competitors"][1]["team"]["name"])
+            awayTeamMascot = _team_mascot(pbp_txt["header"]["competitions"][0]["competitors"][1]["team"])
             awayTeamName = str(pbp_txt["header"]["competitions"][0]["competitors"][1]["team"]["location"])
             awayTeamAbbrev = str(pbp_txt["header"]["competitions"][0]["competitors"][1]["team"]["abbreviation"])
             awayTeamNameAlt = re.sub("Stat(.+)", "St", awayTeamName)
@@ -956,7 +977,7 @@ class NFLPlayProcess(object):
                 "team"
             ]
             awayTeamId = int(pbp_txt["header"]["competitions"][0]["competitors"][0]["team"]["id"])
-            awayTeamMascot = str(pbp_txt["header"]["competitions"][0]["competitors"][0]["team"]["name"])
+            awayTeamMascot = _team_mascot(pbp_txt["header"]["competitions"][0]["competitors"][0]["team"])
             awayTeamName = str(pbp_txt["header"]["competitions"][0]["competitors"][0]["team"]["location"])
             awayTeamAbbrev = str(pbp_txt["header"]["competitions"][0]["competitors"][0]["team"]["abbreviation"])
             awayTeamNameAlt = re.sub("Stat(.+)", "St", awayTeamName)
@@ -964,7 +985,7 @@ class NFLPlayProcess(object):
                 "team"
             ]
             homeTeamId = int(pbp_txt["header"]["competitions"][0]["competitors"][1]["team"]["id"])
-            homeTeamMascot = str(pbp_txt["header"]["competitions"][0]["competitors"][1]["team"]["name"])
+            homeTeamMascot = _team_mascot(pbp_txt["header"]["competitions"][0]["competitors"][1]["team"])
             homeTeamName = str(pbp_txt["header"]["competitions"][0]["competitors"][1]["team"]["location"])
             homeTeamAbbrev = str(pbp_txt["header"]["competitions"][0]["competitors"][1]["team"]["abbreviation"])
             homeTeamNameAlt = re.sub("Stat(.+)", "St", homeTeamName)

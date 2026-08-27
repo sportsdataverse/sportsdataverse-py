@@ -5058,7 +5058,16 @@ class CFBPlayProcess(object):
             sack_team=pl.col("def_pos_team"),
             interception_team=pl.col("def_pos_team"),
             pass_breakup_team=pl.col("def_pos_team"),
-            forced_fumble_team=pl.col("def_pos_team"),
+            # #93: a forced fumble is credited to the side OPPOSITE the fumbling
+            # player -- on scrimmage plays that is the defense, but on punt/kick/INT
+            # returns the fumbler is the returner and the forcer is on the covering
+            # (possession) team. Fall back to def_pos_team when the fumbling side
+            # could not be parsed.
+            forced_fumble_team=pl.when(pl.col("fumbling_team").is_null())
+            .then(pl.col("def_pos_team"))
+            .when(pl.col("fumbling_team") == pl.col("pos_team"))
+            .then(pl.col("def_pos_team"))
+            .otherwise(pl.col("pos_team")),
             # Team that recovered the fumble/muff. Prefer the parsed recovering-team
             # abbreviation; when it does not parse, fall back to the gaining team (the
             # side opposite the fumbling team) for turnovers, or the fumbling team for
@@ -7281,17 +7290,20 @@ class CFBPlayProcess(object):
         )
 
         # --- defensive players (0.0.53): per-defender havoc events, attributed by player ---
-        def _player_event_box(name_col, out, team_col, yds_col=None, team_out=None):
+        def _player_event_box(name_col, out, team_col, yds_col=None, team_out=None, extra_filter=None):
             """Count non-null occurrences of `name_col` per (team, player); sum `yds_col`.
 
             `team_col` is the column to group by (the resolved credited-team). `team_out`
             optionally renames it back to the section's canonical join key (e.g. group by
             `fumble_recovery_team` but emit it as `def_pos_team` so the section reduce-join
-            still aligns).
+            still aligns). `extra_filter` optionally narrows the qualifying plays (e.g.
+            takeaway-only fumble recoveries).
             """
             if name_col not in play_df.columns or team_col not in play_df.columns:
                 return None
             f = play_df.filter(pl.col(name_col).is_not_null() & pl.col(team_col).is_not_null())
+            if extra_filter is not None:
+                f = f.filter(extra_filter)
             if f.height == 0:
                 return None
             aggs = [pl.len().alias(out)]
@@ -7302,17 +7314,78 @@ class CFBPlayProcess(object):
                 g = g.rename({team_col: team_out})
             return g
 
+        def _sack_part():
+            """Per-player sacks with the official split-sack convention (#93).
+
+            An assisted/split sack (``sack_player_name2`` populated) credits 0.5
+            sacks -- and half the sack yardage -- to each participant, so the sum
+            of player sacks always equals the team's sack-play count.
+            """
+            if "sack_player_name" not in play_df.columns or "def_pos_team" not in play_df.columns:
+                return None
+            has2 = "sack_player_name2" in play_df.columns
+            split = pl.col("sack_player_name2").is_not_null() if has2 else pl.lit(False)
+            credit = pl.when(split).then(pl.lit(0.5)).otherwise(pl.lit(1.0))
+            yds = (
+                pl.col("yds_sacked").cast(pl.Float64).fill_null(0.0) if "yds_sacked" in play_df.columns else pl.lit(0.0)
+            )
+            base = play_df.filter(pl.col("sack_player_name").is_not_null() & pl.col("def_pos_team").is_not_null())
+            frames = [
+                base.select(
+                    pl.col("def_pos_team"),
+                    pl.col("sack_player_name").alias("player_name"),
+                    credit.alias("sacks"),
+                    (yds * credit).alias("sacks_yards"),
+                ),
+            ]
+            if has2:
+                second = play_df.filter(
+                    pl.col("sack_player_name2").is_not_null() & pl.col("def_pos_team").is_not_null(),
+                )
+                frames.append(
+                    second.select(
+                        pl.col("def_pos_team"),
+                        pl.col("sack_player_name2").alias("player_name"),
+                        pl.lit(0.5).alias("sacks"),
+                        (yds * 0.5).alias("sacks_yards"),
+                    ),
+                )
+            long = pl.concat(frames)
+            if long.height == 0:
+                return None
+            return long.group_by(["def_pos_team", "player_name"]).agg(
+                pl.col("sacks").sum(),
+                pl.col("sacks_yards").sum(),
+            )
+
+        # #93: exclude own recoveries -- a recovery is a defensive (takeaway) event
+        # only when the recovering side is not the fumbling side. Rows where the
+        # fumbling side could not be parsed are kept (cannot prove own recovery).
+        takeaway_only = (
+            pl.col("fumbling_team").is_null() | (pl.col("fumble_recovery_team") != pl.col("fumbling_team"))
+            if "fumbling_team" in play_df.columns
+            else None
+        )
         def_parts = [
-            _player_event_box("sack_player_name", "sacks", "def_pos_team", "yds_sacked"),
+            _sack_part(),
             _player_event_box("pass_breakup_player_name", "pass_breakups", "def_pos_team"),
             _player_event_box("interception_player_name", "interceptions", "def_pos_team", "yds_int_return"),
-            _player_event_box("fumble_forced_player_name", "forced_fumbles", "def_pos_team"),
+            # #93: group by forced_fumble_team (opposite the fumbling side) so a
+            # coverage player forcing a punt/kick-return fumble is credited to the
+            # kicking team, not blindly to def_pos_team.
+            _player_event_box(
+                "fumble_forced_player_name",
+                "forced_fumbles",
+                "forced_fumble_team",
+                team_out="def_pos_team",
+            ),
             _player_event_box(
                 "fumble_recovered_player_name",
                 "fumble_recoveries",
                 "fumble_recovery_team",
                 "yds_fumble_return",
                 team_out="def_pos_team",
+                extra_filter=takeaway_only,
             ),
         ]
         def_parts = [d for d in def_parts if d is not None]
@@ -7330,10 +7403,27 @@ class CFBPlayProcess(object):
             defensive_players_json = []
 
         # --- specialists (0.0.53): kicking / punting / return players, attributed by player ---
+        # #93: credit kickoff returns to the RECEIVING team the same way punt returns
+        # are -- prefer the parsed `kick_return_team`, coalescing to `pos_team` (ESPN
+        # files a kickoff under the receiving team's possession) so a return is never
+        # dropped just because the returning team abbreviation did not parse.
+        if "kick_return_team" in play_df.columns:
+            play_df = play_df.with_columns(
+                _kick_return_credit_team=pl.coalesce(pl.col("kick_return_team"), pl.col("pos_team")),
+            )
+            _kick_return_team_col = "_kick_return_credit_team"
+        else:
+            _kick_return_team_col = "pos_team"
         spec_parts = [
             _player_event_box("fg_kicker_player_name", "field_goals", "pos_team", "yds_fg"),
             _player_event_box("punter_player_name", "punts", "pos_team", "yds_punted"),
-            _player_event_box("kickoff_return_player_name", "kick_returns", "pos_team", "yds_kickoff_return"),
+            _player_event_box(
+                "kickoff_return_player_name",
+                "kick_returns",
+                _kick_return_team_col,
+                "yds_kickoff_return",
+                team_out="pos_team",
+            ),
             _player_event_box(
                 "punt_return_player_name",
                 "punt_returns",

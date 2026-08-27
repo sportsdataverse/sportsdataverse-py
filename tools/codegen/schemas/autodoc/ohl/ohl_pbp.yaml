@@ -37,6 +37,9 @@ columns:
 - name: goal
   type: logical
   description: ''
+- name: is_goal_twin
+  type: logical
+  description: ''
 - name: goalie_id
   type: double
   description: ''

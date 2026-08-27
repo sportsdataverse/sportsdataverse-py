@@ -235,6 +235,7 @@ def _parse_pbp_a(events: List[Any], game_id: Any = None) -> List[Dict[str, Any]]
             "player_name_last": None,
             "player_position": None,
             "goal": None,
+            "is_goal_twin": False,
             "goalie_id": None,
             "goalie_first": None,
             "goalie_last": None,
@@ -253,6 +254,9 @@ def _parse_pbp_a(events: List[Any], game_id: Any = None) -> List[Dict[str, Any]]
                     "event_type": d.get("shotType"),
                     "shot_quality": d.get("shotQuality"),
                     "goal": bool(d.get("isGoal")) if ev == "shot" else False,
+                    # The feed emits BOTH a shot row (isGoal=true) and a goal row
+                    # for every goal; flag the shot twin so callers can dedupe.
+                    "is_goal_twin": bool(d.get("isGoal")) if ev == "shot" else False,
                     "goalie_id": gl["id"],
                     "goalie_first": gl["first"],
                     "goalie_last": gl["last"],
@@ -403,6 +407,15 @@ def parse_pbp(
     Returns a :class:`polars.DataFrame` by default (one row per event);
     pass ``return_as_pandas=True`` for a :class:`pandas.DataFrame`.
     An empty/None payload returns a zero-row frame, never raises.
+
+    Goal double-rowing: the HockeyTech feed emits TWO rows for (nearly) every
+    goal — the ``goal`` event itself plus a twin ``shot`` event for the same
+    play (the feed's ``isGoal`` flag). The shot rows alone match the official
+    boxscore shots-on-goal totals (goal twins included), so neither row is
+    dropped; instead the twin shot row carries ``is_goal_twin = True``. For a
+    deduplicated event stream (e.g. an xG training corpus), drop rows with
+    ``is_goal_twin == True`` and keep the ``goal`` rows; for boxscore-consistent
+    SOG counts, count the ``shot`` rows as-is.
 
     Args:
         payload: A list of event dicts as returned by the HockeyTech API
