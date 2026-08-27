@@ -9,6 +9,7 @@ from typing import List  # noqa: F401
 
 import polars as pl
 
+from sportsdataverse._codegen_runtime import _fetch_release_parquet
 from sportsdataverse.config import (
     CFB_BETTING_LINES_URL,
     CFB_ROSTERS_CROSSWALK_URL,
@@ -52,11 +53,11 @@ def load_cfb_betting_lines(return_as_pandas=False) -> pl.DataFrame:
     """
 
     return (
-        pl.read_parquet(CFB_BETTING_LINES_URL, use_pyarrow=True, columns=None).to_pandas(
+        _fetch_release_parquet(CFB_BETTING_LINES_URL).to_pandas(
             use_pyarrow_extension_array=True,
         )
         if return_as_pandas
-        else pl.read_parquet(CFB_BETTING_LINES_URL, use_pyarrow=True, columns=None)
+        else _fetch_release_parquet(CFB_BETTING_LINES_URL)
     )
 
 
@@ -91,9 +92,9 @@ def get_cfb_teams(return_as_pandas=False) -> pl.DataFrame:
     """
 
     return (
-        pl.read_parquet(CFB_TEAM_LOGO_URL, use_pyarrow=True, columns=None).to_pandas(use_pyarrow_extension_array=True)
+        _fetch_release_parquet(CFB_TEAM_LOGO_URL).to_pandas(use_pyarrow_extension_array=True)
         if return_as_pandas
-        else pl.read_parquet(CFB_TEAM_LOGO_URL, use_pyarrow=True, columns=None)
+        else _fetch_release_parquet(CFB_TEAM_LOGO_URL)
     )
 
 
@@ -138,9 +139,9 @@ def load_cfb_rosters_crosswalk(return_as_pandas: bool = False) -> pl.DataFrame:
     """
 
     return (
-        pl.read_parquet(CFB_ROSTERS_CROSSWALK_URL, use_pyarrow=True, columns=None).to_pandas(
+        _fetch_release_parquet(CFB_ROSTERS_CROSSWALK_URL).to_pandas(
             use_pyarrow_extension_array=True,
         )
         if return_as_pandas
-        else pl.read_parquet(CFB_ROSTERS_CROSSWALK_URL, use_pyarrow=True, columns=None)
+        else _fetch_release_parquet(CFB_ROSTERS_CROSSWALK_URL)
     )
