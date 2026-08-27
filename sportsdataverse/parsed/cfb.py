@@ -415,6 +415,7 @@ from sportsdataverse.cfb import load_cfb_recruiting_proj as load_cfb_recruiting_
 from sportsdataverse.cfb import load_cfb_recruits as load_cfb_recruits  # noqa: F401
 from sportsdataverse.cfb import load_cfb_returning_production as load_cfb_returning_production  # noqa: F401
 from sportsdataverse.cfb import load_cfb_rosters as load_cfb_rosters  # noqa: F401
+from sportsdataverse.cfb import load_cfb_rosters_cfbd as load_cfb_rosters_cfbd  # noqa: F401
 from sportsdataverse.cfb import load_cfb_rosters_crosswalk as load_cfb_rosters_crosswalk  # noqa: F401
 from sportsdataverse.cfb import load_cfb_rushing as load_cfb_rushing  # noqa: F401
 from sportsdataverse.cfb import load_cfb_schedule as load_cfb_schedule  # noqa: F401
@@ -670,6 +671,7 @@ __all__ = [
     "load_cfb_recruits",
     "load_cfb_returning_production",
     "load_cfb_rosters",
+    "load_cfb_rosters_cfbd",
     "load_cfb_rosters_crosswalk",
     "load_cfb_rushing",
     "load_cfb_schedule",

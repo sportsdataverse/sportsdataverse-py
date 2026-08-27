@@ -53,6 +53,17 @@ loaders:
   - team_id
 - fn: load_cfb_rosters
   league: cfb
+  base: sdv_releases
+  url: espn_cfb_rosters/cfb_rosters_{season}.parquet
+  tag: espn_cfb_rosters
+  min_season: 2004
+  example_args:
+    seasons: 2024
+  id_int64:
+  - team_id
+  - athlete_id
+- fn: load_cfb_rosters_cfbd
+  league: cfb
   base: raw_data
   url: cfbfastR-data/main/rosters/parquet/cfb_rosters_{season}.parquet
   tag: cfbfastR-data
