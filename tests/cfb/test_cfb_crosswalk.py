@@ -1140,12 +1140,21 @@ def test_live_fox_cfb_teams() -> None:
 @skip_if_no_live
 def test_live_yahoo_cfb_teams() -> None:
     df = cw.yahoo_cfb_teams(season=2024)
+    # Yahoo serves an empty payload to some CI runner IPs (observed on
+    # macos-latest while ubuntu/windows passed in the same run, #229) --
+    # runner-specific upstream blocking, not schema drift. Real drift still
+    # fails below whenever data IS returned.
+    if df.height == 0:
+        pytest.skip("upstream returned empty payload (runner-specific Yahoo block, #229)")
     assert isinstance(df, pl.DataFrame) and df.height > 100
     assert {"team_id", "abbreviation", "full_name"}.issubset(df.columns)
 
 
 @skip_if_no_live
 def test_live_cfb_teams_crosswalk_matches_majority() -> None:
+    yahoo = cw.yahoo_cfb_teams(season=2024)
+    if yahoo.height == 0:
+        pytest.skip("upstream returned empty payload (runner-specific Yahoo block, #229)")
     df = cfb_teams_crosswalk(season=2024)
     assert df.height > 100
     # the big-brand teams should hit all three providers
