@@ -133,4 +133,4 @@ def nhl_teams(return_as_pandas=False) -> pl.DataFrame:
         .. _fastRhockey: https://fastRhockey.sportsdataverse.org
         .. _nhl-api-py: https://github.com/coreyjs/nhl-api-py
     """
-    return pl.read_csv(NHL_TEAM_LOGO_URL).to_pandas if return_as_pandas else pl.read_csv(NHL_TEAM_LOGO_URL)
+    return pl.read_csv(NHL_TEAM_LOGO_URL).to_pandas() if return_as_pandas else pl.read_csv(NHL_TEAM_LOGO_URL)

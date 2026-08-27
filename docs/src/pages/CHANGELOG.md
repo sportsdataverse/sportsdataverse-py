@@ -758,6 +758,35 @@ republish in the data repo, not a package change — and **#392**, filed from
 this sweep, records that `cfb_season_odds` is not bit-reproducible despite
 `seed=` because a polars `.unique()` ordering feeds the seeded RNG.
 
+### Fixed — dead and malformed source URLs in `config.py` (#9 follow-up)
+
+Every URL constant in `sportsdataverse/config.py` was probed live. Four were
+broken:
+
+- **`nhl_teams()` was entirely non-functional.** `NHL_TEAM_LOGO_URL` pointed at
+  `fastRhockey-data/main/nhl/nhl_teams_colors_logos.csv`, but the file now sits
+  at the repository root — every call 404'd. The same line also returned
+  `.to_pandas` *without calling it*, so `return_as_pandas=True` handed back a
+  bound method instead of a DataFrame. Both fixed; the loader now returns 25
+  teams x 12 columns in either mode.
+- **`CFB_BASE_URL` 404'd.** It still referenced the retired
+  `cfbfastR-data/main/pbp` path while `load_cfb_pbp` had already moved to the
+  `espn_cfb_pbp` release; several `dev/wexp/` scripts import the constant
+  directly and were silently broken. Repointed at the release the loader
+  actually serves.
+- **`MBB_TEAM_LOGO_URL` / `WBB_TEAM_LOGO_URL` were removed.** Both concatenated
+  the *releases* base onto a *repository* path, producing a URL that could
+  never resolve, and no `teams_colors_logos.csv` exists in either `hoopR-data`
+  or `wehoop-data`. They had no consumers.
+
+The nflverse-vs-SDV constant pairs (`NFL_PLAYER_URL` /
+`NFL_SDV_PLAYER_URL`, and the roster, player-stats, team-stats, and QBR
+equivalents) are deliberate, selected by each loader's `source=` argument, and
+both sides resolve. `CFB_ROSTER_URL` / `CFB_TEAM_INFO_URL` still read
+`cfbfastR-data` paths, which remain live and match their loaders; migrating
+those to ESPN-derived releases is a data change, not a repoint, and stays
+gated behind the parity checks in the CFB cutover plan.
+
 ### Also in this release
 
 The post-0.0.75 window also landed, grouped by theme:

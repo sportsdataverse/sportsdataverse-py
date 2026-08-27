@@ -9,7 +9,7 @@ logger.addHandler(logging.NullHandler())
 SGITHUB = "https://raw.githubusercontent.com/sportsdataverse/"
 SDVRELEASES = "https://github.com/sportsdataverse/sportsdataverse-data/releases/download/"
 
-CFB_BASE_URL = SGITHUB + "cfbfastR-data/main/pbp/parquet/play_by_play_{season}.parquet"
+CFB_BASE_URL = SDVRELEASES + "espn_cfb_pbp/play_by_play_{season}.parquet"
 CFB_ROSTER_URL = SGITHUB + "cfbfastR-data/main/rosters/parquet/cfb_rosters_{season}.parquet"
 CFB_TEAM_LOGO_URL = f"{SGITHUB}cfbfastR-data/main/teams/teams_colors_logos.parquet"
 CFB_TEAM_SCHEDULE_URL = SDVRELEASES + "cfb_schedules/cfb_schedules_{season}.parquet"
@@ -23,7 +23,7 @@ NHL_BASE_URL = SDVRELEASES + "nhl_pbp_full/play_by_play_{season}.parquet"
 NHL_PLAYER_BOX_URL = SDVRELEASES + "nhl_player_boxscores/player_box_{season}.parquet"
 NHL_TEAM_BOX_URL = SDVRELEASES + "nhl_team_boxscores/team_box_{season}.parquet"
 NHL_TEAM_SCHEDULE_URL = SDVRELEASES + "nhl_schedules/nhl_schedule_{season}.parquet"
-NHL_TEAM_LOGO_URL = f"{SGITHUB}fastRhockey-data/main/nhl/nhl_teams_colors_logos.csv"
+NHL_TEAM_LOGO_URL = f"{SGITHUB}fastRhockey-data/main/nhl_teams_colors_logos.csv"
 
 # PHF (Premier Hockey Federation) is a frozen dataset -- the league ceased
 # operations in June 2023. Assets were migrated from the fastRhockey-data git
@@ -37,7 +37,6 @@ PHF_TEAM_SCHEDULE_URL = SDVRELEASES + "phf_schedules/phf_schedule_{season}.parqu
 MBB_BASE_URL = SDVRELEASES + "espn_mens_college_basketball_pbp/play_by_play_{season}.parquet"
 MBB_TEAM_BOX_URL = SDVRELEASES + "espn_mens_college_basketball_team_boxscores/team_box_{season}.parquet"
 MBB_PLAYER_BOX_URL = SDVRELEASES + "espn_mens_college_basketball_player_boxscores/player_box_{season}.parquet"
-MBB_TEAM_LOGO_URL = f"{SDVRELEASES}hoopR-data/master/mbb/teams_colors_logos.csv"
 MBB_TEAM_SCHEDULE_URL = SDVRELEASES + "espn_mens_college_basketball_schedules/mbb_schedule_{season}.parquet"
 
 NBA_BASE_URL = SDVRELEASES + "espn_nba_pbp/play_by_play_{season}.parquet"
@@ -48,7 +47,6 @@ NBA_TEAM_SCHEDULE_URL = SDVRELEASES + "espn_nba_schedules/nba_schedule_{season}.
 WBB_BASE_URL = SDVRELEASES + "espn_womens_college_basketball_pbp/play_by_play_{season}.parquet"
 WBB_TEAM_BOX_URL = SDVRELEASES + "espn_womens_college_basketball_team_boxscores/team_box_{season}.parquet"
 WBB_PLAYER_BOX_URL = SDVRELEASES + "espn_womens_college_basketball_player_boxscores/player_box_{season}.parquet"
-WBB_TEAM_LOGO_URL = f"{SDVRELEASES}wehoop-data/master/wbb/teams_colors_logos.csv"
 WBB_TEAM_SCHEDULE_URL = SDVRELEASES + "espn_womens_college_basketball_schedules/wbb_schedule_{season}.parquet"
 
 WNBA_BASE_URL = SDVRELEASES + "espn_wnba_pbp/play_by_play_{season}.parquet"
