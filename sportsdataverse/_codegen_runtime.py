@@ -181,13 +181,26 @@ def _read_release_parquet(url: str) -> Optional[pl.DataFrame]:
 
 
 def _read_parquet_stripped_metadata(url: str) -> pl.DataFrame:
-    """Fetch a parquet and load it with every field/schema metadata entry dropped."""
+    """Fetch a parquet and load it with every field/schema metadata entry dropped.
+
+    Classifies the refetch the same way the caller does. This path runs only after
+    a panic, so it issues its OWN request -- and that one can fail even though the
+    first read reached the asset. Without the status check, a 403 or 5xx body would
+    be handed to ``pq.read_table`` and surface as a parquet parse error, which is
+    precisely the "failed fetch wearing the wrong clothes" this module exists to
+    prevent. A 404 still arrives as ``NoDataError`` from ``download``.
+    """
     import io
 
     import pyarrow as pa
     import pyarrow.parquet as pq
 
+    from sportsdataverse.errors import AssetFetchError
+
     resp = download(url)
+    status = getattr(resp, "status_code", None)
+    if status is not None and status != 200:
+        raise AssetFetchError(f"release asset fetch failed with HTTP {status}: {url}")
     tbl = pq.read_table(io.BytesIO(resp.content))
     plain = pa.schema([pa.field(f.name, f.type) for f in tbl.schema])
     out = pl.from_arrow(tbl.cast(plain).replace_schema_metadata(None))

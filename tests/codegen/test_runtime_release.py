@@ -187,3 +187,38 @@ def test_fetch_success_path_never_calls_the_transport():
             rt._fetch_release_parquet("https://x/ok.parquet")
 
     assert calls["n"] == 0
+
+
+def test_panic_refetch_that_fails_raises_rather_than_parsing_the_error_body():
+    """The metadata fallback issues its OWN request, which can fail on its own.
+
+    The first read reached the asset (that is why it panicked), but the refetch can
+    still come back 403 or 5xx. Handing that body to ``pq.read_table`` would surface
+    a parquet parse error for what is really a failed fetch -- the same confusion
+    ``AssetFetchError`` exists to prevent, just one layer down.
+    """
+
+    class _Panic(BaseException):
+        pass
+
+    _Panic.__name__ = "PanicException"
+
+    with patch.object(rt.pl, "read_parquet", side_effect=_Panic("arrow-ffi metadata panic")):
+        with patch.object(rt, "download", return_value=_Resp(b"<html>rate limited</html>", status_code=403)):
+            with pytest.raises(AssetFetchError, match="403"):
+                rt._fetch_release_parquet("https://x/rvctrs.parquet")
+
+
+def test_panic_refetch_404_is_still_a_missing_asset():
+    """A refetch 404 keeps its "absent" meaning through both entry points."""
+
+    class _Panic(BaseException):
+        pass
+
+    _Panic.__name__ = "PanicException"
+
+    with patch.object(rt.pl, "read_parquet", side_effect=_Panic("arrow-ffi metadata panic")):
+        with patch.object(rt, "download", side_effect=NoDataError("404")):
+            with pytest.raises(NoDataError):
+                rt._fetch_release_parquet("https://x/gone.parquet")
+            assert rt._read_release_parquet("https://x/gone.parquet") is None
