@@ -194,8 +194,10 @@ def download(
             ``SDV_PY_HTTP_TIMEOUT`` and falls back to ``30``. Pass ``None``
             explicitly for NO timeout (``requests`` waits indefinitely) -- that is
             forwarded unchanged and does NOT consult the environment.
-        num_retries: Maximum retries before giving up. When omitted, reads
-            ``SDV_PY_HTTP_RETRIES`` and falls back to ``15``.
+        num_retries: Maximum retries before giving up. When omitted or ``None``,
+            reads ``SDV_PY_HTTP_RETRIES`` and falls back to ``15``. Unlike
+            ``timeout``, ``None`` is treated as "omitted" -- there is no
+            "infinite retries" reading for it to mean.
         session: Optional ``requests.Session`` to reuse. Defaults to the
             module-level pooled ``_SHARED_SESSION`` when ``None`` — its
             connection pool *and cookie jar* are shared across all calls that
@@ -275,7 +277,11 @@ def download(
     # is forwarded to requests unchanged.
     if timeout is _UNSET:
         timeout = _env_int(_ENV_TIMEOUT, _DEFAULT_TIMEOUT)
-    if num_retries is _UNSET:
+    if num_retries is _UNSET or num_retries is None:
+        # `None` is accepted as "omitted" here, unlike `timeout`, because it has no
+        # meaningful retry semantics -- there is no "infinite retries" reading. On
+        # main it reached `int(None)` and raised TypeError, so this only widens what
+        # is accepted; it takes nothing away.
         num_retries = _env_int(_ENV_RETRIES, _DEFAULT_RETRIES)
 
     session, params, logger = init_request_settings(params, session, logger)

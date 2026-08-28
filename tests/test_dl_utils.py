@@ -390,3 +390,27 @@ def test_explicit_none_timeout_still_means_no_timeout(monkeypatch):
     # omitted -> the environment applies
     d.download("https://example.invalid/x", session=session)
     assert seen["timeout"] == 99
+
+
+def test_none_num_retries_is_treated_as_omitted(monkeypatch):
+    """``num_retries=None`` resolves to the default instead of raising.
+
+    Asymmetric with ``timeout`` on purpose: ``None`` has no "infinite retries"
+    reading, and on main it reached ``int(None)`` and raised ``TypeError``. This
+    only widens what is accepted.
+    """
+    from sportsdataverse import dl_utils as d
+
+    class _Resp:
+        status_code = 200
+        content = b"{}"
+        url = "https://example.invalid/x"
+        headers: dict = {}
+
+        def json(self):
+            return {}
+
+    session = types.SimpleNamespace(get=lambda url, **kw: _Resp())
+    monkeypatch.setenv(d._ENV_RETRIES, "4")
+    # would raise TypeError before this change
+    assert d.download("https://example.invalid/x", session=session, num_retries=None) is not None
