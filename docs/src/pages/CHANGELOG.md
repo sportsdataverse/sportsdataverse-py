@@ -2,6 +2,8 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
+- [0.1.2 Release: August 27, 2026](#012-release-august-27-2026)
+  - [Fixed — passers vanished from the CFB advanced box score (#405)](#fixed--passers-vanished-from-the-cfb-advanced-box-score-405)
 - [0.1.1 Release: August 27, 2026](#011-release-august-27-2026)
   - [Fixed — every source family now reaches the top-level namespace](#fixed--every-source-family-now-reaches-the-top-level-namespace)
   - [Fixed — the distribution shipped `dev/` and `tools/` as top-level packages](#fixed--the-distribution-shipped-dev-and-tools-as-top-level-packages)
@@ -140,7 +142,7 @@
 - [0.0.67 Release: June 17, 2026](#0067-release-june-17-2026)
   - [Documentation — return-table column descriptions filled (~3,061 columns)](#documentation--return-table-column-descriptions-filled-3061-columns)
   - [Documentation — doctest-prompt cleanup, native returns-tables, new tutorials](#documentation--doctest-prompt-cleanup-native-returns-tables-new-tutorials)
-  - [NFL — PBP ETL ↔ nflfastR alignment + faithful model artifacts](#nfl--pbp-etl-%E2%86%94-nflfastr-alignment--faithful-model-artifacts)
+  - [NFL — PBP ETL ↔ nflfastR alignment + faithful model artifacts](#nfl--pbp-etl--nflfastr-alignment--faithful-model-artifacts)
   - [CFB — EP + WP models retrained on the full 2004–2025 history](#cfb--ep--wp-models-retrained-on-the-full-20042025-history)
 - [0.0.66 Release: June 17, 2026](#0066-release-june-17-2026)
   - [CFB — `cfb_pbp` sparse-game `ColumnNotFoundError` guard (`end.team.id` et al.)](#cfb--cfb_pbp-sparse-game-columnnotfounderror-guard-endteamid-et-al)
@@ -185,7 +187,7 @@
   - [NFL — Next Gen Stats (`nfl_ngs_*`) + api.nfl.com football/v2 (`nfl_*`) modules](#nfl--next-gen-stats-nfl_ngs_--apinflcom-footballv2-nfl_-modules)
   - [NFL — restored the api.nfl.com game schedule + play-by-play wrappers](#nfl--restored-the-apinflcom-game-schedule--play-by-play-wrappers)
   - [ESPN — remove always-erroring endpoint variants + NFL R-parity](#espn--remove-always-erroring-endpoint-variants--nfl-r-parity)
-  - [Documentation — per-league Python ↔ R parity tables](#documentation--per-league-python-%E2%86%94-r-parity-tables)
+  - [Documentation — per-league Python ↔ R parity tables](#documentation--per-league-python--r-parity-tables)
   - [Documentation — example notebooks repaired, expanded, and rendered on-site](#documentation--example-notebooks-repaired-expanded-and-rendered-on-site)
   - [NHL / PWHL — loader naming-parity aliases + games-manifest loaders (fastRhockey parity)](#nhl--pwhl--loader-naming-parity-aliases--games-manifest-loaders-fastrhockey-parity)
   - [Documentation — NFL return-table descriptions mined from nflverse](#documentation--nfl-return-table-descriptions-mined-from-nflverse)
@@ -223,7 +225,7 @@
   - [New: `return_parsed=True` dispatch shim](#new-return_parsedtrue-dispatch-shim)
   - [New: `nhl_edge_parsers.py`](#new-nhl_edge_parserspy)
   - [New: Site v2 summary dispatcher (20 sub-parsers)](#new-site-v2-summary-dispatcher-20-sub-parsers)
-  - [New: 100% ENDPOINT_PARSERS coverage (121/121)](#new-100%25-endpoint_parsers-coverage-121121)
+  - [New: 100% ENDPOINT_PARSERS coverage (121/121)](#new-100-endpoint_parsers-coverage-121121)
   - [New: weekly cron live-test drift detector](#new-weekly-cron-live-test-drift-detector)
   - [New: MLB Stats API parser layer](#new-mlb-stats-api-parser-layer)
   - [New: NHL Stats REST + Records parser layers](#new-nhl-stats-rest--records-parser-layers)
@@ -263,6 +265,49 @@
 - [0.0.5 Release: October 20, 2021](#005-release-october-20-2021)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+## 0.1.2 Release: August 27, 2026
+
+### Fixed — passers vanished from the CFB advanced box score (#405)
+
+`create_box_score` returned an empty `advBoxScore["pass"]` for **every** game
+whenever `join_participants=True`, while `rush` and `receiver` filled in
+normally. There cannot be receptions without passes, so the play data was fine
+and the aggregation was not. Game on Paper renders that section directly, so
+every box score on the site showed no passers.
+
+`athlete_name` is derived during QBR feature setup, which runs *before* the
+participants join rewrites `passer_player_name` / `rusher_player_name` with
+cleaned names. It therefore kept the raw participant text while the passer list
+built later held the cleaned name -- all 119 rows of the sample game
+disagreed:
+
+| `athlete_name` (stale) | `passer_player_name` (cleaned) |
+| --- | --- |
+| `No Huddle-Shotgun #2 E.Buehler` | `Eddie Buehler` |
+| `dle-Shotgun #5 R.Marshall` | `Rashawn Marshall` |
+
+`athlete_name.is_in(qbs_list)` then matched nothing, the QBR frame came back
+empty, and the **inner** join onto it deleted every passer.
+
+Two changes, one for the cause and one for the blast radius:
+
+- `athlete_name` is recomputed inside `create_box_score` from the current
+  passer/rusher columns, so it cannot go stale behind a later rewrite however
+  the pipeline order evolves.
+- The QBR join is now a **left** join. QBR is an enrichment; an inner join lets
+  any failure to score it delete the whole passing box score rather than leaving
+  one column null. That fragility is what turned a single stale column into an
+  empty table on every game.
+
+Only reproduces with `join_participants=True`. The offline fixtures use `False`,
+which is why the suite stayed green -- the added regression test is a live test
+asserting that passers exist wherever receivers do, and that no raw participant
+text (a `#`) leaks into a name.
+
+Verified across three games: 401866532 0 -> 2 passers, 401867894 0 -> 3, and
+401752921 0 -> 2 (Sayin 26/19/233/3TD, QBR 88.5). Rush and receiver counts are
+unchanged.
 
 ## 0.1.1 Release: August 27, 2026
 
