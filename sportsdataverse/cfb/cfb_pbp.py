@@ -6565,6 +6565,17 @@ class CFBPlayProcess(object):
         # passer_box = passer_box.replace(pl.all(), pl.Null)
         qbs_list = passer_box["passer_player_name"].to_list()
 
+        # Recompute athlete_name here rather than trusting the copy made during
+        # QBR feature setup. That earlier copy is taken before the participants
+        # join rewrites passer_player_name / rusher_player_name with cleaned
+        # names, so it keeps the raw participant text ("No Huddle-Shotgun #2
+        # E.Buehler") while qbs_list holds the cleaned name ("Eddie Buehler").
+        # The is_in below then matched nothing and every passer vanished from
+        # the box score -- see tests/cfb/test_cfb_box_score.py.
+        play_df = play_df.with_columns(
+            athlete_name=pl.coalesce([pl.col("passer_player_name"), pl.col("rusher_player_name")])
+        )
+
         pass_qbr_box = play_df.filter(
             (pl.col("athlete_name").is_not_null() == True)
             & (pl.col("scrimmage_play") == True)
@@ -6597,10 +6608,14 @@ class CFBPlayProcess(object):
         dtest_qbr = DMatrix(pass_qbr[qbr_vars])
         qbr_result = qbr_model.predict(dtest_qbr)
         pass_qbr = pass_qbr.with_columns(exp_qbr=pl.lit(qbr_result))
+        # LEFT, not inner: QBR is an enrichment. An inner join means any failure
+        # to score QBR deletes the passing box score outright, which is how a
+        # stale athlete_name silently emptied the passers table on every game.
         passer_box = passer_box.join(
             pass_qbr,
             left_on=["passer_player_name", "pos_team"],
             right_on=["athlete_name", "pos_team"],
+            how="left",
         ).sort("Att", descending=True)  # 0.36-live: box tables sorted by volume
 
         rusher_box = (
