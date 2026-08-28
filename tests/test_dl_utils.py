@@ -354,3 +354,39 @@ def test_explicit_kwarg_beats_the_environment(monkeypatch):
     session = types.SimpleNamespace(get=fake_get)
     d.download("https://example.invalid/x", session=session, timeout=7)
     assert seen["timeout"] == 7, "explicit timeout kwarg was overridden by the environment"
+
+
+def test_explicit_none_timeout_still_means_no_timeout(monkeypatch):
+    """``timeout=None`` is meaningful to requests: wait forever.
+
+    Defaulting the parameter to ``None`` would have silently reinterpreted that as
+    "use 30s", changing behaviour for anyone who passed it deliberately. A sentinel
+    keeps "omitted" and "explicitly None" apart, so only the omitted case consults
+    the environment.
+    """
+    from sportsdataverse import dl_utils as d
+
+    seen = {}
+
+    class _Resp:
+        status_code = 200
+        content = b"{}"
+        url = "https://example.invalid/x"
+        headers: dict = {}
+
+        def json(self):
+            return {}
+
+    def fake_get(url, **kw):
+        seen["timeout"] = kw.get("timeout", "absent")
+        return _Resp()
+
+    monkeypatch.setenv(d._ENV_TIMEOUT, "99")
+    session = types.SimpleNamespace(get=fake_get)
+
+    d.download("https://example.invalid/x", session=session, timeout=None)
+    assert seen["timeout"] is None, "explicit None must reach requests as None (no timeout)"
+
+    # omitted -> the environment applies
+    d.download("https://example.invalid/x", session=session)
+    assert seen["timeout"] == 99
