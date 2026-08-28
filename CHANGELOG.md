@@ -2,6 +2,8 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
+- [0.1.3 Release: August 28, 2026](#013-release-august-28-2026)
+  - [Fixed — formation tags reached the box score as player names (#407)](#fixed--formation-tags-reached-the-box-score-as-player-names-407)
 - [0.1.2 Release: August 27, 2026](#012-release-august-27-2026)
   - [Fixed — passers vanished from the CFB advanced box score (#405)](#fixed--passers-vanished-from-the-cfb-advanced-box-score-405)
 - [0.1.1 Release: August 27, 2026](#011-release-august-27-2026)
@@ -265,6 +267,46 @@
 - [0.0.5 Release: October 20, 2021](#005-release-october-20-2021)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+## 0.1.3 Release: August 28, 2026
+
+### Fixed — formation tags reached the box score as player names (#407)
+
+Game 401896383 listed **`No Huddle-Shotgun #1 C.Parker`** in the passing box
+score as a third quarterback, alongside that same player's real line.
+
+ESPN prefixes play text with the formation:
+
+```text
+No Huddle-Shotgun #1 C.Parker pass complete short right to #9 J.Triplett...
+```
+
+The player-name captures are windowed -- `(.{0,30} )pass ` -- and read the raw
+`text`. `No Huddle-Shotgun #1 C.Parker` is 29 characters, so it fits inside the
+window and is swallowed whole; a longer prefix is captured *truncated*, starting
+mid-token (`dle-Shotgun #5 R.Marshall`). A `cleaned_text` column already stripped
+exactly these tokens for the verb-anchored parsers, but the name captures never
+used it.
+
+This surfaces only through the regex **fallback**: where ESPN supplies a
+participant, the join overwrites the name outright. It bites where ESPN does
+not, and that is not rare -- the participants feed for this game carried a null
+passer on **96 of its 210 plays**, while resolving the receiver on the very play
+that broke.
+
+The cleanup runs at the single point where all 19 `*_player_name` columns are
+finalized, so extractors that bypass `_extract_player_name` -- `receiver_player`
+from `to (.+)`, the Passing Touchdown passer from `pass from(.+)` -- are covered
+too. The formation pattern consumes through the *last* formation token, which
+handles a partial leading fragment as well as an intact prefix; no real surname
+contains "huddle" or "shotgun".
+
+Known residual: the fallback yields the abbreviated `C.Parker` where the
+participants path yields `Carson Parker`, so such a play still forms its own
+box-score row. Merging them needs first-initial+surname resolution against the
+game roster with a uniqueness guard (`_norm_player_name` strips punctuation, so
+`cparker` cannot match `carson parker` today) and is deliberately left out of a
+parsing fix.
 
 ## 0.1.2 Release: August 27, 2026
 
