@@ -101,6 +101,41 @@ def _extract_player_name(text_expr: pl.Expr, pattern: str) -> pl.Expr:
     return pl.coalesce([groups.struct.field(str(i)) for i in range(1, n + 1)])
 
 
+#: Formation tags ESPN prepends to play text. The name captures are windowed
+#: (e.g. ``(.{0,30} )pass ``), so a prefix short enough to fit inside the window
+#: is swallowed whole into the name -- "No Huddle-Shotgun #1 C.Parker" is 29
+#: characters -- and a longer one is captured TRUNCATED, starting mid-token
+#: ("dle-Shotgun #5 R.Marshall", "le-Shotgun #20 N.Laughlin"). Either way it
+#: reaches the box score as a phantom player, so this cannot anchor on the whole
+#: tag: it consumes everything through the LAST formation token, which handles a
+#: partial leading fragment as well as the intact prefix. Greedy on purpose --
+#: "No Huddle-Shotgun" carries two tokens and only the last one ends the prefix.
+#: Safe because no real surname contains "huddle" or "shotgun".
+_FORMATION_PREFIX = r"(?i)^.*(?:huddle|shotgun)[\s\-]*"
+
+#: ESPN renders the jersey inline ("#1 C.Parker"). It is never part of a name,
+#: and leaving it on splits a player across rows when only some plays fall back
+#: to the regex.
+_JERSEY_PREFIX = r"^\s*#\d{1,2}\s+"
+
+
+def _strip_presentational_tokens(name_expr: pl.Expr) -> pl.Expr:
+    """Remove formation tags and the jersey number from an extracted name.
+
+    The play text carries presentational tokens that are not part of anyone's
+    name. ``cleaned_text`` already strips them for the verb-anchored parsers,
+    but the player-name captures read raw ``text`` -- so whatever survives the
+    capture window lands in the box score verbatim.
+
+    This only affects the regex FALLBACK: when ESPN supplies a participant the
+    join overwrites the name entirely. It matters where ESPN does not -- that
+    feed had a null passer on 96 of 210 plays for game 401896383, which is how
+    "No Huddle-Shotgun #1 C.Parker" reached the passing table as a third
+    quarterback alongside the same player's real line.
+    """
+    return name_expr.str.replace(_FORMATION_PREFIX, "").str.replace(_JERSEY_PREFIX, "").str.strip_chars()
+
+
 #: A play-text artifact masquerading as a name if it contains one of these as a
 #: whole word (real surnames effectively never do). Used to null garbage
 #: extractions like "bea loss of" / "for a loss" before the roster id-join.
@@ -4306,26 +4341,30 @@ class CFBPlayProcess(object):
                 ),
             )
             .with_columns(
-                ## Extract player names
-                passer_player_name=pl.col("pass_player").str.strip_chars(),
-                rusher_player_name=pl.col("rush_player").str.strip_chars(),
-                receiver_player_name=pl.col("receiver_player").str.strip_chars(),
-                sack_player_name=pl.col("sack_player1").str.strip_chars(),
-                sack_player_name2=pl.col("sack_player2").str.strip_chars(),
-                pass_breakup_player_name=pl.col("pass_breakup_player").str.strip_chars(),
-                interception_player_name=pl.col("interception_player").str.strip_chars(),
-                fg_kicker_player_name=pl.col("fg_kicker_player").str.strip_chars(),
-                fg_block_player_name=pl.col("fg_block_player").str.strip_chars(),
-                fg_return_player_name=pl.col("fg_return_player").str.strip_chars(),
-                kickoff_player_name=pl.col("kickoff_player").str.strip_chars(),
-                kickoff_return_player_name=pl.col("kickoff_return_player").str.strip_chars(),
-                punter_player_name=pl.col("punter_player").str.strip_chars(),
-                punt_block_player_name=pl.col("punt_block_player").str.strip_chars(),
-                punt_return_player_name=pl.col("punt_return_player").str.strip_chars(),
-                punt_block_return_player_name=pl.col("punt_block_return_player").str.strip_chars(),
-                fumble_player_name=pl.col("fumble_player").str.strip_chars(),
-                fumble_forced_player_name=pl.col("fumble_forced_player").str.strip_chars(),
-                fumble_recovered_player_name=pl.col("fumble_recovered_player").str.strip_chars(),
+                ## Extract player names. _strip_presentational_tokens runs HERE, at the one
+                ## point every name column is finalized, so the direct
+                ## .str.extract fallbacks (receiver 'to (.+)', the Passing
+                ## Touchdown 'pass from(.+)') are covered too -- not just the
+                ## ones routed through _extract_player_name.
+                passer_player_name=_strip_presentational_tokens(pl.col("pass_player")),
+                rusher_player_name=_strip_presentational_tokens(pl.col("rush_player")),
+                receiver_player_name=_strip_presentational_tokens(pl.col("receiver_player")),
+                sack_player_name=_strip_presentational_tokens(pl.col("sack_player1")),
+                sack_player_name2=_strip_presentational_tokens(pl.col("sack_player2")),
+                pass_breakup_player_name=_strip_presentational_tokens(pl.col("pass_breakup_player")),
+                interception_player_name=_strip_presentational_tokens(pl.col("interception_player")),
+                fg_kicker_player_name=_strip_presentational_tokens(pl.col("fg_kicker_player")),
+                fg_block_player_name=_strip_presentational_tokens(pl.col("fg_block_player")),
+                fg_return_player_name=_strip_presentational_tokens(pl.col("fg_return_player")),
+                kickoff_player_name=_strip_presentational_tokens(pl.col("kickoff_player")),
+                kickoff_return_player_name=_strip_presentational_tokens(pl.col("kickoff_return_player")),
+                punter_player_name=_strip_presentational_tokens(pl.col("punter_player")),
+                punt_block_player_name=_strip_presentational_tokens(pl.col("punt_block_player")),
+                punt_return_player_name=_strip_presentational_tokens(pl.col("punt_return_player")),
+                punt_block_return_player_name=_strip_presentational_tokens(pl.col("punt_block_return_player")),
+                fumble_player_name=_strip_presentational_tokens(pl.col("fumble_player")),
+                fumble_forced_player_name=_strip_presentational_tokens(pl.col("fumble_forced_player")),
+                fumble_recovered_player_name=_strip_presentational_tokens(pl.col("fumble_recovered_player")),
             )
             .drop(
                 [
