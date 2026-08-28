@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import logging
+import os
 import random
 import re
 import time
@@ -109,13 +110,65 @@ def _retry_delay(
     return delay
 
 
+#: Default retry budget and per-request timeout, overridable by environment so a
+#: caller that cannot pass kwargs -- CI, a batch job, a notebook -- can bound how
+#: long a hostile endpoint parks the process. The defaults are unchanged: 15
+#: retries at a 30s timeout is right for a scraper that must not lose a game, but
+#: it is badly wrong for a test suite, where one unreachable host can burn
+#: 15 x 30s plus backoff on a single call. CI sets these low.
+_ENV_TIMEOUT = "SDV_PY_HTTP_TIMEOUT"
+_ENV_RETRIES = "SDV_PY_HTTP_RETRIES"
+_DEFAULT_TIMEOUT = 30
+_DEFAULT_RETRIES = 15
+
+
+class _Unset:
+    """Sentinel for "argument omitted", distinct from an explicit ``None``.
+
+    ``timeout=None`` is meaningful to ``requests``: it means *no* timeout, wait
+    forever. Defaulting the parameter to ``None`` would have quietly reinterpreted
+    that as "use 30s", changing behaviour for any caller who passed it deliberately.
+    No caller in this repo does -- both variable call sites are typed ``int`` -- but
+    ``download`` is public API, so the two cases stay distinguishable.
+    """
+
+    def __repr__(self) -> str:  # pragma: no cover - debugging aid
+        return "<unset>"
+
+
+_UNSET = _Unset()
+
+
+def _env_int(name: str, default: int) -> int:
+    """Read a positive int from the environment, falling back on anything unusable.
+
+    A malformed or non-positive value is IGNORED rather than raising: this runs on
+    every request, and a typo in an env var must not take the whole process down.
+
+    Args:
+        name: Environment variable to read.
+        default: Value to use when unset, unparseable, or not positive.
+
+    Returns:
+        The parsed override, or ``default``.
+    """
+    raw = os.environ.get(name)
+    if raw is None:
+        return default
+    try:
+        value = int(raw)
+    except (TypeError, ValueError):
+        return default
+    return value if value > 0 else default
+
+
 def download(
     url,
     params=None,
     headers=None,
     proxy=None,
-    timeout=30,
-    num_retries=15,
+    timeout=_UNSET,
+    num_retries=_UNSET,
     session=None,
     logger=None,
     cache_ttl=None,
@@ -137,8 +190,14 @@ def download(
         headers: Extra HTTP headers as a ``dict``.
         proxy: Proxy configuration in the ``requests`` ``proxies=`` shape
             (e.g. ``{"http": "http://host:port", "https": "http://host:port"}``).
-        timeout: Per-request timeout in seconds. Defaults to ``30``.
-        num_retries: Maximum retries before giving up. Defaults to ``15``.
+        timeout: Per-request timeout in seconds. When omitted, reads
+            ``SDV_PY_HTTP_TIMEOUT`` and falls back to ``30``. Pass ``None``
+            explicitly for NO timeout (``requests`` waits indefinitely) -- that is
+            forwarded unchanged and does NOT consult the environment.
+        num_retries: Maximum retries before giving up. When omitted or ``None``,
+            reads ``SDV_PY_HTTP_RETRIES`` and falls back to ``15``. Unlike
+            ``timeout``, ``None`` is treated as "omitted" -- there is no
+            "infinite retries" reading for it to mean.
         session: Optional ``requests.Session`` to reuse. Defaults to the
             module-level pooled ``_SHARED_SESSION`` when ``None`` — its
             connection pool *and cookie jar* are shared across all calls that
@@ -151,6 +210,21 @@ def download(
             :data:`_RETRYABLE_STATUS` (403/408/429/500/502/503/504). Pass a
             narrower set (e.g. ``{429, 503}``) for an auth'd endpoint where a
             403 is a real forbidden rather than ESPN-under-load.
+
+    Raises:
+        NoDataError: When the host answers 404, or ESPN answers 200 with a
+            ``{"code": 404, ...}`` body. Not retried -- it is a definitive
+            "no data", and retrying only adds load against a rate-limited host.
+        requests.exceptions.RequestException: When the retry budget is exhausted
+            on a connection-level failure; the most recent exception is re-raised.
+
+    Note:
+        Precedence for ``timeout`` / ``num_retries`` is **explicit argument >
+        environment > default**. The environment is read at CALL time, not import
+        time, so a test or CI step can set it after the module is imported. A
+        malformed or non-positive env value is ignored in favour of the default
+        rather than raising -- this runs on every request, so a typo must not take
+        the process down.
 
     Returns:
         The final ``requests.Response``. When the retry budget is exhausted on
@@ -196,6 +270,20 @@ def download(
         .. _requests: https://requests.readthedocs.io
         .. _httpx: https://www.python-httpx.org
     """
+    # Resolve HERE, not in the signature: reading the env at call time means a test
+    # (or a CI step) can set it after import and still be honoured. Precedence is
+    # explicit argument > environment > default. Only an OMITTED argument consults
+    # the environment -- an explicit ``timeout=None`` still means "no timeout" and
+    # is forwarded to requests unchanged.
+    if timeout is _UNSET:
+        timeout = _env_int(_ENV_TIMEOUT, _DEFAULT_TIMEOUT)
+    if num_retries is _UNSET or num_retries is None:
+        # `None` is accepted as "omitted" here, unlike `timeout`, because it has no
+        # meaningful retry semantics -- there is no "infinite retries" reading. On
+        # main it reached `int(None)` and raised TypeError, so this only widens what
+        # is accepted; it takes nothing away.
+        num_retries = _env_int(_ENV_RETRIES, _DEFAULT_RETRIES)
+
     session, params, logger = init_request_settings(params, session, logger)
 
     # Cache lookup (mode=off → no-op; LIVE-tier URLs → no-op).
