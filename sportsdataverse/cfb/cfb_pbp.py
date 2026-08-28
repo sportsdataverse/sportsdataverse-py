@@ -96,9 +96,45 @@ def _extract_player_name(text_expr: pl.Expr, pattern: str) -> pl.Expr:
     """
     n = _n_capture_groups(pattern)
     if n <= 1:
-        return text_expr.str.extract(pattern, 1)
-    groups = text_expr.str.extract_groups(pattern)
-    return pl.coalesce([groups.struct.field(str(i)) for i in range(1, n + 1)])
+        extracted = text_expr.str.extract(pattern, 1)
+    else:
+        groups = text_expr.str.extract_groups(pattern)
+        extracted = pl.coalesce([groups.struct.field(str(i)) for i in range(1, n + 1)])
+    return _strip_presentational_tokens(extracted)
+
+
+#: Formation tags ESPN prepends to play text. The name captures are windowed
+#: (e.g. ``(.{0,30} )pass ``), so a prefix short enough to fit inside the window
+#: is swallowed whole into the name -- "No Huddle-Shotgun #1 C.Parker" is 29
+#: characters -- and a longer one is captured truncated ("dle-Shotgun #5
+#: R.Marshall"). Either way it reaches the box score as a phantom player.
+_FORMATION_PREFIX = r"(?i)^\s*(no huddle-shotgun|no huddle-|no huddle|shotgun)\s*"
+
+#: ESPN renders the jersey inline ("#1 C.Parker"). It is never part of a name,
+#: and leaving it on splits a player across rows when only some plays fall back
+#: to the regex.
+_JERSEY_PREFIX = r"^\s*#\d{1,2}\s+"
+
+
+def _strip_presentational_tokens(name_expr: pl.Expr) -> pl.Expr:
+    """Remove formation tags and the jersey number from an extracted name.
+
+    The play text carries presentational tokens that are not part of anyone's
+    name. ``cleaned_text`` already strips them for the verb-anchored parsers,
+    but the player-name captures read raw ``text`` -- so whatever survives the
+    capture window lands in the box score verbatim.
+
+    This only affects the regex FALLBACK: when ESPN supplies a participant the
+    join overwrites the name entirely. It matters where ESPN does not -- that
+    feed had a null passer on 96 of 210 plays for game 401896383, which is how
+    "No Huddle-Shotgun #1 C.Parker" reached the passing table as a third
+    quarterback alongside the same player's real line.
+    """
+    return (
+        name_expr.str.replace(_FORMATION_PREFIX, "")
+        .str.replace(_JERSEY_PREFIX, "")
+        .str.strip_chars()
+    )
 
 
 #: A play-text artifact masquerading as a name if it contains one of these as a

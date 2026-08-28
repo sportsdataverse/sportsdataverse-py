@@ -57,3 +57,43 @@ def test_passer_box_survives_the_participants_join():
 
     # QBR is an enrichment; its absence must not delete rows (left join)
     assert set(passers[0]) >= {"Comp", "Att", "Yds", "Pass_TD", "EPA"}
+
+
+def test_formation_prefix_never_becomes_a_player_name():
+    """Play-text formation tags must not survive into an extracted name.
+
+    ESPN prefixes play text with the formation ("No Huddle-Shotgun #1 C.Parker
+    pass complete..."). The name captures are windowed -- (.{0,30} )pass -- so a
+    prefix short enough to fit is swallowed whole, and a longer one is captured
+    truncated. Either way it reaches the box score as a phantom player: game
+    401896383 listed "No Huddle-Shotgun #1 C.Parker" as a third quarterback
+    alongside that same player's real line.
+
+    Only the regex FALLBACK is affected; where ESPN supplies a participant the
+    join overwrites the name. It bites where ESPN does not -- that game's
+    participants feed had a null passer on 96 of its 210 plays.
+    """
+    import polars as pl
+    from sportsdataverse.cfb.cfb_pbp import _extract_player_name
+
+    pattern = r"(?i)(.{0,30} )pass |(?i)(.{0,30} )incomplete"
+    texts = [
+        "No Huddle-Shotgun #1 C.Parker pass complete short right to #9 J.Triplett",
+        "Shotgun #5 R.Marshall pass incomplete to #1 A.Ice",
+        "No Huddle-#12 B.Brungard pass complete deep left",
+        "#7 D.Parsons pass complete short middle",
+        "Carson Parker pass complete short right",
+    ]
+    got = (
+        pl.DataFrame({"text": texts})
+        .select(_extract_player_name(pl.col("text"), pattern).alias("name"))["name"]
+        .to_list()
+    )
+
+    for name in got:
+        assert name is not None
+        assert "#" not in name, f"jersey number leaked into name: {name!r}"
+        for tag in ("huddle", "shotgun"):
+            assert tag not in name.lower(), f"formation tag leaked into name: {name!r}"
+
+    assert got == ["C.Parker", "R.Marshall", "B.Brungard", "D.Parsons", "Carson Parker"]
