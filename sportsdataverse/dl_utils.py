@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import logging
+import os
 import random
 import re
 import time
@@ -109,13 +110,48 @@ def _retry_delay(
     return delay
 
 
+#: Default retry budget and per-request timeout, overridable by environment so a
+#: caller that cannot pass kwargs -- CI, a batch job, a notebook -- can bound how
+#: long a hostile endpoint parks the process. The defaults are unchanged: 15
+#: retries at a 30s timeout is right for a scraper that must not lose a game, but
+#: it is badly wrong for a test suite, where one unreachable host can burn
+#: 15 x 30s plus backoff on a single call. CI sets these low.
+_ENV_TIMEOUT = "SDV_PY_HTTP_TIMEOUT"
+_ENV_RETRIES = "SDV_PY_HTTP_RETRIES"
+_DEFAULT_TIMEOUT = 30
+_DEFAULT_RETRIES = 15
+
+
+def _env_int(name: str, default: int) -> int:
+    """Read a positive int from the environment, falling back on anything unusable.
+
+    A malformed or non-positive value is IGNORED rather than raising: this runs on
+    every request, and a typo in an env var must not take the whole process down.
+
+    Args:
+        name: Environment variable to read.
+        default: Value to use when unset, unparseable, or not positive.
+
+    Returns:
+        The parsed override, or ``default``.
+    """
+    raw = os.environ.get(name)
+    if raw is None:
+        return default
+    try:
+        value = int(raw)
+    except (TypeError, ValueError):
+        return default
+    return value if value > 0 else default
+
+
 def download(
     url,
     params=None,
     headers=None,
     proxy=None,
-    timeout=30,
-    num_retries=15,
+    timeout=None,
+    num_retries=None,
     session=None,
     logger=None,
     cache_ttl=None,
@@ -196,6 +232,12 @@ def download(
         .. _requests: https://requests.readthedocs.io
         .. _httpx: https://www.python-httpx.org
     """
+    # Resolve the sentinels HERE, not in the signature: reading the env at call
+    # time means a test (or a CI step) can set it after import and still be
+    # honoured, and an explicit kwarg always wins over the environment.
+    timeout = _env_int(_ENV_TIMEOUT, _DEFAULT_TIMEOUT) if timeout is None else timeout
+    num_retries = _env_int(_ENV_RETRIES, _DEFAULT_RETRIES) if num_retries is None else num_retries
+
     session, params, logger = init_request_settings(params, session, logger)
 
     # Cache lookup (mode=off → no-op; LIVE-tier URLs → no-op).

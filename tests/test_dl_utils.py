@@ -280,3 +280,77 @@ class TestDownload:
         monkeypatch.setattr(requests.Session, "get", _resp(200))
         download("https://site.api.espn.com/docache", num_retries=1)
         assert writes == ["https://site.api.espn.com/docache"]  # 200 cached
+
+
+# ---------------------------------------------------------------------------
+# Env-tunable retry budget
+#
+# The library defaults (15 retries / 30s) suit a scraper that must not lose a
+# game, but they are wrong for a test suite: one unreachable host parks a single
+# call for 15 x 30s plus backoff, which is how CI runs reached 60-100 minutes.
+# These lock the contract that makes CI able to bound it WITHOUT changing what
+# ordinary callers get.
+# ---------------------------------------------------------------------------
+
+
+def test_retry_budget_defaults_are_unchanged(monkeypatch):
+    """No env set -> the historical 15 / 30 defaults, exactly as before."""
+    from sportsdataverse import dl_utils as d
+
+    monkeypatch.delenv(d._ENV_RETRIES, raising=False)
+    monkeypatch.delenv(d._ENV_TIMEOUT, raising=False)
+    assert d._env_int(d._ENV_RETRIES, d._DEFAULT_RETRIES) == 15
+    assert d._env_int(d._ENV_TIMEOUT, d._DEFAULT_TIMEOUT) == 30
+
+
+def test_retry_budget_env_override(monkeypatch):
+    from sportsdataverse import dl_utils as d
+
+    monkeypatch.setenv(d._ENV_RETRIES, "3")
+    monkeypatch.setenv(d._ENV_TIMEOUT, "10")
+    assert d._env_int(d._ENV_RETRIES, d._DEFAULT_RETRIES) == 3
+    assert d._env_int(d._ENV_TIMEOUT, d._DEFAULT_TIMEOUT) == 10
+
+
+@pytest.mark.parametrize("bad", ["", "abc", "0", "-5", "3.5"])
+def test_malformed_env_falls_back_rather_than_raising(monkeypatch, bad):
+    """A typo in an env var must not take the process down.
+
+    This runs on EVERY request, so raising here would turn a harmless
+    misconfiguration into a total outage. Non-positive values are ignored too --
+    zero retries with a zero timeout would make every call fail instantly.
+    """
+    from sportsdataverse import dl_utils as d
+
+    monkeypatch.setenv(d._ENV_RETRIES, bad)
+    assert d._env_int(d._ENV_RETRIES, d._DEFAULT_RETRIES) == 15
+
+
+def test_explicit_kwarg_beats_the_environment(monkeypatch):
+    """An explicit ``num_retries=`` must win, or callers lose control in CI.
+
+    ``cfb_fourth_down`` and ``ep_wp`` both pass ``num_retries=5`` deliberately;
+    the env is a floor for callers that cannot pass kwargs, not an override of
+    those that can.
+    """
+    from sportsdataverse import dl_utils as d
+
+    seen = {}
+
+    class _Resp:
+        status_code = 200
+        content = b"{}"
+        url = "https://example.invalid/x"
+        headers: dict = {}
+
+        def json(self):
+            return {}
+
+    def fake_get(url, **kw):
+        seen["timeout"] = kw.get("timeout")
+        return _Resp()
+
+    monkeypatch.setenv(d._ENV_TIMEOUT, "99")
+    session = types.SimpleNamespace(get=fake_get)
+    d.download("https://example.invalid/x", session=session, timeout=7)
+    assert seen["timeout"] == 7, "explicit timeout kwarg was overridden by the environment"

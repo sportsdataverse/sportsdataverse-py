@@ -8,6 +8,8 @@ tree (``docs/docs/{league}/``); a drift guard asserts that tree matches a fresh 
 
 from __future__ import annotations
 
+import pytest
+
 from tools.codegen import generate
 
 
@@ -87,6 +89,8 @@ def test_category_json_is_valid_json():
 # ===========================================================================
 
 
-def test_generated_docs_tree_is_current():
-    stale = generate._docs_stale()
+@pytest.mark.xdist_group("codegen_render")
+def test_generated_docs_tree_is_current(first_render):
+    # Compare against the session render rather than a fourth identical one.
+    stale = generate._docs_stale(rendered=first_render(generate._render_docs_all))
     assert stale == [], f"stale generated docs (run `python tools/codegen/generate.py --docs`): {stale}"

@@ -3525,11 +3525,19 @@ def build_docs() -> list[Path]:
     return sorted(written)
 
 
-def _docs_stale() -> list[str]:
+def _docs_stale(rendered: dict[str, str] | None = None) -> list[str]:
     """Live docs/docs generated files that differ from a fresh render. Orphan-checks
     ONLY the fully-generated roots (league dirs + reference/) so preserved conceptual
-    pages outside them are never flagged."""
-    rendered = _render_docs_all()
+    pages outside them are never flagged.
+
+    Args:
+        rendered: An already-rendered docs corpus to compare against. Defaults to
+            ``None``, which renders one. Rendering the docs tree is the single most
+            expensive operation in the test suite, and callers that already hold a
+            corpus (see ``tests/codegen/conftest.py``) can pass it instead of paying
+            for an identical second render.
+    """
+    rendered = _render_docs_all() if rendered is None else rendered
     stale = []
     for rel, content in rendered.items():
         f = DOCS / rel

@@ -24,15 +24,21 @@ from tools.codegen import generate
         generate._render_flat_all,
     ],
 )
-def test_render_is_deterministic(render) -> None:
+@pytest.mark.xdist_group("codegen_render")
+def test_render_is_deterministic(render, first_render) -> None:
     # Same inputs -> identical output on repeat (no dict-ordering / timestamp /
-    # randomness leaking into generated artifacts).
-    assert render() == render()
+    # randomness leaking into generated artifacts). Still two INDEPENDENT
+    # invocations; the second is the session-cached one the other codegen tests
+    # reuse, so the property is unchanged and nothing renders a third time.
+    assert render() == first_render(render)
 
 
-def test_rendered_content_is_lf_only() -> None:
+@pytest.mark.xdist_group("codegen_render")
+def test_rendered_content_is_lf_only(first_render) -> None:
     # Rendered source + docs must contain no carriage returns, so the write step
     # (now newline="\n" everywhere) yields the same bytes on every platform.
-    corpus = {**generate._render_all(), **generate._render_docs_all()}
+    # Reuses the session render: this asserts a property OF the corpus, not that
+    # rendering repeats, so a fresh render buys nothing here.
+    corpus = {**first_render(generate._render_all), **first_render(generate._render_docs_all)}
     offenders = [name for name, content in corpus.items() if "\r" in content]
     assert not offenders, f"rendered content has CR characters: {offenders}"
