@@ -928,6 +928,79 @@ def _abbr_compat(abbr_col: pl.Expr, team_u: pl.Expr) -> pl.Expr:
     return (abbr_col == team_u) | team_u.str.starts_with(abbr_col) | abbr_col.str.starts_with(team_u)
 
 
+def _reorder_late_inserts(plays_df: pl.DataFrame) -> pl.DataFrame:
+    """Move plays ESPN inserted late (2014+ feed) back to where their sequence says they belong.
+
+    ESPN occasionally adds a play after the fact with a fresh, *later* ``id`` but the
+    ``sequenceNumber`` and clock of its true position, so id order shows it 30+ rows late
+    and the EP/WP lag reads a foreign play's end state (401856766 p130: EPA +7.30 for a
+    7-yard run). A row is a late insert when its sequence drops below the running maximum
+    AND its clock is earlier than the previous row's. It moves to just after the last
+    unflagged row with a smaller sequence, and only when that neighbourhood is its own
+    drive (the target row or the one after it). Measured on the published seasons: 2025
+    286 better / 18 worse neighbourhoods, 2014-24 <=3 worse per season; pre-2014
+    ``sequenceNumber`` is not chronological and the detector is catastrophic there, so
+    the pass is gated to season >= 2014 (ledger section 3.3e).
+    """
+    needed = {"season", "drive.id", "start.adj_TimeSecsRem"}
+    if not needed <= set(plays_df.columns) or plays_df.height < 3:
+        return plays_df
+    if (plays_df["season"].cast(pl.Int32, strict=False).max() or 0) < 2014:
+        return plays_df
+    df = plays_df.with_row_index("_pos").with_columns(
+        _seq=pl.col("sequenceNumber").cast(pl.Int64, strict=False),
+        _t=pl.col("start.adj_TimeSecsRem").cast(pl.Float64, strict=False),
+        _drv=pl.col("drive.id").cast(pl.Utf8),
+        _per=pl.col("period.number").cast(pl.Int32, strict=False),
+    )
+    df = df.with_columns(
+        # null anywhere (first row's shift, a null sequence) means "not late", and the
+        # row must stay a valid target candidate rather than vanish from both filters
+        _late=(
+            (pl.col("_seq") < pl.col("_seq").cum_max())
+            & (pl.col("_per") < 5)
+            & (pl.col("_t") > pl.col("_t").shift(1) + 5)
+            & ~pl.col("type.text").str.contains("(?i)timeout|end")
+        ).fill_null(False),
+    )
+    if not df["_late"].any():
+        return plays_df
+    fixed = df.filter(~pl.col("_late")).select("_pos", "_seq", "_drv")
+    late = df.filter(pl.col("_late")).select("_pos", "_seq", "_drv")
+    target = (
+        late.join(fixed.rename({"_pos": "_tpos", "_seq": "_tseq", "_drv": "_tdrv"}), how="cross")
+        .filter(pl.col("_tseq") < pl.col("_seq"))
+        # the target is the row with the GREATEST sequence below this one, not the
+        # last-positioned one: an unflaggable misfiled row with a low sequence can sit
+        # far later in id order (401754582, seq 81 filed at Q2 0:00) and must not attract
+        # the moving row.
+        .sort(["_tseq", "_tpos"])
+        .group_by("_pos")
+        .agg(pl.col("_tpos").last(), pl.col("_tdrv").last(), pl.col("_drv").first())
+        .join(
+            df.select((pl.col("_pos") - 1).alias("_tpos"), pl.col("_drv").alias("_ndrv")),
+            on="_tpos",
+            how="left",
+        )
+        .filter((pl.col("_tdrv") == pl.col("_drv")) | (pl.col("_ndrv") == pl.col("_drv")))
+        .select("_pos", "_tpos")
+    )
+    if target.height == 0:
+        return plays_df
+    return (
+        df.join(target, on="_pos", how="left")
+        .with_columns(
+            _key=pl.when(pl.col("_tpos").is_not_null())
+            .then(pl.col("_tpos").cast(pl.Float64) + 0.5)
+            .otherwise(pl.col("_pos").cast(pl.Float64))
+        )
+        # Several late inserts can share one target slot (401856766: seq 91 and 92
+        # both belong after seq 90); the sequence decides among them.
+        .sort(["_key", "_seq"], maintain_order=True)
+        .drop("_pos", "_seq", "_t", "_drv", "_per", "_late", "_tpos", "_key")
+    )
+
+
 def _sort_plays_ot_aware(plays_df: pl.DataFrame) -> pl.DataFrame:
     """Chronological play sort with a 2023+ ESPN overtime correction.
 
@@ -941,6 +1014,7 @@ def _sort_plays_ot_aware(plays_df: pl.DataFrame) -> pl.DataFrame:
     plays_df = plays_df.sort(["id", "start.adj_TimeSecsRem"])
     if "period.number" not in plays_df.columns or "sequenceNumber" not in plays_df.columns:
         return plays_df
+    plays_df = _reorder_late_inserts(plays_df)
     period = pl.col("period.number").cast(pl.Int32, strict=False)
     ot = plays_df.filter(period >= 5)
     if ot.height == 0:
