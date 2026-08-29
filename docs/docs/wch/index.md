@@ -1,6 +1,7 @@
 ---
 title: WCH
 sidebar_label: WCH
+description: "sdv-py WCH: endpoint references, dataset loaders and parsers for WCH in the SportsDataverse Python package."
 ---
 # WCH (`sportsdataverse.wch`)
 

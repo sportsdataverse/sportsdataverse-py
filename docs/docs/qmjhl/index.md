@@ -1,6 +1,7 @@
 ---
 title: QMJHL
 sidebar_label: QMJHL
+description: "sdv-py QMJHL: endpoint references, dataset loaders and parsers for QMJHL in the SportsDataverse Python package."
 ---
 # QMJHL (`sportsdataverse.qmjhl`)
 

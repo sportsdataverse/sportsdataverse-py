@@ -1,6 +1,7 @@
 ---
 title: NHL
 sidebar_label: NHL
+description: "sdv-py NHL: endpoint references, dataset loaders and parsers for NHL in the SportsDataverse Python package."
 ---
 # NHL (`sportsdataverse.nhl`)
 

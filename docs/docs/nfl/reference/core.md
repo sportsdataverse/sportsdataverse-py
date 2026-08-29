@@ -1,6 +1,7 @@
 ---
 title: NFL — ESPN core API (v2)
 sidebar_label: ESPN core API (v2)
+description: "NFL — ESPN core API (v2) — endpoint reference in sdv-py, the SportsDataverse Python package."
 sidebar_position: 22
 ---
 # NFL — ESPN core API (v2)

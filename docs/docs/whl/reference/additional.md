@@ -1,6 +1,7 @@
 ---
 title: WHL — additional Python functions
 sidebar_label: Additional functions
+description: "WHL — additional Python functions — additional functions in sdv-py, the SportsDataverse Python package."
 sidebar_position: 50
 ---
 # WHL — additional Python functions

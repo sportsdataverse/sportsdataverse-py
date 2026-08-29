@@ -1,6 +1,7 @@
 ---
 title: Parameters
 sidebar_label: Parameters
+description: "Parameter reference for sdv-py endpoint functions."
 ---
 # Parameter reference
 

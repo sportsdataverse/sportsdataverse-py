@@ -1,6 +1,7 @@
 ---
 title: WNBA
 sidebar_label: WNBA
+description: "sdv-py WNBA: endpoint references, dataset loaders and parsers for WNBA in the SportsDataverse Python package."
 ---
 # WNBA (`sportsdataverse.wnba`)
 

@@ -1,6 +1,7 @@
 ---
 title: MJHL
 sidebar_label: MJHL
+description: "sdv-py MJHL: endpoint references, dataset loaders and parsers for MJHL in the SportsDataverse Python package."
 ---
 # MJHL (`sportsdataverse.mjhl`)
 

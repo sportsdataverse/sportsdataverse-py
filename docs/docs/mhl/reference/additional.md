@@ -1,6 +1,7 @@
 ---
 title: MHL — additional Python functions
 sidebar_label: Additional functions
+description: "MHL — additional Python functions — additional functions in sdv-py, the SportsDataverse Python package."
 sidebar_position: 50
 ---
 # MHL — additional Python functions

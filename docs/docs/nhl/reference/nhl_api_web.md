@@ -1,6 +1,7 @@
 ---
 title: NHL — NHL Web API
 sidebar_label: NHL Web API
+description: "NHL — NHL Web API — endpoint reference in sdv-py, the SportsDataverse Python package."
 sidebar_position: 10
 ---
 # NHL — NHL Web API

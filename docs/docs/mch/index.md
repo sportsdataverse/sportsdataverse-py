@@ -1,6 +1,7 @@
 ---
 title: MCH
 sidebar_label: MCH
+description: "sdv-py MCH: endpoint references, dataset loaders and parsers for MCH in the SportsDataverse Python package."
 ---
 # MCH (`sportsdataverse.mch`)
 

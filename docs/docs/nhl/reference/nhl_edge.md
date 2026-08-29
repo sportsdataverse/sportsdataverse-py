@@ -1,6 +1,7 @@
 ---
 title: NHL — NHL EDGE API
 sidebar_label: NHL EDGE API
+description: "NHL — NHL EDGE API — endpoint reference in sdv-py, the SportsDataverse Python package."
 sidebar_position: 11
 ---
 # NHL — NHL EDGE API

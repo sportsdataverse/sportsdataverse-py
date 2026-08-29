@@ -1,6 +1,7 @@
 ---
 title: WBB
 sidebar_label: WBB
+description: "sdv-py WBB: endpoint references, dataset loaders and parsers for WBB in the SportsDataverse Python package."
 ---
 # WBB (`sportsdataverse.wbb`)
 

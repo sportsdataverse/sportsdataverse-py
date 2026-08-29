@@ -1,6 +1,7 @@
 ---
 title: NBA
 sidebar_label: NBA
+description: "sdv-py NBA: endpoint references, dataset loaders and parsers for NBA in the SportsDataverse Python package."
 ---
 # NBA (`sportsdataverse.nba`)
 

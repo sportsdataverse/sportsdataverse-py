@@ -1,6 +1,7 @@
 ---
 title: Package — additional Python functions
 sidebar_label: Additional functions
+description: "Package — additional Python functions — additional functions in sdv-py, the SportsDataverse Python package."
 sidebar_position: 50
 ---
 # Package — additional Python functions

@@ -1,6 +1,7 @@
 ---
 title: NFL
 sidebar_label: NFL
+description: "sdv-py NFL: endpoint references, dataset loaders and parsers for NFL in the SportsDataverse Python package."
 ---
 # NFL (`sportsdataverse.nfl`)
 

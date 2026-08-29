@@ -1,6 +1,7 @@
 ---
 title: UEL
 sidebar_label: UEL
+description: "sdv-py UEL: endpoint references, dataset loaders and parsers for UEL in the SportsDataverse Python package."
 ---
 # UEL (`sportsdataverse.uel`)
 

@@ -1,6 +1,7 @@
 ---
 title: VIJHL — additional Python functions
 sidebar_label: Additional functions
+description: "VIJHL — additional Python functions — additional functions in sdv-py, the SportsDataverse Python package."
 sidebar_position: 50
 ---
 # VIJHL — additional Python functions

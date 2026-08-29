@@ -1,6 +1,7 @@
 ---
 title: OJHL
 sidebar_label: OJHL
+description: "sdv-py OJHL: endpoint references, dataset loaders and parsers for OJHL in the SportsDataverse Python package."
 ---
 # OJHL (`sportsdataverse.ojhl`)
 

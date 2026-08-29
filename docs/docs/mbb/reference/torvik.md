@@ -1,6 +1,7 @@
 ---
 title: MBB — Bart Torvik T-Rank (barttorvik.com)
 sidebar_label: Bart Torvik T-Rank (barttorvik.com)
+description: "MBB — Bart Torvik T-Rank (barttorvik.com) — endpoint reference in sdv-py, the SportsDataverse Python package."
 sidebar_position: 10
 ---
 # MBB — Bart Torvik T-Rank (barttorvik.com)

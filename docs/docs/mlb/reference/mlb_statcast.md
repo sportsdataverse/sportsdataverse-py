@@ -1,6 +1,7 @@
 ---
 title: MLB — MLB Statcast (Baseball Savant)
 sidebar_label: MLB Statcast (Baseball Savant)
+description: "MLB — MLB Statcast (Baseball Savant) — endpoint reference in sdv-py, the SportsDataverse Python package."
 sidebar_position: 11
 ---
 # MLB — MLB Statcast (Baseball Savant)

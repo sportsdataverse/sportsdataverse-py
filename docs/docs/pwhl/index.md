@@ -1,6 +1,7 @@
 ---
 title: PWHL
 sidebar_label: PWHL
+description: "sdv-py PWHL: endpoint references, dataset loaders and parsers for PWHL in the SportsDataverse Python package."
 ---
 # PWHL (`sportsdataverse.pwhl`)
 

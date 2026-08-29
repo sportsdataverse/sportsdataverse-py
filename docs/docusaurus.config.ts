@@ -33,7 +33,10 @@ const config: Config = {
   },
   title: 'sdv-py',
   tagline: "The SportsDataverse's Python Package for Sports Data.",
-  url: 'https://sportsdataverse-py.sportsdataverse.org',
+  // The site is served from the CNAME host. With the old subdomain here, every
+  // canonical, og:url and og:image pointed off-host, so shares canonicalised and
+  // previewed against a domain no link ever used.
+  url: 'https://py.sportsdataverse.org',
   baseUrl: '/',
   // The per-league reference subtree under docs/docs/{league}/ is generated from
   // endpoint metadata (`python tools/codegen/generate.py --docs`); the conceptual
@@ -126,6 +129,19 @@ const config: Config = {
       respectPrefersColorScheme: true,
     },
     image: 'img/Sportsdataverse_gh.png',
+    // Social metadata Docusaurus does not emit on its own. og:image alone renders
+    // a bare card on several platforms; the type, site name, image dimensions and
+    // Twitter attribution are what make the preview complete.
+    metadata: [
+      { property: 'og:type', content: 'website' },
+      { property: 'og:site_name', content: 'sdv-py | SportsDataverse' },
+      { property: 'og:image:width', content: '1080' },
+      { property: 'og:image:height', content: '540' },
+      { property: 'og:image:alt', content: 'SportsDataverse' },
+      { name: 'twitter:site', content: '@sportsdataverse' },
+      { name: 'twitter:creator', content: '@saiemgilani' },
+      { name: 'twitter:image:alt', content: 'SportsDataverse' },
+    ],
     navbar: {
       hideOnScroll: true,
       title: 'sdv-py',

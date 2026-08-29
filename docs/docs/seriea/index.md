@@ -1,6 +1,7 @@
 ---
 title: SERIEA
 sidebar_label: SERIEA
+description: "sdv-py SERIEA: endpoint references, dataset loaders and parsers for SERIEA in the SportsDataverse Python package."
 ---
 # SERIEA (`sportsdataverse.seriea`)
 

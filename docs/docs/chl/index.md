@@ -1,6 +1,7 @@
 ---
 title: CHL
 sidebar_label: CHL
+description: "sdv-py CHL: endpoint references, dataset loaders and parsers for CHL in the SportsDataverse Python package."
 ---
 # CHL (`sportsdataverse.chl`)
 

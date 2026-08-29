@@ -1,6 +1,7 @@
 ---
 title: NFL dataset loaders
 sidebar_label: Loaders
+description: "NFL dataset loaders in sdv-py: the load_* functions that read the SportsDataverse release assets."
 sidebar_position: 1
 ---
 # NFL dataset loaders

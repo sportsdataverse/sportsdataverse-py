@@ -1,6 +1,7 @@
 ---
 title: UFL — ESPN web API (v3)
 sidebar_label: ESPN web API (v3)
+description: "UFL — ESPN web API (v3) — endpoint reference in sdv-py, the SportsDataverse Python package."
 sidebar_position: 21
 ---
 # UFL — ESPN web API (v3)

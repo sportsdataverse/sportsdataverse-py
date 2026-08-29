@@ -1,6 +1,7 @@
 ---
 title: WBB — additional Python functions
 sidebar_label: Additional functions
+description: "WBB — additional Python functions — additional functions in sdv-py, the SportsDataverse Python package."
 sidebar_position: 50
 ---
 # WBB — additional Python functions

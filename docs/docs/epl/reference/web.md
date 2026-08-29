@@ -1,6 +1,7 @@
 ---
 title: EPL — ESPN web API (v3)
 sidebar_label: ESPN web API (v3)
+description: "EPL — ESPN web API (v3) — endpoint reference in sdv-py, the SportsDataverse Python package."
 sidebar_position: 21
 ---
 # EPL — ESPN web API (v3)

@@ -1,6 +1,7 @@
 ---
 title: UCL
 sidebar_label: UCL
+description: "sdv-py UCL: endpoint references, dataset loaders and parsers for UCL in the SportsDataverse Python package."
 ---
 # UCL (`sportsdataverse.ucl`)
 

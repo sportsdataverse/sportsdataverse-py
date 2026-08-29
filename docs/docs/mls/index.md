@@ -1,6 +1,7 @@
 ---
 title: MLS
 sidebar_label: MLS
+description: "sdv-py MLS: endpoint references, dataset loaders and parsers for MLS in the SportsDataverse Python package."
 ---
 # MLS (`sportsdataverse.mls`)
 

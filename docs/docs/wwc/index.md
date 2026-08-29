@@ -1,6 +1,7 @@
 ---
 title: WWC
 sidebar_label: WWC
+description: "sdv-py WWC: endpoint references, dataset loaders and parsers for WWC in the SportsDataverse Python package."
 ---
 # WWC (`sportsdataverse.wwc`)
 

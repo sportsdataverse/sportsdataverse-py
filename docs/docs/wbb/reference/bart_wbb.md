@@ -1,6 +1,7 @@
 ---
 title: WBB — Bart Torvik Women's T-Rank (barttorvik.com/ncaaw)
 sidebar_label: Bart Torvik Women's T-Rank (barttorvik.com/ncaaw)
+description: "WBB — Bart Torvik Women's T-Rank (barttorvik.com/ncaaw) — endpoint reference in sdv-py, the SportsDataverse Python package."
 sidebar_position: 10
 ---
 # WBB — Bart Torvik Women's T-Rank (barttorvik.com/ncaaw)

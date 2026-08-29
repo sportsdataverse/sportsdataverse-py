@@ -1,6 +1,7 @@
 ---
 title: NHL dataset loaders
 sidebar_label: Loaders
+description: "NHL dataset loaders in sdv-py: the load_* functions that read the SportsDataverse release assets."
 sidebar_position: 1
 ---
 # NHL dataset loaders

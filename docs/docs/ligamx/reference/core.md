@@ -1,6 +1,7 @@
 ---
 title: LIGAMX — ESPN core API (v2)
 sidebar_label: ESPN core API (v2)
+description: "LIGAMX — ESPN core API (v2) — endpoint reference in sdv-py, the SportsDataverse Python package."
 sidebar_position: 22
 ---
 # LIGAMX — ESPN core API (v2)

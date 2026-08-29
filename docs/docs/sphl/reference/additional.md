@@ -1,6 +1,7 @@
 ---
 title: SPHL — additional Python functions
 sidebar_label: Additional functions
+description: "SPHL — additional Python functions — additional functions in sdv-py, the SportsDataverse Python package."
 sidebar_position: 50
 ---
 # SPHL — additional Python functions

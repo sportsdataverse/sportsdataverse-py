@@ -1,6 +1,7 @@
 ---
 title: WBB dataset loaders
 sidebar_label: Loaders
+description: "WBB dataset loaders in sdv-py: the load_* functions that read the SportsDataverse release assets."
 sidebar_position: 1
 ---
 # WBB dataset loaders

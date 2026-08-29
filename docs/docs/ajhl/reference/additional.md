@@ -1,6 +1,7 @@
 ---
 title: AJHL — additional Python functions
 sidebar_label: Additional functions
+description: "AJHL — additional Python functions — additional functions in sdv-py, the SportsDataverse Python package."
 sidebar_position: 50
 ---
 # AJHL — additional Python functions

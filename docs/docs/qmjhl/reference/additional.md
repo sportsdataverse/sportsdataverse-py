@@ -1,6 +1,7 @@
 ---
 title: QMJHL — additional Python functions
 sidebar_label: Additional functions
+description: "QMJHL — additional Python functions — additional functions in sdv-py, the SportsDataverse Python package."
 sidebar_position: 50
 ---
 # QMJHL — additional Python functions

@@ -1,6 +1,7 @@
 ---
 title: ECHL
 sidebar_label: ECHL
+description: "sdv-py ECHL: endpoint references, dataset loaders and parsers for ECHL in the SportsDataverse Python package."
 ---
 # ECHL (`sportsdataverse.echl`)
 

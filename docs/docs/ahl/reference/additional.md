@@ -1,6 +1,7 @@
 ---
 title: AHL — additional Python functions
 sidebar_label: Additional functions
+description: "AHL — additional Python functions — additional functions in sdv-py, the SportsDataverse Python package."
 sidebar_position: 50
 ---
 # AHL — additional Python functions

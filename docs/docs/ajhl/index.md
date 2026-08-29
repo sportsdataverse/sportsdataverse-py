@@ -1,6 +1,7 @@
 ---
 title: AJHL
 sidebar_label: AJHL
+description: "sdv-py AJHL: endpoint references, dataset loaders and parsers for AJHL in the SportsDataverse Python package."
 ---
 # AJHL (`sportsdataverse.ajhl`)
 
