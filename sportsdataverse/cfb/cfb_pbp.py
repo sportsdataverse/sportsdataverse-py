@@ -1883,7 +1883,18 @@ class CFBPlayProcess(object):
                         )
                         == False
                     )
-                    .and_(pl.col("text").str.contains(r"(?i)penalty") == False)
+                    # Part (c) once excluded rows carrying a penalty, on the reasoning
+                    # that a flag legitimately moves the ball between snaps. That
+                    # reasoning guards a DISAGREEMENT between end and next start; it
+                    # does not touch the EXACT-COMPLEMENT test, which with possession
+                    # unchanged is the mirror signature whether or not a flag was
+                    # thrown -- end and next start describe the same ball either way.
+                    # Measured with possession continuing into the next real play:
+                    # 2024 has 1 such scrimmage-penalty row, 2025 has 229 of 2,045
+                    # (11.2%), and the 362-game validation surfaced them as
+                    # counterfactual sign disagreements ("Personal Foul 11 yard from
+                    # NEV21 to NEV1" stored as 90). Kicks stay excluded; their end
+                    # states are parts (d) and (e).
                     .and_(pl.col("end.yardsToEndzone") != pl.col("start.yardsToEndzone").shift(-1))
                     .and_(
                         pl.col("end.yardsToEndzone") == (pl.lit(100) - pl.col("start.yardsToEndzone").shift(-1)),
@@ -4278,8 +4289,26 @@ class CFBPlayProcess(object):
             yds_fumble_return=pl.when((pl.col("fumble_vec") == True).and_(pl.col("kickoff_play") == False))
             .then(pl.col("text").str.extract(r"(?i)return for (.+)").str.extract(r"(\d+)").cast(pl.Int32))
             .otherwise(None),
+            # The first number after "sacked" is the YARDLINE in 2004-2007 text --
+            # "sacked by Pierre Bell at the ECaro 48 for a loss of 8 yards" -- so the
+            # positional grab stored -48 for an 8-yard sack. 2,227 of 2,283 sacks in
+            # 2005 disagreed with their own "loss of N" clause, 1,393 of them by more
+            # than 25 yards. The stated loss is authoritative wherever it appears
+            # (98%+ of sack rows in every era); the positional grab is the fallback.
+            # Two stated forms carry the loss: "for a loss of N yards" (2004-2013) and
+            # "sacked by X for N yds" (2014+; 2025's vendor feed writes "for -6 yds"). A sack row with neither -- "sacked by
+            # Wendell Chavis, fumbled at the SMU 30, recovered by ..." -- states no
+            # loss at all, and the old positional grab returned the yardline (-30) for
+            # it. Null is the honest value there; a number that is really a yardline
+            # is the defect class this branch exists to remove.
             yds_sacked=pl.when(pl.col("sack") == True)
-            .then(-1 * pl.col("text").str.extract(r"(?i)sacked (.+)").str.extract(r"(\d+)").cast(pl.Int32))
+            .then(
+                pl.coalesce(
+                    -1 * pl.col("text").str.extract(r"(?i)loss of (\d+)", 1).cast(pl.Int32, strict=False),
+                    -1
+                    * pl.col("text").str.extract(r"(?i)sacked\b[^,]*?\bfor -?(\d+) y", 1).cast(pl.Int32, strict=False),
+                )
+            )
             .otherwise(None),
         ).with_columns(
             yds_penalty=pl.when(pl.col("penalty_detail").is_in(["Penalty Declined", "Penalty Offset"]))
@@ -5419,6 +5448,7 @@ class CFBPlayProcess(object):
             ("penalty_1st_conv", pl.Boolean),
             ("penalty_declined", pl.Boolean),
             ("penalty_offset", pl.Boolean),
+            ("penalty_no_play", pl.Boolean),
         ):
             if _col not in play_df.columns:
                 play_df = play_df.with_columns(pl.lit(None, dtype=_dtype).alias(_col))
@@ -5842,8 +5872,15 @@ class CFBPlayProcess(object):
                 # Holding ... declined for a 1ST down" carries penalty_1st_conv=True
                 # with the flag on the offense -- so declined and offsetting rows are
                 # excluded from it.
+                # ...and, more generally, only when the flag is the SOLE source of
+                # the first down -- which is a no-play row. On a play that stands,
+                # "pass complete for 36 yards ... for a 1ST down, AIR FORCE penalty
+                # 10 yard Illegal Block" carries the conversion from the catch, and
+                # L1 read the offensive foul as defensive. The 362-game validation
+                # caught it as a sign disagreement with the counterfactual.
                 _pen_L1=pl.when(
                     (pl.col("penalty_1st_conv") == True)
+                    .and_(pl.col("penalty_no_play") == True)
                     .and_(pl.col("penalty_declined") == False)
                     .and_(pl.col("penalty_offset") == False),
                 )
@@ -6599,11 +6636,100 @@ class CFBPlayProcess(object):
 
         EP_end = self.__calculate_ep_exp_val(EP_end_parts)
 
+        # B11: the counterfactual end state for an ACCEPTED penalty on a scrimmage
+        # play that STANDS -- where the play would have ended had there been no flag.
+        # The penalty's own effect is then EP(actual end) - EP(counterfactual end),
+        # which is what EPA_penalty is meant to isolate and what the play-level EPA
+        # cannot, since that folds the play and the flag together.
+        #
+        # What the fields mean here, each verified on 2024 rather than assumed:
+        #   - end.yardsToEndzone INCLUDES the enforcement on these rows (78% of
+        #     rushes equal yds_rushed +/- the penalty), so it is the actual end.
+        #   - yds_rushed / yds_receiving / yds_sacked are the PLAY's own yardage;
+        #     statYardage is the NET and is not usable for this.
+        #   - the counterfactual is start - play_yards, NOT end + penalty_yards_net.
+        #     The two agree on a tack-on enforcement and disagree on a spot-of-foul
+        #     one: a 22-yard run with offensive holding ends at start+3, and the
+        #     flag's true cost is the 22 yards plus 10, not 10.
+        #   - the model reads these eight columns by name, and the published
+        #     end.* values ARE the model inputs (instrumented: 181/181 rows of the
+        #     end call match the emitted frame), so the same frame is safe to build
+        #     the counterfactual features from. down_*_end are NOT derived from
+        #     end.down -- B5 resets the feature flags independently -- so the
+        #     counterfactual flags are built from scratch below, never from end.down.
+        #
+        # Scope, deliberately narrow: rush, completion, incompletion and sack only;
+        # accepted (not declined, not offsetting); not a no-play (those need no
+        # counterfactual -- the start state is it); not a standalone "Penalty" row
+        # (a dead-ball foul with no snap, same reason); not a scoring play, a
+        # turnover, or an end-of-half row; and not a fourth-down non-conversion,
+        # whose counterfactual is the other team's ball. Kicks and returns are out
+        # -- their end states are the subject of parts (b)-(e) and not yet safe
+        # to build on. Everything outside scope is null, not guessed.
+        _cf_scope = (
+            (pl.col("penalty_flag") == True)
+            .and_(pl.col("penalty_no_play") == False)
+            .and_(pl.col("penalty_declined") == False)
+            .and_(pl.col("penalty_offset") == False)
+            .and_(pl.col("type.text").is_in(["Penalty", "Penalty (Kickoff)"]) == False)
+            .and_((pl.col("rush") == True).or_(pl.col("pass") == True))
+            .and_(pl.col("scoring_play") != True)
+            .and_(pl.col("is_turnover") != True)
+            .and_(pl.col("end_of_half") != True)
+            .and_(pl.col("start.yardsToEndzone").is_not_null())
+            .and_(pl.col("start.distance").is_not_null())
+            .and_(pl.col("start.down").is_not_null())
+        )
+        _play_yards = (
+            pl.when(pl.col("sack") == True)
+            .then(pl.col("yds_sacked"))
+            .when(pl.col("rush") == True)
+            .then(pl.col("yds_rushed"))
+            .when(pl.col("completion") == True)
+            .then(pl.col("yds_receiving"))
+            .when(pl.col("pass") == True)
+            .then(pl.lit(0))
+            .otherwise(None)
+        )
+        play_df = play_df.with_columns(_cf_play_yards=_play_yards.cast(pl.Float64))
+        play_df = play_df.with_columns(
+            _cf_converted=(pl.col("_cf_play_yards") >= pl.col("start.distance")),
+            _cf_y2ez=(pl.col("start.yardsToEndzone") - pl.col("_cf_play_yards")).clip(1, 99),
+        )
+        play_df = play_df.with_columns(
+            # a fourth-down play that did not convert would have been the other
+            # team's ball: out of scope rather than modelled
+            _cf_ok=_cf_scope.and_(pl.col("_cf_play_yards").is_not_null()).and_(
+                (pl.col("_cf_converted") == True).or_(pl.col("start.down") < 4),
+            ),
+            _cf_down=pl.when(pl.col("_cf_converted") == True).then(1).otherwise(pl.col("start.down") + 1),
+            _cf_distance=pl.when(pl.col("_cf_converted") == True)
+            .then(pl.min_horizontal(pl.lit(10.0), pl.col("_cf_y2ez")))
+            .otherwise(pl.col("start.distance") - pl.col("_cf_play_yards")),
+        )
+        cf_data = play_df.select(
+            pl.col("end.TimeSecsRem"),
+            pl.col("_cf_y2ez"),
+            pl.col("_cf_distance"),
+            (pl.col("_cf_down") == 1).alias("_cf_d1"),
+            (pl.col("_cf_down") == 2).alias("_cf_d2"),
+            (pl.col("_cf_down") == 3).alias("_cf_d3"),
+            (pl.col("_cf_down") == 4).alias("_cf_d4"),
+            pl.col("pos_score_diff_end"),
+        )
+        cf_data.columns = ep_final_names
+        EP_penalty_cf_parts = ep_model.predict(DMatrix(cf_data))
+        EP_penalty_cf = self.__calculate_ep_exp_val(EP_penalty_cf_parts)
+
         play_df = play_df.with_columns(
             EP_start_touchback=pl.lit(EP_start_touchback),
             EP_start=pl.lit(EP_start),
             EP_end=pl.lit(EP_end),
-        )
+            EP_penalty_cf=pl.when(pl.col("_cf_ok") == True).then(pl.lit(EP_penalty_cf)).otherwise(None),
+            penalty_cf_yardsToEndzone=pl.when(pl.col("_cf_ok") == True)
+            .then(pl.col("_cf_y2ez").cast(pl.Int32))
+            .otherwise(None),
+        ).drop(["_cf_play_yards", "_cf_converted", "_cf_y2ez", "_cf_ok", "_cf_down", "_cf_distance"])
 
         play_df = (
             play_df.with_columns(
@@ -6939,6 +7065,26 @@ class CFBPlayProcess(object):
                 .when(pl.col("type.text").is_in(["Penalty", "Penalty (Kickoff)"]))
                 .then(pl.col("EPA"))
                 .when(pl.col("penalty_in_text") == True)
+                .then(pl.col("EP_end") - pl.col("EP_start"))
+                .otherwise(None),
+                # B11: the penalty's OWN effect, isolated from the play it rode on.
+                # Declined / offsetting: zero. No-play and standalone rows: the flag
+                # is the whole change, so EP_end - EP_start already is it. Scrimmage
+                # plays that stand: actual end against the counterfactual end. Kicks,
+                # returns, turnovers, scoring plays: null -- not yet safe to state.
+                EPA_penalty_direct=pl.when(
+                    (pl.col("penalty_declined") == True).or_(pl.col("penalty_offset") == True),
+                )
+                .then(0.0)
+                .when(pl.col("EP_penalty_cf").is_not_null())
+                .then(pl.col("EP_end") - pl.col("EP_penalty_cf"))
+                .when(
+                    (pl.col("penalty_flag") == True).and_(
+                        (pl.col("penalty_no_play") == True).or_(
+                            pl.col("type.text").is_in(["Penalty", "Penalty (Kickoff)"]),
+                        ),
+                    ),
+                )
                 .then(pl.col("EP_end") - pl.col("EP_start"))
                 .otherwise(None),
                 EPA_sp=pl.when(

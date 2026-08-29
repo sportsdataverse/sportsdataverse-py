@@ -916,3 +916,141 @@ def test_penalty_side_requires_two_independent_signals() -> None:
     )
     assert declined_fd.height >= 1
     assert declined_fd.filter(pl.col("penalty_side").is_not_null()).height == 0
+
+
+def _run_fixture(gid: int):
+    import json
+    from pathlib import Path
+
+    import sportsdataverse.cfb.cfb_pbp as mod
+
+    summary = json.loads((Path(__file__).parent / "fixtures" / f"summary_{gid}.json").read_text(encoding="utf-8"))
+
+    class _Resp:
+        def json(self):
+            return summary
+
+    monkeypatch = pytest.MonkeyPatch()
+    try:
+        monkeypatch.setattr(mod, "download", lambda *a, **k: _Resp())
+        proc = CFBPlayProcess(gameId=gid)
+        proc.join_participants = False
+        proc.espn_cfb_pbp()
+        out = proc.run_processing_pipeline()
+    finally:
+        monkeypatch.undo()
+    return pl.from_dicts(out["plays"], infer_schema_length=None)
+
+
+def test_penalty_epa_direct_isolates_the_flag_from_the_play() -> None:
+    """B11: EPA_penalty_direct is EP(actual end) - EP(counterfactual end), where the
+    counterfactual is where the play would have ended with no flag: start minus
+    the PLAY's own yardage. That is deliberately not end + penalty_yards_net,
+    which is right for a tack-on and wrong for a spot-of-foul enforcement -- a
+    22-yard run with offensive holding ends at start+3, and the flag's cost is
+    the 22 yards plus 10, not 10.
+
+    Two fixtures carry the two shapes. 401628344: an offensive holding on a
+    6-yard run -- play-level EPA -0.62, EPA_penalty -0.44, but the flag alone
+    -1.00, because the run was wiped as well as the 10. 401636889: a defensive
+    holding tacked onto a 4-yard run -- EPA_penalty +1.75 credits the whole play,
+    the flag alone is +0.63.
+    """
+    a = _run_fixture(401628344)
+    off = a.filter(pl.col("EP_penalty_cf").is_not_null())
+    assert off.height == 1, f"fixture drifted; expected 1 counterfactual row, got {off.height}"
+    off = off.row(0, named=True)
+    assert off["penalty_detail"] == "Offensive Holding"
+    # counterfactual = start - play yards (6-yard run from the 46 -> 40); the actual
+    # end is BEHIND the start because enforcement was from the spot of the foul
+    assert off["penalty_cf_yardsToEndzone"] == 40
+    assert off["end.yardsToEndzone"] > off["start.yardsToEndzone"]
+    assert off["EPA_penalty_direct"] < off["EPA_penalty"] < 0, (off["EPA_penalty_direct"], off["EPA_penalty"])
+
+    b = _run_fixture(401636889)
+    de = b.filter(pl.col("EP_penalty_cf").is_not_null())
+    assert de.height == 1, f"fixture drifted; expected 1 counterfactual row, got {de.height}"
+    de = de.row(0, named=True)
+    assert de["penalty_detail"] == "Defensive Holding"
+    assert de["penalty_cf_yardsToEndzone"] == 22
+    assert 0 < de["EPA_penalty_direct"] < de["EPA_penalty"], (de["EPA_penalty_direct"], de["EPA_penalty"])
+
+    # sign agrees with the independently-resolved side on both
+    for r in (off, de):
+        assert (r["penalty_side"] == "def") == (r["EPA_penalty_direct"] > 0)
+
+    # everything outside scope is null, never guessed; declined stays zero
+    for plays in (a, b):
+        assert plays.filter(pl.col("EP_penalty_cf").is_not_null() & (pl.col("penalty_no_play") == True)).height == 0  # noqa: E712
+        declined = plays.filter(pl.col("penalty_declined") == True)  # noqa: E712
+        assert declined.filter(pl.col("EPA_penalty_direct").abs() > 0.001).height == 0
+
+
+def test_yds_sacked_takes_the_stated_loss_over_the_yardline() -> None:
+    """2004-2007 text puts the yardline before the loss -- "sacked by Pierre Bell at
+    the ECaro 48 for a loss of 8 yards" -- and the positional grab stored -48 for
+    an 8-yard sack. 2,227 of 2,283 sacks in 2005, 2,395 of 2,424 in 2006 and 2,806
+    of 2,843 in 2007 disagreed with their own "loss of N" clause. Found because the
+    counterfactual built on yds_sacked produced a sign disagreement.
+
+    A sack that states no loss at all ("sacked by Wendell Chavis, fumbled at the
+    SMU 30, recovered by ...") is null rather than the yardline.
+    """
+    plays = _run_fixture(262940151)  # 2005, SMU @ East Carolina
+    sacks = plays.filter(pl.col("sack") == True).with_columns(  # noqa: E712
+        pl.col("text").str.extract(r"(?i)loss of (\d+)", 1).cast(pl.Int32, strict=False).alias("loss")
+    )
+    assert sacks.height >= 4, "fixture drifted; expected several sacks"
+    stated = sacks.filter(pl.col("loss").is_not_null())
+    assert stated.filter(pl.col("yds_sacked") != -pl.col("loss")).height == 0, stated.select(
+        "yds_sacked", "loss", "text"
+    ).rows()
+    unstated = sacks.filter(pl.col("loss").is_null())
+    assert unstated.filter(pl.col("yds_sacked").is_not_null()).height == 0, unstated.select("yds_sacked", "text").rows()
+    assert sacks.filter(pl.col("yds_sacked").abs() > 25).height == 0
+
+
+def test_penalty_side_first_down_signal_only_on_no_play_rows() -> None:
+    """L1 (an automatic first down implies a defensive flag) holds only when the
+    flag is the SOLE source of the first down, which is a no-play row. On a play
+    that stands the conversion came from the play: "pass complete for 36 yards ...
+    for a 1ST down, AIR FORCE penalty 10 yard Illegal Block" is an offensive foul,
+    and L1 read it as defensive. The 362-game validation surfaced it as a sign
+    disagreement with the counterfactual EP.
+    """
+    plays = _run_fixture(401628344)
+    stands_fd = plays.filter(
+        (pl.col("penalty_flag") == True)  # noqa: E712
+        & (pl.col("penalty_no_play") == False)  # noqa: E712
+        & (pl.col("penalty_1st_conv") == True)  # noqa: E712
+        & (pl.col("type.text") != "Penalty")
+        & (pl.col("penalty_detail").is_in(["Offensive Holding", "Illegal Block", "Holding"]))
+    )
+    # an offensive foul on a converting play must never resolve 'def'
+    assert stands_fd.filter(pl.col("penalty_side") == "def").height == 0, stands_fd.select(
+        "penalty_detail", "penalty_side", "text"
+    ).rows()
+
+
+def test_mirror_repair_reaches_scrimmage_penalty_rows() -> None:
+    """Part (c) once excluded rows carrying a penalty, on the reasoning that a flag
+    legitimately moves the ball between snaps. That guards a DISAGREEMENT between
+    end and next start; it does not touch the exact-complement test, which with
+    possession unchanged is the mirror signature whether or not a flag was thrown.
+
+    2025 has 229 of 2,045 scrimmage-penalty rows (11.2%) stored as the exact
+    complement of the next play's start; 2024 has one. 401760419 p104: "Personal
+    Foul 11 yard from NEV21 to NEV1" was stored as 90 -- ninety yards from the
+    goal for a team on the 1 -- and the counterfactual EP surfaced it as a sign
+    disagreement.
+    """
+    plays = _run_fixture(401760419)
+    row = plays.filter(pl.col("text").str.contains("(?i)Personal Foul 11 yard from NEV21 to NEV1"))
+    assert row.height == 1, "fixture drifted; expected the NEV21->NEV1 personal foul"
+    r = row.row(0, named=True)
+    assert r["end.yardsToEndzone"] < 15, f"enforcement to the 1 must not read as {r['end.yardsToEndzone']} to go"
+    # a defensive flag that hands the offense the 1-yard line is a gain, not a -4.8.
+    # penalty_side is correctly NULL here -- Personal Foul is a mixed foul type and
+    # L1 needs a no-play row -- so the sign is checked against the text, not the side.
+    assert r["EP_penalty_cf"] is not None
+    assert r["EPA_penalty_direct"] > 0, r["EPA_penalty_direct"]
