@@ -366,6 +366,7 @@ def espn_mlb_injuries(
 
 
 def espn_mlb_transactions(
+    limit: Optional[int] = 500,
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
@@ -379,6 +380,7 @@ def espn_mlb_transactions(
     Example URL: https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/transactions
 
     Args:
+        limit: limit query parameter.
         return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
@@ -391,7 +393,9 @@ def espn_mlb_transactions(
             espn_mlb_transactions()
     """
     _caller_params = kwargs.pop("params", None) or {}
-    _params = {}
+    _params = {
+        "limit": limit,
+    }
     _params.update(_caller_params)
     raw = _get(
         "https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/transactions",
@@ -601,6 +605,7 @@ def espn_mlb_team(
 
 def espn_mlb_team_roster(
     team_id: Union[int, str],
+    limit: Optional[int] = 500,
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
@@ -615,6 +620,7 @@ def espn_mlb_team_roster(
 
     Args:
         team_id: team_id path parameter.
+        limit: limit query parameter.
         return_parsed: parse the payload through parse_team_roster -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
@@ -627,7 +633,9 @@ def espn_mlb_team_roster(
             espn_mlb_team_roster(team_id='4')
     """
     _caller_params = kwargs.pop("params", None) or {}
-    _params = {}
+    _params = {
+        "limit": limit,
+    }
     _params.update(_caller_params)
     raw = _get(
         f"https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/teams/{team_id}/roster",
@@ -2054,7 +2062,8 @@ def espn_mlb_season_week_games(
 
 def espn_mlb_season_teams(
     season: Union[int, str],
-    limit: Optional[int] = 500,
+    limit: Optional[int] = 1000,
+    page: Optional[int] = 1,
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
@@ -2070,6 +2079,7 @@ def espn_mlb_season_teams(
     Args:
         season: season path parameter.
         limit: limit query parameter.
+        page: page query parameter.
         return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
@@ -2084,6 +2094,7 @@ def espn_mlb_season_teams(
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
         "limit": limit,
+        "page": page,
     }
     _params.update(_caller_params)
     raw = _get(
@@ -2187,7 +2198,7 @@ def espn_mlb_season_players(
 
 def espn_mlb_season_coaches(
     season: Union[int, str],
-    limit: Optional[int] = 200,
+    limit: Optional[int] = 500,
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
@@ -2477,6 +2488,7 @@ def espn_mlb_season_powerindex_leaders(
 
 def espn_mlb_season_awards(
     season: Union[int, str],
+    limit: Optional[int] = 200,
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
@@ -2491,6 +2503,7 @@ def espn_mlb_season_awards(
 
     Args:
         season: season path parameter.
+        limit: limit query parameter.
         return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
@@ -2503,7 +2516,9 @@ def espn_mlb_season_awards(
             espn_mlb_season_awards(season=2024)
     """
     _caller_params = kwargs.pop("params", None) or {}
-    _params = {}
+    _params = {
+        "limit": limit,
+    }
     _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/{season}/awards",
@@ -4141,7 +4156,8 @@ def espn_mlb_game_official_detail(
 
 
 def espn_mlb_teams_core(
-    limit: Optional[int] = 500,
+    limit: Optional[int] = 1000,
+    page: Optional[int] = 1,
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
@@ -4156,6 +4172,7 @@ def espn_mlb_teams_core(
 
     Args:
         limit: limit query parameter.
+        page: page query parameter.
         return_parsed: parse the payload through parse_teams -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
@@ -4170,6 +4187,7 @@ def espn_mlb_teams_core(
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
         "limit": limit,
+        "page": page,
     }
     _params.update(_caller_params)
     raw = _get(
@@ -4223,7 +4241,7 @@ def espn_mlb_team_core(
 
 
 def espn_mlb_venues(
-    limit: Optional[int] = 200,
+    limit: Optional[int] = 1000,
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
@@ -4511,6 +4529,7 @@ def espn_mlb_coach_season(
 
 
 def espn_mlb_positions(
+    limit: Optional[int] = 200,
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
@@ -4524,6 +4543,7 @@ def espn_mlb_positions(
     Example URL: https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/positions
 
     Args:
+        limit: limit query parameter.
         return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
@@ -4536,7 +4556,9 @@ def espn_mlb_positions(
             espn_mlb_positions()
     """
     _caller_params = kwargs.pop("params", None) or {}
-    _params = {}
+    _params = {
+        "limit": limit,
+    }
     _params.update(_caller_params)
     raw = _get(
         "https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/positions",
@@ -4589,6 +4611,7 @@ def espn_mlb_position(
 
 
 def espn_mlb_tournaments(
+    limit: Optional[int] = 200,
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
@@ -4602,6 +4625,7 @@ def espn_mlb_tournaments(
     Example URL: https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/tournaments
 
     Args:
+        limit: limit query parameter.
         return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
@@ -4614,7 +4638,9 @@ def espn_mlb_tournaments(
             espn_mlb_tournaments()
     """
     _caller_params = kwargs.pop("params", None) or {}
-    _params = {}
+    _params = {
+        "limit": limit,
+    }
     _params.update(_caller_params)
     raw = _get(
         "https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/tournaments",
@@ -4627,6 +4653,7 @@ def espn_mlb_tournaments(
 
 
 def espn_mlb_awards(
+    limit: Optional[int] = 200,
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
@@ -4640,6 +4667,7 @@ def espn_mlb_awards(
     Example URL: https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/awards
 
     Args:
+        limit: limit query parameter.
         return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
@@ -4652,7 +4680,9 @@ def espn_mlb_awards(
             espn_mlb_awards()
     """
     _caller_params = kwargs.pop("params", None) or {}
-    _params = {}
+    _params = {
+        "limit": limit,
+    }
     _params.update(_caller_params)
     raw = _get(
         "https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/awards",

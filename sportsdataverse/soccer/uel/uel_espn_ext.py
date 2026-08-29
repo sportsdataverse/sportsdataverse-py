@@ -369,6 +369,7 @@ def espn_uel_injuries(
 
 
 def espn_uel_transactions(
+    limit: Optional[int] = 500,
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
@@ -382,6 +383,7 @@ def espn_uel_transactions(
     Example URL: https://site.api.espn.com/apis/site/v2/sports/soccer/uefa.europa/transactions
 
     Args:
+        limit: limit query parameter.
         return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
@@ -394,7 +396,9 @@ def espn_uel_transactions(
             espn_uel_transactions()
     """
     _caller_params = kwargs.pop("params", None) or {}
-    _params = {}
+    _params = {
+        "limit": limit,
+    }
     _params.update(_caller_params)
     raw = _get(
         "https://site.api.espn.com/apis/site/v2/sports/soccer/uefa.europa/transactions",
@@ -604,6 +608,7 @@ def espn_uel_team(
 
 def espn_uel_team_roster(
     team_id: Union[int, str],
+    limit: Optional[int] = 500,
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
@@ -618,6 +623,7 @@ def espn_uel_team_roster(
 
     Args:
         team_id: team_id path parameter.
+        limit: limit query parameter.
         return_parsed: parse the payload through parse_team_roster -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
@@ -630,7 +636,9 @@ def espn_uel_team_roster(
             espn_uel_team_roster(team_id='4')
     """
     _caller_params = kwargs.pop("params", None) or {}
-    _params = {}
+    _params = {
+        "limit": limit,
+    }
     _params.update(_caller_params)
     raw = _get(
         f"https://site.api.espn.com/apis/site/v2/sports/soccer/uefa.europa/teams/{team_id}/roster",
@@ -2057,7 +2065,8 @@ def espn_uel_season_week_games(
 
 def espn_uel_season_teams(
     season: Union[int, str],
-    limit: Optional[int] = 500,
+    limit: Optional[int] = 1000,
+    page: Optional[int] = 1,
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
@@ -2073,6 +2082,7 @@ def espn_uel_season_teams(
     Args:
         season: season path parameter.
         limit: limit query parameter.
+        page: page query parameter.
         return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
@@ -2087,6 +2097,7 @@ def espn_uel_season_teams(
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
         "limit": limit,
+        "page": page,
     }
     _params.update(_caller_params)
     raw = _get(
@@ -2190,7 +2201,7 @@ def espn_uel_season_players(
 
 def espn_uel_season_coaches(
     season: Union[int, str],
-    limit: Optional[int] = 200,
+    limit: Optional[int] = 500,
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
@@ -2480,6 +2491,7 @@ def espn_uel_season_powerindex_leaders(
 
 def espn_uel_season_awards(
     season: Union[int, str],
+    limit: Optional[int] = 200,
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
@@ -2494,6 +2506,7 @@ def espn_uel_season_awards(
 
     Args:
         season: season path parameter.
+        limit: limit query parameter.
         return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
@@ -2506,7 +2519,9 @@ def espn_uel_season_awards(
             espn_uel_season_awards(season=2024)
     """
     _caller_params = kwargs.pop("params", None) or {}
-    _params = {}
+    _params = {
+        "limit": limit,
+    }
     _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/seasons/{season}/awards",
@@ -4141,7 +4156,8 @@ def espn_uel_game_official_detail(
 
 
 def espn_uel_teams_core(
-    limit: Optional[int] = 500,
+    limit: Optional[int] = 1000,
+    page: Optional[int] = 1,
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
@@ -4156,6 +4172,7 @@ def espn_uel_teams_core(
 
     Args:
         limit: limit query parameter.
+        page: page query parameter.
         return_parsed: parse the payload through parse_teams -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
@@ -4170,6 +4187,7 @@ def espn_uel_teams_core(
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
         "limit": limit,
+        "page": page,
     }
     _params.update(_caller_params)
     raw = _get(
@@ -4223,7 +4241,7 @@ def espn_uel_team_core(
 
 
 def espn_uel_venues(
-    limit: Optional[int] = 200,
+    limit: Optional[int] = 1000,
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
@@ -4511,6 +4529,7 @@ def espn_uel_coach_season(
 
 
 def espn_uel_positions(
+    limit: Optional[int] = 200,
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
@@ -4524,6 +4543,7 @@ def espn_uel_positions(
     Example URL: https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/positions
 
     Args:
+        limit: limit query parameter.
         return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
@@ -4536,7 +4556,9 @@ def espn_uel_positions(
             espn_uel_positions()
     """
     _caller_params = kwargs.pop("params", None) or {}
-    _params = {}
+    _params = {
+        "limit": limit,
+    }
     _params.update(_caller_params)
     raw = _get(
         "https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/positions",
@@ -4589,6 +4611,7 @@ def espn_uel_position(
 
 
 def espn_uel_tournaments(
+    limit: Optional[int] = 200,
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
@@ -4602,6 +4625,7 @@ def espn_uel_tournaments(
     Example URL: https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/tournaments
 
     Args:
+        limit: limit query parameter.
         return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
@@ -4614,7 +4638,9 @@ def espn_uel_tournaments(
             espn_uel_tournaments()
     """
     _caller_params = kwargs.pop("params", None) or {}
-    _params = {}
+    _params = {
+        "limit": limit,
+    }
     _params.update(_caller_params)
     raw = _get(
         "https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/tournaments",
@@ -4627,6 +4653,7 @@ def espn_uel_tournaments(
 
 
 def espn_uel_awards(
+    limit: Optional[int] = 200,
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
@@ -4640,6 +4667,7 @@ def espn_uel_awards(
     Example URL: https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/awards
 
     Args:
+        limit: limit query parameter.
         return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
@@ -4652,7 +4680,9 @@ def espn_uel_awards(
             espn_uel_awards()
     """
     _caller_params = kwargs.pop("params", None) or {}
-    _params = {}
+    _params = {
+        "limit": limit,
+    }
     _params.update(_caller_params)
     raw = _get(
         "https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/awards",

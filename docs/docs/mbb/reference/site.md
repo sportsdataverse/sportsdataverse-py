@@ -457,6 +457,7 @@ ESPN endpoint.
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
+| `limit` | `limit` |  |  | `Y` | Maximum number of items to return. |
 
 ### Returns
 
@@ -621,6 +622,7 @@ ESPN endpoint.
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
+| `limit` | `limit` |  |  | `Y` | Maximum number of items to return. |
 
 ### Returns
 
