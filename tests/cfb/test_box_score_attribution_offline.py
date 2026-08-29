@@ -268,7 +268,6 @@ def test_mirrored_end_yardline_is_repaired(monkeypatch):
     """
     import polars as pl
 
-
     # end state mirrored (95) vs the next play's start (5), possession unchanged
     frame = pl.DataFrame(
         {
