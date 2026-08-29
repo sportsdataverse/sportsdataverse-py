@@ -1,13 +1,17 @@
-name: dispatch Game on Paper deploy
+name: dispatch Game on Paper deploy (package pushes to main)
 
 # Game on Paper builds its API image against this repo's main at build time
 # (python/Dockerfile re-resolves the sportsdataverse pin). A merge here does
-# nothing for the site until that image is rebuilt, so tell it to rebuild.
+# nothing for the site until that image is rebuilt, so tell it to rebuild --
+# on pushes to main that touch the package or its dependency pins. Docs-only
+# and CI-only pushes do not trigger a deploy; that is the `paths` filter below.
 #
-# Cross-repo dispatch needs a token with `repo` scope on game-on-paper-app;
-# GITHUB_TOKEN is scoped to this repository only. Until the GOP_DEPLOY_TOKEN
-# secret exists this job explains itself and exits green rather than failing
-# every push to main.
+# Cross-repo dispatch needs a token with access to game-on-paper-app;
+# GITHUB_TOKEN is scoped to this repository only. Least privilege for the
+# repository_dispatch endpoint is a fine-grained PAT with `Contents: read` on
+# saiemgilani/game-on-paper-app -- not the classic `repo` scope. Until the
+# GOP_DEPLOY_TOKEN secret exists this job explains itself and exits green
+# rather than failing every push to main.
 
 on:
   push:
