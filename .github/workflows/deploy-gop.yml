@@ -1,0 +1,37 @@
+name: dispatch Game on Paper deploy
+
+# Game on Paper builds its API image against this repo's main at build time
+# (python/Dockerfile re-resolves the sportsdataverse pin). A merge here does
+# nothing for the site until that image is rebuilt, so tell it to rebuild.
+#
+# Cross-repo dispatch needs a token with `repo` scope on game-on-paper-app;
+# GITHUB_TOKEN is scoped to this repository only. Until the GOP_DEPLOY_TOKEN
+# secret exists this job explains itself and exits green rather than failing
+# every push to main.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "sportsdataverse/**"
+      - "pyproject.toml"
+      - "uv.lock"
+
+jobs:
+  dispatch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger game-on-paper-app deploy
+        env:
+          TOKEN: ${{ secrets.GOP_DEPLOY_TOKEN }}
+        run: |
+          if [ -z "$TOKEN" ]; then
+            echo "::notice::GOP_DEPLOY_TOKEN is not set; skipping the Game on Paper deploy dispatch."
+            exit 0
+          fi
+          curl --fail-with-body -sS -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer $TOKEN" \
+            https://api.github.com/repos/saiemgilani/game-on-paper-app/dispatches \
+            -d "{\"event_type\":\"deploy\",\"client_payload\":{\"sportsdataverse_py_sha\":\"${GITHUB_SHA}\"}}"
+          echo "dispatched deploy for sportsdataverse-py ${GITHUB_SHA}"
