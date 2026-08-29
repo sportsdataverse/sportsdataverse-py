@@ -410,6 +410,31 @@ def _apply_wp_derivation(play_df, wp_before_raw, wp_touchback_raw, wp_after_raw,
             .then(1 - pl.col(lwb))
             .when((pl.col("kickoff_onside") == True).and_(pl.col("change_of_pos_team") == True))
             .then(pl.col(wa))
+            # B6: the flip below converts lead_wp_before -- which is stated in the
+            # NEXT play's possession perspective -- into this row's perspective. That
+            # is only a conversion when the next play really is the other team's
+            # possession. It usually is: on a punt or a turnover, lead_pos_team is the
+            # end possession team, so 1 - lead_wp_before is correct, and 97.0% of the
+            # 36,591 rows reaching this branch across 2022-24 are that case.
+            #
+            # The other 2.4% (867 rows) have lead_pos_team == start.pos_team.id -- the
+            # next row belongs to the SAME possession this row started with, so
+            # lead_wp_before is already in this row's perspective and flipping it
+            # returns the complement. A penalty on a kickoff that forces a re-kick is
+            # the clearest generator: the re-kick row carries the kicking team again,
+            # and 30.6% of re-kick kickoff penalties came out flipped against 0.25% of
+            # the rest. Punts (390) and missed field goals (94) dominate by count.
+            #
+            # Left uncorrected these are not small errors. 515 of the 867 published a
+            # |WPA| above 0.5 -- wp 0.020 -> 0.982 on an unsportsmanlike-conduct flag --
+            # and the subset's mean WPA sat at +0.145 where WPA should centre on zero.
+            # Taking lead_wp_before unflipped leaves 6 above 0.5 and a mean of +0.011.
+            .when(
+                (pl.col("start.pos_team.id") != pl.col("end.pos_team.id"))
+                .and_(pl.col("scoringPlay") == False)
+                .and_(pl.col("lead_pos_team") == pl.col("start.pos_team.id")),
+            )
+            .then(pl.col(lwb))
             .when((pl.col("start.pos_team.id") != pl.col("end.pos_team.id")).and_(pl.col("scoringPlay") == False))
             .then(1 - pl.col(lwb))
             .when((pl.col("start.pos_team.id") != pl.col("end.pos_team.id")).and_(pl.col("scoringPlay") == True))
@@ -1640,6 +1665,47 @@ class CFBPlayProcess(object):
                     ),
                 )
                 .then(pl.col("start.yardsToEndzone").shift(-1))
+                .otherwise(pl.col("end.yardsToEndzone"))
+                .alias("end.yardsToEndzone"),
+            )
+            .with_columns(
+                # B3 part (d): a kickoff row that carries a penalty but describes no
+                # kick and no return did not move the ball. ESPN writes the penalty's
+                # ENFORCEMENT spot into end.yardsToEndzone on those rows -- the spot the
+                # kick will be taken from, in the KICKING team's own territory -- while
+                # pos_team is the receiving team. The EP model reads it as the receiving
+                # team's distance to the endzone and scores first-and-goal field
+                # position, e.g. "Tristan Mattson kickoff ARKANSAS ST Penalty,
+                # Unsportsmanlike Conduct to the ArkSt 20" carrying end.yardsToEndzone=20
+                # and EP -2.21 -> +3.31, publishing a 15-yard flag AGAINST the receiving
+                # team as a +5.52 EPA gain FOR it. Ten such rows in 2022-24, mean EPA
+                # +3.70 against -0.40 for kickoff penalties generally.
+                #
+                # The trigger requires the text to describe no kick outcome at all, which
+                # is what distinguishes these from the legitimate deep results: five other
+                # no-rekick kickoff penalties also end inside the 25, and all five carry a
+                # "return for N yds" clause where the return genuinely finished there (a
+                # 90-yard return to the Rice 5 earns its +5.91). Those keep their values.
+                #
+                # Repairing to the next play's start -- the authority parts (b) and (c)
+                # use -- was tested and rejected: it moves 256 of 843 rows and destroys
+                # correct ones ("kickoff for 62 yds FLA ATLANTIC Penalty ... to the FlAtl
+                # 13" holds a correct 87 and would be rewritten to 15). The next row is
+                # not an independent witness here; it frequently inherits the same error.
+                # Since no kick is described, the honest end state is the start state.
+                pl.when(
+                    (pl.col("type.text").is_in(kickoff_vec).or_(pl.col("text").str.contains(r"(?i)kickoff")))
+                    .and_(pl.col("text").str.contains(r"(?i)penalty"))
+                    .and_(
+                        pl.col("text").str.contains(
+                            r"(?i)for \d+ yds|touchback|return|out of bounds|recovered|downed|fair catch",
+                        )
+                        == False
+                    )
+                    .and_(pl.col("end.yardsToEndzone").is_null() == False)
+                    .and_(pl.col("end.yardsToEndzone") <= 25),
+                )
+                .then(pl.col("start.yardsToEndzone"))
                 .otherwise(pl.col("end.yardsToEndzone"))
                 .alias("end.yardsToEndzone"),
             )

@@ -70,3 +70,49 @@ def test_game_ender_home_wp_after_matches_winner(monkeypatch, gid, expected_home
     r = _final_play(_run(monkeypatch, gid))
     assert r["end.homeScore"] != r["end.awayScore"], "fixture has a decided winner"
     assert r["home_wp_after"] == expected_home_wp_after
+
+
+def test_rekick_penalty_does_not_flip_wp_perspective(monkeypatch):
+    """B6: wp_after is derived from lead_wp_before, which is stated in the NEXT
+    play's possession perspective. Flipping it (1 - lead_wp_before) is a valid
+    conversion only when the next play really is the other team's possession.
+
+    A penalty on a kickoff that forces a re-kick breaks that: the re-kick row
+    carries the SAME possessing team this row started with, so lead_wp_before is
+    already in this row's perspective and the flip returned its complement. In
+    401644749 an unsportsmanlike-conduct flag on Western Michigan published
+    wp 0.020 -> 0.982 (WPA +0.962) against an EPA of -0.26.
+    """
+    df = _run(monkeypatch, 401644749)
+    row = df.filter(
+        pl.col("text").str.contains("(?i)kickoff")
+        & pl.col("text").str.contains("(?i)Western Michigan Penalty, unsportsmanlike conduct \\(Jaden Nixon\\)")
+    )
+    assert row.height == 1, "expected exactly one WMU kickoff-penalty row in this fixture"
+    r = row.row(0, named=True)
+
+    # The end state is correct on this row (own 20 -> 80 to go); only WP was wrong.
+    assert r["end.yardsToEndzone"] == 80
+    assert r["EPA"] < 0, "a flag on the receiving team should not be an EP gain"
+    # The flip signature: wp_after must NOT be the complement of wp_before.
+    assert abs(r["wp_after"] - (1 - r["wp_before"])) > 0.5, "wp_after is still the 1-p flip"
+    assert abs(r["wpa"]) < 0.1, f"near-zero EPA must not carry a huge WPA (got {r['wpa']})"
+
+
+def test_kickoff_penalty_enforcement_spot_is_not_field_position(monkeypatch):
+    """B3 part (d): a kickoff row carrying a penalty but describing no kick and no
+    return did not move the ball. ESPN writes the penalty's ENFORCEMENT spot --
+    in the KICKING team's own territory -- into end.yardsToEndzone while pos_team
+    is the receiving team, so the EP model scored first-and-goal field position.
+
+    401636889 p52 ("Jack Stone kickoff Baylor Penalty, Unsportsmanlike Conduct ...
+    to the BAY 20") carried end.yardsToEndzone=20 and published EPA +4.38.
+    """
+    df = _run(monkeypatch, 401636889)
+    row = df.filter(
+        pl.col("text").str.contains("(?i)kickoff") & pl.col("text").str.contains("(?i)Baylor Penalty, Unsportsmanlike")
+    )
+    assert row.height == 1
+    r = row.row(0, named=True)
+    assert r["end.yardsToEndzone"] == r["start.yardsToEndzone"], "no kick described -> end state is the start state"
+    assert r["EPA"] < 2.0, f"enforcement spot must not score as field position (got {r['EPA']})"
