@@ -110,13 +110,27 @@ def _extract_player_name(text_expr: pl.Expr, pattern: str) -> pl.Expr:
 #: tag: it consumes everything through the LAST formation token, which handles a
 #: partial leading fragment as well as the intact prefix. Greedy on purpose --
 #: "No Huddle-Shotgun" carries two tokens and only the last one ends the prefix.
-#: Safe because no real surname contains "huddle" or "shotgun".
-_FORMATION_PREFIX = r"(?i)^.*(?:huddle|shotgun)[\s\-]*"
+#:
+#: The keyword must END a word. v0.1.3 shipped this with a trailing ``[\s\-]*``,
+#: which matches the empty string, on the stated assumption that "no real surname
+#: contains huddle or shotgun". Huddleston does: "Rakeem Cato sacked by Parrish
+#: Huddleston" is 2014 text, and the pattern turned that name into "ston". Rust
+#: regex has no lookaround, so the word end is spelled as a required separator --
+#: which also fixes a second defect, the bracketed form "[No Huddle, Shotgun], "
+#: previously leaving a stray "]" on the front of the name.
+_FORMATION_PREFIX = r"(?i)^.*(?:huddle|shotgun)[\s\-,\]]+"
 
 #: ESPN renders the jersey inline ("#1 C.Parker"). It is never part of a name,
 #: and leaving it on splits a player across rows when only some plays fall back
-#: to the regex.
-_JERSEY_PREFIX = r"^\s*#\d{1,2}\s+"
+#: to the regex. Three digits: 2025's vendor feed uses #99 and higher.
+_JERSEY_PREFIX = r"^\s*#\d{1,3}\s+"
+
+#: 2025's vendor template opens each play with the game clock -- "(15:00) #36
+#: T.Morrison kickoff 65 yards to the SAC00" -- and a capture that starts at the
+#: beginning of the text takes it along. Stripped BEFORE the jersey, since the
+#: clock precedes it. Published 2025 carries 3,682 kickoff_player_name values of
+#: the form "(15:00) #36 T.Morrison", plus rusher, passer and interception names.
+_CLOCK_PREFIX = r"^\s*\(\d{1,2}:\d{2}\)\s*"
 
 
 def _strip_presentational_tokens(name_expr: pl.Expr) -> pl.Expr:
@@ -133,7 +147,13 @@ def _strip_presentational_tokens(name_expr: pl.Expr) -> pl.Expr:
     "No Huddle-Shotgun #1 C.Parker" reached the passing table as a third
     quarterback alongside the same player's real line.
     """
-    return name_expr.str.replace(_FORMATION_PREFIX, "").str.replace(_JERSEY_PREFIX, "").str.strip_chars()
+    return (
+        name_expr.str.replace(_CLOCK_PREFIX, "")
+        .str.replace(_FORMATION_PREFIX, "")
+        .str.replace(_CLOCK_PREFIX, "")
+        .str.replace(_JERSEY_PREFIX, "")
+        .str.strip_chars()
+    )
 
 
 #: A play-text artifact masquerading as a name if it contains one of these as a
@@ -322,8 +342,13 @@ def _apply_wp_derivation(play_df, wp_before_raw, wp_touchback_raw, wp_after_raw,
     # pos_score_diff_end so those tests remain valid (status_type_completed=False
     # means the game-ender branches never fire on synthetic data anyway).
     if "end.homeScore" in play_df.columns and "end.awayScore" in play_df.columns:
+        # B7: stated from the START-possession team's point of view, because that is
+        # the perspective wp_after carries everywhere else (see the mapping below).
+        # The game-ender branches are the only ones that would otherwise be written in
+        # the END team's terms, and on a possession-flipping final play -- a safety, a
+        # pick six -- the two differ.
         end_team_score_diff = (
-            pl.when(pl.col("end.pos_team.id") == pl.col("homeTeamId"))
+            pl.when(pl.col("start.pos_team.id") == pl.col("homeTeamId"))
             .then(pl.col("end.homeScore").cast(pl.Int64) - pl.col("end.awayScore").cast(pl.Int64))
             .otherwise(pl.col("end.awayScore").cast(pl.Int64) - pl.col("end.homeScore").cast(pl.Int64))
         )
@@ -410,6 +435,31 @@ def _apply_wp_derivation(play_df, wp_before_raw, wp_touchback_raw, wp_after_raw,
             .then(1 - pl.col(lwb))
             .when((pl.col("kickoff_onside") == True).and_(pl.col("change_of_pos_team") == True))
             .then(pl.col(wa))
+            # B6: the flip below converts lead_wp_before -- which is stated in the
+            # NEXT play's possession perspective -- into this row's perspective. That
+            # is only a conversion when the next play really is the other team's
+            # possession. It usually is: on a punt or a turnover, lead_pos_team is the
+            # end possession team, so 1 - lead_wp_before is correct, and 97.0% of the
+            # 36,591 rows reaching this branch across 2022-24 are that case.
+            #
+            # The other 2.4% (867 rows) have lead_pos_team == start.pos_team.id -- the
+            # next row belongs to the SAME possession this row started with, so
+            # lead_wp_before is already in this row's perspective and flipping it
+            # returns the complement. A penalty on a kickoff that forces a re-kick is
+            # the clearest generator: the re-kick row carries the kicking team again,
+            # and 30.6% of re-kick kickoff penalties came out flipped against 0.25% of
+            # the rest. Punts (390) and missed field goals (94) dominate by count.
+            #
+            # Left uncorrected these are not small errors. 515 of the 867 published a
+            # |WPA| above 0.5 -- wp 0.020 -> 0.982 on an unsportsmanlike-conduct flag --
+            # and the subset's mean WPA sat at +0.145 where WPA should centre on zero.
+            # Taking lead_wp_before unflipped leaves 6 above 0.5 and a mean of +0.011.
+            .when(
+                (pl.col("start.pos_team.id") != pl.col("end.pos_team.id"))
+                .and_(pl.col("scoringPlay") == False)
+                .and_(pl.col("lead_pos_team") == pl.col("start.pos_team.id")),
+            )
+            .then(pl.col(lwb))
             .when((pl.col("start.pos_team.id") != pl.col("end.pos_team.id")).and_(pl.col("scoringPlay") == False))
             .then(1 - pl.col(lwb))
             .when((pl.col("start.pos_team.id") != pl.col("end.pos_team.id")).and_(pl.col("scoringPlay") == True))
@@ -421,11 +471,31 @@ def _apply_wp_derivation(play_df, wp_before_raw, wp_touchback_raw, wp_after_raw,
             (1 - pl.col(wa)).alias(dwa),
         )
         .with_columns(
-            pl.when(pl.col("end.pos_team.id") == pl.col("homeTeamId"))
+            # B7: wp_after is stated in the START-possession team's perspective, so the
+            # home/away split must key off start.pos_team.id. It keyed off
+            # end.pos_team.id -- the same team on most plays, the OTHER team on every
+            # possession change -- so home_wp_after and away_wp_after came out
+            # complemented on exactly those rows.
+            #
+            # Measured against the identity that home WP at the end of a play equals
+            # home WP at the start of the next, over published 2023-24:
+            #
+            #   group                       n         end-map   start-map
+            #   possession unchanged        289,741    0.0061     0.0061   (same team)
+            #   changed + non-scoring        24,332    0.6797     0.0099
+            #   changed + scoring               654    0.6131     0.1475
+            #   changed + onside kick            11    0.6824     0.1271
+            #   end of half                   1,859    0.0929     0.0072
+            #
+            # 17,125 of the 24,332 possession-change non-scoring rows were off by more
+            # than 0.5. wpa never showed it: that is wp_after minus wp_before, and both
+            # sit in the same perspective, so the error cancels there and surfaces only
+            # in the home/away exports.
+            pl.when(pl.col("start.pos_team.id") == pl.col("homeTeamId"))
             .then(pl.col(wa))
             .otherwise(pl.col(dwa))
             .alias(hwa),
-            pl.when(pl.col("end.pos_team.id") != pl.col("homeTeamId"))
+            pl.when(pl.col("start.pos_team.id") != pl.col("homeTeamId"))
             .then(pl.col(wa))
             .otherwise(pl.col(dwa))
             .alias(awa),
@@ -464,6 +534,48 @@ _RECOVERY_ABBREV_RE = re.compile(r"recovered by\s+([A-Z&]{2,})\b")
 # (the generic branch fires before the offensive/defensive-specific branches), so
 # bare "Pass Interference" cannot be assumed offensive. A later task refines penalty
 # attribution by parsing the "PENALTY {TEAM_ABBR}" token from the play text.
+#: Foul types that move the ball in ONE direction at least 95% of the time, measured
+#: on 19,608 labelled no-play penalties across 2022-25 (label = the sign of
+#: start.yardsToEndzone - end.yardsToEndzone, which on a no-play row is the
+#: enforcement itself). Names that state their side are included on identity.
+#:
+#: Deliberately absent: bare "Pass Interference" (88/12 def -- both forms exist),
+#: "Encroachment" (OFFENSIVE in NCAA usage, per the note on _DEFENSIVE_PENALTIES),
+#: "Delay of Game" (89% off), "Tripping" (88% off), "Face Mask" (78/22),
+#: "Holding" (80/20), "Personal Foul" and "Unsportsmanlike Conduct" (both mixed).
+_PENALTY_SIGN_DEF = frozenset(
+    {
+        "Offside",
+        "Targeting",
+        "Roughing the Passer",
+        "Roughing the Kicker",
+        "Roughing the Holder",
+        "Roughing the Snapper",
+        "Substitution Infraction",
+        "Neutral Zone Infraction",
+        "Defensive Holding",
+        "Defensive Pass Interference",
+        "Defensive Offside",
+        "12 Men on the Field",
+    },
+)
+_PENALTY_SIGN_OFF = frozenset(
+    {
+        "False Start",
+        "Illegal Formation",
+        "Ineligible Downfield",
+        "Illegal Shift",
+        "Illegal Snap",
+        "Illegal Block",
+        "Illegal Motion",
+        "Offensive Holding",
+        "Chop Block",
+        "Offensive Pass Interference",
+        "Intentional Grounding",
+    },
+)
+
+
 _DEFENSIVE_PENALTIES = frozenset(
     {
         "Defensive Holding",
@@ -583,6 +695,157 @@ def _team_alias_initialisms(name):
     return out
 
 
+def _team_candidates(row):
+    """The home/away candidate strings a text team token is scored against.
+
+    Shared by the penalized-team resolver and the enforcement-spot resolver so the
+    two cannot drift apart on which spellings ESPN is allowed to use.
+    """
+    home = [
+        _squash_team(row["homeTeamAbbrev"]),
+        _squash_team(row["homeTeamName"]),
+        _squash_team(row["homeTeamNameAlt"]),
+        _squash_team((row["homeTeamName"] or "") + (row["homeTeamMascot"] or "")),
+    ]
+    away = [
+        _squash_team(row["awayTeamAbbrev"]),
+        _squash_team(row["awayTeamName"]),
+        _squash_team(row["awayTeamNameAlt"]),
+        _squash_team((row["awayTeamName"] or "") + (row["awayTeamMascot"] or "")),
+    ]
+    return home, away, _team_alias_initialisms(row["homeTeamName"]), _team_alias_initialisms(row["awayTeamName"])
+
+
+def _resolve_team_side(tok, home, away, home_alias, away_alias):
+    """Score one squashed team token against both sides; "home" / "away" / None.
+
+    Attribution is a binary choice per game, so the token only has to match one
+    side better than the other. A tie falls to the weak alias tier, and an
+    unbroken tie returns None rather than guessing -- a wrong side is worse than
+    no side, since it mirrors the resulting field position.
+    """
+    if len(tok) < 2:
+        return None
+    # "UMass" -> "MASS", "UFL" -> "FL": the university-style U prefix appears in
+    # text for schools whose payload spellings never carry it.
+    for t in [tok] + ([tok[1:]] if tok.startswith("U") and len(tok) >= 4 else []):
+        hs = _score_team_match(t, home)
+        aws = _score_team_match(t, away)
+        if hs == aws:
+            # weak tier: derived initialism aliases, exact-match only
+            hs = int(t in home_alias)
+            aws = int(t in away_alias)
+        if hs > aws:
+            return "home"
+        if aws > hs:
+            return "away"
+    return None
+
+
+#: The enforcement spot: "to the FlaSt 23", "to LOUISVILLE38", "to the 50 yard line".
+#: The team class must exclude digits -- a greedy [A-Za-z0-9]* swallows the leading
+#: digit of the yardline, turning "to the FLORIDAST13" into team "FLORIDAST1" at the
+#: 3-yard line. That single character cost 85 points of agreement while developing
+#: this (12.4% -> 97.3% against end.yardsToEndzone on no-play penalties).
+_PENALTY_SPOT_RE = re.compile(r"(?i)\bto\s+(?:the\s+)?([A-Za-z][A-Za-z.'&-]*)\s*(\d{1,2})\b")
+_PENALTY_SPOT_MID_RE = re.compile(r"(?i)\bto\s+the\s+50\s+yard\s+line\b")
+
+
+def _spot_from_text(txt, row):
+    """The LAST "to the <TEAM> <NN>" in ``txt``, as ``"<side>:<yardline>"`` or None.
+
+    Shared by the penalty-enforcement and kick-return resolvers. The last mention is
+    the answer in both: a play can name several spots and the final one is where the
+    ball came to rest.
+    """
+    if not txt:
+        return None
+    matches = list(_PENALTY_SPOT_RE.finditer(txt))
+    mid = list(_PENALTY_SPOT_MID_RE.finditer(txt))
+    # Midfield competes on POSITION, not precedence. Returning "mid:50" for any
+    # midfield clause ignored a later team-qualified spot, so "to the 50 yard line ...
+    # to TEAM 35" resolved to the 50 rather than where the ball actually ended.
+    #
+    # The comparison is >= because the two patterns match the SAME text at the same
+    # offset: _PENALTY_SPOT_RE's "the" is optional, so it also reads "to the 50" as
+    # team "the" at yardline 50. On a tie the midfield reading is the right one -- the
+    # alternative is a team token that resolves to nobody.
+    if mid and (not matches or mid[-1].start() >= matches[-1].start()):
+        return "mid:50"
+    if not matches:
+        return None
+    tok_raw, yardline = matches[-1].group(1), matches[-1].group(2)
+    home, away, home_alias, away_alias = _team_candidates(row)
+    side = _resolve_team_side(_squash_team(tok_raw), home, away, home_alias, away_alias)
+    return None if side is None else f"{side}:{int(yardline)}"
+
+
+#: A kickoff/punt row whose text reports where the return finished. Both era forms
+#: end the same way -- "returned by Nick Santa Cruz for 24 yards to the TTB 24."
+#: (2004-2013), ", Trey Sanders return for 15 yds to the Camp 20" (2014+), and
+#: "#27 J.Norman return 22 yards to the EMU22" (2025) -- so the spot regex serves
+#: all three.
+#: Rows that are not snaps and may sit between a play and the one that follows it.
+_ADMIN_ROW_RE = r"(?i)^(?:timeout|end period|end of (?:half|game)|official)"
+
+_RETURN_RE = re.compile(r"(?i)\breturn")
+#: ...on a KICKOFF row specifically. Without this the resolver also fired on fumble
+#: recoveries, whose text carries "returned to the WEST 45" and matches _RETURN_RE.
+#: Two such rows changed in the backtest (401099813 p14 and p84). They may well be
+#: the same defect -- both agreed with the next play, which is what the gate tests --
+#: but the text-versus-field adjudication behind part (e) was measured on kickoff
+#: returns only, so shipping fumble returns on it would be asserting more than was
+#: checked.
+#: KICKOFFS ONLY, and that scope is load bearing.
+#:
+#: Punt and interception returns look like candidates -- adjudicated against the
+#: next real play on 2025, the text wins 93-26 on punts and 57-8 on interceptions.
+#: But widening to them was backtested and REJECTED: on the 26 rows it moved, the
+#: EPA distribution got worse rather than better (rows above |EPA| 4 went 1 -> 7,
+#: maximum 4.22 -> 5.02), and spot checks disagree with the text as well as the
+#: field -- "punt 58 yards to the LOU28 #5 C.Lacy return 21 yards to the LOU49"
+#: was rewritten to 80 when the return plainly ends around 51.
+#:
+#: The next-play agreement that gate tests is evidently satisfiable by a value that
+#: is still wrong on these classes, so they stay out until that is understood.
+#: Fumble returns are out regardless: there the stored field beats the text 27-9.
+_RETURN_CLASS_RE = re.compile(r"(?i)kickoff")
+#: A return that reaches the endzone, or one wiped out, does not report a spot the
+#: EP model should read: the scoring conventions and the nullification both put the
+#: end state somewhere the text does not describe.
+_RETURN_EXCLUDE_RE = re.compile(r"(?i)touchdown|nullif")
+
+
+def _parse_return_spot(row):
+    """Resolve where a kick return finished, as ``"<side>:<yardline>"`` or None.
+
+    Same contract as :func:`_parse_penalty_spot`, reading ``text`` rather than
+    ``penalty_text``. The LAST spot in the text is the answer -- a return can be
+    followed by an enforcement that moves the ball again, and the final mention is
+    where it came to rest.
+    """
+    txt = row["text"]
+    if not txt or not _RETURN_CLASS_RE.search(txt):
+        return None
+    if not _RETURN_RE.search(txt) or _RETURN_EXCLUDE_RE.search(txt):
+        return None
+    return _spot_from_text(txt, row)
+
+
+def _parse_penalty_spot(row):
+    """Resolve the penalty's enforcement spot to ``"<side>:<yardline>"`` or None.
+
+    ``side`` is "home", "away", or "mid" for the 50. The caller turns that into a
+    distance to the endzone once it knows which side has the ball -- the spot alone
+    is ambiguous, and reading it as a distance is the bug this exists to prevent
+    (a 15-yard flag pinning a team on its own 20 published as +5.52 EPA).
+
+    The LAST spot in the clause is the enforcement result: the richer format states
+    both ("15 yards from OU 47 to NEB38"), and the from-spot is where the ball was.
+    """
+    return _spot_from_text(row["penalty_text"], row)
+
+
 def _parse_penalty_team_side(row):
     """Resolve the PENALIZED team from play text to ``"home"`` / ``"away"`` / None.
 
@@ -597,20 +860,7 @@ def _parse_penalty_team_side(row):
     text = row["text"]
     if not text:
         return None
-    home = [
-        _squash_team(row["homeTeamAbbrev"]),
-        _squash_team(row["homeTeamName"]),
-        _squash_team(row["homeTeamNameAlt"]),
-        _squash_team((row["homeTeamName"] or "") + (row["homeTeamMascot"] or "")),
-    ]
-    away = [
-        _squash_team(row["awayTeamAbbrev"]),
-        _squash_team(row["awayTeamName"]),
-        _squash_team(row["awayTeamNameAlt"]),
-        _squash_team((row["awayTeamName"] or "") + (row["awayTeamMascot"] or "")),
-    ]
-    home_alias = _team_alias_initialisms(row["homeTeamName"])
-    away_alias = _team_alias_initialisms(row["awayTeamName"])
+    home, away, home_alias, away_alias = _team_candidates(row)
     for rx, direction in _PENALTY_TOKEN_RES:
         for m in rx.finditer(text):
             words = m.group(1).split()
@@ -620,18 +870,9 @@ def _parse_penalty_team_side(row):
                 if len(tok) < 2:
                     continue
                 # also try the U-university prefix stripped ("UMass" -> "MASS")
-                toks = [tok] + ([tok[1:]] if tok.startswith("U") and len(tok) >= 4 else [])
-                for t in toks:
-                    hs = _score_team_match(t, home)
-                    aws = _score_team_match(t, away)
-                    if hs == aws:
-                        # weak tier: derived initialism aliases, exact-match only
-                        hs = int(t in home_alias)
-                        aws = int(t in away_alias)
-                    if hs > aws:
-                        return "home"
-                    if aws > hs:
-                        return "away"
+                side = _resolve_team_side(tok, home, away, home_alias, away_alias)
+                if side is not None:
+                    return side
     return None
 
 
@@ -1597,6 +1838,312 @@ class CFBPlayProcess(object):
                 .otherwise(pl.col("end.yardsToEndzone"))
                 .alias("end.yardsToEndzone"),
             )
+            .with_columns(
+                # B3 part (c): the same repair for end states that are PRESENT but
+                # mirrored. ESPN sometimes reports end.yardsToEndzone from the wrong
+                # side of the field while its own end.yardLine and the next play's
+                # start agree with each other -- e.g. game 401868040, "pass complete
+                # ... for 34 yards to the VIL05" carries end.yardLine=5 with
+                # end.yardsToEndzone=95. Part (b) cannot catch it because the end
+                # state is not missing, and there is no same-row test that can:
+                # yardsToEndzone equals yardLine on roughly half of plays and its
+                # complement on the other half, depending which side of the fifty the
+                # ball is on, so the pair alone proves nothing.
+                #
+                # Fed to the EP model, 95 scores the offense as if it were backed up
+                # on its own 5 instead of at the goal line. That one input cost the
+                # play about 6 points of EP, and the following play -- a penalty,
+                # whose EPA deliberately folds in EP_between, the discontinuity since
+                # the previous play ended -- inherited the whole error as a +6.45 EPA.
+                #
+                # The trigger is deliberately narrow. Possession must be unchanged
+                # across the pair, so the two values describe the same ball; the value
+                # must be the EXACT complement of the next start, which is the flip
+                # signature (375 pairs in the captured corpus disagree at all, only 54
+                # are mirrored); and the play must not be a kick or carry a penalty of
+                # its own, since both legitimately move the ball between snaps. A
+                # penalty on the NEXT play is fine -- it is enforced from that play's
+                # own result and cannot move its starting spot.
+                pl.when(
+                    (pl.col("end.yardsToEndzone").is_null() == False)
+                    .and_(pl.col("start.yardsToEndzone").shift(-1).is_null() == False)
+                    .and_(pl.col("start.pos_team.id").shift(-1) == pl.col("end.pos_team.id"))
+                    .and_(pl.col("start.pos_team.id") == pl.col("end.pos_team.id"))
+                    .and_(pl.col("type.text").is_in(kickoff_vec) == False)
+                    .and_(
+                        # Era vocabulary again: "field goal" is the 2004-2013 spelling and
+                        # modern text writes "23 yd FG GOOD", while the extra point moved
+                        # from its own "extra point" wording into the scoring play's
+                        # trailing "(Kicker Name Kick)". Without the modern forms this
+                        # exclusion let part (c) rewrite the end state of made field goals
+                        # and PATs -- 4 rows across 2014-2022, none before 2014.
+                        pl.col("text").str.contains(
+                            r"(?i)kickoff|punt|field goal|extra point|touchback|kick attempt"
+                            r"|\bFG\b|\bPAT\b|\(.*\bkick\b.*\)"
+                        )
+                        == False
+                    )
+                    # Part (c) once excluded rows carrying a penalty, on the reasoning
+                    # that a flag legitimately moves the ball between snaps. That
+                    # reasoning guards a DISAGREEMENT between end and next start; it
+                    # does not touch the EXACT-COMPLEMENT test, which with possession
+                    # unchanged is the mirror signature whether or not a flag was
+                    # thrown -- end and next start describe the same ball either way.
+                    # Measured with possession continuing into the next real play:
+                    # 2024 has 1 such scrimmage-penalty row, 2025 has 229 of 2,045
+                    # (11.2%), and the 362-game validation surfaced them as
+                    # counterfactual sign disagreements ("Personal Foul 11 yard from
+                    # NEV21 to NEV1" stored as 90). Kicks stay excluded; their end
+                    # states are parts (d) and (e).
+                    .and_(pl.col("end.yardsToEndzone") != pl.col("start.yardsToEndzone").shift(-1))
+                    .and_(
+                        pl.col("end.yardsToEndzone") == (pl.lit(100) - pl.col("start.yardsToEndzone").shift(-1)),
+                    ),
+                )
+                .then(pl.col("start.yardsToEndzone").shift(-1))
+                .otherwise(pl.col("end.yardsToEndzone"))
+                .alias("end.yardsToEndzone"),
+            )
+            .with_columns(
+                # B3 part (d): a kickoff row that carries a penalty but describes no kick
+                # outcome at all -- no yardage, no return, no touchback, no recovery --
+                # established nobody's field position. ESPN writes the penalty's
+                # ENFORCEMENT spot into end.yardsToEndzone on those rows: the spot the
+                # kick will be taken from, in the KICKING team's own territory, while
+                # pos_team is the receiving team. The EP model reads it as the receiving
+                # team's distance to its target endzone. 83 such rows in 2022-24.
+                #
+                # "Tristan Mattson kickoff ARKANSAS ST Penalty, Unsportsmanlike Conduct
+                # to the ArkSt 20" carried end.yardsToEndzone=20 with EP -2.21 -> +3.31,
+                # publishing a 15-yard flag AGAINST the receiving team as +5.52 EPA FOR
+                # it. Milder but commoner is "to the 50 yard line" holding 50, which
+                # looks correct only because 50 is its own complement.
+                #
+                # The no-kick-described gate is load bearing. Five kickoff penalties end
+                # inside the 25 legitimately, and all five carry a "return for N yds"
+                # clause where the return really finished there -- a 90-yard return to
+                # the Rice 5 earns its +5.91 and keeps it.
+                #
+                # Flag whether the ball is re-kicked. The lookahead skips one
+                # administrative row, since a Timeout routinely sits between the flag and
+                # the re-kick (401636889: flag p52, timeout p53, re-kick p54).
+                _ko_pen_rekick_follows=(
+                    (pl.col("type.text").shift(-1).is_in(kickoff_vec)).or_(
+                        pl.col("type.text")
+                        .shift(-1)
+                        .str.contains(_ADMIN_ROW_RE)
+                        .and_(pl.col("type.text").shift(-2).is_in(kickoff_vec)),
+                    )
+                ).fill_null(False),
+                # (d.ii) needs the next REAL play, not the next row. (d.i) already
+                # skipped administrative rows and (d.ii) did not, so a Timeout between
+                # the flag and the ensuing snap made it read the Timeout's own start
+                # yardline as the receiving team's field position.
+                _pen_nxt_start=pl.when(pl.col("type.text").shift(-1).str.contains(_ADMIN_ROW_RE))
+                .then(
+                    pl.when(pl.col("type.text").shift(-2).str.contains(_ADMIN_ROW_RE))
+                    .then(pl.col("start.yardsToEndzone").shift(-3))
+                    .otherwise(pl.col("start.yardsToEndzone").shift(-2)),
+                )
+                .otherwise(pl.col("start.yardsToEndzone").shift(-1)),
+                _pen_nxt_pos=pl.when(pl.col("type.text").shift(-1).str.contains(_ADMIN_ROW_RE))
+                .then(
+                    pl.when(pl.col("type.text").shift(-2).str.contains(_ADMIN_ROW_RE))
+                    .then(pl.col("start.pos_team.id").shift(-3))
+                    .otherwise(pl.col("start.pos_team.id").shift(-2)),
+                )
+                .otherwise(pl.col("start.pos_team.id").shift(-1)),
+            )
+            .with_columns(
+                # (d.i) A re-kick follows, so this row is a NO-PLAY: the ensuing kickoff
+                # row scores that possession in full, and anything credited here is
+                # counted twice. EP_start on a kickoff is already the touchback EP, so
+                # setting the end state to the same touchback yardline drives EPA to ~0.
+                # start.yardsToEndzone would NOT: the real start (own 35, y2ez 65) is
+                # better field position than a touchback and leaves a spurious ~+1.2.
+                # 42 of the 83 rows, currently averaging +0.78 EPA and reaching +3.92.
+                #
+                # (d.ii) No re-kick follows, so the receiving team really did take over
+                # and the first real play after this row is the only record of where.
+                # The next play is trustworthy here precisely because this row describes
+                # nothing: across the 22 such rows whose next play keeps the same
+                # possession the two disagree 17 times, by a mean of 14 yards, and every
+                # disagreement checked resolves in the next play's favour ("kickoff
+                # MURRAY ST Penalty, Delay Of Game to the MurrS 30" holds 30 while the
+                # next snap starts at 75, Texas Tech on their own 25). This does NOT
+                # generalise to kickoff penalties whose text DOES describe a kick --
+                # tested and rejected, it moves 256 of 843 rows and overwrites correct
+                # values with the next row's inherited error.
+                pl.when(
+                    (pl.col("type.text").is_in(kickoff_vec).or_(pl.col("text").str.contains(r"(?i)kickoff")))
+                    .and_(pl.col("text").str.contains(r"(?i)penalty"))
+                    .and_(
+                        pl.col("text").str.contains(
+                            # Era vocabulary: ESPN wrote "for N yards" through 2013 and
+                            # "for N yds" from 2014. The changeover is total -- 98% one
+                            # side, 0% the other, no overlap season -- so matching only
+                            # "yds" made this gate fire on 108 pre-2014 rows that DO
+                            # describe a kick ("kickoff for 50 yards out-of-bounds"),
+                            # rewriting an end state that was never in question.
+                            # Out-of-bounds is hyphenated in the old texts, spaced in new.
+                            # 2025 adds a THIRD kickoff vocabulary. Alongside "for N yards"
+                            # (2004-2013) and "for N yds" (2014+), a vendor feed writes
+                            # "(15:00) #36 T.Morrison kickoff 65 yards to the SAC00" -- no
+                            # "for" at all, and only 57% of 2025 kickoff rows carry the
+                            # 2014 form. Without it this gate called those rows "no kick
+                            # described": 12 in 2025, 5 in 2023, 1 in 2022.
+                            #
+                            # The distance is anchored on the word kickoff rather than
+                            # matched loosely, because a bare "N yards" also appears as the
+                            # PENALTY yardage on exactly the rows part (d) exists to repair
+                            # ("kickoff UTEP Penalty, Targeting ... (-15 Yards) to the UTEP
+                            # 20"). Anchoring cures all 18 false fires and over-excludes
+                            # nothing, in any season from 2005 to 2025.
+                            r"(?i)kick(?:off)?\s+(?:for\s+)?-?\d+\s*(?:yds|yards)"
+                            r"|for \d+ (?:yds|yards)|touchback|return|out.of.bounds|recovered|downed|fair catch",
+                        )
+                        == False
+                    )
+                    .and_(pl.col("_ko_pen_rekick_follows") == True),
+                )
+                .then(pl.when(pl.col("season") > 2013).then(pl.lit(75)).otherwise(pl.lit(80)))
+                .when(
+                    (pl.col("type.text").is_in(kickoff_vec).or_(pl.col("text").str.contains(r"(?i)kickoff")))
+                    .and_(pl.col("text").str.contains(r"(?i)penalty"))
+                    .and_(
+                        pl.col("text").str.contains(
+                            # Era vocabulary: ESPN wrote "for N yards" through 2013 and
+                            # "for N yds" from 2014. The changeover is total -- 98% one
+                            # side, 0% the other, no overlap season -- so matching only
+                            # "yds" made this gate fire on 108 pre-2014 rows that DO
+                            # describe a kick ("kickoff for 50 yards out-of-bounds"),
+                            # rewriting an end state that was never in question.
+                            # Out-of-bounds is hyphenated in the old texts, spaced in new.
+                            # 2025 adds a THIRD kickoff vocabulary. Alongside "for N yards"
+                            # (2004-2013) and "for N yds" (2014+), a vendor feed writes
+                            # "(15:00) #36 T.Morrison kickoff 65 yards to the SAC00" -- no
+                            # "for" at all, and only 57% of 2025 kickoff rows carry the
+                            # 2014 form. Without it this gate called those rows "no kick
+                            # described": 12 in 2025, 5 in 2023, 1 in 2022.
+                            #
+                            # The distance is anchored on the word kickoff rather than
+                            # matched loosely, because a bare "N yards" also appears as the
+                            # PENALTY yardage on exactly the rows part (d) exists to repair
+                            # ("kickoff UTEP Penalty, Targeting ... (-15 Yards) to the UTEP
+                            # 20"). Anchoring cures all 18 false fires and over-excludes
+                            # nothing, in any season from 2005 to 2025.
+                            r"(?i)kick(?:off)?\s+(?:for\s+)?-?\d+\s*(?:yds|yards)"
+                            r"|for \d+ (?:yds|yards)|touchback|return|out.of.bounds|recovered|downed|fair catch",
+                        )
+                        == False
+                    )
+                    .and_(pl.col("_pen_nxt_pos") == pl.col("end.pos_team.id"))
+                    .and_(pl.col("_pen_nxt_start").is_null() == False),
+                )
+                .then(pl.col("_pen_nxt_start"))
+                .otherwise(pl.col("end.yardsToEndzone"))
+                .alias("end.yardsToEndzone"),
+            )
+            .drop(["_ko_pen_rekick_follows", "_pen_nxt_start", "_pen_nxt_pos"])
+            .with_columns(
+                # B3 part (e): the kick-return end state, when ESPN's own structured
+                # fields contradict its own text.
+                #
+                # Raw payload for 401762869 p122 carries end.yardLine 8 and
+                # end.yardsToEndzone 8, while its text ends "... to EMU08" -- EMU, the
+                # possessing team, on their own 8, which is 92 to go. 8 is the yardline
+                # stored where the distance belongs, and start is correct on the same
+                # row, so it is not a wholesale feed failure. Published 2025 carries 40
+                # kickoff penalties with end.yardsToEndzone <= 25 against 5-11 in each of
+                # 2022-24, 29 above |EPA| 4 against 3-4, and a season mean kickoff-penalty
+                # EPA of +0.233 where every other year is negative.
+                #
+                # Parts (b), (c) and (d) all miss it: the end state is present, 8 is not
+                # the complement of the NEXT play's start, and the text plainly describes
+                # a kick and a return so part (d) correctly declines it.
+                #
+                # THE TEXT ALONE IS NOT ENOUGH. Where text and field disagree, the field
+                # is usually right -- 313 of 326 adjudicable disagreements in 2005, 88 of
+                # 94 in 2018, 29 of 39 in 2024 -- because the side resolution fails on
+                # older abbreviations and returns the complement. Only 2025 inverts, 73
+                # to 38. A repair that trusted the text would corrupt hundreds of rows.
+                #
+                # So the gate requires TWO independent sources against the field: the
+                # text's final spot, and the next real play starting exactly there with
+                # possession unchanged. That fires on 113 rows across 2005-2025, of which
+                # 73 are 2025 and no season before it exceeds 7.
+                _ret_spot=pl.struct(
+                    [
+                        "text",
+                        "homeTeamAbbrev",
+                        "awayTeamAbbrev",
+                        "homeTeamName",
+                        "awayTeamName",
+                        "homeTeamNameAlt",
+                        "awayTeamNameAlt",
+                        "homeTeamMascot",
+                        "awayTeamMascot",
+                    ],
+                ).map_elements(_parse_return_spot, return_dtype=pl.Utf8),
+                # The next REAL play, skipping up to two administrative rows -- a Timeout
+                # sits between a kickoff and the ensuing snap often enough that a bare
+                # shift(-1) reads the wrong row (401762869: kickoff p122, Timeout p123).
+                _nxt_start=pl.when(
+                    pl.col("type.text").shift(-1).str.contains(_ADMIN_ROW_RE),
+                )
+                .then(
+                    pl.when(pl.col("type.text").shift(-2).str.contains(_ADMIN_ROW_RE))
+                    .then(pl.col("start.yardsToEndzone").shift(-3))
+                    .otherwise(pl.col("start.yardsToEndzone").shift(-2)),
+                )
+                .otherwise(pl.col("start.yardsToEndzone").shift(-1)),
+                _nxt_pos=pl.when(
+                    pl.col("type.text").shift(-1).str.contains(_ADMIN_ROW_RE),
+                )
+                .then(
+                    pl.when(pl.col("type.text").shift(-2).str.contains(_ADMIN_ROW_RE))
+                    .then(pl.col("start.pos_team.id").shift(-3))
+                    .otherwise(pl.col("start.pos_team.id").shift(-2)),
+                )
+                .otherwise(pl.col("start.pos_team.id").shift(-1)),
+            )
+            .with_columns(
+                # Resolved against the END possession team, which is what
+                # end.yardsToEndzone expresses -- the distance for whoever has the ball
+                # when the play is over. start.pos_team.id agrees on a kickoff (the same
+                # team on 99% of them) but is the LOSING side on a punt or an
+                # interception, so it returns the complement there. Measured agreement
+                # with the field: kickoffs 99.4% end-ref vs 98.7% start-ref in 2024,
+                # punts 99.7% vs 3.5%, interceptions 99.3% vs 6.1%.
+                _ret_y2ez=pl.when(pl.col("_ret_spot").str.starts_with("mid"))
+                .then(pl.lit(50))
+                .when(
+                    (pl.col("_ret_spot").str.starts_with("home")).and_(
+                        pl.col("end.pos_team.id") == pl.col("homeTeamId"),
+                    )
+                    | (pl.col("_ret_spot").str.starts_with("away")).and_(
+                        pl.col("end.pos_team.id") != pl.col("homeTeamId"),
+                    ),
+                )
+                .then(pl.lit(100) - pl.col("_ret_spot").str.extract(r":(\d+)$", 1).cast(pl.Int64, strict=False))
+                .when(pl.col("_ret_spot").is_not_null())
+                .then(pl.col("_ret_spot").str.extract(r":(\d+)$", 1).cast(pl.Int64, strict=False))
+                .otherwise(None),
+            )
+            .with_columns(
+                pl.when(
+                    pl.col("_ret_y2ez")
+                    .is_not_null()
+                    .and_(pl.col("end.yardsToEndzone").is_null() == False)
+                    .and_(pl.col("_ret_y2ez") != pl.col("end.yardsToEndzone"))
+                    .and_(pl.col("_nxt_pos") == pl.col("end.pos_team.id"))
+                    .and_(pl.col("_nxt_start") == pl.col("_ret_y2ez")),
+                )
+                .then(pl.col("_ret_y2ez"))
+                .otherwise(pl.col("end.yardsToEndzone"))
+                .alias("end.yardsToEndzone"),
+            )
+            .drop(["_ret_spot", "_ret_y2ez", "_nxt_start", "_nxt_pos"])
         )
         pbp_txt["firstHalfKickoffTeamId"] = np.where(
             (pbp_txt["plays"]["game_play_number"] == 1)
@@ -3116,10 +3663,12 @@ class CFBPlayProcess(object):
                     ),
                 )
                 .then(
-                    pl.col("text")
-                    .str.extract(r"(.{0,4})yards\)|Yards\)|yds\)|Yds\)", 1)
-                    .str.replace("yards\\)|Yards\\)|yds\\)|Yds\\)", "")
-                    .str.replace("\\(", ""),
+                    # The parenthesised form, "(15 Yards)". The prior expression here
+                    # was the same ".{0,4} before yards" fragment capture the comment
+                    # above records as producing garbage, and its alternation was
+                    # mis-grouped besides -- group 1 exists only in the first branch, so
+                    # the other three always returned null. Grab the number directly.
+                    pl.col("text").str.extract(r"\((-?\d{1,3})\s*(?i:yards?|yds?)\)", 1)
                 )
                 .otherwise(pl.col("yds_penalty")),
             )
@@ -3740,8 +4289,26 @@ class CFBPlayProcess(object):
             yds_fumble_return=pl.when((pl.col("fumble_vec") == True).and_(pl.col("kickoff_play") == False))
             .then(pl.col("text").str.extract(r"(?i)return for (.+)").str.extract(r"(\d+)").cast(pl.Int32))
             .otherwise(None),
+            # The first number after "sacked" is the YARDLINE in 2004-2007 text --
+            # "sacked by Pierre Bell at the ECaro 48 for a loss of 8 yards" -- so the
+            # positional grab stored -48 for an 8-yard sack. 2,227 of 2,283 sacks in
+            # 2005 disagreed with their own "loss of N" clause, 1,393 of them by more
+            # than 25 yards. The stated loss is authoritative wherever it appears
+            # (98%+ of sack rows in every era); the positional grab is the fallback.
+            # Two stated forms carry the loss: "for a loss of N yards" (2004-2013) and
+            # "sacked by X for N yds" (2014+; 2025's vendor feed writes "for -6 yds"). A sack row with neither -- "sacked by
+            # Wendell Chavis, fumbled at the SMU 30, recovered by ..." -- states no
+            # loss at all, and the old positional grab returned the yardline (-30) for
+            # it. Null is the honest value there; a number that is really a yardline
+            # is the defect class this branch exists to remove.
             yds_sacked=pl.when(pl.col("sack") == True)
-            .then(-1 * pl.col("text").str.extract(r"(?i)sacked (.+)").str.extract(r"(\d+)").cast(pl.Int32))
+            .then(
+                pl.coalesce(
+                    -1 * pl.col("text").str.extract(r"(?i)loss of (\d+)", 1).cast(pl.Int32, strict=False),
+                    -1
+                    * pl.col("text").str.extract(r"(?i)sacked\b[^,]*?\bfor -?(\d+) y", 1).cast(pl.Int32, strict=False),
+                )
+            )
             .otherwise(None),
         ).with_columns(
             yds_penalty=pl.when(pl.col("penalty_detail").is_in(["Penalty Declined", "Penalty Offset"]))
@@ -4197,13 +4764,38 @@ class CFBPlayProcess(object):
                 )
                 .otherwise(None),
                 # --- Field Goal Blocker Names ----
+                # Name-shaped capture first, legacy fixed-window chain as the fallback --
+                # the same two-tier shape the recovered-by extraction already uses below.
+                #
+                # The window is (.{0,25}) and its cleanup trims at the first comma, which
+                # cannot help when ESPN appends the NEXT play's text directly after the
+                # name: "blocked by LaMareon James (00:07) Boomer,Colton field goal
+                # attempt from 27 yards NO GOOD" yields "LaMareon James (00:07) Bo" --
+                # exactly 25 characters, the window's ceiling, with the clock arriving
+                # before any comma. 9 such rows in the published 2024 season and 1 in
+                # 2023; the identical defect in fumble_recovered_player_name was already
+                # cured by giving it a name-shaped pattern, so this follows suit rather
+                # than adding another cleanup step to a chain of twenty.
                 fg_block_player=pl.when(pl.col("type.text").str.contains(r"(?i)Field Goal"))
                 .then(
-                    pl.col("text")
-                    .str.extract(r"(?i)blocked by (.{0,25})")
-                    .str.replace(r",(.+)", "")
-                    .str.replace(r"blocked by ", "")
-                    .str.replace(r"  (.)+", ""),
+                    pl.coalesce(
+                        pl.col("text").str.extract(
+                            # Single spaces throughout, deliberately. ESPN writes
+                            # "blocked by TEAM  Teu Kautai return for 12" when the block
+                            # is credited to the team rather than a player: TEAM is the
+                            # correct answer and the double space marks the start of the
+                            # RETURN clause. With \s+ the optional team token swallowed
+                            # "TEAM" and the capture ran on into the returner's name.
+                            r"(?i)blocked by (?:(?-i:[A-Z]{2,6}) )?(?:#\d+ )?"
+                            r"((?-i:[A-Z][\w'.\-]*(?:\s[A-Z][\w'.\-]*){1,2}))",
+                            1,
+                        ),
+                        pl.col("text")
+                        .str.extract(r"(?i)blocked by (.{0,25})")
+                        .str.replace(r",(.+)", "")
+                        .str.replace(r"blocked by ", "")
+                        .str.replace(r"  (.)+", ""),
+                    )
                 )
                 .otherwise(None),
                 # --- Field Goal Returner Names ----
@@ -4844,6 +5436,22 @@ class CFBPlayProcess(object):
         recovery_team, turnover_team, is_turnover, is_st_turnover,
         penalized_team, penalty_yards_signed, and event-team columns.
         """
+        # The enforcement-spot resolver reads two columns the full pipeline always
+        # has but the synthetic frames in tests/cfb/test_cfb_attribution.py do not --
+        # those carry only what the function under test needs. Supply them as nulls
+        # so the resolver degrades to "unresolved" instead of raising, matching how
+        # penalty_assessed_on_kickoff is guarded in _apply_wp_derivation.
+        for _col, _dtype in (
+            ("penalty_text", pl.Utf8),
+            ("start.pos_team.id", pl.Int64),
+            ("season", pl.Int64),
+            ("penalty_1st_conv", pl.Boolean),
+            ("penalty_declined", pl.Boolean),
+            ("penalty_offset", pl.Boolean),
+            ("penalty_no_play", pl.Boolean),
+        ):
+            if _col not in play_df.columns:
+                play_df = play_df.with_columns(pl.lit(None, dtype=_dtype).alias(_col))
         play_df = play_df.with_columns(
             # --- Special-teams team flip (verified): kickoff pos_team=receiving;
             #     punt/FG pos_team=kicking. ---
@@ -4915,37 +5523,80 @@ class CFBPlayProcess(object):
             if _c not in play_df.columns:
                 play_df = play_df.with_columns(pl.lit(None, dtype=pl.Utf8).alias(_c))
 
-        play_df = play_df.with_columns(
-            recovery_team=_abbrev_to_team_id(pl.col("_recovery_abbrev")),
-            recovery_team_2=_abbrev_to_team_id(pl.col("_recovery_abbrev_2")),
-            # Penalized team parsed from the penalty-team text token (both vendor
-            # forms: "PENALTY {TEAM} ..." and "{TEAM} Penalty, ..."). Matched
-            # binary home-vs-away against abbrev/name/alt/mascot candidates, so
-            # it correctly distinguishes offensive vs defensive fouls (incl.
-            # OPI vs DPI) even when the token is a vowel-dropped vendor
-            # spelling. Replaces the earlier expression-based era-form matcher:
-            # measured on the 13-game box oracle, this resolver scores 61.5%
-            # count / 73.1% yards exact vs 46.2% / 50.0% for the era-form one,
-            # and resolves 98.6% of the 2025 season's 11,844 penalty rows.
-            _penalty_side=pl.struct(
-                [
-                    "text",
-                    "homeTeamAbbrev",
-                    "awayTeamAbbrev",
-                    "homeTeamName",
-                    "awayTeamName",
-                    "homeTeamNameAlt",
-                    "awayTeamNameAlt",
-                    "homeTeamMascot",
-                    "awayTeamMascot",
-                ],
-            ).map_elements(_parse_penalty_team_side, return_dtype=pl.Utf8),
-        ).with_columns(
-            _penalty_team=pl.when(pl.col("_penalty_side") == "home")
-            .then(pl.col("homeTeamId"))
-            .when(pl.col("_penalty_side") == "away")
-            .then(pl.col("awayTeamId"))
-            .otherwise(pl.lit(None, dtype=pl.Int64)),
+        play_df = (
+            play_df.with_columns(
+                recovery_team=_abbrev_to_team_id(pl.col("_recovery_abbrev")),
+                recovery_team_2=_abbrev_to_team_id(pl.col("_recovery_abbrev_2")),
+                # Penalized team parsed from the penalty-team text token (both vendor
+                # forms: "PENALTY {TEAM} ..." and "{TEAM} Penalty, ..."). Matched
+                # binary home-vs-away against abbrev/name/alt/mascot candidates, so
+                # it correctly distinguishes offensive vs defensive fouls (incl.
+                # OPI vs DPI) even when the token is a vowel-dropped vendor
+                # spelling. Replaces the earlier expression-based era-form matcher:
+                # measured on the 13-game box oracle, this resolver scores 61.5%
+                # count / 73.1% yards exact vs 46.2% / 50.0% for the era-form one,
+                # and resolves 98.6% of the 2025 season's 11,844 penalty rows.
+                _penalty_side=pl.struct(
+                    [
+                        "text",
+                        "homeTeamAbbrev",
+                        "awayTeamAbbrev",
+                        "homeTeamName",
+                        "awayTeamName",
+                        "homeTeamNameAlt",
+                        "awayTeamNameAlt",
+                        "homeTeamMascot",
+                        "awayTeamMascot",
+                    ],
+                ).map_elements(_parse_penalty_team_side, return_dtype=pl.Utf8),
+                # The enforcement SPOT, resolved the same way and for the same reason:
+                # "to the FlaSt 23" names a yardline in one team's half, and which half
+                # decides whether the offense has 23 yards to go or 77. Reading the spot
+                # as a distance is what published a 15-yard flag against the receiving
+                # team as a +5.52 EPA gain FOR it. Kept as "<side>:<yardline>" and turned
+                # into a distance below, once the possessing side is known.
+                _penalty_spot=pl.struct(
+                    [
+                        "penalty_text",
+                        "homeTeamAbbrev",
+                        "awayTeamAbbrev",
+                        "homeTeamName",
+                        "awayTeamName",
+                        "homeTeamNameAlt",
+                        "awayTeamNameAlt",
+                        "homeTeamMascot",
+                        "awayTeamMascot",
+                    ],
+                ).map_elements(_parse_penalty_spot, return_dtype=pl.Utf8),
+            )
+            .with_columns(
+                _penalty_team=pl.when(pl.col("_penalty_side") == "home")
+                .then(pl.col("homeTeamId"))
+                .when(pl.col("_penalty_side") == "away")
+                .then(pl.col("awayTeamId"))
+                .otherwise(pl.lit(None, dtype=pl.Int64)),
+            )
+            .with_columns(
+                penalty_spot_yardline=pl.col("_penalty_spot").str.extract(r":(\d+)$", 1).cast(pl.Int32, strict=False),
+                penalty_spot_side=pl.col("_penalty_spot").str.extract(r"^(home|away|mid)", 1),
+            )
+            .with_columns(
+                # The spot as a distance to the possessing team's target endzone -- the
+                # form the EP model consumes. Midfield is its own complement, so it needs
+                # no side. Null when the side could not be resolved: an unresolved spot
+                # must stay absent rather than be guessed, because guessing wrong mirrors
+                # the field position and the resulting EP error is ~6 points.
+                penalty_spot_yardsToEndzone=pl.when(pl.col("penalty_spot_side") == "mid")
+                .then(pl.lit(50, dtype=pl.Int32))
+                .when(
+                    (pl.col("penalty_spot_side") == "home").and_(pl.col("start.pos_team.id") == pl.col("homeTeamId"))
+                    | (pl.col("penalty_spot_side") == "away").and_(pl.col("start.pos_team.id") != pl.col("homeTeamId")),
+                )
+                .then((pl.lit(100) - pl.col("penalty_spot_yardline")).cast(pl.Int32))
+                .when(pl.col("penalty_spot_side").is_in(["home", "away"]))
+                .then(pl.col("penalty_spot_yardline").cast(pl.Int32))
+                .otherwise(None),
+            )
         )
 
         # Special-teams RETURN detection (flag OR text). ESPN sometimes reclassifies a
@@ -5093,59 +5744,180 @@ class CFBPlayProcess(object):
         )
 
         # event -> credited team (spec 5.2)
-        play_df = play_df.with_columns(
-            sack_team=pl.col("def_pos_team"),
-            interception_team=pl.col("def_pos_team"),
-            pass_breakup_team=pl.col("def_pos_team"),
-            # #93: a forced fumble is credited to the side OPPOSITE the fumbling
-            # player -- on scrimmage plays that is the defense, but on punt/kick/INT
-            # returns the fumbler is the returner and the forcer is on the covering
-            # (possession) team. Fall back to def_pos_team when the fumbling side
-            # could not be parsed.
-            forced_fumble_team=pl.when(pl.col("fumbling_team").is_null())
-            .then(pl.col("def_pos_team"))
-            .when(pl.col("fumbling_team") == pl.col("pos_team"))
-            .then(pl.col("def_pos_team"))
-            .otherwise(pl.col("pos_team")),
-            # Team that recovered the fumble/muff. Prefer the parsed recovering-team
-            # abbreviation; when it does not parse, fall back to the gaining team (the
-            # side opposite the fumbling team) for turnovers, or the fumbling team for
-            # own recoveries -- so a recovery is never dropped just because the team
-            # abbreviation in the text could not be matched.
-            fumble_recovery_team=pl.when(pl.col("recovery_team").is_not_null())
-            .then(pl.col("recovery_team"))
-            .when(pl.col("fumble_or_muff") == False)
-            .then(pl.lit(None, dtype=pl.Int64))
-            .when(pl.col("is_turnover") == True)
-            .then(
-                pl.when(pl.col("fumbling_team") == pl.col("pos_team"))
+        play_df = (
+            play_df.with_columns(
+                sack_team=pl.col("def_pos_team"),
+                interception_team=pl.col("def_pos_team"),
+                pass_breakup_team=pl.col("def_pos_team"),
+                # #93: a forced fumble is credited to the side OPPOSITE the fumbling
+                # player -- on scrimmage plays that is the defense, but on punt/kick/INT
+                # returns the fumbler is the returner and the forcer is on the covering
+                # (possession) team. Fall back to def_pos_team when the fumbling side
+                # could not be parsed.
+                forced_fumble_team=pl.when(pl.col("fumbling_team").is_null())
+                .then(pl.col("def_pos_team"))
+                .when(pl.col("fumbling_team") == pl.col("pos_team"))
                 .then(pl.col("def_pos_team"))
                 .otherwise(pl.col("pos_team")),
+                # Team that recovered the fumble/muff. Prefer the parsed recovering-team
+                # abbreviation; when it does not parse, fall back to the gaining team (the
+                # side opposite the fumbling team) for turnovers, or the fumbling team for
+                # own recoveries -- so a recovery is never dropped just because the team
+                # abbreviation in the text could not be matched.
+                fumble_recovery_team=pl.when(pl.col("recovery_team").is_not_null())
+                .then(pl.col("recovery_team"))
+                .when(pl.col("fumble_or_muff") == False)
+                .then(pl.lit(None, dtype=pl.Int64))
+                .when(pl.col("is_turnover") == True)
+                .then(
+                    pl.when(pl.col("fumbling_team") == pl.col("pos_team"))
+                    .then(pl.col("def_pos_team"))
+                    .otherwise(pl.col("pos_team")),
+                )
+                .otherwise(pl.col("fumbling_team")),
+                punt_return_team=pl.col("return_team"),
+                kick_return_team=pl.col("return_team"),
+                fg_team=pl.col("kicking_team"),
+                punt_team=pl.col("kicking_team"),
+                # Team resolution, best evidence first (each layer only fills what
+                # the prior left):
+                #   1. the binary home/away text resolver (_penalty_team via
+                #      _parse_penalty_team_side) -- resolves 98.6% of 2025 rows
+                #   2. foul-direction heuristic (_DEFENSIVE_PENALTIES)
+                # Measured at 13-game team-box parity: 61.5% penalties / 73.1%
+                # yards exact vs the era-form matcher's 46.2% / 50.0%.
+                penalized_team=pl.when(pl.col("penalty_detail").is_null())
+                .then(pl.lit(None, dtype=pl.Int32))
+                .when(pl.col("_penalty_team").is_not_null())
+                .then(pl.col("_penalty_team"))
+                .when(pl.col("penalty_detail").is_in(list(_DEFENSIVE_PENALTIES)))
+                .then(pl.col("def_pos_team"))
+                .otherwise(pl.col("pos_team")),
+                # yds_penalty arrives as a string from several extraction branches and
+                # carries their punctuation ("(16", " 19", "(-5"): 8,745 of 29,892 penalty
+                # rows in 2022-24. The numeric derivation below already recovers the value
+                # from 95.8% of those, so this is hygiene on the published string rather
+                # than a correctness fix -- but a column typed String should hold a number.
+                yds_penalty=pl.col("yds_penalty").cast(pl.Utf8).str.extract(r"(-?\d+)"),
             )
-            .otherwise(pl.col("fumbling_team")),
-            punt_return_team=pl.col("return_team"),
-            kick_return_team=pl.col("return_team"),
-            fg_team=pl.col("kicking_team"),
-            punt_team=pl.col("kicking_team"),
-            # Team resolution, best evidence first (each layer only fills what
-            # the prior left):
-            #   1. the binary home/away text resolver (_penalty_team via
-            #      _parse_penalty_team_side) -- resolves 98.6% of 2025 rows
-            #   2. foul-direction heuristic (_DEFENSIVE_PENALTIES)
-            # Measured at 13-game team-box parity: 61.5% penalties / 73.1%
-            # yards exact vs the era-form matcher's 46.2% / 50.0%.
-            penalized_team=pl.when(pl.col("penalty_detail").is_null())
-            .then(pl.lit(None, dtype=pl.Int32))
-            .when(pl.col("_penalty_team").is_not_null())
-            .then(pl.col("_penalty_team"))
-            .when(pl.col("penalty_detail").is_in(list(_DEFENSIVE_PENALTIES)))
-            .then(pl.col("def_pos_team"))
-            .otherwise(pl.col("pos_team")),
-            penalty_yards_signed=pl.col("yds_penalty")
-            .cast(pl.Utf8)
-            .str.extract(r"(-?\d+)")
-            .cast(pl.Int32, strict=False)
-            .fill_null(0),
+            .with_columns(
+                # Reject magnitudes no penalty enforcement can produce. The bound is
+                # era-aware because what ESPN puts in this field changed with the text
+                # template, and one threshold cannot serve both.
+                #
+                # 2014+ texts state the nominal penalty. NCAA's longest is 15 yards and
+                # half-the-distance only reduces it; ESPN reports net spot change on pass
+                # interference, which reaches ~25 (a 16-yard DPI and a half-the-distance
+                # targeting both appear there). So 25 is the ceiling, and a bound at the
+                # rulebook's 15 would discard real data.
+                #
+                # Pre-2014 texts state a NET figure that routinely exceeds that -- 29, 32,
+                # 34 for a kickoff out of bounds ("kickoff for 62 yards out-of-bounds,
+                # Ucla penalty 32 yard illegal procedure accepted"). Applying 25 there
+                # discarded that era's convention as corrupt: 164 rows in 2007 alone,
+                # ~278 across 2005-2013. Half the field is the invariant that still holds
+                # -- an enforcement cannot move the ball further -- so 50.
+                #
+                # What the bound catches is the parser having seized a nearby number that
+                # is not the penalty, or ESPN stating an impossible one:
+                #
+                #   56  "rush ... for a gain of 56 yards"            the rush's yardage
+                #  -53  "field goal attempt from 53 yards"           the kick distance
+                #   65  "kickoff 65 yards ... Offside offsetting"    offsetting is 0 yards
+                #  -65  "unsportsmanlike conduct (-65 Yards)"        ESPN's own text
+                #   35  "1035 yards to the ALBANY-1020"              ESPN's own text
+                #
+                # Publishing 0 says "no reliable penalty yardage", which is true;
+                # publishing 56 asserts a 56-yard penalty, which is impossible.
+                #
+                # Residual: the pre-2014 26-50 band is not separable this way -- a genuine
+                # net figure and a seized number look alike there. Splitting them needs the
+                # value's provenance (text-stated vs derived from statYardage), which is
+                # not tracked today. Logged, not guessed at.
+                yds_penalty=pl.when(
+                    pl.col("yds_penalty").cast(pl.Int32, strict=False).abs()
+                    > pl.when(pl.col("season") >= 2014).then(pl.lit(25)).otherwise(pl.lit(50)),
+                )
+                .then(None)
+                .otherwise(pl.col("yds_penalty")),
+            )
+            .with_columns(
+                penalty_yards_signed=pl.col("yds_penalty")
+                .cast(pl.Utf8)
+                .str.extract(r"(-?\d+)")
+                .cast(pl.Int32, strict=False)
+                .fill_null(0),
+            )
+            .with_columns(
+                # B10: which side the flag was on, resolved only when two INDEPENDENT
+                # signals agree. penalty_yards_signed has a reliable magnitude
+                # (96.8-97.2% against the observed no-play movement) but not a reliable
+                # sign -- its raw sign agrees with the enforcement direction on 45% of
+                # rows, and any single substitute is not much better: penalized_team
+                # alone runs 91.2%, and a 9% sign error MIRRORS the yardage, the exact
+                # defect class parts (c) through (e) repair.
+                #
+                # Three signals, each independent of the others' failure modes:
+                #   L1  penalty_1st_conv       an automatic first down means the DEFENSE
+                #                              was flagged -- 99.48% on 6,714 rows
+                #   L2  one-directional fouls  rulebook identity, >=95% measured
+                #   L3  penalized_team         the binary text resolver
+                #
+                # Any two that fire and agree decide it; otherwise null. Measured on
+                # 19,608 labelled rows: 59.5% coverage at 99.62% accuracy. Null beats a
+                # guess for the same reason as the enforcement spot: the cost of a wrong
+                # side is a mirrored value, not a small error.
+                # L1 only holds when the penalty itself produced the first down. On a
+                # DECLINED flag the conversion came from the play standing -- "Offensive
+                # Holding ... declined for a 1ST down" carries penalty_1st_conv=True
+                # with the flag on the offense -- so declined and offsetting rows are
+                # excluded from it.
+                # ...and, more generally, only when the flag is the SOLE source of
+                # the first down -- which is a no-play row. On a play that stands,
+                # "pass complete for 36 yards ... for a 1ST down, AIR FORCE penalty
+                # 10 yard Illegal Block" carries the conversion from the catch, and
+                # L1 read the offensive foul as defensive. The 362-game validation
+                # caught it as a sign disagreement with the counterfactual.
+                _pen_L1=pl.when(
+                    (pl.col("penalty_1st_conv") == True)
+                    .and_(pl.col("penalty_no_play") == True)
+                    .and_(pl.col("penalty_declined") == False)
+                    .and_(pl.col("penalty_offset") == False),
+                )
+                .then(pl.lit("def"))
+                .otherwise(None),
+                _pen_L2=pl.when(pl.col("penalty_detail").is_in(list(_PENALTY_SIGN_DEF)))
+                .then(pl.lit("def"))
+                .when(pl.col("penalty_detail").is_in(list(_PENALTY_SIGN_OFF)))
+                .then(pl.lit("off"))
+                .otherwise(None),
+                _pen_L3=pl.when(pl.col("penalized_team") == pl.col("start.pos_team.id"))
+                .then(pl.lit("off"))
+                .when(pl.col("penalized_team").is_not_null())
+                .then(pl.lit("def"))
+                .otherwise(None),
+            )
+            .with_columns(
+                penalty_side=pl.when(
+                    (pl.col("_pen_L1").is_not_null()).and_(pl.col("_pen_L1") == pl.col("_pen_L2"))
+                    | (pl.col("_pen_L1").is_not_null()).and_(pl.col("_pen_L1") == pl.col("_pen_L3"))
+                    | (pl.col("_pen_L2").is_not_null()).and_(pl.col("_pen_L2") == pl.col("_pen_L3")),
+                )
+                .then(pl.coalesce(pl.col("_pen_L1"), pl.col("_pen_L2"), pl.col("_pen_L3")))
+                .otherwise(None),
+            )
+            .with_columns(
+                # The signed yardage in the OFFENSE's perspective: positive when the
+                # flag was on the defense (the offense gains ground), negative when on
+                # the offense. This is the input the accepted-penalty counterfactual
+                # needs; penalty_yards_signed keeps its historical semantics untouched.
+                penalty_yards_net=pl.when(pl.col("penalty_side") == "def")
+                .then(pl.col("penalty_yards_signed").abs())
+                .when(pl.col("penalty_side") == "off")
+                .then(-pl.col("penalty_yards_signed").abs())
+                .otherwise(None),
+            )
+            .drop(["_pen_L1", "_pen_L2", "_pen_L3"])
         )
 
         # penalty_team_id: same value as penalized_team, exported under the
@@ -5165,6 +5937,7 @@ class CFBPlayProcess(object):
                 "_recovery_abbrev_2",
                 "_penalty_team",
                 "_penalty_side",
+                "_penalty_spot",
                 "_is_kick_return",
                 "_is_punt_return",
                 "_loser_1",
@@ -5863,11 +6636,100 @@ class CFBPlayProcess(object):
 
         EP_end = self.__calculate_ep_exp_val(EP_end_parts)
 
+        # B11: the counterfactual end state for an ACCEPTED penalty on a scrimmage
+        # play that STANDS -- where the play would have ended had there been no flag.
+        # The penalty's own effect is then EP(actual end) - EP(counterfactual end),
+        # which is what EPA_penalty is meant to isolate and what the play-level EPA
+        # cannot, since that folds the play and the flag together.
+        #
+        # What the fields mean here, each verified on 2024 rather than assumed:
+        #   - end.yardsToEndzone INCLUDES the enforcement on these rows (78% of
+        #     rushes equal yds_rushed +/- the penalty), so it is the actual end.
+        #   - yds_rushed / yds_receiving / yds_sacked are the PLAY's own yardage;
+        #     statYardage is the NET and is not usable for this.
+        #   - the counterfactual is start - play_yards, NOT end + penalty_yards_net.
+        #     The two agree on a tack-on enforcement and disagree on a spot-of-foul
+        #     one: a 22-yard run with offensive holding ends at start+3, and the
+        #     flag's true cost is the 22 yards plus 10, not 10.
+        #   - the model reads these eight columns by name, and the published
+        #     end.* values ARE the model inputs (instrumented: 181/181 rows of the
+        #     end call match the emitted frame), so the same frame is safe to build
+        #     the counterfactual features from. down_*_end are NOT derived from
+        #     end.down -- B5 resets the feature flags independently -- so the
+        #     counterfactual flags are built from scratch below, never from end.down.
+        #
+        # Scope, deliberately narrow: rush, completion, incompletion and sack only;
+        # accepted (not declined, not offsetting); not a no-play (those need no
+        # counterfactual -- the start state is it); not a standalone "Penalty" row
+        # (a dead-ball foul with no snap, same reason); not a scoring play, a
+        # turnover, or an end-of-half row; and not a fourth-down non-conversion,
+        # whose counterfactual is the other team's ball. Kicks and returns are out
+        # -- their end states are the subject of parts (b)-(e) and not yet safe
+        # to build on. Everything outside scope is null, not guessed.
+        _cf_scope = (
+            (pl.col("penalty_flag") == True)
+            .and_(pl.col("penalty_no_play") == False)
+            .and_(pl.col("penalty_declined") == False)
+            .and_(pl.col("penalty_offset") == False)
+            .and_(pl.col("type.text").is_in(["Penalty", "Penalty (Kickoff)"]) == False)
+            .and_((pl.col("rush") == True).or_(pl.col("pass") == True))
+            .and_(pl.col("scoring_play") != True)
+            .and_(pl.col("is_turnover") != True)
+            .and_(pl.col("end_of_half") != True)
+            .and_(pl.col("start.yardsToEndzone").is_not_null())
+            .and_(pl.col("start.distance").is_not_null())
+            .and_(pl.col("start.down").is_not_null())
+        )
+        _play_yards = (
+            pl.when(pl.col("sack") == True)
+            .then(pl.col("yds_sacked"))
+            .when(pl.col("rush") == True)
+            .then(pl.col("yds_rushed"))
+            .when(pl.col("completion") == True)
+            .then(pl.col("yds_receiving"))
+            .when(pl.col("pass") == True)
+            .then(pl.lit(0))
+            .otherwise(None)
+        )
+        play_df = play_df.with_columns(_cf_play_yards=_play_yards.cast(pl.Float64))
+        play_df = play_df.with_columns(
+            _cf_converted=(pl.col("_cf_play_yards") >= pl.col("start.distance")),
+            _cf_y2ez=(pl.col("start.yardsToEndzone") - pl.col("_cf_play_yards")).clip(1, 99),
+        )
+        play_df = play_df.with_columns(
+            # a fourth-down play that did not convert would have been the other
+            # team's ball: out of scope rather than modelled
+            _cf_ok=_cf_scope.and_(pl.col("_cf_play_yards").is_not_null()).and_(
+                (pl.col("_cf_converted") == True).or_(pl.col("start.down") < 4),
+            ),
+            _cf_down=pl.when(pl.col("_cf_converted") == True).then(1).otherwise(pl.col("start.down") + 1),
+            _cf_distance=pl.when(pl.col("_cf_converted") == True)
+            .then(pl.min_horizontal(pl.lit(10.0), pl.col("_cf_y2ez")))
+            .otherwise(pl.col("start.distance") - pl.col("_cf_play_yards")),
+        )
+        cf_data = play_df.select(
+            pl.col("end.TimeSecsRem"),
+            pl.col("_cf_y2ez"),
+            pl.col("_cf_distance"),
+            (pl.col("_cf_down") == 1).alias("_cf_d1"),
+            (pl.col("_cf_down") == 2).alias("_cf_d2"),
+            (pl.col("_cf_down") == 3).alias("_cf_d3"),
+            (pl.col("_cf_down") == 4).alias("_cf_d4"),
+            pl.col("pos_score_diff_end"),
+        )
+        cf_data.columns = ep_final_names
+        EP_penalty_cf_parts = ep_model.predict(DMatrix(cf_data))
+        EP_penalty_cf = self.__calculate_ep_exp_val(EP_penalty_cf_parts)
+
         play_df = play_df.with_columns(
             EP_start_touchback=pl.lit(EP_start_touchback),
             EP_start=pl.lit(EP_start),
             EP_end=pl.lit(EP_end),
-        )
+            EP_penalty_cf=pl.when(pl.col("_cf_ok") == True).then(pl.lit(EP_penalty_cf)).otherwise(None),
+            penalty_cf_yardsToEndzone=pl.when(pl.col("_cf_ok") == True)
+            .then(pl.col("_cf_y2ez").cast(pl.Int32))
+            .otherwise(None),
+        ).drop(["_cf_play_yards", "_cf_converted", "_cf_y2ez", "_cf_ok", "_cf_down", "_cf_distance"])
 
         play_df = (
             play_df.with_columns(
@@ -6028,7 +6890,24 @@ class CFBPlayProcess(object):
                 .otherwise(pl.col("lag_change_of_pos_team")),
             )
             .with_columns(
-                EP_between=pl.when(pl.col("lag_change_of_pos_team") == True)
+                # B8: EP_between measures the UNEXPLAINED discontinuity since the last
+                # play ended, and penalty EPA folds it in on the assumption that a gap
+                # means someone's end state was wrong. After a score there is no
+                # unexplained gap -- the points explain it -- and lag_EP_end is a
+                # realized 7.00 rather than a field-position expectation. Adding it (the
+                # possession-change branch does add) hands the next play a fictitious
+                # swing of about eight points.
+                #
+                # 23 scrimmage penalties across 2005-2025 fall immediately after a
+                # score, and 13 of them (57%) published |EPA| above 4, against a base
+                # rate near 5% for scrimmage penalties generally. Zeroing the term there
+                # leaves EPA as EP_end - EP_start, which is what the play itself did.
+                #
+                # lag_scoringPlay, not lag_scoring_play: the derived flag is not built
+                # until well after __process_epa, while ESPN's own is set at line 2387.
+                EP_between=pl.when(pl.col("lag_scoringPlay") == True)
+                .then(0.0)
+                .when(pl.col("lag_change_of_pos_team") == True)
                 .then(pl.col("EP_start") + pl.col("lag_EP_end"))
                 .otherwise(pl.col("EP_start") - pl.col("lag_EP_end")),
                 EP_start=pl.when(
@@ -6156,9 +7035,56 @@ class CFBPlayProcess(object):
                 )
                 .then(True)
                 .otherwise(False),
-                EPA_penalty=pl.when(pl.col("type.text").is_in(["Penalty", "Penalty (Kickoff)"]))
+                # B9: EPA_penalty is meant to isolate the PENALTY's effect, so a flag
+                # that had no effect must read zero. A declined penalty leaves the play
+                # exactly as it was and an offsetting pair replays the down, yet both
+                # were taking the branches below and inheriting the PLAY's EP swing:
+                # "Old Dominion Penalty, Defensive Holding (Bryce Duke) declined"
+                # published +3.50. Roughly 97% of declined and offsetting rows carried a
+                # nonzero value -- 286 of 296 in 2022, 158 of 161 in 2024, 314 of 319 in
+                # 2025 -- with a dozen per season above |2|.
+                #
+                # This is as far as the direct calculation goes for now. The remaining
+                # case, an ACCEPTED penalty on a play that stands, needs the counter-
+                # factual end spot, which is the actual end spot less the penalty's
+                # SIGNED yardage -- and that sign is not available. penalty_yards_signed
+                # carries a reliable magnitude (|start - end| matches it on 96.8-97.2% of
+                # no-play rows) but not a reliable sign: it agrees with the observed
+                # direction on only 45% of them, and deriving the sign from
+                # penalized_team gets to 88.8-90.4%. An 11% sign error mirrors the
+                # yardage, which is the defect class parts (c) through (e) exist to
+                # repair, so it is not built on that.
+                #
+                # No-play penalties need no counterfactual: the play never happened, so
+                # the state that would have stood IS the start state, and EP_end -
+                # EP_start already measures exactly the flag.
+                EPA_penalty=pl.when(
+                    (pl.col("penalty_declined") == True).or_(pl.col("penalty_offset") == True),
+                )
+                .then(0.0)
+                .when(pl.col("type.text").is_in(["Penalty", "Penalty (Kickoff)"]))
                 .then(pl.col("EPA"))
                 .when(pl.col("penalty_in_text") == True)
+                .then(pl.col("EP_end") - pl.col("EP_start"))
+                .otherwise(None),
+                # B11: the penalty's OWN effect, isolated from the play it rode on.
+                # Declined / offsetting: zero. No-play and standalone rows: the flag
+                # is the whole change, so EP_end - EP_start already is it. Scrimmage
+                # plays that stand: actual end against the counterfactual end. Kicks,
+                # returns, turnovers, scoring plays: null -- not yet safe to state.
+                EPA_penalty_direct=pl.when(
+                    (pl.col("penalty_declined") == True).or_(pl.col("penalty_offset") == True),
+                )
+                .then(0.0)
+                .when(pl.col("EP_penalty_cf").is_not_null())
+                .then(pl.col("EP_end") - pl.col("EP_penalty_cf"))
+                .when(
+                    (pl.col("penalty_flag") == True).and_(
+                        (pl.col("penalty_no_play") == True).or_(
+                            pl.col("type.text").is_in(["Penalty", "Penalty (Kickoff)"]),
+                        ),
+                    ),
+                )
                 .then(pl.col("EP_end") - pl.col("EP_start"))
                 .otherwise(None),
                 EPA_sp=pl.when(
