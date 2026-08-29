@@ -1669,30 +1669,57 @@ class CFBPlayProcess(object):
                 .alias("end.yardsToEndzone"),
             )
             .with_columns(
-                # B3 part (d): a kickoff row that carries a penalty but describes no
-                # kick and no return did not move the ball. ESPN writes the penalty's
-                # ENFORCEMENT spot into end.yardsToEndzone on those rows -- the spot the
-                # kick will be taken from, in the KICKING team's own territory -- while
+                # B3 part (d): a kickoff row that carries a penalty but describes no kick
+                # outcome at all -- no yardage, no return, no touchback, no recovery --
+                # established nobody's field position. ESPN writes the penalty's
+                # ENFORCEMENT spot into end.yardsToEndzone on those rows: the spot the
+                # kick will be taken from, in the KICKING team's own territory, while
                 # pos_team is the receiving team. The EP model reads it as the receiving
-                # team's distance to the endzone and scores first-and-goal field
-                # position, e.g. "Tristan Mattson kickoff ARKANSAS ST Penalty,
-                # Unsportsmanlike Conduct to the ArkSt 20" carrying end.yardsToEndzone=20
-                # and EP -2.21 -> +3.31, publishing a 15-yard flag AGAINST the receiving
-                # team as a +5.52 EPA gain FOR it. Ten such rows in 2022-24, mean EPA
-                # +3.70 against -0.40 for kickoff penalties generally.
+                # team's distance to its target endzone. 83 such rows in 2022-24.
                 #
-                # The trigger requires the text to describe no kick outcome at all, which
-                # is what distinguishes these from the legitimate deep results: five other
-                # no-rekick kickoff penalties also end inside the 25, and all five carry a
-                # "return for N yds" clause where the return genuinely finished there (a
-                # 90-yard return to the Rice 5 earns its +5.91). Those keep their values.
+                # "Tristan Mattson kickoff ARKANSAS ST Penalty, Unsportsmanlike Conduct
+                # to the ArkSt 20" carried end.yardsToEndzone=20 with EP -2.21 -> +3.31,
+                # publishing a 15-yard flag AGAINST the receiving team as +5.52 EPA FOR
+                # it. Milder but commoner is "to the 50 yard line" holding 50, which
+                # looks correct only because 50 is its own complement.
                 #
-                # Repairing to the next play's start -- the authority parts (b) and (c)
-                # use -- was tested and rejected: it moves 256 of 843 rows and destroys
-                # correct ones ("kickoff for 62 yds FLA ATLANTIC Penalty ... to the FlAtl
-                # 13" holds a correct 87 and would be rewritten to 15). The next row is
-                # not an independent witness here; it frequently inherits the same error.
-                # Since no kick is described, the honest end state is the start state.
+                # The no-kick-described gate is load bearing. Five kickoff penalties end
+                # inside the 25 legitimately, and all five carry a "return for N yds"
+                # clause where the return really finished there -- a 90-yard return to
+                # the Rice 5 earns its +5.91 and keeps it.
+                #
+                # Flag whether the ball is re-kicked. The lookahead skips one
+                # administrative row, since a Timeout routinely sits between the flag and
+                # the re-kick (401636889: flag p52, timeout p53, re-kick p54).
+                _ko_pen_rekick_follows=(
+                    (pl.col("type.text").shift(-1).is_in(kickoff_vec)).or_(
+                        pl.col("type.text")
+                        .shift(-1)
+                        .str.contains(r"(?i)^(?:timeout|end period|end of half|official)")
+                        .and_(pl.col("type.text").shift(-2).is_in(kickoff_vec)),
+                    )
+                ).fill_null(False),
+            )
+            .with_columns(
+                # (d.i) A re-kick follows, so this row is a NO-PLAY: the ensuing kickoff
+                # row scores that possession in full, and anything credited here is
+                # counted twice. EP_start on a kickoff is already the touchback EP, so
+                # setting the end state to the same touchback yardline drives EPA to ~0.
+                # start.yardsToEndzone would NOT: the real start (own 35, y2ez 65) is
+                # better field position than a touchback and leaves a spurious ~+1.2.
+                # 42 of the 83 rows, currently averaging +0.78 EPA and reaching +3.92.
+                #
+                # (d.ii) No re-kick follows, so the receiving team really did take over
+                # and the first real play after this row is the only record of where.
+                # The next play is trustworthy here precisely because this row describes
+                # nothing: across the 22 such rows whose next play keeps the same
+                # possession the two disagree 17 times, by a mean of 14 yards, and every
+                # disagreement checked resolves in the next play's favour ("kickoff
+                # MURRAY ST Penalty, Delay Of Game to the MurrS 30" holds 30 while the
+                # next snap starts at 75, Texas Tech on their own 25). This does NOT
+                # generalise to kickoff penalties whose text DOES describe a kick --
+                # tested and rejected, it moves 256 of 843 rows and overwrites correct
+                # values with the next row's inherited error.
                 pl.when(
                     (pl.col("type.text").is_in(kickoff_vec).or_(pl.col("text").str.contains(r"(?i)kickoff")))
                     .and_(pl.col("text").str.contains(r"(?i)penalty"))
@@ -1702,13 +1729,26 @@ class CFBPlayProcess(object):
                         )
                         == False
                     )
-                    .and_(pl.col("end.yardsToEndzone").is_null() == False)
-                    .and_(pl.col("end.yardsToEndzone") <= 25),
+                    .and_(pl.col("_ko_pen_rekick_follows") == True),
                 )
-                .then(pl.col("start.yardsToEndzone"))
+                .then(pl.when(pl.col("season") > 2013).then(pl.lit(75)).otherwise(pl.lit(80)))
+                .when(
+                    (pl.col("type.text").is_in(kickoff_vec).or_(pl.col("text").str.contains(r"(?i)kickoff")))
+                    .and_(pl.col("text").str.contains(r"(?i)penalty"))
+                    .and_(
+                        pl.col("text").str.contains(
+                            r"(?i)for \d+ yds|touchback|return|out of bounds|recovered|downed|fair catch",
+                        )
+                        == False
+                    )
+                    .and_(pl.col("start.pos_team.id").shift(-1) == pl.col("end.pos_team.id"))
+                    .and_(pl.col("start.yardsToEndzone").shift(-1).is_null() == False),
+                )
+                .then(pl.col("start.yardsToEndzone").shift(-1))
                 .otherwise(pl.col("end.yardsToEndzone"))
                 .alias("end.yardsToEndzone"),
             )
+            .drop("_ko_pen_rekick_follows")
         )
         pbp_txt["firstHalfKickoffTeamId"] = np.where(
             (pbp_txt["plays"]["game_play_number"] == 1)

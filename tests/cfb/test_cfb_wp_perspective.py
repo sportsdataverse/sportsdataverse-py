@@ -91,9 +91,9 @@ def test_rekick_penalty_does_not_flip_wp_perspective(monkeypatch):
     assert row.height == 1, "expected exactly one WMU kickoff-penalty row in this fixture"
     r = row.row(0, named=True)
 
-    # The end state is correct on this row (own 20 -> 80 to go); only WP was wrong.
-    assert r["end.yardsToEndzone"] == 80
-    assert r["EPA"] < 0, "a flag on the receiving team should not be an EP gain"
+    # A re-kick follows, so B3 part (d.i) makes this a no-play at the touchback
+    # yardline; the EPA is incidental here, what is under test is the perspective.
+    assert abs(r["EPA"]) < 1.0, "a nullified kickoff must not carry a large EPA"
     # The flip signature: wp_after must NOT be the complement of wp_before.
     assert abs(r["wp_after"] - (1 - r["wp_before"])) > 0.5, "wp_after is still the 1-p flip"
     assert abs(r["wpa"]) < 0.1, f"near-zero EPA must not carry a huge WPA (got {r['wpa']})"
@@ -114,5 +114,28 @@ def test_kickoff_penalty_enforcement_spot_is_not_field_position(monkeypatch):
     )
     assert row.height == 1
     r = row.row(0, named=True)
-    assert r["end.yardsToEndzone"] == r["start.yardsToEndzone"], "no kick described -> end state is the start state"
-    assert r["EPA"] < 2.0, f"enforcement spot must not score as field position (got {r['EPA']})"
+    # A re-kick follows (p53 is a Timeout, p54 the re-kick), so this is a no-play and
+    # the end state becomes the touchback yardline -- not start.yardsToEndzone, which
+    # is better field position than a touchback and would leave a spurious ~+1.2 EPA.
+    assert r["end.yardsToEndzone"] == 75, "post-2013 no-play kickoff ends at the touchback spot"
+    assert r["EPA"] < 1.0, f"enforcement spot must not score as field position (got {r['EPA']})"
+
+
+def test_kickoff_penalty_without_rekick_takes_the_next_plays_start(monkeypatch):
+    """B3 part (d.ii): when no re-kick follows, the receiving team really did take
+    over, and the first real play after the flag is the only record of where. The
+    row itself describes no kick outcome, so its end state cannot be believed.
+
+    401425418 p102 ("Tristan Mattson kickoff ARKANSAS ST Penalty, Unsportsmanlike
+    Conduct ... to the ArkSt 20") held end.yardsToEndzone=20 -- the enforcement
+    spot -- and published EPA +5.52 while the next snap starts at 76.
+    """
+    df = _run(monkeypatch, 401425418)
+    row = df.filter(
+        pl.col("text").str.contains("(?i)kickoff")
+        & pl.col("text").str.contains("(?i)ARKANSAS ST Penalty, Unsportsmanlike")
+    )
+    assert row.height == 1
+    r = row.row(0, named=True)
+    assert r["end.yardsToEndzone"] > 25, "the enforcement spot must not survive as field position"
+    assert abs(r["EPA"]) < 1.0, f"a flag with no kick described must not swing EP (got {r['EPA']})"
