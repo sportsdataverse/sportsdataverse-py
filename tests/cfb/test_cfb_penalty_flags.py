@@ -724,3 +724,20 @@ def test_return_spot_only_fires_on_kickoff_rows() -> None:
     assert _ret("Ryan Rehkow punt for 45 yds , J.Smith return for 8 yds to the LOU 30") is None
     # kickoffs still resolve
     assert _ret("(06:18) #37 D.Bale kickoff 67 yards to the LOU23 #6 D.Booth return 17 yards to the LOU40") == "home:40"
+
+
+def test_spot_midfield_loses_to_a_later_team_qualified_spot() -> None:
+    """CodeRabbit finding: the midfield clause was checked FIRST and returned
+    immediately, so any text mentioning the 50 resolved there even when a later
+    clause named the real enforcement spot. The contract is the LAST spot wins, so
+    the two patterns have to compete on position.
+
+    The comparison is >=, not >, because they match the same text at the same
+    offset: _PENALTY_SPOT_RE's "the" is optional, so it also reads "to the 50" as
+    team "the" at yardline 50. On a tie midfield is right -- the alternative
+    resolves to no team at all, which is how "to the 50 yard line" started
+    returning None while this was being fixed.
+    """
+    assert _spot("Penalty, Holding to the 50 yard line then enforced to the FlaSt 35") == "away:35"
+    assert _spot("Penalty, Holding enforced to the FlaSt 35 and then to the 50 yard line") == "mid:50"
+    assert _spot("Penalty, Personal Foul (TEAM) to the 50 yard line") == "mid:50"

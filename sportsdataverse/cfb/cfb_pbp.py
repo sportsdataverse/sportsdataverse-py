@@ -342,8 +342,13 @@ def _apply_wp_derivation(play_df, wp_before_raw, wp_touchback_raw, wp_after_raw,
     # pos_score_diff_end so those tests remain valid (status_type_completed=False
     # means the game-ender branches never fire on synthetic data anyway).
     if "end.homeScore" in play_df.columns and "end.awayScore" in play_df.columns:
+        # B7: stated from the START-possession team's point of view, because that is
+        # the perspective wp_after carries everywhere else (see the mapping below).
+        # The game-ender branches are the only ones that would otherwise be written in
+        # the END team's terms, and on a possession-flipping final play -- a safety, a
+        # pick six -- the two differ.
         end_team_score_diff = (
-            pl.when(pl.col("end.pos_team.id") == pl.col("homeTeamId"))
+            pl.when(pl.col("start.pos_team.id") == pl.col("homeTeamId"))
             .then(pl.col("end.homeScore").cast(pl.Int64) - pl.col("end.awayScore").cast(pl.Int64))
             .otherwise(pl.col("end.awayScore").cast(pl.Int64) - pl.col("end.homeScore").cast(pl.Int64))
         )
@@ -466,11 +471,31 @@ def _apply_wp_derivation(play_df, wp_before_raw, wp_touchback_raw, wp_after_raw,
             (1 - pl.col(wa)).alias(dwa),
         )
         .with_columns(
-            pl.when(pl.col("end.pos_team.id") == pl.col("homeTeamId"))
+            # B7: wp_after is stated in the START-possession team's perspective, so the
+            # home/away split must key off start.pos_team.id. It keyed off
+            # end.pos_team.id -- the same team on most plays, the OTHER team on every
+            # possession change -- so home_wp_after and away_wp_after came out
+            # complemented on exactly those rows.
+            #
+            # Measured against the identity that home WP at the end of a play equals
+            # home WP at the start of the next, over published 2023-24:
+            #
+            #   group                       n         end-map   start-map
+            #   possession unchanged        289,741    0.0061     0.0061   (same team)
+            #   changed + non-scoring        24,332    0.6797     0.0099
+            #   changed + scoring               654    0.6131     0.1475
+            #   changed + onside kick            11    0.6824     0.1271
+            #   end of half                   1,859    0.0929     0.0072
+            #
+            # 17,125 of the 24,332 possession-change non-scoring rows were off by more
+            # than 0.5. wpa never showed it: that is wp_after minus wp_before, and both
+            # sit in the same perspective, so the error cancels there and surfaces only
+            # in the home/away exports.
+            pl.when(pl.col("start.pos_team.id") == pl.col("homeTeamId"))
             .then(pl.col(wa))
             .otherwise(pl.col(dwa))
             .alias(hwa),
-            pl.when(pl.col("end.pos_team.id") != pl.col("homeTeamId"))
+            pl.when(pl.col("start.pos_team.id") != pl.col("homeTeamId"))
             .then(pl.col(wa))
             .otherwise(pl.col(dwa))
             .alias(awa),
@@ -693,9 +718,18 @@ def _spot_from_text(txt, row):
     """
     if not txt:
         return None
-    if _PENALTY_SPOT_MID_RE.search(txt):
-        return "mid:50"
     matches = list(_PENALTY_SPOT_RE.finditer(txt))
+    mid = list(_PENALTY_SPOT_MID_RE.finditer(txt))
+    # Midfield competes on POSITION, not precedence. Returning "mid:50" for any
+    # midfield clause ignored a later team-qualified spot, so "to the 50 yard line ...
+    # to TEAM 35" resolved to the 50 rather than where the ball actually ended.
+    #
+    # The comparison is >= because the two patterns match the SAME text at the same
+    # offset: _PENALTY_SPOT_RE's "the" is optional, so it also reads "to the 50" as
+    # team "the" at yardline 50. On a tie the midfield reading is the right one -- the
+    # alternative is a team token that resolves to nobody.
+    if mid and (not matches or mid[-1].start() >= matches[-1].start()):
+        return "mid:50"
     if not matches:
         return None
     tok_raw, yardline = matches[-1].group(1), matches[-1].group(2)
@@ -1835,6 +1869,24 @@ class CFBPlayProcess(object):
                         .and_(pl.col("type.text").shift(-2).is_in(kickoff_vec)),
                     )
                 ).fill_null(False),
+                # (d.ii) needs the next REAL play, not the next row. (d.i) already
+                # skipped administrative rows and (d.ii) did not, so a Timeout between
+                # the flag and the ensuing snap made it read the Timeout's own start
+                # yardline as the receiving team's field position.
+                _pen_nxt_start=pl.when(pl.col("type.text").shift(-1).str.contains(_ADMIN_ROW_RE))
+                .then(
+                    pl.when(pl.col("type.text").shift(-2).str.contains(_ADMIN_ROW_RE))
+                    .then(pl.col("start.yardsToEndzone").shift(-3))
+                    .otherwise(pl.col("start.yardsToEndzone").shift(-2)),
+                )
+                .otherwise(pl.col("start.yardsToEndzone").shift(-1)),
+                _pen_nxt_pos=pl.when(pl.col("type.text").shift(-1).str.contains(_ADMIN_ROW_RE))
+                .then(
+                    pl.when(pl.col("type.text").shift(-2).str.contains(_ADMIN_ROW_RE))
+                    .then(pl.col("start.pos_team.id").shift(-3))
+                    .otherwise(pl.col("start.pos_team.id").shift(-2)),
+                )
+                .otherwise(pl.col("start.pos_team.id").shift(-1)),
             )
             .with_columns(
                 # (d.i) A re-kick follows, so this row is a NO-PLAY: the ensuing kickoff
@@ -1919,14 +1971,14 @@ class CFBPlayProcess(object):
                         )
                         == False
                     )
-                    .and_(pl.col("start.pos_team.id").shift(-1) == pl.col("end.pos_team.id"))
-                    .and_(pl.col("start.yardsToEndzone").shift(-1).is_null() == False),
+                    .and_(pl.col("_pen_nxt_pos") == pl.col("end.pos_team.id"))
+                    .and_(pl.col("_pen_nxt_start").is_null() == False),
                 )
-                .then(pl.col("start.yardsToEndzone").shift(-1))
+                .then(pl.col("_pen_nxt_start"))
                 .otherwise(pl.col("end.yardsToEndzone"))
                 .alias("end.yardsToEndzone"),
             )
-            .drop("_ko_pen_rekick_follows")
+            .drop(["_ko_pen_rekick_follows", "_pen_nxt_start", "_pen_nxt_pos"])
             .with_columns(
                 # B3 part (e): the kick-return end state, when ESPN's own structured
                 # fields contradict its own text.
@@ -5716,6 +5768,7 @@ class CFBPlayProcess(object):
                 "_recovery_abbrev_2",
                 "_penalty_team",
                 "_penalty_side",
+                "_penalty_spot",
                 "_is_kick_return",
                 "_is_punt_return",
                 "_loser_1",
