@@ -4440,13 +4440,38 @@ class CFBPlayProcess(object):
                 )
                 .otherwise(None),
                 # --- Field Goal Blocker Names ----
+                # Name-shaped capture first, legacy fixed-window chain as the fallback --
+                # the same two-tier shape the recovered-by extraction already uses below.
+                #
+                # The window is (.{0,25}) and its cleanup trims at the first comma, which
+                # cannot help when ESPN appends the NEXT play's text directly after the
+                # name: "blocked by LaMareon James (00:07) Boomer,Colton field goal
+                # attempt from 27 yards NO GOOD" yields "LaMareon James (00:07) Bo" --
+                # exactly 25 characters, the window's ceiling, with the clock arriving
+                # before any comma. 9 such rows in the published 2024 season and 1 in
+                # 2023; the identical defect in fumble_recovered_player_name was already
+                # cured by giving it a name-shaped pattern, so this follows suit rather
+                # than adding another cleanup step to a chain of twenty.
                 fg_block_player=pl.when(pl.col("type.text").str.contains(r"(?i)Field Goal"))
                 .then(
-                    pl.col("text")
-                    .str.extract(r"(?i)blocked by (.{0,25})")
-                    .str.replace(r",(.+)", "")
-                    .str.replace(r"blocked by ", "")
-                    .str.replace(r"  (.)+", ""),
+                    pl.coalesce(
+                        pl.col("text").str.extract(
+                            # Single spaces throughout, deliberately. ESPN writes
+                            # "blocked by TEAM  Teu Kautai return for 12" when the block
+                            # is credited to the team rather than a player: TEAM is the
+                            # correct answer and the double space marks the start of the
+                            # RETURN clause. With \s+ the optional team token swallowed
+                            # "TEAM" and the capture ran on into the returner's name.
+                            r"(?i)blocked by (?:(?-i:[A-Z]{2,6}) )?(?:#\d+ )?"
+                            r"((?-i:[A-Z][\w'.\-]*(?:\s[A-Z][\w'.\-]*){1,2}))",
+                            1,
+                        ),
+                        pl.col("text")
+                        .str.extract(r"(?i)blocked by (.{0,25})")
+                        .str.replace(r",(.+)", "")
+                        .str.replace(r"blocked by ", "")
+                        .str.replace(r"  (.)+", ""),
+                    )
                 )
                 .otherwise(None),
                 # --- Field Goal Returner Names ----

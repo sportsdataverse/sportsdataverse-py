@@ -562,3 +562,54 @@ def test_formation_prefix_requires_a_word_end(raw: str, expected: str) -> None:
 
     out = pl.DataFrame({"n": [raw]}).with_columns(_strip_presentational_tokens(pl.col("n")).alias("o"))
     assert out["o"][0] == expected
+
+
+# --- blocked-FG blocker name (capture-window truncation) ------------------------
+
+
+@pytest.mark.parametrize(
+    ("text", "expected"),
+    [
+        # ESPN appends the NEXT play's text after the name. The legacy (.{0,25})
+        # window stops mid-debris and its cleanup trims at the first comma, which
+        # arrives too late -- the clock comes first. 9 rows in published 2024, 1 in
+        # 2023, every one exactly 25 characters, the window's ceiling.
+        (
+            "Colton Boomer 27 yd FG BLOCKED blocked by LaMareon James (00:07) Boomer,Colton "
+            "field goal attempt from 27 yards NO GOOD",
+            "LaMareon James",
+        ),
+        (
+            "Grady Gross 32 yd FG BLOCKED blocked by Connor O'Toole (01:46) Gross,Grady "
+            "field goal attempt from 32 yards NO GOOD",
+            "Connor O'Toole",
+        ),
+        # ESPN credits some blocks to the team rather than a player, and writes the
+        # RETURN clause straight after with a double space. TEAM is the right answer;
+        # an \s+ between the optional team token and the name swallowed it and ran on
+        # into the returner. Single spaces keep the name-shaped branch off this.
+        ("Kyle Bullard 39 yd FG BLOCKED blocked by TEAM  Teu Kautai return for 12 yards", "TEAM"),
+        # ordinary forms must be unaffected
+        ("X 30 yd FG BLOCKED blocked by SAC Noah St-Juste", "Noah St-Juste"),
+        ("X 30 yd FG BLOCKED blocked by #55 John Smith", "John Smith"),
+    ],
+)
+def test_blocked_fg_blocker_name_is_not_capture_window_debris(text: str, expected: str) -> None:
+    RX = (
+        r"(?i)blocked by (?:(?-i:[A-Z]{2,6}) )?(?:#\d+ )?"
+        r"((?-i:[A-Z][\w'.\-]*(?:\s[A-Z][\w'.\-]*){1,2}))"
+    )
+    LEGACY = r"(?i)blocked by (.{0,25})"
+    out = pl.DataFrame({"t": [text]}).with_columns(
+        pl.coalesce(
+            pl.col("t").str.extract(RX, 1),
+            pl.col("t")
+            .str.extract(LEGACY)
+            .str.replace(r",(.+)", "")
+            .str.replace(r"blocked by ", "")
+            .str.replace(r"  (.)+", ""),
+        )
+        .str.strip_chars()
+        .alias("name")
+    )
+    assert out["name"][0] == expected
