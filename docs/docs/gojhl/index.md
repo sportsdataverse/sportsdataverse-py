@@ -1,6 +1,7 @@
 ---
 title: GOJHL
 sidebar_label: GOJHL
+description: "sdv-py GOJHL: endpoint references, dataset loaders and parsers for GOJHL in the SportsDataverse Python package."
 ---
 # GOJHL (`sportsdataverse.gojhl`)
 

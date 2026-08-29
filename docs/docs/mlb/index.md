@@ -1,6 +1,7 @@
 ---
 title: MLB
 sidebar_label: MLB
+description: "sdv-py MLB: endpoint references, dataset loaders and parsers for MLB in the SportsDataverse Python package."
 ---
 # MLB (`sportsdataverse.mlb`)
 

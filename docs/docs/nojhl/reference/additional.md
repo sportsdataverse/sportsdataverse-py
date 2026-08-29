@@ -1,6 +1,7 @@
 ---
 title: NOJHL — additional Python functions
 sidebar_label: Additional functions
+description: "NOJHL — additional Python functions — additional functions in sdv-py, the SportsDataverse Python package."
 sidebar_position: 50
 ---
 # NOJHL — additional Python functions

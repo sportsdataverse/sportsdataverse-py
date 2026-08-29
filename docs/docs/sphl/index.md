@@ -1,6 +1,7 @@
 ---
 title: SPHL
 sidebar_label: SPHL
+description: "sdv-py SPHL: endpoint references, dataset loaders and parsers for SPHL in the SportsDataverse Python package."
 ---
 # SPHL (`sportsdataverse.sphl`)
 

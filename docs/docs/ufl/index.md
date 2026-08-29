@@ -1,6 +1,7 @@
 ---
 title: UFL
 sidebar_label: UFL
+description: "sdv-py UFL: endpoint references, dataset loaders and parsers for UFL in the SportsDataverse Python package."
 ---
 # UFL (`sportsdataverse.ufl`)
 

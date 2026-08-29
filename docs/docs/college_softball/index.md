@@ -1,6 +1,7 @@
 ---
 title: COLLEGE_SOFTBALL
 sidebar_label: COLLEGE_SOFTBALL
+description: "sdv-py COLLEGE_SOFTBALL: endpoint references, dataset loaders and parsers for COLLEGE_SOFTBALL in the SportsDataverse Python package."
 ---
 # COLLEGE_SOFTBALL (`sportsdataverse.college_softball`)
 

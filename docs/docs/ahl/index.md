@@ -1,6 +1,7 @@
 ---
 title: AHL
 sidebar_label: AHL
+description: "sdv-py AHL: endpoint references, dataset loaders and parsers for AHL in the SportsDataverse Python package."
 ---
 # AHL (`sportsdataverse.ahl`)
 

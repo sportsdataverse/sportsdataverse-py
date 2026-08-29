@@ -1,6 +1,7 @@
 ---
 title: CFB — On3 Recruit Database (api.on3.com)
 sidebar_label: On3 Recruit Database (api.on3.com)
+description: "CFB — On3 Recruit Database (api.on3.com) — endpoint reference in sdv-py, the SportsDataverse Python package."
 sidebar_position: 10
 ---
 # CFB — On3 Recruit Database (api.on3.com)

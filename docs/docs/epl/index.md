@@ -1,6 +1,7 @@
 ---
 title: EPL
 sidebar_label: EPL
+description: "sdv-py EPL: endpoint references, dataset loaders and parsers for EPL in the SportsDataverse Python package."
 ---
 # EPL (`sportsdataverse.epl`)
 

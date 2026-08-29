@@ -1,6 +1,7 @@
 ---
 title: LALIGA — ESPN FPI API (fitt v3)
 sidebar_label: ESPN FPI API (fitt v3)
+description: "LALIGA — ESPN FPI API (fitt v3) — endpoint reference in sdv-py, the SportsDataverse Python package."
 sidebar_position: 23
 ---
 # LALIGA — ESPN FPI API (fitt v3)

@@ -1,6 +1,7 @@
 ---
 title: NFL — NFL.com API
 sidebar_label: NFL.com API
+description: "NFL — NFL.com API — endpoint reference in sdv-py, the SportsDataverse Python package."
 sidebar_position: 10
 ---
 # NFL — NFL.com API

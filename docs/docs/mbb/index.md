@@ -1,6 +1,7 @@
 ---
 title: MBB
 sidebar_label: MBB
+description: "sdv-py MBB: endpoint references, dataset loaders and parsers for MBB in the SportsDataverse Python package."
 ---
 # MBB (`sportsdataverse.mbb`)
 

@@ -1,6 +1,7 @@
 ---
 title: BCHL
 sidebar_label: BCHL
+description: "sdv-py BCHL: endpoint references, dataset loaders and parsers for BCHL in the SportsDataverse Python package."
 ---
 # BCHL (`sportsdataverse.bchl`)
 

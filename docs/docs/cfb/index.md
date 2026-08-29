@@ -1,6 +1,7 @@
 ---
 title: CFB
 sidebar_label: CFB
+description: "sdv-py CFB: endpoint references, dataset loaders and parsers for CFB in the SportsDataverse Python package."
 ---
 # CFB (`sportsdataverse.cfb`)
 

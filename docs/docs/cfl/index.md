@@ -1,6 +1,7 @@
 ---
 title: CFL
 sidebar_label: CFL
+description: "sdv-py CFL: endpoint references, dataset loaders and parsers for CFL in the SportsDataverse Python package."
 ---
 # CFL (`sportsdataverse.cfl`)
 

@@ -1,6 +1,7 @@
 ---
 title: NHL — NHL Stats REST API
 sidebar_label: NHL Stats REST API
+description: "NHL — NHL Stats REST API — endpoint reference in sdv-py, the SportsDataverse Python package."
 sidebar_position: 12
 ---
 # NHL — NHL Stats REST API

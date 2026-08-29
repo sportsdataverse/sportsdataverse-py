@@ -1,6 +1,7 @@
 ---
 title: BCHL — additional Python functions
 sidebar_label: Additional functions
+description: "BCHL — additional Python functions — additional functions in sdv-py, the SportsDataverse Python package."
 sidebar_position: 50
 ---
 # BCHL — additional Python functions

@@ -1,6 +1,7 @@
 ---
 title: NBA dataset loaders
 sidebar_label: Loaders
+description: "NBA dataset loaders in sdv-py: the load_* functions that read the SportsDataverse release assets."
 sidebar_position: 1
 ---
 # NBA dataset loaders

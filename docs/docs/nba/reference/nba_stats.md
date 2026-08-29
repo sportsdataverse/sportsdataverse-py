@@ -1,6 +1,7 @@
 ---
 title: NBA — NBA Stats API (stats.nba.com)
 sidebar_label: NBA Stats API (stats.nba.com)
+description: "NBA — NBA Stats API (stats.nba.com) — endpoint reference in sdv-py, the SportsDataverse Python package."
 sidebar_position: 10
 ---
 # NBA — NBA Stats API (stats.nba.com)

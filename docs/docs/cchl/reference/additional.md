@@ -1,6 +1,7 @@
 ---
 title: CCHL — additional Python functions
 sidebar_label: Additional functions
+description: "CCHL — additional Python functions — additional functions in sdv-py, the SportsDataverse Python package."
 sidebar_position: 50
 ---
 # CCHL — additional Python functions

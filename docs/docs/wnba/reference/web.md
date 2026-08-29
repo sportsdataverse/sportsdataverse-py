@@ -1,6 +1,7 @@
 ---
 title: WNBA — ESPN web API (v3)
 sidebar_label: ESPN web API (v3)
+description: "WNBA — ESPN web API (v3) — endpoint reference in sdv-py, the SportsDataverse Python package."
 sidebar_position: 21
 ---
 # WNBA — ESPN web API (v3)

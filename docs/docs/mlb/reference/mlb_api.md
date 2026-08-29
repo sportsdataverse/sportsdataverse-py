@@ -1,6 +1,7 @@
 ---
 title: MLB — MLB Stats API
 sidebar_label: MLB Stats API
+description: "MLB — MLB Stats API — endpoint reference in sdv-py, the SportsDataverse Python package."
 sidebar_position: 10
 ---
 # MLB — MLB Stats API

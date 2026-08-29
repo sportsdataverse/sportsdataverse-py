@@ -1,6 +1,7 @@
 ---
 title: WNBA — WNBA Stats API (stats.wnba.com)
 sidebar_label: WNBA Stats API (stats.wnba.com)
+description: "WNBA — WNBA Stats API (stats.wnba.com) — endpoint reference in sdv-py, the SportsDataverse Python package."
 sidebar_position: 10
 ---
 # WNBA — WNBA Stats API (stats.wnba.com)

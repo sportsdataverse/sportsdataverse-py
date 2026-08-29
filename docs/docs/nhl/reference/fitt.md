@@ -1,6 +1,7 @@
 ---
 title: NHL — ESPN FPI API (fitt v3)
 sidebar_label: ESPN FPI API (fitt v3)
+description: "NHL — ESPN FPI API (fitt v3) — endpoint reference in sdv-py, the SportsDataverse Python package."
 sidebar_position: 23
 ---
 # NHL — ESPN FPI API (fitt v3)

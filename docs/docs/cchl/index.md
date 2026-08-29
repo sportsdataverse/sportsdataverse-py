@@ -1,6 +1,7 @@
 ---
 title: CCHL
 sidebar_label: CCHL
+description: "sdv-py CCHL: endpoint references, dataset loaders and parsers for CCHL in the SportsDataverse Python package."
 ---
 # CCHL (`sportsdataverse.cchl`)
 

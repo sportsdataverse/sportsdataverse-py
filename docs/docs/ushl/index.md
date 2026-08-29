@@ -1,6 +1,7 @@
 ---
 title: USHL
 sidebar_label: USHL
+description: "sdv-py USHL: endpoint references, dataset loaders and parsers for USHL in the SportsDataverse Python package."
 ---
 # USHL (`sportsdataverse.ushl`)
 

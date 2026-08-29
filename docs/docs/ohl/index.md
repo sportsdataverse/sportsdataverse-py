@@ -1,6 +1,7 @@
 ---
 title: OHL
 sidebar_label: OHL
+description: "sdv-py OHL: endpoint references, dataset loaders and parsers for OHL in the SportsDataverse Python package."
 ---
 # OHL (`sportsdataverse.ohl`)
 

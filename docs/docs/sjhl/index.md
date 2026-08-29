@@ -1,6 +1,7 @@
 ---
 title: SJHL
 sidebar_label: SJHL
+description: "sdv-py SJHL: endpoint references, dataset loaders and parsers for SJHL in the SportsDataverse Python package."
 ---
 # SJHL (`sportsdataverse.sjhl`)
 

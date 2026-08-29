@@ -1,6 +1,7 @@
 ---
 title: UCL — ESPN web API (v3)
 sidebar_label: ESPN web API (v3)
+description: "UCL — ESPN web API (v3) — endpoint reference in sdv-py, the SportsDataverse Python package."
 sidebar_position: 21
 ---
 # UCL — ESPN web API (v3)

@@ -1,6 +1,7 @@
 ---
 title: WC
 sidebar_label: WC
+description: "sdv-py WC: endpoint references, dataset loaders and parsers for WC in the SportsDataverse Python package."
 ---
 # WC (`sportsdataverse.wc`)
 

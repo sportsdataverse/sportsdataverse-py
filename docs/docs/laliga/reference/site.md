@@ -1,6 +1,7 @@
 ---
 title: LALIGA — ESPN site API (v2)
 sidebar_label: ESPN site API (v2)
+description: "LALIGA — ESPN site API (v2) — endpoint reference in sdv-py, the SportsDataverse Python package."
 sidebar_position: 20
 ---
 # LALIGA — ESPN site API (v2)

@@ -1,6 +1,7 @@
 ---
 title: NOJHL
 sidebar_label: NOJHL
+description: "sdv-py NOJHL: endpoint references, dataset loaders and parsers for NOJHL in the SportsDataverse Python package."
 ---
 # NOJHL (`sportsdataverse.nojhl`)
 

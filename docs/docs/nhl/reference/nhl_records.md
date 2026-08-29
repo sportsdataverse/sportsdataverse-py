@@ -1,6 +1,7 @@
 ---
 title: NHL — NHL Records API
 sidebar_label: NHL Records API
+description: "NHL — NHL Records API — endpoint reference in sdv-py, the SportsDataverse Python package."
 sidebar_position: 13
 ---
 # NHL — NHL Records API

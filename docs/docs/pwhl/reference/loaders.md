@@ -1,6 +1,7 @@
 ---
 title: PWHL dataset loaders
 sidebar_label: Loaders
+description: "PWHL dataset loaders in sdv-py: the load_* functions that read the SportsDataverse release assets."
 sidebar_position: 1
 ---
 # PWHL dataset loaders

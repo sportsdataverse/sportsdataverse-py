@@ -1,6 +1,7 @@
 ---
 title: ODDS
 sidebar_label: ODDS
+description: "sdv-py ODDS: endpoint references, dataset loaders and parsers for ODDS in the SportsDataverse Python package."
 ---
 # ODDS (`sportsdataverse.odds`)
 

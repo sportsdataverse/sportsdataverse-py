@@ -1,6 +1,7 @@
 ---
 title: MLB dataset loaders
 sidebar_label: Loaders
+description: "MLB dataset loaders in sdv-py: the load_* functions that read the SportsDataverse release assets."
 sidebar_position: 1
 ---
 # MLB dataset loaders

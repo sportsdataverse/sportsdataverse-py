@@ -1,6 +1,7 @@
 ---
 title: LIGUE1
 sidebar_label: LIGUE1
+description: "sdv-py LIGUE1: endpoint references, dataset loaders and parsers for LIGUE1 in the SportsDataverse Python package."
 ---
 # LIGUE1 (`sportsdataverse.ligue1`)
 
