@@ -3268,10 +3268,12 @@ class CFBPlayProcess(object):
                     ),
                 )
                 .then(
-                    pl.col("text")
-                    .str.extract(r"(.{0,4})yards\)|Yards\)|yds\)|Yds\)", 1)
-                    .str.replace("yards\\)|Yards\\)|yds\\)|Yds\\)", "")
-                    .str.replace("\\(", ""),
+                    # The parenthesised form, "(15 Yards)". The prior expression here
+                    # was the same ".{0,4} before yards" fragment capture the comment
+                    # above records as producing garbage, and its alternation was
+                    # mis-grouped besides -- group 1 exists only in the first branch, so
+                    # the other three always returned null. Grab the number directly.
+                    pl.col("text").str.extract(r"\((-?\d{1,3})\s*(?i:yards?|yds?)\)", 1)
                 )
                 .otherwise(pl.col("yds_penalty")),
             )
@@ -5245,59 +5247,91 @@ class CFBPlayProcess(object):
         )
 
         # event -> credited team (spec 5.2)
-        play_df = play_df.with_columns(
-            sack_team=pl.col("def_pos_team"),
-            interception_team=pl.col("def_pos_team"),
-            pass_breakup_team=pl.col("def_pos_team"),
-            # #93: a forced fumble is credited to the side OPPOSITE the fumbling
-            # player -- on scrimmage plays that is the defense, but on punt/kick/INT
-            # returns the fumbler is the returner and the forcer is on the covering
-            # (possession) team. Fall back to def_pos_team when the fumbling side
-            # could not be parsed.
-            forced_fumble_team=pl.when(pl.col("fumbling_team").is_null())
-            .then(pl.col("def_pos_team"))
-            .when(pl.col("fumbling_team") == pl.col("pos_team"))
-            .then(pl.col("def_pos_team"))
-            .otherwise(pl.col("pos_team")),
-            # Team that recovered the fumble/muff. Prefer the parsed recovering-team
-            # abbreviation; when it does not parse, fall back to the gaining team (the
-            # side opposite the fumbling team) for turnovers, or the fumbling team for
-            # own recoveries -- so a recovery is never dropped just because the team
-            # abbreviation in the text could not be matched.
-            fumble_recovery_team=pl.when(pl.col("recovery_team").is_not_null())
-            .then(pl.col("recovery_team"))
-            .when(pl.col("fumble_or_muff") == False)
-            .then(pl.lit(None, dtype=pl.Int64))
-            .when(pl.col("is_turnover") == True)
-            .then(
-                pl.when(pl.col("fumbling_team") == pl.col("pos_team"))
+        play_df = (
+            play_df.with_columns(
+                sack_team=pl.col("def_pos_team"),
+                interception_team=pl.col("def_pos_team"),
+                pass_breakup_team=pl.col("def_pos_team"),
+                # #93: a forced fumble is credited to the side OPPOSITE the fumbling
+                # player -- on scrimmage plays that is the defense, but on punt/kick/INT
+                # returns the fumbler is the returner and the forcer is on the covering
+                # (possession) team. Fall back to def_pos_team when the fumbling side
+                # could not be parsed.
+                forced_fumble_team=pl.when(pl.col("fumbling_team").is_null())
+                .then(pl.col("def_pos_team"))
+                .when(pl.col("fumbling_team") == pl.col("pos_team"))
                 .then(pl.col("def_pos_team"))
                 .otherwise(pl.col("pos_team")),
+                # Team that recovered the fumble/muff. Prefer the parsed recovering-team
+                # abbreviation; when it does not parse, fall back to the gaining team (the
+                # side opposite the fumbling team) for turnovers, or the fumbling team for
+                # own recoveries -- so a recovery is never dropped just because the team
+                # abbreviation in the text could not be matched.
+                fumble_recovery_team=pl.when(pl.col("recovery_team").is_not_null())
+                .then(pl.col("recovery_team"))
+                .when(pl.col("fumble_or_muff") == False)
+                .then(pl.lit(None, dtype=pl.Int64))
+                .when(pl.col("is_turnover") == True)
+                .then(
+                    pl.when(pl.col("fumbling_team") == pl.col("pos_team"))
+                    .then(pl.col("def_pos_team"))
+                    .otherwise(pl.col("pos_team")),
+                )
+                .otherwise(pl.col("fumbling_team")),
+                punt_return_team=pl.col("return_team"),
+                kick_return_team=pl.col("return_team"),
+                fg_team=pl.col("kicking_team"),
+                punt_team=pl.col("kicking_team"),
+                # Team resolution, best evidence first (each layer only fills what
+                # the prior left):
+                #   1. the binary home/away text resolver (_penalty_team via
+                #      _parse_penalty_team_side) -- resolves 98.6% of 2025 rows
+                #   2. foul-direction heuristic (_DEFENSIVE_PENALTIES)
+                # Measured at 13-game team-box parity: 61.5% penalties / 73.1%
+                # yards exact vs the era-form matcher's 46.2% / 50.0%.
+                penalized_team=pl.when(pl.col("penalty_detail").is_null())
+                .then(pl.lit(None, dtype=pl.Int32))
+                .when(pl.col("_penalty_team").is_not_null())
+                .then(pl.col("_penalty_team"))
+                .when(pl.col("penalty_detail").is_in(list(_DEFENSIVE_PENALTIES)))
+                .then(pl.col("def_pos_team"))
+                .otherwise(pl.col("pos_team")),
+                # yds_penalty arrives as a string from several extraction branches and
+                # carries their punctuation ("(16", " 19", "(-5"): 8,745 of 29,892 penalty
+                # rows in 2022-24. The numeric derivation below already recovers the value
+                # from 95.8% of those, so this is hygiene on the published string rather
+                # than a correctness fix -- but a column typed String should hold a number.
+                yds_penalty=pl.col("yds_penalty").cast(pl.Utf8).str.extract(r"(-?\d+)"),
             )
-            .otherwise(pl.col("fumbling_team")),
-            punt_return_team=pl.col("return_team"),
-            kick_return_team=pl.col("return_team"),
-            fg_team=pl.col("kicking_team"),
-            punt_team=pl.col("kicking_team"),
-            # Team resolution, best evidence first (each layer only fills what
-            # the prior left):
-            #   1. the binary home/away text resolver (_penalty_team via
-            #      _parse_penalty_team_side) -- resolves 98.6% of 2025 rows
-            #   2. foul-direction heuristic (_DEFENSIVE_PENALTIES)
-            # Measured at 13-game team-box parity: 61.5% penalties / 73.1%
-            # yards exact vs the era-form matcher's 46.2% / 50.0%.
-            penalized_team=pl.when(pl.col("penalty_detail").is_null())
-            .then(pl.lit(None, dtype=pl.Int32))
-            .when(pl.col("_penalty_team").is_not_null())
-            .then(pl.col("_penalty_team"))
-            .when(pl.col("penalty_detail").is_in(list(_DEFENSIVE_PENALTIES)))
-            .then(pl.col("def_pos_team"))
-            .otherwise(pl.col("pos_team")),
-            penalty_yards_signed=pl.col("yds_penalty")
-            .cast(pl.Utf8)
-            .str.extract(r"(-?\d+)")
-            .cast(pl.Int32, strict=False)
-            .fill_null(0),
+            .with_columns(
+                # Reject magnitudes no penalty enforcement can produce. NCAA's longest
+                # penalty is 15 yards and half-the-distance only ever reduces it; ESPN
+                # additionally reports net spot change on pass interference, which is why
+                # the legitimate band runs to about 25 (a 16-yard DPI and a half-the-distance
+                # targeting both appear there) and why a bound at 15 would discard real data.
+                #
+                # Past 25, all 53 rows in 2022-24 are the parser having seized a nearby
+                # number that is not the penalty, or ESPN stating an impossible one:
+                #
+                #   56  "rush ... for a gain of 56 yards"            the rush's yardage
+                #  -53  "field goal attempt from 53 yards"           the kick distance
+                #   65  "kickoff 65 yards ... Offside offsetting"    offsetting is 0 yards
+                #  -65  "unsportsmanlike conduct (-65 Yards)"        ESPN's own text
+                #
+                # Publishing 0 says "no reliable penalty yardage", which is true; publishing
+                # 56 asserts a 56-yard penalty, which is impossible. The bound is deliberately
+                # loose so it only catches the unarguable cases.
+                yds_penalty=pl.when(pl.col("yds_penalty").cast(pl.Int32, strict=False).abs() > 25)
+                .then(None)
+                .otherwise(pl.col("yds_penalty")),
+            )
+            .with_columns(
+                penalty_yards_signed=pl.col("yds_penalty")
+                .cast(pl.Utf8)
+                .str.extract(r"(-?\d+)")
+                .cast(pl.Int32, strict=False)
+                .fill_null(0),
+            )
         )
 
         # penalty_team_id: same value as penalized_team, exported under the

@@ -256,3 +256,74 @@ def test_detail_disconcerting_signals() -> None:
     assert _details(
         [("Penalty", "PENALTY PUR Disconcerting Signals (Powell,Mani) 5 yards from BSU25 to BSU30. NO PLAY.")]
     ) == ["Disconcerting Signals"]
+
+
+def test_parenthesised_yardage_is_captured_as_a_number() -> None:
+    """The `(15 Yards)` form must reach yds_penalty as a bare number.
+
+    A regression guard rather than a demonstration: the primary extractor already
+    handled these three inputs. What it locks in is that the column stays free of
+    the punctuation that reached the release on 8,745 of 29,892 penalty rows
+    (`'(10'`, `' (5'`, `'(-5'`) via the parenthesised-form fallback -- which was
+    both the fragment-capture pattern the primary extractor had abandoned for
+    producing garbage, and mis-grouped, three of its four branches always
+    returning null.
+    """
+    out = _run(
+        [
+            ("Penalty", "Nebraska Penalty, Face Mask (15 Yards) (Ty Robinson) to the NEB 40"),
+            ("Penalty", "Rutgers Penalty, Delay of Game (-5 Yards) to the RUT 49"),
+            ("Rush", "Doug Brumfield run for 4 yds Penalty, Holding (10 yards) to the NMex 30"),
+        ]
+    )
+    vals = out["yds_penalty"].to_list()
+    for v in vals:
+        assert v is None or "(" not in str(v), f"punctuation survived into yds_penalty: {v!r}"
+    assert [None if v is None else int(v) for v in vals] == [15, -5, 10]
+
+
+def test_implausible_penalty_yardage_is_rejected() -> None:
+    """No penalty enforcement produces 35 yards. 401424416 p143 carries ESPN's own
+    corrupt text ("1035 yards"), from which the parser recovered `'035'` -> 35.
+
+    Past 25 yards, every one of the 53 such rows in 2022-24 is either the parser
+    seizing a nearby number that is not the penalty (a rush gain, a field-goal
+    distance, a kick distance on an offsetting flag) or ESPN stating an impossible
+    one. Publishing 0 says "no reliable penalty yardage"; publishing 35 asserts a
+    35-yard penalty. The bound stays loose -- legitimate values reach ~25, since
+    ESPN reports net spot change on pass interference -- so only the unarguable
+    cases are caught.
+    """
+    import json
+    from pathlib import Path
+
+    import sportsdataverse.cfb.cfb_pbp as mod
+
+    summary = json.loads((Path(__file__).parent / "fixtures" / "summary_401424416.json").read_text(encoding="utf-8"))
+
+    class _Resp:
+        def json(self):
+            return summary
+
+    import pytest as _pytest
+
+    monkeypatch = _pytest.MonkeyPatch()
+    try:
+        monkeypatch.setattr(mod, "download", lambda *a, **k: _Resp())
+        proc = CFBPlayProcess(gameId=401424416)
+        proc.join_participants = False
+        proc.espn_cfb_pbp()
+        out = proc.run_processing_pipeline()
+    finally:
+        monkeypatch.undo()
+
+    plays = pl.from_dicts(out["plays"], infer_schema_length=None)
+    row = plays.filter(pl.col("game_play_number") == 143).row(0, named=True)
+    assert "1035 yards" in row["text"], "fixture drifted; this play should carry ESPN's corrupt yardage"
+    assert row["penalty_yards_signed"] == 0, f"implausible yardage survived: {row['penalty_yards_signed']}"
+
+    # and the game's other penalties keep theirs
+    pens = plays.filter(pl.col("penalty_flag") == True)  # noqa: E712
+    kept = pens.filter(pl.col("penalty_yards_signed") != 0)
+    assert kept.height >= 10, "the bound should not be stripping ordinary penalties"
+    assert kept.select(pl.col("penalty_yards_signed").abs().max()).item() <= 25
