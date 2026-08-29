@@ -797,3 +797,54 @@ def test_ep_between_is_not_folded_across_a_score() -> None:
     assert r["lag_scoringPlay"] is True, "fixture drifted; p63 should be the scoring play"
     assert r["EP_between"] == 0.0, "the fold must not cross a score"
     assert abs(r["EPA"]) < 4, f"a 6-yard completion with a flag is not an 8-point play (got {r['EPA']})"
+
+
+def test_declined_and_offsetting_penalties_have_zero_penalty_epa() -> None:
+    """B9: EPA_penalty isolates the PENALTY's effect, so a flag with no effect must
+    read zero. A declined penalty leaves the play exactly as it was; an offsetting
+    pair replays the down. Both were inheriting the PLAY's EP swing instead --
+    "Buffalo Penalty, Offensive Holding (Yards) declined" published +2.81 -- on
+    roughly 97% of such rows (286 of 296 in 2022, 158 of 161 in 2024, 314 of 319
+    in 2025).
+    """
+    import json
+    from pathlib import Path
+
+    import sportsdataverse.cfb.cfb_pbp as mod
+
+    gid = 401628344
+    fixture = Path(__file__).parent / "fixtures" / f"summary_{gid}.json"
+    if not fixture.exists():
+        pytest.skip(f"fixture summary_{gid}.json not captured")
+    summary = json.loads(fixture.read_text(encoding="utf-8"))
+
+    class _Resp:
+        def json(self):
+            return summary
+
+    monkeypatch = pytest.MonkeyPatch()
+    try:
+        monkeypatch.setattr(mod, "download", lambda *a, **k: _Resp())
+        proc = CFBPlayProcess(gameId=gid)
+        proc.join_participants = False
+        proc.espn_cfb_pbp()
+        out = proc.run_processing_pipeline()
+    finally:
+        monkeypatch.undo()
+
+    plays = pl.from_dicts(out["plays"], infer_schema_length=None)
+    declined = plays.filter(
+        (pl.col("penalty_flag") == True)  # noqa: E712
+        & ((pl.col("penalty_declined") == True) | (pl.col("penalty_offset") == True))  # noqa: E712
+    )
+    assert declined.height >= 1, "fixture drifted; expected at least one declined penalty"
+    nonzero = declined.filter(pl.col("EPA_penalty").abs() > 0.001)
+    assert nonzero.height == 0, nonzero.select("text", "EPA_penalty").rows()
+
+    # accepted penalties keep a value
+    accepted = plays.filter(
+        (pl.col("penalty_flag") == True)  # noqa: E712
+        & (pl.col("penalty_declined") != True)  # noqa: E712
+        & (pl.col("penalty_offset") != True)  # noqa: E712
+    )
+    assert accepted.filter(pl.col("EPA_penalty").is_not_null()).height == accepted.height

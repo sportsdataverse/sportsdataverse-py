@@ -6797,7 +6797,34 @@ class CFBPlayProcess(object):
                 )
                 .then(True)
                 .otherwise(False),
-                EPA_penalty=pl.when(pl.col("type.text").is_in(["Penalty", "Penalty (Kickoff)"]))
+                # B9: EPA_penalty is meant to isolate the PENALTY's effect, so a flag
+                # that had no effect must read zero. A declined penalty leaves the play
+                # exactly as it was and an offsetting pair replays the down, yet both
+                # were taking the branches below and inheriting the PLAY's EP swing:
+                # "Old Dominion Penalty, Defensive Holding (Bryce Duke) declined"
+                # published +3.50. Roughly 97% of declined and offsetting rows carried a
+                # nonzero value -- 286 of 296 in 2022, 158 of 161 in 2024, 314 of 319 in
+                # 2025 -- with a dozen per season above |2|.
+                #
+                # This is as far as the direct calculation goes for now. The remaining
+                # case, an ACCEPTED penalty on a play that stands, needs the counter-
+                # factual end spot, which is the actual end spot less the penalty's
+                # SIGNED yardage -- and that sign is not available. penalty_yards_signed
+                # carries a reliable magnitude (|start - end| matches it on 96.8-97.2% of
+                # no-play rows) but not a reliable sign: it agrees with the observed
+                # direction on only 45% of them, and deriving the sign from
+                # penalized_team gets to 88.8-90.4%. An 11% sign error mirrors the
+                # yardage, which is the defect class parts (c) through (e) exist to
+                # repair, so it is not built on that.
+                #
+                # No-play penalties need no counterfactual: the play never happened, so
+                # the state that would have stood IS the start state, and EP_end -
+                # EP_start already measures exactly the flag.
+                EPA_penalty=pl.when(
+                    (pl.col("penalty_declined") == True).or_(pl.col("penalty_offset") == True),
+                )
+                .then(0.0)
+                .when(pl.col("type.text").is_in(["Penalty", "Penalty (Kickoff)"]))
                 .then(pl.col("EPA"))
                 .when(pl.col("penalty_in_text") == True)
                 .then(pl.col("EP_end") - pl.col("EP_start"))
