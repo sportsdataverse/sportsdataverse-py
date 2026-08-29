@@ -791,10 +791,14 @@ def test_ep_between_is_not_folded_across_a_score() -> None:
         monkeypatch.undo()
 
     plays = pl.from_dicts(out["plays"], infer_schema_length=None)
-    row = plays.filter(pl.col("game_play_number") == 64)
+    # locate by text, not position: the late-insert reorder moved a Q1 TD that ESPN
+    # had filed at the end of this game, shifting every later game_play_number by one
+    row = plays.filter(
+        pl.col("text").str.contains("CJ Dippre for 6 yds to the ALA 31") & (pl.col("lag_scoringPlay") == True)  # noqa: E712
+    )
     assert row.height == 1
     r = row.row(0, named=True)
-    assert r["lag_scoringPlay"] is True, "fixture drifted; p63 should be the scoring play"
+    assert r["lag_scoringPlay"] is True, "fixture drifted; the Etienne TD should precede this play"
     assert r["EP_between"] == 0.0, "the fold must not cross a score"
     assert abs(r["EPA"]) < 4, f"a 6-yard completion with a flag is not an 8-point play (got {r['EPA']})"
 
@@ -1201,3 +1205,31 @@ def test_last_row_of_a_live_game_has_a_win_probability() -> None:
     assert last["status_type_completed"] is False
     assert last["wp_after"] is not None and last["wpa"] is not None and last["home_wp_after"] is not None
     assert abs(last["wp_after"] - truth) < 0.10, (last["wp_after"], truth)
+
+
+def test_late_inserted_plays_return_to_their_sequence_position():
+    """ESPN inserted two TCU plays late into 401856766 (seq 91 and 92) with ids that
+    place them 30+ rows on, in the middle of a UNC drive in Q4. Sorted by id, the
+    7-yard 3rd-down conversion (seq 91) read the Q4 UNC play as its predecessor,
+    folded a +5.38 EP_between and published EPA +7.30; its mirrored end state
+    (39 for 61) could not be repaired because part (c) needs the true next play.
+    The reorder puts both rows back after seq 90, in sequence order, where the
+    mirror repair then sees seq 92's start (61) and the EPA collapses to a real
+    3rd-and-2 conversion offset by a 15-yard unsportsmanlike flag.
+    """
+    df = _run_fixture(401856766).sort("game_play_number")
+    seq = df["sequenceNumber"].cast(pl.Int64).to_list()
+    i91, i92, i90 = seq.index(91), seq.index(92), seq.index(90)
+    assert (i90, i91, i92) == (i90, i90 + 1, i90 + 2), "late inserts must follow seq 90 in sequence order"
+    row = df.row(i91, named=True)
+    assert row["clock.displayValue"] == "12:42" and row["period"] == 3
+    assert row["end.yardsToEndzone"] == 61, "mirror repair needs the true next play"
+    assert abs(row["EP_between"]) < 0.5
+    assert -1.0 < row["EPA"] < 1.5, row["EPA"]
+    # the Q4 play that used to follow it no longer inherits the discontinuity
+    nxt = df.filter(pl.col("text").str.contains("C.Sadler caught at TCU28")).row(0, named=True)
+    assert abs(nxt["EP_between"]) < 1.0
+    # sanity: the game is still one contiguous sequence -- no other row lost its place
+    ids = df["id"].cast(pl.Int64).to_list()
+    disorder = sum(1 for a, b in zip(ids, ids[1:], strict=False) if b < a)
+    assert disorder <= 6, disorder  # the final game carries 5 id inversions, all late inserts
