@@ -1054,3 +1054,150 @@ def test_mirror_repair_reaches_scrimmage_penalty_rows() -> None:
     # L1 needs a no-play row -- so the sign is checked against the text, not the side.
     assert r["EP_penalty_cf"] is not None
     assert r["EPA_penalty_direct"] > 0, r["EPA_penalty_direct"]
+
+
+def test_receiver_name_survives_the_2025_vendor_template() -> None:
+    """The receiver capture is "to (.+)" plus a cleanup chain that never learned
+    the 2025 vendor phrasing -- "to #3 A.Evans III caught at ARK40", "to J.Hayes
+    thrown TCU45", "thrown to UM20 broken up by #1 G.Smith" -- so the regex
+    fallback ran on into those clauses. The participant join hides it on the
+    site, which is exactly why it went unnoticed: the fallback is what produced
+    the phantom-player box-score rows in the first place and has to be right on
+    its own. A bare yardline and a lone initial are nulled rather than published.
+    """
+    plays = _run_fixture(401752746)  # 2025, vendor template
+    names = plays.filter(pl.col("receiver_player_name").is_not_null())["receiver_player_name"]
+    assert names.len() >= 20, "fixture drifted; expected a normal number of targets"
+    debris = names.filter(
+        names.str.contains(r"(?i)caught at|thrown|broken up|intended for|defended by|^[A-Z]{2,6}\d{1,2},?$|^[A-Z]\.?$")
+    )
+    assert debris.len() == 0, debris.to_list()
+    assert all(" " not in n or n.split()[-1] in ("Jr.", "III", "II", "IV") for n in names.to_list()), (
+        names.unique().to_list()
+    )
+
+
+def test_lag_ep_end_skips_timeout_rows() -> None:
+    """B12: lag_EP_end must carry the last REAL play's EP_end across a Timeout,
+    not the Timeout row's own model score. The 2025 vendor template leaves stale
+    state on Timeout rows ("Timeout TCU" at 4th & 9 carrying 2nd & 5 from two
+    plays earlier), so the model's EP on that row is a phantom, and the lag was
+    taken before the Timeout override corrected it. The play after the Timeout
+    then saw a discontinuity that did not exist and, if it was a penalty play,
+    folded it into EPA -- a safety published at -3.09 against -0.64 real.
+
+    Across published 2025, penalty plays after a Timeout carried |EP_between|
+    mean 1.88 against 0.18 elsewhere, with 25 above |EPA| 3.
+    """
+    plays = _run_fixture(401752753)
+    p = {
+        r["game_play_number"]: r
+        for r in plays.filter(pl.col("game_play_number").is_between(123, 125)).iter_rows(named=True)
+    }
+    assert p[124]["type.text"] == "Timeout", "fixture drifted; p124 should be the Timeout"
+    # the Timeout row itself is flat
+    assert abs(p[124]["EP_end"] - p[124]["EP_start"]) < 1e-6
+    assert p[124]["EPA"] == 0
+    # and the play after it lags the last REAL play, not the Timeout's model value
+    assert abs(p[125]["lag_EP_end"] - p[123]["EP_end"]) < 1e-6, (p[125]["lag_EP_end"], p[123]["EP_end"])
+
+
+def test_all_zero_end_state_is_missing_and_backfilled_past_a_timeout() -> None:
+    """B13: the 2025 vendor template ships an ALL-ZERO end state -- yardLine 0,
+    yardsToEndzone 0, down 0, distance 0, team present -- on ordinary scrimmage
+    plays. Nothing flagged it as missing (end_state_missing keyed on a null
+    team), the <= 0 clamp read the 0 as the goal line and stored 99, and
+    "R.Sharpe rush left for 41 yards gain to the MSU20" scored -2.52 EPA.
+    Published rows ending at 99 with down 0 on a non-scoring, non-turnover
+    scrimmage play: 88 in 2022, 6 in 2024, 103 in 2025.
+
+    The backfill must also read the next REAL play: the row after this one is a
+    Timeout carrying stale state (61), and the ensuing snap starts at 20.
+    """
+    plays = _run_fixture(401752753)
+    r = plays.filter(pl.col("game_play_number") == 123).row(0, named=True)
+    assert "R.Sharpe rush left for 41 yards" in r["text"], "fixture drifted"
+    assert r["end.yardsToEndzone"] == 20, r["end.yardsToEndzone"]
+    assert r["EPA"] > 0, f"a 41-yard run to the 20 is not a {r['EPA']:+.2f} play"
+    # and nothing else in the game is left at the phantom 99 / down 0
+    left = plays.filter(
+        (pl.col("end.down") == 0)
+        & (pl.col("end.yardsToEndzone") == 99)
+        & (pl.col("scoring_play") != True)  # noqa: E712
+        & (pl.col("is_turnover") != True)  # noqa: E712
+        & ~pl.col("type.text").str.contains("(?i)kickoff|punt|field goal|timeout|end period")
+    )
+    assert left.height == 0, left.select("game_play_number", "type.text", "text").rows()
+
+
+def test_last_row_of_a_live_game_has_a_win_probability() -> None:
+    """B14: the most recent play of a game in progress. Every possession-change
+    branch of wp_after borrows the NEXT play's wp_before, and the last row of a
+    live game has no next play yet, so wp_after / wpa / home_wp_after came out
+    null and rendered as 0.0% on the site -- on the row people are looking at.
+
+    Simulated by truncating a completed game at a possession-changing play and
+    marking it in progress. The fill must exist, and must land near the value
+    the full game derives from the actual next play (the model's raw end-state
+    prediction, by contrast, misses by 0.15-0.79 on such rows).
+    """
+    import copy
+    import json
+    from pathlib import Path
+
+    import sportsdataverse.cfb.cfb_pbp as mod
+
+    gid = 401644749
+    full = json.loads((Path(__file__).parent / "fixtures" / f"summary_{gid}.json").read_text(encoding="utf-8"))
+
+    def run(summary):
+        class _Resp:
+            def json(self):
+                return summary
+
+        mp = pytest.MonkeyPatch()
+        try:
+            mp.setattr(mod, "download", lambda *a, **k: _Resp())
+            proc = CFBPlayProcess(gameId=gid)
+            proc.join_participants = False
+            proc.espn_cfb_pbp()
+            return pl.from_dicts(proc.run_processing_pipeline()["plays"], infer_schema_length=None)
+        finally:
+            mp.undo()
+
+    ref = run(full).sort("game_play_number")
+    # pick a mid-game possession change with a real next play as the cut point
+    cands = ref.filter(
+        (pl.col("start.pos_team.id") != pl.col("end.pos_team.id"))
+        & (pl.col("scoringPlay") == False)  # noqa: E712
+        & (pl.col("period") == 2)
+        & pl.col("wp_after").is_not_null()
+        & pl.col("type.text").is_in(["Interception Return", "Fumble Recovery (Opponent)", "Punt"])
+    )
+    assert cands.height >= 1, "fixture drifted; no mid-game possession change to cut at"
+    cut = cands.row(0, named=True)
+    truth = cut["wp_after"]
+
+    # truncate the payload after that play and mark the game in progress
+    trunc = copy.deepcopy(full)
+    drives = trunc["drives"]["previous"]
+    kept, done = [], False
+    for d in drives:
+        plays = []
+        for p in d["plays"]:
+            plays.append(p)
+            if str(p.get("id")) == str(cut["id"]):
+                done = True
+                break
+        d = dict(d, plays=plays)
+        kept.append(d)
+        if done:
+            break
+    trunc["drives"]["previous"] = kept
+    trunc["header"]["competitions"][0]["status"]["type"]["completed"] = False
+    live = run(trunc).sort("game_play_number")
+    last = live.row(-1, named=True)
+    assert str(last["id"]) == str(cut["id"]), "truncation did not end on the chosen play"
+    assert last["status_type_completed"] is False
+    assert last["wp_after"] is not None and last["wpa"] is not None and last["home_wp_after"] is not None
+    assert abs(last["wp_after"] - truth) < 0.10, (last["wp_after"], truth)

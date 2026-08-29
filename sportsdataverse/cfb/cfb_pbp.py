@@ -304,7 +304,7 @@ def _wp_predict(play_df, model, names, tb_cols, start_cols, end_cols):
     )
 
 
-def _apply_wp_derivation(play_df, wp_before_raw, wp_touchback_raw, wp_after_raw, suffix=""):
+def _apply_wp_derivation(play_df, wp_before_raw, wp_touchback_raw, wp_after_raw, suffix="", wp_after_flip_raw=None):
     """Apply the win-probability game-logic derivation to a set of raw model
     predictions, writing suffixed output columns. With ``suffix=""`` this emits
     the canonical ``wp_before`` / ``wp_after`` / ``wpa`` (+ home/away/def) columns;
@@ -359,6 +359,10 @@ def _apply_wp_derivation(play_df, wp_before_raw, wp_touchback_raw, wp_after_raw,
             pl.lit(wp_before_raw).alias(wb),
             pl.lit(wp_touchback_raw).alias(wt),
             pl.lit(wp_after_raw).alias(wa),
+            # kept aside: the model's own end-state WP, for the one row that has no
+            # next play to borrow from (B14 below)
+            pl.lit(wp_after_raw).alias(f"_wa_raw{suffix}"),
+            pl.lit(wp_after_flip_raw if wp_after_flip_raw is not None else wp_after_raw).alias(f"_wa_flip{suffix}"),
         )
         .with_columns(
             pl.when(touchback_mask).then(pl.col(wt)).otherwise(pl.col(wb)).alias(wb),
@@ -467,6 +471,41 @@ def _apply_wp_derivation(play_df, wp_before_raw, wp_touchback_raw, wp_after_raw,
             .otherwise(pl.col(wa))
             .alias(wa),
         )
+        .with_columns(
+            # B14: the most recent play of a game IN PROGRESS. Every possession-change
+            # branch above borrows the NEXT play's wp_before, and the last row of a
+            # live game has no next play yet, so wp_after -- and with it wpa and the
+            # home/away exports -- came out null and rendered as 0.0% on the site,
+            # on exactly the row people are looking at ("4th & 1, turnover on downs:
+            # WP after 0.0%, WPA 0.0%"). The game-ender branches do not apply; the
+            # game is not complete.
+            #
+            # The raw end-state prediction is NOT usable here as it stands. Its
+            # features are end-perspective except end.pos_score_diff, which is the
+            # START team's, so on a possession change the model scores an
+            # inconsistent row -- measured against the lead-derived value on six
+            # games across 2005-2026, raw and its complement both miss by 0.15-0.79.
+            # Restating the score differential as -end.pos_score_diff makes the row
+            # consistent, and the complement of THAT lands within 0.001-0.03 on
+            # ordinary turnovers (the residual misses are Timeouts and re-kick
+            # penalties, where the lead-derived value is the questionable side).
+            # Rows with no possession change keep the raw value, as .otherwise does.
+            pl.when(
+                pl.col(wa)
+                .is_null()
+                .and_(pl.col(lwb).is_null())
+                .and_(pl.col("status_type_completed") != True)
+                .and_(pl.col(f"_wa_flip{suffix}").is_not_null()),
+            )
+            .then(
+                pl.when(pl.col("start.pos_team.id") != pl.col("end.pos_team.id"))
+                .then(1 - pl.col(f"_wa_flip{suffix}"))
+                .otherwise(pl.col(f"_wa_raw{suffix}")),
+            )
+            .otherwise(pl.col(wa))
+            .alias(wa),
+        )
+        .drop([f"_wa_raw{suffix}", f"_wa_flip{suffix}"])
         .with_columns(
             (1 - pl.col(wa)).alias(dwa),
         )
@@ -1513,7 +1552,34 @@ class CFBPlayProcess(object):
             # end-state on some short-yardage / penalty plays; the bare current-play
             # fallback mis-attributes possession after a turnover/score, whereas the next
             # play's start team is the correct post-play possessor.
-            .with_columns(end_state_missing=pl.col("end.team.id").is_null())
+            .with_columns(
+                # B13: a second shape of missing end state. Besides the null team and
+                # the -1 sentinel, the 2025 vendor template ships an ALL-ZERO end --
+                # yardLine 0, yardsToEndzone 0, down 0, distance 0, team present -- on
+                # ordinary scrimmage plays: "R.Sharpe rush left for 41 yards gain to
+                # the MSU20, 1ST DOWN". Nothing flagged it, the <= 0 clamp read the 0
+                # as the goal line and stored 99, and a 41-yard run scored -2.52 EPA.
+                # Published rows ending at 99 with down 0 that are not a score, a
+                # turnover or an end of half: 88 in 2022, 6 in 2024, 103 in 2025,
+                # averaging -1.6 to -3.9 EPA. Down 0 AND distance 0 never describe a
+                # real snap's end; a score, a turnover and a kick each leave a real
+                # state behind, and are excluded besides. Flagging it here lets part
+                # (b) backfill from the next play like any other missing end.
+                end_state_missing=pl.col("end.team.id").is_null()
+                | (
+                    (pl.col("end.down") == 0)
+                    .and_(pl.col("end.distance") == 0)
+                    .and_(pl.col("end.yardLine") == 0)
+                    .and_(pl.col("end.yardsToEndzone") == 0)
+                    .and_(pl.col("scoringPlay") == False)
+                    # end.team.id is still a string here; start.team.id is not
+                    .and_(pl.col("end.team.id").cast(pl.Utf8) == pl.col("start.team.id").cast(pl.Utf8))
+                    .and_(
+                        pl.col("type.text").str.contains(r"(?i)kickoff|punt|field goal|timeout|end period|end of")
+                        == False
+                    )
+                ),
+            )
             .with_columns(
                 pl.col("end.team.id")
                 .fill_null(value=pl.col("start.team.id").shift(-1))
@@ -1829,15 +1895,70 @@ class CFBPlayProcess(object):
                 # play is the same possessing team, backfill end.yardsToEndzone from that
                 # next play's start yardline -- the actual resulting field position.
                 # Pairs with the end.team.id next-play fill above.
+                # The next REAL play, not the next row. A Timeout between this play and
+                # the next snap carries stale state on the 2025 template -- "R.Sharpe
+                # rush for 41 yards to the MSU20" was backfilled with 61, the Timeout
+                # row's start, when the ensuing snap starts at 20. Same lookahead part
+                # (d.ii) and part (e) use.
                 pl.when(
                     (pl.col("end_state_missing") == True).and_(
-                        pl.col("start.pos_team.id").shift(-1) == pl.col("end.pos_team.id"),
+                        pl.when(pl.col("type.text").shift(-1).str.contains(_ADMIN_ROW_RE))
+                        .then(
+                            pl.when(pl.col("type.text").shift(-2).str.contains(_ADMIN_ROW_RE))
+                            .then(pl.col("start.pos_team.id").shift(-3))
+                            .otherwise(pl.col("start.pos_team.id").shift(-2)),
+                        )
+                        .otherwise(pl.col("start.pos_team.id").shift(-1))
+                        == pl.col("end.pos_team.id"),
                     ),
                 )
-                .then(pl.col("start.yardsToEndzone").shift(-1))
+                .then(
+                    pl.when(pl.col("type.text").shift(-1).str.contains(_ADMIN_ROW_RE))
+                    .then(
+                        pl.when(pl.col("type.text").shift(-2).str.contains(_ADMIN_ROW_RE))
+                        .then(pl.col("start.yardsToEndzone").shift(-3))
+                        .otherwise(pl.col("start.yardsToEndzone").shift(-2)),
+                    )
+                    .otherwise(pl.col("start.yardsToEndzone").shift(-1)),
+                )
                 .otherwise(pl.col("end.yardsToEndzone"))
                 .alias("end.yardsToEndzone"),
             )
+            .with_columns(
+                # The all-zero shape (B13) zeroed the down and distance too, and the EP
+                # model reads its end-state down flags from end.down: with all four
+                # False it scored the 41-yard run's end at 3.53 where the identical
+                # state at the next snap scored 4.72. Backfill both from the next real
+                # play so the row's end IS the next row's start.
+                _b_zero=(pl.col("end_state_missing") == True)
+                .and_(pl.col("end.down") == 0)
+                .and_(pl.col("end.distance") == 0),
+                _b_nxt_down=pl.when(pl.col("type.text").shift(-1).str.contains(_ADMIN_ROW_RE))
+                .then(
+                    pl.when(pl.col("type.text").shift(-2).str.contains(_ADMIN_ROW_RE))
+                    .then(pl.col("start.down").shift(-3))
+                    .otherwise(pl.col("start.down").shift(-2)),
+                )
+                .otherwise(pl.col("start.down").shift(-1)),
+                _b_nxt_dist=pl.when(pl.col("type.text").shift(-1).str.contains(_ADMIN_ROW_RE))
+                .then(
+                    pl.when(pl.col("type.text").shift(-2).str.contains(_ADMIN_ROW_RE))
+                    .then(pl.col("start.distance").shift(-3))
+                    .otherwise(pl.col("start.distance").shift(-2)),
+                )
+                .otherwise(pl.col("start.distance").shift(-1)),
+            )
+            .with_columns(
+                pl.when(pl.col("_b_zero").and_(pl.col("_b_nxt_down").is_not_null()))
+                .then(pl.col("_b_nxt_down"))
+                .otherwise(pl.col("end.down"))
+                .alias("end.down"),
+                pl.when(pl.col("_b_zero").and_(pl.col("_b_nxt_dist").is_not_null()))
+                .then(pl.col("_b_nxt_dist"))
+                .otherwise(pl.col("end.distance"))
+                .alias("end.distance"),
+            )
+            .drop(["_b_zero", "_b_nxt_down", "_b_nxt_dist"])
             .with_columns(
                 # B3 part (c): the same repair for end states that are PRESENT but
                 # mirrored. ESPN sometimes reports end.yardsToEndzone from the wrong
@@ -4571,7 +4692,15 @@ class CFBPlayProcess(object):
                 .str.replace(r"(?i)pass incomplete to", "")
                 .str.replace(r"(?i)(.+)pass incomplete", "")
                 .str.replace(r"(?i)pass incomplete", "")
-                .str.replace(r"(?i) \((.+)\)", ""),
+                .str.replace(r"(?i) \((.+)\)", "")
+                # 2025's vendor template continues past the receiver -- "to #3 A.Evans
+                # III caught at ARK40", "to J.Hayes thrown TCU45", "thrown to UM20
+                # broken up by #1 G.Smith" -- and none of the trims above knew those
+                # clauses, so the capture ran on into them. The participant join hides
+                # it on the site; the regex fallback is what produced the phantom
+                # box-score rows in the first place, so it has to be right on its own.
+                .str.replace(r"(?i)\s*(?:caught at|thrown|broken up|intended for|defended by)\b.*$", "")
+                .str.strip_chars(),
                 # --- Sack Names -----
                 sack_players=pl.when(
                     (pl.col("sack") == True).or_((pl.col("fumble_vec") == True).and_(pl.col("pass") == True)),
@@ -4584,6 +4713,39 @@ class CFBPlayProcess(object):
                     .str.replace(r" at the (.+)", ""),
                 )
                 .otherwise(None),
+            )
+            .with_columns(
+                # Not receivers: a bare yardline ("thrown to UM20" names no target and
+                # the capture returned "UM20"), and a lone initial ("to K. thrown UNC25"
+                # is ESPN's own truncation). Null beats a phantom box-score row.
+                # The yardline may be mixed case ("Tulsa25") and the team may stand
+                # alone with no number ("FAU"); in this template a real name always
+                # carries an initial and a period, so a bare token is never one.
+                # Trailing punctuation left by a trim ("T.J. Simpson," after cutting
+                # "broken up by ..."). That debris predates 2025 by fifteen years: the
+                # chain's `\\,.+` trim carries a doubled backslash, so it matches a
+                # literal "\," and has never fired -- "Anthony Miller, broken up by
+                # Omar Bolden." survived intact from 2010 on. Left in place, since a
+                # real first-comma cut would break "Garcia Rodriguez,Guillermo".
+                # ...and an UNCLOSED parenthetical -- "Corey (WR Brown, clock:55" (2010)
+                # -- which the " \((.+)\)" trim above needs a closing paren to catch.
+                # No receiver name contains "(".
+                receiver_player=pl.col("receiver_player")
+                .str.replace(r"\s*\(.*$", "")
+                .str.replace(r"\b(Jr|Sr)\.$", "${1}\x00")  # protect a suffix period ...
+                .str.replace(r"[,.\s]+$", "")  # ... strip "Troy Evans." / "T.J. Simpson," ...
+                .str.replace("\x00", "."),  # ... and restore it. Rust regex has no lookbehind.
+            )
+            .with_columns(
+                receiver_player=pl.when(
+                    pl.col("receiver_player").str.contains(r"^[A-Za-z]{2,8}\d{1,2},?$")
+                    | pl.col("receiver_player").str.contains(r"^[A-Z]{2,6}$")
+                    | pl.col("receiver_player").str.contains(r"^[A-Z]\.?$")
+                    # a bare jersey ("pass complete to #87 for 8 yards", 2005) is not a name
+                    | pl.col("receiver_player").str.contains(r"^#\d{1,3}$"),
+                )
+                .then(None)
+                .otherwise(pl.col("receiver_player")),
             )
             .with_columns(
                 sack_player1=pl.col("sack_players").str.replace(r"and (.+)", ""),
@@ -6881,7 +7043,26 @@ class CFBPlayProcess(object):
                 .otherwise(pl.col("EP_end")),
             )
             .with_columns(
-                lag_EP_end=pl.col("EP_end").shift(1),
+                # B12: the lag must not read a Timeout row's EP_end. That value is the
+                # model scored on whatever state ESPN left on the Timeout row, and the
+                # 2025 vendor template leaves a STALE one -- "Timeout TCU" at 4th & 9
+                # on the 31 carried 2nd & 5 on the 35 from two plays earlier. The
+                # Timeout's own EP_end is overridden to its EP_start further down, but
+                # this lag was taken first, so the play after the Timeout saw a phantom
+                # +2.3 discontinuity and, being a penalty play, folded it into EPA:
+                # 401856766 p76, a safety published at -3.09 against -0.78 real.
+                #
+                # Across published 2025, penalty plays following a Timeout carried
+                # |EP_between| mean 1.88 and p90 4.66 against 0.18 / 0.24 elsewhere,
+                # with 25 above |EPA| 3. 2022-24 show 0.16 / 0.24, which is why it went
+                # unnoticed until the new template. Forward-filling the last real play's
+                # EP_end across any run of Timeouts is the same correction the override
+                # below applies to the Timeout row itself.
+                lag_EP_end=pl.when(pl.col("type.text") == "Timeout")
+                .then(None)
+                .otherwise(pl.col("EP_end"))
+                .forward_fill()
+                .shift(1),
                 lag_change_of_pos_team=pl.col("change_of_pos_team").shift(1),
             )
             .with_columns(
@@ -7335,13 +7516,31 @@ class CFBPlayProcess(object):
         # ---- derive wp_before / wp_after / wpa (+ home/away/def) for each model ----
         # The spread surface keeps the canonical un-suffixed column names; the
         # spread-free surface mirrors it under the ``_naive`` suffix.
-        play_df = _apply_wp_derivation(play_df, WP_start, WP_start_touchback, WP_end, suffix="")
+        # B14: the same end-state prediction with the score differential restated in
+        # the END team's perspective (see _apply_wp_derivation). Only consumed on the
+        # last row of a game in progress.
+        _flip_df = play_df.with_columns((-pl.col("end.pos_score_diff")).alias("end.pos_score_diff"))
+        _, _, WP_end_flip = _wp_predict(
+            _flip_df, wp_model, wp_final_names, wp_start_touchback_columns, wp_start_columns, wp_end_columns
+        )
+        _, _, WP_end_flip_naive = _wp_predict(
+            _flip_df,
+            wp_naive_model,
+            wp_naive_final_names,
+            wp_naive_start_touchback_columns,
+            wp_naive_start_columns,
+            wp_naive_end_columns,
+        )
+        play_df = _apply_wp_derivation(
+            play_df, WP_start, WP_start_touchback, WP_end, suffix="", wp_after_flip_raw=WP_end_flip
+        )
         play_df = _apply_wp_derivation(
             play_df,
             WP_start_naive,
             WP_tb_naive,
             WP_end_naive,
             suffix="_naive",
+            wp_after_flip_raw=WP_end_flip_naive,
         )
         return play_df
 
