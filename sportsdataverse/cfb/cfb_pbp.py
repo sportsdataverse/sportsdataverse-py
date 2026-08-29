@@ -754,7 +754,20 @@ _RETURN_RE = re.compile(r"(?i)\breturn")
 #: but the text-versus-field adjudication behind part (e) was measured on kickoff
 #: returns only, so shipping fumble returns on it would be asserting more than was
 #: checked.
-_KICKOFF_TEXT_RE = re.compile(r"(?i)kickoff")
+#: KICKOFFS ONLY, and that scope is load bearing.
+#:
+#: Punt and interception returns look like candidates -- adjudicated against the
+#: next real play on 2025, the text wins 93-26 on punts and 57-8 on interceptions.
+#: But widening to them was backtested and REJECTED: on the 26 rows it moved, the
+#: EPA distribution got worse rather than better (rows above |EPA| 4 went 1 -> 7,
+#: maximum 4.22 -> 5.02), and spot checks disagree with the text as well as the
+#: field -- "punt 58 yards to the LOU28 #5 C.Lacy return 21 yards to the LOU49"
+#: was rewritten to 80 when the return plainly ends around 51.
+#:
+#: The next-play agreement that gate tests is evidently satisfiable by a value that
+#: is still wrong on these classes, so they stay out until that is understood.
+#: Fumble returns are out regardless: there the stored field beats the text 27-9.
+_RETURN_CLASS_RE = re.compile(r"(?i)kickoff")
 #: A return that reaches the endzone, or one wiped out, does not report a spot the
 #: EP model should read: the scoring conventions and the nullification both put the
 #: end state somewhere the text does not describe.
@@ -770,7 +783,7 @@ def _parse_return_spot(row):
     where it came to rest.
     """
     txt = row["text"]
-    if not txt or not _KICKOFF_TEXT_RE.search(txt):
+    if not txt or not _RETURN_CLASS_RE.search(txt):
         return None
     if not _RETURN_RE.search(txt) or _RETURN_EXCLUDE_RE.search(txt):
         return None
@@ -2042,14 +2055,21 @@ class CFBPlayProcess(object):
                 .otherwise(pl.col("start.pos_team.id").shift(-1)),
             )
             .with_columns(
+                # Resolved against the END possession team, which is what
+                # end.yardsToEndzone expresses -- the distance for whoever has the ball
+                # when the play is over. start.pos_team.id agrees on a kickoff (the same
+                # team on 99% of them) but is the LOSING side on a punt or an
+                # interception, so it returns the complement there. Measured agreement
+                # with the field: kickoffs 99.4% end-ref vs 98.7% start-ref in 2024,
+                # punts 99.7% vs 3.5%, interceptions 99.3% vs 6.1%.
                 _ret_y2ez=pl.when(pl.col("_ret_spot").str.starts_with("mid"))
                 .then(pl.lit(50))
                 .when(
                     (pl.col("_ret_spot").str.starts_with("home")).and_(
-                        pl.col("start.pos_team.id") == pl.col("homeTeamId"),
+                        pl.col("end.pos_team.id") == pl.col("homeTeamId"),
                     )
                     | (pl.col("_ret_spot").str.starts_with("away")).and_(
-                        pl.col("start.pos_team.id") != pl.col("homeTeamId"),
+                        pl.col("end.pos_team.id") != pl.col("homeTeamId"),
                     ),
                 )
                 .then(pl.lit(100) - pl.col("_ret_spot").str.extract(r":(\d+)$", 1).cast(pl.Int64, strict=False))

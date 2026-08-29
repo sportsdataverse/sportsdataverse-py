@@ -708,22 +708,31 @@ def test_return_spot_is_none_rather_than_guessed() -> None:
     assert _ret("kickoff 60 yds , A.Player return for 15 yds to the ZZZQQ 20") is None
 
 
-def test_return_spot_only_fires_on_kickoff_rows() -> None:
-    """A fumble recovery's text carries "returned to the WEST 45", which matches the
-    return pattern. Part (e) is not for those rows.
+def test_return_spot_class_scope_is_kickoffs_only() -> None:
+    """Part (e) touches kickoff returns and nothing else, and that scope is load
+    bearing rather than incidental.
 
-    The backtest caught it: 401099813 p14 and p84 both moved, and both are
-    `Fumble Recovery (Own)`. They may well be the same defect -- each agreed with the
-    next play, which is what the gate tests -- but the text-versus-field adjudication
-    behind part (e) was measured on kickoff returns only. Shipping fumble returns on
-    that evidence would assert more than was checked.
+    Punt and interception returns look like candidates. Adjudicated against the
+    next real play on 2025, the text beats the stored field 93-26 on punts and
+    57-8 on interceptions. Widening to them was nonetheless BACKTESTED AND
+    REJECTED: across the 26 rows it moved, the EPA distribution got worse rather
+    than better -- rows above |EPA| 4 went 1 to 7 and the maximum 4.22 to 5.02 --
+    and the new values disagree with the text as well as the field. "punt 58 yards
+    to the LOU28 #5 C.Lacy return 21 yards to the LOU49" was rewritten to 80 when
+    the return plainly ends around 51.
+
+    The lesson is that the next-play agreement the gate tests can be satisfied by a
+    value that is still wrong on these classes: beating the field is not the same
+    as being right, since both can be wrong together. They stay out until that is
+    understood.
+
+    Fumble returns are out on their own evidence -- there the stored field beats
+    the text 27 to 9.
     """
-    assert _ret("David Blough fumbled (aborted) at FSU 45, recovered by David Blough, returned to the FSU 45") is None
-    assert _ret("Taylor Cornelius fumbled (aborted) at the LOU 28, recovered by him, returned to the LOU 28") is None
-    # a punt return is likewise out of scope until it has been adjudicated
+    assert _ret("(06:18) #37 D.Bale kickoff 67 yards to the LOU23 #6 D.Booth return 17 yards to LOU40") == "home:40"
     assert _ret("Ryan Rehkow punt for 45 yds , J.Smith return for 8 yds to the LOU 30") is None
-    # kickoffs still resolve
-    assert _ret("(06:18) #37 D.Bale kickoff 67 yards to the LOU23 #6 D.Booth return 17 yards to the LOU40") == "home:40"
+    assert _ret("A.Jones pass intercepted by B.Lee return for 12 yds to the FSU 44") is None
+    assert _ret("David Blough fumbled (aborted) at FSU 45, recovered by David Blough, returned to the FSU 45") is None
 
 
 def test_spot_midfield_loses_to_a_later_team_qualified_spot() -> None:
