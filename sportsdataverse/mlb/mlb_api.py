@@ -120,14 +120,17 @@ def mlb_schedule_postseason(
 
             mlb_schedule_postseason()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "season": season,
+        "sportId": sport_id,
+        "hydrate": hydrate,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://statsapi.mlb.com/api/v1/schedule/postseason",
-        params={
-            "season": season,
-            "sportId": sport_id,
-            "hydrate": hydrate,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_mlb_api_schedule(raw, return_as_pandas=return_as_pandas)
@@ -167,15 +170,18 @@ def mlb_pbp(
 
             mlb_pbp(game_pk=716390)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "language": language,
+        "language": timecode,
+        "hydrate": hydrate,
+        "fields": fields,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://statsapi.mlb.com/api/v1.1/game/{game_pk}/feed/live",
-        params={
-            "language": language,
-            "language": timecode,
-            "hydrate": hydrate,
-            "fields": fields,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_mlb_api_list(raw, return_as_pandas=return_as_pandas)
@@ -211,13 +217,16 @@ def mlb_boxscore(
 
             mlb_boxscore(game_pk=716390)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "timecode": timecode,
+        "fields": fields,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://statsapi.mlb.com/api/v1/game/{game_pk}/boxscore",
-        params={
-            "timecode": timecode,
-            "fields": fields,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_mlb_api_boxscore(raw, return_as_pandas=return_as_pandas)
@@ -253,13 +262,16 @@ def mlb_linescore(
 
             mlb_linescore(game_pk=716390)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "timecode": timecode,
+        "fields": fields,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://statsapi.mlb.com/api/v1/game/{game_pk}/linescore",
-        params={
-            "timecode": timecode,
-            "fields": fields,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_mlb_api_linescore(raw, return_as_pandas=return_as_pandas)
@@ -295,13 +307,16 @@ def mlb_play_by_play(
 
             mlb_play_by_play(game_pk=716390)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "timecode": timecode,
+        "fields": fields,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://statsapi.mlb.com/api/v1/game/{game_pk}/playByPlay",
-        params={
-            "timecode": timecode,
-            "fields": fields,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_mlb_api_play_by_play(raw, return_as_pandas=return_as_pandas)
@@ -335,12 +350,15 @@ def mlb_game_context_metrics(
 
             mlb_game_context_metrics(game_pk=716390)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "fields": fields,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://statsapi.mlb.com/api/v1/game/{game_pk}/contextMetrics",
-        params={
-            "fields": fields,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_mlb_api_list(raw, return_as_pandas=return_as_pandas)
@@ -374,12 +392,15 @@ def mlb_win_probability(
 
             mlb_win_probability(game_pk=716390)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "fields": fields,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://statsapi.mlb.com/api/v1/game/{game_pk}/winProbability",
-        params={
-            "fields": fields,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_mlb_api_win_probability(raw, return_as_pandas=return_as_pandas)
@@ -411,11 +432,14 @@ def mlb_game_content(
 
             mlb_game_content(game_pk=716390)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://statsapi.mlb.com/api/v1/game/{game_pk}/content",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_mlb_api_list(raw, return_as_pandas=return_as_pandas)
@@ -455,15 +479,18 @@ def mlb_team(
 
             mlb_team(team_id=10)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "season": season,
+        "sportId": sport_id,
+        "hydrate": hydrate,
+        "fields": fields,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://statsapi.mlb.com/api/v1/teams/{team_id}",
-        params={
-            "season": season,
-            "sportId": sport_id,
-            "hydrate": hydrate,
-            "fields": fields,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_mlb_api_list(raw, return_as_pandas=return_as_pandas)
@@ -505,16 +532,19 @@ def mlb_team_roster(
 
             mlb_team_roster(team_id=10)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "season": season,
+        "rosterType": roster_type,
+        "date": date,
+        "hydrate": hydrate,
+        "fields": fields,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://statsapi.mlb.com/api/v1/teams/{team_id}/roster",
-        params={
-            "season": season,
-            "rosterType": roster_type,
-            "date": date,
-            "hydrate": hydrate,
-            "fields": fields,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_mlb_api_team_roster(raw, return_as_pandas=return_as_pandas)
@@ -552,14 +582,17 @@ def mlb_team_alumni(
 
             mlb_team_alumni(team_id=10)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "season": season,
+        "group": group,
+        "hydrate": hydrate,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://statsapi.mlb.com/api/v1/teams/{team_id}/alumni",
-        params={
-            "season": season,
-            "group": group,
-            "hydrate": hydrate,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_mlb_api_list(raw, return_as_pandas=return_as_pandas)
@@ -597,15 +630,18 @@ def mlb_team_affiliates(
 
             mlb_team_affiliates()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "teamIds": team_ids,
+        "sportId": sport_id,
+        "season": season,
+        "hydrate": hydrate,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://statsapi.mlb.com/api/v1/teams/affiliates",
-        params={
-            "teamIds": team_ids,
-            "sportId": sport_id,
-            "season": season,
-            "hydrate": hydrate,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_mlb_api_list(raw, return_as_pandas=return_as_pandas)
@@ -641,14 +677,17 @@ def mlb_people(
 
             mlb_people()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "personIds": person_ids,
+        "hydrate": hydrate,
+        "fields": fields,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://statsapi.mlb.com/api/v1/people",
-        params={
-            "personIds": person_ids,
-            "hydrate": hydrate,
-            "fields": fields,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_mlb_api_list(raw, return_as_pandas=return_as_pandas)
@@ -686,14 +725,17 @@ def mlb_person(
 
             mlb_person(person_id=660271)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "season": season,
+        "hydrate": hydrate,
+        "fields": fields,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://statsapi.mlb.com/api/v1/people/{person_id}",
-        params={
-            "season": season,
-            "hydrate": hydrate,
-            "fields": fields,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_mlb_api_list(raw, return_as_pandas=return_as_pandas)
@@ -729,12 +771,15 @@ def mlb_person_game_stats(
 
             mlb_person_game_stats(person_id=660271, game_pk=716390)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "fields": fields,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://statsapi.mlb.com/api/v1/people/{person_id}/stats/game/{game_pk}",
-        params={
-            "fields": fields,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_mlb_api_list(raw, return_as_pandas=return_as_pandas)
@@ -772,14 +817,17 @@ def mlb_sport_players(
 
             mlb_sport_players()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "season": season,
+        "hydrate": hydrate,
+        "fields": fields,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://statsapi.mlb.com/api/v1/sports/{sport_id}/players",
-        params={
-            "season": season,
-            "hydrate": hydrate,
-            "fields": fields,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_mlb_api_list(raw, return_as_pandas=return_as_pandas)
@@ -811,12 +859,15 @@ def mlb_sports(
 
             mlb_sports()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "sportId": sport_id,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://statsapi.mlb.com/api/v1/sports",
-        params={
-            "sportId": sport_id,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_mlb_api_list(raw, return_as_pandas=return_as_pandas)
@@ -852,14 +903,17 @@ def mlb_leagues(
 
             mlb_leagues()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "sportId": sport_id,
+        "season": season,
+        "leagueIds": league_ids,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://statsapi.mlb.com/api/v1/leagues",
-        params={
-            "sportId": sport_id,
-            "season": season,
-            "leagueIds": league_ids,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_mlb_api_list(raw, return_as_pandas=return_as_pandas)
@@ -893,12 +947,15 @@ def mlb_season(
 
             mlb_season(season_id='X')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "sportId": sport_id,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://statsapi.mlb.com/api/v1/seasons/{season_id}",
-        params={
-            "sportId": sport_id,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_mlb_api_list(raw, return_as_pandas=return_as_pandas)
@@ -934,14 +991,17 @@ def mlb_venues(
 
             mlb_venues()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "season": season,
+        "sportIds": sport_ids,
+        "hydrate": hydrate,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://statsapi.mlb.com/api/v1/venues",
-        params={
-            "season": season,
-            "sportIds": sport_ids,
-            "hydrate": hydrate,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_mlb_api_list(raw, return_as_pandas=return_as_pandas)
@@ -977,13 +1037,16 @@ def mlb_venue(
 
             mlb_venue(venue_id=15)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "season": season,
+        "hydrate": hydrate,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://statsapi.mlb.com/api/v1/venues/{venue_id}",
-        params={
-            "season": season,
-            "hydrate": hydrate,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_mlb_api_list(raw, return_as_pandas=return_as_pandas)
@@ -1015,11 +1078,14 @@ def mlb_meta(
 
             mlb_meta(meta_type='leagueLeaderTypes')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://statsapi.mlb.com/api/v1/{meta_type}",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_mlb_api_list(raw, return_as_pandas=return_as_pandas)
@@ -1051,12 +1117,15 @@ def mlb_awards(
 
             mlb_awards()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "sportId": sport_id,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://statsapi.mlb.com/api/v1/awards",
-        params={
-            "sportId": sport_id,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_mlb_api_list(raw, return_as_pandas=return_as_pandas)
@@ -1094,14 +1163,17 @@ def mlb_award_recipients(
 
             mlb_award_recipients(award_id='MLBHOF')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "season": season,
+        "sportId": sport_id,
+        "hydrate": hydrate,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://statsapi.mlb.com/api/v1/awards/{award_id}/recipients",
-        params={
-            "season": season,
-            "sportId": sport_id,
-            "hydrate": hydrate,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_mlb_api_list(raw, return_as_pandas=return_as_pandas)
@@ -1141,15 +1213,18 @@ def mlb_draft(
 
             mlb_draft(year=2024)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "round": round_,
+        "teamId": team_id,
+        "playerId": player_id,
+        "limit": limit,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://statsapi.mlb.com/api/v1/draft/{year}",
-        params={
-            "round": round_,
-            "teamId": team_id,
-            "playerId": player_id,
-            "limit": limit,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_mlb_api_list(raw, return_as_pandas=return_as_pandas)
@@ -1179,11 +1254,14 @@ def mlb_umpires(
 
             mlb_umpires()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://statsapi.mlb.com/api/v1/jobs/umpires",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_mlb_api_list(raw, return_as_pandas=return_as_pandas)
@@ -1219,14 +1297,17 @@ def mlb_conferences(
 
             mlb_conferences()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "conferenceId": conference_id,
+        "season": season,
+        "fields": fields,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://statsapi.mlb.com/api/v1/conferences",
-        params={
-            "conferenceId": conference_id,
-            "season": season,
-            "fields": fields,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_mlb_api_list(raw, return_as_pandas=return_as_pandas)
@@ -1262,13 +1343,16 @@ def mlb_conference(
 
             mlb_conference(conference_id=301)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "season": season,
+        "fields": fields,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://statsapi.mlb.com/api/v1/conferences/{conference_id}",
-        params={
-            "season": season,
-            "fields": fields,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_mlb_api_list(raw, return_as_pandas=return_as_pandas)
@@ -1300,11 +1384,14 @@ def mlb_draft_latest(
 
             mlb_draft_latest(year=2023)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://statsapi.mlb.com/api/v1/draft/{year}/latest",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_mlb_api_draft_latest(raw, return_as_pandas=return_as_pandas)
@@ -1336,11 +1423,14 @@ def mlb_game_timestamps(
 
             mlb_game_timestamps(game_pk=716390)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://statsapi.mlb.com/api/v1.1/game/{game_pk}/feed/live/timestamps",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_mlb_api_timecodes(raw, return_as_pandas=return_as_pandas)
@@ -1376,14 +1466,17 @@ def mlb_game_changes(
 
             mlb_game_changes(sport_id=1, updated_since='2023-09-01T00:00:00Z')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "updatedSince": updated_since,
+        "sportId": sport_id,
+        "fields": fields,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://statsapi.mlb.com/api/v1/game/changes",
-        params={
-            "updatedSince": updated_since,
-            "sportId": sport_id,
-            "fields": fields,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_mlb_api_schedule(raw, return_as_pandas=return_as_pandas)
@@ -1427,18 +1520,21 @@ def mlb_analytics_games(
 
             mlb_analytics_games()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "gameModeId": game_mode_id,
+        "timecode": timecode,
+        "limit": limit,
+        "sortBy": sort_by,
+        "isNonStatcast": is_non_statcast,
+        "offset": offset,
+        "fields": fields,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://statsapi.mlb.com/api/v1/game/analytics/game",
-        params={
-            "gameModeId": game_mode_id,
-            "timecode": timecode,
-            "limit": limit,
-            "sortBy": sort_by,
-            "isNonStatcast": is_non_statcast,
-            "offset": offset,
-            "fields": fields,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_mlb_api_list(raw, return_as_pandas=return_as_pandas)
@@ -1482,18 +1578,21 @@ def mlb_analytics_guids(
 
             mlb_analytics_guids()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "gameModeId": game_mode_id,
+        "timecode": timecode,
+        "limit": limit,
+        "sortBy": sort_by,
+        "isNonStatcast": is_non_statcast,
+        "offset": offset,
+        "fields": fields,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://statsapi.mlb.com/api/v1/game/analytics/guids",
-        params={
-            "gameModeId": game_mode_id,
-            "timecode": timecode,
-            "limit": limit,
-            "sortBy": sort_by,
-            "isNonStatcast": is_non_statcast,
-            "offset": offset,
-            "fields": fields,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_mlb_api_list(raw, return_as_pandas=return_as_pandas)
@@ -1541,19 +1640,22 @@ def mlb_game_guids(
 
             mlb_game_guids(game_pk=716390)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "gameModeId": game_mode_id,
+        "updatedSince": updated_since,
+        "isPitch": is_pitch,
+        "isHit": is_hit,
+        "isPickoff": is_pickoff,
+        "hydrate": hydrate,
+        "parsed/raw": parsed_raw,
+        "fields": fields,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://statsapi.mlb.com/api/v1/game/{game_pk}/guids",
-        params={
-            "gameModeId": game_mode_id,
-            "updatedSince": updated_since,
-            "isPitch": is_pitch,
-            "isHit": is_hit,
-            "isPickoff": is_pickoff,
-            "hydrate": hydrate,
-            "parsed/raw": parsed_raw,
-            "fields": fields,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_mlb_api_list(raw, return_as_pandas=return_as_pandas)
@@ -1591,13 +1693,16 @@ def mlb_play_analytics(
 
             mlb_play_analytics(game_pk=716390, guid='90groovy-2438-test-guid-placeholder0')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "hydrate": hydrate,
+        "fields": fields,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://statsapi.mlb.com/api/v1/game/{game_pk}/{guid}/analytics",
-        params={
-            "hydrate": hydrate,
-            "fields": fields,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_mlb_api_list(raw, return_as_pandas=return_as_pandas)
@@ -1633,12 +1738,15 @@ def mlb_play_context_metrics_averages(
 
             mlb_play_context_metrics_averages(game_pk=716390, guid='90groovy-2438-test-guid-placeholder0')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "fields": fields,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://statsapi.mlb.com/api/v1/game/{game_pk}/{guid}/contextMetricsAverages",
-        params={
-            "fields": fields,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_mlb_api_list(raw, return_as_pandas=return_as_pandas)
@@ -1674,13 +1782,16 @@ def mlb_game_color(
 
             mlb_game_color(game_pk=716390)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "timecode": timecode,
+        "fields": fields,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://statsapi.mlb.com/api/v1/game/{game_pk}/feed/color",
-        params={
-            "timecode": timecode,
-            "fields": fields,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_mlb_api_list(raw, return_as_pandas=return_as_pandas)
@@ -1716,13 +1827,16 @@ def mlb_game_color_diff(
 
             mlb_game_color_diff(game_pk=716390)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "startTimecode": start_timecode,
+        "endTimecode": end_timecode,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://statsapi.mlb.com/api/v1/game/{game_pk}/feed/color/diffPatch",
-        params={
-            "startTimecode": start_timecode,
-            "endTimecode": end_timecode,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_mlb_api_list(raw, return_as_pandas=return_as_pandas)
@@ -1754,11 +1868,14 @@ def mlb_game_color_timestamps(
 
             mlb_game_color_timestamps(game_pk=716390)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://statsapi.mlb.com/api/v1/game/{game_pk}/feed/color/timestamps",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_mlb_api_timecodes(raw, return_as_pandas=return_as_pandas)
@@ -1812,23 +1929,26 @@ def mlb_game_pace(
 
             mlb_game_pace(season='2023')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "season": season,
+        "teamIds": team_ids,
+        "leagueIds": league_ids,
+        "leagueListId": league_list_id,
+        "sportId": sport_id,
+        "gameType": game_type,
+        "startDate": start_date,
+        "endDate": end_date,
+        "venueIds": venue_ids,
+        "orgType": org_type,
+        "includeChildren": include_children,
+        "fields": fields,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://statsapi.mlb.com/api/v1/gamePace",
-        params={
-            "season": season,
-            "teamIds": team_ids,
-            "leagueIds": league_ids,
-            "leagueListId": league_list_id,
-            "sportId": sport_id,
-            "gameType": game_type,
-            "startDate": start_date,
-            "endDate": end_date,
-            "venueIds": venue_ids,
-            "orgType": org_type,
-            "includeChildren": include_children,
-            "fields": fields,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_mlb_api_list(raw, return_as_pandas=return_as_pandas)
@@ -1878,20 +1998,23 @@ def mlb_high_low(
 
             mlb_high_low(org_type='player', stat_group='hitting', sort_stat='homeRuns', season='2023')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "statGroup": stat_group,
+        "sortStat": sort_stat,
+        "season": season,
+        "gameType": game_type,
+        "teamId": team_id,
+        "leagueId": league_id,
+        "sportIds": sport_ids,
+        "limit": limit,
+        "fields": fields,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://statsapi.mlb.com/api/v1/highLow/{org_type}",
-        params={
-            "statGroup": stat_group,
-            "sortStat": sort_stat,
-            "season": season,
-            "gameType": game_type,
-            "teamId": team_id,
-            "leagueId": league_id,
-            "sportIds": sport_ids,
-            "limit": limit,
-            "fields": fields,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_mlb_api_list(raw, return_as_pandas=return_as_pandas)
@@ -1925,12 +2048,15 @@ def mlb_home_run_derby(
 
             mlb_home_run_derby(game_pk=511101)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "fields": fields,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://statsapi.mlb.com/api/v1/homeRunDerby/{game_pk}",
-        params={
-            "fields": fields,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_mlb_api_list(raw, return_as_pandas=return_as_pandas)
@@ -1964,12 +2090,15 @@ def mlb_home_run_derby_bracket(
 
             mlb_home_run_derby_bracket(game_pk=511101)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "fields": fields,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://statsapi.mlb.com/api/v1/homeRunDerby/{game_pk}/bracket",
-        params={
-            "fields": fields,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_mlb_api_list(raw, return_as_pandas=return_as_pandas)
@@ -2003,12 +2132,15 @@ def mlb_home_run_derby_pool(
 
             mlb_home_run_derby_pool(game_pk=511101)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "fields": fields,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://statsapi.mlb.com/api/v1/homeRunDerby/{game_pk}/pool",
-        params={
-            "fields": fields,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_mlb_api_list(raw, return_as_pandas=return_as_pandas)
@@ -2044,13 +2176,16 @@ def mlb_all_star_ballot(
 
             mlb_all_star_ballot(league_id='103', season='2023')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "season": season,
+        "fields": fields,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://statsapi.mlb.com/api/v1/league/{league_id}/allStarBallot",
-        params={
-            "season": season,
-            "fields": fields,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_mlb_api_list(raw, return_as_pandas=return_as_pandas)
@@ -2086,13 +2221,16 @@ def mlb_all_star_write_ins(
 
             mlb_all_star_write_ins(league_id='103', season='2023')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "season": season,
+        "fields": fields,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://statsapi.mlb.com/api/v1/league/{league_id}/allStarWriteIns",
-        params={
-            "season": season,
-            "fields": fields,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_mlb_api_list(raw, return_as_pandas=return_as_pandas)
@@ -2128,13 +2266,16 @@ def mlb_all_star_final_vote(
 
             mlb_all_star_final_vote(league_id='103', season='2023')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "season": season,
+        "fields": fields,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://statsapi.mlb.com/api/v1/league/{league_id}/allStarFinalVote",
-        params={
-            "season": season,
-            "fields": fields,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_mlb_api_list(raw, return_as_pandas=return_as_pandas)
@@ -2172,15 +2313,18 @@ def mlb_free_agents(
 
             mlb_free_agents(season='2023')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "season": season,
+        "order": order,
+        "hydrate": hydrate,
+        "fields": fields,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://statsapi.mlb.com/api/v1/people/freeAgents",
-        params={
-            "season": season,
-            "order": order,
-            "hydrate": hydrate,
-            "fields": fields,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_mlb_api_list(raw, return_as_pandas=return_as_pandas)
@@ -2218,15 +2362,18 @@ def mlb_jobs(
 
             mlb_jobs(job_type='UMPR')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "jobType": job_type,
+        "sportId": sport_id,
+        "date": date,
+        "fields": fields,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://statsapi.mlb.com/api/v1/jobs",
-        params={
-            "jobType": job_type,
-            "sportId": sport_id,
-            "date": date,
-            "fields": fields,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_mlb_api_list(raw, return_as_pandas=return_as_pandas)
@@ -2264,15 +2411,18 @@ def mlb_datacasters(
 
             mlb_datacasters()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "sportId": sport_id,
+        "date": date,
+        "hydrate": hydrate,
+        "fields": fields,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://statsapi.mlb.com/api/v1/jobs/datacasters",
-        params={
-            "sportId": sport_id,
-            "date": date,
-            "hydrate": hydrate,
-            "fields": fields,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_mlb_api_list(raw, return_as_pandas=return_as_pandas)
@@ -2310,15 +2460,18 @@ def mlb_official_scorers(
 
             mlb_official_scorers()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "sportId": sport_id,
+        "date": date,
+        "hydrate": hydrate,
+        "fields": fields,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://statsapi.mlb.com/api/v1/jobs/officialScorers",
-        params={
-            "sportId": sport_id,
-            "date": date,
-            "hydrate": hydrate,
-            "fields": fields,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_mlb_api_list(raw, return_as_pandas=return_as_pandas)
@@ -2356,14 +2509,17 @@ def mlb_umpire_games(
 
             mlb_umpire_games(umpire_id=596809, season='2023')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "season": season,
+        "hydrate": hydrate,
+        "fields": fields,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://statsapi.mlb.com/api/v1/jobs/umpires/games/{umpire_id}",
-        params={
-            "season": season,
-            "hydrate": hydrate,
-            "fields": fields,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_mlb_api_list(raw, return_as_pandas=return_as_pandas)
@@ -2401,15 +2557,18 @@ def mlb_schedule_tied(
 
             mlb_schedule_tied(season='2016')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "gameTypes": game_types,
+        "season": season,
+        "hydrate": hydrate,
+        "fields": fields,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://statsapi.mlb.com/api/v1/schedule/games/tied",
-        params={
-            "gameTypes": game_types,
-            "season": season,
-            "hydrate": hydrate,
-            "fields": fields,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_mlb_api_schedule(raw, return_as_pandas=return_as_pandas)
@@ -2451,17 +2610,20 @@ def mlb_schedule_postseason_series(
 
             mlb_schedule_postseason_series(season='2023')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "gameTypes": game_types,
+        "seriesNumber": series_number,
+        "teamId": team_id,
+        "sportId": sport_id,
+        "season": season,
+        "fields": fields,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://statsapi.mlb.com/api/v1/schedule/postseason/series",
-        params={
-            "gameTypes": game_types,
-            "seriesNumber": series_number,
-            "teamId": team_id,
-            "sportId": sport_id,
-            "season": season,
-            "fields": fields,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_mlb_api_list(raw, return_as_pandas=return_as_pandas)
@@ -2501,16 +2663,19 @@ def mlb_schedule_postseason_tunein(
 
             mlb_schedule_postseason_tunein(season='2023')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "teamId": team_id,
+        "sportId": sport_id,
+        "season": season,
+        "hydrate": hydrate,
+        "fields": fields,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://statsapi.mlb.com/api/v1/schedule/postseason/tuneIn",
-        params={
-            "teamId": team_id,
-            "sportId": sport_id,
-            "season": season,
-            "hydrate": hydrate,
-            "fields": fields,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_mlb_api_schedule(raw, return_as_pandas=return_as_pandas)
@@ -2550,16 +2715,19 @@ def mlb_seasons_all(
 
             mlb_seasons_all(sport_id=1)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "divisionId": division_id,
+        "leagueId": league_id,
+        "withGameTypeDates": with_game_type_dates,
+        "sportId": sport_id,
+        "fields": fields,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://statsapi.mlb.com/api/v1/seasons/all",
-        params={
-            "divisionId": division_id,
-            "leagueId": league_id,
-            "withGameTypeDates": with_game_type_dates,
-            "sportId": sport_id,
-            "fields": fields,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_mlb_api_list(raw, return_as_pandas=return_as_pandas)
@@ -2593,12 +2761,15 @@ def mlb_sport(
 
             mlb_sport(sport_id=1)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "fields": fields,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://statsapi.mlb.com/api/v1/sports/{sport_id}",
-        params={
-            "fields": fields,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_mlb_api_list(raw, return_as_pandas=return_as_pandas)
@@ -2658,26 +2829,29 @@ def mlb_stats_metrics(
 
             mlb_stats_metrics()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "stats": stats,
+        "group": group,
+        "gameType": game_type,
+        "season": season,
+        "startDate": start_date,
+        "endDate": end_date,
+        "venueId": venue_id,
+        "minOccurrences": min_occurrences,
+        "percentile": percentile,
+        "personId": person_id,
+        "teamId": team_id,
+        "limit": limit,
+        "offset": offset,
+        "hydrate": hydrate,
+        "fields": fields,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://statsapi.mlb.com/api/v1/stats/metrics",
-        params={
-            "stats": stats,
-            "group": group,
-            "gameType": game_type,
-            "season": season,
-            "startDate": start_date,
-            "endDate": end_date,
-            "venueId": venue_id,
-            "minOccurrences": min_occurrences,
-            "percentile": percentile,
-            "personId": person_id,
-            "teamId": team_id,
-            "limit": limit,
-            "offset": offset,
-            "hydrate": hydrate,
-            "fields": fields,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_mlb_api_list(raw, return_as_pandas=return_as_pandas)
@@ -2715,15 +2889,18 @@ def mlb_teams_history(
 
             mlb_teams_history(team_ids='147')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "teamIds": team_ids,
+        "startSeason": start_season,
+        "endSeason": end_season,
+        "fields": fields,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://statsapi.mlb.com/api/v1/teams/history",
-        params={
-            "teamIds": team_ids,
-            "startSeason": start_season,
-            "endSeason": end_season,
-            "fields": fields,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_mlb_api_list(raw, return_as_pandas=return_as_pandas)
@@ -2769,19 +2946,22 @@ def mlb_teams_stats(
 
             mlb_teams_stats(season='2023', sport_ids='1', stat_group='hitting', stats='season')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "season": season,
+        "sportIds": sport_ids,
+        "group": stat_group,
+        "gameType": game_type,
+        "stats": stats,
+        "order": order,
+        "sortStat": sort_stat,
+        "fields": fields,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://statsapi.mlb.com/api/v1/teams/stats",
-        params={
-            "season": season,
-            "sportIds": sport_ids,
-            "group": stat_group,
-            "gameType": game_type,
-            "stats": stats,
-            "order": order,
-            "sortStat": sort_stat,
-            "fields": fields,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_mlb_api_list(raw, return_as_pandas=return_as_pandas)
@@ -2835,23 +3015,26 @@ def mlb_teams_stats_leaders(
 
             mlb_teams_stats_leaders(leader_categories='homeRuns', season='2023')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "leaderCategories": leader_categories,
+        "sitCodes": sit_codes,
+        "gameTypes": game_types,
+        "statGroup": stat_group,
+        "season": season,
+        "leagueIds": league_ids,
+        "startDate": start_date,
+        "endDate": end_date,
+        "sportId": sport_id,
+        "hydrate": hydrate,
+        "limit": limit,
+        "fields": fields,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://statsapi.mlb.com/api/v1/teams/stats/leaders",
-        params={
-            "leaderCategories": leader_categories,
-            "sitCodes": sit_codes,
-            "gameTypes": game_types,
-            "statGroup": stat_group,
-            "season": season,
-            "leagueIds": league_ids,
-            "startDate": start_date,
-            "endDate": end_date,
-            "sportId": sport_id,
-            "hydrate": hydrate,
-            "limit": limit,
-            "fields": fields,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_mlb_api_list(raw, return_as_pandas=return_as_pandas)
@@ -2889,14 +3072,17 @@ def mlb_team_coaches(
 
             mlb_team_coaches(team_id=147, season='2023')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "season": season,
+        "date": date,
+        "fields": fields,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://statsapi.mlb.com/api/v1/teams/{team_id}/coaches",
-        params={
-            "season": season,
-            "date": date,
-            "fields": fields,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_mlb_api_list(raw, return_as_pandas=return_as_pandas)
@@ -2932,13 +3118,16 @@ def mlb_team_personnel(
 
             mlb_team_personnel(team_id=147)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "date": date,
+        "fields": fields,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://statsapi.mlb.com/api/v1/teams/{team_id}/personnel",
-        params={
-            "date": date,
-            "fields": fields,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_mlb_api_list(raw, return_as_pandas=return_as_pandas)
@@ -2980,15 +3169,18 @@ def mlb_team_roster_type(
 
             mlb_team_roster_type(team_id=147, roster_type='active', season='2023')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "season": season,
+        "date": date,
+        "hydrate": hydrate,
+        "fields": fields,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://statsapi.mlb.com/api/v1/teams/{team_id}/roster/{roster_type}",
-        params={
-            "season": season,
-            "date": date,
-            "hydrate": hydrate,
-            "fields": fields,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_mlb_api_list(raw, return_as_pandas=return_as_pandas)

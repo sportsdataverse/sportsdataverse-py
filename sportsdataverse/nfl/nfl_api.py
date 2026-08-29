@@ -73,14 +73,17 @@ def nfl_standings(
 
             nfl_standings(season=2024, season_type='REG', week=18)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "season": season,
+        "seasonType": season_type,
+        "week": week,
+        "limit": limit,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://api.nfl.com/football/v2/standings",
-        params={
-            "season": season,
-            "seasonType": season_type,
-            "week": week,
-            "limit": limit,
-        },
+        params=_params,
         headers=headers,
         **kwargs,
     )
@@ -118,12 +121,15 @@ def nfl_rosters(
 
             nfl_rosters(season=2024)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "season": season,
+        "limit": limit,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://api.nfl.com/football/v2/rosters",
-        params={
-            "season": season,
-            "limit": limit,
-        },
+        params=_params,
         headers=headers,
         **kwargs,
     )
@@ -161,12 +167,15 @@ def nfl_teams_history(
 
             nfl_teams_history(season=2024)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "season": season,
+        "limit": limit,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://api.nfl.com/football/v2/teams/history",
-        params={
-            "season": season,
-            "limit": limit,
-        },
+        params=_params,
         headers=headers,
         **kwargs,
     )
@@ -202,9 +211,12 @@ def nfl_team(
 
             nfl_team(team_id='10403800-517c-7b8c-65a3-c61b95d86123')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://api.nfl.com/football/v2/teams/{team_id}",
-        params={},
+        params=_params,
         headers=headers,
         **kwargs,
     )
@@ -242,9 +254,12 @@ def nfl_weeks(
 
             nfl_weeks(season=2024, season_type='REG')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://api.nfl.com/football/v2/weeks/season/{season}/seasonType/{season_type}",
-        params={},
+        params=_params,
         headers=headers,
         **kwargs,
     )
@@ -280,9 +295,12 @@ def nfl_weeks_by_date(
 
             nfl_weeks_by_date(date='2024-09-08')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://api.nfl.com/football/v2/weeks/date/{date}",
-        params={},
+        params=_params,
         headers=headers,
         **kwargs,
     )
@@ -320,12 +338,15 @@ def nfl_combine_profiles(
 
             nfl_combine_profiles(year=2024)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "year": year,
+        "limit": limit,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://api.nfl.com/football/v2/combine/profiles",
-        params={
-            "year": year,
-            "limit": limit,
-        },
+        params=_params,
         headers=headers,
         **kwargs,
     )
@@ -363,12 +384,15 @@ def nfl_draft_picks(
 
             nfl_draft_picks(year=2024)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "year": year,
+        "limit": limit,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://api.nfl.com/football/v2/draft/picks/report",
-        params={
-            "year": year,
-            "limit": limit,
-        },
+        params=_params,
         headers=headers,
         **kwargs,
     )
@@ -408,13 +432,16 @@ def nfl_injuries(
 
             nfl_injuries(season=2024, season_type='REG', week=1)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "season": season,
+        "seasonType": season_type,
+        "week": week,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://api.nfl.com/football/v2/injuries",
-        params={
-            "season": season,
-            "seasonType": season_type,
-            "week": week,
-        },
+        params=_params,
         headers=headers,
         **kwargs,
     )
@@ -454,13 +481,16 @@ def nfl_game_summaries(
 
             nfl_game_summaries(season=2024, season_type='REG', week=1)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "season": season,
+        "seasonType": season_type,
+        "week": week,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://api.nfl.com/football/v2/stats/live/game-summaries",
-        params={
-            "season": season,
-            "seasonType": season_type,
-            "week": week,
-        },
+        params=_params,
         headers=headers,
         **kwargs,
     )
@@ -508,17 +538,20 @@ def nfl_weekly_game_details(
 
             nfl_weekly_game_details(season=2024, season_type='REG', week=1)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "season": season,
+        "type": season_type,
+        "week": week,
+        "includeDriveChart": _bool_str(include_drive_chart),
+        "includeReplays": _bool_str(include_replays),
+        "includeStandings": _bool_str(include_standings),
+        "includeTaggedVideos": _bool_str(include_tagged_videos),
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://api.nfl.com/football/v2/experience/weekly-game-details",
-        params={
-            "season": season,
-            "type": season_type,
-            "week": week,
-            "includeDriveChart": _bool_str(include_drive_chart),
-            "includeReplays": _bool_str(include_replays),
-            "includeStandings": _bool_str(include_standings),
-            "includeTaggedVideos": _bool_str(include_tagged_videos),
-        },
+        params=_params,
         headers=headers,
         **kwargs,
     )

@@ -56,11 +56,14 @@ def nhl_stats_rest_ping(
 
             nhl_stats_rest_ping()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://api.nhle.com/stats/rest/ping",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     return raw
 
@@ -85,11 +88,14 @@ def nhl_stats_rest_component_season(
 
             nhl_stats_rest_component_season()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://api.nhle.com/stats/rest/{lang}/componentSeason",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     return raw
 
@@ -114,11 +120,14 @@ def nhl_stats_rest_config(
 
             nhl_stats_rest_config()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://api.nhle.com/stats/rest/{lang}/config",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     return raw
 
@@ -145,11 +154,14 @@ def nhl_stats_rest_content_module(
 
             nhl_stats_rest_content_module(template_key='X')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://api.nhle.com/stats/rest/{lang}/content/module/{template_key}",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     return raw
 
@@ -179,11 +191,14 @@ def nhl_stats_rest_country(
 
             nhl_stats_rest_country()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://api.nhle.com/stats/rest/{lang}/country",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_nhl_stats_rest(raw, return_as_pandas=return_as_pandas)
@@ -215,11 +230,14 @@ def nhl_stats_rest_draft(
 
             nhl_stats_rest_draft()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://api.nhle.com/stats/rest/{lang}/draft",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_nhl_stats_rest(raw, return_as_pandas=return_as_pandas)
@@ -251,11 +269,14 @@ def nhl_stats_rest_franchise(
 
             nhl_stats_rest_franchise()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://api.nhle.com/stats/rest/{lang}/franchise",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_nhl_stats_rest(raw, return_as_pandas=return_as_pandas)
@@ -287,11 +308,14 @@ def nhl_stats_rest_game(
 
             nhl_stats_rest_game()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://api.nhle.com/stats/rest/{lang}/game",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_nhl_stats_rest(raw, return_as_pandas=return_as_pandas)
@@ -323,11 +347,14 @@ def nhl_stats_rest_glossary(
 
             nhl_stats_rest_glossary()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://api.nhle.com/stats/rest/{lang}/glossary",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_nhl_stats_rest(raw, return_as_pandas=return_as_pandas)
@@ -361,11 +388,14 @@ def nhl_stats_rest_goalie_report(
 
             nhl_stats_rest_goalie_report(report='summary')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://api.nhle.com/stats/rest/{lang}/goalie/{report}",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_nhl_stats_rest(raw, return_as_pandas=return_as_pandas)
@@ -399,11 +429,14 @@ def nhl_stats_rest_leaders_goalies(
 
             nhl_stats_rest_leaders_goalies(attribute='X')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://api.nhle.com/stats/rest/{lang}/leaders/goalies/{attribute}",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_nhl_stats_rest(raw, return_as_pandas=return_as_pandas)
@@ -437,11 +470,14 @@ def nhl_stats_rest_leaders_skaters(
 
             nhl_stats_rest_leaders_skaters(attribute='X')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://api.nhle.com/stats/rest/{lang}/leaders/skaters/{attribute}",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_nhl_stats_rest(raw, return_as_pandas=return_as_pandas)
@@ -473,11 +509,14 @@ def nhl_stats_rest_milestones_goalies(
 
             nhl_stats_rest_milestones_goalies()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://api.nhle.com/stats/rest/{lang}/milestones/goalies",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_nhl_stats_rest(raw, return_as_pandas=return_as_pandas)
@@ -509,11 +548,14 @@ def nhl_stats_rest_milestones_skaters(
 
             nhl_stats_rest_milestones_skaters()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://api.nhle.com/stats/rest/{lang}/milestones/skaters",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_nhl_stats_rest(raw, return_as_pandas=return_as_pandas)
@@ -545,11 +587,14 @@ def nhl_stats_rest_players(
 
             nhl_stats_rest_players()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://api.nhle.com/stats/rest/{lang}/players",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_nhl_stats_rest(raw, return_as_pandas=return_as_pandas)
@@ -581,11 +626,14 @@ def nhl_stats_rest_season(
 
             nhl_stats_rest_season()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://api.nhle.com/stats/rest/{lang}/season",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_nhl_stats_rest(raw, return_as_pandas=return_as_pandas)
@@ -617,11 +665,14 @@ def nhl_stats_rest_shiftcharts(
 
             nhl_stats_rest_shiftcharts()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://api.nhle.com/stats/rest/{lang}/shiftcharts",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_nhl_stats_rest(raw, return_as_pandas=return_as_pandas)
@@ -655,11 +706,14 @@ def nhl_stats_rest_skater_report(
 
             nhl_stats_rest_skater_report(report='summary')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://api.nhle.com/stats/rest/{lang}/skater/{report}",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_nhl_stats_rest(raw, return_as_pandas=return_as_pandas)
@@ -691,11 +745,14 @@ def nhl_stats_rest_team(
 
             nhl_stats_rest_team()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://api.nhle.com/stats/rest/{lang}/team",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_nhl_stats_rest(raw, return_as_pandas=return_as_pandas)
@@ -729,11 +786,14 @@ def nhl_stats_rest_team_by_id(
 
             nhl_stats_rest_team_by_id(team_id=10)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://api.nhle.com/stats/rest/{lang}/team/id/{team_id}",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_nhl_stats_rest(raw, return_as_pandas=return_as_pandas)
@@ -767,11 +827,14 @@ def nhl_stats_rest_team_report(
 
             nhl_stats_rest_team_report(report='summary')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://api.nhle.com/stats/rest/{lang}/team/{report}",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_nhl_stats_rest(raw, return_as_pandas=return_as_pandas)

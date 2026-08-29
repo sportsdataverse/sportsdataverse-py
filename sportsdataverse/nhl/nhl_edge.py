@@ -86,6 +86,9 @@ def nhl_edge_skater_detail(
 
             nhl_edge_skater_detail(player_id=8480801)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     season = format_nhl_season(season)
     __url = (
         f"https://api-web.nhle.com/v1/edge/skater-detail/{player_id}/now"
@@ -94,7 +97,7 @@ def nhl_edge_skater_detail(
     )
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -131,6 +134,9 @@ def nhl_edge_skater_comparison(
 
             nhl_edge_skater_comparison(player_id=8480801)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     season = format_nhl_season(season)
     __url = (
         f"https://api-web.nhle.com/v1/edge/skater-comparison/{player_id}/now"
@@ -139,7 +145,7 @@ def nhl_edge_skater_comparison(
     )
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -176,6 +182,9 @@ def nhl_edge_skater_shot_location_detail(
 
             nhl_edge_skater_shot_location_detail(player_id=8480801)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     season = format_nhl_season(season)
     __url = (
         f"https://api-web.nhle.com/v1/edge/skater-shot-location-detail/{player_id}/now"
@@ -184,7 +193,7 @@ def nhl_edge_skater_shot_location_detail(
     )
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -225,6 +234,9 @@ def nhl_edge_skater_shot_location_top_10(
 
             nhl_edge_skater_shot_location_top_10(position='forwards', category='shots', sort_by='points')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     season = format_nhl_season(season)
     __url = (
         f"https://api-web.nhle.com/v1/edge/skater-shot-location-top-10/{position}/{category}/{sort_by}/now"
@@ -233,7 +245,7 @@ def nhl_edge_skater_shot_location_top_10(
     )
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -270,6 +282,9 @@ def nhl_edge_skater_shot_speed_detail(
 
             nhl_edge_skater_shot_speed_detail(player_id=8480801)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     season = format_nhl_season(season)
     __url = (
         f"https://api-web.nhle.com/v1/edge/skater-shot-speed-detail/{player_id}/now"
@@ -278,7 +293,7 @@ def nhl_edge_skater_shot_speed_detail(
     )
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -317,6 +332,9 @@ def nhl_edge_skater_shot_speed_top_10(
 
             nhl_edge_skater_shot_speed_top_10(positions='defense', sort_by='points')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     season = format_nhl_season(season)
     __url = (
         f"https://api-web.nhle.com/v1/edge/skater-shot-speed-top-10/{positions}/{sort_by}/now"
@@ -325,7 +343,7 @@ def nhl_edge_skater_shot_speed_top_10(
     )
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -362,6 +380,9 @@ def nhl_edge_skater_skating_distance_detail(
 
             nhl_edge_skater_skating_distance_detail(player_id=8480801)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     season = format_nhl_season(season)
     __url = (
         f"https://api-web.nhle.com/v1/edge/skater-skating-distance-detail/{player_id}/now"
@@ -370,7 +391,7 @@ def nhl_edge_skater_skating_distance_detail(
     )
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -407,6 +428,9 @@ def nhl_edge_skater_skating_speed_detail(
 
             nhl_edge_skater_skating_speed_detail(player_id=8480801)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     season = format_nhl_season(season)
     __url = (
         f"https://api-web.nhle.com/v1/edge/skater-skating-speed-detail/{player_id}/now"
@@ -415,7 +439,7 @@ def nhl_edge_skater_skating_speed_detail(
     )
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -454,6 +478,9 @@ def nhl_edge_skater_speed_top_10(
 
             nhl_edge_skater_speed_top_10(positions='defense', sort_by='points')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     season = format_nhl_season(season)
     __url = (
         f"https://api-web.nhle.com/v1/edge/skater-speed-top-10/{positions}/{sort_by}/now"
@@ -462,7 +489,7 @@ def nhl_edge_skater_speed_top_10(
     )
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -503,6 +530,9 @@ def nhl_edge_skater_distance_top_10(
 
             nhl_edge_skater_distance_top_10(positions='defense', strength='ev', sort_by='points')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     season = format_nhl_season(season)
     __url = (
         f"https://api-web.nhle.com/v1/edge/skater-distance-top-10/{positions}/{strength}/{sort_by}/now"
@@ -511,7 +541,7 @@ def nhl_edge_skater_distance_top_10(
     )
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -548,6 +578,9 @@ def nhl_edge_skater_zone_time(
 
             nhl_edge_skater_zone_time(player_id=8480801)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     season = format_nhl_season(season)
     __url = (
         f"https://api-web.nhle.com/v1/edge/skater-zone-time/{player_id}/now"
@@ -556,7 +589,7 @@ def nhl_edge_skater_zone_time(
     )
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -597,6 +630,9 @@ def nhl_edge_skater_zone_time_top_10(
 
             nhl_edge_skater_zone_time_top_10(positions='defense', strength='ev', sort_by='points')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     season = format_nhl_season(season)
     __url = (
         f"https://api-web.nhle.com/v1/edge/skater-zone-time-top-10/{positions}/{strength}/{sort_by}/now"
@@ -605,7 +641,7 @@ def nhl_edge_skater_zone_time_top_10(
     )
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -640,6 +676,9 @@ def nhl_edge_skater_landing(
 
             nhl_edge_skater_landing()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     season = format_nhl_season(season)
     __url = (
         "https://api-web.nhle.com/v1/edge/skater-landing/now"
@@ -648,7 +687,7 @@ def nhl_edge_skater_landing(
     )
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -685,6 +724,9 @@ def nhl_edge_goalie_detail(
 
             nhl_edge_goalie_detail(player_id=8480801)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     season = format_nhl_season(season)
     __url = (
         f"https://api-web.nhle.com/v1/edge/goalie-detail/{player_id}/now"
@@ -693,7 +735,7 @@ def nhl_edge_goalie_detail(
     )
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -730,6 +772,9 @@ def nhl_edge_goalie_5v5_detail(
 
             nhl_edge_goalie_5v5_detail(player_id=8480801)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     season = format_nhl_season(season)
     __url = (
         f"https://api-web.nhle.com/v1/edge/goalie-5v5-detail/{player_id}/now"
@@ -738,7 +783,7 @@ def nhl_edge_goalie_5v5_detail(
     )
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -775,6 +820,9 @@ def nhl_edge_goalie_5v5_top_10(
 
             nhl_edge_goalie_5v5_top_10(sort_by='points')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     season = format_nhl_season(season)
     __url = (
         f"https://api-web.nhle.com/v1/edge/goalie-5v5-top-10/{sort_by}/now"
@@ -783,7 +831,7 @@ def nhl_edge_goalie_5v5_top_10(
     )
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -820,6 +868,9 @@ def nhl_edge_goalie_comparison(
 
             nhl_edge_goalie_comparison(player_id=8480801)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     season = format_nhl_season(season)
     __url = (
         f"https://api-web.nhle.com/v1/edge/goalie-comparison/{player_id}/now"
@@ -828,7 +879,7 @@ def nhl_edge_goalie_comparison(
     )
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -865,6 +916,9 @@ def nhl_edge_goalie_save_percentage_detail(
 
             nhl_edge_goalie_save_percentage_detail(player_id=8480801)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     season = format_nhl_season(season)
     __url = (
         f"https://api-web.nhle.com/v1/edge/goalie-save-percentage-detail/{player_id}/now"
@@ -873,7 +927,7 @@ def nhl_edge_goalie_save_percentage_detail(
     )
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -910,6 +964,9 @@ def nhl_edge_goalie_edge_save_pctg_top_10(
 
             nhl_edge_goalie_edge_save_pctg_top_10(sort_by='points')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     season = format_nhl_season(season)
     __url = (
         f"https://api-web.nhle.com/v1/edge/goalie-edge-save-pctg-top-10/{sort_by}/now"
@@ -918,7 +975,7 @@ def nhl_edge_goalie_edge_save_pctg_top_10(
     )
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -955,6 +1012,9 @@ def nhl_edge_goalie_shot_location_detail(
 
             nhl_edge_goalie_shot_location_detail(player_id=8480801)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     season = format_nhl_season(season)
     __url = (
         f"https://api-web.nhle.com/v1/edge/goalie-shot-location-detail/{player_id}/now"
@@ -963,7 +1023,7 @@ def nhl_edge_goalie_shot_location_detail(
     )
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1002,6 +1062,9 @@ def nhl_edge_goalie_shot_location_top_10(
 
             nhl_edge_goalie_shot_location_top_10(category='shots', sort_by='points')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     season = format_nhl_season(season)
     __url = (
         f"https://api-web.nhle.com/v1/edge/goalie-shot-location-top-10/{category}/{sort_by}/now"
@@ -1010,7 +1073,7 @@ def nhl_edge_goalie_shot_location_top_10(
     )
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1045,6 +1108,9 @@ def nhl_edge_goalie_landing(
 
             nhl_edge_goalie_landing()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     season = format_nhl_season(season)
     __url = (
         "https://api-web.nhle.com/v1/edge/goalie-landing/now"
@@ -1053,7 +1119,7 @@ def nhl_edge_goalie_landing(
     )
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1090,6 +1156,9 @@ def nhl_edge_team_detail(
 
             nhl_edge_team_detail(team_id=10)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     season = format_nhl_season(season)
     __url = (
         f"https://api-web.nhle.com/v1/edge/team-detail/{team_id}/now"
@@ -1098,7 +1167,7 @@ def nhl_edge_team_detail(
     )
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1133,6 +1202,9 @@ def nhl_edge_team_landing(
 
             nhl_edge_team_landing()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     season = format_nhl_season(season)
     __url = (
         "https://api-web.nhle.com/v1/edge/team-landing/now"
@@ -1141,7 +1213,7 @@ def nhl_edge_team_landing(
     )
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1178,6 +1250,9 @@ def nhl_edge_team_shot_location_detail(
 
             nhl_edge_team_shot_location_detail(team_id=10)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     season = format_nhl_season(season)
     __url = (
         f"https://api-web.nhle.com/v1/edge/team-shot-location-detail/{team_id}/now"
@@ -1186,7 +1261,7 @@ def nhl_edge_team_shot_location_detail(
     )
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1227,6 +1302,9 @@ def nhl_edge_team_shot_location_top_10(
 
             nhl_edge_team_shot_location_top_10(position='forwards', category='shots', sort_by='points')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     season = format_nhl_season(season)
     __url = (
         f"https://api-web.nhle.com/v1/edge/team-shot-location-top-10/{position}/{category}/{sort_by}/now"
@@ -1235,7 +1313,7 @@ def nhl_edge_team_shot_location_top_10(
     )
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1272,6 +1350,9 @@ def nhl_edge_team_shot_speed_detail(
 
             nhl_edge_team_shot_speed_detail(team_id=10)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     season = format_nhl_season(season)
     __url = (
         f"https://api-web.nhle.com/v1/edge/team-shot-speed-detail/{team_id}/now"
@@ -1280,7 +1361,7 @@ def nhl_edge_team_shot_speed_detail(
     )
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1312,6 +1393,9 @@ def nhl_edge_team_skating_distance_detail(
 
             nhl_edge_team_skating_distance_detail(team_id=10)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     season = format_nhl_season(season)
     __url = (
         f"https://api-web.nhle.com/v1/edge/team-skating-distance-detail/{team_id}/now"
@@ -1320,7 +1404,7 @@ def nhl_edge_team_skating_distance_detail(
     )
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     return raw
@@ -1359,6 +1443,9 @@ def nhl_edge_team_skating_distance_top_10(
 
             nhl_edge_team_skating_distance_top_10(positions='defense', strength='ev', sort_by='points')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     season = format_nhl_season(season)
     __url = (
         f"https://api-web.nhle.com/v1/edge/team-skating-distance-top-10/{positions}/{strength}/{sort_by}/now"
@@ -1367,7 +1454,7 @@ def nhl_edge_team_skating_distance_top_10(
     )
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1399,6 +1486,9 @@ def nhl_edge_team_skating_speed_detail(
 
             nhl_edge_team_skating_speed_detail(team_id=10)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     season = format_nhl_season(season)
     __url = (
         f"https://api-web.nhle.com/v1/edge/team-skating-speed-detail/{team_id}/now"
@@ -1407,7 +1497,7 @@ def nhl_edge_team_skating_speed_detail(
     )
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     return raw
@@ -1444,6 +1534,9 @@ def nhl_edge_team_skating_speed_top_10(
 
             nhl_edge_team_skating_speed_top_10(positions='defense', sort_by='points')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     season = format_nhl_season(season)
     __url = (
         f"https://api-web.nhle.com/v1/edge/team-skating-speed-top-10/{positions}/{sort_by}/now"
@@ -1452,7 +1545,7 @@ def nhl_edge_team_skating_speed_top_10(
     )
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1489,6 +1582,9 @@ def nhl_edge_team_zone_time_details(
 
             nhl_edge_team_zone_time_details(team_id=10)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     season = format_nhl_season(season)
     __url = (
         f"https://api-web.nhle.com/v1/edge/team-zone-time-details/{team_id}/now"
@@ -1497,7 +1593,7 @@ def nhl_edge_team_zone_time_details(
     )
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1536,6 +1632,9 @@ def nhl_edge_team_zone_time_top_10(
 
             nhl_edge_team_zone_time_top_10(strength='ev', sort_by='points')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     season = format_nhl_season(season)
     __url = (
         f"https://api-web.nhle.com/v1/edge/team-zone-time-top-10/{strength}/{sort_by}/now"
@@ -1544,7 +1643,7 @@ def nhl_edge_team_zone_time_top_10(
     )
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1581,6 +1680,9 @@ def nhl_edge_cat_skater_detail(
 
             nhl_edge_cat_skater_detail(player_id=8480801)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     season = format_nhl_season(season)
     __url = (
         f"https://api-web.nhle.com/v1/cat/edge/skater-detail/{player_id}/now"
@@ -1589,7 +1691,7 @@ def nhl_edge_cat_skater_detail(
     )
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1626,6 +1728,9 @@ def nhl_edge_cat_goalie_detail(
 
             nhl_edge_cat_goalie_detail(player_id=8480801)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     season = format_nhl_season(season)
     __url = (
         f"https://api-web.nhle.com/v1/cat/edge/goalie-detail/{player_id}/now"
@@ -1634,7 +1739,7 @@ def nhl_edge_cat_goalie_detail(
     )
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:

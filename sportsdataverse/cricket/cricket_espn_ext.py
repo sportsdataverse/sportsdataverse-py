@@ -189,15 +189,18 @@ def espn_cricket_scoreboard(
 
             espn_cricket_scoreboard(dates='20240115')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "dates": dates,
+        "week": week,
+        "seasontype": season_type,
+        "groups": groups,
+        "limit": limit,
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://site.api.espn.com/apis/site/v2/sports/cricket/{league}/scoreboard",
-        params={
-            "dates": dates,
-            "week": week,
-            "seasontype": season_type,
-            "groups": groups,
-            "limit": limit,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -233,11 +236,14 @@ def espn_cricket_summary(
 
             espn_cricket_summary()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "event": event_id,
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://site.api.espn.com/apis/site/v2/sports/cricket/{league}/summary",
-        params={
-            "event": event_id,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -271,9 +277,12 @@ def espn_cricket_calendar(
 
             espn_cricket_calendar()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://site.api.espn.com/apis/site/v2/sports/cricket/{league}/calendar",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -309,11 +318,14 @@ def espn_cricket_news(
 
             espn_cricket_news()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "limit": limit,
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://site.api.espn.com/apis/site/v2/sports/cricket/{league}/news",
-        params={
-            "limit": limit,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -347,9 +359,12 @@ def espn_cricket_injuries(
 
             espn_cricket_injuries()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://site.api.espn.com/apis/site/v2/sports/cricket/{league}/injuries",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -383,9 +398,12 @@ def espn_cricket_transactions(
 
             espn_cricket_transactions()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://site.api.espn.com/apis/site/v2/sports/cricket/{league}/transactions",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -419,9 +437,12 @@ def espn_cricket_conferences(
 
             espn_cricket_conferences()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://site.api.espn.com/apis/site/v2/sports/cricket/{league}/groups",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -455,9 +476,12 @@ def espn_cricket_statistics_league(
 
             espn_cricket_statistics_league()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://site.api.espn.com/apis/site/v2/sports/cricket/{league}/statistics",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -491,9 +515,12 @@ def espn_cricket_draft(
 
             espn_cricket_draft()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://site.api.espn.com/apis/site/v2/sports/cricket/{league}/draft",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -529,11 +556,14 @@ def espn_cricket_teams_site(
 
             espn_cricket_teams_site()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "limit": limit,
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://site.api.espn.com/apis/site/v2/sports/cricket/{league}/teams",
-        params={
-            "limit": limit,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -569,9 +599,12 @@ def espn_cricket_team(
 
             espn_cricket_team(team_id='4')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://site.api.espn.com/apis/site/v2/sports/cricket/{league}/teams/{team_id}",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -607,9 +640,12 @@ def espn_cricket_team_roster(
 
             espn_cricket_team_roster(team_id='4')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://site.api.espn.com/apis/site/v2/sports/cricket/{league}/teams/{team_id}/roster",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -647,11 +683,14 @@ def espn_cricket_team_schedule(
 
             espn_cricket_team_schedule(team_id='4')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "season": season,
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://site.api.espn.com/apis/site/v2/sports/cricket/{league}/teams/{team_id}/schedule",
-        params={
-            "season": season,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -687,9 +726,12 @@ def espn_cricket_team_record(
 
             espn_cricket_team_record(team_id='4')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://site.api.espn.com/apis/site/v2/sports/cricket/{league}/teams/{team_id}/record",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -725,9 +767,12 @@ def espn_cricket_team_depthcharts(
 
             espn_cricket_team_depthcharts(team_id='4')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://site.api.espn.com/apis/site/v2/sports/cricket/{league}/teams/{team_id}/depthcharts",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -763,9 +808,12 @@ def espn_cricket_team_injuries(
 
             espn_cricket_team_injuries(team_id='4')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://site.api.espn.com/apis/site/v2/sports/cricket/{league}/teams/{team_id}/injuries",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -801,9 +849,12 @@ def espn_cricket_team_transactions(
 
             espn_cricket_team_transactions(team_id='4')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://site.api.espn.com/apis/site/v2/sports/cricket/{league}/teams/{team_id}/transactions",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -839,9 +890,12 @@ def espn_cricket_team_history(
 
             espn_cricket_team_history(team_id='4')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://site.api.espn.com/apis/site/v2/sports/cricket/{league}/teams/{team_id}/history",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -879,11 +933,14 @@ def espn_cricket_team_news(
 
             espn_cricket_team_news(team_id='4')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "limit": limit,
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://site.api.espn.com/apis/site/v2/sports/cricket/{league}/teams/{team_id}/news",
-        params={
-            "limit": limit,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -919,9 +976,12 @@ def espn_cricket_team_leaders(
 
             espn_cricket_team_leaders(team_id='4')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://site.api.espn.com/apis/site/v2/sports/cricket/{league}/teams/{team_id}/leaders",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -957,9 +1017,12 @@ def espn_cricket_player_info(
 
             espn_cricket_player_info(athlete_id='4239')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://site.api.espn.com/apis/site/v2/sports/cricket/{league}/athletes/{athlete_id}",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -995,9 +1058,12 @@ def espn_cricket_player_bio(
 
             espn_cricket_player_bio(athlete_id='4239')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://site.api.espn.com/apis/site/v2/sports/cricket/{league}/athletes/{athlete_id}/bio",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1033,9 +1099,12 @@ def espn_cricket_player_news(
 
             espn_cricket_player_news(athlete_id='4239')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://site.api.espn.com/apis/site/v2/sports/cricket/{league}/athletes/{athlete_id}/news",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1075,13 +1144,16 @@ def espn_cricket_standings(
 
             espn_cricket_standings()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "season": season,
+        "group": group,
+        "type": standings_type,
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://site.api.espn.com/apis/v2/sports/cricket/{league}/standings",
-        params={
-            "season": season,
-            "group": group,
-            "type": standings_type,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1117,9 +1189,12 @@ def espn_cricket_player_overview(
 
             espn_cricket_player_overview(athlete_id='4239')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://site.web.api.espn.com/apis/common/v3/sports/cricket/{league}/athletes/{athlete_id}/overview",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1157,11 +1232,14 @@ def espn_cricket_player_stats(
 
             espn_cricket_player_stats(athlete_id='4239')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "season": season,
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://site.web.api.espn.com/apis/common/v3/sports/cricket/{league}/athletes/{athlete_id}/stats",
-        params={
-            "season": season,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1199,11 +1277,14 @@ def espn_cricket_player_gamelog(
 
             espn_cricket_player_gamelog(athlete_id='4239')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "season": season,
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://site.web.api.espn.com/apis/common/v3/sports/cricket/{league}/athletes/{athlete_id}/gamelog",
-        params={
-            "season": season,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1241,11 +1322,14 @@ def espn_cricket_player_splits(
 
             espn_cricket_player_splits(athlete_id='4239')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "season": season,
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://site.web.api.espn.com/apis/common/v3/sports/cricket/{league}/athletes/{athlete_id}/splits",
-        params={
-            "season": season,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1291,16 +1375,19 @@ def espn_cricket_leaders(
 
             espn_cricket_leaders()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "category": category,
+        "season": season,
+        "seasontype": season_type,
+        "limit": limit,
+        "page": page,
+        "sort": sort,
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://site.web.api.espn.com/apis/common/v3/sports/cricket/{league}/statistics/byathlete",
-        params={
-            "category": category,
-            "season": season,
-            "seasontype": season_type,
-            "limit": limit,
-            "page": page,
-            "sort": sort,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1334,9 +1421,12 @@ def espn_cricket_league_root(
 
             espn_cricket_league_root()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/cricket/leagues/{league}",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1370,9 +1460,12 @@ def espn_cricket_season_pointer(
 
             espn_cricket_season_pointer()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/cricket/leagues/{league}/season",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1408,11 +1501,14 @@ def espn_cricket_seasons(
 
             espn_cricket_seasons()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "limit": limit,
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/cricket/leagues/{league}/seasons",
-        params={
-            "limit": limit,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1448,9 +1544,12 @@ def espn_cricket_season_info(
 
             espn_cricket_season_info(season=2024)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/cricket/leagues/{league}/seasons/{season}",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1486,9 +1585,12 @@ def espn_cricket_season_types(
 
             espn_cricket_season_types(season=2024)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/cricket/leagues/{league}/seasons/{season}/types",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1526,9 +1628,12 @@ def espn_cricket_season_type(
 
             espn_cricket_season_type(season=2024, season_type=2)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/cricket/leagues/{league}/seasons/{season}/types/{season_type}",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1568,9 +1673,12 @@ def espn_cricket_season_group(
 
             espn_cricket_season_group(season=2024, season_type=2, group_id=80)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/cricket/leagues/{league}/seasons/{season}/types/{season_type}/groups/{group_id}",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1608,9 +1716,12 @@ def espn_cricket_season_groups(
 
             espn_cricket_season_groups(season=2024, season_type=2)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/cricket/leagues/{league}/seasons/{season}/types/{season_type}/groups",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1652,11 +1763,14 @@ def espn_cricket_season_group_teams(
 
             espn_cricket_season_group_teams(season=2024, season_type=2, group_id=80)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "limit": limit,
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/cricket/leagues/{league}/seasons/{season}/types/{season_type}/groups/{group_id}/teams",
-        params={
-            "limit": limit,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1698,11 +1812,14 @@ def espn_cricket_season_group_children(
 
             espn_cricket_season_group_children(season=2024, season_type=2, group_id=80)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "limit": limit,
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/cricket/leagues/{league}/seasons/{season}/types/{season_type}/groups/{group_id}/children",
-        params={
-            "limit": limit,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1740,9 +1857,12 @@ def espn_cricket_season_type_leaders(
 
             espn_cricket_season_type_leaders(season=2024, season_type=2)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/cricket/leagues/{league}/seasons/{season}/types/{season_type}/leaders",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1780,9 +1900,12 @@ def espn_cricket_season_type_corrections(
 
             espn_cricket_season_type_corrections(season=2024, season_type=2)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/cricket/leagues/{league}/seasons/{season}/types/{season_type}/corrections",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1820,9 +1943,12 @@ def espn_cricket_season_weeks(
 
             espn_cricket_season_weeks(season=2024, season_type=2)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/cricket/leagues/{league}/seasons/{season}/types/{season_type}/weeks",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1862,9 +1988,12 @@ def espn_cricket_season_week(
 
             espn_cricket_season_week(season=2024, season_type=2, week=1)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/cricket/leagues/{league}/seasons/{season}/types/{season_type}/weeks/{week}",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1906,11 +2035,14 @@ def espn_cricket_season_week_powerindex(
 
             espn_cricket_season_week_powerindex(season=2024, season_type=2, week=8)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "limit": limit,
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/cricket/leagues/{league}/seasons/{season}/types/{season_type}/weeks/{week}/powerindex",
-        params={
-            "limit": limit,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1952,11 +2084,14 @@ def espn_cricket_season_week_games(
 
             espn_cricket_season_week_games(season=2024, season_type=2, week=1)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "limit": limit,
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/cricket/leagues/{league}/seasons/{season}/types/{season_type}/weeks/{week}/events",
-        params={
-            "limit": limit,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1994,11 +2129,14 @@ def espn_cricket_season_teams(
 
             espn_cricket_season_teams(season=2024)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "limit": limit,
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/cricket/leagues/{league}/seasons/{season}/teams",
-        params={
-            "limit": limit,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2036,9 +2174,12 @@ def espn_cricket_season_team(
 
             espn_cricket_season_team(season=2024, team_id='4')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/cricket/leagues/{league}/seasons/{season}/teams/{team_id}",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2078,12 +2219,15 @@ def espn_cricket_season_players(
 
             espn_cricket_season_players(season=2024)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "limit": limit,
+        "page": page,
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/cricket/leagues/{league}/seasons/{season}/athletes",
-        params={
-            "limit": limit,
-            "page": page,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2121,11 +2265,14 @@ def espn_cricket_season_coaches(
 
             espn_cricket_season_coaches(season=2024)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "limit": limit,
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/cricket/leagues/{league}/seasons/{season}/coaches",
-        params={
-            "limit": limit,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2161,9 +2308,12 @@ def espn_cricket_season_draft(
 
             espn_cricket_season_draft(season=2024)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/cricket/leagues/{league}/seasons/{season}/draft",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2201,9 +2351,12 @@ def espn_cricket_season_draft_round_picks(
 
             espn_cricket_season_draft_round_picks(season=2024, round_num='1')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/cricket/leagues/{league}/seasons/{season}/draft/rounds/{round_num}/picks",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2239,9 +2392,12 @@ def espn_cricket_season_futures(
 
             espn_cricket_season_futures(season=2024)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/cricket/leagues/{league}/seasons/{season}/futures",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2277,9 +2433,12 @@ def espn_cricket_season_freeagents(
 
             espn_cricket_season_freeagents(season=2024)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/cricket/leagues/{league}/seasons/{season}/freeagents",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2317,11 +2476,14 @@ def espn_cricket_season_powerindex(
 
             espn_cricket_season_powerindex(season=2024)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     __seg = f"/{team_id}" if team_id is not None else ""
     __url = f"https://sports.core.api.espn.com/v2/sports/cricket/leagues/{league}/seasons/{season}/powerindex" + __seg
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2357,9 +2519,12 @@ def espn_cricket_season_powerindex_leaders(
 
             espn_cricket_season_powerindex_leaders(season=2024)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/cricket/leagues/{league}/seasons/{season}/powerindex/leaders",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2395,9 +2560,12 @@ def espn_cricket_season_awards(
 
             espn_cricket_season_awards(season=2024)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/cricket/leagues/{league}/seasons/{season}/awards",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2437,13 +2605,16 @@ def espn_cricket_players_index(
 
             espn_cricket_players_index()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "active": bool_str(active),
+        "limit": limit,
+        "page": page,
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/cricket/leagues/{league}/athletes",
-        params={
-            "active": bool_str(active),
-            "limit": limit,
-            "page": page,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2479,9 +2650,12 @@ def espn_cricket_player_core(
 
             espn_cricket_player_core(athlete_id='4239')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/cricket/leagues/{league}/athletes/{athlete_id}",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2519,13 +2693,16 @@ def espn_cricket_player_career_stats(
 
             espn_cricket_player_career_stats(athlete_id='4239')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     __seg = f"/{stat_type}" if stat_type is not None else ""
     __url = (
         f"https://sports.core.api.espn.com/v2/sports/cricket/leagues/{league}/athletes/{athlete_id}/statistics" + __seg
     )
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2561,9 +2738,12 @@ def espn_cricket_player_statisticslog(
 
             espn_cricket_player_statisticslog(athlete_id='4239')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/cricket/leagues/{league}/athletes/{athlete_id}/statisticslog",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2599,9 +2779,12 @@ def espn_cricket_player_eventlog(
 
             espn_cricket_player_eventlog(athlete_id='4239')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/cricket/leagues/{league}/athletes/{athlete_id}/eventlog",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2637,9 +2820,12 @@ def espn_cricket_player_contracts(
 
             espn_cricket_player_contracts(athlete_id='4239')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/cricket/leagues/{league}/athletes/{athlete_id}/contracts",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2675,9 +2861,12 @@ def espn_cricket_player_awards(
 
             espn_cricket_player_awards(athlete_id='4239')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/cricket/leagues/{league}/athletes/{athlete_id}/awards",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2713,9 +2902,12 @@ def espn_cricket_player_seasons(
 
             espn_cricket_player_seasons(athlete_id='4239')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/cricket/leagues/{league}/athletes/{athlete_id}/seasons",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2751,9 +2943,12 @@ def espn_cricket_player_records(
 
             espn_cricket_player_records(athlete_id='4239')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/cricket/leagues/{league}/athletes/{athlete_id}/records",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2789,9 +2984,12 @@ def espn_cricket_player_injuries(
 
             espn_cricket_player_injuries(athlete_id='4239')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/cricket/leagues/{league}/athletes/{athlete_id}/injuries",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2827,9 +3025,12 @@ def espn_cricket_player_notes(
 
             espn_cricket_player_notes(athlete_id='4239')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/cricket/leagues/{league}/athletes/{athlete_id}/notes",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2867,9 +3068,12 @@ def espn_cricket_player_vs_player(
 
             espn_cricket_player_vs_player(athlete_id='4239', opp_id='5')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/cricket/leagues/{league}/athletes/{athlete_id}/vsathlete/{opp_id}",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2907,12 +3111,15 @@ def espn_cricket_games(
 
             espn_cricket_games()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "dates": dates,
+        "limit": limit,
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/cricket/leagues/{league}/events",
-        params={
-            "dates": dates,
-            "limit": limit,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2948,9 +3155,12 @@ def espn_cricket_game(
 
             espn_cricket_game(event_id='401584793')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/cricket/leagues/{league}/events/{event_id}",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2988,11 +3198,14 @@ def espn_cricket_game_competition(
 
             espn_cricket_game_competition(event_id='401584793')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/cricket/leagues/{league}/events/{event_id}/competitions/{cid}"
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3030,11 +3243,14 @@ def espn_cricket_game_teams(
 
             espn_cricket_game_teams(event_id='401584793')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/cricket/leagues/{league}/events/{event_id}/competitions/{cid}/competitors"
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3074,11 +3290,14 @@ def espn_cricket_game_team(
 
             espn_cricket_game_team(event_id='401584793', team_id='4')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/cricket/leagues/{league}/events/{event_id}/competitions/{cid}/competitors/{team_id}"
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3118,11 +3337,14 @@ def espn_cricket_game_team_roster(
 
             espn_cricket_game_team_roster(event_id='401584793', team_id='4')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/cricket/leagues/{league}/events/{event_id}/competitions/{cid}/competitors/{team_id}/roster"
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3162,11 +3384,14 @@ def espn_cricket_game_team_linescores(
 
             espn_cricket_game_team_linescores(event_id='401584793', team_id='4')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/cricket/leagues/{league}/events/{event_id}/competitions/{cid}/competitors/{team_id}/linescores"
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3206,11 +3431,14 @@ def espn_cricket_game_team_statistics(
 
             espn_cricket_game_team_statistics(event_id='401584793', team_id='4')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/cricket/leagues/{league}/events/{event_id}/competitions/{cid}/competitors/{team_id}/statistics"
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3250,11 +3478,14 @@ def espn_cricket_game_team_record(
 
             espn_cricket_game_team_record(event_id='401584793', team_id='4')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/cricket/leagues/{league}/events/{event_id}/competitions/{cid}/competitors/{team_id}/record"
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3294,11 +3525,14 @@ def espn_cricket_game_team_leaders(
 
             espn_cricket_game_team_leaders(event_id='401584793', team_id='4')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/cricket/leagues/{league}/events/{event_id}/competitions/{cid}/competitors/{team_id}/leaders"
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3336,13 +3570,16 @@ def espn_cricket_game_odds(
 
             espn_cricket_game_odds(event_id='401584793')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     cid = cid if cid is not None else event_id
     __url = (
         f"https://sports.core.api.espn.com/v2/sports/cricket/leagues/{league}/events/{event_id}/competitions/{cid}/odds"
     )
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3382,13 +3619,16 @@ def espn_cricket_game_probabilities(
 
             espn_cricket_game_probabilities(event_id='401584793')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "limit": limit,
+    }
+    _params.update(_caller_params)
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/cricket/leagues/{league}/events/{event_id}/competitions/{cid}/probabilities"
     raw = _get(
         __url,
-        params={
-            "limit": limit,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3428,13 +3668,16 @@ def espn_cricket_game_plays(
 
             espn_cricket_game_plays(event_id='401584793')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "limit": limit,
+    }
+    _params.update(_caller_params)
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/cricket/leagues/{league}/events/{event_id}/competitions/{cid}/plays"
     raw = _get(
         __url,
-        params={
-            "limit": limit,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3474,11 +3717,14 @@ def espn_cricket_game_play(
 
             espn_cricket_game_play(event_id='401584793', play_id='1')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/cricket/leagues/{league}/events/{event_id}/competitions/{cid}/plays/{play_id}"
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3518,11 +3764,14 @@ def espn_cricket_game_play_personnel(
 
             espn_cricket_game_play_personnel(event_id='401584793', play_id='1')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/cricket/leagues/{league}/events/{event_id}/competitions/{cid}/plays/{play_id}/personnel"
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3560,11 +3809,14 @@ def espn_cricket_game_situation(
 
             espn_cricket_game_situation(event_id='401584793')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/cricket/leagues/{league}/events/{event_id}/competitions/{cid}/situation"
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3602,11 +3854,14 @@ def espn_cricket_game_status(
 
             espn_cricket_game_status(event_id='401584793')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/cricket/leagues/{league}/events/{event_id}/competitions/{cid}/status"
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3644,11 +3899,14 @@ def espn_cricket_game_officials(
 
             espn_cricket_game_officials(event_id='401584793')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/cricket/leagues/{league}/events/{event_id}/competitions/{cid}/officials"
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3686,11 +3944,14 @@ def espn_cricket_game_broadcasts(
 
             espn_cricket_game_broadcasts(event_id='401584793')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/cricket/leagues/{league}/events/{event_id}/competitions/{cid}/broadcasts"
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3728,11 +3989,14 @@ def espn_cricket_game_predictor(
 
             espn_cricket_game_predictor(event_id='401584793')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/cricket/leagues/{league}/events/{event_id}/competitions/{cid}/predictor"
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3770,11 +4034,14 @@ def espn_cricket_game_powerindex(
 
             espn_cricket_game_powerindex(event_id='401584793')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/cricket/leagues/{league}/events/{event_id}/competitions/{cid}/powerindex"
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3812,11 +4079,14 @@ def espn_cricket_game_propbets(
 
             espn_cricket_game_propbets(event_id='401584793')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/cricket/leagues/{league}/events/{event_id}/competitions/{cid}/propbets"
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3854,11 +4124,14 @@ def espn_cricket_game_leaders(
 
             espn_cricket_game_leaders(event_id='401584793')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/cricket/leagues/{league}/events/{event_id}/competitions/{cid}/leaders"
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3896,11 +4169,14 @@ def espn_cricket_game_scoringplays(
 
             espn_cricket_game_scoringplays(event_id='401584793')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/cricket/leagues/{league}/events/{event_id}/competitions/{cid}/scoringplays"
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3940,11 +4216,14 @@ def espn_cricket_game_official_detail(
 
             espn_cricket_game_official_detail(event_id='401584793', official_id='1')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/cricket/leagues/{league}/events/{event_id}/competitions/{cid}/officials/{official_id}"
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3980,11 +4259,14 @@ def espn_cricket_teams_core(
 
             espn_cricket_teams_core()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "limit": limit,
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/cricket/leagues/{league}/teams",
-        params={
-            "limit": limit,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -4020,9 +4302,12 @@ def espn_cricket_team_core(
 
             espn_cricket_team_core(team_id='4')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/cricket/leagues/{league}/teams/{team_id}",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -4058,11 +4343,14 @@ def espn_cricket_venues(
 
             espn_cricket_venues()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "limit": limit,
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/cricket/leagues/{league}/venues",
-        params={
-            "limit": limit,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -4098,9 +4386,12 @@ def espn_cricket_venue(
 
             espn_cricket_venue(venue_id='3663')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/cricket/leagues/{league}/venues/{venue_id}",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -4136,11 +4427,14 @@ def espn_cricket_franchises(
 
             espn_cricket_franchises()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "limit": limit,
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/cricket/leagues/{league}/franchises",
-        params={
-            "limit": limit,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -4176,9 +4470,12 @@ def espn_cricket_franchise(
 
             espn_cricket_franchise(franchise_id='2')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/cricket/leagues/{league}/franchises/{franchise_id}",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -4214,9 +4511,12 @@ def espn_cricket_coach(
 
             espn_cricket_coach(coach_id='1')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/cricket/leagues/{league}/coaches/{coach_id}",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -4254,9 +4554,12 @@ def espn_cricket_coach_record(
 
             espn_cricket_coach_record(coach_id='1')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/cricket/leagues/{league}/coaches/{coach_id}/record/{record_type}",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -4294,9 +4597,12 @@ def espn_cricket_coach_season(
 
             espn_cricket_coach_season(coach_id='1', season=2024)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/cricket/leagues/{league}/coaches/{coach_id}/seasons/{season}",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -4330,9 +4636,12 @@ def espn_cricket_positions(
 
             espn_cricket_positions()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/cricket/leagues/{league}/positions",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -4368,9 +4677,12 @@ def espn_cricket_position(
 
             espn_cricket_position(position_id='1')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/cricket/leagues/{league}/positions/{position_id}",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -4404,9 +4716,12 @@ def espn_cricket_tournaments(
 
             espn_cricket_tournaments()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/cricket/leagues/{league}/tournaments",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -4440,9 +4755,12 @@ def espn_cricket_awards(
 
             espn_cricket_awards()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/cricket/leagues/{league}/awards",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -4478,9 +4796,12 @@ def espn_cricket_award(
 
             espn_cricket_award(award_id='1')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/cricket/leagues/{league}/awards/{award_id}",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -4514,9 +4835,12 @@ def espn_cricket_standings_core(
 
             espn_cricket_standings_core()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/cricket/leagues/{league}/standings",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -4550,9 +4874,12 @@ def espn_cricket_leaders_core(
 
             espn_cricket_leaders_core()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/cricket/leagues/{league}/leaders",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -4586,9 +4913,12 @@ def espn_cricket_league_notes(
 
             espn_cricket_league_notes()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/cricket/leagues/{league}/notes",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -4622,9 +4952,12 @@ def espn_cricket_talentpicks(
 
             espn_cricket_talentpicks()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/cricket/leagues/{league}/talentpicks",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -4664,13 +4997,16 @@ def espn_cricket_fpi(
 
             espn_cricket_fpi(season=2024)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "season": season,
+        "limit": limit,
+        "page": page,
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://site.web.api.espn.com/apis/fitt/v3/sports/cricket/{league}/powerindex",
-        params={
-            "season": season,
-            "limit": limit,
-            "page": page,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:

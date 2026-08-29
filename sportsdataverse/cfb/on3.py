@@ -124,13 +124,16 @@ def on3_coaches_history(
 
             on3_coaches_history(person_key=89617)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "page": page,
+        "pageSize": page_size,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://api.on3.com/public/rdb/v1/coaches/{person_key}/history",
-        params={
-            "page": page,
-            "pageSize": page_size,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_on3_rdb(raw, return_as_pandas=return_as_pandas)
@@ -162,11 +165,14 @@ def on3_coaches_profile(
 
             on3_coaches_profile(person_key=89617)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://api.on3.com/public/rdb/v1/coaches/{person_key}/profile",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_on3_rdb(raw, return_as_pandas=return_as_pandas)
@@ -206,16 +212,19 @@ def on3_collective_groups(
 
             on3_collective_groups()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "sportKey": sport_key,
+        "organizationKey": organization_key,
+        "query": query,
+        "page": page,
+        "pageSize": page_size,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://api.on3.com/public/rdb/v1/collective-groups",
-        params={
-            "sportKey": sport_key,
-            "organizationKey": organization_key,
-            "query": query,
-            "page": page,
-            "pageSize": page_size,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_on3_rdb(raw, return_as_pandas=return_as_pandas)
@@ -251,13 +260,16 @@ def on3_collective_groups_deals(
 
             on3_collective_groups_deals(key=1)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "page": page,
+        "pageSize": page_size,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://api.on3.com/public/rdb/v1/collective-groups/{key}/deals",
-        params={
-            "page": page,
-            "pageSize": page_size,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_on3_rdb(raw, return_as_pandas=return_as_pandas)
@@ -289,11 +301,14 @@ def on3_collective_groups_key(
 
             on3_collective_groups_key(key=1)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://api.on3.com/public/rdb/v1/collective-groups/{key}",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_on3_rdb(raw, return_as_pandas=return_as_pandas)
@@ -329,14 +344,17 @@ def on3_commits_latest(
 
             on3_commits_latest()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "sportKey": sport_key,
+        "page": page,
+        "pageSize": page_size,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://api.on3.com/public/rdb/v1/commits/latest",
-        params={
-            "sportKey": sport_key,
-            "page": page,
-            "pageSize": page_size,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_on3_rdb(raw, return_as_pandas=return_as_pandas)
@@ -368,11 +386,14 @@ def on3_commits_organizations_latest_commits(
 
             on3_commits_organizations_latest_commits(org_key=1867)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://api.on3.com/public/rdb/v1/commits/organizations/{org_key}/latest-commits",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_on3_rdb(raw, return_as_pandas=return_as_pandas)
@@ -404,11 +425,14 @@ def on3_commits_organizations_org_key(
 
             on3_commits_organizations_org_key(org_key=1867)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://api.on3.com/public/rdb/v1/commits/organizations/{org_key}",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_on3_rdb(raw, return_as_pandas=return_as_pandas)
@@ -446,15 +470,18 @@ def on3_draft_organization_rank(
 
             on3_draft_organization_rank()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "sportKey": sport_key,
+        "year": year,
+        "page": page,
+        "pageSize": page_size,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://api.on3.com/public/rdb/v1/draft-organization-rank",
-        params={
-            "sportKey": sport_key,
-            "year": year,
-            "page": page,
-            "pageSize": page_size,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_on3_rdb(raw, return_as_pandas=return_as_pandas)
@@ -492,15 +519,18 @@ def on3_draft_pick_organization_rank(
 
             on3_draft_pick_organization_rank()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "sportKey": sport_key,
+        "year": year,
+        "page": page,
+        "pageSize": page_size,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://api.on3.com/public/rdb/v1/draft-pick-organization-rank",
-        params={
-            "sportKey": sport_key,
-            "year": year,
-            "page": page,
-            "pageSize": page_size,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_on3_rdb(raw, return_as_pandas=return_as_pandas)
@@ -536,14 +566,17 @@ def on3_drafts(
 
             on3_drafts()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "sportKey": sport_key,
+        "round": round,
+        "year": year,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://api.on3.com/public/rdb/v1/drafts",
-        params={
-            "sportKey": sport_key,
-            "round": round,
-            "year": year,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_on3_rdb(raw, return_as_pandas=return_as_pandas)
@@ -579,14 +612,17 @@ def on3_drafts_by_stars(
 
             on3_drafts_by_stars()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "sportKey": sport_key,
+        "year": year,
+        "yearSpan": year_span,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://api.on3.com/public/rdb/v1/drafts-by-stars",
-        params={
-            "sportKey": sport_key,
-            "year": year,
-            "yearSpan": year_span,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_on3_rdb(raw, return_as_pandas=return_as_pandas)
@@ -620,13 +656,16 @@ def on3_drafts_by_stars_summary(
 
             on3_drafts_by_stars_summary()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "sportKey": sport_key,
+        "year": year,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://api.on3.com/public/rdb/v1/drafts-by-stars-summary",
-        params={
-            "sportKey": sport_key,
-            "year": year,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_on3_rdb(raw, return_as_pandas=return_as_pandas)
@@ -660,12 +699,15 @@ def on3_drafts_players(
 
             on3_drafts_players(org_key=1867)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "year": year,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://api.on3.com/public/rdb/v1/drafts/{org_key}/players",
-        params={
-            "year": year,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_on3_rdb(raw, return_as_pandas=return_as_pandas)
@@ -699,13 +741,16 @@ def on3_filters_conferences(
 
             on3_filters_conferences()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "year": year,
+        "sportKey": sport_key,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://api.on3.com/public/rdb/v1/filters/conferences",
-        params={
-            "year": year,
-            "sportKey": sport_key,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_on3_rdb(raw, return_as_pandas=return_as_pandas)
@@ -739,13 +784,16 @@ def on3_filters_draft_rounds(
 
             on3_filters_draft_rounds()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "year": year,
+        "sportKey": sport_key,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://api.on3.com/public/rdb/v1/filters/draft-rounds",
-        params={
-            "year": year,
-            "sportKey": sport_key,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_on3_rdb(raw, return_as_pandas=return_as_pandas)
@@ -779,13 +827,16 @@ def on3_filters_positions(
 
             on3_filters_positions()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "sportKey": sport_key,
+        "positionType": position_type,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://api.on3.com/public/rdb/v1/filters/positions",
-        params={
-            "sportKey": sport_key,
-            "positionType": position_type,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_on3_rdb(raw, return_as_pandas=return_as_pandas)
@@ -815,11 +866,14 @@ def on3_filters_sports(
 
             on3_filters_sports()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://api.on3.com/public/rdb/v1/filters/sports",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_on3_rdb(raw, return_as_pandas=return_as_pandas)
@@ -849,11 +903,14 @@ def on3_filters_status(
 
             on3_filters_status()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://api.on3.com/public/rdb/v1/filters/status",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_on3_rdb(raw, return_as_pandas=return_as_pandas)
@@ -889,14 +946,17 @@ def on3_filters_teams(
 
             on3_filters_teams()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "groupBy": group_by,
+        "year": year,
+        "sportKey": sport_key,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://api.on3.com/public/rdb/v1/filters/teams",
-        params={
-            "groupBy": group_by,
-            "year": year,
-            "sportKey": sport_key,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_on3_rdb(raw, return_as_pandas=return_as_pandas)
@@ -926,11 +986,14 @@ def on3_filters_years(
 
             on3_filters_years()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://api.on3.com/public/rdb/v1/filters/years",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_on3_rdb(raw, return_as_pandas=return_as_pandas)
@@ -962,12 +1025,15 @@ def on3_nil_100(
 
             on3_nil_100()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "year": year,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://api.on3.com/public/rdb/v1/nil-100",
-        params={
-            "year": year,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_on3_rdb(raw, return_as_pandas=return_as_pandas)
@@ -1005,15 +1071,18 @@ def on3_nil_100_v2(
 
             on3_nil_100_v2()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "year": year,
+        "orgKey": org_key,
+        "limit": limit,
+        "page": page,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://api.on3.com/public/rdb/v2/nil-100",
-        params={
-            "year": year,
-            "orgKey": org_key,
-            "limit": limit,
-            "page": page,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_on3_rdb(raw, return_as_pandas=return_as_pandas)
@@ -1045,12 +1114,15 @@ def on3_nil_compliances_state(
 
             on3_nil_compliances_state()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "stateKey": state_key,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://api.on3.com/public/rdb/v1/nil-compliances/state",
-        params={
-            "stateKey": state_key,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_on3_rdb(raw, return_as_pandas=return_as_pandas)
@@ -1092,17 +1164,20 @@ def on3_nil_rankings(
 
             on3_nil_rankings()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "sportKey": sport_key,
+        "gender": gender,
+        "year": year,
+        "orgType": org_type,
+        "positionAbbr": position_abbr,
+        "stateAbbr": state_abbr,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://api.on3.com/public/rdb/v1/nil-rankings",
-        params={
-            "sportKey": sport_key,
-            "gender": gender,
-            "year": year,
-            "orgType": org_type,
-            "positionAbbr": position_abbr,
-            "stateAbbr": state_abbr,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_on3_rdb(raw, return_as_pandas=return_as_pandas)
@@ -1138,13 +1213,16 @@ def on3_organizations_draft_class_by_state(
 
             on3_organizations_draft_class_by_state(organization_key=1867)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "page": page,
+        "pageSize": page_size,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://api.on3.com/public/rdb/v1/organizations/{organization_key}/draft-class-by-state",
-        params={
-            "page": page,
-            "pageSize": page_size,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_on3_rdb(raw, return_as_pandas=return_as_pandas)
@@ -1180,13 +1258,16 @@ def on3_organizations_draft_class_by_year(
 
             on3_organizations_draft_class_by_year(organization_key=1867)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "page": page,
+        "pageSize": page_size,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://api.on3.com/public/rdb/v1/organizations/{organization_key}/draft-class-by-year",
-        params={
-            "page": page,
-            "pageSize": page_size,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_on3_rdb(raw, return_as_pandas=return_as_pandas)
@@ -1218,11 +1299,14 @@ def on3_organizations_draft_count_by_stars(
 
             on3_organizations_draft_count_by_stars(organization_key=1867)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://api.on3.com/public/rdb/v1/organizations/{organization_key}/draft-count-by-stars",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_on3_rdb(raw, return_as_pandas=return_as_pandas)
@@ -1258,13 +1342,16 @@ def on3_organizations_draft_count_by_year(
 
             on3_organizations_draft_count_by_year(organization_key=1867)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "page": page,
+        "pageSize": page_size,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://api.on3.com/public/rdb/v1/organizations/{organization_key}/draft-count-by-year",
-        params={
-            "page": page,
-            "pageSize": page_size,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_on3_rdb(raw, return_as_pandas=return_as_pandas)
@@ -1298,12 +1385,15 @@ def on3_organizations_draft_ranking_summary(
 
             on3_organizations_draft_ranking_summary(organization_key=1867)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "year": year,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://api.on3.com/public/rdb/v1/organizations/{organization_key}/draft-ranking-summary",
-        params={
-            "year": year,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_on3_rdb(raw, return_as_pandas=return_as_pandas)
@@ -1339,13 +1429,16 @@ def on3_organizations_drafted_players(
 
             on3_organizations_drafted_players(organization_key=1867)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "page": page,
+        "pageSize": page_size,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://api.on3.com/public/rdb/v1/organizations/{organization_key}/drafted-players",
-        params={
-            "page": page,
-            "pageSize": page_size,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_on3_rdb(raw, return_as_pandas=return_as_pandas)
@@ -1379,12 +1472,15 @@ def on3_organizations_drafts_by_stars_summary(
 
             on3_organizations_drafts_by_stars_summary(organization_key=1867)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "year": year,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://api.on3.com/public/rdb/v1/organizations/{organization_key}/drafts-by-stars-summary",
-        params={
-            "year": year,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_on3_rdb(raw, return_as_pandas=return_as_pandas)
@@ -1424,15 +1520,18 @@ def on3_organizations_roster(
 
             on3_organizations_roster(organization_key=1867)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "sportKey": sport_key,
+        "year": year,
+        "page": page,
+        "pageSize": page_size,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://api.on3.com/public/rdb/v1/organizations/{organization_key}/roster",
-        params={
-            "sportKey": sport_key,
-            "year": year,
-            "page": page,
-            "pageSize": page_size,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_on3_rdb(raw, return_as_pandas=return_as_pandas)
@@ -1468,13 +1567,16 @@ def on3_organizations_roster_header(
 
             on3_organizations_roster_header(organization_key=1867)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "sportKey": sport_key,
+        "year": year,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://api.on3.com/public/rdb/v1/organizations/{organization_key}/roster-header",
-        params={
-            "sportKey": sport_key,
-            "year": year,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_on3_rdb(raw, return_as_pandas=return_as_pandas)
@@ -1506,11 +1608,14 @@ def on3_people_combine_measurements(
 
             on3_people_combine_measurements(person_key=89617)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://api.on3.com/public/rdb/v1/people/{person_key}/combine-measurements",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_on3_rdb(raw, return_as_pandas=return_as_pandas)
@@ -1542,11 +1647,14 @@ def on3_people_latest_valuation(
 
             on3_people_latest_valuation(person_key=89617)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://api.on3.com/public/rdb/v1/people/{person_key}/latest-valuation",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_on3_rdb(raw, return_as_pandas=return_as_pandas)
@@ -1578,11 +1686,14 @@ def on3_people_measurements(
 
             on3_people_measurements(person_key=89617)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://api.on3.com/public/rdb/v1/people/{person_key}/measurements",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_on3_rdb(raw, return_as_pandas=return_as_pandas)
@@ -1618,13 +1729,16 @@ def on3_people_measurements_averages(
 
             on3_people_measurements_averages(person_key=89617)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "page": page,
+        "pageSize": page_size,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://api.on3.com/public/rdb/v1/people/{person_key}/measurements/averages",
-        params={
-            "page": page,
-            "pageSize": page_size,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_on3_rdb(raw, return_as_pandas=return_as_pandas)
@@ -1660,13 +1774,16 @@ def on3_people_person_connections(
 
             on3_people_person_connections(person_key=89617)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "page": page,
+        "pageSize": page_size,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://api.on3.com/public/rdb/v1/people/{person_key}/person-connections",
-        params={
-            "page": page,
-            "pageSize": page_size,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_on3_rdb(raw, return_as_pandas=return_as_pandas)
@@ -1698,11 +1815,14 @@ def on3_people_social(
 
             on3_people_social(person_key=89617)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://api.on3.com/public/rdb/v1/people/{person_key}/social",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_on3_rdb(raw, return_as_pandas=return_as_pandas)
@@ -1734,11 +1854,14 @@ def on3_people_social_post_summary(
 
             on3_people_social_post_summary(person_key=89617)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://api.on3.com/public/rdb/v1/people/{person_key}/social-post-summary",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_on3_rdb(raw, return_as_pandas=return_as_pandas)
@@ -1770,11 +1893,14 @@ def on3_people_track_and_field_measurements(
 
             on3_people_track_and_field_measurements(person_key=89617)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://api.on3.com/public/rdb/v1/people/{person_key}/track-and-field-measurements",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_on3_rdb(raw, return_as_pandas=return_as_pandas)
@@ -1806,11 +1932,14 @@ def on3_people_valuation_growth(
 
             on3_people_valuation_growth(person_key=89617)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://api.on3.com/public/rdb/v1/people/{person_key}/valuation-growth",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_on3_rdb(raw, return_as_pandas=return_as_pandas)
@@ -1842,11 +1971,14 @@ def on3_person_connections_connection_key(
 
             on3_person_connections_connection_key(connection_key=89617)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://api.on3.com/public/rdb/v1/person-connections/{connection_key}",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_on3_rdb(raw, return_as_pandas=return_as_pandas)
@@ -1878,11 +2010,14 @@ def on3_person_primary_recruitment_evaluation(
 
             on3_person_primary_recruitment_evaluation(person_key=89617)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://api.on3.com/public/rdb/v1/person/{person_key}/primary-recruitment-evaluation",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_on3_rdb(raw, return_as_pandas=return_as_pandas)
@@ -1914,11 +2049,14 @@ def on3_person_recruitment_evaluations(
 
             on3_person_recruitment_evaluations(person_key=89617)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://api.on3.com/public/rdb/v1/person/{person_key}/recruitment-evaluations",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_on3_rdb(raw, return_as_pandas=return_as_pandas)
@@ -1950,11 +2088,14 @@ def on3_person_sport_profile_recruit(
 
             on3_person_sport_profile_recruit(ps_key=89617)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://api.on3.com/public/rdb/v1/person-sport/{ps_key}/profile-recruit",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_on3_rdb(raw, return_as_pandas=return_as_pandas)
@@ -1992,15 +2133,18 @@ def on3_person_sport_rankings(
 
             on3_person_sport_rankings()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "sportKey": sport_key,
+        "year": year,
+        "page": page,
+        "pageSize": page_size,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://api.on3.com/public/rdb/v1/person-sport-rankings",
-        params={
-            "sportKey": sport_key,
-            "year": year,
-            "page": page,
-            "pageSize": page_size,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_on3_rdb(raw, return_as_pandas=return_as_pandas)
@@ -2032,11 +2176,14 @@ def on3_player_all_rankings(
 
             on3_player_all_rankings(person_key=89617)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://api.on3.com/public/rdb/v1/player/{person_key}/all-rankings",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_on3_rdb(raw, return_as_pandas=return_as_pandas)
@@ -2068,11 +2215,14 @@ def on3_player_database_updates(
 
             on3_player_database_updates(person_key=89617)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://api.on3.com/public/rdb/v1/player/{person_key}/database-updates",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_on3_rdb(raw, return_as_pandas=return_as_pandas)
@@ -2104,11 +2254,14 @@ def on3_player_images(
 
             on3_player_images(person_key=89617)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://api.on3.com/public/rdb/v1/player/{person_key}/images",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_on3_rdb(raw, return_as_pandas=return_as_pandas)
@@ -2140,11 +2293,14 @@ def on3_player_organizations(
 
             on3_player_organizations(person_key=89617)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://api.on3.com/public/rdb/v1/player/{person_key}/organizations",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_on3_rdb(raw, return_as_pandas=return_as_pandas)
@@ -2178,11 +2334,14 @@ def on3_player_organizations_org_key(
 
             on3_player_organizations_org_key(org_key=1867, player_key=89617)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://api.on3.com/public/rdb/v1/player/{player_key}/organizations/{org_key}",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_on3_rdb(raw, return_as_pandas=return_as_pandas)
@@ -2214,11 +2373,14 @@ def on3_player_person_rankings(
 
             on3_player_person_rankings(person_key=89617)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://api.on3.com/public/rdb/v1/player/{person_key}/rankings",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_on3_rdb(raw, return_as_pandas=return_as_pandas)
@@ -2250,11 +2412,14 @@ def on3_player_profile(
 
             on3_player_profile(person_key=89617)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://api.on3.com/public/rdb/v1/player/{person_key}/profile",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_on3_rdb(raw, return_as_pandas=return_as_pandas)
@@ -2286,11 +2451,14 @@ def on3_player_team_targets(
 
             on3_player_team_targets(player_key=89617)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://api.on3.com/public/rdb/v1/player/{player_key}/team-targets",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_on3_rdb(raw, return_as_pandas=return_as_pandas)
@@ -2326,14 +2494,17 @@ def on3_player_verified(
 
             on3_player_verified()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "sportKey": sport_key,
+        "page": page,
+        "pageSize": page_size,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://api.on3.com/public/rdb/v1/player/verified",
-        params={
-            "sportKey": sport_key,
-            "page": page,
-            "pageSize": page_size,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_on3_rdb(raw, return_as_pandas=return_as_pandas)
@@ -2365,11 +2536,14 @@ def on3_player_videos(
 
             on3_player_videos(person_key=89617)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://api.on3.com/public/rdb/v1/player/{person_key}/videos",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_on3_rdb(raw, return_as_pandas=return_as_pandas)
@@ -2401,11 +2575,14 @@ def on3_player_visit_center(
 
             on3_player_visit_center(player_key=89617)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://api.on3.com/public/rdb/v1/player/{player_key}/visit-center",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_on3_rdb(raw, return_as_pandas=return_as_pandas)
@@ -2447,17 +2624,20 @@ def on3_players_industry_comparision(
 
             on3_players_industry_comparision()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "sportKey": sport_key,
+        "year": year,
+        "stateAbbr": state_abbr,
+        "positionAbbr": position_abbr,
+        "page": page,
+        "sortByIndustry": sort_by_industry,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://api.on3.com/public/rdb/v1/players/industry-comparision",
-        params={
-            "sportKey": sport_key,
-            "year": year,
-            "stateAbbr": state_abbr,
-            "positionAbbr": position_abbr,
-            "page": page,
-            "sortByIndustry": sort_by_industry,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_on3_rdb(raw, return_as_pandas=return_as_pandas)
@@ -2495,15 +2675,18 @@ def on3_players_industry_comparision_list(
 
             on3_players_industry_comparision_list()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "sportKey": sport_key,
+        "year": year,
+        "page": page,
+        "pageSize": page_size,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://api.on3.com/public/rdb/v1/players/industry-comparision-list",
-        params={
-            "sportKey": sport_key,
-            "year": year,
-            "page": page,
-            "pageSize": page_size,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_on3_rdb(raw, return_as_pandas=return_as_pandas)
@@ -2539,13 +2722,16 @@ def on3_predictions_user_key(
 
             on3_predictions_user_key(user_key=89617)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "page": page,
+        "pageSize": page_size,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://api.on3.com/public/rdb/v1/predictions/{user_key}",
-        params={
-            "page": page,
-            "pageSize": page_size,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_on3_rdb(raw, return_as_pandas=return_as_pandas)
@@ -2579,13 +2765,16 @@ def on3_quotes(
 
             on3_quotes()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "page": page,
+        "pageSize": page_size,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://api.on3.com/public/rdb/v1/quotes",
-        params={
-            "page": page,
-            "pageSize": page_size,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_on3_rdb(raw, return_as_pandas=return_as_pandas)
@@ -2617,11 +2806,14 @@ def on3_quotes_key(
 
             on3_quotes_key(key=1)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://api.on3.com/public/rdb/v1/quotes/{key}",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_on3_rdb(raw, return_as_pandas=return_as_pandas)
@@ -2653,11 +2845,14 @@ def on3_recruitment_primary_recruitment_evaluation(
 
             on3_recruitment_primary_recruitment_evaluation(recruitment_key=270036)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://api.on3.com/public/rdb/v1/recruitment/{recruitment_key}/primary-recruitment-evaluation",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_on3_rdb(raw, return_as_pandas=return_as_pandas)
@@ -2689,11 +2884,14 @@ def on3_recruitment_recruitment_evaluations(
 
             on3_recruitment_recruitment_evaluations(recruitment_key=270036)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://api.on3.com/public/rdb/v1/recruitment/{recruitment_key}/recruitment-evaluations",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_on3_rdb(raw, return_as_pandas=return_as_pandas)
@@ -2731,15 +2929,18 @@ def on3_recruitments_latest_rpm_picks(
 
             on3_recruitments_latest_rpm_picks()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "orgKey": org_key,
+        "year": year,
+        "page": page,
+        "pageSize": page_size,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://api.on3.com/public/rdb/v1/recruitments/latest-rpm-picks",
-        params={
-            "orgKey": org_key,
-            "year": year,
-            "page": page,
-            "pageSize": page_size,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_on3_rdb(raw, return_as_pandas=return_as_pandas)
@@ -2771,11 +2972,14 @@ def on3_recruitments_profile(
 
             on3_recruitments_profile(rec_key=270036)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://api.on3.com/public/rdb/v1/recruitments/{rec_key}/profile",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_on3_rdb(raw, return_as_pandas=return_as_pandas)
@@ -2807,11 +3011,14 @@ def on3_recruitments_rpm_picks(
 
             on3_recruitments_rpm_picks(rec_key=270036)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://api.on3.com/public/rdb/v1/recruitments/{rec_key}/rpm-picks",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_on3_rdb(raw, return_as_pandas=return_as_pandas)
@@ -2843,11 +3050,14 @@ def on3_recruitments_rpm_summary(
 
             on3_recruitments_rpm_summary(rec_key=270036)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://api.on3.com/public/rdb/v1/recruitments/{rec_key}/rpm-summary",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_on3_rdb(raw, return_as_pandas=return_as_pandas)
@@ -2885,15 +3095,18 @@ def on3_team_ranking(
 
             on3_team_ranking()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "sportKey": sport_key,
+        "year": year,
+        "page": page,
+        "pageSize": page_size,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://api.on3.com/public/rdb/v1/team-ranking",
-        params={
-            "sportKey": sport_key,
-            "year": year,
-            "page": page,
-            "pageSize": page_size,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_on3_rdb(raw, return_as_pandas=return_as_pandas)
@@ -2927,11 +3140,14 @@ def on3_team_ranking_bluechips_team_rankings(
 
             on3_team_ranking_bluechips_team_rankings(sport_slug='football', year=2025)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://api.on3.com/public/rdb/v1/team-ranking/{sport_slug}-{year}/bluechips-team-rankings",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_on3_rdb(raw, return_as_pandas=return_as_pandas)
@@ -2965,11 +3181,14 @@ def on3_team_ranking_consensus_team_rankings(
 
             on3_team_ranking_consensus_team_rankings(sport_slug='football', year=2025)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://api.on3.com/public/rdb/v1/team-ranking/{sport_slug}-{year}/consensus-team-rankings",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_on3_rdb(raw, return_as_pandas=return_as_pandas)
@@ -3001,11 +3220,14 @@ def on3_team_ranking_organizations_summary(
 
             on3_team_ranking_organizations_summary(org_key=1867)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://api.on3.com/public/rdb/v1/team-ranking/organizations/{org_key}/summary",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_on3_rdb(raw, return_as_pandas=return_as_pandas)
@@ -3039,11 +3261,14 @@ def on3_team_ranking_team_rankings(
 
             on3_team_ranking_team_rankings(sport_slug='football', year=2025)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://api.on3.com/public/rdb/v1/team-ranking/{sport_slug}-{year}/team-rankings",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_on3_rdb(raw, return_as_pandas=return_as_pandas)
@@ -3089,19 +3314,22 @@ def on3_transfers_best_available(
 
             on3_transfers_best_available()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "orgKey": org_key,
+        "sportKey": sport_key,
+        "year": year,
+        "positionAbbr": position_abbr,
+        "status": status,
+        "page": page,
+        "cutoff": cutoff,
+        "orderBy": order_by,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://api.on3.com/public/rdb/v1/transfers/best-available",
-        params={
-            "orgKey": org_key,
-            "sportKey": sport_key,
-            "year": year,
-            "positionAbbr": position_abbr,
-            "status": status,
-            "page": page,
-            "cutoff": cutoff,
-            "orderBy": order_by,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_on3_rdb(raw, return_as_pandas=return_as_pandas)
@@ -3143,17 +3371,20 @@ def on3_transfers_latest(
 
             on3_transfers_latest()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "orgKey": org_key,
+        "sportKey": sport_key,
+        "year": year,
+        "positionAbbr": position_abbr,
+        "status": status,
+        "page": page,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://api.on3.com/public/rdb/v1/transfers/latest",
-        params={
-            "orgKey": org_key,
-            "sportKey": sport_key,
-            "year": year,
-            "positionAbbr": position_abbr,
-            "status": status,
-            "page": page,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_on3_rdb(raw, return_as_pandas=return_as_pandas)
@@ -3185,11 +3416,14 @@ def on3_videos_video_key(
 
             on3_videos_video_key(video_key=1)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://api.on3.com/public/rdb/v1/videos/{video_key}",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_on3_rdb(raw, return_as_pandas=return_as_pandas)

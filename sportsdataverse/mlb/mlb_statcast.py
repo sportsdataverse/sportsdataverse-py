@@ -92,15 +92,18 @@ def mlb_statcast_leaderboard_expected_stats(
 
             mlb_statcast_leaderboard_expected_stats()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "type": type,
+        "year": year,
+        "team": team,
+        "csv": csv,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://baseballsavant.mlb.com/leaderboard/expected_statistics",
-        params={
-            "type": type,
-            "year": year,
-            "team": team,
-            "csv": csv,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_mlb_statcast_leaderboard(raw, return_as_pandas=return_as_pandas)
@@ -138,15 +141,18 @@ def mlb_statcast_leaderboard_percentile_rankings(
 
             mlb_statcast_leaderboard_percentile_rankings()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "type": type,
+        "year": year,
+        "team": team,
+        "csv": csv,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://baseballsavant.mlb.com/leaderboard/percentile-rankings",
-        params={
-            "type": type,
-            "year": year,
-            "team": team,
-            "csv": csv,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_mlb_statcast_leaderboard(raw, return_as_pandas=return_as_pandas)
@@ -184,15 +190,18 @@ def mlb_statcast_leaderboard_sprint_speed(
 
             mlb_statcast_leaderboard_sprint_speed()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "type": type,
+        "year": year,
+        "team": team,
+        "csv": csv,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://baseballsavant.mlb.com/leaderboard/sprint_speed",
-        params={
-            "type": type,
-            "year": year,
-            "team": team,
-            "csv": csv,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_mlb_statcast_leaderboard(raw, return_as_pandas=return_as_pandas)
@@ -230,15 +239,18 @@ def mlb_statcast_leaderboard_running_splits(
 
             mlb_statcast_leaderboard_running_splits()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "type": type,
+        "year": year,
+        "team": team,
+        "csv": csv,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://baseballsavant.mlb.com/leaderboard/running_splits",
-        params={
-            "type": type,
-            "year": year,
-            "team": team,
-            "csv": csv,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_mlb_statcast_leaderboard(raw, return_as_pandas=return_as_pandas)
@@ -276,15 +288,18 @@ def mlb_statcast_leaderboard_bat_tracking(
 
             mlb_statcast_leaderboard_bat_tracking()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "type": type,
+        "year": year,
+        "team": team,
+        "csv": csv,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://baseballsavant.mlb.com/leaderboard/bat-tracking",
-        params={
-            "type": type,
-            "year": year,
-            "team": team,
-            "csv": csv,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_mlb_statcast_leaderboard(raw, return_as_pandas=return_as_pandas)
@@ -322,15 +337,18 @@ def mlb_statcast_leaderboard_swing_path(
 
             mlb_statcast_leaderboard_swing_path()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "type": type,
+        "year": year,
+        "team": team,
+        "csv": csv,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://baseballsavant.mlb.com/leaderboard/bat-tracking/swing-path-attack-angle",
-        params={
-            "type": type,
-            "year": year,
-            "team": team,
-            "csv": csv,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_mlb_statcast_leaderboard(raw, return_as_pandas=return_as_pandas)
@@ -368,15 +386,18 @@ def mlb_statcast_leaderboard_swing_timing(
 
             mlb_statcast_leaderboard_swing_timing()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "type": type,
+        "year": year,
+        "team": team,
+        "csv": csv,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://baseballsavant.mlb.com/leaderboard/bat-tracking/swing-timing-miss-distance",
-        params={
-            "type": type,
-            "year": year,
-            "team": team,
-            "csv": csv,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_mlb_statcast_leaderboard(raw, return_as_pandas=return_as_pandas)
@@ -414,15 +435,18 @@ def mlb_statcast_leaderboard_swing_take(
 
             mlb_statcast_leaderboard_swing_take()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "type": type,
+        "year": year,
+        "team": team,
+        "csv": csv,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://baseballsavant.mlb.com/leaderboard/swing-take",
-        params={
-            "type": type,
-            "year": year,
-            "team": team,
-            "csv": csv,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_mlb_statcast_leaderboard(raw, return_as_pandas=return_as_pandas)
@@ -460,15 +484,18 @@ def mlb_statcast_leaderboard_exit_velocity_barrels(
 
             mlb_statcast_leaderboard_exit_velocity_barrels()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "type": type,
+        "year": year,
+        "team": team,
+        "csv": csv,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://baseballsavant.mlb.com/leaderboard/statcast",
-        params={
-            "type": type,
-            "year": year,
-            "team": team,
-            "csv": csv,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_mlb_statcast_leaderboard(raw, return_as_pandas=return_as_pandas)
@@ -506,15 +533,18 @@ def mlb_statcast_leaderboard_batted_ball(
 
             mlb_statcast_leaderboard_batted_ball()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "type": type,
+        "year": year,
+        "team": team,
+        "csv": csv,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://baseballsavant.mlb.com/leaderboard/batted-ball",
-        params={
-            "type": type,
-            "year": year,
-            "team": team,
-            "csv": csv,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_mlb_statcast_leaderboard(raw, return_as_pandas=return_as_pandas)
@@ -552,15 +582,18 @@ def mlb_statcast_leaderboard_home_runs(
 
             mlb_statcast_leaderboard_home_runs()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "type": type,
+        "year": year,
+        "team": team,
+        "csv": csv,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://baseballsavant.mlb.com/leaderboard/home-runs",
-        params={
-            "type": type,
-            "year": year,
-            "team": team,
-            "csv": csv,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_mlb_statcast_leaderboard(raw, return_as_pandas=return_as_pandas)
@@ -598,15 +631,18 @@ def mlb_statcast_leaderboard_pitch_arsenals(
 
             mlb_statcast_leaderboard_pitch_arsenals()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "type": type,
+        "year": year,
+        "team": team,
+        "csv": csv,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://baseballsavant.mlb.com/leaderboard/pitch-arsenals",
-        params={
-            "type": type,
-            "year": year,
-            "team": team,
-            "csv": csv,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_mlb_statcast_leaderboard(raw, return_as_pandas=return_as_pandas)
@@ -644,15 +680,18 @@ def mlb_statcast_leaderboard_pitch_arsenal_stats(
 
             mlb_statcast_leaderboard_pitch_arsenal_stats()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "type": type,
+        "year": year,
+        "team": team,
+        "csv": csv,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://baseballsavant.mlb.com/leaderboard/pitch-arsenal-stats",
-        params={
-            "type": type,
-            "year": year,
-            "team": team,
-            "csv": csv,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_mlb_statcast_leaderboard(raw, return_as_pandas=return_as_pandas)
@@ -690,15 +729,18 @@ def mlb_statcast_leaderboard_pitch_movement(
 
             mlb_statcast_leaderboard_pitch_movement()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "type": type,
+        "year": year,
+        "team": team,
+        "csv": csv,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://baseballsavant.mlb.com/leaderboard/pitch-movement",
-        params={
-            "type": type,
-            "year": year,
-            "team": team,
-            "csv": csv,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_mlb_statcast_leaderboard(raw, return_as_pandas=return_as_pandas)
@@ -736,15 +778,18 @@ def mlb_statcast_leaderboard_pitch_tempo(
 
             mlb_statcast_leaderboard_pitch_tempo()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "type": type,
+        "year": year,
+        "team": team,
+        "csv": csv,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://baseballsavant.mlb.com/leaderboard/pitch-tempo",
-        params={
-            "type": type,
-            "year": year,
-            "team": team,
-            "csv": csv,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_mlb_statcast_leaderboard(raw, return_as_pandas=return_as_pandas)
@@ -782,15 +827,18 @@ def mlb_statcast_leaderboard_active_spin(
 
             mlb_statcast_leaderboard_active_spin()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "type": type,
+        "year": year,
+        "team": team,
+        "csv": csv,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://baseballsavant.mlb.com/leaderboard/active-spin",
-        params={
-            "type": type,
-            "year": year,
-            "team": team,
-            "csv": csv,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_mlb_statcast_leaderboard(raw, return_as_pandas=return_as_pandas)
@@ -828,15 +876,18 @@ def mlb_statcast_leaderboard_spin_direction(
 
             mlb_statcast_leaderboard_spin_direction()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "type": type,
+        "year": year,
+        "team": team,
+        "csv": csv,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://baseballsavant.mlb.com/leaderboard/spin-direction-pitches",
-        params={
-            "type": type,
-            "year": year,
-            "team": team,
-            "csv": csv,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_mlb_statcast_leaderboard(raw, return_as_pandas=return_as_pandas)
@@ -874,15 +925,18 @@ def mlb_statcast_leaderboard_arm_angles(
 
             mlb_statcast_leaderboard_arm_angles()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "type": type,
+        "year": year,
+        "team": team,
+        "csv": csv,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://baseballsavant.mlb.com/leaderboard/pitcher-arm-angles",
-        params={
-            "type": type,
-            "year": year,
-            "team": team,
-            "csv": csv,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_mlb_statcast_leaderboard(raw, return_as_pandas=return_as_pandas)
@@ -920,15 +974,18 @@ def mlb_statcast_leaderboard_pitcher_running_game(
 
             mlb_statcast_leaderboard_pitcher_running_game()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "type": type,
+        "year": year,
+        "team": team,
+        "csv": csv,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://baseballsavant.mlb.com/leaderboard/pitcher-running-game",
-        params={
-            "type": type,
-            "year": year,
-            "team": team,
-            "csv": csv,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_mlb_statcast_leaderboard(raw, return_as_pandas=return_as_pandas)
@@ -966,15 +1023,18 @@ def mlb_statcast_leaderboard_outs_above_average(
 
             mlb_statcast_leaderboard_outs_above_average()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "type": type,
+        "year": year,
+        "team": team,
+        "csv": csv,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://baseballsavant.mlb.com/leaderboard/outs_above_average",
-        params={
-            "type": type,
-            "year": year,
-            "team": team,
-            "csv": csv,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_mlb_statcast_leaderboard(raw, return_as_pandas=return_as_pandas)
@@ -1012,15 +1072,18 @@ def mlb_statcast_leaderboard_outfield_directional_oaa(
 
             mlb_statcast_leaderboard_outfield_directional_oaa()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "type": type,
+        "year": year,
+        "team": team,
+        "csv": csv,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://baseballsavant.mlb.com/leaderboard/outfield_directional_outs_above_average",
-        params={
-            "type": type,
-            "year": year,
-            "team": team,
-            "csv": csv,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_mlb_statcast_leaderboard(raw, return_as_pandas=return_as_pandas)
@@ -1058,15 +1121,18 @@ def mlb_statcast_leaderboard_outfield_jump(
 
             mlb_statcast_leaderboard_outfield_jump()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "type": type,
+        "year": year,
+        "team": team,
+        "csv": csv,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://baseballsavant.mlb.com/leaderboard/outfield_jump",
-        params={
-            "type": type,
-            "year": year,
-            "team": team,
-            "csv": csv,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_mlb_statcast_leaderboard(raw, return_as_pandas=return_as_pandas)
@@ -1104,15 +1170,18 @@ def mlb_statcast_leaderboard_catch_probability(
 
             mlb_statcast_leaderboard_catch_probability()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "type": type,
+        "year": year,
+        "team": team,
+        "csv": csv,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://baseballsavant.mlb.com/leaderboard/catch_probability",
-        params={
-            "type": type,
-            "year": year,
-            "team": team,
-            "csv": csv,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_mlb_statcast_leaderboard(raw, return_as_pandas=return_as_pandas)
@@ -1150,15 +1219,18 @@ def mlb_statcast_leaderboard_arm_strength(
 
             mlb_statcast_leaderboard_arm_strength()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "type": type,
+        "year": year,
+        "team": team,
+        "csv": csv,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://baseballsavant.mlb.com/leaderboard/arm-strength",
-        params={
-            "type": type,
-            "year": year,
-            "team": team,
-            "csv": csv,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_mlb_statcast_leaderboard(raw, return_as_pandas=return_as_pandas)
@@ -1196,15 +1268,18 @@ def mlb_statcast_leaderboard_poptime(
 
             mlb_statcast_leaderboard_poptime()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "type": type,
+        "year": year,
+        "team": team,
+        "csv": csv,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://baseballsavant.mlb.com/leaderboard/poptime",
-        params={
-            "type": type,
-            "year": year,
-            "team": team,
-            "csv": csv,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_mlb_statcast_leaderboard(raw, return_as_pandas=return_as_pandas)
@@ -1242,15 +1317,18 @@ def mlb_statcast_leaderboard_catcher_framing(
 
             mlb_statcast_leaderboard_catcher_framing()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "type": type,
+        "year": year,
+        "team": team,
+        "csv": csv,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://baseballsavant.mlb.com/leaderboard/catcher-framing",
-        params={
-            "type": type,
-            "year": year,
-            "team": team,
-            "csv": csv,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_mlb_statcast_leaderboard(raw, return_as_pandas=return_as_pandas)
@@ -1288,15 +1366,18 @@ def mlb_statcast_leaderboard_catcher_blocking(
 
             mlb_statcast_leaderboard_catcher_blocking()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "type": type,
+        "year": year,
+        "team": team,
+        "csv": csv,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://baseballsavant.mlb.com/leaderboard/catcher-blocking",
-        params={
-            "type": type,
-            "year": year,
-            "team": team,
-            "csv": csv,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_mlb_statcast_leaderboard(raw, return_as_pandas=return_as_pandas)
@@ -1334,15 +1415,18 @@ def mlb_statcast_leaderboard_catcher_throwing(
 
             mlb_statcast_leaderboard_catcher_throwing()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "type": type,
+        "year": year,
+        "team": team,
+        "csv": csv,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://baseballsavant.mlb.com/leaderboard/catcher-throwing",
-        params={
-            "type": type,
-            "year": year,
-            "team": team,
-            "csv": csv,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_mlb_statcast_leaderboard(raw, return_as_pandas=return_as_pandas)
@@ -1380,15 +1464,18 @@ def mlb_statcast_leaderboard_catcher_stance(
 
             mlb_statcast_leaderboard_catcher_stance()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "type": type,
+        "year": year,
+        "team": team,
+        "csv": csv,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://baseballsavant.mlb.com/leaderboard/catcher-stance",
-        params={
-            "type": type,
-            "year": year,
-            "team": team,
-            "csv": csv,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_mlb_statcast_leaderboard(raw, return_as_pandas=return_as_pandas)
@@ -1426,15 +1513,18 @@ def mlb_statcast_leaderboard_basestealing_run_value(
 
             mlb_statcast_leaderboard_basestealing_run_value()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "type": type,
+        "year": year,
+        "team": team,
+        "csv": csv,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://baseballsavant.mlb.com/leaderboard/basestealing-run-value",
-        params={
-            "type": type,
-            "year": year,
-            "team": team,
-            "csv": csv,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_mlb_statcast_leaderboard(raw, return_as_pandas=return_as_pandas)
@@ -1472,15 +1562,18 @@ def mlb_statcast_leaderboard_baserunning_run_value(
 
             mlb_statcast_leaderboard_baserunning_run_value()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "type": type,
+        "year": year,
+        "team": team,
+        "csv": csv,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://baseballsavant.mlb.com/leaderboard/baserunning-run-value",
-        params={
-            "type": type,
-            "year": year,
-            "team": team,
-            "csv": csv,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_mlb_statcast_leaderboard(raw, return_as_pandas=return_as_pandas)
@@ -1518,15 +1611,18 @@ def mlb_statcast_leaderboard_baserunning(
 
             mlb_statcast_leaderboard_baserunning()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "type": type,
+        "year": year,
+        "team": team,
+        "csv": csv,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://baseballsavant.mlb.com/leaderboard/baserunning",
-        params={
-            "type": type,
-            "year": year,
-            "team": team,
-            "csv": csv,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_mlb_statcast_leaderboard(raw, return_as_pandas=return_as_pandas)
@@ -1564,15 +1660,18 @@ def mlb_statcast_leaderboard_year_to_year(
 
             mlb_statcast_leaderboard_year_to_year()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "type": type,
+        "year": year,
+        "team": team,
+        "csv": csv,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://baseballsavant.mlb.com/leaderboard/statcast-year-to-year",
-        params={
-            "type": type,
-            "year": year,
-            "team": team,
-            "csv": csv,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_mlb_statcast_leaderboard(raw, return_as_pandas=return_as_pandas)
@@ -1610,15 +1709,18 @@ def mlb_statcast_leaderboard_timer_infractions(
 
             mlb_statcast_leaderboard_timer_infractions()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "type": type,
+        "year": year,
+        "team": team,
+        "csv": csv,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://baseballsavant.mlb.com/leaderboard/pitch-timer-infractions",
-        params={
-            "type": type,
-            "year": year,
-            "team": team,
-            "csv": csv,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_mlb_statcast_leaderboard(raw, return_as_pandas=return_as_pandas)
@@ -1664,19 +1766,22 @@ def mlb_statcast_leaderboard_custom(
 
             mlb_statcast_leaderboard_custom()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "type": type,
+        "year": year,
+        "selections": selections,
+        "filter": filter,
+        "min": min,
+        "sort": sort,
+        "sortDir": sort_dir,
+        "csv": csv,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://baseballsavant.mlb.com/leaderboard/custom",
-        params={
-            "type": type,
-            "year": year,
-            "selections": selections,
-            "filter": filter,
-            "min": min,
-            "sort": sort,
-            "sortDir": sort_dir,
-            "csv": csv,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_mlb_statcast_leaderboard(raw, return_as_pandas=return_as_pandas)
@@ -1712,14 +1817,17 @@ def mlb_statcast_leaderboard_fielding_run_value(
 
             mlb_statcast_leaderboard_fielding_run_value()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "type": type,
+        "year": year,
+        "team": team,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://baseballsavant.mlb.com/leaderboard/fielding-run-value",
-        params={
-            "type": type,
-            "year": year,
-            "team": team,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_mlb_statcast_html_leaderboard(raw, return_as_pandas=return_as_pandas)
@@ -1755,14 +1863,17 @@ def mlb_statcast_leaderboard_park_factors(
 
             mlb_statcast_leaderboard_park_factors()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "type": type,
+        "year": year,
+        "team": team,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://baseballsavant.mlb.com/leaderboard/statcast-park-factors",
-        params={
-            "type": type,
-            "year": year,
-            "team": team,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_mlb_statcast_html_leaderboard(raw, return_as_pandas=return_as_pandas)
@@ -1796,13 +1907,16 @@ def mlb_statcast_gamefeed(
 
             mlb_statcast_gamefeed()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "game_pk": game_pk,
+        "at_bat_number": at_bat_number,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://baseballsavant.mlb.com/gf",
-        params={
-            "game_pk": game_pk,
-            "at_bat_number": at_bat_number,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_mlb_statcast_gamefeed(raw, return_as_pandas=return_as_pandas)
@@ -1834,12 +1948,15 @@ def mlb_statcast_schedule(
 
             mlb_statcast_schedule()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "date": date,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://baseballsavant.mlb.com/schedule",
-        params={
-            "date": date,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_mlb_statcast_schedule(raw, return_as_pandas=return_as_pandas)

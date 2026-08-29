@@ -62,14 +62,17 @@ def sports247_teams(
 
             sports247_teams()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "sportKey": sport_key,
+        "year": year,
+        "institutionType": institution_type,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://ipa.247sports.com/rdb/v1/teams/",
-        params={
-            "sportKey": sport_key,
-            "year": year,
-            "institutionType": institution_type,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_sports247_teams(raw, return_as_pandas=return_as_pandas)
@@ -113,16 +116,19 @@ def sports247_institution_rankings(
 
             sports247_institution_rankings(year=2026, sport_key=1)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "pagesize": page_size,
+        "page": page,
+        "useComposite": use_composite,
+        "conferenceAbbreviation": conference_abbreviation,
+        "institutionKey": institution_key,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://ipa.247sports.com/rdb/v1/rankings/{sport_key}/{year}/institutionrankings/",
-        params={
-            "pagesize": page_size,
-            "page": page,
-            "useComposite": use_composite,
-            "conferenceAbbreviation": conference_abbreviation,
-            "institutionKey": institution_key,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_sports247_institution_rankings(raw, return_as_pandas=return_as_pandas)
@@ -164,17 +170,20 @@ def sports247_recruits(
 
             sports247_recruits(year=2026, sport_key=1)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "sportKey": sport_key,
+        "year": year,
+        "pagesize": page_size,
+        "page": page,
+        "positionAbbreviation": position_abbreviation,
+        "stateAbbreviation": state_abbreviation,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://ipa.247sports.com/rdb/v1/recruits/",
-        params={
-            "sportKey": sport_key,
-            "year": year,
-            "pagesize": page_size,
-            "page": page,
-            "positionAbbreviation": position_abbreviation,
-            "stateAbbreviation": state_abbreviation,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_sports247_result_set(raw, return_as_pandas=return_as_pandas)
@@ -212,15 +221,18 @@ def sports247_transfers(
 
             sports247_transfers(year=2026, sport_key=1)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "sportKey": sport_key,
+        "year": year,
+        "pagesize": page_size,
+        "page": page,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://ipa.247sports.com/rdb/v1/transfers/",
-        params={
-            "sportKey": sport_key,
-            "year": year,
-            "pagesize": page_size,
-            "page": page,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_sports247_result_set(raw, return_as_pandas=return_as_pandas)
@@ -258,15 +270,18 @@ def sports247_coaches(
 
             sports247_coaches(year=2026, sport_key=1)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "sportKey": sport_key,
+        "year": year,
+        "pageSize": page_size,
+        "page": page,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://ipa.247sports.com/rdb/v1/coaches/",
-        params={
-            "sportKey": sport_key,
-            "year": year,
-            "pageSize": page_size,
-            "page": page,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_sports247_result_set(raw, return_as_pandas=return_as_pandas)
@@ -302,12 +317,15 @@ def sports247_transfer_portal_player_feed(
 
             sports247_transfer_portal_player_feed(year=2026, sport_key=1)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "pageSize": page_size,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://ipa.247sports.com/rdb/v1/rankings/{sport_key}/{year}/transferPortalPlayerfeed/",
-        params={
-            "pageSize": page_size,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_sports247_result_set(raw, return_as_pandas=return_as_pandas)
@@ -343,12 +361,15 @@ def sports247_composite_team_ranking_feed(
 
             sports247_composite_team_ranking_feed(year=2026, sport_key=1)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "pageSize": page_size,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://ipa.247sports.com/rdb/v1/rankings/{sport_key}/{year}/compositeTeamRankingFeed/",
-        params={
-            "pageSize": page_size,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_sports247_result_set(raw, return_as_pandas=return_as_pandas)
@@ -384,12 +405,15 @@ def sports247_transfer_portal_team_feed(
 
             sports247_transfer_portal_team_feed(year=2026, sport_key=1)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "pageSize": page_size,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://ipa.247sports.com/rdb/v1/rankings/{sport_key}/{year}/transferPortalOnlyTeamFeed/",
-        params={
-            "pageSize": page_size,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_sports247_result_set(raw, return_as_pandas=return_as_pandas)
@@ -427,12 +451,15 @@ def sports247_target_predictions(
 
             sports247_target_predictions(site_key=1, year=2026, sport_key=1)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "pageSize": page_size,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://ipa.247sports.com/rdb/v1/sites/{site_key}/years/{year}/sports/{sport_key}/currentTargetPredictions/",
-        params={
-            "pageSize": page_size,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_sports247_result_set(raw, return_as_pandas=return_as_pandas)
@@ -464,11 +491,14 @@ def sports247_sport_years(
 
             sports247_sport_years(sport_key=1)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://ipa.247sports.com/rdb/v1/sports/{sport_key}/year/",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_sports247_result_set(raw, return_as_pandas=return_as_pandas)
@@ -502,13 +532,16 @@ def sports247_tags_autocomplete(
 
             sports247_tags_autocomplete(default_name='smith')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "defaultName": default_name,
+        "items": items,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://ipa.247sports.com/rdb/v1/tags/autocomplete/",
-        params={
-            "defaultName": default_name,
-            "items": items,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_sports247_result_set(raw, return_as_pandas=return_as_pandas)
@@ -544,14 +577,17 @@ def sports247_positions(
 
             sports247_positions(sport_key=1)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "sportKey": sport_key,
+        "year": year,
+        "rankingKey": ranking_key,
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://ipa.247sports.com/rdb/v1/positions/",
-        params={
-            "sportKey": sport_key,
-            "year": year,
-            "rankingKey": ranking_key,
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_sports247_result_set(raw, return_as_pandas=return_as_pandas)

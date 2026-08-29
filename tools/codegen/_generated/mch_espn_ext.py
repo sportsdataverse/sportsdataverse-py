@@ -191,15 +191,18 @@ def espn_mch_scoreboard(
 
             espn_mch_scoreboard(dates='20240115')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "dates": dates,
+        "week": week,
+        "seasontype": season_type,
+        "groups": groups,
+        "limit": limit,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://site.api.espn.com/apis/site/v2/sports/hockey/mens-college-hockey/scoreboard",
-        params={
-            "dates": dates,
-            "week": week,
-            "seasontype": season_type,
-            "groups": groups,
-            "limit": limit,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -234,11 +237,14 @@ def espn_mch_summary(
 
             espn_mch_summary()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "event": event_id,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://site.api.espn.com/apis/site/v2/sports/hockey/mens-college-hockey/summary",
-        params={
-            "event": event_id,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -271,9 +277,12 @@ def espn_mch_calendar(
 
             espn_mch_calendar()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         "https://site.api.espn.com/apis/site/v2/sports/hockey/mens-college-hockey/calendar",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -308,11 +317,14 @@ def espn_mch_news(
 
             espn_mch_news()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "limit": limit,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://site.api.espn.com/apis/site/v2/sports/hockey/mens-college-hockey/news",
-        params={
-            "limit": limit,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -345,9 +357,12 @@ def espn_mch_injuries(
 
             espn_mch_injuries()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         "https://site.api.espn.com/apis/site/v2/sports/hockey/mens-college-hockey/injuries",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -380,9 +395,12 @@ def espn_mch_transactions(
 
             espn_mch_transactions()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         "https://site.api.espn.com/apis/site/v2/sports/hockey/mens-college-hockey/transactions",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -415,9 +433,12 @@ def espn_mch_conferences(
 
             espn_mch_conferences()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         "https://site.api.espn.com/apis/site/v2/sports/hockey/mens-college-hockey/groups",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -450,9 +471,12 @@ def espn_mch_statistics_league(
 
             espn_mch_statistics_league()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         "https://site.api.espn.com/apis/site/v2/sports/hockey/mens-college-hockey/statistics",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -485,9 +509,12 @@ def espn_mch_draft(
 
             espn_mch_draft()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         "https://site.api.espn.com/apis/site/v2/sports/hockey/mens-college-hockey/draft",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -522,11 +549,14 @@ def espn_mch_teams_site(
 
             espn_mch_teams_site()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "limit": limit,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://site.api.espn.com/apis/site/v2/sports/hockey/mens-college-hockey/teams",
-        params={
-            "limit": limit,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -561,9 +591,12 @@ def espn_mch_team(
 
             espn_mch_team(team_id='4')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://site.api.espn.com/apis/site/v2/sports/hockey/mens-college-hockey/teams/{team_id}",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -598,9 +631,12 @@ def espn_mch_team_roster(
 
             espn_mch_team_roster(team_id='4')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://site.api.espn.com/apis/site/v2/sports/hockey/mens-college-hockey/teams/{team_id}/roster",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -637,11 +673,14 @@ def espn_mch_team_schedule(
 
             espn_mch_team_schedule(team_id='4')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "season": season,
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://site.api.espn.com/apis/site/v2/sports/hockey/mens-college-hockey/teams/{team_id}/schedule",
-        params={
-            "season": season,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -676,9 +715,12 @@ def espn_mch_team_record(
 
             espn_mch_team_record(team_id='4')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://site.api.espn.com/apis/site/v2/sports/hockey/mens-college-hockey/teams/{team_id}/record",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -713,9 +755,12 @@ def espn_mch_team_depthcharts(
 
             espn_mch_team_depthcharts(team_id='4')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://site.api.espn.com/apis/site/v2/sports/hockey/mens-college-hockey/teams/{team_id}/depthcharts",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -750,9 +795,12 @@ def espn_mch_team_injuries(
 
             espn_mch_team_injuries(team_id='4')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://site.api.espn.com/apis/site/v2/sports/hockey/mens-college-hockey/teams/{team_id}/injuries",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -787,9 +835,12 @@ def espn_mch_team_transactions(
 
             espn_mch_team_transactions(team_id='4')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://site.api.espn.com/apis/site/v2/sports/hockey/mens-college-hockey/teams/{team_id}/transactions",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -824,9 +875,12 @@ def espn_mch_team_history(
 
             espn_mch_team_history(team_id='4')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://site.api.espn.com/apis/site/v2/sports/hockey/mens-college-hockey/teams/{team_id}/history",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -863,11 +917,14 @@ def espn_mch_team_news(
 
             espn_mch_team_news(team_id='4')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "limit": limit,
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://site.api.espn.com/apis/site/v2/sports/hockey/mens-college-hockey/teams/{team_id}/news",
-        params={
-            "limit": limit,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -902,9 +959,12 @@ def espn_mch_team_leaders(
 
             espn_mch_team_leaders(team_id='4')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://site.api.espn.com/apis/site/v2/sports/hockey/mens-college-hockey/teams/{team_id}/leaders",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -939,9 +999,12 @@ def espn_mch_player_info(
 
             espn_mch_player_info(athlete_id='4239')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://site.api.espn.com/apis/site/v2/sports/hockey/mens-college-hockey/athletes/{athlete_id}",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -976,9 +1039,12 @@ def espn_mch_player_bio(
 
             espn_mch_player_bio(athlete_id='4239')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://site.api.espn.com/apis/site/v2/sports/hockey/mens-college-hockey/athletes/{athlete_id}/bio",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1013,9 +1079,12 @@ def espn_mch_player_news(
 
             espn_mch_player_news(athlete_id='4239')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://site.api.espn.com/apis/site/v2/sports/hockey/mens-college-hockey/athletes/{athlete_id}/news",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1054,13 +1123,16 @@ def espn_mch_standings(
 
             espn_mch_standings()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "season": season,
+        "group": group,
+        "type": standings_type,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://site.api.espn.com/apis/v2/sports/hockey/mens-college-hockey/standings",
-        params={
-            "season": season,
-            "group": group,
-            "type": standings_type,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1093,9 +1165,12 @@ def espn_mch_rankings(
 
             espn_mch_rankings()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         "https://site.api.espn.com/apis/site/v2/sports/hockey/mens-college-hockey/rankings",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1130,9 +1205,12 @@ def espn_mch_player_overview(
 
             espn_mch_player_overview(athlete_id='4239')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://site.web.api.espn.com/apis/common/v3/sports/hockey/mens-college-hockey/athletes/{athlete_id}/overview",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1169,11 +1247,14 @@ def espn_mch_player_stats(
 
             espn_mch_player_stats(athlete_id='4239')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "season": season,
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://site.web.api.espn.com/apis/common/v3/sports/hockey/mens-college-hockey/athletes/{athlete_id}/stats",
-        params={
-            "season": season,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1210,11 +1291,14 @@ def espn_mch_player_gamelog(
 
             espn_mch_player_gamelog(athlete_id='4239')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "season": season,
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://site.web.api.espn.com/apis/common/v3/sports/hockey/mens-college-hockey/athletes/{athlete_id}/gamelog",
-        params={
-            "season": season,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1251,11 +1335,14 @@ def espn_mch_player_splits(
 
             espn_mch_player_splits(athlete_id='4239')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "season": season,
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://site.web.api.espn.com/apis/common/v3/sports/hockey/mens-college-hockey/athletes/{athlete_id}/splits",
-        params={
-            "season": season,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1300,16 +1387,19 @@ def espn_mch_leaders(
 
             espn_mch_leaders()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "category": category,
+        "season": season,
+        "seasontype": season_type,
+        "limit": limit,
+        "page": page,
+        "sort": sort,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://site.web.api.espn.com/apis/common/v3/sports/hockey/mens-college-hockey/statistics/byathlete",
-        params={
-            "category": category,
-            "season": season,
-            "seasontype": season_type,
-            "limit": limit,
-            "page": page,
-            "sort": sort,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1342,9 +1432,12 @@ def espn_mch_league_root(
 
             espn_mch_league_root()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         "https://sports.core.api.espn.com/v2/sports/hockey/leagues/mens-college-hockey",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1377,9 +1470,12 @@ def espn_mch_season_pointer(
 
             espn_mch_season_pointer()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         "https://sports.core.api.espn.com/v2/sports/hockey/leagues/mens-college-hockey/season",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1414,11 +1510,14 @@ def espn_mch_seasons(
 
             espn_mch_seasons()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "limit": limit,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://sports.core.api.espn.com/v2/sports/hockey/leagues/mens-college-hockey/seasons",
-        params={
-            "limit": limit,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1453,9 +1552,12 @@ def espn_mch_season_info(
 
             espn_mch_season_info(season=2024)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/hockey/leagues/mens-college-hockey/seasons/{season}",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1490,9 +1592,12 @@ def espn_mch_season_types(
 
             espn_mch_season_types(season=2024)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/hockey/leagues/mens-college-hockey/seasons/{season}/types",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1529,9 +1634,12 @@ def espn_mch_season_type(
 
             espn_mch_season_type(season=2024, season_type=2)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/hockey/leagues/mens-college-hockey/seasons/{season}/types/{season_type}",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1570,9 +1678,12 @@ def espn_mch_season_group(
 
             espn_mch_season_group(season=2024, season_type=2, group_id=80)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/hockey/leagues/mens-college-hockey/seasons/{season}/types/{season_type}/groups/{group_id}",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1609,9 +1720,12 @@ def espn_mch_season_groups(
 
             espn_mch_season_groups(season=2024, season_type=2)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/hockey/leagues/mens-college-hockey/seasons/{season}/types/{season_type}/groups",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1652,11 +1766,14 @@ def espn_mch_season_group_teams(
 
             espn_mch_season_group_teams(season=2024, season_type=2, group_id=80)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "limit": limit,
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/hockey/leagues/mens-college-hockey/seasons/{season}/types/{season_type}/groups/{group_id}/teams",
-        params={
-            "limit": limit,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1697,11 +1814,14 @@ def espn_mch_season_group_children(
 
             espn_mch_season_group_children(season=2024, season_type=2, group_id=80)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "limit": limit,
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/hockey/leagues/mens-college-hockey/seasons/{season}/types/{season_type}/groups/{group_id}/children",
-        params={
-            "limit": limit,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1738,9 +1858,12 @@ def espn_mch_season_type_leaders(
 
             espn_mch_season_type_leaders(season=2024, season_type=2)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/hockey/leagues/mens-college-hockey/seasons/{season}/types/{season_type}/leaders",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1777,9 +1900,12 @@ def espn_mch_season_type_corrections(
 
             espn_mch_season_type_corrections(season=2024, season_type=2)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/hockey/leagues/mens-college-hockey/seasons/{season}/types/{season_type}/corrections",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1816,9 +1942,12 @@ def espn_mch_season_weeks(
 
             espn_mch_season_weeks(season=2024, season_type=2)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/hockey/leagues/mens-college-hockey/seasons/{season}/types/{season_type}/weeks",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1857,9 +1986,12 @@ def espn_mch_season_week(
 
             espn_mch_season_week(season=2024, season_type=2, week=1)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/hockey/leagues/mens-college-hockey/seasons/{season}/types/{season_type}/weeks/{week}",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1900,11 +2032,14 @@ def espn_mch_season_week_powerindex(
 
             espn_mch_season_week_powerindex(season=2024, season_type=2, week=8)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "limit": limit,
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/hockey/leagues/mens-college-hockey/seasons/{season}/types/{season_type}/weeks/{week}/powerindex",
-        params={
-            "limit": limit,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1945,11 +2080,14 @@ def espn_mch_season_week_games(
 
             espn_mch_season_week_games(season=2024, season_type=2, week=1)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "limit": limit,
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/hockey/leagues/mens-college-hockey/seasons/{season}/types/{season_type}/weeks/{week}/events",
-        params={
-            "limit": limit,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1986,11 +2124,14 @@ def espn_mch_season_teams(
 
             espn_mch_season_teams(season=2024)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "limit": limit,
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/hockey/leagues/mens-college-hockey/seasons/{season}/teams",
-        params={
-            "limit": limit,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2027,9 +2168,12 @@ def espn_mch_season_team(
 
             espn_mch_season_team(season=2024, team_id='4')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/hockey/leagues/mens-college-hockey/seasons/{season}/teams/{team_id}",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2068,12 +2212,15 @@ def espn_mch_season_players(
 
             espn_mch_season_players(season=2024)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "limit": limit,
+        "page": page,
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/hockey/leagues/mens-college-hockey/seasons/{season}/athletes",
-        params={
-            "limit": limit,
-            "page": page,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2110,11 +2257,14 @@ def espn_mch_season_coaches(
 
             espn_mch_season_coaches(season=2024)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "limit": limit,
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/hockey/leagues/mens-college-hockey/seasons/{season}/coaches",
-        params={
-            "limit": limit,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2149,9 +2299,12 @@ def espn_mch_season_draft(
 
             espn_mch_season_draft(season=2024)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/hockey/leagues/mens-college-hockey/seasons/{season}/draft",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2188,9 +2341,12 @@ def espn_mch_season_draft_round_picks(
 
             espn_mch_season_draft_round_picks(season=2024, round_num='1')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/hockey/leagues/mens-college-hockey/seasons/{season}/draft/rounds/{round_num}/picks",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2225,9 +2381,12 @@ def espn_mch_season_futures(
 
             espn_mch_season_futures(season=2024)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/hockey/leagues/mens-college-hockey/seasons/{season}/futures",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2262,9 +2421,12 @@ def espn_mch_season_freeagents(
 
             espn_mch_season_freeagents(season=2024)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/hockey/leagues/mens-college-hockey/seasons/{season}/freeagents",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2301,6 +2463,9 @@ def espn_mch_season_powerindex(
 
             espn_mch_season_powerindex(season=2024)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     __seg = f"/{team_id}" if team_id is not None else ""
     __url = (
         f"https://sports.core.api.espn.com/v2/sports/hockey/leagues/mens-college-hockey/seasons/{season}/powerindex"
@@ -2308,7 +2473,7 @@ def espn_mch_season_powerindex(
     )
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2343,9 +2508,12 @@ def espn_mch_season_powerindex_leaders(
 
             espn_mch_season_powerindex_leaders(season=2024)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/hockey/leagues/mens-college-hockey/seasons/{season}/powerindex/leaders",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2380,9 +2548,12 @@ def espn_mch_season_awards(
 
             espn_mch_season_awards(season=2024)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/hockey/leagues/mens-college-hockey/seasons/{season}/awards",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2421,13 +2592,16 @@ def espn_mch_players_index(
 
             espn_mch_players_index()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "active": bool_str(active),
+        "limit": limit,
+        "page": page,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://sports.core.api.espn.com/v2/sports/hockey/leagues/mens-college-hockey/athletes",
-        params={
-            "active": bool_str(active),
-            "limit": limit,
-            "page": page,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2462,9 +2636,12 @@ def espn_mch_player_core(
 
             espn_mch_player_core(athlete_id='4239')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/hockey/leagues/mens-college-hockey/athletes/{athlete_id}",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2501,6 +2678,9 @@ def espn_mch_player_career_stats(
 
             espn_mch_player_career_stats(athlete_id='4239')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     __seg = f"/{stat_type}" if stat_type is not None else ""
     __url = (
         f"https://sports.core.api.espn.com/v2/sports/hockey/leagues/mens-college-hockey/athletes/{athlete_id}/statistics"
@@ -2508,7 +2688,7 @@ def espn_mch_player_career_stats(
     )
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2543,9 +2723,12 @@ def espn_mch_player_statisticslog(
 
             espn_mch_player_statisticslog(athlete_id='4239')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/hockey/leagues/mens-college-hockey/athletes/{athlete_id}/statisticslog",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2580,9 +2763,12 @@ def espn_mch_player_eventlog(
 
             espn_mch_player_eventlog(athlete_id='4239')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/hockey/leagues/mens-college-hockey/athletes/{athlete_id}/eventlog",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2617,9 +2803,12 @@ def espn_mch_player_contracts(
 
             espn_mch_player_contracts(athlete_id='4239')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/hockey/leagues/mens-college-hockey/athletes/{athlete_id}/contracts",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2654,9 +2843,12 @@ def espn_mch_player_awards(
 
             espn_mch_player_awards(athlete_id='4239')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/hockey/leagues/mens-college-hockey/athletes/{athlete_id}/awards",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2691,9 +2883,12 @@ def espn_mch_player_seasons(
 
             espn_mch_player_seasons(athlete_id='4239')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/hockey/leagues/mens-college-hockey/athletes/{athlete_id}/seasons",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2728,9 +2923,12 @@ def espn_mch_player_records(
 
             espn_mch_player_records(athlete_id='4239')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/hockey/leagues/mens-college-hockey/athletes/{athlete_id}/records",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2765,9 +2963,12 @@ def espn_mch_player_injuries(
 
             espn_mch_player_injuries(athlete_id='4239')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/hockey/leagues/mens-college-hockey/athletes/{athlete_id}/injuries",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2802,9 +3003,12 @@ def espn_mch_player_notes(
 
             espn_mch_player_notes(athlete_id='4239')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/hockey/leagues/mens-college-hockey/athletes/{athlete_id}/notes",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2841,9 +3045,12 @@ def espn_mch_player_vs_player(
 
             espn_mch_player_vs_player(athlete_id='4239', opp_id='5')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/hockey/leagues/mens-college-hockey/athletes/{athlete_id}/vsathlete/{opp_id}",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2880,12 +3087,15 @@ def espn_mch_games(
 
             espn_mch_games()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "dates": dates,
+        "limit": limit,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://sports.core.api.espn.com/v2/sports/hockey/leagues/mens-college-hockey/events",
-        params={
-            "dates": dates,
-            "limit": limit,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2920,9 +3130,12 @@ def espn_mch_game(
 
             espn_mch_game(event_id='401584793')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/hockey/leagues/mens-college-hockey/events/{event_id}",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2959,11 +3172,14 @@ def espn_mch_game_competition(
 
             espn_mch_game_competition(event_id='401584793')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/hockey/leagues/mens-college-hockey/events/{event_id}/competitions/{cid}"
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3000,11 +3216,14 @@ def espn_mch_game_teams(
 
             espn_mch_game_teams(event_id='401584793')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/hockey/leagues/mens-college-hockey/events/{event_id}/competitions/{cid}/competitors"
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3043,11 +3262,14 @@ def espn_mch_game_team(
 
             espn_mch_game_team(event_id='401584793', team_id='4')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/hockey/leagues/mens-college-hockey/events/{event_id}/competitions/{cid}/competitors/{team_id}"
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3086,11 +3308,14 @@ def espn_mch_game_team_roster(
 
             espn_mch_game_team_roster(event_id='401584793', team_id='4')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/hockey/leagues/mens-college-hockey/events/{event_id}/competitions/{cid}/competitors/{team_id}/roster"
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3129,11 +3354,14 @@ def espn_mch_game_team_linescores(
 
             espn_mch_game_team_linescores(event_id='401584793', team_id='4')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/hockey/leagues/mens-college-hockey/events/{event_id}/competitions/{cid}/competitors/{team_id}/linescores"
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3172,11 +3400,14 @@ def espn_mch_game_team_statistics(
 
             espn_mch_game_team_statistics(event_id='401584793', team_id='4')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/hockey/leagues/mens-college-hockey/events/{event_id}/competitions/{cid}/competitors/{team_id}/statistics"
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3215,11 +3446,14 @@ def espn_mch_game_team_record(
 
             espn_mch_game_team_record(event_id='401584793', team_id='4')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/hockey/leagues/mens-college-hockey/events/{event_id}/competitions/{cid}/competitors/{team_id}/record"
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3258,11 +3492,14 @@ def espn_mch_game_team_leaders(
 
             espn_mch_game_team_leaders(event_id='401584793', team_id='4')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/hockey/leagues/mens-college-hockey/events/{event_id}/competitions/{cid}/competitors/{team_id}/leaders"
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3299,11 +3536,14 @@ def espn_mch_game_odds(
 
             espn_mch_game_odds(event_id='401584793')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/hockey/leagues/mens-college-hockey/events/{event_id}/competitions/{cid}/odds"
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3342,13 +3582,16 @@ def espn_mch_game_probabilities(
 
             espn_mch_game_probabilities(event_id='401584793')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "limit": limit,
+    }
+    _params.update(_caller_params)
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/hockey/leagues/mens-college-hockey/events/{event_id}/competitions/{cid}/probabilities"
     raw = _get(
         __url,
-        params={
-            "limit": limit,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3387,13 +3630,16 @@ def espn_mch_game_plays(
 
             espn_mch_game_plays(event_id='401584793')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "limit": limit,
+    }
+    _params.update(_caller_params)
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/hockey/leagues/mens-college-hockey/events/{event_id}/competitions/{cid}/plays"
     raw = _get(
         __url,
-        params={
-            "limit": limit,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3432,11 +3678,14 @@ def espn_mch_game_play(
 
             espn_mch_game_play(event_id='401584793', play_id='1')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/hockey/leagues/mens-college-hockey/events/{event_id}/competitions/{cid}/plays/{play_id}"
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3475,11 +3724,14 @@ def espn_mch_game_play_personnel(
 
             espn_mch_game_play_personnel(event_id='401584793', play_id='1')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/hockey/leagues/mens-college-hockey/events/{event_id}/competitions/{cid}/plays/{play_id}/personnel"
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3516,11 +3768,14 @@ def espn_mch_game_situation(
 
             espn_mch_game_situation(event_id='401584793')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/hockey/leagues/mens-college-hockey/events/{event_id}/competitions/{cid}/situation"
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3557,11 +3812,14 @@ def espn_mch_game_status(
 
             espn_mch_game_status(event_id='401584793')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/hockey/leagues/mens-college-hockey/events/{event_id}/competitions/{cid}/status"
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3598,11 +3856,14 @@ def espn_mch_game_officials(
 
             espn_mch_game_officials(event_id='401584793')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/hockey/leagues/mens-college-hockey/events/{event_id}/competitions/{cid}/officials"
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3639,11 +3900,14 @@ def espn_mch_game_broadcasts(
 
             espn_mch_game_broadcasts(event_id='401584793')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/hockey/leagues/mens-college-hockey/events/{event_id}/competitions/{cid}/broadcasts"
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3680,11 +3944,14 @@ def espn_mch_game_predictor(
 
             espn_mch_game_predictor(event_id='401584793')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/hockey/leagues/mens-college-hockey/events/{event_id}/competitions/{cid}/predictor"
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3721,11 +3988,14 @@ def espn_mch_game_powerindex(
 
             espn_mch_game_powerindex(event_id='401584793')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/hockey/leagues/mens-college-hockey/events/{event_id}/competitions/{cid}/powerindex"
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3762,11 +4032,14 @@ def espn_mch_game_propbets(
 
             espn_mch_game_propbets(event_id='401584793')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/hockey/leagues/mens-college-hockey/events/{event_id}/competitions/{cid}/propbets"
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3803,11 +4076,14 @@ def espn_mch_game_leaders(
 
             espn_mch_game_leaders(event_id='401584793')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/hockey/leagues/mens-college-hockey/events/{event_id}/competitions/{cid}/leaders"
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3844,11 +4120,14 @@ def espn_mch_game_scoringplays(
 
             espn_mch_game_scoringplays(event_id='401584793')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/hockey/leagues/mens-college-hockey/events/{event_id}/competitions/{cid}/scoringplays"
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3887,11 +4166,14 @@ def espn_mch_game_official_detail(
 
             espn_mch_game_official_detail(event_id='401584793', official_id='1')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/hockey/leagues/mens-college-hockey/events/{event_id}/competitions/{cid}/officials/{official_id}"
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3926,11 +4208,14 @@ def espn_mch_teams_core(
 
             espn_mch_teams_core()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "limit": limit,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://sports.core.api.espn.com/v2/sports/hockey/leagues/mens-college-hockey/teams",
-        params={
-            "limit": limit,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3965,9 +4250,12 @@ def espn_mch_team_core(
 
             espn_mch_team_core(team_id='4')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/hockey/leagues/mens-college-hockey/teams/{team_id}",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -4002,11 +4290,14 @@ def espn_mch_venues(
 
             espn_mch_venues()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "limit": limit,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://sports.core.api.espn.com/v2/sports/hockey/leagues/mens-college-hockey/venues",
-        params={
-            "limit": limit,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -4041,9 +4332,12 @@ def espn_mch_venue(
 
             espn_mch_venue(venue_id='3663')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/hockey/leagues/mens-college-hockey/venues/{venue_id}",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -4078,11 +4372,14 @@ def espn_mch_franchises(
 
             espn_mch_franchises()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "limit": limit,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://sports.core.api.espn.com/v2/sports/hockey/leagues/mens-college-hockey/franchises",
-        params={
-            "limit": limit,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -4117,9 +4414,12 @@ def espn_mch_franchise(
 
             espn_mch_franchise(franchise_id='2')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/hockey/leagues/mens-college-hockey/franchises/{franchise_id}",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -4154,9 +4454,12 @@ def espn_mch_coach(
 
             espn_mch_coach(coach_id='1')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/hockey/leagues/mens-college-hockey/coaches/{coach_id}",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -4193,9 +4496,12 @@ def espn_mch_coach_record(
 
             espn_mch_coach_record(coach_id='1')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/hockey/leagues/mens-college-hockey/coaches/{coach_id}/record/{record_type}",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -4232,9 +4538,12 @@ def espn_mch_coach_season(
 
             espn_mch_coach_season(coach_id='1', season=2024)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/hockey/leagues/mens-college-hockey/coaches/{coach_id}/seasons/{season}",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -4267,9 +4576,12 @@ def espn_mch_positions(
 
             espn_mch_positions()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         "https://sports.core.api.espn.com/v2/sports/hockey/leagues/mens-college-hockey/positions",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -4304,9 +4616,12 @@ def espn_mch_position(
 
             espn_mch_position(position_id='1')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/hockey/leagues/mens-college-hockey/positions/{position_id}",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -4339,9 +4654,12 @@ def espn_mch_tournaments(
 
             espn_mch_tournaments()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         "https://sports.core.api.espn.com/v2/sports/hockey/leagues/mens-college-hockey/tournaments",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -4374,9 +4692,12 @@ def espn_mch_awards(
 
             espn_mch_awards()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         "https://sports.core.api.espn.com/v2/sports/hockey/leagues/mens-college-hockey/awards",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -4411,9 +4732,12 @@ def espn_mch_award(
 
             espn_mch_award(award_id='1')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/hockey/leagues/mens-college-hockey/awards/{award_id}",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -4446,9 +4770,12 @@ def espn_mch_standings_core(
 
             espn_mch_standings_core()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         "https://sports.core.api.espn.com/v2/sports/hockey/leagues/mens-college-hockey/standings",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -4481,9 +4808,12 @@ def espn_mch_leaders_core(
 
             espn_mch_leaders_core()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         "https://sports.core.api.espn.com/v2/sports/hockey/leagues/mens-college-hockey/leaders",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -4516,9 +4846,12 @@ def espn_mch_league_notes(
 
             espn_mch_league_notes()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         "https://sports.core.api.espn.com/v2/sports/hockey/leagues/mens-college-hockey/notes",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -4551,9 +4884,12 @@ def espn_mch_talentpicks(
 
             espn_mch_talentpicks()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         "https://sports.core.api.espn.com/v2/sports/hockey/leagues/mens-college-hockey/talentpicks",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -4590,11 +4926,14 @@ def espn_mch_season_recruits(
 
             espn_mch_season_recruits(season=2024)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "limit": limit,
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/hockey/leagues/mens-college-hockey/seasons/{season}/recruits",
-        params={
-            "limit": limit,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -4627,9 +4966,12 @@ def espn_mch_recruiting_years(
 
             espn_mch_recruiting_years()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         "https://sports.core.api.espn.com/v2/sports/hockey/leagues/mens-college-hockey/recruiting",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -4666,11 +5008,14 @@ def espn_mch_recruiting_players(
 
             espn_mch_recruiting_players(year=2026)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "limit": limit,
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/hockey/leagues/mens-college-hockey/recruiting/{year}/athletes",
-        params={
-            "limit": limit,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -4705,9 +5050,12 @@ def espn_mch_recruiting_rankings(
 
             espn_mch_recruiting_rankings(year=2026)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/hockey/leagues/mens-college-hockey/recruiting/{year}/rankings",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -4746,9 +5094,12 @@ def espn_mch_season_week_rankings(
 
             espn_mch_season_week_rankings(season=2024, season_type=2, week=1)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/hockey/leagues/mens-college-hockey/seasons/{season}/types/{season_type}/weeks/{week}/rankings",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -4787,13 +5138,16 @@ def espn_mch_fpi(
 
             espn_mch_fpi(season=2024)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "season": season,
+        "limit": limit,
+        "page": page,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://site.web.api.espn.com/apis/fitt/v3/sports/hockey/mens-college-hockey/powerindex",
-        params={
-            "season": season,
-            "limit": limit,
-            "page": page,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:

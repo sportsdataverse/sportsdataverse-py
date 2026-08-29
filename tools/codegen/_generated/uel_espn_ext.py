@@ -189,15 +189,18 @@ def espn_uel_scoreboard(
 
             espn_uel_scoreboard(dates='20240115')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "dates": dates,
+        "week": week,
+        "seasontype": season_type,
+        "groups": groups,
+        "limit": limit,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://site.api.espn.com/apis/site/v2/sports/soccer/uefa.europa/scoreboard",
-        params={
-            "dates": dates,
-            "week": week,
-            "seasontype": season_type,
-            "groups": groups,
-            "limit": limit,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -232,11 +235,14 @@ def espn_uel_summary(
 
             espn_uel_summary()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "event": event_id,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://site.api.espn.com/apis/site/v2/sports/soccer/uefa.europa/summary",
-        params={
-            "event": event_id,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -269,9 +275,12 @@ def espn_uel_calendar(
 
             espn_uel_calendar()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         "https://site.api.espn.com/apis/site/v2/sports/soccer/uefa.europa/calendar",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -306,11 +315,14 @@ def espn_uel_news(
 
             espn_uel_news()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "limit": limit,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://site.api.espn.com/apis/site/v2/sports/soccer/uefa.europa/news",
-        params={
-            "limit": limit,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -343,9 +355,12 @@ def espn_uel_injuries(
 
             espn_uel_injuries()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         "https://site.api.espn.com/apis/site/v2/sports/soccer/uefa.europa/injuries",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -378,9 +393,12 @@ def espn_uel_transactions(
 
             espn_uel_transactions()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         "https://site.api.espn.com/apis/site/v2/sports/soccer/uefa.europa/transactions",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -413,9 +431,12 @@ def espn_uel_conferences(
 
             espn_uel_conferences()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         "https://site.api.espn.com/apis/site/v2/sports/soccer/uefa.europa/groups",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -448,9 +469,12 @@ def espn_uel_statistics_league(
 
             espn_uel_statistics_league()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         "https://site.api.espn.com/apis/site/v2/sports/soccer/uefa.europa/statistics",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -483,9 +507,12 @@ def espn_uel_draft(
 
             espn_uel_draft()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         "https://site.api.espn.com/apis/site/v2/sports/soccer/uefa.europa/draft",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -520,11 +547,14 @@ def espn_uel_teams_site(
 
             espn_uel_teams_site()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "limit": limit,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://site.api.espn.com/apis/site/v2/sports/soccer/uefa.europa/teams",
-        params={
-            "limit": limit,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -559,9 +589,12 @@ def espn_uel_team(
 
             espn_uel_team(team_id='4')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://site.api.espn.com/apis/site/v2/sports/soccer/uefa.europa/teams/{team_id}",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -596,9 +629,12 @@ def espn_uel_team_roster(
 
             espn_uel_team_roster(team_id='4')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://site.api.espn.com/apis/site/v2/sports/soccer/uefa.europa/teams/{team_id}/roster",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -635,11 +671,14 @@ def espn_uel_team_schedule(
 
             espn_uel_team_schedule(team_id='4')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "season": season,
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://site.api.espn.com/apis/site/v2/sports/soccer/uefa.europa/teams/{team_id}/schedule",
-        params={
-            "season": season,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -674,9 +713,12 @@ def espn_uel_team_record(
 
             espn_uel_team_record(team_id='4')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://site.api.espn.com/apis/site/v2/sports/soccer/uefa.europa/teams/{team_id}/record",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -711,9 +753,12 @@ def espn_uel_team_depthcharts(
 
             espn_uel_team_depthcharts(team_id='4')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://site.api.espn.com/apis/site/v2/sports/soccer/uefa.europa/teams/{team_id}/depthcharts",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -748,9 +793,12 @@ def espn_uel_team_injuries(
 
             espn_uel_team_injuries(team_id='4')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://site.api.espn.com/apis/site/v2/sports/soccer/uefa.europa/teams/{team_id}/injuries",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -785,9 +833,12 @@ def espn_uel_team_transactions(
 
             espn_uel_team_transactions(team_id='4')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://site.api.espn.com/apis/site/v2/sports/soccer/uefa.europa/teams/{team_id}/transactions",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -822,9 +873,12 @@ def espn_uel_team_history(
 
             espn_uel_team_history(team_id='4')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://site.api.espn.com/apis/site/v2/sports/soccer/uefa.europa/teams/{team_id}/history",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -861,11 +915,14 @@ def espn_uel_team_news(
 
             espn_uel_team_news(team_id='4')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "limit": limit,
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://site.api.espn.com/apis/site/v2/sports/soccer/uefa.europa/teams/{team_id}/news",
-        params={
-            "limit": limit,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -900,9 +957,12 @@ def espn_uel_team_leaders(
 
             espn_uel_team_leaders(team_id='4')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://site.api.espn.com/apis/site/v2/sports/soccer/uefa.europa/teams/{team_id}/leaders",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -937,9 +997,12 @@ def espn_uel_player_info(
 
             espn_uel_player_info(athlete_id='4239')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://site.api.espn.com/apis/site/v2/sports/soccer/uefa.europa/athletes/{athlete_id}",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -974,9 +1037,12 @@ def espn_uel_player_bio(
 
             espn_uel_player_bio(athlete_id='4239')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://site.api.espn.com/apis/site/v2/sports/soccer/uefa.europa/athletes/{athlete_id}/bio",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1011,9 +1077,12 @@ def espn_uel_player_news(
 
             espn_uel_player_news(athlete_id='4239')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://site.api.espn.com/apis/site/v2/sports/soccer/uefa.europa/athletes/{athlete_id}/news",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1052,13 +1121,16 @@ def espn_uel_standings(
 
             espn_uel_standings()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "season": season,
+        "group": group,
+        "type": standings_type,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://site.api.espn.com/apis/v2/sports/soccer/uefa.europa/standings",
-        params={
-            "season": season,
-            "group": group,
-            "type": standings_type,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1093,9 +1165,12 @@ def espn_uel_player_overview(
 
             espn_uel_player_overview(athlete_id='4239')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://site.web.api.espn.com/apis/common/v3/sports/soccer/uefa.europa/athletes/{athlete_id}/overview",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1132,11 +1207,14 @@ def espn_uel_player_stats(
 
             espn_uel_player_stats(athlete_id='4239')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "season": season,
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://site.web.api.espn.com/apis/common/v3/sports/soccer/uefa.europa/athletes/{athlete_id}/stats",
-        params={
-            "season": season,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1173,11 +1251,14 @@ def espn_uel_player_gamelog(
 
             espn_uel_player_gamelog(athlete_id='4239')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "season": season,
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://site.web.api.espn.com/apis/common/v3/sports/soccer/uefa.europa/athletes/{athlete_id}/gamelog",
-        params={
-            "season": season,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1214,11 +1295,14 @@ def espn_uel_player_splits(
 
             espn_uel_player_splits(athlete_id='4239')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "season": season,
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://site.web.api.espn.com/apis/common/v3/sports/soccer/uefa.europa/athletes/{athlete_id}/splits",
-        params={
-            "season": season,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1263,16 +1347,19 @@ def espn_uel_leaders(
 
             espn_uel_leaders()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "category": category,
+        "season": season,
+        "seasontype": season_type,
+        "limit": limit,
+        "page": page,
+        "sort": sort,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://site.web.api.espn.com/apis/common/v3/sports/soccer/uefa.europa/statistics/byathlete",
-        params={
-            "category": category,
-            "season": season,
-            "seasontype": season_type,
-            "limit": limit,
-            "page": page,
-            "sort": sort,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1305,9 +1392,12 @@ def espn_uel_league_root(
 
             espn_uel_league_root()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         "https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1340,9 +1430,12 @@ def espn_uel_season_pointer(
 
             espn_uel_season_pointer()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         "https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/season",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1377,11 +1470,14 @@ def espn_uel_seasons(
 
             espn_uel_seasons()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "limit": limit,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/seasons",
-        params={
-            "limit": limit,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1416,9 +1512,12 @@ def espn_uel_season_info(
 
             espn_uel_season_info(season=2024)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/seasons/{season}",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1453,9 +1552,12 @@ def espn_uel_season_types(
 
             espn_uel_season_types(season=2024)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/seasons/{season}/types",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1492,9 +1594,12 @@ def espn_uel_season_type(
 
             espn_uel_season_type(season=2024, season_type=2)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/seasons/{season}/types/{season_type}",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1533,9 +1638,12 @@ def espn_uel_season_group(
 
             espn_uel_season_group(season=2024, season_type=2, group_id=80)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/seasons/{season}/types/{season_type}/groups/{group_id}",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1572,9 +1680,12 @@ def espn_uel_season_groups(
 
             espn_uel_season_groups(season=2024, season_type=2)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/seasons/{season}/types/{season_type}/groups",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1615,11 +1726,14 @@ def espn_uel_season_group_teams(
 
             espn_uel_season_group_teams(season=2024, season_type=2, group_id=80)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "limit": limit,
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/seasons/{season}/types/{season_type}/groups/{group_id}/teams",
-        params={
-            "limit": limit,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1660,11 +1774,14 @@ def espn_uel_season_group_children(
 
             espn_uel_season_group_children(season=2024, season_type=2, group_id=80)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "limit": limit,
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/seasons/{season}/types/{season_type}/groups/{group_id}/children",
-        params={
-            "limit": limit,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1701,9 +1818,12 @@ def espn_uel_season_type_leaders(
 
             espn_uel_season_type_leaders(season=2024, season_type=2)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/seasons/{season}/types/{season_type}/leaders",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1740,9 +1860,12 @@ def espn_uel_season_type_corrections(
 
             espn_uel_season_type_corrections(season=2024, season_type=2)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/seasons/{season}/types/{season_type}/corrections",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1779,9 +1902,12 @@ def espn_uel_season_weeks(
 
             espn_uel_season_weeks(season=2024, season_type=2)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/seasons/{season}/types/{season_type}/weeks",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1820,9 +1946,12 @@ def espn_uel_season_week(
 
             espn_uel_season_week(season=2024, season_type=2, week=1)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/seasons/{season}/types/{season_type}/weeks/{week}",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1863,11 +1992,14 @@ def espn_uel_season_week_powerindex(
 
             espn_uel_season_week_powerindex(season=2024, season_type=2, week=8)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "limit": limit,
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/seasons/{season}/types/{season_type}/weeks/{week}/powerindex",
-        params={
-            "limit": limit,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1908,11 +2040,14 @@ def espn_uel_season_week_games(
 
             espn_uel_season_week_games(season=2024, season_type=2, week=1)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "limit": limit,
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/seasons/{season}/types/{season_type}/weeks/{week}/events",
-        params={
-            "limit": limit,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1949,11 +2084,14 @@ def espn_uel_season_teams(
 
             espn_uel_season_teams(season=2024)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "limit": limit,
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/seasons/{season}/teams",
-        params={
-            "limit": limit,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1990,9 +2128,12 @@ def espn_uel_season_team(
 
             espn_uel_season_team(season=2024, team_id='4')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/seasons/{season}/teams/{team_id}",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2031,12 +2172,15 @@ def espn_uel_season_players(
 
             espn_uel_season_players(season=2024)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "limit": limit,
+        "page": page,
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/seasons/{season}/athletes",
-        params={
-            "limit": limit,
-            "page": page,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2073,11 +2217,14 @@ def espn_uel_season_coaches(
 
             espn_uel_season_coaches(season=2024)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "limit": limit,
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/seasons/{season}/coaches",
-        params={
-            "limit": limit,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2112,9 +2259,12 @@ def espn_uel_season_draft(
 
             espn_uel_season_draft(season=2024)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/seasons/{season}/draft",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2151,9 +2301,12 @@ def espn_uel_season_draft_round_picks(
 
             espn_uel_season_draft_round_picks(season=2024, round_num='1')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/seasons/{season}/draft/rounds/{round_num}/picks",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2188,9 +2341,12 @@ def espn_uel_season_futures(
 
             espn_uel_season_futures(season=2024)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/seasons/{season}/futures",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2225,9 +2381,12 @@ def espn_uel_season_freeagents(
 
             espn_uel_season_freeagents(season=2024)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/seasons/{season}/freeagents",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2264,11 +2423,14 @@ def espn_uel_season_powerindex(
 
             espn_uel_season_powerindex(season=2024)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     __seg = f"/{team_id}" if team_id is not None else ""
     __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/seasons/{season}/powerindex" + __seg
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2303,9 +2465,12 @@ def espn_uel_season_powerindex_leaders(
 
             espn_uel_season_powerindex_leaders(season=2024)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/seasons/{season}/powerindex/leaders",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2340,9 +2505,12 @@ def espn_uel_season_awards(
 
             espn_uel_season_awards(season=2024)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/seasons/{season}/awards",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2381,13 +2549,16 @@ def espn_uel_players_index(
 
             espn_uel_players_index()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "active": bool_str(active),
+        "limit": limit,
+        "page": page,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/athletes",
-        params={
-            "active": bool_str(active),
-            "limit": limit,
-            "page": page,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2422,9 +2593,12 @@ def espn_uel_player_core(
 
             espn_uel_player_core(athlete_id='4239')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/athletes/{athlete_id}",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2461,6 +2635,9 @@ def espn_uel_player_career_stats(
 
             espn_uel_player_career_stats(athlete_id='4239')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     __seg = f"/{stat_type}" if stat_type is not None else ""
     __url = (
         f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/athletes/{athlete_id}/statistics"
@@ -2468,7 +2645,7 @@ def espn_uel_player_career_stats(
     )
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2503,9 +2680,12 @@ def espn_uel_player_statisticslog(
 
             espn_uel_player_statisticslog(athlete_id='4239')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/athletes/{athlete_id}/statisticslog",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2540,9 +2720,12 @@ def espn_uel_player_eventlog(
 
             espn_uel_player_eventlog(athlete_id='4239')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/athletes/{athlete_id}/eventlog",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2577,9 +2760,12 @@ def espn_uel_player_contracts(
 
             espn_uel_player_contracts(athlete_id='4239')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/athletes/{athlete_id}/contracts",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2614,9 +2800,12 @@ def espn_uel_player_awards(
 
             espn_uel_player_awards(athlete_id='4239')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/athletes/{athlete_id}/awards",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2651,9 +2840,12 @@ def espn_uel_player_seasons(
 
             espn_uel_player_seasons(athlete_id='4239')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/athletes/{athlete_id}/seasons",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2688,9 +2880,12 @@ def espn_uel_player_records(
 
             espn_uel_player_records(athlete_id='4239')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/athletes/{athlete_id}/records",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2725,9 +2920,12 @@ def espn_uel_player_injuries(
 
             espn_uel_player_injuries(athlete_id='4239')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/athletes/{athlete_id}/injuries",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2762,9 +2960,12 @@ def espn_uel_player_notes(
 
             espn_uel_player_notes(athlete_id='4239')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/athletes/{athlete_id}/notes",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2801,9 +3002,12 @@ def espn_uel_player_vs_player(
 
             espn_uel_player_vs_player(athlete_id='4239', opp_id='5')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/athletes/{athlete_id}/vsathlete/{opp_id}",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2840,12 +3044,15 @@ def espn_uel_games(
 
             espn_uel_games()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "dates": dates,
+        "limit": limit,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/events",
-        params={
-            "dates": dates,
-            "limit": limit,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2880,9 +3087,12 @@ def espn_uel_game(
 
             espn_uel_game(event_id='401584793')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/events/{event_id}",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2919,13 +3129,16 @@ def espn_uel_game_competition(
 
             espn_uel_game_competition(event_id='401584793')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     cid = cid if cid is not None else event_id
     __url = (
         f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/events/{event_id}/competitions/{cid}"
     )
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2962,11 +3175,14 @@ def espn_uel_game_teams(
 
             espn_uel_game_teams(event_id='401584793')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/events/{event_id}/competitions/{cid}/competitors"
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3005,11 +3221,14 @@ def espn_uel_game_team(
 
             espn_uel_game_team(event_id='401584793', team_id='4')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/events/{event_id}/competitions/{cid}/competitors/{team_id}"
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3048,11 +3267,14 @@ def espn_uel_game_team_roster(
 
             espn_uel_game_team_roster(event_id='401584793', team_id='4')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/events/{event_id}/competitions/{cid}/competitors/{team_id}/roster"
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3091,11 +3313,14 @@ def espn_uel_game_team_linescores(
 
             espn_uel_game_team_linescores(event_id='401584793', team_id='4')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/events/{event_id}/competitions/{cid}/competitors/{team_id}/linescores"
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3134,11 +3359,14 @@ def espn_uel_game_team_statistics(
 
             espn_uel_game_team_statistics(event_id='401584793', team_id='4')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/events/{event_id}/competitions/{cid}/competitors/{team_id}/statistics"
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3177,11 +3405,14 @@ def espn_uel_game_team_record(
 
             espn_uel_game_team_record(event_id='401584793', team_id='4')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/events/{event_id}/competitions/{cid}/competitors/{team_id}/record"
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3220,11 +3451,14 @@ def espn_uel_game_team_leaders(
 
             espn_uel_game_team_leaders(event_id='401584793', team_id='4')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/events/{event_id}/competitions/{cid}/competitors/{team_id}/leaders"
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3261,11 +3495,14 @@ def espn_uel_game_odds(
 
             espn_uel_game_odds(event_id='401584793')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/events/{event_id}/competitions/{cid}/odds"
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3304,13 +3541,16 @@ def espn_uel_game_probabilities(
 
             espn_uel_game_probabilities(event_id='401584793')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "limit": limit,
+    }
+    _params.update(_caller_params)
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/events/{event_id}/competitions/{cid}/probabilities"
     raw = _get(
         __url,
-        params={
-            "limit": limit,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3349,13 +3589,16 @@ def espn_uel_game_plays(
 
             espn_uel_game_plays(event_id='401584793')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "limit": limit,
+    }
+    _params.update(_caller_params)
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/events/{event_id}/competitions/{cid}/plays"
     raw = _get(
         __url,
-        params={
-            "limit": limit,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3394,11 +3637,14 @@ def espn_uel_game_play(
 
             espn_uel_game_play(event_id='401584793', play_id='1')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/events/{event_id}/competitions/{cid}/plays/{play_id}"
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3437,11 +3683,14 @@ def espn_uel_game_play_personnel(
 
             espn_uel_game_play_personnel(event_id='401584793', play_id='1')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/events/{event_id}/competitions/{cid}/plays/{play_id}/personnel"
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3478,11 +3727,14 @@ def espn_uel_game_situation(
 
             espn_uel_game_situation(event_id='401584793')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/events/{event_id}/competitions/{cid}/situation"
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3519,11 +3771,14 @@ def espn_uel_game_status(
 
             espn_uel_game_status(event_id='401584793')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/events/{event_id}/competitions/{cid}/status"
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3560,11 +3815,14 @@ def espn_uel_game_officials(
 
             espn_uel_game_officials(event_id='401584793')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/events/{event_id}/competitions/{cid}/officials"
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3601,11 +3859,14 @@ def espn_uel_game_broadcasts(
 
             espn_uel_game_broadcasts(event_id='401584793')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/events/{event_id}/competitions/{cid}/broadcasts"
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3642,11 +3903,14 @@ def espn_uel_game_predictor(
 
             espn_uel_game_predictor(event_id='401584793')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/events/{event_id}/competitions/{cid}/predictor"
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3683,11 +3947,14 @@ def espn_uel_game_powerindex(
 
             espn_uel_game_powerindex(event_id='401584793')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/events/{event_id}/competitions/{cid}/powerindex"
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3724,11 +3991,14 @@ def espn_uel_game_propbets(
 
             espn_uel_game_propbets(event_id='401584793')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/events/{event_id}/competitions/{cid}/propbets"
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3765,11 +4035,14 @@ def espn_uel_game_leaders(
 
             espn_uel_game_leaders(event_id='401584793')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/events/{event_id}/competitions/{cid}/leaders"
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3806,11 +4079,14 @@ def espn_uel_game_scoringplays(
 
             espn_uel_game_scoringplays(event_id='401584793')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/events/{event_id}/competitions/{cid}/scoringplays"
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3849,11 +4125,14 @@ def espn_uel_game_official_detail(
 
             espn_uel_game_official_detail(event_id='401584793', official_id='1')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/events/{event_id}/competitions/{cid}/officials/{official_id}"
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3888,11 +4167,14 @@ def espn_uel_teams_core(
 
             espn_uel_teams_core()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "limit": limit,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/teams",
-        params={
-            "limit": limit,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3927,9 +4209,12 @@ def espn_uel_team_core(
 
             espn_uel_team_core(team_id='4')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/teams/{team_id}",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3964,11 +4249,14 @@ def espn_uel_venues(
 
             espn_uel_venues()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "limit": limit,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/venues",
-        params={
-            "limit": limit,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -4003,9 +4291,12 @@ def espn_uel_venue(
 
             espn_uel_venue(venue_id='3663')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/venues/{venue_id}",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -4040,11 +4331,14 @@ def espn_uel_franchises(
 
             espn_uel_franchises()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "limit": limit,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/franchises",
-        params={
-            "limit": limit,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -4079,9 +4373,12 @@ def espn_uel_franchise(
 
             espn_uel_franchise(franchise_id='2')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/franchises/{franchise_id}",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -4116,9 +4413,12 @@ def espn_uel_coach(
 
             espn_uel_coach(coach_id='1')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/coaches/{coach_id}",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -4155,9 +4455,12 @@ def espn_uel_coach_record(
 
             espn_uel_coach_record(coach_id='1')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/coaches/{coach_id}/record/{record_type}",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -4194,9 +4497,12 @@ def espn_uel_coach_season(
 
             espn_uel_coach_season(coach_id='1', season=2024)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/coaches/{coach_id}/seasons/{season}",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -4229,9 +4535,12 @@ def espn_uel_positions(
 
             espn_uel_positions()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         "https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/positions",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -4266,9 +4575,12 @@ def espn_uel_position(
 
             espn_uel_position(position_id='1')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/positions/{position_id}",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -4301,9 +4613,12 @@ def espn_uel_tournaments(
 
             espn_uel_tournaments()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         "https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/tournaments",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -4336,9 +4651,12 @@ def espn_uel_awards(
 
             espn_uel_awards()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         "https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/awards",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -4373,9 +4691,12 @@ def espn_uel_award(
 
             espn_uel_award(award_id='1')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/awards/{award_id}",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -4408,9 +4729,12 @@ def espn_uel_standings_core(
 
             espn_uel_standings_core()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         "https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/standings",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -4443,9 +4767,12 @@ def espn_uel_leaders_core(
 
             espn_uel_leaders_core()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         "https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/leaders",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -4478,9 +4805,12 @@ def espn_uel_league_notes(
 
             espn_uel_league_notes()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         "https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/notes",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -4513,9 +4843,12 @@ def espn_uel_talentpicks(
 
             espn_uel_talentpicks()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         "https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/talentpicks",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -4554,13 +4887,16 @@ def espn_uel_fpi(
 
             espn_uel_fpi(season=2024)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "season": season,
+        "limit": limit,
+        "page": page,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://site.web.api.espn.com/apis/fitt/v3/sports/soccer/uefa.europa/powerindex",
-        params={
-            "season": season,
-            "limit": limit,
-            "page": page,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
