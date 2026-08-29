@@ -534,6 +534,48 @@ _RECOVERY_ABBREV_RE = re.compile(r"recovered by\s+([A-Z&]{2,})\b")
 # (the generic branch fires before the offensive/defensive-specific branches), so
 # bare "Pass Interference" cannot be assumed offensive. A later task refines penalty
 # attribution by parsing the "PENALTY {TEAM_ABBR}" token from the play text.
+#: Foul types that move the ball in ONE direction at least 95% of the time, measured
+#: on 19,608 labelled no-play penalties across 2022-25 (label = the sign of
+#: start.yardsToEndzone - end.yardsToEndzone, which on a no-play row is the
+#: enforcement itself). Names that state their side are included on identity.
+#:
+#: Deliberately absent: bare "Pass Interference" (88/12 def -- both forms exist),
+#: "Encroachment" (OFFENSIVE in NCAA usage, per the note on _DEFENSIVE_PENALTIES),
+#: "Delay of Game" (89% off), "Tripping" (88% off), "Face Mask" (78/22),
+#: "Holding" (80/20), "Personal Foul" and "Unsportsmanlike Conduct" (both mixed).
+_PENALTY_SIGN_DEF = frozenset(
+    {
+        "Offside",
+        "Targeting",
+        "Roughing the Passer",
+        "Roughing the Kicker",
+        "Roughing the Holder",
+        "Roughing the Snapper",
+        "Substitution Infraction",
+        "Neutral Zone Infraction",
+        "Defensive Holding",
+        "Defensive Pass Interference",
+        "Defensive Offside",
+        "12 Men on the Field",
+    },
+)
+_PENALTY_SIGN_OFF = frozenset(
+    {
+        "False Start",
+        "Illegal Formation",
+        "Ineligible Downfield",
+        "Illegal Shift",
+        "Illegal Snap",
+        "Illegal Block",
+        "Illegal Motion",
+        "Offensive Holding",
+        "Chop Block",
+        "Offensive Pass Interference",
+        "Intentional Grounding",
+    },
+)
+
+
 _DEFENSIVE_PENALTIES = frozenset(
     {
         "Defensive Holding",
@@ -5370,7 +5412,14 @@ class CFBPlayProcess(object):
         # those carry only what the function under test needs. Supply them as nulls
         # so the resolver degrades to "unresolved" instead of raising, matching how
         # penalty_assessed_on_kickoff is guarded in _apply_wp_derivation.
-        for _col, _dtype in (("penalty_text", pl.Utf8), ("start.pos_team.id", pl.Int64), ("season", pl.Int64)):
+        for _col, _dtype in (
+            ("penalty_text", pl.Utf8),
+            ("start.pos_team.id", pl.Int64),
+            ("season", pl.Int64),
+            ("penalty_1st_conv", pl.Boolean),
+            ("penalty_declined", pl.Boolean),
+            ("penalty_offset", pl.Boolean),
+        ):
             if _col not in play_df.columns:
                 play_df = play_df.with_columns(pl.lit(None, dtype=_dtype).alias(_col))
         play_df = play_df.with_columns(
@@ -5769,6 +5818,69 @@ class CFBPlayProcess(object):
                 .cast(pl.Int32, strict=False)
                 .fill_null(0),
             )
+            .with_columns(
+                # B10: which side the flag was on, resolved only when two INDEPENDENT
+                # signals agree. penalty_yards_signed has a reliable magnitude
+                # (96.8-97.2% against the observed no-play movement) but not a reliable
+                # sign -- its raw sign agrees with the enforcement direction on 45% of
+                # rows, and any single substitute is not much better: penalized_team
+                # alone runs 91.2%, and a 9% sign error MIRRORS the yardage, the exact
+                # defect class parts (c) through (e) repair.
+                #
+                # Three signals, each independent of the others' failure modes:
+                #   L1  penalty_1st_conv       an automatic first down means the DEFENSE
+                #                              was flagged -- 99.48% on 6,714 rows
+                #   L2  one-directional fouls  rulebook identity, >=95% measured
+                #   L3  penalized_team         the binary text resolver
+                #
+                # Any two that fire and agree decide it; otherwise null. Measured on
+                # 19,608 labelled rows: 59.5% coverage at 99.62% accuracy. Null beats a
+                # guess for the same reason as the enforcement spot: the cost of a wrong
+                # side is a mirrored value, not a small error.
+                # L1 only holds when the penalty itself produced the first down. On a
+                # DECLINED flag the conversion came from the play standing -- "Offensive
+                # Holding ... declined for a 1ST down" carries penalty_1st_conv=True
+                # with the flag on the offense -- so declined and offsetting rows are
+                # excluded from it.
+                _pen_L1=pl.when(
+                    (pl.col("penalty_1st_conv") == True)
+                    .and_(pl.col("penalty_declined") == False)
+                    .and_(pl.col("penalty_offset") == False),
+                )
+                .then(pl.lit("def"))
+                .otherwise(None),
+                _pen_L2=pl.when(pl.col("penalty_detail").is_in(list(_PENALTY_SIGN_DEF)))
+                .then(pl.lit("def"))
+                .when(pl.col("penalty_detail").is_in(list(_PENALTY_SIGN_OFF)))
+                .then(pl.lit("off"))
+                .otherwise(None),
+                _pen_L3=pl.when(pl.col("penalized_team") == pl.col("start.pos_team.id"))
+                .then(pl.lit("off"))
+                .when(pl.col("penalized_team").is_not_null())
+                .then(pl.lit("def"))
+                .otherwise(None),
+            )
+            .with_columns(
+                penalty_side=pl.when(
+                    (pl.col("_pen_L1").is_not_null()).and_(pl.col("_pen_L1") == pl.col("_pen_L2"))
+                    | (pl.col("_pen_L1").is_not_null()).and_(pl.col("_pen_L1") == pl.col("_pen_L3"))
+                    | (pl.col("_pen_L2").is_not_null()).and_(pl.col("_pen_L2") == pl.col("_pen_L3")),
+                )
+                .then(pl.coalesce(pl.col("_pen_L1"), pl.col("_pen_L2"), pl.col("_pen_L3")))
+                .otherwise(None),
+            )
+            .with_columns(
+                # The signed yardage in the OFFENSE's perspective: positive when the
+                # flag was on the defense (the offense gains ground), negative when on
+                # the offense. This is the input the accepted-penalty counterfactual
+                # needs; penalty_yards_signed keeps its historical semantics untouched.
+                penalty_yards_net=pl.when(pl.col("penalty_side") == "def")
+                .then(pl.col("penalty_yards_signed").abs())
+                .when(pl.col("penalty_side") == "off")
+                .then(-pl.col("penalty_yards_signed").abs())
+                .otherwise(None),
+            )
+            .drop(["_pen_L1", "_pen_L2", "_pen_L3"])
         )
 
         # penalty_team_id: same value as penalized_team, exported under the

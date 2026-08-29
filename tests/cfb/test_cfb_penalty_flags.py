@@ -848,3 +848,71 @@ def test_declined_and_offsetting_penalties_have_zero_penalty_epa() -> None:
         & (pl.col("penalty_offset") != True)  # noqa: E712
     )
     assert accepted.filter(pl.col("EPA_penalty").is_not_null()).height == accepted.height
+
+
+def test_penalty_side_requires_two_independent_signals() -> None:
+    """B10: penalty_yards_signed has a reliable magnitude but not a reliable sign
+    (45% raw agreement with the enforcement direction), and any single substitute
+    is not much better -- penalized_team alone runs 91.2%, and a 9% sign error
+    MIRRORS the yardage. penalty_side therefore resolves only when two independent
+    signals agree, and penalty_yards_net carries the offense-perspective signed
+    yardage on those rows: 59.5% coverage at 99.62% accuracy over 19,608 labelled
+    no-play rows, null on the rest.
+
+    L1 (an automatic first down implies a defensive flag) is excluded on declined
+    and offsetting rows, where the conversion came from the play standing --
+    "Offensive Holding ... declined for a 1ST down" carries the flag on the
+    OFFENSE.
+    """
+    import json
+    from pathlib import Path
+
+    import sportsdataverse.cfb.cfb_pbp as mod
+
+    gid = 401628344
+    fixture = Path(__file__).parent / "fixtures" / f"summary_{gid}.json"
+    if not fixture.exists():
+        pytest.skip(f"fixture summary_{gid}.json not captured")
+    summary = json.loads(fixture.read_text(encoding="utf-8"))
+
+    class _Resp:
+        def json(self):
+            return summary
+
+    monkeypatch = pytest.MonkeyPatch()
+    try:
+        monkeypatch.setattr(mod, "download", lambda *a, **k: _Resp())
+        proc = CFBPlayProcess(gameId=gid)
+        proc.join_participants = False
+        proc.espn_cfb_pbp()
+        out = proc.run_processing_pipeline()
+    finally:
+        monkeypatch.undo()
+
+    plays = pl.from_dicts(out["plays"], infer_schema_length=None)
+    pen = plays.filter(pl.col("penalty_flag") == True)  # noqa: E712
+
+    # ground truth on no-play rows: the enforcement IS the observed movement
+    lab = pen.filter(
+        (pl.col("penalty_no_play") == True)  # noqa: E712
+        & pl.col("start.yardsToEndzone").is_not_null()
+        & pl.col("end.yardsToEndzone").is_not_null()
+        & ((pl.col("start.yardsToEndzone") - pl.col("end.yardsToEndzone")) != 0)
+        & pl.col("penalty_side").is_not_null()
+    ).with_columns((pl.col("start.yardsToEndzone") - pl.col("end.yardsToEndzone")).alias("delta"))
+    assert lab.height >= 2, "fixture drifted; expected resolvable no-play penalties"
+    wrong_side = lab.filter(
+        ((pl.col("penalty_side") == "def") & (pl.col("delta") < 0))
+        | ((pl.col("penalty_side") == "off") & (pl.col("delta") > 0))
+    )
+    assert wrong_side.height == 0, wrong_side.select("penalty_detail", "penalty_side", "delta").rows()
+    # and the net yardage reproduces the observed movement exactly on those rows
+    mismatch = lab.filter(pl.col("penalty_yards_net") != pl.col("delta"))
+    assert mismatch.height == 0, mismatch.select("penalty_detail", "penalty_yards_net", "delta").rows()
+
+    # the declined first-down holding must NOT resolve
+    declined_fd = pen.filter(
+        (pl.col("penalty_declined") == True) & (pl.col("penalty_1st_conv") == True)  # noqa: E712
+    )
+    assert declined_fd.height >= 1
+    assert declined_fd.filter(pl.col("penalty_side").is_not_null()).height == 0
