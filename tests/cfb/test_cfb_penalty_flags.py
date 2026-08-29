@@ -438,3 +438,96 @@ def test_spot_column_agrees_with_the_end_state_on_no_play_penalties() -> None:
     assert ko.height == 1
     assert ko.row(0, named=True)["penalty_spot_yardline"] == 20
     assert ko.row(0, named=True)["end.yardsToEndzone"] == 75
+
+
+def test_pre_2014_net_penalty_yardage_survives_the_bound() -> None:
+    """The bound is era-aware because the text template changed what this field holds.
+
+    Pre-2014 ESPN states a NET figure on a kickoff out of bounds -- "kickoff for 62
+    yards out-of-bounds, Ucla penalty 32 yard illegal procedure accepted" -- which
+    routinely exceeds the modern ~25 ceiling. Applying 25 to that era discarded its
+    convention as corrupt: 164 rows in 2007 alone, ~278 across 2005-2013. Half the
+    field is the invariant that still holds there.
+
+    Game 252740026 p99 is the worked example (2005, Ucla, 32 yards).
+    """
+    import json
+    from pathlib import Path
+
+    import sportsdataverse.cfb.cfb_pbp as mod
+
+    gid = 252740026
+    fixture = Path(__file__).parent / "fixtures" / f"summary_{gid}.json"
+    if not fixture.exists():
+        pytest.skip(f"fixture summary_{gid}.json not captured")
+    summary = json.loads(fixture.read_text(encoding="utf-8"))
+
+    class _Resp:
+        def json(self):
+            return summary
+
+    monkeypatch = pytest.MonkeyPatch()
+    try:
+        monkeypatch.setattr(mod, "download", lambda *a, **k: _Resp())
+        proc = CFBPlayProcess(gameId=gid)
+        proc.join_participants = False
+        proc.espn_cfb_pbp()
+        out = proc.run_processing_pipeline()
+    finally:
+        monkeypatch.undo()
+
+    plays = pl.from_dicts(out["plays"], infer_schema_length=None)
+    row = plays.filter(pl.col("text").str.contains("(?i)Ucla penalty 32 yard illegal procedure"))
+    assert row.height == 1, "fixture drifted; expected the 32-yard out-of-bounds enforcement"
+    r = row.row(0, named=True)
+    assert r["penalty_yards_signed"] == 32, f"era-legitimate net yardage was discarded: {r['penalty_yards_signed']}"
+
+
+def test_pre_2014_kickoff_penalty_gate_does_not_fire_on_a_described_kick() -> None:
+    """ESPN wrote "for N yards" through 2013 and "for N yds" from 2014, a total
+    changeover with no overlap season. The part (d) gate -- "this kickoff row
+    describes no kick outcome" -- matched only "yds", so it classified 108 pre-2014
+    rows as describing no kick when they plainly do.
+
+    That misclassification was LATENT, not published: diffing six 2005 games across
+    the fix, no row's end.yardsToEndzone or EPA moved, because those rows never met
+    part (d)'s other conditions (a re-kick following, or possession continuing into
+    the next play). This test therefore guards the classification, not a value that
+    was once wrong -- the sub-condition would have fired the moment one of those
+    other conditions held.
+
+    Game 252740026 p99: "Justin Medlock kickoff for 62 yards out-of-bounds, Ucla
+    penalty 32 yard illegal procedure accepted." A kick of 62 yards is described;
+    the end state must be left alone.
+    """
+    import json
+    from pathlib import Path
+
+    import sportsdataverse.cfb.cfb_pbp as mod
+
+    gid = 252740026
+    fixture = Path(__file__).parent / "fixtures" / f"summary_{gid}.json"
+    if not fixture.exists():
+        pytest.skip(f"fixture summary_{gid}.json not captured")
+    summary = json.loads(fixture.read_text(encoding="utf-8"))
+
+    class _Resp:
+        def json(self):
+            return summary
+
+    monkeypatch = pytest.MonkeyPatch()
+    try:
+        monkeypatch.setattr(mod, "download", lambda *a, **k: _Resp())
+        proc = CFBPlayProcess(gameId=gid)
+        proc.join_participants = False
+        proc.espn_cfb_pbp()
+        out = proc.run_processing_pipeline()
+    finally:
+        monkeypatch.undo()
+
+    plays = pl.from_dicts(out["plays"], infer_schema_length=None)
+    row = plays.filter(pl.col("text").str.contains("(?i)kickoff for 62 yards out-of-bounds"))
+    assert row.height == 1
+    r = row.row(0, named=True)
+    # the touchback yardline is what part (d.i) would have written
+    assert r["end.yardsToEndzone"] not in (75, 80), "part (d) fired on a kick that IS described"

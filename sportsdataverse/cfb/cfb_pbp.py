@@ -1784,7 +1784,14 @@ class CFBPlayProcess(object):
                     .and_(pl.col("text").str.contains(r"(?i)penalty"))
                     .and_(
                         pl.col("text").str.contains(
-                            r"(?i)for \d+ yds|touchback|return|out of bounds|recovered|downed|fair catch",
+                            # Era vocabulary: ESPN wrote "for N yards" through 2013 and
+                            # "for N yds" from 2014. The changeover is total -- 98% one
+                            # side, 0% the other, no overlap season -- so matching only
+                            # "yds" made this gate fire on 108 pre-2014 rows that DO
+                            # describe a kick ("kickoff for 50 yards out-of-bounds"),
+                            # rewriting an end state that was never in question.
+                            # Out-of-bounds is hyphenated in the old texts, spaced in new.
+                            r"(?i)for \d+ (?:yds|yards)|touchback|return|out.of.bounds|recovered|downed|fair catch",
                         )
                         == False
                     )
@@ -1796,7 +1803,14 @@ class CFBPlayProcess(object):
                     .and_(pl.col("text").str.contains(r"(?i)penalty"))
                     .and_(
                         pl.col("text").str.contains(
-                            r"(?i)for \d+ yds|touchback|return|out of bounds|recovered|downed|fair catch",
+                            # Era vocabulary: ESPN wrote "for N yards" through 2013 and
+                            # "for N yds" from 2014. The changeover is total -- 98% one
+                            # side, 0% the other, no overlap season -- so matching only
+                            # "yds" made this gate fire on 108 pre-2014 rows that DO
+                            # describe a kick ("kickoff for 50 yards out-of-bounds"),
+                            # rewriting an end state that was never in question.
+                            # Out-of-bounds is hyphenated in the old texts, spaced in new.
+                            r"(?i)for \d+ (?:yds|yards)|touchback|return|out.of.bounds|recovered|downed|fair catch",
                         )
                         == False
                     )
@@ -5062,7 +5076,7 @@ class CFBPlayProcess(object):
         # those carry only what the function under test needs. Supply them as nulls
         # so the resolver degrades to "unresolved" instead of raising, matching how
         # penalty_assessed_on_kickoff is guarded in _apply_wp_derivation.
-        for _col, _dtype in (("penalty_text", pl.Utf8), ("start.pos_team.id", pl.Int64)):
+        for _col, _dtype in (("penalty_text", pl.Utf8), ("start.pos_team.id", pl.Int64), ("season", pl.Int64)):
             if _col not in play_df.columns:
                 play_df = play_df.with_columns(pl.lit(None, dtype=_dtype).alias(_col))
         play_df = play_df.with_columns(
@@ -5414,24 +5428,43 @@ class CFBPlayProcess(object):
                 yds_penalty=pl.col("yds_penalty").cast(pl.Utf8).str.extract(r"(-?\d+)"),
             )
             .with_columns(
-                # Reject magnitudes no penalty enforcement can produce. NCAA's longest
-                # penalty is 15 yards and half-the-distance only ever reduces it; ESPN
-                # additionally reports net spot change on pass interference, which is why
-                # the legitimate band runs to about 25 (a 16-yard DPI and a half-the-distance
-                # targeting both appear there) and why a bound at 15 would discard real data.
+                # Reject magnitudes no penalty enforcement can produce. The bound is
+                # era-aware because what ESPN puts in this field changed with the text
+                # template, and one threshold cannot serve both.
                 #
-                # Past 25, all 53 rows in 2022-24 are the parser having seized a nearby
-                # number that is not the penalty, or ESPN stating an impossible one:
+                # 2014+ texts state the nominal penalty. NCAA's longest is 15 yards and
+                # half-the-distance only reduces it; ESPN reports net spot change on pass
+                # interference, which reaches ~25 (a 16-yard DPI and a half-the-distance
+                # targeting both appear there). So 25 is the ceiling, and a bound at the
+                # rulebook's 15 would discard real data.
+                #
+                # Pre-2014 texts state a NET figure that routinely exceeds that -- 29, 32,
+                # 34 for a kickoff out of bounds ("kickoff for 62 yards out-of-bounds,
+                # Ucla penalty 32 yard illegal procedure accepted"). Applying 25 there
+                # discarded that era's convention as corrupt: 164 rows in 2007 alone,
+                # ~278 across 2005-2013. Half the field is the invariant that still holds
+                # -- an enforcement cannot move the ball further -- so 50.
+                #
+                # What the bound catches is the parser having seized a nearby number that
+                # is not the penalty, or ESPN stating an impossible one:
                 #
                 #   56  "rush ... for a gain of 56 yards"            the rush's yardage
                 #  -53  "field goal attempt from 53 yards"           the kick distance
                 #   65  "kickoff 65 yards ... Offside offsetting"    offsetting is 0 yards
                 #  -65  "unsportsmanlike conduct (-65 Yards)"        ESPN's own text
+                #   35  "1035 yards to the ALBANY-1020"              ESPN's own text
                 #
-                # Publishing 0 says "no reliable penalty yardage", which is true; publishing
-                # 56 asserts a 56-yard penalty, which is impossible. The bound is deliberately
-                # loose so it only catches the unarguable cases.
-                yds_penalty=pl.when(pl.col("yds_penalty").cast(pl.Int32, strict=False).abs() > 25)
+                # Publishing 0 says "no reliable penalty yardage", which is true;
+                # publishing 56 asserts a 56-yard penalty, which is impossible.
+                #
+                # Residual: the pre-2014 26-50 band is not separable this way -- a genuine
+                # net figure and a seized number look alike there. Splitting them needs the
+                # value's provenance (text-stated vs derived from statYardage), which is
+                # not tracked today. Logged, not guessed at.
+                yds_penalty=pl.when(
+                    pl.col("yds_penalty").cast(pl.Int32, strict=False).abs()
+                    > pl.when(pl.col("season") >= 2014).then(pl.lit(25)).otherwise(pl.lit(50)),
+                )
                 .then(None)
                 .otherwise(pl.col("yds_penalty")),
             )
