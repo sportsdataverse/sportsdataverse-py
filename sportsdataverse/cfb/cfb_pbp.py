@@ -6632,7 +6632,24 @@ class CFBPlayProcess(object):
                 .otherwise(pl.col("lag_change_of_pos_team")),
             )
             .with_columns(
-                EP_between=pl.when(pl.col("lag_change_of_pos_team") == True)
+                # B8: EP_between measures the UNEXPLAINED discontinuity since the last
+                # play ended, and penalty EPA folds it in on the assumption that a gap
+                # means someone's end state was wrong. After a score there is no
+                # unexplained gap -- the points explain it -- and lag_EP_end is a
+                # realized 7.00 rather than a field-position expectation. Adding it (the
+                # possession-change branch does add) hands the next play a fictitious
+                # swing of about eight points.
+                #
+                # 23 scrimmage penalties across 2005-2025 fall immediately after a
+                # score, and 13 of them (57%) published |EPA| above 4, against a base
+                # rate near 5% for scrimmage penalties generally. Zeroing the term there
+                # leaves EPA as EP_end - EP_start, which is what the play itself did.
+                #
+                # lag_scoringPlay, not lag_scoring_play: the derived flag is not built
+                # until well after __process_epa, while ESPN's own is set at line 2387.
+                EP_between=pl.when(pl.col("lag_scoringPlay") == True)
+                .then(0.0)
+                .when(pl.col("lag_change_of_pos_team") == True)
                 .then(pl.col("EP_start") + pl.col("lag_EP_end"))
                 .otherwise(pl.col("EP_start") - pl.col("lag_EP_end")),
                 EP_start=pl.when(

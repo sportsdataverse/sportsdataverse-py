@@ -741,3 +741,50 @@ def test_spot_midfield_loses_to_a_later_team_qualified_spot() -> None:
     assert _spot("Penalty, Holding to the 50 yard line then enforced to the FlaSt 35") == "away:35"
     assert _spot("Penalty, Holding enforced to the FlaSt 35 and then to the 50 yard line") == "mid:50"
     assert _spot("Penalty, Personal Foul (TEAM) to the 50 yard line") == "mid:50"
+
+
+def test_ep_between_is_not_folded_across_a_score() -> None:
+    """B8: EP_between measures the UNEXPLAINED discontinuity since the last play.
+    After a score there is none -- the points explain it -- and lag_EP_end is a
+    realized 7.00 rather than a field-position expectation. The possession-change
+    branch ADDS it, handing the next play a fictitious ~8-point swing.
+
+    26 scrimmage penalties across 2005-2025 fall where the fold applies after a
+    score, and 14 of them published |EPA| above 4. Zeroing the term takes that to
+    zero and drops the maximum from 8.39 to 3.25.
+
+    401628374 p64 is the worked case: a 6-yard completion with an unnecessary
+    roughness flag, following a rushing touchdown, published at +8.08.
+    """
+    import json
+    from pathlib import Path
+
+    import sportsdataverse.cfb.cfb_pbp as mod
+
+    gid = 401628374
+    fixture = Path(__file__).parent / "fixtures" / f"summary_{gid}.json"
+    if not fixture.exists():
+        pytest.skip(f"fixture summary_{gid}.json not captured")
+    summary = json.loads(fixture.read_text(encoding="utf-8"))
+
+    class _Resp:
+        def json(self):
+            return summary
+
+    monkeypatch = pytest.MonkeyPatch()
+    try:
+        monkeypatch.setattr(mod, "download", lambda *a, **k: _Resp())
+        proc = CFBPlayProcess(gameId=gid)
+        proc.join_participants = False
+        proc.espn_cfb_pbp()
+        out = proc.run_processing_pipeline()
+    finally:
+        monkeypatch.undo()
+
+    plays = pl.from_dicts(out["plays"], infer_schema_length=None)
+    row = plays.filter(pl.col("game_play_number") == 64)
+    assert row.height == 1
+    r = row.row(0, named=True)
+    assert r["lag_scoringPlay"] is True, "fixture drifted; p63 should be the scoring play"
+    assert r["EP_between"] == 0.0, "the fold must not cross a score"
+    assert abs(r["EPA"]) < 4, f"a 6-yard completion with a flag is not an 8-point play (got {r['EPA']})"
