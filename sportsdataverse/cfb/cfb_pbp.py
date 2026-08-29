@@ -1597,6 +1597,52 @@ class CFBPlayProcess(object):
                 .otherwise(pl.col("end.yardsToEndzone"))
                 .alias("end.yardsToEndzone"),
             )
+            .with_columns(
+                # B3 part (c): the same repair for end states that are PRESENT but
+                # mirrored. ESPN sometimes reports end.yardsToEndzone from the wrong
+                # side of the field while its own end.yardLine and the next play's
+                # start agree with each other -- e.g. game 401868040, "pass complete
+                # ... for 34 yards to the VIL05" carries end.yardLine=5 with
+                # end.yardsToEndzone=95. Part (b) cannot catch it because the end
+                # state is not missing, and there is no same-row test that can:
+                # yardsToEndzone equals yardLine on roughly half of plays and its
+                # complement on the other half, depending which side of the fifty the
+                # ball is on, so the pair alone proves nothing.
+                #
+                # Fed to the EP model, 95 scores the offense as if it were backed up
+                # on its own 5 instead of at the goal line. That one input cost the
+                # play about 6 points of EP, and the following play -- a penalty,
+                # whose EPA deliberately folds in EP_between, the discontinuity since
+                # the previous play ended -- inherited the whole error as a +6.45 EPA.
+                #
+                # The trigger is deliberately narrow. Possession must be unchanged
+                # across the pair, so the two values describe the same ball; the value
+                # must be the EXACT complement of the next start, which is the flip
+                # signature (375 pairs in the captured corpus disagree at all, only 54
+                # are mirrored); and the play must not be a kick or carry a penalty of
+                # its own, since both legitimately move the ball between snaps. A
+                # penalty on the NEXT play is fine -- it is enforced from that play's
+                # own result and cannot move its starting spot.
+                pl.when(
+                    (pl.col("end.yardsToEndzone").is_null() == False)
+                    .and_(pl.col("start.yardsToEndzone").shift(-1).is_null() == False)
+                    .and_(pl.col("start.pos_team.id").shift(-1) == pl.col("end.pos_team.id"))
+                    .and_(pl.col("start.pos_team.id") == pl.col("end.pos_team.id"))
+                    .and_(pl.col("type.text").is_in(kickoff_vec) == False)
+                    .and_(
+                        pl.col("text").str.contains(r"(?i)kickoff|punt|field goal|extra point|touchback|kick attempt")
+                        == False
+                    )
+                    .and_(pl.col("text").str.contains(r"(?i)penalty") == False)
+                    .and_(pl.col("end.yardsToEndzone") != pl.col("start.yardsToEndzone").shift(-1))
+                    .and_(
+                        pl.col("end.yardsToEndzone") == (pl.lit(100) - pl.col("start.yardsToEndzone").shift(-1)),
+                    ),
+                )
+                .then(pl.col("start.yardsToEndzone").shift(-1))
+                .otherwise(pl.col("end.yardsToEndzone"))
+                .alias("end.yardsToEndzone"),
+            )
         )
         pbp_txt["firstHalfKickoffTeamId"] = np.where(
             (pbp_txt["plays"]["game_play_number"] == 1)

@@ -248,3 +248,64 @@ def test_penalty_box_has_both_teams(monkeypatch):
     box = _box(monkeypatch, 401754598)
     have_pen = {r["pos_team"]: r.get("penalty_yards") for r in box["team"]}
     assert 52 in have_pen and 152 in have_pen
+
+
+def test_mirrored_end_yardline_is_repaired(monkeypatch):
+    """A present-but-mirrored end.yardsToEndzone must be corrected, safely.
+
+    ESPN sometimes reports end.yardsToEndzone from the wrong side of the field.
+    Game 401868040: "pass complete ... for 34 yards to the VIL05" carries
+    end.yardLine=5 with end.yardsToEndzone=95, so the EP model scored the
+    offense as backed up on its own 5 rather than at the goal line -- the play
+    took EPA -2.37 for a 34-yard gain, and the next play (a penalty, whose EPA
+    folds in the discontinuity since the previous play ended) inherited the
+    error as +6.45.
+
+    There is deliberately no same-row test for this: yardsToEndzone equals
+    yardLine on about half of plays and its complement on the other half,
+    depending which side of the fifty the ball is on. Only the next play's
+    start settles it, and only when possession is unchanged.
+    """
+    import polars as pl
+
+
+    # end state mirrored (95) vs the next play's start (5), possession unchanged
+    frame = pl.DataFrame(
+        {
+            "end.yardsToEndzone": [95, 40, 30, 65],
+            "start.yardsToEndzone": [39, 5, 30, 35],
+            "end.pos_team.id": ["1", "1", "1", "2"],
+            "start.pos_team.id": ["1", "1", "1", "1"],
+            "type.text": ["Pass Reception", "Rush", "Rush", "Punt"],
+            "text": [
+                "pass complete for 34 yards to the VIL05",
+                "rush middle for 4 yards",
+                "rush for no gain",
+                "punt 40 yards",
+            ],
+        }
+    )
+    kickoff_vec = ["Kickoff", "Kickoff Return (Offense)"]
+    out = frame.with_columns(
+        pl.when(
+            (pl.col("end.yardsToEndzone").is_null() == False)
+            .and_(pl.col("start.yardsToEndzone").shift(-1).is_null() == False)
+            .and_(pl.col("start.pos_team.id").shift(-1) == pl.col("end.pos_team.id"))
+            .and_(pl.col("start.pos_team.id") == pl.col("end.pos_team.id"))
+            .and_(pl.col("type.text").is_in(kickoff_vec) == False)
+            .and_(
+                pl.col("text").str.contains(r"(?i)kickoff|punt|field goal|extra point|touchback|kick attempt") == False
+            )
+            .and_(pl.col("text").str.contains(r"(?i)penalty") == False)
+            .and_(pl.col("end.yardsToEndzone") != pl.col("start.yardsToEndzone").shift(-1))
+            .and_(pl.col("end.yardsToEndzone") == (pl.lit(100) - pl.col("start.yardsToEndzone").shift(-1)))
+        )
+        .then(pl.col("start.yardsToEndzone").shift(-1))
+        .otherwise(pl.col("end.yardsToEndzone"))
+        .alias("end.yardsToEndzone")
+    )["end.yardsToEndzone"].to_list()
+
+    assert out[0] == 5, "mirrored end state should adopt the next play's start"
+    assert out[1] == 40, "a non-mirrored disagreement must be left alone"
+    assert out[2] == 30, "an already-consistent end state must not move"
+    assert out[3] == 65, "a punt must never be touched: possession legitimately flips"
