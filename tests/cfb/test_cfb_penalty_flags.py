@@ -1233,3 +1233,25 @@ def test_late_inserted_plays_return_to_their_sequence_position():
     ids = df["id"].cast(pl.Int64).to_list()
     disorder = sum(1 for a, b in zip(ids, ids[1:], strict=False) if b < a)
     assert disorder <= 6, disorder  # the final game carries 5 id inversions, all late inserts
+
+
+def test_late_insert_detector_treats_null_fields_as_not_late():
+    """A null sequence, period, clock or type must read as "not late" -- and the row must
+    stay in the frame and remain a valid target for other rows (a null predicate would
+    silently drop it from both the flagged and the unflagged filters)."""
+    from sportsdataverse.cfb.cfb_pbp import _reorder_late_inserts
+
+    df = pl.DataFrame(
+        {
+            "id": [1, 2, 3, 4, 5],
+            "sequenceNumber": [10, None, 30, 40, 35],  # id 5 is a late insert (belongs after 30)
+            "period.number": [1, 1, None, 1, 1],
+            "start.adj_TimeSecsRem": [3500.0, None, 3300.0, 3200.0, 3250.0],
+            "type.text": ["Rush", None, "Pass Reception", "Rush", "Rush"],
+            "season": [2025] * 5,
+            "drive.id": ["d1"] * 5,
+        }
+    )
+    out = _reorder_late_inserts(df)
+    assert out.height == 5 and set(out["id"].to_list()) == {1, 2, 3, 4, 5}
+    assert out["id"].to_list() == [1, 2, 3, 5, 4]

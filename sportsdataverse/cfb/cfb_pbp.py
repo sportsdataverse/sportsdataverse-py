@@ -954,10 +954,14 @@ def _reorder_late_inserts(plays_df: pl.DataFrame) -> pl.DataFrame:
         _per=pl.col("period.number").cast(pl.Int32, strict=False),
     )
     df = df.with_columns(
-        _late=(pl.col("_seq") < pl.col("_seq").cum_max())
-        & (pl.col("_per") < 5)
-        & (pl.col("_t") > pl.col("_t").shift(1) + 5)
-        & ~pl.col("type.text").str.contains("(?i)timeout|end"),
+        # null anywhere (first row's shift, a null sequence) means "not late", and the
+        # row must stay a valid target candidate rather than vanish from both filters
+        _late=(
+            (pl.col("_seq") < pl.col("_seq").cum_max())
+            & (pl.col("_per") < 5)
+            & (pl.col("_t") > pl.col("_t").shift(1) + 5)
+            & ~pl.col("type.text").str.contains("(?i)timeout|end")
+        ).fill_null(False),
     )
     if not df["_late"].any():
         return plays_df
