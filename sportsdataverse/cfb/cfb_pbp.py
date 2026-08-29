@@ -110,8 +110,15 @@ def _extract_player_name(text_expr: pl.Expr, pattern: str) -> pl.Expr:
 #: tag: it consumes everything through the LAST formation token, which handles a
 #: partial leading fragment as well as the intact prefix. Greedy on purpose --
 #: "No Huddle-Shotgun" carries two tokens and only the last one ends the prefix.
-#: Safe because no real surname contains "huddle" or "shotgun".
-_FORMATION_PREFIX = r"(?i)^.*(?:huddle|shotgun)[\s\-]*"
+#:
+#: The keyword must END a word. v0.1.3 shipped this with a trailing ``[\s\-]*``,
+#: which matches the empty string, on the stated assumption that "no real surname
+#: contains huddle or shotgun". Huddleston does: "Rakeem Cato sacked by Parrish
+#: Huddleston" is 2014 text, and the pattern turned that name into "ston". Rust
+#: regex has no lookaround, so the word end is spelled as a required separator --
+#: which also fixes a second defect, the bracketed form "[No Huddle, Shotgun], "
+#: previously leaving a stray "]" on the front of the name.
+_FORMATION_PREFIX = r"(?i)^.*(?:huddle|shotgun)[\s\-,\]]+"
 
 #: ESPN renders the jersey inline ("#1 C.Parker"). It is never part of a name,
 #: and leaving it on splits a player across rows when only some plays fall back
@@ -1714,7 +1721,16 @@ class CFBPlayProcess(object):
                     .and_(pl.col("start.pos_team.id") == pl.col("end.pos_team.id"))
                     .and_(pl.col("type.text").is_in(kickoff_vec) == False)
                     .and_(
-                        pl.col("text").str.contains(r"(?i)kickoff|punt|field goal|extra point|touchback|kick attempt")
+                        # Era vocabulary again: "field goal" is the 2004-2013 spelling and
+                        # modern text writes "23 yd FG GOOD", while the extra point moved
+                        # from its own "extra point" wording into the scoring play's
+                        # trailing "(Kicker Name Kick)". Without the modern forms this
+                        # exclusion let part (c) rewrite the end state of made field goals
+                        # and PATs -- 4 rows across 2014-2022, none before 2014.
+                        pl.col("text").str.contains(
+                            r"(?i)kickoff|punt|field goal|extra point|touchback|kick attempt"
+                            r"|\bFG\b|\bPAT\b|\(.*\bkick\b.*\)"
+                        )
                         == False
                     )
                     .and_(pl.col("text").str.contains(r"(?i)penalty") == False)
@@ -1754,7 +1770,7 @@ class CFBPlayProcess(object):
                     (pl.col("type.text").shift(-1).is_in(kickoff_vec)).or_(
                         pl.col("type.text")
                         .shift(-1)
-                        .str.contains(r"(?i)^(?:timeout|end period|end of half|official)")
+                        .str.contains(r"(?i)^(?:timeout|end period|end of (?:half|game)|official)")
                         .and_(pl.col("type.text").shift(-2).is_in(kickoff_vec)),
                     )
                 ).fill_null(False),

@@ -531,3 +531,34 @@ def test_pre_2014_kickoff_penalty_gate_does_not_fire_on_a_described_kick() -> No
     r = row.row(0, named=True)
     # the touchback yardline is what part (d.i) would have written
     assert r["end.yardsToEndzone"] not in (75, 80), "part (d) fired on a kick that IS described"
+
+
+# --- presentational-token stripping (v0.1.3 regression) -------------------------
+
+
+@pytest.mark.parametrize(
+    ("raw", "expected"),
+    [
+        # the cases the formation stripping exists for
+        ("No Huddle-Shotgun #1 C.Parker", "C.Parker"),
+        ("dle-Shotgun #5 R.Marshall", "R.Marshall"),  # capture window truncates the tag
+        ("le-Shotgun #20 N.Laughlin", "N.Laughlin"),
+        ("[No Huddle, Shotgun], Brin, Davis", "Brin, Davis"),  # v0.1.3 left a stray "]"
+        ("[Shotgun], Smith,Joe", "Smith,Joe"),
+        # real surnames that CONTAIN a formation keyword. v0.1.3's trailing [\s\-]*
+        # matches the empty string, so "Huddleston" was truncated to "ston" -- the
+        # module comment asserted no surname contains "huddle", and 2014 text
+        # ("Rakeem Cato sacked by Parrish Huddleston") disproves it.
+        ("Parrish Huddleston", "Parrish Huddleston"),
+        ("Chris Huddleston", "Chris Huddleston"),
+        ("Sam Huddle", "Sam Huddle"),
+        # both at once: the tag is stripped, the surname survives
+        ("No Huddle-Shotgun Huddleston,Chris", "Huddleston,Chris"),
+        ("J.Smith", "J.Smith"),
+    ],
+)
+def test_formation_prefix_requires_a_word_end(raw: str, expected: str) -> None:
+    from sportsdataverse.cfb.cfb_pbp import _strip_presentational_tokens
+
+    out = pl.DataFrame({"n": [raw]}).with_columns(_strip_presentational_tokens(pl.col("n")).alias("o"))
+    assert out["o"][0] == expected
