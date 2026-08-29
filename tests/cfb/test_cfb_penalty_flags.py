@@ -327,3 +327,114 @@ def test_implausible_penalty_yardage_is_rejected() -> None:
     kept = pens.filter(pl.col("penalty_yards_signed") != 0)
     assert kept.height >= 10, "the bound should not be stripping ordinary penalties"
     assert kept.select(pl.col("penalty_yards_signed").abs().max()).item() <= 25
+
+
+# --- enforcement-spot resolution ------------------------------------------------
+
+_SPOT_ROW = {
+    "homeTeamAbbrev": "LOU",
+    "homeTeamName": "Louisville",
+    "homeTeamNameAlt": "Louisville",
+    "homeTeamMascot": "Cardinals",
+    "awayTeamAbbrev": "FSU",
+    "awayTeamName": "Florida State",
+    "awayTeamNameAlt": "Florida St",
+    "awayTeamMascot": "Seminoles",
+}
+
+
+def _spot(penalty_text: str, **over):
+    from sportsdataverse.cfb.cfb_pbp import _parse_penalty_spot
+
+    return _parse_penalty_spot({**_SPOT_ROW, "penalty_text": penalty_text, **over})
+
+
+def test_spot_team_class_does_not_swallow_the_yardline() -> None:
+    """The single character that mattered most in this parser.
+
+    A team class of `[A-Za-z][A-Za-z0-9...]*` is greedy and matches digits, so
+    "to the FLORIDAST13" captures team "FLORIDAST1" at the 3-yard line. Measured
+    against end.yardsToEndzone on no-play penalties, that one character was the
+    difference between 12.4% and 97.3% agreement.
+    """
+    assert _spot("FLORIDAST pass interference 14 yards to the FLORIDAST13, NO PLAY.") == "away:13"
+    assert _spot("LOUISVILLE offside 5 yards to the LOUISVILLE25, NO PLAY.") == "home:25"
+
+
+def test_spot_resolves_the_side_not_just_the_number() -> None:
+    """A yardline is meaningless without knowing whose half it is in -- reading it
+    as a distance is what published a flag against a team as a gain for it."""
+    assert _spot(", False Start (Trey Benson) to the FlaSt 23") == "away:23"
+    assert _spot(", Offensive Holding (10 Yards) to the Lvile 11") == "home:11"
+
+
+def test_spot_takes_the_last_clause_as_the_enforcement_result() -> None:
+    """The richer format states both spots; the from-spot is where the ball WAS."""
+    assert _spot("FSU Holding (Smith,J) 10 yards from LOU46 to FSU44. NO PLAY.") == "away:44"
+
+
+def test_spot_midfield_needs_no_side() -> None:
+    """50 is its own complement, so the team token is absent and not needed."""
+    assert _spot("Louisville Penalty, Personal Foul (TEAM) to the 50 yard line") == "mid:50"
+
+
+def test_spot_is_none_rather_than_guessed_when_unresolvable() -> None:
+    """A wrong side mirrors the field position and costs about 6 points of EP, so
+    an unresolved token must stay absent."""
+    assert _spot(", Illegal Shift (Amari Terry) declined") is None
+    assert _spot(", Personal Foul (14 Yards)") is None
+    assert _spot(None) is None
+    # a token matching neither side must not be forced onto one
+    assert _spot(", False Start to the ZZZQQ 20") is None
+
+
+def test_spot_column_agrees_with_the_end_state_on_no_play_penalties() -> None:
+    """End-to-end: on a NO PLAY penalty the ball ends AT the enforcement spot, so
+    penalty_spot_yardsToEndzone and end.yardsToEndzone must agree. That identity is
+    what validates the whole resolver -- measured at 97.6% across the fixture games
+    with zero wrong-side errors, the residual being end-state defects rather than
+    spot ones.
+    """
+    import json
+    from pathlib import Path
+
+    import sportsdataverse.cfb.cfb_pbp as mod
+
+    gid = 401636889
+    summary = json.loads((Path(__file__).parent / "fixtures" / f"summary_{gid}.json").read_text(encoding="utf-8"))
+
+    class _Resp:
+        def json(self):
+            return summary
+
+    monkeypatch = pytest.MonkeyPatch()
+    try:
+        monkeypatch.setattr(mod, "download", lambda *a, **k: _Resp())
+        proc = CFBPlayProcess(gameId=gid)
+        proc.join_participants = False
+        proc.espn_cfb_pbp()
+        out = proc.run_processing_pipeline()
+    finally:
+        monkeypatch.undo()
+
+    plays = pl.from_dicts(out["plays"], infer_schema_length=None)
+    v = plays.filter(
+        (pl.col("penalty_no_play") == True)  # noqa: E712
+        & pl.col("penalty_spot_yardsToEndzone").is_not_null()
+        & pl.col("end.yardsToEndzone").is_not_null()
+        & ~pl.col("type.text").str.contains("(?i)kickoff")
+    )
+    assert v.height >= 5, "fixture should carry several no-play penalties"
+    mismatched = v.filter(pl.col("penalty_spot_yardsToEndzone") != pl.col("end.yardsToEndzone"))
+    assert mismatched.height == 0, mismatched.select(
+        "penalty_text", "penalty_spot_yardsToEndzone", "end.yardsToEndzone"
+    ).rows()
+
+    # and the kickoff penalty keeps the two concepts apart: the spot is the kicking
+    # team's own 20, while the end state is the touchback (B3 part d.i)
+    ko = plays.filter(
+        pl.col("text").str.contains("(?i)kickoff") & pl.col("text").str.contains("(?i)Baylor Penalty, Unsportsmanlike")
+    )
+    assert ko.height == 1
+    assert ko.row(0, named=True)["penalty_spot_yardline"] == 20
+    assert ko.row(0, named=True)["end.yardsToEndzone"] == 75

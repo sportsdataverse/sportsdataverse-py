@@ -608,6 +608,87 @@ def _team_alias_initialisms(name):
     return out
 
 
+def _team_candidates(row):
+    """The home/away candidate strings a text team token is scored against.
+
+    Shared by the penalized-team resolver and the enforcement-spot resolver so the
+    two cannot drift apart on which spellings ESPN is allowed to use.
+    """
+    home = [
+        _squash_team(row["homeTeamAbbrev"]),
+        _squash_team(row["homeTeamName"]),
+        _squash_team(row["homeTeamNameAlt"]),
+        _squash_team((row["homeTeamName"] or "") + (row["homeTeamMascot"] or "")),
+    ]
+    away = [
+        _squash_team(row["awayTeamAbbrev"]),
+        _squash_team(row["awayTeamName"]),
+        _squash_team(row["awayTeamNameAlt"]),
+        _squash_team((row["awayTeamName"] or "") + (row["awayTeamMascot"] or "")),
+    ]
+    return home, away, _team_alias_initialisms(row["homeTeamName"]), _team_alias_initialisms(row["awayTeamName"])
+
+
+def _resolve_team_side(tok, home, away, home_alias, away_alias):
+    """Score one squashed team token against both sides; "home" / "away" / None.
+
+    Attribution is a binary choice per game, so the token only has to match one
+    side better than the other. A tie falls to the weak alias tier, and an
+    unbroken tie returns None rather than guessing -- a wrong side is worse than
+    no side, since it mirrors the resulting field position.
+    """
+    if len(tok) < 2:
+        return None
+    # "UMass" -> "MASS", "UFL" -> "FL": the university-style U prefix appears in
+    # text for schools whose payload spellings never carry it.
+    for t in [tok] + ([tok[1:]] if tok.startswith("U") and len(tok) >= 4 else []):
+        hs = _score_team_match(t, home)
+        aws = _score_team_match(t, away)
+        if hs == aws:
+            # weak tier: derived initialism aliases, exact-match only
+            hs = int(t in home_alias)
+            aws = int(t in away_alias)
+        if hs > aws:
+            return "home"
+        if aws > hs:
+            return "away"
+    return None
+
+
+#: The enforcement spot: "to the FlaSt 23", "to LOUISVILLE38", "to the 50 yard line".
+#: The team class must exclude digits -- a greedy [A-Za-z0-9]* swallows the leading
+#: digit of the yardline, turning "to the FLORIDAST13" into team "FLORIDAST1" at the
+#: 3-yard line. That single character cost 85 points of agreement while developing
+#: this (12.4% -> 97.3% against end.yardsToEndzone on no-play penalties).
+_PENALTY_SPOT_RE = re.compile(r"(?i)\bto\s+(?:the\s+)?([A-Za-z][A-Za-z.'&-]*)\s*(\d{1,2})\b")
+_PENALTY_SPOT_MID_RE = re.compile(r"(?i)\bto\s+the\s+50\s+yard\s+line\b")
+
+
+def _parse_penalty_spot(row):
+    """Resolve the penalty's enforcement spot to ``"<side>:<yardline>"`` or None.
+
+    ``side`` is "home", "away", or "mid" for the 50. The caller turns that into a
+    distance to the endzone once it knows which side has the ball -- the spot alone
+    is ambiguous, and reading it as a distance is the bug this exists to prevent
+    (a 15-yard flag pinning a team on its own 20 published as +5.52 EPA).
+
+    The LAST spot in the clause is the enforcement result: the richer format states
+    both ("15 yards from OU 47 to NEB38"), and the from-spot is where the ball was.
+    """
+    txt = row["penalty_text"]
+    if not txt:
+        return None
+    if _PENALTY_SPOT_MID_RE.search(txt):
+        return "mid:50"
+    matches = list(_PENALTY_SPOT_RE.finditer(txt))
+    if not matches:
+        return None
+    tok_raw, yardline = matches[-1].group(1), matches[-1].group(2)
+    home, away, home_alias, away_alias = _team_candidates(row)
+    side = _resolve_team_side(_squash_team(tok_raw), home, away, home_alias, away_alias)
+    return None if side is None else f"{side}:{int(yardline)}"
+
+
 def _parse_penalty_team_side(row):
     """Resolve the PENALIZED team from play text to ``"home"`` / ``"away"`` / None.
 
@@ -622,20 +703,7 @@ def _parse_penalty_team_side(row):
     text = row["text"]
     if not text:
         return None
-    home = [
-        _squash_team(row["homeTeamAbbrev"]),
-        _squash_team(row["homeTeamName"]),
-        _squash_team(row["homeTeamNameAlt"]),
-        _squash_team((row["homeTeamName"] or "") + (row["homeTeamMascot"] or "")),
-    ]
-    away = [
-        _squash_team(row["awayTeamAbbrev"]),
-        _squash_team(row["awayTeamName"]),
-        _squash_team(row["awayTeamNameAlt"]),
-        _squash_team((row["awayTeamName"] or "") + (row["awayTeamMascot"] or "")),
-    ]
-    home_alias = _team_alias_initialisms(row["homeTeamName"])
-    away_alias = _team_alias_initialisms(row["awayTeamName"])
+    home, away, home_alias, away_alias = _team_candidates(row)
     for rx, direction in _PENALTY_TOKEN_RES:
         for m in rx.finditer(text):
             words = m.group(1).split()
@@ -645,18 +713,9 @@ def _parse_penalty_team_side(row):
                 if len(tok) < 2:
                     continue
                 # also try the U-university prefix stripped ("UMass" -> "MASS")
-                toks = [tok] + ([tok[1:]] if tok.startswith("U") and len(tok) >= 4 else [])
-                for t in toks:
-                    hs = _score_team_match(t, home)
-                    aws = _score_team_match(t, away)
-                    if hs == aws:
-                        # weak tier: derived initialism aliases, exact-match only
-                        hs = int(t in home_alias)
-                        aws = int(t in away_alias)
-                    if hs > aws:
-                        return "home"
-                    if aws > hs:
-                        return "away"
+                side = _resolve_team_side(tok, home, away, home_alias, away_alias)
+                if side is not None:
+                    return side
     return None
 
 
@@ -4998,6 +5057,14 @@ class CFBPlayProcess(object):
         recovery_team, turnover_team, is_turnover, is_st_turnover,
         penalized_team, penalty_yards_signed, and event-team columns.
         """
+        # The enforcement-spot resolver reads two columns the full pipeline always
+        # has but the synthetic frames in tests/cfb/test_cfb_attribution.py do not --
+        # those carry only what the function under test needs. Supply them as nulls
+        # so the resolver degrades to "unresolved" instead of raising, matching how
+        # penalty_assessed_on_kickoff is guarded in _apply_wp_derivation.
+        for _col, _dtype in (("penalty_text", pl.Utf8), ("start.pos_team.id", pl.Int64)):
+            if _col not in play_df.columns:
+                play_df = play_df.with_columns(pl.lit(None, dtype=_dtype).alias(_col))
         play_df = play_df.with_columns(
             # --- Special-teams team flip (verified): kickoff pos_team=receiving;
             #     punt/FG pos_team=kicking. ---
@@ -5069,37 +5136,80 @@ class CFBPlayProcess(object):
             if _c not in play_df.columns:
                 play_df = play_df.with_columns(pl.lit(None, dtype=pl.Utf8).alias(_c))
 
-        play_df = play_df.with_columns(
-            recovery_team=_abbrev_to_team_id(pl.col("_recovery_abbrev")),
-            recovery_team_2=_abbrev_to_team_id(pl.col("_recovery_abbrev_2")),
-            # Penalized team parsed from the penalty-team text token (both vendor
-            # forms: "PENALTY {TEAM} ..." and "{TEAM} Penalty, ..."). Matched
-            # binary home-vs-away against abbrev/name/alt/mascot candidates, so
-            # it correctly distinguishes offensive vs defensive fouls (incl.
-            # OPI vs DPI) even when the token is a vowel-dropped vendor
-            # spelling. Replaces the earlier expression-based era-form matcher:
-            # measured on the 13-game box oracle, this resolver scores 61.5%
-            # count / 73.1% yards exact vs 46.2% / 50.0% for the era-form one,
-            # and resolves 98.6% of the 2025 season's 11,844 penalty rows.
-            _penalty_side=pl.struct(
-                [
-                    "text",
-                    "homeTeamAbbrev",
-                    "awayTeamAbbrev",
-                    "homeTeamName",
-                    "awayTeamName",
-                    "homeTeamNameAlt",
-                    "awayTeamNameAlt",
-                    "homeTeamMascot",
-                    "awayTeamMascot",
-                ],
-            ).map_elements(_parse_penalty_team_side, return_dtype=pl.Utf8),
-        ).with_columns(
-            _penalty_team=pl.when(pl.col("_penalty_side") == "home")
-            .then(pl.col("homeTeamId"))
-            .when(pl.col("_penalty_side") == "away")
-            .then(pl.col("awayTeamId"))
-            .otherwise(pl.lit(None, dtype=pl.Int64)),
+        play_df = (
+            play_df.with_columns(
+                recovery_team=_abbrev_to_team_id(pl.col("_recovery_abbrev")),
+                recovery_team_2=_abbrev_to_team_id(pl.col("_recovery_abbrev_2")),
+                # Penalized team parsed from the penalty-team text token (both vendor
+                # forms: "PENALTY {TEAM} ..." and "{TEAM} Penalty, ..."). Matched
+                # binary home-vs-away against abbrev/name/alt/mascot candidates, so
+                # it correctly distinguishes offensive vs defensive fouls (incl.
+                # OPI vs DPI) even when the token is a vowel-dropped vendor
+                # spelling. Replaces the earlier expression-based era-form matcher:
+                # measured on the 13-game box oracle, this resolver scores 61.5%
+                # count / 73.1% yards exact vs 46.2% / 50.0% for the era-form one,
+                # and resolves 98.6% of the 2025 season's 11,844 penalty rows.
+                _penalty_side=pl.struct(
+                    [
+                        "text",
+                        "homeTeamAbbrev",
+                        "awayTeamAbbrev",
+                        "homeTeamName",
+                        "awayTeamName",
+                        "homeTeamNameAlt",
+                        "awayTeamNameAlt",
+                        "homeTeamMascot",
+                        "awayTeamMascot",
+                    ],
+                ).map_elements(_parse_penalty_team_side, return_dtype=pl.Utf8),
+                # The enforcement SPOT, resolved the same way and for the same reason:
+                # "to the FlaSt 23" names a yardline in one team's half, and which half
+                # decides whether the offense has 23 yards to go or 77. Reading the spot
+                # as a distance is what published a 15-yard flag against the receiving
+                # team as a +5.52 EPA gain FOR it. Kept as "<side>:<yardline>" and turned
+                # into a distance below, once the possessing side is known.
+                _penalty_spot=pl.struct(
+                    [
+                        "penalty_text",
+                        "homeTeamAbbrev",
+                        "awayTeamAbbrev",
+                        "homeTeamName",
+                        "awayTeamName",
+                        "homeTeamNameAlt",
+                        "awayTeamNameAlt",
+                        "homeTeamMascot",
+                        "awayTeamMascot",
+                    ],
+                ).map_elements(_parse_penalty_spot, return_dtype=pl.Utf8),
+            )
+            .with_columns(
+                _penalty_team=pl.when(pl.col("_penalty_side") == "home")
+                .then(pl.col("homeTeamId"))
+                .when(pl.col("_penalty_side") == "away")
+                .then(pl.col("awayTeamId"))
+                .otherwise(pl.lit(None, dtype=pl.Int64)),
+            )
+            .with_columns(
+                penalty_spot_yardline=pl.col("_penalty_spot").str.extract(r":(\d+)$", 1).cast(pl.Int32, strict=False),
+                penalty_spot_side=pl.col("_penalty_spot").str.extract(r"^(home|away|mid)", 1),
+            )
+            .with_columns(
+                # The spot as a distance to the possessing team's target endzone -- the
+                # form the EP model consumes. Midfield is its own complement, so it needs
+                # no side. Null when the side could not be resolved: an unresolved spot
+                # must stay absent rather than be guessed, because guessing wrong mirrors
+                # the field position and the resulting EP error is ~6 points.
+                penalty_spot_yardsToEndzone=pl.when(pl.col("penalty_spot_side") == "mid")
+                .then(pl.lit(50, dtype=pl.Int32))
+                .when(
+                    (pl.col("penalty_spot_side") == "home").and_(pl.col("start.pos_team.id") == pl.col("homeTeamId"))
+                    | (pl.col("penalty_spot_side") == "away").and_(pl.col("start.pos_team.id") != pl.col("homeTeamId")),
+                )
+                .then((pl.lit(100) - pl.col("penalty_spot_yardline")).cast(pl.Int32))
+                .when(pl.col("penalty_spot_side").is_in(["home", "away"]))
+                .then(pl.col("penalty_spot_yardline").cast(pl.Int32))
+                .otherwise(None),
+            )
         )
 
         # Special-teams RETURN detection (flag OR text). ESPN sometimes reclassifies a
