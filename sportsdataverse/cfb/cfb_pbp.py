@@ -684,18 +684,13 @@ _PENALTY_SPOT_RE = re.compile(r"(?i)\bto\s+(?:the\s+)?([A-Za-z][A-Za-z.'&-]*)\s*
 _PENALTY_SPOT_MID_RE = re.compile(r"(?i)\bto\s+the\s+50\s+yard\s+line\b")
 
 
-def _parse_penalty_spot(row):
-    """Resolve the penalty's enforcement spot to ``"<side>:<yardline>"`` or None.
+def _spot_from_text(txt, row):
+    """The LAST "to the <TEAM> <NN>" in ``txt``, as ``"<side>:<yardline>"`` or None.
 
-    ``side`` is "home", "away", or "mid" for the 50. The caller turns that into a
-    distance to the endzone once it knows which side has the ball -- the spot alone
-    is ambiguous, and reading it as a distance is the bug this exists to prevent
-    (a 15-yard flag pinning a team on its own 20 published as +5.52 EPA).
-
-    The LAST spot in the clause is the enforcement result: the richer format states
-    both ("15 yards from OU 47 to NEB38"), and the from-spot is where the ball was.
+    Shared by the penalty-enforcement and kick-return resolvers. The last mention is
+    the answer in both: a play can name several spots and the final one is where the
+    ball came to rest.
     """
-    txt = row["penalty_text"]
     if not txt:
         return None
     if _PENALTY_SPOT_MID_RE.search(txt):
@@ -707,6 +702,59 @@ def _parse_penalty_spot(row):
     home, away, home_alias, away_alias = _team_candidates(row)
     side = _resolve_team_side(_squash_team(tok_raw), home, away, home_alias, away_alias)
     return None if side is None else f"{side}:{int(yardline)}"
+
+
+#: A kickoff/punt row whose text reports where the return finished. Both era forms
+#: end the same way -- "returned by Nick Santa Cruz for 24 yards to the TTB 24."
+#: (2004-2013), ", Trey Sanders return for 15 yds to the Camp 20" (2014+), and
+#: "#27 J.Norman return 22 yards to the EMU22" (2025) -- so the spot regex serves
+#: all three.
+#: Rows that are not snaps and may sit between a play and the one that follows it.
+_ADMIN_ROW_RE = r"(?i)^(?:timeout|end period|end of (?:half|game)|official)"
+
+_RETURN_RE = re.compile(r"(?i)\breturn")
+#: ...on a KICKOFF row specifically. Without this the resolver also fired on fumble
+#: recoveries, whose text carries "returned to the WEST 45" and matches _RETURN_RE.
+#: Two such rows changed in the backtest (401099813 p14 and p84). They may well be
+#: the same defect -- both agreed with the next play, which is what the gate tests --
+#: but the text-versus-field adjudication behind part (e) was measured on kickoff
+#: returns only, so shipping fumble returns on it would be asserting more than was
+#: checked.
+_KICKOFF_TEXT_RE = re.compile(r"(?i)kickoff")
+#: A return that reaches the endzone, or one wiped out, does not report a spot the
+#: EP model should read: the scoring conventions and the nullification both put the
+#: end state somewhere the text does not describe.
+_RETURN_EXCLUDE_RE = re.compile(r"(?i)touchdown|nullif")
+
+
+def _parse_return_spot(row):
+    """Resolve where a kick return finished, as ``"<side>:<yardline>"`` or None.
+
+    Same contract as :func:`_parse_penalty_spot`, reading ``text`` rather than
+    ``penalty_text``. The LAST spot in the text is the answer -- a return can be
+    followed by an enforcement that moves the ball again, and the final mention is
+    where it came to rest.
+    """
+    txt = row["text"]
+    if not txt or not _KICKOFF_TEXT_RE.search(txt):
+        return None
+    if not _RETURN_RE.search(txt) or _RETURN_EXCLUDE_RE.search(txt):
+        return None
+    return _spot_from_text(txt, row)
+
+
+def _parse_penalty_spot(row):
+    """Resolve the penalty's enforcement spot to ``"<side>:<yardline>"`` or None.
+
+    ``side`` is "home", "away", or "mid" for the 50. The caller turns that into a
+    distance to the endzone once it knows which side has the ball -- the spot alone
+    is ambiguous, and reading it as a distance is the bug this exists to prevent
+    (a 15-yard flag pinning a team on its own 20 published as +5.52 EPA).
+
+    The LAST spot in the clause is the enforcement result: the richer format states
+    both ("15 yards from OU 47 to NEB38"), and the from-spot is where the ball was.
+    """
+    return _spot_from_text(row["penalty_text"], row)
 
 
 def _parse_penalty_team_side(row):
@@ -1783,7 +1831,7 @@ class CFBPlayProcess(object):
                     (pl.col("type.text").shift(-1).is_in(kickoff_vec)).or_(
                         pl.col("type.text")
                         .shift(-1)
-                        .str.contains(r"(?i)^(?:timeout|end period|end of (?:half|game)|official)")
+                        .str.contains(_ADMIN_ROW_RE)
                         .and_(pl.col("type.text").shift(-2).is_in(kickoff_vec)),
                     )
                 ).fill_null(False),
@@ -1879,6 +1927,98 @@ class CFBPlayProcess(object):
                 .alias("end.yardsToEndzone"),
             )
             .drop("_ko_pen_rekick_follows")
+            .with_columns(
+                # B3 part (e): the kick-return end state, when ESPN's own structured
+                # fields contradict its own text.
+                #
+                # Raw payload for 401762869 p122 carries end.yardLine 8 and
+                # end.yardsToEndzone 8, while its text ends "... to EMU08" -- EMU, the
+                # possessing team, on their own 8, which is 92 to go. 8 is the yardline
+                # stored where the distance belongs, and start is correct on the same
+                # row, so it is not a wholesale feed failure. Published 2025 carries 40
+                # kickoff penalties with end.yardsToEndzone <= 25 against 5-11 in each of
+                # 2022-24, 29 above |EPA| 4 against 3-4, and a season mean kickoff-penalty
+                # EPA of +0.233 where every other year is negative.
+                #
+                # Parts (b), (c) and (d) all miss it: the end state is present, 8 is not
+                # the complement of the NEXT play's start, and the text plainly describes
+                # a kick and a return so part (d) correctly declines it.
+                #
+                # THE TEXT ALONE IS NOT ENOUGH. Where text and field disagree, the field
+                # is usually right -- 313 of 326 adjudicable disagreements in 2005, 88 of
+                # 94 in 2018, 29 of 39 in 2024 -- because the side resolution fails on
+                # older abbreviations and returns the complement. Only 2025 inverts, 73
+                # to 38. A repair that trusted the text would corrupt hundreds of rows.
+                #
+                # So the gate requires TWO independent sources against the field: the
+                # text's final spot, and the next real play starting exactly there with
+                # possession unchanged. That fires on 113 rows across 2005-2025, of which
+                # 73 are 2025 and no season before it exceeds 7.
+                _ret_spot=pl.struct(
+                    [
+                        "text",
+                        "homeTeamAbbrev",
+                        "awayTeamAbbrev",
+                        "homeTeamName",
+                        "awayTeamName",
+                        "homeTeamNameAlt",
+                        "awayTeamNameAlt",
+                        "homeTeamMascot",
+                        "awayTeamMascot",
+                    ],
+                ).map_elements(_parse_return_spot, return_dtype=pl.Utf8),
+                # The next REAL play, skipping up to two administrative rows -- a Timeout
+                # sits between a kickoff and the ensuing snap often enough that a bare
+                # shift(-1) reads the wrong row (401762869: kickoff p122, Timeout p123).
+                _nxt_start=pl.when(
+                    pl.col("type.text").shift(-1).str.contains(_ADMIN_ROW_RE),
+                )
+                .then(
+                    pl.when(pl.col("type.text").shift(-2).str.contains(_ADMIN_ROW_RE))
+                    .then(pl.col("start.yardsToEndzone").shift(-3))
+                    .otherwise(pl.col("start.yardsToEndzone").shift(-2)),
+                )
+                .otherwise(pl.col("start.yardsToEndzone").shift(-1)),
+                _nxt_pos=pl.when(
+                    pl.col("type.text").shift(-1).str.contains(_ADMIN_ROW_RE),
+                )
+                .then(
+                    pl.when(pl.col("type.text").shift(-2).str.contains(_ADMIN_ROW_RE))
+                    .then(pl.col("start.pos_team.id").shift(-3))
+                    .otherwise(pl.col("start.pos_team.id").shift(-2)),
+                )
+                .otherwise(pl.col("start.pos_team.id").shift(-1)),
+            )
+            .with_columns(
+                _ret_y2ez=pl.when(pl.col("_ret_spot").str.starts_with("mid"))
+                .then(pl.lit(50))
+                .when(
+                    (pl.col("_ret_spot").str.starts_with("home")).and_(
+                        pl.col("start.pos_team.id") == pl.col("homeTeamId"),
+                    )
+                    | (pl.col("_ret_spot").str.starts_with("away")).and_(
+                        pl.col("start.pos_team.id") != pl.col("homeTeamId"),
+                    ),
+                )
+                .then(pl.lit(100) - pl.col("_ret_spot").str.extract(r":(\d+)$", 1).cast(pl.Int64, strict=False))
+                .when(pl.col("_ret_spot").is_not_null())
+                .then(pl.col("_ret_spot").str.extract(r":(\d+)$", 1).cast(pl.Int64, strict=False))
+                .otherwise(None),
+            )
+            .with_columns(
+                pl.when(
+                    pl.col("_ret_y2ez")
+                    .is_not_null()
+                    .and_(pl.col("end.yardsToEndzone").is_null() == False)
+                    .and_(pl.col("_ret_y2ez") != pl.col("end.yardsToEndzone"))
+                    .and_(pl.col("_nxt_pos") == pl.col("end.pos_team.id"))
+                    .and_(pl.col("_nxt_start") == pl.col("_ret_y2ez")),
+                )
+                .then(pl.col("_ret_y2ez"))
+                .otherwise(pl.col("end.yardsToEndzone"))
+                .alias("end.yardsToEndzone"),
+            )
+            .drop(["_ret_spot", "_ret_y2ez", "_nxt_start", "_nxt_pos"])
         )
         pbp_txt["firstHalfKickoffTeamId"] = np.where(
             (pbp_txt["plays"]["game_play_number"] == 1)

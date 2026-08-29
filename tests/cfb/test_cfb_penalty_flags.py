@@ -665,3 +665,62 @@ def test_part_d_kick_outcome_gate_across_all_three_vocabularies(text: str, descr
     )
     matched = pl.DataFrame({"t": [text]}).with_columns(pl.col("t").str.contains(gate).alias("m"))["m"][0]
     assert matched == describes_a_kick
+
+
+# --- kick-return end state (B3 part (e)) ----------------------------------------
+
+
+def _ret(text: str, **over):
+    from sportsdataverse.cfb.cfb_pbp import _parse_return_spot
+
+    row = {**_SPOT_ROW, "text": text, **over}
+    return _parse_return_spot(row)
+
+
+def test_return_spot_reads_all_three_era_forms() -> None:
+    """The three vocabularies end the same way, so one spot regex serves them all."""
+    # 2004-2013
+    assert _ret("Preston Jones kickoff for 80 yards returned by N. Cruz for 24 yards to the FSU 24.") == "away:24"
+    # 2014+
+    assert _ret("Massimo Biscardi kickoff for 60 yds , Trey Sanders return for 15 yds to the LOU 20") == "home:20"
+    # 2025 vendor feed: no space before the yardline, no "for"
+    assert _ret("(02:31) #31 H.Smith kickoff 65 yards to the LOU00 #27 J.Norman return 22 yards to LOU08") == "home:8"
+
+
+def test_return_spot_takes_the_last_spot_not_the_first() -> None:
+    """A return can be followed by an enforcement that moves the ball again; the
+    final mention is where it came to rest. 401762869 p122 is the worked case --
+    the text names LOU00 at the catch and LOU08 after everything."""
+    assert _ret("kickoff 65 yards to the LOU00 J.Norman return 22 yards to the FSU22 (tackle) to LOU08") == "home:8"
+
+
+def test_return_spot_declines_touchdowns_and_nullified_returns() -> None:
+    """Neither reports a spot the EP model should read: the scoring convention and
+    the nullification both put the end state somewhere the text does not describe."""
+    assert _ret("kickoff 65 yards , R.Hammond return 99 yards to the LOU00 TOUCHDOWN") is None
+    assert _ret("kickoff 65 yards , T.Smith return 100 yards to the FSU00 TOUCHDOWN nullified by penalty") is None
+    assert _ret("Nate Reed kickoff for 65 yds for a touchback") is None  # no return at all
+    assert _ret(None) is None
+
+
+def test_return_spot_is_none_rather_than_guessed() -> None:
+    """A wrong side mirrors the field position, so an unresolvable team stays absent."""
+    assert _ret("kickoff 60 yds , A.Player return for 15 yds to the ZZZQQ 20") is None
+
+
+def test_return_spot_only_fires_on_kickoff_rows() -> None:
+    """A fumble recovery's text carries "returned to the WEST 45", which matches the
+    return pattern. Part (e) is not for those rows.
+
+    The backtest caught it: 401099813 p14 and p84 both moved, and both are
+    `Fumble Recovery (Own)`. They may well be the same defect -- each agreed with the
+    next play, which is what the gate tests -- but the text-versus-field adjudication
+    behind part (e) was measured on kickoff returns only. Shipping fumble returns on
+    that evidence would assert more than was checked.
+    """
+    assert _ret("David Blough fumbled (aborted) at FSU 45, recovered by David Blough, returned to the FSU 45") is None
+    assert _ret("Taylor Cornelius fumbled (aborted) at the LOU 28, recovered by him, returned to the LOU 28") is None
+    # a punt return is likewise out of scope until it has been adjudicated
+    assert _ret("Ryan Rehkow punt for 45 yds , J.Smith return for 8 yds to the LOU 30") is None
+    # kickoffs still resolve
+    assert _ret("(06:18) #37 D.Bale kickoff 67 yards to the LOU23 #6 D.Booth return 17 yards to the LOU40") == "home:40"
