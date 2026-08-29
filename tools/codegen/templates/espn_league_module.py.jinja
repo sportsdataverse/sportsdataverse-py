@@ -40,6 +40,17 @@ def {{ ep.fn_name }}(
     **kwargs,
 ) -> Dict:
 {{ ep.docstring }}
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+{% for p in ep.query_params %}
+{% if p.transform %}
+        "{{ p.api }}": {{ p.transform }}({{ p.python_name }}),
+{% else %}
+        "{{ p.api }}": {{ p.python_name }},
+{% endif %}
+{% endfor %}
+    }
+    _params.update(_caller_params)
 {% if ep.has_dynamic_path %}
     {{ ep.path_build_expr }}
     raw = _get(
@@ -48,15 +59,7 @@ def {{ ep.fn_name }}(
     raw = _get(
         {{ ep.url_literal }},
 {% endif %}
-        params={
-{% for p in ep.query_params %}
-{% if p.transform %}
-            "{{ p.api }}": {{ p.transform }}({{ p.python_name }}),
-{% else %}
-            "{{ p.api }}": {{ p.python_name }},
-{% endif %}
-{% endfor %}
-        },
+        params=_params,
         **kwargs,
     )
 {% if ep.parser %}

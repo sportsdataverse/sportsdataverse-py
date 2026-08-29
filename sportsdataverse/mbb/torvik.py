@@ -57,9 +57,12 @@ def torvik_ratings(
         .. _hoopR: https://hoopR.sportsdataverse.org
         .. _Bart Torvik: https://barttorvik.com
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://barttorvik.com/{year}_team_results.csv",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -105,9 +108,12 @@ def torvik_team_factors(
         .. _hoopR: https://hoopR.sportsdataverse.org
         .. _Bart Torvik: https://barttorvik.com
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://barttorvik.com/{year}_fffinal.csv",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:

@@ -185,15 +185,18 @@ def espn_nba_scoreboard(
 
             espn_nba_scoreboard(dates='20240115')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "dates": dates,
+        "week": week,
+        "seasontype": season_type,
+        "groups": groups,
+        "limit": limit,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard",
-        params={
-            "dates": dates,
-            "week": week,
-            "seasontype": season_type,
-            "groups": groups,
-            "limit": limit,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -228,11 +231,14 @@ def espn_nba_summary(
 
             espn_nba_summary()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "event": event_id,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/summary",
-        params={
-            "event": event_id,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -265,9 +271,12 @@ def espn_nba_calendar(
 
             espn_nba_calendar()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/calendar",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -302,11 +311,14 @@ def espn_nba_news(
 
             espn_nba_news()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "limit": limit,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/news",
-        params={
-            "limit": limit,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -339,9 +351,12 @@ def espn_nba_injuries(
 
             espn_nba_injuries()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -350,6 +365,7 @@ def espn_nba_injuries(
 
 
 def espn_nba_transactions(
+    limit: Optional[int] = 500,
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
@@ -363,6 +379,7 @@ def espn_nba_transactions(
     Example URL: https://site.api.espn.com/apis/site/v2/sports/basketball/nba/transactions
 
     Args:
+        limit: limit query parameter.
         return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
@@ -374,9 +391,14 @@ def espn_nba_transactions(
 
             espn_nba_transactions()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "limit": limit,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/transactions",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -409,9 +431,12 @@ def espn_nba_conferences(
 
             espn_nba_conferences()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/groups",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -444,9 +469,12 @@ def espn_nba_statistics_league(
 
             espn_nba_statistics_league()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/statistics",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -479,9 +507,12 @@ def espn_nba_draft(
 
             espn_nba_draft()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/draft",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -516,11 +547,14 @@ def espn_nba_teams_site(
 
             espn_nba_teams_site()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "limit": limit,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams",
-        params={
-            "limit": limit,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -555,9 +589,12 @@ def espn_nba_team(
 
             espn_nba_team(team_id='4')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/{team_id}",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -567,6 +604,7 @@ def espn_nba_team(
 
 def espn_nba_team_roster(
     team_id: Union[int, str],
+    limit: Optional[int] = 500,
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
@@ -581,6 +619,7 @@ def espn_nba_team_roster(
 
     Args:
         team_id: team_id path parameter.
+        limit: limit query parameter.
         return_parsed: parse the payload through parse_team_roster -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
@@ -592,9 +631,14 @@ def espn_nba_team_roster(
 
             espn_nba_team_roster(team_id='4')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "limit": limit,
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/{team_id}/roster",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -631,11 +675,14 @@ def espn_nba_team_schedule(
 
             espn_nba_team_schedule(team_id='4')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "season": season,
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/{team_id}/schedule",
-        params={
-            "season": season,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -670,9 +717,12 @@ def espn_nba_team_record(
 
             espn_nba_team_record(team_id='4')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/{team_id}/record",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -707,9 +757,12 @@ def espn_nba_team_depthcharts(
 
             espn_nba_team_depthcharts(team_id='4')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/{team_id}/depthcharts",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -744,9 +797,12 @@ def espn_nba_team_injuries(
 
             espn_nba_team_injuries(team_id='4')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/{team_id}/injuries",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -781,9 +837,12 @@ def espn_nba_team_transactions(
 
             espn_nba_team_transactions(team_id='4')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/{team_id}/transactions",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -818,9 +877,12 @@ def espn_nba_team_history(
 
             espn_nba_team_history(team_id='4')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/{team_id}/history",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -857,11 +919,14 @@ def espn_nba_team_news(
 
             espn_nba_team_news(team_id='4')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "limit": limit,
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/{team_id}/news",
-        params={
-            "limit": limit,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -896,9 +961,12 @@ def espn_nba_team_leaders(
 
             espn_nba_team_leaders(team_id='4')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/{team_id}/leaders",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -933,9 +1001,12 @@ def espn_nba_player_info(
 
             espn_nba_player_info(athlete_id='4239')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://site.api.espn.com/apis/site/v2/sports/basketball/nba/athletes/{athlete_id}",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -970,9 +1041,12 @@ def espn_nba_player_bio(
 
             espn_nba_player_bio(athlete_id='4239')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://site.api.espn.com/apis/site/v2/sports/basketball/nba/athletes/{athlete_id}/bio",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1007,9 +1081,12 @@ def espn_nba_player_news(
 
             espn_nba_player_news(athlete_id='4239')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://site.api.espn.com/apis/site/v2/sports/basketball/nba/athletes/{athlete_id}/news",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1048,13 +1125,16 @@ def espn_nba_standings(
 
             espn_nba_standings()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "season": season,
+        "group": group,
+        "type": standings_type,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://site.api.espn.com/apis/v2/sports/basketball/nba/standings",
-        params={
-            "season": season,
-            "group": group,
-            "type": standings_type,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1089,9 +1169,12 @@ def espn_nba_player_overview(
 
             espn_nba_player_overview(athlete_id='4239')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://site.web.api.espn.com/apis/common/v3/sports/basketball/nba/athletes/{athlete_id}/overview",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1128,11 +1211,14 @@ def espn_nba_player_stats_v3(
 
             espn_nba_player_stats_v3(athlete_id='4239')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "season": season,
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://site.web.api.espn.com/apis/common/v3/sports/basketball/nba/athletes/{athlete_id}/stats",
-        params={
-            "season": season,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1169,11 +1255,14 @@ def espn_nba_player_gamelog(
 
             espn_nba_player_gamelog(athlete_id='4239')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "season": season,
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://site.web.api.espn.com/apis/common/v3/sports/basketball/nba/athletes/{athlete_id}/gamelog",
-        params={
-            "season": season,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1210,11 +1299,14 @@ def espn_nba_player_splits(
 
             espn_nba_player_splits(athlete_id='4239')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "season": season,
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://site.web.api.espn.com/apis/common/v3/sports/basketball/nba/athletes/{athlete_id}/splits",
-        params={
-            "season": season,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1259,16 +1351,19 @@ def espn_nba_leaders(
 
             espn_nba_leaders()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "category": category,
+        "season": season,
+        "seasontype": season_type,
+        "limit": limit,
+        "page": page,
+        "sort": sort,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://site.web.api.espn.com/apis/common/v3/sports/basketball/nba/statistics/byathlete",
-        params={
-            "category": category,
-            "season": season,
-            "seasontype": season_type,
-            "limit": limit,
-            "page": page,
-            "sort": sort,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1301,9 +1396,12 @@ def espn_nba_league_root(
 
             espn_nba_league_root()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         "https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1336,9 +1434,12 @@ def espn_nba_season_pointer(
 
             espn_nba_season_pointer()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         "https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/season",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1373,11 +1474,14 @@ def espn_nba_seasons(
 
             espn_nba_seasons()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "limit": limit,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons",
-        params={
-            "limit": limit,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1412,9 +1516,12 @@ def espn_nba_season_info(
 
             espn_nba_season_info(season=2024)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/{season}",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1449,9 +1556,12 @@ def espn_nba_season_types(
 
             espn_nba_season_types(season=2024)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/{season}/types",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1488,9 +1598,12 @@ def espn_nba_season_type(
 
             espn_nba_season_type(season=2024, season_type=2)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/{season}/types/{season_type}",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1529,9 +1642,12 @@ def espn_nba_season_group(
 
             espn_nba_season_group(season=2024, season_type=2, group_id=80)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/{season}/types/{season_type}/groups/{group_id}",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1568,9 +1684,12 @@ def espn_nba_season_groups(
 
             espn_nba_season_groups(season=2024, season_type=2)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/{season}/types/{season_type}/groups",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1611,11 +1730,14 @@ def espn_nba_season_group_teams(
 
             espn_nba_season_group_teams(season=2024, season_type=2, group_id=80)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "limit": limit,
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/{season}/types/{season_type}/groups/{group_id}/teams",
-        params={
-            "limit": limit,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1656,11 +1778,14 @@ def espn_nba_season_group_children(
 
             espn_nba_season_group_children(season=2024, season_type=2, group_id=80)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "limit": limit,
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/{season}/types/{season_type}/groups/{group_id}/children",
-        params={
-            "limit": limit,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1697,9 +1822,12 @@ def espn_nba_season_type_leaders(
 
             espn_nba_season_type_leaders(season=2024, season_type=2)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/{season}/types/{season_type}/leaders",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1736,9 +1864,12 @@ def espn_nba_season_type_corrections(
 
             espn_nba_season_type_corrections(season=2024, season_type=2)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/{season}/types/{season_type}/corrections",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1775,9 +1906,12 @@ def espn_nba_season_weeks(
 
             espn_nba_season_weeks(season=2024, season_type=2)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/{season}/types/{season_type}/weeks",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1816,9 +1950,12 @@ def espn_nba_season_week(
 
             espn_nba_season_week(season=2024, season_type=2, week=1)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/{season}/types/{season_type}/weeks/{week}",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1859,11 +1996,14 @@ def espn_nba_season_week_powerindex(
 
             espn_nba_season_week_powerindex(season=2024, season_type=2, week=8)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "limit": limit,
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/{season}/types/{season_type}/weeks/{week}/powerindex",
-        params={
-            "limit": limit,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1904,11 +2044,14 @@ def espn_nba_season_week_games(
 
             espn_nba_season_week_games(season=2024, season_type=2, week=1)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "limit": limit,
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/{season}/types/{season_type}/weeks/{week}/events",
-        params={
-            "limit": limit,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1918,7 +2061,8 @@ def espn_nba_season_week_games(
 
 def espn_nba_season_teams(
     season: Union[int, str],
-    limit: Optional[int] = 500,
+    limit: Optional[int] = 1000,
+    page: Optional[int] = 1,
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
@@ -1934,6 +2078,7 @@ def espn_nba_season_teams(
     Args:
         season: season path parameter.
         limit: limit query parameter.
+        page: page query parameter.
         return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
@@ -1945,11 +2090,15 @@ def espn_nba_season_teams(
 
             espn_nba_season_teams(season=2024)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "limit": limit,
+        "page": page,
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/{season}/teams",
-        params={
-            "limit": limit,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1986,9 +2135,12 @@ def espn_nba_season_team(
 
             espn_nba_season_team(season=2024, team_id='4')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/{season}/teams/{team_id}",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2027,12 +2179,15 @@ def espn_nba_season_players(
 
             espn_nba_season_players(season=2024)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "limit": limit,
+        "page": page,
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/{season}/athletes",
-        params={
-            "limit": limit,
-            "page": page,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2042,7 +2197,7 @@ def espn_nba_season_players(
 
 def espn_nba_season_coaches(
     season: Union[int, str],
-    limit: Optional[int] = 200,
+    limit: Optional[int] = 500,
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
@@ -2069,11 +2224,14 @@ def espn_nba_season_coaches(
 
             espn_nba_season_coaches(season=2024)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "limit": limit,
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/{season}/coaches",
-        params={
-            "limit": limit,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2108,9 +2266,12 @@ def espn_nba_season_draft(
 
             espn_nba_season_draft(season=2024)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/{season}/draft",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2147,9 +2308,12 @@ def espn_nba_season_draft_round_picks(
 
             espn_nba_season_draft_round_picks(season=2024, round_num='1')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/{season}/draft/rounds/{round_num}/picks",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2184,9 +2348,12 @@ def espn_nba_season_futures(
 
             espn_nba_season_futures(season=2024)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/{season}/futures",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2221,9 +2388,12 @@ def espn_nba_season_freeagents(
 
             espn_nba_season_freeagents(season=2024)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/{season}/freeagents",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2260,11 +2430,14 @@ def espn_nba_season_powerindex(
 
             espn_nba_season_powerindex(season=2024)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     __seg = f"/{team_id}" if team_id is not None else ""
     __url = f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/{season}/powerindex" + __seg
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2299,9 +2472,12 @@ def espn_nba_season_powerindex_leaders(
 
             espn_nba_season_powerindex_leaders(season=2024)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/{season}/powerindex/leaders",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2311,6 +2487,7 @@ def espn_nba_season_powerindex_leaders(
 
 def espn_nba_season_awards(
     season: Union[int, str],
+    limit: Optional[int] = 200,
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
@@ -2325,6 +2502,7 @@ def espn_nba_season_awards(
 
     Args:
         season: season path parameter.
+        limit: limit query parameter.
         return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
@@ -2336,9 +2514,14 @@ def espn_nba_season_awards(
 
             espn_nba_season_awards(season=2024)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "limit": limit,
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/{season}/awards",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2377,13 +2560,16 @@ def espn_nba_players_index(
 
             espn_nba_players_index()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "active": bool_str(active),
+        "limit": limit,
+        "page": page,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/athletes",
-        params={
-            "active": bool_str(active),
-            "limit": limit,
-            "page": page,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2418,9 +2604,12 @@ def espn_nba_player_core(
 
             espn_nba_player_core(athlete_id='4239')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/athletes/{athlete_id}",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2457,13 +2646,16 @@ def espn_nba_player_career_stats(
 
             espn_nba_player_career_stats(athlete_id='4239')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     __seg = f"/{stat_type}" if stat_type is not None else ""
     __url = (
         f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/athletes/{athlete_id}/statistics" + __seg
     )
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2498,9 +2690,12 @@ def espn_nba_player_statisticslog(
 
             espn_nba_player_statisticslog(athlete_id='4239')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/athletes/{athlete_id}/statisticslog",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2535,9 +2730,12 @@ def espn_nba_player_eventlog(
 
             espn_nba_player_eventlog(athlete_id='4239')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/athletes/{athlete_id}/eventlog",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2572,9 +2770,12 @@ def espn_nba_player_contracts(
 
             espn_nba_player_contracts(athlete_id='4239')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/athletes/{athlete_id}/contracts",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2609,9 +2810,12 @@ def espn_nba_player_awards(
 
             espn_nba_player_awards(athlete_id='4239')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/athletes/{athlete_id}/awards",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2646,9 +2850,12 @@ def espn_nba_player_seasons(
 
             espn_nba_player_seasons(athlete_id='4239')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/athletes/{athlete_id}/seasons",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2683,9 +2890,12 @@ def espn_nba_player_records(
 
             espn_nba_player_records(athlete_id='4239')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/athletes/{athlete_id}/records",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2720,9 +2930,12 @@ def espn_nba_player_injuries(
 
             espn_nba_player_injuries(athlete_id='4239')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/athletes/{athlete_id}/injuries",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2757,9 +2970,12 @@ def espn_nba_player_notes(
 
             espn_nba_player_notes(athlete_id='4239')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/athletes/{athlete_id}/notes",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2796,9 +3012,12 @@ def espn_nba_player_vs_player(
 
             espn_nba_player_vs_player(athlete_id='4239', opp_id='5')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/athletes/{athlete_id}/vsathlete/{opp_id}",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2835,12 +3054,15 @@ def espn_nba_games(
 
             espn_nba_games()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "dates": dates,
+        "limit": limit,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events",
-        params={
-            "dates": dates,
-            "limit": limit,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2875,9 +3097,12 @@ def espn_nba_game(
 
             espn_nba_game(event_id='401584793')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/{event_id}",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2914,11 +3139,14 @@ def espn_nba_game_competition(
 
             espn_nba_game_competition(event_id='401584793')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/{event_id}/competitions/{cid}"
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2955,11 +3183,14 @@ def espn_nba_game_teams(
 
             espn_nba_game_teams(event_id='401584793')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/{event_id}/competitions/{cid}/competitors"
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2998,11 +3229,14 @@ def espn_nba_game_team(
 
             espn_nba_game_team(event_id='401584793', team_id='4')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/{event_id}/competitions/{cid}/competitors/{team_id}"
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3041,11 +3275,14 @@ def espn_nba_game_team_roster(
 
             espn_nba_game_team_roster(event_id='401584793', team_id='4')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/{event_id}/competitions/{cid}/competitors/{team_id}/roster"
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3084,11 +3321,14 @@ def espn_nba_game_team_linescores(
 
             espn_nba_game_team_linescores(event_id='401584793', team_id='4')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/{event_id}/competitions/{cid}/competitors/{team_id}/linescores"
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3127,11 +3367,14 @@ def espn_nba_game_team_statistics(
 
             espn_nba_game_team_statistics(event_id='401584793', team_id='4')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/{event_id}/competitions/{cid}/competitors/{team_id}/statistics"
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3170,11 +3413,14 @@ def espn_nba_game_team_record(
 
             espn_nba_game_team_record(event_id='401584793', team_id='4')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/{event_id}/competitions/{cid}/competitors/{team_id}/record"
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3213,11 +3459,14 @@ def espn_nba_game_team_leaders(
 
             espn_nba_game_team_leaders(event_id='401584793', team_id='4')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/{event_id}/competitions/{cid}/competitors/{team_id}/leaders"
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3254,13 +3503,16 @@ def espn_nba_game_odds(
 
             espn_nba_game_odds(event_id='401584793')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     cid = cid if cid is not None else event_id
     __url = (
         f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/{event_id}/competitions/{cid}/odds"
     )
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3299,13 +3551,16 @@ def espn_nba_game_probabilities(
 
             espn_nba_game_probabilities(event_id='401584793')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "limit": limit,
+    }
+    _params.update(_caller_params)
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/{event_id}/competitions/{cid}/probabilities"
     raw = _get(
         __url,
-        params={
-            "limit": limit,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3344,15 +3599,18 @@ def espn_nba_game_plays(
 
             espn_nba_game_plays(event_id='401584793')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "limit": limit,
+    }
+    _params.update(_caller_params)
     cid = cid if cid is not None else event_id
     __url = (
         f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/{event_id}/competitions/{cid}/plays"
     )
     raw = _get(
         __url,
-        params={
-            "limit": limit,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3391,11 +3649,14 @@ def espn_nba_game_play(
 
             espn_nba_game_play(event_id='401584793', play_id='1')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/{event_id}/competitions/{cid}/plays/{play_id}"
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3434,11 +3695,14 @@ def espn_nba_game_play_personnel(
 
             espn_nba_game_play_personnel(event_id='401584793', play_id='1')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/{event_id}/competitions/{cid}/plays/{play_id}/personnel"
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3475,11 +3739,14 @@ def espn_nba_game_situation(
 
             espn_nba_game_situation(event_id='401584793')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/{event_id}/competitions/{cid}/situation"
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3516,13 +3783,16 @@ def espn_nba_game_status(
 
             espn_nba_game_status(event_id='401584793')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     cid = cid if cid is not None else event_id
     __url = (
         f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/{event_id}/competitions/{cid}/status"
     )
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3559,11 +3829,14 @@ def espn_nba_game_officials(
 
             espn_nba_game_officials(event_id='401584793')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/{event_id}/competitions/{cid}/officials"
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3600,11 +3873,14 @@ def espn_nba_game_broadcasts(
 
             espn_nba_game_broadcasts(event_id='401584793')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/{event_id}/competitions/{cid}/broadcasts"
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3641,11 +3917,14 @@ def espn_nba_game_predictor(
 
             espn_nba_game_predictor(event_id='401584793')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/{event_id}/competitions/{cid}/predictor"
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3682,11 +3961,14 @@ def espn_nba_game_powerindex(
 
             espn_nba_game_powerindex(event_id='401584793')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/{event_id}/competitions/{cid}/powerindex"
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3723,11 +4005,14 @@ def espn_nba_game_propbets(
 
             espn_nba_game_propbets(event_id='401584793')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/{event_id}/competitions/{cid}/propbets"
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3764,11 +4049,14 @@ def espn_nba_game_leaders(
 
             espn_nba_game_leaders(event_id='401584793')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/{event_id}/competitions/{cid}/leaders"
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3805,11 +4093,14 @@ def espn_nba_game_scoringplays(
 
             espn_nba_game_scoringplays(event_id='401584793')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/{event_id}/competitions/{cid}/scoringplays"
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3848,11 +4139,14 @@ def espn_nba_game_official_detail(
 
             espn_nba_game_official_detail(event_id='401584793', official_id='1')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/{event_id}/competitions/{cid}/officials/{official_id}"
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3861,7 +4155,8 @@ def espn_nba_game_official_detail(
 
 
 def espn_nba_teams_core(
-    limit: Optional[int] = 500,
+    limit: Optional[int] = 1000,
+    page: Optional[int] = 1,
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
@@ -3876,6 +4171,7 @@ def espn_nba_teams_core(
 
     Args:
         limit: limit query parameter.
+        page: page query parameter.
         return_parsed: parse the payload through parse_teams -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
@@ -3887,11 +4183,15 @@ def espn_nba_teams_core(
 
             espn_nba_teams_core()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "limit": limit,
+        "page": page,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/teams",
-        params={
-            "limit": limit,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3926,9 +4226,12 @@ def espn_nba_team_core(
 
             espn_nba_team_core(team_id='4')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/teams/{team_id}",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3937,7 +4240,7 @@ def espn_nba_team_core(
 
 
 def espn_nba_venues(
-    limit: Optional[int] = 200,
+    limit: Optional[int] = 1000,
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
@@ -3963,11 +4266,14 @@ def espn_nba_venues(
 
             espn_nba_venues()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "limit": limit,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/venues",
-        params={
-            "limit": limit,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -4002,9 +4308,12 @@ def espn_nba_venue(
 
             espn_nba_venue(venue_id='3663')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/venues/{venue_id}",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -4039,11 +4348,14 @@ def espn_nba_franchises(
 
             espn_nba_franchises()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "limit": limit,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/franchises",
-        params={
-            "limit": limit,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -4078,9 +4390,12 @@ def espn_nba_franchise(
 
             espn_nba_franchise(franchise_id='2')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/franchises/{franchise_id}",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -4115,9 +4430,12 @@ def espn_nba_coach(
 
             espn_nba_coach(coach_id='1')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/coaches/{coach_id}",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -4154,9 +4472,12 @@ def espn_nba_coach_record(
 
             espn_nba_coach_record(coach_id='1')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/coaches/{coach_id}/record/{record_type}",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -4193,9 +4514,12 @@ def espn_nba_coach_season(
 
             espn_nba_coach_season(coach_id='1', season=2024)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/coaches/{coach_id}/seasons/{season}",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -4204,6 +4528,7 @@ def espn_nba_coach_season(
 
 
 def espn_nba_positions(
+    limit: Optional[int] = 200,
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
@@ -4217,6 +4542,7 @@ def espn_nba_positions(
     Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/positions
 
     Args:
+        limit: limit query parameter.
         return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
@@ -4228,9 +4554,14 @@ def espn_nba_positions(
 
             espn_nba_positions()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "limit": limit,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/positions",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -4265,9 +4596,12 @@ def espn_nba_position(
 
             espn_nba_position(position_id='1')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/positions/{position_id}",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -4276,6 +4610,7 @@ def espn_nba_position(
 
 
 def espn_nba_tournaments(
+    limit: Optional[int] = 200,
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
@@ -4289,6 +4624,7 @@ def espn_nba_tournaments(
     Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/tournaments
 
     Args:
+        limit: limit query parameter.
         return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
@@ -4300,9 +4636,14 @@ def espn_nba_tournaments(
 
             espn_nba_tournaments()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "limit": limit,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/tournaments",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -4311,6 +4652,7 @@ def espn_nba_tournaments(
 
 
 def espn_nba_awards(
+    limit: Optional[int] = 200,
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
@@ -4324,6 +4666,7 @@ def espn_nba_awards(
     Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/awards
 
     Args:
+        limit: limit query parameter.
         return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
@@ -4335,9 +4678,14 @@ def espn_nba_awards(
 
             espn_nba_awards()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "limit": limit,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/awards",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -4372,9 +4720,12 @@ def espn_nba_award(
 
             espn_nba_award(award_id='1')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/awards/{award_id}",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -4407,9 +4758,12 @@ def espn_nba_standings_core(
 
             espn_nba_standings_core()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         "https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/standings",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -4442,9 +4796,12 @@ def espn_nba_leaders_core(
 
             espn_nba_leaders_core()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         "https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/leaders",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -4477,9 +4834,12 @@ def espn_nba_league_notes(
 
             espn_nba_league_notes()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         "https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/notes",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -4512,9 +4872,12 @@ def espn_nba_talentpicks(
 
             espn_nba_talentpicks()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         "https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/talentpicks",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -4553,13 +4916,16 @@ def espn_nba_fpi(
 
             espn_nba_fpi(season=2024)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "season": season,
+        "limit": limit,
+        "page": page,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://site.web.api.espn.com/apis/fitt/v3/sports/basketball/nba/powerindex",
-        params={
-            "season": season,
-            "limit": limit,
-            "page": page,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:

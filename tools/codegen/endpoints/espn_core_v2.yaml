@@ -259,10 +259,15 @@ endpoints:
     type: int|str
     required: true
   extra_params:
+  # 1000 = ESPN Core v2's ceiling; WBB 2024 has 1262 teams, so `page` finishes the set.
   - name: limit
     query_key: limit
     type: int
-    default: 500
+    default: 1000
+  - name: page
+    query_key: page
+    type: int
+    default: 1
   parser: parse_items
   example_args:
     season: 2024
@@ -307,10 +312,11 @@ endpoints:
     type: int|str
     required: true
   extra_params:
+  # measured max 376 (WBB 2024); 200 truncated CFB (265) and MBB (372).
   - name: limit
     query_key: limit
     type: int
-    default: 200
+    default: 500
   parser: parse_coaches
   example_args:
     season: 2024
@@ -389,6 +395,11 @@ endpoints:
   - name: season
     type: int|str
     required: true
+  extra_params:
+  - name: limit
+    query_key: limit
+    type: int
+    default: 200
   parser: parse_items
   example_args:
     season: 2024
@@ -923,10 +934,16 @@ endpoints:
   scope: universal
   path: /{sport}/leagues/{league}/teams
   extra_params:
+  # 1000 is ESPN Core v2's hard ceiling (limit=1001 silently degrades to pageSize=25),
+  # and WBB has 1396 teams / MBB 1107 -- so `page` is required to finish the set.
   - name: limit
     query_key: limit
     type: int
-    default: 500
+    default: 1000
+  - name: page
+    query_key: page
+    type: int
+    default: 1
   parser: parse_teams
   returns_schema: teams
 - short: team_core
@@ -943,10 +960,12 @@ endpoints:
   scope: universal
   path: /{sport}/leagues/{league}/venues
   extra_params:
+  # 1000 is ESPN Core v2's hard ceiling -- limit=1001 silently falls back to
+  # pageSize=25. Measured max venue count is 990 (MBB), so 1000 covers every league.
   - name: limit
     query_key: limit
     type: int
-    default: 200
+    default: 1000
   parser: parse_items
 - short: venue
   scope: universal
@@ -1022,6 +1041,11 @@ endpoints:
 - short: positions
   scope: universal
   path: /{sport}/leagues/{league}/positions
+  extra_params:
+  - name: limit
+    query_key: limit
+    type: int
+    default: 200
   parser: parse_items
 - short: position
   scope: universal
@@ -1036,10 +1060,20 @@ endpoints:
 - short: tournaments
   scope: universal
   path: /{sport}/leagues/{league}/tournaments
+  extra_params:
+  - name: limit
+    query_key: limit
+    type: int
+    default: 200
   parser: parse_items
 - short: awards
   scope: universal
   path: /{sport}/leagues/{league}/awards
+  extra_params:
+  - name: limit
+    query_key: limit
+    type: int
+    default: 200
   parser: parse_items
 - short: award
   scope: universal
@@ -1076,10 +1110,16 @@ endpoints:
     type: int|str
     required: true
   extra_params:
+  # ~4,095 recruits for CFB 2024, so this is a genuine paging surface: `limit`
+  # tops out at ESPN's 1000 ceiling and the caller must walk `page`.
   - name: limit
     query_key: limit
     type: int
-    default: 100
+    default: 1000
+  - name: page
+    query_key: page
+    type: int
+    default: 1
   parser: parse_items
   example_args:
     season: 2024
@@ -1095,10 +1135,16 @@ endpoints:
     type: int|str
     required: true
   extra_params:
+  # 3,815 athletes for CFB 2024 / 5,193 for 2026 -- a paging surface, same as
+  # season_recruits. Unlike season_recruits these items ship pre-hydrated.
   - name: limit
     query_key: limit
     type: int
-    default: 100
+    default: 1000
+  - name: page
+    query_key: page
+    type: int
+    default: 1
   parser: parse_items
   example_args:
     year: 2026

@@ -56,9 +56,12 @@ def bart_wbb_ratings(
         .. _wehoop: https://wehoop.sportsdataverse.org
         .. _Bart Torvik: https://barttorvik.com/ncaaw
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://barttorvik.com/ncaaw/{year}_team_results.csv",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:

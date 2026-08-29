@@ -61,6 +61,14 @@ endpoints:
 - short: transactions
   scope: universal
   path: /{sport}/{league}/transactions
+  extra_params:
+  # Rolling feed with no `count` field: the default returned 25 for every league
+  # that publishes one. There is no natural total to cover, so 500 is a deliberate
+  # ceiling, not a proof of completeness -- pass a larger `limit` if you need more.
+  - name: limit
+    query_key: limit
+    type: int
+    default: 500
   parser: parse_items
 - short: conferences
   scope: universal
@@ -101,6 +109,14 @@ endpoints:
   - name: team_id
     type: int|str
     required: true
+  extra_params:
+  # ESPN pages this at 100 with no signal that it did. CFB rosters routinely
+  # exceed that (Alabama 120, Auburn 113, LSU 108 -- measured 2026-08-29), so
+  # every CFB roster scraped through this wrapper was silently truncated.
+  - name: limit
+    query_key: limit
+    type: int
+    default: 500
   parser: parse_team_roster
   returns_schema: team_roster
   example_args:

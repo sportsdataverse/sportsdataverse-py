@@ -176,14 +176,17 @@ def nba_stats_alltimeleadersgrids(
 
             nba_stats_alltimeleadersgrids(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "LeagueID": league_id,
+        "PerMode": per_mode_simple,
+        "SeasonType": season_type,
+        "TopX": topx,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/alltimeleadersgrids",
-        params={
-            "LeagueID": league_id,
-            "PerMode": per_mode_simple,
-            "SeasonType": season_type,
-            "TopX": topx,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -224,15 +227,18 @@ def nba_stats_assistleaders(
 
             nba_stats_assistleaders(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "LeagueID": league_id,
+        "PerMode": per_mode_simple,
+        "PlayerOrTeam": player_or_team,
+        "Season": season,
+        "SeasonType": season_type_playoffs,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/assistleaders",
-        params={
-            "LeagueID": league_id,
-            "PerMode": per_mode_simple,
-            "PlayerOrTeam": player_or_team,
-            "Season": season,
-            "SeasonType": season_type_playoffs,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -319,38 +325,41 @@ def nba_stats_assisttracker(
 
             nba_stats_assisttracker(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "College": college_nullable,
+        "Conference": conference_nullable,
+        "Country": country_nullable,
+        "DateFrom": date_from_nullable,
+        "DateTo": date_to_nullable,
+        "Division": division_simple_nullable,
+        "DraftPick": draft_pick_nullable,
+        "DraftYear": draft_year_nullable,
+        "GameScope": game_scope_simple_nullable,
+        "Height": height_nullable,
+        "LastNGames": last_n_games_nullable,
+        "LeagueID": league_id,
+        "Location": location_nullable,
+        "Month": month_nullable,
+        "OpponentTeamID": opponent_team_id_nullable,
+        "Outcome": outcome_nullable,
+        "PORound": po_round_nullable,
+        "PerMode": per_mode_simple_nullable,
+        "PlayerExperience": player_experience_nullable,
+        "PlayerPosition": player_position_abbreviation_nullable,
+        "Season": season_nullable,
+        "SeasonSegment": season_segment_nullable,
+        "SeasonType": season_type_all_star_nullable,
+        "StarterBench": starter_bench_nullable,
+        "TeamID": team_id_nullable,
+        "VsConference": vs_conference_nullable,
+        "VsDivision": vs_division_nullable,
+        "Weight": weight_nullable,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/assisttracker",
-        params={
-            "College": college_nullable,
-            "Conference": conference_nullable,
-            "Country": country_nullable,
-            "DateFrom": date_from_nullable,
-            "DateTo": date_to_nullable,
-            "Division": division_simple_nullable,
-            "DraftPick": draft_pick_nullable,
-            "DraftYear": draft_year_nullable,
-            "GameScope": game_scope_simple_nullable,
-            "Height": height_nullable,
-            "LastNGames": last_n_games_nullable,
-            "LeagueID": league_id,
-            "Location": location_nullable,
-            "Month": month_nullable,
-            "OpponentTeamID": opponent_team_id_nullable,
-            "Outcome": outcome_nullable,
-            "PORound": po_round_nullable,
-            "PerMode": per_mode_simple_nullable,
-            "PlayerExperience": player_experience_nullable,
-            "PlayerPosition": player_position_abbreviation_nullable,
-            "Season": season_nullable,
-            "SeasonSegment": season_segment_nullable,
-            "SeasonType": season_type_all_star_nullable,
-            "StarterBench": starter_bench_nullable,
-            "TeamID": team_id_nullable,
-            "VsConference": vs_conference_nullable,
-            "VsDivision": vs_division_nullable,
-            "Weight": weight_nullable,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -393,16 +402,19 @@ def nba_stats_boxscoreadvancedv3(
 
             nba_stats_boxscoreadvancedv3()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "EndPeriod": end_period,
+        "EndRange": end_range,
+        "GameID": game_id,
+        "RangeType": range_type,
+        "StartPeriod": start_period,
+        "StartRange": start_range,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/boxscoreadvancedv3",
-        params={
-            "EndPeriod": end_period,
-            "EndRange": end_range,
-            "GameID": game_id,
-            "RangeType": range_type,
-            "StartPeriod": start_period,
-            "StartRange": start_range,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -435,11 +447,14 @@ def nba_stats_boxscoredefensivev2(
 
             nba_stats_boxscoredefensivev2()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "GameID": game_id,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/boxscoredefensivev2",
-        params={
-            "GameID": game_id,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -482,16 +497,19 @@ def nba_stats_boxscorefourfactorsv3(
 
             nba_stats_boxscorefourfactorsv3()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "EndPeriod": end_period,
+        "EndRange": end_range,
+        "GameID": game_id,
+        "RangeType": range_type,
+        "StartPeriod": start_period,
+        "StartRange": start_range,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/boxscorefourfactorsv3",
-        params={
-            "EndPeriod": end_period,
-            "EndRange": end_range,
-            "GameID": game_id,
-            "RangeType": range_type,
-            "StartPeriod": start_period,
-            "StartRange": start_range,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -524,11 +542,14 @@ def nba_stats_boxscorehustlev2(
 
             nba_stats_boxscorehustlev2()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "GameID": gameid,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/boxscorehustlev2",
-        params={
-            "GameID": gameid,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -561,11 +582,14 @@ def nba_stats_boxscorematchupsv3(
 
             nba_stats_boxscorematchupsv3()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "GameID": game_id,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/boxscorematchupsv3",
-        params={
-            "GameID": game_id,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -608,16 +632,19 @@ def nba_stats_boxscoremiscv3(
 
             nba_stats_boxscoremiscv3()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "EndPeriod": end_period,
+        "EndRange": end_range,
+        "GameID": game_id,
+        "RangeType": range_type,
+        "StartPeriod": start_period,
+        "StartRange": start_range,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/boxscoremiscv3",
-        params={
-            "EndPeriod": end_period,
-            "EndRange": end_range,
-            "GameID": game_id,
-            "RangeType": range_type,
-            "StartPeriod": start_period,
-            "StartRange": start_range,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -650,11 +677,14 @@ def nba_stats_boxscoreplayertrackv3(
 
             nba_stats_boxscoreplayertrackv3()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "GameID": game_id,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/boxscoreplayertrackv3",
-        params={
-            "GameID": game_id,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -697,16 +727,19 @@ def nba_stats_boxscorescoringv3(
 
             nba_stats_boxscorescoringv3()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "EndPeriod": end_period,
+        "EndRange": end_range,
+        "GameID": game_id,
+        "RangeType": range_type,
+        "StartPeriod": start_period,
+        "StartRange": start_range,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/boxscorescoringv3",
-        params={
-            "EndPeriod": end_period,
-            "EndRange": end_range,
-            "GameID": game_id,
-            "RangeType": range_type,
-            "StartPeriod": start_period,
-            "StartRange": start_range,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -739,11 +772,14 @@ def nba_stats_boxscoresummaryv2(
 
             nba_stats_boxscoresummaryv2()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "GameID": game_id,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/boxscoresummaryv2",
-        params={
-            "GameID": game_id,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -776,11 +812,14 @@ def nba_stats_boxscoresummaryv3(
 
             nba_stats_boxscoresummaryv3()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "GameID": gameid,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/boxscoresummaryv3",
-        params={
-            "GameID": gameid,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -823,16 +862,19 @@ def nba_stats_boxscoretraditionalv2(
 
             nba_stats_boxscoretraditionalv2()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "EndPeriod": end_period,
+        "EndRange": end_range,
+        "GameID": game_id,
+        "RangeType": range_type,
+        "StartPeriod": start_period,
+        "StartRange": start_range,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/boxscoretraditionalv2",
-        params={
-            "EndPeriod": end_period,
-            "EndRange": end_range,
-            "GameID": game_id,
-            "RangeType": range_type,
-            "StartPeriod": start_period,
-            "StartRange": start_range,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -875,16 +917,19 @@ def nba_stats_boxscoretraditionalv3(
 
             nba_stats_boxscoretraditionalv3()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "EndPeriod": end_period,
+        "EndRange": end_range,
+        "GameID": game_id,
+        "RangeType": range_type,
+        "StartPeriod": start_period,
+        "StartRange": start_range,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/boxscoretraditionalv3",
-        params={
-            "EndPeriod": end_period,
-            "EndRange": end_range,
-            "GameID": game_id,
-            "RangeType": range_type,
-            "StartPeriod": start_period,
-            "StartRange": start_range,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -927,16 +972,19 @@ def nba_stats_boxscoreusagev3(
 
             nba_stats_boxscoreusagev3()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "EndPeriod": end_period,
+        "EndRange": end_range,
+        "GameID": game_id,
+        "RangeType": range_type,
+        "StartPeriod": start_period,
+        "StartRange": start_range,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/boxscoreusagev3",
-        params={
-            "EndPeriod": end_period,
-            "EndRange": end_range,
-            "GameID": game_id,
-            "RangeType": range_type,
-            "StartPeriod": start_period,
-            "StartRange": start_range,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -973,13 +1021,16 @@ def nba_stats_commonallplayers(
 
             nba_stats_commonallplayers(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "IsOnlyCurrentSeason": is_only_current_season,
+        "LeagueID": league_id,
+        "Season": season,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/commonallplayers",
-        params={
-            "IsOnlyCurrentSeason": is_only_current_season,
-            "LeagueID": league_id,
-            "Season": season,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1014,12 +1065,15 @@ def nba_stats_commonplayerinfo(
 
             nba_stats_commonplayerinfo(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "LeagueID": league_id,
+        "PlayerID": player_id,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/commonplayerinfo",
-        params={
-            "LeagueID": league_id,
-            "PlayerID": player_id,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1056,13 +1110,16 @@ def nba_stats_commonplayoffseries(
 
             nba_stats_commonplayoffseries(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "LeagueID": league_id,
+        "Season": season,
+        "SeriesID": series_id_nullable,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/commonplayoffseries",
-        params={
-            "LeagueID": league_id,
-            "Season": season,
-            "SeriesID": series_id_nullable,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1099,13 +1156,16 @@ def nba_stats_commonteamroster(
 
             nba_stats_commonteamroster(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "LeagueID": league_id,
+        "Season": season,
+        "TeamID": team_id,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/commonteamroster",
-        params={
-            "LeagueID": league_id,
-            "Season": season,
-            "TeamID": team_id,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1138,11 +1198,14 @@ def nba_stats_commonteamyears(
 
             nba_stats_commonteamyears(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "LeagueID": league_id,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/commonteamyears",
-        params={
-            "LeagueID": league_id,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1183,15 +1246,18 @@ def nba_stats_cumestatsplayer(
 
             nba_stats_cumestatsplayer(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "GameIDs": game_ids,
+        "LeagueID": league_id,
+        "PlayerID": player_id,
+        "Season": season,
+        "SeasonType": season_type_all_star,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/cumestatsplayer",
-        params={
-            "GameIDs": game_ids,
-            "LeagueID": league_id,
-            "PlayerID": player_id,
-            "Season": season,
-            "SeasonType": season_type_all_star,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1240,19 +1306,22 @@ def nba_stats_cumestatsplayergames(
 
             nba_stats_cumestatsplayergames(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "LeagueID": league_id,
+        "Location": location_nullable,
+        "Outcome": outcome_nullable,
+        "PlayerID": player_id,
+        "Season": season,
+        "SeasonType": season_type_all_star,
+        "VsConference": vs_conference_nullable,
+        "VsDivision": vs_division_nullable,
+        "VsTeamID": vs_team_id_nullable,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/cumestatsplayergames",
-        params={
-            "LeagueID": league_id,
-            "Location": location_nullable,
-            "Outcome": outcome_nullable,
-            "PlayerID": player_id,
-            "Season": season,
-            "SeasonType": season_type_all_star,
-            "VsConference": vs_conference_nullable,
-            "VsDivision": vs_division_nullable,
-            "VsTeamID": vs_team_id_nullable,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1293,15 +1362,18 @@ def nba_stats_cumestatsteam(
 
             nba_stats_cumestatsteam(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "GameIDs": game_ids,
+        "LeagueID": league_id,
+        "Season": season,
+        "SeasonType": season_type_all_star,
+        "TeamID": team_id,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/cumestatsteam",
-        params={
-            "GameIDs": game_ids,
-            "LeagueID": league_id,
-            "Season": season,
-            "SeasonType": season_type_all_star,
-            "TeamID": team_id,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1352,20 +1424,23 @@ def nba_stats_cumestatsteamgames(
 
             nba_stats_cumestatsteamgames(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "LeagueID": league_id,
+        "Location": location_nullable,
+        "Outcome": outcome_nullable,
+        "Season": season,
+        "SeasonID": season_id_nullable,
+        "SeasonType": season_type_all_star,
+        "TeamID": team_id,
+        "VsConference": vs_conference_nullable,
+        "VsDivision": vs_division_nullable,
+        "VsTeamID": vs_team_id_nullable,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/cumestatsteamgames",
-        params={
-            "LeagueID": league_id,
-            "Location": location_nullable,
-            "Outcome": outcome_nullable,
-            "Season": season,
-            "SeasonID": season_id_nullable,
-            "SeasonType": season_type_all_star,
-            "TeamID": team_id,
-            "VsConference": vs_conference_nullable,
-            "VsDivision": vs_division_nullable,
-            "VsTeamID": vs_team_id_nullable,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1400,12 +1475,15 @@ def nba_stats_draftcombinedrillresults(
 
             nba_stats_draftcombinedrillresults(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "LeagueID": league_id,
+        "SeasonYear": season_year,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/draftcombinedrillresults",
-        params={
-            "LeagueID": league_id,
-            "SeasonYear": season_year,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1440,12 +1518,15 @@ def nba_stats_draftcombinenonstationaryshooting(
 
             nba_stats_draftcombinenonstationaryshooting(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "LeagueID": league_id,
+        "SeasonYear": season_year,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/draftcombinenonstationaryshooting",
-        params={
-            "LeagueID": league_id,
-            "SeasonYear": season_year,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1480,12 +1561,15 @@ def nba_stats_draftcombineplayeranthro(
 
             nba_stats_draftcombineplayeranthro(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "LeagueID": league_id,
+        "SeasonYear": season_year,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/draftcombineplayeranthro",
-        params={
-            "LeagueID": league_id,
-            "SeasonYear": season_year,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1520,12 +1604,15 @@ def nba_stats_draftcombinespotshooting(
 
             nba_stats_draftcombinespotshooting(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "LeagueID": league_id,
+        "SeasonYear": season_year,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/draftcombinespotshooting",
-        params={
-            "LeagueID": league_id,
-            "SeasonYear": season_year,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1560,12 +1647,15 @@ def nba_stats_draftcombinestats(
 
             nba_stats_draftcombinestats(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "LeagueID": league_id,
+        "SeasonYear": season_all_time,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/draftcombinestats",
-        params={
-            "LeagueID": league_id,
-            "SeasonYear": season_all_time,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1627,18 +1717,21 @@ def nba_stats_drafthistory(
         .. _hoopR: https://hoopR.sportsdataverse.org
         .. _nba_api: https://github.com/swar/nba_api
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "College": college_nullable,
+        "LeagueID": league_id,
+        "OverallPick": overall_pick_nullable,
+        "RoundNum": round_num_nullable,
+        "RoundPick": round_pick_nullable,
+        "Season": season_year_nullable,
+        "TeamID": team_id_nullable,
+        "TopX": topx_nullable,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/drafthistory",
-        params={
-            "College": college_nullable,
-            "LeagueID": league_id,
-            "OverallPick": overall_pick_nullable,
-            "RoundNum": round_num_nullable,
-            "RoundPick": round_pick_nullable,
-            "Season": season_year_nullable,
-            "TeamID": team_id_nullable,
-            "TopX": topx_nullable,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1707,29 +1800,32 @@ def nba_stats_fantasywidget(
 
             nba_stats_fantasywidget(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "ActivePlayers": active_players,
+        "DateFrom": date_from_nullable,
+        "DateTo": date_to_nullable,
+        "LastNGames": last_n_games,
+        "LeagueID": league_id,
+        "Location": location_nullable,
+        "Month": month_nullable,
+        "OpponentTeamID": opponent_team_id_nullable,
+        "PORound": po_round_nullable,
+        "PlayerID": player_id_nullable,
+        "Position": position_nullable,
+        "Season": season,
+        "SeasonSegment": season_segment_nullable,
+        "SeasonType": season_type_all_star,
+        "TeamID": team_id_nullable,
+        "TodaysOpponent": todays_opponent,
+        "TodaysPlayers": todays_players,
+        "VsConference": vs_conference_nullable,
+        "VsDivision": vs_division_nullable,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/fantasywidget",
-        params={
-            "ActivePlayers": active_players,
-            "DateFrom": date_from_nullable,
-            "DateTo": date_to_nullable,
-            "LastNGames": last_n_games,
-            "LeagueID": league_id,
-            "Location": location_nullable,
-            "Month": month_nullable,
-            "OpponentTeamID": opponent_team_id_nullable,
-            "PORound": po_round_nullable,
-            "PlayerID": player_id_nullable,
-            "Position": position_nullable,
-            "Season": season,
-            "SeasonSegment": season_segment_nullable,
-            "SeasonType": season_type_all_star,
-            "TeamID": team_id_nullable,
-            "TodaysOpponent": todays_opponent,
-            "TodaysPlayers": todays_players,
-            "VsConference": vs_conference_nullable,
-            "VsDivision": vs_division_nullable,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1762,11 +1858,14 @@ def nba_stats_franchisehistory(
 
             nba_stats_franchisehistory(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "LeagueID": league_id,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/franchisehistory",
-        params={
-            "LeagueID": league_id,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1801,12 +1900,15 @@ def nba_stats_franchiseleaders(
 
             nba_stats_franchiseleaders(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "LeagueID": league_id,
+        "TeamID": team_id,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/franchiseleaders",
-        params={
-            "LeagueID": league_id,
-            "TeamID": team_id,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1845,14 +1947,17 @@ def nba_stats_franchiseleaderswrank(
 
             nba_stats_franchiseleaderswrank(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "LeagueID": league_id,
+        "PerMode": per_mode,
+        "SeasonType": season_type,
+        "TeamID": team_id,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/franchiseleaderswrank",
-        params={
-            "LeagueID": league_id,
-            "PerMode": per_mode,
-            "SeasonType": season_type,
-            "TeamID": team_id,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1891,14 +1996,17 @@ def nba_stats_franchiseplayers(
 
             nba_stats_franchiseplayers(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "LeagueID": league_id,
+        "PerMode": per_mode_detailed,
+        "SeasonType": season_type_all_star,
+        "TeamID": team_id,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/franchiseplayers",
-        params={
-            "LeagueID": league_id,
-            "PerMode": per_mode_detailed,
-            "SeasonType": season_type_all_star,
-            "TeamID": team_id,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1933,12 +2041,15 @@ def nba_stats_gamerotation(
 
             nba_stats_gamerotation(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "GameID": game_id,
+        "LeagueID": league_id,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/gamerotation",
-        params={
-            "GameID": game_id,
-            "LeagueID": league_id,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1983,17 +2094,20 @@ def nba_stats_homepageleaders(
 
             nba_stats_homepageleaders(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "GameScope": game_scope_detailed,
+        "LeagueID": league_id,
+        "PlayerOrTeam": player_or_team,
+        "PlayerScope": player_scope,
+        "Season": season,
+        "SeasonType": season_type_playoffs,
+        "StatCategory": stat_category,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/homepageleaders",
-        params={
-            "GameScope": game_scope_detailed,
-            "LeagueID": league_id,
-            "PlayerOrTeam": player_or_team,
-            "PlayerScope": player_scope,
-            "Season": season,
-            "SeasonType": season_type_playoffs,
-            "StatCategory": stat_category,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2038,17 +2152,20 @@ def nba_stats_homepagev2(
 
             nba_stats_homepagev2(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "GameScope": game_scope_detailed,
+        "LeagueID": league_id,
+        "PlayerOrTeam": player_or_team,
+        "PlayerScope": player_scope,
+        "Season": season,
+        "SeasonType": season_type_playoffs,
+        "StatType": stat_type,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/homepagev2",
-        params={
-            "GameScope": game_scope_detailed,
-            "LeagueID": league_id,
-            "PlayerOrTeam": player_or_team,
-            "PlayerScope": player_scope,
-            "Season": season,
-            "SeasonType": season_type_playoffs,
-            "StatType": stat_type,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2081,11 +2198,14 @@ def nba_stats_hustlestatsboxscore(
 
             nba_stats_hustlestatsboxscore()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "GameID": game_id,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/hustlestatsboxscore",
-        params={
-            "GameID": game_id,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2118,11 +2238,14 @@ def nba_stats_infographicfanduelplayer(
 
             nba_stats_infographicfanduelplayer()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "GameID": game_id,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/infographicfanduelplayer",
-        params={
-            "GameID": game_id,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2167,17 +2290,20 @@ def nba_stats_leaderstiles(
 
             nba_stats_leaderstiles(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "GameScope": game_scope_detailed,
+        "LeagueID": league_id,
+        "PlayerOrTeam": player_or_team,
+        "PlayerScope": player_scope,
+        "Season": season,
+        "SeasonType": season_type_playoffs,
+        "Stat": stat,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/leaderstiles",
-        params={
-            "GameScope": game_scope_detailed,
-            "LeagueID": league_id,
-            "PlayerOrTeam": player_or_team,
-            "PlayerScope": player_scope,
-            "Season": season,
-            "SeasonType": season_type_playoffs,
-            "Stat": stat,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2260,36 +2386,39 @@ def nba_stats_leaguedashlineups(
 
             nba_stats_leaguedashlineups(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "Conference": conference_nullable,
+        "DateFrom": date_from_nullable,
+        "DateTo": date_to_nullable,
+        "Division": division_simple_nullable,
+        "GameSegment": game_segment_nullable,
+        "GroupQuantity": group_quantity,
+        "LastNGames": last_n_games,
+        "LeagueID": league_id,
+        "Location": location_nullable,
+        "MeasureType": measure_type_detailed_defense,
+        "Month": month,
+        "OpponentTeamID": opponent_team_id,
+        "Outcome": outcome_nullable,
+        "PORound": po_round_nullable,
+        "PaceAdjust": pace_adjust,
+        "PerMode": per_mode_detailed,
+        "Period": period,
+        "PlusMinus": plus_minus,
+        "Rank": rank,
+        "Season": season,
+        "SeasonSegment": season_segment_nullable,
+        "SeasonType": season_type_all_star,
+        "ShotClockRange": shot_clock_range_nullable,
+        "TeamID": team_id_nullable,
+        "VsConference": vs_conference_nullable,
+        "VsDivision": vs_division_nullable,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/leaguedashlineups",
-        params={
-            "Conference": conference_nullable,
-            "DateFrom": date_from_nullable,
-            "DateTo": date_to_nullable,
-            "Division": division_simple_nullable,
-            "GameSegment": game_segment_nullable,
-            "GroupQuantity": group_quantity,
-            "LastNGames": last_n_games,
-            "LeagueID": league_id,
-            "Location": location_nullable,
-            "MeasureType": measure_type_detailed_defense,
-            "Month": month,
-            "OpponentTeamID": opponent_team_id,
-            "Outcome": outcome_nullable,
-            "PORound": po_round_nullable,
-            "PaceAdjust": pace_adjust,
-            "PerMode": per_mode_detailed,
-            "Period": period,
-            "PlusMinus": plus_minus,
-            "Rank": rank,
-            "Season": season,
-            "SeasonSegment": season_segment_nullable,
-            "SeasonType": season_type_all_star,
-            "ShotClockRange": shot_clock_range_nullable,
-            "TeamID": team_id_nullable,
-            "VsConference": vs_conference_nullable,
-            "VsDivision": vs_division_nullable,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2372,36 +2501,39 @@ def nba_stats_leaguedashoppptshot(
 
             nba_stats_leaguedashoppptshot(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "CloseDefDistRange": close_def_dist_range_nullable,
+        "Conference": conference_nullable,
+        "DateFrom": date_from_nullable,
+        "DateTo": date_to_nullable,
+        "Division": division_nullable,
+        "DribbleRange": dribble_range_nullable,
+        "GameSegment": game_segment_nullable,
+        "GeneralRange": general_range_nullable,
+        "LastNGames": last_n_games_nullable,
+        "LeagueID": league_id,
+        "Location": location_nullable,
+        "Month": month_nullable,
+        "OpponentTeamID": opponent_team_id_nullable,
+        "Outcome": outcome_nullable,
+        "PORound": po_round_nullable,
+        "PerMode": per_mode_simple,
+        "Period": period_nullable,
+        "Season": season,
+        "SeasonSegment": season_segment_nullable,
+        "SeasonType": season_type_all_star,
+        "ShotClockRange": shot_clock_range_nullable,
+        "ShotDistRange": shot_dist_range_nullable,
+        "TeamID": team_id_nullable,
+        "TouchTimeRange": touch_time_range_nullable,
+        "VsConference": vs_conference_nullable,
+        "VsDivision": vs_division_nullable,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/leaguedashoppptshot",
-        params={
-            "CloseDefDistRange": close_def_dist_range_nullable,
-            "Conference": conference_nullable,
-            "DateFrom": date_from_nullable,
-            "DateTo": date_to_nullable,
-            "Division": division_nullable,
-            "DribbleRange": dribble_range_nullable,
-            "GameSegment": game_segment_nullable,
-            "GeneralRange": general_range_nullable,
-            "LastNGames": last_n_games_nullable,
-            "LeagueID": league_id,
-            "Location": location_nullable,
-            "Month": month_nullable,
-            "OpponentTeamID": opponent_team_id_nullable,
-            "Outcome": outcome_nullable,
-            "PORound": po_round_nullable,
-            "PerMode": per_mode_simple,
-            "Period": period_nullable,
-            "Season": season,
-            "SeasonSegment": season_segment_nullable,
-            "SeasonType": season_type_all_star,
-            "ShotClockRange": shot_clock_range_nullable,
-            "ShotDistRange": shot_dist_range_nullable,
-            "TeamID": team_id_nullable,
-            "TouchTimeRange": touch_time_range_nullable,
-            "VsConference": vs_conference_nullable,
-            "VsDivision": vs_division_nullable,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2494,41 +2626,44 @@ def nba_stats_leaguedashplayerbiostats(
 
             nba_stats_leaguedashplayerbiostats(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "College": college_nullable,
+        "Conference": conference_nullable,
+        "Country": country_nullable,
+        "DateFrom": date_from_nullable,
+        "DateTo": date_to_nullable,
+        "Division": division_simple_nullable,
+        "DraftPick": draft_pick_nullable,
+        "DraftYear": draft_year_nullable,
+        "GameScope": game_scope_simple_nullable,
+        "GameSegment": game_segment_nullable,
+        "Height": height_nullable,
+        "LastNGames": last_n_games_nullable,
+        "LeagueID": league_id,
+        "Location": location_nullable,
+        "Month": month_nullable,
+        "OpponentTeamID": opponent_team_id_nullable,
+        "Outcome": outcome_nullable,
+        "PORound": po_round_nullable,
+        "PerMode": per_mode_simple,
+        "Period": period_nullable,
+        "PlayerExperience": player_experience_nullable,
+        "PlayerPosition": player_position_abbreviation_nullable,
+        "Season": season,
+        "SeasonSegment": season_segment_nullable,
+        "SeasonType": season_type_all_star,
+        "ShotClockRange": shot_clock_range_nullable,
+        "StarterBench": starter_bench_nullable,
+        "TeamID": team_id_nullable,
+        "VsConference": vs_conference_nullable,
+        "VsDivision": vs_division_nullable,
+        "Weight": weight_nullable,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/leaguedashplayerbiostats",
-        params={
-            "College": college_nullable,
-            "Conference": conference_nullable,
-            "Country": country_nullable,
-            "DateFrom": date_from_nullable,
-            "DateTo": date_to_nullable,
-            "Division": division_simple_nullable,
-            "DraftPick": draft_pick_nullable,
-            "DraftYear": draft_year_nullable,
-            "GameScope": game_scope_simple_nullable,
-            "GameSegment": game_segment_nullable,
-            "Height": height_nullable,
-            "LastNGames": last_n_games_nullable,
-            "LeagueID": league_id,
-            "Location": location_nullable,
-            "Month": month_nullable,
-            "OpponentTeamID": opponent_team_id_nullable,
-            "Outcome": outcome_nullable,
-            "PORound": po_round_nullable,
-            "PerMode": per_mode_simple,
-            "Period": period_nullable,
-            "PlayerExperience": player_experience_nullable,
-            "PlayerPosition": player_position_abbreviation_nullable,
-            "Season": season,
-            "SeasonSegment": season_segment_nullable,
-            "SeasonType": season_type_all_star,
-            "ShotClockRange": shot_clock_range_nullable,
-            "StarterBench": starter_bench_nullable,
-            "TeamID": team_id_nullable,
-            "VsConference": vs_conference_nullable,
-            "VsDivision": vs_division_nullable,
-            "Weight": weight_nullable,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2635,48 +2770,51 @@ def nba_stats_leaguedashplayerclutch(
 
             nba_stats_leaguedashplayerclutch(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "AheadBehind": ahead_behind,
+        "ClutchTime": clutch_time,
+        "College": college_nullable,
+        "Conference": conference_nullable,
+        "Country": country_nullable,
+        "DateFrom": date_from_nullable,
+        "DateTo": date_to_nullable,
+        "Division": division_simple_nullable,
+        "DraftPick": draft_pick_nullable,
+        "DraftYear": draft_year_nullable,
+        "GameScope": game_scope_simple_nullable,
+        "GameSegment": game_segment_nullable,
+        "Height": height_nullable,
+        "LastNGames": last_n_games,
+        "LeagueID": league_id,
+        "Location": location_nullable,
+        "MeasureType": measure_type_detailed_defense,
+        "Month": month,
+        "OpponentTeamID": opponent_team_id,
+        "Outcome": outcome_nullable,
+        "PORound": po_round_nullable,
+        "PaceAdjust": pace_adjust,
+        "PerMode": per_mode_detailed,
+        "Period": period,
+        "PlayerExperience": player_experience_nullable,
+        "PlayerPosition": player_position_abbreviation_nullable,
+        "PlusMinus": plus_minus,
+        "PointDiff": point_diff,
+        "Rank": rank,
+        "Season": season,
+        "SeasonSegment": season_segment_nullable,
+        "SeasonType": season_type_all_star,
+        "ShotClockRange": shot_clock_range_nullable,
+        "StarterBench": starter_bench_nullable,
+        "TeamID": team_id_nullable,
+        "VsConference": vs_conference_nullable,
+        "VsDivision": vs_division_nullable,
+        "Weight": weight_nullable,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/leaguedashplayerclutch",
-        params={
-            "AheadBehind": ahead_behind,
-            "ClutchTime": clutch_time,
-            "College": college_nullable,
-            "Conference": conference_nullable,
-            "Country": country_nullable,
-            "DateFrom": date_from_nullable,
-            "DateTo": date_to_nullable,
-            "Division": division_simple_nullable,
-            "DraftPick": draft_pick_nullable,
-            "DraftYear": draft_year_nullable,
-            "GameScope": game_scope_simple_nullable,
-            "GameSegment": game_segment_nullable,
-            "Height": height_nullable,
-            "LastNGames": last_n_games,
-            "LeagueID": league_id,
-            "Location": location_nullable,
-            "MeasureType": measure_type_detailed_defense,
-            "Month": month,
-            "OpponentTeamID": opponent_team_id,
-            "Outcome": outcome_nullable,
-            "PORound": po_round_nullable,
-            "PaceAdjust": pace_adjust,
-            "PerMode": per_mode_detailed,
-            "Period": period,
-            "PlayerExperience": player_experience_nullable,
-            "PlayerPosition": player_position_abbreviation_nullable,
-            "PlusMinus": plus_minus,
-            "PointDiff": point_diff,
-            "Rank": rank,
-            "Season": season,
-            "SeasonSegment": season_segment_nullable,
-            "SeasonType": season_type_all_star,
-            "ShotClockRange": shot_clock_range_nullable,
-            "StarterBench": starter_bench_nullable,
-            "TeamID": team_id_nullable,
-            "VsConference": vs_conference_nullable,
-            "VsDivision": vs_division_nullable,
-            "Weight": weight_nullable,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2777,45 +2915,48 @@ def nba_stats_leaguedashplayerptshot(
 
             nba_stats_leaguedashplayerptshot(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "CloseDefDistRange": close_def_dist_range_nullable,
+        "College": college_nullable,
+        "Conference": conference_nullable,
+        "Country": country_nullable,
+        "DateFrom": date_from_nullable,
+        "DateTo": date_to_nullable,
+        "Division": division_nullable,
+        "DraftPick": draft_pick_nullable,
+        "DraftYear": draft_year_nullable,
+        "DribbleRange": dribble_range_nullable,
+        "GameSegment": game_segment_nullable,
+        "GeneralRange": general_range_nullable,
+        "Height": height_nullable,
+        "LastNGames": last_n_games_nullable,
+        "LeagueID": league_id,
+        "Location": location_nullable,
+        "Month": month_nullable,
+        "OpponentTeamID": opponent_team_id_nullable,
+        "Outcome": outcome_nullable,
+        "PORound": po_round_nullable,
+        "PerMode": per_mode_simple,
+        "Period": period_nullable,
+        "PlayerExperience": player_experience_nullable,
+        "PlayerPosition": player_position_nullable,
+        "Season": season,
+        "SeasonSegment": season_segment_nullable,
+        "SeasonType": season_type_all_star,
+        "ShotClockRange": shot_clock_range_nullable,
+        "ShotDistRange": shot_dist_range_nullable,
+        "StarterBench": starter_bench_nullable,
+        "TeamID": team_id_nullable,
+        "TouchTimeRange": touch_time_range_nullable,
+        "VsConference": vs_conference_nullable,
+        "VsDivision": vs_division_nullable,
+        "Weight": weight_nullable,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/leaguedashplayerptshot",
-        params={
-            "CloseDefDistRange": close_def_dist_range_nullable,
-            "College": college_nullable,
-            "Conference": conference_nullable,
-            "Country": country_nullable,
-            "DateFrom": date_from_nullable,
-            "DateTo": date_to_nullable,
-            "Division": division_nullable,
-            "DraftPick": draft_pick_nullable,
-            "DraftYear": draft_year_nullable,
-            "DribbleRange": dribble_range_nullable,
-            "GameSegment": game_segment_nullable,
-            "GeneralRange": general_range_nullable,
-            "Height": height_nullable,
-            "LastNGames": last_n_games_nullable,
-            "LeagueID": league_id,
-            "Location": location_nullable,
-            "Month": month_nullable,
-            "OpponentTeamID": opponent_team_id_nullable,
-            "Outcome": outcome_nullable,
-            "PORound": po_round_nullable,
-            "PerMode": per_mode_simple,
-            "Period": period_nullable,
-            "PlayerExperience": player_experience_nullable,
-            "PlayerPosition": player_position_nullable,
-            "Season": season,
-            "SeasonSegment": season_segment_nullable,
-            "SeasonType": season_type_all_star,
-            "ShotClockRange": shot_clock_range_nullable,
-            "ShotDistRange": shot_dist_range_nullable,
-            "StarterBench": starter_bench_nullable,
-            "TeamID": team_id_nullable,
-            "TouchTimeRange": touch_time_range_nullable,
-            "VsConference": vs_conference_nullable,
-            "VsDivision": vs_division_nullable,
-            "Weight": weight_nullable,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2918,46 +3059,49 @@ def nba_stats_leaguedashplayershotlocations(
 
             nba_stats_leaguedashplayershotlocations(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "College": college_nullable,
+        "Conference": conference_nullable,
+        "Country": country_nullable,
+        "DateFrom": date_from_nullable,
+        "DateTo": date_to_nullable,
+        "DistanceRange": distance_range,
+        "Division": division_simple_nullable,
+        "DraftPick": draft_pick_nullable,
+        "DraftYear": draft_year_nullable,
+        "GameScope": game_scope_simple_nullable,
+        "GameSegment": game_segment_nullable,
+        "Height": height_nullable,
+        "LastNGames": last_n_games,
+        "LeagueID": league_id,
+        "Location": location_nullable,
+        "MeasureType": measure_type_simple,
+        "Month": month,
+        "OpponentTeamID": opponent_team_id,
+        "Outcome": outcome_nullable,
+        "PORound": po_round_nullable,
+        "PaceAdjust": pace_adjust,
+        "PerMode": per_mode_detailed,
+        "Period": period,
+        "PlayerExperience": player_experience_nullable,
+        "PlayerPosition": player_position_abbreviation_nullable,
+        "PlusMinus": plus_minus,
+        "Rank": rank,
+        "Season": season,
+        "SeasonSegment": season_segment_nullable,
+        "SeasonType": season_type_all_star,
+        "ShotClockRange": shot_clock_range_nullable,
+        "StarterBench": starter_bench_nullable,
+        "TeamID": team_id_nullable,
+        "VsConference": vs_conference_nullable,
+        "VsDivision": vs_division_nullable,
+        "Weight": weight_nullable,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/leaguedashplayershotlocations",
-        params={
-            "College": college_nullable,
-            "Conference": conference_nullable,
-            "Country": country_nullable,
-            "DateFrom": date_from_nullable,
-            "DateTo": date_to_nullable,
-            "DistanceRange": distance_range,
-            "Division": division_simple_nullable,
-            "DraftPick": draft_pick_nullable,
-            "DraftYear": draft_year_nullable,
-            "GameScope": game_scope_simple_nullable,
-            "GameSegment": game_segment_nullable,
-            "Height": height_nullable,
-            "LastNGames": last_n_games,
-            "LeagueID": league_id,
-            "Location": location_nullable,
-            "MeasureType": measure_type_simple,
-            "Month": month,
-            "OpponentTeamID": opponent_team_id,
-            "Outcome": outcome_nullable,
-            "PORound": po_round_nullable,
-            "PaceAdjust": pace_adjust,
-            "PerMode": per_mode_detailed,
-            "Period": period,
-            "PlayerExperience": player_experience_nullable,
-            "PlayerPosition": player_position_abbreviation_nullable,
-            "PlusMinus": plus_minus,
-            "Rank": rank,
-            "Season": season,
-            "SeasonSegment": season_segment_nullable,
-            "SeasonType": season_type_all_star,
-            "ShotClockRange": shot_clock_range_nullable,
-            "StarterBench": starter_bench_nullable,
-            "TeamID": team_id_nullable,
-            "VsConference": vs_conference_nullable,
-            "VsDivision": vs_division_nullable,
-            "Weight": weight_nullable,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3060,46 +3204,49 @@ def nba_stats_leaguedashplayerstats(
 
             nba_stats_leaguedashplayerstats(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "College": college_nullable,
+        "Conference": conference_nullable,
+        "Country": country_nullable,
+        "DateFrom": date_from_nullable,
+        "DateTo": date_to_nullable,
+        "Division": division_simple_nullable,
+        "DraftPick": draft_pick_nullable,
+        "DraftYear": draft_year_nullable,
+        "GameScope": game_scope_simple_nullable,
+        "GameSegment": game_segment_nullable,
+        "Height": height_nullable,
+        "LastNGames": last_n_games,
+        "LeagueID": league_id,
+        "Location": location_nullable,
+        "MeasureType": measure_type_detailed_defense,
+        "Month": month,
+        "OpponentTeamID": opponent_team_id,
+        "Outcome": outcome_nullable,
+        "PORound": po_round_nullable,
+        "PaceAdjust": pace_adjust,
+        "PerMode": per_mode_detailed,
+        "Period": period,
+        "PlayerExperience": player_experience_nullable,
+        "PlayerPosition": player_position_abbreviation_nullable,
+        "PlusMinus": plus_minus,
+        "Rank": rank,
+        "Season": season,
+        "SeasonSegment": season_segment_nullable,
+        "SeasonType": season_type_all_star,
+        "ShotClockRange": shot_clock_range_nullable,
+        "StarterBench": starter_bench_nullable,
+        "TeamID": team_id_nullable,
+        "TwoWay": two_way_nullable,
+        "VsConference": vs_conference_nullable,
+        "VsDivision": vs_division_nullable,
+        "Weight": weight_nullable,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/leaguedashplayerstats",
-        params={
-            "College": college_nullable,
-            "Conference": conference_nullable,
-            "Country": country_nullable,
-            "DateFrom": date_from_nullable,
-            "DateTo": date_to_nullable,
-            "Division": division_simple_nullable,
-            "DraftPick": draft_pick_nullable,
-            "DraftYear": draft_year_nullable,
-            "GameScope": game_scope_simple_nullable,
-            "GameSegment": game_segment_nullable,
-            "Height": height_nullable,
-            "LastNGames": last_n_games,
-            "LeagueID": league_id,
-            "Location": location_nullable,
-            "MeasureType": measure_type_detailed_defense,
-            "Month": month,
-            "OpponentTeamID": opponent_team_id,
-            "Outcome": outcome_nullable,
-            "PORound": po_round_nullable,
-            "PaceAdjust": pace_adjust,
-            "PerMode": per_mode_detailed,
-            "Period": period,
-            "PlayerExperience": player_experience_nullable,
-            "PlayerPosition": player_position_abbreviation_nullable,
-            "PlusMinus": plus_minus,
-            "Rank": rank,
-            "Season": season,
-            "SeasonSegment": season_segment_nullable,
-            "SeasonType": season_type_all_star,
-            "ShotClockRange": shot_clock_range_nullable,
-            "StarterBench": starter_bench_nullable,
-            "TeamID": team_id_nullable,
-            "TwoWay": two_way_nullable,
-            "VsConference": vs_conference_nullable,
-            "VsDivision": vs_division_nullable,
-            "Weight": weight_nullable,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3192,41 +3339,44 @@ def nba_stats_leaguedashptdefend(
 
             nba_stats_leaguedashptdefend(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "College": college_nullable,
+        "Conference": conference_nullable,
+        "Country": country_nullable,
+        "DateFrom": date_from_nullable,
+        "DateTo": date_to_nullable,
+        "DefenseCategory": defense_category,
+        "Division": division_nullable,
+        "DraftPick": draft_pick_nullable,
+        "DraftYear": draft_year_nullable,
+        "GameSegment": game_segment_nullable,
+        "Height": height_nullable,
+        "LastNGames": last_n_games_nullable,
+        "LeagueID": league_id,
+        "Location": location_nullable,
+        "Month": month_nullable,
+        "OpponentTeamID": opponent_team_id_nullable,
+        "Outcome": outcome_nullable,
+        "PORound": po_round_nullable,
+        "PerMode": per_mode_simple,
+        "Period": period_nullable,
+        "PlayerExperience": player_experience_nullable,
+        "PlayerID": player_id_nullable,
+        "PlayerPosition": player_position_nullable,
+        "Season": season,
+        "SeasonSegment": season_segment_nullable,
+        "SeasonType": season_type_all_star,
+        "StarterBench": starter_bench_nullable,
+        "TeamID": team_id_nullable,
+        "VsConference": vs_conference_nullable,
+        "VsDivision": vs_division_nullable,
+        "Weight": weight_nullable,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/leaguedashptdefend",
-        params={
-            "College": college_nullable,
-            "Conference": conference_nullable,
-            "Country": country_nullable,
-            "DateFrom": date_from_nullable,
-            "DateTo": date_to_nullable,
-            "DefenseCategory": defense_category,
-            "Division": division_nullable,
-            "DraftPick": draft_pick_nullable,
-            "DraftYear": draft_year_nullable,
-            "GameSegment": game_segment_nullable,
-            "Height": height_nullable,
-            "LastNGames": last_n_games_nullable,
-            "LeagueID": league_id,
-            "Location": location_nullable,
-            "Month": month_nullable,
-            "OpponentTeamID": opponent_team_id_nullable,
-            "Outcome": outcome_nullable,
-            "PORound": po_round_nullable,
-            "PerMode": per_mode_simple,
-            "Period": period_nullable,
-            "PlayerExperience": player_experience_nullable,
-            "PlayerID": player_id_nullable,
-            "PlayerPosition": player_position_nullable,
-            "Season": season,
-            "SeasonSegment": season_segment_nullable,
-            "SeasonType": season_type_all_star,
-            "StarterBench": starter_bench_nullable,
-            "TeamID": team_id_nullable,
-            "VsConference": vs_conference_nullable,
-            "VsDivision": vs_division_nullable,
-            "Weight": weight_nullable,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3317,40 +3467,43 @@ def nba_stats_leaguedashptstats(
 
             nba_stats_leaguedashptstats(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "College": college_nullable,
+        "Conference": conference_nullable,
+        "Country": country_nullable,
+        "DateFrom": date_from_nullable,
+        "DateTo": date_to_nullable,
+        "Division": division_simple_nullable,
+        "DraftPick": draft_pick_nullable,
+        "DraftYear": draft_year_nullable,
+        "GameScope": game_scope_simple_nullable,
+        "Height": height_nullable,
+        "LastNGames": last_n_games,
+        "LeagueID": league_id,
+        "Location": location_nullable,
+        "Month": month,
+        "OpponentTeamID": opponent_team_id,
+        "Outcome": outcome_nullable,
+        "PORound": po_round_nullable,
+        "PerMode": per_mode_simple,
+        "PlayerExperience": player_experience_nullable,
+        "PlayerOrTeam": player_or_team,
+        "PlayerPosition": player_position_abbreviation_nullable,
+        "PtMeasureType": pt_measure_type,
+        "Season": season,
+        "SeasonSegment": season_segment_nullable,
+        "SeasonType": season_type_all_star,
+        "StarterBench": starter_bench_nullable,
+        "TeamID": team_id_nullable,
+        "VsConference": vs_conference_nullable,
+        "VsDivision": vs_division_nullable,
+        "Weight": weight_nullable,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/leaguedashptstats",
-        params={
-            "College": college_nullable,
-            "Conference": conference_nullable,
-            "Country": country_nullable,
-            "DateFrom": date_from_nullable,
-            "DateTo": date_to_nullable,
-            "Division": division_simple_nullable,
-            "DraftPick": draft_pick_nullable,
-            "DraftYear": draft_year_nullable,
-            "GameScope": game_scope_simple_nullable,
-            "Height": height_nullable,
-            "LastNGames": last_n_games,
-            "LeagueID": league_id,
-            "Location": location_nullable,
-            "Month": month,
-            "OpponentTeamID": opponent_team_id,
-            "Outcome": outcome_nullable,
-            "PORound": po_round_nullable,
-            "PerMode": per_mode_simple,
-            "PlayerExperience": player_experience_nullable,
-            "PlayerOrTeam": player_or_team,
-            "PlayerPosition": player_position_abbreviation_nullable,
-            "PtMeasureType": pt_measure_type,
-            "Season": season,
-            "SeasonSegment": season_segment_nullable,
-            "SeasonType": season_type_all_star,
-            "StarterBench": starter_bench_nullable,
-            "TeamID": team_id_nullable,
-            "VsConference": vs_conference_nullable,
-            "VsDivision": vs_division_nullable,
-            "Weight": weight_nullable,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3423,31 +3576,34 @@ def nba_stats_leaguedashptteamdefend(
 
             nba_stats_leaguedashptteamdefend(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "Conference": conference_nullable,
+        "DateFrom": date_from_nullable,
+        "DateTo": date_to_nullable,
+        "DefenseCategory": defense_category,
+        "Division": division_nullable,
+        "GameSegment": game_segment_nullable,
+        "LastNGames": last_n_games_nullable,
+        "LeagueID": league_id,
+        "Location": location_nullable,
+        "Month": month_nullable,
+        "OpponentTeamID": opponent_team_id_nullable,
+        "Outcome": outcome_nullable,
+        "PORound": po_round_nullable,
+        "PerMode": per_mode_simple,
+        "Period": period_nullable,
+        "Season": season,
+        "SeasonSegment": season_segment_nullable,
+        "SeasonType": season_type_all_star,
+        "TeamID": team_id_nullable,
+        "VsConference": vs_conference_nullable,
+        "VsDivision": vs_division_nullable,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/leaguedashptteamdefend",
-        params={
-            "Conference": conference_nullable,
-            "DateFrom": date_from_nullable,
-            "DateTo": date_to_nullable,
-            "DefenseCategory": defense_category,
-            "Division": division_nullable,
-            "GameSegment": game_segment_nullable,
-            "LastNGames": last_n_games_nullable,
-            "LeagueID": league_id,
-            "Location": location_nullable,
-            "Month": month_nullable,
-            "OpponentTeamID": opponent_team_id_nullable,
-            "Outcome": outcome_nullable,
-            "PORound": po_round_nullable,
-            "PerMode": per_mode_simple,
-            "Period": period_nullable,
-            "Season": season,
-            "SeasonSegment": season_segment_nullable,
-            "SeasonType": season_type_all_star,
-            "TeamID": team_id_nullable,
-            "VsConference": vs_conference_nullable,
-            "VsDivision": vs_division_nullable,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3542,42 +3698,45 @@ def nba_stats_leaguedashteamclutch(
 
             nba_stats_leaguedashteamclutch(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "AheadBehind": ahead_behind,
+        "ClutchTime": clutch_time,
+        "Conference": conference_nullable,
+        "DateFrom": date_from_nullable,
+        "DateTo": date_to_nullable,
+        "Division": division_simple_nullable,
+        "GameScope": game_scope_simple_nullable,
+        "GameSegment": game_segment_nullable,
+        "LastNGames": last_n_games,
+        "LeagueID": league_id,
+        "Location": location_nullable,
+        "MeasureType": measure_type_detailed_defense,
+        "Month": month,
+        "OpponentTeamID": opponent_team_id,
+        "Outcome": outcome_nullable,
+        "PORound": po_round_nullable,
+        "PaceAdjust": pace_adjust,
+        "PerMode": per_mode_detailed,
+        "Period": period,
+        "PlayerExperience": player_experience_nullable,
+        "PlayerPosition": player_position_abbreviation_nullable,
+        "PlusMinus": plus_minus,
+        "PointDiff": point_diff,
+        "Rank": rank,
+        "Season": season,
+        "SeasonSegment": season_segment_nullable,
+        "SeasonType": season_type_all_star,
+        "ShotClockRange": shot_clock_range_nullable,
+        "StarterBench": starter_bench_nullable,
+        "TeamID": team_id_nullable,
+        "VsConference": vs_conference_nullable,
+        "VsDivision": vs_division_nullable,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/leaguedashteamclutch",
-        params={
-            "AheadBehind": ahead_behind,
-            "ClutchTime": clutch_time,
-            "Conference": conference_nullable,
-            "DateFrom": date_from_nullable,
-            "DateTo": date_to_nullable,
-            "Division": division_simple_nullable,
-            "GameScope": game_scope_simple_nullable,
-            "GameSegment": game_segment_nullable,
-            "LastNGames": last_n_games,
-            "LeagueID": league_id,
-            "Location": location_nullable,
-            "MeasureType": measure_type_detailed_defense,
-            "Month": month,
-            "OpponentTeamID": opponent_team_id,
-            "Outcome": outcome_nullable,
-            "PORound": po_round_nullable,
-            "PaceAdjust": pace_adjust,
-            "PerMode": per_mode_detailed,
-            "Period": period,
-            "PlayerExperience": player_experience_nullable,
-            "PlayerPosition": player_position_abbreviation_nullable,
-            "PlusMinus": plus_minus,
-            "PointDiff": point_diff,
-            "Rank": rank,
-            "Season": season,
-            "SeasonSegment": season_segment_nullable,
-            "SeasonType": season_type_all_star,
-            "ShotClockRange": shot_clock_range_nullable,
-            "StarterBench": starter_bench_nullable,
-            "TeamID": team_id_nullable,
-            "VsConference": vs_conference_nullable,
-            "VsDivision": vs_division_nullable,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3660,36 +3819,39 @@ def nba_stats_leaguedashteamptshot(
 
             nba_stats_leaguedashteamptshot(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "CloseDefDistRange": close_def_dist_range_nullable,
+        "Conference": conference_nullable,
+        "DateFrom": date_from_nullable,
+        "DateTo": date_to_nullable,
+        "Division": division_nullable,
+        "DribbleRange": dribble_range_nullable,
+        "GameSegment": game_segment_nullable,
+        "GeneralRange": general_range_nullable,
+        "LastNGames": last_n_games_nullable,
+        "LeagueID": league_id,
+        "Location": location_nullable,
+        "Month": month_nullable,
+        "OpponentTeamID": opponent_team_id_nullable,
+        "Outcome": outcome_nullable,
+        "PORound": po_round_nullable,
+        "PerMode": per_mode_simple,
+        "Period": period_nullable,
+        "Season": season,
+        "SeasonSegment": season_segment_nullable,
+        "SeasonType": season_type_all_star,
+        "ShotClockRange": shot_clock_range_nullable,
+        "ShotDistRange": shot_dist_range_nullable,
+        "TeamID": team_id_nullable,
+        "TouchTimeRange": touch_time_range_nullable,
+        "VsConference": vs_conference_nullable,
+        "VsDivision": vs_division_nullable,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/leaguedashteamptshot",
-        params={
-            "CloseDefDistRange": close_def_dist_range_nullable,
-            "Conference": conference_nullable,
-            "DateFrom": date_from_nullable,
-            "DateTo": date_to_nullable,
-            "Division": division_nullable,
-            "DribbleRange": dribble_range_nullable,
-            "GameSegment": game_segment_nullable,
-            "GeneralRange": general_range_nullable,
-            "LastNGames": last_n_games_nullable,
-            "LeagueID": league_id,
-            "Location": location_nullable,
-            "Month": month_nullable,
-            "OpponentTeamID": opponent_team_id_nullable,
-            "Outcome": outcome_nullable,
-            "PORound": po_round_nullable,
-            "PerMode": per_mode_simple,
-            "Period": period_nullable,
-            "Season": season,
-            "SeasonSegment": season_segment_nullable,
-            "SeasonType": season_type_all_star,
-            "ShotClockRange": shot_clock_range_nullable,
-            "ShotDistRange": shot_dist_range_nullable,
-            "TeamID": team_id_nullable,
-            "TouchTimeRange": touch_time_range_nullable,
-            "VsConference": vs_conference_nullable,
-            "VsDivision": vs_division_nullable,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3780,40 +3942,43 @@ def nba_stats_leaguedashteamshotlocations(
 
             nba_stats_leaguedashteamshotlocations(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "Conference": conference_nullable,
+        "DateFrom": date_from_nullable,
+        "DateTo": date_to_nullable,
+        "DistanceRange": distance_range,
+        "Division": division_simple_nullable,
+        "GameScope": game_scope_simple_nullable,
+        "GameSegment": game_segment_nullable,
+        "LastNGames": last_n_games,
+        "LeagueID": league_id,
+        "Location": location_nullable,
+        "MeasureType": measure_type_simple,
+        "Month": month,
+        "OpponentTeamID": opponent_team_id,
+        "Outcome": outcome_nullable,
+        "PORound": po_round_nullable,
+        "PaceAdjust": pace_adjust,
+        "PerMode": per_mode_detailed,
+        "Period": period,
+        "PlayerExperience": player_experience_nullable,
+        "PlayerPosition": player_position_abbreviation_nullable,
+        "PlusMinus": plus_minus,
+        "Rank": rank,
+        "Season": season,
+        "SeasonSegment": season_segment_nullable,
+        "SeasonType": season_type_all_star,
+        "ShotClockRange": shot_clock_range_nullable,
+        "StarterBench": starter_bench_nullable,
+        "TeamID": team_id_nullable,
+        "VsConference": vs_conference_nullable,
+        "VsDivision": vs_division_nullable,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/leaguedashteamshotlocations",
-        params={
-            "Conference": conference_nullable,
-            "DateFrom": date_from_nullable,
-            "DateTo": date_to_nullable,
-            "DistanceRange": distance_range,
-            "Division": division_simple_nullable,
-            "GameScope": game_scope_simple_nullable,
-            "GameSegment": game_segment_nullable,
-            "LastNGames": last_n_games,
-            "LeagueID": league_id,
-            "Location": location_nullable,
-            "MeasureType": measure_type_simple,
-            "Month": month,
-            "OpponentTeamID": opponent_team_id,
-            "Outcome": outcome_nullable,
-            "PORound": po_round_nullable,
-            "PaceAdjust": pace_adjust,
-            "PerMode": per_mode_detailed,
-            "Period": period,
-            "PlayerExperience": player_experience_nullable,
-            "PlayerPosition": player_position_abbreviation_nullable,
-            "PlusMinus": plus_minus,
-            "Rank": rank,
-            "Season": season,
-            "SeasonSegment": season_segment_nullable,
-            "SeasonType": season_type_all_star,
-            "ShotClockRange": shot_clock_range_nullable,
-            "StarterBench": starter_bench_nullable,
-            "TeamID": team_id_nullable,
-            "VsConference": vs_conference_nullable,
-            "VsDivision": vs_division_nullable,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3904,40 +4069,43 @@ def nba_stats_leaguedashteamstats(
 
             nba_stats_leaguedashteamstats(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "Conference": conference_nullable,
+        "DateFrom": date_from_nullable,
+        "DateTo": date_to_nullable,
+        "Division": division_simple_nullable,
+        "GameScope": game_scope_simple_nullable,
+        "GameSegment": game_segment_nullable,
+        "LastNGames": last_n_games,
+        "LeagueID": league_id,
+        "Location": location_nullable,
+        "MeasureType": measure_type_detailed_defense,
+        "Month": month,
+        "OpponentTeamID": opponent_team_id,
+        "Outcome": outcome_nullable,
+        "PORound": po_round_nullable,
+        "PaceAdjust": pace_adjust,
+        "PerMode": per_mode_detailed,
+        "Period": period,
+        "PlayerExperience": player_experience_nullable,
+        "PlayerPosition": player_position_abbreviation_nullable,
+        "PlusMinus": plus_minus,
+        "Rank": rank,
+        "Season": season,
+        "SeasonSegment": season_segment_nullable,
+        "SeasonType": season_type_all_star,
+        "ShotClockRange": shot_clock_range_nullable,
+        "StarterBench": starter_bench_nullable,
+        "TeamID": team_id_nullable,
+        "TwoWay": two_way_nullable,
+        "VsConference": vs_conference_nullable,
+        "VsDivision": vs_division_nullable,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/leaguedashteamstats",
-        params={
-            "Conference": conference_nullable,
-            "DateFrom": date_from_nullable,
-            "DateTo": date_to_nullable,
-            "Division": division_simple_nullable,
-            "GameScope": game_scope_simple_nullable,
-            "GameSegment": game_segment_nullable,
-            "LastNGames": last_n_games,
-            "LeagueID": league_id,
-            "Location": location_nullable,
-            "MeasureType": measure_type_detailed_defense,
-            "Month": month,
-            "OpponentTeamID": opponent_team_id,
-            "Outcome": outcome_nullable,
-            "PORound": po_round_nullable,
-            "PaceAdjust": pace_adjust,
-            "PerMode": per_mode_detailed,
-            "Period": period,
-            "PlayerExperience": player_experience_nullable,
-            "PlayerPosition": player_position_abbreviation_nullable,
-            "PlusMinus": plus_minus,
-            "Rank": rank,
-            "Season": season,
-            "SeasonSegment": season_segment_nullable,
-            "SeasonType": season_type_all_star,
-            "ShotClockRange": shot_clock_range_nullable,
-            "StarterBench": starter_bench_nullable,
-            "TeamID": team_id_nullable,
-            "TwoWay": two_way_nullable,
-            "VsConference": vs_conference_nullable,
-            "VsDivision": vs_division_nullable,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -4144,98 +4312,101 @@ def nba_stats_leaguegamefinder(
 
             nba_stats_leaguegamefinder(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "Conference": conference_nullable,
+        "DateFrom": date_from_nullable,
+        "DateTo": date_to_nullable,
+        "Division": division_simple_nullable,
+        "DraftNumber": draft_number_nullable,
+        "DraftRound": draft_round_nullable,
+        "DraftTeamID": draft_team_id_nullable,
+        "DraftYear": draft_year_nullable,
+        "EqAST": eq_ast_nullable,
+        "EqBLK": eq_blk_nullable,
+        "EqDD": eq_dd_nullable,
+        "EqDREB": eq_dreb_nullable,
+        "EqFG3A": eq_fg3a_nullable,
+        "EqFG3M": eq_fg3m_nullable,
+        "EqFG3_PCT": eq_fg3_pct_nullable,
+        "EqFGA": eq_fga_nullable,
+        "EqFGM": eq_fgm_nullable,
+        "EqFG_PCT": eq_fg_pct_nullable,
+        "EqFTA": eq_fta_nullable,
+        "EqFTM": eq_ftm_nullable,
+        "EqFT_PCT": eq_ft_pct_nullable,
+        "EqMINUTES": eq_minutes_nullable,
+        "EqOREB": eq_oreb_nullable,
+        "EqPF": eq_pf_nullable,
+        "EqPTS": eq_pts_nullable,
+        "EqREB": eq_reb_nullable,
+        "EqSTL": eq_stl_nullable,
+        "EqTD": eq_td_nullable,
+        "EqTOV": eq_tov_nullable,
+        "GameID": game_id_nullable,
+        "GtAST": gt_ast_nullable,
+        "GtBLK": gt_blk_nullable,
+        "GtDD": gt_dd_nullable,
+        "GtDREB": gt_dreb_nullable,
+        "GtFG3A": gt_fg3a_nullable,
+        "GtFG3M": gt_fg3m_nullable,
+        "GtFG3_PCT": gt_fg3_pct_nullable,
+        "GtFGA": gt_fga_nullable,
+        "GtFGM": gt_fgm_nullable,
+        "GtFG_PCT": gt_fg_pct_nullable,
+        "GtFTA": gt_fta_nullable,
+        "GtFTM": gt_ftm_nullable,
+        "GtFT_PCT": gt_ft_pct_nullable,
+        "GtMINUTES": gt_minutes_nullable,
+        "GtOREB": gt_oreb_nullable,
+        "GtPF": gt_pf_nullable,
+        "GtPTS": gt_pts_nullable,
+        "GtREB": gt_reb_nullable,
+        "GtSTL": gt_stl_nullable,
+        "GtTD": gt_td_nullable,
+        "GtTOV": gt_tov_nullable,
+        "LeagueID": league_id,
+        "Location": location_nullable,
+        "LtAST": lt_ast_nullable,
+        "LtBLK": lt_blk_nullable,
+        "LtDD": lt_dd_nullable,
+        "LtDREB": lt_dreb_nullable,
+        "LtFG3A": lt_fg3a_nullable,
+        "LtFG3M": lt_fg3m_nullable,
+        "LtFG3_PCT": lt_fg3_pct_nullable,
+        "LtFGA": lt_fga_nullable,
+        "LtFGM": lt_fgm_nullable,
+        "LtFG_PCT": lt_fg_pct_nullable,
+        "LtFTA": lt_fta_nullable,
+        "LtFTM": lt_ftm_nullable,
+        "LtFT_PCT": lt_ft_pct_nullable,
+        "LtMINUTES": lt_minutes_nullable,
+        "LtOREB": lt_oreb_nullable,
+        "LtPF": lt_pf_nullable,
+        "LtPTS": lt_pts_nullable,
+        "LtREB": lt_reb_nullable,
+        "LtSTL": lt_stl_nullable,
+        "LtTD": lt_td_nullable,
+        "LtTOV": lt_tov_nullable,
+        "Outcome": outcome_nullable,
+        "PORound": po_round_nullable,
+        "PlayerID": player_id_nullable,
+        "PlayerOrTeam": player_or_team_abbreviation,
+        "RookieYear": rookie_year_nullable,
+        "Season": season_nullable,
+        "SeasonSegment": season_segment_nullable,
+        "SeasonType": season_type_nullable,
+        "StarterBench": starter_bench_nullable,
+        "TeamID": team_id_nullable,
+        "VsConference": vs_conference_nullable,
+        "VsDivision": vs_division_nullable,
+        "VsTeamID": vs_team_id_nullable,
+        "YearsExperience": years_experience_nullable,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/leaguegamefinder",
-        params={
-            "Conference": conference_nullable,
-            "DateFrom": date_from_nullable,
-            "DateTo": date_to_nullable,
-            "Division": division_simple_nullable,
-            "DraftNumber": draft_number_nullable,
-            "DraftRound": draft_round_nullable,
-            "DraftTeamID": draft_team_id_nullable,
-            "DraftYear": draft_year_nullable,
-            "EqAST": eq_ast_nullable,
-            "EqBLK": eq_blk_nullable,
-            "EqDD": eq_dd_nullable,
-            "EqDREB": eq_dreb_nullable,
-            "EqFG3A": eq_fg3a_nullable,
-            "EqFG3M": eq_fg3m_nullable,
-            "EqFG3_PCT": eq_fg3_pct_nullable,
-            "EqFGA": eq_fga_nullable,
-            "EqFGM": eq_fgm_nullable,
-            "EqFG_PCT": eq_fg_pct_nullable,
-            "EqFTA": eq_fta_nullable,
-            "EqFTM": eq_ftm_nullable,
-            "EqFT_PCT": eq_ft_pct_nullable,
-            "EqMINUTES": eq_minutes_nullable,
-            "EqOREB": eq_oreb_nullable,
-            "EqPF": eq_pf_nullable,
-            "EqPTS": eq_pts_nullable,
-            "EqREB": eq_reb_nullable,
-            "EqSTL": eq_stl_nullable,
-            "EqTD": eq_td_nullable,
-            "EqTOV": eq_tov_nullable,
-            "GameID": game_id_nullable,
-            "GtAST": gt_ast_nullable,
-            "GtBLK": gt_blk_nullable,
-            "GtDD": gt_dd_nullable,
-            "GtDREB": gt_dreb_nullable,
-            "GtFG3A": gt_fg3a_nullable,
-            "GtFG3M": gt_fg3m_nullable,
-            "GtFG3_PCT": gt_fg3_pct_nullable,
-            "GtFGA": gt_fga_nullable,
-            "GtFGM": gt_fgm_nullable,
-            "GtFG_PCT": gt_fg_pct_nullable,
-            "GtFTA": gt_fta_nullable,
-            "GtFTM": gt_ftm_nullable,
-            "GtFT_PCT": gt_ft_pct_nullable,
-            "GtMINUTES": gt_minutes_nullable,
-            "GtOREB": gt_oreb_nullable,
-            "GtPF": gt_pf_nullable,
-            "GtPTS": gt_pts_nullable,
-            "GtREB": gt_reb_nullable,
-            "GtSTL": gt_stl_nullable,
-            "GtTD": gt_td_nullable,
-            "GtTOV": gt_tov_nullable,
-            "LeagueID": league_id,
-            "Location": location_nullable,
-            "LtAST": lt_ast_nullable,
-            "LtBLK": lt_blk_nullable,
-            "LtDD": lt_dd_nullable,
-            "LtDREB": lt_dreb_nullable,
-            "LtFG3A": lt_fg3a_nullable,
-            "LtFG3M": lt_fg3m_nullable,
-            "LtFG3_PCT": lt_fg3_pct_nullable,
-            "LtFGA": lt_fga_nullable,
-            "LtFGM": lt_fgm_nullable,
-            "LtFG_PCT": lt_fg_pct_nullable,
-            "LtFTA": lt_fta_nullable,
-            "LtFTM": lt_ftm_nullable,
-            "LtFT_PCT": lt_ft_pct_nullable,
-            "LtMINUTES": lt_minutes_nullable,
-            "LtOREB": lt_oreb_nullable,
-            "LtPF": lt_pf_nullable,
-            "LtPTS": lt_pts_nullable,
-            "LtREB": lt_reb_nullable,
-            "LtSTL": lt_stl_nullable,
-            "LtTD": lt_td_nullable,
-            "LtTOV": lt_tov_nullable,
-            "Outcome": outcome_nullable,
-            "PORound": po_round_nullable,
-            "PlayerID": player_id_nullable,
-            "PlayerOrTeam": player_or_team_abbreviation,
-            "RookieYear": rookie_year_nullable,
-            "Season": season_nullable,
-            "SeasonSegment": season_segment_nullable,
-            "SeasonType": season_type_nullable,
-            "StarterBench": starter_bench_nullable,
-            "TeamID": team_id_nullable,
-            "VsConference": vs_conference_nullable,
-            "VsDivision": vs_division_nullable,
-            "VsTeamID": vs_team_id_nullable,
-            "YearsExperience": years_experience_nullable,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -4284,19 +4455,22 @@ def nba_stats_leaguegamelog(
 
             nba_stats_leaguegamelog(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "Counter": counter,
+        "DateFrom": date_from_nullable,
+        "DateTo": date_to_nullable,
+        "Direction": direction,
+        "LeagueID": league_id,
+        "PlayerOrTeam": player_or_team_abbreviation,
+        "Season": season,
+        "SeasonType": season_type_all_star,
+        "Sorter": sorter,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/leaguegamelog",
-        params={
-            "Counter": counter,
-            "DateFrom": date_from_nullable,
-            "DateTo": date_to_nullable,
-            "Direction": direction,
-            "LeagueID": league_id,
-            "PlayerOrTeam": player_or_team_abbreviation,
-            "Season": season,
-            "SeasonType": season_type_all_star,
-            "Sorter": sorter,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -4377,35 +4551,38 @@ def nba_stats_leaguehustlestatsplayer(
 
             nba_stats_leaguehustlestatsplayer(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "College": college_nullable,
+        "Conference": conference_nullable,
+        "Country": country_nullable,
+        "DateFrom": date_from_nullable,
+        "DateTo": date_to_nullable,
+        "Division": division_simple_nullable,
+        "DraftPick": draft_pick_nullable,
+        "DraftYear": draft_year_nullable,
+        "Height": height_nullable,
+        "LeagueID": league_id,
+        "Location": location_nullable,
+        "Month": month_nullable,
+        "OpponentTeamID": opponent_team_id_nullable,
+        "Outcome": outcome_nullable,
+        "PORound": po_round_nullable,
+        "PerMode": per_mode_time,
+        "PlayerExperience": player_experience_nullable,
+        "PlayerPosition": player_position_nullable,
+        "Season": season,
+        "SeasonSegment": season_segment_nullable,
+        "SeasonType": season_type_all_star,
+        "TeamID": team_id_nullable,
+        "VsConference": vs_conference_nullable,
+        "VsDivision": vs_division_nullable,
+        "Weight": weight_nullable,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/leaguehustlestatsplayer",
-        params={
-            "College": college_nullable,
-            "Conference": conference_nullable,
-            "Country": country_nullable,
-            "DateFrom": date_from_nullable,
-            "DateTo": date_to_nullable,
-            "Division": division_simple_nullable,
-            "DraftPick": draft_pick_nullable,
-            "DraftYear": draft_year_nullable,
-            "Height": height_nullable,
-            "LeagueID": league_id,
-            "Location": location_nullable,
-            "Month": month_nullable,
-            "OpponentTeamID": opponent_team_id_nullable,
-            "Outcome": outcome_nullable,
-            "PORound": po_round_nullable,
-            "PerMode": per_mode_time,
-            "PlayerExperience": player_experience_nullable,
-            "PlayerPosition": player_position_nullable,
-            "Season": season,
-            "SeasonSegment": season_segment_nullable,
-            "SeasonType": season_type_all_star,
-            "TeamID": team_id_nullable,
-            "VsConference": vs_conference_nullable,
-            "VsDivision": vs_division_nullable,
-            "Weight": weight_nullable,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -4486,35 +4663,38 @@ def nba_stats_leaguehustlestatsteam(
 
             nba_stats_leaguehustlestatsteam(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "College": college_nullable,
+        "Conference": conference_nullable,
+        "Country": country_nullable,
+        "DateFrom": date_from_nullable,
+        "DateTo": date_to_nullable,
+        "Division": division_simple_nullable,
+        "DraftPick": draft_pick_nullable,
+        "DraftYear": draft_year_nullable,
+        "Height": height_nullable,
+        "LeagueID": league_id,
+        "Location": location_nullable,
+        "Month": month_nullable,
+        "OpponentTeamID": opponent_team_id_nullable,
+        "Outcome": outcome_nullable,
+        "PORound": po_round_nullable,
+        "PerMode": per_mode_time,
+        "PlayerExperience": player_experience_nullable,
+        "PlayerPosition": player_position_nullable,
+        "Season": season,
+        "SeasonSegment": season_segment_nullable,
+        "SeasonType": season_type_all_star,
+        "TeamID": team_id_nullable,
+        "VsConference": vs_conference_nullable,
+        "VsDivision": vs_division_nullable,
+        "Weight": weight_nullable,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/leaguehustlestatsteam",
-        params={
-            "College": college_nullable,
-            "Conference": conference_nullable,
-            "Country": country_nullable,
-            "DateFrom": date_from_nullable,
-            "DateTo": date_to_nullable,
-            "Division": division_simple_nullable,
-            "DraftPick": draft_pick_nullable,
-            "DraftYear": draft_year_nullable,
-            "Height": height_nullable,
-            "LeagueID": league_id,
-            "Location": location_nullable,
-            "Month": month_nullable,
-            "OpponentTeamID": opponent_team_id_nullable,
-            "Outcome": outcome_nullable,
-            "PORound": po_round_nullable,
-            "PerMode": per_mode_time,
-            "PlayerExperience": player_experience_nullable,
-            "PlayerPosition": player_position_nullable,
-            "Season": season,
-            "SeasonSegment": season_segment_nullable,
-            "SeasonType": season_type_all_star,
-            "TeamID": team_id_nullable,
-            "VsConference": vs_conference_nullable,
-            "VsDivision": vs_division_nullable,
-            "Weight": weight_nullable,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -4559,17 +4739,20 @@ def nba_stats_leagueleaders(
 
             nba_stats_leagueleaders(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "ActiveFlag": active_flag_nullable,
+        "LeagueID": league_id,
+        "PerMode": per_mode48,
+        "Scope": scope,
+        "Season": season,
+        "SeasonType": season_type_all_star,
+        "StatCategory": stat_category_abbreviation,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/leagueleaders",
-        params={
-            "ActiveFlag": active_flag_nullable,
-            "LeagueID": league_id,
-            "PerMode": per_mode48,
-            "Scope": scope,
-            "Season": season,
-            "SeasonType": season_type_all_star,
-            "StatCategory": stat_category_abbreviation,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -4654,37 +4837,40 @@ def nba_stats_leaguelineupviz(
 
             nba_stats_leaguelineupviz(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "Conference": conference_nullable,
+        "DateFrom": date_from_nullable,
+        "DateTo": date_to_nullable,
+        "Division": division_simple_nullable,
+        "GameSegment": game_segment_nullable,
+        "GroupQuantity": group_quantity,
+        "LastNGames": last_n_games,
+        "LeagueID": league_id,
+        "Location": location_nullable,
+        "MeasureType": measure_type_detailed_defense,
+        "MinutesMin": minutes_min,
+        "Month": month,
+        "OpponentTeamID": opponent_team_id,
+        "Outcome": outcome_nullable,
+        "PORound": po_round_nullable,
+        "PaceAdjust": pace_adjust,
+        "PerMode": per_mode_detailed,
+        "Period": period,
+        "PlusMinus": plus_minus,
+        "Rank": rank,
+        "Season": season,
+        "SeasonSegment": season_segment_nullable,
+        "SeasonType": season_type_all_star,
+        "ShotClockRange": shot_clock_range_nullable,
+        "TeamID": team_id_nullable,
+        "VsConference": vs_conference_nullable,
+        "VsDivision": vs_division_nullable,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/leaguelineupviz",
-        params={
-            "Conference": conference_nullable,
-            "DateFrom": date_from_nullable,
-            "DateTo": date_to_nullable,
-            "Division": division_simple_nullable,
-            "GameSegment": game_segment_nullable,
-            "GroupQuantity": group_quantity,
-            "LastNGames": last_n_games,
-            "LeagueID": league_id,
-            "Location": location_nullable,
-            "MeasureType": measure_type_detailed_defense,
-            "MinutesMin": minutes_min,
-            "Month": month,
-            "OpponentTeamID": opponent_team_id,
-            "Outcome": outcome_nullable,
-            "PORound": po_round_nullable,
-            "PaceAdjust": pace_adjust,
-            "PerMode": per_mode_detailed,
-            "Period": period,
-            "PlusMinus": plus_minus,
-            "Rank": rank,
-            "Season": season,
-            "SeasonSegment": season_segment_nullable,
-            "SeasonType": season_type_all_star,
-            "ShotClockRange": shot_clock_range_nullable,
-            "TeamID": team_id_nullable,
-            "VsConference": vs_conference_nullable,
-            "VsDivision": vs_division_nullable,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -4757,31 +4943,34 @@ def nba_stats_leagueplayerondetails(
 
             nba_stats_leagueplayerondetails(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "DateFrom": date_from_nullable,
+        "DateTo": date_to_nullable,
+        "GameSegment": game_segment_nullable,
+        "LastNGames": last_n_games,
+        "LeagueID": league_id,
+        "Location": location_nullable,
+        "MeasureType": measure_type_detailed_defense,
+        "Month": month,
+        "OpponentTeamID": opponent_team_id,
+        "Outcome": outcome_nullable,
+        "PaceAdjust": pace_adjust,
+        "PerMode": per_mode_detailed,
+        "Period": period,
+        "PlusMinus": plus_minus,
+        "Rank": rank,
+        "Season": season,
+        "SeasonSegment": season_segment_nullable,
+        "SeasonType": season_type_all_star,
+        "TeamID": team_id,
+        "VsConference": vs_conference_nullable,
+        "VsDivision": vs_division_nullable,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/leagueplayerondetails",
-        params={
-            "DateFrom": date_from_nullable,
-            "DateTo": date_to_nullable,
-            "GameSegment": game_segment_nullable,
-            "LastNGames": last_n_games,
-            "LeagueID": league_id,
-            "Location": location_nullable,
-            "MeasureType": measure_type_detailed_defense,
-            "Month": month,
-            "OpponentTeamID": opponent_team_id,
-            "Outcome": outcome_nullable,
-            "PaceAdjust": pace_adjust,
-            "PerMode": per_mode_detailed,
-            "Period": period,
-            "PlusMinus": plus_minus,
-            "Rank": rank,
-            "Season": season,
-            "SeasonSegment": season_segment_nullable,
-            "SeasonType": season_type_all_star,
-            "TeamID": team_id,
-            "VsConference": vs_conference_nullable,
-            "VsDivision": vs_division_nullable,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -4828,18 +5017,21 @@ def nba_stats_leagueseasonmatchups(
 
             nba_stats_leagueseasonmatchups(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "DefPlayerID": def_player_id_nullable,
+        "DefTeamID": def_team_id_nullable,
+        "LeagueID": league_id,
+        "OffPlayerID": off_player_id_nullable,
+        "OffTeamID": off_team_id_nullable,
+        "PerMode": per_mode_simple,
+        "Season": season,
+        "SeasonType": season_type_playoffs,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/leagueseasonmatchups",
-        params={
-            "DefPlayerID": def_player_id_nullable,
-            "DefTeamID": def_team_id_nullable,
-            "LeagueID": league_id,
-            "OffPlayerID": off_player_id_nullable,
-            "OffTeamID": off_team_id_nullable,
-            "PerMode": per_mode_simple,
-            "Season": season,
-            "SeasonType": season_type_playoffs,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -4878,14 +5070,17 @@ def nba_stats_leaguestandings(
 
             nba_stats_leaguestandings(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "LeagueID": league_id,
+        "Season": season,
+        "SeasonType": season_type,
+        "SeasonYear": season_nullable,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/leaguestandings",
-        params={
-            "LeagueID": league_id,
-            "Season": season,
-            "SeasonType": season_type,
-            "SeasonYear": season_nullable,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -4924,14 +5119,17 @@ def nba_stats_leaguestandingsv3(
 
             nba_stats_leaguestandingsv3(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "LeagueID": league_id,
+        "Season": season,
+        "SeasonType": season_type,
+        "SeasonYear": season_nullable,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/leaguestandingsv3",
-        params={
-            "LeagueID": league_id,
-            "Season": season,
-            "SeasonType": season_type,
-            "SeasonYear": season_nullable,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -4978,18 +5176,21 @@ def nba_stats_matchupsrollup(
 
             nba_stats_matchupsrollup(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "DefPlayerID": def_player_id_nullable,
+        "DefTeamID": def_team_id_nullable,
+        "LeagueID": league_id,
+        "OffPlayerID": off_player_id_nullable,
+        "OffTeamID": off_team_id_nullable,
+        "PerMode": per_mode_simple,
+        "Season": season,
+        "SeasonType": season_type_playoffs,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/matchupsrollup",
-        params={
-            "DefPlayerID": def_player_id_nullable,
-            "DefTeamID": def_team_id_nullable,
-            "LeagueID": league_id,
-            "OffPlayerID": off_player_id_nullable,
-            "OffTeamID": off_team_id_nullable,
-            "PerMode": per_mode_simple,
-            "Season": season,
-            "SeasonType": season_type_playoffs,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -5026,13 +5227,16 @@ def nba_stats_playbyplayv3(
 
             nba_stats_playbyplayv3()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "EndPeriod": end_period,
+        "GameID": game_id,
+        "StartPeriod": start_period,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/playbyplayv3",
-        params={
-            "EndPeriod": end_period,
-            "GameID": game_id,
-            "StartPeriod": start_period,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -5065,11 +5269,14 @@ def nba_stats_playerawards(
 
             nba_stats_playerawards()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "PlayerID": player_id,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/playerawards",
-        params={
-            "PlayerID": player_id,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -5108,14 +5315,17 @@ def nba_stats_playercareerbycollegerollup(
 
             nba_stats_playercareerbycollegerollup(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "LeagueID": league_id,
+        "PerMode": per_mode_simple,
+        "Season": season_nullable,
+        "SeasonType": season_type_all_star,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/playercareerbycollegerollup",
-        params={
-            "LeagueID": league_id,
-            "PerMode": per_mode_simple,
-            "Season": season_nullable,
-            "SeasonType": season_type_all_star,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -5152,13 +5362,16 @@ def nba_stats_playercareerstats(
 
             nba_stats_playercareerstats(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "LeagueID": league_id,
+        "PerMode": per_mode36,
+        "PlayerID": player_id,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/playercareerstats",
-        params={
-            "LeagueID": league_id,
-            "PerMode": per_mode36,
-            "PlayerID": player_id,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -5239,35 +5452,38 @@ def nba_stats_playercompare(
 
             nba_stats_playercompare(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "Conference": conference_nullable,
+        "DateFrom": date_from_nullable,
+        "DateTo": date_to_nullable,
+        "Division": division_simple_nullable,
+        "GameSegment": game_segment_nullable,
+        "LastNGames": last_n_games,
+        "LeagueID": league_id,
+        "Location": location_nullable,
+        "MeasureType": measure_type_detailed_defense,
+        "Month": month,
+        "OpponentTeamID": opponent_team_id,
+        "Outcome": outcome_nullable,
+        "PaceAdjust": pace_adjust,
+        "PerMode": per_mode_detailed,
+        "Period": period,
+        "PlayerIDList": player_id_list,
+        "PlusMinus": plus_minus,
+        "Rank": rank,
+        "Season": season,
+        "SeasonSegment": season_segment_nullable,
+        "SeasonType": season_type_playoffs,
+        "ShotClockRange": shot_clock_range_nullable,
+        "VsConference": vs_conference_nullable,
+        "VsDivision": vs_division_nullable,
+        "VsPlayerIDList": vs_player_id_list,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/playercompare",
-        params={
-            "Conference": conference_nullable,
-            "DateFrom": date_from_nullable,
-            "DateTo": date_to_nullable,
-            "Division": division_simple_nullable,
-            "GameSegment": game_segment_nullable,
-            "LastNGames": last_n_games,
-            "LeagueID": league_id,
-            "Location": location_nullable,
-            "MeasureType": measure_type_detailed_defense,
-            "Month": month,
-            "OpponentTeamID": opponent_team_id,
-            "Outcome": outcome_nullable,
-            "PaceAdjust": pace_adjust,
-            "PerMode": per_mode_detailed,
-            "Period": period,
-            "PlayerIDList": player_id_list,
-            "PlusMinus": plus_minus,
-            "Rank": rank,
-            "Season": season,
-            "SeasonSegment": season_segment_nullable,
-            "SeasonType": season_type_playoffs,
-            "ShotClockRange": shot_clock_range_nullable,
-            "VsConference": vs_conference_nullable,
-            "VsDivision": vs_division_nullable,
-            "VsPlayerIDList": vs_player_id_list,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -5344,33 +5560,36 @@ def nba_stats_playerdashboardbyclutch(
 
             nba_stats_playerdashboardbyclutch(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "DateFrom": date_from_nullable,
+        "DateTo": date_to_nullable,
+        "GameSegment": game_segment_nullable,
+        "LastNGames": last_n_games,
+        "LeagueID": league_id,
+        "Location": location_nullable,
+        "MeasureType": measure_type_detailed,
+        "Month": month,
+        "OpponentTeamID": opponent_team_id,
+        "Outcome": outcome_nullable,
+        "PORound": po_round_nullable,
+        "PaceAdjust": pace_adjust,
+        "PerMode": per_mode_detailed,
+        "Period": period,
+        "PlayerID": player_id,
+        "PlusMinus": plus_minus,
+        "Rank": rank,
+        "Season": season,
+        "SeasonSegment": season_segment_nullable,
+        "SeasonType": season_type_playoffs,
+        "ShotClockRange": shot_clock_range_nullable,
+        "VsConference": vs_conference_nullable,
+        "VsDivision": vs_division_nullable,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/playerdashboardbyclutch",
-        params={
-            "DateFrom": date_from_nullable,
-            "DateTo": date_to_nullable,
-            "GameSegment": game_segment_nullable,
-            "LastNGames": last_n_games,
-            "LeagueID": league_id,
-            "Location": location_nullable,
-            "MeasureType": measure_type_detailed,
-            "Month": month,
-            "OpponentTeamID": opponent_team_id,
-            "Outcome": outcome_nullable,
-            "PORound": po_round_nullable,
-            "PaceAdjust": pace_adjust,
-            "PerMode": per_mode_detailed,
-            "Period": period,
-            "PlayerID": player_id,
-            "PlusMinus": plus_minus,
-            "Rank": rank,
-            "Season": season,
-            "SeasonSegment": season_segment_nullable,
-            "SeasonType": season_type_playoffs,
-            "ShotClockRange": shot_clock_range_nullable,
-            "VsConference": vs_conference_nullable,
-            "VsDivision": vs_division_nullable,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -5447,33 +5666,36 @@ def nba_stats_playerdashboardbygamesplits(
 
             nba_stats_playerdashboardbygamesplits(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "DateFrom": date_from_nullable,
+        "DateTo": date_to_nullable,
+        "GameSegment": game_segment_nullable,
+        "LastNGames": last_n_games,
+        "LeagueID": league_id,
+        "Location": location_nullable,
+        "MeasureType": measure_type_detailed,
+        "Month": month,
+        "OpponentTeamID": opponent_team_id,
+        "Outcome": outcome_nullable,
+        "PORound": po_round_nullable,
+        "PaceAdjust": pace_adjust,
+        "PerMode": per_mode_detailed,
+        "Period": period,
+        "PlayerID": player_id,
+        "PlusMinus": plus_minus,
+        "Rank": rank,
+        "Season": season,
+        "SeasonSegment": season_segment_nullable,
+        "SeasonType": season_type_playoffs,
+        "ShotClockRange": shot_clock_range_nullable,
+        "VsConference": vs_conference_nullable,
+        "VsDivision": vs_division_nullable,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/playerdashboardbygamesplits",
-        params={
-            "DateFrom": date_from_nullable,
-            "DateTo": date_to_nullable,
-            "GameSegment": game_segment_nullable,
-            "LastNGames": last_n_games,
-            "LeagueID": league_id,
-            "Location": location_nullable,
-            "MeasureType": measure_type_detailed,
-            "Month": month,
-            "OpponentTeamID": opponent_team_id,
-            "Outcome": outcome_nullable,
-            "PORound": po_round_nullable,
-            "PaceAdjust": pace_adjust,
-            "PerMode": per_mode_detailed,
-            "Period": period,
-            "PlayerID": player_id,
-            "PlusMinus": plus_minus,
-            "Rank": rank,
-            "Season": season,
-            "SeasonSegment": season_segment_nullable,
-            "SeasonType": season_type_playoffs,
-            "ShotClockRange": shot_clock_range_nullable,
-            "VsConference": vs_conference_nullable,
-            "VsDivision": vs_division_nullable,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -5550,33 +5772,36 @@ def nba_stats_playerdashboardbygeneralsplits(
 
             nba_stats_playerdashboardbygeneralsplits(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "DateFrom": date_from_nullable,
+        "DateTo": date_to_nullable,
+        "GameSegment": game_segment_nullable,
+        "LastNGames": last_n_games,
+        "LeagueID": league_id,
+        "Location": location_nullable,
+        "MeasureType": measure_type_detailed,
+        "Month": month,
+        "OpponentTeamID": opponent_team_id,
+        "Outcome": outcome_nullable,
+        "PORound": po_round_nullable,
+        "PaceAdjust": pace_adjust,
+        "PerMode": per_mode_detailed,
+        "Period": period,
+        "PlayerID": player_id,
+        "PlusMinus": plus_minus,
+        "Rank": rank,
+        "Season": season,
+        "SeasonSegment": season_segment_nullable,
+        "SeasonType": season_type_playoffs,
+        "ShotClockRange": shot_clock_range_nullable,
+        "VsConference": vs_conference_nullable,
+        "VsDivision": vs_division_nullable,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/playerdashboardbygeneralsplits",
-        params={
-            "DateFrom": date_from_nullable,
-            "DateTo": date_to_nullable,
-            "GameSegment": game_segment_nullable,
-            "LastNGames": last_n_games,
-            "LeagueID": league_id,
-            "Location": location_nullable,
-            "MeasureType": measure_type_detailed,
-            "Month": month,
-            "OpponentTeamID": opponent_team_id,
-            "Outcome": outcome_nullable,
-            "PORound": po_round_nullable,
-            "PaceAdjust": pace_adjust,
-            "PerMode": per_mode_detailed,
-            "Period": period,
-            "PlayerID": player_id,
-            "PlusMinus": plus_minus,
-            "Rank": rank,
-            "Season": season,
-            "SeasonSegment": season_segment_nullable,
-            "SeasonType": season_type_playoffs,
-            "ShotClockRange": shot_clock_range_nullable,
-            "VsConference": vs_conference_nullable,
-            "VsDivision": vs_division_nullable,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -5653,33 +5878,36 @@ def nba_stats_playerdashboardbylastngames(
 
             nba_stats_playerdashboardbylastngames(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "DateFrom": date_from_nullable,
+        "DateTo": date_to_nullable,
+        "GameSegment": game_segment_nullable,
+        "LastNGames": last_n_games,
+        "LeagueID": league_id,
+        "Location": location_nullable,
+        "MeasureType": measure_type_detailed,
+        "Month": month,
+        "OpponentTeamID": opponent_team_id,
+        "Outcome": outcome_nullable,
+        "PORound": po_round_nullable,
+        "PaceAdjust": pace_adjust,
+        "PerMode": per_mode_detailed,
+        "Period": period,
+        "PlayerID": player_id,
+        "PlusMinus": plus_minus,
+        "Rank": rank,
+        "Season": season,
+        "SeasonSegment": season_segment_nullable,
+        "SeasonType": season_type_playoffs,
+        "ShotClockRange": shot_clock_range_nullable,
+        "VsConference": vs_conference_nullable,
+        "VsDivision": vs_division_nullable,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/playerdashboardbylastngames",
-        params={
-            "DateFrom": date_from_nullable,
-            "DateTo": date_to_nullable,
-            "GameSegment": game_segment_nullable,
-            "LastNGames": last_n_games,
-            "LeagueID": league_id,
-            "Location": location_nullable,
-            "MeasureType": measure_type_detailed,
-            "Month": month,
-            "OpponentTeamID": opponent_team_id,
-            "Outcome": outcome_nullable,
-            "PORound": po_round_nullable,
-            "PaceAdjust": pace_adjust,
-            "PerMode": per_mode_detailed,
-            "Period": period,
-            "PlayerID": player_id,
-            "PlusMinus": plus_minus,
-            "Rank": rank,
-            "Season": season,
-            "SeasonSegment": season_segment_nullable,
-            "SeasonType": season_type_playoffs,
-            "ShotClockRange": shot_clock_range_nullable,
-            "VsConference": vs_conference_nullable,
-            "VsDivision": vs_division_nullable,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -5756,33 +5984,36 @@ def nba_stats_playerdashboardbyopponent(
 
             nba_stats_playerdashboardbyopponent(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "DateFrom": date_from,
+        "DateTo": date_to,
+        "GameSegment": game_segment,
+        "LastNGames": last_n_games,
+        "LeagueID": league_id,
+        "Location": location,
+        "MeasureType": measure_type,
+        "Month": month,
+        "OpponentTeamID": opponent_team_id,
+        "Outcome": outcome,
+        "PORound": po_round,
+        "PaceAdjust": pace_adjust,
+        "PerMode": per_mode,
+        "Period": period,
+        "PlayerID": player_id,
+        "PlusMinus": plus_minus,
+        "Rank": rank,
+        "Season": season,
+        "SeasonSegment": season_segment,
+        "SeasonType": season_type,
+        "ShotClockRange": shot_clock_range,
+        "VsConference": vs_conference,
+        "VsDivision": vs_division,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/playerdashboardbyopponent",
-        params={
-            "DateFrom": date_from,
-            "DateTo": date_to,
-            "GameSegment": game_segment,
-            "LastNGames": last_n_games,
-            "LeagueID": league_id,
-            "Location": location,
-            "MeasureType": measure_type,
-            "Month": month,
-            "OpponentTeamID": opponent_team_id,
-            "Outcome": outcome,
-            "PORound": po_round,
-            "PaceAdjust": pace_adjust,
-            "PerMode": per_mode,
-            "Period": period,
-            "PlayerID": player_id,
-            "PlusMinus": plus_minus,
-            "Rank": rank,
-            "Season": season,
-            "SeasonSegment": season_segment,
-            "SeasonType": season_type,
-            "ShotClockRange": shot_clock_range,
-            "VsConference": vs_conference,
-            "VsDivision": vs_division,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -5859,33 +6090,36 @@ def nba_stats_playerdashboardbyshootingsplits(
 
             nba_stats_playerdashboardbyshootingsplits(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "DateFrom": date_from_nullable,
+        "DateTo": date_to_nullable,
+        "GameSegment": game_segment_nullable,
+        "LastNGames": last_n_games,
+        "LeagueID": league_id,
+        "Location": location_nullable,
+        "MeasureType": measure_type_detailed,
+        "Month": month,
+        "OpponentTeamID": opponent_team_id,
+        "Outcome": outcome_nullable,
+        "PORound": po_round_nullable,
+        "PaceAdjust": pace_adjust,
+        "PerMode": per_mode_detailed,
+        "Period": period,
+        "PlayerID": player_id,
+        "PlusMinus": plus_minus,
+        "Rank": rank,
+        "Season": season,
+        "SeasonSegment": season_segment_nullable,
+        "SeasonType": season_type_playoffs,
+        "ShotClockRange": shot_clock_range_nullable,
+        "VsConference": vs_conference_nullable,
+        "VsDivision": vs_division_nullable,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/playerdashboardbyshootingsplits",
-        params={
-            "DateFrom": date_from_nullable,
-            "DateTo": date_to_nullable,
-            "GameSegment": game_segment_nullable,
-            "LastNGames": last_n_games,
-            "LeagueID": league_id,
-            "Location": location_nullable,
-            "MeasureType": measure_type_detailed,
-            "Month": month,
-            "OpponentTeamID": opponent_team_id,
-            "Outcome": outcome_nullable,
-            "PORound": po_round_nullable,
-            "PaceAdjust": pace_adjust,
-            "PerMode": per_mode_detailed,
-            "Period": period,
-            "PlayerID": player_id,
-            "PlusMinus": plus_minus,
-            "Rank": rank,
-            "Season": season,
-            "SeasonSegment": season_segment_nullable,
-            "SeasonType": season_type_playoffs,
-            "ShotClockRange": shot_clock_range_nullable,
-            "VsConference": vs_conference_nullable,
-            "VsDivision": vs_division_nullable,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -5962,33 +6196,36 @@ def nba_stats_playerdashboardbyteamperformance(
 
             nba_stats_playerdashboardbyteamperformance(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "DateFrom": date_from_nullable,
+        "DateTo": date_to_nullable,
+        "GameSegment": game_segment_nullable,
+        "LastNGames": last_n_games,
+        "LeagueID": league_id,
+        "Location": location_nullable,
+        "MeasureType": measure_type_detailed,
+        "Month": month,
+        "OpponentTeamID": opponent_team_id,
+        "Outcome": outcome_nullable,
+        "PORound": po_round_nullable,
+        "PaceAdjust": pace_adjust,
+        "PerMode": per_mode_detailed,
+        "Period": period,
+        "PlayerID": player_id,
+        "PlusMinus": plus_minus,
+        "Rank": rank,
+        "Season": season,
+        "SeasonSegment": season_segment_nullable,
+        "SeasonType": season_type_playoffs,
+        "ShotClockRange": shot_clock_range_nullable,
+        "VsConference": vs_conference_nullable,
+        "VsDivision": vs_division_nullable,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/playerdashboardbyteamperformance",
-        params={
-            "DateFrom": date_from_nullable,
-            "DateTo": date_to_nullable,
-            "GameSegment": game_segment_nullable,
-            "LastNGames": last_n_games,
-            "LeagueID": league_id,
-            "Location": location_nullable,
-            "MeasureType": measure_type_detailed,
-            "Month": month,
-            "OpponentTeamID": opponent_team_id,
-            "Outcome": outcome_nullable,
-            "PORound": po_round_nullable,
-            "PaceAdjust": pace_adjust,
-            "PerMode": per_mode_detailed,
-            "Period": period,
-            "PlayerID": player_id,
-            "PlusMinus": plus_minus,
-            "Rank": rank,
-            "Season": season,
-            "SeasonSegment": season_segment_nullable,
-            "SeasonType": season_type_playoffs,
-            "ShotClockRange": shot_clock_range_nullable,
-            "VsConference": vs_conference_nullable,
-            "VsDivision": vs_division_nullable,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -6065,33 +6302,36 @@ def nba_stats_playerdashboardbyyearoveryear(
 
             nba_stats_playerdashboardbyyearoveryear(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "DateFrom": date_from_nullable,
+        "DateTo": date_to_nullable,
+        "GameSegment": game_segment_nullable,
+        "LastNGames": last_n_games,
+        "LeagueID": league_id,
+        "Location": location_nullable,
+        "MeasureType": measure_type_detailed,
+        "Month": month,
+        "OpponentTeamID": opponent_team_id,
+        "Outcome": outcome_nullable,
+        "PORound": po_round_nullable,
+        "PaceAdjust": pace_adjust,
+        "PerMode": per_mode_detailed,
+        "Period": period,
+        "PlayerID": player_id,
+        "PlusMinus": plus_minus,
+        "Rank": rank,
+        "Season": season,
+        "SeasonSegment": season_segment_nullable,
+        "SeasonType": season_type_playoffs,
+        "ShotClockRange": shot_clock_range_nullable,
+        "VsConference": vs_conference_nullable,
+        "VsDivision": vs_division_nullable,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/playerdashboardbyyearoveryear",
-        params={
-            "DateFrom": date_from_nullable,
-            "DateTo": date_to_nullable,
-            "GameSegment": game_segment_nullable,
-            "LastNGames": last_n_games,
-            "LeagueID": league_id,
-            "Location": location_nullable,
-            "MeasureType": measure_type_detailed,
-            "Month": month,
-            "OpponentTeamID": opponent_team_id,
-            "Outcome": outcome_nullable,
-            "PORound": po_round_nullable,
-            "PaceAdjust": pace_adjust,
-            "PerMode": per_mode_detailed,
-            "Period": period,
-            "PlayerID": player_id,
-            "PlusMinus": plus_minus,
-            "Rank": rank,
-            "Season": season,
-            "SeasonSegment": season_segment_nullable,
-            "SeasonType": season_type_playoffs,
-            "ShotClockRange": shot_clock_range_nullable,
-            "VsConference": vs_conference_nullable,
-            "VsDivision": vs_division_nullable,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -6154,26 +6394,29 @@ def nba_stats_playerdashptpass(
 
             nba_stats_playerdashptpass(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "DateFrom": date_from_nullable,
+        "DateTo": date_to_nullable,
+        "LastNGames": last_n_games,
+        "LeagueID": league_id,
+        "Location": location_nullable,
+        "Month": month,
+        "OpponentTeamID": opponent_team_id,
+        "Outcome": outcome_nullable,
+        "PerMode": per_mode_simple,
+        "PlayerID": player_id,
+        "Season": season,
+        "SeasonSegment": season_segment_nullable,
+        "SeasonType": season_type_all_star,
+        "TeamID": team_id,
+        "VsConference": vs_conference_nullable,
+        "VsDivision": vs_division_nullable,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/playerdashptpass",
-        params={
-            "DateFrom": date_from_nullable,
-            "DateTo": date_to_nullable,
-            "LastNGames": last_n_games,
-            "LeagueID": league_id,
-            "Location": location_nullable,
-            "Month": month,
-            "OpponentTeamID": opponent_team_id,
-            "Outcome": outcome_nullable,
-            "PerMode": per_mode_simple,
-            "PlayerID": player_id,
-            "Season": season,
-            "SeasonSegment": season_segment_nullable,
-            "SeasonType": season_type_all_star,
-            "TeamID": team_id,
-            "VsConference": vs_conference_nullable,
-            "VsDivision": vs_division_nullable,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -6240,28 +6483,31 @@ def nba_stats_playerdashptreb(
 
             nba_stats_playerdashptreb(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "DateFrom": date_from_nullable,
+        "DateTo": date_to_nullable,
+        "GameSegment": game_segment_nullable,
+        "LastNGames": last_n_games,
+        "LeagueID": league_id,
+        "Location": location_nullable,
+        "Month": month,
+        "OpponentTeamID": opponent_team_id,
+        "Outcome": outcome_nullable,
+        "PerMode": per_mode_simple,
+        "Period": period,
+        "PlayerID": player_id,
+        "Season": season,
+        "SeasonSegment": season_segment_nullable,
+        "SeasonType": season_type_all_star,
+        "TeamID": team_id,
+        "VsConference": vs_conference_nullable,
+        "VsDivision": vs_division_nullable,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/playerdashptreb",
-        params={
-            "DateFrom": date_from_nullable,
-            "DateTo": date_to_nullable,
-            "GameSegment": game_segment_nullable,
-            "LastNGames": last_n_games,
-            "LeagueID": league_id,
-            "Location": location_nullable,
-            "Month": month,
-            "OpponentTeamID": opponent_team_id,
-            "Outcome": outcome_nullable,
-            "PerMode": per_mode_simple,
-            "Period": period,
-            "PlayerID": player_id,
-            "Season": season,
-            "SeasonSegment": season_segment_nullable,
-            "SeasonType": season_type_all_star,
-            "TeamID": team_id,
-            "VsConference": vs_conference_nullable,
-            "VsDivision": vs_division_nullable,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -6328,28 +6574,31 @@ def nba_stats_playerdashptshotdefend(
 
             nba_stats_playerdashptshotdefend(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "DateFrom": date_from_nullable,
+        "DateTo": date_to_nullable,
+        "GameSegment": game_segment_nullable,
+        "LastNGames": last_n_games,
+        "LeagueID": league_id,
+        "Location": location_nullable,
+        "Month": month,
+        "OpponentTeamID": opponent_team_id,
+        "Outcome": outcome_nullable,
+        "PerMode": per_mode_simple,
+        "Period": period,
+        "PlayerID": player_id,
+        "Season": season,
+        "SeasonSegment": season_segment_nullable,
+        "SeasonType": season_type_all_star,
+        "TeamID": team_id,
+        "VsConference": vs_conference_nullable,
+        "VsDivision": vs_division_nullable,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/playerdashptshotdefend",
-        params={
-            "DateFrom": date_from_nullable,
-            "DateTo": date_to_nullable,
-            "GameSegment": game_segment_nullable,
-            "LastNGames": last_n_games,
-            "LeagueID": league_id,
-            "Location": location_nullable,
-            "Month": month,
-            "OpponentTeamID": opponent_team_id,
-            "Outcome": outcome_nullable,
-            "PerMode": per_mode_simple,
-            "Period": period,
-            "PlayerID": player_id,
-            "Season": season,
-            "SeasonSegment": season_segment_nullable,
-            "SeasonType": season_type_all_star,
-            "TeamID": team_id,
-            "VsConference": vs_conference_nullable,
-            "VsDivision": vs_division_nullable,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -6416,28 +6665,31 @@ def nba_stats_playerdashptshots(
 
             nba_stats_playerdashptshots(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "DateFrom": date_from_nullable,
+        "DateTo": date_to_nullable,
+        "GameSegment": game_segment_nullable,
+        "LastNGames": last_n_games,
+        "LeagueID": league_id,
+        "Location": location_nullable,
+        "Month": month,
+        "OpponentTeamID": opponent_team_id,
+        "Outcome": outcome_nullable,
+        "PerMode": per_mode_simple,
+        "Period": period,
+        "PlayerID": player_id,
+        "Season": season,
+        "SeasonSegment": season_segment_nullable,
+        "SeasonType": season_type_all_star,
+        "TeamID": team_id,
+        "VsConference": vs_conference_nullable,
+        "VsDivision": vs_division_nullable,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/playerdashptshots",
-        params={
-            "DateFrom": date_from_nullable,
-            "DateTo": date_to_nullable,
-            "GameSegment": game_segment_nullable,
-            "LastNGames": last_n_games,
-            "LeagueID": league_id,
-            "Location": location_nullable,
-            "Month": month,
-            "OpponentTeamID": opponent_team_id,
-            "Outcome": outcome_nullable,
-            "PerMode": per_mode_simple,
-            "Period": period,
-            "PlayerID": player_id,
-            "Season": season,
-            "SeasonSegment": season_segment_nullable,
-            "SeasonType": season_type_all_star,
-            "TeamID": team_id,
-            "VsConference": vs_conference_nullable,
-            "VsDivision": vs_division_nullable,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -6474,13 +6726,16 @@ def nba_stats_playerestimatedmetrics(
 
             nba_stats_playerestimatedmetrics(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "LeagueID": league_id,
+        "Season": season,
+        "SeasonType": season_type,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/playerestimatedmetrics",
-        params={
-            "LeagueID": league_id,
-            "Season": season,
-            "SeasonType": season_type,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -6529,19 +6784,22 @@ def nba_stats_playerfantasyprofile(
 
             nba_stats_playerfantasyprofile(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "LeagueID": league_id,
+        "MeasureType": measure_type,
+        "PaceAdjust": pace_adjust,
+        "PerMode": per_mode,
+        "PlayerID": player_id,
+        "PlusMinus": plus_minus,
+        "Rank": rank,
+        "Season": season,
+        "SeasonType": season_type,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/playerfantasyprofile",
-        params={
-            "LeagueID": league_id,
-            "MeasureType": measure_type,
-            "PaceAdjust": pace_adjust,
-            "PerMode": per_mode,
-            "PlayerID": player_id,
-            "PlusMinus": plus_minus,
-            "Rank": rank,
-            "Season": season,
-            "SeasonType": season_type,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -6580,14 +6838,17 @@ def nba_stats_playerfantasyprofilebargraph(
 
             nba_stats_playerfantasyprofilebargraph(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "LeagueID": league_id,
+        "PlayerID": player_id,
+        "Season": season,
+        "SeasonType": season_type_all_star_nullable,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/playerfantasyprofilebargraph",
-        params={
-            "LeagueID": league_id,
-            "PlayerID": player_id,
-            "Season": season,
-            "SeasonType": season_type_all_star_nullable,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -6630,16 +6891,19 @@ def nba_stats_playergamelog(
 
             nba_stats_playergamelog(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "DateFrom": date_from_nullable,
+        "DateTo": date_to_nullable,
+        "LeagueID": league_id,
+        "PlayerID": player_id,
+        "Season": season,
+        "SeasonType": season_type_all_star,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/playergamelog",
-        params={
-            "DateFrom": date_from_nullable,
-            "DateTo": date_to_nullable,
-            "LeagueID": league_id,
-            "PlayerID": player_id,
-            "Season": season,
-            "SeasonType": season_type_all_star,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -6712,31 +6976,34 @@ def nba_stats_playergamelogs(
 
             nba_stats_playergamelogs(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "DateFrom": date_from_nullable,
+        "DateTo": date_to_nullable,
+        "GameSegment": game_segment_nullable,
+        "LastNGames": last_n_games_nullable,
+        "LeagueID": league_id,
+        "Location": location_nullable,
+        "MeasureType": measure_type_player_game_logs_nullable,
+        "Month": month_nullable,
+        "OppTeamID": oppteamid,
+        "Outcome": outcome_nullable,
+        "PORound": po_round_nullable,
+        "PerMode": per_mode_simple_nullable,
+        "Period": period_nullable,
+        "PlayerID": player_id_nullable,
+        "Season": season_nullable,
+        "SeasonSegment": season_segment_nullable,
+        "SeasonType": season_type_nullable,
+        "ShotClockRange": shot_clock_range_nullable,
+        "TeamID": team_id_nullable,
+        "VsConference": vs_conference_nullable,
+        "VsDivision": vs_division_nullable,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/playergamelogs",
-        params={
-            "DateFrom": date_from_nullable,
-            "DateTo": date_to_nullable,
-            "GameSegment": game_segment_nullable,
-            "LastNGames": last_n_games_nullable,
-            "LeagueID": league_id,
-            "Location": location_nullable,
-            "MeasureType": measure_type_player_game_logs_nullable,
-            "Month": month_nullable,
-            "OppTeamID": oppteamid,
-            "Outcome": outcome_nullable,
-            "PORound": po_round_nullable,
-            "PerMode": per_mode_simple_nullable,
-            "Period": period_nullable,
-            "PlayerID": player_id_nullable,
-            "Season": season_nullable,
-            "SeasonSegment": season_segment_nullable,
-            "SeasonType": season_type_nullable,
-            "ShotClockRange": shot_clock_range_nullable,
-            "TeamID": team_id_nullable,
-            "VsConference": vs_conference_nullable,
-            "VsDivision": vs_division_nullable,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -6945,99 +7212,102 @@ def nba_stats_playergamestreakfinder(
 
             nba_stats_playergamestreakfinder(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "ActiveStreaksOnly": active_streaks_only_nullable,
+        "Conference": conference_nullable,
+        "DateFrom": date_from_nullable,
+        "DateTo": date_to_nullable,
+        "Division": division_simple_nullable,
+        "DraftNumber": draft_number_nullable,
+        "DraftRound": draft_round_nullable,
+        "DraftTeamID": draft_team_id_nullable,
+        "DraftYear": draft_year_nullable,
+        "EqAST": eq_ast_nullable,
+        "EqBLK": eq_blk_nullable,
+        "EqDD": eq_dd_nullable,
+        "EqDREB": eq_dreb_nullable,
+        "EqFG3A": eq_fg3a_nullable,
+        "EqFG3M": eq_fg3m_nullable,
+        "EqFG3_PCT": eq_fg3_pct_nullable,
+        "EqFGA": eq_fga_nullable,
+        "EqFGM": eq_fgm_nullable,
+        "EqFG_PCT": eq_fg_pct_nullable,
+        "EqFTA": eq_fta_nullable,
+        "EqFTM": eq_ftm_nullable,
+        "EqFT_PCT": eq_ft_pct_nullable,
+        "EqMINUTES": eq_minutes_nullable,
+        "EqOREB": eq_oreb_nullable,
+        "EqPF": eq_pf_nullable,
+        "EqPTS": eq_pts_nullable,
+        "EqREB": eq_reb_nullable,
+        "EqSTL": eq_stl_nullable,
+        "EqTD": eq_td_nullable,
+        "EqTOV": eq_tov_nullable,
+        "GameID": game_id_nullable,
+        "GtAST": gt_ast_nullable,
+        "GtBLK": gt_blk_nullable,
+        "GtDD": gt_dd_nullable,
+        "GtDREB": gt_dreb_nullable,
+        "GtFG3A": gt_fg3a_nullable,
+        "GtFG3M": gt_fg3m_nullable,
+        "GtFG3_PCT": gt_fg3_pct_nullable,
+        "GtFGA": gt_fga_nullable,
+        "GtFGM": gt_fgm_nullable,
+        "GtFG_PCT": gt_fg_pct_nullable,
+        "GtFTA": gt_fta_nullable,
+        "GtFTM": gt_ftm_nullable,
+        "GtFT_PCT": gt_ft_pct_nullable,
+        "GtMINUTES": gt_minutes_nullable,
+        "GtOREB": gt_oreb_nullable,
+        "GtPF": gt_pf_nullable,
+        "GtPTS": gt_pts_nullable,
+        "GtREB": gt_reb_nullable,
+        "GtSTL": gt_stl_nullable,
+        "GtTD": gt_td_nullable,
+        "GtTOV": gt_tov_nullable,
+        "LeagueID": league_id,
+        "Location": location_nullable,
+        "LtAST": lt_ast_nullable,
+        "LtBLK": lt_blk_nullable,
+        "LtDD": lt_dd_nullable,
+        "LtDREB": lt_dreb_nullable,
+        "LtFG3A": lt_fg3a_nullable,
+        "LtFG3M": lt_fg3m_nullable,
+        "LtFG3_PCT": lt_fg3_pct_nullable,
+        "LtFGA": lt_fga_nullable,
+        "LtFGM": lt_fgm_nullable,
+        "LtFG_PCT": lt_fg_pct_nullable,
+        "LtFTA": lt_fta_nullable,
+        "LtFTM": lt_ftm_nullable,
+        "LtFT_PCT": lt_ft_pct_nullable,
+        "LtMINUTES": lt_minutes_nullable,
+        "LtOREB": lt_oreb_nullable,
+        "LtPF": lt_pf_nullable,
+        "LtPTS": lt_pts_nullable,
+        "LtREB": lt_reb_nullable,
+        "LtSTL": lt_stl_nullable,
+        "LtTD": lt_td_nullable,
+        "LtTOV": lt_tov_nullable,
+        "MinGames": min_games_nullable,
+        "Outcome": outcome_nullable,
+        "PORound": po_round_nullable,
+        "PlayerID": player_id_nullable,
+        "RookieYear": rookie_year_nullable,
+        "Season": season_nullable,
+        "SeasonSegment": season_segment_nullable,
+        "SeasonType": season_type_nullable,
+        "StarterBench": starter_bench_nullable,
+        "TeamID": team_id_nullable,
+        "VsConference": vs_conference_nullable,
+        "VsDivision": vs_division_nullable,
+        "VsTeamID": vs_team_id_nullable,
+        "YearsExperience": years_experience_nullable,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/playergamestreakfinder",
-        params={
-            "ActiveStreaksOnly": active_streaks_only_nullable,
-            "Conference": conference_nullable,
-            "DateFrom": date_from_nullable,
-            "DateTo": date_to_nullable,
-            "Division": division_simple_nullable,
-            "DraftNumber": draft_number_nullable,
-            "DraftRound": draft_round_nullable,
-            "DraftTeamID": draft_team_id_nullable,
-            "DraftYear": draft_year_nullable,
-            "EqAST": eq_ast_nullable,
-            "EqBLK": eq_blk_nullable,
-            "EqDD": eq_dd_nullable,
-            "EqDREB": eq_dreb_nullable,
-            "EqFG3A": eq_fg3a_nullable,
-            "EqFG3M": eq_fg3m_nullable,
-            "EqFG3_PCT": eq_fg3_pct_nullable,
-            "EqFGA": eq_fga_nullable,
-            "EqFGM": eq_fgm_nullable,
-            "EqFG_PCT": eq_fg_pct_nullable,
-            "EqFTA": eq_fta_nullable,
-            "EqFTM": eq_ftm_nullable,
-            "EqFT_PCT": eq_ft_pct_nullable,
-            "EqMINUTES": eq_minutes_nullable,
-            "EqOREB": eq_oreb_nullable,
-            "EqPF": eq_pf_nullable,
-            "EqPTS": eq_pts_nullable,
-            "EqREB": eq_reb_nullable,
-            "EqSTL": eq_stl_nullable,
-            "EqTD": eq_td_nullable,
-            "EqTOV": eq_tov_nullable,
-            "GameID": game_id_nullable,
-            "GtAST": gt_ast_nullable,
-            "GtBLK": gt_blk_nullable,
-            "GtDD": gt_dd_nullable,
-            "GtDREB": gt_dreb_nullable,
-            "GtFG3A": gt_fg3a_nullable,
-            "GtFG3M": gt_fg3m_nullable,
-            "GtFG3_PCT": gt_fg3_pct_nullable,
-            "GtFGA": gt_fga_nullable,
-            "GtFGM": gt_fgm_nullable,
-            "GtFG_PCT": gt_fg_pct_nullable,
-            "GtFTA": gt_fta_nullable,
-            "GtFTM": gt_ftm_nullable,
-            "GtFT_PCT": gt_ft_pct_nullable,
-            "GtMINUTES": gt_minutes_nullable,
-            "GtOREB": gt_oreb_nullable,
-            "GtPF": gt_pf_nullable,
-            "GtPTS": gt_pts_nullable,
-            "GtREB": gt_reb_nullable,
-            "GtSTL": gt_stl_nullable,
-            "GtTD": gt_td_nullable,
-            "GtTOV": gt_tov_nullable,
-            "LeagueID": league_id,
-            "Location": location_nullable,
-            "LtAST": lt_ast_nullable,
-            "LtBLK": lt_blk_nullable,
-            "LtDD": lt_dd_nullable,
-            "LtDREB": lt_dreb_nullable,
-            "LtFG3A": lt_fg3a_nullable,
-            "LtFG3M": lt_fg3m_nullable,
-            "LtFG3_PCT": lt_fg3_pct_nullable,
-            "LtFGA": lt_fga_nullable,
-            "LtFGM": lt_fgm_nullable,
-            "LtFG_PCT": lt_fg_pct_nullable,
-            "LtFTA": lt_fta_nullable,
-            "LtFTM": lt_ftm_nullable,
-            "LtFT_PCT": lt_ft_pct_nullable,
-            "LtMINUTES": lt_minutes_nullable,
-            "LtOREB": lt_oreb_nullable,
-            "LtPF": lt_pf_nullable,
-            "LtPTS": lt_pts_nullable,
-            "LtREB": lt_reb_nullable,
-            "LtSTL": lt_stl_nullable,
-            "LtTD": lt_td_nullable,
-            "LtTOV": lt_tov_nullable,
-            "MinGames": min_games_nullable,
-            "Outcome": outcome_nullable,
-            "PORound": po_round_nullable,
-            "PlayerID": player_id_nullable,
-            "RookieYear": rookie_year_nullable,
-            "Season": season_nullable,
-            "SeasonSegment": season_segment_nullable,
-            "SeasonType": season_type_nullable,
-            "StarterBench": starter_bench_nullable,
-            "TeamID": team_id_nullable,
-            "VsConference": vs_conference_nullable,
-            "VsDivision": vs_division_nullable,
-            "VsTeamID": vs_team_id_nullable,
-            "YearsExperience": years_experience_nullable,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -7094,23 +7364,26 @@ def nba_stats_playerindex(
 
             nba_stats_playerindex(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "Active": active_nullable,
+        "AllStar": allstar_nullable,
+        "College": college_nullable,
+        "Country": country_nullable,
+        "DraftPick": draft_pick_nullable,
+        "DraftRound": draft_round_nullable,
+        "DraftYear": draft_year_nullable,
+        "Height": height_nullable,
+        "Historical": historical_nullable,
+        "LeagueID": league_id,
+        "Season": season,
+        "TeamID": team_id_nullable,
+        "Weight": weight_nullable,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/playerindex",
-        params={
-            "Active": active_nullable,
-            "AllStar": allstar_nullable,
-            "College": college_nullable,
-            "Country": country_nullable,
-            "DraftPick": draft_pick_nullable,
-            "DraftRound": draft_round_nullable,
-            "DraftYear": draft_year_nullable,
-            "Height": height_nullable,
-            "Historical": historical_nullable,
-            "LeagueID": league_id,
-            "Season": season,
-            "TeamID": team_id_nullable,
-            "Weight": weight_nullable,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -7147,13 +7420,16 @@ def nba_stats_playerprofilev2(
 
             nba_stats_playerprofilev2(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "LeagueID": league_id,
+        "PerMode": per_mode36,
+        "PlayerID": player_id,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/playerprofilev2",
-        params={
-            "LeagueID": league_id,
-            "PerMode": per_mode36,
-            "PlayerID": player_id,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -7228,32 +7504,35 @@ def nba_stats_playervsplayer(
 
             nba_stats_playervsplayer(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "DateFrom": date_from_nullable,
+        "DateTo": date_to_nullable,
+        "GameSegment": game_segment_nullable,
+        "LastNGames": last_n_games,
+        "LeagueID": league_id,
+        "Location": location_nullable,
+        "MeasureType": measure_type_detailed_defense,
+        "Month": month,
+        "OpponentTeamID": opponent_team_id,
+        "Outcome": outcome_nullable,
+        "PaceAdjust": pace_adjust,
+        "PerMode": per_mode_detailed,
+        "Period": period,
+        "PlayerID": player_id,
+        "PlusMinus": plus_minus,
+        "Rank": rank,
+        "Season": season,
+        "SeasonSegment": season_segment_nullable,
+        "SeasonType": season_type_playoffs,
+        "VsConference": vs_conference_nullable,
+        "VsDivision": vs_division_nullable,
+        "VsPlayerID": vs_player_id,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/playervsplayer",
-        params={
-            "DateFrom": date_from_nullable,
-            "DateTo": date_to_nullable,
-            "GameSegment": game_segment_nullable,
-            "LastNGames": last_n_games,
-            "LeagueID": league_id,
-            "Location": location_nullable,
-            "MeasureType": measure_type_detailed_defense,
-            "Month": month,
-            "OpponentTeamID": opponent_team_id,
-            "Outcome": outcome_nullable,
-            "PaceAdjust": pace_adjust,
-            "PerMode": per_mode_detailed,
-            "Period": period,
-            "PlayerID": player_id,
-            "PlusMinus": plus_minus,
-            "Rank": rank,
-            "Season": season,
-            "SeasonSegment": season_segment_nullable,
-            "SeasonType": season_type_playoffs,
-            "VsConference": vs_conference_nullable,
-            "VsDivision": vs_division_nullable,
-            "VsPlayerID": vs_player_id,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -7288,12 +7567,15 @@ def nba_stats_playoffpicture(
 
             nba_stats_playoffpicture(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "LeagueID": league_id,
+        "SeasonID": season_id,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/playoffpicture",
-        params={
-            "LeagueID": league_id,
-            "SeasonID": season_id,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -7328,12 +7610,15 @@ def nba_stats_scheduleleaguev2(
 
             nba_stats_scheduleleaguev2(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "LeagueID": league_id,
+        "Season": season,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/scheduleleaguev2",
-        params={
-            "LeagueID": league_id,
-            "Season": season,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -7368,12 +7653,15 @@ def nba_stats_scheduleleaguev2int(
 
             nba_stats_scheduleleaguev2int(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "LeagueID": league_id,
+        "Season": season,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/scheduleleaguev2int",
-        params={
-            "LeagueID": league_id,
-            "Season": season,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -7410,13 +7698,16 @@ def nba_stats_scoreboardv2(
 
             nba_stats_scoreboardv2(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "DayOffset": day_offset,
+        "GameDate": game_date,
+        "LeagueID": league_id,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/scoreboardv2",
-        params={
-            "DayOffset": day_offset,
-            "GameDate": game_date,
-            "LeagueID": league_id,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -7451,12 +7742,15 @@ def nba_stats_scoreboardv3(
 
             nba_stats_scoreboardv3(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "GameDate": game_date,
+        "LeagueID": league_id,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/scoreboardv3",
-        params={
-            "GameDate": game_date,
-            "LeagueID": league_id,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -7549,41 +7843,44 @@ def nba_stats_shotchartdetail(
 
             nba_stats_shotchartdetail(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "AheadBehind": ahead_behind_nullable,
+        "ClutchTime": clutch_time_nullable,
+        "ContextFilter": context_filter_nullable,
+        "ContextMeasure": context_measure_simple,
+        "DateFrom": date_from_nullable,
+        "DateTo": date_to_nullable,
+        "EndPeriod": end_period_nullable,
+        "EndRange": end_range_nullable,
+        "GameID": game_id_nullable,
+        "GameSegment": game_segment_nullable,
+        "LastNGames": last_n_games,
+        "LeagueID": league_id,
+        "Location": location_nullable,
+        "Month": month,
+        "OpponentTeamID": opponent_team_id,
+        "Outcome": outcome_nullable,
+        "Period": period,
+        "PlayerID": player_id,
+        "PlayerPosition": player_position_nullable,
+        "PointDiff": point_diff_nullable,
+        "Position": position_nullable,
+        "RangeType": range_type_nullable,
+        "RookieYear": rookie_year_nullable,
+        "Season": season_nullable,
+        "SeasonSegment": season_segment_nullable,
+        "SeasonType": season_type_all_star,
+        "StartPeriod": start_period_nullable,
+        "StartRange": start_range_nullable,
+        "TeamID": team_id,
+        "VsConference": vs_conference_nullable,
+        "VsDivision": vs_division_nullable,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/shotchartdetail",
-        params={
-            "AheadBehind": ahead_behind_nullable,
-            "ClutchTime": clutch_time_nullable,
-            "ContextFilter": context_filter_nullable,
-            "ContextMeasure": context_measure_simple,
-            "DateFrom": date_from_nullable,
-            "DateTo": date_to_nullable,
-            "EndPeriod": end_period_nullable,
-            "EndRange": end_range_nullable,
-            "GameID": game_id_nullable,
-            "GameSegment": game_segment_nullable,
-            "LastNGames": last_n_games,
-            "LeagueID": league_id,
-            "Location": location_nullable,
-            "Month": month,
-            "OpponentTeamID": opponent_team_id,
-            "Outcome": outcome_nullable,
-            "Period": period,
-            "PlayerID": player_id,
-            "PlayerPosition": player_position_nullable,
-            "PointDiff": point_diff_nullable,
-            "Position": position_nullable,
-            "RangeType": range_type_nullable,
-            "RookieYear": rookie_year_nullable,
-            "Season": season_nullable,
-            "SeasonSegment": season_segment_nullable,
-            "SeasonType": season_type_all_star,
-            "StartPeriod": start_period_nullable,
-            "StartRange": start_range_nullable,
-            "TeamID": team_id,
-            "VsConference": vs_conference_nullable,
-            "VsDivision": vs_division_nullable,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -7618,12 +7915,15 @@ def nba_stats_shotchartleaguewide(
 
             nba_stats_shotchartleaguewide(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "LeagueID": league_id,
+        "Season": season,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/shotchartleaguewide",
-        params={
-            "LeagueID": league_id,
-            "Season": season,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -7694,30 +7994,33 @@ def nba_stats_shotchartlineupdetail(
 
             nba_stats_shotchartlineupdetail(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "ContextFilter": context_filter_nullable,
+        "ContextMeasure": context_measure_detailed,
+        "DateFrom": date_from_nullable,
+        "DateTo": date_to_nullable,
+        "GROUP_ID": group_id,
+        "GameID": game_id_nullable,
+        "GameSegment": game_segment_nullable,
+        "LastNGames": last_n_games_nullable,
+        "LeagueID": league_id,
+        "Location": location_nullable,
+        "Month": month_nullable,
+        "OpponentTeamID": opponent_team_id_nullable,
+        "Outcome": outcome_nullable,
+        "Period": period,
+        "Season": season,
+        "SeasonSegment": season_segment_nullable,
+        "SeasonType": season_type_all_star,
+        "TeamID": team_id_nullable,
+        "VsConference": vs_conference_nullable,
+        "VsDivision": vs_division_nullable,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/shotchartlineupdetail",
-        params={
-            "ContextFilter": context_filter_nullable,
-            "ContextMeasure": context_measure_detailed,
-            "DateFrom": date_from_nullable,
-            "DateTo": date_to_nullable,
-            "GROUP_ID": group_id,
-            "GameID": game_id_nullable,
-            "GameSegment": game_segment_nullable,
-            "LastNGames": last_n_games_nullable,
-            "LeagueID": league_id,
-            "Location": location_nullable,
-            "Month": month_nullable,
-            "OpponentTeamID": opponent_team_id_nullable,
-            "Outcome": outcome_nullable,
-            "Period": period,
-            "Season": season,
-            "SeasonSegment": season_segment_nullable,
-            "SeasonType": season_type_all_star,
-            "TeamID": team_id_nullable,
-            "VsConference": vs_conference_nullable,
-            "VsDivision": vs_division_nullable,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -7762,17 +8065,20 @@ def nba_stats_synergyplaytypes(
 
             nba_stats_synergyplaytypes(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "LeagueID": league_id,
+        "PerMode": per_mode_simple,
+        "PlayType": play_type_nullable,
+        "PlayerOrTeam": player_or_team_abbreviation,
+        "SeasonType": season_type_all_star,
+        "SeasonYear": season,
+        "TypeGrouping": type_grouping_nullable,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/synergyplaytypes",
-        params={
-            "LeagueID": league_id,
-            "PerMode": per_mode_simple,
-            "PlayType": play_type_nullable,
-            "PlayerOrTeam": player_or_team_abbreviation,
-            "SeasonType": season_type_all_star,
-            "SeasonYear": season,
-            "TypeGrouping": type_grouping_nullable,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -7849,33 +8155,36 @@ def nba_stats_teamdashboardbyclutch(
 
             nba_stats_teamdashboardbyclutch(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "DateFrom": date_from,
+        "DateTo": date_to,
+        "GameSegment": game_segment,
+        "LastNGames": last_n_games,
+        "LeagueID": league_id,
+        "Location": location,
+        "MeasureType": measure_type,
+        "Month": month,
+        "OpponentTeamID": opponent_team_id,
+        "Outcome": outcome,
+        "PORound": po_round,
+        "PaceAdjust": pace_adjust,
+        "PerMode": per_mode,
+        "Period": period,
+        "PlusMinus": plus_minus,
+        "Rank": rank,
+        "Season": season,
+        "SeasonSegment": season_segment,
+        "SeasonType": season_type,
+        "ShotClockRange": shot_clock_range,
+        "TeamID": team_id,
+        "VsConference": vs_conference,
+        "VsDivision": vs_division,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/teamdashboardbyclutch",
-        params={
-            "DateFrom": date_from,
-            "DateTo": date_to,
-            "GameSegment": game_segment,
-            "LastNGames": last_n_games,
-            "LeagueID": league_id,
-            "Location": location,
-            "MeasureType": measure_type,
-            "Month": month,
-            "OpponentTeamID": opponent_team_id,
-            "Outcome": outcome,
-            "PORound": po_round,
-            "PaceAdjust": pace_adjust,
-            "PerMode": per_mode,
-            "Period": period,
-            "PlusMinus": plus_minus,
-            "Rank": rank,
-            "Season": season,
-            "SeasonSegment": season_segment,
-            "SeasonType": season_type,
-            "ShotClockRange": shot_clock_range,
-            "TeamID": team_id,
-            "VsConference": vs_conference,
-            "VsDivision": vs_division,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -7952,33 +8261,36 @@ def nba_stats_teamdashboardbygamesplits(
 
             nba_stats_teamdashboardbygamesplits(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "DateFrom": date_from,
+        "DateTo": date_to,
+        "GameSegment": game_segment,
+        "LastNGames": last_n_games,
+        "LeagueID": league_id,
+        "Location": location,
+        "MeasureType": measure_type,
+        "Month": month,
+        "OpponentTeamID": opponent_team_id,
+        "Outcome": outcome,
+        "PORound": po_round,
+        "PaceAdjust": pace_adjust,
+        "PerMode": per_mode,
+        "Period": period,
+        "PlusMinus": plus_minus,
+        "Rank": rank,
+        "Season": season,
+        "SeasonSegment": season_segment,
+        "SeasonType": season_type,
+        "ShotClockRange": shot_clock_range,
+        "TeamID": team_id,
+        "VsConference": vs_conference,
+        "VsDivision": vs_division,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/teamdashboardbygamesplits",
-        params={
-            "DateFrom": date_from,
-            "DateTo": date_to,
-            "GameSegment": game_segment,
-            "LastNGames": last_n_games,
-            "LeagueID": league_id,
-            "Location": location,
-            "MeasureType": measure_type,
-            "Month": month,
-            "OpponentTeamID": opponent_team_id,
-            "Outcome": outcome,
-            "PORound": po_round,
-            "PaceAdjust": pace_adjust,
-            "PerMode": per_mode,
-            "Period": period,
-            "PlusMinus": plus_minus,
-            "Rank": rank,
-            "Season": season,
-            "SeasonSegment": season_segment,
-            "SeasonType": season_type,
-            "ShotClockRange": shot_clock_range,
-            "TeamID": team_id,
-            "VsConference": vs_conference,
-            "VsDivision": vs_division,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -8055,33 +8367,36 @@ def nba_stats_teamdashboardbygeneralsplits(
 
             nba_stats_teamdashboardbygeneralsplits(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "DateFrom": date_from_nullable,
+        "DateTo": date_to_nullable,
+        "GameSegment": game_segment_nullable,
+        "LastNGames": last_n_games,
+        "LeagueID": league_id,
+        "Location": location_nullable,
+        "MeasureType": measure_type_detailed_defense,
+        "Month": month,
+        "OpponentTeamID": opponent_team_id,
+        "Outcome": outcome_nullable,
+        "PORound": po_round_nullable,
+        "PaceAdjust": pace_adjust,
+        "PerMode": per_mode_detailed,
+        "Period": period,
+        "PlusMinus": plus_minus,
+        "Rank": rank,
+        "Season": season,
+        "SeasonSegment": season_segment_nullable,
+        "SeasonType": season_type_all_star,
+        "ShotClockRange": shot_clock_range_nullable,
+        "TeamID": team_id,
+        "VsConference": vs_conference_nullable,
+        "VsDivision": vs_division_nullable,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/teamdashboardbygeneralsplits",
-        params={
-            "DateFrom": date_from_nullable,
-            "DateTo": date_to_nullable,
-            "GameSegment": game_segment_nullable,
-            "LastNGames": last_n_games,
-            "LeagueID": league_id,
-            "Location": location_nullable,
-            "MeasureType": measure_type_detailed_defense,
-            "Month": month,
-            "OpponentTeamID": opponent_team_id,
-            "Outcome": outcome_nullable,
-            "PORound": po_round_nullable,
-            "PaceAdjust": pace_adjust,
-            "PerMode": per_mode_detailed,
-            "Period": period,
-            "PlusMinus": plus_minus,
-            "Rank": rank,
-            "Season": season,
-            "SeasonSegment": season_segment_nullable,
-            "SeasonType": season_type_all_star,
-            "ShotClockRange": shot_clock_range_nullable,
-            "TeamID": team_id,
-            "VsConference": vs_conference_nullable,
-            "VsDivision": vs_division_nullable,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -8158,33 +8473,36 @@ def nba_stats_teamdashboardbylastngames(
 
             nba_stats_teamdashboardbylastngames(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "DateFrom": date_from,
+        "DateTo": date_to,
+        "GameSegment": game_segment,
+        "LastNGames": last_n_games,
+        "LeagueID": league_id,
+        "Location": location,
+        "MeasureType": measure_type,
+        "Month": month,
+        "OpponentTeamID": opponent_team_id,
+        "Outcome": outcome,
+        "PORound": po_round,
+        "PaceAdjust": pace_adjust,
+        "PerMode": per_mode,
+        "Period": period,
+        "PlusMinus": plus_minus,
+        "Rank": rank,
+        "Season": season,
+        "SeasonSegment": season_segment,
+        "SeasonType": season_type,
+        "ShotClockRange": shot_clock_range,
+        "TeamID": team_id,
+        "VsConference": vs_conference,
+        "VsDivision": vs_division,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/teamdashboardbylastngames",
-        params={
-            "DateFrom": date_from,
-            "DateTo": date_to,
-            "GameSegment": game_segment,
-            "LastNGames": last_n_games,
-            "LeagueID": league_id,
-            "Location": location,
-            "MeasureType": measure_type,
-            "Month": month,
-            "OpponentTeamID": opponent_team_id,
-            "Outcome": outcome,
-            "PORound": po_round,
-            "PaceAdjust": pace_adjust,
-            "PerMode": per_mode,
-            "Period": period,
-            "PlusMinus": plus_minus,
-            "Rank": rank,
-            "Season": season,
-            "SeasonSegment": season_segment,
-            "SeasonType": season_type,
-            "ShotClockRange": shot_clock_range,
-            "TeamID": team_id,
-            "VsConference": vs_conference,
-            "VsDivision": vs_division,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -8261,33 +8579,36 @@ def nba_stats_teamdashboardbyopponent(
 
             nba_stats_teamdashboardbyopponent(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "DateFrom": date_from,
+        "DateTo": date_to,
+        "GameSegment": game_segment,
+        "LastNGames": last_n_games,
+        "LeagueID": league_id,
+        "Location": location,
+        "MeasureType": measure_type,
+        "Month": month,
+        "OpponentTeamID": opponent_team_id,
+        "Outcome": outcome,
+        "PORound": po_round,
+        "PaceAdjust": pace_adjust,
+        "PerMode": per_mode,
+        "Period": period,
+        "PlusMinus": plus_minus,
+        "Rank": rank,
+        "Season": season,
+        "SeasonSegment": season_segment,
+        "SeasonType": season_type,
+        "ShotClockRange": shot_clock_range,
+        "TeamID": team_id,
+        "VsConference": vs_conference,
+        "VsDivision": vs_division,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/teamdashboardbyopponent",
-        params={
-            "DateFrom": date_from,
-            "DateTo": date_to,
-            "GameSegment": game_segment,
-            "LastNGames": last_n_games,
-            "LeagueID": league_id,
-            "Location": location,
-            "MeasureType": measure_type,
-            "Month": month,
-            "OpponentTeamID": opponent_team_id,
-            "Outcome": outcome,
-            "PORound": po_round,
-            "PaceAdjust": pace_adjust,
-            "PerMode": per_mode,
-            "Period": period,
-            "PlusMinus": plus_minus,
-            "Rank": rank,
-            "Season": season,
-            "SeasonSegment": season_segment,
-            "SeasonType": season_type,
-            "ShotClockRange": shot_clock_range,
-            "TeamID": team_id,
-            "VsConference": vs_conference,
-            "VsDivision": vs_division,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -8364,33 +8685,36 @@ def nba_stats_teamdashboardbyshootingsplits(
 
             nba_stats_teamdashboardbyshootingsplits(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "DateFrom": date_from_nullable,
+        "DateTo": date_to_nullable,
+        "GameSegment": game_segment_nullable,
+        "LastNGames": last_n_games,
+        "LeagueID": league_id,
+        "Location": location_nullable,
+        "MeasureType": measure_type_detailed_defense,
+        "Month": month,
+        "OpponentTeamID": opponent_team_id,
+        "Outcome": outcome_nullable,
+        "PORound": po_round_nullable,
+        "PaceAdjust": pace_adjust,
+        "PerMode": per_mode_detailed,
+        "Period": period,
+        "PlusMinus": plus_minus,
+        "Rank": rank,
+        "Season": season,
+        "SeasonSegment": season_segment_nullable,
+        "SeasonType": season_type_all_star,
+        "ShotClockRange": shot_clock_range_nullable,
+        "TeamID": team_id,
+        "VsConference": vs_conference_nullable,
+        "VsDivision": vs_division_nullable,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/teamdashboardbyshootingsplits",
-        params={
-            "DateFrom": date_from_nullable,
-            "DateTo": date_to_nullable,
-            "GameSegment": game_segment_nullable,
-            "LastNGames": last_n_games,
-            "LeagueID": league_id,
-            "Location": location_nullable,
-            "MeasureType": measure_type_detailed_defense,
-            "Month": month,
-            "OpponentTeamID": opponent_team_id,
-            "Outcome": outcome_nullable,
-            "PORound": po_round_nullable,
-            "PaceAdjust": pace_adjust,
-            "PerMode": per_mode_detailed,
-            "Period": period,
-            "PlusMinus": plus_minus,
-            "Rank": rank,
-            "Season": season,
-            "SeasonSegment": season_segment_nullable,
-            "SeasonType": season_type_all_star,
-            "ShotClockRange": shot_clock_range_nullable,
-            "TeamID": team_id,
-            "VsConference": vs_conference_nullable,
-            "VsDivision": vs_division_nullable,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -8467,33 +8791,36 @@ def nba_stats_teamdashboardbyteamperformance(
 
             nba_stats_teamdashboardbyteamperformance(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "DateFrom": date_from,
+        "DateTo": date_to,
+        "GameSegment": game_segment,
+        "LastNGames": last_n_games,
+        "LeagueID": league_id,
+        "Location": location,
+        "MeasureType": measure_type,
+        "Month": month,
+        "OpponentTeamID": opponent_team_id,
+        "Outcome": outcome,
+        "PORound": po_round,
+        "PaceAdjust": pace_adjust,
+        "PerMode": per_mode,
+        "Period": period,
+        "PlusMinus": plus_minus,
+        "Rank": rank,
+        "Season": season,
+        "SeasonSegment": season_segment,
+        "SeasonType": season_type,
+        "ShotClockRange": shot_clock_range,
+        "TeamID": team_id,
+        "VsConference": vs_conference,
+        "VsDivision": vs_division,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/teamdashboardbyteamperformance",
-        params={
-            "DateFrom": date_from,
-            "DateTo": date_to,
-            "GameSegment": game_segment,
-            "LastNGames": last_n_games,
-            "LeagueID": league_id,
-            "Location": location,
-            "MeasureType": measure_type,
-            "Month": month,
-            "OpponentTeamID": opponent_team_id,
-            "Outcome": outcome,
-            "PORound": po_round,
-            "PaceAdjust": pace_adjust,
-            "PerMode": per_mode,
-            "Period": period,
-            "PlusMinus": plus_minus,
-            "Rank": rank,
-            "Season": season,
-            "SeasonSegment": season_segment,
-            "SeasonType": season_type,
-            "ShotClockRange": shot_clock_range,
-            "TeamID": team_id,
-            "VsConference": vs_conference,
-            "VsDivision": vs_division,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -8570,33 +8897,36 @@ def nba_stats_teamdashboardbyyearoveryear(
 
             nba_stats_teamdashboardbyyearoveryear(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "DateFrom": date_from,
+        "DateTo": date_to,
+        "GameSegment": game_segment,
+        "LastNGames": last_n_games,
+        "LeagueID": league_id,
+        "Location": location,
+        "MeasureType": measure_type,
+        "Month": month,
+        "OpponentTeamID": opponent_team_id,
+        "Outcome": outcome,
+        "PORound": po_round,
+        "PaceAdjust": pace_adjust,
+        "PerMode": per_mode,
+        "Period": period,
+        "PlusMinus": plus_minus,
+        "Rank": rank,
+        "Season": season,
+        "SeasonSegment": season_segment,
+        "SeasonType": season_type,
+        "ShotClockRange": shot_clock_range,
+        "TeamID": team_id,
+        "VsConference": vs_conference,
+        "VsDivision": vs_division,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/teamdashboardbyyearoveryear",
-        params={
-            "DateFrom": date_from,
-            "DateTo": date_to,
-            "GameSegment": game_segment,
-            "LastNGames": last_n_games,
-            "LeagueID": league_id,
-            "Location": location,
-            "MeasureType": measure_type,
-            "Month": month,
-            "OpponentTeamID": opponent_team_id,
-            "Outcome": outcome,
-            "PORound": po_round,
-            "PaceAdjust": pace_adjust,
-            "PerMode": per_mode,
-            "Period": period,
-            "PlusMinus": plus_minus,
-            "Rank": rank,
-            "Season": season,
-            "SeasonSegment": season_segment,
-            "SeasonType": season_type,
-            "ShotClockRange": shot_clock_range,
-            "TeamID": team_id,
-            "VsConference": vs_conference,
-            "VsDivision": vs_division,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -8677,35 +9007,38 @@ def nba_stats_teamdashlineups(
 
             nba_stats_teamdashlineups(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "DateFrom": date_from_nullable,
+        "DateTo": date_to_nullable,
+        "GameID": game_id_nullable,
+        "GameSegment": game_segment_nullable,
+        "GroupQuantity": group_quantity,
+        "LastNGames": last_n_games,
+        "LeagueID": league_id,
+        "Location": location_nullable,
+        "MeasureType": measure_type_detailed_defense,
+        "Month": month,
+        "OpponentTeamID": opponent_team_id,
+        "Outcome": outcome_nullable,
+        "PORound": po_round_nullable,
+        "PaceAdjust": pace_adjust,
+        "PerMode": per_mode_detailed,
+        "Period": period,
+        "PlusMinus": plus_minus,
+        "Rank": rank,
+        "Season": season,
+        "SeasonSegment": season_segment_nullable,
+        "SeasonType": season_type_all_star,
+        "ShotClockRange": shot_clock_range_nullable,
+        "TeamID": team_id,
+        "VsConference": vs_conference_nullable,
+        "VsDivision": vs_division_nullable,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/teamdashlineups",
-        params={
-            "DateFrom": date_from_nullable,
-            "DateTo": date_to_nullable,
-            "GameID": game_id_nullable,
-            "GameSegment": game_segment_nullable,
-            "GroupQuantity": group_quantity,
-            "LastNGames": last_n_games,
-            "LeagueID": league_id,
-            "Location": location_nullable,
-            "MeasureType": measure_type_detailed_defense,
-            "Month": month,
-            "OpponentTeamID": opponent_team_id,
-            "Outcome": outcome_nullable,
-            "PORound": po_round_nullable,
-            "PaceAdjust": pace_adjust,
-            "PerMode": per_mode_detailed,
-            "Period": period,
-            "PlusMinus": plus_minus,
-            "Rank": rank,
-            "Season": season,
-            "SeasonSegment": season_segment_nullable,
-            "SeasonType": season_type_all_star,
-            "ShotClockRange": shot_clock_range_nullable,
-            "TeamID": team_id,
-            "VsConference": vs_conference_nullable,
-            "VsDivision": vs_division_nullable,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -8766,25 +9099,28 @@ def nba_stats_teamdashptpass(
 
             nba_stats_teamdashptpass(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "DateFrom": date_from_nullable,
+        "DateTo": date_to_nullable,
+        "LastNGames": last_n_games,
+        "LeagueID": league_id,
+        "Location": location_nullable,
+        "Month": month,
+        "OpponentTeamID": opponent_team_id,
+        "Outcome": outcome_nullable,
+        "PerMode": per_mode_simple,
+        "Season": season,
+        "SeasonSegment": season_segment_nullable,
+        "SeasonType": season_type_all_star,
+        "TeamID": team_id,
+        "VsConference": vs_conference_nullable,
+        "VsDivision": vs_division_nullable,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/teamdashptpass",
-        params={
-            "DateFrom": date_from_nullable,
-            "DateTo": date_to_nullable,
-            "LastNGames": last_n_games,
-            "LeagueID": league_id,
-            "Location": location_nullable,
-            "Month": month,
-            "OpponentTeamID": opponent_team_id,
-            "Outcome": outcome_nullable,
-            "PerMode": per_mode_simple,
-            "Season": season,
-            "SeasonSegment": season_segment_nullable,
-            "SeasonType": season_type_all_star,
-            "TeamID": team_id,
-            "VsConference": vs_conference_nullable,
-            "VsDivision": vs_division_nullable,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -8849,27 +9185,30 @@ def nba_stats_teamdashptreb(
 
             nba_stats_teamdashptreb(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "DateFrom": date_from_nullable,
+        "DateTo": date_to_nullable,
+        "GameSegment": game_segment_nullable,
+        "LastNGames": last_n_games,
+        "LeagueID": league_id,
+        "Location": location_nullable,
+        "Month": month,
+        "OpponentTeamID": opponent_team_id,
+        "Outcome": outcome_nullable,
+        "PerMode": per_mode_simple,
+        "Period": period,
+        "Season": season,
+        "SeasonSegment": season_segment_nullable,
+        "SeasonType": season_type_all_star,
+        "TeamID": team_id,
+        "VsConference": vs_conference_nullable,
+        "VsDivision": vs_division_nullable,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/teamdashptreb",
-        params={
-            "DateFrom": date_from_nullable,
-            "DateTo": date_to_nullable,
-            "GameSegment": game_segment_nullable,
-            "LastNGames": last_n_games,
-            "LeagueID": league_id,
-            "Location": location_nullable,
-            "Month": month,
-            "OpponentTeamID": opponent_team_id,
-            "Outcome": outcome_nullable,
-            "PerMode": per_mode_simple,
-            "Period": period,
-            "Season": season,
-            "SeasonSegment": season_segment_nullable,
-            "SeasonType": season_type_all_star,
-            "TeamID": team_id,
-            "VsConference": vs_conference_nullable,
-            "VsDivision": vs_division_nullable,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -8934,27 +9273,30 @@ def nba_stats_teamdashptshots(
 
             nba_stats_teamdashptshots(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "DateFrom": date_from_nullable,
+        "DateTo": date_to_nullable,
+        "GameSegment": game_segment_nullable,
+        "LastNGames": last_n_games,
+        "LeagueID": league_id,
+        "Location": location_nullable,
+        "Month": month,
+        "OpponentTeamID": opponent_team_id,
+        "Outcome": outcome_nullable,
+        "PerMode": per_mode_simple,
+        "Period": period,
+        "Season": season,
+        "SeasonSegment": season_segment_nullable,
+        "SeasonType": season_type_all_star,
+        "TeamID": team_id,
+        "VsConference": vs_conference_nullable,
+        "VsDivision": vs_division_nullable,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/teamdashptshots",
-        params={
-            "DateFrom": date_from_nullable,
-            "DateTo": date_to_nullable,
-            "GameSegment": game_segment_nullable,
-            "LastNGames": last_n_games,
-            "LeagueID": league_id,
-            "Location": location_nullable,
-            "Month": month,
-            "OpponentTeamID": opponent_team_id,
-            "Outcome": outcome_nullable,
-            "PerMode": per_mode_simple,
-            "Period": period,
-            "Season": season,
-            "SeasonSegment": season_segment_nullable,
-            "SeasonType": season_type_all_star,
-            "TeamID": team_id,
-            "VsConference": vs_conference_nullable,
-            "VsDivision": vs_division_nullable,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -8987,11 +9329,14 @@ def nba_stats_teamdetails(
 
             nba_stats_teamdetails()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "TeamID": team_id,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/teamdetails",
-        params={
-            "TeamID": team_id,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -9028,13 +9373,16 @@ def nba_stats_teamestimatedmetrics(
 
             nba_stats_teamestimatedmetrics(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "LeagueID": league_id,
+        "Season": season,
+        "SeasonType": season_type,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/teamestimatedmetrics",
-        params={
-            "LeagueID": league_id,
-            "Season": season,
-            "SeasonType": season_type,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -9077,16 +9425,19 @@ def nba_stats_teamgamelog(
 
             nba_stats_teamgamelog(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "DateFrom": date_from_nullable,
+        "DateTo": date_to_nullable,
+        "LeagueID": league_id,
+        "Season": season,
+        "SeasonType": season_type_all_star,
+        "TeamID": team_id,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/teamgamelog",
-        params={
-            "DateFrom": date_from_nullable,
-            "DateTo": date_to_nullable,
-            "LeagueID": league_id,
-            "Season": season,
-            "SeasonType": season_type_all_star,
-            "TeamID": team_id,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -9159,31 +9510,34 @@ def nba_stats_teamgamelogs(
 
             nba_stats_teamgamelogs(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "DateFrom": date_from_nullable,
+        "DateTo": date_to_nullable,
+        "GameSegment": game_segment_nullable,
+        "LastNGames": last_n_games_nullable,
+        "LeagueID": league_id,
+        "Location": location_nullable,
+        "MeasureType": measure_type_player_game_logs_nullable,
+        "Month": month_nullable,
+        "OppTeamID": opp_team_id_nullable,
+        "Outcome": outcome_nullable,
+        "PORound": po_round_nullable,
+        "PerMode": per_mode_simple_nullable,
+        "Period": period_nullable,
+        "PlayerID": player_id_nullable,
+        "Season": season_nullable,
+        "SeasonSegment": season_segment_nullable,
+        "SeasonType": season_type_nullable,
+        "ShotClockRange": shot_clock_range_nullable,
+        "TeamID": team_id_nullable,
+        "VsConference": vs_conference_nullable,
+        "VsDivision": vs_division_nullable,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/teamgamelogs",
-        params={
-            "DateFrom": date_from_nullable,
-            "DateTo": date_to_nullable,
-            "GameSegment": game_segment_nullable,
-            "LastNGames": last_n_games_nullable,
-            "LeagueID": league_id,
-            "Location": location_nullable,
-            "MeasureType": measure_type_player_game_logs_nullable,
-            "Month": month_nullable,
-            "OppTeamID": opp_team_id_nullable,
-            "Outcome": outcome_nullable,
-            "PORound": po_round_nullable,
-            "PerMode": per_mode_simple_nullable,
-            "Period": period_nullable,
-            "PlayerID": player_id_nullable,
-            "Season": season_nullable,
-            "SeasonSegment": season_segment_nullable,
-            "SeasonType": season_type_nullable,
-            "ShotClockRange": shot_clock_range_nullable,
-            "TeamID": team_id_nullable,
-            "VsConference": vs_conference_nullable,
-            "VsDivision": vs_division_nullable,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -9222,14 +9576,17 @@ def nba_stats_teaminfocommon(
 
             nba_stats_teaminfocommon(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "LeagueID": league_id,
+        "Season": season_nullable,
+        "SeasonType": season_type_nullable,
+        "TeamID": team_id,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/teaminfocommon",
-        params={
-            "LeagueID": league_id,
-            "Season": season_nullable,
-            "SeasonType": season_type_nullable,
-            "TeamID": team_id,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -9306,33 +9663,36 @@ def nba_stats_teamplayerdashboard(
 
             nba_stats_teamplayerdashboard(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "DateFrom": date_from_nullable,
+        "DateTo": date_to_nullable,
+        "GameSegment": game_segment_nullable,
+        "LastNGames": last_n_games,
+        "LeagueID": league_id,
+        "Location": location_nullable,
+        "MeasureType": measure_type_detailed_defense,
+        "Month": month,
+        "OpponentTeamID": opponent_team_id,
+        "Outcome": outcome_nullable,
+        "PORound": po_round_nullable,
+        "PaceAdjust": pace_adjust,
+        "PerMode": per_mode_detailed,
+        "Period": period,
+        "PlusMinus": plus_minus,
+        "Rank": rank,
+        "Season": season,
+        "SeasonSegment": season_segment_nullable,
+        "SeasonType": season_type_all_star,
+        "ShotClockRange": shot_clock_range_nullable,
+        "TeamID": team_id,
+        "VsConference": vs_conference_nullable,
+        "VsDivision": vs_division_nullable,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/teamplayerdashboard",
-        params={
-            "DateFrom": date_from_nullable,
-            "DateTo": date_to_nullable,
-            "GameSegment": game_segment_nullable,
-            "LastNGames": last_n_games,
-            "LeagueID": league_id,
-            "Location": location_nullable,
-            "MeasureType": measure_type_detailed_defense,
-            "Month": month,
-            "OpponentTeamID": opponent_team_id,
-            "Outcome": outcome_nullable,
-            "PORound": po_round_nullable,
-            "PaceAdjust": pace_adjust,
-            "PerMode": per_mode_detailed,
-            "Period": period,
-            "PlusMinus": plus_minus,
-            "Rank": rank,
-            "Season": season,
-            "SeasonSegment": season_segment_nullable,
-            "SeasonType": season_type_all_star,
-            "ShotClockRange": shot_clock_range_nullable,
-            "TeamID": team_id,
-            "VsConference": vs_conference_nullable,
-            "VsDivision": vs_division_nullable,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -9405,31 +9765,34 @@ def nba_stats_teamplayeronoffdetails(
 
             nba_stats_teamplayeronoffdetails(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "DateFrom": date_from_nullable,
+        "DateTo": date_to_nullable,
+        "GameSegment": game_segment_nullable,
+        "LastNGames": last_n_games,
+        "LeagueID": league_id,
+        "Location": location_nullable,
+        "MeasureType": measure_type_detailed_defense,
+        "Month": month,
+        "OpponentTeamID": opponent_team_id,
+        "Outcome": outcome_nullable,
+        "PaceAdjust": pace_adjust,
+        "PerMode": per_mode_detailed,
+        "Period": period,
+        "PlusMinus": plus_minus,
+        "Rank": rank,
+        "Season": season,
+        "SeasonSegment": season_segment_nullable,
+        "SeasonType": season_type_all_star,
+        "TeamID": team_id,
+        "VsConference": vs_conference_nullable,
+        "VsDivision": vs_division_nullable,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/teamplayeronoffdetails",
-        params={
-            "DateFrom": date_from_nullable,
-            "DateTo": date_to_nullable,
-            "GameSegment": game_segment_nullable,
-            "LastNGames": last_n_games,
-            "LeagueID": league_id,
-            "Location": location_nullable,
-            "MeasureType": measure_type_detailed_defense,
-            "Month": month,
-            "OpponentTeamID": opponent_team_id,
-            "Outcome": outcome_nullable,
-            "PaceAdjust": pace_adjust,
-            "PerMode": per_mode_detailed,
-            "Period": period,
-            "PlusMinus": plus_minus,
-            "Rank": rank,
-            "Season": season,
-            "SeasonSegment": season_segment_nullable,
-            "SeasonType": season_type_all_star,
-            "TeamID": team_id,
-            "VsConference": vs_conference_nullable,
-            "VsDivision": vs_division_nullable,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -9502,31 +9865,34 @@ def nba_stats_teamplayeronoffsummary(
 
             nba_stats_teamplayeronoffsummary(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "DateFrom": date_from_nullable,
+        "DateTo": date_to_nullable,
+        "GameSegment": game_segment_nullable,
+        "LastNGames": last_n_games,
+        "LeagueID": league_id,
+        "Location": location_nullable,
+        "MeasureType": measure_type_detailed_defense,
+        "Month": month,
+        "OpponentTeamID": opponent_team_id,
+        "Outcome": outcome_nullable,
+        "PaceAdjust": pace_adjust,
+        "PerMode": per_mode_detailed,
+        "Period": period,
+        "PlusMinus": plus_minus,
+        "Rank": rank,
+        "Season": season,
+        "SeasonSegment": season_segment_nullable,
+        "SeasonType": season_type_all_star,
+        "TeamID": team_id,
+        "VsConference": vs_conference_nullable,
+        "VsDivision": vs_division_nullable,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/teamplayeronoffsummary",
-        params={
-            "DateFrom": date_from_nullable,
-            "DateTo": date_to_nullable,
-            "GameSegment": game_segment_nullable,
-            "LastNGames": last_n_games,
-            "LeagueID": league_id,
-            "Location": location_nullable,
-            "MeasureType": measure_type_detailed_defense,
-            "Month": month,
-            "OpponentTeamID": opponent_team_id,
-            "Outcome": outcome_nullable,
-            "PaceAdjust": pace_adjust,
-            "PerMode": per_mode_detailed,
-            "Period": period,
-            "PlusMinus": plus_minus,
-            "Rank": rank,
-            "Season": season,
-            "SeasonSegment": season_segment_nullable,
-            "SeasonType": season_type_all_star,
-            "TeamID": team_id,
-            "VsConference": vs_conference_nullable,
-            "VsDivision": vs_division_nullable,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -9603,33 +9969,36 @@ def nba_stats_teamvsplayer(
 
             nba_stats_teamvsplayer(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "DateFrom": date_from_nullable,
+        "DateTo": date_to_nullable,
+        "GameSegment": game_segment_nullable,
+        "LastNGames": last_n_games,
+        "LeagueID": league_id,
+        "Location": location_nullable,
+        "MeasureType": measure_type_detailed_defense,
+        "Month": month,
+        "OpponentTeamID": opponent_team_id,
+        "Outcome": outcome_nullable,
+        "PaceAdjust": pace_adjust,
+        "PerMode": per_mode_detailed,
+        "Period": period,
+        "PlayerID": player_id_nullable,
+        "PlusMinus": plus_minus,
+        "Rank": rank,
+        "Season": season,
+        "SeasonSegment": season_segment_nullable,
+        "SeasonType": season_type_playoffs,
+        "TeamID": team_id,
+        "VsConference": vs_conference_nullable,
+        "VsDivision": vs_division_nullable,
+        "VsPlayerID": vs_player_id,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/teamvsplayer",
-        params={
-            "DateFrom": date_from_nullable,
-            "DateTo": date_to_nullable,
-            "GameSegment": game_segment_nullable,
-            "LastNGames": last_n_games,
-            "LeagueID": league_id,
-            "Location": location_nullable,
-            "MeasureType": measure_type_detailed_defense,
-            "Month": month,
-            "OpponentTeamID": opponent_team_id,
-            "Outcome": outcome_nullable,
-            "PaceAdjust": pace_adjust,
-            "PerMode": per_mode_detailed,
-            "Period": period,
-            "PlayerID": player_id_nullable,
-            "PlusMinus": plus_minus,
-            "Rank": rank,
-            "Season": season,
-            "SeasonSegment": season_segment_nullable,
-            "SeasonType": season_type_playoffs,
-            "TeamID": team_id,
-            "VsConference": vs_conference_nullable,
-            "VsDivision": vs_division_nullable,
-            "VsPlayerID": vs_player_id,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -9668,14 +10037,17 @@ def nba_stats_teamyearbyyearstats(
 
             nba_stats_teamyearbyyearstats(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "LeagueID": league_id,
+        "PerMode": per_mode_simple,
+        "SeasonType": season_type_all_star,
+        "TeamID": team_id,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/teamyearbyyearstats",
-        params={
-            "LeagueID": league_id,
-            "PerMode": per_mode_simple,
-            "SeasonType": season_type_all_star,
-            "TeamID": team_id,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -9767,40 +10139,43 @@ def nba_stats_videodetailsasset(
 
             nba_stats_videodetailsasset(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "ContextMeasure": context_measure_detailed,
+        "LastNGames": last_n_games,
+        "Month": month,
+        "OpponentTeamID": opponent_team_id,
+        "Period": period,
+        "PlayerID": player_id,
+        "Season": season,
+        "SeasonType": season_type_all_star,
+        "TeamID": team_id,
+        "VsDivision": vs_division_nullable,
+        "VsConference": vs_conference_nullable,
+        "StartRange": start_range_nullable,
+        "StartPeriod": start_period_nullable,
+        "SeasonSegment": season_segment_nullable,
+        "RookieYear": rookie_year_nullable,
+        "RangeType": range_type_nullable,
+        "Position": position_nullable,
+        "PointDiff": point_diff_nullable,
+        "Outcome": outcome_nullable,
+        "Location": location_nullable,
+        "LeagueID": league_id,
+        "GameSegment": game_segment_nullable,
+        "GameID": game_id_nullable,
+        "EndRange": end_range_nullable,
+        "EndPeriod": end_period_nullable,
+        "DateTo": date_to_nullable,
+        "DateFrom": date_from_nullable,
+        "ContextFilter": context_filter_nullable,
+        "ClutchTime": clutch_time_nullable,
+        "AheadBehind": ahead_behind_nullable,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/videodetailsasset",
-        params={
-            "ContextMeasure": context_measure_detailed,
-            "LastNGames": last_n_games,
-            "Month": month,
-            "OpponentTeamID": opponent_team_id,
-            "Period": period,
-            "PlayerID": player_id,
-            "Season": season,
-            "SeasonType": season_type_all_star,
-            "TeamID": team_id,
-            "VsDivision": vs_division_nullable,
-            "VsConference": vs_conference_nullable,
-            "StartRange": start_range_nullable,
-            "StartPeriod": start_period_nullable,
-            "SeasonSegment": season_segment_nullable,
-            "RookieYear": rookie_year_nullable,
-            "RangeType": range_type_nullable,
-            "Position": position_nullable,
-            "PointDiff": point_diff_nullable,
-            "Outcome": outcome_nullable,
-            "Location": location_nullable,
-            "LeagueID": league_id,
-            "GameSegment": game_segment_nullable,
-            "GameID": game_id_nullable,
-            "EndRange": end_range_nullable,
-            "EndPeriod": end_period_nullable,
-            "DateTo": date_to_nullable,
-            "DateFrom": date_from_nullable,
-            "ContextFilter": context_filter_nullable,
-            "ClutchTime": clutch_time_nullable,
-            "AheadBehind": ahead_behind_nullable,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -9836,12 +10211,15 @@ def nba_stats_videoevents(
 
             nba_stats_videoevents()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "GameEventID": game_event_id,
+        "GameID": game_id,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/videoevents",
-        params={
-            "GameEventID": game_event_id,
-            "GameID": game_id,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -9877,12 +10255,15 @@ def nba_stats_videoeventsasset(
 
             nba_stats_videoeventsasset()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "GameEventID": game_event_id,
+        "GameID": game_id,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/videoeventsasset",
-        params={
-            "GameEventID": game_event_id,
-            "GameID": game_id,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -9917,12 +10298,15 @@ def nba_stats_videostatus(
 
             nba_stats_videostatus(league_id='00')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "GameDate": game_date,
+        "LeagueID": league_id,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.nba.com/stats/videostatus",
-        params={
-            "GameDate": game_date,
-            "LeagueID": league_id,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:

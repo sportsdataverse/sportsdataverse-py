@@ -84,11 +84,14 @@ def nhl_records_awards(
 
             nhl_records_awards()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://records.nhl.com/site/api/award-details",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_nhl_records(raw, return_as_pandas=return_as_pandas)
@@ -120,11 +123,14 @@ def nhl_records_awards_by_franchise(
 
             nhl_records_awards_by_franchise(franchise_id=1)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://records.nhl.com/site/api/award-details/{franchise_id}",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_nhl_records(raw, return_as_pandas=return_as_pandas)
@@ -158,11 +164,14 @@ def nhl_records_awards_trophy_season(
 
             nhl_records_awards_trophy_season(trophy_id=1, season_id='X')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://records.nhl.com/site/api/award-details/trophy/{trophy_id}/season/{season_id}",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_nhl_records(raw, return_as_pandas=return_as_pandas)
@@ -192,11 +201,14 @@ def nhl_records_coaches(
 
             nhl_records_coaches()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://records.nhl.com/site/api/coach",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_nhl_records(raw, return_as_pandas=return_as_pandas)
@@ -228,11 +240,14 @@ def nhl_records_coach(
 
             nhl_records_coach(coach_id='X')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://records.nhl.com/site/api/coach/{coach_id}",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_nhl_records(raw, return_as_pandas=return_as_pandas)
@@ -264,6 +279,11 @@ def nhl_records_coach_career(
 
             nhl_records_coach_career()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     __url = (
         "https://records.nhl.com/site/api/coach-career-records"
         if coach_id is None
@@ -271,9 +291,7 @@ def nhl_records_coach_career(
     )
     raw = _get(
         __url,
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_nhl_records(raw, return_as_pandas=return_as_pandas)
@@ -303,11 +321,14 @@ def nhl_records_coach_career_with_playoffs(
 
             nhl_records_coach_career_with_playoffs()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://records.nhl.com/site/api/coach-career-records-regular-plus-playoffs",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_nhl_records(raw, return_as_pandas=return_as_pandas)
@@ -339,6 +360,11 @@ def nhl_records_coach_franchise(
 
             nhl_records_coach_franchise()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     __url = (
         "https://records.nhl.com/site/api/coach-franchise-records"
         if coach_id is None
@@ -346,9 +372,7 @@ def nhl_records_coach_franchise(
     )
     raw = _get(
         __url,
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_nhl_records(raw, return_as_pandas=return_as_pandas)
@@ -378,11 +402,14 @@ def nhl_records_coach_stanley_cup(
 
             nhl_records_coach_stanley_cup()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://records.nhl.com/site/api/coach-stanley-cup-streak",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_nhl_records(raw, return_as_pandas=return_as_pandas)
@@ -412,11 +439,14 @@ def nhl_records_franchises(
 
             nhl_records_franchises()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://records.nhl.com/site/api/franchise",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_nhl_records(raw, return_as_pandas=return_as_pandas)
@@ -446,11 +476,14 @@ def nhl_records_franchise_detail(
 
             nhl_records_franchise_detail()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://records.nhl.com/site/api/franchise-detail",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_nhl_records(raw, return_as_pandas=return_as_pandas)
@@ -480,11 +513,14 @@ def nhl_records_franchise_team_totals(
 
             nhl_records_franchise_team_totals()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://records.nhl.com/site/api/franchise-team-totals",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_nhl_records(raw, return_as_pandas=return_as_pandas)
@@ -514,11 +550,14 @@ def nhl_records_franchise_season_results(
 
             nhl_records_franchise_season_results()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://records.nhl.com/site/api/franchise-season-results",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_nhl_records(raw, return_as_pandas=return_as_pandas)
@@ -548,11 +587,14 @@ def nhl_records_franchise_playoff_appearances(
 
             nhl_records_franchise_playoff_appearances()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://records.nhl.com/site/api/franchise-playoff-appearances",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_nhl_records(raw, return_as_pandas=return_as_pandas)
@@ -582,11 +624,14 @@ def nhl_records_franchise_totals(
 
             nhl_records_franchise_totals()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://records.nhl.com/site/api/franchise-totals",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_nhl_records(raw, return_as_pandas=return_as_pandas)
@@ -616,11 +661,14 @@ def nhl_records_all_time_record_vs_franchise(
 
             nhl_records_all_time_record_vs_franchise()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://records.nhl.com/site/api/all-time-record-vs-franchise",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_nhl_records(raw, return_as_pandas=return_as_pandas)
@@ -650,11 +698,14 @@ def nhl_records_skater_career_stats(
 
             nhl_records_skater_career_stats()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://records.nhl.com/site/api/skater-career-statistics",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_nhl_records(raw, return_as_pandas=return_as_pandas)
@@ -684,11 +735,14 @@ def nhl_records_skater_career_leaders(
 
             nhl_records_skater_career_leaders()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://records.nhl.com/site/api/skater-career-leaders",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_nhl_records(raw, return_as_pandas=return_as_pandas)
@@ -718,11 +772,14 @@ def nhl_records_consecutive_100pt_seasons(
 
             nhl_records_consecutive_100pt_seasons()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://records.nhl.com/site/api/consecutive-100-point-seasons",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_nhl_records(raw, return_as_pandas=return_as_pandas)
@@ -752,11 +809,14 @@ def nhl_records_goalie_career_stats(
 
             nhl_records_goalie_career_stats()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://records.nhl.com/site/api/goalie-career-stats",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_nhl_records(raw, return_as_pandas=return_as_pandas)
@@ -786,11 +846,14 @@ def nhl_records_goalie_career_stats_with_playoffs(
 
             nhl_records_goalie_career_stats_with_playoffs()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://records.nhl.com/site/api/goalie_career_stats_incl_playoffs",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_nhl_records(raw, return_as_pandas=return_as_pandas)
@@ -820,11 +883,14 @@ def nhl_records_goalie_season_stats(
 
             nhl_records_goalie_season_stats()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://records.nhl.com/site/api/goalie-season-stats",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_nhl_records(raw, return_as_pandas=return_as_pandas)
@@ -854,11 +920,14 @@ def nhl_records_goalie_win_streak(
 
             nhl_records_goalie_win_streak()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://records.nhl.com/site/api/goalie-win-streak",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_nhl_records(raw, return_as_pandas=return_as_pandas)
@@ -888,11 +957,14 @@ def nhl_records_goalie_shutout_streak(
 
             nhl_records_goalie_shutout_streak()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://records.nhl.com/site/api/goalie-shutout-streak",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_nhl_records(raw, return_as_pandas=return_as_pandas)
@@ -922,11 +994,14 @@ def nhl_records_goalie_win_plateaus(
 
             nhl_records_goalie_win_plateaus()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://records.nhl.com/site/api/goalie-win-plateaus",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_nhl_records(raw, return_as_pandas=return_as_pandas)
@@ -956,11 +1031,14 @@ def nhl_records_goalie_playoff_streak(
 
             nhl_records_goalie_playoff_streak()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://records.nhl.com/site/api/goalie-playoff-streak",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_nhl_records(raw, return_as_pandas=return_as_pandas)
@@ -990,11 +1068,14 @@ def nhl_records_goalie_undefeated_streak(
 
             nhl_records_goalie_undefeated_streak()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://records.nhl.com/site/api/goalie-undefeated-streak",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_nhl_records(raw, return_as_pandas=return_as_pandas)
@@ -1026,6 +1107,11 @@ def nhl_records_draft(
 
             nhl_records_draft()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     __url = (
         "https://records.nhl.com/site/api/draft"
         if draft_id is None
@@ -1033,9 +1119,7 @@ def nhl_records_draft(
     )
     raw = _get(
         __url,
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_nhl_records(raw, return_as_pandas=return_as_pandas)
@@ -1067,11 +1151,14 @@ def nhl_records_draft_by_team(
 
             nhl_records_draft_by_team(team_id=10)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://records.nhl.com/site/api/draft/byTeam/{team_id}",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_nhl_records(raw, return_as_pandas=return_as_pandas)
@@ -1103,6 +1190,11 @@ def nhl_records_draft_prospect(
 
             nhl_records_draft_prospect()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     __url = (
         "https://records.nhl.com/site/api/draft-prospect"
         if prospect_id is None
@@ -1110,9 +1202,7 @@ def nhl_records_draft_prospect(
     )
     raw = _get(
         __url,
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_nhl_records(raw, return_as_pandas=return_as_pandas)
@@ -1142,11 +1232,14 @@ def nhl_records_draft_lottery_odds(
 
             nhl_records_draft_lottery_odds()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://records.nhl.com/site/api/draft-lottery-odds",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_nhl_records(raw, return_as_pandas=return_as_pandas)
@@ -1176,11 +1269,14 @@ def nhl_records_expansion_draft_picks(
 
             nhl_records_expansion_draft_picks()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://records.nhl.com/site/api/expansion-draft-picks",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_nhl_records(raw, return_as_pandas=return_as_pandas)
@@ -1210,11 +1306,14 @@ def nhl_records_allstar_skater_career(
 
             nhl_records_allstar_skater_career()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://records.nhl.com/site/api/all-star-skater-career-stats",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_nhl_records(raw, return_as_pandas=return_as_pandas)
@@ -1244,11 +1343,14 @@ def nhl_records_allstar_goalie_career(
 
             nhl_records_allstar_goalie_career()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://records.nhl.com/site/api/all-star-goaltender-career-stats",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_nhl_records(raw, return_as_pandas=return_as_pandas)
@@ -1278,11 +1380,14 @@ def nhl_records_allstar_coach_career(
 
             nhl_records_allstar_coach_career()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://records.nhl.com/site/api/all-star-coach-career-stats",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_nhl_records(raw, return_as_pandas=return_as_pandas)
@@ -1312,11 +1417,14 @@ def nhl_records_allstar_skater_game(
 
             nhl_records_allstar_skater_game()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://records.nhl.com/site/api/all-star-skater-game-stats",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_nhl_records(raw, return_as_pandas=return_as_pandas)
@@ -1346,11 +1454,14 @@ def nhl_records_allstar_goalie_game(
 
             nhl_records_allstar_goalie_game()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://records.nhl.com/site/api/all-star-goaltender-game-stats",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_nhl_records(raw, return_as_pandas=return_as_pandas)
@@ -1380,11 +1491,14 @@ def nhl_records_attendance(
 
             nhl_records_attendance()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://records.nhl.com/site/api/attendance",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_nhl_records(raw, return_as_pandas=return_as_pandas)
@@ -1414,11 +1528,14 @@ def nhl_records_hof_players(
 
             nhl_records_hof_players()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://records.nhl.com/site/api/hof/players",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_nhl_records(raw, return_as_pandas=return_as_pandas)
@@ -1450,11 +1567,14 @@ def nhl_records_hof_players_by_office(
 
             nhl_records_hof_players_by_office(office_id='X')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         f"https://records.nhl.com/site/api/hof/players/{office_id}",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_nhl_records(raw, return_as_pandas=return_as_pandas)
@@ -1486,6 +1606,11 @@ def nhl_records_gm_career(
 
             nhl_records_gm_career()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     __url = (
         "https://records.nhl.com/site/api/general-manager-career-records"
         if gm_id is None
@@ -1493,9 +1618,7 @@ def nhl_records_gm_career(
     )
     raw = _get(
         __url,
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_nhl_records(raw, return_as_pandas=return_as_pandas)
@@ -1525,11 +1648,14 @@ def nhl_records_gm_franchise(
 
             nhl_records_gm_franchise()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://records.nhl.com/site/api/general-manager-franchise-records",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_nhl_records(raw, return_as_pandas=return_as_pandas)
@@ -1559,11 +1685,14 @@ def nhl_records_home_team_record(
 
             nhl_records_home_team_record()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://records.nhl.com/site/api/home-team-record",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_nhl_records(raw, return_as_pandas=return_as_pandas)
@@ -1593,11 +1722,14 @@ def nhl_records_away_team_record(
 
             nhl_records_away_team_record()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://records.nhl.com/site/api/away-team-record",
-        params={
-            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
-        },
+        params=_params,
     )
     if return_parsed:
         return parse_nhl_records(raw, return_as_pandas=return_as_pandas)

@@ -88,9 +88,12 @@ def nhl_web_pbp(
 
             nhl_web_pbp(game_id=2024020001)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://api-web.nhle.com/v1/gamecenter/{game_id}/play-by-play",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -123,9 +126,12 @@ def nhl_boxscore(
 
             nhl_boxscore(game_id=2024020001)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://api-web.nhle.com/v1/gamecenter/{game_id}/boxscore",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -158,9 +164,12 @@ def nhl_landing(
 
             nhl_landing(game_id=2024020001)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://api-web.nhle.com/v1/gamecenter/{game_id}/landing",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -193,9 +202,12 @@ def nhl_right_rail(
 
             nhl_right_rail(game_id=2024020001)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://api-web.nhle.com/v1/gamecenter/{game_id}/right-rail",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -228,12 +240,15 @@ def nhl_web_schedule(
 
             nhl_web_schedule()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     __url = (
         "https://api-web.nhle.com/v1/schedule/now" if date is None else f"https://api-web.nhle.com/v1/schedule/{date}"
     )
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -266,10 +281,13 @@ def nhl_score(
 
             nhl_score()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     __url = "https://api-web.nhle.com/v1/score/now" if date is None else f"https://api-web.nhle.com/v1/score/{date}"
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -302,6 +320,9 @@ def nhl_schedule_calendar(
 
             nhl_schedule_calendar()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     __url = (
         "https://api-web.nhle.com/v1/schedule-calendar/now"
         if date is None
@@ -309,7 +330,7 @@ def nhl_schedule_calendar(
     )
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -344,11 +365,14 @@ def nhl_playoff_series(
 
             nhl_playoff_series(season=2025, series_letter='a')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     season = format_nhl_season(season)
     __url = f"https://api-web.nhle.com/v1/schedule/playoff-series/{season}/{series_letter}"
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -381,12 +405,15 @@ def nhl_standings(
 
             nhl_standings()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     __url = (
         "https://api-web.nhle.com/v1/standings/now" if date is None else f"https://api-web.nhle.com/v1/standings/{date}"
     )
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -417,9 +444,12 @@ def nhl_standings_season(
 
             nhl_standings_season()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         "https://api-web.nhle.com/v1/standings-season",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -454,6 +484,9 @@ def nhl_club_schedule_season(
 
             nhl_club_schedule_season(team='TOR')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     season = format_nhl_season(season)
     __url = (
         f"https://api-web.nhle.com/v1/club-schedule-season/{team}/now"
@@ -462,7 +495,7 @@ def nhl_club_schedule_season(
     )
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -497,6 +530,9 @@ def nhl_club_schedule_month(
 
             nhl_club_schedule_month(team='TOR')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     __url = (
         f"https://api-web.nhle.com/v1/club-schedule/{team}/month/now"
         if month is None
@@ -504,7 +540,7 @@ def nhl_club_schedule_month(
     )
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -539,6 +575,9 @@ def nhl_club_schedule_week(
 
             nhl_club_schedule_week(team='TOR')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     __url = (
         f"https://api-web.nhle.com/v1/club-schedule/{team}/week/now"
         if date is None
@@ -546,7 +585,7 @@ def nhl_club_schedule_week(
     )
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -583,6 +622,9 @@ def nhl_club_stats(
 
             nhl_club_stats(team='TOR')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     season = format_nhl_season(season)
     __url = (
         f"https://api-web.nhle.com/v1/club-stats/{team}/now"
@@ -591,7 +633,7 @@ def nhl_club_stats(
     )
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -624,9 +666,12 @@ def nhl_club_stats_season(
 
             nhl_club_stats_season(team='TOR')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://api-web.nhle.com/v1/club-stats-season/{team}",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -661,6 +706,9 @@ def nhl_roster(
 
             nhl_roster(team='TOR')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     season = format_nhl_season(season)
     __url = (
         f"https://api-web.nhle.com/v1/roster/{team}/current"
@@ -669,7 +717,7 @@ def nhl_roster(
     )
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -702,9 +750,12 @@ def nhl_roster_season(
 
             nhl_roster_season(team='TOR')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://api-web.nhle.com/v1/roster-season/{team}",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -737,9 +788,12 @@ def nhl_player_landing(
 
             nhl_player_landing(player_id=8480801)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://api-web.nhle.com/v1/player/{player_id}/landing",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -776,6 +830,9 @@ def nhl_player_game_log(
 
             nhl_player_game_log(player_id=8480801)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     season = format_nhl_season(season)
     __url = (
         f"https://api-web.nhle.com/v1/player/{player_id}/game-log/now"
@@ -784,7 +841,7 @@ def nhl_player_game_log(
     )
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -815,9 +872,12 @@ def nhl_player_spotlight(
 
             nhl_player_spotlight()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         "https://api-web.nhle.com/v1/player-spotlight",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -852,6 +912,9 @@ def nhl_skater_leaders(
 
             nhl_skater_leaders()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     season = format_nhl_season(season)
     __url = (
         "https://api-web.nhle.com/v1/skater-stats-leaders/current"
@@ -860,7 +923,7 @@ def nhl_skater_leaders(
     )
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -895,6 +958,9 @@ def nhl_goalie_leaders(
 
             nhl_goalie_leaders()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     season = format_nhl_season(season)
     __url = (
         "https://api-web.nhle.com/v1/goalie-stats-leaders/current"
@@ -903,7 +969,7 @@ def nhl_goalie_leaders(
     )
     raw = _get(
         __url,
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -938,9 +1004,12 @@ def nhl_draft_picks(
 
             nhl_draft_picks(year=2024)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://api-web.nhle.com/v1/draft/picks/{year}/{round_}",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -975,9 +1044,12 @@ def nhl_draft_rankings(
 
             nhl_draft_rankings(year=2024)
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         f"https://api-web.nhle.com/v1/draft/rankings/{year}/{category}",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1008,9 +1080,12 @@ def nhl_draft_picks_now(
 
             nhl_draft_picks_now()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         "https://api-web.nhle.com/v1/draft/picks/now",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1041,9 +1116,12 @@ def nhl_draft_rankings_now(
 
             nhl_draft_rankings_now()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         "https://api-web.nhle.com/v1/draft/rankings/now",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1074,9 +1152,12 @@ def nhl_draft_tracker_picks_now(
 
             nhl_draft_tracker_picks_now()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         "https://api-web.nhle.com/v1/draft-tracker/picks/now",
-        params={},
+        params=_params,
         **kwargs,
     )
     if return_parsed:

@@ -100,16 +100,19 @@ def pff_facet_run_defense_summary(
 
             pff_facet_run_defense_summary()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "league": league,
+        "season": season,
+        "week": week,
+        "franchiseId": franchise_id,
+        "gameId": game_id,
+        "division": division,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://premium.pff.com/api/v1/facet/defense/run",
-        params={
-            "league": league,
-            "season": season,
-            "week": week,
-            "franchiseId": franchise_id,
-            "gameId": game_id,
-            "division": division,
-        },
+        params=_params,
         headers=headers,
         **kwargs,
     )
@@ -155,16 +158,19 @@ def pff_facet_field_goal_summary(
 
             pff_facet_field_goal_summary()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "league": league,
+        "season": season,
+        "week": week,
+        "franchiseId": franchise_id,
+        "gameId": game_id,
+        "division": division,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://premium.pff.com/api/v1/facet/field_goal/summary",
-        params={
-            "league": league,
-            "season": season,
-            "week": week,
-            "franchiseId": franchise_id,
-            "gameId": game_id,
-            "division": division,
-        },
+        params=_params,
         headers=headers,
         **kwargs,
     )
@@ -210,16 +216,19 @@ def pff_facet_coverage_summary(
 
             pff_facet_coverage_summary()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "league": league,
+        "season": season,
+        "week": week,
+        "franchiseId": franchise_id,
+        "gameId": game_id,
+        "division": division,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://premium.pff.com/api/v1/facet/defense/coverage",
-        params={
-            "league": league,
-            "season": season,
-            "week": week,
-            "franchiseId": franchise_id,
-            "gameId": game_id,
-            "division": division,
-        },
+        params=_params,
         headers=headers,
         **kwargs,
     )
@@ -265,16 +274,19 @@ def pff_facet_kicking_summary(
 
             pff_facet_kicking_summary()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "league": league,
+        "season": season,
+        "week": week,
+        "franchiseId": franchise_id,
+        "gameId": game_id,
+        "division": division,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://premium.pff.com/api/v1/facet/kickoff/summary",
-        params={
-            "league": league,
-            "season": season,
-            "week": week,
-            "franchiseId": franchise_id,
-            "gameId": game_id,
-            "division": division,
-        },
+        params=_params,
         headers=headers,
         **kwargs,
     )
@@ -320,16 +332,19 @@ def pff_facet_blocking_summary(
 
             pff_facet_blocking_summary()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "league": league,
+        "season": season,
+        "week": week,
+        "franchiseId": franchise_id,
+        "gameId": game_id,
+        "division": division,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://premium.pff.com/api/v1/facet/offense/blocking",
-        params={
-            "league": league,
-            "season": season,
-            "week": week,
-            "franchiseId": franchise_id,
-            "gameId": game_id,
-            "division": division,
-        },
+        params=_params,
         headers=headers,
         **kwargs,
     )
@@ -375,16 +390,19 @@ def pff_facet_defense_summary(
 
             pff_facet_defense_summary()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "league": league,
+        "season": season,
+        "week": week,
+        "franchiseId": franchise_id,
+        "gameId": game_id,
+        "division": division,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://premium.pff.com/api/v1/facet/defense/summary",
-        params={
-            "league": league,
-            "season": season,
-            "week": week,
-            "franchiseId": franchise_id,
-            "gameId": game_id,
-            "division": division,
-        },
+        params=_params,
         headers=headers,
         **kwargs,
     )
@@ -430,16 +448,19 @@ def pff_facet_offense_summary(
 
             pff_facet_offense_summary()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "league": league,
+        "season": season,
+        "week": week,
+        "franchiseId": franchise_id,
+        "gameId": game_id,
+        "division": division,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://premium.pff.com/api/v1/facet/offense/summary",
-        params={
-            "league": league,
-            "season": season,
-            "week": week,
-            "franchiseId": franchise_id,
-            "gameId": game_id,
-            "division": division,
-        },
+        params=_params,
         headers=headers,
         **kwargs,
     )
@@ -485,16 +506,19 @@ def pff_facet_passing_allowed_pressure(
 
             pff_facet_passing_allowed_pressure()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "league": league,
+        "season": season,
+        "week": week,
+        "franchiseId": franchise_id,
+        "gameId": game_id,
+        "division": division,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://premium.pff.com/api/v1/facet/passing/allowed_pressure",
-        params={
-            "league": league,
-            "season": season,
-            "week": week,
-            "franchiseId": franchise_id,
-            "gameId": game_id,
-            "division": division,
-        },
+        params=_params,
         headers=headers,
         **kwargs,
     )
@@ -540,16 +564,19 @@ def pff_facet_pass_rush_summary(
 
             pff_facet_pass_rush_summary()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "league": league,
+        "season": season,
+        "week": week,
+        "franchiseId": franchise_id,
+        "gameId": game_id,
+        "division": division,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://premium.pff.com/api/v1/facet/defense/pass_rush",
-        params={
-            "league": league,
-            "season": season,
-            "week": week,
-            "franchiseId": franchise_id,
-            "gameId": game_id,
-            "division": division,
-        },
+        params=_params,
         headers=headers,
         **kwargs,
     )
@@ -595,16 +622,19 @@ def pff_facet_passing_concept(
 
             pff_facet_passing_concept()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "league": league,
+        "season": season,
+        "week": week,
+        "franchiseId": franchise_id,
+        "gameId": game_id,
+        "division": division,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://premium.pff.com/api/v1/facet/passing/concept",
-        params={
-            "league": league,
-            "season": season,
-            "week": week,
-            "franchiseId": franchise_id,
-            "gameId": game_id,
-            "division": division,
-        },
+        params=_params,
         headers=headers,
         **kwargs,
     )
@@ -650,16 +680,19 @@ def pff_facet_coverage_scheme(
 
             pff_facet_coverage_scheme()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "league": league,
+        "season": season,
+        "week": week,
+        "franchiseId": franchise_id,
+        "gameId": game_id,
+        "division": division,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://premium.pff.com/api/v1/facet/defense/coverage_scheme",
-        params={
-            "league": league,
-            "season": season,
-            "week": week,
-            "franchiseId": franchise_id,
-            "gameId": game_id,
-            "division": division,
-        },
+        params=_params,
         headers=headers,
         **kwargs,
     )
@@ -705,16 +738,19 @@ def pff_facet_passing_detail_stats(
 
             pff_facet_passing_detail_stats()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "league": league,
+        "season": season,
+        "week": week,
+        "franchiseId": franchise_id,
+        "gameId": game_id,
+        "division": division,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://premium.pff.com/api/v1/facet/passing/detail",
-        params={
-            "league": league,
-            "season": season,
-            "week": week,
-            "franchiseId": franchise_id,
-            "gameId": game_id,
-            "division": division,
-        },
+        params=_params,
         headers=headers,
         **kwargs,
     )
@@ -760,16 +796,19 @@ def pff_facet_run_blocking(
 
             pff_facet_run_blocking()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "league": league,
+        "season": season,
+        "week": week,
+        "franchiseId": franchise_id,
+        "gameId": game_id,
+        "division": division,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://premium.pff.com/api/v1/facet/offense/run_blocking",
-        params={
-            "league": league,
-            "season": season,
-            "week": week,
-            "franchiseId": franchise_id,
-            "gameId": game_id,
-            "division": division,
-        },
+        params=_params,
         headers=headers,
         **kwargs,
     )
@@ -815,16 +854,19 @@ def pff_facet_pass_blocking(
 
             pff_facet_pass_blocking()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "league": league,
+        "season": season,
+        "week": week,
+        "franchiseId": franchise_id,
+        "gameId": game_id,
+        "division": division,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://premium.pff.com/api/v1/facet/offense/pass_blocking",
-        params={
-            "league": league,
-            "season": season,
-            "week": week,
-            "franchiseId": franchise_id,
-            "gameId": game_id,
-            "division": division,
-        },
+        params=_params,
         headers=headers,
         **kwargs,
     )
@@ -870,16 +912,19 @@ def pff_facet_passing_summary(
 
             pff_facet_passing_summary()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "league": league,
+        "season": season,
+        "week": week,
+        "franchiseId": franchise_id,
+        "gameId": game_id,
+        "division": division,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://premium.pff.com/api/v1/facet/passing/summary",
-        params={
-            "league": league,
-            "season": season,
-            "week": week,
-            "franchiseId": franchise_id,
-            "gameId": game_id,
-            "division": division,
-        },
+        params=_params,
         headers=headers,
         **kwargs,
     )
@@ -925,16 +970,19 @@ def pff_facet_punting_summary(
 
             pff_facet_punting_summary()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "league": league,
+        "season": season,
+        "week": week,
+        "franchiseId": franchise_id,
+        "gameId": game_id,
+        "division": division,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://premium.pff.com/api/v1/facet/punting/summary",
-        params={
-            "league": league,
-            "season": season,
-            "week": week,
-            "franchiseId": franchise_id,
-            "gameId": game_id,
-            "division": division,
-        },
+        params=_params,
         headers=headers,
         **kwargs,
     )
@@ -980,16 +1028,19 @@ def pff_facet_passing_depth(
 
             pff_facet_passing_depth()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "league": league,
+        "season": season,
+        "week": week,
+        "franchiseId": franchise_id,
+        "gameId": game_id,
+        "division": division,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://premium.pff.com/api/v1/facet/passing/depth",
-        params={
-            "league": league,
-            "season": season,
-            "week": week,
-            "franchiseId": franchise_id,
-            "gameId": game_id,
-            "division": division,
-        },
+        params=_params,
         headers=headers,
         **kwargs,
     )
@@ -1035,16 +1086,19 @@ def pff_facet_passing_pressure(
 
             pff_facet_passing_pressure()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "league": league,
+        "season": season,
+        "week": week,
+        "franchiseId": franchise_id,
+        "gameId": game_id,
+        "division": division,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://premium.pff.com/api/v1/facet/passing/pressure",
-        params={
-            "league": league,
-            "season": season,
-            "week": week,
-            "franchiseId": franchise_id,
-            "gameId": game_id,
-            "division": division,
-        },
+        params=_params,
         headers=headers,
         **kwargs,
     )
@@ -1090,16 +1144,19 @@ def pff_facet_receiving_summary(
 
             pff_facet_receiving_summary()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "league": league,
+        "season": season,
+        "week": week,
+        "franchiseId": franchise_id,
+        "gameId": game_id,
+        "division": division,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://premium.pff.com/api/v1/facet/receiving/summary",
-        params={
-            "league": league,
-            "season": season,
-            "week": week,
-            "franchiseId": franchise_id,
-            "gameId": game_id,
-            "division": division,
-        },
+        params=_params,
         headers=headers,
         **kwargs,
     )
@@ -1145,16 +1202,19 @@ def pff_facet_return_summary(
 
             pff_facet_return_summary()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "league": league,
+        "season": season,
+        "week": week,
+        "franchiseId": franchise_id,
+        "gameId": game_id,
+        "division": division,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://premium.pff.com/api/v1/facet/return/summary",
-        params={
-            "league": league,
-            "season": season,
-            "week": week,
-            "franchiseId": franchise_id,
-            "gameId": game_id,
-            "division": division,
-        },
+        params=_params,
         headers=headers,
         **kwargs,
     )
@@ -1200,16 +1260,19 @@ def pff_facet_rushing_direction_stats(
 
             pff_facet_rushing_direction_stats()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "league": league,
+        "season": season,
+        "week": week,
+        "franchiseId": franchise_id,
+        "gameId": game_id,
+        "division": division,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://premium.pff.com/api/v1/facet/rushing/direction",
-        params={
-            "league": league,
-            "season": season,
-            "week": week,
-            "franchiseId": franchise_id,
-            "gameId": game_id,
-            "division": division,
-        },
+        params=_params,
         headers=headers,
         **kwargs,
     )
@@ -1255,16 +1318,19 @@ def pff_facet_receiving_coverage_stats(
 
             pff_facet_receiving_coverage_stats()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "league": league,
+        "season": season,
+        "week": week,
+        "franchiseId": franchise_id,
+        "gameId": game_id,
+        "division": division,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://premium.pff.com/api/v1/facet/defense/coverage_matchup",
-        params={
-            "league": league,
-            "season": season,
-            "week": week,
-            "franchiseId": franchise_id,
-            "gameId": game_id,
-            "division": division,
-        },
+        params=_params,
         headers=headers,
         **kwargs,
     )
@@ -1310,16 +1376,19 @@ def pff_facet_rushing_summary(
 
             pff_facet_rushing_summary()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "league": league,
+        "season": season,
+        "week": week,
+        "franchiseId": franchise_id,
+        "gameId": game_id,
+        "division": division,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://premium.pff.com/api/v1/facet/rushing/summary",
-        params={
-            "league": league,
-            "season": season,
-            "week": week,
-            "franchiseId": franchise_id,
-            "gameId": game_id,
-            "division": division,
-        },
+        params=_params,
         headers=headers,
         **kwargs,
     )
@@ -1365,16 +1434,19 @@ def pff_facet_slot_coverages(
 
             pff_facet_slot_coverages()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "league": league,
+        "season": season,
+        "week": week,
+        "franchiseId": franchise_id,
+        "gameId": game_id,
+        "division": division,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://premium.pff.com/api/v1/facet/signature/defense/slot_coverage",
-        params={
-            "league": league,
-            "season": season,
-            "week": week,
-            "franchiseId": franchise_id,
-            "gameId": game_id,
-            "division": division,
-        },
+        params=_params,
         headers=headers,
         **kwargs,
     )
@@ -1420,16 +1492,19 @@ def pff_facet_pbes(
 
             pff_facet_pbes()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "league": league,
+        "season": season,
+        "week": week,
+        "franchiseId": franchise_id,
+        "gameId": game_id,
+        "division": division,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://premium.pff.com/api/v1/facet/signature/pass-blocking/efficiency/line",
-        params={
-            "league": league,
-            "season": season,
-            "week": week,
-            "franchiseId": franchise_id,
-            "gameId": game_id,
-            "division": division,
-        },
+        params=_params,
         headers=headers,
         **kwargs,
     )
@@ -1475,16 +1550,19 @@ def pff_facet_prps(
 
             pff_facet_prps()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "league": league,
+        "season": season,
+        "week": week,
+        "franchiseId": franchise_id,
+        "gameId": game_id,
+        "division": division,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://premium.pff.com/api/v1/facet/signature/defense/outside_pass_rush",
-        params={
-            "league": league,
-            "season": season,
-            "week": week,
-            "franchiseId": franchise_id,
-            "gameId": game_id,
-            "division": division,
-        },
+        params=_params,
         headers=headers,
         **kwargs,
     )
@@ -1530,16 +1608,19 @@ def pff_facet_receiving_scheme(
 
             pff_facet_receiving_scheme()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "league": league,
+        "season": season,
+        "week": week,
+        "franchiseId": franchise_id,
+        "gameId": game_id,
+        "division": division,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://premium.pff.com/api/v1/facet/receiving/scheme",
-        params={
-            "league": league,
-            "season": season,
-            "week": week,
-            "franchiseId": franchise_id,
-            "gameId": game_id,
-            "division": division,
-        },
+        params=_params,
         headers=headers,
         **kwargs,
     )
@@ -1585,16 +1666,19 @@ def pff_facet_time_in_pockets(
 
             pff_facet_time_in_pockets()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "league": league,
+        "season": season,
+        "week": week,
+        "franchiseId": franchise_id,
+        "gameId": game_id,
+        "division": division,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://premium.pff.com/api/v1/facet/signature/passing/time_in_pocket",
-        params={
-            "league": league,
-            "season": season,
-            "week": week,
-            "franchiseId": franchise_id,
-            "gameId": game_id,
-            "division": division,
-        },
+        params=_params,
         headers=headers,
         **kwargs,
     )
@@ -1640,16 +1724,19 @@ def pff_facet_receiving_concept(
 
             pff_facet_receiving_concept()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "league": league,
+        "season": season,
+        "week": week,
+        "franchiseId": franchise_id,
+        "gameId": game_id,
+        "division": division,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://premium.pff.com/api/v1/facet/receiving/concept",
-        params={
-            "league": league,
-            "season": season,
-            "week": week,
-            "franchiseId": franchise_id,
-            "gameId": game_id,
-            "division": division,
-        },
+        params=_params,
         headers=headers,
         **kwargs,
     )
@@ -1695,16 +1782,19 @@ def pff_facet_special_teams_summary(
 
             pff_facet_special_teams_summary()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "league": league,
+        "season": season,
+        "week": week,
+        "franchiseId": franchise_id,
+        "gameId": game_id,
+        "division": division,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://premium.pff.com/api/v1/facet/special/summary",
-        params={
-            "league": league,
-            "season": season,
-            "week": week,
-            "franchiseId": franchise_id,
-            "gameId": game_id,
-            "division": division,
-        },
+        params=_params,
         headers=headers,
         **kwargs,
     )
@@ -1750,16 +1840,19 @@ def pff_facet_receiving_depth(
 
             pff_facet_receiving_depth()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "league": league,
+        "season": season,
+        "week": week,
+        "franchiseId": franchise_id,
+        "gameId": game_id,
+        "division": division,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://premium.pff.com/api/v1/facet/receiving/depth",
-        params={
-            "league": league,
-            "season": season,
-            "week": week,
-            "franchiseId": franchise_id,
-            "gameId": game_id,
-            "division": division,
-        },
+        params=_params,
         headers=headers,
         **kwargs,
     )
@@ -1805,16 +1898,19 @@ def pff_facet_receiving_coverage(
 
             pff_facet_receiving_coverage()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "league": league,
+        "season": season,
+        "week": week,
+        "franchiseId": franchise_id,
+        "gameId": game_id,
+        "division": division,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://premium.pff.com/api/v1/facet/receiving/coverage",
-        params={
-            "league": league,
-            "season": season,
-            "week": week,
-            "franchiseId": franchise_id,
-            "gameId": game_id,
-            "division": division,
-        },
+        params=_params,
         headers=headers,
         **kwargs,
     )
@@ -1858,15 +1954,18 @@ def pff_player_passing_summary(
 
             pff_player_passing_summary()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "league": league,
+        "season": season,
+        "week": week,
+        "player_id": player_id,
+        "career": career,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://premium.pff.com/api/v1/player/passing/summary",
-        params={
-            "league": league,
-            "season": season,
-            "week": week,
-            "player_id": player_id,
-            "career": career,
-        },
+        params=_params,
         headers=headers,
         **kwargs,
     )
@@ -1910,15 +2009,18 @@ def pff_player_rushing_summary(
 
             pff_player_rushing_summary()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "league": league,
+        "season": season,
+        "week": week,
+        "player_id": player_id,
+        "career": career,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://premium.pff.com/api/v1/player/rushing/summary",
-        params={
-            "league": league,
-            "season": season,
-            "week": week,
-            "player_id": player_id,
-            "career": career,
-        },
+        params=_params,
         headers=headers,
         **kwargs,
     )
@@ -1962,15 +2064,18 @@ def pff_player_receiving_summary(
 
             pff_player_receiving_summary()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "league": league,
+        "season": season,
+        "week": week,
+        "player_id": player_id,
+        "career": career,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://premium.pff.com/api/v1/player/receiving/summary",
-        params={
-            "league": league,
-            "season": season,
-            "week": week,
-            "player_id": player_id,
-            "career": career,
-        },
+        params=_params,
         headers=headers,
         **kwargs,
     )
@@ -2014,15 +2119,18 @@ def pff_player_defense_summary(
 
             pff_player_defense_summary()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "league": league,
+        "season": season,
+        "week": week,
+        "player_id": player_id,
+        "career": career,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://premium.pff.com/api/v1/player/defense/summary",
-        params={
-            "league": league,
-            "season": season,
-            "week": week,
-            "player_id": player_id,
-            "career": career,
-        },
+        params=_params,
         headers=headers,
         **kwargs,
     )
@@ -2066,15 +2174,18 @@ def pff_player_offense_summary(
 
             pff_player_offense_summary()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "league": league,
+        "season": season,
+        "week": week,
+        "player_id": player_id,
+        "career": career,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://premium.pff.com/api/v1/player/offense/summary",
-        params={
-            "league": league,
-            "season": season,
-            "week": week,
-            "player_id": player_id,
-            "career": career,
-        },
+        params=_params,
         headers=headers,
         **kwargs,
     )
@@ -2118,15 +2229,18 @@ def pff_player_snaps_summary(
 
             pff_player_snaps_summary()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "league": league,
+        "season": season,
+        "week": week,
+        "player_id": player_id,
+        "career": career,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://premium.pff.com/api/v1/player/snaps/summary",
-        params={
-            "league": league,
-            "season": season,
-            "week": week,
-            "player_id": player_id,
-            "career": career,
-        },
+        params=_params,
         headers=headers,
         **kwargs,
     )
@@ -2170,15 +2284,18 @@ def pff_player_offense_blocking(
 
             pff_player_offense_blocking()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "league": league,
+        "season": season,
+        "week": week,
+        "player_id": player_id,
+        "career": career,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://premium.pff.com/api/v1/player/offense/blocking",
-        params={
-            "league": league,
-            "season": season,
-            "week": week,
-            "player_id": player_id,
-            "career": career,
-        },
+        params=_params,
         headers=headers,
         **kwargs,
     )
@@ -2212,9 +2329,12 @@ def pff_leagues(
 
             pff_leagues()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     raw = _get(
         "https://premium.pff.com/api/v1/leagues",
-        params={},
+        params=_params,
         headers=headers,
         **kwargs,
     )
@@ -2252,12 +2372,15 @@ def pff_teams(
 
             pff_teams()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "league": league,
+        "season": season,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://premium.pff.com/api/v1/teams",
-        params={
-            "league": league,
-            "season": season,
-        },
+        params=_params,
         headers=headers,
         **kwargs,
     )
@@ -2297,13 +2420,16 @@ def pff_teams_overview(
 
             pff_teams_overview()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "league": league,
+        "season": season,
+        "week": week,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://premium.pff.com/api/v1/teams/overview",
-        params={
-            "league": league,
-            "season": season,
-            "week": week,
-        },
+        params=_params,
         headers=headers,
         **kwargs,
     )
@@ -2343,13 +2469,16 @@ def pff_games(
 
             pff_games()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "league": league,
+        "season": season,
+        "week": week,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://premium.pff.com/api/v1/games",
-        params={
-            "league": league,
-            "season": season,
-            "week": week,
-        },
+        params=_params,
         headers=headers,
         **kwargs,
     )
@@ -2389,13 +2518,16 @@ def pff_players(
 
             pff_players()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "league": league,
+        "name": name,
+        "id": id,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://premium.pff.com/api/v1/players",
-        params={
-            "league": league,
-            "name": name,
-            "id": id,
-        },
+        params=_params,
         headers=headers,
         **kwargs,
     )
@@ -2433,12 +2565,15 @@ def pff_player_seasons(
 
             pff_player_seasons()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "league": league,
+        "player_id": player_id,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://premium.pff.com/api/v1/player/seasons",
-        params={
-            "league": league,
-            "player_id": player_id,
-        },
+        params=_params,
         headers=headers,
         **kwargs,
     )
@@ -2480,14 +2615,17 @@ def pff_player_position_pivot(
 
             pff_player_position_pivot()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "league": league,
+        "season": season,
+        "week": week,
+        "player_id": player_id,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://premium.pff.com/api/v1/player/position/pivot",
-        params={
-            "league": league,
-            "season": season,
-            "week": week,
-            "player_id": player_id,
-        },
+        params=_params,
         headers=headers,
         **kwargs,
     )

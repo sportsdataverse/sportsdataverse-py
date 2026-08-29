@@ -159,14 +159,17 @@ def wnba_stats_alltimeleadersgrids(
 
             wnba_stats_alltimeleadersgrids(league_id='10')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "LeagueID": league_id,
+        "PerMode": per_mode_simple,
+        "SeasonType": season_type,
+        "TopX": topx,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/alltimeleadersgrids",
-        params={
-            "LeagueID": league_id,
-            "PerMode": per_mode_simple,
-            "SeasonType": season_type,
-            "TopX": topx,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -207,15 +210,18 @@ def wnba_stats_assistleaders(
 
             wnba_stats_assistleaders(league_id='10')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "LeagueID": league_id,
+        "PerMode": per_mode_simple,
+        "PlayerOrTeam": player_or_team,
+        "Season": season,
+        "SeasonType": season_type_playoffs,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/assistleaders",
-        params={
-            "LeagueID": league_id,
-            "PerMode": per_mode_simple,
-            "PlayerOrTeam": player_or_team,
-            "Season": season,
-            "SeasonType": season_type_playoffs,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -302,38 +308,41 @@ def wnba_stats_assisttracker(
 
             wnba_stats_assisttracker(league_id='10')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "College": college_nullable,
+        "Conference": conference_nullable,
+        "Country": country_nullable,
+        "DateFrom": date_from_nullable,
+        "DateTo": date_to_nullable,
+        "Division": division_simple_nullable,
+        "DraftPick": draft_pick_nullable,
+        "DraftYear": draft_year_nullable,
+        "GameScope": game_scope_simple_nullable,
+        "Height": height_nullable,
+        "LastNGames": last_n_games_nullable,
+        "LeagueID": league_id,
+        "Location": location_nullable,
+        "Month": month_nullable,
+        "OpponentTeamID": opponent_team_id_nullable,
+        "Outcome": outcome_nullable,
+        "PORound": po_round_nullable,
+        "PerMode": per_mode_simple_nullable,
+        "PlayerExperience": player_experience_nullable,
+        "PlayerPosition": player_position_abbreviation_nullable,
+        "Season": season_nullable,
+        "SeasonSegment": season_segment_nullable,
+        "SeasonType": season_type_all_star_nullable,
+        "StarterBench": starter_bench_nullable,
+        "TeamID": team_id_nullable,
+        "VsConference": vs_conference_nullable,
+        "VsDivision": vs_division_nullable,
+        "Weight": weight_nullable,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/assisttracker",
-        params={
-            "College": college_nullable,
-            "Conference": conference_nullable,
-            "Country": country_nullable,
-            "DateFrom": date_from_nullable,
-            "DateTo": date_to_nullable,
-            "Division": division_simple_nullable,
-            "DraftPick": draft_pick_nullable,
-            "DraftYear": draft_year_nullable,
-            "GameScope": game_scope_simple_nullable,
-            "Height": height_nullable,
-            "LastNGames": last_n_games_nullable,
-            "LeagueID": league_id,
-            "Location": location_nullable,
-            "Month": month_nullable,
-            "OpponentTeamID": opponent_team_id_nullable,
-            "Outcome": outcome_nullable,
-            "PORound": po_round_nullable,
-            "PerMode": per_mode_simple_nullable,
-            "PlayerExperience": player_experience_nullable,
-            "PlayerPosition": player_position_abbreviation_nullable,
-            "Season": season_nullable,
-            "SeasonSegment": season_segment_nullable,
-            "SeasonType": season_type_all_star_nullable,
-            "StarterBench": starter_bench_nullable,
-            "TeamID": team_id_nullable,
-            "VsConference": vs_conference_nullable,
-            "VsDivision": vs_division_nullable,
-            "Weight": weight_nullable,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -376,16 +385,19 @@ def wnba_stats_boxscoreadvancedv2(
 
             wnba_stats_boxscoreadvancedv2()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "EndPeriod": end_period,
+        "EndRange": end_range,
+        "GameID": game_id,
+        "RangeType": range_type,
+        "StartPeriod": start_period,
+        "StartRange": start_range,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/boxscoreadvancedv2",
-        params={
-            "EndPeriod": end_period,
-            "EndRange": end_range,
-            "GameID": game_id,
-            "RangeType": range_type,
-            "StartPeriod": start_period,
-            "StartRange": start_range,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -428,16 +440,19 @@ def wnba_stats_boxscoreadvancedv3(
 
             wnba_stats_boxscoreadvancedv3()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "EndPeriod": end_period,
+        "EndRange": end_range,
+        "GameID": game_id,
+        "RangeType": range_type,
+        "StartPeriod": start_period,
+        "StartRange": start_range,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/boxscoreadvancedv3",
-        params={
-            "EndPeriod": end_period,
-            "EndRange": end_range,
-            "GameID": game_id,
-            "RangeType": range_type,
-            "StartPeriod": start_period,
-            "StartRange": start_range,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -470,11 +485,14 @@ def wnba_stats_boxscoredefensivev2(
 
             wnba_stats_boxscoredefensivev2()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "GameID": game_id,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/boxscoredefensivev2",
-        params={
-            "GameID": game_id,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -517,16 +535,19 @@ def wnba_stats_boxscorefourfactorsv2(
 
             wnba_stats_boxscorefourfactorsv2()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "EndPeriod": end_period,
+        "EndRange": end_range,
+        "GameID": game_id,
+        "RangeType": range_type,
+        "StartPeriod": start_period,
+        "StartRange": start_range,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/boxscorefourfactorsv2",
-        params={
-            "EndPeriod": end_period,
-            "EndRange": end_range,
-            "GameID": game_id,
-            "RangeType": range_type,
-            "StartPeriod": start_period,
-            "StartRange": start_range,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -569,16 +590,19 @@ def wnba_stats_boxscorefourfactorsv3(
 
             wnba_stats_boxscorefourfactorsv3()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "EndPeriod": end_period,
+        "EndRange": end_range,
+        "GameID": game_id,
+        "RangeType": range_type,
+        "StartPeriod": start_period,
+        "StartRange": start_range,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/boxscorefourfactorsv3",
-        params={
-            "EndPeriod": end_period,
-            "EndRange": end_range,
-            "GameID": game_id,
-            "RangeType": range_type,
-            "StartPeriod": start_period,
-            "StartRange": start_range,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -611,11 +635,14 @@ def wnba_stats_boxscorehustlev2(
 
             wnba_stats_boxscorehustlev2()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "GameID": gameid,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/boxscorehustlev2",
-        params={
-            "GameID": gameid,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -648,11 +675,14 @@ def wnba_stats_boxscorematchupsv3(
 
             wnba_stats_boxscorematchupsv3()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "GameID": game_id,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/boxscorematchupsv3",
-        params={
-            "GameID": game_id,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -695,16 +725,19 @@ def wnba_stats_boxscoremiscv2(
 
             wnba_stats_boxscoremiscv2()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "EndPeriod": end_period,
+        "EndRange": end_range,
+        "GameID": game_id,
+        "RangeType": range_type,
+        "StartPeriod": start_period,
+        "StartRange": start_range,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/boxscoremiscv2",
-        params={
-            "EndPeriod": end_period,
-            "EndRange": end_range,
-            "GameID": game_id,
-            "RangeType": range_type,
-            "StartPeriod": start_period,
-            "StartRange": start_range,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -747,16 +780,19 @@ def wnba_stats_boxscoremiscv3(
 
             wnba_stats_boxscoremiscv3()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "EndPeriod": end_period,
+        "EndRange": end_range,
+        "GameID": game_id,
+        "RangeType": range_type,
+        "StartPeriod": start_period,
+        "StartRange": start_range,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/boxscoremiscv3",
-        params={
-            "EndPeriod": end_period,
-            "EndRange": end_range,
-            "GameID": game_id,
-            "RangeType": range_type,
-            "StartPeriod": start_period,
-            "StartRange": start_range,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -789,11 +825,14 @@ def wnba_stats_boxscoreplayertrackv3(
 
             wnba_stats_boxscoreplayertrackv3()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "GameID": game_id,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/boxscoreplayertrackv3",
-        params={
-            "GameID": game_id,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -836,16 +875,19 @@ def wnba_stats_boxscorescoringv2(
 
             wnba_stats_boxscorescoringv2()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "EndPeriod": end_period,
+        "EndRange": end_range,
+        "GameID": game_id,
+        "RangeType": range_type,
+        "StartPeriod": start_period,
+        "StartRange": start_range,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/boxscorescoringv2",
-        params={
-            "EndPeriod": end_period,
-            "EndRange": end_range,
-            "GameID": game_id,
-            "RangeType": range_type,
-            "StartPeriod": start_period,
-            "StartRange": start_range,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -888,16 +930,19 @@ def wnba_stats_boxscorescoringv3(
 
             wnba_stats_boxscorescoringv3()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "EndPeriod": end_period,
+        "EndRange": end_range,
+        "GameID": game_id,
+        "RangeType": range_type,
+        "StartPeriod": start_period,
+        "StartRange": start_range,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/boxscorescoringv3",
-        params={
-            "EndPeriod": end_period,
-            "EndRange": end_range,
-            "GameID": game_id,
-            "RangeType": range_type,
-            "StartPeriod": start_period,
-            "StartRange": start_range,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -930,11 +975,14 @@ def wnba_stats_boxscoresummaryv2(
 
             wnba_stats_boxscoresummaryv2()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "GameID": game_id,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/boxscoresummaryv2",
-        params={
-            "GameID": game_id,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -967,11 +1015,14 @@ def wnba_stats_boxscoresummaryv3(
 
             wnba_stats_boxscoresummaryv3()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "GameID": gameid,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/boxscoresummaryv3",
-        params={
-            "GameID": gameid,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1014,16 +1065,19 @@ def wnba_stats_boxscoretraditionalv2(
 
             wnba_stats_boxscoretraditionalv2()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "EndPeriod": end_period,
+        "EndRange": end_range,
+        "GameID": game_id,
+        "RangeType": range_type,
+        "StartPeriod": start_period,
+        "StartRange": start_range,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/boxscoretraditionalv2",
-        params={
-            "EndPeriod": end_period,
-            "EndRange": end_range,
-            "GameID": game_id,
-            "RangeType": range_type,
-            "StartPeriod": start_period,
-            "StartRange": start_range,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1066,16 +1120,19 @@ def wnba_stats_boxscoretraditionalv3(
 
             wnba_stats_boxscoretraditionalv3()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "EndPeriod": end_period,
+        "EndRange": end_range,
+        "GameID": game_id,
+        "RangeType": range_type,
+        "StartPeriod": start_period,
+        "StartRange": start_range,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/boxscoretraditionalv3",
-        params={
-            "EndPeriod": end_period,
-            "EndRange": end_range,
-            "GameID": game_id,
-            "RangeType": range_type,
-            "StartPeriod": start_period,
-            "StartRange": start_range,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1118,16 +1175,19 @@ def wnba_stats_boxscoreusagev2(
 
             wnba_stats_boxscoreusagev2()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "EndPeriod": end_period,
+        "EndRange": end_range,
+        "GameID": game_id,
+        "RangeType": range_type,
+        "StartPeriod": start_period,
+        "StartRange": start_range,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/boxscoreusagev2",
-        params={
-            "EndPeriod": end_period,
-            "EndRange": end_range,
-            "GameID": game_id,
-            "RangeType": range_type,
-            "StartPeriod": start_period,
-            "StartRange": start_range,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1170,16 +1230,19 @@ def wnba_stats_boxscoreusagev3(
 
             wnba_stats_boxscoreusagev3()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "EndPeriod": end_period,
+        "EndRange": end_range,
+        "GameID": game_id,
+        "RangeType": range_type,
+        "StartPeriod": start_period,
+        "StartRange": start_range,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/boxscoreusagev3",
-        params={
-            "EndPeriod": end_period,
-            "EndRange": end_range,
-            "GameID": game_id,
-            "RangeType": range_type,
-            "StartPeriod": start_period,
-            "StartRange": start_range,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1216,13 +1279,16 @@ def wnba_stats_commonallplayers(
 
             wnba_stats_commonallplayers(league_id='10')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "IsOnlyCurrentSeason": is_only_current_season,
+        "LeagueID": league_id,
+        "Season": season,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/commonallplayers",
-        params={
-            "IsOnlyCurrentSeason": is_only_current_season,
-            "LeagueID": league_id,
-            "Season": season,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1257,12 +1323,15 @@ def wnba_stats_commonplayerinfo(
 
             wnba_stats_commonplayerinfo(league_id='10')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "LeagueID": league_id,
+        "PlayerID": player_id,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/commonplayerinfo",
-        params={
-            "LeagueID": league_id,
-            "PlayerID": player_id,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1299,13 +1368,16 @@ def wnba_stats_commonplayoffseries(
 
             wnba_stats_commonplayoffseries(league_id='10')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "LeagueID": league_id,
+        "Season": season,
+        "SeriesID": series_id_nullable,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/commonplayoffseries",
-        params={
-            "LeagueID": league_id,
-            "Season": season,
-            "SeriesID": series_id_nullable,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1342,13 +1414,16 @@ def wnba_stats_commonteamroster(
 
             wnba_stats_commonteamroster(league_id='10')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "LeagueID": league_id,
+        "Season": season,
+        "TeamID": team_id,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/commonteamroster",
-        params={
-            "LeagueID": league_id,
-            "Season": season,
-            "TeamID": team_id,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1381,11 +1456,14 @@ def wnba_stats_commonteamyears(
 
             wnba_stats_commonteamyears(league_id='10')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "LeagueID": league_id,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/commonteamyears",
-        params={
-            "LeagueID": league_id,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1426,15 +1504,18 @@ def wnba_stats_cumestatsplayer(
 
             wnba_stats_cumestatsplayer(league_id='10')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "GameIDs": game_ids,
+        "LeagueID": league_id,
+        "PlayerID": player_id,
+        "Season": season,
+        "SeasonType": season_type_all_star,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/cumestatsplayer",
-        params={
-            "GameIDs": game_ids,
-            "LeagueID": league_id,
-            "PlayerID": player_id,
-            "Season": season,
-            "SeasonType": season_type_all_star,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1483,19 +1564,22 @@ def wnba_stats_cumestatsplayergames(
 
             wnba_stats_cumestatsplayergames(league_id='10')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "LeagueID": league_id,
+        "Location": location_nullable,
+        "Outcome": outcome_nullable,
+        "PlayerID": player_id,
+        "Season": season,
+        "SeasonType": season_type_all_star,
+        "VsConference": vs_conference_nullable,
+        "VsDivision": vs_division_nullable,
+        "VsTeamID": vs_team_id_nullable,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/cumestatsplayergames",
-        params={
-            "LeagueID": league_id,
-            "Location": location_nullable,
-            "Outcome": outcome_nullable,
-            "PlayerID": player_id,
-            "Season": season,
-            "SeasonType": season_type_all_star,
-            "VsConference": vs_conference_nullable,
-            "VsDivision": vs_division_nullable,
-            "VsTeamID": vs_team_id_nullable,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1536,15 +1620,18 @@ def wnba_stats_cumestatsteam(
 
             wnba_stats_cumestatsteam(league_id='10')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "GameIDs": game_ids,
+        "LeagueID": league_id,
+        "Season": season,
+        "SeasonType": season_type_all_star,
+        "TeamID": team_id,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/cumestatsteam",
-        params={
-            "GameIDs": game_ids,
-            "LeagueID": league_id,
-            "Season": season,
-            "SeasonType": season_type_all_star,
-            "TeamID": team_id,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1595,20 +1682,23 @@ def wnba_stats_cumestatsteamgames(
 
             wnba_stats_cumestatsteamgames(league_id='10')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "LeagueID": league_id,
+        "Location": location_nullable,
+        "Outcome": outcome_nullable,
+        "Season": season,
+        "SeasonID": season_id_nullable,
+        "SeasonType": season_type_all_star,
+        "TeamID": team_id,
+        "VsConference": vs_conference_nullable,
+        "VsDivision": vs_division_nullable,
+        "VsTeamID": vs_team_id_nullable,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/cumestatsteamgames",
-        params={
-            "LeagueID": league_id,
-            "Location": location_nullable,
-            "Outcome": outcome_nullable,
-            "Season": season,
-            "SeasonID": season_id_nullable,
-            "SeasonType": season_type_all_star,
-            "TeamID": team_id,
-            "VsConference": vs_conference_nullable,
-            "VsDivision": vs_division_nullable,
-            "VsTeamID": vs_team_id_nullable,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1643,12 +1733,15 @@ def wnba_stats_draftcombinestats(
 
             wnba_stats_draftcombinestats(league_id='10')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "LeagueID": league_id,
+        "SeasonYear": season_all_time,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/draftcombinestats",
-        params={
-            "LeagueID": league_id,
-            "SeasonYear": season_all_time,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1710,18 +1803,21 @@ def wnba_stats_drafthistory(
         .. _wehoop: https://wehoop.sportsdataverse.org
         .. _nba_api: https://github.com/swar/nba_api
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "College": college_nullable,
+        "LeagueID": league_id,
+        "OverallPick": overall_pick_nullable,
+        "RoundNum": round_num_nullable,
+        "RoundPick": round_pick_nullable,
+        "Season": season_year_nullable,
+        "TeamID": team_id_nullable,
+        "TopX": topx_nullable,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/drafthistory",
-        params={
-            "College": college_nullable,
-            "LeagueID": league_id,
-            "OverallPick": overall_pick_nullable,
-            "RoundNum": round_num_nullable,
-            "RoundPick": round_pick_nullable,
-            "Season": season_year_nullable,
-            "TeamID": team_id_nullable,
-            "TopX": topx_nullable,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1790,29 +1886,32 @@ def wnba_stats_fantasywidget(
 
             wnba_stats_fantasywidget(league_id='10')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "ActivePlayers": active_players,
+        "DateFrom": date_from_nullable,
+        "DateTo": date_to_nullable,
+        "LastNGames": last_n_games,
+        "LeagueID": league_id,
+        "Location": location_nullable,
+        "Month": month_nullable,
+        "OpponentTeamID": opponent_team_id_nullable,
+        "PORound": po_round_nullable,
+        "PlayerID": player_id_nullable,
+        "Position": position_nullable,
+        "Season": season,
+        "SeasonSegment": season_segment_nullable,
+        "SeasonType": season_type_all_star,
+        "TeamID": team_id_nullable,
+        "TodaysOpponent": todays_opponent,
+        "TodaysPlayers": todays_players,
+        "VsConference": vs_conference_nullable,
+        "VsDivision": vs_division_nullable,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/fantasywidget",
-        params={
-            "ActivePlayers": active_players,
-            "DateFrom": date_from_nullable,
-            "DateTo": date_to_nullable,
-            "LastNGames": last_n_games,
-            "LeagueID": league_id,
-            "Location": location_nullable,
-            "Month": month_nullable,
-            "OpponentTeamID": opponent_team_id_nullable,
-            "PORound": po_round_nullable,
-            "PlayerID": player_id_nullable,
-            "Position": position_nullable,
-            "Season": season,
-            "SeasonSegment": season_segment_nullable,
-            "SeasonType": season_type_all_star,
-            "TeamID": team_id_nullable,
-            "TodaysOpponent": todays_opponent,
-            "TodaysPlayers": todays_players,
-            "VsConference": vs_conference_nullable,
-            "VsDivision": vs_division_nullable,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1845,11 +1944,14 @@ def wnba_stats_franchisehistory(
 
             wnba_stats_franchisehistory(league_id='10')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "LeagueID": league_id,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/franchisehistory",
-        params={
-            "LeagueID": league_id,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1884,12 +1986,15 @@ def wnba_stats_franchiseleaders(
 
             wnba_stats_franchiseleaders(league_id='10')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "LeagueID": league_id,
+        "TeamID": team_id,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/franchiseleaders",
-        params={
-            "LeagueID": league_id,
-            "TeamID": team_id,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1928,14 +2033,17 @@ def wnba_stats_franchiseleaderswrank(
 
             wnba_stats_franchiseleaderswrank(league_id='10')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "LeagueID": league_id,
+        "PerMode": per_mode,
+        "SeasonType": season_type,
+        "TeamID": team_id,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/franchiseleaderswrank",
-        params={
-            "LeagueID": league_id,
-            "PerMode": per_mode,
-            "SeasonType": season_type,
-            "TeamID": team_id,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -1974,14 +2082,17 @@ def wnba_stats_franchiseplayers(
 
             wnba_stats_franchiseplayers(league_id='10')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "LeagueID": league_id,
+        "PerMode": per_mode_detailed,
+        "SeasonType": season_type_all_star,
+        "TeamID": team_id,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/franchiseplayers",
-        params={
-            "LeagueID": league_id,
-            "PerMode": per_mode_detailed,
-            "SeasonType": season_type_all_star,
-            "TeamID": team_id,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2016,12 +2127,15 @@ def wnba_stats_gamerotation(
 
             wnba_stats_gamerotation(league_id='10')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "GameID": game_id,
+        "LeagueID": league_id,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/gamerotation",
-        params={
-            "GameID": game_id,
-            "LeagueID": league_id,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2066,17 +2180,20 @@ def wnba_stats_homepageleaders(
 
             wnba_stats_homepageleaders(league_id='10')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "GameScope": game_scope_detailed,
+        "LeagueID": league_id,
+        "PlayerOrTeam": player_or_team,
+        "PlayerScope": player_scope,
+        "Season": season,
+        "SeasonType": season_type_playoffs,
+        "StatCategory": stat_category,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/homepageleaders",
-        params={
-            "GameScope": game_scope_detailed,
-            "LeagueID": league_id,
-            "PlayerOrTeam": player_or_team,
-            "PlayerScope": player_scope,
-            "Season": season,
-            "SeasonType": season_type_playoffs,
-            "StatCategory": stat_category,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2121,17 +2238,20 @@ def wnba_stats_homepagev2(
 
             wnba_stats_homepagev2(league_id='10')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "GameScope": game_scope_detailed,
+        "LeagueID": league_id,
+        "PlayerOrTeam": player_or_team,
+        "PlayerScope": player_scope,
+        "Season": season,
+        "SeasonType": season_type_playoffs,
+        "StatType": stat_type,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/homepagev2",
-        params={
-            "GameScope": game_scope_detailed,
-            "LeagueID": league_id,
-            "PlayerOrTeam": player_or_team,
-            "PlayerScope": player_scope,
-            "Season": season,
-            "SeasonType": season_type_playoffs,
-            "StatType": stat_type,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2164,11 +2284,14 @@ def wnba_stats_hustlestatsboxscore(
 
             wnba_stats_hustlestatsboxscore()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "GameID": game_id,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/hustlestatsboxscore",
-        params={
-            "GameID": game_id,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2201,11 +2324,14 @@ def wnba_stats_infographicfanduelplayer(
 
             wnba_stats_infographicfanduelplayer()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "GameID": game_id,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/infographicfanduelplayer",
-        params={
-            "GameID": game_id,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2250,17 +2376,20 @@ def wnba_stats_leaderstiles(
 
             wnba_stats_leaderstiles(league_id='10')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "GameScope": game_scope_detailed,
+        "LeagueID": league_id,
+        "PlayerOrTeam": player_or_team,
+        "PlayerScope": player_scope,
+        "Season": season,
+        "SeasonType": season_type_playoffs,
+        "Stat": stat,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/leaderstiles",
-        params={
-            "GameScope": game_scope_detailed,
-            "LeagueID": league_id,
-            "PlayerOrTeam": player_or_team,
-            "PlayerScope": player_scope,
-            "Season": season,
-            "SeasonType": season_type_playoffs,
-            "Stat": stat,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2343,36 +2472,39 @@ def wnba_stats_leaguedashlineups(
 
             wnba_stats_leaguedashlineups(league_id='10')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "Conference": conference_nullable,
+        "DateFrom": date_from_nullable,
+        "DateTo": date_to_nullable,
+        "Division": division_simple_nullable,
+        "GameSegment": game_segment_nullable,
+        "GroupQuantity": group_quantity,
+        "LastNGames": last_n_games,
+        "LeagueID": league_id,
+        "Location": location_nullable,
+        "MeasureType": measure_type_detailed_defense,
+        "Month": month,
+        "OpponentTeamID": opponent_team_id,
+        "Outcome": outcome_nullable,
+        "PORound": po_round_nullable,
+        "PaceAdjust": pace_adjust,
+        "PerMode": per_mode_detailed,
+        "Period": period,
+        "PlusMinus": plus_minus,
+        "Rank": rank,
+        "Season": season,
+        "SeasonSegment": season_segment_nullable,
+        "SeasonType": season_type_all_star,
+        "ShotClockRange": shot_clock_range_nullable,
+        "TeamID": team_id_nullable,
+        "VsConference": vs_conference_nullable,
+        "VsDivision": vs_division_nullable,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/leaguedashlineups",
-        params={
-            "Conference": conference_nullable,
-            "DateFrom": date_from_nullable,
-            "DateTo": date_to_nullable,
-            "Division": division_simple_nullable,
-            "GameSegment": game_segment_nullable,
-            "GroupQuantity": group_quantity,
-            "LastNGames": last_n_games,
-            "LeagueID": league_id,
-            "Location": location_nullable,
-            "MeasureType": measure_type_detailed_defense,
-            "Month": month,
-            "OpponentTeamID": opponent_team_id,
-            "Outcome": outcome_nullable,
-            "PORound": po_round_nullable,
-            "PaceAdjust": pace_adjust,
-            "PerMode": per_mode_detailed,
-            "Period": period,
-            "PlusMinus": plus_minus,
-            "Rank": rank,
-            "Season": season,
-            "SeasonSegment": season_segment_nullable,
-            "SeasonType": season_type_all_star,
-            "ShotClockRange": shot_clock_range_nullable,
-            "TeamID": team_id_nullable,
-            "VsConference": vs_conference_nullable,
-            "VsDivision": vs_division_nullable,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2465,41 +2597,44 @@ def wnba_stats_leaguedashplayerbiostats(
 
             wnba_stats_leaguedashplayerbiostats(league_id='10')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "College": college_nullable,
+        "Conference": conference_nullable,
+        "Country": country_nullable,
+        "DateFrom": date_from_nullable,
+        "DateTo": date_to_nullable,
+        "Division": division_simple_nullable,
+        "DraftPick": draft_pick_nullable,
+        "DraftYear": draft_year_nullable,
+        "GameScope": game_scope_simple_nullable,
+        "GameSegment": game_segment_nullable,
+        "Height": height_nullable,
+        "LastNGames": last_n_games_nullable,
+        "LeagueID": league_id,
+        "Location": location_nullable,
+        "Month": month_nullable,
+        "OpponentTeamID": opponent_team_id_nullable,
+        "Outcome": outcome_nullable,
+        "PORound": po_round_nullable,
+        "PerMode": per_mode_simple,
+        "Period": period_nullable,
+        "PlayerExperience": player_experience_nullable,
+        "PlayerPosition": player_position_abbreviation_nullable,
+        "Season": season,
+        "SeasonSegment": season_segment_nullable,
+        "SeasonType": season_type_all_star,
+        "ShotClockRange": shot_clock_range_nullable,
+        "StarterBench": starter_bench_nullable,
+        "TeamID": team_id_nullable,
+        "VsConference": vs_conference_nullable,
+        "VsDivision": vs_division_nullable,
+        "Weight": weight_nullable,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/leaguedashplayerbiostats",
-        params={
-            "College": college_nullable,
-            "Conference": conference_nullable,
-            "Country": country_nullable,
-            "DateFrom": date_from_nullable,
-            "DateTo": date_to_nullable,
-            "Division": division_simple_nullable,
-            "DraftPick": draft_pick_nullable,
-            "DraftYear": draft_year_nullable,
-            "GameScope": game_scope_simple_nullable,
-            "GameSegment": game_segment_nullable,
-            "Height": height_nullable,
-            "LastNGames": last_n_games_nullable,
-            "LeagueID": league_id,
-            "Location": location_nullable,
-            "Month": month_nullable,
-            "OpponentTeamID": opponent_team_id_nullable,
-            "Outcome": outcome_nullable,
-            "PORound": po_round_nullable,
-            "PerMode": per_mode_simple,
-            "Period": period_nullable,
-            "PlayerExperience": player_experience_nullable,
-            "PlayerPosition": player_position_abbreviation_nullable,
-            "Season": season,
-            "SeasonSegment": season_segment_nullable,
-            "SeasonType": season_type_all_star,
-            "ShotClockRange": shot_clock_range_nullable,
-            "StarterBench": starter_bench_nullable,
-            "TeamID": team_id_nullable,
-            "VsConference": vs_conference_nullable,
-            "VsDivision": vs_division_nullable,
-            "Weight": weight_nullable,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2606,48 +2741,51 @@ def wnba_stats_leaguedashplayerclutch(
 
             wnba_stats_leaguedashplayerclutch(league_id='10')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "AheadBehind": ahead_behind,
+        "ClutchTime": clutch_time,
+        "College": college_nullable,
+        "Conference": conference_nullable,
+        "Country": country_nullable,
+        "DateFrom": date_from_nullable,
+        "DateTo": date_to_nullable,
+        "Division": division_simple_nullable,
+        "DraftPick": draft_pick_nullable,
+        "DraftYear": draft_year_nullable,
+        "GameScope": game_scope_simple_nullable,
+        "GameSegment": game_segment_nullable,
+        "Height": height_nullable,
+        "LastNGames": last_n_games,
+        "LeagueID": league_id,
+        "Location": location_nullable,
+        "MeasureType": measure_type_detailed_defense,
+        "Month": month,
+        "OpponentTeamID": opponent_team_id,
+        "Outcome": outcome_nullable,
+        "PORound": po_round_nullable,
+        "PaceAdjust": pace_adjust,
+        "PerMode": per_mode_detailed,
+        "Period": period,
+        "PlayerExperience": player_experience_nullable,
+        "PlayerPosition": player_position_abbreviation_nullable,
+        "PlusMinus": plus_minus,
+        "PointDiff": point_diff,
+        "Rank": rank,
+        "Season": season,
+        "SeasonSegment": season_segment_nullable,
+        "SeasonType": season_type_all_star,
+        "ShotClockRange": shot_clock_range_nullable,
+        "StarterBench": starter_bench_nullable,
+        "TeamID": team_id_nullable,
+        "VsConference": vs_conference_nullable,
+        "VsDivision": vs_division_nullable,
+        "Weight": weight_nullable,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/leaguedashplayerclutch",
-        params={
-            "AheadBehind": ahead_behind,
-            "ClutchTime": clutch_time,
-            "College": college_nullable,
-            "Conference": conference_nullable,
-            "Country": country_nullable,
-            "DateFrom": date_from_nullable,
-            "DateTo": date_to_nullable,
-            "Division": division_simple_nullable,
-            "DraftPick": draft_pick_nullable,
-            "DraftYear": draft_year_nullable,
-            "GameScope": game_scope_simple_nullable,
-            "GameSegment": game_segment_nullable,
-            "Height": height_nullable,
-            "LastNGames": last_n_games,
-            "LeagueID": league_id,
-            "Location": location_nullable,
-            "MeasureType": measure_type_detailed_defense,
-            "Month": month,
-            "OpponentTeamID": opponent_team_id,
-            "Outcome": outcome_nullable,
-            "PORound": po_round_nullable,
-            "PaceAdjust": pace_adjust,
-            "PerMode": per_mode_detailed,
-            "Period": period,
-            "PlayerExperience": player_experience_nullable,
-            "PlayerPosition": player_position_abbreviation_nullable,
-            "PlusMinus": plus_minus,
-            "PointDiff": point_diff,
-            "Rank": rank,
-            "Season": season,
-            "SeasonSegment": season_segment_nullable,
-            "SeasonType": season_type_all_star,
-            "ShotClockRange": shot_clock_range_nullable,
-            "StarterBench": starter_bench_nullable,
-            "TeamID": team_id_nullable,
-            "VsConference": vs_conference_nullable,
-            "VsDivision": vs_division_nullable,
-            "Weight": weight_nullable,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2750,46 +2888,49 @@ def wnba_stats_leaguedashplayershotlocations(
 
             wnba_stats_leaguedashplayershotlocations(league_id='10')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "College": college_nullable,
+        "Conference": conference_nullable,
+        "Country": country_nullable,
+        "DateFrom": date_from_nullable,
+        "DateTo": date_to_nullable,
+        "DistanceRange": distance_range,
+        "Division": division_simple_nullable,
+        "DraftPick": draft_pick_nullable,
+        "DraftYear": draft_year_nullable,
+        "GameScope": game_scope_simple_nullable,
+        "GameSegment": game_segment_nullable,
+        "Height": height_nullable,
+        "LastNGames": last_n_games,
+        "LeagueID": league_id,
+        "Location": location_nullable,
+        "MeasureType": measure_type_simple,
+        "Month": month,
+        "OpponentTeamID": opponent_team_id,
+        "Outcome": outcome_nullable,
+        "PORound": po_round_nullable,
+        "PaceAdjust": pace_adjust,
+        "PerMode": per_mode_detailed,
+        "Period": period,
+        "PlayerExperience": player_experience_nullable,
+        "PlayerPosition": player_position_abbreviation_nullable,
+        "PlusMinus": plus_minus,
+        "Rank": rank,
+        "Season": season,
+        "SeasonSegment": season_segment_nullable,
+        "SeasonType": season_type_all_star,
+        "ShotClockRange": shot_clock_range_nullable,
+        "StarterBench": starter_bench_nullable,
+        "TeamID": team_id_nullable,
+        "VsConference": vs_conference_nullable,
+        "VsDivision": vs_division_nullable,
+        "Weight": weight_nullable,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/leaguedashplayershotlocations",
-        params={
-            "College": college_nullable,
-            "Conference": conference_nullable,
-            "Country": country_nullable,
-            "DateFrom": date_from_nullable,
-            "DateTo": date_to_nullable,
-            "DistanceRange": distance_range,
-            "Division": division_simple_nullable,
-            "DraftPick": draft_pick_nullable,
-            "DraftYear": draft_year_nullable,
-            "GameScope": game_scope_simple_nullable,
-            "GameSegment": game_segment_nullable,
-            "Height": height_nullable,
-            "LastNGames": last_n_games,
-            "LeagueID": league_id,
-            "Location": location_nullable,
-            "MeasureType": measure_type_simple,
-            "Month": month,
-            "OpponentTeamID": opponent_team_id,
-            "Outcome": outcome_nullable,
-            "PORound": po_round_nullable,
-            "PaceAdjust": pace_adjust,
-            "PerMode": per_mode_detailed,
-            "Period": period,
-            "PlayerExperience": player_experience_nullable,
-            "PlayerPosition": player_position_abbreviation_nullable,
-            "PlusMinus": plus_minus,
-            "Rank": rank,
-            "Season": season,
-            "SeasonSegment": season_segment_nullable,
-            "SeasonType": season_type_all_star,
-            "ShotClockRange": shot_clock_range_nullable,
-            "StarterBench": starter_bench_nullable,
-            "TeamID": team_id_nullable,
-            "VsConference": vs_conference_nullable,
-            "VsDivision": vs_division_nullable,
-            "Weight": weight_nullable,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -2892,46 +3033,49 @@ def wnba_stats_leaguedashplayerstats(
 
             wnba_stats_leaguedashplayerstats(league_id='10')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "College": college_nullable,
+        "Conference": conference_nullable,
+        "Country": country_nullable,
+        "DateFrom": date_from_nullable,
+        "DateTo": date_to_nullable,
+        "Division": division_simple_nullable,
+        "DraftPick": draft_pick_nullable,
+        "DraftYear": draft_year_nullable,
+        "GameScope": game_scope_simple_nullable,
+        "GameSegment": game_segment_nullable,
+        "Height": height_nullable,
+        "LastNGames": last_n_games,
+        "LeagueID": league_id,
+        "Location": location_nullable,
+        "MeasureType": measure_type_detailed_defense,
+        "Month": month,
+        "OpponentTeamID": opponent_team_id,
+        "Outcome": outcome_nullable,
+        "PORound": po_round_nullable,
+        "PaceAdjust": pace_adjust,
+        "PerMode": per_mode_detailed,
+        "Period": period,
+        "PlayerExperience": player_experience_nullable,
+        "PlayerPosition": player_position_abbreviation_nullable,
+        "PlusMinus": plus_minus,
+        "Rank": rank,
+        "Season": season,
+        "SeasonSegment": season_segment_nullable,
+        "SeasonType": season_type_all_star,
+        "ShotClockRange": shot_clock_range_nullable,
+        "StarterBench": starter_bench_nullable,
+        "TeamID": team_id_nullable,
+        "TwoWay": two_way_nullable,
+        "VsConference": vs_conference_nullable,
+        "VsDivision": vs_division_nullable,
+        "Weight": weight_nullable,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/leaguedashplayerstats",
-        params={
-            "College": college_nullable,
-            "Conference": conference_nullable,
-            "Country": country_nullable,
-            "DateFrom": date_from_nullable,
-            "DateTo": date_to_nullable,
-            "Division": division_simple_nullable,
-            "DraftPick": draft_pick_nullable,
-            "DraftYear": draft_year_nullable,
-            "GameScope": game_scope_simple_nullable,
-            "GameSegment": game_segment_nullable,
-            "Height": height_nullable,
-            "LastNGames": last_n_games,
-            "LeagueID": league_id,
-            "Location": location_nullable,
-            "MeasureType": measure_type_detailed_defense,
-            "Month": month,
-            "OpponentTeamID": opponent_team_id,
-            "Outcome": outcome_nullable,
-            "PORound": po_round_nullable,
-            "PaceAdjust": pace_adjust,
-            "PerMode": per_mode_detailed,
-            "Period": period,
-            "PlayerExperience": player_experience_nullable,
-            "PlayerPosition": player_position_abbreviation_nullable,
-            "PlusMinus": plus_minus,
-            "Rank": rank,
-            "Season": season,
-            "SeasonSegment": season_segment_nullable,
-            "SeasonType": season_type_all_star,
-            "ShotClockRange": shot_clock_range_nullable,
-            "StarterBench": starter_bench_nullable,
-            "TeamID": team_id_nullable,
-            "TwoWay": two_way_nullable,
-            "VsConference": vs_conference_nullable,
-            "VsDivision": vs_division_nullable,
-            "Weight": weight_nullable,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3024,41 +3168,44 @@ def wnba_stats_leaguedashptdefend(
 
             wnba_stats_leaguedashptdefend(league_id='10')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "College": college_nullable,
+        "Conference": conference_nullable,
+        "Country": country_nullable,
+        "DateFrom": date_from_nullable,
+        "DateTo": date_to_nullable,
+        "DefenseCategory": defense_category,
+        "Division": division_nullable,
+        "DraftPick": draft_pick_nullable,
+        "DraftYear": draft_year_nullable,
+        "GameSegment": game_segment_nullable,
+        "Height": height_nullable,
+        "LastNGames": last_n_games_nullable,
+        "LeagueID": league_id,
+        "Location": location_nullable,
+        "Month": month_nullable,
+        "OpponentTeamID": opponent_team_id_nullable,
+        "Outcome": outcome_nullable,
+        "PORound": po_round_nullable,
+        "PerMode": per_mode_simple,
+        "Period": period_nullable,
+        "PlayerExperience": player_experience_nullable,
+        "PlayerID": player_id_nullable,
+        "PlayerPosition": player_position_nullable,
+        "Season": season,
+        "SeasonSegment": season_segment_nullable,
+        "SeasonType": season_type_all_star,
+        "StarterBench": starter_bench_nullable,
+        "TeamID": team_id_nullable,
+        "VsConference": vs_conference_nullable,
+        "VsDivision": vs_division_nullable,
+        "Weight": weight_nullable,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/leaguedashptdefend",
-        params={
-            "College": college_nullable,
-            "Conference": conference_nullable,
-            "Country": country_nullable,
-            "DateFrom": date_from_nullable,
-            "DateTo": date_to_nullable,
-            "DefenseCategory": defense_category,
-            "Division": division_nullable,
-            "DraftPick": draft_pick_nullable,
-            "DraftYear": draft_year_nullable,
-            "GameSegment": game_segment_nullable,
-            "Height": height_nullable,
-            "LastNGames": last_n_games_nullable,
-            "LeagueID": league_id,
-            "Location": location_nullable,
-            "Month": month_nullable,
-            "OpponentTeamID": opponent_team_id_nullable,
-            "Outcome": outcome_nullable,
-            "PORound": po_round_nullable,
-            "PerMode": per_mode_simple,
-            "Period": period_nullable,
-            "PlayerExperience": player_experience_nullable,
-            "PlayerID": player_id_nullable,
-            "PlayerPosition": player_position_nullable,
-            "Season": season,
-            "SeasonSegment": season_segment_nullable,
-            "SeasonType": season_type_all_star,
-            "StarterBench": starter_bench_nullable,
-            "TeamID": team_id_nullable,
-            "VsConference": vs_conference_nullable,
-            "VsDivision": vs_division_nullable,
-            "Weight": weight_nullable,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3153,42 +3300,45 @@ def wnba_stats_leaguedashteamclutch(
 
             wnba_stats_leaguedashteamclutch(league_id='10')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "AheadBehind": ahead_behind,
+        "ClutchTime": clutch_time,
+        "Conference": conference_nullable,
+        "DateFrom": date_from_nullable,
+        "DateTo": date_to_nullable,
+        "Division": division_simple_nullable,
+        "GameScope": game_scope_simple_nullable,
+        "GameSegment": game_segment_nullable,
+        "LastNGames": last_n_games,
+        "LeagueID": league_id,
+        "Location": location_nullable,
+        "MeasureType": measure_type_detailed_defense,
+        "Month": month,
+        "OpponentTeamID": opponent_team_id,
+        "Outcome": outcome_nullable,
+        "PORound": po_round_nullable,
+        "PaceAdjust": pace_adjust,
+        "PerMode": per_mode_detailed,
+        "Period": period,
+        "PlayerExperience": player_experience_nullable,
+        "PlayerPosition": player_position_abbreviation_nullable,
+        "PlusMinus": plus_minus,
+        "PointDiff": point_diff,
+        "Rank": rank,
+        "Season": season,
+        "SeasonSegment": season_segment_nullable,
+        "SeasonType": season_type_all_star,
+        "ShotClockRange": shot_clock_range_nullable,
+        "StarterBench": starter_bench_nullable,
+        "TeamID": team_id_nullable,
+        "VsConference": vs_conference_nullable,
+        "VsDivision": vs_division_nullable,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/leaguedashteamclutch",
-        params={
-            "AheadBehind": ahead_behind,
-            "ClutchTime": clutch_time,
-            "Conference": conference_nullable,
-            "DateFrom": date_from_nullable,
-            "DateTo": date_to_nullable,
-            "Division": division_simple_nullable,
-            "GameScope": game_scope_simple_nullable,
-            "GameSegment": game_segment_nullable,
-            "LastNGames": last_n_games,
-            "LeagueID": league_id,
-            "Location": location_nullable,
-            "MeasureType": measure_type_detailed_defense,
-            "Month": month,
-            "OpponentTeamID": opponent_team_id,
-            "Outcome": outcome_nullable,
-            "PORound": po_round_nullable,
-            "PaceAdjust": pace_adjust,
-            "PerMode": per_mode_detailed,
-            "Period": period,
-            "PlayerExperience": player_experience_nullable,
-            "PlayerPosition": player_position_abbreviation_nullable,
-            "PlusMinus": plus_minus,
-            "PointDiff": point_diff,
-            "Rank": rank,
-            "Season": season,
-            "SeasonSegment": season_segment_nullable,
-            "SeasonType": season_type_all_star,
-            "ShotClockRange": shot_clock_range_nullable,
-            "StarterBench": starter_bench_nullable,
-            "TeamID": team_id_nullable,
-            "VsConference": vs_conference_nullable,
-            "VsDivision": vs_division_nullable,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3279,40 +3429,43 @@ def wnba_stats_leaguedashteamshotlocations(
 
             wnba_stats_leaguedashteamshotlocations(league_id='10')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "Conference": conference_nullable,
+        "DateFrom": date_from_nullable,
+        "DateTo": date_to_nullable,
+        "DistanceRange": distance_range,
+        "Division": division_simple_nullable,
+        "GameScope": game_scope_simple_nullable,
+        "GameSegment": game_segment_nullable,
+        "LastNGames": last_n_games,
+        "LeagueID": league_id,
+        "Location": location_nullable,
+        "MeasureType": measure_type_simple,
+        "Month": month,
+        "OpponentTeamID": opponent_team_id,
+        "Outcome": outcome_nullable,
+        "PORound": po_round_nullable,
+        "PaceAdjust": pace_adjust,
+        "PerMode": per_mode_detailed,
+        "Period": period,
+        "PlayerExperience": player_experience_nullable,
+        "PlayerPosition": player_position_abbreviation_nullable,
+        "PlusMinus": plus_minus,
+        "Rank": rank,
+        "Season": season,
+        "SeasonSegment": season_segment_nullable,
+        "SeasonType": season_type_all_star,
+        "ShotClockRange": shot_clock_range_nullable,
+        "StarterBench": starter_bench_nullable,
+        "TeamID": team_id_nullable,
+        "VsConference": vs_conference_nullable,
+        "VsDivision": vs_division_nullable,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/leaguedashteamshotlocations",
-        params={
-            "Conference": conference_nullable,
-            "DateFrom": date_from_nullable,
-            "DateTo": date_to_nullable,
-            "DistanceRange": distance_range,
-            "Division": division_simple_nullable,
-            "GameScope": game_scope_simple_nullable,
-            "GameSegment": game_segment_nullable,
-            "LastNGames": last_n_games,
-            "LeagueID": league_id,
-            "Location": location_nullable,
-            "MeasureType": measure_type_simple,
-            "Month": month,
-            "OpponentTeamID": opponent_team_id,
-            "Outcome": outcome_nullable,
-            "PORound": po_round_nullable,
-            "PaceAdjust": pace_adjust,
-            "PerMode": per_mode_detailed,
-            "Period": period,
-            "PlayerExperience": player_experience_nullable,
-            "PlayerPosition": player_position_abbreviation_nullable,
-            "PlusMinus": plus_minus,
-            "Rank": rank,
-            "Season": season,
-            "SeasonSegment": season_segment_nullable,
-            "SeasonType": season_type_all_star,
-            "ShotClockRange": shot_clock_range_nullable,
-            "StarterBench": starter_bench_nullable,
-            "TeamID": team_id_nullable,
-            "VsConference": vs_conference_nullable,
-            "VsDivision": vs_division_nullable,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3403,40 +3556,43 @@ def wnba_stats_leaguedashteamstats(
 
             wnba_stats_leaguedashteamstats(league_id='10')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "Conference": conference_nullable,
+        "DateFrom": date_from_nullable,
+        "DateTo": date_to_nullable,
+        "Division": division_simple_nullable,
+        "GameScope": game_scope_simple_nullable,
+        "GameSegment": game_segment_nullable,
+        "LastNGames": last_n_games,
+        "LeagueID": league_id,
+        "Location": location_nullable,
+        "MeasureType": measure_type_detailed_defense,
+        "Month": month,
+        "OpponentTeamID": opponent_team_id,
+        "Outcome": outcome_nullable,
+        "PORound": po_round_nullable,
+        "PaceAdjust": pace_adjust,
+        "PerMode": per_mode_detailed,
+        "Period": period,
+        "PlayerExperience": player_experience_nullable,
+        "PlayerPosition": player_position_abbreviation_nullable,
+        "PlusMinus": plus_minus,
+        "Rank": rank,
+        "Season": season,
+        "SeasonSegment": season_segment_nullable,
+        "SeasonType": season_type_all_star,
+        "ShotClockRange": shot_clock_range_nullable,
+        "StarterBench": starter_bench_nullable,
+        "TeamID": team_id_nullable,
+        "TwoWay": two_way_nullable,
+        "VsConference": vs_conference_nullable,
+        "VsDivision": vs_division_nullable,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/leaguedashteamstats",
-        params={
-            "Conference": conference_nullable,
-            "DateFrom": date_from_nullable,
-            "DateTo": date_to_nullable,
-            "Division": division_simple_nullable,
-            "GameScope": game_scope_simple_nullable,
-            "GameSegment": game_segment_nullable,
-            "LastNGames": last_n_games,
-            "LeagueID": league_id,
-            "Location": location_nullable,
-            "MeasureType": measure_type_detailed_defense,
-            "Month": month,
-            "OpponentTeamID": opponent_team_id,
-            "Outcome": outcome_nullable,
-            "PORound": po_round_nullable,
-            "PaceAdjust": pace_adjust,
-            "PerMode": per_mode_detailed,
-            "Period": period,
-            "PlayerExperience": player_experience_nullable,
-            "PlayerPosition": player_position_abbreviation_nullable,
-            "PlusMinus": plus_minus,
-            "Rank": rank,
-            "Season": season,
-            "SeasonSegment": season_segment_nullable,
-            "SeasonType": season_type_all_star,
-            "ShotClockRange": shot_clock_range_nullable,
-            "StarterBench": starter_bench_nullable,
-            "TeamID": team_id_nullable,
-            "TwoWay": two_way_nullable,
-            "VsConference": vs_conference_nullable,
-            "VsDivision": vs_division_nullable,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3643,98 +3799,101 @@ def wnba_stats_leaguegamefinder(
 
             wnba_stats_leaguegamefinder(league_id='10')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "Conference": conference_nullable,
+        "DateFrom": date_from_nullable,
+        "DateTo": date_to_nullable,
+        "Division": division_simple_nullable,
+        "DraftNumber": draft_number_nullable,
+        "DraftRound": draft_round_nullable,
+        "DraftTeamID": draft_team_id_nullable,
+        "DraftYear": draft_year_nullable,
+        "EqAST": eq_ast_nullable,
+        "EqBLK": eq_blk_nullable,
+        "EqDD": eq_dd_nullable,
+        "EqDREB": eq_dreb_nullable,
+        "EqFG3A": eq_fg3a_nullable,
+        "EqFG3M": eq_fg3m_nullable,
+        "EqFG3_PCT": eq_fg3_pct_nullable,
+        "EqFGA": eq_fga_nullable,
+        "EqFGM": eq_fgm_nullable,
+        "EqFG_PCT": eq_fg_pct_nullable,
+        "EqFTA": eq_fta_nullable,
+        "EqFTM": eq_ftm_nullable,
+        "EqFT_PCT": eq_ft_pct_nullable,
+        "EqMINUTES": eq_minutes_nullable,
+        "EqOREB": eq_oreb_nullable,
+        "EqPF": eq_pf_nullable,
+        "EqPTS": eq_pts_nullable,
+        "EqREB": eq_reb_nullable,
+        "EqSTL": eq_stl_nullable,
+        "EqTD": eq_td_nullable,
+        "EqTOV": eq_tov_nullable,
+        "GameID": game_id_nullable,
+        "GtAST": gt_ast_nullable,
+        "GtBLK": gt_blk_nullable,
+        "GtDD": gt_dd_nullable,
+        "GtDREB": gt_dreb_nullable,
+        "GtFG3A": gt_fg3a_nullable,
+        "GtFG3M": gt_fg3m_nullable,
+        "GtFG3_PCT": gt_fg3_pct_nullable,
+        "GtFGA": gt_fga_nullable,
+        "GtFGM": gt_fgm_nullable,
+        "GtFG_PCT": gt_fg_pct_nullable,
+        "GtFTA": gt_fta_nullable,
+        "GtFTM": gt_ftm_nullable,
+        "GtFT_PCT": gt_ft_pct_nullable,
+        "GtMINUTES": gt_minutes_nullable,
+        "GtOREB": gt_oreb_nullable,
+        "GtPF": gt_pf_nullable,
+        "GtPTS": gt_pts_nullable,
+        "GtREB": gt_reb_nullable,
+        "GtSTL": gt_stl_nullable,
+        "GtTD": gt_td_nullable,
+        "GtTOV": gt_tov_nullable,
+        "LeagueID": league_id,
+        "Location": location_nullable,
+        "LtAST": lt_ast_nullable,
+        "LtBLK": lt_blk_nullable,
+        "LtDD": lt_dd_nullable,
+        "LtDREB": lt_dreb_nullable,
+        "LtFG3A": lt_fg3a_nullable,
+        "LtFG3M": lt_fg3m_nullable,
+        "LtFG3_PCT": lt_fg3_pct_nullable,
+        "LtFGA": lt_fga_nullable,
+        "LtFGM": lt_fgm_nullable,
+        "LtFG_PCT": lt_fg_pct_nullable,
+        "LtFTA": lt_fta_nullable,
+        "LtFTM": lt_ftm_nullable,
+        "LtFT_PCT": lt_ft_pct_nullable,
+        "LtMINUTES": lt_minutes_nullable,
+        "LtOREB": lt_oreb_nullable,
+        "LtPF": lt_pf_nullable,
+        "LtPTS": lt_pts_nullable,
+        "LtREB": lt_reb_nullable,
+        "LtSTL": lt_stl_nullable,
+        "LtTD": lt_td_nullable,
+        "LtTOV": lt_tov_nullable,
+        "Outcome": outcome_nullable,
+        "PORound": po_round_nullable,
+        "PlayerID": player_id_nullable,
+        "PlayerOrTeam": player_or_team_abbreviation,
+        "RookieYear": rookie_year_nullable,
+        "Season": season_nullable,
+        "SeasonSegment": season_segment_nullable,
+        "SeasonType": season_type_nullable,
+        "StarterBench": starter_bench_nullable,
+        "TeamID": team_id_nullable,
+        "VsConference": vs_conference_nullable,
+        "VsDivision": vs_division_nullable,
+        "VsTeamID": vs_team_id_nullable,
+        "YearsExperience": years_experience_nullable,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/leaguegamefinder",
-        params={
-            "Conference": conference_nullable,
-            "DateFrom": date_from_nullable,
-            "DateTo": date_to_nullable,
-            "Division": division_simple_nullable,
-            "DraftNumber": draft_number_nullable,
-            "DraftRound": draft_round_nullable,
-            "DraftTeamID": draft_team_id_nullable,
-            "DraftYear": draft_year_nullable,
-            "EqAST": eq_ast_nullable,
-            "EqBLK": eq_blk_nullable,
-            "EqDD": eq_dd_nullable,
-            "EqDREB": eq_dreb_nullable,
-            "EqFG3A": eq_fg3a_nullable,
-            "EqFG3M": eq_fg3m_nullable,
-            "EqFG3_PCT": eq_fg3_pct_nullable,
-            "EqFGA": eq_fga_nullable,
-            "EqFGM": eq_fgm_nullable,
-            "EqFG_PCT": eq_fg_pct_nullable,
-            "EqFTA": eq_fta_nullable,
-            "EqFTM": eq_ftm_nullable,
-            "EqFT_PCT": eq_ft_pct_nullable,
-            "EqMINUTES": eq_minutes_nullable,
-            "EqOREB": eq_oreb_nullable,
-            "EqPF": eq_pf_nullable,
-            "EqPTS": eq_pts_nullable,
-            "EqREB": eq_reb_nullable,
-            "EqSTL": eq_stl_nullable,
-            "EqTD": eq_td_nullable,
-            "EqTOV": eq_tov_nullable,
-            "GameID": game_id_nullable,
-            "GtAST": gt_ast_nullable,
-            "GtBLK": gt_blk_nullable,
-            "GtDD": gt_dd_nullable,
-            "GtDREB": gt_dreb_nullable,
-            "GtFG3A": gt_fg3a_nullable,
-            "GtFG3M": gt_fg3m_nullable,
-            "GtFG3_PCT": gt_fg3_pct_nullable,
-            "GtFGA": gt_fga_nullable,
-            "GtFGM": gt_fgm_nullable,
-            "GtFG_PCT": gt_fg_pct_nullable,
-            "GtFTA": gt_fta_nullable,
-            "GtFTM": gt_ftm_nullable,
-            "GtFT_PCT": gt_ft_pct_nullable,
-            "GtMINUTES": gt_minutes_nullable,
-            "GtOREB": gt_oreb_nullable,
-            "GtPF": gt_pf_nullable,
-            "GtPTS": gt_pts_nullable,
-            "GtREB": gt_reb_nullable,
-            "GtSTL": gt_stl_nullable,
-            "GtTD": gt_td_nullable,
-            "GtTOV": gt_tov_nullable,
-            "LeagueID": league_id,
-            "Location": location_nullable,
-            "LtAST": lt_ast_nullable,
-            "LtBLK": lt_blk_nullable,
-            "LtDD": lt_dd_nullable,
-            "LtDREB": lt_dreb_nullable,
-            "LtFG3A": lt_fg3a_nullable,
-            "LtFG3M": lt_fg3m_nullable,
-            "LtFG3_PCT": lt_fg3_pct_nullable,
-            "LtFGA": lt_fga_nullable,
-            "LtFGM": lt_fgm_nullable,
-            "LtFG_PCT": lt_fg_pct_nullable,
-            "LtFTA": lt_fta_nullable,
-            "LtFTM": lt_ftm_nullable,
-            "LtFT_PCT": lt_ft_pct_nullable,
-            "LtMINUTES": lt_minutes_nullable,
-            "LtOREB": lt_oreb_nullable,
-            "LtPF": lt_pf_nullable,
-            "LtPTS": lt_pts_nullable,
-            "LtREB": lt_reb_nullable,
-            "LtSTL": lt_stl_nullable,
-            "LtTD": lt_td_nullable,
-            "LtTOV": lt_tov_nullable,
-            "Outcome": outcome_nullable,
-            "PORound": po_round_nullable,
-            "PlayerID": player_id_nullable,
-            "PlayerOrTeam": player_or_team_abbreviation,
-            "RookieYear": rookie_year_nullable,
-            "Season": season_nullable,
-            "SeasonSegment": season_segment_nullable,
-            "SeasonType": season_type_nullable,
-            "StarterBench": starter_bench_nullable,
-            "TeamID": team_id_nullable,
-            "VsConference": vs_conference_nullable,
-            "VsDivision": vs_division_nullable,
-            "VsTeamID": vs_team_id_nullable,
-            "YearsExperience": years_experience_nullable,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3783,19 +3942,22 @@ def wnba_stats_leaguegamelog(
 
             wnba_stats_leaguegamelog(league_id='10')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "Counter": counter,
+        "DateFrom": date_from_nullable,
+        "DateTo": date_to_nullable,
+        "Direction": direction,
+        "LeagueID": league_id,
+        "PlayerOrTeam": player_or_team_abbreviation,
+        "Season": season,
+        "SeasonType": season_type_all_star,
+        "Sorter": sorter,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/leaguegamelog",
-        params={
-            "Counter": counter,
-            "DateFrom": date_from_nullable,
-            "DateTo": date_to_nullable,
-            "Direction": direction,
-            "LeagueID": league_id,
-            "PlayerOrTeam": player_or_team_abbreviation,
-            "Season": season,
-            "SeasonType": season_type_all_star,
-            "Sorter": sorter,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3840,17 +4002,20 @@ def wnba_stats_leagueleaders(
 
             wnba_stats_leagueleaders(league_id='10')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "ActiveFlag": active_flag_nullable,
+        "LeagueID": league_id,
+        "PerMode": per_mode48,
+        "Scope": scope,
+        "Season": season,
+        "SeasonType": season_type_all_star,
+        "StatCategory": stat_category_abbreviation,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/leagueleaders",
-        params={
-            "ActiveFlag": active_flag_nullable,
-            "LeagueID": league_id,
-            "PerMode": per_mode48,
-            "Scope": scope,
-            "Season": season,
-            "SeasonType": season_type_all_star,
-            "StatCategory": stat_category_abbreviation,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -3935,37 +4100,40 @@ def wnba_stats_leaguelineupviz(
 
             wnba_stats_leaguelineupviz(league_id='10')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "Conference": conference_nullable,
+        "DateFrom": date_from_nullable,
+        "DateTo": date_to_nullable,
+        "Division": division_simple_nullable,
+        "GameSegment": game_segment_nullable,
+        "GroupQuantity": group_quantity,
+        "LastNGames": last_n_games,
+        "LeagueID": league_id,
+        "Location": location_nullable,
+        "MeasureType": measure_type_detailed_defense,
+        "MinutesMin": minutes_min,
+        "Month": month,
+        "OpponentTeamID": opponent_team_id,
+        "Outcome": outcome_nullable,
+        "PORound": po_round_nullable,
+        "PaceAdjust": pace_adjust,
+        "PerMode": per_mode_detailed,
+        "Period": period,
+        "PlusMinus": plus_minus,
+        "Rank": rank,
+        "Season": season,
+        "SeasonSegment": season_segment_nullable,
+        "SeasonType": season_type_all_star,
+        "ShotClockRange": shot_clock_range_nullable,
+        "TeamID": team_id_nullable,
+        "VsConference": vs_conference_nullable,
+        "VsDivision": vs_division_nullable,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/leaguelineupviz",
-        params={
-            "Conference": conference_nullable,
-            "DateFrom": date_from_nullable,
-            "DateTo": date_to_nullable,
-            "Division": division_simple_nullable,
-            "GameSegment": game_segment_nullable,
-            "GroupQuantity": group_quantity,
-            "LastNGames": last_n_games,
-            "LeagueID": league_id,
-            "Location": location_nullable,
-            "MeasureType": measure_type_detailed_defense,
-            "MinutesMin": minutes_min,
-            "Month": month,
-            "OpponentTeamID": opponent_team_id,
-            "Outcome": outcome_nullable,
-            "PORound": po_round_nullable,
-            "PaceAdjust": pace_adjust,
-            "PerMode": per_mode_detailed,
-            "Period": period,
-            "PlusMinus": plus_minus,
-            "Rank": rank,
-            "Season": season,
-            "SeasonSegment": season_segment_nullable,
-            "SeasonType": season_type_all_star,
-            "ShotClockRange": shot_clock_range_nullable,
-            "TeamID": team_id_nullable,
-            "VsConference": vs_conference_nullable,
-            "VsDivision": vs_division_nullable,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -4038,31 +4206,34 @@ def wnba_stats_leagueplayerondetails(
 
             wnba_stats_leagueplayerondetails(league_id='10')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "DateFrom": date_from_nullable,
+        "DateTo": date_to_nullable,
+        "GameSegment": game_segment_nullable,
+        "LastNGames": last_n_games,
+        "LeagueID": league_id,
+        "Location": location_nullable,
+        "MeasureType": measure_type_detailed_defense,
+        "Month": month,
+        "OpponentTeamID": opponent_team_id,
+        "Outcome": outcome_nullable,
+        "PaceAdjust": pace_adjust,
+        "PerMode": per_mode_detailed,
+        "Period": period,
+        "PlusMinus": plus_minus,
+        "Rank": rank,
+        "Season": season,
+        "SeasonSegment": season_segment_nullable,
+        "SeasonType": season_type_all_star,
+        "TeamID": team_id,
+        "VsConference": vs_conference_nullable,
+        "VsDivision": vs_division_nullable,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/leagueplayerondetails",
-        params={
-            "DateFrom": date_from_nullable,
-            "DateTo": date_to_nullable,
-            "GameSegment": game_segment_nullable,
-            "LastNGames": last_n_games,
-            "LeagueID": league_id,
-            "Location": location_nullable,
-            "MeasureType": measure_type_detailed_defense,
-            "Month": month,
-            "OpponentTeamID": opponent_team_id,
-            "Outcome": outcome_nullable,
-            "PaceAdjust": pace_adjust,
-            "PerMode": per_mode_detailed,
-            "Period": period,
-            "PlusMinus": plus_minus,
-            "Rank": rank,
-            "Season": season,
-            "SeasonSegment": season_segment_nullable,
-            "SeasonType": season_type_all_star,
-            "TeamID": team_id,
-            "VsConference": vs_conference_nullable,
-            "VsDivision": vs_division_nullable,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -4109,18 +4280,21 @@ def wnba_stats_leagueseasonmatchups(
 
             wnba_stats_leagueseasonmatchups(league_id='10')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "DefPlayerID": def_player_id_nullable,
+        "DefTeamID": def_team_id_nullable,
+        "LeagueID": league_id,
+        "OffPlayerID": off_player_id_nullable,
+        "OffTeamID": off_team_id_nullable,
+        "PerMode": per_mode_simple,
+        "Season": season,
+        "SeasonType": season_type_playoffs,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/leagueseasonmatchups",
-        params={
-            "DefPlayerID": def_player_id_nullable,
-            "DefTeamID": def_team_id_nullable,
-            "LeagueID": league_id,
-            "OffPlayerID": off_player_id_nullable,
-            "OffTeamID": off_team_id_nullable,
-            "PerMode": per_mode_simple,
-            "Season": season,
-            "SeasonType": season_type_playoffs,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -4159,14 +4333,17 @@ def wnba_stats_leaguestandingsv3(
 
             wnba_stats_leaguestandingsv3(league_id='10')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "LeagueID": league_id,
+        "Season": season,
+        "SeasonType": season_type,
+        "SeasonYear": season_nullable,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/leaguestandingsv3",
-        params={
-            "LeagueID": league_id,
-            "Season": season,
-            "SeasonType": season_type,
-            "SeasonYear": season_nullable,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -4203,13 +4380,16 @@ def wnba_stats_playbyplayv2(
 
             wnba_stats_playbyplayv2()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "EndPeriod": end_period,
+        "GameID": game_id,
+        "StartPeriod": start_period,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/playbyplayv2",
-        params={
-            "EndPeriod": end_period,
-            "GameID": game_id,
-            "StartPeriod": start_period,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -4246,13 +4426,16 @@ def wnba_stats_playbyplayv3(
 
             wnba_stats_playbyplayv3()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "EndPeriod": end_period,
+        "GameID": game_id,
+        "StartPeriod": start_period,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/playbyplayv3",
-        params={
-            "EndPeriod": end_period,
-            "GameID": game_id,
-            "StartPeriod": start_period,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -4285,11 +4468,14 @@ def wnba_stats_playerawards(
 
             wnba_stats_playerawards()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "PlayerID": player_id,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/playerawards",
-        params={
-            "PlayerID": player_id,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -4328,14 +4514,17 @@ def wnba_stats_playercareerbycollegerollup(
 
             wnba_stats_playercareerbycollegerollup(league_id='10')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "LeagueID": league_id,
+        "PerMode": per_mode_simple,
+        "Season": season_nullable,
+        "SeasonType": season_type_all_star,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/playercareerbycollegerollup",
-        params={
-            "LeagueID": league_id,
-            "PerMode": per_mode_simple,
-            "Season": season_nullable,
-            "SeasonType": season_type_all_star,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -4372,13 +4561,16 @@ def wnba_stats_playercareerstats(
 
             wnba_stats_playercareerstats(league_id='10')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "LeagueID": league_id,
+        "PerMode": per_mode36,
+        "PlayerID": player_id,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/playercareerstats",
-        params={
-            "LeagueID": league_id,
-            "PerMode": per_mode36,
-            "PlayerID": player_id,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -4459,35 +4651,38 @@ def wnba_stats_playercompare(
 
             wnba_stats_playercompare(league_id='10')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "Conference": conference_nullable,
+        "DateFrom": date_from_nullable,
+        "DateTo": date_to_nullable,
+        "Division": division_simple_nullable,
+        "GameSegment": game_segment_nullable,
+        "LastNGames": last_n_games,
+        "LeagueID": league_id,
+        "Location": location_nullable,
+        "MeasureType": measure_type_detailed_defense,
+        "Month": month,
+        "OpponentTeamID": opponent_team_id,
+        "Outcome": outcome_nullable,
+        "PaceAdjust": pace_adjust,
+        "PerMode": per_mode_detailed,
+        "Period": period,
+        "PlayerIDList": player_id_list,
+        "PlusMinus": plus_minus,
+        "Rank": rank,
+        "Season": season,
+        "SeasonSegment": season_segment_nullable,
+        "SeasonType": season_type_playoffs,
+        "ShotClockRange": shot_clock_range_nullable,
+        "VsConference": vs_conference_nullable,
+        "VsDivision": vs_division_nullable,
+        "VsPlayerIDList": vs_player_id_list,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/playercompare",
-        params={
-            "Conference": conference_nullable,
-            "DateFrom": date_from_nullable,
-            "DateTo": date_to_nullable,
-            "Division": division_simple_nullable,
-            "GameSegment": game_segment_nullable,
-            "LastNGames": last_n_games,
-            "LeagueID": league_id,
-            "Location": location_nullable,
-            "MeasureType": measure_type_detailed_defense,
-            "Month": month,
-            "OpponentTeamID": opponent_team_id,
-            "Outcome": outcome_nullable,
-            "PaceAdjust": pace_adjust,
-            "PerMode": per_mode_detailed,
-            "Period": period,
-            "PlayerIDList": player_id_list,
-            "PlusMinus": plus_minus,
-            "Rank": rank,
-            "Season": season,
-            "SeasonSegment": season_segment_nullable,
-            "SeasonType": season_type_playoffs,
-            "ShotClockRange": shot_clock_range_nullable,
-            "VsConference": vs_conference_nullable,
-            "VsDivision": vs_division_nullable,
-            "VsPlayerIDList": vs_player_id_list,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -4564,33 +4759,36 @@ def wnba_stats_playerdashboardbyclutch(
 
             wnba_stats_playerdashboardbyclutch(league_id='10')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "DateFrom": date_from_nullable,
+        "DateTo": date_to_nullable,
+        "GameSegment": game_segment_nullable,
+        "LastNGames": last_n_games,
+        "LeagueID": league_id,
+        "Location": location_nullable,
+        "MeasureType": measure_type_detailed,
+        "Month": month,
+        "OpponentTeamID": opponent_team_id,
+        "Outcome": outcome_nullable,
+        "PORound": po_round_nullable,
+        "PaceAdjust": pace_adjust,
+        "PerMode": per_mode_detailed,
+        "Period": period,
+        "PlayerID": player_id,
+        "PlusMinus": plus_minus,
+        "Rank": rank,
+        "Season": season,
+        "SeasonSegment": season_segment_nullable,
+        "SeasonType": season_type_playoffs,
+        "ShotClockRange": shot_clock_range_nullable,
+        "VsConference": vs_conference_nullable,
+        "VsDivision": vs_division_nullable,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/playerdashboardbyclutch",
-        params={
-            "DateFrom": date_from_nullable,
-            "DateTo": date_to_nullable,
-            "GameSegment": game_segment_nullable,
-            "LastNGames": last_n_games,
-            "LeagueID": league_id,
-            "Location": location_nullable,
-            "MeasureType": measure_type_detailed,
-            "Month": month,
-            "OpponentTeamID": opponent_team_id,
-            "Outcome": outcome_nullable,
-            "PORound": po_round_nullable,
-            "PaceAdjust": pace_adjust,
-            "PerMode": per_mode_detailed,
-            "Period": period,
-            "PlayerID": player_id,
-            "PlusMinus": plus_minus,
-            "Rank": rank,
-            "Season": season,
-            "SeasonSegment": season_segment_nullable,
-            "SeasonType": season_type_playoffs,
-            "ShotClockRange": shot_clock_range_nullable,
-            "VsConference": vs_conference_nullable,
-            "VsDivision": vs_division_nullable,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -4667,33 +4865,36 @@ def wnba_stats_playerdashboardbygamesplits(
 
             wnba_stats_playerdashboardbygamesplits(league_id='10')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "DateFrom": date_from_nullable,
+        "DateTo": date_to_nullable,
+        "GameSegment": game_segment_nullable,
+        "LastNGames": last_n_games,
+        "LeagueID": league_id,
+        "Location": location_nullable,
+        "MeasureType": measure_type_detailed,
+        "Month": month,
+        "OpponentTeamID": opponent_team_id,
+        "Outcome": outcome_nullable,
+        "PORound": po_round_nullable,
+        "PaceAdjust": pace_adjust,
+        "PerMode": per_mode_detailed,
+        "Period": period,
+        "PlayerID": player_id,
+        "PlusMinus": plus_minus,
+        "Rank": rank,
+        "Season": season,
+        "SeasonSegment": season_segment_nullable,
+        "SeasonType": season_type_playoffs,
+        "ShotClockRange": shot_clock_range_nullable,
+        "VsConference": vs_conference_nullable,
+        "VsDivision": vs_division_nullable,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/playerdashboardbygamesplits",
-        params={
-            "DateFrom": date_from_nullable,
-            "DateTo": date_to_nullable,
-            "GameSegment": game_segment_nullable,
-            "LastNGames": last_n_games,
-            "LeagueID": league_id,
-            "Location": location_nullable,
-            "MeasureType": measure_type_detailed,
-            "Month": month,
-            "OpponentTeamID": opponent_team_id,
-            "Outcome": outcome_nullable,
-            "PORound": po_round_nullable,
-            "PaceAdjust": pace_adjust,
-            "PerMode": per_mode_detailed,
-            "Period": period,
-            "PlayerID": player_id,
-            "PlusMinus": plus_minus,
-            "Rank": rank,
-            "Season": season,
-            "SeasonSegment": season_segment_nullable,
-            "SeasonType": season_type_playoffs,
-            "ShotClockRange": shot_clock_range_nullable,
-            "VsConference": vs_conference_nullable,
-            "VsDivision": vs_division_nullable,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -4770,33 +4971,36 @@ def wnba_stats_playerdashboardbygeneralsplits(
 
             wnba_stats_playerdashboardbygeneralsplits(league_id='10')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "DateFrom": date_from_nullable,
+        "DateTo": date_to_nullable,
+        "GameSegment": game_segment_nullable,
+        "LastNGames": last_n_games,
+        "LeagueID": league_id,
+        "Location": location_nullable,
+        "MeasureType": measure_type_detailed,
+        "Month": month,
+        "OpponentTeamID": opponent_team_id,
+        "Outcome": outcome_nullable,
+        "PORound": po_round_nullable,
+        "PaceAdjust": pace_adjust,
+        "PerMode": per_mode_detailed,
+        "Period": period,
+        "PlayerID": player_id,
+        "PlusMinus": plus_minus,
+        "Rank": rank,
+        "Season": season,
+        "SeasonSegment": season_segment_nullable,
+        "SeasonType": season_type_playoffs,
+        "ShotClockRange": shot_clock_range_nullable,
+        "VsConference": vs_conference_nullable,
+        "VsDivision": vs_division_nullable,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/playerdashboardbygeneralsplits",
-        params={
-            "DateFrom": date_from_nullable,
-            "DateTo": date_to_nullable,
-            "GameSegment": game_segment_nullable,
-            "LastNGames": last_n_games,
-            "LeagueID": league_id,
-            "Location": location_nullable,
-            "MeasureType": measure_type_detailed,
-            "Month": month,
-            "OpponentTeamID": opponent_team_id,
-            "Outcome": outcome_nullable,
-            "PORound": po_round_nullable,
-            "PaceAdjust": pace_adjust,
-            "PerMode": per_mode_detailed,
-            "Period": period,
-            "PlayerID": player_id,
-            "PlusMinus": plus_minus,
-            "Rank": rank,
-            "Season": season,
-            "SeasonSegment": season_segment_nullable,
-            "SeasonType": season_type_playoffs,
-            "ShotClockRange": shot_clock_range_nullable,
-            "VsConference": vs_conference_nullable,
-            "VsDivision": vs_division_nullable,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -4873,33 +5077,36 @@ def wnba_stats_playerdashboardbylastngames(
 
             wnba_stats_playerdashboardbylastngames(league_id='10')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "DateFrom": date_from_nullable,
+        "DateTo": date_to_nullable,
+        "GameSegment": game_segment_nullable,
+        "LastNGames": last_n_games,
+        "LeagueID": league_id,
+        "Location": location_nullable,
+        "MeasureType": measure_type_detailed,
+        "Month": month,
+        "OpponentTeamID": opponent_team_id,
+        "Outcome": outcome_nullable,
+        "PORound": po_round_nullable,
+        "PaceAdjust": pace_adjust,
+        "PerMode": per_mode_detailed,
+        "Period": period,
+        "PlayerID": player_id,
+        "PlusMinus": plus_minus,
+        "Rank": rank,
+        "Season": season,
+        "SeasonSegment": season_segment_nullable,
+        "SeasonType": season_type_playoffs,
+        "ShotClockRange": shot_clock_range_nullable,
+        "VsConference": vs_conference_nullable,
+        "VsDivision": vs_division_nullable,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/playerdashboardbylastngames",
-        params={
-            "DateFrom": date_from_nullable,
-            "DateTo": date_to_nullable,
-            "GameSegment": game_segment_nullable,
-            "LastNGames": last_n_games,
-            "LeagueID": league_id,
-            "Location": location_nullable,
-            "MeasureType": measure_type_detailed,
-            "Month": month,
-            "OpponentTeamID": opponent_team_id,
-            "Outcome": outcome_nullable,
-            "PORound": po_round_nullable,
-            "PaceAdjust": pace_adjust,
-            "PerMode": per_mode_detailed,
-            "Period": period,
-            "PlayerID": player_id,
-            "PlusMinus": plus_minus,
-            "Rank": rank,
-            "Season": season,
-            "SeasonSegment": season_segment_nullable,
-            "SeasonType": season_type_playoffs,
-            "ShotClockRange": shot_clock_range_nullable,
-            "VsConference": vs_conference_nullable,
-            "VsDivision": vs_division_nullable,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -4976,33 +5183,36 @@ def wnba_stats_playerdashboardbyopponent(
 
             wnba_stats_playerdashboardbyopponent(league_id='10')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "DateFrom": date_from,
+        "DateTo": date_to,
+        "GameSegment": game_segment,
+        "LastNGames": last_n_games,
+        "LeagueID": league_id,
+        "Location": location,
+        "MeasureType": measure_type,
+        "Month": month,
+        "OpponentTeamID": opponent_team_id,
+        "Outcome": outcome,
+        "PORound": po_round,
+        "PaceAdjust": pace_adjust,
+        "PerMode": per_mode,
+        "Period": period,
+        "PlayerID": player_id,
+        "PlusMinus": plus_minus,
+        "Rank": rank,
+        "Season": season,
+        "SeasonSegment": season_segment,
+        "SeasonType": season_type,
+        "ShotClockRange": shot_clock_range,
+        "VsConference": vs_conference,
+        "VsDivision": vs_division,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/playerdashboardbyopponent",
-        params={
-            "DateFrom": date_from,
-            "DateTo": date_to,
-            "GameSegment": game_segment,
-            "LastNGames": last_n_games,
-            "LeagueID": league_id,
-            "Location": location,
-            "MeasureType": measure_type,
-            "Month": month,
-            "OpponentTeamID": opponent_team_id,
-            "Outcome": outcome,
-            "PORound": po_round,
-            "PaceAdjust": pace_adjust,
-            "PerMode": per_mode,
-            "Period": period,
-            "PlayerID": player_id,
-            "PlusMinus": plus_minus,
-            "Rank": rank,
-            "Season": season,
-            "SeasonSegment": season_segment,
-            "SeasonType": season_type,
-            "ShotClockRange": shot_clock_range,
-            "VsConference": vs_conference,
-            "VsDivision": vs_division,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -5079,33 +5289,36 @@ def wnba_stats_playerdashboardbyshootingsplits(
 
             wnba_stats_playerdashboardbyshootingsplits(league_id='10')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "DateFrom": date_from_nullable,
+        "DateTo": date_to_nullable,
+        "GameSegment": game_segment_nullable,
+        "LastNGames": last_n_games,
+        "LeagueID": league_id,
+        "Location": location_nullable,
+        "MeasureType": measure_type_detailed,
+        "Month": month,
+        "OpponentTeamID": opponent_team_id,
+        "Outcome": outcome_nullable,
+        "PORound": po_round_nullable,
+        "PaceAdjust": pace_adjust,
+        "PerMode": per_mode_detailed,
+        "Period": period,
+        "PlayerID": player_id,
+        "PlusMinus": plus_minus,
+        "Rank": rank,
+        "Season": season,
+        "SeasonSegment": season_segment_nullable,
+        "SeasonType": season_type_playoffs,
+        "ShotClockRange": shot_clock_range_nullable,
+        "VsConference": vs_conference_nullable,
+        "VsDivision": vs_division_nullable,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/playerdashboardbyshootingsplits",
-        params={
-            "DateFrom": date_from_nullable,
-            "DateTo": date_to_nullable,
-            "GameSegment": game_segment_nullable,
-            "LastNGames": last_n_games,
-            "LeagueID": league_id,
-            "Location": location_nullable,
-            "MeasureType": measure_type_detailed,
-            "Month": month,
-            "OpponentTeamID": opponent_team_id,
-            "Outcome": outcome_nullable,
-            "PORound": po_round_nullable,
-            "PaceAdjust": pace_adjust,
-            "PerMode": per_mode_detailed,
-            "Period": period,
-            "PlayerID": player_id,
-            "PlusMinus": plus_minus,
-            "Rank": rank,
-            "Season": season,
-            "SeasonSegment": season_segment_nullable,
-            "SeasonType": season_type_playoffs,
-            "ShotClockRange": shot_clock_range_nullable,
-            "VsConference": vs_conference_nullable,
-            "VsDivision": vs_division_nullable,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -5182,33 +5395,36 @@ def wnba_stats_playerdashboardbyteamperformance(
 
             wnba_stats_playerdashboardbyteamperformance(league_id='10')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "DateFrom": date_from_nullable,
+        "DateTo": date_to_nullable,
+        "GameSegment": game_segment_nullable,
+        "LastNGames": last_n_games,
+        "LeagueID": league_id,
+        "Location": location_nullable,
+        "MeasureType": measure_type_detailed,
+        "Month": month,
+        "OpponentTeamID": opponent_team_id,
+        "Outcome": outcome_nullable,
+        "PORound": po_round_nullable,
+        "PaceAdjust": pace_adjust,
+        "PerMode": per_mode_detailed,
+        "Period": period,
+        "PlayerID": player_id,
+        "PlusMinus": plus_minus,
+        "Rank": rank,
+        "Season": season,
+        "SeasonSegment": season_segment_nullable,
+        "SeasonType": season_type_playoffs,
+        "ShotClockRange": shot_clock_range_nullable,
+        "VsConference": vs_conference_nullable,
+        "VsDivision": vs_division_nullable,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/playerdashboardbyteamperformance",
-        params={
-            "DateFrom": date_from_nullable,
-            "DateTo": date_to_nullable,
-            "GameSegment": game_segment_nullable,
-            "LastNGames": last_n_games,
-            "LeagueID": league_id,
-            "Location": location_nullable,
-            "MeasureType": measure_type_detailed,
-            "Month": month,
-            "OpponentTeamID": opponent_team_id,
-            "Outcome": outcome_nullable,
-            "PORound": po_round_nullable,
-            "PaceAdjust": pace_adjust,
-            "PerMode": per_mode_detailed,
-            "Period": period,
-            "PlayerID": player_id,
-            "PlusMinus": plus_minus,
-            "Rank": rank,
-            "Season": season,
-            "SeasonSegment": season_segment_nullable,
-            "SeasonType": season_type_playoffs,
-            "ShotClockRange": shot_clock_range_nullable,
-            "VsConference": vs_conference_nullable,
-            "VsDivision": vs_division_nullable,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -5285,33 +5501,36 @@ def wnba_stats_playerdashboardbyyearoveryear(
 
             wnba_stats_playerdashboardbyyearoveryear(league_id='10')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "DateFrom": date_from_nullable,
+        "DateTo": date_to_nullable,
+        "GameSegment": game_segment_nullable,
+        "LastNGames": last_n_games,
+        "LeagueID": league_id,
+        "Location": location_nullable,
+        "MeasureType": measure_type_detailed,
+        "Month": month,
+        "OpponentTeamID": opponent_team_id,
+        "Outcome": outcome_nullable,
+        "PORound": po_round_nullable,
+        "PaceAdjust": pace_adjust,
+        "PerMode": per_mode_detailed,
+        "Period": period,
+        "PlayerID": player_id,
+        "PlusMinus": plus_minus,
+        "Rank": rank,
+        "Season": season,
+        "SeasonSegment": season_segment_nullable,
+        "SeasonType": season_type_playoffs,
+        "ShotClockRange": shot_clock_range_nullable,
+        "VsConference": vs_conference_nullable,
+        "VsDivision": vs_division_nullable,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/playerdashboardbyyearoveryear",
-        params={
-            "DateFrom": date_from_nullable,
-            "DateTo": date_to_nullable,
-            "GameSegment": game_segment_nullable,
-            "LastNGames": last_n_games,
-            "LeagueID": league_id,
-            "Location": location_nullable,
-            "MeasureType": measure_type_detailed,
-            "Month": month,
-            "OpponentTeamID": opponent_team_id,
-            "Outcome": outcome_nullable,
-            "PORound": po_round_nullable,
-            "PaceAdjust": pace_adjust,
-            "PerMode": per_mode_detailed,
-            "Period": period,
-            "PlayerID": player_id,
-            "PlusMinus": plus_minus,
-            "Rank": rank,
-            "Season": season,
-            "SeasonSegment": season_segment_nullable,
-            "SeasonType": season_type_playoffs,
-            "ShotClockRange": shot_clock_range_nullable,
-            "VsConference": vs_conference_nullable,
-            "VsDivision": vs_division_nullable,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -5378,28 +5597,31 @@ def wnba_stats_playerdashptshotdefend(
 
             wnba_stats_playerdashptshotdefend(league_id='10')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "DateFrom": date_from_nullable,
+        "DateTo": date_to_nullable,
+        "GameSegment": game_segment_nullable,
+        "LastNGames": last_n_games,
+        "LeagueID": league_id,
+        "Location": location_nullable,
+        "Month": month,
+        "OpponentTeamID": opponent_team_id,
+        "Outcome": outcome_nullable,
+        "PerMode": per_mode_simple,
+        "Period": period,
+        "PlayerID": player_id,
+        "Season": season,
+        "SeasonSegment": season_segment_nullable,
+        "SeasonType": season_type_all_star,
+        "TeamID": team_id,
+        "VsConference": vs_conference_nullable,
+        "VsDivision": vs_division_nullable,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/playerdashptshotdefend",
-        params={
-            "DateFrom": date_from_nullable,
-            "DateTo": date_to_nullable,
-            "GameSegment": game_segment_nullable,
-            "LastNGames": last_n_games,
-            "LeagueID": league_id,
-            "Location": location_nullable,
-            "Month": month,
-            "OpponentTeamID": opponent_team_id,
-            "Outcome": outcome_nullable,
-            "PerMode": per_mode_simple,
-            "Period": period,
-            "PlayerID": player_id,
-            "Season": season,
-            "SeasonSegment": season_segment_nullable,
-            "SeasonType": season_type_all_star,
-            "TeamID": team_id,
-            "VsConference": vs_conference_nullable,
-            "VsDivision": vs_division_nullable,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -5436,13 +5658,16 @@ def wnba_stats_playerestimatedmetrics(
 
             wnba_stats_playerestimatedmetrics(league_id='10')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "LeagueID": league_id,
+        "Season": season,
+        "SeasonType": season_type,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/playerestimatedmetrics",
-        params={
-            "LeagueID": league_id,
-            "Season": season,
-            "SeasonType": season_type,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -5491,19 +5716,22 @@ def wnba_stats_playerfantasyprofile(
 
             wnba_stats_playerfantasyprofile(league_id='10')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "LeagueID": league_id,
+        "MeasureType": measure_type,
+        "PaceAdjust": pace_adjust,
+        "PerMode": per_mode,
+        "PlayerID": player_id,
+        "PlusMinus": plus_minus,
+        "Rank": rank,
+        "Season": season,
+        "SeasonType": season_type,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/playerfantasyprofile",
-        params={
-            "LeagueID": league_id,
-            "MeasureType": measure_type,
-            "PaceAdjust": pace_adjust,
-            "PerMode": per_mode,
-            "PlayerID": player_id,
-            "PlusMinus": plus_minus,
-            "Rank": rank,
-            "Season": season,
-            "SeasonType": season_type,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -5542,14 +5770,17 @@ def wnba_stats_playerfantasyprofilebargraph(
 
             wnba_stats_playerfantasyprofilebargraph(league_id='10')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "LeagueID": league_id,
+        "PlayerID": player_id,
+        "Season": season,
+        "SeasonType": season_type_all_star_nullable,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/playerfantasyprofilebargraph",
-        params={
-            "LeagueID": league_id,
-            "PlayerID": player_id,
-            "Season": season,
-            "SeasonType": season_type_all_star_nullable,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -5592,16 +5823,19 @@ def wnba_stats_playergamelog(
 
             wnba_stats_playergamelog(league_id='10')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "DateFrom": date_from_nullable,
+        "DateTo": date_to_nullable,
+        "LeagueID": league_id,
+        "PlayerID": player_id,
+        "Season": season,
+        "SeasonType": season_type_all_star,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/playergamelog",
-        params={
-            "DateFrom": date_from_nullable,
-            "DateTo": date_to_nullable,
-            "LeagueID": league_id,
-            "PlayerID": player_id,
-            "Season": season,
-            "SeasonType": season_type_all_star,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -5674,31 +5908,34 @@ def wnba_stats_playergamelogs(
 
             wnba_stats_playergamelogs(league_id='10')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "DateFrom": date_from_nullable,
+        "DateTo": date_to_nullable,
+        "GameSegment": game_segment_nullable,
+        "LastNGames": last_n_games_nullable,
+        "LeagueID": league_id,
+        "Location": location_nullable,
+        "MeasureType": measure_type_player_game_logs_nullable,
+        "Month": month_nullable,
+        "OppTeamID": oppteamid,
+        "Outcome": outcome_nullable,
+        "PORound": po_round_nullable,
+        "PerMode": per_mode_simple_nullable,
+        "Period": period_nullable,
+        "PlayerID": player_id_nullable,
+        "Season": season_nullable,
+        "SeasonSegment": season_segment_nullable,
+        "SeasonType": season_type_nullable,
+        "ShotClockRange": shot_clock_range_nullable,
+        "TeamID": team_id_nullable,
+        "VsConference": vs_conference_nullable,
+        "VsDivision": vs_division_nullable,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/playergamelogs",
-        params={
-            "DateFrom": date_from_nullable,
-            "DateTo": date_to_nullable,
-            "GameSegment": game_segment_nullable,
-            "LastNGames": last_n_games_nullable,
-            "LeagueID": league_id,
-            "Location": location_nullable,
-            "MeasureType": measure_type_player_game_logs_nullable,
-            "Month": month_nullable,
-            "OppTeamID": oppteamid,
-            "Outcome": outcome_nullable,
-            "PORound": po_round_nullable,
-            "PerMode": per_mode_simple_nullable,
-            "Period": period_nullable,
-            "PlayerID": player_id_nullable,
-            "Season": season_nullable,
-            "SeasonSegment": season_segment_nullable,
-            "SeasonType": season_type_nullable,
-            "ShotClockRange": shot_clock_range_nullable,
-            "TeamID": team_id_nullable,
-            "VsConference": vs_conference_nullable,
-            "VsDivision": vs_division_nullable,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -5907,99 +6144,102 @@ def wnba_stats_playergamestreakfinder(
 
             wnba_stats_playergamestreakfinder(league_id='10')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "ActiveStreaksOnly": active_streaks_only_nullable,
+        "Conference": conference_nullable,
+        "DateFrom": date_from_nullable,
+        "DateTo": date_to_nullable,
+        "Division": division_simple_nullable,
+        "DraftNumber": draft_number_nullable,
+        "DraftRound": draft_round_nullable,
+        "DraftTeamID": draft_team_id_nullable,
+        "DraftYear": draft_year_nullable,
+        "EqAST": eq_ast_nullable,
+        "EqBLK": eq_blk_nullable,
+        "EqDD": eq_dd_nullable,
+        "EqDREB": eq_dreb_nullable,
+        "EqFG3A": eq_fg3a_nullable,
+        "EqFG3M": eq_fg3m_nullable,
+        "EqFG3_PCT": eq_fg3_pct_nullable,
+        "EqFGA": eq_fga_nullable,
+        "EqFGM": eq_fgm_nullable,
+        "EqFG_PCT": eq_fg_pct_nullable,
+        "EqFTA": eq_fta_nullable,
+        "EqFTM": eq_ftm_nullable,
+        "EqFT_PCT": eq_ft_pct_nullable,
+        "EqMINUTES": eq_minutes_nullable,
+        "EqOREB": eq_oreb_nullable,
+        "EqPF": eq_pf_nullable,
+        "EqPTS": eq_pts_nullable,
+        "EqREB": eq_reb_nullable,
+        "EqSTL": eq_stl_nullable,
+        "EqTD": eq_td_nullable,
+        "EqTOV": eq_tov_nullable,
+        "GameID": game_id_nullable,
+        "GtAST": gt_ast_nullable,
+        "GtBLK": gt_blk_nullable,
+        "GtDD": gt_dd_nullable,
+        "GtDREB": gt_dreb_nullable,
+        "GtFG3A": gt_fg3a_nullable,
+        "GtFG3M": gt_fg3m_nullable,
+        "GtFG3_PCT": gt_fg3_pct_nullable,
+        "GtFGA": gt_fga_nullable,
+        "GtFGM": gt_fgm_nullable,
+        "GtFG_PCT": gt_fg_pct_nullable,
+        "GtFTA": gt_fta_nullable,
+        "GtFTM": gt_ftm_nullable,
+        "GtFT_PCT": gt_ft_pct_nullable,
+        "GtMINUTES": gt_minutes_nullable,
+        "GtOREB": gt_oreb_nullable,
+        "GtPF": gt_pf_nullable,
+        "GtPTS": gt_pts_nullable,
+        "GtREB": gt_reb_nullable,
+        "GtSTL": gt_stl_nullable,
+        "GtTD": gt_td_nullable,
+        "GtTOV": gt_tov_nullable,
+        "LeagueID": league_id,
+        "Location": location_nullable,
+        "LtAST": lt_ast_nullable,
+        "LtBLK": lt_blk_nullable,
+        "LtDD": lt_dd_nullable,
+        "LtDREB": lt_dreb_nullable,
+        "LtFG3A": lt_fg3a_nullable,
+        "LtFG3M": lt_fg3m_nullable,
+        "LtFG3_PCT": lt_fg3_pct_nullable,
+        "LtFGA": lt_fga_nullable,
+        "LtFGM": lt_fgm_nullable,
+        "LtFG_PCT": lt_fg_pct_nullable,
+        "LtFTA": lt_fta_nullable,
+        "LtFTM": lt_ftm_nullable,
+        "LtFT_PCT": lt_ft_pct_nullable,
+        "LtMINUTES": lt_minutes_nullable,
+        "LtOREB": lt_oreb_nullable,
+        "LtPF": lt_pf_nullable,
+        "LtPTS": lt_pts_nullable,
+        "LtREB": lt_reb_nullable,
+        "LtSTL": lt_stl_nullable,
+        "LtTD": lt_td_nullable,
+        "LtTOV": lt_tov_nullable,
+        "MinGames": min_games_nullable,
+        "Outcome": outcome_nullable,
+        "PORound": po_round_nullable,
+        "PlayerID": player_id_nullable,
+        "RookieYear": rookie_year_nullable,
+        "Season": season_nullable,
+        "SeasonSegment": season_segment_nullable,
+        "SeasonType": season_type_nullable,
+        "StarterBench": starter_bench_nullable,
+        "TeamID": team_id_nullable,
+        "VsConference": vs_conference_nullable,
+        "VsDivision": vs_division_nullable,
+        "VsTeamID": vs_team_id_nullable,
+        "YearsExperience": years_experience_nullable,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/playergamestreakfinder",
-        params={
-            "ActiveStreaksOnly": active_streaks_only_nullable,
-            "Conference": conference_nullable,
-            "DateFrom": date_from_nullable,
-            "DateTo": date_to_nullable,
-            "Division": division_simple_nullable,
-            "DraftNumber": draft_number_nullable,
-            "DraftRound": draft_round_nullable,
-            "DraftTeamID": draft_team_id_nullable,
-            "DraftYear": draft_year_nullable,
-            "EqAST": eq_ast_nullable,
-            "EqBLK": eq_blk_nullable,
-            "EqDD": eq_dd_nullable,
-            "EqDREB": eq_dreb_nullable,
-            "EqFG3A": eq_fg3a_nullable,
-            "EqFG3M": eq_fg3m_nullable,
-            "EqFG3_PCT": eq_fg3_pct_nullable,
-            "EqFGA": eq_fga_nullable,
-            "EqFGM": eq_fgm_nullable,
-            "EqFG_PCT": eq_fg_pct_nullable,
-            "EqFTA": eq_fta_nullable,
-            "EqFTM": eq_ftm_nullable,
-            "EqFT_PCT": eq_ft_pct_nullable,
-            "EqMINUTES": eq_minutes_nullable,
-            "EqOREB": eq_oreb_nullable,
-            "EqPF": eq_pf_nullable,
-            "EqPTS": eq_pts_nullable,
-            "EqREB": eq_reb_nullable,
-            "EqSTL": eq_stl_nullable,
-            "EqTD": eq_td_nullable,
-            "EqTOV": eq_tov_nullable,
-            "GameID": game_id_nullable,
-            "GtAST": gt_ast_nullable,
-            "GtBLK": gt_blk_nullable,
-            "GtDD": gt_dd_nullable,
-            "GtDREB": gt_dreb_nullable,
-            "GtFG3A": gt_fg3a_nullable,
-            "GtFG3M": gt_fg3m_nullable,
-            "GtFG3_PCT": gt_fg3_pct_nullable,
-            "GtFGA": gt_fga_nullable,
-            "GtFGM": gt_fgm_nullable,
-            "GtFG_PCT": gt_fg_pct_nullable,
-            "GtFTA": gt_fta_nullable,
-            "GtFTM": gt_ftm_nullable,
-            "GtFT_PCT": gt_ft_pct_nullable,
-            "GtMINUTES": gt_minutes_nullable,
-            "GtOREB": gt_oreb_nullable,
-            "GtPF": gt_pf_nullable,
-            "GtPTS": gt_pts_nullable,
-            "GtREB": gt_reb_nullable,
-            "GtSTL": gt_stl_nullable,
-            "GtTD": gt_td_nullable,
-            "GtTOV": gt_tov_nullable,
-            "LeagueID": league_id,
-            "Location": location_nullable,
-            "LtAST": lt_ast_nullable,
-            "LtBLK": lt_blk_nullable,
-            "LtDD": lt_dd_nullable,
-            "LtDREB": lt_dreb_nullable,
-            "LtFG3A": lt_fg3a_nullable,
-            "LtFG3M": lt_fg3m_nullable,
-            "LtFG3_PCT": lt_fg3_pct_nullable,
-            "LtFGA": lt_fga_nullable,
-            "LtFGM": lt_fgm_nullable,
-            "LtFG_PCT": lt_fg_pct_nullable,
-            "LtFTA": lt_fta_nullable,
-            "LtFTM": lt_ftm_nullable,
-            "LtFT_PCT": lt_ft_pct_nullable,
-            "LtMINUTES": lt_minutes_nullable,
-            "LtOREB": lt_oreb_nullable,
-            "LtPF": lt_pf_nullable,
-            "LtPTS": lt_pts_nullable,
-            "LtREB": lt_reb_nullable,
-            "LtSTL": lt_stl_nullable,
-            "LtTD": lt_td_nullable,
-            "LtTOV": lt_tov_nullable,
-            "MinGames": min_games_nullable,
-            "Outcome": outcome_nullable,
-            "PORound": po_round_nullable,
-            "PlayerID": player_id_nullable,
-            "RookieYear": rookie_year_nullable,
-            "Season": season_nullable,
-            "SeasonSegment": season_segment_nullable,
-            "SeasonType": season_type_nullable,
-            "StarterBench": starter_bench_nullable,
-            "TeamID": team_id_nullable,
-            "VsConference": vs_conference_nullable,
-            "VsDivision": vs_division_nullable,
-            "VsTeamID": vs_team_id_nullable,
-            "YearsExperience": years_experience_nullable,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -6056,23 +6296,26 @@ def wnba_stats_playerindex(
 
             wnba_stats_playerindex(league_id='10')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "Active": active_nullable,
+        "AllStar": allstar_nullable,
+        "College": college_nullable,
+        "Country": country_nullable,
+        "DraftPick": draft_pick_nullable,
+        "DraftRound": draft_round_nullable,
+        "DraftYear": draft_year_nullable,
+        "Height": height_nullable,
+        "Historical": historical_nullable,
+        "LeagueID": league_id,
+        "Season": season,
+        "TeamID": team_id_nullable,
+        "Weight": weight_nullable,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/playerindex",
-        params={
-            "Active": active_nullable,
-            "AllStar": allstar_nullable,
-            "College": college_nullable,
-            "Country": country_nullable,
-            "DraftPick": draft_pick_nullable,
-            "DraftRound": draft_round_nullable,
-            "DraftYear": draft_year_nullable,
-            "Height": height_nullable,
-            "Historical": historical_nullable,
-            "LeagueID": league_id,
-            "Season": season,
-            "TeamID": team_id_nullable,
-            "Weight": weight_nullable,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -6113,15 +6356,18 @@ def wnba_stats_playernextngames(
 
             wnba_stats_playernextngames(league_id='10')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "LeagueID": league_id,
+        "NumberOfGames": number_of_games,
+        "PlayerID": player_id,
+        "Season": season_all,
+        "SeasonType": season_type_all_star,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/playernextngames",
-        params={
-            "LeagueID": league_id,
-            "NumberOfGames": number_of_games,
-            "PlayerID": player_id,
-            "Season": season_all,
-            "SeasonType": season_type_all_star,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -6158,13 +6404,16 @@ def wnba_stats_playerprofilev2(
 
             wnba_stats_playerprofilev2(league_id='10')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "LeagueID": league_id,
+        "PerMode": per_mode36,
+        "PlayerID": player_id,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/playerprofilev2",
-        params={
-            "LeagueID": league_id,
-            "PerMode": per_mode36,
-            "PlayerID": player_id,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -6239,32 +6488,35 @@ def wnba_stats_playervsplayer(
 
             wnba_stats_playervsplayer(league_id='10')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "DateFrom": date_from_nullable,
+        "DateTo": date_to_nullable,
+        "GameSegment": game_segment_nullable,
+        "LastNGames": last_n_games,
+        "LeagueID": league_id,
+        "Location": location_nullable,
+        "MeasureType": measure_type_detailed_defense,
+        "Month": month,
+        "OpponentTeamID": opponent_team_id,
+        "Outcome": outcome_nullable,
+        "PaceAdjust": pace_adjust,
+        "PerMode": per_mode_detailed,
+        "Period": period,
+        "PlayerID": player_id,
+        "PlusMinus": plus_minus,
+        "Rank": rank,
+        "Season": season,
+        "SeasonSegment": season_segment_nullable,
+        "SeasonType": season_type_playoffs,
+        "VsConference": vs_conference_nullable,
+        "VsDivision": vs_division_nullable,
+        "VsPlayerID": vs_player_id,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/playervsplayer",
-        params={
-            "DateFrom": date_from_nullable,
-            "DateTo": date_to_nullable,
-            "GameSegment": game_segment_nullable,
-            "LastNGames": last_n_games,
-            "LeagueID": league_id,
-            "Location": location_nullable,
-            "MeasureType": measure_type_detailed_defense,
-            "Month": month,
-            "OpponentTeamID": opponent_team_id,
-            "Outcome": outcome_nullable,
-            "PaceAdjust": pace_adjust,
-            "PerMode": per_mode_detailed,
-            "Period": period,
-            "PlayerID": player_id,
-            "PlusMinus": plus_minus,
-            "Rank": rank,
-            "Season": season,
-            "SeasonSegment": season_segment_nullable,
-            "SeasonType": season_type_playoffs,
-            "VsConference": vs_conference_nullable,
-            "VsDivision": vs_division_nullable,
-            "VsPlayerID": vs_player_id,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -6299,12 +6551,15 @@ def wnba_stats_scheduleleaguev2(
 
             wnba_stats_scheduleleaguev2(league_id='10')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "LeagueID": league_id,
+        "Season": season,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/scheduleleaguev2",
-        params={
-            "LeagueID": league_id,
-            "Season": season,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -6339,12 +6594,15 @@ def wnba_stats_scheduleleaguev2int(
 
             wnba_stats_scheduleleaguev2int(league_id='10')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "LeagueID": league_id,
+        "Season": season,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/scheduleleaguev2int",
-        params={
-            "LeagueID": league_id,
-            "Season": season,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -6381,13 +6639,16 @@ def wnba_stats_scoreboardv2(
 
             wnba_stats_scoreboardv2(league_id='10')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "DayOffset": day_offset,
+        "GameDate": game_date,
+        "LeagueID": league_id,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/scoreboardv2",
-        params={
-            "DayOffset": day_offset,
-            "GameDate": game_date,
-            "LeagueID": league_id,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -6422,12 +6683,15 @@ def wnba_stats_scoreboardv3(
 
             wnba_stats_scoreboardv3(league_id='10')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "GameDate": game_date,
+        "LeagueID": league_id,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/scoreboardv3",
-        params={
-            "GameDate": game_date,
-            "LeagueID": league_id,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -6520,41 +6784,44 @@ def wnba_stats_shotchartdetail(
 
             wnba_stats_shotchartdetail(league_id='10')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "AheadBehind": ahead_behind_nullable,
+        "ClutchTime": clutch_time_nullable,
+        "ContextFilter": context_filter_nullable,
+        "ContextMeasure": context_measure_simple,
+        "DateFrom": date_from_nullable,
+        "DateTo": date_to_nullable,
+        "EndPeriod": end_period_nullable,
+        "EndRange": end_range_nullable,
+        "GameID": game_id_nullable,
+        "GameSegment": game_segment_nullable,
+        "LastNGames": last_n_games,
+        "LeagueID": league_id,
+        "Location": location_nullable,
+        "Month": month,
+        "OpponentTeamID": opponent_team_id,
+        "Outcome": outcome_nullable,
+        "Period": period,
+        "PlayerID": player_id,
+        "PlayerPosition": player_position_nullable,
+        "PointDiff": point_diff_nullable,
+        "Position": position_nullable,
+        "RangeType": range_type_nullable,
+        "RookieYear": rookie_year_nullable,
+        "Season": season_nullable,
+        "SeasonSegment": season_segment_nullable,
+        "SeasonType": season_type_all_star,
+        "StartPeriod": start_period_nullable,
+        "StartRange": start_range_nullable,
+        "TeamID": team_id,
+        "VsConference": vs_conference_nullable,
+        "VsDivision": vs_division_nullable,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/shotchartdetail",
-        params={
-            "AheadBehind": ahead_behind_nullable,
-            "ClutchTime": clutch_time_nullable,
-            "ContextFilter": context_filter_nullable,
-            "ContextMeasure": context_measure_simple,
-            "DateFrom": date_from_nullable,
-            "DateTo": date_to_nullable,
-            "EndPeriod": end_period_nullable,
-            "EndRange": end_range_nullable,
-            "GameID": game_id_nullable,
-            "GameSegment": game_segment_nullable,
-            "LastNGames": last_n_games,
-            "LeagueID": league_id,
-            "Location": location_nullable,
-            "Month": month,
-            "OpponentTeamID": opponent_team_id,
-            "Outcome": outcome_nullable,
-            "Period": period,
-            "PlayerID": player_id,
-            "PlayerPosition": player_position_nullable,
-            "PointDiff": point_diff_nullable,
-            "Position": position_nullable,
-            "RangeType": range_type_nullable,
-            "RookieYear": rookie_year_nullable,
-            "Season": season_nullable,
-            "SeasonSegment": season_segment_nullable,
-            "SeasonType": season_type_all_star,
-            "StartPeriod": start_period_nullable,
-            "StartRange": start_range_nullable,
-            "TeamID": team_id,
-            "VsConference": vs_conference_nullable,
-            "VsDivision": vs_division_nullable,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -6589,12 +6856,15 @@ def wnba_stats_shotchartleaguewide(
 
             wnba_stats_shotchartleaguewide(league_id='10')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "LeagueID": league_id,
+        "Season": season,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/shotchartleaguewide",
-        params={
-            "LeagueID": league_id,
-            "Season": season,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -6665,30 +6935,33 @@ def wnba_stats_shotchartlineupdetail(
 
             wnba_stats_shotchartlineupdetail(league_id='10')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "ContextFilter": context_filter_nullable,
+        "ContextMeasure": context_measure_detailed,
+        "DateFrom": date_from_nullable,
+        "DateTo": date_to_nullable,
+        "GROUP_ID": group_id,
+        "GameID": game_id_nullable,
+        "GameSegment": game_segment_nullable,
+        "LastNGames": last_n_games_nullable,
+        "LeagueID": league_id,
+        "Location": location_nullable,
+        "Month": month_nullable,
+        "OpponentTeamID": opponent_team_id_nullable,
+        "Outcome": outcome_nullable,
+        "Period": period,
+        "Season": season,
+        "SeasonSegment": season_segment_nullable,
+        "SeasonType": season_type_all_star,
+        "TeamID": team_id_nullable,
+        "VsConference": vs_conference_nullable,
+        "VsDivision": vs_division_nullable,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/shotchartlineupdetail",
-        params={
-            "ContextFilter": context_filter_nullable,
-            "ContextMeasure": context_measure_detailed,
-            "DateFrom": date_from_nullable,
-            "DateTo": date_to_nullable,
-            "GROUP_ID": group_id,
-            "GameID": game_id_nullable,
-            "GameSegment": game_segment_nullable,
-            "LastNGames": last_n_games_nullable,
-            "LeagueID": league_id,
-            "Location": location_nullable,
-            "Month": month_nullable,
-            "OpponentTeamID": opponent_team_id_nullable,
-            "Outcome": outcome_nullable,
-            "Period": period,
-            "Season": season,
-            "SeasonSegment": season_segment_nullable,
-            "SeasonType": season_type_all_star,
-            "TeamID": team_id_nullable,
-            "VsConference": vs_conference_nullable,
-            "VsDivision": vs_division_nullable,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -6765,33 +7038,36 @@ def wnba_stats_teamdashboardbyclutch(
 
             wnba_stats_teamdashboardbyclutch(league_id='10')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "DateFrom": date_from,
+        "DateTo": date_to,
+        "GameSegment": game_segment,
+        "LastNGames": last_n_games,
+        "LeagueID": league_id,
+        "Location": location,
+        "MeasureType": measure_type,
+        "Month": month,
+        "OpponentTeamID": opponent_team_id,
+        "Outcome": outcome,
+        "PORound": po_round,
+        "PaceAdjust": pace_adjust,
+        "PerMode": per_mode,
+        "Period": period,
+        "PlusMinus": plus_minus,
+        "Rank": rank,
+        "Season": season,
+        "SeasonSegment": season_segment,
+        "SeasonType": season_type,
+        "ShotClockRange": shot_clock_range,
+        "TeamID": team_id,
+        "VsConference": vs_conference,
+        "VsDivision": vs_division,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/teamdashboardbyclutch",
-        params={
-            "DateFrom": date_from,
-            "DateTo": date_to,
-            "GameSegment": game_segment,
-            "LastNGames": last_n_games,
-            "LeagueID": league_id,
-            "Location": location,
-            "MeasureType": measure_type,
-            "Month": month,
-            "OpponentTeamID": opponent_team_id,
-            "Outcome": outcome,
-            "PORound": po_round,
-            "PaceAdjust": pace_adjust,
-            "PerMode": per_mode,
-            "Period": period,
-            "PlusMinus": plus_minus,
-            "Rank": rank,
-            "Season": season,
-            "SeasonSegment": season_segment,
-            "SeasonType": season_type,
-            "ShotClockRange": shot_clock_range,
-            "TeamID": team_id,
-            "VsConference": vs_conference,
-            "VsDivision": vs_division,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -6868,33 +7144,36 @@ def wnba_stats_teamdashboardbygamesplits(
 
             wnba_stats_teamdashboardbygamesplits(league_id='10')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "DateFrom": date_from,
+        "DateTo": date_to,
+        "GameSegment": game_segment,
+        "LastNGames": last_n_games,
+        "LeagueID": league_id,
+        "Location": location,
+        "MeasureType": measure_type,
+        "Month": month,
+        "OpponentTeamID": opponent_team_id,
+        "Outcome": outcome,
+        "PORound": po_round,
+        "PaceAdjust": pace_adjust,
+        "PerMode": per_mode,
+        "Period": period,
+        "PlusMinus": plus_minus,
+        "Rank": rank,
+        "Season": season,
+        "SeasonSegment": season_segment,
+        "SeasonType": season_type,
+        "ShotClockRange": shot_clock_range,
+        "TeamID": team_id,
+        "VsConference": vs_conference,
+        "VsDivision": vs_division,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/teamdashboardbygamesplits",
-        params={
-            "DateFrom": date_from,
-            "DateTo": date_to,
-            "GameSegment": game_segment,
-            "LastNGames": last_n_games,
-            "LeagueID": league_id,
-            "Location": location,
-            "MeasureType": measure_type,
-            "Month": month,
-            "OpponentTeamID": opponent_team_id,
-            "Outcome": outcome,
-            "PORound": po_round,
-            "PaceAdjust": pace_adjust,
-            "PerMode": per_mode,
-            "Period": period,
-            "PlusMinus": plus_minus,
-            "Rank": rank,
-            "Season": season,
-            "SeasonSegment": season_segment,
-            "SeasonType": season_type,
-            "ShotClockRange": shot_clock_range,
-            "TeamID": team_id,
-            "VsConference": vs_conference,
-            "VsDivision": vs_division,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -6971,33 +7250,36 @@ def wnba_stats_teamdashboardbygeneralsplits(
 
             wnba_stats_teamdashboardbygeneralsplits(league_id='10')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "DateFrom": date_from_nullable,
+        "DateTo": date_to_nullable,
+        "GameSegment": game_segment_nullable,
+        "LastNGames": last_n_games,
+        "LeagueID": league_id,
+        "Location": location_nullable,
+        "MeasureType": measure_type_detailed_defense,
+        "Month": month,
+        "OpponentTeamID": opponent_team_id,
+        "Outcome": outcome_nullable,
+        "PORound": po_round_nullable,
+        "PaceAdjust": pace_adjust,
+        "PerMode": per_mode_detailed,
+        "Period": period,
+        "PlusMinus": plus_minus,
+        "Rank": rank,
+        "Season": season,
+        "SeasonSegment": season_segment_nullable,
+        "SeasonType": season_type_all_star,
+        "ShotClockRange": shot_clock_range_nullable,
+        "TeamID": team_id,
+        "VsConference": vs_conference_nullable,
+        "VsDivision": vs_division_nullable,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/teamdashboardbygeneralsplits",
-        params={
-            "DateFrom": date_from_nullable,
-            "DateTo": date_to_nullable,
-            "GameSegment": game_segment_nullable,
-            "LastNGames": last_n_games,
-            "LeagueID": league_id,
-            "Location": location_nullable,
-            "MeasureType": measure_type_detailed_defense,
-            "Month": month,
-            "OpponentTeamID": opponent_team_id,
-            "Outcome": outcome_nullable,
-            "PORound": po_round_nullable,
-            "PaceAdjust": pace_adjust,
-            "PerMode": per_mode_detailed,
-            "Period": period,
-            "PlusMinus": plus_minus,
-            "Rank": rank,
-            "Season": season,
-            "SeasonSegment": season_segment_nullable,
-            "SeasonType": season_type_all_star,
-            "ShotClockRange": shot_clock_range_nullable,
-            "TeamID": team_id,
-            "VsConference": vs_conference_nullable,
-            "VsDivision": vs_division_nullable,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -7074,33 +7356,36 @@ def wnba_stats_teamdashboardbylastngames(
 
             wnba_stats_teamdashboardbylastngames(league_id='10')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "DateFrom": date_from,
+        "DateTo": date_to,
+        "GameSegment": game_segment,
+        "LastNGames": last_n_games,
+        "LeagueID": league_id,
+        "Location": location,
+        "MeasureType": measure_type,
+        "Month": month,
+        "OpponentTeamID": opponent_team_id,
+        "Outcome": outcome,
+        "PORound": po_round,
+        "PaceAdjust": pace_adjust,
+        "PerMode": per_mode,
+        "Period": period,
+        "PlusMinus": plus_minus,
+        "Rank": rank,
+        "Season": season,
+        "SeasonSegment": season_segment,
+        "SeasonType": season_type,
+        "ShotClockRange": shot_clock_range,
+        "TeamID": team_id,
+        "VsConference": vs_conference,
+        "VsDivision": vs_division,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/teamdashboardbylastngames",
-        params={
-            "DateFrom": date_from,
-            "DateTo": date_to,
-            "GameSegment": game_segment,
-            "LastNGames": last_n_games,
-            "LeagueID": league_id,
-            "Location": location,
-            "MeasureType": measure_type,
-            "Month": month,
-            "OpponentTeamID": opponent_team_id,
-            "Outcome": outcome,
-            "PORound": po_round,
-            "PaceAdjust": pace_adjust,
-            "PerMode": per_mode,
-            "Period": period,
-            "PlusMinus": plus_minus,
-            "Rank": rank,
-            "Season": season,
-            "SeasonSegment": season_segment,
-            "SeasonType": season_type,
-            "ShotClockRange": shot_clock_range,
-            "TeamID": team_id,
-            "VsConference": vs_conference,
-            "VsDivision": vs_division,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -7177,33 +7462,36 @@ def wnba_stats_teamdashboardbyopponent(
 
             wnba_stats_teamdashboardbyopponent(league_id='10')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "DateFrom": date_from,
+        "DateTo": date_to,
+        "GameSegment": game_segment,
+        "LastNGames": last_n_games,
+        "LeagueID": league_id,
+        "Location": location,
+        "MeasureType": measure_type,
+        "Month": month,
+        "OpponentTeamID": opponent_team_id,
+        "Outcome": outcome,
+        "PORound": po_round,
+        "PaceAdjust": pace_adjust,
+        "PerMode": per_mode,
+        "Period": period,
+        "PlusMinus": plus_minus,
+        "Rank": rank,
+        "Season": season,
+        "SeasonSegment": season_segment,
+        "SeasonType": season_type,
+        "ShotClockRange": shot_clock_range,
+        "TeamID": team_id,
+        "VsConference": vs_conference,
+        "VsDivision": vs_division,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/teamdashboardbyopponent",
-        params={
-            "DateFrom": date_from,
-            "DateTo": date_to,
-            "GameSegment": game_segment,
-            "LastNGames": last_n_games,
-            "LeagueID": league_id,
-            "Location": location,
-            "MeasureType": measure_type,
-            "Month": month,
-            "OpponentTeamID": opponent_team_id,
-            "Outcome": outcome,
-            "PORound": po_round,
-            "PaceAdjust": pace_adjust,
-            "PerMode": per_mode,
-            "Period": period,
-            "PlusMinus": plus_minus,
-            "Rank": rank,
-            "Season": season,
-            "SeasonSegment": season_segment,
-            "SeasonType": season_type,
-            "ShotClockRange": shot_clock_range,
-            "TeamID": team_id,
-            "VsConference": vs_conference,
-            "VsDivision": vs_division,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -7280,33 +7568,36 @@ def wnba_stats_teamdashboardbyshootingsplits(
 
             wnba_stats_teamdashboardbyshootingsplits(league_id='10')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "DateFrom": date_from_nullable,
+        "DateTo": date_to_nullable,
+        "GameSegment": game_segment_nullable,
+        "LastNGames": last_n_games,
+        "LeagueID": league_id,
+        "Location": location_nullable,
+        "MeasureType": measure_type_detailed_defense,
+        "Month": month,
+        "OpponentTeamID": opponent_team_id,
+        "Outcome": outcome_nullable,
+        "PORound": po_round_nullable,
+        "PaceAdjust": pace_adjust,
+        "PerMode": per_mode_detailed,
+        "Period": period,
+        "PlusMinus": plus_minus,
+        "Rank": rank,
+        "Season": season,
+        "SeasonSegment": season_segment_nullable,
+        "SeasonType": season_type_all_star,
+        "ShotClockRange": shot_clock_range_nullable,
+        "TeamID": team_id,
+        "VsConference": vs_conference_nullable,
+        "VsDivision": vs_division_nullable,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/teamdashboardbyshootingsplits",
-        params={
-            "DateFrom": date_from_nullable,
-            "DateTo": date_to_nullable,
-            "GameSegment": game_segment_nullable,
-            "LastNGames": last_n_games,
-            "LeagueID": league_id,
-            "Location": location_nullable,
-            "MeasureType": measure_type_detailed_defense,
-            "Month": month,
-            "OpponentTeamID": opponent_team_id,
-            "Outcome": outcome_nullable,
-            "PORound": po_round_nullable,
-            "PaceAdjust": pace_adjust,
-            "PerMode": per_mode_detailed,
-            "Period": period,
-            "PlusMinus": plus_minus,
-            "Rank": rank,
-            "Season": season,
-            "SeasonSegment": season_segment_nullable,
-            "SeasonType": season_type_all_star,
-            "ShotClockRange": shot_clock_range_nullable,
-            "TeamID": team_id,
-            "VsConference": vs_conference_nullable,
-            "VsDivision": vs_division_nullable,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -7383,33 +7674,36 @@ def wnba_stats_teamdashboardbyteamperformance(
 
             wnba_stats_teamdashboardbyteamperformance(league_id='10')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "DateFrom": date_from,
+        "DateTo": date_to,
+        "GameSegment": game_segment,
+        "LastNGames": last_n_games,
+        "LeagueID": league_id,
+        "Location": location,
+        "MeasureType": measure_type,
+        "Month": month,
+        "OpponentTeamID": opponent_team_id,
+        "Outcome": outcome,
+        "PORound": po_round,
+        "PaceAdjust": pace_adjust,
+        "PerMode": per_mode,
+        "Period": period,
+        "PlusMinus": plus_minus,
+        "Rank": rank,
+        "Season": season,
+        "SeasonSegment": season_segment,
+        "SeasonType": season_type,
+        "ShotClockRange": shot_clock_range,
+        "TeamID": team_id,
+        "VsConference": vs_conference,
+        "VsDivision": vs_division,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/teamdashboardbyteamperformance",
-        params={
-            "DateFrom": date_from,
-            "DateTo": date_to,
-            "GameSegment": game_segment,
-            "LastNGames": last_n_games,
-            "LeagueID": league_id,
-            "Location": location,
-            "MeasureType": measure_type,
-            "Month": month,
-            "OpponentTeamID": opponent_team_id,
-            "Outcome": outcome,
-            "PORound": po_round,
-            "PaceAdjust": pace_adjust,
-            "PerMode": per_mode,
-            "Period": period,
-            "PlusMinus": plus_minus,
-            "Rank": rank,
-            "Season": season,
-            "SeasonSegment": season_segment,
-            "SeasonType": season_type,
-            "ShotClockRange": shot_clock_range,
-            "TeamID": team_id,
-            "VsConference": vs_conference,
-            "VsDivision": vs_division,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -7486,33 +7780,36 @@ def wnba_stats_teamdashboardbyyearoveryear(
 
             wnba_stats_teamdashboardbyyearoveryear(league_id='10')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "DateFrom": date_from,
+        "DateTo": date_to,
+        "GameSegment": game_segment,
+        "LastNGames": last_n_games,
+        "LeagueID": league_id,
+        "Location": location,
+        "MeasureType": measure_type,
+        "Month": month,
+        "OpponentTeamID": opponent_team_id,
+        "Outcome": outcome,
+        "PORound": po_round,
+        "PaceAdjust": pace_adjust,
+        "PerMode": per_mode,
+        "Period": period,
+        "PlusMinus": plus_minus,
+        "Rank": rank,
+        "Season": season,
+        "SeasonSegment": season_segment,
+        "SeasonType": season_type,
+        "ShotClockRange": shot_clock_range,
+        "TeamID": team_id,
+        "VsConference": vs_conference,
+        "VsDivision": vs_division,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/teamdashboardbyyearoveryear",
-        params={
-            "DateFrom": date_from,
-            "DateTo": date_to,
-            "GameSegment": game_segment,
-            "LastNGames": last_n_games,
-            "LeagueID": league_id,
-            "Location": location,
-            "MeasureType": measure_type,
-            "Month": month,
-            "OpponentTeamID": opponent_team_id,
-            "Outcome": outcome,
-            "PORound": po_round,
-            "PaceAdjust": pace_adjust,
-            "PerMode": per_mode,
-            "Period": period,
-            "PlusMinus": plus_minus,
-            "Rank": rank,
-            "Season": season,
-            "SeasonSegment": season_segment,
-            "SeasonType": season_type,
-            "ShotClockRange": shot_clock_range,
-            "TeamID": team_id,
-            "VsConference": vs_conference,
-            "VsDivision": vs_division,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -7593,35 +7890,38 @@ def wnba_stats_teamdashlineups(
 
             wnba_stats_teamdashlineups(league_id='10')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "DateFrom": date_from_nullable,
+        "DateTo": date_to_nullable,
+        "GameID": game_id_nullable,
+        "GameSegment": game_segment_nullable,
+        "GroupQuantity": group_quantity,
+        "LastNGames": last_n_games,
+        "LeagueID": league_id,
+        "Location": location_nullable,
+        "MeasureType": measure_type_detailed_defense,
+        "Month": month,
+        "OpponentTeamID": opponent_team_id,
+        "Outcome": outcome_nullable,
+        "PORound": po_round_nullable,
+        "PaceAdjust": pace_adjust,
+        "PerMode": per_mode_detailed,
+        "Period": period,
+        "PlusMinus": plus_minus,
+        "Rank": rank,
+        "Season": season,
+        "SeasonSegment": season_segment_nullable,
+        "SeasonType": season_type_all_star,
+        "ShotClockRange": shot_clock_range_nullable,
+        "TeamID": team_id,
+        "VsConference": vs_conference_nullable,
+        "VsDivision": vs_division_nullable,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/teamdashlineups",
-        params={
-            "DateFrom": date_from_nullable,
-            "DateTo": date_to_nullable,
-            "GameID": game_id_nullable,
-            "GameSegment": game_segment_nullable,
-            "GroupQuantity": group_quantity,
-            "LastNGames": last_n_games,
-            "LeagueID": league_id,
-            "Location": location_nullable,
-            "MeasureType": measure_type_detailed_defense,
-            "Month": month,
-            "OpponentTeamID": opponent_team_id,
-            "Outcome": outcome_nullable,
-            "PORound": po_round_nullable,
-            "PaceAdjust": pace_adjust,
-            "PerMode": per_mode_detailed,
-            "Period": period,
-            "PlusMinus": plus_minus,
-            "Rank": rank,
-            "Season": season,
-            "SeasonSegment": season_segment_nullable,
-            "SeasonType": season_type_all_star,
-            "ShotClockRange": shot_clock_range_nullable,
-            "TeamID": team_id,
-            "VsConference": vs_conference_nullable,
-            "VsDivision": vs_division_nullable,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -7654,11 +7954,14 @@ def wnba_stats_teamdetails(
 
             wnba_stats_teamdetails()
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "TeamID": team_id,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/teamdetails",
-        params={
-            "TeamID": team_id,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -7695,13 +7998,16 @@ def wnba_stats_teamestimatedmetrics(
 
             wnba_stats_teamestimatedmetrics(league_id='10')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "LeagueID": league_id,
+        "Season": season,
+        "SeasonType": season_type,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/teamestimatedmetrics",
-        params={
-            "LeagueID": league_id,
-            "Season": season,
-            "SeasonType": season_type,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -7744,16 +8050,19 @@ def wnba_stats_teamgamelog(
 
             wnba_stats_teamgamelog(league_id='10')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "DateFrom": date_from_nullable,
+        "DateTo": date_to_nullable,
+        "LeagueID": league_id,
+        "Season": season,
+        "SeasonType": season_type_all_star,
+        "TeamID": team_id,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/teamgamelog",
-        params={
-            "DateFrom": date_from_nullable,
-            "DateTo": date_to_nullable,
-            "LeagueID": league_id,
-            "Season": season,
-            "SeasonType": season_type_all_star,
-            "TeamID": team_id,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -7826,31 +8135,34 @@ def wnba_stats_teamgamelogs(
 
             wnba_stats_teamgamelogs(league_id='10')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "DateFrom": date_from_nullable,
+        "DateTo": date_to_nullable,
+        "GameSegment": game_segment_nullable,
+        "LastNGames": last_n_games_nullable,
+        "LeagueID": league_id,
+        "Location": location_nullable,
+        "MeasureType": measure_type_player_game_logs_nullable,
+        "Month": month_nullable,
+        "OppTeamID": opp_team_id_nullable,
+        "Outcome": outcome_nullable,
+        "PORound": po_round_nullable,
+        "PerMode": per_mode_simple_nullable,
+        "Period": period_nullable,
+        "PlayerID": player_id_nullable,
+        "Season": season_nullable,
+        "SeasonSegment": season_segment_nullable,
+        "SeasonType": season_type_nullable,
+        "ShotClockRange": shot_clock_range_nullable,
+        "TeamID": team_id_nullable,
+        "VsConference": vs_conference_nullable,
+        "VsDivision": vs_division_nullable,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/teamgamelogs",
-        params={
-            "DateFrom": date_from_nullable,
-            "DateTo": date_to_nullable,
-            "GameSegment": game_segment_nullable,
-            "LastNGames": last_n_games_nullable,
-            "LeagueID": league_id,
-            "Location": location_nullable,
-            "MeasureType": measure_type_player_game_logs_nullable,
-            "Month": month_nullable,
-            "OppTeamID": opp_team_id_nullable,
-            "Outcome": outcome_nullable,
-            "PORound": po_round_nullable,
-            "PerMode": per_mode_simple_nullable,
-            "Period": period_nullable,
-            "PlayerID": player_id_nullable,
-            "Season": season_nullable,
-            "SeasonSegment": season_segment_nullable,
-            "SeasonType": season_type_nullable,
-            "ShotClockRange": shot_clock_range_nullable,
-            "TeamID": team_id_nullable,
-            "VsConference": vs_conference_nullable,
-            "VsDivision": vs_division_nullable,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -7889,14 +8201,17 @@ def wnba_stats_teaminfocommon(
 
             wnba_stats_teaminfocommon(league_id='10')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "LeagueID": league_id,
+        "Season": season_nullable,
+        "SeasonType": season_type_nullable,
+        "TeamID": team_id,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/teaminfocommon",
-        params={
-            "LeagueID": league_id,
-            "Season": season_nullable,
-            "SeasonType": season_type_nullable,
-            "TeamID": team_id,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -7973,33 +8288,36 @@ def wnba_stats_teamplayerdashboard(
 
             wnba_stats_teamplayerdashboard(league_id='10')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "DateFrom": date_from_nullable,
+        "DateTo": date_to_nullable,
+        "GameSegment": game_segment_nullable,
+        "LastNGames": last_n_games,
+        "LeagueID": league_id,
+        "Location": location_nullable,
+        "MeasureType": measure_type_detailed_defense,
+        "Month": month,
+        "OpponentTeamID": opponent_team_id,
+        "Outcome": outcome_nullable,
+        "PORound": po_round_nullable,
+        "PaceAdjust": pace_adjust,
+        "PerMode": per_mode_detailed,
+        "Period": period,
+        "PlusMinus": plus_minus,
+        "Rank": rank,
+        "Season": season,
+        "SeasonSegment": season_segment_nullable,
+        "SeasonType": season_type_all_star,
+        "ShotClockRange": shot_clock_range_nullable,
+        "TeamID": team_id,
+        "VsConference": vs_conference_nullable,
+        "VsDivision": vs_division_nullable,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/teamplayerdashboard",
-        params={
-            "DateFrom": date_from_nullable,
-            "DateTo": date_to_nullable,
-            "GameSegment": game_segment_nullable,
-            "LastNGames": last_n_games,
-            "LeagueID": league_id,
-            "Location": location_nullable,
-            "MeasureType": measure_type_detailed_defense,
-            "Month": month,
-            "OpponentTeamID": opponent_team_id,
-            "Outcome": outcome_nullable,
-            "PORound": po_round_nullable,
-            "PaceAdjust": pace_adjust,
-            "PerMode": per_mode_detailed,
-            "Period": period,
-            "PlusMinus": plus_minus,
-            "Rank": rank,
-            "Season": season,
-            "SeasonSegment": season_segment_nullable,
-            "SeasonType": season_type_all_star,
-            "ShotClockRange": shot_clock_range_nullable,
-            "TeamID": team_id,
-            "VsConference": vs_conference_nullable,
-            "VsDivision": vs_division_nullable,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -8072,31 +8390,34 @@ def wnba_stats_teamplayeronoffdetails(
 
             wnba_stats_teamplayeronoffdetails(league_id='10')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "DateFrom": date_from_nullable,
+        "DateTo": date_to_nullable,
+        "GameSegment": game_segment_nullable,
+        "LastNGames": last_n_games,
+        "LeagueID": league_id,
+        "Location": location_nullable,
+        "MeasureType": measure_type_detailed_defense,
+        "Month": month,
+        "OpponentTeamID": opponent_team_id,
+        "Outcome": outcome_nullable,
+        "PaceAdjust": pace_adjust,
+        "PerMode": per_mode_detailed,
+        "Period": period,
+        "PlusMinus": plus_minus,
+        "Rank": rank,
+        "Season": season,
+        "SeasonSegment": season_segment_nullable,
+        "SeasonType": season_type_all_star,
+        "TeamID": team_id,
+        "VsConference": vs_conference_nullable,
+        "VsDivision": vs_division_nullable,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/teamplayeronoffdetails",
-        params={
-            "DateFrom": date_from_nullable,
-            "DateTo": date_to_nullable,
-            "GameSegment": game_segment_nullable,
-            "LastNGames": last_n_games,
-            "LeagueID": league_id,
-            "Location": location_nullable,
-            "MeasureType": measure_type_detailed_defense,
-            "Month": month,
-            "OpponentTeamID": opponent_team_id,
-            "Outcome": outcome_nullable,
-            "PaceAdjust": pace_adjust,
-            "PerMode": per_mode_detailed,
-            "Period": period,
-            "PlusMinus": plus_minus,
-            "Rank": rank,
-            "Season": season,
-            "SeasonSegment": season_segment_nullable,
-            "SeasonType": season_type_all_star,
-            "TeamID": team_id,
-            "VsConference": vs_conference_nullable,
-            "VsDivision": vs_division_nullable,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -8169,31 +8490,34 @@ def wnba_stats_teamplayeronoffsummary(
 
             wnba_stats_teamplayeronoffsummary(league_id='10')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "DateFrom": date_from_nullable,
+        "DateTo": date_to_nullable,
+        "GameSegment": game_segment_nullable,
+        "LastNGames": last_n_games,
+        "LeagueID": league_id,
+        "Location": location_nullable,
+        "MeasureType": measure_type_detailed_defense,
+        "Month": month,
+        "OpponentTeamID": opponent_team_id,
+        "Outcome": outcome_nullable,
+        "PaceAdjust": pace_adjust,
+        "PerMode": per_mode_detailed,
+        "Period": period,
+        "PlusMinus": plus_minus,
+        "Rank": rank,
+        "Season": season,
+        "SeasonSegment": season_segment_nullable,
+        "SeasonType": season_type_all_star,
+        "TeamID": team_id,
+        "VsConference": vs_conference_nullable,
+        "VsDivision": vs_division_nullable,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/teamplayeronoffsummary",
-        params={
-            "DateFrom": date_from_nullable,
-            "DateTo": date_to_nullable,
-            "GameSegment": game_segment_nullable,
-            "LastNGames": last_n_games,
-            "LeagueID": league_id,
-            "Location": location_nullable,
-            "MeasureType": measure_type_detailed_defense,
-            "Month": month,
-            "OpponentTeamID": opponent_team_id,
-            "Outcome": outcome_nullable,
-            "PaceAdjust": pace_adjust,
-            "PerMode": per_mode_detailed,
-            "Period": period,
-            "PlusMinus": plus_minus,
-            "Rank": rank,
-            "Season": season,
-            "SeasonSegment": season_segment_nullable,
-            "SeasonType": season_type_all_star,
-            "TeamID": team_id,
-            "VsConference": vs_conference_nullable,
-            "VsDivision": vs_division_nullable,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -8270,33 +8594,36 @@ def wnba_stats_teamvsplayer(
 
             wnba_stats_teamvsplayer(league_id='10')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "DateFrom": date_from_nullable,
+        "DateTo": date_to_nullable,
+        "GameSegment": game_segment_nullable,
+        "LastNGames": last_n_games,
+        "LeagueID": league_id,
+        "Location": location_nullable,
+        "MeasureType": measure_type_detailed_defense,
+        "Month": month,
+        "OpponentTeamID": opponent_team_id,
+        "Outcome": outcome_nullable,
+        "PaceAdjust": pace_adjust,
+        "PerMode": per_mode_detailed,
+        "Period": period,
+        "PlayerID": player_id_nullable,
+        "PlusMinus": plus_minus,
+        "Rank": rank,
+        "Season": season,
+        "SeasonSegment": season_segment_nullable,
+        "SeasonType": season_type_playoffs,
+        "TeamID": team_id,
+        "VsConference": vs_conference_nullable,
+        "VsDivision": vs_division_nullable,
+        "VsPlayerID": vs_player_id,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/teamvsplayer",
-        params={
-            "DateFrom": date_from_nullable,
-            "DateTo": date_to_nullable,
-            "GameSegment": game_segment_nullable,
-            "LastNGames": last_n_games,
-            "LeagueID": league_id,
-            "Location": location_nullable,
-            "MeasureType": measure_type_detailed_defense,
-            "Month": month,
-            "OpponentTeamID": opponent_team_id,
-            "Outcome": outcome_nullable,
-            "PaceAdjust": pace_adjust,
-            "PerMode": per_mode_detailed,
-            "Period": period,
-            "PlayerID": player_id_nullable,
-            "PlusMinus": plus_minus,
-            "Rank": rank,
-            "Season": season,
-            "SeasonSegment": season_segment_nullable,
-            "SeasonType": season_type_playoffs,
-            "TeamID": team_id,
-            "VsConference": vs_conference_nullable,
-            "VsDivision": vs_division_nullable,
-            "VsPlayerID": vs_player_id,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -8335,14 +8662,17 @@ def wnba_stats_teamyearbyyearstats(
 
             wnba_stats_teamyearbyyearstats(league_id='10')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "LeagueID": league_id,
+        "PerMode": per_mode_simple,
+        "SeasonType": season_type_all_star,
+        "TeamID": team_id,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/teamyearbyyearstats",
-        params={
-            "LeagueID": league_id,
-            "PerMode": per_mode_simple,
-            "SeasonType": season_type_all_star,
-            "TeamID": team_id,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
@@ -8377,12 +8707,15 @@ def wnba_stats_videostatus(
 
             wnba_stats_videostatus(league_id='10')
     """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "GameDate": game_date,
+        "LeagueID": league_id,
+    }
+    _params.update(_caller_params)
     raw = _get(
         "https://stats.wnba.com/stats/videostatus",
-        params={
-            "GameDate": game_date,
-            "LeagueID": league_id,
-        },
+        params=_params,
         **kwargs,
     )
     if return_parsed:
