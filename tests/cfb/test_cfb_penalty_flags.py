@@ -555,6 +555,19 @@ def test_pre_2014_kickoff_penalty_gate_does_not_fire_on_a_described_kick() -> No
         # both at once: the tag is stripped, the surname survives
         ("No Huddle-Shotgun Huddleston,Chris", "Huddleston,Chris"),
         ("J.Smith", "J.Smith"),
+        # 2025's vendor template opens every play with the game clock, which a
+        # capture anchored at the start of the text takes along. Published 2025
+        # carries 3,682 kickoff_player_name values of this shape, plus rusher,
+        # passer and interception names -- and 51,400 athlete_name values with a
+        # TRUNCATED formation prefix, which is the same capture-window artifact.
+        ("(15:00) #36 T.Morrison", "T.Morrison"),
+        ("(05:04) #99 J.Firebaugh", "J.Firebaugh"),  # jersey needs 3 digits, not 2
+        ("o Huddle-Shotgun #7 C.Williams", "C.Williams"),
+        ("uddle-Shotgun #22 J.Smith", "J.Smith"),
+        ("-Shotgun #2 R.Hammond Jr.", "R.Hammond Jr."),
+        ("No Huddle-Shotgun #8 K.Ah Yat", "K.Ah Yat"),
+        # a team-credited value must survive untouched
+        ("TEAM", "TEAM"),
     ],
 )
 def test_formation_prefix_requires_a_word_end(raw: str, expected: str) -> None:
@@ -613,3 +626,42 @@ def test_blocked_fg_blocker_name_is_not_capture_window_debris(text: str, expecte
         .alias("name")
     )
     assert out["name"][0] == expected
+
+
+@pytest.mark.parametrize(
+    ("text", "describes_a_kick"),
+    [
+        # 2004-2013
+        ("Justin Medlock kickoff for 62 yards out-of-bounds, Ucla penalty 32 yard illegal procedure", True),
+        # 2014+
+        ("Enock Gota kickoff for 65 yds , Solomon Beebe return for 90 yds to the UAB -25", True),
+        ("Nate Reed kickoff for 65 yds for a touchback", True),
+        # 2025 vendor feed -- no "for" at all. Only 57% of 2025 kickoff rows carry
+        # the 2014 form, so this is not a rare variant.
+        ("(15:00) #36 T.Morrison kickoff 65 yards to the SAC00, Touchback", True),
+        ("#99 J.Firebaugh onside kickoff 2 yards to the SAC37 PENALTY SAC Illegal Touch Of Kick", True),
+        ("Kinaga,Yoann kickoff 0 yards to the ISU35 PENALTY ISU Delay Of Game", True),
+        # penalty-only rows: no kick outcome stated. The bare "N Yards" here is the
+        # PENALTY yardage, which is why the kick distance must be anchored on the
+        # word kickoff rather than matched loosely -- matching loosely excludes
+        # exactly the rows part (d) exists to repair.
+        ("kickoff UTEP Penalty, Targeting on HAGOPIAN, Joe enforced (-15 Yards) to the UTEP 20", False),
+        ("kickoff MURRAY ST Penalty, Delay Of Game (-5 Yards) to the MurrS 30", False),
+        ("Mateen Bhaghani kickoff UCLA Penalty, unsportsmanlike conduct (Julian Armella) to the UCLA 20", False),
+        ("Luke Akers kickoff Northwestern Penalty, unsportsmanlike conduct (-15 Yards) to the 50 yard line", False),
+    ],
+)
+def test_part_d_kick_outcome_gate_across_all_three_vocabularies(text: str, describes_a_kick: bool) -> None:
+    """Part (d) repairs a kickoff row only when its text describes NO kick outcome.
+
+    Three vocabularies have to agree on that judgement: "for N yards" (2004-2013),
+    "for N yds" (2014+), and the 2025 vendor feed's "kickoff N yards". Getting it
+    wrong in one direction rewrites the end state of a kick that plainly happened;
+    getting it wrong in the other leaves the enforcement-spot defect unrepaired.
+    """
+    gate = (
+        r"(?i)kick(?:off)?\s+(?:for\s+)?-?\d+\s*(?:yds|yards)"
+        r"|for \d+ (?:yds|yards)|touchback|return|out.of.bounds|recovered|downed|fair catch"
+    )
+    matched = pl.DataFrame({"t": [text]}).with_columns(pl.col("t").str.contains(gate).alias("m"))["m"][0]
+    assert matched == describes_a_kick

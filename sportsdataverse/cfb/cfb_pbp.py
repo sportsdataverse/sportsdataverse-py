@@ -122,8 +122,15 @@ _FORMATION_PREFIX = r"(?i)^.*(?:huddle|shotgun)[\s\-,\]]+"
 
 #: ESPN renders the jersey inline ("#1 C.Parker"). It is never part of a name,
 #: and leaving it on splits a player across rows when only some plays fall back
-#: to the regex.
-_JERSEY_PREFIX = r"^\s*#\d{1,2}\s+"
+#: to the regex. Three digits: 2025's vendor feed uses #99 and higher.
+_JERSEY_PREFIX = r"^\s*#\d{1,3}\s+"
+
+#: 2025's vendor template opens each play with the game clock -- "(15:00) #36
+#: T.Morrison kickoff 65 yards to the SAC00" -- and a capture that starts at the
+#: beginning of the text takes it along. Stripped BEFORE the jersey, since the
+#: clock precedes it. Published 2025 carries 3,682 kickoff_player_name values of
+#: the form "(15:00) #36 T.Morrison", plus rusher, passer and interception names.
+_CLOCK_PREFIX = r"^\s*\(\d{1,2}:\d{2}\)\s*"
 
 
 def _strip_presentational_tokens(name_expr: pl.Expr) -> pl.Expr:
@@ -140,7 +147,13 @@ def _strip_presentational_tokens(name_expr: pl.Expr) -> pl.Expr:
     "No Huddle-Shotgun #1 C.Parker" reached the passing table as a third
     quarterback alongside the same player's real line.
     """
-    return name_expr.str.replace(_FORMATION_PREFIX, "").str.replace(_JERSEY_PREFIX, "").str.strip_chars()
+    return (
+        name_expr.str.replace(_CLOCK_PREFIX, "")
+        .str.replace(_FORMATION_PREFIX, "")
+        .str.replace(_CLOCK_PREFIX, "")
+        .str.replace(_JERSEY_PREFIX, "")
+        .str.strip_chars()
+    )
 
 
 #: A play-text artifact masquerading as a name if it contains one of these as a
@@ -1807,7 +1820,21 @@ class CFBPlayProcess(object):
                             # describe a kick ("kickoff for 50 yards out-of-bounds"),
                             # rewriting an end state that was never in question.
                             # Out-of-bounds is hyphenated in the old texts, spaced in new.
-                            r"(?i)for \d+ (?:yds|yards)|touchback|return|out.of.bounds|recovered|downed|fair catch",
+                            # 2025 adds a THIRD kickoff vocabulary. Alongside "for N yards"
+                            # (2004-2013) and "for N yds" (2014+), a vendor feed writes
+                            # "(15:00) #36 T.Morrison kickoff 65 yards to the SAC00" -- no
+                            # "for" at all, and only 57% of 2025 kickoff rows carry the
+                            # 2014 form. Without it this gate called those rows "no kick
+                            # described": 12 in 2025, 5 in 2023, 1 in 2022.
+                            #
+                            # The distance is anchored on the word kickoff rather than
+                            # matched loosely, because a bare "N yards" also appears as the
+                            # PENALTY yardage on exactly the rows part (d) exists to repair
+                            # ("kickoff UTEP Penalty, Targeting ... (-15 Yards) to the UTEP
+                            # 20"). Anchoring cures all 18 false fires and over-excludes
+                            # nothing, in any season from 2005 to 2025.
+                            r"(?i)kick(?:off)?\s+(?:for\s+)?-?\d+\s*(?:yds|yards)"
+                            r"|for \d+ (?:yds|yards)|touchback|return|out.of.bounds|recovered|downed|fair catch",
                         )
                         == False
                     )
@@ -1826,7 +1853,21 @@ class CFBPlayProcess(object):
                             # describe a kick ("kickoff for 50 yards out-of-bounds"),
                             # rewriting an end state that was never in question.
                             # Out-of-bounds is hyphenated in the old texts, spaced in new.
-                            r"(?i)for \d+ (?:yds|yards)|touchback|return|out.of.bounds|recovered|downed|fair catch",
+                            # 2025 adds a THIRD kickoff vocabulary. Alongside "for N yards"
+                            # (2004-2013) and "for N yds" (2014+), a vendor feed writes
+                            # "(15:00) #36 T.Morrison kickoff 65 yards to the SAC00" -- no
+                            # "for" at all, and only 57% of 2025 kickoff rows carry the
+                            # 2014 form. Without it this gate called those rows "no kick
+                            # described": 12 in 2025, 5 in 2023, 1 in 2022.
+                            #
+                            # The distance is anchored on the word kickoff rather than
+                            # matched loosely, because a bare "N yards" also appears as the
+                            # PENALTY yardage on exactly the rows part (d) exists to repair
+                            # ("kickoff UTEP Penalty, Targeting ... (-15 Yards) to the UTEP
+                            # 20"). Anchoring cures all 18 false fires and over-excludes
+                            # nothing, in any season from 2005 to 2025.
+                            r"(?i)kick(?:off)?\s+(?:for\s+)?-?\d+\s*(?:yds|yards)"
+                            r"|for \d+ (?:yds|yards)|touchback|return|out.of.bounds|recovered|downed|fair catch",
                         )
                         == False
                     )
