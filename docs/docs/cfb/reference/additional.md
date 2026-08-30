@@ -698,7 +698,7 @@ so the input `play_df` is expected to be the post-pipeline plays frame.
 
 **Returns**
 
-Box-score sections, each a list of records — `"pass"` / `"rush"` / `"receiver"` (per-player advanced + EPA lines), `"team"` and `"situational"` (per-team), `"defensive"` and `"defensive_players"` (team- and player-level havoc), `"specialists"` (kicking / punting / return players), `"turnover"`, `"drives"`, and the ESPN-sourced `"espn_team"` / `"espn_players"` totals.
+Box-score sections, each a list of records — `"pass"` / `"rush"` / `"receiver"` (per-player advanced + EPA lines; the pass and receiver lines carry `AirYds` / `aDOT` / `CompAirYds` / `YAC` / `AirYdsPct`, null when ESPN's text has no catch spot), `"team"` and `"situational"` (per-team), `"defensive"` and `"defensive_players"` (team- and player-level havoc), `"specialists"` (kicking / punting / return players), `"turnover"`, `"drives"`, and the ESPN-sourced `"espn_team"` / `"espn_players"` totals.
 
 **Example**
 
