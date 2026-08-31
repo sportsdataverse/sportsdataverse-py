@@ -1118,6 +1118,49 @@ def _parse_espn_player_box(boxscore):
     return rows
 
 
+def _air_yards_box(pass_box: "pl.DataFrame", key: str) -> "pl.DataFrame":
+    """Per-``key`` air-yards / YAC aggregate for the passer + receiver box scores.
+
+    Runs on the UNFILLED pass frame: ``_fill_missing`` zero-fills numerics, and a
+    zero air-yard is a real observation (a screen) while a null means ESPN's text
+    carried no catch spot (pre-2025 games, sacks, throwaways). Every output is null
+    when no play in the group has ``air_yards``, so a game without the data shows
+    blanks, not 0.0.
+
+    Columns: ``AirYds`` (all attempts), ``aDOT`` (mean air yards per attempt with
+    data), ``CompAirYds`` (completions only), ``YAC``, and ``AirYdsPct``
+    (``CompAirYds / Yds`` -- share of receiving yards earned in the air).
+    """
+    has_air = pl.col("air_yards").is_not_null()
+    return (
+        pass_box.group_by(["pos_team", key])
+        .agg(
+            _n_air=has_air.sum(),
+            AirYds=pl.col("air_yards").sum(),
+            aDOT=pl.col("air_yards").mean(),
+            CompAirYds=pl.when(pl.col("completion") == True).then(pl.col("air_yards")).otherwise(None).sum(),
+            YAC=pl.col("yards_after_catch").sum(),
+            _yds=pl.col("yds_receiving").sum(),
+        )
+        .with_columns(
+            AirYds=pl.when(pl.col("_n_air") > 0).then(pl.col("AirYds")).otherwise(None),
+            CompAirYds=pl.when(pl.col("_n_air") > 0).then(pl.col("CompAirYds")).otherwise(None),
+            YAC=pl.when(pl.col("_n_air") > 0).then(pl.col("YAC")).otherwise(None),
+        )
+        .with_columns(
+            AirYdsPct=pl.when((pl.col("_n_air") > 0) & (pl.col("_yds") != 0))
+            .then(pl.col("CompAirYds") / pl.col("_yds"))
+            .otherwise(None)
+        )
+        .drop("_n_air", "_yds")
+        .with_columns(
+            pos_team=pl.col("pos_team").cast(pl.Int32),  # join key: both boxes cast pos_team Int32 first
+            aDOT=pl.col("aDOT").cast(pl.Float32).round(2),
+            AirYdsPct=pl.col("AirYdsPct").cast(pl.Float32).round(2),
+        )
+    )
+
+
 def _fill_missing(df: "pl.DataFrame") -> "pl.DataFrame":
     """Fill nulls for aggregation: 0.0 for numerics, False for booleans.
 
@@ -7687,7 +7730,9 @@ class CFBPlayProcess(object):
 
         Returns:
             dict: Box-score sections, each a list of records — ``"pass"`` /
-            ``"rush"`` / ``"receiver"`` (per-player advanced + EPA lines),
+            ``"rush"`` / ``"receiver"`` (per-player advanced + EPA lines; the
+            pass and receiver lines carry ``AirYds`` / ``aDOT`` / ``CompAirYds``
+            / ``YAC`` / ``AirYdsPct``, null when ESPN's text has no catch spot),
             ``"team"`` and ``"situational"`` (per-team), ``"defensive"`` and
             ``"defensive_players"`` (team- and player-level havoc),
             ``"specialists"`` (kicking / punting / return players),
@@ -7799,6 +7844,7 @@ class CFBPlayProcess(object):
             )
             .with_columns(pl.col(pl.Float32).round(2))
             .with_columns(pos_team=pl.col("pos_team").cast(pl.Int32))
+            .join(_air_yards_box(pass_box, "passer_player_name"), on=["pos_team", "passer_player_name"], how="left")
         )
         # passer_box = passer_box.replace(pl.all(), pl.Null)
         qbs_list = passer_box["passer_player_name"].to_list()
@@ -7895,6 +7941,7 @@ class CFBPlayProcess(object):
             )
             .with_columns(pl.col(pl.Float32).round(2))
             .with_columns(pos_team=pl.col("pos_team").cast(pl.Int32))
+            .join(_air_yards_box(pass_box, "receiver_player_name"), on=["pos_team", "receiver_player_name"], how="left")
             .sort("Tar", descending=True)  # 0.36-live: box tables sorted by volume
         )
 
