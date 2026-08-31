@@ -40,11 +40,13 @@ def test_passer_and_receiver_air_yards_on_real_game(monkeypatch):
 
     # Decomposition: CompAirYds + YAC == receiving yards on completions, per passer.
     comp = plays.filter((pl.col("completion") == True) & (pl.col("yards_after_catch").is_not_null()))
-    per_qb = comp.group_by("passer_player_name").agg(
+    per_qb = comp.group_by(["pos_team", "passer_player_name"]).agg(
         air=pl.col("air_yards").sum(), yac=pl.col("yards_after_catch").sum(), yds=pl.col("statYardage").sum()
     )
     assert (per_qb["air"] + per_qb["yac"] == per_qb["yds"]).all()
-    joined = passers.join(per_qb, on="passer_player_name", how="inner")
+    # passers casts pos_team to Int32; match it before joining (id-dtype discipline).
+    per_qb = per_qb.with_columns(pos_team=pl.col("pos_team").cast(pl.Int32))
+    joined = passers.join(per_qb, on=["pos_team", "passer_player_name"], how="inner")
     assert joined.height > 0
     assert (joined["YAC"] == joined["yac"]).all()
 
