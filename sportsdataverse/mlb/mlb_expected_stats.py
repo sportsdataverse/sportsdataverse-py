@@ -50,12 +50,34 @@ _NON_BATTED_EVENTS = {
 #: Events that do NOT count toward at-bats (for the AB denominator).
 _NON_AB_EVENTS = {
     "walk",
+    "intent_walk",
     "hit_by_pitch",
     "sac_fly",
     "sac_fly_double_play",
     "sac_bunt",
     "sac_bunt_double_play",
     "catcher_interf",
+}
+
+#: PA-ending events that carry a ZERO wOBA denominator (standard wOBA denom =
+#: AB + uBB + SF + HBP -- intentional walks, sac bunts and catcher
+#: interference are excluded).
+_WOBA_DENOM_ZERO_EVENTS = {
+    "intent_walk",
+    "sac_bunt",
+    "sac_bunt_double_play",
+    "catcher_interf",
+}
+
+#: Fixed fallback wOBA weights for PA-ending events whose ``woba_value`` is
+#: null in a given cache vintage (older Savant extracts). These are
+#: FanGraphs-scale constants (true seasonal weights drift by ~±0.01) used only
+#: as a null-fill -- a documented approximation that is orders of magnitude
+#: smaller than the corruption of dropping the event entirely. Events not in
+#: this map fall back to 0.0.
+_WOBA_VALUE_FALLBACK = {
+    "walk": 0.69,
+    "hit_by_pitch": 0.72,
 }
 
 
@@ -208,9 +230,19 @@ def mlb_expected_stats(
     marginal fallback, then aggregates:
 
     * ``xwoba = (sum(predicted_woba over balls in play) + sum(woba_value over
-      non-batted-ball PA outcomes)) / sum(woba_denom)``
-    * ``xba = sum(predicted_ba over balls in play) / ab``
-    * ``xslg = sum(predicted_tb over balls in play) / ab``
+      non-batted-ball PA-ENDING outcomes)) / derived_woba_denom`` -- the
+      denominator is DERIVED from ``events`` (PA enders minus intentional
+      walks / sac bunts / catcher interference), never trusted from a cache
+      vintage's ``woba_denom`` column. The numerator excludes those same
+      zero-denominator events, and a PA-ending walk/HBP whose ``woba_value``
+      is null in a given vintage is filled with the fixed weights .69 / .72.
+    * ``xba = sum(predicted_ba over at-bat balls in play) / ab``
+    * ``xslg = sum(predicted_tb over at-bat balls in play) / ab``
+
+    ``pa`` counts PLATE-APPEARANCE-ENDING rows only (``events`` non-null),
+    never raw pitches -- a Statcast search pull carries every pitch, and
+    counting them (the pre-fix behavior) inflated ``pa``/``ab`` by ~4x and
+    corrupted ``xba``/``xslg`` scales.
 
     Args:
         start_dt: Pull start date, ``YYYY-MM-DD``.
@@ -259,11 +291,28 @@ def mlb_expected_stats(
     pitches = pitches.with_columns(season_expr.alias("season"))
 
     pitches = _add_value_columns(pitches)
-    grid = build_outcome_grid(pitches)
+    # The outcome grid's cell means likewise use only PA-ending batted balls —
+    # an events-less "batted ball" row carries no realized outcome to average.
+    grid = build_outcome_grid(pitches.filter(pl.col("events").is_not_null() & (pl.col("events") != "")))
 
     bip_mask = (pl.col("type") == "X") & pl.col("launch_speed").is_not_null() & pl.col("launch_angle").is_not_null()
-    bip = pitches.filter(bip_mask)
-    non_bip = pitches.filter(~bip_mask)
+    # PA-ender discipline: pa / ab / the wOBA denominator count only rows that
+    # END a plate appearance (``events`` non-null and non-empty). A Statcast
+    # search pull carries EVERY PITCH; counting raw non-BIP pitch rows (the
+    # pre-fix behavior) inflated pa/ab by the pitch count and, on cache
+    # vintages with degenerate ``woba_value``/``woba_denom`` semantics,
+    # corrupted the xwOBA scale itself. Denominators are DERIVED from events
+    # (vintage-proof) rather than trusted from ``woba_denom``.
+    pa_end_mask = pl.col("events").is_not_null() & (pl.col("events") != "")
+    zero_denom = pl.col("events").is_in(list(_WOBA_DENOM_ZERO_EVENTS))
+    non_ab = pl.col("events").is_in(list(_NON_AB_EVENTS))
+
+    # A batted-ball row must ALSO be a PA ender: a type=="X" row with launch
+    # data but a null/empty ``events`` is a feed artifact, and without this
+    # gate it would count toward pa while the events-derived masks exclude it
+    # from every denominator (the inconsistency this fix exists to remove).
+    bip = pitches.filter(bip_mask & pa_end_mask)
+    non_bip_pa = pitches.filter(~bip_mask & pa_end_mask)
 
     if bip.height > 0:
         bip = bip.with_columns(
@@ -279,35 +328,34 @@ def mlb_expected_stats(
         )
 
     bip_agg = bip.group_by("batter", "season").agg(
-        pl.col("_pred_woba").sum().alias("_bip_woba_sum"),
-        pl.col("_pred_ba").sum().alias("_bip_ba_sum"),
-        pl.col("_pred_slg").sum().alias("_bip_slg_sum"),
-        pl.len().alias("_ab_from_bip"),
+        pl.col("_pred_woba").filter(~zero_denom).sum().alias("_bip_woba_sum"),
+        pl.col("_pred_ba").filter(~non_ab).sum().alias("_bip_ba_sum"),
+        pl.col("_pred_slg").filter(~non_ab).sum().alias("_bip_slg_sum"),
+        (~zero_denom).sum().cast(pl.Float64).alias("_bip_denom"),
+        (~non_ab).sum().alias("_ab_from_bip"),
+        pl.len().alias("_pa_from_bip"),
     )
 
-    woba_denom_col = "woba_denom" if "woba_denom" in non_bip.columns else None
-    non_bip_agg = non_bip.group_by("batter", "season").agg(
-        pl.col("woba_value").fill_null(0.0).sum().alias("_non_bip_woba_sum"),
-        (pl.col(woba_denom_col).fill_null(0.0).sum() if woba_denom_col else pl.lit(0.0)).alias("_non_bip_denom"),
-        pl.col("events").is_in(list(_NON_AB_EVENTS)).sum().alias("_non_ab_events"),
+    non_bip_agg = non_bip_pa.group_by("batter", "season").agg(
+        pl.coalesce(
+            pl.col("woba_value"),
+            pl.col("events").replace_strict(_WOBA_VALUE_FALLBACK, default=0.0, return_dtype=pl.Float64),
+        )
+        .filter(~zero_denom)
+        .sum()
+        .alias("_non_bip_woba_sum"),
+        (~zero_denom).sum().cast(pl.Float64).alias("_non_bip_denom"),
+        (~non_ab).sum().alias("_ab_from_non_bip"),
         pl.len().alias("_pa_from_non_bip"),
     )
 
-    bip_denom_agg = bip.group_by("batter", "season").agg(
-        (pl.col(woba_denom_col).fill_null(1.0).sum() if woba_denom_col else pl.len().cast(pl.Float64)).alias(
-            "_bip_denom"
-        )
-    )
-
-    merged = bip_agg.join(non_bip_agg, on=["batter", "season"], how="full", coalesce=True).join(
-        bip_denom_agg, on=["batter", "season"], how="full", coalesce=True
-    )
+    merged = bip_agg.join(non_bip_agg, on=["batter", "season"], how="full", coalesce=True)
     merged = merged.fill_null(0)
 
     result = (
         merged.with_columns(
-            (pl.col("_ab_from_bip") + pl.col("_pa_from_non_bip")).alias("pa"),
-            (pl.col("_ab_from_bip") + pl.col("_pa_from_non_bip") - pl.col("_non_ab_events")).alias("ab"),
+            (pl.col("_pa_from_bip") + pl.col("_pa_from_non_bip")).alias("pa"),
+            (pl.col("_ab_from_bip") + pl.col("_ab_from_non_bip")).alias("ab"),
             (pl.col("_bip_denom") + pl.col("_non_bip_denom")).alias("_woba_denom"),
         )
         .with_columns(
