@@ -2,6 +2,15 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
+- [0.1.4 Release: September 1, 2026](#014-release-september-1-2026)
+  - [Fixed — CFB EP/WP inputs: mirrored end yardlines, the wrong `wp_after` perspective, and a flipped WP (#408, #411, #413)](#fixed--cfb-epwp-inputs-mirrored-end-yardlines-the-wrong-wp_after-perspective-and-a-flipped-wp-408-411-413)
+  - [Added — the penalty's own side, net yardage and EPA, plus first-down provenance (#408)](#added--the-penaltys-own-side-net-yardage-and-epa-plus-first-down-provenance-408)
+  - [Added — air yards, aDOT and YAC in the passer and receiver box scores (#414)](#added--air-yards-adot-and-yac-in-the-passer-and-receiver-box-scores-414)
+  - [Fixed — air yards sided by the game's own text abbreviations (#418)](#fixed--air-yards-sided-by-the-games-own-text-abbreviations-418)
+  - [Fixed — returning production had no roster since #399 (#417, #419)](#fixed--returning-production-had-no-roster-since-399-417-419)
+  - [Fixed — codegen let caller params reach ESPN, and un-truncated the endpoints that were silently short (#409)](#fixed--codegen-let-caller-params-reach-espn-and-un-truncated-the-endpoints-that-were-silently-short-409)
+  - [Changed — CI dispatches the Game on Paper deploy on every push to `main`; docs site social metadata completed (#410, #412)](#changed--ci-dispatches-the-game-on-paper-deploy-on-every-push-to-main-docs-site-social-metadata-completed-410-412)
+  - [Data](#data)
 - [0.1.3 Release: August 28, 2026](#013-release-august-28-2026)
   - [Fixed — formation tags reached the box score as player names (#407)](#fixed--formation-tags-reached-the-box-score-as-player-names-407)
 - [0.1.2 Release: August 27, 2026](#012-release-august-27-2026)
@@ -144,7 +153,7 @@
 - [0.0.67 Release: June 17, 2026](#0067-release-june-17-2026)
   - [Documentation — return-table column descriptions filled (~3,061 columns)](#documentation--return-table-column-descriptions-filled-3061-columns)
   - [Documentation — doctest-prompt cleanup, native returns-tables, new tutorials](#documentation--doctest-prompt-cleanup-native-returns-tables-new-tutorials)
-  - [NFL — PBP ETL ↔ nflfastR alignment + faithful model artifacts](#nfl--pbp-etl--nflfastr-alignment--faithful-model-artifacts)
+  - [NFL — PBP ETL ↔ nflfastR alignment + faithful model artifacts](#nfl--pbp-etl-%E2%86%94-nflfastr-alignment--faithful-model-artifacts)
   - [CFB — EP + WP models retrained on the full 2004–2025 history](#cfb--ep--wp-models-retrained-on-the-full-20042025-history)
 - [0.0.66 Release: June 17, 2026](#0066-release-june-17-2026)
   - [CFB — `cfb_pbp` sparse-game `ColumnNotFoundError` guard (`end.team.id` et al.)](#cfb--cfb_pbp-sparse-game-columnnotfounderror-guard-endteamid-et-al)
@@ -189,7 +198,7 @@
   - [NFL — Next Gen Stats (`nfl_ngs_*`) + api.nfl.com football/v2 (`nfl_*`) modules](#nfl--next-gen-stats-nfl_ngs_--apinflcom-footballv2-nfl_-modules)
   - [NFL — restored the api.nfl.com game schedule + play-by-play wrappers](#nfl--restored-the-apinflcom-game-schedule--play-by-play-wrappers)
   - [ESPN — remove always-erroring endpoint variants + NFL R-parity](#espn--remove-always-erroring-endpoint-variants--nfl-r-parity)
-  - [Documentation — per-league Python ↔ R parity tables](#documentation--per-league-python--r-parity-tables)
+  - [Documentation — per-league Python ↔ R parity tables](#documentation--per-league-python-%E2%86%94-r-parity-tables)
   - [Documentation — example notebooks repaired, expanded, and rendered on-site](#documentation--example-notebooks-repaired-expanded-and-rendered-on-site)
   - [NHL / PWHL — loader naming-parity aliases + games-manifest loaders (fastRhockey parity)](#nhl--pwhl--loader-naming-parity-aliases--games-manifest-loaders-fastrhockey-parity)
   - [Documentation — NFL return-table descriptions mined from nflverse](#documentation--nfl-return-table-descriptions-mined-from-nflverse)
@@ -227,7 +236,7 @@
   - [New: `return_parsed=True` dispatch shim](#new-return_parsedtrue-dispatch-shim)
   - [New: `nhl_edge_parsers.py`](#new-nhl_edge_parserspy)
   - [New: Site v2 summary dispatcher (20 sub-parsers)](#new-site-v2-summary-dispatcher-20-sub-parsers)
-  - [New: 100% ENDPOINT_PARSERS coverage (121/121)](#new-100-endpoint_parsers-coverage-121121)
+  - [New: 100% ENDPOINT_PARSERS coverage (121/121)](#new-100%25-endpoint_parsers-coverage-121121)
   - [New: weekly cron live-test drift detector](#new-weekly-cron-live-test-drift-detector)
   - [New: MLB Stats API parser layer](#new-mlb-stats-api-parser-layer)
   - [New: NHL Stats REST + Records parser layers](#new-nhl-stats-rest--records-parser-layers)
@@ -267,6 +276,90 @@
 - [0.0.5 Release: October 20, 2021](#005-release-october-20-2021)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+## 0.1.4 Release: September 1, 2026
+
+### Fixed — CFB EP/WP inputs: mirrored end yardlines, the wrong `wp_after` perspective, and a flipped WP (#408, #411, #413)
+
+ESPN's `end.yardsToEndzone` arrives mirrored on a class of plays (a `-1` missing
+marker, kick returns resolved against the wrong possession team, an all-zero end
+state); it reached the EP model as-is, so `EPA` for those rows measured the
+wrong field position. The repairs now run before the model: the mirrored end
+yardline is corrected, a return spot is resolved against the **end** possession
+team, `EP_between` no longer folds across a score, a penalty with no effect has
+no penalty EPA, and `yds_sacked` is right for 2004-07 text. `wp_after` was
+computed from the wrong possession perspective on **24,332** home/away rows,
+and it flipped when the next play kept the same possession (**867** rows).
+One live 2026 game exposed three more: a Timeout row lent its phantom EP to the
+next play's lag, an all-zero end state now reads as 99, and the last row of a
+game in progress no longer renders 0.0% (filled as the complement of the
+end-state WP). Plays ESPN inserts late (2014+ feed) are moved back to where
+their sequence says they belong before any lag runs.
+
+### Added — the penalty's own side, net yardage and EPA, plus first-down provenance (#408)
+
+The penalty parsers are era-aware (2004-13 / 2014-24 / the 2025 vendor
+template). New play-by-play columns: `penalty_side`, `penalty_yards_net`
+(signed, only where two of three signals agree), `EPA_penalty_direct` and
+`EP_penalty_cf` (the counterfactual EP had the penalty not occurred),
+`penalty_enforcement`, `penalty_spot_side` / `penalty_spot_yardline` /
+`penalty_spot_yardsToEndzone` / `penalty_cf_yardsToEndzone`, `penalty_team_id`,
+`penalty_count`, `penalty_declined_count`, `penalty_all_declined`,
+`penalty_negated_play`; first-down provenance `first_down_earned`,
+`first_down_yards`, `first_down_penalty`, `firstD_by_yards`, `firstD_by_penalty`,
+`firstD_by_poss`, `firstD_by_kickoff`, `new_series`; and the extra-point trio
+`xp_attempt`, `xp_made`, `xp_kicker_player_name`. `espn_cfb_pbp` grows from
+476 to 501 columns.
+
+### Added — air yards, aDOT and YAC in the passer and receiver box scores (#414)
+
+`create_box_score` emits `AirYds`, `aDOT`, `CompAirYds`, `YAC` and `AirYdsPct`
+on the `pass` and `receiver` sections, aggregated from the play-level
+`air_yards` / `yards_after_catch`. Null (not zero) for a passer or receiver
+whose plays carry no catch spot, which is every season before 2025: ESPN's
+play text only started stating the catch point (`caught at SAC18`, `thrown to
+LIN30`) with the vendor template that rolled out in 2025 week 9.
+
+### Fixed — air yards sided by the game's own text abbreviations (#418)
+
+That vendor text spots the catch with each school's **own** abbreviation --
+`UHM`, `UH`, `USC` for South Carolina, `GSU`, `GSO`, `OSU` for Oregon State,
+`Sac St`, `BC.` -- which is frequently not ESPN's `homeTeamAbbrev` /
+`awayTeamAbbrev` (`HAW`, `HOU`, `SC`, `GAST`, `GASO`, `ORST`). The derivation
+only matched ESPN's abbreviation, so a mismatched team lost every one of its
+plays: in 2025's new-template games 25.6% of spot-phrase pass plays (6,131 of
+23,957) came out null, one whole side of the field in 103 of 411 games.
+The side is now learned from the game itself -- every `... to the ABC nn` end
+spot (the last one on a multi-spot play) is compared with ESPN's numeric
+`end.yardsToEndzone` and votes for `ABC` being the possessing or defending
+team; the per-abbreviation majority wins (>= 2 votes, >= 60%), ESPN's
+abbreviation is the fallback, a spot at the 50 needs none, and one regex covers
+every observed token shape (`UA 10`, `BC.41`, `Sac St10`, `NC ST19`). In the
+published 2025 assets in-game coverage rose from 72.4% to 89.8% of pass plays
+(100% of spot-phrase plays; 2026: 91.8%). cfbfastR carries the same logic
+(cfbfastR#146).
+
+### Fixed — returning production had no roster since #399 (#417, #419)
+
+`load_cfb_rosters` was repointed at the ESPN `espn_cfb_rosters` release in
+0.1.1 (#399); `cfb_returning_production._roster_keys` still keyed on the CFBD
+roster's `team` name, so every call raised `ColumnNotFoundError`. It now takes
+`team_id` directly from the ESPN roster -- and, because that roster is built
+from **game** rosters (week 1 of 2026: 4 teams, 476 rows, every player looked
+departed), unions it with the CFBD preseason roster resolved through
+`team_info`. 2026 returning production: 236 team rows, offense / defense
+0.452 / 0.463 (was 0.006).
+
+### Fixed — codegen let caller params reach ESPN, and un-truncated the endpoints that were silently short (#409)
+
+### Changed — CI dispatches the Game on Paper deploy on every push to `main`; docs site social metadata completed (#410, #412)
+
+### Data
+
+Every cfbfastR-cfb-raw final (2004-2026) was rebuilt on this code and every
+`espn_cfb_*` season republished to sportsdataverse-data on 2026-09-01; the
+finals' `processing_version` now carries the sdv-py commit (`0.1.3+9efee9f1.3`)
+so a lock bump can no longer leave a stale final looking current.
 
 ## 0.1.3 Release: August 28, 2026
 
