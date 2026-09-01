@@ -644,7 +644,7 @@ Player detail (identity + primary-sport rating/ranks).
 | `url` | character | RotoWire player page URL. |
 | `last_recruitment_player_institution` | integer | Nested player-institution record from the player's most recent recruitment (stringified). |
 | `current_player_institution` | integer | FK -> PlayerInstitution (current school). |
-| `twitter_contact` | integer | Player's Twitter/X handle on the 247Sports profile. |
+| `twitter_contact` | integer | Nested 247Sports contact record for the player's Twitter/X account (stringified). |
 | `mobile_phone_contact` | character | Player's mobile phone contact field on the 247Sports record. |
 | `primary_player_sport` | integer | FK -> PlayerSport (`/PlayerSport/{id}.json`). |
 | `primary_recruitment` | integer | Nested 247Sports record for the player's primary recruitment (stringified). |
@@ -987,7 +987,7 @@ Player name search.
 | `url` | character | RotoWire player page URL. |
 | `last_recruitment_player_institution` | integer | Nested player-institution record from the player's most recent recruitment (stringified). |
 | `current_player_institution` | integer | FK -> PlayerInstitution (current school). |
-| `twitter_contact` | integer | Player's Twitter/X handle on the 247Sports profile. |
+| `twitter_contact` | integer | Nested 247Sports contact record for the player's Twitter/X account (stringified). |
 | `mobile_phone_contact` | character | Player's mobile phone contact field on the 247Sports record. |
 | `primary_player_sport` | integer | FK -> PlayerSport (`/PlayerSport/{id}.json`). |
 | `primary_recruitment` | integer | Nested 247Sports record for the player's primary recruitment (stringified). |
@@ -1778,7 +1778,7 @@ Recruit class rankings for a season (rich per-recruit rows with inlined Player).
 | `player_url` | character | Full stats.ncaa.org url for the player page. |
 | `player_last_recruitment_player_institution` | integer | Nested player-institution record from the player's most recent recruitment (stringified). |
 | `player_current_player_institution` | integer | FK -> PlayerInstitution (current school). |
-| `player_twitter_contact` | integer | Player's Twitter/X handle on the 247Sports profile. |
+| `player_twitter_contact` | integer | Nested 247Sports contact record for the player's Twitter/X account (stringified). |
 | `player_mobile_phone_contact` | character | Player's mobile phone contact field on the 247Sports record. |
 | `player_primary_player_sport` | integer | FK -> PlayerSport (`/PlayerSport/{id}.json`). |
 | `player_primary_recruitment` | integer | Nested 247Sports record for the player's primary recruitment (stringified). |

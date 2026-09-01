@@ -12645,7 +12645,7 @@ sports247_site_pages_player:
   scout_evaluation: 247Sports scouting evaluation text for the player.
   star_rating: Star tier (2-5) derived from the rating.
   state_rank: Rank within home state for the class.
-  twitter_contact: Player's Twitter/X handle on the 247Sports profile.
+  twitter_contact: Nested 247Sports contact record for the player's Twitter/X account (stringified).
   user: 247Sports user account linked to the player profile (nested, stringified).
 sports247_site_pages_player_institution_evaluation:
   comparison_player: Established player the evaluator compares the prospect to.
@@ -14111,7 +14111,7 @@ sports247_site_pages_recruit:
   player_sport: Nested player-sport profile for the recruit (stringified).
   player_star_rating: Star tier (2-5) derived from the rating.
   player_state_rank: Rank within home state for the class.
-  player_twitter_contact: Player's Twitter/X handle on the 247Sports profile.
+  player_twitter_contact: Nested 247Sports contact record for the player's Twitter/X account (stringified).
   player_user: 247Sports user account linked to the player profile (nested, stringified).
   primary_player_position: Nested 247Sports record for the recruit's primary position (stringified).
   primary_position: Recruit's primary position on the 247Sports profile.
