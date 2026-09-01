@@ -180,7 +180,7 @@ GET /rdb/v1/collective-groups/{key}/deals
 | `agent` | character | Listed player agent. |
 | `collective_group` | character | Nested On3 record for the collective brokering the deal (stringified). |
 | `amount` | numeric | Reported dollar amount of the NIL deal. |
-| `date` | character | Date of the poll release. |
+| `date` | character | Date of the NIL collective deal, per On3. |
 | `verified` | logical | Whether On3 verified the deal. |
 | `source_url` | character | URL of the source reporting the deal. |
 | `rating` | character | Overall SP+ rating (Bill Connelly methodology, in points per game). |
@@ -470,7 +470,7 @@ GET /rdb/v1/drafts
 | `high_school_organization` | character | Nested On3 organization object for the player's high school (stringified). |
 | `college_organization` | character | Nested On3 organization object for the college the player attended (stringified). |
 | `hometown` | character | Prospect hometown. |
-| `state` | character | Venue state. |
+| `state` | character | Home state of the drafted player, per On3. |
 | `pick` | integer | Pick number of the NFL draftee within the round they were picked in. |
 | `compensatory` | logical | Whether the selection was a compensatory draft pick. |
 | `supplementary` | logical | Whether the selection came in a supplemental draft. |
@@ -517,7 +517,7 @@ GET /rdb/v1/drafts-by-stars
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `state` | character | Venue state. |
+| `state` | character | Home state associated with the draft row, per On3. |
 | `blue_chip_percent` | numeric | Percent of the drafted group who were blue-chip (four- or five-star) recruits. |
 | `population_percent` | numeric | Percent of the overall recruit population holding this star rating. |
 | `talent_ratio` | numeric | Ratio of the star tier's draft share to its population share (On3's talent ratio). |
@@ -596,7 +596,7 @@ GET /rdb/v1/drafts/{orgKey}/players
 | `high_school_organization` | character | Nested On3 organization object for the player's high school (stringified). |
 | `college_organization` | character | Nested On3 organization object for the college the player attended (stringified). |
 | `hometown` | character | Prospect hometown. |
-| `state` | character | Venue state. |
+| `state` | character | Home state of the drafted player, per On3. |
 | `pick` | integer | Pick number of the NFL draftee within the round they were picked in. |
 | `compensatory` | logical | Whether the selection was a compensatory draft pick. |
 | `supplementary` | logical | Whether the selection came in a supplemental draft. |
@@ -907,7 +907,7 @@ GET /rdb/v1/nil-compliances/state
 | `key` | integer | On3 RDB key for the state NIL-compliance record. |
 | `organization_type` | character | Organization type. |
 | `state_key` | integer | On3 key of the U.S. state the compliance record covers. |
-| `state` | character | Venue state. |
+| `state` | character | U.S. state whose NIL compliance rules the record describes. |
 | `monetization_allowed` | logical | Whether the state allows high-school athletes to monetize their NIL. |
 | `governing_rule_label` | character | Name of the governing body or rule for NIL in the state. |
 | `governing_rule_url` | character | URL of the governing NIL rule or policy document. |
@@ -977,7 +977,7 @@ GET /rdb/v1/organizations/{organizationKey}/draft-class-by-state
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `state` | character | Venue state. |
+| `state` | character | U.S. state the draft-class grouping covers. |
 | `count` | integer | Total number of players in the season index. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
@@ -1150,7 +1150,7 @@ GET /rdb/v1/organizations/{organizationKey}/drafted-players
 | `high_school_organization` | character | Nested On3 organization object for the player's high school (stringified). |
 | `college_organization` | character | Nested On3 organization object for the college the player attended (stringified). |
 | `hometown` | character | Prospect hometown. |
-| `state` | character | Venue state. |
+| `state` | character | Home state of the drafted player, per On3. |
 | `pick` | integer | Pick number of the NFL draftee within the round they were picked in. |
 | `compensatory` | logical | Whether the selection was a compensatory draft pick. |
 | `supplementary` | logical | Whether the selection came in a supplemental draft. |
@@ -1628,7 +1628,7 @@ GET /rdb/v1/people/{personKey}/valuation-growth
 | `nil_status` | character | Status of the athlete's On3 NIL valuation at the snapshot (e.g. active, inactive). |
 | `valuation` | integer | Athlete's On3 NIL valuation in dollars at the snapshot. |
 | `valuation_change` | integer | Change in the NIL valuation versus the previous snapshot, in dollars. |
-| `date` | character | Date of the poll release. |
+| `date` | character | Date of the On3 NIL valuation snapshot. |
 | `date_unix` | integer | Unix timestamp of the valuation snapshot. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
@@ -2303,7 +2303,7 @@ GET /rdb/v1/player/{personKey}/videos
 | `description` | character | ESPN's description of the stat. |
 | `person_sport` | character | Nested athlete-sport profile the video is attached to (stringified). |
 | `is_featured` | logical | Whether the video is featured on the player's On3 profile. |
-| `date` | integer | Date of the poll release. |
+| `date` | integer | Publication date of the video, per On3. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -3132,7 +3132,7 @@ GET /rdb/v1/videos/{videoKey}
 | `description` | character | ESPN's description of the stat. |
 | `person_sport` | character | Nested athlete-sport profile the video is attached to (stringified). |
 | `is_featured` | logical | Whether the video is featured on the player's On3 profile. |
-| `date` | integer | Date of the poll release. |
+| `date` | integer | Publication date of the video, per On3. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

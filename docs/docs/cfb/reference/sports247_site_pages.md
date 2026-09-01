@@ -120,7 +120,7 @@ Coach hometown Location.
 | `key` | integer | Primary key of this entity (the id used in its `.json` route). |
 | `postal_code` | character | Postal code of the venue. |
 | `city` | character | Venue city. |
-| `state` | integer | Venue state. |
+| `state` | integer | U.S. state of the location record, per 247Sports. |
 | `latitude` | character | Venue latitude in decimal degrees. |
 | `longitude` | character | Venue longitude in decimal degrees. |
 | `county_tax_rate` | character | County income-tax rate for the location, carried on the 247Sports location record. |
@@ -163,11 +163,11 @@ Single CoachRanking row.
 | `ranking` | integer | FK -> the Ranking snapshot this row belongs to. |
 | `sport` | integer | Nested 247Sports sport the ranking covers (stringified). |
 | `recruitment` | character | Nested 247Sports recruitment record credited to the coach on this row (stringified). |
-| `rating` | character | Overall SP+ rating (Bill Connelly methodology, in points per game). |
+| `rating` | character | Overall rating score for the coach's recruiting haul in the 247Sports coach ranking. |
 | `scout_rating` | character | Total 247Sports in-house (scout) rating points credited to the coach's commits. |
 | `composite_rating` | character | Composite class rating for the coach's haul. |
 | `commits` | character | Number of commits credited to the coach in the ranking. |
-| `total` | character | The sum of each team's score in the game. Equals h_score + v_score. Is NA for games which haven't yet been played. Convenient for evaluating over/under total bets. |
+| `total` | character | Total ranking score for the coach's class, as reported by 247Sports. |
 | `composite_total` | character | Total 247Sports Composite rating points credited to the coach's commits. |
 | `five_stars` | character | Number of five-star commits credited to the coach. |
 | `scout_five_stars` | character | Number of five-star commits by 247Sports' own (scout) rating. |
@@ -230,11 +230,11 @@ Coach's recruiting-ranking history (one row per Ranking snapshot).
 | `ranking` | integer | FK -> the Ranking snapshot this row belongs to. |
 | `sport` | integer | Nested 247Sports sport the ranking covers (stringified). |
 | `recruitment` | character | Nested 247Sports recruitment record credited to the coach on this row (stringified). |
-| `rating` | character | Overall SP+ rating (Bill Connelly methodology, in points per game). |
+| `rating` | character | Overall rating score for the coach's recruiting haul in the 247Sports coach ranking. |
 | `scout_rating` | character | Total 247Sports in-house (scout) rating points credited to the coach's commits. |
 | `composite_rating` | character | Composite class rating for the coach's haul. |
 | `commits` | character | Number of commits credited to the coach in the ranking. |
-| `total` | character | The sum of each team's score in the game. Equals h_score + v_score. Is NA for games which haven't yet been played. Convenient for evaluating over/under total bets. |
+| `total` | character | Total ranking score for the coach's class, as reported by 247Sports. |
 | `composite_total` | character | Total 247Sports Composite rating points credited to the coach's commits. |
 | `five_stars` | character | Number of five-star commits credited to the coach. |
 | `scout_five_stars` | character | Number of five-star commits by 247Sports' own (scout) rating. |
@@ -293,7 +293,7 @@ Recruiting event detail (camp/combine/regional).
 | `key` | integer | Primary key of this entity (the id used in its `.json` route). |
 | `name` | character | Position name (e.g. `Quarterback`). |
 | `event_group` | integer | Grouping or series the event belongs to (e.g. a camp circuit) on 247Sports. |
-| `event_type` | integer | Event / play type code (V2 PBP). |
+| `event_type` | integer | Numeric code for the kind of 247Sports recruiting event on this row. |
 | `event_date` | character | Event date-time in ISO 8601 (e.g. '2017-07-11T00:00:00Z'). |
 | `default_asset` | integer | Nested 247Sports image asset for the event (stringified). |
 | `primary_color` | character | Primary team color (hex). |
@@ -428,7 +428,7 @@ Institution location (city/state/coords/tax).
 | `key` | integer | Primary key of this entity (the id used in its `.json` route). |
 | `postal_code` | character | Postal code of the venue. |
 | `city` | character | Venue city. |
-| `state` | integer | Venue state. |
+| `state` | integer | U.S. state of the location record, per 247Sports. |
 | `latitude` | character | Venue latitude in decimal degrees. |
 | `longitude` | character | Venue longitude in decimal degrees. |
 | `county_tax_rate` | character | County income-tax rate for the location, carried on the 247Sports location record. |
@@ -466,7 +466,7 @@ Institution recruiting timeline (site-authored event blurbs).
 | col_name | type | description |
 |---|---|---|
 | `body` | character | Text body of the timeline entry. |
-| `date` | character | Date of the poll release. |
+| `date` | character | Date of the institution timeline entry, per 247Sports. |
 | `author_first_name` | character | First name of the entry's author. |
 | `author_last_name` | character | Last name of the entry's author. |
 | `author_affiliation` | character | Outlet or site the author writes for, per 247Sports. |
@@ -697,7 +697,7 @@ Player's current PlayerInstitution (committed/enrolled school).
 | `key` | integer | Primary key of this entity (the id used in its `.json` route). |
 | `player` | integer | Player name. |
 | `institution` | integer | Nested 247Sports institution for the stint (stringified). |
-| `state` | integer | Venue state. |
+| `state` | integer | Nested 247Sports state record for the institution's location (stringified). |
 | `agent` | character | Listed player agent. |
 | `end_year` | character | Span ending year. |
 | `end_date` | character | Season end timestamp (ISO 8601, UTC). |
@@ -755,7 +755,7 @@ Player's high-school PlayerInstitution row.
 | `key` | integer | Primary key of this entity (the id used in its `.json` route). |
 | `player` | integer | Player name. |
 | `institution` | integer | Nested 247Sports institution for the stint (stringified). |
-| `state` | integer | Venue state. |
+| `state` | integer | Nested 247Sports state record for the institution's location (stringified). |
 | `agent` | character | Listed player agent. |
 | `end_year` | character | Span ending year. |
 | `end_date` | character | Season end timestamp (ISO 8601, UTC). |
@@ -813,7 +813,7 @@ Player-at-institution association detail.
 | `key` | integer | Primary key of this entity (the id used in its `.json` route). |
 | `player` | integer | Player name. |
 | `institution` | integer | Nested 247Sports institution for the stint (stringified). |
-| `state` | integer | Venue state. |
+| `state` | integer | Nested 247Sports state record for the institution's location (stringified). |
 | `agent` | character | Listed player agent. |
 | `end_year` | character | Span ending year. |
 | `end_date` | character | Season end timestamp (ISO 8601, UTC). |
@@ -909,7 +909,7 @@ Player's primary PlayerSport (rating/class/positions).
 | `key` | integer | Primary key of this entity (the id used in its `.json` route). |
 | `player` | integer | Player name. |
 | `player_institution` | integer | Nested player-institution stint the player-sport profile points to (stringified). |
-| `state` | integer | Venue state. |
+| `state` | integer | Home state of the recruit, per 247Sports. |
 | `sport` | integer | Nested 247Sports sport for the profile (stringified). |
 | `rating` | character | 247Sports rating string (0-1). |
 | `rating_or_default` | character | 247Sports in-house rating, falling back to a default value when unrated. |
@@ -1040,7 +1040,7 @@ PlayerSport detail (note lowercase route segment).
 | `key` | integer | Primary key of this entity (the id used in its `.json` route). |
 | `player` | integer | Player name. |
 | `player_institution` | integer | Nested player-institution stint the player-sport profile points to (stringified). |
-| `state` | integer | Venue state. |
+| `state` | integer | Home state of the recruit, per 247Sports. |
 | `sport` | integer | Nested 247Sports sport for the profile (stringified). |
 | `rating` | character | 247Sports rating string (0-1). |
 | `rating_or_default` | character | 247Sports in-house rating, falling back to a default value when unrated. |
@@ -1105,7 +1105,7 @@ PlayerInstitution linked to a PlayerSport.
 | `key` | integer | Primary key of this entity (the id used in its `.json` route). |
 | `player` | integer | Player name. |
 | `institution` | integer | Nested 247Sports institution for the stint (stringified). |
-| `state` | integer | Venue state. |
+| `state` | integer | Nested 247Sports state record for the institution's location (stringified). |
 | `agent` | character | Listed player agent. |
 | `end_year` | character | Span ending year. |
 | `end_date` | character | Season end timestamp (ISO 8601, UTC). |
@@ -1165,15 +1165,15 @@ Ranking history for a PlayerSport (one row per Ranking snapshot).
 | `sport` | integer | Nested 247Sports sport the ranking row covers (stringified). |
 | `player_sport` | integer | Nested player-sport profile the ranking row belongs to (stringified). |
 | `committed_institution` | integer | FK -> committed Institution (null if uncommitted). |
-| `order` | character | Team order within the competition (0 = first). |
+| `order` | character | Display order of the entry within the 247Sports ranking list. |
 | `position` | integer | Athlete position. |
 | `position_group` | integer | Position group of the recruits (e.g. Offensive Line, Defensive Back). |
 | `platoon` | integer | 247Sports platoon (side-of-ball grouping) identifier on the ranking row. |
-| `state` | integer | Venue state. |
-| `region` | integer | Broadcast region code. |
+| `state` | integer | Nested 247Sports state record for the recruit's home state (stringified). |
+| `region` | integer | Nested 247Sports region record for the recruit's home region (stringified). |
 | `institution` | integer | Nested institution the player was committed or signed to at ranking time (stringified). |
 | `institution_group` | character | Grouping (e.g. conference/division) of the player's institution, per 247Sports. |
-| `rating` | character | Overall SP+ rating (Bill Connelly methodology, in points per game). |
+| `rating` | character | Nested 247Sports rating record attached to the ranking row (stringified). |
 | `composite_strength` | character | 247Sports field describing the strength of the industry inputs behind the Composite rating. |
 | `composite_rating` | character | Player's 247Sports Composite rating, blending the major services' ratings. |
 | `overall_rank` | character | Overall national rank in the snapshot. |
@@ -1221,15 +1221,15 @@ Player-sport rankings for a position.
 | `sport` | integer | Nested 247Sports sport the ranking row covers (stringified). |
 | `player_sport` | integer | Nested player-sport profile the ranking row belongs to (stringified). |
 | `committed_institution` | integer | FK -> committed Institution (null if uncommitted). |
-| `order` | character | Team order within the competition (0 = first). |
+| `order` | character | Display order of the entry within the 247Sports ranking list. |
 | `position` | integer | Athlete position. |
 | `position_group` | integer | Position group of the recruits (e.g. Offensive Line, Defensive Back). |
 | `platoon` | integer | 247Sports platoon (side-of-ball grouping) identifier on the ranking row. |
-| `state` | integer | Venue state. |
-| `region` | integer | Broadcast region code. |
+| `state` | integer | Nested 247Sports state record for the recruit's home state (stringified). |
+| `region` | integer | Nested 247Sports region record for the recruit's home region (stringified). |
 | `institution` | integer | Nested institution the player was committed or signed to at ranking time (stringified). |
 | `institution_group` | character | Grouping (e.g. conference/division) of the player's institution, per 247Sports. |
-| `rating` | character | Overall SP+ rating (Bill Connelly methodology, in points per game). |
+| `rating` | character | Nested 247Sports rating record attached to the ranking row (stringified). |
 | `composite_strength` | character | 247Sports field describing the strength of the industry inputs behind the Composite rating. |
 | `composite_rating` | character | Player's 247Sports Composite rating, blending the major services' ratings. |
 | `overall_rank` | character | Overall national rank in the snapshot. |
@@ -1331,7 +1331,7 @@ Final-choice PlayerSport/commit for a recruitment.
 | `key` | integer | Primary key of this entity (the id used in its `.json` route). |
 | `player` | integer | Player name. |
 | `player_institution` | integer | Nested player-institution stint the player-sport profile points to (stringified). |
-| `state` | integer | Venue state. |
+| `state` | integer | Home state of the recruit, per 247Sports. |
 | `sport` | integer | Nested 247Sports sport for the profile (stringified). |
 | `rating` | character | 247Sports rating string (0-1). |
 | `rating_or_default` | character | 247Sports in-house rating, falling back to a default value when unrated. |
@@ -1543,7 +1543,7 @@ PlayerSport underlying a recruitment.
 | `key` | integer | Primary key of this entity (the id used in its `.json` route). |
 | `player` | integer | Player name. |
 | `player_institution` | integer | Nested player-institution stint the player-sport profile points to (stringified). |
-| `state` | integer | Venue state. |
+| `state` | integer | Home state of the recruit, per 247Sports. |
 | `sport` | integer | Nested 247Sports sport for the profile (stringified). |
 | `rating` | character | 247Sports rating string (0-1). |
 | `rating_or_default` | character | 247Sports in-house rating, falling back to a default value when unrated. |
@@ -1651,7 +1651,7 @@ Recruit-interest timeline events for a season (offers/visits/commits).
 | `recruitment` | integer | Nested 247Sports recruitment the event belongs to (stringified). |
 | `recruit_interest` | integer | Nested recruit-interest record the event belongs to (stringified). |
 | `type` | character | Record-type category (e.g. `total`, `home`, `road`). |
-| `date` | character | Date of the poll release. |
+| `date` | character | Date of the recruiting-interest event, per 247Sports. |
 | `default_name` | character | Server-rendered display label for the entity. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
@@ -1748,7 +1748,7 @@ Recruit class rankings for a season (rich per-recruit rows with inlined Player).
 | `signed_institution` | integer | Nested institution the recruit signed with (stringified). |
 | `position` | integer | Athlete position. |
 | `institution` | integer | Nested institution the recruit row is scoped to (stringified). |
-| `state` | integer | Venue state. |
+| `state` | integer | Home state of the recruit, per 247Sports. |
 | `player_sport` | integer | Nested player-sport profile for the recruit (stringified). |
 | `composite_strength` | character | Composite strength points contributed to team ranking. |
 | `final_choice` | integer | Whether this entry represents the recruit's final school choice. |
@@ -1831,7 +1831,7 @@ Signed-class roster embed (PlayerSport rows). Accuracy can lag.
 | `key` | integer | Primary key of this entity (the id used in its `.json` route). |
 | `player` | integer | Player name. |
 | `player_institution` | integer | Nested player-institution stint the player-sport profile points to (stringified). |
-| `state` | integer | Venue state. |
+| `state` | integer | Home state of the recruit, per 247Sports. |
 | `sport` | integer | Nested 247Sports sport for the profile (stringified). |
 | `rating` | character | 247Sports rating string (0-1). |
 | `rating_or_default` | character | 247Sports in-house rating, falling back to a default value when unrated. |

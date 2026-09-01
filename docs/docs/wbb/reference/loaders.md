@@ -987,19 +987,19 @@ Release: [ncaa_wbb_player_box](https://github.com/sportsdataverse/sportsdatavers
 | `rimm_ast` | Float64 | Assisted rim makes. |
 | `midm_ast` | Float64 | Assisted mid-range makes. |
 | `pts_unast` | Float64 | Points from the player's unassisted field-goal makes. |
-| `efg_pct_unast` | Float64 | Effective field-goal percentage in the unassisted split (makes not credited with an assist). |
-| `fgm_unast` | Float64 | Field goals made in the unassisted split (makes not credited with an assist). |
-| `fga_unast` | Float64 | Field goals attempted in the unassisted split (makes not credited with an assist). |
-| `fg_pct_unast` | Float64 | Field-goal percentage in the unassisted split (makes not credited with an assist). |
-| `tpm_unast` | Float64 | Three-pointers made in the unassisted split (makes not credited with an assist). |
-| `tpa_unast` | Float64 | Three-pointers attempted in the unassisted split (makes not credited with an assist). |
-| `tp_pct_unast` | Float64 | Three-point percentage in the unassisted split (makes not credited with an assist). |
-| `rimm_unast` | Float64 | Rim shots made in the unassisted split (makes not credited with an assist). |
-| `rima_unast` | Float64 | Rim shots attempted in the unassisted split (makes not credited with an assist). |
-| `rim_pct_unast` | Float64 | Rim field-goal percentage in the unassisted split (makes not credited with an assist). |
-| `midm_unast` | Float64 | Mid-range shots made in the unassisted split (makes not credited with an assist). |
-| `mida_unast` | Float64 | Mid-range shots attempted in the unassisted split (makes not credited with an assist). |
-| `mid_pct_unast` | Float64 | Mid-range field-goal percentage in the unassisted split (makes not credited with an assist). |
+| `efg_pct_unast` | Float64 | Effective field-goal percentage in the unassisted split (makes for which no assist was credited). |
+| `fgm_unast` | Float64 | Field goals made in the unassisted split (makes for which no assist was credited). |
+| `fga_unast` | Float64 | Field goals attempted in the unassisted split (makes for which no assist was credited). |
+| `fg_pct_unast` | Float64 | Field-goal percentage in the unassisted split (makes for which no assist was credited). |
+| `tpm_unast` | Float64 | Three-pointers made in the unassisted split (makes for which no assist was credited). |
+| `tpa_unast` | Float64 | Three-pointers attempted in the unassisted split (makes for which no assist was credited). |
+| `tp_pct_unast` | Float64 | Three-point percentage in the unassisted split (makes for which no assist was credited). |
+| `rimm_unast` | Float64 | Rim shots made in the unassisted split (makes for which no assist was credited). |
+| `rima_unast` | Float64 | Rim shots attempted in the unassisted split (makes for which no assist was credited). |
+| `rim_pct_unast` | Float64 | Rim field-goal percentage in the unassisted split (makes for which no assist was credited). |
+| `midm_unast` | Float64 | Mid-range shots made in the unassisted split (makes for which no assist was credited). |
+| `mida_unast` | Float64 | Mid-range shots attempted in the unassisted split (makes for which no assist was credited). |
+| `mid_pct_unast` | Float64 | Mid-range field-goal percentage in the unassisted split (makes for which no assist was credited). |
 | `contest_id` | String | stats.ncaa.org contest (game) identifier. |
 | `home_ncaa_team_id` | String | stats.ncaa.org team identifier for the home team. |
 | `home_espn_team_id` | String | ESPN home team id (NA for bart-only rows). |
@@ -1342,7 +1342,7 @@ Release: [ncaa_wbb_matchup_stints](https://github.com/sportsdataverse/sportsdata
 | `period` | Int64 | Period of the game (1-4 quarters; 5+ for OT). |
 | `start_seconds` | Int64 | Elapsed game seconds at which the stint began. |
 | `end_seconds` | Int64 | Elapsed game seconds at which the stint ended. |
-| `duration_seconds` | Int64 | Streak duration in seconds. |
+| `duration_seconds` | Int64 | Duration of the lineup stint in seconds. |
 | `matchup_key` | String | Combined home-plus-away lineup key identifying the ten-player matchup on the floor. |
 | `home_lineup_key` | String | Sorted player-code key for the home five on the floor. |
 | `away_lineup_key` | String | Sorted player-code key for the away five on the floor. |

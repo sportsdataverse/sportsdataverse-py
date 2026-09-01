@@ -352,12 +352,12 @@ Release: [espn_cfb_pbp](https://github.com/sportsdataverse/sportsdataverse-data/
 | `fumble_recovered` | Boolean | True when a fumble on the play was recovered. |
 | `field_goal_result` | String | String indicator for result of field goal attempt: made, missed, or blocked. |
 | `extra_point_result` | String | String indicator for the result of the extra point attempt: good, failed, blocked, safety (touchback in defensive endzone is 1 point apparently), or aborted. |
-| `two_point_conv_result` | String | String indicator for result of two point conversion attempt: success, failure, safety (touchback in defensive endzone is 1 point apparently), or return. |
+| `two_point_conv_result` | String | String result of the two-point conversion attempt: success, failure, or safety (touchback in the defensive end zone). |
 | `air_yardsToEndzone` | Int64 | Yards to the endzone at the catch spot, parsed from the 2025+ vendor catch-spot text; null before 2025 or when unresolvable. |
 | `air_yards` | Int64 | Numeric value for distance in yards perpendicular to the line of scrimmage at where the targeted receiver either caught or didn't catch the ball. |
 | `yards_after_catch` | Int64 | Numeric value for distance in yards perpendicular to the yard line where the receiver made the reception to where the play ended. |
 | `kicking_team` | Int64 | Team id of the kicking team on kickoff, punt, and field-goal plays. |
-| `return_team` | Int64 | String abbreviation of the return team. Returns may occur on any of: interception, fumble, kickoff, punt, or blocked kicks. |
+| `return_team` | Int64 | Team id of the returning side; set on interception, fumble, kickoff, punt, and blocked-kick returns. |
 | `fumble_or_muff` | Boolean | Whether the play includes a fumble or a muffed kick or punt (widened beyond ESPN's fumble play types). |
 | `recovery_team` | Int64 | Team id parsed from the play text as recovering the fumble or muff. |
 | `recovery_team_2` | Int64 | Team id of the second recovery in a multi-recovery scramble, parsed from the play text. |
@@ -367,7 +367,7 @@ Release: [espn_cfb_pbp](https://github.com/sportsdataverse/sportsdataverse-data/
 | `def_fumble_lost` | Boolean | Whether the defending team (e.g. a returner after a takeaway) fumbled and lost the ball back. |
 | `is_pos_team_turnover` | Boolean | Whether the possession team committed a giveaway (interception or fumble lost). |
 | `is_def_pos_team_turnover` | Boolean | Whether the defending team gave the ball back via a lost fumble. |
-| `is_turnover` | Boolean | `TRUE` if the play was a turnover. |
+| `is_turnover` | Boolean | True when the play is a giveaway-based turnover (interception thrown or fumble lost); blocked kicks recovered by the defense are carried by the blocked-kick fields instead. |
 | `turnover_team` | Int64 | Team id charged with the giveaway on the play. |
 | `is_st_turnover` | Boolean | Whether the giveaway happened on a special-teams play (kick or punt snap, or a return). |
 | `is_blocked_punt_turnover` | Boolean | Blocked-punt possession loss (blocked-punt TD, or the defense recovered); kept out of is_turnover to match ESPN's giveaway-only box. |
@@ -846,7 +846,7 @@ Release: [cfb_team_info](https://github.com/sportsdataverse/sportsdataverse-data
 | `venue_id` | Int32 | Referencing venue id. |
 | `venue_name` | String | Full name of the franchise's venue. |
 | `city` | String | Venue city. |
-| `state` | String | Venue state. |
+| `state` | String | U.S. state where the school is located. |
 | `zip` | String | Team/venue zip code. |
 | `country_code` | String | Team/venue country code. |
 | `timezone` | String | Time zone in which the venue resides (i.e. Eastern Time -> "America/New_York"). |
@@ -1084,7 +1084,7 @@ Release: [espn_cfb_player_box](https://github.com/sportsdataverse/sportsdatavers
 | `interceptionTouchdowns` | String | Touchdowns scored on interception returns. |
 | `totalTackles` | String | Player's total tackles, solo plus assisted (ESPN box score). |
 | `soloTackles` | String | Player's solo (unassisted) tackles (ESPN box score). |
-| `sacks` | String | Team sacks. |
+| `sacks` | String | Sacks credited to the player (ESPN box score). |
 | `tacklesForLoss` | String | Player's tackles made behind the line of scrimmage (ESPN box score). |
 | `passesDefended` | String | Passes the player broke up or defended (ESPN box score). |
 | `hurries` | String | Quarterback hurries credited to the player (ESPN box score). |

@@ -5584,18 +5584,6 @@ collective_groups:
   website_name: Display name of the collective's website.
   website_url: URL of the collective's website.
   youtube_handle: Collective's YouTube channel handle.
-collective_groups_deals:
-  amount: Reported dollar amount of the NIL deal.
-  collective_group: Nested On3 record for the collective brokering the deal (stringified).
-  company: Nested On3 record for the company on the other side of the NIL deal (stringified).
-  key: On3 RDB key for the NIL deal record.
-  nil_status: Status of the athlete's On3 NIL valuation (e.g. active, inactive).
-  nil_value: Athlete's On3 NIL valuation in dollars.
-  person: Nested On3 person object for the athlete in the deal (stringified).
-  roster_rating: Nested On3 roster rating object for the athlete at deal time (stringified).
-  rpm: Nested On3 Recruiting Prediction Machine (RPM) data for the athlete (stringified).
-  source_url: URL of the source reporting the deal.
-  verified: Whether On3 verified the deal.
 collective_groups_key:
   annual_goal_amount: Collective's annual fundraising goal in dollars, as reported to On3.
   confirmed_raised_amount: Dollar amount the collective has confirmed raising, per On3.
@@ -6063,40 +6051,6 @@ draftcombinestats:
   three_quarter_sprint: Three-quarter-court sprint time, in seconds.
   wingspan: Wingspan measured at the combine, in inches.
   wingspan_ft_in: Wingspan formatted as feet and inches.
-drafts:
-  college_organization: Nested On3 organization object for the college the player attended (stringified).
-  compensatory: Whether the selection was a compensatory draft pick.
-  drafted_from_organization: Nested On3 organization object for the school the player was drafted out of (stringified).
-  forfeited: Whether the pick was forfeited.
-  high_school_organization: Nested On3 organization object for the player's high school (stringified).
-  key: On3 RDB key for the draft-pick record.
-  person: Nested On3 person object for the drafted player (stringified).
-  recruitment_key: On3 RDB recruitment key linking the draft pick back to the player's recruitment record.
-  supplementary: Whether the selection came in a supplemental draft.
-  through_organization_one: First intermediate organization the pick passed through in trades before being exercised (On3
-    RDB).
-  through_organization_three: Third intermediate organization the pick passed through in trades before being exercised (On3
-    RDB).
-  through_organization_two: Second intermediate organization the pick passed through in trades before being exercised (On3
-    RDB).
-  trading_organization: Pro organization that traded the pick away, when it changed hands (On3 RDB).
-drafts_players:
-  college_organization: Nested On3 organization object for the college the player attended (stringified).
-  compensatory: Whether the selection was a compensatory draft pick.
-  drafted_from_organization: Nested On3 organization object for the school the player was drafted out of (stringified).
-  forfeited: Whether the pick was forfeited.
-  high_school_organization: Nested On3 organization object for the player's high school (stringified).
-  key: On3 RDB key for the draft-pick record.
-  person: Nested On3 person object for the drafted player (stringified).
-  recruitment_key: On3 RDB recruitment key linking the draft pick back to the player's recruitment record.
-  supplementary: Whether the selection came in a supplemental draft.
-  through_organization_one: First intermediate organization the pick passed through in trades before being exercised (On3
-    RDB).
-  through_organization_three: Third intermediate organization the pick passed through in trades before being exercised (On3
-    RDB).
-  through_organization_two: Second intermediate organization the pick passed through in trades before being exercised (On3
-    RDB).
-  trading_organization: Pro organization that traded the pick away, when it changed hands (On3 RDB).
 fantasywidget:
   fan_duel_pts: Fantasy points under FanDuel's scoring formula.
   nba_fantasy_pts: Fantasy points under the NBA's fantasy scoring formula.
@@ -6342,349 +6296,6 @@ load_cfb_game_rosters:
   statistics_href: ESPN Core v2 API reference URL for this athlete's stat line in this game, null for the roughly 71 percent
     of listed players who recorded no stats.
   team_alternate_ids_sdr: The team's Sportradar alternate identifier, which maps one-to-one with team_id.
-load_cfb_pbp:
-  A_score_diff: Away team's score minus the home team's, from the away perspective.
-  EPA_explosive: True when the play was explosive.
-  EPA_explosive_pass: True when the pass play was explosive.
-  EPA_explosive_rush: True when the rush play was explosive.
-  EPA_fg: EPA credited to the play on field-goal attempts.
-  EPA_kickoff: EPA credited to the play on kickoff plays.
-  EPA_middle_8_success: True when the play in the middle eight was successful by EPA.
-  EPA_middle_8_success_pass: True when the pass play in the middle eight was successful by EPA.
-  EPA_middle_8_success_rush: True when the rush play in the middle eight was successful by EPA.
-  EPA_non_explosive: EPA credited to the play on non-explosive plays.
-  EPA_pass: EPA credited to the play on pass plays.
-  EPA_penalty: EPA credited to the play attributable to penalties.
-  EPA_punt: EPA credited to the play on punt plays.
-  EPA_rush: EPA credited to the play on rush plays.
-  EPA_scrimmage: EPA credited to the play on plays from scrimmage.
-  EPA_sp: EPA credited to the play on special-teams plays.
-  EPA_success: True when the play was successful by EPA.
-  EPA_success_EPA: EPA on successful plays.
-  EPA_success_early_down: True when the play on an early down was successful by EPA.
-  EPA_success_early_down_pass: True when the pass play on an early down was successful by EPA.
-  EPA_success_early_down_rush: True when the rush play on an early down was successful by EPA.
-  EPA_success_late_down: True when the play on a late down was successful by EPA.
-  EPA_success_late_down_pass: True when the pass play on a late down was successful by EPA.
-  EPA_success_late_down_rush: True when the rush play on a late down was successful by EPA.
-  EPA_success_pass: True when the pass play was successful by EPA.
-  EPA_success_pass_EPA: EPA on successful pass plays.
-  EPA_success_passing_down: True when the play on a passing down was successful by EPA.
-  EPA_success_passing_down_EPA: EPA on successful plays on a passing down.
-  EPA_success_rush: True when the rush play was successful by EPA.
-  EPA_success_rush_EPA: EPA on successful rush plays.
-  EPA_success_standard_down: True when the play on a standard down was successful by EPA.
-  EPA_success_standard_down_EPA: EPA on successful plays on a standard down.
-  EP_between: Change in expected points across the play, before penalty adjustment.
-  EP_end: Expected points for the offense at the end of the play.
-  EP_start: Expected points for the offense at the start of the play.
-  EP_start_touchback: Expected points the offense would have had from a touchback on this play.
-  HA_score_diff: Home score minus away score for the play.
-  H_score_diff: Home team's score minus the away team's, from the home perspective.
-  TFL: True when the play was a tackle for loss.
-  TFL_pass: True when the play was a tackle for loss on a pass play (a sack).
-  TFL_rush: True when the play was a tackle for loss on a rush play.
-  action_play: True when the play advanced the game state -- excludes timeouts, end-of-period markers and other non-action
-    rows.
-  adj_rush_yardage: Rushing yards capped at 8, the input to the line-yards decomposition.
-  air_yardsToEndzone: Yards to the endzone at the catch spot, parsed from the 2025+ vendor catch-spot text; null before 2025
-    or when unresolvable.
-  awayTeamAbbrev: ESPN's away-team Abbrev for the game, stamped on every play.
-  awayTeamId: ESPN's away-team Id for the game, stamped on every play.
-  awayTeamMascot: ESPN's away-team Mascot for the game, stamped on every play.
-  awayTeamName: ESPN's away-team Name for the game, stamped on every play.
-  awayTeamNameAlt: ESPN's away-team NameAlt for the game, stamped on every play.
-  awayTimeoutCalled: True when the away team called a timeout on the play.
-  away_wp_after_naive: End-of-play naive win probability mapped to the away team.
-  away_wp_before_naive: Pre-snap naive win probability mapped to the away team.
-  cleaned_text: Play description with overturned-call prefixes stripped; the text the name and team extractors run against.
-  clock.displayValue: Game clock at the play, as the displayed mm:ss string.
-  clock.minutes: Minutes remaining on the game clock at the play.
-  clock.seconds: Seconds component of the game clock at the play.
-  def_fumble_lost: Whether the defending team (e.g. a returner after a takeaway) fumbled and lost the ball back.
-  def_wp_after_naive: End-of-play defense win probability under the naive model.
-  def_wp_before_naive: Pre-snap defense win probability under the naive model (1 - wp_before_naive).
-  down_1: True when it is 1st down at the start of the play.
-  down_1_end: True when it is 1st down at the end of the play.
-  down_2: True when it is 2nd down at the start of the play.
-  down_2_end: True when it is 2nd down at the end of the play.
-  down_3: True when it is 3rd down at the start of the play.
-  down_3_end: True when it is 3rd down at the end of the play.
-  down_4: True when it is 4th down at the start of the play.
-  down_4_end: True when it is 4th down at the end of the play.
-  drive.description: ESPN's `description` field for the drive containing this play.
-  drive.displayResult: ESPN's `displayResult` field for the drive containing this play.
-  drive.end.clock.displayValue: ESPN's `end.clock.displayValue` field for the drive containing this play.
-  drive.end.period.number: ESPN's `end.period.number` field for the drive containing this play.
-  drive.end.period.type: ESPN's `end.period.type` field for the drive containing this play.
-  drive.end.yardLine: ESPN's `end.yardLine` field for the drive containing this play.
-  drive.id: ESPN's `id` field for the drive containing this play.
-  drive.isScore: ESPN's `isScore` field for the drive containing this play.
-  drive.offensivePlays: ESPN's `offensivePlays` field for the drive containing this play.
-  drive.result: ESPN's `result` field for the drive containing this play.
-  drive.shortDisplayResult: ESPN's `shortDisplayResult` field for the drive containing this play.
-  drive.start.clock.displayValue: ESPN's `start.clock.displayValue` field for the drive containing this play.
-  drive.start.period.number: ESPN's `start.period.number` field for the drive containing this play.
-  drive.start.period.type: ESPN's `start.period.type` field for the drive containing this play.
-  drive.start.text: ESPN's `start.text` field for the drive containing this play.
-  drive.start.yardLine: ESPN's `start.yardLine` field for the drive containing this play.
-  drive.team.abbreviation: ESPN's `team.abbreviation` field for the drive containing this play.
-  drive.team.displayName: ESPN's `team.displayName` field for the drive containing this play.
-  drive.team.name: ESPN's `team.name` field for the drive containing this play.
-  drive.team.shortDisplayName: ESPN's `team.shortDisplayName` field for the drive containing this play.
-  drive.timeElapsed.displayValue: ESPN's `timeElapsed.displayValue` field for the drive containing this play.
-  drive.yards: ESPN's `yards` field for the drive containing this play.
-  drive_offense_plays: Offensive plays run on the drive.
-  drive_offense_yards: Offensive yards gained on the drive.
-  drive_play_index: Sequence number of the play within its drive.
-  drive_start: Yard line at which the drive began.
-  drive_stopped: True when the play ended the drive.
-  drive_total_yards: Total yards gained on the drive.
-  early_down: True when the play is a scrimmage play on first or second down.
-  early_down_pass: True when the play is a pass on an early down.
-  early_down_rush: True when the play is a rush on an early down.
-  end.ExpScoreDiff: ESPN's `ExpScoreDiff` value for the play state at the end of the play.
-  end.ExpScoreDiff_Time_Ratio: ESPN's `ExpScoreDiff_Time_Ratio` value for the play state at the end of the play.
-  end.TimeSecsRem: ESPN's `TimeSecsRem` value for the play state at the end of the play.
-  end.adj_TimeSecsRem: ESPN's `adj_TimeSecsRem` value for the play state at the end of the play.
-  end.awayScore: ESPN's `awayScore` value for the play state at the end of the play.
-  end.awayTeamTimeouts: ESPN's `awayTeamTimeouts` value for the play state at the end of the play.
-  end.defPosTeamTimeouts: ESPN's `defPosTeamTimeouts` value for the play state at the end of the play.
-  end.def_pos_team.id: ESPN's `def_pos_team.id` value for the play state at the end of the play.
-  end.def_pos_team.name: ESPN's `def_pos_team.name` value for the play state at the end of the play.
-  end.def_pos_team_score: ESPN's `def_pos_team_score` value for the play state at the end of the play.
-  end.distance: ESPN's `distance` value for the play state at the end of the play.
-  end.down: ESPN's `down` value for the play state at the end of the play.
-  end.downDistanceText: ESPN's `downDistanceText` value for the play state at the end of the play.
-  end.elapsed_share: ESPN's `elapsed_share` value for the play state at the end of the play.
-  end.homeScore: ESPN's `homeScore` value for the play state at the end of the play.
-  end.homeTeamTimeouts: ESPN's `homeTeamTimeouts` value for the play state at the end of the play.
-  end.is_home: ESPN's `is_home` value for the play state at the end of the play.
-  end.posTeamTimeouts: ESPN's `posTeamTimeouts` value for the play state at the end of the play.
-  end.pos_score_diff: ESPN's `pos_score_diff` value for the play state at the end of the play.
-  end.pos_team.id: ESPN's `pos_team.id` value for the play state at the end of the play.
-  end.pos_team.name: ESPN's `pos_team.name` value for the play state at the end of the play.
-  end.pos_team_receives_2H_kickoff: ESPN's `pos_team_receives_2H_kickoff` value for the play state at the end of the play.
-  end.pos_team_score: ESPN's `pos_team_score` value for the play state at the end of the play.
-  end.pos_team_spread: ESPN's `pos_team_spread` value for the play state at the end of the play.
-  end.possessionText: ESPN's `possessionText` value for the play state at the end of the play.
-  end.shortDownDistanceText: ESPN's `shortDownDistanceText` value for the play state at the end of the play.
-  end.spread_time: ESPN's `spread_time` value for the play state at the end of the play.
-  end.team.id: ESPN's `team.id` value for the play state at the end of the play.
-  end.yard: ESPN's `yard` value for the play state at the end of the play.
-  end.yardLine: ESPN's `yardLine` value for the play state at the end of the play.
-  end.yardsToEndzone: ESPN's `yardsToEndzone` value for the play state at the end of the play.
-  end_state_missing: Flag that ESPN's end-of-play state (end.team.id) was absent and the end state was imputed.
-  fg_attempt: True when the play was a field-goal attempt.
-  fg_block_player_id: ESPN athlete id of the player who blocked the field goal.
-  fg_kicker_player_id: ESPN athlete id of the field-goal kicker.
-  fg_return_player_id: ESPN athlete id of the player who returned the blocked or missed field goal.
-  fg_team: Team id attempting the field goal (the kicking team).
-  fg_wp: Make-probability-weighted win probability of attempting the field goal.
-  fg_wp_diff: fg_wp minus the recommended option's WP (0 when the field goal is the recommendation, otherwise <= 0).
-  firstHalfKickoffTeamId: ESPN id of the team that received the opening kickoff.
-  first_down_created: True when the play produced a first down for the offense.
-  first_down_prob: Modeled probability of converting the fourth down when going for it.
-  forced_fumble: True when the defense forced a fumble on the play.
-  forced_fumble_team: Team id credited with forcing the fumble -- the side opposite the fumbling player (the covering team
-    on returns).
-  fourth_down_recommendation: Max-WP fourth-down choice among "go", "punt", and "field_goal".
-  fumble_or_muff: Whether the play includes a fumble or a muffed kick or punt (widened beyond ESPN's fumble play types).
-  fumble_recovered: True when a fumble on the play was recovered.
-  fumble_recovery_team: Team id that recovered the fumble or muff, from parsed text with a giveaway / own-recovery fallback.
-  fumbling_team: Team id of the side that fumbled or muffed the ball, parsed from the play text.
-  gameSpread: Point spread used as an input to the win-probability model.
-  gameSpreadAvailable: True when a spread was available for the game.
-  go_boost: 'cfb4th''s headline number: 100 * (go_wp - max(fg_wp, punt_wp)), in percentage points.'
-  go_wp: 'Win probability from going for it on fourth down: conversion-probability-weighted mean of the success and failure
-    states (cfb4th port).'
-  go_wp_diff: go_wp minus the recommended option's WP (0 when going for it is the recommendation, otherwise <= 0).
-  havoc: 'True when the defense disrupted the play: a pass breakup, tackle for loss, interception or forced fumble.'
-  highlight_run: True when the rush gained 8 or more yards.
-  highlight_yards: Second-level plus open-field yards -- the yardage credited to the carrier.
-  homeFavorite: True when the home team was favoured by the spread.
-  homeTeamAbbrev: ESPN's home-team Abbrev for the game, stamped on every play.
-  homeTeamId: ESPN's home-team Id for the game, stamped on every play.
-  homeTeamMascot: ESPN's home-team Mascot for the game, stamped on every play.
-  homeTeamName: ESPN's home-team Name for the game, stamped on every play.
-  homeTeamNameAlt: ESPN's home-team NameAlt for the game, stamped on every play.
-  homeTeamSpread: ESPN's home-team Spread for the game, stamped on every play.
-  homeTimeoutCalled: True when the home team called a timeout on the play.
-  home_wp_after_naive: End-of-play naive win probability mapped to the home team.
-  home_wp_before_naive: Pre-snap naive win probability mapped to the home team.
-  int_turnover: Whether the play is an interception giveaway.
-  interception_team: Team id credited with the interception (the defense).
-  isPenalty: ESPN's per-play flag that a penalty occurred on the play.
-  isTurnover: ESPN's per-play turnover flag as shipped in the plays feed (broader than the giveaway-based is_turnover derivation).
-  is_blocked_fg_turnover: Blocked-field-goal possession loss (blocked-FG TD, or the defense recovered); kept out of is_turnover
-    to match ESPN's giveaway-only box.
-  is_blocked_punt_turnover: Blocked-punt possession loss (blocked-punt TD, or the defense recovered); kept out of is_turnover
-    to match ESPN's giveaway-only box.
-  is_def_pos_team_turnover: Whether the defending team gave the ball back via a lost fumble.
-  is_pos_team_turnover: Whether the possession team committed a giveaway (interception or fumble lost).
-  is_st_turnover: Whether the giveaway happened on a special-teams play (kick or punt snap, or a return).
-  kick_return_team: Team id of the kick-returning side.
-  kicking_team: Team id of the kicking team on kickoff, punt, and field-goal plays.
-  kickoff_player_id: ESPN athlete id of the player kicking off.
-  kickoff_return_player_id: ESPN athlete id of the kickoff returner.
-  kneel_down: Whether the play is an offensive kneel, from explicit kneel text plus an end-of-half TEAM-rush heuristic.
-  lag_EP_end: Value of EP_end on the previous play, used for sequence-aware derivations.
-  lag_HA_score_diff: Value of HA_score_diff on the previous play, used for sequence-aware derivations.
-  lag_awayScore: Value of awayScore on the previous play, used for sequence-aware derivations.
-  lag_change_of_pos_team: Value of change_of_pos_team on the previous play, used for sequence-aware derivations.
-  lag_half: Value of half on the previous play, used for sequence-aware derivations.
-  lag_homeScore: Value of homeScore on the previous play, used for sequence-aware derivations.
-  lag_pos_score_diff: Value of pos_score_diff on the previous play, used for sequence-aware derivations.
-  lag_pos_team: Value of pos_team on the previous play, used for sequence-aware derivations.
-  lag_scoringPlay: Value of scoringPlay on the previous play, used for sequence-aware derivations.
-  late_down: True when the play is a scrimmage play on third or fourth down.
-  late_down_pass: True when the play is a pass on a late down.
-  late_down_rush: True when the play is a rush on a late down.
-  lead_half: Value of half on the next play, used for sequence-aware derivations.
-  lead_play_type: Value of play_type on the next play, used for sequence-aware derivations.
-  lead_pos_team: Value of pos_team on the next play, used for sequence-aware derivations.
-  lead_pos_team2: Value of pos_team 2 plays ahead, used for sequence-aware derivations.
-  lead_scoringPlay: Value of scoringPlay on the next play, used for sequence-aware derivations.
-  lead_start_distance: Value of start_distance on the next play, used for sequence-aware derivations.
-  lead_start_down: Value of start_down on the next play, used for sequence-aware derivations.
-  lead_start_team: Value of start_team on the next play, used for sequence-aware derivations.
-  lead_start_yardsToEndzone: Value of start_yardsToEndzone on the next play, used for sequence-aware derivations.
-  lead_text: Value of text on the next play, used for sequence-aware derivations.
-  lead_wp_before: Value of wp_before on the next play, used for sequence-aware derivations.
-  lead_wp_before2: Value of wp_before 2 plays ahead, used for sequence-aware derivations.
-  lead_wp_before2_naive: Pre-snap naive win probability two plays ahead, used where the immediately following row is a non-play.
-  lead_wp_before_naive: Next play's pre-snap naive win probability, used in the end-of-half and change-of-possession adjustments.
-  line_yards: 'Yards credited to the offensive line on a rush, using the standard sliding scale: 1.2x the capped yardage on
-    a loss, all of it through 3 yards, half of each yard from 4 to 8, and a 5.5-yard ceiling beyond that.'
-  make_fg_wp: Win probability given the field-goal attempt is made.
-  miss_fg_wp: Win probability given the field-goal attempt misses.
-  net_HA_score_pts: Net points the play added to the home-minus-away score margin.
-  new_distance: Distance to go after the play, including any penalty enforcement.
-  new_down: Down after the play, including any penalty enforcement.
-  non_fumble_sack: True when the play was a sack that did not produce a fumble.
-  open_field_yards: Rushing yards gained beyond 8, credited to the ball carrier rather than the line.
-  opp_highlight_yards: Highlight yards earned on opportunity runs, isolating carrier production on carries where the blocking
-    succeeded. Assets published before the 2026-08 fix are identically 0 here, because the inverted opportunity_run gate could
-    never co-occur with non-zero highlight yards.
-  opportunity_run: True when a rush reached 4 yards -- the carries on which the blocking did its job. Matches cfbfastR's espn_cfb_15
-    definition. Assets published before the 2026-08 fix carry the inverted (4 yards or fewer) flag.
-  overUnder: Over/under total used as a model input.
-  pass_breakup: True when a defender broke up the pass.
-  pass_breakup_team: Team id credited with the pass breakup (the defense).
-  pass_depth: Thrown-pass depth parsed from ESPN play text ("short" or "deep"); null when the text omits it (sacks, screens,
-    pre-2025 text).
-  pass_direction: Pass direction parsed from ESPN play text ("left", "middle", or "right"); null when the text omits it.
-  pass_epa: EPA credited to the play when it is a pass.
-  pass_weight: Weighting applied to the pass component of the play.
-  passing_down: True when the offense is behind schedule for the series -- second down needing 8 or more, or third/fourth
-    down needing 5 or more.
-  pen_epa: EPA attributable to a penalty on the play.
-  pen_weight: Weighting applied to the penalty component of the play.
-  penalized_team: Team id the penalty was assessed against, from the home/away text resolver with a foul-direction fallback.
-  penalty_assessed_on_kickoff: Whether a penalty was assessed on a kickoff; such plays take the kickoff/touchback win-probability
-    handling.
-  penalty_in_text: True when the play description mentions a penalty.
-  penalty_yards_signed: Penalty yardage parsed from the play text with era-aware bounds; the printed sign is retained but
-    is not a reliable enforcement direction.
-  period.number: Period (quarter) number in which the play occurred.
-  pointAfterAttempt.abbreviation: ESPN abbreviation of the point-after attempt type; drives the extra-point / two-point result
-    derivation.
-  pointAfterAttempt.id: ESPN identifier for the point-after attempt type on the scoring play.
-  pointAfterAttempt.text: ESPN description of the point-after attempt and its result.
-  pointAfterAttempt.value: Points ESPN credits for the point-after attempt (1.0 made extra point, 2.0 made two-point try).
-  pos_fumble_lost: Whether the possession team fumbled and lost the ball.
-  pos_score_diff_end: Score differential from the possessing team's perspective at the end of the play.
-  power_rush_attempt: True when the play is a short-yardage power rushing attempt.
-  power_rush_success: True when a power rushing attempt gained the yardage needed.
-  prob_2pt: Two-point conversion probability from the bundled CFB two-point model.
-  prog_drive_EPA: Cumulative EPA accrued by the drive up to and including this play.
-  prog_drive_WPA: Cumulative win-probability added by the drive up to and including this play.
-  punt_block_player_id: ESPN athlete id of the player who blocked the punt.
-  punt_block_return_player_id: ESPN athlete id of the player who returned the blocked punt.
-  punt_return_player_id: ESPN athlete id of the punt returner.
-  punt_return_team: Team id of the punt-returning side.
-  punt_team: Team id punting the ball (the kicking team).
-  punt_wp: Win probability of punting, from the bundled punt-outcome distribution.
-  punt_wp_diff: punt_wp minus the recommended option's WP (0 when punting is the recommendation, otherwise <= 0).
-  qb_hurry: Whether ESPN's play text says the quarterback was hurried into the throw ("hurried by ...").
-  qbr_epa: EPA variant used as an input to the QBR calculation.
-  recovery_team: Team id parsed from the play text as recovering the fumble or muff.
-  recovery_team_2: Team id of the second recovery in a multi-recovery scramble, parsed from the play text.
-  rush_direction: Rush direction parsed from ESPN play text ("left", "middle", or "right"); null when the text omits it.
-  rush_epa: EPA credited to the play when it is a rush.
-  rush_weight: Weighting applied to the rush component of the play.
-  sack_epa: EPA credited to the play when it is a sack.
-  sack_player_id2: ESPN athlete id of the second sacker on a split sack (regex fallback for an ESPN sidecar blind spot).
-  sack_team: Team id credited with the sack (the defense).
-  sack_weight: Weighting applied to the sack component of the play.
-  scoringPlay: ESPN flag marking the play as a scoring play.
-  scoringType.abbreviation: ESPN's abbreviation for the scoring type.
-  scoringType.displayName: ESPN's display label for the scoring type.
-  scoringType.name: ESPN's name for the scoring type (e.g. touchdown, field goal).
-  scrimmage_play: True when the play is a play from scrimmage rather than a special-teams or administrative row.
-  seasonType: ESPN season type for the game (2 = regular season, 3 = postseason).
-  second_level_yards: Rushing yards earned from 4 to 8, split evenly between line and carrier under the line-yards decomposition.
-  short_rush_attempt: True when the play is a rush in a short-yardage situation.
-  short_rush_success: True when a short-yardage rush gained the yardage needed.
-  standard_down: True when the offense is on schedule for the series -- first down, second down needing fewer than 8, or third/fourth
-    down needing fewer than 5.
-  start.ExpScoreDiff: ESPN's `ExpScoreDiff` value for the play state at the start of the play.
-  start.ExpScoreDiff_Time_Ratio: ESPN's `ExpScoreDiff_Time_Ratio` value for the play state at the start of the play.
-  start.ExpScoreDiff_Time_Ratio_touchback: ESPN's `ExpScoreDiff_Time_Ratio_touchback` value for the play state at the start
-    of the play.
-  start.ExpScoreDiff_touchback: ESPN's `ExpScoreDiff_touchback` value for the play state at the start of the play.
-  start.TimeSecsRem: ESPN's `TimeSecsRem` value for the play state at the start of the play.
-  start.adj_TimeSecsRem: ESPN's `adj_TimeSecsRem` value for the play state at the start of the play.
-  start.awayScore: ESPN's `awayScore` value for the play state at the start of the play.
-  start.awayTeamTimeouts: ESPN's `awayTeamTimeouts` value for the play state at the start of the play.
-  start.defPosTeamTimeouts: ESPN's `defPosTeamTimeouts` value for the play state at the start of the play.
-  start.def_pos_team.id: ESPN's `def_pos_team.id` value for the play state at the start of the play.
-  start.def_pos_team.name: ESPN's `def_pos_team.name` value for the play state at the start of the play.
-  start.def_pos_team_score: ESPN's `def_pos_team_score` value for the play state at the start of the play.
-  start.distance: ESPN's `distance` value for the play state at the start of the play.
-  start.down: ESPN's `down` value for the play state at the start of the play.
-  start.downDistanceText: ESPN's `downDistanceText` value for the play state at the start of the play.
-  start.elapsed_share: ESPN's `elapsed_share` value for the play state at the start of the play.
-  start.homeScore: ESPN's `homeScore` value for the play state at the start of the play.
-  start.homeTeamTimeouts: ESPN's `homeTeamTimeouts` value for the play state at the start of the play.
-  start.is_home: ESPN's `is_home` value for the play state at the start of the play.
-  start.posTeamTimeouts: ESPN's `posTeamTimeouts` value for the play state at the start of the play.
-  start.pos_score_diff: ESPN's `pos_score_diff` value for the play state at the start of the play.
-  start.pos_team.id: ESPN's `pos_team.id` value for the play state at the start of the play.
-  start.pos_team.name: ESPN's `pos_team.name` value for the play state at the start of the play.
-  start.pos_team_receives_2H_kickoff: ESPN's `pos_team_receives_2H_kickoff` value for the play state at the start of the play.
-  start.pos_team_score: ESPN's `pos_team_score` value for the play state at the start of the play.
-  start.pos_team_spread: ESPN's `pos_team_spread` value for the play state at the start of the play.
-  start.possessionText: ESPN's `possessionText` value for the play state at the start of the play.
-  start.shortDownDistanceText: ESPN's `shortDownDistanceText` value for the play state at the start of the play.
-  start.spread_time: ESPN's `spread_time` value for the play state at the start of the play.
-  start.team.id: ESPN's `team.id` value for the play state at the start of the play.
-  start.yard: ESPN's `yard` value for the play state at the start of the play.
-  start.yardLine: ESPN's `yardLine` value for the play state at the start of the play.
-  start.yardsToEndzone: ESPN's `yardsToEndzone` value for the play state at the start of the play.
-  start.yardsToEndzone.touchback: ESPN's `yardsToEndzone.touchback` value for the play state at the start of the play.
-  statYardage: Yardage ESPN credits to the play for statistical purposes.
-  stopped_run: True when the rush was stopped at or behind the line of scrimmage.
-  td_check: Internal flag used while reconciling whether the play produced a touchdown.
-  teamParticipants: Raw ESPN team-level participants payload carried through from the plays feed (stringified).
-  text_dupe: True when the play description duplicates the previous row's text.
-  turnover_team: Team id charged with the giveaway on the play.
-  two_pt_recommendation: 'Point-after recommendation: "go_for_2" when two_pt_wp exceeds xp_wp, otherwise "kick_xp".'
-  two_pt_wp: 'Win probability of going for two: conversion-probability-weighted mean of the 2-point and 0-point outcomes (cfb4th
-    port).'
-  two_pt_wp_diff: two_pt_wp minus xp_wp; positive favors going for two.
-  type.abbreviation: ESPN's abbreviation for the play type.
-  type.id: ESPN's numeric identifier for the play type.
-  type.text: ESPN's text label for the play type.
-  under_2: Whether the play began with two minutes or less remaining in the half.
-  wp_after_naive: End-of-play possession-team win probability from the naive model, after the game-logic adjustment chain.
-  wp_before_naive: Pre-snap possession-team win probability from the spread-free (naive) WP model.
-  wp_fail: Mean win probability given the fourth-down attempt fails.
-  wp_succeed: Mean win probability across yardage outcomes given the fourth-down attempt converts.
-  wp_touchback: Win probability the offense would have had starting from a touchback.
-  wp_touchback_naive: Naive-model win probability for the kickoff-touchback substitute state, used as the pre-snap WP on kickoffs.
-  wpa_naive: Win probability added on the play under the spread-free (naive) model.
-  xp_wp: Win probability of kicking the extra point, weighting the make by the empirical CFB extra-point make rate.
 load_cfb_pbp_r:
   away_team_pregame_elo: Away team's pregame Elo rating, carried on the cfbfastR-shaped schema.
   home_team_pregame_elo: Home team's pregame Elo rating, carried on the cfbfastR-shaped schema.
@@ -6816,63 +6427,6 @@ load_cfb_play_participants:
   tackler_player_name: Display name of a defender credited with the tackle -- the FIRST participant in that role on the play.
   tackler_player_names: List of the display names of EVERY participant credited as a defender credited with the tackle on
     the play, so multi-entry roles such as split sacks or gang tackles are not collapsed to one.
-load_cfb_player_box:
-  adjQBR: Adjusted Total QBR for the quarterback.
-  completions/passingAttempts: Completions and pass attempts, as ESPN's combined string.
-  defensiveTouchdowns: Touchdowns the player scored on defense (ESPN box score).
-  extraPointsMade/extraPointAttempts: Extra points made and attempted, as ESPN's combined string.
-  fieldGoalPct: Field-goal percentage.
-  fieldGoalsMade/fieldGoalAttempts: Field goals made and attempted, as ESPN's combined string.
-  fumbles: Number of times the player fumbled in the game (ESPN box score).
-  fumblesLost: Number of the player's fumbles lost to the opponent (ESPN box score).
-  fumblesRecovered: Number of fumbles the player recovered (ESPN box score).
-  grossAvgPuntYards: Gross average yards per punt, before return yardage.
-  hurries: Quarterback hurries credited to the player (ESPN box score).
-  interceptionTouchdowns: Touchdowns scored on interception returns.
-  interceptionYards: Yards returned on interceptions.
-  kickReturnTouchdowns: Kickoff returns the player took for touchdowns (ESPN box score).
-  kickReturnYards: Total kickoff-return yards by the player (ESPN box score).
-  kickReturns: Number of kickoff returns by the player (ESPN box score).
-  longFieldGoalMade: Longest field goal made, in yards.
-  longKickReturn: Player's longest kickoff return of the game, in yards (ESPN box score).
-  longPunt: Longest punt of the game, in yards.
-  longPuntReturn: Longest punt return of the game, in yards.
-  longReception: Longest reception of the game, in yards.
-  longRushing: Longest rush of the game, in yards.
-  passesDefended: Passes the player broke up or defended (ESPN box score).
-  passingTouchdowns: Passing touchdowns.
-  passingYards: Net passing yards gained.
-  puntReturnTouchdowns: Touchdowns scored on punt returns.
-  puntReturnYards: Yards gained on punt returns.
-  puntReturns: Punt returns attempted.
-  puntYards: Total punt yards.
-  punts: Punts attempted.
-  puntsInside20: Punts downed inside the opponent 20-yard line.
-  receivingTouchdowns: Receiving touchdowns.
-  receivingYards: Receiving yards gained.
-  rushingAttempts: Rushing attempts.
-  rushingTouchdowns: Rushing touchdowns.
-  rushingYards: Net rushing yards gained.
-  soloTackles: Player's solo (unassisted) tackles (ESPN box score).
-  stat_1: First value of ESPN's raw athlete stats array, written only when the category's key list does not line up with the
-    stats list; on those rows the named per-category columns are all null.
-  stat_2: Second value of ESPN's raw athlete stats array, written only on rows where the category keys did not line up and
-    the named columns could not be filled.
-  stat_3: Third value of ESPN's raw athlete stats array, written only on rows where the category keys did not line up and
-    the named columns could not be filled.
-  stat_4: Fourth value of ESPN's raw athlete stats array, written only on rows where the category keys did not line up and
-    the named columns could not be filled.
-  stat_5: Fifth value of ESPN's raw athlete stats array, written only on rows where the category keys did not line up and
-    the named columns could not be filled.
-  tacklesForLoss: Player's tackles made behind the line of scrimmage (ESPN box score).
-  totalKickingPoints: Total points scored by kicking.
-  totalTackles: Player's total tackles, solo plus assisted (ESPN box score).
-  touchbacks: Punts or kickoffs that resulted in a touchback.
-  yardsPerKickReturn: Average yards per kickoff return for the player (ESPN box score).
-  yardsPerPassAttempt: Yards gained per pass attempt.
-  yardsPerPuntReturn: Yards gained per punt return.
-  yardsPerReception: Yards gained per reception.
-  yardsPerRushAttempt: Yards gained per rushing attempt.
 load_cfb_recruits:
   team_id_247: 247Sports' own team key for the recruit's committed or signed school; not interchangeable with the ESPN/CFBD
     team id.
@@ -6881,24 +6435,6 @@ load_cfb_returning_production:
   n_returning: Number of returning players counted in the returning-production calculation.
   off_returning: Share of the team's prior-season offensive production returning for the season.
   overall_returning: Usage-weighted blend of the offensive and defensive returning-production shares.
-load_cfb_team_info:
-  logo_2: URL of the team's alternate dark-background 500-pixel logo on ESPN's CDN, null for programs with no dark variant.
-  logos_10: URL of the team's logo variant in slot 10 of ESPN's team-info logo list; null when the team publishes fewer variants.
-  logos_11: URL of the team's logo variant in slot 11 of ESPN's team-info logo list; null when the team publishes fewer variants.
-  logos_12: URL of the team's logo variant in slot 12 of ESPN's team-info logo list; null when the team publishes fewer variants.
-  logos_13: URL of the team's logo variant in slot 13 of ESPN's team-info logo list; null when the team publishes fewer variants.
-  logos_14: URL of the team's logo variant in slot 14 of ESPN's team-info logo list; null when the team publishes fewer variants.
-  logos_15: URL of the team's logo variant in slot 15 of ESPN's team-info logo list; null when the team publishes fewer variants.
-  logos_16: URL of the team's logo variant in slot 16 of ESPN's team-info logo list; null when the team publishes fewer variants.
-  logos_3: URL of the team's logo variant in slot 3 of ESPN's team-info logo list; null when the team publishes fewer variants.
-  logos_4: URL of the team's logo variant in slot 4 of ESPN's team-info logo list; null when the team publishes fewer variants.
-  logos_5: URL of the team's logo variant in slot 5 of ESPN's team-info logo list; null when the team publishes fewer variants.
-  logos_6: URL of the team's logo variant in slot 6 of ESPN's team-info logo list; null when the team publishes fewer variants.
-  logos_7: URL of the team's logo variant in slot 7 of ESPN's team-info logo list; null when the team publishes fewer variants.
-  logos_8: URL of the team's logo variant in slot 8 of ESPN's team-info logo list; null when the team publishes fewer variants.
-  logos_9: URL of the team's logo variant in slot 9 of ESPN's team-info logo list; null when the team publishes fewer variants.
-  twitter: The football program's Twitter/X handle including the leading at sign, populated for only a minority of listed
-    teams.
 load_cfb_team_talent:
   blue_chip_ratio: Share of the team's counted signees rated four or five stars over the rolling class window.
   n_recruits: Number of signees counted in the blue-chip-ratio window.
@@ -7725,33 +7261,6 @@ load_ncaa_mbb_lineups:
   tp_ast: Assisted three-point makes by the lineup during the stint.
   tpa: Three-pointers attempted by the lineup during the stint.
   tpm: Three-pointers made by the lineup during the stint.
-load_ncaa_mbb_matchup_stints:
-  away_1: Name of the away team's on-floor player in lineup slot 1 for the stint.
-  away_2: Name of the away team's on-floor player in lineup slot 2 for the stint.
-  away_3: Name of the away team's on-floor player in lineup slot 3 for the stint.
-  away_4: Name of the away team's on-floor player in lineup slot 4 for the stint.
-  away_5: Name of the away team's on-floor player in lineup slot 5 for the stint.
-  away_lineup: Delimited names of the away five on the floor during the stint.
-  away_lineup_key: Sorted player-code key for the away five on the floor.
-  away_pts: Points scored by the away team during the stint.
-  end_away_score: Away team score when the stint ended.
-  end_home_score: Home team score when the stint ended.
-  end_seconds: Elapsed game seconds at which the stint ended.
-  game_stint_num: Sequential stint number within the game, incremented at every substitution by either team.
-  home_1: Name of the home team's on-floor player in lineup slot 1 for the stint.
-  home_2: Name of the home team's on-floor player in lineup slot 2 for the stint.
-  home_3: Name of the home team's on-floor player in lineup slot 3 for the stint.
-  home_4: Name of the home team's on-floor player in lineup slot 4 for the stint.
-  home_5: Name of the home team's on-floor player in lineup slot 5 for the stint.
-  home_lineup: Delimited names of the home five on the floor during the stint.
-  home_lineup_key: Sorted player-code key for the home five on the floor.
-  home_pts: Points scored by the home team during the stint.
-  matchup_key: Combined home-plus-away lineup key identifying the ten-player matchup on the floor.
-  n_events: Number of play-by-play events falling within the stint.
-  n_possessions: Number of possessions falling within the stint.
-  start_away_score: Away team score when the stint began.
-  start_home_score: Home team score when the stint began.
-  start_seconds: Elapsed game seconds at which the stint began.
 load_ncaa_mbb_pbp:
   assist_player: Name of the player credited with the assist on a made shot, when present.
   away_1: Name of the away team's on-floor player in lineup slot 1 for the event, from the substitution walk-forward.
@@ -7838,17 +7347,17 @@ load_ncaa_mbb_player_box:
   efg_pct: Effective field-goal percentage, weighting made threes at 1.5.
   efg_pct_half: Effective field-goal percentage in halfcourt possessions.
   efg_pct_trans: Effective field-goal percentage in transition possessions.
-  efg_pct_unast: Effective field-goal percentage in the unassisted split (makes not credited with an assist).
+  efg_pct_unast: Effective field-goal percentage in the unassisted split (makes for which no assist was credited).
   fg_pct_half: Field-goal percentage in halfcourt possessions.
   fg_pct_trans: Field-goal percentage in transition possessions.
-  fg_pct_unast: Field-goal percentage in the unassisted split (makes not credited with an assist).
+  fg_pct_unast: Field-goal percentage in the unassisted split (makes for which no assist was credited).
   fga_half: Field goals attempted in halfcourt possessions.
   fga_trans: Field goals attempted in transition possessions.
-  fga_unast: Field goals attempted in the unassisted split (makes not credited with an assist).
+  fga_unast: Field goals attempted in the unassisted split (makes for which no assist was credited).
   fgm_ast: Assisted field-goal makes.
   fgm_half: Field goals made in halfcourt possessions.
   fgm_trans: Field goals made in transition possessions.
-  fgm_unast: Field goals made in the unassisted split (makes not credited with an assist).
+  fgm_unast: Field goals made in the unassisted split (makes for which no assist was credited).
   ft_pct_half: Free-throw percentage in halfcourt possessions.
   ft_pct_trans: Free-throw percentage in transition possessions.
   fta_half: Free throws attempted in halfcourt possessions.
@@ -7859,16 +7368,16 @@ load_ncaa_mbb_player_box:
   mid_pct: Field-goal percentage on mid-range attempts.
   mid_pct_half: Mid-range field-goal percentage in halfcourt possessions.
   mid_pct_trans: Mid-range field-goal percentage in transition possessions.
-  mid_pct_unast: Mid-range field-goal percentage in the unassisted split (makes not credited with an assist).
+  mid_pct_unast: Mid-range field-goal percentage in the unassisted split (makes for which no assist was credited).
   mida: Mid-range (non-rim two-point) shots attempted.
   mida_half: Mid-range shots attempted in halfcourt possessions.
   mida_trans: Mid-range shots attempted in transition possessions.
-  mida_unast: Mid-range shots attempted in the unassisted split (makes not credited with an assist).
+  mida_unast: Mid-range shots attempted in the unassisted split (makes for which no assist was credited).
   midm: Mid-range (non-rim two-point) shots made.
   midm_ast: Assisted mid-range makes.
   midm_half: Mid-range shots made in halfcourt possessions.
   midm_trans: Mid-range shots made in transition possessions.
-  midm_unast: Mid-range shots made in the unassisted split (makes not credited with an assist).
+  midm_unast: Mid-range shots made in the unassisted split (makes for which no assist was credited).
   mins: Minutes played, derived from the lineup walk-forward through the play-by-play.
   o_poss: Offensive possessions the player was on the floor for.
   orb: Offensive rebounds.
@@ -7893,16 +7402,16 @@ load_ncaa_mbb_player_box:
   rim_pct: Field-goal percentage on rim attempts.
   rim_pct_half: Rim field-goal percentage in halfcourt possessions.
   rim_pct_trans: Rim field-goal percentage in transition possessions.
-  rim_pct_unast: Rim field-goal percentage in the unassisted split (makes not credited with an assist).
+  rim_pct_unast: Rim field-goal percentage in the unassisted split (makes for which no assist was credited).
   rima: Rim shots (dunks, layups, hooks, tip-ins) attempted.
   rima_half: Rim shots attempted in halfcourt possessions.
   rima_trans: Rim shots attempted in transition possessions.
-  rima_unast: Rim shots attempted in the unassisted split (makes not credited with an assist).
+  rima_unast: Rim shots attempted in the unassisted split (makes for which no assist was credited).
   rimm: Rim shots (dunks, layups, hooks, tip-ins) made.
   rimm_ast: Assisted rim makes.
   rimm_half: Rim shots made in halfcourt possessions.
   rimm_trans: Rim shots made in transition possessions.
-  rimm_unast: Rim shots made in the unassisted split (makes not credited with an assist).
+  rimm_unast: Rim shots made in the unassisted split (makes for which no assist was credited).
   stl_half: Steals in halfcourt possessions.
   stl_trans: Steals in transition possessions.
   team_espn_team_id: ESPN team identifier of the player's team, via the NCAA-to-ESPN crosswalk.
@@ -7912,16 +7421,16 @@ load_ncaa_mbb_player_box:
   tp_pct: Three-point field-goal percentage.
   tp_pct_half: Three-point percentage in halfcourt possessions.
   tp_pct_trans: Three-point percentage in transition possessions.
-  tp_pct_unast: Three-point percentage in the unassisted split (makes not credited with an assist).
+  tp_pct_unast: Three-point percentage in the unassisted split (makes for which no assist was credited).
   tpa: Three-point field goals attempted.
   tpa_half: Three-pointers attempted in halfcourt possessions.
   tpa_trans: Three-pointers attempted in transition possessions.
-  tpa_unast: Three-pointers attempted in the unassisted split (makes not credited with an assist).
+  tpa_unast: Three-pointers attempted in the unassisted split (makes for which no assist was credited).
   tpm: Three-point field goals made.
   tpm_ast: Assisted three-point makes.
   tpm_half: Three-pointers made in halfcourt possessions.
   tpm_trans: Three-pointers made in transition possessions.
-  tpm_unast: Three-pointers made in the unassisted split (makes not credited with an assist).
+  tpm_unast: Three-pointers made in the unassisted split (makes for which no assist was credited).
   ts_pct_half: True-shooting percentage in halfcourt possessions.
   ts_pct_trans: True-shooting percentage in transition possessions.
 load_ncaa_mbb_possessions:
@@ -8112,33 +7621,6 @@ load_ncaa_wbb_lineups:
   tp_ast: Assisted three-point makes by the lineup during the stint.
   tpa: Three-pointers attempted by the lineup during the stint.
   tpm: Three-pointers made by the lineup during the stint.
-load_ncaa_wbb_matchup_stints:
-  away_1: Name of the away team's on-floor player in lineup slot 1 for the stint.
-  away_2: Name of the away team's on-floor player in lineup slot 2 for the stint.
-  away_3: Name of the away team's on-floor player in lineup slot 3 for the stint.
-  away_4: Name of the away team's on-floor player in lineup slot 4 for the stint.
-  away_5: Name of the away team's on-floor player in lineup slot 5 for the stint.
-  away_lineup: Delimited names of the away five on the floor during the stint.
-  away_lineup_key: Sorted player-code key for the away five on the floor.
-  away_pts: Points scored by the away team during the stint.
-  end_away_score: Away team score when the stint ended.
-  end_home_score: Home team score when the stint ended.
-  end_seconds: Elapsed game seconds at which the stint ended.
-  game_stint_num: Sequential stint number within the game, incremented at every substitution by either team.
-  home_1: Name of the home team's on-floor player in lineup slot 1 for the stint.
-  home_2: Name of the home team's on-floor player in lineup slot 2 for the stint.
-  home_3: Name of the home team's on-floor player in lineup slot 3 for the stint.
-  home_4: Name of the home team's on-floor player in lineup slot 4 for the stint.
-  home_5: Name of the home team's on-floor player in lineup slot 5 for the stint.
-  home_lineup: Delimited names of the home five on the floor during the stint.
-  home_lineup_key: Sorted player-code key for the home five on the floor.
-  home_pts: Points scored by the home team during the stint.
-  matchup_key: Combined home-plus-away lineup key identifying the ten-player matchup on the floor.
-  n_events: Number of play-by-play events falling within the stint.
-  n_possessions: Number of possessions falling within the stint.
-  start_away_score: Away team score when the stint began.
-  start_home_score: Home team score when the stint began.
-  start_seconds: Elapsed game seconds at which the stint began.
 load_ncaa_wbb_pbp:
   assist_player: Name of the player credited with the assist on a made shot, when present.
   away_1: Name of the away team's on-floor player in lineup slot 1 for the event, from the substitution walk-forward.
@@ -8225,17 +7707,17 @@ load_ncaa_wbb_player_box:
   efg_pct: Effective field-goal percentage, weighting made threes at 1.5.
   efg_pct_half: Effective field-goal percentage in halfcourt possessions.
   efg_pct_trans: Effective field-goal percentage in transition possessions.
-  efg_pct_unast: Effective field-goal percentage in the unassisted split (makes not credited with an assist).
+  efg_pct_unast: Effective field-goal percentage in the unassisted split (makes for which no assist was credited).
   fg_pct_half: Field-goal percentage in halfcourt possessions.
   fg_pct_trans: Field-goal percentage in transition possessions.
-  fg_pct_unast: Field-goal percentage in the unassisted split (makes not credited with an assist).
+  fg_pct_unast: Field-goal percentage in the unassisted split (makes for which no assist was credited).
   fga_half: Field goals attempted in halfcourt possessions.
   fga_trans: Field goals attempted in transition possessions.
-  fga_unast: Field goals attempted in the unassisted split (makes not credited with an assist).
+  fga_unast: Field goals attempted in the unassisted split (makes for which no assist was credited).
   fgm_ast: Assisted field-goal makes.
   fgm_half: Field goals made in halfcourt possessions.
   fgm_trans: Field goals made in transition possessions.
-  fgm_unast: Field goals made in the unassisted split (makes not credited with an assist).
+  fgm_unast: Field goals made in the unassisted split (makes for which no assist was credited).
   ft_pct_half: Free-throw percentage in halfcourt possessions.
   ft_pct_trans: Free-throw percentage in transition possessions.
   fta_half: Free throws attempted in halfcourt possessions.
@@ -8246,16 +7728,16 @@ load_ncaa_wbb_player_box:
   mid_pct: Field-goal percentage on mid-range attempts.
   mid_pct_half: Mid-range field-goal percentage in halfcourt possessions.
   mid_pct_trans: Mid-range field-goal percentage in transition possessions.
-  mid_pct_unast: Mid-range field-goal percentage in the unassisted split (makes not credited with an assist).
+  mid_pct_unast: Mid-range field-goal percentage in the unassisted split (makes for which no assist was credited).
   mida: Mid-range (non-rim two-point) shots attempted.
   mida_half: Mid-range shots attempted in halfcourt possessions.
   mida_trans: Mid-range shots attempted in transition possessions.
-  mida_unast: Mid-range shots attempted in the unassisted split (makes not credited with an assist).
+  mida_unast: Mid-range shots attempted in the unassisted split (makes for which no assist was credited).
   midm: Mid-range (non-rim two-point) shots made.
   midm_ast: Assisted mid-range makes.
   midm_half: Mid-range shots made in halfcourt possessions.
   midm_trans: Mid-range shots made in transition possessions.
-  midm_unast: Mid-range shots made in the unassisted split (makes not credited with an assist).
+  midm_unast: Mid-range shots made in the unassisted split (makes for which no assist was credited).
   mins: Minutes played, derived from the lineup walk-forward through the play-by-play.
   o_poss: Offensive possessions the player was on the floor for.
   orb: Offensive rebounds.
@@ -8280,16 +7762,16 @@ load_ncaa_wbb_player_box:
   rim_pct: Field-goal percentage on rim attempts.
   rim_pct_half: Rim field-goal percentage in halfcourt possessions.
   rim_pct_trans: Rim field-goal percentage in transition possessions.
-  rim_pct_unast: Rim field-goal percentage in the unassisted split (makes not credited with an assist).
+  rim_pct_unast: Rim field-goal percentage in the unassisted split (makes for which no assist was credited).
   rima: Rim shots (dunks, layups, hooks, tip-ins) attempted.
   rima_half: Rim shots attempted in halfcourt possessions.
   rima_trans: Rim shots attempted in transition possessions.
-  rima_unast: Rim shots attempted in the unassisted split (makes not credited with an assist).
+  rima_unast: Rim shots attempted in the unassisted split (makes for which no assist was credited).
   rimm: Rim shots (dunks, layups, hooks, tip-ins) made.
   rimm_ast: Assisted rim makes.
   rimm_half: Rim shots made in halfcourt possessions.
   rimm_trans: Rim shots made in transition possessions.
-  rimm_unast: Rim shots made in the unassisted split (makes not credited with an assist).
+  rimm_unast: Rim shots made in the unassisted split (makes for which no assist was credited).
   stl_half: Steals in halfcourt possessions.
   stl_trans: Steals in transition possessions.
   team_espn_team_id: ESPN team identifier of the player's team, via the NCAA-to-ESPN crosswalk.
@@ -8299,16 +7781,16 @@ load_ncaa_wbb_player_box:
   tp_pct: Three-point field-goal percentage.
   tp_pct_half: Three-point percentage in halfcourt possessions.
   tp_pct_trans: Three-point percentage in transition possessions.
-  tp_pct_unast: Three-point percentage in the unassisted split (makes not credited with an assist).
+  tp_pct_unast: Three-point percentage in the unassisted split (makes for which no assist was credited).
   tpa: Three-point field goals attempted.
   tpa_half: Three-pointers attempted in halfcourt possessions.
   tpa_trans: Three-pointers attempted in transition possessions.
-  tpa_unast: Three-pointers attempted in the unassisted split (makes not credited with an assist).
+  tpa_unast: Three-pointers attempted in the unassisted split (makes for which no assist was credited).
   tpm: Three-point field goals made.
   tpm_ast: Assisted three-point makes.
   tpm_half: Three-pointers made in halfcourt possessions.
   tpm_trans: Three-pointers made in transition possessions.
-  tpm_unast: Three-pointers made in the unassisted split (makes not credited with an assist).
+  tpm_unast: Three-pointers made in the unassisted split (makes for which no assist was credited).
   ts_pct_half: True-shooting percentage in halfcourt possessions.
   ts_pct_trans: True-shooting percentage in transition possessions.
 load_ncaa_wbb_possessions:
@@ -8546,10 +8028,6 @@ load_nhl_shootout:
     -- so treat it as an alternate spelling, not a canonical one.
   teamAbbrev.default: Three-letter code of the shooting player's team; null on the per-game summary row that instead carries
     the home and away shootout goal totals.
-load_pwhl_pbp:
-  skaters_away: Number of away skaters on the ice for the event, derived from HockeyTech shift data.
-  skaters_home: Number of home skaters on the ice for the event, derived from HockeyTech shift data.
-  strength_state_valid: Flag that the shift-derived strength state reconciles cleanly and can be trusted for this event.
 load_wbb_pbp:
   athlete_name_1: Display name of the first athlete in the ESPN play participants (e.g., the shooter on a shot attempt).
   athlete_name_2: Display name of the second athlete in the ESPN play participants (e.g., the assisting player), when present.
@@ -8712,13 +8190,6 @@ nil_100:
 nil_100_v2:
   person: Nested On3 person object for the ranked athlete (stringified).
   valuation: Athlete's On3 NIL valuation in dollars.
-nil_compliances_state:
-  current_rules: Text of the state's current NIL rules, as tracked by On3.
-  governing_rule_label: Name of the governing body or rule for NIL in the state.
-  governing_rule_url: URL of the governing NIL rule or policy document.
-  key: On3 RDB key for the state NIL-compliance record.
-  monetization_allowed: Whether the state allows high-school athletes to monetize their NIL.
-  state_key: On3 key of the U.S. state the compliance record covers.
 nil_rankings:
   person: Nested On3 person object for the ranked athlete (stringified).
   valuation: Athlete's On3 NIL valuation in dollars.
@@ -8750,23 +8221,6 @@ offense_summary:
 organizations_draft_ranking_summary:
   span_summary: Nested summary of the organization's draft ranking over the multi-year span (stringified).
   year_summary: Nested summary of the organization's draft ranking for the single year (stringified).
-organizations_drafted_players:
-  college_organization: Nested On3 organization object for the college the player attended (stringified).
-  compensatory: Whether the selection was a compensatory draft pick.
-  drafted_from_organization: Nested On3 organization object for the school the player was drafted out of (stringified).
-  forfeited: Whether the pick was forfeited.
-  high_school_organization: Nested On3 organization object for the player's high school (stringified).
-  key: On3 RDB key for the draft-pick record.
-  person: Nested On3 person object for the drafted player (stringified).
-  recruitment_key: On3 RDB recruitment key linking the draft pick back to the player's recruitment record.
-  supplementary: Whether the selection came in a supplemental draft.
-  through_organization_one: First intermediate organization the pick passed through in trades before being exercised (On3
-    RDB).
-  through_organization_three: Third intermediate organization the pick passed through in trades before being exercised (On3
-    RDB).
-  through_organization_two: Second intermediate organization the pick passed through in trades before being exercised (On3
-    RDB).
-  trading_organization: Pro organization that traded the pick away, when it changed hands (On3 RDB).
 organizations_drafts_by_stars_summary:
   draft_rank: Organization's national rank by draft production.
   five_star_summary: Nested draft summary for the organization's five-star recruits (stringified).
@@ -11527,11 +10981,6 @@ people_track_and_field_measurements:
   top_average_change_percent: Percent difference between the athlete's value and the Top300 average.
   verified: Whether On3 verified the measurement.
   verified_by_user_key: On3 user key of the staffer who verified the measurement.
-people_valuation_growth:
-  date_unix: Unix timestamp of the valuation snapshot.
-  nil_status: Status of the athlete's On3 NIL valuation at the snapshot (e.g. active, inactive).
-  valuation: Athlete's On3 NIL valuation in dollars at the snapshot.
-  valuation_change: Change in the NIL valuation versus the previous snapshot, in dollars.
 person_connections_connection_key:
   connected_person_key: On3 person key of the connected person.
   connected_person_sport: Nested athlete-sport profile of the connected person (stringified).
@@ -11716,13 +11165,6 @@ player_verified:
   sports: Sports the player is profiled in, as a stringified list.
   tier: On3 profile tier classification for the player.
   visibility: Profile visibility setting on On3.
-player_videos:
-  is_featured: Whether the video is featured on the player's On3 profile.
-  key: On3 RDB key for the video record.
-  person_key: On3 person key of the featured athlete.
-  person_sport: Nested athlete-sport profile the video is attached to (stringified).
-  source_url: Source URL of the hosted video.
-  thumbnail: URL of the video's thumbnail image.
 player_visit_center:
   sport: Nested On3 sport object for the visit-center entry (stringified).
   total_visits: Total number of school visits logged for the recruit.
@@ -13156,11 +12598,6 @@ sports247_site_pages_draft_pick:
   pro_team_name: Name of the professional team that made the pick.
   round: Draft round number (1-based) the pick belongs to.
   traded_from_team: Team the pick was traded from, when it changed hands.
-sports247_site_pages_event:
-  default_asset: Nested 247Sports image asset for the event (stringified).
-  default_name: Server-rendered display label for the entity.
-  event_group: Grouping or series the event belongs to (e.g. a camp circuit) on 247Sports.
-  key: Primary key of this entity (the id used in its `.json` route).
 sports247_site_pages_feed:
   main_text: Body text of the feed item.
   redirection_url: URL the feed item links out to.
@@ -13181,13 +12618,6 @@ sports247_site_pages_institution:
   state: FK -> State entity.
   telephone: Institution's telephone number.
   type: Institution type code (college / pro / high school).
-sports247_site_pages_location:
-  city_tax_rate: City income-tax rate for the location, carried on the 247Sports location record.
-  county_tax_rate: County income-tax rate for the location, carried on the 247Sports location record.
-  default_name: Server-rendered display label for the entity.
-  key: Primary key of this entity (the id used in its `.json` route).
-  region_name: Name of the region (state/province) for the location.
-  special_tax_rate: Special-district tax rate for the location, carried on the 247Sports location record.
 sports247_site_pages_player:
   bio: Player biography text authored on 247Sports.
   bio_or_default: Player bio text, falling back to a default blurb when none is authored.
@@ -13217,28 +12647,6 @@ sports247_site_pages_player:
   state_rank: Rank within home state for the class.
   twitter_contact: Player's Twitter/X handle on the 247Sports profile.
   user: 247Sports user account linked to the player profile (nested, stringified).
-sports247_site_pages_player_institution:
-  created_date: Date the player-institution record was created.
-  default_asset: Nested 247Sports image asset for the stint (stringified).
-  default_name: Server-rendered display label for the entity.
-  early_enrollee: Whether the player enrolled early at the institution.
-  early_signee: Whether the player signed in the early signing period.
-  end_year_or_current: Stint's end year, or the current year for an active stint.
-  end_year_or_expected: Stint's end year, or the expected end year for an active stint.
-  hero_asset: Nested 247Sports hero (banner) image asset for the stint (stringified).
-  institution: Nested 247Sports institution for the stint (stringified).
-  key: Primary key of this entity (the id used in its `.json` route).
-  lead_expert: 247Sports expert assigned as the lead on the recruitment (nested, stringified).
-  modified_date: Date the player-institution record was last modified.
-  next_institution_group: Grouping (e.g. conference/division) of the player's next institution, per 247Sports.
-  next_institution_type: Level of the player's next institution (e.g. college, professional), per 247Sports.
-  player_institution_evaluation: Nested 247Sports evaluation attached to this player-institution stint (stringified).
-  primary_player_sport: Nested 247Sports player-sport profile the stint belongs to (stringified).
-  primary_recruitment: Nested 247Sports record for the recruitment behind the stint (stringified).
-  start_year_or_expected: Stint's start year, or the expected start year for a future stint.
-  transfer_eligibility: Player's eligibility status for the transfer, per 247Sports.
-  transfer_institution: Nested institution involved in the player's transfer, for transfer-portal stints (stringified).
-  transfer_season: Season of the player's transfer, when applicable.
 sports247_site_pages_player_institution_evaluation:
   comparison_player: Established player the evaluator compares the prospect to.
   default_name: Server-rendered display label for the entity.
@@ -13263,114 +12671,6 @@ sports247_site_pages_player_institution_prediction:
   score: Expert accuracy score at time of prediction.
   updated_on: Date the prediction was last updated.
   user: 247Sports user account of the predictor (nested, stringified).
-sports247_site_pages_player_sport:
-  average_rank: Player's average rank across the tracked industry services.
-  class_year: Recruiting class year.
-  class_year_override: Override of the player's recruiting class year, when 247Sports reassigns it.
-  composite_rating: 247Sports Composite rating (industry blend).
-  composite_rating_or_default: 247Sports Composite rating, falling back to a default value when unrated.
-  composite_strength: Composite strength points (team-ranking weight).
-  current_player_sport_ranking: Nested current published ranking row for the player (stringified).
-  current_player_sport_year: Current ranking-cycle year for the player-sport profile.
-  default_name: Server-rendered display label for the entity.
-  espn_grade: ESPN source grade (industry composite input).
-  espn_index: ESPN index value for the player, as tracked by 247Sports.
-  espn_rank: Player's rank in the ESPN industry ranking, as tracked by 247Sports.
-  key: Primary key of this entity (the id used in its `.json` route).
-  local_index: 247Sports' own industry-index value for the player, alongside the Rivals and ESPN indexes.
-  player_institution: Nested player-institution stint the player-sport profile points to (stringified).
-  previous_recruitment: Nested record for the player's previous recruitment (stringified).
-  primary: Whether this is the player's primary sport.
-  primary_institution_prediction: Nested leading Crystal Ball institution prediction for the player (stringified).
-  primary_institution_prediction_percentage: Share of Crystal Ball predictions favoring the leading institution.
-  primary_player_position: Nested 247Sports record for the player's primary position (stringified).
-  primary_position: Player's primary position on the 247Sports profile.
-  primary_position_group: Position group the player's primary position belongs to.
-  rating: 247Sports rating string (0-1).
-  rating_or_default: 247Sports in-house rating, falling back to a default value when unrated.
-  recruitment: FK -> Recruitment aggregate for this player-sport.
-  rivals_grade: Rivals source grade (industry composite input).
-  rivals_index: Rivals index value for the player, as tracked by 247Sports.
-  rivals_rank: Player's rank in the Rivals industry ranking, as tracked by 247Sports.
-  secondary_institution_prediction: Nested second-place Crystal Ball institution prediction (stringified).
-  secondary_institution_prediction_percentage: Share of Crystal Ball predictions favoring the second-place institution.
-  show_unranked_rating: 247Sports display flag to show the rating even while the player is unranked.
-  sport: Nested 247Sports sport for the profile (stringified).
-  star_rating: Star tier (2-5).
-  unpublished_player_sport_ranking: Nested not-yet-published ranking row for the player (stringified).
-sports247_site_pages_player_sport_ranking:
-  committed_institution: FK -> committed Institution (null if uncommitted).
-  composite_group_rank: Player's rank within their position group by Composite rating.
-  composite_overall_rank: Player's national rank by 247Sports Composite rating.
-  composite_position_rank: Player's rank at their position by Composite rating.
-  composite_rating: Player's 247Sports Composite rating, blending the major services' ratings.
-  composite_state_rank: Player's rank within their home state by Composite rating.
-  composite_strength: 247Sports field describing the strength of the industry inputs behind the Composite rating.
-  default_name: Server-rendered display label for the entity.
-  institution: Nested institution the player was committed or signed to at ranking time (stringified).
-  institution_group: Grouping (e.g. conference/division) of the player's institution, per 247Sports.
-  key: Primary key of this entity (the id used in its `.json` route).
-  overall_rank: Overall national rank in the snapshot.
-  platoon: 247Sports platoon (side-of-ball grouping) identifier on the ranking row.
-  player_sport: Nested player-sport profile the ranking row belongs to (stringified).
-  position_group_rank: Player's rank within their position group in the 247Sports ranking.
-  position_rank: Rank within position.
-  previous_player_sport_ranking: Nested prior-cycle ranking row for the player (stringified).
-  ranking: FK -> Ranking snapshot.
-  sport: Nested 247Sports sport the ranking row covers (stringified).
-  state_rank: Rank within home state.
-sports247_site_pages_recruit:
-  announcement_date: Date the recruit announced their decision.
-  commited_institution_team_image: Team image asset for the committed institution (the 'commited' spelling is 247Sports' own
-    field name).
-  committed_institution: FK -> committed Institution.
-  committed_recruit_interest: Nested interest record for the school the recruit committed to (stringified).
-  composite_strength: Composite strength points contributed to team ranking.
-  default_name: Server-rendered display label for the entity.
-  final_choice: Whether this entry represents the recruit's final school choice.
-  highest_recruit_interest: Nested interest record carrying the recruit's highest interest signal (stringified).
-  highest_recruit_interest_event: Nested highest-signal event on the recruit's interest timeline (stringified).
-  highest_recruit_interest_event_type: Type of the highest-signal event on the recruit's interest timeline (e.g. commit, signing).
-  institution: Nested institution the recruit row is scoped to (stringified).
-  key: Primary key of this entity (the id used in its `.json` route).
-  player_bio: Player biography text authored on 247Sports.
-  player_bio_or_default: Player bio text, falling back to a default blurb when none is authored.
-  player_birthdate: Player's date of birth, per 247Sports.
-  player_cbs_key: Cross-reference key into the CBS Sports id space.
-  player_college_stat_player: Reference tying the profile to a college stats player record (247Sports field).
-  player_current_player_institution: FK -> PlayerInstitution (current school).
-  player_default_asset: Nested 247Sports image asset for the player's headshot (stringified).
-  player_default_asset_url: URL of the player's headshot image.
-  player_default_name: Server-rendered display label for the entity.
-  player_hero_asset: Nested 247Sports hero (banner) image asset for the player page (stringified).
-  player_hometown_city: City of the player's hometown.
-  player_hometown_state: State of the player's hometown.
-  player_institution: Nested player-institution stint behind the recruit row (stringified).
-  player_key: Primary key of this entity (the id used in its `.json` route).
-  player_last_recruitment_player_institution: Nested player-institution record from the player's most recent recruitment (stringified).
-  player_mobile_phone_contact: Player's mobile phone contact field on the 247Sports record.
-  player_modified_date: Date the player record was last modified.
-  player_modified_user: 247Sports user who last modified the player record.
-  player_national_rank: Overall national rank in the recruit's class.
-  player_player_high_school_name: Name of the player's high school.
-  player_position_rank: Rank within position for the class.
-  player_primary_player_position_abbreviation: Abbreviation of the player's primary position.
-  player_primary_player_sport: FK -> PlayerSport (`/PlayerSport/{id}.json`).
-  player_primary_recruitment: Nested 247Sports record for the player's primary recruitment (stringified).
-  player_pro_stat_player: Reference tying the profile to a professional stats player record (247Sports field).
-  player_quote_asset: Nested 247Sports image asset used alongside the player's quote block (stringified).
-  player_rating: 247Sports numeric rating (0-1 scale) for the primary sport.
-  player_scout_evaluation: 247Sports scouting evaluation text for the player.
-  player_sport: Nested player-sport profile for the recruit (stringified).
-  player_star_rating: Star tier (2-5) derived from the rating.
-  player_state_rank: Rank within home state for the class.
-  player_twitter_contact: Player's Twitter/X handle on the 247Sports profile.
-  player_user: 247Sports user account linked to the player profile (nested, stringified).
-  primary_player_position: Nested 247Sports record for the recruit's primary position (stringified).
-  primary_position: Recruit's primary position on the 247Sports profile.
-  recruit_interest_count: Number of tracked school interests.
-  recruit_interests_url: Site URL to the recruit's interest timeline.
-  signed_institution: Nested institution the recruit signed with (stringified).
 sports247_site_pages_recruit_interest:
   commit_status: Commitment status label (e.g. Committed, Signed).
   decommit: Date the recruit decommitted from the school, when applicable.
@@ -13398,17 +12698,6 @@ sports247_site_pages_recruit_interest:
   signing_date: Date the recruit signed with the school.
   soft_commit: Whether 247Sports marks the commitment as a soft commit.
   walk_on: Whether the recruit would join the program as a walk-on.
-sports247_site_pages_recruit_interest_event:
-  default_name: Server-rendered display label for the entity.
-  institution: Nested 247Sports institution the interest event involves (stringified).
-  key: Primary key of this entity (the id used in its `.json` route).
-  recruit_interest: Nested recruit-interest record the event belongs to (stringified).
-  recruitment: Nested 247Sports recruitment the event belongs to (stringified).
-sports247_site_pages_timeline_event:
-  author_affiliation: Outlet or site the author writes for, per 247Sports.
-  author_first_name: First name of the entry's author.
-  author_last_name: Last name of the entry's author.
-  body: Text body of the timeline entry.
 synergyplaytypes:
   efg_pct: Effective field goal percentage on the play type, as a decimal.
   fgmx: Field goals missed on the play type.
@@ -13905,13 +13194,6 @@ transfers_latest:
   recruitment_key: On3 recruitment key of the player's transfer recruitment.
   roster_rating: Nested On3 roster rating object for the player (stringified).
   sport: Nested On3 sport object for the transfer entry (stringified).
-videos_video_key:
-  is_featured: Whether the video is featured on the player's On3 profile.
-  key: On3 RDB key for the video record.
-  person_key: On3 person key of the featured athlete.
-  person_sport: Nested athlete-sport profile the video is attached to (stringified).
-  source_url: Source URL of the hosted video.
-  thumbnail: URL of the video's thumbnail image.
 videostatus:
   is_available: Flag indicating whether game video is available in the league's stats video system.
   visitor_team_abbreviation: Abbreviation of the visiting team.
@@ -13983,14 +13265,6 @@ draft_organization_rank:
   four_stars: Number of four-star recruits the organization signed over the ranking window.
   percent_drafted: Share of the organization's recruits who went on to be drafted.
   three_stars: Number of three-star recruits the organization signed over the ranking window.
-drafts_by_stars:
-  blue_chip_percent: Percent of the drafted group who were blue-chip (four- or five-star) recruits.
-  five_stars: Number of drafted players who were five-star recruits.
-  four_stars: Number of drafted players who were four-star recruits.
-  population_percent: Percent of the overall recruit population holding this star rating.
-  talent_ratio: Ratio of the star tier's draft share to its population share (On3's talent ratio).
-  three_stars: Number of drafted players who were three-star recruits.
-  zero_stars: Number of drafted players who were unrated (zero-star) recruits.
 drafts_by_stars_summary:
   five_stars: Number of drafted players who were five-star recruits.
   four_stars: Number of drafted players who were four-star recruits.
@@ -14010,42 +13284,6 @@ organizations_draft_count_by_year:
   talent_ratio: Ratio of the group's draft share to its recruit-population share for the year (On3's talent ratio).
   three_stars: Number of the organization's players drafted that year who were three-star recruits.
   zero_stars: Number of the organization's players drafted that year who were unrated (zero-star) recruits.
-sports247_site_pages_coach_ranking:
-  average_rating: Average rating across the coach's credited commits.
-  average_scout_rating: Average 247Sports in-house (scout) rating across the credited commits.
-  commits: Number of commits credited to the coach in the ranking.
-  composite_average_rating: Average 247Sports Composite rating across the credited commits.
-  composite_conference_rank: Coach's conference recruiter rank by Composite points.
-  composite_division_rank: Coach's division recruiter rank by Composite points.
-  composite_five_stars: Number of five-star commits by the 247Sports Composite rating.
-  composite_four_stars: Number of four-star commits by the 247Sports Composite rating.
-  composite_overall_rank: Coach's national recruiter rank by Composite points.
-  composite_rating: Composite class rating for the coach's haul.
-  composite_three_stars: Number of three-star commits by the 247Sports Composite rating.
-  composite_total: Total 247Sports Composite rating points credited to the coach's commits.
-  composite_two_stars: Number of two-star commits by the 247Sports Composite rating.
-  conference_rank: Rank within conference.
-  default_name: Server-rendered display label for the entity.
-  division_rank: Coach's recruiter rank within the division.
-  five_stars: Number of five-star commits credited to the coach.
-  four_stars: Number of four-star commits credited to the coach.
-  institution: Nested 247Sports institution the coach recruited for during the ranking cycle (stringified).
-  key: Primary key of this entity (the id used in its `.json` route).
-  overall_rank: Overall national coach-recruiting rank.
-  previous_coach_ranking: Nested prior-cycle recruiter-ranking row for the coach (stringified).
-  ranking: FK -> the Ranking snapshot this row belongs to.
-  recruitment: Nested 247Sports recruitment record credited to the coach on this row (stringified).
-  scout_conference_rank: Coach's conference recruiter rank by 247Sports' own (scout) points.
-  scout_division_rank: Coach's division recruiter rank by 247Sports' own (scout) points.
-  scout_five_stars: Number of five-star commits by 247Sports' own (scout) rating.
-  scout_four_stars: Number of four-star commits by 247Sports' own (scout) rating.
-  scout_overall_rank: Coach's national recruiter rank by 247Sports' own (scout) points.
-  scout_rating: Total 247Sports in-house (scout) rating points credited to the coach's commits.
-  scout_three_stars: Number of three-star commits by 247Sports' own (scout) rating.
-  scout_two_stars: Number of two-star commits by 247Sports' own (scout) rating.
-  sport: Nested 247Sports sport the ranking covers (stringified).
-  three_stars: Number of three-star commits credited to the coach.
-  two_stars: Number of two-star commits credited to the coach.
 team_ranking:
   applied_average_consensus_rating: Average industry-consensus rating across the counted commits.
   applied_average_rating: Average On3 rating across the counted commits.
@@ -14090,6 +13328,804 @@ team_ranking_consensus_team_rankings:
   key: On3 RDB key for the team's class-ranking row.
   overall_consensus_rank: Team's national class rank by industry-consensus score.
   three_stars: Number of three-star commits by the On3 consensus rating.
+load_cfb_pbp:
+  A_score_diff: Away team's score minus the home team's, from the away perspective.
+  EPA_explosive: True when the play was explosive.
+  EPA_explosive_pass: True when the pass play was explosive.
+  EPA_explosive_rush: True when the rush play was explosive.
+  EPA_fg: EPA credited to the play on field-goal attempts.
+  EPA_kickoff: EPA credited to the play on kickoff plays.
+  EPA_middle_8_success: True when the play in the middle eight was successful by EPA.
+  EPA_middle_8_success_pass: True when the pass play in the middle eight was successful by EPA.
+  EPA_middle_8_success_rush: True when the rush play in the middle eight was successful by EPA.
+  EPA_non_explosive: EPA credited to the play on non-explosive plays.
+  EPA_pass: EPA credited to the play on pass plays.
+  EPA_penalty: EPA credited to the play attributable to penalties.
+  EPA_punt: EPA credited to the play on punt plays.
+  EPA_rush: EPA credited to the play on rush plays.
+  EPA_scrimmage: EPA credited to the play on plays from scrimmage.
+  EPA_sp: EPA credited to the play on special-teams plays.
+  EPA_success: True when the play was successful by EPA.
+  EPA_success_EPA: EPA on successful plays.
+  EPA_success_early_down: True when the play on an early down was successful by EPA.
+  EPA_success_early_down_pass: True when the pass play on an early down was successful by EPA.
+  EPA_success_early_down_rush: True when the rush play on an early down was successful by EPA.
+  EPA_success_late_down: True when the play on a late down was successful by EPA.
+  EPA_success_late_down_pass: True when the pass play on a late down was successful by EPA.
+  EPA_success_late_down_rush: True when the rush play on a late down was successful by EPA.
+  EPA_success_pass: True when the pass play was successful by EPA.
+  EPA_success_pass_EPA: EPA on successful pass plays.
+  EPA_success_passing_down: True when the play on a passing down was successful by EPA.
+  EPA_success_passing_down_EPA: EPA on successful plays on a passing down.
+  EPA_success_rush: True when the rush play was successful by EPA.
+  EPA_success_rush_EPA: EPA on successful rush plays.
+  EPA_success_standard_down: True when the play on a standard down was successful by EPA.
+  EPA_success_standard_down_EPA: EPA on successful plays on a standard down.
+  EP_between: Change in expected points across the play, before penalty adjustment.
+  EP_end: Expected points for the offense at the end of the play.
+  EP_start: Expected points for the offense at the start of the play.
+  EP_start_touchback: Expected points the offense would have had from a touchback on this play.
+  HA_score_diff: Home score minus away score for the play.
+  H_score_diff: Home team's score minus the away team's, from the home perspective.
+  TFL: True when the play was a tackle for loss.
+  TFL_pass: True when the play was a tackle for loss on a pass play (a sack).
+  TFL_rush: True when the play was a tackle for loss on a rush play.
+  action_play: True when the play advanced the game state -- excludes timeouts, end-of-period markers and other non-action
+    rows.
+  adj_rush_yardage: Rushing yards capped at 8, the input to the line-yards decomposition.
+  air_yardsToEndzone: Yards to the endzone at the catch spot, parsed from the 2025+ vendor catch-spot text; null before 2025
+    or when unresolvable.
+  awayTeamAbbrev: ESPN's away-team Abbrev for the game, stamped on every play.
+  awayTeamId: ESPN's away-team Id for the game, stamped on every play.
+  awayTeamMascot: ESPN's away-team Mascot for the game, stamped on every play.
+  awayTeamName: ESPN's away-team Name for the game, stamped on every play.
+  awayTeamNameAlt: ESPN's away-team NameAlt for the game, stamped on every play.
+  awayTimeoutCalled: True when the away team called a timeout on the play.
+  away_wp_after_naive: End-of-play naive win probability mapped to the away team.
+  away_wp_before_naive: Pre-snap naive win probability mapped to the away team.
+  cleaned_text: Play description with overturned-call prefixes stripped; the text the name and team extractors run against.
+  clock.displayValue: Game clock at the play, as the displayed mm:ss string.
+  clock.minutes: Minutes remaining on the game clock at the play.
+  clock.seconds: Seconds component of the game clock at the play.
+  def_fumble_lost: Whether the defending team (e.g. a returner after a takeaway) fumbled and lost the ball back.
+  def_wp_after_naive: End-of-play defense win probability under the naive model.
+  def_wp_before_naive: Pre-snap defense win probability under the naive model (1 - wp_before_naive).
+  down_1: True when it is 1st down at the start of the play.
+  down_1_end: True when it is 1st down at the end of the play.
+  down_2: True when it is 2nd down at the start of the play.
+  down_2_end: True when it is 2nd down at the end of the play.
+  down_3: True when it is 3rd down at the start of the play.
+  down_3_end: True when it is 3rd down at the end of the play.
+  down_4: True when it is 4th down at the start of the play.
+  down_4_end: True when it is 4th down at the end of the play.
+  drive.description: ESPN's `description` field for the drive containing this play.
+  drive.displayResult: ESPN's `displayResult` field for the drive containing this play.
+  drive.end.clock.displayValue: ESPN's `end.clock.displayValue` field for the drive containing this play.
+  drive.end.period.number: ESPN's `end.period.number` field for the drive containing this play.
+  drive.end.period.type: ESPN's `end.period.type` field for the drive containing this play.
+  drive.end.yardLine: ESPN's `end.yardLine` field for the drive containing this play.
+  drive.id: ESPN's `id` field for the drive containing this play.
+  drive.isScore: ESPN's `isScore` field for the drive containing this play.
+  drive.offensivePlays: ESPN's `offensivePlays` field for the drive containing this play.
+  drive.result: ESPN's `result` field for the drive containing this play.
+  drive.shortDisplayResult: ESPN's `shortDisplayResult` field for the drive containing this play.
+  drive.start.clock.displayValue: ESPN's `start.clock.displayValue` field for the drive containing this play.
+  drive.start.period.number: ESPN's `start.period.number` field for the drive containing this play.
+  drive.start.period.type: ESPN's `start.period.type` field for the drive containing this play.
+  drive.start.text: ESPN's `start.text` field for the drive containing this play.
+  drive.start.yardLine: ESPN's `start.yardLine` field for the drive containing this play.
+  drive.team.abbreviation: ESPN's `team.abbreviation` field for the drive containing this play.
+  drive.team.displayName: ESPN's `team.displayName` field for the drive containing this play.
+  drive.team.name: ESPN's `team.name` field for the drive containing this play.
+  drive.team.shortDisplayName: ESPN's `team.shortDisplayName` field for the drive containing this play.
+  drive.timeElapsed.displayValue: ESPN's `timeElapsed.displayValue` field for the drive containing this play.
+  drive.yards: ESPN's `yards` field for the drive containing this play.
+  drive_offense_plays: Offensive plays run on the drive.
+  drive_offense_yards: Offensive yards gained on the drive.
+  drive_play_index: Sequence number of the play within its drive.
+  drive_start: Yard line at which the drive began.
+  drive_stopped: True when the play ended the drive.
+  drive_total_yards: Total yards gained on the drive.
+  early_down: True when the play is a scrimmage play on first or second down.
+  early_down_pass: True when the play is a pass on an early down.
+  early_down_rush: True when the play is a rush on an early down.
+  end.ExpScoreDiff: ESPN's `ExpScoreDiff` value for the play state at the end of the play.
+  end.ExpScoreDiff_Time_Ratio: ESPN's `ExpScoreDiff_Time_Ratio` value for the play state at the end of the play.
+  end.TimeSecsRem: ESPN's `TimeSecsRem` value for the play state at the end of the play.
+  end.adj_TimeSecsRem: ESPN's `adj_TimeSecsRem` value for the play state at the end of the play.
+  end.awayScore: ESPN's `awayScore` value for the play state at the end of the play.
+  end.awayTeamTimeouts: ESPN's `awayTeamTimeouts` value for the play state at the end of the play.
+  end.defPosTeamTimeouts: ESPN's `defPosTeamTimeouts` value for the play state at the end of the play.
+  end.def_pos_team.id: ESPN's `def_pos_team.id` value for the play state at the end of the play.
+  end.def_pos_team.name: ESPN's `def_pos_team.name` value for the play state at the end of the play.
+  end.def_pos_team_score: ESPN's `def_pos_team_score` value for the play state at the end of the play.
+  end.distance: ESPN's `distance` value for the play state at the end of the play.
+  end.down: ESPN's `down` value for the play state at the end of the play.
+  end.downDistanceText: ESPN's `downDistanceText` value for the play state at the end of the play.
+  end.elapsed_share: ESPN's `elapsed_share` value for the play state at the end of the play.
+  end.homeScore: ESPN's `homeScore` value for the play state at the end of the play.
+  end.homeTeamTimeouts: ESPN's `homeTeamTimeouts` value for the play state at the end of the play.
+  end.is_home: ESPN's `is_home` value for the play state at the end of the play.
+  end.posTeamTimeouts: ESPN's `posTeamTimeouts` value for the play state at the end of the play.
+  end.pos_score_diff: ESPN's `pos_score_diff` value for the play state at the end of the play.
+  end.pos_team.id: ESPN's `pos_team.id` value for the play state at the end of the play.
+  end.pos_team.name: ESPN's `pos_team.name` value for the play state at the end of the play.
+  end.pos_team_receives_2H_kickoff: ESPN's `pos_team_receives_2H_kickoff` value for the play state at the end of the play.
+  end.pos_team_score: ESPN's `pos_team_score` value for the play state at the end of the play.
+  end.pos_team_spread: ESPN's `pos_team_spread` value for the play state at the end of the play.
+  end.possessionText: ESPN's `possessionText` value for the play state at the end of the play.
+  end.shortDownDistanceText: ESPN's `shortDownDistanceText` value for the play state at the end of the play.
+  end.spread_time: ESPN's `spread_time` value for the play state at the end of the play.
+  end.team.id: ESPN's `team.id` value for the play state at the end of the play.
+  end.yard: ESPN's `yard` value for the play state at the end of the play.
+  end.yardLine: ESPN's `yardLine` value for the play state at the end of the play.
+  end.yardsToEndzone: ESPN's `yardsToEndzone` value for the play state at the end of the play.
+  end_state_missing: Flag that ESPN's end-of-play state (end.team.id) was absent and the end state was imputed.
+  fg_attempt: True when the play was a field-goal attempt.
+  fg_block_player_id: ESPN athlete id of the player who blocked the field goal.
+  fg_kicker_player_id: ESPN athlete id of the field-goal kicker.
+  fg_return_player_id: ESPN athlete id of the player who returned the blocked or missed field goal.
+  fg_team: Team id attempting the field goal (the kicking team).
+  fg_wp: Make-probability-weighted win probability of attempting the field goal.
+  fg_wp_diff: fg_wp minus the recommended option's WP (0 when the field goal is the recommendation, otherwise <= 0).
+  firstHalfKickoffTeamId: ESPN id of the team that received the opening kickoff.
+  first_down_created: True when the play produced a first down for the offense.
+  first_down_prob: Modeled probability of converting the fourth down when going for it.
+  forced_fumble: True when the defense forced a fumble on the play.
+  forced_fumble_team: Team id credited with forcing the fumble -- the side opposite the fumbling player (the covering team
+    on returns).
+  fourth_down_recommendation: Max-WP fourth-down choice among "go", "punt", and "field_goal".
+  fumble_or_muff: Whether the play includes a fumble or a muffed kick or punt (widened beyond ESPN's fumble play types).
+  fumble_recovered: True when a fumble on the play was recovered.
+  fumble_recovery_team: Team id that recovered the fumble or muff, from parsed text with a giveaway / own-recovery fallback.
+  fumbling_team: Team id of the side that fumbled or muffed the ball, parsed from the play text.
+  gameSpread: Point spread used as an input to the win-probability model.
+  gameSpreadAvailable: True when a spread was available for the game.
+  go_boost: 'cfb4th''s headline number: 100 * (go_wp - max(fg_wp, punt_wp)), in percentage points.'
+  go_wp: 'Win probability from going for it on fourth down: conversion-probability-weighted mean of the success and failure
+    states (cfb4th port).'
+  go_wp_diff: go_wp minus the recommended option's WP (0 when going for it is the recommendation, otherwise <= 0).
+  havoc: 'True when the defense disrupted the play: a pass breakup, tackle for loss, interception or forced fumble.'
+  highlight_run: True when the rush gained 8 or more yards.
+  highlight_yards: Second-level plus open-field yards -- the yardage credited to the carrier.
+  homeFavorite: True when the home team was favoured by the spread.
+  homeTeamAbbrev: ESPN's home-team Abbrev for the game, stamped on every play.
+  homeTeamId: ESPN's home-team Id for the game, stamped on every play.
+  homeTeamMascot: ESPN's home-team Mascot for the game, stamped on every play.
+  homeTeamName: ESPN's home-team Name for the game, stamped on every play.
+  homeTeamNameAlt: ESPN's home-team NameAlt for the game, stamped on every play.
+  homeTeamSpread: ESPN's home-team Spread for the game, stamped on every play.
+  homeTimeoutCalled: True when the home team called a timeout on the play.
+  home_wp_after_naive: End-of-play naive win probability mapped to the home team.
+  home_wp_before_naive: Pre-snap naive win probability mapped to the home team.
+  int_turnover: Whether the play is an interception giveaway.
+  interception_team: Team id credited with the interception (the defense).
+  isPenalty: ESPN's per-play flag that a penalty occurred on the play.
+  isTurnover: ESPN's per-play turnover flag as shipped in the plays feed (broader than the giveaway-based is_turnover derivation).
+  is_blocked_fg_turnover: Blocked-field-goal possession loss (blocked-FG TD, or the defense recovered); kept out of is_turnover
+    to match ESPN's giveaway-only box.
+  is_blocked_punt_turnover: Blocked-punt possession loss (blocked-punt TD, or the defense recovered); kept out of is_turnover
+    to match ESPN's giveaway-only box.
+  is_def_pos_team_turnover: Whether the defending team gave the ball back via a lost fumble.
+  is_pos_team_turnover: Whether the possession team committed a giveaway (interception or fumble lost).
+  is_st_turnover: Whether the giveaway happened on a special-teams play (kick or punt snap, or a return).
+  is_turnover: True when the play is a giveaway-based turnover (interception thrown or fumble lost); blocked kicks recovered
+    by the defense are carried by the blocked-kick fields instead.
+  kick_return_team: Team id of the kick-returning side.
+  kicking_team: Team id of the kicking team on kickoff, punt, and field-goal plays.
+  kickoff_player_id: ESPN athlete id of the player kicking off.
+  kickoff_return_player_id: ESPN athlete id of the kickoff returner.
+  kneel_down: Whether the play is an offensive kneel, from explicit kneel text plus an end-of-half TEAM-rush heuristic.
+  lag_EP_end: Value of EP_end on the previous play, used for sequence-aware derivations.
+  lag_HA_score_diff: Value of HA_score_diff on the previous play, used for sequence-aware derivations.
+  lag_awayScore: Value of awayScore on the previous play, used for sequence-aware derivations.
+  lag_change_of_pos_team: Value of change_of_pos_team on the previous play, used for sequence-aware derivations.
+  lag_half: Value of half on the previous play, used for sequence-aware derivations.
+  lag_homeScore: Value of homeScore on the previous play, used for sequence-aware derivations.
+  lag_pos_score_diff: Value of pos_score_diff on the previous play, used for sequence-aware derivations.
+  lag_pos_team: Value of pos_team on the previous play, used for sequence-aware derivations.
+  lag_scoringPlay: Value of scoringPlay on the previous play, used for sequence-aware derivations.
+  late_down: True when the play is a scrimmage play on third or fourth down.
+  late_down_pass: True when the play is a pass on a late down.
+  late_down_rush: True when the play is a rush on a late down.
+  lead_half: Value of half on the next play, used for sequence-aware derivations.
+  lead_play_type: Value of play_type on the next play, used for sequence-aware derivations.
+  lead_pos_team: Value of pos_team on the next play, used for sequence-aware derivations.
+  lead_pos_team2: Value of pos_team 2 plays ahead, used for sequence-aware derivations.
+  lead_scoringPlay: Value of scoringPlay on the next play, used for sequence-aware derivations.
+  lead_start_distance: Value of start_distance on the next play, used for sequence-aware derivations.
+  lead_start_down: Value of start_down on the next play, used for sequence-aware derivations.
+  lead_start_team: Value of start_team on the next play, used for sequence-aware derivations.
+  lead_start_yardsToEndzone: Value of start_yardsToEndzone on the next play, used for sequence-aware derivations.
+  lead_text: Value of text on the next play, used for sequence-aware derivations.
+  lead_wp_before: Value of wp_before on the next play, used for sequence-aware derivations.
+  lead_wp_before2: Value of wp_before 2 plays ahead, used for sequence-aware derivations.
+  lead_wp_before2_naive: Pre-snap naive win probability two plays ahead, used where the immediately following row is a non-play.
+  lead_wp_before_naive: Next play's pre-snap naive win probability, used in the end-of-half and change-of-possession adjustments.
+  line_yards: 'Yards credited to the offensive line on a rush, using the standard sliding scale: 1.2x the capped yardage on
+    a loss, all of it through 3 yards, half of each yard from 4 to 8, and a 5.5-yard ceiling beyond that.'
+  make_fg_wp: Win probability given the field-goal attempt is made.
+  miss_fg_wp: Win probability given the field-goal attempt misses.
+  net_HA_score_pts: Net points the play added to the home-minus-away score margin.
+  new_distance: Distance to go after the play, including any penalty enforcement.
+  new_down: Down after the play, including any penalty enforcement.
+  non_fumble_sack: True when the play was a sack that did not produce a fumble.
+  open_field_yards: Rushing yards gained beyond 8, credited to the ball carrier rather than the line.
+  opp_highlight_yards: Highlight yards earned on opportunity runs, isolating carrier production on carries where the blocking
+    succeeded. Assets published before the 2026-08 fix are identically 0 here, because the inverted opportunity_run gate could
+    never co-occur with non-zero highlight yards.
+  opportunity_run: True when a rush reached 4 yards -- the carries on which the blocking did its job. Matches cfbfastR's espn_cfb_15
+    definition. Assets published before the 2026-08 fix carry the inverted (4 yards or fewer) flag.
+  overUnder: Over/under total used as a model input.
+  pass_breakup: True when a defender broke up the pass.
+  pass_breakup_team: Team id credited with the pass breakup (the defense).
+  pass_depth: Thrown-pass depth parsed from ESPN play text ("short" or "deep"); null when the text omits it (sacks, screens,
+    pre-2025 text).
+  pass_direction: Pass direction parsed from ESPN play text ("left", "middle", or "right"); null when the text omits it.
+  pass_epa: EPA credited to the play when it is a pass.
+  pass_weight: Weighting applied to the pass component of the play.
+  passing_down: True when the offense is behind schedule for the series -- second down needing 8 or more, or third/fourth
+    down needing 5 or more.
+  pen_epa: EPA attributable to a penalty on the play.
+  pen_weight: Weighting applied to the penalty component of the play.
+  penalized_team: Team id the penalty was assessed against, from the home/away text resolver with a foul-direction fallback.
+  penalty_assessed_on_kickoff: Whether a penalty was assessed on a kickoff; such plays take the kickoff/touchback win-probability
+    handling.
+  penalty_in_text: True when the play description mentions a penalty.
+  penalty_yards_signed: Penalty yardage parsed from the play text with era-aware bounds; the printed sign is retained but
+    is not a reliable enforcement direction.
+  period.number: Period (quarter) number in which the play occurred.
+  pointAfterAttempt.abbreviation: ESPN abbreviation of the point-after attempt type; drives the extra-point / two-point result
+    derivation.
+  pointAfterAttempt.id: ESPN identifier for the point-after attempt type on the scoring play.
+  pointAfterAttempt.text: ESPN description of the point-after attempt and its result.
+  pointAfterAttempt.value: Points ESPN credits for the point-after attempt (1.0 made extra point, 2.0 made two-point try).
+  pos_fumble_lost: Whether the possession team fumbled and lost the ball.
+  pos_score_diff_end: Score differential from the possessing team's perspective at the end of the play.
+  power_rush_attempt: True when the play is a short-yardage power rushing attempt.
+  power_rush_success: True when a power rushing attempt gained the yardage needed.
+  prob_2pt: Two-point conversion probability from the bundled CFB two-point model.
+  prog_drive_EPA: Cumulative EPA accrued by the drive up to and including this play.
+  prog_drive_WPA: Cumulative win-probability added by the drive up to and including this play.
+  punt_block_player_id: ESPN athlete id of the player who blocked the punt.
+  punt_block_return_player_id: ESPN athlete id of the player who returned the blocked punt.
+  punt_return_player_id: ESPN athlete id of the punt returner.
+  punt_return_team: Team id of the punt-returning side.
+  punt_team: Team id punting the ball (the kicking team).
+  punt_wp: Win probability of punting, from the bundled punt-outcome distribution.
+  punt_wp_diff: punt_wp minus the recommended option's WP (0 when punting is the recommendation, otherwise <= 0).
+  qb_hurry: Whether ESPN's play text says the quarterback was hurried into the throw ("hurried by ...").
+  qbr_epa: EPA variant used as an input to the QBR calculation.
+  recovery_team: Team id parsed from the play text as recovering the fumble or muff.
+  recovery_team_2: Team id of the second recovery in a multi-recovery scramble, parsed from the play text.
+  return_team: Team id of the returning side; set on interception, fumble, kickoff, punt, and blocked-kick returns.
+  rush_direction: Rush direction parsed from ESPN play text ("left", "middle", or "right"); null when the text omits it.
+  rush_epa: EPA credited to the play when it is a rush.
+  rush_weight: Weighting applied to the rush component of the play.
+  sack_epa: EPA credited to the play when it is a sack.
+  sack_player_id2: ESPN athlete id of the second sacker on a split sack (regex fallback for an ESPN sidecar blind spot).
+  sack_team: Team id credited with the sack (the defense).
+  sack_weight: Weighting applied to the sack component of the play.
+  scoringPlay: ESPN flag marking the play as a scoring play.
+  scoringType.abbreviation: ESPN's abbreviation for the scoring type.
+  scoringType.displayName: ESPN's display label for the scoring type.
+  scoringType.name: ESPN's name for the scoring type (e.g. touchdown, field goal).
+  scrimmage_play: True when the play is a play from scrimmage rather than a special-teams or administrative row.
+  seasonType: ESPN season type for the game (2 = regular season, 3 = postseason).
+  second_level_yards: Rushing yards earned from 4 to 8, split evenly between line and carrier under the line-yards decomposition.
+  short_rush_attempt: True when the play is a rush in a short-yardage situation.
+  short_rush_success: True when a short-yardage rush gained the yardage needed.
+  standard_down: True when the offense is on schedule for the series -- first down, second down needing fewer than 8, or third/fourth
+    down needing fewer than 5.
+  start.ExpScoreDiff: ESPN's `ExpScoreDiff` value for the play state at the start of the play.
+  start.ExpScoreDiff_Time_Ratio: ESPN's `ExpScoreDiff_Time_Ratio` value for the play state at the start of the play.
+  start.ExpScoreDiff_Time_Ratio_touchback: ESPN's `ExpScoreDiff_Time_Ratio_touchback` value for the play state at the start
+    of the play.
+  start.ExpScoreDiff_touchback: ESPN's `ExpScoreDiff_touchback` value for the play state at the start of the play.
+  start.TimeSecsRem: ESPN's `TimeSecsRem` value for the play state at the start of the play.
+  start.adj_TimeSecsRem: ESPN's `adj_TimeSecsRem` value for the play state at the start of the play.
+  start.awayScore: ESPN's `awayScore` value for the play state at the start of the play.
+  start.awayTeamTimeouts: ESPN's `awayTeamTimeouts` value for the play state at the start of the play.
+  start.defPosTeamTimeouts: ESPN's `defPosTeamTimeouts` value for the play state at the start of the play.
+  start.def_pos_team.id: ESPN's `def_pos_team.id` value for the play state at the start of the play.
+  start.def_pos_team.name: ESPN's `def_pos_team.name` value for the play state at the start of the play.
+  start.def_pos_team_score: ESPN's `def_pos_team_score` value for the play state at the start of the play.
+  start.distance: ESPN's `distance` value for the play state at the start of the play.
+  start.down: ESPN's `down` value for the play state at the start of the play.
+  start.downDistanceText: ESPN's `downDistanceText` value for the play state at the start of the play.
+  start.elapsed_share: ESPN's `elapsed_share` value for the play state at the start of the play.
+  start.homeScore: ESPN's `homeScore` value for the play state at the start of the play.
+  start.homeTeamTimeouts: ESPN's `homeTeamTimeouts` value for the play state at the start of the play.
+  start.is_home: ESPN's `is_home` value for the play state at the start of the play.
+  start.posTeamTimeouts: ESPN's `posTeamTimeouts` value for the play state at the start of the play.
+  start.pos_score_diff: ESPN's `pos_score_diff` value for the play state at the start of the play.
+  start.pos_team.id: ESPN's `pos_team.id` value for the play state at the start of the play.
+  start.pos_team.name: ESPN's `pos_team.name` value for the play state at the start of the play.
+  start.pos_team_receives_2H_kickoff: ESPN's `pos_team_receives_2H_kickoff` value for the play state at the start of the play.
+  start.pos_team_score: ESPN's `pos_team_score` value for the play state at the start of the play.
+  start.pos_team_spread: ESPN's `pos_team_spread` value for the play state at the start of the play.
+  start.possessionText: ESPN's `possessionText` value for the play state at the start of the play.
+  start.shortDownDistanceText: ESPN's `shortDownDistanceText` value for the play state at the start of the play.
+  start.spread_time: ESPN's `spread_time` value for the play state at the start of the play.
+  start.team.id: ESPN's `team.id` value for the play state at the start of the play.
+  start.yard: ESPN's `yard` value for the play state at the start of the play.
+  start.yardLine: ESPN's `yardLine` value for the play state at the start of the play.
+  start.yardsToEndzone: ESPN's `yardsToEndzone` value for the play state at the start of the play.
+  start.yardsToEndzone.touchback: ESPN's `yardsToEndzone.touchback` value for the play state at the start of the play.
+  statYardage: Yardage ESPN credits to the play for statistical purposes.
+  stopped_run: True when the rush was stopped at or behind the line of scrimmage.
+  td_check: Internal flag used while reconciling whether the play produced a touchdown.
+  teamParticipants: Raw ESPN team-level participants payload carried through from the plays feed (stringified).
+  text_dupe: True when the play description duplicates the previous row's text.
+  turnover_team: Team id charged with the giveaway on the play.
+  two_point_conv_result: 'String result of the two-point conversion attempt: success, failure, or safety (touchback in the
+    defensive end zone).'
+  two_pt_recommendation: 'Point-after recommendation: "go_for_2" when two_pt_wp exceeds xp_wp, otherwise "kick_xp".'
+  two_pt_wp: 'Win probability of going for two: conversion-probability-weighted mean of the 2-point and 0-point outcomes (cfb4th
+    port).'
+  two_pt_wp_diff: two_pt_wp minus xp_wp; positive favors going for two.
+  type.abbreviation: ESPN's abbreviation for the play type.
+  type.id: ESPN's numeric identifier for the play type.
+  type.text: ESPN's text label for the play type.
+  under_2: Whether the play began with two minutes or less remaining in the half.
+  wp_after_naive: End-of-play possession-team win probability from the naive model, after the game-logic adjustment chain.
+  wp_before_naive: Pre-snap possession-team win probability from the spread-free (naive) WP model.
+  wp_fail: Mean win probability given the fourth-down attempt fails.
+  wp_succeed: Mean win probability across yardage outcomes given the fourth-down attempt converts.
+  wp_touchback: Win probability the offense would have had starting from a touchback.
+  wp_touchback_naive: Naive-model win probability for the kickoff-touchback substitute state, used as the pre-snap WP on kickoffs.
+  wpa_naive: Win probability added on the play under the spread-free (naive) model.
+  xp_wp: Win probability of kicking the extra point, weighting the make by the empirical CFB extra-point make rate.
+load_cfb_player_box:
+  adjQBR: Adjusted Total QBR for the quarterback.
+  completions/passingAttempts: Completions and pass attempts, as ESPN's combined string.
+  defensiveTouchdowns: Touchdowns the player scored on defense (ESPN box score).
+  extraPointsMade/extraPointAttempts: Extra points made and attempted, as ESPN's combined string.
+  fieldGoalPct: Field-goal percentage.
+  fieldGoalsMade/fieldGoalAttempts: Field goals made and attempted, as ESPN's combined string.
+  fumbles: Number of times the player fumbled in the game (ESPN box score).
+  fumblesLost: Number of the player's fumbles lost to the opponent (ESPN box score).
+  fumblesRecovered: Number of fumbles the player recovered (ESPN box score).
+  grossAvgPuntYards: Gross average yards per punt, before return yardage.
+  hurries: Quarterback hurries credited to the player (ESPN box score).
+  interceptionTouchdowns: Touchdowns scored on interception returns.
+  interceptionYards: Yards returned on interceptions.
+  kickReturnTouchdowns: Kickoff returns the player took for touchdowns (ESPN box score).
+  kickReturnYards: Total kickoff-return yards by the player (ESPN box score).
+  kickReturns: Number of kickoff returns by the player (ESPN box score).
+  longFieldGoalMade: Longest field goal made, in yards.
+  longKickReturn: Player's longest kickoff return of the game, in yards (ESPN box score).
+  longPunt: Longest punt of the game, in yards.
+  longPuntReturn: Longest punt return of the game, in yards.
+  longReception: Longest reception of the game, in yards.
+  longRushing: Longest rush of the game, in yards.
+  passesDefended: Passes the player broke up or defended (ESPN box score).
+  passingTouchdowns: Passing touchdowns.
+  passingYards: Net passing yards gained.
+  puntReturnTouchdowns: Touchdowns scored on punt returns.
+  puntReturnYards: Yards gained on punt returns.
+  puntReturns: Punt returns attempted.
+  puntYards: Total punt yards.
+  punts: Punts attempted.
+  puntsInside20: Punts downed inside the opponent 20-yard line.
+  receivingTouchdowns: Receiving touchdowns.
+  receivingYards: Receiving yards gained.
+  rushingAttempts: Rushing attempts.
+  rushingTouchdowns: Rushing touchdowns.
+  rushingYards: Net rushing yards gained.
+  sacks: Sacks credited to the player (ESPN box score).
+  soloTackles: Player's solo (unassisted) tackles (ESPN box score).
+  stat_1: First value of ESPN's raw athlete stats array, written only when the category's key list does not line up with the
+    stats list; on those rows the named per-category columns are all null.
+  stat_2: Second value of ESPN's raw athlete stats array, written only on rows where the category keys did not line up and
+    the named columns could not be filled.
+  stat_3: Third value of ESPN's raw athlete stats array, written only on rows where the category keys did not line up and
+    the named columns could not be filled.
+  stat_4: Fourth value of ESPN's raw athlete stats array, written only on rows where the category keys did not line up and
+    the named columns could not be filled.
+  stat_5: Fifth value of ESPN's raw athlete stats array, written only on rows where the category keys did not line up and
+    the named columns could not be filled.
+  tacklesForLoss: Player's tackles made behind the line of scrimmage (ESPN box score).
+  totalKickingPoints: Total points scored by kicking.
+  totalTackles: Player's total tackles, solo plus assisted (ESPN box score).
+  touchbacks: Punts or kickoffs that resulted in a touchback.
+  yardsPerKickReturn: Average yards per kickoff return for the player (ESPN box score).
+  yardsPerPassAttempt: Yards gained per pass attempt.
+  yardsPerPuntReturn: Yards gained per punt return.
+  yardsPerReception: Yards gained per reception.
+  yardsPerRushAttempt: Yards gained per rushing attempt.
+sports247_site_pages_coach_ranking:
+  average_rating: Average rating across the coach's credited commits.
+  average_scout_rating: Average 247Sports in-house (scout) rating across the credited commits.
+  commits: Number of commits credited to the coach in the ranking.
+  composite_average_rating: Average 247Sports Composite rating across the credited commits.
+  composite_conference_rank: Coach's conference recruiter rank by Composite points.
+  composite_division_rank: Coach's division recruiter rank by Composite points.
+  composite_five_stars: Number of five-star commits by the 247Sports Composite rating.
+  composite_four_stars: Number of four-star commits by the 247Sports Composite rating.
+  composite_overall_rank: Coach's national recruiter rank by Composite points.
+  composite_rating: Composite class rating for the coach's haul.
+  composite_three_stars: Number of three-star commits by the 247Sports Composite rating.
+  composite_total: Total 247Sports Composite rating points credited to the coach's commits.
+  composite_two_stars: Number of two-star commits by the 247Sports Composite rating.
+  conference_rank: Rank within conference.
+  default_name: Server-rendered display label for the entity.
+  division_rank: Coach's recruiter rank within the division.
+  five_stars: Number of five-star commits credited to the coach.
+  four_stars: Number of four-star commits credited to the coach.
+  institution: Nested 247Sports institution the coach recruited for during the ranking cycle (stringified).
+  key: Primary key of this entity (the id used in its `.json` route).
+  overall_rank: Overall national coach-recruiting rank.
+  previous_coach_ranking: Nested prior-cycle recruiter-ranking row for the coach (stringified).
+  ranking: FK -> the Ranking snapshot this row belongs to.
+  rating: Overall rating score for the coach's recruiting haul in the 247Sports coach ranking.
+  recruitment: Nested 247Sports recruitment record credited to the coach on this row (stringified).
+  scout_conference_rank: Coach's conference recruiter rank by 247Sports' own (scout) points.
+  scout_division_rank: Coach's division recruiter rank by 247Sports' own (scout) points.
+  scout_five_stars: Number of five-star commits by 247Sports' own (scout) rating.
+  scout_four_stars: Number of four-star commits by 247Sports' own (scout) rating.
+  scout_overall_rank: Coach's national recruiter rank by 247Sports' own (scout) points.
+  scout_rating: Total 247Sports in-house (scout) rating points credited to the coach's commits.
+  scout_three_stars: Number of three-star commits by 247Sports' own (scout) rating.
+  scout_two_stars: Number of two-star commits by 247Sports' own (scout) rating.
+  sport: Nested 247Sports sport the ranking covers (stringified).
+  three_stars: Number of three-star commits credited to the coach.
+  total: Total ranking score for the coach's class, as reported by 247Sports.
+  two_stars: Number of two-star commits credited to the coach.
+sports247_site_pages_event:
+  default_asset: Nested 247Sports image asset for the event (stringified).
+  default_name: Server-rendered display label for the entity.
+  event_group: Grouping or series the event belongs to (e.g. a camp circuit) on 247Sports.
+  event_type: Numeric code for the kind of 247Sports recruiting event on this row.
+  key: Primary key of this entity (the id used in its `.json` route).
+sports247_site_pages_player_sport_ranking:
+  committed_institution: FK -> committed Institution (null if uncommitted).
+  composite_group_rank: Player's rank within their position group by Composite rating.
+  composite_overall_rank: Player's national rank by 247Sports Composite rating.
+  composite_position_rank: Player's rank at their position by Composite rating.
+  composite_rating: Player's 247Sports Composite rating, blending the major services' ratings.
+  composite_state_rank: Player's rank within their home state by Composite rating.
+  composite_strength: 247Sports field describing the strength of the industry inputs behind the Composite rating.
+  default_name: Server-rendered display label for the entity.
+  institution: Nested institution the player was committed or signed to at ranking time (stringified).
+  institution_group: Grouping (e.g. conference/division) of the player's institution, per 247Sports.
+  key: Primary key of this entity (the id used in its `.json` route).
+  order: Display order of the entry within the 247Sports ranking list.
+  overall_rank: Overall national rank in the snapshot.
+  platoon: 247Sports platoon (side-of-ball grouping) identifier on the ranking row.
+  player_sport: Nested player-sport profile the ranking row belongs to (stringified).
+  position_group_rank: Player's rank within their position group in the 247Sports ranking.
+  position_rank: Rank within position.
+  previous_player_sport_ranking: Nested prior-cycle ranking row for the player (stringified).
+  ranking: FK -> Ranking snapshot.
+  rating: Nested 247Sports rating record attached to the ranking row (stringified).
+  region: Nested 247Sports region record for the recruit's home region (stringified).
+  sport: Nested 247Sports sport the ranking row covers (stringified).
+  state: Nested 247Sports state record for the recruit's home state (stringified).
+  state_rank: Rank within home state.
+sports247_site_pages_timeline_event:
+  author_affiliation: Outlet or site the author writes for, per 247Sports.
+  author_first_name: First name of the entry's author.
+  author_last_name: Last name of the entry's author.
+  body: Text body of the timeline entry.
+  date: Date of the institution timeline entry, per 247Sports.
+load_ncaa_mbb_matchup_stints:
+  away_1: Name of the away team's on-floor player in lineup slot 1 for the stint.
+  away_2: Name of the away team's on-floor player in lineup slot 2 for the stint.
+  away_3: Name of the away team's on-floor player in lineup slot 3 for the stint.
+  away_4: Name of the away team's on-floor player in lineup slot 4 for the stint.
+  away_5: Name of the away team's on-floor player in lineup slot 5 for the stint.
+  away_lineup: Delimited names of the away five on the floor during the stint.
+  away_lineup_key: Sorted player-code key for the away five on the floor.
+  away_pts: Points scored by the away team during the stint.
+  duration_seconds: Duration of the lineup stint in seconds.
+  end_away_score: Away team score when the stint ended.
+  end_home_score: Home team score when the stint ended.
+  end_seconds: Elapsed game seconds at which the stint ended.
+  game_stint_num: Sequential stint number within the game, incremented at every substitution by either team.
+  home_1: Name of the home team's on-floor player in lineup slot 1 for the stint.
+  home_2: Name of the home team's on-floor player in lineup slot 2 for the stint.
+  home_3: Name of the home team's on-floor player in lineup slot 3 for the stint.
+  home_4: Name of the home team's on-floor player in lineup slot 4 for the stint.
+  home_5: Name of the home team's on-floor player in lineup slot 5 for the stint.
+  home_lineup: Delimited names of the home five on the floor during the stint.
+  home_lineup_key: Sorted player-code key for the home five on the floor.
+  home_pts: Points scored by the home team during the stint.
+  matchup_key: Combined home-plus-away lineup key identifying the ten-player matchup on the floor.
+  n_events: Number of play-by-play events falling within the stint.
+  n_possessions: Number of possessions falling within the stint.
+  start_away_score: Away team score when the stint began.
+  start_home_score: Home team score when the stint began.
+  start_seconds: Elapsed game seconds at which the stint began.
+load_ncaa_wbb_matchup_stints:
+  away_1: Name of the away team's on-floor player in lineup slot 1 for the stint.
+  away_2: Name of the away team's on-floor player in lineup slot 2 for the stint.
+  away_3: Name of the away team's on-floor player in lineup slot 3 for the stint.
+  away_4: Name of the away team's on-floor player in lineup slot 4 for the stint.
+  away_5: Name of the away team's on-floor player in lineup slot 5 for the stint.
+  away_lineup: Delimited names of the away five on the floor during the stint.
+  away_lineup_key: Sorted player-code key for the away five on the floor.
+  away_pts: Points scored by the away team during the stint.
+  duration_seconds: Duration of the lineup stint in seconds.
+  end_away_score: Away team score when the stint ended.
+  end_home_score: Home team score when the stint ended.
+  end_seconds: Elapsed game seconds at which the stint ended.
+  game_stint_num: Sequential stint number within the game, incremented at every substitution by either team.
+  home_1: Name of the home team's on-floor player in lineup slot 1 for the stint.
+  home_2: Name of the home team's on-floor player in lineup slot 2 for the stint.
+  home_3: Name of the home team's on-floor player in lineup slot 3 for the stint.
+  home_4: Name of the home team's on-floor player in lineup slot 4 for the stint.
+  home_5: Name of the home team's on-floor player in lineup slot 5 for the stint.
+  home_lineup: Delimited names of the home five on the floor during the stint.
+  home_lineup_key: Sorted player-code key for the home five on the floor.
+  home_pts: Points scored by the home team during the stint.
+  matchup_key: Combined home-plus-away lineup key identifying the ten-player matchup on the floor.
+  n_events: Number of play-by-play events falling within the stint.
+  n_possessions: Number of possessions falling within the stint.
+  start_away_score: Away team score when the stint began.
+  start_home_score: Home team score when the stint began.
+  start_seconds: Elapsed game seconds at which the stint began.
+load_pwhl_pbp:
+  skaters_away: Number of away skaters on the ice for the event, derived from HockeyTech shift data.
+  skaters_home: Number of home skaters on the ice for the event, derived from HockeyTech shift data.
+  strength_state: Skater-strength state formatted home-first as skaters_home v skaters_away (5v4 = home has the extra skater),
+    derived from shift data.
+  strength_state_valid: True when both shift-derived skater counts are between 3 and 6 inclusive; false when a count falls
+    outside that range; null when a count is unavailable.
+collective_groups_deals:
+  amount: Reported dollar amount of the NIL deal.
+  collective_group: Nested On3 record for the collective brokering the deal (stringified).
+  company: Nested On3 record for the company on the other side of the NIL deal (stringified).
+  date: Date of the NIL collective deal, per On3.
+  key: On3 RDB key for the NIL deal record.
+  nil_status: Status of the athlete's On3 NIL valuation (e.g. active, inactive).
+  nil_value: Athlete's On3 NIL valuation in dollars.
+  person: Nested On3 person object for the athlete in the deal (stringified).
+  roster_rating: Nested On3 roster rating object for the athlete at deal time (stringified).
+  rpm: Nested On3 Recruiting Prediction Machine (RPM) data for the athlete (stringified).
+  source_url: URL of the source reporting the deal.
+  verified: Whether On3 verified the deal.
+drafts:
+  college_organization: Nested On3 organization object for the college the player attended (stringified).
+  compensatory: Whether the selection was a compensatory draft pick.
+  drafted_from_organization: Nested On3 organization object for the school the player was drafted out of (stringified).
+  forfeited: Whether the pick was forfeited.
+  high_school_organization: Nested On3 organization object for the player's high school (stringified).
+  key: On3 RDB key for the draft-pick record.
+  person: Nested On3 person object for the drafted player (stringified).
+  recruitment_key: On3 RDB recruitment key linking the draft pick back to the player's recruitment record.
+  state: Home state of the drafted player, per On3.
+  supplementary: Whether the selection came in a supplemental draft.
+  through_organization_one: First intermediate organization the pick passed through in trades before being exercised (On3
+    RDB).
+  through_organization_three: Third intermediate organization the pick passed through in trades before being exercised (On3
+    RDB).
+  through_organization_two: Second intermediate organization the pick passed through in trades before being exercised (On3
+    RDB).
+  trading_organization: Pro organization that traded the pick away, when it changed hands (On3 RDB).
+drafts_by_stars:
+  blue_chip_percent: Percent of the drafted group who were blue-chip (four- or five-star) recruits.
+  five_stars: Number of drafted players who were five-star recruits.
+  four_stars: Number of drafted players who were four-star recruits.
+  population_percent: Percent of the overall recruit population holding this star rating.
+  state: Home state associated with the draft row, per On3.
+  talent_ratio: Ratio of the star tier's draft share to its population share (On3's talent ratio).
+  three_stars: Number of drafted players who were three-star recruits.
+  zero_stars: Number of drafted players who were unrated (zero-star) recruits.
+drafts_players:
+  college_organization: Nested On3 organization object for the college the player attended (stringified).
+  compensatory: Whether the selection was a compensatory draft pick.
+  drafted_from_organization: Nested On3 organization object for the school the player was drafted out of (stringified).
+  forfeited: Whether the pick was forfeited.
+  high_school_organization: Nested On3 organization object for the player's high school (stringified).
+  key: On3 RDB key for the draft-pick record.
+  person: Nested On3 person object for the drafted player (stringified).
+  recruitment_key: On3 RDB recruitment key linking the draft pick back to the player's recruitment record.
+  state: Home state of the drafted player, per On3.
+  supplementary: Whether the selection came in a supplemental draft.
+  through_organization_one: First intermediate organization the pick passed through in trades before being exercised (On3
+    RDB).
+  through_organization_three: Third intermediate organization the pick passed through in trades before being exercised (On3
+    RDB).
+  through_organization_two: Second intermediate organization the pick passed through in trades before being exercised (On3
+    RDB).
+  trading_organization: Pro organization that traded the pick away, when it changed hands (On3 RDB).
+load_cfb_team_info:
+  logo_2: URL of the team's alternate dark-background 500-pixel logo on ESPN's CDN, null for programs with no dark variant.
+  logos_10: URL of the team's logo variant in slot 10 of ESPN's team-info logo list; null when the team publishes fewer variants.
+  logos_11: URL of the team's logo variant in slot 11 of ESPN's team-info logo list; null when the team publishes fewer variants.
+  logos_12: URL of the team's logo variant in slot 12 of ESPN's team-info logo list; null when the team publishes fewer variants.
+  logos_13: URL of the team's logo variant in slot 13 of ESPN's team-info logo list; null when the team publishes fewer variants.
+  logos_14: URL of the team's logo variant in slot 14 of ESPN's team-info logo list; null when the team publishes fewer variants.
+  logos_15: URL of the team's logo variant in slot 15 of ESPN's team-info logo list; null when the team publishes fewer variants.
+  logos_16: URL of the team's logo variant in slot 16 of ESPN's team-info logo list; null when the team publishes fewer variants.
+  logos_3: URL of the team's logo variant in slot 3 of ESPN's team-info logo list; null when the team publishes fewer variants.
+  logos_4: URL of the team's logo variant in slot 4 of ESPN's team-info logo list; null when the team publishes fewer variants.
+  logos_5: URL of the team's logo variant in slot 5 of ESPN's team-info logo list; null when the team publishes fewer variants.
+  logos_6: URL of the team's logo variant in slot 6 of ESPN's team-info logo list; null when the team publishes fewer variants.
+  logos_7: URL of the team's logo variant in slot 7 of ESPN's team-info logo list; null when the team publishes fewer variants.
+  logos_8: URL of the team's logo variant in slot 8 of ESPN's team-info logo list; null when the team publishes fewer variants.
+  logos_9: URL of the team's logo variant in slot 9 of ESPN's team-info logo list; null when the team publishes fewer variants.
+  state: U.S. state where the school is located.
+  twitter: The football program's Twitter/X handle including the leading at sign, populated for only a minority of listed
+    teams.
+nil_compliances_state:
+  current_rules: Text of the state's current NIL rules, as tracked by On3.
+  governing_rule_label: Name of the governing body or rule for NIL in the state.
+  governing_rule_url: URL of the governing NIL rule or policy document.
+  key: On3 RDB key for the state NIL-compliance record.
+  monetization_allowed: Whether the state allows high-school athletes to monetize their NIL.
+  state: U.S. state whose NIL compliance rules the record describes.
+  state_key: On3 key of the U.S. state the compliance record covers.
+organizations_draft_class_by_state:
+  state: U.S. state the draft-class grouping covers.
+organizations_drafted_players:
+  college_organization: Nested On3 organization object for the college the player attended (stringified).
+  compensatory: Whether the selection was a compensatory draft pick.
+  drafted_from_organization: Nested On3 organization object for the school the player was drafted out of (stringified).
+  forfeited: Whether the pick was forfeited.
+  high_school_organization: Nested On3 organization object for the player's high school (stringified).
+  key: On3 RDB key for the draft-pick record.
+  person: Nested On3 person object for the drafted player (stringified).
+  recruitment_key: On3 RDB recruitment key linking the draft pick back to the player's recruitment record.
+  state: Home state of the drafted player, per On3.
+  supplementary: Whether the selection came in a supplemental draft.
+  through_organization_one: First intermediate organization the pick passed through in trades before being exercised (On3
+    RDB).
+  through_organization_three: Third intermediate organization the pick passed through in trades before being exercised (On3
+    RDB).
+  through_organization_two: Second intermediate organization the pick passed through in trades before being exercised (On3
+    RDB).
+  trading_organization: Pro organization that traded the pick away, when it changed hands (On3 RDB).
+people_valuation_growth:
+  date: Date of the On3 NIL valuation snapshot.
+  date_unix: Unix timestamp of the valuation snapshot.
+  nil_status: Status of the athlete's On3 NIL valuation at the snapshot (e.g. active, inactive).
+  valuation: Athlete's On3 NIL valuation in dollars at the snapshot.
+  valuation_change: Change in the NIL valuation versus the previous snapshot, in dollars.
+player_videos:
+  date: Publication date of the video, per On3.
+  is_featured: Whether the video is featured on the player's On3 profile.
+  key: On3 RDB key for the video record.
+  person_key: On3 person key of the featured athlete.
+  person_sport: Nested athlete-sport profile the video is attached to (stringified).
+  source_url: Source URL of the hosted video.
+  thumbnail: URL of the video's thumbnail image.
+videos_video_key:
+  date: Publication date of the video, per On3.
+  is_featured: Whether the video is featured on the player's On3 profile.
+  key: On3 RDB key for the video record.
+  person_key: On3 person key of the featured athlete.
+  person_sport: Nested athlete-sport profile the video is attached to (stringified).
+  source_url: Source URL of the hosted video.
+  thumbnail: URL of the video's thumbnail image.
+sports247_site_pages_location:
+  city_tax_rate: City income-tax rate for the location, carried on the 247Sports location record.
+  county_tax_rate: County income-tax rate for the location, carried on the 247Sports location record.
+  default_name: Server-rendered display label for the entity.
+  key: Primary key of this entity (the id used in its `.json` route).
+  region_name: Name of the region (state/province) for the location.
+  special_tax_rate: Special-district tax rate for the location, carried on the 247Sports location record.
+  state: U.S. state of the location record, per 247Sports.
+sports247_site_pages_player_institution:
+  created_date: Date the player-institution record was created.
+  default_asset: Nested 247Sports image asset for the stint (stringified).
+  default_name: Server-rendered display label for the entity.
+  early_enrollee: Whether the player enrolled early at the institution.
+  early_signee: Whether the player signed in the early signing period.
+  end_year_or_current: Stint's end year, or the current year for an active stint.
+  end_year_or_expected: Stint's end year, or the expected end year for an active stint.
+  hero_asset: Nested 247Sports hero (banner) image asset for the stint (stringified).
+  institution: Nested 247Sports institution for the stint (stringified).
+  key: Primary key of this entity (the id used in its `.json` route).
+  lead_expert: 247Sports expert assigned as the lead on the recruitment (nested, stringified).
+  modified_date: Date the player-institution record was last modified.
+  next_institution_group: Grouping (e.g. conference/division) of the player's next institution, per 247Sports.
+  next_institution_type: Level of the player's next institution (e.g. college, professional), per 247Sports.
+  player_institution_evaluation: Nested 247Sports evaluation attached to this player-institution stint (stringified).
+  primary_player_sport: Nested 247Sports player-sport profile the stint belongs to (stringified).
+  primary_recruitment: Nested 247Sports record for the recruitment behind the stint (stringified).
+  start_year_or_expected: Stint's start year, or the expected start year for a future stint.
+  state: Nested 247Sports state record for the institution's location (stringified).
+  transfer_eligibility: Player's eligibility status for the transfer, per 247Sports.
+  transfer_institution: Nested institution involved in the player's transfer, for transfer-portal stints (stringified).
+  transfer_season: Season of the player's transfer, when applicable.
+sports247_site_pages_player_sport:
+  average_rank: Player's average rank across the tracked industry services.
+  class_year: Recruiting class year.
+  class_year_override: Override of the player's recruiting class year, when 247Sports reassigns it.
+  composite_rating: 247Sports Composite rating (industry blend).
+  composite_rating_or_default: 247Sports Composite rating, falling back to a default value when unrated.
+  composite_strength: Composite strength points (team-ranking weight).
+  current_player_sport_ranking: Nested current published ranking row for the player (stringified).
+  current_player_sport_year: Current ranking-cycle year for the player-sport profile.
+  default_name: Server-rendered display label for the entity.
+  espn_grade: ESPN source grade (industry composite input).
+  espn_index: ESPN index value for the player, as tracked by 247Sports.
+  espn_rank: Player's rank in the ESPN industry ranking, as tracked by 247Sports.
+  key: Primary key of this entity (the id used in its `.json` route).
+  local_index: 247Sports' own industry-index value for the player, alongside the Rivals and ESPN indexes.
+  player_institution: Nested player-institution stint the player-sport profile points to (stringified).
+  previous_recruitment: Nested record for the player's previous recruitment (stringified).
+  primary: Whether this is the player's primary sport.
+  primary_institution_prediction: Nested leading Crystal Ball institution prediction for the player (stringified).
+  primary_institution_prediction_percentage: Share of Crystal Ball predictions favoring the leading institution.
+  primary_player_position: Nested 247Sports record for the player's primary position (stringified).
+  primary_position: Player's primary position on the 247Sports profile.
+  primary_position_group: Position group the player's primary position belongs to.
+  rating: 247Sports rating string (0-1).
+  rating_or_default: 247Sports in-house rating, falling back to a default value when unrated.
+  recruitment: FK -> Recruitment aggregate for this player-sport.
+  rivals_grade: Rivals source grade (industry composite input).
+  rivals_index: Rivals index value for the player, as tracked by 247Sports.
+  rivals_rank: Player's rank in the Rivals industry ranking, as tracked by 247Sports.
+  secondary_institution_prediction: Nested second-place Crystal Ball institution prediction (stringified).
+  secondary_institution_prediction_percentage: Share of Crystal Ball predictions favoring the second-place institution.
+  show_unranked_rating: 247Sports display flag to show the rating even while the player is unranked.
+  sport: Nested 247Sports sport for the profile (stringified).
+  star_rating: Star tier (2-5).
+  state: Home state of the recruit, per 247Sports.
+  unpublished_player_sport_ranking: Nested not-yet-published ranking row for the player (stringified).
+sports247_site_pages_recruit:
+  announcement_date: Date the recruit announced their decision.
+  commited_institution_team_image: Team image asset for the committed institution (the 'commited' spelling is 247Sports' own
+    field name).
+  committed_institution: FK -> committed Institution.
+  committed_recruit_interest: Nested interest record for the school the recruit committed to (stringified).
+  composite_strength: Composite strength points contributed to team ranking.
+  default_name: Server-rendered display label for the entity.
+  final_choice: Whether this entry represents the recruit's final school choice.
+  highest_recruit_interest: Nested interest record carrying the recruit's highest interest signal (stringified).
+  highest_recruit_interest_event: Nested highest-signal event on the recruit's interest timeline (stringified).
+  highest_recruit_interest_event_type: Type of the highest-signal event on the recruit's interest timeline (e.g. commit, signing).
+  institution: Nested institution the recruit row is scoped to (stringified).
+  key: Primary key of this entity (the id used in its `.json` route).
+  player_bio: Player biography text authored on 247Sports.
+  player_bio_or_default: Player bio text, falling back to a default blurb when none is authored.
+  player_birthdate: Player's date of birth, per 247Sports.
+  player_cbs_key: Cross-reference key into the CBS Sports id space.
+  player_college_stat_player: Reference tying the profile to a college stats player record (247Sports field).
+  player_current_player_institution: FK -> PlayerInstitution (current school).
+  player_default_asset: Nested 247Sports image asset for the player's headshot (stringified).
+  player_default_asset_url: URL of the player's headshot image.
+  player_default_name: Server-rendered display label for the entity.
+  player_hero_asset: Nested 247Sports hero (banner) image asset for the player page (stringified).
+  player_hometown_city: City of the player's hometown.
+  player_hometown_state: State of the player's hometown.
+  player_institution: Nested player-institution stint behind the recruit row (stringified).
+  player_key: Primary key of this entity (the id used in its `.json` route).
+  player_last_recruitment_player_institution: Nested player-institution record from the player's most recent recruitment (stringified).
+  player_mobile_phone_contact: Player's mobile phone contact field on the 247Sports record.
+  player_modified_date: Date the player record was last modified.
+  player_modified_user: 247Sports user who last modified the player record.
+  player_national_rank: Overall national rank in the recruit's class.
+  player_player_high_school_name: Name of the player's high school.
+  player_position_rank: Rank within position for the class.
+  player_primary_player_position_abbreviation: Abbreviation of the player's primary position.
+  player_primary_player_sport: FK -> PlayerSport (`/PlayerSport/{id}.json`).
+  player_primary_recruitment: Nested 247Sports record for the player's primary recruitment (stringified).
+  player_pro_stat_player: Reference tying the profile to a professional stats player record (247Sports field).
+  player_quote_asset: Nested 247Sports image asset used alongside the player's quote block (stringified).
+  player_rating: 247Sports numeric rating (0-1 scale) for the primary sport.
+  player_scout_evaluation: 247Sports scouting evaluation text for the player.
+  player_sport: Nested player-sport profile for the recruit (stringified).
+  player_star_rating: Star tier (2-5) derived from the rating.
+  player_state_rank: Rank within home state for the class.
+  player_twitter_contact: Player's Twitter/X handle on the 247Sports profile.
+  player_user: 247Sports user account linked to the player profile (nested, stringified).
+  primary_player_position: Nested 247Sports record for the recruit's primary position (stringified).
+  primary_position: Recruit's primary position on the 247Sports profile.
+  recruit_interest_count: Number of tracked school interests.
+  recruit_interests_url: Site URL to the recruit's interest timeline.
+  signed_institution: Nested institution the recruit signed with (stringified).
+  state: Home state of the recruit, per 247Sports.
+sports247_site_pages_recruit_interest_event:
+  date: Date of the recruiting-interest event, per 247Sports.
+  default_name: Server-rendered display label for the entity.
+  institution: Nested 247Sports institution the interest event involves (stringified).
+  key: Primary key of this entity (the id used in its `.json` route).
+  recruit_interest: Nested recruit-interest record the event belongs to (stringified).
+  recruitment: Nested 247Sports recruitment the event belongs to (stringified).
 load_contracts:
   cols: Placeholder column retained in the contracts loader output schema; contains no meaningful data in this context.
 load_depth_charts:
