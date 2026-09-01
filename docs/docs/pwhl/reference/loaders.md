@@ -534,10 +534,10 @@ Release: [pwhl_pbp](https://github.com/sportsdataverse/sportsdataverse-data/rele
 | `scoring_chance` | Boolean | TRUE when event is a shot-type within 25 ft of the net. |
 | `on_ice_home` | String | Comma-joined sorted player_ids on ice for the home team. |
 | `on_ice_away` | String | Comma-joined sorted player_ids on ice for the away team. |
-| `skaters_home` | Int64 |  |
-| `skaters_away` | Int64 |  |
-| `strength_state` | String | Strength state (e.g. 5v5, 5v4). |
-| `strength_state_valid` | Boolean |  |
+| `skaters_home` | Int64 | Number of home skaters on the ice for the event, derived from HockeyTech shift data. |
+| `skaters_away` | Int64 | Number of away skaters on the ice for the event, derived from HockeyTech shift data. |
+| `strength_state` | String | Skater-strength state formatted home-first as skaters_home v skaters_away (5v4 = home has the extra skater), derived from shift data. |
+| `strength_state_valid` | Boolean | True when both shift-derived skater counts are between 3 and 6 inclusive; false when a count falls outside that range; null when a count is unavailable. |
 
 ```python
 load_pwhl_pbp(seasons=2024)

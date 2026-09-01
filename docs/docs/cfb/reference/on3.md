@@ -27,16 +27,16 @@ GET /rdb/v1/coaches/{personKey}/history
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `start_pso_key` | integer |  |
-| `latest_pso_key` | integer |  |
+| `start_pso_key` | integer | On3 player-sport-organization (PSO) key for the first season of the coaching stint. |
+| `latest_pso_key` | integer | On3 player-sport-organization (PSO) key for the most recent season of the stint. |
 | `start_year` | integer | Span starting year. |
-| `latest_year` | integer |  |
-| `fired` | logical |  |
-| `promoted` | logical |  |
-| `resigned` | logical |  |
-| `end_of_team` | logical |  |
+| `latest_year` | integer | Most recent year of the coaching stint. |
+| `fired` | logical | Whether the stint ended with the coach being fired. |
+| `promoted` | logical | Whether the stint ended with the coach being promoted within the organization. |
+| `resigned` | logical | Whether the stint ended with the coach resigning. |
+| `end_of_team` | logical | On3 RDB flag that the stint ended because the team or program itself ended. |
 | `deceased` | logical | Whether the player is deceased. |
-| `is_present` | logical |  |
+| `is_present` | logical | Whether this is the coach's current (ongoing) stint. |
 | `organization` | character | Organization. |
 | `position` | character | Athlete position. |
 
@@ -70,22 +70,22 @@ GET /rdb/v1/coaches/{personKey}/profile
 | `salary` | numeric | Total cap-counting salary for the season ($). |
 | `age` | integer | Age as of last pipeline build, rounded to one decimal. Pipeline is built on a weekly basis. |
 | `high_school_name` | character | Recruit high-school name. |
-| `home_town_name` | character |  |
+| `home_town_name` | character | Coach's hometown, as listed by On3. |
 | `description` | character | ESPN's description of the stat. |
-| `alma_mater` | character |  |
-| `alma_mater_class_year` | integer |  |
-| `degree` | character |  |
-| `key` | integer |  |
+| `alma_mater` | character | School the coach graduated from. |
+| `alma_mater_class_year` | integer | Coach's graduating class year at their alma mater. |
+| `degree` | character | Degree the coach earned, when listed. |
+| `key` | integer | On3 RDB key for the coach profile. |
 | `first_name` | character | Athlete first name. |
 | `last_name` | character | Athlete last name. |
-| `known_as_name` | character |  |
+| `known_as_name` | character | Name the coach publicly goes by, when it differs from the legal name. |
 | `full_name` | character | Venue full name (e.g. `Tenney Stadium`). |
 | `slug` | character | URL slug for the team. |
-| `default_asset` | character |  |
+| `default_asset` | character | Nested On3 asset object for the coach's headshot (stringified). |
 | `organization` | character | Organization. |
-| `primary_position` | character |  |
-| `org_season_count` | integer |  |
-| `years_active` | integer |  |
+| `primary_position` | character | Nested On3 object for the coach's primary coaching role (stringified). |
+| `org_season_count` | integer | Number of seasons the coach has spent with the current organization. |
+| `years_active` | integer | Span of years the coach has been active, per On3. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -118,32 +118,32 @@ GET /rdb/v1/collective-groups
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `key` | integer |  |
+| `key` | integer | On3 RDB key for the NIL collective group. |
 | `name` | character | Position name (e.g. `Quarterback`). |
-| `default_asset_key` | integer |  |
-| `default_asset` | character |  |
-| `social_asset_key` | integer |  |
-| `social_asset` | character |  |
-| `organization_key` | integer |  |
+| `default_asset_key` | integer | On3 asset key for the collective's primary logo image. |
+| `default_asset` | character | Nested On3 asset object for the collective's primary logo (stringified). |
+| `social_asset_key` | integer | On3 asset key for the collective's social-media image. |
+| `social_asset` | character | Nested On3 asset object for the collective's social-media image (stringified). |
+| `organization_key` | integer | On3 organization key of the school the collective supports. |
 | `organization` | character | Organization. |
-| `launch_date` | character |  |
+| `launch_date` | character | Date the NIL collective launched. |
 | `organization_type` | character | Organization type. |
-| `twitter_handle` | character |  |
-| `instagram_handle` | character |  |
-| `tik_tok_handle` | character |  |
-| `youtube_handle` | character |  |
-| `linked_in_handle` | character |  |
-| `website_name` | character |  |
-| `website_url` | character |  |
-| `mission_statement` | character |  |
+| `twitter_handle` | character | Collective's Twitter/X account handle. |
+| `instagram_handle` | character | Collective's Instagram account handle. |
+| `tik_tok_handle` | character | Collective's TikTok account handle. |
+| `youtube_handle` | character | Collective's YouTube channel handle. |
+| `linked_in_handle` | character | Collective's LinkedIn account handle. |
+| `website_name` | character | Display name of the collective's website. |
+| `website_url` | character | URL of the collective's website. |
+| `mission_statement` | character | Collective's stated mission, as published to On3. |
 | `description` | character | ESPN's description of the stat. |
-| `annual_goal_amount` | numeric |  |
-| `confirmed_raised_amount` | numeric |  |
-| `merged_into_group_key` | integer |  |
-| `merged_into_group` | character |  |
+| `annual_goal_amount` | numeric | Collective's annual fundraising goal in dollars, as reported to On3. |
+| `confirmed_raised_amount` | numeric | Dollar amount the collective has confirmed raising, per On3. |
+| `merged_into_group_key` | integer | On3 key of the collective this group merged into, when applicable. |
+| `merged_into_group` | character | Nested On3 record for the collective this group merged into (stringified). |
 | `slug` | character | URL slug for the team. |
-| `founders` | character |  |
-| `sports` | character |  |
+| `founders` | character | Founders of the collective, as a stringified list. |
+| `sports` | character | Sports the collective funds, as a stringified list. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -174,21 +174,21 @@ GET /rdb/v1/collective-groups/{key}/deals
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `key` | integer |  |
-| `person` | character |  |
-| `company` | character |  |
+| `key` | integer | On3 RDB key for the NIL deal record. |
+| `person` | character | Nested On3 person object for the athlete in the deal (stringified). |
+| `company` | character | Nested On3 record for the company on the other side of the NIL deal (stringified). |
 | `agent` | character | Listed player agent. |
-| `collective_group` | character |  |
-| `amount` | numeric |  |
-| `date` | character | Date of the poll release. |
-| `verified` | logical |  |
-| `source_url` | character |  |
+| `collective_group` | character | Nested On3 record for the collective brokering the deal (stringified). |
+| `amount` | numeric | Reported dollar amount of the NIL deal. |
+| `date` | character | Date of the NIL collective deal, per On3. |
+| `verified` | logical | Whether On3 verified the deal. |
+| `source_url` | character | URL of the source reporting the deal. |
 | `rating` | character | Overall SP+ rating (Bill Connelly methodology, in points per game). |
-| `roster_rating` | character |  |
+| `roster_rating` | character | Nested On3 roster rating object for the athlete at deal time (stringified). |
 | `status` | character | Game status (e.g. "scheduled", "in_progress", "completed"). |
-| `rpm` | character |  |
-| `nil_status` | character |  |
-| `nil_value` | integer |  |
+| `rpm` | character | Nested On3 Recruiting Prediction Machine (RPM) data for the athlete (stringified). |
+| `nil_status` | character | Status of the athlete's On3 NIL valuation (e.g. active, inactive). |
+| `nil_value` | integer | Athlete's On3 NIL valuation in dollars. |
 | `detail` | character | Detailed status text. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
@@ -218,32 +218,32 @@ GET /rdb/v1/collective-groups/{key}
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `key` | integer |  |
+| `key` | integer | On3 RDB key for the NIL collective group. |
 | `name` | character | Position name (e.g. `Quarterback`). |
-| `default_asset_key` | integer |  |
-| `default_asset` | character |  |
-| `social_asset_key` | integer |  |
-| `social_asset` | character |  |
-| `organization_key` | integer |  |
+| `default_asset_key` | integer | On3 asset key for the collective's primary logo image. |
+| `default_asset` | character | Nested On3 asset object for the collective's primary logo (stringified). |
+| `social_asset_key` | integer | On3 asset key for the collective's social-media image. |
+| `social_asset` | character | Nested On3 asset object for the collective's social-media image (stringified). |
+| `organization_key` | integer | On3 organization key of the school the collective supports. |
 | `organization` | character | Organization. |
-| `launch_date` | character |  |
+| `launch_date` | character | Date the NIL collective launched. |
 | `organization_type` | character | Organization type. |
-| `twitter_handle` | character |  |
-| `instagram_handle` | character |  |
-| `tik_tok_handle` | character |  |
-| `youtube_handle` | character |  |
-| `linked_in_handle` | character |  |
-| `website_name` | character |  |
-| `website_url` | character |  |
-| `mission_statement` | character |  |
+| `twitter_handle` | character | Collective's Twitter/X account handle. |
+| `instagram_handle` | character | Collective's Instagram account handle. |
+| `tik_tok_handle` | character | Collective's TikTok account handle. |
+| `youtube_handle` | character | Collective's YouTube channel handle. |
+| `linked_in_handle` | character | Collective's LinkedIn account handle. |
+| `website_name` | character | Display name of the collective's website. |
+| `website_url` | character | URL of the collective's website. |
+| `mission_statement` | character | Collective's stated mission, as published to On3. |
 | `description` | character | ESPN's description of the stat. |
-| `annual_goal_amount` | numeric |  |
-| `confirmed_raised_amount` | numeric |  |
-| `merged_into_group_key` | integer |  |
-| `merged_into_group` | character |  |
+| `annual_goal_amount` | numeric | Collective's annual fundraising goal in dollars, as reported to On3. |
+| `confirmed_raised_amount` | numeric | Dollar amount the collective has confirmed raising, per On3. |
+| `merged_into_group_key` | integer | On3 key of the collective this group merged into, when applicable. |
+| `merged_into_group` | character | Nested On3 record for the collective this group merged into (stringified). |
 | `slug` | character | URL slug for the team. |
-| `founders` | character |  |
-| `sports` | character |  |
+| `founders` | character | Founders of the collective, as a stringified list. |
+| `sports` | character | Sports the collective funds, as a stringified list. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -326,7 +326,7 @@ GET /rdb/v1/commits/organizations/{orgKey}/latest-commits
 | col_name | type | description |
 |---|---|---|
 | `status_type` | character | Status type. |
-| `commits` | character | Number of commits in the position group. |
+| `commits` | character | Number of commitments in the organization's latest recruiting class. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -356,7 +356,7 @@ GET /rdb/v1/commits/organizations/{orgKey}
 | col_name | type | description |
 |---|---|---|
 | `status_type` | character | Status type. |
-| `commits` | character | Number of commits in the position group. |
+| `commits` | character | Number of commitments in the organization's recruiting class for the season. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -390,12 +390,12 @@ GET /rdb/v1/draft-organization-rank
 |---|---|---|
 | `organization` | character | Organization. |
 | `rank` | integer | Position of the school within the poll for the given week (1 = top-ranked). |
-| `five_stars` | integer |  |
-| `four_stars` | integer |  |
-| `three_stars` | integer | Whether three stars data is available. |
+| `five_stars` | integer | Number of five-star recruits the organization signed over the ranking window. |
+| `four_stars` | integer | Number of four-star recruits the organization signed over the ranking window. |
+| `three_stars` | integer | Number of three-star recruits the organization signed over the ranking window. |
 | `total` | integer | The sum of each team's score in the game. Equals h_score + v_score. Is NA for games which haven't yet been played. Convenient for evaluating over/under total bets. |
-| `percent_drafted` | numeric |  |
-| `draft_rate` | numeric |  |
+| `percent_drafted` | numeric | Share of the organization's recruits who went on to be drafted. |
+| `draft_rate` | numeric | Organization's draft-production rate used in On3's draft ranking. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -429,10 +429,10 @@ GET /rdb/v1/draft-pick-organization-rank
 |---|---|---|
 | `organization` | character | Organization. |
 | `rank` | integer | Position of the school within the poll for the given week (1 = top-ranked). |
-| `first_round` | integer |  |
-| `second_round` | integer |  |
-| `third_round` | integer |  |
-| `fourth_through_seventh_round` | integer |  |
+| `first_round` | integer | Number of the organization's players drafted in the first round. |
+| `second_round` | integer | Number of the organization's players drafted in the second round. |
+| `third_round` | integer | Number of the organization's players drafted in the third round. |
+| `fourth_through_seventh_round` | integer | Number of the organization's players drafted in rounds four through seven. |
 | `total` | integer | The sum of each team's score in the game. Equals h_score + v_score. Is NA for games which haven't yet been played. Convenient for evaluating over/under total bets. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
@@ -464,26 +464,26 @@ GET /rdb/v1/drafts
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `recruitment_key` | integer |  |
+| `recruitment_key` | integer | On3 RDB recruitment key linking the draft pick back to the player's recruitment record. |
 | `organization` | character | Organization. |
-| `drafted_from_organization` | character |  |
-| `high_school_organization` | character |  |
-| `college_organization` | character |  |
+| `drafted_from_organization` | character | Nested On3 organization object for the school the player was drafted out of (stringified). |
+| `high_school_organization` | character | Nested On3 organization object for the player's high school (stringified). |
+| `college_organization` | character | Nested On3 organization object for the college the player attended (stringified). |
 | `hometown` | character | Prospect hometown. |
-| `state` | character | Venue state. |
+| `state` | character | Home state of the drafted player, per On3. |
 | `pick` | integer | Pick number of the NFL draftee within the round they were picked in. |
-| `compensatory` | logical |  |
-| `supplementary` | logical |  |
+| `compensatory` | logical | Whether the selection was a compensatory draft pick. |
+| `supplementary` | logical | Whether the selection came in a supplemental draft. |
 | `traded` | logical | Whether the pick was traded. |
-| `forfeited` | logical |  |
-| `trading_organization` | character |  |
-| `through_organization_one` | character |  |
-| `through_organization_two` | character |  |
-| `through_organization_three` | character |  |
-| `key` | integer |  |
+| `forfeited` | logical | Whether the pick was forfeited. |
+| `trading_organization` | character | Pro organization that traded the pick away, when it changed hands (On3 RDB). |
+| `through_organization_one` | character | First intermediate organization the pick passed through in trades before being exercised (On3 RDB). |
+| `through_organization_two` | character | Second intermediate organization the pick passed through in trades before being exercised (On3 RDB). |
+| `through_organization_three` | character | Third intermediate organization the pick passed through in trades before being exercised (On3 RDB). |
+| `key` | integer | On3 RDB key for the draft-pick record. |
 | `round` | integer | Round of NFL draft the draftee was picked in. |
 | `overall_pick` | integer | Overall pick number in the draft. |
-| `person` | character |  |
+| `person` | character | Nested On3 person object for the drafted player (stringified). |
 | `position` | character | Athlete position. |
 | `age` | numeric | Age as of last pipeline build, rounded to one decimal. Pipeline is built on a weekly basis. |
 | `rating` | character | Overall SP+ rating (Bill Connelly methodology, in points per game). |
@@ -517,14 +517,14 @@ GET /rdb/v1/drafts-by-stars
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `state` | character | Venue state. |
-| `blue_chip_percent` | numeric |  |
-| `population_percent` | numeric |  |
-| `talent_ratio` | numeric |  |
-| `five_stars` | integer |  |
-| `four_stars` | integer |  |
-| `three_stars` | integer | Whether three stars data is available. |
-| `zero_stars` | integer |  |
+| `state` | character | Home state associated with the draft row, per On3. |
+| `blue_chip_percent` | numeric | Percent of the drafted group who were blue-chip (four- or five-star) recruits. |
+| `population_percent` | numeric | Percent of the overall recruit population holding this star rating. |
+| `talent_ratio` | numeric | Ratio of the star tier's draft share to its population share (On3's talent ratio). |
+| `five_stars` | integer | Number of drafted players who were five-star recruits. |
+| `four_stars` | integer | Number of drafted players who were four-star recruits. |
+| `three_stars` | integer | Number of drafted players who were three-star recruits. |
+| `zero_stars` | integer | Number of drafted players who were unrated (zero-star) recruits. |
 | `total` | integer | The sum of each team's score in the game. Equals h_score + v_score. Is NA for games which haven't yet been played. Convenient for evaluating over/under total bets. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
@@ -555,12 +555,12 @@ GET /rdb/v1/drafts-by-stars-summary
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `five_stars` | character |  |
-| `four_stars` | character |  |
-| `three_stars` | character | Whether three stars data is available. |
-| `zero_stars` | character |  |
-| `total_drafted` | integer |  |
-| `total_recruited` | integer |  |
+| `five_stars` | character | Number of drafted players who were five-star recruits. |
+| `four_stars` | character | Number of drafted players who were four-star recruits. |
+| `three_stars` | character | Number of drafted players who were three-star recruits. |
+| `zero_stars` | character | Number of drafted players who were unrated (zero-star) recruits. |
+| `total_drafted` | integer | Total number of players drafted in the summarized group. |
+| `total_recruited` | integer | Total number of recruits in the summarized group. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -590,26 +590,26 @@ GET /rdb/v1/drafts/{orgKey}/players
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `recruitment_key` | integer |  |
+| `recruitment_key` | integer | On3 RDB recruitment key linking the draft pick back to the player's recruitment record. |
 | `organization` | character | Organization. |
-| `drafted_from_organization` | character |  |
-| `high_school_organization` | character |  |
-| `college_organization` | character |  |
+| `drafted_from_organization` | character | Nested On3 organization object for the school the player was drafted out of (stringified). |
+| `high_school_organization` | character | Nested On3 organization object for the player's high school (stringified). |
+| `college_organization` | character | Nested On3 organization object for the college the player attended (stringified). |
 | `hometown` | character | Prospect hometown. |
-| `state` | character | Venue state. |
+| `state` | character | Home state of the drafted player, per On3. |
 | `pick` | integer | Pick number of the NFL draftee within the round they were picked in. |
-| `compensatory` | logical |  |
-| `supplementary` | logical |  |
+| `compensatory` | logical | Whether the selection was a compensatory draft pick. |
+| `supplementary` | logical | Whether the selection came in a supplemental draft. |
 | `traded` | logical | Whether the pick was traded. |
-| `forfeited` | logical |  |
-| `trading_organization` | character |  |
-| `through_organization_one` | character |  |
-| `through_organization_two` | character |  |
-| `through_organization_three` | character |  |
-| `key` | integer |  |
+| `forfeited` | logical | Whether the pick was forfeited. |
+| `trading_organization` | character | Pro organization that traded the pick away, when it changed hands (On3 RDB). |
+| `through_organization_one` | character | First intermediate organization the pick passed through in trades before being exercised (On3 RDB). |
+| `through_organization_two` | character | Second intermediate organization the pick passed through in trades before being exercised (On3 RDB). |
+| `through_organization_three` | character | Third intermediate organization the pick passed through in trades before being exercised (On3 RDB). |
+| `key` | integer | On3 RDB key for the draft-pick record. |
 | `round` | integer | Round of NFL draft the draftee was picked in. |
 | `overall_pick` | integer | Overall pick number in the draft. |
-| `person` | character |  |
+| `person` | character | Nested On3 person object for the drafted player (stringified). |
 | `position` | character | Athlete position. |
 | `age` | numeric | Age as of last pipeline build, rounded to one decimal. Pipeline is built on a weekly basis. |
 | `rating` | character | Overall SP+ rating (Bill Connelly methodology, in points per game). |
@@ -642,7 +642,7 @@ GET /rdb/v1/filters/conferences
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `key` | integer |  |
+| `key` | integer | On3 RDB key for the conference filter option. |
 | `name` | character | Position name (e.g. `Quarterback`). |
 | `abbreviation` | character | Metric abbreviation. |
 
@@ -700,7 +700,7 @@ GET /rdb/v1/filters/positions
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `key` | integer |  |
+| `key` | integer | On3 RDB key for the position filter option. |
 | `name` | character | Position name (e.g. `Quarterback`). |
 | `abbreviation` | character | Metric abbreviation. |
 
@@ -730,7 +730,7 @@ GET /rdb/v1/filters/sports
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `key` | integer |  |
+| `key` | integer | On3 RDB key for the sport filter option. |
 | `name` | character | Position name (e.g. `Quarterback`). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
@@ -786,7 +786,7 @@ GET /rdb/v1/filters/teams
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `conference_key` | integer |  |
+| `conference_key` | integer | On3 RDB key of the conference the team belongs to. |
 | `conference_abbr` | character | Conference abbreviation. |
 | `teams` | character | Nested list of member-team membership spans. |
 
@@ -841,8 +841,8 @@ GET /rdb/v1/nil-100
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `person` | character |  |
-| `valuation` | character |  |
+| `person` | character | Nested On3 person object for the ranked athlete (stringified). |
+| `valuation` | character | Athlete's On3 NIL valuation in dollars. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -874,8 +874,8 @@ GET /rdb/v2/nil-100
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `person` | character |  |
-| `valuation` | character |  |
+| `person` | character | Nested On3 person object for the ranked athlete (stringified). |
+| `valuation` | character | Athlete's On3 NIL valuation in dollars. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -904,14 +904,14 @@ GET /rdb/v1/nil-compliances/state
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `key` | integer |  |
+| `key` | integer | On3 RDB key for the state NIL-compliance record. |
 | `organization_type` | character | Organization type. |
-| `state_key` | integer |  |
-| `state` | character | Venue state. |
-| `monetization_allowed` | logical |  |
-| `governing_rule_label` | character |  |
-| `governing_rule_url` | character |  |
-| `current_rules` | character |  |
+| `state_key` | integer | On3 key of the U.S. state the compliance record covers. |
+| `state` | character | U.S. state whose NIL compliance rules the record describes. |
+| `monetization_allowed` | logical | Whether the state allows high-school athletes to monetize their NIL. |
+| `governing_rule_label` | character | Name of the governing body or rule for NIL in the state. |
+| `governing_rule_url` | character | URL of the governing NIL rule or policy document. |
+| `current_rules` | character | Text of the state's current NIL rules, as tracked by On3. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -945,8 +945,8 @@ GET /rdb/v1/nil-rankings
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `person` | character |  |
-| `valuation` | character |  |
+| `person` | character | Nested On3 person object for the ranked athlete (stringified). |
+| `valuation` | character | Athlete's On3 NIL valuation in dollars. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -977,7 +977,7 @@ GET /rdb/v1/organizations/{organizationKey}/draft-class-by-state
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `state` | character | Venue state. |
+| `state` | character | U.S. state the draft-class grouping covers. |
 | `count` | integer | Total number of players in the season index. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
@@ -1039,10 +1039,10 @@ GET /rdb/v1/organizations/{organizationKey}/draft-count-by-stars
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `five_stars` | integer |  |
-| `four_stars` | integer |  |
-| `three_stars` | integer | Whether three stars data is available. |
-| `zero_stars` | integer |  |
+| `five_stars` | integer | Number of the organization's drafted players who were five-star recruits. |
+| `four_stars` | integer | Number of the organization's drafted players who were four-star recruits. |
+| `three_stars` | integer | Number of the organization's drafted players who were three-star recruits. |
+| `zero_stars` | integer | Number of the organization's drafted players who were unrated (zero-star) recruits. |
 | `total` | integer | The sum of each team's score in the game. Equals h_score + v_score. Is NA for games which haven't yet been played. Convenient for evaluating over/under total bets. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
@@ -1075,12 +1075,12 @@ GET /rdb/v1/organizations/{organizationKey}/draft-count-by-year
 | col_name | type | description |
 |---|---|---|
 | `year` | integer | Four-digit season year (e.g. 2019). |
-| `blue_chip_percent` | numeric |  |
-| `talent_ratio` | numeric |  |
-| `five_stars` | integer |  |
-| `four_stars` | integer |  |
-| `three_stars` | integer | Whether three stars data is available. |
-| `zero_stars` | integer |  |
+| `blue_chip_percent` | numeric | Percent of the year's drafted players who were blue-chip (four- or five-star) recruits. |
+| `talent_ratio` | numeric | Ratio of the group's draft share to its recruit-population share for the year (On3's talent ratio). |
+| `five_stars` | integer | Number of the organization's players drafted that year who were five-star recruits. |
+| `four_stars` | integer | Number of the organization's players drafted that year who were four-star recruits. |
+| `three_stars` | integer | Number of the organization's players drafted that year who were three-star recruits. |
+| `zero_stars` | integer | Number of the organization's players drafted that year who were unrated (zero-star) recruits. |
 | `total` | integer | The sum of each team's score in the game. Equals h_score + v_score. Is NA for games which haven't yet been played. Convenient for evaluating over/under total bets. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
@@ -1112,8 +1112,8 @@ GET /rdb/v1/organizations/{organizationKey}/draft-ranking-summary
 | col_name | type | description |
 |---|---|---|
 | `conference` | character | Conference of the team. |
-| `year_summary` | character |  |
-| `span_summary` | character |  |
+| `year_summary` | character | Nested summary of the organization's draft ranking for the single year (stringified). |
+| `span_summary` | character | Nested summary of the organization's draft ranking over the multi-year span (stringified). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -1144,26 +1144,26 @@ GET /rdb/v1/organizations/{organizationKey}/drafted-players
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `recruitment_key` | integer |  |
+| `recruitment_key` | integer | On3 RDB recruitment key linking the draft pick back to the player's recruitment record. |
 | `organization` | character | Organization. |
-| `drafted_from_organization` | character |  |
-| `high_school_organization` | character |  |
-| `college_organization` | character |  |
+| `drafted_from_organization` | character | Nested On3 organization object for the school the player was drafted out of (stringified). |
+| `high_school_organization` | character | Nested On3 organization object for the player's high school (stringified). |
+| `college_organization` | character | Nested On3 organization object for the college the player attended (stringified). |
 | `hometown` | character | Prospect hometown. |
-| `state` | character | Venue state. |
+| `state` | character | Home state of the drafted player, per On3. |
 | `pick` | integer | Pick number of the NFL draftee within the round they were picked in. |
-| `compensatory` | logical |  |
-| `supplementary` | logical |  |
+| `compensatory` | logical | Whether the selection was a compensatory draft pick. |
+| `supplementary` | logical | Whether the selection came in a supplemental draft. |
 | `traded` | logical | Whether the pick was traded. |
-| `forfeited` | logical |  |
-| `trading_organization` | character |  |
-| `through_organization_one` | character |  |
-| `through_organization_two` | character |  |
-| `through_organization_three` | character |  |
-| `key` | integer |  |
+| `forfeited` | logical | Whether the pick was forfeited. |
+| `trading_organization` | character | Pro organization that traded the pick away, when it changed hands (On3 RDB). |
+| `through_organization_one` | character | First intermediate organization the pick passed through in trades before being exercised (On3 RDB). |
+| `through_organization_two` | character | Second intermediate organization the pick passed through in trades before being exercised (On3 RDB). |
+| `through_organization_three` | character | Third intermediate organization the pick passed through in trades before being exercised (On3 RDB). |
+| `key` | integer | On3 RDB key for the draft-pick record. |
 | `round` | integer | Round of NFL draft the draftee was picked in. |
 | `overall_pick` | integer | Overall pick number in the draft. |
-| `person` | character |  |
+| `person` | character | Nested On3 person object for the drafted player (stringified). |
 | `position` | character | Athlete position. |
 | `age` | numeric | Age as of last pipeline build, rounded to one decimal. Pipeline is built on a weekly basis. |
 | `rating` | character | Overall SP+ rating (Bill Connelly methodology, in points per game). |
@@ -1196,14 +1196,14 @@ GET /rdb/v1/organizations/{organizationKey}/drafts-by-stars-summary
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `nat_total_drafted` | integer |  |
-| `total_drafted` | integer |  |
-| `draft_rank` | integer |  |
+| `nat_total_drafted` | integer | National total of drafted players in the comparison set. |
+| `total_drafted` | integer | Total number of the organization's players drafted. |
+| `draft_rank` | integer | Organization's national rank by draft production. |
 | `organization` | character | Organization. |
-| `overall_star_summary` | character |  |
-| `five_star_summary` | character |  |
-| `four_star_summary` | character |  |
-| `three_star_summary` | character |  |
+| `overall_star_summary` | character | Nested draft summary across all star tiers (stringified). |
+| `five_star_summary` | character | Nested draft summary for the organization's five-star recruits (stringified). |
+| `four_star_summary` | character | Nested draft summary for the organization's four-star recruits (stringified). |
+| `three_star_summary` | character | Nested draft summary for the organization's three-star recruits (stringified). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -1236,15 +1236,15 @@ GET /rdb/v1/organizations/{organizationKey}/roster
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `pso_key` | integer |  |
+| `pso_key` | integer | On3 player-sport-organization (PSO) key for the roster entry. |
 | `player` | character | Player name. |
 | `organization` | character | Organization. |
 | `rating` | character | Overall SP+ rating (Bill Connelly methodology, in points per game). |
-| `roster_rating` | character |  |
+| `roster_rating` | character | Nested On3 roster rating object for the player (stringified). |
 | `status` | character | Game status (e.g. "scheduled", "in_progress", "completed"). |
-| `nil_value` | character |  |
-| `rpm` | character |  |
-| `industry_comparison` | character |  |
+| `nil_value` | character | Player's On3 NIL valuation in dollars. |
+| `rpm` | character | Nested On3 Recruiting Prediction Machine (RPM) data for the player (stringified). |
+| `industry_comparison` | character | Nested comparison of the player's On3 rating against the industry-consensus rating (stringified). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -1275,15 +1275,15 @@ GET /rdb/v1/organizations/{organizationKey}/roster-header
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `head_coach` | character |  |
-| `talent_rank` | character |  |
-| `prev_talent_rank` | character |  |
-| `conference_rank` | character |  |
-| `prev_conference_rank` | character |  |
-| `average_rating` | character |  |
-| `prev_average_rating` | character |  |
-| `average_nil_value` | numeric |  |
-| `total_nil_value` | integer |  |
+| `head_coach` | character | Nested On3 person object for the program's head coach (stringified). |
+| `talent_rank` | character | Program's current national roster-talent rank per On3. |
+| `prev_talent_rank` | character | Program's roster-talent rank in the previous cycle. |
+| `conference_rank` | character | Program's roster-talent rank within its conference. |
+| `prev_conference_rank` | character | Program's conference roster-talent rank in the previous cycle. |
+| `average_rating` | character | Average On3 rating across the roster. |
+| `prev_average_rating` | character | Average On3 roster rating in the previous cycle. |
+| `average_nil_value` | numeric | Average On3 NIL valuation across the roster, in dollars. |
+| `total_nil_value` | integer | Total On3 NIL valuation across the roster, in dollars. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -1312,8 +1312,8 @@ GET /rdb/v1/people/{personKey}/combine-measurements
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `measurement_type_key` | integer |  |
-| `measurement_type` | character |  |
+| `measurement_type_key` | integer | On3 key for the measurement category. |
+| `measurement_type` | character | Measurement category (e.g. height, weight, 40-yard dash) per On3's measurement taxonomy. |
 | `value` | numeric | Metric value. |
 | `is_verified` | logical | Whether the player profile is verified. |
 
@@ -1344,13 +1344,13 @@ GET /rdb/v1/people/{personKey}/latest-valuation
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `nil_status` | character |  |
-| `valuation` | integer |  |
-| `valuation_change` | integer |  |
-| `followers` | integer |  |
+| `nil_status` | character | Status of the athlete's On3 NIL valuation (e.g. active, inactive). |
+| `valuation` | integer | Athlete's latest On3 NIL valuation in dollars. |
+| `valuation_change` | integer | Change in the NIL valuation since the previous update, in dollars. |
+| `followers` | integer | Total social-media followers counted toward the valuation. |
 | `rank` | integer | Position of the school within the poll for the given week (1 = top-ranked). |
 | `last_updated` | integer | Timestamp ESPN last refreshed the power index. |
-| `social_valuations` | character |  |
+| `social_valuations` | character | Per-platform breakdown of the social components of the valuation (stringified list). |
 | `group_rank` | integer | League/season rank for group. |
 | `group_name` | character | Group name (conference / division). |
 
@@ -1381,30 +1381,30 @@ GET /rdb/v1/people/{personKey}/measurements
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `key` | integer |  |
-| `measurement_type` | character |  |
-| `measurement_type_key` | integer |  |
+| `key` | integer | On3 RDB key for the measurement record. |
+| `measurement_type` | character | Measurement category (e.g. height, weight, 40-yard dash) per On3's measurement taxonomy. |
+| `measurement_type_key` | integer | On3 key for the measurement category. |
 | `type` | character | Record-type category (e.g. `total`, `home`, `road`). |
 | `value` | numeric | Metric value. |
-| `delta` | numeric |  |
-| `person_key` | integer |  |
-| `verified` | logical |  |
-| `verified_by_user_key` | integer |  |
-| `elite` | logical |  |
-| `event_key` | integer |  |
+| `delta` | numeric | Change in the measured value versus the player's previous measurement of the same type. |
+| `person_key` | integer | On3 person key of the measured athlete. |
+| `verified` | logical | Whether On3 verified the measurement. |
+| `verified_by_user_key` | integer | On3 user key of the staffer who verified the measurement. |
+| `elite` | logical | Whether On3 flags the result as elite for this measurement type. |
+| `event_key` | integer | On3 key of the camp or combine event where the measurement was taken. |
 | `event_name` | character | Event name (e.g. 'All-Star Workout Day: Home Run Derby'). |
 | `event` | character | Binary flag indicating the row is a counted game event (excludes end markers). |
-| `age_measurement_occurred` | numeric |  |
-| `top300_average` | numeric |  |
-| `top_average_change_percent` | numeric |  |
-| `drafted_average` | numeric |  |
+| `age_measurement_occurred` | numeric | Athlete's age when the measurement was taken. |
+| `top300_average` | numeric | Average value of this measurement among On3 Top300-ranked players. |
+| `top_average_change_percent` | numeric | Percent difference between the athlete's value and the Top300 average. |
+| `drafted_average` | numeric | Average value of this measurement among drafted players at the combine. |
 | `record` | character | Team win-loss record for the season. |
-| `draft_change_percent` | numeric |  |
-| `date_added` | integer |  |
+| `draft_change_percent` | numeric | Percent difference between the athlete's value and the drafted-player average. |
+| `date_added` | integer | Date the measurement record was added to the On3 database. |
 | `date_modified` | integer | Date and time that injury information was updated |
-| `date_occurred` | integer |  |
-| `is_current` | logical |  |
-| `person_sport_org_key` | integer |  |
+| `date_occurred` | integer | Date the measurement was actually taken. |
+| `is_current` | logical | Whether this is the athlete's current (most recent) measurement of the type. |
+| `person_sport_org_key` | integer | On3 player-sport-organization (PSO) key the measurement is attached to. |
 | `organization` | character | Organization. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
@@ -1436,16 +1436,16 @@ GET /rdb/v1/people/{personKey}/measurements/averages
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `measurement_key` | integer |  |
-| `measurement_name` | character |  |
-| `current_person_measurement` | numeric |  |
-| `current_measurement_verified` | logical |  |
-| `top300_difference` | numeric |  |
-| `top300_average` | numeric |  |
-| `combine_drafted_average` | numeric |  |
-| `combine_drafted_difference` | numeric |  |
-| `sort` | character |  |
-| `measurement_record` | character |  |
+| `measurement_key` | integer | On3 key for the measurement category being averaged. |
+| `measurement_name` | character | Name of the measurement category (e.g. height, 40-yard dash). |
+| `current_person_measurement` | numeric | Athlete's current value for the measurement. |
+| `current_measurement_verified` | logical | Whether the athlete's current measurement is verified by On3. |
+| `top300_difference` | numeric | Difference between the athlete's value and the On3 Top300 average. |
+| `top300_average` | numeric | Average value of the measurement among On3 Top300-ranked players. |
+| `combine_drafted_average` | numeric | Average combine value of the measurement among drafted players. |
+| `combine_drafted_difference` | numeric | Difference between the athlete's value and the drafted-player combine average. |
+| `sort` | character | Display sort order of the measurement row on the On3 profile. |
+| `measurement_record` | character | Nested On3 record for the athlete's underlying measurement (stringified). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -1476,12 +1476,12 @@ GET /rdb/v1/people/{personKey}/person-connections
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `connection` | character |  |
-| `connected_player` | character |  |
-| `connected_roster_rating` | character |  |
-| `connected_rating` | character |  |
-| `connected_college_organization` | character |  |
-| `connected_draft` | character |  |
+| `connection` | character | Relationship type linking the two people (e.g. sibling, parent, teammate) per On3. |
+| `connected_player` | character | Nested On3 person object for the connected player (stringified). |
+| `connected_roster_rating` | character | Nested On3 roster rating object for the connected player (stringified). |
+| `connected_rating` | character | Nested On3 recruiting rating object for the connected player (stringified). |
+| `connected_college_organization` | character | Nested On3 organization object for the connected player's college (stringified). |
+| `connected_draft` | character | Nested On3 draft record for the connected player, when drafted (stringified). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -1511,8 +1511,8 @@ GET /rdb/v1/people/{personKey}/social
 | col_name | type | description |
 |---|---|---|
 | `type` | character | Record-type category (e.g. `total`, `home`, `road`). |
-| `handle` | character |  |
-| `handshake` | logical |  |
+| `handle` | character | Athlete's account handle on the social platform. |
+| `handshake` | logical | On3 RDB handshake field on the social-account record (platform link/verification metadata). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -1541,9 +1541,9 @@ GET /rdb/v1/people/{personKey}/social-post-summary
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `social_type` | character |  |
+| `social_type` | character | Social platform the post summary covers (e.g. Twitter/X, Instagram). |
 | `type` | character | Record-type category (e.g. `total`, `home`, `road`). |
-| `followers` | integer |  |
+| `followers` | integer | Athlete's follower count on the platform. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -1572,30 +1572,30 @@ GET /rdb/v1/people/{personKey}/track-and-field-measurements
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `key` | integer |  |
-| `measurement_type` | character |  |
-| `measurement_type_key` | integer |  |
+| `key` | integer | On3 RDB key for the measurement record. |
+| `measurement_type` | character | Measurement category (e.g. height, weight, 40-yard dash) per On3's measurement taxonomy. |
+| `measurement_type_key` | integer | On3 key for the measurement category. |
 | `type` | character | Record-type category (e.g. `total`, `home`, `road`). |
 | `value` | numeric | Metric value. |
-| `delta` | numeric |  |
-| `person_key` | integer |  |
-| `verified` | logical |  |
-| `verified_by_user_key` | integer |  |
-| `elite` | logical |  |
-| `event_key` | integer |  |
+| `delta` | numeric | Change in the measured value versus the player's previous measurement of the same type. |
+| `person_key` | integer | On3 person key of the measured athlete. |
+| `verified` | logical | Whether On3 verified the measurement. |
+| `verified_by_user_key` | integer | On3 user key of the staffer who verified the measurement. |
+| `elite` | logical | Whether On3 flags the result as elite for this measurement type. |
+| `event_key` | integer | On3 key of the camp or combine event where the measurement was taken. |
 | `event_name` | character | Event name (e.g. 'All-Star Workout Day: Home Run Derby'). |
 | `event` | character | Binary flag indicating the row is a counted game event (excludes end markers). |
-| `age_measurement_occurred` | numeric |  |
-| `top300_average` | numeric |  |
-| `top_average_change_percent` | numeric |  |
-| `drafted_average` | numeric |  |
+| `age_measurement_occurred` | numeric | Athlete's age when the measurement was taken. |
+| `top300_average` | numeric | Average value of this measurement among On3 Top300-ranked players. |
+| `top_average_change_percent` | numeric | Percent difference between the athlete's value and the Top300 average. |
+| `drafted_average` | numeric | Average value of this measurement among drafted players at the combine. |
 | `record` | character | Team win-loss record for the season. |
-| `draft_change_percent` | numeric |  |
-| `date_added` | integer |  |
+| `draft_change_percent` | numeric | Percent difference between the athlete's value and the drafted-player average. |
+| `date_added` | integer | Date the measurement record was added to the On3 database. |
 | `date_modified` | integer | Date and time that injury information was updated |
-| `date_occurred` | integer |  |
-| `is_current` | logical |  |
-| `person_sport_org_key` | integer |  |
+| `date_occurred` | integer | Date the measurement was actually taken. |
+| `is_current` | logical | Whether this is the athlete's current (most recent) measurement of the type. |
+| `person_sport_org_key` | integer | On3 player-sport-organization (PSO) key the measurement is attached to. |
 | `organization` | character | Organization. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
@@ -1625,11 +1625,11 @@ GET /rdb/v1/people/{personKey}/valuation-growth
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `nil_status` | character |  |
-| `valuation` | integer |  |
-| `valuation_change` | integer |  |
-| `date` | character | Date of the poll release. |
-| `date_unix` | integer |  |
+| `nil_status` | character | Status of the athlete's On3 NIL valuation at the snapshot (e.g. active, inactive). |
+| `valuation` | integer | Athlete's On3 NIL valuation in dollars at the snapshot. |
+| `valuation_change` | integer | Change in the NIL valuation versus the previous snapshot, in dollars. |
+| `date` | character | Date of the On3 NIL valuation snapshot. |
+| `date_unix` | integer | Unix timestamp of the valuation snapshot. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -1658,12 +1658,12 @@ GET /rdb/v1/person-connections/{connectionKey}
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `key` | integer |  |
-| `person_key` | integer |  |
-| `connected_person_key` | integer |  |
-| `sport_key` | integer |  |
+| `key` | integer | On3 RDB key for the person-connection record. |
+| `person_key` | integer | On3 person key of the profile the connection belongs to. |
+| `connected_person_key` | integer | On3 person key of the connected person. |
+| `sport_key` | integer | On3 sport key the connection is scoped to. |
 | `description` | character | ESPN's description of the stat. |
-| `connected_person_sport` | character |  |
+| `connected_person_sport` | character | Nested athlete-sport profile of the connected person (stringified). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -1692,19 +1692,19 @@ GET /rdb/v1/person/{personKey}/primary-recruitment-evaluation
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `key` | integer |  |
-| `recruitment_key` | integer |  |
-| `author_key` | integer |  |
-| `author_name` | character |  |
-| `author_title` | character |  |
+| `key` | integer | On3 RDB key for the scouting evaluation. |
+| `recruitment_key` | integer | On3 recruitment key the evaluation is attached to. |
+| `author_key` | integer | On3 user key of the evaluation's author. |
+| `author_name` | character | Name of the On3 scout who wrote the evaluation. |
+| `author_title` | character | Job title of the On3 scout who wrote the evaluation. |
 | `title` | character | Specific role title for the assignment. |
 | `premium` | logical | Whether the article is premium content. |
-| `body` | character |  |
-| `primary` | logical |  |
+| `body` | character | Full text of the scouting evaluation. |
+| `primary` | logical | Whether this is the primary (featured) evaluation for the recruitment. |
 | `category` | character | CFBD stats category name (e.g. passing, rushing, defensive). |
-| `date_updated_unix` | integer |  |
-| `date_added` | character |  |
-| `date_updated` | character |  |
+| `date_updated_unix` | integer | Unix timestamp of the evaluation's last update. |
+| `date_added` | character | Date the evaluation was added. |
+| `date_updated` | character | Date the evaluation was last updated. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -1733,19 +1733,19 @@ GET /rdb/v1/person/{personKey}/recruitment-evaluations
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `key` | integer |  |
-| `recruitment_key` | integer |  |
-| `author_key` | integer |  |
-| `author_name` | character |  |
-| `author_title` | character |  |
+| `key` | integer | On3 RDB key for the scouting evaluation. |
+| `recruitment_key` | integer | On3 recruitment key the evaluation is attached to. |
+| `author_key` | integer | On3 user key of the evaluation's author. |
+| `author_name` | character | Name of the On3 scout who wrote the evaluation. |
+| `author_title` | character | Job title of the On3 scout who wrote the evaluation. |
 | `title` | character | Specific role title for the assignment. |
 | `premium` | logical | Whether the article is premium content. |
-| `body` | character |  |
-| `primary` | logical |  |
+| `body` | character | Full text of the scouting evaluation. |
+| `primary` | logical | Whether this is the primary (featured) evaluation for the recruitment. |
 | `category` | character | CFBD stats category name (e.g. passing, rushing, defensive). |
-| `date_updated_unix` | integer |  |
-| `date_added` | character |  |
-| `date_updated` | character |  |
+| `date_updated_unix` | integer | Unix timestamp of the evaluation's last update. |
+| `date_added` | character | Date the evaluation was added. |
+| `date_updated` | character | Date the evaluation was last updated. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -1774,24 +1774,24 @@ GET /rdb/v1/person-sport/{psKey}/profile-recruit
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `key` | integer |  |
-| `ranking_key` | integer |  |
+| `key` | integer | On3 RDB key for the player's ranking row. |
+| `ranking_key` | integer | On3 key of the ranking cycle the row belongs to. |
 | `rating` | numeric | Overall SP+ rating (Bill Connelly methodology, in points per game). |
 | `state_rank` | integer | State ranking. |
-| `state_abbr` | character |  |
+| `state_abbr` | character | Two-letter abbreviation of the player's home state. |
 | `position_rank` | integer | Position ranking. |
 | `position_abbr` | character | Position abbreviation. |
 | `overall_rank` | integer | Overall recruit ranking (top recruits only; may be `NA`). |
 | `stars` | integer | Recruit star rating on the 247Sports scale (2-5). |
-| `change` | character |  |
-| `consensus_rating` | numeric |  |
-| `consensus_state_rank` | integer |  |
-| `consensus_position_rank` | integer |  |
-| `consensus_overall_rank` | integer |  |
-| `consensus_stars` | integer |  |
-| `consensus_change` | character |  |
+| `change` | character | Rank movement since the previous ranking cycle. |
+| `consensus_rating` | numeric | Player's industry-consensus rating (blend of the major recruiting services). |
+| `consensus_state_rank` | integer | Player's consensus rank within their home state. |
+| `consensus_position_rank` | integer | Player's consensus rank at their position. |
+| `consensus_overall_rank` | integer | Player's national consensus rank. |
+| `consensus_stars` | integer | Player's star rating under the industry consensus. |
+| `consensus_change` | character | Consensus rank movement since the previous cycle. |
 | `strength` | integer | Strength label (Even, Power Play, Shorthanded). |
-| `five_star_plus` | logical |  |
+| `five_star_plus` | logical | Whether On3 designates the player a Five-Star Plus+ prospect. |
 | `ranking_type` | character | Poll type code (e.g. `ap`, `coaches`, `cfp`). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
@@ -1824,9 +1824,9 @@ GET /rdb/v1/person-sport-rankings
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `ratings` | character |  |
-| `person` | character |  |
-| `nil_value` | integer |  |
+| `ratings` | character | Athlete's ratings across ranking cycles, as a stringified list. |
+| `person` | character | Nested On3 person object for the ranked athlete (stringified). |
+| `nil_value` | integer | Athlete's On3 NIL valuation in dollars. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -1857,20 +1857,20 @@ GET /rdb/v1/player/{personKey}/all-rankings
 |---|---|---|
 | `type` | character | Record-type category (e.g. `total`, `home`, `road`). |
 | `link` | character | API link to the game feed. |
-| `ranking_key` | integer |  |
+| `ranking_key` | integer | On3 key of the ranking cycle the row belongs to. |
 | `ranking_type` | character | Poll type code (e.g. `ap`, `coaches`, `cfp`). |
 | `rating` | numeric | Overall SP+ rating (Bill Connelly methodology, in points per game). |
-| `sport` | character |  |
-| `class_year` | integer |  |
+| `sport` | character | Nested On3 sport object for the ranking row (stringified). |
+| `class_year` | integer | Recruiting class year the ranking covers. |
 | `state_rank` | integer | State ranking. |
-| `state_abbr` | character |  |
+| `state_abbr` | character | Two-letter abbreviation of the player's home state. |
 | `position_rank` | integer | Position ranking. |
 | `position_abbr` | character | Position abbreviation. |
 | `overall_rank` | integer | Overall recruit ranking (top recruits only; may be `NA`). |
 | `stars` | integer | Recruit star rating on the 247Sports scale (2-5). |
-| `five_star_plus` | logical |  |
-| `nearly_five_star_plus` | logical |  |
-| `change` | character |  |
+| `five_star_plus` | logical | Whether On3 designates the player a Five-Star Plus+ prospect. |
+| `nearly_five_star_plus` | logical | On3 flag that the player narrowly missed the Five-Star Plus+ designation. |
+| `change` | character | Rank movement since the previous ranking cycle. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -1899,17 +1899,17 @@ GET /rdb/v1/player/{personKey}/database-updates
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `key` | integer |  |
+| `key` | integer | On3 RDB key for the database-update entry. |
 | `type` | character | Record-type category (e.g. `total`, `home`, `road`). |
 | `text` | character | Full play description. |
-| `replacement_text` | character |  |
+| `replacement_text` | character | Rendered text of the update entry (with references substituted in). |
 | `link` | character | API link to the game feed. |
-| `date_added` | integer |  |
-| `date_occurred` | integer |  |
-| `object_key` | integer |  |
-| `sport_key` | integer |  |
-| `person_key` | integer |  |
-| `organization_key` | integer |  |
+| `date_added` | integer | Date the update entry was logged. |
+| `date_occurred` | integer | Date the underlying event occurred. |
+| `object_key` | integer | On3 key of the object the update refers to. |
+| `sport_key` | integer | On3 sport key the update is scoped to. |
+| `person_key` | integer | On3 person key of the player the update concerns. |
+| `organization_key` | integer | On3 organization key involved in the update, when any. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -1938,25 +1938,25 @@ GET /rdb/v1/player/{personKey}/images
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `key` | integer |  |
-| `domain_override` | character |  |
-| `domain` | character |  |
-| `source_override` | character |  |
+| `key` | integer | On3 asset key for the image. |
+| `domain_override` | character | Override CDN domain for serving the image, when set. |
+| `domain` | character | CDN domain the image is served from. |
+| `source_override` | character | Override source attribution for the image, when set. |
 | `source` | character | News source. |
 | `title` | character | Specific role title for the assignment. |
 | `description` | character | ESPN's description of the stat. |
-| `caption` | character |  |
+| `caption` | character | Caption text for the image. |
 | `category` | character | CFBD stats category name (e.g. passing, rushing, defensive). |
-| `alt_text` | character |  |
+| `alt_text` | character | Alt text for the image. |
 | `height` | integer | Listed height (inches). |
-| `width` | integer |  |
-| `asset_type` | character |  |
-| `file_system` | character |  |
-| `path` | character |  |
+| `width` | integer | Image width in pixels. |
+| `asset_type` | character | Type of the asset (e.g. image) in On3's asset system. |
+| `file_system` | character | Storage file system the asset lives on (On3 asset metadata). |
+| `path` | character | Storage path of the image file. |
 | `type` | character | Record-type category (e.g. `total`, `home`, `road`). |
-| `thumbnail` | character |  |
+| `thumbnail` | character | URL or path of the image's thumbnail rendition. |
 | `duration` | integer | Duration. |
-| `mime_type` | character |  |
+| `mime_type` | character | MIME type of the image file (e.g. image/jpeg). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -1985,8 +1985,8 @@ GET /rdb/v1/player/{personKey}/organizations
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `organizations` | character |  |
-| `draft` | character |  |
+| `organizations` | character | Player's organization stints (high school, college, pro) as a stringified list of nested objects. |
+| `draft` | character | Nested On3 draft record for the player, when drafted (stringified). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -2019,8 +2019,8 @@ GET /rdb/v1/player/{playerKey}/organizations/{orgKey}
 | `organization` | character | Organization. |
 | `rating` | character | Overall SP+ rating (Bill Connelly methodology, in points per game). |
 | `position_abbr` | character | Position abbreviation. |
-| `exp_min` | integer |  |
-| `exp_max` | integer |  |
+| `exp_min` | integer | Minimum years of experience listed for the player's stint with the organization (On3 RDB). |
+| `exp_max` | integer | Maximum years of experience listed for the player's stint with the organization (On3 RDB). |
 | `year` | character | Four-digit season year (e.g. 2019). |
 | `age` | integer | Age as of last pipeline build, rounded to one decimal. Pipeline is built on a weekly basis. |
 
@@ -2051,24 +2051,24 @@ GET /rdb/v1/player/{personKey}/rankings
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `key` | integer |  |
-| `ranking_key` | integer |  |
+| `key` | integer | On3 RDB key for the player's ranking row. |
+| `ranking_key` | integer | On3 key of the ranking cycle the row belongs to. |
 | `rating` | numeric | Overall SP+ rating (Bill Connelly methodology, in points per game). |
 | `state_rank` | integer | State ranking. |
-| `state_abbr` | character |  |
+| `state_abbr` | character | Two-letter abbreviation of the player's home state. |
 | `position_rank` | integer | Position ranking. |
 | `position_abbr` | character | Position abbreviation. |
 | `overall_rank` | integer | Overall recruit ranking (top recruits only; may be `NA`). |
 | `stars` | integer | Recruit star rating on the 247Sports scale (2-5). |
-| `change` | character |  |
-| `consensus_rating` | numeric |  |
-| `consensus_state_rank` | integer |  |
-| `consensus_position_rank` | integer |  |
-| `consensus_overall_rank` | integer |  |
-| `consensus_stars` | integer |  |
-| `consensus_change` | character |  |
+| `change` | character | Rank movement since the previous ranking cycle. |
+| `consensus_rating` | numeric | Player's industry-consensus rating (blend of the major recruiting services). |
+| `consensus_state_rank` | integer | Player's consensus rank within their home state. |
+| `consensus_position_rank` | integer | Player's consensus rank at their position. |
+| `consensus_overall_rank` | integer | Player's national consensus rank. |
+| `consensus_stars` | integer | Player's star rating under the industry consensus. |
+| `consensus_change` | character | Consensus rank movement since the previous cycle. |
 | `strength` | integer | Strength label (Even, Power Play, Shorthanded). |
-| `five_star_plus` | logical |  |
+| `five_star_plus` | logical | Whether On3 designates the player a Five-Star Plus+ prospect. |
 | `ranking_type` | character | Poll type code (e.g. `ap`, `coaches`, `cfp`). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
@@ -2098,53 +2098,53 @@ GET /rdb/v1/player/{personKey}/profile
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `key` | integer |  |
-| `class_year_recruitment_key` | character |  |
-| `recruitment_key` | integer |  |
-| `person_can_manage_recruitment` | character |  |
-| `ranking_key` | integer |  |
-| `person_sport_key` | integer |  |
+| `key` | integer | On3 RDB key for the player profile. |
+| `class_year_recruitment_key` | character | On3 recruitment key for the player's recruiting-class cycle. |
+| `recruitment_key` | integer | On3 key of the player's active recruitment record. |
+| `person_can_manage_recruitment` | character | Whether the athlete can self-manage the recruitment on On3. |
+| `ranking_key` | integer | On3 key of the ranking cycle the profile's rating belongs to. |
+| `person_sport_key` | integer | On3 key of the athlete-sport profile (person x sport). |
 | `ranking` | character | National rank of the team's overall SP+ rating (1 = best). |
-| `oracle_key` | character |  |
+| `oracle_key` | character | On3's internal oracle identifier for the player record. |
 | `name` | character | Position name (e.g. `Quarterback`). |
 | `slug` | character | URL slug for the team. |
 | `high_school_name` | character | Recruit high-school name. |
 | `high_school` | character | High school |
-| `hometown_name` | character |  |
+| `hometown_name` | character | Player's hometown, as listed by On3. |
 | `hometown_state` | character | Recruit hometown state. |
 | `current_state` | character | Current home venue state. |
-| `default_asset` | character |  |
+| `default_asset` | character | Nested On3 asset object for the player's headshot (stringified). |
 | `position_abbreviation` | character | Position abbreviation (e.g. `QB`); `position_detail = TRUE` only. |
-| `primary_position` | character |  |
-| `class_rank` | character |  |
+| `primary_position` | character | Nested On3 object for the player's primary position (stringified). |
+| `class_rank` | character | Player's rank within their recruiting class. |
 | `height` | character | Listed height (inches). |
 | `weight` | integer | Listed weight (lbs). |
-| `class_year` | integer |  |
-| `degree` | character |  |
+| `class_year` | integer | Player's recruiting class year. |
+| `degree` | character | Degree the player earned or is pursuing, when listed. |
 | `age` | integer | Age as of last pipeline build, rounded to one decimal. Pipeline is built on a weekly basis. |
-| `default_sport` | character |  |
-| `sports` | character |  |
+| `default_sport` | character | Nested On3 object for the player's primary sport (stringified). |
+| `sports` | character | Sports the player is profiled in, as a stringified list. |
 | `description` | character | ESPN's description of the stat. |
-| `bio_pro_prospect` | character |  |
-| `bio_college_recruit` | character |  |
-| `organization_level` | character |  |
-| `high_school_org_key` | integer |  |
-| `prep_school_org_key` | character |  |
-| `junior_college_org_key` | character |  |
-| `college_org_key` | character |  |
-| `nil_value` | integer |  |
-| `athlete_verified` | logical |  |
-| `prospect_verified` | logical |  |
-| `player_status` | character |  |
-| `is_coach` | logical |  |
-| `is_athlete` | logical |  |
-| `visibility` | character |  |
-| `tier` | character |  |
-| `review_status` | character |  |
+| `bio_pro_prospect` | character | Bio text framing the player as a pro prospect (On3 RDB). |
+| `bio_college_recruit` | character | Bio text framing the player as a college recruit (On3 RDB). |
+| `organization_level` | character | Level of the player's current organization (e.g. high school, college, professional). |
+| `high_school_org_key` | integer | On3 organization key of the player's high school. |
+| `prep_school_org_key` | character | On3 organization key of the player's prep school, when attended. |
+| `junior_college_org_key` | character | On3 organization key of the player's junior college, when attended. |
+| `college_org_key` | character | On3 organization key of the player's college. |
+| `nil_value` | integer | Player's On3 NIL valuation in dollars. |
+| `athlete_verified` | logical | Whether the athlete has verified their own On3 profile. |
+| `prospect_verified` | logical | Whether On3 has verified the prospect's profile information. |
+| `player_status` | character | Player's current status per On3 (e.g. active, transfer portal). |
+| `is_coach` | logical | Whether the person record is a coach. |
+| `is_athlete` | logical | Whether the person record is an athlete. |
+| `visibility` | character | Profile visibility setting on On3. |
+| `tier` | character | On3 profile tier classification for the player. |
+| `review_status` | character | Editorial review status of the profile in the On3 database. |
 | `jersey_number` | character | Jersey number. Often useful for joins by name/team/jersey. |
-| `badge` | character |  |
-| `ncaa_id` | character |  |
-| `managed_by_user` | logical |  |
+| `badge` | character | Profile badge assigned by On3, when any. |
+| `ncaa_id` | character | Player's NCAA identifier, when known to On3. |
+| `managed_by_user` | logical | On3 user account that manages the player's profile, when claimed. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -2175,20 +2175,20 @@ GET /rdb/v1/player/{playerKey}/team-targets
 |---|---|---|
 | `team` | character | Team name. |
 | `year` | integer | Four-digit season year (e.g. 2019). |
-| `sport` | character |  |
-| `coaches` | character |  |
+| `sport` | character | Nested On3 sport object for the target entry (stringified). |
+| `coaches` | character | Recruiting coaches at the target school tied to the recruitment (stringified list). |
 | `status` | character | Game status (e.g. "scheduled", "in_progress", "completed"). |
-| `interest` | integer |  |
+| `interest` | integer | Recruit's interest level in the target school, per On3. |
 | `distance` | numeric | Yards to gain for a first down (or to the goal line in goal-to-go situations). |
-| `class_rank` | integer |  |
-| `official_visit_count` | integer |  |
-| `un_official_visit_count` | integer |  |
+| `class_rank` | integer | Recruit's rank within their recruiting class. |
+| `official_visit_count` | integer | Number of official visits the recruit has taken to the school. |
+| `un_official_visit_count` | integer | Number of unofficial visits the recruit has taken to the school. |
 | `prediction` | numeric | Pre-game prediction (favorite, score, win %). |
-| `committed_date` | character |  |
-| `draft_position_count` | integer |  |
-| `draft_total` | integer |  |
+| `committed_date` | character | Date the recruit committed to the school, when applicable. |
+| `draft_position_count` | integer | Number of players at the recruit's position the school has had drafted. |
+| `draft_total` | integer | Total number of players the school has had drafted. |
 | `position_abbreviation` | character | Position abbreviation (e.g. `QB`); `position_detail = TRUE` only. |
-| `position_key` | integer |  |
+| `position_key` | integer | On3 key of the recruit's position. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -2219,53 +2219,53 @@ GET /rdb/v1/player/verified
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `key` | integer |  |
-| `class_year_recruitment_key` | character |  |
-| `recruitment_key` | integer |  |
-| `person_can_manage_recruitment` | character |  |
-| `ranking_key` | integer |  |
-| `person_sport_key` | integer |  |
+| `key` | integer | On3 RDB key for the player profile. |
+| `class_year_recruitment_key` | character | On3 recruitment key for the player's recruiting-class cycle. |
+| `recruitment_key` | integer | On3 key of the player's active recruitment record. |
+| `person_can_manage_recruitment` | character | Whether the athlete can self-manage the recruitment on On3. |
+| `ranking_key` | integer | On3 key of the ranking cycle the profile's rating belongs to. |
+| `person_sport_key` | integer | On3 key of the athlete-sport profile (person x sport). |
 | `ranking` | character | National rank of the team's overall SP+ rating (1 = best). |
-| `oracle_key` | character |  |
+| `oracle_key` | character | On3's internal oracle identifier for the player record. |
 | `name` | character | Position name (e.g. `Quarterback`). |
 | `slug` | character | URL slug for the team. |
 | `high_school_name` | character | Recruit high-school name. |
 | `high_school` | character | High school |
-| `hometown_name` | character |  |
+| `hometown_name` | character | Player's hometown, as listed by On3. |
 | `hometown_state` | character | Recruit hometown state. |
 | `current_state` | character | Current home venue state. |
-| `default_asset` | character |  |
+| `default_asset` | character | Nested On3 asset object for the player's headshot (stringified). |
 | `position_abbreviation` | character | Position abbreviation (e.g. `QB`); `position_detail = TRUE` only. |
-| `primary_position` | character |  |
-| `class_rank` | character |  |
+| `primary_position` | character | Nested On3 object for the player's primary position (stringified). |
+| `class_rank` | character | Player's rank within their recruiting class. |
 | `height` | character | Listed height (inches). |
 | `weight` | integer | Listed weight (lbs). |
-| `class_year` | integer |  |
-| `degree` | character |  |
+| `class_year` | integer | Player's recruiting class year. |
+| `degree` | character | Degree the player earned or is pursuing, when listed. |
 | `age` | integer | Age as of last pipeline build, rounded to one decimal. Pipeline is built on a weekly basis. |
-| `default_sport` | character |  |
-| `sports` | character |  |
+| `default_sport` | character | Nested On3 object for the player's primary sport (stringified). |
+| `sports` | character | Sports the player is profiled in, as a stringified list. |
 | `description` | character | ESPN's description of the stat. |
-| `bio_pro_prospect` | character |  |
-| `bio_college_recruit` | character |  |
-| `organization_level` | character |  |
-| `high_school_org_key` | integer |  |
-| `prep_school_org_key` | character |  |
-| `junior_college_org_key` | character |  |
-| `college_org_key` | character |  |
-| `nil_value` | integer |  |
-| `athlete_verified` | logical |  |
-| `prospect_verified` | logical |  |
-| `player_status` | character |  |
-| `is_coach` | logical |  |
-| `is_athlete` | logical |  |
-| `visibility` | character |  |
-| `tier` | character |  |
-| `review_status` | character |  |
+| `bio_pro_prospect` | character | Bio text framing the player as a pro prospect (On3 RDB). |
+| `bio_college_recruit` | character | Bio text framing the player as a college recruit (On3 RDB). |
+| `organization_level` | character | Level of the player's current organization (e.g. high school, college, professional). |
+| `high_school_org_key` | integer | On3 organization key of the player's high school. |
+| `prep_school_org_key` | character | On3 organization key of the player's prep school, when attended. |
+| `junior_college_org_key` | character | On3 organization key of the player's junior college, when attended. |
+| `college_org_key` | character | On3 organization key of the player's college. |
+| `nil_value` | integer | Player's On3 NIL valuation in dollars. |
+| `athlete_verified` | logical | Whether the athlete has verified their own On3 profile. |
+| `prospect_verified` | logical | Whether On3 has verified the prospect's profile information. |
+| `player_status` | character | Player's current status per On3 (e.g. active, transfer portal). |
+| `is_coach` | logical | Whether the person record is a coach. |
+| `is_athlete` | logical | Whether the person record is an athlete. |
+| `visibility` | character | Profile visibility setting on On3. |
+| `tier` | character | On3 profile tier classification for the player. |
+| `review_status` | character | Editorial review status of the profile in the On3 database. |
 | `jersey_number` | character | Jersey number. Often useful for joins by name/team/jersey. |
-| `badge` | character |  |
-| `ncaa_id` | character |  |
-| `managed_by_user` | logical |  |
+| `badge` | character | Profile badge assigned by On3, when any. |
+| `ncaa_id` | character | Player's NCAA identifier, when known to On3. |
+| `managed_by_user` | logical | On3 user account that manages the player's profile, when claimed. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -2294,16 +2294,16 @@ GET /rdb/v1/player/{personKey}/videos
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `key` | integer |  |
-| `person_key` | integer |  |
-| `source_url` | character |  |
+| `key` | integer | On3 RDB key for the video record. |
+| `person_key` | integer | On3 person key of the featured athlete. |
+| `source_url` | character | Source URL of the hosted video. |
 | `title` | character | Specific role title for the assignment. |
-| `thumbnail` | character |  |
+| `thumbnail` | character | URL of the video's thumbnail image. |
 | `category` | character | CFBD stats category name (e.g. passing, rushing, defensive). |
 | `description` | character | ESPN's description of the stat. |
-| `person_sport` | character |  |
-| `is_featured` | logical |  |
-| `date` | integer | Date of the poll release. |
+| `person_sport` | character | Nested athlete-sport profile the video is attached to (stringified). |
+| `is_featured` | logical | Whether the video is featured on the player's On3 profile. |
+| `date` | integer | Publication date of the video, per On3. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -2332,10 +2332,10 @@ GET /rdb/v1/player/{playerKey}/visit-center
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `sport` | character |  |
+| `sport` | character | Nested On3 sport object for the visit-center entry (stringified). |
 | `year` | integer | Four-digit season year (e.g. 2019). |
-| `total_visits` | integer |  |
-| `visits` | character |  |
+| `total_visits` | integer | Total number of school visits logged for the recruit. |
+| `visits` | character | The recruit's school visits with dates and types, as a stringified list. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -2403,9 +2403,9 @@ GET /rdb/v1/players/industry-comparision-list
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `ratings` | character |  |
-| `person` | character |  |
-| `nil_value` | integer |  |
+| `ratings` | character | Player's ratings across the industry services, as a stringified list. |
+| `person` | character | Nested On3 person object for the compared player (stringified). |
+| `nil_value` | integer | Player's On3 NIL valuation in dollars. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -2462,13 +2462,13 @@ GET /rdb/v1/quotes
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `key` | integer |  |
-| `body` | character |  |
+| `key` | integer | On3 RDB key for the quote record. |
+| `body` | character | Full text of the quote. |
 | `category` | character | CFBD stats category name (e.g. passing, rushing, defensive). |
-| `person_key` | integer |  |
-| `person` | character |  |
-| `date_added` | character |  |
-| `date_updated` | character |  |
+| `person_key` | integer | On3 person key of the person quoted or quoted about. |
+| `person` | character | Nested On3 person object for the quote's subject (stringified). |
+| `date_added` | character | Date the quote was added to the On3 database. |
+| `date_updated` | character | Date the quote was last updated. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -2497,13 +2497,13 @@ GET /rdb/v1/quotes/{key}
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `key` | integer |  |
-| `body` | character |  |
+| `key` | integer | On3 RDB key for the quote record. |
+| `body` | character | Full text of the quote. |
 | `category` | character | CFBD stats category name (e.g. passing, rushing, defensive). |
-| `person_key` | integer |  |
-| `person` | character |  |
-| `date_added` | character |  |
-| `date_updated` | character |  |
+| `person_key` | integer | On3 person key of the person quoted or quoted about. |
+| `person` | character | Nested On3 person object for the quote's subject (stringified). |
+| `date_added` | character | Date the quote was added to the On3 database. |
+| `date_updated` | character | Date the quote was last updated. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -2532,19 +2532,19 @@ GET /rdb/v1/recruitment/{recruitmentKey}/primary-recruitment-evaluation
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `key` | integer |  |
-| `recruitment_key` | integer |  |
-| `author_key` | integer |  |
-| `author_name` | character |  |
-| `author_title` | character |  |
+| `key` | integer | On3 RDB key for the scouting evaluation. |
+| `recruitment_key` | integer | On3 recruitment key the evaluation is attached to. |
+| `author_key` | integer | On3 user key of the evaluation's author. |
+| `author_name` | character | Name of the On3 scout who wrote the evaluation. |
+| `author_title` | character | Job title of the On3 scout who wrote the evaluation. |
 | `title` | character | Specific role title for the assignment. |
 | `premium` | logical | Whether the article is premium content. |
-| `body` | character |  |
-| `primary` | logical |  |
+| `body` | character | Full text of the scouting evaluation. |
+| `primary` | logical | Whether this is the primary (featured) evaluation for the recruitment. |
 | `category` | character | CFBD stats category name (e.g. passing, rushing, defensive). |
-| `date_updated_unix` | integer |  |
-| `date_added` | character |  |
-| `date_updated` | character |  |
+| `date_updated_unix` | integer | Unix timestamp of the evaluation's last update. |
+| `date_added` | character | Date the evaluation was added. |
+| `date_updated` | character | Date the evaluation was last updated. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -2573,19 +2573,19 @@ GET /rdb/v1/recruitment/{recruitmentKey}/recruitment-evaluations
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `key` | integer |  |
-| `recruitment_key` | integer |  |
-| `author_key` | integer |  |
-| `author_name` | character |  |
-| `author_title` | character |  |
+| `key` | integer | On3 RDB key for the scouting evaluation. |
+| `recruitment_key` | integer | On3 recruitment key the evaluation is attached to. |
+| `author_key` | integer | On3 user key of the evaluation's author. |
+| `author_name` | character | Name of the On3 scout who wrote the evaluation. |
+| `author_title` | character | Job title of the On3 scout who wrote the evaluation. |
 | `title` | character | Specific role title for the assignment. |
 | `premium` | logical | Whether the article is premium content. |
-| `body` | character |  |
-| `primary` | logical |  |
+| `body` | character | Full text of the scouting evaluation. |
+| `primary` | logical | Whether this is the primary (featured) evaluation for the recruitment. |
 | `category` | character | CFBD stats category name (e.g. passing, rushing, defensive). |
-| `date_updated_unix` | integer |  |
-| `date_added` | character |  |
-| `date_updated` | character |  |
+| `date_updated_unix` | integer | Unix timestamp of the evaluation's last update. |
+| `date_added` | character | Date the evaluation was added. |
+| `date_updated` | character | Date the evaluation was last updated. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -2648,10 +2648,10 @@ GET /rdb/v1/recruitments/{recKey}/profile
 | col_name | type | description |
 |---|---|---|
 | `rating` | character | Overall SP+ rating (Bill Connelly methodology, in points per game). |
-| `class_year` | integer |  |
-| `committed_status` | character |  |
+| `class_year` | integer | Recruiting class year of the recruitment. |
+| `committed_status` | character | Nested commitment status of the recruitment (stringified). |
 | `high_school` | character | High school |
-| `high_school_org` | character |  |
+| `high_school_org` | character | Nested On3 organization object for the recruit's high school (stringified). |
 | `home_town` | character | Player home town. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
@@ -2681,21 +2681,21 @@ GET /rdb/v1/recruitments/{recKey}/rpm-picks
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `key` | integer |  |
+| `key` | integer | On3 RDB key for the RPM pick. |
 | `organization` | character | Organization. |
-| `date_added` | character |  |
-| `expert` | character |  |
-| `confidence` | numeric |  |
+| `date_added` | character | Date the expert logged the RPM pick. |
+| `expert` | character | Nested On3 record for the expert who logged the pick (stringified). |
+| `confidence` | numeric | Expert's confidence level in the prediction. |
 | `description` | character | ESPN's description of the stat. |
-| `article_link` | character |  |
+| `article_link` | character | Link to the On3 article accompanying the pick, when any. |
 | `premium` | logical | Whether the article is premium content. |
-| `correct` | logical |  |
-| `days_correct` | numeric |  |
-| `flipped_from_organization` | character |  |
-| `previous_confidence` | numeric |  |
-| `previous_date_added` | character |  |
+| `correct` | logical | Whether the pick proved correct. |
+| `days_correct` | numeric | Number of days the pick stood as correct. |
+| `flipped_from_organization` | character | Organization the expert's pick flipped from, when the prediction changed (stringified). |
+| `previous_confidence` | numeric | Expert's confidence level on their previous pick for this recruitment. |
+| `previous_date_added` | character | Date the expert's previous pick was logged. |
 | `type` | character | Record-type category (e.g. `total`, `home`, `road`). |
-| `top_teams` | character |  |
+| `top_teams` | character | Teams currently leading for the recruit per the pick, as a stringified list. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -2724,8 +2724,8 @@ GET /rdb/v1/recruitments/{recKey}/rpm-summary
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `predictions` | character |  |
-| `locked` | logical |  |
+| `predictions` | character | Per-team RPM prediction percentages for the recruitment, as a stringified list. |
+| `locked` | logical | Whether the RPM prediction for the recruitment is locked (no longer updating). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -2757,29 +2757,29 @@ GET /rdb/v1/team-ranking
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `key` | integer |  |
+| `key` | integer | On3 RDB key for the team's class-ranking row. |
 | `organization` | character | Organization. |
-| `applied_total_rating` | numeric |  |
-| `applied_total_consensus_rating` | numeric |  |
-| `applied_average_rating` | numeric |  |
-| `applied_average_consensus_rating` | numeric |  |
-| `commits` | integer | Number of commits in the position group. |
-| `applied_commits` | integer |  |
-| `deductions` | numeric |  |
-| `deductions_description` | character |  |
-| `five_stars` | integer |  |
-| `consensus_five_stars` | integer |  |
-| `four_stars` | integer |  |
-| `consensus_four_stars` | integer |  |
-| `three_stars` | integer | Whether three stars data is available. |
-| `consensus_three_stars` | integer |  |
+| `applied_total_rating` | numeric | Sum of counted commits' On3 ratings applied to the class score. |
+| `applied_total_consensus_rating` | numeric | Sum of counted commits' industry-consensus ratings applied to the class score. |
+| `applied_average_rating` | numeric | Average On3 rating across the counted commits. |
+| `applied_average_consensus_rating` | numeric | Average industry-consensus rating across the counted commits. |
+| `commits` | integer | Number of commits in the team's recruiting class. |
+| `applied_commits` | integer | Number of commits counted toward the class score. |
+| `deductions` | numeric | Points deducted from the team's class score (On3 ranking formula). |
+| `deductions_description` | character | Explanation of the deductions applied to the class score. |
+| `five_stars` | integer | Number of five-star commits by On3's own rating. |
+| `consensus_five_stars` | integer | Number of five-star commits by industry-consensus rating. |
+| `four_stars` | integer | Number of four-star commits by On3's own rating. |
+| `consensus_four_stars` | integer | Number of four-star commits by industry-consensus rating. |
+| `three_stars` | integer | Number of three-star commits by On3's own rating. |
+| `consensus_three_stars` | integer | Number of three-star commits by industry-consensus rating. |
 | `overall_rank` | integer | Overall recruit ranking (top recruits only; may be `NA`). |
-| `overall_consensus_rank` | integer |  |
-| `dispay_consensus_score` | numeric |  |
-| `dispay_on3_score` | numeric |  |
-| `average_nil_value` | numeric |  |
-| `conference_rank` | integer |  |
-| `conference_consensus_rank` | integer |  |
+| `overall_consensus_rank` | integer | Team's national class rank by industry-consensus score. |
+| `dispay_consensus_score` | numeric | Display-formatted consensus class score (the 'dispay' spelling is On3's own field name). |
+| `dispay_on3_score` | numeric | Display-formatted On3 class score (the 'dispay' spelling is On3's own field name). |
+| `average_nil_value` | numeric | Average On3 NIL valuation across the class's commits, in dollars. |
+| `conference_rank` | integer | Team's class rank within its conference by On3 score. |
+| `conference_consensus_rank` | integer | Team's class rank within its conference by consensus score. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -2811,13 +2811,13 @@ GET /rdb/v1/team-ranking/{sport}-{year}/bluechips-team-rankings
 |---|---|---|
 | `organization` | character | Organization. |
 | `overall_rank` | integer | Overall recruit ranking (top recruits only; may be `NA`). |
-| `conference_rank` | integer |  |
-| `in_state_count` | numeric |  |
-| `average_distance` | numeric |  |
-| `blue_chips` | numeric |  |
-| `social_nil_values` | numeric |  |
+| `conference_rank` | integer | Team's blue-chip class rank within its conference. |
+| `in_state_count` | numeric | Number of commits from the school's home state. |
+| `average_distance` | numeric | Average distance from the commits' hometowns to campus, in miles. |
+| `blue_chips` | numeric | Number of blue-chip (four- or five-star) commits in the class. |
+| `social_nil_values` | numeric | Nested aggregate of the class's social/NIL values (stringified). |
 | `score` | numeric | Final score string. |
-| `total_commits` | integer |  |
+| `total_commits` | integer | Total number of commits in the class. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -2847,29 +2847,29 @@ GET /rdb/v1/team-ranking/{sport}-{year}/consensus-team-rankings
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `key` | integer |  |
+| `key` | integer | On3 RDB key for the team's class-ranking row. |
 | `organization` | character | Organization. |
-| `applied_total_rating` | numeric |  |
-| `applied_total_consensus_rating` | numeric |  |
-| `applied_average_rating` | numeric |  |
-| `applied_average_consensus_rating` | numeric |  |
-| `commits` | integer | Number of commits in the position group. |
-| `applied_commits` | integer |  |
-| `deductions` | numeric |  |
-| `deductions_description` | character |  |
-| `five_stars` | integer |  |
-| `consensus_five_stars` | integer |  |
-| `four_stars` | integer |  |
-| `consensus_four_stars` | integer |  |
-| `three_stars` | integer | Whether three stars data is available. |
-| `consensus_three_stars` | integer |  |
+| `applied_total_rating` | numeric | Sum of counted commits' On3 ratings applied to the class score. |
+| `applied_total_consensus_rating` | numeric | Sum of counted commits' industry-consensus ratings applied to the class score. |
+| `applied_average_rating` | numeric | Average On3 rating across the counted commits. |
+| `applied_average_consensus_rating` | numeric | Average industry-consensus rating across the counted commits. |
+| `commits` | integer | Number of commits in the team's recruiting class. |
+| `applied_commits` | integer | Number of commits counted toward the class score. |
+| `deductions` | numeric | Points deducted from the team's class score (On3 ranking formula). |
+| `deductions_description` | character | Explanation of the deductions applied to the class score. |
+| `five_stars` | integer | Number of five-star commits by On3's own rating. |
+| `consensus_five_stars` | integer | Number of five-star commits by industry-consensus rating. |
+| `four_stars` | integer | Number of four-star commits by On3's own rating. |
+| `consensus_four_stars` | integer | Number of four-star commits by industry-consensus rating. |
+| `three_stars` | integer | Number of three-star commits by the On3 consensus rating. |
+| `consensus_three_stars` | integer | Number of three-star commits by industry-consensus rating. |
 | `overall_rank` | integer | Overall recruit ranking (top recruits only; may be `NA`). |
-| `overall_consensus_rank` | integer |  |
-| `dispay_consensus_score` | numeric |  |
-| `dispay_on3_score` | numeric |  |
-| `average_nil_value` | numeric |  |
-| `conference_rank` | integer |  |
-| `conference_consensus_rank` | integer |  |
+| `overall_consensus_rank` | integer | Team's national class rank by industry-consensus score. |
+| `dispay_consensus_score` | numeric | Display-formatted consensus class score (the 'dispay' spelling is On3's own field name). |
+| `dispay_on3_score` | numeric | Display-formatted On3 class score (the 'dispay' spelling is On3's own field name). |
+| `average_nil_value` | numeric | Average On3 NIL valuation across the class's commits, in dollars. |
+| `conference_rank` | integer | Team's class rank within its conference by On3 score. |
+| `conference_consensus_rank` | integer | Team's class rank within its conference by consensus score. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -2900,25 +2900,25 @@ GET /rdb/v1/team-ranking/organizations/{orgKey}/summary
 |---|---|---|
 | `conference` | character | Conference of the team. |
 | `year` | integer | Four-digit season year (e.g. 2019). |
-| `total_commits` | integer |  |
-| `class_rating_current` | numeric |  |
-| `class_rating_previous` | numeric |  |
-| `class_rating_change` | character |  |
-| `national_rank_current` | integer |  |
-| `national_rank_previous` | integer |  |
-| `national_rank_change` | character |  |
-| `conference_rank_current` | integer |  |
-| `conference_rank_previous` | integer |  |
-| `conference_rank_change` | character |  |
-| `conference_consensus_rank_current` | integer |  |
-| `conference_consensus_rank_previous` | integer |  |
-| `conference_consensus_rank_change` | character |  |
-| `in_state` | numeric |  |
+| `total_commits` | integer | Total number of commits in the class. |
+| `class_rating_current` | numeric | Team's current On3 class rating. |
+| `class_rating_previous` | numeric | Team's class rating in the previous cycle. |
+| `class_rating_change` | character | Change in the class rating versus the previous cycle. |
+| `national_rank_current` | integer | Team's current national class rank. |
+| `national_rank_previous` | integer | Team's national class rank in the previous cycle. |
+| `national_rank_change` | character | Change in national class rank versus the previous cycle. |
+| `conference_rank_current` | integer | Team's current class rank within its conference. |
+| `conference_rank_previous` | integer | Team's conference class rank in the previous cycle. |
+| `conference_rank_change` | character | Change in conference class rank versus the previous cycle. |
+| `conference_consensus_rank_current` | integer | Team's current conference class rank by consensus score. |
+| `conference_consensus_rank_previous` | integer | Team's conference consensus class rank in the previous cycle. |
+| `conference_consensus_rank_change` | character | Change in conference consensus class rank versus the previous cycle. |
+| `in_state` | numeric | Number of commits from the school's home state. |
 | `avg_distance` | numeric | Average batted-ball distance (feet). |
-| `blue_chips` | numeric |  |
-| `head_coach` | character |  |
-| `director_personnel` | character |  |
-| `average_nil_value` | numeric |  |
+| `blue_chips` | numeric | Number of blue-chip (four- or five-star) commits in the class. |
+| `head_coach` | character | Nested On3 person object for the program's head coach (stringified). |
+| `director_personnel` | character | Nested On3 person object for the program's director of player personnel (stringified). |
+| `average_nil_value` | numeric | Average On3 NIL valuation across the class's commits, in dollars. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -3007,33 +3007,33 @@ GET /rdb/v1/transfers/best-available
 | col_name | type | description |
 |---|---|---|
 | `eligibility` | character | Eligibility status. |
-| `last_team` | character |  |
-| `entered_article` | character |  |
-| `committed_article` | character |  |
-| `exited_article` | character |  |
-| `key` | integer |  |
-| `recruitment_key` | integer |  |
+| `last_team` | character | Nested On3 record for the team the player is transferring from (stringified). |
+| `entered_article` | character | On3 article link covering the player entering the transfer portal (stringified). |
+| `committed_article` | character | On3 article link covering the player's transfer commitment (stringified). |
+| `exited_article` | character | On3 article link covering the player exiting the portal (stringified). |
+| `key` | integer | On3 RDB key for the transfer entry. |
+| `recruitment_key` | integer | On3 recruitment key of the player's transfer recruitment. |
 | `name` | character | Position name (e.g. `Quarterback`). |
 | `slug` | character | URL slug for the team. |
 | `high_school_name` | character | Recruit high-school name. |
-| `home_town_name` | character |  |
-| `early_enrollee` | logical |  |
-| `early_signee` | logical |  |
-| `default_asset_url` | character |  |
-| `class_year` | integer |  |
-| `athlete_verified` | logical |  |
-| `prospect_verified` | logical |  |
-| `default_asset` | character |  |
+| `home_town_name` | character | Player's hometown, as listed by On3. |
+| `early_enrollee` | logical | Whether the player is an early enrollee. |
+| `early_signee` | logical | Whether the player signed in the early signing period. |
+| `default_asset_url` | character | URL of the player's headshot image. |
+| `class_year` | integer | Player's original recruiting class year. |
+| `athlete_verified` | logical | Whether the athlete has verified their own On3 profile. |
+| `prospect_verified` | logical | Whether On3 has verified the prospect's profile information. |
+| `default_asset` | character | Nested On3 asset object for the player's headshot (stringified). |
 | `position_abbreviation` | character | Position abbreviation (e.g. `QB`); `position_detail = TRUE` only. |
 | `height` | character | Listed height (inches). |
 | `weight` | numeric | Listed weight (lbs). |
 | `rating` | character | Overall SP+ rating (Bill Connelly methodology, in points per game). |
-| `roster_rating` | character |  |
-| `commit_status` | character |  |
-| `predictions` | character |  |
-| `nil_status` | character |  |
-| `nil_value` | numeric |  |
-| `sport` | character |  |
+| `roster_rating` | character | Nested On3 roster rating object for the player (stringified). |
+| `commit_status` | character | Nested commitment status of the transfer recruitment (stringified). |
+| `predictions` | character | RPM prediction entries for the transfer destination, as a stringified list. |
+| `nil_status` | character | Status of the player's On3 NIL valuation (e.g. active, inactive). |
+| `nil_value` | numeric | Player's On3 NIL valuation in dollars. |
+| `sport` | character | Nested On3 sport object for the transfer entry (stringified). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -3068,33 +3068,33 @@ GET /rdb/v1/transfers/latest
 | col_name | type | description |
 |---|---|---|
 | `eligibility` | character | Eligibility status. |
-| `last_team` | character |  |
-| `entered_article` | character |  |
-| `committed_article` | character |  |
-| `exited_article` | character |  |
-| `key` | integer |  |
-| `recruitment_key` | integer |  |
+| `last_team` | character | Nested On3 record for the team the player is transferring from (stringified). |
+| `entered_article` | character | On3 article link covering the player entering the transfer portal (stringified). |
+| `committed_article` | character | On3 article link covering the player's transfer commitment (stringified). |
+| `exited_article` | character | On3 article link covering the player exiting the portal (stringified). |
+| `key` | integer | On3 RDB key for the transfer entry. |
+| `recruitment_key` | integer | On3 recruitment key of the player's transfer recruitment. |
 | `name` | character | Position name (e.g. `Quarterback`). |
 | `slug` | character | URL slug for the team. |
 | `high_school_name` | character | Recruit high-school name. |
-| `home_town_name` | character |  |
-| `early_enrollee` | logical |  |
-| `early_signee` | logical |  |
-| `default_asset_url` | character |  |
-| `class_year` | integer |  |
-| `athlete_verified` | logical |  |
-| `prospect_verified` | logical |  |
-| `default_asset` | character |  |
+| `home_town_name` | character | Player's hometown, as listed by On3. |
+| `early_enrollee` | logical | Whether the player is an early enrollee. |
+| `early_signee` | logical | Whether the player signed in the early signing period. |
+| `default_asset_url` | character | URL of the player's headshot image. |
+| `class_year` | integer | Player's original recruiting class year. |
+| `athlete_verified` | logical | Whether the athlete has verified their own On3 profile. |
+| `prospect_verified` | logical | Whether On3 has verified the prospect's profile information. |
+| `default_asset` | character | Nested On3 asset object for the player's headshot (stringified). |
 | `position_abbreviation` | character | Position abbreviation (e.g. `QB`); `position_detail = TRUE` only. |
 | `height` | character | Listed height (inches). |
 | `weight` | numeric | Listed weight (lbs). |
 | `rating` | character | Overall SP+ rating (Bill Connelly methodology, in points per game). |
-| `roster_rating` | character |  |
-| `commit_status` | character |  |
-| `predictions` | character |  |
-| `nil_status` | character |  |
-| `nil_value` | numeric |  |
-| `sport` | character |  |
+| `roster_rating` | character | Nested On3 roster rating object for the player (stringified). |
+| `commit_status` | character | Nested commitment status of the transfer recruitment (stringified). |
+| `predictions` | character | RPM prediction entries for the transfer destination, as a stringified list. |
+| `nil_status` | character | Status of the player's On3 NIL valuation (e.g. active, inactive). |
+| `nil_value` | numeric | Player's On3 NIL valuation in dollars. |
+| `sport` | character | Nested On3 sport object for the transfer entry (stringified). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -3123,16 +3123,16 @@ GET /rdb/v1/videos/{videoKey}
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `key` | integer |  |
-| `person_key` | integer |  |
-| `source_url` | character |  |
+| `key` | integer | On3 RDB key for the video record. |
+| `person_key` | integer | On3 person key of the featured athlete. |
+| `source_url` | character | Source URL of the hosted video. |
 | `title` | character | Specific role title for the assignment. |
-| `thumbnail` | character |  |
+| `thumbnail` | character | URL of the video's thumbnail image. |
 | `category` | character | CFBD stats category name (e.g. passing, rushing, defensive). |
 | `description` | character | ESPN's description of the stat. |
-| `person_sport` | character |  |
-| `is_featured` | logical |  |
-| `date` | integer | Date of the poll release. |
+| `person_sport` | character | Nested athlete-sport profile the video is attached to (stringified). |
+| `is_featured` | logical | Whether the video is featured on the player's On3 profile. |
+| `date` | integer | Publication date of the video, per On3. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

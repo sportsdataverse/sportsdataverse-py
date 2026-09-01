@@ -80,8 +80,8 @@ Release: [espn_nba_pbp](https://github.com/sportsdataverse/sportsdataverse-data/
 | `shooting_play` | Boolean | TRUE if the play was a shooting attempt. |
 | `coordinate_x_raw` | Float64 | X coordinate as returned by the API before any adjustment. |
 | `coordinate_y_raw` | Float64 | Y coordinate as returned by the API before any adjustment. |
-| `points_attempted` | Int32 |  |
-| `short_description` | String |  |
+| `points_attempted` | Int32 | Point value attempted on the shot (2 or 3; 1 for a free throw). |
+| `short_description` | String | Short text description of the play from ESPN. |
 | `game_id` | Int32 | Unique game identifier. |
 | `season` | Int32 | Season year. |
 | `season_type` | Int32 | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
@@ -103,8 +103,8 @@ Release: [espn_nba_pbp](https://github.com/sportsdataverse/sportsdataverse-data/
 | `time` | String | Time / clock value. |
 | `clock_minutes` | Int32 | Clock minutes split out for convenience. |
 | `clock_seconds` | Float64 | Clock seconds split out for convenience. |
-| `home_timeout_called` | Boolean |  |
-| `away_timeout_called` | Boolean |  |
+| `home_timeout_called` | Boolean | Whether the play is a timeout called by the home team. |
+| `away_timeout_called` | Boolean | Whether the play is a timeout called by the away team. |
 | `half` | Int32 | Half of the game (1 or 2). |
 | `game_half` | Int32 | Half of the game (1 or 2). |
 | `lead_qtr` | Int32 | Quarter lead (the next-play's quarter). |
@@ -122,9 +122,9 @@ Release: [espn_nba_pbp](https://github.com/sportsdataverse/sportsdataverse-data/
 | `coordinate_y` | Float64 | Y coordinate on the court (half-court layout). |
 | `game_date` | Date | Game date (YYYY-MM-DD). |
 | `game_date_time` | Datetime(time_unit='us', time_zone='America/New_York') | Game start date/time (ISO 8601). |
-| `athlete_name_1` | String |  |
-| `athlete_name_2` | String |  |
-| `athlete_name_3` | String |  |
+| `athlete_name_1` | String | Name of the primary athlete involved in the play (pairs with athlete_id_1). |
+| `athlete_name_2` | String | Name of the secondary athlete involved in the play (e.g. the assister or fouled player). |
+| `athlete_name_3` | String | Name of the tertiary athlete involved in the play. |
 | `type_abbreviation` | String | Type abbreviation. |
 
 ```python
@@ -254,8 +254,8 @@ Release: [espn_nba_schedules](https://github.com/sportsdataverse/sportsdataverse
 | `home_logo` | String | Home team logo URL. |
 | `home_score` | Int32 | Home team score at the time of the play. |
 | `home_winner` | Boolean | Home team's winner. |
-| `home_linescores` | String |  |
-| `home_records` | String |  |
+| `home_linescores` | String | Period-by-period points for the home team, stringified from ESPN's linescores array. |
+| `home_records` | String | Home team's records at game time (overall, home, away), stringified from ESPN. |
 | `away_id` | Int32 | Unique identifier for away. |
 | `away_uid` | String | Away team's uid. |
 | `away_location` | String | Away team's location. |
@@ -270,8 +270,8 @@ Release: [espn_nba_schedules](https://github.com/sportsdataverse/sportsdataverse
 | `away_logo` | String | Away team logo URL. |
 | `away_score` | Int32 | Away team score at the time of the play. |
 | `away_winner` | Boolean | Away team's winner. |
-| `away_linescores` | String |  |
-| `away_records` | String |  |
+| `away_linescores` | String | Period-by-period points for the away team, stringified from ESPN's linescores array. |
+| `away_records` | String | Away team's records at game time (overall, home, away), stringified from ESPN. |
 | `game_id` | Int32 | Unique game identifier. |
 | `season` | Int32 | Season year. |
 | `season_type` | Int32 | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
@@ -354,7 +354,7 @@ Release: [espn_nba_team_boxscores](https://github.com/sportsdataverse/sportsdata
 | `opponent_team_logo` | String | Opponent team logo URL. |
 | `opponent_team_score` | Int32 | Opponent team's score. |
 | `lead_changes` | String | Lead changes. |
-| `lead_percentage` | String |  |
+| `lead_percentage` | String | Percentage of the game the team held the lead, from ESPN's team box score stats. |
 
 ```python
 load_nba_team_boxscore(seasons=2024)
@@ -435,10 +435,10 @@ Release: [espn_nba_shots](https://github.com/sportsdataverse/sportsdataverse-dat
 | `coordinate_y` | Float64 | Y coordinate on the court (half-court layout). |
 | `coordinate_x_raw` | Float64 | X coordinate as returned by the API before any adjustment. |
 | `coordinate_y_raw` | Float64 | Y coordinate as returned by the API before any adjustment. |
-| `athlete_name_1` | String |  |
-| `athlete_name_2` | String |  |
+| `athlete_name_1` | String | Name of the shooter on the attempt. |
+| `athlete_name_2` | String | Name of the secondary athlete on the attempt (e.g. the assister). |
 | `team_name` | String | Full team display name (e.g. 'Las Vegas Aces'). |
-| `team_mascot` | String |  |
+| `team_mascot` | String | Mascot (nickname) portion of the shooting team's name. |
 | `team_abbrev` | String | Abbreviation for team. |
 
 ```python
@@ -646,13 +646,13 @@ Release: [nba_stats_schedules](https://github.com/sportsdataverse/sportsdatavers
 | `home_team_id` | Int64 | Unique identifier for the home team. |
 | `home_team_abbreviation` | String | Home team abbreviation; `team_detail = TRUE` only. |
 | `home_team_name` | String | Home team name. |
-| `home_pts` | Int64 |  |
-| `home_wl` | String |  |
+| `home_pts` | Int64 | Final points scored by the home team. |
+| `home_wl` | String | Home team's result for the game (W or L). |
 | `away_team_id` | Int64 | Unique identifier for the away team. |
 | `away_team_abbreviation` | String | Away team abbreviation; `team_detail = TRUE` only. |
 | `away_team_name` | String | Away team name. |
-| `away_pts` | Int64 |  |
-| `away_wl` | String |  |
+| `away_pts` | Int64 | Final points scored by the away team. |
+| `away_wl` | String | Away team's result for the game (W or L). |
 
 ```python
 load_nba_stats_schedules(seasons=2025)
@@ -670,11 +670,11 @@ Release: [nba_stats_coaches](https://github.com/sportsdataverse/sportsdataverse-
 | `coach_id` | Int64 | ESPN coach id. |
 | `first_name` | String | Player's first name. |
 | `last_name` | String | Player's last name. |
-| `coach_name` | String |  |
-| `is_assistant` | Int64 |  |
-| `coach_type` | String |  |
-| `sort_sequence` | Int64 |  |
-| `sub_sort_sequence` | Int64 |  |
+| `coach_name` | String | Coach's full name. |
+| `is_assistant` | Int64 | Numeric flag from the NBA Stats API distinguishing assistants from head coaches. |
+| `coach_type` | String | Coach role description (e.g. "Head Coach", "Assistant Coach"). |
+| `sort_sequence` | Int64 | Sort order of the coach within the team's staff listing. |
+| `sub_sort_sequence` | Int64 | Secondary sort order within the coach type. |
 | `season_type` | String | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
 
 ```python
@@ -710,7 +710,7 @@ Release: [nba_stats_lineups](https://github.com/sportsdataverse/sportsdataverse-
 
 | col_name | type | description |
 |---|---|---|
-| `group_set` | String |  |
+| `group_set` | String | Lineup grouping label from the NBA Stats API (e.g. "Lineups"). |
 | `group_id` | String | ESPN group id. |
 | `group_name` | String | Group name (conference / division). |
 | `team_id` | Int64 | Unique team identifier. |
@@ -720,50 +720,50 @@ Release: [nba_stats_lineups](https://github.com/sportsdataverse/sportsdataverse-
 | `l` | Int64 | Losses. |
 | `w_pct` | Float64 | Wins percentage (0-1 decimal). |
 | `min` | Float64 | Minutes played. |
-| `e_off_rating` | Float64 |  |
-| `off_rating` | Float64 |  |
-| `e_def_rating` | Float64 |  |
-| `def_rating` | Float64 |  |
-| `e_net_rating` | Float64 |  |
+| `e_off_rating` | Float64 | Estimated offensive rating (NBA Stats estimated-metrics family) over the split. |
+| `off_rating` | Float64 | Offensive rating (points scored per 100 possessions) over the split. |
+| `e_def_rating` | Float64 | Estimated defensive rating (NBA Stats estimated-metrics family) over the split. |
+| `def_rating` | Float64 | Defensive rating (points allowed per 100 possessions) over the split. |
+| `e_net_rating` | Float64 | Estimated net rating (NBA Stats estimated-metrics family) over the split. |
 | `net_rating` | Float64 | Net rating (off rating - def rating). |
 | `ast_pct` | Float64 | Assist percentage. |
-| `ast_to` | Float64 |  |
-| `ast_ratio` | Float64 |  |
-| `oreb_pct` | Float64 |  |
-| `dreb_pct` | Float64 |  |
-| `reb_pct` | Float64 |  |
-| `tm_tov_pct` | Float64 |  |
-| `efg_pct` | Float64 |  |
+| `ast_to` | Float64 | Assist-to-turnover ratio over the split. |
+| `ast_ratio` | Float64 | Assist ratio (assists per 100 possessions used) over the split. |
+| `oreb_pct` | Float64 | Offensive rebound percentage over the split, as a decimal. |
+| `dreb_pct` | Float64 | Defensive rebound percentage over the split, as a decimal. |
+| `reb_pct` | Float64 | Total rebound percentage over the split, as a decimal. |
+| `tm_tov_pct` | Float64 | Team turnover percentage (turnovers per 100 possessions) over the split, as a decimal. |
+| `efg_pct` | Float64 | Effective field goal percentage over the split, as a decimal. |
 | `ts_pct` | Float64 | True shooting percentage (0-1). |
-| `e_pace` | Float64 |  |
+| `e_pace` | Float64 | Estimated pace (NBA Stats estimated-metrics family) over the split. |
 | `pace` | Float64 | Possessions per 48 minutes. |
 | `pace_per40` | Float64 | Pace per40. |
 | `poss` | Int64 | Poss. |
 | `pie` | Float64 | Player Impact Estimate (0-1). |
-| `gp_rank` | Int64 |  |
-| `w_rank` | Int64 |  |
-| `l_rank` | Int64 |  |
-| `w_pct_rank` | Int64 |  |
-| `min_rank` | Int64 |  |
-| `off_rating_rank` | Int64 |  |
-| `def_rating_rank` | Int64 |  |
-| `net_rating_rank` | Int64 |  |
-| `ast_pct_rank` | Int64 |  |
-| `ast_to_rank` | Int64 |  |
-| `ast_ratio_rank` | Int64 |  |
-| `oreb_pct_rank` | Int64 |  |
-| `dreb_pct_rank` | Int64 |  |
-| `reb_pct_rank` | Int64 |  |
-| `tm_tov_pct_rank` | Int64 |  |
-| `efg_pct_rank` | Int64 |  |
-| `ts_pct_rank` | Int64 |  |
-| `pace_rank` | Int64 |  |
-| `pie_rank` | Int64 |  |
-| `sum_time_played` | Int64 |  |
+| `gp_rank` | Int64 | League rank of the row's games played for the season and split. |
+| `w_rank` | Int64 | League rank of the row's wins for the season and split. |
+| `l_rank` | Int64 | League rank of the row's losses for the season and split. |
+| `w_pct_rank` | Int64 | League rank of the row's win percentage for the season and split. |
+| `min_rank` | Int64 | League rank of the row's minutes played for the season and split. |
+| `off_rating_rank` | Int64 | League rank of the row's offensive rating (points scored per 100 possessions) for the season and split. |
+| `def_rating_rank` | Int64 | League rank of the row's defensive rating (points allowed per 100 possessions) for the season and split. |
+| `net_rating_rank` | Int64 | League rank of the row's net rating (offensive minus defensive rating) for the season and split. |
+| `ast_pct_rank` | Int64 | League rank of the row's assist percentage (share of teammate field goals assisted while on the floor) for the season and split. |
+| `ast_to_rank` | Int64 | League rank of the row's assist-to-turnover ratio for the season and split. |
+| `ast_ratio_rank` | Int64 | League rank of the row's assist ratio (assists per 100 possessions used) for the season and split. |
+| `oreb_pct_rank` | Int64 | League rank of the row's offensive rebound percentage for the season and split. |
+| `dreb_pct_rank` | Int64 | League rank of the row's defensive rebound percentage for the season and split. |
+| `reb_pct_rank` | Int64 | League rank of the row's total rebound percentage for the season and split. |
+| `tm_tov_pct_rank` | Int64 | League rank of the row's team turnover percentage (turnovers per 100 possessions) for the season and split. |
+| `efg_pct_rank` | Int64 | League rank of the row's effective field goal percentage for the season and split. |
+| `ts_pct_rank` | Int64 | League rank of the row's true shooting percentage for the season and split. |
+| `pace_rank` | Int64 | League rank of the row's pace (possessions per 48 minutes) for the season and split. |
+| `pie_rank` | Int64 | League rank of the row's Player Impact Estimate (PIE, the NBA Stats catch-all impact metric) for the season and split. |
+| `sum_time_played` | Int64 | Total time the five-man lineup was on the floor across the split. |
 | `season` | Int32 | Season year. |
 | `season_type` | String | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
-| `measure_type` | String |  |
-| `per_mode` | String |  |
+| `measure_type` | String | NBA Stats measure type the row was pulled from (e.g. Base, Advanced, Misc, Scoring, Opponent, Usage, Defense). |
+| `per_mode` | String | NBA Stats per-mode of the row values (e.g. Totals, PerGame, Per100Possessions). |
 | `fgm` | Float64 | Field goals made. |
 | `fga` | Float64 | Field goal attempts. |
 | `fg_pct` | Float64 | Field goal percentage (0-1). |
@@ -780,118 +780,118 @@ Release: [nba_stats_lineups](https://github.com/sportsdataverse/sportsdataverse-
 | `tov` | Float64 | Turnovers. |
 | `stl` | Float64 | Steals. |
 | `blk` | Float64 | Blocks. |
-| `blka` | Float64 |  |
+| `blka` | Float64 | Shot attempts blocked by opponents (blocks against). |
 | `pf` | Float64 | Personal fouls. |
-| `pfd` | Float64 |  |
+| `pfd` | Float64 | Personal fouls drawn. |
 | `pts` | Float64 | Points scored. |
 | `plus_minus` | Float64 | Plus/minus point differential while on court. |
-| `fgm_rank` | Int64 |  |
-| `fga_rank` | Int64 |  |
-| `fg_pct_rank` | Int64 |  |
-| `fg3m_rank` | Int64 |  |
-| `fg3a_rank` | Int64 |  |
-| `fg3_pct_rank` | Int64 |  |
-| `ftm_rank` | Int64 |  |
-| `fta_rank` | Int64 |  |
-| `ft_pct_rank` | Int64 |  |
-| `oreb_rank` | Int64 |  |
-| `dreb_rank` | Int64 |  |
-| `reb_rank` | Int64 |  |
-| `ast_rank` | Int64 |  |
-| `tov_rank` | Int64 |  |
-| `stl_rank` | Int64 |  |
-| `blk_rank` | Int64 |  |
-| `blka_rank` | Int64 |  |
-| `pf_rank` | Int64 |  |
-| `pfd_rank` | Int64 |  |
-| `pts_rank` | Int64 |  |
-| `plus_minus_rank` | Int64 |  |
-| `pts_off_tov` | Float64 |  |
-| `pts_2nd_chance` | Float64 |  |
-| `pts_fb` | Float64 |  |
-| `pts_paint` | Float64 |  |
-| `opp_pts_off_tov` | Float64 |  |
-| `opp_pts_2nd_chance` | Float64 |  |
-| `opp_pts_fb` | Float64 |  |
-| `opp_pts_paint` | Float64 |  |
-| `pts_off_tov_rank` | Int64 |  |
-| `pts_2nd_chance_rank` | Int64 |  |
-| `pts_fb_rank` | Int64 |  |
-| `pts_paint_rank` | Int64 |  |
-| `opp_pts_off_tov_rank` | Int64 |  |
-| `opp_pts_2nd_chance_rank` | Int64 |  |
-| `opp_pts_fb_rank` | Int64 |  |
-| `opp_pts_paint_rank` | Int64 |  |
-| `opp_fgm` | Float64 |  |
-| `opp_fga` | Float64 |  |
-| `opp_fg_pct` | Float64 |  |
-| `opp_fg3m` | Float64 |  |
-| `opp_fg3a` | Float64 |  |
-| `opp_fg3_pct` | Float64 |  |
-| `opp_ftm` | Float64 |  |
-| `opp_fta` | Float64 |  |
-| `opp_ft_pct` | Float64 |  |
-| `opp_oreb` | Float64 |  |
-| `opp_dreb` | Float64 |  |
-| `opp_reb` | Float64 |  |
-| `opp_ast` | Float64 |  |
-| `opp_tov` | Float64 |  |
-| `opp_stl` | Float64 |  |
-| `opp_blk` | Float64 |  |
-| `opp_blka` | Float64 |  |
-| `opp_pf` | Float64 |  |
-| `opp_pfd` | Float64 |  |
+| `fgm_rank` | Int64 | League rank of the row's field goals made for the season and split. |
+| `fga_rank` | Int64 | League rank of the row's field goals attempted for the season and split. |
+| `fg_pct_rank` | Int64 | League rank of the row's field goal percentage for the season and split. |
+| `fg3m_rank` | Int64 | League rank of the row's three-point field goals made for the season and split. |
+| `fg3a_rank` | Int64 | League rank of the row's three-point field goals attempted for the season and split. |
+| `fg3_pct_rank` | Int64 | League rank of the row's three-point field goal percentage for the season and split. |
+| `ftm_rank` | Int64 | League rank of the row's free throws made for the season and split. |
+| `fta_rank` | Int64 | League rank of the row's free throws attempted for the season and split. |
+| `ft_pct_rank` | Int64 | League rank of the row's free throw percentage for the season and split. |
+| `oreb_rank` | Int64 | League rank of the row's offensive rebounds for the season and split. |
+| `dreb_rank` | Int64 | League rank of the row's defensive rebounds for the season and split. |
+| `reb_rank` | Int64 | League rank of the row's total rebounds for the season and split. |
+| `ast_rank` | Int64 | League rank of the row's assists for the season and split. |
+| `tov_rank` | Int64 | League rank of the row's turnovers for the season and split. |
+| `stl_rank` | Int64 | League rank of the row's steals for the season and split. |
+| `blk_rank` | Int64 | League rank of the row's blocked shots for the season and split. |
+| `blka_rank` | Int64 | League rank of the row's shot attempts blocked by opponents (blocks against) for the season and split. |
+| `pf_rank` | Int64 | League rank of the row's personal fouls committed for the season and split. |
+| `pfd_rank` | Int64 | League rank of the row's personal fouls drawn for the season and split. |
+| `pts_rank` | Int64 | League rank of the row's points scored for the season and split. |
+| `plus_minus_rank` | Int64 | League rank of the row's plus-minus point differential while on the floor for the season and split. |
+| `pts_off_tov` | Float64 | Points scored off opponent turnovers over the split. |
+| `pts_2nd_chance` | Float64 | Second-chance points over the split. |
+| `pts_fb` | Float64 | Fast-break points over the split. |
+| `pts_paint` | Float64 | Points in the paint over the split. |
+| `opp_pts_off_tov` | Float64 | Opponent points scored off opponent turnovers allowed over the split. |
+| `opp_pts_2nd_chance` | Float64 | Opponent second-chance points allowed over the split. |
+| `opp_pts_fb` | Float64 | Opponent fast-break points allowed over the split. |
+| `opp_pts_paint` | Float64 | Opponent points in the paint allowed over the split. |
+| `pts_off_tov_rank` | Int64 | League rank of the row's points scored off opponent turnovers for the season and split. |
+| `pts_2nd_chance_rank` | Int64 | League rank of the row's second-chance points for the season and split. |
+| `pts_fb_rank` | Int64 | League rank of the row's fast-break points for the season and split. |
+| `pts_paint_rank` | Int64 | League rank of the row's points in the paint for the season and split. |
+| `opp_pts_off_tov_rank` | Int64 | League rank of the row's opponent points scored off opponent turnovers for the season and split. |
+| `opp_pts_2nd_chance_rank` | Int64 | League rank of the row's opponent second-chance points for the season and split. |
+| `opp_pts_fb_rank` | Int64 | League rank of the row's opponent fast-break points for the season and split. |
+| `opp_pts_paint_rank` | Int64 | League rank of the row's opponent points in the paint for the season and split. |
+| `opp_fgm` | Float64 | Opponent field goals made allowed over the split. |
+| `opp_fga` | Float64 | Opponent field goals attempted allowed over the split. |
+| `opp_fg_pct` | Float64 | Opponent field goal percentage allowed over the split. |
+| `opp_fg3m` | Float64 | Opponent three-point field goals made allowed over the split. |
+| `opp_fg3a` | Float64 | Opponent three-point field goals attempted allowed over the split. |
+| `opp_fg3_pct` | Float64 | Opponent three-point field goal percentage allowed over the split. |
+| `opp_ftm` | Float64 | Opponent free throws made allowed over the split. |
+| `opp_fta` | Float64 | Opponent free throws attempted allowed over the split. |
+| `opp_ft_pct` | Float64 | Opponent free throw percentage allowed over the split. |
+| `opp_oreb` | Float64 | Opponent offensive rebounds allowed over the split. |
+| `opp_dreb` | Float64 | Opponent defensive rebounds allowed over the split. |
+| `opp_reb` | Float64 | Opponent total rebounds allowed over the split. |
+| `opp_ast` | Float64 | Opponent assists allowed over the split. |
+| `opp_tov` | Float64 | Opponent turnovers allowed over the split. |
+| `opp_stl` | Float64 | Opponent steals allowed over the split. |
+| `opp_blk` | Float64 | Opponent blocked shots allowed over the split. |
+| `opp_blka` | Float64 | Opponent shot attempts blocked by opponents (blocks against) allowed over the split. |
+| `opp_pf` | Float64 | Opponent personal fouls committed allowed over the split. |
+| `opp_pfd` | Float64 | Opponent personal fouls drawn allowed over the split. |
 | `opp_pts` | Float64 | Opponent points. |
-| `opp_fgm_rank` | Int64 |  |
-| `opp_fga_rank` | Int64 |  |
-| `opp_fg_pct_rank` | Int64 |  |
-| `opp_fg3m_rank` | Int64 |  |
-| `opp_fg3a_rank` | Int64 |  |
-| `opp_fg3_pct_rank` | Int64 |  |
-| `opp_ftm_rank` | Int64 |  |
-| `opp_fta_rank` | Int64 |  |
-| `opp_ft_pct_rank` | Int64 |  |
-| `opp_oreb_rank` | Int64 |  |
-| `opp_dreb_rank` | Int64 |  |
-| `opp_reb_rank` | Int64 |  |
-| `opp_ast_rank` | Int64 |  |
-| `opp_tov_rank` | Int64 |  |
-| `opp_stl_rank` | Int64 |  |
-| `opp_blk_rank` | Int64 |  |
-| `opp_blka_rank` | Int64 |  |
-| `opp_pf_rank` | Int64 |  |
-| `opp_pfd_rank` | Int64 |  |
-| `opp_pts_rank` | Int64 |  |
-| `pct_fga_2pt` | Float64 |  |
-| `pct_fga_3pt` | Float64 |  |
-| `pct_pts_2pt` | Float64 |  |
-| `pct_pts_2pt_mr` | Float64 |  |
-| `pct_pts_3pt` | Float64 |  |
-| `pct_pts_fb` | Float64 |  |
-| `pct_pts_ft` | Float64 |  |
-| `pct_pts_off_tov` | Float64 |  |
-| `pct_pts_paint` | Float64 |  |
-| `pct_ast_2pm` | Float64 |  |
-| `pct_uast_2pm` | Float64 |  |
-| `pct_ast_3pm` | Float64 |  |
-| `pct_uast_3pm` | Float64 |  |
-| `pct_ast_fgm` | Float64 |  |
-| `pct_uast_fgm` | Float64 |  |
-| `pct_fga_2pt_rank` | Int64 |  |
-| `pct_fga_3pt_rank` | Int64 |  |
-| `pct_pts_2pt_rank` | Int64 |  |
-| `pct_pts_2pt_mr_rank` | Int64 |  |
-| `pct_pts_3pt_rank` | Int64 |  |
-| `pct_pts_fb_rank` | Int64 |  |
-| `pct_pts_ft_rank` | Int64 |  |
-| `pct_pts_off_tov_rank` | Int64 |  |
-| `pct_pts_paint_rank` | Int64 |  |
-| `pct_ast_2pm_rank` | Int64 |  |
-| `pct_uast_2pm_rank` | Int64 |  |
-| `pct_ast_3pm_rank` | Int64 |  |
-| `pct_uast_3pm_rank` | Int64 |  |
-| `pct_ast_fgm_rank` | Int64 |  |
-| `pct_uast_fgm_rank` | Int64 |  |
+| `opp_fgm_rank` | Int64 | League rank of the row's opponent field goals made for the season and split. |
+| `opp_fga_rank` | Int64 | League rank of the row's opponent field goals attempted for the season and split. |
+| `opp_fg_pct_rank` | Int64 | League rank of the row's opponent field goal percentage for the season and split. |
+| `opp_fg3m_rank` | Int64 | League rank of the row's opponent three-point field goals made for the season and split. |
+| `opp_fg3a_rank` | Int64 | League rank of the row's opponent three-point field goals attempted for the season and split. |
+| `opp_fg3_pct_rank` | Int64 | League rank of the row's opponent three-point field goal percentage for the season and split. |
+| `opp_ftm_rank` | Int64 | League rank of the row's opponent free throws made for the season and split. |
+| `opp_fta_rank` | Int64 | League rank of the row's opponent free throws attempted for the season and split. |
+| `opp_ft_pct_rank` | Int64 | League rank of the row's opponent free throw percentage for the season and split. |
+| `opp_oreb_rank` | Int64 | League rank of the row's opponent offensive rebounds for the season and split. |
+| `opp_dreb_rank` | Int64 | League rank of the row's opponent defensive rebounds for the season and split. |
+| `opp_reb_rank` | Int64 | League rank of the row's opponent total rebounds for the season and split. |
+| `opp_ast_rank` | Int64 | League rank of the row's opponent assists for the season and split. |
+| `opp_tov_rank` | Int64 | League rank of the row's opponent turnovers for the season and split. |
+| `opp_stl_rank` | Int64 | League rank of the row's opponent steals for the season and split. |
+| `opp_blk_rank` | Int64 | League rank of the row's opponent blocked shots for the season and split. |
+| `opp_blka_rank` | Int64 | League rank of the row's opponent shot attempts blocked by opponents (blocks against) for the season and split. |
+| `opp_pf_rank` | Int64 | League rank of the row's opponent personal fouls committed for the season and split. |
+| `opp_pfd_rank` | Int64 | League rank of the row's opponent personal fouls drawn for the season and split. |
+| `opp_pts_rank` | Int64 | League rank of the row's opponent points scored for the season and split. |
+| `pct_fga_2pt` | Float64 | Share of field goal attempts taken as two-pointers, as a decimal. |
+| `pct_fga_3pt` | Float64 | Share of field goal attempts taken as three-pointers, as a decimal. |
+| `pct_pts_2pt` | Float64 | Share of points scored on two-point field goals, as a decimal. |
+| `pct_pts_2pt_mr` | Float64 | Share of points scored on mid-range two-pointers, as a decimal. |
+| `pct_pts_3pt` | Float64 | Share of points scored on three-pointers, as a decimal. |
+| `pct_pts_fb` | Float64 | Share of points scored on fast breaks, as a decimal. |
+| `pct_pts_ft` | Float64 | Share of points scored at the free throw line, as a decimal. |
+| `pct_pts_off_tov` | Float64 | Share of points scored off opponent turnovers, as a decimal. |
+| `pct_pts_paint` | Float64 | Share of points scored in the paint, as a decimal. |
+| `pct_ast_2pm` | Float64 | Percentage of made two-pointers that were assisted, as a decimal. |
+| `pct_uast_2pm` | Float64 | Percentage of made two-pointers that were unassisted, as a decimal. |
+| `pct_ast_3pm` | Float64 | Percentage of made three-pointers that were assisted, as a decimal. |
+| `pct_uast_3pm` | Float64 | Percentage of made three-pointers that were unassisted, as a decimal. |
+| `pct_ast_fgm` | Float64 | Percentage of made field goals that were assisted, as a decimal. |
+| `pct_uast_fgm` | Float64 | Percentage of made field goals that were unassisted, as a decimal. |
+| `pct_fga_2pt_rank` | Int64 | League rank of the row's share of field goal attempts taken as two-pointers for the season and split. |
+| `pct_fga_3pt_rank` | Int64 | League rank of the row's share of field goal attempts taken as three-pointers for the season and split. |
+| `pct_pts_2pt_rank` | Int64 | League rank of the row's share of points scored on two-point field goals for the season and split. |
+| `pct_pts_2pt_mr_rank` | Int64 | League rank of the row's share of points scored on mid-range two-pointers for the season and split. |
+| `pct_pts_3pt_rank` | Int64 | League rank of the row's share of points scored on three-pointers for the season and split. |
+| `pct_pts_fb_rank` | Int64 | League rank of the row's share of points scored on fast breaks for the season and split. |
+| `pct_pts_ft_rank` | Int64 | League rank of the row's share of points scored at the free throw line for the season and split. |
+| `pct_pts_off_tov_rank` | Int64 | League rank of the row's share of points scored off opponent turnovers for the season and split. |
+| `pct_pts_paint_rank` | Int64 | League rank of the row's share of points scored in the paint for the season and split. |
+| `pct_ast_2pm_rank` | Int64 | League rank of the row's percentage of made two-pointers that were assisted for the season and split. |
+| `pct_uast_2pm_rank` | Int64 | League rank of the row's percentage of made two-pointers that were unassisted for the season and split. |
+| `pct_ast_3pm_rank` | Int64 | League rank of the row's percentage of made three-pointers that were assisted for the season and split. |
+| `pct_uast_3pm_rank` | Int64 | League rank of the row's percentage of made three-pointers that were unassisted for the season and split. |
+| `pct_ast_fgm_rank` | Int64 | League rank of the row's percentage of made field goals that were assisted for the season and split. |
+| `pct_uast_fgm_rank` | Int64 | League rank of the row's percentage of made field goals that were unassisted for the season and split. |
 
 ```python
 load_nba_stats_lineups(seasons=2025)
@@ -907,16 +907,16 @@ Release: [nba_stats_game_lineups](https://github.com/sportsdataverse/sportsdatav
 | `game_id` | String | Unique game identifier. |
 | `action_number` | Int64 | Sequential action number within a game (V3 PBP). |
 | `period` | Int64 | Period of the game (1-4 quarters; 5+ for OT). |
-| `home_player_1` | Int64 |  |
-| `home_player_2` | Int64 |  |
-| `home_player_3` | Int64 |  |
-| `home_player_4` | Int64 |  |
-| `home_player_5` | Int64 |  |
-| `away_player_1` | Int64 |  |
-| `away_player_2` | Int64 |  |
-| `away_player_3` | Int64 |  |
-| `away_player_4` | Int64 |  |
-| `away_player_5` | Int64 |  |
+| `home_player_1` | Int64 | NBA Stats player id of the home on-court player 1 of 5 for the row. |
+| `home_player_2` | Int64 | NBA Stats player id of the home on-court player 2 of 5 for the row. |
+| `home_player_3` | Int64 | NBA Stats player id of the home on-court player 3 of 5 for the row. |
+| `home_player_4` | Int64 | NBA Stats player id of the home on-court player 4 of 5 for the row. |
+| `home_player_5` | Int64 | NBA Stats player id of the home on-court player 5 of 5 for the row. |
+| `away_player_1` | Int64 | NBA Stats player id of the away on-court player 1 of 5 for the row. |
+| `away_player_2` | Int64 | NBA Stats player id of the away on-court player 2 of 5 for the row. |
+| `away_player_3` | Int64 | NBA Stats player id of the away on-court player 3 of 5 for the row. |
+| `away_player_4` | Int64 | NBA Stats player id of the away on-court player 4 of 5 for the row. |
+| `away_player_5` | Int64 | NBA Stats player id of the away on-court player 5 of 5 for the row. |
 | `season` | Int64 | Season year. |
 
 ```python
@@ -948,7 +948,7 @@ Release: [nba_stats_pbp](https://github.com/sportsdataverse/sportsdataverse-data
 
 | col_name | type | description |
 |---|---|---|
-| `order_index` | Int64 |  |
+| `order_index` | Int64 | Stable within-game ordering index for events after pbpstats-style reordering of the raw feed. |
 | `action_number` | Int64 | Sequential action number within a game (V3 PBP). |
 | `clock` | String | Game clock value. |
 | `period` | Int64 | Period of the game (1-4 quarters; 5+ for OT). |
@@ -975,27 +975,27 @@ Release: [nba_stats_pbp](https://github.com/sportsdataverse/sportsdataverse-data
 | `game_id` | String | Unique game identifier. |
 | `seconds_remaining` | Float64 | Seconds remaining in the period. |
 | `event_type` | String | Event / play type code (V2 PBP). |
-| `is_made_shot` | Boolean |  |
-| `is_missed_shot` | Boolean |  |
-| `is_free_throw` | Boolean |  |
-| `is_rebound` | Boolean |  |
+| `is_made_shot` | Boolean | Whether the event is a made field goal. |
+| `is_missed_shot` | Boolean | Whether the event is a missed field goal. |
+| `is_free_throw` | Boolean | Whether the event is a free throw attempt. |
+| `is_rebound` | Boolean | Whether the event is a rebound. |
 | `is_turnover` | Boolean | `TRUE` if the play was a turnover. |
-| `is_foul` | Boolean |  |
-| `is_substitution` | Boolean |  |
-| `is_jump_ball` | Boolean |  |
-| `is_timeout` | Boolean |  |
-| `is_period` | Boolean |  |
+| `is_foul` | Boolean | Whether the event is a foul. |
+| `is_substitution` | Boolean | Whether the event is a substitution. |
+| `is_jump_ball` | Boolean | Whether the event is a jump ball. |
+| `is_timeout` | Boolean | Whether the event is a timeout. |
+| `is_period` | Boolean | Whether the event is a period start or end marker. |
 | `possession_number` | Int64 | Possession number. |
-| `off_player_1` | Int64 |  |
-| `off_player_2` | Int64 |  |
-| `off_player_3` | Int64 |  |
-| `off_player_4` | Int64 |  |
-| `off_player_5` | Int64 |  |
-| `def_player_1` | Int64 |  |
-| `def_player_2` | Int64 |  |
-| `def_player_3` | Int64 |  |
-| `def_player_4` | Int64 |  |
-| `def_player_5` | Int64 |  |
+| `off_player_1` | Int64 | NBA Stats player id of offensive on-court player 1 of 5 during the event. |
+| `off_player_2` | Int64 | NBA Stats player id of offensive on-court player 2 of 5 during the event. |
+| `off_player_3` | Int64 | NBA Stats player id of offensive on-court player 3 of 5 during the event. |
+| `off_player_4` | Int64 | NBA Stats player id of offensive on-court player 4 of 5 during the event. |
+| `off_player_5` | Int64 | NBA Stats player id of offensive on-court player 5 of 5 during the event. |
+| `def_player_1` | Int64 | NBA Stats player id of defensive on-court player 1 of 5 during the event. |
+| `def_player_2` | Int64 | NBA Stats player id of defensive on-court player 2 of 5 during the event. |
+| `def_player_3` | Int64 | NBA Stats player id of defensive on-court player 3 of 5 during the event. |
+| `def_player_4` | Int64 | NBA Stats player id of defensive on-court player 4 of 5 during the event. |
+| `def_player_5` | Int64 | NBA Stats player id of defensive on-court player 5 of 5 during the event. |
 | `season` | Int64 | Season year. |
 
 ```python
@@ -1013,18 +1013,18 @@ Release: [nba_stats_possessions](https://github.com/sportsdataverse/sportsdatave
 | `period` | Int64 | Period of the game (1-4 quarters; 5+ for OT). |
 | `possession_number` | Int64 | Possession number. |
 | `offense_team_id` | Int64 | Unique identifier for offense team. |
-| `defense_team_id` | Int64 |  |
-| `start_order_index` | Int64 |  |
-| `end_order_index` | Int64 |  |
-| `start_seconds_remaining` | Float64 |  |
-| `end_seconds_remaining` | Float64 |  |
+| `defense_team_id` | Int64 | NBA Stats team id of the defending team for the possession. |
+| `start_order_index` | Int64 | order_index of the play-by-play event that starts the possession. |
+| `end_order_index` | Int64 | order_index of the play-by-play event that ends the possession. |
+| `start_seconds_remaining` | Float64 | Seconds remaining in the period when the possession started. |
+| `end_seconds_remaining` | Float64 | Seconds remaining in the period when the possession ended. |
 | `points` | Int64 | Points scored. |
-| `is_second_chance` | Boolean |  |
-| `number_in_period` | Int64 |  |
-| `possession_start_type` | String |  |
-| `count_as_possession` | Boolean |  |
-| `fg2a` | Int64 |  |
-| `fg2m` | Int64 |  |
+| `is_second_chance` | Boolean | Whether the row is a second-chance continuation following an offensive rebound. |
+| `number_in_period` | Int64 | Sequential possession number for the offense within the period. |
+| `possession_start_type` | String | How the possession began (e.g. off a made shot, defensive rebound, turnover, or period start). |
+| `count_as_possession` | Boolean | Whether the row counts as a true possession for per-possession rate stats. |
+| `fg2a` | Int64 | Two-point field goal attempts during the possession. |
+| `fg2m` | Int64 | Two-point field goals made during the possession. |
 | `fg3a` | Int64 | Three-point field goal attempts. |
 | `fg3m` | Int64 | Three-point field goals made. |
 | `fta` | Int64 | Free throw attempts. |
@@ -1032,17 +1032,17 @@ Release: [nba_stats_possessions](https://github.com/sportsdataverse/sportsdatave
 | `oreb` | Int64 | Offensive rebounds. |
 | `dreb` | Int64 | Defensive rebounds. |
 | `tov` | Int64 | Turnovers. |
-| `off_player_1` | Int64 |  |
-| `off_player_2` | Int64 |  |
-| `off_player_3` | Int64 |  |
-| `off_player_4` | Int64 |  |
-| `off_player_5` | Int64 |  |
-| `def_player_1` | Int64 |  |
-| `def_player_2` | Int64 |  |
-| `def_player_3` | Int64 |  |
-| `def_player_4` | Int64 |  |
-| `def_player_5` | Int64 |  |
-| `lineup_source` | String |  |
+| `off_player_1` | Int64 | NBA Stats player id of offensive on-court player 1 of 5 for the possession. |
+| `off_player_2` | Int64 | NBA Stats player id of offensive on-court player 2 of 5 for the possession. |
+| `off_player_3` | Int64 | NBA Stats player id of offensive on-court player 3 of 5 for the possession. |
+| `off_player_4` | Int64 | NBA Stats player id of offensive on-court player 4 of 5 for the possession. |
+| `off_player_5` | Int64 | NBA Stats player id of offensive on-court player 5 of 5 for the possession. |
+| `def_player_1` | Int64 | NBA Stats player id of defensive on-court player 1 of 5 for the possession. |
+| `def_player_2` | Int64 | NBA Stats player id of defensive on-court player 2 of 5 for the possession. |
+| `def_player_3` | Int64 | NBA Stats player id of defensive on-court player 3 of 5 for the possession. |
+| `def_player_4` | Int64 | NBA Stats player id of defensive on-court player 4 of 5 for the possession. |
+| `def_player_5` | Int64 | NBA Stats player id of defensive on-court player 5 of 5 for the possession. |
+| `lineup_source` | String | Provenance of the on-court lineup identification for the row (how the five-man units were resolved). |
 | `season` | Int64 | Season year. |
 
 ```python
@@ -1059,16 +1059,16 @@ Release: [nba_stats_game_lineups](https://github.com/sportsdataverse/sportsdatav
 | `game_id` | String | Unique game identifier. |
 | `action_number` | Int64 | Sequential action number within a game (V3 PBP). |
 | `period` | Int64 | Period of the game (1-4 quarters; 5+ for OT). |
-| `home_player_1` | Int64 |  |
-| `home_player_2` | Int64 |  |
-| `home_player_3` | Int64 |  |
-| `home_player_4` | Int64 |  |
-| `home_player_5` | Int64 |  |
-| `away_player_1` | Int64 |  |
-| `away_player_2` | Int64 |  |
-| `away_player_3` | Int64 |  |
-| `away_player_4` | Int64 |  |
-| `away_player_5` | Int64 |  |
+| `home_player_1` | Int64 | NBA Stats player id of the home on-court player 1 of 5 for the row. |
+| `home_player_2` | Int64 | NBA Stats player id of the home on-court player 2 of 5 for the row. |
+| `home_player_3` | Int64 | NBA Stats player id of the home on-court player 3 of 5 for the row. |
+| `home_player_4` | Int64 | NBA Stats player id of the home on-court player 4 of 5 for the row. |
+| `home_player_5` | Int64 | NBA Stats player id of the home on-court player 5 of 5 for the row. |
+| `away_player_1` | Int64 | NBA Stats player id of the away on-court player 1 of 5 for the row. |
+| `away_player_2` | Int64 | NBA Stats player id of the away on-court player 2 of 5 for the row. |
+| `away_player_3` | Int64 | NBA Stats player id of the away on-court player 3 of 5 for the row. |
+| `away_player_4` | Int64 | NBA Stats player id of the away on-court player 4 of 5 for the row. |
+| `away_player_5` | Int64 | NBA Stats player id of the away on-court player 5 of 5 for the row. |
 | `season` | Int64 | Season year. |
 
 ```python
@@ -1082,7 +1082,7 @@ Release: [nba_stats_pbp](https://github.com/sportsdataverse/sportsdataverse-data
 
 | col_name | type | description |
 |---|---|---|
-| `order_index` | Int64 |  |
+| `order_index` | Int64 | Stable within-game ordering index for events after pbpstats-style reordering of the raw feed. |
 | `action_number` | Int64 | Sequential action number within a game (V3 PBP). |
 | `clock` | String | Game clock value. |
 | `period` | Int64 | Period of the game (1-4 quarters; 5+ for OT). |
@@ -1109,27 +1109,27 @@ Release: [nba_stats_pbp](https://github.com/sportsdataverse/sportsdataverse-data
 | `game_id` | String | Unique game identifier. |
 | `seconds_remaining` | Float64 | Seconds remaining in the period. |
 | `event_type` | String | Event / play type code (V2 PBP). |
-| `is_made_shot` | Boolean |  |
-| `is_missed_shot` | Boolean |  |
-| `is_free_throw` | Boolean |  |
-| `is_rebound` | Boolean |  |
+| `is_made_shot` | Boolean | Whether the event is a made field goal. |
+| `is_missed_shot` | Boolean | Whether the event is a missed field goal. |
+| `is_free_throw` | Boolean | Whether the event is a free throw attempt. |
+| `is_rebound` | Boolean | Whether the event is a rebound. |
 | `is_turnover` | Boolean | `TRUE` if the play was a turnover. |
-| `is_foul` | Boolean |  |
-| `is_substitution` | Boolean |  |
-| `is_jump_ball` | Boolean |  |
-| `is_timeout` | Boolean |  |
-| `is_period` | Boolean |  |
+| `is_foul` | Boolean | Whether the event is a foul. |
+| `is_substitution` | Boolean | Whether the event is a substitution. |
+| `is_jump_ball` | Boolean | Whether the event is a jump ball. |
+| `is_timeout` | Boolean | Whether the event is a timeout. |
+| `is_period` | Boolean | Whether the event is a period start or end marker. |
 | `possession_number` | Int64 | Possession number. |
-| `off_player_1` | Int64 |  |
-| `off_player_2` | Int64 |  |
-| `off_player_3` | Int64 |  |
-| `off_player_4` | Int64 |  |
-| `off_player_5` | Int64 |  |
-| `def_player_1` | Int64 |  |
-| `def_player_2` | Int64 |  |
-| `def_player_3` | Int64 |  |
-| `def_player_4` | Int64 |  |
-| `def_player_5` | Int64 |  |
+| `off_player_1` | Int64 | NBA Stats player id of offensive on-court player 1 of 5 during the event. |
+| `off_player_2` | Int64 | NBA Stats player id of offensive on-court player 2 of 5 during the event. |
+| `off_player_3` | Int64 | NBA Stats player id of offensive on-court player 3 of 5 during the event. |
+| `off_player_4` | Int64 | NBA Stats player id of offensive on-court player 4 of 5 during the event. |
+| `off_player_5` | Int64 | NBA Stats player id of offensive on-court player 5 of 5 during the event. |
+| `def_player_1` | Int64 | NBA Stats player id of defensive on-court player 1 of 5 during the event. |
+| `def_player_2` | Int64 | NBA Stats player id of defensive on-court player 2 of 5 during the event. |
+| `def_player_3` | Int64 | NBA Stats player id of defensive on-court player 3 of 5 during the event. |
+| `def_player_4` | Int64 | NBA Stats player id of defensive on-court player 4 of 5 during the event. |
+| `def_player_5` | Int64 | NBA Stats player id of defensive on-court player 5 of 5 during the event. |
 | `season` | Int64 | Season year. |
 
 ```python
@@ -1243,78 +1243,78 @@ Release: [nba_stats_player_season_stats](https://github.com/sportsdataverse/spor
 | `l` | Int64 | Losses. |
 | `w_pct` | Float64 | Wins percentage (0-1 decimal). |
 | `min` | Float64 | Minutes played. |
-| `e_off_rating` | Float64 |  |
-| `off_rating` | Float64 |  |
-| `sp_work_off_rating` | Float64 |  |
-| `e_def_rating` | Float64 |  |
-| `def_rating` | Float64 |  |
-| `sp_work_def_rating` | Float64 |  |
-| `e_net_rating` | Float64 |  |
+| `e_off_rating` | Float64 | Estimated offensive rating (NBA Stats estimated-metrics family) over the split. |
+| `off_rating` | Float64 | Offensive rating (points scored per 100 possessions) over the split. |
+| `sp_work_off_rating` | Float64 | Offensive rating carried in the stats API's SP_WORK column set (mirrors off_rating) over the split. |
+| `e_def_rating` | Float64 | Estimated defensive rating (NBA Stats estimated-metrics family) over the split. |
+| `def_rating` | Float64 | Defensive rating (points allowed per 100 possessions) over the split. |
+| `sp_work_def_rating` | Float64 | Defensive rating carried in the stats API's SP_WORK column set (mirrors def_rating) over the split. |
+| `e_net_rating` | Float64 | Estimated net rating (NBA Stats estimated-metrics family) over the split. |
 | `net_rating` | Float64 | Net rating (off rating - def rating). |
-| `sp_work_net_rating` | Float64 |  |
+| `sp_work_net_rating` | Float64 | Net rating carried in the stats API's SP_WORK column set (mirrors net_rating) over the split. |
 | `ast_pct` | Float64 | Assist percentage. |
-| `ast_to` | Float64 |  |
-| `ast_ratio` | Float64 |  |
-| `oreb_pct` | Float64 |  |
-| `dreb_pct` | Float64 |  |
-| `reb_pct` | Float64 |  |
-| `tm_tov_pct` | Float64 |  |
-| `e_tov_pct` | Float64 |  |
-| `efg_pct` | Float64 |  |
+| `ast_to` | Float64 | Assist-to-turnover ratio over the split. |
+| `ast_ratio` | Float64 | Assist ratio (assists per 100 possessions used) over the split. |
+| `oreb_pct` | Float64 | Offensive rebound percentage over the split, as a decimal. |
+| `dreb_pct` | Float64 | Defensive rebound percentage over the split, as a decimal. |
+| `reb_pct` | Float64 | Total rebound percentage over the split, as a decimal. |
+| `tm_tov_pct` | Float64 | Team turnover percentage (turnovers per 100 possessions) over the split, as a decimal. |
+| `e_tov_pct` | Float64 | Estimated turnover percentage (NBA Stats estimated-metrics family) over the split, as a decimal. |
+| `efg_pct` | Float64 | Effective field goal percentage over the split, as a decimal. |
 | `ts_pct` | Float64 | True shooting percentage (0-1). |
-| `usg_pct` | Float64 |  |
-| `e_usg_pct` | Float64 |  |
-| `e_pace` | Float64 |  |
+| `usg_pct` | Float64 | Usage percentage (share of team plays used while on the floor) over the split, as a decimal. |
+| `e_usg_pct` | Float64 | Estimated usage percentage (NBA Stats estimated-metrics family) over the split, as a decimal. |
+| `e_pace` | Float64 | Estimated pace (NBA Stats estimated-metrics family) over the split. |
 | `pace` | Float64 | Possessions per 48 minutes. |
 | `pace_per40` | Float64 | Pace per40. |
-| `sp_work_pace` | Float64 |  |
+| `sp_work_pace` | Float64 | Pace carried in the stats API's SP_WORK column set (mirrors pace) over the split. |
 | `pie` | Float64 | Player Impact Estimate (0-1). |
 | `poss` | Int64 | Poss. |
 | `fgm` | Float64 | Field goals made. |
 | `fga` | Float64 | Field goal attempts. |
-| `fgm_pg` | Float64 |  |
-| `fga_pg` | Float64 |  |
+| `fgm_pg` | Float64 | Field goals made per game over the split. |
+| `fga_pg` | Float64 | Field goals attempted per game over the split. |
 | `fg_pct` | Float64 | Field goal percentage (0-1). |
-| `gp_rank` | Int64 |  |
-| `w_rank` | Int64 |  |
-| `l_rank` | Int64 |  |
-| `w_pct_rank` | Int64 |  |
-| `min_rank` | Int64 |  |
-| `e_off_rating_rank` | Int64 |  |
-| `off_rating_rank` | Int64 |  |
-| `sp_work_off_rating_rank` | Int64 |  |
-| `e_def_rating_rank` | Int64 |  |
-| `def_rating_rank` | Int64 |  |
-| `sp_work_def_rating_rank` | Int64 |  |
-| `e_net_rating_rank` | Int64 |  |
-| `net_rating_rank` | Int64 |  |
-| `sp_work_net_rating_rank` | Int64 |  |
-| `ast_pct_rank` | Int64 |  |
-| `ast_to_rank` | Int64 |  |
-| `ast_ratio_rank` | Int64 |  |
-| `oreb_pct_rank` | Int64 |  |
-| `dreb_pct_rank` | Int64 |  |
-| `reb_pct_rank` | Int64 |  |
-| `tm_tov_pct_rank` | Int64 |  |
-| `e_tov_pct_rank` | Int64 |  |
-| `efg_pct_rank` | Int64 |  |
-| `ts_pct_rank` | Int64 |  |
-| `usg_pct_rank` | Int64 |  |
-| `e_usg_pct_rank` | Int64 |  |
-| `e_pace_rank` | Int64 |  |
-| `pace_rank` | Int64 |  |
-| `sp_work_pace_rank` | Int64 |  |
-| `pie_rank` | Int64 |  |
-| `fgm_rank` | Int64 |  |
-| `fga_rank` | Int64 |  |
-| `fgm_pg_rank` | Int64 |  |
-| `fga_pg_rank` | Int64 |  |
-| `fg_pct_rank` | Int64 |  |
-| `team_count` | Int64 |  |
+| `gp_rank` | Int64 | League rank of the row's games played for the season and split. |
+| `w_rank` | Int64 | League rank of the row's wins for the season and split. |
+| `l_rank` | Int64 | League rank of the row's losses for the season and split. |
+| `w_pct_rank` | Int64 | League rank of the row's win percentage for the season and split. |
+| `min_rank` | Int64 | League rank of the row's minutes played for the season and split. |
+| `e_off_rating_rank` | Int64 | League rank of the row's estimated offensive rating (NBA Stats estimated-metrics family) for the season and split. |
+| `off_rating_rank` | Int64 | League rank of the row's offensive rating (points scored per 100 possessions) for the season and split. |
+| `sp_work_off_rating_rank` | Int64 | League rank of the row's offensive rating carried in the stats API's SP_WORK column set (mirrors off_rating) for the season and split. |
+| `e_def_rating_rank` | Int64 | League rank of the row's estimated defensive rating (NBA Stats estimated-metrics family) for the season and split. |
+| `def_rating_rank` | Int64 | League rank of the row's defensive rating (points allowed per 100 possessions) for the season and split. |
+| `sp_work_def_rating_rank` | Int64 | League rank of the row's defensive rating carried in the stats API's SP_WORK column set (mirrors def_rating) for the season and split. |
+| `e_net_rating_rank` | Int64 | League rank of the row's estimated net rating (NBA Stats estimated-metrics family) for the season and split. |
+| `net_rating_rank` | Int64 | League rank of the row's net rating (offensive minus defensive rating) for the season and split. |
+| `sp_work_net_rating_rank` | Int64 | League rank of the row's net rating carried in the stats API's SP_WORK column set (mirrors net_rating) for the season and split. |
+| `ast_pct_rank` | Int64 | League rank of the row's assist percentage (share of teammate field goals assisted while on the floor) for the season and split. |
+| `ast_to_rank` | Int64 | League rank of the row's assist-to-turnover ratio for the season and split. |
+| `ast_ratio_rank` | Int64 | League rank of the row's assist ratio (assists per 100 possessions used) for the season and split. |
+| `oreb_pct_rank` | Int64 | League rank of the row's offensive rebound percentage for the season and split. |
+| `dreb_pct_rank` | Int64 | League rank of the row's defensive rebound percentage for the season and split. |
+| `reb_pct_rank` | Int64 | League rank of the row's total rebound percentage for the season and split. |
+| `tm_tov_pct_rank` | Int64 | League rank of the row's team turnover percentage (turnovers per 100 possessions) for the season and split. |
+| `e_tov_pct_rank` | Int64 | League rank of the row's estimated turnover percentage (NBA Stats estimated-metrics family) for the season and split. |
+| `efg_pct_rank` | Int64 | League rank of the row's effective field goal percentage for the season and split. |
+| `ts_pct_rank` | Int64 | League rank of the row's true shooting percentage for the season and split. |
+| `usg_pct_rank` | Int64 | League rank of the row's usage percentage (share of team plays used while on the floor) for the season and split. |
+| `e_usg_pct_rank` | Int64 | League rank of the row's estimated usage percentage (NBA Stats estimated-metrics family) for the season and split. |
+| `e_pace_rank` | Int64 | League rank of the row's estimated pace (NBA Stats estimated-metrics family) for the season and split. |
+| `pace_rank` | Int64 | League rank of the row's pace (possessions per 48 minutes) for the season and split. |
+| `sp_work_pace_rank` | Int64 | League rank of the row's pace carried in the stats API's SP_WORK column set (mirrors pace) for the season and split. |
+| `pie_rank` | Int64 | League rank of the row's Player Impact Estimate (PIE, the NBA Stats catch-all impact metric) for the season and split. |
+| `fgm_rank` | Int64 | League rank of the row's field goals made for the season and split. |
+| `fga_rank` | Int64 | League rank of the row's field goals attempted for the season and split. |
+| `fgm_pg_rank` | Int64 | League rank of the row's field goals made per game for the season and split. |
+| `fga_pg_rank` | Int64 | League rank of the row's field goals attempted per game for the season and split. |
+| `fg_pct_rank` | Int64 | League rank of the row's field goal percentage for the season and split. |
+| `team_count` | Int64 | Number of distinct teams aggregated into the split row. |
 | `season` | Int32 | Season year. |
 | `season_type` | String | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
-| `measure_type` | String |  |
-| `per_mode` | String |  |
+| `measure_type` | String | NBA Stats measure type the row was pulled from (e.g. Base, Advanced, Misc, Scoring, Opponent, Usage, Defense). |
+| `per_mode` | String | NBA Stats per-mode of the row values (e.g. Totals, PerGame, Per100Possessions). |
 | `fg3m` | Float64 | Three-point field goals made. |
 | `fg3a` | Float64 | Three-point field goal attempts. |
 | `fg3_pct` | Float64 | Three-point field goal percentage (0-1). |
@@ -1328,120 +1328,120 @@ Release: [nba_stats_player_season_stats](https://github.com/sportsdataverse/spor
 | `tov` | Float64 | Turnovers. |
 | `stl` | Float64 | Steals. |
 | `blk` | Float64 | Blocks. |
-| `blka` | Float64 |  |
+| `blka` | Float64 | Shot attempts blocked by opponents (blocks against). |
 | `pf` | Float64 | Personal fouls. |
-| `pfd` | Float64 |  |
+| `pfd` | Float64 | Personal fouls drawn. |
 | `pts` | Float64 | Points scored. |
 | `plus_minus` | Float64 | Plus/minus point differential while on court. |
-| `nba_fantasy_pts` | Float64 |  |
-| `dd2` | Int64 |  |
-| `td3` | Int64 |  |
-| `wnba_fantasy_pts` | Float64 |  |
-| `fg3m_rank` | Int64 |  |
-| `fg3a_rank` | Int64 |  |
-| `fg3_pct_rank` | Int64 |  |
-| `ftm_rank` | Int64 |  |
-| `fta_rank` | Int64 |  |
-| `ft_pct_rank` | Int64 |  |
-| `oreb_rank` | Int64 |  |
-| `dreb_rank` | Int64 |  |
-| `reb_rank` | Int64 |  |
-| `ast_rank` | Int64 |  |
-| `tov_rank` | Int64 |  |
-| `stl_rank` | Int64 |  |
-| `blk_rank` | Int64 |  |
-| `blka_rank` | Int64 |  |
-| `pf_rank` | Int64 |  |
-| `pfd_rank` | Int64 |  |
-| `pts_rank` | Int64 |  |
-| `plus_minus_rank` | Int64 |  |
-| `nba_fantasy_pts_rank` | Int64 |  |
-| `dd2_rank` | Int64 |  |
-| `td3_rank` | Int64 |  |
-| `wnba_fantasy_pts_rank` | Int64 |  |
-| `pct_dreb` | Float64 |  |
-| `pct_stl` | Float64 |  |
-| `pct_blk` | Float64 |  |
-| `opp_pts_off_tov` | Float64 |  |
-| `opp_pts_2nd_chance` | Float64 |  |
-| `opp_pts_fb` | Float64 |  |
-| `opp_pts_paint` | Float64 |  |
-| `def_ws` | Float64 |  |
-| `def_ws_raw` | Float64 |  |
-| `pct_dreb_rank` | Int64 |  |
-| `pct_stl_rank` | Int64 |  |
-| `pct_blk_rank` | Int64 |  |
-| `opp_pts_off_tov_rank` | Int64 |  |
-| `opp_pts_2nd_chance_rank` | Int64 |  |
-| `opp_pts_fb_rank` | Int64 |  |
-| `opp_pts_paint_rank` | Int64 |  |
-| `def_ws_rank` | Int64 |  |
-| `pts_off_tov` | Float64 |  |
-| `pts_2nd_chance` | Float64 |  |
-| `pts_fb` | Float64 |  |
-| `pts_paint` | Float64 |  |
-| `pts_off_tov_rank` | Int64 |  |
-| `pts_2nd_chance_rank` | Int64 |  |
-| `pts_fb_rank` | Int64 |  |
-| `pts_paint_rank` | Int64 |  |
-| `pct_fga_2pt` | Float64 |  |
-| `pct_fga_3pt` | Float64 |  |
-| `pct_pts_2pt` | Float64 |  |
-| `pct_pts_2pt_mr` | Float64 |  |
-| `pct_pts_3pt` | Float64 |  |
-| `pct_pts_fb` | Float64 |  |
-| `pct_pts_ft` | Float64 |  |
-| `pct_pts_off_tov` | Float64 |  |
-| `pct_pts_paint` | Float64 |  |
-| `pct_ast_2pm` | Float64 |  |
-| `pct_uast_2pm` | Float64 |  |
-| `pct_ast_3pm` | Float64 |  |
-| `pct_uast_3pm` | Float64 |  |
-| `pct_ast_fgm` | Float64 |  |
-| `pct_uast_fgm` | Float64 |  |
-| `pct_fga_2pt_rank` | Int64 |  |
-| `pct_fga_3pt_rank` | Int64 |  |
-| `pct_pts_2pt_rank` | Int64 |  |
-| `pct_pts_2pt_mr_rank` | Int64 |  |
-| `pct_pts_3pt_rank` | Int64 |  |
-| `pct_pts_fb_rank` | Int64 |  |
-| `pct_pts_ft_rank` | Int64 |  |
-| `pct_pts_off_tov_rank` | Int64 |  |
-| `pct_pts_paint_rank` | Int64 |  |
-| `pct_ast_2pm_rank` | Int64 |  |
-| `pct_uast_2pm_rank` | Int64 |  |
-| `pct_ast_3pm_rank` | Int64 |  |
-| `pct_uast_3pm_rank` | Int64 |  |
-| `pct_ast_fgm_rank` | Int64 |  |
-| `pct_uast_fgm_rank` | Int64 |  |
-| `pct_fgm` | Float64 |  |
-| `pct_fga` | Float64 |  |
-| `pct_fg3m` | Float64 |  |
-| `pct_fg3a` | Float64 |  |
-| `pct_ftm` | Float64 |  |
-| `pct_fta` | Float64 |  |
-| `pct_oreb` | Float64 |  |
-| `pct_reb` | Float64 |  |
-| `pct_ast` | Float64 |  |
-| `pct_tov` | Float64 |  |
-| `pct_blka` | Float64 |  |
-| `pct_pf` | Float64 |  |
-| `pct_pfd` | Float64 |  |
-| `pct_pts` | Float64 |  |
-| `pct_fgm_rank` | Int64 |  |
-| `pct_fga_rank` | Int64 |  |
-| `pct_fg3m_rank` | Int64 |  |
-| `pct_fg3a_rank` | Int64 |  |
-| `pct_ftm_rank` | Int64 |  |
-| `pct_fta_rank` | Int64 |  |
-| `pct_oreb_rank` | Int64 |  |
-| `pct_reb_rank` | Int64 |  |
-| `pct_ast_rank` | Int64 |  |
-| `pct_tov_rank` | Int64 |  |
-| `pct_blka_rank` | Int64 |  |
-| `pct_pf_rank` | Int64 |  |
-| `pct_pfd_rank` | Int64 |  |
-| `pct_pts_rank` | Int64 |  |
+| `nba_fantasy_pts` | Float64 | Fantasy points under the NBA's fantasy scoring formula. |
+| `dd2` | Int64 | Double-doubles recorded over the split. |
+| `td3` | Int64 | Triple-doubles recorded over the split. |
+| `wnba_fantasy_pts` | Float64 | Fantasy points under the WNBA's fantasy scoring formula. |
+| `fg3m_rank` | Int64 | League rank of the row's three-point field goals made for the season and split. |
+| `fg3a_rank` | Int64 | League rank of the row's three-point field goals attempted for the season and split. |
+| `fg3_pct_rank` | Int64 | League rank of the row's three-point field goal percentage for the season and split. |
+| `ftm_rank` | Int64 | League rank of the row's free throws made for the season and split. |
+| `fta_rank` | Int64 | League rank of the row's free throws attempted for the season and split. |
+| `ft_pct_rank` | Int64 | League rank of the row's free throw percentage for the season and split. |
+| `oreb_rank` | Int64 | League rank of the row's offensive rebounds for the season and split. |
+| `dreb_rank` | Int64 | League rank of the row's defensive rebounds for the season and split. |
+| `reb_rank` | Int64 | League rank of the row's total rebounds for the season and split. |
+| `ast_rank` | Int64 | League rank of the row's assists for the season and split. |
+| `tov_rank` | Int64 | League rank of the row's turnovers for the season and split. |
+| `stl_rank` | Int64 | League rank of the row's steals for the season and split. |
+| `blk_rank` | Int64 | League rank of the row's blocked shots for the season and split. |
+| `blka_rank` | Int64 | League rank of the row's shot attempts blocked by opponents (blocks against) for the season and split. |
+| `pf_rank` | Int64 | League rank of the row's personal fouls committed for the season and split. |
+| `pfd_rank` | Int64 | League rank of the row's personal fouls drawn for the season and split. |
+| `pts_rank` | Int64 | League rank of the row's points scored for the season and split. |
+| `plus_minus_rank` | Int64 | League rank of the row's plus-minus point differential while on the floor for the season and split. |
+| `nba_fantasy_pts_rank` | Int64 | League rank of the row's NBA fantasy points (league scoring formula) for the season and split. |
+| `dd2_rank` | Int64 | League rank of the row's double-doubles for the season and split. |
+| `td3_rank` | Int64 | League rank of the row's triple-doubles for the season and split. |
+| `wnba_fantasy_pts_rank` | Int64 | League rank of the row's WNBA fantasy points (league scoring formula) for the season and split. |
+| `pct_dreb` | Float64 | Share of the team's defensive rebounds accounted for by the player while on the floor, as a decimal. |
+| `pct_stl` | Float64 | Share of the team's steals accounted for by the player while on the floor, as a decimal. |
+| `pct_blk` | Float64 | Share of the team's blocked shots accounted for by the player while on the floor, as a decimal. |
+| `opp_pts_off_tov` | Float64 | Opponent points scored off opponent turnovers allowed over the split. |
+| `opp_pts_2nd_chance` | Float64 | Opponent second-chance points allowed over the split. |
+| `opp_pts_fb` | Float64 | Opponent fast-break points allowed over the split. |
+| `opp_pts_paint` | Float64 | Opponent points in the paint allowed over the split. |
+| `def_ws` | Float64 | Defensive win shares credited to the player (NBA Stats defense dashboard metric). |
+| `def_ws_raw` | Float64 | Unscaled (raw) defensive win shares value carried alongside def_ws by the NBA Stats API. |
+| `pct_dreb_rank` | Int64 | League rank of the row's share of the team's defensive rebounds accounted for by the player while on the floor for the season and split. |
+| `pct_stl_rank` | Int64 | League rank of the row's share of the team's steals accounted for by the player while on the floor for the season and split. |
+| `pct_blk_rank` | Int64 | League rank of the row's share of the team's blocked shots accounted for by the player while on the floor for the season and split. |
+| `opp_pts_off_tov_rank` | Int64 | League rank of the row's opponent points scored off opponent turnovers for the season and split. |
+| `opp_pts_2nd_chance_rank` | Int64 | League rank of the row's opponent second-chance points for the season and split. |
+| `opp_pts_fb_rank` | Int64 | League rank of the row's opponent fast-break points for the season and split. |
+| `opp_pts_paint_rank` | Int64 | League rank of the row's opponent points in the paint for the season and split. |
+| `def_ws_rank` | Int64 | League rank of the row's defensive win shares (NBA Stats defense dashboard metric) for the season and split. |
+| `pts_off_tov` | Float64 | Points scored off opponent turnovers over the split. |
+| `pts_2nd_chance` | Float64 | Second-chance points over the split. |
+| `pts_fb` | Float64 | Fast-break points over the split. |
+| `pts_paint` | Float64 | Points in the paint over the split. |
+| `pts_off_tov_rank` | Int64 | League rank of the row's points scored off opponent turnovers for the season and split. |
+| `pts_2nd_chance_rank` | Int64 | League rank of the row's second-chance points for the season and split. |
+| `pts_fb_rank` | Int64 | League rank of the row's fast-break points for the season and split. |
+| `pts_paint_rank` | Int64 | League rank of the row's points in the paint for the season and split. |
+| `pct_fga_2pt` | Float64 | Share of field goal attempts taken as two-pointers, as a decimal. |
+| `pct_fga_3pt` | Float64 | Share of field goal attempts taken as three-pointers, as a decimal. |
+| `pct_pts_2pt` | Float64 | Share of points scored on two-point field goals, as a decimal. |
+| `pct_pts_2pt_mr` | Float64 | Share of points scored on mid-range two-pointers, as a decimal. |
+| `pct_pts_3pt` | Float64 | Share of points scored on three-pointers, as a decimal. |
+| `pct_pts_fb` | Float64 | Share of points scored on fast breaks, as a decimal. |
+| `pct_pts_ft` | Float64 | Share of points scored at the free throw line, as a decimal. |
+| `pct_pts_off_tov` | Float64 | Share of points scored off opponent turnovers, as a decimal. |
+| `pct_pts_paint` | Float64 | Share of points scored in the paint, as a decimal. |
+| `pct_ast_2pm` | Float64 | Percentage of made two-pointers that were assisted, as a decimal. |
+| `pct_uast_2pm` | Float64 | Percentage of made two-pointers that were unassisted, as a decimal. |
+| `pct_ast_3pm` | Float64 | Percentage of made three-pointers that were assisted, as a decimal. |
+| `pct_uast_3pm` | Float64 | Percentage of made three-pointers that were unassisted, as a decimal. |
+| `pct_ast_fgm` | Float64 | Percentage of made field goals that were assisted, as a decimal. |
+| `pct_uast_fgm` | Float64 | Percentage of made field goals that were unassisted, as a decimal. |
+| `pct_fga_2pt_rank` | Int64 | League rank of the row's share of field goal attempts taken as two-pointers for the season and split. |
+| `pct_fga_3pt_rank` | Int64 | League rank of the row's share of field goal attempts taken as three-pointers for the season and split. |
+| `pct_pts_2pt_rank` | Int64 | League rank of the row's share of points scored on two-point field goals for the season and split. |
+| `pct_pts_2pt_mr_rank` | Int64 | League rank of the row's share of points scored on mid-range two-pointers for the season and split. |
+| `pct_pts_3pt_rank` | Int64 | League rank of the row's share of points scored on three-pointers for the season and split. |
+| `pct_pts_fb_rank` | Int64 | League rank of the row's share of points scored on fast breaks for the season and split. |
+| `pct_pts_ft_rank` | Int64 | League rank of the row's share of points scored at the free throw line for the season and split. |
+| `pct_pts_off_tov_rank` | Int64 | League rank of the row's share of points scored off opponent turnovers for the season and split. |
+| `pct_pts_paint_rank` | Int64 | League rank of the row's share of points scored in the paint for the season and split. |
+| `pct_ast_2pm_rank` | Int64 | League rank of the row's percentage of made two-pointers that were assisted for the season and split. |
+| `pct_uast_2pm_rank` | Int64 | League rank of the row's percentage of made two-pointers that were unassisted for the season and split. |
+| `pct_ast_3pm_rank` | Int64 | League rank of the row's percentage of made three-pointers that were assisted for the season and split. |
+| `pct_uast_3pm_rank` | Int64 | League rank of the row's percentage of made three-pointers that were unassisted for the season and split. |
+| `pct_ast_fgm_rank` | Int64 | League rank of the row's percentage of made field goals that were assisted for the season and split. |
+| `pct_uast_fgm_rank` | Int64 | League rank of the row's percentage of made field goals that were unassisted for the season and split. |
+| `pct_fgm` | Float64 | Share of the team's field goals made accounted for by the player while on the floor, as a decimal. |
+| `pct_fga` | Float64 | Share of the team's field goals attempted accounted for by the player while on the floor, as a decimal. |
+| `pct_fg3m` | Float64 | Share of the team's three-point field goals made accounted for by the player while on the floor, as a decimal. |
+| `pct_fg3a` | Float64 | Share of the team's three-point field goals attempted accounted for by the player while on the floor, as a decimal. |
+| `pct_ftm` | Float64 | Share of the team's free throws made accounted for by the player while on the floor, as a decimal. |
+| `pct_fta` | Float64 | Share of the team's free throws attempted accounted for by the player while on the floor, as a decimal. |
+| `pct_oreb` | Float64 | Share of the team's offensive rebounds accounted for by the player while on the floor, as a decimal. |
+| `pct_reb` | Float64 | Share of the team's total rebounds accounted for by the player while on the floor, as a decimal. |
+| `pct_ast` | Float64 | Share of the team's assists accounted for by the player while on the floor, as a decimal. |
+| `pct_tov` | Float64 | Share of the team's turnovers accounted for by the player while on the floor, as a decimal. |
+| `pct_blka` | Float64 | Share of the team's shot attempts blocked by opponents (blocks against) accounted for by the player while on the floor, as a decimal. |
+| `pct_pf` | Float64 | Share of the team's personal fouls committed accounted for by the player while on the floor, as a decimal. |
+| `pct_pfd` | Float64 | Share of the team's personal fouls drawn accounted for by the player while on the floor, as a decimal. |
+| `pct_pts` | Float64 | Share of the team's points scored accounted for by the player while on the floor, as a decimal. |
+| `pct_fgm_rank` | Int64 | League rank of the row's share of the team's field goals made accounted for by the player while on the floor for the season and split. |
+| `pct_fga_rank` | Int64 | League rank of the row's share of the team's field goals attempted accounted for by the player while on the floor for the season and split. |
+| `pct_fg3m_rank` | Int64 | League rank of the row's share of the team's three-point field goals made accounted for by the player while on the floor for the season and split. |
+| `pct_fg3a_rank` | Int64 | League rank of the row's share of the team's three-point field goals attempted accounted for by the player while on the floor for the season and split. |
+| `pct_ftm_rank` | Int64 | League rank of the row's share of the team's free throws made accounted for by the player while on the floor for the season and split. |
+| `pct_fta_rank` | Int64 | League rank of the row's share of the team's free throws attempted accounted for by the player while on the floor for the season and split. |
+| `pct_oreb_rank` | Int64 | League rank of the row's share of the team's offensive rebounds accounted for by the player while on the floor for the season and split. |
+| `pct_reb_rank` | Int64 | League rank of the row's share of the team's total rebounds accounted for by the player while on the floor for the season and split. |
+| `pct_ast_rank` | Int64 | League rank of the row's share of the team's assists accounted for by the player while on the floor for the season and split. |
+| `pct_tov_rank` | Int64 | League rank of the row's share of the team's turnovers accounted for by the player while on the floor for the season and split. |
+| `pct_blka_rank` | Int64 | League rank of the row's share of the team's shot attempts blocked by opponents (blocks against) accounted for by the player while on the floor for the season and split. |
+| `pct_pf_rank` | Int64 | League rank of the row's share of the team's personal fouls committed accounted for by the player while on the floor for the season and split. |
+| `pct_pfd_rank` | Int64 | League rank of the row's share of the team's personal fouls drawn accounted for by the player while on the floor for the season and split. |
+| `pct_pts_rank` | Int64 | League rank of the row's share of the team's points scored accounted for by the player while on the floor for the season and split. |
 
 ```python
 load_nba_stats_player_season_stats(seasons=2025)
@@ -1458,18 +1458,18 @@ Release: [nba_stats_possessions](https://github.com/sportsdataverse/sportsdatave
 | `period` | Int64 | Period of the game (1-4 quarters; 5+ for OT). |
 | `possession_number` | Int64 | Possession number. |
 | `offense_team_id` | Int64 | Unique identifier for offense team. |
-| `defense_team_id` | Int64 |  |
-| `start_order_index` | Int64 |  |
-| `end_order_index` | Int64 |  |
-| `start_seconds_remaining` | Float64 |  |
-| `end_seconds_remaining` | Float64 |  |
+| `defense_team_id` | Int64 | NBA Stats team id of the defending team for the possession. |
+| `start_order_index` | Int64 | order_index of the play-by-play event that starts the possession. |
+| `end_order_index` | Int64 | order_index of the play-by-play event that ends the possession. |
+| `start_seconds_remaining` | Float64 | Seconds remaining in the period when the possession started. |
+| `end_seconds_remaining` | Float64 | Seconds remaining in the period when the possession ended. |
 | `points` | Int64 | Points scored. |
-| `is_second_chance` | Boolean |  |
-| `number_in_period` | Int64 |  |
-| `possession_start_type` | String |  |
-| `count_as_possession` | Boolean |  |
-| `fg2a` | Int64 |  |
-| `fg2m` | Int64 |  |
+| `is_second_chance` | Boolean | Whether the row is a second-chance continuation following an offensive rebound. |
+| `number_in_period` | Int64 | Sequential possession number for the offense within the period. |
+| `possession_start_type` | String | How the possession began (e.g. off a made shot, defensive rebound, turnover, or period start). |
+| `count_as_possession` | Boolean | Whether the row counts as a true possession for per-possession rate stats. |
+| `fg2a` | Int64 | Two-point field goal attempts during the possession. |
+| `fg2m` | Int64 | Two-point field goals made during the possession. |
 | `fg3a` | Int64 | Three-point field goal attempts. |
 | `fg3m` | Int64 | Three-point field goals made. |
 | `fta` | Int64 | Free throw attempts. |
@@ -1477,17 +1477,17 @@ Release: [nba_stats_possessions](https://github.com/sportsdataverse/sportsdatave
 | `oreb` | Int64 | Offensive rebounds. |
 | `dreb` | Int64 | Defensive rebounds. |
 | `tov` | Int64 | Turnovers. |
-| `off_player_1` | Int64 |  |
-| `off_player_2` | Int64 |  |
-| `off_player_3` | Int64 |  |
-| `off_player_4` | Int64 |  |
-| `off_player_5` | Int64 |  |
-| `def_player_1` | Int64 |  |
-| `def_player_2` | Int64 |  |
-| `def_player_3` | Int64 |  |
-| `def_player_4` | Int64 |  |
-| `def_player_5` | Int64 |  |
-| `lineup_source` | String |  |
+| `off_player_1` | Int64 | NBA Stats player id of offensive on-court player 1 of 5 for the possession. |
+| `off_player_2` | Int64 | NBA Stats player id of offensive on-court player 2 of 5 for the possession. |
+| `off_player_3` | Int64 | NBA Stats player id of offensive on-court player 3 of 5 for the possession. |
+| `off_player_4` | Int64 | NBA Stats player id of offensive on-court player 4 of 5 for the possession. |
+| `off_player_5` | Int64 | NBA Stats player id of offensive on-court player 5 of 5 for the possession. |
+| `def_player_1` | Int64 | NBA Stats player id of defensive on-court player 1 of 5 for the possession. |
+| `def_player_2` | Int64 | NBA Stats player id of defensive on-court player 2 of 5 for the possession. |
+| `def_player_3` | Int64 | NBA Stats player id of defensive on-court player 3 of 5 for the possession. |
+| `def_player_4` | Int64 | NBA Stats player id of defensive on-court player 4 of 5 for the possession. |
+| `def_player_5` | Int64 | NBA Stats player id of defensive on-court player 5 of 5 for the possession. |
+| `lineup_source` | String | Provenance of the on-court lineup identification for the row (how the five-man units were resolved). |
 | `season` | Int64 | Season year. |
 
 ```python
@@ -1516,7 +1516,7 @@ Release: [nba_stats_rosters](https://github.com/sportsdataverse/sportsdataverse-
 | `exp` | String | Years of NBA playing experience entering the season ('R' = rookie). |
 | `school` | String | Player school / pre-draft team. |
 | `player_id` | Int64 | Unique player identifier. |
-| `how_acquired` | String |  |
+| `how_acquired` | String | How the team acquired the player (e.g. draft, trade, free agency). |
 | `season_type` | String | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
 
 ```python
@@ -1571,86 +1571,86 @@ Release: [nba_stats_standings](https://github.com/sportsdataverse/sportsdatavers
 | `playoff_rank` | Int64 | League/season rank for playoff. |
 | `clinch_indicator` | String | Playoff clinch indicator (e.g. 'x' clinched playoff, 'e' eliminated). |
 | `division` | String | Team division. |
-| `division_record` | String |  |
-| `division_rank` | Int64 |  |
+| `division_record` | String | Win-loss record against division opponents. |
+| `division_rank` | Int64 | Team's rank within its division. |
 | `wins` | Int64 | Total wins. |
 | `losses` | Int64 | Total losses. |
 | `win_pct` | Float64 | Win percentage (0-1 decimal). |
-| `league_rank` | Int64 |  |
+| `league_rank` | Int64 | Team's rank in the overall league standings. |
 | `record` | String | Overall win-loss record. |
 | `home` | String | Home. |
 | `road` | String | Road. |
 | `l10` | String | Last-ten record. |
-| `last10_home` | String |  |
-| `last10_road` | String |  |
+| `last10_home` | String | Win-loss record over the team's last 10 home games. |
+| `last10_road` | String | Win-loss record over the team's last 10 road games. |
 | `ot` | String | Ot. |
-| `three_pts_or_less` | String |  |
-| `ten_pts_or_more` | String |  |
-| `long_home_streak` | Int64 |  |
-| `str_long_home_streak` | String |  |
-| `long_road_streak` | Int64 |  |
-| `str_long_road_streak` | String |  |
-| `long_win_streak` | Int64 |  |
-| `long_loss_streak` | Int64 |  |
-| `current_home_streak` | Int64 |  |
-| `str_current_home_streak` | String |  |
-| `current_road_streak` | Int64 |  |
-| `str_current_road_streak` | String |  |
-| `current_streak` | Int64 |  |
-| `str_current_streak` | String |  |
-| `conference_games_back` | Float64 |  |
-| `division_games_back` | Float64 |  |
-| `clinched_conference_title` | Int64 |  |
-| `clinched_division_title` | Int64 |  |
-| `clinched_playoff_birth` | Int64 |  |
-| `clinched_play_in` | Int64 |  |
-| `eliminated_conference` | Int64 |  |
-| `eliminated_division` | Int64 |  |
-| `ahead_at_half` | String |  |
-| `behind_at_half` | String |  |
-| `tied_at_half` | String |  |
-| `ahead_at_third` | String |  |
-| `behind_at_third` | String |  |
-| `tied_at_third` | String |  |
-| `score100_pts` | String |  |
-| `opp_score100_pts` | String |  |
-| `opp_over500` | String |  |
-| `lead_in_fgpct` | String |  |
-| `lead_in_reb` | String |  |
-| `fewer_turnovers` | String |  |
+| `three_pts_or_less` | String | Win-loss record in games decided by three points or fewer. |
+| `ten_pts_or_more` | String | Win-loss record in games decided by ten points or more. |
+| `long_home_streak` | Int64 | Longest home streak of the season (positive counts wins, negative losses). |
+| `str_long_home_streak` | String | Longest home streak of the season as display text (e.g. "W 5"). |
+| `long_road_streak` | Int64 | Longest road streak of the season (positive counts wins, negative losses). |
+| `str_long_road_streak` | String | Longest road streak of the season as display text (e.g. "W 5"). |
+| `long_win_streak` | Int64 | Longest winning streak of the season, in games. |
+| `long_loss_streak` | Int64 | Longest losing streak of the season, in games. |
+| `current_home_streak` | Int64 | Current home streak (positive counts wins, negative losses). |
+| `str_current_home_streak` | String | Current home streak as display text (e.g. "L 2"). |
+| `current_road_streak` | Int64 | Current road streak (positive counts wins, negative losses). |
+| `str_current_road_streak` | String | Current road streak as display text (e.g. "W 3"). |
+| `current_streak` | Int64 | Current overall streak (positive counts wins, negative losses). |
+| `str_current_streak` | String | Current overall streak as display text (e.g. "W 4"). |
+| `conference_games_back` | Float64 | Games behind the conference leader. |
+| `division_games_back` | Float64 | Games behind the division leader. |
+| `clinched_conference_title` | Int64 | Flag (1/0) for whether the team has clinched the conference title. |
+| `clinched_division_title` | Int64 | Flag (1/0) for whether the team has clinched its division. |
+| `clinched_playoff_birth` | Int64 | Flag (1/0) for whether the team has clinched a playoff berth. |
+| `clinched_play_in` | Int64 | Flag (1/0) for whether the team has clinched a play-in tournament spot. |
+| `eliminated_conference` | Int64 | Flag (1/0) for whether the team is eliminated from conference contention. |
+| `eliminated_division` | Int64 | Flag (1/0) for whether the team is eliminated from division contention. |
+| `ahead_at_half` | String | Win-loss record when leading at halftime. |
+| `behind_at_half` | String | Win-loss record when trailing at halftime. |
+| `tied_at_half` | String | Win-loss record when tied at halftime. |
+| `ahead_at_third` | String | Win-loss record when leading after three quarters. |
+| `behind_at_third` | String | Win-loss record when trailing after three quarters. |
+| `tied_at_third` | String | Win-loss record when tied after three quarters. |
+| `score100_pts` | String | Win-loss record when scoring 100 or more points. |
+| `opp_score100_pts` | String | Win-loss record when the opponent scores 100 or more points. |
+| `opp_over500` | String | Win-loss record against teams with winning (over .500) records. |
+| `lead_in_fgpct` | String | Win-loss record when posting the higher field goal percentage. |
+| `lead_in_reb` | String | Win-loss record when out-rebounding the opponent. |
+| `fewer_turnovers` | String | Win-loss record when committing fewer turnovers than the opponent. |
 | `points_pg` | Float64 | Points pg. |
 | `opp_points_pg` | Float64 | Opponent points pg. |
 | `diff_points_pg` | Float64 | Diff points pg. |
-| `vs_east` | String |  |
-| `vs_atlantic` | String |  |
-| `vs_central` | String |  |
-| `vs_southeast` | String |  |
-| `vs_west` | String |  |
-| `vs_northwest` | String |  |
-| `vs_pacific` | String |  |
-| `vs_southwest` | String |  |
-| `jan` | String |  |
-| `feb` | String |  |
-| `mar` | String |  |
-| `apr` | String |  |
-| `may` | Null |  |
-| `jun` | Null |  |
-| `jul` | Null |  |
-| `aug` | Null |  |
-| `sep` | Null |  |
-| `oct` | String |  |
-| `nov` | String |  |
-| `dec` | String |  |
-| `score_80_plus` | String |  |
-| `opp_score_80_plus` | String |  |
-| `score_below_80` | String |  |
-| `opp_score_below_80` | String |  |
-| `total_points` | Int64 |  |
-| `opp_total_points` | Int64 |  |
-| `diff_total_points` | Int64 |  |
-| `league_games_back` | Float64 |  |
-| `playoff_seeding` | Int64 |  |
-| `clinched_post_season` | Int64 |  |
+| `vs_east` | String | Win-loss record against Eastern Conference opponents. |
+| `vs_atlantic` | String | Win-loss record against Atlantic Division opponents. |
+| `vs_central` | String | Win-loss record against Central Division opponents. |
+| `vs_southeast` | String | Win-loss record against Southeast Division opponents. |
+| `vs_west` | String | Win-loss record against Western Conference opponents. |
+| `vs_northwest` | String | Win-loss record against Northwest Division opponents. |
+| `vs_pacific` | String | Win-loss record against Pacific Division opponents. |
+| `vs_southwest` | String | Win-loss record against Southwest Division opponents. |
+| `jan` | String | Win-loss record in games played in January. |
+| `feb` | String | Win-loss record in games played in February. |
+| `mar` | String | Win-loss record in games played in March. |
+| `apr` | String | Win-loss record in games played in April. |
+| `may` | Null | Win-loss record in games played in May. |
+| `jun` | Null | Win-loss record in games played in June. |
+| `jul` | Null | Win-loss record in games played in July. |
+| `aug` | Null | Win-loss record in games played in August. |
+| `sep` | Null | Win-loss record in games played in September. |
+| `oct` | String | Win-loss record in games played in October. |
+| `nov` | String | Win-loss record in games played in November. |
+| `dec` | String | Win-loss record in games played in December. |
+| `score_80_plus` | String | Win-loss record when scoring 80 or more points. |
+| `opp_score_80_plus` | String | Win-loss record when the opponent scores 80 or more points. |
+| `score_below_80` | String | Win-loss record when scoring fewer than 80 points. |
+| `opp_score_below_80` | String | Win-loss record when holding the opponent below 80 points. |
+| `total_points` | Int64 | Total points scored by the team over the season to date. |
+| `opp_total_points` | Int64 | Total points allowed by the team over the season to date. |
+| `diff_total_points` | Int64 | Season point differential (points scored minus points allowed). |
+| `league_games_back` | Float64 | Games behind the overall league leader. |
+| `playoff_seeding` | Int64 | Team's current playoff seed. |
+| `clinched_post_season` | Int64 | Flag (1/0) for whether the team has clinched any postseason berth. |
 | `neutral` | String | Neutral. |
 | `season` | Int32 | Season year. |
 | `season_type` | String | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
@@ -1711,49 +1711,49 @@ Release: [nba_stats_team_season_stats](https://github.com/sportsdataverse/sports
 | `l` | Int64 | Losses. |
 | `w_pct` | Float64 | Wins percentage (0-1 decimal). |
 | `min` | Float64 | Minutes played. |
-| `e_off_rating` | Float64 |  |
-| `off_rating` | Float64 |  |
-| `e_def_rating` | Float64 |  |
-| `def_rating` | Float64 |  |
-| `e_net_rating` | Float64 |  |
+| `e_off_rating` | Float64 | Estimated offensive rating (NBA Stats estimated-metrics family) over the split. |
+| `off_rating` | Float64 | Offensive rating (points scored per 100 possessions) over the split. |
+| `e_def_rating` | Float64 | Estimated defensive rating (NBA Stats estimated-metrics family) over the split. |
+| `def_rating` | Float64 | Defensive rating (points allowed per 100 possessions) over the split. |
+| `e_net_rating` | Float64 | Estimated net rating (NBA Stats estimated-metrics family) over the split. |
 | `net_rating` | Float64 | Net rating (off rating - def rating). |
 | `ast_pct` | Float64 | Assist percentage. |
-| `ast_to` | Float64 |  |
-| `ast_ratio` | Float64 |  |
-| `oreb_pct` | Float64 |  |
-| `dreb_pct` | Float64 |  |
-| `reb_pct` | Float64 |  |
-| `tm_tov_pct` | Float64 |  |
-| `efg_pct` | Float64 |  |
+| `ast_to` | Float64 | Assist-to-turnover ratio over the split. |
+| `ast_ratio` | Float64 | Assist ratio (assists per 100 possessions used) over the split. |
+| `oreb_pct` | Float64 | Offensive rebound percentage over the split, as a decimal. |
+| `dreb_pct` | Float64 | Defensive rebound percentage over the split, as a decimal. |
+| `reb_pct` | Float64 | Total rebound percentage over the split, as a decimal. |
+| `tm_tov_pct` | Float64 | Team turnover percentage (turnovers per 100 possessions) over the split, as a decimal. |
+| `efg_pct` | Float64 | Effective field goal percentage over the split, as a decimal. |
 | `ts_pct` | Float64 | True shooting percentage (0-1). |
-| `e_pace` | Float64 |  |
+| `e_pace` | Float64 | Estimated pace (NBA Stats estimated-metrics family) over the split. |
 | `pace` | Float64 | Possessions per 48 minutes. |
 | `pace_per40` | Float64 | Pace per40. |
 | `poss` | Int64 | Poss. |
 | `pie` | Float64 | Player Impact Estimate (0-1). |
-| `gp_rank` | Int64 |  |
-| `w_rank` | Int64 |  |
-| `l_rank` | Int64 |  |
-| `w_pct_rank` | Int64 |  |
-| `min_rank` | Int64 |  |
-| `off_rating_rank` | Int64 |  |
-| `def_rating_rank` | Int64 |  |
-| `net_rating_rank` | Int64 |  |
-| `ast_pct_rank` | Int64 |  |
-| `ast_to_rank` | Int64 |  |
-| `ast_ratio_rank` | Int64 |  |
-| `oreb_pct_rank` | Int64 |  |
-| `dreb_pct_rank` | Int64 |  |
-| `reb_pct_rank` | Int64 |  |
-| `tm_tov_pct_rank` | Int64 |  |
-| `efg_pct_rank` | Int64 |  |
-| `ts_pct_rank` | Int64 |  |
-| `pace_rank` | Int64 |  |
-| `pie_rank` | Int64 |  |
+| `gp_rank` | Int64 | League rank of the row's games played for the season and split. |
+| `w_rank` | Int64 | League rank of the row's wins for the season and split. |
+| `l_rank` | Int64 | League rank of the row's losses for the season and split. |
+| `w_pct_rank` | Int64 | League rank of the row's win percentage for the season and split. |
+| `min_rank` | Int64 | League rank of the row's minutes played for the season and split. |
+| `off_rating_rank` | Int64 | League rank of the row's offensive rating (points scored per 100 possessions) for the season and split. |
+| `def_rating_rank` | Int64 | League rank of the row's defensive rating (points allowed per 100 possessions) for the season and split. |
+| `net_rating_rank` | Int64 | League rank of the row's net rating (offensive minus defensive rating) for the season and split. |
+| `ast_pct_rank` | Int64 | League rank of the row's assist percentage (share of teammate field goals assisted while on the floor) for the season and split. |
+| `ast_to_rank` | Int64 | League rank of the row's assist-to-turnover ratio for the season and split. |
+| `ast_ratio_rank` | Int64 | League rank of the row's assist ratio (assists per 100 possessions used) for the season and split. |
+| `oreb_pct_rank` | Int64 | League rank of the row's offensive rebound percentage for the season and split. |
+| `dreb_pct_rank` | Int64 | League rank of the row's defensive rebound percentage for the season and split. |
+| `reb_pct_rank` | Int64 | League rank of the row's total rebound percentage for the season and split. |
+| `tm_tov_pct_rank` | Int64 | League rank of the row's team turnover percentage (turnovers per 100 possessions) for the season and split. |
+| `efg_pct_rank` | Int64 | League rank of the row's effective field goal percentage for the season and split. |
+| `ts_pct_rank` | Int64 | League rank of the row's true shooting percentage for the season and split. |
+| `pace_rank` | Int64 | League rank of the row's pace (possessions per 48 minutes) for the season and split. |
+| `pie_rank` | Int64 | League rank of the row's Player Impact Estimate (PIE, the NBA Stats catch-all impact metric) for the season and split. |
 | `season` | Int32 | Season year. |
 | `season_type` | String | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
-| `measure_type` | String |  |
-| `per_mode` | String |  |
+| `measure_type` | String | NBA Stats measure type the row was pulled from (e.g. Base, Advanced, Misc, Scoring, Opponent, Usage, Defense). |
+| `per_mode` | String | NBA Stats per-mode of the row values (e.g. Totals, PerGame, Per100Possessions). |
 | `fgm` | Float64 | Field goals made. |
 | `fga` | Float64 | Field goal attempts. |
 | `fg_pct` | Float64 | Field goal percentage (0-1). |
@@ -1770,118 +1770,118 @@ Release: [nba_stats_team_season_stats](https://github.com/sportsdataverse/sports
 | `tov` | Float64 | Turnovers. |
 | `stl` | Float64 | Steals. |
 | `blk` | Float64 | Blocks. |
-| `blka` | Float64 |  |
+| `blka` | Float64 | Shot attempts blocked by opponents (blocks against). |
 | `pf` | Float64 | Personal fouls. |
-| `pfd` | Float64 |  |
+| `pfd` | Float64 | Personal fouls drawn. |
 | `pts` | Float64 | Points scored. |
 | `plus_minus` | Float64 | Plus/minus point differential while on court. |
-| `fgm_rank` | Int64 |  |
-| `fga_rank` | Int64 |  |
-| `fg_pct_rank` | Int64 |  |
-| `fg3m_rank` | Int64 |  |
-| `fg3a_rank` | Int64 |  |
-| `fg3_pct_rank` | Int64 |  |
-| `ftm_rank` | Int64 |  |
-| `fta_rank` | Int64 |  |
-| `ft_pct_rank` | Int64 |  |
-| `oreb_rank` | Int64 |  |
-| `dreb_rank` | Int64 |  |
-| `reb_rank` | Int64 |  |
-| `ast_rank` | Int64 |  |
-| `tov_rank` | Int64 |  |
-| `stl_rank` | Int64 |  |
-| `blk_rank` | Int64 |  |
-| `blka_rank` | Int64 |  |
-| `pf_rank` | Int64 |  |
-| `pfd_rank` | Int64 |  |
-| `pts_rank` | Int64 |  |
-| `plus_minus_rank` | Int64 |  |
-| `opp_pts_off_tov` | Float64 |  |
-| `opp_pts_2nd_chance` | Float64 |  |
-| `opp_pts_fb` | Float64 |  |
-| `opp_pts_paint` | Float64 |  |
-| `opp_pts_off_tov_rank` | Int64 |  |
-| `opp_pts_2nd_chance_rank` | Int64 |  |
-| `opp_pts_fb_rank` | Int64 |  |
-| `opp_pts_paint_rank` | Int64 |  |
-| `pts_off_tov` | Float64 |  |
-| `pts_2nd_chance` | Float64 |  |
-| `pts_fb` | Float64 |  |
-| `pts_paint` | Float64 |  |
-| `pts_off_tov_rank` | Int64 |  |
-| `pts_2nd_chance_rank` | Int64 |  |
-| `pts_fb_rank` | Int64 |  |
-| `pts_paint_rank` | Int64 |  |
-| `opp_fgm` | Float64 |  |
-| `opp_fga` | Float64 |  |
-| `opp_fg_pct` | Float64 |  |
-| `opp_fg3m` | Float64 |  |
-| `opp_fg3a` | Float64 |  |
-| `opp_fg3_pct` | Float64 |  |
-| `opp_ftm` | Float64 |  |
-| `opp_fta` | Float64 |  |
-| `opp_ft_pct` | Float64 |  |
-| `opp_oreb` | Float64 |  |
-| `opp_dreb` | Float64 |  |
-| `opp_reb` | Float64 |  |
-| `opp_ast` | Float64 |  |
-| `opp_tov` | Float64 |  |
-| `opp_stl` | Float64 |  |
-| `opp_blk` | Float64 |  |
-| `opp_blka` | Float64 |  |
-| `opp_pf` | Float64 |  |
-| `opp_pfd` | Float64 |  |
+| `fgm_rank` | Int64 | League rank of the row's field goals made for the season and split. |
+| `fga_rank` | Int64 | League rank of the row's field goals attempted for the season and split. |
+| `fg_pct_rank` | Int64 | League rank of the row's field goal percentage for the season and split. |
+| `fg3m_rank` | Int64 | League rank of the row's three-point field goals made for the season and split. |
+| `fg3a_rank` | Int64 | League rank of the row's three-point field goals attempted for the season and split. |
+| `fg3_pct_rank` | Int64 | League rank of the row's three-point field goal percentage for the season and split. |
+| `ftm_rank` | Int64 | League rank of the row's free throws made for the season and split. |
+| `fta_rank` | Int64 | League rank of the row's free throws attempted for the season and split. |
+| `ft_pct_rank` | Int64 | League rank of the row's free throw percentage for the season and split. |
+| `oreb_rank` | Int64 | League rank of the row's offensive rebounds for the season and split. |
+| `dreb_rank` | Int64 | League rank of the row's defensive rebounds for the season and split. |
+| `reb_rank` | Int64 | League rank of the row's total rebounds for the season and split. |
+| `ast_rank` | Int64 | League rank of the row's assists for the season and split. |
+| `tov_rank` | Int64 | League rank of the row's turnovers for the season and split. |
+| `stl_rank` | Int64 | League rank of the row's steals for the season and split. |
+| `blk_rank` | Int64 | League rank of the row's blocked shots for the season and split. |
+| `blka_rank` | Int64 | League rank of the row's shot attempts blocked by opponents (blocks against) for the season and split. |
+| `pf_rank` | Int64 | League rank of the row's personal fouls committed for the season and split. |
+| `pfd_rank` | Int64 | League rank of the row's personal fouls drawn for the season and split. |
+| `pts_rank` | Int64 | League rank of the row's points scored for the season and split. |
+| `plus_minus_rank` | Int64 | League rank of the row's plus-minus point differential while on the floor for the season and split. |
+| `opp_pts_off_tov` | Float64 | Opponent points scored off opponent turnovers allowed over the split. |
+| `opp_pts_2nd_chance` | Float64 | Opponent second-chance points allowed over the split. |
+| `opp_pts_fb` | Float64 | Opponent fast-break points allowed over the split. |
+| `opp_pts_paint` | Float64 | Opponent points in the paint allowed over the split. |
+| `opp_pts_off_tov_rank` | Int64 | League rank of the row's opponent points scored off opponent turnovers for the season and split. |
+| `opp_pts_2nd_chance_rank` | Int64 | League rank of the row's opponent second-chance points for the season and split. |
+| `opp_pts_fb_rank` | Int64 | League rank of the row's opponent fast-break points for the season and split. |
+| `opp_pts_paint_rank` | Int64 | League rank of the row's opponent points in the paint for the season and split. |
+| `pts_off_tov` | Float64 | Points scored off opponent turnovers over the split. |
+| `pts_2nd_chance` | Float64 | Second-chance points over the split. |
+| `pts_fb` | Float64 | Fast-break points over the split. |
+| `pts_paint` | Float64 | Points in the paint over the split. |
+| `pts_off_tov_rank` | Int64 | League rank of the row's points scored off opponent turnovers for the season and split. |
+| `pts_2nd_chance_rank` | Int64 | League rank of the row's second-chance points for the season and split. |
+| `pts_fb_rank` | Int64 | League rank of the row's fast-break points for the season and split. |
+| `pts_paint_rank` | Int64 | League rank of the row's points in the paint for the season and split. |
+| `opp_fgm` | Float64 | Opponent field goals made allowed over the split. |
+| `opp_fga` | Float64 | Opponent field goals attempted allowed over the split. |
+| `opp_fg_pct` | Float64 | Opponent field goal percentage allowed over the split. |
+| `opp_fg3m` | Float64 | Opponent three-point field goals made allowed over the split. |
+| `opp_fg3a` | Float64 | Opponent three-point field goals attempted allowed over the split. |
+| `opp_fg3_pct` | Float64 | Opponent three-point field goal percentage allowed over the split. |
+| `opp_ftm` | Float64 | Opponent free throws made allowed over the split. |
+| `opp_fta` | Float64 | Opponent free throws attempted allowed over the split. |
+| `opp_ft_pct` | Float64 | Opponent free throw percentage allowed over the split. |
+| `opp_oreb` | Float64 | Opponent offensive rebounds allowed over the split. |
+| `opp_dreb` | Float64 | Opponent defensive rebounds allowed over the split. |
+| `opp_reb` | Float64 | Opponent total rebounds allowed over the split. |
+| `opp_ast` | Float64 | Opponent assists allowed over the split. |
+| `opp_tov` | Float64 | Opponent turnovers allowed over the split. |
+| `opp_stl` | Float64 | Opponent steals allowed over the split. |
+| `opp_blk` | Float64 | Opponent blocked shots allowed over the split. |
+| `opp_blka` | Float64 | Opponent shot attempts blocked by opponents (blocks against) allowed over the split. |
+| `opp_pf` | Float64 | Opponent personal fouls committed allowed over the split. |
+| `opp_pfd` | Float64 | Opponent personal fouls drawn allowed over the split. |
 | `opp_pts` | Float64 | Opponent points. |
-| `opp_fgm_rank` | Int64 |  |
-| `opp_fga_rank` | Int64 |  |
-| `opp_fg_pct_rank` | Int64 |  |
-| `opp_fg3m_rank` | Int64 |  |
-| `opp_fg3a_rank` | Int64 |  |
-| `opp_fg3_pct_rank` | Int64 |  |
-| `opp_ftm_rank` | Int64 |  |
-| `opp_fta_rank` | Int64 |  |
-| `opp_ft_pct_rank` | Int64 |  |
-| `opp_oreb_rank` | Int64 |  |
-| `opp_dreb_rank` | Int64 |  |
-| `opp_reb_rank` | Int64 |  |
-| `opp_ast_rank` | Int64 |  |
-| `opp_tov_rank` | Int64 |  |
-| `opp_stl_rank` | Int64 |  |
-| `opp_blk_rank` | Int64 |  |
-| `opp_blka_rank` | Int64 |  |
-| `opp_pf_rank` | Int64 |  |
-| `opp_pfd_rank` | Int64 |  |
-| `opp_pts_rank` | Int64 |  |
-| `pct_fga_2pt` | Float64 |  |
-| `pct_fga_3pt` | Float64 |  |
-| `pct_pts_2pt` | Float64 |  |
-| `pct_pts_2pt_mr` | Float64 |  |
-| `pct_pts_3pt` | Float64 |  |
-| `pct_pts_fb` | Float64 |  |
-| `pct_pts_ft` | Float64 |  |
-| `pct_pts_off_tov` | Float64 |  |
-| `pct_pts_paint` | Float64 |  |
-| `pct_ast_2pm` | Float64 |  |
-| `pct_uast_2pm` | Float64 |  |
-| `pct_ast_3pm` | Float64 |  |
-| `pct_uast_3pm` | Float64 |  |
-| `pct_ast_fgm` | Float64 |  |
-| `pct_uast_fgm` | Float64 |  |
-| `pct_fga_2pt_rank` | Int64 |  |
-| `pct_fga_3pt_rank` | Int64 |  |
-| `pct_pts_2pt_rank` | Int64 |  |
-| `pct_pts_2pt_mr_rank` | Int64 |  |
-| `pct_pts_3pt_rank` | Int64 |  |
-| `pct_pts_fb_rank` | Int64 |  |
-| `pct_pts_ft_rank` | Int64 |  |
-| `pct_pts_off_tov_rank` | Int64 |  |
-| `pct_pts_paint_rank` | Int64 |  |
-| `pct_ast_2pm_rank` | Int64 |  |
-| `pct_uast_2pm_rank` | Int64 |  |
-| `pct_ast_3pm_rank` | Int64 |  |
-| `pct_uast_3pm_rank` | Int64 |  |
-| `pct_ast_fgm_rank` | Int64 |  |
-| `pct_uast_fgm_rank` | Int64 |  |
+| `opp_fgm_rank` | Int64 | League rank of the row's opponent field goals made for the season and split. |
+| `opp_fga_rank` | Int64 | League rank of the row's opponent field goals attempted for the season and split. |
+| `opp_fg_pct_rank` | Int64 | League rank of the row's opponent field goal percentage for the season and split. |
+| `opp_fg3m_rank` | Int64 | League rank of the row's opponent three-point field goals made for the season and split. |
+| `opp_fg3a_rank` | Int64 | League rank of the row's opponent three-point field goals attempted for the season and split. |
+| `opp_fg3_pct_rank` | Int64 | League rank of the row's opponent three-point field goal percentage for the season and split. |
+| `opp_ftm_rank` | Int64 | League rank of the row's opponent free throws made for the season and split. |
+| `opp_fta_rank` | Int64 | League rank of the row's opponent free throws attempted for the season and split. |
+| `opp_ft_pct_rank` | Int64 | League rank of the row's opponent free throw percentage for the season and split. |
+| `opp_oreb_rank` | Int64 | League rank of the row's opponent offensive rebounds for the season and split. |
+| `opp_dreb_rank` | Int64 | League rank of the row's opponent defensive rebounds for the season and split. |
+| `opp_reb_rank` | Int64 | League rank of the row's opponent total rebounds for the season and split. |
+| `opp_ast_rank` | Int64 | League rank of the row's opponent assists for the season and split. |
+| `opp_tov_rank` | Int64 | League rank of the row's opponent turnovers for the season and split. |
+| `opp_stl_rank` | Int64 | League rank of the row's opponent steals for the season and split. |
+| `opp_blk_rank` | Int64 | League rank of the row's opponent blocked shots for the season and split. |
+| `opp_blka_rank` | Int64 | League rank of the row's opponent shot attempts blocked by opponents (blocks against) for the season and split. |
+| `opp_pf_rank` | Int64 | League rank of the row's opponent personal fouls committed for the season and split. |
+| `opp_pfd_rank` | Int64 | League rank of the row's opponent personal fouls drawn for the season and split. |
+| `opp_pts_rank` | Int64 | League rank of the row's opponent points scored for the season and split. |
+| `pct_fga_2pt` | Float64 | Share of field goal attempts taken as two-pointers, as a decimal. |
+| `pct_fga_3pt` | Float64 | Share of field goal attempts taken as three-pointers, as a decimal. |
+| `pct_pts_2pt` | Float64 | Share of points scored on two-point field goals, as a decimal. |
+| `pct_pts_2pt_mr` | Float64 | Share of points scored on mid-range two-pointers, as a decimal. |
+| `pct_pts_3pt` | Float64 | Share of points scored on three-pointers, as a decimal. |
+| `pct_pts_fb` | Float64 | Share of points scored on fast breaks, as a decimal. |
+| `pct_pts_ft` | Float64 | Share of points scored at the free throw line, as a decimal. |
+| `pct_pts_off_tov` | Float64 | Share of points scored off opponent turnovers, as a decimal. |
+| `pct_pts_paint` | Float64 | Share of points scored in the paint, as a decimal. |
+| `pct_ast_2pm` | Float64 | Percentage of made two-pointers that were assisted, as a decimal. |
+| `pct_uast_2pm` | Float64 | Percentage of made two-pointers that were unassisted, as a decimal. |
+| `pct_ast_3pm` | Float64 | Percentage of made three-pointers that were assisted, as a decimal. |
+| `pct_uast_3pm` | Float64 | Percentage of made three-pointers that were unassisted, as a decimal. |
+| `pct_ast_fgm` | Float64 | Percentage of made field goals that were assisted, as a decimal. |
+| `pct_uast_fgm` | Float64 | Percentage of made field goals that were unassisted, as a decimal. |
+| `pct_fga_2pt_rank` | Int64 | League rank of the row's share of field goal attempts taken as two-pointers for the season and split. |
+| `pct_fga_3pt_rank` | Int64 | League rank of the row's share of field goal attempts taken as three-pointers for the season and split. |
+| `pct_pts_2pt_rank` | Int64 | League rank of the row's share of points scored on two-point field goals for the season and split. |
+| `pct_pts_2pt_mr_rank` | Int64 | League rank of the row's share of points scored on mid-range two-pointers for the season and split. |
+| `pct_pts_3pt_rank` | Int64 | League rank of the row's share of points scored on three-pointers for the season and split. |
+| `pct_pts_fb_rank` | Int64 | League rank of the row's share of points scored on fast breaks for the season and split. |
+| `pct_pts_ft_rank` | Int64 | League rank of the row's share of points scored at the free throw line for the season and split. |
+| `pct_pts_off_tov_rank` | Int64 | League rank of the row's share of points scored off opponent turnovers for the season and split. |
+| `pct_pts_paint_rank` | Int64 | League rank of the row's share of points scored in the paint for the season and split. |
+| `pct_ast_2pm_rank` | Int64 | League rank of the row's percentage of made two-pointers that were assisted for the season and split. |
+| `pct_uast_2pm_rank` | Int64 | League rank of the row's percentage of made two-pointers that were unassisted for the season and split. |
+| `pct_ast_3pm_rank` | Int64 | League rank of the row's percentage of made three-pointers that were assisted for the season and split. |
+| `pct_uast_3pm_rank` | Int64 | League rank of the row's percentage of made three-pointers that were unassisted for the season and split. |
+| `pct_ast_fgm_rank` | Int64 | League rank of the row's percentage of made field goals that were assisted for the season and split. |
+| `pct_uast_fgm_rank` | Int64 | League rank of the row's percentage of made field goals that were unassisted for the season and split. |
 
 ```python
 load_nba_stats_team_season_stats(seasons=2025)
@@ -1902,10 +1902,10 @@ Release: [nba_crosswalk](https://github.com/sportsdataverse/sportsdataverse-data
 | `espn_full_name` | String | ESPN full name. |
 | `espn_jersey` | String | ESPN jersey number. |
 | `espn_position` | String | ESPN position abbreviation. |
-| `nba_player_id` | String |  |
-| `nba_player_name` | String |  |
-| `nba_jersey_num` | String |  |
-| `nba_position` | String |  |
+| `nba_player_id` | String | NBA Stats player id side of the ESPN-to-NBA player crosswalk. |
+| `nba_player_name` | String | Player name as listed by the NBA Stats API. |
+| `nba_jersey_num` | String | Player's jersey number as listed by the NBA Stats API. |
+| `nba_position` | String | Player's position as listed by the NBA Stats API. |
 | `fox_athlete_id` | String | Fox athlete id (NA if unmatched). |
 | `fox_player` | String | Fox player name (NA if unmatched). |
 | `fox_jersey` | String | Fox jersey number (NA if unmatched). |
@@ -1933,13 +1933,13 @@ Release: [nba_crosswalk](https://github.com/sportsdataverse/sportsdataverse-data
 | `home_espn_team_id` | Int32 | ESPN home team id (NA for bart-only rows). |
 | `away_espn_team_id` | Int32 | ESPN away team id (NA for bart-only rows). |
 | `espn_game_id` | String | ESPN game id (NA for bart-only rows). |
-| `nba_game_id` | String |  |
-| `nba_game_code` | String |  |
-| `nba_home_team_id` | String |  |
-| `nba_away_team_id` | String |  |
+| `nba_game_id` | String | NBA Stats 10-character game id matched to the ESPN game in the crosswalk. |
+| `nba_game_code` | String | NBA game code (date and matchup string) from the NBA Stats API. |
+| `nba_home_team_id` | String | NBA Stats team id of the home team. |
+| `nba_away_team_id` | String | NBA Stats team id of the away team. |
 | `fox_game_id` | String | Fox game id (NA placeholder). |
-| `fox_home_team_id` | String |  |
-| `fox_away_team_id` | String |  |
+| `fox_home_team_id` | String | FOX Sports team id of the home team in the crosswalk. |
+| `fox_away_team_id` | String | FOX Sports team id of the away team in the crosswalk. |
 | `yahoo_game_id` | String | Yahoo game id (NA placeholder). |
 | `match_method` | String | Combination of matched sources, e.g. "fox+bart" / "fox_only" / "bart_only" / "espn_only". |
 | `match_confidence` | Float64 | Jaro-Winkler score or 1 for exact (NA if none). |
@@ -1962,13 +1962,13 @@ Release: [nba_crosswalk](https://github.com/sportsdataverse/sportsdataverse-data
 | `espn_short_name` | String | ESPN short name. |
 | `espn_location` | String | ESPN school/location only. |
 | `espn_mascot` | String | ESPN mascot/nickname. |
-| `nba_team_id` | String |  |
-| `nba_team_abbreviation` | String |  |
-| `nba_team_name` | String |  |
-| `nba_team_city` | String |  |
-| `nba_team_slug` | String |  |
-| `nba_conference` | String |  |
-| `nba_division` | String |  |
+| `nba_team_id` | String | NBA Stats team id side of the ESPN-to-NBA team crosswalk. |
+| `nba_team_abbreviation` | String | Team abbreviation as listed by the NBA Stats API. |
+| `nba_team_name` | String | Team nickname as listed by the NBA Stats API. |
+| `nba_team_city` | String | Team city as listed by the NBA Stats API. |
+| `nba_team_slug` | String | URL-friendly slug for the team's name on NBA Stats. |
+| `nba_conference` | String | Team's conference as listed by the NBA Stats API. |
+| `nba_division` | String | Team's division as listed by the NBA Stats API. |
 | `fox_team_id` | String | Fox Bifrost team id (NA if unmatched). |
 | `fox_team_name` | String | Fox team name (NA if unmatched). |
 | `yahoo_team_id` | String | Yahoo team id (NA placeholder). |
