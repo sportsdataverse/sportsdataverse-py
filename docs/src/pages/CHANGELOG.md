@@ -2,6 +2,8 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
+- [Unreleased](#unreleased)
+  - [Fixed — MLB expected stats counted raw pitches as plate appearances](#fixed--mlb-expected-stats-counted-raw-pitches-as-plate-appearances)
 - [0.1.4 Release: September 1, 2026](#014-release-september-1-2026)
   - [Fixed — CFB EP/WP inputs: mirrored end yardlines, the wrong `wp_after` perspective, and a flipped WP (#408, #411, #413)](#fixed--cfb-epwp-inputs-mirrored-end-yardlines-the-wrong-wp_after-perspective-and-a-flipped-wp-408-411-413)
   - [Added — the penalty's own side, net yardage and EPA, plus first-down provenance (#408)](#added--the-penaltys-own-side-net-yardage-and-epa-plus-first-down-provenance-408)
@@ -277,6 +279,25 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
+## Unreleased
+
+### Fixed — MLB expected stats counted raw pitches as plate appearances
+
+`mlb_expected_stats` counted every non-batted-ball *pitch* row toward `pa`
+and `ab` — published batter-seasons carried `pa` up to ~3,400, deflating
+`xba`/`xslg` to ~.05 — and trusted each cache vintage's
+`woba_value`/`woba_denom` semantics, which corrupted the xwOBA scale per
+season (qualified league means of .34–.72 shipped past the rank-based
+gates, which are scale-blind by construction). `pa`/`ab` and the wOBA
+denominator now count only plate-appearance-ending rows (`events`
+non-null), the denominator is derived from events (PA enders minus
+intentional walks, sac bunts and catcher interference) rather than read
+from `woba_denom`, PA-ending events with a null `woba_value` get fixed
+fallback weights (walk .69, HBP .72), and `intent_walk` no longer counts
+as an at-bat. Downstream, `baseballr-data` now enforces an absolute
+league-mean scale gate at publish; the full-history republish of
+`mlb_hitting_models` is the tracked follow-up.
+
 ## 0.1.4 Release: September 1, 2026
 
 ### Fixed — CFB EP/WP inputs: mirrored end yardlines, the wrong `wp_after` perspective, and a flipped WP (#408, #411, #413)
@@ -374,7 +395,7 @@ ESPN prefixes play text with the formation:
 No Huddle-Shotgun #1 C.Parker pass complete short right to #9 J.Triplett...
 ```
 
-The player-name captures are windowed -- `(.{0,30} )pass ` -- and read the raw
+The player-name captures are windowed -- `(.{0,30} )pass` (with a trailing space) -- and read the raw
 `text`. `No Huddle-Shotgun #1 C.Parker` is 29 characters, so it fits inside the
 window and is swallowed whole; a longer prefix is captured *truncated*, starting
 mid-token (`dle-Shotgun #5 R.Marshall`). A `cleaned_text` column already stripped
