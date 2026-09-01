@@ -74,8 +74,8 @@ Release: [espn_wnba_pbp](https://github.com/sportsdataverse/sportsdataverse-data
 | `shooting_play` | Boolean | TRUE if the play was a shooting attempt. |
 | `coordinate_x_raw` | Float64 | X coordinate as returned by the API before any adjustment. |
 | `coordinate_y_raw` | Float64 | Y coordinate as returned by the API before any adjustment. |
-| `points_attempted` | Int32 |  |
-| `short_description` | String |  |
+| `points_attempted` | Int32 | Point value at stake on the play's shot attempt (1, 2, or 3); 0 for non-shooting plays. |
+| `short_description` | String | Abbreviated ESPN text description of the play. |
 | `game_id` | Int32 | Unique game identifier. |
 | `season` | Int32 | Season identifier (4-digit year or 'YYYY-YY' string). |
 | `season_type` | Int32 | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
@@ -97,8 +97,8 @@ Release: [espn_wnba_pbp](https://github.com/sportsdataverse/sportsdataverse-data
 | `time` | String | Time left within the period |
 | `clock_minutes` | Int32 | Clock minutes split from seconds for developer convenience |
 | `clock_seconds` | Float64 | Clock seconds split from minutes for developer convenience |
-| `home_timeout_called` | Boolean |  |
-| `away_timeout_called` | Boolean |  |
+| `home_timeout_called` | Boolean | True when the play is a timeout charged to the home team. |
+| `away_timeout_called` | Boolean | True when the play is a timeout charged to the away team. |
 | `half` | Int32 | Half of the game |
 | `game_half` | Int32 | Half of the game |
 | `lag_qtr` | Int32 | A lag column on the quarter |
@@ -116,9 +116,9 @@ Release: [espn_wnba_pbp](https://github.com/sportsdataverse/sportsdataverse-data
 | `coordinate_y` | Float64 | Y coordinate on the court (half-court layout). |
 | `game_date` | Date | Game date (YYYY-MM-DD). |
 | `game_date_time` | Datetime(time_unit='us', time_zone='America/New_York') | Game start date/time (ISO 8601). |
-| `athlete_name_1` | String |  |
-| `athlete_name_2` | String |  |
-| `athlete_name_3` | String |  |
+| `athlete_name_1` | String | Display name of the primary athlete on the play (e.g. the shooter, rebounder, or fouler), per ESPN participant order. |
+| `athlete_name_2` | String | Display name of the secondary athlete on the play (e.g. the assister or fouled player), when present. |
+| `athlete_name_3` | String | Display name of the third athlete listed on the play, when present. |
 | `type_abbreviation` | String | Play type abbreviation |
 
 ```python
@@ -249,8 +249,8 @@ Release: [espn_wnba_schedules](https://github.com/sportsdataverse/sportsdatavers
 | `home_logo` | String | Home team logo URL. |
 | `home_score` | Int32 | Home team score at the time of the play. |
 | `home_winner` | Boolean | Home team's winner. |
-| `home_linescores` | String |  |
-| `home_records` | String |  |
+| `home_linescores` | String | Stringified list of the home team's period-by-period scores from the ESPN schedule feed. |
+| `home_records` | String | Stringified list of the home team's record summaries (overall/home/away) from the ESPN schedule feed. |
 | `away_id` | Int32 | Unique identifier for away. |
 | `away_uid` | String | Away team's uid. |
 | `away_location` | String | Away team's location. |
@@ -265,8 +265,8 @@ Release: [espn_wnba_schedules](https://github.com/sportsdataverse/sportsdatavers
 | `away_logo` | String | Away team logo URL. |
 | `away_score` | Int32 | Away team score at the time of the play. |
 | `away_winner` | Boolean | Away team's winner. |
-| `away_linescores` | String |  |
-| `away_records` | String |  |
+| `away_linescores` | String | Stringified list of the away team's period-by-period scores from the ESPN schedule feed. |
+| `away_records` | String | Stringified list of the away team's record summaries (overall/home/away) from the ESPN schedule feed. |
 | `game_id` | Int32 | Unique game identifier. |
 | `season` | Int32 | Season identifier (4-digit year or 'YYYY-YY' string). |
 | `season_type` | Int32 | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
@@ -323,7 +323,7 @@ Release: [espn_wnba_team_boxscores](https://github.com/sportsdataverse/sportsdat
 | `free_throws_attempted` | Int32 | Free throw attempts. |
 | `largest_lead` | String | Largest lead during the game. |
 | `lead_changes` | String | Lead changes. |
-| `lead_percentage` | String |  |
+| `lead_percentage` | String | Share of game time the team spent in the lead, as reported by ESPN. |
 | `offensive_rebounds` | Int32 | Offensive rebounds. |
 | `points_in_paint` | String | Points scored in the paint. |
 | `steals` | Int32 | Total steals. |
@@ -556,10 +556,10 @@ Release: [espn_wnba_shots](https://github.com/sportsdataverse/sportsdataverse-da
 | `coordinate_y` | Float64 | Y coordinate on the court (half-court layout). |
 | `coordinate_x_raw` | Float64 | X coordinate as returned by the API before any adjustment. |
 | `coordinate_y_raw` | Float64 | Y coordinate as returned by the API before any adjustment. |
-| `athlete_name_1` | String |  |
-| `athlete_name_2` | String |  |
+| `athlete_name_1` | String | Display name of the shooter, per ESPN participant order. |
+| `athlete_name_2` | String | Display name of the secondary athlete on the shot (typically the assister), when present. |
 | `team_name` | String | Full team display name (e.g. 'Las Vegas Aces'). |
-| `team_mascot` | String |  |
+| `team_mascot` | String | ESPN mascot (nickname) of the shooting team. |
 | `team_abbrev` | String | Abbreviation for team. |
 
 ```python
@@ -645,10 +645,10 @@ Release: [wnba_crosswalk](https://github.com/sportsdataverse/sportsdataverse-dat
 | `espn_full_name` | String | ESPN full name. |
 | `espn_jersey` | String | ESPN jersey number. |
 | `espn_position` | String | ESPN position abbreviation. |
-| `wnba_player_id` | String |  |
-| `wnba_player_name` | String |  |
-| `wnba_jersey_num` | String |  |
-| `wnba_position` | String |  |
+| `wnba_player_id` | String | Player identifier on stats.wnba.com matched to the ESPN player. |
+| `wnba_player_name` | String | Player display name on the stats.wnba.com side of the crosswalk. |
+| `wnba_jersey_num` | String | Jersey number listed on the stats.wnba.com side of the crosswalk. |
+| `wnba_position` | String | Position listed on the stats.wnba.com side of the crosswalk. |
 | `fox_athlete_id` | String | Fox athlete id (NA if unmatched). |
 | `fox_player` | String | Fox player name (NA if unmatched). |
 | `fox_jersey` | String | Fox jersey number (NA if unmatched). |
@@ -676,13 +676,13 @@ Release: [wnba_crosswalk](https://github.com/sportsdataverse/sportsdataverse-dat
 | `home_espn_team_id` | Int32 | ESPN home team id (NA for bart-only rows). |
 | `away_espn_team_id` | Int32 | ESPN away team id (NA for bart-only rows). |
 | `espn_game_id` | String | ESPN game id (NA for bart-only rows). |
-| `wnba_game_id` | String |  |
-| `wnba_game_code` | String |  |
-| `wnba_home_team_id` | String |  |
-| `wnba_away_team_id` | String |  |
+| `wnba_game_id` | String | Game identifier on stats.wnba.com matched to the ESPN game. |
+| `wnba_game_code` | String | stats.wnba.com game code (date/matchup slug) for the matched game. |
+| `wnba_home_team_id` | String | Home team identifier on stats.wnba.com for the matched game. |
+| `wnba_away_team_id` | String | Away team identifier on stats.wnba.com for the matched game. |
 | `fox_game_id` | String | Fox game id (NA placeholder). |
-| `fox_home_team_id` | String |  |
-| `fox_away_team_id` | String |  |
+| `fox_home_team_id` | String | Home team identifier on Fox Sports for the matched game. |
+| `fox_away_team_id` | String | Away team identifier on Fox Sports for the matched game. |
 | `yahoo_game_id` | String | Yahoo game id (NA placeholder). |
 | `match_method` | String | Combination of matched sources, e.g. "fox+bart" / "fox_only" / "bart_only" / "espn_only". |
 | `match_confidence` | Float64 | Jaro-Winkler score or 1 for exact (NA if none). |
@@ -785,26 +785,26 @@ Release: [wnba_player_impact](https://github.com/sportsdataverse/sportsdataverse
 | `teams` | String | Nested list of member-team membership spans. |
 | `season` | Int64 | Season identifier (4-digit year or 'YYYY-YY' string). |
 | `season_type` | String | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
-| `o_rapm` | Float64 |  |
-| `d_rapm` | Float64 |  |
-| `rapm` | Float64 |  |
-| `off_poss` | Int64 |  |
-| `def_poss` | Int64 |  |
-| `o_adj_rapm` | Float64 |  |
-| `d_adj_rapm` | Float64 |  |
-| `adj_rapm` | Float64 |  |
-| `ospm` | Float64 |  |
-| `dspm` | Float64 |  |
-| `spm` | Float64 |  |
+| `o_rapm` | Float64 | Offensive RAPM: ridge-regularized on/off impact on team offense, in points per 100 possessions. |
+| `d_rapm` | Float64 | Defensive RAPM: ridge-regularized on/off impact on team defense, in points per 100 possessions. |
+| `rapm` | Float64 | Total RAPM: offensive plus defensive regularized on/off impact, in points per 100 possessions. |
+| `off_poss` | Int64 | Offensive possessions the player was on the floor for in the RAPM sample. |
+| `def_poss` | Int64 | Defensive possessions the player was on the floor for in the RAPM sample. |
+| `o_adj_rapm` | Float64 | Offensive prior-informed RAPM: ridge shrunk toward a box-score prior, in points per 100 possessions. |
+| `d_adj_rapm` | Float64 | Defensive prior-informed RAPM: ridge shrunk toward a box-score prior, in points per 100 possessions. |
+| `adj_rapm` | Float64 | Total prior-informed RAPM (offense plus defense), in points per 100 possessions. |
+| `ospm` | Float64 | Offensive statistical plus-minus: box-score features regressed onto the offensive RAPM target, per 100 possessions. |
+| `dspm` | Float64 | Defensive statistical plus-minus: box-score features regressed onto the defensive RAPM target, per 100 possessions. |
+| `spm` | Float64 | Statistical plus-minus: offensive plus defensive box-score estimate of the RAPM target, per 100 possessions. |
 | `min` | Float64 | Minutes played. |
 | `gp` | Int64 | Games played. |
 | `obpm` | Float64 | Offensive box plus/minus. |
 | `dbpm` | Float64 | Defensive box plus/minus. |
 | `bpm` | Float64 | Career box plus/minus. |
-| `war` | Float64 |  |
-| `darko_filtered_skill` | Float64 |  |
-| `darko_projected_rating` | Float64 |  |
-| `darko_projected_sd` | Float64 |  |
+| `war` | Float64 | Wins above replacement implied by the player's impact and playing time, calibrated from team points-per-win. |
+| `darko_filtered_skill` | Float64 | DARKO-style Kalman-filtered estimate of the player's current skill level. |
+| `darko_projected_rating` | Float64 | DARKO-style projected forward rating, including the empirical aging-curve drift. |
+| `darko_projected_sd` | Float64 | Posterior standard deviation of the DARKO-style projected rating. |
 
 ```python
 load_wnba_player_impact(seasons=2024)
@@ -906,7 +906,7 @@ Release: [wnba_stats_pbp](https://github.com/sportsdataverse/sportsdataverse-dat
 
 | col_name | type | description |
 |---|---|---|
-| `order_index` | Int64 |  |
+| `order_index` | Int64 | Stable ordering index of the event within the game's stats.wnba.com play-by-play. |
 | `action_number` | Int64 | Sequential action number within a game (V3 PBP). |
 | `clock` | String | Game clock value. |
 | `period` | Int64 | Period of the game (1-4 quarters; 5+ for OT). |
@@ -933,16 +933,16 @@ Release: [wnba_stats_pbp](https://github.com/sportsdataverse/sportsdataverse-dat
 | `game_id` | String | Unique game identifier. |
 | `seconds_remaining` | Float64 | Seconds remaining in the period. |
 | `event_type` | String | Event / play type code (V2 PBP). |
-| `is_made_shot` | Boolean |  |
-| `is_missed_shot` | Boolean |  |
-| `is_free_throw` | Boolean |  |
-| `is_rebound` | Boolean |  |
+| `is_made_shot` | Boolean | True when the event is a made field goal. |
+| `is_missed_shot` | Boolean | True when the event is a missed field goal. |
+| `is_free_throw` | Boolean | True when the event is a free throw attempt. |
+| `is_rebound` | Boolean | True when the event is a rebound (player or team). |
 | `is_turnover` | Boolean | `TRUE` if the play was a turnover. |
-| `is_foul` | Boolean |  |
-| `is_substitution` | Boolean |  |
-| `is_jump_ball` | Boolean |  |
-| `is_timeout` | Boolean |  |
-| `is_period` | Boolean |  |
+| `is_foul` | Boolean | True when the event is a foul. |
+| `is_substitution` | Boolean | True when the event is a substitution. |
+| `is_jump_ball` | Boolean | True when the event is a jump ball. |
+| `is_timeout` | Boolean | True when the event is a timeout. |
+| `is_period` | Boolean | True for period-start and period-end marker events. |
 | `season` | Int64 | Season identifier (4-digit year or 'YYYY-YY' string). |
 
 ```python
@@ -960,18 +960,18 @@ Release: [wnba_stats_possessions](https://github.com/sportsdataverse/sportsdatav
 | `period` | Int64 | Period of the game (1-4 quarters; 5+ for OT). |
 | `possession_number` | Int64 | Possession number. |
 | `offense_team_id` | Int64 | Unique identifier for offense team. |
-| `defense_team_id` | Int64 |  |
-| `start_order_index` | Int64 |  |
-| `end_order_index` | Int64 |  |
-| `start_seconds_remaining` | Float64 |  |
-| `end_seconds_remaining` | Float64 |  |
+| `defense_team_id` | Int64 | stats.wnba.com identifier of the defending team for the possession. |
+| `start_order_index` | Int64 | order_index of the first event in the possession; joins to the wnba_stats_pbp table. |
+| `end_order_index` | Int64 | order_index of the last event in the possession; joins to the wnba_stats_pbp table. |
+| `start_seconds_remaining` | Float64 | Seconds remaining in the period when the possession began. |
+| `end_seconds_remaining` | Float64 | Seconds remaining in the period when the possession ended. |
 | `points` | Int64 | Points scored. |
-| `is_second_chance` | Boolean |  |
-| `number_in_period` | Int64 |  |
-| `possession_start_type` | String |  |
-| `count_as_possession` | Boolean |  |
-| `fg2a` | Int64 |  |
-| `fg2m` | Int64 |  |
+| `is_second_chance` | Boolean | True when the possession continued after an offensive rebound (contains a second-chance segment). |
+| `number_in_period` | Int64 | Possession number within the period, resetting to 1 at each period start. |
+| `possession_start_type` | String | How the possession began: OffDeadball, OffTimeout, OffMadeShot, OffMissedShot, or OffLiveBallTurnover. |
+| `count_as_possession` | Boolean | False only for a possession starting with 2 seconds or less left in the period and no made basket before the period ends. |
+| `fg2a` | Int64 | Two-point field goals attempted by the offense during the possession. |
+| `fg2m` | Int64 | Two-point field goals made by the offense during the possession. |
 | `fg3a` | Int64 | Three-point field goal attempts. |
 | `fg3m` | Int64 | Three-point field goals made. |
 | `fta` | Int64 | Free throw attempts. |
@@ -979,16 +979,16 @@ Release: [wnba_stats_possessions](https://github.com/sportsdataverse/sportsdatav
 | `oreb` | Int64 | Offensive rebounds. |
 | `dreb` | Int64 | Defensive rebounds. |
 | `tov` | Int64 | Turnovers. |
-| `off_player_1` | Int64 |  |
-| `off_player_2` | Int64 |  |
-| `off_player_3` | Int64 |  |
-| `off_player_4` | Int64 |  |
-| `off_player_5` | Int64 |  |
-| `def_player_1` | Int64 |  |
-| `def_player_2` | Int64 |  |
-| `def_player_3` | Int64 |  |
-| `def_player_4` | Int64 |  |
-| `def_player_5` | Int64 |  |
+| `off_player_1` | Int64 | stats.wnba.com identifier of offensive on-court player 1 of 5 for the possession (unordered slot). |
+| `off_player_2` | Int64 | stats.wnba.com identifier of offensive on-court player 2 of 5 for the possession (unordered slot). |
+| `off_player_3` | Int64 | stats.wnba.com identifier of offensive on-court player 3 of 5 for the possession (unordered slot). |
+| `off_player_4` | Int64 | stats.wnba.com identifier of offensive on-court player 4 of 5 for the possession (unordered slot). |
+| `off_player_5` | Int64 | stats.wnba.com identifier of offensive on-court player 5 of 5 for the possession (unordered slot). |
+| `def_player_1` | Int64 | stats.wnba.com identifier of defensive on-court player 1 of 5 for the possession (unordered slot). |
+| `def_player_2` | Int64 | stats.wnba.com identifier of defensive on-court player 2 of 5 for the possession (unordered slot). |
+| `def_player_3` | Int64 | stats.wnba.com identifier of defensive on-court player 3 of 5 for the possession (unordered slot). |
+| `def_player_4` | Int64 | stats.wnba.com identifier of defensive on-court player 4 of 5 for the possession (unordered slot). |
+| `def_player_5` | Int64 | stats.wnba.com identifier of defensive on-court player 5 of 5 for the possession (unordered slot). |
 | `season` | Int64 | Season identifier (4-digit year or 'YYYY-YY' string). |
 
 ```python
@@ -1005,16 +1005,16 @@ Release: [wnba_stats_game_lineups](https://github.com/sportsdataverse/sportsdata
 | `game_id` | String | Unique game identifier. |
 | `action_number` | Int64 | Sequential action number within a game (V3 PBP). |
 | `period` | Int64 | Period of the game (1-4 quarters; 5+ for OT). |
-| `home_player_1` | Int64 |  |
-| `home_player_2` | Int64 |  |
-| `home_player_3` | Int64 |  |
-| `home_player_4` | Int64 |  |
-| `home_player_5` | Int64 |  |
-| `away_player_1` | Int64 |  |
-| `away_player_2` | Int64 |  |
-| `away_player_3` | Int64 |  |
-| `away_player_4` | Int64 |  |
-| `away_player_5` | Int64 |  |
+| `home_player_1` | Int64 | stats.wnba.com identifier of home on-court player 1 of 5 for the lineup stint. |
+| `home_player_2` | Int64 | stats.wnba.com identifier of home on-court player 2 of 5 for the lineup stint. |
+| `home_player_3` | Int64 | stats.wnba.com identifier of home on-court player 3 of 5 for the lineup stint. |
+| `home_player_4` | Int64 | stats.wnba.com identifier of home on-court player 4 of 5 for the lineup stint. |
+| `home_player_5` | Int64 | stats.wnba.com identifier of home on-court player 5 of 5 for the lineup stint. |
+| `away_player_1` | Int64 | stats.wnba.com identifier of away on-court player 1 of 5 for the lineup stint. |
+| `away_player_2` | Int64 | stats.wnba.com identifier of away on-court player 2 of 5 for the lineup stint. |
+| `away_player_3` | Int64 | stats.wnba.com identifier of away on-court player 3 of 5 for the lineup stint. |
+| `away_player_4` | Int64 | stats.wnba.com identifier of away on-court player 4 of 5 for the lineup stint. |
+| `away_player_5` | Int64 | stats.wnba.com identifier of away on-court player 5 of 5 for the lineup stint. |
 | `season` | Int64 | Season identifier (4-digit year or 'YYYY-YY' string). |
 
 ```python
@@ -1108,7 +1108,7 @@ Release: [wnba_stats_player_game_logs](https://github.com/sportsdataverse/sports
 | `player_id` | Int64 | Unique player identifier. |
 | `player_name` | String | Player name. |
 | `fantasy_pts` | Float64 | Fantasy points. |
-| `measure_type` | String |  |
+| `measure_type` | String | Stats API measure-type slice the row was pulled from (e.g. 'Base'). |
 
 ```python
 load_wnba_stats_player_game_logs(seasons=2025)
@@ -1137,7 +1137,7 @@ Release: [wnba_stats_rosters](https://github.com/sportsdataverse/sportsdataverse
 | `school` | String | Player's school / college (when distinct from 'college'). |
 | `player_id` | Int64 | Unique player identifier. |
 | `how_acquired` | String | How the team acquired the player (draft, trade, free agency). |
-| `supplemental_status` | Int64 |  |
+| `supplemental_status` | Int64 | Numeric supplemental roster-status code from the stats.wnba.com roster feed. |
 | `season_type` | String | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
 
 ```python
@@ -1159,13 +1159,13 @@ Release: [wnba_stats_schedules](https://github.com/sportsdataverse/sportsdataver
 | `home_team_id` | Int64 | Unique identifier for the home team. |
 | `home_team_abbreviation` | String | Home team abbreviation; `team_detail = TRUE` only. |
 | `home_team_name` | String | Home team name. |
-| `home_pts` | Int64 |  |
-| `home_wl` | String |  |
+| `home_pts` | Int64 | Final points scored by the home team. |
+| `home_wl` | String | Result for the home team ('W' or 'L'); null before the game is final. |
 | `away_team_id` | Int64 | Unique identifier for the away team. |
 | `away_team_abbreviation` | String | Away team abbreviation; `team_detail = TRUE` only. |
 | `away_team_name` | String | Away team name. |
-| `away_pts` | Int64 |  |
-| `away_wl` | String |  |
+| `away_pts` | Int64 | Final points scored by the away team. |
+| `away_wl` | String | Result for the away team ('W' or 'L'); null before the game is final. |
 
 ```python
 load_wnba_stats_schedules(seasons=2025)

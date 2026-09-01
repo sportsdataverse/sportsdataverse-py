@@ -751,7 +751,7 @@ Release: [nhl_schedules](https://github.com/sportsdataverse/sportsdataverse-data
 | `away_score` | Int32 | Away team final score. |
 | `game_state` | String | Game state (e.g., FINAL, LIVE). |
 | `venue` | String | Venue where the game was played. |
-| `series_letter` | String |  |
+| `series_letter` | String | NHL API letter code identifying the playoff series the game belongs to (null for regular-season games). |
 | `playoff_round` | Int32 | Playoff round identifier. |
 | `series_game_number` | Int32 | Series game number. |
 | `season` | Int32 | Season year (echoed from arg). |
@@ -766,8 +766,8 @@ Release: [nhl_schedules](https://github.com/sportsdataverse/sportsdataverse-data
 | `game_rosters` | Boolean | Whether game rosters data is available. |
 | `scoring` | Boolean | TRUE when the play results in a score (TD, FG, safety, two-point conversion). |
 | `penalties` | Boolean | Penalty count. |
-| `scratches` | Boolean |  |
-| `linescore` | Boolean |  |
+| `scratches` | Boolean | Flag indicating a scratches payload was captured for this game in the NHL raw store. |
+| `linescore` | Boolean | Flag indicating a period-by-period linescore payload was captured for this game in the NHL raw store. |
 | `three_stars` | Boolean | Whether three stars data is available. |
 | `shifts` | Boolean | Number of shifts. |
 | `officials` | Boolean | Whether officials data is available. |
@@ -832,7 +832,7 @@ Release: [nhl_scoring](https://github.com/sportsdataverse/sportsdataverse-data/r
 | `game_id` | Int64 | Unique game identifier. |
 | `period_number` | Int64 | Period number (1-3 regulation, 4+ OT). |
 | `period_type` | String | Period type (REG/OT/SO). |
-| `goalInGame` | Int64 |  |
+| `goalInGame` | Int64 | Running goal count credited to the scorer within this game at the time of the goal. |
 
 ```python
 load_nhl_scoring(seasons=2024)
@@ -919,9 +919,9 @@ Release: [nhl_shootout](https://github.com/sportsdataverse/sportsdataverse-data/
 | `discreteClip` | Int64 | Discrete clip identifier. |
 | `discreteClipFr` | Int64 | Numeric NHL video identifier of the French-language clip of the shootout attempt, distinct from the id in discreteClip. |
 | `highlightClipSharingUrl` | String | Shareable URL for the goal highlight clip. |
-| `highlightClipSharingUrlFr` | String |  |
+| `highlightClipSharingUrlFr` | String | Shareable URL of the French-language broadcast highlight clip for the shootout attempt. |
 | `highlightClip` | Int64 | Highlight clip identifier. |
-| `highlightClipFr` | Int64 |  |
+| `highlightClipFr` | Int64 | NHL video identifier of the French-language highlight clip for the shootout attempt. |
 
 ```python
 load_nhl_shootout(seasons=2025)

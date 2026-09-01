@@ -69,8 +69,8 @@ Release: [espn_mens_college_basketball_pbp](https://github.com/sportsdataverse/s
 | `shooting_play` | Boolean | TRUE if the play was a shooting attempt. |
 | `coordinate_x_raw` | Float64 | X coordinate as returned by the API before any adjustment. |
 | `coordinate_y_raw` | Float64 | Y coordinate as returned by the API before any adjustment. |
-| `points_attempted` | Int32 |  |
-| `short_description` | String |  |
+| `points_attempted` | Int32 | Point value at stake on the shot attempt (3 for threes, 2 for other field goals, 1 for free throws), from the ESPN play type. |
+| `short_description` | String | Shortened version of ESPN's play description text, without score context. |
 | `team_id` | Int32 | Unique team identifier. |
 | `athlete_id_1` | Int32 | Primary athlete identifier (e.g. shooter). |
 | `athlete_id_2` | Int32 | Secondary athlete identifier (e.g. assister / fouler). |
@@ -109,9 +109,9 @@ Release: [espn_mens_college_basketball_pbp](https://github.com/sportsdataverse/s
 | `coordinate_y` | Float64 | Y coordinate on the court (half-court layout). |
 | `game_date` | Date | Game date (YYYY-MM-DD). |
 | `game_date_time` | Datetime(time_unit='us', time_zone='America/New_York') | Game start date/time (ISO 8601). |
-| `athlete_name_1` | String |  |
-| `athlete_name_2` | String |  |
-| `athlete_name_3` | String |  |
+| `athlete_name_1` | String | Display name of the first athlete in the ESPN play participants (e.g., the shooter on a shot attempt). |
+| `athlete_name_2` | String | Display name of the second athlete in the ESPN play participants (e.g., the assisting player), when present. |
+| `athlete_name_3` | String | Display name of the third athlete in the ESPN play participants, when present. |
 
 ```python
 load_mbb_pbp(seasons=2024)
@@ -240,9 +240,9 @@ Release: [espn_mens_college_basketball_schedules](https://github.com/sportsdatav
 | `home_conference_id` | Int32 | Unique identifier for home conference. |
 | `home_score` | Int32 | Home team score at the time of the play. |
 | `home_winner` | Boolean | Home team's winner. |
-| `home_current_rank` | Float64 |  |
-| `home_linescores` | String |  |
-| `home_records` | String |  |
+| `home_current_rank` | Float64 | Poll ranking ESPN listed for the home team at game time (unranked teams carry a sentinel value). |
+| `home_linescores` | String | Period-by-period scores for the home team as a delimited string from ESPN's schedule feed. |
+| `home_records` | String | Record strings (overall and split records) for the home team from ESPN's schedule feed. |
 | `away_id` | Int32 | Unique identifier for away. |
 | `away_uid` | String | Away team's uid. |
 | `away_location` | String | Away team's location. |
@@ -258,9 +258,9 @@ Release: [espn_mens_college_basketball_schedules](https://github.com/sportsdatav
 | `away_conference_id` | Int32 | Unique identifier for away conference. |
 | `away_score` | Int32 | Away team score at the time of the play. |
 | `away_winner` | Boolean | Away team's winner. |
-| `away_current_rank` | Float64 |  |
-| `away_linescores` | String |  |
-| `away_records` | String |  |
+| `away_current_rank` | Float64 | Poll ranking ESPN listed for the away team at game time (unranked teams carry a sentinel value). |
+| `away_linescores` | String | Period-by-period scores for the away team as a delimited string from ESPN's schedule feed. |
+| `away_records` | String | Record strings (overall and split records) for the away team from ESPN's schedule feed. |
 | `game_id` | Int32 | Unique game identifier. |
 | `season` | Int32 | Season year. |
 | `season_type` | Int32 | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
@@ -347,7 +347,7 @@ Release: [espn_mens_college_basketball_team_boxscores](https://github.com/sports
 | `opponent_team_logo` | String | Opponent team logo URL. |
 | `opponent_team_score` | Int32 | Opponent team's score. |
 | `lead_changes` | String | Lead changes. |
-| `lead_percentage` | String |  |
+| `lead_percentage` | String | Share of game time the team held the lead, as reported in ESPN's team boxscore. |
 
 ```python
 load_mbb_team_boxscore(seasons=2024)
@@ -418,10 +418,10 @@ Release: [espn_mens_college_basketball_shots](https://github.com/sportsdataverse
 | `coordinate_y` | Float64 | Y coordinate on the court (half-court layout). |
 | `coordinate_x_raw` | Float64 | X coordinate as returned by the API before any adjustment. |
 | `coordinate_y_raw` | Float64 | Y coordinate as returned by the API before any adjustment. |
-| `athlete_name_1` | String |  |
-| `athlete_name_2` | String |  |
+| `athlete_name_1` | String | Display name of the shooter credited on the attempt in ESPN's play participants. |
+| `athlete_name_2` | String | Display name of the second athlete tied to the attempt (typically the assister), when present. |
 | `team_name` | String | Full team display name (e.g. 'Las Vegas Aces'). |
-| `team_mascot` | String |  |
+| `team_mascot` | String | Mascot/nickname of the shooting team from ESPN's team record. |
 | `team_abbrev` | String | Abbreviation for team. |
 
 ```python
@@ -774,81 +774,81 @@ Release: [ncaa_mbb_pbp](https://github.com/sportsdataverse/sportsdataverse-data/
 | `away_score` | Int64 | Away team score at the time of the play. |
 | `event_team` | String | Team associated with the shift change. |
 | `event_description` | String | Human-readable event description. |
-| `player_1` | String |  |
-| `player_2` | String |  |
+| `player_1` | String | Name of the primary player credited on the event (shooter, fouler, rebounder, etc.), as scraped from stats.ncaa.org. |
+| `player_2` | String | Name of the secondary player on the event (e.g., the assister or the player subbed for), when present. |
 | `event_type` | String | Event / play type code (V2 PBP). |
-| `event_result` | String |  |
+| `event_result` | String | Outcome of the event, e.g. made or missed for shot attempts. |
 | `shot_value` | Int64 | Point value of the shot (2 or 3). |
-| `event_length` | Int64 |  |
-| `poss_num` | Int64 |  |
-| `poss_team` | String |  |
-| `poss_length` | Int64 |  |
-| `is_transition` | Boolean |  |
-| `home_1` | String |  |
-| `home_2` | String |  |
-| `home_3` | String |  |
-| `home_4` | String |  |
-| `home_5` | String |  |
-| `away_1` | String |  |
-| `away_2` | String |  |
-| `away_3` | String |  |
-| `away_4` | String |  |
-| `away_5` | String |  |
+| `event_length` | Int64 | Seconds elapsed between this event and the previous event in the game. |
+| `poss_num` | Int64 | Sequential possession number within the game that the event belongs to. |
+| `poss_team` | String | Name of the team in possession when the event occurred. |
+| `poss_length` | Int64 | Duration of the enclosing possession in seconds. |
+| `is_transition` | Boolean | Flag marking events that occurred in transition, within the opening seconds of the possession. |
+| `home_1` | String | Name of the home team's on-floor player in lineup slot 1 for the event, from the substitution walk-forward. |
+| `home_2` | String | Name of the home team's on-floor player in lineup slot 2 for the event, from the substitution walk-forward. |
+| `home_3` | String | Name of the home team's on-floor player in lineup slot 3 for the event, from the substitution walk-forward. |
+| `home_4` | String | Name of the home team's on-floor player in lineup slot 4 for the event, from the substitution walk-forward. |
+| `home_5` | String | Name of the home team's on-floor player in lineup slot 5 for the event, from the substitution walk-forward. |
+| `away_1` | String | Name of the away team's on-floor player in lineup slot 1 for the event, from the substitution walk-forward. |
+| `away_2` | String | Name of the away team's on-floor player in lineup slot 2 for the event, from the substitution walk-forward. |
+| `away_3` | String | Name of the away team's on-floor player in lineup slot 3 for the event, from the substitution walk-forward. |
+| `away_4` | String | Name of the away team's on-floor player in lineup slot 4 for the event, from the substitution walk-forward. |
+| `away_5` | String | Name of the away team's on-floor player in lineup slot 5 for the event, from the substitution walk-forward. |
 | `status` | String | Status label. |
-| `is_garbage_time` | Boolean |  |
-| `sub_deviate` | Int64 |  |
+| `is_garbage_time` | Boolean | Flag marking events in garbage time under the score-margin and clock rule of the pbp builder. |
+| `sub_deviate` | Int64 | Per-game count of substitution-tracking deviations found while walking lineups forward; nonzero flags imperfect substitution data. |
 | `contest_id` | String | stats.ncaa.org contest (game) identifier. |
-| `home_ncaa_team_id` | String |  |
+| `home_ncaa_team_id` | String | stats.ncaa.org team identifier for the home team. |
 | `home_espn_team_id` | String | ESPN home team id (NA for bart-only rows). |
-| `away_ncaa_team_id` | String |  |
+| `away_ncaa_team_id` | String | stats.ncaa.org team identifier for the away team. |
 | `away_espn_team_id` | String | ESPN away team id (NA for bart-only rows). |
-| `event_team_ncaa_team_id` | String |  |
-| `event_team_espn_team_id` | String |  |
-| `poss_team_ncaa_team_id` | String |  |
-| `poss_team_espn_team_id` | String |  |
-| `player_1_id` | String |  |
-| `player_1_clean_name` | String |  |
-| `player_2_id` | String |  |
-| `player_2_clean_name` | String |  |
-| `home_1_player_id` | String |  |
-| `home_1_clean_name` | String |  |
-| `home_2_player_id` | String |  |
-| `home_2_clean_name` | String |  |
-| `home_3_player_id` | String |  |
-| `home_3_clean_name` | String |  |
-| `home_4_player_id` | String |  |
-| `home_4_clean_name` | String |  |
-| `home_5_player_id` | String |  |
-| `home_5_clean_name` | String |  |
-| `away_1_player_id` | String |  |
-| `away_1_clean_name` | String |  |
-| `away_2_player_id` | String |  |
-| `away_2_clean_name` | String |  |
-| `away_3_player_id` | String |  |
-| `away_3_clean_name` | String |  |
-| `away_4_player_id` | String |  |
-| `away_4_clean_name` | String |  |
-| `away_5_player_id` | String |  |
-| `away_5_clean_name` | String |  |
+| `event_team_ncaa_team_id` | String | stats.ncaa.org team identifier of the team credited with the event. |
+| `event_team_espn_team_id` | String | ESPN team identifier of the team credited with the event, via the NCAA-to-ESPN crosswalk. |
+| `poss_team_ncaa_team_id` | String | stats.ncaa.org team identifier of the team in possession. |
+| `poss_team_espn_team_id` | String | ESPN team identifier of the team in possession, via the NCAA-to-ESPN crosswalk. |
+| `player_1_id` | String | stats.ncaa.org player identifier for player_1, resolved through the roster name matcher. |
+| `player_1_clean_name` | String | Normalized (diacritics- and punctuation-cleaned) name for player_1. |
+| `player_2_id` | String | stats.ncaa.org player identifier for player_2, resolved through the roster name matcher. |
+| `player_2_clean_name` | String | Normalized (diacritics- and punctuation-cleaned) name for player_2. |
+| `home_1_player_id` | String | stats.ncaa.org player identifier for the home slot-1 on-floor player. |
+| `home_1_clean_name` | String | Normalized (diacritics- and punctuation-cleaned) name of the home slot-1 on-floor player. |
+| `home_2_player_id` | String | stats.ncaa.org player identifier for the home slot-2 on-floor player. |
+| `home_2_clean_name` | String | Normalized (diacritics- and punctuation-cleaned) name of the home slot-2 on-floor player. |
+| `home_3_player_id` | String | stats.ncaa.org player identifier for the home slot-3 on-floor player. |
+| `home_3_clean_name` | String | Normalized (diacritics- and punctuation-cleaned) name of the home slot-3 on-floor player. |
+| `home_4_player_id` | String | stats.ncaa.org player identifier for the home slot-4 on-floor player. |
+| `home_4_clean_name` | String | Normalized (diacritics- and punctuation-cleaned) name of the home slot-4 on-floor player. |
+| `home_5_player_id` | String | stats.ncaa.org player identifier for the home slot-5 on-floor player. |
+| `home_5_clean_name` | String | Normalized (diacritics- and punctuation-cleaned) name of the home slot-5 on-floor player. |
+| `away_1_player_id` | String | stats.ncaa.org player identifier for the away slot-1 on-floor player. |
+| `away_1_clean_name` | String | Normalized (diacritics- and punctuation-cleaned) name of the away slot-1 on-floor player. |
+| `away_2_player_id` | String | stats.ncaa.org player identifier for the away slot-2 on-floor player. |
+| `away_2_clean_name` | String | Normalized (diacritics- and punctuation-cleaned) name of the away slot-2 on-floor player. |
+| `away_3_player_id` | String | stats.ncaa.org player identifier for the away slot-3 on-floor player. |
+| `away_3_clean_name` | String | Normalized (diacritics- and punctuation-cleaned) name of the away slot-3 on-floor player. |
+| `away_4_player_id` | String | stats.ncaa.org player identifier for the away slot-4 on-floor player. |
+| `away_4_clean_name` | String | Normalized (diacritics- and punctuation-cleaned) name of the away slot-4 on-floor player. |
+| `away_5_player_id` | String | stats.ncaa.org player identifier for the away slot-5 on-floor player. |
+| `away_5_clean_name` | String | Normalized (diacritics- and punctuation-cleaned) name of the away slot-5 on-floor player. |
 | `espn_game_id` | String | ESPN game id (NA for bart-only rows). |
-| `is_fastbreak` | Boolean |  |
-| `is_from_turnover` | Boolean |  |
-| `is_paint` | Boolean |  |
-| `is_second_chance` | Boolean |  |
-| `assist_player` | String |  |
-| `ft_number` | Int64 |  |
-| `ft_attempts` | Int64 |  |
-| `foul_class` | String |  |
-| `is_shooting_foul` | Boolean |  |
-| `is_looseball_foul` | Boolean |  |
-| `is_one_and_one` | Boolean |  |
-| `is_flagrant` | Boolean |  |
-| `foul_tech_class` | String |  |
-| `ft_awarded` | Int64 |  |
-| `turnover_type` | String |  |
-| `is_team_turnover` | Boolean |  |
-| `timeout_type` | String |  |
-| `challenge_outcome` | String |  |
+| `is_fastbreak` | Boolean | Flag marking the shot as a fast-break attempt, from the stats.ncaa.org play text. |
+| `is_from_turnover` | Boolean | Flag marking an attempt generated off an opponent turnover. |
+| `is_paint` | Boolean | Flag marking the shot as attempted in the paint. |
+| `is_second_chance` | Boolean | Flag marking a second-chance attempt following an offensive rebound. |
+| `assist_player` | String | Name of the player credited with the assist on a made shot, when present. |
+| `ft_number` | Int64 | Which free throw of the trip this attempt is (1 of 2, 2 of 2, etc.). |
+| `ft_attempts` | Int64 | Total free throws in the trip this attempt belongs to. |
+| `foul_class` | String | Parsed category of the foul event (e.g. personal, offensive). |
+| `is_shooting_foul` | Boolean | Flag marking the foul as a shooting foul. |
+| `is_looseball_foul` | Boolean | Flag marking the foul as a loose-ball foul. |
+| `is_one_and_one` | Boolean | Flag marking a bonus one-and-one free-throw trip. |
+| `is_flagrant` | Boolean | Flag marking the foul as flagrant. |
+| `foul_tech_class` | String | Parsed technical-foul class for technical foul events, when present. |
+| `ft_awarded` | Int64 | Number of free throws awarded by the foul. |
+| `turnover_type` | String | Parsed turnover subtype (e.g. lost ball, bad pass, travel). |
+| `is_team_turnover` | Boolean | Flag marking a turnover charged to the team rather than an individual player. |
+| `timeout_type` | String | Type of timeout called (e.g. full, 30-second, media). |
+| `challenge_outcome` | String | Outcome of a coach's challenge or video-review event, when present. |
 | `season` | Int64 | Season year. |
 
 ```python
@@ -886,124 +886,124 @@ Release: [ncaa_mbb_player_box](https://github.com/sportsdataverse/sportsdatavers
 | `away` | String | Away record. |
 | `team` | String | Team-side label or team identifier. |
 | `player` | String | Player name. |
-| `mins` | Float64 |  |
-| `o_poss` | Float64 |  |
+| `mins` | Float64 | Minutes played, derived from the lineup walk-forward through the play-by-play. |
+| `o_poss` | Float64 | Offensive possessions the player was on the floor for. |
 | `pts` | Float64 | Points scored. |
-| `orb` | Float64 |  |
-| `drb` | Float64 |  |
+| `orb` | Float64 | Offensive rebounds. |
+| `drb` | Float64 | Defensive rebounds. |
 | `ast` | Float64 | Assists. |
 | `stl` | Float64 | Steals. |
 | `blk` | Float64 | Blocks. |
 | `tov` | Float64 | Turnovers. |
 | `pf` | Float64 | Personal fouls. |
 | `ts_pct` | Float64 | True shooting percentage (0-1). |
-| `efg_pct` | Float64 |  |
+| `efg_pct` | Float64 | Effective field-goal percentage, weighting made threes at 1.5. |
 | `fgm` | Float64 | Field goals made. |
 | `fga` | Float64 | Field goal attempts. |
 | `fg_pct` | Float64 | Field goal percentage (0-1). |
-| `tpm` | Float64 |  |
-| `tpa` | Float64 |  |
-| `tp_pct` | Float64 |  |
+| `tpm` | Float64 | Three-point field goals made. |
+| `tpa` | Float64 | Three-point field goals attempted. |
+| `tp_pct` | Float64 | Three-point field-goal percentage. |
 | `ftm` | Float64 | Free throws made. |
 | `fta` | Float64 | Free throw attempts. |
 | `ft_pct` | Float64 | Free throw percentage (0-1). |
-| `rimm` | Float64 |  |
-| `rima` | Float64 |  |
-| `rim_pct` | Float64 |  |
-| `midm` | Float64 |  |
-| `mida` | Float64 |  |
-| `mid_pct` | Float64 |  |
-| `pbackm` | Float64 |  |
-| `pbacka` | Float64 |  |
-| `pback_pct` | Float64 |  |
-| `blk_rim` | Float64 |  |
-| `blk_mid` | Float64 |  |
-| `blk_three` | Float64 |  |
-| `pct_fga_trans` | Float64 |  |
-| `pct_tpa_trans` | Float64 |  |
-| `pct_rima_trans` | Float64 |  |
-| `pct_fgm_trans` | Float64 |  |
-| `pct_tpm_trans` | Float64 |  |
-| `pct_rimm_trans` | Float64 |  |
-| `pct_fgm_ast` | Float64 |  |
-| `pct_tpm_ast` | Float64 |  |
-| `pct_rimm_ast` | Float64 |  |
-| `pts_trans` | Float64 |  |
-| `orb_trans` | Float64 |  |
-| `drb_trans` | Float64 |  |
-| `ast_trans` | Float64 |  |
-| `stl_trans` | Float64 |  |
-| `blk_trans` | Float64 |  |
-| `tov_trans` | Float64 |  |
-| `ts_pct_trans` | Float64 |  |
-| `efg_pct_trans` | Float64 |  |
-| `fgm_trans` | Float64 |  |
-| `fga_trans` | Float64 |  |
-| `fg_pct_trans` | Float64 |  |
-| `tpm_trans` | Float64 |  |
-| `tpa_trans` | Float64 |  |
-| `tp_pct_trans` | Float64 |  |
-| `ftm_trans` | Float64 |  |
-| `fta_trans` | Float64 |  |
-| `ft_pct_trans` | Float64 |  |
-| `rimm_trans` | Float64 |  |
-| `rima_trans` | Float64 |  |
-| `rim_pct_trans` | Float64 |  |
-| `midm_trans` | Float64 |  |
-| `mida_trans` | Float64 |  |
-| `mid_pct_trans` | Float64 |  |
-| `pts_half` | Float64 |  |
-| `orb_half` | Float64 |  |
-| `drb_half` | Float64 |  |
-| `ast_half` | Float64 |  |
-| `stl_half` | Float64 |  |
-| `blk_half` | Float64 |  |
-| `tov_half` | Float64 |  |
-| `ts_pct_half` | Float64 |  |
-| `efg_pct_half` | Float64 |  |
-| `fgm_half` | Float64 |  |
-| `fga_half` | Float64 |  |
-| `fg_pct_half` | Float64 |  |
-| `tpm_half` | Float64 |  |
-| `tpa_half` | Float64 |  |
-| `tp_pct_half` | Float64 |  |
-| `ftm_half` | Float64 |  |
-| `fta_half` | Float64 |  |
-| `ft_pct_half` | Float64 |  |
-| `rimm_half` | Float64 |  |
-| `rima_half` | Float64 |  |
-| `rim_pct_half` | Float64 |  |
-| `midm_half` | Float64 |  |
-| `mida_half` | Float64 |  |
-| `mid_pct_half` | Float64 |  |
-| `pts_ast` | Float64 |  |
-| `fgm_ast` | Float64 |  |
-| `tpm_ast` | Float64 |  |
-| `rimm_ast` | Float64 |  |
-| `midm_ast` | Float64 |  |
-| `pts_unast` | Float64 |  |
-| `efg_pct_unast` | Float64 |  |
-| `fgm_unast` | Float64 |  |
-| `fga_unast` | Float64 |  |
-| `fg_pct_unast` | Float64 |  |
-| `tpm_unast` | Float64 |  |
-| `tpa_unast` | Float64 |  |
-| `tp_pct_unast` | Float64 |  |
-| `rimm_unast` | Float64 |  |
-| `rima_unast` | Float64 |  |
-| `rim_pct_unast` | Float64 |  |
-| `midm_unast` | Float64 |  |
-| `mida_unast` | Float64 |  |
-| `mid_pct_unast` | Float64 |  |
+| `rimm` | Float64 | Rim shots (dunks, layups, hooks, tip-ins) made. |
+| `rima` | Float64 | Rim shots (dunks, layups, hooks, tip-ins) attempted. |
+| `rim_pct` | Float64 | Field-goal percentage on rim attempts. |
+| `midm` | Float64 | Mid-range (non-rim two-point) shots made. |
+| `mida` | Float64 | Mid-range (non-rim two-point) shots attempted. |
+| `mid_pct` | Float64 | Field-goal percentage on mid-range attempts. |
+| `pbackm` | Float64 | Putbacks made — rim shots immediately following an offensive rebound. |
+| `pbacka` | Float64 | Putbacks attempted — rim shots immediately following an offensive rebound. |
+| `pback_pct` | Float64 | Field-goal percentage on putback attempts. |
+| `blk_rim` | Float64 | Blocks recorded against opponent rim attempts. |
+| `blk_mid` | Float64 | Blocks recorded against opponent mid-range attempts. |
+| `blk_three` | Float64 | Blocks recorded against opponent three-point attempts. |
+| `pct_fga_trans` | Float64 | Share of the player's field-goal attempts taken in transition. |
+| `pct_tpa_trans` | Float64 | Share of the player's three-point attempts taken in transition. |
+| `pct_rima_trans` | Float64 | Share of the player's rim attempts taken in transition. |
+| `pct_fgm_trans` | Float64 | Share of the player's field-goal makes that came in transition. |
+| `pct_tpm_trans` | Float64 | Share of the player's three-point makes that came in transition. |
+| `pct_rimm_trans` | Float64 | Share of the player's rim makes that came in transition. |
+| `pct_fgm_ast` | Float64 | Share of the player's made field goals that were assisted. |
+| `pct_tpm_ast` | Float64 | Share of the player's made threes that were assisted. |
+| `pct_rimm_ast` | Float64 | Share of the player's made rim shots that were assisted. |
+| `pts_trans` | Float64 | Points scored in transition possessions. |
+| `orb_trans` | Float64 | Offensive rebounds in transition possessions. |
+| `drb_trans` | Float64 | Defensive rebounds in transition possessions. |
+| `ast_trans` | Float64 | Assists in transition possessions. |
+| `stl_trans` | Float64 | Steals in transition possessions. |
+| `blk_trans` | Float64 | Blocks in transition possessions. |
+| `tov_trans` | Float64 | Turnovers in transition possessions. |
+| `ts_pct_trans` | Float64 | True-shooting percentage in transition possessions. |
+| `efg_pct_trans` | Float64 | Effective field-goal percentage in transition possessions. |
+| `fgm_trans` | Float64 | Field goals made in transition possessions. |
+| `fga_trans` | Float64 | Field goals attempted in transition possessions. |
+| `fg_pct_trans` | Float64 | Field-goal percentage in transition possessions. |
+| `tpm_trans` | Float64 | Three-pointers made in transition possessions. |
+| `tpa_trans` | Float64 | Three-pointers attempted in transition possessions. |
+| `tp_pct_trans` | Float64 | Three-point percentage in transition possessions. |
+| `ftm_trans` | Float64 | Free throws made in transition possessions. |
+| `fta_trans` | Float64 | Free throws attempted in transition possessions. |
+| `ft_pct_trans` | Float64 | Free-throw percentage in transition possessions. |
+| `rimm_trans` | Float64 | Rim shots made in transition possessions. |
+| `rima_trans` | Float64 | Rim shots attempted in transition possessions. |
+| `rim_pct_trans` | Float64 | Rim field-goal percentage in transition possessions. |
+| `midm_trans` | Float64 | Mid-range shots made in transition possessions. |
+| `mida_trans` | Float64 | Mid-range shots attempted in transition possessions. |
+| `mid_pct_trans` | Float64 | Mid-range field-goal percentage in transition possessions. |
+| `pts_half` | Float64 | Points scored in halfcourt possessions. |
+| `orb_half` | Float64 | Offensive rebounds in halfcourt possessions. |
+| `drb_half` | Float64 | Defensive rebounds in halfcourt possessions. |
+| `ast_half` | Float64 | Assists in halfcourt possessions. |
+| `stl_half` | Float64 | Steals in halfcourt possessions. |
+| `blk_half` | Float64 | Blocks in halfcourt possessions. |
+| `tov_half` | Float64 | Turnovers in halfcourt possessions. |
+| `ts_pct_half` | Float64 | True-shooting percentage in halfcourt possessions. |
+| `efg_pct_half` | Float64 | Effective field-goal percentage in halfcourt possessions. |
+| `fgm_half` | Float64 | Field goals made in halfcourt possessions. |
+| `fga_half` | Float64 | Field goals attempted in halfcourt possessions. |
+| `fg_pct_half` | Float64 | Field-goal percentage in halfcourt possessions. |
+| `tpm_half` | Float64 | Three-pointers made in halfcourt possessions. |
+| `tpa_half` | Float64 | Three-pointers attempted in halfcourt possessions. |
+| `tp_pct_half` | Float64 | Three-point percentage in halfcourt possessions. |
+| `ftm_half` | Float64 | Free throws made in halfcourt possessions. |
+| `fta_half` | Float64 | Free throws attempted in halfcourt possessions. |
+| `ft_pct_half` | Float64 | Free-throw percentage in halfcourt possessions. |
+| `rimm_half` | Float64 | Rim shots made in halfcourt possessions. |
+| `rima_half` | Float64 | Rim shots attempted in halfcourt possessions. |
+| `rim_pct_half` | Float64 | Rim field-goal percentage in halfcourt possessions. |
+| `midm_half` | Float64 | Mid-range shots made in halfcourt possessions. |
+| `mida_half` | Float64 | Mid-range shots attempted in halfcourt possessions. |
+| `mid_pct_half` | Float64 | Mid-range field-goal percentage in halfcourt possessions. |
+| `pts_ast` | Float64 | Points from the player's assisted field-goal makes. |
+| `fgm_ast` | Float64 | Assisted field-goal makes. |
+| `tpm_ast` | Float64 | Assisted three-point makes. |
+| `rimm_ast` | Float64 | Assisted rim makes. |
+| `midm_ast` | Float64 | Assisted mid-range makes. |
+| `pts_unast` | Float64 | Points from the player's unassisted field-goal makes. |
+| `efg_pct_unast` | Float64 | Effective field-goal percentage in the unassisted split (makes not credited with an assist). |
+| `fgm_unast` | Float64 | Field goals made in the unassisted split (makes not credited with an assist). |
+| `fga_unast` | Float64 | Field goals attempted in the unassisted split (makes not credited with an assist). |
+| `fg_pct_unast` | Float64 | Field-goal percentage in the unassisted split (makes not credited with an assist). |
+| `tpm_unast` | Float64 | Three-pointers made in the unassisted split (makes not credited with an assist). |
+| `tpa_unast` | Float64 | Three-pointers attempted in the unassisted split (makes not credited with an assist). |
+| `tp_pct_unast` | Float64 | Three-point percentage in the unassisted split (makes not credited with an assist). |
+| `rimm_unast` | Float64 | Rim shots made in the unassisted split (makes not credited with an assist). |
+| `rima_unast` | Float64 | Rim shots attempted in the unassisted split (makes not credited with an assist). |
+| `rim_pct_unast` | Float64 | Rim field-goal percentage in the unassisted split (makes not credited with an assist). |
+| `midm_unast` | Float64 | Mid-range shots made in the unassisted split (makes not credited with an assist). |
+| `mida_unast` | Float64 | Mid-range shots attempted in the unassisted split (makes not credited with an assist). |
+| `mid_pct_unast` | Float64 | Mid-range field-goal percentage in the unassisted split (makes not credited with an assist). |
 | `contest_id` | String | stats.ncaa.org contest (game) identifier. |
-| `home_ncaa_team_id` | String |  |
+| `home_ncaa_team_id` | String | stats.ncaa.org team identifier for the home team. |
 | `home_espn_team_id` | String | ESPN home team id (NA for bart-only rows). |
-| `away_ncaa_team_id` | String |  |
+| `away_ncaa_team_id` | String | stats.ncaa.org team identifier for the away team. |
 | `away_espn_team_id` | String | ESPN away team id (NA for bart-only rows). |
-| `team_ncaa_team_id` | String |  |
-| `team_espn_team_id` | String |  |
+| `team_ncaa_team_id` | String | stats.ncaa.org team identifier of the player's team. |
+| `team_espn_team_id` | String | ESPN team identifier of the player's team, via the NCAA-to-ESPN crosswalk. |
 | `player_id` | String | Unique player identifier. |
-| `clean_name` | String |  |
+| `clean_name` | String | Normalized (diacritics- and punctuation-cleaned) player name used to join across the NCAA datasets. |
 | `espn_game_id` | String | ESPN game id (NA for bart-only rows). |
 | `season` | Int64 | Season year. |
 
@@ -1021,82 +1021,82 @@ Release: [ncaa_mbb_team_box](https://github.com/sportsdataverse/sportsdataverse-
 | `home` | String | Home. |
 | `away` | String | Away record. |
 | `team` | String | Team-side label or team identifier. |
-| `mins` | Float64 |  |
-| `o_mins` | Float64 |  |
-| `d_mins` | Float64 |  |
-| `o_poss` | Float64 |  |
-| `d_poss` | Float64 |  |
-| `ortg` | Float64 |  |
-| `drtg` | Float64 |  |
-| `netrtg` | Float64 |  |
+| `mins` | Float64 | Minutes covered by the team's tracked lineups in the game. |
+| `o_mins` | Float64 | Minutes spent on tracked offensive possessions. |
+| `d_mins` | Float64 | Minutes spent on tracked defensive possessions. |
+| `o_poss` | Float64 | Offensive possessions. |
+| `d_poss` | Float64 | Defensive possessions. |
+| `ortg` | Float64 | Offensive rating — points scored per 100 possessions. |
+| `drtg` | Float64 | Defensive rating — points allowed per 100 possessions. |
+| `netrtg` | Float64 | Net rating — offensive rating minus defensive rating. |
 | `pts` | Float64 | Points scored. |
-| `d_pts` | Float64 |  |
+| `d_pts` | Float64 | Points allowed. |
 | `fga` | Float64 | Field goal attempts. |
-| `d_fga` | Float64 |  |
+| `d_fga` | Float64 | Opponent field-goal attempts. |
 | `fgm` | Float64 | Field goals made. |
-| `d_fgm` | Float64 |  |
-| `tpa` | Float64 |  |
-| `d_tpa` | Float64 |  |
-| `tpm` | Float64 |  |
-| `d_tpm` | Float64 |  |
+| `d_fgm` | Float64 | Opponent field goals made. |
+| `tpa` | Float64 | Three-point attempts. |
+| `d_tpa` | Float64 | Opponent three-point attempts. |
+| `tpm` | Float64 | Three-pointers made. |
+| `d_tpm` | Float64 | Opponent three-pointers made. |
 | `fta` | Float64 | Free throw attempts. |
-| `d_fta` | Float64 |  |
+| `d_fta` | Float64 | Opponent free-throw attempts. |
 | `ftm` | Float64 | Free throws made. |
-| `d_ftm` | Float64 |  |
-| `rima` | Float64 |  |
-| `d_rima` | Float64 |  |
-| `rimm` | Float64 |  |
-| `d_rimm` | Float64 |  |
-| `orb` | Float64 |  |
-| `d_orb` | Float64 |  |
-| `drb` | Float64 |  |
-| `d_drb` | Float64 |  |
+| `d_ftm` | Float64 | Opponent free throws made. |
+| `rima` | Float64 | Rim shots (dunks, layups, hooks, tip-ins) attempted. |
+| `d_rima` | Float64 | Opponent rim shots attempted. |
+| `rimm` | Float64 | Rim shots made. |
+| `d_rimm` | Float64 | Opponent rim shots made. |
+| `orb` | Float64 | Offensive rebounds. |
+| `d_orb` | Float64 | Opponent offensive rebounds. |
+| `drb` | Float64 | Defensive rebounds. |
+| `d_drb` | Float64 | Opponent defensive rebounds. |
 | `blk` | Float64 | Blocks. |
-| `d_blk` | Float64 |  |
+| `d_blk` | Float64 | Opponent blocks (own shots blocked). |
 | `to` | Float64 | To. |
-| `d_to` | Float64 |  |
+| `d_to` | Float64 | Opponent turnovers forced. |
 | `ast` | Float64 | Assists. |
-| `d_ast` | Float64 |  |
-| `e_poss` | Float64 |  |
+| `d_ast` | Float64 | Opponent assists allowed. |
+| `e_poss` | Float64 | Estimated possessions — the average of the team's and the opponent's raw possession counts. |
 | `fg_pct` | Float64 | Field goal percentage (0-1). |
-| `d_fg_pct` | Float64 |  |
-| `tpp` | Float64 |  |
-| `d_tpp` | Float64 |  |
-| `ftp` | Float64 |  |
-| `d_ftp` | Float64 |  |
-| `efg_pct` | Float64 |  |
-| `d_efg_pct` | Float64 |  |
+| `d_fg_pct` | Float64 | Opponent field-goal percentage. |
+| `tpp` | Float64 | Three-point percentage. |
+| `d_tpp` | Float64 | Opponent three-point percentage. |
+| `ftp` | Float64 | Free-throw percentage. |
+| `d_ftp` | Float64 | Opponent free-throw percentage. |
+| `efg_pct` | Float64 | Effective field-goal percentage, weighting made threes at 1.5. |
+| `d_efg_pct` | Float64 | Opponent effective field-goal percentage. |
 | `ts_pct` | Float64 | True shooting percentage (0-1). |
-| `d_ts_pct` | Float64 |  |
-| `rim_pct` | Float64 |  |
-| `d_rim_pct` | Float64 |  |
-| `mid_pct` | Float64 |  |
-| `d_mid_pct` | Float64 |  |
-| `tp_rate` | Float64 |  |
-| `d_tp_rate` | Float64 |  |
-| `rim_rate` | Float64 |  |
-| `d_rim_rate` | Float64 |  |
-| `mid_rate` | Float64 |  |
-| `d_mid_rate` | Float64 |  |
+| `d_ts_pct` | Float64 | Opponent true-shooting percentage. |
+| `rim_pct` | Float64 | Field-goal percentage on rim attempts. |
+| `d_rim_pct` | Float64 | Opponent field-goal percentage on rim attempts. |
+| `mid_pct` | Float64 | Field-goal percentage on mid-range attempts. |
+| `d_mid_pct` | Float64 | Opponent field-goal percentage on mid-range attempts. |
+| `tp_rate` | Float64 | Three-point attempts as a share of field-goal attempts. |
+| `d_tp_rate` | Float64 | Opponent three-point attempts as a share of their field-goal attempts. |
+| `rim_rate` | Float64 | Rim attempts as a share of field-goal attempts. |
+| `d_rim_rate` | Float64 | Opponent rim attempts as a share of their field-goal attempts. |
+| `mid_rate` | Float64 | Mid-range attempts as a share of field-goal attempts. |
+| `d_mid_rate` | Float64 | Opponent mid-range attempts as a share of their field-goal attempts. |
 | `ft_rate` | Float64 | Ft rate. |
-| `d_ft_rate` | Float64 |  |
-| `ast_rate` | Float64 |  |
-| `d_ast_rate` | Float64 |  |
+| `d_ft_rate` | Float64 | Opponent free-throw attempts relative to their field-goal attempts. |
+| `ast_rate` | Float64 | Share of the team's made field goals that were assisted. |
+| `d_ast_rate` | Float64 | Share of opponent made field goals that were assisted. |
 | `to_rate` | Float64 | To rate. |
-| `d_to_rate` | Float64 |  |
-| `blk_rate` | Float64 |  |
-| `o_blk_rate` | Float64 |  |
+| `d_to_rate` | Float64 | Opponent turnovers as a share of their possessions (forced-turnover rate). |
+| `blk_rate` | Float64 | Share of opponent two-point attempts the team blocked. |
+| `o_blk_rate` | Float64 | Share of the team's own two-point attempts blocked by the opponent. |
 | `orb_pct` | Float64 | Offensive rebound percentage. |
 | `drb_pct` | Float64 | Defensive rebound percentage. |
-| `time_per_poss` | Float64 |  |
-| `d_time_per_poss` | Float64 |  |
+| `time_per_poss` | Float64 | Average seconds per offensive possession. |
+| `d_time_per_poss` | Float64 | Average seconds per defensive possession. |
 | `contest_id` | String | stats.ncaa.org contest (game) identifier. |
-| `home_ncaa_team_id` | String |  |
+| `home_ncaa_team_id` | String | stats.ncaa.org team identifier for the home team. |
 | `home_espn_team_id` | String | ESPN home team id (NA for bart-only rows). |
-| `away_ncaa_team_id` | String |  |
+| `away_ncaa_team_id` | String | stats.ncaa.org team identifier for the away team. |
 | `away_espn_team_id` | String | ESPN away team id (NA for bart-only rows). |
-| `team_ncaa_team_id` | String |  |
-| `team_espn_team_id` | String |  |
+| `team_ncaa_team_id` | String | stats.ncaa.org team identifier of the team the row belongs to. |
+| `team_espn_team_id` | String | ESPN team identifier of the team, via the NCAA-to-ESPN crosswalk. |
 | `espn_game_id` | String | ESPN game id (NA for bart-only rows). |
 | `season` | Int64 | Season year. |
 
@@ -1132,13 +1132,13 @@ Release: [ncaa_mbb_team_rosters](https://github.com/sportsdataverse/sportsdatave
 | `team` | String | Team-side label or team identifier. |
 | `player_id` | String | Unique player identifier. |
 | `player` | String | Player name. |
-| `clean_name` | String |  |
+| `clean_name` | String | Normalized (diacritics- and punctuation-cleaned) player name used to join across the NCAA datasets. |
 | `name` | String | Display name. |
 | `jersey` | String | Jersey number worn by the player. |
 | `class` | String | College class / draft eligibility note. |
 | `position` | String | Listed roster position (G, F, C, etc.). |
 | `height` | String | Player height (string e.g. '6-2' or inches). |
-| `ht_inches` | Int64 |  |
+| `ht_inches` | Int64 | Player height converted to total inches from the stats.ncaa.org roster listing. |
 | `hometown` | String | Player hometown. |
 | `high_school` | String | High school |
 | `gp` | String | Games played. |
@@ -1175,56 +1175,56 @@ Release: [ncaa_mbb_possessions](https://github.com/sportsdataverse/sportsdataver
 | `home` | String | Home. |
 | `away` | String | Away record. |
 | `period` | Int64 | Period of the game (1-4 quarters; 5+ for OT). |
-| `poss_num` | Int64 |  |
-| `poss_team` | String |  |
-| `home_1` | String |  |
-| `home_2` | String |  |
-| `home_3` | String |  |
-| `home_4` | String |  |
-| `home_5` | String |  |
-| `away_1` | String |  |
-| `away_2` | String |  |
-| `away_3` | String |  |
-| `away_4` | String |  |
-| `away_5` | String |  |
+| `poss_num` | Int64 | Sequential possession number within the game. |
+| `poss_team` | String | Name of the team in possession. |
+| `home_1` | String | Name of the home team's on-floor player in lineup slot 1 for the possession, from the substitution walk-forward. |
+| `home_2` | String | Name of the home team's on-floor player in lineup slot 2 for the possession, from the substitution walk-forward. |
+| `home_3` | String | Name of the home team's on-floor player in lineup slot 3 for the possession, from the substitution walk-forward. |
+| `home_4` | String | Name of the home team's on-floor player in lineup slot 4 for the possession, from the substitution walk-forward. |
+| `home_5` | String | Name of the home team's on-floor player in lineup slot 5 for the possession, from the substitution walk-forward. |
+| `away_1` | String | Name of the away team's on-floor player in lineup slot 1 for the possession, from the substitution walk-forward. |
+| `away_2` | String | Name of the away team's on-floor player in lineup slot 2 for the possession, from the substitution walk-forward. |
+| `away_3` | String | Name of the away team's on-floor player in lineup slot 3 for the possession, from the substitution walk-forward. |
+| `away_4` | String | Name of the away team's on-floor player in lineup slot 4 for the possession, from the substitution walk-forward. |
+| `away_5` | String | Name of the away team's on-floor player in lineup slot 5 for the possession, from the substitution walk-forward. |
 | `home_score` | Int64 | Home team score at the time of the play. |
 | `away_score` | Int64 | Away team score at the time of the play. |
 | `pts` | Int64 | Points scored. |
-| `is_assisted` | Int64 |  |
-| `is_transition` | Int64 |  |
-| `is_garbage_time` | Int64 |  |
-| `start_event_type` | String |  |
-| `first_shot_time` | Int64 |  |
-| `first_shot_type` | String |  |
-| `last_event_time` | Int64 |  |
-| `last_event_type` | String |  |
+| `is_assisted` | Int64 | 1 when the possession's made field goal was assisted, else 0. |
+| `is_transition` | Int64 | 1 for transition possessions, else 0. |
+| `is_garbage_time` | Int64 | 1 for possessions in garbage time under the score-margin and clock rule, else 0. |
+| `start_event_type` | String | Event type that opened the possession (e.g., a defensive rebound or a made-basket inbound). |
+| `first_shot_time` | Int64 | Clock time in seconds at the possession's first shot attempt, from the possession segmentation engine. |
+| `first_shot_type` | String | Shot class of the possession's first attempt (rim, mid-range, or three). |
+| `last_event_time` | Int64 | Clock time in seconds at the possession's final event. |
+| `last_event_type` | String | Event type that ended the possession (e.g., a made shot, turnover, or defensive rebound). |
 | `contest_id` | String | stats.ncaa.org contest (game) identifier. |
-| `home_ncaa_team_id` | String |  |
+| `home_ncaa_team_id` | String | stats.ncaa.org team identifier for the home team. |
 | `home_espn_team_id` | String | ESPN home team id (NA for bart-only rows). |
-| `away_ncaa_team_id` | String |  |
+| `away_ncaa_team_id` | String | stats.ncaa.org team identifier for the away team. |
 | `away_espn_team_id` | String | ESPN away team id (NA for bart-only rows). |
-| `poss_team_ncaa_team_id` | String |  |
-| `poss_team_espn_team_id` | String |  |
-| `home_1_player_id` | String |  |
-| `home_1_clean_name` | String |  |
-| `home_2_player_id` | String |  |
-| `home_2_clean_name` | String |  |
-| `home_3_player_id` | String |  |
-| `home_3_clean_name` | String |  |
-| `home_4_player_id` | String |  |
-| `home_4_clean_name` | String |  |
-| `home_5_player_id` | String |  |
-| `home_5_clean_name` | String |  |
-| `away_1_player_id` | String |  |
-| `away_1_clean_name` | String |  |
-| `away_2_player_id` | String |  |
-| `away_2_clean_name` | String |  |
-| `away_3_player_id` | String |  |
-| `away_3_clean_name` | String |  |
-| `away_4_player_id` | String |  |
-| `away_4_clean_name` | String |  |
-| `away_5_player_id` | String |  |
-| `away_5_clean_name` | String |  |
+| `poss_team_ncaa_team_id` | String | stats.ncaa.org team identifier of the team in possession. |
+| `poss_team_espn_team_id` | String | ESPN team identifier of the team in possession, via the NCAA-to-ESPN crosswalk. |
+| `home_1_player_id` | String | stats.ncaa.org player identifier for the home slot-1 on-floor player. |
+| `home_1_clean_name` | String | Normalized (diacritics- and punctuation-cleaned) name of the home slot-1 on-floor player. |
+| `home_2_player_id` | String | stats.ncaa.org player identifier for the home slot-2 on-floor player. |
+| `home_2_clean_name` | String | Normalized (diacritics- and punctuation-cleaned) name of the home slot-2 on-floor player. |
+| `home_3_player_id` | String | stats.ncaa.org player identifier for the home slot-3 on-floor player. |
+| `home_3_clean_name` | String | Normalized (diacritics- and punctuation-cleaned) name of the home slot-3 on-floor player. |
+| `home_4_player_id` | String | stats.ncaa.org player identifier for the home slot-4 on-floor player. |
+| `home_4_clean_name` | String | Normalized (diacritics- and punctuation-cleaned) name of the home slot-4 on-floor player. |
+| `home_5_player_id` | String | stats.ncaa.org player identifier for the home slot-5 on-floor player. |
+| `home_5_clean_name` | String | Normalized (diacritics- and punctuation-cleaned) name of the home slot-5 on-floor player. |
+| `away_1_player_id` | String | stats.ncaa.org player identifier for the away slot-1 on-floor player. |
+| `away_1_clean_name` | String | Normalized (diacritics- and punctuation-cleaned) name of the away slot-1 on-floor player. |
+| `away_2_player_id` | String | stats.ncaa.org player identifier for the away slot-2 on-floor player. |
+| `away_2_clean_name` | String | Normalized (diacritics- and punctuation-cleaned) name of the away slot-2 on-floor player. |
+| `away_3_player_id` | String | stats.ncaa.org player identifier for the away slot-3 on-floor player. |
+| `away_3_clean_name` | String | Normalized (diacritics- and punctuation-cleaned) name of the away slot-3 on-floor player. |
+| `away_4_player_id` | String | stats.ncaa.org player identifier for the away slot-4 on-floor player. |
+| `away_4_clean_name` | String | Normalized (diacritics- and punctuation-cleaned) name of the away slot-4 on-floor player. |
+| `away_5_player_id` | String | stats.ncaa.org player identifier for the away slot-5 on-floor player. |
+| `away_5_clean_name` | String | Normalized (diacritics- and punctuation-cleaned) name of the away slot-5 on-floor player. |
 | `espn_game_id` | String | ESPN game id (NA for bart-only rows). |
 | `season` | Int64 | Season year. |
 
@@ -1239,81 +1239,81 @@ Release: [ncaa_mbb_lineups](https://github.com/sportsdataverse/sportsdataverse-d
 
 | col_name | type | description |
 |---|---|---|
-| `lineup_key` | String |  |
+| `lineup_key` | String | Sorted player-code key identifying the five-player unit on the floor (hoop-explorer convention). |
 | `date` | String | Date in YYYY-MM-DD format. |
-| `location_type` | String |  |
+| `location_type` | String | Whether the lineup's team was the Home or Away side in the game. |
 | `team` | String | Team-side label or team identifier. |
-| `team_year` | Int64 |  |
+| `team_year` | Int64 | Season year of the team-season the lineup row belongs to. |
 | `opponent` | String | Opponent. |
-| `lineup_id` | String |  |
-| `start_min` | Float64 |  |
-| `end_min` | Float64 |  |
-| `duration_mins` | Float64 |  |
-| `player_1` | String |  |
-| `player_2` | String |  |
-| `player_3` | String |  |
-| `player_4` | String |  |
-| `player_5` | String |  |
-| `players_in` | String |  |
-| `players_out` | String |  |
-| `start_scored` | Int64 |  |
-| `start_allowed` | Int64 |  |
-| `end_scored` | Int64 |  |
-| `end_allowed` | Int64 |  |
-| `start_diff` | Int64 |  |
-| `end_diff` | Int64 |  |
-| `player_count_error` | Null |  |
+| `lineup_id` | String | Sorted-name identifier of the five-player lineup, joined from the on-floor player names. |
+| `start_min` | Float64 | Game minute at which the stint began. |
+| `end_min` | Float64 | Game minute at which the stint ended. |
+| `duration_mins` | Float64 | Length of the stint in minutes. |
+| `player_1` | String | Name of the first player (in sorted order) of the five-player lineup. |
+| `player_2` | String | Name of the second player (in sorted order) of the five-player lineup. |
+| `player_3` | String | Name of the third player (in sorted order) of the five-player lineup. |
+| `player_4` | String | Name of the fourth player (in sorted order) of the five-player lineup. |
+| `player_5` | String | Name of the fifth player (in sorted order) of the five-player lineup. |
+| `players_in` | String | Delimited names of the players substituted in at the start of the stint. |
+| `players_out` | String | Delimited names of the players substituted out at the end of the stint. |
+| `start_scored` | Int64 | Team points scored at the moment the stint began. |
+| `start_allowed` | Int64 | Points allowed at the moment the stint began. |
+| `end_scored` | Int64 | Team points scored at the moment the stint ended. |
+| `end_allowed` | Int64 | Points allowed at the moment the stint ended. |
+| `start_diff` | Int64 | Score margin (scored minus allowed) when the stint began. |
+| `end_diff` | Int64 | Score margin (scored minus allowed) when the stint ended. |
+| `player_count_error` | Null | Flag marking stints where the reconciled on-floor count was not exactly five players (all-null when clean). |
 | `poss` | Int64 | Poss. |
 | `pts` | Int64 | Points scored. |
 | `plus_minus` | Int64 | Plus/minus point differential while on court. |
 | `fga` | Int64 | Field goal attempts. |
 | `fgm` | Int64 | Field goals made. |
-| `rima` | Int64 |  |
-| `rimm` | Int64 |  |
-| `rim_ast` | Int64 |  |
-| `mida` | Int64 |  |
-| `midm` | Int64 |  |
-| `mid_ast` | Int64 |  |
-| `fg2a` | Int64 |  |
-| `fg2m` | Int64 |  |
-| `tpa` | Int64 |  |
-| `tpm` | Int64 |  |
-| `tp_ast` | Int64 |  |
+| `rima` | Int64 | Rim shots (dunks, layups, hooks, tip-ins) attempted by the lineup during the stint. |
+| `rimm` | Int64 | Rim shots made by the lineup during the stint. |
+| `rim_ast` | Int64 | Assisted rim makes by the lineup during the stint. |
+| `mida` | Int64 | Mid-range shots attempted by the lineup during the stint. |
+| `midm` | Int64 | Mid-range shots made by the lineup during the stint. |
+| `mid_ast` | Int64 | Assisted mid-range makes by the lineup during the stint. |
+| `fg2a` | Int64 | Two-point field goals attempted by the lineup during the stint. |
+| `fg2m` | Int64 | Two-point field goals made by the lineup during the stint. |
+| `tpa` | Int64 | Three-pointers attempted by the lineup during the stint. |
+| `tpm` | Int64 | Three-pointers made by the lineup during the stint. |
+| `tp_ast` | Int64 | Assisted three-point makes by the lineup during the stint. |
 | `fta` | Int64 | Free throw attempts. |
 | `ftm` | Int64 | Free throws made. |
-| `orb` | Int64 |  |
-| `drb` | Int64 |  |
+| `orb` | Int64 | Offensive rebounds by the lineup during the stint. |
+| `drb` | Int64 | Defensive rebounds by the lineup during the stint. |
 | `to` | Int64 | To. |
 | `stl` | Int64 | Steals. |
 | `blk` | Int64 | Blocks. |
 | `ast` | Int64 | Assists. |
-| `foul` | Int64 |  |
-| `opp_poss` | Int64 |  |
+| `foul` | Int64 | Fouls committed by the lineup during the stint. |
+| `opp_poss` | Int64 | Opponent possessions while the lineup was on the floor during the stint. |
 | `opp_pts` | Int64 | Opponent points. |
-| `opp_plus_minus` | Int64 |  |
-| `opp_fga` | Int64 |  |
-| `opp_fgm` | Int64 |  |
-| `opp_rima` | Int64 |  |
-| `opp_rimm` | Int64 |  |
-| `opp_rim_ast` | Int64 |  |
-| `opp_mida` | Int64 |  |
-| `opp_midm` | Int64 |  |
-| `opp_mid_ast` | Int64 |  |
-| `opp_fg2a` | Int64 |  |
-| `opp_fg2m` | Int64 |  |
-| `opp_tpa` | Int64 |  |
-| `opp_tpm` | Int64 |  |
-| `opp_tp_ast` | Int64 |  |
-| `opp_fta` | Int64 |  |
-| `opp_ftm` | Int64 |  |
-| `opp_orb` | Int64 |  |
-| `opp_drb` | Int64 |  |
-| `opp_to` | Int64 |  |
-| `opp_stl` | Int64 |  |
-| `opp_blk` | Int64 |  |
-| `opp_ast` | Int64 |  |
-| `opp_foul` | Int64 |  |
-| `stint_num` | Int64 |  |
+| `opp_plus_minus` | Int64 | Opponent scoring margin while the lineup was on the floor during the stint. |
+| `opp_fga` | Int64 | Opponent field-goal attempts while the lineup was on the floor during the stint. |
+| `opp_fgm` | Int64 | Opponent field goals made while the lineup was on the floor during the stint. |
+| `opp_rima` | Int64 | Opponent rim shots attempted while the lineup was on the floor during the stint. |
+| `opp_rimm` | Int64 | Opponent rim shots made while the lineup was on the floor during the stint. |
+| `opp_rim_ast` | Int64 | Opponent assisted rim makes while the lineup was on the floor during the stint. |
+| `opp_mida` | Int64 | Opponent mid-range shots attempted while the lineup was on the floor during the stint. |
+| `opp_midm` | Int64 | Opponent mid-range shots made while the lineup was on the floor during the stint. |
+| `opp_mid_ast` | Int64 | Opponent assisted mid-range makes while the lineup was on the floor during the stint. |
+| `opp_fg2a` | Int64 | Opponent two-point attempts while the lineup was on the floor during the stint. |
+| `opp_fg2m` | Int64 | Opponent two-point makes while the lineup was on the floor during the stint. |
+| `opp_tpa` | Int64 | Opponent three-point attempts while the lineup was on the floor during the stint. |
+| `opp_tpm` | Int64 | Opponent three-point makes while the lineup was on the floor during the stint. |
+| `opp_tp_ast` | Int64 | Opponent assisted three-point makes while the lineup was on the floor during the stint. |
+| `opp_fta` | Int64 | Opponent free-throw attempts while the lineup was on the floor during the stint. |
+| `opp_ftm` | Int64 | Opponent free throws made while the lineup was on the floor during the stint. |
+| `opp_orb` | Int64 | Opponent offensive rebounds while the lineup was on the floor during the stint. |
+| `opp_drb` | Int64 | Opponent defensive rebounds while the lineup was on the floor during the stint. |
+| `opp_to` | Int64 | Opponent turnovers while the lineup was on the floor during the stint. |
+| `opp_stl` | Int64 | Opponent steals while the lineup was on the floor during the stint. |
+| `opp_blk` | Int64 | Opponent blocks while the lineup was on the floor during the stint. |
+| `opp_ast` | Int64 | Opponent assists while the lineup was on the floor during the stint. |
+| `opp_foul` | Int64 | Opponent fouls committed while the lineup was on the floor during the stint. |
+| `stint_num` | Int64 | Sequential on-floor stint number for the lineup within the game. |
 | `contest_id` | String | stats.ncaa.org contest (game) identifier. |
 | `season` | Int64 | Season year. |
 
@@ -1333,34 +1333,34 @@ Release: [ncaa_mbb_matchup_stints](https://github.com/sportsdataverse/sportsdata
 | `game_date` | String | Game date (YYYY-MM-DD). |
 | `home` | String | Home. |
 | `away` | String | Away record. |
-| `game_stint_num` | Int64 |  |
+| `game_stint_num` | Int64 | Sequential stint number within the game, incremented at every substitution by either team. |
 | `period` | Int64 | Period of the game (1-4 quarters; 5+ for OT). |
-| `start_seconds` | Int64 |  |
-| `end_seconds` | Int64 |  |
+| `start_seconds` | Int64 | Elapsed game seconds at which the stint began. |
+| `end_seconds` | Int64 | Elapsed game seconds at which the stint ended. |
 | `duration_seconds` | Int64 | Streak duration in seconds. |
-| `matchup_key` | String |  |
-| `home_lineup_key` | String |  |
-| `away_lineup_key` | String |  |
-| `home_lineup` | String |  |
-| `away_lineup` | String |  |
-| `end_home_score` | Int64 |  |
-| `end_away_score` | Int64 |  |
-| `n_events` | Int64 |  |
-| `n_possessions` | Int64 |  |
-| `start_home_score` | Int64 |  |
-| `start_away_score` | Int64 |  |
-| `home_pts` | Int64 |  |
-| `away_pts` | Int64 |  |
-| `home_1` | String |  |
-| `home_2` | String |  |
-| `home_3` | String |  |
-| `home_4` | String |  |
-| `home_5` | String |  |
-| `away_1` | String |  |
-| `away_2` | String |  |
-| `away_3` | String |  |
-| `away_4` | String |  |
-| `away_5` | String |  |
+| `matchup_key` | String | Combined home-plus-away lineup key identifying the ten-player matchup on the floor. |
+| `home_lineup_key` | String | Sorted player-code key for the home five on the floor. |
+| `away_lineup_key` | String | Sorted player-code key for the away five on the floor. |
+| `home_lineup` | String | Delimited names of the home five on the floor during the stint. |
+| `away_lineup` | String | Delimited names of the away five on the floor during the stint. |
+| `end_home_score` | Int64 | Home team score when the stint ended. |
+| `end_away_score` | Int64 | Away team score when the stint ended. |
+| `n_events` | Int64 | Number of play-by-play events falling within the stint. |
+| `n_possessions` | Int64 | Number of possessions falling within the stint. |
+| `start_home_score` | Int64 | Home team score when the stint began. |
+| `start_away_score` | Int64 | Away team score when the stint began. |
+| `home_pts` | Int64 | Points scored by the home team during the stint. |
+| `away_pts` | Int64 | Points scored by the away team during the stint. |
+| `home_1` | String | Name of the home team's on-floor player in lineup slot 1 for the stint. |
+| `home_2` | String | Name of the home team's on-floor player in lineup slot 2 for the stint. |
+| `home_3` | String | Name of the home team's on-floor player in lineup slot 3 for the stint. |
+| `home_4` | String | Name of the home team's on-floor player in lineup slot 4 for the stint. |
+| `home_5` | String | Name of the home team's on-floor player in lineup slot 5 for the stint. |
+| `away_1` | String | Name of the away team's on-floor player in lineup slot 1 for the stint. |
+| `away_2` | String | Name of the away team's on-floor player in lineup slot 2 for the stint. |
+| `away_3` | String | Name of the away team's on-floor player in lineup slot 3 for the stint. |
+| `away_4` | String | Name of the away team's on-floor player in lineup slot 4 for the stint. |
+| `away_5` | String | Name of the away team's on-floor player in lineup slot 5 for the stint. |
 
 ```python
 load_ncaa_mbb_matchup_stints(seasons=2024)
@@ -1376,21 +1376,21 @@ Release: [ncaa_mbb_shots](https://github.com/sportsdataverse/sportsdataverse-dat
 | `season` | Int64 | Season year. |
 | `team_id` | String | Unique team identifier. |
 | `shooter_id` | String | Unique identifier for shooter. |
-| `shot_x` | Float64 |  |
-| `shot_y` | Float64 |  |
-| `dist_ft` | Float64 |  |
-| `shot_zone` | String |  |
+| `shot_x` | Float64 | Court x-coordinate of the attempt in feet, decoded from the stats.ncaa.org shot-chart map. |
+| `shot_y` | Float64 | Court y-coordinate of the attempt in feet, decoded from the stats.ncaa.org shot-chart map. |
+| `dist_ft` | Float64 | Shot distance from the basket in feet. |
+| `shot_zone` | String | Labeled zone of the attempt (rim, mid-range, or three-point). |
 | `shot_type` | String | Shot type label (e.g. 'Jump Shot', 'Layup'). |
-| `made` | Boolean |  |
-| `point_value` | Int64 |  |
+| `made` | Boolean | Whether the shot was made. |
+| `point_value` | Int64 | Point value of the attempt (2 or 3). |
 | `period` | Null | Period of the game (1-4 quarters; 5+ for OT). |
-| `sec_left` | Null |  |
+| `sec_left` | Null | Seconds remaining in the period when the shot was taken (all-null in current captures). |
 | `source` | String | News source. |
 | `contest_id` | String | stats.ncaa.org contest (game) identifier. |
-| `ncaa_team_id` | String |  |
+| `ncaa_team_id` | String | stats.ncaa.org team identifier of the shooting team. |
 | `espn_team_id` | String | ESPN team id (canonical key). |
-| `shooter_player_id` | String |  |
-| `shooter_clean_name` | String |  |
+| `shooter_player_id` | String | stats.ncaa.org player identifier of the shooter. |
+| `shooter_clean_name` | String | Normalized (diacritics- and punctuation-cleaned) name of the shooter. |
 | `espn_game_id` | String | ESPN game id (NA for bart-only rows). |
 
 ```python
@@ -1405,12 +1405,12 @@ Release: [ncaa_mbb_rapm_within_team](https://github.com/sportsdataverse/sportsda
 | col_name | type | description |
 |---|---|---|
 | `team` | String | Team-side label or team identifier. |
-| `player_code` | String |  |
-| `rapm_off` | Float64 |  |
-| `rapm_def` | Float64 |  |
-| `team_off_poss` | Float64 |  |
-| `num_players` | Int64 |  |
-| `rapm_net` | Float64 |  |
+| `player_code` | String | Short unique-within-team player code generated from the player's name (hoop-explorer convention). |
+| `rapm_off` | Float64 | Ridge-regressed offensive RAPM per 100 possessions, estimated relative to the player's own teammates. |
+| `rapm_def` | Float64 | Ridge-regressed defensive RAPM per 100 possessions relative to teammates; positive means good defense. |
+| `team_off_poss` | Float64 | Team offensive possessions underlying the within-team fit. |
+| `num_players` | Int64 | Number of players in the team's RAPM design matrix. |
+| `rapm_net` | Float64 | Net RAPM — the sum of the offensive and defensive components, per 100 possessions. |
 | `season` | Int32 | Season year. |
 | `player_id` | String | Unique player identifier. |
 | `team_id` | String | Unique team identifier. |
