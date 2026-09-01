@@ -945,8 +945,8 @@ def _spot_key(abbr: pl.Expr) -> pl.Expr:
 def _spot_side_map(play_df: pl.DataFrame) -> pl.DataFrame:
     """Learn which team each text abbreviation refers to, from this game's end spots.
 
-    For every play whose text ends "... to the ABC nn" and whose ESPN
-    ``end.yardsToEndzone`` is known, the yardline is either ``nn`` (ABC is the
+    For every play whose text carries a "... to the ABC nn" spot (the LAST one
+    when there are several) and whose ESPN ``end.yardsToEndzone`` is known, the yardline is either ``nn`` (ABC is the
     defending team's side) or ``100 - nn`` (ABC is the possessing team's side).
     Each such play votes; the majority per abbreviation wins, with a floor of two
     votes and 60% agreement so a single mis-stated spot cannot flip a side. The
@@ -960,10 +960,13 @@ def _spot_side_map(play_df: pl.DataFrame) -> pl.DataFrame:
     needed = {"text", "end.yardsToEndzone", "pos_team", "def_pos_team"}
     if not needed.issubset(play_df.columns):
         return pl.DataFrame(schema={"_catch_abbr": pl.Utf8, "_catch_team": play_df.schema["pos_team"]})
+    # A play can carry several "to the ..." spots (a fumble return, a penalty
+    # restatement); ESPN's end.yardsToEndzone describes the LAST one.
+    last_spot = pl.col("text").str.extract_all(_END_SPOT_RE).list.last()
     votes = (
         play_df.select(
-            _catch_abbr=_spot_key(pl.col("text").str.extract(_END_SPOT_RE, 1)),
-            _yl=pl.col("text").str.extract(_END_SPOT_RE, 2).cast(pl.Int64),
+            _catch_abbr=_spot_key(last_spot.str.extract(_END_SPOT_RE, 1)),
+            _yl=last_spot.str.extract(_END_SPOT_RE, 2).cast(pl.Int64),
             _end=pl.col("end.yardsToEndzone").cast(pl.Int64),
             _pos=pl.col("pos_team"),
             _def=pl.col("def_pos_team"),

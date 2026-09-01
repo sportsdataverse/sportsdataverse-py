@@ -381,3 +381,32 @@ def test_side_vote_needs_a_majority_and_two_votes():
     )
     out = _run_air_yards(rows)
     assert out["air_yardsToEndzone"].to_list()[-2:] == [20, None]  # JSU still defending side (3 of 4 votes)
+
+
+def test_side_vote_uses_the_last_spot_of_a_multi_spot_play():
+    """A fumble return names two spots; only the final one matches ESPN's end yardline."""
+    rows = [
+        # NDSU rush to the JSU 30, fumble, returned by JSU to the NDSU 45: ball ends 55 from the
+        # NDSU goal, i.e. ESPN end.yardsToEndzone (NDSU still charted as pos_team) = 55.
+        # First spot would vote JSU = defending (30 == ... no: 30 != 55 and 30 != 45), so it must
+        # not be used; the LAST spot NDSU45 -> 100 - 45 == 55 -> NDSU is the possessing side.
+        _vendor_row(
+            "#3 C.Miller rush for 5 yards to the JSU30, fumble forced, recovered by JSU #9 returned to the NDSU45",
+            pos_team=_NDSU_ID,
+            start_ytg=35,
+            end_ytg=55,
+        ),
+        _vendor_row("#3 C.Miller rush for 3 yards to the NDSU43", pos_team=_NDSU_ID, start_ytg=60, end_ytg=57),
+        # no direct JSU end spots: JSU's side must come only from the fumble play NOT mis-voting
+        _vendor_row(
+            "pass complete to Y caught at NDSU40, for 5 yards",
+            pos_team=_JSU_ID,
+            start_ytg=45,
+            end_ytg=35,
+            stat_yardage=5,
+            completion=True,
+        ),
+    ]
+    out = _run_air_yards(rows)
+    # NDSU learned as itself from two clean last-spot votes; JSU throwing to the NDSU 40 -> 40 to go -> 5 air yards
+    assert out["air_yardsToEndzone"][-1] == 40 and out["air_yards"][-1] == 5
