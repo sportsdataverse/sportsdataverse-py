@@ -273,6 +273,16 @@ def _roster_keys(season: int) -> pl.DataFrame:
     if roster is None or roster.height == 0:
         return pl.DataFrame(schema={"season": pl.Int64, "team_id": pl.Utf8, "player_id": pl.Utf8})
 
+    if "team_id" in roster.columns:
+        # espn_cfb_rosters (#399) carries the ESPN team id directly, so no name
+        # crosswalk is needed -- and none is possible: it has no `team` column.
+        # The name path below is kept for the CFBD-shaped roster (`team` = school).
+        return roster.select(
+            pl.lit(season, dtype=pl.Int64).alias("season"),
+            pl.col("team_id").cast(pl.Int64).cast(pl.Utf8).alias("team_id"),
+            pl.col("athlete_id").cast(pl.Utf8).alias("player_id"),
+        ).drop_nulls(["team_id", "player_id"])
+
     info = load_cfb_team_info(season)
     if isinstance(info, pd.DataFrame):
         info = pl.from_pandas(info)
