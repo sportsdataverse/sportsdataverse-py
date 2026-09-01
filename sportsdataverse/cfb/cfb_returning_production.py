@@ -249,23 +249,24 @@ def _production_from_box(box: pl.DataFrame, season: int) -> pl.DataFrame:
 def _roster_keys(season: int) -> pl.DataFrame:
     """Season-S roster as ``(season, team_id, player_id)`` with REAL team ids.
 
-    Rosters ship a team NAME and no team id, so this is the one place a name is
-    still involved. It resolves against ``load_cfb_team_info``'s ``school``
-    column, NOT the teams crosswalk: the crosswalk keys on school+mascot
-    ("western kentucky hilltoppers") while rosters carry school only ("Western
-    Kentucky"), which matched 0.0% of 2023 rows. `team_info` carries school and
-    `team_id` side by side, so the join is direct.
+    Two roster shapes reach this function:
 
-    Matching folds case (CLAUDE.md: names join case-insensitively unless case is
-    load-bearing) and falls back through ESPN's alternate names.
-
-    The match rate is ASSERTED rather than assumed -- an unresolved roster makes
-    every player look departed, which reads as "this team returns nobody"
-    instead of as a failure.
+    * **ESPN** (``espn_cfb_rosters``, what :func:`load_cfb_rosters` serves since
+      #399): carries ``team_id`` directly. Keys are taken as-is; rows with a null
+      ``team_id`` or ``athlete_id`` are dropped (ESPN emits none in practice) and
+      no match-rate check applies -- there is nothing to resolve.
+    * **CFBD-shaped** (a ``team`` school-name column, no id): resolved against
+      ``load_cfb_team_info``'s ``school`` column, NOT the teams crosswalk -- the
+      crosswalk keys on school+mascot ("western kentucky hilltoppers") while
+      that roster carries school only ("Western Kentucky"), which matched 0.0%
+      of 2023 rows. Matching folds case and falls back through ESPN's
+      alternate names. The match rate is ASSERTED rather than assumed: an
+      unresolved roster makes every player look departed, which reads as
+      "this team returns nobody" instead of as a failure.
 
     Raises:
-        ValueError: If fewer than :data:`_MIN_ROSTER_MATCH` of roster rows
-            resolve to a team id.
+        ValueError: CFBD-shaped roster only -- if fewer than
+            :data:`_MIN_ROSTER_MATCH` of roster rows resolve to a team id.
     """
     roster = load_cfb_rosters(season)
     if isinstance(roster, pd.DataFrame):
@@ -444,8 +445,10 @@ def cfb_returning_production(
         (typed) when the box data is unavailable.
 
     Raises:
-        ValueError: If the season-S roster cannot be resolved to team ids above
-            the crosswalk match floor.
+        ValueError: Only when the season-S roster is CFBD-shaped (``team`` name,
+            no ``team_id``) and cannot be resolved to team ids above the
+            crosswalk match floor; the ESPN roster carries ``team_id`` and
+            needs no resolution.
 
     Example:
         Quick start::
