@@ -928,6 +928,73 @@ def _abbr_compat(abbr_col: pl.Expr, team_u: pl.Expr) -> pl.Expr:
     return (abbr_col == team_u) | team_u.str.starts_with(abbr_col) | abbr_col.str.starts_with(team_u)
 
 
+#: A field-position token in the 2025+ vendor play text: a school abbreviation of
+#: up to two words in any case ("SDSU", "Sac St", "NC ST", "Mizzou", "Wake F",
+#: "BC."), an optional dot/space, then the 1-2 digit yardline. The abbreviation is
+#: optional so a bare "50" (midfield) still yields the yardline.
+_SPOT_TOKEN_RE = r"(?:([A-Za-z][A-Za-z&.\-]*(?: [A-Za-z][A-Za-z&.\-]*)?)\.? ?)?(\d{1,2})\b"
+_CATCH_SPOT_RE = r"(?i)(?:caught at|thrown to) (?:the )?" + _SPOT_TOKEN_RE
+_END_SPOT_RE = r"(?i)to the " + _SPOT_TOKEN_RE
+
+
+def _spot_key(abbr: pl.Expr) -> pl.Expr:
+    """Normalise a text abbreviation for matching: upper-case, no spaces or dots."""
+    return abbr.str.to_uppercase().str.replace_all(r"[ .]", "")
+
+
+def _spot_side_map(play_df: pl.DataFrame) -> pl.DataFrame:
+    """Learn which team each text abbreviation refers to, from this game's end spots.
+
+    For every play whose text carries a "... to the ABC nn" spot (the LAST one
+    when there are several) and whose ESPN ``end.yardsToEndzone`` is known, the yardline is either ``nn`` (ABC is the
+    defending team's side) or ``100 - nn`` (ABC is the possessing team's side).
+    Each such play votes; the majority per abbreviation wins, with a floor of two
+    votes and 60% agreement so a single mis-stated spot cannot flip a side. The
+    50 is skipped (it votes for both).
+
+    Returns:
+        polars.DataFrame: ``_catch_abbr`` (normalised key) -> ``_catch_team``
+        (team id, same dtype as ``pos_team``); empty when the frame lacks the
+        columns the vote needs.
+    """
+    needed = {"text", "end.yardsToEndzone", "pos_team", "def_pos_team"}
+    if not needed.issubset(play_df.columns):
+        return pl.DataFrame(schema={"_catch_abbr": pl.Utf8, "_catch_team": play_df.schema["pos_team"]})
+    # A play can carry several "to the ..." spots (a fumble return, a penalty
+    # restatement); ESPN's end.yardsToEndzone describes the LAST one.
+    last_spot = pl.col("text").str.extract_all(_END_SPOT_RE).list.last()
+    votes = (
+        play_df.select(
+            _catch_abbr=_spot_key(last_spot.str.extract(_END_SPOT_RE, 1)),
+            _yl=last_spot.str.extract(_END_SPOT_RE, 2).cast(pl.Int64),
+            _end=pl.col("end.yardsToEndzone").cast(pl.Int64),
+            _pos=pl.col("pos_team"),
+            _def=pl.col("def_pos_team"),
+        )
+        .drop_nulls(["_catch_abbr", "_yl", "_end"])
+        .filter(pl.col("_yl") != 50)
+        .with_columns(
+            _catch_team=pl.when(pl.col("_end") == 100 - pl.col("_yl"))
+            .then(pl.col("_pos"))
+            .when(pl.col("_end") == pl.col("_yl"))
+            .then(pl.col("_def"))
+            .otherwise(None)
+        )
+        .drop_nulls("_catch_team")
+        .group_by("_catch_abbr", "_catch_team")
+        .len()
+    )
+    if votes.height == 0:
+        return votes.select("_catch_abbr", "_catch_team")
+    return (
+        votes.with_columns(_total=pl.col("len").sum().over("_catch_abbr"))
+        .sort(["_catch_abbr", "len"], descending=[False, True])
+        .unique(subset=["_catch_abbr"], keep="first", maintain_order=True)
+        .filter((pl.col("len") >= 2) & (pl.col("len") >= 0.6 * pl.col("_total")))
+        .select("_catch_abbr", "_catch_team")
+    )
+
+
 def _reorder_late_inserts(plays_df: pl.DataFrame) -> pl.DataFrame:
     """Move plays ESPN inserted late (2014+ feed) back to where their sequence says they belong.
 
@@ -4600,14 +4667,27 @@ class CFBPlayProcess(object):
         ESPN annotates pass plays with the on-field catch/target point as
         ``"caught at OU35"`` (completions) or ``"thrown to TEX42"`` (targets).
         The stated yardline is relative to whichever team owns that side of the
-        field, not the offense, so the abbreviation in the text is resolved to
-        the possessing-vs-defending team -- using the same prefix-tolerant
-        matcher (:func:`_abbr_compat`) that resolves recovery/penalty teams, so
-        ESPN's BUF/BUFF two-abbreviation-form inconsistency still resolves --
-        then converted to yards-to-endzone:
+        field, not the offense, so the abbreviation in the text has to be sided
+        as possessing-vs-defending. The 2025+ vendor text uses each school's OWN
+        abbreviation (``UHM``, ``GSO``, ``USC`` for South Carolina, ``Sac St``,
+        ``BC.``) which frequently is not ESPN's ``homeTeamAbbrev`` /
+        ``awayTeamAbbrev`` (``HAW``, ``GASO``, ``SC``) -- in 2025 that dropped
+        one whole team's plays in a quarter of new-template games. So the side
+        is resolved in this order:
+
+        1. the game's own text: every ``"... to the ABC nn"`` end spot is
+           compared with ESPN's numeric ``end.yardsToEndzone`` and votes for
+           ``ABC`` being the possessing or the defending team
+           (:func:`_spot_side_map`); the majority per abbreviation wins;
+        2. ESPN's abbreviations through the prefix-tolerant :func:`_abbr_compat`
+           (BUF/BUFF still resolves);
+        3. otherwise null -- never a guess.
+
+        Then converted to yards-to-endzone:
 
         * catch abbrev on the possessing team's side -> ``100 - yardline``
         * catch abbrev on the defending team's side  -> ``yardline``
+        * a spot at the 50 -> ``50`` (no abbreviation needed)
         * no air-yards text / unresolved abbreviation -> null
 
         ``air_yards = start.yardsToEndzone - air_yardsToEndzone`` and
@@ -4638,18 +4718,29 @@ class CFBPlayProcess(object):
         def_abbr = pl.when(pl.col("def_pos_team") == pl.col("homeTeamId")).then(home_u).otherwise(away_u)
 
         play_df = play_df.with_columns(
-            _catch_abbr=pl.col("text")
-            .str.extract(r"(?i)(?:caught at|thrown to) ([A-Za-z]+)\d{1,2}", 1)
-            .str.to_uppercase(),
-            _catch_yardline=pl.col("text")
-            .str.extract(r"(?i)(?:caught at|thrown to) [A-Za-z]+(\d{1,2})", 1)
-            .cast(pl.Int64),
+            _catch_abbr=_spot_key(pl.col("text").str.extract(_CATCH_SPOT_RE, 1)),
+            _catch_yardline=pl.col("text").str.extract(_CATCH_SPOT_RE, 2).cast(pl.Int64),
         )
+        # Learn this game's text abbreviations from its end spots, then side the
+        # catch spot with that map first; ESPN's abbreviation is only the fallback.
+        sides = _spot_side_map(play_df)
+        if sides.height:
+            play_df = play_df.join(sides, on="_catch_abbr", how="left")
+        else:
+            play_df = play_df.with_columns(_catch_team=pl.lit(None, dtype=play_df.schema["pos_team"]))
         play_df = play_df.with_columns(
-            air_yardsToEndzone=pl.when(
-                pl.col("_catch_abbr").is_null().or_(pl.col("_catch_yardline").is_null()),
-            )
+            air_yardsToEndzone=pl.when(pl.col("_catch_yardline").is_null())
             .then(pl.lit(None, dtype=pl.Int64))
+            # midfield is 50 from either endzone; the text often carries no abbreviation there
+            .when(pl.col("_catch_yardline") == 50)
+            .then(pl.lit(50, dtype=pl.Int64))
+            .when(pl.col("_catch_abbr").is_null())
+            .then(pl.lit(None, dtype=pl.Int64))
+            # game-learned side of the field
+            .when(pl.col("_catch_team") == pl.col("pos_team"))
+            .then(100 - pl.col("_catch_yardline"))
+            .when(pl.col("_catch_team") == pl.col("def_pos_team"))
+            .then(pl.col("_catch_yardline"))
             # possessing-team side of the field: yards still to go from the catch point
             .when(_abbr_compat(pl.col("_catch_abbr"), pos_abbr))
             .then(100 - pl.col("_catch_yardline"))
@@ -4670,7 +4761,7 @@ class CFBPlayProcess(object):
             .then(pl.col("statYardage").cast(pl.Int64) - pl.col("air_yards"))
             .otherwise(pl.lit(None, dtype=pl.Int64)),
         )
-        return play_df.drop("_catch_abbr", "_catch_yardline")
+        return play_df.drop("_catch_abbr", "_catch_yardline", "_catch_team")
 
     def __add_player_cols(self, play_df):
         play_df = (
