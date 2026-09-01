@@ -4,6 +4,8 @@ from __future__ import annotations
 
 import importlib
 
+import pytest
+
 import polars as pl
 
 from sportsdataverse.cfb.cfb_returning_production import _returning_from_frames
@@ -91,9 +93,10 @@ def test_roster_keys_use_espn_team_id_without_name_crosswalk(monkeypatch) -> Non
         }
     )
     monkeypatch.setattr(rp, "load_cfb_rosters", lambda season: espn_roster)
+    monkeypatch.setattr(rp, "load_cfb_rosters_cfbd", lambda season: pl.DataFrame())
 
     def _no_info(season):  # pragma: no cover - the assertion is that it is never reached
-        raise AssertionError("team_info crosswalk must not run for an ESPN roster")
+        raise AssertionError("team_info crosswalk must not run when only the ESPN roster is present")
 
     monkeypatch.setattr(rp, "load_cfb_team_info", _no_info)
     out = rp._roster_keys(2025)
@@ -101,3 +104,39 @@ def test_roster_keys_use_espn_team_id_without_name_crosswalk(monkeypatch) -> Non
     assert out["team_id"].to_list() == ["333", "333"]  # null team_id row dropped
     assert out["player_id"].to_list() == ["1", "2"]
     assert out.schema["team_id"] == pl.Utf8 and out.schema["player_id"] == pl.Utf8
+
+
+def test_roster_keys_union_espn_and_cfbd_for_the_season_in_progress(monkeypatch) -> None:
+    """Week 1: ESPN game rosters cover a handful of teams; the CFBD preseason roster fills the rest.
+
+    A player listed by both sources appears once; the CFBD school name is resolved
+    through team_info to the same ESPN team id the ESPN roster carries.
+    """
+    espn_roster = pl.DataFrame({"season": [2026, 2026], "team_id": [333, 333], "athlete_id": [1, 2]})
+    cfbd_roster = pl.DataFrame(
+        {
+            "athlete_id": ["2", "3", "4", "5"],
+            "team": ["Alabama", "Alabama", "Auburn", "Nowhere State"],
+        }
+    )
+    info = pl.DataFrame({"team_id": [333, 2], "school": ["Alabama", "Auburn"], "alt_name1": [None, None]})
+    monkeypatch.setattr(rp, "load_cfb_rosters", lambda season: espn_roster)
+    monkeypatch.setattr(rp, "load_cfb_rosters_cfbd", lambda season: cfbd_roster)
+    monkeypatch.setattr(rp, "load_cfb_team_info", lambda season: info)
+    monkeypatch.setattr(rp, "_MIN_ROSTER_MATCH", 0.5)  # 3 of 4 CFBD rows resolve; "Nowhere State" does not
+    out = rp._roster_keys(2026).sort("team_id", "player_id")
+    assert out.rows() == [(2026, "2", "4"), (2026, "333", "1"), (2026, "333", "2"), (2026, "333", "3")]
+
+
+def test_roster_keys_cfbd_match_floor_still_asserts(monkeypatch) -> None:
+    monkeypatch.setattr(rp, "load_cfb_rosters", lambda season: pl.DataFrame())
+    monkeypatch.setattr(
+        rp,
+        "load_cfb_rosters_cfbd",
+        lambda season: pl.DataFrame({"athlete_id": ["1", "2"], "team": ["Nowhere", "Elsewhere"]}),
+    )
+    monkeypatch.setattr(
+        rp, "load_cfb_team_info", lambda season: pl.DataFrame({"team_id": [1], "school": ["Somewhere"]})
+    )
+    with pytest.raises(ValueError, match="resolved to a team id"):
+        rp._roster_keys(2026)

@@ -39,7 +39,12 @@ import warnings
 import pandas as pd
 import polars as pl
 
-from sportsdataverse.cfb.cfb_loaders import load_cfb_player_box, load_cfb_rosters, load_cfb_team_info
+from sportsdataverse.cfb.cfb_loaders import (
+    load_cfb_player_box,
+    load_cfb_rosters,
+    load_cfb_rosters_cfbd,
+    load_cfb_team_info,
+)
 from sportsdataverse._codegen_runtime import _read_release_parquet
 from sportsdataverse.cfb.cfb_crosswalk import _norm_team
 from sportsdataverse.cfb.cfb_projection_constants import get_constants
@@ -246,43 +251,65 @@ def _production_from_box(box: pl.DataFrame, season: int) -> pl.DataFrame:
     )
 
 
+_EMPTY_KEYS = {"season": pl.Int64, "team_id": pl.Utf8, "player_id": pl.Utf8}
+
+
 def _roster_keys(season: int) -> pl.DataFrame:
     """Season-S roster as ``(season, team_id, player_id)`` with REAL team ids.
 
-    Two roster shapes reach this function:
+    Two sources are UNIONED, because neither is complete on its own:
 
     * **ESPN** (``espn_cfb_rosters``, what :func:`load_cfb_rosters` serves since
-      #399): carries ``team_id`` directly. Keys are taken as-is; rows with a null
-      ``team_id`` or ``athlete_id`` are dropped (ESPN emits none in practice) and
-      no match-rate check applies -- there is nothing to resolve.
-    * **CFBD-shaped** (a ``team`` school-name column, no id): resolved against
-      ``load_cfb_team_info``'s ``school`` column, NOT the teams crosswalk -- the
-      crosswalk keys on school+mascot ("western kentucky hilltoppers") while
-      that roster carries school only ("Western Kentucky"), which matched 0.0%
-      of 2023 rows. Matching folds case and falls back through ESPN's
-      alternate names. The match rate is ASSERTED rather than assumed: an
-      unresolved roster makes every player look departed, which reads as
-      "this team returns nobody" instead of as a failure.
+      #399): built from game rosters, so it carries ``team_id`` directly but
+      only lists players who have dressed -- for the season in progress that is
+      a handful of teams (2026 week 1: 4 teams, 476 rows), which made every
+      returning-production fraction collapse toward zero.
+    * **CFBD** (``cfbfastR-data`` rosters, :func:`load_cfb_rosters_cfbd`): the
+      preseason roster for every team, keyed by school name and ESPN athlete
+      id. Resolved against ``load_cfb_team_info``'s ``school`` column, NOT the
+      teams crosswalk -- the crosswalk keys on school+mascot ("western kentucky
+      hilltoppers") while this roster carries school only ("Western Kentucky"),
+      which matched 0.0% of 2023 rows. Matching folds case and falls back
+      through ESPN's alternate names. Its match rate is ASSERTED: an unresolved
+      roster makes every player look departed, which reads as "this team
+      returns nobody" instead of as a failure.
+
+    A player is "on the roster" if either source lists them (Connelly's
+    definition is roster membership, not appearances). Rows with a null id are
+    dropped; the union is de-duplicated on ``(team_id, player_id)``.
 
     Raises:
-        ValueError: CFBD-shaped roster only -- if fewer than
-            :data:`_MIN_ROSTER_MATCH` of roster rows resolve to a team id.
+        ValueError: If the CFBD roster is present but fewer than
+            :data:`_MIN_ROSTER_MATCH` of its rows resolve to a team id.
     """
+    parts = [_espn_roster_keys(season), _cfbd_roster_keys(season)]
+    parts = [p for p in parts if p.height]
+    if not parts:
+        return pl.DataFrame(schema=_EMPTY_KEYS)
+    return pl.concat(parts).unique(subset=["team_id", "player_id"], maintain_order=True)
+
+
+def _espn_roster_keys(season: int) -> pl.DataFrame:
+    """ESPN game-roster keys: ``team_id`` is carried directly, nothing to resolve."""
     roster = load_cfb_rosters(season)
     if isinstance(roster, pd.DataFrame):
         roster = pl.from_pandas(roster)
-    if roster is None or roster.height == 0:
-        return pl.DataFrame(schema={"season": pl.Int64, "team_id": pl.Utf8, "player_id": pl.Utf8})
+    if roster is None or roster.height == 0 or "team_id" not in roster.columns:
+        return pl.DataFrame(schema=_EMPTY_KEYS)
+    return roster.select(
+        pl.lit(season, dtype=pl.Int64).alias("season"),
+        pl.col("team_id").cast(pl.Int64).cast(pl.Utf8).alias("team_id"),
+        pl.col("athlete_id").cast(pl.Utf8).alias("player_id"),
+    ).drop_nulls(["team_id", "player_id"])
 
-    if "team_id" in roster.columns:
-        # espn_cfb_rosters (#399) carries the ESPN team id directly, so no name
-        # crosswalk is needed -- and none is possible: it has no `team` column.
-        # The name path below is kept for the CFBD-shaped roster (`team` = school).
-        return roster.select(
-            pl.lit(season, dtype=pl.Int64).alias("season"),
-            pl.col("team_id").cast(pl.Int64).cast(pl.Utf8).alias("team_id"),
-            pl.col("athlete_id").cast(pl.Utf8).alias("player_id"),
-        ).drop_nulls(["team_id", "player_id"])
+
+def _cfbd_roster_keys(season: int) -> pl.DataFrame:
+    """CFBD preseason-roster keys, school name resolved to the ESPN team id."""
+    roster = load_cfb_rosters_cfbd(season)
+    if isinstance(roster, pd.DataFrame):
+        roster = pl.from_pandas(roster)
+    if roster is None or roster.height == 0 or "team" not in roster.columns:
+        return pl.DataFrame(schema=_EMPTY_KEYS)
 
     info = load_cfb_team_info(season)
     if isinstance(info, pd.DataFrame):
@@ -445,10 +472,10 @@ def cfb_returning_production(
         (typed) when the box data is unavailable.
 
     Raises:
-        ValueError: Only when the season-S roster is CFBD-shaped (``team`` name,
-            no ``team_id``) and cannot be resolved to team ids above the
-            crosswalk match floor; the ESPN roster carries ``team_id`` and
-            needs no resolution.
+        ValueError: If the season-S CFBD roster cannot be resolved to team ids
+            above the crosswalk match floor (the ESPN roster carries ``team_id``
+            and needs no resolution; the two are unioned, see
+            :func:`_roster_keys`).
 
     Example:
         Quick start::
