@@ -233,7 +233,9 @@ def mlb_expected_stats(
       non-batted-ball PA-ENDING outcomes)) / derived_woba_denom`` -- the
       denominator is DERIVED from ``events`` (PA enders minus intentional
       walks / sac bunts / catcher interference), never trusted from a cache
-      vintage's ``woba_denom`` column.
+      vintage's ``woba_denom`` column. The numerator excludes those same
+      zero-denominator events, and a PA-ending walk/HBP whose ``woba_value``
+      is null in a given vintage is filled with the fixed weights .69 / .72.
     * ``xba = sum(predicted_ba over at-bat balls in play) / ab``
     * ``xslg = sum(predicted_tb over at-bat balls in play) / ab``
 
