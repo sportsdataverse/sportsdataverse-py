@@ -289,7 +289,9 @@ def mlb_expected_stats(
     pitches = pitches.with_columns(season_expr.alias("season"))
 
     pitches = _add_value_columns(pitches)
-    grid = build_outcome_grid(pitches)
+    # The outcome grid's cell means likewise use only PA-ending batted balls —
+    # an events-less "batted ball" row carries no realized outcome to average.
+    grid = build_outcome_grid(pitches.filter(pl.col("events").is_not_null() & (pl.col("events") != "")))
 
     bip_mask = (pl.col("type") == "X") & pl.col("launch_speed").is_not_null() & pl.col("launch_angle").is_not_null()
     # PA-ender discipline: pa / ab / the wOBA denominator count only rows that
@@ -303,7 +305,11 @@ def mlb_expected_stats(
     zero_denom = pl.col("events").is_in(list(_WOBA_DENOM_ZERO_EVENTS))
     non_ab = pl.col("events").is_in(list(_NON_AB_EVENTS))
 
-    bip = pitches.filter(bip_mask)
+    # A batted-ball row must ALSO be a PA ender: a type=="X" row with launch
+    # data but a null/empty ``events`` is a feed artifact, and without this
+    # gate it would count toward pa while the events-derived masks exclude it
+    # from every denominator (the inconsistency this fix exists to remove).
+    bip = pitches.filter(bip_mask & pa_end_mask)
     non_bip_pa = pitches.filter(~bip_mask & pa_end_mask)
 
     if bip.height > 0:

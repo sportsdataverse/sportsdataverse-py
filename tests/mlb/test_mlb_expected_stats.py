@@ -191,3 +191,24 @@ def test_intent_walk_excluded_from_woba_denom_and_ab() -> None:
     assert row["pa"] == 2
     assert row["ab"] == 1
     assert abs(row["xwoba"] - 0.9 / 1) < 1e-9  # IBB contributes neither numerator nor denominator
+
+
+def test_batted_ball_row_without_events_is_ignored_everywhere() -> None:
+    """Sourcery review of #421: a type=='X' row with launch data but a
+    null/empty events value must not count toward pa (nor the grid) — it is a
+    feed artifact, not a plate appearance."""
+    rows = {
+        "batter": [1, 1, 1],
+        "game_date": ["2024-06-01"] * 3,
+        "type": ["X", "X", "S"],
+        "events": ["single", None, "strikeout"],
+        "launch_speed": [95.0, 96.0, None],
+        "launch_angle": [10.0, 11.0, None],
+        "woba_value": [0.9, None, 0.0],
+        "woba_denom": [1.0, None, 1.0],
+    }
+    out = mlb_expected_stats("2024-06-01", "2024-06-21", puller=_pitchy_puller_factory(rows))
+    row = out.row(0, named=True)
+    assert row["pa"] == 2  # the events-less batted ball is not a PA
+    assert row["ab"] == 2  # single + strikeout
+    assert abs(row["xwoba"] - (0.9 + 0.0) / 2) < 1e-9
