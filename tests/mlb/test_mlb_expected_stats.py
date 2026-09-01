@@ -125,3 +125,69 @@ def test_mlb_expected_stats_empty_pull_returns_documented_schema() -> None:
     out = mlb_expected_stats("2024-06-01", "2024-06-21", puller=_empty_puller)
     assert out.height == 0
     assert out.columns == ["batter", "season", "pa", "ab", "xwoba", "xba", "xslg"]
+
+
+def _pitchy_puller_factory(rows: dict):
+    def _puller(start_dt: str, end_dt: str, *, player_type: str = "batter") -> pl.DataFrame:
+        return pl.DataFrame(rows)
+
+    return _puller
+
+
+def test_pa_counts_plate_appearance_enders_not_pitches() -> None:
+    """Regression (2026-09 incident): raw ball/strike pitch rows must not
+    inflate pa/ab — a Statcast search pull carries EVERY pitch."""
+    rows = {
+        "batter": [1] * 10,
+        "game_date": ["2024-06-01"] * 10,
+        "type": ["B", "S", "X", "B", "S", "B", "S", "S", "B", "S"],
+        "events": [None, None, "single", None, "strikeout", None, "walk", None, None, None],
+        "launch_speed": [None, None, 95.0, None, None, None, None, None, None, None],
+        "launch_angle": [None, None, 10.0, None, None, None, None, None, None, None],
+        "woba_value": [None, None, 0.9, None, 0.0, None, 0.7, None, None, None],
+        "woba_denom": [None, None, 1.0, None, 1.0, None, 1.0, None, None, None],
+    }
+    out = mlb_expected_stats("2024-06-01", "2024-06-21", puller=_pitchy_puller_factory(rows))
+    row = out.row(0, named=True)
+    assert row["pa"] == 3  # single, strikeout, walk — NOT 10 pitches
+    assert row["ab"] == 2  # walk is not an at-bat
+    # numerator: predicted woba on the lone BIP (grid mean = 0.9) + K 0.0 + walk 0.7
+    assert abs(row["xwoba"] - (0.9 + 0.0 + 0.7) / 3) < 1e-9
+    assert abs(row["xba"] - 1.0 / 2) < 1e-9  # predicted ba on the BIP = cell/global mean 1.0
+
+
+def test_vintage_missing_woba_denom_and_null_walk_value_stays_on_scale() -> None:
+    """Regression (2026-09 incident): a cache vintage with NO woba_denom
+    column and null woba_value on the walk must not corrupt the scale — the
+    denominator is derived from events and the walk gets the fixed fallback."""
+    rows = {
+        "batter": [1, 1, 1],
+        "game_date": ["2024-06-01"] * 3,
+        "type": ["X", "S", "B"],
+        "events": ["single", "strikeout", "walk"],
+        "launch_speed": [95.0, None, None],
+        "launch_angle": [10.0, None, None],
+        "woba_value": [0.9, 0.0, None],  # walk value missing in this vintage
+    }
+    out = mlb_expected_stats("2024-06-01", "2024-06-21", puller=_pitchy_puller_factory(rows))
+    row = out.row(0, named=True)
+    assert row["pa"] == 3
+    assert abs(row["xwoba"] - (0.9 + 0.0 + 0.69) / 3) < 1e-9  # 0.69 = fixed walk fallback
+
+
+def test_intent_walk_excluded_from_woba_denom_and_ab() -> None:
+    rows = {
+        "batter": [1, 1],
+        "game_date": ["2024-06-01"] * 2,
+        "type": ["X", "B"],
+        "events": ["single", "intent_walk"],
+        "launch_speed": [95.0, None],
+        "launch_angle": [10.0, None],
+        "woba_value": [0.9, 0.0],
+        "woba_denom": [1.0, 0.0],
+    }
+    out = mlb_expected_stats("2024-06-01", "2024-06-21", puller=_pitchy_puller_factory(rows))
+    row = out.row(0, named=True)
+    assert row["pa"] == 2
+    assert row["ab"] == 1
+    assert abs(row["xwoba"] - 0.9 / 1) < 1e-9  # IBB contributes neither numerator nor denominator

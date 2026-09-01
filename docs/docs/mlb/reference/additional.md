@@ -1141,9 +1141,17 @@ contact `woba`/`ba`/`slg` per batted ball with the launch-angle-
 marginal fallback, then aggregates:
 
 * `xwoba = (sum(predicted_woba over balls in play) + sum(woba_value over
-  non-batted-ball PA outcomes)) / sum(woba_denom)`
-* `xba = sum(predicted_ba over balls in play) / ab`
-* `xslg = sum(predicted_tb over balls in play) / ab`
+  non-batted-ball PA-ENDING outcomes)) / derived_woba_denom` -- the
+  denominator is DERIVED from `events` (PA enders minus intentional
+  walks / sac bunts / catcher interference), never trusted from a cache
+  vintage's `woba_denom` column.
+* `xba = sum(predicted_ba over at-bat balls in play) / ab`
+* `xslg = sum(predicted_tb over at-bat balls in play) / ab`
+
+`pa` counts PLATE-APPEARANCE-ENDING rows only (`events` non-null),
+never raw pitches -- a Statcast search pull carries every pitch, and
+counting them (the pre-fix behavior) inflated `pa`/`ab` by ~4x and
+corrupted `xba`/`xslg` scales.
 
 **Parameters**
 
