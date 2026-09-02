@@ -151,6 +151,15 @@ def test_malformed_containers_degrade_to_zero_rows(payload):
     assert dict(df.schema) == INJURY_SNAPSHOT_SCHEMA
 
 
+#: The only columns a record carrying nothing but ``id`` can populate. Every other
+#: column in the schema is derived from a nested object, so when that object is
+#: collapsed to the wrong shape its columns MUST come back null. Asserting the
+#: WHOLE row against this set, rather than a per-case list of the fields the case
+#: names, is what makes the test able to fail: it also catches a leak into a field
+#: the case did not name.
+_IDENTITY_COLUMNS = {"as_of_date", "league", "team_id", "injury_id"}
+
+
 @pytest.mark.parametrize(
     "record",
     [
@@ -171,7 +180,12 @@ def test_collapsed_nested_objects_null_their_fields_instead_of_raising(record):
         as_of_date=STAMP,
     )
     assert df.height == 1
-    assert df["injury_id"].to_list() == ["9"]
+    row = df.row(0, named=True)
+    # Identity survives...
+    assert row["injury_id"] == "9"
+    assert row["team_id"] == "1"
+    # ...and NOTHING derived from the collapsed object leaks a value.
+    assert {c for c, v in row.items() if v is not None} == _IDENTITY_COLUMNS
 
 
 def test_a_malformed_team_does_not_cost_the_valid_teams():
