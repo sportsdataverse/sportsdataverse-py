@@ -51,14 +51,26 @@ before they were kept (see the 2026-09-02 evaluation in the producers'
   stints (keyed by a cross-season person id), weight season ``s`` by
   ``decay ** (t - s)``, and offset each season's per-100 rate by its own
   scoring level so the pooled fit cannot credit a player for his era.
+  :func:`stack_seasons` builds that design and REFUSES a season after the
+  target; :func:`season_slice` cuts the pooled result back to one season's
+  participants and that season's own exposure, which is what a per-season
+  published asset must carry.
 
 **Uncertainty.** :func:`solve_rapm_league` also reports per-player standard
 errors from the ridge POSTERIOR: with the Gaussian prior
 ``beta ~ N(0, sigma^2 / lambda)`` that the penalty encodes and
 possession-weighted Gaussian errors, the posterior covariance is
 ``sigma^2 (X'WX + lambda I)^-1``, where ``sigma^2`` is the weighted residual
-variance on ``n_stints - df_eff`` degrees of freedom (``df_eff`` = trace of
-the ridge hat matrix). This is the Bayesian (credible-interval) SE and is
+variance on ``sum(fit_weight) - df_eff`` degrees of freedom (``df_eff`` =
+trace of the ridge hat matrix). Without ``fit_weight`` that sum IS the stint
+count and the formula is the familiar one; with a decayed multi-season weight
+it is not, because ``w = n_poss`` is inverse-variance weighting (a stint's
+per-100 rate averages ``n_poss`` possessions) while ``w = n_poss * decay`` is
+not: each row then contributes ``decay * sigma^2`` to the weighted residual
+sum, so dividing by the ROW COUNT would deflate ``sigma^2`` -- and every
+published SE with it -- by exactly ``mean(decay)``, which is 0.583 on a
+three-season 0.5-decay pool and has nothing to do with the estimate being
+sharper. This is the Bayesian (credible-interval) SE and is
 what the ``*_se`` columns carry: an interval for the TRUE impact under the
 prior, which widens exactly where the prior is doing the work (a
 low-possession player sits at ~0 +/- the prior SD ``sigma/sqrt(lambda)``).
@@ -89,8 +101,11 @@ __all__ = [
     "STINT_SCHEMA",
     "aggregate_stints",
     "possession_deciles",
+    "season_slice",
+    "stint_exposure",
     "solve_rapm_league",
     "split_half_se_check",
+    "stack_seasons",
     "team_aggregate",
 ]
 
@@ -320,6 +335,136 @@ def _prior_vector(prior_mean: pl.DataFrame, players: "list[str]", n_players: int
     return b0
 
 
+def stint_exposure(stints: pl.DataFrame) -> pl.DataFrame:
+    """``player_id`` -> ``off_poss`` / ``def_poss`` from a stint frame's REAL possessions.
+
+    ``fit_weight`` is deliberately ignored: exposure is a count of possessions
+    PLAYED, never a count of possessions the fit chose to believe. Callers that
+    need a possession total (an SPM prior's exposure shrink, a possession bin)
+    use this so the count means the same thing everywhere.
+
+    Args:
+        stints: :func:`aggregate_stints` output (one season, or a pooled design).
+
+    Returns:
+        One row per player: ``player_id``, ``off_poss``, ``def_poss`` (Int64).
+
+    Example:
+        Season exposure::
+
+            stint_exposure(stints).sort("off_poss", descending=True).head()
+    """
+    parts = [
+        stints.select(pl.col(ids).alias("player_id"), pl.col("n_poss").alias(col)).explode(
+            "player_id", empty_as_null=False
+        )
+        for ids, col in (("off_ids", "off_poss"), ("def_ids", "def_poss"))
+    ]
+    return (
+        pl.concat(parts, how="diagonal")
+        .group_by("player_id")
+        .agg(
+            pl.col("off_poss").sum().fill_null(0).cast(pl.Int64),
+            pl.col("def_poss").sum().fill_null(0).cast(pl.Int64),
+        )
+    )
+
+
+def stack_seasons(per_season: "dict[int, pl.DataFrame]", target: int, decay: float) -> pl.DataFrame:
+    """Pool several seasons' stints into ONE decayed-weight design for ``target``.
+
+    Each season ``s`` contributes its stints with ``fit_weight = decay ** (target
+    - s)`` and ``y_offset`` equal to its own per-100 scoring level minus the
+    target season's, so a pooled fit can neither credit a player for his era's
+    pace nor weight a three-year-old possession like last night's. The stint
+    frames must be keyed by a CROSS-SEASON person id (see
+    ``mbb_ncaa_rapm_input.build_person_keys``) or the pool rates the same human
+    as several different players.
+
+    **Leakage boundary.** A season strictly after ``target`` is refused, not
+    down-weighted: the estimate published for season ``t`` must be computable
+    from what was known at the end of season ``t``.
+
+    Args:
+        per_season: ``{season: stints}``, each the output of
+            :func:`aggregate_stints`. Seasons ``> target`` raise.
+        target: The season the pooled fit is FOR.
+        decay: Per-season weight multiplier in ``(0, 1]``. ``1.0`` pools
+            unweighted; the producers use 0.5 (mbb) / 0.75 (wbb).
+
+    Returns:
+        One vertically concatenated stint frame carrying the extra
+        ``fit_weight`` / ``y_offset`` columns :func:`solve_rapm_league` reads.
+
+    Raises:
+        ValueError: a season is after ``target``, ``decay`` is outside
+            ``(0, 1]``, or ``target`` itself is absent from ``per_season``.
+
+    Example:
+        Three-season pool::
+
+            pooled = stack_seasons({2022: s22, 2023: s23, 2024: s24}, 2024, 0.5)
+            players, info = solve_rapm_league(pooled)
+    """
+    if not (0.0 < decay <= 1.0):
+        raise ValueError(f"stack_seasons: decay must be in (0, 1], got {decay}")
+    if target not in per_season:
+        raise ValueError(f"stack_seasons: target season {target} is not in per_season")
+    future = sorted(s for s in per_season if s > target)
+    if future:
+        raise ValueError(
+            f"stack_seasons: seasons {future} are after target {target} -- a season's "
+            "estimate may never be fitted on its own future"
+        )
+    level_t = _season_level(per_season[target])
+    return pl.concat(
+        [
+            st.with_columns(
+                pl.lit(float(decay ** (target - s))).alias("fit_weight"),
+                pl.lit(_season_level(st) - level_t).alias("y_offset"),
+            )
+            for s, st in sorted(per_season.items())
+        ],
+        how="vertical",
+    )
+
+
+def _season_level(stints: pl.DataFrame) -> float:
+    """Possession-weighted mean points per 100 of a stint frame."""
+    return float(100.0 * stints["pts"].sum() / stints["n_poss"].sum())
+
+
+def season_slice(players: pl.DataFrame, stints: pl.DataFrame) -> pl.DataFrame:
+    """Cut a POOLED fit's players back to ONE season's participants and exposure.
+
+    A fit pooled over seasons ``t-2 .. t`` rates everyone who played in any of
+    them, and its ``off_poss`` / ``def_poss`` are three-season sums. A per-season
+    published asset must be neither: this inner-joins the players to the
+    exposure of ``stints`` (the TARGET season alone), which in one step drops
+    everyone who did not play that season and restores the season's own
+    possession counts. Every other column -- coefficients and standard errors,
+    which are properties of the pooled fit -- is carried through untouched.
+
+    Args:
+        players: First element of a :func:`solve_rapm_league` return.
+        stints: The TARGET season's stints only (:func:`aggregate_stints`
+            output), NOT the pooled design.
+
+    Returns:
+        ``players`` restricted to the season's participants, with ``off_poss`` /
+        ``def_poss`` recomputed from ``stints``.
+
+    Example:
+        Publish one season out of a pooled fit::
+
+            pooled = stack_seasons({2023: s23, 2024: s24}, 2024, 0.5)
+            players, info = solve_rapm_league(pooled)
+            season_2024 = season_slice(players, s24)
+    """
+    out = players.drop("off_poss", "def_poss").join(stint_exposure(stints), on="player_id", how="inner")
+    return out.select([c for c in _PLAYERS_SCHEMA if c in out.columns])
+
+
 def solve_rapm_league(
     stints: pl.DataFrame,
     *,
@@ -441,6 +586,7 @@ def solve_rapm_league(
     if "y_offset" in s.columns:
         y = y - s["y_offset"].to_numpy().astype(np.float64)
     w = n_poss
+    fw = None
     if "fit_weight" in s.columns:
         fw = s["fit_weight"].to_numpy().astype(np.float64)
         if not np.isfinite(fw).all() or (fw < 0).any():
@@ -481,24 +627,11 @@ def solve_rapm_league(
 
     se_info: dict[str, float] = {}
     if compute_se:
-        se, se_info = _posterior_se(x, target, delta, n_players, float(ridge_lambda))
+        se, se_info = _posterior_se(x, target, delta, n_players, float(ridge_lambda), fit_weight=fw)
     else:
         se = {c: np.full(n_players, np.nan) for c in _SE_COLS}  # -> null below, never NaN
 
-    exposure = (
-        pl.concat(
-            [
-                off.select("pid", pl.col("n_poss").alias("off_poss")),
-                dfn.select("pid", pl.col("n_poss").alias("def_poss")),
-            ],
-            how="diagonal",
-        )
-        .group_by("pid")
-        .agg(
-            pl.col("off_poss").sum().fill_null(0).cast(pl.Int64),
-            pl.col("def_poss").sum().fill_null(0).cast(pl.Int64),
-        )
-    )
+    exposure = stint_exposure(s)
     out = (
         pl.DataFrame(
             {
@@ -509,7 +642,7 @@ def solve_rapm_league(
             }
         )
         .with_columns((pl.col("orapm") + pl.col("drapm")).alias("rapm_net"))
-        .join(exposure.rename({"pid": "player_id"}), on="player_id", how="left")
+        .join(exposure, on="player_id", how="left")
         .with_columns(
             pl.col("off_poss").fill_null(0).cast(pl.Int64),
             pl.col("def_poss").fill_null(0).cast(pl.Int64),
@@ -532,7 +665,12 @@ def solve_rapm_league(
 
 
 def _posterior_se(
-    x: Any, yw: np.ndarray, beta: np.ndarray, n_players: int, ridge_lambda: float
+    x: Any,
+    yw: np.ndarray,
+    beta: np.ndarray,
+    n_players: int,
+    ridge_lambda: float,
+    fit_weight: "np.ndarray | None" = None,
 ) -> "tuple[dict[str, np.ndarray], dict[str, float]]":
     """Posterior and sampling SEs of the ridge coefficients from ONE dense Cholesky inverse.
 
@@ -576,7 +714,19 @@ def _posterior_se(
     beta_exact = m @ (x.T @ yw)
     resid = yw - x @ beta
     df_eff = float(dim - ridge_lambda * diag.sum())
-    sigma2 = float(resid @ resid) / max(x.shape[0] - df_eff, 1.0)
+    # Residual degrees of freedom on the FIT-WEIGHT scale, not the row count.
+    # A stint's per-100 rate averages n_poss possessions, so with w = n_poss the
+    # weighting is inverse-variance and E[weighted residual^2] = sigma^2 for
+    # every row -- which is why dividing by (rows - df_eff) is right when there
+    # is no fit_weight. Under a decayed multi-season weight w = n_poss * d the
+    # weighting is no longer inverse-variance: E[weighted residual^2] = d
+    # sigma^2, so the SUM of the weights, not their count, is the denominator.
+    # Dividing by rows would deflate sigma2 by exactly mean(d) -- on a 3-season
+    # 0.5-decay pool that is 0.583, and it would shrink every published SE by
+    # 24% for a reason that has nothing to do with the estimate being sharper.
+    # Reduces to (rows - df_eff) exactly when fit_weight is absent or all ones.
+    dof = float(x.shape[0] if fit_weight is None else fit_weight.sum())
+    sigma2 = float(resid @ resid) / max(dof - df_eff, 1.0)
     p = np.arange(n_players)
     o, d = slice(0, n_players), slice(n_players, 2 * n_players)
     m2_diag = np.einsum("ij,ij->i", m, m)  # diag(M^2)
@@ -610,6 +760,7 @@ def split_half_se_check(
     resolved: pl.DataFrame,
     *,
     ridge_lambda: float = DEFAULT_RIDGE_LAMBDA,
+    refit: "Any | None" = None,
 ) -> "tuple[pl.DataFrame, dict[str, float]]":
     """Odd-vs-even-game refit: are the standard errors on the right scale?
 
@@ -631,6 +782,13 @@ def split_half_se_check(
         resolved: Output of ``resolve_possessions`` WITH its ``contest_id``
             column (integer-like).
         ridge_lambda: Passed to both half fits.
+        refit: Optional ``(half_resolved, half_index) -> (players, info)``
+            replacing the default single-season flat-ridge half fit. Pass it
+            when the PUBLISHED estimator is not that fit -- a pooled or
+            prior-shrunk producer must check the standard errors it actually
+            publishes, and it must split every pooled season by the same
+            parity, or the two halves share possessions and the coverage is
+            inflated by construction.
 
     Returns:
         ``(per_player, summary)``. ``per_player`` has one row per player
@@ -663,7 +821,10 @@ def split_half_se_check(
     fits = []
     for h in (0, 1):
         part = halves.filter(pl.col("_half") == h)
-        players, _ = solve_rapm_league(aggregate_stints(part), ridge_lambda=ridge_lambda)
+        if refit is None:
+            players, _ = solve_rapm_league(aggregate_stints(part), ridge_lambda=ridge_lambda)
+        else:
+            players, _ = refit(part, h)
         fits.append((players, part.get_column("contest_id").n_unique()))
     (pa, n_a), (pb, n_b) = fits
     assert isinstance(pa, pl.DataFrame) and isinstance(pb, pl.DataFrame)

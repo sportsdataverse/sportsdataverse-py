@@ -20,8 +20,11 @@ from sportsdataverse.mbb.mbb_ncaa_rapm_league import (
     STINT_SCHEMA,
     aggregate_stints,
     possession_deciles,
+    stint_exposure,
+    season_slice,
     solve_rapm_league,
     split_half_se_check,
+    stack_seasons,
     team_aggregate,
 )
 
@@ -689,3 +692,132 @@ class TestStackedDesignColumns:
         s = _balanced_stints(n=20).with_columns(pl.lit(-1.0).alias("fit_weight"))
         with pytest.raises(ValueError, match="fit_weight"):
             solve_rapm_league(s, ridge_lambda=100.0, compute_se=False)
+
+
+def _season_stints(extra_id=None, n=40, pts_per_poss=1.0):
+    """One season of stints; ``extra_id`` replaces h5 in half the lineups."""
+    five = _H[:4] + [extra_id] if extra_id else _H
+    rows = []
+    for _ in range(n):
+        rows.append(("Duke", "Iowa", "Duke", 0, _H, _A))
+        rows.append(("Duke", "Iowa", "Duke", 0, five, _A))
+    s = aggregate_stints(_poss(rows))
+    return s.with_columns((pl.col("n_poss") * pts_per_poss).cast(pl.Int64).alias("pts"))
+
+
+class TestStackSeasons:
+    def test_a_season_after_the_target_is_refused(self):
+        # The leakage boundary. Season t's published estimate must be computable
+        # from what was known at the end of season t -- a future season is an
+        # error, never a down-weighted contributor.
+        per = {2023: _season_stints(), 2024: _season_stints(), 2025: _season_stints()}
+        with pytest.raises(ValueError, match=r"\[2025\] are after target 2024"):
+            stack_seasons(per, 2024, 0.5)
+
+    def test_missing_target_and_bad_decay_raise(self):
+        per = {2023: _season_stints()}
+        with pytest.raises(ValueError, match="target season 2024"):
+            stack_seasons(per, 2024, 0.5)
+        with pytest.raises(ValueError, match="decay"):
+            stack_seasons({2024: _season_stints()}, 2024, 0.0)
+
+    def test_weights_decay_and_levels_are_centred_on_the_target(self):
+        older = _season_stints(pts_per_poss=2.0)  # a 200-per-100 era
+        target = _season_stints(pts_per_poss=1.0)  # a 100-per-100 era
+        pooled = stack_seasons({2022: older, 2024: target}, 2024, 0.5)
+        w = dict(zip(pooled["fit_weight"].to_list(), pooled["y_offset"].to_list()))
+        assert sorted(w) == [0.25, 1.0]  # decay ** 2 and decay ** 0
+        assert abs(w[1.0]) < 1e-9  # the target season IS the reference level
+        assert abs(w[0.25] - 100.0) < 1e-6  # the older era's level, relative
+
+    def test_single_season_undecayed_is_the_plain_fit(self):
+        # A no-op test with teeth: the hooks must not perturb a one-season pool.
+        s = _balanced_stints(ppp_starter=2.0, ppp_sub=1.0, n=50)
+        plain, _ = solve_rapm_league(s, ridge_lambda=100.0, compute_se=False)
+        pooled, _ = solve_rapm_league(stack_seasons({2024: s}, 2024, 1.0), ridge_lambda=100.0, compute_se=False)
+        j = plain.join(pooled, on="player_id", suffix="_p")
+        assert (j["orapm_p"] - j["orapm"]).abs().max() < 1e-9
+
+
+class TestSeasonSlice:
+    def test_drops_players_absent_from_the_target_season(self):
+        # h9 played only in 2022. A pooled fit rates him; the 2022-only rating
+        # must not be published as a 2024 row.
+        old = _season_stints(extra_id="h9")
+        target = _season_stints(extra_id="h8")
+        pooled = stack_seasons({2022: old, 2024: target}, 2024, 0.5)
+        players, _ = solve_rapm_league(pooled, ridge_lambda=100.0, compute_se=False)
+        assert "h9" in players["player_id"].to_list()
+        sliced = season_slice(players, target)
+        assert "h9" not in sliced["player_id"].to_list()
+        assert "h8" in sliced["player_id"].to_list()
+        assert set(sliced["player_id"]) == set(stint_exposure(target)["player_id"])
+
+    def test_exposure_is_the_target_season_only_not_the_pooled_sum(self):
+        old = _season_stints()
+        target = _season_stints()
+        pooled = stack_seasons({2022: old, 2023: old, 2024: target}, 2024, 0.5)
+        players, _ = solve_rapm_league(pooled, ridge_lambda=100.0, compute_se=False)
+        sliced = season_slice(players, target)
+        want = stint_exposure(target).sort("player_id")
+        got = sliced.select("player_id", "off_poss", "def_poss").sort("player_id")
+        assert got.equals(want.select("player_id", "off_poss", "def_poss").sort("player_id"))
+        # and the pooled frame really did carry three seasons' worth
+        pooled_poss = players.filter(pl.col("player_id") == "h1")["off_poss"].item()
+        assert pooled_poss == 3 * got.filter(pl.col("player_id") == "h1")["off_poss"].item()
+
+    def test_coefficients_and_standard_errors_pass_through_untouched(self):
+        target = _season_stints()
+        pooled = stack_seasons({2023: _season_stints(), 2024: target}, 2024, 0.5)
+        players, _ = solve_rapm_league(pooled, ridge_lambda=100.0)
+        sliced = season_slice(players, target)
+        assert list(sliced.columns) == list(players.columns)
+        j = players.join(sliced, on="player_id", suffix="_s")
+        for c in ("orapm", "drapm", "rapm_net", "rapm_net_se", "orapm_se", "drapm_se"):
+            assert (j[f"{c}_s"] - j[c]).abs().max() < 1e-12
+
+
+class TestSplitHalfRefitHook:
+    def test_refit_hook_is_used_for_both_halves(self):
+        # The SE gate must test the estimator that is actually PUBLISHED; a
+        # producer that pools or shrinks passes its own half fit here.
+        res = _noisy_resolved(n_poss=2000, n_games=12)
+        seen = []
+
+        def refit(part, h):
+            seen.append(h)
+            return solve_rapm_league(aggregate_stints(part), ridge_lambda=5000.0)
+
+        _pp, summary = split_half_se_check(res, refit=refit)
+        assert seen == [0, 1]
+        pp2, _base = split_half_se_check(res, ridge_lambda=1000.0)
+        # The hook's lambda=5000 shrinks harder than the default 1000: proof the
+        # hook's fit -- not the default one -- produced the frame.
+        j = _pp.join(pp2, on="player_id", suffix="_d")
+        assert j["rapm_net_a"].abs().max() < j["rapm_net_a_d"].abs().max()
+        assert summary["n_players"] == _base["n_players"]
+
+
+class TestSigma2UnderFitWeight:
+    def test_uniform_fit_weight_leaves_sigma2_untouched(self):
+        s = _noisy_resolved(n_poss=3000, n_games=10)
+        st = aggregate_stints(s)
+        _p, base = solve_rapm_league(st, ridge_lambda=1000.0)
+        _p2, one = solve_rapm_league(st.with_columns(pl.lit(1.0).alias("fit_weight")), ridge_lambda=1000.0)
+        assert abs(one["sigma2"] - base["sigma2"]) < 1e-9
+
+    def test_decayed_pool_of_identical_seasons_keeps_the_residual_scale(self):
+        # Two IDENTICAL seasons pooled at decay 0.5: the fit and every row's
+        # residual are unchanged, so the residual VARIANCE must be too. Dividing
+        # the weighted residual sum by the ROW COUNT instead of the weight sum
+        # would report it 25% low (mean decay = 0.75) -- a silent 13% shrink of
+        # every published standard error, bought by nothing.
+        s = _noisy_resolved(n_poss=3000, n_games=10)
+        st = aggregate_stints(s)
+        _p, base = solve_rapm_league(st, ridge_lambda=1000.0)
+        pooled = stack_seasons({2023: st, 2024: st}, 2024, 0.5)
+        _pp, pool_info = solve_rapm_league(pooled, ridge_lambda=1000.0)
+        assert abs(pool_info["sigma2"] / base["sigma2"] - 1.0) < 0.05
+        # and the row-count denominator really would have been ~0.75x
+        rows, dof = pooled.height, float(pooled["fit_weight"].sum())
+        assert abs(dof / rows - 0.75) < 1e-9
