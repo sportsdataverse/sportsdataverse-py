@@ -1,0 +1,18 @@
+schema: mlb_fielding_oaa
+kind: dataframe
+columns:
+- name: fielder_id
+  type: character
+  description: ''
+- name: position
+  type: integer
+  description: ''
+- name: direction
+  type: character
+  description: ''
+- name: opportunities
+  type: integer
+  description: ''
+- name: oaa
+  type: double
+  description: ''

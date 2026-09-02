@@ -258,15 +258,13 @@ def mlb_fielding_oaa(
         return_as_pandas: Return a pandas DataFrame instead of polars.
 
     Returns:
-        pl.DataFrame: one row per ``(fielder_id, position)``.
-
-        | Column | Type | Description |
-        |---|---|---|
-        | fielder_id | Utf8 | Responsible fielder's MLBAM id |
-        | position | Int64 | Position (Savant ``hit_location``, 1-9) |
-        | direction | Utf8 | ``in``/``back``/``lateral`` -- only when ``by_direction=True`` |
-        | opportunities | Int64 | Balls in play charged to this fielder |
-        | oaa | Float64 | Sum of (out - expected catch probability) |
+        pl.DataFrame: one row per ``(fielder_id, position)`` -- or per
+        ``(fielder_id, position, direction)`` when ``by_direction=True`` --
+        with ``opportunities`` and ``oaa``. The rendered column table comes
+        from the committed returns schema
+        (``tools/codegen/schemas/autodoc/mlb/mlb_fielding_oaa.yaml``); a
+        Markdown table written here would be collapsed onto one line by the
+        docs renderer, which joins the lines of a ``Returns:`` block.
 
     Example:
         Quick start::

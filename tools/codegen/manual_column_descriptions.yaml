@@ -19674,6 +19674,12 @@ games:
   start: Kickoff timestamp (ISO 8601 string).
   has_stats: Whether PFF has published stats for the game.
   lock_status: Data lock/publish status for the game.
+mlb_fielding_oaa:
+  fielder_id: Responsible fielder's MLBAM id (the fielder charged with the ball in play).
+  position: Fielding position from Savant's ``hit_location``, 1-9.
+  direction: Movement direction the catch required -- ``in``, ``back`` or ``lateral``. Present only when the call passes ``by_direction=True``; the three rows re-group the same scored balls in play, so they sum exactly to the undirected ``oaa``.
+  opportunities: Balls in play charged to this fielder (the denominator of the OAA sum).
+  oaa: Outs above average -- the sum of (out - expected catch probability) over this fielder's opportunities.
 mlb_run_expectancy_matrix:
   base_state: 3-char base occupancy code ("_" = empty, "1"/"2"/"3" = occupied), e.g. "1_3" for runners on first and third.
   outs: Outs at the start of the base-out state (0-2).
