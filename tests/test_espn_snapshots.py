@@ -424,7 +424,9 @@ def test_depthchart_fetch_stamps_one_date_and_paces_the_teams(monkeypatch):
         return raw
 
     monkeypatch.setattr(mod.time, "sleep", lambda s: slept.append(s))
-    monkeypatch.setattr("sportsdataverse.nba.espn_nba_team_depthcharts", fake_fetch, raising=False)
+    # no raising=False: if the wrapper is renamed or gone, the patch must fail
+    # rather than pass silently against a function this test never exercised
+    monkeypatch.setattr("sportsdataverse.nba.espn_nba_team_depthcharts", fake_fetch)
 
     df = espn_depthcharts_snapshot("nba", team_ids=[1, 2, 17], as_of_date=STAMP)
 
@@ -451,3 +453,14 @@ def test_live_depthchart_snapshot_returns_ranked_joinable_rows():
     assert df.height > 30
     assert df["athlete_id"].null_count() == 0
     assert df["depth_rank"].min() == 1
+
+
+def test_a_league_without_a_teams_wrapper_raises_the_same_clear_error(monkeypatch):
+    """The teams lookup is resolved in the same guard as the depthcharts wrapper,
+    so a half-wired league fails with the documented ValueError rather than an
+    AttributeError from three lines later."""
+    import sportsdataverse.nba as nba
+
+    monkeypatch.delattr(nba, "espn_nba_teams", raising=True)
+    with pytest.raises(ValueError, match="depth charts"):
+        espn_depthcharts_snapshot("nba")

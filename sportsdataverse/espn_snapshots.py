@@ -522,15 +522,18 @@ def espn_depthcharts_snapshot(
     try:
         module = importlib.import_module(f"sportsdataverse.{league}")
         fetch = getattr(module, f"espn_{league}_team_depthcharts")
+        # resolved in the same guard: a league missing its teams wrapper must
+        # fail with the same clear error, not an AttributeError three lines later
+        list_teams = None if team_ids is not None else getattr(module, f"espn_{league}_teams")
     except (ImportError, AttributeError) as exc:
         raise ValueError(
             f"no espn_{league}_team_depthcharts wrapper -- leagues with depth charts: "
             f"{', '.join(ESPN_DEPTHCHART_LEAGUES)}"
         ) from exc
-    if team_ids is None:
-        team_ids = getattr(module, f"espn_{league}_teams")()["team_id"].to_list()
+    if list_teams is not None:
+        team_ids = list_teams()["team_id"].to_list()
     frames: List[pl.DataFrame] = []
-    for index, team_id in enumerate(team_ids):
+    for index, team_id in enumerate(team_ids or []):
         if index and request_delay > 0:
             time.sleep(request_delay)
         frames.append(
