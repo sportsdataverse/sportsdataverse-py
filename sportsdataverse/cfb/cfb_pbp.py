@@ -6574,7 +6574,10 @@ class CFBPlayProcess(object):
                 # 14 of the 24 real red-zone snaps.
                 rz_play=pl.when(pl.col("start.yardsToEndzone") <= 20).then(True).otherwise(False),
                 under_2=pl.when(pl.col("start.TimeSecsRem") <= 120).then(True).otherwise(False),
-                goal_to_go=pl.when(pl.col("start.distance") >= pl.col("start.yardsToEndzone"))
+                # goal-to-go is an equality, not a threshold: the line to gain IS the goal line, so
+                # the distance needed equals the yards remaining. `>=` would also swallow a feed row
+                # where distance exceeds yards-to-goal, which is not a real down and distance.
+                goal_to_go=pl.when(pl.col("start.distance") == pl.col("start.yardsToEndzone"))
                 .then(True)
                 .otherwise(False),
                 scoring_opp=pl.when(pl.col("start.yardsToEndzone") <= 40).then(True).otherwise(False),
