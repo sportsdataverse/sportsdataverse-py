@@ -298,17 +298,44 @@ def _shot_geometry(frame: pl.DataFrame) -> pl.DataFrame:
     ``docs/superpowers/specs/2026-06-09-hockeytech-multi-league-scraper-analytics-design.md``).
     No geometry is computed in this module.
 
-    When geometry must be derived (the frame lacks ``shot_distance``/``shot_angle``),
-    ``x_coord`` is range-checked first (:func:`_assert_rink_feet`) so a RAW-scale
-    enrich frame can never be silently scored with the NHL ``goal_x=89``.
-    """
-    if {"shot_distance", "shot_angle"}.issubset(frame.columns):
-        return frame
-    from sportsdataverse.hockeytech._analytics import add_shot_distance_angle
+    Reuse is **per row**, not per frame: a pooled multi-season frame concatenated
+    ``how="diagonal_relaxed"`` carries the columns from the seasons that ship them
+    and NULL for the seasons that don't, so a frame-level short-circuit left the
+    older seasons with null geometry that :func:`_build_xg_features` then fills
+    with ``0.0`` -- 10,593 of 18,031 pooled PWHL shots (58.7%) trained at distance
+    0. Shot rows whose carried geometry is null are recomputed and coalesced in;
+    carried values are never overwritten (feed and recomputed geometry agree to
+    0.0 ft on the seasons that carry both, so this is lossless).
 
+    When geometry must be derived, ``x_coord`` is range-checked first
+    (:func:`_assert_rink_feet`) so a RAW-scale enrich frame can never be silently
+    scored with the NHL ``goal_x=89``.
+    """
+    from sportsdataverse.hockeytech._analytics import _SHOT_EVENTS, add_shot_distance_angle
+
+    has = {"shot_distance", "shot_angle"}.issubset(frame.columns)
+    if has:
+        gap = pl.col("shot_distance").is_null() | pl.col("shot_angle").is_null()
+        if "event" in frame.columns:
+            gap = gap & pl.col("event").is_in(_SHOT_EVENTS)
+        if not frame.select(gap.any()).item():
+            return frame
     _assert_rink_feet(frame)
     f = frame if "event" in frame.columns else frame.with_columns(pl.lit("shot").alias("event"))
-    return add_shot_distance_angle(f)
+    if not has:
+        return add_shot_distance_angle(f)
+    carried = f.with_columns(
+        _carried_distance=pl.col("shot_distance").cast(pl.Float64, strict=False),
+        _carried_angle=pl.col("shot_angle").cast(pl.Float64, strict=False),
+    ).drop("shot_distance", "shot_angle")
+    return (
+        add_shot_distance_angle(carried)
+        .with_columns(
+            shot_distance=pl.coalesce("_carried_distance", "shot_distance"),
+            shot_angle=pl.coalesce("_carried_angle", "shot_angle"),
+        )
+        .drop("_carried_distance", "_carried_angle")
+    )
 
 
 _XG_BASE_FEATURES = ("shot_distance", "shot_angle")
@@ -415,9 +442,11 @@ def _build_xg_features(
 
     - ``rebound`` -- shot within 3s of the prior shot in the game (needs
       ``game_id`` + ``sec_from_start``).
-    - ``is_home`` / ``is_pp`` / ``is_sh`` -- shooter-relative home flag and
-      power-play/short-handed dummies (needs ``team_id`` + ``home_team_id`` +
-      ``skaters_home`` / ``skaters_away``, i.e. the R4 strength columns).
+    - ``is_home`` -- shooter-relative home flag (needs ``team_id`` +
+      ``home_team_id`` ONLY; see the note in the body).
+    - ``is_pp`` / ``is_sh`` / ``empty_net_for`` -- power-play/short-handed/pulled-goalie
+      dummies (need the R4 strength columns ``skaters_home`` / ``skaters_away``
+      in addition to the team ids).
 
     A frame that lacks those columns (e.g. the legacy xG fixture, or a pre-R4
     pbp) degrades to the 2-feature distance/angle model unchanged. At predict
@@ -445,19 +474,25 @@ def _build_xg_features(
             .sort("_ri")
         )
         avail.append("rebound")
+    home = pl.col("team_id") == pl.col("home_team_id")
+    if {"team_id", "home_team_id"}.issubset(f.columns):
+        # `is_home` needs only the team ids -- it is deliberately NOT gated on the R4
+        # strength columns. It used to share their `if`, so a season scored alone
+        # without `skaters_home`/`skaters_away` (2024, 2025) silently lost `is_home`
+        # too and every row scored as away: ~25% lower xG for the same shots.
+        f = f.with_columns(is_home=home.cast(pl.Int64))
+        avail.append("is_home")
     if {"team_id", "home_team_id", "skaters_home", "skaters_away"}.issubset(f.columns):
-        home = pl.col("team_id") == pl.col("home_team_id")
         sk_for = pl.when(home).then(pl.col("skaters_home")).otherwise(pl.col("skaters_away"))
         sk_opp = pl.when(home).then(pl.col("skaters_away")).otherwise(pl.col("skaters_home"))
         f = f.with_columns(
-            is_home=home.cast(pl.Int64),
             is_pp=(sk_for > sk_opp).fill_null(False).cast(pl.Int64),
             is_sh=(sk_for < sk_opp).fill_null(False).cast(pl.Int64),
             # defending team shows >=6 skaters => their goalie is pulled => the
             # shooter faces an empty net (the booster's `empty_net`; PWHL's SH gap).
             empty_net_for=(sk_opp >= 6).fill_null(False).cast(pl.Int64),
         )
-        avail += ["is_home", "is_pp", "is_sh", "empty_net_for"]
+        avail += ["is_pp", "is_sh", "empty_net_for"]
     if "event_type" in f.columns:
         # Shot type -- PWHL's `event_type` on shot rows IS the shot type
         # (Wrist/Snap/Slap/Backhand/Tip; "Default" => all zero). The NHL booster's

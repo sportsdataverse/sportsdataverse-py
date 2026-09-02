@@ -753,3 +753,73 @@ def test_strength_calibration_improves_real_pwhl_per_strength_ece() -> None:
     reg_r, reg_c = _bucket_ece(y_r, p_r), _bucket_ece(y_c, p_c)
     assert reg_c <= reg_r + 2e-3, f"overall held-out ECE regressed: {reg_c:.4f} vs {reg_r:.4f}"
     assert roc_auc_score(y_c, p_c) >= roc_auc_score(y_r, p_r) - 0.002, "calibration cost AUC"
+
+
+# ---------------------------------------------------------------------------
+# Pooled-frame regressions (2026-09-02). Two production-affecting defects the
+# hockey model writeup measured on the committed pwhl-data pbp tree:
+#
+#   1. `_shot_geometry` short-circuited on COLUMN PRESENCE, so a pooled frame
+#      concatenated `how="diagonal_relaxed"` from seasons that ship geometry
+#      (2026) and seasons that don't (2024/2025) kept NULL geometry for the
+#      older seasons -- `_build_xg_features` then filled it with 0.0 and the
+#      publisher's single pooled fit trained 10,593 of 18,031 shots (58.7%)
+#      at distance 0.
+#   2. `is_home` shared the `if` of the R4 strength columns, so a season scored
+#      ALONE without `skaters_home`/`skaters_away` lost `is_home` too.
+#
+# Both fixtures below carry REAL PWHL coordinates (the committed 2024+2025
+# shots fixture); the season-asymmetry and the team-id columns are the shapes
+# under test.
+# ---------------------------------------------------------------------------
+
+
+def test_pooled_frame_recomputes_null_geometry(train_shots: pl.DataFrame) -> None:
+    """A pooled frame with season-asymmetric geometry must not train at distance 0."""
+    from sportsdataverse.pwhl.pwhl_xg_proxy import _build_xg_features, _shot_geometry
+
+    from sportsdataverse.hockeytech._analytics import add_shot_distance_angle
+
+    on_net = train_shots.filter(pl.col("event") == "shot")
+    with_geo = add_shot_distance_angle(on_net.filter(pl.col("season") == 2025))
+    without_geo = on_net.filter(pl.col("season") == 2024)
+    pooled = pl.concat([without_geo, with_geo], how="diagonal_relaxed")
+    assert pooled.select(pl.col("shot_distance").is_null().sum()).item() == without_geo.height
+
+    out = _shot_geometry(pooled)
+    assert out.select(pl.col("shot_distance").is_null().sum()).item() == 0
+    assert out.select(pl.col("shot_angle").is_null().sum()).item() == 0
+
+    # carried values are reused verbatim, never overwritten (lossless)
+    carried = with_geo.select("shot_distance").to_series()
+    reused = out.tail(with_geo.height).select("shot_distance").to_series()
+    assert (carried - reused).abs().max() == 0.0
+
+    x, feats, _ = _build_xg_features(pooled)
+    n_zero = int((x[:, feats.index("shot_distance")] == 0.0).sum())
+    assert n_zero == 0, f"{n_zero} shots would train at distance 0"
+
+
+def test_is_home_survives_a_season_scored_without_skater_columns(train_shots: pl.DataFrame) -> None:
+    """`is_home` needs only the team ids -- never zero-filled with the strength block."""
+    from sportsdataverse.pwhl.pwhl_xg_proxy import _build_xg_features
+
+    solo = train_shots.filter((pl.col("event") == "shot") & (pl.col("season") == 2024)).with_columns(
+        team_id=pl.col("game_id") % 2,
+        home_team_id=pl.lit(0),
+    )
+    assert not {"skaters_home", "skaters_away", "strength_state"} & set(solo.columns)
+
+    x, feats, _ = _build_xg_features(solo)
+    assert "is_home" in feats, f"is_home lost with the strength block: {feats}"
+    assert {"is_pp", "is_sh", "empty_net_for"}.isdisjoint(feats)  # those DO need the skaters
+    home_col = x[:, feats.index("is_home")]
+    assert 0 < home_col.sum() < len(home_col), "is_home is constant -- not actually derived"
+
+    # and at predict time, a model fitted WITH the strength block still gets a real
+    # is_home for such a frame (0-fill only applies to the columns genuinely absent).
+    want = ("shot_distance", "shot_angle", "is_home", "is_pp", "is_sh")
+    xw, featsw, _ = _build_xg_features(solo, want=want)
+    assert featsw == want
+    assert xw[:, want.index("is_home")].sum() == home_col.sum()
+    assert xw[:, want.index("is_pp")].sum() == 0.0
