@@ -396,6 +396,26 @@ class TestEraMaxKnownSeason:
             out = _make_model_mutations(self._ep_frame(beyond))
         assert out["era4"].to_list() == [1], "still scored under era4 — the warning is the flag, not a filter"
 
+    def test_every_out_of_range_season_warns(self) -> None:
+        """A mixed frame warns once per offending season, not just the max."""
+        import warnings as _warnings
+
+        import polars as pl
+
+        from sportsdataverse.errors import EraCoverageWarning
+        from sportsdataverse.nfl.ep_wp import _make_model_mutations
+        from sportsdataverse.nfl.model_vars import ERA_MAX_KNOWN_SEASON
+
+        a, b = ERA_MAX_KNOWN_SEASON + 1, ERA_MAX_KNOWN_SEASON + 2
+        frame = pl.concat([self._ep_frame(ERA_MAX_KNOWN_SEASON), self._ep_frame(a), self._ep_frame(b)])
+        with _warnings.catch_warnings(record=True) as caught:
+            _warnings.simplefilter("always", EraCoverageWarning)
+            _make_model_mutations(frame)
+        seasons_warned = {
+            s for s in (a, b, ERA_MAX_KNOWN_SEASON) if any(f"season {s} is beyond" in str(w.message) for w in caught)
+        }
+        assert seasons_warned == {a, b}, f"both offending seasons must warn, in-range must not; got {seasons_warned}"
+
     def test_cp_mutations_warn_beyond_max(self) -> None:
         from sportsdataverse.errors import EraCoverageWarning
         from sportsdataverse.nfl.ep_wp import _make_cp_mutations

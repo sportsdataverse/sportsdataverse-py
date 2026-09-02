@@ -401,18 +401,22 @@ def _warn_if_season_beyond_known_eras(df: pl.DataFrame) -> None:
     """
     if "season" not in df.columns or df.height == 0:
         return
-    max_season = df.get_column("season").cast(pl.Int64, strict=False).max()
-    if max_season is None or max_season <= ERA_MAX_KNOWN_SEASON:
-        return
-    warnings.warn(
-        f"season {max_season} is beyond ERA_MAX_KNOWN_SEASON={ERA_MAX_KNOWN_SEASON}, the last season the NFL "
-        "era bins (ERA_SEASON_CUTS) and the kickoff-touchback substitution were validated for; its plays are "
-        "scored under the last era (era4, season > 2017). Review the season for rule changes (a new era needs "
-        "an explicit dummy and a retrain), then bump ERA_MAX_KNOWN_SEASON in sportsdataverse.nfl.model_vars. "
-        "Silence deliberately with warnings.filterwarnings('ignore', category=EraCoverageWarning).",
-        EraCoverageWarning,
-        stacklevel=3,
-    )
+    # Every offending season warns, not just the max: a multi-season frame
+    # (2026 + 2027) is scored entirely under era4, so BOTH need the review
+    # signal.  warnings de-duplicates on message text and the season is in
+    # the message, so one warning per distinct season survives.
+    seasons = df.get_column("season").cast(pl.Int64, strict=False).drop_nulls().unique().sort()
+    offending = seasons.filter(seasons > ERA_MAX_KNOWN_SEASON)
+    for season in offending:
+        warnings.warn(
+            f"season {season} is beyond ERA_MAX_KNOWN_SEASON={ERA_MAX_KNOWN_SEASON}, the last season the NFL "
+            "era bins (ERA_SEASON_CUTS) and the kickoff-touchback substitution were validated for; its plays are "
+            "scored under the last era (era4, season > 2017). Review the season for rule changes (a new era needs "
+            "an explicit dummy and a retrain), then bump ERA_MAX_KNOWN_SEASON in sportsdataverse.nfl.model_vars. "
+            "Silence deliberately with warnings.filterwarnings('ignore', category=EraCoverageWarning).",
+            EraCoverageWarning,
+            stacklevel=3,
+        )
 
 
 def _make_model_mutations(df: pl.DataFrame) -> pl.DataFrame:
