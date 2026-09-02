@@ -130,6 +130,72 @@ def test_malformed_entries_are_skipped_not_raised():
     assert df["athlete_id"].to_list() == [None]
 
 
+#: Every nested container ESPN could collapse to the wrong shape. Each of these
+#: raised before the ``_list`` / ``_mapping`` guards: a truthy scalar raises
+#: ``TypeError`` when iterated and ``AttributeError`` on ``.get``, and neither
+#: ``value or []`` nor ``value or {}`` catches a truthy one. The parser's contract
+#: is to degrade to zero rows on malformed input, so all of these must parse.
+_MALFORMED = {
+    "payload_is_not_a_mapping": ["nope"],
+    "outer_injuries_is_a_scalar": {"injuries": 5},
+    "team_injuries_is_a_scalar": {"injuries": [{"id": "1", "injuries": 5}]},
+    "team_injuries_is_a_string": {"injuries": [{"id": "1", "injuries": "oops"}]},
+    "team_injuries_is_a_dict": {"injuries": [{"id": "1", "injuries": {"a": 1}}]},
+}
+
+
+@pytest.mark.parametrize("payload", _MALFORMED.values(), ids=list(_MALFORMED))
+def test_malformed_containers_degrade_to_zero_rows(payload):
+    df = parse_injuries_snapshot(payload, league="nfl", as_of_date=STAMP)
+    assert df.height == 0
+    assert dict(df.schema) == INJURY_SNAPSHOT_SCHEMA
+
+
+@pytest.mark.parametrize(
+    "record",
+    [
+        {"id": "9", "type": 5},
+        {"id": "9", "source": "x"},
+        {"id": "9", "details": 1},
+        {"id": "9", "athlete": 2},
+        {"id": "9", "athlete": {"links": 7}},
+        {"id": "9", "athlete": {"links": [3]}},
+        {"id": "9", "athlete": {"position": 4}},
+    ],
+    ids="type source details athlete links link_elem position".split(),
+)
+def test_collapsed_nested_objects_null_their_fields_instead_of_raising(record):
+    df = parse_injuries_snapshot(
+        {"injuries": [{"id": "1", "injuries": [record]}]},
+        league="nfl",
+        as_of_date=STAMP,
+    )
+    assert df.height == 1
+    assert df["injury_id"].to_list() == ["9"]
+
+
+def test_a_malformed_team_does_not_cost_the_valid_teams():
+    """The whole run must not abort on one bad team -- and the good one still parses."""
+    payload = {
+        "injuries": [
+            {"id": "1", "injuries": 5},
+            {
+                "id": "2",
+                "injuries": [
+                    {
+                        "id": "9",
+                        "athlete": {"links": [{"href": "https://e.com/id/4870808/x"}]},
+                    }
+                ],
+            },
+        ]
+    }
+    df = parse_injuries_snapshot(payload, league="nfl", as_of_date=STAMP)
+    assert df.height == 1
+    assert df["team_id"].to_list() == ["2"]
+    assert df["athlete_id"].to_list() == ["4870808"]
+
+
 # ---------------------------------------------------------------------------
 # Multi-league concat + fetch plumbing
 # ---------------------------------------------------------------------------

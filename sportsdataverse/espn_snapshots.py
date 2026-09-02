@@ -137,13 +137,34 @@ def _as_id(value: Any) -> Optional[str]:
     return None
 
 
+def _mapping(value: Any) -> Mapping[str, Any]:
+    """A nested object as a Mapping, or an empty one.
+
+    ``value or {}`` is not enough: a truthy non-dict (ESPN collapsing an object to
+    a scalar) survives it and then raises ``AttributeError`` on ``.get``.
+    """
+    return value if isinstance(value, Mapping) else {}
+
+
+def _list(value: Any) -> List[Any]:
+    """A nested array as a list, or an empty one.
+
+    Anything that is not a list is dropped rather than iterated. A truthy scalar
+    raises ``TypeError`` when iterated, and a truthy *iterable* non-list (a str,
+    a dict) iterates over characters or keys and silently yields nothing useful —
+    both are malformed input, and this parser's contract is to degrade to zero
+    rows on malformed input rather than raise.
+    """
+    return value if isinstance(value, list) else []
+
+
 def _athlete_id(athlete: Mapping[str, Any]) -> Optional[str]:
     """Athlete id from ``athlete.id`` when present, else from the player-card link."""
     direct = _as_id(athlete.get("id"))
     if direct:
         return direct
-    for link in athlete.get("links") or []:
-        match = _ATHLETE_ID_RE.search(str((link or {}).get("href") or ""))
+    for link in _list(athlete.get("links")):
+        match = _ATHLETE_ID_RE.search(str(_mapping(link).get("href") or ""))
         if match:
             return match.group(1)
     return None
@@ -187,25 +208,22 @@ def parse_injuries_snapshot(
             df = parse_injuries_snapshot(payload, league="nfl")
     """
     stamp = as_of_date or datetime.now(timezone.utc).date()
-    teams = (payload or {}).get("injuries") or []
+    teams = _list(_mapping(payload).get("injuries"))
     rows: List[Dict[str, Any]] = []
     for team in teams:
         if not isinstance(team, Mapping):
             continue
         team_id = _as_id(team.get("id"))
         team_name = _text(team, "displayName")
-        for record in team.get("injuries") or []:
+        for record in _list(team.get("injuries")):
             if not isinstance(record, Mapping):
                 continue
-            athlete = record.get("athlete") or {}
-            athlete = athlete if isinstance(athlete, Mapping) else {}
-            position = athlete.get("position") or {}
-            position = position if isinstance(position, Mapping) else {}
-            type_ = record.get("type") or {}
-            details = record.get("details") or {}
-            details = details if isinstance(details, Mapping) else {}
-            fantasy = details.get("fantasyStatus") or {}
-            source = record.get("source") or {}
+            athlete = _mapping(record.get("athlete"))
+            position = _mapping(athlete.get("position"))
+            type_ = _mapping(record.get("type"))
+            details = _mapping(record.get("details"))
+            fantasy = _mapping(details.get("fantasyStatus"))
+            source = _mapping(record.get("source"))
             rows.append(
                 {
                     "as_of_date": stamp,
@@ -220,7 +238,7 @@ def parse_injuries_snapshot(
                     "athlete_position_name": _text(position, "displayName"),
                     "status": _text(record, "status"),
                     "injury_date": _text(record, "date"),
-                    "type_id": _as_id((type_ or {}).get("id")),
+                    "type_id": _as_id(type_.get("id")),
                     "type_name": _text(type_, "name"),
                     "type_abbreviation": _text(type_, "abbreviation"),
                     "type_description": _text(type_, "description"),
@@ -232,7 +250,7 @@ def parse_injuries_snapshot(
                     "detail_fantasy_status": _text(fantasy, "description"),
                     "short_comment": _text(record, "shortComment"),
                     "long_comment": _text(record, "longComment"),
-                    "source_id": _as_id((source or {}).get("id")),
+                    "source_id": _as_id(source.get("id")),
                     "source_description": _text(source, "description"),
                 }
             )
