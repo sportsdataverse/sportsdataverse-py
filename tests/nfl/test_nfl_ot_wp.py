@@ -13,23 +13,42 @@ Measured on real data before the overlay (2025, ``enrich_nfl_pbp`` on the
 published nflverse frame vs nflverse's own values, n = 324 overtime rows):
 ``wp`` MAE **0.1731**, bias **-0.1308**, p90 |err| **0.4187**, r **0.379**;
 our ``vegas_wp == wp`` on **0.000 %** of overtime rows against nflverse's
-**96.6 %**.  After: MAE **0.0353**, bias **-0.0195**, p90 **0.0860**,
-r **0.938**, identity **100 %**.  All-plays parity improved too
-(MAE 0.0145 -> 0.0135), so nothing was traded away for it.
+**96.6 %**.
+
+Why sudden-death only
+---------------------
+The R source also carries a ``One_FG_WP`` branch for the first overtime drive
+from 2012.  It is deliberately **not** implemented, and that is a measured
+decision rather than an omission.  Upstream's ``First_Drive`` is a minimum over
+every overtime row in whatever multi-game batch ``add_wp_variables`` was
+handed, so the branch is close to dead in the data nflverse publishes, and
+every deterministic reconstruction of it scores worse.  Overtime ``wp`` MAE vs
+nflverse, same harness:
+
+===================================  ======  ======  ======
+``First_Drive`` scoping               2016    2022    2025
+===================================  ======  ======  ======
+per overtime game (the R intent)     0.1609  0.1102  0.1431
+frame-global over overtime rows      0.0394  0.0503  0.0594
+sudden death only (shipped)          0.0513  0.0534  0.0599
+===================================  ======  ======  ======
+
+The frame-global row wins, but it is frame-dependent — enriching one game gives
+a different ``wp`` than enriching the season containing it, and
+``build_nfl_season`` enriches per game, under which it collapses to the worst
+row.  Among deterministic, per-game-stable options sudden death wins by 2-3x.
+Narrower One-FG gates were tried and are also worse (trailing-by-3 clause
+only: 0.0735 / 0.0585 / 0.0809).
 
 What is pinned
 --------------
-* the two closed forms and the branch rule, exactly;
+* the closed form, exactly, on every overtime row;
 * ``vegas_wp == wp`` inside overtime and ONLY inside overtime;
-* regulation rows are byte-identical with and without the overlay;
+* regulation rows are untouched and row order is preserved;
 * the overlay demonstrably CHANGES overtime output (a no-op implementation
   fails ``test_overlay_actually_moves_overtime_wp``);
 * a missing input WARNS instead of silently skipping;
-* ``Win_Back`` is scored at the play's own yardline — nflfastR's
-  ``overtime_df_ko$yrdline100`` write (L855) targets a column
-  ``ep_model_select()`` does not read, so the touchback substitution is dead
-  upstream and reproducing the *effective* behaviour is what matches the
-  published data.
+* the real-data gate, and that it FAILS without the overlay.
 """
 
 from __future__ import annotations
@@ -42,15 +61,14 @@ import polars as pl
 import pytest
 
 from sportsdataverse.nfl.ep_wp import (
-    OT_ONE_FG_FIRST_YEAR,
     _EP_CLASS_NAMES,
+    OT_WP_EP_CLASSES,
     _apply_ot_wp_overlay,
-    calculate_expected_points,
     enrich_nfl_pbp,
 )
 
-# EP class probabilities held fixed so the closed forms have exact expected
-# values.  Order matches _EP_CLASS_NAMES.
+# EP class probabilities held fixed so the closed form has an exact expected
+# value.  Order matches _EP_CLASS_NAMES.
 _TD, _OPP_TD, _FG, _OPP_FG, _SAF, _OPP_SAF, _NS = 0.31, 0.19, 0.22, 0.14, 0.02, 0.01, 0.11
 _SUDDEN_DEATH = _FG + _TD + _SAF  # 0.55
 
@@ -59,12 +77,14 @@ def _ot_frame(
     *,
     season: int = 2023,
     drives: tuple[float, ...] = (21.0, 22.0, 23.0),
-    score_differential: tuple[float, ...] = (0.0, 0.0, 0.0),
-    qtr: tuple[float, ...] = (5.0, 5.0, 5.0),
-    yardline_100: float = 75.0,
+    score_differential: tuple[float, ...] | None = None,
+    qtr: tuple[float, ...] | None = None,
 ) -> pl.DataFrame:
     """A minimal post-``calculate_win_probability`` frame, one game, N rows."""
     n = len(drives)
+    score_differential = score_differential if score_differential is not None else (0.0,) * n
+    qtr = qtr if qtr is not None else (5.0,) * n
+    assert len(score_differential) == n and len(qtr) == n
     return pl.DataFrame(
         {
             "game_id": [f"{season}_01_AAA_BBB"] * n,
@@ -72,18 +92,6 @@ def _ot_frame(
             "qtr": list(qtr),
             "drive": list(drives),
             "score_differential": list(score_differential),
-            "half_seconds_remaining": [600.0] * n,
-            "game_seconds_remaining": [600.0] * n,
-            "yardline_100": [yardline_100] * n,
-            "ydstogo": [10.0] * n,
-            "down": [1] * n,
-            "posteam": ["AAA"] * n,
-            "home_team": ["BBB"] * n,
-            "roof": ["outdoors"] * n,
-            "posteam_timeouts_remaining": [2] * n,
-            "defteam_timeouts_remaining": [2] * n,
-            "spread_line": [-3.0] * n,
-            "receive_2h_ko": [0] * n,
             "td_prob": [_TD] * n,
             "opp_td_prob": [_OPP_TD] * n,
             "fg_prob": [_FG] * n,
@@ -91,74 +99,69 @@ def _ot_frame(
             "safety_prob": [_SAF] * n,
             "opp_safety_prob": [_OPP_SAF] * n,
             "no_score_prob": [_NS] * n,
-            # Placeholder booster output the overlay must overwrite.  Deliberately far
-            # from any plausible closed-form value so the "did it move" assertion
-            # cannot pass by coincidence.
+            # Placeholder booster output the overlay must overwrite.  Deliberately
+            # far from any plausible closed-form value so the "did it move"
+            # assertion cannot pass by coincidence.
             "wp": [0.999] * n,
             "vegas_wp": [0.001] * n,
         }
     )
 
 
-def _win_back(df: pl.DataFrame) -> np.ndarray:
-    """Independent recomputation of nflfastR's ``Win_Back`` for the same rows."""
-    scored = calculate_expected_points(
-        df.with_columns(
-            pl.lit(1, dtype=pl.Int64).alias("down"),
-            pl.lit(10, dtype=pl.Int64).alias("ydstogo"),
-        )
-    )
-    return (
-        scored["no_score_prob"] + scored["opp_fg_prob"] + scored["opp_safety_prob"] + scored["opp_td_prob"]
-    ).to_numpy()
-
-
 # ---------------------------------------------------------------------------
-# The two closed forms and the branch rule
+# The closed form
 # ---------------------------------------------------------------------------
 
 
-def test_sudden_death_form_on_a_later_overtime_drive():
-    # drives 21/22/23 -> drive_diff 0/1/2; row 2 (diff 2) can only be sudden death.
+def test_the_three_classes_are_the_posteam_scores_next_classes():
+    assert OT_WP_EP_CLASSES == ("fg_prob", "td_prob", "safety_prob")
+    assert set(OT_WP_EP_CLASSES) <= set(_EP_CLASS_NAMES)
+
+
+def test_every_overtime_row_gets_the_sudden_death_closed_form():
     out = _apply_ot_wp_overlay(_ot_frame())
-    assert out["wp"][2] == pytest.approx(_SUDDEN_DEATH, abs=1e-12)
-
-
-def test_one_fg_form_on_the_first_overtime_drive():
-    df = _ot_frame()
-    out = _apply_ot_wp_overlay(df)
-    expected = _TD + _FG * _win_back(df)[0]
-    assert out["wp"][0] == pytest.approx(expected, abs=1e-12)
-    # and it is genuinely a different number from the sudden-death form
-    assert abs(out["wp"][0] - _SUDDEN_DEATH) > 0.01
-
-
-def test_one_fg_form_on_the_second_drive_only_when_trailing_by_exactly_three():
-    trailing = _apply_ot_wp_overlay(_ot_frame(score_differential=(0.0, -3.0, 0.0)))
-    assert trailing["wp"][1] != pytest.approx(_SUDDEN_DEATH, abs=1e-9)
-
-    for other in (-2.0, -4.0, 3.0, 0.0):
-        out = _apply_ot_wp_overlay(_ot_frame(score_differential=(0.0, other, 0.0)))
-        assert out["wp"][1] == pytest.approx(_SUDDEN_DEATH, abs=1e-12), other
-
-
-def test_pre_2012_seasons_always_use_sudden_death():
-    out = _apply_ot_wp_overlay(_ot_frame(season=OT_ONE_FG_FIRST_YEAR - 1))
     assert np.allclose(out["wp"].to_numpy(), _SUDDEN_DEATH, atol=1e-12)
 
-    on = _apply_ot_wp_overlay(_ot_frame(season=OT_ONE_FG_FIRST_YEAR))
-    assert on["wp"][0] != pytest.approx(_SUDDEN_DEATH, abs=1e-9)
+
+@pytest.mark.parametrize("season", [2005, 2011, 2012, 2017, 2022, 2025])
+def test_the_form_does_not_vary_by_season_drive_or_score(season):
+    """The One-FG branch is deliberately unimplemented — see the module docstring.
+
+    If someone re-adds it, this fails and they have to re-read why it was left
+    out, rather than discovering the 2-3x parity regression in production.
+    """
+    out = _apply_ot_wp_overlay(_ot_frame(season=season, drives=(21.0, 22.0), score_differential=(0.0, -3.0)))
+    assert np.allclose(out["wp"].to_numpy(), _SUDDEN_DEATH, atol=1e-12)
 
 
-def test_first_drive_is_scoped_per_game_not_across_the_frame():
-    """Two games whose overtimes start at different drive numbers."""
-    a = _ot_frame(drives=(21.0, 22.0, 23.0))
-    b = _ot_frame(drives=(25.0, 26.0, 27.0)).with_columns(pl.lit("2023_02_CCC_DDD").alias("game_id"))
-    out = _apply_ot_wp_overlay(pl.concat([a, b]))
-    # Row 3 is game B's first overtime drive.  Under a frame-global minimum it
-    # would be drive_diff 4 (sudden death); per game it is 0 (One-FG).
-    assert out["wp"][3] != pytest.approx(_SUDDEN_DEATH, abs=1e-9)
-    assert out["wp"][3] == pytest.approx(out["wp"][0], abs=1e-12)
+def test_the_form_does_not_depend_on_which_rows_share_the_frame():
+    """Deterministic per game: another game's rows cannot move a value.
+
+    This is the property the frame-global ``First_Drive`` variant lacks, and the
+    reason it is not shipped despite scoring marginally better against nflverse.
+    """
+    alone = _apply_ot_wp_overlay(_ot_frame())["wp"].to_list()
+    other = _ot_frame(drives=(25.0, 26.0, 27.0)).with_columns(pl.lit("2023_02_CCC_DDD").alias("game_id"))
+    together = _apply_ot_wp_overlay(pl.concat([_ot_frame(), other]))["wp"].to_list()
+    assert together[:3] == alone
+    assert together[3:] == alone
+
+
+def test_regulation_drive_numbers_in_the_frame_change_nothing():
+    """The production shape a unit fixture of overtime-only rows cannot represent.
+
+    A real frame from ``enrich_nfl_pbp`` carries the whole game, so any rule
+    keyed on a per-``game_id`` drive minimum reads the opening REGULATION drive
+    rather than the first overtime drive — the defect the first cut of this
+    overlay shipped with, invisible to an overtime-only fixture because there
+    the two minima coincide.  The form that ships is drive-independent, so the
+    overtime values must be identical with and without regulation rows present.
+    """
+    ot = _ot_frame(drives=(21.0, 22.0, 23.0))
+    reg = _ot_frame(drives=(1.0, 2.0, 3.0), qtr=(1.0, 1.0, 2.0))
+    with_reg = _apply_ot_wp_overlay(pl.concat([reg, ot]))
+    assert with_reg["wp"].to_list()[:3] == [0.999, 0.999, 0.999]
+    assert with_reg["wp"].to_list()[3:] == _apply_ot_wp_overlay(ot)["wp"].to_list()
 
 
 # ---------------------------------------------------------------------------
@@ -172,31 +175,39 @@ def test_vegas_wp_equals_wp_inside_overtime():
 
 
 def test_regulation_rows_are_untouched():
-    df = _ot_frame(qtr=(4.0, 5.0, 5.0))
-    out = _apply_ot_wp_overlay(df)
+    out = _apply_ot_wp_overlay(_ot_frame(qtr=(4.0, 5.0, 5.0)))
     assert out["wp"][0] == 0.999
     assert out["vegas_wp"][0] == 0.001
-    # ...and the overtime rows next to them still moved
     assert out["wp"][2] == pytest.approx(_SUDDEN_DEATH, abs=1e-12)
 
 
 def test_a_frame_with_no_overtime_is_returned_unchanged():
     df = _ot_frame(qtr=(1.0, 2.0, 4.0))
+    assert _apply_ot_wp_overlay(df).equals(df)
+
+
+def test_row_order_is_preserved():
+    df = pl.concat(
+        [
+            _ot_frame(drives=(1.0, 2.0), qtr=(1.0, 2.0)),
+            _ot_frame(drives=(21.0, 22.0, 23.0)),
+            _ot_frame(drives=(4.0,), qtr=(4.0,)),
+        ]
+    ).with_columns(pl.arange(0, 6).alias("_probe"))
     out = _apply_ot_wp_overlay(df)
-    assert out.equals(df)
+    assert out["_probe"].to_list() == list(range(6))
+    assert out["qtr"].to_list() == [1.0, 2.0, 5.0, 5.0, 5.0, 4.0]
 
 
 def test_overlay_actually_moves_overtime_wp():
     """The silent-no-op assertion: assert the OUTPUT changed, not that it ran."""
     df = _ot_frame()
     out = _apply_ot_wp_overlay(df)
-    moved = (out["wp"] - df["wp"]).abs()
-    assert bool((moved > 0.01).all()), moved.to_list()
-    vmoved = (out["vegas_wp"] - df["vegas_wp"]).abs()
-    assert bool((vmoved > 0.01).all()), vmoved.to_list()
+    assert bool(((out["wp"] - df["wp"]).abs() > 0.01).all())
+    assert bool(((out["vegas_wp"] - df["vegas_wp"]).abs() > 0.01).all())
 
 
-@pytest.mark.parametrize("missing", ["drive", "score_differential", "fg_prob"])
+@pytest.mark.parametrize("missing", ["wp", "vegas_wp", "fg_prob", "td_prob", "safety_prob"])
 def test_missing_input_warns_rather_than_silently_skipping(missing):
     df = _ot_frame().drop(missing)
     with pytest.warns(RuntimeWarning, match=f"overtime WP overlay skipped.*{missing}"):
@@ -205,58 +216,34 @@ def test_missing_input_warns_rather_than_silently_skipping(missing):
 
 
 # ---------------------------------------------------------------------------
-# The upstream dead-code decision, pinned
-# ---------------------------------------------------------------------------
-
-
-def test_win_back_uses_the_plays_own_yardline_not_the_touchback_spot():
-    """nflfastR's ``overtime_df_ko$yrdline100 <- ...`` (L855) is dead.
-
-    ``ep_model_select()`` reads ``yardline_100``; the R line writes
-    ``yrdline100``, so the kickoff-spot substitution never reaches the EP
-    model and ``Win_Back`` is evaluated at the play's own field position.  If
-    someone "fixes" the port to substitute 75, the One-FG value moves and this
-    test fails — which is the point.
-    """
-    near = _ot_frame(yardline_100=20.0)
-    far = _ot_frame(yardline_100=90.0)
-    wp_near = _apply_ot_wp_overlay(near)["wp"][0]
-    wp_far = _apply_ot_wp_overlay(far)["wp"][0]
-
-    # own-yardline semantics => the two differ
-    assert abs(wp_near - wp_far) > 0.01
-
-    # and each equals td_prob + fg_prob * Win_Back(own yardline)
-    assert wp_near == pytest.approx(_TD + _FG * _win_back(near)[0], abs=1e-12)
-    assert wp_far == pytest.approx(_TD + _FG * _win_back(far)[0], abs=1e-12)
-
-    # a touchback-substituted Win_Back would give a different answer
-    touchback = near.with_columns(pl.lit(75.0).alias("yardline_100"))
-    assert wp_near != pytest.approx(_TD + _FG * _win_back(touchback)[0], abs=1e-6)
-
-
-# ---------------------------------------------------------------------------
 # Real-data gate — five whole overtime games, one per rules era
 # ---------------------------------------------------------------------------
 
 _FIXTURE = Path(__file__).resolve().parents[1] / "fixtures" / "nfl_ep_wp" / "overtime_games.parquet"
 
-#: Ceilings/floors for the fixture's 96 paired overtime rows, derived from the
-#: values observed 2026-09-02 with the overlay in place — MAE **0.0209**,
-#: bias **-0.0149**, r **0.9945** — and set strictly on the passing side of
-#: those, while sitting far inside the un-overlaid values (MAE **0.1677**,
-#: r **0.4996**) so a regression to the un-ported state fails loudly.
-#: `test_the_gate_bites_without_the_overlay` proves that second half.
+#: Thresholds for the fixture's 96 paired overtime rows, set from the values
+#: observed 2026-09-02 with the overlay in place — MAE **0.0209**, bias
+#: **-0.0149**, r **0.9945** — each placed strictly on the passing side of the
+#: observation and strictly inside the un-overlaid values (MAE **0.1677**,
+#: bias **+0.0225**, r **0.4996**), so they detect a regression rather than
+#: restate the present.  ``test_the_gate_bites_without_the_overlay`` proves the
+#: second half.
+#:
+#: MAE and r are the criteria that bite: the un-overlaid bias (+0.0225) already
+#: sits inside the bias ceiling, so bias alone would not catch a no-op.  That is
+#: why the bite test asserts on the MAE ceiling and the r floor specifically.
 OT_FIXTURE_MAE_CEILING = 0.035
 OT_FIXTURE_ABS_BIAS_CEILING = 0.030
 OT_FIXTURE_R_FLOOR = 0.98
 
 
 def _enrich(df: pl.DataFrame, models_dir: str) -> pl.DataFrame:
-    """Run the production nflverse path over the fixture (no network)."""
+    """Run the production nflverse path over the fixture (no network).
+
+    ``models_dir`` points at an empty directory so the 34 MB xYAC model is
+    skipped gracefully instead of downloaded.
+    """
     base = df.drop([c for c in ("ep", "epa", "wp", "vegas_wp", "wpa", *_EP_CLASS_NAMES) if c in df.columns])
-    # models_dir points at an empty dir so the 34 MB xYAC model is skipped
-    # gracefully instead of downloaded.
     with warnings.catch_warnings():
         warnings.simplefilter("ignore")
         return enrich_nfl_pbp(base, method="lead_diff", add_fourth_down=False, models_dir=models_dir)
@@ -289,9 +276,9 @@ def test_real_overtime_matches_nflverse(ot_games, tmp_path):
 
 
 def test_real_overtime_vegas_wp_equals_wp(ot_games, tmp_path):
-    """nflverse holds this on 96.6% of published 2025 overtime rows (0.033% in
-    regulation).  We hold it exactly, because we do not run the spread model in
-    overtime at all."""
+    """nflverse holds this on 96.6 % of published 2025 overtime rows, against
+    0.033 % in regulation.  We hold it exactly, because we never run the spread
+    model in overtime."""
     out = _enrich(ot_games, str(tmp_path))
     ot = out.filter((pl.col("qtr") >= 5) & pl.col("wp").is_not_null() & pl.col("vegas_wp").is_not_null())
     assert ot.height >= 90

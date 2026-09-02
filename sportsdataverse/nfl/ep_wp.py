@@ -1068,11 +1068,10 @@ def calculate_win_probability(
 # Overtime WP overlay — nflfastR add_wp_variables L820-899
 # ---------------------------------------------------------------------------
 
-#: nflfastR gates the One-FG overtime branch on ``game_year >= 2012`` — the
-#: season the modified sudden-death format (a first-drive field goal no longer
-#: ends the game) took effect.  Below it, every overtime play uses the pure
-#: sudden-death form.
-OT_ONE_FG_FIRST_YEAR: int = 2012
+#: nflfastR's overtime win probability is the sum of the three
+#: posteam-scores-next EP classes.  ``add_wp_variables`` L885-887:
+#: ``Sudden_Death_WP <- fg_prob + td_prob + safety_prob``.
+OT_WP_EP_CLASSES: tuple[str, str, str] = ("fg_prob", "td_prob", "safety_prob")
 
 
 def _apply_ot_wp_overlay(df: pl.DataFrame) -> pl.DataFrame:
@@ -1081,42 +1080,46 @@ def _apply_ot_wp_overlay(df: pl.DataFrame) -> pl.DataFrame:
     **nflfastR never scores overtime with the WP models.**
     ``helper_add_ep_wp.R::add_wp_variables`` (L820-899) splits the frame before
     prediction: the WP boosters run on ``qtr <= 4`` only, and ``qtr > 4`` rows
-    get a closed-form win probability built from the EP class probabilities::
+    get a win probability built from the EP class probabilities, with
+    ``vegas_wp`` assigned the *same* value — the spread model is not consulted
+    in overtime at all.  Measured on published nflverse 2025: ``vegas_wp == wp``
+    bit-for-bit on 313/324 overtime rows (96.6 %) against 0.033 % in
+    regulation.
 
-        Sudden_Death_WP = fg_prob + td_prob + safety_prob
-        One_FG_WP       = td_prob + fg_prob * Win_Back
-        wp = vegas_wp = One_FG_WP  if game_year >= 2012 and
-                                      (Drive_Diff == 0 or
-                                       (Drive_Diff == 1 and score_differential == -3))
-                        else Sudden_Death_WP
+    We apply the **sudden-death form only**::
 
-    ``Win_Back`` is ``no_score_prob + opp_fg_prob + opp_safety_prob +
-    opp_td_prob`` from a **second EP scoring pass** on a 1st-and-10 view of the
-    same play — the probability the kicking team still wins after conceding a
-    field goal.  Note ``vegas_wp`` is assigned the *same* value: the spread
-    model is not consulted in overtime at all (measured on published nflverse
-    2025: ``vegas_wp == wp`` bit-for-bit on 313/324 overtime rows = 96.6%,
-    against 0.033% in regulation).
+        wp = vegas_wp = fg_prob + td_prob + safety_prob
 
-    Two deliberate divergences from the R source, both documented rather than
-    silently reproduced:
+    The R source also carries a ``One_FG_WP = td_prob + fg_prob * Win_Back``
+    branch for ``game_year >= 2012``, selected when the play is on the first
+    overtime drive (or the second while trailing by exactly 3).  **It is not
+    implemented, because implementing it makes parity worse — measured, not
+    assumed.**  ``First_Drive`` upstream is ``min(overtime_df$drive)`` over
+    *every* overtime row in the frame ``add_wp_variables`` was handed, and
+    nflfastR calls it once on the whole rbound multi-game batch, so
+    ``Drive_Diff == 0`` is reachable only in whichever game happened to carry
+    the batch's lowest overtime drive number.  The branch is therefore close to
+    dead in the data nflverse publishes.  Overtime ``wp`` MAE against nflverse,
+    same harness, three seasons::
 
-    * **``First_Drive`` is taken per ``game_id`` here, not per batch.** The R
-      line is ``min(overtime_df$drive, na.rm = TRUE)`` over *every* overtime row
-      in the frame ``add_wp_variables`` was called with — and nflfastR calls it
-      once on the whole rbound multi-game batch, so upstream's One-FG/sudden-death
-      selection depends on which games happened to be built together and is not
-      reproducible from a play's own game.  Grouping per game is the only
-      deterministic, leak-free reading; it is also what the R code plainly
-      intends.
-    * **The R kickoff-state substitution for ``Win_Back`` is dead upstream.**
-      ``overtime_df_ko$yrdline100 <- ...`` (L855) writes a column named
-      ``yrdline100`` while ``ep_model_select()`` reads ``yardline_100``, so the
-      assignment never reaches the model; only ``down1..down4`` and ``ydstogo``
-      (real features) take effect.  We reproduce the *effective* behaviour —
-      1st-and-10 at the play's own yardline — because that is what produced the
-      published values.  ``test_win_back_uses_the_plays_own_yardline_not_the_touchback_spot``
-      pins it.
+        First_Drive scoping                       2016     2022     2025
+        per overtime game (the R code's intent)  0.1609   0.1102   0.1431
+        frame-global over overtime rows          0.0394   0.0503   0.0594
+        sudden death only (shipped)              0.0513   0.0534   0.0599
+
+    The frame-global variant scores best but is **frame-dependent**: enriching
+    one game gives a different ``wp`` than enriching the season that contains
+    it, and ``build_nfl_season`` enriches per game — under which it degrades to
+    the worst row.  Among deterministic, per-game-stable options the
+    sudden-death form wins by 2-3x, so that is what ships.  Narrower One-FG
+    gates were tried and are also worse (only the trailing-by-3 clause: 0.0735
+    / 0.0585 / 0.0809).
+
+    The gap this leaves is real and is documented rather than papered over:
+    from 2012 a first-possession field goal no longer ends the game, so an
+    unconditional sudden-death WP overstates the kicking team's chances on the
+    opening overtime drive.  nflverse's published values carry the same
+    overstatement; matching them is the contract of this path.
 
     Rows outside overtime are untouched.  A frame with no ``qtr > 4`` rows, or
     missing an input the overlay needs, is returned unchanged with a
@@ -1124,15 +1127,12 @@ def _apply_ot_wp_overlay(df: pl.DataFrame) -> pl.DataFrame:
 
     Args:
         df: Frame carrying ``wp`` / ``vegas_wp`` (as produced by
-            :func:`calculate_win_probability`) plus ``qtr``, ``game_id``,
-            ``drive``, ``score_differential``, ``season`` and the seven EP
-            class-probability columns.
+            :func:`calculate_win_probability`) plus ``qtr`` and the three
+            :data:`OT_WP_EP_CLASSES` probability columns.
 
     Returns:
         The frame with ``wp`` / ``vegas_wp`` replaced on ``qtr > 4`` rows.
     """
-    import sportsdataverse.nfl.ep_wp as _self
-
     if "qtr" not in df.columns:
         return df
     is_ot = pl.col("qtr") > 4
@@ -1140,47 +1140,22 @@ def _apply_ot_wp_overlay(df: pl.DataFrame) -> pl.DataFrame:
     if n_ot == 0:
         return df
 
-    required = ("game_id", "drive", "score_differential", "season", "wp", "vegas_wp", *_EP_CLASS_NAMES)
+    required = ("wp", "vegas_wp", *OT_WP_EP_CLASSES)
     missing = [c for c in required if c not in df.columns]
     if missing:
         warnings.warn(
-            "overtime WP overlay skipped: missing "
-            f"{missing!r}; the {n_ot} overtime rows keep raw WP-model output, "
-            "which nflfastR does not produce for overtime.",
+            f"overtime WP overlay skipped: missing {missing!r}; the {n_ot} overtime rows keep raw "
+            "WP-model output, which nflfastR does not produce for overtime.",
             RuntimeWarning,
             stacklevel=2,
         )
         return df
 
-    # Win_Back: EP re-scored on a 1st-and-10 view of the same play.  Only the
-    # overtime rows need it, so score just those and join the result back by
-    # row index (the frame carries no guaranteed unique key of its own).
-    df = df.with_row_index("_ot_row")
-    ko_view = df.filter(is_ot).with_columns(
-        pl.lit(1, dtype=pl.Int64).alias("down"),
-        pl.lit(10, dtype=pl.Int64).alias("ydstogo"),
-    )
-    scored = _self.calculate_expected_points(ko_view).select(
-        "_ot_row",
-        (pl.col("no_score_prob") + pl.col("opp_fg_prob") + pl.col("opp_safety_prob") + pl.col("opp_td_prob")).alias(
-            "_ot_win_back"
-        ),
-    )
-    df = df.join(scored, on="_ot_row", how="left")
-    drive_diff = pl.col("drive") - pl.col("drive").min().over("game_id")
-    use_one_fg = (pl.col("season") >= OT_ONE_FG_FIRST_YEAR) & (
-        (drive_diff == 0) | ((drive_diff == 1) & (pl.col("score_differential") == -3))
-    )
-    ot_wp = (
-        pl.when(use_one_fg)
-        .then(pl.col("td_prob") + pl.col("fg_prob") * pl.col("_ot_win_back"))
-        .otherwise(pl.col("fg_prob") + pl.col("td_prob") + pl.col("safety_prob"))
-    ).cast(pl.Float64)
-
+    ot_wp = sum((pl.col(c) for c in OT_WP_EP_CLASSES[1:]), start=pl.col(OT_WP_EP_CLASSES[0])).cast(pl.Float64)
     return df.with_columns(
         pl.when(is_ot).then(ot_wp).otherwise(pl.col("wp")).alias("wp"),
         pl.when(is_ot).then(ot_wp).otherwise(pl.col("vegas_wp")).alias("vegas_wp"),
-    ).drop("_ot_win_back", "_ot_row")
+    )
 
 
 def calculate_completion_probability(
