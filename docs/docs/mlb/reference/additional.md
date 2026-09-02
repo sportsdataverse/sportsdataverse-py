@@ -1225,7 +1225,15 @@ dynamically from the responsible position's `fielder_{position}` column
 
 **Returns**
 
-one row per `(fielder_id, position)`. | Column | Type | Description | |---|---|---| | fielder_id | Utf8 | Responsible fielder's MLBAM id | | position | Int64 | Position (Savant `hit_location`, 1-9) | | direction | Utf8 | `in`/`back`/`lateral` -- only when `by_direction=True` | | opportunities | Int64 | Balls in play charged to this fielder | | oaa | Float64 | Sum of (out - expected catch probability) |
+one row per `(fielder_id, position)` -- or per `(fielder_id, position, direction)` when `by_direction=True` -- with `opportunities` and `oaa`. The rendered column table comes from the committed returns schema (`tools/codegen/schemas/autodoc/mlb/mlb_fielding_oaa.yaml`); a Markdown table written here would be collapsed onto one line by the docs renderer, which joins the lines of a `Returns:` block.
+
+| col_name | type | description |
+|---|---|---|
+| `fielder_id` | character | Responsible fielder's MLBAM id (the fielder charged with the ball in play). |
+| `position` | integer | Fielding position from Savant's `hit_location`, 1-9. |
+| `direction` | character | Movement direction the catch required -- `in`, `back` or `lateral`. Present only when the call passes `by_direction=True`; the three rows re-group the same scored balls in play, so they sum exactly to the undirected `oaa`. |
+| `opportunities` | integer | Balls in play charged to this fielder (the denominator of the OAA sum). |
+| `oaa` | double | Outs above average -- the sum of (out - expected catch probability) over this fielder's opportunities. |
 
 **Example**
 
