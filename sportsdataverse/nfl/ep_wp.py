@@ -1115,7 +1115,7 @@ def _apply_ot_wp_overlay(df: pl.DataFrame) -> pl.DataFrame:
       assignment never reaches the model; only ``down1..down4`` and ``ydstogo``
       (real features) take effect.  We reproduce the *effective* behaviour —
       1st-and-10 at the play's own yardline — because that is what produced the
-      published values.  ``test_ot_win_back_ignores_the_dead_yardline_write``
+      published values.  ``test_win_back_uses_the_plays_own_yardline_not_the_touchback_spot``
       pins it.
 
     Rows outside overtime are untouched.  A frame with no ``qtr > 4`` rows, or
