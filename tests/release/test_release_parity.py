@@ -453,3 +453,28 @@ def test_gh_token_fallback_from_github_pat(monkeypatch):
     monkeypatch.setenv("GH_TOKEN", "explicit")
     assert release._gh_env()["GH_TOKEN"] == "explicit"
     assert os.environ.get("GH_TOKEN") == "explicit"
+
+
+def test_write_release_sidecars_writes_all_four(tmp_path):
+    """The public writer emits the same four files the R upload attaches."""
+    from sportsdataverse.release import write_release_sidecars
+
+    paths = write_release_sidecars(tmp_path, "hoopR::load_nba_pbp()")
+
+    assert [p.name for p in paths] == [
+        "timestamp.txt",
+        "timestamp.json",
+        "package_function.txt",
+        "package_function.json",
+    ]
+    assert json.loads((tmp_path / "package_function.json").read_text()) == {"package_function": "hoopR::load_nba_pbp()"}
+    assert "last_updated" in json.loads((tmp_path / "timestamp.json").read_text())
+
+
+def test_write_release_sidecars_omits_package_function_when_none(tmp_path):
+    from sportsdataverse.release import write_release_sidecars
+
+    paths = write_release_sidecars(tmp_path)
+
+    assert [p.name for p in paths] == ["timestamp.txt", "timestamp.json"]
+    assert not (tmp_path / "package_function.json").exists()
