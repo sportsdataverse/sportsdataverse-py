@@ -310,6 +310,7 @@ files = [
     "sportsdataverse/_deprecation.py",
     "sportsdataverse/_rds.py",
     "sportsdataverse/release.py",
+    "sportsdataverse/espn_snapshots.py",
     "sportsdataverse/_common/__init__.py",
     "sportsdataverse/_common/metrics.py",
     "sportsdataverse/_common/ratings.py",
