@@ -98,11 +98,11 @@ Release: [mlb_hitting_models](https://github.com/sportsdataverse/sportsdataverse
 |---|---|---|
 | `batter` | Int64 | MLBAM player id of the batter. |
 | `season` | Int64 | Season year. |
-| `pa` | Int64 | Statcast rows charged to the batter for the season, counting balls in play carrying launch data plus every other pitch, so it is a pitch-row total rather than a true plate-appearance count. |
-| `ab` | Int64 | At-bats. |
+| `pa` | Int64 | Plate appearances for the batter in the season, counted as the Statcast rows that END a plate appearance (a non-empty events value). Pitches within a plate appearance are not counted. |
+| `ab` | Int64 | At-bats, derived from the same plate-appearance-ending rows by excluding walks, hit-by-pitches, sacrifice flies, sacrifice bunts and catcher's interference. |
 | `xwoba` | Float64 | Expected wOBA blending the exit-velocity by launch-angle grid's predicted contact value on balls in play with realized wOBA value on walks, hit-by-pitches and strikeouts, over the wOBA denominator; low-sample batters can exceed 1. |
-| `xba` | Float64 | Sum of grid-predicted hit probability over the batter's balls in play divided by ab, which lands far below conventional batting-average scale because ab counts pitch rows rather than at-bats. |
-| `xslg` | Float64 | Sum of grid-predicted total bases over the batter's balls in play divided by ab, which lands far below conventional slugging scale because ab counts pitch rows rather than at-bats. |
+| `xba` | Float64 | Grid-predicted hit probability summed over the at-bat balls in play that carry launch data, plus the realized hit for balls in play Statcast did not track, divided by at-bats, on the conventional batting-average scale. An untracked ball in play takes its realized outcome exactly as xwoba does, rather than counting in ab with a zero numerator, which deflated league-mean xBA by the untracked share. |
+| `xslg` | Float64 | The same construction on total bases -- grid-predicted total bases where launch data exists, realized total bases for untracked balls in play -- divided by at-bats, on the conventional slugging scale. |
 
 ```python
 load_mlb_expected_stats(seasons=2024)
