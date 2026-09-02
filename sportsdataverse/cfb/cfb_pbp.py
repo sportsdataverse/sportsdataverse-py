@@ -6622,8 +6622,13 @@ class CFBPlayProcess(object):
                 .when((pl.col("rush") == True).and_(pl.col("yds_rushed") >= 8))
                 .then(5.5)
                 .otherwise(None),
+                # The runner's half of the shared band starts where the line's full credit stops, and
+                # line_yards above gives the line 100% only through 3 yards. Subtracting 4 here instead
+                # of 3 lost exactly half a yard on every carry of 4+, so line + second level + open
+                # field came to yds_rushed - 0.5 rather than yds_rushed: 29 of the 55 rushes in
+                # ESPN 401864570 were short by 0.5 and the rest (runs under 4) were exact.
                 second_level_yards=pl.when((pl.col("rush") == True).and_(pl.col("yds_rushed") >= 4))
-                .then(0.5 * (pl.col("adj_rush_yardage") - 4))
+                .then(0.5 * (pl.col("adj_rush_yardage") - 3))
                 .when(pl.col("rush") == True)
                 .then(0)
                 .otherwise(None),
