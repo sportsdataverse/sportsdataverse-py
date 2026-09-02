@@ -61,6 +61,7 @@ from sportsdataverse.nfl.ep_wp import (
     calculate_xpass,
 )
 from sportsdataverse.nfl.model_vars import (
+    SPREAD_TIME_DECAY_EXPONENT,
     TOUCHBACK_YARDLINE_POST_2016,
     TOUCHBACK_YARDLINE_PRE_2016,
     defense_score_vec,
@@ -3379,7 +3380,9 @@ class NFLPlayProcess(object):
                 ((3600 - pl.col("start.adj_TimeSecsRem")) / 3600).clip(0, 3600).alias("start.elapsed_share"),
             )
             .with_columns(
-                (pl.col("start.pos_team_spread") * np.exp(-4 * pl.col("start.elapsed_share"))).alias(
+                (
+                    pl.col("start.pos_team_spread") * np.exp(SPREAD_TIME_DECAY_EXPONENT * pl.col("start.elapsed_share"))
+                ).alias(
                     "start.spread_time",
                 ),
                 pl.when(pl.col("end.pos_team.id") == pl.col("homeTeamId"))
@@ -3389,7 +3392,9 @@ class NFLPlayProcess(object):
                 ((3600 - pl.col("end.adj_TimeSecsRem")) / 3600).clip(0, 3600).alias("end.elapsed_share"),
             )
             .with_columns(
-                (pl.col("end.pos_team_spread") * np.exp(-4 * pl.col("end.elapsed_share"))).alias("end.spread_time"),
+                (
+                    pl.col("end.pos_team_spread") * np.exp(SPREAD_TIME_DECAY_EXPONENT * pl.col("end.elapsed_share"))
+                ).alias("end.spread_time"),
             )
         )
         return play_df

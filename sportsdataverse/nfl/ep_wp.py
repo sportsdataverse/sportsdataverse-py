@@ -37,7 +37,9 @@ Example:
 
 from __future__ import annotations
 
+import json
 import os
+import warnings
 from functools import lru_cache
 from importlib.resources import files as _resource_files
 from pathlib import Path
@@ -50,8 +52,10 @@ if TYPE_CHECKING:
 import numpy as np
 import polars as pl
 
+from sportsdataverse.errors import EraCoverageWarning
 from sportsdataverse.nfl.model_vars import (
     _EP_POINT_VALUES,
+    ERA_MAX_KNOWN_SEASON,
     SPREAD_TIME_DECAY_EXPONENT,
     TOUCHBACK_YARDLINE_POST_2016,
     TOUCHBACK_YARDLINE_PRE_2016,
@@ -266,8 +270,38 @@ def _model_cache_dir() -> Path:
     return get_config().cache_dir / "models"
 
 
+def _check_model_card(path: Path) -> None:
+    """Assert the fitted constants a model card records agree with the applier's.
+
+    The nfl-data trainer writes a ``<model>.json`` card beside each ``.ubj``
+    carrying ``derived_feature_constants`` — the values its feature frame was
+    built with.  A card that disagrees with :data:`SPREAD_TIME_DECAY_EXPONENT`
+    means this process would feed the model a differently-scaled
+    ``spread_time`` / ``Diff_Time_Ratio`` than it was trained on, so it is an
+    error, not a warning.  No card (the bundled ``.ubj`` files ship without one)
+    or a card without the key is not evidence of a mismatch and passes.
+    """
+    card_path = path.with_suffix(".json")
+    if not card_path.exists():
+        return
+    constants = json.loads(card_path.read_text(encoding="utf-8")).get("derived_feature_constants") or {}
+    trained = constants.get("spread_time_decay_exponent")
+    if trained is not None and float(trained) != SPREAD_TIME_DECAY_EXPONENT:
+        raise ValueError(
+            f"{path.name} was trained with spread_time_decay_exponent={trained} (per {card_path.name}) but "
+            f"sportsdataverse.nfl.model_vars.SPREAD_TIME_DECAY_EXPONENT={SPREAD_TIME_DECAY_EXPONENT}: the applier "
+            "would feed the model a differently-scaled spread_time / Diff_Time_Ratio. Update the constant to "
+            "match the artifact, or bundle the artifact that matches the constant."
+        )
+
+
 def _load_booster_from(path: Path) -> "Booster":
-    """Construct an XGBoost ``Booster`` from a model file on disk."""
+    """Construct an XGBoost ``Booster`` from a model file on disk.
+
+    Runs :func:`_check_model_card` first so an artifact whose card records a
+    different fitted constant than this applier uses never scores a play.
+    """
+    _check_model_card(path)
     from xgboost import Booster
 
     b = Booster({"nthread": 4})
@@ -356,13 +390,41 @@ def _load_model(name: str, models_dir: Optional[Union[str, Path]] = None) -> "Bo
 # ---------------------------------------------------------------------------
 
 
+def _warn_if_season_beyond_known_eras(df: pl.DataFrame) -> None:
+    """Emit :class:`EraCoverageWarning` when ``season`` exceeds ``ERA_MAX_KNOWN_SEASON``.
+
+    The era one-hots' last bin (``era4``: ``season > 2017``) is open-ended, so a
+    later season is absorbed into it with no signal.  This is the one place
+    that says so — every era-building feature helper (nflverse and ESPN paths)
+    calls it.  Warns once per offending season: the ``warnings`` module
+    de-duplicates on message text, and the season is in the message.
+    """
+    if "season" not in df.columns or df.height == 0:
+        return
+    max_season = df.get_column("season").cast(pl.Int64, strict=False).max()
+    if max_season is None or max_season <= ERA_MAX_KNOWN_SEASON:
+        return
+    warnings.warn(
+        f"season {max_season} is beyond ERA_MAX_KNOWN_SEASON={ERA_MAX_KNOWN_SEASON}, the last season the NFL "
+        "era bins (ERA_SEASON_CUTS) and the kickoff-touchback substitution were validated for; its plays are "
+        "scored under the last era (era4, season > 2017). Review the season for rule changes (a new era needs "
+        "an explicit dummy and a retrain), then bump ERA_MAX_KNOWN_SEASON in sportsdataverse.nfl.model_vars. "
+        "Silence deliberately with warnings.filterwarnings('ignore', category=EraCoverageWarning).",
+        EraCoverageWarning,
+        stacklevel=3,
+    )
+
+
 def _make_model_mutations(df: pl.DataFrame) -> pl.DataFrame:
     """Add era/roof/down one-hots and the ``home`` indicator.
 
     Matches the R ``make_model_mutations()`` in nflfastR exactly:
     era bins, retractable/dome/outdoors from ``roof``, down dummies,
-    home indicator from ``posteam == home_team``.
+    home indicator from ``posteam == home_team``.  Warns
+    (:class:`EraCoverageWarning`) when a season lies beyond
+    ``ERA_MAX_KNOWN_SEASON`` instead of absorbing it into ``era4`` silently.
     """
+    _warn_if_season_beyond_known_eras(df)
     df = df.with_columns(
         # Era flags
         pl.when(pl.col("season") <= 2001).then(1).otherwise(0).alias("era0"),
@@ -431,8 +493,12 @@ def _add_wp_aux(df: pl.DataFrame) -> pl.DataFrame:
     )
 
     df = df.with_columns(
-        (pl.col("posteam_spread") * ((-4.0 * pl.col("elapsed_share")).exp())).alias("spread_time"),
-        (pl.col("score_differential") / ((-4.0 * pl.col("elapsed_share")).exp())).alias("Diff_Time_Ratio"),
+        (pl.col("posteam_spread") * ((SPREAD_TIME_DECAY_EXPONENT * pl.col("elapsed_share")).exp())).alias(
+            "spread_time"
+        ),
+        (pl.col("score_differential") / ((SPREAD_TIME_DECAY_EXPONENT * pl.col("elapsed_share")).exp())).alias(
+            "Diff_Time_Ratio"
+        ),
     )
 
     # When spread_line is null, spread_time = 0 (use wp_naive model)
@@ -463,7 +529,11 @@ def _make_cp_mutations(df: pl.DataFrame) -> pl.DataFrame:
     - ``home`` indicator (if not already present)
     - Roof one-hots (identical to :func:`_make_model_mutations`)
     - ``pass_middle`` — ``pass_location == "middle"`` coerced to int
+
+    Warns (:class:`EraCoverageWarning`) when a season lies beyond
+    ``ERA_MAX_KNOWN_SEASON`` instead of absorbing it into ``era4`` silently.
     """
+    _warn_if_season_beyond_known_eras(df)
     df = df.with_columns(
         pl.when(pl.col("air_yards") == 0).then(1).otherwise(0).alias("air_is_zero"),
         (pl.col("air_yards") - pl.col("ydstogo")).alias("distance_to_sticks"),
@@ -570,6 +640,7 @@ def _espn_ep_features(
     Returns:
         ``(N, 18)`` float32 ndarray in :data:`EP_FEATURES` column order.
     """
+    _warn_if_season_beyond_known_eras(play_df)
     df = play_df.with_columns(
         pl.when(pl.col("season") <= 2001).then(1).otherwise(0).alias("_era0"),
         pl.when((pl.col("season") > 2001) & (pl.col("season") <= 2005)).then(1).otherwise(0).alias("_era1"),
@@ -653,7 +724,7 @@ def _espn_wp_features(
     df = play_df.with_columns(
         ((3600.0 - pl.col(game_sec_col)) / 3600.0).clip(0.0, 1.0).alias("_elapsed"),
     ).with_columns(
-        (pl.col(score_diff_col) / ((-4.0 * pl.col("_elapsed")).exp())).alias("_dtr"),
+        (pl.col(score_diff_col) / ((SPREAD_TIME_DECAY_EXPONENT * pl.col("_elapsed")).exp())).alias("_dtr"),
     )
     exprs = [pl.col(receive_ko_col).cast(pl.Int8).alias("receive_2h_ko")]
     if include_spread:

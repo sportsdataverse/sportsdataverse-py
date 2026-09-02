@@ -174,6 +174,27 @@ class NoDataError(SportsDataverseError):
 NoESPNDataError = NoDataError
 
 
+class EraCoverageWarning(UserWarning):
+    """Warned when NFL model features are built for a season past the validated era range.
+
+    The nflfastR era one-hots end in an open-ended ``era4`` (``season > 2017``),
+    so a season beyond :data:`sportsdataverse.nfl.model_vars.ERA_MAX_KNOWN_SEASON`
+    is scored under the last era with nothing flagging that a rule change might
+    warrant a new dummy. The warning is that flag. It is a ``UserWarning`` so
+    scoring the in-progress season keeps working; silence it deliberately once
+    the season has been reviewed, and bump ``ERA_MAX_KNOWN_SEASON`` at the next
+    era-aware retrain.
+
+    Example:
+        Silence it for a producer that scores the live season::
+
+            import warnings
+            from sportsdataverse.errors import EraCoverageWarning
+
+            warnings.filterwarnings("ignore", category=EraCoverageWarning)
+    """
+
+
 def no_espn_data(response: "requests.Response") -> "requests.Response":
     """Validate an ESPN response, raising :class:`NoDataError` if empty.
 
