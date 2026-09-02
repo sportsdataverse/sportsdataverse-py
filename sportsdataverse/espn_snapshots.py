@@ -532,6 +532,15 @@ def espn_depthcharts_snapshot(
         ) from exc
     if list_teams is not None:
         team_ids = list_teams()["team_id"].to_list()
+        if not team_ids:
+            # An empty directory is an ESPN outage, not an observation. Left alone
+            # it yields zero rows -- indistinguishable from the leagues ESPN
+            # publishes no depth chart for, which is the one distinction this
+            # dataset is built on. Callers passing team_ids=[] still get a no-op.
+            raise ValueError(
+                f"espn_{league}_teams() returned no teams -- refusing to report an empty"
+                " snapshot that would read as 'this league has no depth charts'"
+            )
     frames: List[pl.DataFrame] = []
     for index, team_id in enumerate(team_ids or []):
         if index and request_delay > 0:

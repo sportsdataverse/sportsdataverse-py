@@ -464,3 +464,23 @@ def test_a_league_without_a_teams_wrapper_raises_the_same_clear_error(monkeypatc
     monkeypatch.delattr(nba, "espn_nba_teams", raising=True)
     with pytest.raises(ValueError, match="depth charts"):
         espn_depthcharts_snapshot("nba")
+
+
+def test_an_empty_teams_directory_raises_instead_of_reporting_no_depth_charts(monkeypatch):
+    """Zero teams is an ESPN outage; zero depth charts is a fact about the league.
+
+    Left unguarded both render as a zero-row frame, and the second is exactly what
+    nhl/wnba/cfb legitimately return -- so an outage would silently read as
+    "this league publishes no depth chart" and be skipped without a cause.
+    """
+    monkeypatch.setattr(
+        "sportsdataverse.nba.espn_nba_teams",
+        lambda *a, **k: pl.DataFrame({"team_id": []}, schema={"team_id": pl.Utf8}),
+    )
+    with pytest.raises(ValueError, match="returned no teams"):
+        espn_depthcharts_snapshot("nba")
+
+    # an explicitly empty team list is the caller's choice, and stays a no-op
+    df = espn_depthcharts_snapshot("nba", team_ids=[], as_of_date=STAMP)
+    assert df.is_empty()
+    assert list(df.columns) == list(DEPTHCHART_SNAPSHOT_SCHEMA)
