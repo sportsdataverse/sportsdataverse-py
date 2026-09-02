@@ -13,7 +13,7 @@ description: "sdv-py MLB: endpoint references, dataset loaders and parsers for M
 | [ESPN FPI API (fitt v3)](reference/fitt) | 1 | `https://site.web.api.espn.com/apis/fitt/v3/sports` |
 | [MLB Stats API](reference/mlb_api) | 64 | `https://statsapi.mlb.com` |
 | [MLB Statcast (Baseball Savant)](reference/mlb_statcast) | 39 | `https://baseballsavant.mlb.com` |
-| [Dataset loaders](reference/loaders) | 13 | sportsdataverse-data releases |
+| [Dataset loaders](reference/loaders) | 20 | sportsdataverse-data releases |
 | [Additional functions](reference/additional) | 83 | hand-written wrappers, loaders & helpers |
 
 ## Examples
@@ -99,6 +99,7 @@ Each `sportsdataverse` function and its equivalent in the sister R package, [`ba
 | [`espn_mlb_venues`](reference/core#espn_mlb_venues) | [`espn_mlb_venues`](https://billpetti.github.io/baseballr/reference/espn_mlb_venues.html) |
 | [`load_ncaa_baseball_pbp`](reference/loaders#load_ncaa_baseball_pbp) | [`load_ncaa_baseball_pbp`](https://billpetti.github.io/baseballr/reference/load_ncaa_baseball_pbp.html) |
 | [`load_ncaa_baseball_schedule`](reference/loaders#load_ncaa_baseball_schedule) | [`load_ncaa_baseball_schedule`](https://billpetti.github.io/baseballr/reference/load_ncaa_baseball_schedule.html) |
+| [`load_ncaa_baseball_teams`](reference/loaders#load_ncaa_baseball_teams) | [`load_ncaa_baseball_teams`](https://billpetti.github.io/baseballr/reference/load_ncaa_baseball_teams.html) |
 | [`mlb_all_star_final_vote`](reference/mlb_api#mlb_all_star_final_vote) | [`mlb_all_star_final_vote`](https://billpetti.github.io/baseballr/reference/mlb_all_star_final_vote.html) |
 | [`mlb_all_star_write_ins`](reference/mlb_api#mlb_all_star_write_ins) | [`mlb_all_star_write_ins`](https://billpetti.github.io/baseballr/reference/mlb_all_star_write_ins.html) |
 | [`mlb_attendance`](reference/additional#mlb_attendance) | [`mlb_attendance`](https://billpetti.github.io/baseballr/reference/mlb_attendance.html) |
