@@ -484,3 +484,41 @@ def test_an_empty_teams_directory_raises_instead_of_reporting_no_depth_charts(mo
     df = espn_depthcharts_snapshot("nba", team_ids=[], as_of_date=STAMP)
     assert df.is_empty()
     assert list(df.columns) == list(DEPTHCHART_SNAPSHOT_SCHEMA)
+
+
+def _chart(athletes: list) -> dict:
+    return {
+        "season": {"year": 2026},
+        "team": {"id": "22"},
+        "depthchart": [
+            {
+                "id": "1",
+                "name": "D",
+                "positions": {
+                    "qb": {
+                        "position": {"id": "8", "abbreviation": "QB"},
+                        "athletes": athletes,
+                    }
+                },
+            }
+        ],
+    }
+
+
+def test_a_malformed_athlete_entry_is_not_a_depth_slot():
+    """`_mapping` would turn a non-mapping entry into an all-null row that still
+    counts as a slot -- the injuries parser already skips its equivalent."""
+    assert parse_depthchart_snapshot(_chart([None]), league="nfl").is_empty()
+    assert parse_depthchart_snapshot(_chart([None, 7, "x"]), league="nfl").is_empty()
+
+
+def test_skipping_a_malformed_entry_does_not_promote_the_players_behind_it():
+    """Depth IS the array position, so a dropped entry must leave a gap. Renumbering
+    would silently make the third-string QB the backup."""
+    df = parse_depthchart_snapshot(
+        _chart([{"id": "1", "displayName": "Starter"}, None, {"id": "3", "displayName": "Third"}]),
+        league="nfl",
+    )
+
+    assert df["depth_rank"].to_list() == [1, 3]
+    assert df["athlete_display_name"].to_list() == ["Starter", "Third"]

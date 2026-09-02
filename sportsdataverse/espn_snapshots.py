@@ -441,7 +441,14 @@ def parse_depthchart_snapshot(
             slot_map = _mapping(slot)
             position = _mapping(slot_map.get("position"))
             for rank, athlete in enumerate(_list(slot_map.get("athletes")), start=1):
-                athlete_map = _mapping(athlete)
+                if not isinstance(athlete, Mapping):
+                    # A malformed entry is not a depth slot. `_mapping` would turn it
+                    # into an all-null row that still counts as one -- the same rule
+                    # the injuries parser applies to its records. `rank` keeps
+                    # enumerating the ORIGINAL positions, so skipping an entry leaves
+                    # a gap rather than silently promoting everyone behind it.
+                    continue
+                athlete_map = athlete
                 rows.append(
                     {
                         "as_of_date": stamp,
@@ -499,7 +506,11 @@ def espn_depthcharts_snapshot(
         One frame with :data:`DEPTHCHART_SNAPSHOT_SCHEMA`'s columns, long over team.
 
     Raises:
-        ValueError: If the league has no ``espn_{league}_team_depthcharts`` wrapper.
+        ValueError: If the league has no ``espn_{league}_team_depthcharts`` wrapper,
+            or if ``team_ids`` was not supplied and ``espn_{league}_teams()`` returned
+            no teams -- an empty directory is an upstream outage, and reporting it as
+            zero rows would be indistinguishable from a league ESPN publishes no depth
+            chart for. Passing ``team_ids=[]`` explicitly is a no-op, not an error.
 
     Example:
         Today's NFL depth charts::
