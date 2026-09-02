@@ -427,6 +427,7 @@ files = [
     "sportsdataverse/nba/nba_shot_zones.py",
     "sportsdataverse/nba/nba_shot_value_constants.py",
     "sportsdataverse/nba/nba_shot_value.py",
+    "sportsdataverse/nba/nba_loaders_extra.py",
     "sportsdataverse/wnba/wnba_shot_value.py",
     "sportsdataverse/nba/nba_tracking_value_constants.py",
     "sportsdataverse/nba/nba_tracking_value.py",

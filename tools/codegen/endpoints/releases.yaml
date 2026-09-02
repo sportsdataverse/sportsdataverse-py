@@ -1713,6 +1713,17 @@ loaders:
   min_season: 1999
   example_args:
     seasons: 2024
+# SDV-native enriched pbp: the same asset load_nfl_pbp(source="sdv") reads, given
+# its own name so the nfl_model_pbp tag is reachable without the source= kwarg.
+# 27 assets, 1999-2025, 257 columns per season (verified live 2026-09-02).
+- fn: load_nfl_model_pbp
+  league: nfl
+  base: sdv_releases
+  url: nfl_model_pbp/model_pbp_{season}.parquet
+  tag: nfl_model_pbp
+  min_season: 1999
+  example_args:
+    seasons: 2024
 # SDV-native: per-week as-of vintages of the ratings spine (nfl-data
 # nfl_ratings_weekly job). as_of_week is STRICTLY EXCLUSIVE — a row at
 # as_of_week=W was fit only on games before week W's first kickoff.

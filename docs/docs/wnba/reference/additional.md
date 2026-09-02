@@ -393,6 +393,61 @@ frames_pd["Misc"].head()
 
 ## Dataset loaders
 
+### `load_wnba_stats_leaguedash(family: 'str', seasons, return_as_pandas: 'bool' = False) -> 'pl.DataFrame'` {#load_wnba_stats_leaguedash}
+
+Load one asset family of the `wnba_stats_leaguedash` release.
+
+`wnba_stats_leaguedash` is a parameter cube: one asset per
+(family, season) pair rather than one per season, so a family must be named.
+The valid families are exported as `WNBA_STATS_LEAGUEDASH_FAMILIES` --
+import that tuple to discover them rather than passing a bare string; an
+unknown family raises `ValueError` listing every valid value. This is the
+non-deprecated way to reach the cube; the four `load_wnba_stats_*` shims
+below only reconstruct retired tags' stacked shapes from it.
+
+Column sets are family-specific (a `lineups_*` frame keys on `group_id`,
+a `player_*` frame on `player_id`), so this loader documents no fixed
+returns table. `player_id` / `team_id` are `Int64` in every family and
+season, so cross-family joins need no dtype reconciliation.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `family` | `str` |  | Asset family, e.g. `"player_stats_advanced"`. Must be one of `WNBA_STATS_LEAGUEDASH_FAMILIES`. |
+| `seasons` | `int \| Iterable[int]` |  | Season, or iterable of seasons, to load. WNBA seasons are single calendar years. 1997 is the earliest season on the tag. A requested season the family does not publish is warned about and skipped, not an error. |
+| `return_as_pandas` | `bool` | `False` | If True, returns a pandas dataframe. If False, returns a polars dataframe. |
+
+**Returns**
+
+Polars dataframe with one row per player / team / lineup per requested season for the requested family; an empty frame when no requested season is published.
+
+**Example**
+
+```python
+from sportsdataverse.wnba import load_wnba_stats_leaguedash
+adv = load_wnba_stats_leaguedash("player_stats_advanced", seasons=2025)
+print(adv.shape)
+
+# Discover the valid families
+
+from sportsdataverse.wnba import WNBA_STATS_LEAGUEDASH_FAMILIES
+print(WNBA_STATS_LEAGUEDASH_FAMILIES)
+
+# Multi-season, pandas round-trip
+
+team_pd = load_wnba_stats_leaguedash(
+    "team_stats_base", seasons=range(2020, 2026), return_as_pandas=True
+)
+
+# Pipeline next step (best net rating in 2025)
+
+import polars as pl
+load_wnba_stats_leaguedash("team_stats_advanced", seasons=2025).sort(
+    "net_rating", descending=True
+).head()
+```
+
 ### `load_wnba_stats_lineups(seasons, return_as_pandas: 'bool' = False) -> 'pl.DataFrame'` {#load_wnba_stats_lineups}
 
 Load season-level WNBA 5-man lineup statistics (deprecated).
