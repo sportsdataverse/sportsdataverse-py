@@ -1017,6 +1017,18 @@ across the whole pipeline:
 - **`pyjanitor 0.32.18+` silently switched to pandas 3.x.** Keep the
   defensive `pyjanitor<0.32.18` upper bound in `pyproject.toml` until
   pandas 3 is the project floor.
+- **ESPN injuries come from the LEAGUE endpoint, never the game summary.**
+  The per-game `summary` payload has an `injuries` key that is present and
+  always `[]` — a producer stage built on it runs green forever and emits zero
+  rows (this is why the `espn_cfb_injuries` release tag sat at zero assets
+  while a correctly-wired daily stage ran). The real records come from
+  `espn_{league}_injuries()`, which takes no arguments and returns every team
+  in one request. It reports CURRENT STATE ONLY, so history exists only if it
+  is snapshotted: `sportsdataverse.espn_snapshots.espn_injuries_snapshot()`
+  stamps every row with `as_of_date` for append-only collection. Also note
+  ESPN omits `athlete.id` from that payload entirely — the athlete id is
+  recovered from the player-card link, so do not "simplify" it to a direct
+  key read.
 
 ## Documentation Maintenance
 
