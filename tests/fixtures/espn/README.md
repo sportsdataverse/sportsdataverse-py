@@ -32,6 +32,8 @@ against the NBA league. Used by `tests/test_espn_universal_parsers.py`.
 | `team_schedule_{mlb,nfl,nhl,wnba}.json` | Site v2 `teams/{id}/schedule` | Cross-league captures for `parse_team_schedule` |
 | `news_{mlb,nfl,nhl,wnba}.json` | Site v2 `news?limit=5` | Cross-league captures for `parse_news` |
 | `injuries_{mlb,nfl,nhl,wnba}.json` | Site v2 `injuries` | Cross-league captures for `parse_injuries`; NFL is the largest (~15 MB) |
+| `depthcharts_{nfl,nba,mlb}.json` | Site v2 `teams/{id}/depthcharts` (captured 2026-09-02) | One team each for `parse_depthchart_snapshot`: NFL=ARI id 22 (3 groups / 68 slots, incl. the wr1/wr2/wr3 slots that share one position id), NBA=ATL id 1 (1 / 39), MLB=SEA id 29 (1 / 76) |
+| `depthcharts_nhl.json` | Site v2 `teams/25/depthcharts` (captured 2026-09-02) | The empty case, and the reason NHL/WNBA/CFB are excluded: HTTP 200 with the `depthchart` key **absent entirely** (558 bytes) |
 
 Endpoints are league-agnostic so capturing against NBA is sufficient — the
 parsers run identically against MLB, NFL, NHL, WNBA, MBB, WBB, CFB payloads
