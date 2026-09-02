@@ -478,3 +478,38 @@ def test_write_release_sidecars_omits_package_function_when_none(tmp_path):
 
     assert [p.name for p in paths] == ["timestamp.txt", "timestamp.json"]
     assert not (tmp_path / "package_function.json").exists()
+
+
+def test_upload_release_sidecars_pushes_four_through_the_runner():
+    """A producer's own gh runner uploads the same four files, one per call."""
+    from sportsdataverse.release import upload_release_sidecars
+
+    calls: list[list[str]] = []
+    names = upload_release_sidecars(
+        "espn_nba_pbp",
+        runner=calls.append,
+        pkg_function="hoopR::load_nba_pbp()",
+        repo="sportsdataverse/sportsdataverse-data",
+    )
+
+    assert names == [
+        "timestamp.txt",
+        "timestamp.json",
+        "package_function.txt",
+        "package_function.json",
+    ]
+    assert len(calls) == 4
+    for call, name in zip(calls, names):
+        assert call[:3] == ["release", "upload", "espn_nba_pbp"]
+        assert call[3].endswith(name)
+        assert call[4:] == ["--repo", "sportsdataverse/sportsdataverse-data", "--clobber"]
+
+
+def test_upload_release_sidecars_cleans_up_its_temp_dir():
+    from sportsdataverse.release import upload_release_sidecars
+
+    paths: list[str] = []
+    upload_release_sidecars("t", runner=lambda a: paths.append(a[3]))
+
+    assert len(paths) == 2  # timestamp pair only
+    assert not any(Path(p).exists() for p in paths)

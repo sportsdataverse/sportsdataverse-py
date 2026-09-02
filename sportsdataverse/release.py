@@ -40,7 +40,7 @@ import time
 import warnings
 from datetime import datetime, timezone
 from pathlib import Path
-from collections.abc import Iterable
+from collections.abc import Callable, Iterable
 from typing import Any
 
 import polars as pl
@@ -73,6 +73,7 @@ __all__ = [
     "gh_cli_release_upload",
     "sportsdataverse_save",
     "sportsdataverse_upload",
+    "upload_release_sidecars",
     "write_release_sidecars",
 ]
 
@@ -380,6 +381,68 @@ def write_release_sidecars(dest_dir: str | Path, pkg_function: str | None = None
     if pkg_function is not None:
         sidecars += _create_package_function(dest, pkg_function)
     return sidecars
+
+
+def upload_release_sidecars(
+    tag: str,
+    *,
+    runner: Callable[[list[str]], Any],
+    pkg_function: str | None = None,
+    repo: str = DEFAULT_REPO,
+) -> list[str]:
+    """Write the release sidecars and push them through a caller's ``gh`` runner.
+
+    The producer repos each own their upload transport -- one ``gh release
+    upload`` per file, a longer subprocess timeout for 100MB+ assets, and an
+    injected ``runner`` so their tests never touch the network. This lets them
+    stamp a tag with the same four files :func:`sportsdataverse_upload` writes
+    without giving up any of that: the sidecars are written to a temp dir and
+    handed to ``runner`` one at a time, exactly like their own data assets.
+
+    Call it once per tag AFTER the data assets land, so the timestamp reflects
+    the finished upload rather than the start of it.
+
+    Args:
+        tag: Release tag to stamp.
+        runner: Callable taking a ``gh`` argument list, e.g. the producer's
+            ``_gh``. Injectable so tests stay offline.
+        pkg_function: Related package function name. When None only the
+            timestamp pair is uploaded.
+        repo: Target repository. Defaults to ``sportsdataverse/sportsdataverse-data``.
+
+    Returns:
+        The uploaded sidecar file names, in upload order.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.release import upload_release_sidecars
+            upload_release_sidecars(
+                "espn_nba_pbp",
+                runner=_gh,
+                pkg_function="hoopR::load_nba_pbp()",
+                repo="sportsdataverse/sportsdataverse-data",
+            )
+
+        Hermetic test::
+
+            calls = []
+            upload_release_sidecars("t", runner=calls.append)
+
+        See Also:
+            * `hoopR`_ -- the R package whose ``sportsdataverse_save()`` this mirrors
+
+        .. _hoopR: https://hoopR.sportsdataverse.org
+    """
+    uploaded: list[str] = []
+    temp_dir = Path(tempfile.mkdtemp(prefix="sdv_sidecars_"))
+    try:
+        for sidecar in write_release_sidecars(temp_dir, pkg_function):
+            runner(["release", "upload", tag, str(sidecar), "--repo", repo, "--clobber"])
+            uploaded.append(sidecar.name)
+    finally:
+        shutil.rmtree(temp_dir, ignore_errors=True)
+    return uploaded
 
 
 def sportsdataverse_upload(
