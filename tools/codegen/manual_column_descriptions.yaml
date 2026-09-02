@@ -14174,6 +14174,11 @@ load_nfl_ftn_charting:
   n_defense_box: Number of defenders aligned in the box at the time of the snap, as charted by FTN Data.
 load_nfl_officials:
   game_key: Unique nflverse game identifier linking the officiating record to a specific NFL game.
+load_nfl_pbp:
+  cpoe: Completion percentage over expected in PERCENTAGE POINTS, not a 0-1 rate -- 100 * (complete_pass - cp) per pass
+    play, so a completed pass with cp 0.368 scores +63.2 and the same pass falling incomplete scores -36.8. Averaged over
+    a passer's attempts it is the familiar CPOE of a few points either way; divide by 100 before combining it with 0-1
+    probabilities such as cp. Null on non-pass rows.
 load_nfl_pfr_advstats:
   def_times_blitzed: Number of times the defensive player sent additional rushers on a blitz during the game or season period.
   def_times_hitqb: Number of times the defensive player made contact with the quarterback (hit on the QB) during pass rushes.
@@ -14441,7 +14446,7 @@ load_nfl_team_stats:
   misc_yards: Miscellaneous yards not attributed to passing, rushing, or standard return categories during the period.
   opponent_team: Team abbreviation or identifier of the opposing team faced during the game or period.
   passing_cpoe: Completion percentage over expectation (CPOE) for the team's passing attack during the period, relative to
-    a model-based baseline.
+    a model-based baseline. Percentage points (100 * the completion-rate gap), not a 0-1 rate.
   passing_interceptions: Total number of interceptions thrown by the team's passers during the game or season period.
   pat_att: Total number of point-after-touchdown (PAT / extra point) attempts by the team's kicker during the period.
   pat_blocked: Number of point-after-touchdown attempts that were blocked by the opposing defense during the period.
@@ -14688,7 +14693,7 @@ load_team_stats:
   misc_yards: Yards gained by the team through miscellaneous means not captured in standard rushing, passing, or return categories.
   opponent_team: Abbreviation of the opposing team the team faced in the game or week represented by this row.
   passing_cpoe: Completion percentage over expectation for the team's passing game — how much better or worse actual completion
-    rate was versus the model-predicted rate.
+    rate was versus the model-predicted rate. Percentage points (100 * the completion-rate gap), not a 0-1 rate.
   passing_interceptions: Total number of interceptions thrown by the team's quarterbacks during the period covered.
   pat_att: Total number of extra point (PAT) kick attempts by the team.
   pat_blocked: Number of extra point attempts that were blocked by the opposing defense.

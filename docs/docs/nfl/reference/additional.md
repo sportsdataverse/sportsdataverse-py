@@ -2924,7 +2924,7 @@ Polars dataframe containing team stats available for the requested seasons.
 | `passing_yards_after_catch` | integer | Yards after the catch gained on plays in which player was the passer (this is an unofficial stat and may differ slightly between different sources). |
 | `passing_first_downs` | integer | First downs on pass attempts. |
 | `passing_epa` | double | Total expected points added on pass attempts and sacks. NOTE: this uses the variable `qb_epa`, which gives QB credit for EPA for up to the point where a receiver lost a fumble after a completed catch and makes EPA work more like passing yards on plays with fumbles. |
-| `passing_cpoe` | double | Completion percentage over expectation (CPOE) for the team's passing attack during the period, relative to a model-based baseline. |
+| `passing_cpoe` | double | Completion percentage over expectation (CPOE) for the team's passing attack during the period, relative to a model-based baseline. Percentage points (100 * the completion-rate gap), not a 0-1 rate. |
 | `passing_2pt_conversions` | integer | Two-point conversion passes. |
 | `carries` | integer | The number of official rush attempts (incl. scrambles and kneel downs). Rushes after a lateral reception don't count as carry. |
 | `rushing_yards` | integer | Numeric yards by the rusher_player_name, excluding yards gained in rush plays with laterals. This should equal official rushing statistics but could miss yards gained in rush plays with laterals. Please see the description of `lateral_rusher_player_name` for further information. |
@@ -3730,7 +3730,7 @@ Polars dataframe containing team stats available for the requested seasons.
 | `passing_yards_after_catch` | integer | Yards after the catch gained on plays in which player was the passer (this is an unofficial stat and may differ slightly between different sources). |
 | `passing_first_downs` | integer | First downs on pass attempts. |
 | `passing_epa` | double | Total expected points added on pass attempts and sacks. NOTE: this uses the variable `qb_epa`, which gives QB credit for EPA for up to the point where a receiver lost a fumble after a completed catch and makes EPA work more like passing yards on plays with fumbles. |
-| `passing_cpoe` | double | Completion percentage over expectation for the team's passing game — how much better or worse actual completion rate was versus the model-predicted rate. |
+| `passing_cpoe` | double | Completion percentage over expectation for the team's passing game — how much better or worse actual completion rate was versus the model-predicted rate. Percentage points (100 * the completion-rate gap), not a 0-1 rate. |
 | `passing_2pt_conversions` | integer | Two-point conversion passes. |
 | `carries` | integer | The number of official rush attempts (incl. scrambles and kneel downs). Rushes after a lateral reception don't count as carry. |
 | `rushing_yards` | integer | Numeric yards by the rusher_player_name, excluding yards gained in rush plays with laterals. This should equal official rushing statistics but could miss yards gained in rush plays with laterals. Please see the description of `lateral_rusher_player_name` for further information. |
