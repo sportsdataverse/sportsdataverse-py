@@ -31,6 +31,8 @@ moved. See each per-sport module for the byte-for-byte migration.
 
 from __future__ import annotations
 
+import warnings
+
 import numpy as np
 import polars as pl
 
@@ -52,6 +54,40 @@ _ITER_SCHEMA: dict[str, pl.PolarsDataType] = {
     "raw_def": pl.Float64,
     "games": pl.Int64,
 }
+
+
+def drop_unusable_possession_rows(paired: pl.DataFrame) -> pl.DataFrame:
+    """Drop game rows whose possession estimate is not usable (``poss <= 0`` / null).
+
+    ESPN ships the occasional boxscore shell -- a final score with every
+    shooting counter zeroed (MBB game ``310573129``, 2011-02-26; WBB game
+    ``400768032``, 2015-03-10) -- which makes ``poss`` exactly ``0`` and the
+    efficiency ``100 * pts / 0`` an infinity. One such row is enough to take a
+    whole season down: :func:`~sportsdataverse._common.ratings.iterative_opponent_adjust`
+    centres on the data's own mean, and ``mean([..., inf])`` is ``inf``, so
+    every team's fixed point (not just the two teams in that game) converges to
+    a non-finite rating. ``raw_o``/``raw_d`` are per-team sums that never touch
+    the mean, which is why they stay finite and the failure looks selective.
+
+    The row carries no information -- there is no possession estimate to be had
+    from an all-zero box -- so it is dropped from both the efficiency and the
+    tempo path, with a warning naming the games.
+    """
+    if paired.height == 0:
+        return paired
+    usable = paired.filter(pl.col("poss").is_not_null() & pl.col("poss").is_finite() & (pl.col("poss") > 0.0))
+    dropped = paired.height - usable.height
+    if dropped:
+        games = paired.join(usable.select("game_id", "team_id"), on=["game_id", "team_id"], how="anti")[
+            "game_id"
+        ].unique(maintain_order=True)
+        warnings.warn(
+            f"raw_game_efficiency: dropped {dropped} team-game row(s) with a non-positive possession "
+            f"estimate (empty boxscore) from {games.len()} game(s): {games.head(10).to_list()}",
+            UserWarning,
+            stacklevel=3,
+        )
+    return usable
 
 
 def opponent_adjusted_ridge(

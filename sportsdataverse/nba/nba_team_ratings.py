@@ -26,7 +26,7 @@ from typing import TYPE_CHECKING, Literal, Union, overload
 import numpy as np
 import polars as pl
 
-from sportsdataverse._common.ratings import iterative_opponent_adjust
+from sportsdataverse._common.ratings import drop_unusable_possession_rows, iterative_opponent_adjust
 from sportsdataverse.nba.nba_loaders import load_nba_schedule, load_nba_team_boxscore
 from sportsdataverse.nba.nba_prediction_constants import as_of_ratings_split, get_constants
 
@@ -110,10 +110,14 @@ def raw_game_efficiency(schedule: pl.DataFrame, team_box: pl.DataFrame) -> pl.Da
         box.join(opp, on="game_id")
         .filter(pl.col("team_id") != pl.col("opp_team_id"))
         .with_columns((0.5 * (pl.col("team_poss") + pl.col("opp_poss"))).alias("poss"))
-        .with_columns(
-            (100.0 * pl.col("pts") / pl.col("poss")).alias("off_rtg"),
-            (100.0 * pl.col("opp_pts") / pl.col("poss")).alias("def_rtg"),
-        )
+    )
+    # Same guard as the MBB/WBB engine: one all-zero boxscore shell gives
+    # poss == 0 -> an infinite rating -> a non-finite league mean -> a
+    # non-finite fixed point for EVERY team. Drop the unusable rows first.
+    paired = drop_unusable_possession_rows(paired)
+    paired = paired.with_columns(
+        (100.0 * pl.col("pts") / pl.col("poss")).alias("off_rtg"),
+        (100.0 * pl.col("opp_pts") / pl.col("poss")).alias("def_rtg"),
     )
 
     sched = schedule.select(
