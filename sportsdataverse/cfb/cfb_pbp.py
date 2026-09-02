@@ -6622,8 +6622,13 @@ class CFBPlayProcess(object):
                 .when((pl.col("rush") == True).and_(pl.col("yds_rushed") >= 8))
                 .then(5.5)
                 .otherwise(None),
+                # The runner's half of the shared band starts where the line's full credit stops, and
+                # line_yards above gives the line 100% only through 3 yards. Subtracting 4 here instead
+                # of 3 lost exactly half a yard on every carry of 4+, so line + second level + open
+                # field came to yds_rushed - 0.5 rather than yds_rushed: 29 of the 55 rushes in
+                # ESPN 401864570 were short by 0.5 and the rest (runs under 4) were exact.
                 second_level_yards=pl.when((pl.col("rush") == True).and_(pl.col("yds_rushed") >= 4))
-                .then(0.5 * (pl.col("adj_rush_yardage") - 4))
+                .then(0.5 * (pl.col("adj_rush_yardage") - 3))
                 .when(pl.col("rush") == True)
                 .then(0)
                 .otherwise(None),
@@ -6660,34 +6665,19 @@ class CFBPlayProcess(object):
                 .when((pl.col("start.distance") >= 2).and_(pl.col("rush") == True))
                 .then(False)
                 .otherwise(None),
-                power_rush_success=pl.when(
-                    (pl.col("start.distance") < 2)
-                    .and_(pl.col("rush") == True)
-                    .and_(pl.col("start.down").is_in([3, 4]))
-                    .and_(pl.col("statYardage") >= pl.col("start.distance")),
-                )
-                .then(True)
-                .when(
-                    (pl.col("start.distance") < 2)
-                    .and_(pl.col("rush") == True)
-                    .and_(pl.col("start.down").is_in([3, 4]))
-                    .and_(pl.col("statYardage") < pl.col("start.distance")),
-                )
-                .then(False)
-                .otherwise(None),
-                power_rush_attempt=pl.when(
-                    (pl.col("start.distance") < 2)
-                    .and_(pl.col("rush") == True)
-                    .and_(pl.col("start.down").is_in([3, 4])),
-                )
-                .then(True)
-                .when(
-                    (pl.col("start.distance") < 2)
-                    .and_(pl.col("rush") == True)
-                    .and_(pl.col("start.down").is_in([3, 4])),
-                )
-                .then(False)
-                .otherwise(None),
+                # Power success is a run on 3rd or 4th down with TWO YARDS OR LESS to go, plus a run
+                # on 1st- or 2nd-and-goal from the two or closer. The old form tested `distance < 2`,
+                # which drops every 3rd-and-2 -- the most common power down there is -- and carried no
+                # goal-line clause at all. The attempt flag's two branches were also identical, so its
+                # False branch was unreachable and the column was True-or-null rather than boolean.
+                _power_situation=(pl.col("rush") == True).and_(
+                    (pl.col("start.down").is_in([3, 4]).and_(pl.col("start.distance") <= 2)).or_(
+                        pl.col("start.down")
+                        .is_in([1, 2])
+                        .and_(pl.col("start.distance") == pl.col("start.yardsToEndzone"))
+                        .and_(pl.col("start.yardsToEndzone") <= 2)
+                    )
+                ),
                 early_down=pl.when(
                     ((pl.col("down_1") == True).or_(pl.col("down_2") == True)).and_(pl.col("scrimmage_play") == True),
                 )
@@ -6699,6 +6689,15 @@ class CFBPlayProcess(object):
                 .then(True)
                 .otherwise(False),
             )
+            .with_columns(
+                power_rush_attempt=pl.when(pl.col("rush") == True).then(pl.col("_power_situation")).otherwise(None),
+                power_rush_success=pl.when(pl.col("_power_situation"))
+                .then(pl.col("statYardage") >= pl.col("start.distance"))
+                .when(pl.col("rush") == True)
+                .then(False)
+                .otherwise(None),
+            )
+            .drop("_power_situation")
             .with_columns(
                 early_down_pass=pl.when((pl.col("pass") == True).and_(pl.col("early_down") == True))
                 .then(True)
