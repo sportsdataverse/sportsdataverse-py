@@ -22,7 +22,8 @@ from typing import TYPE_CHECKING
 import numpy as np
 import polars as pl
 
-from sportsdataverse._common.ratings import iterative_opponent_adjust
+from sportsdataverse._common.ratings import drop_unusable_possession_rows, iterative_opponent_adjust
+from sportsdataverse.errors import InsufficientInputError
 from sportsdataverse.mbb.mbb_loaders import load_mbb_schedule, load_mbb_team_boxscore
 from sportsdataverse.mbb.mbb_prediction_constants import get_constants
 
@@ -55,6 +56,36 @@ _BOX_REQUIRED = (
 _SCHED_REQUIRED = ("game_id", "season", "date", "home_team_id", "away_team_id", "neutral_site")
 
 
+def _assert_possession_inputs(team_box: pl.DataFrame) -> None:
+    """Refuse a boxscore whose ``turnovers`` are structurally absent (all zero).
+
+    A real basketball game always has turnovers, so a frame in which *no* row
+    carries a positive one is a schema gap wearing a zero -- ESPN's pre-2013
+    women's team box is exactly that (``turnovers`` is ``0`` in 100% of rows
+    for WBB 2003-2012, and populated from 2013). Zeros are not nulls, so no
+    null check sees it, and the possession estimate silently loses the whole
+    turnover term (~16 of ~71 possessions per team-game, ~23%). The damage is
+    not a constant rescale that a level band could absorb: each team's poss is
+    understated by *its own* turnover count, so the induced error is
+    correlated with turnover rate and reorders teams.
+
+    Raises:
+        InsufficientInputError: When the frame has rows and no positive turnover.
+    """
+    if team_box.height == 0 or "turnovers" not in team_box.columns:
+        return
+    tov = team_box["turnovers"].cast(pl.Float64, strict=False)
+    if tov.null_count() == tov.len():
+        return
+    if float(tov.max() or 0.0) <= 0.0:
+        raise InsufficientInputError(
+            f"team boxscore carries no turnovers (0 in all {team_box.height} rows): the possession "
+            "estimate FGA - OREB + TO + 0.44*FTA is missing its turnover term (~23% of possessions), "
+            "so efficiency and tempo would be distorted by each team's own turnover rate. This is the "
+            "ESPN pre-2013 women's box schema -- the season is not ratable from these inputs."
+        )
+
+
 def raw_game_efficiency(schedule: pl.DataFrame, team_box: pl.DataFrame) -> pl.DataFrame:
     """Per-team, per-game possessions + raw offensive/defensive efficiency.
 
@@ -78,7 +109,16 @@ def raw_game_efficiency(schedule: pl.DataFrame, team_box: pl.DataFrame) -> pl.Da
     Returns:
         One row per (game_id, team_id): ``game_id, season, date, team_id,
         opp_team_id, is_home, neutral_site, poss, off_eff, def_eff``. Empty
-        input returns that schema with zero rows.
+        input returns that schema with zero rows. Team-game rows whose
+        possession estimate is non-positive (an all-zero ESPN boxscore shell)
+        are dropped with a ``UserWarning`` -- their efficiency is undefined,
+        and one of them poisons the whole season's fixed point.
+
+    Raises:
+        InsufficientInputError: When ``team_box`` has rows but no positive
+            ``turnovers`` -- the possession estimate's turnover term is
+            structurally absent (ESPN's pre-2013 women's box), so no rating
+            built from it would be meaningful.
 
     Example:
         Quick start::
@@ -98,6 +138,7 @@ def raw_game_efficiency(schedule: pl.DataFrame, team_box: pl.DataFrame) -> pl.Da
         or any(c not in schedule.columns for c in _SCHED_REQUIRED)
     ):
         return pl.DataFrame(schema=_EFF_SCHEMA)
+    _assert_possession_inputs(team_box)
     box = team_box.select(
         pl.col("game_id").cast(pl.Utf8),
         pl.col("team_id").cast(pl.Utf8),
@@ -118,10 +159,11 @@ def raw_game_efficiency(schedule: pl.DataFrame, team_box: pl.DataFrame) -> pl.Da
         box.join(opp, on="game_id")
         .filter(pl.col("team_id") != pl.col("opp_team_id"))
         .with_columns((0.5 * (pl.col("team_poss") + pl.col("opp_poss"))).alias("poss"))
-        .with_columns(
-            (100.0 * pl.col("pts") / pl.col("poss")).alias("off_eff"),
-            (100.0 * pl.col("opp_pts") / pl.col("poss")).alias("def_eff"),
-        )
+    )
+    paired = drop_unusable_possession_rows(paired)
+    paired = paired.with_columns(
+        (100.0 * pl.col("pts") / pl.col("poss")).alias("off_eff"),
+        (100.0 * pl.col("opp_pts") / pl.col("poss")).alias("def_eff"),
     )
 
     sched = schedule.select(
@@ -363,6 +405,12 @@ def mbb_team_ratings(
         One row per (season, team_id) with columns ``season, team_id, adj_o,
         adj_d, adj_em, adj_tempo, raw_o, raw_d, games, rank, adj_em_z``. Empty
         input returns that schema with zero rows.
+
+    Raises:
+        InsufficientInputError: When a requested season's team boxscore has no
+            turnovers at all (ESPN's pre-2013 women's box schema), so its
+            possession estimate -- and every rating derived from it -- would be
+            wrong rather than merely missing.
 
     Example:
         Quick start::

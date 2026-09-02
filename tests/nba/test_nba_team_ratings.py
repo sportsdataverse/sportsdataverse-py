@@ -233,3 +233,49 @@ def test_nba_team_ratings_public_entry_point(monkeypatch: pytest.MonkeyPatch) ->
     out_pd = nba_team_ratings(2024, league_id="00", return_as_pandas=True)
     assert type(out_pd).__name__ == "DataFrame"
     assert hasattr(out_pd, "iloc")
+
+
+def test_zero_possession_shell_row_is_dropped() -> None:
+    """Twin of the MBB/WBB guard: an all-zero boxscore shell must not reach the fixed point.
+
+    `poss == 0` makes the rating infinite and the league mean the engine centres
+    on infinite with it, so one shell row would take every team non-finite (it
+    did, in published mbb_ratings_2011 / wbb_ratings_2015).
+    """
+    sched, box = _mini_schedule_box()
+    sched = pl.concat(
+        [
+            sched,
+            pl.DataFrame(
+                {
+                    "game_id": ["G2"],
+                    "season": [2024],
+                    "date": [dt.date(2024, 1, 2)],
+                    "home_team_id": ["A"],
+                    "away_team_id": ["B"],
+                    "neutral_site": [False],
+                }
+            ),
+        ]
+    )
+    box = pl.concat(
+        [
+            box,
+            pl.DataFrame(
+                {
+                    "game_id": ["G2", "G2"],
+                    "team_id": ["A", "B"],
+                    "field_goals_attempted": [0.0, 0.0],
+                    "offensive_rebounds": [0.0, 0.0],
+                    "turnovers": [0.0, 0.0],
+                    "free_throws_attempted": [0.0, 0.0],
+                    "team_score": [101.0, 99.0],
+                }
+            ),
+        ]
+    )
+    with pytest.warns(UserWarning, match="non-positive possession"):
+        eff = raw_game_efficiency(sched, box)
+    assert eff["game_id"].to_list() == ["G1", "G1"]
+    assert eff["off_rtg"].is_finite().all()
+    assert adjust_efficiency(eff)["adj_off_rtg"].is_finite().all()

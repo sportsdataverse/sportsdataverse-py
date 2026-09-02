@@ -1,7 +1,9 @@
 import datetime
 
 import polars as pl
+import pytest
 
+from sportsdataverse.errors import InsufficientInputError
 from sportsdataverse.mbb.mbb_team_ratings import adjust_efficiency, adjust_tempo, raw_game_efficiency
 
 
@@ -298,3 +300,123 @@ def test_raw_game_efficiency_columnless_inputs_return_typed_empty():
     out = raw_game_efficiency(pl.DataFrame(), pl.DataFrame())
     assert out.height == 0
     assert dict(out.schema) == dict(mod._EFF_SCHEMA)
+
+
+# ---------------------------------------------------------------------------
+# Regression: one all-zero boxscore shell used to take a whole season non-finite
+# (published mbb_ratings_2011: 346/346 qualified teams NaN in adj_o/adj_d/adj_em
+# from ESPN game 310573129; wbb_ratings_2015: 335/335 from game 400768032).
+# ---------------------------------------------------------------------------
+
+
+def _season_with_shell_game():
+    """A 4-team round robin PLUS one game whose box is a scoreline with zero counters."""
+    teams = ["A", "B", "C", "D"]
+    sched_rows, box_rows = [], []
+    gid = 0
+    for i, home in enumerate(teams):
+        for away in teams[i + 1 :]:
+            gid += 1
+            sched_rows.append(
+                {
+                    "game_id": f"G{gid}",
+                    "season": 2011,
+                    "date": datetime.date(2011, 1, 1),
+                    "home_team_id": home,
+                    "away_team_id": away,
+                    "neutral_site": False,
+                }
+            )
+            for t, pts in ((home, 75.0), (away, 70.0)):
+                box_rows.append(
+                    {
+                        "game_id": f"G{gid}",
+                        "team_id": t,
+                        "field_goals_attempted": 60.0,
+                        "offensive_rebounds": 10.0,
+                        "turnovers": 12.0,
+                        "free_throws_attempted": 20.0,
+                        "team_score": pts,
+                    }
+                )
+    # the shell: a real final score, every counter zeroed -> poss == 0
+    sched_rows.append(
+        {
+            "game_id": "SHELL",
+            "season": 2011,
+            "date": datetime.date(2011, 2, 26),
+            "home_team_id": "A",
+            "away_team_id": "B",
+            "neutral_site": False,
+        }
+    )
+    for t, pts in (("A", 76.0), ("B", 78.0)):
+        box_rows.append(
+            {
+                "game_id": "SHELL",
+                "team_id": t,
+                "field_goals_attempted": 0.0,
+                "offensive_rebounds": 0.0,
+                "turnovers": 0.0,
+                "free_throws_attempted": 0.0,
+                "team_score": pts,
+            }
+        )
+    return pl.DataFrame(sched_rows), pl.DataFrame(box_rows)
+
+
+def test_zero_possession_row_is_dropped_and_warns():
+    sched, box = _season_with_shell_game()
+    with pytest.warns(UserWarning, match="non-positive possession"):
+        eff = raw_game_efficiency(sched, box)
+    assert "SHELL" not in eff["game_id"].to_list()
+    assert eff.height == 12  # 6 round-robin games x 2 team rows
+    for c in ("poss", "off_eff", "def_eff"):
+        assert eff[c].is_finite().all()
+
+
+def test_one_shell_game_does_not_poison_the_whole_season():
+    """The bug: `avg = off.mean()` is inf, so EVERY team's fixed point goes non-finite."""
+    sched, box = _season_with_shell_game()
+    with pytest.warns(UserWarning):
+        eff = raw_game_efficiency(sched, box)
+    ratings = adjust_efficiency(eff, league="mens")
+    tempo = adjust_tempo(eff, league="mens")
+    assert ratings.height == 4
+    for c in ("adj_o", "adj_d", "adj_em", "raw_o", "raw_d"):
+        assert ratings[c].is_finite().all(), f"{c} went non-finite"
+    assert tempo["adj_tempo"].is_finite().all()
+
+
+def test_structurally_absent_turnovers_are_refused():
+    """WBB 2003-2012: `turnovers` is 0 in 100% of team rows (a schema gap, not a value)."""
+    sched, box = _mini()
+    zeroed = box.with_columns(pl.lit(0.0).alias("turnovers"))
+    with pytest.raises(InsufficientInputError, match="no turnovers"):
+        raw_game_efficiency(sched, zeroed)
+    # a frame that merely CONTAINS a zero is fine
+    one_zero = box.with_columns(
+        pl.when(pl.col("team_id") == "A").then(0.0).otherwise(pl.col("turnovers")).alias("turnovers")
+    )
+    assert raw_game_efficiency(sched, one_zero).height == 2
+
+
+def test_one_sided_shell_is_dropped_too():
+    """A shell on ONE side keeps `poss` positive but halves it -- WBB 2018 game 400998743
+    scored a team at 272 efficiency (and 1452 where both boxes were partial)."""
+    sched, box = _season_with_shell_game()
+    # make the shell one-sided: give team B a real box in that game
+    box = box.with_columns(
+        pl.when((pl.col("game_id") == "SHELL") & (pl.col("team_id") == "B"))
+        .then(69.0)
+        .otherwise(pl.col("field_goals_attempted"))
+        .alias("field_goals_attempted"),
+        pl.when((pl.col("game_id") == "SHELL") & (pl.col("team_id") == "B"))
+        .then(7.0)
+        .otherwise(pl.col("turnovers"))
+        .alias("turnovers"),
+    )
+    with pytest.warns(UserWarning, match="non-positive possession"):
+        eff = raw_game_efficiency(sched, box)
+    assert "SHELL" not in eff["game_id"].to_list()
+    assert eff["off_eff"].max() < 200.0

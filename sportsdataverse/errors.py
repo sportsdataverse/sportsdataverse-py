@@ -174,6 +174,34 @@ class NoDataError(SportsDataverseError):
 NoESPNDataError = NoDataError
 
 
+class InsufficientInputError(SportsDataverseError):
+    """Raised when the inputs arrived intact but cannot support the computation.
+
+    Distinct from both :class:`NoDataError` (nothing came back) and
+    :class:`AssetFetchError` (the fetch failed): here the frame is present and
+    well-formed, but a term the model needs is structurally absent, so any
+    number produced from it would be wrong rather than missing. The canonical
+    case is a boxscore era whose ``turnovers`` column is uniformly ``0`` --
+    the possession estimate ``FGA - OREB + TO + 0.44 * FTA`` then omits ~23% of
+    possessions and every efficiency/tempo rating built on it is distorted by
+    each team's own (unobserved) turnover rate.
+
+    Raise it instead of emitting a plausible-looking number; a caller building
+    a published asset should record the season as unbuildable.
+
+    Example:
+        Skip a season whose inputs cannot support a rating::
+
+            from sportsdataverse.errors import InsufficientInputError
+            from sportsdataverse.wbb import wbb_team_ratings
+
+            try:
+                ratings = wbb_team_ratings(2008)
+            except InsufficientInputError as exc:
+                print(f"not buildable: {exc}")
+    """
+
+
 class EraCoverageWarning(UserWarning):
     """Warned when NFL model features are built for a season past the validated era range.
 
