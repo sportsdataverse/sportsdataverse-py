@@ -319,7 +319,7 @@ Release: [pbp](https://github.com/nflverse/nflverse-data/releases/tag/pbp) · as
 | `safety_player_id` | String | Unique identifier for the player who scored a safety. |
 | `season` | Int32 | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
 | `cp` | Float64 | Numeric value indicating the probability for a complete pass based on comparable game situations. |
-| `cpoe` | Float64 | For a single pass play this is 1 - cp when the pass was completed or 0 - cp when the pass was incomplete. Analyzed for a whole game or season an indicator for the passer how much over or under expectation his completion percentage was. |
+| `cpoe` | Float64 | Completion percentage over expected in PERCENTAGE POINTS, not a 0-1 rate -- 100 * (complete_pass - cp) per pass play, so a completed pass with cp 0.368 scores +63.2 and the same pass falling incomplete scores -36.8. Averaged over a passer's attempts it is the familiar CPOE of a few points either way; divide by 100 before combining it with 0-1 probabilities such as cp. Null on non-pass rows. |
 | `series` | Float64 | Starts at 1, each new first down increments, numbers shared across both teams NA: kickoffs, extra point/two point conversion attempts, non-plays, no posteam |
 | `series_success` | Float64 | 1: scored touchdown, gained enough yards for first down. |
 | `series_result` | String | Possible values: First down, Touchdown, Opp touchdown, Field goal, Missed field goal, Safety, Turnover, Punt, Turnover on downs, QB kneel, End of half |

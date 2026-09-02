@@ -39,6 +39,17 @@ _EP_POINT_VALUES: np.ndarray = np.array([7.0, -7.0, 3.0, -3.0, 2.0, -2.0, 0.0], 
 #: update this tuple and those functions together.
 ERA_SEASON_CUTS: tuple[int, int, int, int] = (2001, 2005, 2013, 2017)
 
+#: Last season the era bins above (and the kickoff-touchback substitution below)
+#: were validated for — the end year of the era-aware retrain corpus
+#: (``nfl-data`` ``_stage.DEFAULT_SEASONS``).  ``era4`` is open-ended
+#: (``season > 2017``), so a later season is scored under the last era with
+#: nothing flagging that a rule change (e.g. the 2024 dynamic kickoff) may
+#: warrant a new dummy.  Every era-building helper in ``ep_wp`` emits
+#: :class:`sportsdataverse.errors.EraCoverageWarning` once per such season
+#: instead of absorbing it silently.  Bump at each era-aware retrain, together
+#: with the trainer's season span.
+ERA_MAX_KNOWN_SEASON: int = 2025
+
 #: Kickoff-touchback starting yardline **before** the 2016 rule change.
 #: nflfastR canonical: the touchback was spotted at the 20-yard line, so
 #: yards-to-endzone = 80.
@@ -51,15 +62,33 @@ TOUCHBACK_YARDLINE_PRE_2016: int = 80
 #: Note: ``nfl_pbp.py`` currently uses an inline ``season > 2013`` boundary
 #: instead of this 2016 boundary — aligning that call site to this constant
 #: is deferred to a later task (behavior-change + parity gate).
+#:
+#: **Dynamic-kickoff audit (2026-09-01).** The 2024 rule moved the kickoff
+#: touchback to the 30 (yards-to-endzone 70) and the 2025 rule to the 35 (65),
+#: but nflfastR's ``helper_add_ep_wp.R`` still substitutes
+#: ``ifelse(season < 2016, 80, 75)`` and nflverse's published ``ep`` / ``wp``
+#: on 2024–2025 kickoffs are therefore scored at 75.  This constant
+#: deliberately stays at 75 — it is a *parity convention with that oracle*,
+#: not the rule spot.  ``tests/nfl/test_nfl_ep_wp_real_rows.py`` pins both
+#: facts on committed real rows: sdv-py == nflverse on kickoff rows season by
+#: season, AND the data's actual post-touchback spot (75 → 70 → 65).  Moving
+#: to the rule-correct spot is a retrain-time decision — trainer and applier
+#: must move together.
 TOUCHBACK_YARDLINE_POST_2016: int = 75
 
 #: Exponent multiplier in the spread-time decay formula::
 #:
-#:     spread_time = spread * exp(SPREAD_TIME_DECAY_EXPONENT * elapsed_share)
+#:     spread_time     = spread             * exp(SPREAD_TIME_DECAY_EXPONENT * elapsed_share)
+#:     Diff_Time_Ratio = score_differential / exp(SPREAD_TIME_DECAY_EXPONENT * elapsed_share)
 #:
 #: where ``elapsed_share = clip((3600 - game_seconds_remaining) / 3600, 0, 1)``.
-#: Mirrors the ``-4.0`` literal in ``_add_wp_aux()`` and ``_espn_wp_features()``
-#: in ``ep_wp.py``.
+#: A *fitted* constant (nflfastR MODELS.R fixed it at -4), so it must travel
+#: with retrains: this is the ONLY source on the applier side (``_add_wp_aux``,
+#: ``_espn_wp_features`` and ``NFLPlayProcess.__add_spread_time`` all import
+#: it), the nfl-data trainer writes the value it trained with into every WP
+#: model card (``<model>.json`` → ``derived_feature_constants``
+#: ``.spread_time_decay_exponent``), and ``ep_wp._load_booster_from`` raises
+#: ``ValueError`` when a card beside a model disagrees with this value.
 SPREAD_TIME_DECAY_EXPONENT: float = -4.0
 
 # ---------------------------------------------------------------------------

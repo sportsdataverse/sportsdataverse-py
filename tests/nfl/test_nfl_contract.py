@@ -268,3 +268,170 @@ class TestSpreadTimeDecayExponent:
         result = spread * np.exp(SPREAD_TIME_DECAY_EXPONENT * elapsed)
         expected = spread * np.exp(-4.0 * elapsed)
         assert abs(result - expected) < 1e-12
+
+    def test_appliers_read_one_source(self) -> None:
+        """No applier hardcodes the exponent — every formula imports the constant.
+
+        The exponent is fitted and travels with retrains through the trainer's
+        model card; the card check in ``_load_booster_from`` can only mean
+        something if the applier reads exactly ONE source.  A ``-4 * pl.col(``
+        literal anywhere in ``ep_wp.py`` / ``nfl_pbp.py`` is a second source.
+        """
+        import re
+        from pathlib import Path
+
+        import sportsdataverse.nfl.ep_wp as ep_wp
+        import sportsdataverse.nfl.nfl_pbp as nfl_pbp
+
+        for mod in (ep_wp, nfl_pbp):
+            src = Path(mod.__file__).read_text(encoding="utf-8")
+            hits = re.findall(r"-4(?:\.0)?\s*\*\s*pl\.col", src)
+            assert not hits, f"{mod.__name__} still hardcodes the spread_time decay exponent: {hits}"
+
+
+# ---------------------------------------------------------------------------
+# Model card check — a card beside an artifact must agree with the applier
+# ---------------------------------------------------------------------------
+
+
+class TestModelCardConstantCheck:
+    """``_load_model`` refuses an artifact whose card records a different fitted constant.
+
+    Exercises the production resolution path (``models_dir`` override) with a
+    tiny real booster written to ``tmp_path``; a card is its ``.json`` sibling.
+    """
+
+    @staticmethod
+    def _booster(tmp_path, name: str):
+        import xgboost as xgb
+
+        X = np.arange(20, dtype=np.float32).reshape(10, 2)
+        y = np.array([0, 1] * 5)
+        booster = xgb.train({"objective": "binary:logistic"}, xgb.DMatrix(X, label=y), num_boost_round=2)
+        path = tmp_path / name
+        booster.save_model(str(path))
+        return path
+
+    @staticmethod
+    def _card(path, exponent) -> None:
+        import json
+
+        path.with_suffix(".json").write_text(
+            json.dumps({"derived_feature_constants": {"spread_time_decay_exponent": exponent}}), encoding="utf-8"
+        )
+
+    def test_mismatched_card_raises(self, tmp_path) -> None:
+        from sportsdataverse.nfl.ep_wp import _load_model
+
+        path = self._booster(tmp_path, "wp_mismatch.ubj")
+        self._card(path, -3.0)
+        with pytest.raises(ValueError, match="spread_time_decay_exponent=-3.0"):
+            _load_model("wp_mismatch.ubj", models_dir=tmp_path)
+
+    def test_matching_card_loads(self, tmp_path) -> None:
+        from sportsdataverse.nfl.ep_wp import _load_model
+        from sportsdataverse.nfl.model_vars import SPREAD_TIME_DECAY_EXPONENT
+
+        path = self._booster(tmp_path, "wp_match.ubj")
+        self._card(path, SPREAD_TIME_DECAY_EXPONENT)
+        assert _load_model("wp_match.ubj", models_dir=tmp_path).num_boosted_rounds() == 2
+
+    def test_no_card_and_card_without_key_load(self, tmp_path) -> None:
+        import json
+
+        from sportsdataverse.nfl.ep_wp import _load_model
+
+        self._booster(tmp_path, "wp_nocard.ubj")
+        assert _load_model("wp_nocard.ubj", models_dir=tmp_path).num_boosted_rounds() == 2
+        path = self._booster(tmp_path, "ep_card_no_key.ubj")
+        path.with_suffix(".json").write_text(json.dumps({"model_type": "ep"}), encoding="utf-8")
+        assert _load_model("ep_card_no_key.ubj", models_dir=tmp_path).num_boosted_rounds() == 2
+
+
+# ---------------------------------------------------------------------------
+# ERA_MAX_KNOWN_SEASON — a season past the validated eras warns, never silent
+# ---------------------------------------------------------------------------
+
+
+class TestEraMaxKnownSeason:
+    """``era4`` is open-ended; a season beyond ``ERA_MAX_KNOWN_SEASON`` must warn."""
+
+    @staticmethod
+    def _ep_frame(season: int):
+        import polars as pl
+
+        return pl.DataFrame({"season": [season], "down": [1], "posteam": ["A"], "home_team": ["A"], "roof": ["dome"]})
+
+    @staticmethod
+    def _cp_frame(season: int):
+        import polars as pl
+
+        return pl.DataFrame(
+            {
+                "season": [season],
+                "air_yards": [5.0],
+                "ydstogo": [10],
+                "down": [1],
+                "posteam": ["A"],
+                "home_team": ["A"],
+                "pass_location": ["middle"],
+                "roof": ["dome"],
+            }
+        )
+
+    def test_value_covers_the_last_era_cut(self) -> None:
+        from sportsdataverse.nfl.model_vars import ERA_MAX_KNOWN_SEASON, ERA_SEASON_CUTS
+
+        assert isinstance(ERA_MAX_KNOWN_SEASON, int)
+        assert ERA_MAX_KNOWN_SEASON >= 2025, "the era-aware retrain corpus ends 2025 (nfl-data DEFAULT_SEASONS)"
+        assert ERA_MAX_KNOWN_SEASON > ERA_SEASON_CUTS[-1]
+
+    def test_model_mutations_warn_beyond_max(self) -> None:
+        from sportsdataverse.errors import EraCoverageWarning
+        from sportsdataverse.nfl.ep_wp import _make_model_mutations
+        from sportsdataverse.nfl.model_vars import ERA_MAX_KNOWN_SEASON
+
+        beyond = ERA_MAX_KNOWN_SEASON + 1
+        with pytest.warns(EraCoverageWarning, match=f"season {beyond} is beyond ERA_MAX_KNOWN_SEASON"):
+            out = _make_model_mutations(self._ep_frame(beyond))
+        assert out["era4"].to_list() == [1], "still scored under era4 — the warning is the flag, not a filter"
+
+    def test_every_out_of_range_season_warns(self) -> None:
+        """A mixed frame warns once per offending season, not just the max."""
+        import warnings as _warnings
+
+        import polars as pl
+
+        from sportsdataverse.errors import EraCoverageWarning
+        from sportsdataverse.nfl.ep_wp import _make_model_mutations
+        from sportsdataverse.nfl.model_vars import ERA_MAX_KNOWN_SEASON
+
+        a, b = ERA_MAX_KNOWN_SEASON + 1, ERA_MAX_KNOWN_SEASON + 2
+        frame = pl.concat([self._ep_frame(ERA_MAX_KNOWN_SEASON), self._ep_frame(a), self._ep_frame(b)])
+        with _warnings.catch_warnings(record=True) as caught:
+            _warnings.simplefilter("always", EraCoverageWarning)
+            _make_model_mutations(frame)
+        seasons_warned = {
+            s for s in (a, b, ERA_MAX_KNOWN_SEASON) if any(f"season {s} is beyond" in str(w.message) for w in caught)
+        }
+        assert seasons_warned == {a, b}, f"both offending seasons must warn, in-range must not; got {seasons_warned}"
+
+    def test_cp_mutations_warn_beyond_max(self) -> None:
+        from sportsdataverse.errors import EraCoverageWarning
+        from sportsdataverse.nfl.ep_wp import _make_cp_mutations
+        from sportsdataverse.nfl.model_vars import ERA_MAX_KNOWN_SEASON
+
+        with pytest.warns(EraCoverageWarning):
+            _make_cp_mutations(self._cp_frame(ERA_MAX_KNOWN_SEASON + 1))
+
+    def test_silent_at_and_below_max(self) -> None:
+        import warnings
+
+        from sportsdataverse.nfl.ep_wp import _make_cp_mutations, _make_model_mutations
+        from sportsdataverse.nfl.model_vars import ERA_MAX_KNOWN_SEASON
+
+        with warnings.catch_warnings():
+            warnings.simplefilter("error")
+            _make_model_mutations(self._ep_frame(ERA_MAX_KNOWN_SEASON))
+            _make_model_mutations(self._ep_frame(2017))
+            _make_cp_mutations(self._cp_frame(ERA_MAX_KNOWN_SEASON))
