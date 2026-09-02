@@ -37,12 +37,32 @@ under the shared penalty is negligible because every possession loads it.
 A null slot id (an unresolved player, or the ``TEAM`` pseudo-slot) marks the
 possession unusable and it is DROPPED -- "not a rated player" must never be
 imputed. Callers should report the usable fraction.
+
+**Uncertainty.** :func:`solve_rapm_league` also reports per-player standard
+errors from the ridge POSTERIOR: with the Gaussian prior
+``beta ~ N(0, sigma^2 / lambda)`` that the penalty encodes and
+possession-weighted Gaussian errors, the posterior covariance is
+``sigma^2 (X'WX + lambda I)^-1``, where ``sigma^2`` is the weighted residual
+variance on ``n_stints - df_eff`` degrees of freedom (``df_eff`` = trace of
+the ridge hat matrix). This is the Bayesian (credible-interval) SE and is
+what the ``*_se`` columns carry: an interval for the TRUE impact under the
+prior, which widens exactly where the prior is doing the work (a
+low-possession player sits at ~0 +/- the prior SD ``sigma/sqrt(lambda)``).
+The frequentist sandwich ``sigma^2 M X'WX M = sigma^2 (M - lambda M^2)``,
+``M = (X'WX + lambda I)^-1``, is the repeatability of the SHRUNK estimate
+and is exposed as ``*_se_sampling``; it is NOT an interval for the truth
+(it collapses to ~0 for a player the ridge pins at zero) but it is the
+quantity a refit can check. On real MBB 2024 the posterior SE is ~2.3x the
+sampling SE even at 4,000 possessions (lambda = 1000 is prior-dominated), so
+a split-half test covers ~100% under the posterior SE and ~95% under the
+sampling SE -- :func:`split_half_se_check` reports both, and the producer
+gates both. The intercept is treated as fixed (its SE is ~0.14 pts/100 on
+~740k usable possessions, negligible beside player SEs of 3-5).
 """
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
-
+from typing import TYPE_CHECKING, Any
 
 import numpy as np
 import polars as pl
@@ -50,14 +70,13 @@ import polars as pl
 if TYPE_CHECKING:
     import pandas as pd
 
-if TYPE_CHECKING:
-    pass
-
 __all__ = [
     "DEFAULT_RIDGE_LAMBDA",
     "STINT_SCHEMA",
     "aggregate_stints",
+    "possession_deciles",
     "solve_rapm_league",
+    "split_half_se_check",
     "team_aggregate",
 ]
 
@@ -91,7 +110,16 @@ _PLAYERS_SCHEMA: dict[str, pl.DataType] = {
     "rapm_net": pl.Float64,
     "off_poss": pl.Int64,
     "def_poss": pl.Int64,
+    "orapm_se": pl.Float64,
+    "drapm_se": pl.Float64,
+    "rapm_net_se": pl.Float64,
+    "orapm_se_sampling": pl.Float64,
+    "drapm_se_sampling": pl.Float64,
+    "rapm_net_se_sampling": pl.Float64,
 }
+
+#: SE columns of :func:`solve_rapm_league`, posterior first, sampling (sandwich) second.
+_SE_COLS = tuple(c for c in _PLAYERS_SCHEMA if c.endswith("_se") or c.endswith("_se_sampling"))
 
 
 def aggregate_stints(resolved: pl.DataFrame) -> pl.DataFrame:
@@ -251,6 +279,7 @@ def solve_rapm_league(
     stints: pl.DataFrame,
     *,
     ridge_lambda: float = DEFAULT_RIDGE_LAMBDA,
+    compute_se: bool = True,
     return_as_pandas: bool = False,
 ) -> "tuple[pl.DataFrame | pd.DataFrame, dict[str, float]]":
     """Weighted sparse joint O/D ridge over matchup stints.
@@ -260,15 +289,37 @@ def solve_rapm_league(
         ridge_lambda: L2 penalty on the possession-weighted normal equations.
             Because rows are weighted by possessions, the same ``lambda`` is
             exactly equivalent to a per-possession ridge with that penalty.
+        compute_se: Also return the posterior standard errors (module
+            docstring, "Uncertainty"). Costs one dense Cholesky inverse of the
+            ``(2P+1)``-square penalised Gram matrix. One such matrix is
+            ~0.8 GB for a D-I season (P ~ 5,000, dim ~ 10,001); the
+            symmetrise step holds two of them at once, so the peak is
+            ~1.6 GB and a few seconds. Switch off for pooled designs past
+            ~20k columns.
         return_as_pandas: Return the players frame as pandas.
 
     Returns:
         ``(players, info)``. ``players`` has one row per rated player:
         ``player_id``, ``orapm``, ``drapm`` (positive = good defense),
         ``rapm_net = orapm + drapm`` (all per 100 possessions), ``off_poss``,
-        ``def_poss``. ``info`` carries ``intercept`` (possession-weighted
-        league mean pts/100), ``hca`` (half the home-minus-away offensive
-        gap), ``ridge_lambda``, ``n_stints``, ``n_poss``.
+        ``def_poss``, the posterior standard errors ``orapm_se``,
+        ``drapm_se``, ``rapm_net_se`` and the sampling (sandwich) standard
+        errors ``*_se_sampling`` (both net SEs include the O/D covariance; all
+        six are null when ``compute_se=False``; see the module docstring for
+        which to publish). ``info``
+        carries ``intercept`` (possession-weighted league mean pts/100),
+        ``hca`` (half the home-minus-away offensive gap), ``ridge_lambda``,
+        ``n_stints``, ``n_poss``, the lsqr diagnostics and, with SEs,
+        ``sigma2`` (weighted residual variance on the per-100 scale = ``1e4 x``
+        the per-possession points variance, ~1.3e4 in D-I), ``df_eff`` (trace
+        of the ridge hat matrix), ``hca_se`` and ``solve_max_abs_dev`` (max
+        |lsqr - exact| coefficient deviation -- the exact solve comes free
+        with the factorisation and doubles as the solver-tolerance check).
+
+    Raises:
+        RuntimeError: lsqr stopped without converging, or the penalised Gram
+            matrix is not positive definite (``ridge_lambda`` must be > 0 for
+            the SEs).
 
     Example:
         Solve a season::
@@ -279,6 +330,13 @@ def solve_rapm_league(
 
             players, info = solve_rapm_league(aggregate_stints(resolved))
             players.sort("rapm_net", descending=True).head()
+
+        A 95% interval per player::
+
+            players.with_columns(
+                (pl.col("rapm_net") - 2 * pl.col("rapm_net_se")).alias("lo95"),
+                (pl.col("rapm_net") + 2 * pl.col("rapm_net_se")).alias("hi95"),
+            )
 
     See Also:
         * `hoopR <https://hoopR.sportsdataverse.org>`_ -- men's college
@@ -337,6 +395,12 @@ def solve_rapm_league(
     drapm = beta[n_players : 2 * n_players]
     hca = float(beta[2 * n_players])
 
+    se_info: dict[str, float] = {}
+    if compute_se:
+        se, se_info = _posterior_se(x, (y - mu) * sw, beta, n_players, float(ridge_lambda))
+    else:
+        se = {c: np.full(n_players, np.nan) for c in _SE_COLS}  # -> null below, never NaN
+
     exposure = (
         pl.concat(
             [
@@ -357,6 +421,7 @@ def solve_rapm_league(
                 "player_id": pl.Series(players, dtype=pl.Utf8),
                 "orapm": orapm.astype(np.float64),
                 "drapm": drapm.astype(np.float64),
+                **{c: pl.Series(se[c], dtype=pl.Float64).fill_nan(None) for c in _SE_COLS},
             }
         )
         .with_columns((pl.col("orapm") + pl.col("drapm")).alias("rapm_net"))
@@ -376,5 +441,222 @@ def solve_rapm_league(
         "n_poss": int(w.sum()),
         "lsqr_istop": int(istop),
         "lsqr_itn": int(itn),
+        **se_info,
     }
     return (out.to_pandas() if return_as_pandas else out), info
+
+
+def _posterior_se(
+    x: Any, yw: np.ndarray, beta: np.ndarray, n_players: int, ridge_lambda: float
+) -> "tuple[dict[str, np.ndarray], dict[str, float]]":
+    """Posterior and sampling SEs of the ridge coefficients from ONE dense Cholesky inverse.
+
+    ``x`` is the sqrt-weight-scaled sparse design, so ``X'X`` IS the
+    possession-weighted Gram matrix ``G = X_raw' W X_raw`` and ``yw`` the
+    scaled centred target. With ``M = (G + lambda I)^-1``:
+
+    * posterior covariance ``sigma2 * M`` -> ``*_se`` (interval for the truth);
+    * sampling covariance ``sigma2 * M G M = sigma2 * (M - lambda M^2)`` ->
+      ``*_se_sampling`` (repeatability of the shrunk estimate; what
+      :func:`split_half_se_check` can verify). Both are O(dim^2) once ``M``
+      is dense, since ``diag(M^2)`` is the squared row norms.
+
+    The net SEs fold in the O/D covariance ``M[i, P+i]`` (resp.
+    ``(M - lambda M^2)[i, P+i]``). Also returns ``sigma2`` (weighted residual
+    variance on ``n - df_eff`` dof), ``df_eff``, ``hca_se`` and the max
+    |lsqr - exact| coefficient deviation.
+    """
+    from scipy.linalg import lapack
+
+    dim = x.shape[1]
+    # ponytail: dense Cholesky inverse, O(dim^3) -- ~10k dims for a D-I season, 0.8 GB per
+    # dense array. `low + low.T` below holds two of them live, so peak is ~1.6 GB; blocked
+    # in-place symmetrisation would halve it if that ever binds. A pooled multi-season
+    # design past ~20k dims needs a sparse (CHOLMOD) factor.
+    a = (x.T @ x).toarray(order="F")
+    a[np.diag_indices(dim)] += ridge_lambda
+    c, info_f = lapack.dpotrf(a, lower=1, clean=1, overwrite_a=1)
+    if info_f != 0:
+        raise RuntimeError(
+            f"penalised Gram matrix is not positive definite (dpotrf info={info_f}); ridge_lambda must be > 0"
+        )
+    low, info_i = lapack.dpotri(c, lower=1, overwrite_c=1)
+    if info_i != 0:
+        raise RuntimeError(f"Cholesky inverse failed (dpotri info={info_i})")
+    # dpotri fills only the lower triangle (clean=1 zeroed the upper): symmetrise.
+    diag = np.diagonal(low).copy()
+    m = low + low.T
+    m[np.diag_indices(dim)] = diag
+    del a, c, low
+    beta_exact = m @ (x.T @ yw)
+    resid = yw - x @ beta
+    df_eff = float(dim - ridge_lambda * diag.sum())
+    sigma2 = float(resid @ resid) / max(x.shape[0] - df_eff, 1.0)
+    p = np.arange(n_players)
+    o, d = slice(0, n_players), slice(n_players, 2 * n_players)
+    m2_diag = np.einsum("ij,ij->i", m, m)  # diag(M^2)
+    m2_od = np.einsum("ij,ij->i", m[o], m[d])  # (M^2)[i, P+i]
+    post_o, post_d, post_od = diag[o], diag[d], m[p, n_players + p]
+    samp_o = post_o - ridge_lambda * m2_diag[o]
+    samp_d = post_d - ridge_lambda * m2_diag[d]
+    samp_od = post_od - ridge_lambda * m2_od
+
+    def _se(var: np.ndarray) -> np.ndarray:
+        return np.sqrt(np.maximum(sigma2 * var, 0.0))
+
+    se = {
+        "orapm_se": _se(post_o),
+        "drapm_se": _se(post_d),
+        "rapm_net_se": _se(post_o + post_d + 2.0 * post_od),
+        "orapm_se_sampling": _se(samp_o),
+        "drapm_se_sampling": _se(samp_d),
+        "rapm_net_se_sampling": _se(samp_o + samp_d + 2.0 * samp_od),
+    }
+    info = {
+        "sigma2": sigma2,
+        "df_eff": df_eff,
+        "hca_se": float(np.sqrt(sigma2 * diag[2 * n_players])),
+        "solve_max_abs_dev": float(np.max(np.abs(beta - beta_exact))),
+    }
+    return se, info
+
+
+def split_half_se_check(
+    resolved: pl.DataFrame,
+    *,
+    ridge_lambda: float = DEFAULT_RIDGE_LAMBDA,
+) -> "tuple[pl.DataFrame, dict[str, float]]":
+    """Odd-vs-even-game refit: are the standard errors on the right scale?
+
+    Splits ``resolved`` by the parity of ``contest_id`` (deterministic and
+    roster-neutral -- the halves differ by sampling noise, not by the
+    mid-season development or transfer drift a date split would add), fits
+    :func:`solve_rapm_league` on each half, and asks per player rated in both
+    whether the two estimates agree to within ``2 * sqrt(se_A^2 + se_B^2)``.
+
+    Two readings, both reported. Under the SAMPLING SE this is the textbook
+    calibration test -- ~95% coverage means ``sigma2`` and the inverse are
+    right. Under the POSTERIOR SE (the published one) coverage is expected
+    ABOVE nominal (~100% on real seasons): a credible interval for the truth
+    is wider than the estimator's repeatability, so its coverage here is a
+    one-sided guard (a bug that shrinks the SEs drops it), not a two-sided
+    calibration.
+
+    Args:
+        resolved: Output of ``resolve_possessions`` WITH its ``contest_id``
+            column (integer-like).
+        ridge_lambda: Passed to both half fits.
+
+    Returns:
+        ``(per_player, summary)``. ``per_player`` has one row per player
+        rated in both halves: ``player_id``, ``poss`` (both halves' exposure)
+        and, for each of ``orapm`` / ``drapm`` / ``rapm_net``, ``<c>_a``,
+        ``<c>_b``, ``<c>_z`` / ``<c>_covered`` (posterior SE units, |z| <= 2)
+        and ``<c>_z_sampling`` / ``<c>_covered_sampling`` (sampling SE units).
+        ``summary`` carries ``n_players``, ``n_games_a``, ``n_games_b`` and,
+        per ``<c>``, ``coverage_<c>``, ``coverage_sampling_<c>``, ``z_sd_<c>``
+        (a posterior/sampling ratio proxy) and ``z_sd_sampling_<c>`` (~1 when
+        calibrated). Feed ``per_player`` to :func:`possession_deciles` for
+        the coverage by playing time.
+
+    Raises:
+        ValueError: ``contest_id`` is missing or not integer-like.
+
+    Example:
+        Season check::
+
+            per_player, summary = split_half_se_check(resolved)
+            print(summary["coverage_sampling_rapm_net"])   # ~0.95
+            possession_deciles(per_player)
+    """
+    if "contest_id" not in resolved.columns:
+        raise ValueError("split_half_se_check: resolved needs its contest_id column")
+    cid = resolved.get_column("contest_id").cast(pl.Int64, strict=False)
+    if cid.null_count():
+        raise ValueError("split_half_se_check: contest_id must be integer-like")
+    halves = resolved.with_columns((cid % 2).alias("_half"))
+    fits = []
+    for h in (0, 1):
+        part = halves.filter(pl.col("_half") == h)
+        players, _ = solve_rapm_league(aggregate_stints(part), ridge_lambda=ridge_lambda)
+        fits.append((players, part.get_column("contest_id").n_unique()))
+    (pa, n_a), (pb, n_b) = fits
+    assert isinstance(pa, pl.DataFrame) and isinstance(pb, pl.DataFrame)
+    j = pa.join(pb, on="player_id", how="inner", suffix="_b")
+    cols = ("orapm", "drapm", "rapm_net")
+    exprs = [pl.col(f"{c}_b") for c in cols]
+    for c in cols:
+        exprs.append(pl.col(c).alias(f"{c}_a"))
+        for kind, sfx in (("", ""), ("_sampling", "_sampling")):
+            se_a, se_b = pl.col(f"{c}_se{kind}"), pl.col(f"{c}_se{kind}_b")
+            z = (pl.col(c) - pl.col(f"{c}_b")) / (se_a**2 + se_b**2).sqrt()
+            exprs += [
+                z.alias(f"{c}_z{sfx}"),
+                (z.abs() <= 2.0).alias(f"{c}_covered{sfx}"),
+            ]
+    per_player = j.select(
+        "player_id",
+        (pl.col("off_poss") + pl.col("def_poss") + pl.col("off_poss_b") + pl.col("def_poss_b")).alias("poss"),
+        *exprs,
+    ).sort("player_id")
+    summary: dict[str, float] = {
+        "n_players": per_player.height,
+        "n_games_a": n_a,
+        "n_games_b": n_b,
+    }
+    for c in cols:
+        for sfx in ("", "_sampling"):
+            key = sfx.lstrip("_") + "_" if sfx else ""
+            cov = per_player[f"{c}_covered{sfx}"]
+            summary[f"coverage_{key}{c}"] = float(cov.mean()) if per_player.height else float("nan")
+            z_sd = per_player[f"{c}_z{sfx}"].std()
+            summary[f"z_sd_{key}{c}"] = float(z_sd) if z_sd is not None else float("nan")
+    return per_player, summary
+
+
+def possession_deciles(players: pl.DataFrame, *, n_bins: int = 10) -> pl.DataFrame:
+    """Equal-count possession bins: median of every SE column, mean of every coverage flag.
+
+    One table serves both SE validations: on :func:`solve_rapm_league`
+    output the median posterior SE must fall with playing time (Spearman
+    strongly negative; the top deciles flatten at a collinearity floor --
+    heavy-minute starters share the floor with the same four teammates); on
+    :func:`split_half_se_check` output the sampling coverage should sit
+    near 0.95 in every bin. Uses ``poss`` when present, else
+    ``off_poss + def_poss``. Bins are rank-based (always ``n_bins``
+    equal-count bins), so heavy ties at low possessions cannot collapse a
+    decile.
+
+    Args:
+        players: Output of :func:`solve_rapm_league` or the ``per_player``
+            frame of :func:`split_half_se_check`.
+        n_bins: Number of equal-count bins (10 = deciles).
+
+    Returns:
+        One row per bin, sorted: ``decile`` (0 = fewest possessions), ``n``,
+        ``poss_min``, ``poss_max``, ``median_<se col>`` ... and
+        ``coverage_<c>[_sampling]`` ... (only for the columns present).
+
+    Example:
+        Shrinkage check::
+
+            d = possession_deciles(players)
+            assert d["median_rapm_net_se"][0] > d["median_rapm_net_se"][-1]
+    """
+    poss = pl.col("poss") if "poss" in players.columns else (pl.col("off_poss") + pl.col("def_poss"))
+    se_cols = [c for c in players.columns if c.endswith("_se") or c.endswith("_se_sampling")]
+    cov_cols = [c for c in players.columns if "_covered" in c]
+    binned = players.with_columns(poss.alias("_poss")).with_columns(
+        ((pl.col("_poss").rank(method="ordinal") - 1) * n_bins // pl.len()).cast(pl.Int32).alias("decile")
+    )
+    return (
+        binned.group_by("decile")
+        .agg(
+            pl.len().alias("n"),
+            pl.col("_poss").min().alias("poss_min"),
+            pl.col("_poss").max().alias("poss_max"),
+            *[pl.col(c).median().alias(f"median_{c}") for c in se_cols],
+            *[pl.col(c).mean().alias(f"coverage_{c.replace('_covered', '')}") for c in cov_cols],
+        )
+        .sort("decile")
+    )
