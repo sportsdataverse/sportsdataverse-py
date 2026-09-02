@@ -1718,7 +1718,7 @@ class CFBPlayProcess(object):
                     # front of it. 401864570 lost a 25-yard third-down completion this way
                     # -- it sits immediately before "Timeout Florida State, clock 04:11".
                     .and_(pl.col("type.text").shift(-1).str.contains("(?i)timeout") == False)
-                    .and_(pl.col("lead_text").str.contains("(?i)no play") == False),
+                    .and_(pl.col("lead_text").str.contains(_PENALTY_NEGATED_TEXT) == False),
                 )
                 .then(pl.lit(True))
                 .otherwise(pl.lit(False)),
