@@ -233,6 +233,7 @@ from sportsdataverse.nba import load_nba_standings as load_nba_standings  # noqa
 from sportsdataverse.nba import load_nba_stats_coaches as load_nba_stats_coaches  # noqa: F401
 from sportsdataverse.nba import load_nba_stats_game_lineups as load_nba_stats_game_lineups  # noqa: F401
 from sportsdataverse.nba import load_nba_stats_game_rosters as load_nba_stats_game_rosters  # noqa: F401
+from sportsdataverse.nba import load_nba_stats_leaguedash as load_nba_stats_leaguedash  # noqa: F401
 from sportsdataverse.nba import load_nba_stats_lineups as load_nba_stats_lineups  # noqa: F401
 from sportsdataverse.nba import load_nba_stats_lineups_v3 as load_nba_stats_lineups_v3  # noqa: F401
 from sportsdataverse.nba import load_nba_stats_officials as load_nba_stats_officials  # noqa: F401
@@ -542,6 +543,7 @@ __all__ = [
     "load_nba_stats_coaches",
     "load_nba_stats_game_lineups",
     "load_nba_stats_game_rosters",
+    "load_nba_stats_leaguedash",
     "load_nba_stats_lineups",
     "load_nba_stats_lineups_v3",
     "load_nba_stats_officials",

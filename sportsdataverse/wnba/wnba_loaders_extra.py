@@ -2,7 +2,8 @@
 ``sportsdataverse.wnba.wnba_loaders``: deprecation shims for 4 legacy
 per-measure-type release tags (``wnba_stats_{lineups,player_season_stats,
 team_season_stats,standings}``) now superseded by the consolidated
-``wnba_stats_leaguedash`` parameter-cube tag.
+``wnba_stats_leaguedash`` parameter-cube tag, plus the generic
+:func:`load_wnba_stats_leaguedash` accessor for that cube.
 
 The old tags stacked a handful of measure types into one release-per-season
 asset; the cube ships each measure type as its own asset instead (plus wide
@@ -16,19 +17,141 @@ convention used elsewhere for cfb/nhl/pwhl).
 
 from __future__ import annotations
 
-from typing import Callable, Dict, Optional
+from typing import Callable, Dict, Optional, Tuple
 
 import polars as pl
 
 from sportsdataverse._codegen_runtime import _as_season_list, _read_release_parquet, cli_warn
 from sportsdataverse._deprecation import warn_deprecated
+from sportsdataverse.config import WNBA_STATS_LEAGUEDASH_URL
+from sportsdataverse.nba.nba_loaders_extra import _load_leaguedash
 
 __all__ = [
+    "WNBA_STATS_LEAGUEDASH_FAMILIES",
+    "load_wnba_stats_leaguedash",
     "load_wnba_stats_player_season_stats",
     "load_wnba_stats_lineups",
     "load_wnba_stats_team_season_stats",
     "load_wnba_stats_standings",
 ]
+
+#: Every asset family published on the ``wnba_stats_leaguedash`` release tag,
+#: verified against the live asset listing on 2026-09-02 (720 parquet assets /
+#: 24 families, 1997-2026). Exactly the NBA cube's families minus the 12
+#: ``player_tracking_*`` ones -- stats.wnba.com publishes no tracking
+#: dashboards.
+WNBA_STATS_LEAGUEDASH_FAMILIES: Tuple[str, ...] = (
+    "lineups_advanced",
+    "lineups_base",
+    "lineups_fourfactors",
+    "lineups_master",
+    "lineups_misc",
+    "lineups_opponent",
+    "lineups_scoring",
+    "player_bio",
+    "player_master",
+    "player_stats_advanced",
+    "player_stats_base",
+    "player_stats_defense",
+    "player_stats_misc",
+    "player_stats_scoring",
+    "player_stats_usage",
+    "standings",
+    "team_master",
+    "team_stats_advanced",
+    "team_stats_base",
+    "team_stats_defense",
+    "team_stats_fourfactors",
+    "team_stats_misc",
+    "team_stats_opponent",
+    "team_stats_scoring",
+)
+
+# Earliest season on the tag; see the NBA module for why per-family floors are
+# deliberately not enforced (a missing season warns and is skipped).
+_WNBA_MIN_SEASON = 1997
+
+
+def load_wnba_stats_leaguedash(
+    family: str,
+    seasons,
+    return_as_pandas: bool = False,
+) -> pl.DataFrame:
+    """Load one asset family of the ``wnba_stats_leaguedash`` release.
+
+    ``wnba_stats_leaguedash`` is a parameter cube: one asset per
+    (family, season) pair rather than one per season, so a family must be named.
+    The valid families are exported as :data:`WNBA_STATS_LEAGUEDASH_FAMILIES` --
+    import that tuple to discover them rather than passing a bare string; an
+    unknown family raises ``ValueError`` listing every valid value. This is the
+    non-deprecated way to reach the cube; the four ``load_wnba_stats_*`` shims
+    below only reconstruct retired tags' stacked shapes from it.
+
+    Column sets are family-specific (a ``lineups_*`` frame keys on ``group_id``,
+    a ``player_*`` frame on ``player_id``), so this loader documents no fixed
+    returns table. ``player_id`` / ``team_id`` are ``Int64`` in every family and
+    season, so cross-family joins need no dtype reconciliation.
+
+    Args:
+        family (str): Asset family, e.g. ``"player_stats_advanced"``. Must be one
+            of :data:`WNBA_STATS_LEAGUEDASH_FAMILIES`.
+        seasons (int | Iterable[int]): Season, or iterable of seasons, to load.
+            WNBA seasons are single calendar years. 1997 is the earliest season
+            on the tag. A requested season the family does not publish is warned
+            about and skipped, not an error.
+        return_as_pandas (bool): If True, returns a pandas dataframe. If False,
+            returns a polars dataframe.
+
+    Returns:
+        pl.DataFrame: Polars dataframe with one row per player / team / lineup
+        per requested season for the requested family; an empty frame when no
+        requested season is published.
+
+    Raises:
+        ValueError: If `family` is not one of :data:`WNBA_STATS_LEAGUEDASH_FAMILIES`.
+        SeasonNotFoundError: If any requested season is less than 1997.
+        AssetFetchError: If a release asset request fails (a 403 or an exhausted
+            retry budget) -- distinct from an absent season, which is skipped.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.wnba import load_wnba_stats_leaguedash
+            adv = load_wnba_stats_leaguedash("player_stats_advanced", seasons=2025)
+            print(adv.shape)
+
+        Discover the valid families::
+
+            from sportsdataverse.wnba import WNBA_STATS_LEAGUEDASH_FAMILIES
+            print(WNBA_STATS_LEAGUEDASH_FAMILIES)
+
+        Multi-season, pandas round-trip::
+
+            team_pd = load_wnba_stats_leaguedash(
+                "team_stats_base", seasons=range(2020, 2026), return_as_pandas=True
+            )
+
+        Pipeline next step (best net rating in 2025)::
+
+            import polars as pl
+            load_wnba_stats_leaguedash("team_stats_advanced", seasons=2025).sort(
+                "net_rating", descending=True
+            ).head()
+
+        See Also:
+            * `wehoop <https://wehoop.sportsdataverse.org>`_ -- R sister package for the same release
+            * `nba_api <https://github.com/swar/nba_api>`_ -- the underlying stats.wnba.com surface
+    """
+    return _load_leaguedash(
+        "load_wnba_stats_leaguedash",
+        WNBA_STATS_LEAGUEDASH_URL,
+        WNBA_STATS_LEAGUEDASH_FAMILIES,
+        family,
+        seasons,
+        _WNBA_MIN_SEASON,
+        return_as_pandas,
+    )
+
 
 _BASE_URL = "https://github.com/sportsdataverse/sportsdataverse-data/releases/download/wnba_stats_leaguedash"
 

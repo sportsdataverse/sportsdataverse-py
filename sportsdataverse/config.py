@@ -54,6 +54,11 @@ WNBA_TEAM_BOX_URL = SDVRELEASES + "espn_wnba_team_boxscores/team_box_{season}.pa
 WNBA_PLAYER_BOX_URL = SDVRELEASES + "espn_wnba_player_boxscores/player_box_{season}.parquet"
 WNBA_TEAM_SCHEDULE_URL = SDVRELEASES + "espn_wnba_schedules/wnba_schedule_{season}.parquet"
 
+# Parameter-cube release tags: one asset per (family, season), not per season.
+# Loaded by the hand-written {league}_loaders_extra.load_{league}_stats_leaguedash.
+NBA_STATS_LEAGUEDASH_URL = SDVRELEASES + "nba_stats_leaguedash/{family}_{season}.parquet"
+WNBA_STATS_LEAGUEDASH_URL = SDVRELEASES + "wnba_stats_leaguedash/{family}_{season}.parquet"
+
 
 NFLVERSEGITHUB = "https://github.com/nflverse/nflverse-data/releases/download/"
 NFLVERSEGITHUBPBP = "https://raw.githubusercontent.com/nflverse/"

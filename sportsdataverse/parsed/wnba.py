@@ -192,6 +192,7 @@ from sportsdataverse.wnba import load_wnba_stats_coaches as load_wnba_stats_coac
 from sportsdataverse.wnba import load_wnba_stats_draft as load_wnba_stats_draft  # noqa: F401
 from sportsdataverse.wnba import load_wnba_stats_game_lineups as load_wnba_stats_game_lineups  # noqa: F401
 from sportsdataverse.wnba import load_wnba_stats_game_rosters as load_wnba_stats_game_rosters  # noqa: F401
+from sportsdataverse.wnba import load_wnba_stats_leaguedash as load_wnba_stats_leaguedash  # noqa: F401
 from sportsdataverse.wnba import load_wnba_stats_lineups as load_wnba_stats_lineups  # noqa: F401
 from sportsdataverse.wnba import load_wnba_stats_officials as load_wnba_stats_officials  # noqa: F401
 from sportsdataverse.wnba import load_wnba_stats_pbp as load_wnba_stats_pbp  # noqa: F401
@@ -422,6 +423,7 @@ __all__ = [
     "load_wnba_stats_draft",
     "load_wnba_stats_game_lineups",
     "load_wnba_stats_game_rosters",
+    "load_wnba_stats_leaguedash",
     "load_wnba_stats_lineups",
     "load_wnba_stats_officials",
     "load_wnba_stats_pbp",

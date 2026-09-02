@@ -70,7 +70,7 @@ def load_nfl_pbp(seasons: List[int], return_as_pandas=False, *, source: str = "n
             unchanged behavior. ``"sportsdataverse"`` / ``"sdv"`` returns the
             SDV-native ``nfl_model_pbp`` release: a Python-built, nflfastR-faithful
             enriched frame (ep/epa, wp/wpa/vegas_wp, cp/cpoe, xyac_*/air_epa) that
-            covers the published seasons (2023+) and drops administrative / timeout
+            covers 1999+ (27 assets, verified 2026-09-02) and drops administrative / timeout
             rows for a clean modeling subset. Any other value raises ``ValueError``.
         return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
@@ -134,6 +134,57 @@ def load_nfl_pbp(seasons: List[int], return_as_pandas=False, *, source: str = "n
         # dropped, and dtypes widened) -- union columns, null-fill gaps.
         data = pl.concat([data, i_data], how="diagonal_relaxed")
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
+
+
+def load_nfl_model_pbp(seasons: List[int], return_as_pandas=False) -> pl.DataFrame:
+    """Load the SDV-native ``nfl_model_pbp`` enriched play-by-play release
+
+    A named alias for ``load_nfl_pbp(seasons, source="sportsdataverse")`` -- the
+    Python-built, nflfastR-faithful enriched frame published as
+    ``nfl_model_pbp/model_pbp_{season}.parquet`` (27 assets, 1999-2025 as of
+    2026-09-02, 257 columns in every season). It carries ep/epa, wp/wpa/vegas_wp,
+    cp/cpoe and xyac_*/air_epa, and drops administrative / timeout rows for a
+    clean modeling subset -- unlike the nflverse ``load_nfl_pbp`` default, which
+    keeps them.
+
+    Caching is inherited from the underlying ``load_nfl_pbp`` call, so this
+    wrapper carries no ``@cached_loader`` of its own (a second layer would
+    double-store every frame).
+
+    Args:
+        seasons (list): Used to define different seasons. 1999 is the earliest available season.
+        return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
+
+    Returns:
+        pl.DataFrame: Polars dataframe containing the enriched plays for the requested seasons.
+
+    Raises:
+        SeasonNotFoundError: If any requested season is less than 1999.
+        NoDataError: If a requested season has no published asset.
+        AssetFetchError: If a release asset request fails (a 403 or an exhausted
+            retry budget) -- never softened into an empty season.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nfl import load_nfl_model_pbp
+            pbp = load_nfl_model_pbp(seasons=[2024])
+            print(pbp.shape)
+
+        Multi-season range::
+
+            pbp = load_nfl_model_pbp(seasons=range(2020, 2025))
+
+        Pipeline next step (team EPA per play on early downs)::
+
+            import polars as pl
+            pbp.filter(pl.col("down") <= 2).group_by("posteam").agg(pl.col("epa").mean())
+
+        See Also:
+            * `nflfastR <https://www.nflfastr.com>`_ -- R sister package the enrichment is faithful to
+            * `nflverse <https://nflverse.nflverse.com>`_ -- the alternative ``source="nflverse"`` release
+    """
+    return load_nfl_pbp(seasons, return_as_pandas=return_as_pandas, source="sportsdataverse")
 
 
 @cached_loader

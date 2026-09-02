@@ -8,6 +8,7 @@ from sportsdataverse.nba.nba_game_officials import *
 from sportsdataverse.nba.nba_player_core import *
 from sportsdataverse.nba.nba_game_rosters import *
 from sportsdataverse.nba.nba_loaders import *
+from sportsdataverse.nba.nba_loaders_extra import *
 from sportsdataverse.nba.nba_pbp import *
 from sportsdataverse.nba.nba_play_by_play import *
 from sportsdataverse.nba.nba_player_box import *
