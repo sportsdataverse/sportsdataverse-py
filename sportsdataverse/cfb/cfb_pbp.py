@@ -6566,10 +6566,21 @@ class CFBPlayProcess(object):
                 )
                 .then(True)
                 .otherwise(False),
-                rz_play=pl.when(pl.col("start.yardLine") <= 20).then(True).otherwise(False),
+                # Field-position flags measure distance to the OPPONENT's goal line, not ESPN's
+                # absolute yardLine. yardLine runs 0-100 across the field, so `<= 20` picked out
+                # plays backed up against one particular end zone -- the red zone for the team going
+                # one way and its own shadow for the team going the other. On 401864570 that left
+                # goal_to_go false on all 8 plays ESPN itself labels "& Goal", and rz_play true on
+                # 14 of the 24 real red-zone snaps.
+                rz_play=pl.when(pl.col("start.yardsToEndzone") <= 20).then(True).otherwise(False),
                 under_2=pl.when(pl.col("start.TimeSecsRem") <= 120).then(True).otherwise(False),
-                goal_to_go=pl.when(pl.col("start.yardLine") <= 10).then(True).otherwise(False),
-                scoring_opp=pl.when(pl.col("start.yardLine") <= 40).then(True).otherwise(False),
+                # goal-to-go is an equality, not a threshold: the line to gain IS the goal line, so
+                # the distance needed equals the yards remaining. `>=` would also swallow a feed row
+                # where distance exceeds yards-to-goal, which is not a real down and distance.
+                goal_to_go=pl.when(pl.col("start.distance") == pl.col("start.yardsToEndzone"))
+                .then(True)
+                .otherwise(False),
+                scoring_opp=pl.when(pl.col("start.yardsToEndzone") <= 40).then(True).otherwise(False),
                 stuffed_run=pl.when((pl.col("type.text") == "Rush").and_(pl.col("yds_rushed") <= 0))
                 .then(True)
                 .otherwise(False),
