@@ -3044,12 +3044,15 @@ load_mlb_expected_hr:
   xhr_park_adj: The same expected-home-run sum after scaling each ball by its ballpark's Savant home-run park factor over
     100; published values run between 0.77 and 1.26 times xhr_neutral.
 load_mlb_expected_stats:
-  pa: Statcast rows charged to the batter for the season, counting balls in play carrying launch data plus every other pitch,
-    so it is a pitch-row total rather than a true plate-appearance count.
-  xba: Sum of grid-predicted hit probability over the batter's balls in play divided by ab, which lands far below conventional
-    batting-average scale because ab counts pitch rows rather than at-bats.
-  xslg: Sum of grid-predicted total bases over the batter's balls in play divided by ab, which lands far below conventional
-    slugging scale because ab counts pitch rows rather than at-bats.
+  pa: Plate appearances for the batter in the season, counted as the Statcast rows that END a plate appearance (a non-empty
+    events value). Pitches within a plate appearance are not counted.
+  ab: At-bats, derived from the same plate-appearance-ending rows by excluding walks, hit-by-pitches, sacrifice flies,
+    sacrifice bunts and catcher's interference.
+  xba: Sum of grid-predicted hit probability over the batter's balls in play, divided by at-bats, on the conventional
+    batting-average scale. Balls in play that Statcast did not track are excluded from both the numerator and ab, rather
+    than counted in ab with a zero numerator.
+  xslg: Sum of grid-predicted total bases over the batter's balls in play, divided by at-bats, on the conventional
+    slugging scale, with untracked balls in play excluded from both sides as for xba.
   xwoba: Expected wOBA blending the exit-velocity by launch-angle grid's predicted contact value on balls in play with realized
     wOBA value on walks, hit-by-pitches and strikeouts, over the wOBA denominator; low-sample batters can exceed 1.
 load_mlb_oaa:
