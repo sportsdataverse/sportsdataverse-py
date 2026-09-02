@@ -12,13 +12,16 @@ lineup is pinned by the data. The external correctness contract (Torvik
 team-aggregate Spearman) runs on real seasons in the gate phase, not here.
 """
 
+import numpy as np
 import polars as pl
 import pytest
 
 from sportsdataverse.mbb.mbb_ncaa_rapm_league import (
     STINT_SCHEMA,
     aggregate_stints,
+    possession_deciles,
     solve_rapm_league,
+    split_half_se_check,
     team_aggregate,
 )
 
@@ -235,6 +238,12 @@ class TestSolveRapmLeague:
             "rapm_net",
             "off_poss",
             "def_poss",
+            "orapm_se",
+            "drapm_se",
+            "rapm_net_se",
+            "orapm_se_sampling",
+            "drapm_se_sampling",
+            "rapm_net_se_sampling",
         }
         assert info["n_stints"] == 0
 
@@ -359,3 +368,195 @@ class TestTeamAggregate:
             "off_poss",
             "def_poss",
         }
+
+
+# ---------------------------------------------------------------------------
+# Posterior + sampling standard errors, and the two SE validations
+# ---------------------------------------------------------------------------
+
+
+_EXPOSURE = np.array([1.0, 1.0, 0.9, 0.9, 0.8, 0.5, 0.2])  # h1..h7 / a1..a7 selection weights
+
+
+def _noisy_resolved(n_poss=4000, n_games=20, seed=0, h7_boost=0.25):
+    """Id-resolved possessions with a ``contest_id`` and Poisson scoring noise.
+
+    Duke (home) vs Iowa (away), each side fielding a random five of seven
+    drawn with graded exposure weights (h1 ~ every possession, h7 rarely), so
+    NO two players are perfectly collinear -- the always-together five of the
+    deterministic fixtures above would pin the starters' SEs at the prior and
+    invert every "more minutes, smaller SE" comparison. Duke's h7 lifts the
+    offence by ``h7_boost`` ppp, so the design carries signal AND noise (the
+    deterministic fixtures have near-zero residuals, where a residual-variance
+    SE is degenerate).
+    """
+    rng = np.random.default_rng(seed)
+    p = _EXPOSURE / _EXPOSURE.sum()
+    hs, as_ = [f"h{i}" for i in range(1, 8)], [f"a{i}" for i in range(1, 8)]
+    rows, contest = [], []
+    for k in range(n_poss):
+        duke = sorted(hs[i] for i in rng.choice(7, 5, replace=False, p=p))
+        iowa = sorted(as_[i] for i in rng.choice(7, 5, replace=False, p=p))
+        poss_team = "Duke" if k % 2 == 0 else "Iowa"
+        ppp = 1.0 + (h7_boost if (poss_team == "Duke" and "h7" in duke) else 0.0)
+        rows.append(("Duke", "Iowa", poss_team, int(min(rng.poisson(ppp), 3)), duke, iowa))
+        contest.append(str(1000 + k % n_games))
+    return _poss(rows).with_columns(pl.Series("contest_id", contest, dtype=pl.Utf8))
+
+
+def _dense_system(s, lam):
+    """Hand-built dense normal equations for a stint frame -- the formula the engine must match."""
+    players = sorted(set(s["off_ids"].explode().to_list()) | set(s["def_ids"].explode().to_list()))
+    idx = {p: i for i, p in enumerate(players)}
+    n_p = len(players)
+    x = np.zeros((s.height, 2 * n_p + 1))
+    rows = zip(s["off_ids"].to_list(), s["def_ids"].to_list(), s["is_home_offense"].to_list())
+    for r, (off, dfn, home) in enumerate(rows):
+        for p in off:
+            x[r, idx[p]] = 1.0
+        for p in dfn:
+            x[r, n_p + idx[p]] = -1.0
+        x[r, 2 * n_p] = 1.0 if home else -1.0
+    w = s["n_poss"].to_numpy().astype(float)
+    y = 100.0 * s["pts"].to_numpy() / w
+    yc = y - np.average(y, weights=w)
+    gram = x.T @ (w[:, None] * x)
+    m = np.linalg.inv(gram + lam * np.eye(2 * n_p + 1))
+    return players, n_p, x, w, yc, gram, m
+
+
+_SE6 = (
+    "orapm_se",
+    "drapm_se",
+    "rapm_net_se",
+    "orapm_se_sampling",
+    "drapm_se_sampling",
+    "rapm_net_se_sampling",
+)
+
+
+class TestPosteriorSe:
+    def test_matches_the_dense_formulas(self):
+        """posterior = sigma2*M, sampling = sigma2*(M - lam*M^2) = sigma2*M G M; sigma2 on n - df_eff dof."""
+        s = aggregate_stints(_noisy_resolved(n_poss=2000, seed=1))
+        lam = 50.0
+        players, info = solve_rapm_league(s, ridge_lambda=lam)
+        ids, n_p, x, w, yc, gram, m = _dense_system(s, lam)
+        assert players["player_id"].to_list() == ids
+        beta_exact = m @ (x.T @ (w * yc))
+        assert np.abs(players["orapm"].to_numpy() - beta_exact[:n_p]).max() < 1e-3
+        assert np.abs(players["drapm"].to_numpy() - beta_exact[n_p : 2 * n_p]).max() < 1e-3
+        assert info["solve_max_abs_dev"] < 1e-3
+        beta = np.concatenate([players["orapm"].to_numpy(), players["drapm"].to_numpy(), [info["hca"]]])
+        resid = yc - x @ beta
+        df_eff = np.trace(m @ gram)
+        sigma2 = float(w @ resid**2) / (s.height - df_eff)
+        assert abs(info["df_eff"] - df_eff) < 1e-8
+        assert abs(info["sigma2"] / sigma2 - 1.0) < 1e-10
+        i = np.arange(n_p)
+        sandwich = m @ gram @ m
+        assert np.allclose(sandwich, m - lam * m @ m)  # the identity the engine relies on
+        for cov, sfx in ((m, ""), (sandwich, "_sampling")):
+            d = np.diag(cov)
+            assert np.allclose(players[f"orapm_se{sfx}"].to_numpy() ** 2, sigma2 * d[:n_p], rtol=1e-9)
+            assert np.allclose(
+                players[f"drapm_se{sfx}"].to_numpy() ** 2,
+                sigma2 * d[n_p : 2 * n_p],
+                rtol=1e-9,
+            )
+            net_var = sigma2 * (d[i] + d[n_p + i] + 2.0 * cov[i, n_p + i])
+            assert np.allclose(players[f"rapm_net_se{sfx}"].to_numpy() ** 2, net_var, rtol=1e-9)
+        assert abs(info["hca_se"] ** 2 - sigma2 * m[2 * n_p, 2 * n_p]) < 1e-9
+
+    def test_sampling_se_never_exceeds_posterior_se(self):
+        """M G M <= M in the PSD order, so the shrunk estimate's repeatability is at most the posterior SD."""
+        players, _ = solve_rapm_league(aggregate_stints(_noisy_resolved(n_poss=1500, seed=5)), ridge_lambda=50.0)
+        for c in ("orapm", "drapm", "rapm_net"):
+            assert (players[f"{c}_se_sampling"] <= players[f"{c}_se"] + 1e-12).all()
+            assert (players[f"{c}_se"] > 0).all()
+
+    def test_more_possessions_tighter_posterior_se(self):
+        small, _ = solve_rapm_league(aggregate_stints(_noisy_resolved(n_poss=500, seed=2)), ridge_lambda=50.0)
+        big, _ = solve_rapm_league(aggregate_stints(_noisy_resolved(n_poss=8000, seed=2)), ridge_lambda=50.0)
+        j = small.join(big, on="player_id", suffix="_big")
+        assert j.height == 14
+        assert (j["rapm_net_se_big"] < j["rapm_net_se"]).all()
+
+    def test_possession_deciles_bins_and_columns(self):
+        """Rank-based equal-count bins over off+def possessions; medians of every SE column.
+
+        Whether the SE actually FALLS with playing time is a data property (a
+        player who never sits is confounded with his team's total under the
+        fixed-five constraint, so the top deciles flatten) -- the producer
+        gates it on real seasons; here only the table contract is tested.
+        """
+        s = aggregate_stints(_noisy_resolved(n_poss=3000, seed=3))
+        players, _ = solve_rapm_league(s, ridge_lambda=50.0)
+        d = possession_deciles(players, n_bins=2)
+        assert d["decile"].to_list() == [0, 1]
+        assert d["n"].to_list() == [7, 7]
+        assert d["poss_max"][0] <= d["poss_min"][1]
+        assert {f"median_{c}" for c in _SE6} <= set(d.columns)
+        assert (d["median_rapm_net_se"] > 0).all()
+
+    def test_tighter_prior_tighter_posterior(self):
+        s = aggregate_stints(_noisy_resolved(n_poss=1500, seed=4))
+        loose, _ = solve_rapm_league(s, ridge_lambda=1.0)
+        tight, _ = solve_rapm_league(s, ridge_lambda=1e5)
+        assert tight["rapm_net_se"].max() < loose["rapm_net_se"].min()
+
+    def test_net_se_within_triangle_bounds(self):
+        players, _ = solve_rapm_league(aggregate_stints(_noisy_resolved(n_poss=1500, seed=5)), ridge_lambda=50.0)
+        for sfx in ("", "_sampling"):
+            o, d, n = (players[f"{c}{sfx}"].to_numpy() for c in ("orapm_se", "drapm_se", "rapm_net_se"))
+            assert np.all(np.isfinite(n))
+            assert np.all(n <= o + d + 1e-12) and np.all(n >= np.abs(o - d) - 1e-12)
+
+    def test_compute_se_false_gives_nulls_not_nans(self):
+        players, info = solve_rapm_league(
+            aggregate_stints(_noisy_resolved(n_poss=300, seed=6)),
+            ridge_lambda=50.0,
+            compute_se=False,
+        )
+        for c in _SE6:
+            assert players[c].dtype == pl.Float64
+            assert players[c].null_count() == players.height
+        assert "sigma2" not in info and "solve_max_abs_dev" not in info
+
+
+class TestSplitHalfSeCheck:
+    def test_shapes_summary_and_deciles(self):
+        resolved = _noisy_resolved(n_poss=3000, n_games=10, seed=7)
+        per_player, summary = split_half_se_check(resolved, ridge_lambda=50.0)
+        assert (summary["n_games_a"], summary["n_games_b"]) == (5, 5)
+        assert summary["n_players"] == per_player.height == 14
+        for c in ("orapm", "drapm", "rapm_net"):
+            want = {
+                f"{c}_a",
+                f"{c}_b",
+                f"{c}_z",
+                f"{c}_covered",
+                f"{c}_z_sampling",
+                f"{c}_covered_sampling",
+            }
+            assert want <= set(per_player.columns)
+            assert 0.0 <= summary[f"coverage_{c}"] <= 1.0
+            assert 0.0 <= summary[f"coverage_sampling_{c}"] <= 1.0
+            assert per_player[f"{c}_z_sampling"].is_finite().all()
+            # posterior SE >= sampling SE -> posterior |z| <= sampling |z| -> coverage no lower
+            assert summary[f"coverage_{c}"] >= summary[f"coverage_sampling_{c}"]
+            assert summary[f"z_sd_{c}"] <= summary[f"z_sd_sampling_{c}"]
+        d = possession_deciles(per_player, n_bins=2)
+        assert d["n"].to_list() == [7, 7]
+        assert d["poss_max"][0] <= d["poss_min"][1]
+        assert {"coverage_rapm_net", "coverage_rapm_net_sampling"} <= set(d.columns)
+
+    def test_requires_integer_like_contest_id(self):
+        resolved = _noisy_resolved(n_poss=200, seed=8)
+        with pytest.raises(ValueError, match="contest_id"):
+            split_half_se_check(resolved.drop("contest_id"), ridge_lambda=50.0)
+        with pytest.raises(ValueError, match="integer-like"):
+            split_half_se_check(
+                resolved.with_columns(pl.lit("g-1").alias("contest_id")),
+                ridge_lambda=50.0,
+            )
