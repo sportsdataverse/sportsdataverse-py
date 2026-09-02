@@ -1711,7 +1711,14 @@ class CFBPlayProcess(object):
                     # this the loose is_in(lead_text) match spuriously flags the real
                     # play right before it (e.g. an end-of-half Hail Mary interception)
                     # as a duplicate and drops it. Never dedupe against an end-marker lead.
-                    .and_(pl.col("lead_text").str.contains(r"(?i)end of|end period|end quarter") == False),
+                    .and_(pl.col("lead_text").str.contains(r"(?i)end of|end period|end quarter") == False)
+                    # Same trap, different marker: a Timeout row (and a penalty row whose
+                    # play was wiped, "NO PLAY") also inherits the preceding play's start
+                    # state, so the loose is_in(lead_text) match deletes the real play in
+                    # front of it. 401864570 lost a 25-yard third-down completion this way
+                    # -- it sits immediately before "Timeout Florida State, clock 04:11".
+                    .and_(pl.col("type.text").shift(-1).str.contains("(?i)timeout") == False)
+                    .and_(pl.col("lead_text").str.contains("(?i)no play") == False),
                 )
                 .then(pl.lit(True))
                 .otherwise(pl.lit(False)),
