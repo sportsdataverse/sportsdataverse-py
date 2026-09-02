@@ -300,8 +300,15 @@ from sportsdataverse.mlb import load_mlb_stuff_plus as load_mlb_stuff_plus  # no
 from sportsdataverse.mlb import load_mlb_we_table as load_mlb_we_table  # noqa: F401
 from sportsdataverse.mlb import load_mlb_wpa as load_mlb_wpa  # noqa: F401
 from sportsdataverse.mlb import load_mlb_xera as load_mlb_xera  # noqa: F401
+from sportsdataverse.mlb import load_ncaa_baseball_games as load_ncaa_baseball_games  # noqa: F401
+from sportsdataverse.mlb import load_ncaa_baseball_linescore as load_ncaa_baseball_linescore  # noqa: F401
 from sportsdataverse.mlb import load_ncaa_baseball_pbp as load_ncaa_baseball_pbp  # noqa: F401
+from sportsdataverse.mlb import load_ncaa_baseball_player_stats as load_ncaa_baseball_player_stats  # noqa: F401
+from sportsdataverse.mlb import load_ncaa_baseball_rosters as load_ncaa_baseball_rosters  # noqa: F401
 from sportsdataverse.mlb import load_ncaa_baseball_schedule as load_ncaa_baseball_schedule  # noqa: F401
+from sportsdataverse.mlb import load_ncaa_baseball_situational_stats as load_ncaa_baseball_situational_stats  # noqa: F401
+from sportsdataverse.mlb import load_ncaa_baseball_team_stats as load_ncaa_baseball_team_stats  # noqa: F401
+from sportsdataverse.mlb import load_ncaa_baseball_teams as load_ncaa_baseball_teams  # noqa: F401
 from sportsdataverse.mlb import mae as mae  # noqa: F401
 from sportsdataverse.mlb import mlb_attendance as mlb_attendance  # noqa: F401
 from sportsdataverse.mlb import mlb_baserunning_value as mlb_baserunning_value  # noqa: F401
@@ -529,8 +536,15 @@ __all__ = [
     "load_mlb_we_table",
     "load_mlb_wpa",
     "load_mlb_xera",
+    "load_ncaa_baseball_games",
+    "load_ncaa_baseball_linescore",
     "load_ncaa_baseball_pbp",
+    "load_ncaa_baseball_player_stats",
+    "load_ncaa_baseball_rosters",
     "load_ncaa_baseball_schedule",
+    "load_ncaa_baseball_situational_stats",
+    "load_ncaa_baseball_team_stats",
+    "load_ncaa_baseball_teams",
     "mae",
     "mlb_all_star_ballot",
     "mlb_all_star_final_vote",

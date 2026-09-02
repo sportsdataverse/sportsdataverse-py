@@ -1203,6 +1203,62 @@ loaders:
   min_season: 2012
   example_args:
     seasons: 2023
+- fn: load_ncaa_baseball_teams
+  league: mlb
+  base: sdv_releases
+  url: ncaa_baseball_teams/ncaa_baseball_teams_{season}.parquet
+  tag: ncaa_baseball_teams
+  min_season: 2024
+  example_args:
+    seasons: 2025
+- fn: load_ncaa_baseball_rosters
+  league: mlb
+  base: sdv_releases
+  url: ncaa_baseball_rosters/ncaa_baseball_rosters_{season}.parquet
+  tag: ncaa_baseball_rosters
+  min_season: 2024
+  example_args:
+    seasons: 2025
+- fn: load_ncaa_baseball_linescore
+  league: mlb
+  base: sdv_releases
+  url: ncaa_baseball_linescore/ncaa_baseball_linescore_{season}.parquet
+  tag: ncaa_baseball_linescore
+  min_season: 2024
+  example_args:
+    seasons: 2025
+- fn: load_ncaa_baseball_team_stats
+  league: mlb
+  base: sdv_releases
+  url: ncaa_baseball_team_stats/ncaa_baseball_team_stats_{season}.parquet
+  tag: ncaa_baseball_team_stats
+  min_season: 2024
+  example_args:
+    seasons: 2025
+- fn: load_ncaa_baseball_player_stats
+  league: mlb
+  base: sdv_releases
+  url: ncaa_baseball_player_stats/ncaa_baseball_player_stats_{season}.parquet
+  tag: ncaa_baseball_player_stats
+  min_season: 2024
+  example_args:
+    seasons: 2025
+- fn: load_ncaa_baseball_situational_stats
+  league: mlb
+  base: sdv_releases
+  url: ncaa_baseball_situational_stats/ncaa_baseball_situational_stats_{season}.parquet
+  tag: ncaa_baseball_situational_stats
+  min_season: 2024
+  example_args:
+    seasons: 2025
+- fn: load_ncaa_baseball_games
+  league: mlb
+  base: sdv_releases
+  url: ncaa_baseball_games/ncaa_baseball_games_{season}.parquet
+  tag: ncaa_baseball_games
+  min_season: 2017
+  example_args:
+    seasons: 2024
 - fn: load_nba_player_impact
   league: nba
   base: sdv_releases
