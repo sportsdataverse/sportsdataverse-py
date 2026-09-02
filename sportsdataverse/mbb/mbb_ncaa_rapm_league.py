@@ -397,8 +397,9 @@ def stack_seasons(per_season: "dict[int, pl.DataFrame]", target: int, decay: flo
         ``fit_weight`` / ``y_offset`` columns :func:`solve_rapm_league` reads.
 
     Raises:
-        ValueError: a season is after ``target``, ``decay`` is outside
-            ``(0, 1]``, or ``target`` itself is absent from ``per_season``.
+        ValueError: a season is after ``target``, a season's stints carry no
+            possessions, ``decay`` is outside ``(0, 1]``, or ``target`` itself
+            is absent from ``per_season``.
 
     Example:
         Three-season pool::
@@ -415,6 +416,16 @@ def stack_seasons(per_season: "dict[int, pl.DataFrame]", target: int, decay: flo
         raise ValueError(
             f"stack_seasons: seasons {future} are after target {target} -- a season's "
             "estimate may never be fitted on its own future"
+        )
+    # Guard every frame here, where the season id is known: _season_level divides
+    # by the possession total, so an empty frame would otherwise surface as a bare
+    # ZeroDivisionError naming nothing. A season with nothing to contribute is the
+    # caller's to drop, not something to pool at an undefined level.
+    empty = sorted(s for s, st in per_season.items() if int(st["n_poss"].sum() or 0) == 0)
+    if empty:
+        raise ValueError(
+            f"stack_seasons: seasons {empty} have no usable possessions -- drop them "
+            "before pooling rather than stacking an empty design"
         )
     level_t = _season_level(per_season[target])
     return pl.concat(

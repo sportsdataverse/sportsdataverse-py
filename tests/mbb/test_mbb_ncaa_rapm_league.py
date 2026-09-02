@@ -821,3 +821,11 @@ class TestSigma2UnderFitWeight:
         # and the row-count denominator really would have been ~0.75x
         rows, dof = pooled.height, float(pooled["fit_weight"].sum())
         assert abs(dof / rows - 0.75) < 1e-9
+
+    def test_an_empty_season_frame_is_refused_by_name(self):
+        # _season_level divides by the possession total; an empty frame would
+        # otherwise be a bare ZeroDivisionError naming no season.
+        empty = _season_stints().clear()
+        per = {2023: empty, 2024: _season_stints()}
+        with pytest.raises(ValueError, match=r"seasons \[2023\] have no usable possessions"):
+            stack_seasons(per, 2024, 0.5)
