@@ -399,3 +399,24 @@ def test_structurally_absent_turnovers_are_refused():
         pl.when(pl.col("team_id") == "A").then(0.0).otherwise(pl.col("turnovers")).alias("turnovers")
     )
     assert raw_game_efficiency(sched, one_zero).height == 2
+
+
+def test_one_sided_shell_is_dropped_too():
+    """A shell on ONE side keeps `poss` positive but halves it -- WBB 2018 game 400998743
+    scored a team at 272 efficiency (and 1452 where both boxes were partial)."""
+    sched, box = _season_with_shell_game()
+    # make the shell one-sided: give team B a real box in that game
+    box = box.with_columns(
+        pl.when((pl.col("game_id") == "SHELL") & (pl.col("team_id") == "B"))
+        .then(69.0)
+        .otherwise(pl.col("field_goals_attempted"))
+        .alias("field_goals_attempted"),
+        pl.when((pl.col("game_id") == "SHELL") & (pl.col("team_id") == "B"))
+        .then(7.0)
+        .otherwise(pl.col("turnovers"))
+        .alias("turnovers"),
+    )
+    with pytest.warns(UserWarning, match="non-positive possession"):
+        eff = raw_game_efficiency(sched, box)
+    assert "SHELL" not in eff["game_id"].to_list()
+    assert eff["off_eff"].max() < 200.0

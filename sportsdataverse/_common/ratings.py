@@ -72,10 +72,21 @@ def drop_unusable_possession_rows(paired: pl.DataFrame) -> pl.DataFrame:
     The row carries no information -- there is no possession estimate to be had
     from an all-zero box -- so it is dropped from both the efficiency and the
     tempo path, with a warning naming the games.
+
+    A shell on ONE side only is the same defect with a quieter symptom: the
+    pairwise average stays positive, so nothing goes infinite, but both teams
+    are scored against half the real possessions. WBB 2018 has three such games
+    (``400998743``, ``400994687``, ``400998215``) which handed a team an
+    efficiency of 272 and, where both boxes were partial, 1452. So a row is
+    kept only when BOTH sides' own possession estimates are positive.
     """
     if paired.height == 0:
         return paired
-    usable = paired.filter(pl.col("poss").is_not_null() & pl.col("poss").is_finite() & (pl.col("poss") > 0.0))
+    usable_expr = pl.col("poss").is_not_null() & pl.col("poss").is_finite() & (pl.col("poss") > 0.0)
+    for side in ("team_poss", "opp_poss"):
+        if side in paired.columns:
+            usable_expr = usable_expr & pl.col(side).is_not_null() & pl.col(side).is_finite() & (pl.col(side) > 0.0)
+    usable = paired.filter(usable_expr)
     dropped = paired.height - usable.height
     if dropped:
         games = paired.join(usable.select("game_id", "team_id"), on=["game_id", "team_id"], how="anti")[
