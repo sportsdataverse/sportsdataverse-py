@@ -18,6 +18,11 @@ route to real injury records — do not re-wire the per-game path.
 Cost: the endpoint takes **no arguments** and returns every team in one response,
 so a full multi-league snapshot is one request per league per day.
 
+The team ``depthcharts`` endpoint is the module's second surface and has the same
+character -- current state, no history -- but is priced per team rather than per
+league (NFL 32, NBA 30, MLB 30). ESPN publishes no depth chart at all for NHL,
+WNBA or college football: those answer 200 with the ``depthchart`` key absent.
+
 Example:
     Snapshot one league::
 
@@ -53,9 +58,13 @@ from typing import Any, Dict, List, Mapping, Optional, Sequence, Union
 import polars as pl
 
 __all__ = [
+    "DEPTHCHART_SNAPSHOT_SCHEMA",
+    "ESPN_DEPTHCHART_LEAGUES",
     "ESPN_INJURY_LEAGUES",
     "INJURY_SNAPSHOT_SCHEMA",
+    "espn_depthcharts_snapshot",
     "espn_injuries_snapshot",
+    "parse_depthchart_snapshot",
     "parse_injuries_snapshot",
 ]
 
@@ -118,6 +127,13 @@ INJURY_SNAPSHOT_SCHEMA: Dict[str, Any] = {
 #: injury row with no athlete id cannot be joined to a roster.
 _ATHLETE_ID_RE = re.compile(r"/id/(\d+)")
 
+#: Second recovery route, for the day the player-card link shape changes. It has
+#: never been needed (0 of 1,291 injury records across all 8 leagues lacked a
+#: link id on 2026-09-02) but 98.7% of those records also carry a headshot, so it
+#: is a real backstop rather than a hypothetical one — and a null athlete id is
+#: an unjoinable row, not a cosmetic gap.
+_HEADSHOT_ID_RE = re.compile(r"/(\d+)\.png")
+
 
 def _as_id(value: Any) -> Optional[str]:
     """Coerce an ESPN id to ``Utf8``, never via ``float``.
@@ -159,7 +175,14 @@ def _list(value: Any) -> List[Any]:
 
 
 def _athlete_id(athlete: Mapping[str, Any]) -> Optional[str]:
-    """Athlete id from ``athlete.id`` when present, else from the player-card link."""
+    """Athlete id from ``athlete.id``, else the player-card link, else the headshot.
+
+    ESPN omits ``athlete.id`` from the injuries payload on every record, so the
+    id is *recovered* rather than read — which makes it fragile in one specific
+    way: if the link shape changes, every id silently becomes null and the rows
+    stay joinable-looking. The headshot URL carries the same id and is the
+    fallback for that day.
+    """
     direct = _as_id(athlete.get("id"))
     if direct:
         return direct
@@ -167,7 +190,8 @@ def _athlete_id(athlete: Mapping[str, Any]) -> Optional[str]:
         match = _ATHLETE_ID_RE.search(str(_mapping(link).get("href") or ""))
         if match:
             return match.group(1)
-    return None
+    headshot = _HEADSHOT_ID_RE.search(str(_mapping(athlete.get("headshot")).get("href") or ""))
+    return headshot.group(1) if headshot else None
 
 
 def _text(container: Any, key: str) -> Optional[str]:
@@ -313,4 +337,208 @@ def espn_injuries_snapshot(
             ) from exc
         frames.append(parse_injuries_snapshot(fetch(return_parsed=False), league=slug, as_of_date=stamp))
     df = pl.concat(frames, how="vertical") if frames else pl.DataFrame(schema=INJURY_SNAPSHOT_SCHEMA)
+    return df.to_pandas() if return_as_pandas else df
+
+
+#: Leagues whose ESPN ``teams/{team_id}/depthcharts`` payload carries a
+#: ``depthchart`` block. Measured live on 2026-09-02: ``nfl`` 3 groups / ~68
+#: athletes per team, ``mlb`` 1 group / ~76, ``nba`` 1 / ~39. ``nhl``, ``wnba``
+#: and ``college-football`` answer 200 with the key absent entirely -- ESPN
+#: publishes no depth chart for them, so polling those leagues is wasted
+#: requests, not an empty dataset. Re-probe before adding one.
+ESPN_DEPTHCHART_LEAGUES: tuple[str, ...] = ("nfl", "nba", "mlb")
+
+#: One row per athlete SLOT. A depth chart is a group (NFL ships three -- an
+#: offensive package, a defensive front and special teams) of positions, each an
+#: ordered list of athletes, and that order IS the depth. ``depth_rank`` makes it
+#: explicit rather than leaving it to the row order of a parquet file.
+#:
+#: ``position_slot`` is ESPN's own key for the slot and is what makes the grain
+#: unique: NFL's "3WR 1TE" group has THREE slots -- ``wr1``/``wr2``/``wr3`` --
+#: that all carry position id ``1`` and abbreviation ``WR``, so a row keyed only
+#: on the position cannot say which receiver spot it describes.
+#:
+#: Ids are ``Utf8`` for the same reason the injuries schema pins them: ESPN's own
+#: wire form, coerced through ``int`` and never through ``float``.
+DEPTHCHART_SNAPSHOT_SCHEMA: Dict[str, Any] = {
+    "as_of_date": pl.Date,
+    "league": pl.Utf8,
+    "season": pl.Int64,
+    "season_type": pl.Int64,
+    "team_id": pl.Utf8,
+    "team_display_name": pl.Utf8,
+    "team_abbreviation": pl.Utf8,
+    "group_id": pl.Utf8,
+    "group_name": pl.Utf8,
+    "position_slot": pl.Utf8,
+    "position_id": pl.Utf8,
+    "position_abbreviation": pl.Utf8,
+    "position_name": pl.Utf8,
+    "depth_rank": pl.Int64,
+    "athlete_id": pl.Utf8,
+    "athlete_display_name": pl.Utf8,
+    "athlete_short_name": pl.Utf8,
+    "espn_timestamp": pl.Utf8,
+}
+
+
+def _as_int(value: Any) -> Optional[int]:
+    """Coerce to ``int``, or ``None`` -- never a partially-parsed number."""
+    try:
+        return int(str(value).strip())
+    except (TypeError, ValueError):
+        return None
+
+
+def parse_depthchart_snapshot(
+    payload: Optional[Mapping[str, Any]],
+    *,
+    league: str,
+    as_of_date: Optional[date] = None,
+    return_as_pandas: bool = False,
+) -> Any:
+    """Flatten one team's ``depthcharts`` payload to one row per athlete slot.
+
+    Args:
+        payload: Raw JSON dict from
+            ``espn_{league}_team_depthcharts(team_id=..., return_parsed=False)``.
+            ``None``, a malformed payload, or a league that publishes no depth
+            chart yields a zero-row frame.
+        league: League slug written into the ``league`` column.
+        as_of_date: Observation date; defaults to today (UTC).
+        return_as_pandas: Return a pandas DataFrame instead of polars.
+
+    Returns:
+        A frame with :data:`DEPTHCHART_SNAPSHOT_SCHEMA`'s columns -- zero rows
+        when the team publishes no depth chart, never a raise.
+
+    Example:
+        Parse a captured payload::
+
+            from sportsdataverse.espn_snapshots import parse_depthchart_snapshot
+            df = parse_depthchart_snapshot(payload, league="nfl")
+
+        Starters only::
+
+            df.filter(pl.col("depth_rank") == 1)
+
+    See Also:
+        * `nflreadpy`_ -- the NFL sister package
+        * `hoopR`_ -- the R men's-basketball sister package
+
+    .. _nflreadpy: https://github.com/nflverse/nflreadpy
+    .. _hoopR: https://hoopR.sportsdataverse.org
+    """
+    stamp = as_of_date or datetime.now(timezone.utc).date()
+    root = _mapping(payload)
+    season = _mapping(root.get("season"))
+    team = _mapping(root.get("team"))
+    timestamp = root.get("timestamp")
+    rows: List[Dict[str, Any]] = []
+    for group in _list(root.get("depthchart")):
+        group_map = _mapping(group)
+        for slot_key, slot in _mapping(group_map.get("positions")).items():
+            slot_map = _mapping(slot)
+            position = _mapping(slot_map.get("position"))
+            for rank, athlete in enumerate(_list(slot_map.get("athletes")), start=1):
+                athlete_map = _mapping(athlete)
+                rows.append(
+                    {
+                        "as_of_date": stamp,
+                        "league": league,
+                        "season": _as_int(season.get("year")),
+                        "season_type": _as_int(season.get("type")),
+                        "team_id": _as_id(team.get("id")),
+                        "team_display_name": _text(team, "displayName"),
+                        "team_abbreviation": _text(team, "abbreviation"),
+                        "group_id": _as_id(group_map.get("id")),
+                        "group_name": _text(group_map, "name"),
+                        "position_slot": str(slot_key),
+                        "position_id": _as_id(position.get("id")),
+                        "position_abbreviation": _text(position, "abbreviation"),
+                        "position_name": _text(position, "displayName"),
+                        "depth_rank": rank,
+                        "athlete_id": _athlete_id(athlete_map),
+                        "athlete_display_name": _text(athlete_map, "displayName"),
+                        "athlete_short_name": _text(athlete_map, "shortName"),
+                        "espn_timestamp": None if timestamp is None else str(timestamp),
+                    }
+                )
+    df = pl.DataFrame(rows, schema=DEPTHCHART_SNAPSHOT_SCHEMA)
+    return df.to_pandas() if return_as_pandas else df
+
+
+def espn_depthcharts_snapshot(
+    league: str,
+    *,
+    team_ids: Optional[Sequence[Union[str, int]]] = None,
+    as_of_date: Optional[date] = None,
+    request_delay: float = 1.5,
+    return_as_pandas: bool = False,
+) -> Any:
+    """Fetch today's depth chart for every team in a league, stamped with the date.
+
+    Unlike ``injuries``, this endpoint is **per team**, so a league costs one
+    request per team -- NFL 32, NBA 30, MLB 30. Requests are issued
+    **sequentially** with ``request_delay`` seconds between them because ESPN
+    answers aggressive polling with 403.
+
+    A team that publishes no depth chart contributes zero rows rather than a
+    null-filled placeholder, so an empty observation can never be counted or
+    persisted as data.
+
+    Args:
+        league: League slug; see :data:`ESPN_DEPTHCHART_LEAGUES`.
+        team_ids: Teams to fetch. Defaults to every team from
+            ``espn_{league}_teams()`` (one extra request).
+        as_of_date: Observation date stamped on every row; defaults to today (UTC).
+        request_delay: Seconds to sleep between team requests.
+        return_as_pandas: Return a pandas DataFrame instead of polars.
+
+    Returns:
+        One frame with :data:`DEPTHCHART_SNAPSHOT_SCHEMA`'s columns, long over team.
+
+    Raises:
+        ValueError: If the league has no ``espn_{league}_team_depthcharts`` wrapper.
+
+    Example:
+        Today's NFL depth charts::
+
+            from sportsdataverse.espn_snapshots import espn_depthcharts_snapshot
+            df = espn_depthcharts_snapshot("nfl")
+
+        Two teams only::
+
+            df = espn_depthcharts_snapshot("nba", team_ids=[1, 2])
+
+    See Also:
+        * `nflreadpy`_ -- the NFL sister package
+        * `hoopR`_ -- the R men's-basketball sister package
+
+    .. _nflreadpy: https://github.com/nflverse/nflreadpy
+    .. _hoopR: https://hoopR.sportsdataverse.org
+    """
+    stamp = as_of_date or datetime.now(timezone.utc).date()
+    try:
+        module = importlib.import_module(f"sportsdataverse.{league}")
+        fetch = getattr(module, f"espn_{league}_team_depthcharts")
+    except (ImportError, AttributeError) as exc:
+        raise ValueError(
+            f"no espn_{league}_team_depthcharts wrapper -- leagues with depth charts: "
+            f"{', '.join(ESPN_DEPTHCHART_LEAGUES)}"
+        ) from exc
+    if team_ids is None:
+        team_ids = getattr(module, f"espn_{league}_teams")()["team_id"].to_list()
+    frames: List[pl.DataFrame] = []
+    for index, team_id in enumerate(team_ids):
+        if index and request_delay > 0:
+            time.sleep(request_delay)
+        frames.append(
+            parse_depthchart_snapshot(
+                fetch(team_id=str(team_id), return_parsed=False),
+                league=league,
+                as_of_date=stamp,
+            )
+        )
+    df = pl.concat(frames, how="vertical") if frames else pl.DataFrame(schema=DEPTHCHART_SNAPSHOT_SCHEMA)
     return df.to_pandas() if return_as_pandas else df
