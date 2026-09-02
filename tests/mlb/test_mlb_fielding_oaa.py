@@ -73,3 +73,40 @@ def test_oaa_return_as_pandas():
 
     out = mlb_fielding_oaa(_oaa_frame(), return_as_pandas=True)
     assert isinstance(out, pd.DataFrame)
+
+
+def test_by_direction_splits_partition_the_undirected_oaa():
+    """The in/back/lateral split re-groups the SAME scored balls in play and
+    never re-fits, so each fielder-position's three rows must sum exactly to
+    its undirected OAA (and opportunities). A split that re-fit per direction
+    — the tempting implementation — would not satisfy this."""
+    import numpy as np
+
+    rng = np.random.default_rng(0)
+    n = 400
+    bip = pl.DataFrame(
+        {
+            "hc_x": rng.normal(125, 40, n),
+            "hc_y": rng.normal(120, 40, n),
+            "hit_distance_sc": rng.normal(300, 60, n),
+            "launch_angle": rng.normal(25, 12, n),
+            "launch_speed": rng.normal(90, 12, n),
+            "hit_location": rng.choice([7, 8, 9], n),
+            "events": rng.choice(["field_out", "single"], n),
+            "fielder_7": rng.integers(1, 6, n),
+            "fielder_8": rng.integers(1, 6, n),
+            "fielder_9": rng.integers(1, 6, n),
+        }
+    )
+    plain = mlb_fielding_oaa(bip)
+    split = mlb_fielding_oaa(bip, by_direction=True)
+
+    assert set(split["direction"].unique().to_list()) <= {"in", "back", "lateral"}
+    joined = (
+        split.group_by(["fielder_id", "position"])
+        .agg(pl.col("oaa").sum().alias("split_oaa"), pl.col("opportunities").sum().alias("split_opps"))
+        .join(plain, on=["fielder_id", "position"], how="inner")
+    )
+    assert joined.height == plain.height  # every fielder-position survives the split
+    assert float((joined["split_oaa"] - joined["oaa"]).abs().max()) < 1e-9
+    assert int((joined["split_opps"] - joined["opportunities"]).abs().max()) == 0

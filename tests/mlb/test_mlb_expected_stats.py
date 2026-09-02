@@ -92,7 +92,7 @@ def test_mlb_expected_stats_schema_and_pandas() -> None:
         )
 
     out = mlb_expected_stats("2024-06-01", "2024-06-21", puller=_fake_puller)
-    assert out.columns == ["batter", "season", "pa", "ab", "xwoba", "xba", "xslg"]
+    assert out.columns == ["batter", "season", "pa", "ab", "xwoba", "xba", "xslg", "woba", "ba"]
     assert out.schema["batter"] == pl.Int64
     assert out.schema["season"] == pl.Int64
     assert out.height == 1
@@ -124,7 +124,7 @@ def test_mlb_expected_stats_empty_pull_returns_documented_schema() -> None:
 
     out = mlb_expected_stats("2024-06-01", "2024-06-21", puller=_empty_puller)
     assert out.height == 0
-    assert out.columns == ["batter", "season", "pa", "ab", "xwoba", "xba", "xslg"]
+    assert out.columns == ["batter", "season", "pa", "ab", "xwoba", "xba", "xslg", "woba", "ba"]
 
 
 def _pitchy_puller_factory(rows: dict):
@@ -212,3 +212,48 @@ def test_batted_ball_row_without_events_is_ignored_everywhere() -> None:
     assert row["pa"] == 2  # the events-less batted ball is not a PA
     assert row["ab"] == 2  # single + strikeout
     assert abs(row["xwoba"] - (0.9 + 0.0) / 2) < 1e-9
+
+
+def test_untracked_batted_ball_gets_its_realized_outcome_in_xba_and_xslg() -> None:
+    """Regression (2026-09 follow-up to #421): a PA-ending ball in play with NO
+    launch data cannot be grid-predicted, but it still counts in `ab`. Before
+    this fix it contributed a zero numerator, deflating league-mean xBA by
+    ~(untracked share x hit rate) — measured .2026 vs an observed BA of .2556
+    on the real 2015 season (19.4% untracked). xwOBA already used the realized
+    value for these rows; xBA/xSLG now do the same."""
+    rows = {
+        "batter": [1, 1],
+        "game_date": ["2024-06-01"] * 2,
+        "type": ["X", "X"],
+        "events": ["single", "double"],  # the double has no launch data
+        "launch_speed": [95.0, None],
+        "launch_angle": [10.0, None],
+        "woba_value": [0.9, 1.25],
+    }
+    out = mlb_expected_stats("2024-06-01", "2024-06-21", puller=_pitchy_puller_factory(rows))
+    row = out.row(0, named=True)
+    assert row["ab"] == 2
+    # tracked single -> grid mean (1.0 hit, 1.0 base); untracked double -> realized 1 hit, 2 bases
+    assert abs(row["xba"] - (1.0 + 1.0) / 2) < 1e-9  # NOT 0.5, which the pre-fix numerator gave
+    assert abs(row["xslg"] - (1.0 + 2.0) / 2) < 1e-9
+
+
+def test_observed_woba_and_ba_ship_beside_the_expected_columns() -> None:
+    """The observed columns use the SAME denominators as their x-counterparts,
+    so `xwoba - woba` / `xba - ba` is a luck-vs-skill delta with no second
+    source."""
+    rows = {
+        "batter": [1] * 4,
+        "game_date": ["2024-06-01"] * 4,
+        "type": ["X", "X", "S", "B"],
+        "events": ["single", "field_out", "strikeout", "walk"],
+        "launch_speed": [95.0, 80.0, None, None],
+        "launch_angle": [10.0, -5.0, None, None],
+        "woba_value": [0.9, 0.0, 0.0, 0.7],
+    }
+    out = mlb_expected_stats("2024-06-01", "2024-06-21", puller=_pitchy_puller_factory(rows))
+    row = out.row(0, named=True)
+    assert row["pa"] == 4 and row["ab"] == 3
+    assert abs(row["woba"] - (0.9 + 0.0 + 0.0 + 0.7) / 4) < 1e-9  # realized, all four PA
+    assert abs(row["ba"] - 1.0 / 3) < 1e-9  # one real hit in three at-bats
+    assert row["xwoba"] is not None and row["xba"] is not None

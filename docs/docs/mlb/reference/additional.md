@@ -1147,8 +1147,14 @@ marginal fallback, then aggregates:
   vintage's `woba_denom` column. The numerator excludes those same
   zero-denominator events, and a PA-ending walk/HBP whose `woba_value`
   is null in a given vintage is filled with the fixed weights .69 / .72.
-* `xba = sum(predicted_ba over at-bat balls in play) / ab`
-* `xslg = sum(predicted_tb over at-bat balls in play) / ab`
+* `xba = (sum(predicted_ba over TRACKED at-bat balls in play) +
+  sum(realized hits over UNTRACKED ones)) / ab` -- a ball in play with no
+  launch data cannot be predicted from the grid, so it takes its realized
+  outcome exactly as `xwoba` does, rather than counting in `ab` with a
+  zero numerator (which deflated league-mean xBA by the untracked share).
+* `xslg` -- same construction on total bases.
+* `woba` / `ba` -- the OBSERVED counterparts on the same denominators,
+  so `xwoba - woba` is a luck-vs-skill delta needing no second source.
 
 `pa` counts PLATE-APPEARANCE-ENDING rows only (`events` non-null),
 never raw pitches -- a Statcast search pull carries every pitch, and
@@ -1166,7 +1172,7 @@ corrupted `xba`/`xslg` scales.
 
 **Returns**
 
-One row per (`batter`, `season`): `pa`, `ab`, `xwoba`, `xba`, `xslg`. Empty pull returns a zero-row frame with the documented schema.
+One row per (`batter`, `season`): `pa`, `ab`, `xwoba`, `xba`, `xslg`, plus the observed `woba` / `ba`. Empty pull returns a zero-row frame with the documented schema.
 
 | col_name | type | description |
 |---|---|---|
@@ -1175,8 +1181,10 @@ One row per (`batter`, `season`): `pa`, `ab`, `xwoba`, `xba`, `xslg`. Empty pull
 | `pa` | integer | Plate appearances in the pulled window. |
 | `ab` | integer | At-bats (PA minus walks, HBP, and sacrifices) in the pulled window. |
 | `xwoba` | double | Expected wOBA from the EV x LA empirical grid (contact) plus realized non-contact outcome value, divided by wOBA denominator. |
-| `xba` | double | Expected batting average from the EV x LA empirical grid's hit-indicator cell means. |
-| `xslg` | double | Expected slugging percentage from the EV x LA empirical grid's total-bases cell means. |
+| `xba` | double | Expected batting average from the EV x LA empirical grid's hit-indicator cell means on tracked balls in play, plus the realized hit indicator on balls in play carrying no launch data, over at-bats. |
+| `xslg` | double | Expected slugging percentage from the EV x LA empirical grid's total-bases cell means on tracked balls in play, plus realized total bases on balls in play carrying no launch data, over at-bats. |
+| `woba` | double | Observed wOBA over the same denominator as `xwoba`, so `xwoba - woba` is the batter's contact-quality luck gap without needing a second source. |
+| `ba` | double | Observed batting average over the same at-bat denominator as `xba`, so `xba - ba` is the batted-ball luck gap without needing a second source. |
 
 **Example**
 
@@ -1191,7 +1199,7 @@ print(df.shape)
 df.sort("xwoba", descending=True).head()
 ```
 
-### `mlb_fielding_oaa(bip: "'pl.DataFrame'", *, l2: 'float' = 0.0001, min_fit: 'int' = 50, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#mlb_fielding_oaa}
+### `mlb_fielding_oaa(bip: "'pl.DataFrame'", *, l2: 'float' = 0.0001, min_fit: 'int' = 50, by_direction: 'bool' = False, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#mlb_fielding_oaa}
 
 Per-fielder outs above average from a per-position catch-probability logistic.
 
@@ -1212,17 +1220,22 @@ dynamically from the responsible position's `fielder_{position}` column
 | `bip` | `DataFrame` |  | Balls-in-play frame with `hc_x`/`hc_y`, `hit_distance_sc`, `launch_angle`, `launch_speed`, `hit_location`, `events`, and the `fielder_1`..`fielder_9` responsible-player columns. MiLB input (e.g. `sportsdataverse.mlb.mlb_statcast_extra.mlb_statcast_search_minors`) runs through the same function -- there is no Savant OAA leaderboard oracle for MiLB. |
 | `l2` | `float` | `0.0001` | L2 penalty for the per-position logistic. Defaults to `1e-4`. |
 | `min_fit` | `int` | `50` | Minimum balls in play for a position to fit its own logistic; below this the position's mean out rate is used. Defaults to `50`. |
+| `by_direction` | `bool` | `False` | Split each fielder-position into `in` / `back` / `lateral` buckets, using the position's own median landing spot as a stand-in for the fielder start coordinates the public feed lacks (a documented approximation). The split re-groups the same scored balls in play, so the three rows sum exactly to the undirected `oaa`. Defaults to `False`. |
 | `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
 
 **Returns**
 
-one row per `(fielder_id, position)`. | Column | Type | Description | |---|---|---| | fielder_id | Utf8 | Responsible fielder's MLBAM id | | position | Int64 | Position (Savant `hit_location`, 1-9) | | opportunities | Int64 | Balls in play charged to this fielder | | oaa | Float64 | Sum of (out - expected catch probability) |
+one row per `(fielder_id, position)`. | Column | Type | Description | |---|---|---| | fielder_id | Utf8 | Responsible fielder's MLBAM id | | position | Int64 | Position (Savant `hit_location`, 1-9) | | direction | Utf8 | `in`/`back`/`lateral` -- only when `by_direction=True` | | opportunities | Int64 | Balls in play charged to this fielder | | oaa | Float64 | Sum of (out - expected catch probability) |
 
 **Example**
 
 ```python
 from sportsdataverse.mlb.mlb_fielding_oaa import mlb_fielding_oaa
 oaa = mlb_fielding_oaa(bip)
+
+# Per-direction splits (sum to the undirected OAA)
+
+mlb_fielding_oaa(bip, by_direction=True)
 
 # Pipeline next step (one line)
 

@@ -27,6 +27,8 @@ _EXPECTED_STATS_SCHEMA = {
     "xwoba": pl.Float64,
     "xba": pl.Float64,
     "xslg": pl.Float64,
+    "woba": pl.Float64,
+    "ba": pl.Float64,
 }
 
 _GRID_SCHEMA = {
@@ -236,8 +238,14 @@ def mlb_expected_stats(
       vintage's ``woba_denom`` column. The numerator excludes those same
       zero-denominator events, and a PA-ending walk/HBP whose ``woba_value``
       is null in a given vintage is filled with the fixed weights .69 / .72.
-    * ``xba = sum(predicted_ba over at-bat balls in play) / ab``
-    * ``xslg = sum(predicted_tb over at-bat balls in play) / ab``
+    * ``xba = (sum(predicted_ba over TRACKED at-bat balls in play) +
+      sum(realized hits over UNTRACKED ones)) / ab`` -- a ball in play with no
+      launch data cannot be predicted from the grid, so it takes its realized
+      outcome exactly as ``xwoba`` does, rather than counting in ``ab`` with a
+      zero numerator (which deflated league-mean xBA by the untracked share).
+    * ``xslg`` -- same construction on total bases.
+    * ``woba`` / ``ba`` -- the OBSERVED counterparts on the same denominators,
+      so ``xwoba - woba`` is a luck-vs-skill delta needing no second source.
 
     ``pa`` counts PLATE-APPEARANCE-ENDING rows only (``events`` non-null),
     never raw pitches -- a Statcast search pull carries every pitch, and
@@ -253,8 +261,8 @@ def mlb_expected_stats(
 
     Returns:
         One row per (``batter``, ``season``): ``pa``, ``ab``, ``xwoba``,
-        ``xba``, ``xslg``. Empty pull returns a zero-row frame with the
-        documented schema.
+        ``xba``, ``xslg``, plus the observed ``woba`` / ``ba``. Empty pull
+        returns a zero-row frame with the documented schema.
 
     Example:
         Quick start::
@@ -327,23 +335,40 @@ def mlb_expected_stats(
             pl.lit(None, dtype=pl.Float64).alias("_pred_slg"),
         )
 
+    #: realized wOBA value with the vintage null-fill -- shared by the observed
+    #: ``woba`` column and by the untracked-batted-ball fallback below.
+    realized_woba = pl.coalesce(
+        pl.col("woba_value"),
+        pl.col("events").replace_strict(_WOBA_VALUE_FALLBACK, default=0.0, return_dtype=pl.Float64),
+    )
+
     bip_agg = bip.group_by("batter", "season").agg(
         pl.col("_pred_woba").filter(~zero_denom).sum().alias("_bip_woba_sum"),
         pl.col("_pred_ba").filter(~non_ab).sum().alias("_bip_ba_sum"),
         pl.col("_pred_slg").filter(~non_ab).sum().alias("_bip_slg_sum"),
+        realized_woba.filter(~zero_denom).sum().alias("_bip_obs_woba_sum"),
+        pl.col("_hit").filter(~non_ab).sum().alias("_bip_obs_ba_sum"),
         (~zero_denom).sum().cast(pl.Float64).alias("_bip_denom"),
         (~non_ab).sum().alias("_ab_from_bip"),
         pl.len().alias("_pa_from_bip"),
     )
 
+    # UNTRACKED-BATTED-BALL SYMMETRY (2026-09 follow-up to the #421 PA-ender
+    # fix): 8-19% of PA-ending balls in play carry no launch_speed/launch_angle
+    # and so cannot be predicted from the grid. They land here, in non_bip_pa.
+    # xwOBA has always given them their REALIZED woba_value; xBA/xSLG did not,
+    # counting them in the `ab` denominator with a zero numerator contribution.
+    # That deflated league-mean xBA by almost exactly the untracked share times
+    # the hit rate (2015: 19.4% untracked -> mean xBA .2026 vs observed BA
+    # .2556; 2021: 8.3% -> .2198 vs .2442), and untracked balls are NOT
+    # degenerate -- their hit rate matches tracked balls to 3 decimals (.325 vs
+    # .324 in 2015). So they take the same realized-outcome fallback xwOBA
+    # already uses. A strikeout/field_out contributes a realized 0, exactly as
+    # before; only untracked batted balls change.
     non_bip_agg = non_bip_pa.group_by("batter", "season").agg(
-        pl.coalesce(
-            pl.col("woba_value"),
-            pl.col("events").replace_strict(_WOBA_VALUE_FALLBACK, default=0.0, return_dtype=pl.Float64),
-        )
-        .filter(~zero_denom)
-        .sum()
-        .alias("_non_bip_woba_sum"),
+        realized_woba.filter(~zero_denom).sum().alias("_non_bip_woba_sum"),
+        pl.col("_hit").filter(~non_ab).sum().alias("_non_bip_ba_sum"),
+        pl.col("_total_bases").filter(~non_ab).sum().alias("_non_bip_slg_sum"),
         (~zero_denom).sum().cast(pl.Float64).alias("_non_bip_denom"),
         (~non_ab).sum().alias("_ab_from_non_bip"),
         pl.len().alias("_pa_from_non_bip"),
@@ -363,10 +388,26 @@ def mlb_expected_stats(
             .then((pl.col("_bip_woba_sum") + pl.col("_non_bip_woba_sum")) / pl.col("_woba_denom"))
             .otherwise(None)
             .alias("xwoba"),
-            pl.when(pl.col("ab") > 0).then(pl.col("_bip_ba_sum") / pl.col("ab")).otherwise(None).alias("xba"),
-            pl.when(pl.col("ab") > 0).then(pl.col("_bip_slg_sum") / pl.col("ab")).otherwise(None).alias("xslg"),
+            pl.when(pl.col("ab") > 0)
+            .then((pl.col("_bip_ba_sum") + pl.col("_non_bip_ba_sum")) / pl.col("ab"))
+            .otherwise(None)
+            .alias("xba"),
+            pl.when(pl.col("ab") > 0)
+            .then((pl.col("_bip_slg_sum") + pl.col("_non_bip_slg_sum")) / pl.col("ab"))
+            .otherwise(None)
+            .alias("xslg"),
+            # Observed counterparts on the SAME denominators, so a luck-vs-skill
+            # delta is `xwoba - woba` / `xba - ba` with no second source.
+            pl.when(pl.col("_woba_denom") > 0)
+            .then((pl.col("_bip_obs_woba_sum") + pl.col("_non_bip_woba_sum")) / pl.col("_woba_denom"))
+            .otherwise(None)
+            .alias("woba"),
+            pl.when(pl.col("ab") > 0)
+            .then((pl.col("_bip_obs_ba_sum") + pl.col("_non_bip_ba_sum")) / pl.col("ab"))
+            .otherwise(None)
+            .alias("ba"),
         )
-        .select("batter", "season", "pa", "ab", "xwoba", "xba", "xslg")
+        .select("batter", "season", "pa", "ab", "xwoba", "xba", "xslg", "woba", "ba")
         .cast(_EXPECTED_STATS_SCHEMA)
     )
 

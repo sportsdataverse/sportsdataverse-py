@@ -18,7 +18,17 @@ columns:
   description: Expected wOBA from the EV x LA empirical grid (contact) plus realized non-contact outcome value, divided by wOBA denominator.
 - name: xba
   type: double
-  description: Expected batting average from the EV x LA empirical grid's hit-indicator cell means.
+  description: Expected batting average from the EV x LA empirical grid's hit-indicator cell means on tracked balls
+    in play, plus the realized hit indicator on balls in play carrying no launch data, over at-bats.
 - name: xslg
   type: double
-  description: Expected slugging percentage from the EV x LA empirical grid's total-bases cell means.
+  description: Expected slugging percentage from the EV x LA empirical grid's total-bases cell means on tracked balls
+    in play, plus realized total bases on balls in play carrying no launch data, over at-bats.
+- name: woba
+  type: double
+  description: Observed wOBA over the same denominator as `xwoba`, so `xwoba - woba` is the batter's contact-quality
+    luck gap without needing a second source.
+- name: ba
+  type: double
+  description: Observed batting average over the same at-bat denominator as `xba`, so `xba - ba` is the batted-ball
+    luck gap without needing a second source.

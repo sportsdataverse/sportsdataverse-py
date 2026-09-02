@@ -181,11 +181,48 @@ def _fit_catch_logistic(x: "np.ndarray", y: "np.ndarray", l2: float) -> "np.ndar
     return np.clip(1.0 / (1.0 + np.exp(-z)), 1e-9, 1 - 1e-9)
 
 
+def _direction_expr(scored: "pl.DataFrame") -> "pl.Expr":
+    """Classify each ball in play as ``in`` / ``back`` / ``lateral`` for the fielder.
+
+    **Documented approximation.** Savant splits directional OAA against the
+    fielder's tracked START position; the public feed has no start coordinates
+    (the same ceiling the module docstring names), so the position's own MEDIAN
+    landing spot stands in for where that position normally plays. Depth
+    deviation is ``hit_dist - median(hit_dist)`` for the position; lateral
+    deviation is the arc length ``hit_dist * (spray_angle - median(spray_angle))``
+    so both legs are in feet and comparable. The larger leg names the direction:
+    lateral when the sideways move dominates, else ``back`` (deeper than normal
+    depth) or ``in`` (shallower).
+
+    Savant's own ``leaderboard/outfield_directional_outs_above_average``
+    (wrapped as
+    :func:`sportsdataverse.mlb.mlb_statcast.mlb_statcast_leaderboard_outfield_directional_oaa`)
+    is the concurrent-validity oracle for the outfield rows of this split.
+
+    The split is a strict PARTITION of the scored balls in play -- it re-groups
+    the same ``out_gain`` values and never re-fits -- so per-direction OAA sums
+    exactly to the undirected OAA for every fielder-position.
+    """
+    med_dist = pl.col("hit_dist").median().over("position")
+    med_spray = pl.col("spray_angle").median().over("position")
+    depth = pl.col("hit_dist") - med_dist
+    lateral = pl.col("hit_dist") * (pl.col("spray_angle") - med_spray)
+    return (
+        pl.when(lateral.abs() >= depth.abs())
+        .then(pl.lit("lateral"))
+        .when(depth > 0)
+        .then(pl.lit("back"))
+        .otherwise(pl.lit("in"))
+        .alias("direction")
+    )
+
+
 def mlb_fielding_oaa(
     bip: "pl.DataFrame",
     *,
     l2: float = 1e-4,
     min_fit: int = 50,
+    by_direction: bool = False,
     return_as_pandas: bool = False,
 ) -> "Union[pl.DataFrame, pd.DataFrame]":
     """Per-fielder outs above average from a per-position catch-probability logistic.
@@ -212,6 +249,12 @@ def mlb_fielding_oaa(
         min_fit: Minimum balls in play for a position to fit its own
             logistic; below this the position's mean out rate is used.
             Defaults to ``50``.
+        by_direction: Split each fielder-position into ``in`` / ``back`` /
+            ``lateral`` buckets, using the position's own median landing spot
+            as a stand-in for the fielder start coordinates the public feed
+            lacks (a documented approximation). The split re-groups the same
+            scored balls in play, so the three rows sum exactly to the
+            undirected ``oaa``. Defaults to ``False``.
         return_as_pandas: Return a pandas DataFrame instead of polars.
 
     Returns:
@@ -221,6 +264,7 @@ def mlb_fielding_oaa(
         |---|---|---|
         | fielder_id | Utf8 | Responsible fielder's MLBAM id |
         | position | Int64 | Position (Savant ``hit_location``, 1-9) |
+        | direction | Utf8 | ``in``/``back``/``lateral`` -- only when ``by_direction=True`` |
         | opportunities | Int64 | Balls in play charged to this fielder |
         | oaa | Float64 | Sum of (out - expected catch probability) |
 
@@ -229,6 +273,10 @@ def mlb_fielding_oaa(
 
             from sportsdataverse.mlb.mlb_fielding_oaa import mlb_fielding_oaa
             oaa = mlb_fielding_oaa(bip)
+
+        Per-direction splits (sum to the undirected OAA)::
+
+            mlb_fielding_oaa(bip, by_direction=True)
 
         Pipeline next step (one line)::
 
@@ -286,10 +334,16 @@ def mlb_fielding_oaa(
     scored = f.with_columns(pl.Series("p_catch", p_catch)).with_columns(
         (pl.col("is_out") - pl.col("p_catch")).alias("out_gain")
     )
+
+    keys = ["fielder_id", "position"]
+    if by_direction:
+        scored = scored.with_columns(_direction_expr(scored))
+        keys = ["fielder_id", "position", "direction"]
+
     out = (
-        scored.group_by(["fielder_id", "position"])
+        scored.group_by(keys)
         .agg(pl.len().alias("opportunities"), pl.col("out_gain").sum().alias("oaa"))
         .sort("oaa", descending=True)
-        .select("fielder_id", "position", "opportunities", "oaa")
+        .select(*keys, "opportunities", "oaa")
     )
     return out.to_pandas() if return_as_pandas else out
