@@ -291,8 +291,10 @@ def solve_rapm_league(
             exactly equivalent to a per-possession ridge with that penalty.
         compute_se: Also return the posterior standard errors (module
             docstring, "Uncertainty"). Costs one dense Cholesky inverse of the
-            ``(2P+1)``-square penalised Gram matrix: ~0.8 GB and a few seconds
-            for a D-I season (P ~ 5,000). Switch off for pooled designs past
+            ``(2P+1)``-square penalised Gram matrix. One such matrix is
+            ~0.8 GB for a D-I season (P ~ 5,000, dim ~ 10,001); the
+            symmetrise step holds two of them at once, so the peak is
+            ~1.6 GB and a few seconds. Switch off for pooled designs past
             ~20k columns.
         return_as_pandas: Return the players frame as pandas.
 
@@ -467,8 +469,10 @@ def _posterior_se(
     from scipy.linalg import lapack
 
     dim = x.shape[1]
-    # ponytail: dense Cholesky inverse, O(dim^3) -- ~10k dims (0.8 GB, seconds) for a D-I
-    # season. A pooled multi-season design past ~20k dims needs a sparse (CHOLMOD) factor.
+    # ponytail: dense Cholesky inverse, O(dim^3) -- ~10k dims for a D-I season, 0.8 GB per
+    # dense array. `low + low.T` below holds two of them live, so peak is ~1.6 GB; blocked
+    # in-place symmetrisation would halve it if that ever binds. A pooled multi-season
+    # design past ~20k dims needs a sparse (CHOLMOD) factor.
     a = (x.T @ x).toarray(order="F")
     a[np.diag_indices(dim)] += ridge_lambda
     c, info_f = lapack.dpotrf(a, lower=1, clean=1, overwrite_a=1)
