@@ -3048,11 +3048,12 @@ load_mlb_expected_stats:
     events value). Pitches within a plate appearance are not counted.
   ab: At-bats, derived from the same plate-appearance-ending rows by excluding walks, hit-by-pitches, sacrifice flies,
     sacrifice bunts and catcher's interference.
-  xba: Sum of grid-predicted hit probability over the batter's balls in play, divided by at-bats, on the conventional
-    batting-average scale. Balls in play that Statcast did not track are excluded from both the numerator and ab, rather
-    than counted in ab with a zero numerator.
-  xslg: Sum of grid-predicted total bases over the batter's balls in play, divided by at-bats, on the conventional
-    slugging scale, with untracked balls in play excluded from both sides as for xba.
+  xba: Grid-predicted hit probability summed over the at-bat balls in play that carry launch data, plus the realized hit
+    for balls in play Statcast did not track, divided by at-bats, on the conventional batting-average scale. An untracked
+    ball in play takes its realized outcome exactly as xwoba does, rather than counting in ab with a zero numerator, which
+    deflated league-mean xBA by the untracked share.
+  xslg: The same construction on total bases -- grid-predicted total bases where launch data exists, realized total bases
+    for untracked balls in play -- divided by at-bats, on the conventional slugging scale.
   xwoba: Expected wOBA blending the exit-velocity by launch-angle grid's predicted contact value on balls in play with realized
     wOBA value on walks, hit-by-pitches and strikeouts, over the wOBA denominator; low-sample batters can exceed 1.
 load_mlb_oaa:
