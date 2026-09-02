@@ -33,7 +33,7 @@ from __future__ import annotations
 import gzip
 import json
 import os
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 import polars as pl
@@ -513,3 +513,62 @@ def test_upload_release_sidecars_cleans_up_its_temp_dir():
 
     assert len(paths) == 2  # timestamp pair only
     assert not any(Path(p).exists() for p in paths)
+
+
+def test_write_release_sidecars_defaults_to_now(tmp_path):
+    """A live publish stamps the current moment -- unchanged behaviour."""
+    from sportsdataverse.release import write_release_sidecars
+
+    write_release_sidecars(tmp_path)
+    stamped = json.loads((tmp_path / "timestamp.json").read_text())["last_updated"]
+
+    assert stamped.startswith(datetime.now().strftime("%Y-%m-%d")) or stamped.startswith(
+        (datetime.now() - timedelta(days=1)).strftime("%Y-%m-%d")
+    )
+
+
+def test_write_release_sidecars_honours_as_of(tmp_path):
+    """A back-fill records when the data actually moved, not when we stamped it.
+
+    Stamping a tag whose assets last changed in 2023 with today's date would
+    assert the data moved today -- a worse answer than the missing one.
+    """
+    from sportsdataverse.release import write_release_sidecars
+
+    write_release_sidecars(tmp_path, as_of=datetime(2023, 3, 5, 13, 4, 56, tzinfo=timezone.utc))
+    stamped = json.loads((tmp_path / "timestamp.json").read_text())["last_updated"]
+
+    assert stamped.startswith("2023-03-05")
+    assert (tmp_path / "timestamp.txt").read_text().strip() == stamped
+
+
+def test_as_of_reads_a_naive_datetime_as_utc(tmp_path):
+    """GitHub's asset timestamps are UTC and parse naive; do not let them drift."""
+    from sportsdataverse.release import write_release_sidecars
+
+    write_release_sidecars(tmp_path, as_of=datetime(2023, 3, 5, 13, 4, 56))
+    naive = json.loads((tmp_path / "timestamp.json").read_text())["last_updated"]
+
+    write_release_sidecars(tmp_path, as_of=datetime(2023, 3, 5, 13, 4, 56, tzinfo=timezone.utc))
+    aware = json.loads((tmp_path / "timestamp.json").read_text())["last_updated"]
+
+    assert naive == aware
+
+
+def test_upload_release_sidecars_passes_as_of_through():
+    from sportsdataverse.release import upload_release_sidecars
+
+    seen: dict[str, str] = {}
+
+    def _runner(argv: list[str]) -> None:
+        path = Path(argv[3])
+        seen[path.name] = path.read_text()
+
+    upload_release_sidecars(
+        "ncaa_baseball_pbp",
+        runner=_runner,
+        pkg_function="sportsdataverse.baseball.load_ncaa_baseball_pbp()",
+        as_of=datetime(2023, 3, 5, 13, 4, 56, tzinfo=timezone.utc),
+    )
+
+    assert json.loads(seen["timestamp.json"])["last_updated"].startswith("2023-03-05")

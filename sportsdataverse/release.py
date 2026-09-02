@@ -305,20 +305,31 @@ def gh_cli_rate_limits(verbose: bool = True) -> dict[str, Any]:
     return all_rates
 
 
-def _timestamp_now() -> str:
-    """Timestamp string matching R ``format(Sys.time(), tz="America/Toronto", usetz=TRUE)``."""
+def _timestamp_now(as_of: datetime | None = None) -> str:
+    """Timestamp string matching R ``format(Sys.time(), tz="America/Toronto", usetz=TRUE)``.
+
+    ``as_of`` renders a moment other than now, in the same format and zone. A
+    naive datetime is read as UTC -- the GitHub API's asset timestamps, which
+    are the only thing this is fed, are UTC.
+    """
     try:
         from zoneinfo import ZoneInfo
 
-        now = datetime.now(ZoneInfo("America/Toronto"))
+        zone = ZoneInfo("America/Toronto")
+        if as_of is None:
+            moment = datetime.now(zone)
+        else:
+            if as_of.tzinfo is None:
+                as_of = as_of.replace(tzinfo=timezone.utc)
+            moment = as_of.astimezone(zone)
     except Exception:  # ponytail: no tzdata on this box -> local time is fine
-        now = datetime.now().astimezone()
-    return now.strftime("%Y-%m-%d %H:%M:%S %Z")
+        moment = datetime.now().astimezone() if as_of is None else as_of.astimezone()
+    return moment.strftime("%Y-%m-%d %H:%M:%S %Z")
 
 
-def _create_timestamp_file(temp_dir: Path) -> list[Path]:
+def _create_timestamp_file(temp_dir: Path, as_of: datetime | None = None) -> list[Path]:
     """timestamp.txt + timestamp.json sidecars (upload.R L46-59)."""
-    update_time = _timestamp_now()
+    update_time = _timestamp_now(as_of)
     txt = temp_dir / "timestamp.txt"
     txt.write_text(update_time + "\n")
     js = temp_dir / "timestamp.json"
@@ -335,7 +346,11 @@ def _create_package_function(temp_dir: Path, pkg_function: str) -> list[Path]:
     return [txt, js]
 
 
-def write_release_sidecars(dest_dir: str | Path, pkg_function: str | None = None) -> list[Path]:
+def write_release_sidecars(
+    dest_dir: str | Path,
+    pkg_function: str | None = None,
+    as_of: datetime | None = None,
+) -> list[Path]:
     """Write the release metadata sidecars R attaches to every published tag.
 
     Always writes ``timestamp.txt`` + ``timestamp.json``; adds
@@ -351,6 +366,11 @@ def write_release_sidecars(dest_dir: str | Path, pkg_function: str | None = None
         pkg_function: Related package function name, e.g.
             ``"hoopR::load_nba_pbp()"``. When None the package_function pair
             is skipped.
+        as_of: The moment to record as ``last_updated``. Defaults to now, which
+            is what a live publish wants. Pass the release asset's own
+            ``updated_at`` when back-filling a tag that was published long ago
+            -- stamping such a tag with "now" would assert the data moved
+            today, which is a worse answer than the missing one it replaces.
 
     Returns:
         The written paths, timestamp pair first.
@@ -377,7 +397,7 @@ def write_release_sidecars(dest_dir: str | Path, pkg_function: str | None = None
         .. _hoopR: https://hoopR.sportsdataverse.org
     """
     dest = Path(dest_dir)
-    sidecars = _create_timestamp_file(dest)
+    sidecars = _create_timestamp_file(dest, as_of)
     if pkg_function is not None:
         sidecars += _create_package_function(dest, pkg_function)
     return sidecars
@@ -389,6 +409,7 @@ def upload_release_sidecars(
     runner: Callable[[list[str]], Any],
     pkg_function: str | None = None,
     repo: str = DEFAULT_REPO,
+    as_of: datetime | None = None,
 ) -> list[str]:
     """Write the release sidecars and push them through a caller's ``gh`` runner.
 
@@ -409,6 +430,8 @@ def upload_release_sidecars(
         pkg_function: Related package function name. When None only the
             timestamp pair is uploaded.
         repo: Target repository. Defaults to ``sportsdataverse/sportsdataverse-data``.
+        as_of: The moment to record as ``last_updated``; defaults to now. Only
+            a back-fill of an already-published tag should pass this.
 
     Returns:
         The uploaded sidecar file names, in upload order.
@@ -437,7 +460,7 @@ def upload_release_sidecars(
     uploaded: list[str] = []
     temp_dir = Path(tempfile.mkdtemp(prefix="sdv_sidecars_"))
     try:
-        for sidecar in write_release_sidecars(temp_dir, pkg_function):
+        for sidecar in write_release_sidecars(temp_dir, pkg_function, as_of):
             runner(["release", "upload", tag, str(sidecar), "--repo", repo, "--clobber"])
             uploaded.append(sidecar.name)
     finally:
