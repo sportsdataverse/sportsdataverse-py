@@ -38,6 +38,20 @@ A null slot id (an unresolved player, or the ``TEAM`` pseudo-slot) marks the
 possession unusable and it is DROPPED -- "not a rated player" must never be
 imputed. Callers should report the usable fraction.
 
+**Two optional stabilisation hooks**, both no-ops unless used, both measured
+before they were kept (see the 2026-09-02 evaluation in the producers'
+``docs/models/rapm.qmd``):
+
+* ``solve_rapm_league(..., prior_mean=frame)`` shrinks toward a per-player
+  point ``b0`` instead of zero -- the box-score-plus-minus-prior form of
+  RAPM. It is a re-centering of the same ridge, so ``lambda`` and the whole
+  SE path are unchanged.
+* ``fit_weight`` / ``y_offset`` columns on the stints frame carry a
+  decayed-weight STACKED MULTI-SEASON design: pool several seasons'
+  stints (keyed by a cross-season person id), weight season ``s`` by
+  ``decay ** (t - s)``, and offset each season's per-100 rate by its own
+  scoring level so the pooled fit cannot credit a player for his era.
+
 **Uncertainty.** :func:`solve_rapm_league` also reports per-player standard
 errors from the ridge POSTERIOR: with the Gaussian prior
 ``beta ~ N(0, sigma^2 / lambda)`` that the penalty encodes and
@@ -275,20 +289,71 @@ def team_aggregate(stints: pl.DataFrame, players: pl.DataFrame) -> pl.DataFrame:
     )
 
 
+def _prior_vector(prior_mean: pl.DataFrame, players: "list[str]", n_players: int) -> np.ndarray:
+    """``(2P+1)`` prior-mean vector from a ``player_id``/``orapm_prior``/``drapm_prior`` frame."""
+    required = ["player_id", "orapm_prior", "drapm_prior"]
+    missing = [c for c in required if c not in prior_mean.columns]
+    if missing:
+        raise ValueError(f"solve_rapm_league: prior_mean missing columns {missing}")
+    if prior_mean.schema["player_id"] != pl.Utf8:
+        # A wrong-dtype key joins to nothing and silently degrades to the flat ridge.
+        raise TypeError(f"prior_mean.player_id must be Utf8, got {prior_mean.schema['player_id']}")
+    b0: np.ndarray = np.zeros(2 * n_players + 1, dtype=np.float64)
+    lookup = (
+        pl.DataFrame({"player_id": pl.Series(players, dtype=pl.Utf8)})
+        .join(prior_mean.unique(subset=["player_id"]), on="player_id", how="left")
+        .with_columns(pl.col("orapm_prior").fill_null(0.0), pl.col("drapm_prior").fill_null(0.0))
+    )
+    o = lookup["orapm_prior"].to_numpy().astype(np.float64)
+    d = lookup["drapm_prior"].to_numpy().astype(np.float64)
+    if not (np.isfinite(o).all() and np.isfinite(d).all()):
+        raise ValueError("solve_rapm_league: prior_mean carries a non-finite value")
+    if not np.any(o) and not np.any(d):
+        # Every prior landed on zero: either no id overlap or an all-zero frame.
+        # Both are the flat ridge wearing a prior's name -- fail loudly instead.
+        raise ValueError(
+            "solve_rapm_league: prior_mean overlaps no rated player (or is all zero) -- "
+            "refusing to run a flat ridge under a prior-mean label"
+        )
+    b0[:n_players] = o
+    b0[n_players : 2 * n_players] = d
+    return b0
+
+
 def solve_rapm_league(
     stints: pl.DataFrame,
     *,
     ridge_lambda: float = DEFAULT_RIDGE_LAMBDA,
+    prior_mean: "pl.DataFrame | None" = None,
     compute_se: bool = True,
     return_as_pandas: bool = False,
 ) -> "tuple[pl.DataFrame | pd.DataFrame, dict[str, float]]":
     """Weighted sparse joint O/D ridge over matchup stints.
 
     Args:
-        stints: Output of :func:`aggregate_stints`.
+        stints: Output of :func:`aggregate_stints`. Two OPTIONAL columns are
+            honoured when present, both no-ops when absent:
+            ``fit_weight`` (Float64) multiplies the row's possession weight —
+            the decay weight of a stacked multi-season design, where older
+            seasons enter the same fit at ``decay ** (t - s)``; and
+            ``y_offset`` (Float64) is subtracted from the row's per-100 rate
+            before centering, which is how a pooled design removes the
+            season-to-season scoring-level drift that would otherwise credit a
+            player for the era he played in. ``off_poss`` / ``def_poss`` always
+            report real possessions, never weighted ones.
         ridge_lambda: L2 penalty on the possession-weighted normal equations.
             Because rows are weighted by possessions, the same ``lambda`` is
             exactly equivalent to a per-possession ridge with that penalty.
+        prior_mean: Optional frame with ``player_id`` (Utf8), ``orapm_prior``
+            and ``drapm_prior``: the ridge then shrinks each player toward
+            THAT point instead of zero (``beta ~ N(b0, sigma^2 / lambda)``),
+            which is the box-score-plus-minus-prior form of RAPM. Solved by
+            re-centering — ``delta = beta - b0`` against the offset target
+            ``y - X b0`` — so ``lambda`` keeps its meaning and the posterior
+            covariance ``sigma^2 (X'WX + lambda I)^-1`` (hence every ``*_se``
+            column) is unchanged. Players absent from the frame keep a zero
+            prior; a frame that overlaps NO rated player raises rather than
+            silently degrading to the flat ridge.
         compute_se: Also return the posterior standard errors (module
             docstring, "Uncertainty"). Costs one dense Cholesky inverse of the
             ``(2P+1)``-square penalised Gram matrix. One such matrix is
@@ -309,7 +374,10 @@ def solve_rapm_league(
         which to publish). ``info``
         carries ``intercept`` (possession-weighted league mean pts/100),
         ``hca`` (half the home-minus-away offensive gap), ``ridge_lambda``,
-        ``n_stints``, ``n_poss``, the lsqr diagnostics and, with SEs,
+        ``n_stints``, ``n_poss``, ``prior_mean_mad`` (mean |b0| over the
+        player block — 0.0 without a prior, so a prior that silently failed to
+        attach is visible in the output rather than only in the intent), the
+        lsqr diagnostics and, with SEs,
         ``sigma2`` (weighted residual variance on the per-100 scale = ``1e4 x``
         the per-possession points variance, ~1.3e4 in D-I), ``df_eff`` (trace
         of the ridge hat matrix), ``hca_se`` and ``solve_max_abs_dev`` (max
@@ -368,9 +436,17 @@ def solve_rapm_league(
     n_players = len(players)
     n_stints = s.height
 
-    w = s["n_poss"].to_numpy().astype(np.float64)
+    n_poss = s["n_poss"].to_numpy().astype(np.float64)
+    y = 100.0 * s["pts"].to_numpy().astype(np.float64) / n_poss
+    if "y_offset" in s.columns:
+        y = y - s["y_offset"].to_numpy().astype(np.float64)
+    w = n_poss
+    if "fit_weight" in s.columns:
+        fw = s["fit_weight"].to_numpy().astype(np.float64)
+        if not np.isfinite(fw).all() or (fw < 0).any():
+            raise ValueError("solve_rapm_league: fit_weight must be finite and non-negative")
+        w = n_poss * fw
     sw = np.sqrt(w)
-    y = 100.0 * s["pts"].to_numpy().astype(np.float64) / w
     mu = float(np.average(y, weights=w))
 
     # Sparse design: offense block [0, P), defense block [P, 2P) with -1
@@ -386,18 +462,26 @@ def solve_rapm_league(
     vals = np.concatenate([sw[off_rows], -sw[dfn_rows], side * sw])
     x = coo_matrix((vals, (rows, cols)), shape=(n_stints, 2 * n_players + 1)).tocsr()
 
-    beta, istop, itn = lsqr(x, (y - mu) * sw, damp=float(np.sqrt(ridge_lambda)))[:3]
+    b0 = _prior_vector(prior_mean, players, n_players) if prior_mean is not None else None
+    # Prior-mean ridge = flat ridge on the residual-from-prior. The offset target and
+    # `delta` below are what the SE path must see: X @ beta == X @ b0 + X @ delta, so the
+    # residual (hence sigma2) is identical either way, and the posterior covariance does
+    # not depend on the prior MEAN at all.
+    yw = (y - mu) * sw
+    target = yw if b0 is None else yw - x @ b0
+    delta, istop, itn = lsqr(x, target, damp=float(np.sqrt(ridge_lambda)))[:3]
     if istop not in (0, 1, 2):
         # istop=7 is the iteration limit: lsqr hands back a PARTIAL iterate
         # with no error, which must never flow silently into the gate.
         raise RuntimeError(f"lsqr did not converge (istop={istop}, itn={itn}) -- refusing to return a partial solve")
+    beta = delta if b0 is None else delta + b0
     orapm = beta[:n_players]
     drapm = beta[n_players : 2 * n_players]
     hca = float(beta[2 * n_players])
 
     se_info: dict[str, float] = {}
     if compute_se:
-        se, se_info = _posterior_se(x, (y - mu) * sw, beta, n_players, float(ridge_lambda))
+        se, se_info = _posterior_se(x, target, delta, n_players, float(ridge_lambda))
     else:
         se = {c: np.full(n_players, np.nan) for c in _SE_COLS}  # -> null below, never NaN
 
@@ -438,7 +522,8 @@ def solve_rapm_league(
         "hca": hca,
         "ridge_lambda": float(ridge_lambda),
         "n_stints": n_stints,
-        "n_poss": int(w.sum()),
+        "n_poss": int(n_poss.sum()),
+        "prior_mean_mad": 0.0 if b0 is None else float(np.abs(b0[: 2 * n_players]).mean()),
         "lsqr_istop": int(istop),
         "lsqr_itn": int(itn),
         **se_info,

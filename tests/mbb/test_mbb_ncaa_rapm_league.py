@@ -560,3 +560,132 @@ class TestSplitHalfSeCheck:
                 resolved.with_columns(pl.lit("g-1").alias("contest_id")),
                 ridge_lambda=50.0,
             )
+
+
+class TestPriorMeanRidge:
+    """``prior_mean=`` shrinks toward b0 instead of zero (SPM-prior RAPM)."""
+
+    def _prior(self, ids, o=0.0, d=0.0):
+        return pl.DataFrame(
+            {
+                "player_id": pl.Series(list(ids), dtype=pl.Utf8),
+                "orapm_prior": [float(o)] * len(ids),
+                "drapm_prior": [float(d)] * len(ids),
+            }
+        )
+
+    def test_none_is_the_unchanged_flat_ridge(self):
+        s = _balanced_stints(ppp_starter=2.0, ppp_sub=1.0, n=50)
+        a, ia = solve_rapm_league(s, ridge_lambda=100.0, compute_se=False)
+        b, ib = solve_rapm_league(s, ridge_lambda=100.0, prior_mean=None, compute_se=False)
+        assert (a["orapm"] - b["orapm"]).abs().max() < 1e-12
+        assert ia["prior_mean_mad"] == 0.0 and ib["prior_mean_mad"] == 0.0
+
+    def test_heavy_penalty_collapses_onto_the_prior_not_zero(self):
+        s = _balanced_stints(ppp_starter=2.0, ppp_sub=1.0, n=50)
+        prior = self._prior(_H + _A + ["h6"], o=3.0, d=-1.0)
+        players, info = solve_rapm_league(s, ridge_lambda=1e9, prior_mean=prior, compute_se=False)
+        assert (players["orapm"] - 3.0).abs().max() < 1e-3
+        assert (players["drapm"] + 1.0).abs().max() < 1e-3
+        assert info["prior_mean_mad"] == pytest.approx(2.0)  # mean(|3|, |-1|)
+
+    def test_output_actually_moved_off_the_flat_fit(self):
+        # silent-no-op guard: the prior must change the ANSWER, not just the call.
+        s = _balanced_stints(ppp_starter=2.0, ppp_sub=1.0, n=50)
+        flat, _ = solve_rapm_league(s, ridge_lambda=500.0, compute_se=False)
+        pri, _ = solve_rapm_league(
+            s, ridge_lambda=500.0, prior_mean=self._prior(_H + _A + ["h6"], o=2.0), compute_se=False
+        )
+        j = flat.join(pri, on="player_id", suffix="_p")
+        assert (j["orapm_p"] - j["orapm"]).abs().max() > 0.1
+
+    def test_posterior_se_is_unchanged_by_the_prior_mean(self):
+        s = _balanced_stints(ppp_starter=2.0, ppp_sub=1.0, n=50)
+        flat, _ = solve_rapm_league(s, ridge_lambda=200.0)
+        pri, _ = solve_rapm_league(s, ridge_lambda=200.0, prior_mean=self._prior(_H + _A + ["h6"], o=1.0, d=0.5))
+        j = flat.join(pri, on="player_id", suffix="_p")
+        # sigma2 shifts a little (different residuals), but the covariance shape does not.
+        assert (j["rapm_net_se_p"] / j["rapm_net_se"]).std() < 1e-9
+
+    def test_zero_overlap_prior_raises_instead_of_flat_ridge(self):
+        s = _balanced_stints(n=20)
+        with pytest.raises(ValueError, match="overlaps no rated player"):
+            solve_rapm_league(s, ridge_lambda=100.0, prior_mean=self._prior(["nobody"], o=5.0))
+
+    def test_wrong_dtype_key_raises(self):
+        s = _balanced_stints(n=20)
+        bad = self._prior(_H, o=1.0).with_columns(pl.lit(1).alias("player_id"))
+        with pytest.raises(TypeError, match="Utf8"):
+            solve_rapm_league(s, ridge_lambda=100.0, prior_mean=bad)
+
+    def test_missing_column_raises(self):
+        s = _balanced_stints(n=20)
+        with pytest.raises(ValueError, match="missing columns"):
+            solve_rapm_league(s, ridge_lambda=100.0, prior_mean=self._prior(_H, o=1.0).drop("drapm_prior"))
+
+
+class TestStackedDesignColumns:
+    """``fit_weight`` / ``y_offset``: the multi-season stacked design's two hooks."""
+
+    def test_uniform_fit_weight_is_a_no_op(self):
+        s = _balanced_stints(ppp_starter=2.0, ppp_sub=1.0, n=50)
+        base, ib = solve_rapm_league(s, ridge_lambda=100.0, compute_se=False)
+        wt, iw = solve_rapm_league(
+            s.with_columns(pl.lit(1.0).alias("fit_weight")), ridge_lambda=100.0, compute_se=False
+        )
+        assert (base["orapm"] - wt["orapm"]).abs().max() < 1e-9
+        assert ib["n_poss"] == iw["n_poss"]  # exposure is real possessions, not weighted
+
+    def test_zero_weight_rows_drop_out_of_the_fit(self):
+        s = _balanced_stints(ppp_starter=2.0, ppp_sub=1.0, n=50)
+        half = s.with_columns(pl.when(pl.int_range(pl.len()) % 2 == 0).then(1.0).otherwise(0.0).alias("fit_weight"))
+        kept = s.filter(pl.int_range(pl.len()) % 2 == 0)
+        a, _ = solve_rapm_league(half, ridge_lambda=100.0, compute_se=False)
+        b, _ = solve_rapm_league(kept, ridge_lambda=100.0, compute_se=False)
+        j = a.join(b, on="player_id", suffix="_k")
+        assert (j["orapm"] - j["orapm_k"]).abs().max() < 1e-8
+
+    def test_off_poss_reports_real_possessions_under_a_decay_weight(self):
+        s = _balanced_stints(n=20).with_columns(pl.lit(0.25).alias("fit_weight"))
+        players, info = solve_rapm_league(s, ridge_lambda=100.0, compute_se=False)
+        assert info["n_poss"] == s["n_poss"].sum()
+        assert players["def_poss"].sum() + players["off_poss"].sum() == 10 * s["n_poss"].sum()
+
+    def test_uniform_y_offset_only_moves_the_intercept(self):
+        s = _balanced_stints(ppp_starter=2.0, ppp_sub=1.0, n=50)
+        base, ib = solve_rapm_league(s, ridge_lambda=100.0, compute_se=False)
+        off, io = solve_rapm_league(s.with_columns(pl.lit(7.0).alias("y_offset")), ridge_lambda=100.0, compute_se=False)
+        assert (base["orapm"] - off["orapm"]).abs().max() < 1e-9
+        assert io["intercept"] == pytest.approx(ib["intercept"] - 7.0)
+
+    def test_y_offset_removes_a_per_season_scoring_level(self):
+        # An older "season" pooled with a newer one, inflated by exactly 100 pts/100
+        # (pts += n_poss). Offsetting it by 100 must reproduce the pooled fit on the
+        # UN-inflated pair, exactly -- and without the offset it must not. The older
+        # season is a SUBSET of the newer one's stints on purpose: a level shift on a
+        # perfectly balanced pool is absorbed whole by the intercept, so only an
+        # unbalanced pool (the real case -- players come and go) can see the offset.
+        s = _balanced_stints(ppp_starter=2.0, ppp_sub=1.0, n=50)
+        old = s.head(s.height // 2)
+        b = old.with_columns((pl.col("pts") + pl.col("n_poss")).alias("pts"))
+        want, _ = solve_rapm_league(pl.concat([s, old], how="vertical"), ridge_lambda=100.0, compute_se=False)
+        centred, _ = solve_rapm_league(
+            pl.concat(
+                [
+                    s.with_columns(pl.lit(0.0).alias("y_offset")),
+                    b.with_columns(pl.lit(100.0).alias("y_offset")),
+                ],
+                how="vertical",
+            ),
+            ridge_lambda=100.0,
+            compute_se=False,
+        )
+        raw, _ = solve_rapm_league(pl.concat([s, b], how="vertical"), ridge_lambda=100.0, compute_se=False)
+        j = want.join(centred, on="player_id", suffix="_c").join(raw, on="player_id", suffix="_r")
+        assert (j["orapm_c"] - j["orapm"]).abs().max() < 1e-9
+        assert (j["orapm_r"] - j["orapm"]).abs().max() > 1e-3
+
+    def test_negative_fit_weight_raises(self):
+        s = _balanced_stints(n=20).with_columns(pl.lit(-1.0).alias("fit_weight"))
+        with pytest.raises(ValueError, match="fit_weight"):
+            solve_rapm_league(s, ridge_lambda=100.0, compute_se=False)
