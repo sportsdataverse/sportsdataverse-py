@@ -1,0 +1,1507 @@
+frames:
+- columns:
+  - description: ''
+    name: entity_id
+    type: character
+  - description: ''
+    name: gameid
+    type: character
+  - description: ''
+    name: global_gameid
+    type: character
+  - description: ''
+    name: start_time
+    type: character
+  - description: ''
+    name: is_time_tba
+    type: logical
+  - description: ''
+    name: season_phase_id
+    type: character
+  - description: ''
+    name: game_type
+    type: character
+  - description: ''
+    name: winning_team_id
+    type: character
+  - description: ''
+    name: is_rank_upset
+    type: character
+  - description: ''
+    name: is_spread_upset
+    type: character
+  - description: ''
+    name: outcome_type
+    type: character
+  - description: ''
+    name: home_team_id
+    type: character
+  - description: ''
+    name: away_team_id
+    type: character
+  - description: ''
+    name: week_number
+    type: character
+  - description: ''
+    name: sportacular_url
+    type: character
+  - description: ''
+    name: status_display_name
+    type: character
+  - description: ''
+    name: status_description
+    type: character
+  - description: ''
+    name: status_type
+    type: character
+  - description: ''
+    name: total_away_points
+    type: character
+  - description: ''
+    name: current_period_id
+    type: character
+  - description: ''
+    name: total_home_points
+    type: character
+  - description: ''
+    name: total_away_shootout_points
+    type: character
+  - description: ''
+    name: total_home_shootout_points
+    type: character
+  - description: ''
+    name: home_team_stats
+    type: character
+  - description: ''
+    name: away_team_stats
+    type: character
+  - description: ''
+    name: game_period_balls
+    type: character
+  - description: ''
+    name: game_period_strikes
+    type: character
+  - description: ''
+    name: game_period_outs
+    type: character
+  - description: ''
+    name: yards_to_endzone
+    type: character
+  - description: ''
+    name: start_yardline
+    type: character
+  - description: ''
+    name: distance
+    type: character
+  - description: ''
+    name: down
+    type: character
+  - description: ''
+    name: team_in_possession
+    type: character
+  - description: ''
+    name: power_play_strength_home
+    type: character
+  - description: ''
+    name: power_play_strength_away
+    type: character
+  - description: ''
+    name: game_time_elapsed
+    type: character
+  - description: ''
+    name: game_time_elapsed_display
+    type: character
+  - description: ''
+    name: inning_status
+    type: character
+  - description: ''
+    name: away_timeouts
+    type: character
+  - description: ''
+    name: home_timeouts
+    type: character
+  - description: ''
+    name: is_halftime
+    type: character
+  - description: ''
+    name: minimum_periods
+    type: character
+  - description: ''
+    name: game_periods
+    type: character
+  - description: ''
+    name: baserunners
+    type: character
+  - description: ''
+    name: season
+    type: character
+  - description: ''
+    name: subleague
+    type: character
+  - description: ''
+    name: subleague_display_name
+    type: character
+  - description: ''
+    name: agg_score
+    type: character
+  - description: ''
+    name: leg_number
+    type: character
+  - description: ''
+    name: tv_coverage
+    type: character
+  - description: ''
+    name: seatgeek_id
+    type: character
+  - description: ''
+    name: last_updated
+    type: logical
+  - description: ''
+    name: teams
+    type: character
+  - description: ''
+    name: play_by_play
+    type: character
+  - description: ''
+    name: pitches
+    type: character
+  - description: ''
+    name: at_bat
+    type: character
+  - description: ''
+    name: penalty_summary
+    type: character
+  - description: ''
+    name: scoring_summary
+    type: character
+  - description: ''
+    name: stat_categories
+    type: character
+  - description: ''
+    name: stadium
+    type: character
+  - description: ''
+    name: stadium_id
+    type: character
+  - description: ''
+    name: stadium_image
+    type: character
+  - description: ''
+    name: attendance
+    type: character
+  - description: ''
+    name: lineups
+    type: character
+  - description: ''
+    name: top_performer
+    type: character
+  - description: ''
+    name: players
+    type: character
+  - description: ''
+    name: byline
+    type: character
+  - description: ''
+    name: highlight
+    type: character
+  - description: ''
+    name: highlights
+    type: character
+  - description: ''
+    name: live_video
+    type: character
+  - description: ''
+    name: odds
+    type: character
+  - description: ''
+    name: current_players
+    type: character
+  - description: ''
+    name: last_play
+    type: character
+  - description: ''
+    name: series_type
+    type: character
+  - description: ''
+    name: series_status
+    type: character
+  - description: ''
+    name: games
+    type: character
+  - description: ''
+    name: series_games
+    type: character
+  - description: ''
+    name: game_details
+    type: character
+  - description: ''
+    name: section_notes
+    type: character
+  - description: ''
+    name: articles
+    type: character
+  - description: ''
+    name: tweets
+    type: character
+  - description: ''
+    name: playoff_round
+    type: character
+  - description: ''
+    name: media_stream
+    type: character
+  - description: ''
+    name: playoff_series_status
+    type: character
+  - description: ''
+    name: playoff_series_details
+    type: character
+  - description: ''
+    name: drives
+    type: character
+  - description: ''
+    name: user_teams_game
+    type: character
+  - description: ''
+    name: page_metadata
+    type: character
+  - description: ''
+    name: penalty_box
+    type: character
+  - description: ''
+    name: starting_pitchers
+    type: character
+  - description: ''
+    name: unrestricted_streams
+    type: character
+  - description: ''
+    name: tv_details
+    type: character
+  - description: ''
+    name: away_seed
+    type: character
+  - description: ''
+    name: home_seed
+    type: character
+  - description: ''
+    name: navigation_links_tickets_url
+    type: character
+  - description: ''
+    name: navigation_links_boxscore_url
+    type: character
+  - description: ''
+    name: navigation_links_match_page_url
+    type: character
+  - description: ''
+    name: navigation_links_league_home_url
+    type: character
+  - description: ''
+    name: navigation_links_league_scores_url
+    type: character
+  - description: ''
+    name: provider_coverage_score_update_frequency_in_minutes
+    type: character
+  - description: ''
+    name: provider_coverage_has_plays
+    type: character
+  - description: ''
+    name: provider_coverage_has_stats
+    type: character
+  - description: ''
+    name: provider_coverage_has_extended_stats
+    type: character
+  - description: ''
+    name: provider_coverage_has_final_stats
+    type: character
+  section: games
+- columns:
+  - description: ''
+    name: entity_id
+    type: character
+  - description: ''
+    name: value
+    type: character
+  section: gameplayoff_round
+- columns:
+  - description: ''
+    name: entity_id
+    type: character
+  - description: ''
+    name: value
+    type: character
+  section: gameplayoff_series_status
+- columns:
+  - description: ''
+    name: entity_id
+    type: character
+  - description: ''
+    name: value
+    type: character
+  section: gameplayoff_series_details
+- columns:
+  - description: ''
+    name: entity_id
+    type: character
+  - description: ''
+    name: team_id
+    type: character
+  - description: ''
+    name: display_name
+    type: character
+  - description: ''
+    name: first_name
+    type: character
+  - description: ''
+    name: last_name
+    type: character
+  - description: ''
+    name: full_name
+    type: character
+  - description: ''
+    name: abbr
+    type: character
+  - description: ''
+    name: division_id
+    type: character
+  - description: ''
+    name: division
+    type: character
+  - description: ''
+    name: division_abbr
+    type: character
+  - description: ''
+    name: subdivision_id
+    type: character
+  - description: ''
+    name: subdivision
+    type: character
+  - description: ''
+    name: conference_id
+    type: character
+  - description: ''
+    name: conference_abbr
+    type: character
+  - description: ''
+    name: conference_seed
+    type: character
+  - description: ''
+    name: conference
+    type: character
+  - description: ''
+    name: seatgeek_id
+    type: character
+  - description: ''
+    name: sportacular_logo
+    type: character
+  - description: ''
+    name: sportacular_logo_dark
+    type: character
+  - description: ''
+    name: logo
+    type: character
+  - description: ''
+    name: logo_dark
+    type: character
+  - description: ''
+    name: color_primary
+    type: character
+  - description: ''
+    name: color_secondary
+    type: character
+  - description: ''
+    name: record
+    type: character
+  - description: ''
+    name: players
+    type: character
+  - description: ''
+    name: rankings
+    type: character
+  - description: ''
+    name: stat_categories
+    type: character
+  - description: ''
+    name: page_metadata
+    type: character
+  - description: ''
+    name: team_home_link
+    type: character
+  - description: ''
+    name: team_schedule_link
+    type: character
+  - description: ''
+    name: conference_position
+    type: character
+  - description: ''
+    name: group_position
+    type: character
+  - description: ''
+    name: playoff_seed
+    type: character
+  section: teams
+- columns:
+  - description: ''
+    name: entity_id
+    type: character
+  - description: ''
+    name: value
+    type: character
+  section: teamsportacular_logo
+- columns:
+  - description: ''
+    name: entity_id
+    type: character
+  - description: ''
+    name: value
+    type: character
+  section: teamsportacular_logo_dark
+- columns:
+  - description: ''
+    name: entity_id
+    type: character
+  - description: ''
+    name: value
+    type: character
+  section: team_logo
+- columns:
+  - description: ''
+    name: entity_id
+    type: character
+  - description: ''
+    name: value
+    type: character
+  section: team_logo_dark
+- columns:
+  - description: ''
+    name: entity_id
+    type: character
+  - description: ''
+    name: value
+    type: character
+  section: teamrecord
+- columns:
+  - description: ''
+    name: entity_id
+    type: character
+  - description: ''
+    name: sub_id
+    type: character
+  - description: ''
+    name: date
+    type: character
+  - description: ''
+    name: poll_key
+    type: character
+  - description: ''
+    name: rank
+    type: character
+  - description: ''
+    name: previous_rank
+    type: character
+  - description: ''
+    name: points
+    type: character
+  - description: ''
+    name: source
+    type: character
+  - description: ''
+    name: primary
+    type: character
+  - description: ''
+    name: relevant
+    type: character
+  - description: ''
+    name: teams
+    type: character
+  section: teamrankings
+- columns:
+  - description: ''
+    name: entity_id
+    type: character
+  - description: ''
+    name: league_id
+    type: character
+  - description: ''
+    name: name
+    type: character
+  - description: ''
+    name: display_name
+    type: character
+  - description: ''
+    name: link
+    type: character
+  - description: ''
+    name: season_year
+    type: character
+  - description: ''
+    name: season_display_year
+    type: character
+  - description: ''
+    name: season_week_number
+    type: integer
+  - description: ''
+    name: season_season_current_date
+    type: character
+  - description: ''
+    name: season_season_next_real_game_date
+    type: character
+  - description: ''
+    name: season_season_next_game_date
+    type: character
+  - description: ''
+    name: season_season_month
+    type: character
+  - description: ''
+    name: season_display_schedule_period
+    type: character
+  - description: ''
+    name: season_display_schedule_period_id
+    type: character
+  - description: ''
+    name: season_current_phase
+    type: character
+  - description: ''
+    name: season_current_sched_state
+    type: character
+  - description: ''
+    name: season_suspended
+    type: character
+  - description: ''
+    name: season_current_stat_state_season
+    type: integer
+  - description: ''
+    name: season_current_stat_state_week
+    type: character
+  - description: ''
+    name: season_current_stat_state_graphite_phase
+    type: character
+  - description: ''
+    name: season_phases_2_phase_id
+    type: character
+  - description: ''
+    name: season_phases_2_name
+    type: character
+  - description: ''
+    name: season_phases_2_sched_state
+    type: character
+  - description: ''
+    name: season_phases_2_phase_start
+    type: character
+  - description: ''
+    name: season_phases_2_phase_end
+    type: character
+  - description: ''
+    name: season_phases_2_phase_start_week
+    type: character
+  - description: ''
+    name: season_phases_2_phase_end_week
+    type: character
+  - description: ''
+    name: season_phases_2_structures
+    type: character
+  - description: ''
+    name: season_phases_3_phase_id
+    type: character
+  - description: ''
+    name: season_phases_3_name
+    type: character
+  - description: ''
+    name: season_phases_3_sched_state
+    type: character
+  - description: ''
+    name: season_phases_3_phase_start
+    type: character
+  - description: ''
+    name: season_phases_3_phase_end
+    type: character
+  - description: ''
+    name: season_phases_3_phase_start_week
+    type: logical
+  - description: ''
+    name: season_phases_3_phase_end_week
+    type: logical
+  - description: ''
+    name: season_phases_3_structures
+    type: character
+  - description: ''
+    name: season_phases_4_phase_id
+    type: character
+  - description: ''
+    name: season_phases_4_name
+    type: character
+  - description: ''
+    name: season_phases_4_sched_state
+    type: character
+  - description: ''
+    name: season_phases_4_phase_start
+    type: character
+  - description: ''
+    name: season_phases_4_phase_end
+    type: character
+  - description: ''
+    name: season_phases_4_phase_start_week
+    type: logical
+  - description: ''
+    name: season_phases_4_phase_end_week
+    type: logical
+  - description: ''
+    name: season_phases_4_structures
+    type: character
+  section: leagues
+- columns:
+  - description: ''
+    name: entity_id
+    type: character
+  - description: ''
+    name: sub_id
+    type: character
+  - description: ''
+    name: id
+    type: integer
+  - description: ''
+    name: name
+    type: character
+  - description: ''
+    name: type
+    type: character
+  - description: ''
+    name: conferences_1_id
+    type: numeric
+  - description: ''
+    name: conferences_1_name
+    type: character
+  - description: ''
+    name: conferences_1_type
+    type: character
+  - description: ''
+    name: conferences_4_id
+    type: numeric
+  - description: ''
+    name: conferences_4_name
+    type: character
+  - description: ''
+    name: conferences_4_type
+    type: character
+  - description: ''
+    name: conferences_6_id
+    type: numeric
+  - description: ''
+    name: conferences_6_name
+    type: character
+  - description: ''
+    name: conferences_6_type
+    type: character
+  - description: ''
+    name: conferences_7_id
+    type: numeric
+  - description: ''
+    name: conferences_7_name
+    type: character
+  - description: ''
+    name: conferences_7_type
+    type: character
+  - description: ''
+    name: conferences_8_id
+    type: numeric
+  - description: ''
+    name: conferences_8_name
+    type: character
+  - description: ''
+    name: conferences_8_type
+    type: character
+  - description: ''
+    name: conferences_11_id
+    type: numeric
+  - description: ''
+    name: conferences_11_name
+    type: character
+  - description: ''
+    name: conferences_11_type
+    type: character
+  - description: ''
+    name: conferences_71_id
+    type: numeric
+  - description: ''
+    name: conferences_71_name
+    type: character
+  - description: ''
+    name: conferences_71_type
+    type: character
+  - description: ''
+    name: conferences_72_id
+    type: numeric
+  - description: ''
+    name: conferences_72_name
+    type: character
+  - description: ''
+    name: conferences_72_type
+    type: character
+  - description: ''
+    name: conferences_87_id
+    type: numeric
+  - description: ''
+    name: conferences_87_name
+    type: character
+  - description: ''
+    name: conferences_87_type
+    type: character
+  - description: ''
+    name: conferences_90_id
+    type: numeric
+  - description: ''
+    name: conferences_90_name
+    type: character
+  - description: ''
+    name: conferences_90_type
+    type: character
+  - description: ''
+    name: conferences_90_subdivisions_1_id
+    type: numeric
+  - description: ''
+    name: conferences_90_subdivisions_1_name
+    type: character
+  - description: ''
+    name: conferences_90_subdivisions_1_type
+    type: character
+  - description: ''
+    name: conferences_90_subdivisions_2_id
+    type: numeric
+  - description: ''
+    name: conferences_90_subdivisions_2_name
+    type: character
+  - description: ''
+    name: conferences_90_subdivisions_2_type
+    type: character
+  - description: ''
+    name: conferences_122_id
+    type: numeric
+  - description: ''
+    name: conferences_122_name
+    type: character
+  - description: ''
+    name: conferences_122_type
+    type: character
+  - description: ''
+    name: conferences_13_id
+    type: numeric
+  - description: ''
+    name: conferences_13_name
+    type: character
+  - description: ''
+    name: conferences_13_type
+    type: character
+  - description: ''
+    name: conferences_14_id
+    type: numeric
+  - description: ''
+    name: conferences_14_name
+    type: character
+  - description: ''
+    name: conferences_14_type
+    type: character
+  - description: ''
+    name: conferences_15_id
+    type: numeric
+  - description: ''
+    name: conferences_15_name
+    type: character
+  - description: ''
+    name: conferences_15_type
+    type: character
+  - description: ''
+    name: conferences_17_id
+    type: numeric
+  - description: ''
+    name: conferences_17_name
+    type: character
+  - description: ''
+    name: conferences_17_type
+    type: character
+  - description: ''
+    name: conferences_19_id
+    type: numeric
+  - description: ''
+    name: conferences_19_name
+    type: character
+  - description: ''
+    name: conferences_19_type
+    type: character
+  - description: ''
+    name: conferences_20_id
+    type: numeric
+  - description: ''
+    name: conferences_20_name
+    type: character
+  - description: ''
+    name: conferences_20_type
+    type: character
+  - description: ''
+    name: conferences_21_id
+    type: numeric
+  - description: ''
+    name: conferences_21_name
+    type: character
+  - description: ''
+    name: conferences_21_type
+    type: character
+  - description: ''
+    name: conferences_22_id
+    type: numeric
+  - description: ''
+    name: conferences_22_name
+    type: character
+  - description: ''
+    name: conferences_22_type
+    type: character
+  - description: ''
+    name: conferences_23_id
+    type: numeric
+  - description: ''
+    name: conferences_23_name
+    type: character
+  - description: ''
+    name: conferences_23_type
+    type: character
+  - description: ''
+    name: conferences_23_subdivisions_1_id
+    type: numeric
+  - description: ''
+    name: conferences_23_subdivisions_1_name
+    type: character
+  - description: ''
+    name: conferences_23_subdivisions_1_type
+    type: character
+  - description: ''
+    name: conferences_23_subdivisions_2_id
+    type: numeric
+  - description: ''
+    name: conferences_23_subdivisions_2_name
+    type: character
+  - description: ''
+    name: conferences_23_subdivisions_2_type
+    type: character
+  - description: ''
+    name: conferences_73_id
+    type: numeric
+  - description: ''
+    name: conferences_73_name
+    type: character
+  - description: ''
+    name: conferences_73_type
+    type: character
+  - description: ''
+    name: conferences_74_id
+    type: numeric
+  - description: ''
+    name: conferences_74_name
+    type: character
+  - description: ''
+    name: conferences_74_type
+    type: character
+  - description: ''
+    name: conferences_98_id
+    type: numeric
+  - description: ''
+    name: conferences_98_name
+    type: character
+  - description: ''
+    name: conferences_98_type
+    type: character
+  - description: ''
+    name: conferences_282_id
+    type: numeric
+  - description: ''
+    name: conferences_282_name
+    type: character
+  - description: ''
+    name: conferences_282_type
+    type: character
+  - description: ''
+    name: conferences_283_id
+    type: numeric
+  - description: ''
+    name: conferences_283_name
+    type: character
+  - description: ''
+    name: conferences_283_type
+    type: character
+  - description: ''
+    name: conferences_25_id
+    type: numeric
+  - description: ''
+    name: conferences_25_name
+    type: character
+  - description: ''
+    name: conferences_25_type
+    type: character
+  - description: ''
+    name: conferences_27_id
+    type: numeric
+  - description: ''
+    name: conferences_27_name
+    type: character
+  - description: ''
+    name: conferences_27_type
+    type: character
+  - description: ''
+    name: conferences_28_id
+    type: numeric
+  - description: ''
+    name: conferences_28_name
+    type: character
+  - description: ''
+    name: conferences_28_type
+    type: character
+  - description: ''
+    name: conferences_29_id
+    type: numeric
+  - description: ''
+    name: conferences_29_name
+    type: character
+  - description: ''
+    name: conferences_29_type
+    type: character
+  - description: ''
+    name: conferences_33_id
+    type: numeric
+  - description: ''
+    name: conferences_33_name
+    type: character
+  - description: ''
+    name: conferences_33_type
+    type: character
+  - description: ''
+    name: conferences_34_id
+    type: numeric
+  - description: ''
+    name: conferences_34_name
+    type: character
+  - description: ''
+    name: conferences_34_type
+    type: character
+  - description: ''
+    name: conferences_35_id
+    type: numeric
+  - description: ''
+    name: conferences_35_name
+    type: character
+  - description: ''
+    name: conferences_35_type
+    type: character
+  - description: ''
+    name: conferences_36_id
+    type: numeric
+  - description: ''
+    name: conferences_36_name
+    type: character
+  - description: ''
+    name: conferences_36_type
+    type: character
+  - description: ''
+    name: conferences_37_id
+    type: numeric
+  - description: ''
+    name: conferences_37_name
+    type: character
+  - description: ''
+    name: conferences_37_type
+    type: character
+  - description: ''
+    name: conferences_97_id
+    type: numeric
+  - description: ''
+    name: conferences_97_name
+    type: character
+  - description: ''
+    name: conferences_97_type
+    type: character
+  - description: ''
+    name: conferences_99_id
+    type: numeric
+  - description: ''
+    name: conferences_99_name
+    type: character
+  - description: ''
+    name: conferences_99_type
+    type: character
+  - description: ''
+    name: conferences_102_id
+    type: numeric
+  - description: ''
+    name: conferences_102_name
+    type: character
+  - description: ''
+    name: conferences_102_type
+    type: character
+  - description: ''
+    name: conferences_107_id
+    type: numeric
+  - description: ''
+    name: conferences_107_name
+    type: character
+  - description: ''
+    name: conferences_107_type
+    type: character
+  - description: ''
+    name: conferences_121_id
+    type: numeric
+  - description: ''
+    name: conferences_121_name
+    type: character
+  - description: ''
+    name: conferences_121_type
+    type: character
+  - description: ''
+    name: conferences_123_id
+    type: numeric
+  - description: ''
+    name: conferences_123_name
+    type: character
+  - description: ''
+    name: conferences_123_type
+    type: character
+  - description: ''
+    name: conferences_127_id
+    type: numeric
+  - description: ''
+    name: conferences_127_name
+    type: character
+  - description: ''
+    name: conferences_127_type
+    type: character
+  - description: ''
+    name: conferences_128_id
+    type: numeric
+  - description: ''
+    name: conferences_128_name
+    type: character
+  - description: ''
+    name: conferences_128_type
+    type: character
+  - description: ''
+    name: conferences_285_id
+    type: numeric
+  - description: ''
+    name: conferences_285_name
+    type: character
+  - description: ''
+    name: conferences_285_type
+    type: character
+  - description: ''
+    name: conferences_26_id
+    type: numeric
+  - description: ''
+    name: conferences_26_name
+    type: character
+  - description: ''
+    name: conferences_26_type
+    type: character
+  - description: ''
+    name: conferences_30_id
+    type: numeric
+  - description: ''
+    name: conferences_30_name
+    type: character
+  - description: ''
+    name: conferences_30_type
+    type: character
+  - description: ''
+    name: conferences_41_id
+    type: numeric
+  - description: ''
+    name: conferences_41_name
+    type: character
+  - description: ''
+    name: conferences_41_type
+    type: character
+  - description: ''
+    name: conferences_46_id
+    type: numeric
+  - description: ''
+    name: conferences_46_name
+    type: character
+  - description: ''
+    name: conferences_46_type
+    type: character
+  - description: ''
+    name: conferences_49_id
+    type: numeric
+  - description: ''
+    name: conferences_49_name
+    type: character
+  - description: ''
+    name: conferences_49_type
+    type: character
+  - description: ''
+    name: conferences_51_id
+    type: numeric
+  - description: ''
+    name: conferences_51_name
+    type: character
+  - description: ''
+    name: conferences_51_type
+    type: character
+  - description: ''
+    name: conferences_53_id
+    type: numeric
+  - description: ''
+    name: conferences_53_name
+    type: character
+  - description: ''
+    name: conferences_53_type
+    type: character
+  - description: ''
+    name: conferences_55_id
+    type: numeric
+  - description: ''
+    name: conferences_55_name
+    type: character
+  - description: ''
+    name: conferences_55_type
+    type: character
+  - description: ''
+    name: conferences_56_id
+    type: numeric
+  - description: ''
+    name: conferences_56_name
+    type: character
+  - description: ''
+    name: conferences_56_type
+    type: character
+  - description: ''
+    name: conferences_57_id
+    type: numeric
+  - description: ''
+    name: conferences_57_name
+    type: character
+  - description: ''
+    name: conferences_57_type
+    type: character
+  - description: ''
+    name: conferences_76_id
+    type: numeric
+  - description: ''
+    name: conferences_76_name
+    type: character
+  - description: ''
+    name: conferences_76_type
+    type: character
+  - description: ''
+    name: conferences_79_id
+    type: numeric
+  - description: ''
+    name: conferences_79_name
+    type: character
+  - description: ''
+    name: conferences_79_type
+    type: character
+  - description: ''
+    name: conferences_93_id
+    type: numeric
+  - description: ''
+    name: conferences_93_name
+    type: character
+  - description: ''
+    name: conferences_93_type
+    type: character
+  - description: ''
+    name: conferences_105_id
+    type: numeric
+  - description: ''
+    name: conferences_105_name
+    type: character
+  - description: ''
+    name: conferences_105_type
+    type: character
+  - description: ''
+    name: conferences_106_id
+    type: numeric
+  - description: ''
+    name: conferences_106_name
+    type: character
+  - description: ''
+    name: conferences_106_type
+    type: character
+  - description: ''
+    name: conferences_109_id
+    type: numeric
+  - description: ''
+    name: conferences_109_name
+    type: character
+  - description: ''
+    name: conferences_109_type
+    type: character
+  - description: ''
+    name: conferences_113_id
+    type: numeric
+  - description: ''
+    name: conferences_113_name
+    type: character
+  - description: ''
+    name: conferences_113_type
+    type: character
+  - description: ''
+    name: conferences_114_id
+    type: numeric
+  - description: ''
+    name: conferences_114_name
+    type: character
+  - description: ''
+    name: conferences_114_type
+    type: character
+  - description: ''
+    name: conferences_129_id
+    type: numeric
+  - description: ''
+    name: conferences_129_name
+    type: character
+  - description: ''
+    name: conferences_129_type
+    type: character
+  - description: ''
+    name: conferences_130_id
+    type: numeric
+  - description: ''
+    name: conferences_130_name
+    type: character
+  - description: ''
+    name: conferences_130_type
+    type: character
+  - description: ''
+    name: conferences_132_id
+    type: numeric
+  - description: ''
+    name: conferences_132_name
+    type: character
+  - description: ''
+    name: conferences_132_type
+    type: character
+  - description: ''
+    name: conferences_48_id
+    type: numeric
+  - description: ''
+    name: conferences_48_name
+    type: character
+  - description: ''
+    name: conferences_48_type
+    type: character
+  - description: ''
+    name: conferences_62_id
+    type: numeric
+  - description: ''
+    name: conferences_62_name
+    type: character
+  - description: ''
+    name: conferences_62_type
+    type: character
+  - description: ''
+    name: conferences_68_id
+    type: numeric
+  - description: ''
+    name: conferences_68_name
+    type: character
+  - description: ''
+    name: conferences_68_type
+    type: character
+  - description: ''
+    name: conferences_69_id
+    type: numeric
+  - description: ''
+    name: conferences_69_name
+    type: character
+  - description: ''
+    name: conferences_69_type
+    type: character
+  - description: ''
+    name: conferences_70_id
+    type: numeric
+  - description: ''
+    name: conferences_70_name
+    type: character
+  - description: ''
+    name: conferences_70_type
+    type: character
+  - description: ''
+    name: conferences_77_id
+    type: numeric
+  - description: ''
+    name: conferences_77_name
+    type: character
+  - description: ''
+    name: conferences_77_type
+    type: character
+  - description: ''
+    name: conferences_103_id
+    type: numeric
+  - description: ''
+    name: conferences_103_name
+    type: character
+  - description: ''
+    name: conferences_103_type
+    type: character
+  - description: ''
+    name: conferences_104_id
+    type: numeric
+  - description: ''
+    name: conferences_104_name
+    type: character
+  - description: ''
+    name: conferences_104_type
+    type: character
+  - description: ''
+    name: conferences_115_id
+    type: numeric
+  - description: ''
+    name: conferences_115_name
+    type: character
+  - description: ''
+    name: conferences_115_type
+    type: character
+  - description: ''
+    name: conferences_116_id
+    type: numeric
+  - description: ''
+    name: conferences_116_name
+    type: character
+  - description: ''
+    name: conferences_116_type
+    type: character
+  - description: ''
+    name: conferences_117_id
+    type: numeric
+  - description: ''
+    name: conferences_117_name
+    type: character
+  - description: ''
+    name: conferences_117_type
+    type: character
+  - description: ''
+    name: conferences_119_id
+    type: numeric
+  - description: ''
+    name: conferences_119_name
+    type: character
+  - description: ''
+    name: conferences_119_type
+    type: character
+  - description: ''
+    name: conferences_133_id
+    type: numeric
+  - description: ''
+    name: conferences_133_name
+    type: character
+  - description: ''
+    name: conferences_133_type
+    type: character
+  - description: ''
+    name: conferences_135_id
+    type: numeric
+  - description: ''
+    name: conferences_135_name
+    type: character
+  - description: ''
+    name: conferences_135_type
+    type: character
+  - description: ''
+    name: conferences_136_id
+    type: numeric
+  - description: ''
+    name: conferences_136_name
+    type: character
+  - description: ''
+    name: conferences_136_type
+    type: character
+  - description: ''
+    name: conferences_137_id
+    type: numeric
+  - description: ''
+    name: conferences_137_name
+    type: character
+  - description: ''
+    name: conferences_137_type
+    type: character
+  - description: ''
+    name: conferences_139_id
+    type: numeric
+  - description: ''
+    name: conferences_139_name
+    type: character
+  - description: ''
+    name: conferences_139_type
+    type: character
+  - description: ''
+    name: conferences_141_id
+    type: numeric
+  - description: ''
+    name: conferences_141_name
+    type: character
+  - description: ''
+    name: conferences_141_type
+    type: character
+  - description: ''
+    name: conferences_281_id
+    type: numeric
+  - description: ''
+    name: conferences_281_name
+    type: character
+  - description: ''
+    name: conferences_281_type
+    type: character
+  - description: ''
+    name: conferences_284_id
+    type: numeric
+  - description: ''
+    name: conferences_284_name
+    type: character
+  - description: ''
+    name: conferences_284_type
+    type: character
+  - description: ''
+    name: conferences_125_id
+    type: numeric
+  - description: ''
+    name: conferences_125_name
+    type: character
+  - description: ''
+    name: conferences_125_type
+    type: character
+  section: divisions
+- columns: []
+  section: gameodds
+- columns: []
+  section: gamebyline
+- columns: []
+  section: gameunrestricted_streams
+- columns:
+  - description: ''
+    name: entity_id
+    type: character
+  - description: ''
+    name: value
+    type: character
+  section: teamcolor_primary
+- columns:
+  - description: ''
+    name: entity_id
+    type: character
+  - description: ''
+    name: value
+    type: character
+  section: teamcolor_secondary
+- columns:
+  - description: ''
+    name: entity_id
+    type: character
+  - description: ''
+    name: value
+    type: character
+  section: gamehighlight
+- columns:
+  - description: ''
+    name: entity_id
+    type: character
+  - description: ''
+    name: tv_details
+    type: character
+  section: gametv_details
+kind: frames
+schema: editorial_scoreboard

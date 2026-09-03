@@ -1,0 +1,45 @@
+columns:
+- description: Composite match-day (match set) id.
+  name: match_set_id
+  type: character
+- description: Underlying StatsPerform/Opta provider id (e.g. `opta:...`).
+  name: provider_id
+  type: character
+- description: Stage display name.
+  name: name
+  type: character
+- description: Composite Season id (Utf8 join key).
+  name: season_id
+  type: character
+- description: Composite Competition id (Utf8 join key).
+  name: competition_id
+  type: character
+- description: Composite id of the round.
+  name: round_id
+  type: character
+- description: Composite Stage id (`nwsl::Football_Stage::{hex}`).
+  name: stage_id
+  type: character
+- description: Ordinal position of the match day within the season.
+  name: index
+  type: character
+- description: Short team name.
+  name: short_name
+  type: character
+- description: Identifier of the match-day format.
+  name: match_set_format_id
+  type: character
+- description: Type discriminator for the record.
+  name: type
+  type: character
+- description: Season window start (ISO-8601 UTC).
+  name: start_date_utc
+  type: character
+- description: Season window end (ISO-8601 UTC).
+  name: end_date_utc
+  type: character
+- description: Status of the match day (scheduled, in progress, completed).
+  name: matchday_status
+  type: character
+kind: dataframe
+schema: matchdays

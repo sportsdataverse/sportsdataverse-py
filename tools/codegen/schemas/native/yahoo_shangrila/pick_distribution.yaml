@@ -1,0 +1,9 @@
+columns:
+- description: ''
+  name: ncaaf_games
+  type: character
+- description: ''
+  name: conferences
+  type: character
+kind: dataframe
+schema: pick_distribution

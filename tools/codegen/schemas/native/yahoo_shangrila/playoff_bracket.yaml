@@ -1,0 +1,30 @@
+columns:
+- description: ''
+  name: conference
+  type: character
+- description: ''
+  name: id
+  type: character
+- description: ''
+  name: location
+  type: character
+- description: ''
+  name: playoff_round
+  type: character
+- description: ''
+  name: display_order
+  type: character
+- description: ''
+  name: season
+  type: character
+- description: ''
+  name: max_games
+  type: character
+- description: ''
+  name: winner_bracket_slot_id
+  type: character
+- description: ''
+  name: playoff_series
+  type: character
+kind: dataframe
+schema: playoff_bracket

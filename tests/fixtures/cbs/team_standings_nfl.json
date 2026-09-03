@@ -1,0 +1,651 @@
+{
+ "2024": {
+  "pre": {
+   "wins": {
+    "number": 3
+   },
+   "team-code": {
+    "id": 34,
+    "global-id": 325
+   },
+   "clinched-division": {
+    "clinched": false
+   },
+   "team-city": {
+    "city": "Houston"
+   },
+   "clinched-playoffs": {
+    "clinched": false
+   },
+   "games-back": {
+    "number": 0.5
+   },
+   "winning-percentage": {
+    "percentage": ".750"
+   },
+   "strength-of-schedule": {
+    "rank": "-"
+   },
+   "streak": {
+    "kind": "winning",
+    "games": 3
+   },
+   "losses": {
+    "number": 1
+   },
+   "points-for": {
+    "number": 82
+   },
+   "points-against": {
+    "number": 58
+   },
+   "today-games-included": {
+    "through": true
+   },
+   "clinched-home-field": {
+    "clinched": false
+   },
+   "ties": {
+    "number": 0
+   },
+   "wc-games-back": {
+    "number": "-"
+   },
+   "eliminated-from-playoffs": {
+    "eliminated": false
+   },
+   "team-name": {
+    "name": "Texans",
+    "alias": "Hou"
+   },
+   "conference-seed": {
+    "seed": "-"
+   },
+   "place": {
+    "place": 3
+   },
+   "win-loss-record": [
+    {
+     "wins": 2,
+     "ties": 0,
+     "name": "home record",
+     "type": "home",
+     "losses": 0
+    },
+    {
+     "wins": 1,
+     "ties": 0,
+     "name": "away record",
+     "type": "away",
+     "losses": 1
+    },
+    {
+     "wins": 0,
+     "ties": 0,
+     "name": "division record",
+     "type": "division",
+     "losses": 0
+    },
+    {
+     "wins": 1,
+     "ties": 0,
+     "name": "conference record",
+     "type": "conference",
+     "losses": 0
+    },
+    {
+     "wins": 1,
+     "ties": 0,
+     "name": "on grass record",
+     "type": "on grass",
+     "losses": 0
+    },
+    {
+     "wins": 2,
+     "ties": 0,
+     "name": "on turf record",
+     "type": "on turf",
+     "losses": 1
+    },
+    {
+     "wins": 1,
+     "ties": 0,
+     "name": "decided by 7 or less record",
+     "type": "decided by 7 or less",
+     "losses": 1
+    },
+    {
+     "wins": 0,
+     "ties": 0,
+     "name": "in OT record",
+     "type": "in OT",
+     "losses": 0
+    },
+    {
+     "wins": 2,
+     "ties": 0,
+     "name": "scoring-first record",
+     "type": "scoring-first",
+     "losses": 1
+    },
+    {
+     "wins": 3,
+     "ties": 0,
+     "name": "leading at half record",
+     "type": "leading at half",
+     "losses": 1
+    },
+    {
+     "wins": 3,
+     "ties": 0,
+     "name": "last 5 games",
+     "type": "last5",
+     "losses": 1
+    }
+   ],
+   "seasonId": 29159866,
+   "season": {
+    "seasonId": 29159866,
+    "sportId": 1,
+    "leagueId": 59,
+    "league": null,
+    "teams": [],
+    "seasonYear": 2024,
+    "isCurrent": 0,
+    "seasonType": "pre",
+    "seasonTypeDesc": "Preseason",
+    "seasonStartDate": "08-01-2024 00:00:00 -0400",
+    "seasonEndDate": "08-25-2024 23:59:59 -0400"
+   }
+  },
+  "regular": {
+   "wins": {
+    "number": 10
+   },
+   "team-code": {
+    "id": 34,
+    "global-id": 325
+   },
+   "clinched-division": {
+    "clinched": true
+   },
+   "team-city": {
+    "city": "Houston"
+   },
+   "clinched-playoffs": {
+    "clinched": true
+   },
+   "games-back": {
+    "number": 0
+   },
+   "winning-percentage": {
+    "percentage": ".588"
+   },
+   "strength-of-schedule": {
+    "rank": 22
+   },
+   "streak": {
+    "kind": "winning",
+    "games": 1
+   },
+   "losses": {
+    "number": 7
+   },
+   "points-for": {
+    "number": 372
+   },
+   "points-against": {
+    "number": 372
+   },
+   "today-games-included": {
+    "through": true
+   },
+   "clinched-home-field": {
+    "clinched": false
+   },
+   "ties": {
+    "number": 0
+   },
+   "wc-games-back": {
+    "number": 0
+   },
+   "eliminated-from-playoffs": {
+    "eliminated": false
+   },
+   "team-name": {
+    "name": "Texans",
+    "alias": "Hou"
+   },
+   "conference-seed": {
+    "seed": 4
+   },
+   "place": {
+    "place": 1
+   },
+   "win-loss-record": [
+    {
+     "wins": 5,
+     "ties": 0,
+     "name": "home record",
+     "type": "home",
+     "losses": 3
+    },
+    {
+     "wins": 5,
+     "ties": 0,
+     "name": "away record",
+     "type": "away",
+     "losses": 4
+    },
+    {
+     "wins": 5,
+     "ties": 0,
+     "name": "division record",
+     "type": "division",
+     "losses": 1
+    },
+    {
+     "wins": 8,
+     "ties": 0,
+     "name": "conference record",
+     "type": "conference",
+     "losses": 4
+    },
+    {
+     "wins": 1,
+     "ties": 0,
+     "name": "on grass record",
+     "type": "on grass",
+     "losses": 2
+    },
+    {
+     "wins": 9,
+     "ties": 0,
+     "name": "on turf record",
+     "type": "on turf",
+     "losses": 5
+    },
+    {
+     "wins": 6,
+     "ties": 0,
+     "name": "decided by 7 or less record",
+     "type": "decided by 7 or less",
+     "losses": 3
+    },
+    {
+     "wins": 0,
+     "ties": 0,
+     "name": "in OT record",
+     "type": "in OT",
+     "losses": 0
+    },
+    {
+     "wins": 8,
+     "ties": 0,
+     "name": "scoring-first record",
+     "type": "scoring-first",
+     "losses": 4
+    },
+    {
+     "wins": 10,
+     "ties": 0,
+     "name": "leading at half record",
+     "type": "leading at half",
+     "losses": 3
+    },
+    {
+     "wins": 3,
+     "ties": 0,
+     "name": "last 5 games",
+     "type": "last5",
+     "losses": 2
+    }
+   ],
+   "clinched-first-round-bye": {
+    "clinched": false
+   },
+   "seasonId": 29159865,
+   "season": {
+    "seasonId": 29159865,
+    "sportId": 1,
+    "leagueId": 59,
+    "league": null,
+    "teams": [],
+    "seasonYear": 2024,
+    "isCurrent": 0,
+    "seasonType": "regular",
+    "seasonTypeDesc": "Regular season",
+    "seasonStartDate": "09-05-2024 00:00:00 -0400",
+    "seasonEndDate": "01-06-2025 23:59:59 -0500"
+   }
+  }
+ },
+ "2025": {
+  "regular": {
+   "wins": {
+    "number": 12
+   },
+   "clinched-playoffs-date": {
+    "date": 27,
+    "month": 12,
+    "year": 2025,
+    "day": 6
+   },
+   "team-code": {
+    "id": 34,
+    "global-id": 325
+   },
+   "clinched-division": {
+    "clinched": false
+   },
+   "team-city": {
+    "city": "Houston"
+   },
+   "clinched-playoffs": {
+    "clinched": true
+   },
+   "games-back": {
+    "number": 1
+   },
+   "winning-percentage": {
+    "percentage": ".706"
+   },
+   "strength-of-schedule": {
+    "rank": 9
+   },
+   "streak": {
+    "kind": "winning",
+    "games": 9
+   },
+   "losses": {
+    "number": 5
+   },
+   "points-for": {
+    "number": 404
+   },
+   "points-against": {
+    "number": 295
+   },
+   "today-games-included": {
+    "through": true
+   },
+   "content": "/>",
+   "clinched-home-field": {
+    "clinched": false
+   },
+   "ties": {
+    "number": 0
+   },
+   "wc-games-back": {
+    "number": 0
+   },
+   "eliminated-from-playoffs": {
+    "eliminated": false
+   },
+   "team-name": {
+    "name": "Texans",
+    "alias": "Hou"
+   },
+   "conference-seed": {
+    "seed": 5
+   },
+   "place": {
+    "place": 2
+   },
+   "win-loss-record": [
+    {
+     "wins": 7,
+     "ties": 0,
+     "name": "home record",
+     "type": "home",
+     "losses": 2
+    },
+    {
+     "wins": 5,
+     "ties": 0,
+     "name": "away record",
+     "type": "away",
+     "losses": 3
+    },
+    {
+     "wins": 5,
+     "ties": 0,
+     "name": "division record",
+     "type": "division",
+     "losses": 1
+    },
+    {
+     "wins": 10,
+     "ties": 0,
+     "name": "conference record",
+     "type": "conference",
+     "losses": 2
+    },
+    {
+     "wins": 2,
+     "ties": 0,
+     "name": "on grass record",
+     "type": "on grass",
+     "losses": 1
+    },
+    {
+     "wins": 10,
+     "ties": 0,
+     "name": "on turf record",
+     "type": "on turf",
+     "losses": 4
+    },
+    {
+     "wins": 6,
+     "ties": 0,
+     "name": "decided by 7 or less record",
+     "type": "decided by 7 or less",
+     "losses": 4
+    },
+    {
+     "wins": 0,
+     "ties": 0,
+     "name": "in OT record",
+     "type": "in OT",
+     "losses": 0
+    },
+    {
+     "wins": 9,
+     "ties": 0,
+     "name": "scoring-first record",
+     "type": "scoring-first",
+     "losses": 3
+    },
+    {
+     "wins": 10,
+     "ties": 0,
+     "name": "leading at half record",
+     "type": "leading at half",
+     "losses": 2
+    },
+    {
+     "wins": 5,
+     "ties": 0,
+     "name": "last 5 games",
+     "type": "last5",
+     "losses": 0
+    }
+   ],
+   "clinched-first-round-bye": {
+    "clinched": false
+   },
+   "seasonId": 29444245,
+   "season": {
+    "seasonId": 29444245,
+    "sportId": 1,
+    "leagueId": 59,
+    "league": null,
+    "teams": [],
+    "seasonYear": 2025,
+    "isCurrent": 0,
+    "seasonType": "regular",
+    "seasonTypeDesc": "Regular season",
+    "seasonStartDate": "09-04-2025 00:00:00 -0400",
+    "seasonEndDate": "01-04-2026 23:59:59 -0500"
+   }
+  },
+  "pre": {
+   "wins": {
+    "number": 2
+   },
+   "team-code": {
+    "id": 34,
+    "global-id": 325
+   },
+   "clinched-division": {
+    "clinched": false
+   },
+   "team-city": {
+    "city": "Houston"
+   },
+   "clinched-playoffs": {
+    "clinched": false
+   },
+   "games-back": {
+    "number": 0
+   },
+   "winning-percentage": {
+    "percentage": ".667"
+   },
+   "strength-of-schedule": {
+    "rank": "-"
+   },
+   "streak": {
+    "kind": "winning",
+    "games": 2
+   },
+   "losses": {
+    "number": 1
+   },
+   "points-for": {
+    "number": 56
+   },
+   "points-against": {
+    "number": 30
+   },
+   "today-games-included": {
+    "through": true
+   },
+   "clinched-home-field": {
+    "clinched": false
+   },
+   "ties": {
+    "number": 0
+   },
+   "wc-games-back": {
+    "number": "-"
+   },
+   "eliminated-from-playoffs": {
+    "eliminated": false
+   },
+   "team-name": {
+    "name": "Texans",
+    "alias": "Hou"
+   },
+   "conference-seed": {
+    "seed": "-"
+   },
+   "place": {
+    "place": 2
+   },
+   "win-loss-record": [
+    {
+     "wins": 1,
+     "ties": 0,
+     "name": "home record",
+     "type": "home",
+     "losses": 0
+    },
+    {
+     "wins": 1,
+     "ties": 0,
+     "name": "away record",
+     "type": "away",
+     "losses": 1
+    },
+    {
+     "wins": 0,
+     "ties": 0,
+     "name": "division record",
+     "type": "division",
+     "losses": 0
+    },
+    {
+     "wins": 0,
+     "ties": 0,
+     "name": "conference record",
+     "type": "conference",
+     "losses": 0
+    },
+    {
+     "wins": 0,
+     "ties": 0,
+     "name": "on grass record",
+     "type": "on grass",
+     "losses": 0
+    },
+    {
+     "wins": 2,
+     "ties": 0,
+     "name": "on turf record",
+     "type": "on turf",
+     "losses": 1
+    },
+    {
+     "wins": 0,
+     "ties": 0,
+     "name": "decided by 7 or less record",
+     "type": "decided by 7 or less",
+     "losses": 0
+    },
+    {
+     "wins": 0,
+     "ties": 0,
+     "name": "in OT record",
+     "type": "in OT",
+     "losses": 0
+    },
+    {
+     "wins": 2,
+     "ties": 0,
+     "name": "scoring-first record",
+     "type": "scoring-first",
+     "losses": 0
+    },
+    {
+     "wins": 2,
+     "ties": 0,
+     "name": "leading at half record",
+     "type": "leading at half",
+     "losses": 0
+    },
+    {
+     "wins": 2,
+     "ties": 0,
+     "name": "last 5 games",
+     "type": "last5",
+     "losses": 1
+    }
+   ],
+   "seasonId": 29444246,
+   "season": {
+    "seasonId": 29444246,
+    "sportId": 1,
+    "leagueId": 59,
+    "league": null,
+    "teams": [],
+    "seasonYear": 2025,
+    "isCurrent": 0,
+    "seasonType": "pre",
+    "seasonTypeDesc": "Preseason",
+    "seasonStartDate": "07-31-2025 00:00:00 -0400",
+    "seasonEndDate": "08-23-2025 23:59:59 -0400"
+   }
+  }
+ }
+}

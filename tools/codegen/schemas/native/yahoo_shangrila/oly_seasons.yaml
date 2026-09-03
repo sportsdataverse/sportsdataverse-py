@@ -1,0 +1,12 @@
+columns:
+- description: ''
+  name: season
+  type: integer
+- description: ''
+  name: display_name
+  type: character
+- description: ''
+  name: type
+  type: character
+kind: dataframe
+schema: oly_seasons

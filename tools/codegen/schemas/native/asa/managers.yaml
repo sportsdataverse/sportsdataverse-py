@@ -1,0 +1,12 @@
+columns:
+- description: ASA manager id (base62 string; Utf8 join key).
+  name: manager_id
+  type: character
+- description: Manager display name.
+  name: manager_name
+  type: character
+- description: Player nationality (country name).
+  name: nationality
+  type: character
+kind: dataframe
+schema: managers

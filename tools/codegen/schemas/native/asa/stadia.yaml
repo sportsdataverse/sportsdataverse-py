@@ -1,0 +1,48 @@
+columns:
+- description: ASA stadium id (base62 string; Utf8 join key).
+  name: stadium_id
+  type: character
+- description: Venue name.
+  name: stadium_name
+  type: character
+- description: Seating capacity.
+  name: capacity
+  type: integer
+- description: Year the venue opened.
+  name: year_built
+  type: integer
+- description: Whether the venue has a roof.
+  name: roof
+  type: logical
+- description: Whether the playing surface is artificial turf.
+  name: turf
+  type: logical
+- description: Street address.
+  name: street
+  type: character
+- description: City.
+  name: city
+  type: character
+- description: State/province.
+  name: province
+  type: character
+- description: Country.
+  name: country
+  type: character
+- description: Postal/ZIP code.
+  name: postal_code
+  type: character
+- description: Latitude (decimal degrees).
+  name: latitude
+  type: numeric
+- description: Longitude (decimal degrees).
+  name: longitude
+  type: numeric
+- description: Pitch length (venue-reported field dimension).
+  name: field_x
+  type: integer
+- description: Pitch width (venue-reported field dimension).
+  name: field_y
+  type: integer
+kind: dataframe
+schema: stadia

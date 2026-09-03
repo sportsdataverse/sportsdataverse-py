@@ -1,0 +1,2695 @@
+{
+ "service": {
+  "xml:lang": "en-US",
+  "boxscore": {
+   "player_stats": {
+    "ncaaf.p.457863": {
+     "ncaaf.stat_variation.2": {
+      "ncaaf.stat_type.102": "30",
+      "ncaaf.stat_type.103": "41",
+      "ncaaf.stat_type.105": "308",
+      "ncaaf.stat_type.104": "73.2",
+      "ncaaf.stat_type.106": "7.5",
+      "ncaaf.stat_type.111": "7",
+      "ncaaf.stat_type.112": "49",
+      "ncaaf.stat_type.108": "3",
+      "ncaaf.stat_type.109": "1",
+      "ncaaf.stat_type.113": "155.5",
+      "ncaaf.stat_type.202": "7",
+      "ncaaf.stat_type.203": "-49",
+      "ncaaf.stat_type.205": "-7.0",
+      "ncaaf.stat_type.206": "0",
+      "ncaaf.stat_type.207": "0"
+     }
+    },
+    "ncaaf.p.469436": {
+     "ncaaf.stat_variation.2": {
+      "ncaaf.stat_type.102": "12",
+      "ncaaf.stat_type.103": "22",
+      "ncaaf.stat_type.105": "105",
+      "ncaaf.stat_type.104": "54.5",
+      "ncaaf.stat_type.106": "4.8",
+      "ncaaf.stat_type.111": "1",
+      "ncaaf.stat_type.112": "6",
+      "ncaaf.stat_type.108": "0",
+      "ncaaf.stat_type.109": "0",
+      "ncaaf.stat_type.113": "94.6",
+      "ncaaf.stat_type.202": "8",
+      "ncaaf.stat_type.203": "61",
+      "ncaaf.stat_type.205": "7.6",
+      "ncaaf.stat_type.206": "37",
+      "ncaaf.stat_type.207": "1"
+     }
+    }
+   },
+   "team_stats": {
+    "ncaaf.t.23": {
+     "ncaaf.stat_variation.2": {
+      "ncaaf.stat_type.919": "23",
+      "ncaaf.stat_type.945": "351",
+      "ncaaf.stat_type.950": "1",
+      "ncaaf.stat_type.937": "15",
+      "ncaaf.stat_type.936": "5",
+      "ncaaf.stat_type.938": "3",
+      "ncaaf.stat_type.941": "2-13",
+      "ncaaf.stat_type.944": "2-3",
+      "ncaaf.stat_type.946": "72",
+      "ncaaf.stat_type.952": "4.9",
+      "ncaaf.stat_type.921": "43",
+      "ncaaf.stat_type.920": "31",
+      "ncaaf.stat_type.949": "1.4",
+      "ncaaf.stat_type.947": "308",
+      "ncaaf.stat_type.951": "30-41",
+      "ncaaf.stat_type.948": "7.5",
+      "ncaaf.stat_type.927": "7",
+      "ncaaf.stat_type.928": "-49",
+      "ncaaf.stat_type.926": "1",
+      "ncaaf.stat_type.929": "4",
+      "ncaaf.stat_type.930": "49.3",
+      "ncaaf.stat_type.933": "3",
+      "ncaaf.stat_type.934": "9",
+      "ncaaf.stat_type.931": "0",
+      "ncaaf.stat_type.932": "0"
+     }
+    },
+    "ncaaf.t.29": {
+     "ncaaf.stat_variation.2": {
+      "ncaaf.stat_type.919": "16",
+      "ncaaf.stat_type.945": "391",
+      "ncaaf.stat_type.950": "1",
+      "ncaaf.stat_type.937": "7",
+      "ncaaf.stat_type.936": "9",
+      "ncaaf.stat_type.938": "0",
+      "ncaaf.stat_type.941": "4-12",
+      "ncaaf.stat_type.944": "0-0",
+      "ncaaf.stat_type.946": "56",
+      "ncaaf.stat_type.952": "7.0",
+      "ncaaf.stat_type.921": "286",
+      "ncaaf.stat_type.920": "33",
+      "ncaaf.stat_type.949": "8.7",
+      "ncaaf.stat_type.947": "105",
+      "ncaaf.stat_type.951": "12-23",
+      "ncaaf.stat_type.948": "4.6",
+      "ncaaf.stat_type.927": "1",
+      "ncaaf.stat_type.928": "-6",
+      "ncaaf.stat_type.926": "0",
+      "ncaaf.stat_type.929": "4",
+      "ncaaf.stat_type.930": "41.0",
+      "ncaaf.stat_type.933": "4",
+      "ncaaf.stat_type.934": "39",
+      "ncaaf.stat_type.931": "1",
+      "ncaaf.stat_type.932": "1"
+     }
+    }
+   },
+   "aliases": {
+    "match": {
+     "stats": [
+      {
+       "variation": "ncaaf.stat_variation.2",
+       "type": "ncaaf.stat_type.102"
+      },
+      {
+       "variation": "ncaaf.stat_variation.2",
+       "type": "ncaaf.stat_type.103"
+      },
+      {
+       "variation": "ncaaf.stat_variation.2",
+       "type": "ncaaf.stat_type.105"
+      },
+      {
+       "variation": "ncaaf.stat_variation.2",
+       "type": "ncaaf.stat_type.104"
+      },
+      {
+       "variation": "ncaaf.stat_variation.2",
+       "type": "ncaaf.stat_type.106"
+      },
+      {
+       "variation": "ncaaf.stat_variation.2",
+       "type": "ncaaf.stat_type.111"
+      },
+      {
+       "variation": "ncaaf.stat_variation.2",
+       "type": "ncaaf.stat_type.112"
+      },
+      {
+       "variation": "ncaaf.stat_variation.2",
+       "type": "ncaaf.stat_type.108"
+      },
+      {
+       "variation": "ncaaf.stat_variation.2",
+       "type": "ncaaf.stat_type.109"
+      },
+      {
+       "variation": "ncaaf.stat_variation.2",
+       "type": "ncaaf.stat_type.113"
+      },
+      {
+       "variation": "ncaaf.stat_variation.2",
+       "type": "ncaaf.stat_type.202"
+      },
+      {
+       "variation": "ncaaf.stat_variation.2",
+       "type": "ncaaf.stat_type.203"
+      },
+      {
+       "variation": "ncaaf.stat_variation.2",
+       "type": "ncaaf.stat_type.205"
+      },
+      {
+       "variation": "ncaaf.stat_variation.2",
+       "type": "ncaaf.stat_type.206"
+      },
+      {
+       "variation": "ncaaf.stat_variation.2",
+       "type": "ncaaf.stat_type.207"
+      },
+      {
+       "variation": "ncaaf.stat_variation.2",
+       "type": "ncaaf.stat_type.302"
+      },
+      {
+       "variation": "ncaaf.stat_variation.2",
+       "type": "ncaaf.stat_type.303"
+      },
+      {
+       "variation": "ncaaf.stat_variation.2",
+       "type": "ncaaf.stat_type.305"
+      },
+      {
+       "variation": "ncaaf.stat_variation.2",
+       "type": "ncaaf.stat_type.306"
+      },
+      {
+       "variation": "ncaaf.stat_variation.2",
+       "type": "ncaaf.stat_type.309"
+      },
+      {
+       "variation": "ncaaf.stat_variation.2",
+       "type": "ncaaf.stat_type.411"
+      },
+      {
+       "variation": "ncaaf.stat_variation.2",
+       "type": "ncaaf.stat_type.412"
+      },
+      {
+       "variation": "ncaaf.stat_variation.2",
+       "type": "ncaaf.stat_type.407"
+      },
+      {
+       "variation": "ncaaf.stat_variation.2",
+       "type": "ncaaf.stat_type.408"
+      },
+      {
+       "variation": "ncaaf.stat_variation.2",
+       "type": "ncaaf.stat_type.410"
+      },
+      {
+       "variation": "ncaaf.stat_variation.2",
+       "type": "ncaaf.stat_type.409"
+      },
+      {
+       "variation": "ncaaf.stat_variation.2",
+       "type": "ncaaf.stat_type.502"
+      },
+      {
+       "variation": "ncaaf.stat_variation.2",
+       "type": "ncaaf.stat_type.503"
+      },
+      {
+       "variation": "ncaaf.stat_variation.2",
+       "type": "ncaaf.stat_type.505"
+      },
+      {
+       "variation": "ncaaf.stat_variation.2",
+       "type": "ncaaf.stat_type.506"
+      },
+      {
+       "variation": "ncaaf.stat_variation.2",
+       "type": "ncaaf.stat_type.507"
+      },
+      {
+       "variation": "ncaaf.stat_variation.2",
+       "type": "ncaaf.stat_type.508"
+      },
+      {
+       "variation": "ncaaf.stat_variation.2",
+       "type": "ncaaf.stat_type.509"
+      },
+      {
+       "variation": "ncaaf.stat_variation.2",
+       "type": "ncaaf.stat_type.511"
+      },
+      {
+       "variation": "ncaaf.stat_variation.2",
+       "type": "ncaaf.stat_type.512"
+      },
+      {
+       "variation": "ncaaf.stat_variation.2",
+       "type": "ncaaf.stat_type.513"
+      },
+      {
+       "variation": "ncaaf.stat_variation.2",
+       "type": "ncaaf.stat_type.602"
+      },
+      {
+       "variation": "ncaaf.stat_variation.2",
+       "type": "ncaaf.stat_type.604"
+      },
+      {
+       "variation": "ncaaf.stat_variation.2",
+       "type": "ncaaf.stat_type.608"
+      },
+      {
+       "variation": "ncaaf.stat_variation.2",
+       "type": "ncaaf.stat_type.702"
+      },
+      {
+       "variation": "ncaaf.stat_variation.2",
+       "type": "ncaaf.stat_type.703"
+      },
+      {
+       "variation": "ncaaf.stat_variation.2",
+       "type": "ncaaf.stat_type.705"
+      },
+      {
+       "variation": "ncaaf.stat_variation.2",
+       "type": "ncaaf.stat_type.706"
+      },
+      {
+       "variation": "ncaaf.stat_variation.2",
+       "type": "ncaaf.stat_type.710"
+      },
+      {
+       "variation": "ncaaf.stat_variation.2",
+       "type": "ncaaf.stat_type.707"
+      },
+      {
+       "variation": "ncaaf.stat_variation.2",
+       "type": "ncaaf.stat_type.708"
+      },
+      {
+       "variation": "ncaaf.stat_variation.2",
+       "type": "ncaaf.stat_type.709"
+      }
+     ]
+    },
+    "match_team": {
+     "stats": [
+      {
+       "variation": "ncaaf.stat_variation.2",
+       "type": "ncaaf.stat_type.919"
+      },
+      {
+       "variation": "ncaaf.stat_variation.2",
+       "type": "ncaaf.stat_type.945"
+      },
+      {
+       "variation": "ncaaf.stat_variation.2",
+       "type": "ncaaf.stat_type.950"
+      },
+      {
+       "variation": "ncaaf.stat_variation.2",
+       "type": "ncaaf.stat_type.937"
+      },
+      {
+       "variation": "ncaaf.stat_variation.2",
+       "type": "ncaaf.stat_type.936"
+      },
+      {
+       "variation": "ncaaf.stat_variation.2",
+       "type": "ncaaf.stat_type.938"
+      },
+      {
+       "variation": "ncaaf.stat_variation.2",
+       "type": "ncaaf.stat_type.941"
+      },
+      {
+       "variation": "ncaaf.stat_variation.2",
+       "type": "ncaaf.stat_type.944"
+      },
+      {
+       "variation": "ncaaf.stat_variation.2",
+       "type": "ncaaf.stat_type.946"
+      },
+      {
+       "variation": "ncaaf.stat_variation.2",
+       "type": "ncaaf.stat_type.952"
+      },
+      {
+       "variation": "ncaaf.stat_variation.2",
+       "type": "ncaaf.stat_type.921"
+      },
+      {
+       "variation": "ncaaf.stat_variation.2",
+       "type": "ncaaf.stat_type.920"
+      },
+      {
+       "variation": "ncaaf.stat_variation.2",
+       "type": "ncaaf.stat_type.949"
+      },
+      {
+       "variation": "ncaaf.stat_variation.2",
+       "type": "ncaaf.stat_type.947"
+      },
+      {
+       "variation": "ncaaf.stat_variation.2",
+       "type": "ncaaf.stat_type.951"
+      },
+      {
+       "variation": "ncaaf.stat_variation.2",
+       "type": "ncaaf.stat_type.948"
+      },
+      {
+       "variation": "ncaaf.stat_variation.2",
+       "type": "ncaaf.stat_type.927"
+      },
+      {
+       "variation": "ncaaf.stat_variation.2",
+       "type": "ncaaf.stat_type.928"
+      },
+      {
+       "variation": "ncaaf.stat_variation.2",
+       "type": "ncaaf.stat_type.926"
+      },
+      {
+       "variation": "ncaaf.stat_variation.2",
+       "type": "ncaaf.stat_type.929"
+      },
+      {
+       "variation": "ncaaf.stat_variation.2",
+       "type": "ncaaf.stat_type.930"
+      },
+      {
+       "variation": "ncaaf.stat_variation.2",
+       "type": "ncaaf.stat_type.933"
+      },
+      {
+       "variation": "ncaaf.stat_variation.2",
+       "type": "ncaaf.stat_type.934"
+      },
+      {
+       "variation": "ncaaf.stat_variation.2",
+       "type": "ncaaf.stat_type.931"
+      },
+      {
+       "variation": "ncaaf.stat_variation.2",
+       "type": "ncaaf.stat_type.932"
+      }
+     ]
+    },
+    "game_stat_leaders": {
+     "stats": [
+      {
+       "variation": "ncaaf.stat_variation.2",
+       "type": "ncaaf.stat_type.105"
+      },
+      {
+       "variation": "ncaaf.stat_variation.2",
+       "type": "ncaaf.stat_type.108"
+      },
+      {
+       "variation": "ncaaf.stat_variation.2",
+       "type": "ncaaf.stat_type.109"
+      },
+      {
+       "variation": "ncaaf.stat_variation.2",
+       "type": "ncaaf.stat_type.203"
+      },
+      {
+       "variation": "ncaaf.stat_variation.2",
+       "type": "ncaaf.stat_type.207"
+      },
+      {
+       "variation": "ncaaf.stat_variation.2",
+       "type": "ncaaf.stat_type.302"
+      },
+      {
+       "variation": "ncaaf.stat_variation.2",
+       "type": "ncaaf.stat_type.303"
+      },
+      {
+       "variation": "ncaaf.stat_variation.2",
+       "type": "ncaaf.stat_type.309"
+      }
+     ]
+    },
+    "team_game_totals": {
+     "stats": []
+    }
+   },
+   "stat_categories": {
+    "ncaaf.stat_category.1": {
+     "name": "Passing",
+     "sort": "ncaaf.stat_type.105",
+     "stats": [
+      "ncaaf.stat_type.102",
+      "ncaaf.stat_type.103",
+      "ncaaf.stat_type.104",
+      "ncaaf.stat_type.105",
+      "ncaaf.stat_type.106",
+      "ncaaf.stat_type.108",
+      "ncaaf.stat_type.109",
+      "ncaaf.stat_type.111",
+      "ncaaf.stat_type.112",
+      "ncaaf.stat_type.113"
+     ]
+    },
+    "ncaaf.stat_category.2": {
+     "name": "Rushing",
+     "sort": "ncaaf.stat_type.203",
+     "stats": [
+      "ncaaf.stat_type.202",
+      "ncaaf.stat_type.203",
+      "ncaaf.stat_type.205",
+      "ncaaf.stat_type.206",
+      "ncaaf.stat_type.207"
+     ]
+    },
+    "ncaaf.stat_category.3": {
+     "name": "Receiving",
+     "sort": "ncaaf.stat_type.303",
+     "stats": [
+      "ncaaf.stat_type.302",
+      "ncaaf.stat_type.303",
+      "ncaaf.stat_type.305",
+      "ncaaf.stat_type.306",
+      "ncaaf.stat_type.309"
+     ]
+    },
+    "ncaaf.stat_category.4": {
+     "name": "Kicking",
+     "sort": "ncaaf.stat_type.403",
+     "stats": [
+      "ncaaf.stat_type.407",
+      "ncaaf.stat_type.408",
+      "ncaaf.stat_type.409",
+      "ncaaf.stat_type.410",
+      "ncaaf.stat_type.411",
+      "ncaaf.stat_type.412"
+     ]
+    },
+    "ncaaf.stat_category.5": {
+     "name": "Returns",
+     "sort": "ncaaf.stat_type.503",
+     "stats": [
+      "ncaaf.stat_type.502",
+      "ncaaf.stat_type.503",
+      "ncaaf.stat_type.505",
+      "ncaaf.stat_type.506",
+      "ncaaf.stat_type.507",
+      "ncaaf.stat_type.508",
+      "ncaaf.stat_type.509",
+      "ncaaf.stat_type.511",
+      "ncaaf.stat_type.512",
+      "ncaaf.stat_type.513"
+     ]
+    },
+    "ncaaf.stat_category.6": {
+     "name": "Punting",
+     "sort": "ncaaf.stat_type.603",
+     "stats": [
+      "ncaaf.stat_type.602",
+      "ncaaf.stat_type.604",
+      "ncaaf.stat_type.608"
+     ]
+    },
+    "ncaaf.stat_category.7": {
+     "name": "Defense",
+     "sort": "ncaaf.stat_type.707",
+     "stats": [
+      "ncaaf.stat_type.702",
+      "ncaaf.stat_type.703",
+      "ncaaf.stat_type.705",
+      "ncaaf.stat_type.706",
+      "ncaaf.stat_type.707",
+      "ncaaf.stat_type.708",
+      "ncaaf.stat_type.709",
+      "ncaaf.stat_type.710"
+     ]
+    },
+    "ncaaf.stat_category.9": {
+     "name": "Team",
+     "sort": "ncaaf.stat_type.901",
+     "stats": [
+      "ncaaf.stat_type.919",
+      "ncaaf.stat_type.920",
+      "ncaaf.stat_type.921",
+      "ncaaf.stat_type.926",
+      "ncaaf.stat_type.927",
+      "ncaaf.stat_type.928",
+      "ncaaf.stat_type.929",
+      "ncaaf.stat_type.930",
+      "ncaaf.stat_type.931",
+      "ncaaf.stat_type.932",
+      "ncaaf.stat_type.933",
+      "ncaaf.stat_type.934",
+      "ncaaf.stat_type.936",
+      "ncaaf.stat_type.937",
+      "ncaaf.stat_type.938",
+      "ncaaf.stat_type.941",
+      "ncaaf.stat_type.944",
+      "ncaaf.stat_type.945",
+      "ncaaf.stat_type.946",
+      "ncaaf.stat_type.947",
+      "ncaaf.stat_type.948",
+      "ncaaf.stat_type.949",
+      "ncaaf.stat_type.950",
+      "ncaaf.stat_type.951",
+      "ncaaf.stat_type.952"
+     ]
+    }
+   },
+   "stat_variations": {
+    "ncaaf.stat_variation.2": {
+     "name": "Game"
+    }
+   },
+   "stat_types": {
+    "ncaaf.stat_type.102": {
+     "name": "Completions",
+     "short_name": "Comp"
+    },
+    "ncaaf.stat_type.103": {
+     "name": "Attempts",
+     "short_name": "Att"
+    },
+    "ncaaf.stat_type.105": {
+     "name": "Yards",
+     "short_name": "Yds"
+    },
+    "ncaaf.stat_type.104": {
+     "name": "Completion Percentage",
+     "short_name": "Pct"
+    },
+    "ncaaf.stat_type.106": {
+     "name": "Yards per Attempt",
+     "short_name": "Y/A"
+    },
+    "ncaaf.stat_type.111": {
+     "name": "Sacks",
+     "short_name": "Sack"
+    }
+   },
+   "stat_cut_types": {
+    "ncaaf.cut_type.0": {
+     "name": "Any"
+    }
+   },
+   "games": {
+    "ncaaf.g.202509200023": {
+     "gameid": "ncaaf.g.202509200023",
+     "global_gameid": "ncaaf.g.13556882",
+     "start_time": "Sat, 20 Sep 2025 19:30:00 +0000",
+     "is_time_tba": false,
+     "season_phase_id": "season.phase.season",
+     "game_type": null,
+     "winning_team_id": "ncaaf.t.29",
+     "is_rank_upset": null,
+     "is_spread_upset": false,
+     "outcome_type": "outcome.type.won",
+     "home_team_id": "ncaaf.t.23",
+     "away_team_id": "ncaaf.t.29",
+     "week_number": "4",
+     "navigation_links": {
+      "tickets": {
+       "url": "https://seatgeek.com/nebraska-cornhuskers-football-tickets?aid=14&date=2025-09-20"
+      },
+      "boxscore": {
+       "url": "/ncaaf/michigan-wolverines-nebraska-cornhuskers-202509200023/"
+      },
+      "match_page": {
+       "url": "/ncaaf/michigan-wolverines-nebraska-cornhuskers-202509200023/"
+      },
+      "recap": {
+       "url": "/no-21-michigan-uses-3-232307623.html"
+      },
+      "league_home": {
+       "url": "/ncaa/football"
+      },
+      "league_scores": {
+       "url": "/ncaa/football/scoreboard"
+      }
+     },
+     "sportacular_url": "ysportacular://v2/scores/details?gameId=ncaaf.g.202509200023&sport=ncaaf",
+     "status_display_name": "Final",
+     "status_description": "Final",
+     "status_type": "status.type.final",
+     "total_away_points": "30",
+     "current_period_id": "4",
+     "total_home_points": "27",
+     "total_away_shootout_points": null,
+     "total_home_shootout_points": null,
+     "home_team_stats": null,
+     "away_team_stats": null,
+     "game_period_balls": null,
+     "game_period_strikes": null,
+     "game_period_outs": null,
+     "yards_to_endzone": null,
+     "start_yardline": null,
+     "distance": null,
+     "down": null,
+     "team_in_possession": null,
+     "power_play_strength_home": null,
+     "power_play_strength_away": null,
+     "game_time_elapsed": null,
+     "game_time_elapsed_display": null,
+     "inning_status": null,
+     "away_timeouts": null,
+     "home_timeouts": null,
+     "is_halftime": "false",
+     "minimum_periods": 4,
+     "game_periods": [
+      {
+       "period_id": 1,
+       "display_name": "1st",
+       "short_name": 1,
+       "full_name": "1st Quarter",
+       "away_points": "10",
+       "home_points": "0"
+      },
+      {
+       "period_id": 2,
+       "display_name": "2nd",
+       "short_name": 2,
+       "full_name": "2nd Quarter",
+       "away_points": "7",
+       "home_points": "17"
+      },
+      {
+       "period_id": 3,
+       "display_name": "3rd",
+       "short_name": 3,
+       "full_name": "3rd Quarter",
+       "away_points": "10",
+       "home_points": "0"
+      },
+      {
+       "period_id": 4,
+       "display_name": "4th",
+       "short_name": 4,
+       "full_name": "4th Quarter",
+       "away_points": "3",
+       "home_points": "10"
+      }
+     ],
+     "baserunners": null,
+     "season": "2025",
+     "subleague": null,
+     "subleague_display_name": null,
+     "agg_score": null,
+     "leg_number": null,
+     "tv_coverage": "CBS",
+     "provider_coverage": {
+      "score_update_frequency_in_minutes": "5",
+      "has_plays": "true",
+      "has_stats": "true",
+      "has_extended_stats": "true",
+      "has_final_stats": "true"
+     },
+     "seatgeek_id": null,
+     "last_updated": "2025-09-21 02:20:06",
+     "teams": [
+      "dataIslandPaths",
+      "ncaaf.g.202509200023",
+      "teams"
+     ],
+     "play_by_play": [
+      "gameplay_by_play",
+      "ncaaf.g.202509200023"
+     ],
+     "pitches": [
+      "gamepitches",
+      "ncaaf.g.202509200023"
+     ],
+     "at_bat": [
+      "gameat_bat",
+      "ncaaf.g.202509200023"
+     ],
+     "penalty_summary": [
+      "gamepenalty_summary",
+      "ncaaf.g.202509200023"
+     ],
+     "scoring_summary": [
+      "gamescoring_summary",
+      "ncaaf.g.202509200023"
+     ],
+     "stat_categories": [
+      "game_stat_leaders"
+     ],
+     "stadium": [
+      "gamestadium",
+      "ncaaf.g.202509200023"
+     ],
+     "stadium_id": [
+      "gamestadium_id",
+      "ncaaf.g.202509200023"
+     ],
+     "stadium_image": [
+      "gamestadium_image",
+      "ncaaf.g.202509200023"
+     ],
+     "attendance": [
+      "gameattendance",
+      "ncaaf.g.202509200023"
+     ],
+     "lineups": [
+      "gamelineups",
+      "ncaaf.g.202509200023"
+     ],
+     "top_performer": [
+      "gametop_performer",
+      "ncaaf.g.202509200023"
+     ],
+     "players": [
+      "dataIslandPaths",
+      "ncaaf.g.202509200023",
+      "players"
+     ],
+     "byline": [
+      "gamebyline",
+      "ncaaf.g.202509200023"
+     ],
+     "highlight": [
+      "gamehighlight",
+      "ncaaf.g.202509200023"
+     ],
+     "highlights": [
+      "gamehighlights",
+      "ncaaf.g.202509200023"
+     ],
+     "live_video": [
+      "gamelive_video",
+      "ncaaf.g.202509200023"
+     ],
+     "odds": [
+      "gameodds",
+      "ncaaf.g.202509200023"
+     ],
+     "current_players": [
+      "gamecurrent_players",
+      "ncaaf.g.202509200023"
+     ],
+     "last_play": [
+      "gamelast_play",
+      "ncaaf.g.202509200023"
+     ],
+     "series_type": [
+      "gameseries_type",
+      "ncaaf.g.202509200023"
+     ],
+     "series_status": [
+      "gameseries_status",
+      "ncaaf.g.202509200023"
+     ],
+     "games": [
+      "dataIslandPaths",
+      "ncaaf.g.202509200023",
+      "games"
+     ],
+     "series_games": [
+      "gameseries_games",
+      "ncaaf.g.202509200023"
+     ],
+     "game_details": [
+      "gamegame_details",
+      "ncaaf.g.202509200023"
+     ],
+     "section_notes": [
+      "gamesection_notes",
+      "ncaaf.g.202509200023"
+     ],
+     "articles": [
+      "dataIslandPaths",
+      "ncaaf.g.202509200023",
+      "gamearticles"
+     ],
+     "tweets": [
+      "gametweets",
+      "ncaaf.g.202509200023"
+     ],
+     "playoff_round": [
+      "gameplayoff_round",
+      "ncaaf.g.202509200023"
+     ],
+     "media_stream": [
+      "gamemedia_stream",
+      "ncaaf.g.202509200023"
+     ],
+     "playoff_series_status": [
+      "gameplayoff_series_status",
+      "ncaaf.g.202509200023"
+     ],
+     "playoff_series_details": [
+      "gameplayoff_series_details",
+      "ncaaf.g.202509200023"
+     ],
+     "drives": [
+      "gamedrives",
+      "ncaaf.g.202509200023"
+     ],
+     "user_teams_game": [
+      "gameuser_teams_game",
+      "ncaaf.g.202509200023"
+     ],
+     "page_metadata": [
+      "gamepage_metadata",
+      "ncaaf.g.202509200023"
+     ],
+     "penalty_box": [
+      "gamepenalty_box",
+      "ncaaf.g.202509200023"
+     ],
+     "starting_pitchers": [
+      "gamestarting_pitchers",
+      "ncaaf.g.202509200023"
+     ],
+     "unrestricted_streams": [
+      "gameunrestricted_streams",
+      "ncaaf.g.202509200023"
+     ],
+     "tv_details": [
+      "gametv_details",
+      "ncaaf.g.202509200023"
+     ],
+     "away_seed": null,
+     "home_seed": null
+    }
+   },
+   "gameplayoff_round": {
+    "ncaaf.g.202509200023": null
+   },
+   "gameplayoff_series_status": {
+    "ncaaf.g.202509200023": null
+   },
+   "gameplayoff_series_details": {
+    "ncaaf.g.202509200023": null
+   },
+   "gamescore": {
+    "ncaaf.g.202509200023": "Michigan Wolverines 30 - Nebraska Cornhuskers 27: Final"
+   },
+   "gamecurrent_players": {
+    "ncaaf.g.202509200023": {
+     "current_batter": null,
+     "current_pitcher": null,
+     "base_runners": [],
+     "due_ups": []
+    }
+   },
+   "gamelast_play": {
+    "ncaaf.g.202509200023": {
+     "play_id": "184",
+     "play_type": "25",
+     "play_text": "End of Game",
+     "period": "4",
+     "clock": "0:00",
+     "team": "29",
+     "is_scoring_play": 0
+    }
+   },
+   "gamepenalty_summary": {
+    "ncaaf.g.202509200023": []
+   },
+   "gamepenalty_box": {
+    "ncaaf.g.202509200023": null
+   },
+   "gameplay_by_play": {
+    "ncaaf.g.202509200023": {
+     "2": {
+      "play_id": "2",
+      "period": "1",
+      "clock": "15:00",
+      "down": "1",
+      "distance": "10",
+      "team": "29",
+      "yardline": "MICH 35",
+      "yards_to_endzone": "65",
+      "type": "8",
+      "yards": "0",
+      "text": "Michigan kicked off, touchback",
+      "play_time": "1758397266"
+     },
+     "3": {
+      "play_id": "3",
+      "period": "1",
+      "clock": "15:00",
+      "down": "1",
+      "distance": "10",
+      "team": "23",
+      "yardline": "NEB 25",
+      "yards_to_endzone": "75",
+      "type": "1",
+      "yards": "14",
+      "text": "[ncaaf.p.333433] rushed to the left for 14 yard gain, tackled by [ncaaf.p.333423]",
+      "play_time": "1758397318"
+     },
+     "4": {
+      "play_id": "4",
+      "period": "1",
+      "clock": "14:33",
+      "down": "1",
+      "distance": "10",
+      "team": "23",
+      "yardline": "NEB 39",
+      "yards_to_endzone": "61",
+      "type": "3",
+      "yards": "0",
+      "text": "[ncaaf.p.457863] incomplete pass to the left intended for [ncaaf.p.333433]",
+      "play_time": "1758397343"
+     }
+    }
+   },
+   "gamepitches": {
+    "ncaaf.g.202509200023": []
+   },
+   "gameat_bat": {
+    "ncaaf.g.202509200023": null
+   },
+   "gamescoring_summary": {
+    "ncaaf.g.202509200023": {
+     "34": {
+      "play_id": "34",
+      "period": "1",
+      "clock": "1:42",
+      "away_score": "3",
+      "home_score": "0",
+      "team": "29",
+      "score_type": "FG",
+      "xp_type": "0",
+      "PLAYERS": "ncaaf.p.333922",
+      "text": "[ncaaf.p.333922] kicked a 46-yard field goal"
+     },
+     "39": {
+      "play_id": "39",
+      "period": "1",
+      "clock": "0:17",
+      "away_score": "10",
+      "home_score": "0",
+      "team": "29",
+      "score_type": "TD",
+      "xp_type": "EP",
+      "PLAYERS": "ncaaf.p.469436,ncaaf.p.333922",
+      "text": "[ncaaf.p.469436] rushed up the middle for 37 yard touchdown ([ncaaf.p.333922] made PAT)"
+     },
+     "59": {
+      "play_id": "59",
+      "period": "2",
+      "clock": "9:05",
+      "away_score": "10",
+      "home_score": "3",
+      "team": "23",
+      "score_type": "FG",
+      "xp_type": "0",
+      "PLAYERS": "ncaaf.p.451229",
+      "text": "[ncaaf.p.451229] kicked a 39-yard field goal"
+     }
+    }
+   },
+   "gamemedia_stream": {
+    "ncaaf.g.202509200023": [
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584093490001,
+      "external_id": "184",
+      "timestamp": "1758409349",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584093490000,
+      "external_id": "183",
+      "timestamp": "1758409349",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584093010000,
+      "external_id": "182",
+      "timestamp": "1758409301",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584092740001,
+      "external_id": "181",
+      "timestamp": "1758409274",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584092740000,
+      "external_id": "180",
+      "timestamp": "1758409274",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584091900000,
+      "external_id": "179",
+      "timestamp": "1758409190",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584091190001,
+      "external_id": "178",
+      "timestamp": "1758409119",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584091190000,
+      "external_id": "177",
+      "timestamp": "1758409119",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584091120000,
+      "external_id": "176",
+      "timestamp": "1758409112",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584089730000,
+      "external_id": "175",
+      "timestamp": "1758408973",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584089570000,
+      "external_id": "174",
+      "timestamp": "1758408957",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584088810000,
+      "external_id": "173",
+      "timestamp": "1758408881",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584087300000,
+      "external_id": "172",
+      "timestamp": "1758408730",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584086310000,
+      "external_id": "171",
+      "timestamp": "1758408631",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584084480000,
+      "external_id": "170",
+      "timestamp": "1758408448",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584084400001,
+      "external_id": "169",
+      "timestamp": "1758408440",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584084400000,
+      "external_id": "168",
+      "timestamp": "1758408440",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584083690000,
+      "external_id": "167",
+      "timestamp": "1758408369",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584082900000,
+      "external_id": "166",
+      "timestamp": "1758408290",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584082460000,
+      "external_id": "165",
+      "timestamp": "1758408246",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584082450000,
+      "external_id": "164",
+      "timestamp": "1758408245",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584081630000,
+      "external_id": "163",
+      "timestamp": "1758408163",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584081410001,
+      "external_id": "162",
+      "timestamp": "1758408141",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584081410000,
+      "external_id": "161",
+      "timestamp": "1758408141",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584079010000,
+      "external_id": "160",
+      "timestamp": "1758407901",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584078680001,
+      "external_id": "159",
+      "timestamp": "1758407868",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584078680000,
+      "external_id": "158",
+      "timestamp": "1758407868",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584077770000,
+      "external_id": "157",
+      "timestamp": "1758407777",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584077370000,
+      "external_id": "156",
+      "timestamp": "1758407737",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584077010000,
+      "external_id": "155",
+      "timestamp": "1758407701",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584076200000,
+      "external_id": "154",
+      "timestamp": "1758407620",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584075780000,
+      "external_id": "153",
+      "timestamp": "1758407578",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584075280000,
+      "external_id": "152",
+      "timestamp": "1758407528",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584074910000,
+      "external_id": "151",
+      "timestamp": "1758407491",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584074630000,
+      "external_id": "150",
+      "timestamp": "1758407463",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584074230000,
+      "external_id": "149",
+      "timestamp": "1758407423",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584073710000,
+      "external_id": "148",
+      "timestamp": "1758407371",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584073370000,
+      "external_id": "147",
+      "timestamp": "1758407337",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584072840000,
+      "external_id": "146",
+      "timestamp": "1758407284",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584072520000,
+      "external_id": "145",
+      "timestamp": "1758407252",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584072190000,
+      "external_id": "144",
+      "timestamp": "1758407219",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584070260000,
+      "external_id": "143",
+      "timestamp": "1758407026",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584069830000,
+      "external_id": "142",
+      "timestamp": "1758406983",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584069340001,
+      "external_id": "141",
+      "timestamp": "1758406934",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584069340000,
+      "external_id": "140",
+      "timestamp": "1758406934",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584067140000,
+      "external_id": "139",
+      "timestamp": "1758406714",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584066610000,
+      "external_id": "138",
+      "timestamp": "1758406661",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584066310000,
+      "external_id": "137",
+      "timestamp": "1758406631",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584065850000,
+      "external_id": "136",
+      "timestamp": "1758406585",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584065440000,
+      "external_id": "135",
+      "timestamp": "1758406544",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584064630000,
+      "external_id": "134",
+      "timestamp": "1758406463",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584062400000,
+      "external_id": "132",
+      "timestamp": "1758406240",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584062040000,
+      "external_id": "131",
+      "timestamp": "1758406204",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584061220000,
+      "external_id": "130",
+      "timestamp": "1758406122",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584060820000,
+      "external_id": "129",
+      "timestamp": "1758406082",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584060400000,
+      "external_id": "128",
+      "timestamp": "1758406040",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584059770000,
+      "external_id": "127",
+      "timestamp": "1758405977",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584059410000,
+      "external_id": "126",
+      "timestamp": "1758405941",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584059080000,
+      "external_id": "125",
+      "timestamp": "1758405908",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584058620000,
+      "external_id": "124",
+      "timestamp": "1758405862",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584058390000,
+      "external_id": "123",
+      "timestamp": "1758405839",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584057650000,
+      "external_id": "122",
+      "timestamp": "1758405765",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584056950000,
+      "external_id": "121",
+      "timestamp": "1758405695",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584056660000,
+      "external_id": "120",
+      "timestamp": "1758405666",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584056150000,
+      "external_id": "119",
+      "timestamp": "1758405615",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584055350000,
+      "external_id": "118",
+      "timestamp": "1758405535",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584055280000,
+      "external_id": "117",
+      "timestamp": "1758405528",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584054570000,
+      "external_id": "116",
+      "timestamp": "1758405457",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584052630000,
+      "external_id": "115",
+      "timestamp": "1758405263",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584052210000,
+      "external_id": "114",
+      "timestamp": "1758405221",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584051790000,
+      "external_id": "113",
+      "timestamp": "1758405179",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584051400000,
+      "external_id": "112",
+      "timestamp": "1758405140",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584050900000,
+      "external_id": "111",
+      "timestamp": "1758405090",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584048990000,
+      "external_id": "110",
+      "timestamp": "1758404899",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584048580000,
+      "external_id": "109",
+      "timestamp": "1758404858",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584046920000,
+      "external_id": "108",
+      "timestamp": "1758404692",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584046360000,
+      "external_id": "107",
+      "timestamp": "1758404636",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584046030000,
+      "external_id": "106",
+      "timestamp": "1758404603",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584045650001,
+      "external_id": "105",
+      "timestamp": "1758404565",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584045650000,
+      "external_id": "104",
+      "timestamp": "1758404565",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584044860000,
+      "external_id": "103",
+      "timestamp": "1758404486",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584043000000,
+      "external_id": "102",
+      "timestamp": "1758404300",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584042940000,
+      "external_id": "101",
+      "timestamp": "1758404294",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584042070000,
+      "external_id": "100",
+      "timestamp": "1758404207",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584041570000,
+      "external_id": "99",
+      "timestamp": "1758404157",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584041210000,
+      "external_id": "98",
+      "timestamp": "1758404121",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584039250001,
+      "external_id": "97",
+      "timestamp": "1758403925",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584039250000,
+      "external_id": "96",
+      "timestamp": "1758403925",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584038510000,
+      "external_id": "95",
+      "timestamp": "1758403851",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584038100000,
+      "external_id": "94",
+      "timestamp": "1758403810",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584037780000,
+      "external_id": "93",
+      "timestamp": "1758403778",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584037130000,
+      "external_id": "92",
+      "timestamp": "1758403713",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584023990000,
+      "external_id": "90",
+      "timestamp": "1758402399",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584023920000,
+      "external_id": "89",
+      "timestamp": "1758402392",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584023840000,
+      "external_id": "88",
+      "timestamp": "1758402384",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584022480000,
+      "external_id": "87",
+      "timestamp": "1758402248",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584022370000,
+      "external_id": "86",
+      "timestamp": "1758402237",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584021650000,
+      "external_id": "85",
+      "timestamp": "1758402165",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584021270000,
+      "external_id": "84",
+      "timestamp": "1758402127",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584020630000,
+      "external_id": "83",
+      "timestamp": "1758402063",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584020490000,
+      "external_id": "82",
+      "timestamp": "1758402049",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584020220000,
+      "external_id": "81",
+      "timestamp": "1758402022",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584019910000,
+      "external_id": "80",
+      "timestamp": "1758401991",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584019430000,
+      "external_id": "79",
+      "timestamp": "1758401943",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584018930000,
+      "external_id": "78",
+      "timestamp": "1758401893",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584017060000,
+      "external_id": "77",
+      "timestamp": "1758401706",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584016910000,
+      "external_id": "76",
+      "timestamp": "1758401691",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584016830000,
+      "external_id": "75",
+      "timestamp": "1758401683",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584015900000,
+      "external_id": "74",
+      "timestamp": "1758401590",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584014910000,
+      "external_id": "73",
+      "timestamp": "1758401491",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584014790000,
+      "external_id": "72",
+      "timestamp": "1758401479",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584013990000,
+      "external_id": "71",
+      "timestamp": "1758401399",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584013600000,
+      "external_id": "70",
+      "timestamp": "1758401360",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584013230000,
+      "external_id": "69",
+      "timestamp": "1758401323",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584012740000,
+      "external_id": "68",
+      "timestamp": "1758401274",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584012440000,
+      "external_id": "67",
+      "timestamp": "1758401244",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584012090000,
+      "external_id": "66",
+      "timestamp": "1758401209",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584010140000,
+      "external_id": "65",
+      "timestamp": "1758401014",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584009620000,
+      "external_id": "64",
+      "timestamp": "1758400962",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584009290000,
+      "external_id": "63",
+      "timestamp": "1758400929",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584008730000,
+      "external_id": "62",
+      "timestamp": "1758400873",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584008380000,
+      "external_id": "61",
+      "timestamp": "1758400838",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584007860000,
+      "external_id": "60",
+      "timestamp": "1758400786",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584005910000,
+      "external_id": "59",
+      "timestamp": "1758400591",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584005520000,
+      "external_id": "58",
+      "timestamp": "1758400552",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584005130000,
+      "external_id": "57",
+      "timestamp": "1758400513",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584004680000,
+      "external_id": "56",
+      "timestamp": "1758400468",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584004340000,
+      "external_id": "55",
+      "timestamp": "1758400434",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584003960000,
+      "external_id": "54",
+      "timestamp": "1758400396",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584003660000,
+      "external_id": "53",
+      "timestamp": "1758400366",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584003120000,
+      "external_id": "52",
+      "timestamp": "1758400312",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584002560000,
+      "external_id": "51",
+      "timestamp": "1758400256",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584001860000,
+      "external_id": "50",
+      "timestamp": "1758400186",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17584001470000,
+      "external_id": "49",
+      "timestamp": "1758400147",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17583999560000,
+      "external_id": "48",
+      "timestamp": "1758399956",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17583999060000,
+      "external_id": "47",
+      "timestamp": "1758399906",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17583998620000,
+      "external_id": "46",
+      "timestamp": "1758399862",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17583995930001,
+      "external_id": "44",
+      "timestamp": "1758399593",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17583995930000,
+      "external_id": "43",
+      "timestamp": "1758399593",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17583995420000,
+      "external_id": "42",
+      "timestamp": "1758399542",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17583995000000,
+      "external_id": "41",
+      "timestamp": "1758399500",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17583994510000,
+      "external_id": "40",
+      "timestamp": "1758399451",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17583994290000,
+      "external_id": "39",
+      "timestamp": "1758399429",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17583993460000,
+      "external_id": "38",
+      "timestamp": "1758399346",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17583992850000,
+      "external_id": "37",
+      "timestamp": "1758399285",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17583992520000,
+      "external_id": "36",
+      "timestamp": "1758399252",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17583992080000,
+      "external_id": "35",
+      "timestamp": "1758399208",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17583990010000,
+      "external_id": "34",
+      "timestamp": "1758399001",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17583989600000,
+      "external_id": "33",
+      "timestamp": "1758398960",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17583989210000,
+      "external_id": "32",
+      "timestamp": "1758398921",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17583988810000,
+      "external_id": "31",
+      "timestamp": "1758398881",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17583988180000,
+      "external_id": "30",
+      "timestamp": "1758398818",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17583987660000,
+      "external_id": "29",
+      "timestamp": "1758398766",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17583987350000,
+      "external_id": "28",
+      "timestamp": "1758398735",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17583986990000,
+      "external_id": "27",
+      "timestamp": "1758398699",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17583986800000,
+      "external_id": "26",
+      "timestamp": "1758398680",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17583986420000,
+      "external_id": "25",
+      "timestamp": "1758398642",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17583984440000,
+      "external_id": "24",
+      "timestamp": "1758398444",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17583984050000,
+      "external_id": "23",
+      "timestamp": "1758398405",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17583983600000,
+      "external_id": "22",
+      "timestamp": "1758398360",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17583983290000,
+      "external_id": "21",
+      "timestamp": "1758398329",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17583982900000,
+      "external_id": "20",
+      "timestamp": "1758398290",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17583982520000,
+      "external_id": "19",
+      "timestamp": "1758398252",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17583982180000,
+      "external_id": "18",
+      "timestamp": "1758398218",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17583980240000,
+      "external_id": "17",
+      "timestamp": "1758398024",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17583979810000,
+      "external_id": "16",
+      "timestamp": "1758397981",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17583979400000,
+      "external_id": "15",
+      "timestamp": "1758397940",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17583978930000,
+      "external_id": "14",
+      "timestamp": "1758397893",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17583978570000,
+      "external_id": "13",
+      "timestamp": "1758397857",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17583976350000,
+      "external_id": "12",
+      "timestamp": "1758397635",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17583976010000,
+      "external_id": "11",
+      "timestamp": "1758397601",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17583975550000,
+      "external_id": "10",
+      "timestamp": "1758397555",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17583975290000,
+      "external_id": "9",
+      "timestamp": "1758397529",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17583974910000,
+      "external_id": "8",
+      "timestamp": "1758397491",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17583974560000,
+      "external_id": "7",
+      "timestamp": "1758397456",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17583974300000,
+      "external_id": "6",
+      "timestamp": "1758397430",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17583973910000,
+      "external_id": "5",
+      "timestamp": "1758397391",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17583973430000,
+      "external_id": "4",
+      "timestamp": "1758397343",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17583973180000,
+      "external_id": "3",
+      "timestamp": "1758397318",
+      "official": true
+     },
+     {
+      "media_type": "play",
+      "media_source": "play_by_play",
+      "sequence_id": 17583972660000,
+      "external_id": "2",
+      "timestamp": "1758397266",
+      "official": true
+     }
+    ]
+   },
+   "gamedrives": {
+    "ncaaf.g.202509200023": [
+     {
+      "id": "1",
+      "team": "23",
+      "time": "3:50",
+      "num_plays": "10",
+      "yards_covered": "70",
+      "start_yardline": "75",
+      "yardline_text": "NEB 25",
+      "plays": "2,3,4,5,6,7,8,9,10,11,12",
+      "result": "Downs",
+      "start_time": {
+       "clock": "15:00",
+       "period": "1"
+      },
+      "end_time": {
+       "clock": "11:10",
+       "period": 1
+      }
+     },
+     {
+      "id": "2",
+      "team": "29",
+      "time": "2:26",
+      "num_plays": "3",
+      "yards_covered": "8",
+      "start_yardline": "95",
+      "yardline_text": "MICH 5",
+      "plays": "13,14,15,16,17",
+      "result": "Punt",
+      "start_time": {
+       "clock": "11:10",
+       "period": "1"
+      },
+      "end_time": {
+       "clock": "8:44",
+       "period": 1
+      }
+     },
+     {
+      "id": "3",
+      "team": "23",
+      "time": "3:44",
+      "num_plays": "7",
+      "yards_covered": "11",
+      "start_yardline": "37",
+      "yardline_text": "MICH 37",
+      "plays": "18,19,20,21,22,23,24",
+      "result": "FG Miss",
+      "start_time": {
+       "clock": "8:44",
+       "period": "1"
+      },
+      "end_time": {
+       "clock": "5:00",
+       "period": 1
+      }
+     }
+    ]
+   },
+   "gamelineups": {
+    "ncaaf.g.202509200023": {
+     "home_lineup": {
+      "all": {
+       "ncaaf.p.457863": {
+        "player_id": "ncaaf.p.457863"
+       },
+       "ncaaf.p.333433": {
+        "player_id": "ncaaf.p.333433"
+       },
+       "ncaaf.p.461405": {
+        "player_id": "ncaaf.p.461405"
+       },
+       "ncaaf.p.457834": {
+        "player_id": "ncaaf.p.457834"
+       },
+       "ncaaf.p.469568": {
+        "player_id": "ncaaf.p.469568"
+       },
+       "ncaaf.p.333434": {
+        "player_id": "ncaaf.p.333434"
+       },
+       "ncaaf.p.333286": {
+        "player_id": "ncaaf.p.333286"
+       },
+       "ncaaf.p.404124": {
+        "player_id": "ncaaf.p.404124"
+       },
+       "ncaaf.p.322801": {
+        "player_id": "ncaaf.p.322801"
+       },
+       "ncaaf.p.457875": {
+        "player_id": "ncaaf.p.457875"
+       },
+       "ncaaf.p.469559": {
+        "player_id": "ncaaf.p.469559"
+       },
+       "ncaaf.p.322827": {
+        "player_id": "ncaaf.p.322827"
+       },
+       "ncaaf.p.451229": {
+        "player_id": "ncaaf.p.451229"
+       },
+       "ncaaf.p.471801": {
+        "player_id": "ncaaf.p.471801"
+       },
+       "ncaaf.p.299700": {
+        "player_id": "ncaaf.p.299700"
+       },
+       "ncaaf.p.322308": {
+        "player_id": "ncaaf.p.322308"
+       },
+       "ncaaf.p.322802": {
+        "player_id": "ncaaf.p.322802"
+       },
+       "ncaaf.p.333347": {
+        "player_id": "ncaaf.p.333347"
+       },
+       "ncaaf.p.334637": {
+        "player_id": "ncaaf.p.334637"
+       },
+       "ncaaf.p.404052": {
+        "player_id": "ncaaf.p.404052"
+       },
+       "ncaaf.p.406379": {
+        "player_id": "ncaaf.p.406379"
+       },
+       "ncaaf.p.457838": {
+        "player_id": "ncaaf.p.457838"
+       },
+       "ncaaf.p.457853": {
+        "player_id": "ncaaf.p.457853"
+       },
+       "ncaaf.p.457880": {
+        "player_id": "ncaaf.p.457880"
+       },
+       "ncaaf.p.461399": {
+        "player_id": "ncaaf.p.461399"
+       }
+      }
+     },
+     "home_lineup_order": [],
+     "away_lineup": {
+      "all": {
+       "ncaaf.p.469436": {
+        "player_id": "ncaaf.p.469436"
+       },
+       "ncaaf.p.403962": {
+        "player_id": "ncaaf.p.403962"
+       },
+       "ncaaf.p.404392": {
+        "player_id": "ncaaf.p.404392"
+       },
+       "ncaaf.p.457591": {
+        "player_id": "ncaaf.p.457591"
+       },
+       "ncaaf.p.323602": {
+        "player_id": "ncaaf.p.323602"
+       },
+       "ncaaf.p.340496": {
+        "player_id": "ncaaf.p.340496"
+       },
+       "ncaaf.p.403924": {
+        "player_id": "ncaaf.p.403924"
+       },
+       "ncaaf.p.457613": {
+        "player_id": "ncaaf.p.457613"
+       },
+       "ncaaf.p.333922": {
+        "player_id": "ncaaf.p.333922"
+       },
+       "ncaaf.p.404008": {
+        "player_id": "ncaaf.p.404008"
+       },
+       "ncaaf.p.338368": {
+        "player_id": "ncaaf.p.338368"
+       },
+       "ncaaf.p.457602": {
+        "player_id": "ncaaf.p.457602"
+       },
+       "ncaaf.p.327406": {
+        "player_id": "ncaaf.p.327406"
+       },
+       "ncaaf.p.327412": {
+        "player_id": "ncaaf.p.327412"
+       },
+       "ncaaf.p.327421": {
+        "player_id": "ncaaf.p.327421"
+       },
+       "ncaaf.p.333312": {
+        "player_id": "ncaaf.p.333312"
+       },
+       "ncaaf.p.333324": {
+        "player_id": "ncaaf.p.333324"
+       },
+       "ncaaf.p.333423": {
+        "player_id": "ncaaf.p.333423"
+       },
+       "ncaaf.p.340505": {
+        "player_id": "ncaaf.p.340505"
+       },
+       "ncaaf.p.403634": {
+        "player_id": "ncaaf.p.403634"
+       },
+       "ncaaf.p.403958": {
+        "player_id": "ncaaf.p.403958"
+       },
+       "ncaaf.p.404304": {
+        "player_id": "ncaaf.p.404304"
+       },
+       "ncaaf.p.405415": {
+        "player_id": "ncaaf.p.405415"
+       },
+       "ncaaf.p.405652": {
+        "player_id": "ncaaf.p.405652"
+       },
+       "ncaaf.p.451303": {
+        "player_id": "ncaaf.p.451303"
+       },
+       "ncaaf.p.457606": {
+        "player_id": "ncaaf.p.457606"
+       },
+       "ncaaf.p.474363": {
+        "player_id": "ncaaf.p.474363"
+       },
+       "ncaaf.p.474366": {
+        "player_id": "ncaaf.p.474366"
+       }
+      }
+     },
+     "away_lineup_order": []
+    }
+   },
+   "gamegame_details": {
+    "ncaaf.g.202509200023": []
+   },
+   "gamesection_notes": {
+    "ncaaf.g.202509200023": []
+   }
+  }
+ }
+}

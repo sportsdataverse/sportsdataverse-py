@@ -1,0 +1,76 @@
+columns:
+- description: Parallel Opta integer id for the entity.
+  name: opta_id
+  type: character
+- description: Full name
+  name: full_name
+  type: character
+- description: First name
+  name: first_name
+  type: character
+- description: Last name
+  name: last_name
+  type: character
+- description: Known / display name
+  name: known_name
+  type: character
+- description: On-loan flag
+  name: on_loan
+  type: logical
+- description: Club Opta id
+  name: club_opta_id
+  type: character
+- description: Club Sportec id
+  name: club_sportec_id
+  type: character
+- description: Sportec opaque id for the entity (Utf8 join key, never numeric).
+  name: sportec_id
+  type: character
+- description: Height
+  name: height
+  type: character
+- description: Weight
+  name: weight
+  type: character
+- description: Table position/rank
+  name: position
+  type: character
+- description: Roster category
+  name: roster_category
+  type: character
+- description: Roster category tags
+  name: player_categories
+  type: character
+- description: Jersey number
+  name: jersey_number
+  type: character
+- description: Status tags (e.g. `Loaned Out`)
+  name: player_status_list
+  type: character
+- description: Birth date
+  name: date_of_birth
+  type: character
+- description: URL slug
+  name: player_slug
+  type: character
+- description: 'Player thumbnail image: URL slug.'
+  name: thumbnail_slug
+  type: character
+- description: 'Player thumbnail image: canonical API URL of this content entry.'
+  name: thumbnail_self_url
+  type: character
+- description: 'Player thumbnail image: display title.'
+  name: thumbnail_title
+  type: character
+- description: 'Player thumbnail image: templated image URL with substitutable size
+    tokens.'
+  name: thumbnail_template_url
+  type: character
+- description: 'Player thumbnail image: URL of the rendered thumbnail image.'
+  name: thumbnail_thumbnail_url
+  type: character
+- description: 'Player thumbnail image: image format of the asset.'
+  name: thumbnail_format
+  type: character
+kind: dataframe
+schema: sportapi_club_players

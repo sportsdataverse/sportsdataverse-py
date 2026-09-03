@@ -290,6 +290,23 @@ from sportsdataverse.nhl import espn_nhl_schedule as espn_nhl_schedule  # noqa: 
 from sportsdataverse.nhl import espn_nhl_teams as espn_nhl_teams  # noqa: F401
 from sportsdataverse.nhl import expected_goals as expected_goals  # noqa: F401
 from sportsdataverse.nhl import flatten_json_iterative as flatten_json_iterative  # noqa: F401
+from sportsdataverse.nhl import fox_nhl_event_matchup as fox_nhl_event_matchup  # noqa: F401
+from sportsdataverse.nhl import fox_nhl_event_recap as fox_nhl_event_recap  # noqa: F401
+from sportsdataverse.nhl import fox_nhl_event_standings as fox_nhl_event_standings  # noqa: F401
+from sportsdataverse.nhl import fox_nhl_league_conferences as fox_nhl_league_conferences  # noqa: F401
+from sportsdataverse.nhl import fox_nhl_league_header as fox_nhl_league_header  # noqa: F401
+from sportsdataverse.nhl import fox_nhl_league_odds as fox_nhl_league_odds  # noqa: F401
+from sportsdataverse.nhl import fox_nhl_league_player_news as fox_nhl_league_player_news  # noqa: F401
+from sportsdataverse.nhl import fox_nhl_league_polls as fox_nhl_league_polls  # noqa: F401
+from sportsdataverse.nhl import fox_nhl_league_schedule as fox_nhl_league_schedule  # noqa: F401
+from sportsdataverse.nhl import fox_nhl_league_scores as fox_nhl_league_scores  # noqa: F401
+from sportsdataverse.nhl import fox_nhl_league_standings as fox_nhl_league_standings  # noqa: F401
+from sportsdataverse.nhl import fox_nhl_league_stat_leaders as fox_nhl_league_stat_leaders  # noqa: F401
+from sportsdataverse.nhl import fox_nhl_scoreboard as fox_nhl_scoreboard  # noqa: F401
+from sportsdataverse.nhl import fox_nhl_scorechip as fox_nhl_scorechip  # noqa: F401
+from sportsdataverse.nhl import fox_nhl_scores_segment as fox_nhl_scores_segment  # noqa: F401
+from sportsdataverse.nhl import fox_nhl_team_header as fox_nhl_team_header  # noqa: F401
+from sportsdataverse.nhl import fox_nhl_teamnav as fox_nhl_teamnav  # noqa: F401
 from sportsdataverse.nhl import get_constants as get_constants  # noqa: F401
 from sportsdataverse.nhl import helper_nhl_athlete_items as helper_nhl_athlete_items  # noqa: F401
 from sportsdataverse.nhl import helper_nhl_game_data as helper_nhl_game_data  # noqa: F401
@@ -538,13 +555,30 @@ __all__ = [
     "expected_goals",
     "flatten_json_iterative",
     "fox_nhl_boxscore",
+    "fox_nhl_event_matchup",
+    "fox_nhl_event_recap",
+    "fox_nhl_event_standings",
+    "fox_nhl_league_conferences",
+    "fox_nhl_league_header",
     "fox_nhl_league_leaders",
+    "fox_nhl_league_odds",
+    "fox_nhl_league_player_news",
+    "fox_nhl_league_polls",
+    "fox_nhl_league_schedule",
+    "fox_nhl_league_scores",
+    "fox_nhl_league_standings",
+    "fox_nhl_league_stat_leaders",
     "fox_nhl_odds",
     "fox_nhl_pbp",
+    "fox_nhl_scoreboard",
+    "fox_nhl_scorechip",
+    "fox_nhl_scores_segment",
     "fox_nhl_standings",
     "fox_nhl_team_gamelog",
+    "fox_nhl_team_header",
     "fox_nhl_team_roster",
     "fox_nhl_team_stats",
+    "fox_nhl_teamnav",
     "get_constants",
     "helper_nhl_athlete_items",
     "helper_nhl_game_data",

@@ -14,7 +14,7 @@ description: "sdv-py MLB: endpoint references, dataset loaders and parsers for M
 | [MLB Stats API](reference/mlb_api) | 64 | `https://statsapi.mlb.com` |
 | [MLB Statcast (Baseball Savant)](reference/mlb_statcast) | 39 | `https://baseballsavant.mlb.com` |
 | [Dataset loaders](reference/loaders) | 20 | sportsdataverse-data releases |
-| [Additional functions](reference/additional) | 83 | hand-written wrappers, loaders & helpers |
+| [Additional functions](reference/additional) | 100 | hand-written wrappers, loaders & helpers |
 
 ## Examples
 

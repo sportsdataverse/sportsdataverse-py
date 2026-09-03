@@ -1,0 +1,15 @@
+columns:
+- description: ASA team id (base62 string; Utf8 join key, never numeric).
+  name: team_id
+  type: character
+- description: Full club name.
+  name: team_name
+  type: character
+- description: Short club name.
+  name: team_short_name
+  type: character
+- description: Short (2-4 char) club abbreviation.
+  name: team_abbreviation
+  type: character
+kind: dataframe
+schema: teams

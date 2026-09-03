@@ -1,0 +1,21 @@
+columns:
+- description: ''
+  name: player_id
+  type: character
+- description: ''
+  name: active
+  type: logical
+- description: ''
+  name: positions
+  type: character
+- description: ''
+  name: team_id
+  type: character
+- description: ''
+  name: player_game_stats
+  type: character
+- description: ''
+  name: player_season_stats
+  type: character
+kind: dataframe
+schema: player_game_log

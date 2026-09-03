@@ -1,0 +1,55 @@
+columns:
+- description: ASA game id (base62 string; Utf8 join key).
+  name: game_id
+  type: character
+- description: Kickoff timestamp (UTC, ISO 8601).
+  name: date_time_utc
+  type: character
+- description: Home goals (regulation + extra time).
+  name: home_score
+  type: integer
+- description: Away goals (regulation + extra time).
+  name: away_score
+  type: integer
+- description: FK -> Team (home side).
+  name: home_team_id
+  type: character
+- description: FK -> Team (away side).
+  name: away_team_id
+  type: character
+- description: ASA referee id (base62 string; Utf8 join key).
+  name: referee_id
+  type: character
+- description: ASA stadium id (base62 string; Utf8 join key).
+  name: stadium_id
+  type: character
+- description: FK -> Manager (home side; nullable).
+  name: home_manager_id
+  type: character
+- description: FK -> Manager (away side; nullable).
+  name: away_manager_id
+  type: character
+- description: Total match minutes incl. stoppage (data coverage window).
+  name: expanded_minutes
+  type: integer
+- description: Season(s) the player appears in; may serialize as a scalar, a list,
+    or an object across the leagues.
+  name: season_name
+  type: character
+- description: Round/matchday number.
+  name: matchday
+  type: integer
+- description: True if a knockout/playoff fixture.
+  name: knockout_game
+  type: logical
+- description: Game status (e.g. `final`).
+  name: status
+  type: character
+- description: Last-updated timestamp (UTC, ISO 8601).
+  name: last_updated_utc
+  type: character
+- description: Reported attendance (nullable).
+  name: attendance
+  type: numeric
+kind: dataframe
+schema: games

@@ -1,0 +1,37 @@
+columns:
+- description: ASA player id (base62 string; Utf8 join key).
+  name: player_id
+  type: character
+- description: Player display name.
+  name: player_name
+  type: character
+- description: Date of birth (`YYYY-MM-DD`; may be null).
+  name: birth_date
+  type: character
+- description: Listed height, feet component.
+  name: height_ft
+  type: integer
+- description: Listed height, inches component.
+  name: height_in
+  type: integer
+- description: Listed weight in pounds.
+  name: weight_lb
+  type: integer
+- description: Player nationality (country name).
+  name: nationality
+  type: character
+- description: Broad position bucket (Goalkeeper/Defender/Midfielder/Forward).
+  name: primary_broad_position
+  type: character
+- description: General position code (GK/CB/FB/DM/CM/AM/W/ST).
+  name: primary_general_position
+  type: character
+- description: Season(s) the player appears in; may serialize as a scalar, a list,
+    or an object across the leagues.
+  name: season_name
+  type: character
+- description: Secondary general position code (nullable).
+  name: secondary_general_position
+  type: character
+kind: dataframe
+schema: players

@@ -1,0 +1,103 @@
+columns:
+- description: Leaderboard rank label (null unless ranked view).
+  name: rank_label
+  type: character
+- description: Composite Team id (Utf8 join key).
+  name: team_id
+  type: character
+- description: Underlying StatsPerform/Opta provider id (e.g. `opta:...`).
+  name: provider_id
+  type: character
+- description: Short team name.
+  name: short_name
+  type: character
+- description: Official team name.
+  name: official_name
+  type: character
+- description: 3-letter team code.
+  name: acronym_name
+  type: character
+- description: Localized 3-letter code.
+  name: acronym_name_localized
+  type: character
+- description: True for placeholder/TBD teams.
+  name: is_team_fake
+  type: logical
+- description: Media-style display name.
+  name: media_name
+  type: character
+- description: Short media-style display name.
+  name: media_short_name
+  type: character
+- description: ISO country code.
+  name: country_code
+  type: character
+- description: Team type (e.g. `club`).
+  name: team_type
+  type: character
+- description: Season summary blurb.
+  name: overall_summary
+  type: character
+- description: 'Home venue: `{id, providerId, name, cityName, country, address, capacity,
+    yearOfConstruction, mapsGeoCodeLatitude, mapsGeoCodeLongitude, imagery}`.'
+  name: stadium
+  type: character
+- description: Per-season crest variants.
+  name: all_season_imagery
+  type: character
+- description: Stable stat key (e.g. `goals`, `points`, `Xg`).
+  name: stats_id
+  type: character
+- description: Human stat name.
+  name: stats_label
+  type: character
+- description: Short label (e.g. `PTS`, `GD`).
+  name: stats_label_abbreviation
+  type: character
+- description: Stat value - integer, string, or array (e.g. `form`).
+  name: stats_value
+  type: character
+- description: Unit name (usually null).
+  name: stats_unit
+  type: character
+- description: Unit abbreviation (usually null).
+  name: stats_unit_abbreviation
+  type: character
+- description: 'Editorial metadata: facebook handle or URL.'
+  name: editorial_social_facebook
+  type: character
+- description: 'Editorial metadata: instagram handle or URL.'
+  name: editorial_social_instagram
+  type: character
+- description: 'Editorial metadata: x (Twitter) handle or URL.'
+  name: editorial_social_x
+  type: character
+- description: 'Editorial metadata: tikTok handle or URL.'
+  name: editorial_social_tik_tok
+  type: character
+- description: 'Editorial metadata: youTube handle or URL.'
+  name: editorial_social_you_tube
+  type: character
+- description: 'Editorial metadata: linkedIn handle or URL.'
+  name: editorial_social_linked_in
+  type: character
+- description: 'Editorial metadata: official website URL.'
+  name: editorial_website_url
+  type: character
+- description: 'Editorial metadata: club shop URL.'
+  name: editorial_shop_url
+  type: character
+- description: 'Editorial metadata: ticketing URL.'
+  name: editorial_tickets_url
+  type: character
+- description: 'Editorial metadata: club primary colour (hex).'
+  name: editorial_club_primary_colour
+  type: character
+- description: 'Editorial metadata: club secondary colour (hex).'
+  name: editorial_club_secondary_colour
+  type: character
+- description: 'Editorial metadata: club text colour (hex).'
+  name: editorial_club_text_colour
+  type: character
+kind: dataframe
+schema: team_stats

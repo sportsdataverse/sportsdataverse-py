@@ -1,0 +1,157 @@
+{
+  "optaId": 289022284,
+  "sportecId": "MLS-MAT-0009H8",
+  "slug": "mtlvstor-07-16-2026",
+  "leagueMatchTitle": "",
+  "home": {
+    "optaId": 1616,
+    "sportecId": "MLS-CLU-000006",
+    "fullName": "CF Montréal",
+    "slug": "cf-montreal",
+    "shortName": "Montréal",
+    "abbreviation": "MTL",
+    "backgroundColor": "#212121",
+    "logoBWSlug": "webcomp_3745d5e8-fb0f-4f0e-9074-12f12193441f",
+    "logoColorSlug": "webcomp_15788305-d93d-4023-9043-2f62392f49b1",
+    "logoColorUrl": "https://images.mlssoccer.com/image/upload/{formatInstructions}/v1747755806/assets/logos/mls-clubs/Club_Logo-Montreal_beeqnh.png",
+    "crestColorSlug": "webcomp_f8f6c220-01ba-404b-9086-28188675f222",
+    "ecalWidgetId": ""
+  },
+  "away": {
+    "optaId": 2077,
+    "sportecId": "MLS-CLU-00000M",
+    "fullName": "Toronto FC",
+    "slug": "toronto-fc",
+    "shortName": "Toronto",
+    "abbreviation": "TOR",
+    "backgroundColor": "#AE132A",
+    "logoBWSlug": "webcomp_658b7bba-a482-488b-81cd-aafa5f3fd812",
+    "logoColorSlug": "webcomp_670b776a-70cb-4402-835f-edfac5ddc550",
+    "logoColorUrl": "https://images.mlssoccer.com/image/upload/{formatInstructions}/v1748265251/assets/logos/mls-clubs/Club_Logo-Toronto_vz6hao.png",
+    "crestColorSlug": "webcomp_43678e7c-dc6e-4aeb-b751-9c0ba4274906",
+    "ecalWidgetId": ""
+  },
+  "venue": {
+    "venueSportecId": "MLS-STA-000006",
+    "backgroundImageSlug": "",
+    "name": "Stade Saputo",
+    "city": "Montréal, QC"
+  },
+  "season": {
+    "slug": "mls-regular-season-2026",
+    "optaId": 2026,
+    "sportecId": "MLS-SEA-0001KA",
+    "competitionOptaId": "98",
+    "name": "2026"
+  },
+  "competition": {
+    "optaId": 98,
+    "sportecId": "MLS-COM-000001",
+    "name": "Major League Soccer - Regular Season",
+    "widgetId": "6822de87326cbb000879b742",
+    "slug": "mls-regular-season",
+    "shortName": "Regular Season",
+    "matchType": "Regular",
+    "logoLight": {
+      "slug": ""
+    },
+    "logoDark": {
+      "slug": ""
+    },
+    "blockHeaderName": "",
+    "mgmId": "",
+    "nextgenEcalMatchHubDisplay": true,
+    "playerHeadshotThumbnailField": ""
+  },
+  "broadcasters": [
+    {
+      "broadcasterTypeLabel": "",
+      "broadcasterName": "Apple TV",
+      "broadcasterStreamingURL": "https://tv.apple.com/channel/tvs.sbd.7000",
+      "broadcasterType": "International Streaming",
+      "broadcasterThumbnail": {
+        "slug": "appletv-icon-x4",
+        "selfUrl": "https://forge-dapi.mls-prd.deltatre.digital/v2/content/en-us/photos/appletv-icon-x4",
+        "title": "appletv-icon_x4",
+        "templateUrl": "https://images.mlssoccer.com/image/private/{formatInstructions}/mls/snffj82ru8ziiotyvipr",
+        "thumbnailUrl": "https://images.mlssoccer.com/image/private/w_250,h_250,c_thumb,g_auto,q_auto,f_jpg/mls/snffj82ru8ziiotyvipr",
+        "format": "png",
+        "overriddenFormats": {}
+      }
+    },
+    {
+      "broadcasterTypeLabel": "Canadian TV",
+      "broadcasterName": "RDS",
+      "broadcasterStreamingURL": "",
+      "broadcasterType": "Canada TV",
+      "broadcasterThumbnail": {
+        "slug": "rds-logo",
+        "selfUrl": "https://forge-dapi.mls-prd.deltatre.digital/v2/content/en-us/photos/rds-logo",
+        "title": "rds_logo",
+        "templateUrl": "https://images.mlssoccer.com/image/private/{formatInstructions}/mls/kjfbaikoy7llmgqwuqvb",
+        "thumbnailUrl": "https://images.mlssoccer.com/image/private/w_250,h_250,c_thumb,g_auto,q_auto,f_jpg/mls/kjfbaikoy7llmgqwuqvb",
+        "format": "png",
+        "overriddenFormats": {}
+      }
+    },
+    {
+      "broadcasterTypeLabel": "Canadian TV",
+      "broadcasterName": "TSN",
+      "broadcasterStreamingURL": "",
+      "broadcasterType": "Canada TV",
+      "broadcasterThumbnail": {
+        "slug": "tsn-logo",
+        "selfUrl": "https://forge-dapi.mls-prd.deltatre.digital/v2/content/en-us/photos/tsn-logo",
+        "title": "tsn_logo",
+        "templateUrl": "https://images.mlssoccer.com/image/private/{formatInstructions}/mls/w07rul0lvietw8j7anqh",
+        "thumbnailUrl": "https://images.mlssoccer.com/image/private/w_250,h_250,c_thumb,g_auto,q_auto,f_jpg/mls/w07rul0lvietw8j7anqh",
+        "format": "jpg",
+        "overriddenFormats": {}
+      }
+    }
+  ],
+  "sponsorImage": {},
+  "leaguePromoImage": {
+    "assetUrl": "https://images.mlssoccer.com/image/upload/{formatInstructions}/v1781540806/assets/MLS_Regular_Season_480x128px_PMM.png"
+  },
+  "matchDate": "2026-07-16T23:30:00.0000000Z",
+  "firstPartyTickets": {
+    "displayText": "",
+    "accessibleText": "",
+    "url": "https://billets.cfmontreal.com/cfm/go/494f016a-b4b8-4b10-8a76-2dc3f29b7b48/shop/select?fac=CFM&locale=en-CA&skin=cfmontreal&ec=CFM2607",
+    "openInNewTab": true,
+    "isVisible": false
+  },
+  "tags": [
+    {
+      "type": "tag",
+      "_translationId": "35c50de7-4727-4afa-b46e-145e1512fa6b",
+      "_entityId": "f76ff0b9-574d-4ebc-b680-1307b5ce3535",
+      "selfUrl": "https://forge-dapi.mls-prd.deltatre.digital/v2/content/en-us/tags/push2sportcache",
+      "title": "Push2SportCache",
+      "slug": "push2sportcache",
+      "neutralSlug": "push2sportcache",
+      "externalSourceReference": {},
+      "fields": {}
+    }
+  ],
+  "homeClubBroadcasters": [],
+  "awayClubBroadcasters": [],
+  "clubBroadcasters": [],
+  "isTimeTbd": false,
+  "mgmId": "",
+  "appleStreamURL": "https://tv.apple.com/us/sporting-event/cf-montreal-vs-toronto-fc/umc.cse.3la4vrj060r6e1s5hgmbzrv8k?ctx_brand=tvs.sbd.7000%2Ctvs.sbd.4000",
+  "appleSubscriptionTier": "",
+  "appleAdvertisementCategory": "",
+  "roundName": "",
+  "competitionPhase": "",
+  "homeClubRank": "",
+  "awayClubRank": "",
+  "roundNumber": 0,
+  "roundGroup": "",
+  "matchDay": "16",
+  "calendarUrl": "",
+  "delayedMatch": false,
+  "priorityMatchDateTo": "2026-07-17T01:45:00.0000000Z",
+  "priorityMatchSponsor": ""
+}

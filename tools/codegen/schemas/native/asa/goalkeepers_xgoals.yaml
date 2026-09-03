@@ -1,0 +1,33 @@
+columns:
+- description: ASA player id (base62 string; Utf8 join key).
+  name: player_id
+  type: character
+- description: ASA team id (base62 string; Utf8 join key, never numeric).
+  name: team_id
+  type: character
+- description: Minutes played in the filtered window.
+  name: minutes_played
+  type: integer
+- description: Shots faced.
+  name: shots_faced
+  type: integer
+- description: Goals conceded.
+  name: goals_conceded
+  type: integer
+- description: Saves made.
+  name: saves
+  type: integer
+- description: Share of faced shots that were headers.
+  name: share_headed_shots
+  type: numeric
+- description: Post-shot expected goals faced.
+  name: xgoals_gk_faced
+  type: numeric
+- description: Goals conceded minus post-shot xG (negative = shots saved above expectation).
+  name: goals_minus_xgoals_gk
+  type: numeric
+- description: Goals conceded / post-shot xG faced.
+  name: goals_divided_by_xgoals_gk
+  type: numeric
+kind: dataframe
+schema: goalkeepers_xgoals

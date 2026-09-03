@@ -1,0 +1,45 @@
+columns:
+- description: ''
+  name: game_id
+  type: character
+- description: ''
+  name: away_team_active
+  type: character
+- description: ''
+  name: away_team_primary_color
+  type: character
+- description: ''
+  name: away_team_secondary_color
+  type: character
+- description: ''
+  name: away_team_team_logo_white
+  type: character
+- description: ''
+  name: away_team_team_logo
+  type: character
+- description: ''
+  name: home_team_active
+  type: character
+- description: ''
+  name: home_team_primary_color
+  type: character
+- description: ''
+  name: home_team_secondary_color
+  type: character
+- description: ''
+  name: home_team_team_logo_white
+  type: character
+- description: ''
+  name: home_team_team_logo
+  type: character
+- description: ''
+  name: league_league_logo
+  type: character
+- description: ''
+  name: start_time
+  type: character
+- description: ''
+  name: start_date
+  type: character
+kind: dataframe
+schema: playbook_boxscore_social_share

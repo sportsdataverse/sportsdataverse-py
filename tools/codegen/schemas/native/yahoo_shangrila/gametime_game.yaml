@@ -1,0 +1,12 @@
+columns:
+- description: ''
+  name: game_id
+  type: character
+- description: ''
+  name: gametime_ticket_url
+  type: character
+- description: ''
+  name: game_ticket_price
+  type: character
+kind: dataframe
+schema: gametime_game

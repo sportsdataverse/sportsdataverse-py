@@ -1,0 +1,10 @@
+{
+ "leagueId": 59,
+ "leagueAbbr": "NFL",
+ "leagueName": "National Football League",
+ "sportId": 1,
+ "leagueType": "M",
+ "teams": [],
+ "colorPrimary": "#003369",
+ "colorSecondary": "#D50A0A"
+}

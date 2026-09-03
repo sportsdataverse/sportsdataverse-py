@@ -1,0 +1,108 @@
+columns:
+- description: Composite Team id (Utf8 join key).
+  name: team_id
+  type: character
+- description: Underlying StatsPerform/Opta provider id (e.g. `opta:...`).
+  name: provider_id
+  type: character
+- description: Short team name.
+  name: short_name
+  type: character
+- description: Official team name.
+  name: official_name
+  type: character
+- description: 3-letter team code.
+  name: acronym_name
+  type: character
+- description: Localized 3-letter code.
+  name: acronym_name_localized
+  type: character
+- description: True for placeholder/TBD teams.
+  name: is_team_fake
+  type: logical
+- description: Media-style display name.
+  name: media_name
+  type: character
+- description: Short media-style display name.
+  name: media_short_name
+  type: character
+- description: ISO country code.
+  name: country_code
+  type: character
+- description: Team type (e.g. `club`).
+  name: team_type
+  type: character
+- description: Season summary blurb.
+  name: overall_summary
+  type: character
+- description: Per-season crest variants.
+  name: all_season_imagery
+  type: character
+- description: Composite Stadium id for the venue.
+  name: stadium_id
+  type: character
+- description: 'Stadium: underlying StatsPerform/Opta provider id (e.g. `opta:...`).'
+  name: stadium_provider_id
+  type: character
+- description: 'Stadium: stage display name.'
+  name: stadium_name
+  type: character
+- description: 'Stadium: city the stadium is in.'
+  name: stadium_city_name
+  type: character
+- description: 'Stadium: country the stadium is in.'
+  name: stadium_country
+  type: character
+- description: 'Stadium: street address of the stadium.'
+  name: stadium_address
+  type: character
+- description: 'Stadium: seating capacity of the stadium.'
+  name: stadium_capacity
+  type: integer
+- description: 'Stadium: year the stadium was built.'
+  name: stadium_year_of_construction
+  type: integer
+- description: 'Stadium: latitude in decimal degrees.'
+  name: stadium_maps_geo_code_latitude
+  type: character
+- description: 'Stadium: longitude in decimal degrees.'
+  name: stadium_maps_geo_code_longitude
+  type: character
+- description: 'Editorial metadata: facebook handle or URL.'
+  name: editorial_social_facebook
+  type: character
+- description: 'Editorial metadata: instagram handle or URL.'
+  name: editorial_social_instagram
+  type: character
+- description: 'Editorial metadata: x (Twitter) handle or URL.'
+  name: editorial_social_x
+  type: character
+- description: 'Editorial metadata: tikTok handle or URL.'
+  name: editorial_social_tik_tok
+  type: character
+- description: 'Editorial metadata: youTube handle or URL.'
+  name: editorial_social_you_tube
+  type: character
+- description: 'Editorial metadata: linkedIn handle or URL.'
+  name: editorial_social_linked_in
+  type: character
+- description: 'Editorial metadata: official website URL.'
+  name: editorial_website_url
+  type: character
+- description: 'Editorial metadata: club shop URL.'
+  name: editorial_shop_url
+  type: character
+- description: 'Editorial metadata: ticketing URL.'
+  name: editorial_tickets_url
+  type: character
+- description: 'Editorial metadata: club primary colour (hex).'
+  name: editorial_club_primary_colour
+  type: character
+- description: 'Editorial metadata: club secondary colour (hex).'
+  name: editorial_club_secondary_colour
+  type: character
+- description: 'Editorial metadata: club text colour (hex).'
+  name: editorial_club_text_colour
+  type: character
+kind: dataframe
+schema: teams

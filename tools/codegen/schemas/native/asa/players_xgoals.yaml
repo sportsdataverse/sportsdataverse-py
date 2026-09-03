@@ -1,0 +1,57 @@
+columns:
+- description: ASA player id (base62 string; Utf8 join key).
+  name: player_id
+  type: character
+- description: ASA team id (base62 string; Utf8 join key, never numeric).
+  name: team_id
+  type: character
+- description: General position code (GK/CB/FB/DM/CM/AM/W/ST).
+  name: general_position
+  type: character
+- description: Minutes played in the filtered window.
+  name: minutes_played
+  type: integer
+- description: Shots taken.
+  name: shots
+  type: integer
+- description: Shots on target.
+  name: shots_on_target
+  type: integer
+- description: Goals scored.
+  name: goals
+  type: integer
+- description: Expected goals (pre-shot xG).
+  name: xgoals
+  type: numeric
+- description: Expected goals added by shot placement (post-shot minus pre-shot).
+  name: xplace
+  type: numeric
+- description: Finishing over expectation (goals - xG).
+  name: goals_minus_xgoals
+  type: numeric
+- description: Passes that led to a shot.
+  name: key_passes
+  type: integer
+- description: Primary assists.
+  name: primary_assists
+  type: integer
+- description: Expected assists.
+  name: xassists
+  type: numeric
+- description: Assists over expectation.
+  name: primary_assists_minus_xassists
+  type: numeric
+- description: Goals + primary assists (G+A).
+  name: goals_plus_primary_assists
+  type: integer
+- description: xGoals + xAssists (xG+xA).
+  name: xgoals_plus_xassists
+  type: numeric
+- description: Team points added by the player's attacking output.
+  name: points_added
+  type: numeric
+- description: Expected team points added.
+  name: xpoints_added
+  type: numeric
+kind: dataframe
+schema: players_xgoals

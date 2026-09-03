@@ -1,0 +1,145 @@
+frames:
+- columns:
+  - description: ''
+    name: sport_sport_id
+    type: character
+  - description: ''
+    name: sport_name
+    type: character
+  - description: ''
+    name: league_name
+    type: character
+  - description: ''
+    name: league_short_name
+    type: character
+  - description: ''
+    name: league_current_season_phase
+    type: character
+  - description: ''
+    name: team_id
+    type: character
+  - description: ''
+    name: conference_id
+    type: integer
+  - description: ''
+    name: full_name
+    type: character
+  - description: ''
+    name: display_name
+    type: character
+  - description: ''
+    name: location
+    type: character
+  - description: ''
+    name: nickname
+    type: character
+  - description: ''
+    name: primary_color
+    type: character
+  - description: ''
+    name: secondary_color
+    type: character
+  - description: ''
+    name: team_logo_white_url
+    type: character
+  - description: ''
+    name: team_logo_url
+    type: character
+  - description: ''
+    name: alias_navigation_links
+    type: character
+  - description: ''
+    name: alias_url
+    type: character
+  - description: ''
+    name: alias_path
+    type: character
+  - description: ''
+    name: last_games
+    type: character
+  - description: ''
+    name: next_games
+    type: character
+  - description: ''
+    name: division_name
+    type: character
+  - description: ''
+    name: division_teams
+    type: character
+  - description: ''
+    name: conference_short_name
+    type: character
+  - description: ''
+    name: conference_name
+    type: character
+  - description: ''
+    name: conference_conference_id
+    type: character
+  - description: ''
+    name: conference_team_standings
+    type: character
+  - description: ''
+    name: conference_abbreviation
+    type: character
+  - description: ''
+    name: team_standings_team
+    type: character
+  - description: ''
+    name: team_standings_conference_id
+    type: character
+  - description: ''
+    name: team_standings_conference
+    type: character
+  - description: ''
+    name: team_standings_display_name
+    type: character
+  - description: ''
+    name: team_standings_full_name
+    type: character
+  - description: ''
+    name: team_standings_position
+    type: character
+  - description: ''
+    name: team_standings_sequence
+    type: character
+  - description: ''
+    name: team_standings_team_record
+    type: character
+  - description: ''
+    name: team_standings_conference_position
+    type: character
+  - description: ''
+    name: team_standings_points_for
+    type: character
+  - description: ''
+    name: team_standings_points_against
+    type: character
+  - description: ''
+    name: team_standings_clinched_playoff
+    type: character
+  - description: ''
+    name: team_standings_clinched_division
+    type: character
+  - description: ''
+    name: team_standings_streak_display
+    type: character
+  - description: ''
+    name: gametime_ticket_url
+    type: character
+  - description: ''
+    name: football_team_season_stats
+    type: character
+  - description: ''
+    name: football_player_season_stats
+    type: character
+  - description: ''
+    name: injured_players
+    type: character
+  - description: ''
+    name: transactions
+    type: character
+  section: teams
+- columns: []
+  section: leagues
+kind: frames
+schema: playbook_team

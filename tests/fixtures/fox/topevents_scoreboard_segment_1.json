@@ -1,0 +1,686 @@
+{
+  "id": "1",
+  "sectionList": [
+    {
+      "id": "favorites",
+      "template": "favorite",
+      "title": "MY TEAMS",
+      "hideLeague": false
+    },
+    {
+      "id": "sport_SOCCER",
+      "template": "default",
+      "image": {
+        "url": "https://b.fssta.com/uploads/application/sports/logos/soccer.vresize.60.60.medium.1.png",
+        "altUrl": "https://b.fssta.com/uploads/application/sports/logos/soccer.vresize.60.60.medium.1.png",
+        "type": "image-logo",
+        "altText": "Soccer Ball Icon"
+      },
+      "title": "SOCCER",
+      "hideLeague": false,
+      "events": [
+        {
+          "template": "scores-team",
+          "id": "soccer647618",
+          "liveStartTime": "2026-06-12T18:50:00Z",
+          "uri": "https://api.foxsports.com/bifrost/v1/soccer/scorechip/soccer647618",
+          "contentUri": "soccer/wc/events/647618",
+          "contentType": "event",
+          "eventStatus": 2,
+          "eventTime": "2026-06-12T19:00:00Z",
+          "sortKey": "122026061219003117647618",
+          "altSortKey": "132202606121900117647618",
+          "tvStation": "FOX",
+          "favoriteEntities": [
+            "soccer/all/teams/742",
+            "soccer/all/teams/516"
+          ],
+          "isTba": false,
+          "entityLink": {
+            "webUrl": "/soccer/fifa-world-cup-men-canada-vs-bosnia-and-herzegovina-jun-12-2026-game-boxscore-647618",
+            "contentUri": "soccer/wc/events/647618",
+            "contentType": "event",
+            "layout": {
+              "path": "/layouts?type=layout&subtype=soccerEventLayout",
+              "tokens": {
+                "id": "647618",
+                "eventUri": "soccer/wc/events/647618",
+                "homeUri": "soccer/all/teams/742",
+                "awayUri": "soccer/all/teams/516"
+              }
+            },
+            "analyticsSport": "soccer",
+            "type": "entity"
+          },
+          "league": "WORLD CUP",
+          "eventHeadline": "Canada, Bosnia and Herzegovina start campaign in Toronto Stadium",
+          "importance": 0,
+          "upperTeam": {
+            "name": "CAN",
+            "uri": "soccer/all/teams/742",
+            "longName": "Canada",
+            "stackedNameBottom": "Canada",
+            "logoUrl": "https://b.fssta.com/uploads/application/countries/flag-logos/124.vresize.80.80.medium.0.png",
+            "imageType": "image-logo",
+            "imageAltText": "Canada",
+            "record": "0-0-0",
+            "isLoser": false,
+            "hasPossession": false,
+            "alternateLogoUrl": "https://b.fssta.com/uploads/application/countries/flag-logos/124.vresize.80.80.medium.0.png"
+          },
+          "lowerTeam": {
+            "name": "BIH",
+            "uri": "soccer/all/teams/516",
+            "longName": "Bosnia and Herzegovina",
+            "stackedNameBottom": "Bosnia and Herzegovina",
+            "logoUrl": "https://b.fssta.com/uploads/application/countries/flag-logos/70.vresize.80.80.medium.0.png",
+            "imageType": "image-logo",
+            "imageAltText": "Bosnia and Herzegovina",
+            "record": "0-0-0",
+            "isLoser": false,
+            "hasPossession": false,
+            "alternateLogoUrl": "https://b.fssta.com/uploads/application/countries/flag-logos/70.vresize.80.80.medium.0.png"
+          },
+          "oddsLine": "CAN -122",
+          "overUnderLine": "BIH +370",
+          "gameNotes": "GROUP B"
+        },
+        {
+          "template": "scores-team",
+          "id": "soccer647619",
+          "liveStartTime": "2026-06-13T00:50:00Z",
+          "uri": "https://api.foxsports.com/bifrost/v1/soccer/scorechip/soccer647619",
+          "contentUri": "soccer/wc/events/647619",
+          "contentType": "event",
+          "eventStatus": 2,
+          "eventTime": "2026-06-13T01:00:00Z",
+          "sortKey": "122026061301003100647619",
+          "altSortKey": "132202606130100100647619",
+          "tvStation": "FOX",
+          "favoriteEntities": [
+            "soccer/all/teams/517",
+            "soccer/all/teams/751"
+          ],
+          "isTba": false,
+          "entityLink": {
+            "webUrl": "/soccer/fifa-world-cup-men-united-states-vs-paraguay-jun-12-2026-game-boxscore-647619",
+            "contentUri": "soccer/wc/events/647619",
+            "contentType": "event",
+            "layout": {
+              "path": "/layouts?type=layout&subtype=soccerEventLayout",
+              "tokens": {
+                "id": "647619",
+                "eventUri": "soccer/wc/events/647619",
+                "homeUri": "soccer/all/teams/517",
+                "awayUri": "soccer/all/teams/751"
+              }
+            },
+            "analyticsSport": "soccer",
+            "type": "entity"
+          },
+          "league": "WORLD CUP",
+          "eventHeadline": "United States kicks off Group Stage against Paraguay",
+          "importance": 0,
+          "upperTeam": {
+            "name": "USA",
+            "uri": "soccer/all/teams/517",
+            "longName": "United States",
+            "stackedNameBottom": "United States",
+            "logoUrl": "https://b.fssta.com/uploads/application/countries/flag-logos/840.vresize.80.80.medium.0.png",
+            "imageType": "image-logo",
+            "imageAltText": "United States",
+            "record": "0-0-0",
+            "isLoser": false,
+            "hasPossession": false,
+            "alternateLogoUrl": "https://b.fssta.com/uploads/application/countries/flag-logos/840.vresize.80.80.medium.0.png"
+          },
+          "lowerTeam": {
+            "name": "PAR",
+            "uri": "soccer/all/teams/751",
+            "longName": "Paraguay",
+            "stackedNameBottom": "Paraguay",
+            "logoUrl": "https://b.fssta.com/uploads/application/countries/flag-logos/600.vresize.80.80.medium.0.png",
+            "imageType": "image-logo",
+            "imageAltText": "Paraguay",
+            "record": "0-0-0",
+            "isLoser": false,
+            "hasPossession": false,
+            "alternateLogoUrl": "https://b.fssta.com/uploads/application/countries/flag-logos/600.vresize.80.80.medium.0.png"
+          },
+          "oddsLine": "USA +107",
+          "overUnderLine": "PAR +287",
+          "gameNotes": "GROUP D"
+        }
+      ]
+    },
+    {
+      "id": "sport_MLB",
+      "template": "default",
+      "uri": "baseball/mlb/league/1",
+      "image": {
+        "url": "https://b.fssta.com/uploads/application/leagues/logos/MLB.vresize.80.80.medium.0.png",
+        "altUrl": "https://b.fssta.com/uploads/application/leagues/logos/MLB.vresize.80.80.medium.0.png",
+        "type": "image-logo",
+        "altText": "MLB Logo"
+      },
+      "title": "MLB",
+      "titleLink": {
+        "title": "MAJOR LEAGUE BASEBALL",
+        "shortTitle": "MLB",
+        "webUrl": "/mlb/scores",
+        "color": "1, 4, 30, 66",
+        "imageUrl": "https://b.fssta.com/uploads/application/leagues/logos/MLB.vresize.200.200.medium.0.png",
+        "imageType": "image-logo",
+        "imageAltText": "Major League Baseball",
+        "contentUri": "baseball/mlb/league/1",
+        "contentType": "league",
+        "layout": {
+          "path": "/layouts?type=layout&subtype=mlbLayout",
+          "tokens": {
+            "contentUri": "baseball/mlb/league/1"
+          }
+        },
+        "analyticsName": "major-league-baseball",
+        "analyticsSport": "mlb",
+        "tab": "scores",
+        "type": "entity"
+      },
+      "headerText": "STANDINGS",
+      "headerLink": {
+        "title": "MAJOR LEAGUE BASEBALL",
+        "shortTitle": "MLB",
+        "webUrl": "/mlb/standings",
+        "color": "1, 4, 30, 66",
+        "imageUrl": "https://b.fssta.com/uploads/application/leagues/logos/MLB.vresize.200.200.medium.0.png",
+        "imageType": "image-logo",
+        "imageAltText": "Major League Baseball",
+        "contentUri": "baseball/mlb/league/1",
+        "contentType": "league",
+        "layout": {
+          "path": "/layouts?type=layout&subtype=mlbLayout",
+          "tokens": {
+            "contentUri": "baseball/mlb/league/1"
+          }
+        },
+        "analyticsName": "major-league-baseball",
+        "analyticsSport": "mlb",
+        "tab": "standings",
+        "type": "entity"
+      },
+      "hideLeague": true,
+      "events": [
+        {
+          "template": "scores-team",
+          "id": "mlb95719",
+          "liveStartTime": "2026-06-12T23:27:00Z",
+          "uri": "https://api.foxsports.com/bifrost/v1/mlb/scorechip/mlb95719",
+          "contentUri": "baseball/mlb/events/95719",
+          "contentType": "event",
+          "eventStatus": 2,
+          "eventTime": "2026-06-12T23:37:00Z",
+          "sortKey": "122026061223373200095719",
+          "altSortKey": "132202606122337200095719",
+          "tvStation": "SNET",
+          "favoriteEntities": [
+            "baseball/mlb/teams/7",
+            "baseball/mlb/teams/6"
+          ],
+          "isTba": false,
+          "entityLink": {
+            "webUrl": "/mlb/new-york-yankees-vs-toronto-blue-jays-jun-12-2026-game-boxscore-95719",
+            "contentUri": "baseball/mlb/events/95719",
+            "contentType": "event",
+            "layout": {
+              "path": "/layouts?type=layout&subtype=mlbEventLayout",
+              "tokens": {
+                "id": "95719",
+                "eventUri": "baseball/mlb/events/95719",
+                "homeUri": "baseball/mlb/teams/7",
+                "awayUri": "baseball/mlb/teams/6"
+              }
+            },
+            "analyticsSport": "mlb",
+            "type": "entity"
+          },
+          "league": "MLB",
+          "eventHeadline": "Blue Jays (Yesavage 2-3, 3.16) will need to slow down Chisholm Jr. (1-4, 3B, 3 RBI, SB in last game) as they play host to Yankees (Weathers 2-4, 3.86)",
+          "importance": 0,
+          "upperTeam": {
+            "name": "NYY",
+            "uri": "baseball/mlb/teams/6",
+            "longName": "Yankees",
+            "stackedNameTop": "New York",
+            "stackedNameBottom": "Yankees",
+            "logoUrl": "https://b.fssta.com/uploads/application/mlb/team-logos/Yankees.vresize.80.80.medium.0.png",
+            "imageType": "image-logo",
+            "imageAltText": "Yankees",
+            "record": "41-26",
+            "isLoser": false,
+            "hasPossession": false,
+            "alternateLogoUrl": "https://b.fssta.com/uploads/application/mlb/team-logos/Yankees-alternate.vresize.80.80.medium.0.png"
+          },
+          "lowerTeam": {
+            "name": "TOR",
+            "uri": "baseball/mlb/teams/7",
+            "longName": "Blue Jays",
+            "stackedNameTop": "Toronto",
+            "stackedNameBottom": "Blue Jays",
+            "logoUrl": "https://b.fssta.com/uploads/application/mlb/team-logos/BlueJays.vresize.80.80.medium.0.png",
+            "imageType": "image-logo",
+            "imageAltText": "Blue Jays",
+            "record": "33-36",
+            "isLoser": false,
+            "hasPossession": false,
+            "alternateLogoUrl": "https://b.fssta.com/uploads/application/mlb/team-logos/BlueJays.vresize.80.80.medium.0.png"
+          },
+          "oddsLine": "NYY -105",
+          "overUnderLine": "TOR -114"
+        },
+        {
+          "template": "scores-team",
+          "id": "mlb95727",
+          "liveStartTime": "2026-06-12T23:30:00Z",
+          "uri": "https://api.foxsports.com/bifrost/v1/mlb/scorechip/mlb95727",
+          "contentUri": "baseball/mlb/events/95727",
+          "contentType": "event",
+          "eventStatus": 2,
+          "eventTime": "2026-06-12T23:40:00Z",
+          "sortKey": "122026061223403200095727",
+          "altSortKey": "132202606122340200095727",
+          "tvStation": "BREW",
+          "favoriteEntities": [
+            "baseball/mlb/teams/5",
+            "baseball/mlb/teams/18"
+          ],
+          "isTba": false,
+          "entityLink": {
+            "webUrl": "/mlb/philadelphia-phillies-vs-milwaukee-brewers-jun-12-2026-game-boxscore-95727",
+            "contentUri": "baseball/mlb/events/95727",
+            "contentType": "event",
+            "layout": {
+              "path": "/layouts?type=layout&subtype=mlbEventLayout",
+              "tokens": {
+                "id": "95727",
+                "eventUri": "baseball/mlb/events/95727",
+                "homeUri": "baseball/mlb/teams/5",
+                "awayUri": "baseball/mlb/teams/18"
+              }
+            },
+            "analyticsSport": "mlb",
+            "type": "entity"
+          },
+          "league": "MLB",
+          "eventHeadline": "Brewers (Misiorowski 7-2, 1.50) welcome Phillies (Painter 1-7, 6.21) and Harper, fresh off his 2-4, HR game",
+          "importance": 0,
+          "upperTeam": {
+            "name": "PHI",
+            "uri": "baseball/mlb/teams/18",
+            "longName": "Phillies",
+            "stackedNameTop": "Philadelphia",
+            "stackedNameBottom": "Phillies",
+            "logoUrl": "https://b.fssta.com/uploads/application/mlb/team-logos/Phillies.vresize.80.80.medium.0.png",
+            "imageType": "image-logo",
+            "imageAltText": "Phillies",
+            "record": "37-31",
+            "isLoser": false,
+            "hasPossession": false,
+            "alternateLogoUrl": "https://b.fssta.com/uploads/application/mlb/team-logos/Phillies-alternate.vresize.80.80.medium.0.png"
+          },
+          "lowerTeam": {
+            "name": "MIL",
+            "uri": "baseball/mlb/teams/5",
+            "longName": "Brewers",
+            "stackedNameTop": "Milwaukee",
+            "stackedNameBottom": "Brewers",
+            "logoUrl": "https://b.fssta.com/uploads/application/mlb/team-logos/Brewers.vresize.80.80.medium.1.png",
+            "imageType": "image-logo",
+            "imageAltText": "Brewers",
+            "record": "41-25",
+            "isLoser": false,
+            "hasPossession": false,
+            "alternateLogoUrl": "https://b.fssta.com/uploads/application/mlb/team-logos/Brewers.vresize.80.80.medium.1.png"
+          },
+          "oddsLine": "PHI +205",
+          "overUnderLine": "MIL -253"
+        },
+        {
+          "template": "scores-team",
+          "id": "mlb95728",
+          "liveStartTime": "2026-06-13T00:00:00Z",
+          "uri": "https://api.foxsports.com/bifrost/v1/mlb/scorechip/mlb95728",
+          "contentUri": "baseball/mlb/events/95728",
+          "contentType": "event",
+          "eventStatus": 2,
+          "eventTime": "2026-06-13T00:10:00Z",
+          "sortKey": "122026061300103200095728",
+          "altSortKey": "132202606130010200095728",
+          "tvStation": "ROYL",
+          "favoriteEntities": [
+            "baseball/mlb/teams/10",
+            "baseball/mlb/teams/23"
+          ],
+          "isTba": false,
+          "entityLink": {
+            "webUrl": "/mlb/houston-astros-vs-kansas-city-royals-jun-12-2026-game-boxscore-95728",
+            "contentUri": "baseball/mlb/events/95728",
+            "contentType": "event",
+            "layout": {
+              "path": "/layouts?type=layout&subtype=mlbEventLayout",
+              "tokens": {
+                "id": "95728",
+                "eventUri": "baseball/mlb/events/95728",
+                "homeUri": "baseball/mlb/teams/10",
+                "awayUri": "baseball/mlb/teams/23"
+              }
+            },
+            "analyticsSport": "mlb",
+            "type": "entity"
+          },
+          "league": "MLB",
+          "eventHeadline": "Royals (Avila) play host to Astros (Imai 3-3, 5.24), looking to take advantage of their sleeping bats (8 runs in last 4 games)",
+          "importance": 0,
+          "upperTeam": {
+            "name": "HOU",
+            "uri": "baseball/mlb/teams/23",
+            "longName": "Astros",
+            "stackedNameTop": "Houston",
+            "stackedNameBottom": "Astros",
+            "logoUrl": "https://b.fssta.com/uploads/application/mlb/team-logos/Astros.vresize.80.80.medium.0.png",
+            "imageType": "image-logo",
+            "imageAltText": "Astros",
+            "record": "31-39",
+            "isLoser": false,
+            "hasPossession": false,
+            "alternateLogoUrl": "https://b.fssta.com/uploads/application/mlb/team-logos/Astros-alternate.vresize.80.80.medium.0.png"
+          },
+          "lowerTeam": {
+            "name": "KC",
+            "uri": "baseball/mlb/teams/10",
+            "longName": "Royals",
+            "stackedNameTop": "Kansas City",
+            "stackedNameBottom": "Royals",
+            "logoUrl": "https://b.fssta.com/uploads/application/mlb/team-logos/Royals.vresize.80.80.medium.0.png",
+            "imageType": "image-logo",
+            "imageAltText": "Royals",
+            "record": "28-41",
+            "isLoser": false,
+            "hasPossession": false,
+            "alternateLogoUrl": "https://b.fssta.com/uploads/application/mlb/team-logos/Royals-alternate.vresize.80.80.medium.0.png"
+          },
+          "oddsLine": "HOU -116",
+          "overUnderLine": "KC -104"
+        },
+        {
+          "template": "scores-team",
+          "id": "mlb95732",
+          "liveStartTime": "2026-06-13T02:05:00Z",
+          "uri": "https://api.foxsports.com/bifrost/v1/mlb/scorechip/mlb95732",
+          "contentUri": "baseball/mlb/events/95732",
+          "contentType": "event",
+          "eventStatus": 2,
+          "eventTime": "2026-06-13T02:15:00Z",
+          "sortKey": "122026061302153200095732",
+          "altSortKey": "132202606130215200095732",
+          "tvStation": "MARQ",
+          "favoriteEntities": [
+            "baseball/mlb/teams/26",
+            "baseball/mlb/teams/15"
+          ],
+          "isTba": false,
+          "entityLink": {
+            "webUrl": "/mlb/chicago-cubs-vs-san-francisco-giants-jun-12-2026-game-boxscore-95732",
+            "contentUri": "baseball/mlb/events/95732",
+            "contentType": "event",
+            "layout": {
+              "path": "/layouts?type=layout&subtype=mlbEventLayout",
+              "tokens": {
+                "id": "95732",
+                "eventUri": "baseball/mlb/events/95732",
+                "homeUri": "baseball/mlb/teams/26",
+                "awayUri": "baseball/mlb/teams/15"
+              }
+            },
+            "analyticsSport": "mlb",
+            "type": "entity"
+          },
+          "league": "MLB",
+          "eventHeadline": "Giants (Roupp 5-6, 4.00) welcome Cubs (Brown 2-2, 1.74) in rematch of 2016 NL Division Series",
+          "importance": 0,
+          "upperTeam": {
+            "name": "CHC",
+            "uri": "baseball/mlb/teams/15",
+            "longName": "Cubs",
+            "stackedNameTop": "Chicago",
+            "stackedNameBottom": "Cubs",
+            "logoUrl": "https://b.fssta.com/uploads/application/mlb/team-logos/Cubs.vresize.80.80.medium.0.png",
+            "imageType": "image-logo",
+            "imageAltText": "Cubs",
+            "record": "35-34",
+            "isLoser": false,
+            "hasPossession": false,
+            "alternateLogoUrl": "https://b.fssta.com/uploads/application/mlb/team-logos/Cubs.vresize.80.80.medium.0.png"
+          },
+          "lowerTeam": {
+            "name": "SF",
+            "uri": "baseball/mlb/teams/26",
+            "longName": "Giants",
+            "stackedNameTop": "San Francisco",
+            "stackedNameBottom": "Giants",
+            "logoUrl": "https://b.fssta.com/uploads/application/mlb/team-logos/Giants.vresize.80.80.medium.0.png",
+            "imageType": "image-logo",
+            "imageAltText": "Giants",
+            "record": "28-41",
+            "isLoser": false,
+            "hasPossession": false,
+            "alternateLogoUrl": "https://b.fssta.com/uploads/application/mlb/team-logos/Giants.vresize.80.80.medium.0.png"
+          },
+          "oddsLine": "CHC -108",
+          "overUnderLine": "SF -111"
+        }
+      ]
+    },
+    {
+      "id": "sport_WNBA",
+      "template": "default",
+      "uri": "basketball/wnba/league/1",
+      "image": {
+        "url": "https://b.fssta.com/uploads/application/leagues/logos/WNBA.vresize.80.80.medium.0.png",
+        "altUrl": "https://b.fssta.com/uploads/application/leagues/logos/WNBA-alternate.vresize.80.80.medium.0.png",
+        "type": "image-logo",
+        "altText": "WNBA Logo"
+      },
+      "title": "WNBA",
+      "titleLink": {
+        "title": "WOMEN'S NATIONAL BASKETBALL ASSOCIATION",
+        "shortTitle": "WNBA",
+        "webUrl": "/wnba/scores",
+        "color": "1, 250, 77, 0",
+        "imageUrl": "https://b.fssta.com/uploads/application/leagues/logos/WNBA-alternate.vresize.200.200.medium.0.png",
+        "imageType": "image-logo",
+        "imageAltText": "Women's National Basketball Association",
+        "contentUri": "basketball/wnba/league/1",
+        "contentType": "league",
+        "layout": {
+          "path": "/layouts?type=layout&subtype=wnbaLayout",
+          "tokens": {
+            "contentUri": "basketball/wnba/league/1"
+          }
+        },
+        "analyticsName": "womens-national-basketball-association",
+        "analyticsSport": "wnba",
+        "tab": "scores",
+        "type": "entity"
+      },
+      "headerText": "STANDINGS",
+      "headerLink": {
+        "title": "WOMEN'S NATIONAL BASKETBALL ASSOCIATION",
+        "shortTitle": "WNBA",
+        "webUrl": "/wnba/standings",
+        "color": "1, 250, 77, 0",
+        "imageUrl": "https://b.fssta.com/uploads/application/leagues/logos/WNBA-alternate.vresize.200.200.medium.0.png",
+        "imageType": "image-logo",
+        "imageAltText": "Women's National Basketball Association",
+        "contentUri": "basketball/wnba/league/1",
+        "contentType": "league",
+        "layout": {
+          "path": "/layouts?type=layout&subtype=wnbaLayout",
+          "tokens": {
+            "contentUri": "basketball/wnba/league/1"
+          }
+        },
+        "analyticsName": "womens-national-basketball-association",
+        "analyticsSport": "wnba",
+        "tab": "standings",
+        "type": "entity"
+      },
+      "hideLeague": true,
+      "events": [
+        {
+          "template": "scores-team",
+          "id": "wnba2472",
+          "liveStartTime": "2026-06-12T23:20:00Z",
+          "uri": "https://api.foxsports.com/bifrost/v1/wnba/scorechip/wnba2472",
+          "contentUri": "basketball/wnba/events/2472",
+          "contentType": "event",
+          "eventStatus": 2,
+          "eventTime": "2026-06-12T23:30:00Z",
+          "sortKey": "122026061223303221002472",
+          "altSortKey": "132202606122330221002472",
+          "tvStation": "ION",
+          "favoriteEntities": [
+            "basketball/wnba/teams/6",
+            "basketball/wnba/teams/29"
+          ],
+          "isTba": false,
+          "entityLink": {
+            "webUrl": "/wnba/toronto-tempo-vs-washington-mystics-jun-12-2026-game-boxscore-2472",
+            "contentUri": "basketball/wnba/events/2472",
+            "contentType": "event",
+            "layout": {
+              "path": "/layouts?type=layout&subtype=wnbaEventLayout",
+              "tokens": {
+                "id": "2472",
+                "eventUri": "basketball/wnba/events/2472",
+                "homeUri": "basketball/wnba/teams/6",
+                "awayUri": "basketball/wnba/teams/29"
+              }
+            },
+            "analyticsSport": "wnba",
+            "type": "entity"
+          },
+          "league": "WNBA",
+          "importance": 0,
+          "upperTeam": {
+            "name": "TOR",
+            "uri": "basketball/wnba/teams/29",
+            "longName": "Tempo",
+            "stackedNameTop": "Toronto",
+            "stackedNameBottom": "Tempo",
+            "logoUrl": "https://b.fssta.com/uploads/application/wnba/team-logos/Tempo.vresize.80.80.medium.0.png",
+            "imageType": "image-logo",
+            "imageAltText": "Toronto Tempo",
+            "record": "7-5",
+            "isLoser": false,
+            "hasPossession": false,
+            "alternateLogoUrl": "https://b.fssta.com/uploads/application/wnba/team-logos/Tempo-alternate.vresize.80.80.medium.0.png"
+          },
+          "lowerTeam": {
+            "name": "WAS",
+            "uri": "basketball/wnba/teams/6",
+            "longName": "Mystics",
+            "stackedNameTop": "Washington",
+            "stackedNameBottom": "Mystics",
+            "logoUrl": "https://b.fssta.com/uploads/application/wnba/team-logos/Mystics.vresize.80.80.medium.2.png",
+            "imageType": "image-logo",
+            "imageAltText": "Washington Mystics",
+            "record": "4-6",
+            "isLoser": false,
+            "hasPossession": false,
+            "alternateLogoUrl": "https://b.fssta.com/uploads/application/wnba/team-logos/Mystics.vresize.80.80.medium.2.png"
+          },
+          "oddsLine": "WAS -2.5",
+          "overUnderLine": "TOTAL 168.5"
+        },
+        {
+          "template": "scores-team",
+          "id": "wnba2434",
+          "liveStartTime": "2026-06-13T01:50:00Z",
+          "uri": "https://api.foxsports.com/bifrost/v1/wnba/scorechip/wnba2434",
+          "contentUri": "basketball/wnba/events/2434",
+          "contentType": "event",
+          "eventStatus": 2,
+          "eventTime": "2026-06-13T02:00:00Z",
+          "sortKey": "122026061302003280002434",
+          "altSortKey": "132202606130200280002434",
+          "tvStation": "ION",
+          "favoriteEntities": [
+            "basketball/wnba/teams/12",
+            "basketball/wnba/teams/23"
+          ],
+          "isTba": false,
+          "entityLink": {
+            "webUrl": "/wnba/golden-state-valkyries-vs-seattle-storm-jun-12-2026-game-boxscore-2434",
+            "contentUri": "basketball/wnba/events/2434",
+            "contentType": "event",
+            "layout": {
+              "path": "/layouts?type=layout&subtype=wnbaEventLayout",
+              "tokens": {
+                "id": "2434",
+                "eventUri": "basketball/wnba/events/2434",
+                "homeUri": "basketball/wnba/teams/12",
+                "awayUri": "basketball/wnba/teams/23"
+              }
+            },
+            "analyticsSport": "wnba",
+            "type": "entity"
+          },
+          "league": "WNBA",
+          "importance": 0,
+          "upperTeam": {
+            "name": "GSV",
+            "uri": "basketball/wnba/teams/23",
+            "longName": "Valkyries",
+            "stackedNameTop": "Golden State",
+            "stackedNameBottom": "Valkyries",
+            "logoUrl": "https://b.fssta.com/uploads/application/wnba/team-logos/Valkyries.vresize.80.80.medium.0.png",
+            "imageType": "image-logo",
+            "imageAltText": "Golden State Valkyries",
+            "record": "7-5",
+            "isLoser": false,
+            "hasPossession": false,
+            "alternateLogoUrl": "https://b.fssta.com/uploads/application/wnba/team-logos/Valkyries-alternate.vresize.80.80.medium.0.png"
+          },
+          "lowerTeam": {
+            "name": "SEA",
+            "uri": "basketball/wnba/teams/12",
+            "longName": "Storm",
+            "stackedNameTop": "Seattle",
+            "stackedNameBottom": "Storm",
+            "logoUrl": "https://b.fssta.com/uploads/application/wnba/team-logos/Storm.vresize.80.80.medium.2.png",
+            "imageType": "image-logo",
+            "imageAltText": "Seattle Storm",
+            "record": "3-11",
+            "isLoser": false,
+            "hasPossession": false,
+            "alternateLogoUrl": "https://b.fssta.com/uploads/application/wnba/team-logos/Storm.vresize.80.80.medium.2.png"
+          },
+          "oddsLine": "GSV -9.5",
+          "overUnderLine": "TOTAL 157.5"
+        }
+      ]
+    }
+  ],
+  "quickNav": [
+    {
+      "id": "0",
+      "uri": "https://api.foxsports.com/bifrost/v1/topevents/scoreboard/segment/0",
+      "date": "2026-06-11T04:00:00Z"
+    },
+    {
+      "id": "1",
+      "uri": "https://api.foxsports.com/bifrost/v1/topevents/scoreboard/segment/1",
+      "date": "2026-06-12T04:00:00Z",
+      "selected": true
+    }
+  ]
+}

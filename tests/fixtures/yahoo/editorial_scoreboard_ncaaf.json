@@ -1,0 +1,1459 @@
+{
+ "service": {
+  "xml:lang": "en-US",
+  "scoreboard": {
+   "games": {
+    "ncaaf.g.202608290085": {
+     "gameid": "ncaaf.g.202608290085",
+     "global_gameid": "ncaaf.g.13591612",
+     "start_time": "Sat, 29 Aug 2026 16:00:00 +0000",
+     "is_time_tba": false,
+     "season_phase_id": "season.phase.season",
+     "game_type": null,
+     "winning_team_id": null,
+     "is_rank_upset": null,
+     "is_spread_upset": null,
+     "outcome_type": null,
+     "home_team_id": "ncaaf.t.85",
+     "away_team_id": "ncaaf.t.6",
+     "week_number": "1",
+     "navigation_links": {
+      "tickets": {
+       "url": "https://seatgeek.com/tcu-horned-frogs-football-tickets?aid=14&date=2026-08-29"
+      },
+      "boxscore": {
+       "url": "/ncaaf/north-carolina-tar-heels-tcu-horned-frogs-202608290085/"
+      },
+      "match_page": {
+       "url": "/ncaaf/north-carolina-tar-heels-tcu-horned-frogs-202608290085/"
+      },
+      "league_home": {
+       "url": "/ncaa/football"
+      },
+      "league_scores": {
+       "url": "/ncaa/football/scoreboard"
+      }
+     },
+     "sportacular_url": "ysportacular://v2/scores/details?gameId=ncaaf.g.202608290085&sport=ncaaf",
+     "status_display_name": "12:00 pm ET",
+     "status_description": "Pregame",
+     "status_type": "status.type.pregame",
+     "total_away_points": null,
+     "current_period_id": null,
+     "total_home_points": null,
+     "total_away_shootout_points": null,
+     "total_home_shootout_points": null,
+     "home_team_stats": null,
+     "away_team_stats": null,
+     "game_period_balls": null,
+     "game_period_strikes": null,
+     "game_period_outs": null,
+     "yards_to_endzone": null,
+     "start_yardline": null,
+     "distance": null,
+     "down": null,
+     "team_in_possession": null,
+     "power_play_strength_home": null,
+     "power_play_strength_away": null,
+     "game_time_elapsed": null,
+     "game_time_elapsed_display": null,
+     "inning_status": null,
+     "away_timeouts": null,
+     "home_timeouts": null,
+     "is_halftime": null,
+     "minimum_periods": null,
+     "game_periods": [],
+     "baserunners": null,
+     "season": "2026",
+     "subleague": null,
+     "subleague_display_name": null,
+     "agg_score": null,
+     "leg_number": null,
+     "tv_coverage": "ESPN",
+     "provider_coverage": {
+      "score_update_frequency_in_minutes": "5",
+      "has_plays": "true",
+      "has_stats": "true",
+      "has_extended_stats": "true",
+      "has_final_stats": "false"
+     },
+     "seatgeek_id": null,
+     "last_updated": false,
+     "teams": [
+      "dataIslandPaths",
+      "ncaaf.g.202608290085",
+      "teams"
+     ],
+     "play_by_play": [
+      "gameplay_by_play",
+      "ncaaf.g.202608290085"
+     ],
+     "pitches": [
+      "gamepitches",
+      "ncaaf.g.202608290085"
+     ],
+     "at_bat": [
+      "gameat_bat",
+      "ncaaf.g.202608290085"
+     ],
+     "penalty_summary": [
+      "gamepenalty_summary",
+      "ncaaf.g.202608290085"
+     ],
+     "scoring_summary": [
+      "gamescoring_summary",
+      "ncaaf.g.202608290085"
+     ],
+     "stat_categories": [
+      "game_stat_leaders"
+     ],
+     "stadium": [
+      "gamestadium",
+      "ncaaf.g.202608290085"
+     ],
+     "stadium_id": [
+      "gamestadium_id",
+      "ncaaf.g.202608290085"
+     ],
+     "stadium_image": [
+      "gamestadium_image",
+      "ncaaf.g.202608290085"
+     ],
+     "attendance": [
+      "gameattendance",
+      "ncaaf.g.202608290085"
+     ],
+     "lineups": [
+      "gamelineups",
+      "ncaaf.g.202608290085"
+     ],
+     "top_performer": [
+      "gametop_performer",
+      "ncaaf.g.202608290085"
+     ],
+     "players": [
+      "dataIslandPaths",
+      "ncaaf.g.202608290085",
+      "players"
+     ],
+     "byline": [
+      "gamebyline",
+      "ncaaf.g.202608290085"
+     ],
+     "highlight": [
+      "gamehighlight",
+      "ncaaf.g.202608290085"
+     ],
+     "highlights": [
+      "gamehighlights",
+      "ncaaf.g.202608290085"
+     ],
+     "live_video": [
+      "gamelive_video",
+      "ncaaf.g.202608290085"
+     ],
+     "odds": [
+      "gameodds",
+      "ncaaf.g.202608290085"
+     ],
+     "current_players": [
+      "gamecurrent_players",
+      "ncaaf.g.202608290085"
+     ],
+     "last_play": [
+      "gamelast_play",
+      "ncaaf.g.202608290085"
+     ],
+     "series_type": [
+      "gameseries_type",
+      "ncaaf.g.202608290085"
+     ],
+     "series_status": [
+      "gameseries_status",
+      "ncaaf.g.202608290085"
+     ],
+     "games": [
+      "dataIslandPaths",
+      "ncaaf.g.202608290085",
+      "games"
+     ],
+     "series_games": [
+      "gameseries_games",
+      "ncaaf.g.202608290085"
+     ],
+     "game_details": [
+      "gamegame_details",
+      "ncaaf.g.202608290085"
+     ],
+     "section_notes": [
+      "gamesection_notes",
+      "ncaaf.g.202608290085"
+     ],
+     "articles": [
+      "dataIslandPaths",
+      "ncaaf.g.202608290085",
+      "gamearticles"
+     ],
+     "tweets": [
+      "gametweets",
+      "ncaaf.g.202608290085"
+     ],
+     "playoff_round": [
+      "gameplayoff_round",
+      "ncaaf.g.202608290085"
+     ],
+     "media_stream": [
+      "gamemedia_stream",
+      "ncaaf.g.202608290085"
+     ],
+     "playoff_series_status": [
+      "gameplayoff_series_status",
+      "ncaaf.g.202608290085"
+     ],
+     "playoff_series_details": [
+      "gameplayoff_series_details",
+      "ncaaf.g.202608290085"
+     ],
+     "drives": [
+      "gamedrives",
+      "ncaaf.g.202608290085"
+     ],
+     "user_teams_game": [
+      "gameuser_teams_game",
+      "ncaaf.g.202608290085"
+     ],
+     "page_metadata": [
+      "gamepage_metadata",
+      "ncaaf.g.202608290085"
+     ],
+     "penalty_box": [
+      "gamepenalty_box",
+      "ncaaf.g.202608290085"
+     ],
+     "starting_pitchers": [
+      "gamestarting_pitchers",
+      "ncaaf.g.202608290085"
+     ],
+     "unrestricted_streams": [
+      "gameunrestricted_streams",
+      "ncaaf.g.202608290085"
+     ],
+     "tv_details": [
+      "gametv_details",
+      "ncaaf.g.202608290085"
+     ],
+     "away_seed": null,
+     "home_seed": null
+    },
+    "ncaaf.g.202608290062": {
+     "gameid": "ncaaf.g.202608290062",
+     "global_gameid": "ncaaf.g.13591629",
+     "start_time": "Sat, 29 Aug 2026 19:00:00 +0000",
+     "is_time_tba": false,
+     "season_phase_id": "season.phase.season",
+     "game_type": null,
+     "winning_team_id": null,
+     "is_rank_upset": null,
+     "is_spread_upset": null,
+     "outcome_type": null,
+     "home_team_id": "ncaaf.t.62",
+     "away_team_id": "ncaaf.t.44",
+     "week_number": "1",
+     "navigation_links": {
+      "tickets": {
+       "url": "https://seatgeek.com/usc-trojans-football-tickets?aid=14&date=2026-08-29"
+      },
+      "boxscore": {
+       "url": "/ncaaf/san-jose-state-spartans-usc-trojans-202608290062/"
+      },
+      "match_page": {
+       "url": "/ncaaf/san-jose-state-spartans-usc-trojans-202608290062/"
+      },
+      "league_home": {
+       "url": "/ncaa/football"
+      },
+      "league_scores": {
+       "url": "/ncaa/football/scoreboard"
+      }
+     },
+     "sportacular_url": "ysportacular://v2/scores/details?gameId=ncaaf.g.202608290062&sport=ncaaf",
+     "status_display_name": "3:00 pm ET",
+     "status_description": "Pregame",
+     "status_type": "status.type.pregame",
+     "total_away_points": null,
+     "current_period_id": null,
+     "total_home_points": null,
+     "total_away_shootout_points": null,
+     "total_home_shootout_points": null,
+     "home_team_stats": null,
+     "away_team_stats": null,
+     "game_period_balls": null,
+     "game_period_strikes": null,
+     "game_period_outs": null,
+     "yards_to_endzone": null,
+     "start_yardline": null,
+     "distance": null,
+     "down": null,
+     "team_in_possession": null,
+     "power_play_strength_home": null,
+     "power_play_strength_away": null,
+     "game_time_elapsed": null,
+     "game_time_elapsed_display": null,
+     "inning_status": null,
+     "away_timeouts": null,
+     "home_timeouts": null,
+     "is_halftime": null,
+     "minimum_periods": null,
+     "game_periods": [],
+     "baserunners": null,
+     "season": "2026",
+     "subleague": null,
+     "subleague_display_name": null,
+     "agg_score": null,
+     "leg_number": null,
+     "tv_coverage": "NBC",
+     "provider_coverage": {
+      "score_update_frequency_in_minutes": "5",
+      "has_plays": "true",
+      "has_stats": "true",
+      "has_extended_stats": "true",
+      "has_final_stats": "false"
+     },
+     "seatgeek_id": null,
+     "last_updated": false,
+     "teams": [
+      "dataIslandPaths",
+      "ncaaf.g.202608290062",
+      "teams"
+     ],
+     "play_by_play": [
+      "gameplay_by_play",
+      "ncaaf.g.202608290062"
+     ],
+     "pitches": [
+      "gamepitches",
+      "ncaaf.g.202608290062"
+     ],
+     "at_bat": [
+      "gameat_bat",
+      "ncaaf.g.202608290062"
+     ],
+     "penalty_summary": [
+      "gamepenalty_summary",
+      "ncaaf.g.202608290062"
+     ],
+     "scoring_summary": [
+      "gamescoring_summary",
+      "ncaaf.g.202608290062"
+     ],
+     "stat_categories": [
+      "game_stat_leaders"
+     ],
+     "stadium": [
+      "gamestadium",
+      "ncaaf.g.202608290062"
+     ],
+     "stadium_id": [
+      "gamestadium_id",
+      "ncaaf.g.202608290062"
+     ],
+     "stadium_image": [
+      "gamestadium_image",
+      "ncaaf.g.202608290062"
+     ],
+     "attendance": [
+      "gameattendance",
+      "ncaaf.g.202608290062"
+     ],
+     "lineups": [
+      "gamelineups",
+      "ncaaf.g.202608290062"
+     ],
+     "top_performer": [
+      "gametop_performer",
+      "ncaaf.g.202608290062"
+     ],
+     "players": [
+      "dataIslandPaths",
+      "ncaaf.g.202608290062",
+      "players"
+     ],
+     "byline": [
+      "gamebyline",
+      "ncaaf.g.202608290062"
+     ],
+     "highlight": [
+      "gamehighlight",
+      "ncaaf.g.202608290062"
+     ],
+     "highlights": [
+      "gamehighlights",
+      "ncaaf.g.202608290062"
+     ],
+     "live_video": [
+      "gamelive_video",
+      "ncaaf.g.202608290062"
+     ],
+     "odds": [
+      "gameodds",
+      "ncaaf.g.202608290062"
+     ],
+     "current_players": [
+      "gamecurrent_players",
+      "ncaaf.g.202608290062"
+     ],
+     "last_play": [
+      "gamelast_play",
+      "ncaaf.g.202608290062"
+     ],
+     "series_type": [
+      "gameseries_type",
+      "ncaaf.g.202608290062"
+     ],
+     "series_status": [
+      "gameseries_status",
+      "ncaaf.g.202608290062"
+     ],
+     "games": [
+      "dataIslandPaths",
+      "ncaaf.g.202608290062",
+      "games"
+     ],
+     "series_games": [
+      "gameseries_games",
+      "ncaaf.g.202608290062"
+     ],
+     "game_details": [
+      "gamegame_details",
+      "ncaaf.g.202608290062"
+     ],
+     "section_notes": [
+      "gamesection_notes",
+      "ncaaf.g.202608290062"
+     ],
+     "articles": [
+      "dataIslandPaths",
+      "ncaaf.g.202608290062",
+      "gamearticles"
+     ],
+     "tweets": [
+      "gametweets",
+      "ncaaf.g.202608290062"
+     ],
+     "playoff_round": [
+      "gameplayoff_round",
+      "ncaaf.g.202608290062"
+     ],
+     "media_stream": [
+      "gamemedia_stream",
+      "ncaaf.g.202608290062"
+     ],
+     "playoff_series_status": [
+      "gameplayoff_series_status",
+      "ncaaf.g.202608290062"
+     ],
+     "playoff_series_details": [
+      "gameplayoff_series_details",
+      "ncaaf.g.202608290062"
+     ],
+     "drives": [
+      "gamedrives",
+      "ncaaf.g.202608290062"
+     ],
+     "user_teams_game": [
+      "gameuser_teams_game",
+      "ncaaf.g.202608290062"
+     ],
+     "page_metadata": [
+      "gamepage_metadata",
+      "ncaaf.g.202608290062"
+     ],
+     "penalty_box": [
+      "gamepenalty_box",
+      "ncaaf.g.202608290062"
+     ],
+     "starting_pitchers": [
+      "gamestarting_pitchers",
+      "ncaaf.g.202608290062"
+     ],
+     "unrestricted_streams": [
+      "gameunrestricted_streams",
+      "ncaaf.g.202608290062"
+     ],
+     "tv_details": [
+      "gametv_details",
+      "ncaaf.g.202608290062"
+     ],
+     "away_seed": null,
+     "home_seed": null
+    }
+   },
+   "gameplayoff_round": {
+    "ncaaf.g.202608290085": null,
+    "ncaaf.g.202608290062": null
+   },
+   "gameplayoff_series_status": {
+    "ncaaf.g.202608290085": null,
+    "ncaaf.g.202608290062": null
+   },
+   "gameplayoff_series_details": {
+    "ncaaf.g.202608290085": null,
+    "ncaaf.g.202608290062": null
+   },
+   "teams": {
+    "ncaaf.t.85": {
+     "team_id": "ncaaf.t.85",
+     "display_name": "TCU",
+     "first_name": "TCU",
+     "last_name": "Horned Frogs",
+     "full_name": "TCU Horned Frogs",
+     "abbr": "TCU",
+     "division_id": "1",
+     "division": "FBS",
+     "division_abbr": "",
+     "subdivision_id": null,
+     "subdivision": null,
+     "conference_id": "71",
+     "conference_abbr": "BIG12",
+     "conference_seed": null,
+     "conference": "Big 12",
+     "seatgeek_id": "5589",
+     "sportacularLogo": [
+      "teamsportacularLogo",
+      "ncaaf.t.85"
+     ],
+     "sportacularLogoDark": [
+      "teamsportacularLogoDark",
+      "ncaaf.t.85"
+     ],
+     "logo": [
+      "teamLogo",
+      "ncaaf.t.85"
+     ],
+     "logoDark": [
+      "teamLogoDark",
+      "ncaaf.t.85"
+     ],
+     "colorPrimary": [
+      "teamcolorPrimary",
+      "ncaaf.t.85"
+     ],
+     "colorSecondary": [
+      "teamColorSecondary",
+      "ncaaf.t.85"
+     ],
+     "record": [
+      "teamrecord",
+      "ncaaf.t.85"
+     ],
+     "players": [
+      "players_info"
+     ],
+     "rankings": [
+      "teamrankings",
+      "ncaaf.t.85"
+     ],
+     "stat_categories": [
+      "team_stats"
+     ],
+     "page_metadata": [
+      "teampage_metadata",
+      "ncaaf.t.85"
+     ],
+     "teamHomeLink": "/ncaaf/teams/tcu",
+     "teamScheduleLink": "/ncaaf/teams/tcu/schedule",
+     "conference_position": null,
+     "group_position": "",
+     "playoff_seed": null
+    },
+    "ncaaf.t.6": {
+     "team_id": "ncaaf.t.6",
+     "display_name": "N. Carolina",
+     "first_name": "North Carolina",
+     "last_name": "Tar Heels",
+     "full_name": "North Carolina Tar Heels",
+     "abbr": "UNC",
+     "division_id": "1",
+     "division": "FBS",
+     "division_abbr": "",
+     "subdivision_id": null,
+     "subdivision": null,
+     "conference_id": "1",
+     "conference_abbr": "ACC",
+     "conference_seed": null,
+     "conference": "Atlantic Coast",
+     "seatgeek_id": "5521",
+     "sportacularLogo": [
+      "teamsportacularLogo",
+      "ncaaf.t.6"
+     ],
+     "sportacularLogoDark": [
+      "teamsportacularLogoDark",
+      "ncaaf.t.6"
+     ],
+     "logo": [
+      "teamLogo",
+      "ncaaf.t.6"
+     ],
+     "logoDark": [
+      "teamLogoDark",
+      "ncaaf.t.6"
+     ],
+     "colorPrimary": [
+      "teamcolorPrimary",
+      "ncaaf.t.6"
+     ],
+     "colorSecondary": [
+      "teamColorSecondary",
+      "ncaaf.t.6"
+     ],
+     "record": [
+      "teamrecord",
+      "ncaaf.t.6"
+     ],
+     "players": [
+      "players_info"
+     ],
+     "rankings": [
+      "teamrankings",
+      "ncaaf.t.6"
+     ],
+     "stat_categories": [
+      "team_stats"
+     ],
+     "page_metadata": [
+      "teampage_metadata",
+      "ncaaf.t.6"
+     ],
+     "teamHomeLink": "/ncaaf/teams/north-carolina",
+     "teamScheduleLink": "/ncaaf/teams/north-carolina/schedule",
+     "conference_position": null,
+     "group_position": "",
+     "playoff_seed": null
+    },
+    "ncaaf.t.62": {
+     "team_id": "ncaaf.t.62",
+     "display_name": "USC",
+     "first_name": "USC",
+     "last_name": "Trojans",
+     "full_name": "USC Trojans",
+     "abbr": "USC",
+     "division_id": "1",
+     "division": "FBS",
+     "division_abbr": "",
+     "subdivision_id": null,
+     "subdivision": null,
+     "conference_id": "4",
+     "conference_abbr": "BTEN",
+     "conference_seed": null,
+     "conference": "Big Ten",
+     "seatgeek_id": "5636",
+     "sportacularLogo": [
+      "teamsportacularLogo",
+      "ncaaf.t.62"
+     ],
+     "sportacularLogoDark": [
+      "teamsportacularLogoDark",
+      "ncaaf.t.62"
+     ],
+     "logo": [
+      "teamLogo",
+      "ncaaf.t.62"
+     ],
+     "logoDark": [
+      "teamLogoDark",
+      "ncaaf.t.62"
+     ],
+     "colorPrimary": [
+      "teamcolorPrimary",
+      "ncaaf.t.62"
+     ],
+     "colorSecondary": [
+      "teamColorSecondary",
+      "ncaaf.t.62"
+     ],
+     "record": [
+      "teamrecord",
+      "ncaaf.t.62"
+     ],
+     "players": [
+      "players_info"
+     ],
+     "rankings": [
+      "teamrankings",
+      "ncaaf.t.62"
+     ],
+     "stat_categories": [
+      "team_stats"
+     ],
+     "page_metadata": [
+      "teampage_metadata",
+      "ncaaf.t.62"
+     ],
+     "teamHomeLink": "/ncaaf/teams/usc",
+     "teamScheduleLink": "/ncaaf/teams/usc/schedule",
+     "conference_position": null,
+     "group_position": "",
+     "playoff_seed": null
+    }
+   },
+   "teamsportacularLogo": {
+    "ncaaf.t.85": "https://s.yimg.com/cv/apiv2/default/ncaaf/20181214/70x70/tcu2_wbgs.png",
+    "ncaaf.t.6": "https://s.yimg.com/cv/apiv2/default/ncaaf/20181207/70x70/north_carolina_wbg.png",
+    "ncaaf.t.62": "https://s.yimg.com/cv/apiv2/default/ncaaf/20181204/70x70/usc_wbg.png"
+   },
+   "teamsportacularLogoDark": {
+    "ncaaf.t.85": "https://s.yimg.com/cv/apiv2/default/ncaaf/20181214/70x70/tcu2_s.png",
+    "ncaaf.t.6": "https://s.yimg.com/cv/apiv2/default/ncaaf/20181207/70x70/north_carolina.png",
+    "ncaaf.t.62": "https://s.yimg.com/cv/apiv2/default/ncaaf/20181204/70x70/usc.png"
+   },
+   "teamLogo": {
+    "ncaaf.t.85": "https://s.yimg.com/cv/apiv2/default/ncaaf/20181214/500x500/tcu2_wbgs.png",
+    "ncaaf.t.6": "https://s.yimg.com/cv/apiv2/default/ncaaf/20181207/500x500/north_carolina_wbg.png",
+    "ncaaf.t.62": "https://s.yimg.com/cv/apiv2/default/ncaaf/20181204/500x500/usc_wbg.png"
+   },
+   "teamLogoDark": {
+    "ncaaf.t.85": "https://s.yimg.com/cv/apiv2/default/ncaaf/20181214/500x500/tcu2_wbgs.png",
+    "ncaaf.t.6": "https://s.yimg.com/cv/apiv2/default/ncaaf/20181207/500x500/north_carolina_wbg.png",
+    "ncaaf.t.62": "https://s.yimg.com/cv/apiv2/default/ncaaf/20181204/500x500/usc_wbg.png"
+   },
+   "teamrecord": {
+    "ncaaf.t.85": "0-0",
+    "ncaaf.t.6": "0-0",
+    "ncaaf.t.62": "0-0"
+   },
+   "teamrankings": {
+    "ncaaf.t.85": {
+     "ncaaf.poll.9": {
+      "date": "2025-12-07",
+      "poll_key": "ncaaf.poll.9",
+      "rank": false,
+      "previous_rank": 0,
+      "points": false,
+      "source": "CFB Selection Committee",
+      "primary": "true",
+      "relevant": "false",
+      "teams": [
+       "teams"
+      ]
+     },
+     "ncaaf.poll.1": {
+      "date": "2025-12-07",
+      "poll_key": "ncaaf.poll.1",
+      "rank": false,
+      "previous_rank": 0,
+      "points": false,
+      "source": "AP Top 25",
+      "primary": "false",
+      "relevant": "false",
+      "teams": [
+       "teams"
+      ]
+     },
+     "ncaaf.poll.3": {
+      "date": "2025-12-07",
+      "poll_key": "ncaaf.poll.3",
+      "rank": false,
+      "previous_rank": 0,
+      "points": false,
+      "source": "Coaches",
+      "primary": "false",
+      "relevant": "false",
+      "teams": [
+       "teams"
+      ]
+     }
+    },
+    "ncaaf.t.6": {
+     "ncaaf.poll.9": {
+      "date": "2025-12-07",
+      "poll_key": "ncaaf.poll.9",
+      "rank": false,
+      "previous_rank": 0,
+      "points": false,
+      "source": "CFB Selection Committee",
+      "primary": "true",
+      "relevant": "false",
+      "teams": [
+       "teams"
+      ]
+     },
+     "ncaaf.poll.1": {
+      "date": "2025-12-07",
+      "poll_key": "ncaaf.poll.1",
+      "rank": false,
+      "previous_rank": 0,
+      "points": false,
+      "source": "AP Top 25",
+      "primary": "false",
+      "relevant": "false",
+      "teams": [
+       "teams"
+      ]
+     },
+     "ncaaf.poll.3": {
+      "date": "2025-12-07",
+      "poll_key": "ncaaf.poll.3",
+      "rank": false,
+      "previous_rank": 0,
+      "points": false,
+      "source": "Coaches",
+      "primary": "false",
+      "relevant": "false",
+      "teams": [
+       "teams"
+      ]
+     }
+    },
+    "ncaaf.t.62": {
+     "ncaaf.poll.9": {
+      "date": "2025-12-07",
+      "poll_key": "ncaaf.poll.9",
+      "rank": "16",
+      "previous_rank": "16",
+      "points": "10",
+      "source": "CFB Selection Committee",
+      "primary": "true",
+      "relevant": "false",
+      "teams": [
+       "teams"
+      ]
+     },
+     "ncaaf.poll.1": {
+      "date": "2025-12-07",
+      "poll_key": "ncaaf.poll.1",
+      "rank": "16",
+      "previous_rank": "17",
+      "points": "609",
+      "source": "AP Top 25",
+      "primary": "false",
+      "relevant": "false",
+      "teams": [
+       "teams"
+      ]
+     },
+     "ncaaf.poll.3": {
+      "date": "2025-12-07",
+      "poll_key": "ncaaf.poll.3",
+      "rank": "16",
+      "previous_rank": "17",
+      "points": "558",
+      "source": "Coaches",
+      "primary": "false",
+      "relevant": "false",
+      "teams": [
+       "teams"
+      ]
+     }
+    }
+   },
+   "leagues": {
+    "ncaaf": {
+     "league_id": "ncaaf",
+     "name": "NCAAF",
+     "display_name": "College Football",
+     "link": "https://sports.yahoo.com/ncaa/football",
+     "season": {
+      "year": "2026",
+      "display_year": "2026",
+      "week_number": 1,
+      "season_current_date": "2026-08-29",
+      "season_next_real_game_date": "2026-08-27",
+      "season_next_game_date": "2026-08-27",
+      "season_month": "06",
+      "display_schedule_period": "season.phase.offseason",
+      "display_schedule_period_id": "4",
+      "current_phase": "season.phase.offseason",
+      "current_sched_state": "4",
+      "suspended": "0",
+      "current_stat_state": {
+       "season": 2025,
+       "week": "16",
+       "graphite_phase": "REGULAR_SEASON"
+      }
+     },
+     "season_phases": {
+      "2": {
+       "phase_id": "season.phase.season",
+       "name": "Regular Season",
+       "sched_state": "2",
+       "phase_start": "Tue, 25 Aug 2026 07:00:00 +0000",
+       "phase_end": "Tue, 15 Dec 2026 08:00:00 +0000",
+       "phase_start_week": "1",
+       "phase_end_week": "15",
+       "structures": [
+        "divisions",
+        "ncaaf"
+       ]
+      },
+      "3": {
+       "phase_id": "season.phase.postseason",
+       "name": "Post Season",
+       "sched_state": "3",
+       "phase_start": "TBD",
+       "phase_end": "TBD",
+       "phase_start_week": false,
+       "phase_end_week": false,
+       "structures": [
+        "divisions",
+        "ncaaf"
+       ]
+      },
+      "4": {
+       "phase_id": "season.phase.offseason",
+       "name": "Off Season",
+       "sched_state": "4",
+       "phase_start": "Tue, 15 Dec 2026 08:00:00 +0000",
+       "phase_end": "TBD",
+       "phase_start_week": false,
+       "phase_end_week": false,
+       "structures": [
+        "divisions",
+        "ncaaf"
+       ]
+      }
+     }
+    }
+   },
+   "divisions": {
+    "ncaaf": {
+     "1": {
+      "id": 1,
+      "name": "FBS",
+      "type": "division",
+      "conferences": {
+       "1": {
+        "id": 1,
+        "name": "Atlantic Coast",
+        "type": "conference"
+       },
+       "4": {
+        "id": 4,
+        "name": "Big Ten",
+        "type": "conference"
+       },
+       "6": {
+        "id": 6,
+        "name": "Mid-American",
+        "type": "conference"
+       },
+       "7": {
+        "id": 7,
+        "name": "Pac-12",
+        "type": "conference"
+       },
+       "8": {
+        "id": 8,
+        "name": "SEC",
+        "type": "conference"
+       },
+       "11": {
+        "id": 11,
+        "name": "Independents (FBS)",
+        "type": "conference"
+       },
+       "71": {
+        "id": 71,
+        "name": "Big 12",
+        "type": "conference"
+       },
+       "72": {
+        "id": 72,
+        "name": "Conference USA",
+        "type": "conference"
+       },
+       "87": {
+        "id": 87,
+        "name": "Mountain West",
+        "type": "conference"
+       },
+       "90": {
+        "id": 90,
+        "name": "Sun Belt",
+        "type": "conference",
+        "subdivisions": {
+         "1": {
+          "id": 1,
+          "name": "East Division",
+          "type": "subdivision"
+         },
+         "2": {
+          "id": 2,
+          "name": "West Division",
+          "type": "subdivision"
+         }
+        }
+       },
+       "122": {
+        "id": 122,
+        "name": "American Athletic",
+        "type": "conference"
+       }
+      }
+     },
+     "2": {
+      "id": 2,
+      "name": "FCS",
+      "type": "division",
+      "conferences": {
+       "13": {
+        "id": 13,
+        "name": "Big Sky",
+        "type": "conference"
+       },
+       "14": {
+        "id": 14,
+        "name": "Missouri Valley",
+        "type": "conference"
+       },
+       "15": {
+        "id": 15,
+        "name": "Ivy League",
+        "type": "conference"
+       },
+       "17": {
+        "id": 17,
+        "name": "Mid-Eastern Athletic",
+        "type": "conference"
+       },
+       "19": {
+        "id": 19,
+        "name": "Patriot League",
+        "type": "conference"
+       },
+       "20": {
+        "id": 20,
+        "name": "Pioneer League",
+        "type": "conference"
+       },
+       "21": {
+        "id": 21,
+        "name": "Southern",
+        "type": "conference"
+       },
+       "22": {
+        "id": 22,
+        "name": "Southland",
+        "type": "conference"
+       },
+       "23": {
+        "id": 23,
+        "name": "Southwestern Athletic",
+        "type": "conference",
+        "subdivisions": {
+         "1": {
+          "id": 1,
+          "name": "East Division",
+          "type": "subdivision"
+         },
+         "2": {
+          "id": 2,
+          "name": "West Division",
+          "type": "subdivision"
+         }
+        }
+       },
+       "73": {
+        "id": 73,
+        "name": "Northeast",
+        "type": "conference"
+       },
+       "74": {
+        "id": 74,
+        "name": "Independents (FCS)",
+        "type": "conference"
+       },
+       "98": {
+        "id": 98,
+        "name": "Coastal Athletic",
+        "type": "conference"
+       },
+       "282": {
+        "id": 282,
+        "name": "United Athletic Conference",
+        "type": "conference"
+       },
+       "283": {
+        "id": 283,
+        "name": "Big South-OVC",
+        "type": "conference"
+       }
+      }
+     },
+     "3": {
+      "id": 3,
+      "name": "D2",
+      "type": "division",
+      "conferences": {
+       "25": {
+        "id": 25,
+        "name": "CIAA",
+        "type": "conference"
+       },
+       "27": {
+        "id": 27,
+        "name": "Gulf South",
+        "type": "conference"
+       },
+       "28": {
+        "id": 28,
+        "name": "Lone Star",
+        "type": "conference"
+       },
+       "29": {
+        "id": 29,
+        "name": "Mid-America Intercollegiate Athletics Association",
+        "type": "conference"
+       },
+       "33": {
+        "id": 33,
+        "name": "Northern Sun Intercollegiate",
+        "type": "conference"
+       },
+       "34": {
+        "id": 34,
+        "name": "Pennsylvania State Athletic Conference",
+        "type": "conference"
+       },
+       "35": {
+        "id": 35,
+        "name": "Rocky Mountain Athletic",
+        "type": "conference"
+       },
+       "36": {
+        "id": 36,
+        "name": "South Atlantic",
+        "type": "conference"
+       },
+       "37": {
+        "id": 37,
+        "name": "Southern Intercollegiate Athletic",
+        "type": "conference"
+       },
+       "97": {
+        "id": 97,
+        "name": "Great Lakes Intercollegiate Athletic",
+        "type": "conference"
+       },
+       "99": {
+        "id": 99,
+        "name": "Northeast 10",
+        "type": "conference"
+       },
+       "102": {
+        "id": 102,
+        "name": "Atlantic Central Conference",
+        "type": "conference"
+       },
+       "107": {
+        "id": 107,
+        "name": "Great Northwest Athletic Conference",
+        "type": "conference"
+       },
+       "121": {
+        "id": 121,
+        "name": "Great American Conference",
+        "type": "conference"
+       },
+       "123": {
+        "id": 123,
+        "name": "Great Midwest Athletic Conference",
+        "type": "conference"
+       },
+       "127": {
+        "id": 127,
+        "name": "Great Lakes Valley Conference",
+        "type": "conference"
+       },
+       "128": {
+        "id": 128,
+        "name": "Mountain East Conference",
+        "type": "conference"
+       },
+       "285": {
+        "id": 285,
+        "name": "Conference Carolinas",
+        "type": "conference"
+       }
+      }
+     },
+     "4": {
+      "id": 4,
+      "name": "D3",
+      "type": "division",
+      "conferences": {
+       "26": {
+        "id": 26,
+        "name": "Eastern Collegiate",
+        "type": "conference"
+       },
+       "30": {
+        "id": 30,
+        "name": "Midwest Intercollegiate",
+        "type": "conference"
+       },
+       "41": {
+        "id": 41,
+        "name": "Centennial Football",
+        "type": "conference"
+       },
+       "46": {
+        "id": 46,
+        "name": "Michigan Intercollegiate Athletic Association",
+        "type": "conference"
+       },
+       "49": {
+        "id": 49,
+        "name": "Minnesota Intercollegiate Athletic",
+        "type": "conference"
+       },
+       "51": {
+        "id": 51,
+        "name": "New England Football",
+        "type": "conference"
+       },
+       "53": {
+        "id": 53,
+        "name": "North Coast Athletic",
+        "type": "conference"
+       },
+       "55": {
+        "id": 55,
+        "name": "Old Dominion Athletic",
+        "type": "conference"
+       },
+       "56": {
+        "id": 56,
+        "name": "Presidents' Athletic",
+        "type": "conference"
+       },
+       "57": {
+        "id": 57,
+        "name": "Southern California Intercollegiate Athletic",
+        "type": "conference"
+       },
+       "76": {
+        "id": 76,
+        "name": "Independents (III)",
+        "type": "conference"
+       },
+       "79": {
+        "id": 79,
+        "name": "Liberty",
+        "type": "conference"
+       },
+       "93": {
+        "id": 93,
+        "name": "American Southwest",
+        "type": "conference"
+       },
+       "105": {
+        "id": 105,
+        "name": "Heartland Collegiate Athletic",
+        "type": "conference"
+       },
+       "106": {
+        "id": 106,
+        "name": "Wisconsin Intercollegiate Athletic Conference",
+        "type": "conference"
+       },
+       "109": {
+        "id": 109,
+        "name": "Empire Eight",
+        "type": "conference"
+       },
+       "113": {
+        "id": 113,
+        "name": "Upper Midwest Athletic Conference",
+        "type": "conference"
+       },
+       "114": {
+        "id": 114,
+        "name": "USA South Athletic Conference",
+        "type": "conference"
+       },
+       "129": {
+        "id": 129,
+        "name": "Massachusetts State Collegiate Athletic Conference",
+        "type": "conference"
+       },
+       "130": {
+        "id": 130,
+        "name": "Southern Athletic Association",
+        "type": "conference"
+       },
+       "132": {
+        "id": 132,
+        "name": "Central Atlantic Collegiate Conference",
+        "type": "conference"
+       }
+      }
+     },
+     "5": {
+      "id": 5,
+      "name": "NAIA",
+      "type": "division",
+      "conferences": {
+       "48": {
+        "id": 48,
+        "name": "Midwest Collegiate Athletic",
+        "type": "conference"
+       },
+       "62": {
+        "id": 62,
+        "name": "Frontier",
+        "type": "conference"
+       },
+       "68": {
+        "id": 68,
+        "name": "Mid-South",
+        "type": "conference"
+       },
+       "69": {
+        "id": 69,
+        "name": "Chicagoland Collegiate",
+        "type": "conference"
+       },
+       "70": {
+        "id": 70,
+        "name": "American Midwest",
+        "type": "conference"
+       },
+       "77": {
+        "id": 77,
+        "name": "Independents (NAIA-I)",
+        "type": "conference"
+       },
+       "103": {
+        "id": 103,
+        "name": "Cascade Collegiate Conference",
+        "type": "conference"
+       },
+       "104": {
+        "id": 104,
+        "name": "Mid-States Football Association",
+        "type": "conference"
+       },
+       "115": {
+        "id": 115,
+        "name": "Great Plains Athletic Conference",
+        "type": "conference"
+       },
+       "116": {
+        "id": 116,
+        "name": "Heart of America Athletic Conference",
+        "type": "conference"
+       },
+       "117": {
+        "id": 117,
+        "name": "Kansas Collegiate Athletic Conference",
+        "type": "conference"
+       },
+       "119": {
+        "id": 119,
+        "name": "Red River Athletic Conference",
+        "type": "conference"
+       },
+       "133": {
+        "id": 133,
+        "name": "New England Women's and Men's Athletic Conference",
+        "type": "conference"
+       },
+       "135": {
+        "id": 135,
+        "name": "Wolverine-Hoosier Athletic Conference",
+        "type": "conference"
+       },
+       "136": {
+        "id": 136,
+        "name": "Sooner Athletic Conference",
+        "type": "conference"
+       },
+       "137": {
+        "id": 137,
+        "name": "Southern States Athletic Conference",
+        "type": "conference"
+       },
+       "139": {
+        "id": 139,
+        "name": "Midlands Collegiate Athletic Conference",
+        "type": "conference"
+       },
+       "141": {
+        "id": 141,
+        "name": "Crossroads League",
+        "type": "conference"
+       },
+       "281": {
+        "id": 281,
+        "name": "The Sun Conference",
+        "type": "conference"
+       },
+       "284": {
+        "id": 284,
+        "name": "New South Athletic Conference",
+        "type": "conference"
+       }
+      }
+     },
+     "9": {
+      "id": 9,
+      "name": "USCAA",
+      "type": "division",
+      "conferences": {
+       "125": {
+        "id": 125,
+        "name": "Independents (ASCAA)",
+        "type": "conference"
+       }
+      }
+     }
+    }
+   },
+   "gameodds": {
+    "ncaaf.g.202608290085": [],
+    "ncaaf.g.202608290062": []
+   },
+   "gamebyline": {
+    "ncaaf.g.202608290085": [],
+    "ncaaf.g.202608290062": []
+   },
+   "gameunrestricted_streams": {
+    "ncaaf.g.202608290085": [],
+    "ncaaf.g.202608290062": []
+   },
+   "teamcolorPrimary": {
+    "ncaaf.t.85": "4d1979",
+    "ncaaf.t.6": "7bafd4",
+    "ncaaf.t.62": "750000"
+   },
+   "teamcolorSecondary": {
+    "ncaaf.t.85": "a3a9ac",
+    "ncaaf.t.6": "ffffff",
+    "ncaaf.t.62": "ffcc00"
+   },
+   "gamehighlight": {
+    "ncaaf.g.202608290085": null,
+    "ncaaf.g.202608290062": null
+   },
+   "gametv_details": {
+    "ncaaf.g.202608290085": {
+     "tv_details": [
+      {
+       "abbr": "ESPN",
+       "name": "ESPN 2"
+      }
+     ]
+    },
+    "ncaaf.g.202608290062": {
+     "tv_details": [
+      {
+       "abbr": "NBC",
+       "name": "NBC/Peacock"
+      }
+     ]
+    }
+   }
+  }
+ }
+}

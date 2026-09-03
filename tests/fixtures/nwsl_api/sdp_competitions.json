@@ -1,0 +1,32 @@
+{
+  "competitions": [
+    {
+      "competitionId": "nwsl::Football_Competition::44a60d83917247f28ebc196840cd3bef",
+      "providerId": "opta:Competition:f20paiiysds2gh27uby7bzt4c",
+      "name": "Baltic Cup",
+      "officialName": "Baltic Cup",
+      "shortName": "Baltic Cup",
+      "acronymName": "Baltic Cup",
+      "imagery": {}
+    },
+    {
+      "competitionId": "nwsl::Football_Competition::ace6b371c96b46e795f8537ce9c63076",
+      "providerId": "opta:Competition:287tckirbfj9nb8ar2k9r60vn",
+      "name": "MLS",
+      "officialName": "MLS",
+      "shortName": "MLS",
+      "acronymName": "MLS",
+      "imagery": {}
+    },
+    {
+      "competitionId": "nwsl::Football_Competition::de3bf05b5d2141df980b54447443bd85",
+      "providerId": "opta:Competition:85qdzpr6i56z8tjex9d5mu5pm",
+      "name": "NWSL Challenge Cup",
+      "officialName": "NWSL Challenge Cup",
+      "shortName": "NWSL Challenge Cup",
+      "acronymName": "NWSL Challenge Cup",
+      "imagery": {}
+    }
+  ],
+  "apiCallRequestTime": "2026-07-18T18:00:59.3118015+00:00"
+}

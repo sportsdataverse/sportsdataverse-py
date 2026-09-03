@@ -1,0 +1,518 @@
+{
+  "results": [
+    {
+      "components": [
+        {
+          "type": "entity",
+          "model": {
+            "analyticsName": "kansas-city-chiefs",
+            "contentType": "team",
+            "contentUri": "football/nfl/teams/11",
+            "image": {
+              "url": "https://b.fssta.com/uploads/application/nfl/team-logos/Chiefs.vresize.200.200.medium.0.png",
+              "altUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Chiefs.vresize.200.200.medium.0.png",
+              "type": "image-logo",
+              "altText": "Kansas City Chiefs"
+            },
+            "subtitle": "NATIONAL FOOTBALL LEAGUE",
+            "title": "Kansas City Chiefs",
+            "webUrl": "/nfl/kansas-city-chiefs-team"
+          }
+        },
+        {
+          "type": "entity",
+          "model": {
+            "analyticsName": "kaizer-chiefs",
+            "contentType": "team",
+            "contentUri": "soccer/all/teams/2486",
+            "image": {
+              "url": "https://b.fssta.com/uploads/application/soccer/team-logos/Placeholder.vresize.200.200.medium.0.png",
+              "altUrl": "https://b.fssta.com/uploads/application/soccer/team-logos/Placeholder.vresize.200.200.medium.0.png",
+              "type": "image-logo",
+              "altText": "Kaizer Chiefs"
+            },
+            "subtitle": "SOCCER",
+            "title": "Kaizer Chiefs",
+            "webUrl": "/soccer/kaizer-chiefs-team"
+          }
+        },
+        {
+          "type": "entity",
+          "model": {
+            "analyticsName": "national-football-league",
+            "contentType": "league",
+            "contentUri": "football/nfl/league/1",
+            "image": {
+              "url": "https://b.fssta.com/uploads/application/leagues/logos/NFL.vresize.200.200.medium.0.png",
+              "altUrl": "https://b.fssta.com/uploads/application/leagues/logos/NFL.vresize.200.200.medium.0.png",
+              "type": "image-logo",
+              "altText": "National Football League"
+            },
+            "subtitle": "FOOTBALL",
+            "title": "National Football League",
+            "webUrl": "/nfl"
+          }
+        },
+        {
+          "type": "entity",
+          "model": {
+            "analyticsName": "denver-broncos",
+            "contentType": "team",
+            "contentUri": "football/nfl/teams/10",
+            "image": {
+              "url": "https://b.fssta.com/uploads/application/nfl/team-logos/Broncos.vresize.200.200.medium.0.png",
+              "altUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Broncos.vresize.200.200.medium.0.png",
+              "type": "image-logo",
+              "altText": "Denver Broncos"
+            },
+            "subtitle": "NATIONAL FOOTBALL LEAGUE",
+            "title": "Denver Broncos",
+            "webUrl": "/nfl/denver-broncos-team"
+          }
+        },
+        {
+          "type": "entity",
+          "model": {
+            "analyticsName": "los-angeles-chargers",
+            "contentType": "team",
+            "contentUri": "football/nfl/teams/13",
+            "image": {
+              "url": "https://b.fssta.com/uploads/application/nfl/team-logos/Chargers.vresize.200.200.medium.2.png",
+              "altUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Chargers.vresize.200.200.medium.2.png",
+              "type": "image-logo",
+              "altText": "Los Angeles Chargers"
+            },
+            "subtitle": "NATIONAL FOOTBALL LEAGUE",
+            "title": "Los Angeles Chargers",
+            "webUrl": "/nfl/los-angeles-chargers-team"
+          }
+        },
+        {
+          "type": "entity",
+          "model": {
+            "analyticsName": "los-angeles-rams",
+            "contentType": "team",
+            "contentUri": "football/nfl/teams/26",
+            "image": {
+              "url": "https://b.fssta.com/uploads/application/nfl/team-logos/Rams.vresize.200.200.medium.2.png",
+              "altUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Rams-alternate.vresize.200.200.medium.1.png",
+              "type": "image-logo",
+              "altText": "Los Angeles Rams"
+            },
+            "subtitle": "NATIONAL FOOTBALL LEAGUE",
+            "title": "Los Angeles Rams",
+            "webUrl": "/nfl/los-angeles-rams-team"
+          }
+        },
+        {
+          "type": "entity",
+          "model": {
+            "analyticsName": "new-york-giants",
+            "contentType": "team",
+            "contentUri": "football/nfl/teams/16",
+            "image": {
+              "url": "https://b.fssta.com/uploads/application/nfl/team-logos/Giants.vresize.200.200.medium.0.png",
+              "altUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Giants-alternate.vresize.200.200.medium.0.png",
+              "type": "image-logo",
+              "altText": "New York Giants"
+            },
+            "subtitle": "NATIONAL FOOTBALL LEAGUE",
+            "title": "New York Giants",
+            "webUrl": "/nfl/new-york-giants-team"
+          }
+        },
+        {
+          "type": "entity",
+          "model": {
+            "analyticsName": "philadelphia-eagles",
+            "contentType": "team",
+            "contentUri": "football/nfl/teams/17",
+            "image": {
+              "url": "https://b.fssta.com/uploads/application/nfl/team-logos/Eagles.vresize.200.200.medium.0.png",
+              "altUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Eagles.vresize.200.200.medium.0.png",
+              "type": "image-logo",
+              "altText": "Philadelphia Eagles"
+            },
+            "subtitle": "NATIONAL FOOTBALL LEAGUE",
+            "title": "Philadelphia Eagles",
+            "webUrl": "/nfl/philadelphia-eagles-team"
+          }
+        },
+        {
+          "type": "entity",
+          "model": {
+            "analyticsName": "new-england-patriots",
+            "contentType": "team",
+            "contentUri": "football/nfl/teams/4",
+            "image": {
+              "url": "https://b.fssta.com/uploads/application/nfl/team-logos/Patriots.vresize.200.200.medium.0.png",
+              "altUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Patriots.vresize.200.200.medium.0.png",
+              "type": "image-logo",
+              "altText": "New England Patriots"
+            },
+            "subtitle": "NATIONAL FOOTBALL LEAGUE",
+            "title": "New England Patriots",
+            "webUrl": "/nfl/new-england-patriots-team"
+          }
+        },
+        {
+          "type": "entity",
+          "model": {
+            "analyticsName": "seattle-seahawks",
+            "contentType": "team",
+            "contentUri": "football/nfl/teams/14",
+            "image": {
+              "url": "https://b.fssta.com/uploads/application/nfl/team-logos/Seahawks.vresize.200.200.medium.0.png",
+              "altUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Seahawks.vresize.200.200.medium.0.png",
+              "type": "image-logo",
+              "altText": "Seattle Seahawks"
+            },
+            "subtitle": "NATIONAL FOOTBALL LEAGUE",
+            "title": "Seattle Seahawks",
+            "webUrl": "/nfl/seattle-seahawks-team"
+          }
+        },
+        {
+          "type": "entity",
+          "model": {
+            "analyticsName": "baltimore-ravens",
+            "contentType": "team",
+            "contentUri": "football/nfl/teams/33",
+            "image": {
+              "url": "https://b.fssta.com/uploads/application/nfl/team-logos/Ravens.vresize.200.200.medium.0.png",
+              "altUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Ravens.vresize.200.200.medium.0.png",
+              "type": "image-logo",
+              "altText": "Baltimore Ravens"
+            },
+            "subtitle": "NATIONAL FOOTBALL LEAGUE",
+            "title": "Baltimore Ravens",
+            "webUrl": "/nfl/baltimore-ravens-team"
+          }
+        },
+        {
+          "type": "entity",
+          "model": {
+            "analyticsName": "new-york-jets",
+            "contentType": "team",
+            "contentUri": "football/nfl/teams/5",
+            "image": {
+              "url": "https://b.fssta.com/uploads/application/nfl/team-logos/Jets.vresize.200.200.medium.2.png",
+              "altUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Jets-alternate.vresize.200.200.medium.1.png",
+              "type": "image-logo",
+              "altText": "New York Jets"
+            },
+            "subtitle": "NATIONAL FOOTBALL LEAGUE",
+            "title": "New York Jets",
+            "webUrl": "/nfl/new-york-jets-team"
+          }
+        },
+        {
+          "type": "entity",
+          "model": {
+            "analyticsName": "tennessee-titans",
+            "contentType": "team",
+            "contentUri": "football/nfl/teams/8",
+            "image": {
+              "url": "https://b.fssta.com/uploads/application/nfl/team-logos/Titans.vresize.200.200.medium.0.png",
+              "altUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Titans.vresize.200.200.medium.0.png",
+              "type": "image-logo",
+              "altText": "Tennessee Titans"
+            },
+            "subtitle": "NATIONAL FOOTBALL LEAGUE",
+            "title": "Tennessee Titans",
+            "webUrl": "/nfl/tennessee-titans-team"
+          }
+        },
+        {
+          "type": "entity",
+          "model": {
+            "analyticsName": "las-vegas-raiders",
+            "contentType": "team",
+            "contentUri": "football/nfl/teams/12",
+            "image": {
+              "url": "https://b.fssta.com/uploads/application/nfl/team-logos/Raiders.vresize.200.200.medium.3.png",
+              "altUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Raiders-alternate.vresize.200.200.medium.0.png",
+              "type": "image-logo",
+              "altText": "Las Vegas Raiders"
+            },
+            "subtitle": "NATIONAL FOOTBALL LEAGUE",
+            "title": "Las Vegas Raiders",
+            "webUrl": "/nfl/las-vegas-raiders-team"
+          }
+        },
+        {
+          "type": "entity",
+          "model": {
+            "analyticsName": "chicago-bears",
+            "contentType": "team",
+            "contentUri": "football/nfl/teams/20",
+            "image": {
+              "url": "https://b.fssta.com/uploads/application/nfl/team-logos/Bears.vresize.200.200.medium.1.png",
+              "altUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Bears.vresize.200.200.medium.1.png",
+              "type": "image-logo",
+              "altText": "Chicago Bears"
+            },
+            "subtitle": "NATIONAL FOOTBALL LEAGUE",
+            "title": "Chicago Bears",
+            "webUrl": "/nfl/chicago-bears-team"
+          }
+        },
+        {
+          "type": "entity",
+          "model": {
+            "analyticsName": "pittsburgh-steelers",
+            "contentType": "team",
+            "contentUri": "football/nfl/teams/9",
+            "image": {
+              "url": "https://b.fssta.com/uploads/application/nfl/team-logos/Steelers.vresize.200.200.medium.0.png",
+              "altUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Steelers.vresize.200.200.medium.0.png",
+              "type": "image-logo",
+              "altText": "Pittsburgh Steelers"
+            },
+            "subtitle": "NATIONAL FOOTBALL LEAGUE",
+            "title": "Pittsburgh Steelers",
+            "webUrl": "/nfl/pittsburgh-steelers-team"
+          }
+        },
+        {
+          "type": "entity",
+          "model": {
+            "analyticsName": "tampa-bay-buccaneers",
+            "contentType": "team",
+            "contentUri": "football/nfl/teams/24",
+            "image": {
+              "url": "https://b.fssta.com/uploads/application/nfl/team-logos/Buccaneers.vresize.200.200.medium.2.png",
+              "altUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Buccaneers.vresize.200.200.medium.2.png",
+              "type": "image-logo",
+              "altText": "Tampa Bay Buccaneers"
+            },
+            "subtitle": "NATIONAL FOOTBALL LEAGUE",
+            "title": "Tampa Bay Buccaneers",
+            "webUrl": "/nfl/tampa-bay-buccaneers-team"
+          }
+        },
+        {
+          "type": "entity",
+          "model": {
+            "analyticsName": "miami-dolphins",
+            "contentType": "team",
+            "contentUri": "football/nfl/teams/3",
+            "image": {
+              "url": "https://b.fssta.com/uploads/application/nfl/team-logos/Dolphins.vresize.200.200.medium.0.png",
+              "altUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Dolphins.vresize.200.200.medium.0.png",
+              "type": "image-logo",
+              "altText": "Miami Dolphins"
+            },
+            "subtitle": "NATIONAL FOOTBALL LEAGUE",
+            "title": "Miami Dolphins",
+            "webUrl": "/nfl/miami-dolphins-team"
+          }
+        },
+        {
+          "type": "entity",
+          "model": {
+            "analyticsName": "cincinnati-bengals",
+            "contentType": "team",
+            "contentUri": "football/nfl/teams/6",
+            "image": {
+              "url": "https://b.fssta.com/uploads/application/nfl/team-logos/Bengals.vresize.200.200.medium.0.png",
+              "altUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Bengals.vresize.200.200.medium.0.png",
+              "type": "image-logo",
+              "altText": "Cincinnati Bengals"
+            },
+            "subtitle": "NATIONAL FOOTBALL LEAGUE",
+            "title": "Cincinnati Bengals",
+            "webUrl": "/nfl/cincinnati-bengals-team"
+          }
+        },
+        {
+          "type": "entity",
+          "model": {
+            "analyticsName": "buffalo-bills",
+            "contentType": "team",
+            "contentUri": "football/nfl/teams/1",
+            "image": {
+              "url": "https://b.fssta.com/uploads/application/nfl/team-logos/Bills.vresize.200.200.medium.0.png",
+              "altUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Bills.vresize.200.200.medium.0.png",
+              "type": "image-logo",
+              "altText": "Buffalo Bills"
+            },
+            "subtitle": "NATIONAL FOOTBALL LEAGUE",
+            "title": "Buffalo Bills",
+            "webUrl": "/nfl/buffalo-bills-team"
+          }
+        },
+        {
+          "type": "entity",
+          "model": {
+            "analyticsName": "new-orleans-saints",
+            "contentType": "team",
+            "contentUri": "football/nfl/teams/27",
+            "image": {
+              "url": "https://b.fssta.com/uploads/application/nfl/team-logos/Saints.vresize.200.200.medium.1.png",
+              "altUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Saints-alternate.vresize.200.200.medium.0.png",
+              "type": "image-logo",
+              "altText": "New Orleans Saints"
+            },
+            "subtitle": "NATIONAL FOOTBALL LEAGUE",
+            "title": "New Orleans Saints",
+            "webUrl": "/nfl/new-orleans-saints-team"
+          }
+        },
+        {
+          "type": "entity",
+          "model": {
+            "analyticsName": "patrick-mahomes",
+            "contentType": "athlete",
+            "contentUri": "football/nfl/athletes/13107",
+            "image": {
+              "url": "https://b.fssta.com/uploads/application/nfl/headshots/13107.vresize.140.170.medium.3.png",
+              "altUrl": "https://b.fssta.com/uploads/application/nfl/headshots/13107.vresize.140.170.medium.3.png",
+              "type": "image-headshot",
+              "altText": "Patrick Mahomes"
+            },
+            "subtitle": "KANSAS CITY CHIEFS",
+            "title": "Patrick Mahomes",
+            "webUrl": "/nfl/patrick-mahomes-ii-player"
+          }
+        },
+        {
+          "type": "entity",
+          "model": {
+            "analyticsName": "dallas-cowboys",
+            "contentType": "team",
+            "contentUri": "football/nfl/teams/15",
+            "image": {
+              "url": "https://b.fssta.com/uploads/application/nfl/team-logos/Cowboys.vresize.200.200.medium.0.png",
+              "altUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Cowboys.vresize.200.200.medium.0.png",
+              "type": "image-logo",
+              "altText": "Dallas Cowboys"
+            },
+            "subtitle": "NATIONAL FOOTBALL LEAGUE",
+            "title": "Dallas Cowboys",
+            "webUrl": "/nfl/dallas-cowboys-team"
+          }
+        },
+        {
+          "type": "entity",
+          "model": {
+            "analyticsName": "washington-commanders",
+            "contentType": "team",
+            "contentUri": "football/nfl/teams/19",
+            "image": {
+              "url": "https://b.fssta.com/uploads/application/nfl/team-logos/Commanders.vresize.200.200.medium.4.png",
+              "altUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Commanders-alternate.vresize.200.200.medium.1.png",
+              "type": "image-logo",
+              "altText": "Washington Commanders"
+            },
+            "subtitle": "NATIONAL FOOTBALL LEAGUE",
+            "title": "Washington Commanders",
+            "webUrl": "/nfl/washington-commanders-team"
+          }
+        },
+        {
+          "type": "entity",
+          "model": {
+            "analyticsName": "green-bay-packers",
+            "contentType": "team",
+            "contentUri": "football/nfl/teams/22",
+            "image": {
+              "url": "https://b.fssta.com/uploads/application/nfl/team-logos/Packers.vresize.200.200.medium.0.png",
+              "altUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Packers.vresize.200.200.medium.0.png",
+              "type": "image-logo",
+              "altText": "Green Bay Packers"
+            },
+            "subtitle": "NATIONAL FOOTBALL LEAGUE",
+            "title": "Green Bay Packers",
+            "webUrl": "/nfl/green-bay-packers-team"
+          }
+        },
+        {
+          "type": "entity",
+          "model": {
+            "analyticsName": "cleveland-browns",
+            "contentType": "team",
+            "contentUri": "football/nfl/teams/7",
+            "image": {
+              "url": "https://b.fssta.com/uploads/application/nfl/team-logos/Browns.vresize.200.200.medium.1.png",
+              "altUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Browns.vresize.200.200.medium.1.png",
+              "type": "image-logo",
+              "altText": "Cleveland Browns"
+            },
+            "subtitle": "NATIONAL FOOTBALL LEAGUE",
+            "title": "Cleveland Browns",
+            "webUrl": "/nfl/cleveland-browns-team"
+          }
+        },
+        {
+          "type": "entity",
+          "model": {
+            "analyticsName": "detroit-lions",
+            "contentType": "team",
+            "contentUri": "football/nfl/teams/21",
+            "image": {
+              "url": "https://b.fssta.com/uploads/application/nfl/team-logos/Lions.vresize.200.200.medium.0.png",
+              "altUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Lions.vresize.200.200.medium.0.png",
+              "type": "image-logo",
+              "altText": "Detroit Lions"
+            },
+            "subtitle": "NATIONAL FOOTBALL LEAGUE",
+            "title": "Detroit Lions",
+            "webUrl": "/nfl/detroit-lions-team"
+          }
+        },
+        {
+          "type": "entity",
+          "model": {
+            "analyticsName": "carolina-panthers",
+            "contentType": "team",
+            "contentUri": "football/nfl/teams/32",
+            "image": {
+              "url": "https://b.fssta.com/uploads/application/nfl/team-logos/Panthers.vresize.200.200.medium.0.png",
+              "altUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Panthers.vresize.200.200.medium.0.png",
+              "type": "image-logo",
+              "altText": "Carolina Panthers"
+            },
+            "subtitle": "NATIONAL FOOTBALL LEAGUE",
+            "title": "Carolina Panthers",
+            "webUrl": "/nfl/carolina-panthers-team"
+          }
+        },
+        {
+          "type": "entity",
+          "model": {
+            "analyticsName": "indianapolis-colts",
+            "contentType": "team",
+            "contentUri": "football/nfl/teams/2",
+            "image": {
+              "url": "https://b.fssta.com/uploads/application/nfl/team-logos/Colts.vresize.200.200.medium.1.png",
+              "altUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Colts.vresize.200.200.medium.1.png",
+              "type": "image-logo",
+              "altText": "Indianapolis Colts"
+            },
+            "subtitle": "NATIONAL FOOTBALL LEAGUE",
+            "title": "Indianapolis Colts",
+            "webUrl": "/nfl/indianapolis-colts-team"
+          }
+        },
+        {
+          "type": "entity",
+          "model": {
+            "analyticsName": "jacksonville-jaguars",
+            "contentType": "team",
+            "contentUri": "football/nfl/teams/31",
+            "image": {
+              "url": "https://b.fssta.com/uploads/application/nfl/team-logos/Jaguars.vresize.200.200.medium.0.png",
+              "altUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Jaguars.vresize.200.200.medium.0.png",
+              "type": "image-logo",
+              "altText": "Jacksonville Jaguars"
+            },
+            "subtitle": "NATIONAL FOOTBALL LEAGUE",
+            "title": "Jacksonville Jaguars",
+            "webUrl": "/nfl/jacksonville-jaguars-team"
+          }
+        }
+      ]
+    }
+  ]
+}

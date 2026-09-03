@@ -1,0 +1,15 @@
+columns:
+- description: ''
+  name: positions
+  type: character
+- description: ''
+  name: stats_by_season
+  type: character
+- description: ''
+  name: total_stats
+  type: character
+- description: ''
+  name: career_stats
+  type: character
+kind: dataframe
+schema: player_career_stats

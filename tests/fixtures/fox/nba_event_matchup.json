@@ -1,0 +1,1395 @@
+{
+  "template": "matchup",
+  "sectionList": [
+    {
+      "id": "carousel",
+      "type": "fairPlay",
+      "order": 0
+    },
+    {
+      "id": "headline",
+      "type": "headline",
+      "order": 1
+    },
+    {
+      "id": "interactivepolls",
+      "type": "interactivePolls",
+      "order": 2
+    },
+    {
+      "id": "strikeAd",
+      "type": "strikeAd",
+      "order": 3
+    },
+    {
+      "id": "favoritecta",
+      "type": "favoriteCta",
+      "order": 4
+    },
+    {
+      "id": "feat",
+      "type": "featuredPairing",
+      "order": 5
+    },
+    {
+      "id": "foxfacts",
+      "type": "foxFacts",
+      "order": 6
+    },
+    {
+      "id": "foxclips",
+      "type": "foxClips",
+      "order": 7
+    },
+    {
+      "id": "teamstats",
+      "type": "teamStats",
+      "order": 8
+    },
+    {
+      "id": "openWeb",
+      "type": "openWeb",
+      "order": 9
+    },
+    {
+      "id": "teamleader",
+      "type": "teamLeaders",
+      "order": 10
+    },
+    {
+      "id": "ads",
+      "type": "ads",
+      "order": 11
+    },
+    {
+      "id": "taboola",
+      "type": "taboola",
+      "order": 12
+    },
+    {
+      "id": "previousresults",
+      "type": "previousResults",
+      "order": 13
+    },
+    {
+      "id": "voting",
+      "type": "voting",
+      "order": 14
+    },
+    {
+      "id": "preview",
+      "type": "previewArticle",
+      "order": 15
+    },
+    {
+      "id": "oddssixpack",
+      "type": "odds",
+      "order": 16
+    },
+    {
+      "id": "supersix",
+      "type": "superSix",
+      "order": 17
+    },
+    {
+      "id": "foxbet",
+      "type": "foxBetProjections",
+      "order": 18
+    },
+    {
+      "id": "playernews",
+      "type": "playerNews",
+      "order": 19
+    },
+    {
+      "id": "questions",
+      "type": "questions",
+      "order": 20
+    }
+  ],
+  "featuredPairing": {
+    "title": "LEADING SCORERS",
+    "subTitle": "VS",
+    "leftEntity": {
+      "entityLink": {
+        "title": "BRICE SENSABAUGH",
+        "webUrl": "/nba/brice-sensabaugh-player",
+        "color": "1, 78, 0, 142",
+        "imageUrl": "https://b.fssta.com/uploads/application/nba/headshots/3852.vresize.140.170.medium.2.png",
+        "imageType": "image-headshot",
+        "imageAltText": "Brice Sensabaugh",
+        "contentUri": "basketball/nba/athletes/3852",
+        "contentType": "athlete",
+        "layout": {
+          "path": "/layouts?type=layout&subtype=playersLayout&elementId=nba",
+          "tokens": {
+            "id": "3852",
+            "contentUri": "basketball/nba/athletes/3852"
+          }
+        },
+        "analyticsName": "brice-sensabaugh",
+        "analyticsSport": "nba",
+        "type": "entity",
+        "alternateImageUrl": "https://b.fssta.com/uploads/application/nba/headshots/3852.vresize.140.170.medium.2.png"
+      },
+      "title": "#28 SF",
+      "name": "B. Sensabaugh",
+      "statLine1": "14.9 PPG",
+      "statLine2": "3.1 RPG",
+      "statLine3": "1.9 APG",
+      "imageUrl": "https://b.fssta.com/uploads/application/nba/headshots/3852.vresize.350.425.medium.2.png",
+      "imageType": "image-headshot",
+      "imageAltText": "Brice Sensabaugh",
+      "alternateImageUrl": "https://b.fssta.com/uploads/application/nba/headshots/3852.vresize.350.425.medium.2.png"
+    },
+    "rightEntity": {
+      "entityLink": {
+        "title": "KEVIN DURANT",
+        "webUrl": "/nba/kevin-durant-player",
+        "color": "1, 206, 17, 65",
+        "imageUrl": "https://b.fssta.com/uploads/application/nba/headshots/1467.vresize.140.170.medium.2.png",
+        "imageType": "image-headshot",
+        "imageAltText": "Kevin Durant",
+        "contentUri": "basketball/nba/athletes/1467",
+        "contentType": "athlete",
+        "layout": {
+          "path": "/layouts?type=layout&subtype=playersLayout&elementId=nba",
+          "tokens": {
+            "id": "1467",
+            "contentUri": "basketball/nba/athletes/1467"
+          }
+        },
+        "analyticsName": "kevin-durant",
+        "analyticsSport": "nba",
+        "type": "entity",
+        "alternateImageUrl": "https://b.fssta.com/uploads/application/nba/headshots/1467.vresize.140.170.medium.2.png"
+      },
+      "title": "#7 PF",
+      "name": "K. Durant",
+      "statLine1": "26.0 PPG",
+      "statLine2": "5.5 RPG",
+      "statLine3": "4.8 APG",
+      "imageUrl": "https://b.fssta.com/uploads/application/nba/headshots/1467.vresize.350.425.medium.2.png",
+      "imageType": "image-headshot",
+      "imageAltText": "Kevin Durant",
+      "alternateImageUrl": "https://b.fssta.com/uploads/application/nba/headshots/1467.vresize.350.425.medium.2.png"
+    }
+  },
+  "teamStatsComparison": {
+    "title": "TEAM STATS",
+    "leftName": "UTA",
+    "leftImageUrl": "https://b.fssta.com/uploads/application/nba/team-logos/Jazz.vresize.200.200.medium.1.png",
+    "leftImageType": "image-logo",
+    "leftImageAltText": "Utah Jazz",
+    "leftSubtext": "15TH WEST",
+    "leftEntityLink": {
+      "title": "UTAH JAZZ",
+      "webUrl": "/nba/utah-jazz-team",
+      "color": "1, 78, 0, 142",
+      "imageUrl": "https://b.fssta.com/uploads/application/nba/team-logos/Jazz-alternate.vresize.200.200.medium.0.png",
+      "imageType": "image-logo",
+      "imageAltText": "Utah Jazz",
+      "contentUri": "basketball/nba/teams/20",
+      "contentType": "team",
+      "layout": {
+        "path": "/layouts?type=layout&subtype=teamsLayout&elementId=nba",
+        "tokens": {
+          "id": "20",
+          "contentUri": "basketball/nba/teams/20"
+        }
+      },
+      "analyticsName": "utah-jazz",
+      "analyticsSport": "nba",
+      "type": "entity",
+      "alternateImageUrl": "https://b.fssta.com/uploads/application/nba/team-logos/Jazz.vresize.200.200.medium.1.png"
+    },
+    "rightName": "HOU",
+    "rightImageUrl": "https://b.fssta.com/uploads/application/nba/team-logos/Rockets.vresize.200.200.medium.0.png",
+    "rightImageType": "image-logo",
+    "rightImageAltText": "Houston Rockets",
+    "rightSubtext": "5TH WEST",
+    "rightEntityLink": {
+      "title": "HOUSTON ROCKETS",
+      "webUrl": "/nba/houston-rockets-team",
+      "color": "1, 206, 17, 65",
+      "imageUrl": "https://b.fssta.com/uploads/application/nba/team-logos/Rockets-alternate.vresize.200.200.medium.0.png",
+      "imageType": "image-logo",
+      "imageAltText": "Houston Rockets",
+      "contentUri": "basketball/nba/teams/17",
+      "contentType": "team",
+      "layout": {
+        "path": "/layouts?type=layout&subtype=teamsLayout&elementId=nba",
+        "tokens": {
+          "id": "17",
+          "contentUri": "basketball/nba/teams/17"
+        }
+      },
+      "analyticsName": "houston-rockets",
+      "analyticsSport": "nba",
+      "type": "entity",
+      "alternateImageUrl": "https://b.fssta.com/uploads/application/nba/team-logos/Rockets.vresize.200.200.medium.0.png"
+    },
+    "items": [
+      {
+        "title": "PPG",
+        "leftItemDetails": {
+          "title": "117.6",
+          "emphasized": true
+        },
+        "rightItemDetails": {
+          "title": "115.2",
+          "emphasized": false
+        }
+      },
+      {
+        "title": "RPG",
+        "leftItemDetails": {
+          "title": "43.8",
+          "emphasized": false
+        },
+        "rightItemDetails": {
+          "title": "48.1",
+          "emphasized": true
+        }
+      },
+      {
+        "title": "APG",
+        "leftItemDetails": {
+          "title": "29.6",
+          "emphasized": true
+        },
+        "rightItemDetails": {
+          "title": "25.4",
+          "emphasized": false
+        }
+      },
+      {
+        "title": "TPG",
+        "leftItemDetails": {
+          "title": "15.0",
+          "emphasized": false
+        },
+        "rightItemDetails": {
+          "title": "14.4",
+          "emphasized": true
+        }
+      },
+      {
+        "title": "PPG Allowed",
+        "leftItemDetails": {
+          "title": "126.0",
+          "emphasized": false
+        },
+        "rightItemDetails": {
+          "title": "110.0",
+          "emphasized": true
+        }
+      }
+    ],
+    "alternateRightImageUrl": "https://b.fssta.com/uploads/application/nba/team-logos/Rockets-alternate.vresize.200.200.medium.0.png",
+    "alternateLeftImageUrl": "https://b.fssta.com/uploads/application/nba/team-logos/Jazz-alternate.vresize.200.200.medium.0.png"
+  },
+  "teamLeadersComparison": {
+    "title": "TEAM LEADERS",
+    "leftName": "UTA",
+    "leftImageUrl": "https://b.fssta.com/uploads/application/nba/team-logos/Jazz.vresize.200.200.medium.1.png",
+    "leftImageType": "image-logo",
+    "leftImageAltText": "Utah Jazz",
+    "leftEntityLink": {
+      "title": "UTAH JAZZ",
+      "webUrl": "/nba/utah-jazz-team",
+      "color": "1, 78, 0, 142",
+      "imageUrl": "https://b.fssta.com/uploads/application/nba/team-logos/Jazz-alternate.vresize.200.200.medium.0.png",
+      "imageType": "image-logo",
+      "imageAltText": "Utah Jazz",
+      "contentUri": "basketball/nba/teams/20",
+      "contentType": "team",
+      "layout": {
+        "path": "/layouts?type=layout&subtype=teamsLayout&elementId=nba",
+        "tokens": {
+          "id": "20",
+          "contentUri": "basketball/nba/teams/20"
+        }
+      },
+      "analyticsName": "utah-jazz",
+      "analyticsSport": "nba",
+      "type": "entity",
+      "alternateImageUrl": "https://b.fssta.com/uploads/application/nba/team-logos/Jazz.vresize.200.200.medium.1.png"
+    },
+    "rightName": "HOU",
+    "rightImageUrl": "https://b.fssta.com/uploads/application/nba/team-logos/Rockets.vresize.200.200.medium.0.png",
+    "rightImageType": "image-logo",
+    "rightImageAltText": "Houston Rockets",
+    "rightEntityLink": {
+      "title": "HOUSTON ROCKETS",
+      "webUrl": "/nba/houston-rockets-team",
+      "color": "1, 206, 17, 65",
+      "imageUrl": "https://b.fssta.com/uploads/application/nba/team-logos/Rockets-alternate.vresize.200.200.medium.0.png",
+      "imageType": "image-logo",
+      "imageAltText": "Houston Rockets",
+      "contentUri": "basketball/nba/teams/17",
+      "contentType": "team",
+      "layout": {
+        "path": "/layouts?type=layout&subtype=teamsLayout&elementId=nba",
+        "tokens": {
+          "id": "17",
+          "contentUri": "basketball/nba/teams/17"
+        }
+      },
+      "analyticsName": "houston-rockets",
+      "analyticsSport": "nba",
+      "type": "entity",
+      "alternateImageUrl": "https://b.fssta.com/uploads/application/nba/team-logos/Rockets.vresize.200.200.medium.0.png"
+    },
+    "items": [
+      {
+        "title": "PPG",
+        "leftItemDetails": {
+          "imageUrl": "https://b.fssta.com/uploads/application/nba/headshots/3852.vresize.140.170.medium.2.png",
+          "imageType": "image-headshot",
+          "imageAltText": "Brice Sensabaugh",
+          "title": "Brice Sensabaugh",
+          "subtitle": "14.9",
+          "emphasized": false,
+          "entityLink": {
+            "title": "BRICE SENSABAUGH",
+            "webUrl": "/nba/brice-sensabaugh-player",
+            "color": "1, 78, 0, 142",
+            "imageUrl": "https://b.fssta.com/uploads/application/nba/headshots/3852.vresize.140.170.medium.2.png",
+            "imageType": "image-headshot",
+            "imageAltText": "Brice Sensabaugh",
+            "contentUri": "basketball/nba/athletes/3852",
+            "contentType": "athlete",
+            "layout": {
+              "path": "/layouts?type=layout&subtype=playersLayout&elementId=nba",
+              "tokens": {
+                "id": "3852",
+                "contentUri": "basketball/nba/athletes/3852"
+              }
+            },
+            "analyticsName": "brice-sensabaugh",
+            "analyticsSport": "nba",
+            "type": "entity",
+            "alternateImageUrl": "https://b.fssta.com/uploads/application/nba/headshots/3852.vresize.140.170.medium.2.png"
+          },
+          "alternateImageUrl": "https://b.fssta.com/uploads/application/nba/headshots/3852.vresize.140.170.medium.2.png"
+        },
+        "rightItemDetails": {
+          "imageUrl": "https://b.fssta.com/uploads/application/nba/headshots/1467.vresize.140.170.medium.2.png",
+          "imageType": "image-headshot",
+          "imageAltText": "Kevin Durant",
+          "title": "Kevin Durant",
+          "subtitle": "26.0",
+          "emphasized": true,
+          "entityLink": {
+            "title": "KEVIN DURANT",
+            "webUrl": "/nba/kevin-durant-player",
+            "color": "1, 206, 17, 65",
+            "imageUrl": "https://b.fssta.com/uploads/application/nba/headshots/1467.vresize.140.170.medium.2.png",
+            "imageType": "image-headshot",
+            "imageAltText": "Kevin Durant",
+            "contentUri": "basketball/nba/athletes/1467",
+            "contentType": "athlete",
+            "layout": {
+              "path": "/layouts?type=layout&subtype=playersLayout&elementId=nba",
+              "tokens": {
+                "id": "1467",
+                "contentUri": "basketball/nba/athletes/1467"
+              }
+            },
+            "analyticsName": "kevin-durant",
+            "analyticsSport": "nba",
+            "type": "entity",
+            "alternateImageUrl": "https://b.fssta.com/uploads/application/nba/headshots/1467.vresize.140.170.medium.2.png"
+          },
+          "alternateImageUrl": "https://b.fssta.com/uploads/application/nba/headshots/1467.vresize.140.170.medium.2.png"
+        }
+      },
+      {
+        "title": "RPG",
+        "leftItemDetails": {
+          "imageUrl": "https://b.fssta.com/uploads/application/nba/headshots/4031.vresize.140.170.medium.2.png",
+          "imageType": "image-headshot",
+          "imageAltText": "Kyle Filipowski",
+          "title": "Kyle Filipowski",
+          "subtitle": "7.2",
+          "emphasized": false,
+          "entityLink": {
+            "title": "KYLE FILIPOWSKI",
+            "webUrl": "/nba/kyle-filipowski-player",
+            "color": "1, 78, 0, 142",
+            "imageUrl": "https://b.fssta.com/uploads/application/nba/headshots/4031.vresize.140.170.medium.2.png",
+            "imageType": "image-headshot",
+            "imageAltText": "Kyle Filipowski",
+            "contentUri": "basketball/nba/athletes/4031",
+            "contentType": "athlete",
+            "layout": {
+              "path": "/layouts?type=layout&subtype=playersLayout&elementId=nba",
+              "tokens": {
+                "id": "4031",
+                "contentUri": "basketball/nba/athletes/4031"
+              }
+            },
+            "analyticsName": "kyle-filipowski",
+            "analyticsSport": "nba",
+            "type": "entity",
+            "alternateImageUrl": "https://b.fssta.com/uploads/application/nba/headshots/4031.vresize.140.170.medium.2.png"
+          },
+          "alternateImageUrl": "https://b.fssta.com/uploads/application/nba/headshots/4031.vresize.140.170.medium.2.png"
+        },
+        "rightItemDetails": {
+          "imageUrl": "https://b.fssta.com/uploads/application/nba/headshots/3592.vresize.140.170.medium.2.png",
+          "imageType": "image-headshot",
+          "imageAltText": "Alperen Sengun",
+          "title": "Alperen Sengun",
+          "subtitle": "8.9",
+          "emphasized": true,
+          "entityLink": {
+            "title": "ALPEREN SENGUN",
+            "webUrl": "/nba/alperen-sengun-player",
+            "color": "1, 206, 17, 65",
+            "imageUrl": "https://b.fssta.com/uploads/application/nba/headshots/3592.vresize.140.170.medium.2.png",
+            "imageType": "image-headshot",
+            "imageAltText": "Alperen Sengun",
+            "contentUri": "basketball/nba/athletes/3592",
+            "contentType": "athlete",
+            "layout": {
+              "path": "/layouts?type=layout&subtype=playersLayout&elementId=nba",
+              "tokens": {
+                "id": "3592",
+                "contentUri": "basketball/nba/athletes/3592"
+              }
+            },
+            "analyticsName": "alperen-sengun",
+            "analyticsSport": "nba",
+            "type": "entity",
+            "alternateImageUrl": "https://b.fssta.com/uploads/application/nba/headshots/3592.vresize.140.170.medium.2.png"
+          },
+          "alternateImageUrl": "https://b.fssta.com/uploads/application/nba/headshots/3592.vresize.140.170.medium.2.png"
+        }
+      },
+      {
+        "title": "APG",
+        "leftItemDetails": {
+          "imageUrl": "https://b.fssta.com/uploads/application/nba/headshots/3994.vresize.140.170.medium.2.png",
+          "imageType": "image-headshot",
+          "imageAltText": "Isaiah Collier",
+          "title": "Isaiah Collier",
+          "subtitle": "7.2",
+          "emphasized": true,
+          "entityLink": {
+            "title": "ISAIAH COLLIER",
+            "webUrl": "/nba/isaiah-collier-player",
+            "color": "1, 78, 0, 142",
+            "imageUrl": "https://b.fssta.com/uploads/application/nba/headshots/3994.vresize.140.170.medium.2.png",
+            "imageType": "image-headshot",
+            "imageAltText": "Isaiah Collier",
+            "contentUri": "basketball/nba/athletes/3994",
+            "contentType": "athlete",
+            "layout": {
+              "path": "/layouts?type=layout&subtype=playersLayout&elementId=nba",
+              "tokens": {
+                "id": "3994",
+                "contentUri": "basketball/nba/athletes/3994"
+              }
+            },
+            "analyticsName": "isaiah-collier",
+            "analyticsSport": "nba",
+            "type": "entity",
+            "alternateImageUrl": "https://b.fssta.com/uploads/application/nba/headshots/3994.vresize.140.170.medium.2.png"
+          },
+          "alternateImageUrl": "https://b.fssta.com/uploads/application/nba/headshots/3994.vresize.140.170.medium.2.png"
+        },
+        "rightItemDetails": {
+          "imageUrl": "https://b.fssta.com/uploads/application/nba/headshots/3592.vresize.140.170.medium.2.png",
+          "imageType": "image-headshot",
+          "imageAltText": "Alperen Sengun",
+          "title": "Alperen Sengun",
+          "subtitle": "6.2",
+          "emphasized": false,
+          "entityLink": {
+            "title": "ALPEREN SENGUN",
+            "webUrl": "/nba/alperen-sengun-player",
+            "color": "1, 206, 17, 65",
+            "imageUrl": "https://b.fssta.com/uploads/application/nba/headshots/3592.vresize.140.170.medium.2.png",
+            "imageType": "image-headshot",
+            "imageAltText": "Alperen Sengun",
+            "contentUri": "basketball/nba/athletes/3592",
+            "contentType": "athlete",
+            "layout": {
+              "path": "/layouts?type=layout&subtype=playersLayout&elementId=nba",
+              "tokens": {
+                "id": "3592",
+                "contentUri": "basketball/nba/athletes/3592"
+              }
+            },
+            "analyticsName": "alperen-sengun",
+            "analyticsSport": "nba",
+            "type": "entity",
+            "alternateImageUrl": "https://b.fssta.com/uploads/application/nba/headshots/3592.vresize.140.170.medium.2.png"
+          },
+          "alternateImageUrl": "https://b.fssta.com/uploads/application/nba/headshots/3592.vresize.140.170.medium.2.png"
+        }
+      },
+      {
+        "title": "BPG",
+        "leftItemDetails": {
+          "imageUrl": "https://b.fssta.com/uploads/application/nba/headshots/4161.vresize.140.170.medium.1.png",
+          "imageType": "image-headshot",
+          "imageAltText": "Ace Bailey",
+          "title": "Ace Bailey",
+          "subtitle": "0.7",
+          "emphasized": false,
+          "entityLink": {
+            "title": "ACE BAILEY",
+            "webUrl": "/nba/ace-bailey-player",
+            "color": "1, 78, 0, 142",
+            "imageUrl": "https://b.fssta.com/uploads/application/nba/headshots/4161.vresize.140.170.medium.1.png",
+            "imageType": "image-headshot",
+            "imageAltText": "Ace Bailey",
+            "contentUri": "basketball/nba/athletes/4161",
+            "contentType": "athlete",
+            "layout": {
+              "path": "/layouts?type=layout&subtype=playersLayout&elementId=nba",
+              "tokens": {
+                "id": "4161",
+                "contentUri": "basketball/nba/athletes/4161"
+              }
+            },
+            "analyticsName": "ace-bailey",
+            "analyticsSport": "nba",
+            "type": "entity",
+            "alternateImageUrl": "https://b.fssta.com/uploads/application/nba/headshots/4161.vresize.140.170.medium.1.png"
+          },
+          "alternateImageUrl": "https://b.fssta.com/uploads/application/nba/headshots/4161.vresize.140.170.medium.1.png"
+        },
+        "rightItemDetails": {
+          "imageUrl": "https://b.fssta.com/uploads/application/nba/headshots/3592.vresize.140.170.medium.2.png",
+          "imageType": "image-headshot",
+          "imageAltText": "Alperen Sengun",
+          "title": "Alperen Sengun",
+          "subtitle": "1.1",
+          "emphasized": true,
+          "entityLink": {
+            "title": "ALPEREN SENGUN",
+            "webUrl": "/nba/alperen-sengun-player",
+            "color": "1, 206, 17, 65",
+            "imageUrl": "https://b.fssta.com/uploads/application/nba/headshots/3592.vresize.140.170.medium.2.png",
+            "imageType": "image-headshot",
+            "imageAltText": "Alperen Sengun",
+            "contentUri": "basketball/nba/athletes/3592",
+            "contentType": "athlete",
+            "layout": {
+              "path": "/layouts?type=layout&subtype=playersLayout&elementId=nba",
+              "tokens": {
+                "id": "3592",
+                "contentUri": "basketball/nba/athletes/3592"
+              }
+            },
+            "analyticsName": "alperen-sengun",
+            "analyticsSport": "nba",
+            "type": "entity",
+            "alternateImageUrl": "https://b.fssta.com/uploads/application/nba/headshots/3592.vresize.140.170.medium.2.png"
+          },
+          "alternateImageUrl": "https://b.fssta.com/uploads/application/nba/headshots/3592.vresize.140.170.medium.2.png"
+        }
+      }
+    ],
+    "alternateRightImageUrl": "https://b.fssta.com/uploads/application/nba/team-logos/Rockets-alternate.vresize.200.200.medium.0.png",
+    "alternateLeftImageUrl": "https://b.fssta.com/uploads/application/nba/team-logos/Jazz-alternate.vresize.200.200.medium.0.png"
+  },
+  "oddsSixPack": {
+    "title": "ODDS",
+    "ctaTitle": "SEE ALL ODDS",
+    "ctaWebUrl": "https://www.foxsports.com/nba/utah-jazz-vs-houston-rockets-apr-03-2026-game-boxscore-44604",
+    "items": [
+      {
+        "title": "SPREAD",
+        "description": "The Rockets must win by 19 points or more to cover the spread",
+        "odds": [
+          {
+            "title": "+18.5",
+            "imageUrl": "https://b.fssta.com/uploads/application/nba/team-logos/Jazz.vresize.200.200.medium.1.png",
+            "imageType": "image-logo",
+            "imageAltText": "Utah Jazz",
+            "text": "UTA",
+            "alternateImageUrl": "https://b.fssta.com/uploads/application/nba/team-logos/Jazz-alternate.vresize.200.200.medium.0.png"
+          },
+          {
+            "title": "-18.5",
+            "imageUrl": "https://b.fssta.com/uploads/application/nba/team-logos/Rockets.vresize.200.200.medium.0.png",
+            "imageType": "image-logo",
+            "imageAltText": "Houston Rockets",
+            "text": "HOU",
+            "alternateImageUrl": "https://b.fssta.com/uploads/application/nba/team-logos/Rockets-alternate.vresize.200.200.medium.0.png"
+          }
+        ]
+      },
+      {
+        "title": "TEAM TO WIN",
+        "description": "A bet of $100 would win $1,163 total if the Jazz win and a bet of $2,174 would win $2,274 total if the Rockets win",
+        "odds": [
+          {
+            "title": "+1063",
+            "imageUrl": "https://b.fssta.com/uploads/application/nba/team-logos/Jazz.vresize.200.200.medium.1.png",
+            "imageType": "image-logo",
+            "imageAltText": "Utah Jazz",
+            "text": "UTA",
+            "alternateImageUrl": "https://b.fssta.com/uploads/application/nba/team-logos/Jazz-alternate.vresize.200.200.medium.0.png"
+          },
+          {
+            "title": "-2174",
+            "imageUrl": "https://b.fssta.com/uploads/application/nba/team-logos/Rockets.vresize.200.200.medium.0.png",
+            "imageType": "image-logo",
+            "imageAltText": "Houston Rockets",
+            "text": "HOU",
+            "alternateImageUrl": "https://b.fssta.com/uploads/application/nba/team-logos/Rockets-alternate.vresize.200.200.medium.0.png"
+          }
+        ]
+      },
+      {
+        "title": "TOTAL",
+        "description": "The combined final score of both teams is set at 233.5",
+        "odds": [
+          {
+            "title": "-110",
+            "text": "OVER 233.5"
+          },
+          {
+            "title": "-110",
+            "text": "UNDER 233.5"
+          }
+        ]
+      }
+    ]
+  },
+  "betSection": {
+    "name": "ODDS",
+    "bets": [
+      {
+        "template": "market",
+        "model": {
+          "subtitle": "SPREAD",
+          "mainText": "The Rockets needed to win by 19 points or more to cover the spread. They did cover, so people who took the Rockets won.",
+          "odds": [
+            {
+              "text": "+18.5",
+              "subText": "UTA"
+            },
+            {
+              "text": "-18.5",
+              "subText": "HOU",
+              "success": true
+            }
+          ]
+        }
+      },
+      {
+        "template": "market",
+        "model": {
+          "subtitle": "TEAM TO WIN",
+          "mainText": "The Rockets won at -2174 odds so a bet of $2174 won $2274 total",
+          "odds": [
+            {
+              "text": "+1063",
+              "subText": "UTA"
+            },
+            {
+              "text": "-2174",
+              "subText": "HOU",
+              "success": true
+            }
+          ]
+        }
+      },
+      {
+        "template": "market",
+        "model": {
+          "subtitle": "TOTAL",
+          "mainText": "The over/under was 233.5 and the teams scored 246 points, so people who bet the over won",
+          "odds": [
+            {
+              "text": "-110",
+              "subText": "OVER 233.5",
+              "success": true
+            },
+            {
+              "text": "-110",
+              "subText": "UNDER 233.5"
+            }
+          ]
+        }
+      }
+    ],
+    "headerMoreLink": {
+      "text": "SEE ALL ODDS"
+    }
+  },
+  "previousResults": {
+    "title": "PREVIOUS GAMES",
+    "leftTeamResults": {
+      "table": {
+        "template": "table",
+        "headers": [
+          {
+            "columns": [
+              {
+                "index": 0,
+                "priority": 3,
+                "template": "cell-text",
+                "weight": 3,
+                "emphasized": false,
+                "sortable": "none"
+              },
+              {
+                "index": 1,
+                "priority": 1,
+                "template": "cell-entity",
+                "weight": 3.5,
+                "emphasized": false,
+                "sortable": "none"
+              },
+              {
+                "index": 2,
+                "priority": 2,
+                "template": "cell-gameresult",
+                "weight": 3.5,
+                "emphasized": false,
+                "sortable": "none"
+              }
+            ],
+            "isPrimary": true
+          }
+        ],
+        "rows": [
+          {
+            "columns": [
+              {
+                "index": 0,
+                "text": "4/12",
+                "emphasized": false
+              },
+              {
+                "index": 1,
+                "text": "@LAL",
+                "imageUrl": "https://b.fssta.com/uploads/application/nba/team-logos/Lakers.vresize.200.200.medium.0.png",
+                "imageType": "image-logo",
+                "imageAltText": "Los Angeles Lakers",
+                "emphasized": false,
+                "alternateImageUrl": "https://b.fssta.com/uploads/application/nba/team-logos/Lakers.vresize.200.200.medium.0.png"
+              },
+              {
+                "index": 2,
+                "text": "131-107",
+                "superscript": "L",
+                "emphasized": false,
+                "subType": "loss"
+              }
+            ],
+            "isCutoff": false,
+            "selected": false,
+            "linkList": [
+              {
+                "entityLink": {
+                  "webUrl": "/nba/utah-jazz-vs-los-angeles-lakers-apr-12-2026-game-boxscore-44672",
+                  "contentUri": "basketball/nba/events/44672",
+                  "contentType": "event",
+                  "layout": {
+                    "path": "/layouts?type=layout&subtype=nbaEventLayout",
+                    "tokens": {
+                      "id": "44672",
+                      "eventUri": "basketball/nba/events/44672",
+                      "homeUri": "basketball/nba/teams/23",
+                      "awayUri": "basketball/nba/teams/20"
+                    }
+                  },
+                  "analyticsSport": "nba",
+                  "type": "entity"
+                },
+                "columns": [
+                  0,
+                  1,
+                  2
+                ]
+              }
+            ],
+            "isFaded": false
+          },
+          {
+            "columns": [
+              {
+                "index": 0,
+                "text": "4/10",
+                "emphasized": false
+              },
+              {
+                "index": 1,
+                "text": "MEM",
+                "imageUrl": "https://b.fssta.com/uploads/application/nba/team-logos/Grizzlies.vresize.200.200.medium.0.png",
+                "imageType": "image-logo",
+                "imageAltText": "Memphis Grizzlies",
+                "emphasized": false,
+                "alternateImageUrl": "https://b.fssta.com/uploads/application/nba/team-logos/Grizzlies.vresize.200.200.medium.0.png"
+              },
+              {
+                "index": 2,
+                "text": "147-101",
+                "superscript": "W",
+                "emphasized": false,
+                "subType": "win"
+              }
+            ],
+            "isCutoff": false,
+            "selected": false,
+            "linkList": [
+              {
+                "entityLink": {
+                  "webUrl": "/nba/memphis-grizzlies-vs-utah-jazz-apr-10-2026-game-boxscore-44659",
+                  "contentUri": "basketball/nba/events/44659",
+                  "contentType": "event",
+                  "layout": {
+                    "path": "/layouts?type=layout&subtype=nbaEventLayout",
+                    "tokens": {
+                      "id": "44659",
+                      "eventUri": "basketball/nba/events/44659",
+                      "homeUri": "basketball/nba/teams/20",
+                      "awayUri": "basketball/nba/teams/31"
+                    }
+                  },
+                  "analyticsSport": "nba",
+                  "type": "entity"
+                },
+                "columns": [
+                  0,
+                  1,
+                  2
+                ]
+              }
+            ],
+            "isFaded": false
+          },
+          {
+            "columns": [
+              {
+                "index": 0,
+                "text": "4/7",
+                "emphasized": false
+              },
+              {
+                "index": 1,
+                "text": "@NOP",
+                "imageUrl": "https://b.fssta.com/uploads/application/nba/team-logos/Pelicans.vresize.200.200.medium.1.png",
+                "imageType": "image-logo",
+                "imageAltText": "New Orleans Pelicans",
+                "emphasized": false,
+                "alternateImageUrl": "https://b.fssta.com/uploads/application/nba/team-logos/Pelicans.vresize.200.200.medium.1.png"
+              },
+              {
+                "index": 2,
+                "text": "156-137",
+                "superscript": "L",
+                "emphasized": false,
+                "subType": "loss"
+              }
+            ],
+            "isCutoff": false,
+            "selected": false,
+            "linkList": [
+              {
+                "entityLink": {
+                  "webUrl": "/nba/utah-jazz-vs-new-orleans-pelicans-apr-07-2026-game-boxscore-44631",
+                  "contentUri": "basketball/nba/events/44631",
+                  "contentType": "event",
+                  "layout": {
+                    "path": "/layouts?type=layout&subtype=nbaEventLayout",
+                    "tokens": {
+                      "id": "44631",
+                      "eventUri": "basketball/nba/events/44631",
+                      "homeUri": "basketball/nba/teams/9",
+                      "awayUri": "basketball/nba/teams/20"
+                    }
+                  },
+                  "analyticsSport": "nba",
+                  "type": "entity"
+                },
+                "columns": [
+                  0,
+                  1,
+                  2
+                ]
+              }
+            ],
+            "isFaded": false
+          },
+          {
+            "columns": [
+              {
+                "index": 0,
+                "text": "4/5",
+                "emphasized": false
+              },
+              {
+                "index": 1,
+                "text": "@OKC",
+                "imageUrl": "https://b.fssta.com/uploads/application/nba/team-logos/Thunder.vresize.200.200.medium.0.png",
+                "imageType": "image-logo",
+                "imageAltText": "Oklahoma City Thunder",
+                "emphasized": false,
+                "alternateImageUrl": "https://b.fssta.com/uploads/application/nba/team-logos/Thunder.vresize.200.200.medium.0.png"
+              },
+              {
+                "index": 2,
+                "text": "146-111",
+                "superscript": "L",
+                "emphasized": false,
+                "subType": "loss"
+              }
+            ],
+            "isCutoff": false,
+            "selected": false,
+            "linkList": [
+              {
+                "entityLink": {
+                  "webUrl": "/nba/utah-jazz-vs-oklahoma-city-thunder-apr-05-2026-game-boxscore-44616",
+                  "contentUri": "basketball/nba/events/44616",
+                  "contentType": "event",
+                  "layout": {
+                    "path": "/layouts?type=layout&subtype=nbaEventLayout",
+                    "tokens": {
+                      "id": "44616",
+                      "eventUri": "basketball/nba/events/44616",
+                      "homeUri": "basketball/nba/teams/27",
+                      "awayUri": "basketball/nba/teams/20"
+                    }
+                  },
+                  "analyticsSport": "nba",
+                  "type": "entity"
+                },
+                "columns": [
+                  0,
+                  1,
+                  2
+                ]
+              }
+            ],
+            "isFaded": false
+          },
+          {
+            "columns": [
+              {
+                "index": 0,
+                "text": "4/3",
+                "emphasized": false
+              },
+              {
+                "index": 1,
+                "text": "@HOU",
+                "imageUrl": "https://b.fssta.com/uploads/application/nba/team-logos/Rockets.vresize.200.200.medium.0.png",
+                "imageType": "image-logo",
+                "imageAltText": "Houston Rockets",
+                "emphasized": false,
+                "alternateImageUrl": "https://b.fssta.com/uploads/application/nba/team-logos/Rockets-alternate.vresize.200.200.medium.0.png"
+              },
+              {
+                "index": 2,
+                "text": "140-106",
+                "superscript": "L",
+                "emphasized": false,
+                "subType": "loss"
+              }
+            ],
+            "isCutoff": false,
+            "selected": false,
+            "linkList": [
+              {
+                "entityLink": {
+                  "webUrl": "/nba/utah-jazz-vs-houston-rockets-apr-03-2026-game-boxscore-44604",
+                  "contentUri": "basketball/nba/events/44604",
+                  "contentType": "event",
+                  "layout": {
+                    "path": "/layouts?type=layout&subtype=nbaEventLayout",
+                    "tokens": {
+                      "id": "44604",
+                      "eventUri": "basketball/nba/events/44604",
+                      "homeUri": "basketball/nba/teams/17",
+                      "awayUri": "basketball/nba/teams/20"
+                    }
+                  },
+                  "analyticsSport": "nba",
+                  "type": "entity"
+                },
+                "columns": [
+                  0,
+                  1,
+                  2
+                ]
+              }
+            ],
+            "isFaded": false
+          }
+        ]
+      },
+      "title": "UTA",
+      "image": {
+        "url": "https://b.fssta.com/uploads/application/nba/team-logos/Jazz.vresize.80.80.medium.1.png",
+        "altUrl": "https://b.fssta.com/uploads/application/nba/team-logos/Jazz-alternate.vresize.80.80.medium.0.png",
+        "type": "image-logo",
+        "altText": "Utah Jazz"
+      },
+      "template": "align-left",
+      "entityLink": {
+        "title": "UTAH JAZZ",
+        "webUrl": "/nba/utah-jazz-team",
+        "color": "1, 78, 0, 142",
+        "imageUrl": "https://b.fssta.com/uploads/application/nba/team-logos/Jazz-alternate.vresize.200.200.medium.0.png",
+        "imageType": "image-logo",
+        "imageAltText": "Utah Jazz",
+        "contentUri": "basketball/nba/teams/20",
+        "contentType": "team",
+        "layout": {
+          "path": "/layouts?type=layout&subtype=teamsLayout&elementId=nba",
+          "tokens": {
+            "id": "20",
+            "contentUri": "basketball/nba/teams/20"
+          }
+        },
+        "analyticsName": "utah-jazz",
+        "analyticsSport": "nba",
+        "type": "entity",
+        "alternateImageUrl": "https://b.fssta.com/uploads/application/nba/team-logos/Jazz.vresize.200.200.medium.1.png"
+      }
+    },
+    "rightTeamResults": {
+      "table": {
+        "template": "table",
+        "headers": [
+          {
+            "columns": [
+              {
+                "index": 0,
+                "priority": 3,
+                "template": "cell-text",
+                "weight": 3,
+                "emphasized": false,
+                "sortable": "none"
+              },
+              {
+                "index": 1,
+                "priority": 1,
+                "template": "cell-entity",
+                "weight": 3.5,
+                "emphasized": false,
+                "sortable": "none"
+              },
+              {
+                "index": 2,
+                "priority": 2,
+                "template": "cell-gameresult",
+                "weight": 3.5,
+                "emphasized": false,
+                "sortable": "none"
+              }
+            ],
+            "isPrimary": true
+          }
+        ],
+        "rows": [
+          {
+            "columns": [
+              {
+                "index": 0,
+                "text": "5/1",
+                "emphasized": false
+              },
+              {
+                "index": 1,
+                "text": "LAL",
+                "imageUrl": "https://b.fssta.com/uploads/application/nba/team-logos/Lakers.vresize.200.200.medium.0.png",
+                "imageType": "image-logo",
+                "imageAltText": "Los Angeles Lakers",
+                "emphasized": false,
+                "alternateImageUrl": "https://b.fssta.com/uploads/application/nba/team-logos/Lakers.vresize.200.200.medium.0.png"
+              },
+              {
+                "index": 2,
+                "text": "98-78",
+                "superscript": "L",
+                "emphasized": false,
+                "subType": "loss"
+              }
+            ],
+            "isCutoff": false,
+            "selected": false,
+            "linkList": [
+              {
+                "entityLink": {
+                  "webUrl": "/nba/nba-playoffs-round-1-game-6-los-angeles-lakers-vs-houston-rockets-may-01-2026-game-boxscore-106419",
+                  "contentUri": "basketball/nba/events/106419",
+                  "contentType": "event",
+                  "layout": {
+                    "path": "/layouts?type=layout&subtype=nbaEventLayout",
+                    "tokens": {
+                      "id": "106419",
+                      "eventUri": "basketball/nba/events/106419",
+                      "homeUri": "basketball/nba/teams/17",
+                      "awayUri": "basketball/nba/teams/23"
+                    }
+                  },
+                  "analyticsSport": "nba",
+                  "type": "entity"
+                },
+                "columns": [
+                  0,
+                  1,
+                  2
+                ]
+              }
+            ],
+            "isFaded": false
+          },
+          {
+            "columns": [
+              {
+                "index": 0,
+                "text": "4/29",
+                "emphasized": false
+              },
+              {
+                "index": 1,
+                "text": "@LAL",
+                "imageUrl": "https://b.fssta.com/uploads/application/nba/team-logos/Lakers.vresize.200.200.medium.0.png",
+                "imageType": "image-logo",
+                "imageAltText": "Los Angeles Lakers",
+                "emphasized": false,
+                "alternateImageUrl": "https://b.fssta.com/uploads/application/nba/team-logos/Lakers.vresize.200.200.medium.0.png"
+              },
+              {
+                "index": 2,
+                "text": "99-93",
+                "superscript": "W",
+                "emphasized": false,
+                "subType": "win"
+              }
+            ],
+            "isCutoff": false,
+            "selected": false,
+            "linkList": [
+              {
+                "entityLink": {
+                  "webUrl": "/nba/nba-playoffs-round-1-game-5-houston-rockets-vs-los-angeles-lakers-apr-29-2026-game-boxscore-106418",
+                  "contentUri": "basketball/nba/events/106418",
+                  "contentType": "event",
+                  "layout": {
+                    "path": "/layouts?type=layout&subtype=nbaEventLayout",
+                    "tokens": {
+                      "id": "106418",
+                      "eventUri": "basketball/nba/events/106418",
+                      "homeUri": "basketball/nba/teams/23",
+                      "awayUri": "basketball/nba/teams/17"
+                    }
+                  },
+                  "analyticsSport": "nba",
+                  "type": "entity"
+                },
+                "columns": [
+                  0,
+                  1,
+                  2
+                ]
+              }
+            ],
+            "isFaded": false
+          },
+          {
+            "columns": [
+              {
+                "index": 0,
+                "text": "4/26",
+                "emphasized": false
+              },
+              {
+                "index": 1,
+                "text": "LAL",
+                "imageUrl": "https://b.fssta.com/uploads/application/nba/team-logos/Lakers.vresize.200.200.medium.0.png",
+                "imageType": "image-logo",
+                "imageAltText": "Los Angeles Lakers",
+                "emphasized": false,
+                "alternateImageUrl": "https://b.fssta.com/uploads/application/nba/team-logos/Lakers.vresize.200.200.medium.0.png"
+              },
+              {
+                "index": 2,
+                "text": "115-96",
+                "superscript": "W",
+                "emphasized": false,
+                "subType": "win"
+              }
+            ],
+            "isCutoff": false,
+            "selected": false,
+            "linkList": [
+              {
+                "entityLink": {
+                  "webUrl": "/nba/nba-playoffs-round-1-game-4-los-angeles-lakers-vs-houston-rockets-apr-26-2026-game-boxscore-106417",
+                  "contentUri": "basketball/nba/events/106417",
+                  "contentType": "event",
+                  "layout": {
+                    "path": "/layouts?type=layout&subtype=nbaEventLayout",
+                    "tokens": {
+                      "id": "106417",
+                      "eventUri": "basketball/nba/events/106417",
+                      "homeUri": "basketball/nba/teams/17",
+                      "awayUri": "basketball/nba/teams/23"
+                    }
+                  },
+                  "analyticsSport": "nba",
+                  "type": "entity"
+                },
+                "columns": [
+                  0,
+                  1,
+                  2
+                ]
+              }
+            ],
+            "isFaded": false
+          },
+          {
+            "columns": [
+              {
+                "index": 0,
+                "text": "4/24",
+                "emphasized": false
+              },
+              {
+                "index": 1,
+                "text": "LAL",
+                "imageUrl": "https://b.fssta.com/uploads/application/nba/team-logos/Lakers.vresize.200.200.medium.0.png",
+                "imageType": "image-logo",
+                "imageAltText": "Los Angeles Lakers",
+                "emphasized": false,
+                "alternateImageUrl": "https://b.fssta.com/uploads/application/nba/team-logos/Lakers.vresize.200.200.medium.0.png"
+              },
+              {
+                "index": 2,
+                "text": "112-108",
+                "superscript": "L",
+                "emphasized": false,
+                "subType": "loss"
+              }
+            ],
+            "isCutoff": false,
+            "selected": false,
+            "linkList": [
+              {
+                "entityLink": {
+                  "webUrl": "/nba/nba-playoffs-round-1-game-3-los-angeles-lakers-vs-houston-rockets-apr-24-2026-game-boxscore-106416",
+                  "contentUri": "basketball/nba/events/106416",
+                  "contentType": "event",
+                  "layout": {
+                    "path": "/layouts?type=layout&subtype=nbaEventLayout",
+                    "tokens": {
+                      "id": "106416",
+                      "eventUri": "basketball/nba/events/106416",
+                      "homeUri": "basketball/nba/teams/17",
+                      "awayUri": "basketball/nba/teams/23"
+                    }
+                  },
+                  "analyticsSport": "nba",
+                  "type": "entity"
+                },
+                "columns": [
+                  0,
+                  1,
+                  2
+                ]
+              }
+            ],
+            "isFaded": false
+          },
+          {
+            "columns": [
+              {
+                "index": 0,
+                "text": "4/21",
+                "emphasized": false
+              },
+              {
+                "index": 1,
+                "text": "@LAL",
+                "imageUrl": "https://b.fssta.com/uploads/application/nba/team-logos/Lakers.vresize.200.200.medium.0.png",
+                "imageType": "image-logo",
+                "imageAltText": "Los Angeles Lakers",
+                "emphasized": false,
+                "alternateImageUrl": "https://b.fssta.com/uploads/application/nba/team-logos/Lakers.vresize.200.200.medium.0.png"
+              },
+              {
+                "index": 2,
+                "text": "101-94",
+                "superscript": "L",
+                "emphasized": false,
+                "subType": "loss"
+              }
+            ],
+            "isCutoff": false,
+            "selected": false,
+            "linkList": [
+              {
+                "entityLink": {
+                  "webUrl": "/nba/nba-playoffs-round-1-game-2-houston-rockets-vs-los-angeles-lakers-apr-21-2026-game-boxscore-106415",
+                  "contentUri": "basketball/nba/events/106415",
+                  "contentType": "event",
+                  "layout": {
+                    "path": "/layouts?type=layout&subtype=nbaEventLayout",
+                    "tokens": {
+                      "id": "106415",
+                      "eventUri": "basketball/nba/events/106415",
+                      "homeUri": "basketball/nba/teams/23",
+                      "awayUri": "basketball/nba/teams/17"
+                    }
+                  },
+                  "analyticsSport": "nba",
+                  "type": "entity"
+                },
+                "columns": [
+                  0,
+                  1,
+                  2
+                ]
+              }
+            ],
+            "isFaded": false
+          }
+        ]
+      },
+      "title": "HOU",
+      "image": {
+        "url": "https://b.fssta.com/uploads/application/nba/team-logos/Rockets.vresize.80.80.medium.0.png",
+        "altUrl": "https://b.fssta.com/uploads/application/nba/team-logos/Rockets-alternate.vresize.80.80.medium.0.png",
+        "type": "image-logo",
+        "altText": "Houston Rockets"
+      },
+      "template": "align-right",
+      "entityLink": {
+        "title": "HOUSTON ROCKETS",
+        "webUrl": "/nba/houston-rockets-team",
+        "color": "1, 206, 17, 65",
+        "imageUrl": "https://b.fssta.com/uploads/application/nba/team-logos/Rockets-alternate.vresize.200.200.medium.0.png",
+        "imageType": "image-logo",
+        "imageAltText": "Houston Rockets",
+        "contentUri": "basketball/nba/teams/17",
+        "contentType": "team",
+        "layout": {
+          "path": "/layouts?type=layout&subtype=teamsLayout&elementId=nba",
+          "tokens": {
+            "id": "17",
+            "contentUri": "basketball/nba/teams/17"
+          }
+        },
+        "analyticsName": "houston-rockets",
+        "analyticsSport": "nba",
+        "type": "entity",
+        "alternateImageUrl": "https://b.fssta.com/uploads/application/nba/team-logos/Rockets.vresize.200.200.medium.0.png"
+      }
+    }
+  }
+}

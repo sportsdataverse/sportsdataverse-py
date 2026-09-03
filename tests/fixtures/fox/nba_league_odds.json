@@ -1,0 +1,2887 @@
+{
+  "sectionList": [
+    {
+      "title": "NEWS",
+      "modules": [
+        {
+          "type": "spark",
+          "model": {
+            "url": "https://prod-api.foxsports.com/fs/feed?required_uri=basketball/nba/league/1&tags=fs/gambling,topics/betting&component_type=news_article,video"
+          }
+        }
+      ]
+    },
+    {
+      "title": "GAMES",
+      "modules": [
+        {
+          "type": "six-pack",
+          "model": {
+            "odds": {
+              "columnHeaders": [
+                "SPREAD",
+                "TO WIN",
+                "TOTAL"
+              ],
+              "rows": [
+                {
+                  "text": "NYK",
+                  "fullText": "New York Knicks",
+                  "image": {
+                    "url": "https://b.fssta.com/uploads/application/nba/team-logos/Knicks.vresize.200.200.medium.0.png",
+                    "altUrl": "https://b.fssta.com/uploads/application/nba/team-logos/Knicks.vresize.200.200.medium.0.png",
+                    "type": "image-logo",
+                    "altText": "New York Knicks"
+                  },
+                  "imageUrl": "https://b.fssta.com/uploads/application/nba/team-logos/Knicks.vresize.200.200.medium.0.png",
+                  "alternateImageUrl": "https://b.fssta.com/uploads/application/nba/team-logos/Knicks.vresize.200.200.medium.0.png",
+                  "imageType": "image-logo",
+                  "imageAltText": "New York Knicks",
+                  "values": [
+                    {
+                      "id": "closing",
+                      "odds": "+5.5",
+                      "betSlip": {
+                        "eventTime": "2026-06-14T00:30:00Z",
+                        "eventTitle": "KNICKS vs SPURS",
+                        "image": {
+                          "url": "https://b.fssta.com/uploads/application/nba/team-logos/Knicks.vresize.200.200.medium.0.png",
+                          "altUrl": "https://b.fssta.com/uploads/application/nba/team-logos/Knicks.vresize.200.200.medium.0.png",
+                          "type": "image-logo",
+                          "altText": "New York Knicks"
+                        },
+                        "betDisplay": "NEW YORK KNICKS +5.5",
+                        "description": "The Knicks must lose by 5 points or fewer (or win outright) to cover the spread",
+                        "oddsDisplay": "-114",
+                        "payoutMultiplier": 1.8772,
+                        "betMin": 5,
+                        "betMax": 100,
+                        "betIncrement": 5,
+                        "betIndex": 1,
+                        "disclaimerText": "",
+                        "trackingData": {
+                          "contentEntityUri": "event:basketball/nba/events/106362,team:basketball/nba/teams/19,team:basketball/nba/teams/4,league:basketball/nba/league/1",
+                          "betEventStatus": 2,
+                          "betEntityName": "New York Knicks",
+                          "betEventUri": "basketball/nba/events/106362",
+                          "betEntityUri": "team:basketball/nba/teams/4",
+                          "betOutcomeLine": "+5.5",
+                          "pageStartSource": "six-pack",
+                          "betOutcomeTitle": "spread"
+                        }
+                      }
+                    },
+                    {
+                      "id": "closing",
+                      "odds": "+165",
+                      "betSlip": {
+                        "eventTime": "2026-06-14T00:30:00Z",
+                        "eventTitle": "KNICKS vs SPURS",
+                        "image": {
+                          "url": "https://b.fssta.com/uploads/application/nba/team-logos/Knicks.vresize.200.200.medium.0.png",
+                          "altUrl": "https://b.fssta.com/uploads/application/nba/team-logos/Knicks.vresize.200.200.medium.0.png",
+                          "type": "image-logo",
+                          "altText": "New York Knicks"
+                        },
+                        "betDisplay": "NEW YORK KNICKS",
+                        "description": "A bet of $100 would win $265 total if the Knicks win",
+                        "oddsDisplay": "+165",
+                        "payoutMultiplier": 2.65,
+                        "betMin": 5,
+                        "betMax": 100,
+                        "betIncrement": 5,
+                        "betIndex": 1,
+                        "disclaimerText": "",
+                        "trackingData": {
+                          "contentEntityUri": "event:basketball/nba/events/106362,team:basketball/nba/teams/19,team:basketball/nba/teams/4,league:basketball/nba/league/1",
+                          "betEventStatus": 2,
+                          "betEntityName": "New York Knicks",
+                          "betEventUri": "basketball/nba/events/106362",
+                          "betEntityUri": "team:basketball/nba/teams/4",
+                          "betOutcomeLine": "+165",
+                          "pageStartSource": "six-pack",
+                          "betOutcomeTitle": "to win"
+                        }
+                      }
+                    },
+                    {
+                      "id": "closing",
+                      "odds": "O 216.5",
+                      "betSlip": {
+                        "eventTime": "2026-06-14T00:30:00Z",
+                        "eventTitle": "KNICKS vs SPURS",
+                        "betDisplay": "OVER 216.5 POINTS",
+                        "description": "The combined final score of both teams must be 217 or higher to cover",
+                        "oddsDisplay": "-111",
+                        "payoutMultiplier": 1.9009,
+                        "betMin": 5,
+                        "betMax": 100,
+                        "betIncrement": 5,
+                        "betIndex": 1,
+                        "disclaimerText": "",
+                        "trackingData": {
+                          "contentEntityUri": "event:basketball/nba/events/106362,team:basketball/nba/teams/19,team:basketball/nba/teams/4,league:basketball/nba/league/1",
+                          "betEventStatus": 2,
+                          "betEntityName": "New York Knicks,San Antonio Spurs",
+                          "betEventUri": "basketball/nba/events/106362",
+                          "betOutcomeLine": "O 216.5",
+                          "pageStartSource": "six-pack",
+                          "betOutcomeTitle": "total"
+                        }
+                      }
+                    }
+                  ],
+                  "template": "entity"
+                },
+                {
+                  "text": "SAS",
+                  "fullText": "San Antonio Spurs",
+                  "image": {
+                    "url": "https://b.fssta.com/uploads/application/nba/team-logos/Spurs.vresize.200.200.medium.0.png",
+                    "altUrl": "https://b.fssta.com/uploads/application/nba/team-logos/Spurs.vresize.200.200.medium.0.png",
+                    "type": "image-logo",
+                    "altText": "San Antonio Spurs"
+                  },
+                  "imageUrl": "https://b.fssta.com/uploads/application/nba/team-logos/Spurs.vresize.200.200.medium.0.png",
+                  "alternateImageUrl": "https://b.fssta.com/uploads/application/nba/team-logos/Spurs.vresize.200.200.medium.0.png",
+                  "imageType": "image-logo",
+                  "imageAltText": "San Antonio Spurs",
+                  "values": [
+                    {
+                      "id": "closing",
+                      "odds": "-5.5",
+                      "betSlip": {
+                        "eventTime": "2026-06-14T00:30:00Z",
+                        "eventTitle": "KNICKS vs SPURS",
+                        "image": {
+                          "url": "https://b.fssta.com/uploads/application/nba/team-logos/Spurs.vresize.200.200.medium.0.png",
+                          "altUrl": "https://b.fssta.com/uploads/application/nba/team-logos/Spurs.vresize.200.200.medium.0.png",
+                          "type": "image-logo",
+                          "altText": "San Antonio Spurs"
+                        },
+                        "betDisplay": "SAN ANTONIO SPURS -5.5",
+                        "description": "The Spurs must win by 6 points or more to cover the spread",
+                        "oddsDisplay": "-106",
+                        "payoutMultiplier": 1.9434,
+                        "betMin": 5,
+                        "betMax": 100,
+                        "betIncrement": 5,
+                        "betIndex": 1,
+                        "disclaimerText": "",
+                        "trackingData": {
+                          "contentEntityUri": "event:basketball/nba/events/106362,team:basketball/nba/teams/19,team:basketball/nba/teams/4,league:basketball/nba/league/1",
+                          "betEventStatus": 2,
+                          "betEntityName": "San Antonio Spurs",
+                          "betEventUri": "basketball/nba/events/106362",
+                          "betEntityUri": "team:basketball/nba/teams/19",
+                          "betOutcomeLine": "-5.5",
+                          "pageStartSource": "six-pack",
+                          "betOutcomeTitle": "spread"
+                        }
+                      }
+                    },
+                    {
+                      "id": "closing",
+                      "odds": "-200",
+                      "betSlip": {
+                        "eventTime": "2026-06-14T00:30:00Z",
+                        "eventTitle": "KNICKS vs SPURS",
+                        "image": {
+                          "url": "https://b.fssta.com/uploads/application/nba/team-logos/Spurs.vresize.200.200.medium.0.png",
+                          "altUrl": "https://b.fssta.com/uploads/application/nba/team-logos/Spurs.vresize.200.200.medium.0.png",
+                          "type": "image-logo",
+                          "altText": "San Antonio Spurs"
+                        },
+                        "betDisplay": "SAN ANTONIO SPURS",
+                        "description": "A bet of $200 would win $300 total if the Spurs win",
+                        "oddsDisplay": "-200",
+                        "payoutMultiplier": 1.5,
+                        "betMin": 5,
+                        "betMax": 100,
+                        "betIncrement": 5,
+                        "betIndex": 1,
+                        "disclaimerText": "",
+                        "trackingData": {
+                          "contentEntityUri": "event:basketball/nba/events/106362,team:basketball/nba/teams/19,team:basketball/nba/teams/4,league:basketball/nba/league/1",
+                          "betEventStatus": 2,
+                          "betEntityName": "San Antonio Spurs",
+                          "betEventUri": "basketball/nba/events/106362",
+                          "betEntityUri": "team:basketball/nba/teams/19",
+                          "betOutcomeLine": "-200",
+                          "pageStartSource": "six-pack",
+                          "betOutcomeTitle": "to win"
+                        }
+                      }
+                    },
+                    {
+                      "id": "closing",
+                      "odds": "U 216.5",
+                      "betSlip": {
+                        "eventTime": "2026-06-14T00:30:00Z",
+                        "eventTitle": "KNICKS vs SPURS",
+                        "betDisplay": "UNDER 216.5 POINTS",
+                        "description": "The combined final score of both teams must be 216 or lower to cover",
+                        "oddsDisplay": "-109",
+                        "payoutMultiplier": 1.9174,
+                        "betMin": 5,
+                        "betMax": 100,
+                        "betIncrement": 5,
+                        "betIndex": 1,
+                        "disclaimerText": "",
+                        "trackingData": {
+                          "contentEntityUri": "event:basketball/nba/events/106362,team:basketball/nba/teams/19,team:basketball/nba/teams/4,league:basketball/nba/league/1",
+                          "betEventStatus": 2,
+                          "betEntityName": "New York Knicks,San Antonio Spurs",
+                          "betEventUri": "basketball/nba/events/106362",
+                          "betOutcomeLine": "U 216.5",
+                          "pageStartSource": "six-pack",
+                          "betOutcomeTitle": "total"
+                        }
+                      }
+                    }
+                  ],
+                  "template": "entity"
+                }
+              ],
+              "template": "default"
+            },
+            "liveStartTime": "2026-06-14T00:20:00Z",
+            "eventStatus": 2,
+            "eventTime": "2026-06-14T00:30:00Z",
+            "isTba": false,
+            "tvStation": "ABC",
+            "moduleLinkText": "ODDS INFO",
+            "betSection": {
+              "name": "KNICKS vs SPURS",
+              "bets": [
+                {
+                  "template": "market",
+                  "model": {
+                    "subtitle": "SPREAD",
+                    "mainText": "The Spurs must win by 6 points or more to cover the spread",
+                    "odds": [
+                      {
+                        "text": "+5.5",
+                        "subText": "NYK",
+                        "betSlip": {
+                          "eventTime": "2026-06-14T00:30:00Z",
+                          "eventTitle": "KNICKS vs SPURS",
+                          "image": {
+                            "url": "https://b.fssta.com/uploads/application/nba/team-logos/Knicks.vresize.200.200.medium.0.png",
+                            "altUrl": "https://b.fssta.com/uploads/application/nba/team-logos/Knicks.vresize.200.200.medium.0.png",
+                            "type": "image-logo",
+                            "altText": "New York Knicks"
+                          },
+                          "betDisplay": "NEW YORK KNICKS +5.5",
+                          "description": "The Knicks must lose by 5 points or fewer (or win outright) to cover the spread",
+                          "oddsDisplay": "-114",
+                          "payoutMultiplier": 1.8772,
+                          "betMin": 5,
+                          "betMax": 100,
+                          "betIncrement": 5,
+                          "betIndex": 1,
+                          "disclaimerText": "",
+                          "trackingData": {
+                            "contentEntityUri": "event:basketball/nba/events/106362,team:basketball/nba/teams/19,team:basketball/nba/teams/4,league:basketball/nba/league/1",
+                            "betEventStatus": 2,
+                            "betEntityName": "New York Knicks",
+                            "betEventUri": "basketball/nba/events/106362",
+                            "betEntityUri": "team:basketball/nba/teams/4",
+                            "betOutcomeLine": "+5.5",
+                            "pageStartSource": "bet-section",
+                            "betOutcomeTitle": "market"
+                          }
+                        }
+                      },
+                      {
+                        "text": "-5.5",
+                        "subText": "SAS",
+                        "betSlip": {
+                          "eventTime": "2026-06-14T00:30:00Z",
+                          "eventTitle": "KNICKS vs SPURS",
+                          "image": {
+                            "url": "https://b.fssta.com/uploads/application/nba/team-logos/Spurs.vresize.200.200.medium.0.png",
+                            "altUrl": "https://b.fssta.com/uploads/application/nba/team-logos/Spurs.vresize.200.200.medium.0.png",
+                            "type": "image-logo",
+                            "altText": "San Antonio Spurs"
+                          },
+                          "betDisplay": "SAN ANTONIO SPURS -5.5",
+                          "description": "The Spurs must win by 6 points or more to cover the spread",
+                          "oddsDisplay": "-106",
+                          "payoutMultiplier": 1.9434,
+                          "betMin": 5,
+                          "betMax": 100,
+                          "betIncrement": 5,
+                          "betIndex": 1,
+                          "disclaimerText": "",
+                          "trackingData": {
+                            "contentEntityUri": "event:basketball/nba/events/106362,team:basketball/nba/teams/19,team:basketball/nba/teams/4,league:basketball/nba/league/1",
+                            "betEventStatus": 2,
+                            "betEntityName": "San Antonio Spurs",
+                            "betEventUri": "basketball/nba/events/106362",
+                            "betEntityUri": "team:basketball/nba/teams/19",
+                            "betOutcomeLine": "-5.5",
+                            "pageStartSource": "bet-section",
+                            "betOutcomeTitle": "market"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                },
+                {
+                  "template": "market",
+                  "model": {
+                    "subtitle": "TEAM TO WIN",
+                    "mainText": "A bet of $100 would win $265 total if the Knicks win and a bet of $200 would win $300 total if the Spurs win",
+                    "odds": [
+                      {
+                        "text": "+165",
+                        "subText": "NYK",
+                        "betSlip": {
+                          "eventTime": "2026-06-14T00:30:00Z",
+                          "eventTitle": "KNICKS vs SPURS",
+                          "image": {
+                            "url": "https://b.fssta.com/uploads/application/nba/team-logos/Knicks.vresize.200.200.medium.0.png",
+                            "altUrl": "https://b.fssta.com/uploads/application/nba/team-logos/Knicks.vresize.200.200.medium.0.png",
+                            "type": "image-logo",
+                            "altText": "New York Knicks"
+                          },
+                          "betDisplay": "NEW YORK KNICKS",
+                          "description": "A bet of $100 would win $265 total if the Knicks win",
+                          "oddsDisplay": "+165",
+                          "payoutMultiplier": 2.65,
+                          "betMin": 5,
+                          "betMax": 100,
+                          "betIncrement": 5,
+                          "betIndex": 1,
+                          "disclaimerText": "",
+                          "trackingData": {
+                            "contentEntityUri": "event:basketball/nba/events/106362,team:basketball/nba/teams/19,team:basketball/nba/teams/4,league:basketball/nba/league/1",
+                            "betEventStatus": 2,
+                            "betEntityName": "New York Knicks",
+                            "betEventUri": "basketball/nba/events/106362",
+                            "betEntityUri": "team:basketball/nba/teams/4",
+                            "betOutcomeLine": "+165",
+                            "pageStartSource": "bet-section",
+                            "betOutcomeTitle": "market"
+                          }
+                        }
+                      },
+                      {
+                        "text": "-200",
+                        "subText": "SAS",
+                        "betSlip": {
+                          "eventTime": "2026-06-14T00:30:00Z",
+                          "eventTitle": "KNICKS vs SPURS",
+                          "image": {
+                            "url": "https://b.fssta.com/uploads/application/nba/team-logos/Spurs.vresize.200.200.medium.0.png",
+                            "altUrl": "https://b.fssta.com/uploads/application/nba/team-logos/Spurs.vresize.200.200.medium.0.png",
+                            "type": "image-logo",
+                            "altText": "San Antonio Spurs"
+                          },
+                          "betDisplay": "SAN ANTONIO SPURS",
+                          "description": "A bet of $200 would win $300 total if the Spurs win",
+                          "oddsDisplay": "-200",
+                          "payoutMultiplier": 1.5,
+                          "betMin": 5,
+                          "betMax": 100,
+                          "betIncrement": 5,
+                          "betIndex": 1,
+                          "disclaimerText": "",
+                          "trackingData": {
+                            "contentEntityUri": "event:basketball/nba/events/106362,team:basketball/nba/teams/19,team:basketball/nba/teams/4,league:basketball/nba/league/1",
+                            "betEventStatus": 2,
+                            "betEntityName": "San Antonio Spurs",
+                            "betEventUri": "basketball/nba/events/106362",
+                            "betEntityUri": "team:basketball/nba/teams/19",
+                            "betOutcomeLine": "-200",
+                            "pageStartSource": "bet-section",
+                            "betOutcomeTitle": "market"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                },
+                {
+                  "template": "market",
+                  "model": {
+                    "subtitle": "TOTAL",
+                    "mainText": "The combined final score of both teams is set at 216.5",
+                    "odds": [
+                      {
+                        "text": "-111",
+                        "subText": "OVER 216.5",
+                        "betSlip": {
+                          "eventTime": "2026-06-14T00:30:00Z",
+                          "eventTitle": "KNICKS vs SPURS",
+                          "betDisplay": "OVER 216.5 POINTS",
+                          "description": "The combined final score of both teams must be 217 or higher to cover",
+                          "oddsDisplay": "-111",
+                          "payoutMultiplier": 1.9009,
+                          "betMin": 5,
+                          "betMax": 100,
+                          "betIncrement": 5,
+                          "betIndex": 1,
+                          "disclaimerText": "",
+                          "trackingData": {
+                            "contentEntityUri": "event:basketball/nba/events/106362,team:basketball/nba/teams/19,team:basketball/nba/teams/4,league:basketball/nba/league/1",
+                            "betEventStatus": 2,
+                            "betEntityName": "New York Knicks,San Antonio Spurs",
+                            "betEventUri": "basketball/nba/events/106362",
+                            "betOutcomeLine": "O 216.5",
+                            "pageStartSource": "bet-section",
+                            "betOutcomeTitle": "market"
+                          }
+                        }
+                      },
+                      {
+                        "text": "-109",
+                        "subText": "UNDER 216.5",
+                        "betSlip": {
+                          "eventTime": "2026-06-14T00:30:00Z",
+                          "eventTitle": "KNICKS vs SPURS",
+                          "betDisplay": "UNDER 216.5 POINTS",
+                          "description": "The combined final score of both teams must be 216 or lower to cover",
+                          "oddsDisplay": "-109",
+                          "payoutMultiplier": 1.9174,
+                          "betMin": 5,
+                          "betMax": 100,
+                          "betIncrement": 5,
+                          "betIndex": 1,
+                          "disclaimerText": "",
+                          "trackingData": {
+                            "contentEntityUri": "event:basketball/nba/events/106362,team:basketball/nba/teams/19,team:basketball/nba/teams/4,league:basketball/nba/league/1",
+                            "betEventStatus": 2,
+                            "betEntityName": "New York Knicks,San Antonio Spurs",
+                            "betEventUri": "basketball/nba/events/106362",
+                            "betOutcomeLine": "U 216.5",
+                            "pageStartSource": "bet-section",
+                            "betOutcomeTitle": "market"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            "entityLink": {
+              "webUrl": "/nba/nba-finals-game-5-new-york-knicks-vs-san-antonio-spurs-jun-13-2026-game-boxscore-106362?tab=odds",
+              "contentUri": "basketball/nba/events/106362",
+              "contentType": "event",
+              "layout": {
+                "path": "/layouts?type=layout&subtype=nbaEventLayout",
+                "tokens": {
+                  "id": "106362",
+                  "eventUri": "basketball/nba/events/106362",
+                  "homeUri": "basketball/nba/teams/19",
+                  "awayUri": "basketball/nba/teams/4"
+                }
+              },
+              "analyticsSport": "nba",
+              "tab": "odds",
+              "type": "entity"
+            },
+            "contentUri": "basketball/nba/events/106362",
+            "fairPlayMetaData": {
+              "parameters": {
+                "homeTeam": "San Antonio Spurs"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "title": "PROPS",
+      "modules": [
+        {
+          "type": "bet-section",
+          "model": {
+            "title": "PROPS",
+            "name": "PLAYER POINTS",
+            "description": "How many points will these players score in their next game? Select a player to see potential winnings.",
+            "bets": [
+              {
+                "template": "prop-future",
+                "model": {
+                  "image": {
+                    "url": "https://b.fssta.com/uploads/application/nba/headshots/3850.vresize.140.170.medium.2.png",
+                    "altUrl": "https://b.fssta.com/uploads/application/nba/headshots/3850.vresize.140.170.medium.2.png",
+                    "type": "image-headshot",
+                    "altText": "Victor Wembanyama"
+                  },
+                  "infoSubText": "NYK at SAS",
+                  "infoDate": "2026-06-14T00:30:00Z",
+                  "mainText": "V. Wembanyama",
+                  "subText": "24.0 PPG",
+                  "gamblingText": {
+                    "betText": "Bet $10 to win",
+                    "winningsText": "$18 total"
+                  },
+                  "odds": {
+                    "title": "OVER",
+                    "text": "27.5",
+                    "subText": "-125",
+                    "betSlip": {
+                      "eventTime": "2026-06-14T00:30:00Z",
+                      "eventTitle": "KNICKS vs SPURS",
+                      "image": {
+                        "url": "https://b.fssta.com/uploads/application/nba/headshots/3850.vresize.140.170.medium.2.png",
+                        "altUrl": "https://b.fssta.com/uploads/application/nba/headshots/3850.vresize.140.170.medium.2.png",
+                        "type": "image-headshot",
+                        "altText": "Victor Wembanyama"
+                      },
+                      "betDisplay": "OVER",
+                      "description": "How many points will Victor Wembanyama score in his next game? Select to see potential winnings.",
+                      "oddsDisplay": "-125",
+                      "payoutMultiplier": 1.8,
+                      "betMin": 5,
+                      "betMax": 100,
+                      "betIncrement": 5,
+                      "betIndex": 1,
+                      "disclaimerText": "",
+                      "trackingData": {
+                        "contentEntityUri": "athlete:basketball/nba/athletes/3850,event:basketball/nba/events/106362,team:basketball/nba/teams/19,team:basketball/nba/teams/4,league:basketball/nba/league/1",
+                        "betEventStatus": 2,
+                        "betEntityName": "Victor Wembanyama",
+                        "betEventUri": "basketball/nba/events/106362",
+                        "betEntityUri": "athlete:basketball/nba/athletes/3850",
+                        "betOutcomeLine": "-125",
+                        "pageStartSource": "prop",
+                        "betOutcomeTitle": "prop"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "template": "prop-future",
+                "model": {
+                  "image": {
+                    "url": "https://b.fssta.com/uploads/application/nba/headshots/2520.vresize.140.170.medium.2.png",
+                    "altUrl": "https://b.fssta.com/uploads/application/nba/headshots/2520.vresize.140.170.medium.2.png",
+                    "type": "image-headshot",
+                    "altText": "Jalen Brunson"
+                  },
+                  "infoSubText": "NYK at SAS",
+                  "infoDate": "2026-06-14T00:30:00Z",
+                  "mainText": "J. Brunson",
+                  "subText": "27.4 PPG",
+                  "gamblingText": {
+                    "betText": "Bet $10 to win",
+                    "winningsText": "$18 total"
+                  },
+                  "odds": {
+                    "title": "OVER",
+                    "text": "27.5",
+                    "subText": "-118",
+                    "betSlip": {
+                      "eventTime": "2026-06-14T00:30:00Z",
+                      "eventTitle": "KNICKS vs SPURS",
+                      "image": {
+                        "url": "https://b.fssta.com/uploads/application/nba/headshots/2520.vresize.140.170.medium.2.png",
+                        "altUrl": "https://b.fssta.com/uploads/application/nba/headshots/2520.vresize.140.170.medium.2.png",
+                        "type": "image-headshot",
+                        "altText": "Jalen Brunson"
+                      },
+                      "betDisplay": "OVER",
+                      "description": "How many points will Jalen Brunson score in his next game? Select to see potential winnings.",
+                      "oddsDisplay": "-118",
+                      "payoutMultiplier": 1.8475,
+                      "betMin": 5,
+                      "betMax": 100,
+                      "betIncrement": 5,
+                      "betIndex": 1,
+                      "disclaimerText": "",
+                      "trackingData": {
+                        "contentEntityUri": "athlete:basketball/nba/athletes/2520,event:basketball/nba/events/106362,team:basketball/nba/teams/19,team:basketball/nba/teams/4,league:basketball/nba/league/1",
+                        "betEventStatus": 2,
+                        "betEntityName": "Jalen Brunson",
+                        "betEventUri": "basketball/nba/events/106362",
+                        "betEntityUri": "athlete:basketball/nba/athletes/2520",
+                        "betOutcomeLine": "-118",
+                        "pageStartSource": "prop",
+                        "betOutcomeTitle": "prop"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "template": "prop-future",
+                "model": {
+                  "image": {
+                    "url": "https://b.fssta.com/uploads/application/nba/headshots/2369.vresize.140.170.medium.2.png",
+                    "altUrl": "https://b.fssta.com/uploads/application/nba/headshots/2369.vresize.140.170.medium.2.png",
+                    "type": "image-headshot",
+                    "altText": "OG Anunoby"
+                  },
+                  "infoSubText": "NYK at SAS",
+                  "infoDate": "2026-06-14T00:30:00Z",
+                  "mainText": "O. Anunoby",
+                  "subText": "20.7 PPG",
+                  "gamblingText": {
+                    "betText": "Bet $10 to win",
+                    "winningsText": "$19 total"
+                  },
+                  "odds": {
+                    "title": "OVER",
+                    "text": "18.5",
+                    "subText": "-114",
+                    "betSlip": {
+                      "eventTime": "2026-06-14T00:30:00Z",
+                      "eventTitle": "KNICKS vs SPURS",
+                      "image": {
+                        "url": "https://b.fssta.com/uploads/application/nba/headshots/2369.vresize.140.170.medium.2.png",
+                        "altUrl": "https://b.fssta.com/uploads/application/nba/headshots/2369.vresize.140.170.medium.2.png",
+                        "type": "image-headshot",
+                        "altText": "OG Anunoby"
+                      },
+                      "betDisplay": "OVER",
+                      "description": "How many points will OG Anunoby score in his next game? Select to see potential winnings.",
+                      "oddsDisplay": "-114",
+                      "payoutMultiplier": 1.8772,
+                      "betMin": 5,
+                      "betMax": 100,
+                      "betIncrement": 5,
+                      "betIndex": 1,
+                      "disclaimerText": "",
+                      "trackingData": {
+                        "contentEntityUri": "athlete:basketball/nba/athletes/2369,event:basketball/nba/events/106362,team:basketball/nba/teams/19,team:basketball/nba/teams/4,league:basketball/nba/league/1",
+                        "betEventStatus": 2,
+                        "betEntityName": "OG Anunoby",
+                        "betEventUri": "basketball/nba/events/106362",
+                        "betEntityUri": "athlete:basketball/nba/athletes/2369",
+                        "betOutcomeLine": "-114",
+                        "pageStartSource": "prop",
+                        "betOutcomeTitle": "prop"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "template": "prop-future",
+                "model": {
+                  "image": {
+                    "url": "https://b.fssta.com/uploads/application/nba/headshots/2051.vresize.140.170.medium.2.png",
+                    "altUrl": "https://b.fssta.com/uploads/application/nba/headshots/2051.vresize.140.170.medium.2.png",
+                    "type": "image-headshot",
+                    "altText": "Karl-Anthony Towns"
+                  },
+                  "infoSubText": "NYK at SAS",
+                  "infoDate": "2026-06-14T00:30:00Z",
+                  "mainText": "K. Towns",
+                  "subText": "16.7 PPG",
+                  "gamblingText": {
+                    "betText": "Bet $10 to win",
+                    "winningsText": "$19 total"
+                  },
+                  "odds": {
+                    "title": "OVER",
+                    "text": "16.5",
+                    "subText": "-110",
+                    "betSlip": {
+                      "eventTime": "2026-06-14T00:30:00Z",
+                      "eventTitle": "KNICKS vs SPURS",
+                      "image": {
+                        "url": "https://b.fssta.com/uploads/application/nba/headshots/2051.vresize.140.170.medium.2.png",
+                        "altUrl": "https://b.fssta.com/uploads/application/nba/headshots/2051.vresize.140.170.medium.2.png",
+                        "type": "image-headshot",
+                        "altText": "Karl-Anthony Towns"
+                      },
+                      "betDisplay": "OVER",
+                      "description": "How many points will Karl-Anthony Towns score in his next game? Select to see potential winnings.",
+                      "oddsDisplay": "-110",
+                      "payoutMultiplier": 1.9091,
+                      "betMin": 5,
+                      "betMax": 100,
+                      "betIncrement": 5,
+                      "betIndex": 1,
+                      "disclaimerText": "",
+                      "trackingData": {
+                        "contentEntityUri": "athlete:basketball/nba/athletes/2051,event:basketball/nba/events/106362,team:basketball/nba/teams/19,team:basketball/nba/teams/4,league:basketball/nba/league/1",
+                        "betEventStatus": 2,
+                        "betEntityName": "Karl-Anthony Towns",
+                        "betEventUri": "basketball/nba/events/106362",
+                        "betEntityUri": "athlete:basketball/nba/athletes/2051",
+                        "betOutcomeLine": "-110",
+                        "pageStartSource": "prop",
+                        "betOutcomeTitle": "prop"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "template": "prop-future",
+                "model": {
+                  "image": {
+                    "url": "https://b.fssta.com/uploads/application/nba/headshots/3993.vresize.140.170.medium.2.png",
+                    "altUrl": "https://b.fssta.com/uploads/application/nba/headshots/3993.vresize.140.170.medium.2.png",
+                    "type": "image-headshot",
+                    "altText": "Stephon Castle"
+                  },
+                  "infoSubText": "NYK at SAS",
+                  "infoDate": "2026-06-14T00:30:00Z",
+                  "mainText": "S. Castle",
+                  "subText": "18.7 PPG",
+                  "gamblingText": {
+                    "betText": "Bet $10 to win",
+                    "winningsText": "$18 total"
+                  },
+                  "odds": {
+                    "title": "OVER",
+                    "text": "15.5",
+                    "subText": "-132",
+                    "betSlip": {
+                      "eventTime": "2026-06-14T00:30:00Z",
+                      "eventTitle": "KNICKS vs SPURS",
+                      "image": {
+                        "url": "https://b.fssta.com/uploads/application/nba/headshots/3993.vresize.140.170.medium.2.png",
+                        "altUrl": "https://b.fssta.com/uploads/application/nba/headshots/3993.vresize.140.170.medium.2.png",
+                        "type": "image-headshot",
+                        "altText": "Stephon Castle"
+                      },
+                      "betDisplay": "OVER",
+                      "description": "How many points will Stephon Castle score in his next game? Select to see potential winnings.",
+                      "oddsDisplay": "-132",
+                      "payoutMultiplier": 1.7576,
+                      "betMin": 5,
+                      "betMax": 100,
+                      "betIncrement": 5,
+                      "betIndex": 1,
+                      "disclaimerText": "",
+                      "trackingData": {
+                        "contentEntityUri": "athlete:basketball/nba/athletes/3993,event:basketball/nba/events/106362,team:basketball/nba/teams/19,team:basketball/nba/teams/4,league:basketball/nba/league/1",
+                        "betEventStatus": 2,
+                        "betEntityName": "Stephon Castle",
+                        "betEventUri": "basketball/nba/events/106362",
+                        "betEntityUri": "athlete:basketball/nba/athletes/3993",
+                        "betOutcomeLine": "-132",
+                        "pageStartSource": "prop",
+                        "betOutcomeTitle": "prop"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "template": "prop-future",
+                "model": {
+                  "image": {
+                    "url": "https://b.fssta.com/uploads/application/nba/headshots/4159.vresize.140.170.medium.1.png",
+                    "altUrl": "https://b.fssta.com/uploads/application/nba/headshots/4159.vresize.140.170.medium.1.png",
+                    "type": "image-headshot",
+                    "altText": "Dylan Harper"
+                  },
+                  "infoSubText": "NYK at SAS",
+                  "infoDate": "2026-06-14T00:30:00Z",
+                  "mainText": "D. Harper",
+                  "subText": "13.6 PPG",
+                  "gamblingText": {
+                    "betText": "Bet $10 to win",
+                    "winningsText": "$18 total"
+                  },
+                  "odds": {
+                    "title": "OVER",
+                    "text": "14.5",
+                    "subText": "-132",
+                    "betSlip": {
+                      "eventTime": "2026-06-14T00:30:00Z",
+                      "eventTitle": "KNICKS vs SPURS",
+                      "image": {
+                        "url": "https://b.fssta.com/uploads/application/nba/headshots/4159.vresize.140.170.medium.1.png",
+                        "altUrl": "https://b.fssta.com/uploads/application/nba/headshots/4159.vresize.140.170.medium.1.png",
+                        "type": "image-headshot",
+                        "altText": "Dylan Harper"
+                      },
+                      "betDisplay": "OVER",
+                      "description": "How many points will Dylan Harper score in his next game? Select to see potential winnings.",
+                      "oddsDisplay": "-132",
+                      "payoutMultiplier": 1.7576,
+                      "betMin": 5,
+                      "betMax": 100,
+                      "betIncrement": 5,
+                      "betIndex": 1,
+                      "disclaimerText": "",
+                      "trackingData": {
+                        "contentEntityUri": "athlete:basketball/nba/athletes/4159,event:basketball/nba/events/106362,team:basketball/nba/teams/19,team:basketball/nba/teams/4,league:basketball/nba/league/1",
+                        "betEventStatus": 2,
+                        "betEntityName": "Dylan Harper",
+                        "betEventUri": "basketball/nba/events/106362",
+                        "betEntityUri": "athlete:basketball/nba/athletes/4159",
+                        "betOutcomeLine": "-132",
+                        "pageStartSource": "prop",
+                        "betOutcomeTitle": "prop"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "template": "prop-future",
+                "model": {
+                  "image": {
+                    "url": "https://b.fssta.com/uploads/application/nba/headshots/2350.vresize.140.170.medium.2.png",
+                    "altUrl": "https://b.fssta.com/uploads/application/nba/headshots/2350.vresize.140.170.medium.2.png",
+                    "type": "image-headshot",
+                    "altText": "De'Aaron Fox"
+                  },
+                  "infoSubText": "NYK at SAS",
+                  "infoDate": "2026-06-14T00:30:00Z",
+                  "mainText": "D. Fox",
+                  "subText": "16.0 PPG",
+                  "gamblingText": {
+                    "betText": "Bet $10 to win",
+                    "winningsText": "$18 total"
+                  },
+                  "odds": {
+                    "title": "OVER",
+                    "text": "14.5",
+                    "subText": "-128",
+                    "betSlip": {
+                      "eventTime": "2026-06-14T00:30:00Z",
+                      "eventTitle": "KNICKS vs SPURS",
+                      "image": {
+                        "url": "https://b.fssta.com/uploads/application/nba/headshots/2350.vresize.140.170.medium.2.png",
+                        "altUrl": "https://b.fssta.com/uploads/application/nba/headshots/2350.vresize.140.170.medium.2.png",
+                        "type": "image-headshot",
+                        "altText": "De'Aaron Fox"
+                      },
+                      "betDisplay": "OVER",
+                      "description": "How many points will De'Aaron Fox score in his next game? Select to see potential winnings.",
+                      "oddsDisplay": "-128",
+                      "payoutMultiplier": 1.7812,
+                      "betMin": 5,
+                      "betMax": 100,
+                      "betIncrement": 5,
+                      "betIndex": 1,
+                      "disclaimerText": "",
+                      "trackingData": {
+                        "contentEntityUri": "athlete:basketball/nba/athletes/2350,event:basketball/nba/events/106362,team:basketball/nba/teams/19,team:basketball/nba/teams/4,league:basketball/nba/league/1",
+                        "betEventStatus": 2,
+                        "betEntityName": "De'Aaron Fox",
+                        "betEventUri": "basketball/nba/events/106362",
+                        "betEntityUri": "athlete:basketball/nba/athletes/2350",
+                        "betOutcomeLine": "-128",
+                        "pageStartSource": "prop",
+                        "betOutcomeTitle": "prop"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "template": "prop-future",
+                "model": {
+                  "image": {
+                    "url": "https://b.fssta.com/uploads/application/nba/headshots/3441.vresize.140.170.medium.2.png",
+                    "altUrl": "https://b.fssta.com/uploads/application/nba/headshots/3441.vresize.140.170.medium.2.png",
+                    "type": "image-headshot",
+                    "altText": "Devin Vassell"
+                  },
+                  "infoSubText": "NYK at SAS",
+                  "infoDate": "2026-06-14T00:30:00Z",
+                  "mainText": "D. Vassell",
+                  "subText": "13.0 PPG",
+                  "gamblingText": {
+                    "betText": "Bet $10 to win",
+                    "winningsText": "$20 total"
+                  },
+                  "odds": {
+                    "title": "OVER",
+                    "text": "13.5",
+                    "subText": "+102",
+                    "betSlip": {
+                      "eventTime": "2026-06-14T00:30:00Z",
+                      "eventTitle": "KNICKS vs SPURS",
+                      "image": {
+                        "url": "https://b.fssta.com/uploads/application/nba/headshots/3441.vresize.140.170.medium.2.png",
+                        "altUrl": "https://b.fssta.com/uploads/application/nba/headshots/3441.vresize.140.170.medium.2.png",
+                        "type": "image-headshot",
+                        "altText": "Devin Vassell"
+                      },
+                      "betDisplay": "OVER",
+                      "description": "How many points will Devin Vassell score in his next game? Select to see potential winnings.",
+                      "oddsDisplay": "+102",
+                      "payoutMultiplier": 2.02,
+                      "betMin": 5,
+                      "betMax": 100,
+                      "betIncrement": 5,
+                      "betIndex": 1,
+                      "disclaimerText": "",
+                      "trackingData": {
+                        "contentEntityUri": "athlete:basketball/nba/athletes/3441,event:basketball/nba/events/106362,team:basketball/nba/teams/19,team:basketball/nba/teams/4,league:basketball/nba/league/1",
+                        "betEventStatus": 2,
+                        "betEntityName": "Devin Vassell",
+                        "betEventUri": "basketball/nba/events/106362",
+                        "betEntityUri": "athlete:basketball/nba/athletes/3441",
+                        "betOutcomeLine": "+102",
+                        "pageStartSource": "prop",
+                        "betOutcomeTitle": "prop"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "template": "prop-future",
+                "model": {
+                  "image": {
+                    "url": "https://b.fssta.com/uploads/application/nba/headshots/2498.vresize.140.170.medium.2.png",
+                    "altUrl": "https://b.fssta.com/uploads/application/nba/headshots/2498.vresize.140.170.medium.2.png",
+                    "type": "image-headshot",
+                    "altText": "Mikal Bridges"
+                  },
+                  "infoSubText": "NYK at SAS",
+                  "infoDate": "2026-06-14T00:30:00Z",
+                  "mainText": "M. Bridges",
+                  "subText": "13.4 PPG",
+                  "gamblingText": {
+                    "betText": "Bet $10 to win",
+                    "winningsText": "$18 total"
+                  },
+                  "odds": {
+                    "title": "OVER",
+                    "text": "10.5",
+                    "subText": "-128",
+                    "betSlip": {
+                      "eventTime": "2026-06-14T00:30:00Z",
+                      "eventTitle": "KNICKS vs SPURS",
+                      "image": {
+                        "url": "https://b.fssta.com/uploads/application/nba/headshots/2498.vresize.140.170.medium.2.png",
+                        "altUrl": "https://b.fssta.com/uploads/application/nba/headshots/2498.vresize.140.170.medium.2.png",
+                        "type": "image-headshot",
+                        "altText": "Mikal Bridges"
+                      },
+                      "betDisplay": "OVER",
+                      "description": "How many points will Mikal Bridges score in his next game? Select to see potential winnings.",
+                      "oddsDisplay": "-128",
+                      "payoutMultiplier": 1.7812,
+                      "betMin": 5,
+                      "betMax": 100,
+                      "betIncrement": 5,
+                      "betIndex": 1,
+                      "disclaimerText": "",
+                      "trackingData": {
+                        "contentEntityUri": "athlete:basketball/nba/athletes/2498,event:basketball/nba/events/106362,team:basketball/nba/teams/19,team:basketball/nba/teams/4,league:basketball/nba/league/1",
+                        "betEventStatus": 2,
+                        "betEntityName": "Mikal Bridges",
+                        "betEventUri": "basketball/nba/events/106362",
+                        "betEntityUri": "athlete:basketball/nba/athletes/2498",
+                        "betOutcomeLine": "-128",
+                        "pageStartSource": "prop",
+                        "betOutcomeTitle": "prop"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "template": "prop-future",
+                "model": {
+                  "image": {
+                    "url": "https://b.fssta.com/uploads/application/nba/headshots/2374.vresize.140.170.medium.2.png",
+                    "altUrl": "https://b.fssta.com/uploads/application/nba/headshots/2374.vresize.140.170.medium.2.png",
+                    "type": "image-headshot",
+                    "altText": "Josh Hart"
+                  },
+                  "infoSubText": "NYK at SAS",
+                  "infoDate": "2026-06-14T00:30:00Z",
+                  "mainText": "J. Hart",
+                  "subText": "10.3 PPG",
+                  "gamblingText": {
+                    "betText": "Bet $10 to win",
+                    "winningsText": "$20 total"
+                  },
+                  "odds": {
+                    "title": "OVER",
+                    "text": "9.5",
+                    "subText": "+102",
+                    "betSlip": {
+                      "eventTime": "2026-06-14T00:30:00Z",
+                      "eventTitle": "KNICKS vs SPURS",
+                      "image": {
+                        "url": "https://b.fssta.com/uploads/application/nba/headshots/2374.vresize.140.170.medium.2.png",
+                        "altUrl": "https://b.fssta.com/uploads/application/nba/headshots/2374.vresize.140.170.medium.2.png",
+                        "type": "image-headshot",
+                        "altText": "Josh Hart"
+                      },
+                      "betDisplay": "OVER",
+                      "description": "How many points will Josh Hart score in his next game? Select to see potential winnings.",
+                      "oddsDisplay": "+102",
+                      "payoutMultiplier": 2.02,
+                      "betMin": 5,
+                      "betMax": 100,
+                      "betIncrement": 5,
+                      "betIndex": 1,
+                      "disclaimerText": "",
+                      "trackingData": {
+                        "contentEntityUri": "athlete:basketball/nba/athletes/2374,event:basketball/nba/events/106362,team:basketball/nba/teams/19,team:basketball/nba/teams/4,league:basketball/nba/league/1",
+                        "betEventStatus": 2,
+                        "betEntityName": "Josh Hart",
+                        "betEventUri": "basketball/nba/events/106362",
+                        "betEntityUri": "athlete:basketball/nba/athletes/2374",
+                        "betOutcomeLine": "+102",
+                        "pageStartSource": "prop",
+                        "betOutcomeTitle": "prop"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "template": "prop-future",
+                "model": {
+                  "image": {
+                    "url": "https://b.fssta.com/uploads/application/nba/headshots/3767.vresize.140.170.medium.2.png",
+                    "altUrl": "https://b.fssta.com/uploads/application/nba/headshots/3767.vresize.140.170.medium.2.png",
+                    "type": "image-headshot",
+                    "altText": "Julian Champagnie"
+                  },
+                  "infoSubText": "NYK at SAS",
+                  "infoDate": "2026-06-14T00:30:00Z",
+                  "mainText": "J. Champagnie",
+                  "subText": "11.1 PPG",
+                  "gamblingText": {
+                    "betText": "Bet $10 to win",
+                    "winningsText": "$20 total"
+                  },
+                  "odds": {
+                    "title": "OVER",
+                    "text": "9.5",
+                    "subText": "+102",
+                    "betSlip": {
+                      "eventTime": "2026-06-14T00:30:00Z",
+                      "eventTitle": "KNICKS vs SPURS",
+                      "image": {
+                        "url": "https://b.fssta.com/uploads/application/nba/headshots/3767.vresize.140.170.medium.2.png",
+                        "altUrl": "https://b.fssta.com/uploads/application/nba/headshots/3767.vresize.140.170.medium.2.png",
+                        "type": "image-headshot",
+                        "altText": "Julian Champagnie"
+                      },
+                      "betDisplay": "OVER",
+                      "description": "How many points will Julian Champagnie score in his next game? Select to see potential winnings.",
+                      "oddsDisplay": "+102",
+                      "payoutMultiplier": 2.02,
+                      "betMin": 5,
+                      "betMax": 100,
+                      "betIncrement": 5,
+                      "betIndex": 1,
+                      "disclaimerText": "",
+                      "trackingData": {
+                        "contentEntityUri": "athlete:basketball/nba/athletes/3767,event:basketball/nba/events/106362,team:basketball/nba/teams/19,team:basketball/nba/teams/4,league:basketball/nba/league/1",
+                        "betEventStatus": 2,
+                        "betEntityName": "Julian Champagnie",
+                        "betEventUri": "basketball/nba/events/106362",
+                        "betEntityUri": "athlete:basketball/nba/athletes/3767",
+                        "betOutcomeLine": "+102",
+                        "pageStartSource": "prop",
+                        "betOutcomeTitle": "prop"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "template": "prop-future",
+                "model": {
+                  "image": {
+                    "url": "https://b.fssta.com/uploads/application/nba/headshots/2515.vresize.140.170.medium.2.png",
+                    "altUrl": "https://b.fssta.com/uploads/application/nba/headshots/2515.vresize.140.170.medium.2.png",
+                    "type": "image-headshot",
+                    "altText": "Landry Shamet"
+                  },
+                  "infoSubText": "NYK at SAS",
+                  "infoDate": "2026-06-14T00:30:00Z",
+                  "mainText": "L. Shamet",
+                  "subText": "6.1 PPG",
+                  "gamblingText": {
+                    "betText": "Bet $10 to win",
+                    "winningsText": "$18 total"
+                  },
+                  "odds": {
+                    "title": "OVER",
+                    "text": "6.5",
+                    "subText": "-122",
+                    "betSlip": {
+                      "eventTime": "2026-06-14T00:30:00Z",
+                      "eventTitle": "KNICKS vs SPURS",
+                      "image": {
+                        "url": "https://b.fssta.com/uploads/application/nba/headshots/2515.vresize.140.170.medium.2.png",
+                        "altUrl": "https://b.fssta.com/uploads/application/nba/headshots/2515.vresize.140.170.medium.2.png",
+                        "type": "image-headshot",
+                        "altText": "Landry Shamet"
+                      },
+                      "betDisplay": "OVER",
+                      "description": "How many points will Landry Shamet score in his next game? Select to see potential winnings.",
+                      "oddsDisplay": "-122",
+                      "payoutMultiplier": 1.8197,
+                      "betMin": 5,
+                      "betMax": 100,
+                      "betIncrement": 5,
+                      "betIndex": 1,
+                      "disclaimerText": "",
+                      "trackingData": {
+                        "contentEntityUri": "athlete:basketball/nba/athletes/2515,event:basketball/nba/events/106362,team:basketball/nba/teams/19,team:basketball/nba/teams/4,league:basketball/nba/league/1",
+                        "betEventStatus": 2,
+                        "betEntityName": "Landry Shamet",
+                        "betEventUri": "basketball/nba/events/106362",
+                        "betEntityUri": "athlete:basketball/nba/athletes/2515",
+                        "betOutcomeLine": "-122",
+                        "pageStartSource": "prop",
+                        "betOutcomeTitle": "prop"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "template": "prop-future",
+                "model": {
+                  "image": {
+                    "url": "https://b.fssta.com/uploads/application/nba/headshots/3282.vresize.140.170.medium.2.png",
+                    "altUrl": "https://b.fssta.com/uploads/application/nba/headshots/3282.vresize.140.170.medium.2.png",
+                    "type": "image-headshot",
+                    "altText": "Keldon Johnson"
+                  },
+                  "infoSubText": "NYK at SAS",
+                  "infoDate": "2026-06-14T00:30:00Z",
+                  "mainText": "K. Johnson",
+                  "subText": "7.8 PPG",
+                  "gamblingText": {
+                    "betText": "Bet $10 to win",
+                    "winningsText": "$19 total"
+                  },
+                  "odds": {
+                    "title": "OVER",
+                    "text": "6.5",
+                    "subText": "-106",
+                    "betSlip": {
+                      "eventTime": "2026-06-14T00:30:00Z",
+                      "eventTitle": "KNICKS vs SPURS",
+                      "image": {
+                        "url": "https://b.fssta.com/uploads/application/nba/headshots/3282.vresize.140.170.medium.2.png",
+                        "altUrl": "https://b.fssta.com/uploads/application/nba/headshots/3282.vresize.140.170.medium.2.png",
+                        "type": "image-headshot",
+                        "altText": "Keldon Johnson"
+                      },
+                      "betDisplay": "OVER",
+                      "description": "How many points will Keldon Johnson score in his next game? Select to see potential winnings.",
+                      "oddsDisplay": "-106",
+                      "payoutMultiplier": 1.9434,
+                      "betMin": 5,
+                      "betMax": 100,
+                      "betIncrement": 5,
+                      "betIndex": 1,
+                      "disclaimerText": "",
+                      "trackingData": {
+                        "contentEntityUri": "athlete:basketball/nba/athletes/3282,event:basketball/nba/events/106362,team:basketball/nba/teams/19,team:basketball/nba/teams/4,league:basketball/nba/league/1",
+                        "betEventStatus": 2,
+                        "betEntityName": "Keldon Johnson",
+                        "betEventUri": "basketball/nba/events/106362",
+                        "betEntityUri": "athlete:basketball/nba/athletes/3282",
+                        "betOutcomeLine": "-106",
+                        "pageStartSource": "prop",
+                        "betOutcomeTitle": "prop"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "template": "prop-future",
+                "model": {
+                  "image": {
+                    "url": "https://b.fssta.com/uploads/application/nba/headshots/3602.vresize.140.170.medium.2.png",
+                    "altUrl": "https://b.fssta.com/uploads/application/nba/headshots/3602.vresize.140.170.medium.2.png",
+                    "type": "image-headshot",
+                    "altText": "Jose Alvarado"
+                  },
+                  "infoSubText": "NYK at SAS",
+                  "infoDate": "2026-06-14T00:30:00Z",
+                  "mainText": "J. Alvarado",
+                  "subText": "4.4 PPG",
+                  "gamblingText": {
+                    "betText": "Bet $10 to win",
+                    "winningsText": "$20 total"
+                  },
+                  "odds": {
+                    "title": "OVER",
+                    "text": "4.5",
+                    "subText": "+102",
+                    "betSlip": {
+                      "eventTime": "2026-06-14T00:30:00Z",
+                      "eventTitle": "KNICKS vs SPURS",
+                      "image": {
+                        "url": "https://b.fssta.com/uploads/application/nba/headshots/3602.vresize.140.170.medium.2.png",
+                        "altUrl": "https://b.fssta.com/uploads/application/nba/headshots/3602.vresize.140.170.medium.2.png",
+                        "type": "image-headshot",
+                        "altText": "Jose Alvarado"
+                      },
+                      "betDisplay": "OVER",
+                      "description": "How many points will Jose Alvarado score in his next game? Select to see potential winnings.",
+                      "oddsDisplay": "+102",
+                      "payoutMultiplier": 2.02,
+                      "betMin": 5,
+                      "betMax": 100,
+                      "betIncrement": 5,
+                      "betIndex": 1,
+                      "disclaimerText": "",
+                      "trackingData": {
+                        "contentEntityUri": "athlete:basketball/nba/athletes/3602,event:basketball/nba/events/106362,team:basketball/nba/teams/19,team:basketball/nba/teams/4,league:basketball/nba/league/1",
+                        "betEventStatus": 2,
+                        "betEntityName": "Jose Alvarado",
+                        "betEventUri": "basketball/nba/events/106362",
+                        "betEntityUri": "athlete:basketball/nba/athletes/3602",
+                        "betOutcomeLine": "+102",
+                        "pageStartSource": "prop",
+                        "betOutcomeTitle": "prop"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "template": "prop-future",
+                "model": {
+                  "image": {
+                    "url": "https://b.fssta.com/uploads/application/nba/headshots/2529.vresize.140.170.medium.2.png",
+                    "altUrl": "https://b.fssta.com/uploads/application/nba/headshots/2529.vresize.140.170.medium.2.png",
+                    "type": "image-headshot",
+                    "altText": "Mitchell Robinson"
+                  },
+                  "infoSubText": "NYK at SAS",
+                  "infoDate": "2026-06-14T00:30:00Z",
+                  "mainText": "M. Robinson",
+                  "subText": "5.0 PPG",
+                  "gamblingText": {
+                    "betText": "Bet $10 to win",
+                    "winningsText": "$20 total"
+                  },
+                  "odds": {
+                    "title": "OVER",
+                    "text": "3.5",
+                    "subText": "-104",
+                    "betSlip": {
+                      "eventTime": "2026-06-14T00:30:00Z",
+                      "eventTitle": "KNICKS vs SPURS",
+                      "image": {
+                        "url": "https://b.fssta.com/uploads/application/nba/headshots/2529.vresize.140.170.medium.2.png",
+                        "altUrl": "https://b.fssta.com/uploads/application/nba/headshots/2529.vresize.140.170.medium.2.png",
+                        "type": "image-headshot",
+                        "altText": "Mitchell Robinson"
+                      },
+                      "betDisplay": "OVER",
+                      "description": "How many points will Mitchell Robinson score in his next game? Select to see potential winnings.",
+                      "oddsDisplay": "-104",
+                      "payoutMultiplier": 1.9615,
+                      "betMin": 5,
+                      "betMax": 100,
+                      "betIncrement": 5,
+                      "betIndex": 1,
+                      "disclaimerText": "",
+                      "trackingData": {
+                        "contentEntityUri": "athlete:basketball/nba/athletes/2529,event:basketball/nba/events/106362,team:basketball/nba/teams/19,team:basketball/nba/teams/4,league:basketball/nba/league/1",
+                        "betEventStatus": 2,
+                        "betEntityName": "Mitchell Robinson",
+                        "betEventUri": "basketball/nba/events/106362",
+                        "betEntityUri": "athlete:basketball/nba/athletes/2529",
+                        "betOutcomeLine": "-104",
+                        "pageStartSource": "prop",
+                        "betOutcomeTitle": "prop"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "template": "prop-future",
+                "model": {
+                  "image": {
+                    "url": "https://b.fssta.com/uploads/application/nba/headshots/3541.vresize.140.170.medium.2.png",
+                    "altUrl": "https://b.fssta.com/uploads/application/nba/headshots/3541.vresize.140.170.medium.2.png",
+                    "type": "image-headshot",
+                    "altText": "Miles McBride"
+                  },
+                  "infoSubText": "NYK at SAS",
+                  "infoDate": "2026-06-14T00:30:00Z",
+                  "mainText": "M. McBride",
+                  "subText": "5.9 PPG",
+                  "gamblingText": {
+                    "betText": "Bet $10 to win",
+                    "winningsText": "$18 total"
+                  },
+                  "odds": {
+                    "title": "OVER",
+                    "text": "2.5",
+                    "subText": "-118",
+                    "betSlip": {
+                      "eventTime": "2026-06-14T00:30:00Z",
+                      "eventTitle": "KNICKS vs SPURS",
+                      "image": {
+                        "url": "https://b.fssta.com/uploads/application/nba/headshots/3541.vresize.140.170.medium.2.png",
+                        "altUrl": "https://b.fssta.com/uploads/application/nba/headshots/3541.vresize.140.170.medium.2.png",
+                        "type": "image-headshot",
+                        "altText": "Miles McBride"
+                      },
+                      "betDisplay": "OVER",
+                      "description": "How many points will Miles McBride score in his next game? Select to see potential winnings.",
+                      "oddsDisplay": "-118",
+                      "payoutMultiplier": 1.8475,
+                      "betMin": 5,
+                      "betMax": 100,
+                      "betIncrement": 5,
+                      "betIndex": 1,
+                      "disclaimerText": "",
+                      "trackingData": {
+                        "contentEntityUri": "athlete:basketball/nba/athletes/3541,event:basketball/nba/events/106362,team:basketball/nba/teams/19,team:basketball/nba/teams/4,league:basketball/nba/league/1",
+                        "betEventStatus": 2,
+                        "betEntityName": "Miles McBride",
+                        "betEventUri": "basketball/nba/events/106362",
+                        "betEntityUri": "athlete:basketball/nba/athletes/3541",
+                        "betOutcomeLine": "-118",
+                        "pageStartSource": "prop",
+                        "betOutcomeTitle": "prop"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "template": "prop-future",
+                "model": {
+                  "image": {
+                    "url": "https://b.fssta.com/uploads/application/nba/headshots/2431.vresize.140.170.medium.2.png",
+                    "altUrl": "https://b.fssta.com/uploads/application/nba/headshots/2431.vresize.140.170.medium.2.png",
+                    "type": "image-headshot",
+                    "altText": "Luke Kornet"
+                  },
+                  "infoSubText": "NYK at SAS",
+                  "infoDate": "2026-06-14T00:30:00Z",
+                  "mainText": "L. Kornet",
+                  "subText": "3.8 PPG",
+                  "gamblingText": {
+                    "betText": "Bet $10 to win",
+                    "winningsText": "$18 total"
+                  },
+                  "odds": {
+                    "title": "OVER",
+                    "text": "1.5",
+                    "subText": "-125",
+                    "betSlip": {
+                      "eventTime": "2026-06-14T00:30:00Z",
+                      "eventTitle": "KNICKS vs SPURS",
+                      "image": {
+                        "url": "https://b.fssta.com/uploads/application/nba/headshots/2431.vresize.140.170.medium.2.png",
+                        "altUrl": "https://b.fssta.com/uploads/application/nba/headshots/2431.vresize.140.170.medium.2.png",
+                        "type": "image-headshot",
+                        "altText": "Luke Kornet"
+                      },
+                      "betDisplay": "OVER",
+                      "description": "How many points will Luke Kornet score in his next game? Select to see potential winnings.",
+                      "oddsDisplay": "-125",
+                      "payoutMultiplier": 1.8,
+                      "betMin": 5,
+                      "betMax": 100,
+                      "betIncrement": 5,
+                      "betIndex": 1,
+                      "disclaimerText": "",
+                      "trackingData": {
+                        "contentEntityUri": "athlete:basketball/nba/athletes/2431,event:basketball/nba/events/106362,team:basketball/nba/teams/19,team:basketball/nba/teams/4,league:basketball/nba/league/1",
+                        "betEventStatus": 2,
+                        "betEntityName": "Luke Kornet",
+                        "betEventUri": "basketball/nba/events/106362",
+                        "betEntityUri": "athlete:basketball/nba/athletes/2431",
+                        "betOutcomeLine": "-125",
+                        "pageStartSource": "prop",
+                        "betOutcomeTitle": "prop"
+                      }
+                    }
+                  }
+                }
+              }
+            ],
+            "count": 2
+          }
+        },
+        {
+          "type": "bet-section",
+          "model": {
+            "title": "PROPS",
+            "name": "PLAYER REBOUNDS",
+            "description": "How many rebounds will these players have in their next game? Select a player to see potential winnings.",
+            "bets": [
+              {
+                "template": "prop-future",
+                "model": {
+                  "image": {
+                    "url": "https://b.fssta.com/uploads/application/nba/headshots/3850.vresize.140.170.medium.2.png",
+                    "altUrl": "https://b.fssta.com/uploads/application/nba/headshots/3850.vresize.140.170.medium.2.png",
+                    "type": "image-headshot",
+                    "altText": "Victor Wembanyama"
+                  },
+                  "infoSubText": "NYK at SAS",
+                  "infoDate": "2026-06-14T00:30:00Z",
+                  "mainText": "V. Wembanyama",
+                  "subText": "10.7 RPG",
+                  "gamblingText": {
+                    "betText": "Bet $10 to win",
+                    "winningsText": "$19 total"
+                  },
+                  "odds": {
+                    "title": "OVER",
+                    "text": "11.5",
+                    "subText": "-108",
+                    "betSlip": {
+                      "eventTime": "2026-06-14T00:30:00Z",
+                      "eventTitle": "KNICKS vs SPURS",
+                      "image": {
+                        "url": "https://b.fssta.com/uploads/application/nba/headshots/3850.vresize.140.170.medium.2.png",
+                        "altUrl": "https://b.fssta.com/uploads/application/nba/headshots/3850.vresize.140.170.medium.2.png",
+                        "type": "image-headshot",
+                        "altText": "Victor Wembanyama"
+                      },
+                      "betDisplay": "OVER",
+                      "description": "How many rebounds will Victor Wembanyama have in his next game? Select to see potential winnings.",
+                      "oddsDisplay": "-108",
+                      "payoutMultiplier": 1.9259,
+                      "betMin": 5,
+                      "betMax": 100,
+                      "betIncrement": 5,
+                      "betIndex": 1,
+                      "disclaimerText": "",
+                      "trackingData": {
+                        "contentEntityUri": "athlete:basketball/nba/athletes/3850,event:basketball/nba/events/106362,team:basketball/nba/teams/19,team:basketball/nba/teams/4,league:basketball/nba/league/1",
+                        "betEventStatus": 2,
+                        "betEntityName": "Victor Wembanyama",
+                        "betEventUri": "basketball/nba/events/106362",
+                        "betEntityUri": "athlete:basketball/nba/athletes/3850",
+                        "betOutcomeLine": "-108",
+                        "pageStartSource": "prop",
+                        "betOutcomeTitle": "prop"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "template": "prop-future",
+                "model": {
+                  "image": {
+                    "url": "https://b.fssta.com/uploads/application/nba/headshots/2051.vresize.140.170.medium.2.png",
+                    "altUrl": "https://b.fssta.com/uploads/application/nba/headshots/2051.vresize.140.170.medium.2.png",
+                    "type": "image-headshot",
+                    "altText": "Karl-Anthony Towns"
+                  },
+                  "infoSubText": "NYK at SAS",
+                  "infoDate": "2026-06-14T00:30:00Z",
+                  "mainText": "K. Towns",
+                  "subText": "10.6 RPG",
+                  "gamblingText": {
+                    "betText": "Bet $10 to win",
+                    "winningsText": "$20 total"
+                  },
+                  "odds": {
+                    "title": "OVER",
+                    "text": "11.5",
+                    "subText": "+104",
+                    "betSlip": {
+                      "eventTime": "2026-06-14T00:30:00Z",
+                      "eventTitle": "KNICKS vs SPURS",
+                      "image": {
+                        "url": "https://b.fssta.com/uploads/application/nba/headshots/2051.vresize.140.170.medium.2.png",
+                        "altUrl": "https://b.fssta.com/uploads/application/nba/headshots/2051.vresize.140.170.medium.2.png",
+                        "type": "image-headshot",
+                        "altText": "Karl-Anthony Towns"
+                      },
+                      "betDisplay": "OVER",
+                      "description": "How many rebounds will Karl-Anthony Towns have in his next game? Select to see potential winnings.",
+                      "oddsDisplay": "+104",
+                      "payoutMultiplier": 2.04,
+                      "betMin": 5,
+                      "betMax": 100,
+                      "betIncrement": 5,
+                      "betIndex": 1,
+                      "disclaimerText": "",
+                      "trackingData": {
+                        "contentEntityUri": "athlete:basketball/nba/athletes/2051,event:basketball/nba/events/106362,team:basketball/nba/teams/19,team:basketball/nba/teams/4,league:basketball/nba/league/1",
+                        "betEventStatus": 2,
+                        "betEntityName": "Karl-Anthony Towns",
+                        "betEventUri": "basketball/nba/events/106362",
+                        "betEntityUri": "athlete:basketball/nba/athletes/2051",
+                        "betOutcomeLine": "+104",
+                        "pageStartSource": "prop",
+                        "betOutcomeTitle": "prop"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "template": "prop-future",
+                "model": {
+                  "image": {
+                    "url": "https://b.fssta.com/uploads/application/nba/headshots/2374.vresize.140.170.medium.2.png",
+                    "altUrl": "https://b.fssta.com/uploads/application/nba/headshots/2374.vresize.140.170.medium.2.png",
+                    "type": "image-headshot",
+                    "altText": "Josh Hart"
+                  },
+                  "infoSubText": "NYK at SAS",
+                  "infoDate": "2026-06-14T00:30:00Z",
+                  "mainText": "J. Hart",
+                  "subText": "8.8 RPG",
+                  "gamblingText": {
+                    "betText": "Bet $10 to win",
+                    "winningsText": "$20 total"
+                  },
+                  "odds": {
+                    "title": "OVER",
+                    "text": "8.5",
+                    "subText": "+102",
+                    "betSlip": {
+                      "eventTime": "2026-06-14T00:30:00Z",
+                      "eventTitle": "KNICKS vs SPURS",
+                      "image": {
+                        "url": "https://b.fssta.com/uploads/application/nba/headshots/2374.vresize.140.170.medium.2.png",
+                        "altUrl": "https://b.fssta.com/uploads/application/nba/headshots/2374.vresize.140.170.medium.2.png",
+                        "type": "image-headshot",
+                        "altText": "Josh Hart"
+                      },
+                      "betDisplay": "OVER",
+                      "description": "How many rebounds will Josh Hart have in his next game? Select to see potential winnings.",
+                      "oddsDisplay": "+102",
+                      "payoutMultiplier": 2.02,
+                      "betMin": 5,
+                      "betMax": 100,
+                      "betIncrement": 5,
+                      "betIndex": 1,
+                      "disclaimerText": "",
+                      "trackingData": {
+                        "contentEntityUri": "athlete:basketball/nba/athletes/2374,event:basketball/nba/events/106362,team:basketball/nba/teams/19,team:basketball/nba/teams/4,league:basketball/nba/league/1",
+                        "betEventStatus": 2,
+                        "betEntityName": "Josh Hart",
+                        "betEventUri": "basketball/nba/events/106362",
+                        "betEntityUri": "athlete:basketball/nba/athletes/2374",
+                        "betOutcomeLine": "+102",
+                        "pageStartSource": "prop",
+                        "betOutcomeTitle": "prop"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "template": "prop-future",
+                "model": {
+                  "image": {
+                    "url": "https://b.fssta.com/uploads/application/nba/headshots/4159.vresize.140.170.medium.1.png",
+                    "altUrl": "https://b.fssta.com/uploads/application/nba/headshots/4159.vresize.140.170.medium.1.png",
+                    "type": "image-headshot",
+                    "altText": "Dylan Harper"
+                  },
+                  "infoSubText": "NYK at SAS",
+                  "infoDate": "2026-06-14T00:30:00Z",
+                  "mainText": "D. Harper",
+                  "subText": "5.6 RPG",
+                  "gamblingText": {
+                    "betText": "Bet $10 to win",
+                    "winningsText": "$17 total"
+                  },
+                  "odds": {
+                    "title": "OVER",
+                    "text": "5.5",
+                    "subText": "-144",
+                    "betSlip": {
+                      "eventTime": "2026-06-14T00:30:00Z",
+                      "eventTitle": "KNICKS vs SPURS",
+                      "image": {
+                        "url": "https://b.fssta.com/uploads/application/nba/headshots/4159.vresize.140.170.medium.1.png",
+                        "altUrl": "https://b.fssta.com/uploads/application/nba/headshots/4159.vresize.140.170.medium.1.png",
+                        "type": "image-headshot",
+                        "altText": "Dylan Harper"
+                      },
+                      "betDisplay": "OVER",
+                      "description": "How many rebounds will Dylan Harper have in his next game? Select to see potential winnings.",
+                      "oddsDisplay": "-144",
+                      "payoutMultiplier": 1.6944,
+                      "betMin": 5,
+                      "betMax": 100,
+                      "betIncrement": 5,
+                      "betIndex": 1,
+                      "disclaimerText": "",
+                      "trackingData": {
+                        "contentEntityUri": "athlete:basketball/nba/athletes/4159,event:basketball/nba/events/106362,team:basketball/nba/teams/19,team:basketball/nba/teams/4,league:basketball/nba/league/1",
+                        "betEventStatus": 2,
+                        "betEntityName": "Dylan Harper",
+                        "betEventUri": "basketball/nba/events/106362",
+                        "betEntityUri": "athlete:basketball/nba/athletes/4159",
+                        "betOutcomeLine": "-144",
+                        "pageStartSource": "prop",
+                        "betOutcomeTitle": "prop"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "template": "prop-future",
+                "model": {
+                  "image": {
+                    "url": "https://b.fssta.com/uploads/application/nba/headshots/2369.vresize.140.170.medium.2.png",
+                    "altUrl": "https://b.fssta.com/uploads/application/nba/headshots/2369.vresize.140.170.medium.2.png",
+                    "type": "image-headshot",
+                    "altText": "OG Anunoby"
+                  },
+                  "infoSubText": "NYK at SAS",
+                  "infoDate": "2026-06-14T00:30:00Z",
+                  "mainText": "O. Anunoby",
+                  "subText": "6.2 RPG",
+                  "gamblingText": {
+                    "betText": "Bet $10 to win",
+                    "winningsText": "$20 total"
+                  },
+                  "odds": {
+                    "title": "OVER",
+                    "text": "5.5",
+                    "subText": "+104",
+                    "betSlip": {
+                      "eventTime": "2026-06-14T00:30:00Z",
+                      "eventTitle": "KNICKS vs SPURS",
+                      "image": {
+                        "url": "https://b.fssta.com/uploads/application/nba/headshots/2369.vresize.140.170.medium.2.png",
+                        "altUrl": "https://b.fssta.com/uploads/application/nba/headshots/2369.vresize.140.170.medium.2.png",
+                        "type": "image-headshot",
+                        "altText": "OG Anunoby"
+                      },
+                      "betDisplay": "OVER",
+                      "description": "How many rebounds will OG Anunoby have in his next game? Select to see potential winnings.",
+                      "oddsDisplay": "+104",
+                      "payoutMultiplier": 2.04,
+                      "betMin": 5,
+                      "betMax": 100,
+                      "betIncrement": 5,
+                      "betIndex": 1,
+                      "disclaimerText": "",
+                      "trackingData": {
+                        "contentEntityUri": "athlete:basketball/nba/athletes/2369,event:basketball/nba/events/106362,team:basketball/nba/teams/19,team:basketball/nba/teams/4,league:basketball/nba/league/1",
+                        "betEventStatus": 2,
+                        "betEntityName": "OG Anunoby",
+                        "betEventUri": "basketball/nba/events/106362",
+                        "betEntityUri": "athlete:basketball/nba/athletes/2369",
+                        "betOutcomeLine": "+104",
+                        "pageStartSource": "prop",
+                        "betOutcomeTitle": "prop"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "template": "prop-future",
+                "model": {
+                  "image": {
+                    "url": "https://b.fssta.com/uploads/application/nba/headshots/3993.vresize.140.170.medium.2.png",
+                    "altUrl": "https://b.fssta.com/uploads/application/nba/headshots/3993.vresize.140.170.medium.2.png",
+                    "type": "image-headshot",
+                    "altText": "Stephon Castle"
+                  },
+                  "infoSubText": "NYK at SAS",
+                  "infoDate": "2026-06-14T00:30:00Z",
+                  "mainText": "S. Castle",
+                  "subText": "5.0 RPG",
+                  "gamblingText": {
+                    "betText": "Bet $10 to win",
+                    "winningsText": "$16 total"
+                  },
+                  "odds": {
+                    "title": "OVER",
+                    "text": "4.5",
+                    "subText": "-158",
+                    "betSlip": {
+                      "eventTime": "2026-06-14T00:30:00Z",
+                      "eventTitle": "KNICKS vs SPURS",
+                      "image": {
+                        "url": "https://b.fssta.com/uploads/application/nba/headshots/3993.vresize.140.170.medium.2.png",
+                        "altUrl": "https://b.fssta.com/uploads/application/nba/headshots/3993.vresize.140.170.medium.2.png",
+                        "type": "image-headshot",
+                        "altText": "Stephon Castle"
+                      },
+                      "betDisplay": "OVER",
+                      "description": "How many rebounds will Stephon Castle have in his next game? Select to see potential winnings.",
+                      "oddsDisplay": "-158",
+                      "payoutMultiplier": 1.6329,
+                      "betMin": 5,
+                      "betMax": 100,
+                      "betIncrement": 5,
+                      "betIndex": 1,
+                      "disclaimerText": "",
+                      "trackingData": {
+                        "contentEntityUri": "athlete:basketball/nba/athletes/3993,event:basketball/nba/events/106362,team:basketball/nba/teams/19,team:basketball/nba/teams/4,league:basketball/nba/league/1",
+                        "betEventStatus": 2,
+                        "betEntityName": "Stephon Castle",
+                        "betEventUri": "basketball/nba/events/106362",
+                        "betEntityUri": "athlete:basketball/nba/athletes/3993",
+                        "betOutcomeLine": "-158",
+                        "pageStartSource": "prop",
+                        "betOutcomeTitle": "prop"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "template": "prop-future",
+                "model": {
+                  "image": {
+                    "url": "https://b.fssta.com/uploads/application/nba/headshots/3441.vresize.140.170.medium.2.png",
+                    "altUrl": "https://b.fssta.com/uploads/application/nba/headshots/3441.vresize.140.170.medium.2.png",
+                    "type": "image-headshot",
+                    "altText": "Devin Vassell"
+                  },
+                  "infoSubText": "NYK at SAS",
+                  "infoDate": "2026-06-14T00:30:00Z",
+                  "mainText": "D. Vassell",
+                  "subText": "5.2 RPG",
+                  "gamblingText": {
+                    "betText": "Bet $10 to win",
+                    "winningsText": "$17 total"
+                  },
+                  "odds": {
+                    "title": "OVER",
+                    "text": "4.5",
+                    "subText": "-152",
+                    "betSlip": {
+                      "eventTime": "2026-06-14T00:30:00Z",
+                      "eventTitle": "KNICKS vs SPURS",
+                      "image": {
+                        "url": "https://b.fssta.com/uploads/application/nba/headshots/3441.vresize.140.170.medium.2.png",
+                        "altUrl": "https://b.fssta.com/uploads/application/nba/headshots/3441.vresize.140.170.medium.2.png",
+                        "type": "image-headshot",
+                        "altText": "Devin Vassell"
+                      },
+                      "betDisplay": "OVER",
+                      "description": "How many rebounds will Devin Vassell have in his next game? Select to see potential winnings.",
+                      "oddsDisplay": "-152",
+                      "payoutMultiplier": 1.6579,
+                      "betMin": 5,
+                      "betMax": 100,
+                      "betIncrement": 5,
+                      "betIndex": 1,
+                      "disclaimerText": "",
+                      "trackingData": {
+                        "contentEntityUri": "athlete:basketball/nba/athletes/3441,event:basketball/nba/events/106362,team:basketball/nba/teams/19,team:basketball/nba/teams/4,league:basketball/nba/league/1",
+                        "betEventStatus": 2,
+                        "betEntityName": "Devin Vassell",
+                        "betEventUri": "basketball/nba/events/106362",
+                        "betEntityUri": "athlete:basketball/nba/athletes/3441",
+                        "betOutcomeLine": "-152",
+                        "pageStartSource": "prop",
+                        "betOutcomeTitle": "prop"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "template": "prop-future",
+                "model": {
+                  "image": {
+                    "url": "https://b.fssta.com/uploads/application/nba/headshots/3767.vresize.140.170.medium.2.png",
+                    "altUrl": "https://b.fssta.com/uploads/application/nba/headshots/3767.vresize.140.170.medium.2.png",
+                    "type": "image-headshot",
+                    "altText": "Julian Champagnie"
+                  },
+                  "infoSubText": "NYK at SAS",
+                  "infoDate": "2026-06-14T00:30:00Z",
+                  "mainText": "J. Champagnie",
+                  "subText": "5.6 RPG",
+                  "gamblingText": {
+                    "betText": "Bet $10 to win",
+                    "winningsText": "$18 total"
+                  },
+                  "odds": {
+                    "title": "OVER",
+                    "text": "4.5",
+                    "subText": "-122",
+                    "betSlip": {
+                      "eventTime": "2026-06-14T00:30:00Z",
+                      "eventTitle": "KNICKS vs SPURS",
+                      "image": {
+                        "url": "https://b.fssta.com/uploads/application/nba/headshots/3767.vresize.140.170.medium.2.png",
+                        "altUrl": "https://b.fssta.com/uploads/application/nba/headshots/3767.vresize.140.170.medium.2.png",
+                        "type": "image-headshot",
+                        "altText": "Julian Champagnie"
+                      },
+                      "betDisplay": "OVER",
+                      "description": "How many rebounds will Julian Champagnie have in his next game? Select to see potential winnings.",
+                      "oddsDisplay": "-122",
+                      "payoutMultiplier": 1.8197,
+                      "betMin": 5,
+                      "betMax": 100,
+                      "betIncrement": 5,
+                      "betIndex": 1,
+                      "disclaimerText": "",
+                      "trackingData": {
+                        "contentEntityUri": "athlete:basketball/nba/athletes/3767,event:basketball/nba/events/106362,team:basketball/nba/teams/19,team:basketball/nba/teams/4,league:basketball/nba/league/1",
+                        "betEventStatus": 2,
+                        "betEntityName": "Julian Champagnie",
+                        "betEventUri": "basketball/nba/events/106362",
+                        "betEntityUri": "athlete:basketball/nba/athletes/3767",
+                        "betOutcomeLine": "-122",
+                        "pageStartSource": "prop",
+                        "betOutcomeTitle": "prop"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "template": "prop-future",
+                "model": {
+                  "image": {
+                    "url": "https://b.fssta.com/uploads/application/nba/headshots/2529.vresize.140.170.medium.2.png",
+                    "altUrl": "https://b.fssta.com/uploads/application/nba/headshots/2529.vresize.140.170.medium.2.png",
+                    "type": "image-headshot",
+                    "altText": "Mitchell Robinson"
+                  },
+                  "infoSubText": "NYK at SAS",
+                  "infoDate": "2026-06-14T00:30:00Z",
+                  "mainText": "M. Robinson",
+                  "subText": "5.2 RPG",
+                  "gamblingText": {
+                    "betText": "Bet $10 to win",
+                    "winningsText": "$19 total"
+                  },
+                  "odds": {
+                    "title": "OVER",
+                    "text": "4.5",
+                    "subText": "-114",
+                    "betSlip": {
+                      "eventTime": "2026-06-14T00:30:00Z",
+                      "eventTitle": "KNICKS vs SPURS",
+                      "image": {
+                        "url": "https://b.fssta.com/uploads/application/nba/headshots/2529.vresize.140.170.medium.2.png",
+                        "altUrl": "https://b.fssta.com/uploads/application/nba/headshots/2529.vresize.140.170.medium.2.png",
+                        "type": "image-headshot",
+                        "altText": "Mitchell Robinson"
+                      },
+                      "betDisplay": "OVER",
+                      "description": "How many rebounds will Mitchell Robinson have in his next game? Select to see potential winnings.",
+                      "oddsDisplay": "-114",
+                      "payoutMultiplier": 1.8772,
+                      "betMin": 5,
+                      "betMax": 100,
+                      "betIncrement": 5,
+                      "betIndex": 1,
+                      "disclaimerText": "",
+                      "trackingData": {
+                        "contentEntityUri": "athlete:basketball/nba/athletes/2529,event:basketball/nba/events/106362,team:basketball/nba/teams/19,team:basketball/nba/teams/4,league:basketball/nba/league/1",
+                        "betEventStatus": 2,
+                        "betEntityName": "Mitchell Robinson",
+                        "betEventUri": "basketball/nba/events/106362",
+                        "betEntityUri": "athlete:basketball/nba/athletes/2529",
+                        "betOutcomeLine": "-114",
+                        "pageStartSource": "prop",
+                        "betOutcomeTitle": "prop"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "template": "prop-future",
+                "model": {
+                  "image": {
+                    "url": "https://b.fssta.com/uploads/application/nba/headshots/2498.vresize.140.170.medium.2.png",
+                    "altUrl": "https://b.fssta.com/uploads/application/nba/headshots/2498.vresize.140.170.medium.2.png",
+                    "type": "image-headshot",
+                    "altText": "Mikal Bridges"
+                  },
+                  "infoSubText": "NYK at SAS",
+                  "infoDate": "2026-06-14T00:30:00Z",
+                  "mainText": "M. Bridges",
+                  "subText": "3.3 RPG",
+                  "gamblingText": {
+                    "betText": "Bet $10 to win",
+                    "winningsText": "$21 total"
+                  },
+                  "odds": {
+                    "title": "OVER",
+                    "text": "3.5",
+                    "subText": "+110",
+                    "betSlip": {
+                      "eventTime": "2026-06-14T00:30:00Z",
+                      "eventTitle": "KNICKS vs SPURS",
+                      "image": {
+                        "url": "https://b.fssta.com/uploads/application/nba/headshots/2498.vresize.140.170.medium.2.png",
+                        "altUrl": "https://b.fssta.com/uploads/application/nba/headshots/2498.vresize.140.170.medium.2.png",
+                        "type": "image-headshot",
+                        "altText": "Mikal Bridges"
+                      },
+                      "betDisplay": "OVER",
+                      "description": "How many rebounds will Mikal Bridges have in his next game? Select to see potential winnings.",
+                      "oddsDisplay": "+110",
+                      "payoutMultiplier": 2.1,
+                      "betMin": 5,
+                      "betMax": 100,
+                      "betIncrement": 5,
+                      "betIndex": 1,
+                      "disclaimerText": "",
+                      "trackingData": {
+                        "contentEntityUri": "athlete:basketball/nba/athletes/2498,event:basketball/nba/events/106362,team:basketball/nba/teams/19,team:basketball/nba/teams/4,league:basketball/nba/league/1",
+                        "betEventStatus": 2,
+                        "betEntityName": "Mikal Bridges",
+                        "betEventUri": "basketball/nba/events/106362",
+                        "betEntityUri": "athlete:basketball/nba/athletes/2498",
+                        "betOutcomeLine": "+110",
+                        "pageStartSource": "prop",
+                        "betOutcomeTitle": "prop"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "template": "prop-future",
+                "model": {
+                  "image": {
+                    "url": "https://b.fssta.com/uploads/application/nba/headshots/2350.vresize.140.170.medium.2.png",
+                    "altUrl": "https://b.fssta.com/uploads/application/nba/headshots/2350.vresize.140.170.medium.2.png",
+                    "type": "image-headshot",
+                    "altText": "De'Aaron Fox"
+                  },
+                  "infoSubText": "NYK at SAS",
+                  "infoDate": "2026-06-14T00:30:00Z",
+                  "mainText": "D. Fox",
+                  "subText": "4.0 RPG",
+                  "gamblingText": {
+                    "betText": "Bet $10 to win",
+                    "winningsText": "$22 total"
+                  },
+                  "odds": {
+                    "title": "OVER",
+                    "text": "3.5",
+                    "subText": "+116",
+                    "betSlip": {
+                      "eventTime": "2026-06-14T00:30:00Z",
+                      "eventTitle": "KNICKS vs SPURS",
+                      "image": {
+                        "url": "https://b.fssta.com/uploads/application/nba/headshots/2350.vresize.140.170.medium.2.png",
+                        "altUrl": "https://b.fssta.com/uploads/application/nba/headshots/2350.vresize.140.170.medium.2.png",
+                        "type": "image-headshot",
+                        "altText": "De'Aaron Fox"
+                      },
+                      "betDisplay": "OVER",
+                      "description": "How many rebounds will De'Aaron Fox have in his next game? Select to see potential winnings.",
+                      "oddsDisplay": "+116",
+                      "payoutMultiplier": 2.16,
+                      "betMin": 5,
+                      "betMax": 100,
+                      "betIncrement": 5,
+                      "betIndex": 1,
+                      "disclaimerText": "",
+                      "trackingData": {
+                        "contentEntityUri": "athlete:basketball/nba/athletes/2350,event:basketball/nba/events/106362,team:basketball/nba/teams/19,team:basketball/nba/teams/4,league:basketball/nba/league/1",
+                        "betEventStatus": 2,
+                        "betEntityName": "De'Aaron Fox",
+                        "betEventUri": "basketball/nba/events/106362",
+                        "betEntityUri": "athlete:basketball/nba/athletes/2350",
+                        "betOutcomeLine": "+116",
+                        "pageStartSource": "prop",
+                        "betOutcomeTitle": "prop"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "template": "prop-future",
+                "model": {
+                  "image": {
+                    "url": "https://b.fssta.com/uploads/application/nba/headshots/2520.vresize.140.170.medium.2.png",
+                    "altUrl": "https://b.fssta.com/uploads/application/nba/headshots/2520.vresize.140.170.medium.2.png",
+                    "type": "image-headshot",
+                    "altText": "Jalen Brunson"
+                  },
+                  "infoSubText": "NYK at SAS",
+                  "infoDate": "2026-06-14T00:30:00Z",
+                  "mainText": "J. Brunson",
+                  "subText": "3.2 RPG",
+                  "gamblingText": {
+                    "betText": "Bet $10 to win",
+                    "winningsText": "$22 total"
+                  },
+                  "odds": {
+                    "title": "OVER",
+                    "text": "3.5",
+                    "subText": "+116",
+                    "betSlip": {
+                      "eventTime": "2026-06-14T00:30:00Z",
+                      "eventTitle": "KNICKS vs SPURS",
+                      "image": {
+                        "url": "https://b.fssta.com/uploads/application/nba/headshots/2520.vresize.140.170.medium.2.png",
+                        "altUrl": "https://b.fssta.com/uploads/application/nba/headshots/2520.vresize.140.170.medium.2.png",
+                        "type": "image-headshot",
+                        "altText": "Jalen Brunson"
+                      },
+                      "betDisplay": "OVER",
+                      "description": "How many rebounds will Jalen Brunson have in his next game? Select to see potential winnings.",
+                      "oddsDisplay": "+116",
+                      "payoutMultiplier": 2.16,
+                      "betMin": 5,
+                      "betMax": 100,
+                      "betIncrement": 5,
+                      "betIndex": 1,
+                      "disclaimerText": "",
+                      "trackingData": {
+                        "contentEntityUri": "athlete:basketball/nba/athletes/2520,event:basketball/nba/events/106362,team:basketball/nba/teams/19,team:basketball/nba/teams/4,league:basketball/nba/league/1",
+                        "betEventStatus": 2,
+                        "betEntityName": "Jalen Brunson",
+                        "betEventUri": "basketball/nba/events/106362",
+                        "betEntityUri": "athlete:basketball/nba/athletes/2520",
+                        "betOutcomeLine": "+116",
+                        "pageStartSource": "prop",
+                        "betOutcomeTitle": "prop"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "template": "prop-future",
+                "model": {
+                  "image": {
+                    "url": "https://b.fssta.com/uploads/application/nba/headshots/3282.vresize.140.170.medium.2.png",
+                    "altUrl": "https://b.fssta.com/uploads/application/nba/headshots/3282.vresize.140.170.medium.2.png",
+                    "type": "image-headshot",
+                    "altText": "Keldon Johnson"
+                  },
+                  "infoSubText": "NYK at SAS",
+                  "infoDate": "2026-06-14T00:30:00Z",
+                  "mainText": "K. Johnson",
+                  "subText": "3.2 RPG",
+                  "gamblingText": {
+                    "betText": "Bet $10 to win",
+                    "winningsText": "$17 total"
+                  },
+                  "odds": {
+                    "title": "OVER",
+                    "text": "2.5",
+                    "subText": "-146",
+                    "betSlip": {
+                      "eventTime": "2026-06-14T00:30:00Z",
+                      "eventTitle": "KNICKS vs SPURS",
+                      "image": {
+                        "url": "https://b.fssta.com/uploads/application/nba/headshots/3282.vresize.140.170.medium.2.png",
+                        "altUrl": "https://b.fssta.com/uploads/application/nba/headshots/3282.vresize.140.170.medium.2.png",
+                        "type": "image-headshot",
+                        "altText": "Keldon Johnson"
+                      },
+                      "betDisplay": "OVER",
+                      "description": "How many rebounds will Keldon Johnson have in his next game? Select to see potential winnings.",
+                      "oddsDisplay": "-146",
+                      "payoutMultiplier": 1.6849,
+                      "betMin": 5,
+                      "betMax": 100,
+                      "betIncrement": 5,
+                      "betIndex": 1,
+                      "disclaimerText": "",
+                      "trackingData": {
+                        "contentEntityUri": "athlete:basketball/nba/athletes/3282,event:basketball/nba/events/106362,team:basketball/nba/teams/19,team:basketball/nba/teams/4,league:basketball/nba/league/1",
+                        "betEventStatus": 2,
+                        "betEntityName": "Keldon Johnson",
+                        "betEventUri": "basketball/nba/events/106362",
+                        "betEntityUri": "athlete:basketball/nba/athletes/3282",
+                        "betOutcomeLine": "-146",
+                        "pageStartSource": "prop",
+                        "betOutcomeTitle": "prop"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "template": "prop-future",
+                "model": {
+                  "image": {
+                    "url": "https://b.fssta.com/uploads/application/nba/headshots/2431.vresize.140.170.medium.2.png",
+                    "altUrl": "https://b.fssta.com/uploads/application/nba/headshots/2431.vresize.140.170.medium.2.png",
+                    "type": "image-headshot",
+                    "altText": "Luke Kornet"
+                  },
+                  "infoSubText": "NYK at SAS",
+                  "infoDate": "2026-06-14T00:30:00Z",
+                  "mainText": "L. Kornet",
+                  "subText": "4.0 RPG",
+                  "gamblingText": {
+                    "betText": "Bet $10 to win",
+                    "winningsText": "$16 total"
+                  },
+                  "odds": {
+                    "title": "OVER",
+                    "text": "1.5",
+                    "subText": "-172",
+                    "betSlip": {
+                      "eventTime": "2026-06-14T00:30:00Z",
+                      "eventTitle": "KNICKS vs SPURS",
+                      "image": {
+                        "url": "https://b.fssta.com/uploads/application/nba/headshots/2431.vresize.140.170.medium.2.png",
+                        "altUrl": "https://b.fssta.com/uploads/application/nba/headshots/2431.vresize.140.170.medium.2.png",
+                        "type": "image-headshot",
+                        "altText": "Luke Kornet"
+                      },
+                      "betDisplay": "OVER",
+                      "description": "How many rebounds will Luke Kornet have in his next game? Select to see potential winnings.",
+                      "oddsDisplay": "-172",
+                      "payoutMultiplier": 1.5814,
+                      "betMin": 5,
+                      "betMax": 100,
+                      "betIncrement": 5,
+                      "betIndex": 1,
+                      "disclaimerText": "",
+                      "trackingData": {
+                        "contentEntityUri": "athlete:basketball/nba/athletes/2431,event:basketball/nba/events/106362,team:basketball/nba/teams/19,team:basketball/nba/teams/4,league:basketball/nba/league/1",
+                        "betEventStatus": 2,
+                        "betEntityName": "Luke Kornet",
+                        "betEventUri": "basketball/nba/events/106362",
+                        "betEntityUri": "athlete:basketball/nba/athletes/2431",
+                        "betOutcomeLine": "-172",
+                        "pageStartSource": "prop",
+                        "betOutcomeTitle": "prop"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "template": "prop-future",
+                "model": {
+                  "image": {
+                    "url": "https://b.fssta.com/uploads/application/nba/headshots/3602.vresize.140.170.medium.2.png",
+                    "altUrl": "https://b.fssta.com/uploads/application/nba/headshots/3602.vresize.140.170.medium.2.png",
+                    "type": "image-headshot",
+                    "altText": "Jose Alvarado"
+                  },
+                  "infoSubText": "NYK at SAS",
+                  "infoDate": "2026-06-14T00:30:00Z",
+                  "mainText": "J. Alvarado",
+                  "subText": "1.4 RPG",
+                  "gamblingText": {
+                    "betText": "Bet $10 to win",
+                    "winningsText": "$18 total"
+                  },
+                  "odds": {
+                    "title": "OVER",
+                    "text": "1.5",
+                    "subText": "-122",
+                    "betSlip": {
+                      "eventTime": "2026-06-14T00:30:00Z",
+                      "eventTitle": "KNICKS vs SPURS",
+                      "image": {
+                        "url": "https://b.fssta.com/uploads/application/nba/headshots/3602.vresize.140.170.medium.2.png",
+                        "altUrl": "https://b.fssta.com/uploads/application/nba/headshots/3602.vresize.140.170.medium.2.png",
+                        "type": "image-headshot",
+                        "altText": "Jose Alvarado"
+                      },
+                      "betDisplay": "OVER",
+                      "description": "How many rebounds will Jose Alvarado have in his next game? Select to see potential winnings.",
+                      "oddsDisplay": "-122",
+                      "payoutMultiplier": 1.8197,
+                      "betMin": 5,
+                      "betMax": 100,
+                      "betIncrement": 5,
+                      "betIndex": 1,
+                      "disclaimerText": "",
+                      "trackingData": {
+                        "contentEntityUri": "athlete:basketball/nba/athletes/3602,event:basketball/nba/events/106362,team:basketball/nba/teams/19,team:basketball/nba/teams/4,league:basketball/nba/league/1",
+                        "betEventStatus": 2,
+                        "betEntityName": "Jose Alvarado",
+                        "betEventUri": "basketball/nba/events/106362",
+                        "betEntityUri": "athlete:basketball/nba/athletes/3602",
+                        "betOutcomeLine": "-122",
+                        "pageStartSource": "prop",
+                        "betOutcomeTitle": "prop"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "template": "prop-future",
+                "model": {
+                  "image": {
+                    "url": "https://b.fssta.com/uploads/application/nba/headshots/2515.vresize.140.170.medium.2.png",
+                    "altUrl": "https://b.fssta.com/uploads/application/nba/headshots/2515.vresize.140.170.medium.2.png",
+                    "type": "image-headshot",
+                    "altText": "Landry Shamet"
+                  },
+                  "infoSubText": "NYK at SAS",
+                  "infoDate": "2026-06-14T00:30:00Z",
+                  "mainText": "L. Shamet",
+                  "subText": "1.1 RPG",
+                  "gamblingText": {
+                    "betText": "Bet $10 to win",
+                    "winningsText": "$23 total"
+                  },
+                  "odds": {
+                    "title": "OVER",
+                    "text": "1.5",
+                    "subText": "+126",
+                    "betSlip": {
+                      "eventTime": "2026-06-14T00:30:00Z",
+                      "eventTitle": "KNICKS vs SPURS",
+                      "image": {
+                        "url": "https://b.fssta.com/uploads/application/nba/headshots/2515.vresize.140.170.medium.2.png",
+                        "altUrl": "https://b.fssta.com/uploads/application/nba/headshots/2515.vresize.140.170.medium.2.png",
+                        "type": "image-headshot",
+                        "altText": "Landry Shamet"
+                      },
+                      "betDisplay": "OVER",
+                      "description": "How many rebounds will Landry Shamet have in his next game? Select to see potential winnings.",
+                      "oddsDisplay": "+126",
+                      "payoutMultiplier": 2.26,
+                      "betMin": 5,
+                      "betMax": 100,
+                      "betIncrement": 5,
+                      "betIndex": 1,
+                      "disclaimerText": "",
+                      "trackingData": {
+                        "contentEntityUri": "athlete:basketball/nba/athletes/2515,event:basketball/nba/events/106362,team:basketball/nba/teams/19,team:basketball/nba/teams/4,league:basketball/nba/league/1",
+                        "betEventStatus": 2,
+                        "betEntityName": "Landry Shamet",
+                        "betEventUri": "basketball/nba/events/106362",
+                        "betEntityUri": "athlete:basketball/nba/athletes/2515",
+                        "betOutcomeLine": "+126",
+                        "pageStartSource": "prop",
+                        "betOutcomeTitle": "prop"
+                      }
+                    }
+                  }
+                }
+              }
+            ],
+            "count": 2
+          }
+        },
+        {
+          "type": "bet-section",
+          "model": {
+            "title": "PROPS",
+            "name": "PLAYER STEALS",
+            "description": "How many steals will these players have in their next game? Select a player to see potential winnings.",
+            "bets": [
+              {
+                "template": "prop-future",
+                "model": {
+                  "image": {
+                    "url": "https://b.fssta.com/uploads/application/nba/headshots/2369.vresize.140.170.medium.2.png",
+                    "altUrl": "https://b.fssta.com/uploads/application/nba/headshots/2369.vresize.140.170.medium.2.png",
+                    "type": "image-headshot",
+                    "altText": "OG Anunoby"
+                  },
+                  "infoSubText": "NYK at SAS",
+                  "infoDate": "2026-06-14T00:30:00Z",
+                  "mainText": "O. Anunoby",
+                  "subText": "1.4 SPG",
+                  "gamblingText": {
+                    "betText": "Bet $10 to win",
+                    "winningsText": "$23 total"
+                  },
+                  "odds": {
+                    "title": "OVER",
+                    "text": "1.5",
+                    "subText": "+126",
+                    "betSlip": {
+                      "eventTime": "2026-06-14T00:30:00Z",
+                      "eventTitle": "KNICKS vs SPURS",
+                      "image": {
+                        "url": "https://b.fssta.com/uploads/application/nba/headshots/2369.vresize.140.170.medium.2.png",
+                        "altUrl": "https://b.fssta.com/uploads/application/nba/headshots/2369.vresize.140.170.medium.2.png",
+                        "type": "image-headshot",
+                        "altText": "OG Anunoby"
+                      },
+                      "betDisplay": "OVER",
+                      "description": "How many steals will OG Anunoby have in his next game? Select to see potential winnings.",
+                      "oddsDisplay": "+126",
+                      "payoutMultiplier": 2.26,
+                      "betMin": 5,
+                      "betMax": 100,
+                      "betIncrement": 5,
+                      "betIndex": 1,
+                      "disclaimerText": "",
+                      "trackingData": {
+                        "contentEntityUri": "athlete:basketball/nba/athletes/2369,event:basketball/nba/events/106362,team:basketball/nba/teams/19,team:basketball/nba/teams/4,league:basketball/nba/league/1",
+                        "betEventStatus": 2,
+                        "betEntityName": "OG Anunoby",
+                        "betEventUri": "basketball/nba/events/106362",
+                        "betEntityUri": "athlete:basketball/nba/athletes/2369",
+                        "betOutcomeLine": "+126",
+                        "pageStartSource": "prop",
+                        "betOutcomeTitle": "prop"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "template": "prop-future",
+                "model": {
+                  "image": {
+                    "url": "https://b.fssta.com/uploads/application/nba/headshots/2374.vresize.140.170.medium.2.png",
+                    "altUrl": "https://b.fssta.com/uploads/application/nba/headshots/2374.vresize.140.170.medium.2.png",
+                    "type": "image-headshot",
+                    "altText": "Josh Hart"
+                  },
+                  "infoSubText": "NYK at SAS",
+                  "infoDate": "2026-06-14T00:30:00Z",
+                  "mainText": "J. Hart",
+                  "subText": "1.8 SPG",
+                  "gamblingText": {
+                    "betText": "Bet $10 to win",
+                    "winningsText": "$26 total"
+                  },
+                  "odds": {
+                    "title": "OVER",
+                    "text": "1.5",
+                    "subText": "+162",
+                    "betSlip": {
+                      "eventTime": "2026-06-14T00:30:00Z",
+                      "eventTitle": "KNICKS vs SPURS",
+                      "image": {
+                        "url": "https://b.fssta.com/uploads/application/nba/headshots/2374.vresize.140.170.medium.2.png",
+                        "altUrl": "https://b.fssta.com/uploads/application/nba/headshots/2374.vresize.140.170.medium.2.png",
+                        "type": "image-headshot",
+                        "altText": "Josh Hart"
+                      },
+                      "betDisplay": "OVER",
+                      "description": "How many steals will Josh Hart have in his next game? Select to see potential winnings.",
+                      "oddsDisplay": "+162",
+                      "payoutMultiplier": 2.62,
+                      "betMin": 5,
+                      "betMax": 100,
+                      "betIncrement": 5,
+                      "betIndex": 1,
+                      "disclaimerText": "",
+                      "trackingData": {
+                        "contentEntityUri": "athlete:basketball/nba/athletes/2374,event:basketball/nba/events/106362,team:basketball/nba/teams/19,team:basketball/nba/teams/4,league:basketball/nba/league/1",
+                        "betEventStatus": 2,
+                        "betEntityName": "Josh Hart",
+                        "betEventUri": "basketball/nba/events/106362",
+                        "betEntityUri": "athlete:basketball/nba/athletes/2374",
+                        "betOutcomeLine": "+162",
+                        "pageStartSource": "prop",
+                        "betOutcomeTitle": "prop"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "template": "prop-future",
+                "model": {
+                  "image": {
+                    "url": "https://b.fssta.com/uploads/application/nba/headshots/3850.vresize.140.170.medium.2.png",
+                    "altUrl": "https://b.fssta.com/uploads/application/nba/headshots/3850.vresize.140.170.medium.2.png",
+                    "type": "image-headshot",
+                    "altText": "Victor Wembanyama"
+                  },
+                  "infoSubText": "NYK at SAS",
+                  "infoDate": "2026-06-14T00:30:00Z",
+                  "mainText": "V. Wembanyama",
+                  "subText": "1.0 SPG",
+                  "gamblingText": {
+                    "betText": "Bet $10 to win",
+                    "winningsText": "$26 total"
+                  },
+                  "odds": {
+                    "title": "OVER",
+                    "text": "1.5",
+                    "subText": "+162",
+                    "betSlip": {
+                      "eventTime": "2026-06-14T00:30:00Z",
+                      "eventTitle": "KNICKS vs SPURS",
+                      "image": {
+                        "url": "https://b.fssta.com/uploads/application/nba/headshots/3850.vresize.140.170.medium.2.png",
+                        "altUrl": "https://b.fssta.com/uploads/application/nba/headshots/3850.vresize.140.170.medium.2.png",
+                        "type": "image-headshot",
+                        "altText": "Victor Wembanyama"
+                      },
+                      "betDisplay": "OVER",
+                      "description": "How many steals will Victor Wembanyama have in his next game? Select to see potential winnings.",
+                      "oddsDisplay": "+162",
+                      "payoutMultiplier": 2.62,
+                      "betMin": 5,
+                      "betMax": 100,
+                      "betIncrement": 5,
+                      "betIndex": 1,
+                      "disclaimerText": "",
+                      "trackingData": {
+                        "contentEntityUri": "athlete:basketball/nba/athletes/3850,event:basketball/nba/events/106362,team:basketball/nba/teams/19,team:basketball/nba/teams/4,league:basketball/nba/league/1",
+                        "betEventStatus": 2,
+                        "betEntityName": "Victor Wembanyama",
+                        "betEventUri": "basketball/nba/events/106362",
+                        "betEntityUri": "athlete:basketball/nba/athletes/3850",
+                        "betOutcomeLine": "+162",
+                        "pageStartSource": "prop",
+                        "betOutcomeTitle": "prop"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "template": "prop-future",
+                "model": {
+                  "image": {
+                    "url": "https://b.fssta.com/uploads/application/nba/headshots/2498.vresize.140.170.medium.2.png",
+                    "altUrl": "https://b.fssta.com/uploads/application/nba/headshots/2498.vresize.140.170.medium.2.png",
+                    "type": "image-headshot",
+                    "altText": "Mikal Bridges"
+                  },
+                  "infoSubText": "NYK at SAS",
+                  "infoDate": "2026-06-14T00:30:00Z",
+                  "mainText": "M. Bridges",
+                  "subText": "1.1 SPG",
+                  "gamblingText": {
+                    "betText": "Bet $10 to win",
+                    "winningsText": "$29 total"
+                  },
+                  "odds": {
+                    "title": "OVER",
+                    "text": "1.5",
+                    "subText": "+194",
+                    "betSlip": {
+                      "eventTime": "2026-06-14T00:30:00Z",
+                      "eventTitle": "KNICKS vs SPURS",
+                      "image": {
+                        "url": "https://b.fssta.com/uploads/application/nba/headshots/2498.vresize.140.170.medium.2.png",
+                        "altUrl": "https://b.fssta.com/uploads/application/nba/headshots/2498.vresize.140.170.medium.2.png",
+                        "type": "image-headshot",
+                        "altText": "Mikal Bridges"
+                      },
+                      "betDisplay": "OVER",
+                      "description": "How many steals will Mikal Bridges have in his next game? Select to see potential winnings.",
+                      "oddsDisplay": "+194",
+                      "payoutMultiplier": 2.94,
+                      "betMin": 5,
+                      "betMax": 100,
+                      "betIncrement": 5,
+                      "betIndex": 1,
+                      "disclaimerText": "",
+                      "trackingData": {
+                        "contentEntityUri": "athlete:basketball/nba/athletes/2498,event:basketball/nba/events/106362,team:basketball/nba/teams/19,team:basketball/nba/teams/4,league:basketball/nba/league/1",
+                        "betEventStatus": 2,
+                        "betEntityName": "Mikal Bridges",
+                        "betEventUri": "basketball/nba/events/106362",
+                        "betEntityUri": "athlete:basketball/nba/athletes/2498",
+                        "betOutcomeLine": "+194",
+                        "pageStartSource": "prop",
+                        "betOutcomeTitle": "prop"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "template": "prop-future",
+                "model": {
+                  "image": {
+                    "url": "https://b.fssta.com/uploads/application/nba/headshots/2520.vresize.140.170.medium.2.png",
+                    "altUrl": "https://b.fssta.com/uploads/application/nba/headshots/2520.vresize.140.170.medium.2.png",
+                    "type": "image-headshot",
+                    "altText": "Jalen Brunson"
+                  },
+                  "infoSubText": "NYK at SAS",
+                  "infoDate": "2026-06-14T00:30:00Z",
+                  "mainText": "J. Brunson",
+                  "subText": "1.2 SPG",
+                  "gamblingText": {
+                    "betText": "Bet $10 to win",
+                    "winningsText": "$15 total"
+                  },
+                  "odds": {
+                    "title": "OVER",
+                    "text": "0.5",
+                    "subText": "-210",
+                    "betSlip": {
+                      "eventTime": "2026-06-14T00:30:00Z",
+                      "eventTitle": "KNICKS vs SPURS",
+                      "image": {
+                        "url": "https://b.fssta.com/uploads/application/nba/headshots/2520.vresize.140.170.medium.2.png",
+                        "altUrl": "https://b.fssta.com/uploads/application/nba/headshots/2520.vresize.140.170.medium.2.png",
+                        "type": "image-headshot",
+                        "altText": "Jalen Brunson"
+                      },
+                      "betDisplay": "OVER",
+                      "description": "How many steals will Jalen Brunson have in his next game? Select to see potential winnings.",
+                      "oddsDisplay": "-210",
+                      "payoutMultiplier": 1.4762,
+                      "betMin": 5,
+                      "betMax": 100,
+                      "betIncrement": 5,
+                      "betIndex": 1,
+                      "disclaimerText": "",
+                      "trackingData": {
+                        "contentEntityUri": "athlete:basketball/nba/athletes/2520,event:basketball/nba/events/106362,team:basketball/nba/teams/19,team:basketball/nba/teams/4,league:basketball/nba/league/1",
+                        "betEventStatus": 2,
+                        "betEntityName": "Jalen Brunson",
+                        "betEventUri": "basketball/nba/events/106362",
+                        "betEntityUri": "athlete:basketball/nba/athletes/2520",
+                        "betOutcomeLine": "-210",
+                        "pageStartSource": "prop",
+                        "betOutcomeTitle": "prop"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "template": "prop-future",
+                "model": {
+                  "image": {
+                    "url": "https://b.fssta.com/uploads/application/nba/headshots/3993.vresize.140.170.medium.2.png",
+                    "altUrl": "https://b.fssta.com/uploads/application/nba/headshots/3993.vresize.140.170.medium.2.png",
+                    "type": "image-headshot",
+                    "altText": "Stephon Castle"
+                  },
+                  "infoSubText": "NYK at SAS",
+                  "infoDate": "2026-06-14T00:30:00Z",
+                  "mainText": "S. Castle",
+                  "subText": "0.9 SPG",
+                  "gamblingText": {
+                    "betText": "Bet $10 to win",
+                    "winningsText": "$15 total"
+                  },
+                  "odds": {
+                    "title": "OVER",
+                    "text": "0.5",
+                    "subText": "-210",
+                    "betSlip": {
+                      "eventTime": "2026-06-14T00:30:00Z",
+                      "eventTitle": "KNICKS vs SPURS",
+                      "image": {
+                        "url": "https://b.fssta.com/uploads/application/nba/headshots/3993.vresize.140.170.medium.2.png",
+                        "altUrl": "https://b.fssta.com/uploads/application/nba/headshots/3993.vresize.140.170.medium.2.png",
+                        "type": "image-headshot",
+                        "altText": "Stephon Castle"
+                      },
+                      "betDisplay": "OVER",
+                      "description": "How many steals will Stephon Castle have in his next game? Select to see potential winnings.",
+                      "oddsDisplay": "-210",
+                      "payoutMultiplier": 1.4762,
+                      "betMin": 5,
+                      "betMax": 100,
+                      "betIncrement": 5,
+                      "betIndex": 1,
+                      "disclaimerText": "",
+                      "trackingData": {
+                        "contentEntityUri": "athlete:basketball/nba/athletes/3993,event:basketball/nba/events/106362,team:basketball/nba/teams/19,team:basketball/nba/teams/4,league:basketball/nba/league/1",
+                        "betEventStatus": 2,
+                        "betEntityName": "Stephon Castle",
+                        "betEventUri": "basketball/nba/events/106362",
+                        "betEntityUri": "athlete:basketball/nba/athletes/3993",
+                        "betOutcomeLine": "-210",
+                        "pageStartSource": "prop",
+                        "betOutcomeTitle": "prop"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "template": "prop-future",
+                "model": {
+                  "image": {
+                    "url": "https://b.fssta.com/uploads/application/nba/headshots/2051.vresize.140.170.medium.2.png",
+                    "altUrl": "https://b.fssta.com/uploads/application/nba/headshots/2051.vresize.140.170.medium.2.png",
+                    "type": "image-headshot",
+                    "altText": "Karl-Anthony Towns"
+                  },
+                  "infoSubText": "NYK at SAS",
+                  "infoDate": "2026-06-14T00:30:00Z",
+                  "mainText": "K. Towns",
+                  "subText": "1.2 SPG",
+                  "gamblingText": {
+                    "betText": "Bet $10 to win",
+                    "winningsText": "$16 total"
+                  },
+                  "odds": {
+                    "title": "OVER",
+                    "text": "0.5",
+                    "subText": "-174",
+                    "betSlip": {
+                      "eventTime": "2026-06-14T00:30:00Z",
+                      "eventTitle": "KNICKS vs SPURS",
+                      "image": {
+                        "url": "https://b.fssta.com/uploads/application/nba/headshots/2051.vresize.140.170.medium.2.png",
+                        "altUrl": "https://b.fssta.com/uploads/application/nba/headshots/2051.vresize.140.170.medium.2.png",
+                        "type": "image-headshot",
+                        "altText": "Karl-Anthony Towns"
+                      },
+                      "betDisplay": "OVER",
+                      "description": "How many steals will Karl-Anthony Towns have in his next game? Select to see potential winnings.",
+                      "oddsDisplay": "-174",
+                      "payoutMultiplier": 1.5747,
+                      "betMin": 5,
+                      "betMax": 100,
+                      "betIncrement": 5,
+                      "betIndex": 1,
+                      "disclaimerText": "",
+                      "trackingData": {
+                        "contentEntityUri": "athlete:basketball/nba/athletes/2051,event:basketball/nba/events/106362,team:basketball/nba/teams/19,team:basketball/nba/teams/4,league:basketball/nba/league/1",
+                        "betEventStatus": 2,
+                        "betEntityName": "Karl-Anthony Towns",
+                        "betEventUri": "basketball/nba/events/106362",
+                        "betEntityUri": "athlete:basketball/nba/athletes/2051",
+                        "betOutcomeLine": "-174",
+                        "pageStartSource": "prop",
+                        "betOutcomeTitle": "prop"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "template": "prop-future",
+                "model": {
+                  "image": {
+                    "url": "https://b.fssta.com/uploads/application/nba/headshots/2515.vresize.140.170.medium.2.png",
+                    "altUrl": "https://b.fssta.com/uploads/application/nba/headshots/2515.vresize.140.170.medium.2.png",
+                    "type": "image-headshot",
+                    "altText": "Landry Shamet"
+                  },
+                  "infoSubText": "NYK at SAS",
+                  "infoDate": "2026-06-14T00:30:00Z",
+                  "mainText": "L. Shamet",
+                  "subText": "0.2 SPG",
+                  "gamblingText": {
+                    "betText": "Bet $10 to win",
+                    "winningsText": "$19 total"
+                  },
+                  "odds": {
+                    "title": "OVER",
+                    "text": "0.5",
+                    "subText": "-114",
+                    "betSlip": {
+                      "eventTime": "2026-06-14T00:30:00Z",
+                      "eventTitle": "KNICKS vs SPURS",
+                      "image": {
+                        "url": "https://b.fssta.com/uploads/application/nba/headshots/2515.vresize.140.170.medium.2.png",
+                        "altUrl": "https://b.fssta.com/uploads/application/nba/headshots/2515.vresize.140.170.medium.2.png",
+                        "type": "image-headshot",
+                        "altText": "Landry Shamet"
+                      },
+                      "betDisplay": "OVER",
+                      "description": "How many steals will Landry Shamet have in his next game? Select to see potential winnings.",
+                      "oddsDisplay": "-114",
+                      "payoutMultiplier": 1.8772,
+                      "betMin": 5,
+                      "betMax": 100,
+                      "betIncrement": 5,
+                      "betIndex": 1,
+                      "disclaimerText": "",
+                      "trackingData": {
+                        "contentEntityUri": "athlete:basketball/nba/athletes/2515,event:basketball/nba/events/106362,team:basketball/nba/teams/19,team:basketball/nba/teams/4,league:basketball/nba/league/1",
+                        "betEventStatus": 2,
+                        "betEntityName": "Landry Shamet",
+                        "betEventUri": "basketball/nba/events/106362",
+                        "betEntityUri": "athlete:basketball/nba/athletes/2515",
+                        "betOutcomeLine": "-114",
+                        "pageStartSource": "prop",
+                        "betOutcomeTitle": "prop"
+                      }
+                    }
+                  }
+                }
+              }
+            ],
+            "count": 2
+          }
+        }
+      ]
+    },
+    {
+      "title": "FUTURES",
+      "modules": [
+        {
+          "type": "bet-section",
+          "model": {
+            "name": "NBA FINALS CHAMPION",
+            "description": "Which team will win the NBA Finals? Select a team to see potential winnings.",
+            "fairPlayMetadata": {
+              "parameters": {
+                "slotId": "759n2YslDYBDKc-VZO8D8"
+              }
+            },
+            "bets": [
+              {
+                "template": "prop-future",
+                "model": {
+                  "image": {
+                    "url": "https://b.fssta.com/uploads/application/nba/team-logos/Spurs.vresize.200.200.medium.0.png",
+                    "altUrl": "https://b.fssta.com/uploads/application/nba/team-logos/Spurs.vresize.200.200.medium.0.png",
+                    "type": "image-logo",
+                    "altText": "San Antonio Spurs"
+                  },
+                  "infoText": "SAN ANTONIO",
+                  "mainText": "SPURS",
+                  "subText": "62-20",
+                  "gamblingText": {
+                    "betText": "Bet $10 to win",
+                    "winningsText": "$15 total"
+                  },
+                  "odds": {
+                    "text": "-190",
+                    "betSlip": {
+                      "eventTitle": "NBA FINALS CHAMPION",
+                      "image": {
+                        "url": "https://b.fssta.com/uploads/application/nba/team-logos/Spurs.vresize.200.200.medium.0.png",
+                        "altUrl": "https://b.fssta.com/uploads/application/nba/team-logos/Spurs.vresize.200.200.medium.0.png",
+                        "type": "image-logo",
+                        "altText": "San Antonio Spurs"
+                      },
+                      "betDisplay": "SAN ANTONIO SPURS",
+                      "description": "The Spurs to win the NBA Finals",
+                      "oddsDisplay": "-190",
+                      "payoutMultiplier": 1.5263,
+                      "betMin": 5,
+                      "betMax": 100,
+                      "betIncrement": 5,
+                      "betIndex": 1,
+                      "disclaimerText": "",
+                      "trackingData": {
+                        "contentEntityUri": "team:basketball/nba/teams/19,league:basketball/nba/league/1",
+                        "betEntityName": "San Antonio Spurs",
+                        "betEntityUri": "team:basketball/nba/teams/19",
+                        "betOutcomeLine": "-190",
+                        "pageStartSource": "prop-future",
+                        "betOutcomeTitle": "future"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "template": "prop-future",
+                "model": {
+                  "image": {
+                    "url": "https://b.fssta.com/uploads/application/nba/team-logos/Thunder.vresize.200.200.medium.0.png",
+                    "altUrl": "https://b.fssta.com/uploads/application/nba/team-logos/Thunder.vresize.200.200.medium.0.png",
+                    "type": "image-logo",
+                    "altText": "Oklahoma City Thunder"
+                  },
+                  "infoText": "OKLAHOMA CITY",
+                  "mainText": "THUNDER",
+                  "subText": "64-18",
+                  "gamblingText": {
+                    "betText": "Bet $10 to win",
+                    "winningsText": "$23 total"
+                  },
+                  "odds": {
+                    "text": "+130",
+                    "betSlip": {
+                      "eventTitle": "NBA FINALS CHAMPION",
+                      "image": {
+                        "url": "https://b.fssta.com/uploads/application/nba/team-logos/Thunder.vresize.200.200.medium.0.png",
+                        "altUrl": "https://b.fssta.com/uploads/application/nba/team-logos/Thunder.vresize.200.200.medium.0.png",
+                        "type": "image-logo",
+                        "altText": "Oklahoma City Thunder"
+                      },
+                      "betDisplay": "OKLAHOMA CITY THUNDER",
+                      "description": "The Thunder to win the NBA Finals",
+                      "oddsDisplay": "+130",
+                      "payoutMultiplier": 2.3,
+                      "betMin": 5,
+                      "betMax": 100,
+                      "betIncrement": 5,
+                      "betIndex": 1,
+                      "disclaimerText": "",
+                      "trackingData": {
+                        "contentEntityUri": "team:basketball/nba/teams/27,league:basketball/nba/league/1",
+                        "betEntityName": "Oklahoma City Thunder",
+                        "betEntityUri": "team:basketball/nba/teams/27",
+                        "betOutcomeLine": "+130",
+                        "pageStartSource": "prop-future",
+                        "betOutcomeTitle": "future"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "template": "prop-future",
+                "model": {
+                  "image": {
+                    "url": "https://b.fssta.com/uploads/application/nba/team-logos/Knicks.vresize.200.200.medium.0.png",
+                    "altUrl": "https://b.fssta.com/uploads/application/nba/team-logos/Knicks.vresize.200.200.medium.0.png",
+                    "type": "image-logo",
+                    "altText": "New York Knicks"
+                  },
+                  "infoText": "NEW YORK",
+                  "mainText": "KNICKS",
+                  "subText": "53-29",
+                  "gamblingText": {
+                    "betText": "Bet $10 to win",
+                    "winningsText": "$26 total"
+                  },
+                  "odds": {
+                    "text": "+160",
+                    "betSlip": {
+                      "eventTitle": "NBA FINALS CHAMPION",
+                      "image": {
+                        "url": "https://b.fssta.com/uploads/application/nba/team-logos/Knicks.vresize.200.200.medium.0.png",
+                        "altUrl": "https://b.fssta.com/uploads/application/nba/team-logos/Knicks.vresize.200.200.medium.0.png",
+                        "type": "image-logo",
+                        "altText": "New York Knicks"
+                      },
+                      "betDisplay": "NEW YORK KNICKS",
+                      "description": "The Knicks to win the NBA Finals",
+                      "oddsDisplay": "+160",
+                      "payoutMultiplier": 2.6,
+                      "betMin": 5,
+                      "betMax": 100,
+                      "betIncrement": 5,
+                      "betIndex": 1,
+                      "disclaimerText": "",
+                      "trackingData": {
+                        "contentEntityUri": "team:basketball/nba/teams/4,league:basketball/nba/league/1",
+                        "betEntityName": "New York Knicks",
+                        "betEntityUri": "team:basketball/nba/teams/4",
+                        "betOutcomeLine": "+160",
+                        "pageStartSource": "prop-future",
+                        "betOutcomeTitle": "future"
+                      }
+                    }
+                  }
+                }
+              }
+            ],
+            "moreLink": {
+              "text": "SEE ALL",
+              "webUrl": "/nba/team-futures?future=NBA_Finals_Champion&segmentId=0&id=2326"
+            },
+            "moreLinkSelectionId": "2326",
+            "expanderTitle": "VIEW MORE TEAMS"
+          }
+        }
+      ]
+    }
+  ],
+  "liveStartTime": "2026-06-14T00:20:00Z",
+  "metadata": {
+    "parameters": {
+      "sport": "NBA",
+      "fairPlaySport": "basketball",
+      "fairPlayLeague": "National Basketball Association",
+      "news": "Odds News & Analysis",
+      "odds": "Odds",
+      "props": "Prop Bets",
+      "futures": "Futures"
+    }
+  }
+}

@@ -1,0 +1,565 @@
+{
+  "navItems": [
+    {
+      "title": "MICH",
+      "logoUrl": "https://b.fssta.com/uploads/application/college/team-logos/Michigan.vresize.200.200.medium.2.png",
+      "imageType": "image-logo",
+      "imageAltText": "Michigan",
+      "entityLink": {
+        "title": "MICHIGAN WOLVERINES",
+        "webUrl": "/college-basketball/michigan-wolverines-team",
+        "color": "1, 0, 40, 94",
+        "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Michigan-alternate.vresize.200.200.medium.1.png",
+        "imageType": "image-logo",
+        "imageAltText": "Michigan Wolverines",
+        "contentUri": "basketball/cbk/teams/87",
+        "contentType": "team",
+        "layout": {
+          "path": "/layouts?type=layout&subtype=teamsLayout&elementId=cbk",
+          "tokens": {
+            "id": "87",
+            "contentUri": "basketball/cbk/teams/87"
+          }
+        },
+        "analyticsName": "michigan-wolverines",
+        "analyticsSport": "college-basketball",
+        "type": "entity"
+      },
+      "template": "default",
+      "alternateLogoUrl": "https://b.fssta.com/uploads/application/college/team-logos/Michigan-alternate.vresize.200.200.medium.1.png"
+    },
+    {
+      "title": "OSU",
+      "logoUrl": "https://b.fssta.com/uploads/application/college/team-logos/OhioState.vresize.200.200.medium.1.png",
+      "imageType": "image-logo",
+      "imageAltText": "Buckeyes",
+      "entityLink": {
+        "title": "OHIO STATE BUCKEYES",
+        "webUrl": "/college-basketball/ohio-state-buckeyes-team",
+        "color": "1, 206, 17, 65",
+        "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/OhioState.vresize.200.200.medium.1.png",
+        "imageType": "image-logo",
+        "imageAltText": "Ohio State Buckeyes",
+        "contentUri": "basketball/cbk/teams/91",
+        "contentType": "team",
+        "layout": {
+          "path": "/layouts?type=layout&subtype=teamsLayout&elementId=cbk",
+          "tokens": {
+            "id": "91",
+            "contentUri": "basketball/cbk/teams/91"
+          }
+        },
+        "analyticsName": "ohio-state-buckeyes",
+        "analyticsSport": "college-basketball",
+        "type": "entity"
+      },
+      "template": "default",
+      "alternateLogoUrl": "https://b.fssta.com/uploads/application/college/team-logos/OhioState.vresize.200.200.medium.1.png"
+    },
+    {
+      "title": "TEX",
+      "logoUrl": "https://b.fssta.com/uploads/application/college/team-logos/Texas.vresize.200.200.medium.1.png",
+      "imageType": "image-logo",
+      "imageAltText": "Texas",
+      "entityLink": {
+        "title": "TEXAS LONGHORNS",
+        "webUrl": "/college-basketball/texas-longhorns-team",
+        "color": "1, 175, 92, 55",
+        "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Texas-alternate.vresize.200.200.medium.1.png",
+        "imageType": "image-logo",
+        "imageAltText": "Texas Longhorns",
+        "contentUri": "basketball/cbk/teams/50",
+        "contentType": "team",
+        "layout": {
+          "path": "/layouts?type=layout&subtype=teamsLayout&elementId=cbk",
+          "tokens": {
+            "id": "50",
+            "contentUri": "basketball/cbk/teams/50"
+          }
+        },
+        "analyticsName": "texas-longhorns",
+        "analyticsSport": "college-basketball",
+        "type": "entity"
+      },
+      "template": "default",
+      "alternateLogoUrl": "https://b.fssta.com/uploads/application/college/team-logos/Texas-alternate.vresize.200.200.medium.1.png"
+    },
+    {
+      "title": "FSU",
+      "logoUrl": "https://b.fssta.com/uploads/application/college/team-logos/FloridaState.vresize.200.200.medium.0.png",
+      "imageType": "image-logo",
+      "imageAltText": "Seminoles",
+      "entityLink": {
+        "title": "FLORIDA STATE SEMINOLES",
+        "webUrl": "/college-basketball/florida-state-seminoles-team",
+        "color": "1, 117, 13, 38",
+        "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/FloridaState.vresize.200.200.medium.0.png",
+        "imageType": "image-logo",
+        "imageAltText": "Florida State Seminoles",
+        "contentUri": "basketball/cbk/teams/24",
+        "contentType": "team",
+        "layout": {
+          "path": "/layouts?type=layout&subtype=teamsLayout&elementId=cbk",
+          "tokens": {
+            "id": "24",
+            "contentUri": "basketball/cbk/teams/24"
+          }
+        },
+        "analyticsName": "florida-state-seminoles",
+        "analyticsSport": "college-basketball",
+        "type": "entity"
+      },
+      "template": "default",
+      "alternateLogoUrl": "https://b.fssta.com/uploads/application/college/team-logos/FloridaState.vresize.200.200.medium.0.png"
+    },
+    {
+      "title": "USC",
+      "logoUrl": "https://b.fssta.com/uploads/application/college/team-logos/USC.vresize.200.200.medium.1.png",
+      "imageType": "image-logo",
+      "imageAltText": "USC",
+      "entityLink": {
+        "title": "USC TROJANS",
+        "webUrl": "/college-basketball/usc-trojans-team",
+        "color": "1, 157, 27, 30",
+        "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/USC-alternate.vresize.200.200.medium.1.png",
+        "imageType": "image-logo",
+        "imageAltText": "USC Trojans",
+        "contentUri": "basketball/cbk/teams/225",
+        "contentType": "team",
+        "layout": {
+          "path": "/layouts?type=layout&subtype=teamsLayout&elementId=cbk",
+          "tokens": {
+            "id": "225",
+            "contentUri": "basketball/cbk/teams/225"
+          }
+        },
+        "analyticsName": "usc-trojans",
+        "analyticsSport": "college-basketball",
+        "type": "entity"
+      },
+      "template": "default",
+      "alternateLogoUrl": "https://b.fssta.com/uploads/application/college/team-logos/USC-alternate.vresize.200.200.medium.1.png"
+    },
+    {
+      "title": "FAMU",
+      "logoUrl": "https://b.fssta.com/uploads/application/college/team-logos/FloridaA&M.vresize.200.200.medium.1.png",
+      "imageType": "image-logo",
+      "imageAltText": "Florida A&M",
+      "entityLink": {
+        "title": "FLORIDA A&M RATTLERS",
+        "webUrl": "/college-basketball/florida-am-rattlers-team",
+        "color": "1, 239, 120, 35",
+        "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/FloridaA&M.vresize.200.200.medium.1.png",
+        "imageType": "image-logo",
+        "imageAltText": "Florida A&M Rattlers",
+        "contentUri": "basketball/cbk/teams/173",
+        "contentType": "team",
+        "layout": {
+          "path": "/layouts?type=layout&subtype=teamsLayout&elementId=cbk",
+          "tokens": {
+            "id": "173",
+            "contentUri": "basketball/cbk/teams/173"
+          }
+        },
+        "analyticsName": "florida-am-rattlers",
+        "analyticsSport": "college-basketball",
+        "type": "entity"
+      },
+      "template": "default",
+      "alternateLogoUrl": "https://b.fssta.com/uploads/application/college/team-logos/FloridaA&M.vresize.200.200.medium.1.png"
+    },
+    {
+      "title": "MIA",
+      "logoUrl": "https://b.fssta.com/uploads/application/college/team-logos/Miami(FL).vresize.200.200.medium.1.png",
+      "imageType": "image-logo",
+      "imageAltText": "Miami (FL)",
+      "entityLink": {
+        "title": "MIAMI (FL) HURRICANES",
+        "webUrl": "/college-basketball/miami-(fl)-hurricanes-team",
+        "color": "1, 0, 80, 48",
+        "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Miami(FL).vresize.200.200.medium.1.png",
+        "imageType": "image-logo",
+        "imageAltText": "Miami (FL) Hurricanes",
+        "contentUri": "basketball/cbk/teams/55",
+        "contentType": "team",
+        "layout": {
+          "path": "/layouts?type=layout&subtype=teamsLayout&elementId=cbk",
+          "tokens": {
+            "id": "55",
+            "contentUri": "basketball/cbk/teams/55"
+          }
+        },
+        "analyticsName": "miami-(fl)-hurricanes",
+        "analyticsSport": "college-basketball",
+        "type": "entity"
+      },
+      "template": "default",
+      "alternateLogoUrl": "https://b.fssta.com/uploads/application/college/team-logos/Miami(FL).vresize.200.200.medium.1.png"
+    },
+    {
+      "title": "MSU",
+      "logoUrl": "https://b.fssta.com/uploads/application/college/team-logos/MichiganState.vresize.200.200.medium.1.png",
+      "imageType": "image-logo",
+      "imageAltText": "Michigan State",
+      "entityLink": {
+        "title": "MICHIGAN STATE SPARTANS",
+        "webUrl": "/college-basketball/michigan-state-spartans-team",
+        "color": "1, 23, 63, 53",
+        "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/MichiganState-alternate.vresize.200.200.medium.3.png",
+        "imageType": "image-logo",
+        "imageAltText": "Michigan State Spartans",
+        "contentUri": "basketball/cbk/teams/88",
+        "contentType": "team",
+        "layout": {
+          "path": "/layouts?type=layout&subtype=teamsLayout&elementId=cbk",
+          "tokens": {
+            "id": "88",
+            "contentUri": "basketball/cbk/teams/88"
+          }
+        },
+        "analyticsName": "michigan-state-spartans",
+        "analyticsSport": "college-basketball",
+        "type": "entity"
+      },
+      "template": "default",
+      "alternateLogoUrl": "https://b.fssta.com/uploads/application/college/team-logos/MichiganState-alternate.vresize.200.200.medium.3.png"
+    },
+    {
+      "title": "SDSU",
+      "logoUrl": "https://b.fssta.com/uploads/application/college/team-logos/SanDiegoState.vresize.200.200.medium.2.png",
+      "imageType": "image-logo",
+      "imageAltText": "San Diego State",
+      "entityLink": {
+        "title": "SAN DIEGO STATE AZTECS",
+        "webUrl": "/college-basketball/san-diego-state-aztecs-team",
+        "color": "1, 195, 49, 57",
+        "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/SanDiegoState.vresize.200.200.medium.2.png",
+        "imageType": "image-logo",
+        "imageAltText": "San Diego State Aztecs",
+        "contentUri": "basketball/cbk/teams/195",
+        "contentType": "team",
+        "layout": {
+          "path": "/layouts?type=layout&subtype=teamsLayout&elementId=cbk",
+          "tokens": {
+            "id": "195",
+            "contentUri": "basketball/cbk/teams/195"
+          }
+        },
+        "analyticsName": "san-diego-state-aztecs",
+        "analyticsSport": "college-basketball",
+        "type": "entity"
+      },
+      "template": "default",
+      "alternateLogoUrl": "https://b.fssta.com/uploads/application/college/team-logos/SanDiegoState.vresize.200.200.medium.2.png"
+    },
+    {
+      "title": "WIS",
+      "logoUrl": "https://b.fssta.com/uploads/application/college/team-logos/Wisconsin.vresize.200.200.medium.0.png",
+      "imageType": "image-logo",
+      "imageAltText": "Wisconsin",
+      "entityLink": {
+        "title": "WISCONSIN BADGERS",
+        "webUrl": "/college-basketball/wisconsin-badgers-team",
+        "color": "1, 160, 0, 0",
+        "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Wisconsin-alternate.vresize.200.200.medium.0.png",
+        "imageType": "image-logo",
+        "imageAltText": "Wisconsin Badgers",
+        "contentUri": "basketball/cbk/teams/94",
+        "contentType": "team",
+        "layout": {
+          "path": "/layouts?type=layout&subtype=teamsLayout&elementId=cbk",
+          "tokens": {
+            "id": "94",
+            "contentUri": "basketball/cbk/teams/94"
+          }
+        },
+        "analyticsName": "wisconsin-badgers",
+        "analyticsSport": "college-basketball",
+        "type": "entity"
+      },
+      "template": "default",
+      "alternateLogoUrl": "https://b.fssta.com/uploads/application/college/team-logos/Wisconsin-alternate.vresize.200.200.medium.0.png"
+    },
+    {
+      "title": "UNC",
+      "logoUrl": "https://b.fssta.com/uploads/application/college/team-logos/NorthCarolina.vresize.200.200.medium.0.png",
+      "imageType": "image-logo",
+      "imageAltText": "North Carolina",
+      "entityLink": {
+        "title": "NORTH CAROLINA TAR HEELS",
+        "webUrl": "/college-basketball/north-carolina-tar-heels-team",
+        "color": "1, 125, 174, 211",
+        "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/NorthCarolina-alternate.vresize.200.200.medium.0.png",
+        "imageType": "image-logo",
+        "imageAltText": "North Carolina Tar Heels",
+        "contentUri": "basketball/cbk/teams/27",
+        "contentType": "team",
+        "layout": {
+          "path": "/layouts?type=layout&subtype=teamsLayout&elementId=cbk",
+          "tokens": {
+            "id": "27",
+            "contentUri": "basketball/cbk/teams/27"
+          }
+        },
+        "analyticsName": "north-carolina-tar-heels",
+        "analyticsSport": "college-basketball",
+        "type": "entity"
+      },
+      "template": "default",
+      "alternateLogoUrl": "https://b.fssta.com/uploads/application/college/team-logos/NorthCarolina-alternate.vresize.200.200.medium.0.png"
+    },
+    {
+      "title": "UGA",
+      "logoUrl": "https://b.fssta.com/uploads/application/college/team-logos/Georgia.vresize.200.200.medium.0.png",
+      "imageType": "image-logo",
+      "imageAltText": "Georgia",
+      "entityLink": {
+        "title": "GEORGIA BULLDOGS",
+        "webUrl": "/college-basketball/georgia-bulldogs-team",
+        "color": "1, 255, 0, 0",
+        "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Georgia.vresize.200.200.medium.0.png",
+        "imageType": "image-logo",
+        "imageAltText": "Georgia Bulldogs",
+        "contentUri": "basketball/cbk/teams/238",
+        "contentType": "team",
+        "layout": {
+          "path": "/layouts?type=layout&subtype=teamsLayout&elementId=cbk",
+          "tokens": {
+            "id": "238",
+            "contentUri": "basketball/cbk/teams/238"
+          }
+        },
+        "analyticsName": "georgia-bulldogs",
+        "analyticsSport": "college-basketball",
+        "type": "entity"
+      },
+      "template": "default",
+      "alternateLogoUrl": "https://b.fssta.com/uploads/application/college/team-logos/Georgia.vresize.200.200.medium.0.png"
+    },
+    {
+      "title": "HOU",
+      "logoUrl": "https://b.fssta.com/uploads/application/college/team-logos/Houston.vresize.200.200.medium.2.png",
+      "imageType": "image-logo",
+      "imageAltText": "Houston",
+      "entityLink": {
+        "title": "HOUSTON COUGARS",
+        "webUrl": "/college-basketball/houston-cougars-team",
+        "color": "1, 200, 16, 46",
+        "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Houston-alternate.vresize.200.200.medium.2.png",
+        "imageType": "image-logo",
+        "imageAltText": "Houston Cougars",
+        "contentUri": "basketball/cbk/teams/113",
+        "contentType": "team",
+        "layout": {
+          "path": "/layouts?type=layout&subtype=teamsLayout&elementId=cbk",
+          "tokens": {
+            "id": "113",
+            "contentUri": "basketball/cbk/teams/113"
+          }
+        },
+        "analyticsName": "houston-cougars",
+        "analyticsSport": "college-basketball",
+        "type": "entity"
+      },
+      "template": "default",
+      "alternateLogoUrl": "https://b.fssta.com/uploads/application/college/team-logos/Houston-alternate.vresize.200.200.medium.2.png"
+    },
+    {
+      "title": "WASH",
+      "logoUrl": "https://b.fssta.com/uploads/application/college/team-logos/Washington.vresize.200.200.medium.1.png",
+      "imageType": "image-logo",
+      "imageAltText": "Washington",
+      "entityLink": {
+        "title": "WASHINGTON HUSKIES",
+        "webUrl": "/college-basketball/washington-huskies-team",
+        "color": "1, 51, 0, 111",
+        "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Washington-alternate.vresize.200.200.medium.0.png",
+        "imageType": "image-logo",
+        "imageAltText": "Washington Huskies",
+        "contentUri": "basketball/cbk/teams/228",
+        "contentType": "team",
+        "layout": {
+          "path": "/layouts?type=layout&subtype=teamsLayout&elementId=cbk",
+          "tokens": {
+            "id": "228",
+            "contentUri": "basketball/cbk/teams/228"
+          }
+        },
+        "analyticsName": "washington-huskies",
+        "analyticsSport": "college-basketball",
+        "type": "entity"
+      },
+      "template": "default",
+      "alternateLogoUrl": "https://b.fssta.com/uploads/application/college/team-logos/Washington-alternate.vresize.200.200.medium.0.png"
+    },
+    {
+      "title": "UCLA",
+      "logoUrl": "https://b.fssta.com/uploads/application/college/team-logos/UCLA.vresize.200.200.medium.0.png",
+      "imageType": "image-logo",
+      "imageAltText": "UCLA",
+      "entityLink": {
+        "title": "UCLA BRUINS",
+        "webUrl": "/college-basketball/ucla-bruins-team",
+        "color": "1, 42, 93, 165",
+        "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/UCLA-alternate.vresize.200.200.medium.0.png",
+        "imageType": "image-logo",
+        "imageAltText": "UCLA Bruins",
+        "contentUri": "basketball/cbk/teams/227",
+        "contentType": "team",
+        "layout": {
+          "path": "/layouts?type=layout&subtype=teamsLayout&elementId=cbk",
+          "tokens": {
+            "id": "227",
+            "contentUri": "basketball/cbk/teams/227"
+          }
+        },
+        "analyticsName": "ucla-bruins",
+        "analyticsSport": "college-basketball",
+        "type": "entity"
+      },
+      "template": "default",
+      "alternateLogoUrl": "https://b.fssta.com/uploads/application/college/team-logos/UCLA-alternate.vresize.200.200.medium.0.png"
+    },
+    {
+      "title": "UK",
+      "logoUrl": "https://b.fssta.com/uploads/application/college/team-logos/Kentucky.vresize.200.200.medium.0.png",
+      "imageType": "image-logo",
+      "imageAltText": "Kentucky",
+      "entityLink": {
+        "title": "KENTUCKY WILDCATS",
+        "webUrl": "/college-basketball/kentucky-wildcats-team",
+        "color": "1, 0, 51, 160",
+        "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Kentucky-alternate.vresize.200.200.medium.0.png",
+        "imageType": "image-logo",
+        "imageAltText": "Kentucky Wildcats",
+        "contentUri": "basketball/cbk/teams/239",
+        "contentType": "team",
+        "layout": {
+          "path": "/layouts?type=layout&subtype=teamsLayout&elementId=cbk",
+          "tokens": {
+            "id": "239",
+            "contentUri": "basketball/cbk/teams/239"
+          }
+        },
+        "analyticsName": "kentucky-wildcats",
+        "analyticsSport": "college-basketball",
+        "type": "entity"
+      },
+      "template": "default",
+      "alternateLogoUrl": "https://b.fssta.com/uploads/application/college/team-logos/Kentucky-alternate.vresize.200.200.medium.0.png"
+    },
+    {
+      "title": "BYU",
+      "logoUrl": "https://b.fssta.com/uploads/application/college/team-logos/BYU.vresize.200.200.medium.2.png",
+      "imageType": "image-logo",
+      "imageAltText": "BYU",
+      "entityLink": {
+        "title": "BYU COUGARS",
+        "webUrl": "/college-basketball/byu-cougars-team",
+        "color": "1, 0, 61, 166",
+        "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/BYU-alternate.vresize.200.200.medium.2.png",
+        "imageType": "image-logo",
+        "imageAltText": "BYU Cougars",
+        "contentUri": "basketball/cbk/teams/192",
+        "contentType": "team",
+        "layout": {
+          "path": "/layouts?type=layout&subtype=teamsLayout&elementId=cbk",
+          "tokens": {
+            "id": "192",
+            "contentUri": "basketball/cbk/teams/192"
+          }
+        },
+        "analyticsName": "byu-cougars",
+        "analyticsSport": "college-basketball",
+        "type": "entity"
+      },
+      "template": "default",
+      "alternateLogoUrl": "https://b.fssta.com/uploads/application/college/team-logos/BYU-alternate.vresize.200.200.medium.2.png"
+    },
+    {
+      "title": "FLA",
+      "logoUrl": "https://b.fssta.com/uploads/application/college/team-logos/Florida.vresize.200.200.medium.0.png",
+      "imageType": "image-logo",
+      "imageAltText": "Florida",
+      "entityLink": {
+        "title": "FLORIDA GATORS",
+        "webUrl": "/college-basketball/florida-gators-team",
+        "color": "1, 0, 50, 141",
+        "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Florida.vresize.200.200.medium.0.png",
+        "imageType": "image-logo",
+        "imageAltText": "Florida Gators",
+        "contentUri": "basketball/cbk/teams/237",
+        "contentType": "team",
+        "layout": {
+          "path": "/layouts?type=layout&subtype=teamsLayout&elementId=cbk",
+          "tokens": {
+            "id": "237",
+            "contentUri": "basketball/cbk/teams/237"
+          }
+        },
+        "analyticsName": "florida-gators",
+        "analyticsSport": "college-basketball",
+        "type": "entity"
+      },
+      "template": "default",
+      "alternateLogoUrl": "https://b.fssta.com/uploads/application/college/team-logos/Florida.vresize.200.200.medium.0.png"
+    },
+    {
+      "title": "SJU",
+      "logoUrl": "https://b.fssta.com/uploads/application/college/team-logos/St.John's.vresize.200.200.medium.0.png",
+      "imageType": "image-logo",
+      "imageAltText": "St John's",
+      "entityLink": {
+        "title": "ST. JOHN'S RED STORM",
+        "webUrl": "/college-basketball/st-johns-red-storm-team",
+        "color": "1, 193, 2, 48",
+        "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/St.John's-alternate.vresize.200.200.medium.0.png",
+        "imageType": "image-logo",
+        "imageAltText": "St. John's Red Storm",
+        "contentUri": "basketball/cbk/teams/57",
+        "contentType": "team",
+        "layout": {
+          "path": "/layouts?type=layout&subtype=teamsLayout&elementId=cbk",
+          "tokens": {
+            "id": "57",
+            "contentUri": "basketball/cbk/teams/57"
+          }
+        },
+        "analyticsName": "st-johns-red-storm",
+        "analyticsSport": "college-basketball",
+        "type": "entity"
+      },
+      "template": "default",
+      "alternateLogoUrl": "https://b.fssta.com/uploads/application/college/team-logos/St.John's-alternate.vresize.200.200.medium.0.png"
+    },
+    {
+      "title": "UCONN",
+      "logoUrl": "https://b.fssta.com/uploads/application/college/team-logos/Connecticut.vresize.200.200.medium.0.png",
+      "imageType": "image-logo",
+      "imageAltText": "Connecticut",
+      "entityLink": {
+        "title": "UCONN HUSKIES",
+        "webUrl": "/college-basketball/connecticut-huskies-team",
+        "color": "1, 13, 34, 64",
+        "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Connecticut.vresize.200.200.medium.0.png",
+        "imageType": "image-logo",
+        "imageAltText": "UConn Huskies",
+        "contentUri": "basketball/cbk/teams/54",
+        "contentType": "team",
+        "layout": {
+          "path": "/layouts?type=layout&subtype=teamsLayout&elementId=cbk",
+          "tokens": {
+            "id": "54",
+            "contentUri": "basketball/cbk/teams/54"
+          }
+        },
+        "analyticsName": "connecticut-huskies",
+        "analyticsSport": "college-basketball",
+        "type": "entity"
+      },
+      "template": "default",
+      "alternateLogoUrl": "https://b.fssta.com/uploads/application/college/team-logos/Connecticut.vresize.200.200.medium.0.png"
+    }
+  ],
+  "maxItems": 11
+}

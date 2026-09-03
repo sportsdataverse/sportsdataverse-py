@@ -1,0 +1,39 @@
+columns:
+- description: Parallel Opta integer id for the entity.
+  name: opta_id
+  type: character
+- description: Sportec opaque id for the entity (Utf8 join key, never numeric).
+  name: sportec_id
+  type: character
+- description: Full name
+  name: full_name
+  type: character
+- description: URL slug.
+  name: slug
+  type: character
+- description: Short name
+  name: short_name
+  type: character
+- description: ''
+  name: abbreviation
+  type: character
+- description: Brand background colour (hex).
+  name: background_color
+  type: character
+- description: Asset slug for the black-and-white logo.
+  name: logo_bw_slug
+  type: character
+- description: Asset slug for the full-colour logo.
+  name: logo_color_slug
+  type: character
+- description: URL of the full-colour logo asset.
+  name: logo_color_url
+  type: character
+- description: Asset slug for the full-colour club crest.
+  name: crest_color_slug
+  type: character
+- description: Identifier of the eCal calendar-subscription widget.
+  name: ecal_widget_id
+  type: character
+kind: dataframe
+schema: sportapi_clubs_by_sportec_ids

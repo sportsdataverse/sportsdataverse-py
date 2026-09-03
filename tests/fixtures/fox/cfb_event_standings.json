@@ -1,0 +1,1533 @@
+{
+  "header": {
+    "title": "STANDINGS"
+  },
+  "standingsSections": [
+    {
+      "id": "conference",
+      "title": "NORTHERN SUN INTERCOLLEGIATE",
+      "standings": [
+        {
+          "template": "table-standings",
+          "headers": [
+            {
+              "columns": [
+                {
+                  "index": 0,
+                  "text": "NORTHERN SUN INTERCOLLEGIATE",
+                  "priority": 1,
+                  "template": "cell-rank",
+                  "weight": 0.5,
+                  "emphasized": true,
+                  "sortable": "none"
+                },
+                {
+                  "index": 1,
+                  "priority": 2,
+                  "template": "cell-entity",
+                  "weight": 4.5,
+                  "emphasized": false,
+                  "sortable": "none"
+                },
+                {
+                  "index": 2,
+                  "text": "W-L",
+                  "priority": 3,
+                  "template": "cell-record",
+                  "weight": 2,
+                  "emphasized": false,
+                  "sortable": "none"
+                },
+                {
+                  "index": 3,
+                  "text": "CONF",
+                  "priority": 4,
+                  "template": "cell-number",
+                  "weight": 1.5,
+                  "emphasized": false,
+                  "sortable": "none"
+                },
+                {
+                  "index": 4,
+                  "text": "STRK",
+                  "priority": 5,
+                  "template": "cell-number",
+                  "weight": 1.5,
+                  "emphasized": false,
+                  "sortable": "none"
+                }
+              ],
+              "isPrimary": true
+            }
+          ],
+          "rows": [
+            {
+              "columns": [
+                {
+                  "index": 0,
+                  "text": "1",
+                  "emphasized": false
+                },
+                {
+                  "index": 1,
+                  "text": "Augustana",
+                  "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Placeholder.vresize.200.200.medium.0.png",
+                  "imageType": "image-logo",
+                  "imageAltText": "Default Logo",
+                  "emphasized": false,
+                  "alternateImageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Placeholder.vresize.200.200.medium.0.png"
+                },
+                {
+                  "index": 2,
+                  "text": "0-0",
+                  "emphasized": false
+                },
+                {
+                  "index": 3,
+                  "text": "0-0",
+                  "emphasized": false
+                },
+                {
+                  "index": 4,
+                  "text": "-",
+                  "emphasized": false
+                }
+              ],
+              "isCutoff": false,
+              "selected": false,
+              "entityLink": {
+                "title": "AUGUSTANA VIKINGS",
+                "color": "0, 14, 56, 135",
+                "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Placeholder.vresize.200.200.medium.0.png",
+                "imageType": "image-logo",
+                "imageAltText": "Default Team Logo",
+                "contentUri": "football/cfb/teams/296",
+                "contentType": "team",
+                "layout": {
+                  "path": "/layouts?type=layout&subtype=teamsLayout&elementId=cfb",
+                  "tokens": {
+                    "id": "296",
+                    "contentUri": "football/cfb/teams/296"
+                  }
+                },
+                "analyticsName": "augustana-vikings",
+                "analyticsSport": "college-football",
+                "type": "entity"
+              },
+              "isFaded": false
+            },
+            {
+              "columns": [
+                {
+                  "index": 0,
+                  "text": "2",
+                  "emphasized": false
+                },
+                {
+                  "index": 1,
+                  "text": "Minnesota State",
+                  "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Placeholder.vresize.200.200.medium.0.png",
+                  "imageType": "image-logo",
+                  "imageAltText": "Default Logo",
+                  "emphasized": false,
+                  "alternateImageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Placeholder.vresize.200.200.medium.0.png"
+                },
+                {
+                  "index": 2,
+                  "text": "0-0",
+                  "emphasized": false
+                },
+                {
+                  "index": 3,
+                  "text": "0-0",
+                  "emphasized": false
+                },
+                {
+                  "index": 4,
+                  "text": "-",
+                  "emphasized": false
+                }
+              ],
+              "isCutoff": false,
+              "selected": false,
+              "entityLink": {
+                "title": "MINNESOTA STATE MAVERICKS",
+                "color": "0, 14, 56, 135",
+                "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Placeholder.vresize.200.200.medium.0.png",
+                "imageType": "image-logo",
+                "imageAltText": "Default Team Logo",
+                "contentUri": "football/cfb/teams/297",
+                "contentType": "team",
+                "layout": {
+                  "path": "/layouts?type=layout&subtype=teamsLayout&elementId=cfb",
+                  "tokens": {
+                    "id": "297",
+                    "contentUri": "football/cfb/teams/297"
+                  }
+                },
+                "analyticsName": "minnesota-state-mavericks",
+                "analyticsSport": "college-football",
+                "type": "entity"
+              },
+              "isFaded": false
+            },
+            {
+              "columns": [
+                {
+                  "index": 0,
+                  "text": "3",
+                  "emphasized": false
+                },
+                {
+                  "index": 1,
+                  "text": "Southwest Minnesota State",
+                  "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Placeholder.vresize.200.200.medium.0.png",
+                  "imageType": "image-logo",
+                  "imageAltText": "Default Logo",
+                  "emphasized": false,
+                  "alternateImageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Placeholder.vresize.200.200.medium.0.png"
+                },
+                {
+                  "index": 2,
+                  "text": "0-0",
+                  "emphasized": false
+                },
+                {
+                  "index": 3,
+                  "text": "0-0",
+                  "emphasized": false
+                },
+                {
+                  "index": 4,
+                  "text": "-",
+                  "emphasized": false
+                }
+              ],
+              "isCutoff": false,
+              "selected": false,
+              "entityLink": {
+                "title": "SOUTHWEST MINNESOTA STATE MUSTANGS",
+                "color": "0, 14, 56, 135",
+                "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Placeholder.vresize.200.200.medium.0.png",
+                "imageType": "image-logo",
+                "imageAltText": "Default Team Logo",
+                "contentUri": "football/cfb/teams/308",
+                "contentType": "team",
+                "layout": {
+                  "path": "/layouts?type=layout&subtype=teamsLayout&elementId=cfb",
+                  "tokens": {
+                    "id": "308",
+                    "contentUri": "football/cfb/teams/308"
+                  }
+                },
+                "analyticsName": "southwest-minnesota-state-mustangs",
+                "analyticsSport": "college-football",
+                "type": "entity"
+              },
+              "isFaded": false
+            },
+            {
+              "columns": [
+                {
+                  "index": 0,
+                  "text": "4",
+                  "emphasized": false
+                },
+                {
+                  "index": 1,
+                  "text": "Winona State",
+                  "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Placeholder.vresize.200.200.medium.0.png",
+                  "imageType": "image-logo",
+                  "imageAltText": "Default Logo",
+                  "emphasized": false,
+                  "alternateImageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Placeholder.vresize.200.200.medium.0.png"
+                },
+                {
+                  "index": 2,
+                  "text": "0-0",
+                  "emphasized": false
+                },
+                {
+                  "index": 3,
+                  "text": "0-0",
+                  "emphasized": false
+                },
+                {
+                  "index": 4,
+                  "text": "-",
+                  "emphasized": false
+                }
+              ],
+              "isCutoff": false,
+              "selected": false,
+              "entityLink": {
+                "title": "WINONA STATE WARRIORS",
+                "color": "0, 14, 56, 135",
+                "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Placeholder.vresize.200.200.medium.0.png",
+                "imageType": "image-logo",
+                "imageAltText": "Default Team Logo",
+                "contentUri": "football/cfb/teams/309",
+                "contentType": "team",
+                "layout": {
+                  "path": "/layouts?type=layout&subtype=teamsLayout&elementId=cfb",
+                  "tokens": {
+                    "id": "309",
+                    "contentUri": "football/cfb/teams/309"
+                  }
+                },
+                "analyticsName": "winona-state-warriors",
+                "analyticsSport": "college-football",
+                "type": "entity"
+              },
+              "isFaded": false
+            },
+            {
+              "columns": [
+                {
+                  "index": 0,
+                  "text": "5",
+                  "emphasized": false
+                },
+                {
+                  "index": 1,
+                  "text": "Minnesota Duluth",
+                  "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Placeholder.vresize.200.200.medium.0.png",
+                  "imageType": "image-logo",
+                  "imageAltText": "Default Logo",
+                  "emphasized": false,
+                  "alternateImageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Placeholder.vresize.200.200.medium.0.png"
+                },
+                {
+                  "index": 2,
+                  "text": "0-0",
+                  "emphasized": false
+                },
+                {
+                  "index": 3,
+                  "text": "0-0",
+                  "emphasized": false
+                },
+                {
+                  "index": 4,
+                  "text": "-",
+                  "emphasized": false
+                }
+              ],
+              "isCutoff": false,
+              "selected": false,
+              "entityLink": {
+                "title": "MINNESOTA DULUTH BULLDOGS",
+                "color": "0, 14, 56, 135",
+                "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Placeholder.vresize.200.200.medium.0.png",
+                "imageType": "image-logo",
+                "imageAltText": "Default Team Logo",
+                "contentUri": "football/cfb/teams/426",
+                "contentType": "team",
+                "layout": {
+                  "path": "/layouts?type=layout&subtype=teamsLayout&elementId=cfb",
+                  "tokens": {
+                    "id": "426",
+                    "contentUri": "football/cfb/teams/426"
+                  }
+                },
+                "analyticsName": "minnesota-duluth-bulldogs",
+                "analyticsSport": "college-football",
+                "type": "entity"
+              },
+              "isFaded": false
+            },
+            {
+              "columns": [
+                {
+                  "index": 0,
+                  "text": "6",
+                  "emphasized": false
+                },
+                {
+                  "index": 1,
+                  "text": "Northern State",
+                  "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Placeholder.vresize.200.200.medium.0.png",
+                  "imageType": "image-logo",
+                  "imageAltText": "Default Logo",
+                  "emphasized": false,
+                  "alternateImageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Placeholder.vresize.200.200.medium.0.png"
+                },
+                {
+                  "index": 2,
+                  "text": "0-0",
+                  "emphasized": false
+                },
+                {
+                  "index": 3,
+                  "text": "0-0",
+                  "emphasized": false
+                },
+                {
+                  "index": 4,
+                  "text": "-",
+                  "emphasized": false
+                }
+              ],
+              "isCutoff": false,
+              "selected": false,
+              "entityLink": {
+                "title": "NORTHERN STATE WOLVES",
+                "color": "0, 14, 56, 135",
+                "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Placeholder.vresize.200.200.medium.0.png",
+                "imageType": "image-logo",
+                "imageAltText": "Default Team Logo",
+                "contentUri": "football/cfb/teams/427",
+                "contentType": "team",
+                "layout": {
+                  "path": "/layouts?type=layout&subtype=teamsLayout&elementId=cfb",
+                  "tokens": {
+                    "id": "427",
+                    "contentUri": "football/cfb/teams/427"
+                  }
+                },
+                "analyticsName": "northern-state-wolves",
+                "analyticsSport": "college-football",
+                "type": "entity"
+              },
+              "isFaded": false
+            },
+            {
+              "columns": [
+                {
+                  "index": 0,
+                  "text": "7",
+                  "emphasized": false
+                },
+                {
+                  "index": 1,
+                  "text": "Sioux Falls",
+                  "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Placeholder.vresize.200.200.medium.0.png",
+                  "imageType": "image-logo",
+                  "imageAltText": "Default Logo",
+                  "emphasized": false,
+                  "alternateImageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Placeholder.vresize.200.200.medium.0.png"
+                },
+                {
+                  "index": 2,
+                  "text": "0-0",
+                  "emphasized": false
+                },
+                {
+                  "index": 3,
+                  "text": "0-0",
+                  "emphasized": false
+                },
+                {
+                  "index": 4,
+                  "text": "-",
+                  "emphasized": false
+                }
+              ],
+              "isCutoff": false,
+              "selected": false,
+              "entityLink": {
+                "title": "SIOUX FALLS COUGARS",
+                "color": "0, 14, 56, 135",
+                "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Placeholder.vresize.200.200.medium.0.png",
+                "imageType": "image-logo",
+                "imageAltText": "Default Team Logo",
+                "contentUri": "football/cfb/teams/439",
+                "contentType": "team",
+                "layout": {
+                  "path": "/layouts?type=layout&subtype=teamsLayout&elementId=cfb",
+                  "tokens": {
+                    "id": "439",
+                    "contentUri": "football/cfb/teams/439"
+                  }
+                },
+                "analyticsName": "sioux-falls-cougars",
+                "analyticsSport": "college-football",
+                "type": "entity"
+              },
+              "isFaded": false
+            },
+            {
+              "columns": [
+                {
+                  "index": 0,
+                  "text": "8",
+                  "emphasized": false
+                },
+                {
+                  "index": 1,
+                  "text": "Wayne State (NE)",
+                  "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Placeholder.vresize.200.200.medium.0.png",
+                  "imageType": "image-logo",
+                  "imageAltText": "Default Logo",
+                  "emphasized": false,
+                  "alternateImageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Placeholder.vresize.200.200.medium.0.png"
+                },
+                {
+                  "index": 2,
+                  "text": "0-0",
+                  "emphasized": false
+                },
+                {
+                  "index": 3,
+                  "text": "0-0",
+                  "emphasized": false
+                },
+                {
+                  "index": 4,
+                  "text": "-",
+                  "emphasized": false
+                }
+              ],
+              "isCutoff": false,
+              "selected": false,
+              "entityLink": {
+                "title": "WAYNE STATE (NE) WILDCATS",
+                "color": "0, 14, 56, 135",
+                "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Placeholder.vresize.200.200.medium.0.png",
+                "imageType": "image-logo",
+                "imageAltText": "Default Team Logo",
+                "contentUri": "football/cfb/teams/474",
+                "contentType": "team",
+                "layout": {
+                  "path": "/layouts?type=layout&subtype=teamsLayout&elementId=cfb",
+                  "tokens": {
+                    "id": "474",
+                    "contentUri": "football/cfb/teams/474"
+                  }
+                },
+                "analyticsName": "wayne-state-(ne)-wildcats",
+                "analyticsSport": "college-football",
+                "type": "entity"
+              },
+              "isFaded": false
+            },
+            {
+              "columns": [
+                {
+                  "index": 0,
+                  "text": "9",
+                  "emphasized": false
+                },
+                {
+                  "index": 1,
+                  "text": "Bemidji State",
+                  "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Placeholder.vresize.200.200.medium.0.png",
+                  "imageType": "image-logo",
+                  "imageAltText": "Default Logo",
+                  "emphasized": false,
+                  "alternateImageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Placeholder.vresize.200.200.medium.0.png"
+                },
+                {
+                  "index": 2,
+                  "text": "0-0",
+                  "emphasized": false
+                },
+                {
+                  "index": 3,
+                  "text": "0-0",
+                  "emphasized": false
+                },
+                {
+                  "index": 4,
+                  "text": "-",
+                  "emphasized": false
+                }
+              ],
+              "isCutoff": false,
+              "selected": false,
+              "entityLink": {
+                "title": "BEMIDJI STATE BEAVERS",
+                "color": "0, 14, 56, 135",
+                "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Placeholder.vresize.200.200.medium.0.png",
+                "imageType": "image-logo",
+                "imageAltText": "Default Team Logo",
+                "contentUri": "football/cfb/teams/525",
+                "contentType": "team",
+                "layout": {
+                  "path": "/layouts?type=layout&subtype=teamsLayout&elementId=cfb",
+                  "tokens": {
+                    "id": "525",
+                    "contentUri": "football/cfb/teams/525"
+                  }
+                },
+                "analyticsName": "bemidji-state-beavers",
+                "analyticsSport": "college-football",
+                "type": "entity"
+              },
+              "isFaded": false
+            },
+            {
+              "columns": [
+                {
+                  "index": 0,
+                  "text": "10",
+                  "emphasized": false
+                },
+                {
+                  "index": 1,
+                  "text": "Minnesota State Moorhead",
+                  "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Placeholder.vresize.200.200.medium.0.png",
+                  "imageType": "image-logo",
+                  "imageAltText": "Default Logo",
+                  "emphasized": false,
+                  "alternateImageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Placeholder.vresize.200.200.medium.0.png"
+                },
+                {
+                  "index": 2,
+                  "text": "0-0",
+                  "emphasized": false
+                },
+                {
+                  "index": 3,
+                  "text": "0-0",
+                  "emphasized": false
+                },
+                {
+                  "index": 4,
+                  "text": "-",
+                  "emphasized": false
+                }
+              ],
+              "isCutoff": false,
+              "selected": false,
+              "entityLink": {
+                "title": "MINNESOTA STATE MOORHEAD DRAGONS",
+                "color": "0, 14, 56, 135",
+                "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Placeholder.vresize.200.200.medium.0.png",
+                "imageType": "image-logo",
+                "imageAltText": "Default Team Logo",
+                "contentUri": "football/cfb/teams/526",
+                "contentType": "team",
+                "layout": {
+                  "path": "/layouts?type=layout&subtype=teamsLayout&elementId=cfb",
+                  "tokens": {
+                    "id": "526",
+                    "contentUri": "football/cfb/teams/526"
+                  }
+                },
+                "analyticsName": "minnesota-state-moorhead-dragons",
+                "analyticsSport": "college-football",
+                "type": "entity"
+              },
+              "isFaded": false
+            },
+            {
+              "columns": [
+                {
+                  "index": 0,
+                  "text": "11",
+                  "emphasized": false
+                },
+                {
+                  "index": 1,
+                  "text": "Concordia-St. Paul",
+                  "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Placeholder.vresize.200.200.medium.0.png",
+                  "imageType": "image-logo",
+                  "imageAltText": "Default Logo",
+                  "emphasized": false,
+                  "alternateImageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Placeholder.vresize.200.200.medium.0.png"
+                },
+                {
+                  "index": 2,
+                  "text": "0-0",
+                  "emphasized": false
+                },
+                {
+                  "index": 3,
+                  "text": "0-0",
+                  "emphasized": false
+                },
+                {
+                  "index": 4,
+                  "text": "-",
+                  "emphasized": false
+                }
+              ],
+              "isCutoff": false,
+              "selected": false,
+              "entityLink": {
+                "title": "CONCORDIA-ST. PAUL GOLDEN BEARS",
+                "color": "0, 14, 56, 135",
+                "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Placeholder.vresize.200.200.medium.0.png",
+                "imageType": "image-logo",
+                "imageAltText": "Default Team Logo",
+                "contentUri": "football/cfb/teams/540",
+                "contentType": "team",
+                "layout": {
+                  "path": "/layouts?type=layout&subtype=teamsLayout&elementId=cfb",
+                  "tokens": {
+                    "id": "540",
+                    "contentUri": "football/cfb/teams/540"
+                  }
+                },
+                "analyticsName": "concordia-st-paul-golden-bears",
+                "analyticsSport": "college-football",
+                "type": "entity"
+              },
+              "isFaded": false
+            },
+            {
+              "columns": [
+                {
+                  "index": 0,
+                  "text": "12",
+                  "emphasized": false
+                },
+                {
+                  "index": 1,
+                  "text": "Mary",
+                  "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Placeholder.vresize.200.200.medium.0.png",
+                  "imageType": "image-logo",
+                  "imageAltText": "Default Logo",
+                  "emphasized": false,
+                  "alternateImageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Placeholder.vresize.200.200.medium.0.png"
+                },
+                {
+                  "index": 2,
+                  "text": "0-0",
+                  "emphasized": false
+                },
+                {
+                  "index": 3,
+                  "text": "0-0",
+                  "emphasized": false
+                },
+                {
+                  "index": 4,
+                  "text": "-",
+                  "emphasized": false
+                }
+              ],
+              "isCutoff": false,
+              "selected": false,
+              "entityLink": {
+                "title": "MARY MARAUDERS",
+                "color": "0, 14, 56, 135",
+                "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Placeholder.vresize.200.200.medium.0.png",
+                "imageType": "image-logo",
+                "imageAltText": "Default Team Logo",
+                "contentUri": "football/cfb/teams/568",
+                "contentType": "team",
+                "layout": {
+                  "path": "/layouts?type=layout&subtype=teamsLayout&elementId=cfb",
+                  "tokens": {
+                    "id": "568",
+                    "contentUri": "football/cfb/teams/568"
+                  }
+                },
+                "analyticsName": "mary-marauders",
+                "analyticsSport": "college-football",
+                "type": "entity"
+              },
+              "isFaded": false
+            },
+            {
+              "columns": [
+                {
+                  "index": 0,
+                  "text": "13",
+                  "emphasized": false
+                },
+                {
+                  "index": 1,
+                  "text": "Minot State",
+                  "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Placeholder.vresize.200.200.medium.0.png",
+                  "imageType": "image-logo",
+                  "imageAltText": "Default Logo",
+                  "emphasized": false,
+                  "alternateImageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Placeholder.vresize.200.200.medium.0.png"
+                },
+                {
+                  "index": 2,
+                  "text": "0-0",
+                  "emphasized": false
+                },
+                {
+                  "index": 3,
+                  "text": "0-0",
+                  "emphasized": false
+                },
+                {
+                  "index": 4,
+                  "text": "-",
+                  "emphasized": false
+                }
+              ],
+              "isCutoff": false,
+              "selected": false,
+              "entityLink": {
+                "title": "MINOT STATE BEAVERS",
+                "color": "0, 14, 56, 135",
+                "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Placeholder.vresize.200.200.medium.0.png",
+                "imageType": "image-logo",
+                "imageAltText": "Default Team Logo",
+                "contentUri": "football/cfb/teams/722",
+                "contentType": "team",
+                "layout": {
+                  "path": "/layouts?type=layout&subtype=teamsLayout&elementId=cfb",
+                  "tokens": {
+                    "id": "722",
+                    "contentUri": "football/cfb/teams/722"
+                  }
+                },
+                "analyticsName": "minot-state-beavers",
+                "analyticsSport": "college-football",
+                "type": "entity"
+              },
+              "isFaded": false
+            },
+            {
+              "columns": [
+                {
+                  "index": 0,
+                  "text": "14",
+                  "emphasized": false
+                },
+                {
+                  "index": 1,
+                  "text": "Upper Iowa",
+                  "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Placeholder.vresize.200.200.medium.0.png",
+                  "imageType": "image-logo",
+                  "imageAltText": "Default Logo",
+                  "emphasized": false,
+                  "alternateImageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Placeholder.vresize.200.200.medium.0.png"
+                },
+                {
+                  "index": 2,
+                  "text": "0-1",
+                  "emphasized": false
+                },
+                {
+                  "index": 3,
+                  "text": "0-0",
+                  "emphasized": false
+                },
+                {
+                  "index": 4,
+                  "text": "L1",
+                  "emphasized": false
+                }
+              ],
+              "isCutoff": false,
+              "selected": true,
+              "entityLink": {
+                "title": "UPPER IOWA PEACOCKS",
+                "color": "0, 14, 56, 135",
+                "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Placeholder.vresize.200.200.medium.0.png",
+                "imageType": "image-logo",
+                "imageAltText": "Default Team Logo",
+                "contentUri": "football/cfb/teams/509",
+                "contentType": "team",
+                "layout": {
+                  "path": "/layouts?type=layout&subtype=teamsLayout&elementId=cfb",
+                  "tokens": {
+                    "id": "509",
+                    "contentUri": "football/cfb/teams/509"
+                  }
+                },
+                "analyticsName": "upper-iowa-peacocks",
+                "analyticsSport": "college-football",
+                "type": "entity"
+              },
+              "isFaded": false
+            }
+          ]
+        }
+      ],
+      "metadata": {
+        "parameters": {
+          "standingsType": "Conference",
+          "leagueName": "NCAA FB",
+          "groupName": "Northern Sun Intercollegiate",
+          "season": "2025"
+        }
+      }
+    },
+    {
+      "id": "conference",
+      "title": "PIONEER LEAGUE",
+      "standings": [
+        {
+          "template": "table-standings",
+          "headers": [
+            {
+              "columns": [
+                {
+                  "index": 0,
+                  "text": "PIONEER LEAGUE",
+                  "priority": 1,
+                  "template": "cell-rank",
+                  "weight": 0.5,
+                  "emphasized": true,
+                  "sortable": "none"
+                },
+                {
+                  "index": 1,
+                  "priority": 2,
+                  "template": "cell-entity",
+                  "weight": 4.5,
+                  "emphasized": false,
+                  "sortable": "none"
+                },
+                {
+                  "index": 2,
+                  "text": "W-L",
+                  "priority": 3,
+                  "template": "cell-record",
+                  "weight": 2,
+                  "emphasized": false,
+                  "sortable": "none"
+                },
+                {
+                  "index": 3,
+                  "text": "CONF",
+                  "priority": 4,
+                  "template": "cell-number",
+                  "weight": 1.5,
+                  "emphasized": false,
+                  "sortable": "none"
+                },
+                {
+                  "index": 4,
+                  "text": "STRK",
+                  "priority": 5,
+                  "template": "cell-number",
+                  "weight": 1.5,
+                  "emphasized": false,
+                  "sortable": "none"
+                }
+              ],
+              "isPrimary": true
+            }
+          ],
+          "rows": [
+            {
+              "columns": [
+                {
+                  "index": 0,
+                  "text": "1",
+                  "emphasized": false
+                },
+                {
+                  "index": 1,
+                  "text": "Drake",
+                  "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Drake.vresize.200.200.medium.0.png",
+                  "imageType": "image-logo",
+                  "imageAltText": "Drake Bulldogs",
+                  "emphasized": false,
+                  "alternateImageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Drake.vresize.200.200.medium.0.png"
+                },
+                {
+                  "index": 2,
+                  "text": "8-4",
+                  "emphasized": false
+                },
+                {
+                  "index": 3,
+                  "text": "7-1",
+                  "emphasized": false
+                },
+                {
+                  "index": 4,
+                  "text": "L1",
+                  "emphasized": false
+                }
+              ],
+              "isCutoff": false,
+              "selected": true,
+              "entityLink": {
+                "title": "DRAKE BULLDOGS",
+                "webUrl": "/college-football/drake-bulldogs-team",
+                "color": "1, 0, 85, 150",
+                "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Drake.vresize.200.200.medium.0.png",
+                "imageType": "image-logo",
+                "imageAltText": "Drake Bulldogs",
+                "contentUri": "football/cfb/teams/207",
+                "contentType": "team",
+                "layout": {
+                  "path": "/layouts?type=layout&subtype=teamsLayout&elementId=cfb",
+                  "tokens": {
+                    "id": "207",
+                    "contentUri": "football/cfb/teams/207"
+                  }
+                },
+                "analyticsName": "drake-bulldogs",
+                "analyticsSport": "college-football",
+                "type": "entity"
+              },
+              "isFaded": false
+            },
+            {
+              "columns": [
+                {
+                  "index": 0,
+                  "text": "2",
+                  "emphasized": false
+                },
+                {
+                  "index": 1,
+                  "text": "Presbyterian",
+                  "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Presbyterian.vresize.200.200.medium.0.png",
+                  "imageType": "image-logo",
+                  "imageAltText": "Presbyterian Blue Hose",
+                  "emphasized": false,
+                  "alternateImageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Presbyterian.vresize.200.200.medium.0.png"
+                },
+                {
+                  "index": 2,
+                  "text": "10-2",
+                  "emphasized": false
+                },
+                {
+                  "index": 3,
+                  "text": "6-2",
+                  "emphasized": false
+                },
+                {
+                  "index": 4,
+                  "text": "W2",
+                  "emphasized": false
+                }
+              ],
+              "isCutoff": false,
+              "selected": false,
+              "entityLink": {
+                "title": "PRESBYTERIAN BLUE HOSE",
+                "webUrl": "/college-football/presbyterian-blue-hose-team",
+                "color": "1, 0, 93, 170",
+                "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Presbyterian.vresize.200.200.medium.0.png",
+                "imageType": "image-logo",
+                "imageAltText": "Presbyterian Blue Hose",
+                "contentUri": "football/cfb/teams/330",
+                "contentType": "team",
+                "layout": {
+                  "path": "/layouts?type=layout&subtype=teamsLayout&elementId=cfb",
+                  "tokens": {
+                    "id": "330",
+                    "contentUri": "football/cfb/teams/330"
+                  }
+                },
+                "analyticsName": "presbyterian-blue-hose",
+                "analyticsSport": "college-football",
+                "type": "entity"
+              },
+              "isFaded": false
+            },
+            {
+              "columns": [
+                {
+                  "index": 0,
+                  "text": "3",
+                  "emphasized": false
+                },
+                {
+                  "index": 1,
+                  "text": "San Diego",
+                  "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/SanDiego.vresize.200.200.medium.0.png",
+                  "imageType": "image-logo",
+                  "imageAltText": "San Diego Toreros",
+                  "emphasized": false,
+                  "alternateImageUrl": "https://b.fssta.com/uploads/application/college/team-logos/SanDiego.vresize.200.200.medium.0.png"
+                },
+                {
+                  "index": 2,
+                  "text": "8-4",
+                  "emphasized": false
+                },
+                {
+                  "index": 3,
+                  "text": "6-2",
+                  "emphasized": false
+                },
+                {
+                  "index": 4,
+                  "text": "W5",
+                  "emphasized": false
+                }
+              ],
+              "isCutoff": false,
+              "selected": false,
+              "entityLink": {
+                "title": "SAN DIEGO TOREROS",
+                "webUrl": "/college-football/san-diego-toreros-team",
+                "color": "1, 54, 152, 212",
+                "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/SanDiego.vresize.200.200.medium.0.png",
+                "imageType": "image-logo",
+                "imageAltText": "San Diego Toreros",
+                "contentUri": "football/cfb/teams/208",
+                "contentType": "team",
+                "layout": {
+                  "path": "/layouts?type=layout&subtype=teamsLayout&elementId=cfb",
+                  "tokens": {
+                    "id": "208",
+                    "contentUri": "football/cfb/teams/208"
+                  }
+                },
+                "analyticsName": "san-diego-toreros",
+                "analyticsSport": "college-football",
+                "type": "entity"
+              },
+              "isFaded": false
+            },
+            {
+              "columns": [
+                {
+                  "index": 0,
+                  "text": "4",
+                  "emphasized": false
+                },
+                {
+                  "index": 1,
+                  "text": "Dayton",
+                  "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Dayton.vresize.200.200.medium.0.png",
+                  "imageType": "image-logo",
+                  "imageAltText": "Dayton Flyers",
+                  "emphasized": false,
+                  "alternateImageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Dayton.vresize.200.200.medium.0.png"
+                },
+                {
+                  "index": 2,
+                  "text": "7-4",
+                  "emphasized": false
+                },
+                {
+                  "index": 3,
+                  "text": "5-3",
+                  "emphasized": false
+                },
+                {
+                  "index": 4,
+                  "text": "W1",
+                  "emphasized": false
+                }
+              ],
+              "isCutoff": false,
+              "selected": false,
+              "entityLink": {
+                "title": "DAYTON FLYERS",
+                "webUrl": "/college-football/dayton-flyers-team",
+                "color": "1, 221, 0, 49",
+                "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Dayton.vresize.200.200.medium.0.png",
+                "imageType": "image-logo",
+                "imageAltText": "Dayton Flyers",
+                "contentUri": "football/cfb/teams/206",
+                "contentType": "team",
+                "layout": {
+                  "path": "/layouts?type=layout&subtype=teamsLayout&elementId=cfb",
+                  "tokens": {
+                    "id": "206",
+                    "contentUri": "football/cfb/teams/206"
+                  }
+                },
+                "analyticsName": "dayton-flyers",
+                "analyticsSport": "college-football",
+                "type": "entity"
+              },
+              "isFaded": false
+            },
+            {
+              "columns": [
+                {
+                  "index": 0,
+                  "text": "5",
+                  "emphasized": false
+                },
+                {
+                  "index": 1,
+                  "text": "St. Thomas",
+                  "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/st-thomas-tommies.vresize.200.200.medium.0.png",
+                  "imageType": "image-logo",
+                  "imageAltText": "St. Thomas Tommies",
+                  "emphasized": false,
+                  "alternateImageUrl": "https://b.fssta.com/uploads/application/college/team-logos/st-thomas-tommies.vresize.200.200.medium.0.png"
+                },
+                {
+                  "index": 2,
+                  "text": "7-5",
+                  "emphasized": false
+                },
+                {
+                  "index": 3,
+                  "text": "5-3",
+                  "emphasized": false
+                },
+                {
+                  "index": 4,
+                  "text": "L2",
+                  "emphasized": false
+                }
+              ],
+              "isCutoff": false,
+              "selected": false,
+              "entityLink": {
+                "title": "ST. THOMAS TOMMIES",
+                "webUrl": "/college-football/st-thomas-tommies-team",
+                "color": "1, 65, 39, 132",
+                "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/st-thomas-tommies.vresize.200.200.medium.0.png",
+                "imageType": "image-logo",
+                "imageAltText": "St. Thomas Tommies",
+                "contentUri": "football/cfb/teams/642",
+                "contentType": "team",
+                "layout": {
+                  "path": "/layouts?type=layout&subtype=teamsLayout&elementId=cfb",
+                  "tokens": {
+                    "id": "642",
+                    "contentUri": "football/cfb/teams/642"
+                  }
+                },
+                "analyticsName": "st-thomas-tommies",
+                "analyticsSport": "college-football",
+                "type": "entity"
+              },
+              "isFaded": false
+            },
+            {
+              "columns": [
+                {
+                  "index": 0,
+                  "text": "6",
+                  "emphasized": false
+                },
+                {
+                  "index": 1,
+                  "text": "Butler",
+                  "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Butler.vresize.200.200.medium.0.png",
+                  "imageType": "image-logo",
+                  "imageAltText": "Butler Bulldogs",
+                  "emphasized": false,
+                  "alternateImageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Butler.vresize.200.200.medium.0.png"
+                },
+                {
+                  "index": 2,
+                  "text": "6-6",
+                  "emphasized": false
+                },
+                {
+                  "index": 3,
+                  "text": "4-4",
+                  "emphasized": false
+                },
+                {
+                  "index": 4,
+                  "text": "W1",
+                  "emphasized": false
+                }
+              ],
+              "isCutoff": false,
+              "selected": false,
+              "entityLink": {
+                "title": "BUTLER BULLDOGS",
+                "webUrl": "/college-football/butler-bulldogs-team",
+                "color": "1, 0, 0, 51",
+                "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Butler.vresize.200.200.medium.0.png",
+                "imageType": "image-logo",
+                "imageAltText": "Butler Bulldogs",
+                "contentUri": "football/cfb/teams/205",
+                "contentType": "team",
+                "layout": {
+                  "path": "/layouts?type=layout&subtype=teamsLayout&elementId=cfb",
+                  "tokens": {
+                    "id": "205",
+                    "contentUri": "football/cfb/teams/205"
+                  }
+                },
+                "analyticsName": "butler-bulldogs",
+                "analyticsSport": "college-football",
+                "type": "entity"
+              },
+              "isFaded": false
+            },
+            {
+              "columns": [
+                {
+                  "index": 0,
+                  "text": "7",
+                  "emphasized": false
+                },
+                {
+                  "index": 1,
+                  "text": "Morehead State",
+                  "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/MoreheadState.vresize.200.200.medium.0.png",
+                  "imageType": "image-logo",
+                  "imageAltText": "Morehead State Eagles",
+                  "emphasized": false,
+                  "alternateImageUrl": "https://b.fssta.com/uploads/application/college/team-logos/MoreheadState.vresize.200.200.medium.0.png"
+                },
+                {
+                  "index": 2,
+                  "text": "6-6",
+                  "emphasized": false
+                },
+                {
+                  "index": 3,
+                  "text": "4-4",
+                  "emphasized": false
+                },
+                {
+                  "index": 4,
+                  "text": "L1",
+                  "emphasized": false
+                }
+              ],
+              "isCutoff": false,
+              "selected": false,
+              "entityLink": {
+                "title": "MOREHEAD STATE EAGLES",
+                "webUrl": "/college-football/morehead-state-eagles-team",
+                "color": "1, 0, 93, 170",
+                "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/MoreheadState.vresize.200.200.medium.0.png",
+                "imageType": "image-logo",
+                "imageAltText": "Morehead State Eagles",
+                "contentUri": "football/cfb/teams/151",
+                "contentType": "team",
+                "layout": {
+                  "path": "/layouts?type=layout&subtype=teamsLayout&elementId=cfb",
+                  "tokens": {
+                    "id": "151",
+                    "contentUri": "football/cfb/teams/151"
+                  }
+                },
+                "analyticsName": "morehead-state-eagles",
+                "analyticsSport": "college-football",
+                "type": "entity"
+              },
+              "isFaded": false
+            },
+            {
+              "columns": [
+                {
+                  "index": 0,
+                  "text": "8",
+                  "emphasized": false
+                },
+                {
+                  "index": 1,
+                  "text": "Marist",
+                  "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Marist.vresize.200.200.medium.0.png",
+                  "imageType": "image-logo",
+                  "imageAltText": "Marist Red Foxes",
+                  "emphasized": false,
+                  "alternateImageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Marist.vresize.200.200.medium.0.png"
+                },
+                {
+                  "index": 2,
+                  "text": "5-7",
+                  "emphasized": false
+                },
+                {
+                  "index": 3,
+                  "text": "3-5",
+                  "emphasized": false
+                },
+                {
+                  "index": 4,
+                  "text": "L1",
+                  "emphasized": false
+                }
+              ],
+              "isCutoff": false,
+              "selected": false,
+              "entityLink": {
+                "title": "MARIST RED FOXES",
+                "webUrl": "/college-football/marist-red-foxes-team",
+                "color": "1, 207, 10, 44",
+                "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Marist.vresize.200.200.medium.0.png",
+                "imageType": "image-logo",
+                "imageAltText": "Marist Red Foxes",
+                "contentUri": "football/cfb/teams/170",
+                "contentType": "team",
+                "layout": {
+                  "path": "/layouts?type=layout&subtype=teamsLayout&elementId=cfb",
+                  "tokens": {
+                    "id": "170",
+                    "contentUri": "football/cfb/teams/170"
+                  }
+                },
+                "analyticsName": "marist-red-foxes",
+                "analyticsSport": "college-football",
+                "type": "entity"
+              },
+              "isFaded": false
+            },
+            {
+              "columns": [
+                {
+                  "index": 0,
+                  "text": "9",
+                  "emphasized": false
+                },
+                {
+                  "index": 1,
+                  "text": "Stetson",
+                  "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Stetson.vresize.200.200.medium.0.png",
+                  "imageType": "image-logo",
+                  "imageAltText": "Stetson Hatters",
+                  "emphasized": false,
+                  "alternateImageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Stetson.vresize.200.200.medium.0.png"
+                },
+                {
+                  "index": 2,
+                  "text": "3-9",
+                  "emphasized": false
+                },
+                {
+                  "index": 3,
+                  "text": "2-6",
+                  "emphasized": false
+                },
+                {
+                  "index": 4,
+                  "text": "L5",
+                  "emphasized": false
+                }
+              ],
+              "isCutoff": false,
+              "selected": false,
+              "entityLink": {
+                "title": "STETSON HATTERS",
+                "webUrl": "/college-football/stetson-hatters-team",
+                "color": "1, 14, 85, 63",
+                "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Stetson.vresize.200.200.medium.0.png",
+                "imageType": "image-logo",
+                "imageAltText": "Stetson Hatters",
+                "contentUri": "football/cfb/teams/763",
+                "contentType": "team",
+                "layout": {
+                  "path": "/layouts?type=layout&subtype=teamsLayout&elementId=cfb",
+                  "tokens": {
+                    "id": "763",
+                    "contentUri": "football/cfb/teams/763"
+                  }
+                },
+                "analyticsName": "stetson-hatters",
+                "analyticsSport": "college-football",
+                "type": "entity"
+              },
+              "isFaded": false
+            },
+            {
+              "columns": [
+                {
+                  "index": 0,
+                  "text": "10",
+                  "emphasized": false
+                },
+                {
+                  "index": 1,
+                  "text": "Davidson",
+                  "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Davidson.vresize.200.200.medium.2.png",
+                  "imageType": "image-logo",
+                  "imageAltText": "Davidson Wildcats",
+                  "emphasized": false,
+                  "alternateImageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Davidson.vresize.200.200.medium.2.png"
+                },
+                {
+                  "index": 2,
+                  "text": "2-10",
+                  "emphasized": false
+                },
+                {
+                  "index": 3,
+                  "text": "1-7",
+                  "emphasized": false
+                },
+                {
+                  "index": 4,
+                  "text": "L2",
+                  "emphasized": false
+                }
+              ],
+              "isCutoff": false,
+              "selected": false,
+              "entityLink": {
+                "title": "DAVIDSON WILDCATS",
+                "webUrl": "/college-football/davidson-wildcats-team",
+                "color": "1, 227, 24, 55",
+                "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Davidson.vresize.200.200.medium.2.png",
+                "imageType": "image-logo",
+                "imageAltText": "Davidson Wildcats",
+                "contentUri": "football/cfb/teams/145",
+                "contentType": "team",
+                "layout": {
+                  "path": "/layouts?type=layout&subtype=teamsLayout&elementId=cfb",
+                  "tokens": {
+                    "id": "145",
+                    "contentUri": "football/cfb/teams/145"
+                  }
+                },
+                "analyticsName": "davidson-wildcats",
+                "analyticsSport": "college-football",
+                "type": "entity"
+              },
+              "isFaded": false
+            },
+            {
+              "columns": [
+                {
+                  "index": 0,
+                  "text": "11",
+                  "emphasized": false
+                },
+                {
+                  "index": 1,
+                  "text": "Valparaiso",
+                  "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Valparaiso.vresize.200.200.medium.1.png",
+                  "imageType": "image-logo",
+                  "imageAltText": "Valparaiso Beacons",
+                  "emphasized": false,
+                  "alternateImageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Valparaiso.vresize.200.200.medium.1.png"
+                },
+                {
+                  "index": 2,
+                  "text": "2-10",
+                  "emphasized": false
+                },
+                {
+                  "index": 3,
+                  "text": "1-7",
+                  "emphasized": false
+                },
+                {
+                  "index": 4,
+                  "text": "L1",
+                  "emphasized": false
+                }
+              ],
+              "isCutoff": false,
+              "selected": false,
+              "entityLink": {
+                "title": "VALPARAISO BEACONS",
+                "webUrl": "/college-football/valparaiso-beacons-team",
+                "color": "1, 107, 63, 35",
+                "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Valparaiso.vresize.200.200.medium.1.png",
+                "imageType": "image-logo",
+                "imageAltText": "Valparaiso Beacons",
+                "contentUri": "football/cfb/teams/209",
+                "contentType": "team",
+                "layout": {
+                  "path": "/layouts?type=layout&subtype=teamsLayout&elementId=cfb",
+                  "tokens": {
+                    "id": "209",
+                    "contentUri": "football/cfb/teams/209"
+                  }
+                },
+                "analyticsName": "valparaiso-beacons",
+                "analyticsSport": "college-football",
+                "type": "entity"
+              },
+              "isFaded": false
+            }
+          ]
+        }
+      ],
+      "metadata": {
+        "parameters": {
+          "standingsType": "Conference",
+          "leagueName": "NCAA FB",
+          "groupName": "Pioneer League",
+          "season": "2025"
+        }
+      }
+    }
+  ]
+}

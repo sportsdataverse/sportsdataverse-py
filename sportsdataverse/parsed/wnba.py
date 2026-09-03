@@ -154,6 +154,23 @@ from sportsdataverse.wnba import espn_wnba_team_roster as espn_wnba_team_roster 
 from sportsdataverse.wnba import espn_wnba_team_stats as espn_wnba_team_stats  # noqa: F401
 from sportsdataverse.wnba import espn_wnba_teams as espn_wnba_teams  # noqa: F401
 from sportsdataverse.wnba import flatten_json_iterative as flatten_json_iterative  # noqa: F401
+from sportsdataverse.wnba import fox_wnba_event_matchup as fox_wnba_event_matchup  # noqa: F401
+from sportsdataverse.wnba import fox_wnba_event_recap as fox_wnba_event_recap  # noqa: F401
+from sportsdataverse.wnba import fox_wnba_event_standings as fox_wnba_event_standings  # noqa: F401
+from sportsdataverse.wnba import fox_wnba_league_conferences as fox_wnba_league_conferences  # noqa: F401
+from sportsdataverse.wnba import fox_wnba_league_header as fox_wnba_league_header  # noqa: F401
+from sportsdataverse.wnba import fox_wnba_league_odds as fox_wnba_league_odds  # noqa: F401
+from sportsdataverse.wnba import fox_wnba_league_player_news as fox_wnba_league_player_news  # noqa: F401
+from sportsdataverse.wnba import fox_wnba_league_polls as fox_wnba_league_polls  # noqa: F401
+from sportsdataverse.wnba import fox_wnba_league_schedule as fox_wnba_league_schedule  # noqa: F401
+from sportsdataverse.wnba import fox_wnba_league_scores as fox_wnba_league_scores  # noqa: F401
+from sportsdataverse.wnba import fox_wnba_league_standings as fox_wnba_league_standings  # noqa: F401
+from sportsdataverse.wnba import fox_wnba_league_stat_leaders as fox_wnba_league_stat_leaders  # noqa: F401
+from sportsdataverse.wnba import fox_wnba_scoreboard as fox_wnba_scoreboard  # noqa: F401
+from sportsdataverse.wnba import fox_wnba_scorechip as fox_wnba_scorechip  # noqa: F401
+from sportsdataverse.wnba import fox_wnba_scores_segment as fox_wnba_scores_segment  # noqa: F401
+from sportsdataverse.wnba import fox_wnba_team_header as fox_wnba_team_header  # noqa: F401
+from sportsdataverse.wnba import fox_wnba_teamnav as fox_wnba_teamnav  # noqa: F401
 from sportsdataverse.wnba import helper_wnba_athlete_items as helper_wnba_athlete_items  # noqa: F401
 from sportsdataverse.wnba import helper_wnba_draft as helper_wnba_draft  # noqa: F401
 from sportsdataverse.wnba import helper_wnba_game_data as helper_wnba_game_data  # noqa: F401
@@ -377,13 +394,30 @@ __all__ = [
     "espn_wnba_venues",
     "flatten_json_iterative",
     "fox_wnba_boxscore",
+    "fox_wnba_event_matchup",
+    "fox_wnba_event_recap",
+    "fox_wnba_event_standings",
+    "fox_wnba_league_conferences",
+    "fox_wnba_league_header",
     "fox_wnba_league_leaders",
+    "fox_wnba_league_odds",
+    "fox_wnba_league_player_news",
+    "fox_wnba_league_polls",
+    "fox_wnba_league_schedule",
+    "fox_wnba_league_scores",
+    "fox_wnba_league_standings",
+    "fox_wnba_league_stat_leaders",
     "fox_wnba_odds",
     "fox_wnba_pbp",
+    "fox_wnba_scoreboard",
+    "fox_wnba_scorechip",
+    "fox_wnba_scores_segment",
     "fox_wnba_standings",
     "fox_wnba_team_gamelog",
+    "fox_wnba_team_header",
     "fox_wnba_team_roster",
     "fox_wnba_team_stats",
+    "fox_wnba_teamnav",
     "fox_wnba_teams",
     "helper_wnba_athlete_items",
     "helper_wnba_draft",

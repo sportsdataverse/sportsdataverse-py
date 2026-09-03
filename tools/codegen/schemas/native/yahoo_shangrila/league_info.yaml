@@ -1,0 +1,15 @@
+columns:
+- description: ''
+  name: display_short
+  type: character
+- description: ''
+  name: name
+  type: character
+- description: ''
+  name: full_name
+  type: character
+- description: ''
+  name: short_name
+  type: character
+kind: dataframe
+schema: league_info

@@ -1,0 +1,171 @@
+{
+  "id": "c1d20260519",
+  "sectionList": [
+    {
+      "id": "c1d20260519",
+      "sectionDate": "2026-05-19T04:00:00Z",
+      "segmentId": "c1d20260519",
+      "selectionId": "c1d20260519",
+      "subtitle": "TUE, MAY 19",
+      "menuTitle": "TUE, MAY 19",
+      "events": [
+        {
+          "template": "scores-team",
+          "id": "soccer627047",
+          "uri": "https://api.foxsports.com/bifrost/v1/soccer/scorechip/soccer627047",
+          "contentUri": "soccer/epl/events/627047",
+          "contentType": "event",
+          "eventStatus": 3,
+          "eventTime": "2026-05-19T18:30:00Z",
+          "sortKey": "132026051918303200627047",
+          "altSortKey": "132026051918303200627047",
+          "statusLine": "FINAL",
+          "favoriteEntities": [
+            "soccer/all/teams/375",
+            "soccer/all/teams/6"
+          ],
+          "isTba": false,
+          "entityLink": {
+            "webUrl": "/soccer/premier-league-bournemouth-vs-man-city-may-19-2026-game-boxscore-627047",
+            "contentUri": "soccer/epl/events/627047",
+            "contentType": "event",
+            "layout": {
+              "path": "/layouts?type=layout&subtype=soccerEventLayout",
+              "tokens": {
+                "id": "627047",
+                "eventUri": "soccer/epl/events/627047",
+                "homeUri": "soccer/all/teams/375",
+                "awayUri": "soccer/all/teams/6"
+              }
+            },
+            "analyticsSport": "soccer",
+            "type": "entity"
+          },
+          "league": "EPL",
+          "eventHeadline": "Manchester City and Bournemouth split points as Haaland (90'+5') and Junior Kroupi (39') each score once",
+          "importance": 0,
+          "upperTeam": {
+            "name": "BOU",
+            "uri": "soccer/all/teams/375",
+            "longName": "Bournemouth",
+            "stackedNameBottom": "Bournemouth",
+            "logoUrl": "https://b.fssta.com/uploads/application/soccer/team-logos/bournemouth.vresize.80.80.medium.0.png",
+            "imageType": "image-logo",
+            "imageAltText": "Bournemouth",
+            "record": "13-17-6",
+            "score": 1,
+            "isLoser": false,
+            "hasPossession": false,
+            "alternateLogoUrl": "https://b.fssta.com/uploads/application/soccer/team-logos/bournemouth.vresize.80.80.medium.0.png"
+          },
+          "lowerTeam": {
+            "name": "MCI",
+            "uri": "soccer/all/teams/6",
+            "longName": "Man. City",
+            "stackedNameBottom": "Man. City",
+            "logoUrl": "https://b.fssta.com/uploads/application/soccer/team-logos/manchester-city.vresize.80.80.medium.0.png",
+            "imageType": "image-logo",
+            "imageAltText": "Man. City",
+            "record": "23-9-5",
+            "score": 1,
+            "isLoser": false,
+            "hasPossession": false,
+            "alternateLogoUrl": "https://b.fssta.com/uploads/application/soccer/team-logos/manchester-city.vresize.80.80.medium.0.png"
+          },
+          "oddsLine": "DRAW +335",
+          "overUnderLine": "UNDER 2.5",
+          "gameNotes": ""
+        },
+        {
+          "template": "scores-team",
+          "id": "soccer809923",
+          "uri": "https://api.foxsports.com/bifrost/v1/soccer/scorechip/soccer809923",
+          "contentUri": "soccer/epl/events/809923",
+          "contentType": "event",
+          "eventStatus": 3,
+          "eventTime": "2026-05-19T19:15:00Z",
+          "sortKey": "132026051919153248809923",
+          "altSortKey": "132026051919153248809923",
+          "statusLine": "FINAL",
+          "favoriteEntities": [
+            "soccer/all/teams/3",
+            "soccer/all/teams/11"
+          ],
+          "isTba": false,
+          "entityLink": {
+            "webUrl": "/soccer/premier-league-chelsea-vs-tottenham-hotspur-may-19-2026-game-boxscore-809923",
+            "contentUri": "soccer/epl/events/809923",
+            "contentType": "event",
+            "layout": {
+              "path": "/layouts?type=layout&subtype=soccerEventLayout",
+              "tokens": {
+                "id": "809923",
+                "eventUri": "soccer/epl/events/809923",
+                "homeUri": "soccer/all/teams/3",
+                "awayUri": "soccer/all/teams/11"
+              }
+            },
+            "analyticsSport": "soccer",
+            "type": "entity"
+          },
+          "league": "EPL",
+          "eventHeadline": "Chelsea defeats Tottenham Hotspur, snaps 7-match losing streak",
+          "importance": 0,
+          "upperTeam": {
+            "name": "CHE",
+            "uri": "soccer/all/teams/3",
+            "longName": "Chelsea",
+            "stackedNameBottom": "Chelsea",
+            "logoUrl": "https://b.fssta.com/uploads/application/soccer/team-logos/chelsea.vresize.80.80.medium.0.png",
+            "imageType": "image-logo",
+            "imageAltText": "Chelsea",
+            "record": "14-10-13",
+            "score": 2,
+            "isLoser": false,
+            "hasPossession": false,
+            "alternateLogoUrl": "https://b.fssta.com/uploads/application/soccer/team-logos/chelsea.vresize.80.80.medium.0.png"
+          },
+          "lowerTeam": {
+            "name": "TOT",
+            "uri": "soccer/all/teams/11",
+            "longName": "Tottenham Hotspur",
+            "stackedNameBottom": "Tottenham Hotspur",
+            "logoUrl": "https://b.fssta.com/uploads/application/soccer/team-logos/tottenham-hotspur.vresize.80.80.medium.0.png",
+            "imageType": "image-logo",
+            "imageAltText": "Tottenham Hotspur",
+            "record": "9-11-17",
+            "score": 1,
+            "isLoser": true,
+            "hasPossession": false,
+            "alternateLogoUrl": "https://b.fssta.com/uploads/application/soccer/team-logos/tottenham-hotspur.vresize.80.80.medium.0.png"
+          },
+          "oddsLine": "CHE +123",
+          "overUnderLine": "OVER 2.5",
+          "gameNotes": ""
+        }
+      ]
+    }
+  ],
+  "currentSectionId": "c1d20260519",
+  "quickNav": [
+    {
+      "id": "c1d20260518",
+      "uri": "https://api.foxsports.com/bifrost/v1/soccer/league/scores-segment/c1d20260518?groupId=1",
+      "webUrl": "/soccer/premier-league/scores?date=2026-05-18",
+      "date": "2026-05-18T04:00:00Z"
+    },
+    {
+      "id": "c1d20260519",
+      "uri": "https://api.foxsports.com/bifrost/v1/soccer/league/scores-segment/c1d20260519?groupId=1",
+      "webUrl": "/soccer/premier-league/scores?date=2026-05-19",
+      "date": "2026-05-19T04:00:00Z",
+      "selected": true
+    },
+    {
+      "id": "c1d20260524",
+      "uri": "https://api.foxsports.com/bifrost/v1/soccer/league/scores-segment/c1d20260524?groupId=1",
+      "webUrl": "/soccer/premier-league/scores?date=2026-05-24",
+      "date": "2026-05-24T04:00:00Z"
+    }
+  ]
+}

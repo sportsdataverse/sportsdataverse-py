@@ -5455,6 +5455,481 @@ p = fg_make_probability(
 print(p)
 ```
 
+### `fox_nfl_boxscore(game_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_nfl_boxscore}
+
+NFL boxscore (long: one row per player-stat).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `game_id` | `Union[int, str]` |  | Fox Bifrost event id. |
+| `return_parsed` | `bool` | `True` | If `True` (default) flatten the per-team stat tables to long form; if `False` return the raw JSON `dict`. |
+| `return_as_pandas` | `bool` | `False` | If `True` return a pandas DataFrame; otherwise polars. Ignored when `return_parsed=False`. |
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.nfl import fox_nfl_boxscore
+df = fox_nfl_boxscore("...")
+```
+
+### `fox_nfl_event_matchup(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_nfl_event_matchup}
+
+Fox Sports nfl pregame team-stat comparison (one row per stat).
+
+Wraps `nfl/event/{game_id}/matchup`.
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.nfl import fox_nfl_event_matchup
+df = fox_nfl_event_matchup("...")
+```
+
+### `fox_nfl_event_recap(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_nfl_event_recap}
+
+Fox Sports nfl postgame top performers (one row per player).
+
+Wraps `nfl/event/{game_id}/recap`.
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.nfl import fox_nfl_event_recap
+df = fox_nfl_event_recap("...")
+```
+
+### `fox_nfl_event_standings(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_nfl_event_standings}
+
+Fox Sports nfl the two teams' standings context.
+
+Wraps `nfl/event/{game_id}/standings`.
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.nfl import fox_nfl_event_standings
+df = fox_nfl_event_standings("...")
+```
+
+### `fox_nfl_league_conferences(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_nfl_league_conferences}
+
+Fox Sports nfl conference / group directory.
+
+Wraps `nfl/league/conferences`.
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.nfl import fox_nfl_league_conferences
+df = fox_nfl_league_conferences()
+```
+
+### `fox_nfl_league_header(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_nfl_league_header}
+
+Fox Sports nfl league header (one row).
+
+Wraps `nfl/league/header`.
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.nfl import fox_nfl_league_header
+df = fox_nfl_league_header()
+```
+
+### `fox_nfl_league_leaders(category: 'str' = 'scoring', who: 'str' = 'player', page: 'int' = 0, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_nfl_league_leaders}
+
+NFL statistical leaders (`stats-con`); who=player|team.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `category` | `str` | `'scoring'` | Stat category. Defaults to `"scoring"`. |
+| `who` | `str` | `'player'` | `"player"` or `"team"`. Defaults to `"player"`. |
+| `page` | `int` | `0` | 0-based result page. Defaults to `0`. |
+| `return_parsed` | `bool` | `True` | If `True` (default) flatten the leader tables to a DataFrame; if `False` return the raw JSON `dict`. |
+| `return_as_pandas` | `bool` | `False` | If `True` return a pandas DataFrame; otherwise polars. Ignored when `return_parsed=False`. |
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.nfl import fox_nfl_league_leaders
+df = fox_nfl_league_leaders("scoring")
+```
+
+### `fox_nfl_league_odds(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_nfl_league_odds}
+
+Fox Sports nfl league odds board (one row per team per game).
+
+Wraps `nfl/league/odds`.
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.nfl import fox_nfl_league_odds
+df = fox_nfl_league_odds()
+```
+
+### `fox_nfl_league_player_news(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_nfl_league_player_news}
+
+Fox Sports nfl league-wide player news feed.
+
+Wraps `nfl/league/playernews`.
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.nfl import fox_nfl_league_player_news
+df = fox_nfl_league_player_news()
+```
+
+### `fox_nfl_league_polls(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_nfl_league_polls}
+
+Fox Sports nfl rankings / polls rendered as standings tables.
+
+Wraps `nfl/league/polls`.
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.nfl import fox_nfl_league_polls
+df = fox_nfl_league_polls()
+```
+
+### `fox_nfl_league_schedule(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_nfl_league_schedule}
+
+Fox Sports nfl league schedule nav selections.
+
+Wraps `nfl/league/schedule`.
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.nfl import fox_nfl_league_schedule
+df = fox_nfl_league_schedule()
+```
+
+### `fox_nfl_league_scores(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_nfl_league_scores}
+
+Fox Sports nfl league scores nav selections.
+
+Wraps `nfl/league/scores`.
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.nfl import fox_nfl_league_scores
+df = fox_nfl_league_scores()
+```
+
+### `fox_nfl_league_standings(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_nfl_league_standings}
+
+Fox Sports nfl league-wide standings tables.
+
+Wraps `nfl/league/standings`.
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.nfl import fox_nfl_league_standings
+df = fox_nfl_league_standings()
+```
+
+### `fox_nfl_league_stat_leaders(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_nfl_league_stat_leaders}
+
+Fox Sports nfl league stats landing leaders.
+
+Wraps `nfl/league/stats`.
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.nfl import fox_nfl_league_stat_leaders
+df = fox_nfl_league_stat_leaders()
+```
+
+### `fox_nfl_odds(game_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_nfl_odds}
+
+NFL game odds six-pack (spread / to-win / total per team).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `game_id` | `Union[int, str]` |  | Fox Bifrost event id. |
+| `return_parsed` | `bool` | `True` | If `True` (default) flatten the six-pack market to a DataFrame; if `False` return the raw JSON `dict`. |
+| `return_as_pandas` | `bool` | `False` | If `True` return a pandas DataFrame; otherwise polars. Ignored when `return_parsed=False`. |
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.nfl import fox_nfl_odds
+df = fox_nfl_odds("...")
+```
+
+### `fox_nfl_pbp(game_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_nfl_pbp}
+
+NFL play-by-play (one row per play; drive-based).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `game_id` | `Union[int, str]` |  | Fox Bifrost event id. |
+| `return_parsed` | `bool` | `True` | If `True` (default) flatten the pbp layout to a DataFrame; if `False` return the raw JSON `dict`. |
+| `return_as_pandas` | `bool` | `False` | If `True` return a pandas DataFrame; otherwise polars. Ignored when `return_parsed=False`. |
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.nfl import fox_nfl_pbp
+df = fox_nfl_pbp("...")
+```
+
+### `fox_nfl_scoreboard(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_nfl_scoreboard}
+
+Fox Sports nfl scoreboard nav selections (weeks / dates / groups).
+
+Wraps `nfl/scoreboard/main`.
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.nfl import fox_nfl_scoreboard
+df = fox_nfl_scoreboard()
+```
+
+### `fox_nfl_scorechip(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_nfl_scorechip}
+
+Fox Sports nfl compact live score chip (raw dict -- live-only, uncaptured shape).
+
+Wraps `nfl/scorechip/{chip_id}`.
+
+**Returns**
+
+The raw JSON `dict`.
+
+**Example**
+
+```python
+from sportsdataverse.nfl import fox_nfl_scorechip
+df = fox_nfl_scorechip("nfl12345")
+```
+
+### `fox_nfl_scores_segment(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_nfl_scores_segment}
+
+Fox Sports nfl one row per game in a scoreboard segment.
+
+Wraps `nfl/league/scores-segment/{segment_id}`.
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.nfl import fox_nfl_scores_segment
+df = fox_nfl_scores_segment("...")
+```
+
+### `fox_nfl_standings(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_nfl_standings}
+
+NFL standings for a team's conference/division.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `team_id` | `Union[int, str]` |  | Fox Bifrost team id. |
+| `return_parsed` | `bool` | `True` | If `True` (default) flatten the standings tables to a DataFrame; if `False` return the raw JSON `dict`. |
+| `return_as_pandas` | `bool` | `False` | If `True` return a pandas DataFrame; otherwise polars. Ignored when `return_parsed=False`. |
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.nfl import fox_nfl_standings
+df = fox_nfl_standings("...")
+```
+
+### `fox_nfl_team_gamelog(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_nfl_team_gamelog}
+
+NFL team game log (long: one row per game-stat).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `team_id` | `Union[int, str]` |  | Fox Bifrost team id. |
+| `return_parsed` | `bool` | `True` | If `True` (default) flatten to long form; if `False` return the raw JSON `dict`. |
+| `return_as_pandas` | `bool` | `False` | If `True` return a pandas DataFrame; otherwise polars. Ignored when `return_parsed=False`. |
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.nfl import fox_nfl_team_gamelog
+df = fox_nfl_team_gamelog("...")
+```
+
+### `fox_nfl_team_header(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_nfl_team_header}
+
+Fox Sports nfl team header (one row).
+
+Wraps `nfl/team/{team_id}/header`.
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.nfl import fox_nfl_team_header
+df = fox_nfl_team_header("...")
+```
+
+### `fox_nfl_team_roster(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_nfl_team_roster}
+
+NFL team roster (one row per player).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `team_id` | `Union[int, str]` |  | Fox Bifrost team id. |
+| `return_parsed` | `bool` | `True` | If `True` (default) flatten the position-group tables to a DataFrame; if `False` return the raw JSON `dict`. |
+| `return_as_pandas` | `bool` | `False` | If `True` return a pandas DataFrame; otherwise polars. Ignored when `return_parsed=False`. |
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.nfl import fox_nfl_team_roster
+df = fox_nfl_team_roster("...")
+```
+
+### `fox_nfl_team_stats(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_nfl_team_stats}
+
+NFL team stat leaders by category.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `team_id` | `Union[int, str]` |  | Fox Bifrost team id. |
+| `return_parsed` | `bool` | `True` | If `True` (default) flatten the leader sections to a DataFrame; if `False` return the raw JSON `dict`. |
+| `return_as_pandas` | `bool` | `False` | If `True` return a pandas DataFrame; otherwise polars. Ignored when `return_parsed=False`. |
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.nfl import fox_nfl_team_stats
+df = fox_nfl_team_stats("...")
+```
+
+### `fox_nfl_teamnav(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_nfl_teamnav}
+
+Fox Sports nfl team directory (one row per team).
+
+Wraps `nfl/league/teamnav`.
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.nfl import fox_nfl_teamnav
+df = fox_nfl_teamnav()
+```
+
 ### `get_2pt_wp(pbp_df: "Union[pl.DataFrame, 'pd.DataFrame']") -> 'pd.DataFrame'` {#get_2pt_wp}
 
 Win probability of the PAT-vs-2pt choice after a touchdown (nfl4th `get_2pt_wp`).

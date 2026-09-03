@@ -1,0 +1,70 @@
+[
+  {
+    "player_id": "0Oq60APM6D",
+    "team_id": [
+      "kRQabn8MKZ",
+      "0KPqjA456v",
+      "Vj58weDM8n"
+    ],
+    "general_position": "CB",
+    "minutes_played": 9774,
+    "shots": 4,
+    "shots_on_target": 0,
+    "goals": 0,
+    "xgoals": 0.5459,
+    "xplace": -0.5459,
+    "goals_minus_xgoals": -0.5459,
+    "key_passes": 11,
+    "primary_assists": 0,
+    "xassists": 0.8302,
+    "primary_assists_minus_xassists": -0.8302,
+    "goals_plus_primary_assists": 0,
+    "xgoals_plus_xassists": 1.3761,
+    "points_added": 0,
+    "xpoints_added": 0.3505
+  },
+  {
+    "player_id": "0Oq60VgM6D",
+    "team_id": [
+      "KAqBN0Vqbg",
+      "kaDQ0wRqEv",
+      "X0Oq66zq6D"
+    ],
+    "general_position": "DM",
+    "minutes_played": 20303,
+    "shots": 196,
+    "shots_on_target": 57,
+    "goals": 19,
+    "xgoals": 22.4174,
+    "xplace": -3.6929,
+    "goals_minus_xgoals": -3.4174,
+    "key_passes": 72,
+    "primary_assists": 9,
+    "xassists": 6.5441,
+    "primary_assists_minus_xassists": 2.4559,
+    "goals_plus_primary_assists": 28,
+    "xgoals_plus_xassists": 28.9615,
+    "points_added": 9.5505,
+    "xpoints_added": 14.3498
+  },
+  {
+    "player_id": "0Oq624oPq6",
+    "team_id": "jYQJ19EqGR",
+    "general_position": "FB",
+    "minutes_played": 2615,
+    "shots": 23,
+    "shots_on_target": 10,
+    "goals": 4,
+    "xgoals": 2.4463,
+    "xplace": 0.7851,
+    "goals_minus_xgoals": 1.5537,
+    "key_passes": 18,
+    "primary_assists": 2,
+    "xassists": 3.1271,
+    "primary_assists_minus_xassists": -1.1271,
+    "goals_plus_primary_assists": 6,
+    "xgoals_plus_xassists": 5.5735,
+    "points_added": 1.9781,
+    "xpoints_added": 1.2357
+  }
+]

@@ -17,6 +17,7 @@ import polars as pl
 
 from sportsdataverse._fox_layout import (
     fox_get,
+    register_league_endpoints,
     frame,
     parse_boxscore,
     parse_league_leaders,
@@ -414,3 +415,8 @@ def fox_nhl_league_leaders(
     """
     raw = fox_get(f"{_SPORT}/league/stats-con/{who}/{category}/{page}", **kwargs)
     return frame(parse_league_leaders(raw), return_as_pandas) if return_parsed else raw
+
+
+# The 17 shared Fox league / event / team endpoints, bound to this league's
+# sport slug. One table in sportsdataverse._fox_layout drives every league.
+__all__ += register_league_endpoints(_SPORT, "nhl", globals())

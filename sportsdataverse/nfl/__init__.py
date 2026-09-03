@@ -9,6 +9,7 @@ from __future__ import annotations
 # replacement story is preserved. Cross-sport lift to
 # ``sportsdataverse.cache`` / ``sportsdataverse.config`` is intentionally
 # additive — these names will keep working.
+from sportsdataverse.nfl.nfl_fox_ext import *
 from sportsdataverse.nfl.cache import clear_cache
 from sportsdataverse.nfl.config import (
     NflConfig,

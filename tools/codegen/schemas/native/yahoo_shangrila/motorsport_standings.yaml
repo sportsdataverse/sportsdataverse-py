@@ -1,0 +1,12 @@
+columns:
+- description: ''
+  name: name
+  type: character
+- description: ''
+  name: full_name
+  type: character
+- description: ''
+  name: current_league_season
+  type: character
+kind: dataframe
+schema: motorsport_standings

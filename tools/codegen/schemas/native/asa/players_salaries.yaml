@@ -1,0 +1,25 @@
+columns:
+- description: ASA player id (base62 string; Utf8 join key).
+  name: player_id
+  type: character
+- description: ASA team id (base62 string; Utf8 join key, never numeric).
+  name: team_id
+  type: character
+- description: Season(s) the player appears in; may serialize as a scalar, a list,
+    or an object across the leagues.
+  name: season_name
+  type: integer
+- description: Roster position designation (string; distinct from `general_position`).
+  name: position
+  type: character
+- description: Base salary (USD).
+  name: base_salary
+  type: integer
+- description: Guaranteed compensation (USD).
+  name: guaranteed_compensation
+  type: integer
+- description: MLSPA salary-release label/date the row is sourced from.
+  name: mlspa_release
+  type: character
+kind: dataframe
+schema: players_salaries

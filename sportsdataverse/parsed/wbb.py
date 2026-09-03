@@ -321,6 +321,23 @@ from sportsdataverse.wbb import fit_shrinkage_k as fit_shrinkage_k  # noqa: F401
 from sportsdataverse.wbb import fix_combos as fix_combos  # noqa: F401
 from sportsdataverse.wbb import fix_possible_score_swap_bug as fix_possible_score_swap_bug  # noqa: F401
 from sportsdataverse.wbb import flatten_json_iterative as flatten_json_iterative  # noqa: F401
+from sportsdataverse.wbb import fox_wbb_event_matchup as fox_wbb_event_matchup  # noqa: F401
+from sportsdataverse.wbb import fox_wbb_event_recap as fox_wbb_event_recap  # noqa: F401
+from sportsdataverse.wbb import fox_wbb_event_standings as fox_wbb_event_standings  # noqa: F401
+from sportsdataverse.wbb import fox_wbb_league_conferences as fox_wbb_league_conferences  # noqa: F401
+from sportsdataverse.wbb import fox_wbb_league_header as fox_wbb_league_header  # noqa: F401
+from sportsdataverse.wbb import fox_wbb_league_odds as fox_wbb_league_odds  # noqa: F401
+from sportsdataverse.wbb import fox_wbb_league_player_news as fox_wbb_league_player_news  # noqa: F401
+from sportsdataverse.wbb import fox_wbb_league_polls as fox_wbb_league_polls  # noqa: F401
+from sportsdataverse.wbb import fox_wbb_league_schedule as fox_wbb_league_schedule  # noqa: F401
+from sportsdataverse.wbb import fox_wbb_league_scores as fox_wbb_league_scores  # noqa: F401
+from sportsdataverse.wbb import fox_wbb_league_standings as fox_wbb_league_standings  # noqa: F401
+from sportsdataverse.wbb import fox_wbb_league_stat_leaders as fox_wbb_league_stat_leaders  # noqa: F401
+from sportsdataverse.wbb import fox_wbb_scoreboard as fox_wbb_scoreboard  # noqa: F401
+from sportsdataverse.wbb import fox_wbb_scorechip as fox_wbb_scorechip  # noqa: F401
+from sportsdataverse.wbb import fox_wbb_scores_segment as fox_wbb_scores_segment  # noqa: F401
+from sportsdataverse.wbb import fox_wbb_team_header as fox_wbb_team_header  # noqa: F401
+from sportsdataverse.wbb import fox_wbb_teamnav as fox_wbb_teamnav  # noqa: F401
 from sportsdataverse.wbb import fox_wbb_teams_all as fox_wbb_teams_all  # noqa: F401
 from sportsdataverse.wbb import fuzzy_box_match as fuzzy_box_match  # noqa: F401
 from sportsdataverse.wbb import get_ascending_time as get_ascending_time  # noqa: F401
@@ -843,13 +860,30 @@ __all__ = [
     "fix_possible_score_swap_bug",
     "flatten_json_iterative",
     "fox_wbb_boxscore",
+    "fox_wbb_event_matchup",
+    "fox_wbb_event_recap",
+    "fox_wbb_event_standings",
+    "fox_wbb_league_conferences",
+    "fox_wbb_league_header",
     "fox_wbb_league_leaders",
+    "fox_wbb_league_odds",
+    "fox_wbb_league_player_news",
+    "fox_wbb_league_polls",
+    "fox_wbb_league_schedule",
+    "fox_wbb_league_scores",
+    "fox_wbb_league_standings",
+    "fox_wbb_league_stat_leaders",
     "fox_wbb_odds",
     "fox_wbb_pbp",
+    "fox_wbb_scoreboard",
+    "fox_wbb_scorechip",
+    "fox_wbb_scores_segment",
     "fox_wbb_standings",
     "fox_wbb_team_gamelog",
+    "fox_wbb_team_header",
     "fox_wbb_team_roster",
     "fox_wbb_team_stats",
+    "fox_wbb_teamnav",
     "fox_wbb_teams",
     "fox_wbb_teams_all",
     "fuzzy_box_match",

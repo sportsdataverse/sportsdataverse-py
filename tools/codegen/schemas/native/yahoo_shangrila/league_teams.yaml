@@ -1,0 +1,9 @@
+columns:
+- description: ''
+  name: short_name
+  type: character
+- description: ''
+  name: teams
+  type: character
+kind: dataframe
+schema: league_teams

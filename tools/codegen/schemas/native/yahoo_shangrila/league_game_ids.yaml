@@ -1,0 +1,15 @@
+columns:
+- description: ''
+  name: alias_url
+  type: character
+- description: ''
+  name: alias_navigation_links
+  type: character
+- description: ''
+  name: current_week
+  type: integer
+- description: ''
+  name: games
+  type: character
+kind: dataframe
+schema: league_game_ids

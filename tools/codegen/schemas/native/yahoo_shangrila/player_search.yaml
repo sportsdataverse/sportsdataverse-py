@@ -1,0 +1,27 @@
+columns:
+- description: ''
+  name: player_id
+  type: character
+- description: ''
+  name: active
+  type: character
+- description: ''
+  name: alias
+  type: character
+- description: ''
+  name: first_name
+  type: character
+- description: ''
+  name: last_name
+  type: character
+- description: ''
+  name: display_name
+  type: character
+- description: ''
+  name: suggested_headshot
+  type: character
+- description: ''
+  name: team
+  type: character
+kind: dataframe
+schema: player_search

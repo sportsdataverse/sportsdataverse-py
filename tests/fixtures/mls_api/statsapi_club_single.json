@@ -1,0 +1,50 @@
+{
+  "club_id": "MLS-CLU-000001",
+  "club_name": "Los Angeles Football Club",
+  "three_letter_code": "LAFC",
+  "short_name": "LAFC",
+  "club_short_name": "LAFC",
+  "club_three_letter_code": "LAFC",
+  "city": "Los Angeles, CA",
+  "country": "USA",
+  "long_name": "Los Angeles Football Club",
+  "founded": "2018",
+  "club_color_one": {
+    "club_color": "black",
+    "club_color_rgb": "#212121"
+  },
+  "club_color_two": {
+    "club_color": "gold",
+    "club_color_rgb": "#C39E6D"
+  },
+  "club_color_three": {
+    "club_color": "white",
+    "club_color_rgb": "#FFFFFF"
+  },
+  "shirt_one": {
+    "shirt_main_color": "black",
+    "shirt_main_color_rgb": "#212121",
+    "shirt_secondary_color": "gold",
+    "shirt_secondary_color_rgb": "#9E8250",
+    "shirt_number_color": "gold",
+    "shirt_number_color_rgb": "#9E8250"
+  },
+  "shirt_two": {
+    "shirt_main_color": "white",
+    "shirt_main_color_rgb": "#F8F9F9",
+    "shirt_secondary_color": "gold",
+    "shirt_secondary_color_rgb": "#C39E6D",
+    "shirt_number_color": "black",
+    "shirt_number_color_rgb": "#212121"
+  },
+  "shirt_three": {
+    "shirt_main_color": "dark green",
+    "shirt_main_color_rgb": "#c9cbbc",
+    "shirt_secondary_color": "black",
+    "shirt_secondary_color_rgb": "#000000",
+    "shirt_number_color": "black",
+    "shirt_number_color_rgb": "#000000"
+  },
+  "stadium_id": "MLS-STA-000001",
+  "stadium_name": "BMO Stadium"
+}

@@ -1,0 +1,1457 @@
+{
+  "groupList": [
+    {
+      "id": "-4",
+      "title": "FEATURED",
+      "selected": true,
+      "webUrl": "/college-basketball/scores?groupId=-4"
+    },
+    {
+      "id": "top25",
+      "title": "TOP 25",
+      "webUrl": "/college-basketball/scores?groupId=top25"
+    },
+    {
+      "id": "2",
+      "title": "DIVISION I",
+      "webUrl": "/college-basketball/scores?groupId=2"
+    },
+    {
+      "id": "-2",
+      "title": "NCAA TOURNAMENT",
+      "webUrl": "/college-basketball/scores?groupId=-2"
+    },
+    {
+      "id": "-5",
+      "title": "COLLEGE BASKETBALL CROWN",
+      "webUrl": "/college-basketball/scores?groupId=-5"
+    },
+    {
+      "id": "-3",
+      "title": "POSTSEASON NIT",
+      "webUrl": "/college-basketball/scores?groupId=-3"
+    },
+    {
+      "id": "11",
+      "title": "ACC",
+      "webUrl": "/college-basketball/scores?groupId=11"
+    },
+    {
+      "id": "13",
+      "title": "BIG 12",
+      "webUrl": "/college-basketball/scores?groupId=13"
+    },
+    {
+      "id": "14",
+      "title": "BIG EAST",
+      "webUrl": "/college-basketball/scores?groupId=14"
+    },
+    {
+      "id": "17",
+      "title": "BIG TEN",
+      "webUrl": "/college-basketball/scores?groupId=17"
+    },
+    {
+      "id": "33",
+      "title": "SEC",
+      "webUrl": "/college-basketball/scores?groupId=33"
+    },
+    {
+      "id": "10",
+      "title": "A 10",
+      "webUrl": "/college-basketball/scores?groupId=10"
+    },
+    {
+      "id": "12",
+      "title": "A-SUN",
+      "webUrl": "/college-basketball/scores?groupId=12"
+    },
+    {
+      "id": "195",
+      "title": "AAC",
+      "webUrl": "/college-basketball/scores?groupId=195"
+    },
+    {
+      "id": "9",
+      "title": "AM. EAST",
+      "webUrl": "/college-basketball/scores?groupId=9"
+    },
+    {
+      "id": "15",
+      "title": "BIG SKY",
+      "webUrl": "/college-basketball/scores?groupId=15"
+    },
+    {
+      "id": "16",
+      "title": "BIG SOUTH",
+      "webUrl": "/college-basketball/scores?groupId=16"
+    },
+    {
+      "id": "18",
+      "title": "BIG WEST",
+      "webUrl": "/college-basketball/scores?groupId=18"
+    },
+    {
+      "id": "20",
+      "title": "C-USA",
+      "webUrl": "/college-basketball/scores?groupId=20"
+    },
+    {
+      "id": "19",
+      "title": "CAA",
+      "webUrl": "/college-basketball/scores?groupId=19"
+    },
+    {
+      "id": "251",
+      "title": "DI-IND",
+      "webUrl": "/college-basketball/scores?groupId=251"
+    },
+    {
+      "id": "21",
+      "title": "HORIZON",
+      "webUrl": "/college-basketball/scores?groupId=21"
+    },
+    {
+      "id": "23",
+      "title": "IVY",
+      "webUrl": "/college-basketball/scores?groupId=23"
+    },
+    {
+      "id": "24",
+      "title": "MAA",
+      "webUrl": "/college-basketball/scores?groupId=24"
+    },
+    {
+      "id": "25",
+      "title": "MAC",
+      "webUrl": "/college-basketball/scores?groupId=25"
+    },
+    {
+      "id": "26",
+      "title": "MEAC",
+      "webUrl": "/college-basketball/scores?groupId=26"
+    },
+    {
+      "id": "27",
+      "title": "MVC",
+      "webUrl": "/college-basketball/scores?groupId=27"
+    },
+    {
+      "id": "28",
+      "title": "MWC",
+      "webUrl": "/college-basketball/scores?groupId=28"
+    },
+    {
+      "id": "29",
+      "title": "NEC",
+      "webUrl": "/college-basketball/scores?groupId=29"
+    },
+    {
+      "id": "30",
+      "title": "OVC",
+      "webUrl": "/college-basketball/scores?groupId=30"
+    },
+    {
+      "id": "31",
+      "title": "PAC-12",
+      "webUrl": "/college-basketball/scores?groupId=31"
+    },
+    {
+      "id": "32",
+      "title": "PATRIOT",
+      "webUrl": "/college-basketball/scores?groupId=32"
+    },
+    {
+      "id": "35",
+      "title": "SLC",
+      "webUrl": "/college-basketball/scores?groupId=35"
+    },
+    {
+      "id": "36",
+      "title": "SWAC",
+      "webUrl": "/college-basketball/scores?groupId=36"
+    },
+    {
+      "id": "34",
+      "title": "SOUTHERN",
+      "webUrl": "/college-basketball/scores?groupId=34"
+    },
+    {
+      "id": "37",
+      "title": "SUMMIT",
+      "webUrl": "/college-basketball/scores?groupId=37"
+    },
+    {
+      "id": "38",
+      "title": "SUN BELT",
+      "webUrl": "/college-basketball/scores?groupId=38"
+    },
+    {
+      "id": "40",
+      "title": "WAC",
+      "webUrl": "/college-basketball/scores?groupId=40"
+    },
+    {
+      "id": "39",
+      "title": "WCC",
+      "webUrl": "/college-basketball/scores?groupId=39"
+    }
+  ],
+  "dailyList": [
+    {
+      "id": "20251103",
+      "date": "2025-11-03T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20251103?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2025-11-03",
+      "parameters": {
+        "date": "2025-11-03"
+      }
+    },
+    {
+      "id": "20251104",
+      "date": "2025-11-04T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20251104?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2025-11-04",
+      "parameters": {
+        "date": "2025-11-04"
+      }
+    },
+    {
+      "id": "20251105",
+      "date": "2025-11-05T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20251105?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2025-11-05",
+      "parameters": {
+        "date": "2025-11-05"
+      }
+    },
+    {
+      "id": "20251106",
+      "date": "2025-11-06T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20251106?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2025-11-06",
+      "parameters": {
+        "date": "2025-11-06"
+      }
+    },
+    {
+      "id": "20251107",
+      "date": "2025-11-07T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20251107?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2025-11-07",
+      "parameters": {
+        "date": "2025-11-07"
+      }
+    },
+    {
+      "id": "20251108",
+      "date": "2025-11-08T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20251108?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2025-11-08",
+      "parameters": {
+        "date": "2025-11-08"
+      }
+    },
+    {
+      "id": "20251109",
+      "date": "2025-11-09T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20251109?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2025-11-09",
+      "parameters": {
+        "date": "2025-11-09"
+      }
+    },
+    {
+      "id": "20251110",
+      "date": "2025-11-10T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20251110?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2025-11-10",
+      "parameters": {
+        "date": "2025-11-10"
+      }
+    },
+    {
+      "id": "20251111",
+      "date": "2025-11-11T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20251111?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2025-11-11",
+      "parameters": {
+        "date": "2025-11-11"
+      }
+    },
+    {
+      "id": "20251112",
+      "date": "2025-11-12T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20251112?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2025-11-12",
+      "parameters": {
+        "date": "2025-11-12"
+      }
+    },
+    {
+      "id": "20251113",
+      "date": "2025-11-13T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20251113?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2025-11-13",
+      "parameters": {
+        "date": "2025-11-13"
+      }
+    },
+    {
+      "id": "20251114",
+      "date": "2025-11-14T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20251114?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2025-11-14",
+      "parameters": {
+        "date": "2025-11-14"
+      }
+    },
+    {
+      "id": "20251115",
+      "date": "2025-11-15T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20251115?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2025-11-15",
+      "parameters": {
+        "date": "2025-11-15"
+      }
+    },
+    {
+      "id": "20251116",
+      "date": "2025-11-16T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20251116?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2025-11-16",
+      "parameters": {
+        "date": "2025-11-16"
+      }
+    },
+    {
+      "id": "20251117",
+      "date": "2025-11-17T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20251117?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2025-11-17",
+      "parameters": {
+        "date": "2025-11-17"
+      }
+    },
+    {
+      "id": "20251118",
+      "date": "2025-11-18T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20251118?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2025-11-18",
+      "parameters": {
+        "date": "2025-11-18"
+      }
+    },
+    {
+      "id": "20251119",
+      "date": "2025-11-19T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20251119?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2025-11-19",
+      "parameters": {
+        "date": "2025-11-19"
+      }
+    },
+    {
+      "id": "20251120",
+      "date": "2025-11-20T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20251120?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2025-11-20",
+      "parameters": {
+        "date": "2025-11-20"
+      }
+    },
+    {
+      "id": "20251121",
+      "date": "2025-11-21T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20251121?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2025-11-21",
+      "parameters": {
+        "date": "2025-11-21"
+      }
+    },
+    {
+      "id": "20251122",
+      "date": "2025-11-22T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20251122?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2025-11-22",
+      "parameters": {
+        "date": "2025-11-22"
+      }
+    },
+    {
+      "id": "20251123",
+      "date": "2025-11-23T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20251123?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2025-11-23",
+      "parameters": {
+        "date": "2025-11-23"
+      }
+    },
+    {
+      "id": "20251124",
+      "date": "2025-11-24T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20251124?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2025-11-24",
+      "parameters": {
+        "date": "2025-11-24"
+      }
+    },
+    {
+      "id": "20251125",
+      "date": "2025-11-25T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20251125?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2025-11-25",
+      "parameters": {
+        "date": "2025-11-25"
+      }
+    },
+    {
+      "id": "20251126",
+      "date": "2025-11-26T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20251126?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2025-11-26",
+      "parameters": {
+        "date": "2025-11-26"
+      }
+    },
+    {
+      "id": "20251127",
+      "date": "2025-11-27T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20251127?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2025-11-27",
+      "parameters": {
+        "date": "2025-11-27"
+      }
+    },
+    {
+      "id": "20251128",
+      "date": "2025-11-28T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20251128?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2025-11-28",
+      "parameters": {
+        "date": "2025-11-28"
+      }
+    },
+    {
+      "id": "20251129",
+      "date": "2025-11-29T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20251129?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2025-11-29",
+      "parameters": {
+        "date": "2025-11-29"
+      }
+    },
+    {
+      "id": "20251130",
+      "date": "2025-11-30T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20251130?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2025-11-30",
+      "parameters": {
+        "date": "2025-11-30"
+      }
+    },
+    {
+      "id": "20251201",
+      "date": "2025-12-01T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20251201?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2025-12-01",
+      "parameters": {
+        "date": "2025-12-01"
+      }
+    },
+    {
+      "id": "20251202",
+      "date": "2025-12-02T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20251202?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2025-12-02",
+      "parameters": {
+        "date": "2025-12-02"
+      }
+    },
+    {
+      "id": "20251203",
+      "date": "2025-12-03T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20251203?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2025-12-03",
+      "parameters": {
+        "date": "2025-12-03"
+      }
+    },
+    {
+      "id": "20251205",
+      "date": "2025-12-05T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20251205?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2025-12-05",
+      "parameters": {
+        "date": "2025-12-05"
+      }
+    },
+    {
+      "id": "20251206",
+      "date": "2025-12-06T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20251206?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2025-12-06",
+      "parameters": {
+        "date": "2025-12-06"
+      }
+    },
+    {
+      "id": "20251207",
+      "date": "2025-12-07T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20251207?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2025-12-07",
+      "parameters": {
+        "date": "2025-12-07"
+      }
+    },
+    {
+      "id": "20251209",
+      "date": "2025-12-09T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20251209?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2025-12-09",
+      "parameters": {
+        "date": "2025-12-09"
+      }
+    },
+    {
+      "id": "20251210",
+      "date": "2025-12-10T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20251210?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2025-12-10",
+      "parameters": {
+        "date": "2025-12-10"
+      }
+    },
+    {
+      "id": "20251211",
+      "date": "2025-12-11T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20251211?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2025-12-11",
+      "parameters": {
+        "date": "2025-12-11"
+      }
+    },
+    {
+      "id": "20251212",
+      "date": "2025-12-12T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20251212?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2025-12-12",
+      "parameters": {
+        "date": "2025-12-12"
+      }
+    },
+    {
+      "id": "20251213",
+      "date": "2025-12-13T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20251213?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2025-12-13",
+      "parameters": {
+        "date": "2025-12-13"
+      }
+    },
+    {
+      "id": "20251214",
+      "date": "2025-12-14T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20251214?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2025-12-14",
+      "parameters": {
+        "date": "2025-12-14"
+      }
+    },
+    {
+      "id": "20251216",
+      "date": "2025-12-16T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20251216?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2025-12-16",
+      "parameters": {
+        "date": "2025-12-16"
+      }
+    },
+    {
+      "id": "20251217",
+      "date": "2025-12-17T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20251217?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2025-12-17",
+      "parameters": {
+        "date": "2025-12-17"
+      }
+    },
+    {
+      "id": "20251218",
+      "date": "2025-12-18T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20251218?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2025-12-18",
+      "parameters": {
+        "date": "2025-12-18"
+      }
+    },
+    {
+      "id": "20251219",
+      "date": "2025-12-19T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20251219?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2025-12-19",
+      "parameters": {
+        "date": "2025-12-19"
+      }
+    },
+    {
+      "id": "20251220",
+      "date": "2025-12-20T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20251220?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2025-12-20",
+      "parameters": {
+        "date": "2025-12-20"
+      }
+    },
+    {
+      "id": "20251221",
+      "date": "2025-12-21T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20251221?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2025-12-21",
+      "parameters": {
+        "date": "2025-12-21"
+      }
+    },
+    {
+      "id": "20251222",
+      "date": "2025-12-22T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20251222?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2025-12-22",
+      "parameters": {
+        "date": "2025-12-22"
+      }
+    },
+    {
+      "id": "20251223",
+      "date": "2025-12-23T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20251223?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2025-12-23",
+      "parameters": {
+        "date": "2025-12-23"
+      }
+    },
+    {
+      "id": "20251228",
+      "date": "2025-12-28T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20251228?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2025-12-28",
+      "parameters": {
+        "date": "2025-12-28"
+      }
+    },
+    {
+      "id": "20251229",
+      "date": "2025-12-29T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20251229?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2025-12-29",
+      "parameters": {
+        "date": "2025-12-29"
+      }
+    },
+    {
+      "id": "20251230",
+      "date": "2025-12-30T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20251230?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2025-12-30",
+      "parameters": {
+        "date": "2025-12-30"
+      }
+    },
+    {
+      "id": "20251231",
+      "date": "2025-12-31T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20251231?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2025-12-31",
+      "parameters": {
+        "date": "2025-12-31"
+      }
+    },
+    {
+      "id": "20260102",
+      "date": "2026-01-02T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20260102?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2026-01-02",
+      "parameters": {
+        "date": "2026-01-02"
+      }
+    },
+    {
+      "id": "20260103",
+      "date": "2026-01-03T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20260103?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2026-01-03",
+      "parameters": {
+        "date": "2026-01-03"
+      }
+    },
+    {
+      "id": "20260104",
+      "date": "2026-01-04T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20260104?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2026-01-04",
+      "parameters": {
+        "date": "2026-01-04"
+      }
+    },
+    {
+      "id": "20260105",
+      "date": "2026-01-05T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20260105?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2026-01-05",
+      "parameters": {
+        "date": "2026-01-05"
+      }
+    },
+    {
+      "id": "20260106",
+      "date": "2026-01-06T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20260106?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2026-01-06",
+      "parameters": {
+        "date": "2026-01-06"
+      }
+    },
+    {
+      "id": "20260107",
+      "date": "2026-01-07T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20260107?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2026-01-07",
+      "parameters": {
+        "date": "2026-01-07"
+      }
+    },
+    {
+      "id": "20260108",
+      "date": "2026-01-08T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20260108?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2026-01-08",
+      "parameters": {
+        "date": "2026-01-08"
+      }
+    },
+    {
+      "id": "20260109",
+      "date": "2026-01-09T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20260109?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2026-01-09",
+      "parameters": {
+        "date": "2026-01-09"
+      }
+    },
+    {
+      "id": "20260110",
+      "date": "2026-01-10T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20260110?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2026-01-10",
+      "parameters": {
+        "date": "2026-01-10"
+      }
+    },
+    {
+      "id": "20260111",
+      "date": "2026-01-11T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20260111?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2026-01-11",
+      "parameters": {
+        "date": "2026-01-11"
+      }
+    },
+    {
+      "id": "20260113",
+      "date": "2026-01-13T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20260113?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2026-01-13",
+      "parameters": {
+        "date": "2026-01-13"
+      }
+    },
+    {
+      "id": "20260114",
+      "date": "2026-01-14T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20260114?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2026-01-14",
+      "parameters": {
+        "date": "2026-01-14"
+      }
+    },
+    {
+      "id": "20260115",
+      "date": "2026-01-15T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20260115?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2026-01-15",
+      "parameters": {
+        "date": "2026-01-15"
+      }
+    },
+    {
+      "id": "20260116",
+      "date": "2026-01-16T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20260116?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2026-01-16",
+      "parameters": {
+        "date": "2026-01-16"
+      }
+    },
+    {
+      "id": "20260117",
+      "date": "2026-01-17T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20260117?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2026-01-17",
+      "parameters": {
+        "date": "2026-01-17"
+      }
+    },
+    {
+      "id": "20260118",
+      "date": "2026-01-18T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20260118?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2026-01-18",
+      "parameters": {
+        "date": "2026-01-18"
+      }
+    },
+    {
+      "id": "20260119",
+      "date": "2026-01-19T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20260119?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2026-01-19",
+      "parameters": {
+        "date": "2026-01-19"
+      }
+    },
+    {
+      "id": "20260120",
+      "date": "2026-01-20T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20260120?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2026-01-20",
+      "parameters": {
+        "date": "2026-01-20"
+      }
+    },
+    {
+      "id": "20260121",
+      "date": "2026-01-21T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20260121?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2026-01-21",
+      "parameters": {
+        "date": "2026-01-21"
+      }
+    },
+    {
+      "id": "20260122",
+      "date": "2026-01-22T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20260122?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2026-01-22",
+      "parameters": {
+        "date": "2026-01-22"
+      }
+    },
+    {
+      "id": "20260123",
+      "date": "2026-01-23T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20260123?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2026-01-23",
+      "parameters": {
+        "date": "2026-01-23"
+      }
+    },
+    {
+      "id": "20260124",
+      "date": "2026-01-24T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20260124?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2026-01-24",
+      "parameters": {
+        "date": "2026-01-24"
+      }
+    },
+    {
+      "id": "20260125",
+      "date": "2026-01-25T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20260125?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2026-01-25",
+      "parameters": {
+        "date": "2026-01-25"
+      }
+    },
+    {
+      "id": "20260126",
+      "date": "2026-01-26T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20260126?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2026-01-26",
+      "parameters": {
+        "date": "2026-01-26"
+      }
+    },
+    {
+      "id": "20260127",
+      "date": "2026-01-27T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20260127?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2026-01-27",
+      "parameters": {
+        "date": "2026-01-27"
+      }
+    },
+    {
+      "id": "20260128",
+      "date": "2026-01-28T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20260128?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2026-01-28",
+      "parameters": {
+        "date": "2026-01-28"
+      }
+    },
+    {
+      "id": "20260129",
+      "date": "2026-01-29T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20260129?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2026-01-29",
+      "parameters": {
+        "date": "2026-01-29"
+      }
+    },
+    {
+      "id": "20260130",
+      "date": "2026-01-30T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20260130?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2026-01-30",
+      "parameters": {
+        "date": "2026-01-30"
+      }
+    },
+    {
+      "id": "20260131",
+      "date": "2026-01-31T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20260131?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2026-01-31",
+      "parameters": {
+        "date": "2026-01-31"
+      }
+    },
+    {
+      "id": "20260201",
+      "date": "2026-02-01T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20260201?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2026-02-01",
+      "parameters": {
+        "date": "2026-02-01"
+      }
+    },
+    {
+      "id": "20260202",
+      "date": "2026-02-02T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20260202?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2026-02-02",
+      "parameters": {
+        "date": "2026-02-02"
+      }
+    },
+    {
+      "id": "20260203",
+      "date": "2026-02-03T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20260203?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2026-02-03",
+      "parameters": {
+        "date": "2026-02-03"
+      }
+    },
+    {
+      "id": "20260204",
+      "date": "2026-02-04T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20260204?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2026-02-04",
+      "parameters": {
+        "date": "2026-02-04"
+      }
+    },
+    {
+      "id": "20260205",
+      "date": "2026-02-05T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20260205?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2026-02-05",
+      "parameters": {
+        "date": "2026-02-05"
+      }
+    },
+    {
+      "id": "20260206",
+      "date": "2026-02-06T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20260206?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2026-02-06",
+      "parameters": {
+        "date": "2026-02-06"
+      }
+    },
+    {
+      "id": "20260207",
+      "date": "2026-02-07T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20260207?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2026-02-07",
+      "parameters": {
+        "date": "2026-02-07"
+      }
+    },
+    {
+      "id": "20260208",
+      "date": "2026-02-08T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20260208?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2026-02-08",
+      "parameters": {
+        "date": "2026-02-08"
+      }
+    },
+    {
+      "id": "20260209",
+      "date": "2026-02-09T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20260209?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2026-02-09",
+      "parameters": {
+        "date": "2026-02-09"
+      }
+    },
+    {
+      "id": "20260210",
+      "date": "2026-02-10T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20260210?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2026-02-10",
+      "parameters": {
+        "date": "2026-02-10"
+      }
+    },
+    {
+      "id": "20260211",
+      "date": "2026-02-11T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20260211?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2026-02-11",
+      "parameters": {
+        "date": "2026-02-11"
+      }
+    },
+    {
+      "id": "20260212",
+      "date": "2026-02-12T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20260212?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2026-02-12",
+      "parameters": {
+        "date": "2026-02-12"
+      }
+    },
+    {
+      "id": "20260213",
+      "date": "2026-02-13T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20260213?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2026-02-13",
+      "parameters": {
+        "date": "2026-02-13"
+      }
+    },
+    {
+      "id": "20260214",
+      "date": "2026-02-14T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20260214?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2026-02-14",
+      "parameters": {
+        "date": "2026-02-14"
+      }
+    },
+    {
+      "id": "20260215",
+      "date": "2026-02-15T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20260215?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2026-02-15",
+      "parameters": {
+        "date": "2026-02-15"
+      }
+    },
+    {
+      "id": "20260216",
+      "date": "2026-02-16T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20260216?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2026-02-16",
+      "parameters": {
+        "date": "2026-02-16"
+      }
+    },
+    {
+      "id": "20260217",
+      "date": "2026-02-17T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20260217?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2026-02-17",
+      "parameters": {
+        "date": "2026-02-17"
+      }
+    },
+    {
+      "id": "20260218",
+      "date": "2026-02-18T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20260218?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2026-02-18",
+      "parameters": {
+        "date": "2026-02-18"
+      }
+    },
+    {
+      "id": "20260219",
+      "date": "2026-02-19T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20260219?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2026-02-19",
+      "parameters": {
+        "date": "2026-02-19"
+      }
+    },
+    {
+      "id": "20260220",
+      "date": "2026-02-20T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20260220?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2026-02-20",
+      "parameters": {
+        "date": "2026-02-20"
+      }
+    },
+    {
+      "id": "20260221",
+      "date": "2026-02-21T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20260221?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2026-02-21",
+      "parameters": {
+        "date": "2026-02-21"
+      }
+    },
+    {
+      "id": "20260222",
+      "date": "2026-02-22T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20260222?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2026-02-22",
+      "parameters": {
+        "date": "2026-02-22"
+      }
+    },
+    {
+      "id": "20260223",
+      "date": "2026-02-23T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20260223?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2026-02-23",
+      "parameters": {
+        "date": "2026-02-23"
+      }
+    },
+    {
+      "id": "20260224",
+      "date": "2026-02-24T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20260224?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2026-02-24",
+      "parameters": {
+        "date": "2026-02-24"
+      }
+    },
+    {
+      "id": "20260225",
+      "date": "2026-02-25T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20260225?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2026-02-25",
+      "parameters": {
+        "date": "2026-02-25"
+      }
+    },
+    {
+      "id": "20260226",
+      "date": "2026-02-26T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20260226?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2026-02-26",
+      "parameters": {
+        "date": "2026-02-26"
+      }
+    },
+    {
+      "id": "20260227",
+      "date": "2026-02-27T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20260227?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2026-02-27",
+      "parameters": {
+        "date": "2026-02-27"
+      }
+    },
+    {
+      "id": "20260228",
+      "date": "2026-02-28T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20260228?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2026-02-28",
+      "parameters": {
+        "date": "2026-02-28"
+      }
+    },
+    {
+      "id": "20260301",
+      "date": "2026-03-01T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20260301?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2026-03-01",
+      "parameters": {
+        "date": "2026-03-01"
+      }
+    },
+    {
+      "id": "20260302",
+      "date": "2026-03-02T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20260302?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2026-03-02",
+      "parameters": {
+        "date": "2026-03-02"
+      }
+    },
+    {
+      "id": "20260303",
+      "date": "2026-03-03T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20260303?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2026-03-03",
+      "parameters": {
+        "date": "2026-03-03"
+      }
+    },
+    {
+      "id": "20260304",
+      "date": "2026-03-04T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20260304?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2026-03-04",
+      "parameters": {
+        "date": "2026-03-04"
+      }
+    },
+    {
+      "id": "20260305",
+      "date": "2026-03-05T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20260305?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2026-03-05",
+      "parameters": {
+        "date": "2026-03-05"
+      }
+    },
+    {
+      "id": "20260306",
+      "date": "2026-03-06T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20260306?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2026-03-06",
+      "parameters": {
+        "date": "2026-03-06"
+      }
+    },
+    {
+      "id": "20260307",
+      "date": "2026-03-07T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20260307?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2026-03-07",
+      "parameters": {
+        "date": "2026-03-07"
+      }
+    },
+    {
+      "id": "20260308",
+      "date": "2026-03-08T05:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20260308?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2026-03-08",
+      "parameters": {
+        "date": "2026-03-08"
+      }
+    },
+    {
+      "id": "20260309",
+      "date": "2026-03-09T04:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20260309?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2026-03-09",
+      "parameters": {
+        "date": "2026-03-09"
+      }
+    },
+    {
+      "id": "20260310",
+      "date": "2026-03-10T04:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20260310?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2026-03-10",
+      "parameters": {
+        "date": "2026-03-10"
+      }
+    },
+    {
+      "id": "20260311",
+      "date": "2026-03-11T04:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20260311?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2026-03-11",
+      "parameters": {
+        "date": "2026-03-11"
+      }
+    },
+    {
+      "id": "20260312",
+      "date": "2026-03-12T04:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20260312?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2026-03-12",
+      "parameters": {
+        "date": "2026-03-12"
+      }
+    },
+    {
+      "id": "20260313",
+      "date": "2026-03-13T04:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20260313?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2026-03-13",
+      "parameters": {
+        "date": "2026-03-13"
+      }
+    },
+    {
+      "id": "20260314",
+      "date": "2026-03-14T04:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20260314?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2026-03-14",
+      "parameters": {
+        "date": "2026-03-14"
+      }
+    },
+    {
+      "id": "20260315",
+      "date": "2026-03-15T04:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20260315?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2026-03-15",
+      "parameters": {
+        "date": "2026-03-15"
+      }
+    },
+    {
+      "id": "20260317",
+      "date": "2026-03-17T04:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20260317?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2026-03-17",
+      "parameters": {
+        "date": "2026-03-17"
+      }
+    },
+    {
+      "id": "20260318",
+      "date": "2026-03-18T04:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20260318?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2026-03-18",
+      "parameters": {
+        "date": "2026-03-18"
+      }
+    },
+    {
+      "id": "20260319",
+      "date": "2026-03-19T04:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20260319?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2026-03-19",
+      "parameters": {
+        "date": "2026-03-19"
+      }
+    },
+    {
+      "id": "20260320",
+      "date": "2026-03-20T04:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20260320?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2026-03-20",
+      "parameters": {
+        "date": "2026-03-20"
+      }
+    },
+    {
+      "id": "20260321",
+      "date": "2026-03-21T04:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20260321?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2026-03-21",
+      "parameters": {
+        "date": "2026-03-21"
+      }
+    },
+    {
+      "id": "20260322",
+      "date": "2026-03-22T04:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20260322?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2026-03-22",
+      "parameters": {
+        "date": "2026-03-22"
+      }
+    },
+    {
+      "id": "20260326",
+      "date": "2026-03-26T04:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20260326?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2026-03-26",
+      "parameters": {
+        "date": "2026-03-26"
+      }
+    },
+    {
+      "id": "20260327",
+      "date": "2026-03-27T04:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20260327?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2026-03-27",
+      "parameters": {
+        "date": "2026-03-27"
+      }
+    },
+    {
+      "id": "20260328",
+      "date": "2026-03-28T04:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20260328?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2026-03-28",
+      "parameters": {
+        "date": "2026-03-28"
+      }
+    },
+    {
+      "id": "20260329",
+      "date": "2026-03-29T04:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20260329?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2026-03-29",
+      "parameters": {
+        "date": "2026-03-29"
+      }
+    },
+    {
+      "id": "20260401",
+      "date": "2026-04-01T04:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20260401?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2026-04-01",
+      "parameters": {
+        "date": "2026-04-01"
+      }
+    },
+    {
+      "id": "20260402",
+      "date": "2026-04-02T04:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20260402?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2026-04-02",
+      "parameters": {
+        "date": "2026-04-02"
+      }
+    },
+    {
+      "id": "20260404",
+      "date": "2026-04-04T04:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20260404?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2026-04-04",
+      "parameters": {
+        "date": "2026-04-04"
+      }
+    },
+    {
+      "id": "20260405",
+      "date": "2026-04-05T04:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20260405?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2026-04-05",
+      "parameters": {
+        "date": "2026-04-05"
+      }
+    },
+    {
+      "id": "20260406",
+      "date": "2026-04-06T04:00:00Z",
+      "uri": "https://api.foxsports.com/bifrost/v1/cbk/league/scores-segment/20260406?groupId=-4",
+      "webUrl": "/college-basketball/scores?groupId=-4&date=2026-04-06",
+      "parameters": {
+        "date": "2026-04-06"
+      }
+    }
+  ],
+  "currentSelectionId": "20260406",
+  "hideSelections": false,
+  "hideRecords": false,
+  "hideLeague": true
+}

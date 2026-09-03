@@ -1,0 +1,391 @@
+{
+  "title": "SPORTS",
+  "groups": [
+    {
+      "header": {
+        "title": "SPORTS"
+      },
+      "items": [
+        {
+          "title": "NFL",
+          "logoUrl": "https://b.fssta.com/uploads/application/leagues/logos/NFL.vresize.200.200.medium.0.png",
+          "imageType": "image-logo",
+          "imageAltText": "National Football League",
+          "uri": "https://api.foxsports.com/bifrost/v1/explore/browse/sports/nfl",
+          "webUrl": "/nfl",
+          "template": "default"
+        },
+        {
+          "title": "NCAA FB",
+          "logoUrl": "https://b.fssta.com/uploads/application/leagues/logos/NCAAFootball.vresize.200.200.medium.2.png",
+          "imageType": "image-logo",
+          "imageAltText": "College Football",
+          "uri": "https://api.foxsports.com/bifrost/v1/explore/browse/sports/cfb",
+          "webUrl": "/college-football",
+          "template": "default",
+          "alternateLogoUrl": "https://b.fssta.com/uploads/application/leagues/logos/NCAAFootball.vresize.200.200.medium.2.png"
+        },
+        {
+          "title": "MLB",
+          "logoUrl": "https://b.fssta.com/uploads/application/leagues/logos/MLB.vresize.200.200.medium.0.png",
+          "imageType": "image-logo",
+          "imageAltText": "Major League Baseball",
+          "uri": "https://api.foxsports.com/bifrost/v1/explore/browse/sports/mlb",
+          "webUrl": "/mlb",
+          "template": "default"
+        },
+        {
+          "title": "NBA",
+          "logoUrl": "https://b.fssta.com/uploads/application/leagues/logos/NBA.vresize.200.200.medium.0.png",
+          "imageType": "image-logo",
+          "imageAltText": "National Basketball Association",
+          "uri": "https://api.foxsports.com/bifrost/v1/explore/browse/sports/nba",
+          "webUrl": "/nba",
+          "template": "default"
+        },
+        {
+          "title": "NCAA BK",
+          "logoUrl": "https://b.fssta.com/uploads/application/leagues/logos/NCAABasketball.vresize.200.200.medium.4.png",
+          "imageType": "image-logo",
+          "imageAltText": "College Basketball",
+          "uri": "https://api.foxsports.com/bifrost/v1/explore/browse/sports/cbk",
+          "webUrl": "/college-basketball",
+          "template": "default",
+          "alternateLogoUrl": "https://b.fssta.com/uploads/application/leagues/logos/NCAABasketball.vresize.200.200.medium.4.png"
+        },
+        {
+          "title": "NASCAR",
+          "logoUrl": "https://b.fssta.com/uploads/application/sports/logos/AutoRacing.vresize.200.200.medium.0.png",
+          "imageType": "image-logo",
+          "imageAltText": "NASCAR Cup Series",
+          "uri": "https://api.foxsports.com/bifrost/v1/explore/browse/sports/nascar",
+          "webUrl": "/nascar/cup-series",
+          "template": "default"
+        },
+        {
+          "title": "Soccer",
+          "logoUrl": "https://b.fssta.com/uploads/application/sports/logos/soccer.vresize.200.200.medium.1.png",
+          "imageType": "image-logo",
+          "imageAltText": "Popular",
+          "uri": "https://api.foxsports.com/bifrost/v1/explore/browse/sports/soccer",
+          "webUrl": "/soccer/mls",
+          "template": "default"
+        },
+        {
+          "title": "UFL",
+          "logoUrl": "https://b.fssta.com/uploads/application/leagues/logos/UFL.vresize.200.200.medium.1.png",
+          "imageType": "image-logo",
+          "imageAltText": "United Football League",
+          "uri": "https://api.foxsports.com/bifrost/v1/explore/browse/sports/ufl",
+          "webUrl": "/ufl",
+          "template": "default",
+          "alternateLogoUrl": "https://b.fssta.com/uploads/application/leagues/logos/UFL-alternate.vresize.200.200.medium.1.png"
+        },
+        {
+          "title": "NCAAW BK",
+          "logoUrl": "https://b.fssta.com/uploads/application/leagues/logos/NCAAWomenBasketball.vresize.200.200.medium.4.png",
+          "imageType": "image-logo",
+          "imageAltText": "Women's College Basketball",
+          "uri": "https://api.foxsports.com/bifrost/v1/explore/browse/sports/wcbk",
+          "webUrl": "/womens-college-basketball",
+          "template": "default",
+          "alternateLogoUrl": "https://b.fssta.com/uploads/application/leagues/logos/NCAAWomenBasketball.vresize.200.200.medium.4.png"
+        },
+        {
+          "title": "NHL",
+          "logoUrl": "https://b.fssta.com/uploads/application/leagues/logos/NHL.vresize.200.200.medium.0.png",
+          "imageType": "image-logo",
+          "imageAltText": "National Hockey League",
+          "uri": "https://api.foxsports.com/bifrost/v1/explore/browse/sports/nhl",
+          "webUrl": "/nhl",
+          "template": "default"
+        },
+        {
+          "title": "Golf",
+          "logoUrl": "https://b.fssta.com/uploads/application/sports/logos/golf.vresize.200.200.medium.1.png",
+          "imageType": "image-logo",
+          "imageAltText": "PGA Tour",
+          "uri": "https://api.foxsports.com/bifrost/v1/explore/browse/sports/golf",
+          "webUrl": "/golf/pga-tour",
+          "template": "default"
+        },
+        {
+          "title": "Motor Sports",
+          "logoUrl": "https://b.fssta.com/uploads/application/sports/logos/auto-racing.vresize.200.200.medium.1.png",
+          "imageType": "image-logo",
+          "imageAltText": "Motor Sports",
+          "uri": "https://api.foxsports.com/bifrost/v1/explore/browse/sports/motor",
+          "webUrl": "/motor/formula-1",
+          "template": "default"
+        },
+        {
+          "title": "WNBA",
+          "logoUrl": "https://b.fssta.com/uploads/application/leagues/logos/WNBA.vresize.200.200.medium.0.png",
+          "imageType": "image-logo",
+          "imageAltText": "Women's National Basketball Association",
+          "uri": "https://api.foxsports.com/bifrost/v1/explore/browse/sports/wnba",
+          "webUrl": "/wnba",
+          "template": "default",
+          "alternateLogoUrl": "https://b.fssta.com/uploads/application/leagues/logos/WNBA-alternate.vresize.200.200.medium.0.png"
+        },
+        {
+          "title": "Premier Boxing Champions",
+          "logoUrl": "https://b.fssta.com/uploads/application/leagues/logos/PBC.vresize.200.200.medium.0.png",
+          "imageType": "image-logo",
+          "imageAltText": "Professional Boxing",
+          "entityLink": {
+            "title": "PREMIER BOXING CHAMPIONS",
+            "webUrl": "/boxing",
+            "color": "1, 37, 37, 37",
+            "imageUrl": "https://b.fssta.com/uploads/application/boxing/SportLogo_Boxing.vresize.200.200.medium.0.png",
+            "imageType": "image-logo",
+            "imageAltText": "Professional Boxing",
+            "contentUri": "fighting/boxing/league/1",
+            "contentType": "league",
+            "layout": {
+              "path": "/layouts?type=layout&subtype=boxingLayout",
+              "tokens": {
+                "contentUri": "fighting/boxing/league/1"
+              }
+            },
+            "analyticsName": "professional-boxing",
+            "analyticsSport": "boxing",
+            "type": "entity"
+          },
+          "webUrl": "/boxing",
+          "template": "default",
+          "alternateLogoUrl": "https://b.fssta.com/uploads/application/boxing/SportLogo_Boxing.vresize.200.200.medium.0.png"
+        },
+        {
+          "title": "WWE",
+          "logoUrl": "https://b.fssta.com/uploads/application/leagues/logos/WWE.vresize.200.200.medium.0.png",
+          "imageType": "image-logo",
+          "imageAltText": "World Wrestling Entertainment",
+          "entityLink": {
+            "title": "WWE",
+            "webUrl": "/wwe",
+            "color": "1, 30, 30, 30",
+            "imageUrl": "https://b.fssta.com/uploads/application/leagues/logos/WWE-alternate.vresize.200.200.medium.0.png",
+            "imageType": "image-logo",
+            "imageAltText": "World Wrestling Entertainment",
+            "contentUri": "fighting/wwe/league/1",
+            "contentType": "league",
+            "layout": {
+              "path": "/layouts?type=layout&subtype=wweLayout",
+              "tokens": {
+                "contentUri": "fighting/wwe/league/1"
+              }
+            },
+            "analyticsName": "world-wrestling-entertainment",
+            "analyticsSport": "wwe",
+            "type": "entity"
+          },
+          "webUrl": "/wwe",
+          "template": "default",
+          "alternateLogoUrl": "https://b.fssta.com/uploads/application/leagues/logos/WWE-alternate.vresize.200.200.medium.0.png"
+        },
+        {
+          "title": "UFC",
+          "logoUrl": "https://b.fssta.com/uploads/application/leagues/logos/UFC.vresize.200.200.medium.0.png",
+          "imageType": "image-logo",
+          "imageAltText": "Ultimate Fighting Championship",
+          "entityLink": {
+            "title": "ULTIMATE FIGHTING CHAMPIONSHIP",
+            "webUrl": "/ufc",
+            "color": "1, 19, 18, 23",
+            "imageUrl": "https://b.fssta.com/uploads/application/leagues/logos/UFC.vresize.200.200.medium.0.png",
+            "imageType": "image-logo",
+            "imageAltText": "Ultimate Fighting Championship",
+            "contentUri": "fighting/ufc/league/1",
+            "contentType": "league",
+            "layout": {
+              "path": "/layouts?type=layout&subtype=ufcLayout",
+              "tokens": {
+                "contentUri": "fighting/ufc/league/1"
+              }
+            },
+            "analyticsName": "ultimate-fighting-championship",
+            "analyticsSport": "ufc",
+            "type": "entity"
+          },
+          "webUrl": "/ufc",
+          "template": "default"
+        },
+        {
+          "title": "Tennis",
+          "logoUrl": "https://b.fssta.com/uploads/application/sports/logos/tennis.vresize.200.200.medium.1.png",
+          "imageType": "image-logo",
+          "imageAltText": "Tennis",
+          "uri": "https://api.foxsports.com/bifrost/v1/explore/browse/sports/tennis",
+          "webUrl": "/tennis/atp",
+          "template": "default"
+        },
+        {
+          "title": "Professional Bowlers Association",
+          "logoUrl": "https://b.fssta.com/uploads/application/leagues/logos/PBA.vresize.200.200.medium.0.png",
+          "imageType": "image-logo",
+          "imageAltText": "Professional Bowlers Association",
+          "entityLink": {
+            "title": "PROFESSIONAL BOWLERS ASSOCIATION",
+            "shortTitle": "PBA",
+            "webUrl": "/bowling",
+            "color": "1, 19, 19, 19",
+            "imageUrl": "https://b.fssta.com/uploads/application/leagues/logos/PBA-alternate.vresize.200.200.medium.0.png",
+            "imageType": "image-logo",
+            "imageAltText": "Professional Bowlers Association",
+            "contentUri": "bowling/pba/league/1",
+            "contentType": "league",
+            "layout": {
+              "path": "/layouts?type=layout&subtype=bowlingLayout",
+              "tokens": {
+                "contentUri": "bowling/pba/league/1"
+              }
+            },
+            "analyticsName": "professional-bowlers-association",
+            "analyticsSport": "pba",
+            "type": "entity"
+          },
+          "webUrl": "/bowling",
+          "template": "default"
+        },
+        {
+          "title": "Horse Racing",
+          "logoUrl": "https://b.fssta.com/uploads/application/sports/logos/horse-racing.vresize.200.200.medium.1.png",
+          "imageType": "image-logo",
+          "imageAltText": "Horse Racing",
+          "entityLink": {
+            "title": "HORSE RACING",
+            "shortTitle": "HORSE RACING",
+            "webUrl": "/horse-racing",
+            "color": "1, 0, 0, 0",
+            "imageUrl": "https://b.fssta.com/uploads/application/sports/logos/horse-racing.vresize.200.200.medium.1.png",
+            "imageType": "image-logo",
+            "imageAltText": "Horse Racing",
+            "contentUri": "other/horseracing/league/1",
+            "contentType": "league",
+            "layout": {
+              "path": "/layouts?type=layout&subtype=horseracingLayout",
+              "tokens": {
+                "contentUri": "other/horseracing/league/1"
+              }
+            },
+            "analyticsName": "horse-racing",
+            "analyticsSport": "horse-racing",
+            "type": "entity"
+          },
+          "webUrl": "/horse-racing",
+          "template": "default"
+        },
+        {
+          "title": "Westminster Kennel Club",
+          "logoUrl": "https://b.fssta.com/uploads/application/leagues/logos/WestminsterKennelClub.vresize.200.200.medium.1.png",
+          "imageType": "image-logo",
+          "imageAltText": "Westminster Kennel Club",
+          "entityLink": {
+            "title": "WESTMINSTER KENNEL CLUB",
+            "webUrl": "/westminster-kennel-club",
+            "color": "1, 71, 36, 104",
+            "imageUrl": "https://b.fssta.com/uploads/application/leagues/logos/WestminsterKennelClub.vresize.200.200.medium.1.png",
+            "imageType": "image-logo",
+            "imageAltText": "Westminster Kennel Club",
+            "contentUri": "dogshow/wkc/league/1",
+            "contentType": "league",
+            "layout": {
+              "path": "/layouts?type=layout&subtype=westminsterkennelclubLayout",
+              "tokens": {
+                "contentUri": "dogshow/wkc/league/1"
+              }
+            },
+            "analyticsName": "westminster-kennel-club",
+            "analyticsSport": "wkc",
+            "type": "entity"
+          },
+          "webUrl": "/westminster-kennel-club",
+          "template": "default"
+        },
+        {
+          "title": "FIBA",
+          "logoUrl": "https://b.fssta.com/uploads/application/leagues/logos/FIBA.vresize.200.200.medium.1.png",
+          "imageType": "image-logo",
+          "imageAltText": "International Basketball Federation",
+          "entityLink": {
+            "title": "INTERNATIONAL BASKETBALL FEDERATION",
+            "shortTitle": "FIBA",
+            "webUrl": "/fiba",
+            "color": "1, 0, 0, 0",
+            "imageUrl": "https://b.fssta.com/uploads/application/leagues/logos/FIBA-alternate.vresize.200.200.medium.0.png",
+            "imageType": "image-logo",
+            "imageAltText": "International Basketball Federation",
+            "contentUri": "basketball/fiba/league/1",
+            "contentType": "league",
+            "layout": {
+              "path": "/layouts?type=layout&subtype=fibaLayout",
+              "tokens": {
+                "contentUri": "basketball/fiba/league/1"
+              }
+            },
+            "analyticsSport": "fiba",
+            "type": "entity"
+          },
+          "webUrl": "/fiba",
+          "template": "default",
+          "alternateLogoUrl": "https://b.fssta.com/uploads/application/leagues/logos/FIBA-alternate.vresize.200.200.medium.0.png"
+        },
+        {
+          "title": "Olympics",
+          "logoUrl": "https://b.fssta.com/uploads/application/leagues/logos/Olympics.vresize.200.200.medium.0.png",
+          "imageType": "image-logo",
+          "imageAltText": "Olympics",
+          "uri": "https://api.foxsports.com/bifrost/v1/explore/browse/sports/olympics",
+          "webUrl": "/summer-olympics",
+          "template": "default"
+        },
+        {
+          "title": "World Baseball Classic",
+          "logoUrl": "https://b.fssta.com/uploads/application/leagues/logos/World-Baseball-Classic.vresize.200.200.medium.1.png",
+          "imageType": "image-logo",
+          "imageAltText": "World Baseball Classic",
+          "uri": "https://api.foxsports.com/bifrost/v1/explore/browse/sports/wbc",
+          "webUrl": "/world-baseball-classic",
+          "template": "default"
+        },
+        {
+          "title": "NRL",
+          "logoUrl": "https://b.fssta.com/uploads/application/rugby/competition-logos/nrl.vresize.200.200.medium.1.png",
+          "imageType": "image-logo",
+          "imageAltText": "National Rugby League Premiership",
+          "uri": "https://api.foxsports.com/bifrost/v1/explore/browse/sports/rugby/group/1",
+          "webUrl": "/rugby/nrl",
+          "template": "default"
+        },
+        {
+          "title": "The Basketball Tournament",
+          "logoUrl": "https://b.fssta.com/uploads/application/leagues/logos/TBT.vresize.200.200.medium.0.png",
+          "imageType": "image-logo",
+          "imageAltText": "The Basketball Tournament",
+          "entityLink": {
+            "title": "THE BASKETBALL TOURNAMENT",
+            "shortTitle": "TBT",
+            "webUrl": "/tbt",
+            "color": "1, 96, 119, 132",
+            "imageUrl": "https://b.fssta.com/uploads/application/leagues/logos/TBT-alternate.vresize.200.200.medium.0.png",
+            "imageType": "image-logo",
+            "imageAltText": "The Basketball Tournament",
+            "contentUri": "basketball/tbt/league/4",
+            "contentType": "league",
+            "layout": {
+              "path": "/layouts?type=layout&subtype=thebasketballtournamentLayout",
+              "tokens": {
+                "contentUri": "basketball/tbt/league/4"
+              }
+            },
+            "analyticsSport": "tbt",
+            "type": "entity"
+          },
+          "webUrl": "/tbt",
+          "template": "default"
+        }
+      ]
+    }
+  ]
+}

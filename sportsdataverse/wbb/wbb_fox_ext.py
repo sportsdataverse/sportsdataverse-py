@@ -17,6 +17,7 @@ import polars as pl
 
 from sportsdataverse._fox_layout import (
     fox_get,
+    register_league_endpoints,
     frame,
     parse_boxscore,
     parse_league_leaders,
@@ -682,3 +683,8 @@ def fox_wbb_teams_all(
                 seen.add(r["fox_team_id"])
                 rows.append(r)
     return _teams_frame(rows, return_as_pandas)
+
+
+# The 17 shared Fox league / event / team endpoints, bound to this league's
+# sport slug. One table in sportsdataverse._fox_layout drives every league.
+__all__ += register_league_endpoints(_SPORT, "wbb", globals())

@@ -1,0 +1,51 @@
+columns:
+- description: ASA game id (base62 string; Utf8 join key).
+  name: game_id
+  type: character
+- description: Kickoff timestamp (UTC, ISO 8601).
+  name: date_time_utc
+  type: character
+- description: FK -> Team (home side).
+  name: home_team_id
+  type: character
+- description: Home goals scored.
+  name: home_goals
+  type: integer
+- description: Home expected goals (team model).
+  name: home_team_xgoals
+  type: numeric
+- description: Home expected goals (player-shot model).
+  name: home_player_xgoals
+  type: numeric
+- description: FK -> Team (away side).
+  name: away_team_id
+  type: character
+- description: Away goals scored.
+  name: away_goals
+  type: integer
+- description: Away expected goals (team model).
+  name: away_team_xgoals
+  type: numeric
+- description: Away expected goals (player-shot model).
+  name: away_player_xgoals
+  type: numeric
+- description: goals_for - goals_against.
+  name: goal_difference
+  type: integer
+- description: Home minus away team xGoals.
+  name: team_xgoal_difference
+  type: numeric
+- description: Home minus away player xGoals.
+  name: player_xgoal_difference
+  type: numeric
+- description: Final goal margin (home perspective).
+  name: final_score_difference
+  type: integer
+- description: Home expected points from the match.
+  name: home_xpoints
+  type: numeric
+- description: Away expected points from the match.
+  name: away_xpoints
+  type: numeric
+kind: dataframe
+schema: games_xgoals

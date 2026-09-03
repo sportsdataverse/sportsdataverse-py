@@ -1,0 +1,21 @@
+columns:
+- description: Composite Competition id (Utf8 join key).
+  name: competition_id
+  type: character
+- description: Underlying StatsPerform/Opta provider id (e.g. `opta:...`).
+  name: provider_id
+  type: character
+- description: Stage display name.
+  name: name
+  type: character
+- description: Official team name.
+  name: official_name
+  type: character
+- description: Short team name.
+  name: short_name
+  type: character
+- description: 3-letter team code.
+  name: acronym_name
+  type: character
+kind: dataframe
+schema: competitions

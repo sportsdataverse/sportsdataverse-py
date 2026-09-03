@@ -1,0 +1,9 @@
+columns:
+- description: ''
+  name: league_seasons
+  type: character
+- description: ''
+  name: current_season
+  type: integer
+kind: dataframe
+schema: racing_schedule

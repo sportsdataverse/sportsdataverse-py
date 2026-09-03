@@ -1,0 +1,276 @@
+{
+  "match_information": {
+    "competition_id": "MLS-COM-000001",
+    "competition_name": "Major League Soccer - Regular Season",
+    "away_team_goals": 0,
+    "home_team_goals": 0,
+    "kickoff_time": "2026-07-16T23:45:44.259Z",
+    "match_day": 16,
+    "match_id": "MLS-MAT-0009H8",
+    "match_title": "CF Montréal:Toronto FC",
+    "planned_kickoff_time": "2026-07-16T23:30:00Z",
+    "result": "0:0",
+    "season": 2026,
+    "season_id": "MLS-SEA-0001KA",
+    "competition_type": "League",
+    "section_name": "TOTAL",
+    "competition_label": "MLS Regular Season 2026",
+    "series_type": "",
+    "total_time_first_half": 2756560,
+    "total_time_second_half": 2956400,
+    "playing_time_first_half": 1722840,
+    "playing_time_second_half": 1845120,
+    "total_time_first_half_extra": 0,
+    "total_time_second_half_extra": 0,
+    "total_time_penalty": 0,
+    "playing_time_penalty": 0,
+    "other_information": "",
+    "match_type": "MATCHWEEK 16",
+    "match_scheduled": true,
+    "date_quality": "",
+    "end_date": "2026-07-18T00:00:00Z",
+    "sub_league": "EASTERN CONFERENCE",
+    "group": "",
+    "competition_name_french": "MLS - Saison régulière",
+    "match_status": "finalWhistle",
+    "minute_of_play": "90+5"
+  },
+  "environment": {
+    "air_humidity": 36,
+    "air_pressure": 1010,
+    "country": "USA",
+    "floodlight": "off",
+    "pitch_erosion": "none",
+    "pitch_x": 110.12,
+    "pitch_y": 68.45,
+    "precipitation": "none",
+    "roof": "open",
+    "sold_out": false,
+    "stadium_address": "Sherbrooke St E 4750, Montréal, QC",
+    "stadium_capacity": 20341,
+    "stadium_id": "MLS-STA-000006",
+    "stadium_name": "Stade Saputo",
+    "temperature": 22,
+    "number_of_spectators": 17707,
+    "house_number": "4750",
+    "street": "Sherbrooke St E",
+    "city": "Montréal, QC"
+  },
+  "home": {
+    "initial_line_up": "",
+    "latest_line_up": "4-3-3 with 6",
+    "player_shirt_main_color": "#004b98",
+    "player_shirt_number_color": "#f5f4f3",
+    "player_shirt_secondary_color": "#191917",
+    "player_shirt_type": "Home jersey",
+    "players": [
+      {
+        "first_name": "Dani",
+        "last_name": "Pereira",
+        "person_id": "MLS-OBJ-00001I",
+        "playing_position": "CDM",
+        "shirt_number": 7,
+        "short_name": "D. Pereira",
+        "starting": "false",
+        "team_leader": false,
+        "is_on_field": "false"
+      },
+      {
+        "first_name": "Sébastian",
+        "last_name": "Breza",
+        "person_id": "MLS-OBJ-00001Z",
+        "playing_position": "",
+        "shirt_number": 1,
+        "short_name": "S. Breza",
+        "starting": "false",
+        "team_leader": false,
+        "is_on_field": "false"
+      },
+      {
+        "first_name": "Samuel",
+        "last_name": "Piette",
+        "person_id": "MLS-OBJ-00002D",
+        "playing_position": "CDM",
+        "shirt_number": 6,
+        "short_name": "S. Piette",
+        "starting": "true",
+        "team_leader": true,
+        "is_on_field": "true"
+      }
+    ],
+    "role": "home",
+    "team_id": "MLS-CLU-000006",
+    "team_name": "CF Montréal",
+    "team_short_name": "Montréal",
+    "team_three_letter_code": "MTL",
+    "trainer_staff": [
+      {
+        "first_name": "Serge",
+        "last_name": "Dinkota",
+        "person_id": "MLS-OBJ-0005LB",
+        "role": "assistantHeadcoach",
+        "short_name": "S. Dinkota"
+      },
+      {
+        "first_name": "Philippe",
+        "last_name": "Eullaffroy",
+        "person_id": "MLS-OBJ-000CIC",
+        "role": "headcoach",
+        "short_name": "P. Eullaffroy"
+      },
+      {
+        "first_name": "Francesco",
+        "last_name": "Morara",
+        "person_id": "MLS-OBJ-000CIE",
+        "role": "assistantHeadcoach",
+        "short_name": "F. Morara"
+      }
+    ],
+    "official_staff": null
+  },
+  "away": {
+    "initial_line_up": "",
+    "latest_line_up": "5-3-2",
+    "player_shirt_main_color": "#ffffff",
+    "player_shirt_number_color": "#83262e",
+    "player_shirt_secondary_color": "#83262e",
+    "player_shirt_type": "Away jersey",
+    "players": [
+      {
+        "first_name": "Djordje",
+        "last_name": "Mihailovic",
+        "person_id": "MLS-OBJ-00002F",
+        "playing_position": "LS",
+        "shirt_number": 10,
+        "short_name": "D. Mihailovic",
+        "starting": "false",
+        "team_leader": false,
+        "is_on_field": "false"
+      },
+      {
+        "first_name": "William",
+        "last_name": "Yarbrough",
+        "person_id": "MLS-OBJ-00004Q",
+        "playing_position": "",
+        "shirt_number": 23,
+        "short_name": "W. Yarbrough",
+        "starting": "false",
+        "team_leader": false,
+        "is_on_field": "false"
+      },
+      {
+        "first_name": "Derrick",
+        "last_name": "Etienne Jr.",
+        "person_id": "MLS-OBJ-000065",
+        "playing_position": "LS",
+        "shirt_number": 11,
+        "short_name": "D. Etienne Jr.",
+        "starting": "true",
+        "team_leader": false,
+        "is_on_field": "true"
+      }
+    ],
+    "role": "away",
+    "team_id": "MLS-CLU-00000M",
+    "team_name": "Toronto FC",
+    "team_short_name": "Toronto",
+    "team_three_letter_code": "TOR",
+    "trainer_staff": [
+      {
+        "first_name": "Steven",
+        "last_name": "Beitashour",
+        "person_id": "MLS-OBJ-000050",
+        "role": "assistantHeadcoach",
+        "short_name": "S. Beitashour"
+      },
+      {
+        "first_name": "Robin",
+        "last_name": "Fraser",
+        "person_id": "MLS-OBJ-00005I",
+        "role": "headcoach",
+        "short_name": "R. Fraser"
+      },
+      {
+        "first_name": "Wolde",
+        "last_name": "Harris",
+        "person_id": "MLS-OBJ-00005J",
+        "role": "assistantHeadcoach",
+        "short_name": "W. Harris"
+      }
+    ],
+    "official_staff": null
+  },
+  "referees": [
+    {
+      "first_name": "Ben",
+      "last_name": "Pilgrim",
+      "person_id": "MLS-OBJ-0001F4",
+      "role": "secondAssistant",
+      "short_name": "B. Pilgrim"
+    },
+    {
+      "first_name": "Mike",
+      "last_name": "Kampmeinert",
+      "person_id": "MLS-OBJ-0001HD",
+      "role": "videoRefereeAssistant",
+      "short_name": "M. Kampmeinert"
+    },
+    {
+      "first_name": "Corey",
+      "last_name": "Rockwell",
+      "person_id": "MLS-OBJ-0001HN",
+      "role": "firstAssistant",
+      "short_name": "C. Rockwell"
+    }
+  ],
+  "last_matches": [
+    {
+      "match_date": "2025-08-30",
+      "home_team_id": "MLS-CLU-00000M",
+      "home_team_name": "Toronto FC",
+      "home_team_short_name": "Toronto",
+      "home_team_three_letter_code": "TOR",
+      "away_team_id": "MLS-CLU-000006",
+      "away_team_name": "CF Montréal",
+      "away_team_short_name": "Montréal",
+      "away_team_three_letter_code": "MTL",
+      "home_team_goals": 1,
+      "away_team_goals": 1,
+      "match_id": "MLS-MAT-000657",
+      "season_id": "MLS-SEA-0001K9",
+      "competition_id": "MLS-COM-000001"
+    },
+    {
+      "match_date": "2025-05-17",
+      "home_team_id": "MLS-CLU-000006",
+      "home_team_name": "CF Montréal",
+      "home_team_short_name": "Montréal",
+      "home_team_three_letter_code": "MTL",
+      "away_team_id": "MLS-CLU-00000M",
+      "away_team_name": "Toronto FC",
+      "away_team_short_name": "Toronto",
+      "away_team_three_letter_code": "TOR",
+      "home_team_goals": 1,
+      "away_team_goals": 6,
+      "match_id": "MLS-MAT-0005YV",
+      "season_id": "MLS-SEA-0001K9",
+      "competition_id": "MLS-COM-000001"
+    },
+    {
+      "match_date": "2025-04-30",
+      "home_team_id": "MLS-CLU-00000M",
+      "home_team_name": "Toronto FC",
+      "home_team_short_name": "Toronto",
+      "home_team_three_letter_code": "TOR",
+      "away_team_id": "MLS-CLU-000006",
+      "away_team_name": "CF Montréal",
+      "away_team_short_name": "Montréal",
+      "away_team_three_letter_code": "MTL",
+      "home_team_goals": 2,
+      "away_team_goals": 2,
+      "match_id": "MLS-MAT-0006NB",
+      "season_id": "MLS-SEA-0001K9",
+      "competition_id": "MLS-COM-00002V"
+    }
+  ]
+}

@@ -2078,6 +2078,91 @@ from sportsdataverse.nba import fox_nba_boxscore
 df = fox_nba_boxscore("...")
 ```
 
+### `fox_nba_event_matchup(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_nba_event_matchup}
+
+Fox Sports nba pregame team-stat comparison (one row per stat).
+
+Wraps `nba/event/{game_id}/matchup`.
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.nba import fox_nba_event_matchup
+df = fox_nba_event_matchup("...")
+```
+
+### `fox_nba_event_recap(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_nba_event_recap}
+
+Fox Sports nba postgame top performers (one row per player).
+
+Wraps `nba/event/{game_id}/recap`.
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.nba import fox_nba_event_recap
+df = fox_nba_event_recap("...")
+```
+
+### `fox_nba_event_standings(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_nba_event_standings}
+
+Fox Sports nba the two teams' standings context.
+
+Wraps `nba/event/{game_id}/standings`.
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.nba import fox_nba_event_standings
+df = fox_nba_event_standings("...")
+```
+
+### `fox_nba_league_conferences(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_nba_league_conferences}
+
+Fox Sports nba conference / group directory.
+
+Wraps `nba/league/conferences`.
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.nba import fox_nba_league_conferences
+df = fox_nba_league_conferences()
+```
+
+### `fox_nba_league_header(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_nba_league_header}
+
+Fox Sports nba league header (one row).
+
+Wraps `nba/league/header`.
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.nba import fox_nba_league_header
+df = fox_nba_league_header()
+```
+
 ### `fox_nba_league_leaders(category: 'str' = 'scoring', who: 'str' = 'player', page: 'int' = 0, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_nba_league_leaders}
 
 NBA statistical leaders (`stats-con`); who=player|team.
@@ -2101,6 +2186,125 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 ```python
 from sportsdataverse.nba import fox_nba_league_leaders
 df = fox_nba_league_leaders("scoring")
+```
+
+### `fox_nba_league_odds(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_nba_league_odds}
+
+Fox Sports nba league odds board (one row per team per game).
+
+Wraps `nba/league/odds`.
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.nba import fox_nba_league_odds
+df = fox_nba_league_odds()
+```
+
+### `fox_nba_league_player_news(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_nba_league_player_news}
+
+Fox Sports nba league-wide player news feed.
+
+Wraps `nba/league/playernews`.
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.nba import fox_nba_league_player_news
+df = fox_nba_league_player_news()
+```
+
+### `fox_nba_league_polls(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_nba_league_polls}
+
+Fox Sports nba rankings / polls rendered as standings tables.
+
+Wraps `nba/league/polls`.
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.nba import fox_nba_league_polls
+df = fox_nba_league_polls()
+```
+
+### `fox_nba_league_schedule(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_nba_league_schedule}
+
+Fox Sports nba league schedule nav selections.
+
+Wraps `nba/league/schedule`.
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.nba import fox_nba_league_schedule
+df = fox_nba_league_schedule()
+```
+
+### `fox_nba_league_scores(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_nba_league_scores}
+
+Fox Sports nba league scores nav selections.
+
+Wraps `nba/league/scores`.
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.nba import fox_nba_league_scores
+df = fox_nba_league_scores()
+```
+
+### `fox_nba_league_standings(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_nba_league_standings}
+
+Fox Sports nba league-wide standings tables.
+
+Wraps `nba/league/standings`.
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.nba import fox_nba_league_standings
+df = fox_nba_league_standings()
+```
+
+### `fox_nba_league_stat_leaders(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_nba_league_stat_leaders}
+
+Fox Sports nba league stats landing leaders.
+
+Wraps `nba/league/stats`.
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.nba import fox_nba_league_stat_leaders
+df = fox_nba_league_stat_leaders()
 ```
 
 ### `fox_nba_odds(game_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_nba_odds}
@@ -2149,6 +2353,57 @@ from sportsdataverse.nba import fox_nba_pbp
 df = fox_nba_pbp("...")
 ```
 
+### `fox_nba_scoreboard(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_nba_scoreboard}
+
+Fox Sports nba scoreboard nav selections (weeks / dates / groups).
+
+Wraps `nba/scoreboard/main`.
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.nba import fox_nba_scoreboard
+df = fox_nba_scoreboard()
+```
+
+### `fox_nba_scorechip(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_nba_scorechip}
+
+Fox Sports nba compact live score chip (raw dict -- live-only, uncaptured shape).
+
+Wraps `nba/scorechip/{chip_id}`.
+
+**Returns**
+
+The raw JSON `dict`.
+
+**Example**
+
+```python
+from sportsdataverse.nba import fox_nba_scorechip
+df = fox_nba_scorechip("nfl12345")
+```
+
+### `fox_nba_scores_segment(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_nba_scores_segment}
+
+Fox Sports nba one row per game in a scoreboard segment.
+
+Wraps `nba/league/scores-segment/{segment_id}`.
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.nba import fox_nba_scores_segment
+df = fox_nba_scores_segment("...")
+```
+
 ### `fox_nba_standings(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_nba_standings}
 
 NBA standings for a team's conference/division.
@@ -2195,6 +2450,23 @@ from sportsdataverse.nba import fox_nba_team_gamelog
 df = fox_nba_team_gamelog("...")
 ```
 
+### `fox_nba_team_header(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_nba_team_header}
+
+Fox Sports nba team header (one row).
+
+Wraps `nba/team/{team_id}/header`.
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.nba import fox_nba_team_header
+df = fox_nba_team_header("...")
+```
+
 ### `fox_nba_team_roster(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_nba_team_roster}
 
 NBA team roster (one row per player).
@@ -2239,6 +2511,23 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 ```python
 from sportsdataverse.nba import fox_nba_team_stats
 df = fox_nba_team_stats("...")
+```
+
+### `fox_nba_teamnav(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_nba_teamnav}
+
+Fox Sports nba team directory (one row per team).
+
+Wraps `nba/league/teamnav`.
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.nba import fox_nba_teamnav
+df = fox_nba_teamnav()
 ```
 
 ### `fox_nba_teams(team_id: 'Union[int, str]' = '1', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_nba_teams}

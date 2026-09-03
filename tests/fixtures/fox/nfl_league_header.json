@@ -1,0 +1,15 @@
+{
+  "template": "entity-header",
+  "title": "NATIONAL FOOTBALL LEAGUE",
+  "shortTitle": "NFL",
+  "color": "1, 8, 31, 87",
+  "logoUrl": "https://b.fssta.com/uploads/application/leagues/logos/NFL.vresize.200.200.medium.0.png",
+  "imageType": "image-logo",
+  "imageAltText": "National Football League",
+  "contentUri": "football/nfl/league/1",
+  "contentType": "league",
+  "hasFeature": [
+    "press",
+    "photosAndLogos"
+  ]
+}
