@@ -418,3 +418,43 @@ def test_cfb_pbp_sack_without_yardage_is_warn():
     by_rule = _findings_by_rule(definitional.run("cfb_pbp", frame, _pbp_ctx()))
     f = by_rule["sack_requires_yds_sacked"]
     assert f.severity is Severity.WARN and f.needs_judgment and f.metric == 1.0
+
+
+def test_distance_non_negative_ignores_the_no_down_sentinel():
+    """A PAT row carrying the -1 no-down sentinel is not a distance violation.
+
+    ``cfb_pbp`` normalizes extra-point and two-point rows onto
+    ``start.down = start.distance = -1`` so they stay out of down-based logic;
+    those rows are ``scrimmage_play=False``. Before this rule was scoped to
+    scrimmage plays it reported ~49.5k ERRORs per run on the published assets
+    (45,500 of them extra points) and buried the ~61 rows that carry a real
+    down with a negative distance. See cfbfastR-cfb-data#67.
+    """
+    frame = pl.DataFrame(
+        {
+            "game_id": [1, 2],
+            "rush": [False, False],
+            "pass": [False, False],
+            "start.distance": [-1, -1],  # the sentinel, on non-scrimmage rows
+        }
+    )
+    assert "distance_non_negative" not in _findings_by_rule(definitional.run("cfb_model_pbp", frame, _ctx()))
+
+
+def test_distance_non_negative_still_catches_a_real_scrimmage_violation():
+    """The narrowing must not make the rule unable to fail.
+
+    A rush or pass with a negative distance is the case the rule exists for and
+    is not explained by the sentinel convention.
+    """
+    frame = pl.DataFrame(
+        {
+            "game_id": [1, 2, 3],
+            "rush": [True, False, False],
+            "pass": [False, True, False],
+            "start.distance": [-5, -3, -1],  # two scrimmage violations + one sentinel
+        }
+    )
+    f = _findings_by_rule(definitional.run("cfb_model_pbp", frame, _ctx()))["distance_non_negative"]
+    assert f.severity is Severity.ERROR
+    assert f.metric == 2.0  # the sentinel row is excluded, the two real ones are not

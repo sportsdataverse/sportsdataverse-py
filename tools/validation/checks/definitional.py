@@ -148,10 +148,19 @@ _CFB_RULES: tuple[Rule, ...] = (
         "a rush/pass play must start on down 1-4",
     ),
     Rule(
+        # Scoped to scrimmage plays on purpose. ``-1`` is this package's OWN
+        # no-down sentinel, not bad data: cfb_pbp normalizes extra-point and
+        # two-point rows onto ``start.down = start.distance = -1`` so they stay
+        # out of down-based logic, and those rows are ``scrimmage_play=False``.
+        # Unscoped, this rule reported ~49.5k ERRORs per run on the published
+        # assets -- 45,500 extra points, 2,117 misses, 1,583 two-point tries --
+        # and buried the ~61 rows that carry a REAL down (1-4) with a negative
+        # distance, which is the thing worth finding. Measured 2026-09-03 over
+        # 2004-2025 (3.27M rows); see cfbfastR-cfb-data#67.
         "distance_non_negative",
-        ("start.distance",),
-        _c("start.distance") < 0,
-        "distance-to-first-down cannot be negative",
+        ("rush", "pass", "start.distance"),
+        _CFB_SCRIMMAGE & (_c("start.distance") < 0),
+        "distance-to-first-down cannot be negative on a scrimmage play",
     ),
     Rule(
         "distance_within_yards_to_endzone",
