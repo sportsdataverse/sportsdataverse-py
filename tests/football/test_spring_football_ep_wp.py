@@ -183,7 +183,7 @@ def test_spring_enrichment_output_contract():
     # Scored: EP/WP derive from down/distance/yardline/clock/score, all of which
     # the builder does produce. Guard on a share, not an exact count, so a
     # re-captured fixture does not turn a working pipeline red.
-    for col in ("ep", "epa", "wp", "wpa"):
+    for col in ("ep", "epa", "wp", "wpa", "vegas_wp"):
         filled = out[col].drop_nulls().len()
         assert filled >= 0.9 * out.height, f"{col} only {filled}/{out.height} populated"
 
