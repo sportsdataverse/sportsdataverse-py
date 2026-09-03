@@ -147,12 +147,27 @@ def load_nfl_model_pbp(seasons: List[int], return_as_pandas=False) -> pl.DataFra
     clean modeling subset -- unlike the nflverse ``load_nfl_pbp`` default, which
     keeps them.
 
+    **Seasons 2000, 2001 and 2002 are near-empty and must not be treated as
+    complete** (measured 2026-09-02). Every game is present and the frame is
+    full-width, so nothing errors and nothing looks wrong -- but the plays are
+    missing: 2000 has 955 rows across 258 games (median 3 plays/game, 56% with a
+    null ``play_type``), 2001 has 1,168 across 259, and 2002 has 7,772 across 267,
+    against roughly 44,000 rows and 167 plays/game in 1999 and in every season
+    from 2003 on. The cause is upstream and not this package: the NFL Shield feed
+    serves drive-level and scoring data for those three seasons but almost no
+    play-level rows, so the captured payloads are complete in every other respect.
+    Any season aggregate spanning them is wrong, and any per-play rate is computed
+    on ~2% of its denominator. Use ``source="nflverse"`` for 2000-2002, which
+    carries full play-by-play. Tracking:
+    `nfl-data#34 <https://github.com/sportsdataverse/nfl-data/issues/34>`_.
+
     Caching is inherited from the underlying ``load_nfl_pbp`` call, so this
     wrapper carries no ``@cached_loader`` of its own (a second layer would
     double-store every frame).
 
     Args:
-        seasons (list): Used to define different seasons. 1999 is the earliest available season.
+        seasons (list): Used to define different seasons. 1999 is the earliest
+            available season; 2000-2002 are published but near-empty (see above).
         return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
     Returns:
