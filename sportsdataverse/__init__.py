@@ -75,6 +75,8 @@ from sportsdataverse.odds import *  # noqa: F401,F403,E402
 # --- ESPN additional leagues — sport param-families stay top-level; minor/alias
 #     leagues are nested under sport-group packages (0.0.65+). ---
 from sportsdataverse.soccer import *  # noqa: F401,F403,E402
+from sportsdataverse.cbs import *  # noqa: F401,F403,E402
+from sportsdataverse.yahoo import *  # noqa: F401,F403,E402
 from sportsdataverse.pff import *  # noqa: F401,F403,E402
 from sportsdataverse.cricket import *  # noqa: F401,F403,E402
 from sportsdataverse.football.ufl import *  # noqa: F401,F403,E402
