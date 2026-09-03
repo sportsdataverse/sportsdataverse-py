@@ -23,7 +23,8 @@ if TYPE_CHECKING:
     import pandas as pd
 
 from sportsdataverse._codegen_runtime import _get
-from sportsdataverse._fox_layout import DATA_KEY as FOX_DATA_KEY  # single source of truth for the public Fox key
+from sportsdataverse._fox_layout import DATA_KEY as FOX_DATA_KEY
+from sportsdataverse._fox_layout import register_league_endpoints  # single source of truth for the public Fox key
 
 logger = logging.getLogger(__name__)
 
@@ -1030,3 +1031,8 @@ def fox_cfb_odds(
                 row[name] = (v or {}).get("odds")
             rows.append(row)
     return _frame(rows, return_as_pandas, _ODDS_COLUMNS)
+
+
+# The 17 shared Fox league / event / team endpoints, bound to this league's
+# sport slug. One table in sportsdataverse._fox_layout drives every league.
+__all__ += register_league_endpoints("cfb", "cfb", globals())

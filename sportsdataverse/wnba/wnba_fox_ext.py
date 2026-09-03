@@ -17,6 +17,7 @@ import polars as pl
 
 from sportsdataverse._fox_layout import (
     fox_get,
+    register_league_endpoints,
     frame,
     parse_boxscore,
     parse_league_leaders,
@@ -636,3 +637,8 @@ def fox_wnba_teams(
     # empty path infers Utf8 -- an unstable schema for crosswalk consumers.
     df = pl.DataFrame(rows, schema=_TEAMS_SCHEMA)
     return df.to_pandas() if return_as_pandas else df
+
+
+# The 17 shared Fox league / event / team endpoints, bound to this league's
+# sport slug. One table in sportsdataverse._fox_layout drives every league.
+__all__ += register_league_endpoints(_SPORT, "wnba", globals())

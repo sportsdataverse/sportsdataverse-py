@@ -1,0 +1,355 @@
+{
+  "title": "NFL PLAYER NEWS",
+  "items": [
+    {
+      "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327000.vresize.140.170.medium.3.png",
+      "imageType": "image-headshot",
+      "imageAltText": "Tank Dell",
+      "title": "Tank Dell",
+      "subtitle": "HOU #1 - WR",
+      "headline": "Shows good progress in minicamp",
+      "description": "Dell (knee) was limited during the Texans' minicamp that ended Thursday, but he has been \"running and cutting without setbacks,\" Aaron Wilson of KPRC 2 Houston reports.",
+      "impactTitle": "Impact",
+      "impact": "Dell continues to rehab from the devastating knee injury that cost him all of the 2025 season. While he wasn't a full participant during Houston's just-completed minicamp, he did catch passes in team drills and worked off to side. The Texans' goal is to have Dell continue to ramp up over the summer so that he can increase his activity level during training camp. However, the team isn't providing a concrete timeline for when the wideout will be fully ready to participate in practices or play in games.",
+      "entityLink": {
+        "title": "TANK DELL",
+        "webUrl": "/nfl/tank-dell-player",
+        "color": "1, 10, 20, 26",
+        "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327000.vresize.140.170.medium.3.png",
+        "imageType": "image-headshot",
+        "imageAltText": "Tank Dell",
+        "contentUri": "football/nfl/athletes/327000",
+        "contentType": "athlete",
+        "layout": {
+          "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+          "tokens": {
+            "id": "327000",
+            "contentUri": "football/nfl/athletes/327000"
+          }
+        },
+        "analyticsName": "tank-dell",
+        "analyticsSport": "nfl",
+        "type": "entity",
+        "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327000.vresize.140.170.medium.3.png"
+      },
+      "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327000.vresize.140.170.medium.3.png",
+      "date": "2026-06-12T05:00:36Z",
+      "source": "Rotowire"
+    },
+    {
+      "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/328094.vresize.140.170.medium.3.png",
+      "imageType": "image-headshot",
+      "imageAltText": "Jalen Coker",
+      "title": "Jalen Coker",
+      "subtitle": "CAR #18 - WR",
+      "headline": "Signs three-year extension",
+      "description": "Coker and the Panthers agreed on a three-year, $35 million contract extension with incentives up to $41 million Thursday, Ian Rapoport of NFL Network reports.",
+      "impactTitle": "Impact",
+      "impact": "Coker was entering a contract year after signing his exclusive-rights free-agent tender with Carolina in April, but he will now be under contract for the next few seasons. The wide receiver has combined to catch 65 of 89 targets for 872 yards and five touchdowns over 22 regular-season contests in his first two NFL campaigns. He is set to enter the 2026 season as the Panthers' primary slot receiver, and he'll look to take a step up in production after his big payday.",
+      "entityLink": {
+        "title": "JALEN COKER",
+        "webUrl": "/nfl/jalen-coker-player",
+        "color": "1, 0, 153, 217",
+        "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/328094.vresize.140.170.medium.3.png",
+        "imageType": "image-headshot",
+        "imageAltText": "Jalen Coker",
+        "contentUri": "football/nfl/athletes/328094",
+        "contentType": "athlete",
+        "layout": {
+          "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+          "tokens": {
+            "id": "328094",
+            "contentUri": "football/nfl/athletes/328094"
+          }
+        },
+        "analyticsName": "jalen-coker",
+        "analyticsSport": "nfl",
+        "type": "entity",
+        "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/328094.vresize.140.170.medium.3.png"
+      },
+      "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/328094.vresize.140.170.medium.3.png",
+      "date": "2026-06-11T23:20:52Z",
+      "source": "Rotowire"
+    },
+    {
+      "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/328796.vresize.140.170.medium.2.png",
+      "imageType": "image-headshot",
+      "imageAltText": "Jacory Croskey-Merritt",
+      "title": "Jacory Croskey-Merritt",
+      "subtitle": "WAS #22 - RB",
+      "headline": "Dealing with soft-tissue injury",
+      "description": "Croskey-Merritt has been absent from spring practices due to a soft-tissue injury, NFL reporter Ben Standig reports.",
+      "impactTitle": "Impact",
+      "impact": "Commanders RBs coach Anthony Lynn didn't sound too concerned, noting that mental preparation is more important than on-field work during the offseason program. Free-agent signing Rachaad White presumably has taken a lot of the first-team snaps, with Jerome Ford, Jeremy McNichols and sixth-round pick Kaytron Allen also competing for playing time. Croskey-Merritt played all 17 games during his rookie season, getting 175 carries (4.6 YPC, eight TDs) but just 13 targets. Head coach Dan Quinn suggested the Commanders have high expectations for Croskey-Merritt in 2026, pointing to the passing game and kick returns as potential areas for improvement, per Zach Selby of Commanders.com.",
+      "entityLink": {
+        "title": "JACORY CROSKEY-MERRITT",
+        "webUrl": "/nfl/jacory-croskey-merritt-player",
+        "color": "1, 90, 20, 20",
+        "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/328796.vresize.140.170.medium.2.png",
+        "imageType": "image-headshot",
+        "imageAltText": "Jacory Croskey-Merritt",
+        "contentUri": "football/nfl/athletes/328796",
+        "contentType": "athlete",
+        "layout": {
+          "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+          "tokens": {
+            "id": "328796",
+            "contentUri": "football/nfl/athletes/328796"
+          }
+        },
+        "analyticsName": "jacory-croskey-merritt",
+        "analyticsSport": "nfl",
+        "type": "entity",
+        "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/328796.vresize.140.170.medium.2.png"
+      },
+      "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/328796.vresize.140.170.medium.2.png",
+      "date": "2026-06-11T21:47:26Z",
+      "source": "Rotowire"
+    },
+    {
+      "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327683.vresize.140.170.medium.3.png",
+      "imageType": "image-headshot",
+      "imageAltText": "Bo Nix",
+      "title": "Bo Nix",
+      "subtitle": "DEN #10 - QB",
+      "headline": "In line to practice next week",
+      "description": "Coach Sean Payton said Thursday that Nix (ankle) is expected to practice at mandatory minicamp next week, Zac Stevens of TheDNVR.com reports.",
+      "impactTitle": "Impact",
+      "impact": "Nix suffered a fracture in his right ankle near the ned of the Broncos' divisional-round win against the Bills and missed the AFC Championship Game loss to the Patriots. After undergoing surgery in late January, he was facing a 12-week recovery, but his on-field work during the offseason program was delayed due to a clean-up procedure that he had in late April. Payton noted Thursday that Nix participated in the walkthrough prior to Thursday's OTA, while adding that he believes Nix will be \"completely clean, mobility-wise,\" once he's back to full health, according to Stevens. The dual threat has combined for 7,706 passing yards and 786 rushing yards in 34 regular-season games since he was selected 12th overall in the 2024 NFL Draft.",
+      "entityLink": {
+        "title": "BO NIX",
+        "webUrl": "/nfl/bo-nix-player",
+        "color": "1, 0, 42, 92",
+        "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327683.vresize.140.170.medium.3.png",
+        "imageType": "image-headshot",
+        "imageAltText": "Bo Nix",
+        "contentUri": "football/nfl/athletes/327683",
+        "contentType": "athlete",
+        "layout": {
+          "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+          "tokens": {
+            "id": "327683",
+            "contentUri": "football/nfl/athletes/327683"
+          }
+        },
+        "analyticsName": "bo-nix",
+        "analyticsSport": "nfl",
+        "type": "entity",
+        "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327683.vresize.140.170.medium.3.png"
+      },
+      "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327683.vresize.140.170.medium.3.png",
+      "date": "2026-06-11T18:37:00Z",
+      "source": "Rotowire"
+    },
+    {
+      "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327798.vresize.140.170.medium.3.png",
+      "imageType": "image-headshot",
+      "imageAltText": "Bucky Irving",
+      "title": "Bucky Irving",
+      "subtitle": "TB #7 - RB",
+      "headline": "Spotted at OTA practice",
+      "description": "Irving (shoulder) was on the field for Thursday's OTA.",
+      "impactTitle": "Impact",
+      "impact": "A clip posted by the Buccaneers showed the running back getting in some on-field work Thursday, which included catching passes. It remains to be seen when Irving will be cleared for full contact as he bounces back from offseason shoulder surgery, but his participation in Thursday's session, in any capacity, supports a previous report by ESPN's Adam Schefter that the 2024 fourth-rounder was likely to be ready at some point during training camp. Next up for Irving and his teammates following their current OTAs will be mandatory minicamp from June 16-18.",
+      "entityLink": {
+        "title": "BUCKY IRVING",
+        "webUrl": "/nfl/bucky-irving-player",
+        "color": "1, 167, 25, 48",
+        "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327798.vresize.140.170.medium.3.png",
+        "imageType": "image-headshot",
+        "imageAltText": "Bucky Irving",
+        "contentUri": "football/nfl/athletes/327798",
+        "contentType": "athlete",
+        "layout": {
+          "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+          "tokens": {
+            "id": "327798",
+            "contentUri": "football/nfl/athletes/327798"
+          }
+        },
+        "analyticsName": "bucky-irving",
+        "analyticsSport": "nfl",
+        "type": "entity",
+        "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327798.vresize.140.170.medium.3.png"
+      },
+      "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327798.vresize.140.170.medium.3.png",
+      "date": "2026-06-11T16:59:45Z",
+      "source": "Rotowire"
+    },
+    {
+      "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/326944.vresize.140.170.medium.3.png",
+      "imageType": "image-headshot",
+      "imageAltText": "Zach Charbonnet",
+      "title": "Zach Charbonnet",
+      "subtitle": "SEA #26 - RB",
+      "headline": "Progressing well in recovery",
+      "description": "Coach Mike Macdonald said Wednesday that Charbonnet continues to do a \"great job\" in his recovery from the torn ACL he suffered during the divisional-round of last season's playoffs, Cameron Van Til of Seattle Sports reports.",
+      "impactTitle": "Impact",
+      "impact": "Per the report, Charbonnet, who underwent surgery to repair his left knee Feb. 20, did some conditioning work during Tuesday's minicamp practice. Given the timing of his procedure, the expectation has been that Charbonnet will miss time out of the gate this coming season, and in that scenario 2026 first-round pick Jadarian Price, as well as George Holani and Emanuel Wilson, would be in line to handle Seattle's backfield duties come Week 1. However, when asked if there's a chance Charbonnet could be ready by the start of the season, Macdonald said Wednesday, \"Everything's possible.\" Either way, Charbonnet's progress will be worth monitoring closely as the summer rolls along, and once he's ready to return to game action, the 2023 second-rounder will have an opportunity to claim a key role in a Seahawks RB corps that no longer includes Kenneth Walker, who led the team with 221 carries in 2025.",
+      "entityLink": {
+        "title": "ZACH CHARBONNET",
+        "webUrl": "/nfl/zach-charbonnet-player",
+        "color": "1, 0, 42, 92",
+        "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/326944.vresize.140.170.medium.3.png",
+        "imageType": "image-headshot",
+        "imageAltText": "Zach Charbonnet",
+        "contentUri": "football/nfl/athletes/326944",
+        "contentType": "athlete",
+        "layout": {
+          "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+          "tokens": {
+            "id": "326944",
+            "contentUri": "football/nfl/athletes/326944"
+          }
+        },
+        "analyticsName": "zach-charbonnet",
+        "analyticsSport": "nfl",
+        "type": "entity",
+        "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/326944.vresize.140.170.medium.3.png"
+      },
+      "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/326944.vresize.140.170.medium.3.png",
+      "date": "2026-06-11T16:14:01Z",
+      "source": "Rotowire"
+    },
+    {
+      "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/14849.vresize.140.170.medium.3.png",
+      "imageType": "image-headshot",
+      "imageAltText": "Daniel Jones",
+      "title": "Daniel Jones",
+      "subtitle": "IND #17 - QB",
+      "headline": "Should see 11-on-11 work next month",
+      "description": "Coach Shane Steichen said this week that Jones (Achilles) is expected to participate in 11-on-11 drills when training camp begins next month, James Boyd of The Athletic reports.",
+      "impactTitle": "Impact",
+      "impact": "Jones, who suffered an Achilles' tear Dec. 7 last year, has been been working in the seven-on-seven portions of practice, and per Boyd, the QB asked about about moving on to 11-on-11's during the team's minicamp this week. On that topic, coach Shane Steichen noted, \"we want to be super smart with him...I mean, could he potentially do it (11-on-11)? Yeah, probably. He probably could, but we're not going to do that right now.\" In any case, Jones' recovery remains on track, and assuming no setbacks this summer, he'll continue to work toward being ready to go for the Colts' Sept. 13 regular-season opener against the Ravens, with the signal-caller's eventual participation in team drills representing a major milestone toward that.",
+      "entityLink": {
+        "title": "DANIEL JONES",
+        "webUrl": "/nfl/daniel-jones-player",
+        "color": "1, 0, 66, 126",
+        "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/14849.vresize.140.170.medium.3.png",
+        "imageType": "image-headshot",
+        "imageAltText": "Daniel Jones",
+        "contentUri": "football/nfl/athletes/14849",
+        "contentType": "athlete",
+        "layout": {
+          "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+          "tokens": {
+            "id": "14849",
+            "contentUri": "football/nfl/athletes/14849"
+          }
+        },
+        "analyticsName": "daniel-jones",
+        "analyticsSport": "nfl",
+        "type": "entity",
+        "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/14849.vresize.140.170.medium.3.png"
+      },
+      "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/14849.vresize.140.170.medium.3.png",
+      "date": "2026-06-11T15:34:55Z",
+      "source": "Rotowire"
+    },
+    {
+      "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/13107.vresize.140.170.medium.3.png",
+      "imageType": "image-headshot",
+      "imageAltText": "Patrick Mahomes",
+      "title": "Patrick Mahomes",
+      "subtitle": "KC #15 - QB",
+      "headline": "Expected back for camp?",
+      "description": "Chiefs coach Andy Reid said Thursday that Mahomes (knee) should \"be able to do some things in camp,\" Nate Taylor of ESPN.com reports.",
+      "impactTitle": "Impact",
+      "impact": "Reid also said Mahomes is \"on course to get ready for camp\", though \"the healing process has to keep taking place.\" It's mostly coach-speak, but overwhelmingly positive, which meshes with previous favorable reports on Mahomes' rehab from mid-December surgery to repair ACL and LCL tears. He's been limited to individual drills and 7-on-7s at OTAs, allowing Justin Fields to take first-team reps.",
+      "entityLink": {
+        "title": "PATRICK MAHOMES",
+        "webUrl": "/nfl/patrick-mahomes-ii-player",
+        "color": "1, 201, 36, 63",
+        "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/13107.vresize.140.170.medium.3.png",
+        "imageType": "image-headshot",
+        "imageAltText": "Patrick Mahomes",
+        "contentUri": "football/nfl/athletes/13107",
+        "contentType": "athlete",
+        "layout": {
+          "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+          "tokens": {
+            "id": "13107",
+            "contentUri": "football/nfl/athletes/13107"
+          }
+        },
+        "analyticsName": "patrick-mahomes-ii",
+        "analyticsSport": "nfl",
+        "type": "entity",
+        "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/13107.vresize.140.170.medium.3.png"
+      },
+      "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/13107.vresize.140.170.medium.3.png",
+      "date": "2026-06-11T15:08:41Z",
+      "source": "Rotowire"
+    },
+    {
+      "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/326940.vresize.140.170.medium.3.png",
+      "imageType": "image-headshot",
+      "imageAltText": "Rashee Rice",
+      "title": "Rashee Rice",
+      "subtitle": "KC #4 - WR",
+      "headline": "May be ready for training camp",
+      "description": "Chiefs coach Andy Reid told reporters Thursday that he thinks Rice (knee) will be ready for the start of training camp, Nate Taylor of ESPN.com reports. \"I think [Rice] will be,\" Reid said. \"He gets out [of jail] next week. We'll see where it goes. He'll be back up here and working.\"",
+      "impactTitle": "Impact",
+      "impact": "Rice is recovering from arthroscopic surgery in a Dallas County jail, with a scheduled release date of June 16 (Tuesday). He had the minor procedure in May to remove loose debris from his right knee, shortly before he was sentenced to 30 days in jail for violating probation with a positive THC test. The Chiefs seemingly expect Rice to be back at full strength before Week 1, but there is still risk for an NFL suspension in response to his recent probation violation. Reid mentioned that Rice has been able to rehab in jail while maintaining contact with Chiefs head athletic trainer Rick Burkholder, per Pete Sweeney of ArrowheadPride.com.",
+      "entityLink": {
+        "title": "RASHEE RICE",
+        "webUrl": "/nfl/rashee-rice-player",
+        "color": "1, 201, 36, 63",
+        "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/326940.vresize.140.170.medium.3.png",
+        "imageType": "image-headshot",
+        "imageAltText": "Rashee Rice",
+        "contentUri": "football/nfl/athletes/326940",
+        "contentType": "athlete",
+        "layout": {
+          "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+          "tokens": {
+            "id": "326940",
+            "contentUri": "football/nfl/athletes/326940"
+          }
+        },
+        "analyticsName": "rashee-rice",
+        "analyticsSport": "nfl",
+        "type": "entity",
+        "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/326940.vresize.140.170.medium.3.png"
+      },
+      "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/326940.vresize.140.170.medium.3.png",
+      "date": "2026-06-11T14:51:57Z",
+      "source": "Rotowire"
+    },
+    {
+      "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22761.vresize.140.170.medium.3.png",
+      "imageType": "image-headshot",
+      "imageAltText": "Chris Olave",
+      "title": "Chris Olave",
+      "subtitle": "NO #12 - WR",
+      "headline": "Limited at OTAs after blood clot",
+      "description": "Olave (illness) has been limited to individual drills at OTAs after undergoing treatment for a blood clot in January, Matthew Paras of Nola.com reports.",
+      "impactTitle": "Impact",
+      "impact": "\"[Olave] hasn't been able to do the team activities obviously throughout OTAs,\" said Saints coach Kellen Moore. \"The blood clot was related to not participating in team and some of those things.\" For his part, Olave told reporters that it only took a week to feel normal again when he first got treatment for the blood clot back in January (missing Week 18 in the process). It's apparently a longer process to get clearance for full practice participation, with Olave saying, \"I just put my best foot forward, (and am) just trying to do everything right so I can be healthy at the beginning of the year.\"",
+      "entityLink": {
+        "title": "CHRIS OLAVE",
+        "webUrl": "/nfl/chris-olave-player",
+        "color": "1, 216, 193, 147",
+        "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22761.vresize.140.170.medium.3.png",
+        "imageType": "image-headshot",
+        "imageAltText": "Chris Olave",
+        "contentUri": "football/nfl/athletes/22761",
+        "contentType": "athlete",
+        "layout": {
+          "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+          "tokens": {
+            "id": "22761",
+            "contentUri": "football/nfl/athletes/22761"
+          }
+        },
+        "analyticsName": "chris-olave",
+        "analyticsSport": "nfl",
+        "type": "entity",
+        "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22761.vresize.140.170.medium.3.png"
+      },
+      "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22761.vresize.140.170.medium.3.png",
+      "date": "2026-06-11T13:40:50Z",
+      "source": "Rotowire"
+    }
+  ]
+}

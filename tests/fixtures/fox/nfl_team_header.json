@@ -1,0 +1,15 @@
+{
+  "template": "entity-header",
+  "title": "DENVER BRONCOS",
+  "color": "1, 0, 42, 92",
+  "logoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Broncos.vresize.400.400.medium.0.png",
+  "imageType": "image-logo",
+  "imageAltText": "Denver Broncos",
+  "contentUri": "football/nfl/teams/10",
+  "contentType": "team",
+  "details": [
+    {
+      "text": "14-3 · 1ST IN AFC WEST"
+    }
+  ]
+}

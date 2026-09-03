@@ -1,0 +1,344 @@
+{
+  "template": "recap",
+  "sectionList": [
+    {
+      "id": "carousel",
+      "type": "fairPlay",
+      "order": 0
+    },
+    {
+      "id": "favoritecta",
+      "type": "favoriteCta",
+      "order": 1
+    },
+    {
+      "id": "linescore",
+      "type": "linescore",
+      "order": 2
+    },
+    {
+      "id": "headline",
+      "type": "headline",
+      "order": 3,
+      "lastUpdate": "2026-04-05T03:03:28Z"
+    },
+    {
+      "id": "clips",
+      "type": "clips",
+      "order": 4
+    },
+    {
+      "id": "recap",
+      "type": "recapArticle",
+      "order": 5
+    },
+    {
+      "id": "strikeAd",
+      "type": "strikeAd",
+      "order": 6
+    },
+    {
+      "id": "keyplayers",
+      "type": "keyPlayers",
+      "order": 7,
+      "lastUpdate": "2026-04-05T03:03:28Z"
+    },
+    {
+      "id": "interactivepolls",
+      "type": "interactivePolls",
+      "order": 8
+    },
+    {
+      "id": "openWeb",
+      "type": "openWeb",
+      "order": 9
+    },
+    {
+      "id": "oddssixpack",
+      "type": "odds",
+      "order": 10
+    },
+    {
+      "id": "foxfacts",
+      "type": "foxFacts",
+      "order": 11
+    },
+    {
+      "id": "voting",
+      "type": "voting",
+      "order": 12
+    },
+    {
+      "id": "keyplays",
+      "type": "keyPlays",
+      "order": 13
+    },
+    {
+      "id": "openWeb",
+      "type": "openWeb",
+      "order": 14
+    },
+    {
+      "id": "questions",
+      "type": "questions",
+      "order": 15
+    }
+  ],
+  "oddsSixPack": {
+    "title": "ODDS",
+    "ctaTitle": "SEE ALL ODDS",
+    "ctaWebUrl": "https://www.foxsports.com/nba/utah-jazz-vs-houston-rockets-apr-03-2026-game-boxscore-44604",
+    "items": [
+      {
+        "title": "SPREAD",
+        "description": "The Rockets needed to win by 19 points or more to cover the spread. They did cover, so people who took the Rockets won.",
+        "imageUrl": "https://b.fssta.com/uploads/application/nba/team-logos/Rockets.vresize.200.200.medium.0.png",
+        "imageType": "image-logo",
+        "imageAltText": "Houston Rockets",
+        "entityLink": {
+          "title": "HOUSTON ROCKETS",
+          "webUrl": "/nba/houston-rockets-team",
+          "color": "1, 206, 17, 65",
+          "imageUrl": "https://b.fssta.com/uploads/application/nba/team-logos/Rockets-alternate.vresize.200.200.medium.0.png",
+          "imageType": "image-logo",
+          "imageAltText": "Houston Rockets",
+          "contentUri": "basketball/nba/teams/17",
+          "contentType": "team",
+          "layout": {
+            "path": "/layouts?type=layout&subtype=teamsLayout&elementId=nba",
+            "tokens": {
+              "id": "17",
+              "contentUri": "basketball/nba/teams/17"
+            }
+          },
+          "analyticsName": "houston-rockets",
+          "analyticsSport": "nba",
+          "type": "entity",
+          "alternateImageUrl": "https://b.fssta.com/uploads/application/nba/team-logos/Rockets.vresize.200.200.medium.0.png"
+        },
+        "alternateImageUrl": "https://b.fssta.com/uploads/application/nba/team-logos/Rockets-alternate.vresize.200.200.medium.0.png"
+      },
+      {
+        "title": "TOTAL",
+        "description": "The over/under was 233.5 and the teams scored 246 points, so people who bet the over won",
+        "resultText": "OVER"
+      },
+      {
+        "title": "TEAM TO WIN",
+        "description": "The Rockets won at -2174 odds so a bet of $2174 won $2274 total",
+        "imageUrl": "https://b.fssta.com/uploads/application/nba/team-logos/Rockets.vresize.200.200.medium.0.png",
+        "imageType": "image-logo",
+        "imageAltText": "Houston Rockets",
+        "entityLink": {
+          "title": "HOUSTON ROCKETS",
+          "webUrl": "/nba/houston-rockets-team",
+          "color": "1, 206, 17, 65",
+          "imageUrl": "https://b.fssta.com/uploads/application/nba/team-logos/Rockets-alternate.vresize.200.200.medium.0.png",
+          "imageType": "image-logo",
+          "imageAltText": "Houston Rockets",
+          "contentUri": "basketball/nba/teams/17",
+          "contentType": "team",
+          "layout": {
+            "path": "/layouts?type=layout&subtype=teamsLayout&elementId=nba",
+            "tokens": {
+              "id": "17",
+              "contentUri": "basketball/nba/teams/17"
+            }
+          },
+          "analyticsName": "houston-rockets",
+          "analyticsSport": "nba",
+          "type": "entity",
+          "alternateImageUrl": "https://b.fssta.com/uploads/application/nba/team-logos/Rockets.vresize.200.200.medium.0.png"
+        },
+        "alternateImageUrl": "https://b.fssta.com/uploads/application/nba/team-logos/Rockets-alternate.vresize.200.200.medium.0.png"
+      }
+    ]
+  },
+  "betSection": {
+    "name": "ODDS",
+    "bets": [
+      {
+        "template": "market",
+        "model": {
+          "subtitle": "SPREAD",
+          "mainText": "The Rockets needed to win by 19 points or more to cover the spread. They did cover, so people who took the Rockets won.",
+          "odds": [
+            {
+              "text": "+18.5",
+              "subText": "UTA"
+            },
+            {
+              "text": "-18.5",
+              "subText": "HOU",
+              "success": true
+            }
+          ]
+        }
+      },
+      {
+        "template": "market",
+        "model": {
+          "subtitle": "TEAM TO WIN",
+          "mainText": "The Rockets won at -2174 odds so a bet of $2174 won $2274 total",
+          "odds": [
+            {
+              "text": "+1063",
+              "subText": "UTA"
+            },
+            {
+              "text": "-2174",
+              "subText": "HOU",
+              "success": true
+            }
+          ]
+        }
+      },
+      {
+        "template": "market",
+        "model": {
+          "subtitle": "TOTAL",
+          "mainText": "The over/under was 233.5 and the teams scored 246 points, so people who bet the over won",
+          "odds": [
+            {
+              "text": "-110",
+              "subText": "OVER 233.5",
+              "success": true
+            },
+            {
+              "text": "-110",
+              "subText": "UNDER 233.5"
+            }
+          ]
+        }
+      }
+    ],
+    "headerMoreLink": {
+      "text": "SEE ALL ODDS"
+    }
+  },
+  "topPerformers": {
+    "title": "KEY PLAYERS",
+    "items": [
+      {
+        "entityLink": {
+          "title": "CODY WILLIAMS",
+          "webUrl": "/nba/cody-williams-player",
+          "color": "1, 78, 0, 142",
+          "imageUrl": "https://b.fssta.com/uploads/application/nba/headshots/3995.vresize.140.170.medium.2.png",
+          "imageType": "image-headshot",
+          "imageAltText": "Cody Williams",
+          "contentUri": "basketball/nba/athletes/3995",
+          "contentType": "athlete",
+          "layout": {
+            "path": "/layouts?type=layout&subtype=playersLayout&elementId=nba",
+            "tokens": {
+              "id": "3995",
+              "contentUri": "basketball/nba/athletes/3995"
+            }
+          },
+          "analyticsName": "cody-williams",
+          "analyticsSport": "nba",
+          "type": "entity",
+          "alternateImageUrl": "https://b.fssta.com/uploads/application/nba/headshots/3995.vresize.140.170.medium.2.png"
+        },
+        "title": "Cody Williams",
+        "subtitle": "UTA · #5 PF",
+        "statLine": "27 pts (10-16 FG), 11 reb",
+        "imageUrl": "https://b.fssta.com/uploads/application/nba/headshots/3995.vresize.140.170.medium.2.png",
+        "imageType": "image-headshot",
+        "imageAltText": "Cody Williams",
+        "alternateImageUrl": "https://b.fssta.com/uploads/application/nba/headshots/3995.vresize.140.170.medium.2.png"
+      },
+      {
+        "entityLink": {
+          "title": "KEVIN DURANT",
+          "webUrl": "/nba/kevin-durant-player",
+          "color": "1, 206, 17, 65",
+          "imageUrl": "https://b.fssta.com/uploads/application/nba/headshots/1467.vresize.140.170.medium.2.png",
+          "imageType": "image-headshot",
+          "imageAltText": "Kevin Durant",
+          "contentUri": "basketball/nba/athletes/1467",
+          "contentType": "athlete",
+          "layout": {
+            "path": "/layouts?type=layout&subtype=playersLayout&elementId=nba",
+            "tokens": {
+              "id": "1467",
+              "contentUri": "basketball/nba/athletes/1467"
+            }
+          },
+          "analyticsName": "kevin-durant",
+          "analyticsSport": "nba",
+          "type": "entity",
+          "alternateImageUrl": "https://b.fssta.com/uploads/application/nba/headshots/1467.vresize.140.170.medium.2.png"
+        },
+        "title": "Kevin Durant",
+        "subtitle": "HOU · #7 SF",
+        "statLine": "25 pts (8-12 FG), 6 ast",
+        "imageUrl": "https://b.fssta.com/uploads/application/nba/headshots/1467.vresize.140.170.medium.2.png",
+        "imageType": "image-headshot",
+        "imageAltText": "Kevin Durant",
+        "alternateImageUrl": "https://b.fssta.com/uploads/application/nba/headshots/1467.vresize.140.170.medium.2.png"
+      },
+      {
+        "entityLink": {
+          "title": "AMEN THOMPSON",
+          "webUrl": "/nba/amen-thompson-player",
+          "color": "1, 206, 17, 65",
+          "imageUrl": "https://b.fssta.com/uploads/application/nba/headshots/3849.vresize.140.170.medium.2.png",
+          "imageType": "image-headshot",
+          "imageAltText": "Amen Thompson",
+          "contentUri": "basketball/nba/athletes/3849",
+          "contentType": "athlete",
+          "layout": {
+            "path": "/layouts?type=layout&subtype=playersLayout&elementId=nba",
+            "tokens": {
+              "id": "3849",
+              "contentUri": "basketball/nba/athletes/3849"
+            }
+          },
+          "analyticsName": "amen-thompson",
+          "analyticsSport": "nba",
+          "type": "entity",
+          "alternateImageUrl": "https://b.fssta.com/uploads/application/nba/headshots/3849.vresize.140.170.medium.2.png"
+        },
+        "title": "Amen Thompson",
+        "subtitle": "HOU · #1 SG",
+        "statLine": "21 pts, 8 reb, 4 ast",
+        "imageUrl": "https://b.fssta.com/uploads/application/nba/headshots/3849.vresize.140.170.medium.2.png",
+        "imageType": "image-headshot",
+        "imageAltText": "Amen Thompson",
+        "alternateImageUrl": "https://b.fssta.com/uploads/application/nba/headshots/3849.vresize.140.170.medium.2.png"
+      },
+      {
+        "entityLink": {
+          "title": "ACE BAILEY",
+          "webUrl": "/nba/ace-bailey-player",
+          "color": "1, 78, 0, 142",
+          "imageUrl": "https://b.fssta.com/uploads/application/nba/headshots/4161.vresize.140.170.medium.1.png",
+          "imageType": "image-headshot",
+          "imageAltText": "Ace Bailey",
+          "contentUri": "basketball/nba/athletes/4161",
+          "contentType": "athlete",
+          "layout": {
+            "path": "/layouts?type=layout&subtype=playersLayout&elementId=nba",
+            "tokens": {
+              "id": "4161",
+              "contentUri": "basketball/nba/athletes/4161"
+            }
+          },
+          "analyticsName": "ace-bailey",
+          "analyticsSport": "nba",
+          "type": "entity",
+          "alternateImageUrl": "https://b.fssta.com/uploads/application/nba/headshots/4161.vresize.140.170.medium.1.png"
+        },
+        "title": "Ace Bailey",
+        "subtitle": "UTA · #19 SG",
+        "statLine": "22 pts (9-17 FG), 6 reb",
+        "imageUrl": "https://b.fssta.com/uploads/application/nba/headshots/4161.vresize.140.170.medium.1.png",
+        "imageType": "image-headshot",
+        "imageAltText": "Ace Bailey",
+        "alternateImageUrl": "https://b.fssta.com/uploads/application/nba/headshots/4161.vresize.140.170.medium.1.png"
+      }
+    ]
+  }
+}

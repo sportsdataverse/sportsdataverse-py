@@ -1,0 +1,2032 @@
+{
+  "sectionList": [
+    {
+      "id": "scoring",
+      "tables": [
+        {
+          "template": "table-game-log",
+          "title": "SCORING",
+          "headers": [
+            {
+              "columns": [
+                {
+                  "index": 0,
+                  "text": "2025-26 POSTSEASON",
+                  "priority": 1,
+                  "template": "cell-text",
+                  "weight": 1.5,
+                  "emphasized": true,
+                  "sortable": "none"
+                },
+                {
+                  "index": 1,
+                  "priority": 2,
+                  "template": "cell-entity",
+                  "weight": 3.3,
+                  "emphasized": false,
+                  "sortable": "none"
+                },
+                {
+                  "index": 2,
+                  "text": "FGM",
+                  "priority": 5,
+                  "template": "cell-number",
+                  "weight": 1,
+                  "emphasized": false,
+                  "sortable": "desc"
+                },
+                {
+                  "index": 3,
+                  "text": "FGA",
+                  "priority": 6,
+                  "template": "cell-number",
+                  "weight": 1,
+                  "emphasized": false,
+                  "sortable": "desc"
+                },
+                {
+                  "index": 4,
+                  "text": "FG%",
+                  "priority": 2,
+                  "template": "cell-number",
+                  "weight": 1,
+                  "emphasized": false,
+                  "sortable": "desc"
+                },
+                {
+                  "index": 5,
+                  "text": "FTM",
+                  "priority": 9,
+                  "template": "cell-number",
+                  "weight": 1,
+                  "emphasized": false,
+                  "sortable": "desc"
+                },
+                {
+                  "index": 6,
+                  "text": "FTA",
+                  "priority": 10,
+                  "template": "cell-number",
+                  "weight": 1,
+                  "emphasized": false,
+                  "sortable": "desc"
+                },
+                {
+                  "index": 7,
+                  "text": "FT%",
+                  "priority": 4,
+                  "template": "cell-number",
+                  "weight": 1,
+                  "emphasized": false,
+                  "sortable": "desc"
+                },
+                {
+                  "index": 8,
+                  "text": "3FGM",
+                  "priority": 7,
+                  "template": "cell-number",
+                  "weight": 1,
+                  "emphasized": false,
+                  "sortable": "desc"
+                },
+                {
+                  "index": 9,
+                  "text": "3FGA",
+                  "priority": 8,
+                  "template": "cell-number",
+                  "weight": 1,
+                  "emphasized": false,
+                  "sortable": "desc"
+                },
+                {
+                  "index": 10,
+                  "text": "3FG%",
+                  "priority": 3,
+                  "template": "cell-number",
+                  "weight": 1,
+                  "emphasized": false,
+                  "sortable": "desc"
+                },
+                {
+                  "index": 11,
+                  "text": "PTS",
+                  "priority": 1,
+                  "template": "cell-number",
+                  "weight": 1,
+                  "emphasized": false,
+                  "sortable": "desc"
+                }
+              ],
+              "isPrimary": true
+            }
+          ],
+          "rows": [
+            {
+              "columns": [
+                {
+                  "index": 0,
+                  "text": "3/26",
+                  "emphasized": false
+                },
+                {
+                  "index": 1,
+                  "text": "ILL",
+                  "superscript": "L",
+                  "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Illinois.vresize.200.200.medium.1.png",
+                  "imageType": "image-logo",
+                  "imageAltText": "Illinois Fighting Illini",
+                  "emphasized": false,
+                  "subType": "loss",
+                  "alternateImageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Illinois-alternate.vresize.200.200.medium.1.png"
+                },
+                {
+                  "index": 2,
+                  "text": "22",
+                  "emphasized": false
+                },
+                {
+                  "index": 3,
+                  "text": "64",
+                  "emphasized": false
+                },
+                {
+                  "index": 4,
+                  "text": "34.4",
+                  "emphasized": false
+                },
+                {
+                  "index": 5,
+                  "text": "2",
+                  "emphasized": false
+                },
+                {
+                  "index": 6,
+                  "text": "2",
+                  "emphasized": false
+                },
+                {
+                  "index": 7,
+                  "text": "100",
+                  "emphasized": false
+                },
+                {
+                  "index": 8,
+                  "text": "9",
+                  "emphasized": false
+                },
+                {
+                  "index": 9,
+                  "text": "32",
+                  "emphasized": false
+                },
+                {
+                  "index": 10,
+                  "text": "28.1",
+                  "emphasized": false
+                },
+                {
+                  "index": 11,
+                  "text": "55",
+                  "emphasized": false
+                }
+              ],
+              "isCutoff": false,
+              "selected": false,
+              "entityLink": {
+                "webUrl": "/college-basketball/ncaa-tournament-sweet-16-illinois-fighting-illini-vs-houston-cougars-mar-26-2026-game-boxscore-264101?tab=boxscore",
+                "contentUri": "basketball/cbk/events/264101",
+                "contentType": "event",
+                "layout": {
+                  "path": "/layouts?type=layout&subtype=cbkEventLayout",
+                  "tokens": {
+                    "id": "264101",
+                    "eventUri": "basketball/cbk/events/264101",
+                    "homeUri": "basketball/cbk/teams/113",
+                    "awayUri": "basketball/cbk/teams/84"
+                  }
+                },
+                "analyticsSport": "college-basketball",
+                "tab": "boxscore",
+                "type": "entity"
+              },
+              "isFaded": false
+            },
+            {
+              "columns": [
+                {
+                  "index": 0,
+                  "text": "3/21",
+                  "emphasized": false
+                },
+                {
+                  "index": 1,
+                  "text": "TXAM",
+                  "superscript": "W",
+                  "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/TexasA&M.vresize.200.200.medium.1.png",
+                  "imageType": "image-logo",
+                  "imageAltText": "Texas A&M Aggies",
+                  "emphasized": false,
+                  "subType": "win",
+                  "alternateImageUrl": "https://b.fssta.com/uploads/application/college/team-logos/TexasA&M-alternate.vresize.200.200.medium.1.png"
+                },
+                {
+                  "index": 2,
+                  "text": "30",
+                  "emphasized": false
+                },
+                {
+                  "index": 3,
+                  "text": "68",
+                  "emphasized": false
+                },
+                {
+                  "index": 4,
+                  "text": "44.1",
+                  "emphasized": false
+                },
+                {
+                  "index": 5,
+                  "text": "20",
+                  "emphasized": false
+                },
+                {
+                  "index": 6,
+                  "text": "25",
+                  "emphasized": false
+                },
+                {
+                  "index": 7,
+                  "text": "80",
+                  "emphasized": false
+                },
+                {
+                  "index": 8,
+                  "text": "8",
+                  "emphasized": false
+                },
+                {
+                  "index": 9,
+                  "text": "31",
+                  "emphasized": false
+                },
+                {
+                  "index": 10,
+                  "text": "25.8",
+                  "emphasized": false
+                },
+                {
+                  "index": 11,
+                  "text": "88",
+                  "emphasized": false
+                }
+              ],
+              "isCutoff": false,
+              "selected": false,
+              "entityLink": {
+                "webUrl": "/college-basketball/ncaa-tournament-second-round-texas-am-aggies-vs-houston-cougars-mar-21-2026-game-boxscore-264094?tab=boxscore",
+                "contentUri": "basketball/cbk/events/264094",
+                "contentType": "event",
+                "layout": {
+                  "path": "/layouts?type=layout&subtype=cbkEventLayout",
+                  "tokens": {
+                    "id": "264094",
+                    "eventUri": "basketball/cbk/events/264094",
+                    "homeUri": "basketball/cbk/teams/113",
+                    "awayUri": "basketball/cbk/teams/51"
+                  }
+                },
+                "analyticsSport": "college-basketball",
+                "tab": "boxscore",
+                "type": "entity"
+              },
+              "isFaded": false
+            },
+            {
+              "columns": [
+                {
+                  "index": 0,
+                  "text": "3/19",
+                  "emphasized": false
+                },
+                {
+                  "index": 1,
+                  "text": "IDHO",
+                  "superscript": "W",
+                  "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Idaho.vresize.200.200.medium.0.png",
+                  "imageType": "image-logo",
+                  "imageAltText": "Idaho Vandals",
+                  "emphasized": false,
+                  "subType": "win",
+                  "alternateImageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Idaho.vresize.200.200.medium.0.png"
+                },
+                {
+                  "index": 2,
+                  "text": "31",
+                  "emphasized": false
+                },
+                {
+                  "index": 3,
+                  "text": "62",
+                  "emphasized": false
+                },
+                {
+                  "index": 4,
+                  "text": "50",
+                  "emphasized": false
+                },
+                {
+                  "index": 5,
+                  "text": "8",
+                  "emphasized": false
+                },
+                {
+                  "index": 6,
+                  "text": "11",
+                  "emphasized": false
+                },
+                {
+                  "index": 7,
+                  "text": "72.7",
+                  "emphasized": false
+                },
+                {
+                  "index": 8,
+                  "text": "8",
+                  "emphasized": false
+                },
+                {
+                  "index": 9,
+                  "text": "15",
+                  "emphasized": false
+                },
+                {
+                  "index": 10,
+                  "text": "53.3",
+                  "emphasized": false
+                },
+                {
+                  "index": 11,
+                  "text": "78",
+                  "emphasized": false
+                }
+              ],
+              "isCutoff": false,
+              "selected": false,
+              "entityLink": {
+                "webUrl": "/college-basketball/ncaa-tournament-first-round-idaho-vandals-vs-houston-cougars-mar-19-2026-game-boxscore-264074?tab=boxscore",
+                "contentUri": "basketball/cbk/events/264074",
+                "contentType": "event",
+                "layout": {
+                  "path": "/layouts?type=layout&subtype=cbkEventLayout",
+                  "tokens": {
+                    "id": "264074",
+                    "eventUri": "basketball/cbk/events/264074",
+                    "homeUri": "basketball/cbk/teams/113",
+                    "awayUri": "basketball/cbk/teams/98"
+                  }
+                },
+                "analyticsSport": "college-basketball",
+                "tab": "boxscore",
+                "type": "entity"
+              },
+              "isFaded": false
+            }
+          ]
+        },
+        {
+          "template": "table-game-log",
+          "title": "SCORING",
+          "headers": [
+            {
+              "columns": [
+                {
+                  "index": 0,
+                  "text": "2025-26 REGULAR SEASON",
+                  "priority": 1,
+                  "template": "cell-text",
+                  "weight": 1.5,
+                  "emphasized": true,
+                  "sortable": "none"
+                },
+                {
+                  "index": 1,
+                  "priority": 2,
+                  "template": "cell-entity",
+                  "weight": 3.3,
+                  "emphasized": false,
+                  "sortable": "none"
+                },
+                {
+                  "index": 2,
+                  "text": "FGM",
+                  "priority": 5,
+                  "template": "cell-number",
+                  "weight": 1,
+                  "emphasized": false,
+                  "sortable": "desc"
+                },
+                {
+                  "index": 3,
+                  "text": "FGA",
+                  "priority": 6,
+                  "template": "cell-number",
+                  "weight": 1,
+                  "emphasized": false,
+                  "sortable": "desc"
+                },
+                {
+                  "index": 4,
+                  "text": "FG%",
+                  "priority": 2,
+                  "template": "cell-number",
+                  "weight": 1,
+                  "emphasized": false,
+                  "sortable": "desc"
+                },
+                {
+                  "index": 5,
+                  "text": "FTM",
+                  "priority": 9,
+                  "template": "cell-number",
+                  "weight": 1,
+                  "emphasized": false,
+                  "sortable": "desc"
+                },
+                {
+                  "index": 6,
+                  "text": "FTA",
+                  "priority": 10,
+                  "template": "cell-number",
+                  "weight": 1,
+                  "emphasized": false,
+                  "sortable": "desc"
+                },
+                {
+                  "index": 7,
+                  "text": "FT%",
+                  "priority": 4,
+                  "template": "cell-number",
+                  "weight": 1,
+                  "emphasized": false,
+                  "sortable": "desc"
+                },
+                {
+                  "index": 8,
+                  "text": "3FGM",
+                  "priority": 7,
+                  "template": "cell-number",
+                  "weight": 1,
+                  "emphasized": false,
+                  "sortable": "desc"
+                },
+                {
+                  "index": 9,
+                  "text": "3FGA",
+                  "priority": 8,
+                  "template": "cell-number",
+                  "weight": 1,
+                  "emphasized": false,
+                  "sortable": "desc"
+                },
+                {
+                  "index": 10,
+                  "text": "3FG%",
+                  "priority": 3,
+                  "template": "cell-number",
+                  "weight": 1,
+                  "emphasized": false,
+                  "sortable": "desc"
+                },
+                {
+                  "index": 11,
+                  "text": "PTS",
+                  "priority": 1,
+                  "template": "cell-number",
+                  "weight": 1,
+                  "emphasized": false,
+                  "sortable": "desc"
+                }
+              ],
+              "isPrimary": true
+            }
+          ],
+          "rows": [
+            {
+              "columns": [
+                {
+                  "index": 0,
+                  "text": "3/14",
+                  "emphasized": false
+                },
+                {
+                  "index": 1,
+                  "text": "ARIZ",
+                  "superscript": "L",
+                  "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Arizona.vresize.200.200.medium.1.png",
+                  "imageType": "image-logo",
+                  "imageAltText": "Arizona Wildcats",
+                  "emphasized": false,
+                  "subType": "loss",
+                  "alternateImageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Arizona.vresize.200.200.medium.1.png"
+                },
+                {
+                  "index": 2,
+                  "text": "28",
+                  "emphasized": false
+                },
+                {
+                  "index": 3,
+                  "text": "64",
+                  "emphasized": false
+                },
+                {
+                  "index": 4,
+                  "text": "43.8",
+                  "emphasized": false
+                },
+                {
+                  "index": 5,
+                  "text": "10",
+                  "emphasized": false
+                },
+                {
+                  "index": 6,
+                  "text": "14",
+                  "emphasized": false
+                },
+                {
+                  "index": 7,
+                  "text": "71.4",
+                  "emphasized": false
+                },
+                {
+                  "index": 8,
+                  "text": "8",
+                  "emphasized": false
+                },
+                {
+                  "index": 9,
+                  "text": "21",
+                  "emphasized": false
+                },
+                {
+                  "index": 10,
+                  "text": "38.1",
+                  "emphasized": false
+                },
+                {
+                  "index": 11,
+                  "text": "74",
+                  "emphasized": false
+                }
+              ],
+              "isCutoff": false,
+              "selected": false,
+              "entityLink": {
+                "webUrl": "/college-basketball/conference-tournament-houston-cougars-vs-arizona-wildcats-mar-14-2026-game-boxscore-264371?tab=boxscore",
+                "contentUri": "basketball/cbk/events/264371",
+                "contentType": "event",
+                "layout": {
+                  "path": "/layouts?type=layout&subtype=cbkEventLayout",
+                  "tokens": {
+                    "id": "264371",
+                    "eventUri": "basketball/cbk/events/264371",
+                    "homeUri": "basketball/cbk/teams/220",
+                    "awayUri": "basketball/cbk/teams/113"
+                  }
+                },
+                "analyticsSport": "college-basketball",
+                "tab": "boxscore",
+                "type": "entity"
+              },
+              "isFaded": false
+            },
+            {
+              "columns": [
+                {
+                  "index": 0,
+                  "text": "3/13",
+                  "emphasized": false
+                },
+                {
+                  "index": 1,
+                  "text": "KU",
+                  "superscript": "W",
+                  "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Kansas.vresize.200.200.medium.1.png",
+                  "imageType": "image-logo",
+                  "imageAltText": "Kansas Jayhawks",
+                  "emphasized": false,
+                  "subType": "win",
+                  "alternateImageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Kansas.vresize.200.200.medium.1.png"
+                },
+                {
+                  "index": 2,
+                  "text": "22",
+                  "emphasized": false
+                },
+                {
+                  "index": 3,
+                  "text": "53",
+                  "emphasized": false
+                },
+                {
+                  "index": 4,
+                  "text": "41.5",
+                  "emphasized": false
+                },
+                {
+                  "index": 5,
+                  "text": "15",
+                  "emphasized": false
+                },
+                {
+                  "index": 6,
+                  "text": "19",
+                  "emphasized": false
+                },
+                {
+                  "index": 7,
+                  "text": "78.9",
+                  "emphasized": false
+                },
+                {
+                  "index": 8,
+                  "text": "10",
+                  "emphasized": false
+                },
+                {
+                  "index": 9,
+                  "text": "18",
+                  "emphasized": false
+                },
+                {
+                  "index": 10,
+                  "text": "55.6",
+                  "emphasized": false
+                },
+                {
+                  "index": 11,
+                  "text": "69",
+                  "emphasized": false
+                }
+              ],
+              "isCutoff": false,
+              "selected": false,
+              "entityLink": {
+                "webUrl": "/college-basketball/conference-tournament-kansas-jayhawks-vs-houston-cougars-mar-13-2026-game-boxscore-264367?tab=boxscore",
+                "contentUri": "basketball/cbk/events/264367",
+                "contentType": "event",
+                "layout": {
+                  "path": "/layouts?type=layout&subtype=cbkEventLayout",
+                  "tokens": {
+                    "id": "264367",
+                    "eventUri": "basketball/cbk/events/264367",
+                    "homeUri": "basketball/cbk/teams/113",
+                    "awayUri": "basketball/cbk/teams/44"
+                  }
+                },
+                "analyticsSport": "college-basketball",
+                "tab": "boxscore",
+                "type": "entity"
+              },
+              "isFaded": false
+            }
+          ]
+        }
+      ],
+      "moreLink": {
+        "text": "FULL SCORING GAME LOG",
+        "webUrl": "/college-basketball/houston-cougars-team-game-log?season=2025&category=scoring"
+      }
+    },
+    {
+      "id": "scoringii",
+      "tables": [
+        {
+          "template": "table-game-log",
+          "title": "SCORING II",
+          "headers": [
+            {
+              "columns": [
+                {
+                  "index": 0,
+                  "text": "2025-26 POSTSEASON",
+                  "priority": 1,
+                  "template": "cell-text",
+                  "weight": 1.5,
+                  "emphasized": true,
+                  "sortable": "none"
+                },
+                {
+                  "index": 1,
+                  "priority": 2,
+                  "template": "cell-entity",
+                  "weight": 3.3,
+                  "emphasized": false,
+                  "sortable": "none"
+                },
+                {
+                  "index": 2,
+                  "text": "PTS",
+                  "priority": 3,
+                  "template": "cell-number",
+                  "weight": 1,
+                  "emphasized": false,
+                  "sortable": "desc"
+                },
+                {
+                  "index": 3,
+                  "text": "AST",
+                  "priority": 1,
+                  "template": "cell-number",
+                  "weight": 1,
+                  "emphasized": false,
+                  "sortable": "desc"
+                },
+                {
+                  "index": 4,
+                  "text": "TO",
+                  "priority": 2,
+                  "template": "cell-number",
+                  "weight": 1,
+                  "emphasized": false,
+                  "sortable": "desc"
+                },
+                {
+                  "index": 5,
+                  "text": "PPS",
+                  "priority": 4,
+                  "template": "cell-number",
+                  "weight": 1,
+                  "emphasized": false,
+                  "sortable": "desc"
+                }
+              ],
+              "isPrimary": true
+            }
+          ],
+          "rows": [
+            {
+              "columns": [
+                {
+                  "index": 0,
+                  "text": "3/26",
+                  "emphasized": false
+                },
+                {
+                  "index": 1,
+                  "text": "ILL",
+                  "superscript": "L",
+                  "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Illinois.vresize.200.200.medium.1.png",
+                  "imageType": "image-logo",
+                  "imageAltText": "Illinois Fighting Illini",
+                  "emphasized": false,
+                  "subType": "loss",
+                  "alternateImageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Illinois-alternate.vresize.200.200.medium.1.png"
+                },
+                {
+                  "index": 2,
+                  "text": "55",
+                  "emphasized": false
+                },
+                {
+                  "index": 3,
+                  "text": "17",
+                  "emphasized": false
+                },
+                {
+                  "index": 4,
+                  "text": "4",
+                  "emphasized": false
+                },
+                {
+                  "index": 5,
+                  "text": "0.86",
+                  "emphasized": false
+                }
+              ],
+              "isCutoff": false,
+              "selected": false,
+              "entityLink": {
+                "webUrl": "/college-basketball/ncaa-tournament-sweet-16-illinois-fighting-illini-vs-houston-cougars-mar-26-2026-game-boxscore-264101?tab=boxscore",
+                "contentUri": "basketball/cbk/events/264101",
+                "contentType": "event",
+                "layout": {
+                  "path": "/layouts?type=layout&subtype=cbkEventLayout",
+                  "tokens": {
+                    "id": "264101",
+                    "eventUri": "basketball/cbk/events/264101",
+                    "homeUri": "basketball/cbk/teams/113",
+                    "awayUri": "basketball/cbk/teams/84"
+                  }
+                },
+                "analyticsSport": "college-basketball",
+                "tab": "boxscore",
+                "type": "entity"
+              },
+              "isFaded": false
+            },
+            {
+              "columns": [
+                {
+                  "index": 0,
+                  "text": "3/21",
+                  "emphasized": false
+                },
+                {
+                  "index": 1,
+                  "text": "TXAM",
+                  "superscript": "W",
+                  "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/TexasA&M.vresize.200.200.medium.1.png",
+                  "imageType": "image-logo",
+                  "imageAltText": "Texas A&M Aggies",
+                  "emphasized": false,
+                  "subType": "win",
+                  "alternateImageUrl": "https://b.fssta.com/uploads/application/college/team-logos/TexasA&M-alternate.vresize.200.200.medium.1.png"
+                },
+                {
+                  "index": 2,
+                  "text": "88",
+                  "emphasized": false
+                },
+                {
+                  "index": 3,
+                  "text": "14",
+                  "emphasized": false
+                },
+                {
+                  "index": 4,
+                  "text": "5",
+                  "emphasized": false
+                },
+                {
+                  "index": 5,
+                  "text": "1.29",
+                  "emphasized": false
+                }
+              ],
+              "isCutoff": false,
+              "selected": false,
+              "entityLink": {
+                "webUrl": "/college-basketball/ncaa-tournament-second-round-texas-am-aggies-vs-houston-cougars-mar-21-2026-game-boxscore-264094?tab=boxscore",
+                "contentUri": "basketball/cbk/events/264094",
+                "contentType": "event",
+                "layout": {
+                  "path": "/layouts?type=layout&subtype=cbkEventLayout",
+                  "tokens": {
+                    "id": "264094",
+                    "eventUri": "basketball/cbk/events/264094",
+                    "homeUri": "basketball/cbk/teams/113",
+                    "awayUri": "basketball/cbk/teams/51"
+                  }
+                },
+                "analyticsSport": "college-basketball",
+                "tab": "boxscore",
+                "type": "entity"
+              },
+              "isFaded": false
+            },
+            {
+              "columns": [
+                {
+                  "index": 0,
+                  "text": "3/19",
+                  "emphasized": false
+                },
+                {
+                  "index": 1,
+                  "text": "IDHO",
+                  "superscript": "W",
+                  "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Idaho.vresize.200.200.medium.0.png",
+                  "imageType": "image-logo",
+                  "imageAltText": "Idaho Vandals",
+                  "emphasized": false,
+                  "subType": "win",
+                  "alternateImageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Idaho.vresize.200.200.medium.0.png"
+                },
+                {
+                  "index": 2,
+                  "text": "78",
+                  "emphasized": false
+                },
+                {
+                  "index": 3,
+                  "text": "10",
+                  "emphasized": false
+                },
+                {
+                  "index": 4,
+                  "text": "6",
+                  "emphasized": false
+                },
+                {
+                  "index": 5,
+                  "text": "1.26",
+                  "emphasized": false
+                }
+              ],
+              "isCutoff": false,
+              "selected": false,
+              "entityLink": {
+                "webUrl": "/college-basketball/ncaa-tournament-first-round-idaho-vandals-vs-houston-cougars-mar-19-2026-game-boxscore-264074?tab=boxscore",
+                "contentUri": "basketball/cbk/events/264074",
+                "contentType": "event",
+                "layout": {
+                  "path": "/layouts?type=layout&subtype=cbkEventLayout",
+                  "tokens": {
+                    "id": "264074",
+                    "eventUri": "basketball/cbk/events/264074",
+                    "homeUri": "basketball/cbk/teams/113",
+                    "awayUri": "basketball/cbk/teams/98"
+                  }
+                },
+                "analyticsSport": "college-basketball",
+                "tab": "boxscore",
+                "type": "entity"
+              },
+              "isFaded": false
+            }
+          ]
+        },
+        {
+          "template": "table-game-log",
+          "title": "SCORING II",
+          "headers": [
+            {
+              "columns": [
+                {
+                  "index": 0,
+                  "text": "2025-26 REGULAR SEASON",
+                  "priority": 1,
+                  "template": "cell-text",
+                  "weight": 1.5,
+                  "emphasized": true,
+                  "sortable": "none"
+                },
+                {
+                  "index": 1,
+                  "priority": 2,
+                  "template": "cell-entity",
+                  "weight": 3.3,
+                  "emphasized": false,
+                  "sortable": "none"
+                },
+                {
+                  "index": 2,
+                  "text": "PTS",
+                  "priority": 3,
+                  "template": "cell-number",
+                  "weight": 1,
+                  "emphasized": false,
+                  "sortable": "desc"
+                },
+                {
+                  "index": 3,
+                  "text": "AST",
+                  "priority": 1,
+                  "template": "cell-number",
+                  "weight": 1,
+                  "emphasized": false,
+                  "sortable": "desc"
+                },
+                {
+                  "index": 4,
+                  "text": "TO",
+                  "priority": 2,
+                  "template": "cell-number",
+                  "weight": 1,
+                  "emphasized": false,
+                  "sortable": "desc"
+                },
+                {
+                  "index": 5,
+                  "text": "PPS",
+                  "priority": 4,
+                  "template": "cell-number",
+                  "weight": 1,
+                  "emphasized": false,
+                  "sortable": "desc"
+                }
+              ],
+              "isPrimary": true
+            }
+          ],
+          "rows": [
+            {
+              "columns": [
+                {
+                  "index": 0,
+                  "text": "3/14",
+                  "emphasized": false
+                },
+                {
+                  "index": 1,
+                  "text": "ARIZ",
+                  "superscript": "L",
+                  "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Arizona.vresize.200.200.medium.1.png",
+                  "imageType": "image-logo",
+                  "imageAltText": "Arizona Wildcats",
+                  "emphasized": false,
+                  "subType": "loss",
+                  "alternateImageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Arizona.vresize.200.200.medium.1.png"
+                },
+                {
+                  "index": 2,
+                  "text": "74",
+                  "emphasized": false
+                },
+                {
+                  "index": 3,
+                  "text": "13",
+                  "emphasized": false
+                },
+                {
+                  "index": 4,
+                  "text": "8",
+                  "emphasized": false
+                },
+                {
+                  "index": 5,
+                  "text": "1.16",
+                  "emphasized": false
+                }
+              ],
+              "isCutoff": false,
+              "selected": false,
+              "entityLink": {
+                "webUrl": "/college-basketball/conference-tournament-houston-cougars-vs-arizona-wildcats-mar-14-2026-game-boxscore-264371?tab=boxscore",
+                "contentUri": "basketball/cbk/events/264371",
+                "contentType": "event",
+                "layout": {
+                  "path": "/layouts?type=layout&subtype=cbkEventLayout",
+                  "tokens": {
+                    "id": "264371",
+                    "eventUri": "basketball/cbk/events/264371",
+                    "homeUri": "basketball/cbk/teams/220",
+                    "awayUri": "basketball/cbk/teams/113"
+                  }
+                },
+                "analyticsSport": "college-basketball",
+                "tab": "boxscore",
+                "type": "entity"
+              },
+              "isFaded": false
+            },
+            {
+              "columns": [
+                {
+                  "index": 0,
+                  "text": "3/13",
+                  "emphasized": false
+                },
+                {
+                  "index": 1,
+                  "text": "KU",
+                  "superscript": "W",
+                  "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Kansas.vresize.200.200.medium.1.png",
+                  "imageType": "image-logo",
+                  "imageAltText": "Kansas Jayhawks",
+                  "emphasized": false,
+                  "subType": "win",
+                  "alternateImageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Kansas.vresize.200.200.medium.1.png"
+                },
+                {
+                  "index": 2,
+                  "text": "69",
+                  "emphasized": false
+                },
+                {
+                  "index": 3,
+                  "text": "11",
+                  "emphasized": false
+                },
+                {
+                  "index": 4,
+                  "text": "5",
+                  "emphasized": false
+                },
+                {
+                  "index": 5,
+                  "text": "1.30",
+                  "emphasized": false
+                }
+              ],
+              "isCutoff": false,
+              "selected": false,
+              "entityLink": {
+                "webUrl": "/college-basketball/conference-tournament-kansas-jayhawks-vs-houston-cougars-mar-13-2026-game-boxscore-264367?tab=boxscore",
+                "contentUri": "basketball/cbk/events/264367",
+                "contentType": "event",
+                "layout": {
+                  "path": "/layouts?type=layout&subtype=cbkEventLayout",
+                  "tokens": {
+                    "id": "264367",
+                    "eventUri": "basketball/cbk/events/264367",
+                    "homeUri": "basketball/cbk/teams/113",
+                    "awayUri": "basketball/cbk/teams/44"
+                  }
+                },
+                "analyticsSport": "college-basketball",
+                "tab": "boxscore",
+                "type": "entity"
+              },
+              "isFaded": false
+            }
+          ]
+        }
+      ],
+      "moreLink": {
+        "text": "FULL SCORING II GAME LOG",
+        "webUrl": "/college-basketball/houston-cougars-team-game-log?season=2025&category=scoringii"
+      }
+    },
+    {
+      "id": "defense",
+      "tables": [
+        {
+          "template": "table-game-log",
+          "title": "DEFENSE",
+          "headers": [
+            {
+              "columns": [
+                {
+                  "index": 0,
+                  "text": "2025-26 POSTSEASON",
+                  "priority": 1,
+                  "template": "cell-text",
+                  "weight": 1.5,
+                  "emphasized": true,
+                  "sortable": "none"
+                },
+                {
+                  "index": 1,
+                  "priority": 2,
+                  "template": "cell-entity",
+                  "weight": 3.3,
+                  "emphasized": false,
+                  "sortable": "none"
+                },
+                {
+                  "index": 2,
+                  "text": "REB",
+                  "priority": 3,
+                  "template": "cell-number",
+                  "weight": 1,
+                  "emphasized": false,
+                  "sortable": "desc"
+                },
+                {
+                  "index": 3,
+                  "text": "OFF REB",
+                  "priority": 4,
+                  "template": "cell-number",
+                  "weight": 1,
+                  "emphasized": false,
+                  "sortable": "desc"
+                },
+                {
+                  "index": 4,
+                  "text": "DEF REB",
+                  "priority": 1,
+                  "template": "cell-number",
+                  "weight": 1,
+                  "emphasized": false,
+                  "sortable": "desc"
+                },
+                {
+                  "index": 5,
+                  "text": "STL",
+                  "priority": 5,
+                  "template": "cell-number",
+                  "weight": 1,
+                  "emphasized": false,
+                  "sortable": "desc"
+                },
+                {
+                  "index": 6,
+                  "text": "BLK",
+                  "priority": 2,
+                  "template": "cell-number",
+                  "weight": 1,
+                  "emphasized": false,
+                  "sortable": "desc"
+                }
+              ],
+              "isPrimary": true
+            }
+          ],
+          "rows": [
+            {
+              "columns": [
+                {
+                  "index": 0,
+                  "text": "3/26",
+                  "emphasized": false
+                },
+                {
+                  "index": 1,
+                  "text": "ILL",
+                  "superscript": "L",
+                  "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Illinois.vresize.200.200.medium.1.png",
+                  "imageType": "image-logo",
+                  "imageAltText": "Illinois Fighting Illini",
+                  "emphasized": false,
+                  "subType": "loss",
+                  "alternateImageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Illinois-alternate.vresize.200.200.medium.1.png"
+                },
+                {
+                  "index": 2,
+                  "text": "25",
+                  "emphasized": false
+                },
+                {
+                  "index": 3,
+                  "text": "6",
+                  "emphasized": false
+                },
+                {
+                  "index": 4,
+                  "text": "19",
+                  "emphasized": false
+                },
+                {
+                  "index": 5,
+                  "text": "4",
+                  "emphasized": false
+                },
+                {
+                  "index": 6,
+                  "text": "2",
+                  "emphasized": false
+                }
+              ],
+              "isCutoff": false,
+              "selected": false,
+              "entityLink": {
+                "webUrl": "/college-basketball/ncaa-tournament-sweet-16-illinois-fighting-illini-vs-houston-cougars-mar-26-2026-game-boxscore-264101?tab=boxscore",
+                "contentUri": "basketball/cbk/events/264101",
+                "contentType": "event",
+                "layout": {
+                  "path": "/layouts?type=layout&subtype=cbkEventLayout",
+                  "tokens": {
+                    "id": "264101",
+                    "eventUri": "basketball/cbk/events/264101",
+                    "homeUri": "basketball/cbk/teams/113",
+                    "awayUri": "basketball/cbk/teams/84"
+                  }
+                },
+                "analyticsSport": "college-basketball",
+                "tab": "boxscore",
+                "type": "entity"
+              },
+              "isFaded": false
+            },
+            {
+              "columns": [
+                {
+                  "index": 0,
+                  "text": "3/21",
+                  "emphasized": false
+                },
+                {
+                  "index": 1,
+                  "text": "TXAM",
+                  "superscript": "W",
+                  "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/TexasA&M.vresize.200.200.medium.1.png",
+                  "imageType": "image-logo",
+                  "imageAltText": "Texas A&M Aggies",
+                  "emphasized": false,
+                  "subType": "win",
+                  "alternateImageUrl": "https://b.fssta.com/uploads/application/college/team-logos/TexasA&M-alternate.vresize.200.200.medium.1.png"
+                },
+                {
+                  "index": 2,
+                  "text": "42",
+                  "emphasized": false
+                },
+                {
+                  "index": 3,
+                  "text": "16",
+                  "emphasized": false
+                },
+                {
+                  "index": 4,
+                  "text": "26",
+                  "emphasized": false
+                },
+                {
+                  "index": 5,
+                  "text": "4",
+                  "emphasized": false
+                },
+                {
+                  "index": 6,
+                  "text": "7",
+                  "emphasized": false
+                }
+              ],
+              "isCutoff": false,
+              "selected": false,
+              "entityLink": {
+                "webUrl": "/college-basketball/ncaa-tournament-second-round-texas-am-aggies-vs-houston-cougars-mar-21-2026-game-boxscore-264094?tab=boxscore",
+                "contentUri": "basketball/cbk/events/264094",
+                "contentType": "event",
+                "layout": {
+                  "path": "/layouts?type=layout&subtype=cbkEventLayout",
+                  "tokens": {
+                    "id": "264094",
+                    "eventUri": "basketball/cbk/events/264094",
+                    "homeUri": "basketball/cbk/teams/113",
+                    "awayUri": "basketball/cbk/teams/51"
+                  }
+                },
+                "analyticsSport": "college-basketball",
+                "tab": "boxscore",
+                "type": "entity"
+              },
+              "isFaded": false
+            },
+            {
+              "columns": [
+                {
+                  "index": 0,
+                  "text": "3/19",
+                  "emphasized": false
+                },
+                {
+                  "index": 1,
+                  "text": "IDHO",
+                  "superscript": "W",
+                  "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Idaho.vresize.200.200.medium.0.png",
+                  "imageType": "image-logo",
+                  "imageAltText": "Idaho Vandals",
+                  "emphasized": false,
+                  "subType": "win",
+                  "alternateImageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Idaho.vresize.200.200.medium.0.png"
+                },
+                {
+                  "index": 2,
+                  "text": "44",
+                  "emphasized": false
+                },
+                {
+                  "index": 3,
+                  "text": "5",
+                  "emphasized": false
+                },
+                {
+                  "index": 4,
+                  "text": "39",
+                  "emphasized": false
+                },
+                {
+                  "index": 5,
+                  "text": "8",
+                  "emphasized": false
+                },
+                {
+                  "index": 6,
+                  "text": "1",
+                  "emphasized": false
+                }
+              ],
+              "isCutoff": false,
+              "selected": false,
+              "entityLink": {
+                "webUrl": "/college-basketball/ncaa-tournament-first-round-idaho-vandals-vs-houston-cougars-mar-19-2026-game-boxscore-264074?tab=boxscore",
+                "contentUri": "basketball/cbk/events/264074",
+                "contentType": "event",
+                "layout": {
+                  "path": "/layouts?type=layout&subtype=cbkEventLayout",
+                  "tokens": {
+                    "id": "264074",
+                    "eventUri": "basketball/cbk/events/264074",
+                    "homeUri": "basketball/cbk/teams/113",
+                    "awayUri": "basketball/cbk/teams/98"
+                  }
+                },
+                "analyticsSport": "college-basketball",
+                "tab": "boxscore",
+                "type": "entity"
+              },
+              "isFaded": false
+            }
+          ]
+        },
+        {
+          "template": "table-game-log",
+          "title": "DEFENSE",
+          "headers": [
+            {
+              "columns": [
+                {
+                  "index": 0,
+                  "text": "2025-26 REGULAR SEASON",
+                  "priority": 1,
+                  "template": "cell-text",
+                  "weight": 1.5,
+                  "emphasized": true,
+                  "sortable": "none"
+                },
+                {
+                  "index": 1,
+                  "priority": 2,
+                  "template": "cell-entity",
+                  "weight": 3.3,
+                  "emphasized": false,
+                  "sortable": "none"
+                },
+                {
+                  "index": 2,
+                  "text": "REB",
+                  "priority": 3,
+                  "template": "cell-number",
+                  "weight": 1,
+                  "emphasized": false,
+                  "sortable": "desc"
+                },
+                {
+                  "index": 3,
+                  "text": "OFF REB",
+                  "priority": 4,
+                  "template": "cell-number",
+                  "weight": 1,
+                  "emphasized": false,
+                  "sortable": "desc"
+                },
+                {
+                  "index": 4,
+                  "text": "DEF REB",
+                  "priority": 1,
+                  "template": "cell-number",
+                  "weight": 1,
+                  "emphasized": false,
+                  "sortable": "desc"
+                },
+                {
+                  "index": 5,
+                  "text": "STL",
+                  "priority": 5,
+                  "template": "cell-number",
+                  "weight": 1,
+                  "emphasized": false,
+                  "sortable": "desc"
+                },
+                {
+                  "index": 6,
+                  "text": "BLK",
+                  "priority": 2,
+                  "template": "cell-number",
+                  "weight": 1,
+                  "emphasized": false,
+                  "sortable": "desc"
+                }
+              ],
+              "isPrimary": true
+            }
+          ],
+          "rows": [
+            {
+              "columns": [
+                {
+                  "index": 0,
+                  "text": "3/14",
+                  "emphasized": false
+                },
+                {
+                  "index": 1,
+                  "text": "ARIZ",
+                  "superscript": "L",
+                  "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Arizona.vresize.200.200.medium.1.png",
+                  "imageType": "image-logo",
+                  "imageAltText": "Arizona Wildcats",
+                  "emphasized": false,
+                  "subType": "loss",
+                  "alternateImageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Arizona.vresize.200.200.medium.1.png"
+                },
+                {
+                  "index": 2,
+                  "text": "31",
+                  "emphasized": false
+                },
+                {
+                  "index": 3,
+                  "text": "13",
+                  "emphasized": false
+                },
+                {
+                  "index": 4,
+                  "text": "18",
+                  "emphasized": false
+                },
+                {
+                  "index": 5,
+                  "text": "4",
+                  "emphasized": false
+                },
+                {
+                  "index": 6,
+                  "text": "3",
+                  "emphasized": false
+                }
+              ],
+              "isCutoff": false,
+              "selected": false,
+              "entityLink": {
+                "webUrl": "/college-basketball/conference-tournament-houston-cougars-vs-arizona-wildcats-mar-14-2026-game-boxscore-264371?tab=boxscore",
+                "contentUri": "basketball/cbk/events/264371",
+                "contentType": "event",
+                "layout": {
+                  "path": "/layouts?type=layout&subtype=cbkEventLayout",
+                  "tokens": {
+                    "id": "264371",
+                    "eventUri": "basketball/cbk/events/264371",
+                    "homeUri": "basketball/cbk/teams/220",
+                    "awayUri": "basketball/cbk/teams/113"
+                  }
+                },
+                "analyticsSport": "college-basketball",
+                "tab": "boxscore",
+                "type": "entity"
+              },
+              "isFaded": false
+            },
+            {
+              "columns": [
+                {
+                  "index": 0,
+                  "text": "3/13",
+                  "emphasized": false
+                },
+                {
+                  "index": 1,
+                  "text": "KU",
+                  "superscript": "W",
+                  "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Kansas.vresize.200.200.medium.1.png",
+                  "imageType": "image-logo",
+                  "imageAltText": "Kansas Jayhawks",
+                  "emphasized": false,
+                  "subType": "win",
+                  "alternateImageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Kansas.vresize.200.200.medium.1.png"
+                },
+                {
+                  "index": 2,
+                  "text": "40",
+                  "emphasized": false
+                },
+                {
+                  "index": 3,
+                  "text": "10",
+                  "emphasized": false
+                },
+                {
+                  "index": 4,
+                  "text": "30",
+                  "emphasized": false
+                },
+                {
+                  "index": 5,
+                  "text": "4",
+                  "emphasized": false
+                },
+                {
+                  "index": 6,
+                  "text": "4",
+                  "emphasized": false
+                }
+              ],
+              "isCutoff": false,
+              "selected": false,
+              "entityLink": {
+                "webUrl": "/college-basketball/conference-tournament-kansas-jayhawks-vs-houston-cougars-mar-13-2026-game-boxscore-264367?tab=boxscore",
+                "contentUri": "basketball/cbk/events/264367",
+                "contentType": "event",
+                "layout": {
+                  "path": "/layouts?type=layout&subtype=cbkEventLayout",
+                  "tokens": {
+                    "id": "264367",
+                    "eventUri": "basketball/cbk/events/264367",
+                    "homeUri": "basketball/cbk/teams/113",
+                    "awayUri": "basketball/cbk/teams/44"
+                  }
+                },
+                "analyticsSport": "college-basketball",
+                "tab": "boxscore",
+                "type": "entity"
+              },
+              "isFaded": false
+            }
+          ]
+        }
+      ],
+      "moreLink": {
+        "text": "FULL DEFENSE GAME LOG",
+        "webUrl": "/college-basketball/houston-cougars-team-game-log?season=2025&category=defense"
+      }
+    },
+    {
+      "id": "miscellaneous",
+      "tables": [
+        {
+          "template": "table-game-log",
+          "title": "MISCELLANEOUS",
+          "headers": [
+            {
+              "columns": [
+                {
+                  "index": 0,
+                  "text": "2025-26 POSTSEASON",
+                  "priority": 1,
+                  "template": "cell-text",
+                  "weight": 1.5,
+                  "emphasized": true,
+                  "sortable": "none"
+                },
+                {
+                  "index": 1,
+                  "priority": 2,
+                  "template": "cell-entity",
+                  "weight": 3.3,
+                  "emphasized": false,
+                  "sortable": "none"
+                },
+                {
+                  "index": 2,
+                  "text": "PF",
+                  "priority": 1,
+                  "template": "cell-number",
+                  "weight": 1,
+                  "emphasized": false,
+                  "sortable": "desc"
+                },
+                {
+                  "index": 3,
+                  "text": "FO",
+                  "priority": 3,
+                  "template": "cell-number",
+                  "weight": 1,
+                  "emphasized": false,
+                  "sortable": "desc"
+                },
+                {
+                  "index": 4,
+                  "text": "FLAG",
+                  "priority": 4,
+                  "template": "cell-number",
+                  "weight": 1,
+                  "emphasized": false,
+                  "sortable": "desc"
+                }
+              ],
+              "isPrimary": true
+            }
+          ],
+          "rows": [
+            {
+              "columns": [
+                {
+                  "index": 0,
+                  "text": "3/26",
+                  "emphasized": false
+                },
+                {
+                  "index": 1,
+                  "text": "ILL",
+                  "superscript": "L",
+                  "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Illinois.vresize.200.200.medium.1.png",
+                  "imageType": "image-logo",
+                  "imageAltText": "Illinois Fighting Illini",
+                  "emphasized": false,
+                  "subType": "loss",
+                  "alternateImageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Illinois-alternate.vresize.200.200.medium.1.png"
+                },
+                {
+                  "index": 2,
+                  "text": "21",
+                  "emphasized": false
+                },
+                {
+                  "index": 3,
+                  "text": "0",
+                  "emphasized": false
+                },
+                {
+                  "index": 4,
+                  "text": "0",
+                  "emphasized": false
+                }
+              ],
+              "isCutoff": false,
+              "selected": false,
+              "entityLink": {
+                "webUrl": "/college-basketball/ncaa-tournament-sweet-16-illinois-fighting-illini-vs-houston-cougars-mar-26-2026-game-boxscore-264101?tab=boxscore",
+                "contentUri": "basketball/cbk/events/264101",
+                "contentType": "event",
+                "layout": {
+                  "path": "/layouts?type=layout&subtype=cbkEventLayout",
+                  "tokens": {
+                    "id": "264101",
+                    "eventUri": "basketball/cbk/events/264101",
+                    "homeUri": "basketball/cbk/teams/113",
+                    "awayUri": "basketball/cbk/teams/84"
+                  }
+                },
+                "analyticsSport": "college-basketball",
+                "tab": "boxscore",
+                "type": "entity"
+              },
+              "isFaded": false
+            },
+            {
+              "columns": [
+                {
+                  "index": 0,
+                  "text": "3/21",
+                  "emphasized": false
+                },
+                {
+                  "index": 1,
+                  "text": "TXAM",
+                  "superscript": "W",
+                  "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/TexasA&M.vresize.200.200.medium.1.png",
+                  "imageType": "image-logo",
+                  "imageAltText": "Texas A&M Aggies",
+                  "emphasized": false,
+                  "subType": "win",
+                  "alternateImageUrl": "https://b.fssta.com/uploads/application/college/team-logos/TexasA&M-alternate.vresize.200.200.medium.1.png"
+                },
+                {
+                  "index": 2,
+                  "text": "16",
+                  "emphasized": false
+                },
+                {
+                  "index": 3,
+                  "text": "0",
+                  "emphasized": false
+                },
+                {
+                  "index": 4,
+                  "text": "0",
+                  "emphasized": false
+                }
+              ],
+              "isCutoff": false,
+              "selected": false,
+              "entityLink": {
+                "webUrl": "/college-basketball/ncaa-tournament-second-round-texas-am-aggies-vs-houston-cougars-mar-21-2026-game-boxscore-264094?tab=boxscore",
+                "contentUri": "basketball/cbk/events/264094",
+                "contentType": "event",
+                "layout": {
+                  "path": "/layouts?type=layout&subtype=cbkEventLayout",
+                  "tokens": {
+                    "id": "264094",
+                    "eventUri": "basketball/cbk/events/264094",
+                    "homeUri": "basketball/cbk/teams/113",
+                    "awayUri": "basketball/cbk/teams/51"
+                  }
+                },
+                "analyticsSport": "college-basketball",
+                "tab": "boxscore",
+                "type": "entity"
+              },
+              "isFaded": false
+            },
+            {
+              "columns": [
+                {
+                  "index": 0,
+                  "text": "3/19",
+                  "emphasized": false
+                },
+                {
+                  "index": 1,
+                  "text": "IDHO",
+                  "superscript": "W",
+                  "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Idaho.vresize.200.200.medium.0.png",
+                  "imageType": "image-logo",
+                  "imageAltText": "Idaho Vandals",
+                  "emphasized": false,
+                  "subType": "win",
+                  "alternateImageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Idaho.vresize.200.200.medium.0.png"
+                },
+                {
+                  "index": 2,
+                  "text": "15",
+                  "emphasized": false
+                },
+                {
+                  "index": 3,
+                  "text": "0",
+                  "emphasized": false
+                },
+                {
+                  "index": 4,
+                  "text": "0",
+                  "emphasized": false
+                }
+              ],
+              "isCutoff": false,
+              "selected": false,
+              "entityLink": {
+                "webUrl": "/college-basketball/ncaa-tournament-first-round-idaho-vandals-vs-houston-cougars-mar-19-2026-game-boxscore-264074?tab=boxscore",
+                "contentUri": "basketball/cbk/events/264074",
+                "contentType": "event",
+                "layout": {
+                  "path": "/layouts?type=layout&subtype=cbkEventLayout",
+                  "tokens": {
+                    "id": "264074",
+                    "eventUri": "basketball/cbk/events/264074",
+                    "homeUri": "basketball/cbk/teams/113",
+                    "awayUri": "basketball/cbk/teams/98"
+                  }
+                },
+                "analyticsSport": "college-basketball",
+                "tab": "boxscore",
+                "type": "entity"
+              },
+              "isFaded": false
+            }
+          ]
+        },
+        {
+          "template": "table-game-log",
+          "title": "MISCELLANEOUS",
+          "headers": [
+            {
+              "columns": [
+                {
+                  "index": 0,
+                  "text": "2025-26 REGULAR SEASON",
+                  "priority": 1,
+                  "template": "cell-text",
+                  "weight": 1.5,
+                  "emphasized": true,
+                  "sortable": "none"
+                },
+                {
+                  "index": 1,
+                  "priority": 2,
+                  "template": "cell-entity",
+                  "weight": 3.3,
+                  "emphasized": false,
+                  "sortable": "none"
+                },
+                {
+                  "index": 2,
+                  "text": "PF",
+                  "priority": 1,
+                  "template": "cell-number",
+                  "weight": 1,
+                  "emphasized": false,
+                  "sortable": "desc"
+                },
+                {
+                  "index": 3,
+                  "text": "FO",
+                  "priority": 3,
+                  "template": "cell-number",
+                  "weight": 1,
+                  "emphasized": false,
+                  "sortable": "desc"
+                },
+                {
+                  "index": 4,
+                  "text": "FLAG",
+                  "priority": 4,
+                  "template": "cell-number",
+                  "weight": 1,
+                  "emphasized": false,
+                  "sortable": "desc"
+                }
+              ],
+              "isPrimary": true
+            }
+          ],
+          "rows": [
+            {
+              "columns": [
+                {
+                  "index": 0,
+                  "text": "3/14",
+                  "emphasized": false
+                },
+                {
+                  "index": 1,
+                  "text": "ARIZ",
+                  "superscript": "L",
+                  "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Arizona.vresize.200.200.medium.1.png",
+                  "imageType": "image-logo",
+                  "imageAltText": "Arizona Wildcats",
+                  "emphasized": false,
+                  "subType": "loss",
+                  "alternateImageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Arizona.vresize.200.200.medium.1.png"
+                },
+                {
+                  "index": 2,
+                  "text": "21",
+                  "emphasized": false
+                },
+                {
+                  "index": 3,
+                  "text": "1",
+                  "emphasized": false
+                },
+                {
+                  "index": 4,
+                  "text": "0",
+                  "emphasized": false
+                }
+              ],
+              "isCutoff": false,
+              "selected": false,
+              "entityLink": {
+                "webUrl": "/college-basketball/conference-tournament-houston-cougars-vs-arizona-wildcats-mar-14-2026-game-boxscore-264371?tab=boxscore",
+                "contentUri": "basketball/cbk/events/264371",
+                "contentType": "event",
+                "layout": {
+                  "path": "/layouts?type=layout&subtype=cbkEventLayout",
+                  "tokens": {
+                    "id": "264371",
+                    "eventUri": "basketball/cbk/events/264371",
+                    "homeUri": "basketball/cbk/teams/220",
+                    "awayUri": "basketball/cbk/teams/113"
+                  }
+                },
+                "analyticsSport": "college-basketball",
+                "tab": "boxscore",
+                "type": "entity"
+              },
+              "isFaded": false
+            },
+            {
+              "columns": [
+                {
+                  "index": 0,
+                  "text": "3/13",
+                  "emphasized": false
+                },
+                {
+                  "index": 1,
+                  "text": "KU",
+                  "superscript": "W",
+                  "imageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Kansas.vresize.200.200.medium.1.png",
+                  "imageType": "image-logo",
+                  "imageAltText": "Kansas Jayhawks",
+                  "emphasized": false,
+                  "subType": "win",
+                  "alternateImageUrl": "https://b.fssta.com/uploads/application/college/team-logos/Kansas.vresize.200.200.medium.1.png"
+                },
+                {
+                  "index": 2,
+                  "text": "15",
+                  "emphasized": false
+                },
+                {
+                  "index": 3,
+                  "text": "0",
+                  "emphasized": false
+                },
+                {
+                  "index": 4,
+                  "text": "0",
+                  "emphasized": false
+                }
+              ],
+              "isCutoff": false,
+              "selected": false,
+              "entityLink": {
+                "webUrl": "/college-basketball/conference-tournament-kansas-jayhawks-vs-houston-cougars-mar-13-2026-game-boxscore-264367?tab=boxscore",
+                "contentUri": "basketball/cbk/events/264367",
+                "contentType": "event",
+                "layout": {
+                  "path": "/layouts?type=layout&subtype=cbkEventLayout",
+                  "tokens": {
+                    "id": "264367",
+                    "eventUri": "basketball/cbk/events/264367",
+                    "homeUri": "basketball/cbk/teams/113",
+                    "awayUri": "basketball/cbk/teams/44"
+                  }
+                },
+                "analyticsSport": "college-basketball",
+                "tab": "boxscore",
+                "type": "entity"
+              },
+              "isFaded": false
+            }
+          ]
+        }
+      ],
+      "moreLink": {
+        "text": "FULL MISCELLANEOUS GAME LOG",
+        "webUrl": "/college-basketball/houston-cougars-team-game-log?season=2025&category=miscellaneous"
+      }
+    }
+  ],
+  "metadata": {
+    "parameters": {
+      "teamName": "Houston Cougars",
+      "year": "2025-26"
+    }
+  }
+}

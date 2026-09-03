@@ -1,0 +1,1055 @@
+{
+ "data": {
+  "existing_total": 12,
+  "results": [
+   {
+    "spark_id": "c5b4fa5e-7b30-5f41-be52-f54522e4a83e",
+    "external_id": "fmc-18j026gny6xn16jb",
+    "last_published_date": "2026-06-12T03:55:47+00:00",
+    "source": {
+     "fn_type": "",
+     "label": "MediaCloud",
+     "name": "South Korea vs Czechia Highlights | 2026 FIFA World Cup\u2122",
+     "publisher": "fmc",
+     "slug": "",
+     "source_id": "fmc-18j026gny6xn16jb",
+     "spark_id": "c5b4fa5e-7b30-5f41-be52-f54522e4a83e",
+     "url": ""
+    },
+    "spark_shows": {},
+    "category": {
+     "page_url": "foxsports.com/category/soccer",
+     "spark_id": "f445ac14-7de3-5571-b2f9-17056f2546d1",
+     "description": "",
+     "wp__origin": {
+      "site": "cms.foxsports.com",
+      "environment": "production",
+      "blog_id": 1,
+      "source": "tiger-cms",
+      "term_id": 20,
+      "taxonomy_type": "category"
+     },
+     "label": "Soccer",
+     "media_tags": [],
+     "title": "Soccer",
+     "canonical_url": "foxsports.com/category/soccer",
+     "type": "spark_categories",
+     "fn__type": "sections",
+     "path": "fs/soccer",
+     "uuidv5": "f445ac14-7de3-5571-b2f9-17056f2546d1",
+     "created_date": "2020-01-08T21:12:32-05:00",
+     "post_status": "publish",
+     "id": "f445ac14-7de3-5571-b2f9-17056f2546d1",
+     "slug": "soccer"
+    },
+    "original_import_date": "2026-06-12T03:49:04Z",
+    "description": "Check out the full game highlights between South Korea and Czechia in the 2026 FIFA World Cup\u2122. Announced by Jacqui Oatley and Warren Barton.",
+    "last_modified_date": "2026-06-12T11:47:36Z",
+    "expiration_date": "2031-01-01T07:30:00Z",
+    "title": "South Korea vs Czechia Highlights | 2026 FIFA World Cup\u2122",
+    "component_type": "video",
+    "content_type": "external_media_cloud",
+    "station": "",
+    "alert_title": "",
+    "publication_date": "2026-06-12T03:55:47Z",
+    "id": "c5b4fa5e-7b30-5f41-be52-f54522e4a83e",
+    "mcvod": {
+     "organizational_tags": [],
+     "traffic_code": "",
+     "credit_cue_point": 0,
+     "vertical_thumbnail": {
+      "copyright": "",
+      "spark_id": "",
+      "content_type": "image",
+      "alt": "South Korea vs Czechia Highlights | 2026 FIFA World Cup\u2122",
+      "caption": "South Korea vs Czechia Highlights | 2026 FIFA World Cup\u2122",
+      "url": null
+     },
+     "freewheel_id": "fmc-18j026gny6xn16jb",
+     "content_sku": [],
+     "proxy_captions": [
+      "https://statics.foxsports.com/mediacloud/fmc-18j026gny6xn16jb/fmc-18j026gny6xn16jb--mc-vod_processed.scc",
+      "https://statics.foxsports.com/mediacloud/fmc-18j026gny6xn16jb/fmc-18j026gny6xn16jb--mc-vod_processed.srt",
+      "https://statics.foxsports.com/mediacloud/fmc-18j026gny6xn16jb/fmc-18j026gny6xn16jb--mc-vod_processed.vtt",
+      "https://statics.foxsports.com/mediacloud/fmc-18j026gny6xn16jb/fmc-18j026gny6xn16jb--mc-vod_processed.smptett"
+     ],
+     "listing_id": "",
+     "policies": {
+      "geo_filter": [],
+      "downloadable_content": false,
+      "availability_by_time_zone": false,
+      "availability": []
+     },
+     "has_vertical": false,
+     "episode": {
+      "episode_number": "",
+      "tms_id": "",
+      "show_code": "fifa-world-cup-4-minute-horizontal-game-recap",
+      "gracenote_id": ""
+     },
+     "requires_drm": false,
+     "allow_ads": true,
+     "gracenote_id": "",
+     "local_station": "fs1_digital",
+     "foxipedia_id": "",
+     "network": "fs",
+     "public_url": "https://d3ayhwgrwyc4j8.cloudfront.net/mcvod/fmc-18j026gny6xn16jb_VX-16401957--603936/hls/v1_1/index.m3u8",
+     "duration": 265.16666,
+     "original_air_date": "2026-06-12T03:55:46Z",
+     "event_show_type": "",
+     "genres": [
+      "Sports"
+     ],
+     "stream_type": "mcvod",
+     "content_rating": "Not Rated",
+     "closed_captions": "https://statics.foxsports.com/mediacloud/fmc-18j026gny6xn16jb/fmc-18j026gny6xn16jb--mc-vod_processed.vtt",
+     "playback_url": "https://d3ayhwgrwyc4j8.cloudfront.net/mcvod/fmc-18j026gny6xn16jb_VX-16401957--603936/hls/v1_1/index.m3u8",
+     "requires_auth": false,
+     "video_source": "fmc",
+     "m3u8_url": "https://d3ayhwgrwyc4j8.cloudfront.net/mcvod/fmc-18j026gny6xn16jb_VX-16401957--603936/hls/v1_1/index.m3u8",
+     "start_date": "2026-06-12T03:55:46Z",
+     "vertical_video_playback_url": null,
+     "audio_only": false,
+     "orientation": "horizontal",
+     "event_uri": "soccer/wc/events/647617",
+     "content_id": "fmc-18j026gny6xn16jb",
+     "display": {
+      "tv_rating_overlay": false,
+      "network_bug": false
+     },
+     "show_code": "fifa-world-cup-4-minute-horizontal-game-recap",
+     "content_ad_type": "dai",
+     "video_type": "clip",
+     "document_releases": [],
+     "series": {
+      "series_name": "FIFA World Cup 4 Minute Horizontal Game Recap",
+      "show_code": "fifa-world-cup-4-minute-horizontal-game-recap",
+      "gracenote_id": "SH064326380000",
+      "foxipedia_id": "SER01137906WIDP"
+     },
+     "program_network": "fs1_digital",
+     "primary_business_unit": "sports",
+     "proxy_url": "https://statics.foxsports.com/mediacloud/fmc-18j026gny6xn16jb/South_KoreavsCzech_4_min-_lowres.mp4",
+     "category": "soccer"
+    },
+    "post_status": "publish",
+    "external_source": "fmc",
+    "alert_eligibility": "Eligible",
+    "thumbnail": {
+     "copyright": "",
+     "spark_id": "",
+     "content_type": "image",
+     "alt": "South Korea vs Czechia Highlights | 2026 FIFA World Cup\u2122",
+     "caption": "South Korea vs Czechia Highlights | 2026 FIFA World Cup\u2122",
+     "url": "https://static-media.fox.com/fmc/prod/sports/VX-16401957/rdm5qnlyqb64xa08.jpg"
+    },
+    "alert_description": "",
+    "canonical_url": "foxsports.com/watch/fmc-18j026gny6xn16jb",
+    "content_topic": "full_game_highlights",
+    "autoplay": false,
+    "tags": [
+     {
+      "path": "fs/hwang-in-beom",
+      "external_uri": "soccer/all/athletes/69138",
+      "spark_id": "8ab6ed05-c4a8-5249-a40d-5d87631b7f31",
+      "short_title": "",
+      "tag_type": "athlete",
+      "parent_external_id": "soccer/all/teams/320",
+      "external_id": 69138,
+      "id": "8ab6ed05-c4a8-5249-a40d-5d87631b7f31",
+      "label": "Hwang In-beom",
+      "title": "Hwang In-beom",
+      "slug": "hwang-in-beom",
+      "parent_external_uri": "soccer/all/teams/320"
+     },
+     {
+      "path": "fs/fifa-world-cup-men",
+      "external_uri": "soccer/wc/league/12",
+      "spark_id": "19afdb17-f08b-5ccc-a99b-e42dd1558e9b",
+      "short_title": "World Cup",
+      "tag_type": "league",
+      "parent_external_id": "soccer",
+      "external_id": 12,
+      "id": "19afdb17-f08b-5ccc-a99b-e42dd1558e9b",
+      "label": "FIFA Men's World Cup",
+      "title": "FIFA Men's World Cup",
+      "slug": "fifa-world-cup-men",
+      "parent_external_uri": "soccer"
+     },
+     {
+      "path": "fs/czech-republic-men",
+      "external_uri": "soccer/all/teams/526",
+      "spark_id": "05a865bd-7fd7-50d7-b1cc-41a9d5b30ae3",
+      "short_title": "Czechia",
+      "tag_type": "team",
+      "parent_external_id": "soccer/wc/league/12",
+      "external_id": 526,
+      "id": "05a865bd-7fd7-50d7-b1cc-41a9d5b30ae3",
+      "label": "Czechia",
+      "title": "Czechia",
+      "slug": "czech-republic-men",
+      "parent_external_uri": "soccer/wc/league/12"
+     },
+     {
+      "path": "fs/ladislav-krejci-2",
+      "external_uri": "soccer/all/athletes/71366",
+      "spark_id": "5855527b-5e66-56fc-acc2-cbdd4f827c0e",
+      "short_title": "",
+      "tag_type": "athlete",
+      "parent_external_id": "soccer/all/teams/347",
+      "external_id": 71366,
+      "id": "5855527b-5e66-56fc-acc2-cbdd4f827c0e",
+      "label": "Ladislav Krejci",
+      "title": "Ladislav Krejci",
+      "slug": "ladislav-krejci-2",
+      "parent_external_uri": "soccer/all/teams/347"
+     },
+     {
+      "path": "fs/647617",
+      "external_uri": "soccer/wc/events/647617",
+      "spark_id": "ac4a45fe-3a1e-56e4-be60-5de94ad67252",
+      "short_title": "WC - KOR vs. CZE - 6/11/26",
+      "tag_type": "event",
+      "parent_external_id": "soccer/wc/league/12",
+      "external_id": 647617,
+      "id": "ac4a45fe-3a1e-56e4-be60-5de94ad67252",
+      "label": "WC - South Korea vs. Czechia - 06/11/2026",
+      "title": "WC - South Korea vs. Czechia - 06/11/2026",
+      "slug": "647617",
+      "parent_external_uri": "soccer/wc/league/12"
+     },
+     {
+      "path": "fs/korea-republic-men",
+      "external_uri": "soccer/all/teams/522",
+      "spark_id": "66581634-31c7-5075-98ea-504d48e3985d",
+      "short_title": "South Korea",
+      "tag_type": "team",
+      "parent_external_id": "soccer/wc/league/12",
+      "external_id": 522,
+      "id": "66581634-31c7-5075-98ea-504d48e3985d",
+      "label": "South Korea",
+      "title": "South Korea",
+      "slug": "korea-republic-men",
+      "parent_external_uri": "soccer/wc/league/12"
+     },
+     {
+      "path": "fs/fifa-world-cup-4-minute-game-recaps",
+      "external_uri": "topics/fifa-world-cup---4-minute-game-recaps",
+      "spark_id": "57f3f2f5-49f4-5b1e-81e4-5702f1474b44",
+      "short_title": "",
+      "tag_type": "topic",
+      "parent_external_id": "",
+      "external_id": "topics/fifa-world-cup---4-minute-game-recaps",
+      "id": "57f3f2f5-49f4-5b1e-81e4-5702f1474b44",
+      "label": "FIFA World Cup - 4 Minute Game Recaps",
+      "title": "FIFA World Cup - 4 Minute Game Recaps",
+      "slug": "fifa-world-cup-4-minute-game-recaps",
+      "parent_external_uri": ""
+     }
+    ],
+    "spark_persons": [],
+    "vanity_urls": [],
+    "created_date": "2026-06-12T03:49:04Z",
+    "last_import_date": "2026-06-12T11:47:40Z",
+    "playback_url": "https://d3ayhwgrwyc4j8.cloudfront.net/mcvod/fmc-18j026gny6xn16jb_VX-16401957--603936/hls/v1_1/index.m3u8"
+   },
+   {
+    "spark_id": "f0ed4ab5-8594-5654-9937-88141802296c",
+    "external_id": "fmc-6ge33b0yn4pdow9w",
+    "last_published_date": "2026-06-11T22:49:31+00:00",
+    "source": {
+     "fn_type": "",
+     "label": "MediaCloud",
+     "name": "Mexico vs South Africa Highlights | 2026 FIFA World Cup\u2122",
+     "publisher": "fmc",
+     "slug": "",
+     "source_id": "fmc-6ge33b0yn4pdow9w",
+     "spark_id": "f0ed4ab5-8594-5654-9937-88141802296c",
+     "url": ""
+    },
+    "spark_shows": {},
+    "category": {
+     "page_url": "foxsports.com/category/other",
+     "spark_id": "021b2b5c-b471-5084-bd7f-7ea994a63e18",
+     "description": "",
+     "wp__origin": {
+      "site": "cms.foxsports.com",
+      "environment": "production",
+      "blog_id": 1,
+      "source": "tiger-cms",
+      "term_id": 29,
+      "taxonomy_type": "category"
+     },
+     "label": "Other",
+     "media_tags": [],
+     "title": "Other",
+     "canonical_url": "foxsports.com/category/other",
+     "type": "spark_categories",
+     "fn__type": "sections",
+     "path": "fs/other",
+     "uuidv5": "021b2b5c-b471-5084-bd7f-7ea994a63e18",
+     "created_date": "2020-01-08T21:15:12-05:00",
+     "post_status": "publish",
+     "id": "021b2b5c-b471-5084-bd7f-7ea994a63e18",
+     "slug": "other"
+    },
+    "original_import_date": "2026-06-11T21:05:23Z",
+    "description": "Check out the full game highlights between Mexico and South Africa in the 2026 FIFA World Cup\u2122. Announced by Ian Darke and Landon Donovan ",
+    "last_modified_date": "2026-06-11T23:05:36Z",
+    "expiration_date": "2031-01-01T07:30:00Z",
+    "title": "Mexico vs South Africa Highlights | 2026 FIFA World Cup\u2122",
+    "component_type": "video",
+    "content_type": "external_media_cloud",
+    "station": "",
+    "alert_title": "",
+    "publication_date": "2026-06-11T22:49:31Z",
+    "id": "f0ed4ab5-8594-5654-9937-88141802296c",
+    "mcvod": {
+     "organizational_tags": [],
+     "traffic_code": "",
+     "credit_cue_point": 0,
+     "vertical_thumbnail": {
+      "copyright": "",
+      "spark_id": "",
+      "content_type": "image",
+      "alt": "Mexico vs South Africa Highlights | 2026 FIFA World Cup\u2122",
+      "caption": "Mexico vs South Africa Highlights | 2026 FIFA World Cup\u2122",
+      "url": null
+     },
+     "freewheel_id": "fmc-6ge33b0yn4pdow9w",
+     "content_sku": [],
+     "proxy_captions": [
+      "https://statics.foxsports.com/mediacloud/fmc-6ge33b0yn4pdow9w/fmc-6ge33b0yn4pdow9w--mc-vod_processed.scc",
+      "https://statics.foxsports.com/mediacloud/fmc-6ge33b0yn4pdow9w/fmc-6ge33b0yn4pdow9w--mc-vod_processed.smptett",
+      "https://statics.foxsports.com/mediacloud/fmc-6ge33b0yn4pdow9w/fmc-6ge33b0yn4pdow9w--mc-vod_processed.vtt",
+      "https://statics.foxsports.com/mediacloud/fmc-6ge33b0yn4pdow9w/fmc-6ge33b0yn4pdow9w--mc-vod_processed.srt"
+     ],
+     "listing_id": "",
+     "policies": {
+      "geo_filter": [],
+      "downloadable_content": false,
+      "availability_by_time_zone": false,
+      "availability": []
+     },
+     "has_vertical": false,
+     "episode": {
+      "episode_number": "",
+      "tms_id": "",
+      "show_code": "fifa-world-cup-4-minute-horizontal-game-recap",
+      "gracenote_id": ""
+     },
+     "requires_drm": false,
+     "allow_ads": true,
+     "gracenote_id": "",
+     "local_station": "fs1_digital",
+     "foxipedia_id": "",
+     "network": "fs",
+     "public_url": "https://d3ayhwgrwyc4j8.cloudfront.net/mcvod/fmc-6ge33b0yn4pdow9w_VX-16400112--603733/hls/v1_1/index.m3u8",
+     "duration": 276.5,
+     "original_air_date": "2026-06-11T22:49:31Z",
+     "event_show_type": "",
+     "genres": [
+      "Sports"
+     ],
+     "stream_type": "mcvod",
+     "content_rating": "Not Rated",
+     "closed_captions": "https://statics.foxsports.com/mediacloud/fmc-6ge33b0yn4pdow9w/fmc-6ge33b0yn4pdow9w--mc-vod_processed.vtt",
+     "playback_url": "https://d3ayhwgrwyc4j8.cloudfront.net/mcvod/fmc-6ge33b0yn4pdow9w_VX-16400112--603733/hls/v1_1/index.m3u8",
+     "requires_auth": false,
+     "video_source": "fmc",
+     "m3u8_url": "https://d3ayhwgrwyc4j8.cloudfront.net/mcvod/fmc-6ge33b0yn4pdow9w_VX-16400112--603733/hls/v1_1/index.m3u8",
+     "start_date": "2026-06-11T22:49:31Z",
+     "vertical_video_playback_url": null,
+     "audio_only": false,
+     "orientation": "horizontal",
+     "event_uri": "soccer/wc/events/647616",
+     "content_id": "fmc-6ge33b0yn4pdow9w",
+     "display": {
+      "tv_rating_overlay": false,
+      "network_bug": false
+     },
+     "show_code": "fifa-world-cup-4-minute-horizontal-game-recap",
+     "content_ad_type": "dai",
+     "video_type": "clip",
+     "document_releases": [],
+     "series": {
+      "series_name": "FIFA World Cup 4 Minute Horizontal Game Recap",
+      "show_code": "fifa-world-cup-4-minute-horizontal-game-recap",
+      "gracenote_id": "SH064326380000",
+      "foxipedia_id": "SER01137906WIDP"
+     },
+     "program_network": "fs1_digital",
+     "primary_business_unit": "sports",
+     "proxy_url": "https://statics.foxsports.com/mediacloud/fmc-6ge33b0yn4pdow9w/4MINMEXRSA_lowres.mp4",
+     "category": "Soccer"
+    },
+    "post_status": "publish",
+    "external_source": "fmc",
+    "alert_eligibility": "Eligible",
+    "thumbnail": {
+     "copyright": "",
+     "spark_id": "",
+     "content_type": "image",
+     "alt": "Mexico vs South Africa Highlights | 2026 FIFA World Cup\u2122",
+     "caption": "Mexico vs South Africa Highlights | 2026 FIFA World Cup\u2122",
+     "url": "https://static-media.fox.com/fmc/prod/sports/VX-16400112/uur1yv9gdivf79xp.jpg"
+    },
+    "alert_description": "",
+    "canonical_url": "foxsports.com/watch/fmc-6ge33b0yn4pdow9w",
+    "content_topic": "full_game_highlights",
+    "autoplay": false,
+    "tags": [
+     {
+      "path": "fs/raul-jimenez-2",
+      "external_uri": "soccer/all/athletes/118751",
+      "spark_id": "50c76e51-1e55-5f85-a87d-62e9f83696bb",
+      "tag_type": "athlete",
+      "parent_external_id": "soccer/all/teams/30",
+      "external_id": 118751,
+      "id": "50c76e51-1e55-5f85-a87d-62e9f83696bb",
+      "label": "Raul Jimenez",
+      "title": "Raul Jimenez",
+      "slug": "raul-jimenez-2",
+      "parent_external_uri": "soccer/all/teams/30"
+     },
+     {
+      "path": "fs/julian-quinones",
+      "external_uri": "soccer/all/athletes/44757",
+      "spark_id": "f6e0ac80-617b-528a-a951-1fa7d7cf2892",
+      "short_title": "",
+      "tag_type": "athlete",
+      "parent_external_id": "soccer/all/teams/3741",
+      "external_id": 44757,
+      "id": "f6e0ac80-617b-528a-a951-1fa7d7cf2892",
+      "label": "Julian Quinones",
+      "title": "Julian Quinones",
+      "slug": "julian-quinones",
+      "parent_external_uri": "soccer/all/teams/3741"
+     },
+     {
+      "path": "fs/mexico-men",
+      "external_uri": "soccer/all/teams/493",
+      "spark_id": "383c0d5a-50fa-5f32-843a-2c0042850284",
+      "short_title": "Mexico",
+      "tag_type": "team",
+      "parent_external_id": "soccer/wc/league/12",
+      "external_id": 493,
+      "id": "383c0d5a-50fa-5f32-843a-2c0042850284",
+      "label": "Mexico",
+      "title": "Mexico",
+      "slug": "mexico-men",
+      "parent_external_uri": "soccer/wc/league/12"
+     },
+     {
+      "path": "fs/fifa-world-cup-men",
+      "external_uri": "soccer/wc/league/12",
+      "spark_id": "19afdb17-f08b-5ccc-a99b-e42dd1558e9b",
+      "short_title": "World Cup",
+      "tag_type": "league",
+      "parent_external_id": "soccer",
+      "external_id": 12,
+      "id": "19afdb17-f08b-5ccc-a99b-e42dd1558e9b",
+      "label": "FIFA Men's World Cup",
+      "title": "FIFA Men's World Cup",
+      "slug": "fifa-world-cup-men",
+      "parent_external_uri": "soccer"
+     },
+     {
+      "path": "fs/647616",
+      "external_uri": "soccer/wc/events/647616",
+      "spark_id": "72b8bb36-ff79-5a81-9a93-8a45a9e5f72c",
+      "short_title": "WC - MEX vs. RSA - 6/11/26",
+      "tag_type": "event",
+      "parent_external_id": "soccer/wc/league/12",
+      "external_id": 647616,
+      "id": "72b8bb36-ff79-5a81-9a93-8a45a9e5f72c",
+      "label": "WC - Mexico vs. South Africa - 06/11/2026",
+      "title": "WC - Mexico vs. South Africa - 06/11/2026",
+      "slug": "647616",
+      "parent_external_uri": "soccer/wc/league/12"
+     },
+     {
+      "path": "fs/south-africa-men",
+      "external_uri": "soccer/all/teams/755",
+      "spark_id": "f746dbd7-4290-5f67-ba36-cfc359662793",
+      "short_title": "South Africa",
+      "tag_type": "team",
+      "parent_external_id": "soccer/wc/league/12",
+      "external_id": 755,
+      "id": "f746dbd7-4290-5f67-ba36-cfc359662793",
+      "label": "South Africa",
+      "title": "South Africa",
+      "slug": "south-africa-men",
+      "parent_external_uri": "soccer/wc/league/12"
+     },
+     {
+      "path": "fs/fifa-world-cup-4-minute-game-recaps",
+      "external_uri": "topics/fifa-world-cup---4-minute-game-recaps",
+      "spark_id": "57f3f2f5-49f4-5b1e-81e4-5702f1474b44",
+      "short_title": "",
+      "tag_type": "topic",
+      "parent_external_id": "",
+      "external_id": "topics/fifa-world-cup---4-minute-game-recaps",
+      "id": "57f3f2f5-49f4-5b1e-81e4-5702f1474b44",
+      "label": "FIFA World Cup - 4 Minute Game Recaps",
+      "title": "FIFA World Cup - 4 Minute Game Recaps",
+      "slug": "fifa-world-cup-4-minute-game-recaps",
+      "parent_external_uri": ""
+     }
+    ],
+    "spark_persons": [
+     {
+      "full_bio": [
+       {
+        "content_type": "text",
+        "content": {
+         "format": "html",
+         "text": "<p><strong>Landon Donovan</strong> is considered one of the greatest U.S. soccer players in history, and has contributed to FOX Sports\u2019 premier soccer coverage across various properties since debuting on air with the network for Copa America Centenario in 2016.\u00a0</p>",
+         "alignment": "left"
+        }
+       },
+       {
+        "content_type": "text",
+        "content": {
+         "format": "html",
+         "text": "<p>Since then, he\u2019s been an analyst with FOX Sports across multiple FIFA World Cup\u2122 competitions, UEFA, Concacaf, CONMEBOL tournaments and more. In 2024, Donovan served as FOX Sports\u2019 lead match analyst in Germany for the network\u2019s inaugural presentation of UEFA EURO 2024\u2122 and was in-studio with FOX as a match and studio analyst for UEFA Nations League Finals 2025\u2122 and the 2025 Concacaf Gold Cup.</p>",
+         "alignment": "left"
+        }
+       },
+       {
+        "content_type": "text",
+        "content": {
+         "format": "html",
+         "text": "<p>Donovan\u2019s decorated and celebrated career as an American soccer icon featured three FIFA World Cup\u2122 appearances as a player for the U.S. and countless memorable goals. He retired from the game in 2018 tied with former teammate Clint Dempsey for the title of all-time leading scorer in USMNT history with 57 goals. He is the only American player to surpass both 50 goals and 50 assists in his career and was the fastest American to earn 100 caps. His individual awards include the only American to win the Golden Ball Award, FIFA\u2019s Best Young Player of the World Cup in 2002, the CONCACAF Gold Cup MVP in 2013, the Gold Cup Best XI four times and U.S. Soccer Athlete of the Year a record four times.</p>",
+         "alignment": "left"
+        }
+       },
+       {
+        "content_type": "text",
+        "content": {
+         "format": "html",
+         "text": "<p>His club career highlights included stints at Bayer Leverkusen (Bundesliga), Everton (Premier League) and Club Le\u00f3n (Liga MX), but he found his greatest success at home in Major League Soccer. Donovan made a splash from 2001 \u2013 2003 with the San Jose Earthquakes, but his play with the LA Galaxy made him a club legend. Over 247 appearances with the Galaxy, he netted 112 goals and led the team to four MLS Cups, two Supporters Shields and the 2005 Lamar Hunt U.S. Open Cup. In recognition to his contributions to the league and soccer in U.S., MLS renamed its Most Valuable Player award after him in 2015.</p>",
+         "alignment": "left"
+        }
+       }
+      ],
+      "prefix": "",
+      "middle_initial": "",
+      "last_modified_date": "2026-04-28T17:31:49-04:00",
+      "media_tags": [],
+      "suffix": "",
+      "gracenote_id": "",
+      "foxipedia_id": "",
+      "short_urls": [
+       ""
+      ],
+      "banner_image": null,
+      "id": "b974bdca-78ae-53d6-8f2b-ae5b48378e62",
+      "post_status": "publish",
+      "job_title": "Match Analyst",
+      "person_id": "content/foxsports/person/d/landon-donovan",
+      "thumbnail": {
+       "uuidv5": "d54df075-cece-5e18-9167-44a3a9260089",
+       "content_type": "image",
+       "content": {
+        "alt": "",
+        "caption": "",
+        "wp__origin": {
+         "blog_id": 1,
+         "environment": "production",
+         "site": "cms.foxsports.com",
+         "post_id": 5025226,
+         "post_type": "attachment",
+         "source": "tiger-cms"
+        },
+        "url": "https://statics.foxsports.com/www.foxsports.com/content/uploads/2026/04/226124bb-untitled-1.png"
+       },
+       "url": "https://statics.foxsports.com/www.foxsports.com/content/uploads/2026/04/226124bb-untitled-1.png"
+      },
+      "meta_title": "",
+      "linkedinurl": "",
+      "personality_name": "",
+      "wp__origin": {
+       "site": "cms.foxsports.com",
+       "environment": "production",
+       "blog_id": 1,
+       "post_id": 4488266,
+       "post_type": "person",
+       "source": "tiger-cms",
+       "post_status": "publish"
+      },
+      "published": true,
+      "canonical_url": "foxsports.com/person/d/landon-donovan",
+      "custom_canonical_url": "",
+      "relevance": "",
+      "tags": [],
+      "origination_station": "",
+      "meta_description": "",
+      "uuidv5": "b974bdca-78ae-53d6-8f2b-ae5b48378e62",
+      "full_name": "Landon Donovan",
+      "last_published_date": "2022-11-23T15:03:06-05:00",
+      "origination_modified_date": "2026-04-28T17:31:49-04:00",
+      "company_name": "Match Analyst",
+      "vanity_urls": [],
+      "show_page_url": "",
+      "vanity_slugs": [],
+      "role": "Personality",
+      "high_resolution_image": {
+       "uuidv5": "d54df075-cece-5e18-9167-44a3a9260089",
+       "content_type": "image",
+       "content": {
+        "alt": "",
+        "caption": "",
+        "wp__origin": {
+         "blog_id": 1,
+         "environment": "production",
+         "site": "cms.foxsports.com",
+         "post_id": 5025226,
+         "post_type": "attachment",
+         "source": "tiger-cms"
+        },
+        "url": "https://statics.foxsports.com/www.foxsports.com/content/uploads/2026/04/226124bb-untitled-1.png"
+       },
+       "url": "https://statics.foxsports.com/www.foxsports.com/content/uploads/2026/04/226124bb-untitled-1.png"
+      },
+      "reciprocal_link": "",
+      "person_fox_nation_url": "",
+      "title": "Landon Donovan",
+      "colors": {
+       "primary": ""
+      },
+      "tagboard_id": "585648",
+      "fn__type": "persons",
+      "blog_urls": [],
+      "full_bio_url": "",
+      "publication_date": "2022-11-23T15:03:06-05:00",
+      "first_name": "Landon",
+      "wp__tags": [],
+      "spark_id": "b974bdca-78ae-53d6-8f2b-ae5b48378e62",
+      "social": [],
+      "short_bio": "",
+      "last_name": "Donovan",
+      "name_id": "landon-donovan",
+      "google_plus_url": "",
+      "fn__tags": [],
+      "person_slug": "landon-donovan",
+      "custom_h1_headline": "",
+      "person_uri": "landon-donovan",
+      "created_date": "2022-11-23T15:03:06-05:00"
+     }
+    ],
+    "vanity_urls": [],
+    "created_date": "2026-06-11T21:05:23Z",
+    "last_import_date": "2026-06-11T23:05:37Z",
+    "playback_url": "https://d3ayhwgrwyc4j8.cloudfront.net/mcvod/fmc-6ge33b0yn4pdow9w_VX-16400112--603733/hls/v1_1/index.m3u8"
+   },
+   {
+    "spark_id": "6fe1547c-7eec-5cdd-9c44-05464f375a1e",
+    "external_id": "fmc-qlh44pc6ak2igmjt",
+    "last_published_date": "2026-06-12T04:28:22+00:00",
+    "source": {
+     "fn_type": "",
+     "label": "MediaCloud",
+     "name": "South Korea vs Czechia Extended Highlights | 2026 FIFA World Cup\u2122",
+     "publisher": "fmc",
+     "slug": "",
+     "source_id": "fmc-qlh44pc6ak2igmjt",
+     "spark_id": "6fe1547c-7eec-5cdd-9c44-05464f375a1e",
+     "url": ""
+    },
+    "spark_shows": {},
+    "category": {
+     "page_url": "foxsports.com/category/soccer",
+     "spark_id": "f445ac14-7de3-5571-b2f9-17056f2546d1",
+     "description": "",
+     "wp__origin": {
+      "site": "cms.foxsports.com",
+      "environment": "production",
+      "blog_id": 1,
+      "source": "tiger-cms",
+      "term_id": 20,
+      "taxonomy_type": "category"
+     },
+     "label": "Soccer",
+     "media_tags": [],
+     "title": "Soccer",
+     "canonical_url": "foxsports.com/category/soccer",
+     "type": "spark_categories",
+     "fn__type": "sections",
+     "path": "fs/soccer",
+     "uuidv5": "f445ac14-7de3-5571-b2f9-17056f2546d1",
+     "created_date": "2020-01-08T21:12:32-05:00",
+     "post_status": "publish",
+     "id": "f445ac14-7de3-5571-b2f9-17056f2546d1",
+     "slug": "soccer"
+    },
+    "original_import_date": "2026-06-12T04:14:40Z",
+    "description": "Check out the full game highlights between South Korea and Czechia in the 2026 FIFA World Cup\u2122. Announced by Jacqui Oatley and Warren Barton.",
+    "last_modified_date": "2026-06-12T04:28:22Z",
+    "expiration_date": "2031-01-01T07:30:00Z",
+    "title": "South Korea vs Czechia Extended Highlights | 2026 FIFA World Cup\u2122",
+    "component_type": "video",
+    "content_type": "external_media_cloud",
+    "station": "",
+    "alert_title": "",
+    "publication_date": "2026-06-12T04:28:22Z",
+    "id": "6fe1547c-7eec-5cdd-9c44-05464f375a1e",
+    "mcvod": {
+     "organizational_tags": [],
+     "traffic_code": "",
+     "credit_cue_point": 0,
+     "vertical_thumbnail": {
+      "copyright": "",
+      "spark_id": "",
+      "content_type": "image",
+      "alt": "South Korea vs Czechia Extended Highlights | 2026 FIFA World Cup\u2122",
+      "caption": "South Korea vs Czechia Extended Highlights | 2026 FIFA World Cup\u2122",
+      "url": null
+     },
+     "freewheel_id": "fmc-qlh44pc6ak2igmjt",
+     "content_sku": [],
+     "proxy_captions": [
+      "https://statics.foxsports.com/mediacloud/fmc-qlh44pc6ak2igmjt/fmc-qlh44pc6ak2igmjt--mc-vod_processed.smptett",
+      "https://statics.foxsports.com/mediacloud/fmc-qlh44pc6ak2igmjt/fmc-qlh44pc6ak2igmjt--mc-vod_processed.scc",
+      "https://statics.foxsports.com/mediacloud/fmc-qlh44pc6ak2igmjt/fmc-qlh44pc6ak2igmjt--mc-vod_processed.srt",
+      "https://statics.foxsports.com/mediacloud/fmc-qlh44pc6ak2igmjt/fmc-qlh44pc6ak2igmjt--mc-vod_processed.vtt"
+     ],
+     "listing_id": "",
+     "policies": {
+      "geo_filter": [],
+      "downloadable_content": false,
+      "availability_by_time_zone": false,
+      "availability": []
+     },
+     "has_vertical": false,
+     "episode": {
+      "episode_number": "",
+      "tms_id": "",
+      "gracenote_id": ""
+     },
+     "requires_drm": false,
+     "allow_ads": true,
+     "gracenote_id": "",
+     "local_station": "fs1",
+     "foxipedia_id": "",
+     "network": "fs",
+     "public_url": "https://d3ayhwgrwyc4j8.cloudfront.net/mcvod/fmc-qlh44pc6ak2igmjt_VX-16401965--603951/hls/v1_1/index.m3u8",
+     "duration": 1335.4,
+     "original_air_date": "2026-06-12T04:28:22Z",
+     "event_show_type": "",
+     "genres": [
+      "Sports"
+     ],
+     "stream_type": "mcvod",
+     "content_rating": "Not Rated",
+     "closed_captions": "https://statics.foxsports.com/mediacloud/fmc-qlh44pc6ak2igmjt/fmc-qlh44pc6ak2igmjt--mc-vod_processed.vtt",
+     "playback_url": "https://d3ayhwgrwyc4j8.cloudfront.net/mcvod/fmc-qlh44pc6ak2igmjt_VX-16401965--603951/hls/v1_1/index.m3u8",
+     "requires_auth": false,
+     "video_source": "fmc",
+     "m3u8_url": "https://d3ayhwgrwyc4j8.cloudfront.net/mcvod/fmc-qlh44pc6ak2igmjt_VX-16401965--603951/hls/v1_1/index.m3u8",
+     "start_date": "2026-06-12T04:28:22Z",
+     "vertical_video_playback_url": null,
+     "audio_only": false,
+     "orientation": "horizontal",
+     "event_uri": "soccer/wc/events/647617",
+     "content_id": "fmc-qlh44pc6ak2igmjt",
+     "display": {
+      "tv_rating_overlay": false,
+      "network_bug": false
+     },
+     "show_code": "n/a",
+     "content_ad_type": "dai",
+     "video_type": "clip",
+     "document_releases": [],
+     "series": {
+      "series_name": "FIFA World Cup 30 Minute Game Recaps",
+      "foxipedia_id": "SER01137891IBET"
+     },
+     "program_network": "fs1",
+     "primary_business_unit": "sports",
+     "proxy_url": "https://statics.foxsports.com/mediacloud/fmc-qlh44pc6ak2igmjt/KOR_CZE_HL_0611_lowres.mp4",
+     "category": "soccer"
+    },
+    "post_status": "publish",
+    "external_source": "fmc",
+    "alert_eligibility": "Eligible",
+    "thumbnail": {
+     "copyright": "",
+     "spark_id": "",
+     "content_type": "image",
+     "alt": "South Korea vs Czechia Extended Highlights | 2026 FIFA World Cup\u2122",
+     "caption": "South Korea vs Czechia Extended Highlights | 2026 FIFA World Cup\u2122",
+     "url": "https://static-media.fox.com/fmc/prod/sports/VX-16401965/ecpvu17s96uhlw00.jpg"
+    },
+    "alert_description": "",
+    "canonical_url": "foxsports.com/watch/fmc-qlh44pc6ak2igmjt",
+    "content_topic": "full_game_highlights",
+    "autoplay": false,
+    "tags": [
+     {
+      "path": "fs/min-jae-kim",
+      "external_uri": "soccer/all/athletes/57194",
+      "spark_id": "0a81e7c1-e08a-5d91-aaf2-fdc7d020d884",
+      "short_title": "",
+      "tag_type": "athlete",
+      "parent_external_id": "soccer/all/teams/68",
+      "external_id": 57194,
+      "id": "0a81e7c1-e08a-5d91-aaf2-fdc7d020d884",
+      "label": "Kim Min-jae",
+      "title": "Kim Min-jae",
+      "slug": "min-jae-kim",
+      "parent_external_uri": "soccer/all/teams/68"
+     },
+     {
+      "path": "fs/fifa-world-cup-men",
+      "external_uri": "soccer/wc/league/12",
+      "spark_id": "19afdb17-f08b-5ccc-a99b-e42dd1558e9b",
+      "short_title": "World Cup",
+      "tag_type": "league",
+      "parent_external_id": "soccer",
+      "external_id": 12,
+      "id": "19afdb17-f08b-5ccc-a99b-e42dd1558e9b",
+      "label": "FIFA Men's World Cup",
+      "title": "FIFA Men's World Cup",
+      "slug": "fifa-world-cup-men",
+      "parent_external_uri": "soccer"
+     },
+     {
+      "path": "fs/czech-republic-men",
+      "external_uri": "soccer/all/teams/526",
+      "spark_id": "05a865bd-7fd7-50d7-b1cc-41a9d5b30ae3",
+      "short_title": "Czechia",
+      "tag_type": "team",
+      "parent_external_id": "soccer/wc/league/12",
+      "external_id": 526,
+      "id": "05a865bd-7fd7-50d7-b1cc-41a9d5b30ae3",
+      "label": "Czechia",
+      "title": "Czechia",
+      "slug": "czech-republic-men",
+      "parent_external_uri": "soccer/wc/league/12"
+     },
+     {
+      "path": "fs/ladislav-krejci-2",
+      "external_uri": "soccer/all/athletes/71366",
+      "spark_id": "5855527b-5e66-56fc-acc2-cbdd4f827c0e",
+      "short_title": "",
+      "tag_type": "athlete",
+      "parent_external_id": "soccer/all/teams/347",
+      "external_id": 71366,
+      "id": "5855527b-5e66-56fc-acc2-cbdd4f827c0e",
+      "label": "Ladislav Krejci",
+      "title": "Ladislav Krejci",
+      "slug": "ladislav-krejci-2",
+      "parent_external_uri": "soccer/all/teams/347"
+     },
+     {
+      "path": "fs/647617",
+      "external_uri": "soccer/wc/events/647617",
+      "spark_id": "ac4a45fe-3a1e-56e4-be60-5de94ad67252",
+      "short_title": "WC - KOR vs. CZE - 6/11/26",
+      "tag_type": "event",
+      "parent_external_id": "soccer/wc/league/12",
+      "external_id": 647617,
+      "id": "ac4a45fe-3a1e-56e4-be60-5de94ad67252",
+      "label": "WC - South Korea vs. Czechia - 06/11/2026",
+      "title": "WC - South Korea vs. Czechia - 06/11/2026",
+      "slug": "647617",
+      "parent_external_uri": "soccer/wc/league/12"
+     },
+     {
+      "path": "fs/korea-republic-men",
+      "external_uri": "soccer/all/teams/522",
+      "spark_id": "66581634-31c7-5075-98ea-504d48e3985d",
+      "short_title": "South Korea",
+      "tag_type": "team",
+      "parent_external_id": "soccer/wc/league/12",
+      "external_id": 522,
+      "id": "66581634-31c7-5075-98ea-504d48e3985d",
+      "label": "South Korea",
+      "title": "South Korea",
+      "slug": "korea-republic-men",
+      "parent_external_uri": "soccer/wc/league/12"
+     },
+     {
+      "path": "fs/heung-min-son",
+      "external_uri": "soccer/all/athletes/2236",
+      "spark_id": "d790b947-2eb2-5280-a7bf-ff479de983ba",
+      "short_title": "",
+      "tag_type": "athlete",
+      "parent_external_id": "soccer/all/teams/1609",
+      "external_id": 2236,
+      "id": "d790b947-2eb2-5280-a7bf-ff479de983ba",
+      "label": "Son Heung-min",
+      "title": "Son Heung-min",
+      "slug": "heung-min-son",
+      "parent_external_uri": "soccer/all/teams/1609"
+     },
+     {
+      "path": "fs/fifa-world-cup-30-minute-recaps",
+      "external_uri": "topics/fifa-world-cup---30-minute-recaps",
+      "spark_id": "34263dc7-b907-56cc-898b-ae5fdbf478ef",
+      "short_title": "",
+      "tag_type": "topic",
+      "parent_external_id": "",
+      "external_id": "topics/fifa-world-cup---30-minute-recaps",
+      "id": "34263dc7-b907-56cc-898b-ae5fdbf478ef",
+      "label": "FIFA World Cup - 30 Minute Recaps",
+      "title": "FIFA World Cup - 30 Minute Recaps",
+      "slug": "fifa-world-cup-30-minute-recaps",
+      "parent_external_uri": ""
+     }
+    ],
+    "spark_persons": [
+     {
+      "full_bio": [
+       {
+        "content_type": "text",
+        "content": {
+         "format": "html",
+         "text": "<p>A former defender for the England national team, <strong>Warren Barton</strong>, serves as a match and studio analyst for FOX Sports. He most recently called matches for FOX Sports at the FIFA World Cup Qatar 2022\u2122 and FIFA World Cup Russia 2018\u2122, and returned to the broadcast booth in Germany for the network\u2019s presentation of UEFA EURO 2024\u2122.\u00a0</p>",
+         "alignment": "left"
+        }
+       },
+       {
+        "content_type": "text",
+        "content": {
+         "format": "html",
+         "text": "<p>He has also covered UEFA Champions League and UEFA Europa League and Bundesliga programming for the network. In May 2012, he called the first-ever all German UEFA Champions League Final, live from Wembley Stadium.</p>",
+         "alignment": "left"
+        }
+       },
+       {
+        "content_type": "text",
+        "content": {
+         "format": "html",
+         "text": "<p>Barton began his career at Maidstone United in Kent, but he soon transferred to Wimbledon, playing defense and midfield during his 180 appearances for the team. With Wimbledon, Warren played on the English national team, making his debut during the infamous 1995 friendly between England and the Republic of Ireland which was canceled after only 27 minutes. He also played internationally against Sweden and Brazil.</p>",
+         "alignment": "left"
+        }
+       },
+       {
+        "content_type": "text",
+        "content": {
+         "format": "html",
+         "text": "<p>He later moved to Premier League side Newcastle United as a defender with the elite group of players known as \"The Entertainers,\" assembled by manager Kevin Keegan. During his 164 games with the Magpies, Warren helped the club record second-place Premiership finishes in both 1995-96 and 1996-97, and reach the FA Cup final in 1998 and 1999. He served as team captain during the 2000-01 campaign and participated in every major European cup competition, including the 1997/98 UEFA Champions League where Newcastle faced off against European heavyweight FC Barcelona. Barton continued to play professionally until retiring in 2004. A respected leader off the pitch, Warren was elected by his peers as chairman of England\u2019s Professional Footballer\u2019s Association in 2002-03, and was actively involved in the Kick Racism Out of Football campaign.</p>",
+         "alignment": "left"
+        }
+       },
+       {
+        "content_type": "text",
+        "content": {
+         "format": "html",
+         "text": "<p>In 2008, Barton and his family relocated to the U.S. and currently reside in the San Diego area.\u00a0</p>",
+         "alignment": "left"
+        }
+       }
+      ],
+      "prefix": "",
+      "middle_initial": "",
+      "last_modified_date": "2026-04-28T13:26:42-04:00",
+      "media_tags": [],
+      "suffix": "",
+      "gracenote_id": "",
+      "foxipedia_id": "",
+      "short_urls": [
+       ""
+      ],
+      "banner_image": null,
+      "id": "6eccd5b3-e7f2-521d-aceb-90805ae61377",
+      "post_status": "publish",
+      "job_title": "Soccer Analyst",
+      "person_id": "content/foxsports/person/b/warren-barton",
+      "thumbnail": {
+       "uuidv5": "6fa0082a-b36e-5b6e-b992-758ebbffcbff",
+       "content_type": "image",
+       "content": {
+        "alt": "",
+        "caption": "",
+        "wp__origin": {
+         "blog_id": 1,
+         "environment": "production",
+         "site": "cms.foxsports.com",
+         "post_id": 4488265,
+         "post_type": "attachment",
+         "source": "tiger-cms"
+        },
+        "url": "https://statics.foxsports.com/www.foxsports.com/content/uploads/2022/11/Warren-Barton_727x727.png"
+       },
+       "url": "https://statics.foxsports.com/www.foxsports.com/content/uploads/2022/11/Warren-Barton_727x727.png"
+      },
+      "meta_title": "",
+      "linkedinurl": "",
+      "personality_name": "",
+      "wp__origin": {
+       "site": "cms.foxsports.com",
+       "environment": "production",
+       "blog_id": 1,
+       "post_id": 4488259,
+       "post_type": "person",
+       "source": "tiger-cms",
+       "post_status": "publish"
+      },
+      "published": true,
+      "canonical_url": "foxsports.com/person/b/warren-barton",
+      "custom_canonical_url": "",
+      "relevance": "",
+      "tags": [],
+      "origination_station": "",
+      "meta_description": "",
+      "uuidv5": "6eccd5b3-e7f2-521d-aceb-90805ae61377",
+      "full_name": "Warren Barton",
+      "last_published_date": "2022-11-23T15:00:46-05:00",
+      "origination_modified_date": "2026-04-28T13:26:42-04:00",
+      "company_name": "Soccer Analyst",
+      "vanity_urls": [],
+      "show_page_url": "",
+      "vanity_slugs": [],
+      "role": "Personality",
+      "high_resolution_image": null,
+      "reciprocal_link": "",
+      "person_fox_nation_url": "",
+      "title": "Warren Barton",
+      "colors": {
+       "primary": ""
+      },
+      "tagboard_id": "585653",
+      "fn__type": "persons",
+      "blog_urls": [],
+      "full_bio_url": "",
+      "publication_date": "2022-11-23T15:00:46-05:00",
+      "first_name": "Warren",
+      "wp__tags": [],
+      "spark_id": "6eccd5b3-e7f2-521d-aceb-90805ae61377",
+      "social": [],
+      "short_bio": "",
+      "last_name": "Barton",
+      "name_id": "warren-barton",
+      "google_plus_url": "",
+      "fn__tags": [],
+      "person_slug": "warren-barton",
+      "custom_h1_headline": "",
+      "person_uri": "warren-barton",
+      "created_date": "2022-11-23T15:00:46-05:00"
+     }
+    ],
+    "vanity_urls": [],
+    "created_date": "2026-06-12T04:14:40Z",
+    "last_import_date": "2026-06-12T04:28:24Z",
+    "playback_url": "https://d3ayhwgrwyc4j8.cloudfront.net/mcvod/fmc-qlh44pc6ak2igmjt_VX-16401965--603951/hls/v1_1/index.m3u8"
+   }
+  ],
+  "request": {
+   "type": "/fs/videos",
+   "contentType": "videos",
+   "internal": false,
+   "platform": "web",
+   "params": "{\"component_type\":\"video\",\"external_id\":\"fmc-18j026gny6xn16jb,fmc-6ge33b0yn4pdow9w,fmc-qlh44pc6ak2igmjt,fmc-z05i63xovin6i6rw,fmc-ppjfmeic702rursw,fmc-uond72uxhvlpwv6h,fmc-z84dexb1bw2nnyu2,fmc-jximgo92sg8wbwij,fmc-vhn7bjo7ix28zgau,fmc-xsb559q656b6bv5l,fmc-t9o0r2emf31ndkjq,fmc-rhuipjb8tkw6i8yv,fmc-o701qc3jztv59byb,fmc-fwnwjgpemcjy8yui,fmc-xo58jffd0yapvie3,fmc-pjiz34zum48qget0,fmc-4v8wmclmzz0cf6fo,fmc-1w3v8i3e40hi19t5,fmc-pujuag8jg109mi57,fmc-rq7pjenldg0828e6,fmc-q30o1lkcu9j0jxsj,fmc-nqat51araw2nf41c,fmc-c5oy6tc199lx3ote,fmc-ass7mf140m63jo3v,fmc-cdl58tnujzg8lkd0,fmc-uie545s1aqzy6j5n,fmc-qlpsonfivu4zf729\"}",
+   "pathParams": {
+    "proxy": "videos"
+   }
+  },
+  "status": {
+   "success": true,
+   "code": 200
+  }
+ }
+}

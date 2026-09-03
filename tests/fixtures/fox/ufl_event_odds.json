@@ -1,0 +1,1616 @@
+{
+  "sectionList": [
+    {
+      "modules": [
+        {
+          "type": "six-pack",
+          "model": {
+            "title": "MATCHUP ODDS",
+            "odds": {
+              "columnHeaders": [
+                "SPREAD",
+                "TO WIN",
+                "TOTAL"
+              ],
+              "rows": [
+                {
+                  "text": "HOU",
+                  "fullText": "Houston Gamblers",
+                  "image": {
+                    "url": "https://b.fssta.com/uploads/application/ufl/team-logos/Gamblers.vresize.200.200.medium.3.png",
+                    "altUrl": "https://b.fssta.com/uploads/application/ufl/team-logos/Gamblers.vresize.200.200.medium.3.png",
+                    "type": "image-logo",
+                    "altText": "Houston Gamblers"
+                  },
+                  "imageUrl": "https://b.fssta.com/uploads/application/ufl/team-logos/Gamblers.vresize.200.200.medium.3.png",
+                  "alternateImageUrl": "https://b.fssta.com/uploads/application/ufl/team-logos/Gamblers.vresize.200.200.medium.3.png",
+                  "imageType": "image-logo",
+                  "imageAltText": "Houston Gamblers",
+                  "values": [
+                    {
+                      "id": "closing",
+                      "odds": "+3.0",
+                      "success": false
+                    },
+                    {
+                      "id": "closing",
+                      "odds": "+164",
+                      "success": false
+                    },
+                    {
+                      "id": "closing",
+                      "odds": "O 45.5",
+                      "success": false
+                    }
+                  ],
+                  "template": "entity"
+                },
+                {
+                  "text": "CLB",
+                  "fullText": "Columbus Aviators",
+                  "image": {
+                    "url": "https://b.fssta.com/uploads/application/ufl/team-logos/Aviators.vresize.200.200.medium.0.png",
+                    "altUrl": "https://b.fssta.com/uploads/application/ufl/team-logos/Aviators.vresize.200.200.medium.0.png",
+                    "type": "image-logo",
+                    "altText": "Columbus Aviators"
+                  },
+                  "imageUrl": "https://b.fssta.com/uploads/application/ufl/team-logos/Aviators.vresize.200.200.medium.0.png",
+                  "alternateImageUrl": "https://b.fssta.com/uploads/application/ufl/team-logos/Aviators.vresize.200.200.medium.0.png",
+                  "imageType": "image-logo",
+                  "imageAltText": "Columbus Aviators",
+                  "values": [
+                    {
+                      "id": "closing",
+                      "odds": "-3.0",
+                      "success": true
+                    },
+                    {
+                      "id": "closing",
+                      "odds": "-198",
+                      "success": true
+                    },
+                    {
+                      "id": "closing",
+                      "odds": "U 45.5",
+                      "success": true
+                    }
+                  ],
+                  "template": "entity"
+                }
+              ],
+              "template": "default"
+            },
+            "eventStatus": 3,
+            "isTba": false,
+            "moduleLinkText": "ODDS INFO",
+            "betSection": {
+              "name": "GAMBLERS vs AVIATORS",
+              "bets": [
+                {
+                  "template": "market",
+                  "model": {
+                    "subtitle": "SPREAD",
+                    "mainText": "The Aviators needed to win by more than 3 points to cover the spread. They did cover, so people who took the Aviators won.",
+                    "odds": [
+                      {
+                        "text": "+3.0",
+                        "subText": "HOU"
+                      },
+                      {
+                        "text": "-3.0",
+                        "subText": "CLB",
+                        "success": true
+                      }
+                    ]
+                  }
+                },
+                {
+                  "template": "market",
+                  "model": {
+                    "subtitle": "TEAM TO WIN",
+                    "mainText": "The Aviators won at -198 odds so a bet of $198 won $298 total",
+                    "odds": [
+                      {
+                        "text": "+164",
+                        "subText": "HOU"
+                      },
+                      {
+                        "text": "-198",
+                        "subText": "CLB",
+                        "success": true
+                      }
+                    ]
+                  }
+                },
+                {
+                  "template": "market",
+                  "model": {
+                    "subtitle": "TOTAL",
+                    "mainText": "The over/under was 45.5 and the teams scored 41 points, so people who bet the under won",
+                    "odds": [
+                      {
+                        "text": "-115",
+                        "subText": "OVER 45.5"
+                      },
+                      {
+                        "text": "-105",
+                        "subText": "UNDER 45.5",
+                        "success": true
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            "entityLink": {
+              "webUrl": "/ufl/week-6-houston-gamblers-vs-columbus-aviators-may-01-2026-game-boxscore-108?tab=odds",
+              "contentUri": "football/ufl/events/108",
+              "contentType": "event",
+              "layout": {
+                "path": "/layouts?type=layout&subtype=uflEventLayout",
+                "tokens": {
+                  "id": "108",
+                  "eventUri": "football/ufl/events/108",
+                  "homeUri": "football/ufl/teams/9",
+                  "awayUri": "football/ufl/teams/2"
+                }
+              },
+              "analyticsSport": "ufl",
+              "tab": "odds",
+              "type": "entity"
+            },
+            "contentUri": "football/ufl/events/108"
+          }
+        },
+        {
+          "type": "chart-win-chance",
+          "model": {
+            "title": "CHANCE TO WIN",
+            "description": "Team to win likelihood based on moneyline",
+            "incrementX": 1,
+            "chartRangeX": [
+              0,
+              132
+            ],
+            "dataRangeX": [
+              0,
+              132
+            ],
+            "chartRangeY": [
+              -50,
+              50
+            ],
+            "lines": [
+              {
+                "values": [
+                  {
+                    "text": "HOU 30%\nCLB 70%",
+                    "text1": "HOU 30%",
+                    "text2": "CLB 70%",
+                    "odds1": "+215",
+                    "odds2": "-265",
+                    "timestamp": "2026-04-26T23:32:42+00:00",
+                    "point": -20
+                  },
+                  {
+                    "text": "HOU 30%\nCLB 70%",
+                    "text1": "HOU 30%",
+                    "text2": "CLB 70%",
+                    "odds1": "+217",
+                    "odds2": "-267",
+                    "timestamp": "2026-04-27T19:02:52+00:00",
+                    "point": -20
+                  },
+                  {
+                    "text": "HOU 30%\nCLB 70%",
+                    "text1": "HOU 30%",
+                    "text2": "CLB 70%",
+                    "odds1": "+219",
+                    "odds2": "-269",
+                    "timestamp": "2026-04-28T15:32:10+00:00",
+                    "point": -20
+                  },
+                  {
+                    "text": "HOU 30%\nCLB 70%",
+                    "text1": "HOU 30%",
+                    "text2": "CLB 70%",
+                    "odds1": "+215",
+                    "odds2": "-263",
+                    "timestamp": "2026-04-29T17:02:10+00:00",
+                    "point": -20
+                  },
+                  {
+                    "text": "HOU 32%\nCLB 68%",
+                    "text1": "HOU 32%",
+                    "text2": "CLB 68%",
+                    "odds1": "+204",
+                    "odds2": "-249",
+                    "timestamp": "2026-04-29T18:32:09+00:00",
+                    "point": -18
+                  },
+                  {
+                    "text": "HOU 31%\nCLB 69%",
+                    "text1": "HOU 31%",
+                    "text2": "CLB 69%",
+                    "odds1": "+208",
+                    "odds2": "-256",
+                    "timestamp": "2026-04-29T19:02:14+00:00",
+                    "point": -19
+                  },
+                  {
+                    "text": "HOU 31%\nCLB 69%",
+                    "text1": "HOU 31%",
+                    "text2": "CLB 69%",
+                    "odds1": "+212",
+                    "odds2": "-262",
+                    "timestamp": "2026-04-30T00:02:14+00:00",
+                    "point": -19
+                  },
+                  {
+                    "text": "HOU 32%\nCLB 68%",
+                    "text1": "HOU 32%",
+                    "text2": "CLB 68%",
+                    "odds1": "+201",
+                    "odds2": "-247",
+                    "timestamp": "2026-04-30T00:32:15+00:00",
+                    "point": -18
+                  },
+                  {
+                    "text": "HOU 32%\nCLB 68%",
+                    "text1": "HOU 32%",
+                    "text2": "CLB 68%",
+                    "odds1": "+200",
+                    "odds2": "-243",
+                    "timestamp": "2026-04-30T12:32:09+00:00",
+                    "point": -18
+                  },
+                  {
+                    "text": "HOU 32%\nCLB 68%",
+                    "text1": "HOU 32%",
+                    "text2": "CLB 68%",
+                    "odds1": "+196",
+                    "odds2": "-239",
+                    "timestamp": "2026-04-30T16:02:11+00:00",
+                    "point": -18
+                  },
+                  {
+                    "text": "HOU 32%\nCLB 68%",
+                    "text1": "HOU 32%",
+                    "text2": "CLB 68%",
+                    "odds1": "+195",
+                    "odds2": "-238",
+                    "timestamp": "2026-04-30T18:02:31+00:00",
+                    "point": -18
+                  },
+                  {
+                    "text": "HOU 33%\nCLB 67%",
+                    "text1": "HOU 33%",
+                    "text2": "CLB 67%",
+                    "odds1": "+188",
+                    "odds2": "-229",
+                    "timestamp": "2026-04-30T22:32:26+00:00",
+                    "point": -17
+                  },
+                  {
+                    "text": "HOU 33%\nCLB 67%",
+                    "text1": "HOU 33%",
+                    "text2": "CLB 67%",
+                    "odds1": "+190",
+                    "odds2": "-230",
+                    "timestamp": "2026-04-30T23:32:28+00:00",
+                    "point": -17
+                  },
+                  {
+                    "text": "HOU 34%\nCLB 66%",
+                    "text1": "HOU 34%",
+                    "text2": "CLB 66%",
+                    "odds1": "+186",
+                    "odds2": "-226",
+                    "timestamp": "2026-05-01T00:32:08+00:00",
+                    "point": -16
+                  },
+                  {
+                    "text": "HOU 34%\nCLB 66%",
+                    "text1": "HOU 34%",
+                    "text2": "CLB 66%",
+                    "odds1": "+181",
+                    "odds2": "-220",
+                    "timestamp": "2026-05-01T01:32:14+00:00",
+                    "point": -16
+                  },
+                  {
+                    "text": "HOU 35%\nCLB 65%",
+                    "text1": "HOU 35%",
+                    "text2": "CLB 65%",
+                    "odds1": "+174",
+                    "odds2": "-211",
+                    "timestamp": "2026-05-01T12:02:18+00:00",
+                    "point": -15
+                  },
+                  {
+                    "text": "HOU 36%\nCLB 64%",
+                    "text1": "HOU 36%",
+                    "text2": "CLB 64%",
+                    "odds1": "+165",
+                    "odds2": "-200",
+                    "timestamp": "2026-05-01T14:32:35+00:00",
+                    "point": -14
+                  },
+                  {
+                    "text": "HOU 38%\nCLB 62%",
+                    "text1": "HOU 38%",
+                    "text2": "CLB 62%",
+                    "odds1": "+154",
+                    "odds2": "-184",
+                    "timestamp": "2026-05-01T15:32:17+00:00",
+                    "point": -12
+                  },
+                  {
+                    "text": "HOU 38%\nCLB 62%",
+                    "text1": "HOU 38%",
+                    "text2": "CLB 62%",
+                    "odds1": "+150",
+                    "odds2": "-181",
+                    "timestamp": "2026-05-01T16:02:22+00:00",
+                    "point": -12
+                  },
+                  {
+                    "text": "HOU 38%\nCLB 62%",
+                    "text1": "HOU 38%",
+                    "text2": "CLB 62%",
+                    "odds1": "+151",
+                    "odds2": "-182",
+                    "timestamp": "2026-05-01T16:32:40+00:00",
+                    "point": -12
+                  },
+                  {
+                    "text": "HOU 38%\nCLB 62%",
+                    "text1": "HOU 38%",
+                    "text2": "CLB 62%",
+                    "odds1": "+150",
+                    "odds2": "-181",
+                    "timestamp": "2026-05-01T19:32:12+00:00",
+                    "point": -12
+                  },
+                  {
+                    "text": "HOU 38%\nCLB 62%",
+                    "text1": "HOU 38%",
+                    "text2": "CLB 62%",
+                    "odds1": "+149",
+                    "odds2": "-180",
+                    "timestamp": "2026-05-01T23:02:24+00:00",
+                    "point": -12
+                  },
+                  {
+                    "text": "HOU 38%\nCLB 62%",
+                    "text1": "HOU 38%",
+                    "text2": "CLB 62%",
+                    "odds1": "+153",
+                    "odds2": "-183",
+                    "timestamp": "2026-05-01T23:32:24+00:00",
+                    "point": -12,
+                    "annotation": {
+                      "text": "CLOSING ODDS",
+                      "color": "0, 16, 168, 44",
+                      "type": "pin"
+                    }
+                  },
+                  {
+                    "text": "HOU 37%\nCLB 63%",
+                    "text1": "HOU 37%",
+                    "text2": "CLB 63%",
+                    "odds1": "+156",
+                    "odds2": "-187",
+                    "timestamp": "2026-05-02T00:02:11+00:00",
+                    "point": -13
+                  },
+                  {
+                    "text": "HOU 37%\nCLB 63%",
+                    "text1": "HOU 37%",
+                    "text2": "CLB 63%",
+                    "odds1": "+156",
+                    "odds2": "-187",
+                    "timestamp": "2026-05-02T00:07:30+00:00",
+                    "point": -13
+                  },
+                  {
+                    "text": "HOU 35%\nCLB 65%",
+                    "text1": "HOU 35%",
+                    "text2": "CLB 65%",
+                    "odds1": "+172",
+                    "odds2": "-214",
+                    "timestamp": "2026-05-02T00:08:31+00:00",
+                    "point": -15
+                  },
+                  {
+                    "text": "HOU 35%\nCLB 65%",
+                    "text1": "HOU 35%",
+                    "text2": "CLB 65%",
+                    "odds1": "+169",
+                    "odds2": "-211",
+                    "timestamp": "2026-05-02T00:09:32+00:00",
+                    "point": -15
+                  },
+                  {
+                    "text": "HOU 38%\nCLB 62%",
+                    "text1": "HOU 38%",
+                    "text2": "CLB 62%",
+                    "odds1": "+150",
+                    "odds2": "-186",
+                    "timestamp": "2026-05-02T00:10:33+00:00",
+                    "point": -12
+                  },
+                  {
+                    "text": "HOU 34%\nCLB 66%",
+                    "text1": "HOU 34%",
+                    "text2": "CLB 66%",
+                    "odds1": "+179",
+                    "odds2": "-225",
+                    "timestamp": "2026-05-02T00:11:34+00:00",
+                    "point": -16
+                  },
+                  {
+                    "text": "HOU 31%\nCLB 69%",
+                    "text1": "HOU 31%",
+                    "text2": "CLB 69%",
+                    "odds1": "+203",
+                    "odds2": "-257",
+                    "timestamp": "2026-05-02T00:12:36+00:00",
+                    "point": -19
+                  },
+                  {
+                    "text": "HOU 34%\nCLB 66%",
+                    "text1": "HOU 34%",
+                    "text2": "CLB 66%",
+                    "odds1": "+181",
+                    "odds2": "-226",
+                    "timestamp": "2026-05-02T00:13:37+00:00",
+                    "point": -16
+                  },
+                  {
+                    "text": "HOU 33%\nCLB 67%",
+                    "text1": "HOU 33%",
+                    "text2": "CLB 67%",
+                    "odds1": "+193",
+                    "odds2": "-243",
+                    "timestamp": "2026-05-02T00:14:39+00:00",
+                    "point": -17
+                  },
+                  {
+                    "text": "HOU 36%\nCLB 64%",
+                    "text1": "HOU 36%",
+                    "text2": "CLB 64%",
+                    "odds1": "+162",
+                    "odds2": "-201",
+                    "timestamp": "2026-05-02T00:15:44+00:00",
+                    "point": -14
+                  },
+                  {
+                    "text": "HOU 30%\nCLB 70%",
+                    "text1": "HOU 30%",
+                    "text2": "CLB 70%",
+                    "odds1": "+215",
+                    "odds2": "-274",
+                    "timestamp": "2026-05-02T00:18:48+00:00",
+                    "point": -20
+                  },
+                  {
+                    "text": "HOU 30%\nCLB 70%",
+                    "text1": "HOU 30%",
+                    "text2": "CLB 70%",
+                    "odds1": "+216",
+                    "odds2": "-276",
+                    "timestamp": "2026-05-02T00:19:49+00:00",
+                    "point": -20
+                  },
+                  {
+                    "text": "HOU 28%\nCLB 72%",
+                    "text1": "HOU 28%",
+                    "text2": "CLB 72%",
+                    "odds1": "+240",
+                    "odds2": "-310",
+                    "timestamp": "2026-05-02T00:21:52+00:00",
+                    "point": -22
+                  },
+                  {
+                    "text": "HOU 27%\nCLB 73%",
+                    "text1": "HOU 27%",
+                    "text2": "CLB 73%",
+                    "odds1": "+253",
+                    "odds2": "-329",
+                    "timestamp": "2026-05-02T00:22:53+00:00",
+                    "point": -23
+                  },
+                  {
+                    "text": "HOU 35%\nCLB 65%",
+                    "text1": "HOU 35%",
+                    "text2": "CLB 65%",
+                    "odds1": "+171",
+                    "odds2": "-214",
+                    "timestamp": "2026-05-02T00:23:55+00:00",
+                    "point": -15
+                  },
+                  {
+                    "text": "HOU 37%\nCLB 63%",
+                    "text1": "HOU 37%",
+                    "text2": "CLB 63%",
+                    "odds1": "+160",
+                    "odds2": "-199",
+                    "timestamp": "2026-05-02T00:24:56+00:00",
+                    "point": -13
+                  },
+                  {
+                    "text": "HOU 33%\nCLB 67%",
+                    "text1": "HOU 33%",
+                    "text2": "CLB 67%",
+                    "odds1": "+190",
+                    "odds2": "-239",
+                    "timestamp": "2026-05-02T00:25:57+00:00",
+                    "point": -17
+                  },
+                  {
+                    "text": "HOU 37%\nCLB 63%",
+                    "text1": "HOU 37%",
+                    "text2": "CLB 63%",
+                    "odds1": "+158",
+                    "odds2": "-196",
+                    "timestamp": "2026-05-02T00:26:59+00:00",
+                    "point": -13
+                  },
+                  {
+                    "text": "HOU 37%\nCLB 63%",
+                    "text1": "HOU 37%",
+                    "text2": "CLB 63%",
+                    "odds1": "+159",
+                    "odds2": "-198",
+                    "timestamp": "2026-05-02T00:28:00+00:00",
+                    "point": -13
+                  },
+                  {
+                    "text": "HOU 47%\nCLB 53%",
+                    "text1": "HOU 47%",
+                    "text2": "CLB 53%",
+                    "odds1": "+102",
+                    "odds2": "-125",
+                    "timestamp": "2026-05-02T00:29:01+00:00",
+                    "point": -3
+                  },
+                  {
+                    "text": "HOU 40%\nCLB 60%",
+                    "text1": "HOU 40%",
+                    "text2": "CLB 60%",
+                    "odds1": "+140",
+                    "odds2": "-173",
+                    "timestamp": "2026-05-02T00:30:02+00:00",
+                    "point": -10
+                  },
+                  {
+                    "text": "HOU 40%\nCLB 60%",
+                    "text1": "HOU 40%",
+                    "text2": "CLB 60%",
+                    "odds1": "+138",
+                    "odds2": "-170",
+                    "timestamp": "2026-05-02T00:31:04+00:00",
+                    "point": -10
+                  },
+                  {
+                    "text": "HOU 40%\nCLB 60%",
+                    "text1": "HOU 40%",
+                    "text2": "CLB 60%",
+                    "odds1": "+139",
+                    "odds2": "-171",
+                    "timestamp": "2026-05-02T00:32:04+00:00",
+                    "point": -10
+                  },
+                  {
+                    "text": "HOU 42%\nCLB 58%",
+                    "text1": "HOU 42%",
+                    "text2": "CLB 58%",
+                    "odds1": "+125",
+                    "odds2": "-154",
+                    "timestamp": "2026-05-02T00:33:06+00:00",
+                    "point": -8
+                  },
+                  {
+                    "text": "HOU 43%\nCLB 57%",
+                    "text1": "HOU 43%",
+                    "text2": "CLB 57%",
+                    "odds1": "+122",
+                    "odds2": "-150",
+                    "timestamp": "2026-05-02T00:35:09+00:00",
+                    "point": -7
+                  },
+                  {
+                    "text": "HOU 43%\nCLB 57%",
+                    "text1": "HOU 43%",
+                    "text2": "CLB 57%",
+                    "odds1": "+123",
+                    "odds2": "-151",
+                    "timestamp": "2026-05-02T00:36:10+00:00",
+                    "point": -7
+                  },
+                  {
+                    "text": "HOU 36%\nCLB 64%",
+                    "text1": "HOU 36%",
+                    "text2": "CLB 64%",
+                    "odds1": "+162",
+                    "odds2": "-202",
+                    "timestamp": "2026-05-02T00:39:14+00:00",
+                    "point": -14
+                  },
+                  {
+                    "text": "HOU 37%\nCLB 63%",
+                    "text1": "HOU 37%",
+                    "text2": "CLB 63%",
+                    "odds1": "+154",
+                    "odds2": "-191",
+                    "timestamp": "2026-05-02T00:40:17+00:00",
+                    "point": -13
+                  },
+                  {
+                    "text": "HOU 35%\nCLB 65%",
+                    "text1": "HOU 35%",
+                    "text2": "CLB 65%",
+                    "odds1": "+175",
+                    "odds2": "-219",
+                    "timestamp": "2026-05-02T00:41:18+00:00",
+                    "point": -15
+                  },
+                  {
+                    "text": "HOU 36%\nCLB 64%",
+                    "text1": "HOU 36%",
+                    "text2": "CLB 64%",
+                    "odds1": "+166",
+                    "odds2": "-207",
+                    "timestamp": "2026-05-02T00:42:20+00:00",
+                    "point": -14
+                  },
+                  {
+                    "text": "HOU 35%\nCLB 65%",
+                    "text1": "HOU 35%",
+                    "text2": "CLB 65%",
+                    "odds1": "+171",
+                    "odds2": "-213",
+                    "timestamp": "2026-05-02T00:43:21+00:00",
+                    "point": -15
+                  },
+                  {
+                    "text": "HOU 29%\nCLB 71%",
+                    "text1": "HOU 29%",
+                    "text2": "CLB 71%",
+                    "odds1": "+229",
+                    "odds2": "-294",
+                    "timestamp": "2026-05-02T00:44:22+00:00",
+                    "point": -21
+                  },
+                  {
+                    "text": "HOU 29%\nCLB 71%",
+                    "text1": "HOU 29%",
+                    "text2": "CLB 71%",
+                    "odds1": "+228",
+                    "odds2": "-292",
+                    "timestamp": "2026-05-02T00:45:24+00:00",
+                    "point": -21
+                  },
+                  {
+                    "text": "HOU 30%\nCLB 70%",
+                    "text1": "HOU 30%",
+                    "text2": "CLB 70%",
+                    "odds1": "+215",
+                    "odds2": "-274",
+                    "timestamp": "2026-05-02T00:47:27+00:00",
+                    "point": -20
+                  },
+                  {
+                    "text": "HOU 32%\nCLB 68%",
+                    "text1": "HOU 32%",
+                    "text2": "CLB 68%",
+                    "odds1": "+201",
+                    "odds2": "-254",
+                    "timestamp": "2026-05-02T00:48:29+00:00",
+                    "point": -18
+                  },
+                  {
+                    "text": "HOU 36%\nCLB 64%",
+                    "text1": "HOU 36%",
+                    "text2": "CLB 64%",
+                    "odds1": "+166",
+                    "odds2": "-206",
+                    "timestamp": "2026-05-02T00:49:30+00:00",
+                    "point": -14
+                  },
+                  {
+                    "text": "HOU 32%\nCLB 68%",
+                    "text1": "HOU 32%",
+                    "text2": "CLB 68%",
+                    "odds1": "+200",
+                    "odds2": "-253",
+                    "timestamp": "2026-05-02T00:51:35+00:00",
+                    "point": -18
+                  },
+                  {
+                    "text": "HOU 34%\nCLB 66%",
+                    "text1": "HOU 34%",
+                    "text2": "CLB 66%",
+                    "odds1": "+178",
+                    "odds2": "-223",
+                    "timestamp": "2026-05-02T00:52:36+00:00",
+                    "point": -16
+                  },
+                  {
+                    "text": "HOU 32%\nCLB 68%",
+                    "text1": "HOU 32%",
+                    "text2": "CLB 68%",
+                    "odds1": "+202",
+                    "odds2": "-256",
+                    "timestamp": "2026-05-02T00:53:37+00:00",
+                    "point": -18
+                  },
+                  {
+                    "text": "HOU 37%\nCLB 63%",
+                    "text1": "HOU 37%",
+                    "text2": "CLB 63%",
+                    "odds1": "+156",
+                    "odds2": "-194",
+                    "timestamp": "2026-05-02T00:56:41+00:00",
+                    "point": -13
+                  },
+                  {
+                    "text": "HOU 25%\nCLB 75%",
+                    "text1": "HOU 25%",
+                    "text2": "CLB 75%",
+                    "odds1": "+287",
+                    "odds2": "-380",
+                    "timestamp": "2026-05-02T00:57:43+00:00",
+                    "point": -25
+                  },
+                  {
+                    "text": "HOU 23%\nCLB 77%",
+                    "text1": "HOU 23%",
+                    "text2": "CLB 77%",
+                    "odds1": "+323",
+                    "odds2": "-436",
+                    "timestamp": "2026-05-02T00:58:44+00:00",
+                    "point": -27
+                  },
+                  {
+                    "text": "HOU 21%\nCLB 79%",
+                    "text1": "HOU 21%",
+                    "text2": "CLB 79%",
+                    "odds1": "+348",
+                    "odds2": "-478",
+                    "timestamp": "2026-05-02T01:00:47+00:00",
+                    "point": -29
+                  },
+                  {
+                    "text": "HOU 38%\nCLB 62%",
+                    "text1": "HOU 38%",
+                    "text2": "CLB 62%",
+                    "odds1": "+155",
+                    "odds2": "-186",
+                    "timestamp": "2026-05-02T01:02:07+00:00",
+                    "point": -12
+                  },
+                  {
+                    "text": "HOU 21%\nCLB 79%",
+                    "text1": "HOU 21%",
+                    "text2": "CLB 79%",
+                    "odds1": "+364",
+                    "odds2": "-505",
+                    "timestamp": "2026-05-02T01:03:51+00:00",
+                    "point": -29
+                  },
+                  {
+                    "text": "HOU 21%\nCLB 79%",
+                    "text1": "HOU 21%",
+                    "text2": "CLB 79%",
+                    "odds1": "+353",
+                    "odds2": "-486",
+                    "timestamp": "2026-05-02T01:04:52+00:00",
+                    "point": -29
+                  },
+                  {
+                    "text": "HOU 17%\nCLB 83%",
+                    "text1": "HOU 17%",
+                    "text2": "CLB 83%",
+                    "odds1": "+457",
+                    "odds2": "-672",
+                    "timestamp": "2026-05-02T01:05:53+00:00",
+                    "point": -33
+                  },
+                  {
+                    "text": "HOU 16%\nCLB 84%",
+                    "text1": "HOU 16%",
+                    "text2": "CLB 84%",
+                    "odds1": "+494",
+                    "odds2": "-744",
+                    "timestamp": "2026-05-02T01:06:54+00:00",
+                    "point": -34
+                  },
+                  {
+                    "text": "HOU 16%\nCLB 84%",
+                    "text1": "HOU 16%",
+                    "text2": "CLB 84%",
+                    "odds1": "+478",
+                    "odds2": "-714",
+                    "timestamp": "2026-05-02T01:07:55+00:00",
+                    "point": -34
+                  },
+                  {
+                    "text": "HOU 15%\nCLB 85%",
+                    "text1": "HOU 15%",
+                    "text2": "CLB 85%",
+                    "odds1": "+537",
+                    "odds2": "-835",
+                    "timestamp": "2026-05-02T01:09:57+00:00",
+                    "point": -35
+                  },
+                  {
+                    "text": "HOU 16%\nCLB 84%",
+                    "text1": "HOU 16%",
+                    "text2": "CLB 84%",
+                    "odds1": "+501",
+                    "odds2": "-758",
+                    "timestamp": "2026-05-02T01:10:58+00:00",
+                    "point": -34
+                  },
+                  {
+                    "text": "HOU 15%\nCLB 85%",
+                    "text1": "HOU 15%",
+                    "text2": "CLB 85%",
+                    "odds1": "+522",
+                    "odds2": "-802",
+                    "timestamp": "2026-05-02T01:12:00+00:00",
+                    "point": -35
+                  },
+                  {
+                    "text": "HOU 17%\nCLB 83%",
+                    "text1": "HOU 17%",
+                    "text2": "CLB 83%",
+                    "odds1": "+471",
+                    "odds2": "-698",
+                    "timestamp": "2026-05-02T01:14:02+00:00",
+                    "point": -33
+                  },
+                  {
+                    "text": "HOU 18%\nCLB 82%",
+                    "text1": "HOU 18%",
+                    "text2": "CLB 82%",
+                    "odds1": "+441",
+                    "odds2": "-641",
+                    "timestamp": "2026-05-02T01:15:04+00:00",
+                    "point": -32
+                  },
+                  {
+                    "text": "HOU 17%\nCLB 83%",
+                    "text1": "HOU 17%",
+                    "text2": "CLB 83%",
+                    "odds1": "+445",
+                    "odds2": "-650",
+                    "timestamp": "2026-05-02T01:16:06+00:00",
+                    "point": -33
+                  },
+                  {
+                    "text": "HOU 18%\nCLB 82%",
+                    "text1": "HOU 18%",
+                    "text2": "CLB 82%",
+                    "odds1": "+440",
+                    "odds2": "-639",
+                    "timestamp": "2026-05-02T01:18:09+00:00",
+                    "point": -32
+                  },
+                  {
+                    "text": "HOU 36%\nCLB 64%",
+                    "text1": "HOU 36%",
+                    "text2": "CLB 64%",
+                    "odds1": "+164",
+                    "odds2": "-198",
+                    "timestamp": "2026-05-02T01:32:09+00:00",
+                    "point": -14
+                  },
+                  {
+                    "text": "HOU 20%\nCLB 80%",
+                    "text1": "HOU 20%",
+                    "text2": "CLB 80%",
+                    "odds1": "+377",
+                    "odds2": "-526",
+                    "timestamp": "2026-05-02T01:34:17+00:00",
+                    "point": -30
+                  },
+                  {
+                    "text": "HOU 16%\nCLB 84%",
+                    "text1": "HOU 16%",
+                    "text2": "CLB 84%",
+                    "odds1": "+512",
+                    "odds2": "-782",
+                    "timestamp": "2026-05-02T01:35:18+00:00",
+                    "point": -34
+                  },
+                  {
+                    "text": "HOU 13%\nCLB 87%",
+                    "text1": "HOU 13%",
+                    "text2": "CLB 87%",
+                    "odds1": "+648",
+                    "odds2": "-1094",
+                    "timestamp": "2026-05-02T01:36:21+00:00",
+                    "point": -37
+                  },
+                  {
+                    "text": "HOU 13%\nCLB 87%",
+                    "text1": "HOU 13%",
+                    "text2": "CLB 87%",
+                    "odds1": "+630",
+                    "odds2": "-1050",
+                    "timestamp": "2026-05-02T01:37:22+00:00",
+                    "point": -37
+                  },
+                  {
+                    "text": "HOU 13%\nCLB 87%",
+                    "text1": "HOU 13%",
+                    "text2": "CLB 87%",
+                    "odds1": "+626",
+                    "odds2": "-1040",
+                    "timestamp": "2026-05-02T01:39:25+00:00",
+                    "point": -37
+                  },
+                  {
+                    "text": "HOU 12%\nCLB 88%",
+                    "text1": "HOU 12%",
+                    "text2": "CLB 88%",
+                    "odds1": "+673",
+                    "odds2": "-1159",
+                    "timestamp": "2026-05-02T01:40:26+00:00",
+                    "point": -38
+                  },
+                  {
+                    "text": "HOU 10%\nCLB 90%",
+                    "text1": "HOU 10%",
+                    "text2": "CLB 90%",
+                    "odds1": "+892",
+                    "odds2": "-1869",
+                    "timestamp": "2026-05-02T01:41:27+00:00",
+                    "point": -40
+                  },
+                  {
+                    "text": "HOU 11%\nCLB 89%",
+                    "text1": "HOU 11%",
+                    "text2": "CLB 89%",
+                    "odds1": "+765",
+                    "odds2": "-1422",
+                    "timestamp": "2026-05-02T01:42:29+00:00",
+                    "point": -39
+                  },
+                  {
+                    "text": "HOU 11%\nCLB 89%",
+                    "text1": "HOU 11%",
+                    "text2": "CLB 89%",
+                    "odds1": "+743",
+                    "odds2": "-1359",
+                    "timestamp": "2026-05-02T01:43:30+00:00",
+                    "point": -39
+                  },
+                  {
+                    "text": "HOU 12%\nCLB 88%",
+                    "text1": "HOU 12%",
+                    "text2": "CLB 88%",
+                    "odds1": "+713",
+                    "odds2": "-1269",
+                    "timestamp": "2026-05-02T01:44:31+00:00",
+                    "point": -38
+                  },
+                  {
+                    "text": "HOU 13%\nCLB 87%",
+                    "text1": "HOU 13%",
+                    "text2": "CLB 87%",
+                    "odds1": "+651",
+                    "odds2": "-1103",
+                    "timestamp": "2026-05-02T01:46:33+00:00",
+                    "point": -37
+                  },
+                  {
+                    "text": "HOU 11%\nCLB 89%",
+                    "text1": "HOU 11%",
+                    "text2": "CLB 89%",
+                    "odds1": "+777",
+                    "odds2": "-1462",
+                    "timestamp": "2026-05-02T01:47:34+00:00",
+                    "point": -39
+                  },
+                  {
+                    "text": "HOU 10%\nCLB 90%",
+                    "text1": "HOU 10%",
+                    "text2": "CLB 90%",
+                    "odds1": "+886",
+                    "odds2": "-1845",
+                    "timestamp": "2026-05-02T01:48:36+00:00",
+                    "point": -40
+                  },
+                  {
+                    "text": "HOU 11%\nCLB 89%",
+                    "text1": "HOU 11%",
+                    "text2": "CLB 89%",
+                    "odds1": "+775",
+                    "odds2": "-1456",
+                    "timestamp": "2026-05-02T01:49:37+00:00",
+                    "point": -39
+                  },
+                  {
+                    "text": "HOU 10%\nCLB 90%",
+                    "text1": "HOU 10%",
+                    "text2": "CLB 90%",
+                    "odds1": "+835",
+                    "odds2": "-1656",
+                    "timestamp": "2026-05-02T01:50:38+00:00",
+                    "point": -40
+                  },
+                  {
+                    "text": "HOU 10%\nCLB 90%",
+                    "text1": "HOU 10%",
+                    "text2": "CLB 90%",
+                    "odds1": "+821",
+                    "odds2": "-1605",
+                    "timestamp": "2026-05-02T01:52:39+00:00",
+                    "point": -40
+                  },
+                  {
+                    "text": "HOU 10%\nCLB 90%",
+                    "text1": "HOU 10%",
+                    "text2": "CLB 90%",
+                    "odds1": "+843",
+                    "odds2": "-1684",
+                    "timestamp": "2026-05-02T01:53:41+00:00",
+                    "point": -40
+                  },
+                  {
+                    "text": "HOU 7%\nCLB 93%",
+                    "text1": "HOU 7%",
+                    "text2": "CLB 93%",
+                    "odds1": "+1209",
+                    "odds2": "-3690",
+                    "timestamp": "2026-05-02T01:54:42+00:00",
+                    "point": -43
+                  },
+                  {
+                    "text": "HOU 7%\nCLB 93%",
+                    "text1": "HOU 7%",
+                    "text2": "CLB 93%",
+                    "odds1": "+1305",
+                    "odds2": "-4608",
+                    "timestamp": "2026-05-02T01:55:43+00:00",
+                    "point": -43
+                  },
+                  {
+                    "text": "HOU 8%\nCLB 92%",
+                    "text1": "HOU 8%",
+                    "text2": "CLB 92%",
+                    "odds1": "+1062",
+                    "odds2": "-2674",
+                    "timestamp": "2026-05-02T01:56:44+00:00",
+                    "point": -42
+                  },
+                  {
+                    "text": "HOU 9%\nCLB 91%",
+                    "text1": "HOU 9%",
+                    "text2": "CLB 91%",
+                    "odds1": "+978",
+                    "odds2": "-2237",
+                    "timestamp": "2026-05-02T01:57:45+00:00",
+                    "point": -41
+                  },
+                  {
+                    "text": "HOU 11%\nCLB 89%",
+                    "text1": "HOU 11%",
+                    "text2": "CLB 89%",
+                    "odds1": "+796",
+                    "odds2": "-1524",
+                    "timestamp": "2026-05-02T02:02:50+00:00",
+                    "point": -39
+                  },
+                  {
+                    "text": "HOU 12%\nCLB 88%",
+                    "text1": "HOU 12%",
+                    "text2": "CLB 88%",
+                    "odds1": "+664",
+                    "odds2": "-1138",
+                    "timestamp": "2026-05-02T02:03:51+00:00",
+                    "point": -38
+                  },
+                  {
+                    "text": "HOU 12%\nCLB 88%",
+                    "text1": "HOU 12%",
+                    "text2": "CLB 88%",
+                    "odds1": "+685",
+                    "odds2": "-1192",
+                    "timestamp": "2026-05-02T02:04:52+00:00",
+                    "point": -38
+                  },
+                  {
+                    "text": "HOU 17%\nCLB 83%",
+                    "text1": "HOU 17%",
+                    "text2": "CLB 83%",
+                    "odds1": "+460",
+                    "odds2": "-677",
+                    "timestamp": "2026-05-02T02:06:54+00:00",
+                    "point": -33
+                  },
+                  {
+                    "text": "HOU 18%\nCLB 82%",
+                    "text1": "HOU 18%",
+                    "text2": "CLB 82%",
+                    "odds1": "+440",
+                    "odds2": "-640",
+                    "timestamp": "2026-05-02T02:07:55+00:00",
+                    "point": -32
+                  },
+                  {
+                    "text": "HOU 17%\nCLB 83%",
+                    "text1": "HOU 17%",
+                    "text2": "CLB 83%",
+                    "odds1": "+459",
+                    "odds2": "-677",
+                    "timestamp": "2026-05-02T02:08:56+00:00",
+                    "point": -33
+                  },
+                  {
+                    "text": "HOU 17%\nCLB 83%",
+                    "text1": "HOU 17%",
+                    "text2": "CLB 83%",
+                    "odds1": "+457",
+                    "odds2": "-671",
+                    "timestamp": "2026-05-02T02:09:57+00:00",
+                    "point": -33
+                  },
+                  {
+                    "text": "HOU 17%\nCLB 83%",
+                    "text1": "HOU 17%",
+                    "text2": "CLB 83%",
+                    "odds1": "+454",
+                    "odds2": "-667",
+                    "timestamp": "2026-05-02T02:11:59+00:00",
+                    "point": -33
+                  },
+                  {
+                    "text": "HOU 19%\nCLB 81%",
+                    "text1": "HOU 19%",
+                    "text2": "CLB 81%",
+                    "odds1": "+391",
+                    "odds2": "-550",
+                    "timestamp": "2026-05-02T02:13:00+00:00",
+                    "point": -31
+                  },
+                  {
+                    "text": "HOU 21%\nCLB 79%",
+                    "text1": "HOU 21%",
+                    "text2": "CLB 79%",
+                    "odds1": "+344",
+                    "odds2": "-471",
+                    "timestamp": "2026-05-02T02:14:01+00:00",
+                    "point": -29
+                  },
+                  {
+                    "text": "HOU 25%\nCLB 75%",
+                    "text1": "HOU 25%",
+                    "text2": "CLB 75%",
+                    "odds1": "+277",
+                    "odds2": "-365",
+                    "timestamp": "2026-05-02T02:15:03+00:00",
+                    "point": -25
+                  },
+                  {
+                    "text": "HOU 25%\nCLB 75%",
+                    "text1": "HOU 25%",
+                    "text2": "CLB 75%",
+                    "odds1": "+274",
+                    "odds2": "-360",
+                    "timestamp": "2026-05-02T02:16:05+00:00",
+                    "point": -25
+                  },
+                  {
+                    "text": "HOU 25%\nCLB 75%",
+                    "text1": "HOU 25%",
+                    "text2": "CLB 75%",
+                    "odds1": "+287",
+                    "odds2": "-381",
+                    "timestamp": "2026-05-02T02:18:07+00:00",
+                    "point": -25
+                  },
+                  {
+                    "text": "HOU 19%\nCLB 81%",
+                    "text1": "HOU 19%",
+                    "text2": "CLB 81%",
+                    "odds1": "+390",
+                    "odds2": "-548",
+                    "timestamp": "2026-05-02T02:19:08+00:00",
+                    "point": -31
+                  },
+                  {
+                    "text": "HOU 17%\nCLB 83%",
+                    "text1": "HOU 17%",
+                    "text2": "CLB 83%",
+                    "odds1": "+473",
+                    "odds2": "-702",
+                    "timestamp": "2026-05-02T02:20:09+00:00",
+                    "point": -33
+                  },
+                  {
+                    "text": "HOU 18%\nCLB 82%",
+                    "text1": "HOU 18%",
+                    "text2": "CLB 82%",
+                    "odds1": "+435",
+                    "odds2": "-631",
+                    "timestamp": "2026-05-02T02:21:11+00:00",
+                    "point": -32
+                  },
+                  {
+                    "text": "HOU 20%\nCLB 80%",
+                    "text1": "HOU 20%",
+                    "text2": "CLB 80%",
+                    "odds1": "+365",
+                    "odds2": "-507",
+                    "timestamp": "2026-05-02T02:22:12+00:00",
+                    "point": -30
+                  },
+                  {
+                    "text": "HOU 21%\nCLB 79%",
+                    "text1": "HOU 21%",
+                    "text2": "CLB 79%",
+                    "odds1": "+359",
+                    "odds2": "-496",
+                    "timestamp": "2026-05-02T02:23:15+00:00",
+                    "point": -29
+                  },
+                  {
+                    "text": "HOU 20%\nCLB 80%",
+                    "text1": "HOU 20%",
+                    "text2": "CLB 80%",
+                    "odds1": "+376",
+                    "odds2": "-525",
+                    "timestamp": "2026-05-02T02:24:16+00:00",
+                    "point": -30
+                  },
+                  {
+                    "text": "HOU 17%\nCLB 83%",
+                    "text1": "HOU 17%",
+                    "text2": "CLB 83%",
+                    "odds1": "+473",
+                    "odds2": "-703",
+                    "timestamp": "2026-05-02T02:25:18+00:00",
+                    "point": -33
+                  },
+                  {
+                    "text": "HOU 11%\nCLB 89%",
+                    "text1": "HOU 11%",
+                    "text2": "CLB 89%",
+                    "odds1": "+801",
+                    "odds2": "-1541",
+                    "timestamp": "2026-05-02T02:26:19+00:00",
+                    "point": -39
+                  },
+                  {
+                    "text": "HOU 8%\nCLB 92%",
+                    "text1": "HOU 8%",
+                    "text2": "CLB 92%",
+                    "odds1": "+1132",
+                    "odds2": "-3106",
+                    "timestamp": "2026-05-02T02:28:21+00:00",
+                    "point": -42
+                  },
+                  {
+                    "text": "HOU 21%\nCLB 79%",
+                    "text1": "HOU 21%",
+                    "text2": "CLB 79%",
+                    "odds1": "+344",
+                    "odds2": "-471",
+                    "timestamp": "2026-05-02T02:30:24+00:00",
+                    "point": -29
+                  },
+                  {
+                    "text": "HOU 21%\nCLB 79%",
+                    "text1": "HOU 21%",
+                    "text2": "CLB 79%",
+                    "odds1": "+348",
+                    "odds2": "-477",
+                    "timestamp": "2026-05-02T02:31:24+00:00",
+                    "point": -29
+                  },
+                  {
+                    "text": "HOU 17%\nCLB 83%",
+                    "text1": "HOU 17%",
+                    "text2": "CLB 83%",
+                    "odds1": "+451",
+                    "odds2": "-661",
+                    "timestamp": "2026-05-02T02:33:26+00:00",
+                    "point": -33
+                  },
+                  {
+                    "text": "HOU 11%\nCLB 89%",
+                    "text1": "HOU 11%",
+                    "text2": "CLB 89%",
+                    "odds1": "+784",
+                    "odds2": "-1484",
+                    "timestamp": "2026-05-02T02:34:27+00:00",
+                    "point": -39
+                  },
+                  {
+                    "text": "HOU 10%\nCLB 90%",
+                    "text1": "HOU 10%",
+                    "text2": "CLB 90%",
+                    "odds1": "+845",
+                    "odds2": "-1689",
+                    "timestamp": "2026-05-02T02:35:28+00:00",
+                    "point": -40
+                  },
+                  {
+                    "text": "HOU 9%\nCLB 91%",
+                    "text1": "HOU 9%",
+                    "text2": "CLB 91%",
+                    "odds1": "+1003",
+                    "odds2": "-2358",
+                    "timestamp": "2026-05-02T02:36:29+00:00",
+                    "point": -41
+                  },
+                  {
+                    "text": "HOU 9%\nCLB 91%",
+                    "text1": "HOU 9%",
+                    "text2": "CLB 91%",
+                    "odds1": "+1014",
+                    "odds2": "-2415",
+                    "timestamp": "2026-05-02T02:37:30+00:00",
+                    "point": -41
+                  },
+                  {
+                    "text": "HOU 9%\nCLB 91%",
+                    "text1": "HOU 9%",
+                    "text2": "CLB 91%",
+                    "odds1": "+906",
+                    "odds2": "-1923",
+                    "timestamp": "2026-05-02T02:38:31+00:00",
+                    "point": -41
+                  },
+                  {
+                    "text": "HOU 12%\nCLB 88%",
+                    "text1": "HOU 12%",
+                    "text2": "CLB 88%",
+                    "odds1": "+673",
+                    "odds2": "-1159",
+                    "timestamp": "2026-05-02T02:39:32+00:00",
+                    "point": -38
+                  },
+                  {
+                    "text": "HOU 12%\nCLB 88%",
+                    "text1": "HOU 12%",
+                    "text2": "CLB 88%",
+                    "odds1": "+700",
+                    "odds2": "-1235",
+                    "timestamp": "2026-05-02T02:40:33+00:00",
+                    "point": -38
+                  }
+                ],
+                "color": "1, 182, 32, 44",
+                "color2": "1, 15, 37, 65",
+                "name": "HOU",
+                "name2": "CLB",
+                "stat1Value": "HOU 12%",
+                "stat1Subtext": "+700",
+                "stat2Value": "CLB 88%",
+                "stat2Subtext": "-1235",
+                "alternateColor": "1, 255, 255, 255",
+                "alternateColor2": "1, 225, 3, 45"
+              }
+            ],
+            "showAxisLines": true
+          }
+        },
+        {
+          "type": "bet-section",
+          "model": {
+            "name": "TEAM TO WIN",
+            "bets": [
+              {
+                "template": "market",
+                "model": {
+                  "mainText": "The Aviators won at -198 odds so a bet of $198 won $298 total",
+                  "odds": [
+                    {
+                      "text": "+164",
+                      "subText": "HOU"
+                    },
+                    {
+                      "text": "-198",
+                      "subText": "CLB",
+                      "success": true
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "bet-section",
+          "model": {
+            "name": "TOTAL",
+            "bets": [
+              {
+                "template": "market",
+                "model": {
+                  "mainText": "The over/under was 45.5 and the teams scored 41 points, so people who bet the under won",
+                  "odds": [
+                    {
+                      "text": "-115",
+                      "subText": "OVER 45.5"
+                    },
+                    {
+                      "text": "-105",
+                      "subText": "UNDER 45.5",
+                      "success": true
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "sixPack": {
+    "odds": {
+      "columnHeaders": [
+        "SPREAD",
+        "TO WIN",
+        "TOTAL"
+      ],
+      "rows": [
+        {
+          "text": "HOU",
+          "fullText": "Houston Gamblers",
+          "image": {
+            "url": "https://b.fssta.com/uploads/application/ufl/team-logos/Gamblers.vresize.200.200.medium.3.png",
+            "altUrl": "https://b.fssta.com/uploads/application/ufl/team-logos/Gamblers.vresize.200.200.medium.3.png",
+            "type": "image-logo",
+            "altText": "Houston Gamblers"
+          },
+          "imageUrl": "https://b.fssta.com/uploads/application/ufl/team-logos/Gamblers.vresize.200.200.medium.3.png",
+          "alternateImageUrl": "https://b.fssta.com/uploads/application/ufl/team-logos/Gamblers.vresize.200.200.medium.3.png",
+          "imageType": "image-logo",
+          "imageAltText": "Houston Gamblers",
+          "values": [
+            {
+              "id": "closing",
+              "odds": "+3.0",
+              "success": false
+            },
+            {
+              "id": "closing",
+              "odds": "+164",
+              "success": false
+            },
+            {
+              "id": "closing",
+              "odds": "O 45.5",
+              "success": false
+            }
+          ],
+          "template": "entity"
+        },
+        {
+          "text": "CLB",
+          "fullText": "Columbus Aviators",
+          "image": {
+            "url": "https://b.fssta.com/uploads/application/ufl/team-logos/Aviators.vresize.200.200.medium.0.png",
+            "altUrl": "https://b.fssta.com/uploads/application/ufl/team-logos/Aviators.vresize.200.200.medium.0.png",
+            "type": "image-logo",
+            "altText": "Columbus Aviators"
+          },
+          "imageUrl": "https://b.fssta.com/uploads/application/ufl/team-logos/Aviators.vresize.200.200.medium.0.png",
+          "alternateImageUrl": "https://b.fssta.com/uploads/application/ufl/team-logos/Aviators.vresize.200.200.medium.0.png",
+          "imageType": "image-logo",
+          "imageAltText": "Columbus Aviators",
+          "values": [
+            {
+              "id": "closing",
+              "odds": "-3.0",
+              "success": true
+            },
+            {
+              "id": "closing",
+              "odds": "-198",
+              "success": true
+            },
+            {
+              "id": "closing",
+              "odds": "U 45.5",
+              "success": true
+            }
+          ],
+          "template": "entity"
+        }
+      ],
+      "template": "default"
+    },
+    "eventStatus": 3,
+    "isTba": false,
+    "moduleLinkText": "ODDS INFO",
+    "betSection": {
+      "name": "GAMBLERS vs AVIATORS",
+      "bets": [
+        {
+          "template": "market",
+          "model": {
+            "subtitle": "SPREAD",
+            "mainText": "The Aviators needed to win by more than 3 points to cover the spread. They did cover, so people who took the Aviators won.",
+            "odds": [
+              {
+                "text": "+3.0",
+                "subText": "HOU"
+              },
+              {
+                "text": "-3.0",
+                "subText": "CLB",
+                "success": true
+              }
+            ]
+          }
+        },
+        {
+          "template": "market",
+          "model": {
+            "subtitle": "TEAM TO WIN",
+            "mainText": "The Aviators won at -198 odds so a bet of $198 won $298 total",
+            "odds": [
+              {
+                "text": "+164",
+                "subText": "HOU"
+              },
+              {
+                "text": "-198",
+                "subText": "CLB",
+                "success": true
+              }
+            ]
+          }
+        },
+        {
+          "template": "market",
+          "model": {
+            "subtitle": "TOTAL",
+            "mainText": "The over/under was 45.5 and the teams scored 41 points, so people who bet the under won",
+            "odds": [
+              {
+                "text": "-115",
+                "subText": "OVER 45.5"
+              },
+              {
+                "text": "-105",
+                "subText": "UNDER 45.5",
+                "success": true
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "entityLink": {
+      "webUrl": "/ufl/week-6-houston-gamblers-vs-columbus-aviators-may-01-2026-game-boxscore-108?tab=odds",
+      "contentUri": "football/ufl/events/108",
+      "contentType": "event",
+      "layout": {
+        "path": "/layouts?type=layout&subtype=uflEventLayout",
+        "tokens": {
+          "id": "108",
+          "eventUri": "football/ufl/events/108",
+          "homeUri": "football/ufl/teams/9",
+          "awayUri": "football/ufl/teams/2"
+        }
+      },
+      "analyticsSport": "ufl",
+      "tab": "odds",
+      "type": "entity"
+    },
+    "contentUri": "football/ufl/events/108",
+    "header": {
+      "title": "MATCHUP ODDS"
+    }
+  }
+}

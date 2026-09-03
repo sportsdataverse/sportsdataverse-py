@@ -1,0 +1,225 @@
+{
+  "leadersSections": [
+    {
+      "title": "PLAYER STATS",
+      "leaders": [
+        {
+          "template": "leader-image",
+          "title": "SCORING",
+          "name": "Kahleah Copper",
+          "shortName": "K. Copper",
+          "imageUrl": "https://b.fssta.com/uploads/application/wnba/headshots/5.vresize.140.170.medium.1.png",
+          "imageType": "image-headshot",
+          "imageAltText": "Kahleah Copper",
+          "statAbbreviation": "PPG",
+          "statValue": "17.1",
+          "condensedUri": "https://api.foxsports.com/bifrost/v1/wnba/team/10/stats-con/player/scoring/0",
+          "webUrl": "/wnba/phoenix-mercury-team-stats?category=scoring&sort=ppg&season=2026&seasonType=reg&sortOrder=desc",
+          "selectionId": "ppg",
+          "alternateImageUrl": "https://b.fssta.com/uploads/application/wnba/headshots/5.vresize.140.170.medium.1.png"
+        },
+        {
+          "template": "leader-image",
+          "title": "REBOUNDING",
+          "name": "Natasha Mack",
+          "shortName": "N. Mack",
+          "imageUrl": "https://b.fssta.com/uploads/application/wnba/headshots/574.vresize.140.170.medium.1.png",
+          "imageType": "image-headshot",
+          "imageAltText": "Natasha Mack",
+          "statAbbreviation": "RPG",
+          "statValue": "8.0",
+          "condensedUri": "https://api.foxsports.com/bifrost/v1/wnba/team/10/stats-con/player/rebounding/0",
+          "webUrl": "/wnba/phoenix-mercury-team-stats?category=rebounding&sort=rpg&season=2026&seasonType=reg&sortOrder=desc",
+          "selectionId": "rpg",
+          "alternateImageUrl": "https://b.fssta.com/uploads/application/wnba/headshots/574.vresize.140.170.medium.1.png"
+        },
+        {
+          "template": "leader-image",
+          "title": "SHOOTING",
+          "name": "Natasha Mack",
+          "shortName": "N. Mack",
+          "imageUrl": "https://b.fssta.com/uploads/application/wnba/headshots/574.vresize.140.170.medium.1.png",
+          "imageType": "image-headshot",
+          "imageAltText": "Natasha Mack",
+          "statAbbreviation": "FG%",
+          "statValue": "68.6",
+          "condensedUri": "https://api.foxsports.com/bifrost/v1/wnba/team/10/stats-con/player/shooting/0",
+          "webUrl": "/wnba/phoenix-mercury-team-stats?category=shooting&sort=fgpct&season=2026&seasonType=reg&sortOrder=desc",
+          "selectionId": "fgpct",
+          "alternateImageUrl": "https://b.fssta.com/uploads/application/wnba/headshots/574.vresize.140.170.medium.1.png"
+        },
+        {
+          "template": "leader-image",
+          "title": "ASSISTS",
+          "name": "Alyssa Thomas",
+          "shortName": "A. Thomas",
+          "imageUrl": "https://b.fssta.com/uploads/application/wnba/headshots/110.vresize.140.170.medium.1.png",
+          "imageType": "image-headshot",
+          "imageAltText": "Alyssa Thomas",
+          "statAbbreviation": "APG",
+          "statValue": "7.8",
+          "condensedUri": "https://api.foxsports.com/bifrost/v1/wnba/team/10/stats-con/player/assists/0",
+          "webUrl": "/wnba/phoenix-mercury-team-stats?category=assists&sort=apg&season=2026&seasonType=reg&sortOrder=desc",
+          "selectionId": "apg",
+          "alternateImageUrl": "https://b.fssta.com/uploads/application/wnba/headshots/110.vresize.140.170.medium.1.png"
+        },
+        {
+          "template": "leader-image",
+          "title": "DEFENSE",
+          "name": "Alyssa Thomas",
+          "shortName": "A. Thomas",
+          "imageUrl": "https://b.fssta.com/uploads/application/wnba/headshots/110.vresize.140.170.medium.1.png",
+          "imageType": "image-headshot",
+          "imageAltText": "Alyssa Thomas",
+          "statAbbreviation": "STL",
+          "statValue": "23",
+          "condensedUri": "https://api.foxsports.com/bifrost/v1/wnba/team/10/stats-con/player/defense/0",
+          "webUrl": "/wnba/phoenix-mercury-team-stats?category=defense&sort=stl&season=2026&seasonType=reg&sortOrder=desc",
+          "selectionId": "stl",
+          "alternateImageUrl": "https://b.fssta.com/uploads/application/wnba/headshots/110.vresize.140.170.medium.1.png"
+        },
+        {
+          "template": "leader-image",
+          "title": "DEFENSE",
+          "name": "Natasha Mack",
+          "shortName": "N. Mack",
+          "imageUrl": "https://b.fssta.com/uploads/application/wnba/headshots/574.vresize.140.170.medium.1.png",
+          "imageType": "image-headshot",
+          "imageAltText": "Natasha Mack",
+          "statAbbreviation": "BLK",
+          "statValue": "19",
+          "condensedUri": "https://api.foxsports.com/bifrost/v1/wnba/team/10/stats-con/player/defense/0",
+          "webUrl": "/wnba/phoenix-mercury-team-stats?category=defense&sort=blk&season=2026&seasonType=reg&sortOrder=desc",
+          "selectionId": "blk",
+          "alternateImageUrl": "https://b.fssta.com/uploads/application/wnba/headshots/574.vresize.140.170.medium.1.png"
+        },
+        {
+          "template": "leader-image",
+          "title": "MISC",
+          "name": "Alyssa Thomas",
+          "shortName": "A. Thomas",
+          "imageUrl": "https://b.fssta.com/uploads/application/wnba/headshots/110.vresize.140.170.medium.1.png",
+          "imageType": "image-headshot",
+          "imageAltText": "Alyssa Thomas",
+          "statAbbreviation": "DBL DBL",
+          "statValue": "3",
+          "condensedUri": "https://api.foxsports.com/bifrost/v1/wnba/team/10/stats-con/player/misc/0",
+          "webUrl": "/wnba/phoenix-mercury-team-stats?category=misc&sort=dbldbl&season=2026&seasonType=reg&sortOrder=desc",
+          "selectionId": "dbldbl",
+          "alternateImageUrl": "https://b.fssta.com/uploads/application/wnba/headshots/110.vresize.140.170.medium.1.png"
+        },
+        {
+          "template": "leader-image",
+          "title": "ADVANCED",
+          "name": "Natasha Mack",
+          "shortName": "N. Mack",
+          "imageUrl": "https://b.fssta.com/uploads/application/wnba/headshots/574.vresize.140.170.medium.1.png",
+          "imageType": "image-headshot",
+          "imageAltText": "Natasha Mack",
+          "statAbbreviation": "OFF RTG",
+          "statValue": "136.7",
+          "condensedUri": "https://api.foxsports.com/bifrost/v1/wnba/team/10/stats-con/player/advanced/0",
+          "webUrl": "/wnba/phoenix-mercury-team-stats?category=advanced&sort=offrtg&season=2026&seasonType=reg&sortOrder=desc",
+          "selectionId": "offrtg",
+          "alternateImageUrl": "https://b.fssta.com/uploads/application/wnba/headshots/574.vresize.140.170.medium.1.png"
+        },
+        {
+          "template": "leader-image",
+          "title": "ADVANCED",
+          "name": "Alyssa Thomas",
+          "shortName": "A. Thomas",
+          "imageUrl": "https://b.fssta.com/uploads/application/wnba/headshots/110.vresize.140.170.medium.1.png",
+          "imageType": "image-headshot",
+          "imageAltText": "Alyssa Thomas",
+          "statAbbreviation": "MPG",
+          "statValue": "33.0",
+          "condensedUri": "https://api.foxsports.com/bifrost/v1/wnba/team/10/stats-con/player/advanced/0",
+          "webUrl": "/wnba/phoenix-mercury-team-stats?category=advanced&sort=mpg&season=2026&seasonType=reg&sortOrder=desc",
+          "selectionId": "mpg",
+          "alternateImageUrl": "https://b.fssta.com/uploads/application/wnba/headshots/110.vresize.140.170.medium.1.png"
+        }
+      ]
+    },
+    {
+      "title": "TEAM STATS",
+      "leaders": [
+        {
+          "template": "leader-stat",
+          "title": "SCORING",
+          "statAbbreviation": "PPG",
+          "statValue": "80.8",
+          "rankLine1": "13TH OVERALL",
+          "condensedUri": "https://api.foxsports.com/bifrost/v1/wnba/team/10/stats-con/team/scoring/0",
+          "webUrl": "/wnba/phoenix-mercury-team-summary-stats?category=scoring&sort=ppg&season=2026&seasonType=reg&sortOrder=desc",
+          "selectionId": "ppg"
+        },
+        {
+          "template": "leader-stat",
+          "title": "REBOUNDING",
+          "statAbbreviation": "RPG",
+          "statValue": "31.6",
+          "rankLine1": "T-12TH OVERALL",
+          "condensedUri": "https://api.foxsports.com/bifrost/v1/wnba/team/10/stats-con/team/rebounding/0",
+          "webUrl": "/wnba/phoenix-mercury-team-summary-stats?category=rebounding&sort=rpg&season=2026&seasonType=reg&sortOrder=desc",
+          "selectionId": "rpg"
+        },
+        {
+          "template": "leader-stat",
+          "title": "SHOOTING",
+          "statAbbreviation": "FG%",
+          "statValue": "41.5",
+          "rankLine1": "13TH OVERALL",
+          "condensedUri": "https://api.foxsports.com/bifrost/v1/wnba/team/10/stats-con/team/shooting/0",
+          "webUrl": "/wnba/phoenix-mercury-team-summary-stats?category=shooting&sort=fgpct&season=2026&seasonType=reg&sortOrder=desc",
+          "selectionId": "fgpct"
+        },
+        {
+          "template": "leader-stat",
+          "title": "ASSISTS",
+          "statAbbreviation": "APG",
+          "statValue": "18.5",
+          "rankLine1": "12TH OVERALL",
+          "condensedUri": "https://api.foxsports.com/bifrost/v1/wnba/team/10/stats-con/team/assists/0",
+          "webUrl": "/wnba/phoenix-mercury-team-summary-stats?category=assists&sort=apg&season=2026&seasonType=reg&sortOrder=desc",
+          "selectionId": "apg"
+        },
+        {
+          "template": "leader-stat",
+          "title": "DEFENSE",
+          "statAbbreviation": "STL",
+          "statValue": "114",
+          "condensedUri": "https://api.foxsports.com/bifrost/v1/wnba/team/10/stats-con/team/defense/0",
+          "webUrl": "/wnba/phoenix-mercury-team-summary-stats?category=defense&sort=stl&season=2026&seasonType=reg&sortOrder=desc",
+          "selectionId": "stl"
+        },
+        {
+          "template": "leader-stat",
+          "title": "DEFENSE",
+          "statAbbreviation": "BLK",
+          "statValue": "49",
+          "condensedUri": "https://api.foxsports.com/bifrost/v1/wnba/team/10/stats-con/team/defense/0",
+          "webUrl": "/wnba/phoenix-mercury-team-summary-stats?category=defense&sort=blk&season=2026&seasonType=reg&sortOrder=desc",
+          "selectionId": "blk"
+        },
+        {
+          "template": "leader-stat",
+          "title": "MISC",
+          "statAbbreviation": "DBL DBL",
+          "statValue": "6",
+          "condensedUri": "https://api.foxsports.com/bifrost/v1/wnba/team/10/stats-con/team/misc/0",
+          "webUrl": "/wnba/phoenix-mercury-team-summary-stats?category=misc&sort=dbldbl&season=2026&seasonType=reg&sortOrder=desc",
+          "selectionId": "dbldbl"
+        },
+        {
+          "template": "leader-stat",
+          "title": "ADVANCED",
+          "statAbbreviation": "NET RTG",
+          "statValue": "-5.5",
+          "condensedUri": "https://api.foxsports.com/bifrost/v1/wnba/team/10/stats-con/team/advanced/0",
+          "webUrl": "/wnba/phoenix-mercury-team-summary-stats?category=advanced&sort=netrtg&season=2026&seasonType=reg&sortOrder=desc",
+          "selectionId": "netrtg"
+        }
+      ]
+    }
+  ]
+}
