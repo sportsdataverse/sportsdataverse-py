@@ -120,12 +120,23 @@ jobs:
           # quotes/newlines) is escaped into valid JSON — a printf-interpolated
           # sentinel is malformed and gets silently swallowed by the aggregation
           # step's JSON.parse AND the platform-ingest jq.
-          if [ "${exit_code}" -ne 0 ]; then
+          # Exit 1 is the CLI's DOCUMENTED "found ERROR findings" (cli.py _emit:
+          # `return 1 if any(f["severity"] == "error" ...)`), NOT a crash. It
+          # writes the complete findings array to stdout BEFORE returning 1, so
+          # on exit 1 the findings file is valid and is the whole point of the
+          # run. Treating every non-zero exit as a crash overwrote those real
+          # findings with a sentinel whose message was empty (the CLI wrote
+          # nothing to stderr because nothing went wrong), so issue #415 read
+          # "validation CLI exited 1: " and the findings it existed to report
+          # were destroyed. An uncaught traceback also exits 1, so the exit code
+          # cannot discriminate -- but the findings file can: a completed run
+          # leaves a valid JSON array, a crash leaves it empty or truncated.
+          if [ "${exit_code}" -ne 0 ] && ! jq -e 'type == "array"' findings_cfb_model_pbp.json >/dev/null 2>&1; then
             log_tail=$(tail -c 500 validate_cfb.log 2>/dev/null || true)
             jq -n --arg code "${exit_code}" --arg log "${log_tail}" \
               '[{check: "run_error", severity: "error", domain: "cfb",
                  dataset: "cfb_model_pbp", needs_judgment: false,
-                 message: ("cfb_model_pbp validation CLI exited " + $code + ": " + $log)}]' \
+                 message: ("cfb_model_pbp validation CLI exited " + $code + " without leaving valid findings JSON: " + $log)}]' \
               > findings_cfb_model_pbp.json
           fi
 
@@ -183,12 +194,23 @@ jobs:
           # quotes/newlines) is escaped into valid JSON — a printf-interpolated
           # sentinel is malformed and gets silently swallowed by the aggregation
           # step's JSON.parse AND the platform-ingest jq.
-          if [ "${exit_code}" -ne 0 ]; then
+          # Exit 1 is the CLI's DOCUMENTED "found ERROR findings" (cli.py _emit:
+          # `return 1 if any(f["severity"] == "error" ...)`), NOT a crash. It
+          # writes the complete findings array to stdout BEFORE returning 1, so
+          # on exit 1 the findings file is valid and is the whole point of the
+          # run. Treating every non-zero exit as a crash overwrote those real
+          # findings with a sentinel whose message was empty (the CLI wrote
+          # nothing to stderr because nothing went wrong), so issue #415 read
+          # "validation CLI exited 1: " and the findings it existed to report
+          # were destroyed. An uncaught traceback also exits 1, so the exit code
+          # cannot discriminate -- but the findings file can: a completed run
+          # leaves a valid JSON array, a crash leaves it empty or truncated.
+          if [ "${exit_code}" -ne 0 ] && ! jq -e 'type == "array"' findings_nfl_model_pbp.json >/dev/null 2>&1; then
             log_tail=$(tail -c 500 validate_nfl.log 2>/dev/null || true)
             jq -n --arg code "${exit_code}" --arg log "${log_tail}" \
               '[{check: "run_error", severity: "error", domain: "nfl",
                  dataset: "nfl_model_pbp", needs_judgment: false,
-                 message: ("nfl_model_pbp validation CLI exited " + $code + ": " + $log)}]' \
+                 message: ("nfl_model_pbp validation CLI exited " + $code + " without leaving valid findings JSON: " + $log)}]' \
               > findings_nfl_model_pbp.json
           fi
 
