@@ -32,7 +32,6 @@ from sportsdataverse.dl_utils import underscore
 __all__ = ["html_tables"]
 
 
-
 _NON_ALNUM = re.compile(r"[^0-9a-zA-Z]+")
 _UNNAMED = re.compile(r"^unnamed[:_]?\s*\d*", re.IGNORECASE)
 #: pandas' duplicate-label suffix on a repeated header level ("NetRtg.1").
