@@ -387,7 +387,6 @@ files = [
     "sportsdataverse/yahoo/yahoo_shangrila_parsers.py",
     "sportsdataverse/yahoo/yahoo_shangrila_runtime.py",
     "sportsdataverse/nfl/nfl_fox_ext.py",
-    "sportsdataverse/_fox_layout.py",
     "sportsdataverse/_subscription_http.py",
     "sportsdataverse/mbb/kenpom_runtime.py",
     "sportsdataverse/wbb/herhoopstats.py",
