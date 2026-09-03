@@ -1678,6 +1678,12 @@ def build_parsed_live() -> list[Path]:
 # Flat (non-sport/league) API families: (yaml_stem, league_prefix). Only those
 # whose YAML exists under tools/codegen/endpoints/ are generated, so the NHL/MLB
 # native cutover can land family-by-family.
+#: League prefix -> sport-group container, for leagues that nest (soccer, football).
+#: Read from leagues.yaml so it cannot drift from the ESPN side's layout.
+_LEAGUE_GROUP = {
+    lg.prefix: lg.group for lg in spec.load_leagues(ENDPOINTS / "leagues.yaml").leagues if lg.group
+}
+
 FLAT_APIS = [
     ("nhl_api_web", "nhl"),
     ("nhl_edge", "nhl"),
@@ -1695,6 +1701,11 @@ FLAT_APIS = [
     ("torvik", "mbb"),
     ("bart_wbb", "wbb"),
     ("kenpom", "mbb"),
+    ("asa", "soccer"),
+    ("mls_api", "mls"),
+    ("nwsl_api", "nwsl"),
+    ("cbs_napi", "cbs"),
+    ("yahoo_shangrila", "yahoo"),
 ]
 
 
@@ -1710,11 +1721,32 @@ def _render_flat_all() -> dict[str, tuple[str, str]]:
     return out
 
 
+def _flat_dest(prefix: str, module: str) -> Path:
+    """Destination path for a generated flat-API module.
+
+    Most leagues sit directly under the package (``sportsdataverse/nfl/``), but a
+    league carrying a ``group`` in ``leagues.yaml`` is nested inside its sport-group
+    container the same way its ESPN extension is (``sportsdataverse/soccer/mls/``).
+    Without this, a flat family registered for ``mls`` would land in a second,
+    parallel ``sportsdataverse/mls/`` package and split the league in two.
+
+    Args:
+        prefix: League prefix from :data:`FLAT_APIS`.
+        module: Rendered module name (the YAML's ``module:`` key).
+
+    Returns:
+        Absolute path the module should be written to.
+    """
+    group = _LEAGUE_GROUP.get(prefix, "")
+    base = LIVE / group / prefix if group else LIVE / prefix
+    return base / f"{module}.py"
+
+
 def build_flat_live() -> list[Path]:
     """Write generated flat-API modules (NHL native, MLB stats) into the live package."""
     written = []
     for module, (prefix, src) in _render_flat_all().items():
-        dest = LIVE / prefix / f"{module}.py"
+        dest = _flat_dest(prefix, module)
         dest.write_text(src, encoding="utf-8", newline="\n")
         written.append(dest)
     if written:
@@ -1737,7 +1769,7 @@ def _flat_stale() -> list[str]:
         _ruff_format_dir(tmp)
         stale = []
         for module, prefix in prefixes.items():
-            live_file = LIVE / prefix / f"{module}.py"
+            live_file = _flat_dest(prefix, module)
             if not live_file.exists() or live_file.read_text(encoding="utf-8") != (tmp / f"{module}.py").read_text(
                 encoding="utf-8",
             ):
@@ -1801,6 +1833,26 @@ def _ensure_init_import(pkg_dir: Path, prefix: str, dotted: str) -> None:
     init.write_text((text.rstrip() + "\n" + line).lstrip("\n"), encoding="utf-8", newline="\n")
 
 
+def _flat_modules_for_prefix(prefix: str) -> list[str]:
+    """Generated flat-API module names registered against ``prefix``, sorted.
+
+    Args:
+        prefix: A league or sport-group prefix from :data:`FLAT_APIS`.
+
+    Returns:
+        Module names (the YAML ``module:`` key) whose family is homed at ``prefix``.
+        Empty when the prefix has no flat family or its YAML is absent.
+    """
+    out: list[str] = []
+    for stem, fprefix in FLAT_APIS:
+        if fprefix != prefix:
+            continue
+        y = ENDPOINTS / f"{stem}.yaml"
+        if y.exists():
+            out.append(spec.load_flat_api(y, {}).module)
+    return sorted(out)
+
+
 def _container_init_body(group: str, members: list[str], has_ext: bool) -> str:
     """Return the deterministic body for a sport-group container ``__init__.py``.
 
@@ -1816,6 +1868,20 @@ def _container_init_body(group: str, members: list[str], has_ext: bool) -> str:
     lines: list[str] = ["from __future__ import annotations", ""]
     if has_ext:
         lines.append(f"from sportsdataverse.{group}.{group}_espn_ext import *  # noqa: F401,F403")
+        lines.append("")
+    # Flat-API families registered directly against the container prefix (e.g. `asa`
+    # at `soccer`) live beside the sub-league packages, not inside one. Their generated
+    # docstrings say `from sportsdataverse.<group> import <fn>`, so the container has to
+    # re-export them or that documented import is a lie. Driven off FLAT_APIS so a new
+    # family cannot drift out of sync.
+    flat_modules = _flat_modules_for_prefix(group)
+    if flat_modules:
+        lines.append(f"# Flat-API families homed directly at ``sportsdataverse.{group}``.")
+        for module in flat_modules:
+            lines.append(f"from sportsdataverse.{group}.{module} import *  # noqa: F401,F403")
+            parsers = LIVE / group / f"{module}_parsers.py"
+            if parsers.exists():
+                lines.append(f"from sportsdataverse.{group}.{module}_parsers import *  # noqa: F401,F403")
         lines.append("")
     lines.append(f"# Sub-league packages — imported so ``sportsdataverse.{group}.<leaf>`` is reachable")
     lines.append("# as an attribute on this container module (0.0.65+).")
@@ -2216,6 +2282,11 @@ _FLAT_API_DOC = {
     "torvik": "Bart Torvik T-Rank (barttorvik.com)",
     "bart_wbb": "Bart Torvik Women's T-Rank (barttorvik.com/ncaaw)",
     "kenpom": "KenPom (kenpom.com, subscription)",
+    "asa": "American Soccer Analysis (app.americansocceranalysis.com)",
+    "mls_api": "MLS official web API (mlssoccer.com)",
+    "nwsl_api": "NWSL official web API (StatsPerform SDP)",
+    "cbs_napi": "CBS Sports NAPI (api.cbssports.com/napi)",
+    "yahoo_shangrila": "Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com)",
 }
 
 # Friendly label per releases.yaml base key, for the "Dataset loaders" row of a
@@ -3393,7 +3464,7 @@ def _doc_leagues() -> list[str]:
     _HOCKEYTECH_EXTRA = _HOCKEYTECH_MODULE_LEAGUES
     # Cross-sport hand-written modules that get their own docs scope but have no
     # ESPN/loader entries (e.g. the The Odds API wrappers in sportsdataverse.odds).
-    _NONLEAGUE_EXTRA = ["odds"]
+    _NONLEAGUE_EXTRA = ["odds", "cbs", "yahoo"]
     known = set(prefixes) | set(extra)
     hockeytech = [lg for lg in _HOCKEYTECH_EXTRA if lg not in known]
     nonleague = [m for m in _NONLEAGUE_EXTRA if m not in known]
