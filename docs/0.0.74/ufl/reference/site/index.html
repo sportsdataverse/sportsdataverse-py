@@ -1,0 +1,2905 @@
+<!doctype html><html lang=en dir=ltr class="docs-wrapper plugin-docs plugin-id-default docs-version-0.0.74 docs-doc-page docs-doc-id-ufl/reference/site" data-has-hydrated=false><head><meta charset=UTF-8><meta name=generator content="Docusaurus v3.10.1"><title data-rh=true>UFL — ESPN site API (v2) | sdv-py</title><meta data-rh=true name=viewport content="width=device-width, initial-scale=1.0"/><meta data-rh=true name=twitter:card content=summary_large_image /><meta data-rh=true property=og:image content=https://py.sportsdataverse.org/img/Sportsdataverse_gh.png /><meta data-rh=true name=twitter:image content=https://py.sportsdataverse.org/img/Sportsdataverse_gh.png /><meta data-rh=true property=og:url content=https://py.sportsdataverse.org/docs/0.0.74/ufl/reference/site /><meta data-rh=true property=og:locale content=en /><meta data-rh=true name=docusaurus_locale content=en /><meta data-rh=true name=docsearch:language content=en /><meta data-rh=true property=og:type content=website /><meta data-rh=true property=og:site_name content="sdv-py | SportsDataverse"/><meta data-rh=true property=og:image:width content=1080 /><meta data-rh=true property=og:image:height content=540 /><meta data-rh=true property=og:image:alt content=SportsDataverse /><meta data-rh=true name=twitter:site content=@sportsdataverse /><meta data-rh=true name=twitter:creator content=@saiemgilani /><meta data-rh=true name=twitter:image:alt content=SportsDataverse /><meta data-rh=true name=docusaurus_version content=0.0.74 /><meta data-rh=true name=docusaurus_tag content=docs-default-0.0.74 /><meta data-rh=true name=docsearch:version content=0.0.74 /><meta data-rh=true name=docsearch:docusaurus_tag content=docs-default-0.0.74 /><meta data-rh=true property=og:title content="UFL — ESPN site API (v2) | sdv-py"/><meta data-rh=true name=description content="sportsdataverse.ufl — 24 endpoints."/><meta data-rh=true property=og:description content="sportsdataverse.ufl — 24 endpoints."/><link data-rh=true rel=icon href=/img/favicon.ico /><link data-rh=true rel=canonical href=https://py.sportsdataverse.org/docs/0.0.74/ufl/reference/site /><link data-rh=true rel=alternate href=https://py.sportsdataverse.org/docs/0.0.74/ufl/reference/site hreflang=en /><link data-rh=true rel=alternate href=https://py.sportsdataverse.org/docs/0.0.74/ufl/reference/site hreflang=x-default /><script src=https://plausible.io/js/script.js defer data-domain=py.sportsdataverse.org></script><link rel=stylesheet href=/assets/css/styles.d2d6b474.css /><script src=/assets/js/runtime~main.f4ad4fd3.js defer></script><script src=/assets/js/main.63746ddb.js defer></script></head><body><svg style="display: none;"><defs>
+<symbol id=theme-svg-external-link viewBox="0 0 24 24"><path fill=currentColor d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"/></symbol>
+</defs></svg>
+<script>!function(){var t=function(){try{return new URLSearchParams(window.location.search).get("docusaurus-theme")}catch(t){}}()||function(){try{return window.localStorage.getItem("theme-a54")}catch(t){}}();document.documentElement.setAttribute("data-theme",t||(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")),document.documentElement.setAttribute("data-theme-choice",t||"system")}(),function(){try{for(var[t,e]of new URLSearchParams(window.location.search).entries())if(t.startsWith("docusaurus-data-")){var a=t.replace("docusaurus-data-","data-");document.documentElement.setAttribute(a,e)}}catch(t){}}()</script><div id=__docusaurus><div role=region aria-label="Skip to main content"><a class=skipToContent_fXgn href=#__docusaurus_skipToContent_fallback>Skip to main content</a></div><nav aria-label=Main class="theme-layout-navbar navbar navbar--fixed-top navbarHideable_m1mJ"><div class=navbar__inner><div class="theme-layout-navbar-left navbar__items"><button aria-label="Toggle navigation bar" aria-expanded=false class="navbar__toggle clean-btn" type=button><svg width=30 height=30 viewBox="0 0 30 30" aria-hidden=true><path stroke=currentColor stroke-linecap=round stroke-miterlimit=10 stroke-width=2 d="M4 7h22M4 15h22M4 23h22"/></svg></button><a class=navbar__brand href=/><div class=navbar__logo><img src=/img/logo.png alt="sportsdataverse-py Logo" class="themedComponent_mlkZ themedComponent--light_NVdE"/><img src=/img/logo.png alt="sportsdataverse-py Logo" class="themedComponent_mlkZ themedComponent--dark_xIcU"/></div><b class="navbar__title text--truncate">sdv-py</b></a><a class="navbar__item navbar__link" href=/docs/0.0.74/intro>Docs</a><a class="navbar__item navbar__link" href=/CHANGELOG>News</a><div class="navbar__item dropdown dropdown--hoverable"><a href=# aria-haspopup=true aria-expanded=false role=button class="navbar__link sdv-packages-dropdown">SDV</a><ul class=dropdown__menu><li><a href=https://sportsdataverse.org target=_self rel="noopener noreferrer" class="dropdown__link sdv-section-header">SportsDataverse<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://py.sportsdataverse.org/ target=_self rel="noopener noreferrer" class="dropdown__link sdv-section-header">Python Packages<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://py.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sportsdataverse-py<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://sportypy.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sportypy<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://collegebaseball.readthedocs.io/en/latest/index.html target=_self rel="noopener noreferrer" class=dropdown__link>collegebaseball<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://github.com/nwslR/nwslpy target=_self rel="noopener noreferrer" class=dropdown__link>nwslpy<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://r.sportsdataverse.org/ target=_blank rel="noopener noreferrer" class="dropdown__link sdv-section-header">R Packages<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://r.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sportsdataverse-R<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://cfbfastR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>cfbfastR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://hoopR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>hoopR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://wehoop.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>wehoop<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://fastRhockey.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>fastRhockey<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://BillPetti.github.io/baseballr/ target=_self rel="noopener noreferrer" class=dropdown__link>baseballr<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://sportyR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sportyR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://abhiamishra.github.io/ggshakeR/ target=_self rel="noopener noreferrer" class=dropdown__link>ggshakeR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://github.com/Dato-Futbol/soccerAnimate target=_self rel="noopener noreferrer" class=dropdown__link>soccerAnimate<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://oddsapiR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>oddsapiR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://camdenk.github.io/mlbplotR/ target=_self rel="noopener noreferrer" class=dropdown__link>mlbplotR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://cfbplotR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>cfbplotR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://cfb4th.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>cfb4th<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://github.com/sportsdataverse/softballR/ target=_self rel="noopener noreferrer" class=dropdown__link>softballR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://github.com/nwslR/nwslR/ target=_self rel="noopener noreferrer" class=dropdown__link>nwslR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://usfootballR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>usfootballR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://recruitR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>recruitR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://puntalytics.github.io/puntr/ target=_self rel="noopener noreferrer" class=dropdown__link>puntr<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://jaseziv.github.io/chessR/ target=_self rel="noopener noreferrer" class=dropdown__link>chessR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://js.sportsdataverse.org/ target=_blank rel="noopener noreferrer" class="dropdown__link sdv-section-header">Node.js Packages<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://js.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sportsdataverse.js<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://github.com/nntrn/nfl-nerd/ target=_self rel="noopener noreferrer" class=dropdown__link>nfl-nerd<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a></ul></div></div><div class="theme-layout-navbar-right navbar__items navbar__items--right"><div class="navbar__item dropdown dropdown--hoverable dropdown--right"><a class=navbar__link aria-haspopup=true aria-expanded=false role=button href=/docs/0.0.74/ufl/reference/site>0.0.74</a><ul class=dropdown__menu><li><a class=dropdown__link href=/docs/ufl/reference/site>main</a><li><a class=dropdown__link href=/docs/0.0.75/ufl/reference/site>0.0.75</a><li><a aria-current=page class="dropdown__link dropdown__link--active" href=/docs/0.0.74/ufl/reference/site>0.0.74</a><li><a class=dropdown__link href=/docs/0.0.73/ufl/reference/site>0.0.73</a></ul></div><a href=https://github.com/sportsdataverse/sportsdataverse-py/ target=_blank rel="noopener noreferrer" class="navbar__item navbar__link">GitHub<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><div class="toggle_vylO colorModeToggle_DEke"><button class="clean-btn toggleButton_gllP toggleButtonDisabled_aARS" type=button disabled title="system mode" aria-label="Switch between dark and light mode (currently system mode)"><svg viewBox="0 0 24 24" width=24 height=24 aria-hidden=true class="toggleIcon_g3eP lightToggleIcon_pyhR"><path fill=currentColor d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"/></svg><svg viewBox="0 0 24 24" width=24 height=24 aria-hidden=true class="toggleIcon_g3eP darkToggleIcon_wfgR"><path fill=currentColor d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"/></svg><svg viewBox="0 0 24 24" width=24 height=24 aria-hidden=true class="toggleIcon_g3eP systemToggleIcon_QzmC"><path fill=currentColor d="m12 21c4.971 0 9-4.029 9-9s-4.029-9-9-9-9 4.029-9 9 4.029 9 9 9zm4.95-13.95c1.313 1.313 2.05 3.093 2.05 4.95s-0.738 3.637-2.05 4.95c-1.313 1.313-3.093 2.05-4.95 2.05v-14c1.857 0 3.637 0.737 4.95 2.05z"/></svg></button></div><div class=navbarSearchContainer_Bca1><div class="navbar__search searchBarContainer_NW3z" dir=ltr><svg aria-hidden=true class=searchIcon_T3tP focusable=false viewBox="0 0 16 16"><path fill=currentColor d="M6.02945 10.20327a4.17382 4.17382 0 1 1 4.17382-4.17382 4.15609 4.15609 0 0 1-4.17382 4.17382Zm9.69195 4.2199-4.8225-4.82338A5.88021 5.88021 0 0 0 12.058 6.02856 6.00467 6.00467 0 1 0 9.59979 10.8989l4.82338 4.82338a.89729.89729 0 0 0 1.29912 0 .89749.89749 0 0 0-.00087-1.29909Z"/></svg><input placeholder=Search aria-label=Search class="navbar__search-input searchInput_YFbd" value="" /><div class="loadingRing_RJI3 searchBarLoadingRing_YnHq"><div></div><div></div><div></div><div></div></div></div></div></div></div><div role=presentation class=navbar-sidebar__backdrop></div></nav><div id=__docusaurus_skipToContent_fallback class="theme-layout-main main-wrapper mainWrapper_z2l0"><div class=docsWrapper_hBAB><button aria-label="Scroll back to top" class="clean-btn theme-back-to-top-button backToTopButton_sjWU" type=button></button><div class=docRoot_UBD9><main class="docMainContainer_TBSr docMainContainerEnhanced_lQrH"><div class="container padding-top--md padding-bottom--lg"><div class=row><div class="col docItemCol_VOVn"><div class="theme-doc-version-banner alert alert--warning margin-bottom--md" role=alert><div>This is documentation for <!-- -->sdv-py<!-- --> <b>0.0.74</b>, which is no longer actively maintained.</div><div class=margin-top--md>For up-to-date documentation, see the <b><a href=/docs/ufl/reference/site>latest version</a></b> (<!-- -->main<!-- -->).</div></div><div class=docItemContainer_Djhp><article><span class="theme-doc-version-badge badge badge--secondary">Version: 0.0.74</span><div class="tocCollapsible_ETCw theme-doc-toc-mobile tocMobile_ITEo"><button type=button class="clean-btn tocCollapsibleButton_TO0P">On this page</button></div><div class="theme-doc-markdown markdown"><header><h1>UFL — ESPN site API (v2)</h1></header>
+<p><code>sportsdataverse.ufl</code> — 24 endpoints.</p>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=espn_ufl_scoreboard><code>espn_ufl_scoreboard</code><a href=#espn_ufl_scoreboard class=hash-link aria-label="Direct link to espn_ufl_scoreboard" title="Direct link to espn_ufl_scoreboard" translate=no>​</a></h2>
+<p>ESPN endpoint.</p>
+<p><strong>Endpoint URL:</strong> <code>GET https://site.api.espn.com/apis/site/v2/sports/football/ufl/scoreboard</code></p>
+<p><strong>Valid URL:</strong> <a href="https://site.api.espn.com/apis/site/v2/sports/football/ufl/scoreboard?dates=20240115" target=_blank rel="noopener noreferrer" class="">https://site.api.espn.com/apis/site/v2/sports/football/ufl/scoreboard?dates=20240115</a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>API Parameter<th>Python<th style=text-align:center>Pattern<th style=text-align:center>Required<th style=text-align:center>Nullable<th>Description<tbody><tr><td><code>dates</code><td><code>dates</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>Date or date range filter (YYYYMMDD or YYYYMMDD-YYYYMMDD).<tr><td><code>week</code><td><code>week</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>Week number within the season (football).<tr><td><code>seasontype</code><td><code>season_type</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>Season phase: 1=preseason, 2=regular season, 3=postseason.<tr><td><code>groups</code><td><code>groups</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>Conference or group id filter (e.g. an ESPN conference id).<tr><td><code>limit</code><td><code>limit</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>Maximum number of items to return.</table>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=returns>Returns<a href=#returns class=hash-link aria-label="Direct link to Returns" title="Direct link to Returns" translate=no>​</a></h3>
+<p><strong><code>return_parsed=True</code></strong> (default) — a tidy <code>polars.DataFrame</code> with the columns below; pass <code>return_as_pandas=True</code> for a <code>pandas.DataFrame</code>.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>game_id</code><td>integer<td>ESPN event id.<tr><td><code>season</code><td>integer<td>Four-digit season year.<tr><td><code>game_date</code><td>character<td>ISO 8601 kickoff timestamp (UTC).</table>
+<p><strong><code>return_parsed=False</code></strong> — the raw JSON <code>Dict</code> payload, unparsed.</p>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=example>Example<a href=#example class=hash-link aria-label="Direct link to Example" title="Direct link to Example" translate=no>​</a></h3>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#393A34;--prism-background-color:#f6f8fa><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#393A34;background-color:#f6f8fa><code class=codeBlockLines_e6Vv><div class=token-line style=color:#393A34><span class="token plain">espn_ufl_scoreboard</span><span class="token punctuation" style=color:#393A34>(</span><span class="token plain">dates</span><span class="token operator" style=color:#393A34>=</span><span class="token string" style=color:#e3116c>'20240115'</span><span class="token punctuation" style=color:#393A34>)</span><br/></div></code></pre></div></div>
+<p><em>Last validated n/a.</em></p>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=espn_ufl_summary><code>espn_ufl_summary</code><a href=#espn_ufl_summary class=hash-link aria-label="Direct link to espn_ufl_summary" title="Direct link to espn_ufl_summary" translate=no>​</a></h2>
+<p>ESPN endpoint.</p>
+<p><strong>Endpoint URL:</strong> <code>GET https://site.api.espn.com/apis/site/v2/sports/football/ufl/summary</code></p>
+<p><strong>Valid URL:</strong> <a href=https://site.api.espn.com/apis/site/v2/sports/football/ufl/summary target=_blank rel="noopener noreferrer" class="">https://site.api.espn.com/apis/site/v2/sports/football/ufl/summary</a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>API Parameter<th>Python<th style=text-align:center>Pattern<th style=text-align:center>Required<th style=text-align:center>Nullable<th>Description<tbody><tr><td><code>event</code><td><code>event_id</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>event query parameter.</table>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=returns-1>Returns<a href=#returns-1 class=hash-link aria-label="Direct link to Returns" title="Direct link to Returns" translate=no>​</a></h3>
+<p><strong><code>return_parsed=True</code></strong> (default) — a tidy <code>polars.DataFrame</code> with the columns below; pass <code>return_as_pandas=True</code> for a <code>pandas.DataFrame</code>.
+<strong>boxscore_player</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>team_id</code><td>character<td>Team id.<tr><td><code>team_abbreviation</code><td>character<td>Team abbreviation.<tr><td><code>team_display_name</code><td>character<td>Team display name.<tr><td><code>team_location</code><td>character<td>Team location.<tr><td><code>athlete_id</code><td>character<td>Athlete id.<tr><td><code>athlete_display_name</code><td>character<td>Athlete display name.<tr><td><code>athlete_short_name</code><td>character<td>Athlete short name.<tr><td><code>athlete_jersey</code><td>character<td>Athlete jersey.<tr><td><code>athlete_position</code><td>character<td>Athlete position.<tr><td><code>starter</code><td>logical<td>Starter.<tr><td><code>active</code><td>logical<td>Active.<tr><td><code>did_not_play</code><td>logical<td>Did not play.<tr><td><code>ejected</code><td>logical<td>Ejected.<tr><td><code>reason</code><td>character<td>Reason.<tr><td><code>minutes</code><td>character<td>Minutes.<tr><td><code>points</code><td>character<td>Points.<tr><td><code>field_goals_made_field_goals_attempted</code><td>character<td>Field goals made field goals attempted.<tr><td><code>three_point_field_goals_made_three_point_field_goals_attempted</code><td>character<td>Three point field goals made three point field goals attempted.<tr><td><code>free_throws_made_free_throws_attempted</code><td>character<td>Free throws made free throws attempted.<tr><td><code>rebounds</code><td>character<td>Rebounds.<tr><td><code>assists</code><td>character<td>Assists.<tr><td><code>turnovers</code><td>character<td>Turnovers.<tr><td><code>steals</code><td>character<td>Steals.<tr><td><code>blocks</code><td>character<td>Blocks.<tr><td><code>offensive_rebounds</code><td>character<td>Offensive rebounds.<tr><td><code>defensive_rebounds</code><td>character<td>Defensive rebounds.<tr><td><code>fouls</code><td>character<td>Fouls.<tr><td><code>plus_minus</code><td>character<td>Plus minus.</table>
+<p><strong>boxscore_team</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>team_id</code><td>character<td>Team id.<tr><td><code>team_abbreviation</code><td>character<td>Team abbreviation.<tr><td><code>team_display_name</code><td>character<td>Team display name.<tr><td><code>home_away</code><td>character<td>Home away.<tr><td><code>display_order</code><td>integer<td>Display order.<tr><td><code>stat_name</code><td>character<td>Stat name.<tr><td><code>stat_label</code><td>character<td>Stat label.<tr><td><code>stat_display_value</code><td>character<td>Stat display value.<tr><td><code>stat_value</code><td>character<td>Stat value.</table>
+<p><strong>plays</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>id</code><td>character<td>Id.<tr><td><code>sequence_number</code><td>character<td>Sequence number.<tr><td><code>text</code><td>character<td>Text.<tr><td><code>away_score</code><td>integer<td>Away score.<tr><td><code>home_score</code><td>integer<td>Home score.<tr><td><code>scoring_play</code><td>logical<td>Scoring play.<tr><td><code>score_value</code><td>integer<td>Score value.<tr><td><code>participants</code><td>character<td>Participants.<tr><td><code>wallclock</code><td>character<td>Wallclock.<tr><td><code>shooting_play</code><td>logical<td>Shooting play.<tr><td><code>points_attempted</code><td>integer<td>Points attempted.<tr><td><code>short_description</code><td>character<td>Short description.<tr><td><code>type_id</code><td>character<td>Type id.<tr><td><code>type_text</code><td>character<td>Type text.<tr><td><code>period_number</code><td>integer<td>Period number.<tr><td><code>period_display_value</code><td>character<td>Period display value.<tr><td><code>clock_display_value</code><td>character<td>Clock display value.<tr><td><code>team_id</code><td>character<td>Team id.<tr><td><code>coordinate_x</code><td>integer<td>Coordinate x.<tr><td><code>coordinate_y</code><td>integer<td>Coordinate y.</table>
+<p><strong>winprobability</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>home_win_percentage</code><td>double<td>Home win percentage.<tr><td><code>tie_percentage</code><td>double<td>Tie percentage.<tr><td><code>play_id</code><td>character<td>Play id.</table>
+<p><strong>leaders</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>team_id</code><td>character<td>Team id.<tr><td><code>team_abbreviation</code><td>character<td>Team abbreviation.<tr><td><code>category_name</code><td>character<td>Category name.<tr><td><code>category_display_name</code><td>character<td>Category display name.<tr><td><code>athlete_id</code><td>character<td>Athlete id.<tr><td><code>athlete_display_name</code><td>character<td>Athlete display name.<tr><td><code>athlete_position</code><td>character<td>Athlete position.<tr><td><code>value</code><td>double<td>Value.<tr><td><code>display_value</code><td>character<td>Display value.<tr><td><code>main_stat</code><td>character<td>Main stat.<tr><td><code>summary</code><td>character<td>Summary.</table>
+<p><strong>game_info</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>attendance</code><td>integer<td>Attendance.<tr><td><code>venue_id</code><td>character<td>Venue id.<tr><td><code>venue_guid</code><td>character<td>Venue guid.<tr><td><code>venue_full_name</code><td>character<td>Venue full name.<tr><td><code>venue_short_name</code><td>character<td>Venue short name.<tr><td><code>venue_address_city</code><td>character<td>Venue address city.<tr><td><code>venue_address_state</code><td>character<td>Venue address state.<tr><td><code>venue_grass</code><td>logical<td>Venue grass.</table>
+<p><strong>officials</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>full_name</code><td>character<td>Full name.<tr><td><code>display_name</code><td>character<td>Display name.<tr><td><code>order</code><td>integer<td>Order.<tr><td><code>position_name</code><td>character<td>Position name.<tr><td><code>position_display_name</code><td>character<td>Position display name.<tr><td><code>position_id</code><td>character<td>Position id.</table>
+<p><strong>header</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>id</code><td>character<td>Id.<tr><td><code>uid</code><td>character<td>Uid.<tr><td><code>time_valid</code><td>logical<td>Time valid.<tr><td><code>competitions</code><td>character<td>Competitions.<tr><td><code>links</code><td>character<td>Links.<tr><td><code>season_year</code><td>integer<td>Season year.<tr><td><code>season_current</code><td>logical<td>Season current.<tr><td><code>season_type</code><td>integer<td>Season type.<tr><td><code>league_id</code><td>character<td>League id.<tr><td><code>league_uid</code><td>character<td>League uid.<tr><td><code>league_name</code><td>character<td>League name.<tr><td><code>league_abbreviation</code><td>character<td>League abbreviation.<tr><td><code>league_slug</code><td>character<td>League slug.<tr><td><code>league_is_tournament</code><td>logical<td>League is tournament.<tr><td><code>league_links</code><td>character<td>League links.<tr><td><code>league_logos</code><td>character<td>League logos.</table>
+<p><strong>season_series</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>type</code><td>character<td>Type.<tr><td><code>title</code><td>character<td>Title.<tr><td><code>description</code><td>character<td>Description.<tr><td><code>summary</code><td>character<td>Summary.<tr><td><code>completed</code><td>logical<td>Completed.<tr><td><code>total_competitions</code><td>integer<td>Total competitions.<tr><td><code>series_label</code><td>character<td>Series label.<tr><td><code>series_score</code><td>character<td>Series score.<tr><td><code>short_summary</code><td>character<td>Short summary.<tr><td><code>events</code><td>character<td>Events.</table>
+<p><strong>standings</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>group_header</code><td>character<td>Group header.<tr><td><code>conference_header</code><td>character<td>Conference header.<tr><td><code>division_header</code><td>character<td>Division header.<tr><td><code>team_id</code><td>character<td>Team id.<tr><td><code>team_uid</code><td>character<td>Team uid.<tr><td><code>team_location</code><td>character<td>Team location.<tr><td><code>games_behind</code><td>character<td>Games behind.<tr><td><code>losses</code><td>character<td>Losses.<tr><td><code>streak</code><td>character<td>Streak.<tr><td><code>win_percent</code><td>character<td>Win percent.<tr><td><code>wins</code><td>character<td>Wins.</table>
+<p><strong>format</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>regulation_periods</code><td>integer<td>Regulation periods.<tr><td><code>regulation_display_name</code><td>character<td>Regulation display name.<tr><td><code>regulation_slug</code><td>character<td>Regulation slug.<tr><td><code>regulation_clock</code><td>double<td>Regulation clock.<tr><td><code>overtime_display_name</code><td>character<td>Overtime display name.<tr><td><code>overtime_slug</code><td>character<td>Overtime slug.<tr><td><code>overtime_clock</code><td>double<td>Overtime clock.</table>
+<p><strong>article</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>id</code><td>integer<td>Id.<tr><td><code>now_id</code><td>character<td>Now id.<tr><td><code>content_key</code><td>character<td>Content key.<tr><td><code>data_source_identifier</code><td>character<td>Data source identifier.<tr><td><code>publishedkey</code><td>character<td>Publishedkey.<tr><td><code>type</code><td>character<td>Type.<tr><td><code>game_id</code><td>character<td>Game id.<tr><td><code>headline</code><td>character<td>Headline.<tr><td><code>description</code><td>character<td>Description.<tr><td><code>link_text</code><td>character<td>Link text.<tr><td><code>categorized</code><td>character<td>Categorized.<tr><td><code>originally_posted</code><td>character<td>Originally posted.<tr><td><code>last_modified</code><td>character<td>Last modified.<tr><td><code>published</code><td>character<td>Published.<tr><td><code>section</code><td>character<td>Section.<tr><td><code>source</code><td>character<td>Source.<tr><td><code>images</code><td>character<td>Images.<tr><td><code>video</code><td>character<td>Video.<tr><td><code>categories</code><td>character<td>Categories.<tr><td><code>keywords</code><td>character<td>Keywords.<tr><td><code>story</code><td>character<td>Story.<tr><td><code>premium</code><td>logical<td>Premium.<tr><td><code>is_live_blog</code><td>logical<td>Is live blog.<tr><td><code>allow_comments</code><td>logical<td>Allow comments.<tr><td><code>allow_search</code><td>logical<td>Allow search.<tr><td><code>allow_content_reactions</code><td>logical<td>Allow content reactions.<tr><td><code>links_web_href</code><td>character<td>Links web href.<tr><td><code>links_mobile_href</code><td>character<td>Links mobile href.<tr><td><code>links_api_self_href</code><td>character<td>Links api self href.<tr><td><code>links_app_sportscenter_href</code><td>character<td>Links app sportscenter href.</table>
+<p><strong>injuries</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>injuries</code><td>character<td>Injuries.<tr><td><code>team_id</code><td>character<td>Team id.<tr><td><code>team_uid</code><td>character<td>Team uid.<tr><td><code>team_display_name</code><td>character<td>Team display name.<tr><td><code>team_abbreviation</code><td>character<td>Team abbreviation.<tr><td><code>team_links</code><td>character<td>Team links.<tr><td><code>team_logo</code><td>character<td>Team logo.<tr><td><code>team_logos</code><td>character<td>Team logos.</table>
+<p><strong>news</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>id</code><td>integer<td>Id.<tr><td><code>now_id</code><td>character<td>Now id.<tr><td><code>content_key</code><td>character<td>Content key.<tr><td><code>data_source_identifier</code><td>character<td>Data source identifier.<tr><td><code>type</code><td>character<td>Type.<tr><td><code>headline</code><td>character<td>Headline.<tr><td><code>description</code><td>character<td>Description.<tr><td><code>last_modified</code><td>character<td>Last modified.<tr><td><code>published</code><td>character<td>Published.<tr><td><code>images</code><td>character<td>Images.<tr><td><code>categories</code><td>character<td>Categories.<tr><td><code>premium</code><td>logical<td>Premium.<tr><td><code>byline</code><td>character<td>Byline.<tr><td><code>links_web_href</code><td>character<td>Links web href.<tr><td><code>links_mobile_href</code><td>character<td>Links mobile href.<tr><td><code>links_api_self_href</code><td>character<td>Links api self href.<tr><td><code>links_app_sportscenter_href</code><td>character<td>Links app sportscenter href.</table>
+<p><strong><code>return_parsed=False</code></strong> — the raw JSON <code>Dict</code> payload, unparsed.</p>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=example-1>Example<a href=#example-1 class=hash-link aria-label="Direct link to Example" title="Direct link to Example" translate=no>​</a></h3>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#393A34;--prism-background-color:#f6f8fa><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#393A34;background-color:#f6f8fa><code class=codeBlockLines_e6Vv><div class=token-line style=color:#393A34><span class="token plain">espn_ufl_summary</span><span class="token punctuation" style=color:#393A34>(</span><span class="token punctuation" style=color:#393A34>)</span><br/></div></code></pre></div></div>
+<p><em>Last validated n/a.</em></p>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=espn_ufl_calendar><code>espn_ufl_calendar</code><a href=#espn_ufl_calendar class=hash-link aria-label="Direct link to espn_ufl_calendar" title="Direct link to espn_ufl_calendar" translate=no>​</a></h2>
+<p>ESPN endpoint.</p>
+<p><strong>Endpoint URL:</strong> <code>GET https://site.api.espn.com/apis/site/v2/sports/football/ufl/calendar</code></p>
+<p><strong>Valid URL:</strong> <a href=https://site.api.espn.com/apis/site/v2/sports/football/ufl/calendar target=_blank rel="noopener noreferrer" class="">https://site.api.espn.com/apis/site/v2/sports/football/ufl/calendar</a></p>
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>API Parameter<th>Python<th style=text-align:center>Pattern<th style=text-align:center>Required<th style=text-align:center>Nullable<th>Description</thead></table>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=returns-2>Returns<a href=#returns-2 class=hash-link aria-label="Direct link to Returns" title="Direct link to Returns" translate=no>​</a></h3>
+<p><strong><code>return_parsed=True</code></strong> (default) — a tidy <code>polars.DataFrame</code> (parser: <code>parse_items</code>); pass <code>return_as_pandas=True</code> for a <code>pandas.DataFrame</code>.
+<strong><code>return_parsed=False</code></strong> — the raw JSON <code>Dict</code> payload, unparsed.</p>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=example-2>Example<a href=#example-2 class=hash-link aria-label="Direct link to Example" title="Direct link to Example" translate=no>​</a></h3>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#393A34;--prism-background-color:#f6f8fa><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#393A34;background-color:#f6f8fa><code class=codeBlockLines_e6Vv><div class=token-line style=color:#393A34><span class="token plain">espn_ufl_calendar</span><span class="token punctuation" style=color:#393A34>(</span><span class="token punctuation" style=color:#393A34>)</span><br/></div></code></pre></div></div>
+<p><em>Last validated n/a.</em></p>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=espn_ufl_news><code>espn_ufl_news</code><a href=#espn_ufl_news class=hash-link aria-label="Direct link to espn_ufl_news" title="Direct link to espn_ufl_news" translate=no>​</a></h2>
+<p>ESPN endpoint.</p>
+<p><strong>Endpoint URL:</strong> <code>GET https://site.api.espn.com/apis/site/v2/sports/football/ufl/news</code></p>
+<p><strong>Valid URL:</strong> <a href=https://site.api.espn.com/apis/site/v2/sports/football/ufl/news target=_blank rel="noopener noreferrer" class="">https://site.api.espn.com/apis/site/v2/sports/football/ufl/news</a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>API Parameter<th>Python<th style=text-align:center>Pattern<th style=text-align:center>Required<th style=text-align:center>Nullable<th>Description<tbody><tr><td><code>limit</code><td><code>limit</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>Maximum number of items to return.</table>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=returns-3>Returns<a href=#returns-3 class=hash-link aria-label="Direct link to Returns" title="Direct link to Returns" translate=no>​</a></h3>
+<p><strong><code>return_parsed=True</code></strong> (default) — a tidy <code>polars.DataFrame</code> with the columns below; pass <code>return_as_pandas=True</code> for a <code>pandas.DataFrame</code>.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>id</code><td>integer<td>ESPN numeric identifier for the article.<tr><td><code>now_id</code><td>character<td>ESPN 'now' feed id.<tr><td><code>content_key</code><td>character<td>Internal content key.<tr><td><code>data_source_identifier</code><td>character<td>Source-system identifier.<tr><td><code>type</code><td>character<td>Article type (Story, Media, HeadlineNews, etc.).<tr><td><code>headline</code><td>character<td>Article headline.<tr><td><code>description</code><td>character<td>Article summary/description.<tr><td><code>last_modified</code><td>character<td>Last-modified timestamp (ISO 8601).<tr><td><code>published</code><td>character<td>Publish timestamp (ISO 8601).<tr><td><code>images</code><td>character<td>Article images (list, stringified).<tr><td><code>categories</code><td>character<td>Article categories (list, stringified).<tr><td><code>premium</code><td>logical<td>Whether the article is premium/paywalled.<tr><td><code>byline</code><td>character<td>Author byline string as published by ESPN.<tr><td><code>links_web_href</code><td>character<td>Web article URL.<tr><td><code>links_mobile_href</code><td>character<td>Mobile article URL.<tr><td><code>links_api_self_href</code><td>character<td>ESPN API canonical self-link for the article resource.<tr><td><code>links_app_sportscenter_href</code><td>character<td>SportsCenter app deep link.</table>
+<p><strong><code>return_parsed=False</code></strong> — the raw JSON <code>Dict</code> payload, unparsed.</p>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=example-3>Example<a href=#example-3 class=hash-link aria-label="Direct link to Example" title="Direct link to Example" translate=no>​</a></h3>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#393A34;--prism-background-color:#f6f8fa><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#393A34;background-color:#f6f8fa><code class=codeBlockLines_e6Vv><div class=token-line style=color:#393A34><span class="token plain">espn_ufl_news</span><span class="token punctuation" style=color:#393A34>(</span><span class="token punctuation" style=color:#393A34>)</span><br/></div></code></pre></div></div>
+<p><em>Last validated n/a.</em></p>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=espn_ufl_injuries><code>espn_ufl_injuries</code><a href=#espn_ufl_injuries class=hash-link aria-label="Direct link to espn_ufl_injuries" title="Direct link to espn_ufl_injuries" translate=no>​</a></h2>
+<p>ESPN endpoint.</p>
+<p><strong>Endpoint URL:</strong> <code>GET https://site.api.espn.com/apis/site/v2/sports/football/ufl/injuries</code></p>
+<p><strong>Valid URL:</strong> <a href=https://site.api.espn.com/apis/site/v2/sports/football/ufl/injuries target=_blank rel="noopener noreferrer" class="">https://site.api.espn.com/apis/site/v2/sports/football/ufl/injuries</a></p>
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>API Parameter<th>Python<th style=text-align:center>Pattern<th style=text-align:center>Required<th style=text-align:center>Nullable<th>Description</thead></table>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=returns-4>Returns<a href=#returns-4 class=hash-link aria-label="Direct link to Returns" title="Direct link to Returns" translate=no>​</a></h3>
+<p><strong><code>return_parsed=True</code></strong> (default) — a tidy <code>polars.DataFrame</code> with the columns below; pass <code>return_as_pandas=True</code> for a <code>pandas.DataFrame</code>.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>id</code><td>character<td>ESPN numeric identifier for the athlete.<tr><td><code>display_name</code><td>character<td>Athlete's full display name as shown on ESPN.<tr><td><code>injuries</code><td>character<td>Injury entries for the athlete (list of dicts, stringified): status, type, details, dates.</table>
+<p><strong><code>return_parsed=False</code></strong> — the raw JSON <code>Dict</code> payload, unparsed.</p>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=example-4>Example<a href=#example-4 class=hash-link aria-label="Direct link to Example" title="Direct link to Example" translate=no>​</a></h3>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#393A34;--prism-background-color:#f6f8fa><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#393A34;background-color:#f6f8fa><code class=codeBlockLines_e6Vv><div class=token-line style=color:#393A34><span class="token plain">espn_ufl_injuries</span><span class="token punctuation" style=color:#393A34>(</span><span class="token punctuation" style=color:#393A34>)</span><br/></div></code></pre></div></div>
+<p><em>Last validated n/a.</em></p>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=espn_ufl_transactions><code>espn_ufl_transactions</code><a href=#espn_ufl_transactions class=hash-link aria-label="Direct link to espn_ufl_transactions" title="Direct link to espn_ufl_transactions" translate=no>​</a></h2>
+<p>ESPN endpoint.</p>
+<p><strong>Endpoint URL:</strong> <code>GET https://site.api.espn.com/apis/site/v2/sports/football/ufl/transactions</code></p>
+<p><strong>Valid URL:</strong> <a href=https://site.api.espn.com/apis/site/v2/sports/football/ufl/transactions target=_blank rel="noopener noreferrer" class="">https://site.api.espn.com/apis/site/v2/sports/football/ufl/transactions</a></p>
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>API Parameter<th>Python<th style=text-align:center>Pattern<th style=text-align:center>Required<th style=text-align:center>Nullable<th>Description</thead></table>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=returns-5>Returns<a href=#returns-5 class=hash-link aria-label="Direct link to Returns" title="Direct link to Returns" translate=no>​</a></h3>
+<p><strong><code>return_parsed=True</code></strong> (default) — a tidy <code>polars.DataFrame</code> (parser: <code>parse_items</code>); pass <code>return_as_pandas=True</code> for a <code>pandas.DataFrame</code>.
+<strong><code>return_parsed=False</code></strong> — the raw JSON <code>Dict</code> payload, unparsed.</p>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=example-5>Example<a href=#example-5 class=hash-link aria-label="Direct link to Example" title="Direct link to Example" translate=no>​</a></h3>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#393A34;--prism-background-color:#f6f8fa><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#393A34;background-color:#f6f8fa><code class=codeBlockLines_e6Vv><div class=token-line style=color:#393A34><span class="token plain">espn_ufl_transactions</span><span class="token punctuation" style=color:#393A34>(</span><span class="token punctuation" style=color:#393A34>)</span><br/></div></code></pre></div></div>
+<p><em>Last validated n/a.</em></p>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=espn_ufl_conferences><code>espn_ufl_conferences</code><a href=#espn_ufl_conferences class=hash-link aria-label="Direct link to espn_ufl_conferences" title="Direct link to espn_ufl_conferences" translate=no>​</a></h2>
+<p>ESPN endpoint.</p>
+<p><strong>Endpoint URL:</strong> <code>GET https://site.api.espn.com/apis/site/v2/sports/football/ufl/groups</code></p>
+<p><strong>Valid URL:</strong> <a href=https://site.api.espn.com/apis/site/v2/sports/football/ufl/groups target=_blank rel="noopener noreferrer" class="">https://site.api.espn.com/apis/site/v2/sports/football/ufl/groups</a></p>
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>API Parameter<th>Python<th style=text-align:center>Pattern<th style=text-align:center>Required<th style=text-align:center>Nullable<th>Description</thead></table>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=returns-6>Returns<a href=#returns-6 class=hash-link aria-label="Direct link to Returns" title="Direct link to Returns" translate=no>​</a></h3>
+<p><strong><code>return_parsed=True</code></strong> (default) — a tidy <code>polars.DataFrame</code> (parser: <code>parse_groups</code>); pass <code>return_as_pandas=True</code> for a <code>pandas.DataFrame</code>.
+<strong><code>return_parsed=False</code></strong> — the raw JSON <code>Dict</code> payload, unparsed.</p>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=example-6>Example<a href=#example-6 class=hash-link aria-label="Direct link to Example" title="Direct link to Example" translate=no>​</a></h3>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#393A34;--prism-background-color:#f6f8fa><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#393A34;background-color:#f6f8fa><code class=codeBlockLines_e6Vv><div class=token-line style=color:#393A34><span class="token plain">espn_ufl_conferences</span><span class="token punctuation" style=color:#393A34>(</span><span class="token punctuation" style=color:#393A34>)</span><br/></div></code></pre></div></div>
+<p><em>Last validated n/a.</em></p>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=espn_ufl_statistics_league><code>espn_ufl_statistics_league</code><a href=#espn_ufl_statistics_league class=hash-link aria-label="Direct link to espn_ufl_statistics_league" title="Direct link to espn_ufl_statistics_league" translate=no>​</a></h2>
+<p>ESPN endpoint.</p>
+<p><strong>Endpoint URL:</strong> <code>GET https://site.api.espn.com/apis/site/v2/sports/football/ufl/statistics</code></p>
+<p><strong>Valid URL:</strong> <a href=https://site.api.espn.com/apis/site/v2/sports/football/ufl/statistics target=_blank rel="noopener noreferrer" class="">https://site.api.espn.com/apis/site/v2/sports/football/ufl/statistics</a></p>
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>API Parameter<th>Python<th style=text-align:center>Pattern<th style=text-align:center>Required<th style=text-align:center>Nullable<th>Description</thead></table>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=returns-7>Returns<a href=#returns-7 class=hash-link aria-label="Direct link to Returns" title="Direct link to Returns" translate=no>​</a></h3>
+<p><strong><code>return_parsed=True</code></strong> (default) — a tidy <code>polars.DataFrame</code> (parser: <code>parse_items</code>); pass <code>return_as_pandas=True</code> for a <code>pandas.DataFrame</code>.
+<strong><code>return_parsed=False</code></strong> — the raw JSON <code>Dict</code> payload, unparsed.</p>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=example-7>Example<a href=#example-7 class=hash-link aria-label="Direct link to Example" title="Direct link to Example" translate=no>​</a></h3>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#393A34;--prism-background-color:#f6f8fa><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#393A34;background-color:#f6f8fa><code class=codeBlockLines_e6Vv><div class=token-line style=color:#393A34><span class="token plain">espn_ufl_statistics_league</span><span class="token punctuation" style=color:#393A34>(</span><span class="token punctuation" style=color:#393A34>)</span><br/></div></code></pre></div></div>
+<p><em>Last validated n/a.</em></p>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=espn_ufl_draft><code>espn_ufl_draft</code><a href=#espn_ufl_draft class=hash-link aria-label="Direct link to espn_ufl_draft" title="Direct link to espn_ufl_draft" translate=no>​</a></h2>
+<p>ESPN endpoint.</p>
+<p><strong>Endpoint URL:</strong> <code>GET https://site.api.espn.com/apis/site/v2/sports/football/ufl/draft</code></p>
+<p><strong>Valid URL:</strong> <a href=https://site.api.espn.com/apis/site/v2/sports/football/ufl/draft target=_blank rel="noopener noreferrer" class="">https://site.api.espn.com/apis/site/v2/sports/football/ufl/draft</a></p>
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>API Parameter<th>Python<th style=text-align:center>Pattern<th style=text-align:center>Required<th style=text-align:center>Nullable<th>Description</thead></table>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=returns-8>Returns<a href=#returns-8 class=hash-link aria-label="Direct link to Returns" title="Direct link to Returns" translate=no>​</a></h3>
+<p><strong><code>return_parsed=True</code></strong> (default) — a tidy <code>polars.DataFrame</code> (parser: <code>parse_items</code>); pass <code>return_as_pandas=True</code> for a <code>pandas.DataFrame</code>.
+<strong><code>return_parsed=False</code></strong> — the raw JSON <code>Dict</code> payload, unparsed.</p>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=example-8>Example<a href=#example-8 class=hash-link aria-label="Direct link to Example" title="Direct link to Example" translate=no>​</a></h3>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#393A34;--prism-background-color:#f6f8fa><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#393A34;background-color:#f6f8fa><code class=codeBlockLines_e6Vv><div class=token-line style=color:#393A34><span class="token plain">espn_ufl_draft</span><span class="token punctuation" style=color:#393A34>(</span><span class="token punctuation" style=color:#393A34>)</span><br/></div></code></pre></div></div>
+<p><em>Last validated n/a.</em></p>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=espn_ufl_teams_site><code>espn_ufl_teams_site</code><a href=#espn_ufl_teams_site class=hash-link aria-label="Direct link to espn_ufl_teams_site" title="Direct link to espn_ufl_teams_site" translate=no>​</a></h2>
+<p>ESPN endpoint.</p>
+<p><strong>Endpoint URL:</strong> <code>GET https://site.api.espn.com/apis/site/v2/sports/football/ufl/teams</code></p>
+<p><strong>Valid URL:</strong> <a href=https://site.api.espn.com/apis/site/v2/sports/football/ufl/teams target=_blank rel="noopener noreferrer" class="">https://site.api.espn.com/apis/site/v2/sports/football/ufl/teams</a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>API Parameter<th>Python<th style=text-align:center>Pattern<th style=text-align:center>Required<th style=text-align:center>Nullable<th>Description<tbody><tr><td><code>limit</code><td><code>limit</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>Maximum number of items to return.</table>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=returns-9>Returns<a href=#returns-9 class=hash-link aria-label="Direct link to Returns" title="Direct link to Returns" translate=no>​</a></h3>
+<p><strong><code>return_parsed=True</code></strong> (default) — a tidy <code>polars.DataFrame</code> with the columns below; pass <code>return_as_pandas=True</code> for a <code>pandas.DataFrame</code>.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>team_abbreviation</code><td>character<td>Short team abbreviation (e.g. "BOS").<tr><td><code>team_alternate_color</code><td>character<td>Secondary team color as a hex string (no leading '#').<tr><td><code>team_color</code><td>character<td>Primary team color as a hex string (no leading '#').<tr><td><code>team_display_name</code><td>character<td>Full team display name (location + nickname).<tr><td><code>team_id</code><td>character<td>ESPN team id (stable join key across ESPN endpoints).<tr><td><code>team_is_active</code><td>logical<td>Whether the team is currently active.<tr><td><code>team_is_all_star</code><td>logical<td>Whether the entry is an all-star squad rather than a franchise.<tr><td><code>team_location</code><td>character<td>Team location / city (e.g. "Boston").<tr><td><code>team_logos</code><td>character<td>Pipe-delimited logo image URLs.<tr><td><code>team_name</code><td>character<td>Team nickname/mascot (e.g. "Celtics").<tr><td><code>team_nickname</code><td>character<td>Team nickname as ESPN labels it (often equals team_name).<tr><td><code>team_short_display_name</code><td>character<td>Abbreviated display name for compact UIs.<tr><td><code>team_slug</code><td>character<td>URL slug used in ESPN web paths.<tr><td><code>team_uid</code><td>character<td>ESPN global UID (encodes sport/league/team).</table>
+<p><strong><code>return_parsed=False</code></strong> — the raw JSON <code>Dict</code> payload, unparsed.</p>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=example-9>Example<a href=#example-9 class=hash-link aria-label="Direct link to Example" title="Direct link to Example" translate=no>​</a></h3>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#393A34;--prism-background-color:#f6f8fa><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#393A34;background-color:#f6f8fa><code class=codeBlockLines_e6Vv><div class=token-line style=color:#393A34><span class="token plain">espn_ufl_teams_site</span><span class="token punctuation" style=color:#393A34>(</span><span class="token punctuation" style=color:#393A34>)</span><br/></div></code></pre></div></div>
+<p><em>Last validated n/a.</em></p>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=espn_ufl_team><code>espn_ufl_team</code><a href=#espn_ufl_team class=hash-link aria-label="Direct link to espn_ufl_team" title="Direct link to espn_ufl_team" translate=no>​</a></h2>
+<p>ESPN endpoint.</p>
+<p><strong>Endpoint URL:</strong> <code>GET https://site.api.espn.com/apis/site/v2/sports/football/ufl/teams/{team_id}</code></p>
+<p><strong>Valid URL:</strong> <a href=https://site.api.espn.com/apis/site/v2/sports/football/ufl/teams/4 target=_blank rel="noopener noreferrer" class="">https://site.api.espn.com/apis/site/v2/sports/football/ufl/teams/4</a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>API Parameter<th>Python<th style=text-align:center>Pattern<th style=text-align:center>Required<th style=text-align:center>Nullable<th>Description<tbody><tr><td><code>team_id</code><td><code>team_id</code><td style=text-align:center><td style=text-align:center><code>Y</code><td style=text-align:center><td>team_id path parameter.</table>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=returns-10>Returns<a href=#returns-10 class=hash-link aria-label="Direct link to Returns" title="Direct link to Returns" translate=no>​</a></h3>
+<p><strong><code>return_parsed=True</code></strong> (default) — a tidy <code>polars.DataFrame</code> (parser: <code>parse_single_entity</code>); pass <code>return_as_pandas=True</code> for a <code>pandas.DataFrame</code>.
+<strong><code>return_parsed=False</code></strong> — the raw JSON <code>Dict</code> payload, unparsed.</p>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=example-10>Example<a href=#example-10 class=hash-link aria-label="Direct link to Example" title="Direct link to Example" translate=no>​</a></h3>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#393A34;--prism-background-color:#f6f8fa><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#393A34;background-color:#f6f8fa><code class=codeBlockLines_e6Vv><div class=token-line style=color:#393A34><span class="token plain">espn_ufl_team</span><span class="token punctuation" style=color:#393A34>(</span><span class="token plain">team_id</span><span class="token operator" style=color:#393A34>=</span><span class="token string" style=color:#e3116c>'4'</span><span class="token punctuation" style=color:#393A34>)</span><br/></div></code></pre></div></div>
+<p><em>Last validated n/a.</em></p>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=espn_ufl_team_roster><code>espn_ufl_team_roster</code><a href=#espn_ufl_team_roster class=hash-link aria-label="Direct link to espn_ufl_team_roster" title="Direct link to espn_ufl_team_roster" translate=no>​</a></h2>
+<p>ESPN endpoint.</p>
+<p><strong>Endpoint URL:</strong> <code>GET https://site.api.espn.com/apis/site/v2/sports/football/ufl/teams/{team_id}/roster</code></p>
+<p><strong>Valid URL:</strong> <a href=https://site.api.espn.com/apis/site/v2/sports/football/ufl/teams/4/roster target=_blank rel="noopener noreferrer" class="">https://site.api.espn.com/apis/site/v2/sports/football/ufl/teams/4/roster</a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>API Parameter<th>Python<th style=text-align:center>Pattern<th style=text-align:center>Required<th style=text-align:center>Nullable<th>Description<tbody><tr><td><code>team_id</code><td><code>team_id</code><td style=text-align:center><td style=text-align:center><code>Y</code><td style=text-align:center><td>team_id path parameter.</table>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=returns-11>Returns<a href=#returns-11 class=hash-link aria-label="Direct link to Returns" title="Direct link to Returns" translate=no>​</a></h3>
+<p><strong><code>return_parsed=True</code></strong> (default) — a tidy <code>polars.DataFrame</code> with the columns below; pass <code>return_as_pandas=True</code> for a <code>pandas.DataFrame</code>.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>id</code><td>character<td>Id.<tr><td><code>uid</code><td>character<td>Uid.<tr><td><code>guid</code><td>character<td>Guid.<tr><td><code>first_name</code><td>character<td>First name.<tr><td><code>last_name</code><td>character<td>Last name.<tr><td><code>full_name</code><td>character<td>Full name.<tr><td><code>display_name</code><td>character<td>Display name.<tr><td><code>short_name</code><td>character<td>Short name.<tr><td><code>weight</code><td>double<td>Weight.<tr><td><code>display_weight</code><td>character<td>Display weight.<tr><td><code>height</code><td>double<td>Height.<tr><td><code>display_height</code><td>character<td>Display height.<tr><td><code>age</code><td>integer<td>Age.<tr><td><code>date_of_birth</code><td>character<td>Date of birth.<tr><td><code>debut_year</code><td>double<td>Debut year.<tr><td><code>links</code><td>character<td>Links.<tr><td><code>slug</code><td>character<td>Slug.<tr><td><code>jersey</code><td>character<td>Jersey.<tr><td><code>injuries</code><td>character<td>Injuries.<tr><td><code>teams</code><td>character<td>Teams.<tr><td><code>contracts</code><td>character<td>Contracts.<tr><td><code>alternate_ids_sdr</code><td>character<td>Alternate ids sdr.<tr><td><code>birth_place_city</code><td>character<td>Birth place city.<tr><td><code>birth_place_country</code><td>character<td>Birth place country.<tr><td><code>college_id</code><td>character<td>College id.<tr><td><code>college_guid</code><td>character<td>College guid.<tr><td><code>college_mascot</code><td>character<td>College mascot.<tr><td><code>college_name</code><td>character<td>College name.<tr><td><code>college_short_name</code><td>character<td>College short name.<tr><td><code>college_abbrev</code><td>character<td>College abbrev.<tr><td><code>college_logos</code><td>character<td>College logos.<tr><td><code>headshot_href</code><td>character<td>Headshot href.<tr><td><code>headshot_alt</code><td>character<td>Headshot alt.<tr><td><code>position_id</code><td>character<td>Position id.<tr><td><code>position_name</code><td>character<td>Position name.<tr><td><code>position_display_name</code><td>character<td>Position display name.<tr><td><code>position_abbreviation</code><td>character<td>Position abbreviation.<tr><td><code>position_leaf</code><td>logical<td>Position leaf.<tr><td><code>experience_years</code><td>integer<td>Experience years.<tr><td><code>contract_bird_status</code><td>integer<td>Contract bird status.<tr><td><code>contract_base_year_compensation_active</code><td>logical<td>Contract base year compensation active.<tr><td><code>contract_poison_pill_provision_active</code><td>logical<td>Contract poison pill provision active.<tr><td><code>contract_incoming_trade_value</code><td>integer<td>Contract incoming trade value.<tr><td><code>contract_outgoing_trade_value</code><td>integer<td>Contract outgoing trade value.<tr><td><code>contract_minimum_salary_exception</code><td>logical<td>Contract minimum salary exception.<tr><td><code>contract_option_type</code><td>integer<td>Contract option type.<tr><td><code>contract_salary</code><td>integer<td>Contract salary.<tr><td><code>contract_salary_remaining</code><td>integer<td>Contract salary remaining.<tr><td><code>contract_years_remaining</code><td>integer<td>Contract years remaining.<tr><td><code>contract_season_year</code><td>integer<td>Contract season year.<tr><td><code>contract_season_start_date</code><td>character<td>Contract season start date.<tr><td><code>contract_season_end_date</code><td>character<td>Contract season end date.<tr><td><code>contract_trade_kicker_active</code><td>logical<td>Contract trade kicker active.<tr><td><code>contract_trade_kicker_percentage</code><td>double<td>Contract trade kicker percentage.<tr><td><code>contract_trade_kicker_value</code><td>integer<td>Contract trade kicker value.<tr><td><code>contract_trade_kicker_trade_value</code><td>integer<td>Contract trade kicker trade value.<tr><td><code>contract_trade_restriction</code><td>logical<td>Contract trade restriction.<tr><td><code>contract_unsigned_foreign_pick</code><td>logical<td>Contract unsigned foreign pick.<tr><td><code>contract_active</code><td>logical<td>Contract active.<tr><td><code>status_id</code><td>character<td>Status id.<tr><td><code>status_name</code><td>character<td>Status name.<tr><td><code>status_type</code><td>character<td>Status type.<tr><td><code>status_abbreviation</code><td>character<td>Status abbreviation.<tr><td><code>citizenship</code><td>character<td>Citizenship.<tr><td><code>birth_place_state</code><td>character<td>Birth place state.<tr><td><code>hand_type</code><td>character<td>Hand type.<tr><td><code>hand_abbreviation</code><td>character<td>Hand abbreviation.<tr><td><code>hand_display_value</code><td>character<td>Hand display value.</table>
+<p><strong><code>return_parsed=False</code></strong> — the raw JSON <code>Dict</code> payload, unparsed.</p>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=example-11>Example<a href=#example-11 class=hash-link aria-label="Direct link to Example" title="Direct link to Example" translate=no>​</a></h3>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#393A34;--prism-background-color:#f6f8fa><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#393A34;background-color:#f6f8fa><code class=codeBlockLines_e6Vv><div class=token-line style=color:#393A34><span class="token plain">espn_ufl_team_roster</span><span class="token punctuation" style=color:#393A34>(</span><span class="token plain">team_id</span><span class="token operator" style=color:#393A34>=</span><span class="token string" style=color:#e3116c>'4'</span><span class="token punctuation" style=color:#393A34>)</span><br/></div></code></pre></div></div>
+<p><em>Last validated n/a.</em></p>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=espn_ufl_team_schedule><code>espn_ufl_team_schedule</code><a href=#espn_ufl_team_schedule class=hash-link aria-label="Direct link to espn_ufl_team_schedule" title="Direct link to espn_ufl_team_schedule" translate=no>​</a></h2>
+<p>ESPN endpoint.</p>
+<p><strong>Endpoint URL:</strong> <code>GET https://site.api.espn.com/apis/site/v2/sports/football/ufl/teams/{team_id}/schedule</code></p>
+<p><strong>Valid URL:</strong> <a href=https://site.api.espn.com/apis/site/v2/sports/football/ufl/teams/4/schedule target=_blank rel="noopener noreferrer" class="">https://site.api.espn.com/apis/site/v2/sports/football/ufl/teams/4/schedule</a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>API Parameter<th>Python<th style=text-align:center>Pattern<th style=text-align:center>Required<th style=text-align:center>Nullable<th>Description<tbody><tr><td><code>team_id</code><td><code>team_id</code><td style=text-align:center><td style=text-align:center><code>Y</code><td style=text-align:center><td>team_id path parameter.<tr><td><code>season</code><td><code>season</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>Season year (e.g. 2024).</table>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=returns-12>Returns<a href=#returns-12 class=hash-link aria-label="Direct link to Returns" title="Direct link to Returns" translate=no>​</a></h3>
+<p><strong><code>return_parsed=True</code></strong> (default) — a tidy <code>polars.DataFrame</code> with the columns below; pass <code>return_as_pandas=True</code> for a <code>pandas.DataFrame</code>.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>id</code><td>character<td>ESPN numeric event identifier.<tr><td><code>date</code><td>character<td>Event timestamp (ISO 8601, UTC).<tr><td><code>name</code><td>character<td>Full event name (e.g. 'Team A at Team B').<tr><td><code>short_name</code><td>character<td>Abbreviated event name (e.g. 'TA @ TB').<tr><td><code>time_valid</code><td>logical<td>Whether the event time is confirmed.<tr><td><code>competitions</code><td>character<td>Competition detail (list of dicts, stringified): competitors, venue, status.<tr><td><code>links</code><td>character<td>Related links (list, stringified).<tr><td><code>season_year</code><td>integer<td>Four-digit season year.<tr><td><code>season_display_name</code><td>character<td>Human-readable season label (e.g. '2024-25').<tr><td><code>season_type_id</code><td>character<td>ESPN numeric identifier for the season type.<tr><td><code>season_type_type</code><td>integer<td>Season type numeric code.<tr><td><code>season_type_name</code><td>character<td>Season type name (e.g. Regular Season).<tr><td><code>season_type_abbreviation</code><td>character<td>Season type abbreviation.</table>
+<p><strong><code>return_parsed=False</code></strong> — the raw JSON <code>Dict</code> payload, unparsed.</p>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=example-12>Example<a href=#example-12 class=hash-link aria-label="Direct link to Example" title="Direct link to Example" translate=no>​</a></h3>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#393A34;--prism-background-color:#f6f8fa><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#393A34;background-color:#f6f8fa><code class=codeBlockLines_e6Vv><div class=token-line style=color:#393A34><span class="token plain">espn_ufl_team_schedule</span><span class="token punctuation" style=color:#393A34>(</span><span class="token plain">team_id</span><span class="token operator" style=color:#393A34>=</span><span class="token string" style=color:#e3116c>'4'</span><span class="token punctuation" style=color:#393A34>)</span><br/></div></code></pre></div></div>
+<p><em>Last validated n/a.</em></p>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=espn_ufl_team_record><code>espn_ufl_team_record</code><a href=#espn_ufl_team_record class=hash-link aria-label="Direct link to espn_ufl_team_record" title="Direct link to espn_ufl_team_record" translate=no>​</a></h2>
+<p>ESPN endpoint.</p>
+<p><strong>Endpoint URL:</strong> <code>GET https://site.api.espn.com/apis/site/v2/sports/football/ufl/teams/{team_id}/record</code></p>
+<p><strong>Valid URL:</strong> <a href=https://site.api.espn.com/apis/site/v2/sports/football/ufl/teams/4/record target=_blank rel="noopener noreferrer" class="">https://site.api.espn.com/apis/site/v2/sports/football/ufl/teams/4/record</a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>API Parameter<th>Python<th style=text-align:center>Pattern<th style=text-align:center>Required<th style=text-align:center>Nullable<th>Description<tbody><tr><td><code>team_id</code><td><code>team_id</code><td style=text-align:center><td style=text-align:center><code>Y</code><td style=text-align:center><td>team_id path parameter.</table>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=returns-13>Returns<a href=#returns-13 class=hash-link aria-label="Direct link to Returns" title="Direct link to Returns" translate=no>​</a></h3>
+<p><strong><code>return_parsed=True</code></strong> (default) — a tidy <code>polars.DataFrame</code> (parser: <code>parse_items</code>); pass <code>return_as_pandas=True</code> for a <code>pandas.DataFrame</code>.
+<strong><code>return_parsed=False</code></strong> — the raw JSON <code>Dict</code> payload, unparsed.</p>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=example-13>Example<a href=#example-13 class=hash-link aria-label="Direct link to Example" title="Direct link to Example" translate=no>​</a></h3>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#393A34;--prism-background-color:#f6f8fa><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#393A34;background-color:#f6f8fa><code class=codeBlockLines_e6Vv><div class=token-line style=color:#393A34><span class="token plain">espn_ufl_team_record</span><span class="token punctuation" style=color:#393A34>(</span><span class="token plain">team_id</span><span class="token operator" style=color:#393A34>=</span><span class="token string" style=color:#e3116c>'4'</span><span class="token punctuation" style=color:#393A34>)</span><br/></div></code></pre></div></div>
+<p><em>Last validated n/a.</em></p>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=espn_ufl_team_depthcharts><code>espn_ufl_team_depthcharts</code><a href=#espn_ufl_team_depthcharts class=hash-link aria-label="Direct link to espn_ufl_team_depthcharts" title="Direct link to espn_ufl_team_depthcharts" translate=no>​</a></h2>
+<p>ESPN endpoint.</p>
+<p><strong>Endpoint URL:</strong> <code>GET https://site.api.espn.com/apis/site/v2/sports/football/ufl/teams/{team_id}/depthcharts</code></p>
+<p><strong>Valid URL:</strong> <a href=https://site.api.espn.com/apis/site/v2/sports/football/ufl/teams/4/depthcharts target=_blank rel="noopener noreferrer" class="">https://site.api.espn.com/apis/site/v2/sports/football/ufl/teams/4/depthcharts</a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>API Parameter<th>Python<th style=text-align:center>Pattern<th style=text-align:center>Required<th style=text-align:center>Nullable<th>Description<tbody><tr><td><code>team_id</code><td><code>team_id</code><td style=text-align:center><td style=text-align:center><code>Y</code><td style=text-align:center><td>team_id path parameter.</table>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=returns-14>Returns<a href=#returns-14 class=hash-link aria-label="Direct link to Returns" title="Direct link to Returns" translate=no>​</a></h3>
+<p><strong><code>return_parsed=True</code></strong> (default) — a tidy <code>polars.DataFrame</code> (parser: <code>parse_items</code>); pass <code>return_as_pandas=True</code> for a <code>pandas.DataFrame</code>.
+<strong><code>return_parsed=False</code></strong> — the raw JSON <code>Dict</code> payload, unparsed.</p>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=example-14>Example<a href=#example-14 class=hash-link aria-label="Direct link to Example" title="Direct link to Example" translate=no>​</a></h3>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#393A34;--prism-background-color:#f6f8fa><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#393A34;background-color:#f6f8fa><code class=codeBlockLines_e6Vv><div class=token-line style=color:#393A34><span class="token plain">espn_ufl_team_depthcharts</span><span class="token punctuation" style=color:#393A34>(</span><span class="token plain">team_id</span><span class="token operator" style=color:#393A34>=</span><span class="token string" style=color:#e3116c>'4'</span><span class="token punctuation" style=color:#393A34>)</span><br/></div></code></pre></div></div>
+<p><em>Last validated n/a.</em></p>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=espn_ufl_team_injuries><code>espn_ufl_team_injuries</code><a href=#espn_ufl_team_injuries class=hash-link aria-label="Direct link to espn_ufl_team_injuries" title="Direct link to espn_ufl_team_injuries" translate=no>​</a></h2>
+<p>ESPN endpoint.</p>
+<p><strong>Endpoint URL:</strong> <code>GET https://site.api.espn.com/apis/site/v2/sports/football/ufl/teams/{team_id}/injuries</code></p>
+<p><strong>Valid URL:</strong> <a href=https://site.api.espn.com/apis/site/v2/sports/football/ufl/teams/4/injuries target=_blank rel="noopener noreferrer" class="">https://site.api.espn.com/apis/site/v2/sports/football/ufl/teams/4/injuries</a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>API Parameter<th>Python<th style=text-align:center>Pattern<th style=text-align:center>Required<th style=text-align:center>Nullable<th>Description<tbody><tr><td><code>team_id</code><td><code>team_id</code><td style=text-align:center><td style=text-align:center><code>Y</code><td style=text-align:center><td>team_id path parameter.</table>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=returns-15>Returns<a href=#returns-15 class=hash-link aria-label="Direct link to Returns" title="Direct link to Returns" translate=no>​</a></h3>
+<p><strong><code>return_parsed=True</code></strong> (default) — a tidy <code>polars.DataFrame</code> with the columns below; pass <code>return_as_pandas=True</code> for a <code>pandas.DataFrame</code>.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>id</code><td>character<td>ESPN numeric identifier for the athlete.<tr><td><code>display_name</code><td>character<td>Athlete's full display name as shown on ESPN.<tr><td><code>injuries</code><td>character<td>Injury entries for the athlete (list of dicts, stringified): status, type, details, dates.</table>
+<p><strong><code>return_parsed=False</code></strong> — the raw JSON <code>Dict</code> payload, unparsed.</p>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=example-15>Example<a href=#example-15 class=hash-link aria-label="Direct link to Example" title="Direct link to Example" translate=no>​</a></h3>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#393A34;--prism-background-color:#f6f8fa><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#393A34;background-color:#f6f8fa><code class=codeBlockLines_e6Vv><div class=token-line style=color:#393A34><span class="token plain">espn_ufl_team_injuries</span><span class="token punctuation" style=color:#393A34>(</span><span class="token plain">team_id</span><span class="token operator" style=color:#393A34>=</span><span class="token string" style=color:#e3116c>'4'</span><span class="token punctuation" style=color:#393A34>)</span><br/></div></code></pre></div></div>
+<p><em>Last validated n/a.</em></p>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=espn_ufl_team_transactions><code>espn_ufl_team_transactions</code><a href=#espn_ufl_team_transactions class=hash-link aria-label="Direct link to espn_ufl_team_transactions" title="Direct link to espn_ufl_team_transactions" translate=no>​</a></h2>
+<p>ESPN endpoint.</p>
+<p><strong>Endpoint URL:</strong> <code>GET https://site.api.espn.com/apis/site/v2/sports/football/ufl/teams/{team_id}/transactions</code></p>
+<p><strong>Valid URL:</strong> <a href=https://site.api.espn.com/apis/site/v2/sports/football/ufl/teams/4/transactions target=_blank rel="noopener noreferrer" class="">https://site.api.espn.com/apis/site/v2/sports/football/ufl/teams/4/transactions</a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>API Parameter<th>Python<th style=text-align:center>Pattern<th style=text-align:center>Required<th style=text-align:center>Nullable<th>Description<tbody><tr><td><code>team_id</code><td><code>team_id</code><td style=text-align:center><td style=text-align:center><code>Y</code><td style=text-align:center><td>team_id path parameter.</table>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=returns-16>Returns<a href=#returns-16 class=hash-link aria-label="Direct link to Returns" title="Direct link to Returns" translate=no>​</a></h3>
+<p><strong><code>return_parsed=True</code></strong> (default) — a tidy <code>polars.DataFrame</code> (parser: <code>parse_items</code>); pass <code>return_as_pandas=True</code> for a <code>pandas.DataFrame</code>.
+<strong><code>return_parsed=False</code></strong> — the raw JSON <code>Dict</code> payload, unparsed.</p>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=example-16>Example<a href=#example-16 class=hash-link aria-label="Direct link to Example" title="Direct link to Example" translate=no>​</a></h3>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#393A34;--prism-background-color:#f6f8fa><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#393A34;background-color:#f6f8fa><code class=codeBlockLines_e6Vv><div class=token-line style=color:#393A34><span class="token plain">espn_ufl_team_transactions</span><span class="token punctuation" style=color:#393A34>(</span><span class="token plain">team_id</span><span class="token operator" style=color:#393A34>=</span><span class="token string" style=color:#e3116c>'4'</span><span class="token punctuation" style=color:#393A34>)</span><br/></div></code></pre></div></div>
+<p><em>Last validated n/a.</em></p>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=espn_ufl_team_history><code>espn_ufl_team_history</code><a href=#espn_ufl_team_history class=hash-link aria-label="Direct link to espn_ufl_team_history" title="Direct link to espn_ufl_team_history" translate=no>​</a></h2>
+<p>ESPN endpoint.</p>
+<p><strong>Endpoint URL:</strong> <code>GET https://site.api.espn.com/apis/site/v2/sports/football/ufl/teams/{team_id}/history</code></p>
+<p><strong>Valid URL:</strong> <a href=https://site.api.espn.com/apis/site/v2/sports/football/ufl/teams/4/history target=_blank rel="noopener noreferrer" class="">https://site.api.espn.com/apis/site/v2/sports/football/ufl/teams/4/history</a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>API Parameter<th>Python<th style=text-align:center>Pattern<th style=text-align:center>Required<th style=text-align:center>Nullable<th>Description<tbody><tr><td><code>team_id</code><td><code>team_id</code><td style=text-align:center><td style=text-align:center><code>Y</code><td style=text-align:center><td>team_id path parameter.</table>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=returns-17>Returns<a href=#returns-17 class=hash-link aria-label="Direct link to Returns" title="Direct link to Returns" translate=no>​</a></h3>
+<p><strong><code>return_parsed=True</code></strong> (default) — a tidy <code>polars.DataFrame</code> (parser: <code>parse_items</code>); pass <code>return_as_pandas=True</code> for a <code>pandas.DataFrame</code>.
+<strong><code>return_parsed=False</code></strong> — the raw JSON <code>Dict</code> payload, unparsed.</p>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=example-17>Example<a href=#example-17 class=hash-link aria-label="Direct link to Example" title="Direct link to Example" translate=no>​</a></h3>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#393A34;--prism-background-color:#f6f8fa><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#393A34;background-color:#f6f8fa><code class=codeBlockLines_e6Vv><div class=token-line style=color:#393A34><span class="token plain">espn_ufl_team_history</span><span class="token punctuation" style=color:#393A34>(</span><span class="token plain">team_id</span><span class="token operator" style=color:#393A34>=</span><span class="token string" style=color:#e3116c>'4'</span><span class="token punctuation" style=color:#393A34>)</span><br/></div></code></pre></div></div>
+<p><em>Last validated n/a.</em></p>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=espn_ufl_team_news><code>espn_ufl_team_news</code><a href=#espn_ufl_team_news class=hash-link aria-label="Direct link to espn_ufl_team_news" title="Direct link to espn_ufl_team_news" translate=no>​</a></h2>
+<p>ESPN endpoint.</p>
+<p><strong>Endpoint URL:</strong> <code>GET https://site.api.espn.com/apis/site/v2/sports/football/ufl/teams/{team_id}/news</code></p>
+<p><strong>Valid URL:</strong> <a href=https://site.api.espn.com/apis/site/v2/sports/football/ufl/teams/4/news target=_blank rel="noopener noreferrer" class="">https://site.api.espn.com/apis/site/v2/sports/football/ufl/teams/4/news</a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>API Parameter<th>Python<th style=text-align:center>Pattern<th style=text-align:center>Required<th style=text-align:center>Nullable<th>Description<tbody><tr><td><code>team_id</code><td><code>team_id</code><td style=text-align:center><td style=text-align:center><code>Y</code><td style=text-align:center><td>team_id path parameter.<tr><td><code>limit</code><td><code>limit</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>Maximum number of items to return.</table>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=returns-18>Returns<a href=#returns-18 class=hash-link aria-label="Direct link to Returns" title="Direct link to Returns" translate=no>​</a></h3>
+<p><strong><code>return_parsed=True</code></strong> (default) — a tidy <code>polars.DataFrame</code> with the columns below; pass <code>return_as_pandas=True</code> for a <code>pandas.DataFrame</code>.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>id</code><td>integer<td>ESPN numeric identifier for the article.<tr><td><code>now_id</code><td>character<td>ESPN 'now' feed id.<tr><td><code>content_key</code><td>character<td>Internal content key.<tr><td><code>data_source_identifier</code><td>character<td>Source-system identifier.<tr><td><code>type</code><td>character<td>Article type (Story, Media, HeadlineNews, etc.).<tr><td><code>headline</code><td>character<td>Article headline.<tr><td><code>description</code><td>character<td>Article summary/description.<tr><td><code>last_modified</code><td>character<td>Last-modified timestamp (ISO 8601).<tr><td><code>published</code><td>character<td>Publish timestamp (ISO 8601).<tr><td><code>images</code><td>character<td>Article images (list, stringified).<tr><td><code>categories</code><td>character<td>Article categories (list, stringified).<tr><td><code>premium</code><td>logical<td>Whether the article is premium/paywalled.<tr><td><code>byline</code><td>character<td>Author byline string as published by ESPN.<tr><td><code>links_web_href</code><td>character<td>Web article URL.<tr><td><code>links_mobile_href</code><td>character<td>Mobile article URL.<tr><td><code>links_api_self_href</code><td>character<td>ESPN API canonical self-link for the article resource.<tr><td><code>links_app_sportscenter_href</code><td>character<td>SportsCenter app deep link.</table>
+<p><strong><code>return_parsed=False</code></strong> — the raw JSON <code>Dict</code> payload, unparsed.</p>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=example-18>Example<a href=#example-18 class=hash-link aria-label="Direct link to Example" title="Direct link to Example" translate=no>​</a></h3>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#393A34;--prism-background-color:#f6f8fa><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#393A34;background-color:#f6f8fa><code class=codeBlockLines_e6Vv><div class=token-line style=color:#393A34><span class="token plain">espn_ufl_team_news</span><span class="token punctuation" style=color:#393A34>(</span><span class="token plain">team_id</span><span class="token operator" style=color:#393A34>=</span><span class="token string" style=color:#e3116c>'4'</span><span class="token punctuation" style=color:#393A34>)</span><br/></div></code></pre></div></div>
+<p><em>Last validated n/a.</em></p>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=espn_ufl_team_leaders><code>espn_ufl_team_leaders</code><a href=#espn_ufl_team_leaders class=hash-link aria-label="Direct link to espn_ufl_team_leaders" title="Direct link to espn_ufl_team_leaders" translate=no>​</a></h2>
+<p>ESPN endpoint.</p>
+<p><strong>Endpoint URL:</strong> <code>GET https://site.api.espn.com/apis/site/v2/sports/football/ufl/teams/{team_id}/leaders</code></p>
+<p><strong>Valid URL:</strong> <a href=https://site.api.espn.com/apis/site/v2/sports/football/ufl/teams/4/leaders target=_blank rel="noopener noreferrer" class="">https://site.api.espn.com/apis/site/v2/sports/football/ufl/teams/4/leaders</a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>API Parameter<th>Python<th style=text-align:center>Pattern<th style=text-align:center>Required<th style=text-align:center>Nullable<th>Description<tbody><tr><td><code>team_id</code><td><code>team_id</code><td style=text-align:center><td style=text-align:center><code>Y</code><td style=text-align:center><td>team_id path parameter.</table>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=returns-19>Returns<a href=#returns-19 class=hash-link aria-label="Direct link to Returns" title="Direct link to Returns" translate=no>​</a></h3>
+<p><strong><code>return_parsed=True</code></strong> (default) — a tidy <code>polars.DataFrame</code> (parser: <code>parse_items</code>); pass <code>return_as_pandas=True</code> for a <code>pandas.DataFrame</code>.
+<strong><code>return_parsed=False</code></strong> — the raw JSON <code>Dict</code> payload, unparsed.</p>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=example-19>Example<a href=#example-19 class=hash-link aria-label="Direct link to Example" title="Direct link to Example" translate=no>​</a></h3>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#393A34;--prism-background-color:#f6f8fa><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#393A34;background-color:#f6f8fa><code class=codeBlockLines_e6Vv><div class=token-line style=color:#393A34><span class="token plain">espn_ufl_team_leaders</span><span class="token punctuation" style=color:#393A34>(</span><span class="token plain">team_id</span><span class="token operator" style=color:#393A34>=</span><span class="token string" style=color:#e3116c>'4'</span><span class="token punctuation" style=color:#393A34>)</span><br/></div></code></pre></div></div>
+<p><em>Last validated n/a.</em></p>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=espn_ufl_player_info><code>espn_ufl_player_info</code><a href=#espn_ufl_player_info class=hash-link aria-label="Direct link to espn_ufl_player_info" title="Direct link to espn_ufl_player_info" translate=no>​</a></h2>
+<p>ESPN endpoint.</p>
+<p><strong>Endpoint URL:</strong> <code>GET https://site.api.espn.com/apis/site/v2/sports/football/ufl/athletes/{athlete_id}</code></p>
+<p><strong>Valid URL:</strong> <a href=https://site.api.espn.com/apis/site/v2/sports/football/ufl/athletes/4239 target=_blank rel="noopener noreferrer" class="">https://site.api.espn.com/apis/site/v2/sports/football/ufl/athletes/4239</a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>API Parameter<th>Python<th style=text-align:center>Pattern<th style=text-align:center>Required<th style=text-align:center>Nullable<th>Description<tbody><tr><td><code>athlete_id</code><td><code>athlete_id</code><td style=text-align:center><td style=text-align:center><code>Y</code><td style=text-align:center><td>athlete_id path parameter.</table>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=returns-20>Returns<a href=#returns-20 class=hash-link aria-label="Direct link to Returns" title="Direct link to Returns" translate=no>​</a></h3>
+<p><strong><code>return_parsed=True</code></strong> (default) — a tidy <code>polars.DataFrame</code> (parser: <code>parse_single_entity</code>); pass <code>return_as_pandas=True</code> for a <code>pandas.DataFrame</code>.
+<strong><code>return_parsed=False</code></strong> — the raw JSON <code>Dict</code> payload, unparsed.</p>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=example-20>Example<a href=#example-20 class=hash-link aria-label="Direct link to Example" title="Direct link to Example" translate=no>​</a></h3>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#393A34;--prism-background-color:#f6f8fa><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#393A34;background-color:#f6f8fa><code class=codeBlockLines_e6Vv><div class=token-line style=color:#393A34><span class="token plain">espn_ufl_player_info</span><span class="token punctuation" style=color:#393A34>(</span><span class="token plain">athlete_id</span><span class="token operator" style=color:#393A34>=</span><span class="token string" style=color:#e3116c>'4239'</span><span class="token punctuation" style=color:#393A34>)</span><br/></div></code></pre></div></div>
+<p><em>Last validated n/a.</em></p>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=espn_ufl_player_bio><code>espn_ufl_player_bio</code><a href=#espn_ufl_player_bio class=hash-link aria-label="Direct link to espn_ufl_player_bio" title="Direct link to espn_ufl_player_bio" translate=no>​</a></h2>
+<p>ESPN endpoint.</p>
+<p><strong>Endpoint URL:</strong> <code>GET https://site.api.espn.com/apis/site/v2/sports/football/ufl/athletes/{athlete_id}/bio</code></p>
+<p><strong>Valid URL:</strong> <a href=https://site.api.espn.com/apis/site/v2/sports/football/ufl/athletes/4239/bio target=_blank rel="noopener noreferrer" class="">https://site.api.espn.com/apis/site/v2/sports/football/ufl/athletes/4239/bio</a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>API Parameter<th>Python<th style=text-align:center>Pattern<th style=text-align:center>Required<th style=text-align:center>Nullable<th>Description<tbody><tr><td><code>athlete_id</code><td><code>athlete_id</code><td style=text-align:center><td style=text-align:center><code>Y</code><td style=text-align:center><td>athlete_id path parameter.</table>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=returns-21>Returns<a href=#returns-21 class=hash-link aria-label="Direct link to Returns" title="Direct link to Returns" translate=no>​</a></h3>
+<p><strong><code>return_parsed=True</code></strong> (default) — a tidy <code>polars.DataFrame</code> (parser: <code>parse_single_entity</code>); pass <code>return_as_pandas=True</code> for a <code>pandas.DataFrame</code>.
+<strong><code>return_parsed=False</code></strong> — the raw JSON <code>Dict</code> payload, unparsed.</p>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=example-21>Example<a href=#example-21 class=hash-link aria-label="Direct link to Example" title="Direct link to Example" translate=no>​</a></h3>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#393A34;--prism-background-color:#f6f8fa><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#393A34;background-color:#f6f8fa><code class=codeBlockLines_e6Vv><div class=token-line style=color:#393A34><span class="token plain">espn_ufl_player_bio</span><span class="token punctuation" style=color:#393A34>(</span><span class="token plain">athlete_id</span><span class="token operator" style=color:#393A34>=</span><span class="token string" style=color:#e3116c>'4239'</span><span class="token punctuation" style=color:#393A34>)</span><br/></div></code></pre></div></div>
+<p><em>Last validated n/a.</em></p>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=espn_ufl_player_news><code>espn_ufl_player_news</code><a href=#espn_ufl_player_news class=hash-link aria-label="Direct link to espn_ufl_player_news" title="Direct link to espn_ufl_player_news" translate=no>​</a></h2>
+<p>ESPN endpoint.</p>
+<p><strong>Endpoint URL:</strong> <code>GET https://site.api.espn.com/apis/site/v2/sports/football/ufl/athletes/{athlete_id}/news</code></p>
+<p><strong>Valid URL:</strong> <a href=https://site.api.espn.com/apis/site/v2/sports/football/ufl/athletes/4239/news target=_blank rel="noopener noreferrer" class="">https://site.api.espn.com/apis/site/v2/sports/football/ufl/athletes/4239/news</a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>API Parameter<th>Python<th style=text-align:center>Pattern<th style=text-align:center>Required<th style=text-align:center>Nullable<th>Description<tbody><tr><td><code>athlete_id</code><td><code>athlete_id</code><td style=text-align:center><td style=text-align:center><code>Y</code><td style=text-align:center><td>athlete_id path parameter.</table>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=returns-22>Returns<a href=#returns-22 class=hash-link aria-label="Direct link to Returns" title="Direct link to Returns" translate=no>​</a></h3>
+<p><strong><code>return_parsed=True</code></strong> (default) — a tidy <code>polars.DataFrame</code> with the columns below; pass <code>return_as_pandas=True</code> for a <code>pandas.DataFrame</code>.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>id</code><td>integer<td>ESPN numeric identifier for the article.<tr><td><code>now_id</code><td>character<td>ESPN 'now' feed id.<tr><td><code>content_key</code><td>character<td>Internal content key.<tr><td><code>data_source_identifier</code><td>character<td>Source-system identifier.<tr><td><code>type</code><td>character<td>Article type (Story, Media, HeadlineNews, etc.).<tr><td><code>headline</code><td>character<td>Article headline.<tr><td><code>description</code><td>character<td>Article summary/description.<tr><td><code>last_modified</code><td>character<td>Last-modified timestamp (ISO 8601).<tr><td><code>published</code><td>character<td>Publish timestamp (ISO 8601).<tr><td><code>images</code><td>character<td>Article images (list, stringified).<tr><td><code>categories</code><td>character<td>Article categories (list, stringified).<tr><td><code>premium</code><td>logical<td>Whether the article is premium/paywalled.<tr><td><code>byline</code><td>character<td>Author byline string as published by ESPN.<tr><td><code>links_web_href</code><td>character<td>Web article URL.<tr><td><code>links_mobile_href</code><td>character<td>Mobile article URL.<tr><td><code>links_api_self_href</code><td>character<td>ESPN API canonical self-link for the article resource.<tr><td><code>links_app_sportscenter_href</code><td>character<td>SportsCenter app deep link.</table>
+<p><strong><code>return_parsed=False</code></strong> — the raw JSON <code>Dict</code> payload, unparsed.</p>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=example-22>Example<a href=#example-22 class=hash-link aria-label="Direct link to Example" title="Direct link to Example" translate=no>​</a></h3>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#393A34;--prism-background-color:#f6f8fa><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#393A34;background-color:#f6f8fa><code class=codeBlockLines_e6Vv><div class=token-line style=color:#393A34><span class="token plain">espn_ufl_player_news</span><span class="token punctuation" style=color:#393A34>(</span><span class="token plain">athlete_id</span><span class="token operator" style=color:#393A34>=</span><span class="token string" style=color:#e3116c>'4239'</span><span class="token punctuation" style=color:#393A34>)</span><br/></div></code></pre></div></div>
+<p><em>Last validated n/a.</em></p>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=espn_ufl_standings><code>espn_ufl_standings</code><a href=#espn_ufl_standings class=hash-link aria-label="Direct link to espn_ufl_standings" title="Direct link to espn_ufl_standings" translate=no>​</a></h2>
+<p>ESPN endpoint.</p>
+<p><strong>Endpoint URL:</strong> <code>GET https://site.api.espn.com/apis/v2/sports/football/ufl/standings</code></p>
+<p><strong>Valid URL:</strong> <a href=https://site.api.espn.com/apis/v2/sports/football/ufl/standings target=_blank rel="noopener noreferrer" class="">https://site.api.espn.com/apis/v2/sports/football/ufl/standings</a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>API Parameter<th>Python<th style=text-align:center>Pattern<th style=text-align:center>Required<th style=text-align:center>Nullable<th>Description<tbody><tr><td><code>season</code><td><code>season</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>Season year (e.g. 2024).<tr><td><code>group</code><td><code>group</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>Conference or group id filter (e.g. an ESPN conference id).<tr><td><code>type</code><td><code>standings_type</code><td style=text-align:center><td style=text-align:center><td style=text-align:center><code>Y</code><td>Standings variant (e.g. 'by-division' or 'by-conference').</table>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=returns-23>Returns<a href=#returns-23 class=hash-link aria-label="Direct link to Returns" title="Direct link to Returns" translate=no>​</a></h3>
+<p><strong><code>return_parsed=True</code></strong> (default) — a tidy <code>polars.DataFrame</code> with the columns below; pass <code>return_as_pandas=True</code> for a <code>pandas.DataFrame</code>.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>group_name</code><td>character<td>Group name.<tr><td><code>group_abbreviation</code><td>character<td>Group abbreviation.<tr><td><code>team_id</code><td>character<td>Team id.<tr><td><code>team_name</code><td>character<td>Team name.<tr><td><code>team_abbreviation</code><td>character<td>Team abbreviation.<tr><td><code>team_display_name</code><td>character<td>Team display name.<tr><td><code>team_location</code><td>character<td>Team location.<tr><td><code>team_logo</code><td>character<td>Team logo.<tr><td><code>avg_points_against</code><td>double<td>Avg points against.<tr><td><code>avg_points_for</code><td>double<td>Avg points for.<tr><td><code>clincher</code><td>double<td>Clincher.<tr><td><code>differential</code><td>double<td>Differential.<tr><td><code>division_win_percent</code><td>double<td>Division win percent.<tr><td><code>games_behind</code><td>double<td>Games behind.<tr><td><code>league_win_percent</code><td>double<td>League win percent.<tr><td><code>losses</code><td>double<td>Losses.<tr><td><code>playoff_seed</code><td>double<td>Playoff seed.<tr><td><code>point_differential</code><td>double<td>Point differential.<tr><td><code>points</code><td>double<td>Points.<tr><td><code>points_against</code><td>double<td>Points against.<tr><td><code>points_for</code><td>double<td>Points for.<tr><td><code>streak</code><td>double<td>Streak.<tr><td><code>win_percent</code><td>double<td>Win percent.<tr><td><code>wins</code><td>double<td>Wins.<tr><td><code>games_ahead</code><td>double<td>Games ahead.<tr><td><code>overall</code><td>character<td>Overall.<tr><td><code>home</code><td>character<td>Home.<tr><td><code>road</code><td>character<td>Road.<tr><td><code>vs. div.</code><td>character<td>Vs. div..<tr><td><code>vs. conf.</code><td>character<td>Vs. conf..<tr><td><code>last ten games</code><td>character<td>Last ten games.</table>
+<p><strong><code>return_parsed=False</code></strong> — the raw JSON <code>Dict</code> payload, unparsed.</p>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=example-23>Example<a href=#example-23 class=hash-link aria-label="Direct link to Example" title="Direct link to Example" translate=no>​</a></h3>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#393A34;--prism-background-color:#f6f8fa><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#393A34;background-color:#f6f8fa><code class=codeBlockLines_e6Vv><div class=token-line style=color:#393A34><span class="token plain">espn_ufl_standings</span><span class="token punctuation" style=color:#393A34>(</span><span class="token punctuation" style=color:#393A34>)</span><br/></div></code></pre></div></div>
+<p><em>Last validated n/a.</em></div><footer class="theme-doc-footer docusaurus-mt-lg"><div class="row margin-top--sm theme-doc-footer-edit-meta-row"><div class="col noPrint_WFHX"><a href=https://github.com/sportsdataverse/sportsdataverse-py/edit/main/docs/versioned_docs/version-0.0.74/ufl/reference/site.md target=_blank rel="noopener noreferrer" class=theme-edit-this-page><svg fill=currentColor height=20 width=20 viewBox="0 0 40 40" class=iconEdit_Z9Sw aria-hidden=true><g><path d="m34.5 11.7l-3 3.1-6.3-6.3 3.1-3q0.5-0.5 1.2-0.5t1.1 0.5l3.9 3.9q0.5 0.4 0.5 1.1t-0.5 1.2z m-29.5 17.1l18.4-18.5 6.3 6.3-18.4 18.4h-6.3v-6.2z"/></g></svg>Edit this page</a></div><div class="col lastUpdated_JAkA"></div></div></footer></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Docs pages"></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href=#espn_ufl_scoreboard class="table-of-contents__link toc-highlight"><code>espn_ufl_scoreboard</code></a><ul><li><a href=#returns class="table-of-contents__link toc-highlight">Returns</a><li><a href=#example class="table-of-contents__link toc-highlight">Example</a></ul><li><a href=#espn_ufl_summary class="table-of-contents__link toc-highlight"><code>espn_ufl_summary</code></a><ul><li><a href=#returns-1 class="table-of-contents__link toc-highlight">Returns</a><li><a href=#example-1 class="table-of-contents__link toc-highlight">Example</a></ul><li><a href=#espn_ufl_calendar class="table-of-contents__link toc-highlight"><code>espn_ufl_calendar</code></a><ul><li><a href=#returns-2 class="table-of-contents__link toc-highlight">Returns</a><li><a href=#example-2 class="table-of-contents__link toc-highlight">Example</a></ul><li><a href=#espn_ufl_news class="table-of-contents__link toc-highlight"><code>espn_ufl_news</code></a><ul><li><a href=#returns-3 class="table-of-contents__link toc-highlight">Returns</a><li><a href=#example-3 class="table-of-contents__link toc-highlight">Example</a></ul><li><a href=#espn_ufl_injuries class="table-of-contents__link toc-highlight"><code>espn_ufl_injuries</code></a><ul><li><a href=#returns-4 class="table-of-contents__link toc-highlight">Returns</a><li><a href=#example-4 class="table-of-contents__link toc-highlight">Example</a></ul><li><a href=#espn_ufl_transactions class="table-of-contents__link toc-highlight"><code>espn_ufl_transactions</code></a><ul><li><a href=#returns-5 class="table-of-contents__link toc-highlight">Returns</a><li><a href=#example-5 class="table-of-contents__link toc-highlight">Example</a></ul><li><a href=#espn_ufl_conferences class="table-of-contents__link toc-highlight"><code>espn_ufl_conferences</code></a><ul><li><a href=#returns-6 class="table-of-contents__link toc-highlight">Returns</a><li><a href=#example-6 class="table-of-contents__link toc-highlight">Example</a></ul><li><a href=#espn_ufl_statistics_league class="table-of-contents__link toc-highlight"><code>espn_ufl_statistics_league</code></a><ul><li><a href=#returns-7 class="table-of-contents__link toc-highlight">Returns</a><li><a href=#example-7 class="table-of-contents__link toc-highlight">Example</a></ul><li><a href=#espn_ufl_draft class="table-of-contents__link toc-highlight"><code>espn_ufl_draft</code></a><ul><li><a href=#returns-8 class="table-of-contents__link toc-highlight">Returns</a><li><a href=#example-8 class="table-of-contents__link toc-highlight">Example</a></ul><li><a href=#espn_ufl_teams_site class="table-of-contents__link toc-highlight"><code>espn_ufl_teams_site</code></a><ul><li><a href=#returns-9 class="table-of-contents__link toc-highlight">Returns</a><li><a href=#example-9 class="table-of-contents__link toc-highlight">Example</a></ul><li><a href=#espn_ufl_team class="table-of-contents__link toc-highlight"><code>espn_ufl_team</code></a><ul><li><a href=#returns-10 class="table-of-contents__link toc-highlight">Returns</a><li><a href=#example-10 class="table-of-contents__link toc-highlight">Example</a></ul><li><a href=#espn_ufl_team_roster class="table-of-contents__link toc-highlight"><code>espn_ufl_team_roster</code></a><ul><li><a href=#returns-11 class="table-of-contents__link toc-highlight">Returns</a><li><a href=#example-11 class="table-of-contents__link toc-highlight">Example</a></ul><li><a href=#espn_ufl_team_schedule class="table-of-contents__link toc-highlight"><code>espn_ufl_team_schedule</code></a><ul><li><a href=#returns-12 class="table-of-contents__link toc-highlight">Returns</a><li><a href=#example-12 class="table-of-contents__link toc-highlight">Example</a></ul><li><a href=#espn_ufl_team_record class="table-of-contents__link toc-highlight"><code>espn_ufl_team_record</code></a><ul><li><a href=#returns-13 class="table-of-contents__link toc-highlight">Returns</a><li><a href=#example-13 class="table-of-contents__link toc-highlight">Example</a></ul><li><a href=#espn_ufl_team_depthcharts class="table-of-contents__link toc-highlight"><code>espn_ufl_team_depthcharts</code></a><ul><li><a href=#returns-14 class="table-of-contents__link toc-highlight">Returns</a><li><a href=#example-14 class="table-of-contents__link toc-highlight">Example</a></ul><li><a href=#espn_ufl_team_injuries class="table-of-contents__link toc-highlight"><code>espn_ufl_team_injuries</code></a><ul><li><a href=#returns-15 class="table-of-contents__link toc-highlight">Returns</a><li><a href=#example-15 class="table-of-contents__link toc-highlight">Example</a></ul><li><a href=#espn_ufl_team_transactions class="table-of-contents__link toc-highlight"><code>espn_ufl_team_transactions</code></a><ul><li><a href=#returns-16 class="table-of-contents__link toc-highlight">Returns</a><li><a href=#example-16 class="table-of-contents__link toc-highlight">Example</a></ul><li><a href=#espn_ufl_team_history class="table-of-contents__link toc-highlight"><code>espn_ufl_team_history</code></a><ul><li><a href=#returns-17 class="table-of-contents__link toc-highlight">Returns</a><li><a href=#example-17 class="table-of-contents__link toc-highlight">Example</a></ul><li><a href=#espn_ufl_team_news class="table-of-contents__link toc-highlight"><code>espn_ufl_team_news</code></a><ul><li><a href=#returns-18 class="table-of-contents__link toc-highlight">Returns</a><li><a href=#example-18 class="table-of-contents__link toc-highlight">Example</a></ul><li><a href=#espn_ufl_team_leaders class="table-of-contents__link toc-highlight"><code>espn_ufl_team_leaders</code></a><ul><li><a href=#returns-19 class="table-of-contents__link toc-highlight">Returns</a><li><a href=#example-19 class="table-of-contents__link toc-highlight">Example</a></ul><li><a href=#espn_ufl_player_info class="table-of-contents__link toc-highlight"><code>espn_ufl_player_info</code></a><ul><li><a href=#returns-20 class="table-of-contents__link toc-highlight">Returns</a><li><a href=#example-20 class="table-of-contents__link toc-highlight">Example</a></ul><li><a href=#espn_ufl_player_bio class="table-of-contents__link toc-highlight"><code>espn_ufl_player_bio</code></a><ul><li><a href=#returns-21 class="table-of-contents__link toc-highlight">Returns</a><li><a href=#example-21 class="table-of-contents__link toc-highlight">Example</a></ul><li><a href=#espn_ufl_player_news class="table-of-contents__link toc-highlight"><code>espn_ufl_player_news</code></a><ul><li><a href=#returns-22 class="table-of-contents__link toc-highlight">Returns</a><li><a href=#example-22 class="table-of-contents__link toc-highlight">Example</a></ul><li><a href=#espn_ufl_standings class="table-of-contents__link toc-highlight"><code>espn_ufl_standings</code></a><ul><li><a href=#returns-23 class="table-of-contents__link toc-highlight">Returns</a><li><a href=#example-23 class="table-of-contents__link toc-highlight">Example</a></ul></ul></div></div></div></div></main></div></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="row footer__links"><div class="theme-layout-footer-column col footer__col"><div class=footer__title>Docs</div><ul class="footer__items clean-list"><li class=footer__item><a class=footer__link-item href=/docs/intro>Docs</a></ul></div><div class="theme-layout-footer-column col footer__col"><div class=footer__title>Community</div><ul class="footer__items clean-list"><li class=footer__item><a href=https://twitter.com/saiemgilani target=_blank rel="noopener noreferrer" class=footer__link-item>Twitter (Author)<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li class=footer__item><a href=https://twitter.com/sportsdataverse target=_blank rel="noopener noreferrer" class=footer__link-item>Twitter (SportsDataverse)<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a></ul></div><div class="theme-layout-footer-column col footer__col"><div class=footer__title>More</div><ul class="footer__items clean-list"><li class=footer__item><a href=https://github.com/sportsdataverse/sportsdataverse-py target=_blank rel="noopener noreferrer" class=footer__link-item>GitHub<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a></ul></div></div><div class="footer__bottom text--center"><div class=footer__copyright>Copyright © 2026 <strong>sportsdataverse-py</strong>, developed by <a href=https://twitter.com/saiemgilani>Saiem Gilani</a>, part of the <a href=https://sportsdataverse.org>SportsDataverse</a>.</div></div></div></footer></div></body>
