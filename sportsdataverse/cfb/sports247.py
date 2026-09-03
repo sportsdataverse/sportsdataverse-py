@@ -48,7 +48,7 @@ def sports247_teams(
     Example URL: https://ipa.247sports.com/rdb/v1/teams/
 
     Args:
-        sport_key: sportKey query parameter.
+        sport_key: 247Sports sport key (1 = football, 2 = basketball).
         year: year query parameter.
         institution_type: institutionType query parameter.
         return_parsed: parse the payload through parse_sports247_teams -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
@@ -99,7 +99,7 @@ def sports247_institution_rankings(
 
     Args:
         year: year path parameter.
-        sport_key: sport_key path parameter.
+        sport_key: 247Sports sport key (1 = football, 2 = basketball).
         page_size: pagesize query parameter.
         page: page query parameter.
         use_composite: useComposite query parameter.
@@ -153,7 +153,7 @@ def sports247_recruits(
     Example URL: https://ipa.247sports.com/rdb/v1/recruits/?sportKey=1&year=2026
 
     Args:
-        sport_key: sportKey query parameter.
+        sport_key: 247Sports sport key (1 = football, 2 = basketball).
         year: year query parameter.
         page_size: pagesize query parameter.
         page: page query parameter.
@@ -206,7 +206,7 @@ def sports247_transfers(
     Example URL: https://ipa.247sports.com/rdb/v1/transfers/?sportKey=1&year=2026
 
     Args:
-        sport_key: sportKey query parameter.
+        sport_key: 247Sports sport key (1 = football, 2 = basketball).
         year: year query parameter.
         page_size: pagesize query parameter.
         page: page query parameter.
@@ -255,7 +255,7 @@ def sports247_coaches(
     Example URL: https://ipa.247sports.com/rdb/v1/coaches/?sportKey=1&year=2026
 
     Args:
-        sport_key: sportKey query parameter.
+        sport_key: 247Sports sport key (1 = football, 2 = basketball).
         year: year query parameter.
         page_size: pageSize query parameter.
         page: page query parameter.
@@ -304,7 +304,7 @@ def sports247_transfer_portal_player_feed(
 
     Args:
         year: year path parameter.
-        sport_key: sport_key path parameter.
+        sport_key: 247Sports sport key (1 = football, 2 = basketball).
         page_size: pageSize query parameter.
         return_parsed: parse the payload through parse_sports247_result_set -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -348,7 +348,7 @@ def sports247_composite_team_ranking_feed(
 
     Args:
         year: year path parameter.
-        sport_key: sport_key path parameter.
+        sport_key: 247Sports sport key (1 = football, 2 = basketball).
         page_size: pageSize query parameter.
         return_parsed: parse the payload through parse_sports247_result_set -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -392,7 +392,7 @@ def sports247_transfer_portal_team_feed(
 
     Args:
         year: year path parameter.
-        sport_key: sport_key path parameter.
+        sport_key: 247Sports sport key (1 = football, 2 = basketball).
         page_size: pageSize query parameter.
         return_parsed: parse the payload through parse_sports247_result_set -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -438,7 +438,7 @@ def sports247_target_predictions(
     Args:
         site_key: site_key path parameter.
         year: year path parameter.
-        sport_key: sport_key path parameter.
+        sport_key: 247Sports sport key (1 = football, 2 = basketball).
         page_size: pageSize query parameter.
         return_parsed: parse the payload through parse_sports247_result_set -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -479,7 +479,7 @@ def sports247_sport_years(
     Example URL: https://ipa.247sports.com/rdb/v1/sports/1/year/
 
     Args:
-        sport_key: sport_key path parameter.
+        sport_key: 247Sports sport key (1 = football, 2 = basketball).
         return_parsed: parse the payload through parse_sports247_result_set -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
@@ -563,7 +563,7 @@ def sports247_positions(
     Example URL: https://ipa.247sports.com/rdb/v1/positions/?sportKey=1
 
     Args:
-        sport_key: sportKey query parameter.
+        sport_key: 247Sports sport key (1 = football, 2 = basketball).
         year: year query parameter.
         ranking_key: rankingKey query parameter.
         return_parsed: parse the payload through parse_sports247_result_set -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.

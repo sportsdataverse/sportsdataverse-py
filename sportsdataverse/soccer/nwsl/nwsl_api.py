@@ -44,7 +44,7 @@ def nwsl_competitions(
     Example URL: https://api-sdp.nwslsoccer.com/v1/nwsl/football/competitions
 
     Args:
-        locale: locale query parameter.
+        locale: UI locale, always `en-US`.
         return_parsed: parse the payload through parse_nwsl_sdp -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -101,7 +101,7 @@ def nwsl_match_lineups(
     Args:
         season_id: season_id path parameter.
         match_id: match_id path parameter.
-        locale: locale query parameter.
+        locale: UI locale, always `en-US`.
         return_parsed: parse the payload through parse_nwsl_lineups -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -156,7 +156,7 @@ def nwsl_matchdays(
 
     Args:
         season_id: season_id path parameter.
-        locale: locale query parameter.
+        locale: UI locale, always `en-US`.
         return_parsed: parse the payload through parse_nwsl_sdp -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -216,12 +216,12 @@ def nwsl_player_stats(
 
     Args:
         season_id: season_id path parameter.
-        locale: locale query parameter.
-        category: category query parameter.
-        role: role query parameter.
-        direction: direction query parameter.
-        page: page query parameter.
-        page_num_element: pageNumElement query parameter.
+        locale: UI locale, always `en-US`.
+        category: Stat family: `general` (default), `attack`, `defence`, etc.
+        role: Position filter, e.g. `all`.
+        direction: `asc` or `desc`.
+        page: 1-based page number.
+        page_num_element: Page size (e.g. 400).
         return_parsed: parse the payload through parse_nwsl_stats -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -282,10 +282,10 @@ def nwsl_season_matches(
     Example URL: https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/multipleSeasonMatches
 
     Args:
-        season_ids: seasonIds query parameter.
-        locale: locale query parameter.
-        start_date: startDate query parameter.
-        end_date: endDate query parameter.
+        season_ids: Comma-separated composite Season ids.
+        locale: UI locale, always `en-US`.
+        start_date: Window start, `MM/DD/YYYY` (US format).
+        end_date: Window end, `MM/DD/YYYY` (US format).
         return_parsed: parse the payload through parse_nwsl_sdp -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -343,7 +343,7 @@ def nwsl_stages(
 
     Args:
         season_id: season_id path parameter.
-        locale: locale query parameter.
+        locale: UI locale, always `en-US`.
         return_parsed: parse the payload through parse_nwsl_sdp -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -400,9 +400,9 @@ def nwsl_standings(
 
     Args:
         season_id: season_id path parameter.
-        locale: locale query parameter.
-        order_by: orderBy query parameter.
-        direction: direction query parameter.
+        locale: UI locale, always `en-US`.
+        order_by: Sort field, e.g. `rank`.
+        direction: `asc` or `desc`.
         return_parsed: parse the payload through parse_nwsl_standings -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -460,8 +460,8 @@ def nwsl_team_stats(
 
     Args:
         season_id: season_id path parameter.
-        locale: locale query parameter.
-        category: category query parameter.
+        locale: UI locale, always `en-US`.
+        category: Stat family: `general` (default), `attack`, `defence`, etc.
         return_parsed: parse the payload through parse_nwsl_stats -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -517,7 +517,7 @@ def nwsl_teams(
 
     Args:
         season_id: season_id path parameter.
-        locale: locale query parameter.
+        locale: UI locale, always `en-US`.
         return_parsed: parse the payload through parse_nwsl_sdp -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.

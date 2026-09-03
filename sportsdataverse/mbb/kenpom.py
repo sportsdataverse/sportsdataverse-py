@@ -61,7 +61,7 @@ def kenpom_ratings(
     Example URL: https://kenpom.com/index.php?y=2025
 
     Args:
-        year: y query parameter.
+        year: Season as a 4-digit ENDING year (2025 = the 2024-25 season). Data begins at 2002.
         headers: optional pre-built request headers to reuse across calls; the authenticated kenpom.com session is resolved and cached when omitted.
         return_parsed: parse the payload through parse_kenpom_page -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw page HTML (``str``).
         return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
@@ -117,7 +117,7 @@ def kenpom_efficiency(
     Example URL: https://kenpom.com/summary.php?y=2025
 
     Args:
-        year: y query parameter.
+        year: Season as a 4-digit ENDING year. Columns are narrower before 2010.
         headers: optional pre-built request headers to reuse across calls; the authenticated kenpom.com session is resolved and cached when omitted.
         return_parsed: parse the payload through parse_kenpom_page -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw page HTML (``str``).
         return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
@@ -173,7 +173,7 @@ def kenpom_four_factors(
     Example URL: https://kenpom.com/stats.php?y=2025
 
     Args:
-        year: y query parameter.
+        year: Season as a 4-digit ENDING year.
         headers: optional pre-built request headers to reuse across calls; the authenticated kenpom.com session is resolved and cached when omitted.
         return_parsed: parse the payload through parse_kenpom_page -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw page HTML (``str``).
         return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
@@ -229,7 +229,7 @@ def kenpom_point_distribution(
     Example URL: https://kenpom.com/pointdist.php?y=2025
 
     Args:
-        year: y query parameter.
+        year: Season as a 4-digit ENDING year.
         headers: optional pre-built request headers to reuse across calls; the authenticated kenpom.com session is resolved and cached when omitted.
         return_parsed: parse the payload through parse_kenpom_page -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw page HTML (``str``).
         return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
@@ -285,7 +285,7 @@ def kenpom_height(
     Example URL: https://kenpom.com/height.php?y=2025
 
     Args:
-        year: y query parameter.
+        year: Season as a 4-digit ENDING year. Columns are narrower before 2008.
         headers: optional pre-built request headers to reuse across calls; the authenticated kenpom.com session is resolved and cached when omitted.
         return_parsed: parse the payload through parse_kenpom_page -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw page HTML (``str``).
         return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
@@ -341,7 +341,7 @@ def kenpom_foul_trouble(
     Example URL: https://kenpom.com/foul_trouble.php?y=2025
 
     Args:
-        year: y query parameter.
+        year: Season as a 4-digit ENDING year.
         headers: optional pre-built request headers to reuse across calls; the authenticated kenpom.com session is resolved and cached when omitted.
         return_parsed: parse the payload through parse_kenpom_page -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw page HTML (``str``).
         return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
@@ -398,8 +398,8 @@ def kenpom_team_stats(
     Example URL: https://kenpom.com/teamstats.php?y=2025&od=o
 
     Args:
-        year: y query parameter.
-        side: od query parameter.
+        year: Season as a 4-digit ENDING year.
+        side: Side of the ball: 'o' (offense, hoopR's default) or 'd' (defense).
         headers: optional pre-built request headers to reuse across calls; the authenticated kenpom.com session is resolved and cached when omitted.
         return_parsed: parse the payload through parse_kenpom_page -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw page HTML (``str``).
         return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
@@ -459,10 +459,10 @@ def kenpom_player_stats(
     Example URL: https://kenpom.com/playerstats.php?y=2025&s=eFG
 
     Args:
-        year: y query parameter.
-        metric: s query parameter.
-        conf: f query parameter.
-        conf_only: c query parameter.
+        year: Season as a 4-digit ENDING year. Data begins at 2004.
+        metric: Metric slug as KenPom spells it on the wire - one of ORtg, PctMin, eFG, PctPoss, PctShots, ORPct, DRPct, TORate, ARate, PctBlocks, FTRate, PctStls, TS, FCper40, FDper40, FG2Pct, FG3Pct, FTPct. (hoopR's kp_playerstats() takes the display labels - ORtg, Min, eFG, Poss, Shots, OR, DR, TO, ARate, Blk, FTRate, Stl, TS, FC40, FD40, 2P, 3P, FT - and maps them to these.)
+        conf: Conference filter (KenPom abbreviation, e.g. 'ACC', 'B10'); omit for all of Division I.
+        conf_only: Conference-games-only toggle: 'c' restricts the leaderboard to conference play.
         headers: optional pre-built request headers to reuse across calls; the authenticated kenpom.com session is resolved and cached when omitted.
         return_parsed: parse the payload through parse_kenpom_page -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw page HTML (``str``).
         return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
@@ -521,7 +521,7 @@ def kenpom_kpoy(
     Example URL: https://kenpom.com/kpoy.php?y=2025
 
     Args:
-        year: y query parameter.
+        year: Season as a 4-digit ENDING year.
         headers: optional pre-built request headers to reuse across calls; the authenticated kenpom.com session is resolved and cached when omitted.
         return_parsed: parse the payload through parse_kenpom_page -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw page HTML (``str``).
         return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
@@ -578,8 +578,8 @@ def kenpom_team(
     Example URL: https://kenpom.com/team.php?team=Duke&y=2025
 
     Args:
-        team: team query parameter.
-        year: y query parameter.
+        team: KenPom team name, spelled as the site does (e.g. 'Duke', 'Michigan St.').
+        year: Season as a 4-digit ENDING year. Lineup tables begin at 2011.
         headers: optional pre-built request headers to reuse across calls; the authenticated kenpom.com session is resolved and cached when omitted.
         return_parsed: parse the payload through parse_kenpom_page -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw page HTML (``str``).
         return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
@@ -637,8 +637,8 @@ def kenpom_team_players_expanded(
     Example URL: https://kenpom.com/player-expanded.php?team=Duke&y=2025
 
     Args:
-        team: team query parameter.
-        year: y query parameter.
+        team: KenPom team name, spelled as the site does.
+        year: Season as a 4-digit ENDING year. Starts ('S') are available from 2014.
         headers: optional pre-built request headers to reuse across calls; the authenticated kenpom.com session is resolved and cached when omitted.
         return_parsed: parse the payload through parse_kenpom_page -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw page HTML (``str``).
         return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
@@ -696,8 +696,8 @@ def kenpom_game_plan(
     Example URL: https://kenpom.com/gameplan.php?team=Duke&y=2025
 
     Args:
-        team: team query parameter.
-        year: y query parameter.
+        team: KenPom team name, spelled as the site does.
+        year: Season as a 4-digit ENDING year.
         headers: optional pre-built request headers to reuse across calls; the authenticated kenpom.com session is resolved and cached when omitted.
         return_parsed: parse the payload through parse_kenpom_page -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw page HTML (``str``).
         return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
@@ -756,9 +756,9 @@ def kenpom_opponent_tracker(
     Example URL: https://kenpom.com/opptracker.php?team=Duke&y=2025&t=o
 
     Args:
-        team: team query parameter.
-        year: y query parameter.
-        side: t query parameter.
+        team: KenPom team name, spelled as the site does.
+        year: Season as a 4-digit ENDING year. Columns are narrower before 2010.
+        side: Side of the ball: 'o' (offense) or 'd' (defense).
         headers: optional pre-built request headers to reuse across calls; the authenticated kenpom.com session is resolved and cached when omitted.
         return_parsed: parse the payload through parse_kenpom_page -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw page HTML (``str``).
         return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
@@ -816,7 +816,7 @@ def kenpom_player_career(
     Example URL: https://kenpom.com/player.php?p=51234
 
     Args:
-        player_id: p query parameter.
+        player_id: KenPom player id - the `p=` value on a player-page URL.
         headers: optional pre-built request headers to reuse across calls; the authenticated kenpom.com session is resolved and cached when omitted.
         return_parsed: parse the payload through parse_kenpom_page -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw page HTML (``str``).
         return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
@@ -873,8 +873,8 @@ def kenpom_box(
     Example URL: https://kenpom.com/box.php?g=20250401&y=2025
 
     Args:
-        game_id: g query parameter.
-        year: y query parameter.
+        game_id: KenPom game id - the `g=` value on a FanMatch game link.
+        year: Season (4-digit ENDING year) the game belongs to.
         headers: optional pre-built request headers to reuse across calls; the authenticated kenpom.com session is resolved and cached when omitted.
         return_parsed: parse the payload through parse_kenpom_page -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw page HTML (``str``).
         return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
@@ -932,8 +932,8 @@ def kenpom_win_probability(
     Example URL: https://kenpom.com/winprob.php?g=20250401&y=2025
 
     Args:
-        game_id: g query parameter.
-        year: y query parameter.
+        game_id: KenPom game id.
+        year: Season (4-digit ENDING year) the game belongs to.
         headers: optional pre-built request headers to reuse across calls; the authenticated kenpom.com session is resolved and cached when omitted.
         return_parsed: parse the payload through parse_kenpom_page -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw page HTML (``str``).
         return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
@@ -990,7 +990,7 @@ def kenpom_fan_match(
     Example URL: https://kenpom.com/fanmatch.php?d=2025-02-01
 
     Args:
-        date: d query parameter.
+        date: Slate date as YYYY-MM-DD.
         headers: optional pre-built request headers to reuse across calls; the authenticated kenpom.com session is resolved and cached when omitted.
         return_parsed: parse the payload through parse_kenpom_page -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw page HTML (``str``).
         return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
@@ -1046,7 +1046,7 @@ def kenpom_team_history(
     Example URL: https://kenpom.com/history.php?t=Duke
 
     Args:
-        team: t query parameter.
+        team: KenPom team name, spelled as the site does.
         headers: optional pre-built request headers to reuse across calls; the authenticated kenpom.com session is resolved and cached when omitted.
         return_parsed: parse the payload through parse_kenpom_page -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw page HTML (``str``).
         return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
@@ -1102,7 +1102,7 @@ def kenpom_coach_history(
     Example URL: https://kenpom.com/history.php?c=Jon+Scheyer
 
     Args:
-        coach: c query parameter.
+        coach: Coach name as KenPom spells it (e.g. 'Jon Scheyer').
         headers: optional pre-built request headers to reuse across calls; the authenticated kenpom.com session is resolved and cached when omitted.
         return_parsed: parse the payload through parse_kenpom_page -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw page HTML (``str``).
         return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
@@ -1210,7 +1210,7 @@ def kenpom_archive_ratings(
     Example URL: https://kenpom.com/archive.php?d=2025-02-01
 
     Args:
-        date: d query parameter.
+        date: Snapshot date as YYYY-MM-DD.
         headers: optional pre-built request headers to reuse across calls; the authenticated kenpom.com session is resolved and cached when omitted.
         return_parsed: parse the payload through parse_kenpom_page -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw page HTML (``str``).
         return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
@@ -1267,8 +1267,8 @@ def kenpom_conference(
     Example URL: https://kenpom.com/conf.php?c=ACC&y=2025
 
     Args:
-        conf: c query parameter.
-        year: y query parameter.
+        conf: KenPom conference abbreviation (e.g. 'ACC', 'B10', 'SEC').
+        year: Season as a 4-digit ENDING year.
         headers: optional pre-built request headers to reuse across calls; the authenticated kenpom.com session is resolved and cached when omitted.
         return_parsed: parse the payload through parse_kenpom_page -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw page HTML (``str``).
         return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
@@ -1325,7 +1325,7 @@ def kenpom_conference_stats(
     Example URL: https://kenpom.com/confstats.php?y=2025
 
     Args:
-        year: y query parameter.
+        year: Season as a 4-digit ENDING year.
         headers: optional pre-built request headers to reuse across calls; the authenticated kenpom.com session is resolved and cached when omitted.
         return_parsed: parse the payload through parse_kenpom_page -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw page HTML (``str``).
         return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
@@ -1381,7 +1381,7 @@ def kenpom_conference_history(
     Example URL: https://kenpom.com/confhistory.php?c=ACC
 
     Args:
-        conf: c query parameter.
+        conf: KenPom conference abbreviation.
         headers: optional pre-built request headers to reuse across calls; the authenticated kenpom.com session is resolved and cached when omitted.
         return_parsed: parse the payload through parse_kenpom_page -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw page HTML (``str``).
         return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
@@ -1541,7 +1541,7 @@ def kenpom_arenas(
     Example URL: https://kenpom.com/arenas.php?y=2025
 
     Args:
-        year: y query parameter.
+        year: Season as a 4-digit ENDING year.
         headers: optional pre-built request headers to reuse across calls; the authenticated kenpom.com session is resolved and cached when omitted.
         return_parsed: parse the payload through parse_kenpom_page -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw page HTML (``str``).
         return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
@@ -1597,7 +1597,7 @@ def kenpom_officials(
     Example URL: https://kenpom.com/officials.php?y=2025
 
     Args:
-        year: y query parameter.
+        year: Season as a 4-digit ENDING year.
         headers: optional pre-built request headers to reuse across calls; the authenticated kenpom.com session is resolved and cached when omitted.
         return_parsed: parse the payload through parse_kenpom_page -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw page HTML (``str``).
         return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
@@ -1654,8 +1654,8 @@ def kenpom_referee(
     Example URL: https://kenpom.com/referee.php?r=Ron+Groover&y=2025
 
     Args:
-        referee: r query parameter.
-        year: y query parameter.
+        referee: Referee name as KenPom spells it (take it from the officials table).
+        year: Season as a 4-digit ENDING year.
         headers: optional pre-built request headers to reuse across calls; the authenticated kenpom.com session is resolved and cached when omitted.
         return_parsed: parse the payload through parse_kenpom_page -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw page HTML (``str``).
         return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
@@ -1713,8 +1713,8 @@ def kenpom_game_attributes(
     Example URL: https://kenpom.com/game_attrs.php?y=2025&s=ThrillScore
 
     Args:
-        year: y query parameter.
-        attribute: s query parameter.
+        year: Season as a 4-digit ENDING year.
+        attribute: Attribute slug, e.g. ThrillScore, Comeback, FanMatch, Upsets, Busts, MinutesPlayed, PossessionLength, LeadChanges.
         headers: optional pre-built request headers to reuse across calls; the authenticated kenpom.com session is resolved and cached when omitted.
         return_parsed: parse the payload through parse_kenpom_page -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw page HTML (``str``).
         return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.

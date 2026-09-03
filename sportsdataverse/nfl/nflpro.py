@@ -53,13 +53,13 @@ def nfl_pro_players_offense_passing_season(
     Example URL: https://pro.nfl.com/api/secured/stats/players-offense/passing/season?season=2024&seasonType=REG
 
     Args:
-        season: season query parameter.
-        season_type: seasonType query parameter.
-        limit: limit query parameter.
-        offset: offset query parameter.
-        sort_key: sortKey query parameter.
-        sort_value: sortValue query parameter.
-        qualified: qualifiedPasser query parameter.
+        season: Season, as the STARTING year (2024 = the 2024-25 NFL season).
+        season_type: Season type code (string): PRE, REG, or POST -- not ESPN's numeric 1/2/3.
+        limit: Page size. Responses truncate silently at this many rows; the getter pages on ``offset`` until it has them all.
+        offset: Zero-based row offset. The getter pages on this automatically; set it only to fetch a specific slice.
+        sort_key: Field name to sort by, e.g. ``epa``.
+        sort_value: Sort direction: ``ASC`` or ``DESC``.
+        qualified: Restrict to players meeting the league qualifying threshold.
         headers: optional pre-minted auth headers dict from ``nflpro_headers_gen()`` to reuse across calls (obtaining a token costs a browser login). A token is resolved when omitted; note an anonymous/client-credentials token is NOT usable here -- every ``/api/secured/*`` route 401s without an active NFL+ plan.
         return_parsed: parse the payload through parse_nfl_pro_stats -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -121,14 +121,14 @@ def nfl_pro_players_offense_passing_week(
     Example URL: https://pro.nfl.com/api/secured/stats/players-offense/passing/week?season=2024&seasonType=REG
 
     Args:
-        season: season query parameter.
-        season_type: seasonType query parameter.
-        limit: limit query parameter.
-        offset: offset query parameter.
-        sort_key: sortKey query parameter.
-        sort_value: sortValue query parameter.
-        qualified: qualifiedPasser query parameter.
-        nfl_id: nflId query parameter.
+        season: Season, as the STARTING year (2024 = the 2024-25 NFL season).
+        season_type: Season type code (string): PRE, REG, or POST -- not ESPN's numeric 1/2/3.
+        limit: Page size. Responses truncate silently at this many rows; the getter pages on ``offset`` until it has them all.
+        offset: Zero-based row offset. The getter pages on this automatically; set it only to fetch a specific slice.
+        sort_key: Field name to sort by, e.g. ``epa``.
+        sort_value: Sort direction: ``ASC`` or ``DESC``.
+        qualified: Restrict to players meeting the league qualifying threshold.
+        nfl_id: Optional player filter; omit for the whole league-week table. Note ``week`` is a path scope here, not a query param.
         headers: optional pre-minted auth headers dict from ``nflpro_headers_gen()`` to reuse across calls (obtaining a token costs a browser login). A token is resolved when omitted; note an anonymous/client-credentials token is NOT usable here -- every ``/api/secured/*`` route 401s without an active NFL+ plan.
         return_parsed: parse the payload through parse_nfl_pro_stats -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -190,13 +190,13 @@ def nfl_pro_players_offense_rushing_season(
     Example URL: https://pro.nfl.com/api/secured/stats/players-offense/rushing/season?season=2024&seasonType=REG
 
     Args:
-        season: season query parameter.
-        season_type: seasonType query parameter.
-        limit: limit query parameter.
-        offset: offset query parameter.
-        sort_key: sortKey query parameter.
-        sort_value: sortValue query parameter.
-        qualified: qualifiedRusher query parameter.
+        season: Season, as the STARTING year (2024 = the 2024-25 NFL season).
+        season_type: Season type code (string): PRE, REG, or POST -- not ESPN's numeric 1/2/3.
+        limit: Page size. Responses truncate silently at this many rows; the getter pages on ``offset`` until it has them all.
+        offset: Zero-based row offset. The getter pages on this automatically; set it only to fetch a specific slice.
+        sort_key: Field name to sort by, e.g. ``epa``.
+        sort_value: Sort direction: ``ASC`` or ``DESC``.
+        qualified: Restrict to players meeting the league qualifying threshold.
         headers: optional pre-minted auth headers dict from ``nflpro_headers_gen()`` to reuse across calls (obtaining a token costs a browser login). A token is resolved when omitted; note an anonymous/client-credentials token is NOT usable here -- every ``/api/secured/*`` route 401s without an active NFL+ plan.
         return_parsed: parse the payload through parse_nfl_pro_stats -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -258,14 +258,14 @@ def nfl_pro_players_offense_rushing_week(
     Example URL: https://pro.nfl.com/api/secured/stats/players-offense/rushing/week?season=2024&seasonType=REG
 
     Args:
-        season: season query parameter.
-        season_type: seasonType query parameter.
-        limit: limit query parameter.
-        offset: offset query parameter.
-        sort_key: sortKey query parameter.
-        sort_value: sortValue query parameter.
-        qualified: qualifiedRusher query parameter.
-        nfl_id: nflId query parameter.
+        season: Season, as the STARTING year (2024 = the 2024-25 NFL season).
+        season_type: Season type code (string): PRE, REG, or POST -- not ESPN's numeric 1/2/3.
+        limit: Page size. Responses truncate silently at this many rows; the getter pages on ``offset`` until it has them all.
+        offset: Zero-based row offset. The getter pages on this automatically; set it only to fetch a specific slice.
+        sort_key: Field name to sort by, e.g. ``epa``.
+        sort_value: Sort direction: ``ASC`` or ``DESC``.
+        qualified: Restrict to players meeting the league qualifying threshold.
+        nfl_id: Optional player filter; omit for the whole league-week table. Note ``week`` is a path scope here, not a query param.
         headers: optional pre-minted auth headers dict from ``nflpro_headers_gen()`` to reuse across calls (obtaining a token costs a browser login). A token is resolved when omitted; note an anonymous/client-credentials token is NOT usable here -- every ``/api/secured/*`` route 401s without an active NFL+ plan.
         return_parsed: parse the payload through parse_nfl_pro_stats -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -327,13 +327,13 @@ def nfl_pro_players_offense_receiving_season(
     Example URL: https://pro.nfl.com/api/secured/stats/players-offense/receiving/season?season=2024&seasonType=REG
 
     Args:
-        season: season query parameter.
-        season_type: seasonType query parameter.
-        limit: limit query parameter.
-        offset: offset query parameter.
-        sort_key: sortKey query parameter.
-        sort_value: sortValue query parameter.
-        qualified: qualifiedReceiver query parameter.
+        season: Season, as the STARTING year (2024 = the 2024-25 NFL season).
+        season_type: Season type code (string): PRE, REG, or POST -- not ESPN's numeric 1/2/3.
+        limit: Page size. Responses truncate silently at this many rows; the getter pages on ``offset`` until it has them all.
+        offset: Zero-based row offset. The getter pages on this automatically; set it only to fetch a specific slice.
+        sort_key: Field name to sort by, e.g. ``epa``.
+        sort_value: Sort direction: ``ASC`` or ``DESC``.
+        qualified: Restrict to players meeting the league qualifying threshold.
         headers: optional pre-minted auth headers dict from ``nflpro_headers_gen()`` to reuse across calls (obtaining a token costs a browser login). A token is resolved when omitted; note an anonymous/client-credentials token is NOT usable here -- every ``/api/secured/*`` route 401s without an active NFL+ plan.
         return_parsed: parse the payload through parse_nfl_pro_stats -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -395,14 +395,14 @@ def nfl_pro_players_offense_receiving_week(
     Example URL: https://pro.nfl.com/api/secured/stats/players-offense/receiving/week?season=2024&seasonType=REG
 
     Args:
-        season: season query parameter.
-        season_type: seasonType query parameter.
-        limit: limit query parameter.
-        offset: offset query parameter.
-        sort_key: sortKey query parameter.
-        sort_value: sortValue query parameter.
-        qualified: qualifiedReceiver query parameter.
-        nfl_id: nflId query parameter.
+        season: Season, as the STARTING year (2024 = the 2024-25 NFL season).
+        season_type: Season type code (string): PRE, REG, or POST -- not ESPN's numeric 1/2/3.
+        limit: Page size. Responses truncate silently at this many rows; the getter pages on ``offset`` until it has them all.
+        offset: Zero-based row offset. The getter pages on this automatically; set it only to fetch a specific slice.
+        sort_key: Field name to sort by, e.g. ``epa``.
+        sort_value: Sort direction: ``ASC`` or ``DESC``.
+        qualified: Restrict to players meeting the league qualifying threshold.
+        nfl_id: Optional player filter; omit for the whole league-week table. Note ``week`` is a path scope here, not a query param.
         headers: optional pre-minted auth headers dict from ``nflpro_headers_gen()`` to reuse across calls (obtaining a token costs a browser login). A token is resolved when omitted; note an anonymous/client-credentials token is NOT usable here -- every ``/api/secured/*`` route 401s without an active NFL+ plan.
         return_parsed: parse the payload through parse_nfl_pro_stats -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -464,13 +464,13 @@ def nfl_pro_defense_overview_season(
     Example URL: https://pro.nfl.com/api/secured/stats/defense/overview/season?season=2024&seasonType=REG
 
     Args:
-        season: season query parameter.
-        season_type: seasonType query parameter.
-        limit: limit query parameter.
-        offset: offset query parameter.
-        sort_key: sortKey query parameter.
-        sort_value: sortValue query parameter.
-        qualified: qualifiedDefender query parameter.
+        season: Season, as the STARTING year (2024 = the 2024-25 NFL season).
+        season_type: Season type code (string): PRE, REG, or POST -- not ESPN's numeric 1/2/3.
+        limit: Page size. Responses truncate silently at this many rows; the getter pages on ``offset`` until it has them all.
+        offset: Zero-based row offset. The getter pages on this automatically; set it only to fetch a specific slice.
+        sort_key: Field name to sort by, e.g. ``epa``.
+        sort_value: Sort direction: ``ASC`` or ``DESC``.
+        qualified: Restrict to players meeting the league qualifying threshold.
         headers: optional pre-minted auth headers dict from ``nflpro_headers_gen()`` to reuse across calls (obtaining a token costs a browser login). A token is resolved when omitted; note an anonymous/client-credentials token is NOT usable here -- every ``/api/secured/*`` route 401s without an active NFL+ plan.
         return_parsed: parse the payload through parse_nfl_pro_stats -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -532,14 +532,14 @@ def nfl_pro_defense_overview_week(
     Example URL: https://pro.nfl.com/api/secured/stats/defense/overview/week?season=2024&seasonType=REG
 
     Args:
-        season: season query parameter.
-        season_type: seasonType query parameter.
-        limit: limit query parameter.
-        offset: offset query parameter.
-        sort_key: sortKey query parameter.
-        sort_value: sortValue query parameter.
-        qualified: qualifiedDefender query parameter.
-        nfl_id: nflId query parameter.
+        season: Season, as the STARTING year (2024 = the 2024-25 NFL season).
+        season_type: Season type code (string): PRE, REG, or POST -- not ESPN's numeric 1/2/3.
+        limit: Page size. Responses truncate silently at this many rows; the getter pages on ``offset`` until it has them all.
+        offset: Zero-based row offset. The getter pages on this automatically; set it only to fetch a specific slice.
+        sort_key: Field name to sort by, e.g. ``epa``.
+        sort_value: Sort direction: ``ASC`` or ``DESC``.
+        qualified: Restrict to players meeting the league qualifying threshold.
+        nfl_id: Optional player filter; omit for the whole league-week table. Note ``week`` is a path scope here, not a query param.
         headers: optional pre-minted auth headers dict from ``nflpro_headers_gen()`` to reuse across calls (obtaining a token costs a browser login). A token is resolved when omitted; note an anonymous/client-credentials token is NOT usable here -- every ``/api/secured/*`` route 401s without an active NFL+ plan.
         return_parsed: parse the payload through parse_nfl_pro_stats -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -601,13 +601,13 @@ def nfl_pro_defense_nearest_season(
     Example URL: https://pro.nfl.com/api/secured/stats/defense/nearest/season?season=2024&seasonType=REG
 
     Args:
-        season: season query parameter.
-        season_type: seasonType query parameter.
-        limit: limit query parameter.
-        offset: offset query parameter.
-        sort_key: sortKey query parameter.
-        sort_value: sortValue query parameter.
-        qualified: qualifiedDefender query parameter.
+        season: Season, as the STARTING year (2024 = the 2024-25 NFL season).
+        season_type: Season type code (string): PRE, REG, or POST -- not ESPN's numeric 1/2/3.
+        limit: Page size. Responses truncate silently at this many rows; the getter pages on ``offset`` until it has them all.
+        offset: Zero-based row offset. The getter pages on this automatically; set it only to fetch a specific slice.
+        sort_key: Field name to sort by, e.g. ``epa``.
+        sort_value: Sort direction: ``ASC`` or ``DESC``.
+        qualified: Restrict to players meeting the league qualifying threshold.
         headers: optional pre-minted auth headers dict from ``nflpro_headers_gen()`` to reuse across calls (obtaining a token costs a browser login). A token is resolved when omitted; note an anonymous/client-credentials token is NOT usable here -- every ``/api/secured/*`` route 401s without an active NFL+ plan.
         return_parsed: parse the payload through parse_nfl_pro_stats -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -669,14 +669,14 @@ def nfl_pro_defense_nearest_week(
     Example URL: https://pro.nfl.com/api/secured/stats/defense/nearest/week?season=2024&seasonType=REG
 
     Args:
-        season: season query parameter.
-        season_type: seasonType query parameter.
-        limit: limit query parameter.
-        offset: offset query parameter.
-        sort_key: sortKey query parameter.
-        sort_value: sortValue query parameter.
-        qualified: qualifiedDefender query parameter.
-        nfl_id: nflId query parameter.
+        season: Season, as the STARTING year (2024 = the 2024-25 NFL season).
+        season_type: Season type code (string): PRE, REG, or POST -- not ESPN's numeric 1/2/3.
+        limit: Page size. Responses truncate silently at this many rows; the getter pages on ``offset`` until it has them all.
+        offset: Zero-based row offset. The getter pages on this automatically; set it only to fetch a specific slice.
+        sort_key: Field name to sort by, e.g. ``epa``.
+        sort_value: Sort direction: ``ASC`` or ``DESC``.
+        qualified: Restrict to players meeting the league qualifying threshold.
+        nfl_id: Optional player filter; omit for the whole league-week table. Note ``week`` is a path scope here, not a query param.
         headers: optional pre-minted auth headers dict from ``nflpro_headers_gen()`` to reuse across calls (obtaining a token costs a browser login). A token is resolved when omitted; note an anonymous/client-credentials token is NOT usable here -- every ``/api/secured/*`` route 401s without an active NFL+ plan.
         return_parsed: parse the payload through parse_nfl_pro_stats -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -737,12 +737,12 @@ def nfl_pro_team_offense_overview_season(
     Example URL: https://pro.nfl.com/api/secured/stats/team-offense/overview/season?season=2024&seasonType=REG
 
     Args:
-        season: season query parameter.
-        season_type: seasonType query parameter.
-        limit: limit query parameter.
-        offset: offset query parameter.
-        sort_key: sortKey query parameter.
-        sort_value: sortValue query parameter.
+        season: Season, as the STARTING year (2024 = the 2024-25 NFL season).
+        season_type: Season type code (string): PRE, REG, or POST -- not ESPN's numeric 1/2/3.
+        limit: Page size. Responses truncate silently at this many rows; the getter pages on ``offset`` until it has them all.
+        offset: Zero-based row offset. The getter pages on this automatically; set it only to fetch a specific slice.
+        sort_key: Field name to sort by, e.g. ``epa``.
+        sort_value: Sort direction: ``ASC`` or ``DESC``.
         headers: optional pre-minted auth headers dict from ``nflpro_headers_gen()`` to reuse across calls (obtaining a token costs a browser login). A token is resolved when omitted; note an anonymous/client-credentials token is NOT usable here -- every ``/api/secured/*`` route 401s without an active NFL+ plan.
         return_parsed: parse the payload through parse_nfl_pro_stats -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -801,12 +801,12 @@ def nfl_pro_team_offense_overview_week(
     Example URL: https://pro.nfl.com/api/secured/stats/team-offense/overview/week?season=2024&seasonType=REG
 
     Args:
-        season: season query parameter.
-        season_type: seasonType query parameter.
-        limit: limit query parameter.
-        offset: offset query parameter.
-        sort_key: sortKey query parameter.
-        sort_value: sortValue query parameter.
+        season: Season, as the STARTING year (2024 = the 2024-25 NFL season).
+        season_type: Season type code (string): PRE, REG, or POST -- not ESPN's numeric 1/2/3.
+        limit: Page size. Responses truncate silently at this many rows; the getter pages on ``offset`` until it has them all.
+        offset: Zero-based row offset. The getter pages on this automatically; set it only to fetch a specific slice.
+        sort_key: Field name to sort by, e.g. ``epa``.
+        sort_value: Sort direction: ``ASC`` or ``DESC``.
         headers: optional pre-minted auth headers dict from ``nflpro_headers_gen()`` to reuse across calls (obtaining a token costs a browser login). A token is resolved when omitted; note an anonymous/client-credentials token is NOT usable here -- every ``/api/secured/*`` route 401s without an active NFL+ plan.
         return_parsed: parse the payload through parse_nfl_pro_stats -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -865,12 +865,12 @@ def nfl_pro_team_defense_overview_season(
     Example URL: https://pro.nfl.com/api/secured/stats/team-defense/overview/season?season=2024&seasonType=REG
 
     Args:
-        season: season query parameter.
-        season_type: seasonType query parameter.
-        limit: limit query parameter.
-        offset: offset query parameter.
-        sort_key: sortKey query parameter.
-        sort_value: sortValue query parameter.
+        season: Season, as the STARTING year (2024 = the 2024-25 NFL season).
+        season_type: Season type code (string): PRE, REG, or POST -- not ESPN's numeric 1/2/3.
+        limit: Page size. Responses truncate silently at this many rows; the getter pages on ``offset`` until it has them all.
+        offset: Zero-based row offset. The getter pages on this automatically; set it only to fetch a specific slice.
+        sort_key: Field name to sort by, e.g. ``epa``.
+        sort_value: Sort direction: ``ASC`` or ``DESC``.
         headers: optional pre-minted auth headers dict from ``nflpro_headers_gen()`` to reuse across calls (obtaining a token costs a browser login). A token is resolved when omitted; note an anonymous/client-credentials token is NOT usable here -- every ``/api/secured/*`` route 401s without an active NFL+ plan.
         return_parsed: parse the payload through parse_nfl_pro_stats -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -929,12 +929,12 @@ def nfl_pro_team_defense_overview_week(
     Example URL: https://pro.nfl.com/api/secured/stats/team-defense/overview/week?season=2024&seasonType=REG
 
     Args:
-        season: season query parameter.
-        season_type: seasonType query parameter.
-        limit: limit query parameter.
-        offset: offset query parameter.
-        sort_key: sortKey query parameter.
-        sort_value: sortValue query parameter.
+        season: Season, as the STARTING year (2024 = the 2024-25 NFL season).
+        season_type: Season type code (string): PRE, REG, or POST -- not ESPN's numeric 1/2/3.
+        limit: Page size. Responses truncate silently at this many rows; the getter pages on ``offset`` until it has them all.
+        offset: Zero-based row offset. The getter pages on this automatically; set it only to fetch a specific slice.
+        sort_key: Field name to sort by, e.g. ``epa``.
+        sort_value: Sort direction: ``ASC`` or ``DESC``.
         headers: optional pre-minted auth headers dict from ``nflpro_headers_gen()`` to reuse across calls (obtaining a token costs a browser login). A token is resolved when omitted; note an anonymous/client-credentials token is NOT usable here -- every ``/api/secured/*`` route 401s without an active NFL+ plan.
         return_parsed: parse the payload through parse_nfl_pro_stats -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -995,14 +995,14 @@ def nfl_pro_fantasy_season(
     Example URL: https://pro.nfl.com/api/secured/stats/fantasy/season?season=2024&seasonType=REG
 
     Args:
-        season: season query parameter.
-        season_type: seasonType query parameter.
-        limit: limit query parameter.
-        offset: offset query parameter.
-        nfl_id: nflId query parameter.
-        position_group: positionGroup query parameter.
-        sort_key: sortKey query parameter.
-        sort_value: sortValue query parameter.
+        season: Season, as the STARTING year (2024 = the 2024-25 NFL season).
+        season_type: Season type code (string): PRE, REG, or POST -- not ESPN's numeric 1/2/3.
+        limit: Page size. Responses truncate silently at this many rows; the getter pages on ``offset`` until it has them all.
+        offset: Zero-based row offset. The getter pages on this automatically; set it only to fetch a specific slice.
+        nfl_id: Optional player filter.
+        position_group: Optional position-group filter, e.g. ``QB``. Optional on this season scope — it is the ``game`` scope that requires it.
+        sort_key: Field name to sort by, e.g. ``fpHalfPPR``.
+        sort_value: Sort direction: ``ASC`` or ``DESC``.
         headers: optional pre-minted auth headers dict from ``nflpro_headers_gen()`` to reuse across calls (obtaining a token costs a browser login). A token is resolved when omitted; note an anonymous/client-credentials token is NOT usable here -- every ``/api/secured/*`` route 401s without an active NFL+ plan.
         return_parsed: parse the payload through parse_nfl_pro_stats -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -1065,14 +1065,14 @@ def nfl_pro_fantasy_game(
     Example URL: https://pro.nfl.com/api/secured/stats/fantasy/game?season=2024&seasonType=REG&positionGroup=QB
 
     Args:
-        season: season query parameter.
-        season_type: seasonType query parameter.
-        limit: limit query parameter.
-        offset: offset query parameter.
-        nfl_id: nflId query parameter.
-        position_group: positionGroup query parameter.
-        sort_key: sortKey query parameter.
-        sort_value: sortValue query parameter.
+        season: Season, as the STARTING year (2024 = the 2024-25 NFL season).
+        season_type: Season type code (string): PRE, REG, or POST -- not ESPN's numeric 1/2/3.
+        limit: Page size. Responses truncate silently at this many rows; the getter pages on ``offset`` until it has them all.
+        offset: Zero-based row offset. The getter pages on this automatically; set it only to fetch a specific slice.
+        nfl_id: Optional player filter.
+        position_group: Position group, e.g. ``QB``. **Required**: this scope returns HTTP 500 without it, so it is a required argument rather than an optional filter.
+        sort_key: Field name to sort by, e.g. ``fpHalfPPR``.
+        sort_value: Sort direction: ``ASC`` or ``DESC``.
         headers: optional pre-minted auth headers dict from ``nflpro_headers_gen()`` to reuse across calls (obtaining a token costs a browser login). A token is resolved when omitted; note an anonymous/client-credentials token is NOT usable here -- every ``/api/secured/*`` route 401s without an active NFL+ plan.
         return_parsed: parse the payload through parse_nfl_pro_stats -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.

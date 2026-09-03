@@ -111,11 +111,17 @@ def _build_docstring(
     if example_url:
         lines.append(f"Example URL: {example_url}")
     lines.append("")
+
+    def _arg_doc(p: spec.Param, generic: str) -> str:
+        # Collapse any embedded newline -- a raw one would land as an unindented
+        # continuation line and corrupt the docstring's Args block.
+        return (p.description or generic).replace("\n", " ").strip()
+
     lines.append("Args:")
     for p in ep.path_params:
-        lines.append(f"    {p.python_name}: {p.api} path parameter.")
+        lines.append(f"    {p.python_name}: {_arg_doc(p, f'{p.api} path parameter.')}")
     for p in ep.query_params:
-        lines.append(f"    {p.python_name}: {p.api} query parameter.")
+        lines.append(f"    {p.python_name}: {_arg_doc(p, f'{p.api} query parameter.')}")
     if auth:
         # Families differ in how their headers are minted and whether an
         # unauthenticated token is even usable, so the default text is only a

@@ -118,13 +118,13 @@ def cbs_bulk(
     Example URL: https://api.cbssports.com/napi/resource/bulk
 
     Args:
-        player_resource: PlayerResource query parameter.
-        team_resource: TeamResource query parameter.
-        game_resource: GameResource query parameter.
-        venue_resource: VenueResource query parameter.
-        event_resource: EventResource query parameter.
-        featured_game_resource: FeaturedGameResource query parameter.
-        golf_event_markets_resource: GolfEventMarketsResource query parameter.
+        player_resource: CSV list of player IDs to retrieve.
+        team_resource: CSV list of team IDs to retrieve.
+        game_resource: CSV list of game IDs to retrieve.
+        venue_resource: CSV list of venue IDs to retrieve
+        event_resource: CSV list of event IDs to retrieve
+        featured_game_resource: CSV list of game IDs to retrieve.
+        golf_event_markets_resource: CSV list of golf event markets IDs to retrieve
         return_parsed: parse the payload through parse_cbs_napi -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -186,11 +186,11 @@ def cbs_client_config(
     Example URL: https://api.cbssports.com/napi/resource/client/config/cbs
 
     Args:
-        client_name: client_name path parameter.
-        resources: resources query parameter.
-        league_id: leagueId query parameter.
-        classifier: classifier query parameter.
-        key_name: keyName query parameter.
+        client_name: Client name as it appears in the database
+        resources: Allowed: league, season.
+        league_id: View option.  Filter by leagueId.
+        classifier: View option.  Filter by a certain classifier.
+        key_name: View option.  Filter by a custom key name.
         return_parsed: parse the payload through parse_cbs_napi -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -245,7 +245,7 @@ def cbs_coach_rankings(
     Example URL: https://api.cbssports.com/napi/resource/coach/rankings
 
     Args:
-        coach_id: coach_id path parameter.
+        coach_id: Numerical player ID
         return_parsed: parse the payload through parse_cbs_napi -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -296,8 +296,8 @@ def cbs_coach_team_associations(
     Example URL: https://api.cbssports.com/napi/resource/coach/teamAssociations
 
     Args:
-        coach_id: coach_id path parameter.
-        resources: resources query parameter.
+        coach_id: Numerical player ID
+        resources: Specify specific sub-resources to resolve. Defaults to none. Allowed: team.
         return_parsed: parse the payload through parse_cbs_napi -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -351,9 +351,9 @@ def cbs_division_subdivisions(
     Example URL: https://api.cbssports.com/napi/resource/division/subdivisions
 
     Args:
-        division_id: division_id path parameter.
-        sub_division_id: subDivisionId query parameter.
-        name: name query parameter.
+        division_id: Numerical division ID
+        sub_division_id: View option for rendering only a certain subdivision
+        name: View option for a csv of subdivsion names to render
         return_parsed: parse the payload through parse_cbs_napi -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -456,9 +456,9 @@ def cbs_event(
     Example URL: https://api.cbssports.com/napi/resource/event
 
     Args:
-        event_id: event_id path parameter.
-        date_format: dateFormat query parameter.
-        resources: resources query parameter.
+        event_id: Numerical event ID
+        date_format: Optional.  Options here: http://momentjs.com/docs/#/displaying/format/
+        resources: Specify specific sub-resources to resolve.  Defaults to none. Allowed: entrants, venues, leaderboard, weather, markets.
         return_parsed: parse the payload through parse_cbs_napi -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -511,7 +511,7 @@ def cbs_event_entrants(
     Example URL: https://api.cbssports.com/napi/resource/event/entrants
 
     Args:
-        event_id: event_id path parameter.
+        event_id: Numerical event ID
         return_parsed: parse the payload through parse_cbs_napi -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -561,7 +561,7 @@ def cbs_event_leaderboard(
     Example URL: https://api.cbssports.com/napi/resource/event/leaderboard
 
     Args:
-        event_id: event_id path parameter.
+        event_id: Numerical event ID
         return_parsed: parse the payload through parse_cbs_napi -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -611,7 +611,7 @@ def cbs_event_seasons(
     Example URL: https://api.cbssports.com/napi/resource/event/seasons
 
     Args:
-        event_id: event_id path parameter.
+        event_id: Numerical event ID
         return_parsed: parse the payload through parse_cbs_napi -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -661,7 +661,7 @@ def cbs_event_venues(
     Example URL: https://api.cbssports.com/napi/resource/event/venues
 
     Args:
-        event_id: event_id path parameter.
+        event_id: Numerical event ID
         return_parsed: parse the payload through parse_cbs_napi -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -713,9 +713,9 @@ def cbs_game(
     Example URL: https://api.cbssports.com/napi/resource/game
 
     Args:
-        game_id: game_id path parameter.
-        date_format: dateFormat query parameter.
-        resources: resources query parameter.
+        game_id: Numerical game ID
+        date_format: Optional.  Options here: http://momentjs.com/docs/#/displaying/format/
+        resources: Specify specific sub-resources to resolve.  Defaults to none. Allowed: homeTeam, awayTeam, league, lineup, odds, players, standings, conference, division, probablePlayers, player, playerTeamAssociations, injuries, transactions, depthCharts, metaData, boxscore, venue, scoringLeaders, scoringPlayerStats, scoringScoreboard, scoringScores, scoringYtdPlayerStats, scoringYtdTeamStats, scoringRosters, scoringPlays, scoringTeamStats, scoringBoxscores, gameOdds, gameOutcomes, ticket, scoringDrives, scoringWinProb, gameHqOdds, weather, featured, gameProps, bettingSplits, gameRTWP.
         return_parsed: parse the payload through parse_cbs_napi -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -768,7 +768,7 @@ def cbs_game_betting_splits(
     Example URL: https://api.cbssports.com/napi/resource/game/bettingSplits
 
     Args:
-        game_id: game_id path parameter.
+        game_id: Numerical game ID
         return_parsed: parse the payload through parse_cbs_napi -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -818,7 +818,7 @@ def cbs_game_boxscore(
     Example URL: https://api.cbssports.com/napi/resource/game/boxscore
 
     Args:
-        game_id: game_id path parameter.
+        game_id: Numerical game ID
         return_parsed: parse the payload through parse_cbs_napi -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -868,7 +868,7 @@ def cbs_game_content_preview(
     Example URL: https://api.cbssports.com/napi/resource/game/content/preview
 
     Args:
-        game_id: game_id path parameter.
+        game_id: Numerical game ID
         return_parsed: parse the payload through parse_cbs_napi -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -918,7 +918,7 @@ def cbs_game_content_recap(
     Example URL: https://api.cbssports.com/napi/resource/game/content/recap
 
     Args:
-        game_id: game_id path parameter.
+        game_id: Numerical game ID
         return_parsed: parse the payload through parse_cbs_napi -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -969,8 +969,8 @@ def cbs_game_content_story(
     Example URL: https://api.cbssports.com/napi/resource/game/content/story
 
     Args:
-        game_id: game_id path parameter.
-        game_ids_story_tags: gameIdsStoryTags query parameter.
+        game_id: Numerical game ID
+        game_ids_story_tags: The tags used to retrieve stories
         return_parsed: parse the payload through parse_cbs_napi -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -1022,7 +1022,7 @@ def cbs_game_featured(
     Example URL: https://api.cbssports.com/napi/resource/game/featured
 
     Args:
-        game_id: game_id path parameter.
+        game_id: Numerical game ID
         return_parsed: parse the payload through parse_cbs_napi -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -1073,8 +1073,8 @@ def cbs_game_lineup(
     Example URL: https://api.cbssports.com/napi/resource/game/lineup
 
     Args:
-        game_id: game_id path parameter.
-        resources: resources query parameter.
+        game_id: Numerical game ID
+        resources: Specify specific sub-resources to resolve.  Defaults to none. Allowed: playerTeamAssociations, injuries, metaData, playerStats.
         return_parsed: parse the payload through parse_cbs_napi -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -1131,12 +1131,12 @@ def cbs_game_odds(
     Example URL: https://api.cbssports.com/napi/resource/game/odds
 
     Args:
-        game_id: game_id path parameter.
-        market_ids: marketIds query parameter.
-        book_ids: bookIds query parameter.
-        state: state query parameter.
-        model: model query parameter.
-        show_hidden_odds: showHiddenOdds query parameter.
+        game_id: Numerical game ID
+        market_ids: This value can be used to specify markets, using the marketIds.
+        book_ids: This value can be used to specify books, using the bookIds.
+        state: This value can be used to specify a state.
+        model: This value can be used set the model to be used
+        show_hidden_odds: If set to 1, show the odds that has been hidden within the market and/or consensus nodes
         return_parsed: parse the payload through parse_cbs_napi -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -1192,7 +1192,7 @@ def cbs_game_odds_hq(
     Example URL: https://api.cbssports.com/napi/resource/game/odds/hq
 
     Args:
-        game_id: game_id path parameter.
+        game_id: Numerical game ID
         return_parsed: parse the payload through parse_cbs_napi -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -1242,7 +1242,7 @@ def cbs_game_outcomes(
     Example URL: https://api.cbssports.com/napi/resource/game/outcomes
 
     Args:
-        game_id: game_id path parameter.
+        game_id: Numerical game ID
         return_parsed: parse the payload through parse_cbs_napi -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -1294,9 +1294,9 @@ def cbs_game_probable_players(
     Example URL: https://api.cbssports.com/napi/resource/game/probablePlayers
 
     Args:
-        game_id: game_id path parameter.
-        date_format: dateFormat query parameter.
-        resources: resources query parameter.
+        game_id: Numerical game ID
+        date_format: Optional.  Options here: http://momentjs.com/docs/#/displaying/format/
+        resources: Specify specific sub-resources to resolve.  Defaults to none. Allowed: player, playerTeamAssociations, injuries, transactions, depthCharts, metaData.
         return_parsed: parse the payload through parse_cbs_napi -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -1354,12 +1354,12 @@ def cbs_game_props(
     Example URL: https://api.cbssports.com/napi/resource/game/props
 
     Args:
-        game_id: game_id path parameter.
-        market_ids: marketIds query parameter.
-        book_ids: bookIds query parameter.
-        prop_bet_types: propBetTypes query parameter.
-        state: state query parameter.
-        include_inactive_markets: includeInactiveMarkets query parameter.
+        game_id: Numerical game ID
+        market_ids: This value can be used to specify markets, using the marketIds.
+        book_ids: This value can be used to specify books, using the bookIds.
+        prop_bet_types: This value can be used to specify prop bet types, using the propBetTypes. Allowed: player, game, team.
+        state: This value can be used to specify a state.
+        include_inactive_markets: This value can be used to filter out inactive markets.
         return_parsed: parse the payload through parse_cbs_napi -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -1415,7 +1415,7 @@ def cbs_game_rtwp(
     Example URL: https://api.cbssports.com/napi/resource/game/rtwp
 
     Args:
-        game_id: game_id path parameter.
+        game_id: Numerical game ID
         return_parsed: parse the payload through parse_cbs_napi -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -1465,7 +1465,7 @@ def cbs_game_ruwt_highlights(
     Example URL: https://api.cbssports.com/napi/resource/game/ruwtHighlights
 
     Args:
-        game_id: game_id path parameter.
+        game_id: Numerical game ID
         return_parsed: parse the payload through parse_cbs_napi -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -1515,7 +1515,7 @@ def cbs_game_scoring_boxscores(
     Example URL: https://api.cbssports.com/napi/resource/game/scoring/boxscores
 
     Args:
-        game_id: game_id path parameter.
+        game_id: Numerical game ID
         return_parsed: parse the payload through parse_cbs_napi -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -1565,7 +1565,7 @@ def cbs_game_scoring_drives(
     Example URL: https://api.cbssports.com/napi/resource/game/scoring/drives
 
     Args:
-        game_id: game_id path parameter.
+        game_id: Numerical game ID
         return_parsed: parse the payload through parse_cbs_napi -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -1615,7 +1615,7 @@ def cbs_game_scoring_leaders(
     Example URL: https://api.cbssports.com/napi/resource/game/scoring/leaders
 
     Args:
-        game_id: game_id path parameter.
+        game_id: Numerical game ID
         return_parsed: parse the payload through parse_cbs_napi -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -1665,7 +1665,7 @@ def cbs_game_scoring_player_stats(
     Example URL: https://api.cbssports.com/napi/resource/game/scoring/playerStats
 
     Args:
-        game_id: game_id path parameter.
+        game_id: Numerical game ID
         return_parsed: parse the payload through parse_cbs_napi -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -1715,7 +1715,7 @@ def cbs_game_scoring_plays(
     Example URL: https://api.cbssports.com/napi/resource/game/scoring/plays
 
     Args:
-        game_id: game_id path parameter.
+        game_id: Numerical game ID
         return_parsed: parse the payload through parse_cbs_napi -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -1765,7 +1765,7 @@ def cbs_game_scoring_rosters(
     Example URL: https://api.cbssports.com/napi/resource/game/scoring/rosters
 
     Args:
-        game_id: game_id path parameter.
+        game_id: Numerical game ID
         return_parsed: parse the payload through parse_cbs_napi -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -1815,7 +1815,7 @@ def cbs_game_scoring_scoreboard(
     Example URL: https://api.cbssports.com/napi/resource/game/scoring/scoreboard
 
     Args:
-        game_id: game_id path parameter.
+        game_id: Numerical game ID
         return_parsed: parse the payload through parse_cbs_napi -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -1865,7 +1865,7 @@ def cbs_game_scoring_scores(
     Example URL: https://api.cbssports.com/napi/resource/game/scoring/scores
 
     Args:
-        game_id: game_id path parameter.
+        game_id: Numerical game ID
         return_parsed: parse the payload through parse_cbs_napi -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -1915,7 +1915,7 @@ def cbs_game_scoring_team_stats(
     Example URL: https://api.cbssports.com/napi/resource/game/scoring/teamStats
 
     Args:
-        game_id: game_id path parameter.
+        game_id: Numerical game ID
         return_parsed: parse the payload through parse_cbs_napi -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -1965,7 +1965,7 @@ def cbs_game_scoring_winprob(
     Example URL: https://api.cbssports.com/napi/resource/game/scoring/winprob
 
     Args:
-        game_id: game_id path parameter.
+        game_id: Numerical game ID
         return_parsed: parse the payload through parse_cbs_napi -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -2015,7 +2015,7 @@ def cbs_game_scoring_ytd_player_stats(
     Example URL: https://api.cbssports.com/napi/resource/game/scoring/ytdPlayerStats
 
     Args:
-        game_id: game_id path parameter.
+        game_id: Numerical game ID
         return_parsed: parse the payload through parse_cbs_napi -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -2065,7 +2065,7 @@ def cbs_game_scoring_ytd_team_stats(
     Example URL: https://api.cbssports.com/napi/resource/game/scoring/ytdTeamStats
 
     Args:
-        game_id: game_id path parameter.
+        game_id: Numerical game ID
         return_parsed: parse the payload through parse_cbs_napi -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -2115,7 +2115,7 @@ def cbs_game_ticket(
     Example URL: https://api.cbssports.com/napi/resource/game/ticket
 
     Args:
-        game_id: game_id path parameter.
+        game_id: Numerical game ID
         return_parsed: parse the payload through parse_cbs_napi -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -2165,7 +2165,7 @@ def cbs_game_weather(
     Example URL: https://api.cbssports.com/napi/resource/game/weather
 
     Args:
-        game_id: game_id path parameter.
+        game_id: Numerical game ID
         return_parsed: parse the payload through parse_cbs_napi -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -2215,7 +2215,7 @@ def cbs_golf_event_markets(
     Example URL: https://api.cbssports.com/napi/resource/golf/event/markets
 
     Args:
-        event_id: event_id path parameter.
+        event_id: Numerical event ID
         return_parsed: parse the payload through parse_cbs_napi -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -2266,8 +2266,8 @@ def cbs_golf_player_markets(
     Example URL: https://api.cbssports.com/napi/resource/golf/player/markets/1751796
 
     Args:
-        player_id: player_id path parameter.
-        event_id: eventId query parameter.
+        player_id: Numerical player ID
+        event_id: View option.  Filter by eventId.
         return_parsed: parse the payload through parse_cbs_napi -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -2321,9 +2321,9 @@ def cbs_golfer_results(
     Example URL: https://api.cbssports.com/napi/resource/golfer/results/1751796
 
     Args:
-        player_id: player_id path parameter.
-        season_year: seasonYear query parameter.
-        season_id: seasonId query parameter.
+        player_id: Numerical player ID
+        season_year: View option.  Filter by seasonType.
+        season_id: View option.  Filter by seasonId.
         return_parsed: parse the payload through parse_cbs_napi -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -2377,8 +2377,8 @@ def cbs_league(
     Example URL: https://api.cbssports.com/napi/resource/league/59
 
     Args:
-        league_id: league_id path parameter.
-        resources: resources query parameter.
+        league_id: Numerical league ID
+        resources: Specify specific sub-resources to resolve.  Defaults to none. Allowed: teams, players, standings, conference, division, polls, teamSeasons.
         return_parsed: parse the payload through parse_cbs_napi -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -2431,8 +2431,8 @@ def cbs_league_teams(
     Example URL: https://api.cbssports.com/napi/resource/league/teams/59
 
     Args:
-        league_id: league_id path parameter.
-        resources: resources query parameter.
+        league_id: Numerical league Id - gets team from team table not teams for season
+        resources: Specify specific sub-resources to resolve.  Defaults to none. Allowed: players, standings, conference, division, playerTeamAssociations, injuries, transactions, depthCharts, polls, teamSeasons, sportsLineStandings.
         return_parsed: parse the payload through parse_cbs_napi -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -2484,7 +2484,7 @@ def cbs_odds(
     Example URL: https://api.cbssports.com/napi/resource/odds
 
     Args:
-        game_id: game_id path parameter.
+        game_id: Numerical game ID
         return_parsed: parse the payload through parse_cbs_napi -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -2537,10 +2537,10 @@ def cbs_player(
     Example URL: https://api.cbssports.com/napi/resource/player/1751796
 
     Args:
-        player_id: player_id path parameter.
-        date_format: dateFormat query parameter.
-        year: year query parameter.
-        resources: resources query parameter.
+        player_id: Numerical player ID
+        date_format: Optional for any date field.  Options here: http://momentjs.com/docs/#/displaying/format/
+        year: Optional year in YYYY format (for Transactions only)
+        resources: Specify specific sub-resources to resolve.  Defaults to none. Allowed: playerTeamAssociations, injuries, transactions, depthCharts, metaData, playerStats, standings, rankings, playerOutlook, draftInfo, combineData, positionRankings, gameStats, encyclopedia, golferResults, playerGolfMetadata, playerFutures, golferMarkets, recruitTeamAssociations, coachTeamAssociations, recruitRankings, coachRankings.
         return_parsed: parse the payload through parse_cbs_napi -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -2594,7 +2594,7 @@ def cbs_player_combine_data(
     Example URL: https://api.cbssports.com/napi/resource/player/combineData/1751796
 
     Args:
-        player_id: player_id path parameter.
+        player_id: Numerical player ID
         return_parsed: parse the payload through parse_cbs_napi -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -2646,9 +2646,9 @@ def cbs_player_depth_charts(
     Example URL: https://api.cbssports.com/napi/resource/player/depthCharts/1751796
 
     Args:
-        player_id: player_id path parameter.
-        position: position query parameter.
-        pitch_pos: pitchPos query parameter.
+        player_id: Numerical player ID
+        position: A csv of positions to filter with
+        pitch_pos: A csv of pitch positions to filter with (baseball only)
         return_parsed: parse the payload through parse_cbs_napi -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -2704,10 +2704,10 @@ def cbs_player_draft_info(
     Example URL: https://api.cbssports.com/napi/resource/player/draftInfo/1751796
 
     Args:
-        player_id: player_id path parameter.
-        season_year: seasonYear query parameter.
-        season_type: seasonType query parameter.
-        season_id: seasonId query parameter.
+        player_id: Numerical player ID
+        season_year: View option, filter by seasonYear
+        season_type: View option, filter by seasonType Allowed: regular, pre, post.
+        season_id: View option, filter by seasonId
         return_parsed: parse the payload through parse_cbs_napi -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -2763,9 +2763,9 @@ def cbs_player_encyclopedia(
     Example URL: https://api.cbssports.com/napi/resource/player/encyclopedia/1751796
 
     Args:
-        player_id: player_id path parameter.
-        season_year: seasonYear query parameter.
-        season_id: seasonId query parameter.
+        player_id: Numerical player ID
+        season_year: View option.  Filter by seasonType.
+        season_id: View option.  Filter by seasonId.
         return_parsed: parse the payload through parse_cbs_napi -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -2818,7 +2818,7 @@ def cbs_player_futures(
     Example URL: https://api.cbssports.com/napi/resource/player/futures/1751796
 
     Args:
-        player_id: player_id path parameter.
+        player_id: Numerical player ID
         return_parsed: parse the payload through parse_cbs_napi -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -2871,10 +2871,10 @@ def cbs_player_game_stats(
     Example URL: https://api.cbssports.com/napi/resource/player/gameStats/1751796
 
     Args:
-        player_id: player_id path parameter.
-        game_id: gameId query parameter.
-        season_year: seasonYear query parameter.
-        season_type: seasonType query parameter.
+        player_id: Numerical player ID
+        game_id: View option, filter by gameId
+        season_year: Season Year in YYYY format
+        season_type: Csv list of pre, regular, or post Allowed: pre, regular, post.
         return_parsed: parse the payload through parse_cbs_napi -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -2928,7 +2928,7 @@ def cbs_player_hockey_meta(
     Example URL: https://api.cbssports.com/napi/resource/player/hockey/meta/1751796
 
     Args:
-        player_id: player_id path parameter.
+        player_id: Numerical player ID
         return_parsed: parse the payload through parse_cbs_napi -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -2979,8 +2979,8 @@ def cbs_player_injuries(
     Example URL: https://api.cbssports.com/napi/resource/player/injuries/1751796
 
     Args:
-        player_id: player_id path parameter.
-        date_format: dateFormat query parameter.
+        player_id: Numerical player ID
+        date_format: Optional.  Options here: http://momentjs.com/docs/#/displaying/format/
         return_parsed: parse the payload through parse_cbs_napi -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -3032,7 +3032,7 @@ def cbs_player_meta_baseball(
     Example URL: https://api.cbssports.com/napi/resource/player/meta/baseball/1751796
 
     Args:
-        player_id: player_id path parameter.
+        player_id: Numerical player ID
         return_parsed: parse the payload through parse_cbs_napi -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -3082,7 +3082,7 @@ def cbs_player_meta_golf(
     Example URL: https://api.cbssports.com/napi/resource/player/meta/golf/1751796
 
     Args:
-        player_id: player_id path parameter.
+        player_id: Numerical player ID
         return_parsed: parse the payload through parse_cbs_napi -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -3133,8 +3133,8 @@ def cbs_player_outlook(
     Example URL: https://api.cbssports.com/napi/resource/player/outlook/1751796
 
     Args:
-        player_id: player_id path parameter.
-        date_format: dateFormat query parameter.
+        player_id: Numerical player ID
+        date_format: Optional format for dateCreated field. Available options here: http://momentjs.com/docs/#/displaying/format/
         return_parsed: parse the payload through parse_cbs_napi -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -3187,8 +3187,8 @@ def cbs_player_position_rankings(
     Example URL: https://api.cbssports.com/napi/resource/player/positionRankings/1751796
 
     Args:
-        player_id: player_id path parameter.
-        position: position query parameter.
+        player_id: Numerical player ID
+        position: Filter by position
         return_parsed: parse the payload through parse_cbs_napi -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -3245,12 +3245,12 @@ def cbs_player_rankings(
     Example URL: https://api.cbssports.com/napi/resource/player/rankings/1751796
 
     Args:
-        player_id: player_id path parameter.
-        season_year: seasonYear query parameter.
-        season_type: seasonType query parameter.
-        season_id: seasonId query parameter.
-        is_current: isCurrent query parameter.
-        categories: categories query parameter.
+        player_id: Numerical player ID
+        season_year: View option.  Filter by seasonYear.
+        season_type: View option.  Filter by seasonType. Allowed: regular, pre, post.
+        season_id: View option.  Filter by seasonId.
+        is_current: View option.  Only show stats for seasons where isCurrent is true. Allowed: 1.
+        categories: View option.  Only return the specified rankings categories.
         return_parsed: parse the payload through parse_cbs_napi -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -3307,8 +3307,8 @@ def cbs_player_recruit_associations(
     Example URL: https://api.cbssports.com/napi/resource/player/recruitAssociations/1751796
 
     Args:
-        player_id: player_id path parameter.
-        resources: resources query parameter.
+        player_id: Numerical player ID
+        resources: Specify specific sub-resources to resolve. Defaults to none. Allowed: team.
         return_parsed: parse the payload through parse_cbs_napi -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -3365,12 +3365,12 @@ def cbs_player_standings(
     Example URL: https://api.cbssports.com/napi/resource/player/standings/1751796
 
     Args:
-        player_id: player_id path parameter.
-        season_year: seasonYear query parameter.
-        season_type: seasonType query parameter.
-        season_id: seasonId query parameter.
-        is_current: isCurrent query parameter.
-        resources: resources query parameter.
+        player_id: Numerical player ID
+        season_year: View option.  Filter by seasonYear.
+        season_type: View option.  Filter by seasonType. Allowed: regular, pre, post.
+        season_id: View option.  Filter by seasonId.
+        is_current: View option.  Only show standings for seasons where isCurrent is true. Allowed: 1.
+        resources: Specify specific sub-resources to resolve.  Defaults to none. Allowed: league.
         return_parsed: parse the payload through parse_cbs_napi -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -3433,14 +3433,14 @@ def cbs_player_stats(
     Example URL: https://api.cbssports.com/napi/resource/player/stats/1751796
 
     Args:
-        player_id: player_id path parameter.
-        season_year: seasonYear query parameter.
-        season_type: seasonType query parameter.
-        season_id: seasonId query parameter.
-        is_current: isCurrent query parameter.
-        team_id: teamId query parameter.
-        team_abbr: teamAbbr query parameter.
-        is_total: isTotal query parameter.
+        player_id: Numerical player ID
+        season_year: View option.  Filter by seasonYear.
+        season_type: View option.  Filter by seasonType. Allowed: regular, pre, post.
+        season_id: View option.  Filter by seasonId.
+        is_current: View option.  Only show stats for seasons where isCurrent is true. Allowed: 1.
+        team_id: View option.  Filter by teamId.
+        team_abbr: View option.  Filter by a specific team abbreviation.
+        is_total: View option.  Filter only the isTotal record for players who played for multiple teams. Allowed: 1.
         return_parsed: parse the payload through parse_cbs_napi -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -3501,10 +3501,10 @@ def cbs_player_team_associations(
     Example URL: https://api.cbssports.com/napi/resource/player/teamAssociations/1751796
 
     Args:
-        player_id: player_id path parameter.
-        assoc_type: assocType query parameter.
-        roster_status: rosterStatus query parameter.
-        resources: resources query parameter.
+        player_id: Numerical player ID
+        assoc_type: Filter associations by assoc type Allowed: C, H, S, F.
+        roster_status: Filter associations by roster status Allowed: ACT, NWT, MIN, MNR, RET, DEV, CUT, DIS, DL, IR, UFA, UDF, EXE, TRA, SUS, PUP, FA, RFA, KIA, INA.
+        resources: Specify specific sub-resources to resolve. Defaults to none. Allowed: team.
         return_parsed: parse the payload through parse_cbs_napi -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -3563,12 +3563,12 @@ def cbs_player_transactions(
     Example URL: https://api.cbssports.com/napi/resource/player/transactions/1751796
 
     Args:
-        player_id: player_id path parameter.
-        date_format: dateFormat query parameter.
-        season_year: seasonYear query parameter.
-        season_type: seasonType query parameter.
-        season_id: seasonId query parameter.
-        resources: resources query parameter.
+        player_id: Numerical player ID
+        date_format: Optional.  Options here: http://momentjs.com/docs/#/displaying/format/
+        season_year: View option.  Filter by seasonYear.
+        season_type: View option.  Filter by seasonType. Allowed: regular, pre, post.
+        season_id: View option.  Filter by seasonId.
+        resources: Specify specific sub-resources to resolve. Defaults to none. Allowed: targetTeam, currentTeam, fromTeam.
         return_parsed: parse the payload through parse_cbs_napi -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -3624,7 +3624,7 @@ def cbs_recruit_rankings(
     Example URL: https://api.cbssports.com/napi/resource/recruit/rankings/1751796
 
     Args:
-        player_id: player_id path parameter.
+        player_id: Numerical player ID
         return_parsed: parse the payload through parse_cbs_napi -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -3676,9 +3676,9 @@ def cbs_season(
     Example URL: https://api.cbssports.com/napi/resource/season/59
 
     Args:
-        season_id: season_id path parameter.
-        date_format: dateFormat query parameter.
-        resources: resources query parameter.
+        season_id: Numerical season ID
+        date_format: Optional.  Options here: http://momentjs.com/docs/#/displaying/format/
+        resources: Specify specific sub-resources to resolve.  Defaults to none. Allowed: sport, league, teams.
         return_parsed: parse the payload through parse_cbs_napi -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -3732,8 +3732,8 @@ def cbs_season_teams(
     Example URL: https://api.cbssports.com/napi/resource/season/teams/59
 
     Args:
-        season_id: season_id path parameter.
-        resources: resources query parameter.
+        season_id: Optional seasonYear for leagues that change teams each year.
+        resources: Specify specific sub-resources to resolve.  Defaults to none. Allowed: players, standings, conference, division, playerTeamAssociations, injuries, transactions, depthCharts, polls, teamSeasons, sportsLineStandings, league.
         return_parsed: parse the payload through parse_cbs_napi -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -3786,8 +3786,8 @@ def cbs_sport(
     Example URL: https://api.cbssports.com/napi/resource/sport/1
 
     Args:
-        sport_id: sport_id path parameter.
-        resources: resources query parameter.
+        sport_id: Numerical sport ID
+        resources: Specify specific sub-resources to resolve.  Defaults to none. Allowed: leagues.
         return_parsed: parse the payload through parse_cbs_napi -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -3839,7 +3839,7 @@ def cbs_sport_leagues(
     Example URL: https://api.cbssports.com/napi/resource/sport/leagues/1
 
     Args:
-        sport_id: sport_id path parameter.
+        sport_id: Numerical league ID
         return_parsed: parse the payload through parse_cbs_napi -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -3889,7 +3889,7 @@ def cbs_team_futures(
     Example URL: https://api.cbssports.com/napi/resource/team/futures/404
 
     Args:
-        team_id: team_id path parameter.
+        team_id: Numerical team ID
         return_parsed: parse the payload through parse_cbs_napi -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -3940,8 +3940,8 @@ def cbs_team_metadata(
     Example URL: https://api.cbssports.com/napi/resource/team/metadata/404
 
     Args:
-        team_id: team_id path parameter.
-        resources: resources query parameter.
+        team_id: Numerical team ID
+        resources: Specify specific sub-resources to resolve. Defaults to none. Allowed: team.
         return_parsed: parse the payload through parse_cbs_napi -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -3994,8 +3994,8 @@ def cbs_team_players(
     Example URL: https://api.cbssports.com/napi/resource/team/players/404
 
     Args:
-        team_id: team_id path parameter.
-        resources: resources query parameter.
+        team_id: Numerical team ID
+        resources: Specify specific sub-resources to resolve.  Defaults to none. Allowed: playerTeamAssociations, injuries, transactions, depthCharts.
         return_parsed: parse the payload through parse_cbs_napi -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -4049,9 +4049,9 @@ def cbs_team_polls(
     Example URL: https://api.cbssports.com/napi/resource/team/polls/404
 
     Args:
-        team_id: team_id path parameter.
-        polls: polls query parameter.
-        season_id: seasonId query parameter.
+        team_id: Numerical team ID
+        polls: View option.  Filter by a certain poll name. Allowed: coaches, ap, fcscoachespoll, statstsnfcspoll, rpi, playoffselectioncommitteepoll, net.
+        season_id: View option. Filter by seasonId.
         return_parsed: parse the payload through parse_cbs_napi -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -4107,10 +4107,10 @@ def cbs_team_rankings(
     Example URL: https://api.cbssports.com/napi/resource/team/rankings/404
 
     Args:
-        team_id: team_id path parameter.
-        season_year: seasonYear query parameter.
-        season_type: seasonType query parameter.
-        season_id: seasonId query parameter.
+        team_id: Numerical team id
+        season_year: View option.  Filter by seasonYear.
+        season_type: View option.  Filter by seasonType. Allowed: regular, pre, post.
+        season_id: View option.  Filter by seasonId.
         return_parsed: parse the payload through parse_cbs_napi -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -4164,7 +4164,7 @@ def cbs_team_rankings_sportsline(
     Example URL: https://api.cbssports.com/napi/resource/team/rankings/sportsline/404
 
     Args:
-        team_id: team_id path parameter.
+        team_id: Numerical team id
         return_parsed: parse the payload through parse_cbs_napi -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -4219,12 +4219,12 @@ def cbs_team_seasons(
     Example URL: https://api.cbssports.com/napi/resource/team/seasons/404
 
     Args:
-        team_id: team_id path parameter.
-        date_format: dateFormat query parameter.
-        season_year: seasonYear query parameter.
-        season_type: seasonType query parameter.
-        season_id: seasonId query parameter.
-        resources: resources query parameter.
+        team_id: Numerical team ID
+        date_format: Optional.  Options here: http://momentjs.com/docs/#/displaying/format/
+        season_year: View option.  Filter by seasonYear.
+        season_type: View option.  Filter by seasonType. Allowed: regular, pre, post.
+        season_id: View option.  Filter by seasonId.
+        resources: Specify specific sub-resources to resolve.  Defaults to none. Allowed: league.
         return_parsed: parse the payload through parse_cbs_napi -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -4283,10 +4283,10 @@ def cbs_team_standings(
     Example URL: https://api.cbssports.com/napi/resource/team/standings/404
 
     Args:
-        team_id: team_id path parameter.
-        year: year query parameter.
-        season_type: seasonType query parameter.
-        season_id: seasonId query parameter.
+        team_id: Numerical team ID
+        year: Optional year in YYYY format
+        season_type: View option.  Filter by seasonType. v3 only! Allowed: regular, pre, post.
+        season_id: View option.  Filter by seasonId. v3 only!
         return_parsed: parse the payload through parse_cbs_napi_standings -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -4341,8 +4341,8 @@ def cbs_team_standings_sportsline(
     Example URL: https://api.cbssports.com/napi/resource/team/standings/sportsline/404
 
     Args:
-        team_id: team_id path parameter.
-        date_format: dateFormat query parameter.
+        team_id: Numerical team ID
+        date_format: Optional.  Options here: http://momentjs.com/docs/#/displaying/format/
         return_parsed: parse the payload through parse_cbs_napi -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -4398,11 +4398,11 @@ def cbs_team_stats(
     Example URL: https://api.cbssports.com/napi/resource/team/stats/404
 
     Args:
-        team_id: team_id path parameter.
-        season_year: seasonYear query parameter.
-        season_type: seasonType query parameter.
-        season_id: seasonId query parameter.
-        is_current: isCurrent query parameter.
+        team_id: Numerical team ID
+        season_year: View option.  Filter by seasonYear.
+        season_type: View option.  Filter by seasonType. Allowed: regular, pre, post.
+        season_id: View option.  Filter by seasonId.
+        is_current: View option.  Only show stats for seasons where isCurrent is true. Allowed: 1.
         return_parsed: parse the payload through parse_cbs_napi -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -4458,8 +4458,8 @@ def cbs_venue(
     Example URL: https://api.cbssports.com/napi/resource/venue
 
     Args:
-        venue_id: venue_id path parameter.
-        resources: resources query parameter.
+        venue_id: Numerical venue ID
+        resources: Specify specific sub-resources to resolve. Defaults to none. Allowed: metaData.
         return_parsed: parse the payload through parse_cbs_napi -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -4511,7 +4511,7 @@ def cbs_venue_metadata(
     Example URL: https://api.cbssports.com/napi/resource/venue/metadata
 
     Args:
-        venue_id: venue_id path parameter.
+        venue_id: Numerical venue ID
         return_parsed: parse the payload through parse_cbs_napi -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
