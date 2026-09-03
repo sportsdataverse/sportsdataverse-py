@@ -19,7 +19,7 @@ ESPN endpoint.
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `dates` | `dates` |  |  | `Y` | Date or date range filter (YYYYMMDD or YYYYMMDD-YYYYMMDD). |
-| `week` | `week` |  |  | `Y` | Week number within the season (football). |
+| `week` | `week` |  |  | `Y` | Week number within the season. |
 | `seasontype` | `season_type` |  |  | `Y` | Season phase: 1=preseason, 2=regular season, 3=postseason. |
 | `groups` | `groups` |  |  | `Y` | Conference or group id filter (e.g. an ESPN conference id). |
 | `limit` | `limit` |  |  | `Y` | Maximum number of items to return. |

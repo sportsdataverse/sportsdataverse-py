@@ -20,7 +20,7 @@ GET /football/v2/standings — one row per team standing across the returned wee
 |---|---|:---:|:---:|:---:|---|
 | `season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
 | `seasonType` | `season_type` |  |  | `Y` | Season type code (string): PRE, REG, or POST -- not ESPN's numeric 1/2/3. |
-| `week` | `week` |  |  | `Y` | Week number within the season (football). |
+| `week` | `week` |  |  | `Y` | Week number within the season. |
 | `limit` | `limit` |  |  | `Y` | Maximum number of items to return. |
 
 ### Returns
@@ -427,7 +427,7 @@ GET /football/v2/injuries — one row per injured player.
 |---|---|:---:|:---:|:---:|---|
 | `season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
 | `seasonType` | `season_type` |  |  | `Y` | Season type code (string): PRE, REG, or POST -- not ESPN's numeric 1/2/3. |
-| `week` | `week` |  |  | `Y` | Week number within the season (football). |
+| `week` | `week` |  |  | `Y` | Week number within the season. |
 
 ### Returns
 
@@ -476,7 +476,7 @@ GET /football/v2/stats/live/game-summaries — one row per game (live state).
 |---|---|:---:|:---:|:---:|---|
 | `season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
 | `seasonType` | `season_type` |  |  | `Y` | Season type code (string): PRE, REG, or POST -- not ESPN's numeric 1/2/3. |
-| `week` | `week` |  |  | `Y` | Week number within the season (football). |
+| `week` | `week` |  |  | `Y` | Week number within the season. |
 
 ### Returns
 
@@ -540,7 +540,7 @@ GET /football/v2/experience/weekly-game-details — one row per game (bare list)
 |---|---|:---:|:---:|:---:|---|
 | `season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
 | `type` | `season_type` |  |  | `Y` | Season type code (string): PRE, REG, or POST (sent as the `type` query param) -- not ESPN's numeric 1/2/3. |
-| `week` | `week` |  |  | `Y` | Week number within the season (football). |
+| `week` | `week` |  |  | `Y` | Week number within the season. |
 | `includeDriveChart` | `include_drive_chart` |  |  | `Y` | includeDriveChart query parameter. |
 | `includeReplays` | `include_replays` |  |  | `Y` | includeReplays query parameter. |
 | `includeStandings` | `include_standings` |  |  | `Y` | includeStandings query parameter. |

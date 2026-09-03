@@ -174,7 +174,7 @@ def espn_wc_scoreboard(
 
     Args:
         dates: Date or date range filter (YYYYMMDD or YYYYMMDD-YYYYMMDD).
-        week: Week number within the season (football).
+        week: Week number within the season.
         season_type: Season phase: 1=preseason, 2=regular season, 3=postseason.
         groups: Conference or group id filter (e.g. an ESPN conference id).
         limit: Maximum number of items to return.
@@ -1988,7 +1988,7 @@ def espn_wc_season_week_powerindex(
         season: season path parameter.
         season_type: season_type path parameter.
         week: week path parameter.
-        limit: Page size; the full FBS table is ~134 rows, so pass a limit above that to avoid paging.
+        limit: Page size for this weekly power-index table; pass a limit large enough to avoid paging (table size varies by sport/league -- CFB's FBS table alone is ~134 rows).
         return_parsed: parse the payload through parse_weekly_powerindex -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
