@@ -164,6 +164,15 @@ from sportsdataverse.nba import adjust_efficiency as adjust_efficiency  # noqa: 
 from sportsdataverse.nba import adjust_pace as adjust_pace  # noqa: F401
 from sportsdataverse.nba import as_of_ratings_split as as_of_ratings_split  # noqa: F401
 from sportsdataverse.nba import box_features as box_features  # noqa: F401
+from sportsdataverse.nba import bref_awards as bref_awards  # noqa: F401
+from sportsdataverse.nba import bref_draft as bref_draft  # noqa: F401
+from sportsdataverse.nba import bref_injuries as bref_injuries  # noqa: F401
+from sportsdataverse.nba import bref_player_bios as bref_player_bios  # noqa: F401
+from sportsdataverse.nba import bref_player_game_log as bref_player_game_log  # noqa: F401
+from sportsdataverse.nba import bref_players_stats as bref_players_stats  # noqa: F401
+from sportsdataverse.nba import bref_standings as bref_standings  # noqa: F401
+from sportsdataverse.nba import bref_team_roster as bref_team_roster  # noqa: F401
+from sportsdataverse.nba import bref_teams_stats as bref_teams_stats  # noqa: F401
 from sportsdataverse.nba import build_athlete_identity_lookup as build_athlete_identity_lookup  # noqa: F401
 from sportsdataverse.nba import build_nba_player_identity_lookup as build_nba_player_identity_lookup  # noqa: F401
 from sportsdataverse.nba import build_play_context_shots as build_play_context_shots  # noqa: F401
@@ -209,6 +218,7 @@ from sportsdataverse.nba import helper_nba_standings as helper_nba_standings  # 
 from sportsdataverse.nba import helper_nba_team_box as helper_nba_team_box  # noqa: F401
 from sportsdataverse.nba import helper_nba_team_items as helper_nba_team_items  # noqa: F401
 from sportsdataverse.nba import helper_nba_team_season_stats as helper_nba_team_season_stats  # noqa: F401
+from sportsdataverse.nba import hoopshype_salaries as hoopshype_salaries  # noqa: F401
 from sportsdataverse.nba import in_game_features as in_game_features  # noqa: F401
 from sportsdataverse.nba import lineup_play_context as lineup_play_context  # noqa: F401
 from sportsdataverse.nba import load_darko_dpm as load_darko_dpm  # noqa: F401
@@ -300,6 +310,7 @@ from sportsdataverse.nba import nba_tracking_shot_diet_value as nba_tracking_sho
 from sportsdataverse.nba import nba_tracking_touch_value as nba_tracking_touch_value  # noqa: F401
 from sportsdataverse.nba import nba_v3_to_v2_pbp as nba_v3_to_v2_pbp  # noqa: F401
 from sportsdataverse.nba import nba_war as nba_war  # noqa: F401
+from sportsdataverse.nba import nbadraft_mock_draft as nbadraft_mock_draft  # noqa: F401
 from sportsdataverse.nba import normalize_player_name as normalize_player_name  # noqa: F401
 from sportsdataverse.nba import normalize_team_roster_columns as normalize_team_roster_columns  # noqa: F401
 from sportsdataverse.nba import parse_nba_stats_result_sets as parse_nba_stats_result_sets  # noqa: F401
@@ -315,12 +326,32 @@ from sportsdataverse.nba import project_player_line as project_player_line  # no
 from sportsdataverse.nba import prop_distribution as prop_distribution  # noqa: F401
 from sportsdataverse.nba import ratings_as_of as ratings_as_of  # noqa: F401
 from sportsdataverse.nba import raw_game_efficiency as raw_game_efficiency  # noqa: F401
+from sportsdataverse.nba import realgm_close_browser as realgm_close_browser  # noqa: F401
+from sportsdataverse.nba import realgm_coaches as realgm_coaches  # noqa: F401
+from sportsdataverse.nba import realgm_draft as realgm_draft  # noqa: F401
+from sportsdataverse.nba import realgm_draft_prospects as realgm_draft_prospects  # noqa: F401
+from sportsdataverse.nba import realgm_early_entry as realgm_early_entry  # noqa: F401
+from sportsdataverse.nba import realgm_future_free_agents as realgm_future_free_agents  # noqa: F401
+from sportsdataverse.nba import realgm_gms as realgm_gms  # noqa: F401
+from sportsdataverse.nba import realgm_individual_games as realgm_individual_games  # noqa: F401
+from sportsdataverse.nba import realgm_individual_seasons as realgm_individual_seasons  # noqa: F401
+from sportsdataverse.nba import realgm_player_stats as realgm_player_stats  # noqa: F401
+from sportsdataverse.nba import realgm_players as realgm_players  # noqa: F401
+from sportsdataverse.nba import realgm_players_abroad as realgm_players_abroad  # noqa: F401
+from sportsdataverse.nba import realgm_rookie_scale as realgm_rookie_scale  # noqa: F401
+from sportsdataverse.nba import realgm_salary_cap as realgm_salary_cap  # noqa: F401
+from sportsdataverse.nba import realgm_standings as realgm_standings  # noqa: F401
+from sportsdataverse.nba import realgm_team_stats as realgm_team_stats  # noqa: F401
+from sportsdataverse.nba import realgm_teams as realgm_teams  # noqa: F401
+from sportsdataverse.nba import realgm_transactions as realgm_transactions  # noqa: F401
 from sportsdataverse.nba import render_report as render_report  # noqa: F401
+from sportsdataverse.nba import rotowire_injuries as rotowire_injuries  # noqa: F401
 from sportsdataverse.nba import score_shot_xpoints as score_shot_xpoints  # noqa: F401
 from sportsdataverse.nba import scoreboard_event_parsing as scoreboard_event_parsing  # noqa: F401
 from sportsdataverse.nba import shooter_talent as shooter_talent  # noqa: F401
 from sportsdataverse.nba import shot_selection_quality as shot_selection_quality  # noqa: F401
 from sportsdataverse.nba import shrink_clutch as shrink_clutch  # noqa: F401
+from sportsdataverse.nba import spotrac_team_cap as spotrac_team_cap  # noqa: F401
 from sportsdataverse.nba import starters_on_court_counts as starters_on_court_counts  # noqa: F401
 from sportsdataverse.nba import team_pace_projection as team_pace_projection  # noqa: F401
 from sportsdataverse.nba import team_play_context as team_play_context  # noqa: F401
@@ -354,6 +385,15 @@ __all__ = [
     "adjust_pace",
     "as_of_ratings_split",
     "box_features",
+    "bref_awards",
+    "bref_draft",
+    "bref_injuries",
+    "bref_player_bios",
+    "bref_player_game_log",
+    "bref_players_stats",
+    "bref_standings",
+    "bref_team_roster",
+    "bref_teams_stats",
     "build_athlete_identity_lookup",
     "build_nba_player_identity_lookup",
     "build_play_context_shots",
@@ -519,6 +559,7 @@ __all__ = [
     "helper_nba_team_box",
     "helper_nba_team_items",
     "helper_nba_team_season_stats",
+    "hoopshype_salaries",
     "in_game_features",
     "lineup_play_context",
     "load_darko_dpm",
@@ -611,6 +652,7 @@ __all__ = [
     "nba_tracking_touch_value",
     "nba_v3_to_v2_pbp",
     "nba_war",
+    "nbadraft_mock_draft",
     "normalize_player_name",
     "normalize_team_roster_columns",
     "parse_nba_stats_result_sets",
@@ -626,12 +668,32 @@ __all__ = [
     "prop_distribution",
     "ratings_as_of",
     "raw_game_efficiency",
+    "realgm_close_browser",
+    "realgm_coaches",
+    "realgm_draft",
+    "realgm_draft_prospects",
+    "realgm_early_entry",
+    "realgm_future_free_agents",
+    "realgm_gms",
+    "realgm_individual_games",
+    "realgm_individual_seasons",
+    "realgm_player_stats",
+    "realgm_players",
+    "realgm_players_abroad",
+    "realgm_rookie_scale",
+    "realgm_salary_cap",
+    "realgm_standings",
+    "realgm_team_stats",
+    "realgm_teams",
+    "realgm_transactions",
     "render_report",
+    "rotowire_injuries",
     "score_shot_xpoints",
     "scoreboard_event_parsing",
     "shooter_talent",
     "shot_selection_quality",
     "shrink_clutch",
+    "spotrac_team_cap",
     "starters_on_court_counts",
     "team_pace_projection",
     "team_play_context",

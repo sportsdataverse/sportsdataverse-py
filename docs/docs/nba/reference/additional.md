@@ -1169,6 +1169,342 @@ game's own team pace), then summed — the result is fully deterministic.
 
 One row per player: `player_id`, the STATS` per-100 rates, `min` (total), `gp` (games). Empty frame with that schema on empty input.
 
+### `bref_awards(season: 'Optional[int]' = None, *, return_as_pandas: 'bool' = False, proxy: 'Any' = None, **kwargs: 'Any') -> 'pl.DataFrame | pd.DataFrame'` {#bref_awards}
+
+End-of-season award voting, all awards stacked into one frame.
+
+Port of hoopR's `bref_awards()`. NBA only -- wehoop wraps no WNBA awards
+page, so none is guessed at here.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `Optional[int]` | `None` | Season in 4-digit ending-year format. Defaults to the current NBA season. |
+| `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
+| `proxy` | `Any` | `None` | Proxy configuration in the `requests` `proxies=` shape. |
+
+**Returns**
+
+One row per candidate per award: `award` (`mvp`, `roy`, `dpoy`, `smoy`, `mip`, `clutch_poy`, `coy`), `rank`, `player`, `age`, `team`, `votes_first`, `points_won`, `points_max`, `award_share`, plus `season`. Zero rows when the page carries no voting table (award voting predates 1956 for none of them).
+
+**Example**
+
+```python
+from sportsdataverse.nba.bref import bref_awards
+
+df = bref_awards(season=2024)
+print(df.shape)
+
+# Pandas output
+
+df_pd = bref_awards(season=2024, return_as_pandas=True)
+
+# Pipeline next step (one line)
+
+df.filter(pl.col("award") == "mvp").sort("award_share", descending=True).head()
+```
+
+### `bref_draft(season: 'Optional[int]' = None, *, return_as_pandas: 'bool' = False, proxy: 'Any' = None, **kwargs: 'Any') -> 'pl.DataFrame | pd.DataFrame'` {#bref_draft}
+
+NBA draft results with each pick's career totals and advanced metrics.
+
+Port of hoopR's `bref_draft()`. NBA only.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `Optional[int]` | `None` | Draft year (e.g. `2024`). Defaults to the current NBA season. |
+| `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
+| `proxy` | `Any` | `None` | Proxy configuration in the `requests` `proxies=` shape. |
+
+**Returns**
+
+One row per pick: `pick_overall`, `round`, `team`, `player`, `college_name`, `seasons`, `g`, `mp`, `pts`, `trb`, `ast`, `fg_pct` …, `ws`, `ws_per_48`, `bpm`, `vorp`, plus `season`. Zero rows when the draft page is absent.
+
+**Example**
+
+```python
+from sportsdataverse.nba.bref import bref_draft
+
+df = bref_draft(season=2024)
+print(df.shape)
+
+# Pandas output
+
+df_pd = bref_draft(season=2003, return_as_pandas=True)
+
+# Pipeline next step (one line)
+
+df.sort("vorp", descending=True).head()
+```
+
+### `bref_injuries(*, return_as_pandas: 'bool' = False, proxy: 'Any' = None, **kwargs: 'Any') -> 'pl.DataFrame | pd.DataFrame'` {#bref_injuries}
+
+The current NBA injury report.
+
+Port of hoopR's `bref_injuries()`. This is the live report -- there is no
+season argument and no history. hoopR uses it in place of RotoWorld, which
+NBC retired.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
+| `proxy` | `Any` | `None` | Proxy configuration in the `requests` `proxies=` shape. |
+
+**Returns**
+
+One row per injured player: `player`, `team_name`, `date_update` and `note` (status plus description). Zero rows when no one is listed or the page is unreachable.
+
+**Example**
+
+```python
+from sportsdataverse.nba.bref import bref_injuries
+
+df = bref_injuries()
+print(df.shape)
+
+# Pandas output
+
+df_pd = bref_injuries(return_as_pandas=True)
+
+# Pipeline next step (one line)
+
+df.filter(pl.col("note").str.contains("(?i)out")).head()
+```
+
+### `bref_player_bios(letter: 'str' = 'a', *, return_as_pandas: 'bool' = False, proxy: 'Any' = None, **kwargs: 'Any') -> 'pl.DataFrame | pd.DataFrame'` {#bref_player_bios}
+
+The player index for one last-name initial -- bios plus the id slugs.
+
+Port of hoopR's `bref_player_bios()`. NBA only. This doubles as the
+Basketball-Reference **player dictionary**: `player_id` is the slug that
+`bref_player_game_log` takes.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `letter` | `str` | `'a'` | Single letter `a`-`z` (last-name initial). Only the first character is used, case-insensitively. |
+| `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
+| `proxy` | `Any` | `None` | Proxy configuration in the `requests` `proxies=` shape. |
+
+**Returns**
+
+One row per player: `player`, `player_id` (e.g. `jamesle01`), `year_min`, `year_max`, `pos`, `height`, `weight`, `birth_date`, `colleges`, plus the echoed `letter`. `player_id` is omitted when the number of player links on the page does not match the number of rows (the same guard the R wrapper applies).
+
+**Example**
+
+```python
+from sportsdataverse.nba.bref import bref_player_bios
+
+df = bref_player_bios(letter="j")
+print(df.shape)
+
+# Build the id dictionary for the whole alphabet
+
+import string
+ids = [bref_player_bios(ch) for ch in string.ascii_lowercase]
+
+# Pipeline next step (one line)
+
+df.filter(pl.col("year_max") >= 2024).select(["player", "player_id"]).head()
+```
+
+### `bref_player_game_log(player_id: 'str', season: 'Optional[int]' = None, *, return_as_pandas: 'bool' = False, proxy: 'Any' = None, **kwargs: 'Any') -> 'pl.DataFrame | pd.DataFrame'` {#bref_player_game_log}
+
+A player's regular-season game-by-game log.
+
+Port of hoopR's `bref_player_game_log()`. NBA only. The playoff log on the
+same page (`player_game_log_post`) is not wrapped, matching the R surface.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `player_id` | `str` |  | Basketball-Reference player id slug -- the id in the player's URL, e.g. `jokicni01` from `/players/j/jokicni01.html`. Use `bref_player_bios` as the id dictionary. |
+| `season` | `Optional[int]` | `None` | Season in 4-digit ending-year format. Defaults to the current NBA season. |
+| `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
+| `proxy` | `Any` | `None` | Proxy configuration in the `requests` `proxies=` shape. |
+
+**Returns**
+
+One row per regular-season game: `ranker`, `player_game_num_career`, `date`, `team`, `location` (`@` for away), `opp`, `result`, `is_starter`, `mp`, the full shooting / box columns, `game_score`, `plus_minus`, plus echoed `player_id` / `season`. Month-separator and no-date rows are dropped. Zero rows when the player did not play that season.
+
+**Example**
+
+```python
+from sportsdataverse.nba.bref import bref_player_game_log
+
+df = bref_player_game_log(player_id="jokicni01", season=2024)
+print(df.shape)
+
+# Pandas output
+
+df_pd = bref_player_game_log("jamesle01", 2024, return_as_pandas=True)
+
+# Pipeline next step (one line)
+
+df.select(["date", "opp", "pts", "trb", "ast"]).head()
+```
+
+### `bref_players_stats(season: 'Optional[int]' = None, table: 'str' = 'per_game', league: 'str' = 'nba', *, return_as_pandas: 'bool' = False, proxy: 'Any' = None, **kwargs: 'Any') -> 'pl.DataFrame | pd.DataFrame'` {#bref_players_stats}
+
+Player season statistics for an entire league season.
+
+Port of hoopR's `bref_players_stats()` (NBA) and wehoop's
+`bref_wnba_player_stats()` (WNBA). One row per player, with columns named
+by Basketball-Reference `data-stat` keys.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `Optional[int]` | `None` | Season in 4-digit ending-year format (`2024` = 2023-24). The WNBA season is a plain calendar year. Defaults to the current season. |
+| `table` | `str` | `'per_game'` | Which stat table. NBA accepts `per_game` (default), `totals`, `advanced`, `per_minute` (per 36) and `per_poss` (per 100 possessions); WNBA accepts `per_game`, `totals` and `advanced`. |
+| `league` | `str` | `'nba'` | `"nba"` (default) or `"wnba"`. |
+| `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
+| `proxy` | `Any` | `None` | Proxy configuration in the `requests` `proxies=` shape. |
+
+**Returns**
+
+One row per player: `ranker`, `player`, `age`, `team`, `pos`, `g`, `gs` plus the box columns scaled to `table` (the `advanced` table adds `per`, `ts_pct`, `usg_pct`, `ws`, `bpm`, `vorp` …), and echoed `season` / `table` / `league` columns. A zero-row frame when the page carries no player table.
+
+**Example**
+
+```python
+from sportsdataverse.nba.bref import bref_players_stats
+
+df = bref_players_stats(season=2024)
+print(df.shape)
+
+# Advanced metrics, and the WNBA page
+
+adv = bref_players_stats(season=2024, table="advanced")
+wnba = bref_players_stats(season=2024, league="wnba")
+
+# Pipeline next step (one line)
+
+adv.filter(pl.col("vorp") > 3.0).sort("vorp", descending=True).head()
+```
+
+### `bref_standings(season: 'Optional[int]' = None, league: 'str' = 'nba', *, return_as_pandas: 'bool' = False, proxy: 'Any' = None, **kwargs: 'Any') -> 'pl.DataFrame | pd.DataFrame'` {#bref_standings}
+
+Conference standings for a season, both conferences stacked.
+
+Port of hoopR's `bref_standings()` (NBA) and wehoop's
+`bref_wnba_standings()` (WNBA).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `Optional[int]` | `None` | Season in 4-digit ending-year format. Defaults to the current season. |
+| `league` | `str` | `'nba'` | `"nba"` (default) or `"wnba"`. |
+| `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
+| `proxy` | `Any` | `None` | Proxy configuration in the `requests` `proxies=` shape. |
+
+**Returns**
+
+One row per team: `conference` (`"E"` / `"W"` for **both** leagues -- wehoop emits `"Eastern"`/`"Western"`), `team` (playoff `*` marker stripped), `playoffs` (bool, from that marker), `wins`, `losses`, `win_loss_pct`, `gb`, `pts_per_g`, `opp_pts_per_g`, `srs`, plus echoed `season` / `league`. Zero rows when neither conference table is present.
+
+**Example**
+
+```python
+from sportsdataverse.nba.bref import bref_standings
+
+df = bref_standings(season=2024)
+print(df.shape)
+
+# The WNBA page
+
+wnba = bref_standings(season=2024, league="wnba")
+
+# Pipeline next step (one line)
+
+df.filter(pl.col("playoffs") == True).sort("srs", descending=True).head()
+```
+
+### `bref_team_roster(team: 'str', season: 'Optional[int]' = None, *, return_as_pandas: 'bool' = False, proxy: 'Any' = None, **kwargs: 'Any') -> 'pl.DataFrame | pd.DataFrame'` {#bref_team_roster}
+
+A team's roster for one season.
+
+Port of hoopR's `bref_team_roster()`. NBA only.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `team` | `str` |  | Basketball-Reference team abbreviation (`BOS`, `LAL`, `GSW`). Historical franchises use their era code (`NJN`, `SEA`). |
+| `season` | `Optional[int]` | `None` | Season in 4-digit ending-year format. Defaults to the current NBA season. |
+| `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
+| `proxy` | `Any` | `None` | Proxy configuration in the `requests` `proxies=` shape. |
+
+**Returns**
+
+One row per rostered player: `number`, `player`, `pos`, `height`, `weight`, `birth_date`, `flag`, `years_experience`, `college`, plus echoed `team` / `season`. Zero rows when the team/season combination has no page.
+
+**Example**
+
+```python
+from sportsdataverse.nba.bref import bref_team_roster
+
+df = bref_team_roster(team="BOS", season=2024)
+print(df.shape)
+
+# A historical franchise code
+
+sonics = bref_team_roster(team="SEA", season=1996)
+
+# Pipeline next step (one line)
+
+df.select(["player", "pos", "height", "college"]).head()
+```
+
+### `bref_teams_stats(season: 'Optional[int]' = None, table: 'str' = 'per_game', league: 'str' = 'nba', *, return_as_pandas: 'bool' = False, proxy: 'Any' = None, **kwargs: 'Any') -> 'pl.DataFrame | pd.DataFrame'` {#bref_teams_stats}
+
+Team season statistics from the league season page.
+
+Port of hoopR's `bref_teams_stats()` (NBA) and wehoop's
+`bref_wnba_team_stats()` (WNBA). Every team table lives on the one season
+page and all but the first are comment-hidden, which is why the table `id`
+selection in bref_table` matters here.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `Optional[int]` | `None` | Season in 4-digit ending-year format (`2024` = 2023-24). Defaults to the current season. |
+| `table` | `str` | `'per_game'` | NBA accepts `per_game` (default), `totals`, `per_poss`, `advanced` and `opponent` (opponent per-game); WNBA accepts the same set minus `opponent`. |
+| `league` | `str` | `'nba'` | `"nba"` (default) or `"wnba"`. |
+| `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
+| `proxy` | `Any` | `None` | Proxy configuration in the `requests` `proxies=` shape. |
+
+**Returns**
+
+One row per team: `ranker`, `team`, `g`, `mp` and the box categories scaled to `table`, plus echoed `season` / `table` / `league`. The WNBA path drops the `League Average` footer row, as wehoop does. A zero-row frame when the table id is absent.
+
+**Example**
+
+```python
+from sportsdataverse.nba.bref import bref_teams_stats
+
+df = bref_teams_stats(season=2024)
+print(df.shape)
+
+# Opponent per-game, and pandas output
+
+opp = bref_teams_stats(season=2024, table="opponent")
+df_pd = bref_teams_stats(season=2024, return_as_pandas=True)
+
+# Pipeline next step (one line)
+
+df.sort("pts_per_g", descending=True).head()
+```
+
 ### `build_athlete_identity_lookup(rosters: 'dict[int | str, dict]') -> 'dict[str, dict[str, Any]]'` {#build_athlete_identity_lookup}
 
 R `build_athlete_identity_lookup`: athlete_id -> identity from team rosters.
@@ -1975,6 +2311,54 @@ The pseudo-attempt shrinkage constant (fitted split-half).
 ```python
 from sportsdataverse.nba.nba_shot_value_constants import get_shrinkage_k
 get_shrinkage_k("00")
+```
+
+### `hoopshype_salaries(*, proxy: 'Any' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#hoopshype_salaries}
+
+League-wide NBA player salaries from HoopsHype.
+
+One row per player per contract season (current plus the future seasons
+HoopsHype lists), for the whole league (~600 players).
+
+HoopsHype is a Next.js app: the single `/salaries/players/` page paginates
+client-side and only ~20 rows survive a static fetch, but each team page
+embeds that team's complete roster in `<script id="__NEXT_DATA__">`. This
+walks the 30 slugs in `HOOPSHYPE_TEAMS` **serially** -- ~30 requests per
+call -- and parses that JSON. A team page that fails is warned about and
+skipped rather than aborting the league.
+
+Pacing is environment-tunable, never hardcoded in the fetch path:
+
+============================ ==================================================
+`SDV_PY_HOOPSHYPE_DELAY`   seconds slept between team pages (default `0.5`)
+============================ ==================================================
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `proxy` | `Any` | `None` | Proxy configuration forwarded to `~sportsdataverse.dl_utils.download` (`requests` `proxies=` shape). |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One row per player-season with `player_id`, `player`, `first_name`, `last_name`, `team_id`, `team`, `season`, `salary`, `cap_allocation`, `team_option`, `player_option`, `two_way` and `qualifying_offer`. Ids are `Utf8`, money is `Float64`, options are `Boolean`. All 30 pages failing yields a zero-row frame with that schema.
+
+**Example**
+
+```python
+from sportsdataverse.nba import hoopshype_salaries
+
+salaries = hoopshype_salaries()
+print(salaries.shape)
+
+# As pandas
+
+salaries_pd = hoopshype_salaries(return_as_pandas=True)
+
+# Pipeline next step (this season's top-paid)
+
+salaries.filter(pl.col("season") == 2026).sort("salary", descending=True).head()
 ```
 
 ### `in_game_features(pbp: 'pl.DataFrame', pregame_home_prob: 'float') -> 'pl.DataFrame'` {#in_game_features}
@@ -3689,6 +4073,45 @@ repl = calibrate_replacement_level(
 war = nba_war(ratings, poss, replacement_level=repl, pts_per_win=pts_per_win)
 ```
 
+### `nbadraft_mock_draft(year: 'Optional[int]' = None, *, proxy: 'Any' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#nbadraft_mock_draft}
+
+The current consensus mock draft from NBADraft.net.
+
+One row per pick across both rounds. The page renders round 1 and round 2 as
+the first two pick tables and then **repeats round 1 in a third table**, so
+only the first two are taken -- concatenating all three double-counts round 1.
+The `<noscript>` fallback is another false-positive JS challenge; the pick
+tables are static. A traded pick's team cell carries `*`, which is stripped.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `year` | `Optional[int]` | `None` | Draft year (e.g. `2025`). `None` (default) reads the site's current mock; a year uses the `/nba-mock-drafts/{year}/` path where NBADraft.net has one. |
+| `proxy` | `Any` | `None` | Proxy configuration forwarded to `~sportsdataverse.dl_utils.download` (`requests` `proxies=` shape). |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One row per pick with `round` (1 or 2), `pick`, `team`, `player`, `height`, `weight`, `position`, `school` and `class`. An unreachable or table-less page yields a zero-row frame with that schema.
+
+**Example**
+
+```python
+from sportsdataverse.nba import nbadraft_mock_draft
+
+mock = nbadraft_mock_draft()
+print(mock.shape)
+
+# A specific draft year, as pandas
+
+mock_pd = nbadraft_mock_draft(year=2025, return_as_pandas=True)
+
+# Pipeline next step (lottery only)
+
+mock.filter((pl.col("round") == 1) & (pl.col("pick") <= 14))
+```
+
 ### `normalize_player_name(name: 'str') -> 'str'` {#normalize_player_name}
 
 Fold a player display name to a join-safe key.
@@ -4146,6 +4569,539 @@ from sportsdataverse.nba.nba_team_ratings import raw_game_efficiency
 eff = raw_game_efficiency(load_nba_schedule([2024]), load_nba_team_boxscore([2024]))
 ```
 
+### `realgm_close_browser() -> 'None'` {#realgm_close_browser}
+
+Close the cached headless browser, if one is open.
+
+The browser is otherwise kept for `SDV_PY_REALGM_TTL` idle seconds and released at
+interpreter exit. Call this to free it early -- after a batch pull, or before a long
+stretch of work that will not touch RealGM.
+
+**Example**
+
+```python
+from sportsdataverse.nba.realgm import realgm_players, realgm_close_browser
+
+players = realgm_players()
+realgm_close_browser()
+```
+
+### `realgm_coaches(*, fetcher: 'Optional[Fetcher]' = None, proxy: 'Optional[str]' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#realgm_coaches}
+
+Current NBA head coaches.
+
+Port of hoopR's `realgm_coaches()` (staff-role id `20`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `fetcher` | `Optional[Fetcher]` | `None` | Callable `(path, proxy) -> html`; defaults to the headless-browser fetch. |
+| `proxy` | `Optional[str]` | `None` | Proxy URL for the browser launch (env fallback `SDV_PY_REALGM_PROXY`). |
+| `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
+
+**Returns**
+
+One row per coach -- `staff`, `team`, `start_season`, `years_in_role`, `birth_date`, `nationality`. Zero rows when the page carried no data table.
+
+**Example**
+
+```python
+from sportsdataverse.nba.realgm import realgm_coaches
+
+coaches = realgm_coaches()
+print(coaches.shape)
+```
+
+### `realgm_draft(year: 'Optional[int]' = None, *, fetcher: 'Optional[Fetcher]' = None, proxy: 'Optional[str]' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#realgm_draft}
+
+Results of one past NBA draft.
+
+Port of hoopR's `realgm_draft()`. Every table carrying `player` / `pos` / `ht`
+is stacked: the pick tables plus RealGM's listed undrafted players. `round` is
+derived from the overall pick number (`> 30` -> round 2) as in the R original, and is
+null for a table with no `pick` column (the undrafted list).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `year` | `Optional[int]` | `None` | Draft year (the calendar year the draft was held). Defaults to the most recently completed draft. |
+| `fetcher` | `Optional[Fetcher]` | `None` | Callable `(path, proxy) -> html`; defaults to the headless-browser fetch. |
+| `proxy` | `Optional[str]` | `None` | Proxy URL for the browser launch (env fallback `SDV_PY_REALGM_PROXY`). |
+| `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
+
+**Returns**
+
+One row per selection -- `pick`, `player`, `team`, `draft_trades`, `pos`, `ht`, `wt`, `age`, `yos`, `pre_draft_team`, `class`, `nationality`, plus `round` and `draft_year`. Zero rows when no draft table was found.
+
+**Example**
+
+```python
+from sportsdataverse.nba.realgm import realgm_draft
+
+draft = realgm_draft(year=2020)
+print(draft.shape)
+
+# Pipeline next step
+
+draft.filter(pl.col("round") == 1).head()
+```
+
+### `realgm_draft_prospects(*, fetcher: 'Optional[Fetcher]' = None, proxy: 'Optional[str]' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#realgm_draft_prospects}
+
+Current NBA draft-prospect statistics.
+
+Port of hoopR's `realgm_draft_prospects()`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `fetcher` | `Optional[Fetcher]` | `None` | Callable `(path, proxy) -> html`; defaults to the headless-browser fetch. |
+| `proxy` | `Optional[str]` | `None` | Proxy URL for the browser launch (env fallback `SDV_PY_REALGM_PROXY`). |
+| `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
+
+**Returns**
+
+One row per prospect -- `player`, `team` (school / club), `gp`, `mpg`, `ppg`, shooting splits, `rpg`, `apg`, `spg`, `bpg`. Zero rows when the page carried no data table.
+
+**Example**
+
+```python
+from sportsdataverse.nba.realgm import realgm_draft_prospects
+
+prospects = realgm_draft_prospects()
+print(prospects.shape)
+```
+
+### `realgm_early_entry(*, fetcher: 'Optional[Fetcher]' = None, proxy: 'Optional[str]' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#realgm_early_entry}
+
+The current NBA draft early-entrant and withdrawal list.
+
+Port of hoopR's `realgm_early_entry()`: RealGM's college and international
+entrant/withdrawal tables stacked into one frame.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `fetcher` | `Optional[Fetcher]` | `None` | Callable `(path, proxy) -> html`; defaults to the headless-browser fetch. |
+| `proxy` | `Optional[str]` | `None` | Proxy URL for the browser launch (env fallback `SDV_PY_REALGM_PROXY`). |
+| `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
+
+**Returns**
+
+One row per candidate -- `player`, `pos`, `ht`, `wt`, `birth_date`, `college` / `pre_draft_team`, `class`, `draft_status`, `yos`, `nationality`. Zero rows when no early-entry table was found.
+
+**Example**
+
+```python
+from sportsdataverse.nba.realgm import realgm_early_entry
+
+entrants = realgm_early_entry()
+print(entrants.shape)
+```
+
+### `realgm_future_free_agents(*, fetcher: 'Optional[Fetcher]' = None, proxy: 'Optional[str]' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#realgm_future_free_agents}
+
+RealGM's projected future NBA free-agent classes, with each player's agent.
+
+Port of hoopR's `realgm_future_free_agents()`. The `agent` column is the
+distinctive one -- no first-party feed publishes it.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `fetcher` | `Optional[Fetcher]` | `None` | Callable `(path, proxy) -> html`; defaults to the headless-browser fetch. |
+| `proxy` | `Optional[str]` | `None` | Proxy URL for the browser launch (env fallback `SDV_PY_REALGM_PROXY`). |
+| `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
+
+**Returns**
+
+One row per upcoming free agent -- `player`, `pos`, `team`, `season`, `age`, `yos`, `veteran_fa_status`, `gp`, `pts`, `reb`, `ast`, `per`, `agent`. Zero rows when the page carried no data table.
+
+**Example**
+
+```python
+from sportsdataverse.nba.realgm import realgm_future_free_agents
+
+fas = realgm_future_free_agents()
+print(fas.shape)
+
+# Pipeline next step
+
+fas.group_by("agent").agg(pl.len().alias("clients")).sort("clients", descending=True)
+```
+
+### `realgm_gms(*, fetcher: 'Optional[Fetcher]' = None, proxy: 'Optional[str]' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#realgm_gms}
+
+Current NBA general managers.
+
+Port of hoopR's `realgm_gms()` (staff-role id `16`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `fetcher` | `Optional[Fetcher]` | `None` | Callable `(path, proxy) -> html`; defaults to the headless-browser fetch. |
+| `proxy` | `Optional[str]` | `None` | Proxy URL for the browser launch (env fallback `SDV_PY_REALGM_PROXY`). |
+| `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
+
+**Returns**
+
+One row per general manager -- `staff`, `team`, `start_season`, `years_in_role`, `birth_date`, `nationality`. Zero rows when the page carried no data table.
+
+**Example**
+
+```python
+from sportsdataverse.nba.realgm import realgm_gms
+
+gms = realgm_gms()
+print(gms.shape)
+```
+
+### `realgm_individual_games(*, fetcher: 'Optional[Fetcher]' = None, proxy: 'Optional[str]' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#realgm_individual_games}
+
+The all-time best individual NBA games leaderboard.
+
+Port of hoopR's `realgm_individual_games()`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `fetcher` | `Optional[Fetcher]` | `None` | Callable `(path, proxy) -> html`; defaults to the headless-browser fetch. |
+| `proxy` | `Optional[str]` | `None` | Proxy URL for the browser launch (env fallback `SDV_PY_REALGM_PROXY`). |
+| `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
+
+**Returns**
+
+One row per player-game -- `player`, `date`, `team`, `min`, `pts`, `fgm`, `fga`, `reb`, `ast`, `stl`, `blk`, ... Zero rows when the page carried no data table.
+
+**Example**
+
+```python
+from sportsdataverse.nba.realgm import realgm_individual_games
+
+best = realgm_individual_games()
+print(best.shape)
+```
+
+### `realgm_individual_seasons(*, fetcher: 'Optional[Fetcher]' = None, proxy: 'Optional[str]' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#realgm_individual_seasons}
+
+The all-time best individual NBA seasons leaderboard.
+
+Port of hoopR's `realgm_individual_seasons()`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `fetcher` | `Optional[Fetcher]` | `None` | Callable `(path, proxy) -> html`; defaults to the headless-browser fetch. |
+| `proxy` | `Optional[str]` | `None` | Proxy URL for the browser launch (env fallback `SDV_PY_REALGM_PROXY`). |
+| `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
+
+**Returns**
+
+One row per player-season -- `player`, `season`, `team`, `gp`, `min`, `pts`, shooting splits, `reb`, `ast`, ... Zero rows when the page carried no data table.
+
+**Example**
+
+```python
+from sportsdataverse.nba.realgm import realgm_individual_seasons
+
+best = realgm_individual_seasons()
+print(best.shape)
+```
+
+### `realgm_player_stats(season: 'Optional[int]' = None, stat_type: 'str' = 'Averages', season_type: 'str' = 'Regular_Season', *, fetcher: 'Optional[Fetcher]' = None, proxy: 'Optional[str]' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#realgm_player_stats}
+
+Season player-statistics leaderboard for one stat family and season segment.
+
+Port of hoopR's `realgm_player_stats()`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `Optional[int]` | `None` | Season by **ending** year (`2026` = 2025-26). Defaults to `sportsdataverse.nba.nba_schedule.most_recent_nba_season`. |
+| `stat_type` | `str` | `'Averages'` | One of `"Averages"`, `"Totals"`, `"Per_48"`, `"Per_40"`, `"Per_36"`, `"Per_Minute"`, `"Advanced_Stats"`, `"Misc_Stats"`. |
+| `season_type` | `str` | `'Regular_Season'` | One of `"Regular_Season"`, `"Playoffs"`, `"Preseason"`, `"Summer_League"`. |
+| `fetcher` | `Optional[Fetcher]` | `None` | Callable `(path, proxy) -> html`; defaults to the headless-browser fetch. |
+| `proxy` | `Optional[str]` | `None` | Proxy URL for the browser launch (env fallback `SDV_PY_REALGM_PROXY`). |
+| `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
+
+**Returns**
+
+One row per qualified player, columns varying by `stat_type` (for `"Averages"`: `player`, `team`, `gp`, `mpg`, `ppg`, `rpg`, `apg`, ...), plus the echoed `season` / `stat_type` / `season_type`. Zero rows when the page carried no data table.
+
+**Example**
+
+```python
+from sportsdataverse.nba.realgm import realgm_player_stats
+
+stats = realgm_player_stats(season=2025, stat_type="Averages")
+print(stats.shape)
+
+# Pipeline next step
+
+stats.sort("ppg", descending=True).head(10)
+```
+
+### `realgm_players(*, fetcher: 'Optional[Fetcher]' = None, proxy: 'Optional[str]' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#realgm_players}
+
+The active NBA player index from RealGM.
+
+Port of hoopR's `realgm_players()`. RealGM's roster of active players, including the
+pre-draft / international club detail the site is uniquely good for (Jokic ->
+"KK Mega Bemax (Serbia)").
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `fetcher` | `Optional[Fetcher]` | `None` | Callable `(path, proxy) -> html`. Defaults to the headless-browser fetch; inject one to run offline. |
+| `proxy` | `Optional[str]` | `None` | Proxy URL for the browser launch. Falls back to `SDV_PY_REALGM_PROXY` then `SDV_PY_PROXY`. |
+| `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
+
+**Returns**
+
+One row per active player -- `number`, `player`, `pos`, `ht`, `wt`, `age`, `current_team`, `yos`, `pre_draft_team`, `draft_status`, `nationality` (transcribed from hoopR; unverified against live HTML). A zero-row frame when the page carried no data table.
+
+**Example**
+
+```python
+from sportsdataverse.nba.realgm import realgm_players
+
+players = realgm_players()
+print(players.shape)
+
+# Offline / testing -- inject a transport, no browser needed
+
+players = realgm_players(fetcher=lambda path, proxy: "<html>...</html>")
+
+# Pipeline next step
+
+players.filter(pl.col("nationality") != "United States").head()
+```
+
+### `realgm_players_abroad(*, fetcher: 'Optional[Fetcher]' = None, proxy: 'Optional[str]' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#realgm_players_abroad}
+
+NBA-affiliated players currently playing overseas.
+
+Port of hoopR's `realgm_players_abroad()`. Draft picks, two-way and free-agent
+players on international rosters -- a view no first-party NBA/ESPN endpoint provides.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `fetcher` | `Optional[Fetcher]` | `None` | Callable `(path, proxy) -> html`; defaults to the headless-browser fetch. |
+| `proxy` | `Optional[str]` | `None` | Proxy URL for the browser launch (env fallback `SDV_PY_REALGM_PROXY`). |
+| `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
+
+**Returns**
+
+One row per player -- `player`, `pos`, `ht`, `wt`, `nba_status`, `team_s`, `gp`, `mpg`, `ppg`, `rpg`, `apg`. Zero rows when the page carried no data table.
+
+**Example**
+
+```python
+from sportsdataverse.nba.realgm import realgm_players_abroad
+
+abroad = realgm_players_abroad()
+print(abroad.shape)
+```
+
+### `realgm_rookie_scale(*, fetcher: 'Optional[Fetcher]' = None, proxy: 'Optional[str]' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#realgm_rookie_scale}
+
+The current NBA rookie-scale salary table.
+
+Port of hoopR's `realgm_rookie_scale()`. Dollar figures are the formatted strings
+RealGM publishes.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `fetcher` | `Optional[Fetcher]` | `None` | Callable `(path, proxy) -> html`; defaults to the headless-browser fetch. |
+| `proxy` | `Optional[str]` | `None` | Proxy URL for the browser launch (env fallback `SDV_PY_REALGM_PROXY`). |
+| `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
+
+**Returns**
+
+One row per first-round pick -- `pick`, the four contract-year amounts, the 4th-year option increase and the qualifying-offer increase. Zero rows when the page carried no data table.
+
+**Example**
+
+```python
+from sportsdataverse.nba.realgm import realgm_rookie_scale
+
+scale = realgm_rookie_scale()
+print(scale.shape)
+```
+
+### `realgm_salary_cap(*, fetcher: 'Optional[Fetcher]' = None, proxy: 'Optional[str]' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#realgm_salary_cap}
+
+NBA salary-cap history and projections.
+
+Port of hoopR's `realgm_salary_cap()`. Dollar figures come back as the formatted
+strings RealGM publishes (`"$140,588,000"`) -- strip non-numeric characters to get
+numerics.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `fetcher` | `Optional[Fetcher]` | `None` | Callable `(path, proxy) -> html`; defaults to the headless-browser fetch. |
+| `proxy` | `Optional[str]` | `None` | Proxy URL for the browser launch (env fallback `SDV_PY_REALGM_PROXY`). |
+| `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
+
+**Returns**
+
+One row per season -- `season`, `salary_cap`, `luxury_tax`, `x1st_apron`, `x2nd_apron`, `bae`, `non_taxpayer_mle`, `taxpayer_mle`, `team_room_mle`. Zero rows when the page carried no data table.
+
+**Example**
+
+```python
+from sportsdataverse.nba.realgm import realgm_salary_cap
+
+caps = realgm_salary_cap()
+print(caps.shape)
+
+# Pipeline next step -- parse the dollar strings
+
+caps.with_columns(pl.col("salary_cap").str.replace_all(r"[^0-9.]", "").cast(pl.Float64))
+```
+
+### `realgm_standings(*, fetcher: 'Optional[Fetcher]' = None, proxy: 'Optional[str]' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#realgm_standings}
+
+Current NBA standings, both conferences stacked.
+
+Port of hoopR's `realgm_standings()`. The Eastern and Western conference tables are
+row-bound and labelled by a `conference` column, assigned **by table order** (first
+qualifying table -> Eastern) exactly as the R original does -- so a RealGM layout
+change that reorders the two tables would mislabel them.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `fetcher` | `Optional[Fetcher]` | `None` | Callable `(path, proxy) -> html`; defaults to the headless-browser fetch. |
+| `proxy` | `Optional[str]` | `None` | Proxy URL for the browser launch (env fallback `SDV_PY_REALGM_PROXY`). |
+| `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
+
+**Returns**
+
+One row per team -- `number`, `team`, `w`, `l`, `pct`, `gb`, `l10`, `strk`, `ppg`, `oppg`, `diff`, `home`, `away` plus `conference` (`"Eastern"` / `"Western"`). Zero rows when no standings table was found.
+
+**Example**
+
+```python
+from sportsdataverse.nba.realgm import realgm_standings
+
+standings = realgm_standings()
+print(standings.shape)
+
+# Pipeline next step
+
+standings.filter(pl.col("conference") == "Eastern").head()
+```
+
+### `realgm_team_stats(season: 'Optional[int]' = None, stat_type: 'str' = 'Averages', season_type: 'str' = 'Regular_Season', *, fetcher: 'Optional[Fetcher]' = None, proxy: 'Optional[str]' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#realgm_team_stats}
+
+Season team statistics for one stat family and season segment.
+
+Port of hoopR's `realgm_team_stats()`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `Optional[int]` | `None` | Season by **ending** year (`2026` = 2025-26). Defaults to `sportsdataverse.nba.nba_schedule.most_recent_nba_season`. |
+| `stat_type` | `str` | `'Averages'` | One of `"Averages"`, `"Totals"`, `"Advanced_Stats"`, `"Misc_Stats"`. |
+| `season_type` | `str` | `'Regular_Season'` | One of `"Regular_Season"`, `"Playoffs"`, `"Preseason"`, `"Summer_League"`. |
+| `fetcher` | `Optional[Fetcher]` | `None` | Callable `(path, proxy) -> html`; defaults to the headless-browser fetch. |
+| `proxy` | `Optional[str]` | `None` | Proxy URL for the browser launch (env fallback `SDV_PY_REALGM_PROXY`). |
+| `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
+
+**Returns**
+
+One row per team (`team`, `gp`, `mpg`, `ppg`, `rpg`, `apg`, ... for `"Averages"`) plus the echoed `season` / `stat_type` / `season_type`. Zero rows when the page carried no data table.
+
+**Example**
+
+```python
+from sportsdataverse.nba.realgm import realgm_team_stats
+
+teams = realgm_team_stats(season=2025, stat_type="Advanced_Stats")
+print(teams.shape)
+```
+
+### `realgm_teams(*, fetcher: 'Optional[Fetcher]' = None, proxy: 'Optional[str]' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#realgm_teams}
+
+The NBA team index with division and conference.
+
+Port of hoopR's `realgm_teams()`. RealGM renders one small table per division, headed
+by e.g. "Atlantic Division"; the division name comes from that first header and the
+conference from a static division -> conference map.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `fetcher` | `Optional[Fetcher]` | `None` | Callable `(path, proxy) -> html`; defaults to the headless-browser fetch. |
+| `proxy` | `Optional[str]` | `None` | Proxy URL for the browser launch (env fallback `SDV_PY_REALGM_PROXY`). |
+| `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
+
+**Returns**
+
+One row per team -- `team`, `division`, `conference`. Zero rows (with that schema) when no division table was recognised.
+
+**Example**
+
+```python
+from sportsdataverse.nba.realgm import realgm_teams
+
+teams = realgm_teams()
+print(teams.shape)
+```
+
+### `realgm_transactions(*, fetcher: 'Optional[Fetcher]' = None, proxy: 'Optional[str]' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#realgm_transactions}
+
+The NBA league transactions log.
+
+Port of hoopR's `realgm_transactions()` -- the one non-tabular RealGM page. RealGM
+publishes transactions as a dated narrative list (`h3` date heading + `ul li`
+items), so this parses the DOM rather than a `<table>`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `fetcher` | `Optional[Fetcher]` | `None` | Callable `(path, proxy) -> html`; defaults to the headless-browser fetch. |
+| `proxy` | `Optional[str]` | `None` | Proxy URL for the browser launch (env fallback `SDV_PY_REALGM_PROXY`). |
+| `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
+
+**Returns**
+
+One row per transaction -- `date` (`polars.Date`) and `transaction` (text). Zero rows (with that schema) when no dated block parsed.
+
+**Example**
+
+```python
+from sportsdataverse.nba.realgm import realgm_transactions
+
+log = realgm_transactions()
+print(log.shape)
+
+# Pipeline next step
+
+log.filter(pl.col("transaction").str.contains("(?i)two-way")).head()
+```
+
 ### `render_report(report: 'ValidationReport') -> 'str'` {#render_report}
 
 Render a `ValidationReport` as a human-readable markdown validation card.
@@ -4175,6 +5131,48 @@ print(md)
 
 with open("validation_card.md", "w") as f:
     f.write(render_report(rep))
+```
+
+### `rotowire_injuries(*, proxy: 'Any' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#rotowire_injuries}
+
+The current NBA injury report from RotoWire.
+
+One row per injured player: team, position, the injury, the designation
+(Out / Doubtful / Questionable / GTD / Day-To-Day) and a link to the player's
+RotoWire page. This is the live replacement for the defunct RotoWorld feed.
+
+The rendered grid at `/basketball/news.php?view=injuries` builds itself
+client-side, so this reads the JSON table endpoint the grid calls
+(`/basketball/tables/injury-report.php?team=ALL&pos=ALL`) rather than
+scraping the page. The projected return date is subscriber-gated and comes
+back as `"Subscribers Only"`; it is returned as null for non-subscribers.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `proxy` | `Any` | `None` | Proxy configuration forwarded to `~sportsdataverse.dl_utils.download` (`requests` `proxies=` shape). |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One row per injured player with `player_id`, `player`, `first_name`, `last_name`, `team`, `position`, `injury`, `status`, `return_date` and `url`. An unreachable endpoint or a non-list body yields a zero-row frame with that schema.
+
+**Example**
+
+```python
+from sportsdataverse.nba import rotowire_injuries
+
+injuries = rotowire_injuries()
+print(injuries.shape)
+
+# As pandas
+
+injuries_pd = rotowire_injuries(return_as_pandas=True)
+
+# Pipeline next step (who is ruled out)
+
+injuries.filter(pl.col("status") == "Out").select("player", "team", "injury")
 ```
 
 ### `score_shot_xpoints(shots: 'pl.DataFrame', league_avgs: 'pl.DataFrame', *, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#score_shot_xpoints}
@@ -4324,6 +5322,47 @@ factor `k_i = τ² / (τ² + σ²_i)` and `clutch_skill_shrunk = k_i · delta_i`
 ```python
 from sportsdataverse.nba.nba_clutch import clutch_delta, shrink_clutch
 skill = shrink_clutch(clutch_delta(clutch_frame, baseline_frame))
+```
+
+### `spotrac_team_cap(season: 'Optional[int]' = None, *, proxy: 'Any' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#spotrac_team_cap}
+
+Team salary-cap allocations from Spotrac.
+
+One row per team: cap allocations, cap space, active-player count and average
+roster age for a season. No API key required.
+
+The page carries a `<noscript>` fallback that looks like a JS challenge but
+is not -- the cap table is in the static HTML. The team cell duplicates the
+abbreviation (`"ORL ORL"`), so only the first token is kept, and every
+`$`-formatted column is parsed to `Float64`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `Optional[int]` | `None` | Season in 4-digit ENDING-year form (`2024` = the 2023-24 season). Defaults to `~sportsdataverse.nba.nba_schedule.most_recent_nba_season`. |
+| `proxy` | `Any` | `None` | Proxy configuration forwarded to `~sportsdataverse.dl_utils.download` (`requests` `proxies=` shape). |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One row per team. Columns follow Spotrac's table -- `rank`, `team`, `record`, `players_active`, `avg_age_team`, `total_cap_allocations`, `cap_space_all` -- plus `season`. An unreachable or table-less page yields a zero-row frame with that schema.
+
+**Example**
+
+```python
+from sportsdataverse.nba import spotrac_team_cap
+
+cap = spotrac_team_cap(season=2024)
+print(cap.shape)
+
+# As pandas
+
+cap_pd = spotrac_team_cap(season=2024, return_as_pandas=True)
+
+# Pipeline next step (most cap space)
+
+cap.sort("cap_space_all", descending=True).head()
 ```
 
 ### `starters_on_court_counts(possessions: 'pl.DataFrame', starters: 'dict[int, list[int]]') -> 'dict[int, int]'` {#starters_on_court_counts}

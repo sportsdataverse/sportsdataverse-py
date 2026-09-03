@@ -337,6 +337,7 @@ from sportsdataverse.wbb import get_team_raw_from_per_game as get_team_raw_from_
 from sportsdataverse.wbb import get_team_triples as get_team_triples  # noqa: F401
 from sportsdataverse.wbb import get_unified_ncaa_id as get_unified_ncaa_id  # noqa: F401
 from sportsdataverse.wbb import handle_common_sub_bug as handle_common_sub_bug  # noqa: F401
+from sportsdataverse.wbb import has_herhoopstats_login as has_herhoopstats_login  # noqa: F401
 from sportsdataverse.wbb import helper_wbb_athlete_items as helper_wbb_athlete_items  # noqa: F401
 from sportsdataverse.wbb import helper_wbb_game_data as helper_wbb_game_data  # noqa: F401
 from sportsdataverse.wbb import helper_wbb_game_items as helper_wbb_game_items  # noqa: F401
@@ -356,6 +357,10 @@ from sportsdataverse.wbb import helper_wbb_standings as helper_wbb_standings  # 
 from sportsdataverse.wbb import helper_wbb_team_box as helper_wbb_team_box  # noqa: F401
 from sportsdataverse.wbb import helper_wbb_team_items as helper_wbb_team_items  # noqa: F401
 from sportsdataverse.wbb import helper_wbb_team_season_stats as helper_wbb_team_season_stats  # noqa: F401
+from sportsdataverse.wbb import herhoopstats_login as herhoopstats_login  # noqa: F401
+from sportsdataverse.wbb import herhoopstats_team_roster as herhoopstats_team_roster  # noqa: F401
+from sportsdataverse.wbb import herhoopstats_team_stats as herhoopstats_team_stats  # noqa: F401
+from sportsdataverse.wbb import herhoopstats_teams as herhoopstats_teams  # noqa: F401
 from sportsdataverse.wbb import in_game_features as in_game_features  # noqa: F401
 from sportsdataverse.wbb import incorporate_height as incorporate_height  # noqa: F401
 from sportsdataverse.wbb import inject_luck as inject_luck  # noqa: F401
@@ -862,6 +867,7 @@ __all__ = [
     "get_team_triples",
     "get_unified_ncaa_id",
     "handle_common_sub_bug",
+    "has_herhoopstats_login",
     "helper_wbb_athlete_items",
     "helper_wbb_game_data",
     "helper_wbb_game_items",
@@ -881,6 +887,10 @@ __all__ = [
     "helper_wbb_team_box",
     "helper_wbb_team_items",
     "helper_wbb_team_season_stats",
+    "herhoopstats_login",
+    "herhoopstats_team_roster",
+    "herhoopstats_team_stats",
+    "herhoopstats_teams",
     "in_game_features",
     "incorporate_height",
     "inject_luck",

@@ -149,6 +149,36 @@ from sportsdataverse.mbb import fox_mbb_team_gamelog as _raw_fox_mbb_team_gamelo
 from sportsdataverse.mbb import fox_mbb_team_roster as _raw_fox_mbb_team_roster
 from sportsdataverse.mbb import fox_mbb_team_stats as _raw_fox_mbb_team_stats
 from sportsdataverse.mbb import fox_mbb_teams as _raw_fox_mbb_teams
+from sportsdataverse.mbb import kenpom_archive_ratings as _raw_kenpom_archive_ratings
+from sportsdataverse.mbb import kenpom_arenas as _raw_kenpom_arenas
+from sportsdataverse.mbb import kenpom_box as _raw_kenpom_box
+from sportsdataverse.mbb import kenpom_coach_history as _raw_kenpom_coach_history
+from sportsdataverse.mbb import kenpom_conference as _raw_kenpom_conference
+from sportsdataverse.mbb import kenpom_conference_history as _raw_kenpom_conference_history
+from sportsdataverse.mbb import kenpom_conference_stats as _raw_kenpom_conference_stats
+from sportsdataverse.mbb import kenpom_efficiency as _raw_kenpom_efficiency
+from sportsdataverse.mbb import kenpom_fan_match as _raw_kenpom_fan_match
+from sportsdataverse.mbb import kenpom_foul_trouble as _raw_kenpom_foul_trouble
+from sportsdataverse.mbb import kenpom_four_factors as _raw_kenpom_four_factors
+from sportsdataverse.mbb import kenpom_game_attributes as _raw_kenpom_game_attributes
+from sportsdataverse.mbb import kenpom_game_plan as _raw_kenpom_game_plan
+from sportsdataverse.mbb import kenpom_height as _raw_kenpom_height
+from sportsdataverse.mbb import kenpom_home_court_advantage as _raw_kenpom_home_court_advantage
+from sportsdataverse.mbb import kenpom_kpoy as _raw_kenpom_kpoy
+from sportsdataverse.mbb import kenpom_officials as _raw_kenpom_officials
+from sportsdataverse.mbb import kenpom_opponent_tracker as _raw_kenpom_opponent_tracker
+from sportsdataverse.mbb import kenpom_player_career as _raw_kenpom_player_career
+from sportsdataverse.mbb import kenpom_player_stats as _raw_kenpom_player_stats
+from sportsdataverse.mbb import kenpom_point_distribution as _raw_kenpom_point_distribution
+from sportsdataverse.mbb import kenpom_program_ratings as _raw_kenpom_program_ratings
+from sportsdataverse.mbb import kenpom_ratings as _raw_kenpom_ratings
+from sportsdataverse.mbb import kenpom_referee as _raw_kenpom_referee
+from sportsdataverse.mbb import kenpom_team as _raw_kenpom_team
+from sportsdataverse.mbb import kenpom_team_history as _raw_kenpom_team_history
+from sportsdataverse.mbb import kenpom_team_players_expanded as _raw_kenpom_team_players_expanded
+from sportsdataverse.mbb import kenpom_team_stats as _raw_kenpom_team_stats
+from sportsdataverse.mbb import kenpom_trends as _raw_kenpom_trends
+from sportsdataverse.mbb import kenpom_win_probability as _raw_kenpom_win_probability
 from sportsdataverse.mbb import torvik_ratings as _raw_torvik_ratings
 from sportsdataverse.mbb import torvik_team_factors as _raw_torvik_team_factors
 from sportsdataverse.mbb import AssistEvent as AssistEvent  # noqa: F401
@@ -338,6 +368,7 @@ from sportsdataverse.mbb import get_team_raw_from_per_game as get_team_raw_from_
 from sportsdataverse.mbb import get_team_triples as get_team_triples  # noqa: F401
 from sportsdataverse.mbb import get_unified_ncaa_id as get_unified_ncaa_id  # noqa: F401
 from sportsdataverse.mbb import handle_common_sub_bug as handle_common_sub_bug  # noqa: F401
+from sportsdataverse.mbb import has_kenpom_login as has_kenpom_login  # noqa: F401
 from sportsdataverse.mbb import helper_mbb_athlete_items as helper_mbb_athlete_items  # noqa: F401
 from sportsdataverse.mbb import helper_mbb_game_data as helper_mbb_game_data  # noqa: F401
 from sportsdataverse.mbb import helper_mbb_game_items as helper_mbb_game_items  # noqa: F401
@@ -371,6 +402,7 @@ from sportsdataverse.mbb import is_team_shooting_left_to_start as is_team_shooti
 from sportsdataverse.mbb import is_transition as is_transition  # noqa: F401
 from sportsdataverse.mbb import is_women_game as is_women_game  # noqa: F401
 from sportsdataverse.mbb import jsoup_text as jsoup_text  # noqa: F401
+from sportsdataverse.mbb import kenpom_login as kenpom_login  # noqa: F401
 from sportsdataverse.mbb import kmeans_fit as kmeans_fit  # noqa: F401
 from sportsdataverse.mbb import lineup_as_raw_clumps as lineup_as_raw_clumps  # noqa: F401
 from sportsdataverse.mbb import lineup_balancer as lineup_balancer  # noqa: F401
@@ -481,6 +513,7 @@ from sportsdataverse.mbb import parse_game_time as parse_game_time  # noqa: F401
 from sportsdataverse.mbb import parse_html as parse_html  # noqa: F401
 from sportsdataverse.mbb import parse_jumpball_won as parse_jumpball_won  # noqa: F401
 from sportsdataverse.mbb import parse_jumpball_won_or_lost as parse_jumpball_won_or_lost  # noqa: F401
+from sportsdataverse.mbb import parse_kenpom_page as parse_kenpom_page  # noqa: F401
 from sportsdataverse.mbb import parse_live_offensive_rebound as parse_live_offensive_rebound  # noqa: F401
 from sportsdataverse.mbb import parse_ncaa_bb_box as parse_ncaa_bb_box  # noqa: F401
 from sportsdataverse.mbb import parse_ncaa_bb_game_pbp as parse_ncaa_bb_game_pbp  # noqa: F401
@@ -888,6 +921,7 @@ __all__ = [
     "get_team_triples",
     "get_unified_ncaa_id",
     "handle_common_sub_bug",
+    "has_kenpom_login",
     "helper_mbb_athlete_items",
     "helper_mbb_game_data",
     "helper_mbb_game_items",
@@ -921,6 +955,37 @@ __all__ = [
     "is_transition",
     "is_women_game",
     "jsoup_text",
+    "kenpom_archive_ratings",
+    "kenpom_arenas",
+    "kenpom_box",
+    "kenpom_coach_history",
+    "kenpom_conference",
+    "kenpom_conference_history",
+    "kenpom_conference_stats",
+    "kenpom_efficiency",
+    "kenpom_fan_match",
+    "kenpom_foul_trouble",
+    "kenpom_four_factors",
+    "kenpom_game_attributes",
+    "kenpom_game_plan",
+    "kenpom_height",
+    "kenpom_home_court_advantage",
+    "kenpom_kpoy",
+    "kenpom_login",
+    "kenpom_officials",
+    "kenpom_opponent_tracker",
+    "kenpom_player_career",
+    "kenpom_player_stats",
+    "kenpom_point_distribution",
+    "kenpom_program_ratings",
+    "kenpom_ratings",
+    "kenpom_referee",
+    "kenpom_team",
+    "kenpom_team_history",
+    "kenpom_team_players_expanded",
+    "kenpom_team_stats",
+    "kenpom_trends",
+    "kenpom_win_probability",
     "kmeans_fit",
     "lineup_as_raw_clumps",
     "lineup_balancer",
@@ -1031,6 +1096,7 @@ __all__ = [
     "parse_html",
     "parse_jumpball_won",
     "parse_jumpball_won_or_lost",
+    "parse_kenpom_page",
     "parse_live_offensive_rebound",
     "parse_ncaa_bb_box",
     "parse_ncaa_bb_game_pbp",
@@ -2890,6 +2956,426 @@ def fox_mbb_teams(*args, **kwargs):
     """
     kwargs.setdefault("return_parsed", True)
     return _raw_fox_mbb_teams(*args, **kwargs)
+
+
+def kenpom_archive_ratings(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mbb.kenpom_archive_ratings``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.mbb.kenpom_archive_ratings` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mbb.kenpom_archive_ratings` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_kenpom_archive_ratings(*args, **kwargs)
+
+
+def kenpom_arenas(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mbb.kenpom_arenas``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.mbb.kenpom_arenas` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mbb.kenpom_arenas` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_kenpom_arenas(*args, **kwargs)
+
+
+def kenpom_box(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mbb.kenpom_box``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.mbb.kenpom_box` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mbb.kenpom_box` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_kenpom_box(*args, **kwargs)
+
+
+def kenpom_coach_history(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mbb.kenpom_coach_history``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.mbb.kenpom_coach_history` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mbb.kenpom_coach_history` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_kenpom_coach_history(*args, **kwargs)
+
+
+def kenpom_conference(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mbb.kenpom_conference``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.mbb.kenpom_conference` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mbb.kenpom_conference` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_kenpom_conference(*args, **kwargs)
+
+
+def kenpom_conference_history(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mbb.kenpom_conference_history``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.mbb.kenpom_conference_history` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mbb.kenpom_conference_history` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_kenpom_conference_history(*args, **kwargs)
+
+
+def kenpom_conference_stats(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mbb.kenpom_conference_stats``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.mbb.kenpom_conference_stats` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mbb.kenpom_conference_stats` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_kenpom_conference_stats(*args, **kwargs)
+
+
+def kenpom_efficiency(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mbb.kenpom_efficiency``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.mbb.kenpom_efficiency` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mbb.kenpom_efficiency` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_kenpom_efficiency(*args, **kwargs)
+
+
+def kenpom_fan_match(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mbb.kenpom_fan_match``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.mbb.kenpom_fan_match` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mbb.kenpom_fan_match` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_kenpom_fan_match(*args, **kwargs)
+
+
+def kenpom_foul_trouble(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mbb.kenpom_foul_trouble``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.mbb.kenpom_foul_trouble` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mbb.kenpom_foul_trouble` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_kenpom_foul_trouble(*args, **kwargs)
+
+
+def kenpom_four_factors(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mbb.kenpom_four_factors``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.mbb.kenpom_four_factors` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mbb.kenpom_four_factors` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_kenpom_four_factors(*args, **kwargs)
+
+
+def kenpom_game_attributes(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mbb.kenpom_game_attributes``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.mbb.kenpom_game_attributes` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mbb.kenpom_game_attributes` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_kenpom_game_attributes(*args, **kwargs)
+
+
+def kenpom_game_plan(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mbb.kenpom_game_plan``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.mbb.kenpom_game_plan` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mbb.kenpom_game_plan` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_kenpom_game_plan(*args, **kwargs)
+
+
+def kenpom_height(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mbb.kenpom_height``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.mbb.kenpom_height` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mbb.kenpom_height` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_kenpom_height(*args, **kwargs)
+
+
+def kenpom_home_court_advantage(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mbb.kenpom_home_court_advantage``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.mbb.kenpom_home_court_advantage` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mbb.kenpom_home_court_advantage` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_kenpom_home_court_advantage(*args, **kwargs)
+
+
+def kenpom_kpoy(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mbb.kenpom_kpoy``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.mbb.kenpom_kpoy` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mbb.kenpom_kpoy` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_kenpom_kpoy(*args, **kwargs)
+
+
+def kenpom_officials(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mbb.kenpom_officials``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.mbb.kenpom_officials` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mbb.kenpom_officials` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_kenpom_officials(*args, **kwargs)
+
+
+def kenpom_opponent_tracker(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mbb.kenpom_opponent_tracker``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.mbb.kenpom_opponent_tracker` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mbb.kenpom_opponent_tracker` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_kenpom_opponent_tracker(*args, **kwargs)
+
+
+def kenpom_player_career(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mbb.kenpom_player_career``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.mbb.kenpom_player_career` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mbb.kenpom_player_career` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_kenpom_player_career(*args, **kwargs)
+
+
+def kenpom_player_stats(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mbb.kenpom_player_stats``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.mbb.kenpom_player_stats` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mbb.kenpom_player_stats` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_kenpom_player_stats(*args, **kwargs)
+
+
+def kenpom_point_distribution(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mbb.kenpom_point_distribution``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.mbb.kenpom_point_distribution` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mbb.kenpom_point_distribution` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_kenpom_point_distribution(*args, **kwargs)
+
+
+def kenpom_program_ratings(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mbb.kenpom_program_ratings``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.mbb.kenpom_program_ratings` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mbb.kenpom_program_ratings` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_kenpom_program_ratings(*args, **kwargs)
+
+
+def kenpom_ratings(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mbb.kenpom_ratings``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.mbb.kenpom_ratings` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mbb.kenpom_ratings` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_kenpom_ratings(*args, **kwargs)
+
+
+def kenpom_referee(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mbb.kenpom_referee``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.mbb.kenpom_referee` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mbb.kenpom_referee` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_kenpom_referee(*args, **kwargs)
+
+
+def kenpom_team(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mbb.kenpom_team``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.mbb.kenpom_team` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mbb.kenpom_team` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_kenpom_team(*args, **kwargs)
+
+
+def kenpom_team_history(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mbb.kenpom_team_history``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.mbb.kenpom_team_history` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mbb.kenpom_team_history` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_kenpom_team_history(*args, **kwargs)
+
+
+def kenpom_team_players_expanded(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mbb.kenpom_team_players_expanded``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.mbb.kenpom_team_players_expanded` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mbb.kenpom_team_players_expanded` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_kenpom_team_players_expanded(*args, **kwargs)
+
+
+def kenpom_team_stats(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mbb.kenpom_team_stats``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.mbb.kenpom_team_stats` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mbb.kenpom_team_stats` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_kenpom_team_stats(*args, **kwargs)
+
+
+def kenpom_trends(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mbb.kenpom_trends``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.mbb.kenpom_trends` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mbb.kenpom_trends` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_kenpom_trends(*args, **kwargs)
+
+
+def kenpom_win_probability(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mbb.kenpom_win_probability``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.mbb.kenpom_win_probability` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mbb.kenpom_win_probability` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_kenpom_win_probability(*args, **kwargs)
 
 
 def torvik_ratings(*args, **kwargs):

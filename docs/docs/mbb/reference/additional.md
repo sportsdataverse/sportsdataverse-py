@@ -1870,16 +1870,6 @@ A surname fragment matched, but the whole-name score fell short of
 | `score` | `int` |  | The whole-name similarity score. |
 | `info` | `str` |  | Human-readable diagnostic (debug-only; see the fuzzy-match- parity note). |
 
-### `Year(value: 'int') -> None` {#Year}
-
-CBB season, named by the year it ends (`Year`, `Year.scala`).
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `value` | `int` |  | The ending year of the season. |
-
 ### `add_missing_players(clump: 'BadLineupClump', box_lineup: 'LineupEvent', valid_player_codes: 'set[str]') -> 'tuple[list[LineupEvent], BadLineupClump]'` {#add_missing_players}
 
 Back-fills a clump whose lineups carry TOO FEW players
@@ -5909,6 +5899,26 @@ from sportsdataverse.mbb.mbb_ncaa_stint_validation import (
 fixed, still = handle_common_sub_bug(clump, box_lineup, valid_codes)
 ```
 
+### `has_kenpom_login() -> 'bool'` {#has_kenpom_login}
+
+Whether KenPom credentials are set in the environment.
+
+The Python counterpart of hoopR's `has_kp_user_and_pw()`; gates a live
+test without attempting a login.
+
+**Returns**
+
+`True` when both an e-mail and a password resolve from the environment.
+
+**Example**
+
+```python
+import pytest
+from sportsdataverse.mbb import has_kenpom_login
+
+pytestmark = pytest.mark.skipif(not has_kenpom_login(), reason="no KenPom login")
+```
+
 ### `in_game_features(pbp: 'pl.DataFrame', pregame_home_prob: 'float') -> 'pl.DataFrame'` {#in_game_features}
 
 Per-play in-game win-probability features from a `load_mbb_pbp` frame.
@@ -6291,6 +6301,35 @@ The whitespace-collapsed text, or `""` if `el` is `None`.
 from sportsdataverse.mbb.mbb_ncaa_html import jsoup_text, parse_html
 soup = parse_html("<td>\n  Akin,\tDaniel  </td>")
 jsoup_text(soup.find("td"))  # "Akin, Daniel"
+```
+
+### `kenpom_login(email: 'Optional[str]' = None, password: 'Optional[str]' = None, *, proxy: 'Any' = None) -> 'requests.Session'` {#kenpom_login}
+
+Log into kenpom.com and return the authenticated session.
+
+The Python counterpart of hoopR's `login()`. Calling this directly is
+optional -- every wrapper logs in on demand and reuses a cached session --
+but it is the fastest way to verify credentials or a proxy before a long
+pull, and the returned session can be passed to a wrapper as `session=`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `email` | `Optional[str]` | `None` | KenPom account e-mail. Falls back to `KENPOM_EMAIL` / `KP_USER` / `SDV_PY_KENPOM_EMAIL`. |
+| `password` | `Optional[str]` | `None` | KenPom password. Falls back to `KENPOM_PW` / `KP_PW` / `SDV_PY_KENPOM_PW`. |
+| `proxy` | `Any` | `None` | Proxy URL `str` or `requests` `proxies=` `dict`. Falls back to `SDV_PY_KENPOM_PROXY` then `SDV_PY_PROXY`. |
+
+**Returns**
+
+An authenticated `requests.Session` carrying the subscription cookie and the resolved proxy.
+
+**Example**
+
+```python
+from sportsdataverse.mbb import kenpom_login
+
+session = kenpom_login(proxy="http://user:pw@proxy.example:8080")
 ```
 
 ### `kmeans_fit(X: 'np.ndarray', k: 'int', seed: 'int', n_init: 'int' = 10, max_iter: 'int' = 100) -> "'tuple[np.ndarray, np.ndarray]'"` {#kmeans_fit}
