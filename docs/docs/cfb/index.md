@@ -14,6 +14,7 @@ description: "sdv-py CFB: endpoint references, dataset loaders and parsers for C
 | [On3 Recruit Database (api.on3.com)](reference/on3) | 78 | `https://api.on3.com/public/rdb/v1` |
 | [247Sports Recruit Database (ipa.247sports.com)](reference/sports247) | 12 | `https://ipa.247sports.com` |
 | [247Sports Site Pages (247sports.com)](reference/sports247_site_pages) | 35 | `https://247sports.com` |
+| [College Football Data API (api.collegefootballdata.com, free API key)](reference/cfbd) | 58 | `https://api.collegefootballdata.com` |
 | [Dataset loaders](reference/loaders) | 42 | sportsdataverse raw data / sportsdataverse-data releases |
 | [Additional functions](reference/additional) | 92 | hand-written wrappers, loaders & helpers |
 
@@ -30,6 +31,30 @@ Each `sportsdataverse` function and its equivalent in the sister R package, [`cf
 
 | `sportsdataverse.cfb` (Python) | `cfbfastR` (R) |
 |---|---|
+| [`cfbd_calendar`](reference/cfbd#cfbd_calendar) | [`cfbd_calendar`](https://cfbfastR.sportsdataverse.org/reference/cfbd_calendar.html) |
+| [`cfbd_coaches`](reference/cfbd#cfbd_coaches) | [`cfbd_coaches`](https://cfbfastR.sportsdataverse.org/reference/cfbd_coaches.html) |
+| [`cfbd_conferences`](reference/cfbd#cfbd_conferences) | [`cfbd_conferences`](https://cfbfastR.sportsdataverse.org/reference/cfbd_conferences.html) |
+| [`cfbd_draft_picks`](reference/cfbd#cfbd_draft_picks) | [`cfbd_draft_picks`](https://cfbfastR.sportsdataverse.org/reference/cfbd_draft_picks.html) |
+| [`cfbd_draft_positions`](reference/cfbd#cfbd_draft_positions) | [`cfbd_draft_positions`](https://cfbfastR.sportsdataverse.org/reference/cfbd_draft_positions.html) |
+| [`cfbd_draft_teams`](reference/cfbd#cfbd_draft_teams) | [`cfbd_draft_teams`](https://cfbfastR.sportsdataverse.org/reference/cfbd_draft_teams.html) |
+| [`cfbd_drives`](reference/cfbd#cfbd_drives) | [`cfbd_drives`](https://cfbfastR.sportsdataverse.org/reference/cfbd_drives.html) |
+| [`cfbd_game_box_advanced`](reference/cfbd#cfbd_game_box_advanced) | [`cfbd_game_box_advanced`](https://cfbfastR.sportsdataverse.org/reference/cfbd_game_box_advanced.html) |
+| [`cfbd_live_plays`](reference/cfbd#cfbd_live_plays) | [`cfbd_live_plays`](https://cfbfastR.sportsdataverse.org/reference/cfbd_live_plays.html) |
+| [`cfbd_metrics_fg_ep`](reference/cfbd#cfbd_metrics_fg_ep) | [`cfbd_metrics_fg_ep`](https://cfbfastR.sportsdataverse.org/reference/cfbd_metrics_fg_ep.html) |
+| [`cfbd_metrics_wp`](reference/cfbd#cfbd_metrics_wp) | [`cfbd_metrics_wp`](https://cfbfastR.sportsdataverse.org/reference/cfbd_metrics_wp.html) |
+| [`cfbd_metrics_wp_pregame`](reference/cfbd#cfbd_metrics_wp_pregame) | [`cfbd_metrics_wp_pregame`](https://cfbfastR.sportsdataverse.org/reference/cfbd_metrics_wp_pregame.html) |
+| [`cfbd_player_returning`](reference/cfbd#cfbd_player_returning) | [`cfbd_player_returning`](https://cfbfastR.sportsdataverse.org/reference/cfbd_player_returning.html) |
+| [`cfbd_player_usage`](reference/cfbd#cfbd_player_usage) | [`cfbd_player_usage`](https://cfbfastR.sportsdataverse.org/reference/cfbd_player_usage.html) |
+| [`cfbd_plays`](reference/cfbd#cfbd_plays) | [`cfbd_plays`](https://cfbfastR.sportsdataverse.org/reference/cfbd_plays.html) |
+| [`cfbd_rankings`](reference/cfbd#cfbd_rankings) | [`cfbd_rankings`](https://cfbfastR.sportsdataverse.org/reference/cfbd_rankings.html) |
+| [`cfbd_ratings_elo`](reference/cfbd#cfbd_ratings_elo) | [`cfbd_ratings_elo`](https://cfbfastR.sportsdataverse.org/reference/cfbd_ratings_elo.html) |
+| [`cfbd_ratings_fpi`](reference/cfbd#cfbd_ratings_fpi) | [`cfbd_ratings_fpi`](https://cfbfastR.sportsdataverse.org/reference/cfbd_ratings_fpi.html) |
+| [`cfbd_ratings_sp`](reference/cfbd#cfbd_ratings_sp) | [`cfbd_ratings_sp`](https://cfbfastR.sportsdataverse.org/reference/cfbd_ratings_sp.html) |
+| [`cfbd_ratings_srs`](reference/cfbd#cfbd_ratings_srs) | [`cfbd_ratings_srs`](https://cfbfastR.sportsdataverse.org/reference/cfbd_ratings_srs.html) |
+| [`cfbd_stats_categories`](reference/cfbd#cfbd_stats_categories) | [`cfbd_stats_categories`](https://cfbfastR.sportsdataverse.org/reference/cfbd_stats_categories.html) |
+| [`cfbd_stats_game_advanced`](reference/cfbd#cfbd_stats_game_advanced) | [`cfbd_stats_game_advanced`](https://cfbfastR.sportsdataverse.org/reference/cfbd_stats_game_advanced.html) |
+| [`cfbd_stats_season_advanced`](reference/cfbd#cfbd_stats_season_advanced) | [`cfbd_stats_season_advanced`](https://cfbfastR.sportsdataverse.org/reference/cfbd_stats_season_advanced.html) |
+| [`cfbd_venues`](reference/cfbd#cfbd_venues) | [`cfbd_venues`](https://cfbfastR.sportsdataverse.org/reference/cfbd_venues.html) |
 | [`espn_cfb_award`](reference/core#espn_cfb_award) | [`espn_cfb_award`](https://cfbfastR.sportsdataverse.org/reference/espn_cfb_award.html) |
 | [`espn_cfb_awards`](reference/core#espn_cfb_awards) | [`espn_cfb_awards`](https://cfbfastR.sportsdataverse.org/reference/espn_cfb_awards.html) |
 | [`espn_cfb_calendar`](reference/site#espn_cfb_calendar) | [`espn_cfb_calendar`](https://cfbfastR.sportsdataverse.org/reference/espn_cfb_calendar.html) |

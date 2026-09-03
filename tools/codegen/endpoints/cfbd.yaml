@@ -1,0 +1,1452 @@
+api: cfbd
+auth: true
+endpoints:
+- extra_params:
+  - description: Required year filter
+    name: year
+    query_key: year
+    required: true
+    type: int
+  parser: parse_cfbd_records
+  path: /calendar
+  returns_schema: native/cfbd/calendar
+  short: calendar
+  summary: "GET /calendar \u2014 Retrieves calendar information"
+- extra_params:
+  - default: null
+    description: Optional first name filter
+    name: first_name
+    query_key: firstName
+    type: str
+  - default: null
+    description: Optional last name filter
+    name: last_name
+    query_key: lastName
+    type: str
+  - default: null
+    description: Optional team filter
+    name: team
+    query_key: team
+    type: str
+  - default: null
+    description: Optional year filter
+    name: year
+    query_key: year
+    type: int
+  - default: null
+    description: Optional start year range filter
+    name: min_year
+    query_key: minYear
+    type: int
+  - default: null
+    description: Optional end year range filter
+    name: max_year
+    query_key: maxYear
+    type: int
+  parser: parse_cfbd_records
+  path: /coaches
+  returns_schema: native/cfbd/coaches
+  short: coaches
+  summary: "GET /coaches \u2014 Retrieves historical head coach information and records"
+- extra_params: []
+  parser: parse_cfbd_records
+  path: /conferences
+  returns_schema: native/cfbd/conferences
+  short: conferences
+  summary: "GET /conferences \u2014 Retrieves list of conferences"
+- extra_params:
+  - default: null
+    description: Optional year filter
+    name: year
+    query_key: year
+    type: int
+  - default: null
+    description: Optional NFL team filter
+    name: team
+    query_key: team
+    type: str
+  - default: null
+    description: Optional college team filter
+    name: school
+    query_key: school
+    type: str
+  - default: null
+    description: Optional college conference filter
+    name: conference
+    query_key: conference
+    type: str
+  - default: null
+    description: Optional position classification filter
+    name: position
+    query_key: position
+    type: str
+  parser: parse_cfbd_records
+  path: /draft/picks
+  returns_schema: native/cfbd/draft_picks
+  short: draft_picks
+  summary: "GET /draft/picks \u2014 Retrieve historical NFL draft data"
+- extra_params: []
+  parser: parse_cfbd_records
+  path: /draft/positions
+  returns_schema: native/cfbd/draft_positions
+  short: draft_positions
+  summary: "GET /draft/positions \u2014 Retrieves list of player position categories for the NFL Draft"
+- extra_params: []
+  parser: parse_cfbd_records
+  path: /draft/teams
+  returns_schema: native/cfbd/draft_teams
+  short: draft_teams
+  summary: "GET /draft/teams \u2014 Retrieves list of NFL teams"
+- extra_params:
+  - description: Required year filter
+    name: year
+    query_key: year
+    required: true
+    type: int
+  - default: null
+    description: Optional season type filter
+    name: season_type
+    query_key: seasonType
+    type: str
+  - default: null
+    description: Optional week filter
+    name: week
+    query_key: week
+    type: int
+  - default: null
+    description: Optional team filter
+    name: team
+    query_key: team
+    type: str
+  - default: null
+    description: Optional offensive team filter
+    name: offense
+    query_key: offense
+    type: str
+  - default: null
+    description: Optional defensive team filter
+    name: defense
+    query_key: defense
+    type: str
+  - default: null
+    description: Optional conference filter
+    name: conference
+    query_key: conference
+    type: str
+  - default: null
+    description: Optional offensive team conference filter
+    name: offense_conference
+    query_key: offenseConference
+    type: str
+  - default: null
+    description: Optional defensive team conference filter
+    name: defense_conference
+    query_key: defenseConference
+    type: str
+  - default: null
+    description: Optional division classification filter
+    name: classification
+    query_key: classification
+    type: str
+  parser: parse_cfbd_records
+  path: /drives
+  returns_schema: native/cfbd/drives
+  short: drives
+  summary: "GET /drives \u2014 Retrieves historical drive data"
+- extra_params:
+  - description: Required game id filter
+    name: id
+    query_key: id
+    required: true
+    type: int
+  parser: parse_cfbd_records
+  path: /game/box/advanced
+  returns_schema: native/cfbd/game_box_advanced
+  short: game_box_advanced
+  summary: "GET /game/box/advanced \u2014 Retrieves an advanced box score for a game"
+- extra_params:
+  - default: null
+    description: Required year filter (except when id is specified)
+    name: year
+    query_key: year
+    type: int
+  - default: null
+    description: Optional week filter
+    name: week
+    query_key: week
+    type: int
+  - default: null
+    description: Optional season type filter
+    name: season_type
+    query_key: seasonType
+    type: str
+  - default: null
+    description: Optional division classification filter
+    name: classification
+    query_key: classification
+    type: str
+  - default: null
+    description: Optional team filter
+    name: team
+    query_key: team
+    type: str
+  - default: null
+    description: Optional home team filter
+    name: home
+    query_key: home
+    type: str
+  - default: null
+    description: Optional away team filter
+    name: away
+    query_key: away
+    type: str
+  - default: null
+    description: Optional conference filter
+    name: conference
+    query_key: conference
+    type: str
+  - default: null
+    description: Game id filter to retrieve a single game
+    name: id
+    query_key: id
+    type: int
+  parser: parse_cfbd_records
+  path: /games
+  returns_schema: native/cfbd/games
+  short: games
+  summary: "GET /games \u2014 Retrieves historical game data"
+- extra_params:
+  - description: Required year filter
+    name: year
+    query_key: year
+    required: true
+    type: int
+  - default: null
+    description: Optional season type filter
+    name: season_type
+    query_key: seasonType
+    type: str
+  - default: null
+    description: Optional week filter
+    name: week
+    query_key: week
+    type: int
+  - default: null
+    description: Optional team filter
+    name: team
+    query_key: team
+    type: str
+  - default: null
+    description: Optional conference filter
+    name: conference
+    query_key: conference
+    type: str
+  - default: null
+    description: Optional media type filter
+    name: media_type
+    query_key: mediaType
+    type: str
+  - default: null
+    description: Optional division classification filter
+    name: classification
+    query_key: classification
+    type: str
+  parser: parse_cfbd_records
+  path: /games/media
+  returns_schema: native/cfbd/games_media
+  short: games_media
+  summary: "GET /games/media \u2014 Retrieves media information for games"
+- extra_params:
+  - default: null
+    description: Required year filter (along with one of week, team, or conference), unless id is specified
+    name: year
+    query_key: year
+    type: int
+  - default: null
+    description: Optional week filter, required if team and conference not specified
+    name: week
+    query_key: week
+    type: int
+  - default: null
+    description: Optional team filter, required if week and conference not specified
+    name: team
+    query_key: team
+    type: str
+  - default: null
+    description: Optional conference filter, required if week and team not specified
+    name: conference
+    query_key: conference
+    type: str
+  - default: null
+    description: Optional division classification filter
+    name: classification
+    query_key: classification
+    type: str
+  - default: null
+    description: Optional season type filter
+    name: season_type
+    query_key: seasonType
+    type: str
+  - default: null
+    description: Optional player statistical category filter
+    name: category
+    query_key: category
+    type: str
+  - default: null
+    description: Optional id filter to retrieve a single game
+    name: id
+    query_key: id
+    type: int
+  parser: parse_cfbd_records
+  path: /games/players
+  returns_schema: native/cfbd/games_players
+  short: games_players
+  summary: "GET /games/players \u2014 Retrieves player box score statistics"
+- extra_params:
+  - default: null
+    description: Required year filter (along with one of week, team, or conference), unless id is specified
+    name: year
+    query_key: year
+    type: int
+  - default: null
+    description: Optional week filter, required if team and conference not specified
+    name: week
+    query_key: week
+    type: int
+  - default: null
+    description: Optional team filter, required if week and conference not specified
+    name: team
+    query_key: team
+    type: str
+  - default: null
+    description: Optional conference filter, required if week and team not specified
+    name: conference
+    query_key: conference
+    type: str
+  - default: null
+    description: Optional division classification filter
+    name: classification
+    query_key: classification
+    type: str
+  - default: null
+    description: Optional season type filter
+    name: season_type
+    query_key: seasonType
+    type: str
+  - default: null
+    description: Optional id filter to retrieve a single game
+    name: id
+    query_key: id
+    type: int
+  parser: parse_cfbd_records
+  path: /games/teams
+  returns_schema: native/cfbd/games_teams
+  short: games_teams
+  summary: "GET /games/teams \u2014 Retrieves team box score statistics"
+- extra_params:
+  - default: null
+    description: Year filter, required if game id not specified
+    name: year
+    query_key: year
+    type: int
+  - default: null
+    description: Optional season type filter
+    name: season_type
+    query_key: seasonType
+    type: str
+  - default: null
+    description: Optional week filter
+    name: week
+    query_key: week
+    type: int
+  - default: null
+    description: Optional team filter
+    name: team
+    query_key: team
+    type: str
+  - default: null
+    description: Optional conference filter
+    name: conference
+    query_key: conference
+    type: str
+  - default: null
+    description: Optional division classification filter
+    name: classification
+    query_key: classification
+    type: str
+  - default: null
+    description: Filter for retrieving a single game
+    name: game_id
+    query_key: gameId
+    type: int
+  parser: parse_cfbd_records
+  path: /games/weather
+  returns_schema: native/cfbd/games_weather
+  short: games_weather
+  summary: "GET /games/weather \u2014 Retrieve historical and future weather data (Patreon only)"
+- extra_params: []
+  parser: parse_cfbd_records
+  path: /info
+  returns_schema: native/cfbd/info
+  short: info
+  summary: "GET /info \u2014 Retrieves information about the user, including their Patreon level and remaining\
+    \ API calls."
+- extra_params:
+  - default: null
+    description: Optional gameId filter
+    name: game_id
+    query_key: gameId
+    type: int
+  - default: null
+    description: Year filter, required if game id not specified
+    name: year
+    query_key: year
+    type: int
+  - default: null
+    description: Optional season type filter
+    name: season_type
+    query_key: seasonType
+    type: str
+  - default: null
+    description: Optional week filter
+    name: week
+    query_key: week
+    type: int
+  - default: null
+    description: Optional team filter
+    name: team
+    query_key: team
+    type: str
+  - default: null
+    description: Optional home team filter
+    name: home
+    query_key: home
+    type: str
+  - default: null
+    description: Optional away team filter
+    name: away
+    query_key: away
+    type: str
+  - default: null
+    description: Optional conference filter
+    name: conference
+    query_key: conference
+    type: str
+  - default: null
+    description: Optional provider name filter
+    name: provider
+    query_key: provider
+    type: str
+  parser: parse_cfbd_records
+  path: /lines
+  returns_schema: native/cfbd/lines
+  short: lines
+  summary: "GET /lines \u2014 Retrieves historical betting data"
+- extra_params:
+  - description: Game Id filter
+    name: game_id
+    query_key: gameId
+    required: true
+    type: int
+  parser: parse_cfbd_records
+  path: /live/plays
+  returns_schema: native/cfbd/live_plays
+  short: live_plays
+  summary: "GET /live/plays \u2014 Queries live play-by-play data and advanced stats"
+- extra_params: []
+  parser: parse_cfbd_records
+  path: /metrics/fg/ep
+  returns_schema: native/cfbd/metrics_fg_ep
+  short: metrics_fg_ep
+  summary: "GET /metrics/fg/ep \u2014 Queries field goal expected points values"
+- extra_params:
+  - description: Required game ID filter
+    name: game_id
+    query_key: gameId
+    required: true
+    type: int
+  parser: parse_cfbd_records
+  path: /metrics/wp
+  returns_schema: native/cfbd/metrics_wp
+  short: metrics_wp
+  summary: "GET /metrics/wp \u2014 Query play win probabilities by game"
+- extra_params:
+  - default: null
+    description: Optional year filter
+    name: year
+    query_key: year
+    type: int
+  - default: null
+    description: Optional week filter
+    name: week
+    query_key: week
+    type: int
+  - default: null
+    description: Optional season type filter
+    name: season_type
+    query_key: seasonType
+    type: str
+  - default: null
+    description: Optional team filter
+    name: team
+    query_key: team
+    type: str
+  parser: parse_cfbd_records
+  path: /metrics/wp/pregame
+  returns_schema: native/cfbd/metrics_wp_pregame
+  short: metrics_wp_pregame
+  summary: "GET /metrics/wp/pregame \u2014 Queries pregame win probabilities"
+- extra_params:
+  - description: Required year filter
+    name: year
+    query_key: year
+    required: true
+    type: int
+  parser: parse_cfbd_records
+  path: /player/portal
+  returns_schema: native/cfbd/player_portal
+  short: player_portal
+  summary: "GET /player/portal \u2014 Retrieves transfer portal data for a given year"
+- extra_params:
+  - default: null
+    description: Year filter, required if team not specified
+    name: year
+    query_key: year
+    type: int
+  - default: null
+    description: Team filter, required if year not specified
+    name: team
+    query_key: team
+    type: str
+  - default: null
+    description: Optional conference filter
+    name: conference
+    query_key: conference
+    type: str
+  parser: parse_cfbd_records
+  path: /player/returning
+  returns_schema: native/cfbd/player_returning
+  short: player_returning
+  summary: "GET /player/returning \u2014 Retrieves returning production data. Either a year or team filter\
+    \ must be specified."
+- extra_params:
+  - description: Search term for matching player name
+    name: search_term
+    query_key: searchTerm
+    required: true
+    type: str
+  - default: null
+    description: Optional year filter
+    name: year
+    query_key: year
+    type: int
+  - default: null
+    description: Optional team filter
+    name: team
+    query_key: team
+    type: str
+  - default: null
+    description: Optional position abbreviation filter
+    name: position
+    query_key: position
+    type: str
+  parser: parse_cfbd_records
+  path: /player/search
+  returns_schema: native/cfbd/player_search
+  short: player_search
+  summary: "GET /player/search \u2014 Search for players (lists top 100 results)"
+- extra_params:
+  - description: Required year filter
+    name: year
+    query_key: year
+    required: true
+    type: int
+  - default: null
+    description: Optional conference abbreviation filter
+    name: conference
+    query_key: conference
+    type: str
+  - default: null
+    description: Optional position abbreivation filter
+    name: position
+    query_key: position
+    type: str
+  - default: null
+    description: Optional team filter
+    name: team
+    query_key: team
+    type: str
+  - default: null
+    description: Optional player id filter
+    name: player_id
+    query_key: playerId
+    type: int
+  - default: null
+    description: Optional exclude garbage time flag, defaults to false
+    name: exclude_garbage_time
+    query_key: excludeGarbageTime
+    type: bool
+  parser: parse_cfbd_records
+  path: /player/usage
+  returns_schema: native/cfbd/player_usage
+  short: player_usage
+  summary: "GET /player/usage \u2014 Retrieves player usage data for a given season"
+- extra_params:
+  - description: Required year filter
+    name: year
+    query_key: year
+    required: true
+    type: int
+  - description: Required week filter
+    name: week
+    query_key: week
+    required: true
+    type: int
+  - default: null
+    description: Optional team filter
+    name: team
+    query_key: team
+    type: str
+  - default: null
+    description: Optional offensive team filter
+    name: offense
+    query_key: offense
+    type: str
+  - default: null
+    description: Optional defensive team filter
+    name: defense
+    query_key: defense
+    type: str
+  - default: null
+    description: Optional offensive conference filter
+    name: offense_conference
+    query_key: offenseConference
+    type: str
+  - default: null
+    description: Optional defensive conference filter
+    name: defense_conference
+    query_key: defenseConference
+    type: str
+  - default: null
+    description: Optional conference filter
+    name: conference
+    query_key: conference
+    type: str
+  - default: null
+    description: Optoinal play type abbreviation filter
+    name: play_type
+    query_key: playType
+    type: str
+  - default: null
+    description: Optional season type filter
+    name: season_type
+    query_key: seasonType
+    type: str
+  - default: null
+    description: Optional division classification filter
+    name: classification
+    query_key: classification
+    type: str
+  parser: parse_cfbd_records
+  path: /plays
+  returns_schema: native/cfbd/plays
+  short: plays
+  summary: "GET /plays \u2014 Retrieves historical play data"
+- extra_params:
+  - default: null
+    description: Optional year filter
+    name: year
+    query_key: year
+    type: int
+  - default: null
+    description: Optional week filter
+    name: week
+    query_key: week
+    type: int
+  - default: null
+    description: Optional team filter
+    name: team
+    query_key: team
+    type: str
+  - default: null
+    description: Optional gameId filter
+    name: game_id
+    query_key: gameId
+    type: int
+  - default: null
+    description: Optional athleteId filter
+    name: athlete_id
+    query_key: athleteId
+    type: int
+  - default: null
+    description: Optional statTypeId filter
+    name: stat_type_id
+    query_key: statTypeId
+    type: int
+  - default: null
+    description: Optional season type filter
+    name: season_type
+    query_key: seasonType
+    type: str
+  - default: null
+    description: Optional conference filter
+    name: conference
+    query_key: conference
+    type: str
+  parser: parse_cfbd_records
+  path: /plays/stats
+  returns_schema: native/cfbd/plays_stats
+  short: plays_stats
+  summary: "GET /plays/stats \u2014 Retrieve player-play associations (limit 2000)"
+- extra_params: []
+  parser: parse_cfbd_records
+  path: /plays/stats/types
+  returns_schema: native/cfbd/plays_stats_types
+  short: plays_stats_types
+  summary: "GET /plays/stats/types \u2014 Retrieves available play stat types"
+- extra_params: []
+  parser: parse_cfbd_records
+  path: /plays/types
+  returns_schema: native/cfbd/plays_types
+  short: plays_types
+  summary: "GET /plays/types \u2014 Retrieves available play types"
+- extra_params:
+  - description: Required year filter
+    name: year
+    query_key: year
+    required: true
+    type: int
+  - default: null
+    description: Optional week filter
+    name: week
+    query_key: week
+    type: int
+  - default: null
+    description: Optional season type filter
+    name: season_type
+    query_key: seasonType
+    type: str
+  - default: null
+    description: Optional team filter
+    name: team
+    query_key: team
+    type: str
+  - default: null
+    description: Optional conference abbreviation filter
+    name: conference
+    query_key: conference
+    type: str
+  - default: null
+    description: Optional flag to exclude garbage time plays
+    name: exclude_garbage_time
+    query_key: excludeGarbageTime
+    type: bool
+  parser: parse_cfbd_records
+  path: /ppa/games
+  returns_schema: native/cfbd/ppa_games
+  short: ppa_games
+  summary: "GET /ppa/games \u2014 Retrieves historical team PPA metrics by game"
+- extra_params:
+  - description: Required year filter
+    name: year
+    query_key: year
+    required: true
+    type: int
+  - default: null
+    description: Week filter, required if team not specified
+    name: week
+    query_key: week
+    type: int
+  - default: null
+    description: Optional season type filter
+    name: season_type
+    query_key: seasonType
+    type: str
+  - default: null
+    description: Team filter, required if week not specified
+    name: team
+    query_key: team
+    type: str
+  - default: null
+    description: Optional player position abbreviation filter
+    name: position
+    query_key: position
+    type: str
+  - default: null
+    description: Optional player ID filter
+    name: player_id
+    query_key: playerId
+    type: str
+  - default: null
+    description: Threshold value for minimum number of plays
+    name: threshold
+    query_key: threshold
+    type: float
+  - default: null
+    description: Optional flag to exclude garbage time plays
+    name: exclude_garbage_time
+    query_key: excludeGarbageTime
+    type: bool
+  parser: parse_cfbd_records
+  path: /ppa/players/games
+  returns_schema: native/cfbd/ppa_players_games
+  short: ppa_players_games
+  summary: "GET /ppa/players/games \u2014 Queries player PPA statistics by game"
+- extra_params:
+  - default: null
+    description: Year filter, required if playerId not specified
+    name: year
+    query_key: year
+    type: int
+  - default: null
+    description: Optional conference abbreviation filter
+    name: conference
+    query_key: conference
+    type: str
+  - default: null
+    description: Optional team filter
+    name: team
+    query_key: team
+    type: str
+  - default: null
+    description: Optional position abbreviation filter
+    name: position
+    query_key: position
+    type: str
+  - default: null
+    description: Player ID filter, required if year not specified
+    name: player_id
+    query_key: playerId
+    type: str
+  - default: null
+    description: Threshold value for minimum number of plays
+    name: threshold
+    query_key: threshold
+    type: float
+  - default: null
+    description: Optional flag to exclude garbage time plays
+    name: exclude_garbage_time
+    query_key: excludeGarbageTime
+    type: bool
+  parser: parse_cfbd_records
+  path: /ppa/players/season
+  returns_schema: native/cfbd/ppa_players_season
+  short: ppa_players_season
+  summary: "GET /ppa/players/season \u2014 Queries player PPA statistics by season"
+- extra_params:
+  - description: Down value
+    name: down
+    query_key: down
+    required: true
+    type: int
+  - description: Distance value
+    name: distance
+    query_key: distance
+    required: true
+    type: int
+  parser: parse_cfbd_records
+  path: /ppa/predicted
+  returns_schema: native/cfbd/ppa_predicted
+  short: ppa_predicted
+  summary: "GET /ppa/predicted \u2014 Query Predicted Points values by down and distance"
+- extra_params:
+  - default: null
+    description: Year filter, required if team not specified
+    name: year
+    query_key: year
+    type: int
+  - default: null
+    description: Team filter, required if year not specified
+    name: team
+    query_key: team
+    type: str
+  - default: null
+    description: Conference abbreviation filter
+    name: conference
+    query_key: conference
+    type: str
+  - default: null
+    description: Exclude garbage time plays
+    name: exclude_garbage_time
+    query_key: excludeGarbageTime
+    type: bool
+  parser: parse_cfbd_records
+  path: /ppa/teams
+  returns_schema: native/cfbd/ppa_teams
+  short: ppa_teams
+  summary: "GET /ppa/teams \u2014 Retrieves historical team PPA metrics by season"
+- extra_params:
+  - description: Required year filter
+    name: year
+    query_key: year
+    required: true
+    type: int
+  - default: null
+    description: Optional season type filter
+    name: season_type
+    query_key: seasonType
+    type: str
+  - default: null
+    description: Optional week filter
+    name: week
+    query_key: week
+    type: float
+  parser: parse_cfbd_records
+  path: /rankings
+  returns_schema: native/cfbd/rankings
+  short: rankings
+  summary: "GET /rankings \u2014 Retrieves historical poll data"
+- extra_params:
+  - default: null
+    description: Optional year filter
+    name: year
+    query_key: year
+    type: int
+  - default: null
+    description: Optional week filter, defaults to last available week in the season
+    name: week
+    query_key: week
+    type: int
+  - default: null
+    description: Optional season type filter
+    name: season_type
+    query_key: seasonType
+    type: str
+  - default: null
+    description: Optional team filter
+    name: team
+    query_key: team
+    type: str
+  - default: null
+    description: Optional conference filter
+    name: conference
+    query_key: conference
+    type: str
+  parser: parse_cfbd_records
+  path: /ratings/elo
+  returns_schema: native/cfbd/ratings_elo
+  short: ratings_elo
+  summary: "GET /ratings/elo \u2014 Retrieves historical Elo ratings"
+- extra_params:
+  - default: null
+    description: year filter, required if team not specified
+    name: year
+    query_key: year
+    type: int
+  - default: null
+    description: team filter, required if year not specified
+    name: team
+    query_key: team
+    type: str
+  - default: null
+    description: Optional conference filter
+    name: conference
+    query_key: conference
+    type: str
+  parser: parse_cfbd_records
+  path: /ratings/fpi
+  returns_schema: native/cfbd/ratings_fpi
+  short: ratings_fpi
+  summary: "GET /ratings/fpi \u2014 Retrieves historical Football Power Index (FPI) ratings"
+- extra_params:
+  - default: null
+    description: Year filter, required if team not specified
+    name: year
+    query_key: year
+    type: int
+  - default: null
+    description: Team filter, required if year not specified
+    name: team
+    query_key: team
+    type: str
+  parser: parse_cfbd_records
+  path: /ratings/sp
+  returns_schema: native/cfbd/ratings_sp
+  short: ratings_sp
+  summary: "GET /ratings/sp \u2014 Retrieves SP+ ratings for a given year or school"
+- extra_params:
+  - default: null
+    description: Optional year filter
+    name: year
+    query_key: year
+    type: int
+  - default: null
+    description: Optional conference filter
+    name: conference
+    query_key: conference
+    type: str
+  parser: parse_cfbd_records
+  path: /ratings/sp/conferences
+  returns_schema: native/cfbd/ratings_sp_conferences
+  short: ratings_sp_conferences
+  summary: "GET /ratings/sp/conferences \u2014 Retrieves aggregated historical conference SP+ data"
+- extra_params:
+  - default: null
+    description: Year filter, required if team not specified
+    name: year
+    query_key: year
+    type: int
+  - default: null
+    description: Team filter, required if year not specified
+    name: team
+    query_key: team
+    type: str
+  - default: null
+    description: Optional conference filter
+    name: conference
+    query_key: conference
+    type: str
+  parser: parse_cfbd_records
+  path: /ratings/srs
+  returns_schema: native/cfbd/ratings_srs
+  short: ratings_srs
+  summary: "GET /ratings/srs \u2014 Retrieves historical SRS for a year or team"
+- extra_params:
+  - default: null
+    description: Year filter, required if team not specified
+    name: year
+    query_key: year
+    type: int
+  - default: null
+    description: Team filter, required if year not specified
+    name: team
+    query_key: team
+    type: str
+  - default: null
+    description: Optional conference filter
+    name: conference
+    query_key: conference
+    type: str
+  parser: parse_cfbd_records
+  path: /records
+  returns_schema: native/cfbd/records
+  short: records
+  summary: "GET /records \u2014 Retrieves historical team records"
+- extra_params:
+  - default: null
+    description: Optional team filter
+    name: team
+    query_key: team
+    type: str
+  - default: null
+    description: Optional conference filter
+    name: conference
+    query_key: conference
+    type: str
+  - default: null
+    description: Optional recruit type filter, defaults to HighSchool
+    name: recruit_type
+    query_key: recruitType
+    type: str
+  - default: null
+    description: Optional start year range, defaults to 2000
+    name: start_year
+    query_key: startYear
+    type: int
+  - default: null
+    description: Optional end year range, defaults to current year
+    name: end_year
+    query_key: endYear
+    type: int
+  parser: parse_cfbd_records
+  path: /recruiting/groups
+  returns_schema: native/cfbd/recruiting_groups
+  short: recruiting_groups
+  summary: "GET /recruiting/groups \u2014 Retrieves aggregated recruiting statistics by team and position\
+    \ grouping"
+- extra_params:
+  - default: null
+    description: Year filter, required when no team specified
+    name: year
+    query_key: year
+    type: int
+  - default: null
+    description: Team filter, required when no team specified
+    name: team
+    query_key: team
+    type: str
+  - default: null
+    description: Optional position categorization filter
+    name: position
+    query_key: position
+    type: str
+  - default: null
+    description: Optional state/province filter
+    name: state
+    query_key: state
+    type: str
+  - default: null
+    description: Optional recruit type classification filter, defaults to HighSchool
+    name: classification
+    query_key: classification
+    type: str
+  parser: parse_cfbd_records
+  path: /recruiting/players
+  returns_schema: native/cfbd/recruiting_players
+  short: recruiting_players
+  summary: "GET /recruiting/players \u2014 Retrieves player recruiting rankings"
+- extra_params:
+  - default: null
+    description: Optional year filter
+    name: year
+    query_key: year
+    type: int
+  - default: null
+    description: Optional team filter
+    name: team
+    query_key: team
+    type: str
+  parser: parse_cfbd_records
+  path: /recruiting/teams
+  returns_schema: native/cfbd/recruiting_teams
+  short: recruiting_teams
+  summary: "GET /recruiting/teams \u2014 Retrieves team recruiting rankings"
+- extra_params:
+  - default: null
+    description: Optional team filter
+    name: team
+    query_key: team
+    type: str
+  - default: null
+    description: Optional year filter, defaults to 2023
+    name: year
+    query_key: year
+    type: int
+  parser: parse_cfbd_records
+  path: /roster
+  returns_schema: native/cfbd/roster
+  short: roster
+  summary: "GET /roster \u2014 Retrieves historical roster data"
+- extra_params:
+  - default: null
+    description: Optional division classification filter, defaults to fbs
+    name: classification
+    query_key: classification
+    type: str
+  - default: null
+    description: Optional conference filter
+    name: conference
+    query_key: conference
+    type: str
+  parser: parse_cfbd_records
+  path: /scoreboard
+  returns_schema: native/cfbd/scoreboard
+  short: scoreboard
+  summary: "GET /scoreboard \u2014 Retrieves live scoreboard data"
+- extra_params: []
+  parser: parse_cfbd_records
+  path: /stats/categories
+  returns_schema: native/cfbd/stats_categories
+  short: stats_categories
+  summary: "GET /stats/categories \u2014 Gets team statistical categories"
+- extra_params:
+  - default: null
+    description: Year filter, required if team not specified
+    name: year
+    query_key: year
+    type: int
+  - default: null
+    description: Team filter, required if year not specified
+    name: team
+    query_key: team
+    type: str
+  - default: null
+    description: Optional week filter
+    name: week
+    query_key: week
+    type: float
+  - default: null
+    description: Optional opponent filter
+    name: opponent
+    query_key: opponent
+    type: str
+  - default: null
+    description: Garbage time exclusion filter, defaults to false
+    name: exclude_garbage_time
+    query_key: excludeGarbageTime
+    type: bool
+  - default: null
+    description: Optional season type filter
+    name: season_type
+    query_key: seasonType
+    type: str
+  parser: parse_cfbd_records
+  path: /stats/game/advanced
+  returns_schema: native/cfbd/stats_game_advanced
+  short: stats_game_advanced
+  summary: "GET /stats/game/advanced \u2014 Retrieves advanced statistics aggregated by game"
+- extra_params:
+  - description: Required year filter
+    name: year
+    query_key: year
+    required: true
+    type: int
+  - default: null
+    description: Optional conference filter
+    name: conference
+    query_key: conference
+    type: str
+  - default: null
+    description: Optional team filter
+    name: team
+    query_key: team
+    type: str
+  - default: null
+    description: Optional starting week range
+    name: start_week
+    query_key: startWeek
+    type: int
+  - default: null
+    description: Optional ending week range
+    name: end_week
+    query_key: endWeek
+    type: int
+  - default: null
+    description: Optional season type filter
+    name: season_type
+    query_key: seasonType
+    type: str
+  - default: null
+    description: Optional category filter
+    name: category
+    query_key: category
+    type: str
+  parser: parse_cfbd_records
+  path: /stats/player/season
+  returns_schema: native/cfbd/stats_player_season
+  short: stats_player_season
+  summary: "GET /stats/player/season \u2014 Retrieves aggregated player statistics for a given season"
+- extra_params:
+  - default: null
+    description: Year filter, required if team not specified
+    name: year
+    query_key: year
+    type: int
+  - default: null
+    description: Team filter, required if year not specified
+    name: team
+    query_key: team
+    type: str
+  - default: null
+    description: Optional conference filter
+    name: conference
+    query_key: conference
+    type: str
+  - default: null
+    description: Optional week start range filter
+    name: start_week
+    query_key: startWeek
+    type: int
+  - default: null
+    description: Optional week end range filter
+    name: end_week
+    query_key: endWeek
+    type: int
+  parser: parse_cfbd_records
+  path: /stats/season
+  returns_schema: native/cfbd/stats_season
+  short: stats_season
+  summary: "GET /stats/season \u2014 Retrieves aggregated team season statistics"
+- extra_params:
+  - default: null
+    description: Year filter, required if team not specified
+    name: year
+    query_key: year
+    type: int
+  - default: null
+    description: Team filter, required if year not specified
+    name: team
+    query_key: team
+    type: str
+  - default: null
+    description: Garbage time exclusion filter, defaults to false
+    name: exclude_garbage_time
+    query_key: excludeGarbageTime
+    type: bool
+  - default: null
+    description: Optional start week range filter
+    name: start_week
+    query_key: startWeek
+    type: int
+  - default: null
+    description: Optional end week range filter
+    name: end_week
+    query_key: endWeek
+    type: int
+  parser: parse_cfbd_records
+  path: /stats/season/advanced
+  returns_schema: native/cfbd/stats_season_advanced
+  short: stats_season_advanced
+  summary: "GET /stats/season/advanced \u2014 Retrieves advanced season statistics for teams"
+- extra_params:
+  - description: Year filter
+    name: year
+    query_key: year
+    required: true
+    type: int
+  parser: parse_cfbd_records
+  path: /talent
+  returns_schema: native/cfbd/talent
+  short: talent
+  summary: "GET /talent \u2014 Retrieve 247 Team Talent Composite for a given year"
+- extra_params:
+  - default: null
+    description: Optional conference abbreviation filter
+    name: conference
+    query_key: conference
+    type: str
+  - default: null
+    description: Optional year filter to get historical conference affiliations
+    name: year
+    query_key: year
+    type: int
+  parser: parse_cfbd_records
+  path: /teams
+  returns_schema: native/cfbd/teams
+  short: teams
+  summary: "GET /teams \u2014 Retrieves team information"
+- extra_params:
+  - default: null
+    description: Year or season
+    name: year
+    query_key: year
+    type: int
+  parser: parse_cfbd_records
+  path: /teams/fbs
+  returns_schema: native/cfbd/teams_fbs
+  short: teams_fbs
+  summary: "GET /teams/fbs \u2014 Retrieves information on teams playing in the highest division of CFB"
+- extra_params:
+  - description: First team to compare
+    name: team1
+    query_key: team1
+    required: true
+    type: str
+  - description: Second team to compare
+    name: team2
+    query_key: team2
+    required: true
+    type: str
+  - default: null
+    description: Optional starting year
+    name: min_year
+    query_key: minYear
+    type: int
+  - default: null
+    description: Optional ending year
+    name: max_year
+    query_key: maxYear
+    type: int
+  parser: parse_cfbd_records
+  path: /teams/matchup
+  returns_schema: native/cfbd/teams_matchup
+  short: teams_matchup
+  summary: "GET /teams/matchup \u2014 Retrieves historical matchup details for two given teams"
+- extra_params: []
+  parser: parse_cfbd_records
+  path: /venues
+  returns_schema: native/cfbd/venues
+  short: venues
+  summary: "GET /venues \u2014 Retrieve list of venues"
+- extra_params:
+  - default: null
+    description: Optional year filter
+    name: year
+    query_key: year
+    type: int
+  - default: null
+    description: Optional team filter
+    name: team
+    query_key: team
+    type: str
+  - default: null
+    description: Optional conference abbreviation filter
+    name: conference
+    query_key: conference
+    type: str
+  parser: parse_cfbd_records
+  path: /wepa/players/kicking
+  returns_schema: native/cfbd/wepa_players_kicking
+  short: wepa_players_kicking
+  summary: "GET /wepa/players/kicking \u2014 Retrieve Points Added Above Replacement (PAAR) ratings for\
+    \ kickers"
+- extra_params:
+  - default: null
+    description: Optional year filter
+    name: year
+    query_key: year
+    type: int
+  - default: null
+    description: Optional team filter
+    name: team
+    query_key: team
+    type: str
+  - default: null
+    description: Optional conference abbreviation filter
+    name: conference
+    query_key: conference
+    type: str
+  - default: null
+    description: Optional position abbreviation filter
+    name: position
+    query_key: position
+    type: str
+  parser: parse_cfbd_records
+  path: /wepa/players/passing
+  returns_schema: native/cfbd/wepa_players_passing
+  short: wepa_players_passing
+  summary: "GET /wepa/players/passing \u2014 Retrieve opponent-adjusted player passing statistics"
+- extra_params:
+  - default: null
+    description: Optional year filter
+    name: year
+    query_key: year
+    type: int
+  - default: null
+    description: Optional team filter
+    name: team
+    query_key: team
+    type: str
+  - default: null
+    description: Optional conference abbreviation filter
+    name: conference
+    query_key: conference
+    type: str
+  - default: null
+    description: Optional position abbreviation filter
+    name: position
+    query_key: position
+    type: str
+  parser: parse_cfbd_records
+  path: /wepa/players/rushing
+  returns_schema: native/cfbd/wepa_players_rushing
+  short: wepa_players_rushing
+  summary: "GET /wepa/players/rushing \u2014 Retrieve opponent-adjusted player rushing statistics"
+- extra_params:
+  - default: null
+    description: Optional year filter
+    name: year
+    query_key: year
+    type: int
+  - default: null
+    description: Optional team filter
+    name: team
+    query_key: team
+    type: str
+  - default: null
+    description: Optional conference filter
+    name: conference
+    query_key: conference
+    type: str
+  parser: parse_cfbd_records
+  path: /wepa/team/season
+  returns_schema: native/cfbd/wepa_team_season
+  short: wepa_team_season
+  summary: "GET /wepa/team/season \u2014 Retrieve opponent-adjusted team season statistics"
+getter_module: sportsdataverse.cfb.cfbd_runtime
+host: https://api.collegefootballdata.com
+module: cfbd
+name_pattern: cfbd_{short}
+parser_module: cfb.cfbd_parsers
+runtime_imports:
+- _get

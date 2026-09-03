@@ -1704,6 +1704,7 @@ FLAT_APIS = [
     ("on3", "cfb"),
     ("sports247", "cfb"),
     ("sports247_site_pages", "cfb"),
+    ("cfbd", "cfb"),
     ("pff", "nfl"),
     ("torvik", "mbb"),
     ("bart_wbb", "wbb"),
@@ -2270,6 +2271,7 @@ _ESPN_API_DOC = {
 # _ESPN_API_DOC; without it the label falls back to the raw module name with
 # underscores->spaces ("nhl api web"), which reads poorly in the nav.
 _FLAT_API_DOC = {
+    "cfbd": "College Football Data API (api.collegefootballdata.com, free API key)",
     "nhl_api_web": "NHL Web API",
     "nhl_edge": "NHL EDGE API",
     "nhl_stats_rest": "NHL Stats REST API",
