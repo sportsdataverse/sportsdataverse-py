@@ -21585,3 +21585,27 @@ x_era:
   season: MLB season (4-digit start year).
   x_era: Parametric xERA converted from x_woba via the season's league baselines.
   x_woba: Mean estimated_woba_using_speedangle allowed on batted balls.
+load_ncaa_mbb_rapm:
+  season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
+load_ncaa_wbb_rapm:
+  season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
+load_ncaa_mfb_pbp:
+  season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
+load_ncaa_mfb_pbp_cfbfastr:
+  season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
+load_ncaa_mfb_drives:
+  season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
+load_ncaa_mfb_schedule:
+  season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
+load_ncaa_mfb_rosters:
+  season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
+load_ncaa_mfb_teams:
+  season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
+load_ncaa_mfb_team_stats:
+  season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
+load_ncaa_mfb_player_stats:
+  season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
+load_ncaa_mfb_officials:
+  season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
+load_ncaa_mfb_linescore:
+  season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.

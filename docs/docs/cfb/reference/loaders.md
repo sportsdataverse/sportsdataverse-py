@@ -57,6 +57,16 @@ flowchart LR
 | `load_cfb_ratings_weekly` | [cfb_ratings_weekly](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_ratings_weekly) | — |
 | `load_cfb_team_summaries_weekly` | [cfb_team_summaries_weekly](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_team_summaries_weekly) | — |
 | `load_cfb_pbp_r` | [cfbfastR_cfb_pbp](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfbfastR_cfb_pbp) | — |
+| `load_ncaa_mfb_pbp` | [ncaa_mfb_pbp](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_mfb_pbp) | — |
+| `load_ncaa_mfb_pbp_cfbfastr` | [ncaa_mfb_pbp_cfbfastr](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_mfb_pbp_cfbfastr) | — |
+| `load_ncaa_mfb_drives` | [ncaa_mfb_drives](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_mfb_drives) | — |
+| `load_ncaa_mfb_schedule` | [ncaa_mfb_schedule](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_mfb_schedule) | — |
+| `load_ncaa_mfb_rosters` | [ncaa_mfb_rosters](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_mfb_rosters) | — |
+| `load_ncaa_mfb_teams` | [ncaa_mfb_teams](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_mfb_teams) | — |
+| `load_ncaa_mfb_team_stats` | [ncaa_mfb_team_stats](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_mfb_team_stats) | — |
+| `load_ncaa_mfb_player_stats` | [ncaa_mfb_player_stats](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_mfb_player_stats) | — |
+| `load_ncaa_mfb_officials` | [ncaa_mfb_officials](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_mfb_officials) | — |
+| `load_ncaa_mfb_linescore` | [ncaa_mfb_linescore](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_mfb_linescore) | — |
 
 ## `load_cfb_pbp`
 
@@ -3378,4 +3388,385 @@ Release: [cfbfastR_cfb_pbp](https://github.com/sportsdataverse/sportsdataverse-d
 
 ```python
 load_cfb_pbp_r(seasons=2024)
+```
+
+## `load_ncaa_mfb_pbp`
+
+Release: [ncaa_mfb_pbp](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_mfb_pbp) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/ncaa_mfb_pbp/ncaa_mfb_pbp_{season}.parquet`
+### Returns
+
+| col_name | type | description |
+|---|---|---|
+| `contest_id` | String | stats.ncaa.org contest (game) identifier. |
+| `drive_number` | Int64 | Sequential drive number within the game (1-indexed). |
+| `play_number` | Int64 | Sequential play number within the game (1-indexed). |
+| `offense` | String | Full name of the offense (team in possession) on the play. |
+| `drive_result` | String | Drive result code (`drive_`-prefixed; every drive-level column is carried with this prefix). |
+| `drive_scored` | Boolean |  |
+| `down` | Int64 | Down of the play (1-4). |
+| `distance` | Int64 | Yards to gain for a first down (or to the goal line in goal-to-go situations). |
+| `yard_line` | String | Field-position yard line at the start of the play (0-50 scale from the offense's side). |
+| `yard_line_side` | String |  |
+| `yard_line_number` | Int64 |  |
+| `play_type` | String | CFBD play type label (e.g. "Rush", "Pass Reception", "Field Goal Good"). |
+| `clock` | String | Game clock display value at the play (`MM:SS`). |
+| `yards_gained` | Int64 | Net yards gained by the offense on the play. |
+| `formation` | String |  |
+| `passer` | String | Name of the dropback player (scrambles included) including plays with penalties. |
+| `rusher` | String | Name of the rusher (no scrambles) including plays with penalties. |
+| `receiver` | String | Name of the receiver including plays with penalties. |
+| `kicker` | String |  |
+| `punter` | String |  |
+| `returner` | String |  |
+| `run_direction` | String |  |
+| `qb_scramble` | Boolean | Binary indicator for whether or not the QB scrambled. |
+| `pass_complete` | Boolean |  |
+| `pass_depth` | String |  |
+| `pass_direction` | String |  |
+| `tackler_1` | String |  |
+| `tackler_2` | String |  |
+| `kick_yards` | Int64 |  |
+| `return_yards` | Int64 | Yards gained by the return team. Returns may occur on any of: interception, fumble, kickoff, punt, or blocked kicks. |
+| `punt_yards` | Int64 |  |
+| `fg_distance` | Int64 |  |
+| `fg_made` | Boolean | TRUE when the field goal attempt was successful. |
+| `is_first_down` | Boolean |  |
+| `is_touchdown` | Boolean |  |
+| `is_safety` | Boolean |  |
+| `is_fumble` | Boolean |  |
+| `is_turnover` | Boolean | `TRUE` if the play was a turnover. |
+| `turnover_type` | String |  |
+| `out_of_bounds` | Boolean | 1 if play description contains ran ob, pushed ob, or sacked ob; 0 otherwise. |
+| `no_play` | Boolean |  |
+| `fair_catch` | Boolean |  |
+| `penalty_flag` | Boolean | TRUE when a penalty was flagged on the play. |
+| `penalty_team` | String | String abbreviation of the team with the penalty. |
+| `penalty_type` | String | String indicating the penalty type of the first penalty in the given play. Will be `NA` if `desc` is missing the type. |
+| `penalty_player` | String |  |
+| `penalty_yards` | Int64 | Yards gained (or lost) by the posteam from the penalty. |
+| `end_yard_line` | String | Yard line at the end of the play. |
+| `play_text` | String | Free-form text description of the play from the CFBD feed. |
+| `espn_game_id` | String | ESPN game id (NA for bart-only rows). |
+| `season` | Int64 | Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted. |
+
+```python
+load_ncaa_mfb_pbp(seasons=2024)
+```
+
+## `load_ncaa_mfb_pbp_cfbfastr`
+
+Release: [ncaa_mfb_pbp_cfbfastr](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_mfb_pbp_cfbfastr) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/ncaa_mfb_pbp_cfbfastr/ncaa_mfb_pbp_cfbfastr_{season}.parquet`
+### Returns
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | Int64 | ESPN game identifier. |
+| `id_play` | Int64 | Unique CFBD play identifier (concatenates game_id and play index). |
+| `drive_id` | Int64 | CFBD drive identifier the play belongs to. |
+| `game_play_number` | Int64 | Sequential play number within the game (excludes timeouts/end markers). |
+| `half_play_number` | Int64 | Sequential play number within the current half. |
+| `drive_play_number` | Int64 | Sequential play number within the current drive. |
+| `drive_number` | Int64 | Sequential drive number within the game (1-indexed). |
+| `season` | Int64 | Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted. |
+| `year` | Int64 | Four-digit season year (e.g. 2019). |
+| `week` | Int64 | Game week of the season. |
+| `period` | Int64 | Period (quarter) number. |
+| `half` | Int64 | Half indicator (1 or 2). |
+| `clock.minutes` | Int64 |  |
+| `clock.seconds` | Int64 |  |
+| `TimeSecsRem` | Int64 | Seconds remaining in the half at the start of the play. |
+| `Under_two` | Boolean | TRUE when under two minutes remain in the half. |
+| `pos_team` | String | Team name in possession at the start of the play (offense, kickoff-aware). |
+| `def_pos_team` | String | Team name on defense at the start of the play. |
+| `offense_play` | String | Offensive team name as labeled by CFBD on the play. |
+| `defense_play` | String | Defensive team name as labeled by CFBD on the play. |
+| `home` | String | Home team name. |
+| `away` | String | Away team name. |
+| `pos_team_score` | Int64 | Score for the team in possession at the start of the play. |
+| `def_pos_team_score` | Int64 | Score for the defensive team at the start of the play. |
+| `offense_score` | Int64 | Offense team score at the start of the play. |
+| `defense_score` | Int64 | Defense team score at the start of the play. |
+| `pos_score_diff` | Int64 | Score differential from the possession team's perspective. |
+| `score_pts` | Int64 | Points scored on the play. |
+| `scoring_play` | Boolean | `TRUE` if the play resulted in a score. |
+| `scoring` | Boolean | TRUE when the play results in a score (TD, FG, safety, two-point conversion). |
+| `down` | Int64 | Down of the play (1-4). |
+| `distance` | Int64 | Yards to gain for a first down (or to the goal line in goal-to-go situations). |
+| `yard_line` | String | Field-position yard line at the start of the play (0-50 scale from the offense's side). |
+| `yards_to_goal` | Int64 | Distance in yards from the offense's spot to the opponent's goal line (0-100). |
+| `yards_to_goal_end` | Int64 | Yards to opponent end zone at the end of the play. |
+| `Goal_To_Go` | Boolean | TRUE when the offense is in a goal-to-go situation. |
+| `log_ydstogo` | Float64 | Natural log of distance-to-go (model feature). |
+| `yards_gained` | Int64 | Net yards gained by the offense on the play. |
+| `play_type` | String | CFBD play type label (e.g. "Rush", "Pass Reception", "Field Goal Good"). |
+| `orig_play_type` | String | Original CFBD play type label before cfbfastR cleaning. |
+| `play_text` | String | Free-form text description of the play from the CFBD feed. |
+| `rush` | Boolean | Binary flag for a rushing play. |
+| `rush_td` | Boolean | Binary flag for a rushing touchdown. |
+| `pass` | Boolean | Binary flag for a passing play (includes sacks). |
+| `pass_td` | Boolean | Binary flag for a passing touchdown. |
+| `pass_attempt` | Boolean | Binary flag for a pass attempt. |
+| `completion` | Boolean | Binary flag for a completed pass. |
+| `target` | Boolean | Binary flag for a targeted receiver on the play. |
+| `sack` | Boolean | Binary flag for a sack (duplicate of sack_vec for downstream use). |
+| `sack_vec` | Boolean | Binary flag for a sack play. |
+| `int` | Boolean | Binary flag for an interception. |
+| `int_td` | Boolean | Binary flag for an interception returned for a touchdown. |
+| `turnover_vec` | Boolean | Binary flag for any play classified as a turnover. |
+| `downs_turnover` | Boolean | Binary flag for a turnover on downs. |
+| `touchdown` | Boolean | Binary flag for a touchdown (duplicate of td_play for downstream use). |
+| `td_play` | Boolean | Binary flag for a touchdown play. |
+| `safety` | Boolean | Binary flag for a safety. |
+| `fumble_vec` | Boolean | Binary flag for a play involving a fumble. |
+| `punt` | Boolean | Binary flag for a punt play. |
+| `punt_play` | Boolean | Binary flag for any punt-related play (includes blocks/returns). |
+| `kickoff_play` | Boolean | Binary flag for a kickoff play. |
+| `kick_play` | Boolean | Binary flag for any kicking play (kickoff or field goal). |
+| `fg_inds` | Boolean | Binary flag for a field goal attempt. |
+| `fg_made` | Boolean | TRUE when the field goal attempt was successful. |
+| `punt_blocked` | Boolean | Binary flag for a blocked punt. |
+| `punt_fair_catch` | Boolean | Binary flag for a punt fair catch. |
+| `firstD_by_yards` | Boolean | Binary flag for a new first down via yards gained. |
+| `firstD_by_penalty` | Boolean | Binary flag for a new first down via penalty. |
+| `penalty_flag` | Boolean | TRUE when a penalty was flagged on the play. |
+| `penalty_no_play` | Boolean | TRUE when the penalty nullified the play (no play counted). |
+| `penalty_declined` | Boolean | TRUE when the penalty was declined. |
+| `penalty_offset` | Boolean | TRUE when offsetting penalties were called. |
+| `penalty_text` | String | TRUE when penalty information is detectable in the play text. |
+| `yds_penalty` | Int64 | Yardage assessed on the penalty. |
+| `rusher_player_name` | String | Name of the rusher on a rushing play. |
+| `passer_player_name` | String | Name of the passer on a passing play. |
+| `receiver_player_name` | String | Name of the receiver on a passing play. |
+| `interception_player_name` | String | Name of the defender credited with the interception. |
+| `punter_player_name` | String | Name of the punter. |
+| `punt_returner_player_name` | String | Name of the punt returner. |
+| `fg_kicker_player_name` | String | Name of the field goal kicker. |
+| `kickoff_player_name` | String | Name of the kickoff specialist. |
+| `kickoff_returner_player_name` | String | Name of the kickoff returner. |
+| `yds_rushed` | Int64 | Rushing yards gained on the play. |
+| `yds_receiving` | Int64 | Receiving yards gained on the play. |
+| `yds_sacked` | Int64 | Yards lost on the sack. |
+| `yds_punted` | Int64 | Yards the ball traveled on the punt. |
+| `yds_punt_return` | Int64 | Yards gained on the punt return. |
+| `yds_kickoff` | Int64 | Yards the ball traveled on the kickoff. |
+| `yds_kickoff_return` | Int64 | Yards gained on the kickoff return. |
+| `yds_int_return` | Int64 | Yards gained on an interception return. |
+| `yds_fg` | Int64 | Distance of the field goal attempt in yards. |
+| `drive_result` | String | Drive result code (`drive_`-prefixed; every drive-level column is carried with this prefix). |
+| `drive_scoring` | Boolean | Binary flag for a scoring drive. |
+| `ot_synthesized` | Boolean |  |
+| `lag_pos_team` | String | Possession team on the previous play (lag value). |
+| `lead_pos_team` | String | Possession team on the next play (lead value). |
+| `lag_play_type` | String | Play type on the previous play (lag value). |
+| `lead_play_type` | String | Play type on the next play (lead value). |
+| `lag_play_text` | String | Play text from the previous play (lag value). |
+| `lead_play_text` | String | Play text from the next play (lead value). |
+| `change_of_pos_team` | Boolean | Binary flag for change of possession-team on the play. |
+| `play_after_turnover` | Boolean | Binary flag indicating the play immediately following a turnover. |
+| `n_plays_in_game` | UInt32 |  |
+| `espn_game_id` | String | ESPN game id (NA for bart-only rows). |
+
+```python
+load_ncaa_mfb_pbp_cfbfastr(seasons=2024)
+```
+
+## `load_ncaa_mfb_drives`
+
+Release: [ncaa_mfb_drives](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_mfb_drives) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/ncaa_mfb_drives/ncaa_mfb_drives_{season}.parquet`
+### Returns
+
+| col_name | type | description |
+|---|---|---|
+| `contest_id` | String | stats.ncaa.org contest (game) identifier. |
+| `drive_number` | Int64 | Sequential drive number within the game (1-indexed). |
+| `quarter` | Int64 |  |
+| `period` | Int64 | Period (quarter) number. |
+| `team` | String | Team name. |
+| `start_period` | Int64 | Period (quarter) in which the drive starts. |
+| `start_how` | String |  |
+| `start_clock` | String | Game clock display value at the start of the drive. |
+| `start_yard_line` | String | Yard line at the start of the play. |
+| `end_period` | Int64 | Period (quarter) in which the drive ends. |
+| `end_how` | String |  |
+| `end_clock` | String | Game clock display value at the end of the drive. |
+| `end_yard_line` | String | Yard line at the end of the play. |
+| `n_plays` | Int64 |  |
+| `yards` | Int64 | Total yards gained on the drive. |
+| `espn_game_id` | String | ESPN game id (NA for bart-only rows). |
+| `season` | Int64 | Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted. |
+
+```python
+load_ncaa_mfb_drives(seasons=2024)
+```
+
+## `load_ncaa_mfb_schedule`
+
+Release: [ncaa_mfb_schedule](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_mfb_schedule) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/ncaa_mfb_schedule/ncaa_mfb_schedule_{season}.parquet`
+### Returns
+
+| col_name | type | description |
+|---|---|---|
+| `team_id` | String | ESPN team id. |
+| `team_name` | String | Team nickname; `team_detail = TRUE` only. |
+| `date` | String | Date of the poll release. |
+| `opponent_id` | String | ESPN team id of the opponent. |
+| `opponent` | String | Opponent team name. |
+| `result` | String | Drive result code (e.g. `PUNT`, `TD`). |
+| `outcome` | String |  |
+| `team_score` | Int64 | Offense team score at the time of the play. |
+| `opponent_score` | Int64 | Defense / opponent team score at the time of the play. |
+| `contest_id` | String | stats.ncaa.org contest (game) identifier. |
+| `attendance` | Int64 | Reported attendance at the game. |
+| `academic_year` | Int32 |  |
+| `season` | Int64 | Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted. |
+
+```python
+load_ncaa_mfb_schedule(seasons=2024)
+```
+
+## `load_ncaa_mfb_rosters`
+
+Release: [ncaa_mfb_rosters](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_mfb_rosters) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/ncaa_mfb_rosters/ncaa_mfb_rosters_{season}.parquet`
+### Returns
+
+| col_name | type | description |
+|---|---|---|
+| `team_id` | String | ESPN team id. |
+| `team_name` | String | Team nickname; `team_detail = TRUE` only. |
+| `player_id` | String | ESPN player id from the roster entry. |
+| `player_name` | String | Full name of player |
+| `jersey` | String | Jersey number. |
+| `statcrew_jersey` | String |  |
+| `player_class` | String |  |
+| `position` | String | Athlete position. |
+| `height` | String | Listed height (inches). |
+| `weight` | Int64 | Listed weight (lbs). |
+| `hometown` | String | Prospect hometown. |
+| `high_school` | String | High school |
+| `games_played` | Int64 | Games played. |
+| `games_started` | Int64 | Games started (goalies). |
+| `academic_year` | Int32 |  |
+| `season` | Int64 | Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted. |
+
+```python
+load_ncaa_mfb_rosters(seasons=2024)
+```
+
+## `load_ncaa_mfb_teams`
+
+Release: [ncaa_mfb_teams](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_mfb_teams) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/ncaa_mfb_teams/ncaa_mfb_teams_{season}.parquet`
+### Returns
+
+| col_name | type | description |
+|---|---|---|
+| `team_id` | String | ESPN team id. |
+| `team_name` | String | Team nickname; `team_detail = TRUE` only. |
+| `academic_year` | Int32 |  |
+| `division` | Int32 | Division in the conference for the team. |
+| `season` | Int64 | Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted. |
+
+```python
+load_ncaa_mfb_teams(seasons=2024)
+```
+
+## `load_ncaa_mfb_team_stats`
+
+Release: [ncaa_mfb_team_stats](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_mfb_team_stats) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/ncaa_mfb_team_stats/ncaa_mfb_team_stats_{season}.parquet`
+### Returns
+
+| col_name | type | description |
+|---|---|---|
+| `contest_id` | String | stats.ncaa.org contest (game) identifier. |
+| `category` | String | CFBD stats category name (e.g. passing, rushing, defensive). |
+| `stat` | String | Stat. |
+| `period` | String | Period (quarter) number. |
+| `away_team` | String | Away team name. |
+| `away_value` | String |  |
+| `home_team` | String | Home team name. |
+| `home_value` | String |  |
+| `espn_game_id` | String | ESPN game id (NA for bart-only rows). |
+| `season` | Int64 | Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted. |
+
+```python
+load_ncaa_mfb_team_stats(seasons=2024)
+```
+
+## `load_ncaa_mfb_player_stats`
+
+Release: [ncaa_mfb_player_stats](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_mfb_player_stats) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/ncaa_mfb_player_stats/ncaa_mfb_player_stats_{season}.parquet`
+### Returns
+
+| col_name | type | description |
+|---|---|---|
+| `contest_id` | String | stats.ncaa.org contest (game) identifier. |
+| `team_id` | String | ESPN team id. |
+| `number` | String | Week number as returned by the API. |
+| `name` | String | Position name (e.g. `Quarterback`). |
+| `position` | String | Athlete position. |
+| `rush_attempts` | String | The number of rushing attempts |
+| `rush_yds_gained` | String |  |
+| `rush_yds_lost` | String |  |
+| `yds_rush` | String |  |
+| `rush_tds` | String | Team rushing touchdowns. |
+| `rush_long` | String |  |
+| `category` | String | CFBD stats category name (e.g. passing, rushing, defensive). |
+| `espn_game_id` | String | ESPN game id (NA for bart-only rows). |
+| `pass_attempts` | String | Career pass attempts |
+| `completions` | String | The number of completed passes. |
+| `pass_yards` | String | Number of yards gained on pass plays |
+| `interceptions` | String | Passing interceptions. |
+| `pass_tds` | String | Career pass touchdowns thrown |
+| `pass_eff` | String |  |
+| `yds_per_completion` | String |  |
+| `pct` | String | Win percentage. |
+| `long_pass` | String |  |
+| `rec` | String |  |
+| `receiving_yards` | String | Numeric yards by the receiver_player_name, excluding yards gained in pass plays with laterals. This should equal official receiving statistics but could miss yards gained in pass plays with laterals. Please see the description of `lateral_receiver_player_name` for further information. |
+| `yards_per_reception` | String |  |
+| `rec_td` | String |  |
+| `long_rec` | String |  |
+| `season` | Int64 | Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted. |
+
+```python
+load_ncaa_mfb_player_stats(seasons=2024)
+```
+
+## `load_ncaa_mfb_officials`
+
+Release: [ncaa_mfb_officials](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_mfb_officials) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/ncaa_mfb_officials/ncaa_mfb_officials_{season}.parquet`
+### Returns
+
+| col_name | type | description |
+|---|---|---|
+| `contest_id` | String | stats.ncaa.org contest (game) identifier. |
+| `role` | String | Grouped official role (Referee/Linesperson). |
+| `official` | String | Flag indicating that the media item comes from the official league feed rather than an editorial source. |
+| `espn_game_id` | String | ESPN game id (NA for bart-only rows). |
+| `season` | Int64 | Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted. |
+
+```python
+load_ncaa_mfb_officials(seasons=2024)
+```
+
+## `load_ncaa_mfb_linescore`
+
+Release: [ncaa_mfb_linescore](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_mfb_linescore) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/ncaa_mfb_linescore/ncaa_mfb_linescore_{season}.parquet`
+### Returns
+
+| col_name | type | description |
+|---|---|---|
+| `contest_id` | String | stats.ncaa.org contest (game) identifier. |
+| `team` | String | Team name. |
+| `home_away` | String | `home` or `away`. |
+| `period` | String | Period (quarter) number. |
+| `points` | Int64 | Total points accumulated by the school in the poll's weighted voting. |
+| `final` | Int64 | Flag for whether the game is final. |
+| `game_date` | String | Kickoff date-time (ISO 8601, UTC). |
+| `venue` | String | Venue name. |
+| `attendance` | Int64 | Reported attendance at the game. |
+| `espn_game_id` | String | ESPN game id (NA for bart-only rows). |
+| `season` | Int64 | Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted. |
+
+```python
+load_ncaa_mfb_linescore(seasons=2024)
 ```

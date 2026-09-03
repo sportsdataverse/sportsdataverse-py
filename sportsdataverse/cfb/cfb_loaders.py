@@ -57,6 +57,16 @@ __all__ = [
     "load_cfb_ratings_weekly",
     "load_cfb_team_summaries_weekly",
     "load_cfb_pbp_r",
+    "load_ncaa_mfb_pbp",
+    "load_ncaa_mfb_pbp_cfbfastr",
+    "load_ncaa_mfb_drives",
+    "load_ncaa_mfb_schedule",
+    "load_ncaa_mfb_rosters",
+    "load_ncaa_mfb_teams",
+    "load_ncaa_mfb_team_stats",
+    "load_ncaa_mfb_player_stats",
+    "load_ncaa_mfb_officials",
+    "load_ncaa_mfb_linescore",
 ]
 
 
@@ -4726,6 +4736,697 @@ def load_cfb_pbp_r(seasons, return_as_pandas: bool = False):
         frames.append(df)
     if missing:
         cli_warn("load_cfb_pbp_r: no data for season(s) {missing} (skipped)".format(missing=missing))
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+def load_ncaa_mfb_pbp(seasons, return_as_pandas: bool = False):
+    """Load ncaa_mfb_pbp (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_mfb_pbp
+
+    Args:
+        seasons: an int or iterable of seasons (>= 2013).
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; seasons with no published asset are
+        skipped with a warning rather than raising (404-safe).
+
+        |col_name         |type    |
+        |:----------------|:-------|
+        |contest_id       |String  |
+        |drive_number     |Int64   |
+        |play_number      |Int64   |
+        |offense          |String  |
+        |drive_result     |String  |
+        |drive_scored     |Boolean |
+        |down             |Int64   |
+        |distance         |Int64   |
+        |yard_line        |String  |
+        |yard_line_side   |String  |
+        |yard_line_number |Int64   |
+        |play_type        |String  |
+        |clock            |String  |
+        |yards_gained     |Int64   |
+        |formation        |String  |
+        |passer           |String  |
+        |rusher           |String  |
+        |receiver         |String  |
+        |kicker           |String  |
+        |punter           |String  |
+        |returner         |String  |
+        |run_direction    |String  |
+        |qb_scramble      |Boolean |
+        |pass_complete    |Boolean |
+        |pass_depth       |String  |
+        |pass_direction   |String  |
+        |tackler_1        |String  |
+        |tackler_2        |String  |
+        |kick_yards       |Int64   |
+        |return_yards     |Int64   |
+        |punt_yards       |Int64   |
+        |fg_distance      |Int64   |
+        |fg_made          |Boolean |
+        |is_first_down    |Boolean |
+        |is_touchdown     |Boolean |
+        |is_safety        |Boolean |
+        |is_fumble        |Boolean |
+        |is_turnover      |Boolean |
+        |turnover_type    |String  |
+        |out_of_bounds    |Boolean |
+        |no_play          |Boolean |
+        |fair_catch       |Boolean |
+        |penalty_flag     |Boolean |
+        |penalty_team     |String  |
+        |penalty_type     |String  |
+        |penalty_player   |String  |
+        |penalty_yards    |Int64   |
+        |end_yard_line    |String  |
+        |play_text        |String  |
+        |espn_game_id     |String  |
+        |season           |Int64   |
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2013.
+
+    Example:
+        Quick start::
+
+            load_ncaa_mfb_pbp(seasons=2024)
+    """
+    frames, missing = [], []
+    for season in _as_season_list(seasons):
+        if int(season) < 2013:
+            raise SeasonNotFoundError("season cannot be less than 2013")
+        df = _read_release_parquet(
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/ncaa_mfb_pbp/ncaa_mfb_pbp_{season}.parquet"
+        )
+        if df is None:
+            missing.append(season)
+            continue
+        frames.append(df)
+    if missing:
+        cli_warn("load_ncaa_mfb_pbp: no data for season(s) {missing} (skipped)".format(missing=missing))
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+def load_ncaa_mfb_pbp_cfbfastr(seasons, return_as_pandas: bool = False):
+    """Load ncaa_mfb_pbp_cfbfastr (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_mfb_pbp_cfbfastr
+
+    Args:
+        seasons: an int or iterable of seasons (>= 2013).
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; seasons with no published asset are
+        skipped with a warning rather than raising (404-safe).
+
+        |col_name                     |type    |
+        |:----------------------------|:-------|
+        |game_id                      |Int64   |
+        |id_play                      |Int64   |
+        |drive_id                     |Int64   |
+        |game_play_number             |Int64   |
+        |half_play_number             |Int64   |
+        |drive_play_number            |Int64   |
+        |drive_number                 |Int64   |
+        |season                       |Int64   |
+        |year                         |Int64   |
+        |week                         |Int64   |
+        |period                       |Int64   |
+        |half                         |Int64   |
+        |clock.minutes                |Int64   |
+        |clock.seconds                |Int64   |
+        |TimeSecsRem                  |Int64   |
+        |Under_two                    |Boolean |
+        |pos_team                     |String  |
+        |def_pos_team                 |String  |
+        |offense_play                 |String  |
+        |defense_play                 |String  |
+        |home                         |String  |
+        |away                         |String  |
+        |pos_team_score               |Int64   |
+        |def_pos_team_score           |Int64   |
+        |offense_score                |Int64   |
+        |defense_score                |Int64   |
+        |pos_score_diff               |Int64   |
+        |score_pts                    |Int64   |
+        |scoring_play                 |Boolean |
+        |scoring                      |Boolean |
+        |down                         |Int64   |
+        |distance                     |Int64   |
+        |yard_line                    |String  |
+        |yards_to_goal                |Int64   |
+        |yards_to_goal_end            |Int64   |
+        |Goal_To_Go                   |Boolean |
+        |log_ydstogo                  |Float64 |
+        |yards_gained                 |Int64   |
+        |play_type                    |String  |
+        |orig_play_type               |String  |
+        |play_text                    |String  |
+        |rush                         |Boolean |
+        |rush_td                      |Boolean |
+        |pass                         |Boolean |
+        |pass_td                      |Boolean |
+        |pass_attempt                 |Boolean |
+        |completion                   |Boolean |
+        |target                       |Boolean |
+        |sack                         |Boolean |
+        |sack_vec                     |Boolean |
+        |int                          |Boolean |
+        |int_td                       |Boolean |
+        |turnover_vec                 |Boolean |
+        |downs_turnover               |Boolean |
+        |touchdown                    |Boolean |
+        |td_play                      |Boolean |
+        |safety                       |Boolean |
+        |fumble_vec                   |Boolean |
+        |punt                         |Boolean |
+        |punt_play                    |Boolean |
+        |kickoff_play                 |Boolean |
+        |kick_play                    |Boolean |
+        |fg_inds                      |Boolean |
+        |fg_made                      |Boolean |
+        |punt_blocked                 |Boolean |
+        |punt_fair_catch              |Boolean |
+        |firstD_by_yards              |Boolean |
+        |firstD_by_penalty            |Boolean |
+        |penalty_flag                 |Boolean |
+        |penalty_no_play              |Boolean |
+        |penalty_declined             |Boolean |
+        |penalty_offset               |Boolean |
+        |penalty_text                 |String  |
+        |yds_penalty                  |Int64   |
+        |rusher_player_name           |String  |
+        |passer_player_name           |String  |
+        |receiver_player_name         |String  |
+        |interception_player_name     |String  |
+        |punter_player_name           |String  |
+        |punt_returner_player_name    |String  |
+        |fg_kicker_player_name        |String  |
+        |kickoff_player_name          |String  |
+        |kickoff_returner_player_name |String  |
+        |yds_rushed                   |Int64   |
+        |yds_receiving                |Int64   |
+        |yds_sacked                   |Int64   |
+        |yds_punted                   |Int64   |
+        |yds_punt_return              |Int64   |
+        |yds_kickoff                  |Int64   |
+        |yds_kickoff_return           |Int64   |
+        |yds_int_return               |Int64   |
+        |yds_fg                       |Int64   |
+        |drive_result                 |String  |
+        |drive_scoring                |Boolean |
+        |ot_synthesized               |Boolean |
+        |lag_pos_team                 |String  |
+        |lead_pos_team                |String  |
+        |lag_play_type                |String  |
+        |lead_play_type               |String  |
+        |lag_play_text                |String  |
+        |lead_play_text               |String  |
+        |change_of_pos_team           |Boolean |
+        |play_after_turnover          |Boolean |
+        |n_plays_in_game              |UInt32  |
+        |espn_game_id                 |String  |
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2013.
+
+    Example:
+        Quick start::
+
+            load_ncaa_mfb_pbp_cfbfastr(seasons=2024)
+    """
+    frames, missing = [], []
+    for season in _as_season_list(seasons):
+        if int(season) < 2013:
+            raise SeasonNotFoundError("season cannot be less than 2013")
+        df = _read_release_parquet(
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/ncaa_mfb_pbp_cfbfastr/ncaa_mfb_pbp_cfbfastr_{season}.parquet"
+        )
+        if df is None:
+            missing.append(season)
+            continue
+        frames.append(df)
+    if missing:
+        cli_warn("load_ncaa_mfb_pbp_cfbfastr: no data for season(s) {missing} (skipped)".format(missing=missing))
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+def load_ncaa_mfb_drives(seasons, return_as_pandas: bool = False):
+    """Load ncaa_mfb_drives (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_mfb_drives
+
+    Args:
+        seasons: an int or iterable of seasons (>= 2013).
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; seasons with no published asset are
+        skipped with a warning rather than raising (404-safe).
+
+        |col_name        |type   |
+        |:---------------|:------|
+        |contest_id      |String |
+        |drive_number    |Int64  |
+        |quarter         |Int64  |
+        |period          |Int64  |
+        |team            |String |
+        |start_period    |Int64  |
+        |start_how       |String |
+        |start_clock     |String |
+        |start_yard_line |String |
+        |end_period      |Int64  |
+        |end_how         |String |
+        |end_clock       |String |
+        |end_yard_line   |String |
+        |n_plays         |Int64  |
+        |yards           |Int64  |
+        |espn_game_id    |String |
+        |season          |Int64  |
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2013.
+
+    Example:
+        Quick start::
+
+            load_ncaa_mfb_drives(seasons=2024)
+    """
+    frames, missing = [], []
+    for season in _as_season_list(seasons):
+        if int(season) < 2013:
+            raise SeasonNotFoundError("season cannot be less than 2013")
+        df = _read_release_parquet(
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/ncaa_mfb_drives/ncaa_mfb_drives_{season}.parquet"
+        )
+        if df is None:
+            missing.append(season)
+            continue
+        frames.append(df)
+    if missing:
+        cli_warn("load_ncaa_mfb_drives: no data for season(s) {missing} (skipped)".format(missing=missing))
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+def load_ncaa_mfb_schedule(seasons, return_as_pandas: bool = False):
+    """Load ncaa_mfb_schedule (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_mfb_schedule
+
+    Args:
+        seasons: an int or iterable of seasons (>= 2013).
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; seasons with no published asset are
+        skipped with a warning rather than raising (404-safe).
+
+        |col_name       |type   |
+        |:--------------|:------|
+        |team_id        |String |
+        |team_name      |String |
+        |date           |String |
+        |opponent_id    |String |
+        |opponent       |String |
+        |result         |String |
+        |outcome        |String |
+        |team_score     |Int64  |
+        |opponent_score |Int64  |
+        |contest_id     |String |
+        |attendance     |Int64  |
+        |academic_year  |Int32  |
+        |season         |Int64  |
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2013.
+
+    Example:
+        Quick start::
+
+            load_ncaa_mfb_schedule(seasons=2024)
+    """
+    frames, missing = [], []
+    for season in _as_season_list(seasons):
+        if int(season) < 2013:
+            raise SeasonNotFoundError("season cannot be less than 2013")
+        df = _read_release_parquet(
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/ncaa_mfb_schedule/ncaa_mfb_schedule_{season}.parquet"
+        )
+        if df is None:
+            missing.append(season)
+            continue
+        frames.append(df)
+    if missing:
+        cli_warn("load_ncaa_mfb_schedule: no data for season(s) {missing} (skipped)".format(missing=missing))
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+def load_ncaa_mfb_rosters(seasons, return_as_pandas: bool = False):
+    """Load ncaa_mfb_rosters (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_mfb_rosters
+
+    Args:
+        seasons: an int or iterable of seasons (>= 2013).
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; seasons with no published asset are
+        skipped with a warning rather than raising (404-safe).
+
+        |col_name        |type   |
+        |:---------------|:------|
+        |team_id         |String |
+        |team_name       |String |
+        |player_id       |String |
+        |player_name     |String |
+        |jersey          |String |
+        |statcrew_jersey |String |
+        |player_class    |String |
+        |position        |String |
+        |height          |String |
+        |weight          |Int64  |
+        |hometown        |String |
+        |high_school     |String |
+        |games_played    |Int64  |
+        |games_started   |Int64  |
+        |academic_year   |Int32  |
+        |season          |Int64  |
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2013.
+
+    Example:
+        Quick start::
+
+            load_ncaa_mfb_rosters(seasons=2024)
+    """
+    frames, missing = [], []
+    for season in _as_season_list(seasons):
+        if int(season) < 2013:
+            raise SeasonNotFoundError("season cannot be less than 2013")
+        df = _read_release_parquet(
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/ncaa_mfb_rosters/ncaa_mfb_rosters_{season}.parquet"
+        )
+        if df is None:
+            missing.append(season)
+            continue
+        frames.append(df)
+    if missing:
+        cli_warn("load_ncaa_mfb_rosters: no data for season(s) {missing} (skipped)".format(missing=missing))
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+def load_ncaa_mfb_teams(seasons, return_as_pandas: bool = False):
+    """Load ncaa_mfb_teams (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_mfb_teams
+
+    Args:
+        seasons: an int or iterable of seasons (>= 2013).
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; seasons with no published asset are
+        skipped with a warning rather than raising (404-safe).
+
+        |col_name      |type   |
+        |:-------------|:------|
+        |team_id       |String |
+        |team_name     |String |
+        |academic_year |Int32  |
+        |division      |Int32  |
+        |season        |Int64  |
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2013.
+
+    Example:
+        Quick start::
+
+            load_ncaa_mfb_teams(seasons=2024)
+    """
+    frames, missing = [], []
+    for season in _as_season_list(seasons):
+        if int(season) < 2013:
+            raise SeasonNotFoundError("season cannot be less than 2013")
+        df = _read_release_parquet(
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/ncaa_mfb_teams/ncaa_mfb_teams_{season}.parquet"
+        )
+        if df is None:
+            missing.append(season)
+            continue
+        frames.append(df)
+    if missing:
+        cli_warn("load_ncaa_mfb_teams: no data for season(s) {missing} (skipped)".format(missing=missing))
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+def load_ncaa_mfb_team_stats(seasons, return_as_pandas: bool = False):
+    """Load ncaa_mfb_team_stats (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_mfb_team_stats
+
+    Args:
+        seasons: an int or iterable of seasons (>= 2013).
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; seasons with no published asset are
+        skipped with a warning rather than raising (404-safe).
+
+        |col_name     |type   |
+        |:------------|:------|
+        |contest_id   |String |
+        |category     |String |
+        |stat         |String |
+        |period       |String |
+        |away_team    |String |
+        |away_value   |String |
+        |home_team    |String |
+        |home_value   |String |
+        |espn_game_id |String |
+        |season       |Int64  |
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2013.
+
+    Example:
+        Quick start::
+
+            load_ncaa_mfb_team_stats(seasons=2024)
+    """
+    frames, missing = [], []
+    for season in _as_season_list(seasons):
+        if int(season) < 2013:
+            raise SeasonNotFoundError("season cannot be less than 2013")
+        df = _read_release_parquet(
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/ncaa_mfb_team_stats/ncaa_mfb_team_stats_{season}.parquet"
+        )
+        if df is None:
+            missing.append(season)
+            continue
+        frames.append(df)
+    if missing:
+        cli_warn("load_ncaa_mfb_team_stats: no data for season(s) {missing} (skipped)".format(missing=missing))
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+def load_ncaa_mfb_player_stats(seasons, return_as_pandas: bool = False):
+    """Load ncaa_mfb_player_stats (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_mfb_player_stats
+
+    Args:
+        seasons: an int or iterable of seasons (>= 2013).
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; seasons with no published asset are
+        skipped with a warning rather than raising (404-safe).
+
+        |col_name            |type   |
+        |:-------------------|:------|
+        |contest_id          |String |
+        |team_id             |String |
+        |number              |String |
+        |name                |String |
+        |position            |String |
+        |rush_attempts       |String |
+        |rush_yds_gained     |String |
+        |rush_yds_lost       |String |
+        |yds_rush            |String |
+        |rush_tds            |String |
+        |rush_long           |String |
+        |category            |String |
+        |espn_game_id        |String |
+        |pass_attempts       |String |
+        |completions         |String |
+        |pass_yards          |String |
+        |interceptions       |String |
+        |pass_tds            |String |
+        |pass_eff            |String |
+        |yds_per_completion  |String |
+        |pct                 |String |
+        |long_pass           |String |
+        |rec                 |String |
+        |receiving_yards     |String |
+        |yards_per_reception |String |
+        |rec_td              |String |
+        |long_rec            |String |
+        |season              |Int64  |
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2013.
+
+    Example:
+        Quick start::
+
+            load_ncaa_mfb_player_stats(seasons=2024)
+    """
+    frames, missing = [], []
+    for season in _as_season_list(seasons):
+        if int(season) < 2013:
+            raise SeasonNotFoundError("season cannot be less than 2013")
+        df = _read_release_parquet(
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/ncaa_mfb_player_stats/ncaa_mfb_player_stats_{season}.parquet"
+        )
+        if df is None:
+            missing.append(season)
+            continue
+        frames.append(df)
+    if missing:
+        cli_warn("load_ncaa_mfb_player_stats: no data for season(s) {missing} (skipped)".format(missing=missing))
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+def load_ncaa_mfb_officials(seasons, return_as_pandas: bool = False):
+    """Load ncaa_mfb_officials (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_mfb_officials
+
+    Args:
+        seasons: an int or iterable of seasons (>= 2013).
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; seasons with no published asset are
+        skipped with a warning rather than raising (404-safe).
+
+        |col_name     |type   |
+        |:------------|:------|
+        |contest_id   |String |
+        |role         |String |
+        |official     |String |
+        |espn_game_id |String |
+        |season       |Int64  |
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2013.
+
+    Example:
+        Quick start::
+
+            load_ncaa_mfb_officials(seasons=2024)
+    """
+    frames, missing = [], []
+    for season in _as_season_list(seasons):
+        if int(season) < 2013:
+            raise SeasonNotFoundError("season cannot be less than 2013")
+        df = _read_release_parquet(
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/ncaa_mfb_officials/ncaa_mfb_officials_{season}.parquet"
+        )
+        if df is None:
+            missing.append(season)
+            continue
+        frames.append(df)
+    if missing:
+        cli_warn("load_ncaa_mfb_officials: no data for season(s) {missing} (skipped)".format(missing=missing))
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+def load_ncaa_mfb_linescore(seasons, return_as_pandas: bool = False):
+    """Load ncaa_mfb_linescore (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_mfb_linescore
+
+    Args:
+        seasons: an int or iterable of seasons (>= 2013).
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; seasons with no published asset are
+        skipped with a warning rather than raising (404-safe).
+
+        |col_name     |type   |
+        |:------------|:------|
+        |contest_id   |String |
+        |team         |String |
+        |home_away    |String |
+        |period       |String |
+        |points       |Int64  |
+        |final        |Int64  |
+        |game_date    |String |
+        |venue        |String |
+        |attendance   |Int64  |
+        |espn_game_id |String |
+        |season       |Int64  |
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2013.
+
+    Example:
+        Quick start::
+
+            load_ncaa_mfb_linescore(seasons=2024)
+    """
+    frames, missing = [], []
+    for season in _as_season_list(seasons):
+        if int(season) < 2013:
+            raise SeasonNotFoundError("season cannot be less than 2013")
+        df = _read_release_parquet(
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/ncaa_mfb_linescore/ncaa_mfb_linescore_{season}.parquet"
+        )
+        if df is None:
+            missing.append(season)
+            continue
+        frames.append(df)
+    if missing:
+        cli_warn("load_ncaa_mfb_linescore: no data for season(s) {missing} (skipped)".format(missing=missing))
     # diagonal: per-season release schemas can drift (columns added/dropped
     # over the years) -- union columns, null-fill gaps.
     out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()

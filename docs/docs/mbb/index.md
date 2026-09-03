@@ -13,7 +13,7 @@ description: "sdv-py MBB: endpoint references, dataset loaders and parsers for M
 | [ESPN FPI API (fitt v3)](reference/fitt) | 1 | `https://site.web.api.espn.com/apis/fitt/v3/sports` |
 | [Bart Torvik T-Rank (barttorvik.com)](reference/torvik) | 2 | `https://barttorvik.com` |
 | [KenPom (kenpom.com, subscription)](reference/kenpom) | 30 | `https://kenpom.com` |
-| [Dataset loaders](reference/loaders) | 29 | sportsdataverse-data releases |
+| [Dataset loaders](reference/loaders) | 30 | sportsdataverse-data releases |
 | [Additional functions](reference/additional) | 326 | hand-written wrappers, loaders & helpers |
 
 ## Examples

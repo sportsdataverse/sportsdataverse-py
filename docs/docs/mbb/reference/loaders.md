@@ -44,6 +44,7 @@ flowchart LR
 | `load_ncaa_mbb_matchup_stints` | [ncaa_mbb_matchup_stints](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_mbb_matchup_stints) | — |
 | `load_ncaa_mbb_shots` | [ncaa_mbb_shots](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_mbb_shots) | — |
 | `load_ncaa_mbb_rapm_within_team` | [ncaa_mbb_rapm_within_team](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_mbb_rapm_within_team) | — |
+| `load_ncaa_mbb_rapm` | [ncaa_mbb_rapm](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_mbb_rapm) | — |
 
 ## `load_mbb_pbp`
 
@@ -1418,4 +1419,27 @@ Release: [ncaa_mbb_rapm_within_team](https://github.com/sportsdataverse/sportsda
 
 ```python
 load_ncaa_mbb_rapm_within_team(seasons=2024)
+```
+
+## `load_ncaa_mbb_rapm`
+
+Release: [ncaa_mbb_rapm](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_mbb_rapm) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/ncaa_mbb_rapm/ncaa_mbb_rapm_{season}.parquet`
+### Returns
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int32 | Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted. |
+| `player_id` | String | Unique player identifier. |
+| `person_id` | String | Unique player identifier (V3 endpoints). |
+| `player` | String | Player name. |
+| `team` | String | Team-side label or team identifier. |
+| `orapm` | Float64 |  |
+| `drapm` | Float64 |  |
+| `rapm_net` | Float64 |  |
+| `off_poss` | Int64 |  |
+| `def_poss` | Int64 |  |
+| `estimand` | String |  |
+
+```python
+load_ncaa_mbb_rapm(seasons=2024)
 ```

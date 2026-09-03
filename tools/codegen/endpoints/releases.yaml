@@ -1895,6 +1895,102 @@ loaders:
   min_season: 2010
   example_args:
     seasons: 2024
+- fn: load_ncaa_mbb_rapm
+  league: mbb
+  base: sdv_releases
+  url: ncaa_mbb_rapm/ncaa_mbb_rapm_{season}.parquet
+  tag: ncaa_mbb_rapm
+  min_season: 2011
+  example_args:
+    seasons: 2024
+- fn: load_ncaa_wbb_rapm
+  league: wbb
+  base: sdv_releases
+  url: ncaa_wbb_rapm/ncaa_wbb_rapm_{season}.parquet
+  tag: ncaa_wbb_rapm
+  min_season: 2011
+  example_args:
+    seasons: 2024
+- fn: load_ncaa_mfb_pbp
+  league: cfb
+  base: sdv_releases
+  url: ncaa_mfb_pbp/ncaa_mfb_pbp_{season}.parquet
+  tag: ncaa_mfb_pbp
+  min_season: 2013
+  example_args:
+    seasons: 2024
+- fn: load_ncaa_mfb_pbp_cfbfastr
+  league: cfb
+  base: sdv_releases
+  url: ncaa_mfb_pbp_cfbfastr/ncaa_mfb_pbp_cfbfastr_{season}.parquet
+  tag: ncaa_mfb_pbp_cfbfastr
+  min_season: 2013
+  example_args:
+    seasons: 2024
+- fn: load_ncaa_mfb_drives
+  league: cfb
+  base: sdv_releases
+  url: ncaa_mfb_drives/ncaa_mfb_drives_{season}.parquet
+  tag: ncaa_mfb_drives
+  min_season: 2013
+  example_args:
+    seasons: 2024
+- fn: load_ncaa_mfb_schedule
+  league: cfb
+  base: sdv_releases
+  url: ncaa_mfb_schedule/ncaa_mfb_schedule_{season}.parquet
+  tag: ncaa_mfb_schedule
+  min_season: 2013
+  example_args:
+    seasons: 2024
+- fn: load_ncaa_mfb_rosters
+  league: cfb
+  base: sdv_releases
+  url: ncaa_mfb_rosters/ncaa_mfb_rosters_{season}.parquet
+  tag: ncaa_mfb_rosters
+  min_season: 2013
+  example_args:
+    seasons: 2024
+- fn: load_ncaa_mfb_teams
+  league: cfb
+  base: sdv_releases
+  url: ncaa_mfb_teams/ncaa_mfb_teams_{season}.parquet
+  tag: ncaa_mfb_teams
+  min_season: 2013
+  example_args:
+    seasons: 2024
+- fn: load_ncaa_mfb_team_stats
+  league: cfb
+  base: sdv_releases
+  url: ncaa_mfb_team_stats/ncaa_mfb_team_stats_{season}.parquet
+  tag: ncaa_mfb_team_stats
+  min_season: 2013
+  example_args:
+    seasons: 2024
+- fn: load_ncaa_mfb_player_stats
+  league: cfb
+  base: sdv_releases
+  url: ncaa_mfb_player_stats/ncaa_mfb_player_stats_{season}.parquet
+  tag: ncaa_mfb_player_stats
+  min_season: 2013
+  example_args:
+    seasons: 2024
+- fn: load_ncaa_mfb_officials
+  league: cfb
+  base: sdv_releases
+  url: ncaa_mfb_officials/ncaa_mfb_officials_{season}.parquet
+  tag: ncaa_mfb_officials
+  min_season: 2013
+  example_args:
+    seasons: 2024
+- fn: load_ncaa_mfb_linescore
+  league: cfb
+  base: sdv_releases
+  url: ncaa_mfb_linescore/ncaa_mfb_linescore_{season}.parquet
+  tag: ncaa_mfb_linescore
+  min_season: 2013
+  example_args:
+    seasons: 2024
 - fn: load_ncaa_wbb_pbp
   league: wbb
   base: sdv_releases

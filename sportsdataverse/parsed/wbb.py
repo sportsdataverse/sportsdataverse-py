@@ -403,6 +403,7 @@ from sportsdataverse.wbb import load_ncaa_wbb_matchup_stints as load_ncaa_wbb_ma
 from sportsdataverse.wbb import load_ncaa_wbb_pbp as load_ncaa_wbb_pbp  # noqa: F401
 from sportsdataverse.wbb import load_ncaa_wbb_player_box as load_ncaa_wbb_player_box  # noqa: F401
 from sportsdataverse.wbb import load_ncaa_wbb_possessions as load_ncaa_wbb_possessions  # noqa: F401
+from sportsdataverse.wbb import load_ncaa_wbb_rapm as load_ncaa_wbb_rapm  # noqa: F401
 from sportsdataverse.wbb import load_ncaa_wbb_rapm_within_team as load_ncaa_wbb_rapm_within_team  # noqa: F401
 from sportsdataverse.wbb import load_ncaa_wbb_rosters as load_ncaa_wbb_rosters  # noqa: F401
 from sportsdataverse.wbb import load_ncaa_wbb_schedule as load_ncaa_wbb_schedule  # noqa: F401
@@ -950,6 +951,7 @@ __all__ = [
     "load_ncaa_wbb_pbp",
     "load_ncaa_wbb_player_box",
     "load_ncaa_wbb_possessions",
+    "load_ncaa_wbb_rapm",
     "load_ncaa_wbb_rapm_within_team",
     "load_ncaa_wbb_rosters",
     "load_ncaa_wbb_schedule",
