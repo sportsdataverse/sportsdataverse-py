@@ -236,8 +236,22 @@ def test_scrape_season_live_passing_2023():
     try:
         df = scrape_ngs_season("passing", 2023)
     except requests.exceptions.HTTPError as exc:  # pragma: no cover - upstream state
-        status = getattr(exc.response, "status_code", None)
-        if status in (401, 403):
+        resp = exc.response
+        status = getattr(resp, "status_code", None)
+        # Narrow to the ONE documented deny, so a future auth/authorization
+        # regression still fails loudly instead of being skipped away.
+        #
+        # The signature is split across body and headers, and only the body half
+        # is reliable to match on: the API Gateway deny message lands in the JSON
+        # body, while "AccessDeniedException" is the value of the x-amzn-errortype
+        # HEADER -- it never appears in the body, so matching it there would make
+        # this branch dead and put the test straight back to failing. Verified
+        # against a live response 2026-09-03.
+        body = getattr(resp, "text", "") or ""
+        errtype = (getattr(resp, "headers", {}) or {}).get("x-amzn-errortype", "")
+        if status == 403 and (
+            "explicit deny in an identity-based policy" in body or "AccessDeniedException" in errtype
+        ):
             pytest.skip(f"NGS denied this network ({status}); see notes/2026-09-02-ngs-recon.md")
         raise
     assert df.height > 0
