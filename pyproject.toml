@@ -92,6 +92,13 @@ tests = [
     "pytest-xdist>=2.1.0",
     "ruff>=0.1.0",
 ]
+nflpro = [
+    # NFL Pro's user-bound token can only be obtained by completing the real
+    # id.nfl.com login, which needs a browser. Requests themselves are plain HTTP,
+    # so this stays an extra rather than a hard dependency -- and is unnecessary
+    # entirely when NFLPRO_TOKEN is supplied.
+    "playwright>=1.40",
+]
 models = [
     "beautifulsoup4>=4.11.0",
     "inflection>=0.5.1",
@@ -373,6 +380,8 @@ files = [
     "sportsdataverse/nfl/nfl_simulations.py",
     "sportsdataverse/nfl/nfl_stats.py",
     "sportsdataverse/nfl/pff_runtime.py",
+    "sportsdataverse/nfl/nflpro_parsers.py",
+    "sportsdataverse/nfl/nflpro_runtime.py",
     "sportsdataverse/nfl/pff_parsers.py",
     "sportsdataverse/nfl/pff_league.py",
     "sportsdataverse/nfl/utils_date.py",

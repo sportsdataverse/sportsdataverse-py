@@ -117,10 +117,18 @@ def _build_docstring(
     for p in ep.query_params:
         lines.append(f"    {p.python_name}: {p.api} query parameter.")
     if auth:
+        # Families differ in how their headers are minted and whether an
+        # unauthenticated token is even usable, so the default text is only a
+        # default: `docstring.headers_doc` overrides it per API. NFL Pro in
+        # particular must NOT promise an anonymous token -- it 401s there.
         lines.append(
-            "    headers: optional pre-minted auth headers dict (e.g. from "
-            "nfl_headers_gen()) to reuse across calls; a fresh anonymous token is "
-            "minted when omitted."
+            "    headers: "
+            + (
+                str(extras.get("headers_doc") or "")
+                or "optional pre-minted auth headers dict (e.g. from "
+                "nfl_headers_gen()) to reuse across calls; a fresh anonymous "
+                "token is minted when omitted."
+            )
         )
     if ep.parser:
         parsed_kind = "dict of polars DataFrames" if parsed_doc else "polars DataFrame"
@@ -1690,6 +1698,7 @@ FLAT_APIS = [
     ("mlb_api", "mlb"),
     ("mlb_statcast", "mlb"),
     ("nfl_api", "nfl"),
+    ("nflpro", "nfl"),
     ("nba_stats", "nba"),
     ("wnba_stats", "wnba"),
     ("on3", "cfb"),
