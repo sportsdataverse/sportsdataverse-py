@@ -1680,9 +1680,7 @@ def build_parsed_live() -> list[Path]:
 # native cutover can land family-by-family.
 #: League prefix -> sport-group container, for leagues that nest (soccer, football).
 #: Read from leagues.yaml so it cannot drift from the ESPN side's layout.
-_LEAGUE_GROUP = {
-    lg.prefix: lg.group for lg in spec.load_leagues(ENDPOINTS / "leagues.yaml").leagues if lg.group
-}
+_LEAGUE_GROUP = {lg.prefix: lg.group for lg in spec.load_leagues(ENDPOINTS / "leagues.yaml").leagues if lg.group}
 
 FLAT_APIS = [
     ("nhl_api_web", "nhl"),
