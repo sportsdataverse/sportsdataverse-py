@@ -1,6 +1,8 @@
 from __future__ import annotations
 
+from sportsdataverse.nba.bref import *
 from sportsdataverse.nba.nba_crosswalk import *
+from sportsdataverse.nba.nba_salary_draft import *
 from sportsdataverse.nba.nba_draft import *
 from sportsdataverse.nba.nba_espn_ext import *
 from sportsdataverse.nba.nba_fox_ext import *
@@ -10,6 +12,7 @@ from sportsdataverse.nba.nba_game_rosters import *
 from sportsdataverse.nba.nba_loaders import *
 from sportsdataverse.nba.nba_loaders_extra import *
 from sportsdataverse.nba.nba_pbp import *
+from sportsdataverse.nba.realgm import *
 from sportsdataverse.nba.nba_play_by_play import *
 from sportsdataverse.nba.nba_player_box import *
 from sportsdataverse.nba.nba_player_stats import *
