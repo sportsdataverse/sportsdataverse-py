@@ -1694,6 +1694,7 @@ FLAT_APIS = [
     ("pff", "nfl"),
     ("torvik", "mbb"),
     ("bart_wbb", "wbb"),
+    ("kenpom", "mbb"),
 ]
 
 
@@ -2214,6 +2215,7 @@ _FLAT_API_DOC = {
     "pff_core": "PFF Premium Stats (premium.pff.com)",
     "torvik": "Bart Torvik T-Rank (barttorvik.com)",
     "bart_wbb": "Bart Torvik Women's T-Rank (barttorvik.com/ncaaw)",
+    "kenpom": "KenPom (kenpom.com, subscription)",
 }
 
 # Friendly label per releases.yaml base key, for the "Dataset loaders" row of a
