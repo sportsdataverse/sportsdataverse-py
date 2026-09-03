@@ -107,15 +107,15 @@ def asa_games_xgoals(
 
     Args:
         league_slug: league_slug path parameter.
-        season_name: season_name query parameter.
-        stage_name: stage_name query parameter.
-        minimum_minutes: minimum_minutes query parameter.
-        general_position: general_position query parameter.
-        split_by_teams: split_by_teams query parameter.
-        split_by_seasons: split_by_seasons query parameter.
-        split_by_games: split_by_games query parameter.
-        start_date: start_date query parameter.
-        end_date: end_date query parameter.
+        season_name: Filter to one or more seasons. Comma-list accepted (`2022,2023`).
+        stage_name: Filter to a competition stage, e.g. `Regular Season`. **URL-encode spaces.**
+        minimum_minutes: Drop players/teams below this minutes-played threshold.
+        general_position: Filter by general position code: GK, CB, FB, DM, CM, AM, W, ST (player/GK routes).
+        split_by_teams: `true` => one row per entity per team (splits traded players).
+        split_by_seasons: `true` => one row per entity per season.
+        split_by_games: `true` => one row per entity per game.
+        start_date: Lower date bound (`YYYY-MM-DD`), where the route supports date windows.
+        end_date: Upper date bound (`YYYY-MM-DD`), where the route supports date windows.
         return_parsed: parse the payload through parse_asa -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -186,15 +186,15 @@ def asa_goalkeepers_goals_added(
 
     Args:
         league_slug: league_slug path parameter.
-        season_name: season_name query parameter.
-        stage_name: stage_name query parameter.
-        minimum_minutes: minimum_minutes query parameter.
-        general_position: general_position query parameter.
-        split_by_teams: split_by_teams query parameter.
-        split_by_seasons: split_by_seasons query parameter.
-        split_by_games: split_by_games query parameter.
-        start_date: start_date query parameter.
-        end_date: end_date query parameter.
+        season_name: Filter to one or more seasons. Comma-list accepted (`2022,2023`).
+        stage_name: Filter to a competition stage, e.g. `Regular Season`. **URL-encode spaces.**
+        minimum_minutes: Drop players/teams below this minutes-played threshold.
+        general_position: Filter by general position code: GK, CB, FB, DM, CM, AM, W, ST (player/GK routes).
+        split_by_teams: `true` => one row per entity per team (splits traded players).
+        split_by_seasons: `true` => one row per entity per season.
+        split_by_games: `true` => one row per entity per game.
+        start_date: Lower date bound (`YYYY-MM-DD`), where the route supports date windows.
+        end_date: Upper date bound (`YYYY-MM-DD`), where the route supports date windows.
         return_parsed: parse the payload through parse_asa_goals_added -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -265,15 +265,15 @@ def asa_goalkeepers_xgoals(
 
     Args:
         league_slug: league_slug path parameter.
-        season_name: season_name query parameter.
-        stage_name: stage_name query parameter.
-        minimum_minutes: minimum_minutes query parameter.
-        general_position: general_position query parameter.
-        split_by_teams: split_by_teams query parameter.
-        split_by_seasons: split_by_seasons query parameter.
-        split_by_games: split_by_games query parameter.
-        start_date: start_date query parameter.
-        end_date: end_date query parameter.
+        season_name: Filter to one or more seasons. Comma-list accepted (`2022,2023`).
+        stage_name: Filter to a competition stage, e.g. `Regular Season`. **URL-encode spaces.**
+        minimum_minutes: Drop players/teams below this minutes-played threshold.
+        general_position: Filter by general position code: GK, CB, FB, DM, CM, AM, W, ST (player/GK routes).
+        split_by_teams: `true` => one row per entity per team (splits traded players).
+        split_by_seasons: `true` => one row per entity per season.
+        split_by_games: `true` => one row per entity per game.
+        start_date: Lower date bound (`YYYY-MM-DD`), where the route supports date windows.
+        end_date: Upper date bound (`YYYY-MM-DD`), where the route supports date windows.
         return_parsed: parse the payload through parse_asa -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -448,15 +448,15 @@ def asa_players_goals_added(
 
     Args:
         league_slug: league_slug path parameter.
-        season_name: season_name query parameter.
-        stage_name: stage_name query parameter.
-        minimum_minutes: minimum_minutes query parameter.
-        general_position: general_position query parameter.
-        split_by_teams: split_by_teams query parameter.
-        split_by_seasons: split_by_seasons query parameter.
-        split_by_games: split_by_games query parameter.
-        start_date: start_date query parameter.
-        end_date: end_date query parameter.
+        season_name: Filter to one or more seasons. Comma-list accepted (`2022,2023`).
+        stage_name: Filter to a competition stage, e.g. `Regular Season`. **URL-encode spaces.**
+        minimum_minutes: Drop players/teams below this minutes-played threshold.
+        general_position: Filter by general position code: GK, CB, FB, DM, CM, AM, W, ST (player/GK routes).
+        split_by_teams: `true` => one row per entity per team (splits traded players).
+        split_by_seasons: `true` => one row per entity per season.
+        split_by_games: `true` => one row per entity per game.
+        start_date: Lower date bound (`YYYY-MM-DD`), where the route supports date windows.
+        end_date: Upper date bound (`YYYY-MM-DD`), where the route supports date windows.
         return_parsed: parse the payload through parse_asa_goals_added -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -527,15 +527,15 @@ def asa_players_salaries(
 
     Args:
         league_slug: league_slug path parameter.
-        season_name: season_name query parameter.
-        stage_name: stage_name query parameter.
-        minimum_minutes: minimum_minutes query parameter.
-        general_position: general_position query parameter.
-        split_by_teams: split_by_teams query parameter.
-        split_by_seasons: split_by_seasons query parameter.
-        split_by_games: split_by_games query parameter.
-        start_date: start_date query parameter.
-        end_date: end_date query parameter.
+        season_name: Filter to one or more seasons. Comma-list accepted (`2022,2023`).
+        stage_name: Filter to a competition stage, e.g. `Regular Season`. **URL-encode spaces.**
+        minimum_minutes: Drop players/teams below this minutes-played threshold.
+        general_position: Filter by general position code: GK, CB, FB, DM, CM, AM, W, ST (player/GK routes).
+        split_by_teams: `true` => one row per entity per team (splits traded players).
+        split_by_seasons: `true` => one row per entity per season.
+        split_by_games: `true` => one row per entity per game.
+        start_date: Lower date bound (`YYYY-MM-DD`), where the route supports date windows.
+        end_date: Upper date bound (`YYYY-MM-DD`), where the route supports date windows.
         return_parsed: parse the payload through parse_asa -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -606,15 +606,15 @@ def asa_players_xgoals(
 
     Args:
         league_slug: league_slug path parameter.
-        season_name: season_name query parameter.
-        stage_name: stage_name query parameter.
-        minimum_minutes: minimum_minutes query parameter.
-        general_position: general_position query parameter.
-        split_by_teams: split_by_teams query parameter.
-        split_by_seasons: split_by_seasons query parameter.
-        split_by_games: split_by_games query parameter.
-        start_date: start_date query parameter.
-        end_date: end_date query parameter.
+        season_name: Filter to one or more seasons. Comma-list accepted (`2022,2023`).
+        stage_name: Filter to a competition stage, e.g. `Regular Season`. **URL-encode spaces.**
+        minimum_minutes: Drop players/teams below this minutes-played threshold.
+        general_position: Filter by general position code: GK, CB, FB, DM, CM, AM, W, ST (player/GK routes).
+        split_by_teams: `true` => one row per entity per team (splits traded players).
+        split_by_seasons: `true` => one row per entity per season.
+        split_by_games: `true` => one row per entity per game.
+        start_date: Lower date bound (`YYYY-MM-DD`), where the route supports date windows.
+        end_date: Upper date bound (`YYYY-MM-DD`), where the route supports date windows.
         return_parsed: parse the payload through parse_asa -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -841,15 +841,15 @@ def asa_teams_goals_added(
 
     Args:
         league_slug: league_slug path parameter.
-        season_name: season_name query parameter.
-        stage_name: stage_name query parameter.
-        minimum_minutes: minimum_minutes query parameter.
-        general_position: general_position query parameter.
-        split_by_teams: split_by_teams query parameter.
-        split_by_seasons: split_by_seasons query parameter.
-        split_by_games: split_by_games query parameter.
-        start_date: start_date query parameter.
-        end_date: end_date query parameter.
+        season_name: Filter to one or more seasons. Comma-list accepted (`2022,2023`).
+        stage_name: Filter to a competition stage, e.g. `Regular Season`. **URL-encode spaces.**
+        minimum_minutes: Drop players/teams below this minutes-played threshold.
+        general_position: Filter by general position code: GK, CB, FB, DM, CM, AM, W, ST (player/GK routes).
+        split_by_teams: `true` => one row per entity per team (splits traded players).
+        split_by_seasons: `true` => one row per entity per season.
+        split_by_games: `true` => one row per entity per game.
+        start_date: Lower date bound (`YYYY-MM-DD`), where the route supports date windows.
+        end_date: Upper date bound (`YYYY-MM-DD`), where the route supports date windows.
         return_parsed: parse the payload through parse_asa_goals_added -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -920,15 +920,15 @@ def asa_teams_xgoals(
 
     Args:
         league_slug: league_slug path parameter.
-        season_name: season_name query parameter.
-        stage_name: stage_name query parameter.
-        minimum_minutes: minimum_minutes query parameter.
-        general_position: general_position query parameter.
-        split_by_teams: split_by_teams query parameter.
-        split_by_seasons: split_by_seasons query parameter.
-        split_by_games: split_by_games query parameter.
-        start_date: start_date query parameter.
-        end_date: end_date query parameter.
+        season_name: Filter to one or more seasons. Comma-list accepted (`2022,2023`).
+        stage_name: Filter to a competition stage, e.g. `Regular Season`. **URL-encode spaces.**
+        minimum_minutes: Drop players/teams below this minutes-played threshold.
+        general_position: Filter by general position code: GK, CB, FB, DM, CM, AM, W, ST (player/GK routes).
+        split_by_teams: `true` => one row per entity per team (splits traded players).
+        split_by_seasons: `true` => one row per entity per season.
+        split_by_games: `true` => one row per entity per game.
+        start_date: Lower date bound (`YYYY-MM-DD`), where the route supports date windows.
+        end_date: Upper date bound (`YYYY-MM-DD`), where the route supports date windows.
         return_parsed: parse the payload through parse_asa -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -999,15 +999,15 @@ def asa_teams_xpass(
 
     Args:
         league_slug: league_slug path parameter.
-        season_name: season_name query parameter.
-        stage_name: stage_name query parameter.
-        minimum_minutes: minimum_minutes query parameter.
-        general_position: general_position query parameter.
-        split_by_teams: split_by_teams query parameter.
-        split_by_seasons: split_by_seasons query parameter.
-        split_by_games: split_by_games query parameter.
-        start_date: start_date query parameter.
-        end_date: end_date query parameter.
+        season_name: Filter to one or more seasons. Comma-list accepted (`2022,2023`).
+        stage_name: Filter to a competition stage, e.g. `Regular Season`. **URL-encode spaces.**
+        minimum_minutes: Drop players/teams below this minutes-played threshold.
+        general_position: Filter by general position code: GK, CB, FB, DM, CM, AM, W, ST (player/GK routes).
+        split_by_teams: `true` => one row per entity per team (splits traded players).
+        split_by_seasons: `true` => one row per entity per season.
+        split_by_games: `true` => one row per entity per game.
+        start_date: Lower date bound (`YYYY-MM-DD`), where the route supports date windows.
+        end_date: Upper date bound (`YYYY-MM-DD`), where the route supports date windows.
         return_parsed: parse the payload through parse_asa -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.

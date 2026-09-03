@@ -1,6 +1,6 @@
 params:
   dates: {api: dates, type: "int|str", description: "Date or date range filter (YYYYMMDD or YYYYMMDD-YYYYMMDD)."}
-  week: {api: week, type: int, description: "Week number within the season (football)."}
+  week: {api: week, type: int, description: "Week number within the season."}
   season_type: {api: seasontype, type: int, description: "Season phase: 1=preseason, 2=regular season, 3=postseason."}
   groups: {api: groups, type: "int|str", description: "Conference or group id filter (e.g. an ESPN conference id)."}
   limit: {api: limit, type: int, default: 500, description: "Maximum number of items to return."}

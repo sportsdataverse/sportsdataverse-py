@@ -58,7 +58,7 @@ def nfl_standings(
 
     Args:
         season: season query parameter.
-        season_type: seasonType query parameter.
+        season_type: Season type code (string): PRE, REG, or POST -- not ESPN's numeric 1/2/3.
         week: week query parameter.
         limit: limit query parameter.
         headers: optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted.
@@ -241,7 +241,7 @@ def nfl_weeks(
 
     Args:
         season: season path parameter.
-        season_type: season_type path parameter.
+        season_type: Season type code (string): PRE, REG, or POST -- not ESPN's numeric 1/2/3.
         headers: optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted.
         return_parsed: parse the payload through parse_nfl_weeks -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -418,7 +418,7 @@ def nfl_injuries(
 
     Args:
         season: season query parameter.
-        season_type: seasonType query parameter.
+        season_type: Season type code (string): PRE, REG, or POST -- not ESPN's numeric 1/2/3.
         week: week query parameter.
         headers: optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted.
         return_parsed: parse the payload through parse_nfl_injuries -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
@@ -467,7 +467,7 @@ def nfl_game_summaries(
 
     Args:
         season: season query parameter.
-        season_type: seasonType query parameter.
+        season_type: Season type code (string): PRE, REG, or POST -- not ESPN's numeric 1/2/3.
         week: week query parameter.
         headers: optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted.
         return_parsed: parse the payload through parse_nfl_game_summaries -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
@@ -520,7 +520,7 @@ def nfl_weekly_game_details(
 
     Args:
         season: season query parameter.
-        season_type: type query parameter.
+        season_type: Season type code (string): PRE, REG, or POST (sent as the `type` query param) -- not ESPN's numeric 1/2/3.
         week: week query parameter.
         include_drive_chart: includeDriveChart query parameter.
         include_replays: includeReplays query parameter.
