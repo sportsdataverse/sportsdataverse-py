@@ -1,0 +1,27 @@
+columns:
+- description: ''
+  name: league_id
+  type: integer
+- description: ''
+  name: league_abbr
+  type: character
+- description: ''
+  name: league_name
+  type: character
+- description: ''
+  name: sport_id
+  type: integer
+- description: ''
+  name: league_type
+  type: character
+- description: ''
+  name: teams
+  type: character
+- description: ''
+  name: color_primary
+  type: character
+- description: ''
+  name: color_secondary
+  type: character
+kind: dataframe
+schema: league

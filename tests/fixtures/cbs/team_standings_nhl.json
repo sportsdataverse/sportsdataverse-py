@@ -1,0 +1,371 @@
+{
+ "2025": {
+  "regular": {
+   "overtime-losses": {
+    "number": 12
+   },
+   "winning-percentage": {
+    "percentage": ".500"
+   },
+   "goals-against": {
+    "goals": 260
+   },
+   "losses": {
+    "number": 35
+   },
+   "regulation-plus-overtime-wins": {
+    "number": 33
+   },
+   "shootout-losses": {
+    "number": 4
+   },
+   "overtime-wins": {
+    "number": 5
+   },
+   "ties": {
+    "number": 0
+   },
+   "elimination-number": {
+    "number": 0
+   },
+   "games-played": {
+    "games": 82
+   },
+   "place": {
+    "place": 7
+   },
+   "team-points": {
+    "number": 82
+   },
+   "shootout-wins": {
+    "number": 2
+   },
+   "regulation-wins": {
+    "number": 28
+   },
+   "wins": {
+    "number": 35
+   },
+   "goals-for": {
+    "goals": 231
+   },
+   "team-code": {
+    "id": 28,
+    "global-id": 4981
+   },
+   "team-city": {
+    "city": "Winnipeg",
+    "alternate": "Winnipeg"
+   },
+   "magic-number": {
+    "number": 9
+   },
+   "streak": [
+    {
+     "kind": "losing",
+     "games": 4
+    },
+    {
+     "kind": "winless",
+     "games": 4
+    },
+    {
+     "kind": "ot-loss",
+     "games": 0
+    }
+   ],
+   "wild-card-rank": {
+    "rank": 6
+   },
+   "today-games-included": {
+    "through": true
+   },
+   "hockey-nhl-conference-ranking": {
+    "ranking": 12
+   },
+   "league-rank": {
+    "rank": 26
+   },
+   "eliminated-from-playoffs": {
+    "eliminated": true
+   },
+   "team-name": {
+    "name": "Jets",
+    "alias": "WPG"
+   },
+   "win-loss-record": [
+    {
+     "wins": 19,
+     "shootout-losses": 2,
+     "overtime-wins": 2,
+     "overtime-losses": 6,
+     "name": "Home",
+     "type": "home",
+     "losses": 16,
+     "shootout-wins": 0
+    },
+    {
+     "wins": 16,
+     "shootout-losses": 2,
+     "overtime-wins": 3,
+     "overtime-losses": 6,
+     "name": "Road",
+     "type": "road",
+     "losses": 19,
+     "shootout-wins": 2
+    },
+    {
+     "wins": 5,
+     "shootout-losses": 0,
+     "overtime-wins": 1,
+     "overtime-losses": 0,
+     "name": "Last Ten Games",
+     "type": "last-ten-games",
+     "losses": 5,
+     "shootout-wins": 0
+    },
+    {
+     "wins": 13,
+     "shootout-losses": 3,
+     "overtime-wins": 0,
+     "overtime-losses": 5,
+     "name": "Eastern",
+     "type": "conference",
+     "losses": 14,
+     "shootout-wins": 1
+    },
+    {
+     "wins": 22,
+     "shootout-losses": 1,
+     "overtime-wins": 5,
+     "overtime-losses": 7,
+     "name": "Western",
+     "type": "conference",
+     "losses": 21,
+     "shootout-wins": 1
+    },
+    {
+     "wins": 3,
+     "shootout-losses": 2,
+     "overtime-wins": 0,
+     "overtime-losses": 4,
+     "name": "Atlantic",
+     "type": "division",
+     "losses": 9,
+     "shootout-wins": 0
+    },
+    {
+     "wins": 12,
+     "shootout-losses": 1,
+     "overtime-wins": 3,
+     "overtime-losses": 4,
+     "name": "Central",
+     "type": "division",
+     "losses": 10,
+     "shootout-wins": 0
+    },
+    {
+     "wins": 10,
+     "shootout-losses": 0,
+     "overtime-wins": 2,
+     "overtime-losses": 3,
+     "name": "Pacific",
+     "type": "division",
+     "losses": 11,
+     "shootout-wins": 1
+    },
+    {
+     "wins": 10,
+     "shootout-losses": 1,
+     "overtime-wins": 0,
+     "overtime-losses": 1,
+     "name": "Metropolitan",
+     "type": "division",
+     "losses": 5,
+     "shootout-wins": 1
+    }
+   ],
+   "seasonId": 29758025,
+   "season": {
+    "seasonId": 29758025,
+    "sportId": 4,
+    "leagueId": 60,
+    "league": null,
+    "teams": [],
+    "seasonYear": 2025,
+    "isCurrent": 1,
+    "seasonType": "regular",
+    "seasonTypeDesc": "Regular season",
+    "seasonStartDate": "10-07-2025 00:00:00 -0400",
+    "seasonEndDate": "04-16-2026 23:59:59 -0400"
+   }
+  },
+  "pre": {
+   "overtime-losses": {
+    "number": 1
+   },
+   "winning-percentage": {
+    "percentage": ".417"
+   },
+   "goals-against": {
+    "goals": 19
+   },
+   "losses": {
+    "number": 3
+   },
+   "regulation-plus-overtime-wins": {
+    "number": 1
+   },
+   "shootout-losses": {
+    "number": 0
+   },
+   "overtime-wins": {
+    "number": 0
+   },
+   "ties": {
+    "number": 0
+   },
+   "elimination-number": {
+    "number": ""
+   },
+   "games-played": {
+    "games": 6
+   },
+   "place": {
+    "place": 6
+   },
+   "team-points": {
+    "number": 5
+   },
+   "shootout-wins": {
+    "number": 1
+   },
+   "regulation-wins": {
+    "number": 1
+   },
+   "wins": {
+    "number": 2
+   },
+   "goals-for": {
+    "goals": 15
+   },
+   "team-code": {
+    "id": 28,
+    "global-id": 4981
+   },
+   "team-city": {
+    "city": "Winnipeg",
+    "alternate": "Winnipeg"
+   },
+   "magic-number": {
+    "number": ""
+   },
+   "streak": [
+    {
+     "kind": "winning",
+     "games": 1
+    },
+    {
+     "kind": "lossless",
+     "games": 1
+    },
+    {
+     "kind": "ot-loss",
+     "games": 0
+    }
+   ],
+   "wild-card-rank": {
+    "rank": 0
+   },
+   "today-games-included": {
+    "through": true
+   },
+   "hockey-nhl-conference-ranking": {
+    "ranking": 13
+   },
+   "league-rank": {
+    "rank": 27
+   },
+   "team-name": {
+    "name": "Jets",
+    "alias": "WPG"
+   },
+   "win-loss-record": [
+    {
+     "wins": 1,
+     "shootout-losses": 0,
+     "overtime-wins": 0,
+     "overtime-losses": 1,
+     "name": "Home",
+     "type": "home",
+     "losses": 1,
+     "shootout-wins": 0
+    },
+    {
+     "wins": 1,
+     "shootout-losses": 0,
+     "overtime-wins": 0,
+     "overtime-losses": 0,
+     "name": "Road",
+     "type": "road",
+     "losses": 2,
+     "shootout-wins": 1
+    },
+    {
+     "wins": 2,
+     "shootout-losses": 0,
+     "overtime-wins": 0,
+     "overtime-losses": 1,
+     "name": "Last Ten Games",
+     "type": "last-ten-games",
+     "losses": 3,
+     "shootout-wins": 1
+    },
+    {
+     "wins": 2,
+     "shootout-losses": 0,
+     "overtime-wins": 0,
+     "overtime-losses": 1,
+     "name": "Western",
+     "type": "conference",
+     "losses": 3,
+     "shootout-wins": 1
+    },
+    {
+     "wins": 0,
+     "shootout-losses": 0,
+     "overtime-wins": 0,
+     "overtime-losses": 1,
+     "name": "Central",
+     "type": "division",
+     "losses": 1,
+     "shootout-wins": 0
+    },
+    {
+     "wins": 2,
+     "shootout-losses": 0,
+     "overtime-wins": 0,
+     "overtime-losses": 0,
+     "name": "Pacific",
+     "type": "division",
+     "losses": 2,
+     "shootout-wins": 1
+    }
+   ],
+   "seasonId": 50000001,
+   "season": {
+    "seasonId": 50000001,
+    "sportId": 4,
+    "leagueId": 60,
+    "league": null,
+    "teams": [],
+    "seasonYear": 2025,
+    "isCurrent": 1,
+    "seasonType": "pre",
+    "seasonTypeDesc": "Preseason",
+    "seasonStartDate": "09-20-2025 00:00:00 -0400",
+    "seasonEndDate": "10-04-2025 23:59:59 -0400"
+   }
+  }
+ }
+}

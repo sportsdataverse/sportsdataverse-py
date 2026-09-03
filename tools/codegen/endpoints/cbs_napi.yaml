@@ -1,0 +1,1409 @@
+api: cbs_napi
+docstring:
+  example_import: true
+  raises:
+  - 'requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download``
+    exhausts its retries. An unknown id is NOT an exception -- NAPI answers it with
+    HTTP 200 plus an ``{error|errors|warnings}`` envelope, which parses to a zero-row
+    frame.'
+  see_also:
+  - name: CBS Sports NAPI registry
+    note: the API's own self-documenting endpoint catalog (data origin)
+    url: https://api.cbssports.com/napi/resource/endpoint/registry
+  - name: nflfastR
+    note: R sister package; NAPI is cross-sport, this is its NFL counterpart
+    url: https://www.nflfastr.com
+endpoints:
+- extra_params:
+  - description: CSV list of player IDs to retrieve.
+    name: player_resource
+    query_key: PlayerResource
+    type: str
+  - description: CSV list of team IDs to retrieve.
+    name: team_resource
+    query_key: TeamResource
+    type: str
+  - description: CSV list of game IDs to retrieve.
+    name: game_resource
+    query_key: GameResource
+    type: str
+  - description: CSV list of venue IDs to retrieve
+    name: venue_resource
+    query_key: VenueResource
+    type: str
+  - description: CSV list of event IDs to retrieve
+    name: event_resource
+    query_key: EventResource
+    type: str
+  - description: CSV list of game IDs to retrieve.
+    name: featured_game_resource
+    query_key: FeaturedGameResource
+    type: str
+  - description: CSV list of golf event markets IDs to retrieve
+    name: golf_event_markets_resource
+    query_key: GolfEventMarketsResource
+    type: str
+  parser: parse_cbs_napi
+  path: /resource/bulk
+  returns_schema: native/cbs_napi/bulk
+  short: bulk
+  summary: Resolve resources in bulk to save HTTP traffic.
+- example_args:
+    client_name: cbs
+  extra_params:
+  - description: 'Allowed: league, season.'
+    name: resources
+    query_key: resources
+    type: str
+  - description: View option.  Filter by leagueId.
+    name: league_id
+    query_key: leagueId
+    type: str
+  - description: View option.  Filter by a certain classifier.
+    name: classifier
+    query_key: classifier
+    type: str
+  - description: View option.  Filter by a custom key name.
+    name: key_name
+    query_key: keyName
+    type: str
+  parser: parse_cbs_napi
+  path: /resource/client/config/{client_name}
+  path_params:
+  - description: Client name as it appears in the database
+    name: client_name
+    required: true
+    type: str
+  returns_schema: native/cbs_napi/client_config
+  short: client_config
+  summary: Get configuration for how a client should access our APIs, or any additional
+    settings they want supplied to them.
+- parser: parse_cbs_napi
+  path: /resource/coach/rankings/{coach_id}
+  path_params:
+  - description: Numerical player ID
+    name: coach_id
+    required: true
+    type: int
+  returns_schema: native/cbs_napi/coach_rankings
+  short: coach_rankings
+  summary: Get rankings resource for a coach.
+- extra_params:
+  - description: 'Specify specific sub-resources to resolve. Defaults to none. Allowed:
+      team.'
+    name: resources
+    query_key: resources
+    type: str
+  parser: parse_cbs_napi
+  path: /resource/coach/teamAssociations/{coach_id}
+  path_params:
+  - description: Numerical player ID
+    name: coach_id
+    required: true
+    type: int
+  returns_schema: native/cbs_napi/coach_team_associations
+  short: coach_team_associations
+  summary: Get team associations for a particular coach.
+- extra_params:
+  - description: View option for rendering only a certain subdivision
+    name: sub_division_id
+    query_key: subDivisionId
+    type: int
+  - description: View option for a csv of subdivsion names to render
+    name: name
+    query_key: name
+    type: str
+  parser: parse_cbs_napi
+  path: /resource/division/subdivisions/{division_id}
+  path_params:
+  - description: Numerical division ID
+    name: division_id
+    required: true
+    type: int
+  returns_schema: native/cbs_napi/division_subdivisions
+  short: division_subdivisions
+  summary: Get subdivisions for a division from Atlas.
+- parser: parse_cbs_napi
+  path: /resource/endpoint/registry
+  returns_schema: native/cbs_napi/endpoint_registry
+  short: endpoint_registry
+  summary: Get the resource endpoint registry
+- extra_params:
+  - description: 'Optional.  Options here: http://momentjs.com/docs/#/displaying/format/'
+    name: date_format
+    query_key: dateFormat
+    type: str
+  - description: 'Specify specific sub-resources to resolve.  Defaults to none. Allowed:
+      entrants, venues, leaderboard, weather, markets.'
+    name: resources
+    query_key: resources
+    type: str
+  parser: parse_cbs_napi
+  path: /resource/event/{event_id}
+  path_params:
+  - description: Numerical event ID
+    name: event_id
+    required: true
+    type: int
+  returns_schema: native/cbs_napi/event
+  short: event
+  summary: Get an event resource
+- parser: parse_cbs_napi
+  path: /resource/event/entrants/{event_id}
+  path_params:
+  - description: Numerical event ID
+    name: event_id
+    required: true
+    type: int
+  returns_schema: native/cbs_napi/event_entrants
+  short: event_entrants
+  summary: Get players entered in a particular event.
+- parser: parse_cbs_napi
+  path: /resource/event/leaderboard/{event_id}
+  path_params:
+  - description: Numerical event ID
+    name: event_id
+    required: true
+    type: int
+  returns_schema: native/cbs_napi/event_leaderboard
+  short: event_leaderboard
+  summary: Get a leaderboard data resource for a particular event.
+- parser: parse_cbs_napi
+  path: /resource/event/seasons/{event_id}
+  path_params:
+  - description: Numerical event ID
+    name: event_id
+    required: true
+    type: int
+  returns_schema: native/cbs_napi/event_seasons
+  short: event_seasons
+  summary: Get seasons associated to a particular event.
+- parser: parse_cbs_napi
+  path: /resource/event/venues/{event_id}
+  path_params:
+  - description: Numerical event ID
+    name: event_id
+    required: true
+    type: int
+  returns_schema: native/cbs_napi/event_venues
+  short: event_venues
+  summary: Get venues associated to a particular event.
+- extra_params:
+  - description: 'Optional.  Options here: http://momentjs.com/docs/#/displaying/format/'
+    name: date_format
+    query_key: dateFormat
+    type: str
+  - description: 'Specify specific sub-resources to resolve.  Defaults to none. Allowed:
+      homeTeam, awayTeam, league, lineup, odds, players, standings, conference, division,
+      probablePlayers, player, playerTeamAssociations, injuries, transactions, depthCharts,
+      metaData, boxscore, venue, scoringLeaders, scoringPlayerStats, scoringScoreboard,
+      scoringScores, scoringYtdPlayerStats, scoringYtdTeamStats, scoringRosters, scoringPlays,
+      scoringTeamStats, scoringBoxscores, gameOdds, gameOutcomes, ticket, scoringDrives,
+      scoringWinProb, gameHqOdds, weather, featured, gameProps, bettingSplits, gameRTWP.'
+    name: resources
+    query_key: resources
+    type: str
+  parser: parse_cbs_napi
+  path: /resource/game/{game_id}
+  path_params:
+  - description: Numerical game ID
+    name: game_id
+    required: true
+    type: int
+  returns_schema: native/cbs_napi/game
+  short: game
+  summary: Get a game resource
+- parser: parse_cbs_napi
+  path: /resource/game/bettingSplits/{game_id}
+  path_params:
+  - description: Numerical game ID
+    name: game_id
+    required: true
+    type: int
+  returns_schema: native/cbs_napi/game_betting_splits
+  short: game_betting_splits
+  summary: Get a BettingSplits resource for a particular game.
+- parser: parse_cbs_napi
+  path: /resource/game/boxscore/{game_id}
+  path_params:
+  - description: Numerical game ID
+    name: game_id
+    required: true
+    type: int
+  returns_schema: native/cbs_napi/game_boxscore
+  short: game_boxscore
+  summary: Get boxscore resource
+- parser: parse_cbs_napi
+  path: /resource/game/content/preview/{game_id}
+  path_params:
+  - description: Numerical game ID
+    name: game_id
+    required: true
+    type: int
+  returns_schema: native/cbs_napi/game_content_preview
+  short: game_content_preview
+  summary: Get content for game preview
+- parser: parse_cbs_napi
+  path: /resource/game/content/recap/{game_id}
+  path_params:
+  - description: Numerical game ID
+    name: game_id
+    required: true
+    type: int
+  returns_schema: native/cbs_napi/game_content_recap
+  short: game_content_recap
+  summary: Get content for game recap
+- extra_params:
+  - description: The tags used to retrieve stories
+    name: game_ids_story_tags
+    query_key: gameIdsStoryTags
+    type: str
+  parser: parse_cbs_napi
+  path: /resource/game/content/story/{game_id}
+  path_params:
+  - description: Numerical game ID
+    name: game_id
+    required: true
+    type: int
+  returns_schema: native/cbs_napi/game_content_story
+  short: game_content_story
+  summary: Get content for game story
+- parser: parse_cbs_napi
+  path: /resource/game/featured/{game_id}
+  path_params:
+  - description: Numerical game ID
+    name: game_id
+    required: true
+    type: int
+  returns_schema: native/cbs_napi/game_featured
+  short: game_featured
+  summary: Get a FeaturedGame resource.
+- extra_params:
+  - description: 'Specify specific sub-resources to resolve.  Defaults to none. Allowed:
+      playerTeamAssociations, injuries, metaData, playerStats.'
+    name: resources
+    query_key: resources
+    type: str
+  parser: parse_cbs_napi
+  path: /resource/game/lineup/{game_id}
+  path_params:
+  - description: Numerical game ID
+    name: game_id
+    required: true
+    type: int
+  returns_schema: native/cbs_napi/game_lineup
+  short: game_lineup
+  summary: Get a lineup resource for a particular game.
+- extra_params:
+  - description: This value can be used to specify markets, using the marketIds.
+    name: market_ids
+    query_key: marketIds
+    type: str
+  - description: This value can be used to specify books, using the bookIds.
+    name: book_ids
+    query_key: bookIds
+    type: str
+  - description: This value can be used to specify a state.
+    name: state
+    query_key: state
+    type: str
+  - description: This value can be used set the model to be used
+    name: model
+    query_key: model
+    type: str
+  - description: If set to 1, show the odds that has been hidden within the market
+      and/or consensus nodes
+    name: show_hidden_odds
+    query_key: showHiddenOdds
+    type: int
+  parser: parse_cbs_napi
+  path: /resource/game/odds/{game_id}
+  path_params:
+  - description: Numerical game ID
+    name: game_id
+    required: true
+    type: int
+  returns_schema: native/cbs_napi/game_odds
+  short: game_odds
+  summary: Get an odds resource for a particular game.
+- parser: parse_cbs_napi
+  path: /resource/game/odds/hq/{game_id}
+  path_params:
+  - description: Numerical game ID
+    name: game_id
+    required: true
+    type: int
+  returns_schema: native/cbs_napi/game_odds_hq
+  short: game_odds_hq
+  summary: Get an HQ odds resource for a particular game.
+- parser: parse_cbs_napi
+  path: /resource/game/outcomes/{game_id}
+  path_params:
+  - description: Numerical game ID
+    name: game_id
+    required: true
+    type: int
+  returns_schema: native/cbs_napi/game_outcomes
+  short: game_outcomes
+  summary: Get an odds outcome for a particular game.
+- extra_params:
+  - description: 'Optional.  Options here: http://momentjs.com/docs/#/displaying/format/'
+    name: date_format
+    query_key: dateFormat
+    type: str
+  - description: 'Specify specific sub-resources to resolve.  Defaults to none. Allowed:
+      player, playerTeamAssociations, injuries, transactions, depthCharts, metaData.'
+    name: resources
+    query_key: resources
+    type: str
+  parser: parse_cbs_napi
+  path: /resource/game/probablePlayers/{game_id}
+  path_params:
+  - description: Numerical game ID
+    name: game_id
+    required: true
+    type: int
+  returns_schema: native/cbs_napi/game_probable_players
+  short: game_probable_players
+  summary: Get a list of players who are probably playing in a particular game.
+- extra_params:
+  - description: This value can be used to specify markets, using the marketIds.
+    name: market_ids
+    query_key: marketIds
+    type: str
+  - description: This value can be used to specify books, using the bookIds.
+    name: book_ids
+    query_key: bookIds
+    type: str
+  - description: 'This value can be used to specify prop bet types, using the propBetTypes.
+      Allowed: player, game, team.'
+    name: prop_bet_types
+    query_key: propBetTypes
+    type: str
+  - description: This value can be used to specify a state.
+    name: state
+    query_key: state
+    type: str
+  - description: This value can be used to filter out inactive markets.
+    name: include_inactive_markets
+    query_key: includeInactiveMarkets
+    type: int
+  parser: parse_cbs_napi
+  path: /resource/game/props/{game_id}
+  path_params:
+  - description: Numerical game ID
+    name: game_id
+    required: true
+    type: int
+  returns_schema: native/cbs_napi/game_props
+  short: game_props
+  summary: Get game props for a game.
+- parser: parse_cbs_napi
+  path: /resource/game/rtwp/{game_id}
+  path_params:
+  - description: Numerical game ID
+    name: game_id
+    required: true
+    type: int
+  returns_schema: native/cbs_napi/game_rtwp
+  short: game_rtwp
+  summary: Get a rtwp resource for a particular game.
+- parser: parse_cbs_napi
+  path: /resource/game/ruwtHighlights/{game_id}
+  path_params:
+  - description: Numerical game ID
+    name: game_id
+    required: true
+    type: int
+  returns_schema: native/cbs_napi/game_ruwt_highlights
+  short: game_ruwt_highlights
+  summary: Get the RUWT highlights resource for a particular game.
+- parser: parse_cbs_napi
+  path: /resource/game/scoring/boxscores/{game_id}
+  path_params:
+  - description: Numerical game ID
+    name: game_id
+    required: true
+    type: int
+  returns_schema: native/cbs_napi/game_scoring_boxscores
+  short: game_scoring_boxscores
+  summary: Get an scoring box scores resource for a particular game.
+- parser: parse_cbs_napi
+  path: /resource/game/scoring/drives/{game_id}
+  path_params:
+  - description: Numerical game ID
+    name: game_id
+    required: true
+    type: int
+  returns_schema: native/cbs_napi/game_scoring_drives
+  short: game_scoring_drives
+  summary: Get a drives resource for a particular game.
+- parser: parse_cbs_napi
+  path: /resource/game/scoring/leaders/{game_id}
+  path_params:
+  - description: Numerical game ID
+    name: game_id
+    required: true
+    type: int
+  returns_schema: native/cbs_napi/game_scoring_leaders
+  short: game_scoring_leaders
+  summary: Get an scoring leaders resource for a particular game.
+- parser: parse_cbs_napi
+  path: /resource/game/scoring/playerStats/{game_id}
+  path_params:
+  - description: Numerical game ID
+    name: game_id
+    required: true
+    type: int
+  returns_schema: native/cbs_napi/game_scoring_player_stats
+  short: game_scoring_player_stats
+  summary: Get an scoring player stats resource for a particular game.
+- parser: parse_cbs_napi
+  path: /resource/game/scoring/plays/{game_id}
+  path_params:
+  - description: Numerical game ID
+    name: game_id
+    required: true
+    type: int
+  returns_schema: native/cbs_napi/game_scoring_plays
+  short: game_scoring_plays
+  summary: Get an scoring plays resource for a particular game.
+- parser: parse_cbs_napi
+  path: /resource/game/scoring/rosters/{game_id}
+  path_params:
+  - description: Numerical game ID
+    name: game_id
+    required: true
+    type: int
+  returns_schema: native/cbs_napi/game_scoring_rosters
+  short: game_scoring_rosters
+  summary: Get an scoring rosters resource for a particular game.
+- parser: parse_cbs_napi
+  path: /resource/game/scoring/scoreboard/{game_id}
+  path_params:
+  - description: Numerical game ID
+    name: game_id
+    required: true
+    type: int
+  returns_schema: native/cbs_napi/game_scoring_scoreboard
+  short: game_scoring_scoreboard
+  summary: Get an scoring scoreboard resource for a particular game.
+- parser: parse_cbs_napi
+  path: /resource/game/scoring/scores/{game_id}
+  path_params:
+  - description: Numerical game ID
+    name: game_id
+    required: true
+    type: int
+  returns_schema: native/cbs_napi/game_scoring_scores
+  short: game_scoring_scores
+  summary: Get an scoring scores resource for a particular game.
+- parser: parse_cbs_napi
+  path: /resource/game/scoring/teamStats/{game_id}
+  path_params:
+  - description: Numerical game ID
+    name: game_id
+    required: true
+    type: int
+  returns_schema: native/cbs_napi/game_scoring_team_stats
+  short: game_scoring_team_stats
+  summary: Get an scoring team stats resource for a particular game.
+- parser: parse_cbs_napi
+  path: /resource/game/scoring/winprob/{game_id}
+  path_params:
+  - description: Numerical game ID
+    name: game_id
+    required: true
+    type: int
+  returns_schema: native/cbs_napi/game_scoring_winprob
+  short: game_scoring_winprob
+  summary: Get an scoring winprob resource for a particular game.
+- parser: parse_cbs_napi
+  path: /resource/game/scoring/ytdPlayerStats/{game_id}
+  path_params:
+  - description: Numerical game ID
+    name: game_id
+    required: true
+    type: int
+  returns_schema: native/cbs_napi/game_scoring_ytd_player_stats
+  short: game_scoring_ytd_player_stats
+  summary: Get an scoring YTD player stats resource for a particular game.
+- parser: parse_cbs_napi
+  path: /resource/game/scoring/ytdTeamStats/{game_id}
+  path_params:
+  - description: Numerical game ID
+    name: game_id
+    required: true
+    type: int
+  returns_schema: native/cbs_napi/game_scoring_ytd_team_stats
+  short: game_scoring_ytd_team_stats
+  summary: Get an scoring YTD team stats resource for a particular game.
+- parser: parse_cbs_napi
+  path: /resource/game/ticket/{game_id}
+  path_params:
+  - description: Numerical game ID
+    name: game_id
+    required: true
+    type: int
+  returns_schema: native/cbs_napi/game_ticket
+  short: game_ticket
+  summary: Get a ticket resource for a particular game.
+- parser: parse_cbs_napi
+  path: /resource/game/weather/{game_id}
+  path_params:
+  - description: Numerical game ID
+    name: game_id
+    required: true
+    type: int
+  returns_schema: native/cbs_napi/game_weather
+  short: game_weather
+  summary: Get a Weather resource for a particular game.
+- parser: parse_cbs_napi
+  path: /resource/golf/event/markets/{event_id}
+  path_params:
+  - description: Numerical event ID
+    name: event_id
+    required: true
+    type: int
+  returns_schema: native/cbs_napi/golf_event_markets
+  short: golf_event_markets
+  summary: Get markets for an event.
+- example_args:
+    player_id: 1751796
+  extra_params:
+  - description: View option.  Filter by eventId.
+    name: event_id
+    query_key: eventId
+    type: str
+  parser: parse_cbs_napi
+  path: /resource/golf/player/markets/{player_id}
+  path_params:
+  - description: Numerical player ID
+    name: player_id
+    required: true
+    type: int
+  returns_schema: native/cbs_napi/golf_player_markets
+  short: golf_player_markets
+  summary: Get markets for a golfer.
+- example_args:
+    player_id: 1751796
+  extra_params:
+  - description: View option.  Filter by seasonType.
+    name: season_year
+    query_key: seasonYear
+    type: int
+  - description: View option.  Filter by seasonId.
+    name: season_id
+    query_key: seasonId
+    type: str
+  parser: parse_cbs_napi
+  path: /resource/golfer/results/{player_id}
+  path_params:
+  - description: Numerical player ID
+    name: player_id
+    required: true
+    type: int
+  returns_schema: native/cbs_napi/golfer_results
+  short: golfer_results
+  summary: Get golfer tournament results resource for a particular player.
+- example_args:
+    league_id: 59
+  extra_params:
+  - description: 'Specify specific sub-resources to resolve.  Defaults to none. Allowed:
+      teams, players, standings, conference, division, polls, teamSeasons.'
+    name: resources
+    query_key: resources
+    type: str
+  parser: parse_cbs_napi
+  path: /resource/league/{league_id}
+  path_params:
+  - description: Numerical league ID
+    name: league_id
+    required: true
+    type: int
+  returns_schema: native/cbs_napi/league
+  short: league
+  summary: Get a league resource
+- example_args:
+    league_id: 59
+  extra_params:
+  - description: 'Specify specific sub-resources to resolve.  Defaults to none. Allowed:
+      players, standings, conference, division, playerTeamAssociations, injuries,
+      transactions, depthCharts, polls, teamSeasons, sportsLineStandings.'
+    name: resources
+    query_key: resources
+    type: str
+  parser: parse_cbs_napi
+  path: /resource/league/teams/{league_id}
+  path_params:
+  - description: Numerical league Id - gets team from team table not teams for season
+    name: league_id
+    required: true
+    type: int
+  returns_schema: native/cbs_napi/league_teams
+  short: league_teams
+  summary: Get team resources on a league with optional vendor overlay
+- parser: parse_cbs_napi
+  path: /resource/odds/{game_id}
+  path_params:
+  - description: Numerical game ID
+    name: game_id
+    required: true
+    type: int
+  returns_schema: native/cbs_napi/odds
+  short: odds
+  summary: Get an odds resource for a particular game.
+- example_args:
+    player_id: 1751796
+  extra_params:
+  - description: 'Optional for any date field.  Options here: http://momentjs.com/docs/#/displaying/format/'
+    name: date_format
+    query_key: dateFormat
+    type: str
+  - description: Optional year in YYYY format (for Transactions only)
+    name: year
+    query_key: year
+    type: int
+  - description: 'Specify specific sub-resources to resolve.  Defaults to none. Allowed:
+      playerTeamAssociations, injuries, transactions, depthCharts, metaData, playerStats,
+      standings, rankings, playerOutlook, draftInfo, combineData, positionRankings,
+      gameStats, encyclopedia, golferResults, playerGolfMetadata, playerFutures, golferMarkets,
+      recruitTeamAssociations, coachTeamAssociations, recruitRankings, coachRankings.'
+    name: resources
+    query_key: resources
+    type: str
+  parser: parse_cbs_napi
+  path: /resource/player/{player_id}
+  path_params:
+  - description: Numerical player ID
+    name: player_id
+    required: true
+    type: int
+  returns_schema: native/cbs_napi/player
+  short: player
+  summary: Get a player resource
+- example_args:
+    player_id: 1751796
+  parser: parse_cbs_napi
+  path: /resource/player/combineData/{player_id}
+  path_params:
+  - description: Numerical player ID
+    name: player_id
+    required: true
+    type: int
+  returns_schema: native/cbs_napi/player_combine_data
+  short: player_combine_data
+  summary: Get draft related info for a particular player.
+- example_args:
+    player_id: 1751796
+  extra_params:
+  - description: A csv of positions to filter with
+    name: position
+    query_key: position
+    type: str
+  - description: A csv of pitch positions to filter with (baseball only)
+    name: pitch_pos
+    query_key: pitchPos
+    type: str
+  parser: parse_cbs_napi
+  path: /resource/player/depthCharts/{player_id}
+  path_params:
+  - description: Numerical player ID
+    name: player_id
+    required: true
+    type: int
+  returns_schema: native/cbs_napi/player_depth_charts
+  short: player_depth_charts
+  summary: Get depth charts for a particular player.
+- example_args:
+    player_id: 1751796
+  extra_params:
+  - description: View option, filter by seasonYear
+    name: season_year
+    query_key: seasonYear
+    type: str
+  - description: 'View option, filter by seasonType Allowed: regular, pre, post.'
+    name: season_type
+    query_key: seasonType
+    type: str
+  - description: View option, filter by seasonId
+    name: season_id
+    query_key: seasonId
+    type: str
+  parser: parse_cbs_napi
+  path: /resource/player/draftInfo/{player_id}
+  path_params:
+  - description: Numerical player ID
+    name: player_id
+    required: true
+    type: int
+  returns_schema: native/cbs_napi/player_draft_info
+  short: player_draft_info
+  summary: Get draft info for a particular player.
+- example_args:
+    player_id: 1751796
+  extra_params:
+  - description: View option.  Filter by seasonType.
+    name: season_year
+    query_key: seasonYear
+    type: int
+  - description: View option.  Filter by seasonId.
+    name: season_id
+    query_key: seasonId
+    type: str
+  parser: parse_cbs_napi
+  path: /resource/player/encyclopedia/{player_id}
+  path_params:
+  - description: Numerical player ID
+    name: player_id
+    required: true
+    type: int
+  returns_schema: native/cbs_napi/player_encyclopedia
+  short: player_encyclopedia
+  summary: Get encyclopedia resource for a particular player.
+- example_args:
+    player_id: 1751796
+  parser: parse_cbs_napi
+  path: /resource/player/futures/{player_id}
+  path_params:
+  - description: Numerical player ID
+    name: player_id
+    required: true
+    type: int
+  returns_schema: native/cbs_napi/player_futures
+  short: player_futures
+  summary: Get futures for a player.
+- example_args:
+    player_id: 1751796
+  extra_params:
+  - description: View option, filter by gameId
+    name: game_id
+    query_key: gameId
+    type: str
+  - description: Season Year in YYYY format
+    name: season_year
+    query_key: seasonYear
+    type: str
+  - description: 'Csv list of pre, regular, or post Allowed: pre, regular, post.'
+    name: season_type
+    query_key: seasonType
+    type: str
+  parser: parse_cbs_napi
+  path: /resource/player/gameStats/{player_id}
+  path_params:
+  - description: Numerical player ID
+    name: player_id
+    required: true
+    type: int
+  returns_schema: native/cbs_napi/player_game_stats
+  short: player_game_stats
+  summary: Get game stats for a particular player.
+- example_args:
+    player_id: 1751796
+  parser: parse_cbs_napi
+  path: /resource/player/hockey/meta/{player_id}
+  path_params:
+  - description: Numerical player ID
+    name: player_id
+    required: true
+    type: int
+  returns_schema: native/cbs_napi/player_hockey_meta
+  short: player_hockey_meta
+  summary: Get the hockey meta data resource for a particular player.
+- example_args:
+    player_id: 1751796
+  extra_params:
+  - description: 'Optional.  Options here: http://momentjs.com/docs/#/displaying/format/'
+    name: date_format
+    query_key: dateFormat
+    type: str
+  parser: parse_cbs_napi
+  path: /resource/player/injuries/{player_id}
+  path_params:
+  - description: Numerical player ID
+    name: player_id
+    required: true
+    type: int
+  returns_schema: native/cbs_napi/player_injuries
+  short: player_injuries
+  summary: Get injuries for a particular player.
+- example_args:
+    player_id: 1751796
+  parser: parse_cbs_napi
+  path: /resource/player/meta/baseball/{player_id}
+  path_params:
+  - description: Numerical player ID
+    name: player_id
+    required: true
+    type: int
+  returns_schema: native/cbs_napi/player_meta_baseball
+  short: player_meta_baseball
+  summary: Get meta data associated to a particular baseball player.
+- example_args:
+    player_id: 1751796
+  parser: parse_cbs_napi
+  path: /resource/player/meta/golf/{player_id}
+  path_params:
+  - description: Numerical player ID
+    name: player_id
+    required: true
+    type: int
+  returns_schema: native/cbs_napi/player_meta_golf
+  short: player_meta_golf
+  summary: Get a metadata resource for a particular golf player.
+- example_args:
+    player_id: 1751796
+  extra_params:
+  - description: 'Optional format for dateCreated field. Available options here: http://momentjs.com/docs/#/displaying/format/'
+    name: date_format
+    query_key: dateFormat
+    type: str
+  parser: parse_cbs_napi
+  path: /resource/player/outlook/{player_id}
+  path_params:
+  - description: Numerical player ID
+    name: player_id
+    required: true
+    type: int
+  returns_schema: native/cbs_napi/player_outlook
+  short: player_outlook
+  summary: Get outlook for a player (context is now)
+- example_args:
+    player_id: 1751796
+  extra_params:
+  - description: Filter by position
+    name: position
+    query_key: position
+    type: str
+  parser: parse_cbs_napi
+  path: /resource/player/positionRankings/{player_id}
+  path_params:
+  - description: Numerical player ID
+    name: player_id
+    required: true
+    type: int
+  returns_schema: native/cbs_napi/player_position_rankings
+  short: player_position_rankings
+  summary: Get position rankings for a player
+- example_args:
+    player_id: 1751796
+  extra_params:
+  - description: View option.  Filter by seasonYear.
+    name: season_year
+    query_key: seasonYear
+    type: int
+  - description: 'View option.  Filter by seasonType. Allowed: regular, pre, post.'
+    name: season_type
+    query_key: seasonType
+    type: str
+  - description: View option.  Filter by seasonId.
+    name: season_id
+    query_key: seasonId
+    type: str
+  - description: 'View option.  Only show stats for seasons where isCurrent is true.
+      Allowed: 1.'
+    name: is_current
+    query_key: isCurrent
+    type: str
+  - description: View option.  Only return the specified rankings categories.
+    name: categories
+    query_key: categories
+    type: str
+  parser: parse_cbs_napi
+  path: /resource/player/rankings/{player_id}
+  path_params:
+  - description: Numerical player ID
+    name: player_id
+    required: true
+    type: int
+  returns_schema: native/cbs_napi/player_rankings
+  short: player_rankings
+  summary: Get all rankings for a player.
+- example_args:
+    player_id: 1751796
+  extra_params:
+  - description: 'Specify specific sub-resources to resolve. Defaults to none. Allowed:
+      team.'
+    name: resources
+    query_key: resources
+    type: str
+  parser: parse_cbs_napi
+  path: /resource/player/recruitAssociations/{player_id}
+  path_params:
+  - description: Numerical player ID
+    name: player_id
+    required: true
+    type: int
+  returns_schema: native/cbs_napi/player_recruit_associations
+  short: player_recruit_associations
+  summary: Get recruit associations for a particular player.
+- example_args:
+    player_id: 1751796
+  extra_params:
+  - description: View option.  Filter by seasonYear.
+    name: season_year
+    query_key: seasonYear
+    type: int
+  - description: 'View option.  Filter by seasonType. Allowed: regular, pre, post.'
+    name: season_type
+    query_key: seasonType
+    type: str
+  - description: View option.  Filter by seasonId.
+    name: season_id
+    query_key: seasonId
+    type: str
+  - description: 'View option.  Only show standings for seasons where isCurrent is
+      true. Allowed: 1.'
+    name: is_current
+    query_key: isCurrent
+    type: str
+  - description: 'Specify specific sub-resources to resolve.  Defaults to none. Allowed:
+      league.'
+    name: resources
+    query_key: resources
+    type: str
+  parser: parse_cbs_napi
+  path: /resource/player/standings/{player_id}
+  path_params:
+  - description: Numerical player ID
+    name: player_id
+    required: true
+    type: int
+  returns_schema: native/cbs_napi/player_standings
+  short: player_standings
+  summary: Get standings for a particular player
+- example_args:
+    player_id: 1751796
+  extra_params:
+  - description: View option.  Filter by seasonYear.
+    name: season_year
+    query_key: seasonYear
+    type: int
+  - description: 'View option.  Filter by seasonType. Allowed: regular, pre, post.'
+    name: season_type
+    query_key: seasonType
+    type: str
+  - description: View option.  Filter by seasonId.
+    name: season_id
+    query_key: seasonId
+    type: str
+  - description: 'View option.  Only show stats for seasons where isCurrent is true.
+      Allowed: 1.'
+    name: is_current
+    query_key: isCurrent
+    type: str
+  - description: View option.  Filter by teamId.
+    name: team_id
+    query_key: teamId
+    type: int
+  - description: View option.  Filter by a specific team abbreviation.
+    name: team_abbr
+    query_key: teamAbbr
+    type: str
+  - description: 'View option.  Filter only the isTotal record for players who played
+      for multiple teams. Allowed: 1.'
+    name: is_total
+    query_key: isTotal
+    type: str
+  parser: parse_cbs_napi
+  path: /resource/player/stats/{player_id}
+  path_params:
+  - description: Numerical player ID
+    name: player_id
+    required: true
+    type: int
+  returns_schema: native/cbs_napi/player_stats
+  short: player_stats
+  summary: Get all statistics for a player.
+- example_args:
+    player_id: 1751796
+  extra_params:
+  - description: 'Filter associations by assoc type Allowed: C, H, S, F.'
+    name: assoc_type
+    query_key: assocType
+    type: str
+  - description: 'Filter associations by roster status Allowed: ACT, NWT, MIN, MNR,
+      RET, DEV, CUT, DIS, DL, IR, UFA, UDF, EXE, TRA, SUS, PUP, FA, RFA, KIA, INA.'
+    name: roster_status
+    query_key: rosterStatus
+    type: str
+  - description: 'Specify specific sub-resources to resolve. Defaults to none. Allowed:
+      team.'
+    name: resources
+    query_key: resources
+    type: str
+  parser: parse_cbs_napi
+  path: /resource/player/teamAssociations/{player_id}
+  path_params:
+  - description: Numerical player ID
+    name: player_id
+    required: true
+    type: int
+  returns_schema: native/cbs_napi/player_team_associations
+  short: player_team_associations
+  summary: Get team associations for a particular player.
+- example_args:
+    player_id: 1751796
+  extra_params:
+  - description: 'Optional.  Options here: http://momentjs.com/docs/#/displaying/format/'
+    name: date_format
+    query_key: dateFormat
+    type: str
+  - description: View option.  Filter by seasonYear.
+    name: season_year
+    query_key: seasonYear
+    type: int
+  - description: 'View option.  Filter by seasonType. Allowed: regular, pre, post.'
+    name: season_type
+    query_key: seasonType
+    type: str
+  - description: View option.  Filter by seasonId.
+    name: season_id
+    query_key: seasonId
+    type: str
+  - description: 'Specify specific sub-resources to resolve. Defaults to none. Allowed:
+      targetTeam, currentTeam, fromTeam.'
+    name: resources
+    query_key: resources
+    type: str
+  parser: parse_cbs_napi
+  path: /resource/player/transactions/{player_id}
+  path_params:
+  - description: Numerical player ID
+    name: player_id
+    required: true
+    type: int
+  returns_schema: native/cbs_napi/player_transactions
+  short: player_transactions
+  summary: Get transactions resource for a particular player.
+- example_args:
+    player_id: 1751796
+  parser: parse_cbs_napi
+  path: /resource/recruit/rankings/{player_id}
+  path_params:
+  - description: Numerical player ID
+    name: player_id
+    required: true
+    type: int
+  returns_schema: native/cbs_napi/recruit_rankings
+  short: recruit_rankings
+  summary: Get rankings resource for a recruit.
+- example_args:
+    season_id: 59
+  extra_params:
+  - description: 'Optional.  Options here: http://momentjs.com/docs/#/displaying/format/'
+    name: date_format
+    query_key: dateFormat
+    type: str
+  - description: 'Specify specific sub-resources to resolve.  Defaults to none. Allowed:
+      sport, league, teams.'
+    name: resources
+    query_key: resources
+    type: str
+  parser: parse_cbs_napi
+  path: /resource/season/{season_id}
+  path_params:
+  - description: Numerical season ID
+    name: season_id
+    required: true
+    type: int
+  returns_schema: native/cbs_napi/season
+  short: season
+  summary: Get a season resource from Atlas.
+- example_args:
+    season_id: 59
+  extra_params:
+  - description: 'Specify specific sub-resources to resolve.  Defaults to none. Allowed:
+      players, standings, conference, division, playerTeamAssociations, injuries,
+      transactions, depthCharts, polls, teamSeasons, sportsLineStandings, league.'
+    name: resources
+    query_key: resources
+    type: str
+  parser: parse_cbs_napi
+  path: /resource/season/teams/{season_id}
+  path_params:
+  - description: Optional seasonYear for leagues that change teams each year.
+    name: season_id
+    required: true
+    type: int
+  returns_schema: native/cbs_napi/season_teams
+  short: season_teams
+  summary: Get team resources associated to a season
+- example_args:
+    sport_id: 1
+  extra_params:
+  - description: 'Specify specific sub-resources to resolve.  Defaults to none. Allowed:
+      leagues.'
+    name: resources
+    query_key: resources
+    type: str
+  parser: parse_cbs_napi
+  path: /resource/sport/{sport_id}
+  path_params:
+  - description: Numerical sport ID
+    name: sport_id
+    required: true
+    type: int
+  returns_schema: native/cbs_napi/sport
+  short: sport
+  summary: Get a sport resource from Atlas.
+- example_args:
+    sport_id: 1
+  parser: parse_cbs_napi
+  path: /resource/sport/leagues/{sport_id}
+  path_params:
+  - description: Numerical league ID
+    name: sport_id
+    required: true
+    type: int
+  returns_schema: native/cbs_napi/sport_leagues
+  short: sport_leagues
+  summary: Get league resources for a sport.
+- example_args:
+    team_id: 404
+  parser: parse_cbs_napi
+  path: /resource/team/futures/{team_id}
+  path_params:
+  - description: Numerical team ID
+    name: team_id
+    required: true
+    type: int
+  returns_schema: native/cbs_napi/team_futures
+  short: team_futures
+  summary: Get futures for a team.
+- example_args:
+    team_id: 404
+  extra_params:
+  - description: 'Specify specific sub-resources to resolve. Defaults to none. Allowed:
+      team.'
+    name: resources
+    query_key: resources
+    type: str
+  parser: parse_cbs_napi
+  path: /resource/team/metadata/{team_id}
+  path_params:
+  - description: Numerical team ID
+    name: team_id
+    required: true
+    type: int
+  returns_schema: native/cbs_napi/team_metadata
+  short: team_metadata
+  summary: Get a team metadata resource
+- example_args:
+    team_id: 404
+  extra_params:
+  - description: 'Specify specific sub-resources to resolve.  Defaults to none. Allowed:
+      playerTeamAssociations, injuries, transactions, depthCharts.'
+    name: resources
+    query_key: resources
+    type: str
+  parser: parse_cbs_napi
+  path: /resource/team/players/{team_id}
+  path_params:
+  - description: Numerical team ID
+    name: team_id
+    required: true
+    type: int
+  returns_schema: native/cbs_napi/team_players
+  short: team_players
+  summary: Get player resources on a team.
+- example_args:
+    team_id: 404
+  extra_params:
+  - description: 'View option.  Filter by a certain poll name. Allowed: coaches, ap,
+      fcscoachespoll, statstsnfcspoll, rpi, playoffselectioncommitteepoll, net.'
+    name: polls
+    query_key: polls
+    type: str
+  - description: View option. Filter by seasonId.
+    name: season_id
+    query_key: seasonId
+    type: str
+  parser: parse_cbs_napi
+  path: /resource/team/polls/{team_id}
+  path_params:
+  - description: Numerical team ID
+    name: team_id
+    required: true
+    type: int
+  returns_schema: native/cbs_napi/team_polls
+  short: team_polls
+  summary: Retrieve team rankings data from our various polls.
+- example_args:
+    team_id: 404
+  extra_params:
+  - description: View option.  Filter by seasonYear.
+    name: season_year
+    query_key: seasonYear
+    type: int
+  - description: 'View option.  Filter by seasonType. Allowed: regular, pre, post.'
+    name: season_type
+    query_key: seasonType
+    type: str
+  - description: View option.  Filter by seasonId.
+    name: season_id
+    query_key: seasonId
+    type: str
+  parser: parse_cbs_napi
+  path: /resource/team/rankings/{team_id}
+  path_params:
+  - description: Numerical team id
+    name: team_id
+    required: true
+    type: int
+  returns_schema: native/cbs_napi/team_rankings
+  short: team_rankings
+  summary: Get rankings for a team (by season)
+- example_args:
+    team_id: 404
+  parser: parse_cbs_napi
+  path: /resource/team/rankings/sportsline/{team_id}
+  path_params:
+  - description: Numerical team id
+    name: team_id
+    required: true
+    type: int
+  returns_schema: native/cbs_napi/team_rankings_sportsline
+  short: team_rankings_sportsline
+  summary: Get sportsline rankings for a team
+- example_args:
+    team_id: 404
+  extra_params:
+  - description: 'Optional.  Options here: http://momentjs.com/docs/#/displaying/format/'
+    name: date_format
+    query_key: dateFormat
+    type: str
+  - description: View option.  Filter by seasonYear.
+    name: season_year
+    query_key: seasonYear
+    type: int
+  - description: 'View option.  Filter by seasonType. Allowed: regular, pre, post.'
+    name: season_type
+    query_key: seasonType
+    type: str
+  - description: View option.  Filter by seasonId.
+    name: season_id
+    query_key: seasonId
+    type: str
+  - description: 'Specify specific sub-resources to resolve.  Defaults to none. Allowed:
+      league.'
+    name: resources
+    query_key: resources
+    type: str
+  parser: parse_cbs_napi
+  path: /resource/team/seasons/{team_id}
+  path_params:
+  - description: Numerical team ID
+    name: team_id
+    required: true
+    type: int
+  returns_schema: native/cbs_napi/team_seasons
+  short: team_seasons
+  summary: Get a list of Season resources associated to a Team.
+- example_args:
+    team_id: 404
+  extra_params:
+  - description: Optional year in YYYY format
+    name: year
+    query_key: year
+    type: int
+  - description: 'View option.  Filter by seasonType. v3 only! Allowed: regular, pre,
+      post.'
+    name: season_type
+    query_key: seasonType
+    type: str
+  - description: View option.  Filter by seasonId. v3 only!
+    name: season_id
+    query_key: seasonId
+    type: str
+  parser: parse_cbs_napi_standings
+  path: /resource/team/standings/{team_id}
+  path_params:
+  - description: Numerical team ID
+    name: team_id
+    required: true
+    type: int
+  returns_schema: native/cbs_napi/team_standings
+  short: team_standings
+  summary: Get standings for a particular team.
+- example_args:
+    team_id: 404
+  extra_params:
+  - description: 'Optional.  Options here: http://momentjs.com/docs/#/displaying/format/'
+    name: date_format
+    query_key: dateFormat
+    type: str
+  parser: parse_cbs_napi
+  path: /resource/team/standings/sportsline/{team_id}
+  path_params:
+  - description: Numerical team ID
+    name: team_id
+    required: true
+    type: int
+  returns_schema: native/cbs_napi/team_standings_sportsline
+  short: team_standings_sportsline
+  summary: Get SportsLine standings for a particular team.
+- example_args:
+    team_id: 404
+  extra_params:
+  - description: View option.  Filter by seasonYear.
+    name: season_year
+    query_key: seasonYear
+    type: int
+  - description: 'View option.  Filter by seasonType. Allowed: regular, pre, post.'
+    name: season_type
+    query_key: seasonType
+    type: str
+  - description: View option.  Filter by seasonId.
+    name: season_id
+    query_key: seasonId
+    type: str
+  - description: 'View option.  Only show stats for seasons where isCurrent is true.
+      Allowed: 1.'
+    name: is_current
+    query_key: isCurrent
+    type: str
+  parser: parse_cbs_napi
+  path: /resource/team/stats/{team_id}
+  path_params:
+  - description: Numerical team ID
+    name: team_id
+    required: true
+    type: int
+  returns_schema: native/cbs_napi/team_stats
+  short: team_stats
+  summary: Get all statistics for a team.
+- extra_params:
+  - description: 'Specify specific sub-resources to resolve. Defaults to none. Allowed:
+      metaData.'
+    name: resources
+    query_key: resources
+    type: str
+  parser: parse_cbs_napi
+  path: /resource/venue/{venue_id}
+  path_params:
+  - description: Numerical venue ID
+    name: venue_id
+    required: true
+    type: int
+  returns_schema: native/cbs_napi/venue
+  short: venue
+  summary: Get a venue resource
+- parser: parse_cbs_napi
+  path: /resource/venue/metadata/{venue_id}
+  path_params:
+  - description: Numerical venue ID
+    name: venue_id
+    required: true
+    type: int
+  returns_schema: native/cbs_napi/venue_metadata
+  short: venue_metadata
+  summary: Get a venues metadata resource
+host: https://api.cbssports.com/napi
+module: cbs_napi
+name_pattern: cbs_{short}
+parser_module: cbs.cbs_napi_parsers
+passthrough_query: false
+qualifier: ''
+runtime_imports:
+- _get

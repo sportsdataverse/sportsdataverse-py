@@ -1,0 +1,316 @@
+{
+ "BoxscoreResource": {
+  "location": "BoxscoreResource",
+  "route": "/resource/game/boxscore/:gameId",
+  "path": "/resource/game/boxscore/{gameId}",
+  "summary": "Get boxscore resource",
+  "notes": "Get boxscore resource",
+  "versions": {
+   "allowed": [
+    "v1"
+   ],
+   "current": "v1"
+  },
+  "methods": [
+   "GET"
+  ],
+  "formats": [
+   "json"
+  ],
+  "parameters": [
+   {
+    "name": "gameId",
+    "required": true,
+    "dataType": "int",
+    "paramType": "path",
+    "description": "Numerical game ID"
+   }
+  ],
+  "authSettings": {
+   "requireAuth": true,
+   "allowOnly": [
+    "qaeng",
+    "mweb",
+    "cbs",
+    "mobile",
+    "prism",
+    "highlander",
+    "primpy",
+    "fantasy",
+    "stephenohproject",
+    "hep"
+   ]
+  },
+  "resourceCache": {
+   "NS": "FINALBOXSCORE",
+   "cacheKeys": [
+    "gameId"
+   ],
+   "cacheBuster": 1
+  },
+  "expirationMessage": {
+   "objectKeyName": "objectKey"
+  }
+ },
+ "PlayerResource": {
+  "location": "PlayerResource",
+  "route": "/resource/player/:playerId",
+  "path": "/resource/player/{playerId}",
+  "summary": "Get a player resource",
+  "notes": "Get a player resource",
+  "versions": {
+   "allowed": [
+    "v1"
+   ],
+   "current": "v1"
+  },
+  "methods": [
+   "GET"
+  ],
+  "formats": [
+   "json"
+  ],
+  "parameters": [
+   {
+    "name": "playerId",
+    "required": true,
+    "dataType": "int",
+    "paramType": "path",
+    "description": "Numerical player ID"
+   },
+   {
+    "name": "dateFormat",
+    "required": false,
+    "dataType": "string",
+    "paramType": "query",
+    "description": "Optional for any date field.  Options here: http://momentjs.com/docs/#/displaying/format/"
+   },
+   {
+    "name": "year",
+    "required": false,
+    "dataType": "int",
+    "paramType": "query",
+    "description": "Optional year in YYYY format (for Transactions only)"
+   },
+   {
+    "name": "resources",
+    "required": false,
+    "dataType": "csv",
+    "paramType": "query",
+    "typeCast": true,
+    "allowedValues": [
+     "playerTeamAssociations",
+     "injuries",
+     "transactions",
+     "depthCharts",
+     "metaData",
+     "playerStats",
+     "standings",
+     "rankings",
+     "playerOutlook",
+     "draftInfo",
+     "combineData",
+     "positionRankings",
+     "gameStats",
+     "encyclopedia",
+     "golferResults",
+     "playerGolfMetadata",
+     "playerFutures",
+     "golferMarkets",
+     "recruitTeamAssociations",
+     "coachTeamAssociations",
+     "recruitRankings",
+     "coachRankings"
+    ],
+    "description": "Specify specific sub-resources to resolve.  Defaults to none."
+   }
+  ],
+  "authSettings": {
+   "requireAuth": true,
+   "allowOnly": [
+    "qaeng",
+    "mweb",
+    "cbs",
+    "mobile",
+    "prism",
+    "highlander",
+    "primpy",
+    "fantasy",
+    "stephenohproject",
+    "hep"
+   ]
+  },
+  "resourceCache": {
+   "NS": "PLAYER",
+   "cacheKeys": [
+    "playerId"
+   ],
+   "cacheBuster": 1
+  },
+  "expirationMessage": {
+   "objectKeyName": "objectKey"
+  }
+ },
+ "PlayerTeamAssociationsResource": {
+  "location": "PlayerTeamAssociationsResource",
+  "route": "/resource/player/teamAssociations/:playerId",
+  "path": "/resource/player/teamAssociations/{playerId}",
+  "summary": "Get team associations for a particular player.",
+  "notes": "The resource contains all teams a user has played for regardless of status.",
+  "versions": {
+   "allowed": [
+    "v1"
+   ],
+   "current": "v1"
+  },
+  "methods": [
+   "GET"
+  ],
+  "formats": [
+   "json"
+  ],
+  "parameters": [
+   {
+    "name": "playerId",
+    "required": true,
+    "dataType": "int",
+    "paramType": "path",
+    "description": "Numerical player ID"
+   },
+   {
+    "name": "assocType",
+    "required": false,
+    "dataType": "string",
+    "paramType": "query",
+    "caseInsensitive": true,
+    "description": "Filter associations by assoc type",
+    "allowedValues": [
+     "C",
+     "H",
+     "S",
+     "F"
+    ]
+   },
+   {
+    "name": "rosterStatus",
+    "required": false,
+    "dataType": "string",
+    "paramType": "query",
+    "caseInsensitive": true,
+    "description": "Filter associations by roster status",
+    "allowedValues": [
+     "ACT",
+     "NWT",
+     "MIN",
+     "MNR",
+     "RET",
+     "DEV",
+     "CUT",
+     "DIS",
+     "DL",
+     "IR",
+     "UFA",
+     "UDF",
+     "EXE",
+     "TRA",
+     "SUS",
+     "PUP",
+     "FA",
+     "RFA",
+     "KIA",
+     "INA"
+    ]
+   },
+   {
+    "name": "resources",
+    "required": false,
+    "dataType": "csv",
+    "paramType": "query",
+    "typeCast": true,
+    "allowedValues": [
+     "team"
+    ],
+    "description": "Specify specific sub-resources to resolve. Defaults to none."
+   }
+  ],
+  "authSettings": {
+   "requireAuth": true,
+   "allowOnly": [
+    "qaeng",
+    "mweb",
+    "cbs",
+    "mobile",
+    "prism",
+    "highlander",
+    "primpy",
+    "stephenohproject",
+    "fantasy"
+   ]
+  },
+  "resourceCache": {
+   "NS": "PLAYERTEAMASSOCIATION",
+   "cacheKeys": [
+    "playerId"
+   ],
+   "cacheBuster": 1
+  },
+  "expirationMessage": {
+   "objectKeyName": "playerId"
+  }
+ },
+ "RecruitTeamAssociationsResource": {
+  "location": "RecruitTeamAssociationsResource",
+  "route": "/resource/player/recruitTeamAssociations/:playerId",
+  "path": "/resource/player/recruitAssociations/{playerId}",
+  "summary": "Get recruit associations for a particular player.",
+  "notes": "The resource contains all teams a user has been recruited for",
+  "versions": {
+   "allowed": [
+    "v1"
+   ],
+   "current": "v1"
+  },
+  "methods": [
+   "GET"
+  ],
+  "formats": [
+   "json"
+  ],
+  "parameters": [
+   {
+    "name": "playerId",
+    "required": true,
+    "dataType": "int",
+    "paramType": "path",
+    "description": "Numerical player ID"
+   },
+   {
+    "name": "resources",
+    "required": false,
+    "dataType": "csv",
+    "paramType": "query",
+    "typeCast": true,
+    "allowedValues": [
+     "team"
+    ],
+    "description": "Specify specific sub-resources to resolve. Defaults to none."
+   }
+  ],
+  "authSettings": {
+   "requireAuth": true,
+   "allowOnly": [
+    "primpy"
+   ]
+  },
+  "resourceCache": {
+   "NS": "RECRUITTEAMASSOCIATION",
+   "cacheKeys": [
+    "playerId"
+   ],
+   "cacheBuster": 1
+  },
+  "expirationMessage": {
+   "objectKeyName": "playerId"
+  }
+ }
+}
