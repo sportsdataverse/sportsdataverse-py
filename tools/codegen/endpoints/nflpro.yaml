@@ -1,0 +1,252 @@
+api: nflpro
+host: https://pro.nfl.com
+name_pattern: nfl_pro_{short}
+module: nflpro
+parser_module: nfl.nflpro_parsers
+getter_module: sportsdataverse.nfl.nflpro_runtime
+qualifier: ''
+# pro.nfl.com serves the Next Gen Stats data that nextgenstats.nfl.com stopped
+# serving. /api/secured/* needs a USER-BOUND bearer carrying an active NFL+ Premium
+# entitlement -- a client-credentials token is not user-bound and 401s on every
+# route. nflpro_runtime._get resolves the token (NFLPRO_TOKEN, or an NFLPRO_EMAIL /
+# NFLPRO_PW browser login) and pages on `offset` until the row count reaches the
+# envelope's own `total`, because these responses truncate silently at the page size.
+auth: true
+docstring:
+  headers_doc: >-
+    optional pre-minted auth headers dict from ``nflpro_headers_gen()`` to reuse across calls (obtaining a token costs a browser login). A token is resolved when omitted; note an anonymous/client-credentials token is NOT usable here -- every ``/api/secured/*`` route 401s without an active NFL+ plan.
+  example_import: true
+  raises:
+  - 'NFLProAuthError: No user-bound NFL Pro token could be resolved (pass ``token=``
+    or ``email=``/``password=``, or set ``NFLPRO_TOKEN``, or ``NFLPRO_EMAIL``/``NFLPRO_PW``),
+    or the resolved token carries no active NFL_PLUS_* plan.'
+  - 'ValueError: pro.nfl.com returned HTTP 200 with an empty body -- how it signals
+    rejected query params, since it sends no error envelope.'
+endpoints:
+- short: players_offense_passing_season
+  summary: "GET /api/secured/stats/players-offense/passing/season — one row per passer for the season — quarterback passing incl. Next Gen time-to-throw, aggressiveness and CPOE."
+  path: /api/secured/stats/players-offense/passing/season
+  parser: parse_nfl_pro_stats
+  returns_schema: native/nflpro/players_offense_passing_season
+  extra_params:
+  - {name: season, query_key: season, type: int, default: 2024, description: "Season, as the STARTING year (2024 = the 2024-25 NFL season)."}
+  - {name: season_type, query_key: seasonType, type: str, default: REG, description: "Season type code (string): PRE, REG, or POST -- not ESPN's numeric 1/2/3."}
+  - {name: limit, query_key: limit, type: int, default: 500, description: "Page size. Responses truncate silently at this many rows; the getter pages on ``offset`` until it has them all."}
+  - {name: offset, query_key: offset, type: int, default: null, description: "Zero-based row offset. The getter pages on this automatically; set it only to fetch a specific slice."}
+  - {name: sort_key, query_key: sortKey, type: str, default: null, description: "Field name to sort by, e.g. ``epa``."}
+  - {name: sort_value, query_key: sortValue, type: str, default: null, description: "Sort direction: ``ASC`` or ``DESC``."}
+  - {name: qualified, query_key: qualifiedPasser, type: bool, default: null, description: "Restrict to players meeting the league qualifying threshold."}
+  example_args: {season: 2024, season_type: REG}
+- short: players_offense_passing_week
+  summary: "GET /api/secured/stats/players-offense/passing/week — one row per passer per week — quarterback passing incl. Next Gen time-to-throw, aggressiveness and CPOE."
+  path: /api/secured/stats/players-offense/passing/week
+  parser: parse_nfl_pro_stats
+  returns_schema: native/nflpro/players_offense_passing_week
+  extra_params:
+  - {name: season, query_key: season, type: int, default: 2024, description: "Season, as the STARTING year (2024 = the 2024-25 NFL season)."}
+  - {name: season_type, query_key: seasonType, type: str, default: REG, description: "Season type code (string): PRE, REG, or POST -- not ESPN's numeric 1/2/3."}
+  - {name: limit, query_key: limit, type: int, default: 500, description: "Page size. Responses truncate silently at this many rows; the getter pages on ``offset`` until it has them all."}
+  - {name: offset, query_key: offset, type: int, default: null, description: "Zero-based row offset. The getter pages on this automatically; set it only to fetch a specific slice."}
+  - {name: sort_key, query_key: sortKey, type: str, default: null, description: "Field name to sort by, e.g. ``epa``."}
+  - {name: sort_value, query_key: sortValue, type: str, default: null, description: "Sort direction: ``ASC`` or ``DESC``."}
+  - {name: qualified, query_key: qualifiedPasser, type: bool, default: null, description: "Restrict to players meeting the league qualifying threshold."}
+  - {name: nfl_id, query_key: nflId, type: int, default: null, description: "Optional player filter; omit for the whole league-week table. Note ``week`` is a path scope here, not a query param."}
+  example_args: {season: 2024, season_type: REG}
+- short: players_offense_rushing_season
+  summary: "GET /api/secured/stats/players-offense/rushing/season — one row per rusher for the season — rushing incl. Next Gen efficiency, yards over expected and defenders-in-box."
+  path: /api/secured/stats/players-offense/rushing/season
+  parser: parse_nfl_pro_stats
+  returns_schema: native/nflpro/players_offense_rushing_season
+  extra_params:
+  - {name: season, query_key: season, type: int, default: 2024, description: "Season, as the STARTING year (2024 = the 2024-25 NFL season)."}
+  - {name: season_type, query_key: seasonType, type: str, default: REG, description: "Season type code (string): PRE, REG, or POST -- not ESPN's numeric 1/2/3."}
+  - {name: limit, query_key: limit, type: int, default: 500, description: "Page size. Responses truncate silently at this many rows; the getter pages on ``offset`` until it has them all."}
+  - {name: offset, query_key: offset, type: int, default: null, description: "Zero-based row offset. The getter pages on this automatically; set it only to fetch a specific slice."}
+  - {name: sort_key, query_key: sortKey, type: str, default: null, description: "Field name to sort by, e.g. ``epa``."}
+  - {name: sort_value, query_key: sortValue, type: str, default: null, description: "Sort direction: ``ASC`` or ``DESC``."}
+  - {name: qualified, query_key: qualifiedRusher, type: bool, default: null, description: "Restrict to players meeting the league qualifying threshold."}
+  example_args: {season: 2024, season_type: REG}
+- short: players_offense_rushing_week
+  summary: "GET /api/secured/stats/players-offense/rushing/week — one row per rusher per week — rushing incl. Next Gen efficiency, yards over expected and defenders-in-box."
+  path: /api/secured/stats/players-offense/rushing/week
+  parser: parse_nfl_pro_stats
+  returns_schema: native/nflpro/players_offense_rushing_week
+  extra_params:
+  - {name: season, query_key: season, type: int, default: 2024, description: "Season, as the STARTING year (2024 = the 2024-25 NFL season)."}
+  - {name: season_type, query_key: seasonType, type: str, default: REG, description: "Season type code (string): PRE, REG, or POST -- not ESPN's numeric 1/2/3."}
+  - {name: limit, query_key: limit, type: int, default: 500, description: "Page size. Responses truncate silently at this many rows; the getter pages on ``offset`` until it has them all."}
+  - {name: offset, query_key: offset, type: int, default: null, description: "Zero-based row offset. The getter pages on this automatically; set it only to fetch a specific slice."}
+  - {name: sort_key, query_key: sortKey, type: str, default: null, description: "Field name to sort by, e.g. ``epa``."}
+  - {name: sort_value, query_key: sortValue, type: str, default: null, description: "Sort direction: ``ASC`` or ``DESC``."}
+  - {name: qualified, query_key: qualifiedRusher, type: bool, default: null, description: "Restrict to players meeting the league qualifying threshold."}
+  - {name: nfl_id, query_key: nflId, type: int, default: null, description: "Optional player filter; omit for the whole league-week table. Note ``week`` is a path scope here, not a query param."}
+  example_args: {season: 2024, season_type: REG}
+- short: players_offense_receiving_season
+  summary: "GET /api/secured/stats/players-offense/receiving/season — one row per receiver for the season — receiving incl. Next Gen separation, cushion and catch rate over expected."
+  path: /api/secured/stats/players-offense/receiving/season
+  parser: parse_nfl_pro_stats
+  returns_schema: native/nflpro/players_offense_receiving_season
+  extra_params:
+  - {name: season, query_key: season, type: int, default: 2024, description: "Season, as the STARTING year (2024 = the 2024-25 NFL season)."}
+  - {name: season_type, query_key: seasonType, type: str, default: REG, description: "Season type code (string): PRE, REG, or POST -- not ESPN's numeric 1/2/3."}
+  - {name: limit, query_key: limit, type: int, default: 500, description: "Page size. Responses truncate silently at this many rows; the getter pages on ``offset`` until it has them all."}
+  - {name: offset, query_key: offset, type: int, default: null, description: "Zero-based row offset. The getter pages on this automatically; set it only to fetch a specific slice."}
+  - {name: sort_key, query_key: sortKey, type: str, default: null, description: "Field name to sort by, e.g. ``epa``."}
+  - {name: sort_value, query_key: sortValue, type: str, default: null, description: "Sort direction: ``ASC`` or ``DESC``."}
+  - {name: qualified, query_key: qualifiedReceiver, type: bool, default: null, description: "Restrict to players meeting the league qualifying threshold."}
+  example_args: {season: 2024, season_type: REG}
+- short: players_offense_receiving_week
+  summary: "GET /api/secured/stats/players-offense/receiving/week — one row per receiver per week — receiving incl. Next Gen separation, cushion and catch rate over expected."
+  path: /api/secured/stats/players-offense/receiving/week
+  parser: parse_nfl_pro_stats
+  returns_schema: native/nflpro/players_offense_receiving_week
+  extra_params:
+  - {name: season, query_key: season, type: int, default: 2024, description: "Season, as the STARTING year (2024 = the 2024-25 NFL season)."}
+  - {name: season_type, query_key: seasonType, type: str, default: REG, description: "Season type code (string): PRE, REG, or POST -- not ESPN's numeric 1/2/3."}
+  - {name: limit, query_key: limit, type: int, default: 500, description: "Page size. Responses truncate silently at this many rows; the getter pages on ``offset`` until it has them all."}
+  - {name: offset, query_key: offset, type: int, default: null, description: "Zero-based row offset. The getter pages on this automatically; set it only to fetch a specific slice."}
+  - {name: sort_key, query_key: sortKey, type: str, default: null, description: "Field name to sort by, e.g. ``epa``."}
+  - {name: sort_value, query_key: sortValue, type: str, default: null, description: "Sort direction: ``ASC`` or ``DESC``."}
+  - {name: qualified, query_key: qualifiedReceiver, type: bool, default: null, description: "Restrict to players meeting the league qualifying threshold."}
+  - {name: nfl_id, query_key: nflId, type: int, default: null, description: "Optional player filter; omit for the whole league-week table. Note ``week`` is a path scope here, not a query param."}
+  example_args: {season: 2024, season_type: REG}
+- short: defense_overview_season
+  summary: "GET /api/secured/stats/defense/overview/season — one row per defender for the season — defensive overview incl. snap counts, pressures and havoc stops."
+  path: /api/secured/stats/defense/overview/season
+  parser: parse_nfl_pro_stats
+  returns_schema: native/nflpro/defense_overview_season
+  extra_params:
+  - {name: season, query_key: season, type: int, default: 2024, description: "Season, as the STARTING year (2024 = the 2024-25 NFL season)."}
+  - {name: season_type, query_key: seasonType, type: str, default: REG, description: "Season type code (string): PRE, REG, or POST -- not ESPN's numeric 1/2/3."}
+  - {name: limit, query_key: limit, type: int, default: 500, description: "Page size. Responses truncate silently at this many rows; the getter pages on ``offset`` until it has them all."}
+  - {name: offset, query_key: offset, type: int, default: null, description: "Zero-based row offset. The getter pages on this automatically; set it only to fetch a specific slice."}
+  - {name: sort_key, query_key: sortKey, type: str, default: null, description: "Field name to sort by, e.g. ``epa``."}
+  - {name: sort_value, query_key: sortValue, type: str, default: null, description: "Sort direction: ``ASC`` or ``DESC``."}
+  - {name: qualified, query_key: qualifiedDefender, type: bool, default: null, description: "Restrict to players meeting the league qualifying threshold."}
+  example_args: {season: 2024, season_type: REG}
+- short: defense_overview_week
+  summary: "GET /api/secured/stats/defense/overview/week — one row per defender per week — defensive overview incl. snap counts, pressures and havoc stops."
+  path: /api/secured/stats/defense/overview/week
+  parser: parse_nfl_pro_stats
+  returns_schema: native/nflpro/defense_overview_week
+  extra_params:
+  - {name: season, query_key: season, type: int, default: 2024, description: "Season, as the STARTING year (2024 = the 2024-25 NFL season)."}
+  - {name: season_type, query_key: seasonType, type: str, default: REG, description: "Season type code (string): PRE, REG, or POST -- not ESPN's numeric 1/2/3."}
+  - {name: limit, query_key: limit, type: int, default: 500, description: "Page size. Responses truncate silently at this many rows; the getter pages on ``offset`` until it has them all."}
+  - {name: offset, query_key: offset, type: int, default: null, description: "Zero-based row offset. The getter pages on this automatically; set it only to fetch a specific slice."}
+  - {name: sort_key, query_key: sortKey, type: str, default: null, description: "Field name to sort by, e.g. ``epa``."}
+  - {name: sort_value, query_key: sortValue, type: str, default: null, description: "Sort direction: ``ASC`` or ``DESC``."}
+  - {name: qualified, query_key: qualifiedDefender, type: bool, default: null, description: "Restrict to players meeting the league qualifying threshold."}
+  - {name: nfl_id, query_key: nflId, type: int, default: null, description: "Optional player filter; omit for the whole league-week table. Note ``week`` is a path scope here, not a query param."}
+  example_args: {season: 2024, season_type: REG}
+- short: defense_nearest_season
+  summary: "GET /api/secured/stats/defense/nearest/season — one row per defender for the season — nearest-defender coverage incl. targets, catch rate and CROE allowed."
+  path: /api/secured/stats/defense/nearest/season
+  parser: parse_nfl_pro_stats
+  returns_schema: native/nflpro/defense_nearest_season
+  extra_params:
+  - {name: season, query_key: season, type: int, default: 2024, description: "Season, as the STARTING year (2024 = the 2024-25 NFL season)."}
+  - {name: season_type, query_key: seasonType, type: str, default: REG, description: "Season type code (string): PRE, REG, or POST -- not ESPN's numeric 1/2/3."}
+  - {name: limit, query_key: limit, type: int, default: 500, description: "Page size. Responses truncate silently at this many rows; the getter pages on ``offset`` until it has them all."}
+  - {name: offset, query_key: offset, type: int, default: null, description: "Zero-based row offset. The getter pages on this automatically; set it only to fetch a specific slice."}
+  - {name: sort_key, query_key: sortKey, type: str, default: null, description: "Field name to sort by, e.g. ``epa``."}
+  - {name: sort_value, query_key: sortValue, type: str, default: null, description: "Sort direction: ``ASC`` or ``DESC``."}
+  - {name: qualified, query_key: qualifiedDefender, type: bool, default: null, description: "Restrict to players meeting the league qualifying threshold."}
+  example_args: {season: 2024, season_type: REG}
+- short: defense_nearest_week
+  summary: "GET /api/secured/stats/defense/nearest/week — one row per defender per week — nearest-defender coverage incl. targets, catch rate and CROE allowed."
+  path: /api/secured/stats/defense/nearest/week
+  parser: parse_nfl_pro_stats
+  returns_schema: native/nflpro/defense_nearest_week
+  extra_params:
+  - {name: season, query_key: season, type: int, default: 2024, description: "Season, as the STARTING year (2024 = the 2024-25 NFL season)."}
+  - {name: season_type, query_key: seasonType, type: str, default: REG, description: "Season type code (string): PRE, REG, or POST -- not ESPN's numeric 1/2/3."}
+  - {name: limit, query_key: limit, type: int, default: 500, description: "Page size. Responses truncate silently at this many rows; the getter pages on ``offset`` until it has them all."}
+  - {name: offset, query_key: offset, type: int, default: null, description: "Zero-based row offset. The getter pages on this automatically; set it only to fetch a specific slice."}
+  - {name: sort_key, query_key: sortKey, type: str, default: null, description: "Field name to sort by, e.g. ``epa``."}
+  - {name: sort_value, query_key: sortValue, type: str, default: null, description: "Sort direction: ``ASC`` or ``DESC``."}
+  - {name: qualified, query_key: qualifiedDefender, type: bool, default: null, description: "Restrict to players meeting the league qualifying threshold."}
+  - {name: nfl_id, query_key: nflId, type: int, default: null, description: "Optional player filter; omit for the whole league-week table. Note ``week`` is a path scope here, not a query param."}
+  example_args: {season: 2024, season_type: REG}
+- short: team_offense_overview_season
+  summary: "GET /api/secured/stats/team-offense/overview/season — one row per team for the season — team offensive overview incl. EPA per play, pass and rush splits."
+  path: /api/secured/stats/team-offense/overview/season
+  parser: parse_nfl_pro_stats
+  returns_schema: native/nflpro/team_offense_overview_season
+  extra_params:
+  - {name: season, query_key: season, type: int, default: 2024, description: "Season, as the STARTING year (2024 = the 2024-25 NFL season)."}
+  - {name: season_type, query_key: seasonType, type: str, default: REG, description: "Season type code (string): PRE, REG, or POST -- not ESPN's numeric 1/2/3."}
+  - {name: limit, query_key: limit, type: int, default: 500, description: "Page size. Responses truncate silently at this many rows; the getter pages on ``offset`` until it has them all."}
+  - {name: offset, query_key: offset, type: int, default: null, description: "Zero-based row offset. The getter pages on this automatically; set it only to fetch a specific slice."}
+  - {name: sort_key, query_key: sortKey, type: str, default: null, description: "Field name to sort by, e.g. ``epa``."}
+  - {name: sort_value, query_key: sortValue, type: str, default: null, description: "Sort direction: ``ASC`` or ``DESC``."}
+  example_args: {season: 2024, season_type: REG}
+- short: team_offense_overview_week
+  summary: "GET /api/secured/stats/team-offense/overview/week — one row per team per week — team offensive overview incl. EPA per play, pass and rush splits."
+  path: /api/secured/stats/team-offense/overview/week
+  parser: parse_nfl_pro_stats
+  returns_schema: native/nflpro/team_offense_overview_week
+  extra_params:
+  - {name: season, query_key: season, type: int, default: 2024, description: "Season, as the STARTING year (2024 = the 2024-25 NFL season)."}
+  - {name: season_type, query_key: seasonType, type: str, default: REG, description: "Season type code (string): PRE, REG, or POST -- not ESPN's numeric 1/2/3."}
+  - {name: limit, query_key: limit, type: int, default: 500, description: "Page size. Responses truncate silently at this many rows; the getter pages on ``offset`` until it has them all."}
+  - {name: offset, query_key: offset, type: int, default: null, description: "Zero-based row offset. The getter pages on this automatically; set it only to fetch a specific slice."}
+  - {name: sort_key, query_key: sortKey, type: str, default: null, description: "Field name to sort by, e.g. ``epa``."}
+  - {name: sort_value, query_key: sortValue, type: str, default: null, description: "Sort direction: ``ASC`` or ``DESC``."}
+  example_args: {season: 2024, season_type: REG}
+- short: team_defense_overview_season
+  summary: "GET /api/secured/stats/team-defense/overview/season — one row per team for the season — team defensive overview incl. EPA allowed per play and takeaways."
+  path: /api/secured/stats/team-defense/overview/season
+  parser: parse_nfl_pro_stats
+  returns_schema: native/nflpro/team_defense_overview_season
+  extra_params:
+  - {name: season, query_key: season, type: int, default: 2024, description: "Season, as the STARTING year (2024 = the 2024-25 NFL season)."}
+  - {name: season_type, query_key: seasonType, type: str, default: REG, description: "Season type code (string): PRE, REG, or POST -- not ESPN's numeric 1/2/3."}
+  - {name: limit, query_key: limit, type: int, default: 500, description: "Page size. Responses truncate silently at this many rows; the getter pages on ``offset`` until it has them all."}
+  - {name: offset, query_key: offset, type: int, default: null, description: "Zero-based row offset. The getter pages on this automatically; set it only to fetch a specific slice."}
+  - {name: sort_key, query_key: sortKey, type: str, default: null, description: "Field name to sort by, e.g. ``epa``."}
+  - {name: sort_value, query_key: sortValue, type: str, default: null, description: "Sort direction: ``ASC`` or ``DESC``."}
+  example_args: {season: 2024, season_type: REG}
+- short: team_defense_overview_week
+  summary: "GET /api/secured/stats/team-defense/overview/week — one row per team per week — team defensive overview incl. EPA allowed per play and takeaways."
+  path: /api/secured/stats/team-defense/overview/week
+  parser: parse_nfl_pro_stats
+  returns_schema: native/nflpro/team_defense_overview_week
+  extra_params:
+  - {name: season, query_key: season, type: int, default: 2024, description: "Season, as the STARTING year (2024 = the 2024-25 NFL season)."}
+  - {name: season_type, query_key: seasonType, type: str, default: REG, description: "Season type code (string): PRE, REG, or POST -- not ESPN's numeric 1/2/3."}
+  - {name: limit, query_key: limit, type: int, default: 500, description: "Page size. Responses truncate silently at this many rows; the getter pages on ``offset`` until it has them all."}
+  - {name: offset, query_key: offset, type: int, default: null, description: "Zero-based row offset. The getter pages on this automatically; set it only to fetch a specific slice."}
+  - {name: sort_key, query_key: sortKey, type: str, default: null, description: "Field name to sort by, e.g. ``epa``."}
+  - {name: sort_value, query_key: sortValue, type: str, default: null, description: "Sort direction: ``ASC`` or ``DESC``."}
+  example_args: {season: 2024, season_type: REG}
+- short: fantasy_season
+  summary: "GET /api/secured/stats/fantasy/season — one row per player for the season — fantasy points, opportunity and usage."
+  path: /api/secured/stats/fantasy/season
+  parser: parse_nfl_pro_stats
+  returns_schema: native/nflpro/fantasy_season
+  extra_params:
+  - {name: season, query_key: season, type: int, default: 2024, description: "Season, as the STARTING year (2024 = the 2024-25 NFL season)."}
+  - {name: season_type, query_key: seasonType, type: str, default: REG, description: "Season type code (string): PRE, REG, or POST -- not ESPN's numeric 1/2/3."}
+  - {name: limit, query_key: limit, type: int, default: 500, description: "Page size. Responses truncate silently at this many rows; the getter pages on ``offset`` until it has them all."}
+  - {name: offset, query_key: offset, type: int, default: null, description: "Zero-based row offset. The getter pages on this automatically; set it only to fetch a specific slice."}
+  - {name: nfl_id, query_key: nflId, type: int, default: null, description: "Optional player filter."}
+  - {name: position_group, query_key: positionGroup, type: str, default: null, description: "Optional position-group filter, e.g. ``QB``. Optional on this season scope — it is the ``game`` scope that requires it."}
+  - {name: sort_key, query_key: sortKey, type: str, default: null, description: "Field name to sort by, e.g. ``fpHalfPPR``."}
+  - {name: sort_value, query_key: sortValue, type: str, default: null, description: "Sort direction: ``ASC`` or ``DESC``."}
+  example_args: {season: 2024, season_type: REG}
+- short: fantasy_game
+  summary: "GET /api/secured/stats/fantasy/game — one row per player-game — fantasy scoring by game. Requires ``position_group``."
+  path: /api/secured/stats/fantasy/game
+  parser: parse_nfl_pro_stats
+  returns_schema: native/nflpro/fantasy_game
+  extra_params:
+  - {name: season, query_key: season, type: int, default: 2024, description: "Season, as the STARTING year (2024 = the 2024-25 NFL season)."}
+  - {name: season_type, query_key: seasonType, type: str, default: REG, description: "Season type code (string): PRE, REG, or POST -- not ESPN's numeric 1/2/3."}
+  - {name: limit, query_key: limit, type: int, default: 500, description: "Page size. Responses truncate silently at this many rows; the getter pages on ``offset`` until it has them all."}
+  - {name: offset, query_key: offset, type: int, default: null, description: "Zero-based row offset. The getter pages on this automatically; set it only to fetch a specific slice."}
+  - {name: nfl_id, query_key: nflId, type: int, default: null, description: "Optional player filter."}
+  - {name: position_group, query_key: positionGroup, type: str, required: true, description: "Position group, e.g. ``QB``. **Required**: this scope returns HTTP 500 without it, so it is a required argument rather than an optional filter."}
+  - {name: sort_key, query_key: sortKey, type: str, default: null, description: "Field name to sort by, e.g. ``fpHalfPPR``."}
+  - {name: sort_value, query_key: sortValue, type: str, default: null, description: "Sort direction: ``ASC`` or ``DESC``."}
+  example_args: {season: 2024, season_type: REG, position_group: QB}

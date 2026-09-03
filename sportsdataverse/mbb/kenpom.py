@@ -62,7 +62,7 @@ def kenpom_ratings(
 
     Args:
         year: y query parameter.
-        headers: optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted.
+        headers: optional pre-built request headers to reuse across calls; the authenticated kenpom.com session is resolved and cached when omitted.
         return_parsed: parse the payload through parse_kenpom_page -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw page HTML (``str``).
         return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -118,7 +118,7 @@ def kenpom_efficiency(
 
     Args:
         year: y query parameter.
-        headers: optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted.
+        headers: optional pre-built request headers to reuse across calls; the authenticated kenpom.com session is resolved and cached when omitted.
         return_parsed: parse the payload through parse_kenpom_page -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw page HTML (``str``).
         return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -174,7 +174,7 @@ def kenpom_four_factors(
 
     Args:
         year: y query parameter.
-        headers: optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted.
+        headers: optional pre-built request headers to reuse across calls; the authenticated kenpom.com session is resolved and cached when omitted.
         return_parsed: parse the payload through parse_kenpom_page -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw page HTML (``str``).
         return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -230,7 +230,7 @@ def kenpom_point_distribution(
 
     Args:
         year: y query parameter.
-        headers: optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted.
+        headers: optional pre-built request headers to reuse across calls; the authenticated kenpom.com session is resolved and cached when omitted.
         return_parsed: parse the payload through parse_kenpom_page -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw page HTML (``str``).
         return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -286,7 +286,7 @@ def kenpom_height(
 
     Args:
         year: y query parameter.
-        headers: optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted.
+        headers: optional pre-built request headers to reuse across calls; the authenticated kenpom.com session is resolved and cached when omitted.
         return_parsed: parse the payload through parse_kenpom_page -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw page HTML (``str``).
         return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -342,7 +342,7 @@ def kenpom_foul_trouble(
 
     Args:
         year: y query parameter.
-        headers: optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted.
+        headers: optional pre-built request headers to reuse across calls; the authenticated kenpom.com session is resolved and cached when omitted.
         return_parsed: parse the payload through parse_kenpom_page -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw page HTML (``str``).
         return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -400,7 +400,7 @@ def kenpom_team_stats(
     Args:
         year: y query parameter.
         side: od query parameter.
-        headers: optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted.
+        headers: optional pre-built request headers to reuse across calls; the authenticated kenpom.com session is resolved and cached when omitted.
         return_parsed: parse the payload through parse_kenpom_page -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw page HTML (``str``).
         return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -463,7 +463,7 @@ def kenpom_player_stats(
         metric: s query parameter.
         conf: f query parameter.
         conf_only: c query parameter.
-        headers: optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted.
+        headers: optional pre-built request headers to reuse across calls; the authenticated kenpom.com session is resolved and cached when omitted.
         return_parsed: parse the payload through parse_kenpom_page -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw page HTML (``str``).
         return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -522,7 +522,7 @@ def kenpom_kpoy(
 
     Args:
         year: y query parameter.
-        headers: optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted.
+        headers: optional pre-built request headers to reuse across calls; the authenticated kenpom.com session is resolved and cached when omitted.
         return_parsed: parse the payload through parse_kenpom_page -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw page HTML (``str``).
         return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -580,7 +580,7 @@ def kenpom_team(
     Args:
         team: team query parameter.
         year: y query parameter.
-        headers: optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted.
+        headers: optional pre-built request headers to reuse across calls; the authenticated kenpom.com session is resolved and cached when omitted.
         return_parsed: parse the payload through parse_kenpom_page -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw page HTML (``str``).
         return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -639,7 +639,7 @@ def kenpom_team_players_expanded(
     Args:
         team: team query parameter.
         year: y query parameter.
-        headers: optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted.
+        headers: optional pre-built request headers to reuse across calls; the authenticated kenpom.com session is resolved and cached when omitted.
         return_parsed: parse the payload through parse_kenpom_page -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw page HTML (``str``).
         return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -698,7 +698,7 @@ def kenpom_game_plan(
     Args:
         team: team query parameter.
         year: y query parameter.
-        headers: optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted.
+        headers: optional pre-built request headers to reuse across calls; the authenticated kenpom.com session is resolved and cached when omitted.
         return_parsed: parse the payload through parse_kenpom_page -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw page HTML (``str``).
         return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -759,7 +759,7 @@ def kenpom_opponent_tracker(
         team: team query parameter.
         year: y query parameter.
         side: t query parameter.
-        headers: optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted.
+        headers: optional pre-built request headers to reuse across calls; the authenticated kenpom.com session is resolved and cached when omitted.
         return_parsed: parse the payload through parse_kenpom_page -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw page HTML (``str``).
         return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -817,7 +817,7 @@ def kenpom_player_career(
 
     Args:
         player_id: p query parameter.
-        headers: optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted.
+        headers: optional pre-built request headers to reuse across calls; the authenticated kenpom.com session is resolved and cached when omitted.
         return_parsed: parse the payload through parse_kenpom_page -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw page HTML (``str``).
         return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -875,7 +875,7 @@ def kenpom_box(
     Args:
         game_id: g query parameter.
         year: y query parameter.
-        headers: optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted.
+        headers: optional pre-built request headers to reuse across calls; the authenticated kenpom.com session is resolved and cached when omitted.
         return_parsed: parse the payload through parse_kenpom_page -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw page HTML (``str``).
         return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -934,7 +934,7 @@ def kenpom_win_probability(
     Args:
         game_id: g query parameter.
         year: y query parameter.
-        headers: optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted.
+        headers: optional pre-built request headers to reuse across calls; the authenticated kenpom.com session is resolved and cached when omitted.
         return_parsed: parse the payload through parse_kenpom_page -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw page HTML (``str``).
         return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -991,7 +991,7 @@ def kenpom_fan_match(
 
     Args:
         date: d query parameter.
-        headers: optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted.
+        headers: optional pre-built request headers to reuse across calls; the authenticated kenpom.com session is resolved and cached when omitted.
         return_parsed: parse the payload through parse_kenpom_page -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw page HTML (``str``).
         return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -1047,7 +1047,7 @@ def kenpom_team_history(
 
     Args:
         team: t query parameter.
-        headers: optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted.
+        headers: optional pre-built request headers to reuse across calls; the authenticated kenpom.com session is resolved and cached when omitted.
         return_parsed: parse the payload through parse_kenpom_page -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw page HTML (``str``).
         return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -1103,7 +1103,7 @@ def kenpom_coach_history(
 
     Args:
         coach: c query parameter.
-        headers: optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted.
+        headers: optional pre-built request headers to reuse across calls; the authenticated kenpom.com session is resolved and cached when omitted.
         return_parsed: parse the payload through parse_kenpom_page -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw page HTML (``str``).
         return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -1157,7 +1157,7 @@ def kenpom_program_ratings(
     Example URL: https://kenpom.com/programs.php
 
     Args:
-        headers: optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted.
+        headers: optional pre-built request headers to reuse across calls; the authenticated kenpom.com session is resolved and cached when omitted.
         return_parsed: parse the payload through parse_kenpom_page -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw page HTML (``str``).
         return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -1211,7 +1211,7 @@ def kenpom_archive_ratings(
 
     Args:
         date: d query parameter.
-        headers: optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted.
+        headers: optional pre-built request headers to reuse across calls; the authenticated kenpom.com session is resolved and cached when omitted.
         return_parsed: parse the payload through parse_kenpom_page -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw page HTML (``str``).
         return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -1269,7 +1269,7 @@ def kenpom_conference(
     Args:
         conf: c query parameter.
         year: y query parameter.
-        headers: optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted.
+        headers: optional pre-built request headers to reuse across calls; the authenticated kenpom.com session is resolved and cached when omitted.
         return_parsed: parse the payload through parse_kenpom_page -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw page HTML (``str``).
         return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -1326,7 +1326,7 @@ def kenpom_conference_stats(
 
     Args:
         year: y query parameter.
-        headers: optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted.
+        headers: optional pre-built request headers to reuse across calls; the authenticated kenpom.com session is resolved and cached when omitted.
         return_parsed: parse the payload through parse_kenpom_page -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw page HTML (``str``).
         return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -1382,7 +1382,7 @@ def kenpom_conference_history(
 
     Args:
         conf: c query parameter.
-        headers: optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted.
+        headers: optional pre-built request headers to reuse across calls; the authenticated kenpom.com session is resolved and cached when omitted.
         return_parsed: parse the payload through parse_kenpom_page -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw page HTML (``str``).
         return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -1436,7 +1436,7 @@ def kenpom_trends(
     Example URL: https://kenpom.com/trends.php
 
     Args:
-        headers: optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted.
+        headers: optional pre-built request headers to reuse across calls; the authenticated kenpom.com session is resolved and cached when omitted.
         return_parsed: parse the payload through parse_kenpom_page -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw page HTML (``str``).
         return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -1488,7 +1488,7 @@ def kenpom_home_court_advantage(
     Example URL: https://kenpom.com/hca.php
 
     Args:
-        headers: optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted.
+        headers: optional pre-built request headers to reuse across calls; the authenticated kenpom.com session is resolved and cached when omitted.
         return_parsed: parse the payload through parse_kenpom_page -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw page HTML (``str``).
         return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -1542,7 +1542,7 @@ def kenpom_arenas(
 
     Args:
         year: y query parameter.
-        headers: optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted.
+        headers: optional pre-built request headers to reuse across calls; the authenticated kenpom.com session is resolved and cached when omitted.
         return_parsed: parse the payload through parse_kenpom_page -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw page HTML (``str``).
         return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -1598,7 +1598,7 @@ def kenpom_officials(
 
     Args:
         year: y query parameter.
-        headers: optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted.
+        headers: optional pre-built request headers to reuse across calls; the authenticated kenpom.com session is resolved and cached when omitted.
         return_parsed: parse the payload through parse_kenpom_page -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw page HTML (``str``).
         return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -1656,7 +1656,7 @@ def kenpom_referee(
     Args:
         referee: r query parameter.
         year: y query parameter.
-        headers: optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted.
+        headers: optional pre-built request headers to reuse across calls; the authenticated kenpom.com session is resolved and cached when omitted.
         return_parsed: parse the payload through parse_kenpom_page -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw page HTML (``str``).
         return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -1715,7 +1715,7 @@ def kenpom_game_attributes(
     Args:
         year: y query parameter.
         attribute: s query parameter.
-        headers: optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted.
+        headers: optional pre-built request headers to reuse across calls; the authenticated kenpom.com session is resolved and cached when omitted.
         return_parsed: parse the payload through parse_kenpom_page -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw page HTML (``str``).
         return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
