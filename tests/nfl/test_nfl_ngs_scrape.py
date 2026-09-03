@@ -22,6 +22,7 @@ from __future__ import annotations
 
 import polars as pl
 import pytest
+import requests
 
 from sportsdataverse.nfl import nfl_ngs as M
 from sportsdataverse.nfl import scrape_ngs_season, scrape_ngs_week
@@ -218,7 +219,27 @@ def test_teams_lookup_failure_does_not_abort(monkeypatch):
 # --------------------------------------------------------------------------- #
 @skip_if_no_live
 def test_scrape_season_live_passing_2023():
-    df = scrape_ngs_season("passing", 2023)
+    """Skips when NGS denies this network, fails on anything we could have broken.
+
+    Measured 2026-09-02: ``nextgenstats.nfl.com/api`` sits behind AWS API Gateway and
+    returns 403 ``AccessDeniedException`` -- "explicit deny in an identity-based
+    policy" -- to *every* client from some networks, GitHub runners included. It is
+    not an auth wall: a real Chromium browser sends no ``Authorization`` header at
+    all and gets the identical body, so there is no token to obtain and nothing in
+    this package can fix it.
+
+    Failing on that is noise: it reports a policy decision at NFL as a regression
+    here, and it is the reason main has been red. Skipping keeps the test honest --
+    the day the deny lifts it starts passing again on its own, which deleting it
+    would not. Every other failure mode still fails.
+    """
+    try:
+        df = scrape_ngs_season("passing", 2023)
+    except requests.exceptions.HTTPError as exc:  # pragma: no cover - upstream state
+        status = getattr(exc.response, "status_code", None)
+        if status in (401, 403):
+            pytest.skip(f"NGS denied this network ({status}); see notes/2026-09-02-ngs-recon.md")
+        raise
     assert df.height > 0
     for col in (
         "season",
