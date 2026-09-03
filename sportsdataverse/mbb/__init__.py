@@ -6,6 +6,12 @@ from sportsdataverse.mbb.mbb_bracketology import *
 from sportsdataverse.mbb.mbb_fox_ext import *
 from sportsdataverse.mbb.torvik import *
 from sportsdataverse.mbb.torvik_parsers import parse_torvik_csv
+from sportsdataverse.mbb.kenpom import *
+from sportsdataverse.mbb.kenpom_runtime import (
+    has_kenpom_login,
+    kenpom_login,
+    parse_kenpom_page,
+)
 from sportsdataverse.mbb.mbb_game_officials import *
 from sportsdataverse.mbb.mbb_player_core import *
 from sportsdataverse.mbb.mbb_game_predict import *
