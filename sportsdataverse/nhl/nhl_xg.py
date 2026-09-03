@@ -334,6 +334,33 @@ def nhl_xg(
     ``pbp`` by ``event_id``. Attaches the danger/distance/angle expansion
     (``add_shot_geometry``) after scoring.
 
+    **Known issue -- the published boosters over-predict for seasons through 2023-24.**
+    Measured 2026-09-02 against the 2026-04 boosters currently in the ``nhl_xg_models``
+    release: observed goals / sum(``xg``) is **0.771** at 5v5 (n=1,724,290 shots) and
+    **0.768** on special teams (n=349,232), where a correctly-levelled model gives 1.0 --
+    i.e. ``xg`` is inflated by roughly 25-30% for every season from 2009-10 through
+    2023-24. At 5v5 the two most recent seasons are much closer (2024-25 **0.949**,
+    2025-26 **0.913**). The cause is the boosters' training corpus, which carried no
+    ``MISSED_SHOT`` events for the affected seasons; it is not a defect in the feature
+    frame this function builds.
+    Shot RANKING is far less affected (rank AUC 0.778 / 0.760), so ``xg`` is still usable
+    for ordering chances -- but any SUM of ``xg`` (per game, per player, team totals,
+    goals-above-expected, and ``nhl_gsax`` downstream) is inflated for pre-2024-25
+    seasons. Tracking:
+    `sportsdataverse-py#444 <https://github.com/sportsdataverse/sportsdataverse-py/issues/444>`_;
+    evidence:
+    `fastRhockey-nhl-data#11 <https://github.com/sportsdataverse/fastRhockey-nhl-data/pull/11>`_.
+    To check whether this still applies to the boosters you have, restrict to the rows
+    this function actually scored -- ``xg`` non-null, i.e. unblocked shots only -- and
+    compare ``sum(xg)`` against the goals **on those same rows**, separately for
+    ``strength_state == "5v5"`` and for the rest, since the two come from different
+    boosters and are quoted separately above; a corrected booster gives a ratio near 1.0
+    for each. Comparing against a season's full goal total instead would fold in
+    shootout and penalty-shot goals and every unscored row, and would not validate the
+    numbers above. The same measurement is packaged as
+    ``nhl_data_build.xg_parity.artifact_calibration(pbp, booster, variant=...)``
+    (``variant`` is ``"5v5"`` or ``"st"``) in ``fastRhockey-nhl-data``.
+
     Args:
         pbp: a ``load_nhl_pbp_full``-shaped frame.
         model_dir: booster directory; ``None`` downloads-and-caches on first use (see
