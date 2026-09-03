@@ -288,6 +288,23 @@ from sportsdataverse.mlb import espn_mlb_schedule as espn_mlb_schedule  # noqa: 
 from sportsdataverse.mlb import espn_mlb_teams as espn_mlb_teams  # noqa: F401
 from sportsdataverse.mlb import event_run_value as event_run_value  # noqa: F401
 from sportsdataverse.mlb import fit_zone_model as fit_zone_model  # noqa: F401
+from sportsdataverse.mlb import fox_mlb_event_matchup as fox_mlb_event_matchup  # noqa: F401
+from sportsdataverse.mlb import fox_mlb_event_recap as fox_mlb_event_recap  # noqa: F401
+from sportsdataverse.mlb import fox_mlb_event_standings as fox_mlb_event_standings  # noqa: F401
+from sportsdataverse.mlb import fox_mlb_league_conferences as fox_mlb_league_conferences  # noqa: F401
+from sportsdataverse.mlb import fox_mlb_league_header as fox_mlb_league_header  # noqa: F401
+from sportsdataverse.mlb import fox_mlb_league_odds as fox_mlb_league_odds  # noqa: F401
+from sportsdataverse.mlb import fox_mlb_league_player_news as fox_mlb_league_player_news  # noqa: F401
+from sportsdataverse.mlb import fox_mlb_league_polls as fox_mlb_league_polls  # noqa: F401
+from sportsdataverse.mlb import fox_mlb_league_schedule as fox_mlb_league_schedule  # noqa: F401
+from sportsdataverse.mlb import fox_mlb_league_scores as fox_mlb_league_scores  # noqa: F401
+from sportsdataverse.mlb import fox_mlb_league_standings as fox_mlb_league_standings  # noqa: F401
+from sportsdataverse.mlb import fox_mlb_league_stat_leaders as fox_mlb_league_stat_leaders  # noqa: F401
+from sportsdataverse.mlb import fox_mlb_scoreboard as fox_mlb_scoreboard  # noqa: F401
+from sportsdataverse.mlb import fox_mlb_scorechip as fox_mlb_scorechip  # noqa: F401
+from sportsdataverse.mlb import fox_mlb_scores_segment as fox_mlb_scores_segment  # noqa: F401
+from sportsdataverse.mlb import fox_mlb_team_header as fox_mlb_team_header  # noqa: F401
+from sportsdataverse.mlb import fox_mlb_teamnav as fox_mlb_teamnav  # noqa: F401
 from sportsdataverse.mlb import leverage_index as leverage_index  # noqa: F401
 from sportsdataverse.mlb import load_mlb_batter_projection as load_mlb_batter_projection  # noqa: F401
 from sportsdataverse.mlb import load_mlb_catcher_framing as load_mlb_catcher_framing  # noqa: F401
@@ -518,12 +535,29 @@ __all__ = [
     "espn_mlb_venues",
     "event_run_value",
     "fit_zone_model",
+    "fox_mlb_event_matchup",
+    "fox_mlb_event_recap",
+    "fox_mlb_event_standings",
+    "fox_mlb_league_conferences",
+    "fox_mlb_league_header",
     "fox_mlb_league_leaders",
+    "fox_mlb_league_odds",
+    "fox_mlb_league_player_news",
+    "fox_mlb_league_polls",
+    "fox_mlb_league_schedule",
+    "fox_mlb_league_scores",
+    "fox_mlb_league_standings",
+    "fox_mlb_league_stat_leaders",
     "fox_mlb_odds",
+    "fox_mlb_scoreboard",
+    "fox_mlb_scorechip",
+    "fox_mlb_scores_segment",
     "fox_mlb_standings",
     "fox_mlb_team_gamelog",
+    "fox_mlb_team_header",
     "fox_mlb_team_roster",
     "fox_mlb_team_stats",
+    "fox_mlb_teamnav",
     "leverage_index",
     "load_mlb_batter_projection",
     "load_mlb_catcher_framing",

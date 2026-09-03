@@ -2051,6 +2051,91 @@ from sportsdataverse.cfb import fox_cfb_boxscore
 df = fox_cfb_boxscore("41616")
 ```
 
+### `fox_cfb_event_matchup(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_cfb_event_matchup}
+
+Fox Sports cfb pregame team-stat comparison (one row per stat).
+
+Wraps `cfb/event/{game_id}/matchup`.
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.cfb import fox_cfb_event_matchup
+df = fox_cfb_event_matchup("...")
+```
+
+### `fox_cfb_event_recap(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_cfb_event_recap}
+
+Fox Sports cfb postgame top performers (one row per player).
+
+Wraps `cfb/event/{game_id}/recap`.
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.cfb import fox_cfb_event_recap
+df = fox_cfb_event_recap("...")
+```
+
+### `fox_cfb_event_standings(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_cfb_event_standings}
+
+Fox Sports cfb the two teams' standings context.
+
+Wraps `cfb/event/{game_id}/standings`.
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.cfb import fox_cfb_event_standings
+df = fox_cfb_event_standings("...")
+```
+
+### `fox_cfb_league_conferences(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_cfb_league_conferences}
+
+Fox Sports cfb conference / group directory.
+
+Wraps `cfb/league/conferences`.
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.cfb import fox_cfb_league_conferences
+df = fox_cfb_league_conferences()
+```
+
+### `fox_cfb_league_header(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_cfb_league_header}
+
+Fox Sports cfb league header (one row).
+
+Wraps `cfb/league/header`.
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.cfb import fox_cfb_league_header
+df = fox_cfb_league_header()
+```
+
 ### `fox_cfb_league_leaders(category: 'str' = 'passing', who: 'str' = 'player', page: 'int' = 0, group_id: 'Union[int, str]' = '2', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_cfb_league_leaders}
 
 Fox Sports CFB statistical leaders (one row per player/team).
@@ -2077,6 +2162,125 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 ```python
 from sportsdataverse.cfb import fox_cfb_league_leaders
 df = fox_cfb_league_leaders("passing")
+```
+
+### `fox_cfb_league_odds(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_cfb_league_odds}
+
+Fox Sports cfb league odds board (one row per team per game).
+
+Wraps `cfb/league/odds`.
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.cfb import fox_cfb_league_odds
+df = fox_cfb_league_odds()
+```
+
+### `fox_cfb_league_player_news(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_cfb_league_player_news}
+
+Fox Sports cfb league-wide player news feed.
+
+Wraps `cfb/league/playernews`.
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.cfb import fox_cfb_league_player_news
+df = fox_cfb_league_player_news()
+```
+
+### `fox_cfb_league_polls(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_cfb_league_polls}
+
+Fox Sports cfb rankings / polls rendered as standings tables.
+
+Wraps `cfb/league/polls`.
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.cfb import fox_cfb_league_polls
+df = fox_cfb_league_polls()
+```
+
+### `fox_cfb_league_schedule(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_cfb_league_schedule}
+
+Fox Sports cfb league schedule nav selections.
+
+Wraps `cfb/league/schedule`.
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.cfb import fox_cfb_league_schedule
+df = fox_cfb_league_schedule()
+```
+
+### `fox_cfb_league_scores(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_cfb_league_scores}
+
+Fox Sports cfb league scores nav selections.
+
+Wraps `cfb/league/scores`.
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.cfb import fox_cfb_league_scores
+df = fox_cfb_league_scores()
+```
+
+### `fox_cfb_league_standings(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_cfb_league_standings}
+
+Fox Sports cfb league-wide standings tables.
+
+Wraps `cfb/league/standings`.
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.cfb import fox_cfb_league_standings
+df = fox_cfb_league_standings()
+```
+
+### `fox_cfb_league_stat_leaders(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_cfb_league_stat_leaders}
+
+Fox Sports cfb league stats landing leaders.
+
+Wraps `cfb/league/stats`.
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.cfb import fox_cfb_league_stat_leaders
+df = fox_cfb_league_stat_leaders()
 ```
 
 ### `fox_cfb_odds(game_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_cfb_odds}
@@ -2208,6 +2412,57 @@ wk5 = fox_cfb_schedule(segment_id="2025-5-1")
 cfp = fox_cfb_schedule(segment_id="2025-cfp-2")
 ```
 
+### `fox_cfb_scoreboard(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_cfb_scoreboard}
+
+Fox Sports cfb scoreboard nav selections (weeks / dates / groups).
+
+Wraps `cfb/scoreboard/main`.
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.cfb import fox_cfb_scoreboard
+df = fox_cfb_scoreboard()
+```
+
+### `fox_cfb_scorechip(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_cfb_scorechip}
+
+Fox Sports cfb compact live score chip (raw dict -- live-only, uncaptured shape).
+
+Wraps `cfb/scorechip/{chip_id}`.
+
+**Returns**
+
+The raw JSON `dict`.
+
+**Example**
+
+```python
+from sportsdataverse.cfb import fox_cfb_scorechip
+df = fox_cfb_scorechip("nfl12345")
+```
+
+### `fox_cfb_scores_segment(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_cfb_scores_segment}
+
+Fox Sports cfb one row per game in a scoreboard segment.
+
+Wraps `cfb/league/scores-segment/{segment_id}`.
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.cfb import fox_cfb_scores_segment
+df = fox_cfb_scores_segment("...")
+```
+
 ### `fox_cfb_standings(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_cfb_standings}
 
 Fox Sports CFB conference standings for a team's conference.
@@ -2263,6 +2518,23 @@ from sportsdataverse.cfb import fox_cfb_team_gamelog
 df = fox_cfb_team_gamelog("11")
 ```
 
+### `fox_cfb_team_header(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_cfb_team_header}
+
+Fox Sports cfb team header (one row).
+
+Wraps `cfb/team/{team_id}/header`.
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.cfb import fox_cfb_team_header
+df = fox_cfb_team_header("...")
+```
+
 ### `fox_cfb_team_roster(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_cfb_team_roster}
 
 Fox Sports CFB team roster (one row per player).
@@ -2311,6 +2583,23 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 ```python
 from sportsdataverse.cfb import fox_cfb_team_stats
 df = fox_cfb_team_stats("11")
+```
+
+### `fox_cfb_teamnav(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_cfb_teamnav}
+
+Fox Sports cfb team directory (one row per team).
+
+Wraps `cfb/league/teamnav`.
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.cfb import fox_cfb_teamnav
+df = fox_cfb_teamnav()
 ```
 
 ### `fox_cfb_teams(*, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_cfb_teams}

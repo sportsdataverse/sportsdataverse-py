@@ -5235,6 +5235,91 @@ from sportsdataverse.mbb import fox_mbb_boxscore
 df = fox_mbb_boxscore("...")
 ```
 
+### `fox_mbb_event_matchup(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_mbb_event_matchup}
+
+Fox Sports cbk pregame team-stat comparison (one row per stat).
+
+Wraps `cbk/event/{game_id}/matchup`.
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.mbb import fox_mbb_event_matchup
+df = fox_mbb_event_matchup("...")
+```
+
+### `fox_mbb_event_recap(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_mbb_event_recap}
+
+Fox Sports cbk postgame top performers (one row per player).
+
+Wraps `cbk/event/{game_id}/recap`.
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.mbb import fox_mbb_event_recap
+df = fox_mbb_event_recap("...")
+```
+
+### `fox_mbb_event_standings(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_mbb_event_standings}
+
+Fox Sports cbk the two teams' standings context.
+
+Wraps `cbk/event/{game_id}/standings`.
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.mbb import fox_mbb_event_standings
+df = fox_mbb_event_standings("...")
+```
+
+### `fox_mbb_league_conferences(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_mbb_league_conferences}
+
+Fox Sports cbk conference / group directory.
+
+Wraps `cbk/league/conferences`.
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.mbb import fox_mbb_league_conferences
+df = fox_mbb_league_conferences()
+```
+
+### `fox_mbb_league_header(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_mbb_league_header}
+
+Fox Sports cbk league header (one row).
+
+Wraps `cbk/league/header`.
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.mbb import fox_mbb_league_header
+df = fox_mbb_league_header()
+```
+
 ### `fox_mbb_league_leaders(category: 'str' = 'scoring', who: 'str' = 'player', page: 'int' = 0, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_mbb_league_leaders}
 
 MBB statistical leaders (`stats-con`); who=player|team.
@@ -5258,6 +5343,125 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 ```python
 from sportsdataverse.mbb import fox_mbb_league_leaders
 df = fox_mbb_league_leaders("scoring")
+```
+
+### `fox_mbb_league_odds(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_mbb_league_odds}
+
+Fox Sports cbk league odds board (one row per team per game).
+
+Wraps `cbk/league/odds`.
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.mbb import fox_mbb_league_odds
+df = fox_mbb_league_odds()
+```
+
+### `fox_mbb_league_player_news(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_mbb_league_player_news}
+
+Fox Sports cbk league-wide player news feed.
+
+Wraps `cbk/league/playernews`.
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.mbb import fox_mbb_league_player_news
+df = fox_mbb_league_player_news()
+```
+
+### `fox_mbb_league_polls(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_mbb_league_polls}
+
+Fox Sports cbk rankings / polls rendered as standings tables.
+
+Wraps `cbk/league/polls`.
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.mbb import fox_mbb_league_polls
+df = fox_mbb_league_polls()
+```
+
+### `fox_mbb_league_schedule(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_mbb_league_schedule}
+
+Fox Sports cbk league schedule nav selections.
+
+Wraps `cbk/league/schedule`.
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.mbb import fox_mbb_league_schedule
+df = fox_mbb_league_schedule()
+```
+
+### `fox_mbb_league_scores(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_mbb_league_scores}
+
+Fox Sports cbk league scores nav selections.
+
+Wraps `cbk/league/scores`.
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.mbb import fox_mbb_league_scores
+df = fox_mbb_league_scores()
+```
+
+### `fox_mbb_league_standings(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_mbb_league_standings}
+
+Fox Sports cbk league-wide standings tables.
+
+Wraps `cbk/league/standings`.
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.mbb import fox_mbb_league_standings
+df = fox_mbb_league_standings()
+```
+
+### `fox_mbb_league_stat_leaders(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_mbb_league_stat_leaders}
+
+Fox Sports cbk league stats landing leaders.
+
+Wraps `cbk/league/stats`.
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.mbb import fox_mbb_league_stat_leaders
+df = fox_mbb_league_stat_leaders()
 ```
 
 ### `fox_mbb_odds(game_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_mbb_odds}
@@ -5306,6 +5510,57 @@ from sportsdataverse.mbb import fox_mbb_pbp
 df = fox_mbb_pbp("...")
 ```
 
+### `fox_mbb_scoreboard(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_mbb_scoreboard}
+
+Fox Sports cbk scoreboard nav selections (weeks / dates / groups).
+
+Wraps `cbk/scoreboard/main`.
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.mbb import fox_mbb_scoreboard
+df = fox_mbb_scoreboard()
+```
+
+### `fox_mbb_scorechip(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_mbb_scorechip}
+
+Fox Sports cbk compact live score chip (raw dict -- live-only, uncaptured shape).
+
+Wraps `cbk/scorechip/{chip_id}`.
+
+**Returns**
+
+The raw JSON `dict`.
+
+**Example**
+
+```python
+from sportsdataverse.mbb import fox_mbb_scorechip
+df = fox_mbb_scorechip("nfl12345")
+```
+
+### `fox_mbb_scores_segment(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_mbb_scores_segment}
+
+Fox Sports cbk one row per game in a scoreboard segment.
+
+Wraps `cbk/league/scores-segment/{segment_id}`.
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.mbb import fox_mbb_scores_segment
+df = fox_mbb_scores_segment("...")
+```
+
 ### `fox_mbb_standings(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_mbb_standings}
 
 MBB standings for a team's conference/division.
@@ -5352,6 +5607,23 @@ from sportsdataverse.mbb import fox_mbb_team_gamelog
 df = fox_mbb_team_gamelog("...")
 ```
 
+### `fox_mbb_team_header(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_mbb_team_header}
+
+Fox Sports cbk team header (one row).
+
+Wraps `cbk/team/{team_id}/header`.
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.mbb import fox_mbb_team_header
+df = fox_mbb_team_header("...")
+```
+
 ### `fox_mbb_team_roster(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_mbb_team_roster}
 
 MBB team roster (one row per player).
@@ -5396,6 +5668,23 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 ```python
 from sportsdataverse.mbb import fox_mbb_team_stats
 df = fox_mbb_team_stats("...")
+```
+
+### `fox_mbb_teamnav(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_mbb_teamnav}
+
+Fox Sports cbk team directory (one row per team).
+
+Wraps `cbk/league/teamnav`.
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.mbb import fox_mbb_teamnav
+df = fox_mbb_teamnav()
 ```
 
 ### `fox_mbb_teams(team_id: 'Union[int, str]' = '150', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_mbb_teams}

@@ -654,6 +654,91 @@ from sportsdataverse.mlb.mlb_umpire_zone import fit_zone_model
 model = fit_zone_model(pitches)
 ```
 
+### `fox_mlb_event_matchup(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_mlb_event_matchup}
+
+Fox Sports mlb pregame team-stat comparison (one row per stat).
+
+Wraps `mlb/event/{game_id}/matchup`.
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.mlb import fox_mlb_event_matchup
+df = fox_mlb_event_matchup("...")
+```
+
+### `fox_mlb_event_recap(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_mlb_event_recap}
+
+Fox Sports mlb postgame top performers (one row per player).
+
+Wraps `mlb/event/{game_id}/recap`.
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.mlb import fox_mlb_event_recap
+df = fox_mlb_event_recap("...")
+```
+
+### `fox_mlb_event_standings(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_mlb_event_standings}
+
+Fox Sports mlb the two teams' standings context.
+
+Wraps `mlb/event/{game_id}/standings`.
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.mlb import fox_mlb_event_standings
+df = fox_mlb_event_standings("...")
+```
+
+### `fox_mlb_league_conferences(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_mlb_league_conferences}
+
+Fox Sports mlb conference / group directory.
+
+Wraps `mlb/league/conferences`.
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.mlb import fox_mlb_league_conferences
+df = fox_mlb_league_conferences()
+```
+
+### `fox_mlb_league_header(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_mlb_league_header}
+
+Fox Sports mlb league header (one row).
+
+Wraps `mlb/league/header`.
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.mlb import fox_mlb_league_header
+df = fox_mlb_league_header()
+```
+
 ### `fox_mlb_league_leaders(category: 'str' = 'batting', who: 'str' = 'player', page: 'int' = 0, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_mlb_league_leaders}
 
 MLB statistical leaders (`stats-con`); who=player|team.
@@ -679,6 +764,125 @@ from sportsdataverse.mlb import fox_mlb_league_leaders
 df = fox_mlb_league_leaders("batting")
 ```
 
+### `fox_mlb_league_odds(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_mlb_league_odds}
+
+Fox Sports mlb league odds board (one row per team per game).
+
+Wraps `mlb/league/odds`.
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.mlb import fox_mlb_league_odds
+df = fox_mlb_league_odds()
+```
+
+### `fox_mlb_league_player_news(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_mlb_league_player_news}
+
+Fox Sports mlb league-wide player news feed.
+
+Wraps `mlb/league/playernews`.
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.mlb import fox_mlb_league_player_news
+df = fox_mlb_league_player_news()
+```
+
+### `fox_mlb_league_polls(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_mlb_league_polls}
+
+Fox Sports mlb rankings / polls rendered as standings tables.
+
+Wraps `mlb/league/polls`.
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.mlb import fox_mlb_league_polls
+df = fox_mlb_league_polls()
+```
+
+### `fox_mlb_league_schedule(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_mlb_league_schedule}
+
+Fox Sports mlb league schedule nav selections.
+
+Wraps `mlb/league/schedule`.
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.mlb import fox_mlb_league_schedule
+df = fox_mlb_league_schedule()
+```
+
+### `fox_mlb_league_scores(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_mlb_league_scores}
+
+Fox Sports mlb league scores nav selections.
+
+Wraps `mlb/league/scores`.
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.mlb import fox_mlb_league_scores
+df = fox_mlb_league_scores()
+```
+
+### `fox_mlb_league_standings(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_mlb_league_standings}
+
+Fox Sports mlb league-wide standings tables.
+
+Wraps `mlb/league/standings`.
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.mlb import fox_mlb_league_standings
+df = fox_mlb_league_standings()
+```
+
+### `fox_mlb_league_stat_leaders(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_mlb_league_stat_leaders}
+
+Fox Sports mlb league stats landing leaders.
+
+Wraps `mlb/league/stats`.
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.mlb import fox_mlb_league_stat_leaders
+df = fox_mlb_league_stat_leaders()
+```
+
 ### `fox_mlb_odds(game_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_mlb_odds}
 
 MLB game odds six-pack (run line / to-win / total per team).
@@ -700,6 +904,57 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 ```python
 from sportsdataverse.mlb import fox_mlb_odds
 df = fox_mlb_odds("...")
+```
+
+### `fox_mlb_scoreboard(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_mlb_scoreboard}
+
+Fox Sports mlb scoreboard nav selections (weeks / dates / groups).
+
+Wraps `mlb/scoreboard/main`.
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.mlb import fox_mlb_scoreboard
+df = fox_mlb_scoreboard()
+```
+
+### `fox_mlb_scorechip(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_mlb_scorechip}
+
+Fox Sports mlb compact live score chip (raw dict -- live-only, uncaptured shape).
+
+Wraps `mlb/scorechip/{chip_id}`.
+
+**Returns**
+
+The raw JSON `dict`.
+
+**Example**
+
+```python
+from sportsdataverse.mlb import fox_mlb_scorechip
+df = fox_mlb_scorechip("nfl12345")
+```
+
+### `fox_mlb_scores_segment(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_mlb_scores_segment}
+
+Fox Sports mlb one row per game in a scoreboard segment.
+
+Wraps `mlb/league/scores-segment/{segment_id}`.
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.mlb import fox_mlb_scores_segment
+df = fox_mlb_scores_segment("...")
 ```
 
 ### `fox_mlb_standings(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_mlb_standings}
@@ -748,6 +1003,23 @@ from sportsdataverse.mlb import fox_mlb_team_gamelog
 df = fox_mlb_team_gamelog("...")
 ```
 
+### `fox_mlb_team_header(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_mlb_team_header}
+
+Fox Sports mlb team header (one row).
+
+Wraps `mlb/team/{team_id}/header`.
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.mlb import fox_mlb_team_header
+df = fox_mlb_team_header("...")
+```
+
 ### `fox_mlb_team_roster(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_mlb_team_roster}
 
 MLB team roster (one row per player).
@@ -792,6 +1064,23 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 ```python
 from sportsdataverse.mlb import fox_mlb_team_stats
 df = fox_mlb_team_stats("...")
+```
+
+### `fox_mlb_teamnav(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_mlb_teamnav}
+
+Fox Sports mlb team directory (one row per team).
+
+Wraps `mlb/league/teamnav`.
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.mlb import fox_mlb_teamnav
+df = fox_mlb_teamnav()
 ```
 
 ### `mae(a: 'np.ndarray', b: 'np.ndarray') -> 'float'` {#mae}

@@ -136,6 +136,14 @@ from sportsdataverse.nfl import espn_nfl_tournaments as _raw_espn_nfl_tournament
 from sportsdataverse.nfl import espn_nfl_transactions as _raw_espn_nfl_transactions
 from sportsdataverse.nfl import espn_nfl_venue as _raw_espn_nfl_venue
 from sportsdataverse.nfl import espn_nfl_venues as _raw_espn_nfl_venues
+from sportsdataverse.nfl import fox_nfl_boxscore as _raw_fox_nfl_boxscore
+from sportsdataverse.nfl import fox_nfl_league_leaders as _raw_fox_nfl_league_leaders
+from sportsdataverse.nfl import fox_nfl_odds as _raw_fox_nfl_odds
+from sportsdataverse.nfl import fox_nfl_pbp as _raw_fox_nfl_pbp
+from sportsdataverse.nfl import fox_nfl_standings as _raw_fox_nfl_standings
+from sportsdataverse.nfl import fox_nfl_team_gamelog as _raw_fox_nfl_team_gamelog
+from sportsdataverse.nfl import fox_nfl_team_roster as _raw_fox_nfl_team_roster
+from sportsdataverse.nfl import fox_nfl_team_stats as _raw_fox_nfl_team_stats
 from sportsdataverse.nfl import nfl_combine_profiles as _raw_nfl_combine_profiles
 from sportsdataverse.nfl import nfl_draft_picks as _raw_nfl_draft_picks
 from sportsdataverse.nfl import nfl_game_summaries as _raw_nfl_game_summaries
@@ -179,6 +187,23 @@ from sportsdataverse.nfl import espn_nfl_player_stats as espn_nfl_player_stats  
 from sportsdataverse.nfl import espn_nfl_schedule as espn_nfl_schedule  # noqa: F401
 from sportsdataverse.nfl import espn_nfl_teams as espn_nfl_teams  # noqa: F401
 from sportsdataverse.nfl import fg_make_probability as fg_make_probability  # noqa: F401
+from sportsdataverse.nfl import fox_nfl_event_matchup as fox_nfl_event_matchup  # noqa: F401
+from sportsdataverse.nfl import fox_nfl_event_recap as fox_nfl_event_recap  # noqa: F401
+from sportsdataverse.nfl import fox_nfl_event_standings as fox_nfl_event_standings  # noqa: F401
+from sportsdataverse.nfl import fox_nfl_league_conferences as fox_nfl_league_conferences  # noqa: F401
+from sportsdataverse.nfl import fox_nfl_league_header as fox_nfl_league_header  # noqa: F401
+from sportsdataverse.nfl import fox_nfl_league_odds as fox_nfl_league_odds  # noqa: F401
+from sportsdataverse.nfl import fox_nfl_league_player_news as fox_nfl_league_player_news  # noqa: F401
+from sportsdataverse.nfl import fox_nfl_league_polls as fox_nfl_league_polls  # noqa: F401
+from sportsdataverse.nfl import fox_nfl_league_schedule as fox_nfl_league_schedule  # noqa: F401
+from sportsdataverse.nfl import fox_nfl_league_scores as fox_nfl_league_scores  # noqa: F401
+from sportsdataverse.nfl import fox_nfl_league_standings as fox_nfl_league_standings  # noqa: F401
+from sportsdataverse.nfl import fox_nfl_league_stat_leaders as fox_nfl_league_stat_leaders  # noqa: F401
+from sportsdataverse.nfl import fox_nfl_scoreboard as fox_nfl_scoreboard  # noqa: F401
+from sportsdataverse.nfl import fox_nfl_scorechip as fox_nfl_scorechip  # noqa: F401
+from sportsdataverse.nfl import fox_nfl_scores_segment as fox_nfl_scores_segment  # noqa: F401
+from sportsdataverse.nfl import fox_nfl_team_header as fox_nfl_team_header  # noqa: F401
+from sportsdataverse.nfl import fox_nfl_teamnav as fox_nfl_teamnav  # noqa: F401
 from sportsdataverse.nfl import get_2pt_wp as get_2pt_wp  # noqa: F401
 from sportsdataverse.nfl import get_4th_down_probs as get_4th_down_probs  # noqa: F401
 from sportsdataverse.nfl import get_config as get_config  # noqa: F401
@@ -461,6 +486,31 @@ __all__ = [
     "espn_nfl_venue",
     "espn_nfl_venues",
     "fg_make_probability",
+    "fox_nfl_boxscore",
+    "fox_nfl_event_matchup",
+    "fox_nfl_event_recap",
+    "fox_nfl_event_standings",
+    "fox_nfl_league_conferences",
+    "fox_nfl_league_header",
+    "fox_nfl_league_leaders",
+    "fox_nfl_league_odds",
+    "fox_nfl_league_player_news",
+    "fox_nfl_league_polls",
+    "fox_nfl_league_schedule",
+    "fox_nfl_league_scores",
+    "fox_nfl_league_standings",
+    "fox_nfl_league_stat_leaders",
+    "fox_nfl_odds",
+    "fox_nfl_pbp",
+    "fox_nfl_scoreboard",
+    "fox_nfl_scorechip",
+    "fox_nfl_scores_segment",
+    "fox_nfl_standings",
+    "fox_nfl_team_gamelog",
+    "fox_nfl_team_header",
+    "fox_nfl_team_roster",
+    "fox_nfl_team_stats",
+    "fox_nfl_teamnav",
     "get_2pt_wp",
     "get_4th_down_probs",
     "get_config",
@@ -2190,6 +2240,118 @@ def espn_nfl_venues(*args, **kwargs):
     """
     kwargs.setdefault("return_parsed", True)
     return _raw_espn_nfl_venues(*args, **kwargs)
+
+
+def fox_nfl_boxscore(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nfl.fox_nfl_boxscore``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.nfl.fox_nfl_boxscore` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nfl.fox_nfl_boxscore` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_fox_nfl_boxscore(*args, **kwargs)
+
+
+def fox_nfl_league_leaders(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nfl.fox_nfl_league_leaders``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.nfl.fox_nfl_league_leaders` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nfl.fox_nfl_league_leaders` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_fox_nfl_league_leaders(*args, **kwargs)
+
+
+def fox_nfl_odds(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nfl.fox_nfl_odds``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.nfl.fox_nfl_odds` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nfl.fox_nfl_odds` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_fox_nfl_odds(*args, **kwargs)
+
+
+def fox_nfl_pbp(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nfl.fox_nfl_pbp``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.nfl.fox_nfl_pbp` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nfl.fox_nfl_pbp` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_fox_nfl_pbp(*args, **kwargs)
+
+
+def fox_nfl_standings(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nfl.fox_nfl_standings``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.nfl.fox_nfl_standings` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nfl.fox_nfl_standings` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_fox_nfl_standings(*args, **kwargs)
+
+
+def fox_nfl_team_gamelog(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nfl.fox_nfl_team_gamelog``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.nfl.fox_nfl_team_gamelog` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nfl.fox_nfl_team_gamelog` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_fox_nfl_team_gamelog(*args, **kwargs)
+
+
+def fox_nfl_team_roster(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nfl.fox_nfl_team_roster``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.nfl.fox_nfl_team_roster` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nfl.fox_nfl_team_roster` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_fox_nfl_team_roster(*args, **kwargs)
+
+
+def fox_nfl_team_stats(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nfl.fox_nfl_team_stats``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.nfl.fox_nfl_team_stats` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nfl.fox_nfl_team_stats` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_fox_nfl_team_stats(*args, **kwargs)
 
 
 def nfl_combine_profiles(*args, **kwargs):

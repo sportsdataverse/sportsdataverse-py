@@ -371,7 +371,24 @@ from sportsdataverse.cfb import espn_cfb_schedule as espn_cfb_schedule  # noqa: 
 from sportsdataverse.cfb import espn_cfb_teams as espn_cfb_teams  # noqa: F401
 from sportsdataverse.cfb import fei_ratings as fei_ratings  # noqa: F401
 from sportsdataverse.cfb import fit_field_position_ep as fit_field_position_ep  # noqa: F401
+from sportsdataverse.cfb import fox_cfb_event_matchup as fox_cfb_event_matchup  # noqa: F401
+from sportsdataverse.cfb import fox_cfb_event_recap as fox_cfb_event_recap  # noqa: F401
+from sportsdataverse.cfb import fox_cfb_event_standings as fox_cfb_event_standings  # noqa: F401
+from sportsdataverse.cfb import fox_cfb_league_conferences as fox_cfb_league_conferences  # noqa: F401
+from sportsdataverse.cfb import fox_cfb_league_header as fox_cfb_league_header  # noqa: F401
+from sportsdataverse.cfb import fox_cfb_league_odds as fox_cfb_league_odds  # noqa: F401
+from sportsdataverse.cfb import fox_cfb_league_player_news as fox_cfb_league_player_news  # noqa: F401
+from sportsdataverse.cfb import fox_cfb_league_polls as fox_cfb_league_polls  # noqa: F401
+from sportsdataverse.cfb import fox_cfb_league_schedule as fox_cfb_league_schedule  # noqa: F401
+from sportsdataverse.cfb import fox_cfb_league_scores as fox_cfb_league_scores  # noqa: F401
+from sportsdataverse.cfb import fox_cfb_league_standings as fox_cfb_league_standings  # noqa: F401
+from sportsdataverse.cfb import fox_cfb_league_stat_leaders as fox_cfb_league_stat_leaders  # noqa: F401
 from sportsdataverse.cfb import fox_cfb_play_process as fox_cfb_play_process  # noqa: F401
+from sportsdataverse.cfb import fox_cfb_scoreboard as fox_cfb_scoreboard  # noqa: F401
+from sportsdataverse.cfb import fox_cfb_scorechip as fox_cfb_scorechip  # noqa: F401
+from sportsdataverse.cfb import fox_cfb_scores_segment as fox_cfb_scores_segment  # noqa: F401
+from sportsdataverse.cfb import fox_cfb_team_header as fox_cfb_team_header  # noqa: F401
+from sportsdataverse.cfb import fox_cfb_teamnav as fox_cfb_teamnav  # noqa: F401
 from sportsdataverse.cfb import fox_to_espn_summary as fox_to_espn_summary  # noqa: F401
 from sportsdataverse.cfb import get_2pt_probs as get_2pt_probs  # noqa: F401
 from sportsdataverse.cfb import get_4th_down_probs as get_4th_down_probs  # noqa: F401
@@ -618,15 +635,32 @@ __all__ = [
     "fei_ratings",
     "fit_field_position_ep",
     "fox_cfb_boxscore",
+    "fox_cfb_event_matchup",
+    "fox_cfb_event_recap",
+    "fox_cfb_event_standings",
+    "fox_cfb_league_conferences",
+    "fox_cfb_league_header",
     "fox_cfb_league_leaders",
+    "fox_cfb_league_odds",
+    "fox_cfb_league_player_news",
+    "fox_cfb_league_polls",
+    "fox_cfb_league_schedule",
+    "fox_cfb_league_scores",
+    "fox_cfb_league_standings",
+    "fox_cfb_league_stat_leaders",
     "fox_cfb_odds",
     "fox_cfb_pbp",
     "fox_cfb_play_process",
     "fox_cfb_schedule",
+    "fox_cfb_scoreboard",
+    "fox_cfb_scorechip",
+    "fox_cfb_scores_segment",
     "fox_cfb_standings",
     "fox_cfb_team_gamelog",
+    "fox_cfb_team_header",
     "fox_cfb_team_roster",
     "fox_cfb_team_stats",
+    "fox_cfb_teamnav",
     "fox_cfb_teams",
     "fox_to_espn_summary",
     "get_2pt_probs",

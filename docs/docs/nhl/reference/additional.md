@@ -1790,6 +1790,91 @@ from sportsdataverse.nhl import fox_nhl_boxscore
 df = fox_nhl_boxscore("...")
 ```
 
+### `fox_nhl_event_matchup(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_nhl_event_matchup}
+
+Fox Sports nhl pregame team-stat comparison (one row per stat).
+
+Wraps `nhl/event/{game_id}/matchup`.
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.nhl import fox_nhl_event_matchup
+df = fox_nhl_event_matchup("...")
+```
+
+### `fox_nhl_event_recap(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_nhl_event_recap}
+
+Fox Sports nhl postgame top performers (one row per player).
+
+Wraps `nhl/event/{game_id}/recap`.
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.nhl import fox_nhl_event_recap
+df = fox_nhl_event_recap("...")
+```
+
+### `fox_nhl_event_standings(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_nhl_event_standings}
+
+Fox Sports nhl the two teams' standings context.
+
+Wraps `nhl/event/{game_id}/standings`.
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.nhl import fox_nhl_event_standings
+df = fox_nhl_event_standings("...")
+```
+
+### `fox_nhl_league_conferences(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_nhl_league_conferences}
+
+Fox Sports nhl conference / group directory.
+
+Wraps `nhl/league/conferences`.
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.nhl import fox_nhl_league_conferences
+df = fox_nhl_league_conferences()
+```
+
+### `fox_nhl_league_header(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_nhl_league_header}
+
+Fox Sports nhl league header (one row).
+
+Wraps `nhl/league/header`.
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.nhl import fox_nhl_league_header
+df = fox_nhl_league_header()
+```
+
 ### `fox_nhl_league_leaders(category: 'str' = 'scoring', who: 'str' = 'player', page: 'int' = 0, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_nhl_league_leaders}
 
 NHL statistical leaders (`stats-con`); who=player|team.
@@ -1813,6 +1898,125 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 ```python
 from sportsdataverse.nhl import fox_nhl_league_leaders
 df = fox_nhl_league_leaders("scoring")
+```
+
+### `fox_nhl_league_odds(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_nhl_league_odds}
+
+Fox Sports nhl league odds board (one row per team per game).
+
+Wraps `nhl/league/odds`.
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.nhl import fox_nhl_league_odds
+df = fox_nhl_league_odds()
+```
+
+### `fox_nhl_league_player_news(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_nhl_league_player_news}
+
+Fox Sports nhl league-wide player news feed.
+
+Wraps `nhl/league/playernews`.
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.nhl import fox_nhl_league_player_news
+df = fox_nhl_league_player_news()
+```
+
+### `fox_nhl_league_polls(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_nhl_league_polls}
+
+Fox Sports nhl rankings / polls rendered as standings tables.
+
+Wraps `nhl/league/polls`.
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.nhl import fox_nhl_league_polls
+df = fox_nhl_league_polls()
+```
+
+### `fox_nhl_league_schedule(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_nhl_league_schedule}
+
+Fox Sports nhl league schedule nav selections.
+
+Wraps `nhl/league/schedule`.
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.nhl import fox_nhl_league_schedule
+df = fox_nhl_league_schedule()
+```
+
+### `fox_nhl_league_scores(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_nhl_league_scores}
+
+Fox Sports nhl league scores nav selections.
+
+Wraps `nhl/league/scores`.
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.nhl import fox_nhl_league_scores
+df = fox_nhl_league_scores()
+```
+
+### `fox_nhl_league_standings(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_nhl_league_standings}
+
+Fox Sports nhl league-wide standings tables.
+
+Wraps `nhl/league/standings`.
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.nhl import fox_nhl_league_standings
+df = fox_nhl_league_standings()
+```
+
+### `fox_nhl_league_stat_leaders(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_nhl_league_stat_leaders}
+
+Fox Sports nhl league stats landing leaders.
+
+Wraps `nhl/league/stats`.
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.nhl import fox_nhl_league_stat_leaders
+df = fox_nhl_league_stat_leaders()
 ```
 
 ### `fox_nhl_odds(game_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_nhl_odds}
@@ -1861,6 +2065,57 @@ from sportsdataverse.nhl import fox_nhl_pbp
 df = fox_nhl_pbp("...")
 ```
 
+### `fox_nhl_scoreboard(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_nhl_scoreboard}
+
+Fox Sports nhl scoreboard nav selections (weeks / dates / groups).
+
+Wraps `nhl/scoreboard/main`.
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.nhl import fox_nhl_scoreboard
+df = fox_nhl_scoreboard()
+```
+
+### `fox_nhl_scorechip(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_nhl_scorechip}
+
+Fox Sports nhl compact live score chip (raw dict -- live-only, uncaptured shape).
+
+Wraps `nhl/scorechip/{chip_id}`.
+
+**Returns**
+
+The raw JSON `dict`.
+
+**Example**
+
+```python
+from sportsdataverse.nhl import fox_nhl_scorechip
+df = fox_nhl_scorechip("nfl12345")
+```
+
+### `fox_nhl_scores_segment(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_nhl_scores_segment}
+
+Fox Sports nhl one row per game in a scoreboard segment.
+
+Wraps `nhl/league/scores-segment/{segment_id}`.
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.nhl import fox_nhl_scores_segment
+df = fox_nhl_scores_segment("...")
+```
+
 ### `fox_nhl_standings(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_nhl_standings}
 
 NHL standings for a team's conference/division.
@@ -1907,6 +2162,23 @@ from sportsdataverse.nhl import fox_nhl_team_gamelog
 df = fox_nhl_team_gamelog("...")
 ```
 
+### `fox_nhl_team_header(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_nhl_team_header}
+
+Fox Sports nhl team header (one row).
+
+Wraps `nhl/team/{team_id}/header`.
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.nhl import fox_nhl_team_header
+df = fox_nhl_team_header("...")
+```
+
 ### `fox_nhl_team_roster(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_nhl_team_roster}
 
 NHL team roster (one row per player).
@@ -1951,6 +2223,23 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 ```python
 from sportsdataverse.nhl import fox_nhl_team_stats
 df = fox_nhl_team_stats("...")
+```
+
+### `fox_nhl_teamnav(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_nhl_teamnav}
+
+Fox Sports nhl team directory (one row per team).
+
+Wraps `nhl/league/teamnav`.
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.nhl import fox_nhl_teamnav
+df = fox_nhl_teamnav()
 ```
 
 ### `get_constants(league: 'str') -> 'LeagueConstants'` {#get_constants}

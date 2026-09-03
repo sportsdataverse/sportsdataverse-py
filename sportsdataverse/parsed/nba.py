@@ -196,6 +196,23 @@ from sportsdataverse.nba import fit_aging_curve as fit_aging_curve  # noqa: F401
 from sportsdataverse.nba import flag_garbage_time as flag_garbage_time  # noqa: F401
 from sportsdataverse.nba import flag_heave_possessions as flag_heave_possessions  # noqa: F401
 from sportsdataverse.nba import flatten_json_iterative as flatten_json_iterative  # noqa: F401
+from sportsdataverse.nba import fox_nba_event_matchup as fox_nba_event_matchup  # noqa: F401
+from sportsdataverse.nba import fox_nba_event_recap as fox_nba_event_recap  # noqa: F401
+from sportsdataverse.nba import fox_nba_event_standings as fox_nba_event_standings  # noqa: F401
+from sportsdataverse.nba import fox_nba_league_conferences as fox_nba_league_conferences  # noqa: F401
+from sportsdataverse.nba import fox_nba_league_header as fox_nba_league_header  # noqa: F401
+from sportsdataverse.nba import fox_nba_league_odds as fox_nba_league_odds  # noqa: F401
+from sportsdataverse.nba import fox_nba_league_player_news as fox_nba_league_player_news  # noqa: F401
+from sportsdataverse.nba import fox_nba_league_polls as fox_nba_league_polls  # noqa: F401
+from sportsdataverse.nba import fox_nba_league_schedule as fox_nba_league_schedule  # noqa: F401
+from sportsdataverse.nba import fox_nba_league_scores as fox_nba_league_scores  # noqa: F401
+from sportsdataverse.nba import fox_nba_league_standings as fox_nba_league_standings  # noqa: F401
+from sportsdataverse.nba import fox_nba_league_stat_leaders as fox_nba_league_stat_leaders  # noqa: F401
+from sportsdataverse.nba import fox_nba_scoreboard as fox_nba_scoreboard  # noqa: F401
+from sportsdataverse.nba import fox_nba_scorechip as fox_nba_scorechip  # noqa: F401
+from sportsdataverse.nba import fox_nba_scores_segment as fox_nba_scores_segment  # noqa: F401
+from sportsdataverse.nba import fox_nba_team_header as fox_nba_team_header  # noqa: F401
+from sportsdataverse.nba import fox_nba_teamnav as fox_nba_teamnav  # noqa: F401
 from sportsdataverse.nba import get_constants as get_constants  # noqa: F401
 from sportsdataverse.nba import get_shrinkage_k as get_shrinkage_k  # noqa: F401
 from sportsdataverse.nba import helper_nba_athlete_items as helper_nba_athlete_items  # noqa: F401
@@ -529,13 +546,30 @@ __all__ = [
     "flag_heave_possessions",
     "flatten_json_iterative",
     "fox_nba_boxscore",
+    "fox_nba_event_matchup",
+    "fox_nba_event_recap",
+    "fox_nba_event_standings",
+    "fox_nba_league_conferences",
+    "fox_nba_league_header",
     "fox_nba_league_leaders",
+    "fox_nba_league_odds",
+    "fox_nba_league_player_news",
+    "fox_nba_league_polls",
+    "fox_nba_league_schedule",
+    "fox_nba_league_scores",
+    "fox_nba_league_standings",
+    "fox_nba_league_stat_leaders",
     "fox_nba_odds",
     "fox_nba_pbp",
+    "fox_nba_scoreboard",
+    "fox_nba_scorechip",
+    "fox_nba_scores_segment",
     "fox_nba_standings",
     "fox_nba_team_gamelog",
+    "fox_nba_team_header",
     "fox_nba_team_roster",
     "fox_nba_team_stats",
+    "fox_nba_teamnav",
     "fox_nba_teams",
     "get_constants",
     "get_shrinkage_k",
