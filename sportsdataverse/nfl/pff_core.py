@@ -82,12 +82,12 @@ def pff_facet_run_defense_summary(
     Example URL: https://premium.pff.com/api/v1/facet/defense/run
 
     Args:
-        league: league query parameter.
-        season: season query parameter.
-        week: week query parameter.
-        franchise_id: franchiseId query parameter.
-        game_id: gameId query parameter.
-        division: division query parameter.
+        league: League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules.
+        season: Season (starting year).
+        week: Week or week-group key (e.g. 'REG', a week number, or a range).
+        franchise_id: PFF franchise (team) id; filters a report 'By Team'.
+        game_id: PFF game id; filters a report 'By Game'.
+        division: Division filter (NCAA).
         headers: optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted.
         return_parsed: parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -140,12 +140,12 @@ def pff_facet_field_goal_summary(
     Example URL: https://premium.pff.com/api/v1/facet/field_goal/summary
 
     Args:
-        league: league query parameter.
-        season: season query parameter.
-        week: week query parameter.
-        franchise_id: franchiseId query parameter.
-        game_id: gameId query parameter.
-        division: division query parameter.
+        league: League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules.
+        season: Season (starting year).
+        week: Week or week-group key (e.g. 'REG', a week number, or a range).
+        franchise_id: PFF franchise (team) id; filters a report 'By Team'.
+        game_id: PFF game id; filters a report 'By Game'.
+        division: Division filter (NCAA).
         headers: optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted.
         return_parsed: parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -198,12 +198,12 @@ def pff_facet_coverage_summary(
     Example URL: https://premium.pff.com/api/v1/facet/defense/coverage
 
     Args:
-        league: league query parameter.
-        season: season query parameter.
-        week: week query parameter.
-        franchise_id: franchiseId query parameter.
-        game_id: gameId query parameter.
-        division: division query parameter.
+        league: League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules.
+        season: Season (starting year).
+        week: Week or week-group key (e.g. 'REG', a week number, or a range).
+        franchise_id: PFF franchise (team) id; filters a report 'By Team'.
+        game_id: PFF game id; filters a report 'By Game'.
+        division: Division filter (NCAA).
         headers: optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted.
         return_parsed: parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -256,12 +256,12 @@ def pff_facet_kicking_summary(
     Example URL: https://premium.pff.com/api/v1/facet/kickoff/summary
 
     Args:
-        league: league query parameter.
-        season: season query parameter.
-        week: week query parameter.
-        franchise_id: franchiseId query parameter.
-        game_id: gameId query parameter.
-        division: division query parameter.
+        league: League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules.
+        season: Season (starting year).
+        week: Week or week-group key (e.g. 'REG', a week number, or a range).
+        franchise_id: PFF franchise (team) id; filters a report 'By Team'.
+        game_id: PFF game id; filters a report 'By Game'.
+        division: Division filter (NCAA).
         headers: optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted.
         return_parsed: parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -314,12 +314,12 @@ def pff_facet_blocking_summary(
     Example URL: https://premium.pff.com/api/v1/facet/offense/blocking
 
     Args:
-        league: league query parameter.
-        season: season query parameter.
-        week: week query parameter.
-        franchise_id: franchiseId query parameter.
-        game_id: gameId query parameter.
-        division: division query parameter.
+        league: League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules.
+        season: Season (starting year).
+        week: Week or week-group key (e.g. 'REG', a week number, or a range).
+        franchise_id: PFF franchise (team) id; filters a report 'By Team'.
+        game_id: PFF game id; filters a report 'By Game'.
+        division: Division filter (NCAA).
         headers: optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted.
         return_parsed: parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -372,12 +372,12 @@ def pff_facet_defense_summary(
     Example URL: https://premium.pff.com/api/v1/facet/defense/summary
 
     Args:
-        league: league query parameter.
-        season: season query parameter.
-        week: week query parameter.
-        franchise_id: franchiseId query parameter.
-        game_id: gameId query parameter.
-        division: division query parameter.
+        league: League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules.
+        season: Season (starting year).
+        week: Week or week-group key (e.g. 'REG', a week number, or a range).
+        franchise_id: PFF franchise (team) id; filters a report 'By Team'.
+        game_id: PFF game id; filters a report 'By Game'.
+        division: Division filter (NCAA).
         headers: optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted.
         return_parsed: parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -430,12 +430,12 @@ def pff_facet_offense_summary(
     Example URL: https://premium.pff.com/api/v1/facet/offense/summary
 
     Args:
-        league: league query parameter.
-        season: season query parameter.
-        week: week query parameter.
-        franchise_id: franchiseId query parameter.
-        game_id: gameId query parameter.
-        division: division query parameter.
+        league: League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules.
+        season: Season (starting year).
+        week: Week or week-group key (e.g. 'REG', a week number, or a range).
+        franchise_id: PFF franchise (team) id; filters a report 'By Team'.
+        game_id: PFF game id; filters a report 'By Game'.
+        division: Division filter (NCAA).
         headers: optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted.
         return_parsed: parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -488,12 +488,12 @@ def pff_facet_passing_allowed_pressure(
     Example URL: https://premium.pff.com/api/v1/facet/passing/allowed_pressure
 
     Args:
-        league: league query parameter.
-        season: season query parameter.
-        week: week query parameter.
-        franchise_id: franchiseId query parameter.
-        game_id: gameId query parameter.
-        division: division query parameter.
+        league: League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules.
+        season: Season (starting year).
+        week: Week or week-group key (e.g. 'REG', a week number, or a range).
+        franchise_id: PFF franchise (team) id; filters a report 'By Team'.
+        game_id: PFF game id; filters a report 'By Game'.
+        division: Division filter (NCAA).
         headers: optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted.
         return_parsed: parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -546,12 +546,12 @@ def pff_facet_pass_rush_summary(
     Example URL: https://premium.pff.com/api/v1/facet/defense/pass_rush
 
     Args:
-        league: league query parameter.
-        season: season query parameter.
-        week: week query parameter.
-        franchise_id: franchiseId query parameter.
-        game_id: gameId query parameter.
-        division: division query parameter.
+        league: League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules.
+        season: Season (starting year).
+        week: Week or week-group key (e.g. 'REG', a week number, or a range).
+        franchise_id: PFF franchise (team) id; filters a report 'By Team'.
+        game_id: PFF game id; filters a report 'By Game'.
+        division: Division filter (NCAA).
         headers: optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted.
         return_parsed: parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -604,12 +604,12 @@ def pff_facet_passing_concept(
     Example URL: https://premium.pff.com/api/v1/facet/passing/concept
 
     Args:
-        league: league query parameter.
-        season: season query parameter.
-        week: week query parameter.
-        franchise_id: franchiseId query parameter.
-        game_id: gameId query parameter.
-        division: division query parameter.
+        league: League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules.
+        season: Season (starting year).
+        week: Week or week-group key (e.g. 'REG', a week number, or a range).
+        franchise_id: PFF franchise (team) id; filters a report 'By Team'.
+        game_id: PFF game id; filters a report 'By Game'.
+        division: Division filter (NCAA).
         headers: optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted.
         return_parsed: parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -662,12 +662,12 @@ def pff_facet_coverage_scheme(
     Example URL: https://premium.pff.com/api/v1/facet/defense/coverage_scheme
 
     Args:
-        league: league query parameter.
-        season: season query parameter.
-        week: week query parameter.
-        franchise_id: franchiseId query parameter.
-        game_id: gameId query parameter.
-        division: division query parameter.
+        league: League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules.
+        season: Season (starting year).
+        week: Week or week-group key (e.g. 'REG', a week number, or a range).
+        franchise_id: PFF franchise (team) id; filters a report 'By Team'.
+        game_id: PFF game id; filters a report 'By Game'.
+        division: Division filter (NCAA).
         headers: optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted.
         return_parsed: parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -720,12 +720,12 @@ def pff_facet_passing_detail_stats(
     Example URL: https://premium.pff.com/api/v1/facet/passing/detail
 
     Args:
-        league: league query parameter.
-        season: season query parameter.
-        week: week query parameter.
-        franchise_id: franchiseId query parameter.
-        game_id: gameId query parameter.
-        division: division query parameter.
+        league: League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules.
+        season: Season (starting year).
+        week: Week or week-group key (e.g. 'REG', a week number, or a range).
+        franchise_id: PFF franchise (team) id; filters a report 'By Team'.
+        game_id: PFF game id; filters a report 'By Game'.
+        division: Division filter (NCAA).
         headers: optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted.
         return_parsed: parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -778,12 +778,12 @@ def pff_facet_run_blocking(
     Example URL: https://premium.pff.com/api/v1/facet/offense/run_blocking
 
     Args:
-        league: league query parameter.
-        season: season query parameter.
-        week: week query parameter.
-        franchise_id: franchiseId query parameter.
-        game_id: gameId query parameter.
-        division: division query parameter.
+        league: League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules.
+        season: Season (starting year).
+        week: Week or week-group key (e.g. 'REG', a week number, or a range).
+        franchise_id: PFF franchise (team) id; filters a report 'By Team'.
+        game_id: PFF game id; filters a report 'By Game'.
+        division: Division filter (NCAA).
         headers: optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted.
         return_parsed: parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -836,12 +836,12 @@ def pff_facet_pass_blocking(
     Example URL: https://premium.pff.com/api/v1/facet/offense/pass_blocking
 
     Args:
-        league: league query parameter.
-        season: season query parameter.
-        week: week query parameter.
-        franchise_id: franchiseId query parameter.
-        game_id: gameId query parameter.
-        division: division query parameter.
+        league: League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules.
+        season: Season (starting year).
+        week: Week or week-group key (e.g. 'REG', a week number, or a range).
+        franchise_id: PFF franchise (team) id; filters a report 'By Team'.
+        game_id: PFF game id; filters a report 'By Game'.
+        division: Division filter (NCAA).
         headers: optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted.
         return_parsed: parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -894,12 +894,12 @@ def pff_facet_passing_summary(
     Example URL: https://premium.pff.com/api/v1/facet/passing/summary
 
     Args:
-        league: league query parameter.
-        season: season query parameter.
-        week: week query parameter.
-        franchise_id: franchiseId query parameter.
-        game_id: gameId query parameter.
-        division: division query parameter.
+        league: League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules.
+        season: Season (starting year).
+        week: Week or week-group key (e.g. 'REG', a week number, or a range).
+        franchise_id: PFF franchise (team) id; filters a report 'By Team'.
+        game_id: PFF game id; filters a report 'By Game'.
+        division: Division filter (NCAA).
         headers: optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted.
         return_parsed: parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -952,12 +952,12 @@ def pff_facet_punting_summary(
     Example URL: https://premium.pff.com/api/v1/facet/punting/summary
 
     Args:
-        league: league query parameter.
-        season: season query parameter.
-        week: week query parameter.
-        franchise_id: franchiseId query parameter.
-        game_id: gameId query parameter.
-        division: division query parameter.
+        league: League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules.
+        season: Season (starting year).
+        week: Week or week-group key (e.g. 'REG', a week number, or a range).
+        franchise_id: PFF franchise (team) id; filters a report 'By Team'.
+        game_id: PFF game id; filters a report 'By Game'.
+        division: Division filter (NCAA).
         headers: optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted.
         return_parsed: parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -1010,12 +1010,12 @@ def pff_facet_passing_depth(
     Example URL: https://premium.pff.com/api/v1/facet/passing/depth
 
     Args:
-        league: league query parameter.
-        season: season query parameter.
-        week: week query parameter.
-        franchise_id: franchiseId query parameter.
-        game_id: gameId query parameter.
-        division: division query parameter.
+        league: League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules.
+        season: Season (starting year).
+        week: Week or week-group key (e.g. 'REG', a week number, or a range).
+        franchise_id: PFF franchise (team) id; filters a report 'By Team'.
+        game_id: PFF game id; filters a report 'By Game'.
+        division: Division filter (NCAA).
         headers: optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted.
         return_parsed: parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -1068,12 +1068,12 @@ def pff_facet_passing_pressure(
     Example URL: https://premium.pff.com/api/v1/facet/passing/pressure
 
     Args:
-        league: league query parameter.
-        season: season query parameter.
-        week: week query parameter.
-        franchise_id: franchiseId query parameter.
-        game_id: gameId query parameter.
-        division: division query parameter.
+        league: League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules.
+        season: Season (starting year).
+        week: Week or week-group key (e.g. 'REG', a week number, or a range).
+        franchise_id: PFF franchise (team) id; filters a report 'By Team'.
+        game_id: PFF game id; filters a report 'By Game'.
+        division: Division filter (NCAA).
         headers: optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted.
         return_parsed: parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -1126,12 +1126,12 @@ def pff_facet_receiving_summary(
     Example URL: https://premium.pff.com/api/v1/facet/receiving/summary
 
     Args:
-        league: league query parameter.
-        season: season query parameter.
-        week: week query parameter.
-        franchise_id: franchiseId query parameter.
-        game_id: gameId query parameter.
-        division: division query parameter.
+        league: League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules.
+        season: Season (starting year).
+        week: Week or week-group key (e.g. 'REG', a week number, or a range).
+        franchise_id: PFF franchise (team) id; filters a report 'By Team'.
+        game_id: PFF game id; filters a report 'By Game'.
+        division: Division filter (NCAA).
         headers: optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted.
         return_parsed: parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -1184,12 +1184,12 @@ def pff_facet_return_summary(
     Example URL: https://premium.pff.com/api/v1/facet/return/summary
 
     Args:
-        league: league query parameter.
-        season: season query parameter.
-        week: week query parameter.
-        franchise_id: franchiseId query parameter.
-        game_id: gameId query parameter.
-        division: division query parameter.
+        league: League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules.
+        season: Season (starting year).
+        week: Week or week-group key (e.g. 'REG', a week number, or a range).
+        franchise_id: PFF franchise (team) id; filters a report 'By Team'.
+        game_id: PFF game id; filters a report 'By Game'.
+        division: Division filter (NCAA).
         headers: optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted.
         return_parsed: parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -1242,12 +1242,12 @@ def pff_facet_rushing_direction_stats(
     Example URL: https://premium.pff.com/api/v1/facet/rushing/direction
 
     Args:
-        league: league query parameter.
-        season: season query parameter.
-        week: week query parameter.
-        franchise_id: franchiseId query parameter.
-        game_id: gameId query parameter.
-        division: division query parameter.
+        league: League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules.
+        season: Season (starting year).
+        week: Week or week-group key (e.g. 'REG', a week number, or a range).
+        franchise_id: PFF franchise (team) id; filters a report 'By Team'.
+        game_id: PFF game id; filters a report 'By Game'.
+        division: Division filter (NCAA).
         headers: optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted.
         return_parsed: parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -1300,12 +1300,12 @@ def pff_facet_receiving_coverage_stats(
     Example URL: https://premium.pff.com/api/v1/facet/defense/coverage_matchup
 
     Args:
-        league: league query parameter.
-        season: season query parameter.
-        week: week query parameter.
-        franchise_id: franchiseId query parameter.
-        game_id: gameId query parameter.
-        division: division query parameter.
+        league: League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules.
+        season: Season (starting year).
+        week: Week or week-group key (e.g. 'REG', a week number, or a range).
+        franchise_id: PFF franchise (team) id; filters a report 'By Team'.
+        game_id: PFF game id; filters a report 'By Game'.
+        division: Division filter (NCAA).
         headers: optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted.
         return_parsed: parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -1358,12 +1358,12 @@ def pff_facet_rushing_summary(
     Example URL: https://premium.pff.com/api/v1/facet/rushing/summary
 
     Args:
-        league: league query parameter.
-        season: season query parameter.
-        week: week query parameter.
-        franchise_id: franchiseId query parameter.
-        game_id: gameId query parameter.
-        division: division query parameter.
+        league: League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules.
+        season: Season (starting year).
+        week: Week or week-group key (e.g. 'REG', a week number, or a range).
+        franchise_id: PFF franchise (team) id; filters a report 'By Team'.
+        game_id: PFF game id; filters a report 'By Game'.
+        division: Division filter (NCAA).
         headers: optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted.
         return_parsed: parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -1416,12 +1416,12 @@ def pff_facet_slot_coverages(
     Example URL: https://premium.pff.com/api/v1/facet/signature/defense/slot_coverage
 
     Args:
-        league: league query parameter.
-        season: season query parameter.
-        week: week query parameter.
-        franchise_id: franchiseId query parameter.
-        game_id: gameId query parameter.
-        division: division query parameter.
+        league: League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules.
+        season: Season (starting year).
+        week: Week or week-group key (e.g. 'REG', a week number, or a range).
+        franchise_id: PFF franchise (team) id; filters a report 'By Team'.
+        game_id: PFF game id; filters a report 'By Game'.
+        division: Division filter (NCAA).
         headers: optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted.
         return_parsed: parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -1474,12 +1474,12 @@ def pff_facet_pbes(
     Example URL: https://premium.pff.com/api/v1/facet/signature/pass-blocking/efficiency/line
 
     Args:
-        league: league query parameter.
-        season: season query parameter.
-        week: week query parameter.
-        franchise_id: franchiseId query parameter.
-        game_id: gameId query parameter.
-        division: division query parameter.
+        league: League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules.
+        season: Season (starting year).
+        week: Week or week-group key (e.g. 'REG', a week number, or a range).
+        franchise_id: PFF franchise (team) id; filters a report 'By Team'.
+        game_id: PFF game id; filters a report 'By Game'.
+        division: Division filter (NCAA).
         headers: optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted.
         return_parsed: parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -1532,12 +1532,12 @@ def pff_facet_prps(
     Example URL: https://premium.pff.com/api/v1/facet/signature/defense/outside_pass_rush
 
     Args:
-        league: league query parameter.
-        season: season query parameter.
-        week: week query parameter.
-        franchise_id: franchiseId query parameter.
-        game_id: gameId query parameter.
-        division: division query parameter.
+        league: League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules.
+        season: Season (starting year).
+        week: Week or week-group key (e.g. 'REG', a week number, or a range).
+        franchise_id: PFF franchise (team) id; filters a report 'By Team'.
+        game_id: PFF game id; filters a report 'By Game'.
+        division: Division filter (NCAA).
         headers: optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted.
         return_parsed: parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -1590,12 +1590,12 @@ def pff_facet_receiving_scheme(
     Example URL: https://premium.pff.com/api/v1/facet/receiving/scheme
 
     Args:
-        league: league query parameter.
-        season: season query parameter.
-        week: week query parameter.
-        franchise_id: franchiseId query parameter.
-        game_id: gameId query parameter.
-        division: division query parameter.
+        league: League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules.
+        season: Season (starting year).
+        week: Week or week-group key (e.g. 'REG', a week number, or a range).
+        franchise_id: PFF franchise (team) id; filters a report 'By Team'.
+        game_id: PFF game id; filters a report 'By Game'.
+        division: Division filter (NCAA).
         headers: optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted.
         return_parsed: parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -1648,12 +1648,12 @@ def pff_facet_time_in_pockets(
     Example URL: https://premium.pff.com/api/v1/facet/signature/passing/time_in_pocket
 
     Args:
-        league: league query parameter.
-        season: season query parameter.
-        week: week query parameter.
-        franchise_id: franchiseId query parameter.
-        game_id: gameId query parameter.
-        division: division query parameter.
+        league: League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules.
+        season: Season (starting year).
+        week: Week or week-group key (e.g. 'REG', a week number, or a range).
+        franchise_id: PFF franchise (team) id; filters a report 'By Team'.
+        game_id: PFF game id; filters a report 'By Game'.
+        division: Division filter (NCAA).
         headers: optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted.
         return_parsed: parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -1706,12 +1706,12 @@ def pff_facet_receiving_concept(
     Example URL: https://premium.pff.com/api/v1/facet/receiving/concept
 
     Args:
-        league: league query parameter.
-        season: season query parameter.
-        week: week query parameter.
-        franchise_id: franchiseId query parameter.
-        game_id: gameId query parameter.
-        division: division query parameter.
+        league: League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules.
+        season: Season (starting year).
+        week: Week or week-group key (e.g. 'REG', a week number, or a range).
+        franchise_id: PFF franchise (team) id; filters a report 'By Team'.
+        game_id: PFF game id; filters a report 'By Game'.
+        division: Division filter (NCAA).
         headers: optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted.
         return_parsed: parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -1764,12 +1764,12 @@ def pff_facet_special_teams_summary(
     Example URL: https://premium.pff.com/api/v1/facet/special/summary
 
     Args:
-        league: league query parameter.
-        season: season query parameter.
-        week: week query parameter.
-        franchise_id: franchiseId query parameter.
-        game_id: gameId query parameter.
-        division: division query parameter.
+        league: League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules.
+        season: Season (starting year).
+        week: Week or week-group key (e.g. 'REG', a week number, or a range).
+        franchise_id: PFF franchise (team) id; filters a report 'By Team'.
+        game_id: PFF game id; filters a report 'By Game'.
+        division: Division filter (NCAA).
         headers: optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted.
         return_parsed: parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -1822,12 +1822,12 @@ def pff_facet_receiving_depth(
     Example URL: https://premium.pff.com/api/v1/facet/receiving/depth
 
     Args:
-        league: league query parameter.
-        season: season query parameter.
-        week: week query parameter.
-        franchise_id: franchiseId query parameter.
-        game_id: gameId query parameter.
-        division: division query parameter.
+        league: League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules.
+        season: Season (starting year).
+        week: Week or week-group key (e.g. 'REG', a week number, or a range).
+        franchise_id: PFF franchise (team) id; filters a report 'By Team'.
+        game_id: PFF game id; filters a report 'By Game'.
+        division: Division filter (NCAA).
         headers: optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted.
         return_parsed: parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -1880,12 +1880,12 @@ def pff_facet_receiving_coverage(
     Example URL: https://premium.pff.com/api/v1/facet/receiving/coverage
 
     Args:
-        league: league query parameter.
-        season: season query parameter.
-        week: week query parameter.
-        franchise_id: franchiseId query parameter.
-        game_id: gameId query parameter.
-        division: division query parameter.
+        league: League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules.
+        season: Season (starting year).
+        week: Week or week-group key (e.g. 'REG', a week number, or a range).
+        franchise_id: PFF franchise (team) id; filters a report 'By Team'.
+        game_id: PFF game id; filters a report 'By Game'.
+        division: Division filter (NCAA).
         headers: optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted.
         return_parsed: parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -1937,11 +1937,11 @@ def pff_player_passing_summary(
     Example URL: https://premium.pff.com/api/v1/player/passing/summary
 
     Args:
-        league: league query parameter.
-        season: season query parameter.
-        week: week query parameter.
-        player_id: player_id query parameter.
-        career: career query parameter.
+        league: League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules.
+        season: Season (starting year).
+        week: Week or week-group key (e.g. 'REG', a week number, or a range).
+        player_id: PFF player id (snake_case on the wire; matches the /players id).
+        career: Career-rollup flag ("true"/"false"); player-detail views only.
         headers: optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted.
         return_parsed: parse the payload through parse_pff_player_detail -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -1992,11 +1992,11 @@ def pff_player_rushing_summary(
     Example URL: https://premium.pff.com/api/v1/player/rushing/summary
 
     Args:
-        league: league query parameter.
-        season: season query parameter.
-        week: week query parameter.
-        player_id: player_id query parameter.
-        career: career query parameter.
+        league: League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules.
+        season: Season (starting year).
+        week: Week or week-group key (e.g. 'REG', a week number, or a range).
+        player_id: PFF player id (snake_case on the wire; matches the /players id).
+        career: Career-rollup flag ("true"/"false"); player-detail views only.
         headers: optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted.
         return_parsed: parse the payload through parse_pff_player_detail -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -2047,11 +2047,11 @@ def pff_player_receiving_summary(
     Example URL: https://premium.pff.com/api/v1/player/receiving/summary
 
     Args:
-        league: league query parameter.
-        season: season query parameter.
-        week: week query parameter.
-        player_id: player_id query parameter.
-        career: career query parameter.
+        league: League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules.
+        season: Season (starting year).
+        week: Week or week-group key (e.g. 'REG', a week number, or a range).
+        player_id: PFF player id (snake_case on the wire; matches the /players id).
+        career: Career-rollup flag ("true"/"false"); player-detail views only.
         headers: optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted.
         return_parsed: parse the payload through parse_pff_player_detail -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -2102,11 +2102,11 @@ def pff_player_defense_summary(
     Example URL: https://premium.pff.com/api/v1/player/defense/summary
 
     Args:
-        league: league query parameter.
-        season: season query parameter.
-        week: week query parameter.
-        player_id: player_id query parameter.
-        career: career query parameter.
+        league: League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules.
+        season: Season (starting year).
+        week: Week or week-group key (e.g. 'REG', a week number, or a range).
+        player_id: PFF player id (snake_case on the wire; matches the /players id).
+        career: Career-rollup flag ("true"/"false"); player-detail views only.
         headers: optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted.
         return_parsed: parse the payload through parse_pff_player_detail -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -2157,11 +2157,11 @@ def pff_player_offense_summary(
     Example URL: https://premium.pff.com/api/v1/player/offense/summary
 
     Args:
-        league: league query parameter.
-        season: season query parameter.
-        week: week query parameter.
-        player_id: player_id query parameter.
-        career: career query parameter.
+        league: League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules.
+        season: Season (starting year).
+        week: Week or week-group key (e.g. 'REG', a week number, or a range).
+        player_id: PFF player id (snake_case on the wire; matches the /players id).
+        career: Career-rollup flag ("true"/"false"); player-detail views only.
         headers: optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted.
         return_parsed: parse the payload through parse_pff_player_detail -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -2212,11 +2212,11 @@ def pff_player_snaps_summary(
     Example URL: https://premium.pff.com/api/v1/player/snaps/summary
 
     Args:
-        league: league query parameter.
-        season: season query parameter.
-        week: week query parameter.
-        player_id: player_id query parameter.
-        career: career query parameter.
+        league: League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules.
+        season: Season (starting year).
+        week: Week or week-group key (e.g. 'REG', a week number, or a range).
+        player_id: PFF player id (snake_case on the wire; matches the /players id).
+        career: Career-rollup flag ("true"/"false"); player-detail views only.
         headers: optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted.
         return_parsed: parse the payload through parse_pff_player_detail -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -2267,11 +2267,11 @@ def pff_player_offense_blocking(
     Example URL: https://premium.pff.com/api/v1/player/offense/blocking
 
     Args:
-        league: league query parameter.
-        season: season query parameter.
-        week: week query parameter.
-        player_id: player_id query parameter.
-        career: career query parameter.
+        league: League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules.
+        season: Season (starting year).
+        week: Week or week-group key (e.g. 'REG', a week number, or a range).
+        player_id: PFF player id (snake_case on the wire; matches the /players id).
+        career: Career-rollup flag ("true"/"false"); player-detail views only.
         headers: optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted.
         return_parsed: parse the payload through parse_pff_player_detail -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -2358,8 +2358,8 @@ def pff_teams(
     Example URL: https://premium.pff.com/api/v1/teams
 
     Args:
-        league: league query parameter.
-        season: season query parameter.
+        league: League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules.
+        season: Season (starting year).
         headers: optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted.
         return_parsed: parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -2405,9 +2405,9 @@ def pff_teams_overview(
     Example URL: https://premium.pff.com/api/v1/teams/overview
 
     Args:
-        league: league query parameter.
-        season: season query parameter.
-        week: week query parameter.
+        league: League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules.
+        season: Season (starting year).
+        week: Week or week-group key (e.g. 'REG', a week number, or a range).
         headers: optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted.
         return_parsed: parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -2454,9 +2454,9 @@ def pff_games(
     Example URL: https://premium.pff.com/api/v1/games
 
     Args:
-        league: league query parameter.
-        season: season query parameter.
-        week: week query parameter.
+        league: League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules.
+        season: Season (starting year).
+        week: Single week number.
         headers: optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted.
         return_parsed: parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -2503,9 +2503,9 @@ def pff_players(
     Example URL: https://premium.pff.com/api/v1/players
 
     Args:
-        league: league query parameter.
-        name: name query parameter.
-        id: id query parameter.
+        league: League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules.
+        name: Player-name search prefix.
+        id: Entity id (player lookup).
         headers: optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted.
         return_parsed: parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -2551,8 +2551,8 @@ def pff_player_seasons(
     Example URL: https://premium.pff.com/api/v1/player/seasons
 
     Args:
-        league: league query parameter.
-        player_id: player_id query parameter.
+        league: League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules.
+        player_id: PFF player id (snake_case on the wire; matches the /players id).
         headers: optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted.
         return_parsed: parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -2599,10 +2599,10 @@ def pff_player_position_pivot(
     Example URL: https://premium.pff.com/api/v1/player/position/pivot
 
     Args:
-        league: league query parameter.
-        season: season query parameter.
-        week: week query parameter.
-        player_id: player_id query parameter.
+        league: League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules.
+        season: Season (starting year).
+        week: Week or week-group key (e.g. 'REG', a week number, or a range).
+        player_id: PFF player id (snake_case on the wire; matches the /players id).
         headers: optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted.
         return_parsed: parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.

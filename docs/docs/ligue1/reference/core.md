@@ -384,7 +384,7 @@ ESPN endpoint.
 | `season` | `season` |  | `Y` |  | season path parameter. |
 | `season_type` | `season_type` |  | `Y` |  | season_type path parameter. |
 | `week` | `week` |  | `Y` |  | week path parameter. |
-| `limit` | `limit` |  |  | `Y` | Page size; the full FBS table is ~134 rows, so pass a limit above that to avoid paging. |
+| `limit` | `limit` |  |  | `Y` | Page size for this weekly power-index table; pass a limit large enough to avoid paging (table size varies by sport/league -- CFB's FBS table alone is ~134 rows). |
 
 ### Returns
 

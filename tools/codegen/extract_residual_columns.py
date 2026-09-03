@@ -69,6 +69,10 @@ _DEFERRED_BUCKETS = {
     "native/sports247_site_pages",
     "native/on3",
     "native/pff",
+    # NFL Pro (NGS): 1,036 columns whose descriptions are deliberately absent --
+    # no authoritative label source was reachable, and guessing would manufacture
+    # authority the capture does not carry. Tracked here rather than left invisible.
+    "native/nflpro",
     "loader_schemas",
 }
 

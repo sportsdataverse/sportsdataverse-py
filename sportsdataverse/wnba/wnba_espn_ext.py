@@ -168,11 +168,11 @@ def espn_wnba_scoreboard(
     Example URL: https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/scoreboard?dates=20240115
 
     Args:
-        dates: dates query parameter.
-        week: week query parameter.
-        season_type: seasontype query parameter.
-        groups: groups query parameter.
-        limit: limit query parameter.
+        dates: Date or date range filter (YYYYMMDD or YYYYMMDD-YYYYMMDD).
+        week: Week number within the season.
+        season_type: Season phase: 1=preseason, 2=regular season, 3=postseason.
+        groups: Conference or group id filter (e.g. an ESPN conference id).
+        limit: Maximum number of items to return.
         return_parsed: parse the payload through parse_scoreboard -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
@@ -298,7 +298,7 @@ def espn_wnba_news(
     Example URL: https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/news
 
     Args:
-        limit: limit query parameter.
+        limit: Maximum number of items to return.
         return_parsed: parse the payload through parse_news -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
@@ -378,7 +378,7 @@ def espn_wnba_transactions(
     Example URL: https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/transactions
 
     Args:
-        limit: limit query parameter.
+        limit: Maximum number of items to return.
         return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
@@ -534,7 +534,7 @@ def espn_wnba_teams_site(
     Example URL: https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/teams
 
     Args:
-        limit: limit query parameter.
+        limit: Maximum number of items to return.
         return_parsed: parse the payload through parse_teams -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
@@ -618,7 +618,7 @@ def espn_wnba_team_roster(
 
     Args:
         team_id: team_id path parameter.
-        limit: limit query parameter.
+        limit: Maximum number of items to return.
         return_parsed: parse the payload through parse_team_roster -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
@@ -662,7 +662,7 @@ def espn_wnba_team_schedule(
 
     Args:
         team_id: team_id path parameter.
-        season: season query parameter.
+        season: Season year (e.g. 2024).
         return_parsed: parse the payload through parse_team_schedule -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
@@ -906,7 +906,7 @@ def espn_wnba_team_news(
 
     Args:
         team_id: team_id path parameter.
-        limit: limit query parameter.
+        limit: Maximum number of items to return.
         return_parsed: parse the payload through parse_news -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
@@ -1110,9 +1110,9 @@ def espn_wnba_standings(
     Example URL: https://site.api.espn.com/apis/v2/sports/basketball/wnba/standings
 
     Args:
-        season: season query parameter.
-        group: group query parameter.
-        standings_type: type query parameter.
+        season: Season year (e.g. 2024).
+        group: Conference or group id filter (e.g. an ESPN conference id).
+        standings_type: Standings variant (e.g. 'by-division' or 'by-conference').
         return_parsed: parse the payload through parse_standings -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
@@ -1198,7 +1198,7 @@ def espn_wnba_player_stats_v3(
 
     Args:
         athlete_id: athlete_id path parameter.
-        season: season query parameter.
+        season: Season year (e.g. 2024).
         return_parsed: parse the payload through parse_athlete_stats -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
@@ -1242,7 +1242,7 @@ def espn_wnba_player_gamelog(
 
     Args:
         athlete_id: athlete_id path parameter.
-        season: season query parameter.
+        season: Season year (e.g. 2024).
         return_parsed: parse the payload through parse_athlete_gamelog -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
@@ -1286,7 +1286,7 @@ def espn_wnba_player_splits(
 
     Args:
         athlete_id: athlete_id path parameter.
-        season: season query parameter.
+        season: Season year (e.g. 2024).
         return_parsed: parse the payload through parse_athlete_splits -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
@@ -1334,9 +1334,9 @@ def espn_wnba_leaders(
 
     Args:
         category: category query parameter.
-        season: season query parameter.
-        season_type: seasontype query parameter.
-        limit: limit query parameter.
+        season: Season year (e.g. 2024).
+        season_type: Season phase: 1=preseason, 2=regular season, 3=postseason.
+        limit: Maximum number of items to return.
         page: page query parameter.
         sort: sort query parameter.
         return_parsed: parse the payload through parse_leaders -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
@@ -1461,7 +1461,7 @@ def espn_wnba_seasons(
     Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/seasons
 
     Args:
-        limit: limit query parameter.
+        limit: Maximum number of items to return.
         return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
@@ -1717,7 +1717,7 @@ def espn_wnba_season_group_teams(
         season: season path parameter.
         season_type: season_type path parameter.
         group_id: group_id path parameter.
-        limit: limit query parameter.
+        limit: Maximum number of items to return.
         return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
@@ -1765,7 +1765,7 @@ def espn_wnba_season_group_children(
         season: season path parameter.
         season_type: season_type path parameter.
         group_id: group_id path parameter.
-        limit: limit query parameter.
+        limit: Maximum number of items to return.
         return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
@@ -1983,7 +1983,7 @@ def espn_wnba_season_week_powerindex(
         season: season path parameter.
         season_type: season_type path parameter.
         week: week path parameter.
-        limit: limit query parameter.
+        limit: Page size for this weekly power-index table; pass a limit large enough to avoid paging (table size varies by sport/league -- CFB's FBS table alone is ~134 rows).
         return_parsed: parse the payload through parse_weekly_powerindex -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
@@ -2031,7 +2031,7 @@ def espn_wnba_season_week_games(
         season: season path parameter.
         season_type: season_type path parameter.
         week: week path parameter.
-        limit: limit query parameter.
+        limit: Maximum number of items to return.
         return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
@@ -2076,7 +2076,7 @@ def espn_wnba_season_teams(
 
     Args:
         season: season path parameter.
-        limit: limit query parameter.
+        limit: Maximum number of items to return.
         page: page query parameter.
         return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -2165,7 +2165,7 @@ def espn_wnba_season_players(
 
     Args:
         season: season path parameter.
-        limit: limit query parameter.
+        limit: Maximum number of items to return.
         page: page query parameter.
         return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -2211,7 +2211,7 @@ def espn_wnba_season_coaches(
 
     Args:
         season: season path parameter.
-        limit: limit query parameter.
+        limit: Maximum number of items to return.
         return_parsed: parse the payload through parse_coaches -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
@@ -2501,7 +2501,7 @@ def espn_wnba_season_awards(
 
     Args:
         season: season path parameter.
-        limit: limit query parameter.
+        limit: Maximum number of items to return.
         return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
@@ -2546,7 +2546,7 @@ def espn_wnba_players_index(
 
     Args:
         active: active query parameter.
-        limit: limit query parameter.
+        limit: Maximum number of items to return.
         page: page query parameter.
         return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -3040,8 +3040,8 @@ def espn_wnba_games(
     Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/events
 
     Args:
-        dates: dates query parameter.
-        limit: limit query parameter.
+        dates: Date or date range filter (YYYYMMDD or YYYYMMDD-YYYYMMDD).
+        limit: Maximum number of items to return.
         return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
@@ -3538,7 +3538,7 @@ def espn_wnba_game_probabilities(
     Args:
         event_id: event_id path parameter.
         cid: cid path parameter.
-        limit: limit query parameter.
+        limit: Maximum number of items to return.
         return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
@@ -3586,7 +3586,7 @@ def espn_wnba_game_plays(
     Args:
         event_id: event_id path parameter.
         cid: cid path parameter.
-        limit: limit query parameter.
+        limit: Maximum number of items to return.
         return_parsed: parse the payload through parse_event_plays -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
@@ -4123,7 +4123,7 @@ def espn_wnba_teams_core(
     Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/teams
 
     Args:
-        limit: limit query parameter.
+        limit: Maximum number of items to return.
         page: page query parameter.
         return_parsed: parse the payload through parse_teams -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -4207,7 +4207,7 @@ def espn_wnba_venues(
     Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/venues
 
     Args:
-        limit: limit query parameter.
+        limit: Maximum number of items to return.
         return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
@@ -4289,7 +4289,7 @@ def espn_wnba_franchises(
     Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/franchises
 
     Args:
-        limit: limit query parameter.
+        limit: Maximum number of items to return.
         return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
@@ -4495,7 +4495,7 @@ def espn_wnba_positions(
     Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/positions
 
     Args:
-        limit: limit query parameter.
+        limit: Maximum number of items to return.
         return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
@@ -4577,7 +4577,7 @@ def espn_wnba_tournaments(
     Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/tournaments
 
     Args:
-        limit: limit query parameter.
+        limit: Maximum number of items to return.
         return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
@@ -4619,7 +4619,7 @@ def espn_wnba_awards(
     Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/awards
 
     Args:
-        limit: limit query parameter.
+        limit: Maximum number of items to return.
         return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
@@ -4855,9 +4855,9 @@ def espn_wnba_fpi(
     Example URL: https://site.web.api.espn.com/apis/fitt/v3/sports/basketball/wnba/powerindex?season=2024
 
     Args:
-        season: season query parameter.
-        limit: limit query parameter.
-        page: page query parameter.
+        season: Season (4-digit year) whose FPI table to return; defaults to the current season.
+        limit: Page size. The response is a single page for every league observed, so the default suffices.
+        page: Page number, for the paginated envelope.
         return_parsed: parse the payload through parse_fpi -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 

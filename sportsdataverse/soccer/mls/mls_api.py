@@ -254,8 +254,8 @@ def mls_content_seasons(
     Example URL: https://dapi.mlssoccer.com/v2/content/en-us/seasons
 
     Args:
-        competition_sportec_id: fields.competitionSportecId query parameter.
-        sportec_id: fields.sportecId query parameter.
+        competition_sportec_id: Filter by competition Sportec id (indexed field)
+        sportec_id: Filter by season Sportec id (indexed field)
         return_parsed: parse the payload through parse_mls_api -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -368,12 +368,12 @@ def mls_season_matches(
 
     Args:
         season_id: season_id path parameter.
-        match_date_gte: match_date[gte] query parameter.
-        match_date_lte: match_date[lte] query parameter.
-        competition_id: competition_id query parameter.
-        per_page: per_page query parameter.
-        sort: sort query parameter.
-        series_name: series_name query parameter.
+        match_date_gte: Window start date (YYYY-MM-DD)
+        match_date_lte: Window end date (YYYY-MM-DD)
+        competition_id: Filter by competition id
+        per_page: Page size
+        sort: Sort spec, e.g. planned_kickoff_time:asc,home_team_name:asc
+        series_name: Filter by series/round name
         return_parsed: parse the payload through parse_mls_api -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -433,7 +433,7 @@ def mls_sportapi_club_players(
 
     Args:
         club_id: club_id path parameter.
-        culture: culture query parameter.
+        culture: Locale, e.g. en-us
         return_parsed: parse the payload through parse_mls_api -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -648,9 +648,9 @@ def mls_standings(
     Args:
         competition_id: competition_id path parameter.
         season_id: season_id path parameter.
-        category: category query parameter.
-        standings_type: type query parameter.
-        is_live: is_live query parameter.
+        category: Standings grouping: conference | overall
+        standings_type: home | away split (optional)
+        is_live: Include live in-progress results
         return_parsed: parse the payload through parse_mls_standings -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.

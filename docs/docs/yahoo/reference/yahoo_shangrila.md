@@ -1132,7 +1132,7 @@ Yahoo shangrila persisted query `leagueGameIds` -> one row per `leagues` entry
 |---|---|:---:|:---:|:---:|---|
 | `count` | `count` |  |  | `Y` | count query parameter. |
 | `league` | `league` |  |  | `Y` | league query parameter. |
-| `week` | `week` |  |  | `Y` | Week number within the season (football). |
+| `week` | `week` |  |  | `Y` | Week number within the season. |
 | `date` | `date` |  |  | `Y` | date query parameter. |
 | `season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
 | `gameStatusOrder` | `game_status_order` |  |  | `Y` | gameStatusOrder query parameter. |
@@ -1174,7 +1174,7 @@ Yahoo shangrila persisted query `leagueGameIdsByDate` -> one row per `leagues` e
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `leagues` | `leagues` |  |  | `Y` | leagues query parameter. |
-| `week` | `week` |  |  | `Y` | Week number within the season (football). |
+| `week` | `week` |  |  | `Y` | Week number within the season. |
 | `dates` | `dates` |  |  | `Y` | Date or date range filter (YYYYMMDD or YYYYMMDD-YYYYMMDD). |
 | `startRange` | `start_range` |  |  | `Y` | startRange query parameter. |
 | `endRange` | `end_range` |  |  | `Y` | endRange query parameter. |
@@ -1510,7 +1510,7 @@ Yahoo shangrila persisted query `leagueStatsOverview` (response body not capture
 |---|---|:---:|:---:|:---:|---|
 | `leagues` | `leagues` |  |  | `Y` | leagues query parameter. |
 | `count` | `count` |  |  | `Y` | count query parameter. |
-| `week` | `week` |  |  | `Y` | Week number within the season (football). |
+| `week` | `week` |  |  | `Y` | Week number within the season. |
 | `weekSeasonPhase` | `week_season_phase` |  |  | `Y` | weekSeasonPhase query parameter. |
 | `seasonPhase` | `season_phase` |  |  | `Y` | seasonPhase query parameter. |
 | `leagueStructureId` | `league_structure_id` |  |  | `Y` | leagueStructureId query parameter. |
@@ -1544,7 +1544,7 @@ Yahoo shangrila persisted query `leagueStatsWeekly` -> one row per `leagues` ent
 |---|---|:---:|:---:|:---:|---|
 | `leagues` | `leagues` |  |  | `Y` | leagues query parameter. |
 | `count` | `count` |  |  | `Y` | count query parameter. |
-| `week` | `week` |  |  | `Y` | Week number within the season (football). |
+| `week` | `week` |  |  | `Y` | Week number within the season. |
 | `season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
 | `seasonPhase` | `season_phase` |  |  | `Y` | seasonPhase query parameter. |
 
@@ -5397,7 +5397,7 @@ Scoreboard: games + teams + leagues + odds (fat payload)
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `leagues` | `leagues` |  |  | `Y` | leagues query parameter. |
-| `week` | `week` |  |  | `Y` | Week number within the season (football). |
+| `week` | `week` |  |  | `Y` | Week number within the season. |
 | `season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
 | `conferences` | `conferences` |  |  | `Y` | conferences query parameter. |
 | `count` | `count` |  |  | `Y` | count query parameter. |

@@ -1251,7 +1251,7 @@ def sports247_site_pages_season_current_expert_predictions(
     Example URL: https://247sports.com/Season/2026-Football/CurrentExpertPredictions.json
 
     Args:
-        season: season path parameter.
+        season: Season path segment in `{year}-{Sport}` form, e.g. `2026-Football`.
         return_parsed: parse the payload through parse_sports247_site_page -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
@@ -1290,7 +1290,7 @@ def sports247_site_pages_season_recruit_interest_events(
     Example URL: https://247sports.com/Season/2026-Football/RecruitInterestEvents.json
 
     Args:
-        season: season path parameter.
+        season: Season path segment in `{year}-{Sport}` form, e.g. `2026-Football`.
         return_parsed: parse the payload through parse_sports247_site_page -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
@@ -1329,7 +1329,7 @@ def sports247_site_pages_season_recruit_interests(
     Example URL: https://247sports.com/Season/2026-Football/RecruitInterests.json
 
     Args:
-        season: season path parameter.
+        season: Season path segment in `{year}-{Sport}` form, e.g. `2026-Football`.
         return_parsed: parse the payload through parse_sports247_site_page -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
@@ -1372,7 +1372,7 @@ def sports247_site_pages_season_recruits(
     Example URL: https://247sports.com/Season/2026-Football/Recruits.json
 
     Args:
-        season: season path parameter.
+        season: Season path segment in `{year}-{Sport}` form, e.g. `2026-Football`.
         items: Items query parameter.
         page: Page query parameter.
         player_full_name: Player.FullName query parameter.
@@ -1419,7 +1419,7 @@ def sports247_site_pages_season_roster_embed(
     Example URL: https://247sports.com/Season/2020-Football/Roster/Embed.json
 
     Args:
-        season: season path parameter.
+        season: Season path segment in `{year}-{Sport}` form, e.g. `2026-Football`.
         return_parsed: parse the payload through parse_sports247_site_page -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
