@@ -64,21 +64,30 @@ game-detail pages, so there are two transports:
   (:func:`playwright_transport` / :meth:`NcaaFetcher.with_browser`): a real
   Chromium driven by Playwright in **Chrome new-headless** (``--headless=new``)
   clears the challenge, then serves the raw server HTML the Phase 5a-5e parsers
-  consume. It runs fully headless (no window) on any host with a real GPU.
+  consume. It runs fully headless (no window); a real GPU is NOT required.
 
 **Three load-bearing details, all required together (re-established live 2026-07-16
 after Akamai tightened -- the earlier "anti-detect is unnecessary" note was
-FALSIFIED).** (1) **new-headless** (``--headless=new``) renders through the real
-GPU/ANGLE path; the default ``headless=True``/old ``headless_shell`` uses the
-SwiftShader software-GPU renderer (``"Google SwiftShader"``), a textbook Akamai
-tell. (2) **patchright, not vanilla Playwright** -- vanilla Playwright leaks
+FALSIFIED).** (1) **new-headless** (``--headless=new``) -- the default
+``headless=True``/old ``headless_shell`` is what leaks, and new-headless is the
+mode every live run here has used. (2) **patchright, not vanilla Playwright** -- vanilla Playwright leaks
 ``navigator.webdriver=true`` + the ``Runtime.enable`` CDP tell and gets
 *challenged*; patchright patches both. (3) **a real Chrome ``user_agent``** --
 new-headless otherwise reports ``HeadlessChrome`` in ``navigator.userAgent``, the
 single tell that broke every prior attempt. With all three + a **residential** IP
 (datacenter gets an instant edge 403 regardless of browser), bm-verify clears
-(proven: 10-game canary, real 100 KB+ pages, ~11 s/page warm). Ceiling: a GPU-less
-headless CI box falls back to SwiftShader and is re-detected; run on a real-GPU host.
+(proven: 10-game canary, real 100 KB+ pages, ~11 s/page warm).
+
+**A real GPU is NOT one of the tells** (measured 2026-08-02; this corrects an
+earlier claim in this docstring that a SwiftShader host "is re-detected"). On a
+virtio-GPU droplet Chrome falls back to
+``ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero)), SwiftShader driver)``
+and bm-verify clears normally -- **342 bundles captured with zero challenge
+failures and zero bans**. The WebGL renderer string is not part of the check; the
+load-bearing tells are (2) and (3) above. Do not buy a GPU host or a managed
+browser for this. The real cost of software rendering is throughput, not
+detection: it is CPU-heavy, so 8 concurrent workers on 8 cores scale at only
+~46%. Source: ``ncaa-mbb-hoops-raw/docs/SCRAPING_NOTES.md`` section 2026-08-02.
 
 **patchright stays an OPTIONAL import** (lazy, like ``curl_cffi``): importing
 this module never requires it; only :func:`playwright_transport` does, with a
@@ -506,14 +515,16 @@ class _PlaywrightTransport:
     convenience). Re-proven live 2026-07-16 (10-game canary PASS).
 
     **Three tells must ALL be neutralized** (see the module docstring): (1)
-    **new-headless** (``--headless=new``) → real GPU/ANGLE, not the
-    ``"Google SwiftShader"`` of old ``headless_shell``; (2) **patchright** patches
-    ``navigator.webdriver`` + the ``Runtime.enable`` CDP leak that get *vanilla*
-    Playwright challenged; (3) a **real Chrome ``user_agent``** (new-headless
-    leaks ``HeadlessChrome`` otherwise). Plus a **residential** proxy -- a
-    datacenter IP gets an instant edge 403 no matter how clean the browser is.
-    Caveat: a GPU-less headless CI box falls back to SwiftShader and is
-    re-detected -- run on a real-GPU host.
+    **new-headless** (``--headless=new``), not the old ``headless_shell``;
+    (2) **patchright** patches ``navigator.webdriver`` + the ``Runtime.enable``
+    CDP leak that get *vanilla* Playwright challenged; (3) a **real Chrome
+    ``user_agent``** (new-headless leaks ``HeadlessChrome`` otherwise). Plus a
+    **residential** proxy -- a datacenter IP gets an instant edge 403 no matter
+    how clean the browser is.
+
+    A real GPU is **not** required: a SwiftShader/virtio-GPU host clears
+    bm-verify normally (342 bundles, zero failures, measured 2026-08-02). Software
+    rendering costs throughput, not detection.
 
     Reuses ONE browser across the whole session: the first fetch navigates to
     mint the ``_abck`` cookie, every fetch (including the first) reads raw

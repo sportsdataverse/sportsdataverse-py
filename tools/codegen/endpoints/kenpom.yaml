@@ -1,0 +1,462 @@
+api: kenpom
+host: https://kenpom.com
+name_pattern: kenpom_{short}
+module: kenpom
+parser_module: mbb.kenpom_runtime
+getter_module: sportsdataverse.mbb.kenpom_runtime
+qualifier: ''
+passthrough_query: false
+# kenpom.com is a paid subscription: every page needs the session cookie minted
+# by a username/password login. kenpom_runtime._get handles auth (KENPOM_EMAIL /
+# KENPOM_PW, or hoopR's KP_USER / KP_PW) and proxying, and returns raw HTML text.
+# Python arg names are readable (year/team/date/...); query_key carries KenPom's
+# single-letter wire keys (y/t/d/...).
+auth: true
+raw_types:
+- str
+docstring:
+  raw_doc: 'the raw page HTML (``str``)'
+  parsed_doc: >-
+    A ``dict`` of polars DataFrames, one per HTML table on the page, keyed by the
+    table's HTML id (a KenPom page often carries several -- ``team.php`` alone holds
+    the schedule, roster, depth chart and lineup tables)
+  example_import: true
+  raises:
+  - 'RuntimeError: No KenPom credentials could be resolved (pass ``email=``/``password=``,
+    or set ``KENPOM_EMAIL``/``KENPOM_PW``), or kenpom.com rejected them.'
+  - 'requests.exceptions.RequestException: Connection-level failure after
+    ``dl_utils.download`` exhausts its retries.'
+  see_also:
+  - name: hoopR
+    url: https://hoopR.sportsdataverse.org
+    note: R sister package; this is the port of its kp_* family
+  - name: KenPom
+    url: https://kenpom.com
+    note: data origin (subscription required)
+runtime_imports:
+- _get
+endpoints:
+
+# --- season-wide ratings / efficiency tables (hoopR kp_ratings_tables.R) -----
+- short: ratings
+  summary: "GET /index.php - Pomeroy season ratings (AdjEM/AdjO/AdjD/AdjT plus SOS, one row per team). Port of hoopR kp_pomeroy_ratings()."
+  path: /index.php
+  extra_params:
+  - name: year
+    query_key: y
+    type: int
+    required: true
+    description: Season as a 4-digit ENDING year (2025 = the 2024-25 season). Data begins at 2002.
+  example_args: {year: 2025}
+  parser: parse_kenpom_page
+
+- short: efficiency
+  summary: "GET /summary.php - efficiency and tempo summary (adjusted and raw O/D/T, average possession length). Port of hoopR kp_efficiency()."
+  path: /summary.php
+  extra_params:
+  - name: year
+    query_key: y
+    type: int
+    required: true
+    description: Season as a 4-digit ENDING year. Columns are narrower before 2010.
+  example_args: {year: 2025}
+  parser: parse_kenpom_page
+
+- short: four_factors
+  summary: "GET /stats.php - four-factors rankings (eFG%, TO%, OR%, FTRate on offense and defense). Port of hoopR kp_fourfactors()."
+  path: /stats.php
+  extra_params:
+  - name: year
+    query_key: y
+    type: int
+    required: true
+    description: Season as a 4-digit ENDING year.
+  example_args: {year: 2025}
+  parser: parse_kenpom_page
+
+- short: point_distribution
+  summary: "GET /pointdist.php - share of points scored from 2s, 3s and free throws, offense and defense. Port of hoopR kp_pointdist()."
+  path: /pointdist.php
+  extra_params:
+  - name: year
+    query_key: y
+    type: int
+    required: true
+    description: Season as a 4-digit ENDING year.
+  example_args: {year: 2025}
+  parser: parse_kenpom_page
+
+- short: height
+  summary: "GET /height.php - team height, effective height, experience, bench minutes and continuity. Port of hoopR kp_height()."
+  path: /height.php
+  extra_params:
+  - name: year
+    query_key: y
+    type: int
+    required: true
+    description: Season as a 4-digit ENDING year. Columns are narrower before 2008.
+  example_args: {year: 2025}
+  parser: parse_kenpom_page
+
+- short: foul_trouble
+  summary: "GET /foul_trouble.php - team foul-trouble splits (minutes and efficiency with starters in foul trouble). Port of hoopR kp_foul_trouble()."
+  path: /foul_trouble.php
+  extra_params:
+  - name: year
+    query_key: y
+    type: int
+    required: true
+    description: Season as a 4-digit ENDING year.
+  example_args: {year: 2025}
+  parser: parse_kenpom_page
+
+- short: team_stats
+  summary: "GET /teamstats.php - team shooting and style splits; side='o' for offense, 'd' for defense. Port of hoopR kp_teamstats()."
+  path: /teamstats.php
+  extra_params:
+  - name: year
+    query_key: y
+    type: int
+    required: true
+    description: Season as a 4-digit ENDING year.
+  - name: side
+    query_key: od
+    type: str
+    description: "Side of the ball: 'o' (offense, hoopR's default) or 'd' (defense)."
+  example_args: {year: 2025, side: o}
+  parser: parse_kenpom_page
+
+- short: player_stats
+  summary: "GET /playerstats.php - national player leaderboard for one metric. Port of hoopR kp_playerstats()."
+  path: /playerstats.php
+  extra_params:
+  - name: year
+    query_key: y
+    type: int
+    required: true
+    description: Season as a 4-digit ENDING year. Data begins at 2004.
+  - name: metric
+    query_key: s
+    type: str
+    required: true
+    description: >-
+      Metric slug as KenPom spells it on the wire - one of ORtg, PctMin, eFG, PctPoss,
+      PctShots, ORPct, DRPct, TORate, ARate, PctBlocks, FTRate, PctStls, TS, FCper40,
+      FDper40, FG2Pct, FG3Pct, FTPct. (hoopR's kp_playerstats() takes the display
+      labels - ORtg, Min, eFG, Poss, Shots, OR, DR, TO, ARate, Blk, FTRate, Stl, TS,
+      FC40, FD40, 2P, 3P, FT - and maps them to these.)
+  - name: conf
+    query_key: f
+    type: str
+    description: "Conference filter (KenPom abbreviation, e.g. 'ACC', 'B10'); omit for all of Division I."
+  - name: conf_only
+    query_key: c
+    type: str
+    description: "Conference-games-only toggle: 'c' restricts the leaderboard to conference play."
+  example_args: {year: 2025, metric: eFG}
+  parser: parse_kenpom_page
+
+- short: kpoy
+  summary: "GET /kpoy.php - KenPom Player of the Year standings and the game-MVP table. Port of hoopR kp_kpoy()."
+  path: /kpoy.php
+  extra_params:
+  - name: year
+    query_key: y
+    type: int
+    required: true
+    description: Season as a 4-digit ENDING year.
+  example_args: {year: 2025}
+  parser: parse_kenpom_page
+
+# --- per-team pages (hoopR kp_team_tables.R) --------------------------------
+- short: team
+  summary: >-
+    GET /team.php - a team's full season page. Returns EVERY table on it, so one call
+    covers hoopR's kp_team_schedule(), kp_team_players(), kp_team_depth_chart() and
+    kp_team_lineups(), which each fetch this same page separately.
+  path: /team.php
+  extra_params:
+  - name: team
+    query_key: team
+    type: str
+    required: true
+    description: "KenPom team name, spelled as the site does (e.g. 'Duke', 'Michigan St.')."
+  - name: year
+    query_key: y
+    type: int
+    required: true
+    description: Season as a 4-digit ENDING year. Lineup tables begin at 2011.
+  example_args: {team: Duke, year: 2025}
+  parser: parse_kenpom_page
+
+- short: team_players_expanded
+  summary: >-
+    GET /player-expanded.php - a team's expanded per-player table plus the minutes
+    matrix. Covers hoopR's kp_team_player_stats() and kp_minutes_matrix() in one fetch.
+  path: /player-expanded.php
+  extra_params:
+  - name: team
+    query_key: team
+    type: str
+    required: true
+    description: KenPom team name, spelled as the site does.
+  - name: year
+    query_key: y
+    type: int
+    required: true
+    description: Season as a 4-digit ENDING year. Starts ('S') are available from 2014.
+  example_args: {team: Duke, year: 2025}
+  parser: parse_kenpom_page
+
+- short: game_plan
+  summary: "GET /gameplan.php - a team's game-plan page (per-game four factors and personnel splits). Port of hoopR kp_gameplan()."
+  path: /gameplan.php
+  extra_params:
+  - name: team
+    query_key: team
+    type: str
+    required: true
+    description: KenPom team name, spelled as the site does.
+  - name: year
+    query_key: y
+    type: int
+    required: true
+    description: Season as a 4-digit ENDING year.
+  example_args: {team: Duke, year: 2025}
+  parser: parse_kenpom_page
+
+- short: opponent_tracker
+  summary: "GET /opptracker.php - opponent tracker; side='o' for offense, 'd' for defense. Port of hoopR kp_opptracker()."
+  path: /opptracker.php
+  extra_params:
+  - name: team
+    query_key: team
+    type: str
+    required: true
+    description: KenPom team name, spelled as the site does.
+  - name: year
+    query_key: y
+    type: int
+    required: true
+    description: Season as a 4-digit ENDING year. Columns are narrower before 2010.
+  - name: side
+    query_key: t
+    type: str
+    description: "Side of the ball: 'o' (offense) or 'd' (defense)."
+  example_args: {team: Duke, year: 2025, side: o}
+  parser: parse_kenpom_page
+
+- short: player_career
+  summary: "GET /player.php - one player's career page (season-by-season stats and game log). Port of hoopR kp_player_career()."
+  path: /player.php
+  extra_params:
+  - name: player_id
+    query_key: p
+    type: int|str
+    required: true
+    description: KenPom player id - the `p=` value on a player-page URL.
+  example_args: {player_id: 51234}
+  parser: parse_kenpom_page
+
+# --- per-game pages (hoopR kp_box_tables.R) ---------------------------------
+- short: box
+  summary: "GET /box.php - box-score detail for one game (per-team four factors, player lines, scoring runs). Port of hoopR kp_box()."
+  path: /box.php
+  extra_params:
+  - name: game_id
+    query_key: g
+    type: int|str
+    required: true
+    description: KenPom game id - the `g=` value on a FanMatch game link.
+  - name: year
+    query_key: y
+    type: int
+    required: true
+    description: Season (4-digit ENDING year) the game belongs to.
+  example_args: {game_id: 20250401, year: 2025}
+  parser: parse_kenpom_page
+
+- short: win_probability
+  summary: "GET /winprob.php - in-game win-probability table for one game. Port of hoopR kp_winprob()."
+  path: /winprob.php
+  extra_params:
+  - name: game_id
+    query_key: g
+    type: int|str
+    required: true
+    description: KenPom game id.
+  - name: year
+    query_key: y
+    type: int
+    required: true
+    description: Season (4-digit ENDING year) the game belongs to.
+  example_args: {game_id: 20250401, year: 2025}
+  parser: parse_kenpom_page
+
+- short: fan_match
+  summary: "GET /fanmatch.php - the FanMatch slate for one date (predictions, thrill score, results). Port of hoopR kp_fanmatch()."
+  path: /fanmatch.php
+  extra_params:
+  - name: date
+    query_key: d
+    type: str
+    required: true
+    description: Slate date as YYYY-MM-DD.
+  example_args: {date: '2025-02-01'}
+  parser: parse_kenpom_page
+
+# --- history / program / conference (hoopR kp_historical_tables.R) ----------
+- short: team_history
+  summary: "GET /history.php?t= - a program's season-by-season history. Port of hoopR kp_team_history()."
+  path: /history.php
+  extra_params:
+  - name: team
+    query_key: t
+    type: str
+    required: true
+    description: KenPom team name, spelled as the site does.
+  example_args: {team: Duke}
+  parser: parse_kenpom_page
+
+- short: coach_history
+  summary: "GET /history.php?c= - a coach's season-by-season history. Port of hoopR kp_coach_history()."
+  path: /history.php
+  extra_params:
+  - name: coach
+    query_key: c
+    type: str
+    required: true
+    description: "Coach name as KenPom spells it (e.g. 'Jon Scheyer')."
+  example_args: {coach: Jon Scheyer}
+  parser: parse_kenpom_page
+
+- short: program_ratings
+  summary: "GET /programs.php - program-level ratings across the full KenPom era. Port of hoopR kp_program_ratings()."
+  path: /programs.php
+  example_args: {}
+  parser: parse_kenpom_page
+
+- short: archive_ratings
+  summary: "GET /archive.php - the Pomeroy ratings as they stood on a past date. Port of hoopR kp_pomeroy_archive_ratings()."
+  path: /archive.php
+  extra_params:
+  - name: date
+    query_key: d
+    type: str
+    required: true
+    description: Snapshot date as YYYY-MM-DD.
+  example_args: {date: '2025-02-01'}
+  parser: parse_kenpom_page
+
+- short: conference
+  summary: "GET /conf.php - one conference's season page (standings, efficiency, per-team splits). Port of hoopR kp_conf()."
+  path: /conf.php
+  extra_params:
+  - name: conf
+    query_key: c
+    type: str
+    required: true
+    description: "KenPom conference abbreviation (e.g. 'ACC', 'B10', 'SEC')."
+  - name: year
+    query_key: y
+    type: int
+    required: true
+    description: Season as a 4-digit ENDING year.
+  example_args: {conf: ACC, year: 2025}
+  parser: parse_kenpom_page
+
+- short: conference_stats
+  summary: "GET /confstats.php - league-wide conference comparison for one season. Port of hoopR kp_confstats()."
+  path: /confstats.php
+  extra_params:
+  - name: year
+    query_key: y
+    type: int
+    required: true
+    description: Season as a 4-digit ENDING year.
+  example_args: {year: 2025}
+  parser: parse_kenpom_page
+
+- short: conference_history
+  summary: "GET /confhistory.php - one conference's season-by-season history. Port of hoopR kp_confhistory()."
+  path: /confhistory.php
+  extra_params:
+  - name: conf
+    query_key: c
+    type: str
+    required: true
+    description: KenPom conference abbreviation.
+  example_args: {conf: ACC}
+  parser: parse_kenpom_page
+
+# --- miscellany (hoopR kp_misc_stats.R) -------------------------------------
+- short: trends
+  summary: "GET /trends.php - national Division I trends by season (tempo, efficiency, shooting, fouls). Port of hoopR kp_trends()."
+  path: /trends.php
+  example_args: {}
+  parser: parse_kenpom_page
+
+- short: home_court_advantage
+  summary: "GET /hca.php - per-team home-court advantage estimates. Port of hoopR kp_hca()."
+  path: /hca.php
+  example_args: {}
+  parser: parse_kenpom_page
+
+- short: arenas
+  summary: "GET /arenas.php - arena reference (name, capacity, average attendance) by team. Port of hoopR kp_arenas()."
+  path: /arenas.php
+  extra_params:
+  - name: year
+    query_key: y
+    type: int
+    required: true
+    description: Season as a 4-digit ENDING year.
+  example_args: {year: 2025}
+  parser: parse_kenpom_page
+
+- short: officials
+  summary: "GET /officials.php - referee ratings for one season. Port of hoopR kp_officials()."
+  path: /officials.php
+  extra_params:
+  - name: year
+    query_key: y
+    type: int
+    required: true
+    description: Season as a 4-digit ENDING year.
+  example_args: {year: 2025}
+  parser: parse_kenpom_page
+
+- short: referee
+  summary: "GET /referee.php - one referee's game log and splits for a season. Port of hoopR kp_referee()."
+  path: /referee.php
+  extra_params:
+  - name: referee
+    query_key: r
+    type: str
+    required: true
+    description: Referee name as KenPom spells it (take it from the officials table).
+  - name: year
+    query_key: y
+    type: int
+    required: true
+    description: Season as a 4-digit ENDING year.
+  example_args: {referee: Ron Groover, year: 2025}
+  parser: parse_kenpom_page
+
+- short: game_attributes
+  summary: "GET /game_attrs.php - season game leaderboards by attribute (thrill score, comebacks, upsets, ...). Port of hoopR kp_game_attrs()."
+  path: /game_attrs.php
+  extra_params:
+  - name: year
+    query_key: y
+    type: int
+    required: true
+    description: Season as a 4-digit ENDING year.
+  - name: attribute
+    query_key: s
+    type: str
+    description: >-
+      Attribute slug, e.g. ThrillScore, Comeback, FanMatch, Upsets, Busts,
+      MinutesPlayed, PossessionLength, LeadChanges.
+  example_args: {year: 2025, attribute: ThrillScore}
+  parser: parse_kenpom_page
