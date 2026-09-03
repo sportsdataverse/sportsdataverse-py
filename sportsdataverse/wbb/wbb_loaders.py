@@ -32,6 +32,7 @@ __all__ = [
     "load_wbb_schedule_crosswalk",
     "load_wbb_team_crosswalk",
     "load_wbb_player_core",
+    "load_ncaa_wbb_rapm",
     "load_ncaa_wbb_pbp",
     "load_ncaa_wbb_schedule",
     "load_ncaa_wbb_player_box",
@@ -1284,6 +1285,60 @@ def load_wbb_player_core(seasons, return_as_pandas: bool = False):
         frames.append(df)
     if missing:
         cli_warn("load_wbb_player_core: no data for season(s) {missing} (skipped)".format(missing=missing))
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+def load_ncaa_wbb_rapm(seasons, return_as_pandas: bool = False):
+    """Load ncaa_wbb_rapm (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_wbb_rapm
+
+    Args:
+        seasons: an int or iterable of seasons (>= 2011).
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; seasons with no published asset are
+        skipped with a warning rather than raising (404-safe).
+
+        |col_name  |type    |
+        |:---------|:-------|
+        |season    |Int32   |
+        |player_id |String  |
+        |person_id |String  |
+        |player    |String  |
+        |team      |String  |
+        |orapm     |Float64 |
+        |drapm     |Float64 |
+        |rapm_net  |Float64 |
+        |off_poss  |Int64   |
+        |def_poss  |Int64   |
+        |estimand  |String  |
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2011.
+
+    Example:
+        Quick start::
+
+            load_ncaa_wbb_rapm(seasons=2024)
+    """
+    frames, missing = [], []
+    for season in _as_season_list(seasons):
+        if int(season) < 2011:
+            raise SeasonNotFoundError("season cannot be less than 2011")
+        df = _read_release_parquet(
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/ncaa_wbb_rapm/ncaa_wbb_rapm_{season}.parquet"
+        )
+        if df is None:
+            missing.append(season)
+            continue
+        frames.append(df)
+    if missing:
+        cli_warn("load_ncaa_wbb_rapm: no data for season(s) {missing} (skipped)".format(missing=missing))
     # diagonal: per-season release schemas can drift (columns added/dropped
     # over the years) -- union columns, null-fill gaps.
     out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()

@@ -32,6 +32,7 @@ flowchart LR
 | `load_wbb_schedule_crosswalk` | [wbb_crosswalk](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wbb_crosswalk) | — |
 | `load_wbb_team_crosswalk` | [wbb_crosswalk](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wbb_crosswalk) | — |
 | `load_wbb_player_core` | [espn_womens_college_basketball_player_core](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_womens_college_basketball_player_core) | — |
+| `load_ncaa_wbb_rapm` | [ncaa_wbb_rapm](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_wbb_rapm) | — |
 | `load_ncaa_wbb_pbp` | [ncaa_wbb_pbp](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_wbb_pbp) | — |
 | `load_ncaa_wbb_schedule` | [ncaa_wbb_schedule](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_wbb_schedule) | — |
 | `load_ncaa_wbb_player_box` | [ncaa_wbb_player_box](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_wbb_player_box) | — |
@@ -759,6 +760,29 @@ Release: [espn_womens_college_basketball_player_core](https://github.com/sportsd
 
 ```python
 load_wbb_player_core(seasons=2025)
+```
+
+## `load_ncaa_wbb_rapm`
+
+Release: [ncaa_wbb_rapm](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_wbb_rapm) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/ncaa_wbb_rapm/ncaa_wbb_rapm_{season}.parquet`
+### Returns
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int32 | Season identifier (4-digit year or 'YYYY-YY' string). |
+| `player_id` | String | Unique player identifier. |
+| `person_id` | String | Unique player identifier (V3 endpoints). |
+| `player` | String | Player name. |
+| `team` | String | Team-side label or team identifier. |
+| `orapm` | Float64 |  |
+| `drapm` | Float64 |  |
+| `rapm_net` | Float64 |  |
+| `off_poss` | Int64 |  |
+| `def_poss` | Int64 |  |
+| `estimand` | String |  |
+
+```python
+load_ncaa_wbb_rapm(seasons=2024)
 ```
 
 ## `load_ncaa_wbb_pbp`
