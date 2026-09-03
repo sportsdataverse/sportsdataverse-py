@@ -1716,6 +1716,11 @@ loaders:
 # SDV-native enriched pbp: the same asset load_nfl_pbp(source="sdv") reads, given
 # its own name so the nfl_model_pbp tag is reachable without the source= kwarg.
 # 27 assets, 1999-2025, 257 columns per season (verified live 2026-09-02).
+# CAVEAT: 2000, 2001 and 2002 are published but near-empty -- 955 / 1,168 / 7,772
+# rows against ~44,000 in adjacent seasons, because the upstream Shield feed
+# serves drive and scoring data but almost no plays for those three years. Every
+# game is present and nothing errors, so it does not look wrong. Documented in
+# the loader docstring; tracking sportsdataverse/nfl-data#34.
 - fn: load_nfl_model_pbp
   league: nfl
   base: sdv_releases
