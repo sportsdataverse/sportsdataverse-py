@@ -1,0 +1,72 @@
+columns:
+- description: Composite Match id (Utf8 join key).
+  name: match_id
+  type: character
+- description: ''
+  name: side
+  type: character
+- description: Composite Team id (Utf8 join key).
+  name: team_id
+  type: character
+- description: ''
+  name: selection
+  type: character
+- description: Underlying StatsPerform/Opta provider id (e.g. `opta:...`).
+  name: provider_id
+  type: character
+- description: Composite Player id (Utf8 join key).
+  name: player_id
+  type: character
+- description: Shirt/bib number.
+  name: bib_number
+  type: character
+- description: Human position label (e.g. `Forward`).
+  name: role_label
+  type: character
+- description: Numeric position/role code.
+  name: role
+  type: integer
+- description: Media-style first name.
+  name: media_first_name
+  type: character
+- description: Media-style last name.
+  name: media_last_name
+  type: character
+- description: Name printed on the shirt.
+  name: shirt_name
+  type: character
+- description: Short team name.
+  name: short_name
+  type: character
+- description: ''
+  name: display_name
+  type: character
+- description: Nationality name.
+  name: nationality
+  type: character
+- description: ISO country code.
+  name: nationality_iso_code
+  type: character
+- description: Whether the player wears the captain's armband.
+  name: is_captain
+  type: logical
+- description: Whether the player is the goalkeeper.
+  name: is_goalkeeper
+  type: logical
+- description: In-match events attributed to the player (goals/cards/subs).
+  name: events
+  type: character
+- description: Formation-grid X (0-1 normalized canvas).
+  name: tactical_x_position
+  type: character
+- description: Formation-grid Y (0-1 normalized canvas).
+  name: tactical_y_position
+  type: character
+- description: Average pitch x-coordinate of the player over the match.
+  name: average_x_position
+  type: character
+- description: Average pitch y-coordinate of the player over the match.
+  name: average_y_position
+  type: character
+kind: dataframe
+schema: match_lineups

@@ -1,0 +1,105 @@
+columns:
+- description: Sportec competition id
+  name: competition_id
+  type: character
+- description: Competition display name
+  name: competition_name
+  type: character
+- description: Away goals
+  name: away_team_goals
+  type: integer
+- description: Home goals
+  name: home_team_goals
+  type: integer
+- description: Actual kickoff timestamp (ISO 8601)
+  name: kickoff_time
+  type: character
+- description: Matchday / round number
+  name: match_day
+  type: integer
+- description: Sportec match id (MLS-MAT-*)
+  name: match_id
+  type: character
+- description: Home:Away title, e.g. `CF Montréal:Toronto FC`
+  name: match_title
+  type: character
+- description: Scheduled kickoff timestamp (ISO 8601)
+  name: planned_kickoff_time
+  type: character
+- description: Final score string, e.g. `0:0`
+  name: result
+  type: character
+- description: Season year
+  name: season
+  type: integer
+- description: Sportec season id
+  name: season_id
+  type: character
+- description: '`League` or `Tournament`'
+  name: competition_type
+  type: character
+- description: Season section / phase
+  name: section_name
+  type: character
+- description: Short competition label
+  name: competition_label
+  type: character
+- description: Series type (e.g. regular)
+  name: series_type
+  type: character
+- description: First-half elapsed seconds
+  name: total_time_first_half
+  type: integer
+- description: Second-half elapsed seconds
+  name: total_time_second_half
+  type: integer
+- description: First-half playing seconds
+  name: playing_time_first_half
+  type: integer
+- description: Second-half playing seconds
+  name: playing_time_second_half
+  type: integer
+- description: First-half stoppage seconds
+  name: total_time_first_half_extra
+  type: integer
+- description: Second-half stoppage seconds
+  name: total_time_second_half_extra
+  type: integer
+- description: Penalty-shootout total seconds
+  name: total_time_penalty
+  type: integer
+- description: Penalty-shootout playing seconds
+  name: playing_time_penalty
+  type: integer
+- description: Free-form notes
+  name: other_information
+  type: character
+- description: Match classification
+  name: match_type
+  type: character
+- description: Whether kickoff is scheduled
+  name: match_scheduled
+  type: logical
+- description: Confidence of the match date
+  name: date_quality
+  type: character
+- description: Match end date
+  name: end_date
+  type: character
+- description: Sub-league grouping
+  name: sub_league
+  type: character
+- description: Group name (tournaments)
+  name: group
+  type: character
+- description: French competition name
+  name: competition_name_french
+  type: character
+- description: Status (e.g. `Live`, `FullTime`)
+  name: match_status
+  type: character
+- description: Current minute (live)
+  name: minute_of_play
+  type: character
+kind: dataframe
+schema: match

@@ -1,0 +1,96 @@
+[
+  {
+    "optaId": "315206319",
+    "fullName": "Amin Boudri",
+    "firstName": "Amin",
+    "lastName": "Boudri",
+    "knownName": "",
+    "onLoan": false,
+    "clubOptaId": "11690",
+    "clubSportecId": "MLS-CLU-000001",
+    "sportecId": "MLS-OBJ-000CLB",
+    "thumbnail": {
+      "slug": "lafc-boudri-amin-mls-obj-000clb",
+      "selfUrl": "https://forge-dapi.mls-prd.deltatre.digital/v2/content/en-us/photos/lafc-boudri-amin-mls-obj-000clb",
+      "title": "LAFC_Boudri_Amin_MLS-OBJ-000CLB",
+      "templateUrl": "https://images.mlssoccer.com/image/private/{formatInstructions}/mls/rlrebchpcyitnaelmtti",
+      "thumbnailUrl": "https://images.mlssoccer.com/image/private/w_250,h_250,c_thumb,g_auto,q_auto,f_jpg/mls/rlrebchpcyitnaelmtti",
+      "format": "png",
+      "overriddenFormats": {}
+    },
+    "height": "0",
+    "weight": "0",
+    "position": "offense",
+    "rosterCategory": "Senior",
+    "playerCategories": [
+      "International",
+      "U22 Initiative"
+    ],
+    "jerseyNumber": "65",
+    "playerStatusList": [],
+    "dateOfBirth": "2004-09-29",
+    "playerSlug": "amin-boudri"
+  },
+  {
+    "optaId": "229911",
+    "fullName": "Ryan \"Ryan Porteous\" Porteous",
+    "firstName": "Ryan",
+    "lastName": "Porteous",
+    "knownName": "Ryan Porteous",
+    "onLoan": false,
+    "clubOptaId": "11690",
+    "clubSportecId": "MLS-CLU-000001",
+    "sportecId": "MLS-OBJ-000C5V",
+    "thumbnail": {
+      "slug": "lafc-porteous-ryan-mls-obj-000c5v-x3423",
+      "selfUrl": "https://forge-dapi.mls-prd.deltatre.digital/v2/content/en-us/photos/lafc-porteous-ryan-mls-obj-000c5v-x3423",
+      "title": "LAFC_Porteous_Ryan_MLS-OBJ-000C5V",
+      "templateUrl": "https://images.mlssoccer.com/image/private/{formatInstructions}/mls/u7icaw0c5xtclwkbese9",
+      "thumbnailUrl": "https://images.mlssoccer.com/image/private/w_250,h_250,c_thumb,g_auto,q_auto,f_jpg/mls/u7icaw0c5xtclwkbese9",
+      "format": "png",
+      "overriddenFormats": {}
+    },
+    "height": "188",
+    "weight": "0",
+    "position": "defense",
+    "rosterCategory": "Senior",
+    "playerCategories": [
+      "International"
+    ],
+    "jerseyNumber": "5",
+    "playerStatusList": [],
+    "dateOfBirth": "1999-03-25",
+    "playerSlug": "ryan-porteous"
+  },
+  {
+    "optaId": "315200585",
+    "fullName": "Cabral Carter",
+    "firstName": "Cabral",
+    "lastName": "Carter",
+    "knownName": "",
+    "onLoan": false,
+    "clubOptaId": "11690",
+    "clubSportecId": "MLS-CLU-000001",
+    "sportecId": "MLS-OBJ-000861",
+    "thumbnail": {
+      "slug": "lafc-carter-cabral-mls-obj-000861-x3561",
+      "selfUrl": "https://forge-dapi.mls-prd.deltatre.digital/v2/content/en-us/photos/lafc-carter-cabral-mls-obj-000861-x3561",
+      "title": "LAFC_Carter_Cabral_MLS-OBJ-000861",
+      "templateUrl": "https://images.mlssoccer.com/image/private/{formatInstructions}/mls/ngnkabhjjswwlghq6424",
+      "thumbnailUrl": "https://images.mlssoccer.com/image/private/w_250,h_250,c_thumb,g_auto,q_auto,f_jpg/mls/ngnkabhjjswwlghq6424",
+      "format": "png",
+      "overriddenFormats": {}
+    },
+    "height": "0",
+    "weight": "0",
+    "position": "goalkeeper",
+    "rosterCategory": "Supplemental Slots 25-28",
+    "playerCategories": [
+      "Homegrown"
+    ],
+    "jerseyNumber": "31",
+    "playerStatusList": [],
+    "dateOfBirth": "2004-05-07",
+    "playerSlug": "cabral-carter"
+  }
+]

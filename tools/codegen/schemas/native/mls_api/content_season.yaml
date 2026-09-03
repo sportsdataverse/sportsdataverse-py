@@ -1,0 +1,111 @@
+columns:
+- description: Type discriminator for the record.
+  name: type
+  type: character
+- description: Contentful translation-group id shared by every locale of this entry.
+  name: _translation_id
+  type: character
+- description: Contentful entity id for the content entry.
+  name: _entity_id
+  type: character
+- description: Canonical API URL of this content entry.
+  name: self_url
+  type: character
+- description: URL slug.
+  name: slug
+  type: character
+- description: Display title.
+  name: title
+  type: character
+- description: Content tags, JSON-encoded.
+  name: tags
+  type: character
+- description: Related content entries, JSON-encoded.
+  name: relations
+  type: character
+- description: User or service that created the content entry.
+  name: created_by
+  type: character
+- description: User or service that last updated the content entry.
+  name: last_updated_by
+  type: character
+- description: Timestamp of the last content update (ISO 8601).
+  name: last_updated_date
+  type: character
+- description: Editorial content date (ISO 8601).
+  name: content_date
+  type: character
+- description: Whether the entry is flagged as featured (1 = featured).
+  name: featured
+  type: integer
+- description: Contentful entity-type code.
+  name: entity_code
+  type: character
+- description: Contentful flag controlling whether the entry appears in listings.
+  name: _list_availability
+  type: integer
+- description: 'Contentful reference list: reference list of clubs that have clinched,
+    list variant x.'
+  name: references_list_of_clubs_clinched_x
+  type: character
+- description: 'Contentful reference list: reference list of clubs that have clinched,
+    list variant e.'
+  name: references_list_of_clubs_clinched_e
+  type: character
+- description: 'Contentful reference list: reference list of clubs that have clinched,
+    list variant s.'
+  name: references_list_of_clubs_clinched_s
+  type: character
+- description: 'Contentful reference list: reference list of clubs that have clinched,
+    list variant y.'
+  name: references_list_of_clubs_clinched_y
+  type: character
+- description: 'Season content field: parallel Opta integer id for the entity.'
+  name: fields_opta_id
+  type: character
+- description: 'Season content field: Sportec opaque id for the entity (Utf8 join
+    key, never numeric).'
+  name: fields_sportec_id
+  type: character
+- description: 'Season content field: display name.'
+  name: fields_name
+  type: character
+- description: 'Season content field: parallel Opta integer id of the competition.'
+  name: fields_competition_opta_id
+  type: character
+- description: 'Season content field: Sportec opaque id of the competition (Utf8 join
+    key).'
+  name: fields_competition_sportec_id
+  type: character
+- description: 'Season content field: prose legend explaining the standings qualification
+    bands.'
+  name: fields_standings_legend
+  type: character
+- description: 'Season content field: number of clubs qualifying from the top of the
+    table.'
+  name: fields_top_clubs
+  type: integer
+- description: 'Season content field: prose legend explaining the top-clubs cut line.'
+  name: fields_top_clubs_legend
+  type: character
+- description: 'Season content field: points of home advantage applied by the playoff
+    seeding rules.'
+  name: fields_home_advantage
+  type: integer
+- description: 'Season content field: prose legend explaining the home-advantage rule.'
+  name: fields_home_advantage_legend
+  type: character
+- description: 'Season content field: count of Eastern Conference clubs that have
+    clinched a playoff berth.'
+  name: fields_playoff_qualified_east_conference
+  type: integer
+- description: 'Season content field: count of Western Conference clubs that have
+    clinched a playoff berth.'
+  name: fields_playoff_qualified_west_conference
+  type: integer
+- description: 'Season content field: competition: whether the season''s Sportec id
+    is manually overridden in the CMS.'
+  name: fields_competition_sportec_id_overwrite
+  type: logical
+kind: dataframe
+schema: content_season

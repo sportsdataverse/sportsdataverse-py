@@ -1,0 +1,9 @@
+columns:
+- description: ASA team id (base62 string; Utf8 join key, never numeric).
+  name: team_id
+  type: character
+- description: Team minutes in the window.
+  name: minutes
+  type: integer
+kind: dataframe
+schema: teams_goals_added

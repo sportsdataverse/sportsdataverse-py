@@ -1,0 +1,42 @@
+columns:
+- description: ASA team id (base62 string; Utf8 join key, never numeric).
+  name: team_id
+  type: character
+- description: Games included in the window.
+  name: count_games
+  type: integer
+- description: Shots taken.
+  name: shots_for
+  type: integer
+- description: Shots faced.
+  name: shots_against
+  type: integer
+- description: Goals scored.
+  name: goals_for
+  type: integer
+- description: Goals conceded.
+  name: goals_against
+  type: integer
+- description: goals_for - goals_against.
+  name: goal_difference
+  type: integer
+- description: Expected goals created.
+  name: xgoals_for
+  type: numeric
+- description: Expected goals conceded.
+  name: xgoals_against
+  type: numeric
+- description: xgoals_for - xgoals_against.
+  name: xgoal_difference
+  type: numeric
+- description: Finishing/keeping over expectation.
+  name: goal_difference_minus_xgoal_difference
+  type: numeric
+- description: Actual league points earned.
+  name: points
+  type: integer
+- description: Expected league points.
+  name: xpoints
+  type: numeric
+kind: dataframe
+schema: teams_xgoals

@@ -1,0 +1,18 @@
+columns:
+- description: Sportec competition id
+  name: competition_id
+  type: character
+- description: Competition display name
+  name: competition_name
+  type: character
+- description: French competition name
+  name: competition_name_french
+  type: character
+- description: Country
+  name: country
+  type: character
+- description: '`League` or `Tournament`'
+  name: competition_type
+  type: character
+kind: dataframe
+schema: competitions

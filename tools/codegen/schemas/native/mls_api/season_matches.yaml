@@ -1,0 +1,126 @@
+columns:
+- description: Sportec competition id
+  name: competition_id
+  type: character
+- description: Competition display name
+  name: competition_name
+  type: character
+- description: '`League` or `Tournament`'
+  name: competition_type
+  type: character
+- description: Match end date
+  name: end_date
+  type: character
+- description: Away Sportec club id
+  name: away_team_id
+  type: character
+- description: Away club name
+  name: away_team_name
+  type: character
+- description: Home Sportec club id
+  name: home_team_id
+  type: character
+- description: Home club name
+  name: home_team_name
+  type: character
+- description: Home short name
+  name: home_team_short_name
+  type: character
+- description: Home 3-letter code
+  name: home_team_three_letter_code
+  type: character
+- description: Away short name
+  name: away_team_short_name
+  type: character
+- description: Away 3-letter code
+  name: away_team_three_letter_code
+  type: character
+- description: Whether kickoff is scheduled
+  name: match_scheduled
+  type: logical
+- description: Matchday / round number
+  name: match_day
+  type: integer
+- description: Sportec matchday id
+  name: match_day_id
+  type: character
+- description: Sportec match id (MLS-MAT-*)
+  name: match_id
+  type: character
+- description: Match classification
+  name: match_type
+  type: character
+- description: Scheduled kickoff timestamp (ISO 8601)
+  name: planned_kickoff_time
+  type: character
+- description: Season year
+  name: season
+  type: integer
+- description: Sportec season id
+  name: season_id
+  type: character
+- description: Stadium id
+  name: stadium_id
+  type: character
+- description: Stadium name
+  name: stadium_name
+  type: character
+- description: Neutral-venue flag
+  name: neutral_venue
+  type: logical
+- description: Match start date
+  name: start_date
+  type: character
+- description: Sub-league grouping
+  name: sub_league
+  type: character
+- description: Group name (tournaments)
+  name: group
+  type: character
+- description: Confidence of the match date
+  name: date_quality
+  type: character
+- description: Officiating notes
+  name: official_information
+  type: character
+- description: Kickoff time status
+  name: match_date_time_status
+  type: character
+- description: Season section / phase
+  name: section_name
+  type: character
+- description: Short competition label
+  name: competition_label
+  type: character
+- description: Series type (e.g. regular)
+  name: series_type
+  type: character
+- description: French competition name
+  name: competition_name_french
+  type: character
+- description: Final score string, e.g. `0:0`
+  name: result
+  type: character
+- description: Away goals
+  name: away_team_goals
+  type: integer
+- description: Home goals
+  name: home_team_goals
+  type: integer
+- description: Status (e.g. `Live`, `FullTime`)
+  name: match_status
+  type: character
+- description: Current minute (live)
+  name: minute_of_play
+  type: character
+- description: Stadium city
+  name: stadium_city
+  type: character
+- description: Stadium country
+  name: stadium_country
+  type: character
+- description: Identifier of the playoff bracket structure.
+  name: bracket_structure_id
+  type: character
+kind: dataframe
+schema: season_matches

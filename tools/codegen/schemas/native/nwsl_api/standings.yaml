@@ -1,0 +1,100 @@
+columns:
+- description: ''
+  name: split_type
+  type: character
+- description: Achievement flags (champion, clinched, etc.).
+  name: achievement_statuses
+  type: character
+- description: Free-text standings note (null when none).
+  name: note
+  type: character
+- description: Composite Team id (Utf8 join key).
+  name: team_id
+  type: character
+- description: Underlying StatsPerform/Opta provider id (e.g. `opta:...`).
+  name: provider_id
+  type: character
+- description: Short team name.
+  name: short_name
+  type: character
+- description: Official team name.
+  name: official_name
+  type: character
+- description: 3-letter team code.
+  name: acronym_name
+  type: character
+- description: Localized 3-letter code.
+  name: acronym_name_localized
+  type: character
+- description: True for placeholder/TBD teams.
+  name: is_team_fake
+  type: logical
+- description: Media-style display name.
+  name: media_name
+  type: character
+- description: Short media-style display name.
+  name: media_short_name
+  type: character
+- description: ISO country code.
+  name: country_code
+  type: character
+- description: Team type (e.g. `club`).
+  name: team_type
+  type: character
+- description: Season summary blurb.
+  name: overall_summary
+  type: character
+- description: 'Home venue: `{id, providerId, name, cityName, country, address, capacity,
+    yearOfConstruction, mapsGeoCodeLatitude, mapsGeoCodeLongitude, imagery}`.'
+  name: stadium
+  type: character
+- description: Per-season crest variants.
+  name: all_season_imagery
+  type: character
+- description: ''
+  name: rank
+  type: integer
+- description: Team identity block the player belongs to.
+  name: team
+  type: character
+- description: ''
+  name: points
+  type: integer
+- description: 'Qualification band: identifier of the qualification band.'
+  name: qualification_qualification_id
+  type: character
+- description: 'Qualification band: display label of the qualification band.'
+  name: qualification_qualification_label
+  type: character
+- description: Qualification band (e.g. playoff/Final Series).
+  name: qualification
+  type: numeric
+- description: Matches played in this split.
+  name: matches_played
+  type: integer
+- description: Matches won.
+  name: win
+  type: integer
+- description: Matches drawn.
+  name: draw
+  type: integer
+- description: Matches lost.
+  name: lose
+  type: integer
+- description: Goals scored.
+  name: goals_for
+  type: integer
+- description: Goals conceded.
+  name: goals_against
+  type: integer
+- description: Goals scored minus goals conceded.
+  name: goal_difference
+  type: integer
+- description: Position movement versus the previous matchday.
+  name: movement
+  type: character
+- description: Recent results sequence, JSON-encoded (the API sends an array).
+  name: form
+  type: character
+kind: dataframe
+schema: standings

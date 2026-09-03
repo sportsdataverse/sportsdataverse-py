@@ -1,0 +1,258 @@
+{
+  "competition": {
+    "seasonId": "nwsl::Football_Season::0b6761e4701749f593690c0f338da74c",
+    "tournamentName": null,
+    "competitionId": "nwsl::Football_Competition::3293333447504e83986ec13e794b68ea",
+    "providerId": "opta:Competition:djkvh1luqdkdixpoe653lzixg",
+    "name": "NWSL",
+    "officialName": "NWSL",
+    "shortName": null,
+    "acronymName": null,
+    "imagery": {}
+  },
+  "players": [
+    {
+      "stats": [
+        {
+          "statsId": "games-played",
+          "statsLabel": "Games played",
+          "statsLabelAbbreviation": "GP",
+          "statsValue": 14,
+          "statsUnit": null,
+          "statsUnitAbbreviation": null
+        },
+        {
+          "statsId": "minutes-played",
+          "statsLabel": "Minutes played",
+          "statsLabelAbbreviation": "Mins",
+          "statsValue": 1116,
+          "statsUnit": "minutes",
+          "statsUnitAbbreviation": "'"
+        },
+        {
+          "statsId": "goals",
+          "statsLabel": "Goals",
+          "statsLabelAbbreviation": "G",
+          "statsValue": 1,
+          "statsUnit": null,
+          "statsUnitAbbreviation": null
+        }
+      ],
+      "rankLabel": null,
+      "team": {
+        "teamId": "nwsl::Football_Team::2c1699409ff84c9eb491aeaca3d3edde",
+        "providerId": "opta:Team:agxipc0vk4rtg09amjxv10nx0",
+        "shortName": "KC Current",
+        "officialName": "Kansas City Current",
+        "acronymName": "KC",
+        "acronymNameLocalized": "KC",
+        "isTeamFake": false,
+        "mediaName": "Kansas City Current",
+        "mediaShortName": "KC Current",
+        "countryCode": "US",
+        "teamType": "club",
+        "overallSummary": null,
+        "stadium": null,
+        "imagery": {},
+        "allSeasonImagery": [],
+        "editorial": {
+          "social": {
+            "facebook": "https://www.facebook.com/kccurrent",
+            "instagram": "https://www.instagram.com/kccurrent",
+            "x": "https://twitter.com/thekccurrent",
+            "tikTok": "https://www.tiktok.com/@thekccurrent",
+            "youTube": "https://www.youtube.com/kccurrent",
+            "linkedIn": "https://www.linkedin.com/company/kc-current"
+          },
+          "websiteUrl": "https://www.kansascitycurrent.com/",
+          "shopUrl": "https://shop.kansascitycurrent.com/password",
+          "ticketsUrl": "https://www.kansascitycurrent.com/tickets",
+          "clubPrimaryColour": "",
+          "clubSecondaryColour": "",
+          "clubTextColour": ""
+        }
+      },
+      "playerId": "nwsl::Football_Player::9b7fd5c1259c48b1a87f1cc0c10f713c",
+      "providerId": "opta:Player:4c6z6g6q7jq62bznylu0kjnc9",
+      "bibNumber": "10",
+      "roleLabel": "Midfielder",
+      "role": 3,
+      "mediaFirstName": "Lo'eau",
+      "mediaLastName": "LaBonta",
+      "shirtName": "",
+      "shortName": "L. LaBonta",
+      "displayName": "",
+      "nationality": "USA",
+      "nationalityIsoCode": "USA",
+      "editorial": {
+        "playerRoleWithinTeam": ""
+      },
+      "imagery": {},
+      "apiCallRequestTime": "0001-01-01T00:00:00"
+    },
+    {
+      "stats": [
+        {
+          "statsId": "games-played",
+          "statsLabel": "Games played",
+          "statsLabelAbbreviation": "GP",
+          "statsValue": 15,
+          "statsUnit": null,
+          "statsUnitAbbreviation": null
+        },
+        {
+          "statsId": "minutes-played",
+          "statsLabel": "Minutes played",
+          "statsLabelAbbreviation": "Mins",
+          "statsValue": 652,
+          "statsUnit": "minutes",
+          "statsUnitAbbreviation": "'"
+        },
+        {
+          "statsId": "goals",
+          "statsLabel": "Goals",
+          "statsLabelAbbreviation": "G",
+          "statsValue": 2,
+          "statsUnit": null,
+          "statsUnitAbbreviation": null
+        }
+      ],
+      "rankLabel": null,
+      "team": {
+        "teamId": "nwsl::Football_Team::2c1699409ff84c9eb491aeaca3d3edde",
+        "providerId": "opta:Team:agxipc0vk4rtg09amjxv10nx0",
+        "shortName": "KC Current",
+        "officialName": "Kansas City Current",
+        "acronymName": "KC",
+        "acronymNameLocalized": "KC",
+        "isTeamFake": false,
+        "mediaName": "Kansas City Current",
+        "mediaShortName": "KC Current",
+        "countryCode": "US",
+        "teamType": "club",
+        "overallSummary": null,
+        "stadium": null,
+        "imagery": {},
+        "allSeasonImagery": [],
+        "editorial": {
+          "social": {
+            "facebook": "https://www.facebook.com/kccurrent",
+            "instagram": "https://www.instagram.com/kccurrent",
+            "x": "https://twitter.com/thekccurrent",
+            "tikTok": "https://www.tiktok.com/@thekccurrent",
+            "youTube": "https://www.youtube.com/kccurrent",
+            "linkedIn": "https://www.linkedin.com/company/kc-current"
+          },
+          "websiteUrl": "https://www.kansascitycurrent.com/",
+          "shopUrl": "https://shop.kansascitycurrent.com/password",
+          "ticketsUrl": "https://www.kansascitycurrent.com/tickets",
+          "clubPrimaryColour": "",
+          "clubSecondaryColour": "",
+          "clubTextColour": ""
+        }
+      },
+      "playerId": "nwsl::Football_Player::f82ac82c607145468005f6b2e5da5b72",
+      "providerId": "opta:Player:3qk8owv039ppiiev6skkkb52i",
+      "bibNumber": "13",
+      "roleLabel": "Forward",
+      "role": 4,
+      "mediaFirstName": "Haley",
+      "mediaLastName": "Hopkins",
+      "shirtName": "",
+      "shortName": "H. Hopkins",
+      "displayName": "",
+      "nationality": "USA",
+      "nationalityIsoCode": "USA",
+      "editorial": {
+        "playerRoleWithinTeam": ""
+      },
+      "imagery": {},
+      "apiCallRequestTime": "0001-01-01T00:00:00"
+    },
+    {
+      "stats": [
+        {
+          "statsId": "games-played",
+          "statsLabel": "Games played",
+          "statsLabelAbbreviation": "GP",
+          "statsValue": 15,
+          "statsUnit": null,
+          "statsUnitAbbreviation": null
+        },
+        {
+          "statsId": "minutes-played",
+          "statsLabel": "Minutes played",
+          "statsLabelAbbreviation": "Mins",
+          "statsValue": 1340,
+          "statsUnit": "minutes",
+          "statsUnitAbbreviation": "'"
+        },
+        {
+          "statsId": "goals",
+          "statsLabel": "Goals",
+          "statsLabelAbbreviation": "G",
+          "statsValue": 0,
+          "statsUnit": null,
+          "statsUnitAbbreviation": null
+        }
+      ],
+      "rankLabel": null,
+      "team": {
+        "teamId": "nwsl::Football_Team::2c1699409ff84c9eb491aeaca3d3edde",
+        "providerId": "opta:Team:agxipc0vk4rtg09amjxv10nx0",
+        "shortName": "KC Current",
+        "officialName": "Kansas City Current",
+        "acronymName": "KC",
+        "acronymNameLocalized": "KC",
+        "isTeamFake": false,
+        "mediaName": "Kansas City Current",
+        "mediaShortName": "KC Current",
+        "countryCode": "US",
+        "teamType": "club",
+        "overallSummary": null,
+        "stadium": null,
+        "imagery": {},
+        "allSeasonImagery": [],
+        "editorial": {
+          "social": {
+            "facebook": "https://www.facebook.com/kccurrent",
+            "instagram": "https://www.instagram.com/kccurrent",
+            "x": "https://twitter.com/thekccurrent",
+            "tikTok": "https://www.tiktok.com/@thekccurrent",
+            "youTube": "https://www.youtube.com/kccurrent",
+            "linkedIn": "https://www.linkedin.com/company/kc-current"
+          },
+          "websiteUrl": "https://www.kansascitycurrent.com/",
+          "shopUrl": "https://shop.kansascitycurrent.com/password",
+          "ticketsUrl": "https://www.kansascitycurrent.com/tickets",
+          "clubPrimaryColour": "",
+          "clubSecondaryColour": "",
+          "clubTextColour": ""
+        }
+      },
+      "playerId": "nwsl::Football_Player::04a1aad603eb46dd9c349c2ba91d2322",
+      "providerId": "opta:Player:736jvvtkgwc3g1vooviaod33d",
+      "bibNumber": "18",
+      "roleLabel": "Defender",
+      "role": 2,
+      "mediaFirstName": "Izzy",
+      "mediaLastName": "Rodriguez",
+      "shirtName": "Izzy Rodriguez",
+      "shortName": "I. Rodriguez",
+      "displayName": "",
+      "nationality": "USA",
+      "nationalityIsoCode": "USA",
+      "editorial": {
+        "playerRoleWithinTeam": ""
+      },
+      "imagery": {},
+      "apiCallRequestTime": "0001-01-01T00:00:00"
+    }
+  ],
+  "pagination": {
+    "totalPages": 2,
+    "currentPage": 1,
+    "isLastPage": false
+  },
+  "apiCallRequestTime": "2026-07-18T17:59:38.7781931+00:00"
+}

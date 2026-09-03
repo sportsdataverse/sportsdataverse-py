@@ -1,0 +1,209 @@
+api: mls_api
+docstring:
+  example_import: true
+  raises:
+  - 'sportsdataverse.errors.NoESPNDataError: the MLS host returned 404 (unknown id,
+    or an unplayed match on ``/matches/{matchId}``).'
+  - 'requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download``
+    exhausts its retries.'
+  see_also:
+  - name: MLS
+    note: the public site these hosts render
+    url: https://www.mlssoccer.com/
+  - name: American Soccer Analysis
+    note: advanced MLS xG / g+ metrics (``asa_*`` wrappers)
+    url: https://www.americansocceranalysis.com/
+endpoints:
+- example_args:
+    club_id: MLS-CLU-000001
+  parser: parse_mls_entity
+  path: /clubs/{club_id}
+  path_params:
+  - name: club_id
+    required: true
+    type: str
+  returns_schema: native/mls_api/club
+  short: club
+  summary: Single club detail (stats-api).
+- example_args:
+    competition_id: MLS-COM-000001
+  parser: parse_mls_api
+  path: /competitions/{competition_id}/seasons
+  path_params:
+  - name: competition_id
+    required: true
+    type: str
+  returns_schema: native/mls_api/competition_seasons
+  short: competition_seasons
+  summary: List seasons for a competition (stats-api).
+- parser: parse_mls_api
+  path: /competitions
+  returns_schema: native/mls_api/competitions
+  short: competitions
+  summary: List competitions (stats-api).
+- example_args:
+    slug: mls-regular-season-2026
+  host: https://dapi.mlssoccer.com
+  parser: parse_mls_entity
+  path: /v2/content/en-us/seasons/{slug}
+  path_params:
+  - name: slug
+    required: true
+    type: str
+  returns_schema: native/mls_api/content_season
+  short: content_season
+  summary: Season content entity by slug (dapi / Contentful).
+- extra_params:
+  - description: Filter by competition Sportec id (indexed field)
+    name: competition_sportec_id
+    query_key: fields.competitionSportecId
+    type: str
+  - description: Filter by season Sportec id (indexed field)
+    name: sportec_id
+    query_key: fields.sportecId
+    type: str
+  host: https://dapi.mlssoccer.com
+  parser: parse_mls_api
+  path: /v2/content/en-us/seasons
+  returns_schema: native/mls_api/content_seasons
+  short: content_seasons
+  summary: Query season content entities (dapi / Contentful).
+- example_args:
+    match_id: MLS-MAT-0009H8
+  parser: parse_mls_match
+  path: /matches/{match_id}
+  path_params:
+  - name: match_id
+    required: true
+    type: str
+  returns_schema: native/mls_api/match
+  short: match
+  summary: Single match detail incl. lineups + referees (stats-api).
+- example_args:
+    season_id: MLS-SEA-0001KA
+  extra_params:
+  - description: Window start date (YYYY-MM-DD)
+    name: match_date_gte
+    query_key: match_date[gte]
+    type: str
+  - description: Window end date (YYYY-MM-DD)
+    name: match_date_lte
+    query_key: match_date[lte]
+    type: str
+  - description: Filter by competition id
+    name: competition_id
+    query_key: competition_id
+    type: str
+  - description: Page size
+    name: per_page
+    query_key: per_page
+    type: int
+  - description: Sort spec, e.g. planned_kickoff_time:asc,home_team_name:asc
+    name: sort
+    query_key: sort
+    type: str
+  - description: Filter by series/round name
+    name: series_name
+    query_key: series_name
+    type: str
+  parser: parse_mls_api
+  path: /matches/seasons/{season_id}
+  path_params:
+  - name: season_id
+    required: true
+    type: str
+  returns_schema: native/mls_api/season_matches
+  short: season_matches
+  summary: List matches in a season, date-windowed (stats-api).
+- example_args:
+    club_id: MLS-CLU-000001
+  extra_params:
+  - description: Locale, e.g. en-us
+    name: culture
+    query_key: culture
+    type: str
+  host: https://sportapi.mlssoccer.com
+  parser: parse_mls_api
+  path: /api/players/byClub/{club_id}
+  path_params:
+  - name: club_id
+    required: true
+    type: str
+  returns_schema: native/mls_api/sportapi_club_players
+  short: sportapi_club_players
+  summary: Club roster with player Sportec ids (sportapi).
+- example_args:
+    ids: MLS-MAT-0009H8
+  host: https://sportapi.mlssoccer.com
+  parser: parse_mls_api
+  path: /api/clubs/bySportecIds/{ids}
+  path_params:
+  - name: ids
+    required: true
+    type: str
+  returns_schema: native/mls_api/sportapi_clubs_by_sportec_ids
+  short: sportapi_clubs_by_sportec_ids
+  summary: Batch club detail by Sportec ids (sportapi).
+- example_args:
+    match_id: MLS-MAT-0009H8
+  host: https://sportapi.mlssoccer.com
+  parser: parse_mls_entity
+  path: /api/matches/{match_id}
+  path_params:
+  - name: match_id
+    required: true
+    type: str
+  returns_schema: native/mls_api/sportapi_match
+  short: sportapi_match
+  summary: Single match detail (sportapi / .NET).
+- example_args:
+    ids: MLS-MAT-0009H8
+  host: https://sportapi.mlssoccer.com
+  parser: parse_mls_api
+  path: /api/matches/bySportecIds/{ids}
+  path_params:
+  - name: ids
+    required: true
+    type: str
+  returns_schema: native/mls_api/sportapi_matches_by_sportec_ids
+  short: sportapi_matches_by_sportec_ids
+  summary: Batch match detail by Sportec ids (sportapi).
+- example_args:
+    competition_id: MLS-COM-000001
+    season_id: MLS-SEA-0001KA
+  extra_params:
+  - description: 'Standings grouping: conference | overall'
+    name: category
+    query_key: category
+    type: str
+  - description: home | away split (optional)
+    name: standings_type
+    query_key: type
+    type: str
+  - description: Include live in-progress results
+    name: is_live
+    query_key: is_live
+    transform: bool_str
+    type: bool
+  parser: parse_mls_standings
+  path: /competitions/{competition_id}/seasons/{season_id}/standings
+  path_params:
+  - name: competition_id
+    required: true
+    type: str
+  - name: season_id
+    required: true
+    type: str
+  returns_schema: native/mls_api/standings
+  short: standings
+  summary: Standings table for a competition season (stats-api).
+getter_module: sportsdataverse.soccer.mls.mls_api_runtime
+host: https://stats-api.mlssoccer.com
+module: mls_api
+name_pattern: mls_{short}
+parser_module: soccer.mls.mls_api_parsers
+passthrough_query: true
+qualifier: ''
+runtime_imports:
+- _get
+- bool_str

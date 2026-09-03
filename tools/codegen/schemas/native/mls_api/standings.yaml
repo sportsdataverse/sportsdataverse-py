@@ -1,0 +1,81 @@
+columns:
+- description: Sportec competition id
+  name: competition_id
+  type: character
+- description: Sportec season id
+  name: season_id
+  type: character
+- description: Group name (tournaments)
+  name: group
+  type: character
+- description: ''
+  name: category
+  type: character
+- description: Type discriminator for the record.
+  name: type
+  type: character
+- description: Table position/rank
+  name: position
+  type: integer
+- description: Club full name
+  name: club
+  type: character
+- description: Sportec club id
+  name: club_id
+  type: character
+- description: Team name
+  name: team
+  type: character
+- description: Sportec club id
+  name: team_id
+  type: character
+- description: Short club name
+  name: team_short_name
+  type: character
+- description: 3-letter club code
+  name: team_three_letter_code
+  type: character
+- description: Matches played
+  name: games_played
+  type: integer
+- description: Wins
+  name: wins
+  type: integer
+- description: Draws
+  name: draws
+  type: integer
+- description: Losses
+  name: losses
+  type: integer
+- description: Goals for
+  name: goals_scored
+  type: integer
+- description: Goals against
+  name: goals_against
+  type: integer
+- description: Goal differential
+  name: goals_difference
+  type: integer
+- description: Points
+  name: points
+  type: integer
+- description: Playoff/qualification marker
+  name: qualification
+  type: character
+- description: Movement vs prior matchday
+  name: tendency
+  type: character
+- description: Points per game
+  name: points_per_game
+  type: numeric
+- description: Goals-for per game
+  name: goals_scored_per_game
+  type: numeric
+- description: Goals-against per game
+  name: goals_against_per_game
+  type: numeric
+- description: Goal-diff per game
+  name: goals_difference_per_game
+  type: numeric
+kind: dataframe
+schema: standings

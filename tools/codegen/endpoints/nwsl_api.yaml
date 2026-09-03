@@ -1,0 +1,214 @@
+api: nwsl_api
+docstring:
+  example_import: true
+  raises:
+  - 'sportsdataverse.errors.NoESPNDataError: the SDP host returned 404 (unknown composite
+    id, or an unmapped match sub-resource).'
+  - 'requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download``
+    exhausts its retries.'
+  see_also:
+  - name: NWSL
+    note: the public site this feed renders
+    url: https://www.nwslsoccer.com/
+  - name: American Soccer Analysis
+    note: advanced NWSL xG / g+ metrics (``asa_*`` wrappers)
+    url: https://www.americansocceranalysis.com/
+endpoints:
+- extra_params:
+  - default: en-US
+    description: UI locale, always `en-US`.
+    name: locale
+    query_key: locale
+    type: str
+  parser: parse_nwsl_sdp
+  path: /competitions
+  returns_schema: native/nwsl_api/competitions
+  short: competitions
+  summary: All competitions StatsPerform tracks for NWSL (league + friendlies/cups).
+- example_args:
+    match_id: nwsl::Football_Match::0b6761e4701749f593690c0f338da74c
+    season_id: nwsl::Football_Season::0b6761e4701749f593690c0f338da74c
+  extra_params:
+  - default: en-US
+    description: UI locale, always `en-US`.
+    name: locale
+    query_key: locale
+    type: str
+  parser: parse_nwsl_lineups
+  path: /seasons/{season_id}/matches/{match_id}/lineups
+  path_params:
+  - name: season_id
+    required: true
+    type: str
+  - name: match_id
+    required: true
+    type: str
+  returns_schema: native/nwsl_api/match_lineups
+  short: match_lineups
+  summary: Team lineups (starting XI + bench + staff) for a match.
+- example_args:
+    season_id: nwsl::Football_Season::0b6761e4701749f593690c0f338da74c
+  extra_params:
+  - default: en-US
+    description: UI locale, always `en-US`.
+    name: locale
+    query_key: locale
+    type: str
+  parser: parse_nwsl_sdp
+  path: /seasons/{season_id}/matchdays
+  path_params:
+  - name: season_id
+    required: true
+    type: str
+  returns_schema: native/nwsl_api/matchdays
+  short: matchdays
+  summary: Match days (rounds) for a season.
+- example_args:
+    season_id: nwsl::Football_Season::0b6761e4701749f593690c0f338da74c
+  extra_params:
+  - default: en-US
+    description: UI locale, always `en-US`.
+    name: locale
+    query_key: locale
+    type: str
+  - description: 'Stat family: `general` (default), `attack`, `defence`, etc.'
+    name: category
+    query_key: category
+    type: str
+  - description: Position filter, e.g. `all`.
+    name: role
+    query_key: role
+    type: str
+  - description: '`asc` or `desc`.'
+    name: direction
+    query_key: direction
+    type: str
+  - description: 1-based page number.
+    name: page
+    query_key: page
+    type: int
+  - description: Page size (e.g. 400).
+    name: page_num_element
+    query_key: pageNumElement
+    type: int
+  parser: parse_nwsl_stats
+  path: /seasons/{season_id}/stats/players
+  path_params:
+  - name: season_id
+    required: true
+    type: str
+  returns_schema: native/nwsl_api/player_stats
+  short: player_stats
+  summary: Player-stats leaderboard for a season (paginated).
+- extra_params:
+  - description: Comma-separated composite Season ids.
+    name: season_ids
+    query_key: seasonIds
+    type: str
+  - default: en-US
+    description: UI locale, always `en-US`.
+    name: locale
+    query_key: locale
+    type: str
+  - description: Window start, `MM/DD/YYYY` (US format).
+    name: start_date
+    query_key: startDate
+    type: str
+  - description: Window end, `MM/DD/YYYY` (US format).
+    name: end_date
+    query_key: endDate
+    type: str
+  parser: parse_nwsl_sdp
+  path: /seasons/multipleSeasonMatches
+  returns_schema: native/nwsl_api/season_matches
+  short: season_matches
+  summary: Matches across one or more seasons within a US-format date window.
+- example_args:
+    season_id: nwsl::Football_Season::0b6761e4701749f593690c0f338da74c
+  extra_params:
+  - default: en-US
+    description: UI locale, always `en-US`.
+    name: locale
+    query_key: locale
+    type: str
+  parser: parse_nwsl_sdp
+  path: /seasons/{season_id}/stages
+  path_params:
+  - name: season_id
+    required: true
+    type: str
+  returns_schema: native/nwsl_api/stages
+  short: stages
+  summary: Competition stages for a season (may be empty for league play).
+- example_args:
+    season_id: nwsl::Football_Season::0b6761e4701749f593690c0f338da74c
+  extra_params:
+  - default: en-US
+    description: UI locale, always `en-US`.
+    name: locale
+    query_key: locale
+    type: str
+  - description: Sort field, e.g. `rank`.
+    name: order_by
+    query_key: orderBy
+    type: str
+  - description: '`asc` or `desc`.'
+    name: direction
+    query_key: direction
+    type: str
+  parser: parse_nwsl_standings
+  path: /seasons/{season_id}/standings/overall
+  path_params:
+  - name: season_id
+    required: true
+    type: str
+  returns_schema: native/nwsl_api/standings
+  short: standings
+  summary: Overall standings table for a season (table/home/away splits).
+- example_args:
+    season_id: nwsl::Football_Season::0b6761e4701749f593690c0f338da74c
+  extra_params:
+  - default: en-US
+    description: UI locale, always `en-US`.
+    name: locale
+    query_key: locale
+    type: str
+  - description: 'Stat family: `general` (default), `attack`, `defence`, etc.'
+    name: category
+    query_key: category
+    type: str
+  parser: parse_nwsl_stats
+  path: /seasons/{season_id}/stats/teams
+  path_params:
+  - name: season_id
+    required: true
+    type: str
+  returns_schema: native/nwsl_api/team_stats
+  short: team_stats
+  summary: Team-stats leaderboard for a season.
+- example_args:
+    season_id: nwsl::Football_Season::0b6761e4701749f593690c0f338da74c
+  extra_params:
+  - default: en-US
+    description: UI locale, always `en-US`.
+    name: locale
+    query_key: locale
+    type: str
+  parser: parse_nwsl_sdp
+  path: /seasons/{season_id}/teams
+  path_params:
+  - name: season_id
+    required: true
+    type: str
+  returns_schema: native/nwsl_api/teams
+  short: teams
+  summary: Teams participating in a season.
+getter_module: sportsdataverse.soccer.nwsl.nwsl_api_runtime
+host: https://api-sdp.nwslsoccer.com/v1/nwsl/football
+module: nwsl_api
+name_pattern: nwsl_{short}
+parser_module: soccer.nwsl.nwsl_api_parsers
+passthrough_query: true
+qualifier: ''
+runtime_imports:
+- _get

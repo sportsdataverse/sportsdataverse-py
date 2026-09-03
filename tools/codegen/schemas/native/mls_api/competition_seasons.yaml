@@ -1,0 +1,9 @@
+columns:
+- description: Sportec season id
+  name: season_id
+  type: character
+- description: Season year
+  name: season
+  type: integer
+kind: dataframe
+schema: competition_seasons

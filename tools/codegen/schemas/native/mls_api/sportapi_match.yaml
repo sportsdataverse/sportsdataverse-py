@@ -1,0 +1,241 @@
+columns:
+- description: Parallel Opta integer id for the entity.
+  name: opta_id
+  type: character
+- description: Sportec opaque id for the entity (Utf8 join key, never numeric).
+  name: sportec_id
+  type: character
+- description: URL slug.
+  name: slug
+  type: character
+- description: Home:Away match title as rendered in league listings.
+  name: league_match_title
+  type: character
+- description: Broadcast listings for the match, JSON-encoded.
+  name: broadcasters
+  type: character
+- description: Scheduled kickoff timestamp (ISO 8601).
+  name: match_date
+  type: character
+- description: Content tags, JSON-encoded.
+  name: tags
+  type: character
+- description: 'Home club: club-specific broadcast listings, JSON-encoded.'
+  name: home_club_broadcasters
+  type: character
+- description: 'Away club: club-specific broadcast listings, JSON-encoded.'
+  name: away_club_broadcasters
+  type: character
+- description: Club-specific broadcast listings, JSON-encoded.
+  name: club_broadcasters
+  type: character
+- description: Whether the kickoff time is still to be confirmed.
+  name: is_time_tbd
+  type: logical
+- description: MGM sportsbook partner identifier.
+  name: mgm_id
+  type: character
+- description: 'Apple broadcast: Apple TV stream URL for the match.'
+  name: apple_stream_url
+  type: character
+- description: 'Apple broadcast: Apple subscription tier required to watch.'
+  name: apple_subscription_tier
+  type: character
+- description: 'Apple broadcast: Apple advertising category for the stream.'
+  name: apple_advertisement_category
+  type: character
+- description: Name of the round or series this match belongs to.
+  name: round_name
+  type: character
+- description: 'Competition: competition phase of the match (regular season, playoffs,
+    ...).'
+  name: competition_phase
+  type: character
+- description: 'Home club: club''s standings rank at the time of the request.'
+  name: home_club_rank
+  type: character
+- description: 'Away club: club''s standings rank at the time of the request.'
+  name: away_club_rank
+  type: character
+- description: ''
+  name: round_number
+  type: integer
+- description: Group label within the round (tournaments).
+  name: round_group
+  type: character
+- description: Matchday / round number
+  name: match_day
+  type: character
+- description: Calendar (.ics) subscription URL for the match.
+  name: calendar_url
+  type: character
+- description: Whether the match is flagged as delayed.
+  name: delayed_match
+  type: logical
+- description: 'Priority-match window: end of the display window (ISO 8601).'
+  name: priority_match_date_to
+  type: character
+- description: 'Priority-match window: sponsor name attached to the priority match.'
+  name: priority_match_sponsor
+  type: character
+- description: 'Home club: parallel Opta integer id for the entity.'
+  name: home_opta_id
+  type: character
+- description: 'Home club: Sportec opaque id for the entity (Utf8 join key, never
+    numeric).'
+  name: home_sportec_id
+  type: character
+- description: 'Home club: full name'
+  name: home_full_name
+  type: character
+- description: 'Home club: URL slug.'
+  name: home_slug
+  type: character
+- description: 'Home club: short name'
+  name: home_short_name
+  type: character
+- description: ''
+  name: home_abbreviation
+  type: character
+- description: 'Home club: brand background colour (hex).'
+  name: home_background_color
+  type: character
+- description: 'Home club: asset slug for the black-and-white logo.'
+  name: home_logo_bw_slug
+  type: character
+- description: 'Home club: asset slug for the full-colour logo.'
+  name: home_logo_color_slug
+  type: character
+- description: 'Home club: URL of the full-colour logo asset.'
+  name: home_logo_color_url
+  type: character
+- description: 'Home club: asset slug for the full-colour club crest.'
+  name: home_crest_color_slug
+  type: character
+- description: 'Home club: identifier of the eCal calendar-subscription widget.'
+  name: home_ecal_widget_id
+  type: character
+- description: 'Away club: parallel Opta integer id for the entity.'
+  name: away_opta_id
+  type: character
+- description: 'Away club: Sportec opaque id for the entity (Utf8 join key, never
+    numeric).'
+  name: away_sportec_id
+  type: character
+- description: 'Away club: full name'
+  name: away_full_name
+  type: character
+- description: 'Away club: URL slug.'
+  name: away_slug
+  type: character
+- description: 'Away club: short name'
+  name: away_short_name
+  type: character
+- description: ''
+  name: away_abbreviation
+  type: character
+- description: 'Away club: brand background colour (hex).'
+  name: away_background_color
+  type: character
+- description: 'Away club: asset slug for the black-and-white logo.'
+  name: away_logo_bw_slug
+  type: character
+- description: 'Away club: asset slug for the full-colour logo.'
+  name: away_logo_color_slug
+  type: character
+- description: 'Away club: URL of the full-colour logo asset.'
+  name: away_logo_color_url
+  type: character
+- description: 'Away club: asset slug for the full-colour club crest.'
+  name: away_crest_color_slug
+  type: character
+- description: 'Away club: identifier of the eCal calendar-subscription widget.'
+  name: away_ecal_widget_id
+  type: character
+- description: 'Venue: Sportec opaque id of the venue (Utf8 join key).'
+  name: venue_venue_sportec_id
+  type: character
+- description: 'Venue: asset slug for the background image.'
+  name: venue_background_image_slug
+  type: character
+- description: 'Venue: display name.'
+  name: venue_name
+  type: character
+- description: 'Venue: home city'
+  name: venue_city
+  type: character
+- description: 'Season: URL slug.'
+  name: season_slug
+  type: character
+- description: 'Season: parallel Opta integer id for the entity.'
+  name: season_opta_id
+  type: character
+- description: 'Season: Sportec opaque id for the entity (Utf8 join key, never numeric).'
+  name: season_sportec_id
+  type: character
+- description: 'Season: parallel Opta integer id of the competition.'
+  name: season_competition_opta_id
+  type: character
+- description: 'Season: display name.'
+  name: season_name
+  type: character
+- description: Parallel Opta integer id of the competition.
+  name: competition_opta_id
+  type: character
+- description: Sportec opaque id of the competition (Utf8 join key).
+  name: competition_sportec_id
+  type: character
+- description: Competition display name
+  name: competition_name
+  type: character
+- description: 'Competition: identifier of the embedded provider widget.'
+  name: competition_widget_id
+  type: character
+- description: 'Competition: URL slug.'
+  name: competition_slug
+  type: character
+- description: 'Competition: short name'
+  name: competition_short_name
+  type: character
+- description: 'Competition: Match classification'
+  name: competition_match_type
+  type: character
+- description: 'Competition light-theme logo: URL slug.'
+  name: competition_logo_light_slug
+  type: character
+- description: 'Competition dark-theme logo: URL slug.'
+  name: competition_logo_dark_slug
+  type: character
+- description: 'Competition: header label used for this competition on the site.'
+  name: competition_block_header_name
+  type: character
+- description: 'Competition: MGM sportsbook partner identifier.'
+  name: competition_mgm_id
+  type: character
+- description: 'Competition: whether the match hub shows the eCal subscribe control.'
+  name: competition_nextgen_ecal_match_hub_display
+  type: logical
+- description: 'Competition: content field the site reads player headshots from.'
+  name: competition_player_headshot_thumbnail_field
+  type: character
+- description: 'League promo image: URL of the image asset.'
+  name: league_promo_image_asset_url
+  type: character
+- description: 'MLS-operated ticketing link: button label for the ticketing link.'
+  name: first_party_tickets_display_text
+  type: character
+- description: 'MLS-operated ticketing link: accessible (screen-reader) label for
+    the ticketing link.'
+  name: first_party_tickets_accessible_text
+  type: character
+- description: 'MLS-operated ticketing link: link URL.'
+  name: first_party_tickets_url
+  type: character
+- description: 'MLS-operated ticketing link: whether the link opens in a new tab.'
+  name: first_party_tickets_open_in_new_tab
+  type: logical
+- description: 'MLS-operated ticketing link: whether the link is shown.'
+  name: first_party_tickets_is_visible
+  type: logical
+kind: dataframe
+schema: sportapi_match

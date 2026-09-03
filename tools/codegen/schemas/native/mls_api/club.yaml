@@ -1,0 +1,111 @@
+columns:
+- description: Sportec club id
+  name: club_id
+  type: character
+- description: Full club name
+  name: club_name
+  type: character
+- description: 3-letter code
+  name: three_letter_code
+  type: character
+- description: Short name
+  name: short_name
+  type: character
+- description: Alternate short name
+  name: club_short_name
+  type: character
+- description: Alternate 3-letter code
+  name: club_three_letter_code
+  type: character
+- description: Home city
+  name: city
+  type: character
+- description: Country
+  name: country
+  type: character
+- description: Long/legal club name
+  name: long_name
+  type: character
+- description: Year founded
+  name: founded
+  type: character
+- description: Stadium id
+  name: stadium_id
+  type: character
+- description: Stadium name
+  name: stadium_name
+  type: character
+- description: 'Primary club colour: club colour name.'
+  name: club_color_one_club_color
+  type: character
+- description: 'Primary club colour: club colour as an RGB hex string.'
+  name: club_color_one_club_color_rgb
+  type: character
+- description: 'Secondary club colour: club colour name.'
+  name: club_color_two_club_color
+  type: character
+- description: 'Secondary club colour: club colour as an RGB hex string.'
+  name: club_color_two_club_color_rgb
+  type: character
+- description: 'Tertiary club colour: club colour name.'
+  name: club_color_three_club_color
+  type: character
+- description: 'Tertiary club colour: club colour as an RGB hex string.'
+  name: club_color_three_club_color_rgb
+  type: character
+- description: 'First-choice kit: main shirt colour name.'
+  name: shirt_one_shirt_main_color
+  type: character
+- description: 'First-choice kit: main shirt colour as an RGB hex string.'
+  name: shirt_one_shirt_main_color_rgb
+  type: character
+- description: 'First-choice kit: secondary shirt colour name.'
+  name: shirt_one_shirt_secondary_color
+  type: character
+- description: 'First-choice kit: secondary shirt colour as an RGB hex string.'
+  name: shirt_one_shirt_secondary_color_rgb
+  type: character
+- description: 'First-choice kit: shirt-number colour name.'
+  name: shirt_one_shirt_number_color
+  type: character
+- description: 'First-choice kit: shirt-number colour as an RGB hex string.'
+  name: shirt_one_shirt_number_color_rgb
+  type: character
+- description: 'Second-choice kit: main shirt colour name.'
+  name: shirt_two_shirt_main_color
+  type: character
+- description: 'Second-choice kit: main shirt colour as an RGB hex string.'
+  name: shirt_two_shirt_main_color_rgb
+  type: character
+- description: 'Second-choice kit: secondary shirt colour name.'
+  name: shirt_two_shirt_secondary_color
+  type: character
+- description: 'Second-choice kit: secondary shirt colour as an RGB hex string.'
+  name: shirt_two_shirt_secondary_color_rgb
+  type: character
+- description: 'Second-choice kit: shirt-number colour name.'
+  name: shirt_two_shirt_number_color
+  type: character
+- description: 'Second-choice kit: shirt-number colour as an RGB hex string.'
+  name: shirt_two_shirt_number_color_rgb
+  type: character
+- description: 'Third-choice kit: main shirt colour name.'
+  name: shirt_three_shirt_main_color
+  type: character
+- description: 'Third-choice kit: main shirt colour as an RGB hex string.'
+  name: shirt_three_shirt_main_color_rgb
+  type: character
+- description: 'Third-choice kit: secondary shirt colour name.'
+  name: shirt_three_shirt_secondary_color
+  type: character
+- description: 'Third-choice kit: secondary shirt colour as an RGB hex string.'
+  name: shirt_three_shirt_secondary_color_rgb
+  type: character
+- description: 'Third-choice kit: shirt-number colour name.'
+  name: shirt_three_shirt_number_color
+  type: character
+- description: 'Third-choice kit: shirt-number colour as an RGB hex string.'
+  name: shirt_three_shirt_number_color_rgb
+  type: character
+kind: dataframe
+schema: club

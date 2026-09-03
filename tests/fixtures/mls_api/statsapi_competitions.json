@@ -1,0 +1,26 @@
+{
+  "competitions": [
+    {
+      "competition_id": "MLS-COM-000001",
+      "competition_name": "Major League Soccer - Regular Season",
+      "competition_name_french": "MLS - Saison régulière",
+      "country": "USA",
+      "competition_type": "League"
+    },
+    {
+      "competition_id": "MLS-COM-000002",
+      "competition_name": "Major League Soccer - Cup Playoffs",
+      "competition_name_french": "MLS - Séries éliminatoires",
+      "country": "USA",
+      "competition_type": "Tournament"
+    },
+    {
+      "competition_id": "MLS-COM-000003",
+      "competition_name": "MLS NEXT Pro - Regular Season",
+      "competition_name_french": "MLS NEXT Pro – Saison régulière",
+      "country": "USA",
+      "competition_type": "League"
+    }
+  ],
+  "next_page_token": "eyJQayI6ImNvbXBldGl0aW9uSW5mbyIsIlNrIjoiY29tcGV0aXRpb24jTUxTLUNPTS0wMDAwMzUifQ=="
+}

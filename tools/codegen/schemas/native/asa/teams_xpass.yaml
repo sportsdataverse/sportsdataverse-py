@@ -1,0 +1,51 @@
+columns:
+- description: ASA team id (base62 string; Utf8 join key, never numeric).
+  name: team_id
+  type: character
+- description: Games included in the window.
+  name: count_games
+  type: integer
+- description: Passes attempted by the team.
+  name: attempted_passes_for
+  type: integer
+- description: Actual pass completion % (for).
+  name: pass_completion_percentage_for
+  type: numeric
+- description: Expected pass completion % (for).
+  name: xpass_completion_percentage_for
+  type: numeric
+- description: Passes completed over expected (for).
+  name: passes_completed_over_expected_for
+  type: numeric
+- description: Passes completed over expected per 100 passes (for).
+  name: passes_completed_over_expected_p100_for
+  type: numeric
+- description: Average vertical (goalward) pass distance (for).
+  name: avg_vertical_distance_for
+  type: numeric
+- description: Passes attempted by opponents.
+  name: attempted_passes_against
+  type: integer
+- description: Actual pass completion % (against).
+  name: pass_completion_percentage_against
+  type: numeric
+- description: Expected pass completion % (against).
+  name: xpass_completion_percentage_against
+  type: numeric
+- description: Passes completed over expected (against).
+  name: passes_completed_over_expected_against
+  type: numeric
+- description: Passes completed over expected per 100 passes (against).
+  name: passes_completed_over_expected_p100_against
+  type: numeric
+- description: Average vertical pass distance (against).
+  name: avg_vertical_distance_against
+  type: numeric
+- description: For minus against (passes over expected).
+  name: passes_completed_over_expected_difference
+  type: numeric
+- description: For minus against (vertical distance).
+  name: avg_vertical_distance_difference
+  type: numeric
+kind: dataframe
+schema: teams_xpass

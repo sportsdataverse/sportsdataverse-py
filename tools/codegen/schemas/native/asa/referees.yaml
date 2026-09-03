@@ -1,0 +1,15 @@
+columns:
+- description: ASA referee id (base62 string; Utf8 join key).
+  name: referee_id
+  type: character
+- description: Referee display name.
+  name: referee_name
+  type: character
+- description: Date of birth (`YYYY-MM-DD`; may be null).
+  name: birth_date
+  type: character
+- description: Player nationality (country name).
+  name: nationality
+  type: character
+kind: dataframe
+schema: referees

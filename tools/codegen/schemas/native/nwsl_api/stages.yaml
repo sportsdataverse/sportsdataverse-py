@@ -1,0 +1,9 @@
+columns:
+- description: Composite Stage id (`nwsl::Football_Stage::{hex}`).
+  name: stage_id
+  type: character
+- description: Stage display name.
+  name: name
+  type: character
+kind: dataframe
+schema: stages

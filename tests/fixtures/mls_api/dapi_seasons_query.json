@@ -1,0 +1,41 @@
+{
+  "pagination": {
+    "maxItems": 100
+  },
+  "meta": {
+    "apiVersion": "2.0",
+    "generatedAt": "2026-07-18T17:54:30.0909625Z"
+  },
+  "items": [
+    {
+      "type": "customentity",
+      "_translationId": "406c214d-e0ea-4440-baf8-601e04c4fd5a",
+      "_entityId": "0a150198-2521-4320-ae0b-502740b58e4e",
+      "selfUrl": "https://forge-dapi.mls-prd.deltatre.digital/v2/content/en-us/seasons/mls-regular-season-2026",
+      "slug": "mls-regular-season-2026",
+      "title": "Major League Soccer - Regular Season - 2026",
+      "tags": [],
+      "fields": {
+        "optaId": 2026,
+        "sportecId": "MLS-SEA-0001KA",
+        "name": "2026",
+        "competitionOptaId": 98,
+        "competitionSportecId": "MLS-COM-000001",
+        "standingsLegend": "### Playoffs Designation\n\ns - Clinched Supporters' Shield\n\ny - Clinched #1 Conference Seed\n\nx - Clinched Playoffs\n\ne - Eliminated from Playoffs",
+        "topClubs": 4,
+        "topClubsLegend": "Homefield Advantage in Round One Best-of-3 Series",
+        "homeAdvantage": 7,
+        "homeAdvantageLegend": "Qualify for Round One Best-of-3-Series",
+        "playoffQualifiedEastConference": 9,
+        "playoffQualifiedWestConference": 9,
+        "competitionSportecIdOverwrite": false
+      },
+      "createdBy": "Harika Kasireddy",
+      "lastUpdatedBy": "Harika Kasireddy",
+      "lastUpdatedDate": "2026-05-14T20:01:53.328Z",
+      "contentDate": "2025-11-20T11:21:23.84Z",
+      "featured": 0,
+      "entityCode": "season"
+    }
+  ]
+}

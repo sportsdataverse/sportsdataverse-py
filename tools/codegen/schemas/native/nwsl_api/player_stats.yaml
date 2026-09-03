@@ -1,0 +1,146 @@
+columns:
+- description: Leaderboard rank label (null unless ranked view).
+  name: rank_label
+  type: character
+- description: Composite Player id (Utf8 join key).
+  name: player_id
+  type: character
+- description: Underlying StatsPerform/Opta provider id (e.g. `opta:...`).
+  name: provider_id
+  type: character
+- description: Shirt/bib number.
+  name: bib_number
+  type: character
+- description: Human position label (e.g. `Forward`).
+  name: role_label
+  type: character
+- description: Numeric position/role code.
+  name: role
+  type: integer
+- description: Media-style first name.
+  name: media_first_name
+  type: character
+- description: Media-style last name.
+  name: media_last_name
+  type: character
+- description: Name printed on the shirt.
+  name: shirt_name
+  type: character
+- description: Short team name.
+  name: short_name
+  type: character
+- description: ''
+  name: display_name
+  type: character
+- description: Nationality name.
+  name: nationality
+  type: character
+- description: ISO country code.
+  name: nationality_iso_code
+  type: character
+- description: Server timestamp the payload was assembled (ISO-8601).
+  name: api_call_request_time
+  type: character
+- description: Stable stat key (e.g. `goals`, `points`, `Xg`).
+  name: stats_id
+  type: character
+- description: Human stat name.
+  name: stats_label
+  type: character
+- description: Short label (e.g. `PTS`, `GD`).
+  name: stats_label_abbreviation
+  type: character
+- description: Stat value - integer, string, or array (e.g. `form`).
+  name: stats_value
+  type: character
+- description: Unit name (usually null).
+  name: stats_unit
+  type: character
+- description: Unit abbreviation (usually null).
+  name: stats_unit_abbreviation
+  type: character
+- description: 'Club: Composite Team id (Utf8 join key).'
+  name: team_team_id
+  type: character
+- description: 'Club: underlying StatsPerform/Opta provider id (e.g. `opta:...`).'
+  name: team_provider_id
+  type: character
+- description: 'Club: short team name.'
+  name: team_short_name
+  type: character
+- description: 'Club: official team name.'
+  name: team_official_name
+  type: character
+- description: 'Club: 3-letter team code.'
+  name: team_acronym_name
+  type: character
+- description: 'Club: localized 3-letter code.'
+  name: team_acronym_name_localized
+  type: character
+- description: 'Club: true for placeholder/TBD teams.'
+  name: team_is_team_fake
+  type: logical
+- description: 'Club: media-style display name.'
+  name: team_media_name
+  type: character
+- description: 'Club: short media-style display name.'
+  name: team_media_short_name
+  type: character
+- description: 'Club: ISO country code.'
+  name: team_country_code
+  type: character
+- description: 'Club: team type (e.g. `club`).'
+  name: team_team_type
+  type: character
+- description: 'Club: Season summary blurb.'
+  name: team_overall_summary
+  type: character
+- description: 'Club: home venue: `{id, providerId, name, cityName, country, address,
+    capacity, yearOfConstruction, mapsGeoCodeLatitude, mapsGeoCodeLongitude, imagery}`.'
+  name: team_stadium
+  type: character
+- description: 'Club: per-season crest variants.'
+  name: team_all_season_imagery
+  type: character
+- description: 'Club editorial: facebook handle or URL.'
+  name: team_editorial_social_facebook
+  type: character
+- description: 'Club editorial: instagram handle or URL.'
+  name: team_editorial_social_instagram
+  type: character
+- description: 'Club editorial: x (Twitter) handle or URL.'
+  name: team_editorial_social_x
+  type: character
+- description: 'Club editorial: tikTok handle or URL.'
+  name: team_editorial_social_tik_tok
+  type: character
+- description: 'Club editorial: youTube handle or URL.'
+  name: team_editorial_social_you_tube
+  type: character
+- description: 'Club editorial: linkedIn handle or URL.'
+  name: team_editorial_social_linked_in
+  type: character
+- description: 'Club editorial: official website URL.'
+  name: team_editorial_website_url
+  type: character
+- description: 'Club editorial: club shop URL.'
+  name: team_editorial_shop_url
+  type: character
+- description: 'Club editorial: ticketing URL.'
+  name: team_editorial_tickets_url
+  type: character
+- description: 'Club editorial: club primary colour (hex).'
+  name: team_editorial_club_primary_colour
+  type: character
+- description: 'Club editorial: club secondary colour (hex).'
+  name: team_editorial_club_secondary_colour
+  type: character
+- description: 'Club editorial: club text colour (hex).'
+  name: team_editorial_club_text_colour
+  type: character
+- description: 'Editorial metadata: editorial description of the player''s role in
+    the side.'
+  name: editorial_player_role_within_team
+  type: character
+kind: dataframe
+schema: player_stats

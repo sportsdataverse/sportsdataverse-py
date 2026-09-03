@@ -1,0 +1,12 @@
+columns:
+- description: ASA player id (base62 string; Utf8 join key).
+  name: player_id
+  type: character
+- description: ASA team id (base62 string; Utf8 join key, never numeric).
+  name: team_id
+  type: character
+- description: Minutes played in the filtered window.
+  name: minutes_played
+  type: integer
+kind: dataframe
+schema: goalkeepers_goals_added

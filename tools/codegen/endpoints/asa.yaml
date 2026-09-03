@@ -1,0 +1,540 @@
+api: asa
+docstring:
+  example_import: true
+  raises:
+  - 'sportsdataverse.errors.NoESPNDataError: the ASA API returned 404 (route not published
+    for that league).'
+  - 'requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download``
+    exhausts its retries.'
+  see_also:
+  - name: itscalledsoccer
+    note: official ASA R/Python client over the same API
+    url: https://github.com/American-Soccer-Analysis/itscalledsoccer
+  - name: American Soccer Analysis
+    note: data origin (xG, g+, xPass models)
+    url: https://www.americansocceranalysis.com/
+endpoints:
+- example_args:
+    league_slug: mls
+  parser: parse_asa
+  path: /{league_slug}/games
+  path_params:
+  - name: league_slug
+    required: true
+    type: str
+  returns_schema: native/asa/games
+  short: games
+  summary: Games/fixtures with final scores, venue/official/manager FKs.
+- example_args:
+    league_slug: mls
+  extra_params:
+  - description: Filter to one or more seasons. Comma-list accepted (`2022,2023`).
+    name: season_name
+    query_key: season_name
+    type: str
+  - description: Filter to a competition stage, e.g. `Regular Season`. **URL-encode
+      spaces.**
+    name: stage_name
+    query_key: stage_name
+    type: str
+  - description: Drop players/teams below this minutes-played threshold.
+    name: minimum_minutes
+    query_key: minimum_minutes
+    type: str
+  - description: 'Filter by general position code: GK, CB, FB, DM, CM, AM, W, ST (player/GK
+      routes).'
+    name: general_position
+    query_key: general_position
+    type: str
+  - description: '`true` => one row per entity per team (splits traded players).'
+    name: split_by_teams
+    query_key: split_by_teams
+    type: str
+  - description: '`true` => one row per entity per season.'
+    name: split_by_seasons
+    query_key: split_by_seasons
+    type: str
+  - description: '`true` => one row per entity per game.'
+    name: split_by_games
+    query_key: split_by_games
+    type: str
+  - description: Lower date bound (`YYYY-MM-DD`), where the route supports date windows.
+    name: start_date
+    query_key: start_date
+    type: str
+  - description: Upper date bound (`YYYY-MM-DD`), where the route supports date windows.
+    name: end_date
+    query_key: end_date
+    type: str
+  parser: parse_asa
+  path: /{league_slug}/games/xgoals
+  path_params:
+  - name: league_slug
+    required: true
+    type: str
+  returns_schema: native/asa/games_xgoals
+  short: games_xgoals
+  summary: Per-game expected-goals + expected points for both sides.
+- example_args:
+    league_slug: mls
+  extra_params:
+  - description: Filter to one or more seasons. Comma-list accepted (`2022,2023`).
+    name: season_name
+    query_key: season_name
+    type: str
+  - description: Filter to a competition stage, e.g. `Regular Season`. **URL-encode
+      spaces.**
+    name: stage_name
+    query_key: stage_name
+    type: str
+  - description: Drop players/teams below this minutes-played threshold.
+    name: minimum_minutes
+    query_key: minimum_minutes
+    type: str
+  - description: 'Filter by general position code: GK, CB, FB, DM, CM, AM, W, ST (player/GK
+      routes).'
+    name: general_position
+    query_key: general_position
+    type: str
+  - description: '`true` => one row per entity per team (splits traded players).'
+    name: split_by_teams
+    query_key: split_by_teams
+    type: str
+  - description: '`true` => one row per entity per season.'
+    name: split_by_seasons
+    query_key: split_by_seasons
+    type: str
+  - description: '`true` => one row per entity per game.'
+    name: split_by_games
+    query_key: split_by_games
+    type: str
+  - description: Lower date bound (`YYYY-MM-DD`), where the route supports date windows.
+    name: start_date
+    query_key: start_date
+    type: str
+  - description: Upper date bound (`YYYY-MM-DD`), where the route supports date windows.
+    name: end_date
+    query_key: end_date
+    type: str
+  parser: parse_asa_goals_added
+  path: /{league_slug}/goalkeepers/goals-added
+  path_params:
+  - name: league_slug
+    required: true
+    type: str
+  returns_schema: native/asa/goalkeepers_goals_added
+  short: goalkeepers_goals_added
+  summary: Per-goalkeeper Goals Added with a per-action-type data[] breakdown.
+- example_args:
+    league_slug: mls
+  extra_params:
+  - description: Filter to one or more seasons. Comma-list accepted (`2022,2023`).
+    name: season_name
+    query_key: season_name
+    type: str
+  - description: Filter to a competition stage, e.g. `Regular Season`. **URL-encode
+      spaces.**
+    name: stage_name
+    query_key: stage_name
+    type: str
+  - description: Drop players/teams below this minutes-played threshold.
+    name: minimum_minutes
+    query_key: minimum_minutes
+    type: str
+  - description: 'Filter by general position code: GK, CB, FB, DM, CM, AM, W, ST (player/GK
+      routes).'
+    name: general_position
+    query_key: general_position
+    type: str
+  - description: '`true` => one row per entity per team (splits traded players).'
+    name: split_by_teams
+    query_key: split_by_teams
+    type: str
+  - description: '`true` => one row per entity per season.'
+    name: split_by_seasons
+    query_key: split_by_seasons
+    type: str
+  - description: '`true` => one row per entity per game.'
+    name: split_by_games
+    query_key: split_by_games
+    type: str
+  - description: Lower date bound (`YYYY-MM-DD`), where the route supports date windows.
+    name: start_date
+    query_key: start_date
+    type: str
+  - description: Upper date bound (`YYYY-MM-DD`), where the route supports date windows.
+    name: end_date
+    query_key: end_date
+    type: str
+  parser: parse_asa
+  path: /{league_slug}/goalkeepers/xgoals
+  path_params:
+  - name: league_slug
+    required: true
+    type: str
+  returns_schema: native/asa/goalkeepers_xgoals
+  short: goalkeepers_xgoals
+  summary: Per-goalkeeper shot-stopping vs post-shot expected goals.
+- example_args:
+    league_slug: mls
+  parser: parse_asa
+  path: /{league_slug}/managers
+  path_params:
+  - name: league_slug
+    required: true
+    type: str
+  returns_schema: native/asa/managers
+  short: managers
+  summary: Managers/head coaches.
+- example_args:
+    league_slug: mls
+  parser: parse_asa
+  path: /{league_slug}/players
+  path_params:
+  - name: league_slug
+    required: true
+    type: str
+  returns_schema: native/asa/players
+  short: players
+  summary: Players in the league (identity + biometrics + positions).
+- example_args:
+    league_slug: mls
+  extra_params:
+  - description: Filter to one or more seasons. Comma-list accepted (`2022,2023`).
+    name: season_name
+    query_key: season_name
+    type: str
+  - description: Filter to a competition stage, e.g. `Regular Season`. **URL-encode
+      spaces.**
+    name: stage_name
+    query_key: stage_name
+    type: str
+  - description: Drop players/teams below this minutes-played threshold.
+    name: minimum_minutes
+    query_key: minimum_minutes
+    type: str
+  - description: 'Filter by general position code: GK, CB, FB, DM, CM, AM, W, ST (player/GK
+      routes).'
+    name: general_position
+    query_key: general_position
+    type: str
+  - description: '`true` => one row per entity per team (splits traded players).'
+    name: split_by_teams
+    query_key: split_by_teams
+    type: str
+  - description: '`true` => one row per entity per season.'
+    name: split_by_seasons
+    query_key: split_by_seasons
+    type: str
+  - description: '`true` => one row per entity per game.'
+    name: split_by_games
+    query_key: split_by_games
+    type: str
+  - description: Lower date bound (`YYYY-MM-DD`), where the route supports date windows.
+    name: start_date
+    query_key: start_date
+    type: str
+  - description: Upper date bound (`YYYY-MM-DD`), where the route supports date windows.
+    name: end_date
+    query_key: end_date
+    type: str
+  parser: parse_asa_goals_added
+  path: /{league_slug}/players/goals-added
+  path_params:
+  - name: league_slug
+    required: true
+    type: str
+  returns_schema: native/asa/players_goals_added
+  short: players_goals_added
+  summary: Per-player Goals Added (g+) with a per-action-type data[] breakdown.
+- example_args:
+    league_slug: mls
+  extra_params:
+  - description: Filter to one or more seasons. Comma-list accepted (`2022,2023`).
+    name: season_name
+    query_key: season_name
+    type: str
+  - description: Filter to a competition stage, e.g. `Regular Season`. **URL-encode
+      spaces.**
+    name: stage_name
+    query_key: stage_name
+    type: str
+  - description: Drop players/teams below this minutes-played threshold.
+    name: minimum_minutes
+    query_key: minimum_minutes
+    type: str
+  - description: 'Filter by general position code: GK, CB, FB, DM, CM, AM, W, ST (player/GK
+      routes).'
+    name: general_position
+    query_key: general_position
+    type: str
+  - description: '`true` => one row per entity per team (splits traded players).'
+    name: split_by_teams
+    query_key: split_by_teams
+    type: str
+  - description: '`true` => one row per entity per season.'
+    name: split_by_seasons
+    query_key: split_by_seasons
+    type: str
+  - description: '`true` => one row per entity per game.'
+    name: split_by_games
+    query_key: split_by_games
+    type: str
+  - description: Lower date bound (`YYYY-MM-DD`), where the route supports date windows.
+    name: start_date
+    query_key: start_date
+    type: str
+  - description: Upper date bound (`YYYY-MM-DD`), where the route supports date windows.
+    name: end_date
+    query_key: end_date
+    type: str
+  parser: parse_asa
+  path: /{league_slug}/players/salaries
+  path_params:
+  - name: league_slug
+    required: true
+    type: str
+  returns_schema: native/asa/players_salaries
+  short: players_salaries
+  summary: Player salaries (MLS only; server caps the response at 10000 rows).
+- example_args:
+    league_slug: mls
+  extra_params:
+  - description: Filter to one or more seasons. Comma-list accepted (`2022,2023`).
+    name: season_name
+    query_key: season_name
+    type: str
+  - description: Filter to a competition stage, e.g. `Regular Season`. **URL-encode
+      spaces.**
+    name: stage_name
+    query_key: stage_name
+    type: str
+  - description: Drop players/teams below this minutes-played threshold.
+    name: minimum_minutes
+    query_key: minimum_minutes
+    type: str
+  - description: 'Filter by general position code: GK, CB, FB, DM, CM, AM, W, ST (player/GK
+      routes).'
+    name: general_position
+    query_key: general_position
+    type: str
+  - description: '`true` => one row per entity per team (splits traded players).'
+    name: split_by_teams
+    query_key: split_by_teams
+    type: str
+  - description: '`true` => one row per entity per season.'
+    name: split_by_seasons
+    query_key: split_by_seasons
+    type: str
+  - description: '`true` => one row per entity per game.'
+    name: split_by_games
+    query_key: split_by_games
+    type: str
+  - description: Lower date bound (`YYYY-MM-DD`), where the route supports date windows.
+    name: start_date
+    query_key: start_date
+    type: str
+  - description: Upper date bound (`YYYY-MM-DD`), where the route supports date windows.
+    name: end_date
+    query_key: end_date
+    type: str
+  parser: parse_asa
+  path: /{league_slug}/players/xgoals
+  path_params:
+  - name: league_slug
+    required: true
+    type: str
+  returns_schema: native/asa/players_xgoals
+  short: players_xgoals
+  summary: Per-player expected-goals + attacking production.
+- example_args:
+    league_slug: mls
+  parser: parse_asa
+  path: /{league_slug}/referees
+  path_params:
+  - name: league_slug
+    required: true
+    type: str
+  returns_schema: native/asa/referees
+  short: referees
+  summary: Match referees.
+- example_args:
+    league_slug: mls
+  parser: parse_asa
+  path: /{league_slug}/stadia
+  path_params:
+  - name: league_slug
+    required: true
+    type: str
+  returns_schema: native/asa/stadia
+  short: stadia
+  summary: Stadia (venue metadata incl. coordinates + pitch dimensions).
+- example_args:
+    league_slug: mls
+  parser: parse_asa
+  path: /{league_slug}/teams
+  path_params:
+  - name: league_slug
+    required: true
+    type: str
+  returns_schema: native/asa/teams
+  short: teams
+  summary: Teams in the league (full table, no filter params).
+- example_args:
+    league_slug: mls
+  extra_params:
+  - description: Filter to one or more seasons. Comma-list accepted (`2022,2023`).
+    name: season_name
+    query_key: season_name
+    type: str
+  - description: Filter to a competition stage, e.g. `Regular Season`. **URL-encode
+      spaces.**
+    name: stage_name
+    query_key: stage_name
+    type: str
+  - description: Drop players/teams below this minutes-played threshold.
+    name: minimum_minutes
+    query_key: minimum_minutes
+    type: str
+  - description: 'Filter by general position code: GK, CB, FB, DM, CM, AM, W, ST (player/GK
+      routes).'
+    name: general_position
+    query_key: general_position
+    type: str
+  - description: '`true` => one row per entity per team (splits traded players).'
+    name: split_by_teams
+    query_key: split_by_teams
+    type: str
+  - description: '`true` => one row per entity per season.'
+    name: split_by_seasons
+    query_key: split_by_seasons
+    type: str
+  - description: '`true` => one row per entity per game.'
+    name: split_by_games
+    query_key: split_by_games
+    type: str
+  - description: Lower date bound (`YYYY-MM-DD`), where the route supports date windows.
+    name: start_date
+    query_key: start_date
+    type: str
+  - description: Upper date bound (`YYYY-MM-DD`), where the route supports date windows.
+    name: end_date
+    query_key: end_date
+    type: str
+  parser: parse_asa_goals_added
+  path: /{league_slug}/teams/goals-added
+  path_params:
+  - name: league_slug
+    required: true
+    type: str
+  returns_schema: native/asa/teams_goals_added
+  short: teams_goals_added
+  summary: Per-team Goals Added for/against with a per-action-type data[] breakdown.
+- example_args:
+    league_slug: mls
+  extra_params:
+  - description: Filter to one or more seasons. Comma-list accepted (`2022,2023`).
+    name: season_name
+    query_key: season_name
+    type: str
+  - description: Filter to a competition stage, e.g. `Regular Season`. **URL-encode
+      spaces.**
+    name: stage_name
+    query_key: stage_name
+    type: str
+  - description: Drop players/teams below this minutes-played threshold.
+    name: minimum_minutes
+    query_key: minimum_minutes
+    type: str
+  - description: 'Filter by general position code: GK, CB, FB, DM, CM, AM, W, ST (player/GK
+      routes).'
+    name: general_position
+    query_key: general_position
+    type: str
+  - description: '`true` => one row per entity per team (splits traded players).'
+    name: split_by_teams
+    query_key: split_by_teams
+    type: str
+  - description: '`true` => one row per entity per season.'
+    name: split_by_seasons
+    query_key: split_by_seasons
+    type: str
+  - description: '`true` => one row per entity per game.'
+    name: split_by_games
+    query_key: split_by_games
+    type: str
+  - description: Lower date bound (`YYYY-MM-DD`), where the route supports date windows.
+    name: start_date
+    query_key: start_date
+    type: str
+  - description: Upper date bound (`YYYY-MM-DD`), where the route supports date windows.
+    name: end_date
+    query_key: end_date
+    type: str
+  parser: parse_asa
+  path: /{league_slug}/teams/xgoals
+  path_params:
+  - name: league_slug
+    required: true
+    type: str
+  returns_schema: native/asa/teams_xgoals
+  short: teams_xgoals
+  summary: Per-team expected-goals for/against + expected points.
+- example_args:
+    league_slug: mls
+  extra_params:
+  - description: Filter to one or more seasons. Comma-list accepted (`2022,2023`).
+    name: season_name
+    query_key: season_name
+    type: str
+  - description: Filter to a competition stage, e.g. `Regular Season`. **URL-encode
+      spaces.**
+    name: stage_name
+    query_key: stage_name
+    type: str
+  - description: Drop players/teams below this minutes-played threshold.
+    name: minimum_minutes
+    query_key: minimum_minutes
+    type: str
+  - description: 'Filter by general position code: GK, CB, FB, DM, CM, AM, W, ST (player/GK
+      routes).'
+    name: general_position
+    query_key: general_position
+    type: str
+  - description: '`true` => one row per entity per team (splits traded players).'
+    name: split_by_teams
+    query_key: split_by_teams
+    type: str
+  - description: '`true` => one row per entity per season.'
+    name: split_by_seasons
+    query_key: split_by_seasons
+    type: str
+  - description: '`true` => one row per entity per game.'
+    name: split_by_games
+    query_key: split_by_games
+    type: str
+  - description: Lower date bound (`YYYY-MM-DD`), where the route supports date windows.
+    name: start_date
+    query_key: start_date
+    type: str
+  - description: Upper date bound (`YYYY-MM-DD`), where the route supports date windows.
+    name: end_date
+    query_key: end_date
+    type: str
+  parser: parse_asa
+  path: /{league_slug}/teams/xpass
+  path_params:
+  - name: league_slug
+    required: true
+    type: str
+  returns_schema: native/asa/teams_xpass
+  short: teams_xpass
+  summary: Per-team expected-passing (completion over expected, vertical distance).
+host: https://app.americansocceranalysis.com/api/v1
+module: asa
+name_pattern: asa_{short}
+parser_module: soccer.asa_parsers
+passthrough_query: true
+qualifier: ''
+runtime_imports:
+- _get

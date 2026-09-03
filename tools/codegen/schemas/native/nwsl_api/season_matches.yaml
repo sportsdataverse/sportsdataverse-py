@@ -1,0 +1,345 @@
+columns:
+- description: Underlying StatsPerform/Opta provider id (e.g. `opta:...`).
+  name: provider_id
+  type: character
+- description: Composite Season id (Utf8 join key).
+  name: season_id
+  type: character
+- description: Composite Match id (Utf8 join key).
+  name: match_id
+  type: character
+- description: Normalized match status (e.g. `PostMatch`, `PreMatch`, `Live`).
+  name: status
+  type: character
+- description: Raw provider status string.
+  name: provider_status
+  type: character
+- description: Season phase (e.g. `RegularSeason`, `Final Series`).
+  name: phase
+  type: character
+- description: Kickoff time in UTC (ISO-8601).
+  name: match_date_utc
+  type: character
+- description: Kickoff time in venue-local time.
+  name: match_date_local
+  type: character
+- description: Venue UTC offset.
+  name: local_time_utc_offset
+  type: character
+- description: True if kickoff time is TBD.
+  name: is_unknown_kick_off_time
+  type: logical
+- description: 'Home club: live score pushed by the feed for this side.'
+  name: home_score_push
+  type: integer
+- description: 'Away club: live score pushed by the feed for this side.'
+  name: away_score_push
+  type: integer
+- description: 'Provider-reported: home side''s penalty-shootout score.'
+  name: provider_penalty_score_home
+  type: character
+- description: 'Provider-reported: away side''s penalty-shootout score.'
+  name: provider_penalty_score_away
+  type: character
+- description: Two-leg aggregate label.
+  name: aggregate
+  type: character
+- description: How the result was decided.
+  name: win_reason
+  type: character
+- description: Composite Team id of the winner (null if draw/unplayed).
+  name: win_team_id
+  type: character
+- description: Aggregate result of previous legs in a two-legged tie.
+  name: previous_legs_result
+  type: character
+- description: Composite Stadium id for the venue.
+  name: stadium_id
+  type: character
+- description: 'Stadium: stage display name.'
+  name: stadium_name
+  type: character
+- description: City the stadium is in.
+  name: city_name
+  type: character
+- description: ''
+  name: group
+  type: character
+- description: ''
+  name: group_name
+  type: character
+- description: Composite id of the round.
+  name: round_id
+  type: character
+- description: Name of the round or series this match belongs to.
+  name: round_name
+  type: character
+- description: Scheduling status.
+  name: schedule_status
+  type: character
+- description: 'Provider-reported: home side''s score.'
+  name: provider_home_score
+  type: integer
+- description: 'Provider-reported: away side''s score.'
+  name: provider_away_score
+  type: integer
+- description: ''
+  name: group_id
+  type: character
+- description: Sub-league label.
+  name: sub_league
+  type: character
+- description: ''
+  name: time
+  type: character
+- description: Stoppage time added, in minutes.
+  name: additional_time
+  type: character
+- description: Composite Match id of the previous leg (two-legged ties).
+  name: previous_leg_id
+  type: character
+- description: 'Broadcast listing: first national broadcaster carrying the match.'
+  name: editorial_broadcasters_broadcaster_national1
+  type: character
+- description: 'Broadcast listing: second national broadcaster carrying the match.'
+  name: editorial_broadcasters_broadcaster_national2
+  type: character
+- description: 'Broadcast listing: third national broadcaster carrying the match.'
+  name: editorial_broadcasters_broadcaster_national3
+  type: character
+- description: 'Broadcast listing: first international broadcaster carrying the match.'
+  name: editorial_broadcasters_broadcaster_international1
+  type: character
+- description: 'Broadcast listing: second international broadcaster carrying the match.'
+  name: editorial_broadcasters_broadcaster_international2
+  type: character
+- description: 'Broadcast listing: third international broadcaster carrying the match.'
+  name: editorial_broadcasters_broadcaster_international3
+  type: character
+- description: 'Editorial metadata: Match highlights URL.'
+  name: editorial_highlights_url
+  type: character
+- description: 'Editorial metadata: nationally-geofenced match highlights URL.'
+  name: editorial_highlights_national_url
+  type: character
+- description: 'Editorial metadata: internationally-geofenced match highlights URL.'
+  name: editorial_highlights_international_url
+  type: character
+- description: 'Editorial metadata: ticketing URL.'
+  name: editorial_tickets_url
+  type: character
+- description: 'Editorial metadata: sponsor image asset, JSON-encoded.'
+  name: editorial_sponsor_image
+  type: character
+- description: 'Editorial metadata: theme-night promotion attached to the match.'
+  name: editorial_theme_night
+  type: character
+- description: 'Editorial metadata: editorial blurbs attached to the record, JSON-encoded.'
+  name: editorial_editorials
+  type: character
+- description: 'Home club: Composite Team id (Utf8 join key).'
+  name: home_team_id
+  type: character
+- description: 'Home club: underlying StatsPerform/Opta provider id (e.g. `opta:...`).'
+  name: home_provider_id
+  type: character
+- description: 'Home club: short team name.'
+  name: home_short_name
+  type: character
+- description: 'Home club: official team name.'
+  name: home_official_name
+  type: character
+- description: 'Home club: 3-letter team code.'
+  name: home_acronym_name
+  type: character
+- description: 'Home club: localized 3-letter code.'
+  name: home_acronym_name_localized
+  type: character
+- description: 'Home club: true for placeholder/TBD teams.'
+  name: home_is_team_fake
+  type: logical
+- description: 'Home club: media-style display name.'
+  name: home_media_name
+  type: character
+- description: 'Home club: short media-style display name.'
+  name: home_media_short_name
+  type: character
+- description: 'Home club: ISO country code.'
+  name: home_country_code
+  type: character
+- description: 'Home club: team type (e.g. `club`).'
+  name: home_team_type
+  type: character
+- description: 'Home club: Season summary blurb.'
+  name: home_overall_summary
+  type: character
+- description: 'Home club: home venue: `{id, providerId, name, cityName, country,
+    address, capacity, yearOfConstruction, mapsGeoCodeLatitude, mapsGeoCodeLongitude,
+    imagery}`.'
+  name: home_stadium
+  type: character
+- description: 'Home club: per-season crest variants.'
+  name: home_all_season_imagery
+  type: character
+- description: 'Home club editorial: facebook handle or URL.'
+  name: home_editorial_social_facebook
+  type: character
+- description: 'Home club editorial: instagram handle or URL.'
+  name: home_editorial_social_instagram
+  type: character
+- description: 'Home club editorial: x (Twitter) handle or URL.'
+  name: home_editorial_social_x
+  type: character
+- description: 'Home club editorial: tikTok handle or URL.'
+  name: home_editorial_social_tik_tok
+  type: character
+- description: 'Home club editorial: youTube handle or URL.'
+  name: home_editorial_social_you_tube
+  type: character
+- description: 'Home club editorial: linkedIn handle or URL.'
+  name: home_editorial_social_linked_in
+  type: character
+- description: 'Home club editorial: official website URL.'
+  name: home_editorial_website_url
+  type: character
+- description: 'Home club editorial: club shop URL.'
+  name: home_editorial_shop_url
+  type: character
+- description: 'Home club editorial: ticketing URL.'
+  name: home_editorial_tickets_url
+  type: character
+- description: 'Home club editorial: club primary colour (hex).'
+  name: home_editorial_club_primary_colour
+  type: character
+- description: 'Home club editorial: club secondary colour (hex).'
+  name: home_editorial_club_secondary_colour
+  type: character
+- description: 'Home club editorial: club text colour (hex).'
+  name: home_editorial_club_text_colour
+  type: character
+- description: 'Away club: Composite Team id (Utf8 join key).'
+  name: away_team_id
+  type: character
+- description: 'Away club: underlying StatsPerform/Opta provider id (e.g. `opta:...`).'
+  name: away_provider_id
+  type: character
+- description: 'Away club: short team name.'
+  name: away_short_name
+  type: character
+- description: 'Away club: official team name.'
+  name: away_official_name
+  type: character
+- description: 'Away club: 3-letter team code.'
+  name: away_acronym_name
+  type: character
+- description: 'Away club: localized 3-letter code.'
+  name: away_acronym_name_localized
+  type: character
+- description: 'Away club: true for placeholder/TBD teams.'
+  name: away_is_team_fake
+  type: logical
+- description: 'Away club: media-style display name.'
+  name: away_media_name
+  type: character
+- description: 'Away club: short media-style display name.'
+  name: away_media_short_name
+  type: character
+- description: 'Away club: ISO country code.'
+  name: away_country_code
+  type: character
+- description: 'Away club: team type (e.g. `club`).'
+  name: away_team_type
+  type: character
+- description: 'Away club: Season summary blurb.'
+  name: away_overall_summary
+  type: character
+- description: 'Away club: home venue: `{id, providerId, name, cityName, country,
+    address, capacity, yearOfConstruction, mapsGeoCodeLatitude, mapsGeoCodeLongitude,
+    imagery}`.'
+  name: away_stadium
+  type: character
+- description: 'Away club: per-season crest variants.'
+  name: away_all_season_imagery
+  type: character
+- description: 'Away club editorial: facebook handle or URL.'
+  name: away_editorial_social_facebook
+  type: character
+- description: 'Away club editorial: instagram handle or URL.'
+  name: away_editorial_social_instagram
+  type: character
+- description: 'Away club editorial: x (Twitter) handle or URL.'
+  name: away_editorial_social_x
+  type: character
+- description: 'Away club editorial: tikTok handle or URL.'
+  name: away_editorial_social_tik_tok
+  type: character
+- description: 'Away club editorial: youTube handle or URL.'
+  name: away_editorial_social_you_tube
+  type: character
+- description: 'Away club editorial: linkedIn handle or URL.'
+  name: away_editorial_social_linked_in
+  type: character
+- description: 'Away club editorial: official website URL.'
+  name: away_editorial_website_url
+  type: character
+- description: 'Away club editorial: club shop URL.'
+  name: away_editorial_shop_url
+  type: character
+- description: 'Away club editorial: ticketing URL.'
+  name: away_editorial_tickets_url
+  type: character
+- description: 'Away club editorial: club primary colour (hex).'
+  name: away_editorial_club_primary_colour
+  type: character
+- description: 'Away club editorial: club secondary colour (hex).'
+  name: away_editorial_club_secondary_colour
+  type: character
+- description: 'Away club editorial: club text colour (hex).'
+  name: away_editorial_club_text_colour
+  type: character
+- description: 'Match day (round): Composite match-day (match set) id.'
+  name: match_set_match_set_id
+  type: character
+- description: 'Match day (round): underlying StatsPerform/Opta provider id (e.g.
+    `opta:...`).'
+  name: match_set_provider_id
+  type: character
+- description: 'Match day (round): stage display name.'
+  name: match_set_name
+  type: character
+- description: 'Match day (round): Composite Season id (Utf8 join key).'
+  name: match_set_season_id
+  type: character
+- description: 'Match day (round): Composite Competition id (Utf8 join key).'
+  name: match_set_competition_id
+  type: character
+- description: 'Match day (round): Composite id of the round.'
+  name: match_set_round_id
+  type: character
+- description: 'Match day (round): Composite Stage id (`nwsl::Football_Stage::{hex}`).'
+  name: match_set_stage_id
+  type: character
+- description: 'Match day (round): ordinal position of the match day within the season.'
+  name: match_set_index
+  type: character
+- description: 'Match day (round): short team name.'
+  name: match_set_short_name
+  type: character
+- description: 'Match day (round): identifier of the match-day format.'
+  name: match_set_match_set_format_id
+  type: character
+- description: 'Match day (round): type discriminator for the record.'
+  name: match_set_type
+  type: character
+- description: 'Match day (round): Season window start (ISO-8601 UTC).'
+  name: match_set_start_date_utc
+  type: character
+- description: 'Match day (round): Season window end (ISO-8601 UTC).'
+  name: match_set_end_date_utc
+  type: character
+- description: 'Match day (round): status of the match day (scheduled, in progress,
+    completed).'
+  name: match_set_matchday_status
+  type: character
+kind: dataframe
+schema: season_matches

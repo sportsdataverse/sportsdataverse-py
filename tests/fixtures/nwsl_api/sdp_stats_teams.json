@@ -1,0 +1,201 @@
+{
+  "competition": {
+    "seasonId": "nwsl::Football_Season::0b6761e4701749f593690c0f338da74c",
+    "tournamentName": null,
+    "competitionId": "nwsl::Football_Competition::3293333447504e83986ec13e794b68ea",
+    "providerId": "opta:Competition:djkvh1luqdkdixpoe653lzixg",
+    "name": "NWSL",
+    "officialName": "NWSL",
+    "shortName": null,
+    "acronymName": null,
+    "imagery": {}
+  },
+  "teams": [
+    {
+      "stats": [
+        {
+          "statsId": "games-played",
+          "statsLabel": "Games played",
+          "statsLabelAbbreviation": "GP",
+          "statsValue": 13,
+          "statsUnit": null,
+          "statsUnitAbbreviation": null
+        },
+        {
+          "statsId": "total-points",
+          "statsLabel": "Total points",
+          "statsLabelAbbreviation": "PTS",
+          "statsValue": 19,
+          "statsUnit": null,
+          "statsUnitAbbreviation": null
+        },
+        {
+          "statsId": "total-wins",
+          "statsLabel": "Total wins",
+          "statsLabelAbbreviation": "W",
+          "statsValue": 6,
+          "statsUnit": null,
+          "statsUnitAbbreviation": null
+        }
+      ],
+      "rankLabel": null,
+      "teamId": "nwsl::Football_Team::9587b8ce40624165903b6bc9fd252634",
+      "providerId": "opta:Team:6hbfgdczbi3yg4sdpqgtu6s",
+      "shortName": "Angel City",
+      "officialName": "Angel City",
+      "acronymName": "LA",
+      "acronymNameLocalized": "LA",
+      "isTeamFake": false,
+      "mediaName": "Angel City",
+      "mediaShortName": "Angel City",
+      "countryCode": "US",
+      "teamType": "club",
+      "overallSummary": null,
+      "stadium": null,
+      "imagery": {},
+      "allSeasonImagery": [],
+      "editorial": {
+        "social": {
+          "facebook": "https://www.facebook.com/weareangelcity",
+          "instagram": "https://www.instagram.com/weareangelcity",
+          "x": "https://twitter.com/weareangelcity",
+          "tikTok": "https://www.tiktok.com/@weareangelcity",
+          "youTube": "https://www.youtube.com/@AngelCityFC",
+          "linkedIn": "https://www.linkedin.com/company/angelcity"
+        },
+        "websiteUrl": "https://www.angelcity.com",
+        "shopUrl": "https://shop.angelcity.com/",
+        "ticketsUrl": "https://www.angelcity.com/tickets/season-tickets",
+        "clubPrimaryColour": "",
+        "clubSecondaryColour": "",
+        "clubTextColour": ""
+      }
+    },
+    {
+      "stats": [
+        {
+          "statsId": "games-played",
+          "statsLabel": "Games played",
+          "statsLabelAbbreviation": "GP",
+          "statsValue": 13,
+          "statsUnit": null,
+          "statsUnitAbbreviation": null
+        },
+        {
+          "statsId": "total-points",
+          "statsLabel": "Total points",
+          "statsLabelAbbreviation": "PTS",
+          "statsValue": 15,
+          "statsUnit": null,
+          "statsUnitAbbreviation": null
+        },
+        {
+          "statsId": "total-wins",
+          "statsLabel": "Total wins",
+          "statsLabelAbbreviation": "W",
+          "statsValue": 4,
+          "statsUnit": null,
+          "statsUnitAbbreviation": null
+        }
+      ],
+      "rankLabel": null,
+      "teamId": "nwsl::Football_Team::19674698cec24f53af8866cd21abaf8f",
+      "providerId": "opta:Team:eka22bj7co8bw5qxa6qlbinf8",
+      "shortName": "Bay",
+      "officialName": "Bay",
+      "acronymName": "BAY",
+      "acronymNameLocalized": "BAY",
+      "isTeamFake": false,
+      "mediaName": "Bay",
+      "mediaShortName": "Bay",
+      "countryCode": "US",
+      "teamType": "club",
+      "overallSummary": null,
+      "stadium": null,
+      "imagery": {},
+      "allSeasonImagery": [],
+      "editorial": {
+        "social": {
+          "facebook": "https://www.facebook.com/wearebayfc",
+          "instagram": "https://www.instagram.com/wearebayfc",
+          "x": "https://twitter.com/wearebayfc",
+          "tikTok": "https://www.tiktok.com/@wearebayfc",
+          "youTube": "https://www.youtube.com/@WeAreBayFC",
+          "linkedIn": "https://www.linkedin.com/company/wearebayfc"
+        },
+        "websiteUrl": "https://bayfc.com/",
+        "shopUrl": "https://shop.bayfc.com/",
+        "ticketsUrl": "https://bayfc.com/tickets/ ",
+        "clubPrimaryColour": "",
+        "clubSecondaryColour": "",
+        "clubTextColour": ""
+      }
+    },
+    {
+      "stats": [
+        {
+          "statsId": "games-played",
+          "statsLabel": "Games played",
+          "statsLabelAbbreviation": "GP",
+          "statsValue": 13,
+          "statsUnit": null,
+          "statsUnitAbbreviation": null
+        },
+        {
+          "statsId": "total-points",
+          "statsLabel": "Total points",
+          "statsLabelAbbreviation": "PTS",
+          "statsValue": 21,
+          "statsUnit": null,
+          "statsUnitAbbreviation": null
+        },
+        {
+          "statsId": "total-wins",
+          "statsLabel": "Total wins",
+          "statsLabelAbbreviation": "W",
+          "statsValue": 6,
+          "statsUnit": null,
+          "statsUnitAbbreviation": null
+        }
+      ],
+      "rankLabel": null,
+      "teamId": "nwsl::Football_Team::fb41ef4439dd495098cb6d40415767cc",
+      "providerId": "opta:Team:b4fbmos00gxtk8qnaqsm392p5",
+      "shortName": "Courage",
+      "officialName": "North Carolina Courage",
+      "acronymName": "NC",
+      "acronymNameLocalized": "NC",
+      "isTeamFake": false,
+      "mediaName": "North Carolina Courage",
+      "mediaShortName": "Courage",
+      "countryCode": "US",
+      "teamType": "club",
+      "overallSummary": null,
+      "stadium": null,
+      "imagery": {},
+      "allSeasonImagery": [],
+      "editorial": {
+        "social": {
+          "facebook": "https://www.facebook.com/TheNCCourage",
+          "instagram": "https://www.instagram.com/thenccourage",
+          "x": "https://twitter.com/TheNCCourage",
+          "tikTok": "https://www.tiktok.com/@thenccourage",
+          "youTube": "https://www.youtube.com/c/NorthCarolinaCourage",
+          "linkedIn": "https://www.linkedin.com/company/nccourage"
+        },
+        "websiteUrl": "https://www.nccourage.com/",
+        "shopUrl": "https://store.northcarolinafc.com/collections/courage",
+        "ticketsUrl": "https://www.nccourage.com/tickets",
+        "clubPrimaryColour": "",
+        "clubSecondaryColour": "",
+        "clubTextColour": ""
+      }
+    }
+  ],
+  "pagination": {
+    "totalPages": 1,
+    "currentPage": 1,
+    "isLastPage": true
+  },
+  "apiCallRequestTime": "2026-07-18T18:09:29.4923955+00:00"
+}

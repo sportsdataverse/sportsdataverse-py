@@ -1,0 +1,153 @@
+{
+  "competition": {
+    "seasonId": "nwsl::Football_Season::0b6761e4701749f593690c0f338da74c",
+    "startDateUtc": "2026-03-14T00:00:00Z",
+    "endDateUtc": "2026-11-21T00:00:00Z",
+    "seasonName": "2026",
+    "imagery": {},
+    "competitionId": "nwsl::Football_Competition::3293333447504e83986ec13e794b68ea",
+    "providerId": "opta:Competition:djkvh1luqdkdixpoe653lzixg",
+    "name": "NWSL",
+    "officialName": "NWSL",
+    "shortName": "NWSL",
+    "acronymName": "NWSL"
+  },
+  "teams": [
+    {
+      "teamId": "nwsl::Football_Team::269e825b853f4b43a9d38390aa92bf6e",
+      "providerId": "opta:Team:dzxypx8djih58p668surbi4qm",
+      "shortName": "Chicago Stars",
+      "officialName": "Chicago Stars",
+      "acronymName": "CHI",
+      "acronymNameLocalized": "CHI",
+      "isTeamFake": false,
+      "mediaName": "Chicago Stars FC",
+      "mediaShortName": "Chicago Stars",
+      "countryCode": "US",
+      "teamType": "club",
+      "overallSummary": "",
+      "stadium": {
+        "id": "nwsl::Football_Stadium::c4549b143bff479990c4dddbc5bb6149",
+        "providerId": "opta:Stadium:eq9wxbgce944xpvbqz6bgda7d",
+        "name": "Northwestern Medicine Field at Martin Stadium",
+        "cityName": "Evanston, Illinois",
+        "country": "US",
+        "address": "2235 Campus Drive",
+        "capacity": 12000,
+        "yearOfConstruction": 0,
+        "mapsGeoCodeLatitude": "42.058348283",
+        "mapsGeoCodeLongitude": "-87.670785904",
+        "imagery": {}
+      },
+      "imagery": {},
+      "allSeasonImagery": [],
+      "editorial": {
+        "social": {
+          "facebook": "https://www.facebook.com/thechicagostars/",
+          "instagram": "https://www.instagram.com/thechicagostars/",
+          "x": "https://x.com/chicagostarsfc_",
+          "tikTok": "https://www.tiktok.com/@chicagoredstars",
+          "youTube": "https://www.youtube.com/chicagoredstarsnwsl",
+          "linkedIn": "https://www.linkedin.com/company/thechicagostars/"
+        },
+        "websiteUrl": "https://chicagostars.com/",
+        "shopUrl": "https://chicagostarsshop.com/",
+        "ticketsUrl": "https://chicagostars.com/tickets/",
+        "clubPrimaryColour": "",
+        "clubSecondaryColour": "",
+        "clubTextColour": ""
+      }
+    },
+    {
+      "teamId": "nwsl::Football_Team::2c1699409ff84c9eb491aeaca3d3edde",
+      "providerId": "opta:Team:agxipc0vk4rtg09amjxv10nx0",
+      "shortName": "KC Current",
+      "officialName": "Kansas City Current",
+      "acronymName": "KC",
+      "acronymNameLocalized": "KC",
+      "isTeamFake": false,
+      "mediaName": "Kansas City Current",
+      "mediaShortName": "KC Current",
+      "countryCode": "US",
+      "teamType": "club",
+      "overallSummary": "",
+      "stadium": {
+        "id": "nwsl::Football_Stadium::ce3f5b2a2d1f4fb5ad3ff7144aefba33",
+        "providerId": "opta:Stadium:alsxozhgtofr3v2x9zd8rtn9w",
+        "name": "CPKC Stadium",
+        "cityName": "Kansas City, Missouri",
+        "country": "US",
+        "address": "",
+        "capacity": 11500,
+        "yearOfConstruction": 0,
+        "mapsGeoCodeLatitude": "39.119598432",
+        "mapsGeoCodeLongitude": "-94.566512856",
+        "imagery": {}
+      },
+      "imagery": {},
+      "allSeasonImagery": [],
+      "editorial": {
+        "social": {
+          "facebook": "https://www.facebook.com/kccurrent",
+          "instagram": "https://www.instagram.com/kccurrent",
+          "x": "https://twitter.com/thekccurrent",
+          "tikTok": "https://www.tiktok.com/@thekccurrent",
+          "youTube": "https://www.youtube.com/kccurrent",
+          "linkedIn": "https://www.linkedin.com/company/kc-current"
+        },
+        "websiteUrl": "https://www.kansascitycurrent.com/",
+        "shopUrl": "https://shop.kansascitycurrent.com/password",
+        "ticketsUrl": "https://www.kansascitycurrent.com/tickets",
+        "clubPrimaryColour": "",
+        "clubSecondaryColour": "",
+        "clubTextColour": ""
+      }
+    },
+    {
+      "teamId": "nwsl::Football_Team::d2d8efe548734dfd8bc667b5a52a079a",
+      "providerId": "opta:Team:2yppf5jwqllc49s0qkbkchvkk",
+      "shortName": "Boston Legacy",
+      "officialName": "Boston Legacy",
+      "acronymName": "BOS",
+      "acronymNameLocalized": "BOS",
+      "isTeamFake": false,
+      "mediaName": "Boston Legacy FC",
+      "mediaShortName": "Boston Legacy",
+      "countryCode": "US",
+      "teamType": "club",
+      "overallSummary": "",
+      "stadium": {
+        "id": "nwsl::Football_Stadium::e3463fb6f87e45d18f9ec9cc07945fac",
+        "providerId": "opta:Stadium:237ujcuu0eb45tpkanwx7gh9l",
+        "name": "Boston Stadium",
+        "cityName": "Foxborough, Massachusetts",
+        "country": "US",
+        "address": "1388 One Patriot Place",
+        "capacity": 64146,
+        "yearOfConstruction": 2002,
+        "mapsGeoCodeLatitude": "42.091296172",
+        "mapsGeoCodeLongitude": "-71.264045835",
+        "imagery": {}
+      },
+      "imagery": {},
+      "allSeasonImagery": [],
+      "editorial": {
+        "social": {
+          "facebook": "https://www.facebook.com/bostonlegacyfc",
+          "instagram": "https://www.instagram.com/bostonlegacyfc/",
+          "x": "https://x.com/NWSLBoston",
+          "tikTok": "https://www.tiktok.com/@bostonlegacyfc",
+          "youTube": "https://www.youtube.com/@BostonLegacyFC",
+          "linkedIn": "https://www.linkedin.com/company/boston-legacy-fc/"
+        },
+        "websiteUrl": "https://bostonlegacyfc.com/",
+        "shopUrl": "https://bostonlegacyfc.com/collections/shop-all",
+        "ticketsUrl": "https://bostonlegacyfc.com/products/secure-your-seats",
+        "clubPrimaryColour": "",
+        "clubSecondaryColour": "",
+        "clubTextColour": ""
+      }
+    }
+  ],
+  "apiCallRequestTime": "2026-07-18T17:59:41.4206384+00:00"
+}
