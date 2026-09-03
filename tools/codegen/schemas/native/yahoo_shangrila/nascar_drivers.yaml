@@ -1,0 +1,9 @@
+columns:
+- description: ''
+  name: short_name
+  type: character
+- description: ''
+  name: players
+  type: character
+kind: dataframe
+schema: nascar_drivers

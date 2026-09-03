@@ -1,0 +1,49 @@
+frames:
+- columns:
+  - description: ''
+    name: alias_path
+    type: character
+  - description: ''
+    name: alias_lang
+    type: character
+  - description: ''
+    name: alias_url
+    type: character
+  - description: ''
+    name: alias_domain
+    type: character
+  - description: ''
+    name: display_name
+    type: character
+  - description: ''
+    name: first_name
+    type: character
+  - description: ''
+    name: last_name
+    type: character
+  - description: ''
+    name: player_id
+    type: character
+  - description: ''
+    name: positions
+    type: character
+  - description: ''
+    name: team_display_name
+    type: character
+  - description: ''
+    name: team_team_id
+    type: character
+  - description: ''
+    name: uniform_number
+    type: character
+  - description: ''
+    name: injury
+    type: character
+  section: players
+- columns:
+  - description: ''
+    name: current_season
+    type: integer
+  section: leagues
+kind: frames
+schema: player_basic

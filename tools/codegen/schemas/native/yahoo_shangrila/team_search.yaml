@@ -1,0 +1,42 @@
+columns:
+- description: ''
+  name: team_id
+  type: character
+- description: ''
+  name: display_name
+  type: character
+- description: ''
+  name: full_name
+  type: character
+- description: ''
+  name: alias_url
+  type: character
+- description: ''
+  name: alias_path
+  type: character
+- description: ''
+  name: primary_color
+  type: character
+- description: ''
+  name: secondary_color
+  type: character
+- description: ''
+  name: abbreviation
+  type: character
+- description: ''
+  name: league_short_name
+  type: character
+- description: ''
+  name: league_display_short
+  type: character
+- description: ''
+  name: league_name
+  type: character
+- description: ''
+  name: team_logo_url
+  type: character
+- description: ''
+  name: team_logo_white_url
+  type: character
+kind: dataframe
+schema: team_search

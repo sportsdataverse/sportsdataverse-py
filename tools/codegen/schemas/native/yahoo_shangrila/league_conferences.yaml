@@ -1,0 +1,9 @@
+columns:
+- description: ''
+  name: short_name
+  type: character
+- description: ''
+  name: conferences
+  type: character
+kind: dataframe
+schema: league_conferences

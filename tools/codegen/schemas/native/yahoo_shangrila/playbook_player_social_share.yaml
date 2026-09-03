@@ -1,0 +1,21 @@
+columns:
+- description: ''
+  name: sport_name
+  type: character
+- description: ''
+  name: short_display_name
+  type: character
+- description: ''
+  name: suggested_headshot
+  type: character
+- description: ''
+  name: team_primary_color
+  type: character
+- description: ''
+  name: team_secondary_color
+  type: character
+- description: ''
+  name: team_league
+  type: character
+kind: dataframe
+schema: playbook_player_social_share

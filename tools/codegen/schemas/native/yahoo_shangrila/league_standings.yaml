@@ -1,0 +1,21 @@
+columns:
+- description: ''
+  name: sport_name
+  type: character
+- description: ''
+  name: current_season_phase
+  type: character
+- description: ''
+  name: current_league_season
+  type: character
+- description: ''
+  name: divisions
+  type: character
+- description: ''
+  name: teams
+  type: character
+- description: ''
+  name: conferences
+  type: character
+kind: dataframe
+schema: league_standings

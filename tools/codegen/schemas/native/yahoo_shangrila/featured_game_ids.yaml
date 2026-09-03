@@ -1,0 +1,6 @@
+columns:
+- description: ''
+  name: game_id
+  type: character
+kind: dataframe
+schema: featured_game_ids

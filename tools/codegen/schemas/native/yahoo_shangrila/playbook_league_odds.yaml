@@ -1,0 +1,9 @@
+columns:
+- description: ''
+  name: ncaaf_games
+  type: character
+- description: ''
+  name: conferences
+  type: character
+kind: dataframe
+schema: playbook_league_odds

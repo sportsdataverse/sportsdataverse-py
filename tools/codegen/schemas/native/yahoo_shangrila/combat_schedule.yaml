@@ -1,0 +1,9 @@
+columns:
+- description: ''
+  name: short_name
+  type: character
+- description: ''
+  name: full_name
+  type: character
+kind: dataframe
+schema: combat_schedule

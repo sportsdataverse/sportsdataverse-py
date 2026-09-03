@@ -1,0 +1,9 @@
+columns:
+- description: ''
+  name: league_current_season
+  type: character
+- description: ''
+  name: roster
+  type: character
+kind: dataframe
+schema: team_roster

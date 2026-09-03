@@ -1,0 +1,9 @@
+columns:
+- description: ''
+  name: bets
+  type: character
+- description: ''
+  name: league
+  type: character
+kind: dataframe
+schema: league_future_odds

@@ -1,0 +1,87 @@
+frames:
+- columns:
+  - description: ''
+    name: short_name
+    type: character
+  - description: ''
+    name: teams
+    type: character
+  section: nfl
+- columns:
+  - description: ''
+    name: short_name
+    type: character
+  - description: ''
+    name: teams
+    type: character
+  section: nhl
+- columns:
+  - description: ''
+    name: short_name
+    type: character
+  - description: ''
+    name: teams
+    type: character
+  section: nba
+- columns:
+  - description: ''
+    name: short_name
+    type: character
+  - description: ''
+    name: teams
+    type: character
+  section: mlb
+- columns:
+  - description: ''
+    name: short_name
+    type: character
+  - description: ''
+    name: teams
+    type: character
+  section: wnba
+- columns:
+  - description: ''
+    name: poll_name
+    type: character
+  - description: ''
+    name: rank
+    type: character
+  - description: ''
+    name: team_id
+    type: character
+  - description: ''
+    name: team
+    type: character
+  section: ncaab
+- columns:
+  - description: ''
+    name: poll_name
+    type: character
+  - description: ''
+    name: rank
+    type: character
+  - description: ''
+    name: team_id
+    type: character
+  - description: ''
+    name: team
+    type: character
+  section: ncaaf
+- columns:
+  - description: ''
+    name: poll_name
+    type: character
+  - description: ''
+    name: rank
+    type: character
+  - description: ''
+    name: team_id
+    type: character
+  - description: ''
+    name: team
+    type: character
+  section: ncaaw
+- columns: []
+  section: sportsbook_legal_states
+kind: frames
+schema: nav_dropdown_tray

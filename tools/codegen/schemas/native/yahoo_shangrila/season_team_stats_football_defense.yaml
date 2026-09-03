@@ -1,0 +1,40 @@
+frames:
+- columns:
+  - description: ''
+    name: stat_id
+    type: character
+  - description: ''
+    name: display_name
+    type: character
+  - description: ''
+    name: abbreviation
+    type: character
+  - description: ''
+    name: sort_order
+    type: character
+  section: stat_types
+- columns:
+  - description: ''
+    name: player_display_name
+    type: character
+  - description: ''
+    name: player_player_id
+    type: character
+  - description: ''
+    name: player_team
+    type: character
+  - description: ''
+    name: player_positions
+    type: character
+  - description: ''
+    name: player_alias
+    type: character
+  - description: ''
+    name: player_player_cutout
+    type: character
+  - description: ''
+    name: stats
+    type: character
+  section: leagues
+kind: frames
+schema: season_team_stats_football_defense

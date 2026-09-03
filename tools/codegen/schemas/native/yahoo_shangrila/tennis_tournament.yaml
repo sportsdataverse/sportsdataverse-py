@@ -1,0 +1,33 @@
+columns:
+- description: ''
+  name: display_name
+  type: character
+- description: ''
+  name: tournament_status
+  type: character
+- description: ''
+  name: start_time
+  type: character
+- description: ''
+  name: end_time
+  type: character
+- description: ''
+  name: events
+  type: character
+- description: ''
+  name: champions
+  type: character
+- description: ''
+  name: previous_champions
+  type: character
+- description: ''
+  name: venue_country
+  type: character
+- description: ''
+  name: venue_city
+  type: character
+- description: ''
+  name: venue_state
+  type: character
+kind: dataframe
+schema: tennis_tournament

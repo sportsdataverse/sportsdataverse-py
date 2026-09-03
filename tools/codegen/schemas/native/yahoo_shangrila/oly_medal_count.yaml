@@ -1,0 +1,24 @@
+columns:
+- description: ''
+  name: display_name
+  type: character
+- description: ''
+  name: short_display_name
+  type: character
+- description: ''
+  name: start_date
+  type: character
+- description: ''
+  name: end_date
+  type: character
+- description: ''
+  name: season
+  type: integer
+- description: ''
+  name: alias
+  type: character
+- description: ''
+  name: olympic_team
+  type: character
+kind: dataframe
+schema: oly_medal_count

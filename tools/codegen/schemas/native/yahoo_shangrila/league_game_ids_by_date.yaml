@@ -1,0 +1,24 @@
+columns:
+- description: ''
+  name: display_short
+  type: character
+- description: ''
+  name: full_name
+  type: character
+- description: ''
+  name: name
+  type: character
+- description: ''
+  name: current_week
+  type: integer
+- description: ''
+  name: current_game_season_phase
+  type: character
+- description: ''
+  name: current_league_season
+  type: character
+- description: ''
+  name: games
+  type: character
+kind: dataframe
+schema: league_game_ids_by_date

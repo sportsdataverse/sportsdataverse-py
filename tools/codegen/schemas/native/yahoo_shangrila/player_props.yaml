@@ -1,0 +1,12 @@
+columns:
+- description: ''
+  name: games
+  type: character
+- description: ''
+  name: player_id
+  type: character
+- description: ''
+  name: display_name
+  type: character
+kind: dataframe
+schema: player_props

@@ -1,0 +1,9 @@
+columns:
+- description: ''
+  name: disclaimer_id
+  type: character
+- description: ''
+  name: text
+  type: character
+kind: dataframe
+schema: betting_disclaimer

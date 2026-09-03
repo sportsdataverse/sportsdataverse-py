@@ -1,0 +1,309 @@
+{
+ "data": {
+  "statTypes": [
+   {
+    "statId": "GAMES_PASSING",
+    "displayName": "Games",
+    "abbreviation": "G",
+    "sortOrder": "DESCENDING"
+   },
+   {
+    "statId": "QB_RATING",
+    "displayName": "QB Rating",
+    "abbreviation": "QBRat",
+    "sortOrder": "DESCENDING"
+   },
+   {
+    "statId": "PASSING_COMPLETIONS",
+    "displayName": "Completions",
+    "abbreviation": "Comp",
+    "sortOrder": "DESCENDING"
+   },
+   {
+    "statId": "PASSING_ATTEMPTS",
+    "displayName": "Attempts",
+    "abbreviation": "Att",
+    "sortOrder": "DESCENDING"
+   },
+   {
+    "statId": "COMPLETION_PERCENTAGE",
+    "displayName": "Completion Percentage",
+    "abbreviation": "Pct",
+    "sortOrder": "DESCENDING"
+   },
+   {
+    "statId": "PASSING_YARDS",
+    "displayName": "Passing Yards",
+    "abbreviation": "Yds",
+    "sortOrder": "DESCENDING"
+   },
+   {
+    "statId": "PASSING_YARDS_PER_GAME",
+    "displayName": "Passing Yards per Game",
+    "abbreviation": "PasY/G",
+    "sortOrder": "DESCENDING"
+   },
+   {
+    "statId": "PASSING_YARDS_PER_ATTEMPT",
+    "displayName": "Passing Yards per Attempt",
+    "abbreviation": "Y/A",
+    "sortOrder": "DESCENDING"
+   },
+   {
+    "statId": "PASSING_TOUCHDOWNS",
+    "displayName": "Passing Touchdowns",
+    "abbreviation": "TD",
+    "sortOrder": "DESCENDING"
+   },
+   {
+    "statId": "PASSING_INTERCEPTIONS",
+    "displayName": "Interceptions",
+    "abbreviation": "Int",
+    "sortOrder": "DESCENDING"
+   },
+   {
+    "statId": "SACKS_TAKEN",
+    "displayName": "Sacks",
+    "abbreviation": "Sacks",
+    "sortOrder": "DESCENDING"
+   },
+   {
+    "statId": "SACKS_YARDS_LOST",
+    "displayName": "Yards Lost",
+    "abbreviation": "YdsL",
+    "sortOrder": "DESCENDING"
+   }
+  ],
+  "leagues": [
+   {
+    "leaders": [
+     {
+      "player": {
+       "displayName": "Drew Mestemaker",
+       "playerId": "ncaaf.p.464024",
+       "team": {
+        "displayName": "Oklahoma St.",
+        "abbreviation": "OKST",
+        "teamLogo": {
+         "url": "https://s.yimg.com/iu/api/res/1.2/aWRB4sdzqhZbmEeZazCUBg--~B/YXBwaWQ9c2hhcmVkO2ZpPWZpbGw7cT03NTtoPTEyODt3PTEyOA--/https://s.yimg.com/cv/apiv2/default/20250409/500px/oklahomast.png"
+        }
+       },
+       "positions": [
+        {
+         "name": "Quarterback",
+         "abbreviation": "QB",
+         "positionId": "QUARTERBACK"
+        }
+       ],
+       "alias": {
+        "url": "https://sports.yahoo.com/ncaaf/players/464024/"
+       },
+       "playerCutout": null
+      },
+      "stats": [
+       {
+        "statId": "GAMES_PASSING",
+        "value": "14"
+       },
+       {
+        "statId": "QB_RATING",
+        "value": "168.7"
+       },
+       {
+        "statId": "PASSING_COMPLETIONS",
+        "value": "319"
+       },
+       {
+        "statId": "PASSING_ATTEMPTS",
+        "value": "463"
+       },
+       {
+        "statId": "COMPLETION_PERCENTAGE",
+        "value": "68.9"
+       },
+       {
+        "statId": "PASSING_YARDS",
+        "value": "4379"
+       },
+       {
+        "statId": "PASSING_YARDS_PER_GAME",
+        "value": "312.8"
+       },
+       {
+        "statId": "PASSING_YARDS_PER_ATTEMPT",
+        "value": "9.5"
+       },
+       {
+        "statId": "PASSING_TOUCHDOWNS",
+        "value": "34"
+       },
+       {
+        "statId": "PASSING_INTERCEPTIONS",
+        "value": "9"
+       },
+       {
+        "statId": "SACKS_TAKEN",
+        "value": "18"
+       },
+       {
+        "statId": "SACKS_YARDS_LOST",
+        "value": "-135"
+       }
+      ]
+     },
+     {
+      "player": {
+       "displayName": "Darian Mensah",
+       "playerId": "ncaaf.p.406169",
+       "team": {
+        "displayName": "Miami (FL)",
+        "abbreviation": "MIA",
+        "teamLogo": {
+         "url": "https://s.yimg.com/iu/api/res/1.2/CrUcfMyaBylT22ED.2tLLA--~B/YXBwaWQ9c2hhcmVkO2ZpPWZpbGw7cT03NTtoPTEyODt3PTEyOA--/https://s.yimg.com/cv/apiv2/default/ncaaf/20181127/500X500/miami_fl.png"
+        }
+       },
+       "positions": [
+        {
+         "name": "Quarterback",
+         "abbreviation": "QB",
+         "positionId": "QUARTERBACK"
+        }
+       ],
+       "alias": {
+        "url": "https://sports.yahoo.com/ncaaf/players/406169/"
+       },
+       "playerCutout": null
+      },
+      "stats": [
+       {
+        "statId": "GAMES_PASSING",
+        "value": "14"
+       },
+       {
+        "statId": "QB_RATING",
+        "value": "153.6"
+       },
+       {
+        "statId": "PASSING_COMPLETIONS",
+        "value": "334"
+       },
+       {
+        "statId": "PASSING_ATTEMPTS",
+        "value": "500"
+       },
+       {
+        "statId": "COMPLETION_PERCENTAGE",
+        "value": "66.8"
+       },
+       {
+        "statId": "PASSING_YARDS",
+        "value": "3973"
+       },
+       {
+        "statId": "PASSING_YARDS_PER_GAME",
+        "value": "283.8"
+       },
+       {
+        "statId": "PASSING_YARDS_PER_ATTEMPT",
+        "value": "7.9"
+       },
+       {
+        "statId": "PASSING_TOUCHDOWNS",
+        "value": "34"
+       },
+       {
+        "statId": "PASSING_INTERCEPTIONS",
+        "value": "6"
+       },
+       {
+        "statId": "SACKS_TAKEN",
+        "value": "27"
+       },
+       {
+        "statId": "SACKS_YARDS_LOST",
+        "value": "-188"
+       }
+      ]
+     },
+     {
+      "player": {
+       "displayName": "Trinidad Chambliss",
+       "playerId": "ncaaf.p.471748",
+       "team": {
+        "displayName": "Mississippi",
+        "abbreviation": "MISS",
+        "teamLogo": {
+         "url": "https://s.yimg.com/iu/api/res/1.2/HRTPPADrJdzK0YP9d6opUA--~B/YXBwaWQ9c2hhcmVkO2ZpPWZpbGw7cT03NTtoPTEyODt3PTEyOA--/https://s.yimg.com/cv/apiv2/default/ncaaf/20190606/500x500/mississippi_s.png"
+        }
+       },
+       "positions": [
+        {
+         "name": "Quarterback",
+         "abbreviation": "QB",
+         "positionId": "QUARTERBACK"
+        }
+       ],
+       "alias": {
+        "url": "https://sports.yahoo.com/ncaaf/players/471748/"
+       },
+       "playerCutout": {
+        "url": "https://s.yimg.com/iu/api/res/1.2/HdZn8CYEUeGW5NRU6RLOqA--~B/YXBwaWQ9c2hhcmVkO2ZpPWZpbGw7cT03NTtoPTEyODt3PTEyOA--/https://s.yimg.com/xe/i/us/sp/v/ncaaf_cutout/players_l/01082026/471748.png"
+       }
+      },
+      "stats": [
+       {
+        "statId": "GAMES_PASSING",
+        "value": "15"
+       },
+       {
+        "statId": "QB_RATING",
+        "value": "155.4"
+       },
+       {
+        "statId": "PASSING_COMPLETIONS",
+        "value": "294"
+       },
+       {
+        "statId": "PASSING_ATTEMPTS",
+        "value": "445"
+       },
+       {
+        "statId": "COMPLETION_PERCENTAGE",
+        "value": "66.1"
+       },
+       {
+        "statId": "PASSING_YARDS",
+        "value": "3937"
+       },
+       {
+        "statId": "PASSING_YARDS_PER_GAME",
+        "value": "262.5"
+       },
+       {
+        "statId": "PASSING_YARDS_PER_ATTEMPT",
+        "value": "8.8"
+       },
+       {
+        "statId": "PASSING_TOUCHDOWNS",
+        "value": "22"
+       },
+       {
+        "statId": "PASSING_INTERCEPTIONS",
+        "value": "3"
+       },
+       {
+        "statId": "SACKS_TAKEN",
+        "value": "14"
+       },
+       {
+        "statId": "SACKS_YARDS_LOST",
+        "value": "-73"
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ "extensions": {}
+}

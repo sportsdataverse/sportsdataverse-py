@@ -1,0 +1,1019 @@
+frames:
+- columns:
+  - description: ''
+    name: entity_id
+    type: character
+  - description: ''
+    name: sub_id
+    type: character
+  - description: ''
+    name: ncaaf_stat_type_102
+    type: character
+  - description: ''
+    name: ncaaf_stat_type_103
+    type: character
+  - description: ''
+    name: ncaaf_stat_type_105
+    type: character
+  - description: ''
+    name: ncaaf_stat_type_104
+    type: character
+  - description: ''
+    name: ncaaf_stat_type_106
+    type: character
+  - description: ''
+    name: ncaaf_stat_type_111
+    type: character
+  - description: ''
+    name: ncaaf_stat_type_112
+    type: character
+  - description: ''
+    name: ncaaf_stat_type_108
+    type: character
+  - description: ''
+    name: ncaaf_stat_type_109
+    type: character
+  - description: ''
+    name: ncaaf_stat_type_113
+    type: character
+  - description: ''
+    name: ncaaf_stat_type_202
+    type: character
+  - description: ''
+    name: ncaaf_stat_type_203
+    type: character
+  - description: ''
+    name: ncaaf_stat_type_205
+    type: character
+  - description: ''
+    name: ncaaf_stat_type_206
+    type: character
+  - description: ''
+    name: ncaaf_stat_type_207
+    type: character
+  - description: ''
+    name: ncaaf_stat_type_302
+    type: character
+  - description: ''
+    name: ncaaf_stat_type_303
+    type: character
+  - description: ''
+    name: ncaaf_stat_type_305
+    type: character
+  - description: ''
+    name: ncaaf_stat_type_306
+    type: character
+  - description: ''
+    name: ncaaf_stat_type_309
+    type: character
+  - description: ''
+    name: ncaaf_stat_type_502
+    type: character
+  - description: ''
+    name: ncaaf_stat_type_503
+    type: character
+  - description: ''
+    name: ncaaf_stat_type_505
+    type: character
+  - description: ''
+    name: ncaaf_stat_type_506
+    type: character
+  - description: ''
+    name: ncaaf_stat_type_507
+    type: character
+  - description: ''
+    name: ncaaf_stat_type_508
+    type: character
+  - description: ''
+    name: ncaaf_stat_type_509
+    type: character
+  - description: ''
+    name: ncaaf_stat_type_511
+    type: character
+  - description: ''
+    name: ncaaf_stat_type_512
+    type: character
+  - description: ''
+    name: ncaaf_stat_type_513
+    type: character
+  - description: ''
+    name: ncaaf_stat_type_411
+    type: character
+  - description: ''
+    name: ncaaf_stat_type_412
+    type: character
+  - description: ''
+    name: ncaaf_stat_type_407
+    type: character
+  - description: ''
+    name: ncaaf_stat_type_408
+    type: character
+  - description: ''
+    name: ncaaf_stat_type_410
+    type: character
+  - description: ''
+    name: ncaaf_stat_type_409
+    type: character
+  - description: ''
+    name: ncaaf_stat_type_602
+    type: character
+  - description: ''
+    name: ncaaf_stat_type_604
+    type: character
+  - description: ''
+    name: ncaaf_stat_type_608
+    type: character
+  - description: ''
+    name: ncaaf_stat_type_702
+    type: character
+  - description: ''
+    name: ncaaf_stat_type_703
+    type: character
+  - description: ''
+    name: ncaaf_stat_type_705
+    type: character
+  - description: ''
+    name: ncaaf_stat_type_706
+    type: character
+  - description: ''
+    name: ncaaf_stat_type_710
+    type: character
+  - description: ''
+    name: ncaaf_stat_type_707
+    type: character
+  - description: ''
+    name: ncaaf_stat_type_708
+    type: character
+  - description: ''
+    name: ncaaf_stat_type_709
+    type: character
+  section: player_stats
+- columns:
+  - description: ''
+    name: entity_id
+    type: character
+  - description: ''
+    name: sub_id
+    type: character
+  - description: ''
+    name: ncaaf_stat_type_919
+    type: character
+  - description: ''
+    name: ncaaf_stat_type_945
+    type: character
+  - description: ''
+    name: ncaaf_stat_type_950
+    type: character
+  - description: ''
+    name: ncaaf_stat_type_937
+    type: character
+  - description: ''
+    name: ncaaf_stat_type_936
+    type: character
+  - description: ''
+    name: ncaaf_stat_type_938
+    type: character
+  - description: ''
+    name: ncaaf_stat_type_941
+    type: character
+  - description: ''
+    name: ncaaf_stat_type_944
+    type: character
+  - description: ''
+    name: ncaaf_stat_type_946
+    type: character
+  - description: ''
+    name: ncaaf_stat_type_952
+    type: character
+  - description: ''
+    name: ncaaf_stat_type_921
+    type: character
+  - description: ''
+    name: ncaaf_stat_type_920
+    type: character
+  - description: ''
+    name: ncaaf_stat_type_949
+    type: character
+  - description: ''
+    name: ncaaf_stat_type_947
+    type: character
+  - description: ''
+    name: ncaaf_stat_type_951
+    type: character
+  - description: ''
+    name: ncaaf_stat_type_948
+    type: character
+  - description: ''
+    name: ncaaf_stat_type_927
+    type: character
+  - description: ''
+    name: ncaaf_stat_type_928
+    type: character
+  - description: ''
+    name: ncaaf_stat_type_926
+    type: character
+  - description: ''
+    name: ncaaf_stat_type_929
+    type: character
+  - description: ''
+    name: ncaaf_stat_type_930
+    type: character
+  - description: ''
+    name: ncaaf_stat_type_933
+    type: character
+  - description: ''
+    name: ncaaf_stat_type_934
+    type: character
+  - description: ''
+    name: ncaaf_stat_type_931
+    type: character
+  - description: ''
+    name: ncaaf_stat_type_932
+    type: character
+  section: team_stats
+- columns:
+  - description: ''
+    name: entity_id
+    type: character
+  - description: ''
+    name: stats
+    type: character
+  section: aliases
+- columns:
+  - description: ''
+    name: entity_id
+    type: character
+  - description: ''
+    name: name
+    type: character
+  - description: ''
+    name: sort
+    type: character
+  - description: ''
+    name: stats
+    type: character
+  section: stat_categories
+- columns:
+  - description: ''
+    name: entity_id
+    type: character
+  - description: ''
+    name: name
+    type: character
+  section: stat_variations
+- columns:
+  - description: ''
+    name: entity_id
+    type: character
+  - description: ''
+    name: name
+    type: character
+  - description: ''
+    name: short_name
+    type: character
+  section: stat_types
+- columns:
+  - description: ''
+    name: entity_id
+    type: character
+  - description: ''
+    name: name
+    type: character
+  section: stat_cut_types
+- columns:
+  - description: ''
+    name: entity_id
+    type: character
+  - description: ''
+    name: gameid
+    type: character
+  - description: ''
+    name: global_gameid
+    type: character
+  - description: ''
+    name: start_time
+    type: character
+  - description: ''
+    name: is_time_tba
+    type: logical
+  - description: ''
+    name: season_phase_id
+    type: character
+  - description: ''
+    name: game_type
+    type: character
+  - description: ''
+    name: winning_team_id
+    type: character
+  - description: ''
+    name: is_rank_upset
+    type: character
+  - description: ''
+    name: is_spread_upset
+    type: logical
+  - description: ''
+    name: outcome_type
+    type: character
+  - description: ''
+    name: home_team_id
+    type: character
+  - description: ''
+    name: away_team_id
+    type: character
+  - description: ''
+    name: week_number
+    type: character
+  - description: ''
+    name: sportacular_url
+    type: character
+  - description: ''
+    name: status_display_name
+    type: character
+  - description: ''
+    name: status_description
+    type: character
+  - description: ''
+    name: status_type
+    type: character
+  - description: ''
+    name: total_away_points
+    type: character
+  - description: ''
+    name: current_period_id
+    type: character
+  - description: ''
+    name: total_home_points
+    type: character
+  - description: ''
+    name: total_away_shootout_points
+    type: character
+  - description: ''
+    name: total_home_shootout_points
+    type: character
+  - description: ''
+    name: home_team_stats
+    type: character
+  - description: ''
+    name: away_team_stats
+    type: character
+  - description: ''
+    name: game_period_balls
+    type: character
+  - description: ''
+    name: game_period_strikes
+    type: character
+  - description: ''
+    name: game_period_outs
+    type: character
+  - description: ''
+    name: yards_to_endzone
+    type: character
+  - description: ''
+    name: start_yardline
+    type: character
+  - description: ''
+    name: distance
+    type: character
+  - description: ''
+    name: down
+    type: character
+  - description: ''
+    name: team_in_possession
+    type: character
+  - description: ''
+    name: power_play_strength_home
+    type: character
+  - description: ''
+    name: power_play_strength_away
+    type: character
+  - description: ''
+    name: game_time_elapsed
+    type: character
+  - description: ''
+    name: game_time_elapsed_display
+    type: character
+  - description: ''
+    name: inning_status
+    type: character
+  - description: ''
+    name: away_timeouts
+    type: character
+  - description: ''
+    name: home_timeouts
+    type: character
+  - description: ''
+    name: is_halftime
+    type: character
+  - description: ''
+    name: minimum_periods
+    type: integer
+  - description: ''
+    name: game_periods
+    type: character
+  - description: ''
+    name: baserunners
+    type: character
+  - description: ''
+    name: season
+    type: character
+  - description: ''
+    name: subleague
+    type: character
+  - description: ''
+    name: subleague_display_name
+    type: character
+  - description: ''
+    name: agg_score
+    type: character
+  - description: ''
+    name: leg_number
+    type: character
+  - description: ''
+    name: tv_coverage
+    type: character
+  - description: ''
+    name: seatgeek_id
+    type: character
+  - description: ''
+    name: last_updated
+    type: character
+  - description: ''
+    name: teams
+    type: character
+  - description: ''
+    name: play_by_play
+    type: character
+  - description: ''
+    name: pitches
+    type: character
+  - description: ''
+    name: at_bat
+    type: character
+  - description: ''
+    name: penalty_summary
+    type: character
+  - description: ''
+    name: scoring_summary
+    type: character
+  - description: ''
+    name: stat_categories
+    type: character
+  - description: ''
+    name: stadium
+    type: character
+  - description: ''
+    name: stadium_id
+    type: character
+  - description: ''
+    name: stadium_image
+    type: character
+  - description: ''
+    name: attendance
+    type: character
+  - description: ''
+    name: lineups
+    type: character
+  - description: ''
+    name: top_performer
+    type: character
+  - description: ''
+    name: players
+    type: character
+  - description: ''
+    name: byline
+    type: character
+  - description: ''
+    name: highlight
+    type: character
+  - description: ''
+    name: highlights
+    type: character
+  - description: ''
+    name: live_video
+    type: character
+  - description: ''
+    name: odds
+    type: character
+  - description: ''
+    name: current_players
+    type: character
+  - description: ''
+    name: last_play
+    type: character
+  - description: ''
+    name: series_type
+    type: character
+  - description: ''
+    name: series_status
+    type: character
+  - description: ''
+    name: games
+    type: character
+  - description: ''
+    name: series_games
+    type: character
+  - description: ''
+    name: game_details
+    type: character
+  - description: ''
+    name: section_notes
+    type: character
+  - description: ''
+    name: articles
+    type: character
+  - description: ''
+    name: tweets
+    type: character
+  - description: ''
+    name: playoff_round
+    type: character
+  - description: ''
+    name: media_stream
+    type: character
+  - description: ''
+    name: playoff_series_status
+    type: character
+  - description: ''
+    name: playoff_series_details
+    type: character
+  - description: ''
+    name: drives
+    type: character
+  - description: ''
+    name: user_teams_game
+    type: character
+  - description: ''
+    name: page_metadata
+    type: character
+  - description: ''
+    name: penalty_box
+    type: character
+  - description: ''
+    name: starting_pitchers
+    type: character
+  - description: ''
+    name: unrestricted_streams
+    type: character
+  - description: ''
+    name: tv_details
+    type: character
+  - description: ''
+    name: away_seed
+    type: character
+  - description: ''
+    name: home_seed
+    type: character
+  - description: ''
+    name: navigation_links_tickets_url
+    type: character
+  - description: ''
+    name: navigation_links_boxscore_url
+    type: character
+  - description: ''
+    name: navigation_links_match_page_url
+    type: character
+  - description: ''
+    name: navigation_links_recap_url
+    type: character
+  - description: ''
+    name: navigation_links_league_home_url
+    type: character
+  - description: ''
+    name: navigation_links_league_scores_url
+    type: character
+  - description: ''
+    name: provider_coverage_score_update_frequency_in_minutes
+    type: character
+  - description: ''
+    name: provider_coverage_has_plays
+    type: character
+  - description: ''
+    name: provider_coverage_has_stats
+    type: character
+  - description: ''
+    name: provider_coverage_has_extended_stats
+    type: character
+  - description: ''
+    name: provider_coverage_has_final_stats
+    type: character
+  section: games
+- columns:
+  - description: ''
+    name: entity_id
+    type: character
+  - description: ''
+    name: value
+    type: character
+  section: gameplayoff_round
+- columns:
+  - description: ''
+    name: entity_id
+    type: character
+  - description: ''
+    name: value
+    type: character
+  section: gameplayoff_series_status
+- columns:
+  - description: ''
+    name: entity_id
+    type: character
+  - description: ''
+    name: value
+    type: character
+  section: gameplayoff_series_details
+- columns:
+  - description: ''
+    name: entity_id
+    type: character
+  - description: ''
+    name: value
+    type: character
+  section: gamescore
+- columns:
+  - description: ''
+    name: entity_id
+    type: character
+  - description: ''
+    name: current_batter
+    type: character
+  - description: ''
+    name: current_pitcher
+    type: character
+  - description: ''
+    name: base_runners
+    type: character
+  - description: ''
+    name: due_ups
+    type: character
+  section: gamecurrent_players
+- columns:
+  - description: ''
+    name: entity_id
+    type: character
+  - description: ''
+    name: play_id
+    type: character
+  - description: ''
+    name: play_type
+    type: character
+  - description: ''
+    name: play_text
+    type: character
+  - description: ''
+    name: period
+    type: character
+  - description: ''
+    name: clock
+    type: character
+  - description: ''
+    name: team
+    type: character
+  - description: ''
+    name: is_scoring_play
+    type: integer
+  section: gamelast_play
+- columns: []
+  section: gamepenalty_summary
+- columns:
+  - description: ''
+    name: entity_id
+    type: character
+  - description: ''
+    name: value
+    type: character
+  section: gamepenalty_box
+- columns:
+  - description: ''
+    name: entity_id
+    type: character
+  - description: ''
+    name: sub_id
+    type: character
+  - description: ''
+    name: play_id
+    type: character
+  - description: ''
+    name: period
+    type: character
+  - description: ''
+    name: clock
+    type: character
+  - description: ''
+    name: down
+    type: character
+  - description: ''
+    name: distance
+    type: character
+  - description: ''
+    name: team
+    type: character
+  - description: ''
+    name: yardline
+    type: character
+  - description: ''
+    name: yards_to_endzone
+    type: character
+  - description: ''
+    name: type
+    type: character
+  - description: ''
+    name: yards
+    type: character
+  - description: ''
+    name: text
+    type: character
+  - description: ''
+    name: play_time
+    type: character
+  section: gameplay_by_play
+- columns: []
+  section: gamepitches
+- columns:
+  - description: ''
+    name: entity_id
+    type: character
+  - description: ''
+    name: value
+    type: character
+  section: gameat_bat
+- columns:
+  - description: ''
+    name: entity_id
+    type: character
+  - description: ''
+    name: sub_id
+    type: character
+  - description: ''
+    name: play_id
+    type: character
+  - description: ''
+    name: period
+    type: character
+  - description: ''
+    name: clock
+    type: character
+  - description: ''
+    name: away_score
+    type: character
+  - description: ''
+    name: home_score
+    type: character
+  - description: ''
+    name: team
+    type: character
+  - description: ''
+    name: score_type
+    type: character
+  - description: ''
+    name: xp_type
+    type: character
+  - description: ''
+    name: players
+    type: character
+  - description: ''
+    name: text
+    type: character
+  section: gamescoring_summary
+- columns:
+  - description: ''
+    name: entity_id
+    type: character
+  - description: ''
+    name: media_type
+    type: character
+  - description: ''
+    name: media_source
+    type: character
+  - description: ''
+    name: sequence_id
+    type: integer
+  - description: ''
+    name: external_id
+    type: character
+  - description: ''
+    name: timestamp
+    type: character
+  - description: ''
+    name: official
+    type: logical
+  section: gamemedia_stream
+- columns:
+  - description: ''
+    name: entity_id
+    type: character
+  - description: ''
+    name: id
+    type: character
+  - description: ''
+    name: team
+    type: character
+  - description: ''
+    name: time
+    type: character
+  - description: ''
+    name: num_plays
+    type: character
+  - description: ''
+    name: yards_covered
+    type: character
+  - description: ''
+    name: start_yardline
+    type: character
+  - description: ''
+    name: yardline_text
+    type: character
+  - description: ''
+    name: plays
+    type: character
+  - description: ''
+    name: result
+    type: character
+  - description: ''
+    name: start_time_clock
+    type: character
+  - description: ''
+    name: start_time_period
+    type: character
+  - description: ''
+    name: end_time_clock
+    type: character
+  - description: ''
+    name: end_time_period
+    type: integer
+  section: gamedrives
+- columns:
+  - description: ''
+    name: entity_id
+    type: character
+  - description: ''
+    name: home_lineup_order
+    type: character
+  - description: ''
+    name: away_lineup_order
+    type: character
+  - description: ''
+    name: home_lineup_all_ncaaf_p_457863_player_id
+    type: character
+  - description: ''
+    name: home_lineup_all_ncaaf_p_333433_player_id
+    type: character
+  - description: ''
+    name: home_lineup_all_ncaaf_p_461405_player_id
+    type: character
+  - description: ''
+    name: home_lineup_all_ncaaf_p_457834_player_id
+    type: character
+  - description: ''
+    name: home_lineup_all_ncaaf_p_469568_player_id
+    type: character
+  - description: ''
+    name: home_lineup_all_ncaaf_p_333434_player_id
+    type: character
+  - description: ''
+    name: home_lineup_all_ncaaf_p_333286_player_id
+    type: character
+  - description: ''
+    name: home_lineup_all_ncaaf_p_404124_player_id
+    type: character
+  - description: ''
+    name: home_lineup_all_ncaaf_p_322801_player_id
+    type: character
+  - description: ''
+    name: home_lineup_all_ncaaf_p_457875_player_id
+    type: character
+  - description: ''
+    name: home_lineup_all_ncaaf_p_469559_player_id
+    type: character
+  - description: ''
+    name: home_lineup_all_ncaaf_p_322827_player_id
+    type: character
+  - description: ''
+    name: home_lineup_all_ncaaf_p_451229_player_id
+    type: character
+  - description: ''
+    name: home_lineup_all_ncaaf_p_471801_player_id
+    type: character
+  - description: ''
+    name: home_lineup_all_ncaaf_p_299700_player_id
+    type: character
+  - description: ''
+    name: home_lineup_all_ncaaf_p_322308_player_id
+    type: character
+  - description: ''
+    name: home_lineup_all_ncaaf_p_322802_player_id
+    type: character
+  - description: ''
+    name: home_lineup_all_ncaaf_p_333347_player_id
+    type: character
+  - description: ''
+    name: home_lineup_all_ncaaf_p_334637_player_id
+    type: character
+  - description: ''
+    name: home_lineup_all_ncaaf_p_404052_player_id
+    type: character
+  - description: ''
+    name: home_lineup_all_ncaaf_p_406379_player_id
+    type: character
+  - description: ''
+    name: home_lineup_all_ncaaf_p_457838_player_id
+    type: character
+  - description: ''
+    name: home_lineup_all_ncaaf_p_457853_player_id
+    type: character
+  - description: ''
+    name: home_lineup_all_ncaaf_p_457880_player_id
+    type: character
+  - description: ''
+    name: home_lineup_all_ncaaf_p_461399_player_id
+    type: character
+  - description: ''
+    name: away_lineup_all_ncaaf_p_469436_player_id
+    type: character
+  - description: ''
+    name: away_lineup_all_ncaaf_p_403962_player_id
+    type: character
+  - description: ''
+    name: away_lineup_all_ncaaf_p_404392_player_id
+    type: character
+  - description: ''
+    name: away_lineup_all_ncaaf_p_457591_player_id
+    type: character
+  - description: ''
+    name: away_lineup_all_ncaaf_p_323602_player_id
+    type: character
+  - description: ''
+    name: away_lineup_all_ncaaf_p_340496_player_id
+    type: character
+  - description: ''
+    name: away_lineup_all_ncaaf_p_403924_player_id
+    type: character
+  - description: ''
+    name: away_lineup_all_ncaaf_p_457613_player_id
+    type: character
+  - description: ''
+    name: away_lineup_all_ncaaf_p_333922_player_id
+    type: character
+  - description: ''
+    name: away_lineup_all_ncaaf_p_404008_player_id
+    type: character
+  - description: ''
+    name: away_lineup_all_ncaaf_p_338368_player_id
+    type: character
+  - description: ''
+    name: away_lineup_all_ncaaf_p_457602_player_id
+    type: character
+  - description: ''
+    name: away_lineup_all_ncaaf_p_327406_player_id
+    type: character
+  - description: ''
+    name: away_lineup_all_ncaaf_p_327412_player_id
+    type: character
+  - description: ''
+    name: away_lineup_all_ncaaf_p_327421_player_id
+    type: character
+  - description: ''
+    name: away_lineup_all_ncaaf_p_333312_player_id
+    type: character
+  - description: ''
+    name: away_lineup_all_ncaaf_p_333324_player_id
+    type: character
+  - description: ''
+    name: away_lineup_all_ncaaf_p_333423_player_id
+    type: character
+  - description: ''
+    name: away_lineup_all_ncaaf_p_340505_player_id
+    type: character
+  - description: ''
+    name: away_lineup_all_ncaaf_p_403634_player_id
+    type: character
+  - description: ''
+    name: away_lineup_all_ncaaf_p_403958_player_id
+    type: character
+  - description: ''
+    name: away_lineup_all_ncaaf_p_404304_player_id
+    type: character
+  - description: ''
+    name: away_lineup_all_ncaaf_p_405415_player_id
+    type: character
+  - description: ''
+    name: away_lineup_all_ncaaf_p_405652_player_id
+    type: character
+  - description: ''
+    name: away_lineup_all_ncaaf_p_451303_player_id
+    type: character
+  - description: ''
+    name: away_lineup_all_ncaaf_p_457606_player_id
+    type: character
+  - description: ''
+    name: away_lineup_all_ncaaf_p_474363_player_id
+    type: character
+  - description: ''
+    name: away_lineup_all_ncaaf_p_474366_player_id
+    type: character
+  section: gamelineups
+- columns: []
+  section: gamegame_details
+- columns: []
+  section: gamesection_notes
+kind: frames
+schema: editorial_boxscore

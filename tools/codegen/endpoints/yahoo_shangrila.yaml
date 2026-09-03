@@ -1,0 +1,2506 @@
+api: yahoo_shangrila
+docstring:
+  example_import: true
+  example_import_from: sportsdataverse.yahoo.yahoo_shangrila
+  raises:
+  - 'requests.exceptions.RequestException: Connection-level failure after ``dl_utils.download``
+    exhausts its retries.'
+  see_also:
+  - name: cfbfastR
+    note: R sister package for college football
+    url: https://cfbfastR.sportsdataverse.org
+  - name: Yahoo Sports
+    note: data origin (unofficial, undocumented endpoints)
+    url: https://sports.yahoo.com
+endpoints:
+- extra_params:
+  - name: season
+    query_key: season
+    type: str
+  - name: sort_method
+    query_key: sortMethod
+    type: str
+  parser: parse_yahoo_shangrila
+  path: /OlyMedalCount
+  returns_schema: native/yahoo_shangrila/oly_medal_count
+  short: oly_medal_count
+  summary: Yahoo shangrila persisted query `OlyMedalCount` -> one row per `olympics`
+    entry
+- extra_params:
+  - name: seasons
+    query_key: seasons
+    type: str
+  parser: parse_yahoo_shangrila
+  path: /OlySeasons
+  returns_schema: native/yahoo_shangrila/oly_seasons
+  short: oly_seasons
+  summary: Yahoo shangrila persisted query `OlySeasons` -> one row per `olympics`
+    entry
+- extra_params:
+  - name: alias
+    query_key: alias
+    type: str
+  parser: parse_yahoo_shangrila
+  path: /alias
+  returns_schema: native/yahoo_shangrila/alias
+  short: alias
+  summary: Yahoo shangrila persisted query `alias` -> one row per `pageMetaData` entry
+- extra_params:
+  - name: player_ids
+    query_key: playerIds
+    type: str
+  parser: parse_yahoo_shangrila
+  path: /articleListCardPlayers
+  returns_schema: native/yahoo_shangrila/article_list_card_players
+  short: article_list_card_players
+  summary: Yahoo shangrila persisted query `articleListCardPlayers` -> one row per
+    `players` entry
+- extra_params:
+  - name: team_ids
+    query_key: teamIds
+    type: str
+  parser: parse_yahoo_shangrila
+  path: /articleListCardTeams
+  returns_schema: native/yahoo_shangrila/article_list_card_teams
+  short: article_list_card_teams
+  summary: Yahoo shangrila persisted query `articleListCardTeams` -> one row per `teams`
+    entry
+- extra_params:
+  - name: players
+    query_key: players
+    type: str
+  parser: parse_yahoo_shangrila
+  path: /basicPlayers
+  returns_schema: native/yahoo_shangrila/basic_players
+  short: basic_players
+  summary: Yahoo shangrila persisted query `basicPlayers` -> one row per `players`
+    entry
+- extra_params:
+  - name: betting_disclaimer_id
+    query_key: bettingDisclaimerId
+    type: str
+  parser: parse_yahoo_shangrila
+  path: /bettingDisclaimer
+  returns_schema: native/yahoo_shangrila/betting_disclaimer
+  short: betting_disclaimer
+  summary: Yahoo shangrila persisted query `bettingDisclaimer` -> one row per `bettingDisclaimers`
+    entry
+- extra_params:
+  - name: event_group_id
+    query_key: eventGroupId
+    type: str
+  - name: season
+    query_key: season
+    type: str
+  - name: league
+    query_key: league
+    type: str
+  parser: parse_yahoo_shangrila
+  path: /combatEventFights
+  returns_schema: native/yahoo_shangrila/combat_event_fights
+  short: combat_event_fights
+  summary: Yahoo shangrila persisted query `combatEventFights` -> one row per `leagues`
+    entry
+- extra_params:
+  - name: season
+    query_key: season
+    type: str
+  - name: league
+    query_key: league
+    type: str
+  parser: parse_yahoo_shangrila
+  path: /combatSchedule
+  returns_schema: native/yahoo_shangrila/combat_schedule
+  short: combat_schedule
+  summary: Yahoo shangrila persisted query `combatSchedule` -> one row per `leagues`
+    entry
+- extra_params:
+  - name: add_team_logos
+    query_key: addTeamLogos
+    type: str
+  - name: date
+    query_key: date
+    type: str
+  - name: team_ids
+    query_key: teamIds
+    type: str
+  parser: parse_yahoo_shangrila
+  path: /common/pills
+  returns_schema: native/yahoo_shangrila/common_pills
+  short: common_pills
+  summary: Yahoo shangrila persisted query `common/pills` (response body not captured;
+    shape unknown)
+- extra_params:
+  - name: sport
+    query_key: sport
+    type: str
+  - name: position
+    query_key: position
+    type: str
+  - name: filters
+    query_key: filters
+    type: str
+  - name: experts
+    query_key: experts
+    type: str
+  - name: scoring
+    query_key: scoring
+    type: str
+  - name: type
+    query_key: type
+    type: str
+  parser: parse_yahoo_shangrila
+  path: /consensus-rankings.php
+  returns_schema: native/yahoo_shangrila/consensus_rankings_php
+  short: consensus_rankings_php
+  summary: Yahoo shangrila persisted query `consensus-rankings.php` (response body
+    not captured; shape unknown)
+- extra_params:
+  - name: league
+    query_key: league
+    type: str
+  - name: season
+    query_key: season
+    type: str
+  parser: parse_yahoo_shangrila
+  path: /draft
+  returns_schema: native/yahoo_shangrila/draft
+  short: draft
+  summary: Yahoo shangrila persisted query `draft` -> one row per `leagues` entry
+- extra_params:
+  - name: league
+    query_key: league
+    type: str
+  - name: season
+    query_key: season
+    type: str
+  - name: image_height
+    query_key: imageHeight
+    type: str
+  - name: image_width
+    query_key: imageWidth
+    type: str
+  parser: parse_yahoo_shangrila
+  path: /draftProspects
+  returns_schema: native/yahoo_shangrila/draft_prospects
+  short: draft_prospects
+  summary: Yahoo shangrila persisted query `draftProspects` -> one row per `leagues`
+    entry
+- extra_params:
+  - name: player_id
+    query_key: playerId
+    type: str
+  - name: season
+    query_key: season
+    type: str
+  parser: parse_yahoo_shangrila
+  path: /driverResults
+  returns_schema: native/yahoo_shangrila/driver_results
+  short: driver_results
+  summary: Yahoo shangrila persisted query `driverResults` -> one row per `players`
+    entry
+- extra_params:
+  - name: player_id
+    query_key: playerId
+    type: str
+  parser: parse_yahoo_shangrila
+  path: /driverSplits
+  returns_schema: native/yahoo_shangrila/driver_splits
+  short: driver_splits
+  summary: Yahoo shangrila persisted query `driverSplits` -> one row per `players`
+    entry
+- parser: parse_yahoo_shangrila
+  path: /featuredGameIds
+  returns_schema: native/yahoo_shangrila/featured_game_ids
+  short: featured_game_ids
+  summary: Yahoo shangrila persisted query `featuredGameIds` -> one row per `featuredGames`
+    entry
+- extra_params:
+  - name: game_id
+    query_key: gameId
+    type: str
+  parser: parse_yahoo_shangrila
+  path: /gamePropBets
+  returns_schema: native/yahoo_shangrila/game_prop_bets
+  short: game_prop_bets
+  summary: Yahoo shangrila persisted query `gamePropBets` -> one row per `games` entry
+- extra_params:
+  - name: game_id
+    query_key: gameId
+    type: str
+  - name: season
+    query_key: season
+    type: str
+  - name: season_phases
+    query_key: seasonPhases
+    type: str
+  - name: qualified
+    query_key: qualified
+    type: str
+  - name: count
+    query_key: count
+    type: str
+  - name: is_pregame
+    query_key: isPregame
+    type: str
+  - name: team_image_height
+    query_key: teamImageHeight
+    type: str
+  - name: team_image_width
+    query_key: teamImageWidth
+    type: str
+  - name: player_image_height
+    query_key: playerImageHeight
+    type: str
+  - name: player_image_width
+    query_key: playerImageWidth
+    type: str
+  - name: baseball_leader_sort_stat0
+    query_key: baseballLeaderSortStat0
+    type: str
+  - name: baseball_leader_sort_stat1
+    query_key: baseballLeaderSortStat1
+    type: str
+  - name: baseball_leader_sort_stat2
+    query_key: baseballLeaderSortStat2
+    type: str
+  - name: baseball_leader_sort_stat3
+    query_key: baseballLeaderSortStat3
+    type: str
+  - name: baseball_leader_sort_stat4
+    query_key: baseballLeaderSortStat4
+    type: str
+  - name: baseball_leader_stat_ids0
+    query_key: baseballLeaderStatIds0
+    type: str
+  - name: baseball_leader_stat_ids1
+    query_key: baseballLeaderStatIds1
+    type: str
+  - name: baseball_leader_stat_ids2
+    query_key: baseballLeaderStatIds2
+    type: str
+  - name: baseball_leader_stat_ids3
+    query_key: baseballLeaderStatIds3
+    type: str
+  - name: baseball_leader_stat_ids4
+    query_key: baseballLeaderStatIds4
+    type: str
+  - name: baseball_player_stat_ids0
+    query_key: baseballPlayerStatIds0
+    type: str
+  - name: baseball_player_stat_ids1
+    query_key: baseballPlayerStatIds1
+    type: str
+  - name: baseball_team_sort_stat0
+    query_key: baseballTeamSortStat0
+    type: str
+  - name: baseball_team_sort_stat1
+    query_key: baseballTeamSortStat1
+    type: str
+  - name: baseball_team_sort_stat2
+    query_key: baseballTeamSortStat2
+    type: str
+  - name: baseball_team_sort_stat3
+    query_key: baseballTeamSortStat3
+    type: str
+  - name: baseball_team_sort_stat4
+    query_key: baseballTeamSortStat4
+    type: str
+  - name: baseball_team_sort_stat5
+    query_key: baseballTeamSortStat5
+    type: str
+  - name: baseball_team_sort_stat6
+    query_key: baseballTeamSortStat6
+    type: str
+  - name: baseball_team_sort_stat7
+    query_key: baseballTeamSortStat7
+    type: str
+  - name: baseball_team_sort_stat8
+    query_key: baseballTeamSortStat8
+    type: str
+  - name: baseball_team_sort_stat9
+    query_key: baseballTeamSortStat9
+    type: str
+  - name: baseball_team_sort_stat10
+    query_key: baseballTeamSortStat10
+    type: str
+  - name: baseball_team_sort_stat11
+    query_key: baseballTeamSortStat11
+    type: str
+  - name: baseball_team_stat_ids0
+    query_key: baseballTeamStatIds0
+    type: str
+  - name: baseball_team_stat_ids1
+    query_key: baseballTeamStatIds1
+    type: str
+  - name: baseball_team_stat_ids2
+    query_key: baseballTeamStatIds2
+    type: str
+  - name: baseball_team_stat_ids3
+    query_key: baseballTeamStatIds3
+    type: str
+  - name: baseball_team_stat_ids4
+    query_key: baseballTeamStatIds4
+    type: str
+  - name: baseball_team_stat_ids5
+    query_key: baseballTeamStatIds5
+    type: str
+  - name: baseball_team_stat_ids6
+    query_key: baseballTeamStatIds6
+    type: str
+  - name: baseball_team_stat_ids7
+    query_key: baseballTeamStatIds7
+    type: str
+  - name: baseball_team_stat_ids8
+    query_key: baseballTeamStatIds8
+    type: str
+  - name: baseball_team_stat_ids9
+    query_key: baseballTeamStatIds9
+    type: str
+  - name: baseball_team_stat_ids10
+    query_key: baseballTeamStatIds10
+    type: str
+  - name: baseball_team_stat_ids11
+    query_key: baseballTeamStatIds11
+    type: str
+  - name: basketball_leader_sort_stat0
+    query_key: basketballLeaderSortStat0
+    type: str
+  - name: basketball_leader_sort_stat1
+    query_key: basketballLeaderSortStat1
+    type: str
+  - name: basketball_leader_sort_stat2
+    query_key: basketballLeaderSortStat2
+    type: str
+  - name: basketball_leader_sort_stat3
+    query_key: basketballLeaderSortStat3
+    type: str
+  - name: basketball_leader_sort_stat4
+    query_key: basketballLeaderSortStat4
+    type: str
+  - name: basketball_leader_stat_ids0
+    query_key: basketballLeaderStatIds0
+    type: str
+  - name: basketball_leader_stat_ids1
+    query_key: basketballLeaderStatIds1
+    type: str
+  - name: basketball_leader_stat_ids2
+    query_key: basketballLeaderStatIds2
+    type: str
+  - name: basketball_leader_stat_ids3
+    query_key: basketballLeaderStatIds3
+    type: str
+  - name: basketball_leader_stat_ids4
+    query_key: basketballLeaderStatIds4
+    type: str
+  - name: basketball_player_stat_ids0
+    query_key: basketballPlayerStatIds0
+    type: str
+  - name: basketball_team_sort_stat0
+    query_key: basketballTeamSortStat0
+    type: str
+  - name: basketball_team_sort_stat1
+    query_key: basketballTeamSortStat1
+    type: str
+  - name: basketball_team_sort_stat2
+    query_key: basketballTeamSortStat2
+    type: str
+  - name: basketball_team_sort_stat3
+    query_key: basketballTeamSortStat3
+    type: str
+  - name: basketball_team_sort_stat4
+    query_key: basketballTeamSortStat4
+    type: str
+  - name: basketball_team_sort_stat5
+    query_key: basketballTeamSortStat5
+    type: str
+  - name: basketball_team_sort_stat6
+    query_key: basketballTeamSortStat6
+    type: str
+  - name: basketball_team_sort_stat7
+    query_key: basketballTeamSortStat7
+    type: str
+  - name: basketball_team_sort_stat8
+    query_key: basketballTeamSortStat8
+    type: str
+  - name: basketball_team_sort_stat9
+    query_key: basketballTeamSortStat9
+    type: str
+  - name: basketball_team_stat_ids0
+    query_key: basketballTeamStatIds0
+    type: str
+  - name: basketball_team_stat_ids1
+    query_key: basketballTeamStatIds1
+    type: str
+  - name: basketball_team_stat_ids2
+    query_key: basketballTeamStatIds2
+    type: str
+  - name: basketball_team_stat_ids3
+    query_key: basketballTeamStatIds3
+    type: str
+  - name: basketball_team_stat_ids4
+    query_key: basketballTeamStatIds4
+    type: str
+  - name: basketball_team_stat_ids5
+    query_key: basketballTeamStatIds5
+    type: str
+  - name: basketball_team_stat_ids6
+    query_key: basketballTeamStatIds6
+    type: str
+  - name: basketball_team_stat_ids7
+    query_key: basketballTeamStatIds7
+    type: str
+  - name: basketball_team_stat_ids8
+    query_key: basketballTeamStatIds8
+    type: str
+  - name: basketball_team_stat_ids9
+    query_key: basketballTeamStatIds9
+    type: str
+  - name: football_leader_sort_stat0
+    query_key: footballLeaderSortStat0
+    type: str
+  - name: football_leader_sort_stat1
+    query_key: footballLeaderSortStat1
+    type: str
+  - name: football_leader_sort_stat2
+    query_key: footballLeaderSortStat2
+    type: str
+  - name: football_leader_sort_stat3
+    query_key: footballLeaderSortStat3
+    type: str
+  - name: football_leader_stat_ids0
+    query_key: footballLeaderStatIds0
+    type: str
+  - name: football_leader_stat_ids1
+    query_key: footballLeaderStatIds1
+    type: str
+  - name: football_leader_stat_ids2
+    query_key: footballLeaderStatIds2
+    type: str
+  - name: football_leader_stat_ids3
+    query_key: footballLeaderStatIds3
+    type: str
+  - name: football_player_stat_ids0
+    query_key: footballPlayerStatIds0
+    type: str
+  - name: football_player_stat_ids1
+    query_key: footballPlayerStatIds1
+    type: str
+  - name: football_player_stat_ids2
+    query_key: footballPlayerStatIds2
+    type: str
+  - name: football_player_stat_ids3
+    query_key: footballPlayerStatIds3
+    type: str
+  - name: football_player_stat_ids4
+    query_key: footballPlayerStatIds4
+    type: str
+  - name: football_player_stat_ids5
+    query_key: footballPlayerStatIds5
+    type: str
+  - name: football_player_stat_ids6
+    query_key: footballPlayerStatIds6
+    type: str
+  - name: football_player_stat_ids7
+    query_key: footballPlayerStatIds7
+    type: str
+  - name: football_team_sort_stat0
+    query_key: footballTeamSortStat0
+    type: str
+  - name: football_team_sort_stat1
+    query_key: footballTeamSortStat1
+    type: str
+  - name: football_team_sort_stat2
+    query_key: footballTeamSortStat2
+    type: str
+  - name: football_team_sort_stat3
+    query_key: footballTeamSortStat3
+    type: str
+  - name: football_team_sort_stat4
+    query_key: footballTeamSortStat4
+    type: str
+  - name: football_team_sort_stat5
+    query_key: footballTeamSortStat5
+    type: str
+  - name: football_team_sort_stat6
+    query_key: footballTeamSortStat6
+    type: str
+  - name: football_team_sort_stat7
+    query_key: footballTeamSortStat7
+    type: str
+  - name: football_team_sort_stat8
+    query_key: footballTeamSortStat8
+    type: str
+  - name: football_team_sort_stat9
+    query_key: footballTeamSortStat9
+    type: str
+  - name: football_team_sort_stat10
+    query_key: footballTeamSortStat10
+    type: str
+  - name: football_team_sort_stat11
+    query_key: footballTeamSortStat11
+    type: str
+  - name: football_team_stat_ids0
+    query_key: footballTeamStatIds0
+    type: str
+  - name: football_team_stat_ids1
+    query_key: footballTeamStatIds1
+    type: str
+  - name: football_team_stat_ids2
+    query_key: footballTeamStatIds2
+    type: str
+  - name: football_team_stat_ids3
+    query_key: footballTeamStatIds3
+    type: str
+  - name: football_team_stat_ids4
+    query_key: footballTeamStatIds4
+    type: str
+  - name: football_team_stat_ids5
+    query_key: footballTeamStatIds5
+    type: str
+  - name: football_team_stat_ids6
+    query_key: footballTeamStatIds6
+    type: str
+  - name: football_team_stat_ids7
+    query_key: footballTeamStatIds7
+    type: str
+  - name: football_team_stat_ids8
+    query_key: footballTeamStatIds8
+    type: str
+  - name: football_team_stat_ids9
+    query_key: footballTeamStatIds9
+    type: str
+  - name: football_team_stat_ids10
+    query_key: footballTeamStatIds10
+    type: str
+  - name: football_team_stat_ids11
+    query_key: footballTeamStatIds11
+    type: str
+  - name: hockey_leader_sort_stat0
+    query_key: hockeyLeaderSortStat0
+    type: str
+  - name: hockey_leader_sort_stat1
+    query_key: hockeyLeaderSortStat1
+    type: str
+  - name: hockey_leader_sort_stat2
+    query_key: hockeyLeaderSortStat2
+    type: str
+  - name: hockey_leader_sort_stat3
+    query_key: hockeyLeaderSortStat3
+    type: str
+  - name: hockey_leader_stat_ids0
+    query_key: hockeyLeaderStatIds0
+    type: str
+  - name: hockey_leader_stat_ids1
+    query_key: hockeyLeaderStatIds1
+    type: str
+  - name: hockey_leader_stat_ids2
+    query_key: hockeyLeaderStatIds2
+    type: str
+  - name: hockey_leader_stat_ids3
+    query_key: hockeyLeaderStatIds3
+    type: str
+  - name: hockey_player_stat_ids0
+    query_key: hockeyPlayerStatIds0
+    type: str
+  - name: hockey_player_stat_ids1
+    query_key: hockeyPlayerStatIds1
+    type: str
+  - name: hockey_player_stat_ids2
+    query_key: hockeyPlayerStatIds2
+    type: str
+  - name: hockey_team_sort_stat0
+    query_key: hockeyTeamSortStat0
+    type: str
+  - name: hockey_team_sort_stat1
+    query_key: hockeyTeamSortStat1
+    type: str
+  - name: hockey_team_sort_stat2
+    query_key: hockeyTeamSortStat2
+    type: str
+  - name: hockey_team_sort_stat3
+    query_key: hockeyTeamSortStat3
+    type: str
+  - name: hockey_team_sort_stat4
+    query_key: hockeyTeamSortStat4
+    type: str
+  - name: hockey_team_sort_stat5
+    query_key: hockeyTeamSortStat5
+    type: str
+  - name: hockey_team_sort_stat6
+    query_key: hockeyTeamSortStat6
+    type: str
+  - name: hockey_team_stat_ids0
+    query_key: hockeyTeamStatIds0
+    type: str
+  - name: hockey_team_stat_ids1
+    query_key: hockeyTeamStatIds1
+    type: str
+  - name: hockey_team_stat_ids2
+    query_key: hockeyTeamStatIds2
+    type: str
+  - name: hockey_team_stat_ids3
+    query_key: hockeyTeamStatIds3
+    type: str
+  - name: hockey_team_stat_ids4
+    query_key: hockeyTeamStatIds4
+    type: str
+  - name: hockey_team_stat_ids5
+    query_key: hockeyTeamStatIds5
+    type: str
+  - name: hockey_team_stat_ids6
+    query_key: hockeyTeamStatIds6
+    type: str
+  - name: soccer_player_stat_ids0
+    query_key: soccerPlayerStatIds0
+    type: str
+  - name: soccer_player_stat_ids1
+    query_key: soccerPlayerStatIds1
+    type: str
+  - name: soccer_player_stat_ids2
+    query_key: soccerPlayerStatIds2
+    type: str
+  - name: soccer_player_stat_ids3
+    query_key: soccerPlayerStatIds3
+    type: str
+  - name: soccer_player_stat_ids4
+    query_key: soccerPlayerStatIds4
+    type: str
+  - name: soccer_team_sort_stat0
+    query_key: soccerTeamSortStat0
+    type: str
+  - name: soccer_team_sort_stat1
+    query_key: soccerTeamSortStat1
+    type: str
+  - name: soccer_team_sort_stat2
+    query_key: soccerTeamSortStat2
+    type: str
+  - name: soccer_team_sort_stat3
+    query_key: soccerTeamSortStat3
+    type: str
+  - name: soccer_team_sort_stat4
+    query_key: soccerTeamSortStat4
+    type: str
+  - name: soccer_team_sort_stat5
+    query_key: soccerTeamSortStat5
+    type: str
+  - name: soccer_team_stat_ids0
+    query_key: soccerTeamStatIds0
+    type: str
+  - name: soccer_team_stat_ids1
+    query_key: soccerTeamStatIds1
+    type: str
+  - name: soccer_team_stat_ids2
+    query_key: soccerTeamStatIds2
+    type: str
+  - name: soccer_team_stat_ids3
+    query_key: soccerTeamStatIds3
+    type: str
+  - name: soccer_team_stat_ids4
+    query_key: soccerTeamStatIds4
+    type: str
+  - name: soccer_team_stat_ids5
+    query_key: soccerTeamStatIds5
+    type: str
+  parser: parse_yahoo_shangrila
+  path: /gameStatsLeaders
+  returns_schema: native/yahoo_shangrila/game_stats_leaders
+  short: game_stats_leaders
+  summary: Yahoo shangrila persisted query `gameStatsLeaders` -> one row per `games`
+    entry
+- extra_params:
+  - name: game_id
+    query_key: gameId
+    type: str
+  parser: parse_yahoo_shangrila
+  path: /gametimeGame
+  returns_schema: native/yahoo_shangrila/gametime_game
+  short: gametime_game
+  summary: Yahoo shangrila persisted query `gametimeGame` -> one row per `games` entry
+- extra_params:
+  - name: team_id
+    query_key: teamId
+    type: str
+  parser: parse_yahoo_shangrila
+  path: /gametimeTeam
+  returns_schema: native/yahoo_shangrila/gametime_team
+  short: gametime_team
+  summary: Yahoo shangrila persisted query `gametimeTeam` -> one row per `teams` entry
+- extra_params:
+  - name: event_group_id
+    query_key: eventGroupId
+    type: str
+  parser: parse_yahoo_shangrila
+  path: /golfTournamentSeasons
+  returns_schema: native/yahoo_shangrila/golf_tournament_seasons
+  short: golf_tournament_seasons
+  summary: Yahoo shangrila persisted query `golfTournamentSeasons` (response body
+    not captured; shape unknown)
+- extra_params:
+  - name: association
+    query_key: association
+    type: str
+  - name: season
+    query_key: season
+    type: str
+  - name: show_defending_champs
+    query_key: showDefendingChamps
+    type: str
+  parser: parse_yahoo_shangrila
+  path: /golfTournaments
+  returns_schema: native/yahoo_shangrila/golf_tournaments
+  short: golf_tournaments
+  summary: Yahoo shangrila persisted query `golfTournaments` -> one row per `golfTournaments`
+    entry
+- extra_params:
+  - name: event_group_id
+    query_key: eventGroupId
+    type: str
+  - name: association
+    query_key: association
+    type: str
+  - name: season
+    query_key: season
+    type: str
+  parser: parse_yahoo_shangrila
+  path: /golfTournamentsBasic
+  returns_schema: native/yahoo_shangrila/golf_tournaments_basic
+  short: golf_tournaments_basic
+  summary: Yahoo shangrila persisted query `golfTournamentsBasic` -> one row per `golfTournaments`
+    entry
+- extra_params:
+  - name: league
+    query_key: league
+    type: str
+  - name: division_ids
+    query_key: divisionIds
+    type: str
+  parser: parse_yahoo_shangrila
+  path: /leagueConferences
+  returns_schema: native/yahoo_shangrila/league_conferences
+  short: league_conferences
+  summary: Yahoo shangrila persisted query `leagueConferences` -> one row per `leagues`
+    entry
+- extra_params:
+  - name: league
+    query_key: league
+    type: str
+  - name: season
+    query_key: season
+    type: str
+  - name: view_type
+    query_key: viewType
+    type: str
+  - name: include_pos_and_splits_data
+    query_key: includePosAndSplitsData
+    type: str
+  parser: parse_yahoo_shangrila
+  path: /leagueFiltersData
+  returns_schema: native/yahoo_shangrila/league_filters_data
+  short: league_filters_data
+  summary: Yahoo shangrila persisted query `leagueFiltersData` -> one row per `leagues`
+    entry
+- extra_params:
+  - name: league
+    query_key: league
+    type: str
+  - name: bet_categories
+    query_key: betCategories
+    type: str
+  parser: parse_yahoo_shangrila
+  path: /leagueFutureOdds
+  returns_schema: native/yahoo_shangrila/league_future_odds
+  short: league_future_odds
+  summary: Yahoo shangrila persisted query `leagueFutureOdds` -> one row per `leagues`
+    entry
+- extra_params:
+  - name: count
+    query_key: count
+    type: str
+  - name: league
+    query_key: league
+    type: str
+  - name: week
+    query_key: week
+    type: str
+  - name: date
+    query_key: date
+    type: str
+  - name: season
+    query_key: season
+    type: str
+  - name: game_status_order
+    query_key: gameStatusOrder
+    type: str
+  - name: start_time_order
+    query_key: startTimeOrder
+    type: str
+  - name: date_flip_offset
+    query_key: dateFlipOffset
+    type: str
+  - name: season_phase
+    query_key: seasonPhase
+    type: str
+  - name: conference_ids
+    query_key: conferenceIds
+    type: str
+  - name: top25
+    query_key: top25
+    type: str
+  - name: game_day_query_type
+    query_key: gameDayQueryType
+    type: str
+  parser: parse_yahoo_shangrila
+  path: /leagueGameIds
+  returns_schema: native/yahoo_shangrila/league_game_ids
+  short: league_game_ids
+  summary: Yahoo shangrila persisted query `leagueGameIds` -> one row per `leagues`
+    entry
+- extra_params:
+  - name: leagues
+    query_key: leagues
+    type: str
+  - name: week
+    query_key: week
+    type: str
+  - name: dates
+    query_key: dates
+    type: str
+  - name: start_range
+    query_key: startRange
+    type: str
+  - name: end_range
+    query_key: endRange
+    type: str
+  - name: season
+    query_key: season
+    type: str
+  - name: season_phases
+    query_key: seasonPhases
+    type: str
+  - name: conference_ids
+    query_key: conferenceIds
+    type: str
+  - name: division_ids
+    query_key: divisionIds
+    type: str
+  - name: top25
+    query_key: top25
+    type: str
+  - name: tournament_ids
+    query_key: tournamentIds
+    type: str
+  - name: is_tennis
+    query_key: isTennis
+    type: str
+  parser: parse_yahoo_shangrila
+  path: /leagueGameIdsByDate
+  returns_schema: native/yahoo_shangrila/league_game_ids_by_date
+  short: league_game_ids_by_date
+  summary: Yahoo shangrila persisted query `leagueGameIdsByDate` -> one row per `leagues`
+    entry
+- extra_params:
+  - name: league
+    query_key: league
+    type: str
+  - name: tournament_round_ids
+    query_key: tournamentRoundIds
+    type: str
+  - name: season
+    query_key: season
+    type: str
+  parser: parse_yahoo_shangrila
+  path: /leagueGamesByRound
+  returns_schema: native/yahoo_shangrila/league_games_by_round
+  short: league_games_by_round
+  summary: Yahoo shangrila persisted query `leagueGamesByRound` -> one row per `leagues`
+    entry
+- extra_params:
+  - name: league
+    query_key: league
+    type: str
+  parser: parse_yahoo_shangrila
+  path: /leagueInfo
+  returns_schema: native/yahoo_shangrila/league_info
+  short: league_info
+  summary: Yahoo shangrila persisted query `leagueInfo` -> one row per `leagues` entry
+- extra_params:
+  - name: league_id
+    query_key: leagueId
+    type: str
+  parser: parse_yahoo_shangrila
+  path: /leagueInjuries
+  returns_schema: native/yahoo_shangrila/league_injuries
+  short: league_injuries
+  summary: Yahoo shangrila persisted query `leagueInjuries` -> one row per `leagues.teams`
+    entry
+- extra_params:
+  - name: leagues
+    query_key: leagues
+    type: str
+  parser: parse_yahoo_shangrila
+  path: /leagueNames
+  returns_schema: native/yahoo_shangrila/league_names
+  short: league_names
+  summary: Yahoo shangrila persisted query `leagueNames` -> one row per `leagues`
+    entry
+- extra_params:
+  - name: count
+    query_key: count
+    type: str
+  - name: league
+    query_key: league
+    type: str
+  parser: parse_yahoo_shangrila
+  path: /leaguePropOdds
+  returns_schema: native/yahoo_shangrila/league_prop_odds
+  short: league_prop_odds
+  summary: Yahoo shangrila persisted query `leaguePropOdds` -> one row per `leagues`
+    entry
+- extra_params:
+  - name: league
+    query_key: league
+    type: str
+  - name: season
+    query_key: season
+    type: str
+  - name: season_phase
+    query_key: seasonPhase
+    type: str
+  parser: parse_yahoo_shangrila
+  path: /leagueStandings
+  returns_schema: native/yahoo_shangrila/league_standings
+  short: league_standings
+  summary: Yahoo shangrila persisted query `leagueStandings` -> one row per `leagues`
+    entry
+- extra_params:
+  - name: leagues
+    query_key: leagues
+    type: str
+  - name: count
+    query_key: count
+    type: str
+  - name: season
+    query_key: season
+    type: str
+  - name: league_structure_id
+    query_key: leagueStructureId
+    type: str
+  - name: baseball_cut_type
+    query_key: baseballCutType
+    type: str
+  - name: basketball_cut_type
+    query_key: basketballCutType
+    type: str
+  - name: football_cut_type
+    query_key: footballCutType
+    type: str
+  - name: hockey_cut_type
+    query_key: hockeyCutType
+    type: str
+  parser: parse_yahoo_shangrila
+  path: /leagueStatsByTeam
+  returns_schema: native/yahoo_shangrila/league_stats_by_team
+  short: league_stats_by_team
+  summary: Yahoo shangrila persisted query `leagueStatsByTeam` -> one row per `leagues`
+    entry
+- extra_params:
+  - name: leagues
+    query_key: leagues
+    type: str
+  - name: count
+    query_key: count
+    type: str
+  - name: season
+    query_key: season
+    type: str
+  - name: qualified
+    query_key: qualified
+    type: str
+  - name: league_structure_id
+    query_key: leagueStructureId
+    type: str
+  - name: baseball_cut_type
+    query_key: baseballCutType
+    type: str
+  - name: baseball_position
+    query_key: baseballPosition
+    type: str
+  - name: basketball_cut_type
+    query_key: basketballCutType
+    type: str
+  - name: basketball_position
+    query_key: basketballPosition
+    type: str
+  - name: football_cut_type
+    query_key: footballCutType
+    type: str
+  - name: hockey_cut_type
+    query_key: hockeyCutType
+    type: str
+  - name: hockey_position
+    query_key: hockeyPosition
+    type: str
+  - name: golf_sort_stat
+    query_key: golfSortStat
+    type: str
+  - name: golf_stat_ids
+    query_key: golfStatIds
+    type: str
+  - name: motorsports_sort_stat
+    query_key: motorsportsSortStat
+    type: str
+  - name: motorsports_stat_ids
+    query_key: motorsportsStatIds
+    type: str
+  parser: parse_yahoo_shangrila
+  path: /leagueStatsIndividual
+  returns_schema: native/yahoo_shangrila/league_stats_individual
+  short: league_stats_individual
+  summary: Yahoo shangrila persisted query `leagueStatsIndividual` -> one row per
+    `leagues` entry
+- extra_params:
+  - name: leagues
+    query_key: leagues
+    type: str
+  - name: count
+    query_key: count
+    type: str
+  - name: week
+    query_key: week
+    type: str
+  - name: week_season_phase
+    query_key: weekSeasonPhase
+    type: str
+  - name: season_phase
+    query_key: seasonPhase
+    type: str
+  - name: league_structure_id
+    query_key: leagueStructureId
+    type: str
+  - name: golf_sort_stat
+    query_key: golfSortStat
+    type: str
+  - name: golf_stat_ids
+    query_key: golfStatIds
+    type: str
+  - name: motorsports_sort_stat
+    query_key: motorsportsSortStat
+    type: str
+  - name: motorsports_stat_ids
+    query_key: motorsportsStatIds
+    type: str
+  parser: parse_yahoo_shangrila
+  path: /leagueStatsOverview
+  returns_schema: native/yahoo_shangrila/league_stats_overview
+  short: league_stats_overview
+  summary: Yahoo shangrila persisted query `leagueStatsOverview` (response body not
+    captured; shape unknown)
+- extra_params:
+  - name: leagues
+    query_key: leagues
+    type: str
+  - name: count
+    query_key: count
+    type: str
+  - name: week
+    query_key: week
+    type: str
+  - name: season
+    query_key: season
+    type: str
+  - name: season_phase
+    query_key: seasonPhase
+    type: str
+  parser: parse_yahoo_shangrila
+  path: /leagueStatsWeekly
+  returns_schema: native/yahoo_shangrila/league_stats_weekly
+  short: league_stats_weekly
+  summary: Yahoo shangrila persisted query `leagueStatsWeekly` -> one row per `leagues`
+    entry
+- extra_params:
+  - name: league
+    query_key: league
+    type: str
+  - name: division_ids
+    query_key: divisionIds
+    type: str
+  - name: get_teams_by_division
+    query_key: getTeamsByDivision
+    type: str
+  parser: parse_yahoo_shangrila
+  path: /leagueTeamIds
+  returns_schema: native/yahoo_shangrila/league_team_ids
+  short: league_team_ids
+  summary: Yahoo shangrila persisted query `leagueTeamIds` -> one row per `leagues`
+    entry
+- extra_params:
+  - name: league
+    query_key: league
+    type: str
+  - name: season
+    query_key: season
+    type: str
+  - name: division_ids
+    query_key: divisionIds
+    type: str
+  - name: get_teams_by_division
+    query_key: getTeamsByDivision
+    type: str
+  parser: parse_yahoo_shangrila
+  path: /leagueTeams
+  returns_schema: native/yahoo_shangrila/league_teams
+  short: league_teams
+  summary: Yahoo shangrila persisted query `leagueTeams` -> one row per `leagues`
+    entry
+- extra_params:
+  - name: leagues
+    query_key: leagues
+    type: str
+  parser: parse_yahoo_shangrila
+  path: /leaguesSeasonStates
+  returns_schema: native/yahoo_shangrila/leagues_season_states
+  short: leagues_season_states
+  summary: Yahoo shangrila persisted query `leaguesSeasonStates` -> one row per `leagues`
+    entry
+- extra_params:
+  - name: game_id
+    query_key: gameId
+    type: str
+  - name: image_height
+    query_key: imageHeight
+    type: str
+  - name: image_width
+    query_key: imageWidth
+    type: str
+  parser: parse_yahoo_shangrila
+  path: /moduleGame
+  returns_schema: native/yahoo_shangrila/module_game
+  short: module_game
+  summary: Yahoo shangrila persisted query `moduleGame` -> one row per `games` entry
+- extra_params:
+  - name: league
+    query_key: league
+    type: str
+  - name: season
+    query_key: season
+    type: str
+  parser: parse_yahoo_shangrila
+  path: /motorsportStandings
+  returns_schema: native/yahoo_shangrila/motorsport_standings
+  short: motorsport_standings
+  summary: Yahoo shangrila persisted query `motorsportStandings` -> one row per `leagues`
+    entry
+- extra_params:
+  - name: league
+    query_key: league
+    type: str
+  parser: parse_yahoo_shangrila
+  path: /nascarDrivers
+  returns_schema: native/yahoo_shangrila/nascar_drivers
+  short: nascar_drivers
+  summary: Yahoo shangrila persisted query `nascarDrivers` -> one row per `leagues`
+    entry
+- docstring:
+    parsed_doc: A dict of polars/pandas DataFrames keyed by the payload's ``data``
+      collections
+  extra_params:
+  - name: get_soccer_data
+    query_key: getSoccerData
+    type: str
+  - name: soccer_league_ids
+    query_key: soccerLeagueIds
+    type: str
+  - name: soccer_team_ids
+    query_key: soccerTeamIds
+    type: str
+  parser: parse_yahoo_shangrila_tables
+  path: /navDropdownTray
+  returns_schema: native/yahoo_shangrila/nav_dropdown_tray
+  short: nav_dropdown_tray
+  summary: 'Yahoo shangrila persisted query `navDropdownTray` -> tables: nfl, nhl,
+    nba, mlb, wnba, ncaab, ncaaf, ncaaw, sportsbook_legal_states'
+- extra_params:
+  - name: league
+    query_key: league
+    type: str
+  - name: dates
+    query_key: dates
+    type: str
+  - name: count
+    query_key: count
+    type: str
+  parser: parse_yahoo_shangrila
+  path: /pickDistribution
+  returns_schema: native/yahoo_shangrila/pick_distribution
+  short: pick_distribution
+  summary: Yahoo shangrila persisted query `pickDistribution` -> one row per `leagues`
+    entry
+- docstring:
+    parsed_doc: A dict of polars/pandas DataFrames keyed by the payload's ``data``
+      collections
+  extra_params:
+  - name: game_id
+    query_key: gameId
+    type: str
+  - name: standings_season_phases
+    query_key: standingsSeasonPhases
+    type: str
+  - name: image_height
+    query_key: imageHeight
+    type: str
+  - name: image_width
+    query_key: imageWidth
+    type: str
+  - name: is_baseball
+    query_key: isBaseball
+    type: str
+  - name: is_football
+    query_key: isFootball
+    type: str
+  - name: is_pro_basketball
+    query_key: isProBasketball
+    type: str
+  - name: is_college_basketball
+    query_key: isCollegeBasketball
+    type: str
+  - name: is_hockey
+    query_key: isHockey
+    type: str
+  - name: is_soccer
+    query_key: isSoccer
+    type: str
+  - name: event_state
+    query_key: eventState
+    type: str
+  parser: parse_yahoo_shangrila_tables
+  path: /playbookBoxscore
+  returns_schema: native/yahoo_shangrila/playbook_boxscore
+  short: playbook_boxscore
+  summary: 'Yahoo shangrila persisted query `playbookBoxscore` -> tables: football_positions,
+    football_stat_types, games'
+- docstring:
+    parsed_doc: A dict of polars/pandas DataFrames keyed by the payload's ``data``
+      collections
+  extra_params:
+  - name: game_id
+    query_key: gameId
+    type: str
+  - name: standings_season_phases
+    query_key: standingsSeasonPhases
+    type: str
+  - name: is_baseball
+    query_key: isBaseball
+    type: str
+  - name: is_football
+    query_key: isFootball
+    type: str
+  - name: is_pro_basketball
+    query_key: isProBasketball
+    type: str
+  - name: is_college_basketball
+    query_key: isCollegeBasketball
+    type: str
+  - name: is_hockey
+    query_key: isHockey
+    type: str
+  - name: is_soccer
+    query_key: isSoccer
+    type: str
+  - name: event_state
+    query_key: eventState
+    type: str
+  parser: parse_yahoo_shangrila_tables
+  path: /playbookBoxscorePoll
+  returns_schema: native/yahoo_shangrila/playbook_boxscore_poll
+  short: playbook_boxscore_poll
+  summary: 'Yahoo shangrila persisted query `playbookBoxscorePoll` -> tables: football_positions,
+    football_stat_types, games'
+- extra_params:
+  - name: game_id
+    query_key: gameId
+    type: str
+  parser: parse_yahoo_shangrila
+  path: /playbookBoxscoreSocialShare
+  returns_schema: native/yahoo_shangrila/playbook_boxscore_social_share
+  short: playbook_boxscore_social_share
+  summary: Yahoo shangrila persisted query `playbookBoxscoreSocialShare` -> one row
+    per `games` entry
+- extra_params:
+  - name: game_id
+    query_key: gameId
+    type: str
+  - name: image_height
+    query_key: imageHeight
+    type: str
+  - name: image_width
+    query_key: imageWidth
+    type: str
+  - name: headshot_height
+    query_key: headshotHeight
+    type: str
+  - name: headshot_width
+    query_key: headshotWidth
+    type: str
+  parser: parse_yahoo_shangrila
+  path: /playbookCombatMatch
+  returns_schema: native/yahoo_shangrila/playbook_combat_match
+  short: playbook_combat_match
+  summary: Yahoo shangrila persisted query `playbookCombatMatch` -> one row per `games`
+    entry
+- extra_params:
+  - name: game_id
+    query_key: gameId
+    type: str
+  - name: image_height
+    query_key: imageHeight
+    type: str
+  - name: image_width
+    query_key: imageWidth
+    type: str
+  parser: parse_yahoo_shangrila
+  path: /playbookGame
+  returns_schema: native/yahoo_shangrila/playbook_game
+  short: playbook_game
+  summary: Yahoo shangrila persisted query `playbookGame` -> one row per `games` entry
+- extra_params:
+  - name: game_id
+    query_key: gameId
+    type: str
+  - name: event_state
+    query_key: eventState
+    type: str
+  parser: parse_yahoo_shangrila
+  path: /playbookGameOddsPoll
+  returns_schema: native/yahoo_shangrila/playbook_game_odds_poll
+  short: playbook_game_odds_poll
+  summary: Yahoo shangrila persisted query `playbookGameOddsPoll` -> one row per `games`
+    entry
+- extra_params:
+  - name: game_id
+    query_key: gameId
+    type: str
+  - name: season
+    query_key: season
+    type: str
+  - name: count
+    query_key: count
+    type: str
+  - name: stat_ids
+    query_key: statIds
+    type: str
+  - name: show_hole_results
+    query_key: showHoleResults
+    type: str
+  parser: parse_yahoo_shangrila
+  path: /playbookGolfTournament
+  returns_schema: native/yahoo_shangrila/playbook_golf_tournament
+  short: playbook_golf_tournament
+  summary: Yahoo shangrila persisted query `playbookGolfTournament` (response body
+    not captured; shape unknown)
+- extra_params:
+  - name: league
+    query_key: league
+    type: str
+  - name: dates
+    query_key: dates
+    type: str
+  - name: count
+    query_key: count
+    type: str
+  - name: start_time_filter
+    query_key: startTimeFilter
+    type: str
+  - name: range_start_date
+    query_key: rangeStartDate
+    type: str
+  - name: range_end_date
+    query_key: rangeEndDate
+    type: str
+  parser: parse_yahoo_shangrila
+  path: /playbookLeagueOdds
+  returns_schema: native/yahoo_shangrila/playbook_league_odds
+  short: playbook_league_odds
+  summary: Yahoo shangrila persisted query `playbookLeagueOdds` -> one row per `leagues`
+    entry
+- extra_params:
+  - name: player_id
+    query_key: playerId
+    type: str
+  - name: season_phases
+    query_key: seasonPhases
+    type: str
+  parser: parse_yahoo_shangrila
+  path: /playbookPlayer
+  returns_schema: native/yahoo_shangrila/playbook_player
+  short: playbook_player
+  summary: Yahoo shangrila persisted query `playbookPlayer` -> one row per `players`
+    entry
+- extra_params:
+  - name: player_id
+    query_key: playerId
+    type: str
+  parser: parse_yahoo_shangrila
+  path: /playbookPlayerSocialShare
+  returns_schema: native/yahoo_shangrila/playbook_player_social_share
+  short: playbook_player_social_share
+  summary: Yahoo shangrila persisted query `playbookPlayerSocialShare` -> one row
+    per `players` entry
+- extra_params:
+  - name: game_id
+    query_key: gameId
+    type: str
+  - name: player_image_height
+    query_key: playerImageHeight
+    type: str
+  - name: player_image_width
+    query_key: playerImageWidth
+    type: str
+  parser: parse_yahoo_shangrila
+  path: /playbookRace
+  returns_schema: native/yahoo_shangrila/playbook_race
+  short: playbook_race
+  summary: Yahoo shangrila persisted query `playbookRace` -> one row per `games` entry
+- docstring:
+    parsed_doc: A dict of polars/pandas DataFrames keyed by the payload's ``data``
+      collections
+  extra_params:
+  - name: team_id
+    query_key: teamId
+    type: str
+  - name: image_height
+    query_key: imageHeight
+    type: str
+  - name: image_width
+    query_key: imageWidth
+    type: str
+  - name: league_short_name
+    query_key: leagueShortName
+    type: str
+  - name: disable_conference
+    query_key: disableConference
+    type: str
+  - name: disable_division
+    query_key: disableDivision
+    type: str
+  parser: parse_yahoo_shangrila_tables
+  path: /playbookTeam
+  returns_schema: native/yahoo_shangrila/playbook_team
+  short: playbook_team
+  summary: 'Yahoo shangrila persisted query `playbookTeam` -> tables: teams, leagues'
+- extra_params:
+  - name: team_id
+    query_key: teamId
+    type: str
+  - name: image_height
+    query_key: imageHeight
+    type: str
+  - name: image_width
+    query_key: imageWidth
+    type: str
+  parser: parse_yahoo_shangrila
+  path: /playbookTeamBasic
+  returns_schema: native/yahoo_shangrila/playbook_team_basic
+  short: playbook_team_basic
+  summary: Yahoo shangrila persisted query `playbookTeamBasic` -> one row per `teams`
+    entry
+- extra_params:
+  - name: team_id
+    query_key: teamId
+    type: str
+  parser: parse_yahoo_shangrila
+  path: /playbookTeamSocialShare
+  returns_schema: native/yahoo_shangrila/playbook_team_social_share
+  short: playbook_team_social_share
+  summary: Yahoo shangrila persisted query `playbookTeamSocialShare` -> one row per
+    `teams` entry
+- extra_params:
+  - name: game_id
+    query_key: gameId
+    type: str
+  parser: parse_yahoo_shangrila
+  path: /playbookTennisMatch
+  returns_schema: native/yahoo_shangrila/playbook_tennis_match
+  short: playbook_tennis_match
+  summary: Yahoo shangrila persisted query `playbookTennisMatch` -> one row per `events`
+    entry
+- docstring:
+    parsed_doc: A dict of polars/pandas DataFrames keyed by the payload's ``data``
+      collections
+  extra_params:
+  - name: league
+    query_key: league
+    type: str
+  - name: player_id
+    query_key: playerId
+    type: str
+  parser: parse_yahoo_shangrila_tables
+  path: /playerBasic
+  returns_schema: native/yahoo_shangrila/player_basic
+  short: player_basic
+  summary: 'Yahoo shangrila persisted query `playerBasic` -> tables: players, leagues'
+- extra_params:
+  - name: player_id
+    query_key: playerId
+    type: str
+  - name: season_phases
+    query_key: seasonPhases
+    type: str
+  - name: football_stat_ids
+    query_key: footballStatIds
+    type: str
+  - name: basketball_stat_ids
+    query_key: basketballStatIds
+    type: str
+  - name: baseball_stat_ids
+    query_key: baseballStatIds
+    type: str
+  - name: hockey_stat_ids
+    query_key: hockeyStatIds
+    type: str
+  - name: soccer_stat_ids
+    query_key: soccerStatIds
+    type: str
+  parser: parse_yahoo_shangrila
+  path: /playerCareerStats
+  returns_schema: native/yahoo_shangrila/player_career_stats
+  short: player_career_stats
+  summary: Yahoo shangrila persisted query `playerCareerStats` -> one row per `players`
+    entry
+- extra_params:
+  - name: player_id
+    query_key: playerId
+    type: str
+  - name: count
+    query_key: count
+    type: str
+  - name: seasons
+    query_key: seasons
+    type: str
+  - name: season_phases
+    query_key: seasonPhases
+    type: str
+  - name: football_stat_ids
+    query_key: footballStatIds
+    type: str
+  - name: basketball_stat_ids
+    query_key: basketballStatIds
+    type: str
+  - name: baseball_stat_ids
+    query_key: baseballStatIds
+    type: str
+  - name: hockey_stat_ids
+    query_key: hockeyStatIds
+    type: str
+  - name: soccer_stat_ids
+    query_key: soccerStatIds
+    type: str
+  parser: parse_yahoo_shangrila
+  path: /playerGameLog
+  returns_schema: native/yahoo_shangrila/player_game_log
+  short: player_game_log
+  summary: Yahoo shangrila persisted query `playerGameLog` -> one row per `players`
+    entry
+- extra_params:
+  - name: player_id
+    query_key: playerId
+    type: str
+  parser: parse_yahoo_shangrila
+  path: /playerProps
+  returns_schema: native/yahoo_shangrila/player_props
+  short: player_props
+  summary: Yahoo shangrila persisted query `playerProps` -> one row per `players`
+    entry
+- extra_params:
+  - name: league
+    query_key: league
+    type: str
+  - name: name
+    query_key: name
+    type: str
+  - name: on_active_roster_only
+    query_key: onActiveRosterOnly
+    type: str
+  - name: nfl_position_id
+    query_key: nflPositionId
+    type: str
+  - name: nba_position_id
+    query_key: nbaPositionId
+    type: str
+  - name: mlb_position_id
+    query_key: mlbPositionId
+    type: str
+  - name: nhl_position_id
+    query_key: nhlPositionId
+    type: str
+  parser: parse_yahoo_shangrila
+  path: /playerSearch
+  returns_schema: native/yahoo_shangrila/player_search
+  short: player_search
+  summary: Yahoo shangrila persisted query `playerSearch` -> one row per `leagues.players`
+    entry
+- extra_params:
+  - name: player_id
+    query_key: playerId
+    type: str
+  - name: seasons
+    query_key: seasons
+    type: str
+  - name: season_phases
+    query_key: seasonPhases
+    type: str
+  - name: football_stat_ids
+    query_key: footballStatIds
+    type: str
+  - name: football_cut_type_groups
+    query_key: footballCutTypeGroups
+    type: str
+  - name: basketball_stat_ids
+    query_key: basketballStatIds
+    type: str
+  - name: basketball_cut_type_groups
+    query_key: basketballCutTypeGroups
+    type: str
+  - name: baseball_stat_ids
+    query_key: baseballStatIds
+    type: str
+  - name: baseball_cut_type_groups
+    query_key: baseballCutTypeGroups
+    type: str
+  - name: hockey_stat_ids
+    query_key: hockeyStatIds
+    type: str
+  - name: hockey_cut_type_groups
+    query_key: hockeyCutTypeGroups
+    type: str
+  - name: group_by_season_phase
+    query_key: groupBySeasonPhase
+    type: str
+  - name: use_player_unique_id
+    query_key: usePlayerUniqueId
+    type: str
+  parser: parse_yahoo_shangrila
+  path: /playerSeasonStats
+  returns_schema: native/yahoo_shangrila/player_season_stats
+  short: player_season_stats
+  summary: Yahoo shangrila persisted query `playerSeasonStats` -> one row per `players`
+    entry
+- extra_params:
+  - name: league
+    query_key: league
+    type: str
+  - name: season
+    query_key: season
+    type: str
+  - name: tournament
+    query_key: tournament
+    type: str
+  - name: type
+    query_key: type
+    type: str
+  - name: playoff_rounds
+    query_key: playoffRounds
+    type: str
+  parser: parse_yahoo_shangrila
+  path: /playoffBracket
+  returns_schema: native/yahoo_shangrila/playoff_bracket
+  short: playoff_bracket
+  summary: Yahoo shangrila persisted query `playoffBracket` -> one row per `leagues.bracketSlots`
+    entry
+- extra_params:
+  - name: game_id
+    query_key: gameId
+    type: str
+  parser: parse_yahoo_shangrila
+  path: /playoffSeriesGame
+  returns_schema: native/yahoo_shangrila/playoff_series_game
+  short: playoff_series_game
+  summary: Yahoo shangrila persisted query `playoffSeriesGame` -> one row per `games`
+    entry
+- extra_params:
+  - name: game_id
+    query_key: gameId
+    type: str
+  parser: parse_yahoo_shangrila
+  path: /polymarketGame
+  returns_schema: native/yahoo_shangrila/polymarket_game
+  short: polymarket_game
+  summary: Yahoo shangrila persisted query `polymarketGame` -> one row per `games`
+    entry
+- extra_params:
+  - name: league
+    query_key: league
+    type: str
+  - name: season
+    query_key: season
+    type: str
+  - name: today
+    query_key: today
+    type: str
+  - name: has_series
+    query_key: hasSeries
+    type: str
+  parser: parse_yahoo_shangrila
+  path: /racingSchedule
+  returns_schema: native/yahoo_shangrila/racing_schedule
+  short: racing_schedule
+  summary: Yahoo shangrila persisted query `racingSchedule` -> one row per `leagues`
+    entry
+- extra_params:
+  - name: game_id
+    query_key: gameId
+    type: str
+  - name: season
+    query_key: season
+    type: str
+  - name: season_phase
+    query_key: seasonPhase
+    type: str
+  - name: stat_leader_count
+    query_key: statLeaderCount
+    type: str
+  - name: single_stat_leader
+    query_key: singleStatLeader
+    type: str
+  - name: bet_event_state
+    query_key: betEventState
+    type: str
+  parser: parse_yahoo_shangrila
+  path: /scoreboardGame
+  returns_schema: native/yahoo_shangrila/scoreboard_game
+  short: scoreboard_game
+  summary: Yahoo shangrila persisted query `scoreboardGame` -> one row per `games`
+    entry
+- docstring:
+    parsed_doc: A dict of polars/pandas DataFrames keyed by the payload's ``data``
+      collections
+  extra_params:
+  - name: season
+    query_key: season
+    type: int
+  - name: league
+    query_key: league
+    type: str
+  - name: league_structure
+    query_key: leagueStructure
+    type: str
+  - name: count
+    query_key: count
+    type: int
+  - name: sort_stat_id
+    query_key: sortStatId
+    type: str
+  parser: parse_yahoo_shangrila_tables
+  path: /seasonStatsFootballDefenseNcaaf
+  returns_schema: native/yahoo_shangrila/season_stats_football_defense_ncaaf
+  short: season_stats_football_defense_ncaaf
+  summary: Legacy player season Defense leaders (NCAAF)
+- docstring:
+    parsed_doc: A dict of polars/pandas DataFrames keyed by the payload's ``data``
+      collections
+  extra_params:
+  - name: season
+    query_key: season
+    type: int
+  - name: league
+    query_key: league
+    type: str
+  - name: league_structure
+    query_key: leagueStructure
+    type: str
+  - name: count
+    query_key: count
+    type: int
+  - name: sort_stat_id
+    query_key: sortStatId
+    type: str
+  parser: parse_yahoo_shangrila_tables
+  path: /seasonStatsFootballKickingNcaaf
+  returns_schema: native/yahoo_shangrila/season_stats_football_kicking_ncaaf
+  short: season_stats_football_kicking_ncaaf
+  summary: Legacy player season Kicking leaders (NCAAF)
+- docstring:
+    parsed_doc: A dict of polars/pandas DataFrames keyed by the payload's ``data``
+      collections
+  extra_params:
+  - name: season
+    query_key: season
+    type: int
+  - name: league
+    query_key: league
+    type: str
+  - name: league_structure
+    query_key: leagueStructure
+    type: str
+  - name: count
+    query_key: count
+    type: int
+  - name: sort_stat_id
+    query_key: sortStatId
+    type: str
+  parser: parse_yahoo_shangrila_tables
+  path: /seasonStatsFootballPassingNcaaf
+  returns_schema: native/yahoo_shangrila/season_stats_football_passing_ncaaf
+  short: season_stats_football_passing_ncaaf
+  summary: Legacy player season Passing leaders (NCAAF)
+- docstring:
+    parsed_doc: A dict of polars/pandas DataFrames keyed by the payload's ``data``
+      collections
+  extra_params:
+  - name: season
+    query_key: season
+    type: int
+  - name: league
+    query_key: league
+    type: str
+  - name: league_structure
+    query_key: leagueStructure
+    type: str
+  - name: count
+    query_key: count
+    type: int
+  - name: sort_stat_id
+    query_key: sortStatId
+    type: str
+  parser: parse_yahoo_shangrila_tables
+  path: /seasonStatsFootballPuntingNcaaf
+  returns_schema: native/yahoo_shangrila/season_stats_football_punting_ncaaf
+  short: season_stats_football_punting_ncaaf
+  summary: Legacy player season Punting leaders (NCAAF)
+- docstring:
+    parsed_doc: A dict of polars/pandas DataFrames keyed by the payload's ``data``
+      collections
+  extra_params:
+  - name: season
+    query_key: season
+    type: int
+  - name: league
+    query_key: league
+    type: str
+  - name: league_structure
+    query_key: leagueStructure
+    type: str
+  - name: count
+    query_key: count
+    type: int
+  - name: sort_stat_id
+    query_key: sortStatId
+    type: str
+  parser: parse_yahoo_shangrila_tables
+  path: /seasonStatsFootballReceivingNcaaf
+  returns_schema: native/yahoo_shangrila/season_stats_football_receiving_ncaaf
+  short: season_stats_football_receiving_ncaaf
+  summary: Legacy player season Receiving leaders (NCAAF)
+- docstring:
+    parsed_doc: A dict of polars/pandas DataFrames keyed by the payload's ``data``
+      collections
+  extra_params:
+  - name: season
+    query_key: season
+    type: int
+  - name: league
+    query_key: league
+    type: str
+  - name: league_structure
+    query_key: leagueStructure
+    type: str
+  - name: count
+    query_key: count
+    type: int
+  - name: sort_stat_id
+    query_key: sortStatId
+    type: str
+  parser: parse_yahoo_shangrila_tables
+  path: /seasonStatsFootballReturnsNcaaf
+  returns_schema: native/yahoo_shangrila/season_stats_football_returns_ncaaf
+  short: season_stats_football_returns_ncaaf
+  summary: Legacy player season Returns leaders (NCAAF)
+- docstring:
+    parsed_doc: A dict of polars/pandas DataFrames keyed by the payload's ``data``
+      collections
+  extra_params:
+  - name: season
+    query_key: season
+    type: int
+  - name: league
+    query_key: league
+    type: str
+  - name: league_structure
+    query_key: leagueStructure
+    type: str
+  - name: count
+    query_key: count
+    type: int
+  - name: sort_stat_id
+    query_key: sortStatId
+    type: str
+  parser: parse_yahoo_shangrila_tables
+  path: /seasonStatsFootballRushingNcaaf
+  returns_schema: native/yahoo_shangrila/season_stats_football_rushing_ncaaf
+  short: season_stats_football_rushing_ncaaf
+  summary: Legacy player season Rushing leaders (NCAAF)
+- docstring:
+    parsed_doc: A dict of polars/pandas DataFrames keyed by the payload's ``data``
+      collections
+  extra_params:
+  - name: season
+    query_key: season
+    type: int
+  - name: league
+    query_key: league
+    type: str
+  - name: league_structure
+    query_key: leagueStructure
+    type: str
+  - name: count
+    query_key: count
+    type: int
+  - name: sort_stat_id
+    query_key: sortStatId
+    type: str
+  parser: parse_yahoo_shangrila_tables
+  path: /seasonTeamStatsFootballDefense
+  returns_schema: native/yahoo_shangrila/season_team_stats_football_defense
+  short: season_team_stats_football_defense
+  summary: Legacy team season Defense (NCAAF)
+- docstring:
+    parsed_doc: A dict of polars/pandas DataFrames keyed by the payload's ``data``
+      collections
+  extra_params:
+  - name: season
+    query_key: season
+    type: int
+  - name: league
+    query_key: league
+    type: str
+  - name: league_structure
+    query_key: leagueStructure
+    type: str
+  - name: count
+    query_key: count
+    type: int
+  - name: sort_stat_id
+    query_key: sortStatId
+    type: str
+  parser: parse_yahoo_shangrila_tables
+  path: /seasonTeamStatsFootballKicking
+  returns_schema: native/yahoo_shangrila/season_team_stats_football_kicking
+  short: season_team_stats_football_kicking
+  summary: Legacy team season Kicking (NCAAF)
+- docstring:
+    parsed_doc: A dict of polars/pandas DataFrames keyed by the payload's ``data``
+      collections
+  extra_params:
+  - name: season
+    query_key: season
+    type: int
+  - name: league
+    query_key: league
+    type: str
+  - name: league_structure
+    query_key: leagueStructure
+    type: str
+  - name: count
+    query_key: count
+    type: int
+  - name: sort_stat_id
+    query_key: sortStatId
+    type: str
+  parser: parse_yahoo_shangrila_tables
+  path: /seasonTeamStatsFootballKickoffs
+  returns_schema: native/yahoo_shangrila/season_team_stats_football_kickoffs
+  short: season_team_stats_football_kickoffs
+  summary: Legacy team season Kickoffs (NCAAF)
+- docstring:
+    parsed_doc: A dict of polars/pandas DataFrames keyed by the payload's ``data``
+      collections
+  extra_params:
+  - name: season
+    query_key: season
+    type: int
+  - name: league
+    query_key: league
+    type: str
+  - name: league_structure
+    query_key: leagueStructure
+    type: str
+  - name: count
+    query_key: count
+    type: int
+  - name: sort_stat_id
+    query_key: sortStatId
+    type: str
+  parser: parse_yahoo_shangrila_tables
+  path: /seasonTeamStatsFootballOffense
+  returns_schema: native/yahoo_shangrila/season_team_stats_football_offense
+  short: season_team_stats_football_offense
+  summary: Legacy team season Offense (NCAAF)
+- docstring:
+    parsed_doc: A dict of polars/pandas DataFrames keyed by the payload's ``data``
+      collections
+  extra_params:
+  - name: season
+    query_key: season
+    type: int
+  - name: league
+    query_key: league
+    type: str
+  - name: league_structure
+    query_key: leagueStructure
+    type: str
+  - name: count
+    query_key: count
+    type: int
+  - name: sort_stat_id
+    query_key: sortStatId
+    type: str
+  parser: parse_yahoo_shangrila_tables
+  path: /seasonTeamStatsFootballPassing
+  returns_schema: native/yahoo_shangrila/season_team_stats_football_passing
+  short: season_team_stats_football_passing
+  summary: Legacy team season Passing (NCAAF)
+- docstring:
+    parsed_doc: A dict of polars/pandas DataFrames keyed by the payload's ``data``
+      collections
+  extra_params:
+  - name: season
+    query_key: season
+    type: int
+  - name: league
+    query_key: league
+    type: str
+  - name: league_structure
+    query_key: leagueStructure
+    type: str
+  - name: count
+    query_key: count
+    type: int
+  - name: sort_stat_id
+    query_key: sortStatId
+    type: str
+  parser: parse_yahoo_shangrila_tables
+  path: /seasonTeamStatsFootballPassingDefense
+  returns_schema: native/yahoo_shangrila/season_team_stats_football_passing_defense
+  short: season_team_stats_football_passing_defense
+  summary: Legacy team Passing defense allowed (NCAAF)
+- docstring:
+    parsed_doc: A dict of polars/pandas DataFrames keyed by the payload's ``data``
+      collections
+  extra_params:
+  - name: season
+    query_key: season
+    type: int
+  - name: league
+    query_key: league
+    type: str
+  - name: league_structure
+    query_key: leagueStructure
+    type: str
+  - name: count
+    query_key: count
+    type: int
+  - name: sort_stat_id
+    query_key: sortStatId
+    type: str
+  parser: parse_yahoo_shangrila_tables
+  path: /seasonTeamStatsFootballPunting
+  returns_schema: native/yahoo_shangrila/season_team_stats_football_punting
+  short: season_team_stats_football_punting
+  summary: Legacy team season Punting (NCAAF)
+- docstring:
+    parsed_doc: A dict of polars/pandas DataFrames keyed by the payload's ``data``
+      collections
+  extra_params:
+  - name: season
+    query_key: season
+    type: int
+  - name: league
+    query_key: league
+    type: str
+  - name: league_structure
+    query_key: leagueStructure
+    type: str
+  - name: count
+    query_key: count
+    type: int
+  - name: sort_stat_id
+    query_key: sortStatId
+    type: str
+  parser: parse_yahoo_shangrila_tables
+  path: /seasonTeamStatsFootballReceiving
+  returns_schema: native/yahoo_shangrila/season_team_stats_football_receiving
+  short: season_team_stats_football_receiving
+  summary: Legacy team season Receiving (NCAAF)
+- docstring:
+    parsed_doc: A dict of polars/pandas DataFrames keyed by the payload's ``data``
+      collections
+  extra_params:
+  - name: season
+    query_key: season
+    type: int
+  - name: league
+    query_key: league
+    type: str
+  - name: league_structure
+    query_key: leagueStructure
+    type: str
+  - name: count
+    query_key: count
+    type: int
+  - name: sort_stat_id
+    query_key: sortStatId
+    type: str
+  parser: parse_yahoo_shangrila_tables
+  path: /seasonTeamStatsFootballReceivingDefense
+  returns_schema: native/yahoo_shangrila/season_team_stats_football_receiving_defense
+  short: season_team_stats_football_receiving_defense
+  summary: Legacy team Receiving defense allowed (NCAAF)
+- docstring:
+    parsed_doc: A dict of polars/pandas DataFrames keyed by the payload's ``data``
+      collections
+  extra_params:
+  - name: season
+    query_key: season
+    type: int
+  - name: league
+    query_key: league
+    type: str
+  - name: league_structure
+    query_key: leagueStructure
+    type: str
+  - name: count
+    query_key: count
+    type: int
+  - name: sort_stat_id
+    query_key: sortStatId
+    type: str
+  parser: parse_yahoo_shangrila_tables
+  path: /seasonTeamStatsFootballReturns
+  returns_schema: native/yahoo_shangrila/season_team_stats_football_returns
+  short: season_team_stats_football_returns
+  summary: Legacy team season Returns (NCAAF)
+- docstring:
+    parsed_doc: A dict of polars/pandas DataFrames keyed by the payload's ``data``
+      collections
+  extra_params:
+  - name: season
+    query_key: season
+    type: int
+  - name: league
+    query_key: league
+    type: str
+  - name: league_structure
+    query_key: leagueStructure
+    type: str
+  - name: count
+    query_key: count
+    type: int
+  - name: sort_stat_id
+    query_key: sortStatId
+    type: str
+  parser: parse_yahoo_shangrila_tables
+  path: /seasonTeamStatsFootballRushing
+  returns_schema: native/yahoo_shangrila/season_team_stats_football_rushing
+  short: season_team_stats_football_rushing
+  summary: Legacy team season Rushing (NCAAF)
+- docstring:
+    parsed_doc: A dict of polars/pandas DataFrames keyed by the payload's ``data``
+      collections
+  extra_params:
+  - name: season
+    query_key: season
+    type: int
+  - name: league
+    query_key: league
+    type: str
+  - name: league_structure
+    query_key: leagueStructure
+    type: str
+  - name: count
+    query_key: count
+    type: int
+  - name: sort_stat_id
+    query_key: sortStatId
+    type: str
+  parser: parse_yahoo_shangrila_tables
+  path: /seasonTeamStatsFootballRushingDefense
+  returns_schema: native/yahoo_shangrila/season_team_stats_football_rushing_defense
+  short: season_team_stats_football_rushing_defense
+  summary: Legacy team Rushing defense allowed (NCAAF)
+- extra_params:
+  - name: team_id
+    query_key: teamId
+    type: str
+  parser: parse_yahoo_shangrila
+  path: /teamInjuries
+  returns_schema: native/yahoo_shangrila/team_injuries
+  short: team_injuries
+  summary: Yahoo shangrila persisted query `teamInjuries` -> one row per `teams` entry
+- extra_params:
+  - name: team_id
+    query_key: teamId
+    type: str
+  - name: season
+    query_key: season
+    type: str
+  parser: parse_yahoo_shangrila
+  path: /teamPlayoffSeries
+  returns_schema: native/yahoo_shangrila/team_playoff_series
+  short: team_playoff_series
+  summary: Yahoo shangrila persisted query `teamPlayoffSeries` -> one row per `teams.playoffSeries`
+    entry
+- extra_params:
+  - name: team_id
+    query_key: teamId
+    type: str
+  - name: player_image_height
+    query_key: playerImageHeight
+    type: str
+  - name: player_image_width
+    query_key: playerImageWidth
+    type: str
+  parser: parse_yahoo_shangrila
+  path: /teamRoster
+  returns_schema: native/yahoo_shangrila/team_roster
+  short: team_roster
+  summary: Yahoo shangrila persisted query `teamRoster` -> one row per `teams` entry
+- extra_params:
+  - name: season
+    query_key: season
+    type: str
+  - name: team_id
+    query_key: teamId
+    type: str
+  parser: parse_yahoo_shangrila
+  path: /teamScheduleBySeason
+  returns_schema: native/yahoo_shangrila/team_schedule_by_season
+  short: team_schedule_by_season
+  summary: Yahoo shangrila persisted query `teamScheduleBySeason` -> one row per `teams`
+    entry
+- extra_params:
+  - name: name
+    query_key: name
+    type: str
+  - name: image_height
+    query_key: imageHeight
+    type: str
+  - name: image_width
+    query_key: imageWidth
+    type: str
+  parser: parse_yahoo_shangrila
+  path: /teamSearch
+  returns_schema: native/yahoo_shangrila/team_search
+  short: team_search
+  summary: Yahoo shangrila persisted query `teamSearch` -> one row per `teams` entry
+- docstring:
+    parsed_doc: A dict of polars/pandas DataFrames keyed by the payload's ``data``
+      collections
+  extra_params:
+  - name: league
+    query_key: league
+    type: str
+  - name: team_id
+    query_key: teamId
+    type: str
+  - name: count
+    query_key: count
+    type: str
+  - name: season
+    query_key: season
+    type: str
+  - name: baseball_cut_type
+    query_key: baseballCutType
+    type: str
+  - name: qualified
+    query_key: qualified
+    type: str
+  - name: include_team_stats
+    query_key: includeTeamStats
+    type: str
+  - name: include_player_stats
+    query_key: includePlayerStats
+    type: str
+  - name: is_baseball
+    query_key: isBaseball
+    type: str
+  parser: parse_yahoo_shangrila_tables
+  path: /teamStatsLeadersV2
+  returns_schema: native/yahoo_shangrila/team_stats_leaders_v2
+  short: team_stats_leaders_v2
+  summary: 'Yahoo shangrila persisted query `teamStatsLeadersV2` -> tables: leagues,
+    teams'
+- extra_params:
+  - name: team_id
+    query_key: teamId
+    type: str
+  parser: parse_yahoo_shangrila
+  path: /teamTransactions
+  returns_schema: native/yahoo_shangrila/team_transactions
+  short: team_transactions
+  summary: Yahoo shangrila persisted query `teamTransactions` -> one row per `teams`
+    entry
+- extra_params:
+  - name: team_ids
+    query_key: teamIds
+    type: str
+  - name: image_height
+    query_key: imageHeight
+    type: str
+  - name: image_width
+    query_key: imageWidth
+    type: str
+  parser: parse_yahoo_shangrila
+  path: /teamsBasic
+  returns_schema: native/yahoo_shangrila/teams_basic
+  short: teams_basic
+  summary: Yahoo shangrila persisted query `teamsBasic` -> one row per `teams` entry
+- extra_params:
+  - name: tournament_id
+    query_key: tournamentId
+    type: str
+  - name: season
+    query_key: season
+    type: str
+  - name: date
+    query_key: date
+    type: str
+  parser: parse_yahoo_shangrila
+  path: /tennisMatchesByDate
+  returns_schema: native/yahoo_shangrila/tennis_matches_by_date
+  short: tennis_matches_by_date
+  summary: Yahoo shangrila persisted query `tennisMatchesByDate` -> one row per `tennisTournaments`
+    entry
+- extra_params:
+  - name: tournament_id
+    query_key: tournamentId
+    type: str
+  - name: season
+    query_key: season
+    type: str
+  parser: parse_yahoo_shangrila
+  path: /tennisTournament
+  returns_schema: native/yahoo_shangrila/tennis_tournament
+  short: tennis_tournament
+  summary: Yahoo shangrila persisted query `tennisTournament` -> one row per `tennisTournaments`
+    entry
+- extra_params:
+  - name: league_id
+    query_key: leagueId
+    type: str
+  - name: match_type
+    query_key: matchType
+    type: str
+  - name: season
+    query_key: season
+    type: str
+  parser: parse_yahoo_shangrila
+  path: /tennisTournaments
+  returns_schema: native/yahoo_shangrila/tennis_tournaments
+  short: tennis_tournaments
+  summary: Yahoo shangrila persisted query `tennisTournaments` -> one row per `tennisTournaments`
+    entry
+- extra_params:
+  - name: season
+    query_key: season
+    type: str
+  - name: date
+    query_key: date
+    type: str
+  parser: parse_yahoo_shangrila
+  path: /tennisTournamentsByDate
+  returns_schema: native/yahoo_shangrila/tennis_tournaments_by_date
+  short: tennis_tournaments_by_date
+  summary: Yahoo shangrila persisted query `tennisTournamentsByDate` -> one row per
+    `tennisTournaments` entry
+- extra_params:
+  - name: count
+    query_key: count
+    type: str
+  - name: league
+    query_key: league
+    type: str
+  - name: date_flip_offset
+    query_key: dateFlipOffset
+    type: str
+  parser: parse_yahoo_shangrila
+  path: /trendingEventIds
+  returns_schema: native/yahoo_shangrila/trending_event_ids
+  short: trending_event_ids
+  summary: Yahoo shangrila persisted query `trendingEventIds` -> one row per `trendingEvents`
+    entry
+- extra_params:
+  - name: count
+    query_key: count
+    type: str
+  - name: league
+    query_key: league
+    type: str
+  - name: date_flip_offset
+    query_key: dateFlipOffset
+    type: str
+  - name: dates
+    query_key: dates
+    type: str
+  parser: parse_yahoo_shangrila
+  path: /trendingGameIds
+  returns_schema: native/yahoo_shangrila/trending_game_ids
+  short: trending_game_ids
+  summary: Yahoo shangrila persisted query `trendingGameIds` -> one row per `trendingGames`
+    entry
+- docstring:
+    parsed_doc: A dict of polars/pandas DataFrames keyed by the feed's id-keyed collections
+  example_args:
+    game_id: ncaaf.g.202509200023
+  extra_params:
+  - name: v
+    query_key: v
+    type: int
+  - name: polling
+    query_key: polling
+    type: int
+  host: https://api-secure.sports.yahoo.com/v1/editorial/s
+  parser: parse_yahoo_editorial
+  path: /boxscore/{game_id}
+  path_params:
+  - name: game_id
+    required: true
+    type: str
+  returns_schema: native/yahoo_shangrila/editorial_boxscore
+  short: editorial_boxscore
+  summary: Full game box score + play-by-play (normalized stat dictionaries)
+- docstring:
+    parsed_doc: A dict of polars/pandas DataFrames keyed by the feed's id-keyed collections
+  extra_params:
+  - name: leagues
+    query_key: leagues
+    type: str
+  - name: week
+    query_key: week
+    type: int
+  - name: season
+    query_key: season
+    type: int
+  - name: conferences
+    query_key: conferences
+    type: str
+  - name: count
+    query_key: count
+    type: int
+  - name: v
+    query_key: v
+    type: int
+  host: https://api-secure.sports.yahoo.com/v1/editorial/s
+  parser: parse_yahoo_editorial
+  path: /scoreboard
+  returns_schema: native/yahoo_shangrila/editorial_scoreboard
+  short: editorial_scoreboard
+  summary: 'Scoreboard: games + teams + leagues + odds (fat payload)'
+getter_module: sportsdataverse.yahoo.yahoo_shangrila_runtime
+host: https://graphite-secure.sports.yahoo.com/v1/query/shangrila
+module: yahoo_shangrila
+name_pattern: yahoo_{short}
+parser_module: yahoo.yahoo_shangrila_parsers
+passthrough_query: false
+qualifier: ''
+runtime_imports:
+- _get

@@ -1,0 +1,462 @@
+frames:
+- columns:
+  - description: ''
+    name: position_id
+    type: character
+  - description: ''
+    name: name
+    type: character
+  - description: ''
+    name: abbreviation
+    type: character
+  section: football_positions
+- columns:
+  - description: ''
+    name: stat_id
+    type: character
+  - description: ''
+    name: abbreviation
+    type: character
+  - description: ''
+    name: display_name
+    type: character
+  - description: ''
+    name: short_name
+    type: character
+  - description: ''
+    name: context_agnostic_abbreviation
+    type: character
+  - description: ''
+    name: sort_order
+    type: character
+  section: football_stat_types
+- columns:
+  - description: ''
+    name: game_id
+    type: character
+  - description: ''
+    name: display_name
+    type: character
+  - description: ''
+    name: display_result
+    type: character
+  - description: ''
+    name: sport_name
+    type: character
+  - description: ''
+    name: league_name
+    type: character
+  - description: ''
+    name: league_full_name
+    type: character
+  - description: ''
+    name: league_display_short
+    type: character
+  - description: ''
+    name: league_short_name
+    type: character
+  - description: ''
+    name: league_sport
+    type: character
+  - description: ''
+    name: league_alias
+    type: character
+  - description: ''
+    name: alias_url
+    type: character
+  - description: ''
+    name: special_event_type
+    type: character
+  - description: ''
+    name: away_team_id
+    type: character
+  - description: ''
+    name: basic_away_team_abbreviation
+    type: character
+  - description: ''
+    name: basic_away_team_display_name
+    type: character
+  - description: ''
+    name: basic_away_team_team_id
+    type: character
+  - description: ''
+    name: basic_away_team_team_logo_white
+    type: character
+  - description: ''
+    name: basic_away_team_team_logo
+    type: character
+  - description: ''
+    name: basic_away_team_playoff_seeds
+    type: character
+  - description: ''
+    name: basic_away_team_nickname
+    type: character
+  - description: ''
+    name: basic_away_team_primary_color
+    type: character
+  - description: ''
+    name: basic_away_team_secondary_color
+    type: character
+  - description: ''
+    name: away_team_full_name
+    type: character
+  - description: ''
+    name: away_team_team_id
+    type: character
+  - description: ''
+    name: away_team_primary_color
+    type: character
+  - description: ''
+    name: away_team_secondary_color
+    type: character
+  - description: ''
+    name: away_team_display_name
+    type: character
+  - description: ''
+    name: away_team_abbreviation
+    type: character
+  - description: ''
+    name: away_team_location
+    type: character
+  - description: ''
+    name: away_team_alias
+    type: character
+  - description: ''
+    name: away_team_nickname
+    type: character
+  - description: ''
+    name: away_team_last_games
+    type: character
+  - description: ''
+    name: away_team_team_logo_white
+    type: character
+  - description: ''
+    name: away_team_team_logo
+    type: character
+  - description: ''
+    name: away_team_team_logo_white_large
+    type: character
+  - description: ''
+    name: away_team_team_logo_large
+    type: character
+  - description: ''
+    name: away_team_team_standings
+    type: character
+  - description: ''
+    name: away_team_gametime_ticket_url
+    type: character
+  - description: ''
+    name: away_team_injured_players
+    type: character
+  - description: ''
+    name: away_team_rank_polls
+    type: character
+  - description: ''
+    name: away_team_playoff_seeds
+    type: character
+  - description: ''
+    name: away_team_record
+    type: character
+  - description: ''
+    name: home_team_id
+    type: character
+  - description: ''
+    name: basic_home_team_abbreviation
+    type: character
+  - description: ''
+    name: basic_home_team_display_name
+    type: character
+  - description: ''
+    name: basic_home_team_team_id
+    type: character
+  - description: ''
+    name: basic_home_team_team_logo_white
+    type: character
+  - description: ''
+    name: basic_home_team_team_logo
+    type: character
+  - description: ''
+    name: basic_home_team_playoff_seeds
+    type: character
+  - description: ''
+    name: basic_home_team_nickname
+    type: character
+  - description: ''
+    name: basic_home_team_primary_color
+    type: character
+  - description: ''
+    name: basic_home_team_secondary_color
+    type: character
+  - description: ''
+    name: home_team_full_name
+    type: character
+  - description: ''
+    name: home_team_team_id
+    type: character
+  - description: ''
+    name: home_team_primary_color
+    type: character
+  - description: ''
+    name: home_team_secondary_color
+    type: character
+  - description: ''
+    name: home_team_display_name
+    type: character
+  - description: ''
+    name: home_team_abbreviation
+    type: character
+  - description: ''
+    name: home_team_location
+    type: character
+  - description: ''
+    name: home_team_alias
+    type: character
+  - description: ''
+    name: home_team_nickname
+    type: character
+  - description: ''
+    name: home_team_last_games
+    type: character
+  - description: ''
+    name: home_team_team_logo_white
+    type: character
+  - description: ''
+    name: home_team_team_logo
+    type: character
+  - description: ''
+    name: home_team_team_logo_white_large
+    type: character
+  - description: ''
+    name: home_team_team_logo_large
+    type: character
+  - description: ''
+    name: home_team_team_standings
+    type: character
+  - description: ''
+    name: home_team_gametime_ticket_url
+    type: character
+  - description: ''
+    name: home_team_injured_players
+    type: character
+  - description: ''
+    name: home_team_rank_polls
+    type: character
+  - description: ''
+    name: home_team_playoff_seeds
+    type: character
+  - description: ''
+    name: home_team_record
+    type: character
+  - description: ''
+    name: away_score
+    type: integer
+  - description: ''
+    name: home_score
+    type: integer
+  - description: ''
+    name: start_time
+    type: character
+  - description: ''
+    name: start_date
+    type: character
+  - description: ''
+    name: if_necessary
+    type: character
+  - description: ''
+    name: status
+    type: character
+  - description: ''
+    name: status_display_name
+    type: character
+  - description: ''
+    name: full_status_display_name
+    type: character
+  - description: ''
+    name: season
+    type: integer
+  - description: ''
+    name: season_phase
+    type: character
+  - description: ''
+    name: time_left
+    type: character
+  - description: ''
+    name: is_halftime
+    type: logical
+  - description: ''
+    name: tournament_id
+    type: character
+  - description: ''
+    name: week
+    type: integer
+  - description: ''
+    name: playoff_series
+    type: character
+  - description: ''
+    name: winning_team_id
+    type: character
+  - description: ''
+    name: broadcast_channels
+    type: character
+  - description: ''
+    name: news_break_subtext
+    type: character
+  - description: ''
+    name: news_break_title
+    type: character
+  - description: ''
+    name: news_break_url
+    type: character
+  - description: ''
+    name: news_break_uuid
+    type: character
+  - description: ''
+    name: brief
+    type: character
+  - description: ''
+    name: event_extended_display_name
+    type: character
+  - description: ''
+    name: game_odds_summary_pregame_odds_display
+    type: character
+  - description: ''
+    name: game_odds_summary_favorite_id
+    type: character
+  - description: ''
+    name: game_odds_summary_underdog_team_predicted_score
+    type: character
+  - description: ''
+    name: game_odds_summary_favorite_team_predicted_score
+    type: character
+  - description: ''
+    name: bets
+    type: character
+  - description: ''
+    name: partial_game_bets
+    type: character
+  - description: ''
+    name: venue_display_name
+    type: character
+  - description: ''
+    name: venue_city
+    type: character
+  - description: ''
+    name: venue_cover_type
+    type: character
+  - description: ''
+    name: venue_state
+    type: character
+  - description: ''
+    name: venue_venue_id
+    type: character
+  - description: ''
+    name: venue_country
+    type: character
+  - description: ''
+    name: tv_coverage
+    type: character
+  - description: ''
+    name: weather
+    type: character
+  - description: ''
+    name: regular_season_series_series_score
+    type: character
+  - description: ''
+    name: regular_season_series_games
+    type: character
+  - description: ''
+    name: regular_season_series_first_home_team_id
+    type: character
+  - description: ''
+    name: regular_season_series_first_home_team_wins
+    type: character
+  - description: ''
+    name: regular_season_series_first_away_team_id
+    type: character
+  - description: ''
+    name: regular_season_series_first_away_team_wins
+    type: character
+  - description: ''
+    name: regular_season_series_winning_team_id
+    type: character
+  - description: ''
+    name: game_win_probability_time_line_win_probability_timeline
+    type: character
+  - description: ''
+    name: current_period_short_display_name
+    type: character
+  - description: ''
+    name: current_period_period
+    type: character
+  - description: ''
+    name: current_period_display_name
+    type: character
+  - description: ''
+    name: current_period_overtime
+    type: character
+  - description: ''
+    name: regulation_periods
+    type: character
+  - description: ''
+    name: away_team_lineup
+    type: character
+  - description: ''
+    name: home_team_lineup
+    type: character
+  - description: ''
+    name: game_ticket_price
+    type: character
+  - description: ''
+    name: gametime_ticket_url
+    type: character
+  - description: ''
+    name: game_coverage
+    type: character
+  - description: ''
+    name: down
+    type: character
+  - description: ''
+    name: distance
+    type: character
+  - description: ''
+    name: field_position
+    type: character
+  - description: ''
+    name: field_position_display_name
+    type: character
+  - description: ''
+    name: home_timeouts_remaining
+    type: integer
+  - description: ''
+    name: away_timeouts_remaining
+    type: integer
+  - description: ''
+    name: timeouts_granted
+    type: integer
+  - description: ''
+    name: team_possessing_ball
+    type: character
+  - description: ''
+    name: away_line_score
+    type: character
+  - description: ''
+    name: home_line_score
+    type: character
+  - description: ''
+    name: first_play
+    type: character
+  - description: ''
+    name: last_play
+    type: character
+  - description: ''
+    name: recap_videos
+    type: character
+  - description: ''
+    name: play_by_play
+    type: character
+  - description: ''
+    name: drives
+    type: character
+  section: games
+kind: frames
+schema: playbook_boxscore

@@ -1,0 +1,9 @@
+columns:
+- description: ''
+  name: game_id
+  type: character
+- description: ''
+  name: polymarket_url
+  type: character
+kind: dataframe
+schema: polymarket_game

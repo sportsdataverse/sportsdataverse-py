@@ -1,0 +1,21 @@
+columns:
+- description: ''
+  name: sport_sport_id
+  type: character
+- description: ''
+  name: sport_name
+  type: character
+- description: ''
+  name: team_id
+  type: character
+- description: ''
+  name: primary_color
+  type: character
+- description: ''
+  name: team_logo_url
+  type: character
+- description: ''
+  name: team_logo_white_url
+  type: character
+kind: dataframe
+schema: playbook_team_social_share

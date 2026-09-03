@@ -1,0 +1,36 @@
+columns:
+- description: ''
+  name: team_id
+  type: character
+- description: ''
+  name: nickname
+  type: character
+- description: ''
+  name: full_name
+  type: character
+- description: ''
+  name: location
+  type: character
+- description: ''
+  name: display_name
+  type: character
+- description: ''
+  name: primary_color
+  type: character
+- description: ''
+  name: abbreviation
+  type: character
+- description: ''
+  name: alias
+  type: character
+- description: ''
+  name: team_logo_white
+  type: character
+- description: ''
+  name: team_logo
+  type: character
+- description: ''
+  name: players
+  type: character
+kind: dataframe
+schema: league_injuries

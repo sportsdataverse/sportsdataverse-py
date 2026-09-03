@@ -1,0 +1,45 @@
+columns:
+- description: ''
+  name: alias_path
+  type: character
+- description: ''
+  name: alias_lang
+  type: character
+- description: ''
+  name: alias_url
+  type: character
+- description: ''
+  name: alias_domain
+  type: character
+- description: ''
+  name: game_id
+  type: character
+- description: ''
+  name: status
+  type: character
+- description: ''
+  name: away_team_team_id
+  type: character
+- description: ''
+  name: away_team_primary_color
+  type: character
+- description: ''
+  name: away_team_display_name
+  type: character
+- description: ''
+  name: home_team_team_id
+  type: character
+- description: ''
+  name: home_team_primary_color
+  type: character
+- description: ''
+  name: home_team_display_name
+  type: character
+- description: ''
+  name: active_prop_bets
+  type: character
+- description: ''
+  name: game_props
+  type: character
+kind: dataframe
+schema: game_prop_bets

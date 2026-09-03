@@ -1,0 +1,12 @@
+columns:
+- description: ''
+  name: game_id
+  type: character
+- description: ''
+  name: bets
+  type: character
+- description: ''
+  name: partial_game_bets
+  type: character
+kind: dataframe
+schema: playbook_game_odds_poll

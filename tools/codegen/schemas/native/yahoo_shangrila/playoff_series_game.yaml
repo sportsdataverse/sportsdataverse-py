@@ -1,0 +1,9 @@
+columns:
+- description: ''
+  name: game_id
+  type: character
+- description: ''
+  name: playoff_series
+  type: character
+kind: dataframe
+schema: playoff_series_game

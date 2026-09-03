@@ -1,0 +1,15 @@
+columns:
+- description: ''
+  name: player_id
+  type: character
+- description: ''
+  name: display_name
+  type: character
+- description: ''
+  name: suggested_headshot
+  type: character
+- description: ''
+  name: alias_url
+  type: character
+kind: dataframe
+schema: basic_players

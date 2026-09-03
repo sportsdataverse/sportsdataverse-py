@@ -1,0 +1,21 @@
+columns:
+- description: ''
+  name: sport_sport_id
+  type: character
+- description: ''
+  name: sport_name
+  type: character
+- description: ''
+  name: short_name
+  type: character
+- description: ''
+  name: full_name
+  type: character
+- description: ''
+  name: name
+  type: character
+- description: ''
+  name: football_stats
+  type: character
+kind: dataframe
+schema: league_stats_by_team

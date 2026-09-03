@@ -1,0 +1,22 @@
+frames:
+- columns: []
+  section: leagues
+- columns:
+  - description: ''
+    name: display_name
+    type: character
+  - description: ''
+    name: full_name
+    type: character
+  - description: ''
+    name: nickname
+    type: character
+  - description: ''
+    name: team_football
+    type: character
+  - description: ''
+    name: individual_football
+    type: character
+  section: teams
+kind: frames
+schema: team_stats_leaders_v2
