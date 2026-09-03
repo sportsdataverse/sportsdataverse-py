@@ -343,12 +343,12 @@ Example URL: https://premium.pff.com/api/v1/facet/offense/blocking
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'aaf'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'aaf'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -374,12 +374,12 @@ Example URL: https://premium.pff.com/api/v1/facet/defense/coverage_scheme
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'aaf'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'aaf'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -405,12 +405,12 @@ Example URL: https://premium.pff.com/api/v1/facet/defense/coverage
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'aaf'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'aaf'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -436,12 +436,12 @@ Example URL: https://premium.pff.com/api/v1/facet/defense/summary
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'aaf'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'aaf'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -467,12 +467,12 @@ Example URL: https://premium.pff.com/api/v1/facet/field_goal/summary
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'aaf'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'aaf'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -498,12 +498,12 @@ Example URL: https://premium.pff.com/api/v1/facet/kickoff/summary
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'aaf'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'aaf'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -529,12 +529,12 @@ Example URL: https://premium.pff.com/api/v1/facet/offense/summary
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'aaf'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'aaf'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -560,12 +560,12 @@ Example URL: https://premium.pff.com/api/v1/facet/offense/pass_blocking
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'aaf'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'aaf'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -591,12 +591,12 @@ Example URL: https://premium.pff.com/api/v1/facet/defense/pass_rush
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'aaf'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'aaf'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -622,12 +622,12 @@ Example URL: https://premium.pff.com/api/v1/facet/passing/allowed_pressure
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'aaf'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'aaf'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -653,12 +653,12 @@ Example URL: https://premium.pff.com/api/v1/facet/passing/concept
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'aaf'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'aaf'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -684,12 +684,12 @@ Example URL: https://premium.pff.com/api/v1/facet/passing/depth
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'aaf'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'aaf'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -715,12 +715,12 @@ Example URL: https://premium.pff.com/api/v1/facet/passing/detail
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'aaf'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'aaf'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -746,12 +746,12 @@ Example URL: https://premium.pff.com/api/v1/facet/passing/pressure
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'aaf'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'aaf'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -777,12 +777,12 @@ Example URL: https://premium.pff.com/api/v1/facet/passing/summary
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'aaf'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'aaf'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -808,12 +808,12 @@ Example URL: https://premium.pff.com/api/v1/facet/signature/pass-blocking/effici
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'aaf'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'aaf'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -839,12 +839,12 @@ Example URL: https://premium.pff.com/api/v1/facet/signature/defense/outside_pass
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'aaf'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'aaf'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -870,12 +870,12 @@ Example URL: https://premium.pff.com/api/v1/facet/punting/summary
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'aaf'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'aaf'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -901,12 +901,12 @@ Example URL: https://premium.pff.com/api/v1/facet/receiving/concept
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'aaf'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'aaf'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -932,12 +932,12 @@ Example URL: https://premium.pff.com/api/v1/facet/receiving/coverage
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'aaf'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'aaf'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -963,12 +963,12 @@ Example URL: https://premium.pff.com/api/v1/facet/defense/coverage_matchup
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'aaf'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'aaf'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -994,12 +994,12 @@ Example URL: https://premium.pff.com/api/v1/facet/receiving/depth
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'aaf'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'aaf'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -1025,12 +1025,12 @@ Example URL: https://premium.pff.com/api/v1/facet/receiving/scheme
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'aaf'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'aaf'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -1056,12 +1056,12 @@ Example URL: https://premium.pff.com/api/v1/facet/receiving/summary
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'aaf'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'aaf'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -1087,12 +1087,12 @@ Example URL: https://premium.pff.com/api/v1/facet/return/summary
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'aaf'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'aaf'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -1118,12 +1118,12 @@ Example URL: https://premium.pff.com/api/v1/facet/offense/run_blocking
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'aaf'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'aaf'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -1149,12 +1149,12 @@ Example URL: https://premium.pff.com/api/v1/facet/defense/run
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'aaf'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'aaf'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -1180,12 +1180,12 @@ Example URL: https://premium.pff.com/api/v1/facet/rushing/direction
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'aaf'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'aaf'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -1211,12 +1211,12 @@ Example URL: https://premium.pff.com/api/v1/facet/rushing/summary
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'aaf'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'aaf'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -1242,12 +1242,12 @@ Example URL: https://premium.pff.com/api/v1/facet/signature/defense/slot_coverag
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'aaf'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'aaf'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -1273,12 +1273,12 @@ Example URL: https://premium.pff.com/api/v1/facet/special/summary
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'aaf'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'aaf'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -1304,12 +1304,12 @@ Example URL: https://premium.pff.com/api/v1/facet/signature/passing/time_in_pock
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'aaf'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'aaf'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -1335,9 +1335,9 @@ Example URL: https://premium.pff.com/api/v1/games
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'aaf'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[int]` | `None` | week query parameter. |
+| `league` | `Optional[str]` | `'aaf'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[int]` | `None` | Single week number. |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -1388,11 +1388,11 @@ Example URL: https://premium.pff.com/api/v1/player/defense/summary
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'aaf'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `player_id` | `Optional[int]` | `None` | player_id query parameter. |
-| `career` | `Optional[str]` | `None` | career query parameter. |
+| `league` | `Optional[str]` | `'aaf'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `player_id` | `Optional[int]` | `None` | PFF player id (snake_case on the wire; matches the /players id). |
+| `career` | `Optional[str]` | `None` | Career-rollup flag ("true"/"false"); player-detail views only. |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_player_detail -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -1418,11 +1418,11 @@ Example URL: https://premium.pff.com/api/v1/player/offense/blocking
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'aaf'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `player_id` | `Optional[int]` | `None` | player_id query parameter. |
-| `career` | `Optional[str]` | `None` | career query parameter. |
+| `league` | `Optional[str]` | `'aaf'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `player_id` | `Optional[int]` | `None` | PFF player id (snake_case on the wire; matches the /players id). |
+| `career` | `Optional[str]` | `None` | Career-rollup flag ("true"/"false"); player-detail views only. |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_player_detail -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -1448,11 +1448,11 @@ Example URL: https://premium.pff.com/api/v1/player/offense/summary
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'aaf'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `player_id` | `Optional[int]` | `None` | player_id query parameter. |
-| `career` | `Optional[str]` | `None` | career query parameter. |
+| `league` | `Optional[str]` | `'aaf'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `player_id` | `Optional[int]` | `None` | PFF player id (snake_case on the wire; matches the /players id). |
+| `career` | `Optional[str]` | `None` | Career-rollup flag ("true"/"false"); player-detail views only. |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_player_detail -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -1478,11 +1478,11 @@ Example URL: https://premium.pff.com/api/v1/player/passing/summary
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'aaf'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `player_id` | `Optional[int]` | `None` | player_id query parameter. |
-| `career` | `Optional[str]` | `None` | career query parameter. |
+| `league` | `Optional[str]` | `'aaf'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `player_id` | `Optional[int]` | `None` | PFF player id (snake_case on the wire; matches the /players id). |
+| `career` | `Optional[str]` | `None` | Career-rollup flag ("true"/"false"); player-detail views only. |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_player_detail -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -1508,10 +1508,10 @@ Example URL: https://premium.pff.com/api/v1/player/position/pivot
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'aaf'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `player_id` | `Optional[int]` | `None` | player_id query parameter. |
+| `league` | `Optional[str]` | `'aaf'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `player_id` | `Optional[int]` | `None` | PFF player id (snake_case on the wire; matches the /players id). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -1537,11 +1537,11 @@ Example URL: https://premium.pff.com/api/v1/player/receiving/summary
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'aaf'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `player_id` | `Optional[int]` | `None` | player_id query parameter. |
-| `career` | `Optional[str]` | `None` | career query parameter. |
+| `league` | `Optional[str]` | `'aaf'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `player_id` | `Optional[int]` | `None` | PFF player id (snake_case on the wire; matches the /players id). |
+| `career` | `Optional[str]` | `None` | Career-rollup flag ("true"/"false"); player-detail views only. |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_player_detail -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -1567,11 +1567,11 @@ Example URL: https://premium.pff.com/api/v1/player/rushing/summary
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'aaf'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `player_id` | `Optional[int]` | `None` | player_id query parameter. |
-| `career` | `Optional[str]` | `None` | career query parameter. |
+| `league` | `Optional[str]` | `'aaf'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `player_id` | `Optional[int]` | `None` | PFF player id (snake_case on the wire; matches the /players id). |
+| `career` | `Optional[str]` | `None` | Career-rollup flag ("true"/"false"); player-detail views only. |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_player_detail -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -1597,8 +1597,8 @@ Example URL: https://premium.pff.com/api/v1/player/seasons
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'aaf'` | league query parameter. |
-| `player_id` | `Optional[int]` | `None` | player_id query parameter. |
+| `league` | `Optional[str]` | `'aaf'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `player_id` | `Optional[int]` | `None` | PFF player id (snake_case on the wire; matches the /players id). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -1624,11 +1624,11 @@ Example URL: https://premium.pff.com/api/v1/player/snaps/summary
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'aaf'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `player_id` | `Optional[int]` | `None` | player_id query parameter. |
-| `career` | `Optional[str]` | `None` | career query parameter. |
+| `league` | `Optional[str]` | `'aaf'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `player_id` | `Optional[int]` | `None` | PFF player id (snake_case on the wire; matches the /players id). |
+| `career` | `Optional[str]` | `None` | Career-rollup flag ("true"/"false"); player-detail views only. |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_player_detail -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -1654,9 +1654,9 @@ Example URL: https://premium.pff.com/api/v1/players
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'aaf'` | league query parameter. |
-| `name` | `Optional[str]` | `None` | name query parameter. |
-| `id` | `Optional[int]` | `None` | id query parameter. |
+| `league` | `Optional[str]` | `'aaf'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `name` | `Optional[str]` | `None` | Player-name search prefix. |
+| `id` | `Optional[int]` | `None` | Entity id (player lookup). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -1682,8 +1682,8 @@ Example URL: https://premium.pff.com/api/v1/teams
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'aaf'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
+| `league` | `Optional[str]` | `'aaf'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -1709,9 +1709,9 @@ Example URL: https://premium.pff.com/api/v1/teams/overview
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'aaf'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
+| `league` | `Optional[str]` | `'aaf'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -1737,12 +1737,12 @@ Example URL: https://premium.pff.com/api/v1/facet/offense/blocking
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'ncaa'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'ncaa'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -1768,12 +1768,12 @@ Example URL: https://premium.pff.com/api/v1/facet/defense/coverage_scheme
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'ncaa'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'ncaa'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -1799,12 +1799,12 @@ Example URL: https://premium.pff.com/api/v1/facet/defense/coverage
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'ncaa'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'ncaa'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -1830,12 +1830,12 @@ Example URL: https://premium.pff.com/api/v1/facet/defense/summary
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'ncaa'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'ncaa'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -1861,12 +1861,12 @@ Example URL: https://premium.pff.com/api/v1/facet/field_goal/summary
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'ncaa'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'ncaa'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -1892,12 +1892,12 @@ Example URL: https://premium.pff.com/api/v1/facet/kickoff/summary
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'ncaa'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'ncaa'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -1923,12 +1923,12 @@ Example URL: https://premium.pff.com/api/v1/facet/offense/summary
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'ncaa'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'ncaa'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -1954,12 +1954,12 @@ Example URL: https://premium.pff.com/api/v1/facet/offense/pass_blocking
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'ncaa'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'ncaa'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -1985,12 +1985,12 @@ Example URL: https://premium.pff.com/api/v1/facet/defense/pass_rush
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'ncaa'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'ncaa'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -2016,12 +2016,12 @@ Example URL: https://premium.pff.com/api/v1/facet/passing/allowed_pressure
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'ncaa'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'ncaa'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -2047,12 +2047,12 @@ Example URL: https://premium.pff.com/api/v1/facet/passing/concept
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'ncaa'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'ncaa'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -2078,12 +2078,12 @@ Example URL: https://premium.pff.com/api/v1/facet/passing/depth
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'ncaa'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'ncaa'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -2109,12 +2109,12 @@ Example URL: https://premium.pff.com/api/v1/facet/passing/detail
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'ncaa'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'ncaa'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -2140,12 +2140,12 @@ Example URL: https://premium.pff.com/api/v1/facet/passing/pressure
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'ncaa'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'ncaa'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -2171,12 +2171,12 @@ Example URL: https://premium.pff.com/api/v1/facet/passing/summary
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'ncaa'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'ncaa'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -2202,12 +2202,12 @@ Example URL: https://premium.pff.com/api/v1/facet/signature/pass-blocking/effici
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'ncaa'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'ncaa'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -2233,12 +2233,12 @@ Example URL: https://premium.pff.com/api/v1/facet/signature/defense/outside_pass
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'ncaa'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'ncaa'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -2264,12 +2264,12 @@ Example URL: https://premium.pff.com/api/v1/facet/punting/summary
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'ncaa'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'ncaa'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -2295,12 +2295,12 @@ Example URL: https://premium.pff.com/api/v1/facet/receiving/concept
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'ncaa'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'ncaa'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -2326,12 +2326,12 @@ Example URL: https://premium.pff.com/api/v1/facet/receiving/coverage
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'ncaa'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'ncaa'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -2357,12 +2357,12 @@ Example URL: https://premium.pff.com/api/v1/facet/defense/coverage_matchup
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'ncaa'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'ncaa'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -2388,12 +2388,12 @@ Example URL: https://premium.pff.com/api/v1/facet/receiving/depth
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'ncaa'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'ncaa'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -2419,12 +2419,12 @@ Example URL: https://premium.pff.com/api/v1/facet/receiving/scheme
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'ncaa'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'ncaa'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -2450,12 +2450,12 @@ Example URL: https://premium.pff.com/api/v1/facet/receiving/summary
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'ncaa'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'ncaa'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -2481,12 +2481,12 @@ Example URL: https://premium.pff.com/api/v1/facet/return/summary
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'ncaa'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'ncaa'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -2512,12 +2512,12 @@ Example URL: https://premium.pff.com/api/v1/facet/offense/run_blocking
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'ncaa'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'ncaa'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -2543,12 +2543,12 @@ Example URL: https://premium.pff.com/api/v1/facet/defense/run
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'ncaa'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'ncaa'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -2574,12 +2574,12 @@ Example URL: https://premium.pff.com/api/v1/facet/rushing/direction
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'ncaa'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'ncaa'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -2605,12 +2605,12 @@ Example URL: https://premium.pff.com/api/v1/facet/rushing/summary
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'ncaa'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'ncaa'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -2636,12 +2636,12 @@ Example URL: https://premium.pff.com/api/v1/facet/signature/defense/slot_coverag
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'ncaa'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'ncaa'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -2667,12 +2667,12 @@ Example URL: https://premium.pff.com/api/v1/facet/special/summary
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'ncaa'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'ncaa'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -2698,12 +2698,12 @@ Example URL: https://premium.pff.com/api/v1/facet/signature/passing/time_in_pock
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'ncaa'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'ncaa'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -2729,9 +2729,9 @@ Example URL: https://premium.pff.com/api/v1/games
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'ncaa'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[int]` | `None` | week query parameter. |
+| `league` | `Optional[str]` | `'ncaa'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[int]` | `None` | Single week number. |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -2782,11 +2782,11 @@ Example URL: https://premium.pff.com/api/v1/player/defense/summary
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'ncaa'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `player_id` | `Optional[int]` | `None` | player_id query parameter. |
-| `career` | `Optional[str]` | `None` | career query parameter. |
+| `league` | `Optional[str]` | `'ncaa'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `player_id` | `Optional[int]` | `None` | PFF player id (snake_case on the wire; matches the /players id). |
+| `career` | `Optional[str]` | `None` | Career-rollup flag ("true"/"false"); player-detail views only. |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_player_detail -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -2812,11 +2812,11 @@ Example URL: https://premium.pff.com/api/v1/player/offense/blocking
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'ncaa'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `player_id` | `Optional[int]` | `None` | player_id query parameter. |
-| `career` | `Optional[str]` | `None` | career query parameter. |
+| `league` | `Optional[str]` | `'ncaa'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `player_id` | `Optional[int]` | `None` | PFF player id (snake_case on the wire; matches the /players id). |
+| `career` | `Optional[str]` | `None` | Career-rollup flag ("true"/"false"); player-detail views only. |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_player_detail -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -2842,11 +2842,11 @@ Example URL: https://premium.pff.com/api/v1/player/offense/summary
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'ncaa'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `player_id` | `Optional[int]` | `None` | player_id query parameter. |
-| `career` | `Optional[str]` | `None` | career query parameter. |
+| `league` | `Optional[str]` | `'ncaa'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `player_id` | `Optional[int]` | `None` | PFF player id (snake_case on the wire; matches the /players id). |
+| `career` | `Optional[str]` | `None` | Career-rollup flag ("true"/"false"); player-detail views only. |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_player_detail -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -2872,11 +2872,11 @@ Example URL: https://premium.pff.com/api/v1/player/passing/summary
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'ncaa'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `player_id` | `Optional[int]` | `None` | player_id query parameter. |
-| `career` | `Optional[str]` | `None` | career query parameter. |
+| `league` | `Optional[str]` | `'ncaa'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `player_id` | `Optional[int]` | `None` | PFF player id (snake_case on the wire; matches the /players id). |
+| `career` | `Optional[str]` | `None` | Career-rollup flag ("true"/"false"); player-detail views only. |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_player_detail -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -2902,10 +2902,10 @@ Example URL: https://premium.pff.com/api/v1/player/position/pivot
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'ncaa'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `player_id` | `Optional[int]` | `None` | player_id query parameter. |
+| `league` | `Optional[str]` | `'ncaa'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `player_id` | `Optional[int]` | `None` | PFF player id (snake_case on the wire; matches the /players id). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -2931,11 +2931,11 @@ Example URL: https://premium.pff.com/api/v1/player/receiving/summary
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'ncaa'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `player_id` | `Optional[int]` | `None` | player_id query parameter. |
-| `career` | `Optional[str]` | `None` | career query parameter. |
+| `league` | `Optional[str]` | `'ncaa'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `player_id` | `Optional[int]` | `None` | PFF player id (snake_case on the wire; matches the /players id). |
+| `career` | `Optional[str]` | `None` | Career-rollup flag ("true"/"false"); player-detail views only. |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_player_detail -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -2961,11 +2961,11 @@ Example URL: https://premium.pff.com/api/v1/player/rushing/summary
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'ncaa'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `player_id` | `Optional[int]` | `None` | player_id query parameter. |
-| `career` | `Optional[str]` | `None` | career query parameter. |
+| `league` | `Optional[str]` | `'ncaa'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `player_id` | `Optional[int]` | `None` | PFF player id (snake_case on the wire; matches the /players id). |
+| `career` | `Optional[str]` | `None` | Career-rollup flag ("true"/"false"); player-detail views only. |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_player_detail -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -2991,8 +2991,8 @@ Example URL: https://premium.pff.com/api/v1/player/seasons
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'ncaa'` | league query parameter. |
-| `player_id` | `Optional[int]` | `None` | player_id query parameter. |
+| `league` | `Optional[str]` | `'ncaa'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `player_id` | `Optional[int]` | `None` | PFF player id (snake_case on the wire; matches the /players id). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -3018,11 +3018,11 @@ Example URL: https://premium.pff.com/api/v1/player/snaps/summary
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'ncaa'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `player_id` | `Optional[int]` | `None` | player_id query parameter. |
-| `career` | `Optional[str]` | `None` | career query parameter. |
+| `league` | `Optional[str]` | `'ncaa'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `player_id` | `Optional[int]` | `None` | PFF player id (snake_case on the wire; matches the /players id). |
+| `career` | `Optional[str]` | `None` | Career-rollup flag ("true"/"false"); player-detail views only. |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_player_detail -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -3048,9 +3048,9 @@ Example URL: https://premium.pff.com/api/v1/players
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'ncaa'` | league query parameter. |
-| `name` | `Optional[str]` | `None` | name query parameter. |
-| `id` | `Optional[int]` | `None` | id query parameter. |
+| `league` | `Optional[str]` | `'ncaa'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `name` | `Optional[str]` | `None` | Player-name search prefix. |
+| `id` | `Optional[int]` | `None` | Entity id (player lookup). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -3076,8 +3076,8 @@ Example URL: https://premium.pff.com/api/v1/teams
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'ncaa'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
+| `league` | `Optional[str]` | `'ncaa'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -3103,9 +3103,9 @@ Example URL: https://premium.pff.com/api/v1/teams/overview
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'ncaa'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
+| `league` | `Optional[str]` | `'ncaa'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -3131,12 +3131,12 @@ Example URL: https://premium.pff.com/api/v1/facet/offense/blocking
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'nfl'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'nfl'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -3162,12 +3162,12 @@ Example URL: https://premium.pff.com/api/v1/facet/defense/coverage_scheme
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'nfl'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'nfl'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -3193,12 +3193,12 @@ Example URL: https://premium.pff.com/api/v1/facet/defense/coverage
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'nfl'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'nfl'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -3224,12 +3224,12 @@ Example URL: https://premium.pff.com/api/v1/facet/defense/summary
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'nfl'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'nfl'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -3255,12 +3255,12 @@ Example URL: https://premium.pff.com/api/v1/facet/field_goal/summary
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'nfl'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'nfl'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -3286,12 +3286,12 @@ Example URL: https://premium.pff.com/api/v1/facet/kickoff/summary
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'nfl'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'nfl'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -3317,12 +3317,12 @@ Example URL: https://premium.pff.com/api/v1/facet/offense/summary
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'nfl'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'nfl'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -3348,12 +3348,12 @@ Example URL: https://premium.pff.com/api/v1/facet/offense/pass_blocking
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'nfl'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'nfl'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -3379,12 +3379,12 @@ Example URL: https://premium.pff.com/api/v1/facet/defense/pass_rush
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'nfl'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'nfl'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -3410,12 +3410,12 @@ Example URL: https://premium.pff.com/api/v1/facet/passing/allowed_pressure
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'nfl'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'nfl'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -3441,12 +3441,12 @@ Example URL: https://premium.pff.com/api/v1/facet/passing/concept
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'nfl'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'nfl'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -3472,12 +3472,12 @@ Example URL: https://premium.pff.com/api/v1/facet/passing/depth
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'nfl'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'nfl'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -3503,12 +3503,12 @@ Example URL: https://premium.pff.com/api/v1/facet/passing/detail
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'nfl'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'nfl'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -3534,12 +3534,12 @@ Example URL: https://premium.pff.com/api/v1/facet/passing/pressure
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'nfl'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'nfl'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -3565,12 +3565,12 @@ Example URL: https://premium.pff.com/api/v1/facet/passing/summary
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'nfl'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'nfl'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -3596,12 +3596,12 @@ Example URL: https://premium.pff.com/api/v1/facet/signature/pass-blocking/effici
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'nfl'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'nfl'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -3627,12 +3627,12 @@ Example URL: https://premium.pff.com/api/v1/facet/signature/defense/outside_pass
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'nfl'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'nfl'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -3658,12 +3658,12 @@ Example URL: https://premium.pff.com/api/v1/facet/punting/summary
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'nfl'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'nfl'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -3689,12 +3689,12 @@ Example URL: https://premium.pff.com/api/v1/facet/receiving/concept
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'nfl'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'nfl'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -3720,12 +3720,12 @@ Example URL: https://premium.pff.com/api/v1/facet/receiving/coverage
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'nfl'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'nfl'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -3751,12 +3751,12 @@ Example URL: https://premium.pff.com/api/v1/facet/defense/coverage_matchup
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'nfl'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'nfl'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -3782,12 +3782,12 @@ Example URL: https://premium.pff.com/api/v1/facet/receiving/depth
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'nfl'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'nfl'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -3813,12 +3813,12 @@ Example URL: https://premium.pff.com/api/v1/facet/receiving/scheme
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'nfl'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'nfl'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -3844,12 +3844,12 @@ Example URL: https://premium.pff.com/api/v1/facet/receiving/summary
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'nfl'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'nfl'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -3875,12 +3875,12 @@ Example URL: https://premium.pff.com/api/v1/facet/return/summary
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'nfl'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'nfl'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -3906,12 +3906,12 @@ Example URL: https://premium.pff.com/api/v1/facet/offense/run_blocking
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'nfl'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'nfl'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -3937,12 +3937,12 @@ Example URL: https://premium.pff.com/api/v1/facet/defense/run
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'nfl'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'nfl'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -3968,12 +3968,12 @@ Example URL: https://premium.pff.com/api/v1/facet/rushing/direction
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'nfl'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'nfl'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -3999,12 +3999,12 @@ Example URL: https://premium.pff.com/api/v1/facet/rushing/summary
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'nfl'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'nfl'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -4030,12 +4030,12 @@ Example URL: https://premium.pff.com/api/v1/facet/signature/defense/slot_coverag
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'nfl'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'nfl'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -4061,12 +4061,12 @@ Example URL: https://premium.pff.com/api/v1/facet/special/summary
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'nfl'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'nfl'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -4092,12 +4092,12 @@ Example URL: https://premium.pff.com/api/v1/facet/signature/passing/time_in_pock
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'nfl'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'nfl'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -4123,9 +4123,9 @@ Example URL: https://premium.pff.com/api/v1/games
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'nfl'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[int]` | `None` | week query parameter. |
+| `league` | `Optional[str]` | `'nfl'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[int]` | `None` | Single week number. |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -4176,11 +4176,11 @@ Example URL: https://premium.pff.com/api/v1/player/defense/summary
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'nfl'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `player_id` | `Optional[int]` | `None` | player_id query parameter. |
-| `career` | `Optional[str]` | `None` | career query parameter. |
+| `league` | `Optional[str]` | `'nfl'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `player_id` | `Optional[int]` | `None` | PFF player id (snake_case on the wire; matches the /players id). |
+| `career` | `Optional[str]` | `None` | Career-rollup flag ("true"/"false"); player-detail views only. |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_player_detail -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -4206,11 +4206,11 @@ Example URL: https://premium.pff.com/api/v1/player/offense/blocking
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'nfl'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `player_id` | `Optional[int]` | `None` | player_id query parameter. |
-| `career` | `Optional[str]` | `None` | career query parameter. |
+| `league` | `Optional[str]` | `'nfl'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `player_id` | `Optional[int]` | `None` | PFF player id (snake_case on the wire; matches the /players id). |
+| `career` | `Optional[str]` | `None` | Career-rollup flag ("true"/"false"); player-detail views only. |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_player_detail -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -4236,11 +4236,11 @@ Example URL: https://premium.pff.com/api/v1/player/offense/summary
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'nfl'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `player_id` | `Optional[int]` | `None` | player_id query parameter. |
-| `career` | `Optional[str]` | `None` | career query parameter. |
+| `league` | `Optional[str]` | `'nfl'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `player_id` | `Optional[int]` | `None` | PFF player id (snake_case on the wire; matches the /players id). |
+| `career` | `Optional[str]` | `None` | Career-rollup flag ("true"/"false"); player-detail views only. |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_player_detail -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -4266,11 +4266,11 @@ Example URL: https://premium.pff.com/api/v1/player/passing/summary
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'nfl'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `player_id` | `Optional[int]` | `None` | player_id query parameter. |
-| `career` | `Optional[str]` | `None` | career query parameter. |
+| `league` | `Optional[str]` | `'nfl'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `player_id` | `Optional[int]` | `None` | PFF player id (snake_case on the wire; matches the /players id). |
+| `career` | `Optional[str]` | `None` | Career-rollup flag ("true"/"false"); player-detail views only. |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_player_detail -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -4296,10 +4296,10 @@ Example URL: https://premium.pff.com/api/v1/player/position/pivot
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'nfl'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `player_id` | `Optional[int]` | `None` | player_id query parameter. |
+| `league` | `Optional[str]` | `'nfl'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `player_id` | `Optional[int]` | `None` | PFF player id (snake_case on the wire; matches the /players id). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -4325,11 +4325,11 @@ Example URL: https://premium.pff.com/api/v1/player/receiving/summary
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'nfl'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `player_id` | `Optional[int]` | `None` | player_id query parameter. |
-| `career` | `Optional[str]` | `None` | career query parameter. |
+| `league` | `Optional[str]` | `'nfl'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `player_id` | `Optional[int]` | `None` | PFF player id (snake_case on the wire; matches the /players id). |
+| `career` | `Optional[str]` | `None` | Career-rollup flag ("true"/"false"); player-detail views only. |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_player_detail -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -4355,11 +4355,11 @@ Example URL: https://premium.pff.com/api/v1/player/rushing/summary
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'nfl'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `player_id` | `Optional[int]` | `None` | player_id query parameter. |
-| `career` | `Optional[str]` | `None` | career query parameter. |
+| `league` | `Optional[str]` | `'nfl'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `player_id` | `Optional[int]` | `None` | PFF player id (snake_case on the wire; matches the /players id). |
+| `career` | `Optional[str]` | `None` | Career-rollup flag ("true"/"false"); player-detail views only. |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_player_detail -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -4385,8 +4385,8 @@ Example URL: https://premium.pff.com/api/v1/player/seasons
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'nfl'` | league query parameter. |
-| `player_id` | `Optional[int]` | `None` | player_id query parameter. |
+| `league` | `Optional[str]` | `'nfl'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `player_id` | `Optional[int]` | `None` | PFF player id (snake_case on the wire; matches the /players id). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -4412,11 +4412,11 @@ Example URL: https://premium.pff.com/api/v1/player/snaps/summary
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'nfl'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `player_id` | `Optional[int]` | `None` | player_id query parameter. |
-| `career` | `Optional[str]` | `None` | career query parameter. |
+| `league` | `Optional[str]` | `'nfl'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `player_id` | `Optional[int]` | `None` | PFF player id (snake_case on the wire; matches the /players id). |
+| `career` | `Optional[str]` | `None` | Career-rollup flag ("true"/"false"); player-detail views only. |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_player_detail -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -4442,9 +4442,9 @@ Example URL: https://premium.pff.com/api/v1/players
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'nfl'` | league query parameter. |
-| `name` | `Optional[str]` | `None` | name query parameter. |
-| `id` | `Optional[int]` | `None` | id query parameter. |
+| `league` | `Optional[str]` | `'nfl'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `name` | `Optional[str]` | `None` | Player-name search prefix. |
+| `id` | `Optional[int]` | `None` | Entity id (player lookup). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -4470,8 +4470,8 @@ Example URL: https://premium.pff.com/api/v1/teams
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'nfl'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
+| `league` | `Optional[str]` | `'nfl'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -4497,9 +4497,9 @@ Example URL: https://premium.pff.com/api/v1/teams/overview
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'nfl'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
+| `league` | `Optional[str]` | `'nfl'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -4525,12 +4525,12 @@ Example URL: https://premium.pff.com/api/v1/facet/offense/blocking
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'ufl'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'ufl'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -4556,12 +4556,12 @@ Example URL: https://premium.pff.com/api/v1/facet/defense/coverage_scheme
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'ufl'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'ufl'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -4587,12 +4587,12 @@ Example URL: https://premium.pff.com/api/v1/facet/defense/coverage
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'ufl'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'ufl'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -4618,12 +4618,12 @@ Example URL: https://premium.pff.com/api/v1/facet/defense/summary
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'ufl'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'ufl'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -4649,12 +4649,12 @@ Example URL: https://premium.pff.com/api/v1/facet/field_goal/summary
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'ufl'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'ufl'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -4680,12 +4680,12 @@ Example URL: https://premium.pff.com/api/v1/facet/kickoff/summary
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'ufl'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'ufl'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -4711,12 +4711,12 @@ Example URL: https://premium.pff.com/api/v1/facet/offense/summary
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'ufl'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'ufl'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -4742,12 +4742,12 @@ Example URL: https://premium.pff.com/api/v1/facet/offense/pass_blocking
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'ufl'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'ufl'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -4773,12 +4773,12 @@ Example URL: https://premium.pff.com/api/v1/facet/defense/pass_rush
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'ufl'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'ufl'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -4804,12 +4804,12 @@ Example URL: https://premium.pff.com/api/v1/facet/passing/allowed_pressure
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'ufl'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'ufl'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -4835,12 +4835,12 @@ Example URL: https://premium.pff.com/api/v1/facet/passing/concept
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'ufl'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'ufl'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -4866,12 +4866,12 @@ Example URL: https://premium.pff.com/api/v1/facet/passing/depth
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'ufl'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'ufl'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -4897,12 +4897,12 @@ Example URL: https://premium.pff.com/api/v1/facet/passing/detail
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'ufl'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'ufl'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -4928,12 +4928,12 @@ Example URL: https://premium.pff.com/api/v1/facet/passing/pressure
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'ufl'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'ufl'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -4959,12 +4959,12 @@ Example URL: https://premium.pff.com/api/v1/facet/passing/summary
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'ufl'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'ufl'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -4990,12 +4990,12 @@ Example URL: https://premium.pff.com/api/v1/facet/signature/pass-blocking/effici
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'ufl'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'ufl'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -5021,12 +5021,12 @@ Example URL: https://premium.pff.com/api/v1/facet/signature/defense/outside_pass
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'ufl'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'ufl'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -5052,12 +5052,12 @@ Example URL: https://premium.pff.com/api/v1/facet/punting/summary
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'ufl'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'ufl'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -5083,12 +5083,12 @@ Example URL: https://premium.pff.com/api/v1/facet/receiving/concept
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'ufl'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'ufl'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -5114,12 +5114,12 @@ Example URL: https://premium.pff.com/api/v1/facet/receiving/coverage
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'ufl'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'ufl'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -5145,12 +5145,12 @@ Example URL: https://premium.pff.com/api/v1/facet/defense/coverage_matchup
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'ufl'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'ufl'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -5176,12 +5176,12 @@ Example URL: https://premium.pff.com/api/v1/facet/receiving/depth
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'ufl'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'ufl'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -5207,12 +5207,12 @@ Example URL: https://premium.pff.com/api/v1/facet/receiving/scheme
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'ufl'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'ufl'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -5238,12 +5238,12 @@ Example URL: https://premium.pff.com/api/v1/facet/receiving/summary
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'ufl'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'ufl'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -5269,12 +5269,12 @@ Example URL: https://premium.pff.com/api/v1/facet/return/summary
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'ufl'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'ufl'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -5300,12 +5300,12 @@ Example URL: https://premium.pff.com/api/v1/facet/offense/run_blocking
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'ufl'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'ufl'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -5331,12 +5331,12 @@ Example URL: https://premium.pff.com/api/v1/facet/defense/run
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'ufl'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'ufl'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -5362,12 +5362,12 @@ Example URL: https://premium.pff.com/api/v1/facet/rushing/direction
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'ufl'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'ufl'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -5393,12 +5393,12 @@ Example URL: https://premium.pff.com/api/v1/facet/rushing/summary
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'ufl'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'ufl'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -5424,12 +5424,12 @@ Example URL: https://premium.pff.com/api/v1/facet/signature/defense/slot_coverag
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'ufl'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'ufl'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -5455,12 +5455,12 @@ Example URL: https://premium.pff.com/api/v1/facet/special/summary
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'ufl'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'ufl'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -5486,12 +5486,12 @@ Example URL: https://premium.pff.com/api/v1/facet/signature/passing/time_in_pock
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'ufl'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `franchise_id` | `Optional[int]` | `None` | franchiseId query parameter. |
-| `game_id` | `Optional[int]` | `None` | gameId query parameter. |
-| `division` | `Optional[str]` | `None` | division query parameter. |
+| `league` | `Optional[str]` | `'ufl'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
+| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
+| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -5517,9 +5517,9 @@ Example URL: https://premium.pff.com/api/v1/games
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'ufl'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[int]` | `None` | week query parameter. |
+| `league` | `Optional[str]` | `'ufl'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[int]` | `None` | Single week number. |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -5570,11 +5570,11 @@ Example URL: https://premium.pff.com/api/v1/player/defense/summary
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'ufl'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `player_id` | `Optional[int]` | `None` | player_id query parameter. |
-| `career` | `Optional[str]` | `None` | career query parameter. |
+| `league` | `Optional[str]` | `'ufl'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `player_id` | `Optional[int]` | `None` | PFF player id (snake_case on the wire; matches the /players id). |
+| `career` | `Optional[str]` | `None` | Career-rollup flag ("true"/"false"); player-detail views only. |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_player_detail -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -5600,11 +5600,11 @@ Example URL: https://premium.pff.com/api/v1/player/offense/blocking
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'ufl'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `player_id` | `Optional[int]` | `None` | player_id query parameter. |
-| `career` | `Optional[str]` | `None` | career query parameter. |
+| `league` | `Optional[str]` | `'ufl'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `player_id` | `Optional[int]` | `None` | PFF player id (snake_case on the wire; matches the /players id). |
+| `career` | `Optional[str]` | `None` | Career-rollup flag ("true"/"false"); player-detail views only. |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_player_detail -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -5630,11 +5630,11 @@ Example URL: https://premium.pff.com/api/v1/player/offense/summary
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'ufl'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `player_id` | `Optional[int]` | `None` | player_id query parameter. |
-| `career` | `Optional[str]` | `None` | career query parameter. |
+| `league` | `Optional[str]` | `'ufl'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `player_id` | `Optional[int]` | `None` | PFF player id (snake_case on the wire; matches the /players id). |
+| `career` | `Optional[str]` | `None` | Career-rollup flag ("true"/"false"); player-detail views only. |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_player_detail -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -5660,11 +5660,11 @@ Example URL: https://premium.pff.com/api/v1/player/passing/summary
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'ufl'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `player_id` | `Optional[int]` | `None` | player_id query parameter. |
-| `career` | `Optional[str]` | `None` | career query parameter. |
+| `league` | `Optional[str]` | `'ufl'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `player_id` | `Optional[int]` | `None` | PFF player id (snake_case on the wire; matches the /players id). |
+| `career` | `Optional[str]` | `None` | Career-rollup flag ("true"/"false"); player-detail views only. |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_player_detail -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -5690,10 +5690,10 @@ Example URL: https://premium.pff.com/api/v1/player/position/pivot
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'ufl'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `player_id` | `Optional[int]` | `None` | player_id query parameter. |
+| `league` | `Optional[str]` | `'ufl'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `player_id` | `Optional[int]` | `None` | PFF player id (snake_case on the wire; matches the /players id). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -5719,11 +5719,11 @@ Example URL: https://premium.pff.com/api/v1/player/receiving/summary
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'ufl'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `player_id` | `Optional[int]` | `None` | player_id query parameter. |
-| `career` | `Optional[str]` | `None` | career query parameter. |
+| `league` | `Optional[str]` | `'ufl'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `player_id` | `Optional[int]` | `None` | PFF player id (snake_case on the wire; matches the /players id). |
+| `career` | `Optional[str]` | `None` | Career-rollup flag ("true"/"false"); player-detail views only. |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_player_detail -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -5749,11 +5749,11 @@ Example URL: https://premium.pff.com/api/v1/player/rushing/summary
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'ufl'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `player_id` | `Optional[int]` | `None` | player_id query parameter. |
-| `career` | `Optional[str]` | `None` | career query parameter. |
+| `league` | `Optional[str]` | `'ufl'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `player_id` | `Optional[int]` | `None` | PFF player id (snake_case on the wire; matches the /players id). |
+| `career` | `Optional[str]` | `None` | Career-rollup flag ("true"/"false"); player-detail views only. |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_player_detail -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -5779,8 +5779,8 @@ Example URL: https://premium.pff.com/api/v1/player/seasons
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'ufl'` | league query parameter. |
-| `player_id` | `Optional[int]` | `None` | player_id query parameter. |
+| `league` | `Optional[str]` | `'ufl'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `player_id` | `Optional[int]` | `None` | PFF player id (snake_case on the wire; matches the /players id). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -5806,11 +5806,11 @@ Example URL: https://premium.pff.com/api/v1/player/snaps/summary
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'ufl'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
-| `player_id` | `Optional[int]` | `None` | player_id query parameter. |
-| `career` | `Optional[str]` | `None` | career query parameter. |
+| `league` | `Optional[str]` | `'ufl'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
+| `player_id` | `Optional[int]` | `None` | PFF player id (snake_case on the wire; matches the /players id). |
+| `career` | `Optional[str]` | `None` | Career-rollup flag ("true"/"false"); player-detail views only. |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_player_detail -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -5836,9 +5836,9 @@ Example URL: https://premium.pff.com/api/v1/players
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'ufl'` | league query parameter. |
-| `name` | `Optional[str]` | `None` | name query parameter. |
-| `id` | `Optional[int]` | `None` | id query parameter. |
+| `league` | `Optional[str]` | `'ufl'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `name` | `Optional[str]` | `None` | Player-name search prefix. |
+| `id` | `Optional[int]` | `None` | Entity id (player lookup). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -5864,8 +5864,8 @@ Example URL: https://premium.pff.com/api/v1/teams
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'ufl'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
+| `league` | `Optional[str]` | `'ufl'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -5891,9 +5891,9 @@ Example URL: https://premium.pff.com/api/v1/teams/overview
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league` | `Optional[str]` | `'ufl'` | league query parameter. |
-| `season` | `Optional[int]` | `None` | season query parameter. |
-| `week` | `Optional[str]` | `None` | week query parameter. |
+| `league` | `Optional[str]` | `'ufl'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
+| `season` | `Optional[int]` | `None` | Season (starting year). |
+| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
 | `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
 | `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
