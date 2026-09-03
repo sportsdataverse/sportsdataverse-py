@@ -44,36 +44,26 @@ def _bucket_of(path: str) -> str:
 
 
 # Buckets whose blank columns are a TRACKED follow-up, not a coverage failure.
-# The stats.nba.com / stats.wnba.com flat-API family wraps ~150 endpoints whose
-# ~3k+ result-set columns are documented incrementally (the 5 pilot slugs are
-# authored; the long tail is mined opportunistically via the R `_merged` dict).
-# Capturing more endpoints (resolving "untested" -> "live") grows the column
-# surface faster than descriptions are authored, so these buckets are exempted
-# from the residual ratchet and surfaced via deferred_columns() instead. Authoring
-# a column here (manual dict or R dict) still removes it from the deferred count.
-# native/sports247_site_pages: the 247sports.com front-end page-model surface (17
-# entity schemas, 372 columns). The semantically load-bearing columns (ids, FKs,
-# ratings, ranks, status/commit fields — 89 columns) are authored from the OpenAPI
-# `description:` fields; the plain long tail (names, dates, assets, tax rates) is a
-# tracked follow-up, mirroring the nba_stats/wnba_stats decision above.
-# native/on3 + native/pff: the On3 RDB and PFF Premium column tails are likewise
-# authored as pilots with the remainder deferred (see those tracks' plans).
-# loader_schemas: generated dataset-loader return tables gained a `description`
-# column (previously they rendered name+type only), which exposed ~3k columns
-# across 8 leagues in one step. The shared//id columns fill from the R dict for
-# free; the per-dataset statistical tails are authored incrementally, mirroring
-# the nba_stats/wnba_stats decision above. `deferred_columns()` reports the count.
+#
+# nba_stats / wnba_stats / sports247_site_pages / on3 / pff / loader_schemas were
+# once here for the same reason: each family's column surface was captured faster
+# than descriptions could be authored, so the backlog was exempted from the hard
+# residual ratchet and reported separately via deferred_columns(). All six have
+# since been fully backfilled (0 genuinely-uncovered columns as of 2026-09-03) and
+# were promoted OUT of this set -- their coverage is now enforced by the same hard
+# gate as everything else, so a future regression (e.g. capturing a new nba_stats
+# endpoint before its columns are described) is caught immediately instead of
+# quietly reappearing as "deferred." If a bucket like this grows a large new
+# backlog again, re-add it here deliberately rather than letting the gate go red.
+#
+# native/nflpro remains deferred for a different, durable reason (not "not yet
+# authored" but "not authorable"): the Next Gen Stats field names (avgTTT, croeNd,
+# bhPct, ...) have no reachable authoritative label source, and guessing would
+# manufacture authority the capture does not carry. See
+# sdv-internal-refs/nfl/nflpro/catalogs/nfl_pro_secured_returns.md for the full
+# provenance note and the identified (partial) load_nfl_nextgen_stats cross-walk.
 _DEFERRED_BUCKETS = {
-    "native/nba_stats",
-    "native/wnba_stats",
-    "native/sports247_site_pages",
-    "native/on3",
-    "native/pff",
-    # NFL Pro (NGS): 1,036 columns whose descriptions are deliberately absent --
-    # no authoritative label source was reachable, and guessing would manufacture
-    # authority the capture does not carry. Tracked here rather than left invisible.
     "native/nflpro",
-    "loader_schemas",
 }
 
 

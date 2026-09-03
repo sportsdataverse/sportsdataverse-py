@@ -3934,6 +3934,7 @@ espn_wbb_game_rosters:
   team_alternate_ids_sdr: Alternate team identifier from ESPN's SDR (Sports Data Reference) system for the athlete's team.
 espn_wbb_player_stats:
   offensive_second_chance_points: Points scored by the player on offensive-rebound put-back opportunities during the season.
+  season: "Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted."
 espn_wbb_schedule:
   away_current_rank: Current AP/coaches poll ranking of the away team at the time of the game.
   away_linescores: Points scored by the away team in each period or half of the game.
@@ -3941,6 +3942,7 @@ espn_wbb_schedule:
   home_current_rank: Current AP/coaches poll ranking of the home team at the time of the game.
   home_linescores: Points scored by the home team in each period or half of the game.
   home_records: Win-loss record string for the home team at the time of the game.
+  season: "Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted."
 espn_wnba_player_stats:
   defensive_avg48_blocks: Player's blocked shots per 48 minutes of play, drawn from the defensive statistical category.
   defensive_avg48_defensive_rebounds: Player's defensive rebounds per 48 minutes of play, drawn from the defensive statistical
@@ -3971,11 +3973,13 @@ espn_wnba_player_stats:
   offensive_avg48_three_point_field_goals_made: Player's three-point field goals made per 48 minutes of play, drawn from the
     offensive statistical category.
   offensive_avg48_turnovers: Player's turnovers per 48 minutes of play, drawn from the offensive statistical category.
+  season: "Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted."
 espn_wnba_schedule:
   away_linescores: Period-by-period point totals for the away team, stored as a list of integer scores.
   away_records: Win-loss record strings for the away team across relevant splits (e.g., overall, home/away, conference).
   home_linescores: Period-by-period point totals for the home team, stored as a list of integer scores.
   home_records: Win-loss record strings for the home team across relevant splits (e.g., overall, home/away, conference).
+  season: "Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted."
 expansion_draft_picks:
   draft_picks: JSON-serialized list of players selected by this franchise in the NHL expansion draft.
 fantasywidget:
@@ -10778,6 +10782,7 @@ load_teams:
 load_wbb_game_rosters:
   athlete_headshot: URL of the player's ESPN headshot image on a.espncdn.com, whose filename is the athlete_id; null when
     ESPN publishes no headshot for that player.
+  season: "Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted."
 load_wbb_officials:
   official_display_name: ESPN's displayName for the official, which is identical to official_full_name in every published
     row of the released data.
@@ -10791,6 +10796,7 @@ load_wbb_officials:
     1 to 3 for the standard three-person crew.
   official_uid: ESPN's globally unique resource identifier for the official, read from the core-api items[] uid key; that
     payload never ships it, so the column is null for every published row.
+  season: "Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted."
 load_wbb_pbp:
   athlete_name_1: Display name of the first athlete in the ESPN play participants (e.g., the shooter on a shot attempt).
   athlete_name_2: Display name of the second athlete in the ESPN play participants (e.g., the assisting player), when present.
@@ -10804,19 +10810,23 @@ load_wbb_pbp:
   short_description: Shortened version of ESPN's play description text, without score context.
   type_text: Play type text, passed through verbatim from ESPN. ESPN labels the free-throw play type "MadeFreeThrow" for made
     AND missed free throws; filter makes vs. misses with scoring_play, not type_text.
+  season: "Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted."
 load_wbb_player_season_stats:
   stat_description: ESPN's prose definition of the statistic named in stat_name, for example The average assists per game
     for avgAssists; combined made-attempted stats carry both definitions joined by a hyphen.
+  season: "Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted."
 load_wbb_player_value:
   box_bpm: Total box plus/minus in points per 100 possessions above average, exactly box_obpm plus box_dbpm in every published
     row.
   box_dbpm: Box-score defensive plus/minus for the player, the defensive half of box BPM.
   box_obpm: Box-score offensive plus/minus for the player, the offensive half of box BPM.
+  season: "Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted."
 load_wbb_ratings:
   adj_em_z: Within-season z-score of adj_em, computed as adj_em minus the season mean divided by the season standard deviation
     over every team in the frame, so it is mean 0 and standard deviation 1 per season.
   adj_tempo: Opponent-adjusted tempo in possessions per 40 minutes, produced by the same fixed-point adjustment as the efficiencies
     applied to game possessions under the additive model poss = tempo_i + tempo_j minus the league baseline.
+  season: "Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted."
 load_wbb_schedule:
   away_current_rank: Poll ranking ESPN listed for the away team at game time (unranked teams carry a sentinel value).
   away_linescores: Period-by-period scores for the away team as a delimited string from ESPN's schedule feed.
@@ -10824,21 +10834,26 @@ load_wbb_schedule:
   home_current_rank: Poll ranking ESPN listed for the home team at game time (unranked teams carry a sentinel value).
   home_linescores: Period-by-period scores for the home team as a delimited string from ESPN's schedule feed.
   home_records: Record strings (overall and split records) for the home team from ESPN's schedule feed.
+  season: "Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted."
 load_wbb_shots:
   athlete_name_1: Display name of the shooter credited on the attempt in ESPN's play participants.
   athlete_name_2: Display name of the second athlete tied to the attempt (typically the assister), when present.
   team_mascot: Mascot/nickname of the shooting team from ESPN's team record.
+  season: "Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted."
 load_wbb_standings:
   group_short_name: Short display name of the conference or division grouping the row belongs to.
   stat_abbreviation: ESPN's abbreviation for the standings stat, such as GB, OPP PPG or VS CONF; always populated and matching
     stat_short_display_name for about 90 percent of rows.
   stat_description: ESPN's longer wording for the standings stat, for example Overall Record for the Team Season Record entry
     and Current Streak for Streak; null for stats ESPN ships without one, such as vs AP Top 25.
+  season: "Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted."
 load_wbb_team_boxscore:
   lead_percentage: Share of game time the team held the lead, as reported in ESPN's team boxscore.
+  season: "Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted."
 load_wbb_team_season_stats:
   stat_description: ESPN's prose definition of the team statistic named in stat_name, for example The average blocks per game
     for avgBlocks or the full sentence defining a blocked shot for blocks.
+  season: "Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted."
 load_wnba_draft:
   college_abbreviation: Short code for the drafted player's school, read from the athlete's ESPN college block; null throughout
     the published data because ESPN ships no college block on these picks.
@@ -10849,9 +10864,11 @@ load_wnba_draft:
   round_display_name: Human-readable label for the draft round, read from the ESPN round object's displayName falling back
     to its name; null whenever ESPN ships the modern flat picks array with no round objects, which is the case for every published
     season.
+  season: "Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted."
 load_wnba_game_rosters:
   athlete_headshot: Direct link to the player's ESPN headshot image, always of the form https://a.espncdn.com/i/headshots/wnba/players/full/{athlete_id}.png,
     and null for the few players ESPN has no photo for.
+  season: "Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted."
 load_wnba_officials:
   official_display_name: ESPN's display rendering of the official's name, which is byte-identical to official_full_name on
     every published row and therefore adds nothing.
@@ -10864,6 +10881,7 @@ load_wnba_officials:
     crew and 40 of 573 games in 2024-2025 add a fourth.
   official_uid: ESPN's global uid string for the official, carried straight through from the officials payload; the Core v2
     items ESPN serves omit it, so it is null in every published season.
+  season: "Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted."
 load_wnba_pbp:
   athlete_name_1: Display name of the primary athlete on the play (e.g. the shooter, rebounder, or fouler), per ESPN participant
     order.
@@ -10877,11 +10895,13 @@ load_wnba_pbp:
   short_description: Abbreviated ESPN text description of the play.
   type_text: Play type text, passed through verbatim from ESPN. ESPN labels the free-throw play type "MadeFreeThrow" for made
     AND missed free throws; filter makes vs. misses with scoring_play, not type_text.
+  season: "Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted."
 load_wnba_player_crosswalk:
   wnba_jersey_num: Jersey number listed on the stats.wnba.com side of the crosswalk.
   wnba_player_id: Player identifier on stats.wnba.com matched to the ESPN player.
   wnba_player_name: Player display name on the stats.wnba.com side of the crosswalk.
   wnba_position: Position listed on the stats.wnba.com side of the crosswalk.
+  season: "Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted."
 load_wnba_player_impact:
   adj_rapm: Total prior-informed RAPM (offense plus defense), in points per 100 possessions.
   d_adj_rapm: 'Defensive prior-informed RAPM: ridge shrunk toward a box-score prior, in points per 100 possessions.'
@@ -10898,14 +10918,17 @@ load_wnba_player_impact:
   rapm: 'Total RAPM: offensive plus defensive regularized on/off impact, in points per 100 possessions.'
   spm: 'Statistical plus-minus: offensive plus defensive box-score estimate of the RAPM target, per 100 possessions.'
   war: Wins above replacement implied by the player's impact and playing time, calibrated from team points-per-win.
+  season: "Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted."
 load_wnba_player_season_stats:
   stat_description: ESPN's prose definition of the statistic on this row, for example The average number of points scored
     per game for avgPoints; combined made-attempted stats carry both halves joined by a hyphen.
+  season: "Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted."
 load_wnba_schedule:
   away_linescores: Stringified list of the away team's period-by-period scores from the ESPN schedule feed.
   away_records: Stringified list of the away team's record summaries (overall/home/away) from the ESPN schedule feed.
   home_linescores: Stringified list of the home team's period-by-period scores from the ESPN schedule feed.
   home_records: Stringified list of the home team's record summaries (overall/home/away) from the ESPN schedule feed.
+  season: "Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted."
 load_wnba_schedule_crosswalk:
   fox_away_team_id: Away team identifier on Fox Sports for the matched game.
   fox_home_team_id: Home team identifier on Fox Sports for the matched game.
@@ -10913,10 +10936,12 @@ load_wnba_schedule_crosswalk:
   wnba_game_code: stats.wnba.com game code (date/matchup slug) for the matched game.
   wnba_game_id: Game identifier on stats.wnba.com matched to the ESPN game.
   wnba_home_team_id: Home team identifier on stats.wnba.com for the matched game.
+  season: "Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted."
 load_wnba_shots:
   athlete_name_1: Display name of the shooter, per ESPN participant order.
   athlete_name_2: Display name of the secondary athlete on the shot (typically the assister), when present.
   team_mascot: ESPN mascot (nickname) of the shooting team.
+  season: "Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted."
 load_wnba_standings:
   group_short_name: Short label of the standings group node the team sits under, read from ESPN shortName; the WNBA conference
     nodes ship only name and abbreviation, so it is null on every published row.
@@ -10924,6 +10949,7 @@ load_wnba_standings:
     is SEED here but POS there) and is null on the record-split rows such as Home and vs. Conf.
   stat_description: ESPN's long-form explanation of the standings stat, such as Clinched Best League Record for clincher or
     Record last 10 games for lasttengames.
+  season: "Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted."
 load_wnba_stats_coaches:
   coach_name: Full name of the staff member as the feed renders it, exactly first_name plus a space plus last_name on every
     published row.
@@ -10935,9 +10961,11 @@ load_wnba_stats_coaches:
     every published row is null.
   sub_sort_sequence: 'Secondary display-ordering rank that tracks coach_type exactly: 1 head coach, 2 associate head coach,
     5 assistant coach, 7 trainer.'
+  season: "Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted."
 load_wnba_stats_draft:
   draft_type: 'CONSTANT in the published asset: every row reads ''Draft'', so it does not currently distinguish the main draft
     from any other selection event.'
+  season: "Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted."
 load_wnba_stats_game_lineups:
   away_player_1: stats.wnba.com identifier of away on-court player 1 of 5 for the lineup stint.
   away_player_2: stats.wnba.com identifier of away on-court player 2 of 5 for the lineup stint.
@@ -10949,6 +10977,7 @@ load_wnba_stats_game_lineups:
   home_player_3: stats.wnba.com identifier of home on-court player 3 of 5 for the lineup stint.
   home_player_4: stats.wnba.com identifier of home on-court player 4 of 5 for the lineup stint.
   home_player_5: stats.wnba.com identifier of home on-court player 5 of 5 for the lineup stint.
+  season: "Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted."
 load_wnba_stats_pbp:
   is_foul: True when the event is a foul.
   is_free_throw: True when the event is a free throw attempt.
@@ -10960,6 +10989,7 @@ load_wnba_stats_pbp:
   is_substitution: True when the event is a substitution.
   is_timeout: True when the event is a timeout.
   order_index: Stable ordering index of the event within the game's stats.wnba.com play-by-play.
+  season: "Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted."
 load_wnba_stats_player_game_logs:
   ast: Assists credited.
   blk: Total shots blocked.
@@ -10983,6 +11013,7 @@ load_wnba_stats_player_game_logs:
   reb: Total rebounds collected.
   stl: Steals recorded.
   tov: Turnovers committed.
+  season: "Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted."
 load_wnba_stats_possessions:
   count_as_possession: False only for a possession starting with 2 seconds or less left in the period and no made basket before
     the period ends.
@@ -11006,20 +11037,25 @@ load_wnba_stats_possessions:
   possession_start_type: 'How the possession began: OffDeadball, OffTimeout, OffMadeShot, OffMissedShot, or OffLiveBallTurnover.'
   start_order_index: order_index of the first event in the possession; joins to the wnba_stats_pbp table.
   start_seconds_remaining: Seconds remaining in the period when the possession began.
+  season: "Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted."
 load_wnba_stats_rosters:
   exp: Years of WNBA playing experience entering the season ('R' = rookie).
   how_acquired: How the team acquired the player (draft, trade, free agency).
   num: Jersey number worn by the player.
   supplemental_status: Numeric supplemental roster-status code from the stats.wnba.com roster feed.
+  season: "Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted."
 load_wnba_stats_schedules:
   away_pts: Final points scored by the away team.
   away_wl: Result for the away team ('W' or 'L'); null before the game is final.
   home_pts: Final points scored by the home team.
   home_wl: Result for the home team ('W' or 'L'); null before the game is final.
+  season: "Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted."
 load_wnba_team_boxscore:
   lead_percentage: Share of game time the team spent in the lead, as reported by ESPN.
+  season: "Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted."
 load_wnba_team_season_stats:
   stat_description: Human-readable description of the statistic the row reports.
+  season: "Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted."
 matchupsrollup:
   def_player_id: Stats API identifier for defensive player identifier associated with this NBA or WNBA Stats row.
   def_player_name: Display name for defensive player name associated with this NBA or WNBA Stats row.
@@ -21587,25 +21623,122 @@ x_era:
   x_woba: Mean estimated_woba_using_speedangle allowed on batted balls.
 load_ncaa_mbb_rapm:
   season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
+  def_poss: "Defensive possessions the player was on court for; the regression weight behind drapm."
+  drapm: "Defensive regularized adjusted plus-minus: points allowed per 100 possessions on defense, adjusted for the other 9 players on the floor."
+  estimand: "Which RAPM quantity this row's coefficient estimates ('offense', 'defense', or 'net') -- one row per player per estimand."
+  off_poss: "Offensive possessions the player was on court for; the regression weight behind orapm."
+  orapm: "Offensive regularized adjusted plus-minus: points contributed per 100 possessions on offense, adjusted for the other 9 players on the floor."
+  rapm_net: "Net RAPM (orapm minus drapm): overall point contribution per 100 possessions."
 load_ncaa_wbb_rapm:
   season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
+  def_poss: "Defensive possessions the player was on court for; the regression weight behind drapm."
+  drapm: "Defensive regularized adjusted plus-minus: points allowed per 100 possessions on defense, adjusted for the other 9 players on the floor."
+  estimand: "Which RAPM quantity this row's coefficient estimates ('offense', 'defense', or 'net') -- one row per player per estimand."
+  off_poss: "Offensive possessions the player was on court for; the regression weight behind orapm."
+  orapm: "Offensive regularized adjusted plus-minus: points contributed per 100 possessions on offense, adjusted for the other 9 players on the floor."
+  rapm_net: "Net RAPM (orapm minus drapm): overall point contribution per 100 possessions."
 load_ncaa_mfb_pbp:
   season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
+  drive_scored: "Whether the possession containing this play ended in points for the offense."
+  fair_catch: "Whether the returner called a fair catch on a kickoff or punt."
+  fg_distance: "Distance in yards of a field goal attempt."
+  formation: "Offensive formation or personnel grouping reported for the play (e.g. 'Shotgun', 'I-Formation'), when the source narrative names it."
+  is_first_down: "Whether the play resulted in a first down for the offense."
+  is_fumble: "Whether a fumble occurred on the play, regardless of which team recovered it."
+  is_safety: "Whether the play resulted in a safety."
+  is_touchdown: "Whether the play resulted in a touchdown."
+  kick_yards: "Yards traveled on a kickoff."
+  kicker: "Name of the player who kicked off, punted, or attempted the field goal/PAT on this play."
+  no_play: "Whether the play was negated (e.g. by a penalty on the preceding down) and is excluded from drive/stat totals."
+  pass_complete: "Whether a pass attempt on this play was completed."
+  pass_depth: "Depth classification of a pass attempt (e.g. 'short', 'deep'), when the narrative reports it."
+  pass_direction: "Side of the field the pass was thrown to (e.g. 'left', 'middle', 'right'), when the narrative reports it."
+  penalty_player: "Name of the player penalized on the play, when a penalty occurred."
+  punt_yards: "Gross yards traveled on a punt, before any return."
+  punter: "Name of the player who punted on this play."
+  returner: "Name of the player who fielded or returned the kickoff or punt on this play."
+  run_direction: "Hole or side the ball carrier ran through on a rush play (e.g. 'left end', 'right guard'), when the narrative reports it."
+  tackler_1: "Name of the primary (first-listed) tackler on the play."
+  tackler_2: "Name of the secondary (assisting) tackler on the play, when the narrative credits an assist."
+  turnover_type: "Kind of turnover on the play, if any (e.g. 'interception', 'fumble lost'); null when no turnover occurred."
+  yard_line_number: "Yard line at the snap (0-50); pairs with yard_line_side for absolute field position."
+  yard_line_side: "Which team's territory the ball was on at the snap ('OFF' own side, 'DEF' opponent side); pairs with yard_line_number for absolute field position."
 load_ncaa_mfb_pbp_cfbfastr:
   season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
+  clock.minutes: "Minutes remaining on the game clock at the start of the play (cfbfastR schema column)."
+  clock.seconds: "Seconds remaining within the current minute on the game clock at the start of the play (cfbfastR schema column)."
+  n_plays_in_game: "Total number of plays in the game this row belongs to, repeated on every row for convenience."
+  ot_synthesized: "Whether this row's overtime clock/period fields were synthesized rather than sourced directly -- stats.ncaa.org reports no running clock in overtime, so OT plays are assigned a synthetic countdown."
 load_ncaa_mfb_drives:
   season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
+  end_how: "How the drive ended (e.g. 'Touchdown', 'Punt', 'Interception', 'Fumble', 'End of Half')."
+  n_plays: "Number of plays run during the drive."
+  quarter: "Quarter in which the drive started (1-4 for regulation, 5+ for overtime periods)."
+  start_how: "How the drive began (e.g. 'Kickoff', 'Interception', 'Fumble', 'Downs', 'Punt')."
 load_ncaa_mfb_schedule:
   season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
+  academic_year: "Academic year the game was played in (the ENDING year of the fall/spring split, e.g. 2025 for the 2024 fall season) -- distinct from `season`, which is the STARTING year."
+  outcome: "Result of the game from the home team's perspective (e.g. 'W', 'L', 'T')."
 load_ncaa_mfb_rosters:
   season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
+  academic_year: "Academic year the roster snapshot covers (the ENDING year of the fall/spring split) -- distinct from `season`, which is the STARTING year."
+  player_class: "Player's academic/eligibility class (e.g. 'FR', 'SO', 'JR', 'SR', 'GR')."
+  statcrew_jersey: "Jersey number as recorded in the NCAA StatCrew roster feed; can differ from the number a player actually wears on a given game day."
 load_ncaa_mfb_teams:
   season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
+  academic_year: "Academic year the team record covers (the ENDING year of the fall/spring split) -- distinct from `season`, which is the STARTING year."
 load_ncaa_mfb_team_stats:
   season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
+  away_value: "Team-stat value for the away team; each row is one stat category for one game, wide by side."
+  home_value: "Team-stat value for the home team; each row is one stat category for one game, wide by side."
 load_ncaa_mfb_player_stats:
   season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
+  long_pass: "Longest completed pass of the game."
+  long_rec: "Longest reception of the game."
+  pass_eff: "Passer efficiency rating for the game, per the NCAA passer-rating formula."
+  rec: "Total receptions for the game."
+  rec_td: "Receiving touchdowns."
+  rush_long: "Longest single rush of the game."
+  rush_yds_gained: "Total positive rushing yards gained on carries, before subtracting yards lost to tackles for loss."
+  rush_yds_lost: "Total rushing yards lost to tackles for loss on carries."
+  yards_per_reception: "Receiving yards divided by receptions."
+  yds_per_completion: "Passing yards divided by completions."
+  yds_rush: "Net rushing yards (rush_yds_gained minus rush_yds_lost)."
 load_ncaa_mfb_officials:
   season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
 load_ncaa_mfb_linescore:
   season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
+espn_wbb_game_officials:
+  season: "Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted."
+espn_wnba_game_officials:
+  season: "Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted."
+load_wbb_player_boxscore:
+  season: "Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted."
+load_wbb_player_core:
+  season: "Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted."
+load_wbb_player_crosswalk:
+  season: "Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted."
+load_wbb_rosters:
+  season: "Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted."
+load_wbb_schedule_crosswalk:
+  season: "Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted."
+load_wbb_team_crosswalk:
+  season: "Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted."
+load_wnba_player_boxscore:
+  season: "Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted."
+load_wnba_player_core:
+  season: "Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted."
+load_wnba_rosters:
+  season: "Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted."
+load_wnba_stats_game_rosters:
+  season: "Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted."
+load_wnba_stats_officials:
+  season: "Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted."
+load_wnba_stats_player_boxscores:
+  season: "Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted."
+load_wnba_stats_shots:
+  season: "Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted."
+load_wnba_stats_team_boxscores:
+  season: "Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted."
+load_wnba_team_crosswalk:
+  season: "Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted."

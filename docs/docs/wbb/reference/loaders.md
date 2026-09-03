@@ -76,7 +76,7 @@ Release: [espn_womens_college_basketball_pbp](https://github.com/sportsdataverse
 | `athlete_id_1` | Int32 | Primary athlete identifier (e.g. shooter). |
 | `athlete_id_2` | Int32 | Secondary athlete identifier (e.g. assister / fouler). |
 | `game_id` | Int32 | Unique game identifier. |
-| `season` | Int32 | Season identifier (4-digit year or 'YYYY-YY' string). |
+| `season` | Int32 | Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted. |
 | `season_type` | Int32 | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
 | `home_team_id` | Int32 | Unique identifier for the home team. |
 | `home_team_name` | String | Home team name. |
@@ -131,7 +131,7 @@ Release: [espn_womens_college_basketball_player_boxscores](https://github.com/sp
 | col_name | type | description |
 |---|---|---|
 | `game_id` | Int32 | Unique game identifier. |
-| `season` | Int32 | Season identifier (4-digit year or 'YYYY-YY' string). |
+| `season` | Int32 | Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted. |
 | `season_type` | Int32 | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
 | `game_date` | Date | Game date (YYYY-MM-DD). |
 | `game_date_time` | Datetime(time_unit='us', time_zone='America/New_York') | Game start date/time (ISO 8601). |
@@ -268,7 +268,7 @@ Release: [espn_womens_college_basketball_schedules](https://github.com/sportsdat
 | `away_linescores` | String | Period-by-period scores for the away team as a delimited string from ESPN's schedule feed. |
 | `away_records` | String | Record strings (overall and split records) for the away team from ESPN's schedule feed. |
 | `game_id` | Int32 | Unique game identifier. |
-| `season` | Int32 | Season identifier (4-digit year or 'YYYY-YY' string). |
+| `season` | Int32 | Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted. |
 | `season_type` | Int32 | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
 | `status_type_alt_detail` | String | Status type alt detail. |
 | `tournament_id` | Int32 | ESPN tournament identifier. |
@@ -296,7 +296,7 @@ Release: [espn_womens_college_basketball_team_boxscores](https://github.com/spor
 | col_name | type | description |
 |---|---|---|
 | `game_id` | Int32 | Unique game identifier. |
-| `season` | Int32 | Season identifier (4-digit year or 'YYYY-YY' string). |
+| `season` | Int32 | Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted. |
 | `season_type` | Int32 | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
 | `game_date` | Date | Game date (YYYY-MM-DD). |
 | `game_date_time` | Datetime(time_unit='us', time_zone='America/New_York') | Game start date/time (ISO 8601). |
@@ -365,7 +365,7 @@ Release: [wbb_ratings](https://github.com/sportsdataverse/sportsdataverse-data/r
 
 | col_name | type | description |
 |---|---|---|
-| `season` | Int64 | Season identifier (4-digit year or 'YYYY-YY' string). |
+| `season` | Int64 | Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted. |
 | `team_id` | String | Unique team identifier. |
 | `adj_o` | Float64 | Adj o. |
 | `adj_d` | Float64 | Adj d. |
@@ -390,7 +390,7 @@ Release: [wbb_player_value](https://github.com/sportsdataverse/sportsdataverse-d
 |---|---|---|
 | `player_id` | String | Unique player identifier. |
 | `player` | String | Player name. |
-| `season` | Int64 | Season identifier (4-digit year or 'YYYY-YY' string). |
+| `season` | Int64 | Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted. |
 | `team_id` | String | Unique team identifier. |
 | `min` | Float64 | Minutes played. |
 | `box_obpm` | Float64 | Box-score offensive plus/minus for the player, the offensive half of box BPM. |
@@ -408,7 +408,7 @@ Release: [espn_womens_college_basketball_game_rosters](https://github.com/sports
 
 | col_name | type | description |
 |---|---|---|
-| `season` | Int32 | Season identifier (4-digit year or 'YYYY-YY' string). |
+| `season` | Int32 | Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted. |
 | `game_id` | String | Unique game identifier. |
 | `team_id` | Int32 | Unique team identifier. |
 | `team_slug` | String | URL-safe team identifier (e.g. 'lasvegas-aces' / 'aces'). |
@@ -442,7 +442,7 @@ Release: [espn_womens_college_basketball_officials](https://github.com/sportsdat
 
 | col_name | type | description |
 |---|---|---|
-| `season` | Int32 | Season identifier (4-digit year or 'YYYY-YY' string). |
+| `season` | Int32 | Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted. |
 | `game_id` | String | Unique game identifier. |
 | `official_id` | Int32 | Unique official / referee identifier. |
 | `official_uid` | String | ESPN's globally unique resource identifier for the official, read from the core-api items[] uid key; that payload never ships it, so the column is null for every published row. |
@@ -465,7 +465,7 @@ Release: [espn_womens_college_basketball_player_season_stats](https://github.com
 
 | col_name | type | description |
 |---|---|---|
-| `season` | Int32 | Season identifier (4-digit year or 'YYYY-YY' string). |
+| `season` | Int32 | Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted. |
 | `athlete_id` | Int32 | Unique athlete identifier (ESPN). |
 | `athlete_display_name` | String | Athlete display name (full). |
 | `athlete_first_name` | String | Player first name; `athlete_detail = TRUE` only. |
@@ -493,7 +493,7 @@ Release: [espn_womens_college_basketball_rosters](https://github.com/sportsdatav
 
 | col_name | type | description |
 |---|---|---|
-| `season` | Int32 | Season identifier (4-digit year or 'YYYY-YY' string). |
+| `season` | Int32 | Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted. |
 | `team_id` | Int32 | Unique team identifier. |
 | `team_slug` | String | URL-safe team identifier (e.g. 'lasvegas-aces' / 'aces'). |
 | `team_abbreviation` | String | Short team abbreviation (e.g. 'LAS'). |
@@ -542,7 +542,7 @@ Release: [espn_womens_college_basketball_shots](https://github.com/sportsdataver
 | col_name | type | description |
 |---|---|---|
 | `game_id` | Int32 | Unique game identifier. |
-| `season` | Int32 | Season identifier (4-digit year or 'YYYY-YY' string). |
+| `season` | Int32 | Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted. |
 | `period_number` | Int32 | Numeric period (1-4 for quarters; 5+ for OT). |
 | `clock_display_value` | String | Game clock display string (e.g. '8:32'). |
 | `team_id` | Int32 | Unique team identifier. |
@@ -573,7 +573,7 @@ Release: [espn_womens_college_basketball_standings](https://github.com/sportsdat
 
 | col_name | type | description |
 |---|---|---|
-| `season` | Int32 | Season identifier (4-digit year or 'YYYY-YY' string). |
+| `season` | Int32 | Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted. |
 | `group_id` | String | ESPN group id. |
 | `group_name` | String | Group name (conference / division). |
 | `group_abbreviation` | String | Group abbreviation. |
@@ -609,7 +609,7 @@ Release: [espn_womens_college_basketball_team_season_stats](https://github.com/s
 
 | col_name | type | description |
 |---|---|---|
-| `season` | Int32 | Season identifier (4-digit year or 'YYYY-YY' string). |
+| `season` | Int32 | Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted. |
 | `team_id` | Int32 | Unique team identifier. |
 | `team_slug` | String | URL-safe team identifier (e.g. 'lasvegas-aces' / 'aces'). |
 | `team_abbreviation` | String | Short team abbreviation (e.g. 'LAS'). |
@@ -637,7 +637,7 @@ Release: [wbb_crosswalk](https://github.com/sportsdataverse/sportsdataverse-data
 
 | col_name | type | description |
 |---|---|---|
-| `season` | Int32 | Season identifier (4-digit year or 'YYYY-YY' string). |
+| `season` | Int32 | Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted. |
 | `espn_team_id` | Int32 | ESPN team id (canonical key). |
 | `team_abbreviation` | String | Short team abbreviation (e.g. 'LAS'). |
 | `player_name` | String | Player name. |
@@ -666,7 +666,7 @@ Release: [wbb_crosswalk](https://github.com/sportsdataverse/sportsdataverse-data
 
 | col_name | type | description |
 |---|---|---|
-| `season` | Int32 | Season identifier (4-digit year or 'YYYY-YY' string). |
+| `season` | Int32 | Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted. |
 | `game_date` | Date | Game date (YYYY-MM-DD). |
 | `home_espn_team_id` | Int32 | ESPN home team id (NA for bart-only rows). |
 | `away_espn_team_id` | Int32 | ESPN away team id (NA for bart-only rows). |
@@ -691,7 +691,7 @@ Release: [wbb_crosswalk](https://github.com/sportsdataverse/sportsdataverse-data
 
 | col_name | type | description |
 |---|---|---|
-| `season` | Int32 | Season identifier (4-digit year or 'YYYY-YY' string). |
+| `season` | Int32 | Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted. |
 | `espn_team_id` | Int32 | ESPN team id (canonical key). |
 | `espn_abbreviation` | String | ESPN abbreviation. |
 | `espn_display_name` | String | ESPN display name (school + mascot). |
@@ -721,7 +721,7 @@ Release: [espn_womens_college_basketball_player_core](https://github.com/sportsd
 
 | col_name | type | description |
 |---|---|---|
-| `season` | Int32 | Season identifier (4-digit year or 'YYYY-YY' string). |
+| `season` | Int32 | Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted. |
 | `athlete_id` | Int64 | Unique athlete identifier (ESPN). |
 | `guid` | String | Stable cross-league team GUID. |
 | `uid` | String | ESPN UID string. |
@@ -774,12 +774,12 @@ Release: [ncaa_wbb_rapm](https://github.com/sportsdataverse/sportsdataverse-data
 | `person_id` | String | Unique player identifier (V3 endpoints). |
 | `player` | String | Player name. |
 | `team` | String | Team-side label or team identifier. |
-| `orapm` | Float64 |  |
-| `drapm` | Float64 |  |
-| `rapm_net` | Float64 |  |
-| `off_poss` | Int64 |  |
-| `def_poss` | Int64 |  |
-| `estimand` | String |  |
+| `orapm` | Float64 | Offensive regularized adjusted plus-minus: points contributed per 100 possessions on offense, adjusted for the other 9 players on the floor. |
+| `drapm` | Float64 | Defensive regularized adjusted plus-minus: points allowed per 100 possessions on defense, adjusted for the other 9 players on the floor. |
+| `rapm_net` | Float64 | Net RAPM (orapm minus drapm): overall point contribution per 100 possessions. |
+| `off_poss` | Int64 | Offensive possessions the player was on court for; the regression weight behind orapm. |
+| `def_poss` | Int64 | Defensive possessions the player was on court for; the regression weight behind drapm. |
+| `estimand` | String | Which RAPM quantity this row's coefficient estimates ('offense', 'defense', or 'net') -- one row per player per estimand. |
 
 ```python
 load_ncaa_wbb_rapm(seasons=2024)

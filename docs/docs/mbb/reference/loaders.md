@@ -1433,12 +1433,12 @@ Release: [ncaa_mbb_rapm](https://github.com/sportsdataverse/sportsdataverse-data
 | `person_id` | String | Unique player identifier (V3 endpoints). |
 | `player` | String | Player name. |
 | `team` | String | Team-side label or team identifier. |
-| `orapm` | Float64 |  |
-| `drapm` | Float64 |  |
-| `rapm_net` | Float64 |  |
-| `off_poss` | Int64 |  |
-| `def_poss` | Int64 |  |
-| `estimand` | String |  |
+| `orapm` | Float64 | Offensive regularized adjusted plus-minus: points contributed per 100 possessions on offense, adjusted for the other 9 players on the floor. |
+| `drapm` | Float64 | Defensive regularized adjusted plus-minus: points allowed per 100 possessions on defense, adjusted for the other 9 players on the floor. |
+| `rapm_net` | Float64 | Net RAPM (orapm minus drapm): overall point contribution per 100 possessions. |
+| `off_poss` | Int64 | Offensive possessions the player was on court for; the regression weight behind orapm. |
+| `def_poss` | Int64 | Defensive possessions the player was on court for; the regression weight behind drapm. |
+| `estimand` | String | Which RAPM quantity this row's coefficient estimates ('offense', 'defense', or 'net') -- one row per player per estimand. |
 
 ```python
 load_ncaa_mbb_rapm(seasons=2024)

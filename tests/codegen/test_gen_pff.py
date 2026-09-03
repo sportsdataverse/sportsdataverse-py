@@ -61,7 +61,11 @@ def test_pff_registered_in_flat_apis():
 
     assert ("pff", "nfl") in g.FLAT_APIS
     assert "premium.pff.com" in g._FLAT_API_DOC["pff"]
-    assert "native/pff" in x._DEFERRED_BUCKETS
+    # native/pff graduated off the deferred-columns backlog (fully backfilled,
+    # 2026-09-03) -- assert it stays fully covered rather than merely deferred.
+    assert "native/pff" not in x._DEFERRED_BUCKETS
+    uncovered = [r for r in x.iter_schema_columns() if r["bucket"] == "native/pff" and x._uncovered(r)]
+    assert not uncovered, f"native/pff regressed: {len(uncovered)} columns lost their description"
 
 
 def test_pff_descriptions_seeded():
