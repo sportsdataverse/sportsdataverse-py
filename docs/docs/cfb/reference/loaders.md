@@ -3447,7 +3447,7 @@ Release: [ncaa_mfb_pbp](https://github.com/sportsdataverse/sportsdataverse-data/
 | `end_yard_line` | String | Yard line at the end of the play. |
 | `play_text` | String | Free-form text description of the play from the CFBD feed. |
 | `espn_game_id` | String | ESPN game id (NA for bart-only rows). |
-| `season` | Int64 | Season (4-digit year). |
+| `season` | Int64 | Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted. |
 
 ```python
 load_ncaa_mfb_pbp(seasons=2024)
@@ -3467,7 +3467,7 @@ Release: [ncaa_mfb_pbp_cfbfastr](https://github.com/sportsdataverse/sportsdatave
 | `half_play_number` | Int64 | Sequential play number within the current half. |
 | `drive_play_number` | Int64 | Sequential play number within the current drive. |
 | `drive_number` | Int64 | Sequential drive number within the game (1-indexed). |
-| `season` | Int64 | Season (4-digit year). |
+| `season` | Int64 | Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted. |
 | `year` | Int64 | Four-digit season year (e.g. 2019). |
 | `week` | Int64 | Game week of the season. |
 | `period` | Int64 | Period (quarter) number. |
@@ -3593,7 +3593,7 @@ Release: [ncaa_mfb_drives](https://github.com/sportsdataverse/sportsdataverse-da
 | `n_plays` | Int64 |  |
 | `yards` | Int64 | Total yards gained on the drive. |
 | `espn_game_id` | String | ESPN game id (NA for bart-only rows). |
-| `season` | Int64 | Season (4-digit year). |
+| `season` | Int64 | Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted. |
 
 ```python
 load_ncaa_mfb_drives(seasons=2024)
@@ -3618,7 +3618,7 @@ Release: [ncaa_mfb_schedule](https://github.com/sportsdataverse/sportsdataverse-
 | `contest_id` | String | stats.ncaa.org contest (game) identifier. |
 | `attendance` | Int64 | Reported attendance at the game. |
 | `academic_year` | Int32 |  |
-| `season` | Int64 | Season (4-digit year). |
+| `season` | Int64 | Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted. |
 
 ```python
 load_ncaa_mfb_schedule(seasons=2024)
@@ -3646,7 +3646,7 @@ Release: [ncaa_mfb_rosters](https://github.com/sportsdataverse/sportsdataverse-d
 | `games_played` | Int64 | Games played. |
 | `games_started` | Int64 | Games started (goalies). |
 | `academic_year` | Int32 |  |
-| `season` | Int64 | Season (4-digit year). |
+| `season` | Int64 | Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted. |
 
 ```python
 load_ncaa_mfb_rosters(seasons=2024)
@@ -3663,7 +3663,7 @@ Release: [ncaa_mfb_teams](https://github.com/sportsdataverse/sportsdataverse-dat
 | `team_name` | String | Team nickname; `team_detail = TRUE` only. |
 | `academic_year` | Int32 |  |
 | `division` | Int32 | Division in the conference for the team. |
-| `season` | Int64 | Season (4-digit year). |
+| `season` | Int64 | Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted. |
 
 ```python
 load_ncaa_mfb_teams(seasons=2024)
@@ -3685,7 +3685,7 @@ Release: [ncaa_mfb_team_stats](https://github.com/sportsdataverse/sportsdatavers
 | `home_team` | String | Home team name. |
 | `home_value` | String |  |
 | `espn_game_id` | String | ESPN game id (NA for bart-only rows). |
-| `season` | Int64 | Season (4-digit year). |
+| `season` | Int64 | Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted. |
 
 ```python
 load_ncaa_mfb_team_stats(seasons=2024)
@@ -3725,7 +3725,7 @@ Release: [ncaa_mfb_player_stats](https://github.com/sportsdataverse/sportsdatave
 | `yards_per_reception` | String |  |
 | `rec_td` | String |  |
 | `long_rec` | String |  |
-| `season` | Int64 | Season (4-digit year). |
+| `season` | Int64 | Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted. |
 
 ```python
 load_ncaa_mfb_player_stats(seasons=2024)
@@ -3742,7 +3742,7 @@ Release: [ncaa_mfb_officials](https://github.com/sportsdataverse/sportsdataverse
 | `role` | String | Grouped official role (Referee/Linesperson). |
 | `official` | String | Flag indicating that the media item comes from the official league feed rather than an editorial source. |
 | `espn_game_id` | String | ESPN game id (NA for bart-only rows). |
-| `season` | Int64 | Season (4-digit year). |
+| `season` | Int64 | Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted. |
 
 ```python
 load_ncaa_mfb_officials(seasons=2024)
@@ -3765,7 +3765,7 @@ Release: [ncaa_mfb_linescore](https://github.com/sportsdataverse/sportsdataverse
 | `venue` | String | Venue name. |
 | `attendance` | Int64 | Reported attendance at the game. |
 | `espn_game_id` | String | ESPN game id (NA for bart-only rows). |
-| `season` | Int64 | Season (4-digit year). |
+| `season` | Int64 | Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted. |
 
 ```python
 load_ncaa_mfb_linescore(seasons=2024)
