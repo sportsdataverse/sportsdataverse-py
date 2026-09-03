@@ -128,7 +128,7 @@ def test_build_unknown_league_raises():
 def test_enrich_xfl_pbp_produces_model_columns():
     pbp = build_spring_football_pbp(_xfl_summary(), league="xfl")
     out = enrich_spring_football_pbp(pbp, league="xfl")
-    for col in ("ep", "epa", "wp", "wpa"):
+    for col in ("ep", "epa", "wp", "wpa", "vegas_wp"):
         assert col in out.columns
         assert out[col].drop_nulls().len() > 0
     assert out.select(pl.col("epa").drop_nulls().is_finite().all()).item()
