@@ -35,6 +35,8 @@ actually reached the scorer for kickoff / down-NA rows.
 
 from __future__ import annotations
 
+import math
+
 import polars as pl
 import pytest
 
@@ -406,8 +408,26 @@ class TestLeadDiffWiring:
         out_g1 = enrich_nfl_pbp(g1, method="lead_diff")
         merged = out.filter(pl.col("game_id") == "2023_01_AAA_BBB").sort("play_id")
         solo = out_g1.sort("play_id")
-        # epa column must match between the two-game and single-game runs
-        assert merged["epa"].to_list() == solo["epa"].to_list(), "epa leaked across game boundary"
+
+        # The epa column must match between the two-game and single-game runs.
+        #
+        # Compared with a tolerance, NOT `==`, and that is load-bearing: polars
+        # rewrites a division by a literal into a multiplication by its reciprocal
+        # on larger frames, so `(100 - yardline) / 10` is evaluated as `92.0 / 10.0`
+        # (0x1.2666666666666p+3) on the 5-row frame and as `92.0 * 0.1`
+        # (0x1.2666666666667p+3) on the 10-row one. That is a 1-ULP difference in
+        # `ep` which first-differencing carries into `epa` -- an artefact of frame
+        # SIZE, not of a cross-game leak. A real leak would move epa by whole
+        # points (the boundary play would derive from the other game's ep), so a
+        # 1e-9 tolerance still fails loudly on the thing this test exists to catch.
+        got, want = merged["epa"].to_list(), solo["epa"].to_list()
+        assert len(got) == len(want), "row count differs between the two runs"
+        for i, (a, b) in enumerate(zip(got, want)):
+            assert (a is None) == (b is None), f"epa null-ness differs at play {i + 1}: {a!r} vs {b!r}"
+            if a is not None:
+                assert math.isclose(a, b, rel_tol=1e-9, abs_tol=1e-9), (
+                    f"epa leaked across game boundary at play {i + 1}: {a!r} vs {b!r}"
+                )
 
     def test_idempotent(self, patched) -> None:  # noqa: ANN001
         once = enrich_nfl_pbp(_synthetic_frame(), method="lead_diff")
