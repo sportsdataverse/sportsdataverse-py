@@ -11,6 +11,7 @@ this port; XFL does).
 from __future__ import annotations
 
 import json
+import warnings
 from pathlib import Path
 
 import polars as pl
@@ -127,7 +128,7 @@ def test_build_unknown_league_raises():
 def test_enrich_xfl_pbp_produces_model_columns():
     pbp = build_spring_football_pbp(_xfl_summary(), league="xfl")
     out = enrich_spring_football_pbp(pbp, league="xfl")
-    for col in ("ep", "epa", "wp", "wpa"):
+    for col in ("ep", "epa", "wp", "wpa", "vegas_wp"):
         assert col in out.columns
         assert out[col].drop_nulls().len() > 0
     assert out.select(pl.col("epa").drop_nulls().is_finite().all()).item()
@@ -152,3 +153,43 @@ def test_enrich_unknown_league_raises():
     pbp = build_spring_football_pbp(_xfl_summary(), league="xfl")
     with pytest.raises(ValueError):
         enrich_spring_football_pbp(pbp, league="usfl")
+
+
+def test_spring_enrichment_output_contract():
+    """Pin which enrich outputs spring football actually populates.
+
+    The docstring used to promise ``cp``/``cpoe``/xYAC; all three come back
+    100% null, and cp/cpoe do so with no warning at all. The cause is upstream:
+    the builder emits ``air_yards`` and ``spread_line`` as all-null (no
+    air-yards charting, no betting market), so the CP and xYAC air-yards models
+    and the fourth-down surface have nothing to score.
+
+    This asserts the real contract in both directions. If the builder ever
+    gains genuine air yards, the "always null" half starts failing -- which is
+    the point: the docs claim these are structurally empty, and that claim
+    should not outlive the reason for it.
+    """
+    pbp = build_spring_football_pbp(_load_fixture("xfl_summary.json"), league="xfl")
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore")
+        out = enrich_spring_football_pbp(pbp, league="xfl")
+
+    assert out.height > 0
+
+    # The inputs whose absence causes everything below.
+    for col in ("air_yards", "spread_line"):
+        assert out[col].drop_nulls().len() == 0, f"{col} gained values — update the Returns note"
+
+    # Scored: EP/WP derive from down/distance/yardline/clock/score, all of which
+    # the builder does produce. Guard on a share, not an exact count, so a
+    # re-captured fixture does not turn a working pipeline red.
+    for col in ("ep", "epa", "wp", "wpa", "vegas_wp"):
+        filled = out[col].drop_nulls().len()
+        assert filled >= 0.9 * out.height, f"{col} only {filled}/{out.height} populated"
+
+    # Structurally empty for these leagues — see the function's Returns note.
+    for col in ("cp", "cpoe", "xyac_epa", "first_down_prob", "go_boost"):
+        assert out[col].drop_nulls().len() == 0, (
+            f"{col} is now populated for spring football — the Returns note in "
+            "enrich_spring_football_pbp says it cannot be, so one of them is wrong"
+        )

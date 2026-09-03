@@ -344,9 +344,31 @@ def enrich_spring_football_pbp(
         return_as_pandas: When ``True``, return a ``pandas.DataFrame``.
 
     Returns:
-        ``pbp`` with ``ep``/``epa``/``wp``/``wpa``/``cp``/``cpoe``/xYAC and
-        the other ``enrich_nfl_pbp`` output columns added. Unchanged
+        ``pbp`` with the ``enrich_nfl_pbp`` output columns added. Unchanged
         (zero-row) passthrough when ``pbp`` is empty.
+
+        **Not every output column is populated for spring football**, and the
+        ones that are not are structurally empty rather than occasionally
+        missing -- measured on the committed ``xfl_summary.json`` fixture
+        (159 plays):
+
+        * Populated: ``ep`` (158/159), ``epa`` (157), ``wp`` (158),
+          ``wpa`` (157), ``vegas_wp`` (158).
+        * **Always null**: ``cp``, ``cpoe``, every ``xyac_*`` column, and the
+          fourth-down surface (``first_down_prob``, ``go_boost``,
+          ``fourth_down_recommendation``).
+
+        The cause is upstream of the scorers: :func:`build_spring_football_pbp`
+        emits ``air_yards`` and ``spread_line`` as all-null, because these
+        leagues publish no air-yards charting and carry no betting market. CP
+        and xYAC are air-yards models and the fourth-down surface needs
+        ``total_line``, so none of them has an input to score. They are not
+        broken here and cannot be fixed here -- they would start working the
+        day the builder gains real air yards, which is what
+        ``test_spring_enrichment_output_contract`` is there to notice.
+        The skipped steps emit a ``RuntimeWarning`` per call; that noise is
+        kept on purpose, because suppressing it via ``add_fourth_down=False``
+        would drop 15 columns and break the nfl_parity column-set equality.
 
     Raises:
         ValueError: ``league`` is not a recognized spring-football league.
@@ -367,4 +389,10 @@ def enrich_spring_football_pbp(
     if pbp.height == 0:
         return pbp.to_pandas() if return_as_pandas else pbp
 
+    # Deliberately UNCHANGED -- no add_fourth_down=False here. Passing it would
+    # silence the per-call warning, but it also drops 15 columns and breaks the
+    # "calls enrich_nfl_pbp unchanged" property the nfl_parity tests exist to
+    # prove (test_nfl_parity_shared_core compares column sets exactly). The
+    # warning is the cheaper cost; see the Returns note for why the fourth-down
+    # and air-yards outputs are null for these leagues.
     return enrich_nfl_pbp(pbp, return_as_pandas=return_as_pandas)
