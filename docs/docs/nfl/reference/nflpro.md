@@ -1147,7 +1147,7 @@ GET /api/secured/stats/fantasy/season — one row per player for the season — 
 | `limit` | `limit` |  |  | `Y` | Page size. Responses truncate silently at this many rows; the getter pages on ``offset`` until it has them all. |
 | `offset` | `offset` |  |  | `Y` | Zero-based row offset. The getter pages on this automatically; set it only to fetch a specific slice. |
 | `nflId` | `nfl_id` |  |  | `Y` | Optional player filter. |
-| `positionGroup` | `position_group` |  |  | `Y` | Position group, e.g. ``QB``. Required by the ``game`` scope, which 500s without it. |
+| `positionGroup` | `position_group` |  |  | `Y` | Optional position-group filter, e.g. ``QB``. Optional on this season scope — it is the ``game`` scope that requires it. |
 | `sortKey` | `sort_key` |  |  | `Y` | Field name to sort by, e.g. ``fpHalfPPR``. |
 | `sortValue` | `sort_value` |  |  | `Y` | Sort direction: ``ASC`` or ``DESC``. |
 
@@ -1373,7 +1373,7 @@ GET /api/secured/stats/fantasy/game — one row per player-game — fantasy scor
 | `limit` | `limit` |  |  | `Y` | Page size. Responses truncate silently at this many rows; the getter pages on ``offset`` until it has them all. |
 | `offset` | `offset` |  |  | `Y` | Zero-based row offset. The getter pages on this automatically; set it only to fetch a specific slice. |
 | `nflId` | `nfl_id` |  |  | `Y` | Optional player filter. |
-| `positionGroup` | `position_group` |  |  | `Y` | Position group, e.g. ``QB``. Required by the ``game`` scope, which 500s without it. |
+| `positionGroup` | `position_group` |  | `Y` |  | Position group, e.g. ``QB``. **Required**: this scope returns HTTP 500 without it, so it is a required argument rather than an optional filter. |
 | `sortKey` | `sort_key` |  |  | `Y` | Field name to sort by, e.g. ``fpHalfPPR``. |
 | `sortValue` | `sort_value` |  |  | `Y` | Sort direction: ``ASC`` or ``DESC``. |
 

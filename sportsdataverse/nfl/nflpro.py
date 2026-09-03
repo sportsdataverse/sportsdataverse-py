@@ -1045,12 +1045,12 @@ def nfl_pro_fantasy_season(
 
 
 def nfl_pro_fantasy_game(
+    position_group: str,
     season: Optional[int] = 2024,
     season_type: Optional[str] = "REG",
     limit: Optional[int] = 500,
     offset: Optional[int] = None,
     nfl_id: Optional[int] = None,
-    position_group: Optional[str] = None,
     sort_key: Optional[str] = None,
     sort_value: Optional[str] = None,
     headers: Optional[Dict[str, str]] = None,

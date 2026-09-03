@@ -231,7 +231,7 @@ endpoints:
   - {name: limit, query_key: limit, type: int, default: 500, description: "Page size. Responses truncate silently at this many rows; the getter pages on ``offset`` until it has them all."}
   - {name: offset, query_key: offset, type: int, default: null, description: "Zero-based row offset. The getter pages on this automatically; set it only to fetch a specific slice."}
   - {name: nfl_id, query_key: nflId, type: int, default: null, description: "Optional player filter."}
-  - {name: position_group, query_key: positionGroup, type: str, default: null, description: "Position group, e.g. ``QB``. Required by the ``game`` scope, which 500s without it."}
+  - {name: position_group, query_key: positionGroup, type: str, default: null, description: "Optional position-group filter, e.g. ``QB``. Optional on this season scope — it is the ``game`` scope that requires it."}
   - {name: sort_key, query_key: sortKey, type: str, default: null, description: "Field name to sort by, e.g. ``fpHalfPPR``."}
   - {name: sort_value, query_key: sortValue, type: str, default: null, description: "Sort direction: ``ASC`` or ``DESC``."}
   example_args: {season: 2024, season_type: REG}
@@ -246,7 +246,7 @@ endpoints:
   - {name: limit, query_key: limit, type: int, default: 500, description: "Page size. Responses truncate silently at this many rows; the getter pages on ``offset`` until it has them all."}
   - {name: offset, query_key: offset, type: int, default: null, description: "Zero-based row offset. The getter pages on this automatically; set it only to fetch a specific slice."}
   - {name: nfl_id, query_key: nflId, type: int, default: null, description: "Optional player filter."}
-  - {name: position_group, query_key: positionGroup, type: str, default: null, description: "Position group, e.g. ``QB``. Required by the ``game`` scope, which 500s without it."}
+  - {name: position_group, query_key: positionGroup, type: str, required: true, description: "Position group, e.g. ``QB``. **Required**: this scope returns HTTP 500 without it, so it is a required argument rather than an optional filter."}
   - {name: sort_key, query_key: sortKey, type: str, default: null, description: "Field name to sort by, e.g. ``fpHalfPPR``."}
   - {name: sort_value, query_key: sortValue, type: str, default: null, description: "Sort direction: ``ASC`` or ``DESC``."}
   example_args: {season: 2024, season_type: REG, position_group: QB}
