@@ -328,8 +328,15 @@ def _get(
                 # A missing required param (e.g. `position_group` on fantasy/game)
                 # surfaces as a bare 500 with no field named in a bare requests
                 # HTTPError. The body usually names the failed request -- surface it.
+                #
+                # Mutate the ORIGINAL exception's args and re-raise it bare, rather
+                # than constructing a new instance: requests.HTTPError carries
+                # `.response`/`.request` set by raise_for_status(), and a fresh
+                # `type(exc)(...)` call would silently drop both, so a caller
+                # inspecting `exc.response.status_code` would find None.
                 detail = (getattr(resp, "text", "") or "")[:300]
-                raise type(exc)(f"{exc} -- response body: {detail}") from exc
+                exc.args = (f"{exc} -- response body: {detail}",)
+                raise
         text = getattr(resp, "text", "") or ""
         if not text.strip():
             raise ValueError(

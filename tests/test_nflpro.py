@@ -198,11 +198,16 @@ def test_http_error_surfaces_the_response_body(monkeypatch):
             self.text = '{"ok":false,"status":500,"statusText":"missing positionGroup"}'
 
         def raise_for_status(self):
-            raise Exception("500 Server Error")
+            exc = Exception("500 Server Error")
+            exc.response = self  # what requests.HTTPError carries in real life
+            raise exc
 
     monkeypatch.setattr("sportsdataverse.nfl.nflpro_runtime.download", lambda **kw: Failing())
-    with pytest.raises(Exception, match="missing positionGroup"):
+    with pytest.raises(Exception, match="missing positionGroup") as exc_info:
         _get("https://pro.nfl.com/api/secured/stats/fantasy/game", {}, headers={"a": "b"})
+    # A caller inspecting exc.response must still find it -- a fresh
+    # type(exc)(...) instance would have silently dropped it.
+    assert exc_info.value.response is not None
 
 
 def test_missing_total_still_pages_on_a_full_page(monkeypatch):
