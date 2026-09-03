@@ -15,7 +15,7 @@ from __future__ import annotations
 
 import logging
 import re
-from typing import TYPE_CHECKING, Any, Dict, List, Literal, Optional, Union, overload
+from typing import TYPE_CHECKING, Any, Dict, List, Literal, Optional, Sequence, Union, overload
 
 import polars as pl
 
@@ -88,11 +88,119 @@ def _uri_id(uri: Optional[str]) -> Optional[str]:
     return m.group(1) if m else None
 
 
-def _frame(rows: List[Dict[str, Any]], return_as_pandas: bool) -> Union[pl.DataFrame, "pd.DataFrame"]:
+# Stable column sets -- what each parser always emits, so an empty response still
+# carries a usable schema. Captured from live responses 2026-09-02, not guessed.
+# Fox serialises every value as a string, hence Utf8 throughout.
+_TEAMS_COLUMNS: Sequence[str] = (
+    "fox_team_id",
+    "abbreviation",
+    "name",
+    "slug",
+    "color",
+    "logo_url",
+)
+_SCHEDULE_COLUMNS: Sequence[str] = (
+    "game_id",
+    "date",
+    "status",
+    "week_label",
+    "home_team",
+    "home_team_id",
+    "away_team",
+    "away_team_id",
+    "segment_id",
+)
+_PBP_COLUMNS: Sequence[str] = (
+    "game_id",
+    "quarter",
+    "drive_id",
+    "drive_result",
+    "drive_summary",
+    "drive_team",
+    "play_id",
+    "period",
+    "clock",
+    "field_position",
+    "play_text",
+    "play_team",
+)
+_TEAM_ROSTER_COLUMNS: Sequence[str] = (
+    "team_id",
+    "position_group",
+    "player",
+    "pos",
+    "cls",
+    "ht",
+    "wt",
+    "athlete_id",
+)
+_BOXSCORE_COLUMNS: Sequence[str] = (
+    "game_id",
+    "team",
+    "stat_group",
+    "player",
+    "athlete_id",
+    "stat",
+    "value",
+)
+_STANDINGS_COLUMNS: Sequence[str] = (
+    "team_id",
+    "section",
+    "entity_id",
+)
+_TEAM_STATS_COLUMNS: Sequence[str] = (
+    "team_id",
+    "category",
+    "stat",
+    "stat_abbreviation",
+    "player",
+    "value",
+)
+_TEAM_GAMELOG_COLUMNS: Sequence[str] = (
+    "team_id",
+    "season_type",
+    "category",
+    "game_id",
+    "game_date",
+    "opponent",
+    "stat",
+    "value",
+)
+_ODDS_COLUMNS: Sequence[str] = (
+    "game_id",
+    "team",
+    "spread",
+    "to_win",
+    "total",
+)
+# league_leaders is deliberately absent: every one of its columns is response-shaped
+# (the stat category becomes the columns), so there is no stable set to declare.
+
+
+def _frame(
+    rows: List[Dict[str, Any]],
+    return_as_pandas: bool,
+    columns: Optional[Sequence[str]] = None,
+) -> Union[pl.DataFrame, "pd.DataFrame"]:
+    """Rows -> frame, carrying the documented schema when there are no rows.
+
+    A bare ``pl.DataFrame([])`` is zero-COLUMN, not just zero-row, which makes an
+    upstream-empty response indistinguishable from a broken parser: both surface
+    as a frame with nothing in it, and a caller checking ``df.columns`` learns
+    nothing. Fox returns empty payloads routinely -- a team's gamelog in week 1,
+    a category with no qualifiers -- so this is the normal path, not the edge.
+
+    ``columns`` is the stable key set the parser always emits. Populated frames
+    may be wider (``standings`` and ``league_leaders`` pivot response headers
+    into columns, so their shape depends on the conference or stat requested);
+    the guarantee is only that these keys are always present.
+    """
     if return_as_pandas:
         import pandas as pd
 
-        return pd.DataFrame(rows)
+        return pd.DataFrame(rows, columns=list(columns) if not rows and columns else None)
+    if not rows and columns:
+        return pl.DataFrame(schema={c: pl.Utf8 for c in columns})
     return pl.DataFrame(rows)
 
 
@@ -162,7 +270,7 @@ def fox_cfb_teams(
                 "logo_url": it.get("logoUrl"),
             }
         )
-    return _frame(rows, return_as_pandas)
+    return _frame(rows, return_as_pandas, _TEAMS_COLUMNS)
 
 
 def _fox_team_fullname(team: Optional[dict]) -> Optional[str]:
@@ -347,7 +455,7 @@ def fox_cfb_schedule(
             if gid is not None:
                 seen_games.add(gid)
             rows.append(row)
-    return _frame(rows, return_as_pandas)
+    return _frame(rows, return_as_pandas, _SCHEDULE_COLUMNS)
 
 
 @overload
@@ -420,7 +528,7 @@ def fox_cfb_pbp(
                         "play_team": (p.get("entityLink") or {}).get("title"),
                     }
                 )
-    return _frame(rows, return_as_pandas)
+    return _frame(rows, return_as_pandas, _PBP_COLUMNS)
 
 
 @overload
@@ -488,7 +596,7 @@ def fox_cfb_team_roster(
                 row[name] = val
             row["athlete_id"] = _uri_id(uri)
             rows.append(row)
-    return _frame(rows, return_as_pandas)
+    return _frame(rows, return_as_pandas, _TEAM_ROSTER_COLUMNS)
 
 
 @overload
@@ -567,7 +675,7 @@ def fox_cfb_boxscore(
                             "value": val,
                         }
                     )
-    return _frame(rows, return_as_pandas)
+    return _frame(rows, return_as_pandas, _BOXSCORE_COLUMNS)
 
 
 @overload
@@ -625,7 +733,7 @@ def fox_cfb_standings(
     for sec in raw.get("standingsSections", []) or []:
         for tbl in sec.get("standings", []) or []:  # a list of tables per section
             rows += _table_rows(tbl, extra={"team_id": str(team_id), "section": sec.get("title")})
-    return _frame(rows, return_as_pandas)
+    return _frame(rows, return_as_pandas, _STANDINGS_COLUMNS)
 
 
 @overload
@@ -690,7 +798,7 @@ def fox_cfb_team_stats(
                     "value": ld.get("statValue"),
                 }
             )
-    return _frame(rows, return_as_pandas)
+    return _frame(rows, return_as_pandas, _TEAM_STATS_COLUMNS)
 
 
 @overload
@@ -776,7 +884,7 @@ def fox_cfb_team_gamelog(
                             "value": val,
                         }
                     )
-    return _frame(rows, return_as_pandas)
+    return _frame(rows, return_as_pandas, _TEAM_GAMELOG_COLUMNS)
 
 
 @overload
@@ -921,4 +1029,4 @@ def fox_cfb_odds(
             for name, v in zip(names, r.get("values", []) or []):
                 row[name] = (v or {}).get("odds")
             rows.append(row)
-    return _frame(rows, return_as_pandas)
+    return _frame(rows, return_as_pandas, _ODDS_COLUMNS)

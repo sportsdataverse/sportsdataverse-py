@@ -85,10 +85,20 @@ def test_fox_cfb_team_stats():
 
 
 def test_fox_cfb_team_gamelog():
+    """The schema is asserted unconditionally; the row count only when Fox has rows.
+
+    A bare ``len(df) > 0`` here fails every offseason and every week 1 -- Fox
+    returns ``sectionList: []`` for a team with no games logged yet, which is an
+    upstream state, not a defect. Asserting the columns regardless is what keeps
+    this test able to catch a real parser break: if the parser stopped emitting
+    its keys, the column assertion fails whether or not Fox had data.
+    """
+    raw = fox_cfb_team_gamelog(TEAM, return_parsed=False)
     df = fox_cfb_team_gamelog(TEAM, return_as_pandas=False)
     assert isinstance(df, pl.DataFrame)
-    assert len(df) > 0
     assert {"team_id", "season_type", "category", "game_id", "stat", "value"}.issubset(df.columns)
+    if raw.get("sectionList"):
+        assert len(df) > 0
 
 
 def test_fox_cfb_standings():
