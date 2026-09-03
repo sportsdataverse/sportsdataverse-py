@@ -56,6 +56,7 @@ Divergences from the R wrappers, all deliberate:
 from __future__ import annotations
 
 import os
+import threading
 import time
 from typing import TYPE_CHECKING, Any, Dict, List, Optional
 
@@ -94,6 +95,7 @@ _DEFAULT_RATE_DELAY = 3.0
 # ponytail: module-global, not thread-safe. Concurrent scraping of this host is a
 # ban, not a speedup, so a per-thread budget would be the wrong upgrade anyway.
 _LAST_REQUEST = 0.0
+_THROTTLE_LOCK = threading.Lock()
 
 _PLAYER_TABLES = {
     "nba": ("per_game", "totals", "advanced", "per_minute", "per_poss"),
@@ -148,10 +150,15 @@ def _throttle() -> None:
     delay = _rate_delay()
     if delay <= 0:
         return
-    wait = delay - (time.monotonic() - _LAST_REQUEST)
-    if wait > 0:
-        time.sleep(wait)
-    _LAST_REQUEST = time.monotonic()
+    # Read, sleep and stamp under one lock. Unserialized, two threads compute
+    # `wait` from the same _LAST_REQUEST before either updates it, both sleep the
+    # same interval and then fire together -- which silently halves the pacing
+    # Basketball-Reference is being given and invites a temporary block.
+    with _THROTTLE_LOCK:
+        wait = delay - (time.monotonic() - _LAST_REQUEST)
+        if wait > 0:
+            time.sleep(wait)
+        _LAST_REQUEST = time.monotonic()
 
 
 def _bref_get(path: str, *, proxy: Any = None, **kwargs: Any) -> str:

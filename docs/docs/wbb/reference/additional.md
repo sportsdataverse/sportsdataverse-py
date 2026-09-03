@@ -6034,7 +6034,7 @@ position), so a single fetch covers the whole page.
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `team_link` | `str` |  | A team page path or full URL -- e.g. a link taken from the team-page column of `herhoopstats_teams`. |
+| `team_link` | `str` |  | A team page path, or an `https` URL on `herhoopstats.com` -- e.g. a link taken from the team-page column of `herhoopstats_teams`. Any other host is refused, because this argument steers an authenticated request. |
 | `email` | `Optional[str]` | `None` | Subscription e-mail; falls back to `HERHOOPSTATS_EMAIL`. |
 | `password` | `Optional[str]` | `None` | Subscription password; falls back to `HERHOOPSTATS_PW`. |
 | `return_as_pandas` | `bool` | `False` | Return `pandas.DataFrame` values instead of polars. |

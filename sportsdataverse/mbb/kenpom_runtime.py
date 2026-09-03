@@ -268,7 +268,7 @@ def parse_kenpom_page(
 
             from sportsdataverse.mbb import kenpom_ratings
 
-            tables = kenpom_ratings(y=2025)
+            tables = kenpom_ratings(year=2025)
             tables["ratings_table"].head()
     """
     tables = html_tables(raw, min_rows=2)

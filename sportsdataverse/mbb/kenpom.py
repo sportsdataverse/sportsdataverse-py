@@ -54,7 +54,7 @@ def kenpom_ratings(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, str]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], str]:
     """GET /index.php - Pomeroy season ratings (AdjEM/AdjO/AdjD/AdjT plus SOS, one row per team). Port of hoopR kp_pomeroy_ratings().
 
     Endpoint: ``GET https://kenpom.com/index.php``
@@ -110,7 +110,7 @@ def kenpom_efficiency(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, str]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], str]:
     """GET /summary.php - efficiency and tempo summary (adjusted and raw O/D/T, average possession length). Port of hoopR kp_efficiency().
 
     Endpoint: ``GET https://kenpom.com/summary.php``
@@ -166,7 +166,7 @@ def kenpom_four_factors(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, str]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], str]:
     """GET /stats.php - four-factors rankings (eFG%, TO%, OR%, FTRate on offense and defense). Port of hoopR kp_fourfactors().
 
     Endpoint: ``GET https://kenpom.com/stats.php``
@@ -222,7 +222,7 @@ def kenpom_point_distribution(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, str]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], str]:
     """GET /pointdist.php - share of points scored from 2s, 3s and free throws, offense and defense. Port of hoopR kp_pointdist().
 
     Endpoint: ``GET https://kenpom.com/pointdist.php``
@@ -278,7 +278,7 @@ def kenpom_height(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, str]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], str]:
     """GET /height.php - team height, effective height, experience, bench minutes and continuity. Port of hoopR kp_height().
 
     Endpoint: ``GET https://kenpom.com/height.php``
@@ -334,7 +334,7 @@ def kenpom_foul_trouble(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, str]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], str]:
     """GET /foul_trouble.php - team foul-trouble splits (minutes and efficiency with starters in foul trouble). Port of hoopR kp_foul_trouble().
 
     Endpoint: ``GET https://kenpom.com/foul_trouble.php``
@@ -391,7 +391,7 @@ def kenpom_team_stats(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, str]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], str]:
     """GET /teamstats.php - team shooting and style splits; side='o' for offense, 'd' for defense. Port of hoopR kp_teamstats().
 
     Endpoint: ``GET https://kenpom.com/teamstats.php``
@@ -452,7 +452,7 @@ def kenpom_player_stats(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, str]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], str]:
     """GET /playerstats.php - national player leaderboard for one metric. Port of hoopR kp_playerstats().
 
     Endpoint: ``GET https://kenpom.com/playerstats.php``
@@ -514,7 +514,7 @@ def kenpom_kpoy(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, str]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], str]:
     """GET /kpoy.php - KenPom Player of the Year standings and the game-MVP table. Port of hoopR kp_kpoy().
 
     Endpoint: ``GET https://kenpom.com/kpoy.php``
@@ -571,7 +571,7 @@ def kenpom_team(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, str]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], str]:
     """GET /team.php - a team's full season page. Returns EVERY table on it, so one call covers hoopR's kp_team_schedule(), kp_team_players(), kp_team_depth_chart() and kp_team_lineups(), which each fetch this same page separately.
 
     Endpoint: ``GET https://kenpom.com/team.php``
@@ -630,7 +630,7 @@ def kenpom_team_players_expanded(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, str]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], str]:
     """GET /player-expanded.php - a team's expanded per-player table plus the minutes matrix. Covers hoopR's kp_team_player_stats() and kp_minutes_matrix() in one fetch.
 
     Endpoint: ``GET https://kenpom.com/player-expanded.php``
@@ -689,7 +689,7 @@ def kenpom_game_plan(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, str]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], str]:
     """GET /gameplan.php - a team's game-plan page (per-game four factors and personnel splits). Port of hoopR kp_gameplan().
 
     Endpoint: ``GET https://kenpom.com/gameplan.php``
@@ -749,7 +749,7 @@ def kenpom_opponent_tracker(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, str]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], str]:
     """GET /opptracker.php - opponent tracker; side='o' for offense, 'd' for defense. Port of hoopR kp_opptracker().
 
     Endpoint: ``GET https://kenpom.com/opptracker.php``
@@ -809,7 +809,7 @@ def kenpom_player_career(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, str]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], str]:
     """GET /player.php - one player's career page (season-by-season stats and game log). Port of hoopR kp_player_career().
 
     Endpoint: ``GET https://kenpom.com/player.php``
@@ -866,7 +866,7 @@ def kenpom_box(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, str]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], str]:
     """GET /box.php - box-score detail for one game (per-team four factors, player lines, scoring runs). Port of hoopR kp_box().
 
     Endpoint: ``GET https://kenpom.com/box.php``
@@ -925,7 +925,7 @@ def kenpom_win_probability(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, str]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], str]:
     """GET /winprob.php - in-game win-probability table for one game. Port of hoopR kp_winprob().
 
     Endpoint: ``GET https://kenpom.com/winprob.php``
@@ -983,7 +983,7 @@ def kenpom_fan_match(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, str]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], str]:
     """GET /fanmatch.php - the FanMatch slate for one date (predictions, thrill score, results). Port of hoopR kp_fanmatch().
 
     Endpoint: ``GET https://kenpom.com/fanmatch.php``
@@ -1039,7 +1039,7 @@ def kenpom_team_history(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, str]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], str]:
     """GET /history.php?t= - a program's season-by-season history. Port of hoopR kp_team_history().
 
     Endpoint: ``GET https://kenpom.com/history.php``
@@ -1095,7 +1095,7 @@ def kenpom_coach_history(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, str]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], str]:
     """GET /history.php?c= - a coach's season-by-season history. Port of hoopR kp_coach_history().
 
     Endpoint: ``GET https://kenpom.com/history.php``
@@ -1150,7 +1150,7 @@ def kenpom_program_ratings(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, str]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], str]:
     """GET /programs.php - program-level ratings across the full KenPom era. Port of hoopR kp_program_ratings().
 
     Endpoint: ``GET https://kenpom.com/programs.php``
@@ -1203,7 +1203,7 @@ def kenpom_archive_ratings(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, str]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], str]:
     """GET /archive.php - the Pomeroy ratings as they stood on a past date. Port of hoopR kp_pomeroy_archive_ratings().
 
     Endpoint: ``GET https://kenpom.com/archive.php``
@@ -1260,7 +1260,7 @@ def kenpom_conference(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, str]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], str]:
     """GET /conf.php - one conference's season page (standings, efficiency, per-team splits). Port of hoopR kp_conf().
 
     Endpoint: ``GET https://kenpom.com/conf.php``
@@ -1318,7 +1318,7 @@ def kenpom_conference_stats(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, str]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], str]:
     """GET /confstats.php - league-wide conference comparison for one season. Port of hoopR kp_confstats().
 
     Endpoint: ``GET https://kenpom.com/confstats.php``
@@ -1374,7 +1374,7 @@ def kenpom_conference_history(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, str]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], str]:
     """GET /confhistory.php - one conference's season-by-season history. Port of hoopR kp_confhistory().
 
     Endpoint: ``GET https://kenpom.com/confhistory.php``
@@ -1429,7 +1429,7 @@ def kenpom_trends(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, str]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], str]:
     """GET /trends.php - national Division I trends by season (tempo, efficiency, shooting, fouls). Port of hoopR kp_trends().
 
     Endpoint: ``GET https://kenpom.com/trends.php``
@@ -1481,7 +1481,7 @@ def kenpom_home_court_advantage(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, str]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], str]:
     """GET /hca.php - per-team home-court advantage estimates. Port of hoopR kp_hca().
 
     Endpoint: ``GET https://kenpom.com/hca.php``
@@ -1534,7 +1534,7 @@ def kenpom_arenas(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, str]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], str]:
     """GET /arenas.php - arena reference (name, capacity, average attendance) by team. Port of hoopR kp_arenas().
 
     Endpoint: ``GET https://kenpom.com/arenas.php``
@@ -1590,7 +1590,7 @@ def kenpom_officials(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, str]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], str]:
     """GET /officials.php - referee ratings for one season. Port of hoopR kp_officials().
 
     Endpoint: ``GET https://kenpom.com/officials.php``
@@ -1647,7 +1647,7 @@ def kenpom_referee(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, str]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], str]:
     """GET /referee.php - one referee's game log and splits for a season. Port of hoopR kp_referee().
 
     Endpoint: ``GET https://kenpom.com/referee.php``
@@ -1706,7 +1706,7 @@ def kenpom_game_attributes(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, str]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], str]:
     """GET /game_attrs.php - season game leaderboards by attribute (thrill score, comebacks, upsets, ...). Port of hoopR kp_game_attrs().
 
     Endpoint: ``GET https://kenpom.com/game_attrs.php``

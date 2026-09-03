@@ -56,6 +56,7 @@ from __future__ import annotations
 import atexit
 import os
 import re
+import threading
 import time
 from datetime import datetime
 from typing import TYPE_CHECKING, Any, Callable, Dict, List, Optional, Sequence
@@ -104,6 +105,7 @@ _POLL_ENV = "SDV_PY_REALGM_POLL"
 
 # In-process browser session: one launch per idle window, shared by every endpoint, because
 # the Cloudflare clearance cookie lives on the context and re-earning it costs ~2s a page.
+_SESSION_LOCK = threading.RLock()
 _SESSION: Dict[str, Any] = {}
 
 _DIVISION_CONFERENCE = {
@@ -240,27 +242,39 @@ def _playwright_html(path: str, proxy: Optional[str] = None) -> str:
             html = _playwright_html("/nba/players")
     """
     resolved = _resolve_proxy(proxy)
-    page = _session_page(resolved)
-    delay = _env_float(_DELAY_ENV, 1.0)
-    last = _SESSION.get("last_fetch")
-    if last is not None and delay:
-        remaining = delay - (time.monotonic() - last)
-        if remaining > 0:
-            time.sleep(remaining)
-    wait = _env_float(_WAIT_ENV, 25.0)
-    poll = _env_float(_POLL_ENV, 1.5)
-    page.goto(f"{BASE_URL}{path}", wait_until="domcontentloaded", timeout=int(wait * 1000) or 30000)
-    deadline = time.monotonic() + wait
-    while True:
-        title = page.title() or ""
-        if title and not _CHALLENGE_TITLE.search(title):
-            break
-        if time.monotonic() >= deadline:
-            break
-        page.wait_for_timeout(int(poll * 1000))
-    html = page.content()
-    _SESSION["last_fetch"] = time.monotonic()
-    return str(html or "")
+    # One shared page per process, so the whole navigate -> poll -> content
+    # sequence has to be atomic. Interleaved, a second call's goto() can land
+    # between the first call's goto() and content(), and the first returns HTML
+    # from the WRONG endpoint -- a wrong-data bug, not just a slow one.
+    with _SESSION_LOCK:
+        page = _session_page(resolved)
+        delay = _env_float(_DELAY_ENV, 1.0)
+        last = _SESSION.get("last_fetch")
+        if last is not None and delay:
+            remaining = delay - (time.monotonic() - last)
+            if remaining > 0:
+                time.sleep(remaining)
+        wait = _env_float(_WAIT_ENV, 25.0)
+        poll = _env_float(_POLL_ENV, 1.5)
+        page.goto(f"{BASE_URL}{path}", wait_until="domcontentloaded", timeout=int(wait * 1000) or 30000)
+        deadline = time.monotonic() + wait
+        while True:
+            title = page.title() or ""
+            if title and not _CHALLENGE_TITLE.search(title):
+                break
+            if time.monotonic() >= deadline:
+                break
+            page.wait_for_timeout(int(poll * 1000))
+        html = page.content()
+        now = time.monotonic()
+        _SESSION["last_fetch"] = now
+        # [4] The TTL is documented as IDLE time, so start it once the fetch has
+        # actually succeeded. Starting it in _session_page charges navigation and
+        # Cloudflare-challenge time against the idle budget, and a slow challenge
+        # can expire the session it just built -- relaunching the browser and
+        # paying the whole startup cost again on the very next call.
+        _SESSION["expires"] = now + _env_float(_TTL_ENV, 300.0)
+        return str(html or "")
 
 
 def _fetch(path: str, fetcher: Optional[Fetcher], proxy: Optional[str]) -> str:

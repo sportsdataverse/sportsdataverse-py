@@ -89,6 +89,13 @@ class FlatApi:
     # bodies as text declares ``raw_types: [Dict, str]`` so the generated wrappers
     # annotate + document the union they actually return (Torvik data files).
     raw_types: List[str] = field(default_factory=lambda: ["Dict"])
+    # Parsed (``return_parsed=True``) types this family's PARSER returns. Defaults
+    # to a single frame. A parser that returns a mapping (KenPom hands back one
+    # frame per HTML table on the page) declares e.g.
+    # ``parsed_types: ["Dict[str, pl.DataFrame]", "Dict[str, pd.DataFrame]"]`` so
+    # the annotation matches the object callers actually get -- a DataFrame
+    # annotation on a dict return is a runtime trap for anyone trusting the type.
+    parsed_types: List[str] = field(default_factory=lambda: ["pl.DataFrame", "pd.DataFrame"])
     # Optional per-family docstring extras merged into every generated wrapper:
     # ``raw_doc`` (prose for the return_parsed=False payload), ``raises`` (list of
     # "Exception: description"), ``see_also`` (list of {name, url, note}) and
@@ -322,5 +329,6 @@ def load_flat_api(path: Path, registry: Dict[str, Param]) -> FlatApi:
         getter_module=raw.get("getter_module", "sportsdataverse._codegen_runtime"),
         auth=bool(raw.get("auth", False)),
         raw_types=list(raw.get("raw_types") or ["Dict"]),
+        parsed_types=list(raw.get("parsed_types") or ["pl.DataFrame", "pd.DataFrame"]),
         docstring=dict(raw.get("docstring") or {}),
     )

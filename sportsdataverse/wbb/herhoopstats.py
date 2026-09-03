@@ -27,6 +27,7 @@ player names.
 
 from __future__ import annotations
 
+from urllib.parse import urlparse
 from typing import TYPE_CHECKING, Any, Dict, Optional
 
 import polars as pl
@@ -122,9 +123,30 @@ def has_herhoopstats_login() -> bool:
     return has_credentials(HERHOOPSTATS)
 
 
+def _on_site(target: str) -> str:
+    """Return *target* if it stays on Her Hoop Stats, else raise.
+
+    ``herhoopstats_team_stats`` takes a link from a scraped frame, so in normal
+    use the value is already on-site. But it is a public argument carrying an
+    AUTHENTICATED session: an absolute URL to any other host would send the
+    subscriber's logged-in cookies there (SSRF, CWE-918). Relative paths and
+    ``https://herhoopstats.com`` are allowed; everything else is refused.
+    """
+    parsed = urlparse(target)
+    if not parsed.scheme and not parsed.netloc:  # relative path -- the normal case
+        return target
+    host = (parsed.hostname or "").lower()
+    if parsed.scheme == "https" and (host == "herhoopstats.com" or host.endswith(".herhoopstats.com")):
+        return target
+    raise ValueError(
+        f"refusing to send the authenticated Her Hoop Stats session to {target!r}: "
+        "pass a relative path, or an https URL on herhoopstats.com"
+    )
+
+
 def _page(path: str, params: Optional[Dict[str, Any]] = None, **kwargs: Any) -> str:
     """GET one authenticated Her Hoop Stats page and return its HTML."""
-    return get_html(HERHOOPSTATS, path, params, **kwargs)
+    return get_html(HERHOOPSTATS, _on_site(path), params, **kwargs)
 
 
 def _largest(tables: Dict[str, Any]) -> Any:
@@ -265,8 +287,10 @@ def herhoopstats_team_stats(
     position), so a single fetch covers the whole page.
 
     Args:
-        team_link: A team page path or full URL -- e.g. a link taken from the
-            team-page column of :func:`herhoopstats_teams`.
+        team_link: A team page path, or an ``https`` URL on ``herhoopstats.com`` --
+            e.g. a link taken from the team-page column of
+            :func:`herhoopstats_teams`. Any other host is refused, because this
+            argument steers an authenticated request.
         email: Subscription e-mail; falls back to ``HERHOOPSTATS_EMAIL``.
         password: Subscription password; falls back to ``HERHOOPSTATS_PW``.
         return_as_pandas: Return ``pandas.DataFrame`` values instead of polars.

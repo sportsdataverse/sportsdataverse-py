@@ -42,7 +42,7 @@ def {{ ep.fn_name }}(
 {% endif %}
     **kwargs,
 {% if ep.parser %}
-) -> Union[pl.DataFrame, pd.DataFrame, {{ ep.raw_hint }}]:
+) -> Union[{{ ep.parsed_hint }}, {{ ep.raw_hint }}]:
 {% else %}
 ) -> {{ ep.raw_annotation }}:
 {% endif %}

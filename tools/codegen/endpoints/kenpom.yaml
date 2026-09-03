@@ -14,6 +14,11 @@ passthrough_query: false
 auth: true
 raw_types:
 - str
+# parse_kenpom_page returns one frame PER HTML TABLE, keyed by table id -- not a
+# single frame. Annotating it as a DataFrame is a runtime trap for typed callers.
+parsed_types:
+- Dict[str, pl.DataFrame]
+- Dict[str, pd.DataFrame]
 docstring:
   raw_doc: 'the raw page HTML (``str``)'
   parsed_doc: >-

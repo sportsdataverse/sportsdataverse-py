@@ -574,6 +574,7 @@ class _EndpointView:
         flat: bool = False,
         auth: bool = False,
         raw_types: list[str] | None = None,
+        parsed_types: list[str] | None = None,
         doc_extras: dict | None = None,
     ):
         # Raw (``return_parsed=False``) payload types: JSON-only unless the family's
@@ -581,6 +582,8 @@ class _EndpointView:
         rt = list(raw_types or ["Dict"])
         self.raw_hint = ", ".join(rt)  # spliced INTO the parser Union[...]
         self.raw_annotation = rt[0] if len(rt) == 1 else f"Union[{self.raw_hint}]"
+        # Parsed-return types, spliced into the same Union. Defaults to one frame.
+        self.parsed_hint = ", ".join(parsed_types or ["pl.DataFrame", "pd.DataFrame"])
         # markdown flavour of the same prose for the docs reference block
         self.raw_doc_md = str((doc_extras or {}).get("raw_doc") or "").replace("``", "`")
         self.parsed_doc_md = str((doc_extras or {}).get("parsed_doc") or "").replace("``", "`")
@@ -999,6 +1002,7 @@ def _flat_views(api: spec.FlatApi, league_prefix: str = "") -> list[_EndpointVie
                 flat=True,
                 auth=api.auth,
                 raw_types=api.raw_types,
+                parsed_types=api.parsed_types,
                 # Per-endpoint extras win over the family block, so a large family
                 # can document one wrapper without rewriting all of its siblings.
                 doc_extras=ep.docstring or api.docstring,
