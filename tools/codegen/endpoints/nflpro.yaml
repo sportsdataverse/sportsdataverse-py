@@ -193,7 +193,6 @@ endpoints:
   - {name: offset, query_key: offset, type: int, default: null, description: "Zero-based row offset. The getter pages on this automatically; set it only to fetch a specific slice."}
   - {name: sort_key, query_key: sortKey, type: str, default: null, description: "Field name to sort by, e.g. ``epa``."}
   - {name: sort_value, query_key: sortValue, type: str, default: null, description: "Sort direction: ``ASC`` or ``DESC``."}
-  - {name: nfl_id, query_key: nflId, type: int, default: null, description: "Optional player filter; omit for the whole league-week table. Note ``week`` is a path scope here, not a query param."}
   example_args: {season: 2024, season_type: REG}
 - short: team_defense_overview_season
   summary: "GET /api/secured/stats/team-defense/overview/season — one row per team for the season — team defensive overview incl. EPA allowed per play and takeaways."
@@ -220,7 +219,6 @@ endpoints:
   - {name: offset, query_key: offset, type: int, default: null, description: "Zero-based row offset. The getter pages on this automatically; set it only to fetch a specific slice."}
   - {name: sort_key, query_key: sortKey, type: str, default: null, description: "Field name to sort by, e.g. ``epa``."}
   - {name: sort_value, query_key: sortValue, type: str, default: null, description: "Sort direction: ``ASC`` or ``DESC``."}
-  - {name: nfl_id, query_key: nflId, type: int, default: null, description: "Optional player filter; omit for the whole league-week table. Note ``week`` is a path scope here, not a query param."}
   example_args: {season: 2024, season_type: REG}
 - short: fantasy_season
   summary: "GET /api/secured/stats/fantasy/season — one row per player for the season — fantasy points, opportunity and usage."

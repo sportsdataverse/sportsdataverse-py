@@ -35,7 +35,9 @@ _HOST = "https://pro.nfl.com"
 _UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36"
 _MAX_PAGES = 40
 _LOGGER = logging.getLogger(__name__)
-_token_cache: Dict[str, Any] = {"token": None}
+# Keyed by account email -- a plain single-slot cache would silently hand
+# account B a token that was minted for account A once A had logged in once.
+_token_cache: Dict[str, str] = {}
 
 
 class NFLProAuthError(RuntimeError):
@@ -202,10 +204,6 @@ def nflpro_token(
             )
         return token
 
-    cached = _token_cache.get("token")
-    if cached and _fresh(cached):
-        return str(cached)
-
     email = email or os.environ.get("NFLPRO_EMAIL")
     password = password or os.environ.get("NFLPRO_PW")
     if not email or not password:
@@ -213,8 +211,16 @@ def nflpro_token(
             "No NFL Pro credentials: pass email=/password=, or set NFLPRO_EMAIL and "
             "NFLPRO_PW, or set NFLPRO_TOKEN to an already-obtained token."
         )
+
+    # Cache lookup happens AFTER resolving which account is being asked for, keyed
+    # on that account -- otherwise a call for account B while account A's token is
+    # still fresh would silently hand back account A's token.
+    cached = _token_cache.get(email)
+    if cached and _fresh(cached):
+        return cached
+
     fresh = _browser_login(email, password)
-    _token_cache["token"] = fresh
+    _token_cache[email] = fresh
     return fresh
 
 
@@ -316,7 +322,14 @@ def _get(
                 "not user-bound, or carries no active NFL_PLUS_* plan."
             )
         if hasattr(resp, "raise_for_status"):
-            resp.raise_for_status()
+            try:
+                resp.raise_for_status()
+            except Exception as exc:
+                # A missing required param (e.g. `position_group` on fantasy/game)
+                # surfaces as a bare 500 with no field named in a bare requests
+                # HTTPError. The body usually names the failed request -- surface it.
+                detail = (getattr(resp, "text", "") or "")[:300]
+                raise type(exc)(f"{exc} -- response body: {detail}") from exc
         text = getattr(resp, "text", "") or ""
         if not text.strip():
             raise ValueError(

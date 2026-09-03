@@ -28,12 +28,15 @@ _COLLECTION_KEYS = ("passers", "rushers", "receivers", "defenders", "offense", "
 def _is_record_list(value: Any) -> bool:
     """True if ``value`` is a list this parser can build a frame from.
 
-    The elements must be dicts. A list of scalars reaches ``json_normalize`` as a
-    ``TypeError``, and the shape that produces one is a *successful* request: when
-    a query legitimately matches zero rows the API can omit the collection key
-    while still echoing ``positionGroup`` back as a one-element list of strings.
+    At least one element must be a dict. Checking only index 0 would reject
+    ``["junk", {"a": 1}]`` outright and lose a valid trailing record; checking
+    every element is what lets ``_dicts`` discard just the scalar. A list of
+    scalars reaches ``json_normalize`` as a ``TypeError``, and the shape that
+    produces one is a *successful* request: when a query legitimately matches
+    zero rows the API can omit the collection key while still echoing
+    ``positionGroup`` back as a one-element list of strings.
     """
-    return isinstance(value, list) and (not value or isinstance(value[0], dict))
+    return isinstance(value, list) and (not value or any(isinstance(v, dict) for v in value))
 
 
 def _dicts(values: Any) -> list:

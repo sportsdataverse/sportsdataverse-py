@@ -91,6 +91,12 @@ def test_a_stray_scalar_does_not_discard_the_valid_records():
     assert df.height == 2
 
 
+def test_leading_junk_does_not_hide_a_trailing_valid_record():
+    """Checking only element 0 would reject ["junk", {"a": 1}] outright."""
+    df = parse_nfl_pro_stats({"passers": ["junk", {"a": 1}]})
+    assert df.height == 1
+
+
 def test_nested_records_are_snake_cased_not_dotted():
     """json_normalize defaults to `a.b`; underscore() rewrites camel case, not dots."""
     df = parse_nfl_pro_stats({"passers": [{"outer": {"innerValue": 1}}]})
@@ -180,6 +186,23 @@ def test_server_ignoring_offset_raises_instead_of_duplicating(monkeypatch):
     )
     with pytest.raises(ValueError, match="ignored `offset`"):
         _get("https://pro.nfl.com/x", {"limit": 5}, headers={"a": "b"})
+
+
+def test_http_error_surfaces_the_response_body(monkeypatch):
+    """A missing required param (e.g. position_group) 500s with no field named
+    in a bare requests HTTPError -- the body usually names the failed request."""
+
+    class Failing(_Resp):
+        def __init__(self):
+            super().__init__({})
+            self.text = '{"ok":false,"status":500,"statusText":"missing positionGroup"}'
+
+        def raise_for_status(self):
+            raise Exception("500 Server Error")
+
+    monkeypatch.setattr("sportsdataverse.nfl.nflpro_runtime.download", lambda **kw: Failing())
+    with pytest.raises(Exception, match="missing positionGroup"):
+        _get("https://pro.nfl.com/api/secured/stats/fantasy/game", {}, headers={"a": "b"})
 
 
 def test_missing_total_still_pages_on_a_full_page(monkeypatch):
@@ -281,6 +304,44 @@ def test_client_credentials_token_is_rejected():
 def test_missing_credentials_raise_a_useful_error(monkeypatch):
     for var in ("NFLPRO_TOKEN", "NFLPRO_EMAIL", "NFLPRO_PW"):
         monkeypatch.delenv(var, raising=False)
-    monkeypatch.setattr("sportsdataverse.nfl.nflpro_runtime._token_cache", {"token": None, "exp": 0.0})
+    monkeypatch.setattr("sportsdataverse.nfl.nflpro_runtime._token_cache", {})
     with pytest.raises(NFLProAuthError, match="NFLPRO_EMAIL"):
         nflpro_token()
+
+
+def test_cached_token_is_not_reused_across_accounts(monkeypatch):
+    """A single-slot cache would hand account B a token minted for account A."""
+    monkeypatch.setattr("sportsdataverse.nfl.nflpro_runtime._token_cache", {})
+    logins: list = []
+
+    def fake_login(email, password):
+        logins.append(email)
+        return f"token-for-{email}"
+
+    monkeypatch.setattr("sportsdataverse.nfl.nflpro_runtime._browser_login", fake_login)
+    monkeypatch.setattr("sportsdataverse.nfl.nflpro_runtime._entitled", lambda t: True)
+    monkeypatch.setattr("sportsdataverse.nfl.nflpro_runtime._fresh", lambda t: True)
+
+    tok_a = nflpro_token(email="a@example.com", password="pw-a")
+    tok_b = nflpro_token(email="b@example.com", password="pw-b")
+    assert tok_a == "token-for-a@example.com"
+    assert tok_b == "token-for-b@example.com"
+    assert logins == ["a@example.com", "b@example.com"]
+
+    # A second call for account A hits the cache, not a third login.
+    assert nflpro_token(email="a@example.com", password="pw-a") == tok_a
+    assert logins == ["a@example.com", "b@example.com"]
+
+
+def test_team_week_wrappers_do_not_expose_nfl_id():
+    """nflId is silently accepted-and-ignored on team-scoped week routes (verified
+    live: identical response with or without it), so it must not be a parameter."""
+    import inspect
+
+    from sportsdataverse.nfl.nflpro import (
+        nfl_pro_team_defense_overview_week,
+        nfl_pro_team_offense_overview_week,
+    )
+
+    for fn in (nfl_pro_team_offense_overview_week, nfl_pro_team_defense_overview_week):
+        assert "nfl_id" not in inspect.signature(fn).parameters

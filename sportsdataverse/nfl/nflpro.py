@@ -789,7 +789,6 @@ def nfl_pro_team_offense_overview_week(
     offset: Optional[int] = None,
     sort_key: Optional[str] = None,
     sort_value: Optional[str] = None,
-    nfl_id: Optional[int] = None,
     headers: Optional[Dict[str, str]] = None,
     *,
     return_parsed: bool = True,
@@ -808,7 +807,6 @@ def nfl_pro_team_offense_overview_week(
         offset: offset query parameter.
         sort_key: sortKey query parameter.
         sort_value: sortValue query parameter.
-        nfl_id: nflId query parameter.
         headers: optional pre-minted auth headers dict from ``nflpro_headers_gen()`` to reuse across calls (obtaining a token costs a browser login). A token is resolved when omitted; note an anonymous/client-credentials token is NOT usable here -- every ``/api/secured/*`` route 401s without an active NFL+ plan.
         return_parsed: parse the payload through parse_nfl_pro_stats -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -835,7 +833,6 @@ def nfl_pro_team_offense_overview_week(
         "offset": offset,
         "sortKey": sort_key,
         "sortValue": sort_value,
-        "nflId": nfl_id,
     }
     _params.update(_caller_params)
     raw = _get(
@@ -920,7 +917,6 @@ def nfl_pro_team_defense_overview_week(
     offset: Optional[int] = None,
     sort_key: Optional[str] = None,
     sort_value: Optional[str] = None,
-    nfl_id: Optional[int] = None,
     headers: Optional[Dict[str, str]] = None,
     *,
     return_parsed: bool = True,
@@ -939,7 +935,6 @@ def nfl_pro_team_defense_overview_week(
         offset: offset query parameter.
         sort_key: sortKey query parameter.
         sort_value: sortValue query parameter.
-        nfl_id: nflId query parameter.
         headers: optional pre-minted auth headers dict from ``nflpro_headers_gen()`` to reuse across calls (obtaining a token costs a browser login). A token is resolved when omitted; note an anonymous/client-credentials token is NOT usable here -- every ``/api/secured/*`` route 401s without an active NFL+ plan.
         return_parsed: parse the payload through parse_nfl_pro_stats -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -966,7 +961,6 @@ def nfl_pro_team_defense_overview_week(
         "offset": offset,
         "sortKey": sort_key,
         "sortValue": sort_value,
-        "nflId": nfl_id,
     }
     _params.update(_caller_params)
     raw = _get(

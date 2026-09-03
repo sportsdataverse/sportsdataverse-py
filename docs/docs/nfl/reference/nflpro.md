@@ -934,7 +934,6 @@ GET /api/secured/stats/team-offense/overview/week — one row per team per week 
 | `offset` | `offset` |  |  | `Y` | Zero-based row offset. The getter pages on this automatically; set it only to fetch a specific slice. |
 | `sortKey` | `sort_key` |  |  | `Y` | Field name to sort by, e.g. ``epa``. |
 | `sortValue` | `sort_value` |  |  | `Y` | Sort direction: ``ASC`` or ``DESC``. |
-| `nflId` | `nfl_id` |  |  | `Y` | Optional player filter; omit for the whole league-week table. Note ``week`` is a path scope here, not a query param. |
 
 ### Returns
 
@@ -1073,7 +1072,6 @@ GET /api/secured/stats/team-defense/overview/week — one row per team per week 
 | `offset` | `offset` |  |  | `Y` | Zero-based row offset. The getter pages on this automatically; set it only to fetch a specific slice. |
 | `sortKey` | `sort_key` |  |  | `Y` | Field name to sort by, e.g. ``epa``. |
 | `sortValue` | `sort_value` |  |  | `Y` | Sort direction: ``ASC`` or ``DESC``. |
-| `nflId` | `nfl_id` |  |  | `Y` | Optional player filter; omit for the whole league-week table. Note ``week`` is a path scope here, not a query param. |
 
 ### Returns
 
