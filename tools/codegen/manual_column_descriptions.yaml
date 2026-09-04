@@ -9971,6 +9971,7 @@ load_nfl_pfr_weekly_def:
   def_yards_allowed: Total receiving yards allowed by this defender in coverage during the week per Pro Football Reference.
   def_yards_allowed_per_cmp: Receiving yards allowed per completion by this defender in coverage during the week.
   def_yards_allowed_per_tgt: Receiving yards allowed per target thrown at this defender in coverage during the week.
+  def_ints: "Interceptions for the week (this loader is per-player-per-week, not career)."
 load_nfl_pfr_weekly_pass:
   def_times_blitzed: Number of pass plays on which the defense sent a blitz, as experienced by the quarterback in this weekly
     log.
@@ -21624,19 +21625,19 @@ x_era:
 load_ncaa_mbb_rapm:
   season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
   def_poss: "Defensive possessions the player was on court for; the regression weight behind drapm."
-  drapm: "Defensive regularized adjusted plus-minus: points allowed per 100 possessions on defense, adjusted for the other 9 players on the floor."
-  estimand: "Which RAPM quantity this row's coefficient estimates ('offense', 'defense', or 'net') -- one row per player per estimand."
+  drapm: "Defensive regularized adjusted plus-minus: points prevented per 100 possessions on defense (higher is better defense), adjusted for the other 9 players on the floor."
+  estimand: "Fit-scope tag for the RAPM model that produced this row (observed value: 'league', a Division I-wide fit) -- one row per player-season, not per estimand."
   off_poss: "Offensive possessions the player was on court for; the regression weight behind orapm."
   orapm: "Offensive regularized adjusted plus-minus: points contributed per 100 possessions on offense, adjusted for the other 9 players on the floor."
-  rapm_net: "Net RAPM (orapm minus drapm): overall point contribution per 100 possessions."
+  rapm_net: "Net RAPM (orapm plus drapm): overall point contribution per 100 possessions. Verified against live data: rapm_net == orapm + drapm exactly."
 load_ncaa_wbb_rapm:
   season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
   def_poss: "Defensive possessions the player was on court for; the regression weight behind drapm."
-  drapm: "Defensive regularized adjusted plus-minus: points allowed per 100 possessions on defense, adjusted for the other 9 players on the floor."
-  estimand: "Which RAPM quantity this row's coefficient estimates ('offense', 'defense', or 'net') -- one row per player per estimand."
+  drapm: "Defensive regularized adjusted plus-minus: points prevented per 100 possessions on defense (higher is better defense), adjusted for the other 9 players on the floor."
+  estimand: "Fit-scope tag for the RAPM model that produced this row (observed value: 'league', a Division I-wide fit) -- one row per player-season, not per estimand."
   off_poss: "Offensive possessions the player was on court for; the regression weight behind orapm."
   orapm: "Offensive regularized adjusted plus-minus: points contributed per 100 possessions on offense, adjusted for the other 9 players on the floor."
-  rapm_net: "Net RAPM (orapm minus drapm): overall point contribution per 100 possessions."
+  rapm_net: "Net RAPM (orapm plus drapm): overall point contribution per 100 possessions. Verified against live data: rapm_net == orapm + drapm exactly."
 load_ncaa_mfb_pbp:
   season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
   drive_scored: "Whether the possession containing this play ended in points for the offense."
@@ -21704,6 +21705,9 @@ load_ncaa_mfb_player_stats:
   yards_per_reception: "Receiving yards divided by receptions."
   yds_per_completion: "Passing yards divided by completions."
   yds_rush: "Net rushing yards (rush_yds_gained minus rush_yds_lost)."
+  pass_attempts: "Pass attempts for the game. Populated only on this player-game's 'passing' category row (null on the 'rushing'/'receiving' rows for the same player-game) -- the loader returns one row per player-game-category."
+  pass_tds: "Passing touchdowns thrown for the game. Populated only on this player-game's 'passing' category row (null on the 'rushing'/'receiving' rows for the same player-game) -- the loader returns one row per player-game-category."
+  rush_tds: "Rushing touchdowns for the game. Populated only on this player-game's 'rushing' category row (null on the 'passing'/'receiving' rows for the same player-game) -- the loader returns one row per player-game-category."
 load_ncaa_mfb_officials:
   season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
 load_ncaa_mfb_linescore:

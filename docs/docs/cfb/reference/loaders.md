@@ -3707,15 +3707,15 @@ Release: [ncaa_mfb_player_stats](https://github.com/sportsdataverse/sportsdatave
 | `rush_yds_gained` | String | Total positive rushing yards gained on carries, before subtracting yards lost to tackles for loss. |
 | `rush_yds_lost` | String | Total rushing yards lost to tackles for loss on carries. |
 | `yds_rush` | String | Net rushing yards (rush_yds_gained minus rush_yds_lost). |
-| `rush_tds` | String | Team rushing touchdowns. |
+| `rush_tds` | String | Rushing touchdowns for the game. Populated only on this player-game's 'rushing' category row (null on the 'passing'/'receiving' rows for the same player-game) -- the loader returns one row per player-game-category. |
 | `rush_long` | String | Longest single rush of the game. |
 | `category` | String | CFBD stats category name (e.g. passing, rushing, defensive). |
 | `espn_game_id` | String | ESPN game id (NA for bart-only rows). |
-| `pass_attempts` | String | Career pass attempts |
+| `pass_attempts` | String | Pass attempts for the game. Populated only on this player-game's 'passing' category row (null on the 'rushing'/'receiving' rows for the same player-game) -- the loader returns one row per player-game-category. |
 | `completions` | String | The number of completed passes. |
 | `pass_yards` | String | Number of yards gained on pass plays |
 | `interceptions` | String | Passing interceptions. |
-| `pass_tds` | String | Career pass touchdowns thrown |
+| `pass_tds` | String | Passing touchdowns thrown for the game. Populated only on this player-game's 'passing' category row (null on the 'rushing'/'receiving' rows for the same player-game) -- the loader returns one row per player-game-category. |
 | `pass_eff` | String | Passer efficiency rating for the game, per the NCAA passer-rating formula. |
 | `yds_per_completion` | String | Passing yards divided by completions. |
 | `pct` | String | Win percentage. |
