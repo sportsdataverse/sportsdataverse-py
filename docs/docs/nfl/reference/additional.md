@@ -2436,7 +2436,7 @@ Will be removed in a future release. Migrate callers to the unified
 | `opponent` | character | Opposing team of player |
 | `pfr_player_name` | character | Player's name as recorded by PFR |
 | `pfr_player_id` | character | ID from Pro Football Reference |
-| `def_ints` | double | Career interceptions |
+| `def_ints` | double | Interceptions for the week (this loader is per-player-per-week, not career). |
 | `def_targets` | double | Number of passing attempts thrown at or into the coverage area of this defender during the week. |
 | `def_completions_allowed` | double | Number of completions allowed by the defender on passes thrown into their coverage during the week. |
 | `def_completion_pct` | double | Completion percentage allowed by the defender on targets thrown in their coverage during the week. |
