@@ -7333,6 +7333,10 @@ models = [
     { name = "xgboost", version = "3.2.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10' and python_full_version < '3.12'" },
     { name = "xgboost", version = "3.3.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
 ]
+nflpro = [
+    { name = "playwright", version = "1.60.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.10'" },
+    { name = "playwright", version = "1.61.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10'" },
+]
 pff = [
     { name = "playwright", version = "1.60.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.10'" },
     { name = "playwright", version = "1.61.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10'" },
@@ -7430,6 +7434,7 @@ requires-dist = [
     { name = "pandas", specifier = ">=2.0.0" },
     { name = "patchright", marker = "extra == 'all'", specifier = ">=1.50" },
     { name = "playwright", marker = "extra == 'all'", specifier = ">=1.40" },
+    { name = "playwright", marker = "extra == 'nflpro'", specifier = ">=1.40" },
     { name = "playwright", marker = "extra == 'pff'", specifier = ">=1.40" },
     { name = "polars", specifier = ">=1.0,<2.0" },
     { name = "pyarrow", specifier = ">=14.0.0" },
@@ -7468,7 +7473,7 @@ requires-dist = [
     { name = "xgboost", marker = "extra == 'all'", specifier = ">=2.0.0" },
     { name = "xgboost", marker = "extra == 'models'", specifier = ">=2.0.0" },
 ]
-provides-extras = ["tests", "models", "pff", "all"]
+provides-extras = ["tests", "nflpro", "models", "pff", "all"]
 
 [package.metadata.requires-dev]
 dev = [
