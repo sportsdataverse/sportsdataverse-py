@@ -94,3 +94,42 @@ def test_ispenalty_implies_penalty_flag(monkeypatch, gid):
         f"{gid}: {viol.height} play(s) ESPN flags isPenalty=True but penalty_flag is False: "
         f"{viol.select(['type.text', 'text']).to_dicts()}"
     )
+
+
+def test_plays_frame_retained_for_window_reaggregation(monkeypatch):
+    """The enriched polars frame must survive run_processing_pipeline.
+
+    plays_json becomes a list of dicts at the end of the pipeline (and Game on
+    Paper's Flask layer then mutates the records, nesting start/end and
+    deleting the flat dotted columns) -- so windowed re-aggregation (?span=
+    boxes: filter the frame, re-run create_box_score) needs the ORIGINAL frame
+    kept as plays_frame. Its silent absence broke every ?span= box request.
+    """
+    gid = GIDS[0]
+    summary = json.loads((FIX / f"summary_{gid}.json").read_text(encoding="utf-8"))
+
+    class _Resp:
+        def json(self):
+            return summary
+
+    monkeypatch.setattr("sportsdataverse.cfb.cfb_pbp.download", lambda *a, **k: _Resp())
+    proc = CFBPlayProcess(gameId=gid)
+    proc.join_participants = False
+    proc.espn_cfb_pbp()
+    proc.run_processing_pipeline()
+
+    assert isinstance(proc.plays_frame, pl.DataFrame)
+    assert proc.plays_frame.height == len(proc.plays_json)
+    # the flat dotted schema create_box_score consumes, not the nested shape
+    assert "start.down" in proc.plays_frame.columns
+    # and it is actually re-aggregable: a windowed box computes without error
+    # (the fixture game must exercise this -- an empty window would let the
+    # test pass without ever calling create_box_score)
+    q3 = proc.plays_frame.filter(pl.col("period") == 3)
+    assert q3.height > 0
+    box = proc.create_box_score(q3)
+    assert box
+    # the post-pipeline prob methods must not leave the frame stale
+    proc.add_fourth_down_probs()
+    assert proc.plays_frame.height == len(proc.plays_json)
+    assert "fourth_down_recommendation" in proc.plays_frame.columns

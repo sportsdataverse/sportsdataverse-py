@@ -9566,6 +9566,11 @@ class CFBPlayProcess(object):
                     self.plays_json = self.__add_two_pt_probs(self.plays_json)
                 self.ran_pipeline = True
                 advBoxScore = self.plays_json.pipe(self.create_box_score)
+                # Keep the enriched polars frame: plays_json becomes a list of
+                # dicts below (and callers mutate it), so consumers that need
+                # to re-aggregate windows (Game on Paper's ?span= boxes filter
+                # the frame and re-run create_box_score) read plays_frame.
+                self.plays_frame = self.plays_json
                 self.plays_json = self.plays_json.to_dicts()
                 pbp_json = {
                     "gameId": int(self.gameId),
@@ -9653,6 +9658,7 @@ class CFBPlayProcess(object):
                 dtype = pl.Utf8 if c == "fourth_down_recommendation" else pl.Float64
                 plays = plays.with_columns(pl.lit(None, dtype=dtype).alias(c))
             plays = plays.drop("__fourth_row_idx")
+            self.plays_frame = plays
             self.plays_json = plays.to_dicts()
             self.json["plays"] = self.plays_json
             return plays
@@ -9662,6 +9668,9 @@ class CFBPlayProcess(object):
         scored_pl = pl.from_pandas(scored[keep]).with_columns(pl.col("__fourth_row_idx").cast(pl.UInt32))
 
         plays = plays.join(scored_pl, on="__fourth_row_idx", how="left").drop("__fourth_row_idx")
+        # keep the retained frame in sync -- consumers re-aggregating windows
+        # (see run_processing_pipeline) must see the added columns too
+        self.plays_frame = plays
         self.plays_json = plays.to_dicts()
         self.json["plays"] = self.plays_json
         return plays
@@ -9706,6 +9715,9 @@ class CFBPlayProcess(object):
             self.run_processing_pipeline()
 
         plays = self.__add_two_pt_probs(pl.DataFrame(self.plays_json, infer_schema_length=None))
+        # keep the retained frame in sync -- consumers re-aggregating windows
+        # (see run_processing_pipeline) must see the added columns too
+        self.plays_frame = plays
         self.plays_json = plays.to_dicts()
         self.json["plays"] = self.plays_json
         return plays
