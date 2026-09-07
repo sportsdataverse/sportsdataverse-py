@@ -482,7 +482,7 @@ standings = safe('2025 standings', lambda: wbb.espn_wbb_standings(season=SEASON)
     │ Grand Canyon      ┆ UAC              ┆ 16   ┆ 0      ┆ 1.0         ┆ 1219.0     ┆ 894.0          │
     │ Lopes             ┆                  ┆      ┆        ┆             ┆            ┆                │
     │ Green Bay Phoenix ┆ hor              ┆ 19   ┆ 1      ┆ 0.95        ┆ 1408.0     ┆ 1037.0         │
-    │ Fairfield Stags   ┆ maac             ┆ 19   ┆ 1      ┆ 0.95        ┆ 1498.0     ┆ 1034.0         │
+    │ Fairfield Stags   ┆ Metro            ┆ 19   ┆ 1      ┆ 0.95        ┆ 1498.0     ┆ 1034.0         │
     │ SE Louisiana Lady ┆ land             ┆ 19   ┆ 1      ┆ 0.95        ┆ 1330.0     ┆ 1013.0         │
     │ Lions             ┆                  ┆      ┆        ┆             ┆            ┆                │
     └───────────────────┴──────────────────┴──────┴────────┴─────────────┴────────────┴────────────────┘
@@ -539,7 +539,7 @@ season_pbp = wbb.load_wbb_pbp(seasons=[2024])
 print('player_box:', player_box.shape, '| team_box:', team_box.shape, '| pbp:', season_pbp.shape)
 ```
 
-    player_box: (167412, 55) | team_box: (11796, 56) | pbp: (1908679, 61)
+    player_box: (167412, 55) | team_box: (11796, 56) | pbp: (1908679, 66)
 
 
 ### Recipe 1 — Win-probability ride of a championship 📈
@@ -653,22 +653,22 @@ top_scorers
 
 
     shape: (10, 6)
-    ┌────────────┬──────────────────────┬─────────────────────────┬───────┬──────────────┬──────┐
-    │ athlete_id ┆ athlete_display_name ┆ team_short_display_name ┆ games ┆ total_points ┆ ppg  │
-    │ ---        ┆ ---                  ┆ ---                     ┆ ---   ┆ ---          ┆ ---  │
-    │ i32        ┆ str                  ┆ str                     ┆ u32   ┆ i32          ┆ f64  │
-    ╞════════════╪══════════════════════╪═════════════════════════╪═══════╪══════════════╪══════╡
-    │ 5125264    ┆ Jana El Alfy         ┆ UConn                   ┆ 39    ┆ 0            ┆ null │
-    │ 5107554    ┆ Ella Okubasu         ┆ Binghamton              ┆ 31    ┆ 0            ┆ null │
-    │ 4704431    ┆ Dayna Tirado         ┆ Fairfield               ┆ 33    ┆ 0            ┆ null │
-    │ 4595339    ┆ Keeli Burton-Oliver  ┆ Montana                 ┆ 33    ┆ 0            ┆ null │
-    │ 5176367    ┆ Emily Montes         ┆ Columbia                ┆ 30    ┆ 0            ┆ null │
-    │ 5174515    ┆ Alana Scott          ┆ Bryant                  ┆ 30    ┆ 0            ┆ null │
-    │ 4900069    ┆ Clare Chambers       ┆ Miami OH                ┆ 29    ┆ 0            ┆ null │
-    │ 4705316    ┆ Destiny Howell       ┆ Howard                  ┆ 31    ┆ 0            ┆ null │
-    │ 5177057    ┆ Fantasia James       ┆ FIU                     ┆ 33    ┆ 0            ┆ null │
-    │ 5174353    ┆ Alyssa Lewis         ┆ NC State                ┆ 38    ┆ 0            ┆ null │
-    └────────────┴──────────────────────┴─────────────────────────┴───────┴──────────────┴──────┘
+    ┌────────────┬────────────────────────┬─────────────────────────┬───────┬──────────────┬──────┐
+    │ athlete_id ┆ athlete_display_name   ┆ team_short_display_name ┆ games ┆ total_points ┆ ppg  │
+    │ ---        ┆ ---                    ┆ ---                     ┆ ---   ┆ ---          ┆ ---  │
+    │ i32        ┆ str                    ┆ str                     ┆ u32   ┆ i32          ┆ f64  │
+    ╞════════════╪════════════════════════╪═════════════════════════╪═══════╪══════════════╪══════╡
+    │ 4898987    ┆ Catherine Gilwee       ┆ Vermont                 ┆ 37    ┆ 0            ┆ null │
+    │ 4433772    ┆ Sallie Schutz          ┆ Davidson                ┆ 26    ┆ 0            ┆ null │
+    │ 5177221    ┆ Ann Zachariah          ┆ Colorado St             ┆ 31    ┆ 0            ┆ null │
+    │ 5174406    ┆ Danna Grenald          ┆ Clemson                 ┆ 31    ┆ 0            ┆ null │
+    │ 5109802    ┆ Annie Watson           ┆ Akron                   ┆ 29    ┆ 0            ┆ null │
+    │ 5178107    ┆ Ellie Magestro-Kennedy ┆ Wright St               ┆ 33    ┆ 0            ┆ null │
+    │ 4704065    ┆ Dominique Camp         ┆ Syracuse                ┆ 32    ┆ 0            ┆ null │
+    │ 4398831    ┆ Jenna Brown            ┆ Notre Dame              ┆ 35    ┆ 0            ┆ null │
+    │ 5177220    ┆ Avree Antony           ┆ Colorado St             ┆ 31    ┆ 0            ┆ null │
+    │ 5175439    ┆ Saniyah Shelton        ┆ E Kentucky              ┆ 34    ┆ 0            ┆ null │
+    └────────────┴────────────────────────┴─────────────────────────┴───────┴──────────────┴──────┘
 
 
 
@@ -790,8 +790,8 @@ three_pt
     │ ---     ┆ ---                            ┆ ---   ┆ --- ┆ ---  ┆ ---       │
     │ i32     ┆ str                            ┆ u32   ┆ i32 ┆ i32  ┆ f64       │
     ╞═════════╪════════════════════════════════╪═══════╪═════╪══════╪═══════════╡
-    │ 2250    ┆ Gonzaga Bulldogs               ┆ 36    ┆ 336 ┆ 849  ┆ 39.6      │
     │ 84      ┆ Indiana Hoosiers               ┆ 32    ┆ 268 ┆ 677  ┆ 39.6      │
+    │ 2250    ┆ Gonzaga Bulldogs               ┆ 36    ┆ 336 ┆ 849  ┆ 39.6      │
     │ 2579    ┆ South Carolina Gamecocks       ┆ 38    ┆ 253 ┆ 640  ┆ 39.5      │
     │ 149     ┆ Montana Lady Griz              ┆ 33    ┆ 357 ┆ 927  ┆ 38.5      │
     │ 2086    ┆ Butler Bulldogs                ┆ 32    ┆ 266 ┆ 694  ┆ 38.3      │
@@ -850,8 +850,8 @@ clutch
     │ Ta'Niya Latson       ┆ Florida St              ┆ 47           ┆ 65            │
     │ Cheyenne Stubbs      ┆ Utah State              ┆ 36           ┆ 62            │
     │ Chellia Watson       ┆ Buffalo                 ┆ 38           ┆ 61            │
-    │ Deja Kelly           ┆ North Carolina          ┆ 51           ┆ 59            │
     │ Lucy Olsen           ┆ Villanova               ┆ 39           ┆ 59            │
+    │ Deja Kelly           ┆ North Carolina          ┆ 51           ┆ 59            │
     └──────────────────────┴─────────────────────────┴──────────────┴───────────────┘
 
 
@@ -940,9 +940,9 @@ dd
     │ 4898966    ┆ Adrianna Smith       ┆ Maine                   ┆ 22             │
     │ 4684384    ┆ Aneesah Morrow       ┆ LSU                     ┆ 22             │
     │ 4899516    ┆ Akasha Davis         ┆ Lamar                   ┆ 20             │
+    │ 4433404    ┆ Cameron Brink        ┆ Stanford                ┆ 20             │
     │ 4898391    ┆ Phillipina Kyei      ┆ Oregon                  ┆ 20             │
     │ 5108550    ┆ Serah Williams       ┆ Wisconsin               ┆ 20             │
-    │ 4433404    ┆ Cameron Brink        ┆ Stanford                ┆ 20             │
     └────────────┴──────────────────────┴─────────────────────────┴────────────────┘
 
 
@@ -1090,19 +1090,24 @@ print("team-id crosswalk:", ids.shape)
 ids.filter(pl.col("season") == "2025-26").head()
 ```
 
-    team-id crosswalk: (5613, 4)
+    team-id crosswalk: (5972, 4)
 
 
 
 
 
-    shape: (0, 4)
-    ┌──────┬────────────┬─────┬────────┐
-    │ team ┆ conference ┆ id  ┆ season │
-    │ ---  ┆ ---        ┆ --- ┆ ---    │
-    │ str  ┆ str        ┆ i64 ┆ str    │
-    ╞══════╪════════════╪═════╪════════╡
-    └──────┴────────────┴─────┴────────┘
+    shape: (5, 4)
+    ┌────────────────────┬────────────┬────────┬─────────┐
+    │ team               ┆ conference ┆ id     ┆ season  │
+    │ ---                ┆ ---        ┆ ---    ┆ ---     │
+    │ str                ┆ str        ┆ i64    ┆ str     │
+    ╞════════════════════╪════════════╪════════╪═════════╡
+    │ A&M-Corpus Christi ┆ Southland  ┆ 610016 ┆ 2025-26 │
+    │ Abilene Christian  ┆ WAC        ┆ 610128 ┆ 2025-26 │
+    │ Air Force          ┆ MWC        ┆ 609930 ┆ 2025-26 │
+    │ Akron              ┆ MAC        ┆ 610133 ┆ 2025-26 │
+    │ Alabama            ┆ SEC        ┆ 610143 ┆ 2025-26 │
+    └────────────────────┴────────────┴────────┴─────────┘
 
 
 

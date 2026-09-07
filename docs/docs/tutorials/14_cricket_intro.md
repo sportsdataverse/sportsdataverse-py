@@ -75,7 +75,7 @@ IPL = "8048"
 print("polars", pl.__version__)
 ```
 
-    polars 1.40.1
+    polars 1.42.0
 
 
 The ESPN cricket feed is live and occasionally rate-limited, so a small `safe()`
@@ -573,11 +573,11 @@ else:
     │ ---                             ┆ ---                  ┆ ---          │
     │ str                             ┆ str                  ┆ str          │
     ╞═════════════════════════════════╪══════════════════════╪══════════════╡
-    │ Phillips rides the Archer ligh… ┆ 2026-06-17T19:41:29Z ┆ Story        │
-    │ Glenn Phillips repels England … ┆ 2026-06-17T19:41:47Z ┆ Recap        │
-    │ Gill and Kishan hundreds carry… ┆ 2026-06-17T18:05:42Z ┆ Recap        │
-    │ Shafali's all-round show helps… ┆ 2026-06-17T17:54:49Z ┆ Recap        │
-    │ Shreyanka Patil stretchered of… ┆ 2026-06-17T17:54:27Z ┆ HeadlineNews │
+    │ Miller, de Kock, Coetzee in So… ┆ 2026-09-07T11:21:09Z ┆ HeadlineNews │
+    │ Fatima Sana penalised for send… ┆ 2026-09-07T11:14:19Z ┆ HeadlineNews │
+    │ PCB to investigate conduct and… ┆ 2026-09-07T11:03:24Z ┆ HeadlineNews │
+    │ Kevin Pietersen makes shock En… ┆ 2026-09-07T10:53:35Z ┆ HeadlineNews │
+    │ Sowter heads for Surrey follow… ┆ 2026-09-07T10:38:31Z ┆ HeadlineNews │
     └─────────────────────────────────┴──────────────────────┴──────────────┘
 
 
@@ -594,8 +594,6 @@ else:
 ```
 
     ✅ IPL injuries
-
-
     injuries feed unavailable or empty right now
 
 
@@ -618,7 +616,7 @@ else:
     print("calendar unavailable right now")
 ```
 
-    ⚠️  IPL calendar — NoESPNDataError: No data found for https://site.api.espn.com/apis/site/v2/sports/cricket/8048/calendar
+    ⚠️  IPL calendar — NoDataError: No data found for https://site.api.espn.com/apis/site/v2/sports/cricket/8048/calendar
     calendar unavailable right now
 
 

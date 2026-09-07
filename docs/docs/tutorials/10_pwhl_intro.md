@@ -294,8 +294,8 @@ No loader is needed for a quick standings table: the schedule's `winner` column 
     ╞═══════════╪══════╡
     │ Toronto   ┆ 17   │
     │ Montreal  ┆ 13   │
-    │ Boston    ┆ 12   │
     │ Minnesota ┆ 12   │
+    │ Boston    ┆ 12   │
     │ Ottawa    ┆ 9    │
     │ New York  ┆ 9    │
     └───────────┴──────┘
@@ -333,12 +333,12 @@ Aggregate the skater boxscore across every game to build a points leaderboard �
     │ Marie-Philip ┆ Poulin          ┆ 11    ┆ 14      ┆ 25     │
     │ Sarah        ┆ Nurse           ┆ 11    ┆ 13      ┆ 24     │
     │ Alex         ┆ Carpenter       ┆ 8     ┆ 15      ┆ 23     │
+    │ Ella         ┆ Shelton         ┆ 7     ┆ 14      ┆ 21     │
     │ Emma         ┆ Maltais         ┆ 5     ┆ 16      ┆ 21     │
     │ Taylor       ┆ Heise           ┆ 9     ┆ 12      ┆ 21     │
-    │ Ella         ┆ Shelton         ┆ 7     ┆ 14      ┆ 21     │
-    │ Grace        ┆ Zumwinkle       ┆ 12    ┆ 8       ┆ 20     │
     │ Brianne      ┆ Jenner          ┆ 9     ┆ 11      ┆ 20     │
     │ Kendall      ┆ Coyne Schofield ┆ 7     ┆ 13      ┆ 20     │
+    │ Grace        ┆ Zumwinkle       ┆ 12    ┆ 8       ┆ 20     │
     └──────────────┴─────────────────┴───────┴─────────┴────────┘
 
 
@@ -591,9 +591,9 @@ Not every contribution shows up on the scoresheet. Sum hits and blocked shots fr
     │ Blayre     ┆ Turnbull   ┆ C        ┆ 62   ┆ 14     ┆ 76               │
     │ Allie      ┆ Munroe     ┆ LD       ┆ 44   ┆ 25     ┆ 69               │
     │ Jessica    ┆ DiGirolamo ┆ LD       ┆ 36   ┆ 31     ┆ 67               │
-    │ Emma       ┆ Maltais    ┆ LW       ┆ 53   ┆ 8      ┆ 61               │
     │ Emma       ┆ Greco      ┆ LD       ┆ 32   ┆ 29     ┆ 61               │
     │ Lee        ┆ Stecklein  ┆ LD       ┆ 36   ┆ 25     ┆ 61               │
+    │ Emma       ┆ Maltais    ┆ LW       ┆ 53   ┆ 8      ┆ 61               │
     │ Kelly      ┆ Pannek     ┆ C        ┆ 28   ┆ 30     ┆ 58               │
     └────────────┴────────────┴──────────┴──────┴────────┴──────────────────┘
 
@@ -631,8 +631,8 @@ top_infractions
     │ Interference   ┆ 53    │
     │ Slashing       ┆ 35    │
     │ Boarding       ┆ 30    │
-    │ Holding        ┆ 26    │
     │ Cross Checking ┆ 26    │
+    │ Holding        ┆ 26    │
     └────────────────┴───────┘
 
 
@@ -733,12 +733,12 @@ goals_by_period
     │ Grace             ┆ Zumwinkle        ┆ 12    │
     │ Sarah             ┆ Nurse            ┆ 11    │
     │ Marie-Philip      ┆ Poulin           ┆ 11    │
-    │ Laura             ┆ Stacey           ┆ 10    │
     │ Daryl             ┆ Watts            ┆ 10    │
+    │ Laura             ┆ Stacey           ┆ 10    │
     │ Taylor            ┆ Heise            ┆ 9     │
-    │ Gabbie            ┆ Hughes           ┆ 9     │
-    │ Michela           ┆ Cava             ┆ 9     │
     │ Brianne           ┆ Jenner           ┆ 9     │
+    │ Michela           ┆ Cava             ┆ 9     │
+    │ Gabbie            ┆ Hughes           ┆ 9     │
     └───────────────────┴──────────────────┴───────┘
 
 
@@ -770,15 +770,15 @@ three_stars = pwhl.load_pwhl_three_stars(seasons=[2024])
     │ str          ┆ str       ┆ u32         │
     ╞══════════════╪═══════════╪═════════════╡
     │ Natalie      ┆ Spooner   ┆ 7           │
-    │ Kristen      ┆ Campbell  ┆ 4           │
     │ Nicole       ┆ Hensley   ┆ 4           │
-    │ Sarah        ┆ Nurse     ┆ 3           │
-    │ Hilary       ┆ Knight    ┆ 3           │
-    │ Marie-Philip ┆ Poulin    ┆ 3           │
+    │ Kristen      ┆ Campbell  ┆ 4           │
     │ Alex         ┆ Carpenter ┆ 3           │
+    │ Hilary       ┆ Knight    ┆ 3           │
     │ Gabbie       ┆ Hughes    ┆ 3           │
+    │ Marie-Philip ┆ Poulin    ┆ 3           │
+    │ Sarah        ┆ Nurse     ┆ 3           │
     │ Susanna      ┆ Tapani    ┆ 3           │
-    │ Kateřina     ┆ Mrázová   ┆ 2           │
+    │ Ann-Renée    ┆ Desbiens  ┆ 2           │
     └──────────────┴───────────┴─────────────┘
 
 
@@ -1074,7 +1074,7 @@ out
     │ 76        ┆ 17        ┆ 4             ┆ 66.521739       │
     │ 89        ┆ 15        ┆ 6             ┆ 64.362336       │
     │ 100       ┆ 17        ┆ 8             ┆ 59.824047       │
-    │ 20        ┆ 16        ┆ 14            ┆ 51.382694       │
+    │ 20        ┆ 16        ┆ 13            ┆ 51.382694       │
     └───────────┴───────────┴───────────────┴─────────────────┘
 
 
@@ -1171,11 +1171,11 @@ xg.select(["game_id", "event_type", "shot_distance", "shot_angle", "xg"]).drop_n
     │ ---     ┆ ---        ┆ ---           ┆ ---        ┆ ---      │
     │ i32     ┆ str        ┆ f64           ┆ f64        ┆ f64      │
     ╞═════════╪════════════╪═══════════════╪════════════╪══════════╡
-    │ 105     ┆ Default    ┆ 38.6912       ┆ 33.3136    ┆ 0.050235 │
-    │ 105     ┆ Default    ┆ 46.5487       ┆ 21.4205    ┆ 0.053222 │
-    │ 105     ┆ Default    ┆ 24.8723       ┆ 17.9129    ┆ 0.082214 │
-    │ 105     ┆ Default    ┆ 36.8333       ┆ 22.6199    ┆ 0.06718  │
-    │ 105     ┆ Default    ┆ 25.5563       ┆ 61.145     ┆ 0.061872 │
+    │ 105     ┆ Default    ┆ 38.691146     ┆ 33.313604  ┆ 0.059754 │
+    │ 105     ┆ Default    ┆ 46.548629     ┆ 21.420474  ┆ 0.054782 │
+    │ 105     ┆ Default    ┆ 24.872378     ┆ 17.912855  ┆ 0.110832 │
+    │ 105     ┆ Default    ┆ 36.833346     ┆ 22.619913  ┆ 0.070203 │
+    │ 105     ┆ Default    ┆ 25.55626      ┆ 61.145036  ┆ 0.066663 │
     └─────────┴────────────┴───────────────┴────────────┴──────────┘
 
 

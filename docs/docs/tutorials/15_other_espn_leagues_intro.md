@@ -278,7 +278,7 @@ summary_ufl = safe(
 _keys(summary_ufl)
 ```
 
-    ⏭️  UFL game summary (raw): unavailable right now (NoESPNDataError)
+    ⏭️  UFL game summary (raw): unavailable right now (NoDataError)
     (no data)
 
 
@@ -292,7 +292,7 @@ plays_ufl = safe(
 _keys(plays_ufl)
 ```
 
-    ⏭️  UFL game plays (raw): unavailable right now (NoESPNDataError)
+    ⏭️  UFL game plays (raw): unavailable right now (NoDataError)
     (no data)
 
 
@@ -416,8 +416,6 @@ else:
 
 
 
-
-
 ```python
 # CFL team schedule — Winnipeg Blue Bombers (team_id=100) 2023 season
 schedule_cfl = safe(
@@ -435,8 +433,6 @@ else:
 ```
 
     ✅ CFL team schedule
-
-
 
 
 ---
@@ -474,8 +470,6 @@ else:
 ```
 
     ✅ college baseball scoreboard (parsed)
-
-
 
 
 
@@ -540,7 +534,7 @@ else:
     'rankings unavailable (only current during the season)'
 ```
 
-    ✅ college baseball rankings
+    ⏭️  college baseball rankings: unavailable right now (NoDataError)
 
 
 ### 📅 College baseball: team schedule
@@ -632,9 +626,7 @@ else:
     'rankings unavailable (only current during the season)'
 ```
 
-    ✅ college softball rankings
-
-
+    ⏭️  college softball rankings: unavailable right now (NoDataError)
 
 
 ### 🥎 College softball: game summary
@@ -656,7 +648,7 @@ summary_cbs = safe(
 _keys(summary_cbs)
 ```
 
-    ⏭️  college softball game summary (raw): unavailable right now (NoESPNDataError)
+    ⏭️  college softball game summary (raw): unavailable right now (NoDataError)
     (no data)
 
 
@@ -946,8 +938,6 @@ else:
 
 
     ✅ xfl teams
-
-
     ✅ cfl teams
 
 
@@ -955,9 +945,9 @@ else:
 
 
     ✅ college_softball teams
-
-
     ✅ mch teams
+
+
     ✅ wch teams
     Total teams across all 7 leagues: 1067
 
@@ -986,7 +976,7 @@ else:
     'no CFL games today (or offseason)'
 ```
 
-    ✅ today's CFL slate (20260617)
+    ✅ today's CFL slate (20260907)
 
 
 ### Recipe 3 — Player info for any athlete 🧑‍💻
@@ -1037,8 +1027,6 @@ _keys(injuries_cfl)
 ```
 
     ✅ UFL news
-
-
     <class 'polars.dataframe.frame.DataFrame'>
     ✅ CFL injuries
     <class 'polars.dataframe.frame.DataFrame'>
@@ -1093,7 +1081,7 @@ print(f'{len(ufl_fns)} functions on sportsdataverse.football.ufl')
 print('sample:', ufl_fns[:8], '...')
 ```
 
-    110 functions on sportsdataverse.football.ufl
+    112 functions on sportsdataverse.football.ufl
     sample: ['espn_ufl_award', 'espn_ufl_awards', 'espn_ufl_calendar', 'espn_ufl_coach', 'espn_ufl_coach_record', 'espn_ufl_coach_season', 'espn_ufl_conferences', 'espn_ufl_draft'] ...
 
 
@@ -1107,13 +1095,13 @@ for name, mod in [('ufl', ufl), ('xfl', xfl), ('cfl', cfl),
     print(f'  {name:20s}: {n} wrappers')
 ```
 
-      ufl                 : 110 wrappers
-      xfl                 : 110 wrappers
-      cfl                 : 110 wrappers
-      college_baseball    : 113 wrappers
-      college_softball    : 113 wrappers
-      mch                 : 113 wrappers
-      wch                 : 113 wrappers
+      ufl                 : 112 wrappers
+      xfl                 : 112 wrappers
+      cfl                 : 112 wrappers
+      college_baseball    : 118 wrappers
+      college_softball    : 118 wrappers
+      mch                 : 118 wrappers
+      wch                 : 118 wrappers
 
 
 ---

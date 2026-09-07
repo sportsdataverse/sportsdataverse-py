@@ -765,7 +765,7 @@ print("season pbp rows:", season_pbp.shape)
     .head(10))
 ```
 
-    season pbp rows: (2004997, 58)
+    season pbp rows: (2004997, 61)
 
 
 
@@ -833,10 +833,10 @@ pbox_pd["is_dd"] = (pbox_pd[["points", "rebounds", "assists"]] >= 10).sum(axis=1
     3              DJ Burns               YSU              22
     4           Oumar Ballo              ARIZ              20
     5         Armando Bacot               UNC              19
-    6         Fardaws Aimaq               CAL              19
-    7       Yaxel Lendeborg               UAB              19
-    8          Saint Thomas              UNCO              19
-    9           Riley Minix              MORE              19
+    6          Saint Thomas              UNCO              19
+    7         Fardaws Aimaq               CAL              19
+    8           Riley Minix              MORE              19
+    9       Yaxel Lendeborg               UAB              19
 
 
 
