@@ -235,6 +235,7 @@ wp_spread_file = _cfb_resource_filename("sportsdataverse", "cfb/models/wp_spread
 wp_naive_file = _cfb_resource_filename("sportsdataverse", "cfb/models/wp_naive.ubj")
 qbr_model_file = _cfb_resource_filename("sportsdataverse", "cfb/models/qbr_model.ubj")
 cp_model_file = _cfb_resource_filename("sportsdataverse", "cfb/models/cfb_cp_model.ubj")
+cp_air_yards_model_file = _cfb_resource_filename("sportsdataverse", "cfb/models/cfb_cp_model_air_yards.ubj")
 xpass_model_file = _cfb_resource_filename("sportsdataverse", "cfb/models/xpass_model.ubj")
 
 ep_model = Booster({"nthread": 4})  # init model
@@ -254,6 +255,11 @@ qbr_model.load_model(qbr_model_file)
 cp_model = Booster({"nthread": 4})  # init model
 cp_model.load_model(cp_model_file)
 
+# Completion-probability booster with throw depth (11-feat) -> cp / cpoe on the
+# plays that have air yards. See CP_AIR_YARDS_FEATURES and __process_cpoe.
+cp_air_yards_model = Booster({"nthread": 4})  # init model
+cp_air_yards_model.load_model(cp_air_yards_model_file)
+
 # Expected-pass booster (7-feat, binary:logistic) -> xpass / pass_oe.
 xpass_model = Booster({"nthread": 4})  # init model
 xpass_model.load_model(xpass_model_file)
@@ -271,6 +277,12 @@ CP_FEATURES = [
     "period",
     "passing_down",
 ]
+#: The air-yards CP booster's features: the 8 game-state ones plus throw depth.
+#: Kept as a superset rather than a replacement -- the extra game-state columns
+#: cost ~0.002 logloss to retain and still carry information air yards do not
+#: (a throw on 3rd and 18 down two scores is not the same proposition as the
+#: same throw tied in the first quarter).
+CP_AIR_YARDS_FEATURES = CP_FEATURES + ["air_yards", "pass_is_middle", "qb_hurry"]
 XPASS_FEATURES = [
     "down",
     "distance",
@@ -7552,10 +7564,27 @@ class CFBPlayProcess(object):
     def __process_cpoe(self, play_df):
         """Completion probability + CPOE (nflfastR ``cp`` / ``cpoe`` analogue).
 
-        Scores ``cp`` = P(complete pass) on pass plays via the bundled 8-feature
-        completion-probability booster, then ``cpoe = 100 * (completion - cp)``
-        (percentage-point scale). ``cp`` / ``cpoe`` are null on non-pass plays.
-        Degrades to null columns if any source column is missing.
+        Scores ``cp`` = P(complete pass) on pass plays, then
+        ``cpoe = 100 * (completion - cp)`` (percentage-point scale). ``cp`` /
+        ``cpoe`` are null on non-pass plays. Degrades to null columns if any
+        source column is missing.
+
+        Two boosters back this, and which one scored a play is recorded in
+        ``cp_model``:
+
+        * ``air_yards`` -- the 11-feature booster, used where ESPN's play text
+          gave up a catch/target spot. Far stronger: on those rows the
+          game-state model is close to a coin flip (AUC 0.567) while this one
+          reaches 0.764.
+        * ``game_state`` -- the original 8-feature booster, used everywhere
+          else. ESPN only emits those spots from 2025 (38.9% of 2025, 90.2% of
+          2026 to date, ~none before), so this remains the only thing that can
+          score the overwhelming majority of the historical corpus.
+
+        ``cp`` from the two is NOT on a comparable scale, so anything
+        aggregating ``cpoe`` across plays must group by ``cp_model`` or
+        restrict to one of them -- coverage rises steeply season over season,
+        so a blended average would read that composition change as a trend.
         """
         cp_sources = {
             "down": "start.down",
@@ -7572,17 +7601,52 @@ class CFBPlayProcess(object):
             return play_df.with_columns(
                 pl.lit(None, dtype=pl.Float64).alias("cp"),
                 pl.lit(None, dtype=pl.Float64).alias("cpoe"),
+                pl.lit(None, dtype=pl.Utf8).alias("cp_model"),
             )
         try:
             feat = play_df.select(
                 [pl.col(src).cast(pl.Float64).alias(name) for name, src in cp_sources.items()],
             ).to_pandas()[CP_FEATURES]
             cp_raw = cp_model.predict(DMatrix(feat, feature_names=CP_FEATURES))
+
+            # Air-yards arm. Only rows carrying air_yards can use it, so the
+            # booster is scored over the whole frame (cheap) and selected per
+            # row below -- it is never extrapolated onto plays whose throw
+            # distance is unknown.
+            air_ok = all(c in play_df.columns for c in ("air_yards", "pass_direction", "qb_hurry"))
+            if air_ok:
+                air_feat = feat.copy()
+                extra = play_df.select(
+                    pl.col("air_yards").cast(pl.Float64),
+                    # null direction stays null: "not middle" is a different
+                    # claim from "we don't know", and xgboost reads NaN as
+                    # missing rather than as a zero.
+                    pl.when(pl.col("pass_direction").is_null())
+                    .then(None)
+                    .otherwise(pl.col("pass_direction") == "middle")
+                    .cast(pl.Float64)
+                    .alias("pass_is_middle"),
+                    pl.col("qb_hurry").cast(pl.Float64),
+                ).to_pandas()
+                for c in ("air_yards", "pass_is_middle", "qb_hurry"):
+                    air_feat[c] = extra[c]
+                air_raw = cp_air_yards_model.predict(
+                    DMatrix(air_feat[CP_AIR_YARDS_FEATURES], feature_names=CP_AIR_YARDS_FEATURES),
+                )
+                has_air = pl.col("air_yards").is_not_null()
+                cp_expr = (
+                    pl.when(has_air)
+                    .then(pl.Series("_cp_air", air_raw, dtype=pl.Float64))
+                    .otherwise(pl.Series("_cp_base", cp_raw, dtype=pl.Float64))
+                )
+                model_expr = pl.when(has_air).then(pl.lit("air_yards")).otherwise(pl.lit("game_state"))
+            else:
+                cp_expr = pl.Series("_cp_base", cp_raw, dtype=pl.Float64)
+                model_expr = pl.lit("game_state")
+
             play_df = play_df.with_columns(
-                pl.when(pl.col("pass") == True)
-                .then(pl.Series("cp", cp_raw, dtype=pl.Float64))
-                .otherwise(None)
-                .alias("cp"),
+                pl.when(pl.col("pass") == True).then(cp_expr).otherwise(None).alias("cp"),
+                pl.when(pl.col("pass") == True).then(model_expr).otherwise(None).cast(pl.Utf8).alias("cp_model"),
             ).with_columns(
                 pl.when(pl.col("cp").is_not_null())
                 .then(100.0 * (pl.col("completion").cast(pl.Float64) - pl.col("cp")))
@@ -7594,6 +7658,7 @@ class CFBPlayProcess(object):
             play_df = play_df.with_columns(
                 pl.lit(None, dtype=pl.Float64).alias("cp"),
                 pl.lit(None, dtype=pl.Float64).alias("cpoe"),
+                pl.lit(None, dtype=pl.Utf8).alias("cp_model"),
             )
         return play_df
 

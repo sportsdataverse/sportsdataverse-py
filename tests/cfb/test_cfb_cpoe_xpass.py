@@ -16,8 +16,10 @@ import polars as pl
 
 from sportsdataverse.cfb.cfb_pbp import (
     CFBPlayProcess,
+    CP_AIR_YARDS_FEATURES,
     CP_FEATURES,
     XPASS_FEATURES,
+    cp_air_yards_model,
     cp_model,
     xpass_model,
 )
@@ -89,3 +91,74 @@ def test_live_pipeline_emits_cpoe_xpass():
     assert pass_oe_def.null_count() == 0, "pass_oe null where xpass defined"
     assert all(math.isfinite(v) for v in pass_oe_def.to_list()), "pass_oe non-finite where defined"
     assert df.filter(pl.col("xpass").is_null())["pass_oe"].drop_nulls().len() == 0
+
+
+def test_cp_air_yards_model_bundled():
+    """The air-yards booster ships and is the 11-feat superset of CP_FEATURES."""
+    assert cp_air_yards_model.num_features() == 11
+    assert list(cp_air_yards_model.feature_names) == CP_AIR_YARDS_FEATURES
+    # A superset, not a replacement: the game-state features are retained and
+    # keep their order, so the two models stay comparable feature-for-feature.
+    assert CP_AIR_YARDS_FEATURES[:8] == CP_FEATURES
+    assert CP_AIR_YARDS_FEATURES[8:] == ["air_yards", "pass_is_middle", "qb_hurry"]
+
+
+def _cpoe_frame(air_yards, *, direction="middle", with_air_cols=True):
+    """Minimal frame carrying every column __process_cpoe reads."""
+    n = len(air_yards)
+    cols = {
+        "start.down": [1] * n,
+        "start.distance": [10] * n,
+        "start.yardsToEndzone": [70] * n,
+        "pos_score_diff_start": [0] * n,
+        "start.TimeSecsRem": [1800] * n,
+        "start.is_home": [True] * n,
+        "period": [1] * n,
+        "passing_down": [False] * n,
+        "pass": [True] * n,
+        "completion": [1] * n,
+    }
+    if with_air_cols:
+        cols["air_yards"] = air_yards
+        cols["pass_direction"] = [direction] * n
+        cols["qb_hurry"] = [False] * n
+    return pl.DataFrame(cols)
+
+
+def _score(df):
+    proc = CFBPlayProcess(gameId=1)
+    return proc._CFBPlayProcess__process_cpoe(df)
+
+
+def test_cpoe_routes_per_play_and_records_which_model():
+    """Rows with air yards use the air booster; the rest fall back."""
+    out = _score(_cpoe_frame([12, None, 4, None]))
+    assert out["cp_model"].to_list() == [
+        "air_yards",
+        "game_state",
+        "air_yards",
+        "game_state",
+    ]
+    assert out["cp"].null_count() == 0
+    assert out["cp"].min() >= 0.0 and out["cp"].max() <= 1.0
+
+
+def test_cpoe_falls_back_when_air_columns_are_absent():
+    """A pre-2025 frame has no air-yards columns at all and must still score."""
+    out = _score(_cpoe_frame([None, None], with_air_cols=False))
+    assert out["cp_model"].to_list() == ["game_state", "game_state"]
+    assert out["cp"].null_count() == 0
+
+
+def test_cpoe_air_arm_separates_deep_from_short_throws():
+    """The air booster must actually use throw depth, not ignore it.
+
+    A 45-yard throw and a 1-yard throw in identical game state should not get
+    the same completion probability -- if they do, the feature is wired in but
+    inert, which is exactly the failure the game-state model had.
+    """
+    out = _score(_cpoe_frame([1, 45]))
+    assert out["cp_model"].to_list() == ["air_yards", "air_yards"]
+    short_cp, deep_cp = out["cp"].to_list()
+    assert short_cp > deep_cp, f"short {short_cp:.3f} should beat deep {deep_cp:.3f}"
+    assert short_cp - deep_cp > 0.10, "throw depth barely moved cp"
