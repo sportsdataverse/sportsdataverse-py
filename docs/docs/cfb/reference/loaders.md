@@ -1954,18 +1954,18 @@ Release: [espn_cfb_passing](https://github.com/sportsdataverse/sportsdataverse-d
 | `dropbacks` | Float64 | Dropbacks taken by the passer. |
 | `sack_adj_yards` | Float64 | Passing yards adjusted for sack yardage lost. |
 | `yardsdropback` | Float64 | Yards per dropback. |
-| `TEPA_rank` | Float64 | National rank of the team's total EPA summed over every play, where 1 is best. |
-| `EPAgame_rank` | Float64 | National rank of the team's EPA generated per game, where 1 is best. |
-| `EPAplay_rank` | Float64 | National rank of the team's EPA generated per play, where 1 is best. |
-| `success_rank` | Float64 | National rank of the team's success rate across the team plays, where 1 is best. |
-| `comppct_rank` | Float64 | National rank of the team's completion percentage, where 1 is best. |
-| `yards_rank` | Float64 | National rank of the team's total yards, where 1 is best. |
-| `yardsplay_rank` | Float64 | National rank of the team's yards per play, where 1 is best. |
-| `yardsgame_rank` | Float64 | National rank of the team's yards per game, where 1 is best. |
-| `sack_adj_yards_rank` | Float64 | National rank of the team's passing yards adjusted for sack yardage lost, where 1 is best. |
-| `yardsdropback_rank` | Float64 | National rank of the team's yards per dropback, where 1 is best. |
-| `detmer_rank` | Float64 | National rank of the team's detmer rating -- the composite passing-efficiency measure this pipeline publishes, named for the college passing-efficiency tradition, where 1 is best. |
-| `detmergame_rank` | Float64 | National rank of the team's detmer rating expressed per game, where 1 is best. |
+| `TEPA_rank` | Float64 | Rank of the passer's total EPA summed over every play among passers clearing the leaderboard minimum of 14 dropbacks per team game, where 1 is best. |
+| `EPAgame_rank` | Float64 | Rank of the passer's EPA generated per game among passers clearing the leaderboard minimum of 14 dropbacks per team game, where 1 is best. |
+| `EPAplay_rank` | Float64 | Rank of the passer's EPA generated per play among passers clearing the leaderboard minimum of 14 dropbacks per team game, where 1 is best. |
+| `success_rank` | Float64 | Rank of the passer's success rate across their plays among passers clearing the leaderboard minimum of 14 dropbacks per team game, where 1 is best. |
+| `comppct_rank` | Float64 | Rank of the passer's completion percentage among passers clearing the leaderboard minimum of 14 dropbacks per team game, where 1 is best. |
+| `yards_rank` | Float64 | Rank of the passer's total yards among passers clearing the leaderboard minimum of 14 dropbacks per team game, where 1 is best. |
+| `yardsplay_rank` | Float64 | Rank of the passer's yards per play among passers clearing the leaderboard minimum of 14 dropbacks per team game, where 1 is best. |
+| `yardsgame_rank` | Float64 | Rank of the passer's yards per game among passers clearing the leaderboard minimum of 14 dropbacks per team game, where 1 is best. |
+| `sack_adj_yards_rank` | Float64 | Rank of the passer's passing yards adjusted for sack yardage lost among passers clearing the leaderboard minimum of 14 dropbacks per team game, where 1 is best. |
+| `yardsdropback_rank` | Float64 | Rank of the passer's yards per dropback among passers clearing the leaderboard minimum of 14 dropbacks per team game, where 1 is best. |
+| `detmer_rank` | Float64 | Rank of the passer's detmer rating -- the composite passing-efficiency measure this pipeline publishes, named for the college passing-efficiency tradition among passers clearing the leaderboard minimum of 14 dropbacks per team game, where 1 is best. |
+| `detmergame_rank` | Float64 | Rank of the passer's detmer rating expressed per game among passers clearing the leaderboard minimum of 14 dropbacks per team game, where 1 is best. |
 | `fbs_class` | String | Power/Group classification for the season: P4 or G6 from 2024 on, P5 or G5 through 2023, derived from conference membership. Null for teams outside FBS. |
 
 ```python
@@ -2041,14 +2041,14 @@ Release: [espn_cfb_receiving](https://github.com/sportsdataverse/sportsdataverse
 | `yardsplay` | Float64 | Yards per play. |
 | `yardsgame` | Float64 | Yards per game. |
 | `catchpct` | Float64 | Catch rate on a 0-to-1 scale, receptions divided by targets for the season. |
-| `TEPA_rank` | Float64 | National rank of the team's total EPA summed over every play, where 1 is best. |
-| `EPAgame_rank` | Float64 | National rank of the team's EPA generated per game, where 1 is best. |
-| `EPAplay_rank` | Float64 | National rank of the team's EPA generated per play, where 1 is best. |
-| `success_rank` | Float64 | National rank of the team's success rate across the team plays, where 1 is best. |
+| `TEPA_rank` | Float64 | Rank of the receiver's total EPA summed over every play among receivers clearing the leaderboard minimum of 1.875 targets per team game, where 1 is best. |
+| `EPAgame_rank` | Float64 | Rank of the receiver's EPA generated per game among receivers clearing the leaderboard minimum of 1.875 targets per team game, where 1 is best. |
+| `EPAplay_rank` | Float64 | Rank of the receiver's EPA generated per play among receivers clearing the leaderboard minimum of 1.875 targets per team game, where 1 is best. |
+| `success_rank` | Float64 | Rank of the receiver's success rate across their plays among receivers clearing the leaderboard minimum of 1.875 targets per team game, where 1 is best. |
 | `catchpct_rank` | Float64 | Season rank of catchpct with the best catch rate first, computed only for receivers clearing the leaderboard minimum of 1.875 targets per team game and using averaged ranks for ties. |
-| `yards_rank` | Float64 | National rank of the team's total yards, where 1 is best. |
-| `yardsplay_rank` | Float64 | National rank of the team's yards per play, where 1 is best. |
-| `yardsgame_rank` | Float64 | National rank of the team's yards per game, where 1 is best. |
+| `yards_rank` | Float64 | Rank of the receiver's total yards among receivers clearing the leaderboard minimum of 1.875 targets per team game, where 1 is best. |
+| `yardsplay_rank` | Float64 | Rank of the receiver's yards per play among receivers clearing the leaderboard minimum of 1.875 targets per team game, where 1 is best. |
+| `yardsgame_rank` | Float64 | Rank of the receiver's yards per game among receivers clearing the leaderboard minimum of 1.875 targets per team game, where 1 is best. |
 | `fbs_class` | String | Power/Group classification for the season: P4 or G6 from 2024 on, P5 or G5 through 2023, derived from conference membership. Null for teams outside FBS. |
 
 ```python
@@ -2082,13 +2082,13 @@ Release: [espn_cfb_rushing](https://github.com/sportsdataverse/sportsdataverse-d
 | `EPAgame` | Float64 | EPA generated per game. |
 | `yardsplay` | Float64 | Yards per play. |
 | `yardsgame` | Float64 | Yards per game. |
-| `TEPA_rank` | Float64 | National rank of the team's total EPA summed over every play, where 1 is best. |
-| `EPAgame_rank` | Float64 | National rank of the team's EPA generated per game, where 1 is best. |
-| `EPAplay_rank` | Float64 | National rank of the team's EPA generated per play, where 1 is best. |
-| `success_rank` | Float64 | National rank of the team's success rate across the team plays, where 1 is best. |
-| `yards_rank` | Float64 | National rank of the team's total yards, where 1 is best. |
-| `yardsplay_rank` | Float64 | National rank of the team's yards per play, where 1 is best. |
-| `yardsgame_rank` | Float64 | National rank of the team's yards per game, where 1 is best. |
+| `TEPA_rank` | Float64 | Rank of the rusher's total EPA summed over every play among rushers clearing the leaderboard minimum of 6.25 plays per team game, where 1 is best. |
+| `EPAgame_rank` | Float64 | Rank of the rusher's EPA generated per game among rushers clearing the leaderboard minimum of 6.25 plays per team game, where 1 is best. |
+| `EPAplay_rank` | Float64 | Rank of the rusher's EPA generated per play among rushers clearing the leaderboard minimum of 6.25 plays per team game, where 1 is best. |
+| `success_rank` | Float64 | Rank of the rusher's success rate across their plays among rushers clearing the leaderboard minimum of 6.25 plays per team game, where 1 is best. |
+| `yards_rank` | Float64 | Rank of the rusher's total yards among rushers clearing the leaderboard minimum of 6.25 plays per team game, where 1 is best. |
+| `yardsplay_rank` | Float64 | Rank of the rusher's yards per play among rushers clearing the leaderboard minimum of 6.25 plays per team game, where 1 is best. |
+| `yardsgame_rank` | Float64 | Rank of the rusher's yards per game among rushers clearing the leaderboard minimum of 6.25 plays per team game, where 1 is best. |
 | `fbs_class` | String | Power/Group classification for the season: P4 or G6 from 2024 on, P5 or G5 through 2023, derived from conference membership. Null for teams outside FBS. |
 
 ```python
