@@ -9566,6 +9566,11 @@ class CFBPlayProcess(object):
                     self.plays_json = self.__add_two_pt_probs(self.plays_json)
                 self.ran_pipeline = True
                 advBoxScore = self.plays_json.pipe(self.create_box_score)
+                # Keep the enriched polars frame: plays_json becomes a list of
+                # dicts below (and callers mutate it), so consumers that need
+                # to re-aggregate windows (Game on Paper's ?span= boxes filter
+                # the frame and re-run create_box_score) read plays_frame.
+                self.plays_frame = self.plays_json
                 self.plays_json = self.plays_json.to_dicts()
                 pbp_json = {
                     "gameId": int(self.gameId),
