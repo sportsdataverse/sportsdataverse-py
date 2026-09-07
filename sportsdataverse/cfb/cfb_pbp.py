@@ -7585,6 +7585,13 @@ class CFBPlayProcess(object):
         aggregating ``cpoe`` across plays must group by ``cp_model`` or
         restrict to one of them -- coverage rises steeply season over season,
         so a blended average would read that composition change as a trend.
+
+        For exactly that reason a third column, ``cp_game_state``, carries the
+        game-state prediction on every pass play regardless of which model won.
+        It is the series to aggregate: the box score's ``xComp`` / ``CPOE`` sum
+        it rather than ``cp``, so a passer whose plays are partly air-yards
+        scored is not compared against one whose plays are not. Use ``cp`` for a
+        single play, ``cp_game_state`` for anything summed or averaged.
         """
         cp_sources = {
             "down": "start.down",
@@ -7601,6 +7608,7 @@ class CFBPlayProcess(object):
             return play_df.with_columns(
                 pl.lit(None, dtype=pl.Float64).alias("cp"),
                 pl.lit(None, dtype=pl.Float64).alias("cpoe"),
+                pl.lit(None, dtype=pl.Float64).alias("cp_game_state"),
                 pl.lit(None, dtype=pl.Utf8).alias("cp_model"),
             )
         try:
@@ -7646,6 +7654,17 @@ class CFBPlayProcess(object):
 
             play_df = play_df.with_columns(
                 pl.when(pl.col("pass") == True).then(cp_expr).otherwise(None).alias("cp"),
+                # The game-state prediction on EVERY pass play, kept alongside the
+                # hybrid `cp`. Aggregates need one consistent scale: summing the
+                # hybrid across a passer whose plays are partly air-yards-scored
+                # and partly not adds two different quantities, and because
+                # coverage varies by game it would also make passers
+                # non-comparable to each other. `cp` is the better per-play
+                # number; `cp_game_state` is the one that can be averaged.
+                pl.when(pl.col("pass") == True)
+                .then(pl.Series("_cp_gs", cp_raw, dtype=pl.Float64))
+                .otherwise(None)
+                .alias("cp_game_state"),
                 pl.when(pl.col("pass") == True).then(model_expr).otherwise(None).cast(pl.Utf8).alias("cp_model"),
             ).with_columns(
                 pl.when(pl.col("cp").is_not_null())
@@ -7658,6 +7677,7 @@ class CFBPlayProcess(object):
             play_df = play_df.with_columns(
                 pl.lit(None, dtype=pl.Float64).alias("cp"),
                 pl.lit(None, dtype=pl.Float64).alias("cpoe"),
+                pl.lit(None, dtype=pl.Float64).alias("cp_game_state"),
                 pl.lit(None, dtype=pl.Utf8).alias("cp_model"),
             )
         return play_df
@@ -8007,7 +8027,9 @@ class CFBPlayProcess(object):
             .agg(
                 Comp=pl.col("completion").sum(),
                 Att=pl.col("pass_attempt").sum(),
-                xComp=pl.col("cp").sum(),
+                # cp_game_state, NOT cp: see __process_cpoe. Summing the hybrid
+                # would blend two scales within one passer and across passers.
+                xComp=pl.col("cp_game_state").sum(),
                 Yds=pl.col("yds_receiving").sum(),
                 Pass_TD=pl.col("pass_td").sum(),
                 Int=pl.col("int").sum(),

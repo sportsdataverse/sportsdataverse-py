@@ -162,3 +162,25 @@ def test_cpoe_air_arm_separates_deep_from_short_throws():
     short_cp, deep_cp = out["cp"].to_list()
     assert short_cp > deep_cp, f"short {short_cp:.3f} should beat deep {deep_cp:.3f}"
     assert short_cp - deep_cp > 0.10, "throw depth barely moved cp"
+
+
+def test_cp_game_state_is_the_aggregatable_series():
+    """cp_game_state must be one consistent scale on EVERY pass play.
+
+    The box score sums it into xComp. If it were the hybrid, a passer whose
+    plays are partly air-yards-scored would have two different quantities added
+    together, and passers would stop being comparable to each other because
+    air-yards coverage varies by game.
+    """
+    out = _score(_cpoe_frame([12, None, 4, None]))
+
+    # present and non-null on every pass play, whichever model won
+    assert out["cp_game_state"].null_count() == 0
+    assert out["cp_model"].to_list() == ["air_yards", "game_state", "air_yards", "game_state"]
+
+    # on fallback rows the two agree; on air-yards rows cp is the better number
+    for i in (1, 3):
+        assert out["cp"][i] == out["cp_game_state"][i]
+    assert any(out["cp"][i] != out["cp_game_state"][i] for i in (0, 2)), (
+        "cp never diverged from cp_game_state -- the air-yards arm is inert"
+    )
