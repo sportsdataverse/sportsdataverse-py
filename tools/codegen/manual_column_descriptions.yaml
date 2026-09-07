@@ -9626,6 +9626,7 @@ load_ncaa_wbb_lineups:
   rim_ast: Assisted rim makes by the lineup during the stint.
   rima: Rim shots (dunks, layups, hooks, tip-ins) attempted by the lineup during the stint.
   rimm: Rim shots made by the lineup during the stint.
+  season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
   start_allowed: Points allowed at the moment the stint began.
   start_diff: Score margin (scored minus allowed) when the stint began.
   start_min: Game minute at which the stint began.
@@ -9660,6 +9661,7 @@ load_ncaa_wbb_matchup_stints:
   matchup_key: Combined home-plus-away lineup key identifying the ten-player matchup on the floor.
   n_events: Number of play-by-play events falling within the stint.
   n_possessions: Number of possessions falling within the stint.
+  season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
   start_away_score: Away team score when the stint began.
   start_home_score: Home team score when the stint began.
   start_seconds: Elapsed game seconds at which the stint began.
@@ -9729,6 +9731,7 @@ load_ncaa_wbb_pbp:
   poss_team: Name of the team in possession when the event occurred.
   poss_team_espn_team_id: ESPN team identifier of the team in possession, via the NCAA-to-ESPN crosswalk.
   poss_team_ncaa_team_id: stats.ncaa.org team identifier of the team in possession.
+  season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
   sub_deviate: Per-game count of substitution-tracking deviations found while walking lineups forward; nonzero flags imperfect
     substitution data.
   timeout_type: Type of timeout called (e.g. full, 30-second, media).
@@ -9814,6 +9817,7 @@ load_ncaa_wbb_player_box:
   rimm_half: Rim shots made in halfcourt possessions.
   rimm_trans: Rim shots made in transition possessions.
   rimm_unast: Rim shots made in the unassisted split (makes for which no assist was credited).
+  season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
   stl_half: Steals in halfcourt possessions.
   stl_trans: Steals in transition possessions.
   team_espn_team_id: ESPN team identifier of the player's team, via the NCAA-to-ESPN crosswalk.
@@ -9879,6 +9883,7 @@ load_ncaa_wbb_possessions:
   poss_team: Name of the team in possession.
   poss_team_espn_team_id: ESPN team identifier of the team in possession, via the NCAA-to-ESPN crosswalk.
   poss_team_ncaa_team_id: stats.ncaa.org team identifier of the team in possession.
+  season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
   start_event_type: Event type that opened the possession (e.g., a defensive rebound or a made-basket inbound).
 load_ncaa_wbb_rapm:
   def_poss: Defensive possessions the player was on court for; the regression weight behind drapm.
@@ -9898,12 +9903,18 @@ load_ncaa_wbb_rapm_within_team:
   rapm_def: Ridge-regressed defensive RAPM per 100 possessions relative to teammates; positive means good defense.
   rapm_net: Net RAPM — the sum of the offensive and defensive components, per 100 possessions.
   rapm_off: Ridge-regressed offensive RAPM per 100 possessions, estimated relative to the player's own teammates.
+  season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
   team_off_poss: Team offensive possessions underlying the within-team fit.
+load_ncaa_wbb_rosters:
+  season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
+load_ncaa_wbb_schedule:
+  season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
 load_ncaa_wbb_shots:
   dist_ft: Shot distance from the basket in feet.
   made: Whether the shot was made.
   ncaa_team_id: stats.ncaa.org team identifier of the shooting team.
   point_value: Point value of the attempt (2 or 3).
+  season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
   sec_left: Seconds remaining in the period when the shot was taken (all-null in current captures).
   shooter_clean_name: Normalized (diacritics- and punctuation-cleaned) name of the shooter.
   shooter_player_id: stats.ncaa.org player identifier of the shooter.
@@ -9963,6 +9974,7 @@ load_ncaa_wbb_team_box:
   rim_rate: Rim attempts as a share of field-goal attempts.
   rima: Rim shots (dunks, layups, hooks, tip-ins) attempted.
   rimm: Rim shots made.
+  season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
   team_espn_team_id: ESPN team identifier of the team, via the NCAA-to-ESPN crosswalk.
   team_ncaa_team_id: stats.ncaa.org team identifier of the team the row belongs to.
   time_per_poss: Average seconds per offensive possession.
@@ -9970,9 +9982,12 @@ load_ncaa_wbb_team_box:
   tpa: Three-point attempts.
   tpm: Three-pointers made.
   tpp: Three-point percentage.
+load_ncaa_wbb_team_ids:
+  season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
 load_ncaa_wbb_team_rosters:
   clean_name: Normalized (diacritics- and punctuation-cleaned) player name used to join across the NCAA datasets.
   ht_inches: Player height converted to total inches from the stats.ncaa.org roster listing.
+  season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
 load_nfl_contracts:
   cols: Number of contract columns returned in the contracts dataset (metadata artifact from the loader).
 load_nfl_depth_charts:
