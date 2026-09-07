@@ -9429,6 +9429,7 @@ load_ncaa_wbb_lineups:
   tp_ast: Assisted three-point makes by the lineup during the stint.
   tpa: Three-pointers attempted by the lineup during the stint.
   tpm: Three-pointers made by the lineup during the stint.
+  season: "Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted."
 load_ncaa_wbb_matchup_stints:
   away_1: Name of the away team's on-floor player in lineup slot 1 for the stint.
   away_2: Name of the away team's on-floor player in lineup slot 2 for the stint.
@@ -9457,6 +9458,7 @@ load_ncaa_wbb_matchup_stints:
   start_away_score: Away team score when the stint began.
   start_home_score: Home team score when the stint began.
   start_seconds: Elapsed game seconds at which the stint began.
+  season: "Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted."
 load_ncaa_wbb_pbp:
   assist_player: Name of the player credited with the assist on a made shot, when present.
   away_1: Name of the away team's on-floor player in lineup slot 1 for the event, from the substitution walk-forward.
@@ -9527,6 +9529,7 @@ load_ncaa_wbb_pbp:
     substitution data.
   timeout_type: Type of timeout called (e.g. full, 30-second, media).
   turnover_type: Parsed turnover subtype (e.g. lost ball, bad pass, travel).
+  season: "Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted."
 load_ncaa_wbb_player_box:
   ast_half: Assists in halfcourt possessions.
   ast_trans: Assists in transition possessions.
@@ -9629,6 +9632,7 @@ load_ncaa_wbb_player_box:
   tpm_unast: Three-pointers made in the unassisted split (makes for which no assist was credited).
   ts_pct_half: True-shooting percentage in halfcourt possessions.
   ts_pct_trans: True-shooting percentage in transition possessions.
+  season: "Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted."
 load_ncaa_wbb_possessions:
   away_1: Name of the away team's on-floor player in lineup slot 1 for the possession, from the substitution walk-forward.
   away_1_clean_name: Normalized (diacritics- and punctuation-cleaned) name of the away slot-1 on-floor player.
@@ -9674,6 +9678,7 @@ load_ncaa_wbb_possessions:
   poss_team_espn_team_id: ESPN team identifier of the team in possession, via the NCAA-to-ESPN crosswalk.
   poss_team_ncaa_team_id: stats.ncaa.org team identifier of the team in possession.
   start_event_type: Event type that opened the possession (e.g., a defensive rebound or a made-basket inbound).
+  season: "Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted."
 load_ncaa_wbb_rapm_within_team:
   num_players: Number of players in the team's RAPM design matrix.
   player_code: Short unique-within-team player code generated from the player's name (hoop-explorer convention).
@@ -9681,6 +9686,7 @@ load_ncaa_wbb_rapm_within_team:
   rapm_net: Net RAPM — the sum of the offensive and defensive components, per 100 possessions.
   rapm_off: Ridge-regressed offensive RAPM per 100 possessions, estimated relative to the player's own teammates.
   team_off_poss: Team offensive possessions underlying the within-team fit.
+  season: "Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted."
 load_ncaa_wbb_shots:
   dist_ft: Shot distance from the basket in feet.
   made: Whether the shot was made.
@@ -9692,6 +9698,7 @@ load_ncaa_wbb_shots:
   shot_x: Court x-coordinate of the attempt in feet, decoded from the stats.ncaa.org shot-chart map.
   shot_y: Court y-coordinate of the attempt in feet, decoded from the stats.ncaa.org shot-chart map.
   shot_zone: Labeled zone of the attempt (rim, mid-range, or three-point).
+  season: "Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted."
 load_ncaa_wbb_team_box:
   ast_rate: Share of the team's made field goals that were assisted.
   away_ncaa_team_id: stats.ncaa.org team identifier for the away team.
@@ -9752,9 +9759,11 @@ load_ncaa_wbb_team_box:
   tpa: Three-point attempts.
   tpm: Three-pointers made.
   tpp: Three-point percentage.
+  season: "Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted."
 load_ncaa_wbb_team_rosters:
   clean_name: Normalized (diacritics- and punctuation-cleaned) player name used to join across the NCAA datasets.
   ht_inches: Player height converted to total inches from the stats.ncaa.org roster listing.
+  season: "Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted."
 load_nfl_contracts:
   cols: Number of contract columns returned in the contracts dataset (metadata artifact from the loader).
 load_nfl_depth_charts:
@@ -21745,4 +21754,10 @@ load_wnba_stats_shots:
 load_wnba_stats_team_boxscores:
   season: "Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted."
 load_wnba_team_crosswalk:
+  season: "Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted."
+load_ncaa_wbb_rosters:
+  season: "Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted."
+load_ncaa_wbb_schedule:
+  season: "Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted."
+load_ncaa_wbb_team_ids:
   season: "Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted."
