@@ -92,7 +92,9 @@ TWO_PT_MODEL_AVAILABLE: bool = two_pt_model is not None
 
 
 def _era(season: np.ndarray) -> np.ndarray:
-    """Ordinal CFB rule-era factor from season (<=2006->0, <=2013->1, <=2017->2, else 3)."""
+    """Ordinal CFB rule-era factor from season, cuts ``FD_ERA_BOUNDS``
+    (<=2006->0, <=2013->1, <=2020->2, else 3) -- the same cuts the one-hot
+    dummies use, matching the training construction in cfbfastR-cfb-data."""
     lo, mid, hi = FD_ERA_BOUNDS
     out = np.full(len(season), 3, dtype=np.int32)
     out = np.where(season <= hi, 2, out)

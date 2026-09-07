@@ -7620,13 +7620,23 @@ class CFBPlayProcess(object):
                 pl.lit(None, dtype=pl.Float64).alias("pass_oe"),
             )
         try:
-            # Ordinal era from season (cuts: <=2006->0, <=2013->1, <=2017->2, else 3).
+            # Ordinal era from season, cuts FD_ERA_BOUNDS (<=2006->0, <=2013->1,
+            # <=2020->2, else 3). These MUST match the training construction in
+            # cfbfastR-cfb-data (`model_training/features.py::_era`, which reads
+            # the same `ERA_BOUNDS = (2006, 2013, 2020)` the one-hot dummies use).
+            # This was hard-coded to <=2017, so 2018-2020 scored as era 3 against
+            # a model that trained them as era 2 -- see cfbfastR-cfb-data#70.
+            # function-local: cfb_fourth_down imports the EP/WP boosters from
+            # this module, so a top-level import here would be circular
+            from sportsdataverse.cfb.cfb_fourth_down import FD_ERA_BOUNDS
+
+            _lo, _mid, _hi = FD_ERA_BOUNDS
             play_df = play_df.with_columns(
-                pl.when(pl.col("season") <= 2006)
+                pl.when(pl.col("season") <= _lo)
                 .then(0)
-                .when(pl.col("season") <= 2013)
+                .when(pl.col("season") <= _mid)
                 .then(1)
-                .when(pl.col("season") <= 2017)
+                .when(pl.col("season") <= _hi)
                 .then(2)
                 .otherwise(3)
                 .alias("era"),
