@@ -112,8 +112,10 @@ def _report_schema(schemas: dict, ref: str, env_keys: List[str], is_player_detai
     """Build a returns-schema dict from the response envelope's row shape.
 
     Player-detail + matrix + content-less endpoints have no per-row column list in the
-    spec, so they emit a zero-column schema (descriptions are a deferred follow-up via the
-    ``native/pff`` bucket in ``extract_residual_columns._DEFERRED_BUCKETS``).
+    spec, so they emit a zero-column schema. (``native/pff``'s columns were backfilled
+    and graduated off ``extract_residual_columns._DEFERRED_BUCKETS`` on 2026-09-03; a
+    new PFF endpoint with real columns still needs its descriptions authored before
+    the hard residual gate will pass.)
     """
     slug = env_keys[0] if env_keys else ref
     if is_player_detail or not env_keys:

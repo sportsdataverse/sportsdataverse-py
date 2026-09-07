@@ -36,7 +36,7 @@ Polars (or pandas) DataFrame with the same columns documented in `sportsdatavers
 | col_name | type | description |
 |---|---|---|
 | `game_id` | integer | Unique game identifier. |
-| `season` | integer | Season identifier (4-digit year or 'YYYY-YY' string). |
+| `season` | integer | Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted. |
 | `official_id` | character | Unique official / referee identifier. |
 | `first_name` | character | Player's first name. |
 | `last_name` | character | Player's last name. |
@@ -94,7 +94,7 @@ A single-row wide DataFrame (polars by default). When `raw=True` returns the raw
 
 | col_name | type | description |
 |---|---|---|
-| `season` | integer | Season identifier (4-digit year or 'YYYY-YY' string). |
+| `season` | integer | Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted. |
 | `season_type` | character | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
 | `total` | logical | Total. |
 | `athlete_id` | integer | Unique athlete identifier (ESPN). |
@@ -327,7 +327,7 @@ Polars dataframe containing schedule dates for the requested season. Returns Non
 | `away_linescores` | list | Period-by-period point totals for the away team, stored as a list of integer scores. |
 | `away_records` | character | Win-loss record strings for the away team across relevant splits (e.g., overall, home/away, conference). |
 | `game_id` | integer | Unique game identifier. |
-| `season` | integer | Season identifier (4-digit year or 'YYYY-YY' string). |
+| `season` | integer | Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted. |
 | `season_type` | integer | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
 
 **Example**
