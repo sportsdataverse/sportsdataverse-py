@@ -70,10 +70,22 @@ SUBJECT = {
     ),
 }
 
-# "National rank of the team's <noun>, where 1 is best." -> <noun>
-_RANK_RE = re.compile(
-    r"^National rank of the team's (?P<noun>.+?),\s*where 1 is best\.?$",
-    re.IGNORECASE,
+# Two accepted shapes, so the script is re-runnable against a tree it has
+# already been applied to. Matching only the first would make a second run
+# report every column as unparsed and compose nothing -- idempotent on the
+# INPUT is not the same as idempotent on its own OUTPUT.
+#
+#   1. team-grid leftover: "National rank of the team's <noun>, where 1 is best."
+#   2. this script's own:  "Rank of the <subject>'s <noun> among <pop>, where 1 is best."
+_RANK_PATTERNS = (
+    re.compile(
+        r"^National rank of the team's (?P<noun>.+?),\s*where 1 is best\.?$",
+        re.IGNORECASE,
+    ),
+    re.compile(
+        r"^Rank of the \w+'s (?P<noun>.+?) among .+?,\s*where 1 is best\.?$",
+        re.IGNORECASE,
+    ),
 )
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
@@ -94,7 +106,10 @@ def _noun(existing: str | None) -> str | None:
     """Metric phrase out of an existing ``_rank`` description, else None."""
     if not existing:
         return None
-    m = _RANK_RE.match(existing.strip())
+    m = next(
+        (m for p in _RANK_PATTERNS if (m := p.match(existing.strip()))),
+        None,
+    )
     if not m:
         return None
     noun = NOUN_FIXUPS.get((raw := m.group("noun").strip()), raw)
@@ -127,12 +142,15 @@ def main() -> None:
 
     out: dict[str, dict[str, str]] = {t: {} for t in TARGETS}
     unparsed: list[str] = []
+    pending: list[str] = []
 
     for t in TARGETS:
         subject, population = SUBJECT[t]
         curated = manual.get(t) or {}
-        for entry in schemas.get(t, []):
-            col = entry["name"] if isinstance(entry, dict) else str(entry)
+        declared = {
+            (e["name"] if isinstance(e, dict) else str(e)) for e in schemas.get(t, [])
+        }
+        for col in sorted(declared):
             if not col.endswith("_rank"):
                 continue
             base = col[: -len("_rank")]
@@ -141,13 +159,27 @@ def main() -> None:
                 unparsed.append(f"{t}.{col}")
                 continue
             out[t][col] = rank_desc(noun, subject, population)
-            out[t][f"{base}_pct"] = pct_desc(noun, population)
+            # Emit the _pct sibling ONLY when the column is actually declared.
+            # tests/codegen/test_manual_descriptions.py::test_no_orphan_manual_entries
+            # fails on any manual key without a matching schema column, so a
+            # description cannot be written ahead of the column existing --
+            # runtime tolerates it (the lookup is manual[schema][col]) but the
+            # suite deliberately does not. The _pct columns land when
+            # cfbfastR-cfb-data#50's rebuilt assets are published and
+            # loader_schemas.yaml is re-captured; this generator then emits them
+            # on the next run with no edit here.
+            pct_col = f"{base}_pct"
+            if pct_col in declared:
+                out[t][pct_col] = pct_desc(noun, population)
+            else:
+                pending.append(f"{t}.{pct_col}")
 
     total = sum(len(v) for v in out.values())
     ranks = sum(1 for v in out.values() for c in v if c.endswith("_rank"))
     pcts = sum(1 for v in out.values() for c in v if c.endswith("_pct"))
     print(f"composed {total} descriptions across {len(TARGETS)} schemas ({ranks} corrected _rank, {pcts} new _pct)")
     print(f"UNPARSED (skipped, never invented): {len(unparsed)}")
+    print(f"PENDING _pct (column not declared yet, skipped): {len(pending)}")
     for u in sorted(unparsed)[:40]:
         print(f"   {u}")
 

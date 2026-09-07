@@ -5779,44 +5779,25 @@ load_cfb_model_pbp:
   wp_model_version: Version of the win-probability model that scored the play.
 load_cfb_passing:
   EPAgame: EPA generated per game.
-  EPAgame_pct: Percentile (0-100) of EPA generated per game among passers clearing the leaderboard minimum of 14 dropbacks
-    per team game, where 100 is best. Direction is already encoded in the matching rank, so a lower-is-better metric still
-    scores 100 at its best. Null when the metric is null, and null rows are excluded from the denominator.
   EPAgame_rank: Rank of the passer's EPA generated per game among passers clearing the leaderboard minimum of 14 dropbacks
     per team game, where 1 is best.
   EPAplay: EPA generated per play.
-  EPAplay_pct: Percentile (0-100) of EPA generated per play among passers clearing the leaderboard minimum of 14 dropbacks
-    per team game, where 100 is best. Direction is already encoded in the matching rank, so a lower-is-better metric still
-    scores 100 at its best. Null when the metric is null, and null rows are excluded from the denominator.
   EPAplay_rank: Rank of the passer's EPA generated per play among passers clearing the leaderboard minimum of 14 dropbacks
     per team game, where 1 is best.
   TEPA: Total EPA summed over every play.
-  TEPA_pct: Percentile (0-100) of total EPA summed over every play among passers clearing the leaderboard minimum of 14 dropbacks
-    per team game, where 100 is best. Direction is already encoded in the matching rank, so a lower-is-better metric still
-    scores 100 at its best. Null when the metric is null, and null rows are excluded from the denominator.
   TEPA_rank: Rank of the passer's total EPA summed over every play among passers clearing the leaderboard minimum of 14 dropbacks
     per team game, where 1 is best.
   att: Pass attempts thrown.
   comp: Completed passes.
   comppct: Completion percentage.
-  comppct_pct: Percentile (0-100) of completion percentage among passers clearing the leaderboard minimum of 14 dropbacks
-    per team game, where 100 is best. Direction is already encoded in the matching rank, so a lower-is-better metric still
-    scores 100 at its best. Null when the metric is null, and null rows are excluded from the denominator.
   comppct_rank: Rank of the passer's completion percentage among passers clearing the leaderboard minimum of 14 dropbacks
     per team game, where 1 is best.
   detmer: Detmer rating -- the composite passing-efficiency measure this pipeline publishes, named for the college passing-efficiency
     tradition.
-  detmer_pct: Percentile (0-100) of detmer rating -- the composite passing-efficiency measure this pipeline publishes, named
-    for the college passing-efficiency tradition among passers clearing the leaderboard minimum of 14 dropbacks per team game,
-    where 100 is best. Direction is already encoded in the matching rank, so a lower-is-better metric still scores 100 at
-    its best. Null when the metric is null, and null rows are excluded from the denominator.
   detmer_rank: Rank of the passer's detmer rating -- the composite passing-efficiency measure this pipeline publishes, named
     for the college passing-efficiency tradition among passers clearing the leaderboard minimum of 14 dropbacks per team game,
     where 1 is best.
   detmergame: Detmer rating expressed per game.
-  detmergame_pct: Percentile (0-100) of detmer rating expressed per game among passers clearing the leaderboard minimum of
-    14 dropbacks per team game, where 100 is best. Direction is already encoded in the matching rank, so a lower-is-better
-    metric still scores 100 at its best. Null when the metric is null, and null rows are excluded from the denominator.
   detmergame_rank: Rank of the passer's detmer rating expressed per game among passers clearing the leaderboard minimum of
     14 dropbacks per team game, where 1 is best.
   dropbacks: Dropbacks taken by the passer.
@@ -5827,42 +5808,24 @@ load_cfb_passing:
   passer_player_name: Display name of the passer -- the FIRST participant in that role on the play.
   playsgame: Plays per game.
   sack_adj_yards: Passing yards adjusted for sack yardage lost.
-  sack_adj_yards_pct: Percentile (0-100) of passing yards adjusted for sack yardage lost among passers clearing the leaderboard
-    minimum of 14 dropbacks per team game, where 100 is best. Direction is already encoded in the matching rank, so a lower-is-better
-    metric still scores 100 at its best. Null when the metric is null, and null rows are excluded from the denominator.
   sack_adj_yards_rank: Rank of the passer's passing yards adjusted for sack yardage lost among passers clearing the leaderboard
     minimum of 14 dropbacks per team game, where 1 is best.
   sack_epa: EPA lost on the sacks the team's passers took -- the expected-points cost of those plays.
   sack_yds: Yards lost to sacks.
   sacked: Times the passer was sacked.
   success: Success rate across the team plays.
-  success_pct: Percentile (0-100) of success rate across their plays among passers clearing the leaderboard minimum of 14
-    dropbacks per team game, where 100 is best. Direction is already encoded in the matching rank, so a lower-is-better metric
-    still scores 100 at its best. Null when the metric is null, and null rows are excluded from the denominator.
   success_rank: Rank of the passer's success rate across their plays among passers clearing the leaderboard minimum of 14
     dropbacks per team game, where 1 is best.
   team_games: Games the team played, used as the per-game denominator.
-  yards_pct: Percentile (0-100) of total yards among passers clearing the leaderboard minimum of 14 dropbacks per team game,
-    where 100 is best. Direction is already encoded in the matching rank, so a lower-is-better metric still scores 100 at
-    its best. Null when the metric is null, and null rows are excluded from the denominator.
   yards_rank: Rank of the passer's total yards among passers clearing the leaderboard minimum of 14 dropbacks per team game,
     where 1 is best.
   yardsdropback: Yards per dropback.
-  yardsdropback_pct: Percentile (0-100) of yards per dropback among passers clearing the leaderboard minimum of 14 dropbacks
-    per team game, where 100 is best. Direction is already encoded in the matching rank, so a lower-is-better metric still
-    scores 100 at its best. Null when the metric is null, and null rows are excluded from the denominator.
   yardsdropback_rank: Rank of the passer's yards per dropback among passers clearing the leaderboard minimum of 14 dropbacks
     per team game, where 1 is best.
   yardsgame: Yards per game.
-  yardsgame_pct: Percentile (0-100) of yards per game among passers clearing the leaderboard minimum of 14 dropbacks per team
-    game, where 100 is best. Direction is already encoded in the matching rank, so a lower-is-better metric still scores 100
-    at its best. Null when the metric is null, and null rows are excluded from the denominator.
   yardsgame_rank: Rank of the passer's yards per game among passers clearing the leaderboard minimum of 14 dropbacks per team
     game, where 1 is best.
   yardsplay: Yards per play.
-  yardsplay_pct: Percentile (0-100) of yards per play among passers clearing the leaderboard minimum of 14 dropbacks per team
-    game, where 100 is best. Direction is already encoded in the matching rank, so a lower-is-better metric still scores 100
-    at its best. Null when the metric is null, and null rows are excluded from the denominator.
   yardsplay_rank: Rank of the passer's yards per play among passers clearing the leaderboard minimum of 14 dropbacks per team
     game, where 1 is best.
 load_cfb_pbp:
@@ -6482,21 +6445,12 @@ load_cfb_ratings_weekly:
     that week's final kickoff date.
 load_cfb_receiving:
   EPAgame: EPA generated per game.
-  EPAgame_pct: Percentile (0-100) of EPA generated per game among receivers clearing the leaderboard minimum of 1.875 targets
-    per team game, where 100 is best. Direction is already encoded in the matching rank, so a lower-is-better metric still
-    scores 100 at its best. Null when the metric is null, and null rows are excluded from the denominator.
   EPAgame_rank: Rank of the receiver's EPA generated per game among receivers clearing the leaderboard minimum of 1.875 targets
     per team game, where 1 is best.
   EPAplay: EPA generated per play.
-  EPAplay_pct: Percentile (0-100) of EPA generated per play among receivers clearing the leaderboard minimum of 1.875 targets
-    per team game, where 100 is best. Direction is already encoded in the matching rank, so a lower-is-better metric still
-    scores 100 at its best. Null when the metric is null, and null rows are excluded from the denominator.
   EPAplay_rank: Rank of the receiver's EPA generated per play among receivers clearing the leaderboard minimum of 1.875 targets
     per team game, where 1 is best.
   TEPA: Total EPA summed over every play.
-  TEPA_pct: Percentile (0-100) of total EPA summed over every play among receivers clearing the leaderboard minimum of 1.875
-    targets per team game, where 100 is best. Direction is already encoded in the matching rank, so a lower-is-better metric
-    still scores 100 at its best. Null when the metric is null, and null rows are excluded from the denominator.
   TEPA_rank: Rank of the receiver's total EPA summed over every play among receivers clearing the leaderboard minimum of 1.875
     targets per team game, where 1 is best.
   catchpct: Catch rate on a 0-to-1 scale, receptions divided by targets for the season.
@@ -6509,27 +6463,15 @@ load_cfb_receiving:
   playsgame: Plays per game.
   receiver_player_name: Display name of the targeted receiver -- the FIRST participant in that role on the play.
   success: Success rate across the team plays.
-  success_pct: Percentile (0-100) of success rate across their plays among receivers clearing the leaderboard minimum of 1.875
-    targets per team game, where 100 is best. Direction is already encoded in the matching rank, so a lower-is-better metric
-    still scores 100 at its best. Null when the metric is null, and null rows are excluded from the denominator.
   success_rank: Rank of the receiver's success rate across their plays among receivers clearing the leaderboard minimum of
     1.875 targets per team game, where 1 is best.
   team_games: Games the team played, used as the per-game denominator.
-  yards_pct: Percentile (0-100) of total yards among receivers clearing the leaderboard minimum of 1.875 targets per team
-    game, where 100 is best. Direction is already encoded in the matching rank, so a lower-is-better metric still scores 100
-    at its best. Null when the metric is null, and null rows are excluded from the denominator.
   yards_rank: Rank of the receiver's total yards among receivers clearing the leaderboard minimum of 1.875 targets per team
     game, where 1 is best.
   yardsgame: Yards per game.
-  yardsgame_pct: Percentile (0-100) of yards per game among receivers clearing the leaderboard minimum of 1.875 targets per
-    team game, where 100 is best. Direction is already encoded in the matching rank, so a lower-is-better metric still scores
-    100 at its best. Null when the metric is null, and null rows are excluded from the denominator.
   yardsgame_rank: Rank of the receiver's yards per game among receivers clearing the leaderboard minimum of 1.875 targets
     per team game, where 1 is best.
   yardsplay: Yards per play.
-  yardsplay_pct: Percentile (0-100) of yards per play among receivers clearing the leaderboard minimum of 1.875 targets per
-    team game, where 100 is best. Direction is already encoded in the matching rank, so a lower-is-better metric still scores
-    100 at its best. Null when the metric is null, and null rows are excluded from the denominator.
   yardsplay_rank: Rank of the receiver's yards per play among receivers clearing the leaderboard minimum of 1.875 targets
     per team game, where 1 is best.
 load_cfb_recruiting_proj:
@@ -6663,21 +6605,12 @@ load_cfb_rosters_cfbd:
     0 entry means no recruiting profile was matched.
 load_cfb_rushing:
   EPAgame: EPA generated per game.
-  EPAgame_pct: Percentile (0-100) of EPA generated per game among rushers clearing the leaderboard minimum of 6.25 plays per
-    team game, where 100 is best. Direction is already encoded in the matching rank, so a lower-is-better metric still scores
-    100 at its best. Null when the metric is null, and null rows are excluded from the denominator.
   EPAgame_rank: Rank of the rusher's EPA generated per game among rushers clearing the leaderboard minimum of 6.25 plays per
     team game, where 1 is best.
   EPAplay: EPA generated per play.
-  EPAplay_pct: Percentile (0-100) of EPA generated per play among rushers clearing the leaderboard minimum of 6.25 plays per
-    team game, where 100 is best. Direction is already encoded in the matching rank, so a lower-is-better metric still scores
-    100 at its best. Null when the metric is null, and null rows are excluded from the denominator.
   EPAplay_rank: Rank of the rusher's EPA generated per play among rushers clearing the leaderboard minimum of 6.25 plays per
     team game, where 1 is best.
   TEPA: Total EPA summed over every play.
-  TEPA_pct: Percentile (0-100) of total EPA summed over every play among rushers clearing the leaderboard minimum of 6.25
-    plays per team game, where 100 is best. Direction is already encoded in the matching rank, so a lower-is-better metric
-    still scores 100 at its best. Null when the metric is null, and null rows are excluded from the denominator.
   TEPA_rank: Rank of the rusher's total EPA summed over every play among rushers clearing the leaderboard minimum of 6.25
     plays per team game, where 1 is best.
   fbs_class: 'Power/Group classification for the season: P4 or G6 from 2024 on, P5 or G5 through 2023, derived from conference
@@ -6686,27 +6619,15 @@ load_cfb_rushing:
   playsgame: Plays per game.
   rusher_player_name: Display name of the ball carrier on a rush -- the FIRST participant in that role on the play.
   success: Success rate across the team plays.
-  success_pct: Percentile (0-100) of success rate across their plays among rushers clearing the leaderboard minimum of 6.25
-    plays per team game, where 100 is best. Direction is already encoded in the matching rank, so a lower-is-better metric
-    still scores 100 at its best. Null when the metric is null, and null rows are excluded from the denominator.
   success_rank: Rank of the rusher's success rate across their plays among rushers clearing the leaderboard minimum of 6.25
     plays per team game, where 1 is best.
   team_games: Games the team played, used as the per-game denominator.
-  yards_pct: Percentile (0-100) of total yards among rushers clearing the leaderboard minimum of 6.25 plays per team game,
-    where 100 is best. Direction is already encoded in the matching rank, so a lower-is-better metric still scores 100 at
-    its best. Null when the metric is null, and null rows are excluded from the denominator.
   yards_rank: Rank of the rusher's total yards among rushers clearing the leaderboard minimum of 6.25 plays per team game,
     where 1 is best.
   yardsgame: Yards per game.
-  yardsgame_pct: Percentile (0-100) of yards per game among rushers clearing the leaderboard minimum of 6.25 plays per team
-    game, where 100 is best. Direction is already encoded in the matching rank, so a lower-is-better metric still scores 100
-    at its best. Null when the metric is null, and null rows are excluded from the denominator.
   yardsgame_rank: Rank of the rusher's yards per game among rushers clearing the leaderboard minimum of 6.25 plays per team
     game, where 1 is best.
   yardsplay: Yards per play.
-  yardsplay_pct: Percentile (0-100) of yards per play among rushers clearing the leaderboard minimum of 6.25 plays per team
-    game, where 100 is best. Direction is already encoded in the matching rank, so a lower-is-better metric still scores 100
-    at its best. Null when the metric is null, and null rows are excluded from the denominator.
   yardsplay_rank: Rank of the rusher's yards per play among rushers clearing the leaderboard minimum of 6.25 plays per team
     game, where 1 is best.
 load_cfb_schedule:
