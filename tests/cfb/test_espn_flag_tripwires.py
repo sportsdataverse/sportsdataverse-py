@@ -123,7 +123,13 @@ def test_plays_frame_retained_for_window_reaggregation(monkeypatch):
     # the flat dotted schema create_box_score consumes, not the nested shape
     assert "start.down" in proc.plays_frame.columns
     # and it is actually re-aggregable: a windowed box computes without error
+    # (the fixture game must exercise this -- an empty window would let the
+    # test pass without ever calling create_box_score)
     q3 = proc.plays_frame.filter(pl.col("period") == 3)
-    if q3.height:
-        box = proc.create_box_score(q3)
-        assert box
+    assert q3.height > 0
+    box = proc.create_box_score(q3)
+    assert box
+    # the post-pipeline prob methods must not leave the frame stale
+    proc.add_fourth_down_probs()
+    assert proc.plays_frame.height == len(proc.plays_json)
+    assert "fourth_down_recommendation" in proc.plays_frame.columns
