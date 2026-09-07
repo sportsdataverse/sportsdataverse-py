@@ -147,9 +147,7 @@ def main() -> None:
     for t in TARGETS:
         subject, population = SUBJECT[t]
         curated = manual.get(t) or {}
-        declared = {
-            (e["name"] if isinstance(e, dict) else str(e)) for e in schemas.get(t, [])
-        }
+        declared = {(e["name"] if isinstance(e, dict) else str(e)) for e in schemas.get(t, [])}
         for col in sorted(declared):
             if not col.endswith("_rank"):
                 continue
