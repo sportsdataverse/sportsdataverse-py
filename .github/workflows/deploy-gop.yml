@@ -8,10 +8,18 @@ name: dispatch Game on Paper deploy (package pushes to main)
 #
 # Cross-repo dispatch needs a token with access to game-on-paper-app;
 # GITHUB_TOKEN is scoped to this repository only. Least privilege for the
-# repository_dispatch endpoint is a fine-grained PAT with `Contents: read` on
-# saiemgilani/game-on-paper-app -- not the classic `repo` scope. Until the
-# GOP_DEPLOY_TOKEN secret exists this job explains itself and exits green
-# rather than failing every push to main.
+# repository_dispatch endpoint is a fine-grained PAT with `Contents: WRITE` on
+# saiemgilani/game-on-paper-app -- not the classic `repo` scope, and NOT
+# `Contents: read`, which this comment claimed until 2026-09-07.
+#
+# That was not a harmless typo. POST /repos/{owner}/{repo}/dispatches is a
+# write endpoint; a read-scoped token gets 403 "Resource not accessible by
+# personal access token". The secret was scoped by following this comment, so
+# every run of this workflow has failed -- 60 for 60, no success on record --
+# and no push to main has ever actually redeployed Game on Paper.
+#
+# Until the GOP_DEPLOY_TOKEN secret exists this job explains itself and exits
+# green rather than failing every push to main.
 
 on:
   push:
