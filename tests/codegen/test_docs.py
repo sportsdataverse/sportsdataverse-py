@@ -60,49 +60,6 @@ def test_league_index_lists_api_rows_and_loaders():
     assert "[Dataset loaders](reference/loaders)" in md
 
 
-# --- Highlights: curated functions pulled out of the Additional bucket ------
-
-
-def test_highlighted_names_intersects_against_the_real_autodoc_set():
-    # A curated name that doesn't actually exist in this call's autodoc set (typo,
-    # or since moved to a generated page) is silently dropped, not surfaced.
-    highlighted = generate._highlighted_names("mbb", ["espn_mbb_schedule", "not_a_real_function"])
-    assert highlighted == {"espn_mbb_schedule"}
-
-
-def test_highlighted_names_is_always_empty_for_the_global_scope():
-    assert generate._highlighted_names(None, ["espn_mbb_schedule"]) == set()
-
-
-def test_autodoc_family_checks_highlighted_before_the_keyword_rules():
-    # espn_mbb_schedule would otherwise classify as "Play-by-play, schedule & rosters"
-    # (it matches the _ESPN_PBP_FAMILY_TOKENS "_schedule" token) -- Highlights wins.
-    assert generate._autodoc_family("espn_mbb_schedule") == "Play-by-play, schedule & rosters"
-    assert generate._autodoc_family("espn_mbb_schedule", frozenset({"espn_mbb_schedule"})) == "Highlights"
-
-
-def test_render_league_index_highlights_row_and_additional_count_do_not_overlap():
-    md = generate.render_league_index(
-        "mbb", has_additional=True, additional_count=317, has_highlights=True, highlights_count=9
-    )
-    assert "| [Highlights](reference/additional#highlights) | 9 |" in md
-    assert "| [Additional functions](reference/additional) | 317 |" in md
-
-
-def test_render_league_index_omits_highlights_row_by_default():
-    md = generate.render_league_index("nba")
-    assert "Highlights" not in md
-
-
-def test_mbb_additional_page_has_a_highlights_group_first():
-    names = generate._autodoc_names("mbb", "")
-    groups = generate._autodoc_groups("mbb", names)
-    assert groups[0]["family"] == "Highlights"
-    highlighted_fns = {fn["name"] for fn in groups[0]["functions"]}
-    assert "espn_mbb_pbp" in highlighted_fns
-    assert "espn_mbb_schedule" in highlighted_fns
-
-
 def test_loaders_page_has_mermaid_and_per_loader_blocks():
     md = generate.render_loaders_page("nhl")
     assert "```mermaid" in md

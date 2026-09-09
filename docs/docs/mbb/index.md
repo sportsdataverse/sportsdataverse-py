@@ -7,7 +7,6 @@ description: "sdv-py MBB: endpoint references, dataset loaders and parsers for M
 
 | Reference | Functions | Base URL |
 |---|---:|---|
-| [Highlights](reference/additional#highlights) | 9 | curated "start here" functions |
 | [ESPN site API (v2)](reference/site) | 25 | `https://site.api.espn.com/apis/site/v2/sports` |
 | [ESPN web API (v3)](reference/web) | 5 | `https://site.web.api.espn.com/apis/common/v3/sports` |
 | [ESPN core API (v2)](reference/core) | 87 | `https://sports.core.api.espn.com/v2/sports` |
@@ -15,7 +14,7 @@ description: "sdv-py MBB: endpoint references, dataset loaders and parsers for M
 | [Bart Torvik T-Rank (barttorvik.com)](reference/torvik) | 2 | `https://barttorvik.com` |
 | [KenPom (kenpom.com, subscription)](reference/kenpom) | 30 | `https://kenpom.com` |
 | [Dataset loaders](reference/loaders) | 30 | sportsdataverse-data releases |
-| [Additional functions](reference/additional) | 317 | hand-written wrappers, loaders & helpers |
+| [Additional functions](reference/additional) | 326 | hand-written wrappers, loaders & helpers |
 
 ## Examples
 

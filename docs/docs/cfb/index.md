@@ -7,7 +7,6 @@ description: "sdv-py CFB: endpoint references, dataset loaders and parsers for C
 
 | Reference | Functions | Base URL |
 |---|---:|---|
-| [Highlights](reference/additional#highlights) | 8 | curated "start here" functions |
 | [ESPN site API (v2)](reference/site) | 25 | `https://site.api.espn.com/apis/site/v2/sports` |
 | [ESPN web API (v3)](reference/web) | 5 | `https://site.web.api.espn.com/apis/common/v3/sports` |
 | [ESPN core API (v2)](reference/core) | 89 | `https://sports.core.api.espn.com/v2/sports` |
@@ -16,7 +15,7 @@ description: "sdv-py CFB: endpoint references, dataset loaders and parsers for C
 | [247Sports Recruit Database (ipa.247sports.com)](reference/sports247) | 12 | `https://ipa.247sports.com` |
 | [247Sports Site Pages (247sports.com)](reference/sports247_site_pages) | 35 | `https://247sports.com` |
 | [Dataset loaders](reference/loaders) | 52 | sportsdataverse raw data / sportsdataverse-data releases |
-| [Additional functions](reference/additional) | 86 | hand-written wrappers, loaders & helpers |
+| [Additional functions](reference/additional) | 94 | hand-written wrappers, loaders & helpers |
 
 ## Examples
 

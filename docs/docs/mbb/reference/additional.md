@@ -9,7 +9,7 @@ sidebar_position: 50
 Hand-written wrappers, loaders, and helpers in `sportsdataverse.mbb`
 not covered by the generated API-endpoint reference above.
 
-## Highlights
+## Play-by-play, schedule & rosters
 
 ### `espn_mbb_game_rosters(game_id: 'int', raw=False, return_as_pandas=False, **kwargs) -> 'pl.DataFrame'` {#espn_mbb_game_rosters}
 
@@ -446,173 +446,6 @@ season_pd = espn_mbb_schedule(dates=2024, return_as_pandas=True)
 season_pd.head()
 ```
 
-### `espn_mbb_teams(groups=None, return_as_pandas=False, **kwargs) -> 'pl.DataFrame'` {#espn_mbb_teams}
-
-espn_mbb_teams - look up the men's college basketball teams
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `groups` | `int` | `None` | Used to define different divisions. 50 is Division I, 51 is Division II/Division III. |
-| `return_as_pandas` | `bool` | `False` | If True, returns a pandas dataframe. If False, returns a polars dataframe. |
-
-**Returns**
-
-Polars dataframe containing teams for the requested league. This function caches by default, so if you want to refresh the data, use the command sportsdataverse.mbb.espn_mbb_teams.clear_cache().
-
-| col_name | type | description |
-|---|---|---|
-| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
-| `team_alternate_color` | character | Team alternate color (hex without leading '#'). |
-| `team_color` | character | Team primary color (hex without leading '#'). |
-| `team_display_name` | character | Full team display name. |
-| `team_id` | character | Unique team identifier. |
-| `team_is_active` | logical | TRUE if the team is currently active. |
-| `team_is_all_star` | logical | TRUE if the row represents an All-Star team. |
-| `team_location` | character | Team city or location string. |
-| `team_logos` | integer | Team logo metadata. |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
-| `team_nickname` | character | Team nickname. |
-| `team_short_display_name` | character | Short team display name (e.g. 'Aces'). |
-| `team_slug` | character | URL-safe team identifier (e.g. 'lasvegas-aces' / 'aces'). |
-| `team_uid` | character | ESPN universal team identifier (UID format 's:40~l:...~t:...'). |
-
-**Example**
-
-```python
-from sportsdataverse.mbb import espn_mbb_teams
-teams = espn_mbb_teams()
-print(teams.shape)
-print(teams.columns[:8])
-
-# Walk every team-id (handy for batched scrapes)
-
-team_ids = teams["team_id"].to_list()
-print(len(team_ids), "D1 teams")
-
-# Pandas round-trip + Division II/III
-
-d2_d3 = espn_mbb_teams(groups=51, return_as_pandas=True)
-d2_d3.head()
-```
-
-### `most_recent_mbb_season()` {#most_recent_mbb_season}
-
-Return the most recent men's college basketball season year.
-
-The men's college basketball season spans early November through early
-April; for any month October-December the "current season" is the
-following calendar year (e.g. October 2025 returns `2026`).
-
-**Returns**
-
-The most recent / current season year.
-
-**Example**
-
-```python
-from sportsdataverse.mbb import most_recent_mbb_season, espn_mbb_schedule
-season = most_recent_mbb_season()
-sched = espn_mbb_schedule(dates=season)
-```
-
-### `ncaa_mbb_play_by_play(game_ids: "'Sequence[object]'", *, fetcher: 'Optional[_SupportsFetchGamePbp]' = None, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, Any]'"` {#ncaa_mbb_play_by_play}
-
-Scrape many MBB games' play-by-play (bigballR `get_play_by_play`).
-
-Ports `bigballR/R/all_functions.R:1857-1897`: drops missing ids, shares
-one fetcher session across games, retries each empty/failed game once,
-row-binds the survivors, and logs the removed ids.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `game_ids` | `Sequence[object]` |  | NCAA contest ids; `None`/NaN entries are dropped. |
-| `fetcher` | `Optional[_SupportsFetchGamePbp]` | `None` | Optional injected fetcher exposing `fetch_game_pbp`. Defaults to one shared `NcaaFetcher.with_browser()` context. |
-| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
-
-**Returns**
-
-Row-bound play-by-play for every game that scraped successfully (zero-row contract frame when none did).
-
-**Example**
-
-```python
-from sportsdataverse.mbb.mbb_ncaa_game_pbp import ncaa_mbb_play_by_play
-df = ncaa_mbb_play_by_play(["6470186", "6479639"])
-print(df.shape)
-
-# Pipeline next step (one line)
-
-df.group_by("game_id").len()
-```
-
-### `ncaa_mbb_team_roster(team_id: 'Optional[int]' = None, *, team: 'Optional[str]' = None, season: 'Optional[str]' = None, fetcher: "Optional['NcaaFetcher']" = None, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#ncaa_mbb_team_roster}
-
-Scrape a men's team roster from stats.ncaa.org.
-
-Port of bigballR `get_team_roster`. The `player` column is the
-normalized `FIRST.LAST` key that byte-matches the play-by-play name
-normalization, so roster<->pbp joins line up.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `team_id` | `Optional[int]` | `None` | stats.ncaa.org team id (changes every season). |
-| `team` | `Optional[str]` | `None` | School name, e.g. `"Illinois"`. |
-| `season` | `Optional[str]` | `None` | Season string, e.g. `"2025-26"`; required with `team`. |
-| `fetcher` | `Optional['NcaaFetcher']` | `None` | Injectable `~sportsdataverse.mbb.mbb_ncaa_fetch. NcaaFetcher`; defaults to a fresh browser-transport fetcher. |
-| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
-
-**Returns**
-
-One row per player -- see `parse_ncaa_bb_team_roster` for the column contract.
-
-**Example**
-
-```python
-from sportsdataverse.mbb import ncaa_mbb_team_roster
-df = ncaa_mbb_team_roster(team="Illinois", season="2025-26")
-print(df.select("jersey", "player", "ht_inches").head())
-```
-
-### `ncaa_mbb_team_schedule(team_id: 'Optional[int]' = None, *, team: 'Optional[str]' = None, season: 'Optional[str]' = None, fetcher: "Optional['NcaaFetcher']" = None, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#ncaa_mbb_team_schedule}
-
-Scrape a men's team's season schedule from stats.ncaa.org.
-
-Port of bigballR `get_team_schedule`. Give either the season-specific
-`team_id` or a `team` + `season` pair (resolved through the bundled
-men's crosswalk).
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `team_id` | `Optional[int]` | `None` | stats.ncaa.org team id (changes every season) -- the number in the team page URL. |
-| `team` | `Optional[str]` | `None` | School name, e.g. `"Illinois"` (not the mascot form). |
-| `season` | `Optional[str]` | `None` | Season string, e.g. `"2025-26"`; required with `team`. |
-| `fetcher` | `Optional['NcaaFetcher']` | `None` | Injectable `~sportsdataverse.mbb.mbb_ncaa_fetch. NcaaFetcher`; defaults to a fresh browser-transport fetcher (stats.ncaa.org blocks plain HTTP clients). |
-| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
-
-**Returns**
-
-One row per scheduled game -- see `parse_ncaa_bb_team_schedule` for the column contract.
-
-**Example**
-
-```python
-from sportsdataverse.mbb import ncaa_mbb_team_schedule
-df = ncaa_mbb_team_schedule(team="Illinois", season="2025-26")
-print(df.shape)
-
-# Pipeline next step (one line)
-
-df.filter(pl.col("is_neutral") == True).head()
-```
-
 ## Dataset loaders
 
 ### `load_artifact(name: 'str') -> 'dict'` {#load_artifact}
@@ -664,6 +497,28 @@ One `http://login:password@ip:port` URL per IP in the package.
 def fake(url, headers):
     return 200, '{"data": {"login": "u", "password": "p", "ippacks": []}}'
 pool = load_proxybonanza_pool("key", "pkg", transport=fake)
+```
+
+## Utilities & helpers
+
+### `most_recent_mbb_season()` {#most_recent_mbb_season}
+
+Return the most recent men's college basketball season year.
+
+The men's college basketball season spans early November through early
+April; for any month October-December the "current season" is the
+following calendar year (e.g. October 2025 returns `2026`).
+
+**Returns**
+
+The most recent / current season year.
+
+**Example**
+
+```python
+from sportsdataverse.mbb import most_recent_mbb_season, espn_mbb_schedule
+season = most_recent_mbb_season()
+sched = espn_mbb_schedule(dates=season)
 ```
 
 ## Other
@@ -4948,6 +4803,57 @@ under `==` (`ensure_ev_uniqueness`, `LineupUtils.scala:105-111`).
 
 A new `~sportsdataverse.mbb.mbb_ncaa_possessions.ConcurrentClump` with each event's `min` incremented by `1e-6 * index`.
 
+### `espn_mbb_teams(groups=None, return_as_pandas=False, **kwargs) -> 'pl.DataFrame'` {#espn_mbb_teams}
+
+espn_mbb_teams - look up the men's college basketball teams
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `groups` | `int` | `None` | Used to define different divisions. 50 is Division I, 51 is Division II/Division III. |
+| `return_as_pandas` | `bool` | `False` | If True, returns a pandas dataframe. If False, returns a polars dataframe. |
+
+**Returns**
+
+Polars dataframe containing teams for the requested league. This function caches by default, so if you want to refresh the data, use the command sportsdataverse.mbb.espn_mbb_teams.clear_cache().
+
+| col_name | type | description |
+|---|---|---|
+| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
+| `team_alternate_color` | character | Team alternate color (hex without leading '#'). |
+| `team_color` | character | Team primary color (hex without leading '#'). |
+| `team_display_name` | character | Full team display name. |
+| `team_id` | character | Unique team identifier. |
+| `team_is_active` | logical | TRUE if the team is currently active. |
+| `team_is_all_star` | logical | TRUE if the row represents an All-Star team. |
+| `team_location` | character | Team city or location string. |
+| `team_logos` | integer | Team logo metadata. |
+| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `team_nickname` | character | Team nickname. |
+| `team_short_display_name` | character | Short team display name (e.g. 'Aces'). |
+| `team_slug` | character | URL-safe team identifier (e.g. 'lasvegas-aces' / 'aces'). |
+| `team_uid` | character | ESPN universal team identifier (UID format 's:40~l:...~t:...'). |
+
+**Example**
+
+```python
+from sportsdataverse.mbb import espn_mbb_teams
+teams = espn_mbb_teams()
+print(teams.shape)
+print(teams.columns[:8])
+
+# Walk every team-id (handy for batched scrapes)
+
+team_ids = teams["team_id"].to_list()
+print(len(team_ids), "D1 teams")
+
+# Pandas round-trip + Division II/III
+
+d2_d3 = espn_mbb_teams(groups=51, return_as_pandas=True)
+d2_d3.head()
+```
+
 ### `espn_shots_to_canonical(espn: 'pl.DataFrame', *, league: 'str', season: 'int', scale: "'tuple[float, float, float] | None'" = None) -> 'pl.DataFrame'` {#espn_shots_to_canonical}
 
 ESPN `load_mbb_shots` frame -> the canonical shot frame.
@@ -7997,6 +7903,38 @@ duo = ncaa_mbb_on_off(["A.PLAYER", "B.PLAYER"], lineups)
 split.select("status", "netrtg")
 ```
 
+### `ncaa_mbb_play_by_play(game_ids: "'Sequence[object]'", *, fetcher: 'Optional[_SupportsFetchGamePbp]' = None, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, Any]'"` {#ncaa_mbb_play_by_play}
+
+Scrape many MBB games' play-by-play (bigballR `get_play_by_play`).
+
+Ports `bigballR/R/all_functions.R:1857-1897`: drops missing ids, shares
+one fetcher session across games, retries each empty/failed game once,
+row-binds the survivors, and logs the removed ids.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `game_ids` | `Sequence[object]` |  | NCAA contest ids; `None`/NaN entries are dropped. |
+| `fetcher` | `Optional[_SupportsFetchGamePbp]` | `None` | Optional injected fetcher exposing `fetch_game_pbp`. Defaults to one shared `NcaaFetcher.with_browser()` context. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+Row-bound play-by-play for every game that scraped successfully (zero-row contract frame when none did).
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_game_pbp import ncaa_mbb_play_by_play
+df = ncaa_mbb_play_by_play(["6470186", "6479639"])
+print(df.shape)
+
+# Pipeline next step (one line)
+
+df.group_by("game_id").len()
+```
+
 ### `ncaa_mbb_player_combos(lineups: 'pl.DataFrame', *, n: 'int' = 2, min_mins: 'float' = 0, included: 'Union[str, Sequence[str], None]' = None, excluded: 'Union[str, Sequence[str], None]' = None, include_transition: 'bool' = False, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#ncaa_mbb_player_combos}
 
 Team stats for every n-player combination on the court together.
@@ -8168,6 +8106,70 @@ df = ncaa_mbb_shot_locations(["6470186"], fetcher=my_fetcher)
 # Pipeline next step (one line)
 
 df.group_by("team").agg(pl.col("shot_dist").mean()).head()
+```
+
+### `ncaa_mbb_team_roster(team_id: 'Optional[int]' = None, *, team: 'Optional[str]' = None, season: 'Optional[str]' = None, fetcher: "Optional['NcaaFetcher']" = None, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#ncaa_mbb_team_roster}
+
+Scrape a men's team roster from stats.ncaa.org.
+
+Port of bigballR `get_team_roster`. The `player` column is the
+normalized `FIRST.LAST` key that byte-matches the play-by-play name
+normalization, so roster<->pbp joins line up.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `team_id` | `Optional[int]` | `None` | stats.ncaa.org team id (changes every season). |
+| `team` | `Optional[str]` | `None` | School name, e.g. `"Illinois"`. |
+| `season` | `Optional[str]` | `None` | Season string, e.g. `"2025-26"`; required with `team`. |
+| `fetcher` | `Optional['NcaaFetcher']` | `None` | Injectable `~sportsdataverse.mbb.mbb_ncaa_fetch. NcaaFetcher`; defaults to a fresh browser-transport fetcher. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One row per player -- see `parse_ncaa_bb_team_roster` for the column contract.
+
+**Example**
+
+```python
+from sportsdataverse.mbb import ncaa_mbb_team_roster
+df = ncaa_mbb_team_roster(team="Illinois", season="2025-26")
+print(df.select("jersey", "player", "ht_inches").head())
+```
+
+### `ncaa_mbb_team_schedule(team_id: 'Optional[int]' = None, *, team: 'Optional[str]' = None, season: 'Optional[str]' = None, fetcher: "Optional['NcaaFetcher']" = None, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#ncaa_mbb_team_schedule}
+
+Scrape a men's team's season schedule from stats.ncaa.org.
+
+Port of bigballR `get_team_schedule`. Give either the season-specific
+`team_id` or a `team` + `season` pair (resolved through the bundled
+men's crosswalk).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `team_id` | `Optional[int]` | `None` | stats.ncaa.org team id (changes every season) -- the number in the team page URL. |
+| `team` | `Optional[str]` | `None` | School name, e.g. `"Illinois"` (not the mascot form). |
+| `season` | `Optional[str]` | `None` | Season string, e.g. `"2025-26"`; required with `team`. |
+| `fetcher` | `Optional['NcaaFetcher']` | `None` | Injectable `~sportsdataverse.mbb.mbb_ncaa_fetch. NcaaFetcher`; defaults to a fresh browser-transport fetcher (stats.ncaa.org blocks plain HTTP clients). |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One row per scheduled game -- see `parse_ncaa_bb_team_schedule` for the column contract.
+
+**Example**
+
+```python
+from sportsdataverse.mbb import ncaa_mbb_team_schedule
+df = ncaa_mbb_team_schedule(team="Illinois", season="2025-26")
+print(df.shape)
+
+# Pipeline next step (one line)
+
+df.filter(pl.col("is_neutral") == True).head()
 ```
 
 ### `ncaa_mbb_team_stats(pbp: 'pl.DataFrame', *, include_transition: 'bool' = False, fix_tip_in: 'bool' = True, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#ncaa_mbb_team_stats}

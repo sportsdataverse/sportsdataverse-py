@@ -444,7 +444,6 @@ def _table_cell_desc(stored: str, league: str | None, col: str, schema: str | No
 
 _R_EXPORTS_FILE = ROOT / "tools" / "codegen" / "r_exports.yaml"
 _R_PARITY_ALIASES_FILE = ROOT / "tools" / "codegen" / "r_parity_aliases.yaml"
-_HIGHLIGHTS_FILE = ROOT / "tools" / "codegen" / "highlights.yaml"
 
 # League prefix -> R package for parity (pwhl is also fastRhockey; otherwise the
 # same mapping used for column descriptions).
@@ -476,34 +475,6 @@ def _r_exports() -> dict:
     import yaml
 
     return yaml.safe_load(_R_EXPORTS_FILE.read_text(encoding="utf-8")) or {}
-
-
-@functools.lru_cache(maxsize=1)
-def _highlights_map() -> dict:
-    """``{league_prefix: [curated function names]}`` from the committed ``highlights.yaml``.
-
-    Hand-maintained "start here" picks pulled out of a league's Additional bucket
-    into their own top-billed Highlights section -- see the file's own header
-    comment and :func:`_autodoc_family`. Empty dict if absent/for an unlisted
-    league, so a league with no curated list just keeps today's behavior."""
-    if not _HIGHLIGHTS_FILE.exists():
-        return {}
-    import yaml
-
-    return yaml.safe_load(_HIGHLIGHTS_FILE.read_text(encoding="utf-8")) or {}
-
-
-def _highlighted_names(league: str | None, names: list[str]) -> set[str]:
-    """Curated names from :func:`_highlights_map` that are actually in *names*.
-
-    ``None`` (the package-level global scope) always yields an empty set -- the
-    pilot is per-league only. Intersecting against *names* means a stale or
-    misspelled entry in ``highlights.yaml`` is silently inert rather than
-    surfacing a name that doesn't exist / already moved to a generated page.
-    """
-    if league is None:
-        return set()
-    return set(_highlights_map().get(league, [])) & set(names)
 
 
 @functools.lru_cache(maxsize=1)
@@ -2524,8 +2495,6 @@ def render_league_index(
     *,
     has_additional: bool = False,
     additional_count: int = 0,
-    has_highlights: bool = False,
-    highlights_count: int = 0,
     r_parity: list[dict] | None = None,
     r_pkg: str | None = None,
 ) -> str:
@@ -2534,11 +2503,8 @@ def render_league_index(
     ``has_additional`` / ``additional_count`` are supplied by :func:`_render_docs_all`
     (and :func:`_autodoc_names_by_scope`) after they compute the autodoc set for this
     league, so the index table can link the ``reference/additional`` page with an
-    accurate function count. ``has_highlights`` / ``highlights_count`` are the curated
-    subset of that same autodoc set (see :func:`_highlighted_names`) -- when non-zero,
-    ``additional_count`` reports the REST (the autodoc set minus the highlighted names)
-    so the two rows never double-count the same functions. ``r_parity`` / ``r_pkg``
-    (also from :func:`_render_docs_all`) drive the Python<->R parity table."""
+    accurate function count. ``r_parity`` / ``r_pkg`` (also from
+    :func:`_render_docs_all`) drive the Python<->R parity table."""
     loaders = _loader_doc_views(prefix)
     template = render.ENV.get_template("league_index.md.jinja")
     return template.render(
@@ -2549,8 +2515,6 @@ def render_league_index(
         loader_base=_loader_base_label(prefix),
         has_additional=has_additional,
         additional_count=additional_count,
-        has_highlights=has_highlights,
-        highlights_count=highlights_count,
         notebooks=_notebooks_for(prefix),
         r_parity=r_parity or [],
         r_pkg=r_pkg,
@@ -2659,7 +2623,6 @@ def _is_shared_leak(module: str) -> bool:
 # Deterministic family order for the autodoc page (families not listed sort last,
 # alphabetically). Functions within a family are always sorted alphabetically.
 _AUTODOC_FAMILY_ORDER = [
-    "Highlights",
     "Statcast",
     "MLB Stats API",
     "Play-by-play, schedule & rosters",
@@ -2680,15 +2643,8 @@ _ESPN_PBP_FAMILY_TOKENS = (
 )
 
 
-def _autodoc_family(name: str, highlighted: frozenset[str] = frozenset()) -> str:
-    """Group key for an autodoc function name (see the family rules in Task D2).
-
-    ``highlighted`` (the per-league curated set from :func:`_highlighted_names`)
-    is checked FIRST, so a hand-picked "start here" function is pulled out of
-    whichever family it would otherwise land in (Utilities & helpers, Other,
-    Play-by-play, ...) into its own top-billed Highlights section instead."""
-    if name in highlighted:
-        return "Highlights"
+def _autodoc_family(name: str) -> str:
+    """Group key for an autodoc function name (see the family rules in Task D2)."""
     if name.startswith("statcast") or name == "mlb_statcast":
         return "Statcast"
     if name.startswith("load_"):
@@ -3319,7 +3275,6 @@ def _autodoc_groups(league: str | None, names: list[str]) -> list[dict]:
     _mod_path = _LEAGUE_MODULE.get(league, league) if league is not None else None
     mod = importlib.import_module("sportsdataverse" if _mod_path is None else f"sportsdataverse.{_mod_path}")
     scope = "global" if league is None else league
-    highlighted = frozenset(_highlighted_names(league, names))
     by_family: dict[str, list[dict]] = {}
     for n in names:
         obj = getattr(mod, n)
@@ -3344,7 +3299,7 @@ def _autodoc_groups(league: str | None, names: list[str]) -> list[dict]:
             c["description"] = _table_cell_desc(str(c.get("description", "")), league, raw_name, n)
             c["name"] = raw_name.replace("|", "\\|")
             c["type"] = str(c.get("type", "")).replace("|", "\\|")
-        by_family.setdefault(_autodoc_family(n, highlighted), []).append(
+        by_family.setdefault(_autodoc_family(n), []).append(
             {"name": n, "signature": _autodoc_signature(obj), "return_columns": return_columns, **view},
         )
 
@@ -3593,14 +3548,10 @@ def _render_docs_all() -> dict[str, str]:
         ref_pages = {
             rel[len(ref_prefix) : -3]: c for rel, c in out.items() if rel.startswith(ref_prefix) and rel.endswith(".md")
         }
-        highlights_count = len(_highlighted_names(prefix, autodoc_names_list))
-        remaining_count = len(autodoc_names_list) - highlights_count
         out[f"{prefix}/index.md"] = render_league_index(
             prefix,
-            has_additional=bool(remaining_count),
-            additional_count=remaining_count,
-            has_highlights=bool(highlights_count),
-            highlights_count=highlights_count,
+            has_additional=bool(autodoc_names_list),
+            additional_count=len(autodoc_names_list),
             r_parity=_r_parity_rows(prefix, ref_pages, autodoc_names_list),
             r_pkg=_R_PARITY_PACKAGE.get(prefix),
         )
