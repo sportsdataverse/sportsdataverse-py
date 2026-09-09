@@ -472,6 +472,7 @@ from sportsdataverse.cfb import load_ncaa_mfb_teams as load_ncaa_mfb_teams  # no
 from sportsdataverse.cfb import load_recruit_classes as load_recruit_classes  # noqa: F401
 from sportsdataverse.cfb import make_ratings_compute_results as make_ratings_compute_results  # noqa: F401
 from sportsdataverse.cfb import most_recent_cfb_season as most_recent_cfb_season  # noqa: F401
+from sportsdataverse.cfb import normalize_pbp_columns as normalize_pbp_columns  # noqa: F401
 from sportsdataverse.cfb import normalize_team_roster_columns as normalize_team_roster_columns  # noqa: F401
 from sportsdataverse.cfb import parse_cfb_ncaa_drive_titles as parse_cfb_ncaa_drive_titles  # noqa: F401
 from sportsdataverse.cfb import parse_cfb_ncaa_drives as parse_cfb_ncaa_drives  # noqa: F401
@@ -769,6 +770,7 @@ __all__ = [
     "load_recruit_classes",
     "make_ratings_compute_results",
     "most_recent_cfb_season",
+    "normalize_pbp_columns",
     "normalize_team_roster_columns",
     "on3_coaches_history",
     "on3_coaches_profile",

@@ -3408,6 +3408,31 @@ games = pl.DataFrame({"sim": [1], "week": [1], "home_team": ["A"], "away_team": 
 cr(teams, games, 1, rng=np.random.default_rng(0))["games"]
 ```
 
+### `normalize_pbp_columns(df: 'pl.DataFrame', model: 'str') -> 'pl.DataFrame'` {#normalize_pbp_columns}
+
+Add card-named copies of any play-by-play columns `df` already carries.
+
+A hand-built frame using the card's own names passes through untouched; a
+pbp frame gains the names the card asks for. Copies rather than renames, so
+nothing the caller passed in is removed.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `df` | `DataFrame` |  | Caller's frame. |
+| `model` | `str` |  | Bundle stem, used to look up which features are wanted. |
+
+**Returns**
+
+`df` plus any alias columns that could be resolved.
+
+**Example**
+
+```python
+normalize_pbp_columns(pbp, "xpass_model")
+```
+
 ### `on3_industry_player_rankings(year: 'Union[int, str]', sport_slug: 'str' = 'football', page: 'Any' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#on3_industry_player_rankings}
 
 On3 Industry Comparison player rankings (**deprecated** next/data` scrape).

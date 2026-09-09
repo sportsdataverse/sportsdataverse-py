@@ -31,9 +31,63 @@ __all__ = [
     "calculate_win_probability",
     "calculate_wpa",
     "calculate_xpass",
+    "normalize_pbp_columns",
     "predict_from_card",
     "add_era_columns",
 ]
+
+
+#: Play-by-play column names for each model feature, mirroring the source maps
+#: the pipeline already uses (`xpass_sources` in cfb_pbp, and the positionally
+#: aligned `ep_start_columns`/`ep_final_names` in model_vars). A real pbp frame
+#: carries `start.TimeSecsRem`; the cards declare `TimeSecsRem`. Without this the
+#: calculators only accept already-normalized names, which is not what a caller
+#: holding a pbp frame has.
+_PBP_ALIASES: dict[str, tuple[str, ...]] = {
+    "TimeSecsRem": ("start.TimeSecsRem",),
+    "adj_TimeSecsRem": ("start.adj_TimeSecsRem",),
+    "yards_to_goal": ("start.yardsToEndzone", "start.yards_to_goal"),
+    "distance": ("start.distance",),
+    "down": ("start.down",),
+    "pos_score_diff": ("pos_score_diff_start",),
+    "period": ("start.period",),
+    "is_home": ("start.is_home",),
+    "spread_time": ("start.spread_time",),
+    "ExpScoreDiff_Time_Ratio": ("start.ExpScoreDiff_Time_Ratio",),
+    "pos_team_receives_2H_kickoff": ("start.pos_team_receives_2H_kickoff",),
+    "pos_team_timeouts_rem_before": ("start.pos_team_timeouts_rem_before",),
+    "def_pos_team_timeouts_rem_before": ("start.def_pos_team_timeouts_rem_before",),
+}
+
+
+def normalize_pbp_columns(df: pl.DataFrame, model: str) -> pl.DataFrame:
+    """Add card-named copies of any play-by-play columns ``df`` already carries.
+
+    A hand-built frame using the card's own names passes through untouched; a
+    pbp frame gains the names the card asks for. Copies rather than renames, so
+    nothing the caller passed in is removed.
+
+    Args:
+        df: Caller's frame.
+        model: Bundle stem, used to look up which features are wanted.
+
+    Returns:
+        ``df`` plus any alias columns that could be resolved.
+
+    Example:
+        Quick start::
+
+            normalize_pbp_columns(pbp, "xpass_model")
+    """
+    additions = []
+    for feature in card_features(model):
+        if feature in df.columns:
+            continue
+        for source in _PBP_ALIASES.get(feature, ()):
+            if source in df.columns:
+                additions.append(pl.col(source).alias(feature))
+                break
+    return df.with_columns(additions) if additions else df
 
 
 def predict_from_card(df: pl.DataFrame, model: str, booster: Any) -> np.ndarray:
@@ -109,10 +163,14 @@ def add_era_columns(df: pl.DataFrame, model: str, season: int | None = None) -> 
     if all(c in df.columns for c in columns):
         return df
     lo, mid, hi = contract["cuts"]
-    if season is not None:
-        season_expr = pl.lit(season, dtype=pl.Int64)
-    elif "season" in df.columns:
+    # The frame's own season wins. `season=` is documented as the fallback for a
+    # frame that carries no season column, so letting it override would stamp one
+    # era across a multi-season frame and score most rows against the wrong model
+    # inputs -- silently, since every column would still be present.
+    if "season" in df.columns:
         season_expr = pl.col("season").cast(pl.Int64)
+    elif season is not None:
+        season_expr = pl.lit(season, dtype=pl.Int64)
     else:
         raise ValueError(f"{model} needs an era column; supply a 'season' column or the season= argument")
     bucket = (
@@ -200,7 +258,7 @@ def _calculate(
         preserved -- a calculator that dropped columns would make chaining two
         of them lossy.
     """
-    prepared = add_era_columns(df, model, season=season)
+    prepared = add_era_columns(normalize_pbp_columns(df, model), model, season=season)
     raw = predict_from_card(prepared, model, _booster_for(model))
     values = transform(raw) if transform is not None else raw
     out = prepared.with_columns(pl.Series(out_col, values))
@@ -423,7 +481,7 @@ def calculate_expected_points(df, *, season=None, return_as_pandas=False):
     """
     from sportsdataverse.cfb.model_vars import ep_class_to_score_mapping
 
-    prepared = add_era_columns(df, "ep_model", season=season)
+    prepared = add_era_columns(normalize_pbp_columns(df, "ep_model"), "ep_model", season=season)
     probs = predict_from_card(prepared, "ep_model", _booster_for("ep_model"))
     probs = np.asarray(probs)
     if probs.ndim == 1:  # a single row comes back flat

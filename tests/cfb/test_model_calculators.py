@@ -276,3 +276,63 @@ def test_the_air_yards_superset_still_composes_from_the_card():
 
     assert CP_AIR_YARDS_FEATURES[: len(CP_FEATURES)] == CP_FEATURES
     assert set(CP_AIR_YARDS_FEATURES) - set(CP_FEATURES) == {"air_yards", "pass_is_middle", "qb_hurry"}
+
+
+# ---------------------------------------------------------------------------
+# Regressions found in review of PR #475.
+# ---------------------------------------------------------------------------
+
+
+def test_a_real_pbp_frame_scores_without_pre_renaming():
+    """A pbp frame carries start.TimeSecsRem / start.yardsToEndzone; the cards
+    declare TimeSecsRem / yards_to_goal. Before normalization the calculators
+    only accepted already-renamed frames -- which is not what a caller holding
+    play-by-play has, and the PR claimed otherwise."""
+    pbp = pl.DataFrame(
+        {
+            "season": [2024],
+            "start.TimeSecsRem": [900.0],
+            "start.yardsToEndzone": [55.0],
+            "start.distance": [8.0],
+            "start.down": [3.0],
+            "pos_score_diff_start": [-4.0],
+            "period": [3.0],
+        }
+    )
+    out = mc.calculate_xpass(pbp)
+    assert 0.0 <= out["xpass"][0] <= 1.0
+    # copies, never renames: the caller's own columns must survive
+    assert "start.TimeSecsRem" in out.columns
+
+
+def test_normalization_does_not_clobber_an_already_named_column():
+    """A hand-built frame using card names must pass through untouched."""
+    df = pl.DataFrame(
+        {
+            "TimeSecsRem": [111.0],
+            "start.TimeSecsRem": [999.0],
+            "down": [1.0],
+            "distance": [10.0],
+            "yards_to_goal": [50.0],
+            "pos_score_diff": [0.0],
+            "period": [1.0],
+            "season": [2024],
+        }
+    )
+    out = mc.normalize_pbp_columns(df, "xpass_model")
+    assert out["TimeSecsRem"].to_list() == [111.0]
+
+
+def test_the_frames_own_season_beats_the_season_argument():
+    """`season=` is documented as the fallback for a frame with no season column.
+    Letting it override stamped one era across a multi-season frame and scored
+    most rows against the wrong inputs -- silently, since no column was missing.
+    """
+    multi = pl.DataFrame({"season": [2005, 2024], "yards_to_goal": [25.0, 25.0]})
+    out = mc.calculate_field_goal_probability(multi, season=2024)
+    vals = out["fg_prob"].to_list()
+    assert vals[0] != vals[1], "one era was stamped across both rows"
+    # and the per-row eras must match what each season maps to
+    eras = mc.add_era_columns(multi, "fg_model", season=2024)
+    assert eras.select(["era0", "era1", "era2", "era3"]).row(0) == (1, 0, 0, 0)
+    assert eras.select(["era0", "era1", "era2", "era3"]).row(1) == (0, 0, 0, 1)
