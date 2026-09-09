@@ -1172,3 +1172,10 @@ the wrappers, via the codegen CLI:
   excluded from doctoc + markdownlint), so generated tables/fences don't fight the
   hooks. Docstrings still use Google-style sections (`Args:`/`Returns:`/`Raises:`/
   `Example:`) — those feed the wrappers' runtime help, not a Sphinx build.
+
+## Cheat sheet
+
+There is a printable one-page reference for this package at
+<https://sportsdataverse.org/cheatsheets/sportsdataverse-py.pdf>, one of [a set covering every SportsDataverse package](https://sportsdataverse.org/cheatsheets).
+Keep it in mind when adding or renaming an exported function: the sheet is a
+hand-built canvas, so a surface change means the sheet needs a revision too.

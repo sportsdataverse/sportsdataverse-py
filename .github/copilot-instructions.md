@@ -440,3 +440,10 @@ uv add --dev some-package           # add dev-only dep
 - **`pyjanitor 0.32.18+` silently switched to pandas 3.x.** Keep the
   defensive `pyjanitor<0.32.18` upper bound in `pyproject.toml` until
   pandas 3 is the project floor.
+
+## Cheat sheet
+
+There is a printable one-page reference for this package at
+<https://sportsdataverse.org/cheatsheets/sportsdataverse-py.pdf>, one of [a set covering every SportsDataverse package](https://sportsdataverse.org/cheatsheets).
+Keep it in mind when adding or renaming an exported function: the sheet is a
+hand-built canvas, so a surface change means the sheet needs a revision too.

@@ -229,6 +229,17 @@ upstream data source for many of those loaders.
 <a href="https://github.com/saiemgilani" target="blank"><img src="https://img.shields.io/github/followers/saiemgilani?color=eee&logo=Github&style=for-the-badge" alt="@saiemgilani" /></a>
 
 
+<!-- cheatsheet-section -->
+## **Cheat sheet**
+
+A printable one-page reference for **sportsdataverse (Python)** — the loaders, the wrapper
+families, and what each one returns.
+
+📄 **[Download the sportsdataverse (Python) cheat sheet (PDF)](https://sportsdataverse.org/cheatsheets/sportsdataverse-py.pdf)**
+
+Every SportsDataverse package has one — browse them all at
+**[sportsdataverse.org/cheatsheets](https://sportsdataverse.org/cheatsheets)**.
+
 ## **Citations**
 
 To cite the [**`sportsdataverse-py`**](https://py.sportsdataverse.org) Python package in publications, use:
