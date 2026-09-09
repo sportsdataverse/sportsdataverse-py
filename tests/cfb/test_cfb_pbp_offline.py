@@ -76,3 +76,67 @@ def test_odds_override_validation():
         CFBPlayProcess(gameId=1, odds_override={"gameSpread": -3.5})  # missing keys
     with pytest.raises(ValueError):
         CFBPlayProcess(gameId=1, odds_override=[1, 2, 3])  # not a dict
+
+
+def _stub_competitor():
+    """ESPN's placeholder competitor, verbatim key set from game 401256142 (2020).
+
+    A negative team id with "TBD" location/abbreviation; note the ABSENT `name`,
+    `color`, `logos` and `groups` that a real team carries.
+    """
+    return {
+        "id": "-2",
+        "uid": "s:20~l:23~t:-2",
+        "location": "TBD",
+        "abbreviation": "TBD",
+        "displayName": "TBD",
+        "nickname": "TBD",
+        "links": [],
+    }
+
+
+def test_placeholder_competitor_raises_nodata(monkeypatch):
+    """A TBD opponent has no play-by-play; fail catchably, not on KeyError: 'name'.
+
+    2020 is full of these (COVID cancellations) -- 28 games in that season alone
+    died deep inside __helper_cfb_game_data before this guard existed.
+    """
+    from sportsdataverse.errors import NoDataError
+
+    summary = _load_summary()
+    summary["header"]["competitions"][0]["competitors"][1]["team"] = _stub_competitor()
+
+    class _Resp:
+        def json(self):
+            return summary
+
+    monkeypatch.setattr("sportsdataverse.cfb.cfb_pbp.download", lambda *a, **k: _Resp())
+
+    game = CFBPlayProcess(gameId=401256142)
+    with pytest.raises(NoDataError, match="placeholder"):
+        game.espn_cfb_pbp()
+        game.run_processing_pipeline()
+
+
+def test_missing_team_name_does_not_keyerror(monkeypatch):
+    """A real team (positive id) missing only `name` must not raise KeyError.
+
+    The stub guard above catches the TBD case; this pins the belt-and-braces
+    .get("name", "") so any other payload shape degrades instead of crashing.
+    """
+    summary = _load_summary()
+    team = summary["header"]["competitions"][0]["competitors"][1]["team"]
+    team.pop("name", None)
+
+    class _Resp:
+        def json(self):
+            return summary
+
+    monkeypatch.setattr("sportsdataverse.cfb.cfb_pbp.download", lambda *a, **k: _Resp())
+
+    game = CFBPlayProcess(gameId=401628455)
+    try:
+        game.espn_cfb_pbp()
+        game.run_processing_pipeline()
+    except KeyError as exc:  # pragma: no cover - the regression we are pinning
+        pytest.fail(f"missing team key should not raise KeyError: {exc}")

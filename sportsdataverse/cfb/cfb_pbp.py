@@ -2564,6 +2564,18 @@ class CFBPlayProcess(object):
             raise NoDataError(
                 f"ESPN summary for game {self.gameId} has no header.competitions; cannot build play-by-play.",
             )
+        # ESPN emits a PLACEHOLDER competitor when a game has no settled opponent:
+        # a NEGATIVE team id, "TBD" location/abbreviation, and a stub key set that
+        # omits `name`, `color`, `logos` and `groups`. 2020 is full of these (COVID
+        # cancellations). There is no play-by-play to build, so short-circuit here
+        # -- catchable, and before the pickcenter odds hop -- rather than dying deep
+        # in __helper_cfb_game_data on a bare `KeyError: 'name'`.
+        _competitors = (pbp_txt["header"]["competitions"][0] or {}).get("competitors") or []
+        if any(str(((c or {}).get("team") or {}).get("id", "")).strip().startswith("-") for c in _competitors):
+            raise NoDataError(
+                f"ESPN summary for game {self.gameId} has a placeholder (TBD) competitor; "
+                "there is no play-by-play to build.",
+            )
         init = self.__helper_cfb_pickcenter(pbp_txt)
         return self.__helper_cfb_game_data(pbp_txt, init)
 
@@ -2707,7 +2719,7 @@ class CFBPlayProcess(object):
                 "team"
             ]
             homeTeamId = int(pbp_txt["header"]["competitions"][0]["competitors"][0]["team"]["id"])
-            homeTeamMascot = str(pbp_txt["header"]["competitions"][0]["competitors"][0]["team"]["name"])
+            homeTeamMascot = str(pbp_txt["header"]["competitions"][0]["competitors"][0]["team"].get("name", ""))
             homeTeamName = str(pbp_txt["header"]["competitions"][0]["competitors"][0]["team"]["location"])
             homeTeamAbbrev = str(pbp_txt["header"]["competitions"][0]["competitors"][0]["team"]["abbreviation"])
             homeTeamNameAlt = re.sub("Stat(.+)", "St", homeTeamName)
@@ -2715,7 +2727,7 @@ class CFBPlayProcess(object):
                 "team"
             ]
             awayTeamId = int(pbp_txt["header"]["competitions"][0]["competitors"][1]["team"]["id"])
-            awayTeamMascot = str(pbp_txt["header"]["competitions"][0]["competitors"][1]["team"]["name"])
+            awayTeamMascot = str(pbp_txt["header"]["competitions"][0]["competitors"][1]["team"].get("name", ""))
             awayTeamName = str(pbp_txt["header"]["competitions"][0]["competitors"][1]["team"]["location"])
             awayTeamAbbrev = str(pbp_txt["header"]["competitions"][0]["competitors"][1]["team"]["abbreviation"])
             awayTeamNameAlt = re.sub("Stat(.+)", "St", awayTeamName)
@@ -2724,7 +2736,7 @@ class CFBPlayProcess(object):
                 "team"
             ]
             awayTeamId = int(pbp_txt["header"]["competitions"][0]["competitors"][0]["team"]["id"])
-            awayTeamMascot = str(pbp_txt["header"]["competitions"][0]["competitors"][0]["team"]["name"])
+            awayTeamMascot = str(pbp_txt["header"]["competitions"][0]["competitors"][0]["team"].get("name", ""))
             awayTeamName = str(pbp_txt["header"]["competitions"][0]["competitors"][0]["team"]["location"])
             awayTeamAbbrev = str(pbp_txt["header"]["competitions"][0]["competitors"][0]["team"]["abbreviation"])
             awayTeamNameAlt = re.sub("Stat(.+)", "St", awayTeamName)
@@ -2732,7 +2744,7 @@ class CFBPlayProcess(object):
                 "team"
             ]
             homeTeamId = int(pbp_txt["header"]["competitions"][0]["competitors"][1]["team"]["id"])
-            homeTeamMascot = str(pbp_txt["header"]["competitions"][0]["competitors"][1]["team"]["name"])
+            homeTeamMascot = str(pbp_txt["header"]["competitions"][0]["competitors"][1]["team"].get("name", ""))
             homeTeamName = str(pbp_txt["header"]["competitions"][0]["competitors"][1]["team"]["location"])
             homeTeamAbbrev = str(pbp_txt["header"]["competitions"][0]["competitors"][1]["team"]["abbreviation"])
             homeTeamNameAlt = re.sub("Stat(.+)", "St", homeTeamName)
