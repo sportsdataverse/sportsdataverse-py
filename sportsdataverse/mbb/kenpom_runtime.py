@@ -324,7 +324,7 @@ def parse_kenpom_page(
     tidied = {k: _cast_numerics(_split_ncaa_seed(_drop_repeated_headers(v))) for k, v in tables.items()}
     depth_chart = _depth_chart_table(raw)
     if depth_chart is not None:
-        tidied["depth_chart"] = depth_chart
+        tidied["depth_chart"] = _cast_numerics(depth_chart)
     if return_as_pandas:
         return {k: v.to_pandas() for k, v in tidied.items()}
     return tidied

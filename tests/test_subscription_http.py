@@ -8,6 +8,7 @@ is the whole reason hoopR carries ~44 hardcoded header vectors).
 
 from __future__ import annotations
 
+import polars as pl
 import pytest
 
 from sportsdataverse._html_tables import _clean_name, _dedupe_headers, html_tables
@@ -170,9 +171,16 @@ def test_parse_kenpom_page_extracts_depth_chart_from_script_tag():
     dc = frames["depth_chart"]
     # underscore() derives names generically (no hoopR-style hardcoded rename map),
     # so KenPom's raw "Name" JSON key stays "name", not hoopR's renamed "player_name".
-    assert dc["player_id"].to_list() == ["123"]
     assert dc["name"].to_list() == ["Cooper Flagg"]
     assert dc["pct_sf"].to_list() == [40]
+    # player_id / FTA / FG2A / FG3A arrive as quoted JSON strings on the real site
+    # (hoopR casts FTA/FG2A/FG3A explicitly with as.integer()) -- _cast_numerics must
+    # run on this frame too, same as every HTML-table column, or these stay Utf8 while
+    # everything else gets typed. No ID-column carve-out: _cast_numerics has never had
+    # one (it treats every fully-numeric text column alike), so player_id casts too.
+    assert dc["player_id"].to_list() == [123]
+    assert dc["fta"].to_list() == [120]
+    assert dc.schema["fta"] == pl.Int64
 
 
 def test_depth_chart_table_absent_without_a_script_tag():
