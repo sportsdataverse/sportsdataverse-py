@@ -28,6 +28,7 @@ const sidebars: SidebarsConfig = {
     {type: 'doc', id: 'ecosystem', label: 'Ecosystem & philosophy'},
     {type: 'doc', id: 'quality-of-life', label: 'Quality-of-life helpers'},
     {type: 'doc', id: 'architecture/espn-cross-league', label: 'How it works'},
+    {type: 'doc', id: 'architecture/http-auth-config', label: 'HTTP, auth & proxy config'},
     {type: 'doc', id: 'parsers/index', label: 'Parser layer'},
     {type: 'doc', id: 'reference/parameters', label: 'Parameter reference'},
     {type: 'doc', id: 'reference/python-helpers', label: 'Package helpers'},
