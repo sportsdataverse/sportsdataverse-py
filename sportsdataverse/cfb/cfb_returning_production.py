@@ -46,6 +46,7 @@ from sportsdataverse.cfb.cfb_loaders import (
     load_cfb_team_info,
 )
 from sportsdataverse._codegen_runtime import _read_release_parquet
+from sportsdataverse.errors import SeasonNotFoundError
 from sportsdataverse.cfb.cfb_crosswalk import _norm_team
 from sportsdataverse.cfb.cfb_projection_constants import get_constants
 
@@ -57,6 +58,27 @@ _PLAYER_STATS_URL = (
     "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/main/"
     "player_stats/parquet/player_stats_{season}.parquet"
 )
+
+#: Season-2003 offensive production, the one season ESPN's player box cannot
+#: supply. ESPN starts in 2004 (0 athlete rows across sampled 2003 games; team
+#: rosters likewise empty), so returning production for 2004 had no S-1 side and
+#: raised SeasonNotFoundError. CFBD's play-by-play DOES start in 2003 and its
+#: play text is name-tagged by team, so the offensive half is recoverable; the
+#: producer parses it and hosts the result, because THIS package is keyless by
+#: design and must not start requiring a CFBD API key to compute a season.
+#:
+#: Offense only, deliberately. 2003 play text carries no tacklers at all -- the
+#: volume term of `_DEFENSE_BOX_WEIGHTS` is unrecoverable -- and every shipped
+#: season through 2016 already carries a null `def_returning` anyway, so a
+#: splash-only defensive number would make 2004 the lone pre-2020 season with a
+#: defensive value, computed by a method no other season uses.
+_PRODUCTION_2003_URL = (
+    "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-cfb-data/main/data/cfb_production_2003.parquet"
+)
+
+#: The first season ESPN's player box can describe. Below it, `_load_box` has
+#: nothing and the S-1 production side must come from `_PRODUCTION_2003_URL`.
+_ESPN_BOX_FLOOR = 2004
 
 #: Offensive production = attributed yardage. One row per athlete-game.
 _OFFENSE_BOX_COLS: tuple[str, ...] = ("passingYards", "rushingYards", "receivingYards")
@@ -96,6 +118,12 @@ _RETURNING_SCHEMA: dict[str, pl.PolarsDataType] = {
     "def_returning": pl.Float64,
     "overall_returning": pl.Float64,
     "n_returning": pl.Int64,
+    #: True only where the S-1 production came from parsed play text rather than
+    #: the ESPN box (2004 alone). Back-tested against 2005, where both sources
+    #: exist, the play-text route tracks the box route at r=0.73 with a -0.085
+    #: bias: it ranks teams well but reads systematically LOW, so a consumer
+    #: comparing 2004 against its neighbours on level must filter on this.
+    "is_estimated": pl.Boolean,
 }
 
 # (player-id column, weight expression source, unit, team-name column)
@@ -192,7 +220,13 @@ def _num(col: str) -> pl.Expr:
 
 def _load_box(season: int) -> pl.DataFrame:
     """One season of the ESPN player box (empty frame when unavailable)."""
-    box = load_cfb_player_box([season])
+    try:
+        box = load_cfb_player_box([season])
+    except SeasonNotFoundError:
+        # "empty frame when unavailable" is what this promised and what every
+        # caller assumes; below the ESPN floor the loader RAISES instead, which
+        # is how cfb_returning_production(2004) came to abort a whole build.
+        return pl.DataFrame()
     if isinstance(box, pd.DataFrame):
         box = pl.from_pandas(box)
     return box if box is not None else pl.DataFrame()
@@ -354,6 +388,19 @@ def _cfbd_roster_keys(season: int) -> pl.DataFrame:
 # ---------------------------------------------------------------------------
 
 
+def _load_production_2003() -> pl.DataFrame:
+    """Hosted season-2003 offensive production ({} when unreachable).
+
+    Already in `_production_from_box`'s output shape and keyed on ESPN athlete
+    ids, so it drops straight into `_returning_from_frames`. A 2003 producer who
+    is NOT on the 2004 roster carries a synthetic ``cfbd2003:`` id: they belong
+    in the DENOMINATOR -- production that did not return -- and must never
+    collide with a real athlete id.
+    """
+    df = _read_release_parquet(_PRODUCTION_2003_URL)
+    return df if df is not None else pl.DataFrame()
+
+
 def _load_player_stats(season: int) -> pl.DataFrame:
     """One season of the hosted per-play player-stats parquet ({} on 404)."""
     df = _read_release_parquet(_PLAYER_STATS_URL.format(season=season))
@@ -466,10 +513,19 @@ def cfb_returning_production(
     Returns:
         Per ``(season, team_id)``: ``off_returning``, ``def_returning``,
         ``overall_returning`` (Float64 fractions in [0, 1]), ``n_returning``
-        (Int64 count of returning contributors). ``team_id`` is the ESPN team
-        id as Utf8 -- BREAKING vs the previous release, which emitted a
-        normalized team NAME under ``team`` and joined at 57.7%. Zero-row
-        (typed) when the box data is unavailable.
+        (Int64 count of returning contributors), ``is_estimated`` (Boolean).
+        ``team_id`` is the ESPN team id as Utf8 -- BREAKING vs the previous
+        release, which emitted a normalized team NAME under ``team`` and joined
+        at 57.7%. Zero-row (typed) when the box data is unavailable.
+
+        ``is_estimated`` is True for **2004 only**, where season-2003 production
+        is parsed from CFBD play text because ESPN's player box starts in 2004.
+        Back-tested on 2005, where both sources exist, that route tracks the box
+        route at r=0.73 (MAE 0.11) but reads about 0.085 LOW. It ranks teams
+        well; it is not on the same level as its neighbours, so filter on this
+        flag before comparing 2004 against another season. 2004 also carries a
+        null ``def_returning`` -- 2003 play text has no tacklers, and every
+        season through 2016 is null there regardless.
 
     Raises:
         ValueError: If the season-S CFBD roster cannot be resolved to team ids
@@ -492,10 +548,17 @@ def cfb_returning_production(
     season_list = [seasons] if isinstance(seasons, int) else list(seasons)
     out_frames: list[pl.DataFrame] = []
     for season in season_list:
+        estimated = False
         box_prev = _load_box(season - 1)
-        if box_prev.height == 0:
+        if box_prev.height:
+            prod_prev = _production_from_box(box_prev, season - 1)
+        elif season - 1 == _ESPN_BOX_FLOOR - 1:
+            # The one season the box cannot describe. Parsed 2003 play text is a
+            # proxy, not the same measurement -- hence the flag on every row.
+            prod_prev = _load_production_2003()
+            estimated = prod_prev.height > 0
+        else:
             continue
-        prod_prev = _production_from_box(box_prev, season - 1)
         if prod_prev.height == 0:
             continue
         roster_curr = _roster_keys(season)
@@ -503,7 +566,7 @@ def cfb_returning_production(
             continue
         frame = _returning_from_frames(prod_prev, roster_curr, division=division)
         _warn_thin_defense(frame, season)
-        out_frames.append(frame)
+        out_frames.append(frame.with_columns(pl.lit(estimated).alias("is_estimated")))
     if not out_frames:
         empty = pl.DataFrame(schema=_RETURNING_SCHEMA)
         return empty.to_pandas() if return_as_pandas else empty
