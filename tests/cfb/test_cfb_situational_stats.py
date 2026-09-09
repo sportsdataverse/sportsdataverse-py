@@ -348,9 +348,7 @@ def test_situational_sections_and_values():
     assert a["penalties_situational"]["accepted"] == 1
     assert a["penalties_situational"]["epa_swing"] == -1.5
     # home's defense created the away havoc plays
-    assert (
-        h["havoc_created"]["front_seven"] == 1 and h["havoc_created"]["secondary"] == 1
-    )
+    assert h["havoc_created"]["front_seven"] == 1 and h["havoc_created"]["secondary"] == 1
     assert a["turnovers"]["committed"] == 1 and a["turnovers"]["epa_swing"] == -0.2
     assert h["field_zones"]["red_zone"]["plays"] == 2
     # pace: only same-drive same-period consecutive deltas count
@@ -376,18 +374,26 @@ def test_windowed_build_drops_window_inherent_sections():
 
 
 def test_windowed_build_empty_window_is_none():
-    assert (
-        situational_stats.create_situational_stats(_frame(), HOME, AWAY, window_expr=pl.col("period") > 90)
-        is None
-    )
+    assert situational_stats.create_situational_stats(_frame(), HOME, AWAY, window_expr=pl.col("period") > 90) is None
 
 
 def test_playprocess_delegate_matches_module():
     from sportsdataverse.cfb.cfb_pbp import CFBPlayProcess
 
-    f = _frame().with_columns(
-        homeTeamId=pl.lit(int(HOME)), awayTeamId=pl.lit(int(AWAY))
-    )
+    f = _frame().with_columns(homeTeamId=pl.lit(int(HOME)), awayTeamId=pl.lit(int(AWAY)))
     direct = situational_stats.create_situational_stats(f, HOME, AWAY)
     via_method = CFBPlayProcess.create_situational_stats(object(), f)
     assert via_method == direct
+
+
+def test_delegate_fails_open_on_unusable_frame():
+    from sportsdataverse.cfb.cfb_pbp import CFBPlayProcess
+
+    assert CFBPlayProcess.create_situational_stats(object(), pl.DataFrame()) is None
+    assert CFBPlayProcess.create_situational_stats(object(), None) is None
+
+
+def test_partially_enriched_frame_fails_open():
+    # the five original core columns alone must NOT be enough to proceed
+    f = _frame().select(["scrimmage_play", "pos_team", "EPA", "EPA_success", "pos_score_pts"])
+    assert situational_stats.create_situational_stats(f, HOME, AWAY) is None

@@ -711,7 +711,7 @@ box = game.create_box_score(game.plays_json)
 print(list(box.keys()))
 ```
 
-#### `CFBPlayProcess.create_drive_summary(play_df, drives, periods=None)`
+#### `CFBPlayProcess.create_drive_summary(play_df, drives, periods=None) -> 'dict | None'`
 
 Build the StatBroadcast-style drive summary for this game.
 
@@ -732,7 +732,7 @@ sibling of `create_box_score`.
 
 the drive summary, or `None` when inputs are unusable.
 
-#### `CFBPlayProcess.create_situational_stats(play_df, window_expr=None)`
+#### `CFBPlayProcess.create_situational_stats(play_df, window_expr=None) -> 'dict | None'`
 
 Build the situational team-stats block for this game.
 
@@ -1955,7 +1955,7 @@ moves = cfb_transfer_moves(2024)
 moves.filter(pl.col("direction") == "in").group_by("team_id").len()
 ```
 
-### `create_drive_summary(drives, frame, home_id, away_id, periods=None)` {#create_drive_summary}
+### `create_drive_summary(drives: list[dict] | dict, frame: polars.dataframe.frame.DataFrame, home_id: str | int, away_id: str | int, periods: set[int] | str | None = None) -> dict | None` {#create_drive_summary}
 
 Build the StatBroadcast-style drive summary, chart, and long-play lists.
 
@@ -1971,9 +1971,9 @@ leading/tied) ship only on the un-windowed build.
 |---|---|---|---|
 | `drives` | `list[dict]` |  | the ESPN drives grouping, in game order (`previous` plus the in-progress `current` drive, if any). |
 | `frame` | `pl.DataFrame` |  | the enriched plays frame from `CFBPlayProcess.run_processing_pipeline` (`plays_frame`). |
-| `home_id` |  |  | ESPN home team id. |
-| `away_id` |  |  | ESPN away team id. |
-| `periods` |  | `None` | optional window -- a set of quarter numbers (e.g. `{1, 2}`) or the string `"ot"` (every period > 4). `None` = full game. |
+| `home_id` | `str \| int` |  | ESPN home team id. |
+| `away_id` | `str \| int` |  | ESPN away team id. |
+| `periods` | `set[int] \| str \| None` | `None` | optional window -- a set of quarter numbers (e.g. `{1, 2}`) or the string `"ot"` (every period > 4). `None` = full game. |
 
 **Returns**
 
@@ -1985,7 +1985,7 @@ leading/tied) ship only on the un-windowed build.
 summary = create_drive_summary(drives, game.plays_frame, "52", "61")
 ```
 
-### `create_situational_stats(frame, home_id, away_id, window_expr=None)` {#create_situational_stats}
+### `create_situational_stats(frame: polars.dataframe.frame.DataFrame, home_id: str | int, away_id: str | int, window_expr: polars.expr.expr.Expr | None = None) -> dict | None` {#create_situational_stats}
 
 Build the situational team-stats block from a plays frame.
 
@@ -1999,9 +1999,9 @@ double-windowing them is a category error.
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `frame` | `pl.DataFrame` |  | the enriched plays frame from `CFBPlayProcess.run_processing_pipeline` (`plays_frame`). |
-| `home_id` |  |  | ESPN home team id. |
-| `away_id` |  |  | ESPN away team id. |
-| `window_expr` |  | `None` | optional polars filter expression windowing the windowable sections to that slice (e.g. `pl.col("period") == 3`). `None` = full game. |
+| `home_id` | `str \| int` |  | ESPN home team id. |
+| `away_id` | `str \| int` |  | ESPN away team id. |
+| `window_expr` | `Expr \| None` | `None` | optional polars filter expression windowing the windowable sections to that slice (e.g. `pl.col("period") == 3`). `None` = full game. |
 
 **Returns**
 

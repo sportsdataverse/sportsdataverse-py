@@ -41,7 +41,12 @@ def _points(df):
     return int(df["pos_score_pts"].fill_null(0).sum()) if df.height else 0
 
 
-def create_situational_stats(frame, home_id, away_id, window_expr=None):
+def create_situational_stats(
+    frame: pl.DataFrame,
+    home_id: str | int,
+    away_id: str | int,
+    window_expr: pl.Expr | None = None,
+) -> dict | None:
     """Build the situational team-stats block from a plays frame.
 
     Window-inherent sections -- ``two_minute``, ``middle_8``, ``non_garbage``,
@@ -69,7 +74,68 @@ def create_situational_stats(frame, home_id, away_id, window_expr=None):
     """
     if not isinstance(frame, pl.DataFrame) or frame.height == 0:
         return None
-    needed = {"scrimmage_play", "pos_team", "EPA", "EPA_success", "pos_score_pts"}
+    # fail-open contract: every column this module touches must be present
+    # up front, so a partially-enriched frame returns None instead of raising
+    # ColumnNotFoundError deep inside a section
+    needed = {
+        "EPA",
+        "EPA_penalty",
+        "EPA_success",
+        "TFL",
+        "air_yards",
+        "completion",
+        "cpoe",
+        "distance",
+        "down",
+        "drive.id",
+        "fg_attempt",
+        "fg_made",
+        "firstD_by_penalty",
+        "first_down_created",
+        "fourth_down_recommendation",
+        "fumble_lost",
+        "fumble_vec",
+        "game_play_number",
+        "go_boost",
+        "goal_to_go",
+        "havoc",
+        "int",
+        "is_pos_team_turnover",
+        "line_yards",
+        "middle_8",
+        "open_field_yards",
+        "opportunity_run",
+        "pass",
+        "pass_breakup",
+        "pass_oe",
+        "penalty_1st_conv",
+        "penalty_declined",
+        "penalty_flag",
+        "penalty_team_id",
+        "period",
+        "pos_score_diff",
+        "pos_score_pts",
+        "pos_team",
+        "power_rush_attempt",
+        "power_rush_success",
+        "punt_play",
+        "rush",
+        "rz_play",
+        "sack",
+        "scoring_opp",
+        "scrimmage_play",
+        "second_level_yards",
+        "short_rush_attempt",
+        "short_rush_success",
+        "start.adj_TimeSecsRem",
+        "start.yardsToEndzone.touchback",
+        "statYardage",
+        "stuffed_run",
+        "touchdown",
+        "under_2",
+        "xp_attempt",
+        "yards_after_catch",
+    }
     if not needed.issubset(set(frame.columns)):
         return None
 
@@ -96,9 +162,7 @@ def create_situational_stats(frame, home_id, away_id, window_expr=None):
         # are already attributed by pos_team, so drive.id is safe HERE) ------
         rz = mine.filter(_TRUE("rz_play"))
         rz_trips = rz["drive.id"].n_unique() if rz.height else 0
-        rz_tds = (
-            rz.filter(_TRUE("touchdown"))["drive.id"].n_unique() if rz.height else 0
-        )
+        rz_tds = rz.filter(_TRUE("touchdown"))["drive.id"].n_unique() if rz.height else 0
         rz_fgs = rz.filter(_TRUE("fg_made"))["drive.id"].n_unique() if rz.height else 0
         t["red_zone"] = {
             **_grp(rz),
@@ -130,9 +194,7 @@ def create_situational_stats(frame, home_id, away_id, window_expr=None):
             entry = {
                 **_grp(dd),
                 "avg_distance": _num(dd["distance"].mean(), 1) if dd.height else None,
-                "yards_per_play": _num(dd["statYardage"].mean(), 1)
-                if dd.height
-                else None,
+                "yards_per_play": _num(dd["statYardage"].mean(), 1) if dd.height else None,
                 "rush": {
                     "att": d_rush.height,
                     "yards": int(d_rush["statYardage"].fill_null(0).sum()),
@@ -142,12 +204,8 @@ def create_situational_stats(frame, home_id, away_id, window_expr=None):
                     "comp": d_pass.filter(_TRUE("completion")).height,
                     "yards": int(d_pass["statYardage"].fill_null(0).sum()),
                 },
-                "pass_rate": _num(dd.select(_TRUE("pass").mean()).item())
-                if dd.height
-                else None,
-                "pass_rate_over_expected": _num(dd["pass_oe"].mean())
-                if dd.height
-                else None,
+                "pass_rate": _num(dd.select(_TRUE("pass").mean()).item()) if dd.height else None,
+                "pass_rate_over_expected": _num(dd["pass_oe"].mean()) if dd.height else None,
             }
             if down in (3, 4):
                 conv_df = dd.filter(_TRUE("first_down_created") | _TRUE("touchdown"))
@@ -166,9 +224,7 @@ def create_situational_stats(frame, home_id, away_id, window_expr=None):
                     ("long", 7, 99),
                 ):
                     bb = dd.filter(pl.col("distance").is_between(lo, hi))
-                    made = bb.filter(
-                        _TRUE("first_down_created") | _TRUE("touchdown")
-                    ).height
+                    made = bb.filter(_TRUE("first_down_created") | _TRUE("touchdown")).height
                     buckets[name] = {"made": made, "att": bb.height}
                 entry["by_distance"] = buckets
             downs[f"down_{down}"] = entry
@@ -176,11 +232,7 @@ def create_situational_stats(frame, home_id, away_id, window_expr=None):
 
         # --- rushing quality ------------------------------------------------
         rushes = mine.filter(_TRUE("rush"))
-        opp_att = (
-            int(rushes.select(_TRUE("opportunity_run").sum()).item())
-            if rushes.height
-            else 0
-        )
+        opp_att = int(rushes.select(_TRUE("opportunity_run").sum()).item()) if rushes.height else 0
         sacks = mine.filter(_TRUE("sack"))
         sack_yds = int(sacks["statYardage"].fill_null(0).sum())
         rush_yds = int(rushes["statYardage"].fill_null(0).sum())
@@ -190,20 +242,14 @@ def create_situational_stats(frame, home_id, away_id, window_expr=None):
             # sack-adjusted by construction: the rush flag never covers sacks
             "yards_per_rush": _num(rushes["statYardage"].mean(), 1),
             # official NCAA team rushing folds sacks in
-            "yards_per_rush_with_sacks": _num(
-                (rush_yds + sack_yds) / (rushes.height + sacks.height), 1
-            )
+            "yards_per_rush_with_sacks": _num((rush_yds + sack_yds) / (rushes.height + sacks.height), 1)
             if rushes.height + sacks.height
             else None,
             "line_yards_per_rush": _num(rushes["line_yards"].mean(), 2),
             "second_level_per_rush": _num(rushes["second_level_yards"].mean(), 2),
             "open_field_per_rush": _num(rushes["open_field_yards"].mean(), 2),
-            "stuff_rate": _num(rushes.select(_TRUE("stuffed_run").mean()).item())
-            if rushes.height
-            else None,
-            "opportunity_rate": _num(opp_att / rushes.height)
-            if rushes.height
-            else None,
+            "stuff_rate": _num(rushes.select(_TRUE("stuffed_run").mean()).item()) if rushes.height else None,
+            "opportunity_rate": _num(opp_att / rushes.height) if rushes.height else None,
             "power": {
                 "made": int(mine.select(_TRUE("power_rush_success").sum()).item()),
                 "att": int(mine.select(_TRUE("power_rush_attempt").sum()).item()),
@@ -255,20 +301,14 @@ def create_situational_stats(frame, home_id, away_id, window_expr=None):
 
         t["big_plays"] = {
             "plays": bp_pass.height + bp_rush.height,
-            "yards": int(
-                bp_pass["statYardage"].fill_null(0).sum()
-                + bp_rush["statYardage"].fill_null(0).sum()
-            ),
-            "touchdowns": bp_pass.filter(_TRUE("touchdown")).height
-            + bp_rush.filter(_TRUE("touchdown")).height,
+            "yards": int(bp_pass["statYardage"].fill_null(0).sum() + bp_rush["statYardage"].fill_null(0).sum()),
+            "touchdowns": bp_pass.filter(_TRUE("touchdown")).height + bp_rush.filter(_TRUE("touchdown")).height,
             "pass": _bp(bp_pass),
             "rush": _bp(bp_rush),
         }
 
         # --- 4th-down decision report ---------------------------------------
-        fourth = mine.filter(
-            (pl.col("down") == 4) & pl.col("fourth_down_recommendation").is_not_null()
-        )
+        fourth = mine.filter((pl.col("down") == 4) & pl.col("fourth_down_recommendation").is_not_null())
         went = fourth.filter(
             _TRUE("scrimmage_play")
             & (_TRUE("punt_play") == False)
@@ -277,21 +317,11 @@ def create_situational_stats(frame, home_id, away_id, window_expr=None):
         )  # noqa: E712
         agree = 0
         forgone = 0.0
-        for r in fourth.select(
-            ["fourth_down_recommendation", "punt_play", "fg_attempt", "go_boost"]
-        ).to_dicts():
-            actual = (
-                "punt"
-                if r.get("punt_play")
-                else "field_goal"
-                if r.get("fg_attempt")
-                else "go"
-            )
+        for r in fourth.select(["fourth_down_recommendation", "punt_play", "fg_attempt", "go_boost"]).to_dicts():
+            actual = "punt" if r.get("punt_play") else "field_goal" if r.get("fg_attempt") else "go"
             if actual == r["fourth_down_recommendation"]:
                 agree += 1
-            elif (
-                r["fourth_down_recommendation"] == "go" and (r.get("go_boost") or 0) > 0
-            ):
+            elif r["fourth_down_recommendation"] == "go" and (r.get("go_boost") or 0) > 0:
                 forgone += r["go_boost"]
         t["fourth_down_decisions"] = {
             "decisions": fourth.height,
@@ -311,9 +341,7 @@ def create_situational_stats(frame, home_id, away_id, window_expr=None):
             ss = mine.filter(expr)
             states[name] = {
                 **_grp(ss),
-                "pass_rate": _num(ss.select(_TRUE("pass").mean()).item())
-                if ss.height
-                else None,
+                "pass_rate": _num(ss.select(_TRUE("pass").mean()).item()) if ss.height else None,
             }
         t["score_state"] = states
 
@@ -327,30 +355,19 @@ def create_situational_stats(frame, home_id, away_id, window_expr=None):
             "accepted": my_pens.height,
             "drive_extending_committed": int(
                 frame.select(
-                    (
-                        _TRUE("penalty_1st_conv")
-                        & (pl.col("penalty_team_id").cast(pl.Utf8) == tid)
-                    ).sum()
+                    (_TRUE("penalty_1st_conv") & (pl.col("penalty_team_id").cast(pl.Utf8) == tid)).sum()
                 ).item()
             ),
             "epa_swing": _num(my_pens["EPA_penalty"].fill_null(0).sum(), 2),
-            "by_quarter": {
-                int(k): int(v)
-                for k, v in my_pens.group_by("period").len().iter_rows()
-                if k is not None
-            },
+            "by_quarter": {int(k): int(v) for k, v in my_pens.group_by("period").len().iter_rows() if k is not None},
         }
 
         # --- havoc created (defense = opponent offensive snaps) -------------
         faced = opp_off
         t["havoc_created"] = {
-            "rate": _num(faced.select(_TRUE("havoc").mean()).item())
-            if faced.height
-            else None,
+            "rate": _num(faced.select(_TRUE("havoc").mean()).item()) if faced.height else None,
             "front_seven": int(faced.select(_TRUE("TFL").sum()).item()),
-            "secondary": int(
-                faced.select((_TRUE("pass_breakup") | _TRUE("int")).sum()).item()
-            ),
+            "secondary": int(faced.select((_TRUE("pass_breakup") | _TRUE("int")).sum()).item()),
         }
 
         # --- turnovers -------------------------------------------------------
@@ -384,17 +401,13 @@ def create_situational_stats(frame, home_id, away_id, window_expr=None):
         if mine.height > 1:
             ordered = (
                 mine.sort("game_play_number")
-                .select(
-                    ["drive.id", "period", "start.adj_TimeSecsRem", "pos_score_diff"]
-                )
+                .select(["drive.id", "period", "start.adj_TimeSecsRem", "pos_score_diff"])
                 .to_dicts()
             )
             for i in range(len(ordered) - 1):
                 a, b = ordered[i], ordered[i + 1]
                 if a["drive.id"] == b["drive.id"] and a["period"] == b["period"]:
-                    dt = (a["start.adj_TimeSecsRem"] or 0) - (
-                        b["start.adj_TimeSecsRem"] or 0
-                    )
+                    dt = (a["start.adj_TimeSecsRem"] or 0) - (b["start.adj_TimeSecsRem"] or 0)
                     if 0 < dt <= 60:
                         secs.append((dt, a["period"], a["pos_score_diff"] or 0))
 
@@ -410,7 +423,7 @@ def create_situational_stats(frame, home_id, away_id, window_expr=None):
         }
 
         # --- garbage-time filter (derived): the spice-level heuristic -------
-        margin = pl.col("pos_score_diff").abs()
+        margin = pl.col("pos_score_diff").fill_null(0).abs()
         garbage = (
             ((pl.col("period") == 2) & (margin > 38))
             | ((pl.col("period") == 3) & (margin > 28))

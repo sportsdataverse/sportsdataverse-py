@@ -8985,7 +8985,7 @@ class CFBPlayProcess(object):
             "espn_players": espn_players,
         }
 
-    def create_drive_summary(self, play_df, drives, periods=None):
+    def create_drive_summary(self, play_df, drives, periods=None) -> dict | None:
         """Build the StatBroadcast-style drive summary for this game.
 
         Thin delegate to
@@ -9004,11 +9004,17 @@ class CFBPlayProcess(object):
         """
         from sportsdataverse.cfb.cfb_drive_summary import create_drive_summary
 
+        if (
+            not isinstance(play_df, pl.DataFrame)
+            or play_df.height == 0
+            or not {"homeTeamId", "awayTeamId"}.issubset(play_df.columns)
+        ):
+            return None
         return create_drive_summary(
             drives, play_df, play_df["homeTeamId"][0], play_df["awayTeamId"][0], periods=periods
         )
 
-    def create_situational_stats(self, play_df, window_expr=None):
+    def create_situational_stats(self, play_df, window_expr=None) -> dict | None:
         """Build the situational team-stats block for this game.
 
         Thin delegate to
@@ -9027,6 +9033,12 @@ class CFBPlayProcess(object):
         """
         from sportsdataverse.cfb.cfb_situational_stats import create_situational_stats
 
+        if (
+            not isinstance(play_df, pl.DataFrame)
+            or play_df.height == 0
+            or not {"homeTeamId", "awayTeamId"}.issubset(play_df.columns)
+        ):
+            return None
         return create_situational_stats(
             play_df, play_df["homeTeamId"][0], play_df["awayTeamId"][0], window_expr=window_expr
         )

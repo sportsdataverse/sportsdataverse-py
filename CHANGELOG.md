@@ -281,6 +281,24 @@
 
 ## Unreleased
 
+### Added — CFB drive summary and situational team stats, graduated from Game on Paper (#470)
+
+`cfb_drive_summary.create_drive_summary(drives, frame, home_id, away_id,
+periods=None)` builds the StatBroadcast-style drive summary — per-team drive
+lines (both named drive-success metrics, points off turnovers, forced
+three-and-outs, TOP by quarter, first-down sources), the OBTAINED/HOW-LOST
+drive chart, how-scores-happened, and per-team long-play lists — windowable
+by start-quarter set or `"ot"`. `cfb_situational_stats.create_situational_stats(frame,
+home_id, away_id, window_expr=None)` builds the per-team situational block
+(down-by-down with distance buckets and conversion attribution, red zone,
+finishing drives, rushing tiers, passing profile, 4th-down decision report,
+score state, penalties, havoc, turnovers, field zones, pace, big plays),
+windowable via a polars filter with window-inherent sections omitted on
+windowed builds. Thin `CFBPlayProcess.create_drive_summary` /
+`.create_situational_stats` delegates mirror `create_box_score`. Both consume
+the post-pipeline `plays_frame`; drive-level attribution reads the drives
+grouping (`drive.team`), never plays grouped by `drive.id`.
+
 ### Fixed — MLB expected stats counted raw pitches as plate appearances
 
 `mlb_expected_stats` counted every non-batted-ball *pitch* row toward `pa`

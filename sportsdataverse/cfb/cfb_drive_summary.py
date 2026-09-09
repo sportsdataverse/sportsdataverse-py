@@ -107,7 +107,13 @@ def _obtained(prev_result, is_first_of_half):
     return r
 
 
-def create_drive_summary(drives, frame, home_id, away_id, periods=None):
+def create_drive_summary(
+    drives: list[dict] | dict,
+    frame: pl.DataFrame,
+    home_id: str | int,
+    away_id: str | int,
+    periods: set[int] | str | None = None,
+) -> dict | None:
     """Build the StatBroadcast-style drive summary, chart, and long-play lists.
 
     A drive belongs to the quarter it STARTED in. On a windowed build the
@@ -136,6 +142,11 @@ def create_drive_summary(drives, frame, home_id, away_id, periods=None):
 
             summary = create_drive_summary(drives, game.plays_frame, "52", "61")
     """
+    if isinstance(drives, dict):  # the raw ESPN grouping, not yet flattened
+        flat = list(drives.get("previous") or [])
+        if drives.get("current"):
+            flat.append(drives["current"])
+        drives = flat
     if not drives or not isinstance(frame, pl.DataFrame) or frame.height == 0:
         return None
 
@@ -190,9 +201,7 @@ def create_drive_summary(drives, frame, home_id, away_id, periods=None):
 
         prev = ordered[i - 1] if i > 0 else None
         first_of_half = prev is None or (
-            _period(prev) is not None
-            and period is not None
-            and (_period(prev) <= 2 < period)
+            _period(prev) is not None and period is not None and (_period(prev) <= 2 < period)
         )
 
         if not in_window(period):
@@ -273,9 +282,7 @@ def create_drive_summary(drives, frame, home_id, away_id, periods=None):
                 "period": period,
                 "start_spot": _spot(d, "start"),
                 "start_clock": _clock(d, "start"),
-                "obtained": _obtained(
-                    (prev.get("result") if prev else None), first_of_half
-                ),
+                "obtained": _obtained((prev.get("result") if prev else None), first_of_half),
                 "end_spot": _spot(d, "end"),
                 "end_clock": _clock(d, "end"),
                 "result": result or None,
@@ -288,10 +295,7 @@ def create_drive_summary(drives, frame, home_id, away_id, periods=None):
         # drive success, both named metrics
         succeeded_fd = bool(d.get("isScore"))
         if not succeeded_fd:
-            sub = frame.filter(
-                (pl.col("drive.id") == d.get("id"))
-                & (pl.col("pos_team").cast(pl.Utf8) == tid)
-            )
+            sub = frame.filter((pl.col("drive.id") == d.get("id")) & (pl.col("pos_team").cast(pl.Utf8) == tid))
             succeeded_fd = bool(
                 sub.select(
                     (pl.col("first_down_created") == True).any()  # noqa: E712
@@ -318,35 +322,15 @@ def create_drive_summary(drives, frame, home_id, away_id, periods=None):
         third = mine.filter(pl.col("down") == 3)
         fourth = mine.filter(pl.col("down") == 4)
         conv = lambda df: int(  # noqa: E731
-            df.select(
-                (
-                    (pl.col("first_down_created") == True)
-                    | (pl.col("touchdown") == True)
-                ).sum()
-            ).item()  # noqa: E712
+            df.select(((pl.col("first_down_created") == True) | (pl.col("touchdown") == True)).sum()).item()  # noqa: E712
         )
-        t["avg_third_down_distance"] = (
-            round(third["distance"].mean(), 1) if third.height else None
-        )
+        _third_dist = third["distance"].mean() if third.height else None
+        t["avg_third_down_distance"] = round(_third_dist, 1) if _third_dist is not None else None
         t["third_downs"] = {"made": conv(third), "att": third.height}
         t["fourth_downs"] = {"made": conv(fourth), "att": fourth.height}
         t["first_downs"] = {
-            "rush": int(
-                mine.select(
-                    (
-                        (pl.col("first_down_created") == True)
-                        & (pl.col("rush") == True)
-                    ).sum()
-                ).item()
-            ),  # noqa: E712
-            "pass": int(
-                mine.select(
-                    (
-                        (pl.col("first_down_created") == True)
-                        & (pl.col("pass") == True)
-                    ).sum()
-                ).item()
-            ),  # noqa: E712
+            "rush": int(mine.select(((pl.col("first_down_created") == True) & (pl.col("rush") == True)).sum()).item()),  # noqa: E712
+            "pass": int(mine.select(((pl.col("first_down_created") == True) & (pl.col("pass") == True)).sum()).item()),  # noqa: E712
             "penalty": int(mine.select(pl.col("firstD_by_penalty").sum()).item()),
         }
 
@@ -371,16 +355,10 @@ def create_drive_summary(drives, frame, home_id, away_id, periods=None):
     # largest lead + minutes leading/trailing/tied from the score-state clock
     # (regulation only -- OT clocks don't tick the same axis); game-level, so
     # only the un-windowed build carries it
-    reg = (
-        scrim.filter(pl.col("period") <= 4).sort("game_play_number")
-        if periods is None
-        else scrim.head(0)
-    )
+    reg = scrim.filter(pl.col("period") <= 4).sort("game_play_number") if periods is None else scrim.head(0)
     lead = {home_id: 0, away_id: 0}
     clockstate = {home_id: 0, away_id: 0, "tied": 0}
-    rows = reg.select(
-        ["start.adj_TimeSecsRem", "start.homeScore", "start.awayScore"]
-    ).to_dicts()
+    rows = reg.select(["start.adj_TimeSecsRem", "start.homeScore", "start.awayScore"]).to_dicts()
     final_h, final_a = h, a  # running score after the chart walk = final score
     for j, r in enumerate(rows):
         hh, aa = r.get("start.homeScore") or 0, r.get("start.awayScore") or 0
@@ -391,9 +369,7 @@ def create_drive_summary(drives, frame, home_id, away_id, periods=None):
         # go-ahead score counts its aftermath as leading, not the prior state
         if j + 1 < len(rows):
             nxt = rows[j + 1]
-            dt = (r.get("start.adj_TimeSecsRem") or 0) - (
-                nxt.get("start.adj_TimeSecsRem") or 0
-            )
+            dt = (r.get("start.adj_TimeSecsRem") or 0) - (nxt.get("start.adj_TimeSecsRem") or 0)
             dt = max(0, dt)
             sh = nxt.get("start.homeScore") or 0
             sa = nxt.get("start.awayScore") or 0

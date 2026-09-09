@@ -81,21 +81,15 @@ def _frame():
 def _drives():
     return [
         # home: 75-yd TD drive (available-yards success + fd success via score)
-        _drive(
-            HOME, "d1", "TD", 75, 8, "3:10", 25, 1, is_score=True, last_score=(7, 0)
-        ),
+        _drive(HOME, "d1", "TD", 75, 8, "3:10", 25, 1, is_score=True, last_score=(7, 0)),
         # away: three-and-out (forced by home)
         _drive(AWAY, "dX", "PUNT", 4, 3, "1:20", 20, 1, last_score=(7, 0)),
         # home: interception thrown
         _drive(HOME, "d2", "INT", 10, 4, "2:00", 30, 2, last_score=(7, 0)),
         # away: ensuing possession scores -> points off turnovers
-        _drive(
-            AWAY, "d3", "TD", 60, 7, "5:10", 40, 2, is_score=True, last_score=(7, 7)
-        ),
+        _drive(AWAY, "d3", "TD", 60, 7, "5:10", 40, 2, is_score=True, last_score=(7, 7)),
         # away: field goal, 12-play drive
-        _drive(
-            AWAY, "d4", "FG", 40, 12, "6:01", 35, 3, is_score=True, last_score=(7, 10)
-        ),
+        _drive(AWAY, "d4", "FG", 40, 12, "6:01", 35, 3, is_score=True, last_score=(7, 10)),
         # home: downs, no first down (fails both success metrics)
         _drive(HOME, "d5", "DOWNS", 9, 4, "0:50", 45, 4, last_score=(7, 10)),
     ]
@@ -139,9 +133,7 @@ def test_drive_summary_frame_aggregates():
     assert h["time_tied_seconds"] == 300
     # long plays sorted, positive gains only, per team
     assert out["longPlays"][AWAY][0]["yards"] == 45
-    assert all(
-        p["yards"] > 0 for ps in out["longPlays"].values() for ps in [ps] for p in ps
-    )
+    assert all(p["yards"] > 0 for ps in out["longPlays"].values() for ps in [ps] for p in ps)
 
 
 def test_drive_chart_obtained_and_scores():
@@ -205,3 +197,17 @@ def test_playprocess_delegate_matches_module():
     direct = drive_summary.create_drive_summary(_drives(), _frame(), HOME, AWAY)
     via_method = CFBPlayProcess.create_drive_summary(object(), _frame(), _drives())
     assert via_method == direct
+
+
+def test_accepts_raw_espn_drives_grouping():
+    grouping = {"previous": _drives()[:-1], "current": _drives()[-1]}
+    flat = drive_summary.create_drive_summary(_drives(), _frame(), HOME, AWAY)
+    from_grouping = drive_summary.create_drive_summary(grouping, _frame(), HOME, AWAY)
+    assert from_grouping == flat
+
+
+def test_delegate_fails_open_on_unusable_frame():
+    from sportsdataverse.cfb.cfb_pbp import CFBPlayProcess
+
+    assert CFBPlayProcess.create_drive_summary(object(), pl.DataFrame(), _drives()) is None
+    assert CFBPlayProcess.create_drive_summary(object(), None, _drives()) is None
