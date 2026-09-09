@@ -457,6 +457,7 @@ def ncaa_mbb_team_schedule(
     Example:
         Quick start::
 
+            import polars as pl
             from sportsdataverse.mbb import ncaa_mbb_team_schedule
             df = ncaa_mbb_team_schedule(team="Illinois", season="2025-26")
             print(df.shape)

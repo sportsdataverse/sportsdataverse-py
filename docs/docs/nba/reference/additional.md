@@ -36,6 +36,7 @@ One row per player: `ranker`, `player`, `age`, `team`, `pos`, `g`, `gs` plus the
 **Example**
 
 ```python
+import polars as pl
 from sportsdataverse.nba.bref import bref_players_stats
 
 df = bref_players_stats(season=2024)
@@ -74,6 +75,7 @@ One row per team: `conference` (`"E"` / `"W"` for **both** leagues -- wehoop emi
 **Example**
 
 ```python
+import polars as pl
 from sportsdataverse.nba.bref import bref_standings
 
 df = bref_standings(season=2024)

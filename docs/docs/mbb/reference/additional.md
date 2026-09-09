@@ -604,6 +604,7 @@ One row per scheduled game -- see `parse_ncaa_bb_team_schedule` for the column c
 **Example**
 
 ```python
+import polars as pl
 from sportsdataverse.mbb import ncaa_mbb_team_schedule
 df = ncaa_mbb_team_schedule(team="Illinois", season="2025-26")
 print(df.shape)

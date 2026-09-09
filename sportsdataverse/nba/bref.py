@@ -374,6 +374,7 @@ def bref_players_stats(
     Example:
         Quick start::
 
+            import polars as pl
             from sportsdataverse.nba.bref import bref_players_stats
 
             df = bref_players_stats(season=2024)
@@ -537,6 +538,7 @@ def bref_standings(
     Example:
         Quick start::
 
+            import polars as pl
             from sportsdataverse.nba.bref import bref_standings
 
             df = bref_standings(season=2024)
