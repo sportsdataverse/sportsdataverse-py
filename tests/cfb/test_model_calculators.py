@@ -60,24 +60,28 @@ def test_an_empty_frame_returns_an_empty_result(monkeypatch):
 def test_ordinal_era_is_derived_from_the_cards_cuts(monkeypatch):
     """cfbfastR-cfb-data#70: consumers kept a private era cut of 2017 the trainer
     never used, so 2018-2020 scored an era off. The cut now comes from the card."""
-    monkeypatch.setattr(mc, "card_era_contract", lambda m: {
-        "encoding": "ordinal", "columns": ["era"], "cuts": [2006, 2013, 2020]})
+    monkeypatch.setattr(
+        mc, "card_era_contract", lambda m: {"encoding": "ordinal", "columns": ["era"], "cuts": [2006, 2013, 2020]}
+    )
     out = mc.add_era_columns(pl.DataFrame({"season": [2005, 2010, 2018, 2024]}), "xpass_model")
     assert out["era"].to_list() == [0, 1, 2, 3]
 
 
 def test_2018_through_2020_land_in_bucket_2_not_3(monkeypatch):
     """The exact regression from cfbfastR-cfb-data#70, pinned."""
-    monkeypatch.setattr(mc, "card_era_contract", lambda m: {
-        "encoding": "ordinal", "columns": ["era"], "cuts": [2006, 2013, 2020]})
+    monkeypatch.setattr(
+        mc, "card_era_contract", lambda m: {"encoding": "ordinal", "columns": ["era"], "cuts": [2006, 2013, 2020]}
+    )
     out = mc.add_era_columns(pl.DataFrame({"season": [2018, 2019, 2020]}), "xpass_model")
     assert out["era"].to_list() == [2, 2, 2]
 
 
 def test_one_hot_era_produces_all_four_columns(monkeypatch):
-    monkeypatch.setattr(mc, "card_era_contract", lambda m: {
-        "encoding": "one_hot", "columns": ["era0", "era1", "era2", "era3"],
-        "cuts": [2006, 2013, 2020]})
+    monkeypatch.setattr(
+        mc,
+        "card_era_contract",
+        lambda m: {"encoding": "one_hot", "columns": ["era0", "era1", "era2", "era3"], "cuts": [2006, 2013, 2020]},
+    )
     out = mc.add_era_columns(pl.DataFrame({"season": [2018]}), "fg_model")
     assert out.select(["era0", "era1", "era2", "era3"]).row(0) == (0, 0, 1, 0)
 
@@ -90,23 +94,26 @@ def test_a_model_with_no_era_contract_is_left_untouched(monkeypatch):
 
 def test_an_existing_era_column_is_not_overwritten(monkeypatch):
     """A pbp frame already carries era; recomputing it would fight the pipeline."""
-    monkeypatch.setattr(mc, "card_era_contract", lambda m: {
-        "encoding": "ordinal", "columns": ["era"], "cuts": [2006, 2013, 2020]})
+    monkeypatch.setattr(
+        mc, "card_era_contract", lambda m: {"encoding": "ordinal", "columns": ["era"], "cuts": [2006, 2013, 2020]}
+    )
     df = pl.DataFrame({"season": [2018], "era": [99]})
     assert mc.add_era_columns(df, "xpass_model")["era"].to_list() == [99]
 
 
 def test_a_hand_built_row_can_supply_the_season_argument(monkeypatch):
     """The hypothetical case: no season column, season passed explicitly."""
-    monkeypatch.setattr(mc, "card_era_contract", lambda m: {
-        "encoding": "ordinal", "columns": ["era"], "cuts": [2006, 2013, 2020]})
+    monkeypatch.setattr(
+        mc, "card_era_contract", lambda m: {"encoding": "ordinal", "columns": ["era"], "cuts": [2006, 2013, 2020]}
+    )
     out = mc.add_era_columns(pl.DataFrame({"yards_to_goal": [30.0]}), "xpass_model", season=2018)
     assert out["era"].to_list() == [2]
 
 
 def test_no_season_at_all_is_a_clear_error(monkeypatch):
-    monkeypatch.setattr(mc, "card_era_contract", lambda m: {
-        "encoding": "ordinal", "columns": ["era"], "cuts": [2006, 2013, 2020]})
+    monkeypatch.setattr(
+        mc, "card_era_contract", lambda m: {"encoding": "ordinal", "columns": ["era"], "cuts": [2006, 2013, 2020]}
+    )
     with pytest.raises(ValueError, match="season"):
         mc.add_era_columns(pl.DataFrame({"yards_to_goal": [30.0]}), "xpass_model")
 
@@ -119,11 +126,17 @@ def test_no_season_at_all_is_a_clear_error(monkeypatch):
 def test_xpass_returns_the_frame_plus_one_probability_column():
     """The contract: return the caller's frame with model output appended, so a
     hand-built row and a pbp frame behave identically."""
-    df = pl.DataFrame({
-        "season": [2024], "down": [3.0], "distance": [8.0],
-        "yards_to_goal": [55.0], "pos_score_diff": [-4.0],
-        "TimeSecsRem": [900.0], "period": [3.0],
-    })
+    df = pl.DataFrame(
+        {
+            "season": [2024],
+            "down": [3.0],
+            "distance": [8.0],
+            "yards_to_goal": [55.0],
+            "pos_score_diff": [-4.0],
+            "TimeSecsRem": [900.0],
+            "period": [3.0],
+        }
+    )
     out = mc.calculate_xpass(df)
     assert out.height == 1
     assert 0.0 <= out["xpass"][0] <= 1.0
@@ -133,9 +146,7 @@ def test_xpass_returns_the_frame_plus_one_probability_column():
 
 def test_a_hand_built_row_scores_without_any_pbp_machinery():
     """The hypothetical case: someone types a situation and asks the model."""
-    out = mc.calculate_field_goal_probability(
-        pl.DataFrame({"season": [2024], "yards_to_goal": [25.0]})
-    )
+    out = mc.calculate_field_goal_probability(pl.DataFrame({"season": [2024], "yards_to_goal": [25.0]}))
     assert 0.0 <= out["fg_prob"][0] <= 1.0
 
 
@@ -143,10 +154,11 @@ def test_field_goal_probability_moves_with_the_era():
     """The era one-hot must actually reach the model. Kickers improved over the
     covered seasons, so a fixed distance should not score identically in 2005
     and 2024 -- if it does, the era columns are being ignored."""
+
     def fg(year):
-        return mc.calculate_field_goal_probability(
-            pl.DataFrame({"season": [year], "yards_to_goal": [25.0]})
-        )["fg_prob"][0]
+        return mc.calculate_field_goal_probability(pl.DataFrame({"season": [year], "yards_to_goal": [25.0]}))[
+            "fg_prob"
+        ][0]
 
     assert fg(2005) != fg(2024)
     assert fg(2005) < fg(2024)
@@ -169,13 +181,21 @@ def test_return_as_pandas_is_honoured():
 def test_expected_points_emits_class_probabilities_and_a_points_expectation():
     """EP is multi:softprob over seven next-score classes; the probabilities and
     the collapsed expectation must both surface, and the classes must sum to 1."""
-    out = mc.calculate_expected_points(pl.DataFrame({
-        "TimeSecsRem": [1800.0], "yards_to_goal": [75.0], "distance": [10.0],
-        "down_1": [1], "down_2": [0], "down_3": [0], "down_4": [0],
-        "pos_score_diff_start": [0.0],
-    }))
-    classes = ["td_prob", "opp_td_prob", "fg_prob", "opp_fg_prob",
-               "safety_prob", "opp_safety_prob", "no_score_prob"]
+    out = mc.calculate_expected_points(
+        pl.DataFrame(
+            {
+                "TimeSecsRem": [1800.0],
+                "yards_to_goal": [75.0],
+                "distance": [10.0],
+                "down_1": [1],
+                "down_2": [0],
+                "down_3": [0],
+                "down_4": [0],
+                "pos_score_diff_start": [0.0],
+            }
+        )
+    )
+    classes = ["td_prob", "opp_td_prob", "fg_prob", "opp_fg_prob", "safety_prob", "opp_safety_prob", "no_score_prob"]
     for c in classes:
         assert c in out.columns
     total = sum(out[c][0] for c in classes)
@@ -187,8 +207,7 @@ def test_win_probability_picks_the_spread_model_when_a_spread_is_present(monkeyp
     """wp_naive is wp_spread minus spread_time, so the presence of that column
     is what decides which contract applies."""
     seen = []
-    monkeypatch.setattr(mc, "_calculate",
-                        lambda df, model, out, **kw: seen.append(model) or df)
+    monkeypatch.setattr(mc, "_calculate", lambda df, model, out, **kw: seen.append(model) or df)
     mc.calculate_win_probability(pl.DataFrame({"spread_time": [1.0]}))
     mc.calculate_win_probability(pl.DataFrame({"down": [1.0]}))
     assert seen == ["wp_spread", "wp_naive"]
@@ -256,6 +275,4 @@ def test_the_air_yards_superset_still_composes_from_the_card():
     from sportsdataverse.cfb.cfb_pbp import CP_AIR_YARDS_FEATURES, CP_FEATURES
 
     assert CP_AIR_YARDS_FEATURES[: len(CP_FEATURES)] == CP_FEATURES
-    assert set(CP_AIR_YARDS_FEATURES) - set(CP_FEATURES) == {
-        "air_yards", "pass_is_middle", "qb_hurry"
-    }
+    assert set(CP_AIR_YARDS_FEATURES) - set(CP_FEATURES) == {"air_yards", "pass_is_middle", "qb_hurry"}

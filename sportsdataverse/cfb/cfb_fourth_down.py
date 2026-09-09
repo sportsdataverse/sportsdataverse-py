@@ -72,6 +72,7 @@ from sportsdataverse.cfb.cfb_pbp import (
     ep_model as _ep_model,
     wp_model as _wp_model,
 )
+
 #: Read from each model's published card rather than restated here. A retrain
 #: that changes a feature set now propagates instead of silently disagreeing --
 #: the failure mode of cfbfastR-cfb-data#70, one layer down.

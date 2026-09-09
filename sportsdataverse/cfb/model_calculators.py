@@ -114,23 +114,13 @@ def add_era_columns(df: pl.DataFrame, model: str, season: int | None = None) -> 
     elif "season" in df.columns:
         season_expr = pl.col("season").cast(pl.Int64)
     else:
-        raise ValueError(
-            f"{model} needs an era column; supply a 'season' column or the season= argument"
-        )
+        raise ValueError(f"{model} needs an era column; supply a 'season' column or the season= argument")
     bucket = (
-        pl.when(season_expr <= lo)
-        .then(0)
-        .when(season_expr <= mid)
-        .then(1)
-        .when(season_expr <= hi)
-        .then(2)
-        .otherwise(3)
+        pl.when(season_expr <= lo).then(0).when(season_expr <= mid).then(1).when(season_expr <= hi).then(2).otherwise(3)
     )
     if contract["encoding"] == "ordinal":
         return df.with_columns(bucket.cast(pl.Int32).alias(columns[0]))
-    return df.with_columns(
-        [(bucket == i).cast(pl.Int32).alias(col) for i, col in enumerate(columns)]
-    )
+    return df.with_columns([(bucket == i).cast(pl.Int32).alias(col) for i, col in enumerate(columns)])
 
 
 def _booster_for(model: str) -> Any:
@@ -245,8 +235,7 @@ def calculate_xpass(df, *, season=None, return_as_pandas=False):
             from sportsdataverse.cfb import calculate_xpass
             calculate_xpass(df, season=2024)
     """
-    return _calculate(df, "xpass_model", "xpass", season=season,
-                      return_as_pandas=return_as_pandas)
+    return _calculate(df, "xpass_model", "xpass", season=season, return_as_pandas=return_as_pandas)
 
 
 def calculate_field_goal_probability(df, *, season=None, return_as_pandas=False):
@@ -277,8 +266,7 @@ def calculate_field_goal_probability(df, *, season=None, return_as_pandas=False)
             from sportsdataverse.cfb import calculate_field_goal_probability
             calculate_field_goal_probability(df, season=2024)
     """
-    return _calculate(df, "fg_model", "fg_prob", season=season,
-                      return_as_pandas=return_as_pandas)
+    return _calculate(df, "fg_model", "fg_prob", season=season, return_as_pandas=return_as_pandas)
 
 
 def calculate_completion_probability(df, *, season=None, return_as_pandas=False):
@@ -309,8 +297,7 @@ def calculate_completion_probability(df, *, season=None, return_as_pandas=False)
             from sportsdataverse.cfb import calculate_completion_probability
             calculate_completion_probability(df, season=2024)
     """
-    return _calculate(df, "cfb_cp_model", "cp", season=season,
-                      return_as_pandas=return_as_pandas)
+    return _calculate(df, "cfb_cp_model", "cp", season=season, return_as_pandas=return_as_pandas)
 
 
 def calculate_two_point_probability(df, *, season=None, return_as_pandas=False):
@@ -341,8 +328,7 @@ def calculate_two_point_probability(df, *, season=None, return_as_pandas=False):
             from sportsdataverse.cfb import calculate_two_point_probability
             calculate_two_point_probability(df, season=2024)
     """
-    return _calculate(df, "two_pt_model", "two_pt_prob", season=season,
-                      return_as_pandas=return_as_pandas)
+    return _calculate(df, "two_pt_model", "two_pt_prob", season=season, return_as_pandas=return_as_pandas)
 
 
 def calculate_fourth_down(df, *, season=None, return_as_pandas=False):
@@ -373,8 +359,7 @@ def calculate_fourth_down(df, *, season=None, return_as_pandas=False):
             from sportsdataverse.cfb import calculate_fourth_down
             calculate_fourth_down(df, season=2024)
     """
-    return _calculate(df, "fd_model", "fd_prob", season=season,
-                      return_as_pandas=return_as_pandas)
+    return _calculate(df, "fd_model", "fd_prob", season=season, return_as_pandas=return_as_pandas)
 
 
 def calculate_qbr(df, *, season=None, return_as_pandas=False):
@@ -405,8 +390,7 @@ def calculate_qbr(df, *, season=None, return_as_pandas=False):
             from sportsdataverse.cfb import calculate_qbr
             calculate_qbr(df, season=2024)
     """
-    return _calculate(df, "qbr_model", "qbr", season=season,
-                      return_as_pandas=return_as_pandas)
+    return _calculate(df, "qbr_model", "qbr", season=season, return_as_pandas=return_as_pandas)
 
 
 def calculate_expected_points(df, *, season=None, return_as_pandas=False):
@@ -447,12 +431,11 @@ def calculate_expected_points(df, *, season=None, return_as_pandas=False):
     #: Column names in the booster's own class order, matched to the score each
     #: class is worth. Reading the mapping keeps this from becoming a seventh
     #: private copy of the class contract.
-    names = ["td_prob", "opp_td_prob", "fg_prob", "opp_fg_prob",
-             "safety_prob", "opp_safety_prob", "no_score_prob"]
+    names = ["td_prob", "opp_td_prob", "fg_prob", "opp_fg_prob", "safety_prob", "opp_safety_prob", "no_score_prob"]
     scores = np.array([ep_class_to_score_mapping[i] for i in range(probs.shape[1])], dtype=float)
-    out = prepared.with_columns(
-        [pl.Series(names[i], probs[:, i]) for i in range(probs.shape[1])]
-    ).with_columns(pl.Series("ep", probs @ scores))
+    out = prepared.with_columns([pl.Series(names[i], probs[:, i]) for i in range(probs.shape[1])]).with_columns(
+        pl.Series("ep", probs @ scores)
+    )
     return out.to_pandas() if return_as_pandas else out
 
 
