@@ -8,6 +8,7 @@ is the whole reason hoopR carries ~44 hardcoded header vectors).
 
 from __future__ import annotations
 
+import polars as pl
 import pytest
 
 from sportsdataverse._html_tables import _clean_name, _dedupe_headers, html_tables
@@ -17,7 +18,7 @@ from sportsdataverse._subscription_http import (
     resolve_credentials,
     resolve_proxy,
 )
-from sportsdataverse.mbb.kenpom_runtime import KENPOM, parse_kenpom_page
+from sportsdataverse.mbb.kenpom_runtime import KENPOM, _depth_chart_table, parse_kenpom_page
 from sportsdataverse.wbb.herhoopstats import HERHOOPSTATS
 
 # A KenPom-shaped ratings table: grouped two-row header, and each metric followed
@@ -35,6 +36,26 @@ KENPOM_HTML = """
   </tbody>
 </table>
 <table id="nav"><tr><th>x</th></tr><tr><td>1</td></tr></table>
+</body></html>
+"""
+
+# team.php-shaped page: a real <table> plus the depth chart's replacement -- a
+# `const players = [...]` JSON array inside a <script> tag (KenPom dropped the
+# static #dc-table depth-chart table; see hoopR's kp_team_depth_chart() source).
+DEPTH_CHART_HTML = """
+<html><body>
+<table id="schedule-table">
+  <tr><th>Date</th><th>Opponent</th></tr>
+  <tr><td>11/4</td><td>Maine</td></tr>
+  <tr><td>11/7</td><td>Kentucky</td></tr>
+</table>
+<script>
+  var otherStuff = 1;
+  const players = [{"playerID":"123","Name":"Cooper Flagg","Year":"Fr","Height":"6-9",
+    "Weight":"205","PctPG":0,"PctSG":0,"PctSF":40,"PctPF":60,"PctC":0,"PctPoss":100,
+    "FTA":"120","FG2A":"200","FG3A":"80"}];
+  var moreStuff = 2;
+</script>
 </body></html>
 """
 
@@ -139,6 +160,41 @@ def test_parse_kenpom_page_returns_dict_of_frames():
 
 def test_html_tables_empty_page_is_empty_not_an_error():
     assert html_tables("<html><body>no tables</body></html>") == {}
+
+
+# --- depth chart: recovered from a <script> tag, not html_tables() -----------
+
+
+def test_parse_kenpom_page_extracts_depth_chart_from_script_tag():
+    frames = parse_kenpom_page(DEPTH_CHART_HTML)
+    assert set(frames) == {"schedule_table", "depth_chart"}
+    dc = frames["depth_chart"]
+    # underscore() derives names generically (no hoopR-style hardcoded rename map),
+    # so KenPom's raw "Name" JSON key stays "name", not hoopR's renamed "player_name".
+    assert dc["name"].to_list() == ["Cooper Flagg"]
+    assert dc["pct_sf"].to_list() == [40]
+    # player_id / FTA / FG2A / FG3A arrive as quoted JSON strings on the real site
+    # (hoopR casts FTA/FG2A/FG3A explicitly with as.integer()) -- _cast_numerics must
+    # run on this frame too, same as every HTML-table column, or these stay Utf8 while
+    # everything else gets typed. No ID-column carve-out: _cast_numerics has never had
+    # one (it treats every fully-numeric text column alike), so player_id casts too.
+    assert dc["player_id"].to_list() == [123]
+    assert dc["fta"].to_list() == [120]
+    assert dc.schema["fta"] == pl.Int64
+
+
+def test_depth_chart_table_absent_without_a_script_tag():
+    assert _depth_chart_table(KENPOM_HTML) is None
+
+
+def test_depth_chart_table_ignores_malformed_json():
+    assert _depth_chart_table("<script>const players = [not json};</script>") is None
+
+
+def test_depth_chart_table_empty_array_is_zero_row_not_none():
+    df = _depth_chart_table("<script>const players = [];</script>")
+    assert df is not None
+    assert df.shape == (0, 0)
 
 
 # --- credentials -------------------------------------------------------------

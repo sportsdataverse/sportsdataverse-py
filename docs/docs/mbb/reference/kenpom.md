@@ -239,7 +239,7 @@ _Last validated n/a._
 
 ## `kenpom_team`
 
-GET /team.php - a team's full season page. Returns EVERY table on it, so one call covers hoopR's kp_team_schedule(), kp_team_players(), kp_team_depth_chart() and kp_team_lineups(), which each fetch this same page separately.
+GET /team.php - a team's full season page. Returns EVERY table on it, so one call covers hoopR's kp_team_schedule(), kp_team_players() and kp_team_lineups(), which each fetch this same page separately -- plus kp_team_depth_chart(), recovered under a "depth_chart" key from an embedded script tag rather than a table (KenPom dropped the static depth-chart table; see kp_team_depth_chart()'s R source).
 
 **Endpoint URL:** `GET https://kenpom.com/team.php`
 

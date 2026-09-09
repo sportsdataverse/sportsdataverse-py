@@ -9,7 +9,7 @@ KenPom-specific description of it plus the two callables the generated wrappers
 import (``_get`` and ``parse_kenpom_page``).
 
 This is the Python port of hoopR's ``kp_*()`` family (``R/kp_*.R`` +
-``login()`` / ``.kp_get_page()`` in ``R/utils.R``), with two deliberate
+``login()`` / ``.kp_get_page()`` in ``R/utils.R``), with three deliberate
 divergences:
 
 * **One wrapper per URL, all tables returned.** hoopR ships four functions
@@ -25,6 +25,16 @@ divergences:
   :func:`sportsdataverse._subscription_http.html_tables` derives the same names
   from the ``MultiIndex`` ``pandas.read_html`` builds, so a KenPom column
   addition widens the frame instead of silently shifting every column.
+* **The depth chart is recovered from a ``<script>`` tag, not a ``<table>``.**
+  KenPom retired the static ``#dc-table`` depth-chart table (hoopR issue
+  sportsdataverse/hoopR#152); ``team.php`` now renders it client-side from a
+  ``const players = [...]`` JSON array. :func:`_depth_chart_table` extracts
+  that array directly, since :func:`~sportsdataverse._subscription_http.html_tables`
+  only ever sees ``<table>`` elements (``<script>`` contents are stripped
+  before parsing so they can't contaminate a real table's cell text). Mirrors
+  hoopR's ``kp_team_depth_chart()``, minus its hardcoded column list; the
+  result is merged into ``kenpom_team()``'s returned dict under the
+  ``"depth_chart"`` key.
 
 Credentials come from ``KENPOM_EMAIL`` / ``KENPOM_PW`` (hoopR's ``KP_USER`` /
 ``KP_PW`` are also accepted, so an existing R environment works unchanged), or
@@ -34,6 +44,8 @@ from ``email=`` / ``password=`` on any call. Proxy from ``proxy=``,
 
 from __future__ import annotations
 
+import json
+import re
 from typing import TYPE_CHECKING, Any, Dict, Optional
 
 import polars as pl
@@ -45,6 +57,7 @@ from sportsdataverse._subscription_http import (
     html_tables,
 )
 from sportsdataverse._subscription_http import login as _login
+from sportsdataverse.dl_utils import underscore
 
 if TYPE_CHECKING:  # pragma: no cover -- annotation-only imports
     import pandas as pd
@@ -243,6 +256,40 @@ def _cast_numerics(frame: pl.DataFrame) -> pl.DataFrame:
     return out
 
 
+_DEPTH_CHART_RE = re.compile(r"const players\s*=\s*(\[.*?\]);", re.DOTALL)
+
+
+def _depth_chart_table(raw: str) -> Optional[pl.DataFrame]:
+    """Extract KenPom's client-rendered depth-chart table from ``team.php``.
+
+    See the module docstring's third divergence for why this can't just be
+    another entry in :func:`~sportsdataverse._subscription_http.html_tables`'s
+    output -- the data isn't in a ``<table>`` at all.
+
+    Args:
+        raw: The page HTML from :func:`_get`.
+
+    Returns:
+        A polars DataFrame (one row per rostered player), or ``None`` when the
+        page carries no matching script -- an unauthenticated page, a
+        page/parser this doesn't apply to, or a further site change.
+    """
+    import pandas as pd
+
+    match = _DEPTH_CHART_RE.search(raw or "")
+    if match is None:
+        return None
+    try:
+        records = json.loads(match.group(1))
+    except json.JSONDecodeError:
+        return None
+    if not records:
+        return pl.DataFrame()
+    frame = pd.json_normalize(records)
+    frame.columns = [underscore(c) for c in frame.columns]
+    return pl.from_pandas(frame)
+
+
 def parse_kenpom_page(
     raw: str,
     *,
@@ -253,7 +300,9 @@ def parse_kenpom_page(
     Keys are the table's HTML ``id`` (KenPom's real data tables all carry one --
     ``ratings_table``, ``player_table``, ``schedule_table``, ...), snake-cased.
     ``min_rows=2`` drops the small nav/legend tables KenPom renders alongside
-    the data.
+    the data. On ``team.php`` an additional ``"depth_chart"`` key is added when
+    present, recovered from an embedded script tag rather than a table -- see
+    :func:`_depth_chart_table`.
 
     Args:
         raw: The page HTML from :func:`_get`.
@@ -273,6 +322,9 @@ def parse_kenpom_page(
     """
     tables = html_tables(raw, min_rows=2)
     tidied = {k: _cast_numerics(_split_ncaa_seed(_drop_repeated_headers(v))) for k, v in tables.items()}
+    depth_chart = _depth_chart_table(raw)
+    if depth_chart is not None:
+        tidied["depth_chart"] = _cast_numerics(depth_chart)
     if return_as_pandas:
         return {k: v.to_pandas() for k, v in tidied.items()}
     return tidied
