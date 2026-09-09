@@ -336,3 +336,45 @@ def test_the_frames_own_season_beats_the_season_argument():
     eras = mc.add_era_columns(multi, "fg_model", season=2024)
     assert eras.select(["era0", "era1", "era2", "era3"]).row(0) == (1, 0, 0, 0)
     assert eras.select(["era0", "era1", "era2", "era3"]).row(1) == (0, 0, 0, 1)
+
+
+def test_expected_points_scores_a_raw_pbp_frame():
+    """EP is trained on one-hot downs, so aliasing start.down -> down left a raw
+    pbp frame four features short. The first pbp fix normalized names but not
+    this derivation, and calculate_expected_points still raised."""
+    pbp = pl.DataFrame(
+        {
+            "season": [2024],
+            "start.TimeSecsRem": [900.0],
+            "start.yardsToEndzone": [75.0],
+            "start.distance": [10.0],
+            "start.down": [1.0],
+            "pos_score_diff_start": [0.0],
+        }
+    )
+    out = mc.calculate_expected_points(pbp)
+    assert -10.0 <= out["ep"][0] <= 10.0
+    assert [out[c][0] for c in ("down_1", "down_2", "down_3", "down_4")] == [1, 0, 0, 0]
+
+
+def test_down_one_hots_are_derived_per_down():
+    pbp = pl.DataFrame({"start.down": [1.0, 2.0, 3.0, 4.0]})
+    out = mc.normalize_pbp_columns(pbp, "ep_model")
+    assert out["down_1"].to_list() == [1, 0, 0, 0]
+    assert out["down_4"].to_list() == [0, 0, 0, 1]
+
+
+def test_caller_supplied_down_one_hots_are_never_overwritten():
+    """A pbp frame may already carry them from the pipeline."""
+    df = pl.DataFrame(
+        {
+            "start.down": [1.0],
+            "down_1": [0],
+            "down_2": [1],
+            "down_3": [0],
+            "down_4": [0],
+        }
+    )
+    out = mc.normalize_pbp_columns(df, "ep_model")
+    assert out["down_1"].to_list() == [0]
+    assert out["down_2"].to_list() == [1]

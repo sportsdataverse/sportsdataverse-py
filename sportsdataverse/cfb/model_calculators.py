@@ -60,6 +60,10 @@ _PBP_ALIASES: dict[str, tuple[str, ...]] = {
 }
 
 
+#: EP one-hot down indicators. Derived from `down` when a card asks for them.
+_DOWN_ONE_HOTS = ("down_1", "down_2", "down_3", "down_4")
+
+
 def normalize_pbp_columns(df: pl.DataFrame, model: str) -> pl.DataFrame:
     """Add card-named copies of any play-by-play columns ``df`` already carries.
 
@@ -87,7 +91,24 @@ def normalize_pbp_columns(df: pl.DataFrame, model: str) -> pl.DataFrame:
             if source in df.columns:
                 additions.append(pl.col(source).alias(feature))
                 break
-    return df.with_columns(additions) if additions else df
+    out = df.with_columns(additions) if additions else df
+
+    # EP is trained on one-hot downs (down_1..down_4), not a `down` column, so
+    # aliasing start.down -> down is not enough: a raw pbp frame still arrives
+    # four features short. Derived here rather than in the EP calculator so any
+    # model whose card asks for them gets the same treatment.
+    wanted = [c for c in card_features(model) if c in _DOWN_ONE_HOTS]
+    if wanted and not all(c in out.columns for c in wanted):
+        down = next((c for c in ("down", "start.down") if c in out.columns), None)
+        if down is not None:
+            out = out.with_columns(
+                [
+                    (pl.col(down).cast(pl.Int64) == int(c.rsplit("_", 1)[1])).cast(pl.Int64).alias(c)
+                    for c in wanted
+                    if c not in out.columns  # never overwrite a caller's column
+                ]
+            )
+    return out
 
 
 def predict_from_card(df: pl.DataFrame, model: str, booster: Any) -> np.ndarray:
