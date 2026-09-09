@@ -9,7 +9,180 @@ sidebar_position: 50
 Hand-written wrappers, loaders, and helpers in `sportsdataverse.nba`
 not covered by the generated API-endpoint reference above.
 
-## Play-by-play, schedule & rosters
+## Highlights
+
+### `bref_players_stats(season: 'Optional[int]' = None, table: 'str' = 'per_game', league: 'str' = 'nba', *, return_as_pandas: 'bool' = False, proxy: 'Any' = None, **kwargs: 'Any') -> 'pl.DataFrame | pd.DataFrame'` {#bref_players_stats}
+
+Player season statistics for an entire league season.
+
+Port of hoopR's `bref_players_stats()` (NBA) and wehoop's
+`bref_wnba_player_stats()` (WNBA). One row per player, with columns named
+by Basketball-Reference `data-stat` keys.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `Optional[int]` | `None` | Season in 4-digit ending-year format (`2024` = 2023-24). The WNBA season is a plain calendar year. Defaults to the current season. |
+| `table` | `str` | `'per_game'` | Which stat table. NBA accepts `per_game` (default), `totals`, `advanced`, `per_minute` (per 36) and `per_poss` (per 100 possessions); WNBA accepts `per_game`, `totals` and `advanced`. |
+| `league` | `str` | `'nba'` | `"nba"` (default) or `"wnba"`. |
+| `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
+| `proxy` | `Any` | `None` | Proxy configuration in the `requests` `proxies=` shape. |
+
+**Returns**
+
+One row per player: `ranker`, `player`, `age`, `team`, `pos`, `g`, `gs` plus the box columns scaled to `table` (the `advanced` table adds `per`, `ts_pct`, `usg_pct`, `ws`, `bpm`, `vorp` …), and echoed `season` / `table` / `league` columns. A zero-row frame when the page carries no player table.
+
+**Example**
+
+```python
+import polars as pl
+from sportsdataverse.nba.bref import bref_players_stats
+
+df = bref_players_stats(season=2024)
+print(df.shape)
+
+# Advanced metrics, and the WNBA page
+
+adv = bref_players_stats(season=2024, table="advanced")
+wnba = bref_players_stats(season=2024, league="wnba")
+
+# Pipeline next step (one line)
+
+adv.filter(pl.col("vorp") > 3.0).sort("vorp", descending=True).head()
+```
+
+### `bref_standings(season: 'Optional[int]' = None, league: 'str' = 'nba', *, return_as_pandas: 'bool' = False, proxy: 'Any' = None, **kwargs: 'Any') -> 'pl.DataFrame | pd.DataFrame'` {#bref_standings}
+
+Conference standings for a season, both conferences stacked.
+
+Port of hoopR's `bref_standings()` (NBA) and wehoop's
+`bref_wnba_standings()` (WNBA).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `Optional[int]` | `None` | Season in 4-digit ending-year format. Defaults to the current season. |
+| `league` | `str` | `'nba'` | `"nba"` (default) or `"wnba"`. |
+| `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
+| `proxy` | `Any` | `None` | Proxy configuration in the `requests` `proxies=` shape. |
+
+**Returns**
+
+One row per team: `conference` (`"E"` / `"W"` for **both** leagues -- wehoop emits `"Eastern"`/`"Western"`), `team` (playoff `*` marker stripped), `playoffs` (bool, from that marker), `wins`, `losses`, `win_loss_pct`, `gb`, `pts_per_g`, `opp_pts_per_g`, `srs`, plus echoed `season` / `league`. Zero rows when neither conference table is present.
+
+**Example**
+
+```python
+import polars as pl
+from sportsdataverse.nba.bref import bref_standings
+
+df = bref_standings(season=2024)
+print(df.shape)
+
+# The WNBA page
+
+wnba = bref_standings(season=2024, league="wnba")
+
+# Pipeline next step (one line)
+
+df.filter(pl.col("playoffs") == True).sort("srs", descending=True).head()
+```
+
+### `bref_teams_stats(season: 'Optional[int]' = None, table: 'str' = 'per_game', league: 'str' = 'nba', *, return_as_pandas: 'bool' = False, proxy: 'Any' = None, **kwargs: 'Any') -> 'pl.DataFrame | pd.DataFrame'` {#bref_teams_stats}
+
+Team season statistics from the league season page.
+
+Port of hoopR's `bref_teams_stats()` (NBA) and wehoop's
+`bref_wnba_team_stats()` (WNBA). Every team table lives on the one season
+page and all but the first are comment-hidden, which is why the table `id`
+selection in bref_table` matters here.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `Optional[int]` | `None` | Season in 4-digit ending-year format (`2024` = 2023-24). Defaults to the current season. |
+| `table` | `str` | `'per_game'` | NBA accepts `per_game` (default), `totals`, `per_poss`, `advanced` and `opponent` (opponent per-game); WNBA accepts the same set minus `opponent`. |
+| `league` | `str` | `'nba'` | `"nba"` (default) or `"wnba"`. |
+| `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
+| `proxy` | `Any` | `None` | Proxy configuration in the `requests` `proxies=` shape. |
+
+**Returns**
+
+One row per team: `ranker`, `team`, `g`, `mp` and the box categories scaled to `table`, plus echoed `season` / `table` / `league`. The WNBA path drops the `League Average` footer row, as wehoop does. A zero-row frame when the table id is absent.
+
+**Example**
+
+```python
+from sportsdataverse.nba.bref import bref_teams_stats
+
+df = bref_teams_stats(season=2024)
+print(df.shape)
+
+# Opponent per-game, and pandas output
+
+opp = bref_teams_stats(season=2024, table="opponent")
+df_pd = bref_teams_stats(season=2024, return_as_pandas=True)
+
+# Pipeline next step (one line)
+
+df.sort("pts_per_g", descending=True).head()
+```
+
+### `compile_nba_season(season: 'int', season_type: 'str' = 'Regular Season', *, resume: 'bool' = True, cache_dir: 'Optional[str]' = None, delay_s: 'float' = 0.6, lineup_source: 'str' = 'auto', proxy_provider: 'Optional[Callable[[], Optional[str]]]' = None, raw_store_dir: 'RawStoreDir' = None, raw_store_readonly: 'Optional[bool]' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#compile_nba_season}
+
+Compile a full season's possession stint matrix (cached + resumable + throttled).
+
+Discovers game ids, dedupes, then per game loads the cached parquet if present
+(`resume`), else fetches via fetch_possessions`, caches it, and sleeps
+`delay_s` (throttle; only on live fetches). A game that errors or returns no
+possessions is logged and skipped (best-effort — a per-game failure never
+raises; see `Raises` for the game_date integrity error). The assembled
+frame is tagged with a `season` column.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `int` |  | Season END year (e.g. 2024 for 2023-24). |
+| `season_type` | `str` | `'Regular Season'` | `"Regular Season"` (default) or `"Playoffs"`. |
+| `resume` | `bool` | `True` | Reuse per-game cached parquet when present. |
+| `cache_dir` | `Optional[str]` | `None` | Cache root; defaults to `SDV_PY_NBA_CACHE_DIR` or `~/.sdv_py_nba_cache/possessions`. |
+| `delay_s` | `float` | `0.6` | Seconds to sleep after each live fetch (rate-limit throttle). |
+| `lineup_source` | `str` | `'auto'` | Which on-court lineup producer to use — `"auto"` (default; tries rotation then falls back to pbp), `"rotation"` (gamerotation endpoint only), or `"pbp"` (pbp-derived, no gamerotation fetch — useful when the gamerotation endpoint is throttled or unavailable). |
+| `proxy_provider` | `Optional[Callable[[], Optional[str]]]` | `None` | Optional zero-arg callable returning a proxy URL (or `None`). **Called once for game discovery, then once per game** (`N + 1` calls for an `N`-game season), so a rotating pool spreads a season's fetches across many exit IPs rather than hammering `stats.nba.com` from one address. `stats.nba.com` rejects or hangs on datacenter/cloud IPs, so an unattended host (CI, a droplet) MUST supply one — a proxied request is judged on the proxy's exit IP, which is what makes such a host viable at all. Note discovery is proxied too: an unproxied index call returns no rows there, compiling the season to zero games without an error. Any `() -> str \| None` works; a round-robin pool's `.next` matches the signature directly:: compile_nba_season(2024, proxy_provider=round_robin.next) |
+| `raw_store_dir` | `RawStoreDir` | `None` | Explicit raw JSON store root forwarded to every per-game fetch — a single path, or a per-endpoint mapping (`"*"` default key) so payload families can live in independent trees. `None` -> env vars (per-endpoint `SDV_PY_NBA_RAW_JSON_DIR_{ENDPOINT}`, then the generic `SDV_PY_NBA_RAW_JSON_DIR`); `""` force-disables. Same spirit as `cache_dir`'s arg-over-env precedence. |
+| `raw_store_readonly` | `Optional[bool]` | `None` | If `True`, per-game fetches are fully offline — the store is the only source, and a game with no capture raises `~sportsdataverse.errors.RawStoreMissError`, which this loop's per-game handler logs and skips (so an uncaptured game is visibly skipped instead of silently completed from the live API). `None` defers to `SDV_PY_NBA_RAW_JSON_READONLY`. |
+| `return_as_pandas` | `bool` | `False` | Return pandas instead of polars. |
+
+**Returns**
+
+The season possession frame (+ `season` and `game_date` cols). Empty typed frame if no games.
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_season_compile import compile_nba_season
+
+poss = compile_nba_season(2024)
+print(poss.shape)          # (n_possessions, n_cols)
+print(poss["season"][0])   # 2024
+
+# Resume a partially completed run and return as pandas
+
+poss_pd = compile_nba_season(2024, resume=True, return_as_pandas=True)
+print(type(poss_pd))       # <class 'pandas.core.frame.DataFrame'>
+
+# Compile Playoffs with a custom cache directory
+
+poss = compile_nba_season(
+    2024,
+    season_type="Playoffs",
+    cache_dir="/tmp/nba_cache",
+)
+```
 
 ### `espn_nba_player_stats(athlete_id: 'int', season: 'int', *, season_type: 'str' = 'regular', total: 'bool' = False, raw: 'bool' = False, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'pl.DataFrame | pd.DataFrame | dict[str, Any]'` {#espn_nba_player_stats}
 
@@ -308,6 +481,80 @@ finals = espn_nba_schedule(dates=20230102).filter(
 )
 ```
 
+### `espn_nba_teams(return_as_pandas=False, **kwargs) -> 'pl.DataFrame'` {#espn_nba_teams}
+
+espn_nba_teams - look up NBA teams
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `return_as_pandas` | `bool` | `False` | If True, returns a pandas dataframe. If False, returns a polars dataframe. |
+
+**Returns**
+
+Polars dataframe containing teams for the requested league. This function caches by default, so if you want to refresh the data, use the command sportsdataverse.nba.espn_nba_teams.clear_cache().
+
+| col_name | type | description |
+|---|---|---|
+| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
+| `team_alternate_color` | character | Team alternate color (hex without leading '#'). |
+| `team_color` | character | Team primary color (hex without leading '#'). |
+| `team_display_name` | character | Full team display name. |
+| `team_id` | character | Unique team identifier. |
+| `team_is_active` | logical | TRUE if the team is currently active. |
+| `team_is_all_star` | logical | TRUE if the row represents an All-Star team. |
+| `team_location` | character | Team city or location string. |
+| `team_logos` | integer | Team logo metadata. |
+| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `team_nickname` | character | Team nickname. |
+| `team_short_display_name` | character | Short team display name (e.g. 'Aces'). |
+| `team_slug` | character | URL-safe team identifier (e.g. 'lasvegas-aces' / 'aces'). |
+| `team_uid` | character | ESPN universal team identifier (UID format 's:40~l:...~t:...'). |
+
+**Example**
+
+```python
+from sportsdataverse.nba import espn_nba_teams
+teams = espn_nba_teams()
+print(teams.shape)
+
+# Pandas round-trip
+
+teams_pd = espn_nba_teams(return_as_pandas=True)
+teams_pd.head()
+
+# Pipeline next step (build a team_id to abbreviation map)
+
+teams = espn_nba_teams()
+abbr_map = dict(zip(teams["team_id"], teams["team_abbreviation"]))
+```
+
+### `most_recent_nba_season()` {#most_recent_nba_season}
+
+Return the most recent NBA season year based on today's date.
+
+The NBA season crosses calendar years -- a season started in October of
+year Y is reported as season Y+1. If today is in October or later, this
+returns next calendar year; otherwise it returns the current calendar year.
+
+**Returns**
+
+The most recent NBA season year (e.g. 2024 for the 2023-24 season).
+
+**Example**
+
+```python
+from sportsdataverse.nba import most_recent_nba_season
+year = most_recent_nba_season()
+print(year)
+
+# Combine with the loaders for a "current season" pull
+
+from sportsdataverse.nba import load_nba_schedule, most_recent_nba_season
+sched = load_nba_schedule(seasons=[most_recent_nba_season()])
+```
+
 ## Dataset loaders
 
 ### `load_darko_dpm(path: 'str') -> 'pl.DataFrame'` {#load_darko_dpm}
@@ -517,31 +764,6 @@ season = oracle.filter(pl.col("season") == "2022-23")
 ```
 
 ## Utilities & helpers
-
-### `most_recent_nba_season()` {#most_recent_nba_season}
-
-Return the most recent NBA season year based on today's date.
-
-The NBA season crosses calendar years -- a season started in October of
-year Y is reported as season Y+1. If today is in October or later, this
-returns next calendar year; otherwise it returns the current calendar year.
-
-**Returns**
-
-The most recent NBA season year (e.g. 2024 for the 2023-24 season).
-
-**Example**
-
-```python
-from sportsdataverse.nba import most_recent_nba_season
-year = most_recent_nba_season()
-print(year)
-
-# Combine with the loaders for a "current season" pull
-
-from sportsdataverse.nba import load_nba_schedule, most_recent_nba_season
-sched = load_nba_schedule(seasons=[most_recent_nba_season()])
-```
 
 ### `year_to_season(year)` {#year_to_season}
 
@@ -1351,83 +1573,6 @@ df_pd = bref_player_game_log("jamesle01", 2024, return_as_pandas=True)
 df.select(["date", "opp", "pts", "trb", "ast"]).head()
 ```
 
-### `bref_players_stats(season: 'Optional[int]' = None, table: 'str' = 'per_game', league: 'str' = 'nba', *, return_as_pandas: 'bool' = False, proxy: 'Any' = None, **kwargs: 'Any') -> 'pl.DataFrame | pd.DataFrame'` {#bref_players_stats}
-
-Player season statistics for an entire league season.
-
-Port of hoopR's `bref_players_stats()` (NBA) and wehoop's
-`bref_wnba_player_stats()` (WNBA). One row per player, with columns named
-by Basketball-Reference `data-stat` keys.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `season` | `Optional[int]` | `None` | Season in 4-digit ending-year format (`2024` = 2023-24). The WNBA season is a plain calendar year. Defaults to the current season. |
-| `table` | `str` | `'per_game'` | Which stat table. NBA accepts `per_game` (default), `totals`, `advanced`, `per_minute` (per 36) and `per_poss` (per 100 possessions); WNBA accepts `per_game`, `totals` and `advanced`. |
-| `league` | `str` | `'nba'` | `"nba"` (default) or `"wnba"`. |
-| `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
-| `proxy` | `Any` | `None` | Proxy configuration in the `requests` `proxies=` shape. |
-
-**Returns**
-
-One row per player: `ranker`, `player`, `age`, `team`, `pos`, `g`, `gs` plus the box columns scaled to `table` (the `advanced` table adds `per`, `ts_pct`, `usg_pct`, `ws`, `bpm`, `vorp` …), and echoed `season` / `table` / `league` columns. A zero-row frame when the page carries no player table.
-
-**Example**
-
-```python
-from sportsdataverse.nba.bref import bref_players_stats
-
-df = bref_players_stats(season=2024)
-print(df.shape)
-
-# Advanced metrics, and the WNBA page
-
-adv = bref_players_stats(season=2024, table="advanced")
-wnba = bref_players_stats(season=2024, league="wnba")
-
-# Pipeline next step (one line)
-
-adv.filter(pl.col("vorp") > 3.0).sort("vorp", descending=True).head()
-```
-
-### `bref_standings(season: 'Optional[int]' = None, league: 'str' = 'nba', *, return_as_pandas: 'bool' = False, proxy: 'Any' = None, **kwargs: 'Any') -> 'pl.DataFrame | pd.DataFrame'` {#bref_standings}
-
-Conference standings for a season, both conferences stacked.
-
-Port of hoopR's `bref_standings()` (NBA) and wehoop's
-`bref_wnba_standings()` (WNBA).
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `season` | `Optional[int]` | `None` | Season in 4-digit ending-year format. Defaults to the current season. |
-| `league` | `str` | `'nba'` | `"nba"` (default) or `"wnba"`. |
-| `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
-| `proxy` | `Any` | `None` | Proxy configuration in the `requests` `proxies=` shape. |
-
-**Returns**
-
-One row per team: `conference` (`"E"` / `"W"` for **both** leagues -- wehoop emits `"Eastern"`/`"Western"`), `team` (playoff `*` marker stripped), `playoffs` (bool, from that marker), `wins`, `losses`, `win_loss_pct`, `gb`, `pts_per_g`, `opp_pts_per_g`, `srs`, plus echoed `season` / `league`. Zero rows when neither conference table is present.
-
-**Example**
-
-```python
-from sportsdataverse.nba.bref import bref_standings
-
-df = bref_standings(season=2024)
-print(df.shape)
-
-# The WNBA page
-
-wnba = bref_standings(season=2024, league="wnba")
-
-# Pipeline next step (one line)
-
-df.filter(pl.col("playoffs") == True).sort("srs", descending=True).head()
-```
-
 ### `bref_team_roster(team: 'str', season: 'Optional[int]' = None, *, return_as_pandas: 'bool' = False, proxy: 'Any' = None, **kwargs: 'Any') -> 'pl.DataFrame | pd.DataFrame'` {#bref_team_roster}
 
 A team's roster for one season.
@@ -1462,47 +1607,6 @@ sonics = bref_team_roster(team="SEA", season=1996)
 # Pipeline next step (one line)
 
 df.select(["player", "pos", "height", "college"]).head()
-```
-
-### `bref_teams_stats(season: 'Optional[int]' = None, table: 'str' = 'per_game', league: 'str' = 'nba', *, return_as_pandas: 'bool' = False, proxy: 'Any' = None, **kwargs: 'Any') -> 'pl.DataFrame | pd.DataFrame'` {#bref_teams_stats}
-
-Team season statistics from the league season page.
-
-Port of hoopR's `bref_teams_stats()` (NBA) and wehoop's
-`bref_wnba_team_stats()` (WNBA). Every team table lives on the one season
-page and all but the first are comment-hidden, which is why the table `id`
-selection in bref_table` matters here.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `season` | `Optional[int]` | `None` | Season in 4-digit ending-year format (`2024` = 2023-24). Defaults to the current season. |
-| `table` | `str` | `'per_game'` | NBA accepts `per_game` (default), `totals`, `per_poss`, `advanced` and `opponent` (opponent per-game); WNBA accepts the same set minus `opponent`. |
-| `league` | `str` | `'nba'` | `"nba"` (default) or `"wnba"`. |
-| `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
-| `proxy` | `Any` | `None` | Proxy configuration in the `requests` `proxies=` shape. |
-
-**Returns**
-
-One row per team: `ranker`, `team`, `g`, `mp` and the box categories scaled to `table`, plus echoed `season` / `table` / `league`. The WNBA path drops the `League Average` footer row, as wehoop does. A zero-row frame when the table id is absent.
-
-**Example**
-
-```python
-from sportsdataverse.nba.bref import bref_teams_stats
-
-df = bref_teams_stats(season=2024)
-print(df.shape)
-
-# Opponent per-game, and pandas output
-
-opp = bref_teams_stats(season=2024, table="opponent")
-df_pd = bref_teams_stats(season=2024, return_as_pandas=True)
-
-# Pipeline next step (one line)
-
-df.sort("pts_per_g", descending=True).head()
 ```
 
 ### `build_athlete_identity_lookup(rosters: 'dict[int | str, dict]') -> 'dict[str, dict[str, Any]]'` {#build_athlete_identity_lookup}
@@ -1709,59 +1813,6 @@ from sportsdataverse.nba.nba_clutch import clutch_delta
 d = clutch_delta(clutch_frame, baseline_frame)
 ```
 
-### `compile_nba_season(season: 'int', season_type: 'str' = 'Regular Season', *, resume: 'bool' = True, cache_dir: 'Optional[str]' = None, delay_s: 'float' = 0.6, lineup_source: 'str' = 'auto', proxy_provider: 'Optional[Callable[[], Optional[str]]]' = None, raw_store_dir: 'RawStoreDir' = None, raw_store_readonly: 'Optional[bool]' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#compile_nba_season}
-
-Compile a full season's possession stint matrix (cached + resumable + throttled).
-
-Discovers game ids, dedupes, then per game loads the cached parquet if present
-(`resume`), else fetches via fetch_possessions`, caches it, and sleeps
-`delay_s` (throttle; only on live fetches). A game that errors or returns no
-possessions is logged and skipped (best-effort — a per-game failure never
-raises; see `Raises` for the game_date integrity error). The assembled
-frame is tagged with a `season` column.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `season` | `int` |  | Season END year (e.g. 2024 for 2023-24). |
-| `season_type` | `str` | `'Regular Season'` | `"Regular Season"` (default) or `"Playoffs"`. |
-| `resume` | `bool` | `True` | Reuse per-game cached parquet when present. |
-| `cache_dir` | `Optional[str]` | `None` | Cache root; defaults to `SDV_PY_NBA_CACHE_DIR` or `~/.sdv_py_nba_cache/possessions`. |
-| `delay_s` | `float` | `0.6` | Seconds to sleep after each live fetch (rate-limit throttle). |
-| `lineup_source` | `str` | `'auto'` | Which on-court lineup producer to use — `"auto"` (default; tries rotation then falls back to pbp), `"rotation"` (gamerotation endpoint only), or `"pbp"` (pbp-derived, no gamerotation fetch — useful when the gamerotation endpoint is throttled or unavailable). |
-| `proxy_provider` | `Optional[Callable[[], Optional[str]]]` | `None` | Optional zero-arg callable returning a proxy URL (or `None`). **Called once for game discovery, then once per game** (`N + 1` calls for an `N`-game season), so a rotating pool spreads a season's fetches across many exit IPs rather than hammering `stats.nba.com` from one address. `stats.nba.com` rejects or hangs on datacenter/cloud IPs, so an unattended host (CI, a droplet) MUST supply one — a proxied request is judged on the proxy's exit IP, which is what makes such a host viable at all. Note discovery is proxied too: an unproxied index call returns no rows there, compiling the season to zero games without an error. Any `() -> str \| None` works; a round-robin pool's `.next` matches the signature directly:: compile_nba_season(2024, proxy_provider=round_robin.next) |
-| `raw_store_dir` | `RawStoreDir` | `None` | Explicit raw JSON store root forwarded to every per-game fetch — a single path, or a per-endpoint mapping (`"*"` default key) so payload families can live in independent trees. `None` -> env vars (per-endpoint `SDV_PY_NBA_RAW_JSON_DIR_{ENDPOINT}`, then the generic `SDV_PY_NBA_RAW_JSON_DIR`); `""` force-disables. Same spirit as `cache_dir`'s arg-over-env precedence. |
-| `raw_store_readonly` | `Optional[bool]` | `None` | If `True`, per-game fetches are fully offline — the store is the only source, and a game with no capture raises `~sportsdataverse.errors.RawStoreMissError`, which this loop's per-game handler logs and skips (so an uncaptured game is visibly skipped instead of silently completed from the live API). `None` defers to `SDV_PY_NBA_RAW_JSON_READONLY`. |
-| `return_as_pandas` | `bool` | `False` | Return pandas instead of polars. |
-
-**Returns**
-
-The season possession frame (+ `season` and `game_date` cols). Empty typed frame if no games.
-
-**Example**
-
-```python
-from sportsdataverse.nba.nba_season_compile import compile_nba_season
-
-poss = compile_nba_season(2024)
-print(poss.shape)          # (n_possessions, n_cols)
-print(poss["season"][0])   # 2024
-
-# Resume a partially completed run and return as pandas
-
-poss_pd = compile_nba_season(2024, resume=True, return_as_pandas=True)
-print(type(poss_pd))       # <class 'pandas.core.frame.DataFrame'>
-
-# Compile Playoffs with a custom cache directory
-
-poss = compile_nba_season(
-    2024,
-    season_type="Playoffs",
-    cache_dir="/tmp/nba_cache",
-)
-```
-
 ### `darko_forecast_accuracy(panel: 'pl.DataFrame', ages: 'pl.DataFrame', *, aging_curve: "'AgingCurve | None'" = None, process_var: "'float | None'" = None, obs_base: "'float | None'" = None, min_history: 'int' = 1) -> 'ForecastResult'` {#darko_forecast_accuracy}
 
 Holdout forecast accuracy: for each transition, forecast N+1 from history <= N vs actual.
@@ -1828,55 +1879,6 @@ from sportsdataverse.nba.nba_rapm_variants import decay_weights
 dates = pl.Series("game_date", [datetime.date(2023, 1, 1)])
 w = decay_weights(dates, datetime.date(2023, 1, 31), half_life_days=30.0)
 print(round(float(w[0]), 3))  # 0.5
-```
-
-### `espn_nba_teams(return_as_pandas=False, **kwargs) -> 'pl.DataFrame'` {#espn_nba_teams}
-
-espn_nba_teams - look up NBA teams
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `return_as_pandas` | `bool` | `False` | If True, returns a pandas dataframe. If False, returns a polars dataframe. |
-
-**Returns**
-
-Polars dataframe containing teams for the requested league. This function caches by default, so if you want to refresh the data, use the command sportsdataverse.nba.espn_nba_teams.clear_cache().
-
-| col_name | type | description |
-|---|---|---|
-| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
-| `team_alternate_color` | character | Team alternate color (hex without leading '#'). |
-| `team_color` | character | Team primary color (hex without leading '#'). |
-| `team_display_name` | character | Full team display name. |
-| `team_id` | character | Unique team identifier. |
-| `team_is_active` | logical | TRUE if the team is currently active. |
-| `team_is_all_star` | logical | TRUE if the row represents an All-Star team. |
-| `team_location` | character | Team city or location string. |
-| `team_logos` | integer | Team logo metadata. |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
-| `team_nickname` | character | Team nickname. |
-| `team_short_display_name` | character | Short team display name (e.g. 'Aces'). |
-| `team_slug` | character | URL-safe team identifier (e.g. 'lasvegas-aces' / 'aces'). |
-| `team_uid` | character | ESPN universal team identifier (UID format 's:40~l:...~t:...'). |
-
-**Example**
-
-```python
-from sportsdataverse.nba import espn_nba_teams
-teams = espn_nba_teams()
-print(teams.shape)
-
-# Pandas round-trip
-
-teams_pd = espn_nba_teams(return_as_pandas=True)
-teams_pd.head()
-
-# Pipeline next step (build a team_id to abbreviation map)
-
-teams = espn_nba_teams()
-abbr_map = dict(zip(teams["team_id"], teams["team_abbreviation"]))
 ```
 
 ### `expected_possessions(home_pace: 'float', away_pace: 'float', *, league_id: 'str' = '00') -> 'float'` {#expected_possessions}

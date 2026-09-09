@@ -7,7 +7,8 @@ description: "sdv-py {{ prefix|upper }}: endpoint references, dataset loaders an
 
 | Reference | Functions | Base URL |
 |---|---:|---|
-{% for a in api_rows %}| [{{ a.label }}](reference/{{ a.slug }}) | {{ a.count }} | `{{ a.base }}` |
+{% if has_highlights %}| [Highlights](reference/additional#highlights) | {{ highlights_count }} | curated "start here" functions |
+{% endif %}{% for a in api_rows %}| [{{ a.label }}](reference/{{ a.slug }}) | {{ a.count }} | `{{ a.base }}` |
 {% endfor %}
 {% if has_loaders %}| [Dataset loaders](reference/loaders) | {{ loader_count }} | {{ loader_base }} |
 {% endif %}{% if has_additional %}| [Additional functions](reference/additional) | {{ additional_count }} | hand-written wrappers, loaders & helpers |
