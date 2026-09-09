@@ -174,9 +174,7 @@ class TestSeason2004:
                 "position": [None, None, None],
             }
         )
-        roster_2004 = pl.DataFrame(
-            {"season": [2004, 2004], "team_id": ["333", "333"], "player_id": ["1", "2"]}
-        )
+        roster_2004 = pl.DataFrame({"season": [2004, 2004], "team_id": ["333", "333"], "player_id": ["1", "2"]})
         monkeypatch.setattr(rp, "_load_box", lambda _s: pl.DataFrame())
         monkeypatch.setattr(rp, "_load_production_2003", lambda: prod_2003)
         monkeypatch.setattr(rp, "_roster_keys", lambda _s: roster_2004)
@@ -210,9 +208,7 @@ class TestSeason2004:
         monkeypatch.setattr(
             rp,
             "_roster_keys",
-            lambda _s: pl.DataFrame(
-                {"season": [2005], "team_id": ["333"], "player_id": ["1"]}
-            ),
+            lambda _s: pl.DataFrame({"season": [2005], "team_id": ["333"], "player_id": ["1"]}),
         )
         called = []
         monkeypatch.setattr(rp, "_load_production_2003", lambda: called.append(1) or pl.DataFrame())
