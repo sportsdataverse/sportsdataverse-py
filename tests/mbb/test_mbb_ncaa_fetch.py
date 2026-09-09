@@ -118,6 +118,38 @@ def test_all_proxies_banned_raises_a_clear_error(tmp_path: Path) -> None:
         fetcher.fetch_html("contests/1/play_by_play")
 
 
+def test_missing_patchright_is_not_treated_as_a_transport_failure(tmp_path: Path) -> None:
+    """A missing optional dependency must not be rotated on.
+
+    patchright is imported lazily inside the browser transport, so its
+    ImportError arrives through the same call as a 403. Rotating on it burned
+    the entire pool -- one backoff sleep per proxy -- and then reported the real
+    cause under "NCAA fetch failed after rotating proxies", which reads as a ban
+    and sends the reader hunting for an IP problem that does not exist. It cost a
+    live cron a night: the install error was invisible under a proxy headline.
+    """
+
+    class _NoPatchright:
+        def __init__(self) -> None:
+            self.calls = 0
+
+        def __call__(self, url: str, proxies: dict, headers: dict) -> "tuple[int, str]":
+            self.calls += 1
+            raise ImportError("The NCAA browser transport requires patchright")
+
+    transport = _NoPatchright()
+    cfg = NcaaFetchConfig(cache_dir=tmp_path, transport=transport, rotation_backoff=0.0)
+    fetcher = NcaaFetcher(cfg, proxy_pool=_POOL)
+
+    # The install instruction is the error -- not a RuntimeError about proxies.
+    with pytest.raises(ImportError, match="requires patchright"):
+        fetcher.fetch_html("contests/1/play_by_play")
+
+    # And the pool is untouched: rotation cannot install a package.
+    assert transport.calls == 1
+    assert fetcher._dead == set()
+
+
 def test_rotate_every_env_override(monkeypatch: pytest.MonkeyPatch) -> None:
     from sportsdataverse.mbb.mbb_ncaa_fetch import _from_env
 
