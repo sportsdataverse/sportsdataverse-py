@@ -109,3 +109,112 @@ def test_no_season_at_all_is_a_clear_error(monkeypatch):
         "encoding": "ordinal", "columns": ["era"], "cuts": [2006, 2013, 2020]})
     with pytest.raises(ValueError, match="season"):
         mc.add_era_columns(pl.DataFrame({"yards_to_goal": [30.0]}), "xpass_model")
+
+
+# ---------------------------------------------------------------------------
+# The ten public calculators, against the real packaged models.
+# ---------------------------------------------------------------------------
+
+
+def test_xpass_returns_the_frame_plus_one_probability_column():
+    """The contract: return the caller's frame with model output appended, so a
+    hand-built row and a pbp frame behave identically."""
+    df = pl.DataFrame({
+        "season": [2024], "down": [3.0], "distance": [8.0],
+        "yards_to_goal": [55.0], "pos_score_diff": [-4.0],
+        "TimeSecsRem": [900.0], "period": [3.0],
+    })
+    out = mc.calculate_xpass(df)
+    assert out.height == 1
+    assert 0.0 <= out["xpass"][0] <= 1.0
+    for c in df.columns:
+        assert c in out.columns, f"calculator dropped the caller's column {c}"
+
+
+def test_a_hand_built_row_scores_without_any_pbp_machinery():
+    """The hypothetical case: someone types a situation and asks the model."""
+    out = mc.calculate_field_goal_probability(
+        pl.DataFrame({"season": [2024], "yards_to_goal": [25.0]})
+    )
+    assert 0.0 <= out["fg_prob"][0] <= 1.0
+
+
+def test_field_goal_probability_moves_with_the_era():
+    """The era one-hot must actually reach the model. Kickers improved over the
+    covered seasons, so a fixed distance should not score identically in 2005
+    and 2024 -- if it does, the era columns are being ignored."""
+    def fg(year):
+        return mc.calculate_field_goal_probability(
+            pl.DataFrame({"season": [year], "yards_to_goal": [25.0]})
+        )["fg_prob"][0]
+
+    assert fg(2005) != fg(2024)
+    assert fg(2005) < fg(2024)
+
+
+def test_a_missing_column_names_what_is_absent():
+    with pytest.raises(ValueError, match="yards_to_goal"):
+        mc.calculate_field_goal_probability(pl.DataFrame({"season": [2024]}))
+
+
+def test_return_as_pandas_is_honoured():
+    import pandas as pd
+
+    out = mc.calculate_field_goal_probability(
+        pl.DataFrame({"season": [2024], "yards_to_goal": [25.0]}), return_as_pandas=True
+    )
+    assert isinstance(out, pd.DataFrame)
+
+
+def test_expected_points_emits_class_probabilities_and_a_points_expectation():
+    """EP is multi:softprob over seven next-score classes; the probabilities and
+    the collapsed expectation must both surface, and the classes must sum to 1."""
+    out = mc.calculate_expected_points(pl.DataFrame({
+        "TimeSecsRem": [1800.0], "yards_to_goal": [75.0], "distance": [10.0],
+        "down_1": [1], "down_2": [0], "down_3": [0], "down_4": [0],
+        "pos_score_diff_start": [0.0],
+    }))
+    classes = ["td_prob", "opp_td_prob", "fg_prob", "opp_fg_prob",
+               "safety_prob", "opp_safety_prob", "no_score_prob"]
+    for c in classes:
+        assert c in out.columns
+    total = sum(out[c][0] for c in classes)
+    assert total == pytest.approx(1.0, abs=1e-4), f"class probabilities sum to {total}"
+    assert -10.0 <= out["ep"][0] <= 10.0
+
+
+def test_win_probability_picks_the_spread_model_when_a_spread_is_present(monkeypatch):
+    """wp_naive is wp_spread minus spread_time, so the presence of that column
+    is what decides which contract applies."""
+    seen = []
+    monkeypatch.setattr(mc, "_calculate",
+                        lambda df, model, out, **kw: seen.append(model) or df)
+    mc.calculate_win_probability(pl.DataFrame({"spread_time": [1.0]}))
+    mc.calculate_win_probability(pl.DataFrame({"down": [1.0]}))
+    assert seen == ["wp_spread", "wp_naive"]
+
+
+def test_epa_requires_the_after_play_value():
+    """EPA is a difference; this scores rows, not sequences. Silently inventing
+    ep_end would produce a number that looks like EPA and is not."""
+    with pytest.raises(ValueError, match="ep_end"):
+        mc.calculate_epa(pl.DataFrame({"yards_to_goal": [75.0]}))
+
+
+def test_wpa_requires_the_after_play_value():
+    with pytest.raises(ValueError, match="wp_end"):
+        mc.calculate_wpa(pl.DataFrame({"down": [1.0]}))
+
+
+def test_epa_is_the_difference_and_reuses_an_existing_ep():
+    """An ep already present must not be recomputed -- that would fight a pbp
+    frame whose ep came from the pipeline."""
+    df = pl.DataFrame({"ep": [2.0], "ep_end": [5.0]})
+    assert mc.calculate_epa(df)["epa"].to_list() == [3.0]
+
+
+def test_every_calculator_preserves_input_columns():
+    """Chaining two calculators must be lossless."""
+    df = pl.DataFrame({"season": [2024], "yards_to_goal": [25.0], "marker": ["keep"]})
+    out = mc.calculate_field_goal_probability(df)
+    assert out["marker"].to_list() == ["keep"]

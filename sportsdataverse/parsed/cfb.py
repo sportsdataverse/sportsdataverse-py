@@ -333,9 +333,20 @@ from sportsdataverse.cfb import yahoo_cfb_team_season_stats as _raw_yahoo_cfb_te
 from sportsdataverse.cfb import yahoo_cfb_team_season_stats_legacy as _raw_yahoo_cfb_team_season_stats_legacy
 from sportsdataverse.cfb import yahoo_cfb_teams as _raw_yahoo_cfb_teams
 from sportsdataverse.cfb import CFBPlayProcess as CFBPlayProcess  # noqa: F401
+from sportsdataverse.cfb import add_era_columns as add_era_columns  # noqa: F401
 from sportsdataverse.cfb import add_play_type_canonical as add_play_type_canonical  # noqa: F401
 from sportsdataverse.cfb import assert_rating_scale as assert_rating_scale  # noqa: F401
 from sportsdataverse.cfb import blue_chip_ratio as blue_chip_ratio  # noqa: F401
+from sportsdataverse.cfb import calculate_completion_probability as calculate_completion_probability  # noqa: F401
+from sportsdataverse.cfb import calculate_epa as calculate_epa  # noqa: F401
+from sportsdataverse.cfb import calculate_expected_points as calculate_expected_points  # noqa: F401
+from sportsdataverse.cfb import calculate_field_goal_probability as calculate_field_goal_probability  # noqa: F401
+from sportsdataverse.cfb import calculate_fourth_down as calculate_fourth_down  # noqa: F401
+from sportsdataverse.cfb import calculate_qbr as calculate_qbr  # noqa: F401
+from sportsdataverse.cfb import calculate_two_point_probability as calculate_two_point_probability  # noqa: F401
+from sportsdataverse.cfb import calculate_win_probability as calculate_win_probability  # noqa: F401
+from sportsdataverse.cfb import calculate_wpa as calculate_wpa  # noqa: F401
+from sportsdataverse.cfb import calculate_xpass as calculate_xpass  # noqa: F401
 from sportsdataverse.cfb import canonical_play_type_expr as canonical_play_type_expr  # noqa: F401
 from sportsdataverse.cfb import cfb_adjusted_epa as cfb_adjusted_epa  # noqa: F401
 from sportsdataverse.cfb import cfb_adjusted_epa_by_game as cfb_adjusted_epa_by_game  # noqa: F401
@@ -478,6 +489,7 @@ from sportsdataverse.cfb import parse_sports247_result_set as parse_sports247_re
 from sportsdataverse.cfb import parse_sports247_site_page as parse_sports247_site_page  # noqa: F401
 from sportsdataverse.cfb import parse_sports247_teams as parse_sports247_teams  # noqa: F401
 from sportsdataverse.cfb import play_type_family_expr as play_type_family_expr  # noqa: F401
+from sportsdataverse.cfb import predict_from_card as predict_from_card  # noqa: F401
 from sportsdataverse.cfb import predict_margin as predict_margin  # noqa: F401
 from sportsdataverse.cfb import predict_total as predict_total  # noqa: F401
 from sportsdataverse.cfb import scoreboard_event_parsing as scoreboard_event_parsing  # noqa: F401
@@ -489,9 +501,20 @@ from sportsdataverse.cfb import win_prob_from_margin as win_prob_from_margin  # 
 
 __all__ = [
     "CFBPlayProcess",
+    "add_era_columns",
     "add_play_type_canonical",
     "assert_rating_scale",
     "blue_chip_ratio",
+    "calculate_completion_probability",
+    "calculate_epa",
+    "calculate_expected_points",
+    "calculate_field_goal_probability",
+    "calculate_fourth_down",
+    "calculate_qbr",
+    "calculate_two_point_probability",
+    "calculate_win_probability",
+    "calculate_wpa",
+    "calculate_xpass",
     "canonical_play_type_expr",
     "cfb_adjusted_epa",
     "cfb_adjusted_epa_by_game",
@@ -845,6 +868,7 @@ __all__ = [
     "parse_sports247_site_page",
     "parse_sports247_teams",
     "play_type_family_expr",
+    "predict_from_card",
     "predict_margin",
     "predict_total",
     "scoreboard_event_parsing",

@@ -10,6 +10,7 @@ from sportsdataverse.cfb.cfb_ncaa_pbp import *
 from sportsdataverse.cfb.cfb_ncaa_box import *
 from sportsdataverse.cfb.cfb_ncaa_cfbfastr import *
 from sportsdataverse.cfb.cfb_adjusted_epa import *
+from sportsdataverse.cfb.model_calculators import *
 from sportsdataverse.cfb.cfb_drive_summary import *
 from sportsdataverse.cfb.cfb_situational_stats import *
 from sportsdataverse.cfb.cfb_advanced_stats import *
