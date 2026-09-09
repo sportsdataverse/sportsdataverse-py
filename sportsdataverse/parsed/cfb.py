@@ -361,6 +361,8 @@ from sportsdataverse.cfb import cfb_standings as cfb_standings  # noqa: F401
 from sportsdataverse.cfb import cfb_teams_crosswalk as cfb_teams_crosswalk  # noqa: F401
 from sportsdataverse.cfb import cfb_transfer_impact as cfb_transfer_impact  # noqa: F401
 from sportsdataverse.cfb import cfb_transfer_moves as cfb_transfer_moves  # noqa: F401
+from sportsdataverse.cfb import create_drive_summary as create_drive_summary  # noqa: F401
+from sportsdataverse.cfb import create_situational_stats as create_situational_stats  # noqa: F401
 from sportsdataverse.cfb import download as download  # noqa: F401
 from sportsdataverse.cfb import efficiency_ratings as efficiency_ratings  # noqa: F401
 from sportsdataverse.cfb import espn_cfb_calendar as espn_cfb_calendar  # noqa: F401
@@ -515,6 +517,8 @@ __all__ = [
     "cfb_teams_crosswalk",
     "cfb_transfer_impact",
     "cfb_transfer_moves",
+    "create_drive_summary",
+    "create_situational_stats",
     "download",
     "efficiency_ratings",
     "espn_cfb_award",

@@ -8985,6 +8985,64 @@ class CFBPlayProcess(object):
             "espn_players": espn_players,
         }
 
+    def create_drive_summary(self, play_df, drives, periods=None) -> dict | None:
+        """Build the StatBroadcast-style drive summary for this game.
+
+        Thin delegate to
+        :func:`sportsdataverse.cfb.cfb_drive_summary.create_drive_summary`,
+        with the team ids read from the plays frame -- the drive-level
+        sibling of :meth:`create_box_score`.
+
+        Args:
+            play_df (pl.DataFrame): the post-pipeline plays frame
+                (``plays_frame``).
+            drives (list[dict]): the ESPN drives grouping in game order.
+            periods: optional window (a set of quarter numbers, or ``"ot"``).
+
+        Returns:
+            dict: the drive summary, or ``None`` when inputs are unusable.
+        """
+        from sportsdataverse.cfb.cfb_drive_summary import create_drive_summary
+
+        if (
+            not isinstance(play_df, pl.DataFrame)
+            or play_df.height == 0
+            or not {"homeTeamId", "awayTeamId"}.issubset(play_df.columns)
+        ):
+            return None
+        return create_drive_summary(
+            drives, play_df, play_df["homeTeamId"][0], play_df["awayTeamId"][0], periods=periods
+        )
+
+    def create_situational_stats(self, play_df, window_expr=None) -> dict | None:
+        """Build the situational team-stats block for this game.
+
+        Thin delegate to
+        :func:`sportsdataverse.cfb.cfb_situational_stats.create_situational_stats`,
+        with the team ids read from the plays frame.
+
+        Args:
+            play_df (pl.DataFrame): the post-pipeline plays frame
+                (``plays_frame``).
+            window_expr: optional polars filter windowing the windowable
+                sections (e.g. ``pl.col("period") == 3``).
+
+        Returns:
+            dict: the situational stats, or ``None`` when the frame is
+            unusable or the window is empty.
+        """
+        from sportsdataverse.cfb.cfb_situational_stats import create_situational_stats
+
+        if (
+            not isinstance(play_df, pl.DataFrame)
+            or play_df.height == 0
+            or not {"homeTeamId", "awayTeamId"}.issubset(play_df.columns)
+        ):
+            return None
+        return create_situational_stats(
+            play_df, play_df["homeTeamId"][0], play_df["awayTeamId"][0], window_expr=window_expr
+        )
+
     def __join_participants(self, play_df):
         """Join ESPN play participants to overwrite regex-extracted player names with clean display names.
 

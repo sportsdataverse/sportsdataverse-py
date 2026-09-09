@@ -711,6 +711,46 @@ box = game.create_box_score(game.plays_json)
 print(list(box.keys()))
 ```
 
+#### `CFBPlayProcess.create_drive_summary(play_df, drives, periods=None) -> 'dict | None'`
+
+Build the StatBroadcast-style drive summary for this game.
+
+Thin delegate to
+`sportsdataverse.cfb.cfb_drive_summary.create_drive_summary`,
+with the team ids read from the plays frame -- the drive-level
+sibling of `create_box_score`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `play_df` | `pl.DataFrame` |  | the post-pipeline plays frame (`plays_frame`). |
+| `drives` | `list[dict]` |  | the ESPN drives grouping in game order. |
+| `periods` |  | `None` | optional window (a set of quarter numbers, or `"ot"`). |
+
+**Returns**
+
+the drive summary, or `None` when inputs are unusable.
+
+#### `CFBPlayProcess.create_situational_stats(play_df, window_expr=None) -> 'dict | None'`
+
+Build the situational team-stats block for this game.
+
+Thin delegate to
+`sportsdataverse.cfb.cfb_situational_stats.create_situational_stats`,
+with the team ids read from the plays frame.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `play_df` | `pl.DataFrame` |  | the post-pipeline plays frame (`plays_frame`). |
+| `window_expr` |  | `None` | optional polars filter windowing the windowable sections (e.g. `pl.col("period") == 3`). |
+
+**Returns**
+
+the situational stats, or `None` when the frame is unusable or the window is empty.
+
 #### `CFBPlayProcess.espn_cfb_pbp(**kwargs)`
 
 espn_cfb_pbp() - Pull the game by id. Data from API endpoints: `college-football/playbyplay`,
@@ -1913,6 +1953,64 @@ One row per move side: `season` (Int64, the destination season), `team_id` (Utf8
 from sportsdataverse.cfb import cfb_transfer_moves
 moves = cfb_transfer_moves(2024)
 moves.filter(pl.col("direction") == "in").group_by("team_id").len()
+```
+
+### `create_drive_summary(drives: list[dict] | dict, frame: polars.dataframe.frame.DataFrame, home_id: str | int, away_id: str | int, periods: set[int] | str | None = None) -> dict | None` {#create_drive_summary}
+
+Build the StatBroadcast-style drive summary, chart, and long-play lists.
+
+A drive belongs to the quarter it STARTED in. On a windowed build the
+full drive sequence still provides context (running score, the previous
+drive for OBTAINED and points-off-turnovers), but only in-window drives
+are counted, charted, or listed; game-level lines (largest lead, time
+leading/tied) ship only on the un-windowed build.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `drives` | `list[dict]` |  | the ESPN drives grouping, in game order (`previous` plus the in-progress `current` drive, if any). |
+| `frame` | `pl.DataFrame` |  | the enriched plays frame from `CFBPlayProcess.run_processing_pipeline` (`plays_frame`). |
+| `home_id` | `str \| int` |  | ESPN home team id. |
+| `away_id` | `str \| int` |  | ESPN away team id. |
+| `periods` | `set[int] \| str \| None` | `None` | optional window -- a set of quarter numbers (e.g. `{1, 2}`) or the string `"ot"` (every period > 4). `None` = full game. |
+
+**Returns**
+
+`{"teams": {...}, "chart": [...], "scores": [...], "longPlays": {...}}` keyed by team id, or `None` when the inputs are unusable (no drives, empty frame, or an empty window).
+
+**Example**
+
+```python
+summary = create_drive_summary(drives, game.plays_frame, "52", "61")
+```
+
+### `create_situational_stats(frame: polars.dataframe.frame.DataFrame, home_id: str | int, away_id: str | int, window_expr: polars.expr.expr.Expr | None = None) -> dict | None` {#create_situational_stats}
+
+Build the situational team-stats block from a plays frame.
+
+Window-inherent sections -- `two_minute`, `middle_8`, `non_garbage`,
+`pace`, `fourth_down_decisions` -- are omitted from a windowed build:
+they are themselves time windows or game-level filters, and
+double-windowing them is a category error.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `frame` | `pl.DataFrame` |  | the enriched plays frame from `CFBPlayProcess.run_processing_pipeline` (`plays_frame`). |
+| `home_id` | `str \| int` |  | ESPN home team id. |
+| `away_id` | `str \| int` |  | ESPN away team id. |
+| `window_expr` | `Expr \| None` | `None` | optional polars filter expression windowing the windowable sections to that slice (e.g. `pl.col("period") == 3`). `None` = full game. |
+
+**Returns**
+
+`{"teams": {<team_id>: {<section>: ...}}}` or `None` when the frame is unusable or the window is empty.
+
+**Example**
+
+```python
+stats = create_situational_stats(game.plays_frame, "52", "61")
 ```
 
 ### `efficiency_ratings(plays: 'pl.DataFrame', *, config: 'RatingsConfig | None' = None) -> 'pl.DataFrame'` {#efficiency_ratings}
