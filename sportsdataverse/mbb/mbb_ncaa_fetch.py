@@ -980,6 +980,11 @@ class NcaaFetcher:
             RuntimeError: No proxy is configured (the binding directive --
                 there is no direct-fetch mode), or every proxy in the pool
                 failed / looked banned.
+            ImportError: An optional dependency the selected transport needs is
+                not installed -- patchright for the browser transport. Raised
+                immediately rather than rotated on: no amount of proxy rotation
+                installs a package, and reporting it as a pool exhaustion reads
+                as a ban. Carries the install instruction.
         """
         cache_file = cached_path(path, cache_dir=self.config.cache_dir)
         if cache_file.exists() and not force:
