@@ -378,3 +378,50 @@ def test_caller_supplied_down_one_hots_are_never_overwritten():
     out = mc.normalize_pbp_columns(df, "ep_model")
     assert out["down_1"].to_list() == [0]
     assert out["down_2"].to_list() == [1]
+
+
+def test_cp_score_diff_comes_from_the_models_source_not_the_like_named_column():
+    """The CP model's score_diff is fed from pos_score_diff_start, signed from
+    the possessing team's view. A cfbfastR pbp frame ALSO carries its own
+    score_diff, which is a different quantity. Taking the like-named column
+    yields completion probabilities that are wrong yet entirely plausible --
+    the failure mode this override exists to prevent."""
+    pbp = pl.DataFrame(
+        {
+            "season": [2024],
+            "start.down": [3.0],
+            "start.distance": [8.0],
+            "start.yardsToEndzone": [55.0],
+            "pos_score_diff_start": [-4.0],
+            "score_diff": [99.0],  # the frame's own, deliberately not the model's
+            "start.TimeSecsRem": [900.0],
+            "start.is_home": [1.0],
+            "period": [3.0],
+            "passing_down": [1.0],
+        }
+    )
+    out = mc.normalize_pbp_columns(pbp, "cfb_cp_model")
+    assert out["score_diff"].to_list() == [-4.0]
+
+
+def test_a_hand_built_frame_keeps_its_own_score_diff():
+    """No pos_score_diff_start means it is not a pbp frame, so nothing overrides."""
+    df = pl.DataFrame({"score_diff": [7.0], "down": [1.0]})
+    assert mc.normalize_pbp_columns(df, "cfb_cp_model")["score_diff"].to_list() == [7.0]
+
+
+def test_completion_probability_scores_a_raw_pbp_frame():
+    pbp = pl.DataFrame(
+        {
+            "season": [2024],
+            "start.down": [3.0],
+            "start.distance": [8.0],
+            "start.yardsToEndzone": [55.0],
+            "pos_score_diff_start": [-4.0],
+            "start.TimeSecsRem": [900.0],
+            "start.is_home": [1.0],
+            "period": [3.0],
+            "passing_down": [1.0],
+        }
+    )
+    assert 0.0 <= mc.calculate_completion_probability(pbp)["cp"][0] <= 1.0

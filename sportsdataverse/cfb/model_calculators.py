@@ -57,7 +57,20 @@ _PBP_ALIASES: dict[str, tuple[str, ...]] = {
     "pos_team_receives_2H_kickoff": ("start.pos_team_receives_2H_kickoff",),
     "pos_team_timeouts_rem_before": ("start.pos_team_timeouts_rem_before",),
     "def_pos_team_timeouts_rem_before": ("start.def_pos_team_timeouts_rem_before",),
+    "seconds_remaining": ("start.TimeSecsRem",),
+    "passing_down": ("passing_down",),
 }
+
+#: Features whose pbp source OVERRIDES a like-named column already in the frame.
+#:
+#: The CP model's ``score_diff`` is fed from ``pos_score_diff_start`` -- signed
+#: from the possessing team's view -- and a cfbfastR pbp frame ALSO carries its
+#: own ``score_diff``, which is not the same quantity. Taking the like-named
+#: column would produce completion probabilities that are wrong yet entirely
+#: plausible, so where the pbp source is present it wins: its presence is what
+#: identifies the frame as play-by-play, and a hand-built frame has no such
+#: column to be overridden by.
+_PBP_OVERRIDES: dict[str, str] = {"score_diff": "pos_score_diff_start"}
 
 
 #: EP one-hot down indicators. Derived from `down` when a card asks for them.
@@ -85,6 +98,10 @@ def normalize_pbp_columns(df: pl.DataFrame, model: str) -> pl.DataFrame:
     """
     additions = []
     for feature in card_features(model):
+        override = _PBP_OVERRIDES.get(feature)
+        if override is not None and override in df.columns:
+            additions.append(pl.col(override).alias(feature))
+            continue
         if feature in df.columns:
             continue
         for source in _PBP_ALIASES.get(feature, ()):
