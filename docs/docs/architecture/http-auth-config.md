@@ -16,8 +16,13 @@ data sources.
 **Precedence is consistent everywhere on this page unless noted otherwise:
 explicit keyword argument > source-specific environment variable > a
 package-wide environment variable (where one exists) > a hardcoded default.**
-Env vars are read at *call time*, not import time, so setting one after the
-package is imported (e.g. mid-test, mid-notebook) still takes effect.
+Most of this surface reads its environment variables at *call time*, not
+import time, so setting one after the package is imported (e.g. mid-test,
+mid-notebook) still takes effect. **The one exception is NFL** (§8): its
+`SDV_PY_NFL_*` variables are read once into a module-level `NflConfig`
+singleton at import time, and stay at whatever they were until
+`reset_config()` or an explicit `update_config()` -- changing the env var
+after import has no effect on an already-imported process.
 
 ## 1. The core gateway: `dl_utils.download()`
 
@@ -49,7 +54,15 @@ flow straight into its getter, `headers=`, `proxy=`, `timeout=`,
 `num_retries=`, `session=`, and `cache_ttl=` work as override kwargs on
 essentially every public function in the package** (all ~800 ESPN
 cross-league wrappers plus every flat-API family), whether or not that
-function's own docstring calls them out individually. Example:
+function's own docstring calls them out individually.
+
+> **Exception: HockeyTech.** `hockeytech_api()` (the shared client behind
+> PWHL + the 19 minor/junior leagues, §7) accepts `**kwargs` but never
+> forwards them to `download()` -- it calls the gateway with a fixed
+> `headers=`/`timeout=`/`num_retries=` and nothing else. Passing `proxy=`
+> (or any other override kwarg) to a HockeyTech wrapper is silently a no-op.
+
+Example:
 
 ```python
 from sportsdataverse.nba import espn_nba_scoreboard
