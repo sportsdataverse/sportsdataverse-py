@@ -140,3 +140,86 @@ def test_roster_keys_cfbd_match_floor_still_asserts(monkeypatch) -> None:
     )
     with pytest.raises(ValueError, match="resolved to a team id"):
         rp._roster_keys(2026)
+
+
+class TestSeason2004:
+    """2004: the one season whose S-1 production cannot come from the ESPN box.
+
+    `load_cfb_player_box([2003])` RAISES SeasonNotFoundError (ESPN's player box
+    starts in 2004), which propagated out of cfb_returning_production and killed
+    a whole cfbfastR-cfb-data build -- run 34142076600, `A creation step for
+    season 2004 exited with code 1`.
+    """
+
+    def test_load_box_below_the_floor_returns_empty_not_raises(self, monkeypatch):
+        """Its docstring promised an empty frame; it raised instead."""
+        from sportsdataverse.errors import SeasonNotFoundError
+
+        def boom(_seasons):
+            raise SeasonNotFoundError("Season 2003 not found, season cannot be less than 2004")
+
+        monkeypatch.setattr(rp, "load_cfb_player_box", boom)
+        assert rp._load_box(2003).height == 0
+
+    def test_2004_falls_back_to_hosted_2003_production(self, monkeypatch):
+        prod_2003 = pl.DataFrame(
+            {
+                "season": [2003, 2003, 2003],
+                "team_id": ["333", "333", "333"],
+                # two returned in 2004, one did not
+                "player_id": ["1", "2", "cfbd2003:Alabama:gone player"],
+                "player_name": ["a", "b", "gone player"],
+                "unit": ["offense"] * 3,
+                "prod_weight": [600.0, 300.0, 100.0],
+                "position": [None, None, None],
+            }
+        )
+        roster_2004 = pl.DataFrame({"season": [2004, 2004], "team_id": ["333", "333"], "player_id": ["1", "2"]})
+        monkeypatch.setattr(rp, "_load_box", lambda _s: pl.DataFrame())
+        monkeypatch.setattr(rp, "_load_production_2003", lambda: prod_2003)
+        monkeypatch.setattr(rp, "_roster_keys", lambda _s: roster_2004)
+
+        out = rp.cfb_returning_production(2004)
+        assert out.height == 1
+        row = out.row(0, named=True)
+        assert row["season"] == 2004
+        # 900 of 1000 yards returned
+        assert row["off_returning"] == pytest.approx(0.9)
+        assert row["is_estimated"] is True
+        # 2003 play text carries no tacklers, and every season through 2016 is
+        # null here anyway -- a splash-only number would make 2004 the lone
+        # pre-2020 season with a defensive value.
+        assert row["def_returning"] is None
+
+    def test_a_normal_season_is_not_flagged_estimated(self, monkeypatch):
+        """The flag must mark 2004 alone, not every row in the panel."""
+        box = pl.DataFrame(
+            {
+                "season": [2004, 2004],
+                "team_id": [333, 333],
+                "athlete_id": [1, 2],
+                "athlete_name": ["a", "b"],
+                "passingYards": ["100", "0"],
+                "rushingYards": ["0", "50"],
+                "receivingYards": ["0", "0"],
+            }
+        )
+        monkeypatch.setattr(rp, "_load_box", lambda _s: box)
+        monkeypatch.setattr(
+            rp,
+            "_roster_keys",
+            lambda _s: pl.DataFrame({"season": [2005], "team_id": ["333"], "player_id": ["1"]}),
+        )
+        called = []
+        monkeypatch.setattr(rp, "_load_production_2003", lambda: called.append(1) or pl.DataFrame())
+        out = rp.cfb_returning_production(2005)
+        assert not called, "the 2003 table must not be fetched for a normal season"
+        assert out["is_estimated"].to_list() == [False]
+
+    def test_2004_still_skipped_when_the_hosted_table_is_unreachable(self, monkeypatch):
+        """A 404 must skip the season, never emit a row flagged as estimated."""
+        monkeypatch.setattr(rp, "_load_box", lambda _s: pl.DataFrame())
+        monkeypatch.setattr(rp, "_load_production_2003", lambda: pl.DataFrame())
+        out = rp.cfb_returning_production(2004)
+        assert out.height == 0
+        assert out.schema["is_estimated"] == pl.Boolean
