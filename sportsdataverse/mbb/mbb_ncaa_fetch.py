@@ -899,6 +899,15 @@ class NcaaFetcher:
             proxies = {"http": proxy, "https": proxy} if proxy else {}
             try:
                 status, text = transport(url, proxies, headers)
+            except ImportError:
+                # A missing optional dependency is a SETUP error, not a transport
+                # error, and no amount of proxy rotation installs patchright.
+                # Rotating on it burned the whole pool (with backoff between each
+                # attempt) and then reported the real cause under a "failed after
+                # rotating proxies" headline -- which reads as a ban and sends the
+                # reader hunting for an IP problem that does not exist. Re-raise so
+                # the install instruction from _ensure_page is the error.
+                raise
             except Exception as exc:  # noqa: BLE001 - rotate on any transport failure
                 last_err = str(exc)
                 self._rotate("transport error")
@@ -971,6 +980,11 @@ class NcaaFetcher:
             RuntimeError: No proxy is configured (the binding directive --
                 there is no direct-fetch mode), or every proxy in the pool
                 failed / looked banned.
+            ImportError: An optional dependency the selected transport needs is
+                not installed -- patchright for the browser transport. Raised
+                immediately rather than rotated on: no amount of proxy rotation
+                installs a package, and reporting it as a pool exhaustion reads
+                as a ban. Carries the install instruction.
         """
         cache_file = cached_path(path, cache_dir=self.config.cache_dir)
         if cache_file.exists() and not force:
