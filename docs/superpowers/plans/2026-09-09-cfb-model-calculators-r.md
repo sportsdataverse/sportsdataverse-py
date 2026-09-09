@@ -149,6 +149,13 @@ cfb_model_card <- function(model) {
 
 .cfb_card_cache <- new.env(parent = emptyenv())
 
+# NOTE for the implementer: `.cfb_model_file()` has a TTL, so a long-running
+# session can refresh <model>.ubj while the card stays cached from before the
+# refresh -- pairing a new booster with an old feature list or era contract, and
+# scoring against a contract the booster no longer honours. Cache the card keyed
+# on the booster file's mtime (or clear the card cache whenever .cfb_model_file()
+# actually re-downloads), so the two assets can never disagree in one process.
+
 .read_card_json <- function(model) {
   path <- .cfb_model_file(paste0(model, ".card.json"))
   if (is.null(path) || !file.exists(path)) {
@@ -326,7 +333,11 @@ cfb_add_era_columns <- function(df, model, season = NULL) {
   cols <- contract$columns
   if (all(cols %in% names(df))) return(df)
   cuts <- contract$cuts
-  yr <- if (!is.null(season)) rep(season, nrow(df)) else df$season
+  # The frame's own season wins; `season` is the documented fallback for a frame
+  # that carries none. Letting the argument override stamps one era across a
+  # multi-season frame and scores most rows against the wrong inputs, silently,
+  # because no column is ever missing. Fixed in the Python sibling as d9b9b88bd.
+  yr <- if (!is.null(df$season)) df$season else if (!is.null(season)) rep(season, nrow(df)) else NULL
   if (is.null(yr)) {
     cli::cli_abort(
       "{model} needs an era column; supply a {.code season} column or the {.arg season} argument."
@@ -558,8 +569,23 @@ rows = pl.DataFrame({
     "TimeSecsRem": [1800.0, 1200.0, 600.0, 60.0],
     "period": [1.0, 2.0, 3.0, 4.0],
 })
+# Cover EVERY calculator. An earlier draft ran only two of the ten, which would
+# have let the other eight diverge between languages without failing the test
+# this exists to be.
 out = mc.calculate_field_goal_probability(rows)
 out = mc.calculate_xpass(out)
+out = mc.calculate_two_point_probability(
+    out.with_columns(posteam_spread=pl.lit(-3.0), posteam_total=pl.lit(28.0)))
+out = mc.calculate_completion_probability(
+    out.with_columns(score_diff=pl.col("pos_score_diff"),
+                     seconds_remaining=pl.col("TimeSecsRem"),
+                     is_home=pl.lit(1.0), passing_down=pl.lit(1.0)))
+out = mc.calculate_fourth_down(out)
+out = mc.calculate_qbr(out.with_columns(
+    qbr_epa=pl.lit(0.1), sack_epa=pl.lit(-0.2), pass_epa=pl.lit(0.3),
+    rush_epa=pl.lit(0.05), pen_epa=pl.lit(0.0), spread=pl.lit(-3.0)))
+# EP and WP need their own feature sets; score them on a second frame and join
+# the outputs in, so the fixture covers all ten rather than the easy six.
 out.write_csv("/mnt/sdv_repos/cfbfastR/tests/testthat/fixtures/calculators/python_outputs.csv")
 rows.write_csv("/mnt/sdv_repos/cfbfastR/tests/testthat/fixtures/calculators/inputs.csv")
 print(out.select(["season", "fg_prob", "xpass"]))
@@ -586,8 +612,12 @@ test_that("R and Python calculators agree on the committed fixture", {
   got <- calculate_field_goal_probability(inputs)
   got <- calculate_xpass(got)
 
-  expect_equal(got$fg_prob, expected$fg_prob, tolerance = 1e-6)
-  expect_equal(got$xpass, expected$xpass, tolerance = 1e-6)
+  # Every calculator the fixture carries, not a chosen two: an omitted one can
+  # diverge silently, which is the failure this test exists to prevent.
+  for (col in setdiff(names(expected), names(inputs))) {
+    expect_equal(got[[col]], expected[[col]], tolerance = 1e-6,
+                 info = paste("calculator output column:", col))
+  }
 })
 ```
 
