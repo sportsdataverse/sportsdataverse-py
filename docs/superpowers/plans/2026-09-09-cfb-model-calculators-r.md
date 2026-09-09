@@ -499,10 +499,17 @@ calculate_xpass <- function(df, season = NULL) {
 }
 ```
 
-`calculate_expected_points()` differs: the EP booster is `multi:softprob` over seven next-score classes, so reshape the prediction to a matrix, name the columns
-`td_prob`, `opp_td_prob`, `fg_prob`, `opp_fg_prob`, `safety_prob`, `opp_safety_prob`,
-`no_score_prob`, and collapse to `ep` with the score each class is worth
-(`7, -7, 3, -3, 2, -2, 0`) — the same mapping `create_epa()` already uses; read it rather than restating it.
+`calculate_expected_points()` **must reuse `.ep_predict()`**, not reimplement the
+reshape. R's class order is NOT Python's: `.EP_LEV` is
+`No_Score, FG, Opp_FG, Opp_Safety, Opp_TD, Safety, TD`, with the positional weights
+`c(0, 3, -3, -2, -7, 2, 7)` used in `.pbp_create_epa()`. The bundle also ships a
+permutation (`ep_class_contract$permutation_to_cfbfastR_lev_1based` in `MANIFEST.json`)
+that `.ep_predict()` already applies, along with a byrow reshape that keeps class
+probabilities attached to their own play.
+
+An earlier draft of this plan gave Python's order and weights here. Following it
+literally would have produced silently wrong EP -- every column present, every value
+mis-assigned. Call `.ep_predict()` and name the returned columns from `.EP_LEV`.
 
 `calculate_win_probability()` selects `wp_spread` when the frame carries `spread_time` and `wp_naive` otherwise, mirroring the pipeline and the Python sibling.
 
