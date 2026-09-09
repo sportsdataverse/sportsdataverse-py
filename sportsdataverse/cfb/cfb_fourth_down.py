@@ -72,10 +72,12 @@ from sportsdataverse.cfb.cfb_pbp import (
     ep_model as _ep_model,
     wp_model as _wp_model,
 )
+#: Read from each model's published card rather than restated here. A retrain
+#: that changes a feature set now propagates instead of silently disagreeing --
+#: the failure mode of cfbfastR-cfb-data#70, one layer down.
+from sportsdataverse.cfb.model_cards import card_features as _card_features
 from sportsdataverse.cfb.model_vars import (
     ep_class_to_score_mapping,
-    ep_final_names,
-    wp_final_names,
 )
 
 __all__ = [
@@ -89,12 +91,12 @@ __all__ = [
 # --- inference contracts (mirror cfbfastR-cfb-data fourth_down constants) ---
 # The fourth-down model uses one-hot rule-era dummies (era0..era3), which beat the
 # ordinal factor out-of-fold (first-down cal-MAE 0.0035 -> 0.0027). Cuts 2006/2013/2020.
-FD_FEATURES = ["down", "distance", "yards_to_goal", "posteam_total", "posteam_spread", "era0", "era1", "era2", "era3"]
+FD_FEATURES = _card_features("fd_model")
 FD_NUM_CLASS = 76  # gain class k -> yards = k - 10, range -10..65
 FD_ERA_BOUNDS = (2006, 2013, 2020)  # one-hot CFB rule-era factor cuts
 
-EP_FEATURES = list(ep_final_names)
-WP_SPREAD_FEATURES = list(wp_final_names)
+EP_FEATURES = _card_features("ep_model")
+WP_SPREAD_FEATURES = _card_features("wp_spread")
 _EP_SCORES = np.array(
     [ep_class_to_score_mapping[i] for i in range(len(ep_class_to_score_mapping))],
     dtype=np.float64,

@@ -218,3 +218,44 @@ def test_every_calculator_preserves_input_columns():
     df = pl.DataFrame({"season": [2024], "yards_to_goal": [25.0], "marker": ["keep"]})
     out = mc.calculate_field_goal_probability(df)
     assert out["marker"].to_list() == ["keep"]
+
+
+# ---------------------------------------------------------------------------
+# No feature list may drift from the card it restates.
+# ---------------------------------------------------------------------------
+
+CARD_BACKED = [
+    ("ep_model", "sportsdataverse.cfb.cfb_fourth_down", "EP_FEATURES"),
+    ("wp_spread", "sportsdataverse.cfb.cfb_fourth_down", "WP_SPREAD_FEATURES"),
+    ("fd_model", "sportsdataverse.cfb.cfb_fourth_down", "FD_FEATURES"),
+    ("two_pt_model", "sportsdataverse.cfb.cfb_two_point", "TWO_PT_FEATURES"),
+    ("cfb_cp_model", "sportsdataverse.cfb.cfb_pbp", "CP_FEATURES"),
+    ("xpass_model", "sportsdataverse.cfb.cfb_pbp", "XPASS_FEATURES"),
+]
+
+
+@pytest.mark.parametrize("model,module,const", CARD_BACKED)
+def test_no_feature_list_drifts_from_its_card(model, module, const):
+    """Every feature-list constant must equal its card, in order.
+
+    These six restated what the cards publish. Left unpinned they drift -- which
+    is exactly how cfbfastR-cfb-data#70 happened one layer down, with the era
+    cuts. This fails the moment a retrain changes a model's feature set.
+    """
+    import importlib
+
+    from sportsdataverse.cfb.model_cards import card_features
+
+    local = list(getattr(importlib.import_module(module), const))
+    assert local == card_features(model), f"{const} drifted from {model}'s card"
+
+
+def test_the_air_yards_superset_still_composes_from_the_card():
+    """CP_AIR_YARDS_FEATURES is CP_FEATURES plus three throw-depth columns.
+    Making CP_FEATURES card-backed must not break that composition."""
+    from sportsdataverse.cfb.cfb_pbp import CP_AIR_YARDS_FEATURES, CP_FEATURES
+
+    assert CP_AIR_YARDS_FEATURES[: len(CP_FEATURES)] == CP_FEATURES
+    assert set(CP_AIR_YARDS_FEATURES) - set(CP_FEATURES) == {
+        "air_yards", "pass_is_middle", "qb_hurry"
+    }

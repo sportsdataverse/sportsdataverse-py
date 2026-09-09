@@ -66,7 +66,10 @@ __all__ = [
 ]
 
 # Two-point model feature contract (order matters -- matches the bundled booster).
-TWO_PT_FEATURES = ["posteam_spread", "posteam_total", "pos_score_diff", "era"]
+#: Read from the published card, not restated -- see cfbfastR-cfb-data#70.
+from sportsdataverse.cfb.model_cards import card_features as _card_features  # noqa: E402
+
+TWO_PT_FEATURES = _card_features("two_pt_model")
 
 # Empirical CFB extra-point make rate. cfb4th derives prob_xp from its FG GAM
 # evaluated at a 2-yard kick; the empirical CFB rate is more accurate for college,
