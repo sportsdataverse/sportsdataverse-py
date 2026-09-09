@@ -337,7 +337,10 @@ cfb_add_era_columns <- function(df, model, season = NULL) {
   # that carries none. Letting the argument override stamps one era across a
   # multi-season frame and scores most rows against the wrong inputs, silently,
   # because no column is ever missing. Fixed in the Python sibling as d9b9b88bd.
-  yr <- if (!is.null(df$season)) df$season else if (!is.null(season)) rep(season, nrow(df)) else NULL
+  # `df[["season"]]`, never `df$season`: `$` partial-matches on data frames, so a
+  # pbp frame carrying `season_type` but no `season` returns "regular" here and
+  # the era comparison silently runs against a season TYPE.
+  yr <- if ("season" %in% names(df)) df[["season"]] else if (!is.null(season)) rep(season, nrow(df)) else NULL
   if (is.null(yr)) {
     cli::cli_abort(
       "{model} needs an era column; supply a {.code season} column or the {.arg season} argument."
