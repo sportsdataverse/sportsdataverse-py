@@ -10005,6 +10005,26 @@ load_nfl_model_pbp:
   two_point_rush_safety: Binary indicator (1/0) that a rushing two-point conversion attempt ended in a safety for the defense.
   wp_fail: Mean win probability across the failure outcomes, i.e. the WP conditional on failing to convert.
   wp_succeed: Mean win probability across the conversion outcomes, i.e. the WP conditional on converting the fourth down.
+load_nfl_ngs:
+  player_esb_id: NFL Elias Sports Bureau (ESB) player id, a letter-digit key such as "MAH047439" shared across NFL data products.
+  player_football_name: Name the player goes by on the field and in broadcasts (e.g. "Patrick"), which can differ from the
+    legal first name.
+  player_gsis_it_id: Integer NFL GSIS "IT" player id used by the league's internal tracking systems; a second id alongside
+    the string player_gsis_id.
+  player_ngs_position: Position as classified by the Next Gen Stats tracking model, which can differ from the roster position.
+  player_ngs_position_group: Position group the Next Gen Stats tracking model assigns the player to (e.g. "QB", "WR").
+  player_position_group: Roster position group the player is listed under (e.g. "QB", "WR", "RB").
+  player_season: Season the embedded player record was resolved against; mirrors season.
+  player_season_type: Season type (PRE, REG, POST) of the embedded player record; mirrors season_type.
+  player_smart_id: NFL "smart id", a UUID-style player identifier shared across NFL data products.
+  player_status: Roster status code of the player at capture time (e.g. "ACT" active, "RES" reserve, "CUT", "DEV" practice
+    squad).
+  player_uniform_number: Jersey number as the zero-padded string NGS lists it (e.g. "07").
+  player_week: Week of the embedded player record; mirrors week.
+  scope: Aggregation scope of the row -- "season" for the season-to-date aggregate (always week 0) or "week" for a single
+    week's statboard (week 0 is preseason week 0).
+  threshold: Minimum-attempts qualifying threshold NGS applied to the statboard the row came from (differs between weekly
+    and season scopes).
 load_nfl_officials:
   game_key: Unique nflverse game identifier linking the officiating record to a specific NFL game.
 load_nfl_pbp:

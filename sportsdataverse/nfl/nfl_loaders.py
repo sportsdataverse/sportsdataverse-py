@@ -26,6 +26,7 @@ from sportsdataverse.config import (
     NFL_NGS_PASSING_URL,
     NFL_NGS_RECEIVING_URL,
     NFL_NGS_RUSHING_URL,
+    NFL_NGS_SDV_URL,
     NFL_OFFICIALS_URL,
     NFL_PBP_PARTICIPATION_URL,
     NFL_PFR_SEASON_DEF_URL,
@@ -1933,5 +1934,124 @@ def load_nfl_ratings_weekly(seasons: List[int], return_as_pandas: bool = False) 
     # diagonal_relaxed: per-season release schemas drift (columns added or
     # dropped, and dtypes widened) -- union columns, null-fill gaps.
     # vertical_relaxed tolerated the dtype half of that but not the columns.
+    data = pl.concat(frames, how="diagonal_relaxed")
+    return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
+
+
+# SDV-native Next Gen Stats (nfl-ngs-data): dataset -> (release tag, asset stem,
+# first season with data). Floors were MEASURED on the live release after the
+# 2026-09-09 backfill, not taken from the API probe -- the tracking era starts
+# 2016, but schedules/gamecenter passers reach 2009, teams 2013, and the other
+# two gamecenter tables 2015. Stems are not all derivable from the tag
+# (schedules publishes ``ngs_schedule_{season}``), which is why this is a table.
+_NFL_NGS_DATASETS: dict = {
+    "schedules": ("nfl_ngs_schedules", "ngs_schedule", 2009),
+    "teams": ("nfl_ngs_teams", "ngs_teams", 2013),
+    "passing": ("nfl_ngs_passing", "ngs_passing", 2016),
+    "rushing": ("nfl_ngs_rushing", "ngs_rushing", 2016),
+    "receiving": ("nfl_ngs_receiving", "ngs_receiving", 2016),
+    "statboard_leaders": ("nfl_ngs_statboard_leaders", "ngs_statboard_leaders", 2016),
+    "leaders": ("nfl_ngs_leaders", "ngs_leaders", 2016),
+    "gamecenter_passers": ("nfl_ngs_gamecenter_passers", "ngs_gamecenter_passers", 2009),
+    "gamecenter_rushers": ("nfl_ngs_gamecenter_rushers", "ngs_gamecenter_rushers", 2015),
+    "gamecenter_receivers": ("nfl_ngs_gamecenter_receivers", "ngs_gamecenter_receivers", 2015),
+    "gamecenter_pass_rushers": ("nfl_ngs_gamecenter_pass_rushers", "ngs_gamecenter_pass_rushers", 2016),
+    "gamecenter_leaders": ("nfl_ngs_gamecenter_leaders", "ngs_gamecenter_leaders", 2016),
+}
+
+
+@cached_loader
+def load_nfl_ngs(seasons: List[int], dataset: str = "passing", return_as_pandas: bool = False) -> pl.DataFrame:
+    """Load the SDV-native NFL Next Gen Stats datasets (``nfl_ngs_*`` releases).
+
+    Built by ``nfl-ngs-data`` from ``nfl-ngs-raw``'s scrape of the public
+    ``nextgenstats.nfl.com/api`` (no auth). This is a DIFFERENT source from
+    :func:`load_nfl_nextgen_stats`, which reads nflverse's republished
+    ``statboard/`` parquet: that one carries the three passing/rushing/receiving
+    season-and-week leaderboards only, under expanded column names
+    (``avg_time_to_throw``). This loader carries the whole 12-dataset surface
+    under NGS's own snake_cased field names (``avg_time_to_throw`` too for the
+    statboards, but ``completion_probability`` / ``rush_yards_over_expected`` /
+    ``max_speed`` on the leaderboards, ``play_game_id`` / ``play_play_id`` as
+    play-level join keys). Reach for :func:`load_nfl_nextgen_stats` when the
+    three statboards are all you need; reach for this for everything else.
+
+    Datasets (``dataset=``), their release tag, and the first season with data:
+
+    ==========================  =================================  =====
+    dataset                     tag                                floor
+    ==========================  =================================  =====
+    ``schedules``               ``nfl_ngs_schedules``              2009
+    ``teams``                   ``nfl_ngs_teams``                  2013
+    ``passing``                 ``nfl_ngs_passing``                2016
+    ``rushing``                 ``nfl_ngs_rushing``                2016
+    ``receiving``               ``nfl_ngs_receiving``              2016
+    ``statboard_leaders``       ``nfl_ngs_statboard_leaders``      2016
+    ``leaders``                 ``nfl_ngs_leaders``                2016
+    ``gamecenter_passers``      ``nfl_ngs_gamecenter_passers``     2009
+    ``gamecenter_rushers``      ``nfl_ngs_gamecenter_rushers``     2015
+    ``gamecenter_receivers``    ``nfl_ngs_gamecenter_receivers``   2015
+    ``gamecenter_pass_rushers`` ``nfl_ngs_gamecenter_pass_rushers`` 2016
+    ``gamecenter_leaders``      ``nfl_ngs_gamecenter_leaders``     2016
+    ==========================  =================================  =====
+
+    The three statboards are one row per player x ``season_type`` x ``week``,
+    where ``week = 0`` with ``scope = "season"`` is the season aggregate.
+    ``leaders`` unions all seven NGS leaderboard families (completion / ERY /
+    YAC expectation, distance, speed, time-to-sack) in one long table keyed by
+    ``leaderboard`` / ``scope`` / ``season_type`` / ``week`` / ``rank``. The
+    ``gamecenter_*`` tables are per game x side (x rank).
+
+    Args:
+        seasons (List[int]): Seasons to load, as the STARTING calendar year
+            (2025 = the 2025-26 season). Each season is one release asset.
+        dataset (str): One of the 12 keys above. Defaults to ``"passing"``.
+        return_as_pandas (bool): If True, returns a pandas dataframe. If False,
+            returns a polars dataframe.
+
+    Returns:
+        pl.DataFrame: The requested dataset for the requested seasons, unioned
+        with ``diagonal_relaxed`` (per-season schemas may add columns).
+
+    Raises:
+        ValueError: If ``dataset`` is not one of the 12 keys.
+        SeasonNotFoundError: If a requested season is below that dataset's floor.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nfl import load_nfl_ngs
+            ngs = load_nfl_ngs(seasons=[2024], dataset="passing")
+            print(ngs.shape)
+
+        Season aggregates only (drop the weekly rows)::
+
+            import polars as pl
+            season_totals = load_nfl_ngs(seasons=[2024]).filter(pl.col("scope") == "season")
+
+        The completion-probability leaderboard, joinable to play-by-play on
+        ``play_game_id`` / ``play_play_id``::
+
+            cp = load_nfl_ngs(seasons=[2024], dataset="leaders").filter(
+                pl.col("leaderboard") == "completion"
+            )
+
+        See Also:
+            * :func:`load_nfl_nextgen_stats` -- nflverse's republished statboards
+            * `nfl-ngs-data`_ -- the producer repo (dataset docs + build)
+
+        .. _nfl-ngs-data: https://github.com/sportsdataverse/nfl-ngs-data
+    """
+    if dataset not in _NFL_NGS_DATASETS:
+        raise ValueError(f"dataset must be one of {sorted(_NFL_NGS_DATASETS)}; got {dataset!r}")
+    tag, stem, floor = _NFL_NGS_DATASETS[dataset]
+    if isinstance(seasons, int):
+        seasons = [seasons]
+    frames = []
+    for i in seasons:
+        season_not_found_error(int(i), floor)
+        frames.append(_fetch_release_parquet(NFL_NGS_SDV_URL.format(tag=tag, stem=stem, season=int(i))))
+    # diagonal_relaxed: per-season release schemas drift (columns added or
+    # dropped, and dtypes widened) -- union columns, null-fill gaps.
     data = pl.concat(frames, how="diagonal_relaxed")
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
