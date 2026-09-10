@@ -1740,6 +1740,19 @@ loaders:
   min_season: 1999
   example_args:
     seasons: 2024
+# SDV-native Next Gen Stats (nfl-ngs-data): one unified loader over 12 tags
+# (dataset= selects the tag). Listed under the default dataset's tag; the
+# full dataset -> tag -> floor table lives in the loader docstring. The floor
+# here is the surface-wide minimum (schedules / gamecenter_passers); the
+# statboards and leaderboards start 2016 and the loader enforces per-dataset.
+- fn: load_nfl_ngs
+  league: nfl
+  base: sdv_releases
+  url: nfl_ngs_passing/ngs_passing_{season}.parquet
+  tag: nfl_ngs_passing
+  min_season: 2009
+  example_args:
+    seasons: 2024
 # load_nfl_rosters also accepts source="sdv" to read the SDV-native nfl_rosters
 # release (public Shield/ESPN build; 30-col subset; published seasons 2022+).
 # The default source="nflverse" maps to the asset below and is documented here.

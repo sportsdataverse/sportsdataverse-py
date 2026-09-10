@@ -241,6 +241,7 @@ from sportsdataverse.nfl import load_nfl_ftn_charting as load_nfl_ftn_charting  
 from sportsdataverse.nfl import load_nfl_injuries as load_nfl_injuries  # noqa: F401
 from sportsdataverse.nfl import load_nfl_model_pbp as load_nfl_model_pbp  # noqa: F401
 from sportsdataverse.nfl import load_nfl_nextgen_stats as load_nfl_nextgen_stats  # noqa: F401
+from sportsdataverse.nfl import load_nfl_ngs as load_nfl_ngs  # noqa: F401
 from sportsdataverse.nfl import load_nfl_ngs_passing as load_nfl_ngs_passing  # noqa: F401
 from sportsdataverse.nfl import load_nfl_ngs_receiving as load_nfl_ngs_receiving  # noqa: F401
 from sportsdataverse.nfl import load_nfl_ngs_rushing as load_nfl_ngs_rushing  # noqa: F401
@@ -548,6 +549,7 @@ __all__ = [
     "load_nfl_injuries",
     "load_nfl_model_pbp",
     "load_nfl_nextgen_stats",
+    "load_nfl_ngs",
     "load_nfl_ngs_passing",
     "load_nfl_ngs_receiving",
     "load_nfl_ngs_rushing",

@@ -110,6 +110,10 @@ NFL_ESPN_QBR_WEEK_URL = f"{NFLVERSEGITHUB}espn_data/qbr_week_level.parquet"
 NFL_SDV_ESPN_QBR_SEASON_URL = SDVRELEASES + "nfl_espn_qbr/qbr_season_level.parquet"
 NFL_SDV_ESPN_QBR_WEEK_URL = SDVRELEASES + "nfl_espn_qbr/qbr_week_level.parquet"
 NFL_RATINGS_WEEKLY_URL = SDVRELEASES + "nfl_ratings_weekly/nfl_ratings_weekly_{season}.parquet"
+# SDV-native Next Gen Stats (nfl-ngs-data): 12 nfl_ngs_* tags, per-season assets.
+# {tag}/{stem} come from nfl_loaders._NFL_NGS_DATASETS (stems are not all
+# derivable from the tag -- schedules publishes ngs_schedule_{season}).
+NFL_NGS_SDV_URL = SDVRELEASES + "{tag}/{stem}_{season}.parquet"
 NFL_FTN_CHARTING_URL = NFLVERSEGITHUB + "ftn_charting/ftn_charting_{season}.parquet"
 NFL_TRADES_URL = f"{NFLVERSEGITHUB}trades/trades.parquet"
 NFL_FF_PLAYERIDS_URL = f"{DYNASTYPROCESSGITHUB}db_playerids.csv"

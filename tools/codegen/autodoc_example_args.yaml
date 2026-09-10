@@ -36,6 +36,7 @@ nfl:
   load_nfl_ftn_charting: {seasons: 2024}
   load_nfl_injuries: {seasons: 2024}
   load_nfl_nextgen_stats: {seasons: 2024}
+  load_nfl_ngs: {seasons: 2024, dataset: passing}
   load_nfl_pbp: {seasons: 2024}
   nfl_ngs_man_zone_rates: {seasons: 2022}
   nfl_ngs_ryoe: {seasons: 2023}
