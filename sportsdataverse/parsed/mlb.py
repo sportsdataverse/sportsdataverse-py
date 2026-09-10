@@ -312,7 +312,10 @@ from sportsdataverse.mlb import load_mlb_command_plus as load_mlb_command_plus  
 from sportsdataverse.mlb import load_mlb_expected_hr as load_mlb_expected_hr  # noqa: F401
 from sportsdataverse.mlb import load_mlb_expected_stats as load_mlb_expected_stats  # noqa: F401
 from sportsdataverse.mlb import load_mlb_oaa as load_mlb_oaa  # noqa: F401
+from sportsdataverse.mlb import load_mlb_pbp as load_mlb_pbp  # noqa: F401
+from sportsdataverse.mlb import load_mlb_pitches as load_mlb_pitches  # noqa: F401
 from sportsdataverse.mlb import load_mlb_re24_matrix as load_mlb_re24_matrix  # noqa: F401
+from sportsdataverse.mlb import load_mlb_runners as load_mlb_runners  # noqa: F401
 from sportsdataverse.mlb import load_mlb_stuff_plus as load_mlb_stuff_plus  # noqa: F401
 from sportsdataverse.mlb import load_mlb_we_table as load_mlb_we_table  # noqa: F401
 from sportsdataverse.mlb import load_mlb_wpa as load_mlb_wpa  # noqa: F401
@@ -565,7 +568,10 @@ __all__ = [
     "load_mlb_expected_hr",
     "load_mlb_expected_stats",
     "load_mlb_oaa",
+    "load_mlb_pbp",
+    "load_mlb_pitches",
     "load_mlb_re24_matrix",
+    "load_mlb_runners",
     "load_mlb_stuff_plus",
     "load_mlb_we_table",
     "load_mlb_wpa",
