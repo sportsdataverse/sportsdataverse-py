@@ -442,7 +442,8 @@ def calculate_fourth_down(df, *, season=None, return_as_pandas=False):
         return_as_pandas: Return a pandas DataFrame instead of polars.
 
     Returns:
-        ``df`` with an ``fd_prob`` column appended. Input columns are preserved, so
+        ``df`` with ``fd_conversion_prob`` (probability the gain reaches
+        ``distance``) and ``fd_expected_yards`` appended. Input columns are preserved, so
         chaining two calculators is lossless.
 
     Raises:
@@ -455,7 +456,26 @@ def calculate_fourth_down(df, *, season=None, return_as_pandas=False):
             from sportsdataverse.cfb import calculate_fourth_down
             calculate_fourth_down(df, season=2024)
     """
-    return _calculate(df, "fd_model", "fd_prob", season=season, return_as_pandas=return_as_pandas)
+    from sportsdataverse.cfb.cfb_fourth_down import FD_NUM_CLASS
+
+    prepared = add_era_columns(normalize_pbp_columns(df, "fd_model"), "fd_model", season=season)
+    probs = np.asarray(predict_from_card(prepared, "fd_model", _booster_for("fd_model")))
+    if probs.ndim == 1:
+        probs = probs.reshape(-1, FD_NUM_CLASS)
+    # Class k is a gain of k - 10 yards, spanning -10..65 (FD_NUM_CLASS = 76).
+    gains = np.arange(FD_NUM_CLASS) - 10
+    expected_yards = probs @ gains.astype(float)
+    if "distance" not in prepared.columns:
+        raise ValueError("fd_model needs a 'distance' column to compute conversion probability")
+    needed = prepared["distance"].to_numpy()[:, None]
+    conversion = (probs * (gains[None, :] >= needed)).sum(axis=1)
+    # Cast explicitly: the booster returns Float32 and a public column's dtype
+    # should not be an artifact of the model's internal precision.
+    out = prepared.with_columns(
+        pl.Series("fd_conversion_prob", conversion, dtype=pl.Float64),
+        pl.Series("fd_expected_yards", expected_yards, dtype=pl.Float64),
+    )
+    return out.to_pandas() if return_as_pandas else out
 
 
 def calculate_qbr(df, *, season=None, return_as_pandas=False):

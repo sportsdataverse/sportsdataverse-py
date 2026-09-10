@@ -425,3 +425,36 @@ def test_completion_probability_scores_a_raw_pbp_frame():
         }
     )
     assert 0.0 <= mc.calculate_completion_probability(pbp)["cp"][0] <= 1.0
+
+
+def test_fourth_down_emits_scalars_not_a_raw_class_distribution():
+    """fd_model is a 76-class yards-gained distribution (class k = k-10 yards),
+    not a probability. Appending the raw array gave a column that could not even
+    be written to CSV, while the returns table documented a scalar."""
+    df = pl.DataFrame(
+        {
+            "season": [2024, 2024],
+            "down": [4.0, 4.0],
+            "distance": [1.0, 15.0],
+            "yards_to_goal": [45.0, 45.0],
+            "posteam_total": [52.0, 52.0],
+            "posteam_spread": [-3.0, -3.0],
+        }
+    )
+    out = mc.calculate_fourth_down(df)
+    assert out.schema["fd_conversion_prob"] == pl.Float64
+    assert out.schema["fd_expected_yards"] == pl.Float64
+    # a short distance must convert more often than a long one
+    assert out["fd_conversion_prob"][0] > out["fd_conversion_prob"][1]
+    for v in out["fd_conversion_prob"].to_list():
+        assert 0.0 <= v <= 1.0
+
+
+def test_fourth_down_needs_distance_for_the_conversion_probability():
+    """Conversion is 'gain >= distance', so distance is not optional here even
+    though the card lists it among many features."""
+    df = pl.DataFrame(
+        {"season": [2024], "down": [4.0], "yards_to_goal": [45.0], "posteam_total": [52.0], "posteam_spread": [-3.0]}
+    )
+    with pytest.raises(ValueError, match="distance"):
+        mc.calculate_fourth_down(df)
