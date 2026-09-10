@@ -264,34 +264,19 @@ cp_air_yards_model.load_model(cp_air_yards_model_file)
 xpass_model = Booster({"nthread": 4})  # init model
 xpass_model.load_model(xpass_model_file)
 
-# Faithful feature-name orders the boosters were trained with. The DMatrix
+from sportsdataverse.cfb.model_cards import card_features as _card_features
+
+# Feature orders come from each booster's published card, not restated here. The DMatrix
 # is built from a pandas frame whose columns are renamed to these exact
 # names so xgboost validates feature_names alignment.
-CP_FEATURES = [
-    "down",
-    "distance",
-    "yards_to_goal",
-    "score_diff",
-    "seconds_remaining",
-    "is_home",
-    "period",
-    "passing_down",
-]
+CP_FEATURES = _card_features("cfb_cp_model")
 #: The air-yards CP booster's features: the 8 game-state ones plus throw depth.
 #: Kept as a superset rather than a replacement -- the extra game-state columns
 #: cost ~0.002 logloss to retain and still carry information air yards do not
 #: (a throw on 3rd and 18 down two scores is not the same proposition as the
 #: same throw tied in the first quarter).
 CP_AIR_YARDS_FEATURES = CP_FEATURES + ["air_yards", "pass_is_middle", "qb_hurry"]
-XPASS_FEATURES = [
-    "down",
-    "distance",
-    "yards_to_goal",
-    "pos_score_diff",
-    "TimeSecsRem",
-    "era",
-    "period",
-]
+XPASS_FEATURES = _card_features("xpass_model")
 
 logger = logging.getLogger("sdv.cfb_pbp")
 logger.addHandler(logging.NullHandler())

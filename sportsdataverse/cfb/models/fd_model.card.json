@@ -1,31 +1,25 @@
 {
-  "model_type": "fg",
+  "model_type": "fourth_down",
   "xgboost_version": "3.2.0",
-  "objective": "binary:logistic",
+  "objective": null,
   "features": [
+    "down",
+    "distance",
     "yards_to_goal",
+    "posteam_total",
+    "posteam_spread",
     "era0",
     "era1",
     "era2",
     "era3"
   ],
-  "n_features": 5,
-  "label": "fg_made",
-  "training_seasons": [
-    2004,
-    2025
-  ],
-  "n_training_rows": 2219971,
-  "hyperparameters": {
-    "objective": "binary:logistic",
-    "eval_metric": "logloss",
-    "max_depth": 3,
-    "eta": 0.1,
-    "subsample": 0.8,
-    "min_child_weight": 30
-  },
+  "n_features": 9,
+  "label": "statYardage",
+  "training_seasons": null,
+  "n_training_rows": null,
+  "hyperparameters": null,
   "source": "cfb_final_json",
-  "trained_date": "2026-08-02",
+  "trained_date": "2026-09-09",
   "era_contract": {
     "encoding": "one_hot",
     "cuts": [
@@ -46,7 +40,5 @@
       "era2",
       "era3"
     ]
-  },
-  "num_boost_round": 60,
-  "training_frame": "artifacts/pbp_full_v2.parquet"
+  }
 }

@@ -1093,6 +1093,34 @@ rec.group_by("team").len().sort("len", descending=True).head()
 
 ## Other
 
+### `add_era_columns(df: 'pl.DataFrame', model: 'str', season: 'int | None' = None) -> 'pl.DataFrame'` {#add_era_columns}
+
+Add the era column(s) `model` consumes, using ITS card's cuts.
+
+The cuts are read from the published contract, never restated here. That is
+the fix for cfbfastR-cfb-data#70, where both consumers kept a private copy of
+the era boundary, both drifted to a 2017 cut the trainer never used, and
+2018-2020 scored an era off the models trained with them.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `df` | `DataFrame` |  | Frame carrying a `season` column, or any frame when `season` is given explicitly. |
+| `model` | `str` |  | Bundle stem, used to look up the era contract. |
+| `season` | `int \| None` | `None` | Season to use when `df` has no `season` column -- the hand-built-row case. |
+
+**Returns**
+
+`df` with the contract's columns added. Returned unchanged when the model declares no era contract, or when the columns are already present.
+
+**Example**
+
+```python
+from sportsdataverse.cfb.model_calculators import add_era_columns
+add_era_columns(pl.DataFrame({"season": [2018]}), "xpass_model")
+```
+
 ### `add_play_type_canonical(df: 'pl.DataFrame', *, source: 'str' = 'type.text', with_family: 'bool' = True) -> 'pl.DataFrame'` {#add_play_type_canonical}
 
 Append `play_type_canonical` (and optionally `play_type_family`).
@@ -1157,6 +1185,283 @@ ratio = assert_rating_scale(ratings)
 # Treat a large drift as a refit signal, not a nuisance warning
 
 assert ratio < 1.6, "refit the constants before trusting predictions"
+```
+
+### `calculate_completion_probability(df, *, season=None, return_as_pandas=False)` {#calculate_completion_probability}
+
+Completion probability for each pass attempt.
+
+Mirrors the shape of `sportsdataverse.nfl`'s calculators. Rows may come
+from a play-by-play frame or be typed by hand to ask a hypothetical; only
+the model card's declared columns are required, and extra columns pass
+through untouched.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `df` |  |  | Frame carrying `down`, `distance`, `yards_to_goal`, `score_diff`, `seconds_remaining`, `is_home`, `period`, `passing_down`, plus either a `season` column or the `season` argument when the model consumes an era feature. |
+| `season` |  | `None` | Season used to derive era columns when `df` has none. |
+| `return_as_pandas` |  | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+`df` with a `cp` column appended. Input columns are preserved, so chaining two calculators is lossless.
+
+**Example**
+
+```python
+from sportsdataverse.cfb import calculate_completion_probability
+calculate_completion_probability(df, season=2024)
+```
+
+### `calculate_epa(df, *, season=None, return_as_pandas=False)` {#calculate_epa}
+
+Expected points added: the change in EP across a play.
+
+Recomputes `ep` when it is absent, matching nflfastR's behaviour. Requires
+`ep_end` -- the expected points after the play -- because EPA is a
+difference and this function scores rows, not sequences.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `df` |  |  | Frame with the EP features and an `ep_end` column. |
+| `season` |  | `None` | Unused by the EP model; accepted for signature consistency. |
+| `return_as_pandas` |  | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+`df` with `ep` (if it was absent) and `epa` appended.
+
+**Example**
+
+```python
+from sportsdataverse.cfb import calculate_epa
+calculate_epa(pbp)
+```
+
+### `calculate_expected_points(df, *, season=None, return_as_pandas=False)` {#calculate_expected_points}
+
+Expected points for each row.
+
+Mirrors `sportsdataverse.nfl.calculate_expected_points()`. The EP booster
+is `multi:softprob` over seven next-score classes; this collapses those
+probabilities to a points expectation using the package's own
+`ep_class_to_score_mapping` rather than restating the class order.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `df` |  |  | Frame carrying `TimeSecsRem`, `yards_to_goal`, `distance`, `down_1` through `down_4` and `pos_score_diff_start`. |
+| `season` |  | `None` | Unused by this model (EP consumes no era feature); accepted so every calculator shares one signature. |
+| `return_as_pandas` |  | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+`df` with the seven class probability columns and an `ep` column appended.
+
+**Example**
+
+```python
+from sportsdataverse.cfb import calculate_expected_points
+calculate_expected_points(pbp)
+```
+
+### `calculate_field_goal_probability(df, *, season=None, return_as_pandas=False)` {#calculate_field_goal_probability}
+
+Field-goal make probability for each row.
+
+Mirrors the shape of `sportsdataverse.nfl`'s calculators. Rows may come
+from a play-by-play frame or be typed by hand to ask a hypothetical; only
+the model card's declared columns are required, and extra columns pass
+through untouched.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `df` |  |  | Frame carrying `yards_to_goal`, plus either a `season` column or the `season` argument when the model consumes an era feature. |
+| `season` |  | `None` | Season used to derive era columns when `df` has none. |
+| `return_as_pandas` |  | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+`df` with an `fg_prob` column appended. Input columns are preserved, so chaining two calculators is lossless.
+
+**Example**
+
+```python
+from sportsdataverse.cfb import calculate_field_goal_probability
+calculate_field_goal_probability(df, season=2024)
+```
+
+### `calculate_fourth_down(df, *, season=None, return_as_pandas=False)` {#calculate_fourth_down}
+
+Fourth-down conversion model output for each row.
+
+Mirrors the shape of `sportsdataverse.nfl`'s calculators. Rows may come
+from a play-by-play frame or be typed by hand to ask a hypothetical; only
+the model card's declared columns are required, and extra columns pass
+through untouched.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `df` |  |  | Frame carrying `down`, `distance`, `yards_to_goal`, `posteam_total`, `posteam_spread`, plus either a `season` column or the `season` argument when the model consumes an era feature. |
+| `season` |  | `None` | Season used to derive era columns when `df` has none. |
+| `return_as_pandas` |  | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+`df` with an `fd_prob` column appended. Input columns are preserved, so chaining two calculators is lossless.
+
+**Example**
+
+```python
+from sportsdataverse.cfb import calculate_fourth_down
+calculate_fourth_down(df, season=2024)
+```
+
+### `calculate_qbr(df, *, season=None, return_as_pandas=False)` {#calculate_qbr}
+
+Model QBR for each row.
+
+Mirrors the shape of `sportsdataverse.nfl`'s calculators. Rows may come
+from a play-by-play frame or be typed by hand to ask a hypothetical; only
+the model card's declared columns are required, and extra columns pass
+through untouched.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `df` |  |  | Frame carrying `qbr_epa`, `sack_epa`, `pass_epa`, `rush_epa`, `pen_epa`, `spread`, plus either a `season` column or the `season` argument when the model consumes an era feature. |
+| `season` |  | `None` | Season used to derive era columns when `df` has none. |
+| `return_as_pandas` |  | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+`df` with a `qbr` column appended. Input columns are preserved, so chaining two calculators is lossless.
+
+**Example**
+
+```python
+from sportsdataverse.cfb import calculate_qbr
+calculate_qbr(df, season=2024)
+```
+
+### `calculate_two_point_probability(df, *, season=None, return_as_pandas=False)` {#calculate_two_point_probability}
+
+Two-point conversion success probability.
+
+Mirrors the shape of `sportsdataverse.nfl`'s calculators. Rows may come
+from a play-by-play frame or be typed by hand to ask a hypothetical; only
+the model card's declared columns are required, and extra columns pass
+through untouched.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `df` |  |  | Frame carrying `posteam_spread`, `posteam_total`, `pos_score_diff`, plus either a `season` column or the `season` argument when the model consumes an era feature. |
+| `season` |  | `None` | Season used to derive era columns when `df` has none. |
+| `return_as_pandas` |  | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+`df` with a `two_pt_prob` column appended. Input columns are preserved, so chaining two calculators is lossless.
+
+**Example**
+
+```python
+from sportsdataverse.cfb import calculate_two_point_probability
+calculate_two_point_probability(df, season=2024)
+```
+
+### `calculate_win_probability(df, *, season=None, return_as_pandas=False)` {#calculate_win_probability}
+
+Win probability for each row.
+
+Selects the booster the way the pipeline does: `wp_spread` when the frame
+carries a `spread_time` column, `wp_naive` otherwise. The naive model is
+the spread model minus that single feature, so which one applies is decided
+by whether the caller has spread information at all.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `df` |  |  | Frame carrying the win-probability features. Include `spread_time` to use the spread model. |
+| `season` |  | `None` | Unused by these models; accepted for signature consistency. |
+| `return_as_pandas` |  | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+`df` with a `wp` column appended.
+
+**Example**
+
+```python
+from sportsdataverse.cfb import calculate_win_probability
+calculate_win_probability(pbp)
+```
+
+### `calculate_wpa(df, *, season=None, return_as_pandas=False)` {#calculate_wpa}
+
+Win probability added: the change in WP across a play.
+
+Recomputes `wp` when it is absent. Requires `wp_end` for the same reason
+`calculate_epa` requires `ep_end`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `df` |  |  | Frame with the WP features and a `wp_end` column. |
+| `season` |  | `None` | Unused by these models; accepted for signature consistency. |
+| `return_as_pandas` |  | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+`df` with `wp` (if it was absent) and `wpa` appended.
+
+**Example**
+
+```python
+from sportsdataverse.cfb import calculate_wpa
+calculate_wpa(pbp)
+```
+
+### `calculate_xpass(df, *, season=None, return_as_pandas=False)` {#calculate_xpass}
+
+Expected pass probability for each row.
+
+Mirrors the shape of `sportsdataverse.nfl`'s calculators. Rows may come
+from a play-by-play frame or be typed by hand to ask a hypothetical; only
+the model card's declared columns are required, and extra columns pass
+through untouched.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `df` |  |  | Frame carrying `down`, `distance`, `yards_to_goal`, `pos_score_diff`, `TimeSecsRem`, `period`, plus either a `season` column or the `season` argument when the model consumes an era feature. |
+| `season` |  | `None` | Season used to derive era columns when `df` has none. |
+| `return_as_pandas` |  | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+`df` with an `xpass` column (probability the play is a pass) appended. Input columns are preserved, so chaining two calculators is lossless.
+
+**Example**
+
+```python
+from sportsdataverse.cfb import calculate_xpass
+calculate_xpass(df, season=2024)
 ```
 
 ### `canonical_play_type_expr(source: 'str' = 'type.text') -> 'pl.Expr'` {#canonical_play_type_expr}
@@ -3103,6 +3408,31 @@ games = pl.DataFrame({"sim": [1], "week": [1], "home_team": ["A"], "away_team": 
 cr(teams, games, 1, rng=np.random.default_rng(0))["games"]
 ```
 
+### `normalize_pbp_columns(df: 'pl.DataFrame', model: 'str') -> 'pl.DataFrame'` {#normalize_pbp_columns}
+
+Add card-named copies of any play-by-play columns `df` already carries.
+
+A hand-built frame using the card's own names passes through untouched; a
+pbp frame gains the names the card asks for. Copies rather than renames, so
+nothing the caller passed in is removed.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `df` | `DataFrame` |  | Caller's frame. |
+| `model` | `str` |  | Bundle stem, used to look up which features are wanted. |
+
+**Returns**
+
+`df` plus any alias columns that could be resolved.
+
+**Example**
+
+```python
+normalize_pbp_columns(pbp, "xpass_model")
+```
+
 ### `on3_industry_player_rankings(year: 'Union[int, str]', sport_slug: 'str' = 'football', page: 'Any' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#on3_industry_player_rankings}
 
 On3 Industry Comparison player rankings (**deprecated** next/data` scrape).
@@ -3231,6 +3561,29 @@ pbp = pl.DataFrame({"type.text": ["Rush", "Timeout"]})
 add_play_type_canonical(pbp).filter(
     pl.col("play_type_family") != "administrative"
 )
+```
+
+### `predict_from_card(df: 'pl.DataFrame', model: 'str', booster: 'Any') -> 'np.ndarray'` {#predict_from_card}
+
+Score `df` with `booster`, validated and ordered by the model's card.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `df` | `DataFrame` |  | Frame carrying at least the model's declared features. Extra columns are ignored, so a full pbp frame passes through unchanged. |
+| `model` | `str` |  | Bundle stem, used to look up the card and to name the model in any error. |
+| `booster` | `Any` |  | The loaded `xgboost.Booster`. |
+
+**Returns**
+
+The booster's raw predictions.
+
+**Example**
+
+```python
+from sportsdataverse.cfb.model_calculators import predict_from_card
+predict_from_card(pbp, "xpass_model", booster)
 ```
 
 ### `predict_margin(home_adj_net: 'float', away_adj_net: 'float', neutral: 'bool', *, era: 'str' = 'modern', games_played: 'float | None' = None) -> 'float'` {#predict_margin}

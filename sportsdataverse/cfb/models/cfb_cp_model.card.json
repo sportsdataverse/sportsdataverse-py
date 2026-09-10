@@ -1,0 +1,22 @@
+{
+  "model_type": "cpoe",
+  "xgboost_version": "3.2.0",
+  "objective": null,
+  "features": [
+    "down",
+    "distance",
+    "yards_to_goal",
+    "score_diff",
+    "seconds_remaining",
+    "is_home",
+    "period",
+    "passing_down"
+  ],
+  "n_features": 8,
+  "label": "completion",
+  "training_seasons": null,
+  "n_training_rows": null,
+  "hyperparameters": null,
+  "source": "cfb_final_json",
+  "trained_date": "2026-09-09"
+}

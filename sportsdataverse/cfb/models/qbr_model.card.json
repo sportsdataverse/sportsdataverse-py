@@ -32,6 +32,27 @@
   },
   "source": "cfb_final_json",
   "trained_date": "2026-08-02",
+  "era_contract": {
+    "encoding": "one_hot",
+    "cuts": [
+      2006,
+      2013,
+      2020
+    ],
+    "buckets": [
+      "<=2006",
+      "2007-2013",
+      "2014-2020",
+      ">=2021"
+    ],
+    "note": "season <= cuts[0] -> 0, <= cuts[1] -> 1, <= cuts[2] -> 2, else 3. Both encodings share these cuts; they differ only in SHAPE.",
+    "columns": [
+      "era0",
+      "era1",
+      "era2",
+      "era3"
+    ]
+  },
   "num_boost_round": 45,
   "training_frame": "artifacts/pbp_full_v2.parquet"
 }
