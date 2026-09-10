@@ -438,6 +438,30 @@ loaders:
   min_season: 2015
   example_args:
     seasons: 2024
+- fn: load_mlb_pbp
+  league: mlb
+  base: sdv_releases
+  url: mlb_pbp/mlb_pbp_{season}.parquet
+  tag: mlb_pbp
+  min_season: 1988
+  example_args:
+    seasons: 2024
+- fn: load_mlb_pitches
+  league: mlb
+  base: sdv_releases
+  url: mlb_pitches/mlb_pitches_{season}.parquet
+  tag: mlb_pitches
+  min_season: 1988
+  example_args:
+    seasons: 2024
+- fn: load_mlb_runners
+  league: mlb
+  base: sdv_releases
+  url: mlb_runners/mlb_runners_{season}.parquet
+  tag: mlb_runners
+  min_season: 1988
+  example_args:
+    seasons: 2024
 - fn: load_mlb_expected_stats
   league: mlb
   base: sdv_releases

@@ -18,6 +18,9 @@ __all__ = [
     "load_mlb_re24_matrix",
     "load_mlb_we_table",
     "load_mlb_wpa",
+    "load_mlb_pbp",
+    "load_mlb_pitches",
+    "load_mlb_runners",
     "load_mlb_expected_stats",
     "load_mlb_expected_hr",
     "load_mlb_batter_projection",
@@ -178,6 +181,126 @@ def load_mlb_wpa(seasons, return_as_pandas: bool = False):
         frames.append(df)
     if missing:
         cli_warn("load_mlb_wpa: no data for season(s) {missing} (skipped)".format(missing=missing))
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+def load_mlb_pbp(seasons, return_as_pandas: bool = False):
+    """Load mlb_pbp (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/mlb_pbp
+
+    Args:
+        seasons: an int or iterable of seasons (>= 1988).
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; seasons with no published asset are
+        skipped with a warning rather than raising (404-safe).
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 1988.
+
+    Example:
+        Quick start::
+
+            load_mlb_pbp(seasons=2024)
+    """
+    frames, missing = [], []
+    for season in _as_season_list(seasons):
+        if int(season) < 1988:
+            raise SeasonNotFoundError("season cannot be less than 1988")
+        df = _read_release_parquet(
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/mlb_pbp/mlb_pbp_{season}.parquet"
+        )
+        if df is None:
+            missing.append(season)
+            continue
+        frames.append(df)
+    if missing:
+        cli_warn("load_mlb_pbp: no data for season(s) {missing} (skipped)".format(missing=missing))
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+def load_mlb_pitches(seasons, return_as_pandas: bool = False):
+    """Load mlb_pitches (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/mlb_pitches
+
+    Args:
+        seasons: an int or iterable of seasons (>= 1988).
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; seasons with no published asset are
+        skipped with a warning rather than raising (404-safe).
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 1988.
+
+    Example:
+        Quick start::
+
+            load_mlb_pitches(seasons=2024)
+    """
+    frames, missing = [], []
+    for season in _as_season_list(seasons):
+        if int(season) < 1988:
+            raise SeasonNotFoundError("season cannot be less than 1988")
+        df = _read_release_parquet(
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/mlb_pitches/mlb_pitches_{season}.parquet"
+        )
+        if df is None:
+            missing.append(season)
+            continue
+        frames.append(df)
+    if missing:
+        cli_warn("load_mlb_pitches: no data for season(s) {missing} (skipped)".format(missing=missing))
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+def load_mlb_runners(seasons, return_as_pandas: bool = False):
+    """Load mlb_runners (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/mlb_runners
+
+    Args:
+        seasons: an int or iterable of seasons (>= 1988).
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; seasons with no published asset are
+        skipped with a warning rather than raising (404-safe).
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 1988.
+
+    Example:
+        Quick start::
+
+            load_mlb_runners(seasons=2024)
+    """
+    frames, missing = [], []
+    for season in _as_season_list(seasons):
+        if int(season) < 1988:
+            raise SeasonNotFoundError("season cannot be less than 1988")
+        df = _read_release_parquet(
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/mlb_runners/mlb_runners_{season}.parquet"
+        )
+        if df is None:
+            missing.append(season)
+            continue
+        frames.append(df)
+    if missing:
+        cli_warn("load_mlb_runners: no data for season(s) {missing} (skipped)".format(missing=missing))
     # diagonal: per-season release schemas can drift (columns added/dropped
     # over the years) -- union columns, null-fill gaps.
     out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
