@@ -361,16 +361,33 @@ def test_situational_fails_open():
     assert situational_stats.create_situational_stats(pl.DataFrame({"x": [1]}), HOME, AWAY) is None
 
 
-def test_windowed_build_drops_window_inherent_sections():
+def test_windowed_build_drops_only_the_clock_named_sections():
     expr = pl.col("period").is_in([1, 2])
     out = situational_stats.create_situational_stats(_frame(), HOME, AWAY, window_expr=expr)
     h = out["teams"][HOME]
     # windowable sections present and windowed
     assert h["downs"]["down_1"]["plays"] == 1  # only the Q1 first-down play
     assert h["red_zone"]["trips"] == 1
-    # window-inherent sections absent
-    for k in ("two_minute", "middle_8", "pace", "non_garbage", "fourth_down_decisions"):
+    # two_minute and middle_8 name a clock window of their own; intersecting
+    # them with another window describes neither
+    for k in ("two_minute", "middle_8"):
         assert k not in h, k
+    # everything else reads the already-windowed frame and ships with it
+    for k in ("pace", "non_garbage", "fourth_down_decisions"):
+        assert k in h, k
+
+
+def test_windowed_pace_is_the_window_and_drops_the_half_split():
+    h1 = situational_stats.create_situational_stats(_frame(), HOME, AWAY, window_expr=pl.col("period") == 1)["teams"][
+        HOME
+    ]
+    # a window inside one half cannot split by half: both keys go, rather than
+    # shipping a permanently-null pair that would render as two blank rows
+    assert "first_half" not in h1["pace"] and "second_half" not in h1["pace"]
+    assert "seconds_per_play" in h1["pace"]
+    # the full-game build still splits, because there both halves have plays
+    full = situational_stats.create_situational_stats(_frame(), HOME, AWAY)["teams"][HOME]
+    assert "first_half" in full["pace"] and "second_half" in full["pace"]
 
 
 def test_windowed_build_empty_window_is_none():

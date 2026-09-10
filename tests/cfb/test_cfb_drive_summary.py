@@ -178,8 +178,9 @@ def test_windowed_build_books_drives_to_start_quarter():
     # because the out-of-window context (running score, prev drive) is kept
     assert h["total_drives"] == 1 and a["total_drives"] == 1
     assert a["points_off_turnovers"] == 7
-    # game-level lines never ship on a windowed build
-    assert "largest_lead" not in h and "time_leading_seconds" not in h
+    # lead and clock state window too -- see the _clock_frame tests below for
+    # the bounds themselves; this fixture's clock does not match its periods
+    assert "largest_lead" in h and "time_leading_seconds" in h
     # chart holds only in-window drives
     assert [c["period"] for c in out["chart"]] == [2, 2]
     # first-down sources window with everything else (incl. penalty count)
@@ -211,3 +212,178 @@ def test_delegate_fails_open_on_unusable_frame():
 
     assert CFBPlayProcess.create_drive_summary(object(), pl.DataFrame(), _drives()) is None
     assert CFBPlayProcess.create_drive_summary(object(), None, _drives()) is None
+
+
+# --- windowed score-state clock ------------------------------------------
+# The shared _frame() fixture labels a play at 1500 game-seconds remaining as
+# Q2, which is really Q3 on the regulation axis. That is harmless for the
+# aggregates it was built for, but a clock-bounds test has to run on a frame
+# whose periods and clock agree, so this one does.
+
+
+def _clock_frame():
+    return pl.DataFrame(
+        {
+            "game_play_number": [1, 2, 3, 4, 5, 6, 7, 8],
+            "scrimmage_play": [True] * 8,
+            "pos_team": [10, 20, 10, 20, 20, 10, 20, 10],
+            "down": [1, 1, 1, 1, 1, 1, 1, 1],
+            "distance": [10] * 8,
+            "first_down_created": [False] * 8,
+            "firstD_by_penalty": [False] * 8,
+            "touchdown": [False] * 8,
+            "rush": [True, False] * 4,
+            "pass": [False, True] * 4,
+            "period": [1, 1, 2, 2, 3, 3, 4, 4],
+            # strictly inside each quarter: Q1 3600-2700, Q2 2700-1800,
+            # Q3 1800-900, Q4 900-0
+            "start.adj_TimeSecsRem": [3500.0, 3000.0, 2600.0, 2000.0, 1700.0, 1200.0, 800.0, 200.0],
+            "start.homeScore": [0, 0, 0, 0, 7, 7, 7, 7],
+            "start.awayScore": [0, 0, 0, 0, 0, 7, 7, 7],
+            "statYardage": [5] * 8,
+            "text": list("abcdefgh"),
+            "homeTeamId": [10] * 8,
+            "awayTeamId": [20] * 8,
+            "drive.id": ["c1", "c2", "c3", "c4", "c5", "c6", "c7", "c8"],
+        }
+    )
+
+
+def _clock_drives():
+    return [
+        _drive(HOME, "c1", "PUNT", 10, 3, "1:40", 25, 1, last_score=(0, 0)),
+        _drive(AWAY, "c2", "PUNT", 10, 3, "1:40", 25, 1, last_score=(0, 0)),
+        _drive(HOME, "c3", "TD", 75, 8, "3:20", 25, 2, is_score=True, last_score=(7, 0)),
+        _drive(AWAY, "c4", "PUNT", 10, 3, "1:40", 25, 2, last_score=(7, 0)),
+        _drive(AWAY, "c5", "TD", 75, 8, "3:20", 25, 3, is_score=True, last_score=(7, 7)),
+        _drive(HOME, "c6", "PUNT", 10, 3, "1:40", 25, 3, last_score=(7, 7)),
+        _drive(AWAY, "c7", "FG", 40, 8, "3:20", 25, 4, is_score=True, last_score=(7, 10)),
+        _drive(HOME, "c8", "DOWNS", 9, 4, "0:50", 45, 4, last_score=(7, 10)),
+    ]
+
+
+def _accounted(out):
+    h, a = out["teams"][HOME], out["teams"][AWAY]
+    return h["time_leading_seconds"] + a["time_leading_seconds"] + h["time_tied_seconds"]
+
+
+def test_windowed_clock_accounts_for_exactly_the_window():
+    """Every second of the window is charged to somebody, and none outside it.
+
+    This is the regression that matters: before the bounds fix the last play's
+    remainder ran to 0:00 of the GAME, so a Q3 build silently swallowed the
+    fourth quarter. A quarter is 900 seconds and the accounting must say so.
+    """
+    for periods, length in (
+        ({1}, 900),
+        ({2}, 900),
+        ({3}, 900),
+        ({4}, 900),
+        ({1, 2}, 1800),
+        ({3, 4}, 1800),
+        # gapped: two quarters, and none of the one between them
+        ({1, 3}, 1800),
+        ({1, 2, 4}, 2700),
+        (None, 3600),
+    ):
+        out = drive_summary.create_drive_summary(_clock_drives(), _clock_frame(), HOME, AWAY, periods=periods)
+        assert _accounted(out) == length, (periods, _accounted(out))
+
+
+def test_windowed_clock_uses_the_window_score_not_the_final():
+    # Q2: home goes ahead 7-0 and stays there; the game ends 7-10, and that
+    # final must not colour a second of this window.
+    out = drive_summary.create_drive_summary(_clock_drives(), _clock_frame(), HOME, AWAY, periods={2})
+    h, a = out["teams"][HOME], out["teams"][AWAY]
+    assert a["time_leading_seconds"] == 0
+    assert h["time_leading_seconds"] + h["time_tied_seconds"] == 900
+    # entering Q2 the game was level, so the tied share is real, not an artefact
+    assert h["time_tied_seconds"] > 0
+    # Q4 opens level at 7-7 and away's field goal lands late: the quarter is
+    # tied until then, and only the tail belongs to away. The tail is charged
+    # from the score at the WINDOW's end -- which here happens to equal the
+    # game's, so the sharper check is that it is neither 0 (the closing score
+    # ignored) nor 900 (the whole quarter mislabelled).
+    q4 = drive_summary.create_drive_summary(_clock_drives(), _clock_frame(), HOME, AWAY, periods={4})
+    assert q4["teams"][HOME]["time_leading_seconds"] == 0
+    assert q4["teams"][AWAY]["time_leading_seconds"] == 200
+    assert q4["teams"][HOME]["time_tied_seconds"] == 700
+
+
+def test_windowed_largest_lead_sees_the_window_edges():
+    # Home's 7-0 lead is established in Q2 and gone by the end of Q3. A Q3
+    # build must still report it: the window OPENS with home up seven, which no
+    # in-window snap after the tying score would show on its own.
+    q3 = drive_summary.create_drive_summary(_clock_drives(), _clock_frame(), HOME, AWAY, periods={3})
+    assert q3["teams"][HOME]["largest_lead"] == 7
+    assert q3["teams"][AWAY]["largest_lead"] == 0
+
+
+def test_ot_window_reports_lead_but_no_clock():
+    """OT has no clock axis to integrate over, so the time split must be absent.
+
+    ESPN files every OT play under one period number and adj_TimeSecsRem
+    collapses there -- see the sort note in cfb_pbp.
+    """
+    frame = _clock_frame().with_columns(period=pl.lit(5, dtype=pl.Int64))
+    drives = [
+        _drive(AWAY, "o1", "TD", 25, 3, "0:00", 25, 5, is_score=True, last_score=(7, 17)),
+        _drive(HOME, "o2", "DOWNS", 12, 4, "0:00", 25, 5, last_score=(7, 17)),
+    ]
+    out = drive_summary.create_drive_summary(drives, frame, HOME, AWAY, periods="ot")
+    h = out["teams"][HOME]
+    assert "largest_lead" in h
+    assert "time_leading_seconds" not in h and "time_tied_seconds" not in h
+
+
+def test_clock_intervals_table():
+    assert drive_summary._clock_intervals(None) == [(3600, 0)]
+    assert drive_summary._clock_intervals({1}) == [(3600, 2700)]
+    assert drive_summary._clock_intervals({3}) == [(1800, 900)]
+    assert drive_summary._clock_intervals({1, 2}) == [(3600, 1800)]
+    assert drive_summary._clock_intervals({4}) == [(900, 0)]
+    assert drive_summary._clock_intervals("ot") is None
+    assert drive_summary._clock_intervals({5, 6}) is None
+    # a gapped set is two runs, never one span across the quarter it skipped
+    assert drive_summary._clock_intervals({1, 3}) == [(3600, 2700), (1800, 900)]
+    assert drive_summary._clock_intervals({1, 2, 4}) == [(3600, 1800), (900, 0)]
+
+
+def test_boundary_score_comes_from_plays_not_drive_outcomes():
+    """A drive that starts in Q2 and scores in Q3 must not colour Q2's clock.
+
+    The drive books to Q2, so a Q3 window excludes it -- but its points land
+    inside Q3. Taking the window's opening score from drive outcomes would put
+    those seven points on the wrong side of the boundary in both directions.
+    """
+    frame = _clock_frame().with_columns(
+        # home's go-ahead score now happens just INSIDE Q3, on a drive that
+        # started in Q2: the play at 1700 is the first one that sees 7-0
+        pl.Series("start.homeScore", [0, 0, 0, 0, 0, 7, 7, 7]),
+        pl.Series("start.awayScore", [0, 0, 0, 0, 0, 0, 0, 0]),
+    )
+    drives = _clock_drives()
+    q2 = drive_summary.create_drive_summary(drives, frame, HOME, AWAY, periods={2})
+    q3 = drive_summary.create_drive_summary(drives, frame, HOME, AWAY, periods={3})
+    # Q2 was level throughout -- the score arrives after the quarter ends
+    assert q2["teams"][HOME]["time_leading_seconds"] == 0
+    assert q2["teams"][HOME]["time_tied_seconds"] == 900
+    assert q2["teams"][HOME]["largest_lead"] == 0
+    # Q3 carries the lead, and both windows still account for their full length
+    assert q3["teams"][HOME]["time_leading_seconds"] > 0
+    assert _accounted(q2) == 900 and _accounted(q3) == 900
+
+
+def test_gapped_window_skips_the_quarter_between():
+    """{1, 3} must charge Q1 and Q3 and nothing from Q2."""
+    q1 = drive_summary.create_drive_summary(_clock_drives(), _clock_frame(), HOME, AWAY, periods={1})
+    q3 = drive_summary.create_drive_summary(_clock_drives(), _clock_frame(), HOME, AWAY, periods={3})
+    both = drive_summary.create_drive_summary(_clock_drives(), _clock_frame(), HOME, AWAY, periods={1, 3})
+    for team in (HOME, AWAY):
+        assert (
+            both["teams"][team]["time_leading_seconds"]
+            == q1["teams"][team]["time_leading_seconds"] + q3["teams"][team]["time_leading_seconds"]
+        )
+    assert both["teams"][HOME]["time_tied_seconds"] == (
+        q1["teams"][HOME]["time_tied_seconds"] + q3["teams"][HOME]["time_tied_seconds"]
+    )
