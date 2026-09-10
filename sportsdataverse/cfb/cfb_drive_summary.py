@@ -114,8 +114,12 @@ _REG_SECONDS = 3600
 _QUARTER_SECONDS = 900
 
 
-def _clock_bounds(periods: set[int] | str | None) -> tuple[int, int] | None:
-    """The window's start and end in ``adj_TimeSecsRem``, or None with no clock.
+def _clock_intervals(periods: set[int] | str | None) -> list[tuple[int, int]] | None:
+    """The window's ``adj_TimeSecsRem`` intervals, or None when it has no clock.
+
+    One ``(high, low)`` interval per CONTIGUOUS run of selected quarters, so a
+    gapped set like ``{1, 3}`` yields two intervals and never charges the second
+    quarter it did not ask for.
 
     Returns None for overtime: from 2023 ESPN files every OT play under one
     ``period.number`` and the clock-derived ``adj_TimeSecsRem`` collapses (see
@@ -123,16 +127,23 @@ def _clock_bounds(periods: set[int] | str | None) -> tuple[int, int] | None:
     A window of only OT therefore reports ``largest_lead`` but no time split.
     """
     if periods is None:
-        return _REG_SECONDS, 0
-    if periods == "ot":
+        return [(_REG_SECONDS, 0)]
+    if isinstance(periods, str):  # the "ot" sentinel, and any other string
         return None
-    reg = sorted(p for p in periods if p <= 4)
+    reg = sorted(p for p in periods if 1 <= p <= 4)
     if not reg:
         return None
-    return (
-        _REG_SECONDS - _QUARTER_SECONDS * (reg[0] - 1),
-        _REG_SECONDS - _QUARTER_SECONDS * reg[-1],
-    )
+    runs: list[tuple[int, int]] = []
+    first = prev = reg[0]
+    for q in reg[1:]:
+        if q != prev + 1:
+            runs.append((first, prev))
+            first = q
+        prev = q
+    runs.append((first, prev))
+    return [
+        (_REG_SECONDS - _QUARTER_SECONDS * (lo_q - 1), _REG_SECONDS - _QUARTER_SECONDS * hi_q) for lo_q, hi_q in runs
+    ]
 
 
 def create_drive_summary(
@@ -148,10 +159,11 @@ def create_drive_summary(
     full drive sequence still provides context (running score, the previous
     drive for OBTAINED and points-off-turnovers), but only in-window drives
     are counted, charted, or listed. ``largest_lead`` and the time-leading /
-    time-tied split are measured against the window's own clock bounds and its
-    own opening and closing score, so they window too -- except under ``"ot"``,
-    where the OT clock has no axis to integrate over and only ``largest_lead``
-    ships.
+    time-tied split window too: the score state is read from the whole
+    regulation play sequence and then clipped to the window's clock intervals
+    (one per contiguous run of quarters, so a gapped set never charges the
+    quarter it skipped). Under ``"ot"`` the clock has no axis to integrate over
+    and only ``largest_lead`` ships.
 
     Args:
         drives (list[dict]): the ESPN drives grouping, in game order
@@ -392,53 +404,68 @@ def create_drive_summary(
         del t["success_fd"], t["success_ay"], t["start_yte_sum"], t["start_yte_n"]
 
     # largest lead + seconds leading/trailing/tied from the score-state clock.
-    # `scrim` is already windowed above, so this integrates over the window --
-    # but only against the window's own clock bounds and its own opening and
-    # closing score, never the game's.
-    reg = scrim.filter(pl.col("period") <= 4).sort("game_play_number")
-    lead = {home_id: 0, away_id: 0}
-    clockstate = {home_id: 0, away_id: 0, "tied": 0}
-    rows = reg.select(["start.adj_TimeSecsRem", "start.homeScore", "start.awayScore"]).to_dicts()
+    #
+    # Built from the WHOLE regulation sequence, not the windowed one. A drive
+    # books to the quarter it started in, so a drive that starts in Q2 and
+    # scores in Q3 is out of a Q3 window while its points land inside it --
+    # taking the boundary score from drive outcomes would credit those points
+    # to the wrong side of the edge. Play start scores do not have that problem.
+    #
+    # Each consecutive pair of plays defines an interval whose score state is
+    # the LATER play's start score: the stretch after a play belongs to that
+    # play's outcome, so a go-ahead score counts its own aftermath as leading.
+    # The window then just clips those intervals.
+    reg_all = (
+        frame.filter((pl.col("scrimmage_play") == True) & (pl.col("period") <= 4))  # noqa: E712
+        .sort("game_play_number")
+        .select(["start.adj_TimeSecsRem", "start.homeScore", "start.awayScore"])
+        .to_dicts()
+    )
     final_h, final_a = h, a  # running score after the chart walk = final score
-    open_h, open_a = win_open if win_open is not None else (0, 0)
-    close_h, close_a = win_close if periods is not None else (final_h, final_a)
-    bounds = _clock_bounds(periods)
-    # the window's own edges bound the lead too: a team can enter a window
-    # already ahead by more than any in-window snap shows
-    for ph, pa in ((open_h, open_a), (close_h, close_a)):
-        lead[home_id] = max(lead[home_id], ph - pa)
-        lead[away_id] = max(lead[away_id], pa - ph)
-    if bounds is not None and rows:
-        start_rem, end_rem = bounds
-        # the stretch from the window's opening whistle to its first snap
-        first_rem = rows[0].get("start.adj_TimeSecsRem")
-        dt = max(0, start_rem - (first_rem if first_rem is not None else start_rem))
-        key = home_id if open_h > open_a else away_id if open_a > open_h else "tied"
-        clockstate[key] += dt
-        for j, r in enumerate(rows):
-            hh, aa = r.get("start.homeScore") or 0, r.get("start.awayScore") or 0
-            lead[home_id] = max(lead[home_id], hh - aa)
-            lead[away_id] = max(lead[away_id], aa - hh)
-            # the interval after play j belongs to play j's OUTCOME -- the next
-            # play's start state (or the score at the window's end after the
-            # last one) -- so a go-ahead score counts its aftermath as leading,
-            # not the prior state
-            if j + 1 < len(rows):
-                nxt = rows[j + 1]
-                dt = (r.get("start.adj_TimeSecsRem") or 0) - (nxt.get("start.adj_TimeSecsRem") or 0)
-                dt = max(0, dt)
+    segments: list[tuple[float, float, int, int]] = []
+    if reg_all:
+        first_rem = reg_all[0].get("start.adj_TimeSecsRem")
+        if first_rem is not None and first_rem < _REG_SECONDS:
+            # kickoff to the first snap, at 0-0
+            segments.append((_REG_SECONDS, first_rem, 0, 0))
+        for j, r in enumerate(reg_all):
+            t0 = r.get("start.adj_TimeSecsRem")
+            if t0 is None:
+                continue
+            if j + 1 < len(reg_all):
+                nxt = reg_all[j + 1]
+                t1 = nxt.get("start.adj_TimeSecsRem")
                 sh = nxt.get("start.homeScore") or 0
                 sa = nxt.get("start.awayScore") or 0
             else:
-                # to the END OF THE WINDOW, not the end of the game: on a Q3
-                # build an unclamped remainder would swallow the fourth quarter
-                dt = max(0, (r.get("start.adj_TimeSecsRem") or 0) - end_rem)
-                sh, sa = close_h, close_a
-            key = home_id if sh > sa else away_id if sa > sh else "tied"
-            clockstate[key] += dt
+                t1, sh, sa = 0, final_h, final_a
+            if t1 is not None and t0 > t1:
+                segments.append((t0, t1, sh, sa))
+
+    lead = {home_id: 0, away_id: 0}
+    clockstate = {home_id: 0.0, away_id: 0.0, "tied": 0.0}
+    intervals = _clock_intervals(periods)
+    if intervals is not None:
+        for hi, lo in intervals:
+            for t0, t1, sh, sa in segments:
+                overlap = min(t0, hi) - max(t1, lo)
+                if overlap <= 0:
+                    continue
+                key = home_id if sh > sa else away_id if sa > sh else "tied"
+                clockstate[key] += overlap
+                # only states the window actually saw can set its largest lead
+                lead[home_id] = max(lead[home_id], sh - sa)
+                lead[away_id] = max(lead[away_id], sa - sh)
+    else:
+        # overtime: no clock axis, so the lead comes from the drive boundaries
+        open_h, open_a = win_open if win_open is not None else (0, 0)
+        for ph, pa in ((open_h, open_a), win_close):
+            lead[home_id] = max(lead[home_id], ph - pa)
+            lead[away_id] = max(lead[away_id], pa - ph)
+
     for tid, t in teams.items():
         t["largest_lead"] = lead[tid]
-    if bounds is not None:
+    if intervals is not None:
         for tid, t in teams.items():
             t["time_leading_seconds"] = round(clockstate[tid])
         tied_s = round(clockstate["tied"])

@@ -146,6 +146,12 @@ def create_situational_stats(
             return None
 
     scrim = frame.filter(_TRUE("scrimmage_play"))
+    # Whether the SELECTED WINDOW straddles halftime, decided once from the
+    # frame so both teams get the same shape -- a per-team test on qualifying
+    # pace intervals would drop the half split for one team and keep it for the
+    # other inside the same response.
+    _periods = set(frame["period"].drop_nulls().to_list()) if "period" in frame.columns else set()
+    _spans_halves = any(p <= 2 for p in _periods) and any(p > 2 for p in _periods)
     out = {}
     for tid in (str(home_id), str(away_id)):
         mine = scrim.filter(pl.col("pos_team").cast(pl.Utf8) == tid)
@@ -426,7 +432,7 @@ def create_situational_stats(
         # a single-quarter window one side IS the window and the other is empty,
         # so drop both rather than ship a permanently-null pair. The full-game
         # build keeps both keys whatever the data, so its shape never moves.
-        if window_expr is not None and not (any(r[1] <= 2 for r in secs) and any(r[1] > 2 for r in secs)):
+        if window_expr is not None and not _spans_halves:
             t["pace"].pop("first_half", None)
             t["pace"].pop("second_half", None)
 

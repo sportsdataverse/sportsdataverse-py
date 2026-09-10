@@ -281,6 +281,9 @@ def test_windowed_clock_accounts_for_exactly_the_window():
         ({4}, 900),
         ({1, 2}, 1800),
         ({3, 4}, 1800),
+        # gapped: two quarters, and none of the one between them
+        ({1, 3}, 1800),
+        ({1, 2, 4}, 2700),
         (None, 3600),
     ):
         out = drive_summary.create_drive_summary(_clock_drives(), _clock_frame(), HOME, AWAY, periods=periods)
@@ -333,11 +336,54 @@ def test_ot_window_reports_lead_but_no_clock():
     assert "time_leading_seconds" not in h and "time_tied_seconds" not in h
 
 
-def test_clock_bounds_table():
-    assert drive_summary._clock_bounds(None) == (3600, 0)
-    assert drive_summary._clock_bounds({1}) == (3600, 2700)
-    assert drive_summary._clock_bounds({3}) == (1800, 900)
-    assert drive_summary._clock_bounds({1, 2}) == (3600, 1800)
-    assert drive_summary._clock_bounds({4}) == (900, 0)
-    assert drive_summary._clock_bounds("ot") is None
-    assert drive_summary._clock_bounds({5, 6}) is None
+def test_clock_intervals_table():
+    assert drive_summary._clock_intervals(None) == [(3600, 0)]
+    assert drive_summary._clock_intervals({1}) == [(3600, 2700)]
+    assert drive_summary._clock_intervals({3}) == [(1800, 900)]
+    assert drive_summary._clock_intervals({1, 2}) == [(3600, 1800)]
+    assert drive_summary._clock_intervals({4}) == [(900, 0)]
+    assert drive_summary._clock_intervals("ot") is None
+    assert drive_summary._clock_intervals({5, 6}) is None
+    # a gapped set is two runs, never one span across the quarter it skipped
+    assert drive_summary._clock_intervals({1, 3}) == [(3600, 2700), (1800, 900)]
+    assert drive_summary._clock_intervals({1, 2, 4}) == [(3600, 1800), (900, 0)]
+
+
+def test_boundary_score_comes_from_plays_not_drive_outcomes():
+    """A drive that starts in Q2 and scores in Q3 must not colour Q2's clock.
+
+    The drive books to Q2, so a Q3 window excludes it -- but its points land
+    inside Q3. Taking the window's opening score from drive outcomes would put
+    those seven points on the wrong side of the boundary in both directions.
+    """
+    frame = _clock_frame().with_columns(
+        # home's go-ahead score now happens just INSIDE Q3, on a drive that
+        # started in Q2: the play at 1700 is the first one that sees 7-0
+        pl.Series("start.homeScore", [0, 0, 0, 0, 0, 7, 7, 7]),
+        pl.Series("start.awayScore", [0, 0, 0, 0, 0, 0, 0, 0]),
+    )
+    drives = _clock_drives()
+    q2 = drive_summary.create_drive_summary(drives, frame, HOME, AWAY, periods={2})
+    q3 = drive_summary.create_drive_summary(drives, frame, HOME, AWAY, periods={3})
+    # Q2 was level throughout -- the score arrives after the quarter ends
+    assert q2["teams"][HOME]["time_leading_seconds"] == 0
+    assert q2["teams"][HOME]["time_tied_seconds"] == 900
+    assert q2["teams"][HOME]["largest_lead"] == 0
+    # Q3 carries the lead, and both windows still account for their full length
+    assert q3["teams"][HOME]["time_leading_seconds"] > 0
+    assert _accounted(q2) == 900 and _accounted(q3) == 900
+
+
+def test_gapped_window_skips_the_quarter_between():
+    """{1, 3} must charge Q1 and Q3 and nothing from Q2."""
+    q1 = drive_summary.create_drive_summary(_clock_drives(), _clock_frame(), HOME, AWAY, periods={1})
+    q3 = drive_summary.create_drive_summary(_clock_drives(), _clock_frame(), HOME, AWAY, periods={3})
+    both = drive_summary.create_drive_summary(_clock_drives(), _clock_frame(), HOME, AWAY, periods={1, 3})
+    for team in (HOME, AWAY):
+        assert (
+            both["teams"][team]["time_leading_seconds"]
+            == q1["teams"][team]["time_leading_seconds"] + q3["teams"][team]["time_leading_seconds"]
+        )
+    assert both["teams"][HOME]["time_tied_seconds"] == (
+        q1["teams"][HOME]["time_tied_seconds"] + q3["teams"][HOME]["time_tied_seconds"]
+    )

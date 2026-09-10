@@ -2349,10 +2349,11 @@ A drive belongs to the quarter it STARTED in. On a windowed build the
 full drive sequence still provides context (running score, the previous
 drive for OBTAINED and points-off-turnovers), but only in-window drives
 are counted, charted, or listed. `largest_lead` and the time-leading /
-time-tied split are measured against the window's own clock bounds and its
-own opening and closing score, so they window too -- except under `"ot"`,
-where the OT clock has no axis to integrate over and only `largest_lead`
-ships.
+time-tied split window too: the score state is read from the whole
+regulation play sequence and then clipped to the window's clock intervals
+(one per contiguous run of quarters, so a gapped set never charges the
+quarter it skipped). Under `"ot"` the clock has no axis to integrate over
+and only `largest_lead` ships.
 
 **Parameters**
 
