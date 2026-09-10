@@ -1289,7 +1289,7 @@ through untouched.
 
 **Returns**
 
-`df` with an `fg_prob` column appended. Input columns are preserved, so chaining two calculators is lossless.
+`df` with an `fg_make_prob` column appended. Named `fg_make_prob`, not `fg_prob`: `calculate_expected_points` emits `fg_prob` for the probability the NEXT SCORE is a field goal, which is a different quantity. Sharing the name made chaining the two silently lossy. Input columns are preserved, so chaining two calculators is lossless.
 
 **Example**
 
@@ -1317,7 +1317,7 @@ through untouched.
 
 **Returns**
 
-`df` with an `fd_prob` column appended. Input columns are preserved, so chaining two calculators is lossless.
+`df` with `fd_conversion_prob` (probability the gain reaches `distance`) and `fd_expected_yards` appended. Input columns are preserved, so chaining two calculators is lossless.
 
 **Example**
 
