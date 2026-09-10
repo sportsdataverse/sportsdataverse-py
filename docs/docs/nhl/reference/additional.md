@@ -1134,9 +1134,15 @@ release: observed goals / sum(`xg`) is **0.771** at 5v5 (n=1,724,290 shots) and
 **0.768** on special teams (n=349,232), where a correctly-levelled model gives 1.0 --
 i.e. `xg` is inflated by roughly 25-30% for every season from 2009-10 through
 2023-24. At 5v5 the two most recent seasons are much closer (2024-25 **0.949**,
-2025-26 **0.913**). The cause is the boosters' training corpus, which carried no
-`MISSED_SHOT` events for the affected seasons; it is not a defect in the feature
-frame this function builds.
+2025-26 **0.913**). The cause is **not identified**. It is not a defect in the
+feature frame this function builds, and it is not the missing-`MISSED_SHOT`
+training corpus recorded here previously: every season carries missed shots
+(27.7-34.8% of Fenwick events), the trainer's Fenwick selector takes
+`MISSED_SHOT` alongside `SHOT` and `GOAL`, and the published artifacts'
+`base_score` (0.07368 / 0.10533) matches the Fenwick goal rate (0.0695) rather
+than the shots-on-goal rate (0.0977). Leave-one-season-out refits land at
+goals / sum(`xg`) of 0.95-1.05 per season, so the miscalibration is a property
+of the published artifact rather than of the data it was trained on.
 Shot RANKING is far less affected (rank AUC 0.778 / 0.760), so `xg` is still usable
 for ordering chances -- but any SUM of `xg` (per game, per player, team totals,
 goals-above-expected, and `nhl_gsax` downstream) is inflated for pre-2024-25
