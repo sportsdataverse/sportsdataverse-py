@@ -2348,8 +2348,11 @@ Build the StatBroadcast-style drive summary, chart, and long-play lists.
 A drive belongs to the quarter it STARTED in. On a windowed build the
 full drive sequence still provides context (running score, the previous
 drive for OBTAINED and points-off-turnovers), but only in-window drives
-are counted, charted, or listed; game-level lines (largest lead, time
-leading/tied) ship only on the un-windowed build.
+are counted, charted, or listed. `largest_lead` and the time-leading /
+time-tied split are measured against the window's own clock bounds and its
+own opening and closing score, so they window too -- except under `"ot"`,
+where the OT clock has no axis to integrate over and only `largest_lead`
+ships.
 
 **Parameters**
 
@@ -2375,10 +2378,11 @@ summary = create_drive_summary(drives, game.plays_frame, "52", "61")
 
 Build the situational team-stats block from a plays frame.
 
-Window-inherent sections -- `two_minute`, `middle_8`, `non_garbage`,
-`pace`, `fourth_down_decisions` -- are omitted from a windowed build:
-they are themselves time windows or game-level filters, and
-double-windowing them is a category error.
+`two_minute` and `middle_8` are omitted from a windowed build: both name
+a clock window of their own, so intersecting them with another window
+describes neither (middle-8 inside Q1 is empty). Every other section,
+`pace` and `non_garbage` included, is computed on the windowed slice and
+ships with it.
 
 **Parameters**
 

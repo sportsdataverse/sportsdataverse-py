@@ -49,10 +49,11 @@ def create_situational_stats(
 ) -> dict | None:
     """Build the situational team-stats block from a plays frame.
 
-    Window-inherent sections -- ``two_minute``, ``middle_8``, ``non_garbage``,
-    ``pace``, ``fourth_down_decisions`` -- are omitted from a windowed build:
-    they are themselves time windows or game-level filters, and
-    double-windowing them is a category error.
+    ``two_minute`` and ``middle_8`` are omitted from a windowed build: both name
+    a clock window of their own, so intersecting them with another window
+    describes neither (middle-8 inside Q1 is empty). Every other section,
+    ``pace`` and ``non_garbage`` included, is computed on the windowed slice and
+    ships with it.
 
     Args:
         frame (pl.DataFrame): the enriched plays frame from
@@ -421,6 +422,13 @@ def create_situational_stats(
             "leading": pace([r for r in secs if r[2] > 0]),
             "trailing": pace([r for r in secs if r[2] < 0]),
         }
+        # The half split is only a split when the window straddles halftime. On
+        # a single-quarter window one side IS the window and the other is empty,
+        # so drop both rather than ship a permanently-null pair. The full-game
+        # build keeps both keys whatever the data, so its shape never moves.
+        if window_expr is not None and not (any(r[1] <= 2 for r in secs) and any(r[1] > 2 for r in secs)):
+            t["pace"].pop("first_half", None)
+            t["pace"].pop("second_half", None)
 
         # --- garbage-time filter (derived): the spice-level heuristic -------
         margin = pl.col("pos_score_diff").fill_null(0).abs()
@@ -431,11 +439,14 @@ def create_situational_stats(
         )
         t["non_garbage"] = _grp(mine.filter(~garbage))
 
-        if window_expr is not None:
-            # window-inherent or sample-size-noise sections never ship on a
-            # windowed build (two_minute/middle_8 were skipped above)
-            for k in ("fourth_down_decisions", "pace", "non_garbage"):
-                t.pop(k, None)
+        # pace, non_garbage and fourth_down_decisions all read `mine`, which the
+        # window already filtered at the top of this function, and none of them
+        # reaches outside the slice: pace only measures deltas WITHIN a drive and
+        # period, the garbage mask is a per-play test on period and margin, and
+        # the fourth-down columns are per-play model output. They are therefore
+        # correct per window and ship on a windowed build too. Only two_minute
+        # and middle_8 stay full-game-only (skipped above): both intersect a
+        # window rather than describing one, and middle-8-inside-Q1 is empty.
 
         out[tid] = t
     return {"teams": out}
