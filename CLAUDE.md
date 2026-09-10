@@ -428,9 +428,10 @@ function. Don't add new per-type wrappers; extend the unified function.
 
 **`load_nfl_ngs(seasons, dataset=)`** (0.1.5) is a DIFFERENT source from
 `load_nfl_nextgen_stats`: it reads the SDV-native `nfl_ngs_*` releases built by
-`nfl-ngs-data` from the public NGS API (12 datasets -- the three statboards
-plus statboard_leaders, the 7-family `leaders` union, and five `gamecenter_*`
-tables; floors are per dataset, 2009-2016). The dataset -> tag -> floor table
+`nfl-ngs-data` from the public NGS API (12 datasets: `schedules`, `teams`,
+the three statboards `passing`/`rushing`/`receiving`, `statboard_leaders`, the
+single `leaders` table (a union of the 7 leaderboard families), and five
+`gamecenter_*` tables; floors are per dataset, 2009-2016). The dataset -> tag -> floor table
 lives in `nfl_loaders._NFL_NGS_DATASETS`. It is unified on purpose: the
 per-dataset names `load_nfl_ngs_passing/_rushing/_receiving` are already taken
 by the deprecated nflverse aliases, and reusing them would silently change
