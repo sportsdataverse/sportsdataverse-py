@@ -147,7 +147,7 @@ def test_xpass_returns_the_frame_plus_one_probability_column():
 def test_a_hand_built_row_scores_without_any_pbp_machinery():
     """The hypothetical case: someone types a situation and asks the model."""
     out = mc.calculate_field_goal_probability(pl.DataFrame({"season": [2024], "yards_to_goal": [25.0]}))
-    assert 0.0 <= out["fg_prob"][0] <= 1.0
+    assert 0.0 <= out["fg_make_prob"][0] <= 1.0
 
 
 def test_field_goal_probability_moves_with_the_era():
@@ -157,7 +157,7 @@ def test_field_goal_probability_moves_with_the_era():
 
     def fg(year):
         return mc.calculate_field_goal_probability(pl.DataFrame({"season": [year], "yards_to_goal": [25.0]}))[
-            "fg_prob"
+            "fg_make_prob"
         ][0]
 
     assert fg(2005) != fg(2024)
@@ -330,7 +330,7 @@ def test_the_frames_own_season_beats_the_season_argument():
     """
     multi = pl.DataFrame({"season": [2005, 2024], "yards_to_goal": [25.0, 25.0]})
     out = mc.calculate_field_goal_probability(multi, season=2024)
-    vals = out["fg_prob"].to_list()
+    vals = out["fg_make_prob"].to_list()
     assert vals[0] != vals[1], "one era was stamped across both rows"
     # and the per-row eras must match what each season maps to
     eras = mc.add_era_columns(multi, "fg_model", season=2024)
@@ -458,3 +458,26 @@ def test_fourth_down_needs_distance_for_the_conversion_probability():
     )
     with pytest.raises(ValueError, match="distance"):
         mc.calculate_fourth_down(df)
+
+
+def test_chaining_fg_and_ep_is_lossless():
+    """calculate_expected_points emits fg_prob for 'next score is a field goal';
+    the FG model emits the probability the KICK is made. Sharing the name meant
+    EP silently overwrote the FG output, breaking the documented guarantee that
+    chaining two calculators is lossless."""
+    df = pl.DataFrame(
+        {
+            "season": [2024],
+            "yards_to_goal": [25.0],
+            "TimeSecsRem": [1800.0],
+            "distance": [10.0],
+            "down_1": [1],
+            "down_2": [0],
+            "down_3": [0],
+            "down_4": [0],
+            "pos_score_diff_start": [0.0],
+        }
+    )
+    out = mc.calculate_expected_points(mc.calculate_field_goal_probability(df))
+    assert "fg_make_prob" in out.columns and "fg_prob" in out.columns
+    assert out["fg_make_prob"][0] != out["fg_prob"][0]
