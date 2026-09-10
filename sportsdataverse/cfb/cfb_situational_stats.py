@@ -27,13 +27,75 @@ def _num(v, digits=3):
 
 
 def _grp(df):
-    """plays / EPA per play / success rate for a slice."""
+    """The one aggregate shape every slice of plays reports.
+
+    ``plays`` / ``epa_total`` / ``epa_play`` / ``success_rate`` /
+    ``explosive_rate`` -- a count, the value it produced, and three rates. Every
+    section that slices plays spreads this, so a reader learns the columns once
+    and a consumer can join any two slices on the same keys. An empty slice
+    reports zero plays and null rates rather than raising or inventing a number.
+    """
     if df.height == 0:
-        return {"plays": 0, "epa_play": None, "success_rate": None}
+        return {"plays": 0, "epa_total": 0.0, "epa_play": None, "success_rate": None, "explosive_rate": None}
     return {
         "plays": df.height,
+        "epa_total": _num(df["EPA"].fill_null(0).sum(), 2),
         "epa_play": _num(df["EPA"].mean()),
         "success_rate": _num(df["EPA_success"].mean()),
+        "explosive_rate": _num(df["EPA_explosive"].cast(pl.Float64).mean()),
+    }
+
+
+_ST_PHASES = ("kickoff", "kickoff_return", "punt", "punt_return", "fg_xp")
+
+
+def _unit_of(df, tid):
+    """Label each play with the unit ``tid`` fielded on it.
+
+    A kick outranks possession: a hold on a punt return is a special-teams
+    flag even though the flagged team is nominally the defence. Within special
+    teams the side comes from ``kicking_team`` / ``return_team``, which the
+    pbp pipeline resolves from the play text, so the kicking team and the
+    return team are told apart rather than both filed under "kickoff".
+    """
+    t = pl.lit(str(tid))
+    is_kick = _TRUE("kickoff_play")
+    is_punt = _TRUE("punt_play")
+    is_fg = _TRUE("fg_attempt") | _TRUE("xp_attempt")
+    kicking = pl.col("kicking_team").cast(pl.Utf8) == t
+    return df.with_columns(
+        _unit=pl.when(is_fg)
+        .then(pl.lit("fg_xp"))
+        .when(is_kick & kicking)
+        .then(pl.lit("kickoff"))
+        .when(is_kick)
+        .then(pl.lit("kickoff_return"))
+        .when(is_punt & kicking)
+        .then(pl.lit("punt"))
+        .when(is_punt)
+        .then(pl.lit("punt_return"))
+        .when(pl.col("pos_team").cast(pl.Utf8) == t)
+        .then(pl.lit("offense"))
+        .otherwise(pl.lit("defense"))
+    )
+
+
+def _by_unit(df, leaf):
+    """``{offense, defense, special_teams: {phase: ...}}`` with ``leaf(slice)`` at each node.
+
+    ``special_teams`` also carries its own total so a reader who does not want
+    the phase split still gets one number. Every bucket is present even when
+    empty -- a consumer can rely on the keys.
+    """
+    u = pl.col("_unit")
+    st = df.filter(u.is_in(_ST_PHASES))
+    return {
+        "offense": leaf(df.filter(u == "offense")),
+        "defense": leaf(df.filter(u == "defense")),
+        "special_teams": {
+            **leaf(st),
+            **{ph: leaf(st.filter(u == ph)) for ph in _ST_PHASES},
+        },
     }
 
 
@@ -80,6 +142,7 @@ def create_situational_stats(
     # ColumnNotFoundError deep inside a section
     needed = {
         "EPA",
+        "EPA_explosive",
         "EPA_penalty",
         "EPA_success",
         "TFL",
@@ -101,7 +164,13 @@ def create_situational_stats(
         "goal_to_go",
         "havoc",
         "int",
+        "int_turnover",
+        "is_def_pos_team_turnover",
         "is_pos_team_turnover",
+        "is_st_turnover",
+        "is_turnover",
+        "kicking_team",
+        "kickoff_play",
         "line_yards",
         "middle_8",
         "open_field_yards",
@@ -133,9 +202,12 @@ def create_situational_stats(
         "statYardage",
         "stuffed_run",
         "touchdown",
+        "turnover_team",
         "under_2",
         "xp_attempt",
         "yards_after_catch",
+        "yds_penalty",
+        "def_fumble_lost",
     }
     if not needed.issubset(set(frame.columns)):
         return None
@@ -187,6 +259,7 @@ def create_situational_stats(
         so = mine.filter(_TRUE("scoring_opp"))
         so_trips = so["drive.id"].n_unique() if so.height else 0
         t["finishing_drives"] = {
+            **_grp(so),
             "trips": so_trips,
             "points": _points(so),
             "points_per_trip": _num(_points(so) / so_trips, 2) if so_trips else None,
@@ -244,6 +317,7 @@ def create_situational_stats(
         sack_yds = int(sacks["statYardage"].fill_null(0).sum())
         rush_yds = int(rushes["statYardage"].fill_null(0).sum())
         t["rushing_quality"] = {
+            **_grp(rushes),
             "attempts": rushes.height,
             "yards": rush_yds,
             # sack-adjusted by construction: the rush flag never covers sacks
@@ -300,14 +374,14 @@ def create_situational_stats(
 
         def _bp(df):
             return {
-                "plays": df.height,
+                **_grp(df),
                 "yards": int(df["statYardage"].fill_null(0).sum()),
                 "long": int(df["statYardage"].max()) if df.height else None,
                 "touchdowns": df.filter(_TRUE("touchdown")).height,
             }
 
         t["big_plays"] = {
-            "plays": bp_pass.height + bp_rush.height,
+            **_grp(pl.concat([bp_pass, bp_rush], how="vertical_relaxed")),
             "yards": int(bp_pass["statYardage"].fill_null(0).sum() + bp_rush["statYardage"].fill_null(0).sum()),
             "touchdowns": bp_pass.filter(_TRUE("touchdown")).height + bp_rush.filter(_TRUE("touchdown")).height,
             "pass": _bp(bp_pass),
@@ -358,6 +432,17 @@ def create_situational_stats(
             & (_TRUE("penalty_declined") == False)  # noqa: E712
             & (pl.col("penalty_team_id").cast(pl.Utf8) == tid)
         )
+
+        def _pen_leaf(df):
+            return {
+                "n": df.height,
+                "yards": int(df["yds_penalty"].cast(pl.Float64, strict=False).fill_null(0).abs().sum())
+                if df.height
+                else 0,
+                "auto_first": int(df.select(_TRUE("penalty_1st_conv").sum()).item()) if df.height else 0,
+                "epa_swing": _num(df["EPA_penalty"].fill_null(0).sum(), 2) if df.height else 0.0,
+            }
+
         t["penalties_situational"] = {
             "accepted": my_pens.height,
             "drive_extending_committed": int(
@@ -367,6 +452,7 @@ def create_situational_stats(
             ),
             "epa_swing": _num(my_pens["EPA_penalty"].fill_null(0).sum(), 2),
             "by_quarter": {int(k): int(v) for k, v in my_pens.group_by("period").len().iter_rows() if k is not None},
+            "by_unit": _by_unit(_unit_of(my_pens, tid), _pen_leaf),
         }
 
         # --- havoc created (defense = opponent offensive snaps) -------------
@@ -380,11 +466,27 @@ def create_situational_stats(
         # --- turnovers -------------------------------------------------------
         my_tos = mine.filter(_TRUE("is_pos_team_turnover"))
         my_fumbles = mine.filter(_TRUE("fumble_vec"))
+        # every turnover this team is charged with, whichever unit lost it:
+        # a giveaway on offence, a fumble back after a takeaway, or a muff on
+        # a return. `turnover_team` is the pipeline's single answer to "who".
+        all_tos = frame.filter(_TRUE("is_turnover") & (pl.col("turnover_team").cast(pl.Utf8) == tid))
+
+        def _to_leaf(df):
+            return {
+                "n": df.height,
+                "interceptions": int(df.select(_TRUE("int_turnover").sum()).item()) if df.height else 0,
+                "fumbles_lost": int(df.select((_TRUE("fumble_lost") | _TRUE("def_fumble_lost")).sum()).item())
+                if df.height
+                else 0,
+                "epa_swing": _num(df["EPA"].fill_null(0).sum(), 2) if df.height else 0.0,
+            }
+
         t["turnovers"] = {
             "committed": my_tos.height,
             "epa_swing": _num(my_tos["EPA"].fill_null(0).sum(), 2),
             "fumbles": my_fumbles.height,
             "fumbles_lost": int(mine.select(_TRUE("fumble_lost").sum()).item()),
+            "by_unit": _by_unit(_unit_of(all_tos, tid), _to_leaf),
         }
 
         # --- field-zone success ---------------------------------------------
