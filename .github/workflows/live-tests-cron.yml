@@ -207,3 +207,50 @@ jobs:
               });
               core.info(`Opened new drift issue #${created.data.number}`);
             }
+
+      # Close the tracking issue when the run goes green. Without this the
+      # workflow only ever OPENS issues -- the body above promises "the next
+      # cron run that goes green will leave the issue closed", and nothing
+      # executed that, so a fixed drift stayed open indefinitely and the
+      # tracker filled with resolved issues (#416 sat open for a week after
+      # d7a8c7829 fixed it).
+      - name: Close drift tracking issue on green
+        if: success() && steps.run-pytest.outcome == 'success'
+        uses: actions/github-script@v9
+        with:
+          script: |
+            const label = 'live-tests:drift';
+            const today = new Date().toISOString().slice(0, 10);
+            // paginate: listForRepo returns ONE page, so a plain call would
+            // leave every drift issue past the page size open.
+            const found = await github.paginate(github.rest.issues.listForRepo, {
+              owner: context.repo.owner,
+              repo:  context.repo.repo,
+              state: 'open',
+              labels: label,
+              per_page: 100,
+            });
+            // The issues endpoint also returns pull requests. A PR carrying the
+            // drift label is not a tracking issue and must not be closed here.
+            const open = found.filter((i) => !i.pull_request);
+            if (open.length === 0) {
+              core.info('No open drift issue to close.');
+              return;
+            }
+            const runUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+            for (const issue of open) {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo:  context.repo.repo,
+                issue_number: issue.number,
+                body: `Live tests went green on ${today} — closing automatically.\n\nRun: ${runUrl}\n\nIf the drift returns, the next failing run reopens tracking by filing a fresh issue with the \`${label}\` label.`,
+              });
+              await github.rest.issues.update({
+                owner: context.repo.owner,
+                repo:  context.repo.repo,
+                issue_number: issue.number,
+                state: 'closed',
+                state_reason: 'completed',
+              });
+              core.info(`Closed drift issue #${issue.number}`);
+            }
