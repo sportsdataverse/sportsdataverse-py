@@ -2341,6 +2341,27 @@ moves = cfb_transfer_moves(2024)
 moves.filter(pl.col("direction") == "in").group_by("team_id").len()
 ```
 
+### `check_box_invariants(drive_summary: 'dict | None' = None, situational: 'dict | None' = None) -> 'list[str]'` {#check_box_invariants}
+
+Every identity the two aggregates must satisfy; violations as strings.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `drive_summary` | `dict \| None` | `None` | the dict from `create_drive_summary`, or None. |
+| `situational` | `dict \| None` | `None` | the dict from `create_situational_stats`, or None. |
+
+**Returns**
+
+one line per violation, `[]` when everything holds.
+
+**Example**
+
+```python
+assert check_box_invariants(summary, stats) == []
+```
+
 ### `create_drive_summary(drives: list[dict] | dict, frame: polars.dataframe.frame.DataFrame, home_id: str | int, away_id: str | int, periods: set[int] | str | None = None) -> dict | None` {#create_drive_summary}
 
 Build the StatBroadcast-style drive summary, chart, and long-play lists.

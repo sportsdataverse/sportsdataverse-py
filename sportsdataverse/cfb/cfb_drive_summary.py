@@ -215,6 +215,11 @@ def create_drive_summary(
             "long_drives_10plays": 0,
             "drives_over_5min": 0,
             "drives_under_1min": 0,
+            # DURATION, not clock position: a drive that took under two minutes
+            # of game clock, whenever it happened. `under_2` on the plays frame
+            # is the other thing -- snaps inside the final two minutes of a half.
+            "drives_under_2min": 0,
+            "scoring_drives_under_2min": 0,
             "three_and_outs": 0,
             "forced_three_and_outs": 0,
             "points_off_turnovers": 0,
@@ -272,6 +277,10 @@ def create_drive_summary(
                 t["drives_over_5min"] += 1
             if top < 60:
                 t["drives_under_1min"] += 1
+            if top < 120:
+                t["drives_under_2min"] += 1
+                if d.get("isScore"):
+                    t["scoring_drives_under_2min"] += 1
         if yards >= 70:
             t["long_drives_70yds"] += 1
         if plays >= 10:

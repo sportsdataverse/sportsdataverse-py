@@ -264,6 +264,23 @@ def _frame():
             400.0,
         ],
     }
+    # the aggregate contract widened (explosive rate, unit attribution): the
+    # shared fixture stays scrimmage-only, so every kick flag is off and the
+    # one away turnover (row 8) is an interception the offence threw
+    base.update(
+        {
+            "EPA_explosive": [False, True, False, True, False, False, False, False, True, False],
+            "kickoff_play": [False] * n,
+            "kicking_team": [None] * n,
+            "int_turnover": [False, False, False, False, False, False, False, True, False, False],
+            "def_fumble_lost": [False] * n,
+            "is_def_pos_team_turnover": [False] * n,
+            "is_st_turnover": [False] * n,
+            "is_turnover": base["is_pos_team_turnover"],
+            "turnover_team": [None, None, None, None, None, None, None, 20, None, None],
+            "yds_penalty": [None, None, None, None, None, None, None, None, None, 15],
+        }
+    )
     return pl.DataFrame(base, strict=False)
 
 
@@ -296,8 +313,10 @@ def test_situational_sections_and_values():
 
     assert h["two_minute"] == {
         "plays": 1,
+        "epa_total": -0.5,
         "epa_play": -0.5,
         "success_rate": 0.0,
+        "explosive_rate": 0.0,
         "points": 7,
     }
     assert h["red_zone"]["trips"] == 1 and h["red_zone"]["td_trips"] == 1
@@ -331,6 +350,10 @@ def test_situational_sections_and_values():
     assert h["big_plays"]["pass"]["long"] == 15
     assert h["big_plays"]["rush"] == {
         "plays": 2,
+        "epa_total": 0.7,
+        "epa_play": 0.35,
+        "success_rate": 1.0,
+        "explosive_rate": 0.0,
         "yards": 23,
         "long": 12,
         "touchdowns": 0,
@@ -414,3 +437,165 @@ def test_partially_enriched_frame_fails_open():
     # the five original core columns alone must NOT be enough to proceed
     f = _frame().select(["scrimmage_play", "pos_team", "EPA", "EPA_success", "pos_score_pts"])
     assert situational_stats.create_situational_stats(f, HOME, AWAY) is None
+
+
+# --- the five-field aggregate shape, everywhere -----------------------------
+
+
+def _grp_nodes(node, path="", out=None):
+    """Every dict carrying a `plays` key, with its path."""
+    out = [] if out is None else out
+    if isinstance(node, dict):
+        if "plays" in node:
+            out.append((path, node))
+        for k, v in node.items():
+            _grp_nodes(v, f"{path}.{k}" if path else k, out)
+    return out
+
+
+def test_every_slice_reports_the_same_five_fields():
+    out = situational_stats.create_situational_stats(_frame(), HOME, AWAY)
+    nodes = _grp_nodes(out["teams"][HOME])
+    assert len(nodes) >= 20, [p for p, _ in nodes]
+    for path, g in nodes:
+        for k in ("plays", "epa_total", "epa_play", "success_rate", "explosive_rate"):
+            assert k in g, (path, k)
+    # the three sections that used to lack it now carry it
+    h = out["teams"][HOME]
+    for sec in ("finishing_drives", "rushing_quality", "big_plays"):
+        assert "epa_play" in h[sec] and "explosive_rate" in h[sec], sec
+    # and the values are the slice's, not invented: the total is the fixture's
+    # own EPA over home rushes, whatever rows those happen to be
+    rq = h["rushing_quality"]
+    assert rq["plays"] == rq["attempts"]
+    f = _frame()
+    expect = f.filter((pl.col("rush") == True) & (pl.col("pos_team") == 10))["EPA"].sum()  # noqa: E712
+    assert rq["epa_total"] == round(expect, 2)
+
+
+def test_explosive_rate_is_the_share_of_explosive_plays():
+    h = situational_stats.create_situational_stats(_frame(), HOME, AWAY)["teams"][HOME]
+    # home scrimmage plays: rows 1-6, explosive on rows 2 and 4
+    assert h["downs"]["down_3"]["explosive_rate"] == 0.5  # rows 2 (T) and 3 (F)
+    assert h["field_zones"]["red_zone"]["plays"] > 0
+
+
+# --- unit attribution ----------------------------------------------------------
+
+
+def test_scrimmage_only_game_lands_everything_on_offense_or_defense():
+    out = situational_stats.create_situational_stats(_frame(), HOME, AWAY)
+    a = out["teams"][AWAY]
+    pu = a["penalties_situational"]["by_unit"]
+    # the one accepted flag is on team 20's own snap -> offence, 15 yards
+    assert pu["offense"] == {"n": 1, "yards": 15, "auto_first": 0, "epa_swing": -1.5}
+    assert pu["defense"]["n"] == 0 and pu["special_teams"]["n"] == 0
+    for ph in ("kickoff", "kickoff_return", "punt", "punt_return", "fg_xp"):
+        assert pu["special_teams"][ph]["n"] == 0, ph
+    tu = a["turnovers"]["by_unit"]
+    assert tu["offense"]["n"] == 1 and tu["offense"]["interceptions"] == 1
+    assert tu["defense"]["n"] == 0 and tu["special_teams"]["n"] == 0
+
+
+def _st_frame():
+    """Three special-teams plays, so the phase split has something to file.
+
+    row 0: team 10 punts, team 20 muffs the return and loses it   -> 20: ST punt_return turnover
+    row 1: team 10 kicks off, a hold on 10's coverage unit          -> 10: ST kickoff penalty
+    row 2: team 10 punts, a block in the back on 20's return        -> 20: ST punt_return penalty
+    """
+    n = 3
+    f = _frame()
+    cols = {c: [None] * n for c in f.columns}
+    cols.update(
+        {
+            "game_play_number": [1, 2, 3],
+            "scrimmage_play": [False] * n,
+            "pos_team": [10, 10, 10],
+            "period": [1, 2, 3],
+            "EPA": [-3.0, -0.4, -0.6],
+            "EPA_explosive": [False] * n,
+            "EPA_success": [False] * n,
+            "punt_play": [True, False, True],
+            "kickoff_play": [False, True, False],
+            "kicking_team": [10, 10, 10],
+            "fg_attempt": [False] * n,
+            "xp_attempt": [False] * n,
+            "penalty_flag": [False, True, True],
+            "penalty_declined": [False] * n,
+            "penalty_team_id": [None, 10, 20],
+            "penalty_1st_conv": [False] * n,
+            "EPA_penalty": [None, -0.4, -0.6],
+            "yds_penalty": [None, 10, 10],
+            "fumble_vec": [True, False, False],
+            "fumble_lost": [True, False, False],
+            "def_fumble_lost": [False] * n,
+            "int_turnover": [False] * n,
+            "int": [False] * n,
+            "is_pos_team_turnover": [False] * n,
+            "is_def_pos_team_turnover": [False] * n,
+            "is_st_turnover": [True, False, False],
+            "is_turnover": [True, False, False],
+            "turnover_team": [20, None, None],
+            "under_2": [False] * n,
+            "middle_8": [False] * n,
+            "rz_play": [False] * n,
+            "goal_to_go": [False] * n,
+            "scoring_opp": [False] * n,
+            "pos_score_pts": [0] * n,
+            "pos_score_diff": [0] * n,
+            "havoc": [False] * n,
+            "pass_breakup": [False] * n,
+            "rush": [False] * n,
+            "pass": [False] * n,
+            "sack": [False] * n,
+            "completion": [False] * n,
+            "touchdown": [False] * n,
+            "first_down_created": [False] * n,
+            "firstD_by_penalty": [False] * n,
+            "stuffed_run": [False] * n,
+            "opportunity_run": [False] * n,
+            "power_rush_attempt": [False] * n,
+            "power_rush_success": [False] * n,
+            "short_rush_attempt": [False] * n,
+            "short_rush_success": [False] * n,
+            "fg_made": [False] * n,
+            "TFL": [False] * n,
+            "drive.id": ["s1", "s2", "s3"],
+            "start.adj_TimeSecsRem": [3500.0, 2600.0, 1700.0],
+            "start.yardsToEndzone.touchback": [60, 65, 55],
+            "statYardage": [0, 0, 0],
+        }
+    )
+    return pl.DataFrame(cols, strict=False)
+
+
+def test_special_teams_phases_file_by_kicking_and_return_side():
+    out = situational_stats.create_situational_stats(_st_frame(), HOME, AWAY)
+    h, a = out["teams"][HOME], out["teams"][AWAY]
+    # team 20 lost a muffed punt: an ST turnover on the RETURN side, and the
+    # offence/defence buckets stay empty because it was never a scrimmage snap
+    tu = a["turnovers"]["by_unit"]
+    assert tu["special_teams"]["n"] == 1 and tu["special_teams"]["punt_return"]["n"] == 1
+    assert tu["special_teams"]["punt_return"]["fumbles_lost"] == 1
+    assert tu["special_teams"]["punt"]["n"] == 0 and tu["offense"]["n"] == 0
+    assert tu["special_teams"]["epa_swing"] == -3.0
+    # a hold on the kicking team's coverage files under kickoff, not kickoff_return
+    pu_h = h["penalties_situational"]["by_unit"]
+    assert pu_h["special_teams"]["kickoff"] == {"n": 1, "yards": 10, "auto_first": 0, "epa_swing": -0.4}
+    assert pu_h["special_teams"]["kickoff_return"]["n"] == 0
+    # a block in the back on the return files under punt_return for the returning team
+    pu_a = a["penalties_situational"]["by_unit"]
+    assert pu_a["special_teams"]["punt_return"]["n"] == 1 and pu_a["special_teams"]["punt"]["n"] == 0
+    # and the kick outranks possession: 20 had no possession on any of these
+    # plays, yet nothing of theirs landed in "defense"
+    assert pu_a["defense"]["n"] == 0 and pu_a["offense"]["n"] == 0
+    assert a["penalties_situational"]["accepted"] == pu_a["special_teams"]["n"] == 1
+
+
+def test_by_unit_keys_exist_even_when_empty():
+    a = situational_stats.create_situational_stats(_frame(), HOME, AWAY)["teams"][AWAY]
+    for section in ("penalties_situational", "turnovers"):
+        bu = a[section]["by_unit"]
+        assert set(bu) == {"offense", "defense", "special_teams"}
+        assert set(bu["special_teams"]) >= {"kickoff", "kickoff_return", "punt", "punt_return", "fg_xp", "n"}

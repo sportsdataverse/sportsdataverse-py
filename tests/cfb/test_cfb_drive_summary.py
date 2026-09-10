@@ -136,6 +136,21 @@ def test_drive_summary_frame_aggregates():
     assert all(p["yards"] > 0 for ps in out["longPlays"].values() for ps in [ps] for p in ps)
 
 
+def test_two_minute_buckets_are_duration_not_clock_position():
+    out = drive_summary.create_drive_summary(_drives(), _frame(), HOME, AWAY)
+    h, a = out["teams"][HOME], out["teams"][AWAY]
+    # elapsed under 2:00 -- home's 0:50 downs drive, away's 1:20 three-and-out;
+    # neither scored. The 2:00 INT drive is NOT under two minutes.
+    assert h["drives_under_2min"] == 1 and a["drives_under_2min"] == 1
+    assert h["scoring_drives_under_2min"] == 0 and a["scoring_drives_under_2min"] == 0
+    # nested: under-1:00 is a subset of under-2:00
+    assert h["drives_under_1min"] <= h["drives_under_2min"]
+    # a quick score counts in both the scoring and the duration bucket
+    quick = drive_summary.create_drive_summary(_clock_drives(), _clock_frame(), HOME, AWAY)
+    assert quick["teams"][AWAY]["scoring_drives_under_2min"] == 1
+    assert quick["teams"][AWAY]["drives_under_2min"] >= 1
+
+
 def test_drive_chart_obtained_and_scores():
     out = drive_summary.create_drive_summary(_drives(), _frame(), HOME, AWAY)
     chart = out["chart"]
@@ -257,7 +272,7 @@ def _clock_drives():
         _drive(AWAY, "c4", "PUNT", 10, 3, "1:40", 25, 2, last_score=(7, 0)),
         _drive(AWAY, "c5", "TD", 75, 8, "3:20", 25, 3, is_score=True, last_score=(7, 7)),
         _drive(HOME, "c6", "PUNT", 10, 3, "1:40", 25, 3, last_score=(7, 7)),
-        _drive(AWAY, "c7", "FG", 40, 8, "3:20", 25, 4, is_score=True, last_score=(7, 10)),
+        _drive(AWAY, "c7", "FG", 40, 8, "1:40", 25, 4, is_score=True, last_score=(7, 10)),
         _drive(HOME, "c8", "DOWNS", 9, 4, "0:50", 45, 4, last_score=(7, 10)),
     ]
 
