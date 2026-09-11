@@ -7,19 +7,29 @@ name: dispatch Game on Paper deploy (package pushes to main)
 # and CI-only pushes do not trigger a deploy; that is the `paths` filter below.
 #
 # Cross-repo dispatch needs a token with access to game-on-paper-app;
-# GITHUB_TOKEN is scoped to this repository only. Least privilege for the
-# repository_dispatch endpoint is a fine-grained PAT with `Contents: WRITE` on
-# saiemgilani/game-on-paper-app -- not the classic `repo` scope, and NOT
-# `Contents: read`, which this comment claimed until 2026-09-07.
+# GITHUB_TOKEN is scoped to this repository only. The PAT shapes below are
+# what this secret holds; they fail differently -- read the 403 body, it names
+# which one you have. (A GitHub App installation token with `Contents: write`
+# on the target also reaches this endpoint, but none is wired up here.)
 #
-# That was not a harmless typo. POST /repos/{owner}/{repo}/dispatches is a
-# write endpoint; a read-scoped token gets 403 "Resource not accessible by
-# personal access token". The secret was scoped by following this comment, so
-# every run of this workflow has failed -- 60 for 60, no success on record --
-# and no push to main has ever actually redeployed Game on Paper.
+#   * classic PAT with the `repo` scope           -> works (what the secret holds)
+#   * fine-grained PAT, `Contents: WRITE` on
+#     saiemgilani/game-on-paper-app               -> works, least privilege
+#   * fine-grained PAT with `Contents: read`      -> 403 "Resource not accessible
+#                                                   by personal access token"
 #
-# Until the GOP_DEPLOY_TOKEN secret exists this job explains itself and exits
-# green rather than failing every push to main.
+# History, so nobody re-derives it: POST /repos/{owner}/{repo}/dispatches is a
+# WRITE endpoint, but this comment claimed `Contents: read` sufficed until
+# 2026-09-07. The org-level secret was scoped by following it, so every run
+# failed -- 60 for 60, no success on record -- and no push to main ever
+# actually redeployed Game on Paper. Fixed 2026-09-10 by setting a
+# REPOSITORY-level GOP_DEPLOY_TOKEN (classic, `repo`), which shadows the
+# still-wrongly-scoped org secret. Deleting the repo secret silently falls
+# back to the broken org one; fix the org secret before removing it.
+#
+# The `-z` guard below only distinguishes ABSENT from present. A present-but-
+# wrongly-scoped secret sails past it, which is precisely how the breakage
+# stayed invisible for 60 runs -- hence the explicit 403 hint on failure.
 
 on:
   push:
@@ -41,9 +51,18 @@ jobs:
             echo "::notice::GOP_DEPLOY_TOKEN is not set; skipping the Game on Paper deploy dispatch."
             exit 0
           fi
-          curl --fail-with-body -sS -X POST \
+          if ! body=$(curl --fail-with-body -sS -X POST \
             -H "Accept: application/vnd.github+json" \
             -H "Authorization: Bearer $TOKEN" \
             https://api.github.com/repos/saiemgilani/game-on-paper-app/dispatches \
-            -d "{\"event_type\":\"deploy\",\"client_payload\":{\"sportsdataverse_py_sha\":\"${GITHUB_SHA}\"}}"
+            -d "{\"event_type\":\"deploy\",\"client_payload\":{\"sportsdataverse_py_sha\":\"${GITHUB_SHA}\"}}" 2>&1); then
+            echo "$body"
+            case "$body" in
+              *"not accessible by personal access token"*)
+                echo "::error::GOP_DEPLOY_TOKEN is a fine-grained PAT without Contents: WRITE on saiemgilani/game-on-paper-app. The dispatch endpoint is a WRITE endpoint; Contents: read returns this 403. Re-scope the token, or use a classic PAT with the 'repo' scope." ;;
+              *)
+                echo "::error::Game on Paper deploy dispatch failed; see the response body above." ;;
+            esac
+            exit 1
+          fi
           echo "dispatched deploy for sportsdataverse-py ${GITHUB_SHA}"
