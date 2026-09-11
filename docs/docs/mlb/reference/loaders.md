@@ -101,7 +101,7 @@ Release: [mlb_pbp](https://github.com/sportsdataverse/sportsdataverse-data/relea
 |---|---|---|
 | `game_pk` | Int64 | statsapi game identifier; the join key to every other MLB release. |
 | `at_bat_index` | Int64 | Zero-based index of the plate appearance within the game; joins to mlb_pitches and mlb_runners. |
-| `inning` | Int64 | Inning number. |
+| `inning` | Int64 | Inning number, counting from 1; extra innings continue the sequence. |
 | `half_inning` | String | `top` or `bottom`. |
 | `batter_id` | Int64 | statsapi person id of the batter. |
 | `pitcher_id` | Int64 | statsapi person id of the pitcher. |
