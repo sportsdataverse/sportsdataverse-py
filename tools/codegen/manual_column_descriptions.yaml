@@ -8191,12 +8191,92 @@ load_mlb_oaa:
   oaa: 'Outs above average: outs the fielder actually recorded minus what a per-position catch-probability logistic expected
     from the same batted-ball trajectories, summed across their opportunities.'
   opportunities: Balls in play charged to this fielder at this position, the sample the oaa sum runs over.
+load_mlb_pbp:
+  game_pk: statsapi game identifier; the join key to every other MLB release.
+  at_bat_index: Zero-based index of the plate appearance within the game; joins to mlb_pitches and mlb_runners.
+  inning: Inning number, counting from 1; extra innings continue the sequence.
+  half_inning: '`top` or `bottom`.'
+  batter_id: statsapi person id of the batter.
+  pitcher_id: statsapi person id of the pitcher.
+  event_type: Machine-readable plate-appearance outcome (e.g. `single`, `strikeout`, `field_out`).
+  event: Human-readable outcome of the plate appearance.
+  description: Narrative text for the plate appearance.
+  rbi: Runs batted in credited to this plate appearance.
+  away_score: Away score AFTER the plate appearance.
+  home_score: Home score AFTER the plate appearance.
+  is_scoring_play: Whether the plate appearance scored a run.
+  outs: Outs recorded after the plate appearance.
+  start_time: UTC timestamp when the plate appearance began; null in older seasons.
+  end_time: UTC timestamp when the plate appearance ended; null in older seasons.
+  post_on_first_id: Person id on first base after the plate appearance; null when unoccupied.
+  post_on_second_id: Person id on second base after the plate appearance; null when unoccupied.
+  post_on_third_id: Person id on third base after the plate appearance; null when unoccupied.
+load_mlb_pitches:
+  game_pk: statsapi game identifier; the join key to every other MLB release.
+  at_bat_index: Zero-based index of the plate appearance within the game; joins to mlb_pbp and mlb_runners.
+  pitch_number: One-based pitch number within the plate appearance.
+  batter_id: statsapi person id of the batter.
+  pitcher_id: statsapi person id of the pitcher.
+  pitch_type: 'Classified pitch-type code (FF, SL, CH, ...). statsapi `pitchData`, measured fill: ~0% before 2007, 45.7% in
+    2007 (mid-season PITCHf/x rollout across ballparks), 96.6% in 2008, ~100% from 2015. Null for pitches the system never
+    tracked.'
+  pitch_name: 'Human-readable pitch type. statsapi `pitchData`, measured fill: ~0% before 2007, 45.7% in 2007 (mid-season
+    PITCHf/x rollout across ballparks), 96.6% in 2008, ~100% from 2015. Null for pitches the system never tracked.'
+  call_code: Umpire call code (B, C, S, X, ...).
+  call_description: Human-readable umpire call.
+  balls: Ball count BEFORE the pitch.
+  strikes: Strike count BEFORE the pitch.
+  outs: Outs BEFORE the pitch.
+  start_speed: 'Release speed in mph. statsapi `pitchData`, measured fill: ~0% before 2007, 45.7% in 2007 (mid-season PITCHf/x
+    rollout across ballparks), 96.6% in 2008, ~100% from 2015. Null for pitches the system never tracked.'
+  end_speed: 'Speed crossing the plate in mph. statsapi `pitchData`, measured fill: ~0% before 2007, 45.7% in 2007 (mid-season
+    PITCHf/x rollout across ballparks), 96.6% in 2008, ~100% from 2015. Null for pitches the system never tracked.'
+  spin_rate: 'Spin rate in rpm. statsapi `pitchData`, measured fill: ~0% before 2007, 45.7% in 2007 (mid-season PITCHf/x rollout
+    across ballparks), 96.6% in 2008, ~100% from 2015. Null for pitches the system never tracked.'
+  extension: 'Release extension toward the plate in feet. Later than the rest of `pitchData`: measured 0% through 2016 and
+    ~100% from 2017, so it is null for two PITCHf/x-era decades that do carry speed and spin.'
+  px: 'Horizontal location crossing the plate in feet from the plate''s centre, catcher''s view. statsapi `pitchData`, measured
+    fill: ~0% before 2007, 45.7% in 2007 (mid-season PITCHf/x rollout across ballparks), 96.6% in 2008, ~100% from 2015. Null
+    for pitches the system never tracked.'
+  pz: 'Height crossing the plate in feet above the ground. statsapi `pitchData`, measured fill: ~0% before 2007, 45.7% in
+    2007 (mid-season PITCHf/x rollout across ballparks), 96.6% in 2008, ~100% from 2015. Null for pitches the system never
+    tracked.'
+  sz_top: Top of the batter's strike zone in feet. Derived from the batter, not `pitchData`, so it is populated back to 1988.
+  sz_bot: Bottom of the batter's strike zone in feet. Derived from the batter, not `pitchData`, so it is populated back to
+    1988.
+  launch_speed: 'Exit velocity off the bat in mph. statsapi `hitData`, Statcast-era and batted balls only: null before 2015
+    and ~17% populated after, which is the share of pitches put in play rather than a coverage gap.'
+  launch_angle: 'Vertical launch angle in degrees. statsapi `hitData`, Statcast-era and batted balls only: null before 2015
+    and ~17% populated after, which is the share of pitches put in play rather than a coverage gap.'
+  total_distance: 'Batted-ball distance travelled in feet. statsapi `hitData`, Statcast-era and batted balls only: null before
+    2015 and ~17% populated after, which is the share of pitches put in play rather than a coverage gap.'
+  trajectory: 'Batted-ball trajectory (`ground_ball`, `line_drive`, `fly_ball`, `popup`). Legacy scorer field, batted balls
+    only: ~20% populated in every season back to 1988, and present long before Statcast.'
+  hardness: 'Scorer''s contact-quality grade (`soft`, `medium`, `hard`). Legacy scorer field, batted balls only: ~20% populated
+    in every season back to 1988, and present long before Statcast.'
 load_mlb_re24_matrix:
   base_state: Three-character pre-play base occupancy where each slot carries its base number when occupied and an underscore
     when empty, so ___ is bases empty and 123 is bases loaded.
   n: Plate appearances observed starting in this base-out state, the sample size behind re.
   re: Mean runs the batting team went on to score from this base-out state through the end of the half-inning, with bottom-of-the-9th-and-later
     halves excluded to avoid walk-off selection bias.
+load_mlb_runners:
+  game_pk: statsapi game identifier; the join key to every other MLB release.
+  at_bat_index: Zero-based index of the plate appearance within the game; joins to mlb_pbp and mlb_pitches.
+  runner_id: statsapi person id of the baserunner.
+  origin_base: Base the runner occupied when the plate appearance began; null for the batter.
+  start_base: Base the runner started this movement from; null when the movement begins at the plate.
+  end_base: Base the runner finished on; null when retired or when scoring is recorded by `is_scoring_event`.
+  out_base: Base at which the runner was retired; null when not retired.
+  is_out: Whether the runner was retired on this movement.
+  out_number: Which out of the half-inning this retirement was; null when not retired.
+  event: Human-readable event that caused the movement.
+  event_type: Machine-readable event that caused the movement.
+  movement_reason: statsapi reason code for a movement not caused by the plate appearance itself (e.g. `r_stolen_base_2b`).
+  is_scoring_event: Whether this movement scored a run.
+  rbi: Whether the run was credited as an RBI to the batter.
+  earned: Whether the run was earned against the responsible pitcher.
+  responsible_pitcher_id: statsapi person id of the pitcher charged with the runner.
 load_mlb_stuff_plus:
   stuff_plus: Stuff+ on the 100-is-average scale, exactly 100 minus 10 times (stuff_rv_hat minus the league mean) over the
     league SD, so higher is better and outlier run-value predictions can push it well below zero.
