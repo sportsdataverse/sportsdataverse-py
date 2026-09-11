@@ -3440,6 +3440,9 @@ def refresh_autodoc_schemas() -> int:
     captured = skipped = 0
     skip_reasons: list[str] = []
     written_paths: set = set()
+    # (scope_key, fn) for every name the autodoc set still resolves to a callable,
+    # whether or not its capture succeeds -- the prune guard below keys off this.
+    in_scope: set = set()
     args_by_scope = _autodoc_example_args()
     for scope, names in _autodoc_names_by_scope().items():
         scope_key = "global" if scope is None else scope
@@ -3449,6 +3452,7 @@ def refresh_autodoc_schemas() -> int:
             obj = getattr(mod, fn, None)
             if obj is None or not callable(obj):
                 continue
+            in_scope.add((scope_key, fn))
             kwargs = scope_args.get(fn, {})
             try:
                 df = obj(**kwargs)
@@ -3473,20 +3477,33 @@ def refresh_autodoc_schemas() -> int:
             dest.write_text(yaml.safe_dump(doc, sort_keys=False, width=120), encoding="utf-8", newline="\n")
             written_paths.add(dest.resolve())
             captured += 1
-    # Prune stale schema files (a function that no longer captures) so the
-    # committed artifact set stays in lockstep with what the renderer can read.
-    pruned = 0
+    # Prune ONLY what is genuinely gone from the autodoc set. "Did not capture
+    # this run" is NOT the same as "no longer exists": a rate limit, an
+    # off-season endpoint, an unreachable host, or a required positional arg all
+    # fail the call while the function stays documented. Deleting on that
+    # condition silently drops a rendered Returns table on a transient failure,
+    # which is what made this refresh unsafe to run -- and is why the committed
+    # set drifted. A schema whose function is still in scope is kept as-is.
+    pruned = kept_stale = 0
     if _AUTODOC_SCHEMA_DIR.exists():
         for f in _AUTODOC_SCHEMA_DIR.rglob("*.yaml"):
-            if f.resolve() not in written_paths:
-                # Hand-authored schemas (functions the capture step cannot call:
-                # frame-valued args or dict-of-frames returns) are kept, not pruned.
-                if (yaml.safe_load(f.read_text(encoding="utf-8")) or {}).get("hand_authored"):
-                    continue
-                f.unlink()
-                pruned += 1
+            if f.resolve() in written_paths:
+                continue
+            # Hand-authored schemas (functions the capture step cannot call:
+            # frame-valued args or dict-of-frames returns) are kept, not pruned.
+            if (yaml.safe_load(f.read_text(encoding="utf-8")) or {}).get("hand_authored"):
+                continue
+            if (f.parent.name, f.stem) in in_scope:
+                kept_stale += 1
+                continue
+            f.unlink()
+            pruned += 1
     _autodoc_return_columns.cache_clear()
-    print(f"autodoc schemas: {captured} captured, {skipped} skipped" + (f", {pruned} pruned" if pruned else ""))
+    print(
+        f"autodoc schemas: {captured} captured, {skipped} skipped"
+        + (f", {pruned} pruned" if pruned else "")
+        + (f", {kept_stale} kept (in scope, capture failed)" if kept_stale else "")
+    )
     if skip_reasons:
         print("  sample skips: " + "; ".join(skip_reasons[:5]))
     return 0
