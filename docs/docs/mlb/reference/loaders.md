@@ -95,6 +95,30 @@ load_mlb_wpa(seasons=2024)
 ## `load_mlb_pbp`
 
 Release: [mlb_pbp](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/mlb_pbp) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/mlb_pbp/mlb_pbp_{season}.parquet`
+### Returns
+
+| col_name | type | description |
+|---|---|---|
+| `game_pk` | Int64 | statsapi game identifier; the join key to every other MLB release. |
+| `at_bat_index` | Int64 | Zero-based index of the plate appearance within the game; joins to mlb_pitches and mlb_runners. |
+| `inning` | Int64 | Inning number. |
+| `half_inning` | String | `top` or `bottom`. |
+| `batter_id` | Int64 | statsapi person id of the batter. |
+| `pitcher_id` | Int64 | statsapi person id of the pitcher. |
+| `event_type` | String | Machine-readable plate-appearance outcome (e.g. `single`, `strikeout`, `field_out`). |
+| `event` | String | Human-readable outcome of the plate appearance. |
+| `description` | String | Narrative text for the plate appearance. |
+| `rbi` | Int64 | Runs batted in credited to this plate appearance. |
+| `away_score` | Int64 | Away score AFTER the plate appearance. |
+| `home_score` | Int64 | Home score AFTER the plate appearance. |
+| `is_scoring_play` | Boolean | Whether the plate appearance scored a run. |
+| `outs` | Int64 | Outs recorded after the plate appearance. |
+| `start_time` | String | UTC timestamp when the plate appearance began; null in older seasons. |
+| `end_time` | String | UTC timestamp when the plate appearance ended; null in older seasons. |
+| `post_on_first_id` | Int64 | Person id on first base after the plate appearance; null when unoccupied. |
+| `post_on_second_id` | Int64 | Person id on second base after the plate appearance; null when unoccupied. |
+| `post_on_third_id` | Int64 | Person id on third base after the plate appearance; null when unoccupied. |
+
 ```python
 load_mlb_pbp(seasons=2024)
 ```
@@ -102,6 +126,36 @@ load_mlb_pbp(seasons=2024)
 ## `load_mlb_pitches`
 
 Release: [mlb_pitches](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/mlb_pitches) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/mlb_pitches/mlb_pitches_{season}.parquet`
+### Returns
+
+| col_name | type | description |
+|---|---|---|
+| `game_pk` | Int64 | statsapi game identifier; the join key to every other MLB release. |
+| `at_bat_index` | Int64 | Zero-based index of the plate appearance within the game; joins to mlb_pbp and mlb_runners. |
+| `pitch_number` | Int64 | One-based pitch number within the plate appearance. |
+| `batter_id` | Int64 | statsapi person id of the batter. |
+| `pitcher_id` | Int64 | statsapi person id of the pitcher. |
+| `pitch_type` | String | Classified pitch-type code (FF, SL, CH, ...). statsapi `pitchData`, measured fill: ~0% before 2007, 45.7% in 2007 (mid-season PITCHf/x rollout across ballparks), 96.6% in 2008, ~100% from 2015. Null for pitches the system never tracked. |
+| `pitch_name` | String | Human-readable pitch type. statsapi `pitchData`, measured fill: ~0% before 2007, 45.7% in 2007 (mid-season PITCHf/x rollout across ballparks), 96.6% in 2008, ~100% from 2015. Null for pitches the system never tracked. |
+| `call_code` | String | Umpire call code (B, C, S, X, ...). |
+| `call_description` | String | Human-readable umpire call. |
+| `balls` | Int64 | Ball count BEFORE the pitch. |
+| `strikes` | Int64 | Strike count BEFORE the pitch. |
+| `outs` | Int64 | Outs BEFORE the pitch. |
+| `start_speed` | Float64 | Release speed in mph. statsapi `pitchData`, measured fill: ~0% before 2007, 45.7% in 2007 (mid-season PITCHf/x rollout across ballparks), 96.6% in 2008, ~100% from 2015. Null for pitches the system never tracked. |
+| `end_speed` | Float64 | Speed crossing the plate in mph. statsapi `pitchData`, measured fill: ~0% before 2007, 45.7% in 2007 (mid-season PITCHf/x rollout across ballparks), 96.6% in 2008, ~100% from 2015. Null for pitches the system never tracked. |
+| `spin_rate` | Float64 | Spin rate in rpm. statsapi `pitchData`, measured fill: ~0% before 2007, 45.7% in 2007 (mid-season PITCHf/x rollout across ballparks), 96.6% in 2008, ~100% from 2015. Null for pitches the system never tracked. |
+| `extension` | Float64 | Release extension toward the plate in feet. Later than the rest of `pitchData`: measured 0% through 2016 and ~100% from 2017, so it is null for two PITCHf/x-era decades that do carry speed and spin. |
+| `px` | Float64 | Horizontal location crossing the plate in feet from the plate's centre, catcher's view. statsapi `pitchData`, measured fill: ~0% before 2007, 45.7% in 2007 (mid-season PITCHf/x rollout across ballparks), 96.6% in 2008, ~100% from 2015. Null for pitches the system never tracked. |
+| `pz` | Float64 | Height crossing the plate in feet above the ground. statsapi `pitchData`, measured fill: ~0% before 2007, 45.7% in 2007 (mid-season PITCHf/x rollout across ballparks), 96.6% in 2008, ~100% from 2015. Null for pitches the system never tracked. |
+| `sz_top` | Float64 | Top of the batter's strike zone in feet. Derived from the batter, not `pitchData`, so it is populated back to 1988. |
+| `sz_bot` | Float64 | Bottom of the batter's strike zone in feet. Derived from the batter, not `pitchData`, so it is populated back to 1988. |
+| `launch_speed` | Float64 | Exit velocity off the bat in mph. statsapi `hitData`, Statcast-era and batted balls only: null before 2015 and ~17% populated after, which is the share of pitches put in play rather than a coverage gap. |
+| `launch_angle` | Float64 | Vertical launch angle in degrees. statsapi `hitData`, Statcast-era and batted balls only: null before 2015 and ~17% populated after, which is the share of pitches put in play rather than a coverage gap. |
+| `total_distance` | Float64 | Batted-ball distance travelled in feet. statsapi `hitData`, Statcast-era and batted balls only: null before 2015 and ~17% populated after, which is the share of pitches put in play rather than a coverage gap. |
+| `trajectory` | String | Batted-ball trajectory (`ground_ball`, `line_drive`, `fly_ball`, `popup`). Legacy scorer field, batted balls only: ~20% populated in every season back to 1988, and present long before Statcast. |
+| `hardness` | String | Scorer's contact-quality grade (`soft`, `medium`, `hard`). Legacy scorer field, batted balls only: ~20% populated in every season back to 1988, and present long before Statcast. |
+
 ```python
 load_mlb_pitches(seasons=2024)
 ```
@@ -109,6 +163,27 @@ load_mlb_pitches(seasons=2024)
 ## `load_mlb_runners`
 
 Release: [mlb_runners](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/mlb_runners) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/mlb_runners/mlb_runners_{season}.parquet`
+### Returns
+
+| col_name | type | description |
+|---|---|---|
+| `game_pk` | Int64 | statsapi game identifier; the join key to every other MLB release. |
+| `at_bat_index` | Int64 | Zero-based index of the plate appearance within the game; joins to mlb_pbp and mlb_pitches. |
+| `runner_id` | Int64 | statsapi person id of the baserunner. |
+| `origin_base` | String | Base the runner occupied when the plate appearance began; null for the batter. |
+| `start_base` | String | Base the runner started this movement from; null when the movement begins at the plate. |
+| `end_base` | String | Base the runner finished on; null when retired or when scoring is recorded by `is_scoring_event`. |
+| `out_base` | String | Base at which the runner was retired; null when not retired. |
+| `is_out` | Boolean | Whether the runner was retired on this movement. |
+| `out_number` | Int64 | Which out of the half-inning this retirement was; null when not retired. |
+| `event` | String | Human-readable event that caused the movement. |
+| `event_type` | String | Machine-readable event that caused the movement. |
+| `movement_reason` | String | statsapi reason code for a movement not caused by the plate appearance itself (e.g. `r_stolen_base_2b`). |
+| `is_scoring_event` | Boolean | Whether this movement scored a run. |
+| `rbi` | Boolean | Whether the run was credited as an RBI to the batter. |
+| `earned` | Boolean | Whether the run was earned against the responsible pitcher. |
+| `responsible_pitcher_id` | Int64 | statsapi person id of the pitcher charged with the runner. |
+
 ```python
 load_mlb_runners(seasons=2024)
 ```

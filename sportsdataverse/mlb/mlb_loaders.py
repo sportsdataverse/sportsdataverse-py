@@ -200,6 +200,28 @@ def load_mlb_pbp(seasons, return_as_pandas: bool = False):
         A polars (or pandas) DataFrame; seasons with no published asset are
         skipped with a warning rather than raising (404-safe).
 
+        |col_name          |type    |
+        |:-----------------|:-------|
+        |game_pk           |Int64   |
+        |at_bat_index      |Int64   |
+        |inning            |Int64   |
+        |half_inning       |String  |
+        |batter_id         |Int64   |
+        |pitcher_id        |Int64   |
+        |event_type        |String  |
+        |event             |String  |
+        |description       |String  |
+        |rbi               |Int64   |
+        |away_score        |Int64   |
+        |home_score        |Int64   |
+        |is_scoring_play   |Boolean |
+        |outs              |Int64   |
+        |start_time        |String  |
+        |end_time          |String  |
+        |post_on_first_id  |Int64   |
+        |post_on_second_id |Int64   |
+        |post_on_third_id  |Int64   |
+
     Raises:
         SeasonNotFoundError: if a requested season is below 1988.
 
@@ -240,6 +262,34 @@ def load_mlb_pitches(seasons, return_as_pandas: bool = False):
         A polars (or pandas) DataFrame; seasons with no published asset are
         skipped with a warning rather than raising (404-safe).
 
+        |col_name         |type    |
+        |:----------------|:-------|
+        |game_pk          |Int64   |
+        |at_bat_index     |Int64   |
+        |pitch_number     |Int64   |
+        |batter_id        |Int64   |
+        |pitcher_id       |Int64   |
+        |pitch_type       |String  |
+        |pitch_name       |String  |
+        |call_code        |String  |
+        |call_description |String  |
+        |balls            |Int64   |
+        |strikes          |Int64   |
+        |outs             |Int64   |
+        |start_speed      |Float64 |
+        |end_speed        |Float64 |
+        |spin_rate        |Float64 |
+        |extension        |Float64 |
+        |px               |Float64 |
+        |pz               |Float64 |
+        |sz_top           |Float64 |
+        |sz_bot           |Float64 |
+        |launch_speed     |Float64 |
+        |launch_angle     |Float64 |
+        |total_distance   |Float64 |
+        |trajectory       |String  |
+        |hardness         |String  |
+
     Raises:
         SeasonNotFoundError: if a requested season is below 1988.
 
@@ -279,6 +329,25 @@ def load_mlb_runners(seasons, return_as_pandas: bool = False):
     Returns:
         A polars (or pandas) DataFrame; seasons with no published asset are
         skipped with a warning rather than raising (404-safe).
+
+        |col_name               |type    |
+        |:----------------------|:-------|
+        |game_pk                |Int64   |
+        |at_bat_index           |Int64   |
+        |runner_id              |Int64   |
+        |origin_base            |String  |
+        |start_base             |String  |
+        |end_base               |String  |
+        |out_base               |String  |
+        |is_out                 |Boolean |
+        |out_number             |Int64   |
+        |event                  |String  |
+        |event_type             |String  |
+        |movement_reason        |String  |
+        |is_scoring_event       |Boolean |
+        |rbi                    |Boolean |
+        |earned                 |Boolean |
+        |responsible_pitcher_id |Int64   |
 
     Raises:
         SeasonNotFoundError: if a requested season is below 1988.
