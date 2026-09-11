@@ -7,8 +7,10 @@ name: dispatch Game on Paper deploy (package pushes to main)
 # and CI-only pushes do not trigger a deploy; that is the `paths` filter below.
 #
 # Cross-repo dispatch needs a token with access to game-on-paper-app;
-# GITHUB_TOKEN is scoped to this repository only. Two token families work,
-# and they fail differently -- read the 403 body, it names which one you have:
+# GITHUB_TOKEN is scoped to this repository only. The PAT shapes below are
+# what this secret holds; they fail differently -- read the 403 body, it names
+# which one you have. (A GitHub App installation token with `Contents: write`
+# on the target also reaches this endpoint, but none is wired up here.)
 #
 #   * classic PAT with the `repo` scope           -> works (what the secret holds)
 #   * fine-grained PAT, `Contents: WRITE` on
