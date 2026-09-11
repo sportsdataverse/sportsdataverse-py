@@ -1,5 +1,7 @@
+import importlib
 import importlib.util
 from pathlib import Path
+from types import SimpleNamespace
 from unittest.mock import patch
 
 from tools.codegen import generate
@@ -76,3 +78,47 @@ def test_standings_uses_alt_host():
     with patch("sportsdataverse._codegen_runtime.download", return_value=FakeResp()) as dl:
         mod.espn_nba_standings(season=2024)
     assert dl.call_args.kwargs["url"] == "https://site.api.espn.com/apis/v2/sports/basketball/nba/standings"
+
+
+# ===========================================================================
+# refresh_autodoc_schemas -- prune guard
+# ===========================================================================
+
+
+def _autodoc_tree(tmp_path: Path) -> Path:
+    """Three committed schemas: in-scope, removed, and hand-authored."""
+    d = tmp_path / "autodoc" / "nfl"
+    d.mkdir(parents=True)
+    (d / "boom.yaml").write_text("schema: boom\nkind: dataframe\ncolumns: []\n", encoding="utf-8")
+    (d / "removed.yaml").write_text("schema: removed\nkind: dataframe\ncolumns: []\n", encoding="utf-8")
+    (d / "handmade.yaml").write_text("schema: handmade\nhand_authored: true\ncolumns: []\n", encoding="utf-8")
+    return d
+
+
+def test_autodoc_prune_keeps_in_scope_schema_whose_capture_failed(tmp_path, monkeypatch, capsys):
+    """A failed capture must NOT delete a still-documented function's schema.
+
+    "Did not capture this run" is not "no longer exists" -- a rate limit, an
+    off-season endpoint or an unreachable host fails the call while the function
+    stays in the autodoc set. Deleting on that condition silently drops a
+    rendered Returns table, so only a name that left the set may be pruned.
+    """
+    d = _autodoc_tree(tmp_path)
+
+    def boom():
+        raise RuntimeError("simulated rate limit")
+
+    stub = SimpleNamespace(boom=boom)
+    monkeypatch.setattr(generate, "_AUTODOC_SCHEMA_DIR", tmp_path / "autodoc")
+    monkeypatch.setattr(generate, "_autodoc_names_by_scope", lambda: {"nfl": ["boom"]})
+    monkeypatch.setattr(generate, "_autodoc_example_args", lambda: {})
+    monkeypatch.setattr(importlib, "import_module", lambda name: stub)
+
+    assert generate.refresh_autodoc_schemas() == 0
+
+    assert (d / "boom.yaml").exists(), "in-scope function whose capture failed was pruned"
+    assert (d / "handmade.yaml").exists(), "hand-authored schema was pruned"
+    assert not (d / "removed.yaml").exists(), "schema for a name outside the set was not pruned"
+
+    out = capsys.readouterr().out
+    assert "1 pruned" in out and "1 kept (in scope, capture failed)" in out
