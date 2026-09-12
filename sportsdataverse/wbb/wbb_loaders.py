@@ -125,9 +125,14 @@ def load_wbb_pbp(seasons, return_as_pandas: bool = False):
         |coordinate_y                    |Float64                                                |
         |game_date                       |Date                                                   |
         |game_date_time                  |Datetime(time_unit='us', time_zone='America/New_York') |
+        |espn_home_wp                    |Float64                                                |
+        |espn_tie_percentage             |Float64                                                |
+        |espn_away_wp                    |Float64                                                |
         |athlete_name_1                  |String                                                 |
         |athlete_name_2                  |String                                                 |
         |athlete_name_3                  |String                                                 |
+        |pregame_home_prob               |Float64                                                |
+        |home_win_prob                   |Float64                                                |
 
     Raises:
         SeasonNotFoundError: if a requested season is below 2002.
@@ -350,11 +355,20 @@ def load_wbb_schedule(seasons, return_as_pandas: bool = False):
         |groups_is_conference      |Boolean                                                |
         |game_json                 |Boolean                                                |
         |game_json_url             |String                                                 |
+        |has_game_json             |Boolean                                                |
+        |game_json_raw_url         |String                                                 |
+        |game_rosters_json_url     |String                                                 |
+        |has_game_rosters_json     |Boolean                                                |
+        |officials_json_url        |String                                                 |
+        |has_officials_json        |Boolean                                                |
         |game_date_time            |Datetime(time_unit='us', time_zone='America/New_York') |
         |game_date                 |Date                                                   |
         |PBP                       |Boolean                                                |
         |team_box                  |Boolean                                                |
         |player_box                |Boolean                                                |
+        |in_shots                  |Boolean                                                |
+        |in_game_rosters           |Boolean                                                |
+        |in_officials              |Boolean                                                |
 
     Raises:
         SeasonNotFoundError: if a requested season is below 2002.
@@ -429,8 +443,6 @@ def load_wbb_team_boxscore(seasons, return_as_pandas: bool = False):
         |free_throws_made                  |Int32                                                  |
         |free_throws_attempted             |Int32                                                  |
         |largest_lead                      |String                                                 |
-        |lead_changes                      |String                                                 |
-        |lead_percentage                   |String                                                 |
         |offensive_rebounds                |Int32                                                  |
         |points_in_paint                   |String                                                 |
         |steals                            |Int32                                                  |
@@ -456,6 +468,8 @@ def load_wbb_team_boxscore(seasons, return_as_pandas: bool = False):
         |opponent_team_alternate_color     |String                                                 |
         |opponent_team_logo                |String                                                 |
         |opponent_team_score               |Int32                                                  |
+        |lead_changes                      |String                                                 |
+        |lead_percentage                   |String                                                 |
 
     Raises:
         SeasonNotFoundError: if a requested season is below 2002.
@@ -605,7 +619,7 @@ def load_wbb_game_rosters(seasons, return_as_pandas: bool = False):
         |col_name             |type    |
         |:--------------------|:-------|
         |season               |Int32   |
-        |game_id              |String  |
+        |game_id              |Int32   |
         |team_id              |Int32   |
         |team_slug            |String  |
         |team_abbreviation    |String  |
@@ -670,7 +684,7 @@ def load_wbb_officials(seasons, return_as_pandas: bool = False):
         |col_name              |type   |
         |:---------------------|:------|
         |season                |Int32  |
-        |game_id               |String |
+        |game_id               |Int32  |
         |official_id           |Int32  |
         |official_uid          |String |
         |official_full_name    |String |
@@ -791,7 +805,7 @@ def load_wbb_rosters(seasons, return_as_pandas: bool = False):
         |team_color               |String |
         |team_alternate_color     |String |
         |team_logo                |String |
-        |athlete_id               |String |
+        |athlete_id               |Int32  |
         |uid                      |String |
         |guid                     |String |
         |full_name                |String |
@@ -802,7 +816,7 @@ def load_wbb_rosters(seasons, return_as_pandas: bool = False):
         |jersey                   |String |
         |position_abbreviation    |String |
         |position_name            |String |
-        |position_id              |String |
+        |position_id              |Int32  |
         |height                   |String |
         |weight                   |String |
         |age                      |String |
@@ -815,7 +829,7 @@ def load_wbb_rosters(seasons, return_as_pandas: bool = False):
         |headshot_href            |String |
         |headshot_alt             |String |
         |link_web                 |String |
-        |status_id                |String |
+        |status_id                |Int32  |
         |status_name              |String |
         |status_type              |String |
 
@@ -925,7 +939,7 @@ def load_wbb_standings(seasons, return_as_pandas: bool = False):
         |col_name                |type    |
         |:-----------------------|:-------|
         |season                  |Int32   |
-        |group_id                |String  |
+        |group_id                |Int32   |
         |group_name              |String  |
         |group_abbreviation      |String  |
         |group_short_name        |String  |
@@ -1228,7 +1242,7 @@ def load_wbb_player_core(seasons, return_as_pandas: bool = False):
         |col_name              |type    |
         |:---------------------|:-------|
         |season                |Int32   |
-        |athlete_id            |Int64   |
+        |athlete_id            |Int32   |
         |guid                  |String  |
         |uid                   |String  |
         |slug                  |String  |

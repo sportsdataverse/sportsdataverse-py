@@ -71,7 +71,7 @@ def load_nba_pbp(seasons, return_as_pandas: bool = False):
         |col_name                        |type                                                   |
         |:-------------------------------|:------------------------------------------------------|
         |game_play_number                |Int32                                                  |
-        |id                              |Float64                                                |
+        |id                              |Int64                                                  |
         |sequence_number                 |Int32                                                  |
         |type_id                         |Int32                                                  |
         |type_text                       |String                                                 |
@@ -118,7 +118,9 @@ def load_nba_pbp(seasons, return_as_pandas: bool = False):
         |away_timeout_called             |Boolean                                                |
         |half                            |Int32                                                  |
         |game_half                       |Int32                                                  |
+        |lag_qtr                         |Int32                                                  |
         |lead_qtr                        |Int32                                                  |
+        |lag_half                        |Int32                                                  |
         |lead_half                       |Int32                                                  |
         |start_quarter_seconds_remaining |Float64                                                |
         |start_half_seconds_remaining    |Float64                                                |
@@ -127,8 +129,6 @@ def load_nba_pbp(seasons, return_as_pandas: bool = False):
         |end_half_seconds_remaining      |Float64                                                |
         |end_game_seconds_remaining      |Float64                                                |
         |period                          |Int32                                                  |
-        |lag_qtr                         |Int32                                                  |
-        |lag_half                        |Int32                                                  |
         |coordinate_x                    |Float64                                                |
         |coordinate_y                    |Float64                                                |
         |game_date                       |Date                                                   |

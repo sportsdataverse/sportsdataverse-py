@@ -88,8 +88,10 @@ def load_cfb_pbp(seasons, return_as_pandas: bool = False):
         |season                                  |Int64   |
         |game_id                                 |Int64   |
         |game_play_number                        |Int64   |
-        |pos_team                                |Int64   |
-        |def_pos_team                            |Int64   |
+        |pos_team_id                             |Int64   |
+        |pos_team                                |String  |
+        |def_pos_team_id                         |Int64   |
+        |def_pos_team                            |String  |
         |pos_team_score                          |Int64   |
         |def_pos_team_score                      |Int64   |
         |half                                    |Int64   |
@@ -105,6 +107,11 @@ def load_cfb_pbp(seasons, return_as_pandas: bool = False):
         |penalty_detail                          |String  |
         |yds_penalty                             |String  |
         |penalty_1st_conv                        |Boolean |
+        |new_series                              |Boolean |
+        |firstD_by_kickoff                       |Boolean |
+        |firstD_by_poss                          |Boolean |
+        |firstD_by_penalty                       |Boolean |
+        |firstD_by_yards                         |Boolean |
         |def_EPA                                 |Float64 |
         |rz_play                                 |Boolean |
         |scoring_opp                             |Boolean |
@@ -119,9 +126,6 @@ def load_cfb_pbp(seasons, return_as_pandas: bool = False):
         |home_wp_after                           |Float64 |
         |away_wp_after                           |Float64 |
         |end_of_half                             |Boolean |
-        |lead_pos_team                           |Int64   |
-        |lead_play_type                          |String  |
-        |lag_pos_team                            |Int64   |
         |orig_play_type                          |String  |
         |offense_score_play                      |Boolean |
         |defense_score_play                      |Boolean |
@@ -135,7 +139,7 @@ def load_cfb_pbp(seasons, return_as_pandas: bool = False):
         |yds_sacked                              |Int64   |
         |sack_players                            |String  |
         |sack_player_name                        |String  |
-        |sack_player_name2                       |String  |
+        |sack_player_name2                       |Null    |
         |pass_breakup_player_name                |String  |
         |interception_player_name                |String  |
         |yds_int_return                          |Int64   |
@@ -148,11 +152,11 @@ def load_cfb_pbp(seasons, return_as_pandas: bool = False):
         |yds_punt_return                         |Int64   |
         |yds_punt_gained                         |Int64   |
         |punt_block_player_name                  |String  |
-        |punt_block_return_player_name           |String  |
+        |punt_block_return_player_name           |Null    |
         |fg_kicker_player_name                   |String  |
         |yds_fg                                  |Int64   |
         |fg_block_player_name                    |String  |
-        |fg_return_player_name                   |String  |
+        |fg_return_player_name                   |Null    |
         |kickoff_player_name                     |String  |
         |yds_kickoff                             |Int64   |
         |yds_kickoff_return                      |Int64   |
@@ -163,7 +167,6 @@ def load_cfb_pbp(seasons, return_as_pandas: bool = False):
         |completion                              |Boolean |
         |pass_attempt                            |Boolean |
         |target                                  |Boolean |
-        |sack_vec                                |Boolean |
         |sack                                    |Boolean |
         |int                                     |Boolean |
         |int_td                                  |Boolean |
@@ -180,7 +183,6 @@ def load_cfb_pbp(seasons, return_as_pandas: bool = False):
         |kickoff_fair_catch                      |Boolean |
         |kickoff_downed                          |Boolean |
         |kickoff_safety                          |Boolean |
-        |kick_play                               |Boolean |
         |punt                                    |Boolean |
         |punt_play                               |Boolean |
         |punt_tb                                 |Boolean |
@@ -200,8 +202,6 @@ def load_cfb_pbp(seasons, return_as_pandas: bool = False):
         |lead_wp_before2                         |Float64 |
         |lead_wp_before                          |Float64 |
         |lead_pos_team2                          |Int64   |
-        |lag_change_of_pos_team                  |Boolean |
-        |lag_pos_score_diff                      |Int64   |
         |id                                      |Int64   |
         |sequenceNumber                          |Int64   |
         |text                                    |String  |
@@ -354,6 +354,11 @@ def load_cfb_pbp(seasons, return_as_pandas: bool = False):
         |start.pos_team_receives_2H_kickoff      |Boolean |
         |end.pos_team_receives_2H_kickoff        |Boolean |
         |penalty_in_text                         |Boolean |
+        |penalty_count                           |Int64   |
+        |penalty_declined_count                  |Int64   |
+        |penalty_all_declined                    |Boolean |
+        |penalty_enforcement                     |String  |
+        |penalty_negated_play                    |Boolean |
         |pass_breakup                            |Boolean |
         |pass_depth                              |String  |
         |pass_direction                          |String  |
@@ -376,11 +381,19 @@ def load_cfb_pbp(seasons, return_as_pandas: bool = False):
         |air_yardsToEndzone                      |Int64   |
         |air_yards                               |Int64   |
         |yards_after_catch                       |Int64   |
+        |kickoff_return_player_name              |String  |
+        |punt_return_player_name                 |String  |
+        |xp_attempt                              |Boolean |
+        |xp_made                                 |Boolean |
+        |xp_kicker_player_name                   |String  |
         |kicking_team                            |Int64   |
         |return_team                             |Int64   |
         |fumble_or_muff                          |Boolean |
         |recovery_team                           |Int64   |
-        |recovery_team_2                         |Int64   |
+        |recovery_team_2                         |Null    |
+        |penalty_spot_yardline                   |Int64   |
+        |penalty_spot_side                       |String  |
+        |penalty_spot_yardsToEndzone             |Int64   |
         |fumbling_team                           |Int64   |
         |int_turnover                            |Boolean |
         |pos_fumble_lost                         |Boolean |
@@ -403,6 +416,9 @@ def load_cfb_pbp(seasons, return_as_pandas: bool = False):
         |punt_team                               |Int64   |
         |penalized_team                          |Int64   |
         |penalty_yards_signed                    |Int64   |
+        |penalty_side                            |String  |
+        |penalty_yards_net                       |Int64   |
+        |penalty_team_id                         |Int64   |
         |new_down                                |Int64   |
         |new_distance                            |Int64   |
         |under_2                                 |Boolean |
@@ -418,10 +434,10 @@ def load_cfb_pbp(seasons, return_as_pandas: bool = False):
         |opp_highlight_yards                     |Float64 |
         |short_rush_success                      |Boolean |
         |short_rush_attempt                      |Boolean |
-        |power_rush_success                      |Boolean |
-        |power_rush_attempt                      |Boolean |
         |early_down                              |Boolean |
         |late_down                               |Boolean |
+        |power_rush_attempt                      |Boolean |
+        |power_rush_success                      |Boolean |
         |early_down_pass                         |Boolean |
         |early_down_rush                         |Boolean |
         |late_down_pass                          |Boolean |
@@ -432,6 +448,9 @@ def load_cfb_pbp(seasons, return_as_pandas: bool = False):
         |TFL_pass                                |Boolean |
         |TFL_rush                                |Boolean |
         |havoc                                   |Boolean |
+        |first_down_yards                        |Boolean |
+        |first_down_penalty                      |Boolean |
+        |first_down_earned                       |Boolean |
         |start.pos_team_spread                   |Float64 |
         |start.elapsed_share                     |Float64 |
         |start.spread_time                       |Float64 |
@@ -443,6 +462,8 @@ def load_cfb_pbp(seasons, return_as_pandas: bool = False):
         |EP_start_touchback                      |Float64 |
         |EP_start                                |Float64 |
         |EP_end                                  |Float64 |
+        |EP_penalty_cf                           |Float64 |
+        |penalty_cf_yardsToEndzone               |Int64   |
         |lag_EP_end                              |Float64 |
         |EP_between                              |Float64 |
         |EPA_scrimmage                           |Float64 |
@@ -473,6 +494,7 @@ def load_cfb_pbp(seasons, return_as_pandas: bool = False):
         |EPA_middle_8_success_pass               |Boolean |
         |EPA_middle_8_success_rush               |Boolean |
         |EPA_penalty                             |Float64 |
+        |EPA_penalty_direct                      |Float64 |
         |EPA_sp                                  |Float64 |
         |EPA_fg                                  |Float64 |
         |EPA_punt                                |Float64 |
@@ -527,7 +549,7 @@ def load_cfb_pbp(seasons, return_as_pandas: bool = False):
         |receiver_player_id                      |Int64   |
         |fumble_player_id                        |Int64   |
         |sack_player_id                          |Int64   |
-        |sack_player_id2                         |Int64   |
+        |sack_player_id2                         |Null    |
         |interception_player_id                  |Int64   |
         |pass_breakup_player_id                  |Int64   |
         |fumble_forced_player_id                 |Int64   |
@@ -537,9 +559,9 @@ def load_cfb_pbp(seasons, return_as_pandas: bool = False):
         |kickoff_player_id                       |Int64   |
         |kickoff_return_player_id                |Int64   |
         |punt_return_player_id                   |Int64   |
-        |fg_block_player_id                      |Int64   |
-        |punt_block_player_id                    |Int64   |
-        |fg_return_player_id                     |Int64   |
+        |fg_block_player_id                      |Null    |
+        |punt_block_player_id                    |Null    |
+        |fg_return_player_id                     |Null    |
         |punt_block_return_player_id             |Null    |
         |go_wp                                   |Float64 |
         |first_down_prob                         |Float64 |
@@ -559,6 +581,8 @@ def load_cfb_pbp(seasons, return_as_pandas: bool = False):
         |prob_2pt                                |Float64 |
         |two_pt_recommendation                   |String  |
         |two_pt_wp_diff                          |Float64 |
+        |scoreValue                              |Null    |
+        |participants                            |Null    |
 
     Raises:
         SeasonNotFoundError: if a requested season is below 2004.
@@ -775,6 +799,7 @@ def load_cfb_returning_production(seasons, return_as_pandas: bool = False):
         |def_returning     |Float64 |
         |overall_returning |Float64 |
         |n_returning       |Int64   |
+        |is_estimated      |Boolean |
 
     Raises:
         SeasonNotFoundError: if a requested season is below 2005.
@@ -969,7 +994,7 @@ def load_cfb_rosters_cfbd(seasons, return_as_pandas: bool = False):
         |home_county_fips |String      |
         |recruit_ids      |List(Int32) |
         |headshot_url     |String      |
-        |season           |Float64     |
+        |season           |Int32       |
 
     Raises:
         SeasonNotFoundError: if a requested season is below 2003.
@@ -1531,19 +1556,21 @@ def load_cfb_player_box(seasons, return_as_pandas: bool = False):
         |yardsPerReception                  |String |
         |receivingTouchdowns                |String |
         |longReception                      |String |
-        |fumbles                            |String |
-        |fumblesLost                        |String |
-        |fumblesRecovered                   |String |
+        |totalTackles                       |String |
+        |soloTackles                        |String |
+        |sacks                              |String |
+        |tacklesForLoss                     |String |
+        |passesDefended                     |String |
+        |hurries                            |String |
+        |defensiveTouchdowns                |String |
+        |interceptions                      |String |
+        |interceptionYards                  |String |
+        |interceptionTouchdowns             |String |
         |kickReturns                        |String |
         |kickReturnYards                    |String |
         |yardsPerKickReturn                 |String |
         |longKickReturn                     |String |
         |kickReturnTouchdowns               |String |
-        |puntReturns                        |String |
-        |puntReturnYards                    |String |
-        |yardsPerPuntReturn                 |String |
-        |longPuntReturn                     |String |
-        |puntReturnTouchdowns               |String |
         |fieldGoalsMade/fieldGoalAttempts   |String |
         |fieldGoalPct                       |String |
         |longFieldGoalMade                  |String |
@@ -1555,18 +1582,16 @@ def load_cfb_player_box(seasons, return_as_pandas: bool = False):
         |touchbacks                         |String |
         |puntsInside20                      |String |
         |longPunt                           |String |
+        |puntReturns                        |String |
+        |puntReturnYards                    |String |
+        |yardsPerPuntReturn                 |String |
+        |longPuntReturn                     |String |
+        |puntReturnTouchdowns               |String |
         |game_id                            |Int64  |
         |season                             |Int64  |
-        |interceptions                      |String |
-        |interceptionYards                  |String |
-        |interceptionTouchdowns             |String |
-        |totalTackles                       |String |
-        |soloTackles                        |String |
-        |sacks                              |String |
-        |tacklesForLoss                     |String |
-        |passesDefended                     |String |
-        |hurries                            |String |
-        |defensiveTouchdowns                |String |
+        |fumbles                            |String |
+        |fumblesLost                        |String |
+        |fumblesRecovered                   |String |
         |completions/passingAttempts        |String |
         |passingYards                       |String |
         |yardsPerPassAttempt                |String |
@@ -1681,75 +1706,75 @@ def load_cfb_play_participants(seasons, return_as_pandas: bool = False):
         |game_id                    |Int64  |
         |play_id                    |Int64  |
         |kicker_player_name         |String |
-        |tackler_player_name        |String |
         |returner_player_name       |String |
+        |tackler_player_name        |String |
         |rusher_player_name         |String |
         |passer_player_name         |String |
         |receiver_player_name       |String |
-        |punter_player_name         |String |
         |assisted_by_player_name    |String |
-        |penalized_player_name      |String |
         |scorer_player_name         |String |
         |pat_scorer_player_name     |String |
+        |punter_player_name         |String |
+        |pass_defender_player_name  |String |
         |sacked_by_player_name      |String |
+        |penalized_player_name      |String |
+        |pat_passer_player_name     |String |
         |kicker_player_id           |String |
-        |tackler_player_id          |String |
         |returner_player_id         |String |
+        |tackler_player_id          |String |
         |rusher_player_id           |String |
         |passer_player_id           |String |
         |receiver_player_id         |String |
-        |punter_player_id           |String |
         |assisted_by_player_id      |String |
-        |penalized_player_id        |String |
         |scorer_player_id           |String |
         |pat_scorer_player_id       |String |
+        |punter_player_id           |String |
+        |pass_defender_player_id    |String |
         |sacked_by_player_id        |String |
+        |penalized_player_id        |String |
+        |pat_passer_player_id       |String |
         |kicker_player_names        |String |
-        |tackler_player_names       |String |
         |returner_player_names      |String |
+        |tackler_player_names       |String |
         |rusher_player_names        |String |
         |passer_player_names        |String |
         |receiver_player_names      |String |
-        |punter_player_names        |String |
         |assisted_by_player_names   |String |
-        |penalized_player_names     |String |
         |scorer_player_names        |String |
         |pat_scorer_player_names    |String |
+        |punter_player_names        |String |
+        |pass_defender_player_names |String |
         |sacked_by_player_names     |String |
+        |penalized_player_names     |String |
+        |pat_passer_player_names    |String |
         |kicker_player_ids          |String |
-        |tackler_player_ids         |String |
         |returner_player_ids        |String |
+        |tackler_player_ids         |String |
         |rusher_player_ids          |String |
         |passer_player_ids          |String |
         |receiver_player_ids        |String |
-        |punter_player_ids          |String |
         |assisted_by_player_ids     |String |
-        |penalized_player_ids       |String |
         |scorer_player_ids          |String |
         |pat_scorer_player_ids      |String |
+        |punter_player_ids          |String |
+        |pass_defender_player_ids   |String |
         |sacked_by_player_ids       |String |
+        |penalized_player_ids       |String |
+        |pat_passer_player_ids      |String |
         |season                     |Int64  |
         |week                       |Int64  |
-        |pass_defender_player_name  |String |
-        |pass_defender_player_id    |String |
-        |pass_defender_player_names |String |
-        |pass_defender_player_ids   |String |
         |recoverer_player_name      |String |
         |fumbler_player_name        |String |
+        |forced_by_player_name      |String |
         |recoverer_player_id        |String |
         |fumbler_player_id          |String |
+        |forced_by_player_id        |String |
         |recoverer_player_names     |String |
         |fumbler_player_names       |String |
+        |forced_by_player_names     |String |
         |recoverer_player_ids       |String |
         |fumbler_player_ids         |String |
-        |forced_by_player_name      |String |
-        |forced_by_player_id        |String |
-        |forced_by_player_names     |String |
         |forced_by_player_ids       |String |
-        |pat_passer_player_name     |String |
-        |pat_passer_player_id       |String |
-        |pat_passer_player_names    |String |
-        |pat_passer_player_ids      |String |
 
     Raises:
         SeasonNotFoundError: if a requested season is below 2014.
@@ -1818,9 +1843,6 @@ def load_cfb_game_rosters(seasons, return_as_pandas: bool = False):
         |birth_country_abbreviation |String  |
         |headshot_href              |String  |
         |headshot_alt               |String  |
-        |hand_type                  |String  |
-        |hand_abbreviation          |String  |
-        |hand_display_value         |String  |
         |flag_href                  |String  |
         |flag_alt                   |String  |
         |flag_rel                   |String  |
@@ -1831,7 +1853,9 @@ def load_cfb_game_rosters(seasons, return_as_pandas: bool = False):
         |status_name                |String  |
         |status_type                |String  |
         |status_abbreviation        |String  |
-        |middle_name                |String  |
+        |hand_type                  |String  |
+        |hand_abbreviation          |String  |
+        |hand_display_value         |String  |
         |starter                    |Boolean |
         |jersey_right               |String  |
         |valid                      |Boolean |
@@ -1863,14 +1887,10 @@ def load_cfb_game_rosters(seasons, return_as_pandas: bool = False):
         |game_id                    |Int64   |
         |season                     |Int64   |
         |week                       |Int64   |
+        |citizenship                |String  |
+        |middle_name                |String  |
         |age                        |Float64 |
         |date_of_birth              |String  |
-        |citizenship                |String  |
-        |draft_display_text         |String  |
-        |draft_round                |Float64 |
-        |draft_year                 |Float64 |
-        |draft_selection            |Float64 |
-        |draft_team_href            |String  |
 
     Raises:
         SeasonNotFoundError: if a requested season is below 2004.
@@ -2117,7 +2137,7 @@ def load_cfb_power_index(seasons, return_as_pandas: bool = False):
         |teampredptdiff   |Float64 |
         |gameprojection   |Float64 |
         |matchupquality   |Float64 |
-        |teamadjgamescore |Float64 |
+        |teamadjgamescore |Null    |
 
     Raises:
         SeasonNotFoundError: if a requested season is below 2015.
@@ -2305,6 +2325,11 @@ def load_cfb_adv_passing(seasons, return_as_pandas: bool = False):
         |CompPct            |Float64 |
         |xCompPct           |Float64 |
         |CPOE               |Float64 |
+        |AirYds             |Int64   |
+        |aDOT               |Float64 |
+        |CompAirYds         |Int64   |
+        |YAC                |Int64   |
+        |AirYdsPct          |Float64 |
         |qbr_epa            |Float64 |
         |sack_epa           |Float64 |
         |pass_epa           |Float64 |
@@ -2435,6 +2460,11 @@ def load_cfb_adv_receiving(seasons, return_as_pandas: bool = False):
         |SR                   |Float64 |
         |Fum                  |Int64   |
         |Fum_Lost             |Int64   |
+        |AirYds               |Int64   |
+        |aDOT                 |Float64 |
+        |CompAirYds           |Int64   |
+        |YAC                  |Int64   |
+        |AirYdsPct            |Float64 |
         |game_id              |Int64   |
         |season               |Int64   |
         |week                 |Int64   |
@@ -2544,22 +2574,22 @@ def load_cfb_adv_defensive_players(seasons, return_as_pandas: bool = False):
         A polars (or pandas) DataFrame; seasons with no published asset are
         skipped with a warning rather than raising (404-safe).
 
-        |col_name                |type   |
-        |:-----------------------|:------|
-        |def_pos_team_id         |Int64  |
-        |def_pos_team            |String |
-        |player_name             |String |
-        |sacks                   |Int64  |
-        |sacks_yards             |Int64  |
-        |fumble_recoveries       |Int64  |
-        |fumble_recoveries_yards |Int64  |
-        |game_id                 |Int64  |
-        |season                  |Int64  |
-        |week                    |Int64  |
-        |pass_breakups           |Int64  |
-        |interceptions           |Int64  |
-        |interceptions_yards     |Int64  |
-        |forced_fumbles          |Int64  |
+        |col_name                |type    |
+        |:-----------------------|:-------|
+        |def_pos_team_id         |Int64   |
+        |def_pos_team            |String  |
+        |player_name             |String  |
+        |sacks                   |Float64 |
+        |sacks_yards             |Float64 |
+        |pass_breakups           |Int64   |
+        |interceptions           |Int64   |
+        |interceptions_yards     |Int64   |
+        |game_id                 |Int64   |
+        |season                  |Int64   |
+        |week                    |Int64   |
+        |forced_fumbles          |Int64   |
+        |fumble_recoveries       |Int64   |
+        |fumble_recoveries_yards |Int64   |
 
     Raises:
         SeasonNotFoundError: if a requested season is below 2004.
@@ -2782,13 +2812,13 @@ def load_cfb_adv_specialists(seasons, return_as_pandas: bool = False):
         |field_goals_yards  |Int64  |
         |punts              |Int64  |
         |punts_yards        |Int64  |
-        |kick_returns       |Int64  |
-        |kick_returns_yards |Int64  |
         |punt_returns       |Int64  |
         |punt_returns_yards |Int64  |
         |game_id            |Int64  |
         |season             |Int64  |
         |week               |Int64  |
+        |kick_returns       |Int64  |
+        |kick_returns_yards |Int64  |
 
     Raises:
         SeasonNotFoundError: if a requested season is below 2004.
@@ -3029,6 +3059,24 @@ def load_cfb_passing(seasons, return_as_pandas: bool = False):
         |yardsdropback_rank  |Float64 |
         |detmer_rank         |Float64 |
         |detmergame_rank     |Float64 |
+        |passing_td_rank     |Float64 |
+        |pass_int_rank       |Float64 |
+        |sacked_rank         |Float64 |
+        |TEPA_pct            |Float64 |
+        |EPAgame_pct         |Float64 |
+        |EPAplay_pct         |Float64 |
+        |success_pct         |Float64 |
+        |comppct_pct         |Float64 |
+        |yards_pct           |Float64 |
+        |yardsplay_pct       |Float64 |
+        |yardsgame_pct       |Float64 |
+        |sack_adj_yards_pct  |Float64 |
+        |yardsdropback_pct   |Float64 |
+        |detmer_pct          |Float64 |
+        |detmergame_pct      |Float64 |
+        |passing_td_pct      |Float64 |
+        |pass_int_pct        |Float64 |
+        |sacked_pct          |Float64 |
         |fbs_class           |String  |
 
     Raises:
@@ -3173,10 +3221,26 @@ def load_cfb_receiving(seasons, return_as_pandas: bool = False):
         |EPAgame_rank         |Float64 |
         |EPAplay_rank         |Float64 |
         |success_rank         |Float64 |
+        |comp_rank            |Float64 |
+        |targets_rank         |Float64 |
         |catchpct_rank        |Float64 |
         |yards_rank           |Float64 |
+        |passing_td_rank      |Float64 |
+        |fumbles_rank         |Float64 |
         |yardsplay_rank       |Float64 |
         |yardsgame_rank       |Float64 |
+        |TEPA_pct             |Float64 |
+        |EPAgame_pct          |Float64 |
+        |EPAplay_pct          |Float64 |
+        |success_pct          |Float64 |
+        |comp_pct             |Float64 |
+        |targets_pct          |Float64 |
+        |catchpct_pct         |Float64 |
+        |yards_pct            |Float64 |
+        |passing_td_pct       |Float64 |
+        |fumbles_pct          |Float64 |
+        |yardsplay_pct        |Float64 |
+        |yardsgame_pct        |Float64 |
         |fbs_class            |String  |
 
     Raises:
@@ -3248,9 +3312,22 @@ def load_cfb_rushing(seasons, return_as_pandas: bool = False):
         |EPAgame_rank       |Float64 |
         |EPAplay_rank       |Float64 |
         |success_rank       |Float64 |
+        |plays_rank         |Float64 |
         |yards_rank         |Float64 |
+        |rushing_td_rank    |Float64 |
+        |fumbles_rank       |Float64 |
         |yardsplay_rank     |Float64 |
         |yardsgame_rank     |Float64 |
+        |TEPA_pct           |Float64 |
+        |EPAgame_pct        |Float64 |
+        |EPAplay_pct        |Float64 |
+        |success_pct        |Float64 |
+        |plays_pct          |Float64 |
+        |yards_pct          |Float64 |
+        |rushing_td_pct     |Float64 |
+        |fumbles_pct        |Float64 |
+        |yardsplay_pct      |Float64 |
+        |yardsgame_pct      |Float64 |
         |fbs_class          |String  |
 
     Raises:
@@ -4503,8 +4580,8 @@ def load_cfb_pbp_r(seasons, return_as_pandas: bool = False):
         |scoring                          |Boolean |
         |pos_team_timeouts_rem_before     |Float64 |
         |def_pos_team_timeouts_rem_before |Float64 |
-        |pos_team_timeouts                |Float64 |
-        |def_pos_team_timeouts            |Float64 |
+        |pos_team_timeouts                |Int32   |
+        |def_pos_team_timeouts            |Int32   |
         |pos_score_diff                   |Int32   |
         |pos_score_diff_start_end         |Float64 |
         |offense_play                     |String  |
@@ -4520,8 +4597,8 @@ def load_cfb_pbp_r(seasons, return_as_pandas: bool = False):
         |defense_conference               |String  |
         |off_timeout_called               |Float64 |
         |def_timeout_called               |Float64 |
-        |offense_timeouts                 |Float64 |
-        |defense_timeouts                 |Float64 |
+        |offense_timeouts                 |Int32   |
+        |defense_timeouts                 |Int32   |
         |off_timeouts_rem_before          |Float64 |
         |def_timeouts_rem_before          |Float64 |
         |rusher_player_name               |String  |
@@ -4694,8 +4771,8 @@ def load_cfb_pbp_r(seasons, return_as_pandas: bool = False):
         |sack_taken_player                |String  |
         |sack_taken_stat                  |Int32   |
         |pass_breakup_player_id           |Float64 |
-        |pass_breakup_player              |String  |
-        |pass_breakup_stat                |Int32   |
+        |pass_breakup_player              |Boolean |
+        |pass_breakup_stat                |Boolean |
         |field_goal_attempt_player_id     |String  |
         |field_goal_attempt_player        |String  |
         |field_goal_attempt_stat          |Int32   |
@@ -5071,6 +5148,7 @@ def load_ncaa_mfb_schedule(seasons, return_as_pandas: bool = False):
         |contest_id     |String |
         |attendance     |Int64  |
         |academic_year  |Int32  |
+        |espn_game_id   |String |
         |season         |Int64  |
 
     Raises:
@@ -5302,6 +5380,28 @@ def load_ncaa_mfb_player_stats(seasons, return_as_pandas: bool = False):
         |yards_per_reception |String |
         |rec_td              |String |
         |long_rec            |String |
+        |yds                 |String |
+        |plays               |String |
+        |pbu                 |String |
+        |int                 |String |
+        |intyds              |String |
+        |int_ret_tds         |String |
+        |pdef                |String |
+        |ko_ret              |String |
+        |ko_ret_yds          |String |
+        |kick_ret_tds        |String |
+        |long_kor            |String |
+        |sacks               |String |
+        |solo_tack           |String |
+        |asst_tack           |String |
+        |tackles             |String |
+        |fgm                 |String |
+        |fga                 |String |
+        |fg_blocks_allowed   |String |
+        |punt_ret            |String |
+        |punt_ret_yds        |String |
+        |punt_ret_tds        |String |
+        |long_pr             |String |
         |season              |Int64  |
 
     Raises:

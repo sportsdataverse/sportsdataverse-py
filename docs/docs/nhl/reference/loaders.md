@@ -312,6 +312,7 @@ Release: [nhl_game_rosters](https://github.com/sportsdataverse/sportsdataverse-d
 | `game_id` | Int64 | Unique game identifier. |
 | `season` | Int64 | Season year (echoed from arg). |
 | `game_date` | String | Game date. |
+| `shoots_catches` | String | Handedness (shoots/catches). |
 
 ```python
 load_nhl_game_rosters(seasons=2024)

@@ -108,6 +108,7 @@ def load_mlb_we_table(seasons, return_as_pandas: bool = False):
         |score_diff_bucket |Int64   |
         |home_win_exp      |Float64 |
         |n                 |UInt32  |
+        |thin              |Boolean |
         |season            |Int64   |
 
     Raises:
@@ -206,6 +207,8 @@ def load_mlb_expected_stats(seasons, return_as_pandas: bool = False):
         |xwoba    |Float64 |
         |xba      |Float64 |
         |xslg     |Float64 |
+        |woba     |Float64 |
+        |ba       |Float64 |
 
     Raises:
         SeasonNotFoundError: if a requested season is below 2015.
@@ -581,22 +584,45 @@ def load_ncaa_baseball_pbp(seasons, return_as_pandas: bool = False):
         A polars (or pandas) DataFrame; seasons with no published asset are
         skipped with a warning rather than raising (404-safe).
 
-        |col_name       |type    |
-        |:--------------|:-------|
-        |game_date      |String  |
-        |location       |String  |
-        |attendance     |Boolean |
-        |inning         |String  |
-        |inning_top_bot |String  |
-        |score          |String  |
-        |batting        |String  |
-        |fielding       |String  |
-        |description    |String  |
-        |year           |Int32   |
-        |game_pbp_url   |String  |
-        |game_pbp_id    |Int32   |
-        |game_info_url  |String  |
-        |contest_id     |Int32   |
+        |col_name         |type         |
+        |:----------------|:------------|
+        |contest_id       |String       |
+        |inning           |Int64        |
+        |inning_top_bot   |String       |
+        |batting          |String       |
+        |fielding         |String       |
+        |play_number      |Int64        |
+        |score_away       |Int64        |
+        |score_home       |Int64        |
+        |batter           |String       |
+        |play_type        |String       |
+        |hit_trajectory   |String       |
+        |fielded_position |String       |
+        |is_hit           |Boolean      |
+        |is_out           |Boolean      |
+        |strikeout_type   |String       |
+        |is_sacrifice     |Boolean      |
+        |sac_type         |String       |
+        |is_double_play   |Boolean      |
+        |rbi              |Int64        |
+        |count_balls      |Int64        |
+        |count_strikes    |Int64        |
+        |pitch_sequence   |String       |
+        |error_position   |String       |
+        |unearned         |Boolean      |
+        |runs_scored      |Int64        |
+        |scoring_runners  |List(String) |
+        |runners_advanced |List(String) |
+        |outs_on_play     |Int64        |
+        |is_scoring_play  |Boolean      |
+        |description      |String       |
+        |source           |String       |
+        |espn_game_id     |String       |
+        |game_key         |String       |
+        |game_date        |String       |
+        |location         |String       |
+        |attendance       |Int64        |
+        |season           |Int64        |
 
     Raises:
         SeasonNotFoundError: if a requested season is below 2017.
@@ -638,30 +664,22 @@ def load_ncaa_baseball_schedule(seasons, return_as_pandas: bool = False):
         A polars (or pandas) DataFrame; seasons with no published asset are
         skipped with a warning rather than raising (404-safe).
 
-        |col_name                |type   |
-        |:-----------------------|:------|
-        |year                    |Int32  |
-        |season_id               |Int32  |
-        |date                    |String |
-        |home_team               |String |
-        |home_team_id            |Int32  |
-        |home_team_score         |Int32  |
-        |home_team_conference    |String |
-        |home_team_conference_id |Int32  |
-        |home_team_slug          |String |
-        |home_team_division      |Int32  |
-        |away_team               |String |
-        |away_team_id            |Int32  |
-        |away_team_score         |Int32  |
-        |away_team_conference    |String |
-        |away_team_conference_id |Int32  |
-        |away_team_slug          |String |
-        |away_team_division      |Int32  |
-        |neutral_site            |String |
-        |innings                 |Int32  |
-        |slug                    |String |
-        |game_info_url           |String |
-        |contest_id              |Int32  |
+        |col_name       |type   |
+        |:--------------|:------|
+        |team_id        |String |
+        |team_name      |String |
+        |date           |String |
+        |game_number    |Int64  |
+        |opponent_id    |String |
+        |opponent       |String |
+        |result         |String |
+        |outcome        |String |
+        |team_score     |Int64  |
+        |opponent_score |Int64  |
+        |contest_id     |String |
+        |attendance     |Int64  |
+        |division       |Int64  |
+        |season         |Int64  |
 
     Raises:
         SeasonNotFoundError: if a requested season is below 2012.
@@ -703,6 +721,13 @@ def load_ncaa_baseball_teams(seasons, return_as_pandas: bool = False):
         A polars (or pandas) DataFrame; seasons with no published asset are
         skipped with a warning rather than raising (404-safe).
 
+        |col_name  |type   |
+        |:---------|:------|
+        |team_id   |String |
+        |team_name |String |
+        |division  |Int64  |
+        |season    |Int64  |
+
     Raises:
         SeasonNotFoundError: if a requested season is below 2024.
 
@@ -742,6 +767,24 @@ def load_ncaa_baseball_rosters(seasons, return_as_pandas: bool = False):
     Returns:
         A polars (or pandas) DataFrame; seasons with no published asset are
         skipped with a warning rather than raising (404-safe).
+
+        |col_name        |type   |
+        |:---------------|:------|
+        |team_id         |String |
+        |team_name       |String |
+        |player_id       |String |
+        |player_name     |String |
+        |jersey          |String |
+        |statcrew_jersey |String |
+        |player_class    |String |
+        |position        |String |
+        |height          |String |
+        |weight          |Int64  |
+        |hometown        |String |
+        |high_school     |String |
+        |games_played    |Int64  |
+        |games_started   |Int64  |
+        |season          |Int64  |
 
     Raises:
         SeasonNotFoundError: if a requested season is below 2024.
@@ -783,6 +826,25 @@ def load_ncaa_baseball_linescore(seasons, return_as_pandas: bool = False):
         A polars (or pandas) DataFrame; seasons with no published asset are
         skipped with a warning rather than raising (404-safe).
 
+        |col_name     |type   |
+        |:------------|:------|
+        |contest_id   |String |
+        |team         |String |
+        |home_away    |String |
+        |inning       |String |
+        |runs         |Int64  |
+        |runs_total   |Int64  |
+        |hits         |Int64  |
+        |errors       |Int64  |
+        |game_date    |String |
+        |venue        |String |
+        |attendance   |Int64  |
+        |source       |String |
+        |espn_game_id |String |
+        |game_key     |String |
+        |location     |String |
+        |season       |Int64  |
+
     Raises:
         SeasonNotFoundError: if a requested season is below 2024.
 
@@ -822,6 +884,24 @@ def load_ncaa_baseball_team_stats(seasons, return_as_pandas: bool = False):
     Returns:
         A polars (or pandas) DataFrame; seasons with no published asset are
         skipped with a warning rather than raising (404-safe).
+
+        |col_name     |type   |
+        |:------------|:------|
+        |contest_id   |String |
+        |category     |String |
+        |stat         |String |
+        |period       |String |
+        |away_team    |String |
+        |away_value   |String |
+        |home_team    |String |
+        |home_value   |String |
+        |source       |String |
+        |espn_game_id |String |
+        |game_key     |String |
+        |game_date    |String |
+        |location     |String |
+        |attendance   |Int64  |
+        |season       |Int64  |
 
     Raises:
         SeasonNotFoundError: if a requested season is below 2024.
@@ -863,6 +943,68 @@ def load_ncaa_baseball_player_stats(seasons, return_as_pandas: bool = False):
         A polars (or pandas) DataFrame; seasons with no published asset are
         skipped with a warning rather than raising (404-safe).
 
+        |col_name      |type   |
+        |:-------------|:------|
+        |contest_id    |String |
+        |team_id       |String |
+        |number        |String |
+        |name          |String |
+        |position      |String |
+        |r             |String |
+        |ab            |String |
+        |h             |String |
+        |2b            |String |
+        |3b            |String |
+        |tb            |String |
+        |hr            |String |
+        |rbi           |String |
+        |bb            |String |
+        |hbp           |String |
+        |sf            |String |
+        |sh            |String |
+        |k             |String |
+        |opp_dp        |String |
+        |cs            |String |
+        |picked        |String |
+        |sb            |String |
+        |ibb           |String |
+        |kl            |String |
+        |category      |String |
+        |source        |String |
+        |espn_game_id  |String |
+        |game_key      |String |
+        |game_date     |String |
+        |location      |String |
+        |attendance    |Int64  |
+        |ip            |String |
+        |er            |String |
+        |so            |String |
+        |bf            |String |
+        |2b_a          |String |
+        |3b_a          |String |
+        |bk            |String |
+        |hr_a          |String |
+        |wp            |String |
+        |hb            |String |
+        |inh_run       |String |
+        |inh_run_score |String |
+        |sha           |String |
+        |sfa           |String |
+        |tuer          |String |
+        |pickoffs      |String |
+        |po            |String |
+        |a             |String |
+        |tc            |String |
+        |e             |String |
+        |ci            |String |
+        |pb            |String |
+        |sba           |String |
+        |csb           |String |
+        |idp           |String |
+        |tp            |String |
+        |sbapct        |String |
+        |season        |Int64  |
+
     Raises:
         SeasonNotFoundError: if a requested season is below 2024.
 
@@ -902,6 +1044,42 @@ def load_ncaa_baseball_situational_stats(seasons, return_as_pandas: bool = False
     Returns:
         A polars (or pandas) DataFrame; seasons with no published asset are
         skipped with a warning rather than raising (404-safe).
+
+        |col_name       |type   |
+        |:--------------|:------|
+        |contest_id     |String |
+        |team_seq       |Int64  |
+        |player         |String |
+        |position       |String |
+        |with_runrs     |String |
+        |hits_scorepos  |String |
+        |vs_lhp         |String |
+        |vs_rhp         |String |
+        |leadoff_pct    |String |
+        |rbi3rd         |String |
+        |h_pinchit      |String |
+        |adv_ops        |String |
+        |with_2_outs    |String |
+        |with_runrs2    |String |
+        |with_scorepos2 |String |
+        |bases_empty    |String |
+        |bases_loaded   |String |
+        |category       |String |
+        |source         |String |
+        |espn_game_id   |String |
+        |game_key       |String |
+        |game_date      |String |
+        |location       |String |
+        |attendance     |Int64  |
+        |runners        |String |
+        |vs_lhb         |String |
+        |with_2outs     |String |
+        |emtpy          |String |
+        |with_scorepos  |String |
+        |with_runners2  |String |
+        |vs_rhb         |String |
+        |field_pct      |String |
+        |season         |Int64  |
 
     Raises:
         SeasonNotFoundError: if a requested season is below 2024.
@@ -944,6 +1122,19 @@ def load_ncaa_baseball_games(seasons, return_as_pandas: bool = False):
     Returns:
         A polars (or pandas) DataFrame; seasons with no published asset are
         skipped with a warning rather than raising (404-safe).
+
+        |col_name     |type   |
+        |:------------|:------|
+        |game_key     |String |
+        |contest_id   |String |
+        |game_pbp_id  |Int64  |
+        |season       |Int64  |
+        |source       |String |
+        |espn_game_id |String |
+        |away_team    |String |
+        |away_final   |Int64  |
+        |home_team    |String |
+        |home_final   |Int64  |
 
     Raises:
         SeasonNotFoundError: if a requested season is below 2017.
