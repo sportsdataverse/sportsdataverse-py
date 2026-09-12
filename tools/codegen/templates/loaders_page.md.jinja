@@ -22,6 +22,11 @@ flowchart LR
 ## `{{ ld.fn }}`
 
 Release: {% if ld.tag_url %}[{{ ld.tag }}]({{ ld.tag_url }}){% else %}`{{ ld.tag }}`{% endif %}{% if ld.url %} · asset `{{ ld.url }}`{% endif %}
+{% if ld.notes %}
+:::caution Coverage
+{{ ld.notes }}
+:::
+{% endif %}
 
 {% if ld.return_table %}### Returns
 
