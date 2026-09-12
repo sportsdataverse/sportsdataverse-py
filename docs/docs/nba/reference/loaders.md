@@ -60,7 +60,7 @@ Release: [espn_nba_pbp](https://github.com/sportsdataverse/sportsdataverse-data/
 | col_name | type | description |
 |---|---|---|
 | `game_play_number` | Int32 | Sequential play number within the game. |
-| `id` | Float64 | Id. |
+| `id` | Int64 | Id. |
 | `sequence_number` | Int32 | Sequence number representing a shot-possession (V3 PBP). |
 | `type_id` | Int32 | Type identifier (numeric). |
 | `type_text` | String | Display text for the type field. |
@@ -107,7 +107,9 @@ Release: [espn_nba_pbp](https://github.com/sportsdataverse/sportsdataverse-data/
 | `away_timeout_called` | Boolean | Whether the play is a timeout called by the away team. |
 | `half` | Int32 | Half of the game (1 or 2). |
 | `game_half` | Int32 | Half of the game (1 or 2). |
+| `lag_qtr` | Int32 | Quarter lag (the previous-play's quarter). |
 | `lead_qtr` | Int32 | Quarter lead (the next-play's quarter). |
+| `lag_half` | Int32 | A lag column on the half |
 | `lead_half` | Int32 | A lead column on the half |
 | `start_quarter_seconds_remaining` | Float64 | Seconds remaining in the period at the start of the play. |
 | `start_half_seconds_remaining` | Float64 | Seconds remaining in the half at the start of the play. |
@@ -116,8 +118,6 @@ Release: [espn_nba_pbp](https://github.com/sportsdataverse/sportsdataverse-data/
 | `end_half_seconds_remaining` | Float64 | Seconds remaining in the half at the end of the play. |
 | `end_game_seconds_remaining` | Float64 | Seconds remaining in the game at the end of the play. |
 | `period` | Int32 | Period of the game (1-4 quarters; 5+ for OT). |
-| `lag_qtr` | Int32 | Quarter lag (the previous-play's quarter). |
-| `lag_half` | Int32 | A lag column on the half |
 | `coordinate_x` | Float64 | X coordinate on the court (half-court layout). |
 | `coordinate_y` | Float64 | Y coordinate on the court (half-court layout). |
 | `game_date` | Date | Game date (YYYY-MM-DD). |

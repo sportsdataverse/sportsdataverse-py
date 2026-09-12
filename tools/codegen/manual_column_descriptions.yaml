@@ -5285,17 +5285,23 @@ load_cfb_adv_drives:
   yards_per_drive: Mean of ESPN's per-drive yardage taken over plays rather than over drives, exactly drive_total_gained_yards
     divided by the team's scrimmage-play count.
 load_cfb_adv_passing:
+  AirYds: Air yards -- distance the ball travelled in the air, past the line of scrimmage, summed over the player's attempts/targets.
+  AirYdsPct: 'Air-yards rate published alongside AirYds. Despite the `Pct` suffix this is NOT a 0-100 percentage and is not
+    AirYds/Yds (verified: max absolute difference 33.0); observed values run negative to slightly above 1.'
   Att: Pass attempts recorded in the advanced box score.
   CPOE: Completion percentage over expected -- actual minus modelled completion rate.
   Comp: Completed passes recorded in the advanced box score.
+  CompAirYds: Air yards on completed passes only.
   CompPct: Completion percentage from the advanced box score.
   EPA_per_Play: EPA per play on the passer's plays.
   Int: Interceptions thrown.
   Pass_TD: Passing touchdowns.
   SR: Success rate on the passer's plays.
   Sck: Times the passer was sacked.
+  YAC: Yards after catch.
   YPA: Yards per pass attempt.
   Yds: Passing yards from the advanced box score.
+  aDOT: Average depth of target -- mean air yards per attempt/target.
   era0: Rule-era indicator for the earliest modelled era.
   era1: Rule-era indicator for the second modelled era.
   era2: Rule-era indicator for the third modelled era.
@@ -5311,6 +5317,10 @@ load_cfb_adv_passing:
   xComp: Expected completions, summed from the per-play completion model.
   xCompPct: Expected completion percentage from the per-play completion model.
 load_cfb_adv_receiving:
+  AirYds: Air yards -- distance the ball travelled in the air, past the line of scrimmage, summed over the player's attempts/targets.
+  AirYdsPct: 'Air-yards rate published alongside AirYds. Despite the `Pct` suffix this is NOT a 0-100 percentage and is not
+    AirYds/Yds (verified: max absolute difference 33.0); observed values run negative to slightly above 1.'
+  CompAirYds: Air yards on completed passes only.
   EPA_per_Play: EPA per play on the passer's plays.
   Fum: Count of the receiver's targeted pass plays whose text mentions a fumble; it is a play-level flag, not a fumble charged
     to this player.
@@ -5319,8 +5329,10 @@ load_cfb_adv_receiving:
   Rec_TD: Receiving touchdowns, the count of the player's targeted plays that ended in a passing touchdown.
   SR: Success rate on the passer's plays.
   Tar: Times the player was targeted on a pass attempt, the denominator behind YPT.
+  YAC: Yards after catch.
   YPT: Receiving yards per target, the mean of receiving yardage over every target rather than over receptions only.
   Yds: Passing yards from the advanced box score.
+  aDOT: Average depth of target -- mean air yards per attempt/target.
   pos_team_id: ESPN team id of the team on offense. Present for every season 2004+.
   receiver_player_name: Display name of the targeted receiver -- the FIRST participant in that role on the play.
 load_cfb_adv_rushing:
@@ -5739,8 +5751,6 @@ load_cfb_game_rosters:
   athlete_href: ESPN Core v2 API reference URL for the athlete's season record, ending in the athlete id.
   birth_country_alternate_id: ESPN's internal alternate identifier for the athlete's birth country, paired with birth_place_country
     and the flag fields.
-  draft_team_href: 'API link to the team that drafted the player. Sparse: absent entirely from the 2023 and 2024 assets and
-    populated on only a small share of 2025 rows.'
   flag_alt: Alt text ESPN attaches to the birth-country flag image, which is the country's name spelled out.
   flag_href: URL of the birth-country flag image hosted on ESPN's CDN under teamlogos/countries.
   flag_rel: Stringified relationship list ESPN ships with the flag image; the only non-null value observed is a single country-flag
@@ -5779,25 +5789,31 @@ load_cfb_model_pbp:
   wp_model_version: Version of the win-probability model that scored the play.
 load_cfb_passing:
   EPAgame: EPA generated per game.
+  EPAgame_pct: Percentile position (0-100) of the player's EPA per game among qualifying players that season.
   EPAgame_rank: Rank of the passer's EPA generated per game among passers clearing the leaderboard minimum of 14 dropbacks
     per team game, where 1 is best.
   EPAplay: EPA generated per play.
+  EPAplay_pct: Percentile position (0-100) of the player's EPA per play among qualifying players that season.
   EPAplay_rank: Rank of the passer's EPA generated per play among passers clearing the leaderboard minimum of 14 dropbacks
     per team game, where 1 is best.
   TEPA: Total EPA summed over every play.
+  TEPA_pct: Percentile position (0-100) of the player's total EPA among qualifying players that season.
   TEPA_rank: Rank of the passer's total EPA summed over every play among passers clearing the leaderboard minimum of 14 dropbacks
     per team game, where 1 is best.
   att: Pass attempts thrown.
   comp: Completed passes.
   comppct: Completion percentage.
+  comppct_pct: Percentile position (0-100) of the player's completion percentage among qualifying players that season.
   comppct_rank: Rank of the passer's completion percentage among passers clearing the leaderboard minimum of 14 dropbacks
     per team game, where 1 is best.
   detmer: Detmer rating -- the composite passing-efficiency measure this pipeline publishes, named for the college passing-efficiency
     tradition.
+  detmer_pct: Percentile position (0-100) of the player's Detmer rating among qualifying players that season.
   detmer_rank: Rank of the passer's detmer rating -- the composite passing-efficiency measure this pipeline publishes, named
     for the college passing-efficiency tradition among passers clearing the leaderboard minimum of 14 dropbacks per team game,
     where 1 is best.
   detmergame: Detmer rating expressed per game.
+  detmergame_pct: Percentile position (0-100) of the player's Detmer rating per game among qualifying players that season.
   detmergame_rank: Rank of the passer's detmer rating expressed per game among passers clearing the leaderboard minimum of
     14 dropbacks per team game, where 1 is best.
   dropbacks: Dropbacks taken by the passer.
@@ -5805,27 +5821,41 @@ load_cfb_passing:
     membership. Null for teams outside FBS.'
   int_epa: EPA lost on the team's interceptions thrown -- the expected-points cost of the turnovers, not a count.
   pass_int: Interceptions thrown.
+  pass_int_pct: Percentile position (0-100) of the player's interceptions thrown among qualifying players that season.
+  pass_int_rank: Ordinal rank of the player's interceptions thrown among qualifying players that season; ties share a fractional
+    rank.
   passer_player_name: Display name of the passer -- the FIRST participant in that role on the play.
+  passing_td_pct: Percentile position (0-100) of the player's passing touchdowns among qualifying players that season.
+  passing_td_rank: Ordinal rank of the player's passing touchdowns among qualifying players that season; ties share a fractional
+    rank.
   playsgame: Plays per game.
   sack_adj_yards: Passing yards adjusted for sack yardage lost.
+  sack_adj_yards_pct: Percentile position (0-100) of the player's sack-adjusted yards among qualifying players that season.
   sack_adj_yards_rank: Rank of the passer's passing yards adjusted for sack yardage lost among passers clearing the leaderboard
     minimum of 14 dropbacks per team game, where 1 is best.
   sack_epa: EPA lost on the sacks the team's passers took -- the expected-points cost of those plays.
   sack_yds: Yards lost to sacks.
   sacked: Times the passer was sacked.
+  sacked_pct: Percentile position (0-100) of the player's times sacked among qualifying players that season.
+  sacked_rank: Ordinal rank of the player's times sacked among qualifying players that season; ties share a fractional rank.
   success: Success rate across the team plays.
+  success_pct: Percentile position (0-100) of the player's success rate among qualifying players that season.
   success_rank: Rank of the passer's success rate across their plays among passers clearing the leaderboard minimum of 14
     dropbacks per team game, where 1 is best.
   team_games: Games the team played, used as the per-game denominator.
+  yards_pct: Percentile position (0-100) of the player's yards among qualifying players that season.
   yards_rank: Rank of the passer's total yards among passers clearing the leaderboard minimum of 14 dropbacks per team game,
     where 1 is best.
   yardsdropback: Yards per dropback.
+  yardsdropback_pct: Percentile position (0-100) of the player's yards per dropback among qualifying players that season.
   yardsdropback_rank: Rank of the passer's yards per dropback among passers clearing the leaderboard minimum of 14 dropbacks
     per team game, where 1 is best.
   yardsgame: Yards per game.
+  yardsgame_pct: Percentile position (0-100) of the player's yards per game among qualifying players that season.
   yardsgame_rank: Rank of the passer's yards per game among passers clearing the leaderboard minimum of 14 dropbacks per team
     game, where 1 is best.
   yardsplay: Yards per play.
+  yardsplay_pct: Percentile position (0-100) of the player's yards per play among qualifying players that season.
   yardsplay_rank: Rank of the passer's yards per play among passers clearing the leaderboard minimum of 14 dropbacks per team
     game, where 1 is best.
 load_cfb_pbp:
@@ -5841,6 +5871,8 @@ load_cfb_pbp:
   EPA_non_explosive: EPA credited to the play on non-explosive plays.
   EPA_pass: EPA credited to the play on pass plays.
   EPA_penalty: EPA credited to the play attributable to penalties.
+  EPA_penalty_direct: EPA attributable directly to the penalty on the play, separated from the EPA of the play itself (observed
+    -11.7 to 8.05; null when no penalty applied).
   EPA_punt: EPA credited to the play on punt plays.
   EPA_rush: EPA credited to the play on rush plays.
   EPA_scrimmage: EPA credited to the play on plays from scrimmage.
@@ -5863,6 +5895,8 @@ load_cfb_pbp:
   EPA_success_standard_down_EPA: EPA on successful plays on a standard down.
   EP_between: Change in expected points across the play, before penalty adjustment.
   EP_end: Expected points for the offense at the end of the play.
+  EP_penalty_cf: Counterfactual expected points for the penalty branch -- the EP had the alternative penalty outcome been taken
+    (null unless a penalty decision existed).
   EP_start: Expected points for the offense at the start of the play.
   EP_start_touchback: Expected points the offense would have had from a touchback on this play.
   HA_score_diff: Home score minus away score for the play.
@@ -5888,6 +5922,7 @@ load_cfb_pbp:
   clock.minutes: Minutes remaining on the game clock at the play.
   clock.seconds: Seconds component of the game clock at the play.
   def_fumble_lost: Whether the defending team (e.g. a returner after a takeaway) fumbled and lost the ball back.
+  def_pos_team_id: Team id of the defense on the play.
   def_wp_after_naive: End-of-play defense win probability under the naive model.
   def_wp_before_naive: Pre-snap defense win probability under the naive model (1 - wp_before_naive).
   down_1: True when it is 1st down at the start of the play.
@@ -5970,7 +6005,9 @@ load_cfb_pbp:
   fg_wp_diff: fg_wp minus the recommended option's WP (0 when the field goal is the recommendation, otherwise <= 0).
   firstHalfKickoffTeamId: ESPN id of the team that received the opening kickoff.
   first_down_created: True when the play produced a first down for the offense.
+  first_down_earned: Whether the play earned a first down by means other than yardage (e.g. by penalty).
   first_down_prob: Modeled probability of converting the fourth down when going for it.
+  first_down_yards: Whether the play gained enough yardage to earn a first down.
   forced_fumble: True when the defense forced a fumble on the play.
   forced_fumble_team: Team id credited with forcing the fumble -- the side opposite the fumbling player (the covering team
     on returns).
@@ -6015,22 +6052,18 @@ load_cfb_pbp:
   kicking_team: Team id of the kicking team on kickoff, punt, and field-goal plays.
   kickoff_player_id: ESPN athlete id of the player kicking off.
   kickoff_return_player_id: ESPN athlete id of the kickoff returner.
+  kickoff_return_player_name: Name of the player returning the kickoff, when the play was returned.
   kneel_down: Whether the play is an offensive kneel, from explicit kneel text plus an end-of-half TEAM-rush heuristic.
   lag_EP_end: Value of EP_end on the previous play, used for sequence-aware derivations.
   lag_HA_score_diff: Value of HA_score_diff on the previous play, used for sequence-aware derivations.
   lag_awayScore: Value of awayScore on the previous play, used for sequence-aware derivations.
-  lag_change_of_pos_team: Value of change_of_pos_team on the previous play, used for sequence-aware derivations.
   lag_half: Value of half on the previous play, used for sequence-aware derivations.
   lag_homeScore: Value of homeScore on the previous play, used for sequence-aware derivations.
-  lag_pos_score_diff: Value of pos_score_diff on the previous play, used for sequence-aware derivations.
-  lag_pos_team: Value of pos_team on the previous play, used for sequence-aware derivations.
   lag_scoringPlay: Value of scoringPlay on the previous play, used for sequence-aware derivations.
   late_down: True when the play is a scrimmage play on third or fourth down.
   late_down_pass: True when the play is a pass on a late down.
   late_down_rush: True when the play is a rush on a late down.
   lead_half: Value of half on the next play, used for sequence-aware derivations.
-  lead_play_type: Value of play_type on the next play, used for sequence-aware derivations.
-  lead_pos_team: Value of pos_team on the next play, used for sequence-aware derivations.
   lead_pos_team2: Value of pos_team 2 plays ahead, used for sequence-aware derivations.
   lead_scoringPlay: Value of scoringPlay on the next play, used for sequence-aware derivations.
   lead_start_distance: Value of start_distance on the next play, used for sequence-aware derivations.
@@ -6069,9 +6102,21 @@ load_cfb_pbp:
   pen_epa: EPA attributable to a penalty on the play.
   pen_weight: Weighting applied to the penalty component of the play.
   penalized_team: Team id the penalty was assessed against, from the home/away text resolver with a foul-direction fallback.
+  penalty_all_declined: Whether every penalty flagged on the play was declined.
   penalty_assessed_on_kickoff: Whether a penalty was assessed on a kickoff; such plays take the kickoff/touchback win-probability
     handling.
+  penalty_cf_yardsToEndzone: Yards to the end zone in the counterfactual penalty branch.
+  penalty_count: Number of penalties flagged on the play (0-4 observed).
+  penalty_declined_count: Number of the flagged penalties that were declined.
+  penalty_enforcement: 'How the penalty was resolved: one of no_play, declined, offsetting, negating_foul, play_stands, unknown.'
   penalty_in_text: True when the play description mentions a penalty.
+  penalty_negated_play: Whether the penalty negated the play's result.
+  penalty_side: Which side committed the penalty -- 'off' (offense) or 'def' (defense).
+  penalty_spot_side: 'Side of the field the penalty was spotted on: ''home'', ''away'' or ''mid'' (midfield).'
+  penalty_spot_yardline: Yard line (0-50) at which the penalty was spotted.
+  penalty_spot_yardsToEndzone: Yards from the penalty spot to the end zone (0-100).
+  penalty_team_id: Team id of the side that committed the penalty.
+  penalty_yards_net: Net yardage assessed for the penalty, signed relative to the possession team (observed -25 to 25).
   penalty_yards_signed: Penalty yardage parsed from the play text with era-aware bounds; the printed sign is retained but
     is not a reliable enforcement direction.
   period.number: Period (quarter) number in which the play occurred.
@@ -6082,6 +6127,7 @@ load_cfb_pbp:
   pointAfterAttempt.value: Points ESPN credits for the point-after attempt (1.0 made extra point, 2.0 made two-point try).
   pos_fumble_lost: Whether the possession team fumbled and lost the ball.
   pos_score_diff_end: Score differential from the possessing team's perspective at the end of the play.
+  pos_team_id: Team id of the offense (possession team) on the play.
   power_rush_attempt: True when the play is a short-yardage power rushing attempt.
   power_rush_success: True when a power rushing attempt gained the yardage needed.
   prob_2pt: Two-point conversion probability from the bundled CFB two-point model.
@@ -6090,6 +6136,7 @@ load_cfb_pbp:
   punt_block_player_id: ESPN athlete id of the player who blocked the punt.
   punt_block_return_player_id: ESPN athlete id of the player who returned the blocked punt.
   punt_return_player_id: ESPN athlete id of the punt returner.
+  punt_return_player_name: Name of the player returning the punt, when the punt was returned.
   punt_return_team: Team id of the punt-returning side.
   punt_team: Team id punting the ball (the kicking team).
   punt_wp: Win probability of punting, from the bundled punt-outcome distribution.
@@ -6106,6 +6153,8 @@ load_cfb_pbp:
   sack_player_id2: ESPN athlete id of the second sacker on a split sack (regex fallback for an ESPN sidecar blind spot).
   sack_team: Team id credited with the sack (the defense).
   sack_weight: Weighting applied to the sack component of the play.
+  scoreValue: Present in the published asset but never populated (all-null, Null dtype as of the 2026 capture); do not rely
+    on it.
   scoringPlay: ESPN flag marking the play as a scoring play.
   scoringType.abbreviation: ESPN's abbreviation for the scoring type.
   scoringType.displayName: ESPN's display label for the scoring type.
@@ -6175,6 +6224,9 @@ load_cfb_pbp:
   wp_touchback: Win probability the offense would have had starting from a touchback.
   wp_touchback_naive: Naive-model win probability for the kickoff-touchback substitute state, used as the pre-snap WP on kickoffs.
   wpa_naive: Win probability added on the play under the spread-free (naive) model.
+  xp_attempt: Whether an extra-point kick was attempted on the play.
+  xp_kicker_player_name: Name of the kicker attempting the extra point.
+  xp_made: Whether the extra-point kick was successful.
   xp_wp: Win probability of kicking the extra point, weighting the make by the empirical CFB extra-point make rate.
 load_cfb_pbp_r:
   away_team_pregame_elo: Away team's pregame Elo rating, carried on the cfbfastR-shaped schema.
@@ -6445,33 +6497,50 @@ load_cfb_ratings_weekly:
     that week's final kickoff date.
 load_cfb_receiving:
   EPAgame: EPA generated per game.
+  EPAgame_pct: Percentile position (0-100) of the player's EPA per game among qualifying players that season.
   EPAgame_rank: Rank of the receiver's EPA generated per game among receivers clearing the leaderboard minimum of 1.875 targets
     per team game, where 1 is best.
   EPAplay: EPA generated per play.
+  EPAplay_pct: Percentile position (0-100) of the player's EPA per play among qualifying players that season.
   EPAplay_rank: Rank of the receiver's EPA generated per play among receivers clearing the leaderboard minimum of 1.875 targets
     per team game, where 1 is best.
   TEPA: Total EPA summed over every play.
+  TEPA_pct: Percentile position (0-100) of the player's total EPA among qualifying players that season.
   TEPA_rank: Rank of the receiver's total EPA summed over every play among receivers clearing the leaderboard minimum of 1.875
     targets per team game, where 1 is best.
   catchpct: Catch rate on a 0-to-1 scale, receptions divided by targets for the season.
+  catchpct_pct: Percentile position (0-100) of the player's catch rate among qualifying players that season.
   catchpct_rank: Season rank of catchpct with the best catch rate first, computed only for receivers clearing the leaderboard
     minimum of 1.875 targets per team game and using averaged ranks for ties.
   comp: Completed passes.
+  comp_pct: Percentile position (0-100) of the player's completions among qualifying players that season.
+  comp_rank: Ordinal rank of the player's completions among qualifying players that season; ties share a fractional rank.
   fbs_class: 'Power/Group classification for the season: P4 or G6 from 2024 on, P5 or G5 through 2023, derived from conference
     membership. Null for teams outside FBS.'
   fumbles: Count of the receiver's targeted pass plays across the season whose play text mentions a fumble by either team.
+  fumbles_pct: Percentile position (0-100) of the player's fumbles among qualifying players that season.
+  fumbles_rank: Ordinal rank of the player's fumbles among qualifying players that season; ties share a fractional rank.
+  passing_td_pct: Percentile position (0-100) of the player's passing touchdowns among qualifying players that season.
+  passing_td_rank: Ordinal rank of the player's passing touchdowns among qualifying players that season; ties share a fractional
+    rank.
   playsgame: Plays per game.
   receiver_player_name: Display name of the targeted receiver -- the FIRST participant in that role on the play.
   success: Success rate across the team plays.
+  success_pct: Percentile position (0-100) of the player's success rate among qualifying players that season.
   success_rank: Rank of the receiver's success rate across their plays among receivers clearing the leaderboard minimum of
     1.875 targets per team game, where 1 is best.
+  targets_pct: Percentile position (0-100) of the player's targets among qualifying players that season.
+  targets_rank: Ordinal rank of the player's targets among qualifying players that season; ties share a fractional rank.
   team_games: Games the team played, used as the per-game denominator.
+  yards_pct: Percentile position (0-100) of the player's yards among qualifying players that season.
   yards_rank: Rank of the receiver's total yards among receivers clearing the leaderboard minimum of 1.875 targets per team
     game, where 1 is best.
   yardsgame: Yards per game.
+  yardsgame_pct: Percentile position (0-100) of the player's yards per game among qualifying players that season.
   yardsgame_rank: Rank of the receiver's yards per game among receivers clearing the leaderboard minimum of 1.875 targets
     per team game, where 1 is best.
   yardsplay: Yards per play.
+  yardsplay_pct: Percentile position (0-100) of the player's yards per play among qualifying players that season.
   yardsplay_rank: Rank of the receiver's yards per play among receivers clearing the leaderboard minimum of 1.875 targets
     per team game, where 1 is best.
 load_cfb_recruiting_proj:
@@ -6486,6 +6555,7 @@ load_cfb_recruits:
     team id.
 load_cfb_returning_production:
   def_returning: Share of the team's prior-season defensive production returning for the season.
+  is_estimated: Whether the returning-production figures for the row were estimated rather than derived from complete data.
   n_returning: Number of returning players counted in the returning-production calculation.
   off_returning: Share of the team's prior-season offensive production returning for the season.
   overall_returning: Usage-weighted blend of the offensive and defensive returning-production shares.
@@ -6605,29 +6675,43 @@ load_cfb_rosters_cfbd:
     0 entry means no recruiting profile was matched.
 load_cfb_rushing:
   EPAgame: EPA generated per game.
+  EPAgame_pct: Percentile position (0-100) of the player's EPA per game among qualifying players that season.
   EPAgame_rank: Rank of the rusher's EPA generated per game among rushers clearing the leaderboard minimum of 6.25 plays per
     team game, where 1 is best.
   EPAplay: EPA generated per play.
+  EPAplay_pct: Percentile position (0-100) of the player's EPA per play among qualifying players that season.
   EPAplay_rank: Rank of the rusher's EPA generated per play among rushers clearing the leaderboard minimum of 6.25 plays per
     team game, where 1 is best.
   TEPA: Total EPA summed over every play.
+  TEPA_pct: Percentile position (0-100) of the player's total EPA among qualifying players that season.
   TEPA_rank: Rank of the rusher's total EPA summed over every play among rushers clearing the leaderboard minimum of 6.25
     plays per team game, where 1 is best.
   fbs_class: 'Power/Group classification for the season: P4 or G6 from 2024 on, P5 or G5 through 2023, derived from conference
     membership. Null for teams outside FBS.'
   fumbles: Count of the ball carrier's rush attempts across the season whose play text mentions a fumble by either team.
+  fumbles_pct: Percentile position (0-100) of the player's fumbles among qualifying players that season.
+  fumbles_rank: Ordinal rank of the player's fumbles among qualifying players that season; ties share a fractional rank.
+  plays_pct: Percentile position (0-100) of the player's plays among qualifying players that season.
+  plays_rank: Ordinal rank of the player's plays among qualifying players that season; ties share a fractional rank.
   playsgame: Plays per game.
   rusher_player_name: Display name of the ball carrier on a rush -- the FIRST participant in that role on the play.
+  rushing_td_pct: Percentile position (0-100) of the player's rushing touchdowns among qualifying players that season.
+  rushing_td_rank: Ordinal rank of the player's rushing touchdowns among qualifying players that season; ties share a fractional
+    rank.
   success: Success rate across the team plays.
+  success_pct: Percentile position (0-100) of the player's success rate among qualifying players that season.
   success_rank: Rank of the rusher's success rate across their plays among rushers clearing the leaderboard minimum of 6.25
     plays per team game, where 1 is best.
   team_games: Games the team played, used as the per-game denominator.
+  yards_pct: Percentile position (0-100) of the player's yards among qualifying players that season.
   yards_rank: Rank of the rusher's total yards among rushers clearing the leaderboard minimum of 6.25 plays per team game,
     where 1 is best.
   yardsgame: Yards per game.
+  yardsgame_pct: Percentile position (0-100) of the player's yards per game among qualifying players that season.
   yardsgame_rank: Rank of the rusher's yards per game among rushers clearing the leaderboard minimum of 6.25 plays per team
     game, where 1 is best.
   yardsplay: Yards per play.
+  yardsplay_pct: Percentile position (0-100) of the player's yards per play among qualifying players that season.
   yardsplay_rank: Rank of the rusher's yards per play among rushers clearing the leaderboard minimum of 6.25 plays per team
     game, where 1 is best.
 load_cfb_schedule:
@@ -8108,6 +8192,7 @@ load_mbb_pbp:
     on each game's final play.
   points_attempted: Point value at stake on the shot attempt (3 for threes, 2 for other field goals, 1 for free throws), from
     the ESPN play type.
+  pregame_home_prob: Model's pre-game win probability for the home team (0-1), constant within a game.
   short_description: Shortened version of ESPN's play description text, without score context.
   start_period_seconds_remaining: Seconds left in the current period when the play started, computed as 60 times the game
     clock minutes plus the seconds, so 1200 at the tip of each 20-minute half and 300 at the start of an overtime.
@@ -8175,8 +8260,10 @@ load_mlb_expected_hr:
 load_mlb_expected_stats:
   ab: At-bats, derived from the same plate-appearance-ending rows by excluding walks, hit-by-pitches, sacrifice flies, sacrifice
     bunts and catcher's interference.
+  ba: Actual batting average for the player over the sample (0-1), alongside the expected-stat columns.
   pa: Plate appearances for the batter in the season, counted as the Statcast rows that END a plate appearance (a non-empty
     events value). Pitches within a plate appearance are not counted.
+  woba: Actual weighted on-base average (wOBA) for the player over the sample.
   xba: Grid-predicted hit probability summed over the at-bat balls in play that carry launch data, plus the realized hit for
     balls in play Statcast did not track, divided by at-bats, on the conventional batting-average scale. An untracked ball
     in play takes its realized outcome exactly as xwoba does, rather than counting in ab with a zero numerator, which deflated
@@ -8212,6 +8299,7 @@ load_mlb_we_table:
     carry a stale 3 that the RE24 matrix filters out but this table does not.
   score_diff_bucket: Home score minus away score before the play, clipped to the range -6 through +6 so blowouts collapse
     into the end buckets.
+  thin: Whether the win-expectancy cell was estimated from a thin sample of historical games.
 load_mlb_xera:
   x_era: ERA-scale conversion of x_woba as league_era plus (x_woba minus league_woba) over woba_scale times pa_per_9, an exact
     linear function of x_woba that can go negative for extreme pitchers.
@@ -9009,6 +9097,121 @@ load_nba_team_crosswalk:
 load_nba_team_season_stats:
   stat_description: ESPN's prose definition of the team statistic on this row, for example the average number of assists a
     team records per turnover.
+load_ncaa_baseball_games:
+  away_final: Final runs scored by the away team.
+  game_key: NCAA contest identifier for the game the row belongs to; the join key to the other ncaa_baseball_* tables.
+  home_final: Final runs scored by the home team.
+load_ncaa_baseball_linescore:
+  game_key: NCAA contest identifier for the game the row belongs to; the join key to the other ncaa_baseball_* tables.
+  runs_total: Total runs scored by the team across the whole game.
+load_ncaa_baseball_pbp:
+  count_balls: Ball count when the plate appearance resolved.
+  count_strikes: Strike count when the plate appearance resolved.
+  error_position: Fielding position credited with the error, as the feed labels it (e.g. 'ss', 'rf', 'c').
+  fielded_position: Free-text description of where/how the ball was fielded or the runner advanced, as written by the scorer.
+  game_key: NCAA contest identifier for the game the row belongs to; the join key to the other ncaa_baseball_* tables.
+  hit_trajectory: 'Batted-ball trajectory: one of ground, line, fly, pop, foul.'
+  is_double_play: Whether the play resulted in a double play.
+  is_hit: Whether the plate appearance resulted in a hit.
+  is_out: Whether the play recorded at least one out.
+  is_sacrifice: Whether the play was scored as a sacrifice.
+  outs_on_play: Number of outs recorded on the play (0-3).
+  pitch_sequence: Per-pitch result string for the plate appearance (e.g. 'BBKKS'), one character per pitch.
+  runners_advanced: List of 'runner->base' strings describing each runner's advance on the play.
+  runs_scored: Runs that scored on the play.
+  sac_type: 'Kind of sacrifice when one was scored: ''fly'' or ''bunt''.'
+  scoring_runners: List of runner names who scored on the play.
+  strikeout_type: 'How the strikeout ended: ''swinging'' or ''looking''.'
+  unearned: Whether the run(s) on the play were scored as unearned.
+load_ncaa_baseball_player_stats:
+  2b: Doubles hit by the batter.
+  2b_a: Doubles allowed by the pitcher.
+  3b: Triples hit by the batter.
+  3b_a: Triples allowed by the pitcher.
+  bf: Batters faced by the pitcher.
+  bk: Balks charged to the pitcher.
+  ci: Times the batter reached base on catcher's interference.
+  cs: Times the baserunner was caught stealing.
+  csb: Runners caught stealing while this catcher was behind the plate.
+  e: Errors charged to the fielder.
+  game_key: NCAA contest identifier for the game the row belongs to; the join key to the other ncaa_baseball_* tables.
+  hb: Batters hit by a pitch from this pitcher.
+  hbp: Times the batter was hit by a pitch.
+  hr_a: Home runs allowed by the pitcher.
+  ibb: Intentional bases on balls drawn by the batter.
+  idp: Times the batter grounded into a double play.
+  inh_run: Inherited runners on base when this relief pitcher entered.
+  inh_run_score: Inherited runners who subsequently scored.
+  kl: Strikeouts looking -- called third strikes, as opposed to swinging strikeouts.
+  opp_dp: Double plays turned by the opposing defense against this side.
+  pb: Passed balls charged to the catcher.
+  picked: Times the baserunner was picked off.
+  po: Putouts recorded by the fielder.
+  sb: Stolen bases by the baserunner.
+  sba: Stolen bases allowed while this catcher was behind the plate.
+  sbapct: Stolen-base success rate allowed by the catcher, as a PROPORTION on 0-1 (e.g. 0.625), not a percentage.
+  sf: Sacrifice flies hit by the batter.
+  sfa: Sacrifice flies allowed by the pitcher.
+  sh: Sacrifice hits (bunts) laid down by the batter.
+  sha: Sacrifice hits allowed by the pitcher.
+  tb: Total bases accumulated by the batter.
+  tc: Total chances for the fielder (putouts + assists + errors).
+  tp: Triple plays the player took part in.
+  tuer: Team unearned runs scored while this pitcher was in the game.
+load_ncaa_baseball_rosters:
+  player_class: Class year as the feed reports it (Fr., So., Jr., Sr.); '---' when unreported.
+  statcrew_jersey: StatCrew jersey number; present in the schema but entirely unpopulated in the published asset.
+load_ncaa_baseball_schedule:
+  outcome: 'Result for the team the row is keyed to: ''W'', ''L'' or ''T''.'
+load_ncaa_baseball_situational_stats:
+  adv_ops: Situational split as a 'successes-opportunities' pair string (e.g. '5-13'), not a numeric rate -- advancing-opportunity
+    situations.
+  bases_empty: Situational split as a 'successes-opportunities' pair string (e.g. '5-13'), not a numeric rate -- plate appearances
+    with the bases empty.
+  bases_loaded: Situational split as a 'successes-opportunities' pair string (e.g. '5-13'), not a numeric rate -- plate appearances
+    with the bases loaded.
+  emtpy: Situational split as a 'successes-opportunities' pair string (e.g. '5-13'), not a numeric rate -- bases-empty split
+    under the upstream feed's misspelled key ('emtpy', sic).
+  field_pct: Situational split as a 'successes-opportunities' pair string (e.g. '5-13'), not a numeric rate -- fielding chances
+    handled cleanly; despite the name it is a pair string, not a fielding percentage.
+  game_key: NCAA contest identifier for the game the row belongs to; the join key to the other ncaa_baseball_* tables.
+  h_pinchit: Situational split as a 'successes-opportunities' pair string (e.g. '5-13'), not a numeric rate -- pinch-hitting
+    appearances.
+  hits_scorepos: Situational split as a 'successes-opportunities' pair string (e.g. '5-13'), not a numeric rate -- at-bats with
+    runners in scoring position.
+  leadoff_pct: Situational split as a 'successes-opportunities' pair string (e.g. '5-13'), not a numeric rate -- leadoff batters
+    reaching base; despite the name it is a pair string, not a percentage.
+  rbi3rd: Situational split as a 'successes-opportunities' pair string (e.g. '5-13'), not a numeric rate -- chances to drive
+    in a runner from third.
+  runners: Situational split as a 'successes-opportunities' pair string (e.g. '5-13'), not a numeric rate -- plate appearances
+    with runners on base.
+  team_seq: 'Side indicator for the row: 0 and 1 distinguish the two teams in the contest.'
+  vs_lhb: Situational split as a 'successes-opportunities' pair string (e.g. '5-13'), not a numeric rate -- pitching against
+    left-handed batters.
+  vs_lhp: Situational split as a 'successes-opportunities' pair string (e.g. '5-13'), not a numeric rate -- batting against
+    left-handed pitching.
+  vs_rhb: Situational split as a 'successes-opportunities' pair string (e.g. '5-13'), not a numeric rate -- pitching against
+    right-handed batters.
+  vs_rhp: Situational split as a 'successes-opportunities' pair string (e.g. '5-13'), not a numeric rate -- batting against
+    right-handed pitching.
+  with_2_outs: Situational split as a 'successes-opportunities' pair string (e.g. '5-13'), not a numeric rate -- plate appearances
+    with two outs.
+  with_2outs: Situational split as a 'successes-opportunities' pair string (e.g. '5-13'), not a numeric rate -- two-out split
+    under the feed's second, unpunctuated key (distinct column from with_2_outs).
+  with_runners2: Situational split as a 'successes-opportunities' pair string (e.g. '5-13'), not a numeric rate -- secondary
+    runners-on split emitted by the feed alongside with_runrs2.
+  with_runrs: Situational split as a 'successes-opportunities' pair string (e.g. '5-13'), not a numeric rate -- plate appearances
+    with runners on base.
+  with_runrs2: Situational split as a 'successes-opportunities' pair string (e.g. '5-13'), not a numeric rate -- secondary runners-on
+    split emitted by the feed.
+  with_scorepos: Situational split as a 'successes-opportunities' pair string (e.g. '5-13'), not a numeric rate -- plate appearances
+    with runners in scoring position.
+  with_scorepos2: Situational split as a 'successes-opportunities' pair string (e.g. '5-13'), not a numeric rate -- secondary
+    runners-in-scoring-position split emitted by the feed.
+load_ncaa_baseball_team_stats:
+  away_value: Away team's value for the stat named by the row, as a string (the table is long/tidy, one stat per row).
+  game_key: NCAA contest identifier for the game the row belongs to; the join key to the other ncaa_baseball_* tables.
+  home_value: Home team's value for the stat named by the row, as a string (the table is long/tidy, one stat per row).
 load_ncaa_mbb_lineups:
   drb: Defensive rebounds by the lineup during the stint.
   duration_mins: Length of the stint in minutes.
@@ -9456,13 +9659,27 @@ load_ncaa_mfb_pbp_cfbfastr:
     reports no running clock in overtime, so OT plays are assigned a synthetic countdown.
   season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
 load_ncaa_mfb_player_stats:
+  asst_tack: Assisted tackles.
+  fg_blocks_allowed: Field goals blocked against the player's unit.
+  int_ret_tds: Touchdowns scored on interception returns.
+  intyds: Interception return yards (can be negative).
+  kick_ret_tds: Touchdowns scored on kick returns.
+  ko_ret: Kickoff returns.
+  ko_ret_yds: Kickoff return yards.
+  long_kor: Longest kickoff return, in yards.
   long_pass: Longest completed pass of the game.
+  long_pr: Longest punt return, in yards.
   long_rec: Longest reception of the game.
   pass_attempts: Pass attempts for the game. Populated only on this player-game's 'passing' category row (null on the 'rushing'/'receiving'
     rows for the same player-game) -- the loader returns one row per player-game-category.
   pass_eff: Passer efficiency rating for the game, per the NCAA passer-rating formula.
   pass_tds: Passing touchdowns thrown for the game. Populated only on this player-game's 'passing' category row (null on the
     'rushing'/'receiving' rows for the same player-game) -- the loader returns one row per player-game-category.
+  pbu: Passes broken up.
+  pdef: Passes defended, as emitted by the feed with a decimal component (e.g. '7.00').
+  punt_ret: Punt returns fielded by the player.
+  punt_ret_tds: Touchdowns scored on punt returns.
+  punt_ret_yds: Punt return yards (can be negative).
   rec: Total receptions for the game.
   rec_td: Receiving touchdowns.
   rush_long: Longest single rush of the game.
@@ -9471,7 +9688,9 @@ load_ncaa_mfb_player_stats:
   rush_yds_gained: Total positive rushing yards gained on carries, before subtracting yards lost to tackles for loss.
   rush_yds_lost: Total rushing yards lost to tackles for loss on carries.
   season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
+  solo_tack: Solo (unassisted) tackles.
   yards_per_reception: Receiving yards divided by receptions.
+  yds: Yards recorded for the player in the stat category of the row (can be negative).
   yds_per_completion: Passing yards divided by completions.
   yds_rush: Net rushing yards (rush_yds_gained minus rush_yds_lost).
 load_ncaa_mfb_rosters:
@@ -9946,6 +10165,7 @@ load_nfl_ftn_charting:
 load_nfl_model_pbp:
   Diff_Time_Ratio: 'WP-model feature: score_differential inflated by elapsed time, score_differential / exp(SPREAD_TIME_DECAY_EXPONENT
     * elapsed_share).'
+  action_play: Whether the row is an action play -- a live-ball play rather than a timeout, penalty-only or administrative row.
   elapsed_share: Share of regulation elapsed at the start of the play, (3600 - game_seconds_remaining) / 3600, clipped to
     [0, 1].
   extra_point_aborted: Binary indicator (1/0) that the extra-point attempt on this play was aborted (botched snap or hold,
@@ -9976,6 +10196,11 @@ load_nfl_model_pbp:
   misc_yards: Yards gained or lost on the play that are not attributed to a rush, pass, or return (miscellaneous Shield yardage
     bucket).
   miss_fg_wp: Win probability conditional on the field-goal attempt being missed (opponent takes over at the spot).
+  non_fumble_sack: Whether the play was a sack that did not involve a fumble.
+  pass_epa: EPA credited to the play's passing component (clipped at -5).
+  pass_weight: Weight applied to the paired EPA term when aggregating (observed 0.6, 0.9, 1.0).
+  pen_epa: EPA credited to the play's penalty component (clipped at -5).
+  pen_weight: Weight applied to the paired EPA term when aggregating (observed 0.6, 0.9, 1.0).
   play_seq: Game-global sequential play order from the NFL.com Shield feed; ordering key within a game (game_id + play_seq
     is unique).
   posteam_spread: Vegas point spread from the possession team's perspective (spread_line when the posteam is home, negated
@@ -9983,8 +10208,13 @@ load_nfl_model_pbp:
   punt_wp: Probability-weighted win probability of punting, integrated over the modeled punt-landing distribution.
   punt_wp_diff: punt_wp minus the best available option's WP, in win-probability units. 0 when punting is the recommendation
     and <= 0 otherwise.
+  qbr_epa: EPA input used by the QBR calculation for the play (clipped at -5).
   receive_2h_ko: Binary indicator (1/0) that the play is in the first half and the possession team is the team receiving the
     second-half kickoff (the game's opening defense); mirrors nflfastR helper_add_ep_wp.R.
+  rush_epa: EPA credited to the play's rushing component (clipped at -5).
+  rush_weight: Weight applied to the paired EPA term when aggregating (observed 0.6, 0.9, 1.0).
+  sack_epa: EPA credited to the play's sack component (clipped at -5).
+  sack_weight: Weight applied to the paired EPA term when aggregating (observed 0.6, 0.9, 1.0).
   shield_play_type: Raw NFL.com Shield play-type enum for the play (e.g. RUSH, PASS, FIELD_GOAL, KICK_OFF, PENALTY, END_QUARTER,
     GAME_START, COMMENT) -- the unmapped upstream value behind the nflfastR-style play_type.
   special_teams_play_type: Shield special-teams sub-type qualifier; UNSPECIFIED on ordinary plays and PENALTY when the special-teams
@@ -10222,6 +10452,16 @@ load_nfl_players:
   suffix: Generational or honorific name suffix (e.g., Jr., Sr., III), when present.
   weight: Player's listed weight in pounds.
   years_of_experience: Number of accrued NFL seasons of experience.
+load_nfl_ratings_weekly:
+  adj_def_epa: Opponent-adjusted defensive EPA per play for the team as of this week (negative is better for the defense).
+  adj_net: Opponent-adjusted net EPA per play -- the team's offensive rating less its defensive rating.
+  adj_off_epa: Opponent-adjusted offensive EPA per play for the team as of this week.
+  adj_st_epa: Opponent-adjusted special-teams EPA per play for the team as of this week.
+  as_of_week: Week through which the rating was computed; the row is the team's standing at that point in the season.
+  def_rank: Team's rank (1-32) on adjusted defensive EPA as of this week.
+  net_rank: Team's rank (1-32) on adjusted net EPA as of this week.
+  net_z: Adjusted net rating expressed as a z-score across the league that week.
+  off_rank: Team's rank (1-32) on adjusted offensive EPA as of this week.
 load_nfl_rosters:
   birth_date: Player's date of birth (YYYY-MM-DD).
   college: College or university the player attended.
@@ -10977,9 +11217,13 @@ load_wbb_pbp:
   athlete_name_2: Display name of the second athlete in the ESPN play participants (e.g., the assisting player), when present.
   athlete_name_3: Display name of the third athlete in the ESPN play participants, when present.
   away_timeout_called: Flag set on plays where a timeout was charged to the away team.
+  espn_away_wp: ESPN's own published win probability for the away team (0-1), carried through unchanged.
+  espn_home_wp: ESPN's own published win probability for the home team (0-1), carried through unchanged.
+  espn_tie_percentage: ESPN's published tie probability; present in the feed but always 0.0 in the published asset.
   home_timeout_called: Flag set on plays where a timeout was charged to the home team.
   points_attempted: Point value at stake on the shot attempt (3 for threes, 2 for other field goals, 1 for free throws), from
     the ESPN play type.
+  pregame_home_prob: Model's pre-game win probability for the home team (0-1), constant within a game.
   score_value: Point value of the attempt (1 / 2 / 3), carried even on misses (a missed free throw still shows 1); use scoring_play
     to identify points actually scored.
   season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
@@ -11014,9 +11258,18 @@ load_wbb_schedule:
   away_current_rank: Poll ranking ESPN listed for the away team at game time (unranked teams carry a sentinel value).
   away_linescores: Period-by-period scores for the away team as a delimited string from ESPN's schedule feed.
   away_records: Record strings (overall and split records) for the away team from ESPN's schedule feed.
+  game_json_raw_url: raw.githubusercontent.com URL of the game's raw JSON payload in wehoop-wbb-raw.
+  game_rosters_json_url: raw.githubusercontent.com URL of the game's rosters JSON payload in wehoop-wbb-raw.
+  has_game_json: Whether the raw game JSON payload exists in the raw store for this game.
+  has_game_rosters_json: Whether the rosters JSON payload exists in the raw store for this game.
+  has_officials_json: Whether the officials JSON payload exists in the raw store for this game.
   home_current_rank: Poll ranking ESPN listed for the home team at game time (unranked teams carry a sentinel value).
   home_linescores: Period-by-period scores for the home team as a delimited string from ESPN's schedule feed.
   home_records: Record strings (overall and split records) for the home team from ESPN's schedule feed.
+  in_game_rosters: Whether the game is represented in the built game-rosters dataset.
+  in_officials: Whether the game is represented in the built officials dataset.
+  in_shots: Whether the game is represented in the built shots dataset.
+  officials_json_url: raw.githubusercontent.com URL of the game's officials JSON payload in wehoop-wbb-raw.
   season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
 load_wbb_schedule_crosswalk:
   season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
