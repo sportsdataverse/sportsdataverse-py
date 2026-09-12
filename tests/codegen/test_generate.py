@@ -176,18 +176,29 @@ def test_loader_without_notes_emits_no_empty_caveat_block():
     from tools.codegen import spec
 
     ld = spec.Loader(
-        fn="load_demo_plain", league="mlb", base="sdv",
-        url="demo/demo_{season}.parquet", tag="demo",
+        fn="load_demo_plain",
+        league="mlb",
+        base="sdv",
+        url="demo/demo_{season}.parquet",
+        tag="demo",
     )
     assert "Note:" not in generate._build_loader_docstring(ld)
 
     template = generate.render.ENV.get_template("loaders_page.md.jinja")
     page = template.render(
-        prefix="mlb", sidebar_position=1,
-        loaders=[{
-            "fn": ld.fn, "notes": "", "tag": ld.tag, "tag_url": "", "url": "",
-            "automation": {"repo": "", "workflow": ""}, "return_table": "",
-            "example_seasons": 2024,
-        }],
+        prefix="mlb",
+        sidebar_position=1,
+        loaders=[
+            {
+                "fn": ld.fn,
+                "notes": "",
+                "tag": ld.tag,
+                "tag_url": "",
+                "url": "",
+                "automation": {"repo": "", "workflow": ""},
+                "return_table": "",
+                "example_seasons": 2024,
+            }
+        ],
     )
     assert ":::caution" not in page
