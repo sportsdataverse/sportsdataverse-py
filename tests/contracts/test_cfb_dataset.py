@@ -35,8 +35,8 @@ _SMALL_SPEC = DatasetSpec(
 
 def test_load_schema_returns_full_cfb_contract() -> None:
     schema = load_schema("cfb_model_pbp")
-    assert len(schema) == 42
-    for col in ("game_id", "ep_before", "wp_after", "epa", "completion_prob"):
+    assert len(schema) == 43
+    for col in ("game_id", "ep_before", "wp_after", "epa", "completion_prob", "scored_date"):
         assert col in schema, f"expected column {col!r} in schema"
 
 
