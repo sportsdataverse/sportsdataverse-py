@@ -3,8 +3,10 @@
 from __future__ import annotations
 
 from datetime import datetime, timedelta, timezone
+from unittest.mock import Mock
 
 import pytest
+import requests
 
 # ---------------------------------------------------------------------------
 # Tier picker
@@ -65,6 +67,22 @@ def test_pick_ttl_future_scoreboard_is_live():
     assert cache.pick_ttl(url, today=today) == cache.LIVE
 
 
+@pytest.mark.parametrize(
+    "dates,expected",
+    [
+        ("20260524-20260525", "IMMUTABLE"),
+        ("20260525-20260526", "LIVE"),
+        ("20260525-20260527", "LIVE"),
+    ],
+)
+def test_pick_ttl_scoreboard_date_range(dates, expected):
+    from sportsdataverse import cache
+
+    url = f"https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard?dates={dates}&limit=500"
+    today = datetime(2026, 5, 26, tzinfo=timezone.utc)
+    assert cache.pick_ttl(url, today=today) == getattr(cache, expected)
+
+
 # ---------------------------------------------------------------------------
 # Mode + read/write
 # ---------------------------------------------------------------------------
@@ -89,6 +107,21 @@ def reset_cache():
     cache.set_cache_mode("off")
     cache._MEMORY_CACHE.clear()
     cache.set_cache_mode(original_mode)
+
+
+@pytest.fixture
+def cache_clock(monkeypatch):
+    from sportsdataverse import cache
+
+    now = [datetime(2026, 5, 26, tzinfo=timezone.utc)]
+
+    class Clock(datetime):
+        @classmethod
+        def now(cls, tz=None):
+            return now[0]
+
+    monkeypatch.setattr(cache, "datetime", Clock)
+    return now
 
 
 def test_set_cache_mode_rejects_invalid(reset_cache):
@@ -209,6 +242,60 @@ def test_cache_stats_reflects_mode(reset_cache):
 # ---------------------------------------------------------------------------
 # download() integration: cache hit returns CachedResponse
 # ---------------------------------------------------------------------------
+
+
+@pytest.mark.parametrize("mode", ["memory", "filesystem"])
+@pytest.mark.parametrize("dates", [20260526, "20260527", "20260525-20260526", "20260525-20260527"])
+def test_scoreboard_query_dates_refresh(mode, dates, monkeypatch, tmp_cache_dir, reset_cache, cache_clock):
+    from sportsdataverse import cache
+    from sportsdataverse.nba.nba_espn_ext import espn_nba_scoreboard
+
+    cache.set_cache_mode(mode)
+    responses = []
+    for event_id in (1, 2):
+        response = requests.Response()
+        response.status_code = 200
+        response._content = f'{{"events": [{{"id": "{event_id}"}}]}}'.encode()
+        responses.append(response)
+    get = Mock(side_effect=responses)
+    monkeypatch.setattr("requests.Session.get", get)
+
+    first = espn_nba_scoreboard(dates=dates, return_parsed=False)
+    second = espn_nba_scoreboard(dates=dates, return_parsed=False)
+
+    assert first == {"events": [{"id": "1"}]}
+    assert second == {"events": [{"id": "2"}]}
+    assert get.call_count == 2
+    assert get.call_args.kwargs["params"]["dates"] == dates
+    assert cache.cache_stats()["entries"] == 0
+
+
+@pytest.mark.parametrize("mode", ["memory", "filesystem"])
+@pytest.mark.parametrize("dates", ["20260526", "20260525-20260527"])
+def test_scoreboard_query_dates_bypass_existing_entry(mode, dates, tmp_cache_dir, reset_cache, cache_clock):
+    from sportsdataverse import cache
+
+    cache.set_cache_mode(mode)
+    url = "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard?limit=500"
+    params = {"dates": dates}
+    cache.cache_set(url, params, {"stale": True}, ttl=timedelta(hours=1))
+    assert cache.cache_get(url, params) is None
+    assert cache.cache_get(url, params, ttl=timedelta(hours=1)) == {"stale": True}
+    assert params == {"dates": dates}
+
+
+@pytest.mark.parametrize("mode", ["memory", "filesystem"])
+@pytest.mark.parametrize("dates", [20260525, "20260524-20260525"])
+def test_scoreboard_query_dates_keep_historical_ttl(mode, dates, tmp_cache_dir, reset_cache, cache_clock):
+    from sportsdataverse import cache
+
+    cache.set_cache_mode(mode)
+    url = "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard"
+    params = {"dates": dates, "groups": None}
+    cache.cache_set(url, params, {"historical": True})
+    cache_clock[0] += timedelta(hours=2)
+    assert cache.cache_get(url, params) == {"historical": True}
+    assert params == {"dates": dates, "groups": None}
 
 
 def test_download_returns_cached_response_on_hit(reset_cache):

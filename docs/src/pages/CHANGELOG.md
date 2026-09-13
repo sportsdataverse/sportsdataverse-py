@@ -3,6 +3,7 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [Unreleased](#unreleased)
+  - [Added — CFB drive summary and situational team stats, graduated from Game on Paper (#470)](#added--cfb-drive-summary-and-situational-team-stats-graduated-from-game-on-paper-470)
   - [Fixed — MLB expected stats counted raw pitches as plate appearances](#fixed--mlb-expected-stats-counted-raw-pitches-as-plate-appearances)
 - [0.1.4 Release: September 1, 2026](#014-release-september-1-2026)
   - [Fixed — CFB EP/WP inputs: mirrored end yardlines, the wrong `wp_after` perspective, and a flipped WP (#408, #411, #413)](#fixed--cfb-epwp-inputs-mirrored-end-yardlines-the-wrong-wp_after-perspective-and-a-flipped-wp-408-411-413)
@@ -280,6 +281,29 @@
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Unreleased
+
+Fixed scoreboard cache TTL selection when dates are supplied in query parameters:
+current/future days and ranges containing them bypass both cache reads and writes,
+while wholly historical dates retain the 30-day TTL. Explicit TTL overrides still
+take precedence.
+
+### Added — CFB drive summary and situational team stats, graduated from Game on Paper (#470)
+
+`cfb_drive_summary.create_drive_summary(drives, frame, home_id, away_id,
+periods=None)` builds the StatBroadcast-style drive summary — per-team drive
+lines (both named drive-success metrics, points off turnovers, forced
+three-and-outs, TOP by quarter, first-down sources), the OBTAINED/HOW-LOST
+drive chart, how-scores-happened, and per-team long-play lists — windowable
+by start-quarter set or `"ot"`. `cfb_situational_stats.create_situational_stats(frame,
+home_id, away_id, window_expr=None)` builds the per-team situational block
+(down-by-down with distance buckets and conversion attribution, red zone,
+finishing drives, rushing tiers, passing profile, 4th-down decision report,
+score state, penalties, havoc, turnovers, field zones, pace, big plays),
+windowable via a polars filter with window-inherent sections omitted on
+windowed builds. Thin `CFBPlayProcess.create_drive_summary` /
+`.create_situational_stats` delegates mirror `create_box_score`. Both consume
+the post-pipeline `plays_frame`; drive-level attribution reads the drives
+grouping (`drive.team`), never plays grouped by `drive.id`.
 
 ### Fixed — MLB expected stats counted raw pitches as plate appearances
 

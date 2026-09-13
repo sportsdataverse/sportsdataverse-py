@@ -71,6 +71,8 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any, Dict, Optional, Union
 
+from requests import Request
+
 # ---------------------------------------------------------------------------
 # TTL tiers
 # ---------------------------------------------------------------------------
@@ -96,7 +98,7 @@ _TIER_RULES = [
     (re.compile(r"/playerstatusupdate\b"), LIVE),
     # IMMUTABLE — completed games never change
     (re.compile(r"/gamecenter/\d+/(play-by-play|boxscore|landing|right-rail)"), IMMUTABLE),
-    (re.compile(r"/scoreboard.*dates=(\d{8})"), None),  # special-cased below
+    (re.compile(r"/scoreboard\b[^#]*[?&]dates=(\d{8})(?:-(\d{8}))?(?:[&#]|$)"), None),  # special-cased below
     (re.compile(r"/glossary\b"), IMMUTABLE),
     (re.compile(r"/award\b"), IMMUTABLE),
     (re.compile(r"records\.nhl\.com/site/api/(player|coach|draft|attendance|franchise)"), IMMUTABLE),
@@ -146,9 +148,9 @@ def pick_ttl(url: str, today: Optional[datetime] = None) -> timedelta:
         if not m:
             continue
         if tier is None:
-            # Special-cased: ESPN scoreboard with explicit dates=YYYYMMDD
-            # — past dates are immutable, today/future are LIVE.
-            date_match = m.group(1)
+            # ESPN accepts a single day or YYYYMMDD-YYYYMMDD range. Only
+            # ranges entirely in the past are immutable; today/future are LIVE.
+            date_match = max(m.group(1), m.group(2) or m.group(1))
             try:
                 if int(date_match) < int(today_yyyymmdd):
                     return IMMUTABLE
@@ -210,10 +212,19 @@ def set_default_ttl(ttl: Optional[Union[timedelta, int]]) -> None:
         raise TypeError(f"ttl must be timedelta or seconds, got {type(ttl)}")
 
 
-def _resolve_ttl(url: str, override: Optional[timedelta] = None) -> timedelta:
+def _resolve_ttl(
+    url: str,
+    override: Optional[timedelta] = None,
+    *,
+    params: Optional[Dict[str, Any]] = None,
+) -> timedelta:
     """Apply override → default-override → tier-rule fallback chain."""
     if override is not None:
         return override
+    if params:
+        # Classify the same query that requests sends, including dates supplied
+        # separately by the scoreboard wrappers. Cache keys remain unchanged.
+        url = Request("GET", url, params=params).prepare().url or url
     ttl = pick_ttl(url)
     # Only apply default-override when the URL fell through to DEFAULT_TTL
     if ttl == DEFAULT_TTL and _DEFAULT_TTL_OVERRIDE is not None:
@@ -300,7 +311,7 @@ def cache_get(
     """Fetch a cached body. Returns ``None`` on miss / expiry / mode=off."""
     if _MODE == "off":
         return None
-    effective_ttl = _resolve_ttl(url, ttl)
+    effective_ttl = _resolve_ttl(url, ttl, params=params)
     if effective_ttl.total_seconds() <= 0:
         return None  # LIVE — never serve from cache
 
@@ -341,7 +352,7 @@ def cache_set(
     """Persist a body to the cache. No-op when mode=off or TTL=LIVE."""
     if _MODE == "off":
         return
-    effective_ttl = _resolve_ttl(url, ttl)
+    effective_ttl = _resolve_ttl(url, ttl, params=params)
     if effective_ttl.total_seconds() <= 0:
         return
 
