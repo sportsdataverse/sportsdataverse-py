@@ -9117,6 +9117,7 @@ load_ncaa_baseball_pbp:
   is_sacrifice: Whether the play was scored as a sacrifice.
   outs_on_play: Number of outs recorded on the play (0-3).
   pitch_sequence: Per-pitch result string for the plate appearance (e.g. 'BBKKS'), one character per pitch.
+  play_type: 'Play category the NCAA baseball parser classified from the play text: single, double, triple, home_run, strikeout, walk, hit_by_pitch, groundout, flyout, lineout, out, double_play, fielders_choice, reached_on_error, stolen_base, wild_pitch, passed_ball, runner_advance, substitution, other, or unknown when the clause could not be classified.'
   runners_advanced: List of 'runner->base' strings describing each runner's advance on the play.
   runs_scored: Runs that scored on the play.
   sac_type: 'Kind of sacrifice when one was scored: ''fly'' or ''bunt''.'
@@ -9128,6 +9129,7 @@ load_ncaa_baseball_player_stats:
   2b_a: Doubles allowed by the pitcher.
   3b: Triples hit by the batter.
   3b_a: Triples allowed by the pitcher.
+  a: 'Fielding assists credited to the player.'
   bf: Batters faced by the pitcher.
   bk: Balks charged to the pitcher.
   ci: Times the batter reached base on catcher's interference.
@@ -9147,6 +9149,7 @@ load_ncaa_baseball_player_stats:
   pb: Passed balls charged to the catcher.
   picked: Times the baserunner was picked off.
   po: Putouts recorded by the fielder.
+  position: 'Position the NCAA baseball feed reports for the player.'
   sb: Stolen bases by the baserunner.
   sba: Stolen bases allowed while this catcher was behind the plate.
   sbapct: Stolen-base success rate allowed by the catcher, as a PROPORTION on 0-1 (e.g. 0.625), not a percentage.
@@ -9154,12 +9157,15 @@ load_ncaa_baseball_player_stats:
   sfa: Sacrifice flies allowed by the pitcher.
   sh: Sacrifice hits (bunts) laid down by the batter.
   sha: Sacrifice hits allowed by the pitcher.
+  so: 'Strikeouts: the batter''s strikeouts on the batting line, the pitcher''s strikeouts recorded on the pitching line.'
   tb: Total bases accumulated by the batter.
   tc: Total chances for the fielder (putouts + assists + errors).
   tp: Triple plays the player took part in.
   tuer: Team unearned runs scored while this pitcher was in the game.
+  wp: 'Wild pitches charged to the pitcher.'
 load_ncaa_baseball_rosters:
   player_class: Class year as the feed reports it (Fr., So., Jr., Sr.); '---' when unreported.
+  position: 'Position the NCAA baseball feed reports for the player.'
   statcrew_jersey: StatCrew jersey number; present in the schema but entirely unpopulated in the published asset.
 load_ncaa_baseball_schedule:
   outcome: 'Result for the team the row is keyed to: ''W'', ''L'' or ''T''.'
@@ -9181,6 +9187,7 @@ load_ncaa_baseball_situational_stats:
     runners in scoring position.
   leadoff_pct: Situational split as a 'successes-opportunities' pair string (e.g. '5-13'), not a numeric rate -- leadoff batters
     reaching base; despite the name it is a pair string, not a percentage.
+  position: 'Position the NCAA baseball feed reports for the player.'
   rbi3rd: Situational split as a 'successes-opportunities' pair string (e.g. '5-13'), not a numeric rate -- chances to drive
     in a runner from third.
   runners: Situational split as a 'successes-opportunities' pair string (e.g. '5-13'), not a numeric rate -- plate appearances
@@ -10166,6 +10173,8 @@ load_nfl_model_pbp:
   Diff_Time_Ratio: 'WP-model feature: score_differential inflated by elapsed time, score_differential / exp(SPREAD_TIME_DECAY_EXPONENT
     * elapsed_share).'
   action_play: Whether the row is an action play -- a live-ball play rather than a timeout, penalty-only or administrative row.
+  drive_end_yard_line: 'Yards from the offense''s line of scrimmage to the opponent''s end zone (yardline_100) on the drive''s last play; the model-pbp parquet stores the numeric spot, not the ''OPP 45'' text load_nfl_pbp carries.'
+  drive_start_yard_line: 'Yards from the offense''s line of scrimmage to the opponent''s end zone (yardline_100) on the drive''s first play, 1-99; the model-pbp parquet stores the numeric spot, not the ''OWN 20'' text load_nfl_pbp carries.'
   elapsed_share: Share of regulation elapsed at the start of the play, (3600 - game_seconds_remaining) / 3600, clipped to
     [0, 1].
   extra_point_aborted: Binary indicator (1/0) that the extra-point attempt on this play was aborted (botched snap or hold,
@@ -10459,6 +10468,7 @@ load_nfl_ratings_weekly:
   adj_st_epa: Opponent-adjusted special-teams EPA per play for the team as of this week.
   as_of_week: Week through which the rating was computed; the row is the team's standing at that point in the season.
   def_rank: Team's rank (1-32) on adjusted defensive EPA as of this week.
+  games: 'Games the team played in the fitted window: those with a gameday strictly before as_of_week''s first kickoff, the only games the rating for that week saw.'
   net_rank: Team's rank (1-32) on adjusted net EPA as of this week.
   net_z: Adjusted net rating expressed as a z-score across the league that week.
   off_rank: Team's rank (1-32) on adjusted offensive EPA as of this week.

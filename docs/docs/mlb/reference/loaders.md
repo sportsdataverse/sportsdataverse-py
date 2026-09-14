@@ -244,7 +244,7 @@ Release: [ncaa_baseball_pbp](https://github.com/sportsdataverse/sportsdataverse-
 | `score_away` | Int64 | Score away. |
 | `score_home` | Int64 | Score home. |
 | `batter` | String | MLBAM player id of the batter. |
-| `play_type` | String | String indicating the type of play: pass (includes sacks), run (includes scrambles), punt, field_goal, kickoff, extra_point, qb_kneel, qb_spike, no_play (timeouts and penalties), and missing for rows indicating end of play. |
+| `play_type` | String | Play category the NCAA baseball parser classified from the play text: single, double, triple, home_run, strikeout, walk, hit_by_pitch, groundout, flyout, lineout, out, double_play, fielders_choice, reached_on_error, stolen_base, wild_pitch, passed_ball, runner_advance, substitution, other, or unknown when the clause could not be classified. |
 | `hit_trajectory` | String | Batted-ball trajectory: one of ground, line, fly, pop, foul. |
 | `fielded_position` | String | Free-text description of where/how the ball was fielded or the runner advanced, as written by the scorer. |
 | `is_hit` | Boolean | Whether the plate appearance resulted in a hit. |
@@ -333,7 +333,7 @@ Release: [ncaa_baseball_rosters](https://github.com/sportsdataverse/sportsdatave
 | `jersey` | String | Jersey number worn by the player. |
 | `statcrew_jersey` | String | StatCrew jersey number; present in the schema but entirely unpopulated in the published asset. |
 | `player_class` | String | Class year as the feed reports it (Fr., So., Jr., Sr.); '---' when unreported. |
-| `position` | String | Listed roster position (G, F, C, etc.). |
+| `position` | String | Position the NCAA baseball feed reports for the player. |
 | `height` | String | Height (feet and inches). |
 | `weight` | Int64 | Weight in pounds. |
 | `hometown` | String | Prospect hometown. |
@@ -412,7 +412,7 @@ Release: [ncaa_baseball_player_stats](https://github.com/sportsdataverse/sportsd
 | `team_id` | String | Unique ESPN team identifier. |
 | `number` | String | Jersey number. |
 | `name` | String | Display name. |
-| `position` | String | Listed roster position (G, F, C, etc.). |
+| `position` | String | Position the NCAA baseball feed reports for the player. |
 | `r` | String | Runs scored. |
 | `ab` | String | At-bats. |
 | `h` | String | Hits. |
@@ -441,13 +441,13 @@ Release: [ncaa_baseball_player_stats](https://github.com/sportsdataverse/sportsd
 | `attendance` | Int64 | Reported attendance (NA on the redesigned page). |
 | `ip` | String | Innings pitched. |
 | `er` | String | Earned runs. |
-| `so` | String | Park factor for strikeouts. |
+| `so` | String | Strikeouts: the batter's strikeouts on the batting line, the pitcher's strikeouts recorded on the pitching line. |
 | `bf` | String | Batters faced by the pitcher. |
 | `2b_a` | String | Doubles allowed by the pitcher. |
 | `3b_a` | String | Triples allowed by the pitcher. |
 | `bk` | String | Balks charged to the pitcher. |
 | `hr_a` | String | Home runs allowed by the pitcher. |
-| `wp` | String | Estimated win probability for the posteam given the current situation at the start of the given play. |
+| `wp` | String | Wild pitches charged to the pitcher. |
 | `hb` | String | Batters hit by a pitch from this pitcher. |
 | `inh_run` | String | Inherited runners on base when this relief pitcher entered. |
 | `inh_run_score` | String | Inherited runners who subsequently scored. |
@@ -456,7 +456,7 @@ Release: [ncaa_baseball_player_stats](https://github.com/sportsdataverse/sportsd
 | `tuer` | String | Team unearned runs scored while this pitcher was in the game. |
 | `pickoffs` | String | Pickoffs. |
 | `po` | String | Putouts recorded by the fielder. |
-| `a` | String | Assists (skaters). |
+| `a` | String | Fielding assists credited to the player. |
 | `tc` | String | Total chances for the fielder (putouts + assists + errors). |
 | `e` | String | Errors charged to the fielder. |
 | `ci` | String | Times the batter reached base on catcher's interference. |
@@ -482,7 +482,7 @@ Release: [ncaa_baseball_situational_stats](https://github.com/sportsdataverse/sp
 | `contest_id` | String | stats.ncaa.org contest (game) identifier. |
 | `team_seq` | Int64 | Side indicator for the row: 0 and 1 distinguish the two teams in the contest. |
 | `player` | String | Player name. |
-| `position` | String | Listed roster position (G, F, C, etc.). |
+| `position` | String | Position the NCAA baseball feed reports for the player. |
 | `with_runrs` | String | Situational split as a 'successes-opportunities' pair string (e.g. '5-13'), not a numeric rate -- plate appearances with runners on base. |
 | `hits_scorepos` | String | Situational split as a 'successes-opportunities' pair string (e.g. '5-13'), not a numeric rate -- at-bats with runners in scoring position. |
 | `vs_lhp` | String | Situational split as a 'successes-opportunities' pair string (e.g. '5-13'), not a numeric rate -- batting against left-handed pitching. |

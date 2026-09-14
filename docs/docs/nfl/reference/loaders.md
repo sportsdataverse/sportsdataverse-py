@@ -643,8 +643,8 @@ Release: [nfl_model_pbp](https://github.com/sportsdataverse/sportsdataverse-data
 | `drive_end_transition` | String | String indicating how the offense lost the ball. |
 | `drive_game_clock_start` | String | Game time at the beginning of a given drive. |
 | `drive_game_clock_end` | String | Game time at the end of a given drive. |
-| `drive_start_yard_line` | Int64 | String indicating where a given drive started consisting of team half and yard line number. |
-| `drive_end_yard_line` | Int64 | String indicating where a given drive ended consisting of team half and yard line number. |
+| `drive_start_yard_line` | Int64 | Yards from the offense's line of scrimmage to the opponent's end zone (yardline_100) on the drive's first play, 1-99; the model-pbp parquet stores the numeric spot, not the 'OWN 20' text load_nfl_pbp carries. |
+| `drive_end_yard_line` | Int64 | Yards from the offense's line of scrimmage to the opponent's end zone (yardline_100) on the drive's last play; the model-pbp parquet stores the numeric spot, not the 'OPP 45' text load_nfl_pbp carries. |
 | `drive_play_id_started` | Int64 | Play_id of the first play in the given drive. |
 | `drive_play_id_ended` | Int64 | Play_id of the last play in the given drive. |
 | `drive_time_of_possession` | String | Time of possession in a given drive. |
@@ -762,7 +762,7 @@ Release: [nfl_ratings_weekly](https://github.com/sportsdataverse/sportsdataverse
 | `adj_def_epa` | Float64 | Opponent-adjusted defensive EPA per play for the team as of this week (negative is better for the defense). |
 | `adj_st_epa` | Float64 | Opponent-adjusted special-teams EPA per play for the team as of this week. |
 | `adj_net` | Float64 | Opponent-adjusted net EPA per play -- the team's offensive rating less its defensive rating. |
-| `games` | Int64 | Games played in career |
+| `games` | Int64 | Games the team played in the fitted window: those with a gameday strictly before as_of_week's first kickoff, the only games the rating for that week saw. |
 | `off_rank` | Int64 | Team's rank (1-32) on adjusted offensive EPA as of this week. |
 | `def_rank` | Int64 | Team's rank (1-32) on adjusted defensive EPA as of this week. |
 | `net_rank` | Int64 | Team's rank (1-32) on adjusted net EPA as of this week. |
