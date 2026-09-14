@@ -1764,7 +1764,7 @@ loaders:
   min_season: 1999
   example_args:
     seasons: 2024
-# SDV-native Next Gen Stats (nfl-ngs-data): one unified loader over 12 tags
+# SDV-native Next Gen Stats (nfl-ngs-data): one unified loader over 16 tags
 # (dataset= selects the tag). Listed under the default dataset's tag; the
 # full dataset -> tag -> floor table lives in the loader docstring. The floor
 # here is the surface-wide minimum (schedules / gamecenter_passers); the

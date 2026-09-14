@@ -1957,6 +1957,13 @@ _NFL_NGS_DATASETS: dict = {
     "gamecenter_receivers": ("nfl_ngs_gamecenter_receivers", "ngs_gamecenter_receivers", 2015),
     "gamecenter_pass_rushers": ("nfl_ngs_gamecenter_pass_rushers", "ngs_gamecenter_pass_rushers", 2016),
     "gamecenter_leaders": ("nfl_ngs_gamecenter_leaders", "ngs_gamecenter_leaders", 2016),
+    # Highlight plays -- the only plays NGS serves player tracking and
+    # participation for (added 2026-09-14). The weekly highlight list that
+    # enumerates them answers nothing before 2018.
+    "highlights": ("nfl_ngs_highlights", "ngs_highlights", 2018),
+    "highlight_participation": ("nfl_ngs_highlight_participation", "ngs_highlight_participation", 2018),
+    "highlight_events": ("nfl_ngs_highlight_events", "ngs_highlight_events", 2018),
+    "highlight_tracking": ("nfl_ngs_highlight_tracking", "ngs_highlight_tracking", 2018),
 }
 
 
@@ -1969,12 +1976,13 @@ def load_nfl_ngs(seasons: List[int], dataset: str = "passing", return_as_pandas:
     :func:`load_nfl_nextgen_stats`, which reads nflverse's republished
     ``statboard/`` parquet: that one carries the three passing/rushing/receiving
     season-and-week leaderboards only, under expanded column names
-    (``avg_time_to_throw``). This loader carries the whole 12-dataset surface
+    (``avg_time_to_throw``). This loader carries the whole 16-dataset surface
     under NGS's own snake_cased field names (``avg_time_to_throw`` too for the
     statboards, but ``completion_probability`` / ``rush_yards_over_expected`` /
     ``max_speed`` on the leaderboards, ``play_game_id`` / ``play_play_id`` as
     play-level join keys). Reach for :func:`load_nfl_nextgen_stats` when the
-    three statboards are all you need; reach for this for everything else.
+    three statboards are all you need; reach for this for everything else --
+    including player-tracking coordinates for NGS highlight plays.
 
     Datasets (``dataset=``), their release tag, and the first season with data:
 
@@ -1993,6 +2001,10 @@ def load_nfl_ngs(seasons: List[int], dataset: str = "passing", return_as_pandas:
     ``gamecenter_receivers``    ``nfl_ngs_gamecenter_receivers``   2015
     ``gamecenter_pass_rushers`` ``nfl_ngs_gamecenter_pass_rushers`` 2016
     ``gamecenter_leaders``      ``nfl_ngs_gamecenter_leaders``     2016
+    ``highlights``              ``nfl_ngs_highlights``             2018
+    ``highlight_participation`` ``nfl_ngs_highlight_participation`` 2018
+    ``highlight_events``        ``nfl_ngs_highlight_events``       2018
+    ``highlight_tracking``      ``nfl_ngs_highlight_tracking``     2018
     ==========================  =================================  =====
 
     The three statboards are one row per player x ``season_type`` x ``week``,
@@ -2002,10 +2014,23 @@ def load_nfl_ngs(seasons: List[int], dataset: str = "passing", return_as_pandas:
     ``leaderboard`` / ``scope`` / ``season_type`` / ``week`` / ``rank``. The
     ``gamecenter_*`` tables are per game x side (x rank).
 
+    The four ``highlight*`` datasets cover only plays NGS tagged as highlights
+    (~140-160 per regular-season week): NGS serves tracking for those plays
+    and denies it for every other play. ``highlights`` is one row per play;
+    ``highlight_participation`` one row per player on the field, with NGS role
+    flags (``was_running_route``, ``was_blitzing``, ``is_lined_up_as_qb``);
+    ``highlight_tracking`` one row per player or ball (``side`` = ``home`` /
+    ``away`` / ``ball``) per ~10 Hz frame, ``x``/``y`` in yards; and
+    ``highlight_events`` one row per play event (``ball_snap``,
+    ``pass_forward``, ``tackle``, ...). ``frame_id`` is shared by tracking and
+    events, so an event joins to the frame it happened in on
+    ``game_id`` / ``play_id`` / ``frame_id``. ``highlight_tracking`` is large:
+    roughly 18M rows and ~85 MB per season.
+
     Args:
         seasons (List[int]): Seasons to load, as the STARTING calendar year
             (2025 = the 2025-26 season). Each season is one release asset.
-        dataset (str): One of the 12 keys above. Defaults to ``"passing"``.
+        dataset (str): One of the 16 keys above. Defaults to ``"passing"``.
         return_as_pandas (bool): If True, returns a pandas dataframe. If False,
             returns a polars dataframe.
 
@@ -2014,7 +2039,7 @@ def load_nfl_ngs(seasons: List[int], dataset: str = "passing", return_as_pandas:
         with ``diagonal_relaxed`` (per-season schemas may add columns).
 
     Raises:
-        ValueError: If ``dataset`` is not one of the 12 keys.
+        ValueError: If ``dataset`` is not one of the 16 keys.
         SeasonNotFoundError: If a requested season is below that dataset's floor.
 
     Example:
@@ -2035,6 +2060,15 @@ def load_nfl_ngs(seasons: List[int], dataset: str = "passing", return_as_pandas:
             cp = load_nfl_ngs(seasons=[2024], dataset="leaders").filter(
                 pl.col("leaderboard") == "completion"
             )
+
+        Player positions at the snap of every 2024 highlight play::
+
+            events = load_nfl_ngs(seasons=[2024], dataset="highlight_events")
+            tracking = load_nfl_ngs(seasons=[2024], dataset="highlight_tracking")
+            snaps = events.filter(pl.col("event") == "ball_snap").select(
+                ["game_id", "play_id", "frame_id"]
+            )
+            at_snap = tracking.join(snaps, on=["game_id", "play_id", "frame_id"])
 
         See Also:
             * :func:`load_nfl_nextgen_stats` -- nflverse's republished statboards
