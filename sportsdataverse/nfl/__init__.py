@@ -107,6 +107,7 @@ from sportsdataverse.nfl.nfl_ngs_tracking import (
     nfl_ngs_yac_oe,
 )
 from sportsdataverse.nfl.nfl_pbp import *
+from sportsdataverse.nfl.nfl_play_participants import *
 from sportsdataverse.nfl.nfl_player_props import *
 from sportsdataverse.nfl.nfl_player_stats import *
 from sportsdataverse.nfl.nfl_ratings import *
