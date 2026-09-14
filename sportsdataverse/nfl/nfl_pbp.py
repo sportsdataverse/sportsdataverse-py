@@ -5,6 +5,7 @@ import logging
 import os
 import re
 import time
+import warnings
 from functools import reduce
 from importlib.resources import files as _resource_files
 
@@ -45,6 +46,18 @@ def _team_mascot(team: dict) -> str:
 
 
 from sportsdataverse.dl_utils import download
+from sportsdataverse.football.attribution import (
+    add_attribution_cols as _add_attribution_cols,
+    add_penalty_enforcement_cols as _add_penalty_enforcement_cols,
+    refine_play_types_post_attribution as _refine_play_types_post_attribution,
+)
+from sportsdataverse.football.box import air_yards_box as _air_yards_box
+from sportsdataverse.football.box import build_defensive_players_box as _build_defensive_players_box
+from sportsdataverse.football.box import build_specialists_box as _build_specialists_box
+from sportsdataverse.football.espn_box import parse_espn_player_box as _parse_espn_player_box
+from sportsdataverse.football.espn_box import parse_espn_team_box as _parse_espn_team_box
+from sportsdataverse.football.play_participants import coalesce_participants as _coalesce_participants
+from sportsdataverse.football.series import add_series_data as _add_series_data
 from sportsdataverse.nfl.ep_wp import (
     CP_FEATURES,
     EP_FEATURES,
@@ -69,6 +82,7 @@ from sportsdataverse.nfl.model_vars import (
     ep_class_to_score_mapping,
     int_vec,
     kickoff_turnovers,
+    clock_stoppage_vec,
     kickoff_vec,
     normalplay,
     offense_score_vec,
@@ -78,6 +92,149 @@ from sportsdataverse.nfl.model_vars import (
     scores_vec,
     turnover_vec,
 )
+
+# ESPN NFL play-text grammar. A ball-carrier is "X.Surname" (optionally
+# "Ja.Surname", "A.St. Brown", "A.Van Ginkel", "D.Jones Jr."); the CFB text the
+# older extractors were written for spells names out and never appears in the
+# NFL feed. Rust regex has no lookaround, so each pattern anchors on the verb
+# that follows the name instead.
+_NFL_NAME = (
+    r"[A-Z][a-z]{0,2}\.(?:St\. |Ste\. |Van |Von |De |Da |Del |Di |Du |La |Le )?[A-Za-z'\-]+"
+    r"(?: (?:Jr|Sr|II|III|IV)\.?)?"
+)
+# ESPN's scoring-summary phrasing ("Denzel Boston 46 Yd pass from Deshaun Watson
+# (Andre Szmyt Kick)", "Bri.Thomas 5 Yd Run") spells names out; group 1 + "." +
+# group 2 folds them to the abbreviated form the rest of the game uses so a
+# player's rows group together in the box.
+_NFL_LONG_NAME = r"([A-Z])[A-Za-z'\-]+ ((?:St\. )?[A-Z][A-Za-z'\-]+)"
+_NFL_LEGACY_PASSER_RE = r"Yd (?:TD )?pass from " + _NFL_LONG_NAME
+_NFL_LEGACY_RECEIVER_RE = r"^(?:\(.*?\) )?" + _NFL_LONG_NAME + r" \d{1,3} Yd (?:TD )?pass"
+_NFL_LEGACY_RUSHER_RE = r"^(?:\(.*?\) )?" + _NFL_LONG_NAME + r" \d{1,3} Yd (?:TD )?(?:Run|Rush)"
+# ...and the other alternate phrasing ESPN slips in ("Kirk Cousins Pass Complete
+# for 5 Yds to Michael Mayer", "Kirk Cousins Run for 5 Yds").
+_NFL_LEGACY_PASSER_RE2 = r"^(?:\(.*?\) )?" + _NFL_LONG_NAME + r" [Pp]ass "
+_NFL_LEGACY_RECEIVER_RE2 = r" to " + _NFL_LONG_NAME + r"\.?$"
+_NFL_LEGACY_XP_KICKER_RE = r"\(" + _NFL_LONG_NAME + r" Kick(?: [A-Za-z]+)?\)"
+_NFL_LEGACY_RUSHER_RE2 = r"^(?:\(.*?\) )?" + _NFL_LONG_NAME + r" [Rr]un for "
+_NFL_RUSH_DIRECTION = r"(?:up the middle|left (?:end|tackle|guard)|right (?:end|tackle|guard)|scrambles|kneels)"
+# A ball-carrier followed by a rush direction, or (aborted-snap recoveries: "J.Williams
+# to DET 32 for 7 yards") by the spot / gain the run ends at.
+_NFL_RUSHER_RE = (
+    r"(" + _NFL_NAME + r") (?:" + _NFL_RUSH_DIRECTION[3:-1] + r"|to [A-Z]{2,3} -?\d|for (?:-?\d+ yards?|no gain))"
+)
+# A fumble-recovery row is a rush or a pass by its text; the CFB tests ("run
+# for", "pass complete") never match NFL text, so these are the NFL equivalents.
+_NFL_FUMBLE_ROW_RUSH_RE = _NFL_NAME + r" " + _NFL_RUSH_DIRECTION
+_NFL_FUMBLE_ROW_PASS_RE = _NFL_NAME + r" (?:pass|sacked)"
+_NFL_PASSER_RE = r"(" + _NFL_NAME + r") (?:pass|sacked|spiked)"
+_NFL_RECEIVER_RE = r"(?:^|\s)(?:to|for) (" + _NFL_NAME + r")"
+
+
+def _abbreviated_name(pattern: str) -> pl.Expr:
+    """``"Deshaun Watson"`` -> ``"D.Watson"`` from a two-group ``_NFL_LONG_NAME`` match."""
+    return pl.concat_str(
+        [
+            pl.col("text").str.extract(pattern, 1),
+            pl.lit("."),
+            pl.col("text").str.extract(pattern, 2),
+        ],
+    )
+
+
+# Defensive and special-teams grammar. Tacklers / defenders sit in a trailing
+# "(NAME)" (or "(NAME; NAME)") group, assisted sacks read "(sack split by A and
+# B)", the ball-hawk reads "INTERCEPTED by NAME" / "FUMBLES (NAME)" /
+# "RECOVERED by ABBR-NAME", kickers "NAME kicks 65 yards" / "NAME 34 yard field
+# goal" / "NAME extra point is GOOD", punters "NAME punts 46 yards", and the
+# returner is the first name after the spot the kick landed at.
+_NFL_SACK_SPLIT_1_RE = r"sack split by (" + _NFL_NAME + r") and"
+_NFL_SACK_SPLIT_2_RE = r"sack split by " + _NFL_NAME + r" and (" + _NFL_NAME + r")"
+_NFL_SACK_SOLO_RE = r"sacked[^()]*\((" + _NFL_NAME + r")"
+_NFL_INTERCEPTOR_RE = r"INTERCEPTED by (" + _NFL_NAME + r")"
+_NFL_PAREN_NAME_RE = r"\((" + _NFL_NAME + r")"
+_NFL_FUMBLE_FORCED_RE = r"FUMBLES \((" + _NFL_NAME + r")"
+_NFL_RECOVERED_BY_RE = r"(?:RECOVERED|recovered) by [A-Z]{2,3}-(" + _NFL_NAME + r")"
+_NFL_FUMBLER_RE = r"(" + _NFL_NAME + r") (?:FUMBLES|MUFFS)"
+_NFL_PUNTER_RE = r"(" + _NFL_NAME + r") punts"
+_NFL_PUNT_BLOCK_RE = r"punt is BLOCKED by (" + _NFL_NAME + r")"
+_NFL_PUNT_RETURNER_RE = r"Center-" + _NFL_NAME + r"\.? (" + _NFL_NAME + r") (?:to [A-Z]|ran ob|pushed ob|MUFFS|for )"
+_NFL_FAIR_CATCH_RE = r"fair catch by (" + _NFL_NAME + r")"
+_NFL_KICKER_RE = r"(" + _NFL_NAME + r") kicks"
+_NFL_KICK_RETURNER_RE = (
+    r"(?:to [A-Z]{2,3} -?\d+|end zone|at [A-Z]{2,3} \d+)\. ("
+    + _NFL_NAME
+    + r") (?:to [A-Z]|ran ob|pushed ob|MUFFS|\(didn't|for )"
+)
+_NFL_FG_KICKER_RE = r"(" + _NFL_NAME + r") \d{1,2} yard field goal"
+_NFL_FG_BLOCK_RE = r"field goal is BLOCKED by (" + _NFL_NAME + r")"
+_NFL_XP_KICKER_RE = r"(" + _NFL_NAME + r") extra point is"
+_NFL_INT_RETURN_YDS_RE = r"INTERCEPTED by .*? for (-?\d+) yards?"
+_NFL_FUMBLE_RETURN_YDS_RE = r"(?:RECOVERED|recovered) by [^.]*\. [^.]*? for (-?\d+) yards?"
+
+# ESPN's NFL play text names teams by the league's own (GSIS-style) codes, which
+# differ from ESPN's team abbreviations for a handful of clubs; the attribution
+# parsers fold them before the prefix-tolerant match against home/away.
+_NFL_TEXT_TEAM_ALIASES = {
+    "ARZ": "ARI",
+    "BLT": "BAL",
+    "CLV": "CLE",
+    "HST": "HOU",
+    "WAS": "WSH",
+    "LA": "LAR",
+    "SL": "STL",
+}
+_NFL_NAME_SUFFIX_RE = re.compile(r"\s+(?:Jr|Sr|II|III|IV)\.?$")
+_NFL_RECOVERY_RE = re.compile(r"(?i)recovered by\s+([A-Z]{2,3})-")
+_NFL_PENALTY_ON_RE = re.compile(r"(?i)penalty on\s+([A-Z]{2,3})\b")
+_NFL_ENFORCED_AT_RE = re.compile(r"(?i)enforced at\s+(?:([A-Z]{2,3})\s+)?(\d{1,2})\b")
+
+
+def _nfl_norm_abbr(abbr: str) -> str:
+    a = (abbr or "").upper()
+    return _NFL_TEXT_TEAM_ALIASES.get(a, a)
+
+
+def _nfl_side_of_abbrev(abbr, home, away):
+    """``"home"`` / ``"away"`` for a play-text team code, or None when it matches
+    neither side (or, degenerately, both)."""
+    if not abbr:
+        return None
+    a, h, w = _nfl_norm_abbr(abbr), (home or "").upper(), (away or "").upper()
+
+    def _compat(x, t):
+        return bool(t) and (x == t or t.startswith(x) or x.startswith(t))
+
+    hs, ws = _compat(a, h), _compat(a, w)
+    if hs and not ws:
+        return "home"
+    if ws and not hs:
+        return "away"
+    return None
+
+
+def _nfl_parse_recovery_abbrevs(text):
+    """Ordered recovering-team codes from ``"RECOVERED by ARZ-W.Johnson"`` clauses,
+    folded to ESPN's abbreviations (``CLV`` -> ``CLE``)."""
+    return [_nfl_norm_abbr(m) for m in _NFL_RECOVERY_RE.findall(text or "")]
+
+
+def _nfl_parse_penalty_team_side(row):
+    """The penalized side from ``"PENALTY on CLV-S.Williams, ..."``."""
+    m = _NFL_PENALTY_ON_RE.search(row["text"] or "")
+    return _nfl_side_of_abbrev(m.group(1), row["homeTeamAbbrev"], row["awayTeamAbbrev"]) if m else None
+
+
+def _nfl_parse_penalty_spot(row):
+    """``"<side>:<yardline>"`` from ``"enforced at JAX 42"`` (``"mid:50"`` at midfield)."""
+    m = _NFL_ENFORCED_AT_RE.search(row["penalty_text"] or "")
+    if not m:
+        return None
+    abbr, yardline = m.group(1), m.group(2)
+    if abbr is None:
+        return f"mid:{yardline}" if yardline == "50" else None
+    side = _nfl_side_of_abbrev(abbr, row["homeTeamAbbrev"], row["awayTeamAbbrev"])
+    return f"{side}:{yardline}" if side else None
+
 
 # "td" : float(p[0]),
 # "opp_td" : float(p[1]),
@@ -157,6 +314,16 @@ class NFLPlayProcess(object):
         # self.logger = logger
         self.ran_pipeline = False
         self.ran_cleaning_pipeline = False
+        # The enriched polars frame the pipeline produced, kept alongside the
+        # list-of-dicts ``plays_json`` for consumers that re-aggregate windows
+        # (Game on Paper's ?span= boxes filter it and re-run create_box_score).
+        self.plays_frame = None
+        # ESPN's per-play participants (``espn_nfl_play_participants``): the live
+        # path fetches them to overwrite the text-extracted names and ids; pass
+        # ``participants=`` (a frame) to inject, or ``join_participants=False`` to
+        # skip the network fetch (offline reprocessing, the offline test suite).
+        self.participants = kwargs.get("participants")
+        self.join_participants = bool(kwargs.get("join_participants", True))
         self.raw = raw
         self.path_to_json = path_to_json
         self.return_keys = return_keys
@@ -470,7 +637,7 @@ class NFLPlayProcess(object):
                     .and_(pl.col("start.yardsToEndzone") == pl.col("lead_start_yardsToEndzone"))
                     .and_(pl.col("start.distance") == pl.col("lead_start_distance"))
                     .and_(pl.col("text") == pl.col("lead_text"))
-                    .and_(pl.col("type.text") != "Timeout"),
+                    .and_(pl.col("type.text").is_in(clock_stoppage_vec) == False),
                 )
                 .then(pl.lit(True))
                 .when(
@@ -479,7 +646,7 @@ class NFLPlayProcess(object):
                     .and_(pl.col("start.yardsToEndzone") == pl.col("lead_start_yardsToEndzone"))
                     .and_(pl.col("start.distance") == pl.col("lead_start_distance"))
                     .and_(pl.col("text").is_in(pl.col("lead_text").implode()))
-                    .and_(pl.col("type.text") != "Timeout"),
+                    .and_(pl.col("type.text").is_in(clock_stoppage_vec) == False),
                 )
                 .then(pl.lit(True))
                 .otherwise(pl.lit(False)),
@@ -1062,7 +1229,8 @@ class NFLPlayProcess(object):
         play_df = (
             play_df.with_columns(
                 scoring_play=pl.when(pl.col("type.text").is_in(scores_vec)).then(True).otherwise(False),
-                td_play=pl.col("text").str.contains("(?i)touchdown|(?i)for a TD"),
+                td_play=pl.col("text").str.contains("(?i)touchdown|(?i)for a TD")
+                | pl.col("type.text").str.contains("Touchdown"),
                 touchdown=pl.col("type.text").str.contains("(?i)touchdown"),
                 ## Portion of touchdown check for plays where touchdown is not listed in the play_type--
                 td_check=pl.col("text").str.contains("(?i)touchdown"),
@@ -1187,6 +1355,21 @@ class NFLPlayProcess(object):
                                 ],
                             )
                         ).and_(pl.col("text").str.contains("run for")),
+                    )
+                    .or_(
+                        (
+                            pl.col("type.text").is_in(
+                                [
+                                    "Fumble Recovery (Opponent)",
+                                    "Fumble Recovery (Opponent) Touchdown",
+                                    "Fumble Recovery (Own)",
+                                    "Fumble Recovery (Own) Touchdown",
+                                    "Fumble Return Touchdown",
+                                ],
+                            )
+                        )
+                        .and_(pl.col("text").str.contains(_NFL_FUMBLE_ROW_RUSH_RE))
+                        .and_(pl.col("text").str.contains(r" pass ") == False),
                     ),
                 )
                 .then(True)
@@ -1237,6 +1420,18 @@ class NFLPlayProcess(object):
                         (pl.col("type.text") == "Fumble Recovery (Opponent)").and_(
                             pl.col("text").str.contains("sacked"),
                         ),
+                    )
+                    .or_(
+                        (
+                            pl.col("type.text").is_in(
+                                [
+                                    "Fumble Recovery (Opponent)",
+                                    "Fumble Recovery (Opponent) Touchdown",
+                                    "Fumble Recovery (Own)",
+                                    "Fumble Recovery (Own) Touchdown",
+                                ],
+                            )
+                        ).and_(pl.col("text").str.contains(_NFL_FUMBLE_ROW_PASS_RE)),
                     )
                     .or_(
                         (pl.col("type.text") == "Fumble Recovery (Opponent) Touchdown").and_(
@@ -1823,7 +2018,9 @@ class NFLPlayProcess(object):
         play_df = (
             play_df.with_columns(
                 # -- T/F flag conditions penalty_flag
-                penalty_flag=pl.when((pl.col("type.text") == "Penalty").or_(pl.col("text").str.contains("(?i)penalty")))
+                penalty_flag=pl.when(
+                    (pl.col("type.text") == "Penalty").or_(pl.col("text").str.contains(r"(?i)penalty on\b"))
+                )
                 .then(True)
                 .otherwise(False),
                 # -- T/F flag conditions penalty_declined
@@ -2049,8 +2246,38 @@ class NFLPlayProcess(object):
                 )
                 .otherwise(pl.col("yds_penalty")),
             )
+            .with_columns(
+                # ESPN's NFL penalty text reads "..., Neutral Zone Infraction, 5 yards,
+                # enforced at JAX 42", so the CFB-shaped ".{0,3} yards" capture above
+                # comes back as ", 5". Keep the digits only (the column stays text --
+                # every branch below compares against it as text), falling back to
+                # ESPN's own ``penalty.yards`` field when the text carries no number.
+                yds_penalty=pl.when(pl.col("penalty_flag") == True)
+                .then(
+                    pl.coalesce(
+                        pl.col("text").str.extract(r"(?i)penalty on [^,]+, [^,]+, (\d+) yards?", 1),
+                        pl.col("yds_penalty").str.extract(r"(\d+)", 1),
+                        *(
+                            [pl.col("penalty.yards").cast(pl.Int32, strict=False).cast(pl.Utf8)]
+                            if "penalty.yards" in play_df.columns
+                            else []
+                        ),
+                    ),
+                )
+                .otherwise(pl.col("yds_penalty")),
+            )
         )
 
+        # ESPN's NFL rows carry the foul name structurally (``penalty.type.text``,
+        # e.g. "Neutral Zone Infraction"); it is authoritative over the text-derived
+        # CFB-shaped label whenever the row is flagged.
+        if "penalty.type.text" in play_df.columns:
+            play_df = play_df.with_columns(
+                penalty_detail=pl.when((pl.col("penalty_flag") == True).and_(pl.col("penalty.type.text").is_not_null()))  # noqa: E712
+                .then(pl.col("penalty.type.text"))
+                .otherwise(pl.col("penalty_detail")),
+            )
+        play_df = _add_penalty_enforcement_cols(play_df)
         return play_df
 
     def __add_play_category_flags(self, play_df):
@@ -2255,7 +2482,7 @@ class NFLPlayProcess(object):
                 )
                 .then(True)
                 .otherwise(False),
-                play=pl.when(pl.col("type.text").is_in(["Timeout", "End Period", "End of Half", "Penalty"]) == False)
+                play=pl.when(pl.col("type.text").is_in([*clock_stoppage_vec, "Penalty"]) == False)
                 .then(True)
                 .otherwise(False),
             )
@@ -2264,7 +2491,7 @@ class NFLPlayProcess(object):
                     (pl.col("sp") == False).and_(
                         pl.col("type.text").is_in(
                             [
-                                "Timeout",
+                                *clock_stoppage_vec,
                                 "Extra Point Good",
                                 "Extra Point Missed",
                                 "Two-Point Pass",
@@ -2374,6 +2601,40 @@ class NFLPlayProcess(object):
             ]
         play_df = play_df.with_columns(scoring_exprs)
 
+        play_df = play_df.with_columns(
+            # NFL text: "J.Dart kneels to DAL 25 for -1 yards"; ESPN never writes
+            # "hurried by" in the NFL feed, so qb_hurry is a parity column that stays False.
+            kneel_down=(pl.col("rush") == True).and_(pl.col("text").str.contains(r"(?i)\bkneels?\b")).fill_null(False),  # noqa: E712
+            qb_hurry=pl.col("text").str.contains(r"(?i)\shurried by\s").fill_null(False),
+            # ESPN folds the try into the touchdown row ("... TOUCHDOWN. J.Elliott
+            # extra point is GOOD, ..."), so the XP flags ride on that row.
+            xp_attempt=(
+                pl.col("text").str.contains("extra point is")
+                | pl.col("text").str.contains(r"\([A-Za-z' .-]+ Kick(?: [A-Za-z]+)?\)")
+            ).fill_null(False),
+            xp_made=(
+                pl.col("text").str.contains("extra point is GOOD")
+                | pl.col("text").str.contains(r"\([A-Za-z' .-]+ Kick\)")
+            ).fill_null(False),
+            # ... and so is the two-point try: "TOUCHDOWN. TWO-POINT CONVERSION
+            # ATTEMPT. C.Wentz pass to J.Jefferson is complete. ATTEMPT SUCCEEDS."
+            two_point_attempt=pl.col("text").str.contains("TWO-POINT CONVERSION ATTEMPT").fill_null(False),
+        )
+        play_df = play_df.with_columns(
+            two_point_conv_result=pl.when(
+                (pl.col("two_point_attempt") == True).and_(pl.col("text").str.contains("ATTEMPT SUCCEEDS")),  # noqa: E712
+            )
+            .then(pl.lit("success"))
+            .when((pl.col("two_point_attempt") == True).and_(pl.col("text").str.contains("ATTEMPT FAILS")))  # noqa: E712
+            .then(pl.lit("failure"))
+            .otherwise(pl.col("two_point_conv_result")),
+            two_point_pass=(pl.col("two_point_attempt") == True).and_(  # noqa: E712
+                pl.col("text").str.contains(r"CONVERSION ATTEMPT\. [^.]* pass "),
+            ),
+            two_point_rush=(pl.col("two_point_attempt") == True).and_(  # noqa: E712
+                pl.col("text").str.contains(r"CONVERSION ATTEMPT\. [^.]* pass ") == False,  # noqa: E712
+            ),
+        )
         return play_df
 
     def __add_yardage_cols(self, play_df):
@@ -2525,7 +2786,116 @@ class NFLPlayProcess(object):
             yds_sacked=pl.when(pl.col("sack") == True)
             .then(-1 * pl.col("text").str.extract(r"(?i)sacked (.+)").str.extract(r"(\d+)").cast(pl.Int32))
             .otherwise(None),
-        ).with_columns(
+        )
+        play_df = play_df.with_columns(
+            # ESPN's NFL grammar ("J.Gibbs up the middle to DET 22 for 4 yards",
+            # "J.Goff pass short left to A.St. Brown to DET 27 for 5 yards",
+            # "J.Hurts sacked at PHI 28 for -9 yards") never matches the CFB
+            # phrasing above ("run for", "pass complete to", "sacked for a loss
+            # of"), so those branches come back null -- and the CFB sack branch
+            # reads the *yard line* out of "sacked at PHI 42". The first
+            # "for N yards" after the ball-carrier is the play's gain; ESPN's
+            # own ``statYardage`` is the fallback.
+            yds_rushed=pl.when((pl.col("rush") == True).and_(pl.col("yds_rushed").is_null()))
+            .then(
+                pl.coalesce(
+                    pl.col("text").str.extract(r"for (-?\d+) yards?", 1).cast(pl.Int32, strict=False),
+                    pl.col("statYardage").cast(pl.Int32, strict=False),
+                ),
+            )
+            .otherwise(pl.col("yds_rushed")),
+            yds_receiving=pl.when(
+                (pl.col("pass") == True)
+                .and_(pl.col("yds_receiving").is_null())
+                .and_(pl.col("text").str.contains(r"(?i)incomplete|sacked|intercepted|for no gain")),
+            )
+            .then(0)
+            .when((pl.col("pass") == True).and_(pl.col("yds_receiving").is_null()))
+            .then(
+                pl.coalesce(
+                    pl.col("text").str.extract(r"for (-?\d+) yards?", 1).cast(pl.Int32, strict=False),
+                    pl.col("statYardage").cast(pl.Int32, strict=False),
+                ),
+            )
+            .otherwise(pl.col("yds_receiving")),
+            yds_sacked=pl.when(
+                (pl.col("sack") == True).and_(pl.col("text").str.contains(r"(?i)sacked .*? for -?\d+ yard")),
+            )
+            .then(pl.col("text").str.extract(r"(?i)sacked .*? for (-?\d+) yard", 1).cast(pl.Int32, strict=False))
+            .otherwise(pl.col("yds_sacked")),
+        )
+        # Special teams and returns in the NFL grammar ("punts 46 yards", "kicks 65
+        # yards", "34 yard field goal", "INTERCEPTED by X at DET 35. X to DET 36 for
+        # 1 yard"). The CFB extractors read "for (.+)" off the whole text, which on
+        # NFL text is a yard line, not a return.
+        _first_gain = pl.col("text").str.extract(r"for (-?\d+) yards?", 1).cast(pl.Int32, strict=False)
+        _no_gain_or_dead = pl.col("text").str.contains(
+            r"(?i)for no gain|fair catch|touchback|out of bounds|downed by|\(didn't try to advance\)",
+        )
+        play_df = play_df.with_columns(
+            yds_punted=pl.when(pl.col("punt") == True)
+            .then(
+                pl.coalesce(
+                    pl.col("text").str.extract(r"punts (\d+) yards", 1).cast(pl.Int32, strict=False),
+                    pl.col("yds_punted"),
+                )
+            )
+            .otherwise(pl.col("yds_punted")),
+            yds_kickoff=pl.when(pl.col("kickoff_play") == True)
+            .then(
+                pl.coalesce(
+                    pl.col("text").str.extract(r"kicks (?:onside )?(\d+) yards", 1).cast(pl.Int32, strict=False),
+                    pl.col("yds_kickoff"),
+                ),
+            )
+            .otherwise(pl.col("yds_kickoff")),
+            yds_fg=pl.coalesce(
+                pl.col("text").str.extract(r"(\d{1,2}) yard field goal", 1).cast(pl.Int32, strict=False),
+                pl.col("yds_fg"),
+            ),
+            yds_punt_return=pl.when((pl.col("punt") == True).and_(pl.col("text").str.contains(r"for -?\d+ yards?")))
+            .then(_first_gain)
+            .when((pl.col("punt") == True).and_(_no_gain_or_dead))
+            .then(0)
+            .otherwise(pl.col("yds_punt_return")),
+            yds_kickoff_return=pl.when(
+                (pl.col("kickoff_play") == True)
+                .and_(pl.col("kickoff_tb") == False)
+                .and_(pl.col("text").str.contains(r"for -?\d+ yards?")),
+            )
+            .then(_first_gain)
+            .when((pl.col("kickoff_play") == True).and_(pl.col("kickoff_tb") == False).and_(_no_gain_or_dead))
+            .then(0)
+            .otherwise(pl.col("yds_kickoff_return")),
+            yds_int_return=pl.when((pl.col("int") == True).and_(pl.col("text").str.contains("INTERCEPTED")))
+            .then(pl.col("text").str.extract(_NFL_INT_RETURN_YDS_RE, 1).cast(pl.Int32, strict=False).fill_null(0))
+            .otherwise(pl.col("yds_int_return")),
+            yds_fumble_return=pl.when(
+                (pl.col("fumble_vec") == True).and_(pl.col("text").str.contains(r"(?:RECOVERED|recovered) by")),
+            )
+            .then(pl.col("text").str.extract(_NFL_FUMBLE_RETURN_YDS_RE, 1).cast(pl.Int32, strict=False).fill_null(0))
+            .otherwise(pl.col("yds_fumble_return")),
+        )
+        # Official-scoring conventions the text alone gets wrong: a run or catch
+        # wiped out by a foul ("PENALTY on SEA-A.Lucas, False Start, 5 yards,
+        # enforced at SEA 38 - No Play.") gains nothing -- the NFL feed marks
+        # nullification explicitly with "No Play", while a holding call enforced
+        # from the end of the run leaves the run standing -- and a carrier who
+        # fumbles and recovers his own ball is credited with the whole advance
+        # (ESPN's statYardage), not the pre-fumble segment.
+        play_df = play_df.with_columns(
+            yds_rushed=pl.when((pl.col("rush") == True).and_(pl.col("penalty_no_play") == True))  # noqa: E712
+            .then(0)
+            .when((pl.col("rush") == True).and_(pl.col("type.text") == "Fumble Recovery (Own)"))  # noqa: E712
+            .then(pl.col("statYardage").cast(pl.Int32, strict=False))
+            .otherwise(pl.col("yds_rushed")),
+            yds_receiving=pl.when(
+                (pl.col("pass") == True).and_(pl.col("completion") == True).and_(pl.col("penalty_no_play") == True),  # noqa: E712
+            )
+            .then(0)
+            .otherwise(pl.col("yds_receiving")),
+        )
+        play_df = play_df.with_columns(
             yds_penalty=pl.when(pl.col("penalty_detail").is_in(["Penalty Declined", "Penalty Offset"]))
             .then(0)
             .when(pl.col("yds_penalty").is_not_null())
@@ -3001,6 +3371,142 @@ class NFLPlayProcess(object):
                 .otherwise(pl.col("fumble_recovered_player")),
             )
             .with_columns(
+                # ESPN's NFL play text is nflfastR-style -- "(Shotgun) J.Goff pass
+                # short left to A.St. Brown to DET 27 for 5 yards", "J.Gibbs up the
+                # middle to DET 22 for 4 yards", "J.Hurts sacked at PHI 28 for -9
+                # yards" -- so the CFB extractors above ("run for", ".{0,30} pass ")
+                # return null for every rusher, and a formation-prefixed or
+                # sentence-tail string for passers and receivers. Where the NFL
+                # grammar matches it wins; the CFB/legacy value is the fallback.
+                rush_player=pl.when(pl.col("rush") == True)
+                .then(
+                    pl.coalesce(
+                        pl.col("text").str.extract(_NFL_RUSHER_RE, 1),
+                        _abbreviated_name(_NFL_LEGACY_RUSHER_RE),
+                        _abbreviated_name(_NFL_LEGACY_RUSHER_RE2),
+                        pl.col("rush_player"),
+                    ),
+                )
+                .otherwise(pl.col("rush_player")),
+                pass_player=pl.when(pl.col("pass") == True)
+                .then(
+                    pl.coalesce(
+                        pl.col("text").str.extract(_NFL_PASSER_RE, 1),
+                        _abbreviated_name(_NFL_LEGACY_PASSER_RE),
+                        _abbreviated_name(_NFL_LEGACY_PASSER_RE2),
+                        pl.col("pass_player"),
+                    ),
+                )
+                .otherwise(pl.col("pass_player")),
+                # The legacy receiver chain leaves the "X Yd pass from Y" touchdown
+                # form null (its first branch matches and extracts nothing), so a
+                # null receiver on a non-sack, non-interception pass is retried;
+                # the deliberate nulls on sacks / interceptions stay null.
+                receiver_player=pl.when(
+                    (pl.col("pass") == True).and_(pl.col("receiver_player").is_not_null()),
+                )
+                .then(
+                    pl.coalesce(
+                        pl.col("text").str.extract(_NFL_RECEIVER_RE, 1),
+                        _abbreviated_name(_NFL_LEGACY_RECEIVER_RE2),
+                        pl.col("receiver_player"),
+                    ),
+                )
+                .when(
+                    (pl.col("pass") == True)
+                    .and_(pl.col("sack_vec") == False)
+                    .and_(pl.col("int") == False)
+                    .and_(pl.col("text").str.contains(r"Yd (?:TD )?pass")),
+                )
+                .then(_abbreviated_name(_NFL_LEGACY_RECEIVER_RE))
+                .otherwise(pl.col("receiver_player")),
+            )
+            .with_columns(
+                # Defence / special teams, NFL grammar first, CFB extractor as fallback.
+                sack_player1=pl.when(pl.col("sack") == True)
+                .then(
+                    pl.coalesce(
+                        pl.col("text").str.extract(_NFL_SACK_SPLIT_1_RE, 1),
+                        pl.col("text").str.extract(_NFL_SACK_SOLO_RE, 1),
+                        pl.col("sack_player1"),
+                    ),
+                )
+                .otherwise(pl.col("sack_player1")),
+                sack_player2=pl.when(pl.col("sack") == True)
+                .then(pl.coalesce(pl.col("text").str.extract(_NFL_SACK_SPLIT_2_RE, 1), pl.col("sack_player2")))
+                .otherwise(pl.col("sack_player2")),
+                interception_player=pl.coalesce(
+                    pl.col("text").str.extract(_NFL_INTERCEPTOR_RE, 1),
+                    pl.col("interception_player"),
+                ),
+                pass_breakup_player=pl.when(pl.col("type.text") == "Pass Incompletion")
+                .then(pl.coalesce(pl.col("text").str.extract(_NFL_PAREN_NAME_RE, 1), pl.col("pass_breakup_player")))
+                .otherwise(pl.col("pass_breakup_player")),
+                fumble_forced_player=pl.coalesce(
+                    pl.col("text").str.extract(_NFL_FUMBLE_FORCED_RE, 1),
+                    pl.col("fumble_forced_player"),
+                ),
+                fumble_recovered_player=pl.coalesce(
+                    pl.col("text").str.extract(_NFL_RECOVERED_BY_RE, 1),
+                    # "FUMBLES (X), and recovers at DAL 29": the carrier kept it
+                    pl.when(pl.col("text").str.contains(r"(?:FUMBLES|MUFFS catch)[^.]*, and recovers"))
+                    .then(pl.col("text").str.extract(_NFL_FUMBLER_RE, 1))
+                    .otherwise(None),
+                    pl.col("fumble_recovered_player"),
+                ),
+                fumble_player=pl.when(pl.col("fumble_vec") == True)
+                .then(
+                    pl.coalesce(
+                        pl.col("text").str.extract(_NFL_FUMBLER_RE, 1),
+                        pl.when(pl.col("sack") == True).then(pl.col("pass_player")).otherwise(None),
+                        pl.when(pl.col("pass") == True).then(pl.col("receiver_player")).otherwise(None),
+                        pl.when(pl.col("rush") == True).then(pl.col("rush_player")).otherwise(None),
+                        pl.col("fumble_player"),
+                    ),
+                )
+                .otherwise(pl.col("fumble_player")),
+                punter_player=pl.coalesce(pl.col("text").str.extract(_NFL_PUNTER_RE, 1), pl.col("punter_player")),
+                punt_block_player=pl.coalesce(
+                    pl.col("text").str.extract(_NFL_PUNT_BLOCK_RE, 1),
+                    pl.col("punt_block_player"),
+                ),
+                punt_return_player=pl.when(pl.col("punt") == True)
+                .then(
+                    pl.coalesce(
+                        pl.col("text").str.extract(_NFL_PUNT_RETURNER_RE, 1),
+                        pl.col("text").str.extract(_NFL_FAIR_CATCH_RE, 1),
+                        pl.col("punt_return_player"),
+                    ),
+                )
+                .otherwise(pl.col("punt_return_player")),
+                kickoff_player=pl.coalesce(pl.col("text").str.extract(_NFL_KICKER_RE, 1), pl.col("kickoff_player")),
+                kickoff_return_player=pl.when(pl.col("kickoff_play") == True)
+                .then(
+                    pl.coalesce(
+                        pl.col("text").str.extract(_NFL_KICK_RETURNER_RE, 1),
+                        pl.col("kickoff_return_player"),
+                    ),
+                )
+                .otherwise(pl.col("kickoff_return_player")),
+                fg_kicker_player=pl.coalesce(
+                    pl.col("text").str.extract(_NFL_FG_KICKER_RE, 1),
+                    pl.col("fg_kicker_player"),
+                ),
+                fg_block_player=pl.coalesce(pl.col("text").str.extract(_NFL_FG_BLOCK_RE, 1), pl.col("fg_block_player")),
+                xp_kicker_player_name=pl.coalesce(
+                    pl.col("text").str.extract(_NFL_XP_KICKER_RE, 1),
+                    _abbreviated_name(_NFL_LEGACY_XP_KICKER_RE),
+                ),
+            )
+            .with_columns(
+                # An incompletion with a named defender is a pass defensed (nflfastR's
+                # pass_defense_1); the CFB feed spells it "broken up by", the NFL feed
+                # does not.
+                pass_breakup=(pl.col("pass_breakup") == True).or_(
+                    (pl.col("type.text") == "Pass Incompletion").and_(pl.col("pass_breakup_player").is_not_null()),
+                ),
+            )
+            .with_columns(
                 ## Extract player names
                 passer_player_name=pl.col("pass_player").str.strip_chars(),
                 rusher_player_name=pl.col("rush_player").str.strip_chars(),
@@ -3048,10 +3554,319 @@ class NFLPlayProcess(object):
         )
         return play_df
 
+    def __add_two_pt_probs(self, play_df):
+        """Append the PAT-vs-2pt decision columns to touchdown rows (CFB parity).
+
+        ESPN folds the try into the touchdown row, so the decision state is the
+        scoring team's lead **after** the six points on that row; the columns
+        (``two_pt_wp`` / ``xp_wp`` / ``prob_2pt`` / ``two_pt_recommendation`` /
+        ``two_pt_wp_diff``) come from
+        :func:`sportsdataverse.nfl.nfl_fourth_down.get_2pt_probs`. Every other row
+        is null, and when the download-on-demand WP model is unavailable the
+        columns are emitted null with a ``RuntimeWarning`` rather than failing the
+        pipeline. Idempotent.
+        """
+        import sportsdataverse.nfl.nfl_fourth_down as _fd
+
+        decision_cols = ["two_pt_wp", "xp_wp", "prob_2pt", "two_pt_recommendation", "two_pt_wp_diff"]
+        if "two_pt_recommendation" in play_df.columns:
+            return play_df
+
+        def _with_null_decisions(frame):
+            return frame.with_columns(
+                [
+                    (
+                        pl.lit(None, dtype=pl.Utf8).alias(c)
+                        if c == "two_pt_recommendation"
+                        else pl.lit(None, dtype=pl.Float64).alias(c)
+                    )
+                    for c in decision_cols
+                    if c not in frame.columns
+                ],
+            )
+
+        required = ("id", "td_play", "pos_score_diff_start", "period", "clock.minutes", "clock.seconds")
+        if any(c not in play_df.columns for c in required):
+            return _with_null_decisions(play_df)
+        tried = pl.lit(False)
+        for c in ("xp_attempt", "two_point_attempt"):
+            if c in play_df.columns:
+                tried = tried | (pl.col(c) == True)  # noqa: E712
+        tds = play_df.filter((pl.col("td_play") == True).and_(tried))  # noqa: E712
+        if tds.height == 0:
+            return _with_null_decisions(play_df)
+        # the scoring team: the offense on an offensive touchdown, else the defence
+        scorer_is_pos = (
+            pl.col("offense_score_play") == True  # noqa: E712
+            if "offense_score_play" in tds.columns
+            else (pl.col("pass_td") == True) | (pl.col("rush_td") == True)  # noqa: E712
+        )
+        scorer = pl.when(scorer_is_pos).then(pl.col("start.pos_team.id")).otherwise(pl.col("start.def_pos_team.id"))
+        other = pl.when(scorer_is_pos).then(pl.col("start.def_pos_team.id")).otherwise(pl.col("start.pos_team.id"))
+        lead_after_td = (
+            pl.when(scorer_is_pos).then(pl.col("pos_score_diff_start")).otherwise(-pl.col("pos_score_diff_start"))
+        ).cast(pl.Float64) + 6.0
+        qsr = (60 * pl.col("clock.minutes") + pl.col("clock.seconds")).cast(pl.Float64)
+        home_receives_2h = (
+            pl.when(pl.col("start.pos_team.id") == pl.col("homeTeamId"))
+            .then(pl.col("start.pos_team_receives_2H_kickoff"))
+            .otherwise(~pl.col("start.pos_team_receives_2H_kickoff"))
+        )
+        scorer_timeouts = (
+            pl.when(scorer_is_pos).then(pl.col("start.posTeamTimeouts")).otherwise(pl.col("start.defPosTeamTimeouts"))
+        )
+        other_timeouts = (
+            pl.when(scorer_is_pos).then(pl.col("start.defPosTeamTimeouts")).otherwise(pl.col("start.posTeamTimeouts"))
+        )
+        view = tds.select(
+            pl.col("id").alias("play_id"),
+            pl.lit(int(self.gameId)).alias("game_id"),
+            pl.col("season"),
+            scorer.cast(pl.Utf8).alias("posteam"),
+            other.cast(pl.Utf8).alias("defteam"),
+            pl.col("homeTeamId").cast(pl.Utf8).alias("home_team"),
+            pl.col("awayTeamId").cast(pl.Utf8).alias("away_team"),
+            pl.lit("outdoors").alias("roof"),
+            pl.col("period").alias("qtr"),
+            qsr.alias("quarter_seconds_remaining"),
+            pl.lit(10.0).alias("ydstogo"),
+            pl.lit(0.0).alias("yardline_100"),
+            lead_after_td.alias("score_differential"),
+            scorer_timeouts.cast(pl.Int64).alias("posteam_timeouts_remaining"),
+            other_timeouts.cast(pl.Int64).alias("defteam_timeouts_remaining"),
+            home_receives_2h.cast(pl.Int64).alias("home_opening_kickoff"),
+            (-pl.col("homeTeamSpread").cast(pl.Float64)).alias("spread_line"),
+            pl.col("overUnder").cast(pl.Float64).alias("total_line"),
+        ).with_row_index("go_index")
+        try:
+            scored = _fd.get_2pt_probs(view)
+        except Exception as exc:  # the try decision must never cost the pipeline
+            warnings.warn(
+                f"two-point decision columns unavailable for {self.gameId}: {exc}", RuntimeWarning, stacklevel=2
+            )
+            return _with_null_decisions(play_df)
+        scored_pl = pl.from_pandas(scored).with_columns(pl.col("go_index").cast(pl.UInt32))
+        keyed = view.select("go_index", "play_id").join(scored_pl, on="go_index", how="left").drop("go_index")
+        keyed = keyed.with_columns(pl.col("play_id").cast(play_df.schema["id"]))
+        return play_df.join(keyed, left_on="id", right_on="play_id", how="left")
+
+    def __add_naive_wp_cols(self, play_df):
+        """CFB-named aliases of the spread-free win probability.
+
+        The NFL frame already carries both views nflfastR-style -- ``wp`` (no
+        Vegas line) and ``vegas_wp`` -- while ``wp_before`` / ``wp_after`` are the
+        spread-adjusted series the page reads. The CFB processor publishes the
+        spread-free series under ``*_naive`` names; this emits the same names
+        from ``wp`` so a consumer can read either league identically.
+        """
+        if "wp" not in play_df.columns:
+            return play_df
+        lead_wp = pl.col("wp").shift(-1)
+        last_play = pl.col("game_play_number") == pl.col("game_play_number").max()
+        completed = pl.col("status_type_completed") == True  # noqa: E712
+        return (
+            play_df.with_columns(wp_before_naive=pl.col("wp").cast(pl.Float64))
+            .with_columns(
+                wp_after_naive=pl.when(pl.col("type.text").is_in(clock_stoppage_vec))
+                .then(pl.col("wp_before_naive"))
+                .when(completed.and_(last_play).and_(pl.col("pos_score_diff_end") > 0))
+                .then(1.0)
+                .when(completed.and_(last_play).and_(pl.col("pos_score_diff_end") < 0))
+                .then(0.0)
+                .when(pl.col("change_of_pos_team") == True)  # noqa: E712
+                .then(1.0 - lead_wp)
+                .otherwise(lead_wp)
+                .fill_null(pl.col("wp_before_naive")),
+            )
+            .with_columns(
+                wpa_naive=pl.col("wp_after_naive") - pl.col("wp_before_naive"),
+                def_wp_before_naive=1.0 - pl.col("wp_before_naive"),
+                def_wp_after_naive=1.0 - pl.col("wp_after_naive"),
+                home_wp_before_naive=pl.when(pl.col("start.pos_team.id") == pl.col("homeTeamId"))
+                .then(pl.col("wp_before_naive"))
+                .otherwise(1.0 - pl.col("wp_before_naive")),
+                home_wp_after_naive=pl.when(pl.col("end.pos_team.id") == pl.col("homeTeamId"))
+                .then(pl.col("wp_after_naive"))
+                .otherwise(1.0 - pl.col("wp_after_naive")),
+                lead_wp_before_naive=pl.col("wp_before_naive").shift(-1),
+                lead_wp_before2_naive=pl.col("wp_before_naive").shift(-2),
+                wp_touchback_naive=pl.when(pl.col("type.text").is_in(kickoff_vec))
+                .then(pl.col("wp_before_naive"))
+                .otherwise(None),
+            )
+            .with_columns(
+                away_wp_before_naive=1.0 - pl.col("home_wp_before_naive"),
+                away_wp_after_naive=1.0 - pl.col("home_wp_after_naive"),
+            )
+        )
+
+    # (name column, credited-team column) for every extracted player name; the
+    # id column is the name column with ``_name`` -> ``_id`` (``sack_player_name2``
+    # -> ``sack_player_id2``), matching the CFB processor's columns.
+    _PLAYER_ID_TEAM_MAP = (
+        ("passer_player_name", "pos_team"),
+        ("rusher_player_name", "pos_team"),
+        ("receiver_player_name", "pos_team"),
+        ("sack_player_name", "def_pos_team"),
+        ("sack_player_name2", "def_pos_team"),
+        ("interception_player_name", "def_pos_team"),
+        ("pass_breakup_player_name", "def_pos_team"),
+        ("fumble_forced_player_name", "forced_fumble_team"),
+        ("fumble_recovered_player_name", "fumble_recovery_team"),
+        ("fumble_player_name", "fumbling_team"),
+        ("punter_player_name", "kicking_team"),
+        ("punt_return_player_name", "return_team"),
+        ("punt_block_player_name", "return_team"),
+        ("punt_block_return_player_name", "return_team"),
+        ("kickoff_player_name", "kicking_team"),
+        ("kickoff_return_player_name", "return_team"),
+        ("fg_kicker_player_name", "kicking_team"),
+        ("fg_block_player_name", "return_team"),
+        ("fg_return_player_name", "return_team"),
+        ("xp_kicker_player_name", "pos_team"),
+    )
+
+    def __join_participants(self, play_df):
+        """Overwrite text-extracted names and ids with ESPN's per-play participants.
+
+        Mirrors the CFB processor's step: the same ``sports.core.api.espn.com``
+        plays endpoint and ``cdn.espn.com`` playbyplay sidecar
+        (:func:`sportsdataverse.nfl.nfl_play_participants.espn_nfl_play_participants`),
+        coalesced by :func:`sportsdataverse.football.play_participants.coalesce_participants`
+        with the participant athlete ids taking precedence. Falls back to the
+        unchanged frame on any failure so offline paths are unaffected.
+        """
+        passed = getattr(self, "participants", None)
+        if passed is None and not getattr(self, "join_participants", True):
+            return play_df
+        try:
+            if passed is not None:
+                parts = passed if hasattr(passed, "height") else pl.DataFrame(passed)
+            else:
+                from sportsdataverse.nfl.nfl_play_participants import espn_nfl_play_participants
+
+                parts = espn_nfl_play_participants(self.gameId)
+            if parts is None or parts.height == 0 or "id" not in play_df.columns:
+                return play_df
+            joined = _coalesce_participants(play_df, parts, prefer_ids=True)
+            if "athlete_name" in joined.columns:
+                # the QBR box joins on athlete_name, derived from the pre-join names
+                joined = joined.with_columns(
+                    athlete_name=pl.when(pl.col("passer_player_name").is_not_null())
+                    .then(pl.col("passer_player_name"))
+                    .when(pl.col("rusher_player_name").is_not_null())
+                    .then(pl.col("rusher_player_name"))
+                    .otherwise(pl.col("athlete_name")),
+                )
+            return joined
+        except Exception as exc:
+            logging.debug(f"{self.gameId}: __join_participants fallback -- {exc}")
+            return play_df
+
+    def __attach_player_ids(self, play_df):
+        """Attach ESPN athlete ids to every extracted ``*_player_name``.
+
+        ESPN's NFL summary ships no per-play ``participants`` array (the CFB
+        feed does), so the ids come from the game's own ``boxscore.players``:
+        every athlete with a stat line, keyed by team and by the text form of
+        the name -- first-initial prefixes of one to three letters
+        (``D.Watson``, ``Bri.Thomas``) plus the surname with any Jr./Sr./II
+        suffix dropped. A key that maps to two athletes on the same team is
+        left unresolved rather than guessed. Team-aware: each name column is
+        matched against the team that fielded it.
+        """
+        box = self.json.get("boxscore") if isinstance(self.json, dict) else None
+        rows = _parse_espn_player_box(box) if box else []
+        mapping: dict[str, str | None] = {}
+        for r in rows:
+            tid, aid, name = r.get("team_id"), r.get("athlete_id"), r.get("athlete")
+            if tid is None or not aid or not name:
+                continue
+            tokens = _NFL_NAME_SUFFIX_RE.sub("", str(name)).strip().split()
+            if len(tokens) < 2:
+                continue
+            first, rest = tokens[0], " ".join(tokens[1:]).lower()
+            keys = [f"{tid}|{first[:k].lower()}.{rest}" for k in (1, 2, 3)]
+            keys.append(f"{tid}|{first.lower()} {rest}")  # the participants' full display name
+            for key in keys:
+                mapping[key] = None if key in mapping and mapping[key] != str(aid) else str(aid)
+        mapping = {k: v for k, v in mapping.items() if v is not None}
+        if not mapping:
+            return play_df
+        exprs = []
+        for name_col, team_col in self._PLAYER_ID_TEAM_MAP:
+            if name_col not in play_df.columns or team_col not in play_df.columns:
+                continue
+            id_col = name_col.replace("_name", "_id")
+            key = pl.concat_str(
+                [
+                    pl.col(team_col).cast(pl.Int64).cast(pl.Utf8),
+                    pl.lit("|"),
+                    pl.col(name_col).str.replace(_NFL_NAME_SUFFIX_RE.pattern, "").str.strip_chars().str.to_lowercase(),
+                ],
+            )
+            resolved = (
+                pl.when(pl.col(name_col).is_not_null().and_(pl.col(team_col).is_not_null()))
+                .then(key.replace_strict(mapping, default=None, return_dtype=pl.Utf8))
+                .otherwise(None)
+            )
+            # an id the participants join already supplied wins
+            if id_col in play_df.columns:
+                resolved = pl.coalesce(pl.col(id_col).cast(pl.Utf8), resolved)
+            exprs.append(resolved.alias(id_col))
+        return play_df.with_columns(exprs) if exprs else play_df
+
+    def __add_air_yards_cols(self, play_df):
+        """Air yards / yards after catch for completions.
+
+        ESPN's NFL play text carries no catch spot (the CFB feed's ``"caught at
+        OU35"``), but every NFL play row ships ``yardsAfterCatch``; for a completed
+        pass ``air_yards = yds_receiving - yardsAfterCatch``. Incompletions have
+        no air-yards signal in the feed and stay null, so the box's ``aDOT`` is
+        over completions only.
+        """
+        if "yardsAfterCatch" in play_df.columns:
+            yac = pl.col("yardsAfterCatch").cast(pl.Int64, strict=False)
+        else:
+            yac = pl.lit(None, dtype=pl.Int64)
+        comp = (pl.col("pass") == True).and_(pl.col("completion") == True).and_(pl.col("sack") == False)  # noqa: E712
+        return (
+            play_df.with_columns(yards_after_catch=pl.when(comp).then(yac).otherwise(None))
+            .with_columns(
+                air_yards=pl.when(comp.and_(pl.col("yards_after_catch").is_not_null()))
+                .then(pl.col("yds_receiving").cast(pl.Int64, strict=False) - pl.col("yards_after_catch"))
+                .otherwise(None),
+            )
+            .with_columns(
+                air_yardsToEndzone=pl.when(pl.col("air_yards").is_not_null())
+                .then(pl.col("start.yardsToEndzone").cast(pl.Int64, strict=False) - pl.col("air_yards"))
+                .otherwise(None),
+            )
+        )
+
+    def __add_attribution_cols(self, play_df):
+        """Resolve the credited team per play (shared football attribution, NFL text parsers)."""
+        return _add_attribution_cols(
+            play_df,
+            parse_recovery_abbrevs=_nfl_parse_recovery_abbrevs,
+            parse_penalty_team_side=_nfl_parse_penalty_team_side,
+            parse_penalty_spot=_nfl_parse_penalty_spot,
+            trust_text_side=True,
+            max_penalty_yards=99,
+        )
+
+    def __refine_play_types_post_attribution(self, play_df):
+        """Correct two play-type labels that need the post-attribution turnover signal."""
+        return _refine_play_types_post_attribution(play_df, normalplay=normalplay, end_change_vec=end_change_vec)
+
+    def __add_series_data(self, play_df):
+        """cfbfastR's series / first-down decomposition (shared football series module)."""
+        return _add_series_data(play_df, penalty=penalty, normalplay=normalplay)
+
     def __after_cols(self, play_df):
         play_df = (
             play_df.with_columns(
-                new_down=pl.when(pl.col("type.text") == "Timeout")
+                new_down=pl.when(pl.col("type.text").is_in(clock_stoppage_vec))
                 .then(pl.col("start.down"))
                 .when((pl.col("type.text").is_in(penalty)).and_(pl.col("penalty_1st_conv") == True))
                 .then(1)
@@ -3115,7 +3930,7 @@ class NFLPlayProcess(object):
                 )
                 .then(1)
                 .otherwise(pl.col("start.down")),
-                new_distance=pl.when(pl.col("type.text") == "Timeout")
+                new_distance=pl.when(pl.col("type.text").is_in(clock_stoppage_vec))
                 .then(pl.col("start.distance"))
                 .when((pl.col("type.text").is_in(penalty)).and_(pl.col("penalty_1st_conv") == True))
                 .then(10)
@@ -3553,10 +4368,102 @@ class NFLPlayProcess(object):
         _probs_end = _ep_model.predict(DMatrix(X_ep_end, feature_names=EP_FEATURES)).reshape(-1, 7)
         EP_end = np.clip(_probs_end @ _EP_POINT_VALUES, -10.0, 10.0)
 
+        # --- Accepted-penalty counterfactual (parity with the CFB processor) ---
+        # What the play would have been worth had the foul not been enforced:
+        # re-score the EP model at the state the play's own yardage produces
+        # (the counterfactual next down / distance / spot), so
+        # EPA_penalty_direct = EP_end - EP_penalty_cf isolates the flag's cost.
+        _cf_scope = (
+            (pl.col("penalty_flag") == True)  # noqa: E712
+            .and_(pl.col("penalty_no_play") == False)  # noqa: E712
+            .and_(pl.col("penalty_declined") == False)  # noqa: E712
+            .and_(pl.col("penalty_offset") == False)  # noqa: E712
+            .and_(pl.col("type.text").is_in(["Penalty", "Penalty (Kickoff)"]) == False)  # noqa: E712
+            .and_((pl.col("rush") == True).or_(pl.col("pass") == True))  # noqa: E712
+            .and_(pl.col("scoring_play") != True)  # noqa: E712
+            .and_(pl.col("is_turnover") != True)  # noqa: E712
+            .and_(pl.col("end_of_half") != True)  # noqa: E712
+            .and_(pl.col("start.yardsToEndzone").is_not_null())
+            .and_(pl.col("start.distance").is_not_null())
+            .and_(pl.col("start.down").is_not_null())
+        )
+        _play_yards = (
+            pl.when(pl.col("sack") == True)  # noqa: E712
+            .then(pl.col("yds_sacked"))
+            .when(pl.col("rush") == True)  # noqa: E712
+            .then(pl.col("yds_rushed"))
+            .when(pl.col("completion") == True)  # noqa: E712
+            .then(pl.col("yds_receiving"))
+            .when(pl.col("pass") == True)  # noqa: E712
+            .then(pl.lit(0))
+            .otherwise(None)
+        )
+        play_df = play_df.with_columns(_cf_play_yards=_play_yards.cast(pl.Float64))
+        play_df = play_df.with_columns(
+            _cf_converted=(pl.col("_cf_play_yards") >= pl.col("start.distance")),
+            _cf_y2ez=(pl.col("start.yardsToEndzone") - pl.col("_cf_play_yards")).clip(1, 99),
+        )
+        play_df = play_df.with_columns(
+            _cf_ok=_cf_scope.and_(pl.col("_cf_play_yards").is_not_null()).and_(
+                (pl.col("_cf_converted") == True).or_(pl.col("start.down") < 4),  # noqa: E712
+            ),
+            _cf_down=pl.when(pl.col("_cf_converted") == True).then(1).otherwise(pl.col("start.down") + 1),  # noqa: E712
+            _cf_distance=pl.when(pl.col("_cf_converted") == True)  # noqa: E712
+            .then(pl.min_horizontal(pl.lit(10.0), pl.col("_cf_y2ez")))
+            .otherwise(pl.col("start.distance") - pl.col("_cf_play_yards")),
+        )
+        play_df = play_df.with_columns(
+            _cf_d1=pl.col("_cf_down") == 1,
+            _cf_d2=pl.col("_cf_down") == 2,
+            _cf_d3=pl.col("_cf_down") == 3,
+            _cf_d4=pl.col("_cf_down") == 4,
+            penalty_assessed_on_kickoff=(
+                (pl.col("scoring_play").shift(1) == True)  # noqa: E712
+                .and_(pl.col("kickoff_play").shift(-1) == True)  # noqa: E712
+                .and_(pl.col("pos_score_diff_end") != pl.col("pos_score_diff_start"))
+                .and_(pl.col("penalty_flag") == True)  # noqa: E712
+                .and_(pl.col("type.text").is_in(kickoff_vec) == False)  # noqa: E712
+            ).fill_null(False),
+        )
+        X_ep_cf = _espn_ep_features(
+            play_df,
+            half_sec_col="end.TimeSecsRem",
+            yardline_col="_cf_y2ez",
+            home_col="start.is_home",
+            ydstogo_col="_cf_distance",
+            down1_col="_cf_d1",
+            down2_col="_cf_d2",
+            down3_col="_cf_d3",
+            down4_col="_cf_d4",
+            pos_timeouts_col="start.posTeamTimeouts",
+            def_timeouts_col="start.defPosTeamTimeouts",
+        )
+        _probs_cf = _ep_model.predict(DMatrix(X_ep_cf, feature_names=EP_FEATURES)).reshape(-1, 7)
+        EP_penalty_cf = np.clip(_probs_cf @ _EP_POINT_VALUES, -10.0, 10.0)
+
         play_df = play_df.with_columns(
             pl.Series("EP_start_touchback", EP_start_touchback, dtype=pl.Float64),
             pl.Series("EP_start", EP_start, dtype=pl.Float64),
             pl.Series("EP_end", EP_end, dtype=pl.Float64),
+            EP_penalty_cf=pl.when(pl.col("_cf_ok") == True)  # noqa: E712
+            .then(pl.Series("EP_penalty_cf", EP_penalty_cf, dtype=pl.Float64))
+            .otherwise(None),
+            penalty_cf_yardsToEndzone=pl.when(pl.col("_cf_ok") == True)  # noqa: E712
+            .then(pl.col("_cf_y2ez").cast(pl.Int32))
+            .otherwise(None),
+        ).drop(
+            [
+                "_cf_play_yards",
+                "_cf_converted",
+                "_cf_y2ez",
+                "_cf_ok",
+                "_cf_down",
+                "_cf_distance",
+                "_cf_d1",
+                "_cf_d2",
+                "_cf_d3",
+                "_cf_d4",
+            ]
         )
 
         # --- Derivation half delegated to the shared, model-free calculate_epa ---
@@ -3661,6 +4568,21 @@ class NFLPlayProcess(object):
             EPA_penalty=pl.when(pl.col("type.text").is_in(["Penalty", "Penalty (Kickoff)"]))
             .then(pl.col("EPA"))
             .when(pl.col("penalty_in_text") == True)
+            .then(pl.col("EP_end") - pl.col("EP_start"))
+            .otherwise(None),
+            EPA_penalty_direct=pl.when(
+                (pl.col("penalty_declined") == True).or_(pl.col("penalty_offset") == True),  # noqa: E712
+            )
+            .then(0.0)
+            .when(pl.col("EP_penalty_cf").is_not_null())
+            .then(pl.col("EP_end") - pl.col("EP_penalty_cf"))
+            .when(
+                (pl.col("penalty_flag") == True).and_(  # noqa: E712
+                    (pl.col("penalty_no_play") == True).or_(  # noqa: E712
+                        pl.col("type.text").is_in(["Penalty", "Penalty (Kickoff)"]),
+                    ),
+                ),
+            )
             .then(pl.col("EP_end") - pl.col("EP_start"))
             .otherwise(None),
             EPA_sp=pl.when(
@@ -4128,7 +5050,7 @@ class NFLPlayProcess(object):
                 .alias("start.ExpScoreDiff_touchback"),
                 pl.when((pl.col("penalty_in_text") == True).and_(pl.col("type.text").is_in(["Penalty"]) == False))
                 .then(pl.col("pos_score_diff_start") + pl.col("EP_start") - pl.col("EP_between"))
-                .when((pl.col("type.text") == "Timeout").and_(pl.col("lag_scoringPlay") == True))
+                .when((pl.col("type.text").is_in(clock_stoppage_vec)).and_(pl.col("lag_scoringPlay") == True))
                 .then(pl.col("pos_score_diff_start") + 0.92)
                 .otherwise(pl.col("pos_score_diff_start") + pl.col("EP_start"))
                 .alias("start.ExpScoreDiff"),
@@ -4149,9 +5071,9 @@ class NFLPlayProcess(object):
                 .then(pl.col("pos_score_diff_end") - pl.col("EP_end"))
                 .when(pl.col("type.text").is_in(kickoff_turnovers).and_(pl.col("scoringPlay") == False))
                 .then(pl.col("pos_score_diff_end") + pl.col("EP_end"))
-                .when((pl.col("scoringPlay") == False).and_(pl.col("type.text") != "Timeout"))
+                .when((pl.col("scoringPlay") == False).and_(pl.col("type.text").is_in(clock_stoppage_vec) == False))
                 .then(pl.col("pos_score_diff_end") + pl.col("EP_end"))
-                .when((pl.col("scoringPlay") == False).and_(pl.col("type.text") == "Timeout"))
+                .when((pl.col("scoringPlay") == False).and_(pl.col("type.text").is_in(clock_stoppage_vec)))
                 .then(pl.col("pos_score_diff_end") + pl.col("EP_end"))
                 .when(
                     (pl.col("scoringPlay") == True)
@@ -4168,7 +5090,7 @@ class NFLPlayProcess(object):
                 )
                 .then(pl.col("pos_score_diff_end") + 0.92)
                 .when(
-                    (pl.col("type.text") == "Timeout")
+                    (pl.col("type.text").is_in(clock_stoppage_vec))
                     .and_(pl.col("lag_scoringPlay") == True)
                     .and_(pl.col("season") <= 2013),
                 )
@@ -4895,6 +5817,9 @@ class NFLPlayProcess(object):
         pass_box = play_df.filter((pl.col("pass") == True) & (pl.col("scrimmage_play") == True))
         rush_box = play_df.filter((pl.col("rush") == True) & (pl.col("scrimmage_play") == True))
         # pass_box.yds_receiving.fillna(0.0, inplace=True)
+        # nflfastR-style completion probability (``cp``) is the expected-completion
+        # basis for CPOE, the CFB box's ``cp_game_state``.
+        _cp_expr = pl.col("cp") if "cp" in play_df.columns else pl.lit(None, dtype=pl.Float64)
         passer_box = (
             pass_box.fill_null(0.0)
             .group_by(["pos_team", "passer_player_name"])
@@ -4910,10 +5835,20 @@ class NFLPlayProcess(object):
                 WPA=pl.col("wpa").sum(),
                 SR=pl.col("EPA_success").mean(),
                 Sck=pl.col("sack_vec").sum(),
+                xComp=_cp_expr.sum(),
+            )
+            .with_columns(
+                CompPct=(pl.when(pl.col("Att") == pl.lit(0)).then(0).otherwise(pl.col("Comp") / pl.col("Att"))),
+                xCompPct=(pl.when(pl.col("Att") == pl.lit(0)).then(0).otherwise(pl.col("xComp") / pl.col("Att"))),
+            )
+            .with_columns(
+                CPOE=(pl.col("CompPct") - pl.col("xCompPct")),
             )
             .with_columns(pl.col(pl.Float32).round(2))
             .with_columns(pos_team=pl.col("pos_team").cast(pl.Int32))
+            .join(_air_yards_box(pass_box, "passer_player_name"), on=["pos_team", "passer_player_name"], how="left")
         )
+
         # passer_box = passer_box.replace(pl.all(), pl.Null)
         qbs_list = passer_box["passer_player_name"].to_list()
 
@@ -4984,6 +5919,7 @@ class NFLPlayProcess(object):
             )
             .with_columns(pl.col(pl.Float32).round(2))
             .with_columns(pos_team=pl.col("pos_team").cast(pl.Int32))
+            .join(_air_yards_box(pass_box, "receiver_player_name"), on=["pos_team", "receiver_player_name"], how="left")
         )
 
         team_base_box = (
@@ -5164,7 +6100,24 @@ class NFLPlayProcess(object):
             .with_columns(pos_team=pl.col("pos_team").cast(pl.Int32))
         )
 
+        team_penalized_box = (
+            play_df.filter(
+                (pl.col("penalty_flag") == True)  # noqa: E712
+                & (pl.col("penalty_declined") == False)  # noqa: E712
+                & (pl.col("penalty_offset") == False)  # noqa: E712
+                & (pl.col("penalized_team").is_not_null()),
+            )
+            .group_by(["penalized_team"])
+            .agg(
+                penalties=pl.len(),
+                penalty_yards=pl.col("penalty_yards_signed").sum(),
+            )
+            .rename({"penalized_team": "pos_team"})
+            .with_columns(pos_team=pl.col("pos_team").cast(pl.Int32))
+        )
+
         team_data_frames = [
+            team_penalized_box,
             team_rush_opp_box,
             team_pen_box,
             team_sp_box,
@@ -5482,62 +6435,93 @@ class NFLPlayProcess(object):
         )
         def_box_json = json.loads(def_box.write_json())
 
-        turnover_box = (
+        pos_ev = play_df.filter(pl.col("is_pos_team_turnover") == True).select(
+            team=pl.col("pos_team").cast(pl.Int32),
+            is_int=pl.col("int_turnover"),
+            is_st=(pl.col("pos_fumble_lost") & pl.col("is_st_turnover")),
+        )
+        def_ev = play_df.filter(pl.col("is_def_pos_team_turnover") == True).select(
+            team=pl.col("def_pos_team").cast(pl.Int32),
+            is_int=pl.lit(False),
+            is_st=(pl.col("def_fumble_lost") & pl.col("is_st_turnover")),
+        )
+        to_events = pl.concat([pos_ev, def_ev], how="vertical")
+
+        to_lost = (
+            to_events.group_by(["team"])
+            .agg(
+                turnovers=pl.len(),
+                st_turnovers_lost=pl.col("is_st").sum(),
+                Int=pl.col("is_int").sum(),
+                fumbles_lost=(pl.col("is_int") == False).sum(),
+            )
+            .rename({"team": "pos_team"})
+            .with_columns(pos_team=pl.col("pos_team").cast(pl.Int32))
+        )
+        to_aux = (
             play_df.filter(pl.col("scrimmage_play") == True)
             .group_by(["pos_team"])
             .agg(
                 pass_breakups=pl.col("pass_breakup").sum(),
-                fumbles_lost=pl.col("fumble_lost").sum(),
-                fumbles_recovered=pl.col("fumble_recovered").sum(),
-                total_fumbles=pl.col("fumble_vec").sum(),
-                Int=pl.col("int").sum(),
+                total_fumbles=pl.col("fumble_or_muff").sum(),
+                fumbles_recovered=((pl.col("fumble_or_muff") == True) & (pl.col("is_turnover") == False)).sum(),
             )
-            .with_columns(pl.col(pl.Float32).round(2))
-            .with_columns(
-                pos_team=pl.col("pos_team").cast(pl.Int32),
-            )
+            .with_columns(pos_team=pl.col("pos_team").cast(pl.Int32))
         )
 
+        team_ids = [int(self.homeTeamId), int(self.awayTeamId)]
+        turnover_box = (
+            pl.DataFrame({"pos_team": team_ids}, schema={"pos_team": pl.Int32})
+            .join(to_lost, on="pos_team", how="left")
+            .join(to_aux, on="pos_team", how="left")
+            .fill_null(0)
+            .with_columns(team_id=pl.col("pos_team"))
+        )
         turnover_box_json = json.loads(turnover_box.write_json())
-        if len(turnover_box_json) < 2:
-            for i in range(len(turnover_box_json), 2):
-                turnover_box_json.append({})
 
-        turnover_box_json[0]["Int"] = int(turnover_box_json[0].get("Int", 0))
-        turnover_box_json[1]["Int"] = int(turnover_box_json[1].get("Int", 0))
+        # identity-keyed margins / luck (never list index).
+        # Int here is all-play (from to_lost); pass_breakups/total_fumbles are scrimmage-only (to_aux).
+        # Gained-side fields are the opponent's lost-side fields (a 2-team game: every
+        # turnover one team loses, the other gains).
+        by_id = {int(r["pos_team"]): r for r in turnover_box_json}
 
-        away_passes_def = turnover_box_json[0].get("pass_breakups", 0)
-        away_passes_int = turnover_box_json[0].get("Int", 0)
-        away_fumbles = turnover_box_json[0].get("total_fumbles", 0)
-        turnover_box_json[0]["expected_turnovers"] = (0.5 * away_fumbles) + (0.22 * (away_passes_def + away_passes_int))
+        # Source the countable turnover totals DIRECTLY from ESPN's official box where it
+        # is available (authoritative). The play-by-play derivation -- which we still
+        # compute and validate against ESPN -- is retained under ``*_pbp`` keys and is the
+        # fallback for games ESPN does not cover.
+        espn_box = self.json.get("boxscore", {}) if isinstance(self.json, dict) else {}
+        espn_team_box = _parse_espn_team_box(espn_box)
+        for tid, r in by_id.items():
+            r["turnovers_pbp"] = r.get("turnovers", 0)
+            r["Int_pbp"] = int(r.get("Int", 0))
+            r["fumbles_lost_pbp"] = r.get("fumbles_lost", 0)
+            e = espn_team_box.get(tid)
+            r["espn_sourced"] = bool(e)
+            if not e:
+                continue
+            if isinstance(e.get("turnovers"), int):
+                r["turnovers"] = e["turnovers"]
+            if isinstance(e.get("interceptions"), int):
+                r["Int"] = e["interceptions"]
+            if isinstance(e.get("fumblesLost"), int):
+                r["fumbles_lost"] = e["fumblesLost"]
 
-        home_passes_def = turnover_box_json[1].get("pass_breakups", 0)
-        home_passes_int = turnover_box_json[1].get("Int", 0)
-        home_fumbles = turnover_box_json[1].get("total_fumbles", 0)
-        turnover_box_json[1]["expected_turnovers"] = (0.5 * home_fumbles) + (0.22 * (home_passes_def + home_passes_int))
-
-        turnover_box_json[0]["expected_turnover_margin"] = (
-            turnover_box_json[1]["expected_turnovers"] - turnover_box_json[0]["expected_turnovers"]
-        )
-        turnover_box_json[1]["expected_turnover_margin"] = (
-            turnover_box_json[0]["expected_turnovers"] - turnover_box_json[1]["expected_turnovers"]
-        )
-
-        away_to = turnover_box_json[0].get("fumbles_lost", 0) + turnover_box_json[0]["Int"]
-        home_to = turnover_box_json[1].get("fumbles_lost", 0) + turnover_box_json[1]["Int"]
-
-        turnover_box_json[0]["turnovers"] = away_to
-        turnover_box_json[1]["turnovers"] = home_to
-
-        turnover_box_json[0]["turnover_margin"] = home_to - away_to
-        turnover_box_json[1]["turnover_margin"] = away_to - home_to
-
-        turnover_box_json[0]["turnover_luck"] = 5.0 * (
-            turnover_box_json[0]["turnover_margin"] - turnover_box_json[0]["expected_turnover_margin"]
-        )
-        turnover_box_json[1]["turnover_luck"] = 5.0 * (
-            turnover_box_json[1]["turnover_margin"] - turnover_box_json[1]["expected_turnover_margin"]
-        )
+        for tid, r in by_id.items():
+            r["Int"] = int(r.get("Int", 0))
+            r["expected_turnovers"] = (0.5 * r.get("total_fumbles", 0)) + (
+                0.22 * (r.get("pass_breakups", 0) + r.get("Int", 0))
+            )
+        for tid, r in by_id.items():
+            others = [x for x in team_ids if x != tid]
+            opp = by_id[others[0]] if others else r  # degenerate (home==away id): self as opponent
+            r["expected_turnover_margin"] = opp["expected_turnovers"] - r["expected_turnovers"]
+            r["turnover_margin"] = opp["turnovers"] - r["turnovers"]
+            r["turnover_luck"] = 5.0 * (r["turnover_margin"] - r["expected_turnover_margin"])
+            # takeaways gained = turnovers the opponent lost
+            r["takeaways"] = opp["turnovers"]
+            r["st_turnovers_gained"] = opp["st_turnovers_lost"]
+            r["fumble_recoveries_gained"] = opp["fumbles_lost"]
+        turnover_box_json = [by_id[t] for t in team_ids]
 
         drives_data = (
             play_df.filter(pl.col("scrimmage_play") == True)
@@ -5566,6 +6550,12 @@ class NFLPlayProcess(object):
             "defensive": def_box_json,
             "turnover": turnover_box_json,
             "drives": json.loads(drives_data.write_json()),
+            "defensive_players": _build_defensive_players_box(play_df),
+            "specialists": _build_specialists_box(play_df),
+            # ESPN's official boxes, verbatim: the reference the play-by-play
+            # derivation is validated against downstream.
+            "espn_team": list(espn_team_box.values()),
+            "espn_players": _parse_espn_player_box(espn_box),
         }
 
     def run_processing_pipeline(self):
@@ -5650,23 +6640,34 @@ class NFLPlayProcess(object):
                     .pipe(self.__add_play_category_flags)
                     .pipe(self.__add_yardage_cols)
                     .pipe(self.__add_player_cols)
+                    .pipe(self.__add_air_yards_cols)
+                    .pipe(self.__add_attribution_cols)
+                    .pipe(self.__refine_play_types_post_attribution)
                     .pipe(self.__after_cols)
+                    .pipe(self.__add_series_data)
                     .pipe(self.__add_spread_time)
                     .pipe(self.__add_description_features)
                     .pipe(self.__process_epa)
                     .pipe(self.__process_qb_epa)
                     .pipe(self.__process_wpa)
                     .pipe(self.__process_wp)
+                    .pipe(self.__add_naive_wp_cols)
                     .pipe(self.__process_cp)
                     .pipe(self.__process_xpass)
                     .pipe(self.__process_xyac)
                     .pipe(self.__add_drive_data)
                     .pipe(self.__add_fixed_drives_series)
                     .pipe(self.__process_fourth_down)
+                    .pipe(self.__add_two_pt_probs)
                     .pipe(self.__process_qbr)
+                    .pipe(self.__join_participants)
+                    .pipe(self.__attach_player_ids)
                 )
                 self.ran_pipeline = True
                 advBoxScore = self.plays_json.pipe(self.create_box_score)
+                # Keep the enriched polars frame (see __init__): plays_json becomes
+                # a list of dicts below and callers mutate it.
+                self.plays_frame = self.plays_json
                 self.plays_json = self.plays_json.to_dicts()
                 pbp_json = {
                     "gameId": int(self.gameId),
@@ -5768,7 +6769,11 @@ class NFLPlayProcess(object):
                     .pipe(self.__add_play_category_flags)
                     .pipe(self.__add_yardage_cols)
                     .pipe(self.__add_player_cols)
+                    .pipe(self.__add_air_yards_cols)
+                    .pipe(self.__add_attribution_cols)
+                    .pipe(self.__refine_play_types_post_attribution)
                     .pipe(self.__after_cols)
+                    .pipe(self.__add_series_data)
                     .pipe(self.__add_spread_time)
                     .pipe(self.__add_description_features)
                 )

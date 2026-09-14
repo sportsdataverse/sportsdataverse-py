@@ -126,6 +126,41 @@ home = rosters_pd[rosters_pd["home_away"] == "home"]
 away = rosters_pd[rosters_pd["home_away"] == "away"]
 ```
 
+### `espn_nfl_play_participants(game_id: 'int', *, raw: 'bool' = False, return_as_pandas: 'bool' = False, resolve_missing: 'bool' = True, resolve_missing_max: 'int' = 50, **kwargs: 'Any') -> 'pl.DataFrame | pd.DataFrame | dict[str, Any]'` {#espn_nfl_play_participants}
+
+Pull ESPN per-play participants for an NFL game.
+
+One row per play keyed by `play_id` with `{type}_player_name` /
+`{type}_player_id` scalars (first occurrence) and `{type}_player_names`
+/ `{type}_player_ids` lists for every participant type ESPN ships
+(`passer`, `rusher`, `receiver`, `tackler`, `sacked_by`,
+`forced_by`, `pass_defender`, `kicker`, `punter`, `returner`,
+`recoverer`, `scorer`, `pat_scorer`, `penalized`, `assisted_by`).
+`NFLPlayProcess` runs it on the live path to overwrite the text-extracted
+names and ids.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `game_id` | `int` |  | ESPN game / event identifier. |
+| `raw` | `bool` | `False` | If True, returns the raw list of play-items dicts. |
+| `return_as_pandas` | `bool` | `False` | If True, returns a pandas DataFrame; otherwise polars. |
+| `resolve_missing` | `bool` | `True` | Fetch athletes the sidecar omits from their `$ref`. |
+| `resolve_missing_max` | `int` | `50` | Cap on those per-athlete requests (default 50). |
+
+**Returns**
+
+Polars (or pandas) DataFrame, one row per play; the raw play dicts when `raw=True`.
+
+**Example**
+
+```python
+from sportsdataverse.nfl import espn_nfl_play_participants
+participants = espn_nfl_play_participants(game_id=401872922)
+print(participants.select("play_id", "passer_player_name", "passer_player_id").head())
+```
+
 ### `espn_nfl_player_stats(athlete_id: 'int', season: 'int', *, season_type: 'str' = 'regular', total: 'bool' = False, raw: 'bool' = False, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'pl.DataFrame | pd.DataFrame | dict[str, Any]'` {#espn_nfl_player_stats}
 
 Pull an NFL athlete's ESPN **season** stat line as one wide row.
@@ -5928,6 +5963,31 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 ```python
 from sportsdataverse.nfl import fox_nfl_teamnav
 df = fox_nfl_teamnav()
+```
+
+### `get_2pt_probs(pbp_df: "Union[pl.DataFrame, 'pd.DataFrame']") -> 'pd.DataFrame'` {#get_2pt_probs}
+
+The PAT-vs-2pt decision surface for post-touchdown states (CFB-shaped).
+
+The NFL twin of `sportsdataverse.cfb.cfb_two_point.get_2pt_probs`: the
+same three-outcome enumeration `get_2pt_wp` uses, but returned as the
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pbp_df` | `Union[DataFrame, 'DataFrame']` |  | Post-touchdown states in nflverse column space (the same inputs `get_4th_down_probs` takes; `score_differential` is the scoring team's lead **after** the six points). Prepared frames are accepted as-is. |
+
+**Returns**
+
+A pandas frame with `go_index` plus `two_pt_wp`, `xp_wp`, `prob_2pt`, `two_pt_recommendation` (`"go_for_2"` iff `two_pt_wp > xp_wp` else `"kick_xp"`) and `two_pt_wp_diff` (`two_pt_wp - xp_wp`). All NaN / null when the models are unavailable.
+
+**Example**
+
+```python
+from sportsdataverse.nfl.nfl_fourth_down import get_2pt_probs
+out = get_2pt_probs(touchdown_states)
+print(out[["two_pt_wp", "xp_wp", "two_pt_recommendation"]].head())
 ```
 
 ### `get_2pt_wp(pbp_df: "Union[pl.DataFrame, 'pd.DataFrame']") -> 'pd.DataFrame'` {#get_2pt_wp}

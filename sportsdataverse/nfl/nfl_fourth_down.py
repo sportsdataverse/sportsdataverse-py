@@ -88,6 +88,7 @@ __all__ = [
     "get_fg_wp",
     "get_punt_wp",
     "get_2pt_wp",
+    "get_2pt_probs",
     "fg_make_probability",
     "FD_MODEL_AVAILABLE",
     "WP_MODEL_AVAILABLE",
@@ -532,6 +533,65 @@ def _fd_long_frame(d: pd.DataFrame) -> pd.DataFrame:
 # --------------------------------------------------------------------------- #
 # 2-pt path (nfl4th get_2pt_wp) — used by the go path's touchdown branch
 # --------------------------------------------------------------------------- #
+def _two_pt_components(d: pd.DataFrame) -> Optional[pd.DataFrame]:
+    """Score the three try outcomes for prepared post-touchdown states.
+
+    Returns one row per ``go_index`` with the kicking-off team's ensuing-drive WP
+    after 0 / 1 / 2 added points (``wp0`` / ``wp1`` / ``wp2``), the 2-pt
+    conversion probability (``conv_2pt``, ``two_pt_model``) and the PAT make
+    probability (``conv_1pt``, the FG model at ``yardline_100 = 15``) -- or
+    ``None`` when any of the WP / FG / 2-pt models is unavailable.
+    """
+    n = len(d)
+    two_pt = _load_two_pt_model()
+    if two_pt is None or _load_fg_model() is None or _try_load(_WP_MODEL_FILE) is None:
+        return None
+
+    from xgboost import DMatrix
+
+    x2 = np.column_stack(
+        [
+            np.zeros(n),  # era2 = 0 (nfl4th hard-codes era2=0 in get_2pt_wp)
+            d["era3"].to_numpy(),
+            d["era4"].to_numpy(),
+            d["outdoors"].to_numpy(),
+            d["retractable"].to_numpy(),
+            d["dome"].to_numpy(),
+            d["posteam_spread"].to_numpy(),
+            d["total_line"].to_numpy(),
+            d["posteam_total"].to_numpy(),
+        ]
+    ).astype(np.float32)
+    conv_2pt = two_pt.predict(DMatrix(x2, feature_names=TWO_PT_FEATURES))
+
+    # PAT make probability: the FG model at yardline_100 = 15 (the PAT spot).
+    pat_yl: np.ndarray = np.full(n, 15, dtype=float)
+    conv_1pt = _fg_make_prob(pat_yl, d["fg_roof"].to_numpy(), d[["era0", "era1", "era2", "era3", "era4"]].to_numpy())
+    if conv_1pt is None:  # FG model unobtainable on the re-load (race/eviction) — emit NaN, never crash
+        return None
+
+    rows = []
+    for pts in (0, 1, 2):
+        r = d.copy()
+        r["score_differential"] = -d["score_differential"].to_numpy() - pts
+        r["posteam"] = np.where(d["home_team"] == d["posteam"], d["away_team"], d["home_team"])
+        r["yardline_100"] = 75
+        r["down"] = 1
+        r["ydstogo"] = 10
+        r["pts"] = pts
+        rows.append(r)
+    allr = pd.concat(rows, ignore_index=True)
+    allr = _flip_half(allr)
+    allr["vegas_wp"] = _calc_wp(allr)
+
+    piv = allr.pivot_table(index="go_index", columns="pts", values="vegas_wp")
+    res = pd.DataFrame(
+        {"go_index": piv.index, "wp0": piv[0].to_numpy(), "wp1": piv[1].to_numpy(), "wp2": piv[2].to_numpy()}
+    )
+    res = res.merge(d[["go_index"]].assign(conv_2pt=conv_2pt, conv_1pt=conv_1pt), on="go_index", how="left")
+    return res
+
+
 def get_2pt_wp(pbp_df: Union[pl.DataFrame, "pd.DataFrame"]) -> pd.DataFrame:
     """Win probability of the PAT-vs-2pt choice after a touchdown (nfl4th ``get_2pt_wp``).
 
@@ -561,58 +621,12 @@ def get_2pt_wp(pbp_df: Union[pl.DataFrame, "pd.DataFrame"]) -> pd.DataFrame:
     if n == 0:
         return pd.DataFrame({"go_index": [], "yardline_100": [], "wp_td": []})
 
-    two_pt = _load_two_pt_model()
-    if two_pt is None or _load_fg_model() is None or _try_load(_WP_MODEL_FILE) is None:
+    res = _two_pt_components(d)
+    if res is None:
         out = d[["go_index"]].copy()
         out["yardline_100"] = 0
         out["wp_td"] = np.nan
         return out[["go_index", "yardline_100", "wp_td"]]
-
-    from xgboost import DMatrix
-
-    x2 = np.column_stack(
-        [
-            np.zeros(n),  # era2 = 0 (nfl4th hard-codes era2=0 in get_2pt_wp)
-            d["era3"].to_numpy(),
-            d["era4"].to_numpy(),
-            d["outdoors"].to_numpy(),
-            d["retractable"].to_numpy(),
-            d["dome"].to_numpy(),
-            d["posteam_spread"].to_numpy(),
-            d["total_line"].to_numpy(),
-            d["posteam_total"].to_numpy(),
-        ]
-    ).astype(np.float32)
-    conv_2pt = two_pt.predict(DMatrix(x2, feature_names=TWO_PT_FEATURES))
-
-    # PAT make probability: the FG model at yardline_100 = 15 (the PAT spot).
-    pat_yl: np.ndarray = np.full(n, 15, dtype=float)
-    conv_1pt = _fg_make_prob(pat_yl, d["fg_roof"].to_numpy(), d[["era0", "era1", "era2", "era3", "era4"]].to_numpy())
-    if conv_1pt is None:  # FG model unobtainable on the re-load (race/eviction) — emit NaN, never crash
-        out = d[["go_index"]].copy()
-        out["yardline_100"] = 0
-        out["wp_td"] = np.nan
-        return out[["go_index", "yardline_100", "wp_td"]]
-
-    rows = []
-    for pts in (0, 1, 2):
-        r = d.copy()
-        r["score_differential"] = -d["score_differential"].to_numpy() - pts
-        r["posteam"] = np.where(d["home_team"] == d["posteam"], d["away_team"], d["home_team"])
-        r["yardline_100"] = 75
-        r["down"] = 1
-        r["ydstogo"] = 10
-        r["pts"] = pts
-        rows.append(r)
-    allr = pd.concat(rows, ignore_index=True)
-    allr = _flip_half(allr)
-    allr["vegas_wp"] = _calc_wp(allr)
-
-    piv = allr.pivot_table(index="go_index", columns="pts", values="vegas_wp")
-    res = pd.DataFrame(
-        {"go_index": piv.index, "wp0": piv[0].to_numpy(), "wp1": piv[1].to_numpy(), "wp2": piv[2].to_numpy()}
-    )
-    res = res.merge(d[["go_index"]].assign(conv_2pt=conv_2pt, conv_1pt=conv_1pt), on="go_index", how="left")
     wp_go2 = (
         res["conv_2pt"].to_numpy() * res["wp2"].to_numpy() + (1.0 - res["conv_2pt"].to_numpy()) * res["wp0"].to_numpy()
     )
@@ -627,6 +641,63 @@ def get_2pt_wp(pbp_df: Union[pl.DataFrame, "pd.DataFrame"]) -> pd.DataFrame:
 # --------------------------------------------------------------------------- #
 # GO path (nfl4th get_go_wp)
 # --------------------------------------------------------------------------- #
+def get_2pt_probs(pbp_df: Union[pl.DataFrame, "pd.DataFrame"]) -> pd.DataFrame:
+    """The PAT-vs-2pt decision surface for post-touchdown states (CFB-shaped).
+
+    The NFL twin of :func:`sportsdataverse.cfb.cfb_two_point.get_2pt_probs`: the
+    same three-outcome enumeration :func:`get_2pt_wp` uses, but returned as the
+    decision columns rather than folded into ``wp_td``::
+
+        two_pt_wp = prob_2pt * wp(pts=2) + (1 - prob_2pt) * wp(pts=0)
+        xp_wp     = prob_xp  * wp(pts=1) + (1 - prob_xp)  * wp(pts=0)
+
+    with ``prob_2pt`` from the bundled nfl4th ``two_pt_model`` and ``prob_xp``
+    from the FG model at the 15-yard PAT spot.
+
+    Args:
+        pbp_df: Post-touchdown states in nflverse column space (the same
+            inputs :func:`get_4th_down_probs` takes; ``score_differential`` is the
+            scoring team's lead **after** the six points). Prepared frames are
+            accepted as-is.
+
+    Returns:
+        A pandas frame with ``go_index`` plus ``two_pt_wp``, ``xp_wp``,
+        ``prob_2pt``, ``two_pt_recommendation`` (``"go_for_2"`` iff
+        ``two_pt_wp > xp_wp`` else ``"kick_xp"``) and ``two_pt_wp_diff``
+        (``two_pt_wp - xp_wp``). All NaN / null when the models are unavailable.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nfl.nfl_fourth_down import get_2pt_probs
+            out = get_2pt_probs(touchdown_states)
+            print(out[["two_pt_wp", "xp_wp", "two_pt_recommendation"]].head())
+    """
+    d = _to_pandas(pbp_df).reset_index(drop=True)
+    cols = ["two_pt_wp", "xp_wp", "prob_2pt", "two_pt_recommendation", "two_pt_wp_diff"]
+    if len(d) == 0:
+        return pd.DataFrame({"go_index": [], **{c: [] for c in cols}})
+    if "posteam_spread" not in d.columns:
+        d = _prepare(d)
+    if "go_index" not in d.columns:
+        d["go_index"] = np.arange(len(d))
+    res = _two_pt_components(d)
+    out = d[["go_index"]].copy()
+    if res is None:
+        for c in cols:
+            out[c] = None if c == "two_pt_recommendation" else np.nan
+        return out
+    res = res.set_index("go_index").reindex(out["go_index"]).reset_index()
+    conv2, conv1 = res["conv_2pt"].to_numpy(), res["conv_1pt"].to_numpy()
+    wp0, wp1, wp2 = res["wp0"].to_numpy(), res["wp1"].to_numpy(), res["wp2"].to_numpy()
+    out["two_pt_wp"] = conv2 * wp2 + (1.0 - conv2) * wp0
+    out["xp_wp"] = conv1 * wp1 + (1.0 - conv1) * wp0
+    out["prob_2pt"] = conv2
+    out["two_pt_wp_diff"] = out["two_pt_wp"] - out["xp_wp"]
+    out["two_pt_recommendation"] = np.where(out["two_pt_wp"] > out["xp_wp"], "go_for_2", "kick_xp")
+    return out
+
+
 def get_go_wp(pbp_df: Union[pl.DataFrame, "pd.DataFrame"]) -> pd.DataFrame:
     """Expected win probability of going for it on 4th down (nfl4th ``get_go_wp``).
 

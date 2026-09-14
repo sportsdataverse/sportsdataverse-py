@@ -48,7 +48,13 @@ ERA_SEASON_CUTS: tuple[int, int, int, int] = (2001, 2005, 2013, 2017)
 #: :class:`sportsdataverse.errors.EraCoverageWarning` once per such season
 #: instead of absorbing it silently.  Bump at each era-aware retrain, together
 #: with the trainer's season span.
-ERA_MAX_KNOWN_SEASON: int = 2025
+#: 2026 review (2026-09-14): the 2026 season plays under the 2025 rulebook for
+#: everything the EP/WP features see -- dynamic kickoff with the touchback at
+#: the 35 (scored at the nflverse-parity spot below, as in 2024-2025) and the
+#: regular-season overtime format introduced in 2025 -- so it stays in ``era4``
+#: without a new dummy. This bump is a coverage assertion, not a retrain: the
+#: era-aware corpus still ends at 2025.
+ERA_MAX_KNOWN_SEASON: int = 2026
 
 #: Kickoff-touchback starting yardline **before** the 2016 rule change.
 #: nflfastR canonical: the touchback was spotted at the 20-yard line, so
@@ -368,6 +374,23 @@ normalplay = [
     "Fumble Recovery (Own)",
 ]
 penalty = ["Penalty", "Penalty (Kickoff)", "Penalty (Safety)"]
+# ESPN clock-stoppage rows are not plays. The CFB-derived lists only knew the
+# team "Timeout"; ESPN's NFL feed also emits "Official Timeout" (TV / injury /
+# replay) and "Two-minute warning", and those rows carry no game state of their
+# own -- an Official Timeout after a touchdown arrives as down=-1, distance=15,
+# yardsToEndzone=15, which the EP model scores as ~3.8 EP and the next play then
+# "loses". Every scrimmage/play aggregate and every EPA/WPA neutralisation keys
+# on this list, never on "Timeout" alone (2026 week 1: 124 Official Timeouts
+# across 15 games leaked -0.9 to -18.2 EPA into each team's EPA_overall_off).
+clock_stoppage_vec = [
+    "Timeout",
+    "Official Timeout",
+    "Two-minute warning",
+    "Two-Minute Warning",
+    "End Period",
+    "End of Half",
+    "End of Game",
+]
 offense_score_vec = [
     "Passing Touchdown",
     "Rushing Touchdown",

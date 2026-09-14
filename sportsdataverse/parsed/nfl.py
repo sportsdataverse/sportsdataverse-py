@@ -183,6 +183,7 @@ from sportsdataverse.nfl import efficiency_ratings as efficiency_ratings  # noqa
 from sportsdataverse.nfl import env_adjusted_make_prob as env_adjusted_make_prob  # noqa: F401
 from sportsdataverse.nfl import espn_nfl_calendar as espn_nfl_calendar  # noqa: F401
 from sportsdataverse.nfl import espn_nfl_game_rosters as espn_nfl_game_rosters  # noqa: F401
+from sportsdataverse.nfl import espn_nfl_play_participants as espn_nfl_play_participants  # noqa: F401
 from sportsdataverse.nfl import espn_nfl_player_stats as espn_nfl_player_stats  # noqa: F401
 from sportsdataverse.nfl import espn_nfl_schedule as espn_nfl_schedule  # noqa: F401
 from sportsdataverse.nfl import espn_nfl_teams as espn_nfl_teams  # noqa: F401
@@ -204,6 +205,7 @@ from sportsdataverse.nfl import fox_nfl_scorechip as fox_nfl_scorechip  # noqa: 
 from sportsdataverse.nfl import fox_nfl_scores_segment as fox_nfl_scores_segment  # noqa: F401
 from sportsdataverse.nfl import fox_nfl_team_header as fox_nfl_team_header  # noqa: F401
 from sportsdataverse.nfl import fox_nfl_teamnav as fox_nfl_teamnav  # noqa: F401
+from sportsdataverse.nfl import get_2pt_probs as get_2pt_probs  # noqa: F401
 from sportsdataverse.nfl import get_2pt_wp as get_2pt_wp  # noqa: F401
 from sportsdataverse.nfl import get_4th_down_probs as get_4th_down_probs  # noqa: F401
 from sportsdataverse.nfl import get_config as get_config  # noqa: F401
@@ -411,6 +413,7 @@ __all__ = [
     "espn_nfl_league_notes",
     "espn_nfl_league_root",
     "espn_nfl_news",
+    "espn_nfl_play_participants",
     "espn_nfl_player_awards",
     "espn_nfl_player_bio",
     "espn_nfl_player_career_stats",
@@ -512,6 +515,7 @@ __all__ = [
     "fox_nfl_team_roster",
     "fox_nfl_team_stats",
     "fox_nfl_teamnav",
+    "get_2pt_probs",
     "get_2pt_wp",
     "get_4th_down_probs",
     "get_config",

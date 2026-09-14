@@ -59,6 +59,7 @@ from sportsdataverse.nfl.model_vars import (
     SPREAD_TIME_DECAY_EXPONENT,
     TOUCHBACK_YARDLINE_POST_2016,
     TOUCHBACK_YARDLINE_PRE_2016,
+    clock_stoppage_vec,
     defense_score_vec,
     end_change_vec,
     kickoff_turnovers,
@@ -2082,16 +2083,31 @@ def calculate_epa(df: pl.DataFrame) -> pl.DataFrame:
             .otherwise(pl.col("lag_change_of_pos_team")),
         )
         .with_columns(
-            EP_between=pl.when(pl.col("lag_change_of_pos_team") == True)
-            .then(pl.col("EP_start") + pl.col("lag_EP_end"))
-            .otherwise(pl.col("EP_start") - pl.col("lag_EP_end")),
+            # A clock-stoppage row (timeout, two-minute warning, end of period)
+            # has no state of its own: it inherits the previous play's end EP,
+            # sign-flipped when possession changed in between, so its EP_between
+            # and EPA are zero by construction and the next play's lag is clean.
+            # This must land BEFORE EP_between is derived (a with_columns
+            # evaluates against its input frame, so a same-block fix is invisible
+            # to EP_between).
             EP_start=pl.when(
-                (pl.col("type.text").is_in(["Timeout", "End Period"])).and_(
+                (pl.col("type.text").is_in(clock_stoppage_vec)).and_(
                     pl.col("lag_change_of_pos_team") == False,
                 ),
             )
             .then(pl.col("lag_EP_end"))
+            .when(
+                (pl.col("type.text").is_in(clock_stoppage_vec)).and_(
+                    pl.col("lag_change_of_pos_team") == True,
+                ),
+            )
+            .then(-1 * pl.col("lag_EP_end"))
             .otherwise(pl.col("EP_start")),
+        )
+        .with_columns(
+            EP_between=pl.when(pl.col("lag_change_of_pos_team") == True)
+            .then(pl.col("EP_start") + pl.col("lag_EP_end"))
+            .otherwise(pl.col("EP_start") - pl.col("lag_EP_end")),
         )
         .with_columns(
             EP_start=pl.when(pl.col("type.text").is_in(kickoff_vec))
@@ -2099,10 +2115,12 @@ def calculate_epa(df: pl.DataFrame) -> pl.DataFrame:
             .otherwise(pl.col("EP_start")),
         )
         .with_columns(
-            EP_end=pl.when(pl.col("type.text").is_in(["Timeout"])).then(pl.col("EP_start")).otherwise(pl.col("EP_end")),
+            EP_end=pl.when(pl.col("type.text").is_in(clock_stoppage_vec))
+            .then(pl.col("EP_start"))
+            .otherwise(pl.col("EP_end")),
         )
         .with_columns(
-            EPA=pl.when(pl.col("type.text").is_in(["Timeout"]))
+            EPA=pl.when(pl.col("type.text").is_in(clock_stoppage_vec))
             .then(0)
             .when((pl.col("scoring_play") == False).and_(pl.col("end_of_half") == True))
             .then(-1 * pl.col("EP_start"))
@@ -2295,7 +2313,7 @@ def calculate_wpa(df: pl.DataFrame) -> pl.DataFrame:
             lead_wp_before2=pl.col("wp_before").shift(-2).over("game_id"),
         )
         .with_columns(
-            wp_after=pl.when(pl.col("type.text").is_in(["Timeout"]))
+            wp_after=pl.when(pl.col("type.text").is_in(clock_stoppage_vec))
             .then(pl.col("wp_before"))
             .when(
                 (pl.col("status_type_completed") == True)
@@ -2322,19 +2340,19 @@ def calculate_wpa(df: pl.DataFrame) -> pl.DataFrame:
             .when(
                 (pl.col("end_of_half") == True)
                 .and_(pl.col("start.pos_team.id") == pl.col("lead_pos_team"))
-                .and_(pl.col("type.text") != "Timeout"),
+                .and_(pl.col("type.text").is_in(clock_stoppage_vec) == False),
             )
             .then(pl.col("lead_wp_before"))
             .when(
                 (pl.col("end_of_half") == True)
                 .and_(pl.col("start.pos_team.id") != pl.col("end.pos_team.id"))
-                .and_(pl.col("type.text") != "Timeout"),
+                .and_(pl.col("type.text").is_in(clock_stoppage_vec) == False),
             )
             .then(1 - pl.col("lead_wp_before"))
             .when(
                 (pl.col("end_of_half") == True)
                 .and_(pl.col("start.pos_team_receives_2H_kickoff") == False)
-                .and_(pl.col("type.text") == "Timeout"),
+                .and_(pl.col("type.text").is_in(clock_stoppage_vec)),
             )
             .then(pl.col("wp_after"))
             .when(
