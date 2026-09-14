@@ -3,6 +3,7 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [Unreleased](#unreleased)
+  - [Added — CFB drive summary and situational team stats, graduated from Game on Paper (#470)](#added--cfb-drive-summary-and-situational-team-stats-graduated-from-game-on-paper-470)
   - [Fixed — MLB expected stats counted raw pitches as plate appearances](#fixed--mlb-expected-stats-counted-raw-pitches-as-plate-appearances)
 - [0.1.4 Release: September 1, 2026](#014-release-september-1-2026)
   - [Fixed — CFB EP/WP inputs: mirrored end yardlines, the wrong `wp_after` perspective, and a flipped WP (#408, #411, #413)](#fixed--cfb-epwp-inputs-mirrored-end-yardlines-the-wrong-wp_after-perspective-and-a-flipped-wp-408-411-413)
@@ -280,6 +281,11 @@
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Unreleased
+
+Fixed scoreboard cache TTL selection when dates are supplied in query parameters:
+current/future days and ranges containing them bypass both cache reads and writes,
+while wholly historical dates retain the 30-day TTL. Explicit TTL overrides still
+take precedence.
 
 ### Added — CFB drive summary and situational team stats, graduated from Game on Paper (#470)
 
