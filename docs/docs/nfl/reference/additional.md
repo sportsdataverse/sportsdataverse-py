@@ -4057,9 +4057,15 @@ box = result["advBoxScore"]
 sorted(box.keys())
 ```
 
-#### `NFLPlayProcess.espn_nfl_pbp(**kwargs)`
+#### `NFLPlayProcess.espn_nfl_pbp(summary=None, **kwargs)`
 
 espn_nfl_pbp() - Pull the game by id. Data from API endpoints: `nfl/playbyplay`, `nfl/summary`
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `summary` | `dict` | `None` | A previously fetched ESPN summary payload. When given, no request is made -- the offline path for committed raw libraries. |
 
 **Returns**
 

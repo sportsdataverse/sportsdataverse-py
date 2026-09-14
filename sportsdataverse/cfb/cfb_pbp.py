@@ -1062,11 +1062,13 @@ class CFBPlayProcess(object):
         self.participants = participants
         self.join_participants = bool(join_participants)
 
-    def espn_cfb_pbp(self, **kwargs):
+    def espn_cfb_pbp(self, summary=None, **kwargs):
         """espn_cfb_pbp() - Pull the game by id. Data from API endpoints: `college-football/playbyplay`,
         `college-football/summary`
 
         Args:
+            summary (dict, optional): A previously fetched ESPN summary payload. When given, no
+                request is made -- the offline path for committed raw libraries.
             game_id (int): Unique game_id, can be obtained from cfb_schedule().
             raw (bool): If True, returns the raw json from the API endpoint. If False, returns a
             cleaned dictionary of datasets.
@@ -1099,12 +1101,13 @@ class CFBPlayProcess(object):
                 * `cfbfastR <https://cfbfastR.sportsdataverse.org>`_ -- R sister package for CFB PBP
                 * `nflverse <https://nflverse.nflverse.com>`_ -- companion data ecosystem for the NFL
         """
-        cache_buster = int(time.time() * 1000)
         pbp_txt = {"timeouts": {}}
-        # summary endpoint for pickcenter array
-        summary_url = f"http://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event={self.gameId}&{cache_buster}"
-        summary_resp = download(url=summary_url, **kwargs)
-        summary = summary_resp.json()
+        if summary is None:
+            cache_buster = int(time.time() * 1000)
+            # summary endpoint for pickcenter array
+            summary_url = f"http://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event={self.gameId}&{cache_buster}"
+            summary_resp = download(url=summary_url, **kwargs)
+            summary = summary_resp.json()
         incoming_keys_expected = [
             "boxscore",
             "format",

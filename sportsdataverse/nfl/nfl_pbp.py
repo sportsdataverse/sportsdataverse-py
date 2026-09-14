@@ -334,10 +334,12 @@ class NFLPlayProcess(object):
         self.path_to_json = path_to_json
         self.return_keys = return_keys
 
-    def espn_nfl_pbp(self, **kwargs):
+    def espn_nfl_pbp(self, summary=None, **kwargs):
         """espn_nfl_pbp() - Pull the game by id. Data from API endpoints: `nfl/playbyplay`, `nfl/summary`
 
         Args:
+            summary (dict, optional): A previously fetched ESPN summary payload. When given, no
+                request is made -- the offline path for committed raw libraries.
             game_id (int): Unique game_id, can be obtained from nfl_schedule().
 
         Returns:
@@ -365,14 +367,15 @@ class NFLPlayProcess(object):
                 proc.espn_nfl_pbp()
                 result = proc.run_processing_pipeline()
         """
-        cache_buster = int(time.time() * 1000)
         pbp_txt = {"timeouts": {}}
-        # summary endpoint for pickcenter array
-        summary_url = (
-            f"http://site.api.espn.com/apis/site/v2/sports/football/nfl/summary?event={self.gameId}&{cache_buster}"
-        )
-        summary_resp = download(url=summary_url, **kwargs)
-        summary = summary_resp.json()
+        if summary is None:
+            cache_buster = int(time.time() * 1000)
+            # summary endpoint for pickcenter array
+            summary_url = (
+                f"http://site.api.espn.com/apis/site/v2/sports/football/nfl/summary?event={self.gameId}&{cache_buster}"
+            )
+            summary_resp = download(url=summary_url, **kwargs)
+            summary = summary_resp.json()
         incoming_keys_expected = [
             "boxscore",
             "format",
