@@ -1976,7 +1976,7 @@ def load_nfl_ngs(seasons: List[int], dataset: str = "passing", return_as_pandas:
     :func:`load_nfl_nextgen_stats`, which reads nflverse's republished
     ``statboard/`` parquet: that one carries the three passing/rushing/receiving
     season-and-week leaderboards only, under expanded column names
-    (``avg_time_to_throw``). This loader carries the whole 12-dataset surface
+    (``avg_time_to_throw``). This loader carries the whole 16-dataset surface
     under NGS's own snake_cased field names (``avg_time_to_throw`` too for the
     statboards, but ``completion_probability`` / ``rush_yards_over_expected`` /
     ``max_speed`` on the leaderboards, ``play_game_id`` / ``play_play_id`` as
