@@ -47,6 +47,7 @@ def _team_mascot(team: dict) -> str:
 
 from sportsdataverse.dl_utils import download
 from sportsdataverse.football.attribution import (
+    _abbr_compat,
     add_attribution_cols as _add_attribution_cols,
     add_penalty_enforcement_cols as _add_penalty_enforcement_cols,
     refine_play_types_post_attribution as _refine_play_types_post_attribution,
@@ -125,7 +126,12 @@ _NFL_RUSHER_RE = (
 # A fumble-recovery row is a rush or a pass by its text; the CFB tests ("run
 # for", "pass complete") never match NFL text, so these are the NFL equivalents.
 _NFL_FUMBLE_ROW_RUSH_RE = _NFL_NAME + r" " + _NFL_RUSH_DIRECTION
-_NFL_FUMBLE_ROW_PASS_RE = _NFL_NAME + r" (?:pass|sacked)"
+_NFL_FUMBLE_ROW_PASS_RE = _NFL_NAME + r" (?:pass|sacked)|[A-Z][a-z]+ [A-Z][A-Za-z'\-]+ Pass (?:Complete|Incomplete)"
+# "Lateral to K.Shakir pushed ob at HST 23 for 10 yards": the lateral recipient's
+# yards are receiving yards in official scoring, credited to him, not the catcher.
+_NFL_LATERAL_NAME_RE = r"Lateral to (" + _NFL_NAME + r")"
+_NFL_LATERAL_YDS_RE = r"Lateral to " + _NFL_NAME + r"[^.]*? for (-?\d+) yards?"
+_NFL_RECOVERY_SPOT_RE = r"(?:RECOVERED|recovered) by [A-Z]{2,3}-[^,]*? at ([A-Z]{2,3}) (\d{1,2})"
 _NFL_PASSER_RE = r"(" + _NFL_NAME + r") (?:pass|sacked|spiked)"
 _NFL_RECEIVER_RE = r"(?:^|\s)(?:to|for) (" + _NFL_NAME + r")"
 
@@ -2805,7 +2811,7 @@ class NFLPlayProcess(object):
             yds_rushed=pl.when((pl.col("rush") == True).and_(pl.col("yds_rushed").is_null()))
             .then(
                 pl.coalesce(
-                    pl.col("text").str.extract(r"for (-?\d+) yards?", 1).cast(pl.Int32, strict=False),
+                    pl.col("text").str.extract(r"for (-?\d+) [Yy](?:ar)?ds?", 1).cast(pl.Int32, strict=False),
                     pl.col("statYardage").cast(pl.Int32, strict=False),
                 ),
             )
@@ -2819,7 +2825,7 @@ class NFLPlayProcess(object):
             .when((pl.col("pass") == True).and_(pl.col("yds_receiving").is_null()))
             .then(
                 pl.coalesce(
-                    pl.col("text").str.extract(r"for (-?\d+) yards?", 1).cast(pl.Int32, strict=False),
+                    pl.col("text").str.extract(r"for (-?\d+) [Yy](?:ar)?ds?", 1).cast(pl.Int32, strict=False),
                     pl.col("statYardage").cast(pl.Int32, strict=False),
                 ),
             )
@@ -2892,7 +2898,7 @@ class NFLPlayProcess(object):
         play_df = play_df.with_columns(
             yds_rushed=pl.when((pl.col("rush") == True).and_(pl.col("penalty_no_play") == True))  # noqa: E712
             .then(0)
-            .when((pl.col("rush") == True).and_(pl.col("type.text") == "Fumble Recovery (Own)"))  # noqa: E712
+            .when((pl.col("rush") == True).and_(pl.col("text").str.contains("and recovers")))  # noqa: E712
             .then(pl.col("statYardage").cast(pl.Int32, strict=False))
             .otherwise(pl.col("yds_rushed")),
             yds_receiving=pl.when(
@@ -3868,6 +3874,131 @@ class NFLPlayProcess(object):
     def __add_series_data(self, play_df):
         """cfbfastR's series / first-down decomposition (shared football series module)."""
         return _add_series_data(play_df, penalty=penalty, normalplay=normalplay)
+
+    def __credit_to_spot_of_foul(self, play_df):
+        """Official-scoring credit for a run or catch that drew an offensive foul.
+
+        When the offense is flagged during a run or after a catch and the
+        penalty is enforced from a spot BEHIND where the play ended
+        ("D.Swift right tackle to CHI 37 for 17 yards (Ja.Horn).PENALTY on
+        CHI-R.Odunze, Offensive Holding, 10 yards, enforced at CHI 29"), the
+        official rushing / receiving yardage is the gain up to the spot of the
+        foul -- 9 here, not 17 and not 0. ESPN's box scores it that way on every
+        such play in 2026 week 1 (Swift 132 -> 124, Brooks 24 -> 14, Henry 150
+        -> 144, Barkley 87 -> 83 once credited to the spot). A foul enforced at
+        or beyond the end of the play (dead-ball) leaves the yardage standing;
+        "No Play" rows are already zeroed upstream.
+        """
+        needed = {
+            "penalty_flag",
+            "penalty_side",
+            "penalty_declined",
+            "penalty_offset",
+            "penalty_no_play",
+            "start.yardsToEndzone",
+            "homeTeamAbbrev",
+            "awayTeamAbbrev",
+            "homeTeamId",
+            "pos_team",
+        }
+        if not needed.issubset(play_df.columns):
+            return play_df
+        enf_abbr = (
+            pl.col("text")
+            .str.extract(r"enforced at ([A-Z]{2,3}) \d{1,2}", 1)
+            .replace_strict(
+                _NFL_TEXT_TEAM_ALIASES, default=pl.col("text").str.extract(r"enforced at ([A-Z]{2,3}) \d{1,2}", 1)
+            )
+        )
+        enf_yl = pl.col("text").str.extract(r"enforced at (?:[A-Z]{2,3} )?(\d{1,2})", 1).cast(pl.Int32, strict=False)
+        off_abbr = (
+            pl.when(pl.col("pos_team") == pl.col("homeTeamId"))
+            .then(pl.col("homeTeamAbbrev"))
+            .otherwise(pl.col("awayTeamAbbrev"))
+            .str.to_uppercase()
+        )
+        on_offense_side = _abbr_compat(enf_abbr, off_abbr)
+        enf_y100 = (
+            pl.when(enf_abbr.is_null() & (enf_yl == 50))
+            .then(pl.lit(50))
+            .when(on_offense_side)
+            .then(100 - enf_yl)
+            .otherwise(enf_yl)
+        )
+        offensive_foul = (
+            (pl.col("penalty_flag") == True)  # noqa: E712
+            .and_(pl.col("penalty_side") == "off")
+            .and_(pl.col("penalty_declined") == False)  # noqa: E712
+            .and_(pl.col("penalty_offset") == False)  # noqa: E712
+            .and_(pl.col("penalty_no_play") == False)  # noqa: E712
+            .and_(enf_y100.is_not_null())
+        )
+        credited = (pl.col("start.yardsToEndzone") - enf_y100).cast(pl.Int32)
+        rush_end = pl.col("start.yardsToEndzone") - pl.col("yds_rushed")
+        recv_end = pl.col("start.yardsToEndzone") - pl.col("yds_receiving")
+        # On a plain run or catch (no flag, no fumble) ESPN's per-play
+        # statYardage is the official spot-to-spot gain and the text is not
+        # always: "C.Heyward up the middle to MIA 34 for no gain" is scored as
+        # 1 yard in ESPN's box. Text stays the source only where statYardage
+        # bundles something else (penalties, fumbles).
+        plain = (
+            (pl.col("penalty_flag") == False)
+            .and_(pl.col("fumble_vec") == False)
+            .and_(pl.col("statYardage").is_not_null())
+        )  # noqa: E712
+        plain_rush = plain.and_(pl.col("type.text").is_in(["Rush", "Rushing Touchdown"]))
+        plain_catch = plain.and_(pl.col("type.text").is_in(["Pass Reception", "Passing Touchdown"])).and_(
+            pl.col("completion") == True
+        )  # noqa: E712
+        play_df = play_df.with_columns(
+            yds_rushed=pl.when((pl.col("rush") == True).and_(plain_rush))  # noqa: E712
+            .then(pl.col("statYardage").cast(pl.Int32, strict=False))
+            .otherwise(pl.col("yds_rushed")),
+            yds_receiving=pl.when((pl.col("pass") == True).and_(plain_catch))  # noqa: E712
+            .then(pl.col("statYardage").cast(pl.Int32, strict=False))
+            .otherwise(pl.col("yds_receiving")),
+        )
+        play_df = play_df.with_columns(
+            yds_rushed=pl.when(offensive_foul.and_(pl.col("rush") == True).and_(enf_y100 > rush_end))  # noqa: E712
+            .then(credited)
+            .otherwise(pl.col("yds_rushed")),
+            yds_receiving=pl.when(
+                offensive_foul.and_(pl.col("pass") == True)
+                .and_(pl.col("completion") == True)
+                .and_(enf_y100 > recv_end),  # noqa: E712
+            )
+            .then(credited)
+            .otherwise(pl.col("yds_receiving")),
+        )
+        # A fumble recovered by anyone but the carrier: the carrier is credited
+        # up to the recovery spot when the ball went backwards ("to CLV 36 for 17
+        # yards ... recovered by JAX-B.Tuten at CLV 41" -> 12), and never with a
+        # teammate's advance. His own recovery keeps the whole advance (above).
+        rec_abbr_raw = pl.col("text").str.extract(_NFL_RECOVERY_SPOT_RE, 1)
+        rec_abbr = rec_abbr_raw.replace_strict(_NFL_TEXT_TEAM_ALIASES, default=rec_abbr_raw)
+        rec_yl = pl.col("text").str.extract(_NFL_RECOVERY_SPOT_RE, 2).cast(pl.Int32, strict=False)
+        rec_y100 = pl.when(_abbr_compat(rec_abbr, off_abbr)).then(100 - rec_yl).otherwise(rec_yl)
+        rec_credit = (pl.col("start.yardsToEndzone") - rec_y100).cast(pl.Int32)
+        lost_or_teammate = (
+            (pl.col("fumble_vec") == True)  # noqa: E712
+            .and_(pl.col("text").str.contains("and recovers") == False)  # noqa: E712
+            .and_(rec_y100.is_not_null())
+        )
+        return play_df.with_columns(
+            yds_rushed=pl.when(lost_or_teammate.and_(pl.col("rush") == True).and_(rec_credit < pl.col("yds_rushed")))  # noqa: E712
+            .then(rec_credit)
+            .otherwise(pl.col("yds_rushed")),
+            yds_receiving=pl.when(
+                lost_or_teammate.and_(pl.col("completion") == True).and_(rec_credit < pl.col("yds_receiving")),  # noqa: E712
+            )
+            .then(rec_credit)
+            .otherwise(pl.col("yds_receiving")),
+            # lateral after a catch: the row's yds_receiving stays the passer's
+            # credit (statYardage); the receiver box moves the lateral yards to
+            # the lateral recipient
+            lateral_player_name=pl.col("text").str.extract(_NFL_LATERAL_NAME_RE, 1),
+            yds_lateral=pl.col("text").str.extract(_NFL_LATERAL_YDS_RE, 1).cast(pl.Int32, strict=False),
+        )
 
     def __after_cols(self, play_df):
         play_df = (
@@ -5922,15 +6053,19 @@ class NFLPlayProcess(object):
         )
         # rusher_box = rusher_box.replace({np.nan: None})
 
+        if "yds_lateral" in pass_box.columns:
+            _recv_yds = pl.col("yds_receiving") - pl.col("yds_lateral").fill_null(0)
+        else:
+            _recv_yds = pl.col("yds_receiving")
         receiver_box = (
             pass_box.fill_null(0.0)
             .group_by(["pos_team", "receiver_player_name"])
             .agg(
                 Rec=pl.col("completion").sum(),
                 Tar=pl.col("target").sum(),
-                Yds=pl.col("yds_receiving").sum(),
+                Yds=_recv_yds.sum(),
                 Rec_TD=pl.col("pass_td").sum(),
-                YPT=pl.col("yds_receiving").mean(),
+                YPT=_recv_yds.mean(),
                 EPA=pl.col("EPA").sum(),
                 EPA_per_Play=pl.col("EPA").mean(),
                 WPA=pl.col("wpa").sum(),
@@ -5942,6 +6077,35 @@ class NFLPlayProcess(object):
             .with_columns(pos_team=pl.col("pos_team").cast(pl.Int32))
             .join(_air_yards_box(pass_box, "receiver_player_name"), on=["pos_team", "receiver_player_name"], how="left")
         )
+        if "lateral_player_name" in pass_box.columns and pass_box["lateral_player_name"].is_not_null().any():
+            # credit the lateral recipient under the name form the rest of the
+            # frame uses for him (the full name after the participants join)
+            def _key(n):
+                n = _NFL_NAME_SUFFIX_RE.sub("", str(n)).strip()
+                if "." in n.split(" ")[0]:
+                    return (n[0] + "." + n.split(".", 1)[1].strip()).lower()
+                parts = n.split(" ")
+                return (parts[0][0] + "." + " ".join(parts[1:])).lower() if len(parts) > 1 else n.lower()
+
+            known = {_key(n): n for n in receiver_box["receiver_player_name"].drop_nulls().to_list()}
+            laterals = (
+                pass_box.filter(pl.col("lateral_player_name").is_not_null())
+                .group_by(["pos_team", "lateral_player_name"])
+                .agg(Yds_lateral=pl.col("yds_lateral").fill_null(0).sum())
+                .with_columns(
+                    pos_team=pl.col("pos_team").cast(pl.Int32),
+                    receiver_player_name=pl.col("lateral_player_name").map_elements(
+                        lambda n: known.get(_key(n), n), return_dtype=pl.Utf8
+                    ),
+                )
+                .drop("lateral_player_name")
+            )
+            receiver_box = (
+                receiver_box.join(laterals, on=["pos_team", "receiver_player_name"], how="full", coalesce=True)
+                .with_columns(Yds=pl.col("Yds").fill_null(0) + pl.col("Yds_lateral").fill_null(0))
+                .drop("Yds_lateral")
+                .with_columns(pl.col("Rec").fill_null(0), pl.col("Tar").fill_null(0))
+            )
 
         team_base_box = (
             play_df.group_by(["pos_team"])
@@ -6661,9 +6825,10 @@ class NFLPlayProcess(object):
                     .pipe(self.__add_play_category_flags)
                     .pipe(self.__add_yardage_cols)
                     .pipe(self.__add_player_cols)
-                    .pipe(self.__add_air_yards_cols)
                     .pipe(self.__add_attribution_cols)
                     .pipe(self.__refine_play_types_post_attribution)
+                    .pipe(self.__credit_to_spot_of_foul)
+                    .pipe(self.__add_air_yards_cols)
                     .pipe(self.__after_cols)
                     .pipe(self.__add_series_data)
                     .pipe(self.__add_spread_time)
@@ -6790,9 +6955,10 @@ class NFLPlayProcess(object):
                     .pipe(self.__add_play_category_flags)
                     .pipe(self.__add_yardage_cols)
                     .pipe(self.__add_player_cols)
-                    .pipe(self.__add_air_yards_cols)
                     .pipe(self.__add_attribution_cols)
                     .pipe(self.__refine_play_types_post_attribution)
+                    .pipe(self.__credit_to_spot_of_foul)
+                    .pipe(self.__add_air_yards_cols)
                     .pipe(self.__after_cols)
                     .pipe(self.__add_series_data)
                     .pipe(self.__add_spread_time)

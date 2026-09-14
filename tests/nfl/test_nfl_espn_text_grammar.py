@@ -423,3 +423,59 @@ def test_participants_join_prefers_espn_ids_and_names(processed):
         out.filter(pl.col("id") != row["id"][0])["passer_player_name"].to_list()
         == f.filter(pl.col("id") != row["id"][0])["passer_player_name"].to_list()
     )
+
+
+def test_offensive_foul_credits_the_run_to_the_spot_of_the_foul(processed):
+    """ESPN's box scores a run that drew an offensive foul enforced from behind
+    the end of the run with the yards up to the spot of the foul (Swift 17 -> 9
+    on "to CHI 37 ... enforced at CHI 29"); a foul enforced at or beyond the end
+    leaves the yardage standing; "No Play" rows stay at zero."""
+    proc, _ = processed
+    base = {
+        "text": [
+            "D.Swift right tackle to CHI 37 for 17 yards (Ja.Horn).PENALTY on CHI-R.Odunze, Offensive Holding, 10 yards, enforced at CHI 29.",
+            "T.Lawrence left end to CLV 44 for 2 yards.PENALTY on JAX-T.Lawrence, Illegal Forward Pass, 5 yards, enforced at CLV 44.",
+            "(Shotgun) J.Goff pass short left to A.St. Brown to DET 27 for 5 yards.PENALTY on DET-P.Sewell, Offensive Holding, 10 yards, enforced at DET 24.",
+            "J.Gibbs up the middle to DET 30 for 8 yards (K.Elliss).",
+            "J.Cook left guard to BUF 16 for 12 yards (D.Stingley). FUMBLES (D.Stingley), recovered by BUF-O.Torrence at BUF 19.",
+            "(Shotgun) T.Lawrence pass deep right to Bri.Thomas to CLV 36 for 17 yards (D.Ward). FUMBLES (D.Ward), recovered by JAX-B.Tuten at CLV 41.",
+            "C.Skattebo left end to DAL 31 for 7 yards (C.Durant). FUMBLES (C.Durant), and recovers at DAL 29. C.Skattebo to DAL 28 for 1 yard.",
+            "(Shotgun) J.Allen pass short left to K.Coleman to HST 33 for 1 yard. Lateral to K.Shakir pushed ob at HST 23 for 10 yards (R.Blankenship).",
+        ],
+        "rush": [True, True, False, True, True, False, True, False],
+        "pass": [False, False, True, False, False, True, False, True],
+        "completion": [False, False, True, False, False, True, False, True],
+        "yds_rushed": [17, 2, None, 8, 12, None, 10, None],
+        "yds_receiving": [None, None, 5, None, None, 17, None, 11],
+        "start.yardsToEndzone": [80, 58, 78, 78, 96, 53, 38, 34],
+        "statYardage": [-11, 2, 5, 8, 15, 12, 10, 11],
+        "type.text": [
+            "Rush",
+            "Rush",
+            "Pass Reception",
+            "Rush",
+            "Fumble Recovery (Own)",
+            "Fumble Recovery (Own)",
+            "Fumble Recovery (Own)",
+            "Pass Reception",
+        ],
+        "penalty_flag": [True, True, True, False, False, False, False, False],
+        "penalty_side": ["off", "off", "off", None, None, None, None, None],
+        "penalty_declined": [False] * 8,
+        "penalty_offset": [False] * 8,
+        "penalty_no_play": [False] * 8,
+        "fumble_vec": [False, False, False, False, True, True, True, False],
+        "pos_team": [3, 30, 8, 8, 2, 30, 19, 2],
+        "homeTeamId": [3, 30, 8, 8, 34, 30, 19, 34],
+        "homeTeamAbbrev": ["CHI", "JAX", "DET", "DET", "HOU", "JAX", "NYG", "HOU"],
+        "awayTeamAbbrev": ["CAR", "CLE", "NO", "NO", "BUF", "CLE", "DAL", "BUF"],
+    }
+    df = pl.DataFrame(base)
+    out = proc._NFLPlayProcess__credit_to_spot_of_foul(df)
+    # spot of the foul (9), stands (2), stands (8); fumble recovered by a teammate
+    # ahead keeps the carrier's 12, a teammate's recovery behind credits to the
+    # spot (17 -> 12), the carrier's own recovery keeps the whole advance (10)
+    assert out["yds_rushed"].to_list() == [9, 2, None, 8, 12, None, 10, None]
+    assert out["yds_receiving"].to_list() == [None, None, 2, None, None, 12, None, 11]
+    # the lateral is split off for the receiver box: catcher 1, lateral recipient 10
+    assert out["lateral_player_name"].to_list()[-1] == "K.Shakir" and out["yds_lateral"].to_list()[-1] == 10
