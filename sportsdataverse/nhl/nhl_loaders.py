@@ -477,6 +477,7 @@ def load_nhl_game_rosters(seasons, return_as_pandas: bool = False):
         |game_id        |Int64  |
         |season         |Int64  |
         |game_date      |String |
+        |shoots_catches |String |
 
     Raises:
         SeasonNotFoundError: if a requested season is below 2024.

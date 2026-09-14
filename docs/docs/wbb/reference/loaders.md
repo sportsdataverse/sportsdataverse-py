@@ -115,9 +115,14 @@ Release: [espn_womens_college_basketball_pbp](https://github.com/sportsdataverse
 | `coordinate_y` | Float64 | Y coordinate on the court (half-court layout). |
 | `game_date` | Date | Game date (YYYY-MM-DD). |
 | `game_date_time` | Datetime(time_unit='us', time_zone='America/New_York') | Game start date/time (ISO 8601). |
+| `espn_home_wp` | Float64 | ESPN's own published win probability for the home team (0-1), carried through unchanged. |
+| `espn_tie_percentage` | Float64 | ESPN's published tie probability; present in the feed but always 0.0 in the published asset. |
+| `espn_away_wp` | Float64 | ESPN's own published win probability for the away team (0-1), carried through unchanged. |
 | `athlete_name_1` | String | Display name of the first athlete in the ESPN play participants (e.g., the shooter on a shot attempt). |
 | `athlete_name_2` | String | Display name of the second athlete in the ESPN play participants (e.g., the assisting player), when present. |
 | `athlete_name_3` | String | Display name of the third athlete in the ESPN play participants, when present. |
+| `pregame_home_prob` | Float64 | Model's pre-game win probability for the home team (0-1), constant within a game. |
+| `home_win_prob` | Float64 | Home win probability - pre-game prediction (0-1). |
 
 ```python
 load_wbb_pbp(seasons=2024)
@@ -278,11 +283,20 @@ Release: [espn_womens_college_basketball_schedules](https://github.com/sportsdat
 | `groups_is_conference` | Boolean | Groups is conference. |
 | `game_json` | Boolean | Whether processed game JSON is available. |
 | `game_json_url` | String | URL to the processed game JSON. |
+| `has_game_json` | Boolean | Whether the raw game JSON payload exists in the raw store for this game. |
+| `game_json_raw_url` | String | raw.githubusercontent.com URL of the game's raw JSON payload in wehoop-wbb-raw. |
+| `game_rosters_json_url` | String | raw.githubusercontent.com URL of the game's rosters JSON payload in wehoop-wbb-raw. |
+| `has_game_rosters_json` | Boolean | Whether the rosters JSON payload exists in the raw store for this game. |
+| `officials_json_url` | String | raw.githubusercontent.com URL of the game's officials JSON payload in wehoop-wbb-raw. |
+| `has_officials_json` | Boolean | Whether the officials JSON payload exists in the raw store for this game. |
 | `game_date_time` | Datetime(time_unit='us', time_zone='America/New_York') | Game start date/time (ISO 8601). |
 | `game_date` | Date | Game date (YYYY-MM-DD). |
 | `PBP` | Boolean | Whether play-by-play data is available. |
 | `team_box` | Boolean | Team box. |
 | `player_box` | Boolean | Player box. |
+| `in_shots` | Boolean | Whether the game is represented in the built shots dataset. |
+| `in_game_rosters` | Boolean | Whether the game is represented in the built game-rosters dataset. |
+| `in_officials` | Boolean | Whether the game is represented in the built officials dataset. |
 
 ```python
 load_wbb_schedule(seasons=2024)
@@ -326,8 +340,6 @@ Release: [espn_womens_college_basketball_team_boxscores](https://github.com/spor
 | `free_throws_made` | Int32 | Free throws made. |
 | `free_throws_attempted` | Int32 | Free throw attempts. |
 | `largest_lead` | String | Largest lead during the game. |
-| `lead_changes` | String | Lead changes. |
-| `lead_percentage` | String | Share of game time the team held the lead, as reported in ESPN's team boxscore. |
 | `offensive_rebounds` | Int32 | Offensive rebounds. |
 | `points_in_paint` | String | Points scored in the paint. |
 | `steals` | Int32 | Total steals. |
@@ -353,6 +365,8 @@ Release: [espn_womens_college_basketball_team_boxscores](https://github.com/spor
 | `opponent_team_alternate_color` | String | Opponent team alternate color (hex). |
 | `opponent_team_logo` | String | Opponent team logo URL. |
 | `opponent_team_score` | Int32 | Opponent team's score. |
+| `lead_changes` | String | Lead changes. |
+| `lead_percentage` | String | Share of game time the team held the lead, as reported in ESPN's team boxscore. |
 
 ```python
 load_wbb_team_boxscore(seasons=2024)
@@ -409,7 +423,7 @@ Release: [espn_womens_college_basketball_game_rosters](https://github.com/sports
 | col_name | type | description |
 |---|---|---|
 | `season` | Int32 | Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted. |
-| `game_id` | String | Unique game identifier. |
+| `game_id` | Int32 | Unique game identifier. |
 | `team_id` | Int32 | Unique team identifier. |
 | `team_slug` | String | URL-safe team identifier (e.g. 'lasvegas-aces' / 'aces'). |
 | `team_abbreviation` | String | Short team abbreviation (e.g. 'LAS'). |
@@ -443,7 +457,7 @@ Release: [espn_womens_college_basketball_officials](https://github.com/sportsdat
 | col_name | type | description |
 |---|---|---|
 | `season` | Int32 | Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted. |
-| `game_id` | String | Unique game identifier. |
+| `game_id` | Int32 | Unique game identifier. |
 | `official_id` | Int32 | Unique official / referee identifier. |
 | `official_uid` | String | ESPN's globally unique resource identifier for the official, read from the core-api items[] uid key; that payload never ships it, so the column is null for every published row. |
 | `official_full_name` | String | ESPN's fullName for the official, falling back to displayName when fullName is absent; ESPN sometimes ships it with a middle initial or a doubled internal space, so it is not simply first plus last name. |
@@ -502,7 +516,7 @@ Release: [espn_womens_college_basketball_rosters](https://github.com/sportsdatav
 | `team_color` | String | Team primary color (hex without leading '#'). |
 | `team_alternate_color` | String | Team alternate color (hex without leading '#'). |
 | `team_logo` | String | Team logo image URL. |
-| `athlete_id` | String | Unique athlete identifier (ESPN). |
+| `athlete_id` | Int32 | Unique athlete identifier (ESPN). |
 | `uid` | String | ESPN UID string. |
 | `guid` | String | Stable cross-league team GUID. |
 | `full_name` | String | Player's full name. |
@@ -513,7 +527,7 @@ Release: [espn_womens_college_basketball_rosters](https://github.com/sportsdatav
 | `jersey` | String | Jersey number worn by the player. |
 | `position_abbreviation` | String | Position abbreviation ('G' / 'F' / 'C'). |
 | `position_name` | String | Listed roster position ('Guard', 'Forward', 'Center'). |
-| `position_id` | String | Unique position identifier. |
+| `position_id` | Int32 | Unique position identifier. |
 | `height` | String | Player height (string e.g. '6-2' or inches). |
 | `weight` | String | Player weight in pounds. |
 | `age` | String | Player age (in years). |
@@ -526,7 +540,7 @@ Release: [espn_womens_college_basketball_rosters](https://github.com/sportsdatav
 | `headshot_href` | String | Headshot image URL. |
 | `headshot_alt` | String | Alternative-text label for the headshot. |
 | `link_web` | String | Web link / URL. |
-| `status_id` | String | Status identifier. |
+| `status_id` | Int32 | Status identifier. |
 | `status_name` | String | Status label. |
 | `status_type` | String | Status type. |
 
@@ -574,7 +588,7 @@ Release: [espn_womens_college_basketball_standings](https://github.com/sportsdat
 | col_name | type | description |
 |---|---|---|
 | `season` | Int32 | Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted. |
-| `group_id` | String | ESPN group id. |
+| `group_id` | Int32 | ESPN group id. |
 | `group_name` | String | Group name (conference / division). |
 | `group_abbreviation` | String | Group abbreviation. |
 | `group_short_name` | String | Short display name of the conference or division grouping the row belongs to. |
@@ -722,7 +736,7 @@ Release: [espn_womens_college_basketball_player_core](https://github.com/sportsd
 | col_name | type | description |
 |---|---|---|
 | `season` | Int32 | Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted. |
-| `athlete_id` | Int64 | Unique athlete identifier (ESPN). |
+| `athlete_id` | Int32 | Unique athlete identifier (ESPN). |
 | `guid` | String | Stable cross-league team GUID. |
 | `uid` | String | ESPN UID string. |
 | `slug` | String | URL-safe identifier. |
