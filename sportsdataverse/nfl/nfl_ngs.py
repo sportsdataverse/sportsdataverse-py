@@ -15,12 +15,22 @@ NGS game ids are the ``YYYYMMDDNN`` integers found in :func:`nfl_ngs_league_sche
 (the ``gameId`` field) -- they are *not* the ``api.nfl.com`` uuid game ids. Use a
 ``gameId`` from the schedule for the game-scoped functions.
 
-A family of ``/api/live/*`` endpoints (drives, scores, winProbability, playlist,
-drive chart, defense splits, completion-probability, per-game passing/receiving/
-rushing summaries), ``/api/participation/team/game``, ``/api/plays/highlights`` and
-``/api/plays/highlight/players`` are intentionally **not** wrapped: the NGS gateway
-returns an explicit-deny ``403`` for anonymous browser sessions on those paths.
-See the module-level ``_DENIED_ENDPOINTS`` note and the package docs for details.
+The NGS gateway denies anonymous **per-game** lookups: every ``/api/live/*``
+route that takes a ``gameId``/``gameKey`` (scores, drives, drive chart, playlist,
+winProbability, completion-probability, defense splits, per-game passing/
+receiving/rushing summaries), ``/api/plays/highlights?gameId=`` and
+``/api/participation/team/game`` answer an explicit-deny ``403``. The deny keys on
+the single-game parameter, not on the caller: the site's own frontend sends no
+credential, and US residential egress gets the same 403 (verified 2026-09-14).
+Those routes are intentionally **not** wrapped -- see ``_DENIED_ENDPOINTS``.
+
+Player-tracking coordinates and per-play participation ARE served, but only for
+plays NGS tagged as highlights (``/api/highlights/tracking/...`` and
+``/api/highlights/participation/...`` 403 for any other play). The weekly
+``/api/plays/highlights?season=&seasonType=&week=`` list enumerates them; the
+released form of all three is :func:`sportsdataverse.nfl.load_nfl_ngs` with
+``dataset="highlights"`` / ``"highlight_tracking"`` / ``"highlight_participation"``
+/ ``"highlight_events"``.
 """
 
 from __future__ import annotations
@@ -37,8 +47,13 @@ _HOME = "https://nextgenstats.nfl.com/"
 _REFERER = "https://nextgenstats.nfl.com/stats/passing"
 _UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36"
 
-# Paths that return an explicit-deny 403 (or are otherwise unreachable) for an
-# anonymous browser session -- documented here so callers know why they are absent.
+# Paths an anonymous session cannot use -- documented here so callers know why
+# they are absent. The live/* routes and participation/team/game 403 on their
+# required gameId/gameKey from every egress tested (datacenter and US
+# residential); plays/highlight/players answers 500 on every parameter shape.
+# NOT listed, because they answer: plays/highlights by season/seasonType/week
+# (403 only with gameId), and highlights/{tracking,participation} for highlight
+# plays (403 for other plays; 503 for a play id that does not exist).
 _DENIED_ENDPOINTS = (
     "/live/game/drives",
     "/live/game/scores",
@@ -51,10 +66,7 @@ _DENIED_ENDPOINTS = (
     "/live/summary/game/receiving",
     "/live/summary/game/rushing",
     "/participation/team/game",
-    "/plays/highlights",
     "/plays/highlight/players",
-    "/highlights/participation/game/play",
-    "/highlights/tracking/game/play/withBall/min",
 )
 
 # Module-level cached session (lazy-init + warmed once).

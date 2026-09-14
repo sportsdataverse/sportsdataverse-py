@@ -28,8 +28,8 @@ def _no_cache():
     update_config(cache_mode="memory")
 
 
-def test_registry_covers_the_twelve_published_tags():
-    assert len(_NFL_NGS_DATASETS) == 12
+def test_registry_covers_the_sixteen_published_tags():
+    assert len(_NFL_NGS_DATASETS) == 16
     assert {t for t, _, _ in _NFL_NGS_DATASETS.values()} == {f"nfl_ngs_{k}" for k in _NFL_NGS_DATASETS}
     # the one stem that is NOT derivable from the tag
     assert _NFL_NGS_DATASETS["schedules"][1] == "ngs_schedule"
@@ -71,7 +71,15 @@ def test_bad_dataset_raises():
 
 @pytest.mark.parametrize(
     "dataset,too_early",
-    [("passing", 2015), ("leaders", 2015), ("teams", 2012), ("gamecenter_rushers", 2014), ("schedules", 2008)],
+    [
+        ("passing", 2015),
+        ("leaders", 2015),
+        ("teams", 2012),
+        ("gamecenter_rushers", 2014),
+        ("schedules", 2008),
+        ("highlights", 2017),
+        ("highlight_tracking", 2017),
+    ],
 )
 def test_per_dataset_season_floor(monkeypatch, dataset, too_early):
     calls = []
