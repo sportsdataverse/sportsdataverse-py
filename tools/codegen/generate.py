@@ -1197,6 +1197,13 @@ def _build_loader_docstring(ld: spec.Loader) -> str:
         for c in cols:
             lines.append(f"    |{c['name'].ljust(width)} |{c['type'].ljust(twidth)} |")
     lines.append("")
+    if ld.notes:
+        # Before Raises/Example so it is visible in help() without scrolling. A
+        # coverage caveat that sits below the example is a caveat nobody reads.
+        lines.append("Note:")
+        for para in ld.notes.strip().split("\n"):
+            lines.append(f"    {para}".rstrip())
+        lines.append("")
     if ld.min_season:
         lines.append("Raises:")
         lines.append(f"    SeasonNotFoundError: if a requested season is below {ld.min_season}.")
@@ -2390,6 +2397,7 @@ def _loader_doc_views(prefix: str) -> list[dict]:
         out.append(
             {
                 "fn": ld.fn,
+                "notes": ld.notes or "",
                 "tag": ld.tag,
                 "tag_url": f"{tag_base}{ld.tag}",
                 "url": "" if ld.stub else f"{rel.bases[ld.base]}{ld.url}",

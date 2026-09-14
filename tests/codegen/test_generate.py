@@ -122,3 +122,83 @@ def test_autodoc_prune_keeps_in_scope_schema_whose_capture_failed(tmp_path, monk
 
     out = capsys.readouterr().out
     assert "1 pruned" in out and "1 kept (in scope, capture failed)" in out
+
+
+def test_loader_notes_reach_the_docstring_and_the_page():
+    """A `notes:` caveat must render in BOTH generated surfaces.
+
+    A coverage caveat is only useful where someone reads it. The docstring
+    serves help() and IDEs; the reference page serves the docs site. Wiring one
+    and not the other is the failure this guards -- the caveat looks documented
+    while the audience that would act on it never sees it.
+    """
+    from tools.codegen import spec
+
+    ld = spec.Loader(
+        fn="load_demo_thing",
+        league="mlb",
+        base="sdv",
+        url="demo/demo_{season}.parquet",
+        tag="demo",
+        min_season=1988,
+        notes="``demo_field`` is absent before 2008 and only 45.7% populated in 2007.",
+    )
+
+    doc = generate._build_loader_docstring(ld)
+    assert "Note:" in doc
+    assert "45.7% populated in 2007" in doc
+    # Note must precede Raises/Example so it is visible without scrolling.
+    assert doc.index("Note:") < doc.index("Raises:")
+
+    template = generate.render.ENV.get_template("loaders_page.md.jinja")
+    page = template.render(
+        prefix="mlb",
+        sidebar_position=1,
+        loaders=[
+            {
+                "fn": ld.fn,
+                "notes": ld.notes,
+                "tag": ld.tag,
+                "tag_url": "",
+                "url": "",
+                "automation": {"repo": "", "workflow": ""},
+                "return_table": "",
+                "example_seasons": 2024,
+            }
+        ],
+    )
+    assert ":::caution Coverage" in page
+    assert "45.7% populated in 2007" in page
+
+
+def test_loader_without_notes_emits_no_empty_caveat_block():
+    """No `notes:` must mean no Note section and no empty admonition."""
+    from tools.codegen import spec
+
+    ld = spec.Loader(
+        fn="load_demo_plain",
+        league="mlb",
+        base="sdv",
+        url="demo/demo_{season}.parquet",
+        tag="demo",
+    )
+    assert "Note:" not in generate._build_loader_docstring(ld)
+
+    template = generate.render.ENV.get_template("loaders_page.md.jinja")
+    page = template.render(
+        prefix="mlb",
+        sidebar_position=1,
+        loaders=[
+            {
+                "fn": ld.fn,
+                "notes": "",
+                "tag": ld.tag,
+                "tag_url": "",
+                "url": "",
+                "automation": {"repo": "", "workflow": ""},
+                "return_table": "",
+                "example_seasons": 2024,
+            }
+        ],
+    )
+    assert ":::caution" not in page

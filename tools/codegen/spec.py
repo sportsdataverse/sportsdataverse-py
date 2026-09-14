@@ -129,6 +129,12 @@ class Loader:
     example_args: Dict[str, object] = field(default_factory=dict)
     automation: Dict[str, str] = field(default_factory=dict)
     notebook: Optional[str] = None
+    # Free-text caveat for this dataset -- coverage boundaries, partial
+    # seasons, fields that only populate after some date. Rendered into the
+    # generated docstring AND the loaders reference page, because a caveat
+    # only a maintainer can see does not stop anyone averaging a
+    # partly-empty column.
+    notes: Optional[str] = None
     stub: bool = False
     stub_message: Optional[str] = None
     # Name of the loader that supersedes this one. When set, the generated body is
@@ -295,6 +301,7 @@ def load_releases(path: Path) -> ReleasesConfig:
             example_args=ld.get("example_args", {}) or {},
             automation=ld.get("automation", {}) or {},
             notebook=ld.get("notebook"),
+            notes=ld.get("notes"),
             stub=ld.get("stub", False),
             stub_message=ld.get("stub_message"),
             deprecated_for=ld.get("deprecated_for"),
