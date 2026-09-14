@@ -78,6 +78,8 @@ def test_bad_dataset_raises():
         ("gamecenter_rushers", 2014),
         ("schedules", 2008),
         ("highlights", 2017),
+        ("highlight_participation", 2017),
+        ("highlight_events", 2017),
         ("highlight_tracking", 2017),
     ],
 )
