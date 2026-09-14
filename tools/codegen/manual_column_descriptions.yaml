@@ -8234,7 +8234,7 @@ load_mlb_pitches:
   spin_rate: 'Spin rate in rpm. statsapi `pitchData`, measured fill: ~0% before 2007, 45.7% in 2007 (mid-season PITCHf/x rollout
     across ballparks), 96.6% in 2008, ~100% from 2015. Null for pitches the system never tracked.'
   extension: 'Release extension toward the plate in feet. Later than the rest of `pitchData`: measured 0% through 2016 and
-    ~100% from 2017, so it is null for two PITCHf/x-era decades that do carry speed and spin.'
+    ~100% from 2017, so it is null for the 2007-2016 PITCHf/x seasons that do carry speed and spin.'
   px: 'Horizontal location crossing the plate in feet from the plate''s centre, catcher''s view. statsapi `pitchData`, measured
     fill: ~0% before 2007, 45.7% in 2007 (mid-season PITCHf/x rollout across ballparks), 96.6% in 2008, ~100% from 2015. Null
     for pitches the system never tracked.'
