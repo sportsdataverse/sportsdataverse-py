@@ -3947,8 +3947,10 @@ class NFLPlayProcess(object):
             .and_(pl.col("statYardage").is_not_null())
         )  # noqa: E712
         plain_rush = plain.and_(pl.col("type.text").is_in(["Rush", "Rushing Touchdown"]))
-        plain_catch = plain.and_(pl.col("type.text").is_in(["Pass Reception", "Passing Touchdown"])).and_(
-            pl.col("completion") == True
+        plain_catch = plain.and_(
+            pl.col("type.text").is_in(["Pass Reception", "Pass Completion", "Passing Touchdown"])
+        ).and_(
+            pl.col("completion") == True  # noqa: E712
         )  # noqa: E712
         play_df = play_df.with_columns(
             yds_rushed=pl.when((pl.col("rush") == True).and_(plain_rush))  # noqa: E712
@@ -5952,7 +5954,12 @@ class NFLPlayProcess(object):
             self.__cast_box_score_column(play_df, item, pl.Float32)
 
         pass_box = play_df.filter((pl.col("pass") == True) & (pl.col("scrimmage_play") == True)).with_columns(
-            _cp_scored=(pl.col("cp").is_not_null() if "cp" in play_df.columns else pl.lit(False)),
+            # a sack is not a pass attempt: it carries no cp and must not veto the passer's CPOE
+            _cp_scored=(
+                (pl.col("cp").is_not_null() | (pl.col("pass_attempt") == False))  # noqa: E712
+                if "cp" in play_df.columns
+                else pl.lit(False)
+            ),
         )
         rush_box = play_df.filter((pl.col("rush") == True) & (pl.col("scrimmage_play") == True))
         # pass_box.yds_receiving.fillna(0.0, inplace=True)
