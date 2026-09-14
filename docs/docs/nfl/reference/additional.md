@@ -5969,8 +5969,9 @@ df = fox_nfl_teamnav()
 
 The PAT-vs-2pt decision surface for post-touchdown states (CFB-shaped).
 
-The NFL twin of `sportsdataverse.cfb.cfb_two_point.get_2pt_probs`: the
-same three-outcome enumeration `get_2pt_wp` uses, but returned as the
+The NFL twin of `sportsdataverse.cfb.cfb_two_point.get_2pt_probs`. It
+runs the same three-outcome enumeration `get_2pt_wp` uses, but returns
+the decision columns instead of folding them into `wp_td`. The two option
 
 **Parameters**
 

@@ -644,9 +644,10 @@ def get_2pt_wp(pbp_df: Union[pl.DataFrame, "pd.DataFrame"]) -> pd.DataFrame:
 def get_2pt_probs(pbp_df: Union[pl.DataFrame, "pd.DataFrame"]) -> pd.DataFrame:
     """The PAT-vs-2pt decision surface for post-touchdown states (CFB-shaped).
 
-    The NFL twin of :func:`sportsdataverse.cfb.cfb_two_point.get_2pt_probs`: the
-    same three-outcome enumeration :func:`get_2pt_wp` uses, but returned as the
-    decision columns rather than folded into ``wp_td``::
+    The NFL twin of :func:`sportsdataverse.cfb.cfb_two_point.get_2pt_probs`. It
+    runs the same three-outcome enumeration :func:`get_2pt_wp` uses, but returns
+    the decision columns instead of folding them into ``wp_td``. The two option
+    values are::
 
         two_pt_wp = prob_2pt * wp(pts=2) + (1 - prob_2pt) * wp(pts=0)
         xp_wp     = prob_xp  * wp(pts=1) + (1 - prob_xp)  * wp(pts=0)

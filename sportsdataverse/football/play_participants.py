@@ -316,7 +316,7 @@ def _resolve_missing_athletes(
 
     if missing.height > max_fetches:
         logger.warning(
-            "cfb_play_participants: %d unique athletes need $ref resolution but "
+            "football.play_participants: %d unique athletes need $ref resolution but "
             "max_fetches=%d; the first %d will be resolved and the remaining "
             "%d will retain null names.",
             missing.height,
@@ -335,7 +335,7 @@ def _resolve_missing_athletes(
             payload = resp.json()
         except Exception as e:  # noqa: BLE001 — best-effort; log and continue
             logger.warning(
-                "cfb_play_participants: failed to resolve athlete %s via %s: %s",
+                "football.play_participants: failed to resolve athlete %s via %s: %s",
                 ath_id,
                 ref_url,
                 e,

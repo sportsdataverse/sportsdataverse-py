@@ -2620,6 +2620,12 @@ class NFLPlayProcess(object):
             # ATTEMPT. C.Wentz pass to J.Jefferson is complete. ATTEMPT SUCCEEDS."
             two_point_attempt=pl.col("text").str.contains("TWO-POINT CONVERSION ATTEMPT").fill_null(False),
         )
+        # pointAfterAttempt.* (and so two_point_conv_result) is absent on the oldest payloads
+        _existing_2pt_result = (
+            pl.col("two_point_conv_result")
+            if "two_point_conv_result" in play_df.columns
+            else pl.lit(None, dtype=pl.Utf8)
+        )
         play_df = play_df.with_columns(
             two_point_conv_result=pl.when(
                 (pl.col("two_point_attempt") == True).and_(pl.col("text").str.contains("ATTEMPT SUCCEEDS")),  # noqa: E712
@@ -2627,7 +2633,7 @@ class NFLPlayProcess(object):
             .then(pl.lit("success"))
             .when((pl.col("two_point_attempt") == True).and_(pl.col("text").str.contains("ATTEMPT FAILS")))  # noqa: E712
             .then(pl.lit("failure"))
-            .otherwise(pl.col("two_point_conv_result")),
+            .otherwise(_existing_2pt_result),
             two_point_pass=(pl.col("two_point_attempt") == True).and_(  # noqa: E712
                 pl.col("text").str.contains(r"CONVERSION ATTEMPT\. [^.]* pass "),
             ),
@@ -5814,12 +5820,21 @@ class NFLPlayProcess(object):
         for item in box_score_columns:
             self.__cast_box_score_column(play_df, item, pl.Float32)
 
-        pass_box = play_df.filter((pl.col("pass") == True) & (pl.col("scrimmage_play") == True))
+        pass_box = play_df.filter((pl.col("pass") == True) & (pl.col("scrimmage_play") == True)).with_columns(
+            _cp_scored=(pl.col("cp").is_not_null() if "cp" in play_df.columns else pl.lit(False)),
+        )
         rush_box = play_df.filter((pl.col("rush") == True) & (pl.col("scrimmage_play") == True))
         # pass_box.yds_receiving.fillna(0.0, inplace=True)
         # nflfastR-style completion probability (``cp``) is the expected-completion
-        # basis for CPOE, the CFB box's ``cp_game_state``.
+        # basis for CPOE, the CFB box's ``cp_game_state``. The cp model needs air
+        # yards, which ESPN's NFL feed only yields for completions (yardsAfterCatch),
+        # so a passer's expected completions are published only when EVERY attempt
+        # in the group was scored -- a sum over completions alone would make
+        # CPOE a completed-passes-only number wearing an all-attempts name.
+        # (``_cp_scored`` is captured before the aggregation's ``fill_null(0.0)``
+        # turns an unscored attempt into a 0.0 expectation.)
         _cp_expr = pl.col("cp") if "cp" in play_df.columns else pl.lit(None, dtype=pl.Float64)
+        _xcomp_expr = pl.when(pl.col("_cp_scored").all()).then(_cp_expr.sum()).otherwise(None)
         passer_box = (
             pass_box.fill_null(0.0)
             .group_by(["pos_team", "passer_player_name"])
@@ -5835,11 +5850,17 @@ class NFLPlayProcess(object):
                 WPA=pl.col("wpa").sum(),
                 SR=pl.col("EPA_success").mean(),
                 Sck=pl.col("sack_vec").sum(),
-                xComp=_cp_expr.sum(),
+                xComp=_xcomp_expr,
             )
             .with_columns(
                 CompPct=(pl.when(pl.col("Att") == pl.lit(0)).then(0).otherwise(pl.col("Comp") / pl.col("Att"))),
-                xCompPct=(pl.when(pl.col("Att") == pl.lit(0)).then(0).otherwise(pl.col("xComp") / pl.col("Att"))),
+                xCompPct=(
+                    pl.when(pl.col("Att") == pl.lit(0))
+                    .then(0)
+                    .when(pl.col("xComp").is_null())
+                    .then(None)
+                    .otherwise(pl.col("xComp") / pl.col("Att"))
+                ),
             )
             .with_columns(
                 CPOE=(pl.col("CompPct") - pl.col("xCompPct")),
