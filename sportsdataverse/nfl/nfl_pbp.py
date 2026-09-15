@@ -4193,7 +4193,7 @@ class NFLPlayProcess(object):
                 rz_play=pl.when(pl.col("start.yardLine") <= 20).then(True).otherwise(False),
                 under_2=pl.when(pl.col("start.TimeSecsRem") <= 120).then(True).otherwise(False),
                 goal_to_go=pl.when(pl.col("start.yardLine") <= 10).then(True).otherwise(False),
-                scoring_opp=pl.when(pl.col("start.yardLine") <= 40).then(True).otherwise(False),
+                scoring_opp=pl.when(pl.col("start.yardsToEndzone") <= 40).then(True).otherwise(False),
                 stuffed_run=pl.when((pl.col("type.text") == "Rush").and_(pl.col("yds_rushed") <= 0))
                 .then(True)
                 .otherwise(False),

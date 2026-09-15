@@ -1867,6 +1867,22 @@ history = load_nfl_ff_rankings(kind="all")
 draft = load_nfl_ff_rankings(type="draft")
 ```
 
+### `load_nfl_fp_curve() -> 'pl.DataFrame'` {#load_nfl_fp_curve}
+
+Load the bundled NFL EP-by-yardline curve (no network).
+
+**Returns**
+
+`yardline_own: Int64 (1..99), ep: Float64`.
+
+**Example**
+
+```python
+from sportsdataverse.nfl import load_nfl_fp_curve
+curve = load_nfl_fp_curve()
+curve.filter(curve["yardline_own"] == 30)
+```
+
 ### `load_nfl_nextgen_stats(seasons: 'List[int]', stat_type: 'str' = 'passing', return_as_pandas: 'bool' = False) -> 'pl.DataFrame'` {#load_nfl_nextgen_stats}
 
 Load NFL NextGen Stats data going back to 2016.
@@ -5494,6 +5510,37 @@ p = fg_make_probability(
     np.array([[0.0, 0.0, 0.0, 0.0, 1.0]]),
 )
 print(p)
+```
+
+### `fit_nfl_field_position_ep(pbp: 'pl.DataFrame', *, exclude_garbage: 'bool' = True) -> 'pl.DataFrame'` {#fit_nfl_field_position_ep}
+
+Fit the NFL EP-by-starting-yardline curve from released `espn_nfl_pbp` plays.
+
+Extracts one row per drive (starting yard line from the offense's own
+goal, realized drive points) and fits the monotone curve with
+`sportsdataverse.cfb.cfb_field_position.fit_field_position_ep` --
+the same estimator and target the college curve uses. This is how the
+bundled artifact was produced; re-run it on newer seasons to refresh it.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pbp` | `DataFrame` |  | plays in the released `espn_nfl_pbp` shape (any number of seasons concatenated). Needs the drive fields (`drive.id`, `drive.result`, `drive.start.yardLine`), `homeTeamId`, `period` and `start.pos_team.id` / `start.def_pos_team.id`. |
+| `exclude_garbage` | `bool` | `True` | drop drives that start in garbage time. |
+
+**Returns**
+
+`yardline_own: Int64 (1..99), ep: Float64` -- monotone non-decreasing. Empty input returns a zero-row frame.
+
+**Example**
+
+```python
+import polars as pl
+from sportsdataverse.nfl import fit_nfl_field_position_ep
+pbp = pl.concat([pl.read_parquet(f) for f in files], how="diagonal_relaxed")
+curve = fit_nfl_field_position_ep(pbp)
+curve.write_parquet("nfl_field_position_ep.parquet")
 ```
 
 ### `fox_nfl_boxscore(game_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_nfl_boxscore}
