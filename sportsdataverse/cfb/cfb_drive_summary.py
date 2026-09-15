@@ -146,6 +146,20 @@ def _clock_intervals(periods: set[int] | str | None) -> list[tuple[int, int]] | 
     ]
 
 
+def _unique_by_id(drives: list) -> list:
+    """Drives in order with repeated ids dropped (drives without an id are kept)."""
+    seen: set = set()
+    unique = []
+    for drive in drives:
+        key = drive.get("id") if isinstance(drive, dict) else None
+        if key is not None:
+            if key in seen:
+                continue
+            seen.add(key)
+        unique.append(drive)
+    return unique
+
+
 def create_drive_summary(
     drives: list[dict] | dict,
     frame: pl.DataFrame,
@@ -190,6 +204,13 @@ def create_drive_summary(
         if drives.get("current"):
             flat.append(drives["current"])
         drives = flat
+    # A live ESPN summary repeats drives.current inside drives.previous (NFL
+    # 401872931, 2026-09-14), so previous + [current] -- here or in a caller that
+    # flattened the grouping itself -- counted that drive twice: an extra drive for
+    # its team, an extra chart row, and every per-drive average skewed. Keep each
+    # drive id once, first occurrence, so game order holds.
+    if isinstance(drives, list):
+        drives = _unique_by_id(drives)
     if not drives or not isinstance(frame, pl.DataFrame) or frame.height == 0:
         return None
 
