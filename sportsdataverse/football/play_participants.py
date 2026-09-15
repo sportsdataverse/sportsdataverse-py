@@ -443,6 +443,9 @@ def _pivot_wide(long: pl.DataFrame) -> pl.DataFrame:
 
     * **Scalar** (backwards-compatible) — ``{type}_player_name`` /
       ``{type}_player_id``: first occurrence of the type on the play.
+    * **Position** — ``{type}_position_id``: the ESPN position id of the
+      first participant of the type (``sportsdataverse.football.positions``
+      maps it to an abbreviation and a position group).
     * **List** (additive) — ``{type}_player_names`` /
       ``{type}_player_ids``: ``List(Utf8)`` columns carrying every
       occurrence in ESPN-supplied order. Plays with no participant of a
@@ -476,8 +479,18 @@ def _pivot_wide(long: pl.DataFrame) -> pl.DataFrame:
         values="athlete_id",
         aggregate_function="first",
     )
+    # position of the first participant of each type (ESPN position id; see
+    # sportsdataverse.football.positions for the id -> group map) -- what the
+    # usage box needs to split tackles and first downs by position group
+    pos_wide = deduped.pivot(
+        on="participant_type",
+        index=["game_id", "play_id"],
+        values="position_id",
+        aggregate_function="first",
+    )
     name_wide = name_wide.rename({c: f"{c}_player_name" for c in name_wide.columns if c not in fixed_cols})
     id_wide = id_wide.rename({c: f"{c}_player_id" for c in id_wide.columns if c not in fixed_cols})
+    pos_wide = pos_wide.rename({c: f"{c}_position_id" for c in pos_wide.columns if c not in fixed_cols})
 
     # ----- List pivot (every occurrence per play, in order) ---------------
     # Aggregate the long frame into one (play_id, type) row carrying the
@@ -521,6 +534,7 @@ def _pivot_wide(long: pl.DataFrame) -> pl.DataFrame:
     # ----- Join all four pivots -------------------------------------------
     wide: pl.DataFrame = (
         name_wide.join(id_wide, on=["game_id", "play_id"], how="full", coalesce=True)
+        .join(pos_wide, on=["game_id", "play_id"], how="full", coalesce=True)
         .join(names_wide_list, on=["game_id", "play_id"], how="full", coalesce=True)
         .join(ids_wide_list, on=["game_id", "play_id"], how="full", coalesce=True)
     )

@@ -181,6 +181,18 @@ def test_box_sections_match_the_cfb_processor(processed):
         "drives",
         "espn_team",
         "espn_players",
+        # the shared usage / situational / special-teams box (both processors)
+        "player_usage",
+        "position_group_usage",
+        "tackles",
+        "position_group_tackles",
+        "team_usage",
+        "drive_scripting",
+        "st_kickers",
+        "st_punters",
+        "st_returners",
+        "st_blocks",
+        "st_team",
     }
     # the CFB passer / receiver air-yards and CPOE keys are present
     assert {"AirYds", "aDOT", "CompAirYds", "YAC", "AirYdsPct", "CompPct", "xCompPct", "CPOE"} <= out["advBoxScore"][

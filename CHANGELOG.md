@@ -287,6 +287,26 @@ current/future days and ranges containing them bypass both cache reads and write
 while wholly historical dates retain the 30-day TTL. Explicit TTL overrides still
 take precedence.
 
+### Added — usage and situational box (`sportsdataverse.football.usage_box`)
+
+Six new `advBoxScore` sections on BOTH football processors, computed once in the
+shared football layer from the processed plays and the per-play participants:
+`player_usage` (explosive plays, first downs, touchdowns, first-down +
+touchdown rate, target share, first-down share, red-zone and
+scoring-opportunity touches / targets / touchdowns, third downs converted
+over expected), `position_group_usage`, `tackles` (tackle share:
+tackles + 0.5 assists over the team total), `position_group_tackles`,
+`team_usage` (third downs over expected, red-zone and scoring-opportunity
+efficiencies: trips, TD rate, points per trip, success, EPA per play) and
+`drive_scripting` (scripted = a team's first two drives of each half vs the
+rest). `aggregate_usage_box` sums per-game rows into season leaderboards and
+recomputes every rate. The participants pivot now also emits
+`{type}_position_id`; `sportsdataverse.football.positions` maps ESPN position
+ids to abbreviations and groups. Bundled third-down conversion curves
+(`{cfb,nfl}/models/{league}_third_down_conversion.parquet`, isotonic in yards to
+go; NFL 2002-2025, CFB 2022-2025) feed the "over expected" columns and refit
+with `fit_third_down_curve`.
+
 ### Added — NFL field-position EP curve (`nfl_field_position`)
 
 `load_nfl_fp_curve()` loads the bundled `nfl/models/nfl_field_position_ep.parquet`
