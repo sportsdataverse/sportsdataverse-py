@@ -7554,7 +7554,14 @@ class CFBPlayProcess(object):
         # drive scripting) -- shared across the football processors; the box
         # must never cost the game, so a failure leaves the six sections empty
         try:
-            box.update(_create_usage_box(play_df, getattr(self, "participants", None), league="cfb"))
+            box.update(
+                _create_usage_box(
+                    play_df,
+                    getattr(self, "participants", None),
+                    league="cfb",
+                    rosters=getattr(self, "game_roster", None),
+                )
+            )
         except Exception as exc:  # noqa: BLE001
             logging.debug(f"{self.gameId}: usage box failed -- {exc}")
             box.update({k: [] for k in _USAGE_SECTIONS})

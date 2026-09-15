@@ -19,7 +19,8 @@ team, red-zone (``rz_play``, inside the 20) and scoring-opportunity
 third-down conversions vs expected (the league's distance curve).
 
 ``position_group_usage`` -- the same usage columns summed per
-(pos_team, position group) when the participants carry positions.
+(pos_team, position group) when the participants carry positions or a game
+roster is supplied.
 
 ``tackles`` -- one row per (def_pos_team, tackler): tackles, assists,
 **tackle share** = (tackles + 0.5 assists) / team total, position group.
@@ -78,7 +79,10 @@ Example:
 from __future__ import annotations
 
 import ast
+import io
 import json
+import re
+import tokenize
 from importlib.resources import files
 from typing import Any, Optional
 
@@ -376,8 +380,29 @@ def _team_totals(df: pl.DataFrame) -> pl.DataFrame:
     )
 
 
+def _repr_items(text: str) -> list[str]:
+    """Items of a bracketed Python / numpy repr, one per string or number literal.
+
+    ``ast.literal_eval`` is wrong for numpy's repr: ``"['5152441' '5220449']"``
+    has no commas, so the two adjacent string literals concatenate into ONE
+    id ``'51524415220449'`` without raising. Tokenizing keeps every literal
+    separate and reads ``"['a', 'b']"``, ``"['a' 'b']"`` and a line-wrapped
+    numpy repr the same way; ``None`` (a NAME token) is skipped.
+    """
+    if not text.startswith(("[", "(")):
+        return []
+    out: list[str] = []
+    try:
+        for tok in tokenize.generate_tokens(io.StringIO(text).readline):
+            if tok.type in (tokenize.STRING, tokenize.NUMBER):
+                out.append(str(ast.literal_eval(tok.string)))
+    except (tokenize.TokenError, ValueError, SyntaxError):
+        return []
+    return out
+
+
 def _decode_list_cell(v: Any) -> Optional[list[str]]:
-    """A list cell as stored in a final.json: JSON, a Python repr, or already a list."""
+    """A list cell as stored in a final.json: JSON, a Python / numpy repr, or already a list."""
     if v is None:
         return None
     if isinstance(v, (list, tuple)):
@@ -389,10 +414,7 @@ def _decode_list_cell(v: Any) -> Optional[list[str]]:
         try:
             out = json.loads(text)
         except ValueError:
-            try:
-                out = ast.literal_eval(text)
-            except (ValueError, SyntaxError):
-                return []
+            return _repr_items(text)
         return [str(x) for x in out if x is not None] if isinstance(out, (list, tuple)) else []
     return []
 
@@ -1145,21 +1167,66 @@ def _special_teams(plays: pl.DataFrame) -> dict[str, pl.DataFrame]:
     }
 
 
-def _position_map(participants: Optional[pl.DataFrame]) -> dict[str, Any]:
-    """athlete id -> position group, from every ``{type}_position_id`` column."""
-    if participants is None or participants.height == 0:
+_POSITION_FROM_HREF = re.compile(r"/positions/(\d+)")
+
+
+def _roster_positions(rosters: Any) -> dict[str, Any]:
+    """athlete id -> position group from a game roster.
+
+    Accepts a polars / pandas frame, a list of athlete records or the stored
+    ``{"data": [...]}`` envelope. Only ``athlete_id`` and ``position_id`` (else
+    the id inside ``position_href``) are read, row by row, so a roster whose
+    other columns mix types can never cost the box.
+    """
+    if rosters is None:
         return {}
+    if hasattr(rosters, "to_dicts"):
+        rows = rosters.to_dicts()
+    elif hasattr(rosters, "to_dict"):
+        rows = rosters.to_dict("records")
+    elif isinstance(rosters, dict):
+        rows = rosters.get("data") or []
+    else:
+        rows = rosters
     out: dict[str, Any] = {}
-    for col in participants.columns:
-        if not col.endswith("_position_id"):
+    for rec in rows or []:
+        if not isinstance(rec, dict) or rec.get("athlete_id") is None:
             continue
-        id_col = col.replace("_position_id", "_player_id")
-        if id_col not in participants.columns:
-            continue
-        for pid, pos in participants.select(id_col, col).drop_nulls().iter_rows():
-            grp = position_group(pos)
-            if grp and str(pid) not in out:
-                out[str(pid)] = grp
+        pos = rec.get("position_id")
+        if pos is None:
+            m = _POSITION_FROM_HREF.search(str(rec.get("position_href") or ""))
+            pos = m.group(1) if m else None
+        grp = position_group(pos)
+        raw_id = rec["athlete_id"]
+        # a roster frame that widened ids to float must still key "4432712", not "4432712.0"
+        pid = str(int(raw_id)) if isinstance(raw_id, float) and raw_id.is_integer() else str(raw_id)
+        if grp and pid not in out:
+            out[pid] = grp
+    return out
+
+
+def _position_map(participants: Optional[pl.DataFrame], rosters: Any = None) -> dict[str, Any]:
+    """athlete id -> position group.
+
+    Every ``{type}_position_id`` column on the participants wins (the position
+    ESPN lists for that play); the game roster fills athletes the participants
+    never classified -- participants stored before ``*_position_id`` existed
+    carry ids only.
+    """
+    out: dict[str, Any] = {}
+    if participants is not None and participants.height:
+        for col in participants.columns:
+            if not col.endswith("_position_id"):
+                continue
+            id_col = col.replace("_position_id", "_player_id")
+            if id_col not in participants.columns:
+                continue
+            for pid, pos in participants.select(id_col, col).drop_nulls().iter_rows():
+                grp = position_group(pos)
+                if grp and str(pid) not in out:
+                    out[str(pid)] = grp
+    for pid, grp in _roster_positions(rosters).items():
+        out.setdefault(pid, grp)
     return out
 
 
@@ -1181,16 +1248,24 @@ def create_usage_box(
     *,
     league: str = "cfb",
     third_down_curve: Optional[pl.DataFrame] = None,
+    rosters: Any = None,
 ) -> dict[str, list[dict[str, Any]]]:
     """Build the eleven usage / situational / special-teams sections for one game.
 
     Args:
         plays: the processed plays frame (``NFLPlayProcess`` / ``CFBPlayProcess``).
         participants: the wide per-play participants frame (tackles and
-            position groups come from it); ``None`` yields empty tackle
-            sections and no position groups.
+            position ids come from it); ``None`` yields empty tackle
+            sections, and position groups only where ``rosters`` supplies
+            them.
         league: ``"cfb"`` or ``"nfl"`` -- selects the bundled third-down curve.
         third_down_curve: override the bundled curve (``distance``, ``rate``).
+        rosters: the game roster -- a frame, a list of athlete records or the
+            stored ``{"data": [...]}`` envelope, read for ``athlete_id`` and
+            ``position_id`` (else ``position_href``). Fills the
+            position group of any athlete the participants carry no
+            ``{type}_position_id`` for -- e.g. participants stored before that
+            column existed; a participant's own position always wins.
 
     Returns:
         ``{section: [row, ...]}`` for every name in :data:`SECTIONS`; a
@@ -1216,7 +1291,7 @@ def create_usage_box(
     if df.height == 0 or "pos_team" not in df.columns:
         empty.update({k: _to_rows(v) for k, v in _special_teams(plays).items()})
         return empty
-    positions = _position_map(participants)
+    positions = _position_map(participants, rosters)
 
     long = _player_rows(df, curve, positions)
     if long.height:
