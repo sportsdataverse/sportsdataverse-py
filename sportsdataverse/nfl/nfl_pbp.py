@@ -330,14 +330,40 @@ class NFLPlayProcess(object):
         # skip the network fetch (offline reprocessing, the offline test suite).
         self.participants = kwargs.get("participants")
         self.join_participants = bool(kwargs.get("join_participants", True))
+        # ``odds_override=`` (the CFB twin's contract): a dict with gameSpread,
+        # overUnder, homeFavorite, gameSpreadAvailable that replaces the
+        # pickcenter / core-odds cascade -- the offline path's way to supply a
+        # closing line (nflverse spread_line / total_line) for a stored game.
+        odds_override = kwargs.get("odds_override")
+        if odds_override is not None:
+            if not isinstance(odds_override, dict):
+                raise ValueError(
+                    "odds_override must be a dict with keys {gameSpread, overUnder, homeFavorite, gameSpreadAvailable}",
+                )
+            required = {"gameSpread", "overUnder", "homeFavorite", "gameSpreadAvailable"}
+            missing = required.difference(odds_override)
+            if missing:
+                raise ValueError(f"odds_override is missing required keys: {sorted(missing)}")
+            odds_override = {
+                "gameSpread": float(odds_override["gameSpread"]),
+                "overUnder": float(odds_override["overUnder"]),
+                "homeFavorite": bool(odds_override["homeFavorite"]),
+                "gameSpreadAvailable": bool(odds_override["gameSpreadAvailable"]),
+            }
+        self.odds_override = odds_override
+        self.odds_source = None
         self.raw = raw
         self.path_to_json = path_to_json
         self.return_keys = return_keys
 
-    def espn_nfl_pbp(self, **kwargs):
+    def espn_nfl_pbp(self, summary=None, **kwargs):
         """espn_nfl_pbp() - Pull the game by id. Data from API endpoints: `nfl/playbyplay`, `nfl/summary`
 
         Args:
+            summary (dict, optional): A previously fetched ESPN summary payload. When given, no
+                request is made -- the offline path for committed raw libraries -- and the
+                pipeline joins participants only if ``participants=`` was passed at
+                construction (it never fetches them, nor a roster, for a supplied summary).
             game_id (int): Unique game_id, can be obtained from nfl_schedule().
 
         Returns:
@@ -365,14 +391,20 @@ class NFLPlayProcess(object):
                 proc.espn_nfl_pbp()
                 result = proc.run_processing_pipeline()
         """
-        cache_buster = int(time.time() * 1000)
         pbp_txt = {"timeouts": {}}
-        # summary endpoint for pickcenter array
-        summary_url = (
-            f"http://site.api.espn.com/apis/site/v2/sports/football/nfl/summary?event={self.gameId}&{cache_buster}"
-        )
-        summary_resp = download(url=summary_url, **kwargs)
-        summary = summary_resp.json()
+        self._offline = summary is not None
+        if summary is not None and self.participants is None:
+            # a supplied summary is the offline path: the pipeline must not reach
+            # the network for participants (or a roster) unless they were passed in
+            self.join_participants = False
+        if summary is None:
+            cache_buster = int(time.time() * 1000)
+            # summary endpoint for pickcenter array
+            summary_url = (
+                f"http://site.api.espn.com/apis/site/v2/sports/football/nfl/summary?event={self.gameId}&{cache_buster}"
+            )
+            summary_resp = download(url=summary_url, **kwargs)
+            summary = summary_resp.json()
         incoming_keys_expected = [
             "boxscore",
             "format",
@@ -1070,7 +1102,25 @@ class NFLPlayProcess(object):
 
     def __helper_nfl_pickcenter(self, pbp_txt):
         # Spread definition
-        if len(pbp_txt.get("pickcenter", [])) > 1:
+        if getattr(self, "odds_override", None) is not None:
+            o = self.odds_override
+            self.gameSpread = o["gameSpread"]
+            self.overUnder = o["overUnder"]
+            self.homeFavorite = o["homeFavorite"]
+            self.gameSpreadAvailable = o["gameSpreadAvailable"]
+            self.odds_source = "injected"
+            return {
+                "gameSpread": self.gameSpread,
+                "overUnder": self.overUnder,
+                "homeFavorite": self.homeFavorite,
+                "gameSpreadAvailable": self.gameSpreadAvailable,
+            }
+        offline = getattr(self, "_offline", False)
+        n_pick = len(pbp_txt.get("pickcenter", []))
+        # offline (a supplied summary): the summary's own pickcenter is the only
+        # odds source, so one provider is enough and an empty array means the
+        # documented defaults, never a request
+        if n_pick > 1 or (offline and n_pick >= 1):
             pickcenter = pd.json_normalize(data=pbp_txt, record_path="pickcenter")
             pickcenter = pickcenter.sort_values(by=["provider.id"])
             homeFavorite = (
@@ -1089,6 +1139,7 @@ class NFLPlayProcess(object):
                 else 55.0
             )
             gameSpreadAvailable = True
+            self.odds_source = "summary_pickcenter"
             # self.logger.info(f"Spread: {gameSpread}, home Favorite: {homeFavorite}, ou: {overUnder}")
         else:
             # Cascade: legacy `pickcenter` array empty (true for many recent
@@ -1101,7 +1152,8 @@ class NFLPlayProcess(object):
                 overUnder,
                 homeFavorite,
                 gameSpreadAvailable,
-            ) = self.__helper__espn_nfl_odds_information__()
+            ) = (2.5, 55.5, True, False) if offline else self.__helper__espn_nfl_odds_information__()
+            self.odds_source = "core_odds_api" if gameSpreadAvailable else "default"
         self.gameSpread = gameSpread
         self.overUnder = overUnder
         self.homeFavorite = homeFavorite

@@ -33,7 +33,12 @@ from sportsdataverse.dl_utils import download, underscore
 logger = logging.getLogger("sdv.football.play_participants")
 logger.addHandler(logging.NullHandler())
 
-__all__ = ["coalesce_participants", "espn_play_participants"]
+__all__ = [
+    "athlete_lookup_from_summary",
+    "coalesce_participants",
+    "espn_play_participants",
+    "play_participants_from_items",
+]
 
 # Pre-compiled regex for parsing the trailing numeric id out of an ESPN ``$ref``
 # URL like ``http://sports.core.api.espn.com/v2/.../athletes/4567010?lang=en``.
@@ -156,6 +161,82 @@ def espn_play_participants(
     wide = _pivot_wide(long)
 
     return wide.to_pandas() if return_as_pandas else wide
+
+
+def play_participants_from_items(
+    plays_raw: list[dict[str, Any]],
+    game_id: int,
+    *,
+    athlete_lookup: dict[str, str] | None = None,
+    return_as_pandas: bool = False,
+) -> pl.DataFrame | pd.DataFrame:
+    """Build the wide participants frame from already-fetched play items, no network.
+
+    The offline twin of :func:`espn_play_participants` for a committed raw
+    library: ``plays_raw`` is the core plays ``items`` list (each play needs
+    only ``id`` and ``participants[]`` with athlete / position ``$ref``, so a
+    slimmed capture works), ``athlete_lookup`` an ``athlete_id -> display name``
+    map -- see :func:`athlete_lookup_from_summary`. Names left unresolved stay
+    null, which :func:`coalesce_participants` treats as "keep the text name".
+
+    Args:
+        plays_raw: The plays ``items`` list from ESPN's core plays endpoint.
+        game_id: ESPN game / event identifier stamped on every row.
+        athlete_lookup: ``athlete_id -> display name``; ``{}`` yields id-only rows.
+        return_as_pandas: If True, returns a pandas DataFrame; otherwise polars.
+
+    Returns:
+        The same wide one-row-per-play frame :func:`espn_play_participants` returns.
+
+    Example:
+        From a stored game::
+
+            from sportsdataverse.football.play_participants import (
+                athlete_lookup_from_summary,
+                play_participants_from_items,
+            )
+            parts = play_participants_from_items(
+                plays["items"], 401872922, athlete_lookup=athlete_lookup_from_summary(summary)
+            )
+    """
+    long = _build_long_frame(plays_raw, athlete_lookup or {}, game_id)
+    if long.is_empty():
+        empty = pl.DataFrame(schema=_EMPTY_SCHEMA)
+        return empty.to_pandas() if return_as_pandas else empty
+    wide = _pivot_wide(long)
+    return wide.to_pandas() if return_as_pandas else wide
+
+
+def athlete_lookup_from_summary(summary: dict[str, Any]) -> dict[str, str]:
+    """``athlete_id -> display name`` from a summary's ``boxscore.players``.
+
+    An offline stand-in for the ``cdn.espn.com`` playbyplay sidecar: every
+    athlete with a stat line in the game. Athletes with no stat line (a
+    penalized lineman, say) are absent and their names stay unresolved.
+
+    Args:
+        summary: An ESPN game summary payload (``site.api.espn.com`` ``summary``).
+
+    Returns:
+        Dict of athlete id (str) to display name.
+
+    Example:
+        Resolve names for a stored game::
+
+            lookup = athlete_lookup_from_summary(summary)
+            lookup.get("4241478")
+    """
+    lookup: dict[str, str] = {}
+    box = summary.get("boxscore") if isinstance(summary, dict) else None
+    for team in (box or {}).get("players") or []:
+        for stat in (team or {}).get("statistics") or []:
+            for row in (stat or {}).get("athletes") or []:
+                ath = (row or {}).get("athlete") or {}
+                aid = ath.get("id")
+                name = ath.get("displayName") or ath.get("fullName")
+                if aid is not None and name:
+                    lookup[str(aid)] = str(name)
+    return lookup
 
 
 def _download_plays(game_id: int, league: str = "college-football", **kwargs: Any) -> list[dict[str, Any]]:

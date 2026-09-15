@@ -251,11 +251,17 @@ with the team ids read from the plays frame.
 
 the situational stats, or `None` when the frame is unusable or the window is empty.
 
-#### `CFBPlayProcess.espn_cfb_pbp(**kwargs)`
+#### `CFBPlayProcess.espn_cfb_pbp(summary=None, **kwargs)`
 
 espn_cfb_pbp() - Pull the game by id. Data from API endpoints: `college-football/playbyplay`,
 
 `college-football/summary`
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `summary` | `dict, optional` | `None` | A previously fetched ESPN summary payload. When given, no request is made -- the offline path for committed raw libraries -- and the pipeline joins participants only if `participants=` was passed at construction (it never fetches them, nor a roster, for a supplied summary). |
 
 **Returns**
 
