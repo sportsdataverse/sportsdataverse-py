@@ -643,7 +643,11 @@ class _EndpointView:
         opt_path = [p for p in ep.path_params if not p.required or p.default_from is not None]
         req_q = [p for p in ep.query_params if p.required]
         opt_q = [p for p in ep.query_params if not p.required]
-        self.signature_params = req_path + req_q + opt_path + opt_q
+        ordered = req_path + req_q + opt_path + opt_q
+        # ``kw_only`` params render after ``*`` (see spec.Param.kw_only) so they
+        # never displace ``headers`` / later positional args of an existing wrapper.
+        self.signature_params = [p for p in ordered if not p.kw_only]
+        self.kw_only_params = [p for p in ordered if p.kw_only]
 
         self.league_param = league.league_param
         # In param mode, keep {league} as a runtime f-string token (sport still baked).

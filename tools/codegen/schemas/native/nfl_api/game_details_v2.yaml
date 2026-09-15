@@ -1,0 +1,543 @@
+schema: game_details_v2
+kind: dataframe
+columns:
+- name: id
+  type: character
+  description: NFL.com Shield GUID for the game.
+- name: category
+  type: character
+  description: Game category / window (e.g. SNF, MNF, TNF).
+- name: date
+  type: character
+  description: Game date (YYYY-MM-DD).
+- name: time
+  type: character
+  description: ISO 8601 kickoff timestamp.
+- name: game_type
+  type: character
+  description: Game type classification (e.g. UNSPECIFIED, REG, WC).
+- name: international
+  type: logical
+  description: Whether the game is played at an international venue.
+- name: neutral_site
+  type: logical
+  description: Whether the game is played at a neutral site.
+- name: season
+  type: integer
+  description: Season (year) the date falls in.
+- name: season_type
+  type: character
+  description: Season type code (PRE, REG, or POST).
+- name: status
+  type: character
+  description: Game status (e.g. SCHEDULED, INGAME, FINAL).
+- name: week
+  type: integer
+  description: Week number that the queried date falls within.
+- name: week_type
+  type: character
+  description: Week type code (e.g. PRE, REG, WC, DIV, CONF, SB).
+- name: external_ids
+  type: character
+  description: JSON-stringified array of external game identifiers (elias, gsis, etc.).
+- name: ticket_url
+  type: character
+  description: Primary ticket-purchase URL for the game.
+- name: ticket_vendors
+  type: character
+  description: JSON-stringified array of ticket-vendor objects (vendor name, URL).
+- name: extensions
+  type: character
+  description: JSON-stringified array of extension objects (empty when none).
+- name: version
+  type: integer
+  description: Record version number.
+- name: replays
+  type: character
+  description: JSON-stringified array of replay objects (populated only when include_replays=true).
+- name: tagged_videos
+  type: character
+  description: JSON-stringified array of tagged-video objects (populated only when include_tagged_videos=true).
+- name: home_team_id
+  type: character
+  description: NFL.com Shield GUID of the home team.
+- name: home_team_current_logo
+  type: character
+  description: Templated URL of the home team's current logo.
+- name: home_team_full_name
+  type: character
+  description: Full home-team name (e.g. "Kansas City Chiefs").
+- name: away_team_id
+  type: character
+  description: NFL.com Shield GUID of the away team.
+- name: away_team_current_logo
+  type: character
+  description: Templated URL of the away team's current logo.
+- name: away_team_full_name
+  type: character
+  description: Full away-team name (e.g. "Baltimore Ravens").
+- name: broadcast_info_home_network_channels
+  type: character
+  description: JSON-stringified array of broadcast channels in the home market.
+- name: broadcast_info_away_network_channels
+  type: character
+  description: JSON-stringified array of broadcast channels in the away market.
+- name: broadcast_info_international_watch_options
+  type: character
+  description: JSON-stringified array of international broadcaster options by country.
+- name: broadcast_info_streaming_networks
+  type: character
+  description: JSON-stringified array of streaming-network objects.
+- name: broadcast_info_territory
+  type: character
+  description: Broadcast territory designation (e.g. NATIONAL, REGIONAL).
+- name: broadcast_info_audio_networks
+  type: character
+  description: JSON-stringified array of audio-broadcast network objects.
+- name: venue_id
+  type: character
+  description: NFL.com Shield GUID of the venue.
+- name: venue_name
+  type: character
+  description: Venue name (e.g. "GEHA Field at Arrowhead Stadium").
+- name: venue_city
+  type: character
+  description: Venue city.
+- name: venue_country
+  type: character
+  description: Venue country.
+- name: summary_game_id
+  type: character
+  description: NFL.com Shield GUID for the game (from the embedded live summary).
+- name: summary_offset
+  type: integer
+  description: Live-feed sequence offset for the embedded summary snapshot.
+- name: summary_attendance
+  type: integer
+  description: Announced game attendance (from the embedded summary).
+- name: summary_clock
+  type: character
+  description: Game clock at the summary snapshot (MM:SS).
+- name: summary_distance
+  type: integer
+  description: Yards to gain for a first down at the summary snapshot.
+- name: summary_down
+  type: integer
+  description: Current down (1-4) at the summary snapshot.
+- name: summary_game_book_url
+  type: character
+  description: URL of the official game book image (from the embedded summary).
+- name: summary_is_goal_to_go
+  type: logical
+  description: Whether the situation is goal-to-go at the summary snapshot.
+- name: summary_is_red_zone
+  type: logical
+  description: Whether the ball is in the red zone at the summary snapshot.
+- name: summary_phase
+  type: character
+  description: Game phase (e.g. PREGAME, INGAME, HALFTIME, FINAL).
+- name: summary_quarter
+  type: character
+  description: Current period descriptor (e.g. Q1, HALFTIME, END_OF_GAME).
+- name: summary_start_time
+  type: character
+  description: ISO 8601 kickoff timestamp (from the embedded summary).
+- name: summary_weather
+  type: character
+  description: Weather summary string (temperature, humidity, wind).
+- name: summary_yard_line
+  type: character
+  description: Current line of scrimmage at the summary snapshot (e.g. "KC 10").
+- name: summary_away_team_team_id
+  type: character
+  description: NFL.com Shield GUID of the away team (from the embedded summary).
+- name: summary_away_team_has_possession
+  type: logical
+  description: Whether the away team has possession at the summary snapshot.
+- name: summary_away_team_score_q1
+  type: integer
+  description: Away team points scored in the first quarter.
+- name: summary_away_team_score_q2
+  type: integer
+  description: Away team points scored in the second quarter.
+- name: summary_away_team_score_q3
+  type: integer
+  description: Away team points scored in the third quarter.
+- name: summary_away_team_score_q4
+  type: integer
+  description: Away team points scored in the fourth quarter.
+- name: summary_away_team_score_ot
+  type: integer
+  description: Away team points scored in overtime.
+- name: summary_away_team_score_total
+  type: integer
+  description: Away team total points.
+- name: summary_away_team_timeouts_remaining
+  type: integer
+  description: Away team timeouts remaining at the summary snapshot.
+- name: summary_away_team_timeouts_used
+  type: integer
+  description: Away team timeouts used at the summary snapshot.
+- name: summary_home_team_team_id
+  type: character
+  description: NFL.com Shield GUID of the home team (from the embedded summary).
+- name: summary_home_team_has_possession
+  type: logical
+  description: Whether the home team has possession at the summary snapshot.
+- name: summary_home_team_score_q1
+  type: integer
+  description: Home team points scored in the first quarter.
+- name: summary_home_team_score_q2
+  type: integer
+  description: Home team points scored in the second quarter.
+- name: summary_home_team_score_q3
+  type: integer
+  description: Home team points scored in the third quarter.
+- name: summary_home_team_score_q4
+  type: integer
+  description: Home team points scored in the fourth quarter.
+- name: summary_home_team_score_ot
+  type: integer
+  description: Home team points scored in overtime.
+- name: summary_home_team_score_total
+  type: integer
+  description: Home team total points.
+- name: summary_home_team_timeouts_remaining
+  type: integer
+  description: Home team timeouts remaining at the summary snapshot.
+- name: summary_home_team_timeouts_used
+  type: integer
+  description: Home team timeouts used at the summary snapshot.
+- name: away_team_standings_team_id
+  type: character
+  description: 'Away team standings: nFL.com Shield GUID for the team.'
+- name: away_team_standings_team_current_logo
+  type: character
+  description: 'Away team standings: templated URL of the team''s current logo.'
+- name: away_team_standings_team_full_name
+  type: character
+  description: 'Away team standings: full team name (e.g. "Arizona Cardinals").'
+- name: away_team_standings_clinched_bye
+  type: logical
+  description: 'Away team standings: whether the team has clinched a first-round playoff bye.'
+- name: away_team_standings_clinched_division
+  type: logical
+  description: 'Away team standings: whether the team has clinched its division.'
+- name: away_team_standings_clinched_eliminated
+  type: logical
+  description: 'Away team standings: whether the team has been mathematically eliminated from playoff contention.'
+- name: away_team_standings_clinched_home_field
+  type: logical
+  description: 'Away team standings: whether the team has clinched home-field advantage throughout the playoffs.'
+- name: away_team_standings_clinched_playoff
+  type: logical
+  description: 'Away team standings: whether the team has clinched a playoff berth.'
+- name: away_team_standings_clinched_wild_card
+  type: logical
+  description: 'Away team standings: whether the team has clinched a wild-card playoff berth.'
+- name: away_team_standings_close_games_wins
+  type: integer
+  description: 'Away team standings: wins in close games (decided by one score / 8 points or fewer).'
+- name: away_team_standings_close_games_losses
+  type: integer
+  description: 'Away team standings: losses in close games (decided by one score / 8 points or fewer).'
+- name: away_team_standings_close_games_ties
+  type: integer
+  description: 'Away team standings: ties in close games.'
+- name: away_team_standings_conference_wins
+  type: integer
+  description: 'Away team standings: wins against conference (AFC/NFC) opponents.'
+- name: away_team_standings_conference_win_pct
+  type: numeric
+  description: 'Away team standings: win percentage against conference opponents.'
+- name: away_team_standings_conference_losses
+  type: integer
+  description: 'Away team standings: losses against conference opponents.'
+- name: away_team_standings_conference_ties
+  type: integer
+  description: 'Away team standings: ties against conference opponents.'
+- name: away_team_standings_conference_rank
+  type: integer
+  description: 'Away team standings: standings rank within the conference.'
+- name: away_team_standings_conference_points_for
+  type: integer
+  description: 'Away team standings: points scored in conference games.'
+- name: away_team_standings_conference_points_against
+  type: integer
+  description: 'Away team standings: points allowed in conference games.'
+- name: away_team_standings_division_wins
+  type: integer
+  description: 'Away team standings: wins against division opponents.'
+- name: away_team_standings_division_win_pct
+  type: numeric
+  description: 'Away team standings: win percentage against division opponents.'
+- name: away_team_standings_division_losses
+  type: integer
+  description: 'Away team standings: losses against division opponents.'
+- name: away_team_standings_division_ties
+  type: integer
+  description: 'Away team standings: ties against division opponents.'
+- name: away_team_standings_division_rank
+  type: integer
+  description: 'Away team standings: standings rank within the division.'
+- name: away_team_standings_division_points_for
+  type: integer
+  description: 'Away team standings: points scored in division games.'
+- name: away_team_standings_division_points_against
+  type: integer
+  description: 'Away team standings: points allowed in division games.'
+- name: away_team_standings_home_wins
+  type: integer
+  description: 'Away team standings: wins in home games.'
+- name: away_team_standings_home_win_pct
+  type: numeric
+  description: 'Away team standings: win percentage in home games.'
+- name: away_team_standings_home_losses
+  type: integer
+  description: 'Away team standings: losses in home games.'
+- name: away_team_standings_home_ties
+  type: integer
+  description: 'Away team standings: ties in home games.'
+- name: away_team_standings_home_points_for
+  type: integer
+  description: 'Away team standings: points scored in home games.'
+- name: away_team_standings_home_points_against
+  type: integer
+  description: 'Away team standings: points allowed in home games.'
+- name: away_team_standings_last5_wins
+  type: integer
+  description: 'Away team standings: wins over the last five games.'
+- name: away_team_standings_last5_win_pct
+  type: numeric
+  description: 'Away team standings: win percentage over the last five games.'
+- name: away_team_standings_last5_losses
+  type: integer
+  description: 'Away team standings: losses over the last five games.'
+- name: away_team_standings_last5_ties
+  type: integer
+  description: 'Away team standings: ties over the last five games.'
+- name: away_team_standings_last5_points_for
+  type: integer
+  description: 'Away team standings: points scored over the last five games.'
+- name: away_team_standings_last5_points_against
+  type: integer
+  description: 'Away team standings: points allowed over the last five games.'
+- name: away_team_standings_overall_games
+  type: integer
+  description: 'Away team standings: total games played.'
+- name: away_team_standings_overall_wins
+  type: integer
+  description: 'Away team standings: total wins.'
+- name: away_team_standings_overall_win_pct
+  type: numeric
+  description: 'Away team standings: overall win percentage.'
+- name: away_team_standings_overall_losses
+  type: integer
+  description: 'Away team standings: total losses.'
+- name: away_team_standings_overall_ties
+  type: integer
+  description: 'Away team standings: total ties.'
+- name: away_team_standings_overall_points_for
+  type: integer
+  description: 'Away team standings: total points scored.'
+- name: away_team_standings_overall_points_against
+  type: integer
+  description: 'Away team standings: total points allowed.'
+- name: away_team_standings_overall_streak_type
+  type: character
+  description: 'Away team standings: current streak type ("W" for winning, "L" for losing).'
+- name: away_team_standings_overall_streak_length
+  type: integer
+  description: 'Away team standings: length of the current win/loss streak.'
+- name: away_team_standings_road_wins
+  type: integer
+  description: 'Away team standings: wins in road (away) games.'
+- name: away_team_standings_road_win_pct
+  type: numeric
+  description: 'Away team standings: win percentage in road games.'
+- name: away_team_standings_road_losses
+  type: integer
+  description: 'Away team standings: losses in road games.'
+- name: away_team_standings_road_ties
+  type: integer
+  description: 'Away team standings: ties in road games.'
+- name: away_team_standings_road_points_for
+  type: integer
+  description: 'Away team standings: points scored in road games.'
+- name: away_team_standings_road_points_against
+  type: integer
+  description: 'Away team standings: points allowed in road games.'
+- name: home_team_standings_team_id
+  type: character
+  description: 'Home team standings: nFL.com Shield GUID for the team.'
+- name: home_team_standings_team_current_logo
+  type: character
+  description: 'Home team standings: templated URL of the team''s current logo.'
+- name: home_team_standings_team_full_name
+  type: character
+  description: 'Home team standings: full team name (e.g. "Arizona Cardinals").'
+- name: home_team_standings_clinched_bye
+  type: logical
+  description: 'Home team standings: whether the team has clinched a first-round playoff bye.'
+- name: home_team_standings_clinched_division
+  type: logical
+  description: 'Home team standings: whether the team has clinched its division.'
+- name: home_team_standings_clinched_eliminated
+  type: logical
+  description: 'Home team standings: whether the team has been mathematically eliminated from playoff contention.'
+- name: home_team_standings_clinched_home_field
+  type: logical
+  description: 'Home team standings: whether the team has clinched home-field advantage throughout the playoffs.'
+- name: home_team_standings_clinched_playoff
+  type: logical
+  description: 'Home team standings: whether the team has clinched a playoff berth.'
+- name: home_team_standings_clinched_wild_card
+  type: logical
+  description: 'Home team standings: whether the team has clinched a wild-card playoff berth.'
+- name: home_team_standings_close_games_wins
+  type: integer
+  description: 'Home team standings: wins in close games (decided by one score / 8 points or fewer).'
+- name: home_team_standings_close_games_losses
+  type: integer
+  description: 'Home team standings: losses in close games (decided by one score / 8 points or fewer).'
+- name: home_team_standings_close_games_ties
+  type: integer
+  description: 'Home team standings: ties in close games.'
+- name: home_team_standings_conference_wins
+  type: integer
+  description: 'Home team standings: wins against conference (AFC/NFC) opponents.'
+- name: home_team_standings_conference_win_pct
+  type: numeric
+  description: 'Home team standings: win percentage against conference opponents.'
+- name: home_team_standings_conference_losses
+  type: integer
+  description: 'Home team standings: losses against conference opponents.'
+- name: home_team_standings_conference_ties
+  type: integer
+  description: 'Home team standings: ties against conference opponents.'
+- name: home_team_standings_conference_rank
+  type: integer
+  description: 'Home team standings: standings rank within the conference.'
+- name: home_team_standings_conference_points_for
+  type: integer
+  description: 'Home team standings: points scored in conference games.'
+- name: home_team_standings_conference_points_against
+  type: integer
+  description: 'Home team standings: points allowed in conference games.'
+- name: home_team_standings_division_wins
+  type: integer
+  description: 'Home team standings: wins against division opponents.'
+- name: home_team_standings_division_win_pct
+  type: numeric
+  description: 'Home team standings: win percentage against division opponents.'
+- name: home_team_standings_division_losses
+  type: integer
+  description: 'Home team standings: losses against division opponents.'
+- name: home_team_standings_division_ties
+  type: integer
+  description: 'Home team standings: ties against division opponents.'
+- name: home_team_standings_division_rank
+  type: integer
+  description: 'Home team standings: standings rank within the division.'
+- name: home_team_standings_division_points_for
+  type: integer
+  description: 'Home team standings: points scored in division games.'
+- name: home_team_standings_division_points_against
+  type: integer
+  description: 'Home team standings: points allowed in division games.'
+- name: home_team_standings_home_wins
+  type: integer
+  description: 'Home team standings: wins in home games.'
+- name: home_team_standings_home_win_pct
+  type: numeric
+  description: 'Home team standings: win percentage in home games.'
+- name: home_team_standings_home_losses
+  type: integer
+  description: 'Home team standings: losses in home games.'
+- name: home_team_standings_home_ties
+  type: integer
+  description: 'Home team standings: ties in home games.'
+- name: home_team_standings_home_points_for
+  type: integer
+  description: 'Home team standings: points scored in home games.'
+- name: home_team_standings_home_points_against
+  type: integer
+  description: 'Home team standings: points allowed in home games.'
+- name: home_team_standings_last5_wins
+  type: integer
+  description: 'Home team standings: wins over the last five games.'
+- name: home_team_standings_last5_win_pct
+  type: numeric
+  description: 'Home team standings: win percentage over the last five games.'
+- name: home_team_standings_last5_losses
+  type: integer
+  description: 'Home team standings: losses over the last five games.'
+- name: home_team_standings_last5_ties
+  type: integer
+  description: 'Home team standings: ties over the last five games.'
+- name: home_team_standings_last5_points_for
+  type: integer
+  description: 'Home team standings: points scored over the last five games.'
+- name: home_team_standings_last5_points_against
+  type: integer
+  description: 'Home team standings: points allowed over the last five games.'
+- name: home_team_standings_overall_games
+  type: integer
+  description: 'Home team standings: total games played.'
+- name: home_team_standings_overall_wins
+  type: integer
+  description: 'Home team standings: total wins.'
+- name: home_team_standings_overall_win_pct
+  type: numeric
+  description: 'Home team standings: overall win percentage.'
+- name: home_team_standings_overall_losses
+  type: integer
+  description: 'Home team standings: total losses.'
+- name: home_team_standings_overall_ties
+  type: integer
+  description: 'Home team standings: total ties.'
+- name: home_team_standings_overall_points_for
+  type: integer
+  description: 'Home team standings: total points scored.'
+- name: home_team_standings_overall_points_against
+  type: integer
+  description: 'Home team standings: total points allowed.'
+- name: home_team_standings_overall_streak_type
+  type: character
+  description: 'Home team standings: current streak type ("W" for winning, "L" for losing).'
+- name: home_team_standings_overall_streak_length
+  type: integer
+  description: 'Home team standings: length of the current win/loss streak.'
+- name: home_team_standings_road_wins
+  type: integer
+  description: 'Home team standings: wins in road (away) games.'
+- name: home_team_standings_road_win_pct
+  type: numeric
+  description: 'Home team standings: win percentage in road games.'
+- name: home_team_standings_road_losses
+  type: integer
+  description: 'Home team standings: losses in road games.'
+- name: home_team_standings_road_ties
+  type: integer
+  description: 'Home team standings: ties in road games.'
+- name: home_team_standings_road_points_for
+  type: integer
+  description: 'Home team standings: points scored in road games.'
+- name: home_team_standings_road_points_against
+  type: integer
+  description: 'Home team standings: points allowed in road games.'
+- name: drive_chart_game_id
+  type: character
+  description: NFL.com Shield GUID for the game (from the drive chart, present when include_drive_chart=true).
+- name: drive_chart_offset
+  type: integer
+  description: Live-feed sequence offset for the drive-chart snapshot.
+- name: drive_chart_drives
+  type: character
+  description: JSON-stringified array of drive objects (sequence, team, result, etc.).
+- name: drive_chart_plays
+  type: character
+  description: JSON-stringified array of play objects within the drive chart.
+- name: drive_chart_scoring_summaries
+  type: character
+  description: JSON-stringified array of scoring-summary objects (sequence, scores, clock).

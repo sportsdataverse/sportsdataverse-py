@@ -1,0 +1,369 @@
+schema: live_player_statistics
+kind: dataframe
+columns:
+- name: game_id
+  type: character
+  description: NFL.com Shield GUID for the game.
+- name: offset
+  type: integer
+  description: Live-feed sequence position the statistics reflect; advances as the game is played.
+- name: side
+  type: character
+  description: 'Which side of the game the row belongs to: away or home.'
+- name: team_id
+  type: character
+  description: NFL.com Shield GUID of the team.
+- name: gsis_player_id
+  type: character
+  description: NFL GSIS player id (00-00xxxxx), the key nflverse data joins on.
+- name: gsis_player_jersey_number
+  type: character
+  description: Player's jersey number as recorded in GSIS.
+- name: gsis_player_name
+  type: character
+  description: Player name as recorded in GSIS (e.g. P.Mahomes).
+- name: person_id
+  type: character
+  description: NFL.com Shield GUID of the player (person).
+- name: defensive_fumbles_forced
+  type: integer
+  description: 'Defense: fumbles forced.'
+- name: defensive_fumbles_recovered
+  type: integer
+  description: 'Defense: fumbles recovered.'
+- name: defensive_interceptions
+  type: integer
+  description: 'Defense: interceptions.'
+- name: defensive_miscellaneous_fumbles_forced
+  type: integer
+  description: 'Defense (miscellaneous): fumbles forced.'
+- name: defensive_miscellaneous_fumbles_recovered
+  type: integer
+  description: 'Defense (miscellaneous): fumbles recovered.'
+- name: defensive_miscellaneous_tackles
+  type: numeric
+  description: 'Defense (miscellaneous): tackles.'
+- name: defensive_miscellaneous_tackles_assists
+  type: integer
+  description: 'Defense (miscellaneous): tackles assists.'
+- name: defensive_passes_defended
+  type: integer
+  description: 'Defense: passes defended.'
+- name: defensive_quarterback_hits
+  type: integer
+  description: 'Defense: quarterback hits.'
+- name: defensive_sacks
+  type: numeric
+  description: 'Defense: sacks.'
+- name: defensive_sack_yards
+  type: numeric
+  description: 'Defense: sack yards.'
+- name: defensive_safeties
+  type: integer
+  description: 'Defense: safeties.'
+- name: defensive_special_teams_fumbles_forced
+  type: integer
+  description: 'Defense: special teams fumbles forced.'
+- name: defensive_special_teams_fumbles_recovered
+  type: integer
+  description: 'Defense: special teams fumbles recovered.'
+- name: defensive_special_teams_tackles
+  type: numeric
+  description: 'Defense: special teams tackles.'
+- name: defensive_special_teams_tackles_assists
+  type: integer
+  description: 'Defense: special teams tackles assists.'
+- name: defensive_special_teams_blocks
+  type: integer
+  description: 'Defense: special teams blocks.'
+- name: defensive_tackles
+  type: numeric
+  description: 'Defense: tackles.'
+- name: defensive_tackles_assists
+  type: integer
+  description: 'Defense: tackles assists.'
+- name: defensive_tackles_combined
+  type: numeric
+  description: 'Defense: tackles combined.'
+- name: defensive_tackles_for_loss
+  type: numeric
+  description: 'Defense: tackles for loss.'
+- name: defensive_tackles_for_loss_yards
+  type: numeric
+  description: 'Defense: tackles for loss yards.'
+- name: extra_points_attempted
+  type: integer
+  description: 'Extra points: attempted.'
+- name: extra_points_made
+  type: integer
+  description: 'Extra points: made.'
+- name: extra_points_missed
+  type: integer
+  description: 'Extra points: missed.'
+- name: extra_points_blocked
+  type: integer
+  description: 'Extra points: blocked.'
+- name: field_goals_attempted
+  type: integer
+  description: 'Field goals: attempted.'
+- name: field_goals_average_length
+  type: numeric
+  description: 'Field goals: average length.'
+- name: field_goals_blocked
+  type: integer
+  description: 'Field goals: blocked.'
+- name: field_goals_longest_made
+  type: integer
+  description: 'Field goals: longest made.'
+- name: field_goals_made
+  type: integer
+  description: 'Field goals: made.'
+- name: field_goals_missed
+  type: integer
+  description: 'Field goals: missed.'
+- name: field_goals_total_yards
+  type: integer
+  description: 'Field goals: total yards.'
+- name: fumbles
+  type: integer
+  description: Fumbles.
+- name: fumbles_forced
+  type: integer
+  description: 'Fumbles: forced.'
+- name: fumbles_lost
+  type: integer
+  description: 'Fumbles: lost.'
+- name: fumbles_recovered_in_end_zone_for_touchdown
+  type: integer
+  description: 'Fumbles: recovered in end zone for touchdown.'
+- name: fumbles_opponent_recoveries
+  type: integer
+  description: 'Fumbles: opponent recoveries.'
+- name: fumbles_opponent_recovery_touchdowns
+  type: integer
+  description: 'Fumbles: opponent recovery touchdowns.'
+- name: fumbles_opponent_recovery_yards
+  type: integer
+  description: 'Fumbles: opponent recovery yards.'
+- name: fumbles_out_of_bounds
+  type: integer
+  description: 'Fumbles: out of bounds.'
+- name: fumbles_own_recoveries
+  type: integer
+  description: 'Fumbles: own recoveries.'
+- name: fumbles_own_recovery_touchdowns
+  type: integer
+  description: 'Fumbles: own recovery touchdowns.'
+- name: fumbles_own_recovery_yards
+  type: integer
+  description: 'Fumbles: own recovery yards.'
+- name: interceptions
+  type: integer
+  description: Interceptions thrown.
+- name: interceptions_long
+  type: integer
+  description: 'Interceptions: longest.'
+- name: interceptions_longest_touchdown
+  type: integer
+  description: 'Interceptions: longest touchdown.'
+- name: interceptions_touchdowns
+  type: integer
+  description: 'Interceptions: touchdowns.'
+- name: interceptions_yards
+  type: integer
+  description: 'Interceptions: yards.'
+- name: kickoffs
+  type: integer
+  description: Kickoffs.
+- name: kickoffs_inside20
+  type: integer
+  description: 'Kickoffs: inside the 20.'
+- name: kickoffs_out_of_bounds
+  type: integer
+  description: 'Kickoffs: out of bounds.'
+- name: kickoffs_return_yards
+  type: integer
+  description: 'Kickoffs: return yards.'
+- name: kickoffs_to_end_zone
+  type: integer
+  description: 'Kickoffs: to end zone.'
+- name: kickoffs_touchbacks
+  type: integer
+  description: 'Kickoffs: touchbacks.'
+- name: kickoffs_yards
+  type: integer
+  description: 'Kickoffs: yards.'
+- name: kick_returns
+  type: integer
+  description: Kickoff returns.
+- name: kick_returns_fair_catches
+  type: integer
+  description: 'Kickoff returns: fair catches.'
+- name: kick_returns_longest
+  type: integer
+  description: 'Kickoff returns: longest.'
+- name: kick_returns_longest_touchdown
+  type: integer
+  description: 'Kickoff returns: longest touchdown.'
+- name: kick_returns_touchdowns
+  type: integer
+  description: 'Kickoff returns: touchdowns.'
+- name: kick_returns_yards
+  type: integer
+  description: 'Kickoff returns: yards.'
+- name: kick_returns_yards_average
+  type: numeric
+  description: 'Kickoff returns: yards average.'
+- name: passing_attempts
+  type: integer
+  description: 'Passing: attempts.'
+- name: passing_completions
+  type: integer
+  description: 'Passing: completions.'
+- name: passing_completion_percent
+  type: numeric
+  description: 'Passing: completion percent.'
+- name: passing_interceptions
+  type: integer
+  description: 'Passing: interceptions.'
+- name: passing_long
+  type: integer
+  description: 'Passing: longest.'
+- name: passing_longest_touchdown_pass
+  type: integer
+  description: 'Passing: longest touchdown pass.'
+- name: passing_rating
+  type: numeric
+  description: 'Passing: rating.'
+- name: passing_sack_yards_lost
+  type: numeric
+  description: 'Passing: sack yards lost.'
+- name: passing_times_sacked
+  type: integer
+  description: 'Passing: times sacked.'
+- name: passing_touchdowns
+  type: integer
+  description: 'Passing: touchdowns.'
+- name: passing_yards
+  type: integer
+  description: 'Passing: yards.'
+- name: passing_yards_average
+  type: numeric
+  description: 'Passing: yards average.'
+- name: passing_yards_per_attempt
+  type: numeric
+  description: 'Passing: yards per attempt.'
+- name: punts
+  type: integer
+  description: Punts.
+- name: punts_blocked
+  type: integer
+  description: 'Punting: blocked.'
+- name: punts_inside20
+  type: integer
+  description: 'Punting: inside the 20.'
+- name: punts_longest
+  type: integer
+  description: 'Punting: longest.'
+- name: punts_return_yards
+  type: integer
+  description: Punt return yards allowed on this player's punts.
+- name: punts_touchbacks
+  type: integer
+  description: 'Punting: touchbacks.'
+- name: punts_yards
+  type: integer
+  description: 'Punting: yards.'
+- name: punts_yards_average_gross
+  type: numeric
+  description: Gross punting average (yards per punt).
+- name: punts_yards_average_net
+  type: numeric
+  description: Net punting average (yards per punt, after returns and touchbacks).
+- name: punt_returns
+  type: integer
+  description: Punt returns.
+- name: punt_returns_fair_catches
+  type: integer
+  description: 'Punt returns: fair catches.'
+- name: punt_returns_longest
+  type: integer
+  description: 'Punt returns: longest.'
+- name: punt_returns_longest_touchdown
+  type: integer
+  description: 'Punt returns: longest touchdown.'
+- name: punt_returns_touchdowns
+  type: integer
+  description: 'Punt returns: touchdowns.'
+- name: punt_returns_yards
+  type: integer
+  description: 'Punt returns: yards.'
+- name: punt_returns_yards_average
+  type: numeric
+  description: 'Punt returns: yards average.'
+- name: receptions
+  type: integer
+  description: Receptions.
+- name: receptions_average
+  type: numeric
+  description: 'Receiving: average.'
+- name: receptions_long
+  type: integer
+  description: 'Receiving: longest.'
+- name: receptions_longest_touchdown
+  type: integer
+  description: 'Receiving: longest touchdown.'
+- name: receptions_pass_target
+  type: integer
+  description: Pass targets.
+- name: receptions_touchdowns
+  type: integer
+  description: 'Receiving: touchdowns.'
+- name: receptions_yards
+  type: integer
+  description: 'Receiving: yards.'
+- name: receptions_yards_after_catch
+  type: integer
+  description: Receiving yards after the catch.
+- name: rushing_attempts
+  type: integer
+  description: 'Rushing: attempts.'
+- name: rushing_average
+  type: numeric
+  description: 'Rushing: average.'
+- name: rushing_long
+  type: integer
+  description: 'Rushing: longest.'
+- name: rushing_longest_touchdown
+  type: integer
+  description: 'Rushing: longest touchdown.'
+- name: rushing_touchdowns
+  type: integer
+  description: 'Rushing: touchdowns.'
+- name: rushing_yards
+  type: integer
+  description: 'Rushing: yards.'
+- name: two_point_defensive_attempts
+  type: integer
+  description: 'Two-point conversions: defensive attempts.'
+- name: two_point_defensive_successes
+  type: integer
+  description: 'Two-point conversions: defensive successes.'
+- name: two_point_passing_attempts
+  type: integer
+  description: 'Two-point conversions: passing attempts.'
+- name: two_point_passing_successes
+  type: integer
+  description: 'Two-point conversions: passing successes.'
+- name: two_point_reception_attempts
+  type: integer
+  description: 'Two-point conversions: reception attempts.'
+- name: two_point_reception_successes
+  type: integer
+  description: 'Two-point conversions: reception successes.'
+- name: two_point_rushing_attempts
+  type: integer
+  description: 'Two-point conversions: rushing attempts.'
+- name: two_point_rushing_successes
+  type: integer
+  description: 'Two-point conversions: rushing successes.'
