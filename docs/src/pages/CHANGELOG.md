@@ -3,6 +3,7 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [Unreleased](#unreleased)
+  - [Fixed — the usage box glued shared tackles into one phantom player and read positions only from participants](#fixed--the-usage-box-glued-shared-tackles-into-one-phantom-player-and-read-positions-only-from-participants)
   - [Fixed — CFB special teams read ESPN's 2025 jersey-style text; the usage box keys a kicker once](#fixed--cfb-special-teams-read-espns-2025-jersey-style-text-the-usage-box-keys-a-kicker-once)
   - [Added — loaders for the ESPN football usage leaderboards and team / coach tendencies](#added--loaders-for-the-espn-football-usage-leaderboards-and-team--coach-tendencies)
   - [Added — team and coach tendencies (`sportsdataverse.football.tendencies`)](#added--team-and-coach-tendencies-sportsdataversefootballtendencies)
@@ -292,6 +293,28 @@ Fixed scoreboard cache TTL selection when dates are supplied in query parameters
 current/future days and ranges containing them bypass both cache reads and writes,
 while wholly historical dates retain the 30-day TTL. Explicit TTL overrides still
 take precedence.
+
+### Fixed — the usage box glued shared tackles into one phantom player and read positions only from participants
+
+`cfbfastR-cfb-raw` stores each game's play participants with every list cell written
+as a numpy array's `str()` -- `"['5152441' '5220449']"`, no commas. The usage box
+decoded those cells with `ast.literal_eval`, which reads two adjacent string literals
+as ONE concatenated string without raising, so every two-player assist became a single
+phantom tackler (`51524415220449`, "Jon JohnsonBrett Karhu") and the real players lost
+the credit. In a sample of stored games every multi-player cell had this shape (1,528
+of 1,528); game 401760404 produced 72 `tackles` rows instead of 43. List cells now
+decode by tokenizing, so the JSON, Python-repr and numpy-repr shapes (line-wrapped,
+double-quoted names such as "D'Andre Swift", bare numbers) all yield the same items.
+
+`create_usage_box` also only knew a player's position from the participants'
+`{type}_position_id` columns, which the stored CFB participants predate, so
+`position_group_usage` and `position_group_tackles` were empty for every historical
+CFB game. It takes an optional `rosters` (a frame, a list of athlete records or the
+stored `{"data": [...]}` envelope) and fills the group of any athlete the participants
+did not classify from `position_id`, or the id inside `position_href`; a participant's
+own position still wins. `CFBPlayProcess` passes its supplied `game_roster`. On stored
+2014-2025 games the roster resolves 97-100% of participant ids; 2004-2013 have no play
+participants at all.
 
 ### Fixed — CFB special teams read ESPN's 2025 jersey-style text; the usage box keys a kicker once
 

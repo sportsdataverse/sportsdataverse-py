@@ -6,6 +6,7 @@ import gzip
 import json
 from pathlib import Path
 
+import numpy as np
 import polars as pl
 import pytest
 
@@ -163,28 +164,55 @@ def test_no_participants_degrades_to_empty_tackles(game):
     assert create_usage_box(pl.DataFrame(), None, league="nfl") == {s: [] for s in SECTIONS}
 
 
-def test_tackles_from_json_string_lists(game):
-    """A committed final.json stringifies list cells; the tackle path decodes them."""
-    import json as _json
+_LIST_COLS = ("tackler_player_ids", "assisted_by_player_ids", "tackler_player_names", "assisted_by_player_names")
 
-    proc, out, parts = game
+
+def _tackle_key(rows: list[dict]) -> dict:
+    return {(r["def_pos_team"], r["player_id"]): (r["tackles"], r.get("assists"), r.get("player_name")) for r in rows}
+
+
+@pytest.mark.parametrize(
+    "encode",
+    [
+        pytest.param(lambda v: json.dumps(list(v)), id="json"),
+        pytest.param(lambda v: repr(list(v)), id="python-repr"),
+        # what cfbfastR-cfb-raw's stored play_participants actually hold: str(numpy array)
+        pytest.param(lambda v: str(np.array(list(v), dtype=str)) if len(v) else "[]", id="numpy-repr"),
+    ],
+)
+def test_tackles_from_stringified_lists(game, encode):
+    """A committed final.json stringifies list cells; every stored shape decodes to the live rows."""
+    _, out, parts = game
     plays = pl.from_dicts(out["plays"], infer_schema_length=None)
-    stringified = parts.with_columns(
-        [
-            pl.col(c).map_elements(lambda v: _json.dumps(list(v)), return_dtype=pl.Utf8)
-            for c in (
-                "tackler_player_ids",
-                "assisted_by_player_ids",
-                "tackler_player_names",
-                "assisted_by_player_names",
-            )
-            if c in parts.columns
-        ]
-    )
+    cols = [c for c in _LIST_COLS if c in parts.columns]
+    # the fixture must hold multi-player cells, or the numpy case could not fail
+    assert parts.select(pl.col("assisted_by_player_ids").list.len().max()).item() >= 2
+    stringified = parts.with_columns([pl.col(c).map_elements(encode, return_dtype=pl.Utf8) for c in cols])
     a = create_usage_box(plays, parts, league="nfl")["tackles"]
     b = create_usage_box(plays, stringified, league="nfl")["tackles"]
-    assert a and len(a) == len(b)
-    assert sum(r["tackles"] for r in a) == sum(r["tackles"] for r in b)
+    assert a and _tackle_key(a) == _tackle_key(b)
+
+
+@pytest.mark.parametrize(
+    ("cell", "expected"),
+    [
+        ("['5152441' '5220449']", ["5152441", "5220449"]),
+        ("['5152441', '5220449']", ["5152441", "5220449"]),
+        ('["5152441","5220449"]', ["5152441", "5220449"]),
+        ("[\"D'Andre Swift\" 'Jon Johnson']", ["D'Andre Swift", "Jon Johnson"]),
+        ("['a' 'b'\n 'c']", ["a", "b", "c"]),
+        ("[None, '7']", ["7"]),
+        ("[4432712 5079588]", ["4432712", "5079588"]),
+        ("[]", []),
+        ("'5152441'", []),
+        ("['unterminated", []),
+        (None, None),
+    ],
+)
+def test_decode_list_cell_shapes(cell, expected):
+    from sportsdataverse.football.usage_box import _decode_list_cell
+
+    assert _decode_list_cell(cell) == expected
 
 
 def test_special_teams_sections(game):
@@ -331,3 +359,69 @@ def test_an_ambiguous_name_is_not_resolved_to_either_player():
     got = sorted(((r["player_id"] or ""), r["kickoffs"], r["fg_attempts"]) for r in rows)
     assert got == [("", 0, 1), ("1", 1, 0), ("2", 1, 0)]
     assert all(r["player_name"] == "Same Name" for r in rows)
+
+
+def _roster_from(parts: pl.DataFrame) -> list[dict]:
+    """(athlete, ESPN position href) records recovered from the participants' own position columns."""
+    seen: dict[str, str] = {}
+    for col in parts.columns:
+        if col.endswith("_position_id") and col.replace("_position_id", "_player_id") in parts.columns:
+            for pid, pos in parts.select(col.replace("_position_id", "_player_id"), col).drop_nulls().iter_rows():
+                seen.setdefault(str(pid), str(pos))
+    base = "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions"
+    return [{"athlete_id": int(pid), "position_href": f"{base}/{pos}?lang=en&region=us"} for pid, pos in seen.items()]
+
+
+def _groups(box: dict, section: str, key: str) -> dict:
+    return {(r[key], r["position_group"]): r for r in box[section]}
+
+
+def test_roster_fills_positions_when_participants_carry_none(game):
+    """Participants stored before *_position_id existed: the game roster restores the groups."""
+    _, out, parts = game
+    plays = pl.from_dicts(out["plays"], infer_schema_length=None)
+    bare = parts.drop([c for c in parts.columns if c.endswith("_position_id")])
+    without = create_usage_box(plays, bare, league="nfl")
+    assert without["position_group_usage"] == [] and without["position_group_tackles"] == []
+
+    full = create_usage_box(plays, parts, league="nfl")
+    for roster in (_roster_from(parts), {"data": _roster_from(parts)}, pl.from_dicts(_roster_from(parts))):
+        filled = create_usage_box(plays, bare, league="nfl", rosters=roster)
+        assert filled["position_group_usage"] and filled["position_group_tackles"]
+        assert _groups(filled, "position_group_usage", "pos_team") == _groups(full, "position_group_usage", "pos_team")
+        assert _groups(filled, "position_group_tackles", "def_pos_team") == _groups(
+            full, "position_group_tackles", "def_pos_team"
+        )
+        assert [r.get("position_group") for r in filled["player_usage"]] == [
+            r.get("position_group") for r in full["player_usage"]
+        ]
+
+
+def test_participant_position_beats_the_roster(game):
+    _, out, parts = game
+    plays = pl.from_dicts(out["plays"], infer_schema_length=None)
+    # every roster row claims a kicker (ESPN 22 -> ST); the participants' own ids must still win
+    liar = [{**r, "position_href": r["position_href"].rsplit("/", 1)[0] + "/22?lang=en"} for r in _roster_from(parts)]
+    assert position_group(22) == "ST"
+    box = create_usage_box(plays, parts, league="nfl", rosters=liar)
+    full = create_usage_box(plays, parts, league="nfl")
+    assert box["position_group_usage"] == full["position_group_usage"]
+
+
+def test_malformed_roster_never_costs_the_box(game):
+    _, out, parts = game
+    plays = pl.from_dicts(out["plays"], infer_schema_length=None)
+    bare = parts.drop([c for c in parts.columns if c.endswith("_position_id")])
+    junk = [
+        None,
+        "not a record",
+        {"position_href": ".../positions/8"},  # no athlete id
+        {"athlete_id": 1, "position_href": None, "age": "unknown"},
+        {"athlete_id": 2.0, "position_id": 8, "age": 31},
+        {"athlete_id": 3, "position_href": ".../positions/0?lang=en"},  # 0 = no position
+    ]
+    box = create_usage_box(plays, bare, league="nfl", rosters=junk)
+    assert box["player_usage"] and box["position_group_usage"] == []
+    from sportsdataverse.football.usage_box import _roster_positions
+
+    assert _roster_positions(junk) == {"2": "QB"}
