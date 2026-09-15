@@ -10,8 +10,12 @@ from sportsdataverse.nfl.nfl_api_runtime import _get, _bool_str
 from sportsdataverse.nfl.nfl_api_parsers import (
     parse_nfl_combine_profiles,
     parse_nfl_draft_picks,
+    parse_nfl_game_details_by_slug,
+    parse_nfl_game_details_v2,
     parse_nfl_game_summaries,
     parse_nfl_injuries,
+    parse_nfl_live_player_statistics,
+    parse_nfl_live_team_statistics,
     parse_nfl_rosters,
     parse_nfl_standings,
     parse_nfl_team,
@@ -37,6 +41,10 @@ __all__ = [
     "nfl_injuries",
     "nfl_game_summaries",
     "nfl_weekly_game_details",
+    "nfl_live_team_statistics",
+    "nfl_live_player_statistics",
+    "nfl_game_details_v2",
+    "nfl_game_details_by_slug",
 ]
 
 
@@ -95,6 +103,7 @@ def nfl_standings(
 def nfl_rosters(
     season: Optional[int] = 2024,
     limit: Optional[int] = 40,
+    team_id: Optional[str] = None,
     headers: Optional[Dict[str, str]] = None,
     *,
     return_parsed: bool = True,
@@ -109,6 +118,7 @@ def nfl_rosters(
     Args:
         season: season query parameter.
         limit: limit query parameter.
+        team_id: Shield team uuid (the ``id`` of a team in the teams history listing). Returns just that team's roster -- one roster (~37 KB) instead of all 32 (~1.2 MB).
         headers: optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted.
         return_parsed: parse the payload through parse_nfl_rosters -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -125,6 +135,7 @@ def nfl_rosters(
     _params = {
         "season": season,
         "limit": limit,
+        "teamId": team_id,
     }
     _params.update(_caller_params)
     raw = _get(
@@ -557,4 +568,185 @@ def nfl_weekly_game_details(
     )
     if return_parsed:
         return parse_nfl_weekly_game_details(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def nfl_live_team_statistics(
+    game_id: str,
+    headers: Optional[Dict[str, str]] = None,
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """GET /football/v2/stats/live/team-statistics/{game_id} — one row per side (away, home): the live team box score.
+
+    Endpoint: ``GET https://api.nfl.com/football/v2/stats/live/team-statistics/{game_id}``
+    Example URL: https://api.nfl.com/football/v2/stats/live/team-statistics/a9a890ed-4feb-11f1-abca-2c54536568a9
+
+    Args:
+        game_id: Shield uuid game id -- the ``id`` column of the week games and weekly game details listings.
+        headers: optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted.
+        return_parsed: parse the payload through parse_nfl_live_team_statistics -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        Quick start::
+
+            nfl_live_team_statistics(game_id='a9a890ed-4feb-11f1-abca-2c54536568a9')
+    """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
+    raw = _get(
+        f"https://api.nfl.com/football/v2/stats/live/team-statistics/{game_id}",
+        params=_params,
+        headers=headers,
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_nfl_live_team_statistics(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def nfl_live_player_statistics(
+    game_id: str,
+    headers: Optional[Dict[str, str]] = None,
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """GET /football/v2/stats/live/player-statistics/{game_id} — one row per player per side: the live player box score.
+
+    Endpoint: ``GET https://api.nfl.com/football/v2/stats/live/player-statistics/{game_id}``
+    Example URL: https://api.nfl.com/football/v2/stats/live/player-statistics/a9a890ed-4feb-11f1-abca-2c54536568a9
+
+    Args:
+        game_id: Shield uuid game id -- the ``id`` column of the week games and weekly game details listings.
+        headers: optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted.
+        return_parsed: parse the payload through parse_nfl_live_player_statistics -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        Quick start::
+
+            nfl_live_player_statistics(game_id='a9a890ed-4feb-11f1-abca-2c54536568a9')
+    """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
+    raw = _get(
+        f"https://api.nfl.com/football/v2/stats/live/player-statistics/{game_id}",
+        params=_params,
+        headers=headers,
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_nfl_live_player_statistics(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def nfl_game_details_v2(
+    game_id: str,
+    include_drive_chart: Optional[bool] = False,
+    include_replays: Optional[bool] = False,
+    include_standings: Optional[bool] = False,
+    include_tagged_videos: Optional[bool] = False,
+    headers: Optional[Dict[str, str]] = None,
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """GET /experience/v2/gamedetails/{game_id} — one row: the flat v2 game detail (game, summary, optional drive chart / replays / standings).
+
+    Endpoint: ``GET https://api.nfl.com/experience/v2/gamedetails/{game_id}``
+    Example URL: https://api.nfl.com/experience/v2/gamedetails/a9a890ed-4feb-11f1-abca-2c54536568a9
+
+    Args:
+        game_id: Shield uuid game id -- the ``id`` column of the week games and weekly game details listings.
+        include_drive_chart: includeDriveChart query parameter.
+        include_replays: includeReplays query parameter.
+        include_standings: includeStandings query parameter.
+        include_tagged_videos: includeTaggedVideos query parameter.
+        headers: optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted.
+        return_parsed: parse the payload through parse_nfl_game_details_v2 -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        Quick start::
+
+            nfl_game_details_v2(game_id='a9a890ed-4feb-11f1-abca-2c54536568a9')
+    """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "includeDriveChart": _bool_str(include_drive_chart),
+        "includeReplays": _bool_str(include_replays),
+        "includeStandings": _bool_str(include_standings),
+        "includeTaggedVideos": _bool_str(include_tagged_videos),
+    }
+    _params.update(_caller_params)
+    raw = _get(
+        f"https://api.nfl.com/experience/v2/gamedetails/{game_id}",
+        params=_params,
+        headers=headers,
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_nfl_game_details_v2(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def nfl_game_details_by_slug(
+    slug: str,
+    include_replays: Optional[bool] = False,
+    headers: Optional[Dict[str, str]] = None,
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """GET /experience/v1/gamedetailsbyslug/{slug} — one row: the flat game detail looked up by nfl.com slug.
+
+    Endpoint: ``GET https://api.nfl.com/experience/v1/gamedetailsbyslug/{slug}``
+    Example URL: https://api.nfl.com/experience/v1/gamedetailsbyslug/broncos-at-chiefs-2026-reg-1
+
+    Args:
+        slug: nfl.com game slug, e.g. ``broncos-at-chiefs-2026-reg-1`` -- the last segment of the nfl.com game page URL and the ``slug`` external id.
+        include_replays: includeReplays query parameter.
+        headers: optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted.
+        return_parsed: parse the payload through parse_nfl_game_details_by_slug -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        Quick start::
+
+            nfl_game_details_by_slug(slug='broncos-at-chiefs-2026-reg-1')
+    """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "includeReplays": _bool_str(include_replays),
+    }
+    _params.update(_caller_params)
+    raw = _get(
+        f"https://api.nfl.com/experience/v1/gamedetailsbyslug/{slug}",
+        params=_params,
+        headers=headers,
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_nfl_game_details_by_slug(raw, return_as_pandas=return_as_pandas)
     return raw

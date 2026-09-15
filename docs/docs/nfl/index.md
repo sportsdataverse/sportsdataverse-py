@@ -11,7 +11,7 @@ description: "sdv-py NFL: endpoint references, dataset loaders and parsers for N
 | [ESPN web API (v3)](reference/web) | 5 | `https://site.web.api.espn.com/apis/common/v3/sports` |
 | [ESPN core API (v2)](reference/core) | 84 | `https://sports.core.api.espn.com/v2/sports` |
 | [ESPN FPI API (fitt v3)](reference/fitt) | 1 | `https://site.web.api.espn.com/apis/fitt/v3/sports` |
-| [NFL.com API](reference/nfl_api) | 11 | `https://api.nfl.com` |
+| [NFL.com API](reference/nfl_api) | 15 | `https://api.nfl.com` |
 | [nflpro](reference/nflpro) | 16 | `https://pro.nfl.com` |
 | [PFF Premium Stats (premium.pff.com)](reference/pff_core) | 46 | `https://premium.pff.com` |
 | [Dataset loaders](reference/loaders) | 11 | nflverse data releases / sportsdataverse-data releases |

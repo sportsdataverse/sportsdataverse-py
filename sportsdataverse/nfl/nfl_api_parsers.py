@@ -36,6 +36,10 @@ __all__ = [
     "parse_nfl_injuries",
     "parse_nfl_game_summaries",
     "parse_nfl_weekly_game_details",
+    "parse_nfl_live_team_statistics",
+    "parse_nfl_live_player_statistics",
+    "parse_nfl_game_details_v2",
+    "parse_nfl_game_details_by_slug",
 ]
 
 
@@ -321,3 +325,127 @@ def parse_nfl_weekly_game_details(raw: Union[Dict, List], return_as_pandas: bool
     """
     records = raw if isinstance(raw, list) else raw.get("games", []) or raw.get("data", [])
     return _to_frame(records, return_as_pandas)
+
+
+def parse_nfl_live_team_statistics(raw: Dict, return_as_pandas: bool = False) -> DataFrameT:
+    """Flatten ``/football/v2/stats/live/team-statistics/{game_id}`` into one row per side.
+
+    The payload holds one flat stat object per side under ``awayTeam`` /
+    ``homeTeam``; each becomes a row tagged with ``side`` and carrying the
+    payload's ``game_id`` and ``offset`` (the live-feed position the stats
+    reflect -- it advances as the game is played).
+
+    Args:
+        raw: Raw JSON dict from :func:`sportsdataverse.nfl.nfl_live_team_statistics`.
+        return_as_pandas: Return a ``pandas.DataFrame`` instead of polars.
+
+    Returns:
+        A ``polars`` (or ``pandas``) ``DataFrame`` with two rows (``side`` =
+        ``away`` / ``home``); zero rows for a game with no stats yet.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nfl import nfl_live_team_statistics, parse_nfl_live_team_statistics
+            raw = nfl_live_team_statistics(game_id="a9a890ed-4feb-11f1-abca-2c54536568a9", return_parsed=False)
+            parse_nfl_live_team_statistics(raw).select(["side", "team_id"])
+    """
+    if not isinstance(raw, dict):
+        return _to_frame([], return_as_pandas)
+    rows = []
+    for side in ("away", "home"):
+        team = raw.get(f"{side}Team")
+        if isinstance(team, dict):
+            rows.append({"gameId": raw.get("gameId"), "offset": raw.get("offset"), "side": side, **team})
+    return _to_frame(rows, return_as_pandas)
+
+
+def parse_nfl_live_player_statistics(raw: Dict, return_as_pandas: bool = False) -> DataFrameT:
+    """Flatten ``/football/v2/stats/live/player-statistics/{game_id}`` into one row per player.
+
+    Each side is ``{teamId, players[]}``; every player row is tagged with
+    ``side`` and ``team_id`` and carries the payload's ``game_id`` / ``offset``.
+    Player ids are GSIS (``gsis_player_id``) plus NFL.com ``person_id``.
+
+    Args:
+        raw: Raw JSON dict from :func:`sportsdataverse.nfl.nfl_live_player_statistics`.
+        return_as_pandas: Return a ``pandas.DataFrame`` instead of polars.
+
+    Returns:
+        A ``polars`` (or ``pandas``) ``DataFrame``, one row per player per side.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nfl import nfl_live_player_statistics, parse_nfl_live_player_statistics
+            raw = nfl_live_player_statistics(game_id="a9a890ed-4feb-11f1-abca-2c54536568a9", return_parsed=False)
+            parse_nfl_live_player_statistics(raw).select(["side", "gsis_player_name"]).head()
+    """
+    if not isinstance(raw, dict):
+        return _to_frame([], return_as_pandas)
+    rows = []
+    for side in ("away", "home"):
+        team = raw.get(f"{side}Team")
+        if not isinstance(team, dict):
+            continue
+        for player in team.get("players") or []:
+            if isinstance(player, dict):
+                rows.append(
+                    {
+                        "gameId": raw.get("gameId"),
+                        "offset": raw.get("offset"),
+                        "side": side,
+                        "teamId": team.get("teamId"),
+                        **player,
+                    }
+                )
+    return _to_frame(rows, return_as_pandas)
+
+
+def parse_nfl_game_details_v2(raw: Dict, return_as_pandas: bool = False) -> DataFrameT:
+    """Flatten ``/experience/v2/gamedetails/{game_id}`` into one row.
+
+    The v2 payload is flat (the v1 route wraps it under ``data``): game fields
+    at the top level plus ``summary`` and, when requested, ``driveChart``,
+    ``replays`` and the two standings blocks. Nested objects flatten into
+    prefixed columns; list-valued sections (``externalIds``, ``replays``, drive
+    lists) are stringified, as in :func:`parse_nfl_weekly_game_details`.
+
+    Args:
+        raw: Raw JSON dict from :func:`sportsdataverse.nfl.nfl_game_details_v2`.
+        return_as_pandas: Return a ``pandas.DataFrame`` instead of polars.
+
+    Returns:
+        A one-row ``polars`` (or ``pandas``) ``DataFrame``.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nfl import nfl_game_details_v2, parse_nfl_game_details_v2
+            raw = nfl_game_details_v2(game_id="a9a890ed-4feb-11f1-abca-2c54536568a9", return_parsed=False)
+            parse_nfl_game_details_v2(raw).select(["id", "status"])
+    """
+    return _to_frame([raw] if isinstance(raw, dict) and raw else [], return_as_pandas)
+
+
+def parse_nfl_game_details_by_slug(raw: Dict, return_as_pandas: bool = False) -> DataFrameT:
+    """Flatten ``/experience/v1/gamedetailsbyslug/{slug}`` into one row.
+
+    Same flat shape as :func:`parse_nfl_game_details_v2`, looked up by the
+    nfl.com slug instead of the Shield uuid.
+
+    Args:
+        raw: Raw JSON dict from :func:`sportsdataverse.nfl.nfl_game_details_by_slug`.
+        return_as_pandas: Return a ``pandas.DataFrame`` instead of polars.
+
+    Returns:
+        A one-row ``polars`` (or ``pandas``) ``DataFrame``.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nfl import nfl_game_details_by_slug, parse_nfl_game_details_by_slug
+            raw = nfl_game_details_by_slug(slug="broncos-at-chiefs-2026-reg-1", return_parsed=False)
+            parse_nfl_game_details_by_slug(raw).select(["id", "status"])
+    """
+    return _to_frame([raw] if isinstance(raw, dict) and raw else [], return_as_pandas)

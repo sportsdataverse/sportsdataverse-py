@@ -6,7 +6,7 @@ sidebar_position: 10
 ---
 # NFL — NFL.com API
 
-`sportsdataverse.nfl` — 11 endpoints.
+`sportsdataverse.nfl` — 15 endpoints.
 
 ## `nfl_standings`
 
@@ -104,6 +104,7 @@ GET /football/v2/rosters — one row per team roster for the season.
 |---|---|:---:|:---:|:---:|---|
 | `season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
 | `limit` | `limit` |  |  | `Y` | Maximum number of items to return. |
+| `teamId` | `team_id` |  |  | `Y` | Shield team uuid (the ``id`` of a team in the teams history listing). Returns just that team's roster -- one roster (~37 KB) instead of all 32 (~1.2 MB). |
 
 ### Returns
 
@@ -634,6 +635,713 @@ GET /football/v2/experience/weekly-game-details — one row per game (bare list)
 
 ```python
 nfl_weekly_game_details(season=2024, season_type='REG', week=1)
+```
+
+_Last validated n/a._
+
+## `nfl_live_team_statistics`
+
+GET /football/v2/stats/live/team-statistics/{game_id} — one row per side (away, home): the live team box score.
+
+**Endpoint URL:** `GET https://api.nfl.com/football/v2/stats/live/team-statistics/{game_id}`
+
+**Valid URL:** [https://api.nfl.com/football/v2/stats/live/team-statistics/a9a890ed-4feb-11f1-abca-2c54536568a9](https://api.nfl.com/football/v2/stats/live/team-statistics/a9a890ed-4feb-11f1-abca-2c54536568a9)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `game_id` | `game_id` |  | `Y` |  | Shield uuid game id -- the ``id`` column of the week games and weekly game details listings. |
+
+### Returns
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `game_id` | character | NFL.com Shield GUID for the game. |
+| `offset` | integer | Live-feed sequence position the statistics reflect; advances as the game is played. |
+| `side` | character | Which side of the game the row belongs to: away or home. |
+| `team_id` | character | NFL.com Shield GUID of the team. |
+| `defensive_fumbles_forced` | integer | Defense: fumbles forced. |
+| `defensive_fumbles_recovered` | integer | Defense: fumbles recovered. |
+| `defensive_interceptions` | integer | Defense: interceptions. |
+| `defensive_passes_defended` | integer | Defense: passes defended. |
+| `defensive_quarterback_hits` | integer | Defense: quarterback hits. |
+| `defensive_sacks` | integer | Defense: sacks. |
+| `defensive_safeties` | integer | Defense: safeties. |
+| `defensive_tackles_combined` | numeric | Defense: tackles combined. |
+| `defensive_tackles_for_loss` | numeric | Defense: tackles for loss. |
+| `defensive_touchdowns` | integer | Defense: touchdowns. |
+| `extra_point_kick_attempts` | integer | Extra points: kick attempts. |
+| `extra_point_kick_blocked` | integer | Extra points: kick blocked. |
+| `extra_point_kick_made` | integer | Extra points: kick made. |
+| `field_goals_attempts` | integer | Field goals: attempts. |
+| `field_goals_blocked` | integer | Field goals: blocked. |
+| `field_goals_longest_made` | integer | Field goals: longest made. |
+| `field_goals_made` | integer | Field goals: made. |
+| `first_downs_passing` | integer | First downs: passing. |
+| `first_downs_penalty` | integer | First downs: penalty. |
+| `first_downs_rushing` | integer | First downs: rushing. |
+| `first_downs_total` | integer | First downs: total. |
+| `fourth_down_attempts` | integer | Fourth down: attempts. |
+| `fourth_down_conversions` | integer | Fourth down: conversions. |
+| `fumbles_lost` | integer | Fumbles: lost. |
+| `fumbles_made` | integer | Fumbles: made. |
+| `fumbles_own_recoveries` | integer | Fumbles: own recoveries. |
+| `fumbles_returned_touchdowns` | integer | Fumbles: returned touchdowns. |
+| `goal_to_go_attempts` | integer | Goal-to-go: attempts. |
+| `goal_to_go_successes` | integer | Goal-to-go: successes. |
+| `interceptions_longest_touchdown` | integer | Interceptions: longest touchdown. |
+| `interceptions_made` | integer | Interceptions made by the defense. |
+| `interceptions_returned` | integer | Interceptions: returned. |
+| `interceptions_returned_touchdowns` | integer | Interceptions: returned touchdowns. |
+| `interceptions_returned_yards` | integer | Interceptions: returned yards. |
+| `kick_returns_longest` | integer | Kickoff returns: longest. |
+| `kick_returns_yards_average` | numeric | Kickoff returns: yards average. |
+| `kickoffs_in_end_zone` | integer | Kickoffs: in end zone. |
+| `kickoffs_made` | integer | Kickoffs: made. |
+| `kickoffs_returned` | integer | Kickoffs: returned. |
+| `kickoffs_returned_touchdowns` | integer | Kickoffs: returned touchdowns. |
+| `kickoffs_returned_yards` | integer | Kickoffs: returned yards. |
+| `kickoffs_touchbacks` | integer | Kickoffs: touchbacks. |
+| `passing_attempts` | integer | Passing: attempts. |
+| `passing_completions` | integer | Passing: completions. |
+| `passing_completion_percent` | numeric | Passing: completion percent. |
+| `passing_interceptions` | integer | Passing: interceptions. |
+| `passing_rating` | numeric | Passing: rating. |
+| `passing_sacks` | integer | Passing: sacks. |
+| `passing_sack_yards_lost` | numeric | Passing: sack yards lost. |
+| `passing_touchdowns` | integer | Passing: touchdowns. |
+| `passing_yards` | integer | Passing: yards. |
+| `passing_yards_average` | numeric | Passing: yards average. |
+| `passing_yards_per_attempt` | numeric | Passing: yards per attempt. |
+| `penalties_made` | integer | Penalties: made. |
+| `penalties_yards` | integer | Penalties: yards. |
+| `punt_returns_longest` | integer | Punt returns: longest. |
+| `punt_returns_yards_average` | numeric | Punt returns: yards average. |
+| `punts_attempts` | integer | Punting: attempts. |
+| `punts_blocked` | integer | Punting: blocked. |
+| `punts_inside20` | integer | Punting: inside the 20. |
+| `punts_longest` | integer | Punting: longest. |
+| `punts_returned` | integer | Punting: returned. |
+| `punts_returned_touchdowns` | integer | Punting: returned touchdowns. |
+| `punts_returned_yards` | integer | Punting: returned yards. |
+| `punts_touchbacks` | integer | Punting: touchbacks. |
+| `punts_yards` | integer | Punting: yards. |
+| `punts_yards_average_gross` | numeric | Gross punting average (yards per punt). |
+| `punts_yards_average_net` | numeric | Net punting average (yards per punt, after returns and touchbacks). |
+| `receptions` | integer | Receptions. |
+| `receptions_long` | integer | Receiving: longest. |
+| `receptions_pass_target` | integer | Pass targets. |
+| `receptions_touchdowns` | integer | Receiving: touchdowns. |
+| `receptions_yards` | integer | Receiving: yards. |
+| `receptions_yards_after_catch` | integer | Receiving yards after the catch. |
+| `red_zone_attempts` | integer | Red zone: attempts. |
+| `red_zone_successes` | integer | Red zone: successes. |
+| `rushing_long` | integer | Rushing: longest. |
+| `rushing_plays` | integer | Rushing: plays. |
+| `rushing_tackles_for_loss` | integer | Rushing: tackles for loss. |
+| `rushing_tackles_for_loss_yards` | integer | Rushing: tackles for loss yards. |
+| `rushing_touchdowns` | integer | Rushing: touchdowns. |
+| `rushing_yards` | integer | Rushing: yards. |
+| `rushing_yards_average` | numeric | Rushing: yards average. |
+| `safeties_one_point` | integer | Safeties: one point. |
+| `safeties_two_point` | integer | Safeties: two point. |
+| `score_q1` | integer | Points scored in the 1st quarter. |
+| `score_q2` | integer | Points scored in the 2nd quarter. |
+| `score_q3` | integer | Points scored in the 3rd quarter. |
+| `score_q4` | integer | Points scored in the 4th quarter. |
+| `score_ot` | integer | Points scored in overtime. |
+| `score_total` | integer | Total points scored. |
+| `third_down_attempts` | integer | Third down: attempts. |
+| `third_down_conversions` | integer | Third down: conversions. |
+| `time_of_possession` | character | Time of possession (MM:SS). |
+| `timeouts_remaining` | integer | Timeouts: remaining. |
+| `timeouts_used` | integer | Timeouts: used. |
+| `total_plays` | integer | Totals: plays. |
+| `total_yards` | integer | Totals: yards. |
+| `touchdowns_all_other` | integer | Touchdowns: all other. |
+| `turnovers` | integer | Total turnovers. |
+| `two_point_conversions_defensive_returns` | integer | Two-point conversions: defensive returns. |
+| `two_point_conversions_passing_attempts` | integer | Two-point conversions: passing attempts. |
+| `two_point_conversions_passing_successes` | integer | Two-point conversions: passing successes. |
+| `two_point_conversions_rushing_attempts` | integer | Two-point conversions: rushing attempts. |
+| `two_point_conversions_rushing_successes` | integer | Two-point conversions: rushing successes. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example
+
+```python
+nfl_live_team_statistics(game_id='a9a890ed-4feb-11f1-abca-2c54536568a9')
+```
+
+_Last validated n/a._
+
+## `nfl_live_player_statistics`
+
+GET /football/v2/stats/live/player-statistics/{game_id} — one row per player per side: the live player box score.
+
+**Endpoint URL:** `GET https://api.nfl.com/football/v2/stats/live/player-statistics/{game_id}`
+
+**Valid URL:** [https://api.nfl.com/football/v2/stats/live/player-statistics/a9a890ed-4feb-11f1-abca-2c54536568a9](https://api.nfl.com/football/v2/stats/live/player-statistics/a9a890ed-4feb-11f1-abca-2c54536568a9)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `game_id` | `game_id` |  | `Y` |  | Shield uuid game id -- the ``id`` column of the week games and weekly game details listings. |
+
+### Returns
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `game_id` | character | NFL.com Shield GUID for the game. |
+| `offset` | integer | Live-feed sequence position the statistics reflect; advances as the game is played. |
+| `side` | character | Which side of the game the row belongs to: away or home. |
+| `team_id` | character | NFL.com Shield GUID of the team. |
+| `gsis_player_id` | character | NFL GSIS player id (00-00xxxxx), the key nflverse data joins on. |
+| `gsis_player_jersey_number` | character | Player's jersey number as recorded in GSIS. |
+| `gsis_player_name` | character | Player name as recorded in GSIS (e.g. P.Mahomes). |
+| `person_id` | character | NFL.com Shield GUID of the player (person). |
+| `defensive_fumbles_forced` | integer | Defense: fumbles forced. |
+| `defensive_fumbles_recovered` | integer | Defense: fumbles recovered. |
+| `defensive_interceptions` | integer | Defense: interceptions. |
+| `defensive_miscellaneous_fumbles_forced` | integer | Defense (miscellaneous): fumbles forced. |
+| `defensive_miscellaneous_fumbles_recovered` | integer | Defense (miscellaneous): fumbles recovered. |
+| `defensive_miscellaneous_tackles` | numeric | Defense (miscellaneous): tackles. |
+| `defensive_miscellaneous_tackles_assists` | integer | Defense (miscellaneous): tackles assists. |
+| `defensive_passes_defended` | integer | Defense: passes defended. |
+| `defensive_quarterback_hits` | integer | Defense: quarterback hits. |
+| `defensive_sacks` | numeric | Defense: sacks. |
+| `defensive_sack_yards` | numeric | Defense: sack yards. |
+| `defensive_safeties` | integer | Defense: safeties. |
+| `defensive_special_teams_fumbles_forced` | integer | Defense: special teams fumbles forced. |
+| `defensive_special_teams_fumbles_recovered` | integer | Defense: special teams fumbles recovered. |
+| `defensive_special_teams_tackles` | numeric | Defense: special teams tackles. |
+| `defensive_special_teams_tackles_assists` | integer | Defense: special teams tackles assists. |
+| `defensive_special_teams_blocks` | integer | Defense: special teams blocks. |
+| `defensive_tackles` | numeric | Defense: tackles. |
+| `defensive_tackles_assists` | integer | Defense: tackles assists. |
+| `defensive_tackles_combined` | numeric | Defense: tackles combined. |
+| `defensive_tackles_for_loss` | numeric | Defense: tackles for loss. |
+| `defensive_tackles_for_loss_yards` | numeric | Defense: tackles for loss yards. |
+| `extra_points_attempted` | integer | Extra points: attempted. |
+| `extra_points_made` | integer | Extra points: made. |
+| `extra_points_missed` | integer | Extra points: missed. |
+| `extra_points_blocked` | integer | Extra points: blocked. |
+| `field_goals_attempted` | integer | Field goals: attempted. |
+| `field_goals_average_length` | numeric | Field goals: average length. |
+| `field_goals_blocked` | integer | Field goals: blocked. |
+| `field_goals_longest_made` | integer | Field goals: longest made. |
+| `field_goals_made` | integer | Field goals: made. |
+| `field_goals_missed` | integer | Field goals: missed. |
+| `field_goals_total_yards` | integer | Field goals: total yards. |
+| `fumbles` | integer | Fumbles. |
+| `fumbles_forced` | integer | Fumbles: forced. |
+| `fumbles_lost` | integer | Fumbles: lost. |
+| `fumbles_recovered_in_end_zone_for_touchdown` | integer | Fumbles: recovered in end zone for touchdown. |
+| `fumbles_opponent_recoveries` | integer | Fumbles: opponent recoveries. |
+| `fumbles_opponent_recovery_touchdowns` | integer | Fumbles: opponent recovery touchdowns. |
+| `fumbles_opponent_recovery_yards` | integer | Fumbles: opponent recovery yards. |
+| `fumbles_out_of_bounds` | integer | Fumbles: out of bounds. |
+| `fumbles_own_recoveries` | integer | Fumbles: own recoveries. |
+| `fumbles_own_recovery_touchdowns` | integer | Fumbles: own recovery touchdowns. |
+| `fumbles_own_recovery_yards` | integer | Fumbles: own recovery yards. |
+| `interceptions` | integer | Interceptions thrown. |
+| `interceptions_long` | integer | Interceptions: longest. |
+| `interceptions_longest_touchdown` | integer | Interceptions: longest touchdown. |
+| `interceptions_touchdowns` | integer | Interceptions: touchdowns. |
+| `interceptions_yards` | integer | Interceptions: yards. |
+| `kickoffs` | integer | Kickoffs. |
+| `kickoffs_inside20` | integer | Kickoffs: inside the 20. |
+| `kickoffs_out_of_bounds` | integer | Kickoffs: out of bounds. |
+| `kickoffs_return_yards` | integer | Kickoffs: return yards. |
+| `kickoffs_to_end_zone` | integer | Kickoffs: to end zone. |
+| `kickoffs_touchbacks` | integer | Kickoffs: touchbacks. |
+| `kickoffs_yards` | integer | Kickoffs: yards. |
+| `kick_returns` | integer | Kickoff returns. |
+| `kick_returns_fair_catches` | integer | Kickoff returns: fair catches. |
+| `kick_returns_longest` | integer | Kickoff returns: longest. |
+| `kick_returns_longest_touchdown` | integer | Kickoff returns: longest touchdown. |
+| `kick_returns_touchdowns` | integer | Kickoff returns: touchdowns. |
+| `kick_returns_yards` | integer | Kickoff returns: yards. |
+| `kick_returns_yards_average` | numeric | Kickoff returns: yards average. |
+| `passing_attempts` | integer | Passing: attempts. |
+| `passing_completions` | integer | Passing: completions. |
+| `passing_completion_percent` | numeric | Passing: completion percent. |
+| `passing_interceptions` | integer | Passing: interceptions. |
+| `passing_long` | integer | Passing: longest. |
+| `passing_longest_touchdown_pass` | integer | Passing: longest touchdown pass. |
+| `passing_rating` | numeric | Passing: rating. |
+| `passing_sack_yards_lost` | numeric | Passing: sack yards lost. |
+| `passing_times_sacked` | integer | Passing: times sacked. |
+| `passing_touchdowns` | integer | Passing: touchdowns. |
+| `passing_yards` | integer | Passing: yards. |
+| `passing_yards_average` | numeric | Passing: yards average. |
+| `passing_yards_per_attempt` | numeric | Passing: yards per attempt. |
+| `punts` | integer | Punts. |
+| `punts_blocked` | integer | Punting: blocked. |
+| `punts_inside20` | integer | Punting: inside the 20. |
+| `punts_longest` | integer | Punting: longest. |
+| `punts_return_yards` | integer | Punt return yards allowed on this player's punts. |
+| `punts_touchbacks` | integer | Punting: touchbacks. |
+| `punts_yards` | integer | Punting: yards. |
+| `punts_yards_average_gross` | numeric | Gross punting average (yards per punt). |
+| `punts_yards_average_net` | numeric | Net punting average (yards per punt, after returns and touchbacks). |
+| `punt_returns` | integer | Punt returns. |
+| `punt_returns_fair_catches` | integer | Punt returns: fair catches. |
+| `punt_returns_longest` | integer | Punt returns: longest. |
+| `punt_returns_longest_touchdown` | integer | Punt returns: longest touchdown. |
+| `punt_returns_touchdowns` | integer | Punt returns: touchdowns. |
+| `punt_returns_yards` | integer | Punt returns: yards. |
+| `punt_returns_yards_average` | numeric | Punt returns: yards average. |
+| `receptions` | integer | Receptions. |
+| `receptions_average` | numeric | Receiving: average. |
+| `receptions_long` | integer | Receiving: longest. |
+| `receptions_longest_touchdown` | integer | Receiving: longest touchdown. |
+| `receptions_pass_target` | integer | Pass targets. |
+| `receptions_touchdowns` | integer | Receiving: touchdowns. |
+| `receptions_yards` | integer | Receiving: yards. |
+| `receptions_yards_after_catch` | integer | Receiving yards after the catch. |
+| `rushing_attempts` | integer | Rushing: attempts. |
+| `rushing_average` | numeric | Rushing: average. |
+| `rushing_long` | integer | Rushing: longest. |
+| `rushing_longest_touchdown` | integer | Rushing: longest touchdown. |
+| `rushing_touchdowns` | integer | Rushing: touchdowns. |
+| `rushing_yards` | integer | Rushing: yards. |
+| `two_point_defensive_attempts` | integer | Two-point conversions: defensive attempts. |
+| `two_point_defensive_successes` | integer | Two-point conversions: defensive successes. |
+| `two_point_passing_attempts` | integer | Two-point conversions: passing attempts. |
+| `two_point_passing_successes` | integer | Two-point conversions: passing successes. |
+| `two_point_reception_attempts` | integer | Two-point conversions: reception attempts. |
+| `two_point_reception_successes` | integer | Two-point conversions: reception successes. |
+| `two_point_rushing_attempts` | integer | Two-point conversions: rushing attempts. |
+| `two_point_rushing_successes` | integer | Two-point conversions: rushing successes. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example
+
+```python
+nfl_live_player_statistics(game_id='a9a890ed-4feb-11f1-abca-2c54536568a9')
+```
+
+_Last validated n/a._
+
+## `nfl_game_details_v2`
+
+GET /experience/v2/gamedetails/{game_id} — one row: the flat v2 game detail (game, summary, optional drive chart / replays / standings).
+
+**Endpoint URL:** `GET https://api.nfl.com/experience/v2/gamedetails/{game_id}`
+
+**Valid URL:** [https://api.nfl.com/experience/v2/gamedetails/a9a890ed-4feb-11f1-abca-2c54536568a9](https://api.nfl.com/experience/v2/gamedetails/a9a890ed-4feb-11f1-abca-2c54536568a9)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `game_id` | `game_id` |  | `Y` |  | Shield uuid game id -- the ``id`` column of the week games and weekly game details listings. |
+| `includeDriveChart` | `include_drive_chart` |  |  | `Y` | includeDriveChart query parameter. |
+| `includeReplays` | `include_replays` |  |  | `Y` | includeReplays query parameter. |
+| `includeStandings` | `include_standings` |  |  | `Y` | includeStandings query parameter. |
+| `includeTaggedVideos` | `include_tagged_videos` |  |  | `Y` | includeTaggedVideos query parameter. |
+
+### Returns
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `id` | character | NFL.com Shield GUID for the combine profile. |
+| `category` | character | Game category / window (e.g. SNF, MNF, TNF). |
+| `date` | character | Game date (YYYY-MM-DD). |
+| `time` | character | ISO 8601 kickoff timestamp. |
+| `game_type` | character | Game type classification (e.g. UNSPECIFIED, REG, WC). |
+| `international` | logical | Whether the game is played at an international venue. |
+| `neutral_site` | logical | Whether the game is played at a neutral site. |
+| `season` | integer | Season (year) the date falls in. |
+| `season_type` | character | Season type code (PRE, REG, or POST). |
+| `status` | character | Game status (e.g. SCHEDULED, INGAME, FINAL). |
+| `week` | integer | Week number that the queried date falls within. |
+| `week_type` | character | Week type code (e.g. PRE, REG, WC, DIV, CONF, SB). |
+| `external_ids` | character | JSON-stringified array of external game identifiers (elias, gsis, etc.). |
+| `ticket_url` | character | Primary ticket-purchase URL for the game. |
+| `ticket_vendors` | character | JSON-stringified array of ticket-vendor objects (vendor name, URL). |
+| `extensions` | character | JSON-stringified array of extension objects (empty when none). |
+| `version` | integer | Record version number. |
+| `replays` | character | JSON-stringified array of replay objects (populated only when include_replays=true). |
+| `tagged_videos` | character | JSON-stringified array of tagged-video objects (populated only when include_tagged_videos=true). |
+| `home_team_id` | character | NFL.com Shield GUID of the home team. |
+| `home_team_current_logo` | character | Templated URL of the home team's current logo. |
+| `home_team_full_name` | character | Full home-team name (e.g. "Kansas City Chiefs"). |
+| `away_team_id` | character | NFL.com Shield GUID of the away team. |
+| `away_team_current_logo` | character | Templated URL of the away team's current logo. |
+| `away_team_full_name` | character | Full away-team name (e.g. "Baltimore Ravens"). |
+| `broadcast_info_home_network_channels` | character | JSON-stringified array of broadcast channels in the home market. |
+| `broadcast_info_away_network_channels` | character | JSON-stringified array of broadcast channels in the away market. |
+| `broadcast_info_international_watch_options` | character | JSON-stringified array of international broadcaster options by country. |
+| `broadcast_info_streaming_networks` | character | JSON-stringified array of streaming-network objects. |
+| `broadcast_info_territory` | character | Broadcast territory designation (e.g. NATIONAL, REGIONAL). |
+| `broadcast_info_audio_networks` | character | JSON-stringified array of audio-broadcast network objects. |
+| `venue_id` | character | NFL.com Shield GUID of the venue. |
+| `venue_name` | character | Venue name (e.g. "GEHA Field at Arrowhead Stadium"). |
+| `venue_city` | character | Venue city. |
+| `venue_country` | character | Venue country. |
+| `summary_game_id` | character | NFL.com Shield GUID for the game (from the embedded live summary). |
+| `summary_offset` | integer | Live-feed sequence offset for the embedded summary snapshot. |
+| `summary_attendance` | character | Announced game attendance (from the embedded summary). |
+| `summary_clock` | character | Game clock at the summary snapshot (MM:SS). |
+| `summary_distance` | integer | Yards to gain for a first down at the summary snapshot. |
+| `summary_down` | integer | Current down (1-4) at the summary snapshot. |
+| `summary_game_book_url` | character | URL of the official game book image (from the embedded summary). |
+| `summary_is_goal_to_go` | logical | Whether the situation is goal-to-go at the summary snapshot. |
+| `summary_is_red_zone` | logical | Whether the ball is in the red zone at the summary snapshot. |
+| `summary_phase` | character | Game phase (e.g. PREGAME, INGAME, HALFTIME, FINAL). |
+| `summary_quarter` | character | Current period descriptor (e.g. Q1, HALFTIME, END_OF_GAME). |
+| `summary_start_time` | character | ISO 8601 kickoff timestamp (from the embedded summary). |
+| `summary_weather` | character | Weather summary string (temperature, humidity, wind). |
+| `summary_yard_line` | character | Current line of scrimmage at the summary snapshot (e.g. "KC 10"). |
+| `summary_away_team_team_id` | character | NFL.com Shield GUID of the away team (from the embedded summary). |
+| `summary_away_team_has_possession` | logical | Whether the away team has possession at the summary snapshot. |
+| `summary_away_team_score_q1` | integer | Away team points scored in the first quarter. |
+| `summary_away_team_score_q2` | integer | Away team points scored in the second quarter. |
+| `summary_away_team_score_q3` | integer | Away team points scored in the third quarter. |
+| `summary_away_team_score_q4` | integer | Away team points scored in the fourth quarter. |
+| `summary_away_team_score_ot` | integer | Away team points scored in overtime. |
+| `summary_away_team_score_total` | integer | Away team total points. |
+| `summary_away_team_timeouts_remaining` | integer | Away team timeouts remaining at the summary snapshot. |
+| `summary_away_team_timeouts_used` | integer | Away team timeouts used at the summary snapshot. |
+| `summary_home_team_team_id` | character | NFL.com Shield GUID of the home team (from the embedded summary). |
+| `summary_home_team_has_possession` | logical | Whether the home team has possession at the summary snapshot. |
+| `summary_home_team_score_q1` | integer | Home team points scored in the first quarter. |
+| `summary_home_team_score_q2` | integer | Home team points scored in the second quarter. |
+| `summary_home_team_score_q3` | integer | Home team points scored in the third quarter. |
+| `summary_home_team_score_q4` | integer | Home team points scored in the fourth quarter. |
+| `summary_home_team_score_ot` | integer | Home team points scored in overtime. |
+| `summary_home_team_score_total` | integer | Home team total points. |
+| `summary_home_team_timeouts_remaining` | integer | Home team timeouts remaining at the summary snapshot. |
+| `summary_home_team_timeouts_used` | integer | Home team timeouts used at the summary snapshot. |
+| `away_team_standings_team_id` | character | Away team standings: nFL.com Shield GUID for the team. |
+| `away_team_standings_team_current_logo` | character | Away team standings: templated URL of the team's current logo. |
+| `away_team_standings_team_full_name` | character | Away team standings: full team name (e.g. "Arizona Cardinals"). |
+| `away_team_standings_clinched_bye` | logical | Away team standings: whether the team has clinched a first-round playoff bye. |
+| `away_team_standings_clinched_division` | logical | Away team standings: whether the team has clinched its division. |
+| `away_team_standings_clinched_eliminated` | logical | Away team standings: whether the team has been mathematically eliminated from playoff contention. |
+| `away_team_standings_clinched_home_field` | logical | Away team standings: whether the team has clinched home-field advantage throughout the playoffs. |
+| `away_team_standings_clinched_playoff` | logical | Away team standings: whether the team has clinched a playoff berth. |
+| `away_team_standings_clinched_wild_card` | logical | Away team standings: whether the team has clinched a wild-card playoff berth. |
+| `away_team_standings_close_games_wins` | integer | Away team standings: wins in close games (decided by one score / 8 points or fewer). |
+| `away_team_standings_close_games_losses` | integer | Away team standings: losses in close games (decided by one score / 8 points or fewer). |
+| `away_team_standings_close_games_ties` | integer | Away team standings: ties in close games. |
+| `away_team_standings_conference_wins` | integer | Away team standings: wins against conference (AFC/NFC) opponents. |
+| `away_team_standings_conference_win_pct` | numeric | Away team standings: win percentage against conference opponents. |
+| `away_team_standings_conference_losses` | integer | Away team standings: losses against conference opponents. |
+| `away_team_standings_conference_ties` | integer | Away team standings: ties against conference opponents. |
+| `away_team_standings_conference_rank` | integer | Away team standings: standings rank within the conference. |
+| `away_team_standings_conference_points_for` | integer | Away team standings: points scored in conference games. |
+| `away_team_standings_conference_points_against` | integer | Away team standings: points allowed in conference games. |
+| `away_team_standings_division_wins` | integer | Away team standings: wins against division opponents. |
+| `away_team_standings_division_win_pct` | numeric | Away team standings: win percentage against division opponents. |
+| `away_team_standings_division_losses` | integer | Away team standings: losses against division opponents. |
+| `away_team_standings_division_ties` | integer | Away team standings: ties against division opponents. |
+| `away_team_standings_division_rank` | integer | Away team standings: standings rank within the division. |
+| `away_team_standings_division_points_for` | integer | Away team standings: points scored in division games. |
+| `away_team_standings_division_points_against` | integer | Away team standings: points allowed in division games. |
+| `away_team_standings_home_wins` | integer | Away team standings: wins in home games. |
+| `away_team_standings_home_win_pct` | numeric | Away team standings: win percentage in home games. |
+| `away_team_standings_home_losses` | integer | Away team standings: losses in home games. |
+| `away_team_standings_home_ties` | integer | Away team standings: ties in home games. |
+| `away_team_standings_home_points_for` | integer | Away team standings: points scored in home games. |
+| `away_team_standings_home_points_against` | integer | Away team standings: points allowed in home games. |
+| `away_team_standings_last5_wins` | integer | Away team standings: wins over the last five games. |
+| `away_team_standings_last5_win_pct` | numeric | Away team standings: win percentage over the last five games. |
+| `away_team_standings_last5_losses` | integer | Away team standings: losses over the last five games. |
+| `away_team_standings_last5_ties` | integer | Away team standings: ties over the last five games. |
+| `away_team_standings_last5_points_for` | integer | Away team standings: points scored over the last five games. |
+| `away_team_standings_last5_points_against` | integer | Away team standings: points allowed over the last five games. |
+| `away_team_standings_overall_games` | integer | Away team standings: total games played. |
+| `away_team_standings_overall_wins` | integer | Away team standings: total wins. |
+| `away_team_standings_overall_win_pct` | numeric | Away team standings: overall win percentage. |
+| `away_team_standings_overall_losses` | integer | Away team standings: total losses. |
+| `away_team_standings_overall_ties` | integer | Away team standings: total ties. |
+| `away_team_standings_overall_points_for` | integer | Away team standings: total points scored. |
+| `away_team_standings_overall_points_against` | integer | Away team standings: total points allowed. |
+| `away_team_standings_overall_streak_type` | character | Away team standings: current streak type ("W" for winning, "L" for losing). |
+| `away_team_standings_overall_streak_length` | integer | Away team standings: length of the current win/loss streak. |
+| `away_team_standings_road_wins` | integer | Away team standings: wins in road (away) games. |
+| `away_team_standings_road_win_pct` | numeric | Away team standings: win percentage in road games. |
+| `away_team_standings_road_losses` | integer | Away team standings: losses in road games. |
+| `away_team_standings_road_ties` | integer | Away team standings: ties in road games. |
+| `away_team_standings_road_points_for` | integer | Away team standings: points scored in road games. |
+| `away_team_standings_road_points_against` | integer | Away team standings: points allowed in road games. |
+| `home_team_standings_team_id` | character | Home team standings: nFL.com Shield GUID for the team. |
+| `home_team_standings_team_current_logo` | character | Home team standings: templated URL of the team's current logo. |
+| `home_team_standings_team_full_name` | character | Home team standings: full team name (e.g. "Arizona Cardinals"). |
+| `home_team_standings_clinched_bye` | logical | Home team standings: whether the team has clinched a first-round playoff bye. |
+| `home_team_standings_clinched_division` | logical | Home team standings: whether the team has clinched its division. |
+| `home_team_standings_clinched_eliminated` | logical | Home team standings: whether the team has been mathematically eliminated from playoff contention. |
+| `home_team_standings_clinched_home_field` | logical | Home team standings: whether the team has clinched home-field advantage throughout the playoffs. |
+| `home_team_standings_clinched_playoff` | logical | Home team standings: whether the team has clinched a playoff berth. |
+| `home_team_standings_clinched_wild_card` | logical | Home team standings: whether the team has clinched a wild-card playoff berth. |
+| `home_team_standings_close_games_wins` | integer | Home team standings: wins in close games (decided by one score / 8 points or fewer). |
+| `home_team_standings_close_games_losses` | integer | Home team standings: losses in close games (decided by one score / 8 points or fewer). |
+| `home_team_standings_close_games_ties` | integer | Home team standings: ties in close games. |
+| `home_team_standings_conference_wins` | integer | Home team standings: wins against conference (AFC/NFC) opponents. |
+| `home_team_standings_conference_win_pct` | numeric | Home team standings: win percentage against conference opponents. |
+| `home_team_standings_conference_losses` | integer | Home team standings: losses against conference opponents. |
+| `home_team_standings_conference_ties` | integer | Home team standings: ties against conference opponents. |
+| `home_team_standings_conference_rank` | integer | Home team standings: standings rank within the conference. |
+| `home_team_standings_conference_points_for` | integer | Home team standings: points scored in conference games. |
+| `home_team_standings_conference_points_against` | integer | Home team standings: points allowed in conference games. |
+| `home_team_standings_division_wins` | integer | Home team standings: wins against division opponents. |
+| `home_team_standings_division_win_pct` | numeric | Home team standings: win percentage against division opponents. |
+| `home_team_standings_division_losses` | integer | Home team standings: losses against division opponents. |
+| `home_team_standings_division_ties` | integer | Home team standings: ties against division opponents. |
+| `home_team_standings_division_rank` | integer | Home team standings: standings rank within the division. |
+| `home_team_standings_division_points_for` | integer | Home team standings: points scored in division games. |
+| `home_team_standings_division_points_against` | integer | Home team standings: points allowed in division games. |
+| `home_team_standings_home_wins` | integer | Home team standings: wins in home games. |
+| `home_team_standings_home_win_pct` | numeric | Home team standings: win percentage in home games. |
+| `home_team_standings_home_losses` | integer | Home team standings: losses in home games. |
+| `home_team_standings_home_ties` | integer | Home team standings: ties in home games. |
+| `home_team_standings_home_points_for` | integer | Home team standings: points scored in home games. |
+| `home_team_standings_home_points_against` | integer | Home team standings: points allowed in home games. |
+| `home_team_standings_last5_wins` | integer | Home team standings: wins over the last five games. |
+| `home_team_standings_last5_win_pct` | numeric | Home team standings: win percentage over the last five games. |
+| `home_team_standings_last5_losses` | integer | Home team standings: losses over the last five games. |
+| `home_team_standings_last5_ties` | integer | Home team standings: ties over the last five games. |
+| `home_team_standings_last5_points_for` | integer | Home team standings: points scored over the last five games. |
+| `home_team_standings_last5_points_against` | integer | Home team standings: points allowed over the last five games. |
+| `home_team_standings_overall_games` | integer | Home team standings: total games played. |
+| `home_team_standings_overall_wins` | integer | Home team standings: total wins. |
+| `home_team_standings_overall_win_pct` | numeric | Home team standings: overall win percentage. |
+| `home_team_standings_overall_losses` | integer | Home team standings: total losses. |
+| `home_team_standings_overall_ties` | integer | Home team standings: total ties. |
+| `home_team_standings_overall_points_for` | integer | Home team standings: total points scored. |
+| `home_team_standings_overall_points_against` | integer | Home team standings: total points allowed. |
+| `home_team_standings_overall_streak_type` | character | Home team standings: current streak type ("W" for winning, "L" for losing). |
+| `home_team_standings_overall_streak_length` | integer | Home team standings: length of the current win/loss streak. |
+| `home_team_standings_road_wins` | integer | Home team standings: wins in road (away) games. |
+| `home_team_standings_road_win_pct` | numeric | Home team standings: win percentage in road games. |
+| `home_team_standings_road_losses` | integer | Home team standings: losses in road games. |
+| `home_team_standings_road_ties` | integer | Home team standings: ties in road games. |
+| `home_team_standings_road_points_for` | integer | Home team standings: points scored in road games. |
+| `home_team_standings_road_points_against` | integer | Home team standings: points allowed in road games. |
+| `drive_chart_game_id` | character | NFL.com Shield GUID for the game (from the drive chart, present when include_drive_chart=true). |
+| `drive_chart_offset` | integer | Live-feed sequence offset for the drive-chart snapshot. |
+| `drive_chart_drives` | character | JSON-stringified array of drive objects (sequence, team, result, etc.). |
+| `drive_chart_plays` | character | JSON-stringified array of play objects within the drive chart. |
+| `drive_chart_scoring_summaries` | character | JSON-stringified array of scoring-summary objects (sequence, scores, clock). |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example
+
+```python
+nfl_game_details_v2(game_id='a9a890ed-4feb-11f1-abca-2c54536568a9')
+```
+
+_Last validated n/a._
+
+## `nfl_game_details_by_slug`
+
+GET /experience/v1/gamedetailsbyslug/{slug} — one row: the flat game detail looked up by nfl.com slug.
+
+**Endpoint URL:** `GET https://api.nfl.com/experience/v1/gamedetailsbyslug/{slug}`
+
+**Valid URL:** [https://api.nfl.com/experience/v1/gamedetailsbyslug/broncos-at-chiefs-2026-reg-1](https://api.nfl.com/experience/v1/gamedetailsbyslug/broncos-at-chiefs-2026-reg-1)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `slug` | `slug` |  | `Y` |  | nfl.com game slug, e.g. ``broncos-at-chiefs-2026-reg-1`` -- the last segment of the nfl.com game page URL and the ``slug`` external id. |
+| `includeReplays` | `include_replays` |  |  | `Y` | includeReplays query parameter. |
+
+### Returns
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `id` | character | NFL.com Shield GUID for the combine profile. |
+| `category` | character | Game category / window (e.g. SNF, MNF, TNF). |
+| `date` | character | Game date (YYYY-MM-DD). |
+| `time` | character | ISO 8601 kickoff timestamp. |
+| `game_type` | character | Game type classification (e.g. UNSPECIFIED, REG, WC). |
+| `international` | logical | Whether the game is played at an international venue. |
+| `neutral_site` | logical | Whether the game is played at a neutral site. |
+| `season` | integer | Season (year) the date falls in. |
+| `season_type` | character | Season type code (PRE, REG, or POST). |
+| `status` | character | Game status (e.g. SCHEDULED, INGAME, FINAL). |
+| `week` | integer | Week number that the queried date falls within. |
+| `week_type` | character | Week type code (e.g. PRE, REG, WC, DIV, CONF, SB). |
+| `external_ids` | character | JSON-stringified array of external game identifiers (elias, gsis, etc.). |
+| `ticket_url` | character | Primary ticket-purchase URL for the game. |
+| `ticket_vendors` | character | JSON-stringified array of ticket-vendor objects (vendor name, URL). |
+| `extensions` | character | JSON-stringified array of extension objects (empty when none). |
+| `version` | integer | Record version number. |
+| `replays` | character | JSON-stringified array of replay objects (populated only when include_replays=true). |
+| `home_team_id` | character | NFL.com Shield GUID of the home team. |
+| `home_team_current_logo` | character | Templated URL of the home team's current logo. |
+| `home_team_full_name` | character | Full home-team name (e.g. "Kansas City Chiefs"). |
+| `away_team_id` | character | NFL.com Shield GUID of the away team. |
+| `away_team_current_logo` | character | Templated URL of the away team's current logo. |
+| `away_team_full_name` | character | Full away-team name (e.g. "Baltimore Ravens"). |
+| `broadcast_info_home_network_channels` | character | JSON-stringified array of broadcast channels in the home market. |
+| `broadcast_info_away_network_channels` | character | JSON-stringified array of broadcast channels in the away market. |
+| `broadcast_info_international_watch_options` | character | JSON-stringified array of international broadcaster options by country. |
+| `broadcast_info_streaming_networks` | character | JSON-stringified array of streaming-network objects. |
+| `broadcast_info_territory` | character | Broadcast territory designation (e.g. NATIONAL, REGIONAL). |
+| `broadcast_info_audio_networks` | character | JSON-stringified array of audio-broadcast network objects. |
+| `venue_id` | character | NFL.com Shield GUID of the venue. |
+| `venue_name` | character | Venue name (e.g. "GEHA Field at Arrowhead Stadium"). |
+| `venue_city` | character | Venue city. |
+| `venue_country` | character | Venue country. |
+| `summary_game_id` | character | NFL.com Shield GUID for the game (from the embedded live summary). |
+| `summary_offset` | integer | Live-feed sequence offset for the embedded summary snapshot. |
+| `summary_attendance` | character | Announced game attendance (from the embedded summary). |
+| `summary_clock` | character | Game clock at the summary snapshot (MM:SS). |
+| `summary_distance` | integer | Yards to gain for a first down at the summary snapshot. |
+| `summary_down` | integer | Current down (1-4) at the summary snapshot. |
+| `summary_game_book_url` | character | URL of the official game book image (from the embedded summary). |
+| `summary_is_goal_to_go` | logical | Whether the situation is goal-to-go at the summary snapshot. |
+| `summary_is_red_zone` | logical | Whether the ball is in the red zone at the summary snapshot. |
+| `summary_phase` | character | Game phase (e.g. PREGAME, INGAME, HALFTIME, FINAL). |
+| `summary_quarter` | character | Current period descriptor (e.g. Q1, HALFTIME, END_OF_GAME). |
+| `summary_start_time` | character | ISO 8601 kickoff timestamp (from the embedded summary). |
+| `summary_weather` | character | Weather summary string (temperature, humidity, wind). |
+| `summary_yard_line` | character | Current line of scrimmage at the summary snapshot (e.g. "KC 10"). |
+| `summary_away_team_team_id` | character | NFL.com Shield GUID of the away team (from the embedded summary). |
+| `summary_away_team_has_possession` | logical | Whether the away team has possession at the summary snapshot. |
+| `summary_away_team_score_q1` | integer | Away team points scored in the first quarter. |
+| `summary_away_team_score_q2` | integer | Away team points scored in the second quarter. |
+| `summary_away_team_score_q3` | integer | Away team points scored in the third quarter. |
+| `summary_away_team_score_q4` | integer | Away team points scored in the fourth quarter. |
+| `summary_away_team_score_ot` | integer | Away team points scored in overtime. |
+| `summary_away_team_score_total` | integer | Away team total points. |
+| `summary_away_team_timeouts_remaining` | integer | Away team timeouts remaining at the summary snapshot. |
+| `summary_away_team_timeouts_used` | integer | Away team timeouts used at the summary snapshot. |
+| `summary_home_team_team_id` | character | NFL.com Shield GUID of the home team (from the embedded summary). |
+| `summary_home_team_has_possession` | logical | Whether the home team has possession at the summary snapshot. |
+| `summary_home_team_score_q1` | integer | Home team points scored in the first quarter. |
+| `summary_home_team_score_q2` | integer | Home team points scored in the second quarter. |
+| `summary_home_team_score_q3` | integer | Home team points scored in the third quarter. |
+| `summary_home_team_score_q4` | integer | Home team points scored in the fourth quarter. |
+| `summary_home_team_score_ot` | integer | Home team points scored in overtime. |
+| `summary_home_team_score_total` | integer | Home team total points. |
+| `summary_home_team_timeouts_remaining` | integer | Home team timeouts remaining at the summary snapshot. |
+| `summary_home_team_timeouts_used` | integer | Home team timeouts used at the summary snapshot. |
+| `away_team_standings_team_id` | character | Away team standings: nFL.com Shield GUID for the team. |
+| `away_team_standings_team_current_logo` | character | Away team standings: templated URL of the team's current logo. |
+| `away_team_standings_team_full_name` | character | Away team standings: full team name (e.g. "Arizona Cardinals"). |
+| `away_team_standings_clinched_bye` | logical | Away team standings: whether the team has clinched a first-round playoff bye. |
+| `away_team_standings_clinched_division` | logical | Away team standings: whether the team has clinched its division. |
+| `away_team_standings_clinched_eliminated` | logical | Away team standings: whether the team has been mathematically eliminated from playoff contention. |
+| `away_team_standings_clinched_home_field` | logical | Away team standings: whether the team has clinched home-field advantage throughout the playoffs. |
+| `away_team_standings_clinched_playoff` | logical | Away team standings: whether the team has clinched a playoff berth. |
+| `away_team_standings_clinched_wild_card` | logical | Away team standings: whether the team has clinched a wild-card playoff berth. |
+| `away_team_standings_close_games_wins` | integer | Away team standings: wins in close games (decided by one score / 8 points or fewer). |
+| `away_team_standings_close_games_losses` | integer | Away team standings: losses in close games (decided by one score / 8 points or fewer). |
+| `away_team_standings_close_games_ties` | integer | Away team standings: ties in close games. |
+| `away_team_standings_conference_wins` | integer | Away team standings: wins against conference (AFC/NFC) opponents. |
+| `away_team_standings_conference_win_pct` | numeric | Away team standings: win percentage against conference opponents. |
+| `away_team_standings_conference_losses` | integer | Away team standings: losses against conference opponents. |
+| `away_team_standings_conference_ties` | integer | Away team standings: ties against conference opponents. |
+| `away_team_standings_conference_rank` | integer | Away team standings: standings rank within the conference. |
+| `away_team_standings_conference_points_for` | integer | Away team standings: points scored in conference games. |
+| `away_team_standings_conference_points_against` | integer | Away team standings: points allowed in conference games. |
+| `away_team_standings_division_wins` | integer | Away team standings: wins against division opponents. |
+| `away_team_standings_division_win_pct` | numeric | Away team standings: win percentage against division opponents. |
+| `away_team_standings_division_losses` | integer | Away team standings: losses against division opponents. |
+| `away_team_standings_division_ties` | integer | Away team standings: ties against division opponents. |
+| `away_team_standings_division_rank` | integer | Away team standings: standings rank within the division. |
+| `away_team_standings_division_points_for` | integer | Away team standings: points scored in division games. |
+| `away_team_standings_division_points_against` | integer | Away team standings: points allowed in division games. |
+| `away_team_standings_home_wins` | integer | Away team standings: wins in home games. |
+| `away_team_standings_home_win_pct` | numeric | Away team standings: win percentage in home games. |
+| `away_team_standings_home_losses` | integer | Away team standings: losses in home games. |
+| `away_team_standings_home_ties` | integer | Away team standings: ties in home games. |
+| `away_team_standings_home_points_for` | integer | Away team standings: points scored in home games. |
+| `away_team_standings_home_points_against` | integer | Away team standings: points allowed in home games. |
+| `away_team_standings_last5_wins` | integer | Away team standings: wins over the last five games. |
+| `away_team_standings_last5_win_pct` | numeric | Away team standings: win percentage over the last five games. |
+| `away_team_standings_last5_losses` | integer | Away team standings: losses over the last five games. |
+| `away_team_standings_last5_ties` | integer | Away team standings: ties over the last five games. |
+| `away_team_standings_last5_points_for` | integer | Away team standings: points scored over the last five games. |
+| `away_team_standings_last5_points_against` | integer | Away team standings: points allowed over the last five games. |
+| `away_team_standings_overall_games` | integer | Away team standings: total games played. |
+| `away_team_standings_overall_wins` | integer | Away team standings: total wins. |
+| `away_team_standings_overall_win_pct` | numeric | Away team standings: overall win percentage. |
+| `away_team_standings_overall_losses` | integer | Away team standings: total losses. |
+| `away_team_standings_overall_ties` | integer | Away team standings: total ties. |
+| `away_team_standings_overall_points_for` | integer | Away team standings: total points scored. |
+| `away_team_standings_overall_points_against` | integer | Away team standings: total points allowed. |
+| `away_team_standings_overall_streak_type` | character | Away team standings: current streak type ("W" for winning, "L" for losing). |
+| `away_team_standings_overall_streak_length` | integer | Away team standings: length of the current win/loss streak. |
+| `away_team_standings_road_wins` | integer | Away team standings: wins in road (away) games. |
+| `away_team_standings_road_win_pct` | numeric | Away team standings: win percentage in road games. |
+| `away_team_standings_road_losses` | integer | Away team standings: losses in road games. |
+| `away_team_standings_road_ties` | integer | Away team standings: ties in road games. |
+| `away_team_standings_road_points_for` | integer | Away team standings: points scored in road games. |
+| `away_team_standings_road_points_against` | integer | Away team standings: points allowed in road games. |
+| `home_team_standings_team_id` | character | Home team standings: nFL.com Shield GUID for the team. |
+| `home_team_standings_team_current_logo` | character | Home team standings: templated URL of the team's current logo. |
+| `home_team_standings_team_full_name` | character | Home team standings: full team name (e.g. "Arizona Cardinals"). |
+| `home_team_standings_clinched_bye` | logical | Home team standings: whether the team has clinched a first-round playoff bye. |
+| `home_team_standings_clinched_division` | logical | Home team standings: whether the team has clinched its division. |
+| `home_team_standings_clinched_eliminated` | logical | Home team standings: whether the team has been mathematically eliminated from playoff contention. |
+| `home_team_standings_clinched_home_field` | logical | Home team standings: whether the team has clinched home-field advantage throughout the playoffs. |
+| `home_team_standings_clinched_playoff` | logical | Home team standings: whether the team has clinched a playoff berth. |
+| `home_team_standings_clinched_wild_card` | logical | Home team standings: whether the team has clinched a wild-card playoff berth. |
+| `home_team_standings_close_games_wins` | integer | Home team standings: wins in close games (decided by one score / 8 points or fewer). |
+| `home_team_standings_close_games_losses` | integer | Home team standings: losses in close games (decided by one score / 8 points or fewer). |
+| `home_team_standings_close_games_ties` | integer | Home team standings: ties in close games. |
+| `home_team_standings_conference_wins` | integer | Home team standings: wins against conference (AFC/NFC) opponents. |
+| `home_team_standings_conference_win_pct` | numeric | Home team standings: win percentage against conference opponents. |
+| `home_team_standings_conference_losses` | integer | Home team standings: losses against conference opponents. |
+| `home_team_standings_conference_ties` | integer | Home team standings: ties against conference opponents. |
+| `home_team_standings_conference_rank` | integer | Home team standings: standings rank within the conference. |
+| `home_team_standings_conference_points_for` | integer | Home team standings: points scored in conference games. |
+| `home_team_standings_conference_points_against` | integer | Home team standings: points allowed in conference games. |
+| `home_team_standings_division_wins` | integer | Home team standings: wins against division opponents. |
+| `home_team_standings_division_win_pct` | numeric | Home team standings: win percentage against division opponents. |
+| `home_team_standings_division_losses` | integer | Home team standings: losses against division opponents. |
+| `home_team_standings_division_ties` | integer | Home team standings: ties against division opponents. |
+| `home_team_standings_division_rank` | integer | Home team standings: standings rank within the division. |
+| `home_team_standings_division_points_for` | integer | Home team standings: points scored in division games. |
+| `home_team_standings_division_points_against` | integer | Home team standings: points allowed in division games. |
+| `home_team_standings_home_wins` | integer | Home team standings: wins in home games. |
+| `home_team_standings_home_win_pct` | numeric | Home team standings: win percentage in home games. |
+| `home_team_standings_home_losses` | integer | Home team standings: losses in home games. |
+| `home_team_standings_home_ties` | integer | Home team standings: ties in home games. |
+| `home_team_standings_home_points_for` | integer | Home team standings: points scored in home games. |
+| `home_team_standings_home_points_against` | integer | Home team standings: points allowed in home games. |
+| `home_team_standings_last5_wins` | integer | Home team standings: wins over the last five games. |
+| `home_team_standings_last5_win_pct` | numeric | Home team standings: win percentage over the last five games. |
+| `home_team_standings_last5_losses` | integer | Home team standings: losses over the last five games. |
+| `home_team_standings_last5_ties` | integer | Home team standings: ties over the last five games. |
+| `home_team_standings_last5_points_for` | integer | Home team standings: points scored over the last five games. |
+| `home_team_standings_last5_points_against` | integer | Home team standings: points allowed over the last five games. |
+| `home_team_standings_overall_games` | integer | Home team standings: total games played. |
+| `home_team_standings_overall_wins` | integer | Home team standings: total wins. |
+| `home_team_standings_overall_win_pct` | numeric | Home team standings: overall win percentage. |
+| `home_team_standings_overall_losses` | integer | Home team standings: total losses. |
+| `home_team_standings_overall_ties` | integer | Home team standings: total ties. |
+| `home_team_standings_overall_points_for` | integer | Home team standings: total points scored. |
+| `home_team_standings_overall_points_against` | integer | Home team standings: total points allowed. |
+| `home_team_standings_overall_streak_type` | character | Home team standings: current streak type ("W" for winning, "L" for losing). |
+| `home_team_standings_overall_streak_length` | integer | Home team standings: length of the current win/loss streak. |
+| `home_team_standings_road_wins` | integer | Home team standings: wins in road (away) games. |
+| `home_team_standings_road_win_pct` | numeric | Home team standings: win percentage in road games. |
+| `home_team_standings_road_losses` | integer | Home team standings: losses in road games. |
+| `home_team_standings_road_ties` | integer | Home team standings: ties in road games. |
+| `home_team_standings_road_points_for` | integer | Home team standings: points scored in road games. |
+| `home_team_standings_road_points_against` | integer | Home team standings: points allowed in road games. |
+| `drive_chart_game_id` | character | NFL.com Shield GUID for the game (from the drive chart, present when include_drive_chart=true). |
+| `drive_chart_offset` | integer | Live-feed sequence offset for the drive-chart snapshot. |
+| `drive_chart_drives` | character | JSON-stringified array of drive objects (sequence, team, result, etc.). |
+| `drive_chart_plays` | character | JSON-stringified array of play objects within the drive chart. |
+| `drive_chart_scoring_summaries` | character | JSON-stringified array of scoring-summary objects (sequence, scores, clock). |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example
+
+```python
+nfl_game_details_by_slug(slug='broncos-at-chiefs-2026-reg-1')
 ```
 
 _Last validated n/a._

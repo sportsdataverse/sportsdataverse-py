@@ -33,6 +33,7 @@ endpoints:
   extra_params:
   - {name: season, query_key: season, type: int, default: 2024}
   - {name: limit, query_key: limit, type: int, default: 40}
+  - {name: team_id, query_key: teamId, type: str, default: null, description: "Shield team uuid (the ``id`` of a team in the teams history listing). Returns just that team's roster -- one roster (~37 KB) instead of all 32 (~1.2 MB)."}
   example_args: {season: 2024}
 - short: teams_history
   summary: "GET /football/v2/teams/history — one row per team for a season."
@@ -120,3 +121,42 @@ endpoints:
   - {name: include_standings, query_key: includeStandings, type: bool, default: false, transform: _bool_str}
   - {name: include_tagged_videos, query_key: includeTaggedVideos, type: bool, default: false, transform: _bool_str}
   example_args: {season: 2024, season_type: REG, week: 1}
+- short: live_team_statistics
+  summary: "GET /football/v2/stats/live/team-statistics/{game_id} — one row per side (away, home): the live team box score."
+  path: /football/v2/stats/live/team-statistics/{game_id}
+  parser: parse_nfl_live_team_statistics
+  returns_schema: native/nfl_api/live_team_statistics
+  path_params:
+  - {name: game_id, type: str, required: true, description: "Shield uuid game id -- the ``id`` column of the week games and weekly game details listings."}
+  example_args: {game_id: a9a890ed-4feb-11f1-abca-2c54536568a9}
+- short: live_player_statistics
+  summary: "GET /football/v2/stats/live/player-statistics/{game_id} — one row per player per side: the live player box score."
+  path: /football/v2/stats/live/player-statistics/{game_id}
+  parser: parse_nfl_live_player_statistics
+  returns_schema: native/nfl_api/live_player_statistics
+  path_params:
+  - {name: game_id, type: str, required: true, description: "Shield uuid game id -- the ``id`` column of the week games and weekly game details listings."}
+  example_args: {game_id: a9a890ed-4feb-11f1-abca-2c54536568a9}
+- short: game_details_v2
+  summary: "GET /experience/v2/gamedetails/{game_id} — one row: the flat v2 game detail (game, summary, optional drive chart / replays / standings)."
+  path: /experience/v2/gamedetails/{game_id}
+  parser: parse_nfl_game_details_v2
+  returns_schema: native/nfl_api/game_details_v2
+  path_params:
+  - {name: game_id, type: str, required: true, description: "Shield uuid game id -- the ``id`` column of the week games and weekly game details listings."}
+  extra_params:
+  - {name: include_drive_chart, query_key: includeDriveChart, type: bool, default: false, transform: _bool_str}
+  - {name: include_replays, query_key: includeReplays, type: bool, default: false, transform: _bool_str}
+  - {name: include_standings, query_key: includeStandings, type: bool, default: false, transform: _bool_str}
+  - {name: include_tagged_videos, query_key: includeTaggedVideos, type: bool, default: false, transform: _bool_str}
+  example_args: {game_id: a9a890ed-4feb-11f1-abca-2c54536568a9}
+- short: game_details_by_slug
+  summary: "GET /experience/v1/gamedetailsbyslug/{slug} — one row: the flat game detail looked up by nfl.com slug."
+  path: /experience/v1/gamedetailsbyslug/{slug}
+  parser: parse_nfl_game_details_by_slug
+  returns_schema: native/nfl_api/game_details_by_slug
+  path_params:
+  - {name: slug, type: str, required: true, description: "nfl.com game slug, e.g. ``broncos-at-chiefs-2026-reg-1`` -- the last segment of the nfl.com game page URL and the ``slug`` external id."}
+  extra_params:
+  - {name: include_replays, query_key: includeReplays, type: bool, default: false, transform: _bool_str}
+  example_args: {slug: broncos-at-chiefs-2026-reg-1}

@@ -146,8 +146,12 @@ from sportsdataverse.nfl import fox_nfl_team_roster as _raw_fox_nfl_team_roster
 from sportsdataverse.nfl import fox_nfl_team_stats as _raw_fox_nfl_team_stats
 from sportsdataverse.nfl import nfl_combine_profiles as _raw_nfl_combine_profiles
 from sportsdataverse.nfl import nfl_draft_picks as _raw_nfl_draft_picks
+from sportsdataverse.nfl import nfl_game_details_by_slug as _raw_nfl_game_details_by_slug
+from sportsdataverse.nfl import nfl_game_details_v2 as _raw_nfl_game_details_v2
 from sportsdataverse.nfl import nfl_game_summaries as _raw_nfl_game_summaries
 from sportsdataverse.nfl import nfl_injuries as _raw_nfl_injuries
+from sportsdataverse.nfl import nfl_live_player_statistics as _raw_nfl_live_player_statistics
+from sportsdataverse.nfl import nfl_live_team_statistics as _raw_nfl_live_team_statistics
 from sportsdataverse.nfl import nfl_rosters as _raw_nfl_rosters
 from sportsdataverse.nfl import nfl_standings as _raw_nfl_standings
 from sportsdataverse.nfl import nfl_team as _raw_nfl_team
@@ -601,6 +605,8 @@ __all__ = [
     "nfl_draft_projection",
     "nfl_fantasy_projection",
     "nfl_game_details",
+    "nfl_game_details_by_slug",
+    "nfl_game_details_v2",
     "nfl_game_pbp",
     "nfl_game_schedule",
     "nfl_game_script",
@@ -609,6 +615,8 @@ __all__ = [
     "nfl_injuries",
     "nfl_kicker_rating",
     "nfl_line_grades",
+    "nfl_live_player_statistics",
+    "nfl_live_team_statistics",
     "nfl_ngs_gamecenter_overview",
     "nfl_ngs_leaders",
     "nfl_ngs_league_schedule",
@@ -2388,6 +2396,34 @@ def nfl_draft_picks(*args, **kwargs):
     return _raw_nfl_draft_picks(*args, **kwargs)
 
 
+def nfl_game_details_by_slug(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nfl.nfl_game_details_by_slug``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.nfl.nfl_game_details_by_slug` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nfl.nfl_game_details_by_slug` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_nfl_game_details_by_slug(*args, **kwargs)
+
+
+def nfl_game_details_v2(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nfl.nfl_game_details_v2``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.nfl.nfl_game_details_v2` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nfl.nfl_game_details_v2` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_nfl_game_details_v2(*args, **kwargs)
+
+
 def nfl_game_summaries(*args, **kwargs):
     """``return_parsed=True`` by default (parsed.* mirror of ``nfl.nfl_game_summaries``).
 
@@ -2414,6 +2450,34 @@ def nfl_injuries(*args, **kwargs):
     """
     kwargs.setdefault("return_parsed", True)
     return _raw_nfl_injuries(*args, **kwargs)
+
+
+def nfl_live_player_statistics(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nfl.nfl_live_player_statistics``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.nfl.nfl_live_player_statistics` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nfl.nfl_live_player_statistics` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_nfl_live_player_statistics(*args, **kwargs)
+
+
+def nfl_live_team_statistics(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nfl.nfl_live_team_statistics``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.nfl.nfl_live_team_statistics` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nfl.nfl_live_team_statistics` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_nfl_live_team_statistics(*args, **kwargs)
 
 
 def nfl_rosters(*args, **kwargs):

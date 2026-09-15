@@ -1,0 +1,679 @@
+{
+ "id": "a9a890ed-4feb-11f1-abca-2c54536568a9",
+ "homeTeam": {
+  "id": "10402310-a47e-10ea-7442-16b633633637",
+  "currentLogo": "https://static.www.nfl.com/{formatInstructions}/league/api/clubs/logos/KC",
+  "fullName": "Kansas City Chiefs"
+ },
+ "awayTeam": {
+  "id": "10401400-b89b-96e5-55d1-caa7e18de3d8",
+  "currentLogo": "https://static.www.nfl.com/{formatInstructions}/league/api/clubs/logos/DEN",
+  "fullName": "Denver Broncos"
+ },
+ "category": "MNF",
+ "date": "2026-09-15",
+ "time": "2026-09-15T00:15:00Z",
+ "broadcastInfo": {
+  "homeNetworkChannels": [
+   "ESPN",
+   "ABC",
+   "ESPN2",
+   "ESPN DEPORTES"
+  ],
+  "awayNetworkChannels": [
+   "ESPN",
+   "ABC",
+   "ESPN2",
+   "ESPN DEPORTES"
+  ],
+  "internationalWatchOptions": [],
+  "streamingNetworks": [
+   {
+    "hostNetwork": "ESPN",
+    "networks": [
+     "ESPN",
+     "ABC"
+    ],
+    "streamType": "en-pri"
+   },
+   {
+    "hostNetwork": "ESPNDEPORTES",
+    "networks": [
+     "ESPNDEPORTES"
+    ],
+    "streamType": "es-alt-1"
+   },
+   {
+    "hostNetwork": "ESPN2",
+    "networks": [
+     "ESPN2"
+    ],
+    "streamType": "en-alt-1"
+   }
+  ],
+  "territory": "NATIONAL",
+  "audioNetworks": [
+   {
+    "audience": "Westwood One",
+    "languages": [
+     "en"
+    ]
+   },
+   {
+    "audience": "Entravision",
+    "languages": [
+     "es"
+    ]
+   },
+   {
+    "audience": "Home",
+    "languages": [
+     "en"
+    ]
+   },
+   {
+    "audience": "Away",
+    "languages": [
+     "en"
+    ]
+   },
+   {
+    "audience": "Home SAP",
+    "languages": [
+     "es"
+    ]
+   },
+   {
+    "audience": "Away SAP",
+    "languages": [
+     "es"
+    ]
+   }
+  ]
+ },
+ "gameType": "UNSPECIFIED",
+ "international": false,
+ "neutralSite": false,
+ "venue": {
+  "id": "00081552-5c92-a7d0-fa55-fc0bb887fb88",
+  "name": "Arrowhead Stadium",
+  "city": "Kansas City",
+  "country": "USA"
+ },
+ "season": 2026,
+ "seasonType": "REG",
+ "status": "SCHEDULED",
+ "week": 1,
+ "weekType": "REG",
+ "externalIds": [
+  {
+   "source": "elias",
+   "id": "2026091400"
+  },
+  {
+   "source": "gsis",
+   "id": "60193"
+  },
+  {
+   "source": "slug",
+   "id": "broncos-at-chiefs-2026-reg-1"
+  }
+ ],
+ "ticketUrl": "https://www.ticketmaster.com/event/0600646B83F86E1A?wt.mc_id=NFL_LEAGUE_SCHED_PG_KC_LINK3&utm_source=NFL.com&utm_medium=client&utm_campaign=NFL_LEAGUE&utm_content=SCHED_PG_KC_LINK3&campaign=kc-ti-iw-sp-2072608",
+ "ticketVendors": [
+  {
+   "vendorName": "lodgingUrl",
+   "ticketUrl": "https://www.marriott.com/search/findHotels.mi?pageType=advanced&showMore=true&destinationAddress.location=GEHA+Field+at+Arrowhead+Stadium&cid=PMO_GLB0003VDI_GLE00095QK_GLF000HKF5&deviceType=desktop-web&view=list#/1/"
+  },
+  {
+   "vendorName": "oneBoxUrl",
+   "ticketUrl": "https://www.ticketmaster.com/event/0600646B83F86E1A?wt.mc_id=NFL_LEAGUE_GOOGLE_ONEBOX_KC_LINK3&utm_source=NFL.com&utm_medium=client&utm_campaign=NFL_LEAGUE&utm_content=GOOGLE_ONEBOX_KC_LINK3&campaign=kc-ti-na-vg-2072162"
+  },
+  {
+   "vendorName": "ticketmaster",
+   "ticketUrl": "https://www.ticketmaster.com/event/0600646B83F86E1A?wt.mc_id=NFL_LEAGUE_SCHED_PG_KC_LINK3&utm_source=NFL.com&utm_medium=client&utm_campaign=NFL_LEAGUE&utm_content=SCHED_PG_KC_LINK3&campaign=kc-ti-iw-sp-2072608"
+  }
+ ],
+ "extensions": [],
+ "version": 9,
+ "replays": [],
+ "summary": {
+  "gameId": "a9a890ed-4feb-11f1-abca-2c54536568a9",
+  "offset": 101,
+  "attendance": null,
+  "clock": "12:42",
+  "distance": 1,
+  "down": 3,
+  "gameBookUrl": null,
+  "isGoalToGo": false,
+  "isRedZone": false,
+  "phase": "INGAME",
+  "quarter": "Q2",
+  "startTime": "2026-09-15T00:16:12Z",
+  "weather": "Temp: 91\u00b0 F, Humidity: 45%, Wind: S 13 mph",
+  "yardLine": "KC 38",
+  "awayTeam": {
+   "teamId": "10401400-b89b-96e5-55d1-caa7e18de3d8",
+   "hasPossession": false,
+   "score": {
+    "q1": 7,
+    "q2": 0,
+    "q3": 0,
+    "q4": 0,
+    "ot": 0,
+    "total": 7
+   },
+   "timeouts": {
+    "remaining": 3,
+    "used": 0
+   }
+  },
+  "homeTeam": {
+   "teamId": "10402310-a47e-10ea-7442-16b633633637",
+   "hasPossession": true,
+   "score": {
+    "q1": 7,
+    "q2": 0,
+    "q3": 0,
+    "q4": 0,
+    "ot": 0,
+    "total": 7
+   },
+   "timeouts": {
+    "remaining": 3,
+    "used": 0
+   }
+  }
+ },
+ "awayTeamStandings": {
+  "team": {
+   "id": "10401400-b89b-96e5-55d1-caa7e18de3d8",
+   "currentLogo": "https://static.www.nfl.com/{formatInstructions}/league/api/clubs/logos/DEN",
+   "fullName": "Denver Broncos"
+  },
+  "clinched": {
+   "bye": false,
+   "division": false,
+   "eliminated": false,
+   "homeField": false,
+   "playoff": false,
+   "wildCard": false
+  },
+  "closeGames": {
+   "wins": 0,
+   "losses": 0,
+   "ties": 0
+  },
+  "conference": {
+   "wins": 0,
+   "winPct": 0,
+   "losses": 0,
+   "ties": 0,
+   "rank": 8,
+   "points": {
+    "for": null,
+    "against": null
+   }
+  },
+  "division": {
+   "wins": 0,
+   "winPct": 0,
+   "losses": 0,
+   "ties": 0,
+   "rank": 2,
+   "points": {
+    "for": null,
+    "against": null
+   }
+  },
+  "home": {
+   "wins": 0,
+   "winPct": 0,
+   "losses": 0,
+   "ties": 0,
+   "points": {
+    "for": null,
+    "against": null
+   }
+  },
+  "last5": {
+   "wins": null,
+   "winPct": null,
+   "losses": null,
+   "ties": null,
+   "points": {
+    "for": null,
+    "against": null
+   }
+  },
+  "overall": {
+   "games": 0,
+   "wins": 0,
+   "winPct": 0,
+   "losses": 0,
+   "ties": 0,
+   "points": {
+    "for": null,
+    "against": null
+   },
+   "streak": {
+    "type": null,
+    "length": null
+   }
+  },
+  "road": {
+   "wins": 0,
+   "winPct": 0,
+   "losses": 0,
+   "ties": 0,
+   "points": {
+    "for": null,
+    "against": null
+   }
+  }
+ },
+ "homeTeamStandings": {
+  "team": {
+   "id": "10402310-a47e-10ea-7442-16b633633637",
+   "currentLogo": "https://static.www.nfl.com/{formatInstructions}/league/api/clubs/logos/KC",
+   "fullName": "Kansas City Chiefs"
+  },
+  "clinched": {
+   "bye": false,
+   "division": false,
+   "eliminated": false,
+   "homeField": false,
+   "playoff": false,
+   "wildCard": false
+  },
+  "closeGames": {
+   "wins": 0,
+   "losses": 0,
+   "ties": 0
+  },
+  "conference": {
+   "wins": 0,
+   "winPct": 0,
+   "losses": 0,
+   "ties": 0,
+   "rank": 8,
+   "points": {
+    "for": null,
+    "against": null
+   }
+  },
+  "division": {
+   "wins": 0,
+   "winPct": 0,
+   "losses": 0,
+   "ties": 0,
+   "rank": 2,
+   "points": {
+    "for": null,
+    "against": null
+   }
+  },
+  "home": {
+   "wins": 0,
+   "winPct": 0,
+   "losses": 0,
+   "ties": 0,
+   "points": {
+    "for": null,
+    "against": null
+   }
+  },
+  "last5": {
+   "wins": null,
+   "winPct": null,
+   "losses": null,
+   "ties": null,
+   "points": {
+    "for": null,
+    "against": null
+   }
+  },
+  "overall": {
+   "games": 0,
+   "wins": 0,
+   "winPct": 0,
+   "losses": 0,
+   "ties": 0,
+   "points": {
+    "for": null,
+    "against": null
+   },
+   "streak": {
+    "type": null,
+    "length": null
+   }
+  },
+  "road": {
+   "wins": 0,
+   "winPct": 0,
+   "losses": 0,
+   "ties": 0,
+   "points": {
+    "for": null,
+    "against": null
+   }
+  }
+ },
+ "driveChart": {
+  "gameId": "a9a890ed-4feb-11f1-abca-2c54536568a9",
+  "offset": 101,
+  "drives": [
+   {
+    "sequence": 1,
+    "teamId": "10401400-b89b-96e5-55d1-caa7e18de3d8",
+    "startedClock": "15:00",
+    "startedDescription": "Kickoff",
+    "startedPlayId": 40,
+    "startedPlaySequenceNumber": 40,
+    "startedQuarter": 1,
+    "startedTime": "2026-09-15T00:16:12.707Z",
+    "startedYardLine": "DEN 35",
+    "endedClock": "13:30",
+    "endedDescription": "Interception",
+    "endedPlayId": 99,
+    "endedPlaySequenceNumber": 99,
+    "endedQuarter": 1,
+    "endedTime": null,
+    "endedWithScore": false,
+    "endedYardLine": "DEN 34",
+    "firstDowns": 0,
+    "inside20": false,
+    "plays": 3,
+    "timeOfPossession": "1:30",
+    "totalEndedWithScore": false,
+    "yardsGained": -1,
+    "yardsGainedByPenalty": 0,
+    "yardsGainedNet": -1
+   },
+   {
+    "sequence": 2,
+    "teamId": "10402310-a47e-10ea-7442-16b633633637",
+    "startedClock": "13:30",
+    "startedDescription": "Interception",
+    "startedPlayId": 126,
+    "startedPlaySequenceNumber": 126,
+    "startedQuarter": 1,
+    "startedTime": "2026-09-15T00:19:30.647Z",
+    "startedYardLine": "DEN 46",
+    "endedClock": "08:11",
+    "endedDescription": "Touchdown",
+    "endedPlayId": 402,
+    "endedPlaySequenceNumber": 402,
+    "endedQuarter": 1,
+    "endedTime": null,
+    "endedWithScore": true,
+    "endedYardLine": "DEN 15",
+    "firstDowns": 4,
+    "inside20": true,
+    "plays": 10,
+    "timeOfPossession": "5:19",
+    "totalEndedWithScore": true,
+    "yardsGained": 56,
+    "yardsGainedByPenalty": -10,
+    "yardsGainedNet": 46
+   }
+  ],
+  "plays": [
+   {
+    "playId": 1,
+    "clockTime": null,
+    "down": 0,
+    "driveNetYards": 0,
+    "drivePlayCount": 0,
+    "driveSequence": 0,
+    "driveTimeOfPossession": null,
+    "nextPlayType": "FREE_KICK",
+    "nextPlayIsGoalToGo": false,
+    "prePlayByPlay": "DEN - KC",
+    "playDeleted": false,
+    "playDescription": "GAME",
+    "playDescriptionWithJerseyNumbers": "GAME",
+    "playEndTime": null,
+    "playIsEndOfQuarter": false,
+    "playIsGoalToGo": false,
+    "playScored": false,
+    "playSequenceNumber": 1,
+    "playStartTime": null,
+    "playType": "GAME_START",
+    "quarter": 1,
+    "scoringPlayType": "UNSPECIFIED",
+    "scoringTeamId": null,
+    "specialTeamsPlayType": "UNSPECIFIED",
+    "yardLine": null,
+    "yardsGained": 0,
+    "yardsRemaining": 0,
+    "stats": []
+   },
+   {
+    "playId": 40,
+    "clockTime": "15:00",
+    "down": 0,
+    "driveNetYards": -1,
+    "drivePlayCount": 2,
+    "driveSequence": 1,
+    "driveTimeOfPossession": "0:38",
+    "nextPlayType": "PLAY_FROM_SCRIMMAGE",
+    "nextPlayIsGoalToGo": false,
+    "prePlayByPlay": "KC  KO  KC 35",
+    "playDeleted": false,
+    "playDescription": "H.Butker kicks 65 yards from KC 35 to end zone, Touchback to the DEN 35.",
+    "playDescriptionWithJerseyNumbers": "7-H.Butker kicks 65 yards from KC 35 to end zone, Touchback to the DEN 35.",
+    "playEndTime": "2026-09-15T00:16:18.143Z",
+    "playIsEndOfQuarter": false,
+    "playIsGoalToGo": false,
+    "playScored": false,
+    "playSequenceNumber": 40,
+    "playStartTime": "2026-09-15T00:16:12.707Z",
+    "playType": "KICK_OFF",
+    "quarter": 1,
+    "scoringPlayType": "UNSPECIFIED",
+    "scoringTeamId": null,
+    "specialTeamsPlayType": "UNSPECIFIED",
+    "yardLine": "KC 35",
+    "yardsGained": 40,
+    "yardsRemaining": 0,
+    "stats": [
+     {
+      "playStatId": "10330060-1930-0400-4100-00151377c4d4",
+      "gsisPlayerId": "00-0033303",
+      "gsisPlayerName": "H.Butker",
+      "gsisPlayerJerseyNumber": "07",
+      "personId": "32004255-5406-1642-3745-75ce5dec0422",
+      "statType": 410,
+      "teamId": "10402310-a47e-10ea-7442-16b633633637",
+      "yards": 67
+     },
+     {
+      "playStatId": "10330060-1930-0400-4260-00260ad64353",
+      "gsisPlayerId": "00-0033303",
+      "gsisPlayerName": "H.Butker",
+      "gsisPlayerJerseyNumber": "07",
+      "personId": "32004255-5406-1642-3745-75ce5dec0422",
+      "statType": 426,
+      "teamId": "10402310-a47e-10ea-7442-16b633633637",
+      "yards": 65
+     },
+     {
+      "playStatId": "10330060-1930-0400-0440-003f47c1ca7a",
+      "gsisPlayerId": "00-0033303",
+      "gsisPlayerName": "H.Butker",
+      "gsisPlayerJerseyNumber": "07",
+      "personId": "32004255-5406-1642-3745-75ce5dec0422",
+      "statType": 44,
+      "teamId": "10402310-a47e-10ea-7442-16b633633637",
+      "yards": 65
+     },
+     {
+      "playStatId": "10330060-1930-0400-4270-004b4b2a17f9",
+      "gsisPlayerId": null,
+      "gsisPlayerName": null,
+      "gsisPlayerJerseyNumber": null,
+      "personId": null,
+      "statType": 427,
+      "teamId": "10401400-b89b-96e5-55d1-caa7e18de3d8",
+      "yards": null
+     },
+     {
+      "playStatId": "10330060-1930-0400-0510-0056d1b16aca",
+      "gsisPlayerId": null,
+      "gsisPlayerName": null,
+      "gsisPlayerJerseyNumber": null,
+      "personId": null,
+      "statType": 51,
+      "teamId": "10401400-b89b-96e5-55d1-caa7e18de3d8",
+      "yards": null
+     }
+    ]
+   }
+  ],
+  "scoringSummaries": [
+   {
+    "sequence": 1,
+    "awayScore": 0,
+    "clockTime": "08:11",
+    "homeScore": 7,
+    "patPlayId": 402,
+    "playDescription": "P.Mahomes 15 yd. run (H.Butker kick) (10-46, 5:19)",
+    "quarter": 1,
+    "scoreType": "TOUCHDOWN",
+    "scoringPlayId": 379,
+    "scoringTeamId": "10402310-a47e-10ea-7442-16b633633637"
+   },
+   {
+    "sequence": 2,
+    "awayScore": 7,
+    "clockTime": "03:48",
+    "homeScore": 7,
+    "patPlayId": 674,
+    "playDescription": "E.Engram 19 yd. pass from B.Nix (W.Lutz kick) (7-68, 4:23)",
+    "quarter": 1,
+    "scoreType": "TOUCHDOWN",
+    "scoringPlayId": 648,
+    "scoringTeamId": "10401400-b89b-96e5-55d1-caa7e18de3d8"
+   }
+  ]
+ },
+ "taggedVideos": [
+  {
+   "provider": "lura",
+   "type": "video",
+   "language": "English",
+   "advertiserId": null,
+   "author": "MCPLeagueVODFeed",
+   "authorizations": {
+    "free": [
+     {
+      "FREE - VOD": {
+       "requirements": null
+      }
+     }
+    ]
+   },
+   "background": {},
+   "cameraSource": null,
+   "clipType": "In Game Highlight",
+   "ctas": [],
+   "ctaLink": null,
+   "ctaText": null,
+   "ctaTarget": null,
+   "description": "Denver Broncos quarterback Bo Nix throws a 19-yard pass to tight end Evan Engram.",
+   "displayTitle": null,
+   "startDate": null,
+   "endDate": null,
+   "duration": 27,
+   "episodeNumber": null,
+   "entitlement": null,
+   "expirationDate": null,
+   "externalId": "G4Wk6uETxkPQht4n3IsAXw",
+   "fantasyLink": null,
+   "hostNetwork": null,
+   "id": "03289642-ddbd-4fcb-b652-165b46f8c895",
+   "ids": null,
+   "images": [],
+   "intendedAudience": null,
+   "introEnd": null,
+   "mcpPlaybackId": "2654407",
+   "mobileLink": null,
+   "mobileTitle": "Bo Nix's 19-yard TD pass to Evan Engram trims Chiefs' lead to 7-6 in first quarter",
+   "originalAirDate": null,
+   "outroStart": null,
+   "playIds": [
+    "648"
+   ],
+   "preRollDisabled": false,
+   "promoAssets": [],
+   "promoLink": null,
+   "promoText": null,
+   "promoTarget": "_self",
+   "lastUpdated": "2026-09-15T00:55:12.781Z",
+   "updatedDate": null,
+   "publishDate": "2026-09-15T00:53:57.094Z",
+   "radioStation": null,
+   "seriesTitle": null,
+   "seriesSeason": null,
+   "series": null,
+   "slug": "bo-nix-s-19-yard-td-pass-to-evan-engram-trims-chiefs-lead-to-7-6-in-first-quarter",
+   "subType": null,
+   "summary": null,
+   "tags": [
+    {
+     "gameId": "a9a890ed-4feb-11f1-abca-2c54536568a9",
+     "title": "Denver Broncos at Kansas City Chiefs (2026-REG-1)",
+     "slug": "broncos-at-chiefs-2026-reg-1",
+     "externalSourceName": "games",
+     "extraData": {
+      "homeTeamId": "10402310-a47e-10ea-7442-16b633633637",
+      "awayTeamId": "10401400-b89b-96e5-55d1-caa7e18de3d8"
+     }
+    },
+    {
+     "teamId": "10401400-b89b-96e5-55d1-caa7e18de3d8",
+     "title": "Denver Broncos",
+     "slug": "denver-broncos",
+     "externalSourceName": "teams",
+     "extraData": {
+      "iconUrl": "https://static.www.nfl.com/{formatInstructions}/league/api/clubs/logos/DEN"
+     }
+    },
+    {
+     "personId": "3200454e-4772-6325-a4a0-9b4b442fe68a",
+     "title": "Evan Engram",
+     "slug": "evan-engram",
+     "externalSourceName": "players",
+     "extraData": {}
+    },
+    {
+     "title": "league",
+     "slug": "league",
+     "extraData": {}
+    },
+    {
+     "personId": "32004e49-5811-8212-6abe-fc1a8b4f4942",
+     "title": "Bo Nix",
+     "slug": "bo-nix",
+     "externalSourceName": "players",
+     "extraData": {}
+    },
+    {
+     "title": "Game Highlights",
+     "slug": "game-highlights-vc",
+     "externalSourceName": "customentity.videochannel",
+     "extraData": {}
+    }
+   ],
+   "thumbnail": {
+    "thumbnailUrl": "https://static.www.nfl.com/image/upload/{formatInstructions}/league/e5gbr1kj87iitpyzm4db",
+    "title": "Bo Nix's 19-yard TD pass to Evan Engram trims Chiefs' lead to 7-6 in first quarter",
+    "format": "jpg"
+   },
+   "title": "Bo Nix's 19-yard TD pass to Evan Engram trims Chiefs' lead to 7-6 in first quarter",
+   "videos": [],
+   "webLink": "https://www.nfl.com/videos/bo-nix-s-19-yard-td-pass-to-evan-engram-trims-chiefs-lead-to-7-6-in-first-quarter"
+  }
+ ]
+}
