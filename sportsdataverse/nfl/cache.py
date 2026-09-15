@@ -24,6 +24,7 @@ from __future__ import annotations
 import hashlib
 import json
 import shutil
+import inspect
 import time
 from functools import wraps
 from pathlib import Path
@@ -191,7 +192,19 @@ def cached_loader(func: F) -> F:
         # Cache key excludes return_as_pandas — see module docstring.
         key_kwargs = {k: v for k, v in kwargs.items() if k != "return_as_pandas"}
         key = _cache_key(func, args, key_kwargs)
-        return_as_pandas = kwargs.get("return_as_pandas", False)
+        # Bind the call so a POSITIONAL return_as_pandas (``load_x(2024, True)``)
+        # is seen too, and so the miss path below can re-issue the call with it
+        # forced off without handing the parameter two values.
+        try:
+            bound = inspect.signature(func).bind_partial(*args, **kwargs)
+        except TypeError:
+            bound = None
+        if bound is not None:
+            return_as_pandas = bool(bound.arguments.pop("return_as_pandas", False))
+            inner_args, inner_kwargs = bound.args, {**bound.kwargs, "return_as_pandas": False}
+        else:
+            return_as_pandas = bool(kwargs.get("return_as_pandas", False))
+            inner_args, inner_kwargs = args, {**kwargs, "return_as_pandas": False}
 
         if cfg.cache_mode == "memory":
             cached = _MEMORY.get(key)
@@ -202,8 +215,7 @@ def cached_loader(func: F) -> F:
                 # Expired — drop and refetch.
                 del _MEMORY[key]
             # Miss — always materialize as polars internally.
-            inner_kwargs = {**kwargs, "return_as_pandas": False}
-            frame = func(*args, **inner_kwargs)
+            frame = func(*inner_args, **inner_kwargs)
             _MEMORY[key] = (time.time(), frame)
             return frame.to_pandas() if return_as_pandas else frame
 
@@ -219,8 +231,7 @@ def cached_loader(func: F) -> F:
                     # cache is opaque infra and the caller asked for data.
                     path.unlink(missing_ok=True)
             # Miss / expired / corrupt — refetch.
-            inner_kwargs = {**kwargs, "return_as_pandas": False}
-            frame = func(*args, **inner_kwargs)
+            frame = func(*inner_args, **inner_kwargs)
             cache_dir = cfg.cache_dir
             cache_dir.mkdir(parents=True, exist_ok=True)
             try:

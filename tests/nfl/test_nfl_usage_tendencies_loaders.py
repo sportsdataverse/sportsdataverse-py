@@ -21,7 +21,7 @@ import yaml
 import sportsdataverse.nfl as nfl
 from sportsdataverse.errors import NoDataError, SeasonNotFoundError
 from sportsdataverse.nfl import nfl_loaders as _mod
-from sportsdataverse.nfl import update_config
+from sportsdataverse.nfl import clear_cache, get_config, update_config
 
 SDV = "https://github.com/sportsdataverse/sportsdataverse-data/releases/download/"
 _RELEASES = Path(__file__).resolve().parents[2] / "tools" / "codegen" / "endpoints" / "releases.yaml"
@@ -30,9 +30,10 @@ SEASONAL = list(_mod._NFL_ESPN_FOOTBALL_STEMS)
 
 @pytest.fixture(autouse=True)
 def _no_cache():
+    prior = get_config().cache_mode
     update_config(cache_mode="off")
     yield
-    update_config(cache_mode="memory")
+    update_config(cache_mode=prior)
 
 
 def _capture(monkeypatch, frame_for):
@@ -136,3 +137,23 @@ def test_docs_metadata_matches_the_code():
         assert SDV + e["url"] == _mod.NFL_ESPN_FOOTBALL_URL.replace("{stem}", stem)
     careers = entries["load_nfl_coach_careers"]
     assert SDV + careers["url"] == _mod.NFL_ESPN_COACH_CAREERS_URL and "min_season" not in careers
+
+
+@pytest.mark.parametrize("mode", ["memory", "filesystem"])
+def test_positional_return_as_pandas_survives_a_cache_miss(monkeypatch, tmp_path, mode):
+    """``load_x(2024, True)`` used to raise TypeError on a cache miss: the wrapper
+    re-issued the call with ``return_as_pandas=False`` as a keyword while the
+    positional True was still in ``args``. The wrapper now binds the call."""
+    _capture(monkeypatch, lambda url: pl.DataFrame({"season": [2024], "coach": ["Andy Reid"]}))
+    update_config(cache_mode=mode, cache_dir=tmp_path)
+    clear_cache()
+    try:
+        out = nfl.load_nfl_usage_players([2024], True)
+        assert out.__class__.__module__.startswith("pandas") and len(out) == 1
+        again = nfl.load_nfl_usage_players([2024], True)  # served from the cache, still pandas
+        assert again.__class__.__module__.startswith("pandas")
+        careers = nfl.load_nfl_coach_careers(True)
+        assert careers.__class__.__module__.startswith("pandas") and list(careers["coach"]) == ["Andy Reid"]
+        assert isinstance(nfl.load_nfl_coach_careers(), pl.DataFrame)
+    finally:
+        clear_cache()
