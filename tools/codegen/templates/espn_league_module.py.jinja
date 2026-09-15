@@ -32,8 +32,17 @@ def {{ ep.fn_name }}(
     {{ p.python_name }}: Optional[{{ p.type|type_hint }}] = {{ p.default|py_repr }},
 {% endif %}
 {% endfor %}
-{% if ep.parser %}
+{% if ep.parser or ep.kw_only_params %}
     *,
+{% endif %}
+{% for p in ep.kw_only_params %}
+{% if p.required and p.default_from is none %}
+    {{ p.python_name }}: {{ p.type|type_hint }},
+{% else %}
+    {{ p.python_name }}: Optional[{{ p.type|type_hint }}] = {{ p.default|py_repr }},
+{% endif %}
+{% endfor %}
+{% if ep.parser %}
     return_parsed: bool = True,
     return_as_pandas: bool = False,
 {% endif %}

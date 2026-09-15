@@ -984,7 +984,7 @@ GET /experience/v2/gamedetails/{game_id} — one row: the flat v2 game detail (g
 | `venue_country` | character | Venue country. |
 | `summary_game_id` | character | NFL.com Shield GUID for the game (from the embedded live summary). |
 | `summary_offset` | integer | Live-feed sequence offset for the embedded summary snapshot. |
-| `summary_attendance` | character | Announced game attendance (from the embedded summary). |
+| `summary_attendance` | integer | Announced game attendance (from the embedded summary). |
 | `summary_clock` | character | Game clock at the summary snapshot (MM:SS). |
 | `summary_distance` | integer | Yards to gain for a first down at the summary snapshot. |
 | `summary_down` | integer | Current down (1-4) at the summary snapshot. |
@@ -1192,7 +1192,7 @@ GET /experience/v1/gamedetailsbyslug/{slug} — one row: the flat game detail lo
 | `venue_country` | character | Venue country. |
 | `summary_game_id` | character | NFL.com Shield GUID for the game (from the embedded live summary). |
 | `summary_offset` | integer | Live-feed sequence offset for the embedded summary snapshot. |
-| `summary_attendance` | character | Announced game attendance (from the embedded summary). |
+| `summary_attendance` | integer | Announced game attendance (from the embedded summary). |
 | `summary_clock` | character | Game clock at the summary snapshot (MM:SS). |
 | `summary_distance` | integer | Yards to gain for a first down at the summary snapshot. |
 | `summary_down` | integer | Current down (1-4) at the summary snapshot. |

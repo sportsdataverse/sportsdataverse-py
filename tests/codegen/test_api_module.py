@@ -103,6 +103,7 @@ def test_kw_only_extra_param_renders_after_star_and_keeps_headers_positional(tmp
         "  - short: teams\n    summary: 'Teams (no parser).'\n    path: '/football/v2/teams'\n"
         "    extra_params:\n      - { name: season, query_key: season, type: int, default: 2024 }\n"
         "      - { name: limit, query_key: limit, type: int, default: 40, kw_only: true }\n"
+        "      - { name: week, query_key: week, type: int, required: true, kw_only: true }\n"
         "    example_args: { season: 2024 }\n",
         encoding="utf-8",
     )
@@ -114,6 +115,51 @@ def test_kw_only_extra_param_renders_after_star_and_keeps_headers_positional(tmp
     assert [a.arg for a in rosters.args] == ["season", "headers"]
     assert [a.arg for a in rosters.kwonlyargs] == ["team_id", "return_parsed", "return_as_pandas"]
     assert '"teamId": team_id,' in src  # still sent on the wire
-    teams = fns["nfl_teams"].args  # no parser: the star is still emitted for the kw-only param
+    teams = fns["nfl_teams"].args  # no parser: the star is still emitted for the kw-only params
     assert [a.arg for a in teams.args] == ["season", "headers"]
-    assert [a.arg for a in teams.kwonlyargs] == ["limit"]
+    # required kw-only params sort first (same required-before-optional order as
+    # the positional block) and keep their no-default contract
+    assert [a.arg for a in teams.kwonlyargs] == ["week", "limit"]
+    assert [d is None for d in teams.kw_defaults] == [True, False]
+    assert "week: int,\n" in src and "week: Optional[int]" not in src
+
+
+def test_espn_template_renders_kw_only_params_after_star():
+    # The ESPN league template shares _EndpointView; a ``kw_only`` query param must
+    # land after ``*`` there too (not vanish from the signature while _params uses it).
+    import dataclasses
+
+    endpoints = generate.ENDPOINTS
+    params = spec.load_parameters(endpoints / "parameters.yaml")
+    apis = [spec.load_espn_api(endpoints / f"{a}.yaml", params) for a in generate.ESPN_APIS]
+    hosts = spec.load_leagues(endpoints / "leagues.yaml").hosts
+    lg = spec.League(prefix="nba", sport="basketball", league="nba", scopes=["universal"])
+    # first endpoint with an optional query param -> mark that param keyword-only
+    target = None
+    for ai, api in enumerate(apis):
+        for ei, ep in enumerate(api.endpoints):
+            opt = [p for p in ep.query_params if not p.required]
+            if opt and not ep.exclude_leagues:
+                target = (ai, ei, opt[0].python_name)
+                break
+        if target:
+            break
+    assert target is not None
+    ai, ei, pname = target
+    ep = apis[ai].endpoints[ei]
+    new_q = [dataclasses.replace(p, kw_only=True) if p.python_name == pname else p for p in ep.query_params]
+    new_eps = list(apis[ai].endpoints)
+    new_eps[ei] = dataclasses.replace(ep, query_params=new_q)
+    apis[ai] = dataclasses.replace(apis[ai], endpoints=new_eps)
+    src = generate._league_module_source(lg, apis, hosts)
+    tree = ast.parse(src)
+    hits = [
+        n
+        for n in tree.body
+        if isinstance(n, ast.FunctionDef)
+        and n.name.endswith(f"_{ep.short}")
+        and pname in {a.arg for a in n.args.kwonlyargs}
+    ]
+    assert hits, f"{pname} not keyword-only in any *_{ep.short} wrapper"
+    for fn in hits:
+        assert pname not in {a.arg for a in fn.args.args}

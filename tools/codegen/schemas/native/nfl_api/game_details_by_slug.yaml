@@ -110,7 +110,7 @@ columns:
   type: integer
   description: Live-feed sequence offset for the embedded summary snapshot.
 - name: summary_attendance
-  type: character
+  type: integer
   description: Announced game attendance (from the embedded summary).
 - name: summary_clock
   type: character
