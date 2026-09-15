@@ -317,3 +317,17 @@ def test_blockers_key_by_id_when_the_punt_block_has_it_and_the_fg_block_only_the
     (row,) = create_usage_box(plays, None, league="cfb")["st_blocks"]
     assert (row["def_pos_team"], row["player_id"], row["player_name"]) == (2, "55", "Blocker")
     assert (row["punt_blocks"], row["fg_blocks"], row["blocks"]) == (1, 1, 2)
+
+
+def test_an_ambiguous_name_is_not_resolved_to_either_player():
+    """Two same-name kickers on one team: a name-only row must stay its own row
+    rather than merge into whichever id sorts first."""
+    a = {"kickoff_play": True, "kickoff_tb": True, "yds_kickoff": 65, "yds_kickoff_return": 25}
+    a |= {"kickoff_player_id": "1", "kickoff_player_name": "Same Name"}
+    b = {**a, "kickoff_player_id": "2"}
+    fg = {"fg_attempt": True, "fg_made": True, "yds_fg": 30, "pos_team": 1, "def_pos_team": 2}
+    fg |= {"fg_kicker_player_id": None, "fg_kicker_player_name": "Same Name"}
+    rows = create_usage_box(_st_plays([a, b, fg]), None, league="cfb")["st_kickers"]
+    got = sorted(((r["player_id"] or ""), r["kickoffs"], r["fg_attempts"]) for r in rows)
+    assert got == [("", 0, 1), ("1", 1, 0), ("2", 1, 0)]
+    assert all(r["player_name"] == "Same Name" for r in rows)

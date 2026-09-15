@@ -769,8 +769,16 @@ def _key_players(frames: list[tuple[pl.DataFrame, str, str]], team_col: str) -> 
         [f.select(pl.col(team_col), pl.col(i).alias("_pid"), pl.col(n).alias("_pname")) for f, i, n in frames],
         how="vertical_relaxed",
     ).filter(pl.col("_pid").is_not_null() & pl.col("_pname").is_not_null())
-    # sort() keeps the resolution deterministic when a source disagrees with itself
-    name_to_id = pairs.group_by(team_col, "_pname").agg(pl.col("_pid").sort().first().alias("_id_from_name"))
+    # A name resolves to an id only when the team has exactly one id under that
+    # name: two same-name players would otherwise fold a name-only row into an
+    # arbitrary one of them, so an ambiguous name stays keyed on the name.
+    name_to_id = (
+        pairs.group_by(team_col, "_pname")
+        .agg(pl.col("_pid").first().alias("_id_from_name"), pl.col("_pid").n_unique().alias("_n_ids"))
+        .with_columns(_id_from_name=pl.when(pl.col("_n_ids") == 1).then(pl.col("_id_from_name")).otherwise(None))
+        .drop("_n_ids")
+    )
+    # sort() keeps the name deterministic when a source spells one id two ways
     id_to_name = pairs.group_by(team_col, "_pid").agg(pl.col("_pname").sort().first().alias("_name_from_id"))
     out = []
     for f, i, n in frames:
