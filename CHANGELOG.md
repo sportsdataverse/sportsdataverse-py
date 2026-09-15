@@ -287,6 +287,29 @@ current/future days and ranges containing them bypass both cache reads and write
 while wholly historical dates retain the 30-day TTL. Explicit TTL overrides still
 take precedence.
 
+### Added — loaders for the ESPN football usage leaderboards and team / coach tendencies
+
+Twenty-eight dataset loaders over the release tags `cfbfastR-cfb-data` and `nfl-data`
+publish from `sportsdataverse.football.usage_box` and `tendencies`: the eleven usage
+sections (`load_{cfb,nfl}_usage_players`, `_usage_position_groups`, `_usage_tackles`,
+`_usage_position_group_tackles`, `_usage_teams`, `_usage_drive_scripting`,
+`_usage_st_kickers`, `_usage_st_punters`, `_usage_st_returners`, `_usage_st_blocks`,
+`_usage_st_team`), `load_{cfb,nfl}_team_tendencies`, `load_{cfb,nfl}_coach_tendencies`,
+and the season-less `load_{cfb,nfl}_coach_careers()`. One parquet per season
+(`{stem}_{season}.parquet`, CFB from 2004, NFL from 2002), unioned with
+`diagonal_relaxed`; the CFB loaders are generated from `releases.yaml` (a missing
+season is skipped with a warning), the NFL ones are hand-written in `nfl_loaders.py`
+(a missing season raises `NoDataError`, matching its siblings). Returns tables are
+derived from the published parquets and every column is described from the
+producers' semantics; published coverage caveats (NFL 2005 has no play text upstream,
+the participant-based sections start in 2014, the kicker / punter / returner tags
+have no 2005-2007 assets) live in each loader's `notes:` / docstring.
+
+The loader codegen learned a season-less form: a `releases.yaml` url with no
+`{season}` token now renders a `fn(return_as_pandas=False)` loader that reads one
+asset (an absent asset is an empty frame plus a warning), and the loaders page
+renders its example as `fn()`.
+
 ### Added — team and coach tendencies (`sportsdataverse.football.tendencies`)
 
 `tendencies(plays, league=)` folds a season of processed plays (either

@@ -56,6 +56,20 @@ __all__ = [
     "load_cfb_adv_team_gamelog",
     "load_cfb_ratings_weekly",
     "load_cfb_team_summaries_weekly",
+    "load_cfb_usage_players",
+    "load_cfb_usage_position_groups",
+    "load_cfb_usage_tackles",
+    "load_cfb_usage_position_group_tackles",
+    "load_cfb_usage_teams",
+    "load_cfb_usage_drive_scripting",
+    "load_cfb_usage_st_kickers",
+    "load_cfb_usage_st_punters",
+    "load_cfb_usage_st_returners",
+    "load_cfb_usage_st_blocks",
+    "load_cfb_usage_st_team",
+    "load_cfb_team_tendencies",
+    "load_cfb_coach_tendencies",
+    "load_cfb_coach_careers",
     "load_cfb_pbp_r",
     "load_ncaa_mfb_pbp",
     "load_ncaa_mfb_pbp_cfbfastr",
@@ -4411,6 +4425,1713 @@ def load_cfb_team_summaries_weekly(seasons, return_as_pandas: bool = False):
     # Producers shipped this id with differing dtypes across releases; pin it here
     # so a cross-dataset join cannot silently match nothing.
     out = _cast_ids_int64(out, ["team_id"])
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+def load_cfb_usage_players(seasons, return_as_pandas: bool = False):
+    """Load espn_cfb_usage_players (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_usage_players
+
+    Args:
+        seasons: an int or iterable of seasons (>= 2004).
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; seasons with no published asset are
+        skipped with a warning rather than raising (404-safe).
+
+        |col_name                 |type    |
+        |:------------------------|:-------|
+        |season                   |Int64   |
+        |pos_team_id              |Int64   |
+        |pos_team                 |String  |
+        |player_id                |String  |
+        |player_name              |String  |
+        |position_group           |String  |
+        |rushes                   |Int64   |
+        |targets                  |Int64   |
+        |receptions               |Int64   |
+        |touches                  |Int64   |
+        |opportunities            |Int64   |
+        |rush_yards               |Float64 |
+        |receiving_yards          |Float64 |
+        |first_downs              |Int64   |
+        |touchdowns               |Int64   |
+        |fd_or_td                 |Int64   |
+        |explosive_plays          |Int64   |
+        |successful_plays         |Int64   |
+        |epa                      |Float64 |
+        |rz_rushes                |Int64   |
+        |rz_targets               |Int64   |
+        |rz_touches               |Int64   |
+        |rz_touchdowns            |Int64   |
+        |so_rushes                |Int64   |
+        |so_targets               |Int64   |
+        |so_touches               |Int64   |
+        |so_touchdowns            |Int64   |
+        |third_down_opportunities |Int64   |
+        |third_down_conversions   |Int64   |
+        |third_down_expected      |Float64 |
+        |team_targets             |Int64   |
+        |team_first_downs         |Int64   |
+        |team_touches             |Int64   |
+        |games                    |UInt32  |
+        |fd_td_rate               |Float64 |
+        |explosive_rate           |Float64 |
+        |success_rate             |Float64 |
+        |epa_per_opportunity      |Float64 |
+        |rz_touchdown_rate        |Float64 |
+        |so_touchdown_rate        |Float64 |
+        |third_down_rate          |Float64 |
+        |third_down_over_expected |Float64 |
+        |target_share             |Float64 |
+        |first_down_share         |Float64 |
+        |touch_share              |Float64 |
+
+    Note:
+        position_group is null for seasons whose play-by-play carried no participant positions.
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2004.
+
+    Example:
+        Quick start::
+
+            load_cfb_usage_players(seasons=2024)
+    """
+    frames, missing = [], []
+    for season in _as_season_list(seasons):
+        if int(season) < 2004:
+            raise SeasonNotFoundError("season cannot be less than 2004")
+        df = _read_release_parquet(
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_usage_players/usage_players_{season}.parquet"
+        )
+        if df is None:
+            missing.append(season)
+            continue
+        frames.append(df)
+    if missing:
+        cli_warn("load_cfb_usage_players: no data for season(s) {missing} (skipped)".format(missing=missing))
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+def load_cfb_usage_position_groups(seasons, return_as_pandas: bool = False):
+    """Load espn_cfb_usage_position_groups (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_usage_position_groups
+
+    Args:
+        seasons: an int or iterable of seasons (>= 2004).
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; seasons with no published asset are
+        skipped with a warning rather than raising (404-safe).
+
+        |col_name                 |type    |
+        |:------------------------|:-------|
+        |season                   |Int64   |
+        |pos_team_id              |Int64   |
+        |pos_team                 |String  |
+        |position_group           |String  |
+        |rushes                   |Int64   |
+        |targets                  |Int64   |
+        |receptions               |Int64   |
+        |touches                  |Int64   |
+        |opportunities            |Int64   |
+        |rush_yards               |Float64 |
+        |receiving_yards          |Float64 |
+        |first_downs              |Int64   |
+        |touchdowns               |Int64   |
+        |fd_or_td                 |Int64   |
+        |explosive_plays          |Int64   |
+        |successful_plays         |Int64   |
+        |epa                      |Float64 |
+        |rz_rushes                |Int64   |
+        |rz_targets               |Int64   |
+        |rz_touches               |Int64   |
+        |rz_touchdowns            |Int64   |
+        |so_rushes                |Int64   |
+        |so_targets               |Int64   |
+        |so_touches               |Int64   |
+        |so_touchdowns            |Int64   |
+        |third_down_opportunities |Int64   |
+        |third_down_conversions   |Int64   |
+        |third_down_expected      |Float64 |
+        |team_targets             |Int64   |
+        |team_first_downs         |Int64   |
+        |team_touches             |Int64   |
+        |games                    |UInt32  |
+        |fd_td_rate               |Float64 |
+        |explosive_rate           |Float64 |
+        |success_rate             |Float64 |
+        |epa_per_opportunity      |Float64 |
+        |rz_touchdown_rate        |Float64 |
+        |so_touchdown_rate        |Float64 |
+        |third_down_rate          |Float64 |
+        |third_down_over_expected |Float64 |
+        |target_share             |Float64 |
+        |first_down_share         |Float64 |
+        |touch_share              |Float64 |
+
+    Note:
+        Needs ESPN play participants: rows exist only for seasons whose play-by-play carried player positions.
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2004.
+
+    Example:
+        Quick start::
+
+            load_cfb_usage_position_groups(seasons=2024)
+    """
+    frames, missing = [], []
+    for season in _as_season_list(seasons):
+        if int(season) < 2004:
+            raise SeasonNotFoundError("season cannot be less than 2004")
+        df = _read_release_parquet(
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_usage_position_groups/usage_position_groups_{season}.parquet"
+        )
+        if df is None:
+            missing.append(season)
+            continue
+        frames.append(df)
+    if missing:
+        cli_warn("load_cfb_usage_position_groups: no data for season(s) {missing} (skipped)".format(missing=missing))
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+def load_cfb_usage_tackles(seasons, return_as_pandas: bool = False):
+    """Load espn_cfb_usage_tackles (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_usage_tackles
+
+    Args:
+        seasons: an int or iterable of seasons (>= 2004).
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; seasons with no published asset are
+        skipped with a warning rather than raising (404-safe).
+
+        |col_name           |type    |
+        |:------------------|:-------|
+        |season             |Int64   |
+        |def_pos_team_id    |Int64   |
+        |def_pos_team       |String  |
+        |player_id          |String  |
+        |player_name        |String  |
+        |position_group     |String  |
+        |tackles            |Int64   |
+        |assists            |Int64   |
+        |tackle_points      |Float64 |
+        |games              |UInt32  |
+        |team_tackle_points |Float64 |
+        |tackle_share       |Float64 |
+
+    Note:
+        Needs ESPN play participants (tackler / assist ids); a season without them has no rows, and position_group is null when no participant carried a position.
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2004.
+
+    Example:
+        Quick start::
+
+            load_cfb_usage_tackles(seasons=2024)
+    """
+    frames, missing = [], []
+    for season in _as_season_list(seasons):
+        if int(season) < 2004:
+            raise SeasonNotFoundError("season cannot be less than 2004")
+        df = _read_release_parquet(
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_usage_tackles/usage_tackles_{season}.parquet"
+        )
+        if df is None:
+            missing.append(season)
+            continue
+        frames.append(df)
+    if missing:
+        cli_warn("load_cfb_usage_tackles: no data for season(s) {missing} (skipped)".format(missing=missing))
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+def load_cfb_usage_position_group_tackles(seasons, return_as_pandas: bool = False):
+    """Load espn_cfb_usage_position_group_tackles (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_usage_position_group_tackles
+
+    Args:
+        seasons: an int or iterable of seasons (>= 2004).
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; seasons with no published asset are
+        skipped with a warning rather than raising (404-safe).
+
+        |col_name           |type    |
+        |:------------------|:-------|
+        |season             |Int64   |
+        |def_pos_team_id    |Int64   |
+        |def_pos_team       |String  |
+        |position_group     |String  |
+        |tackles            |Int64   |
+        |assists            |Int64   |
+        |tackle_points      |Float64 |
+        |games              |UInt32  |
+        |team_tackle_points |Float64 |
+        |tackle_share       |Float64 |
+
+    Note:
+        Needs ESPN play participants with player positions; a season without them has no rows.
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2004.
+
+    Example:
+        Quick start::
+
+            load_cfb_usage_position_group_tackles(seasons=2024)
+    """
+    frames, missing = [], []
+    for season in _as_season_list(seasons):
+        if int(season) < 2004:
+            raise SeasonNotFoundError("season cannot be less than 2004")
+        df = _read_release_parquet(
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_usage_position_group_tackles/usage_position_group_tackles_{season}.parquet"
+        )
+        if df is None:
+            missing.append(season)
+            continue
+        frames.append(df)
+    if missing:
+        cli_warn(
+            "load_cfb_usage_position_group_tackles: no data for season(s) {missing} (skipped)".format(missing=missing)
+        )
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+def load_cfb_usage_teams(seasons, return_as_pandas: bool = False):
+    """Load espn_cfb_usage_teams (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_usage_teams
+
+    Args:
+        seasons: an int or iterable of seasons (>= 2004).
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; seasons with no published asset are
+        skipped with a warning rather than raising (404-safe).
+
+        |col_name                 |type    |
+        |:------------------------|:-------|
+        |season                   |Int64   |
+        |pos_team_id              |Int64   |
+        |pos_team                 |String  |
+        |plays                    |Int64   |
+        |rushes                   |Int64   |
+        |targets                  |Int64   |
+        |completions              |Int64   |
+        |first_downs              |Int64   |
+        |touchdowns               |Int64   |
+        |explosive_plays          |Int64   |
+        |successful_plays         |Int64   |
+        |epa                      |Float64 |
+        |third_down_opportunities |Int64   |
+        |third_down_conversions   |Int64   |
+        |third_down_expected      |Float64 |
+        |rz_plays                 |Int64   |
+        |rz_successes             |Int64   |
+        |rz_epa                   |Float64 |
+        |rz_touchdowns            |Int64   |
+        |rz_targets               |Int64   |
+        |rz_rushes                |Int64   |
+        |rz_trips                 |Int64   |
+        |rz_points                |Float64 |
+        |so_plays                 |Int64   |
+        |so_successes             |Int64   |
+        |so_epa                   |Float64 |
+        |so_touchdowns            |Int64   |
+        |so_targets               |Int64   |
+        |so_rushes                |Int64   |
+        |so_trips                 |Int64   |
+        |so_points                |Float64 |
+        |games                    |UInt32  |
+        |success_rate             |Float64 |
+        |explosive_rate           |Float64 |
+        |epa_per_play             |Float64 |
+        |third_down_rate          |Float64 |
+        |third_down_over_expected |Float64 |
+        |rz_touchdown_rate        |Float64 |
+        |rz_points_per_trip       |Float64 |
+        |rz_success_rate          |Float64 |
+        |rz_epa_per_play          |Float64 |
+        |so_touchdown_rate        |Float64 |
+        |so_points_per_trip       |Float64 |
+        |so_success_rate          |Float64 |
+        |so_epa_per_play          |Float64 |
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2004.
+
+    Example:
+        Quick start::
+
+            load_cfb_usage_teams(seasons=2024)
+    """
+    frames, missing = [], []
+    for season in _as_season_list(seasons):
+        if int(season) < 2004:
+            raise SeasonNotFoundError("season cannot be less than 2004")
+        df = _read_release_parquet(
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_usage_teams/usage_teams_{season}.parquet"
+        )
+        if df is None:
+            missing.append(season)
+            continue
+        frames.append(df)
+    if missing:
+        cli_warn("load_cfb_usage_teams: no data for season(s) {missing} (skipped)".format(missing=missing))
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+def load_cfb_usage_drive_scripting(seasons, return_as_pandas: bool = False):
+    """Load espn_cfb_usage_drive_scripting (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_usage_drive_scripting
+
+    Args:
+        seasons: an int or iterable of seasons (>= 2004).
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; seasons with no published asset are
+        skipped with a warning rather than raising (404-safe).
+
+        |col_name         |type    |
+        |:----------------|:-------|
+        |season           |Int64   |
+        |pos_team_id      |Int64   |
+        |pos_team         |String  |
+        |script           |String  |
+        |drives           |Int64   |
+        |plays            |Int64   |
+        |epa              |Float64 |
+        |successes        |Int64   |
+        |yards            |Float64 |
+        |points           |Float64 |
+        |touchdowns       |Int64   |
+        |scoring_opps     |Int64   |
+        |games            |UInt32  |
+        |epa_per_play     |Float64 |
+        |success_rate     |Float64 |
+        |yards_per_play   |Float64 |
+        |points_per_drive |Float64 |
+        |touchdown_rate   |Float64 |
+        |scoring_opp_rate |Float64 |
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2004.
+
+    Example:
+        Quick start::
+
+            load_cfb_usage_drive_scripting(seasons=2024)
+    """
+    frames, missing = [], []
+    for season in _as_season_list(seasons):
+        if int(season) < 2004:
+            raise SeasonNotFoundError("season cannot be less than 2004")
+        df = _read_release_parquet(
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_usage_drive_scripting/usage_drive_scripting_{season}.parquet"
+        )
+        if df is None:
+            missing.append(season)
+            continue
+        frames.append(df)
+    if missing:
+        cli_warn("load_cfb_usage_drive_scripting: no data for season(s) {missing} (skipped)".format(missing=missing))
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+def load_cfb_usage_st_kickers(seasons, return_as_pandas: bool = False):
+    """Load espn_cfb_usage_st_kickers (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_usage_st_kickers
+
+    Args:
+        seasons: an int or iterable of seasons (>= 2004).
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; seasons with no published asset are
+        skipped with a warning rather than raising (404-safe).
+
+        |col_name                     |type    |
+        |:----------------------------|:-------|
+        |season                       |Int64   |
+        |pos_team_id                  |Int64   |
+        |pos_team                     |String  |
+        |player_id                    |String  |
+        |player_name                  |String  |
+        |kickoffs                     |Int64   |
+        |kickoff_yards                |Float64 |
+        |kickoff_touchbacks           |Int64   |
+        |kickoff_onside               |Int64   |
+        |kickoff_out_of_bounds        |Int64   |
+        |kickoff_returns_allowed      |Int64   |
+        |kickoff_return_yards_allowed |Float64 |
+        |kickoff_return_tds_allowed   |Int64   |
+        |kickoff_epa                  |Float64 |
+        |fg_attempts                  |Int64   |
+        |fg_made                      |Int64   |
+        |fg_blocked                   |Int64   |
+        |fg_0_39_attempts             |Int64   |
+        |fg_0_39_made                 |Int64   |
+        |fg_40_49_attempts            |Int64   |
+        |fg_40_49_made                |Int64   |
+        |fg_50_plus_attempts          |Int64   |
+        |fg_50_plus_made              |Int64   |
+        |fg_epa                       |Float64 |
+        |xp_attempts                  |Int64   |
+        |xp_made                      |Int64   |
+        |fg_long                      |Float64 |
+        |games                        |UInt32  |
+        |kickoff_avg                  |Float64 |
+        |kickoff_touchback_rate       |Float64 |
+        |kickoff_return_avg_allowed   |Float64 |
+        |fg_pct                       |Float64 |
+        |xp_pct                       |Float64 |
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2004.
+
+    Example:
+        Quick start::
+
+            load_cfb_usage_st_kickers(seasons=2024)
+    """
+    frames, missing = [], []
+    for season in _as_season_list(seasons):
+        if int(season) < 2004:
+            raise SeasonNotFoundError("season cannot be less than 2004")
+        df = _read_release_parquet(
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_usage_st_kickers/usage_st_kickers_{season}.parquet"
+        )
+        if df is None:
+            missing.append(season)
+            continue
+        frames.append(df)
+    if missing:
+        cli_warn("load_cfb_usage_st_kickers: no data for season(s) {missing} (skipped)".format(missing=missing))
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+def load_cfb_usage_st_punters(seasons, return_as_pandas: bool = False):
+    """Load espn_cfb_usage_st_punters (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_usage_st_punters
+
+    Args:
+        seasons: an int or iterable of seasons (>= 2004).
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; seasons with no published asset are
+        skipped with a warning rather than raising (404-safe).
+
+        |col_name                  |type    |
+        |:-------------------------|:-------|
+        |season                    |Int64   |
+        |pos_team_id               |Int64   |
+        |pos_team                  |String  |
+        |player_id                 |String  |
+        |player_name               |String  |
+        |punts                     |Int64   |
+        |punt_yards                |Float64 |
+        |punt_touchbacks           |Int64   |
+        |punt_inside_20            |Int64   |
+        |punt_fair_catches         |Int64   |
+        |punt_downed               |Int64   |
+        |punt_out_of_bounds        |Int64   |
+        |punt_blocked              |Int64   |
+        |punt_returns_allowed      |Int64   |
+        |punt_return_yards_allowed |Float64 |
+        |punt_return_tds_allowed   |Int64   |
+        |punt_epa                  |Float64 |
+        |punt_long                 |Float64 |
+        |games                     |UInt32  |
+        |punt_net_yards            |Float64 |
+        |punt_avg                  |Float64 |
+        |punt_net_avg              |Float64 |
+        |punt_inside_20_rate       |Float64 |
+        |punt_return_avg_allowed   |Float64 |
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2004.
+
+    Example:
+        Quick start::
+
+            load_cfb_usage_st_punters(seasons=2024)
+    """
+    frames, missing = [], []
+    for season in _as_season_list(seasons):
+        if int(season) < 2004:
+            raise SeasonNotFoundError("season cannot be less than 2004")
+        df = _read_release_parquet(
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_usage_st_punters/usage_st_punters_{season}.parquet"
+        )
+        if df is None:
+            missing.append(season)
+            continue
+        frames.append(df)
+    if missing:
+        cli_warn("load_cfb_usage_st_punters: no data for season(s) {missing} (skipped)".format(missing=missing))
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+def load_cfb_usage_st_returners(seasons, return_as_pandas: bool = False):
+    """Load espn_cfb_usage_st_returners (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_usage_st_returners
+
+    Args:
+        seasons: an int or iterable of seasons (>= 2004).
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; seasons with no published asset are
+        skipped with a warning rather than raising (404-safe).
+
+        |col_name          |type    |
+        |:-----------------|:-------|
+        |season            |Int64   |
+        |pos_team_id       |Int64   |
+        |pos_team          |String  |
+        |player_id         |String  |
+        |player_name       |String  |
+        |kick_returns      |Int64   |
+        |kick_return_yards |Float64 |
+        |kick_return_tds   |Int64   |
+        |kick_return_epa   |Float64 |
+        |punt_returns      |Int64   |
+        |punt_return_yards |Float64 |
+        |punt_return_tds   |Int64   |
+        |punt_return_epa   |Float64 |
+        |kick_return_long  |Float64 |
+        |punt_return_long  |Float64 |
+        |games             |UInt32  |
+        |kick_return_avg   |Float64 |
+        |punt_return_avg   |Float64 |
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2004.
+
+    Example:
+        Quick start::
+
+            load_cfb_usage_st_returners(seasons=2024)
+    """
+    frames, missing = [], []
+    for season in _as_season_list(seasons):
+        if int(season) < 2004:
+            raise SeasonNotFoundError("season cannot be less than 2004")
+        df = _read_release_parquet(
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_usage_st_returners/usage_st_returners_{season}.parquet"
+        )
+        if df is None:
+            missing.append(season)
+            continue
+        frames.append(df)
+    if missing:
+        cli_warn("load_cfb_usage_st_returners: no data for season(s) {missing} (skipped)".format(missing=missing))
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+def load_cfb_usage_st_blocks(seasons, return_as_pandas: bool = False):
+    """Load espn_cfb_usage_st_blocks (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_usage_st_blocks
+
+    Args:
+        seasons: an int or iterable of seasons (>= 2004).
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; seasons with no published asset are
+        skipped with a warning rather than raising (404-safe).
+
+        |col_name        |type   |
+        |:---------------|:------|
+        |season          |Int64  |
+        |def_pos_team_id |Int64  |
+        |def_pos_team    |String |
+        |player_id       |String |
+        |player_name     |String |
+        |punt_blocks     |Int64  |
+        |fg_blocks       |Int64  |
+        |blocks          |Int64  |
+        |games           |UInt32 |
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2004.
+
+    Example:
+        Quick start::
+
+            load_cfb_usage_st_blocks(seasons=2024)
+    """
+    frames, missing = [], []
+    for season in _as_season_list(seasons):
+        if int(season) < 2004:
+            raise SeasonNotFoundError("season cannot be less than 2004")
+        df = _read_release_parquet(
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_usage_st_blocks/usage_st_blocks_{season}.parquet"
+        )
+        if df is None:
+            missing.append(season)
+            continue
+        frames.append(df)
+    if missing:
+        cli_warn("load_cfb_usage_st_blocks: no data for season(s) {missing} (skipped)".format(missing=missing))
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+def load_cfb_usage_st_team(seasons, return_as_pandas: bool = False):
+    """Load espn_cfb_usage_st_team (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_usage_st_team
+
+    Args:
+        seasons: an int or iterable of seasons (>= 2004).
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; seasons with no published asset are
+        skipped with a warning rather than raising (404-safe).
+
+        |col_name                     |type    |
+        |:----------------------------|:-------|
+        |season                       |Int64   |
+        |pos_team_id                  |Int64   |
+        |pos_team                     |String  |
+        |kickoffs                     |Int64   |
+        |kickoff_touchbacks           |Int64   |
+        |kickoff_returns_allowed      |Int64   |
+        |kickoff_return_yards_allowed |Float64 |
+        |kickoff_return_tds_allowed   |Int64   |
+        |kickoff_epa                  |Float64 |
+        |punts                        |Int64   |
+        |punt_yards                   |Float64 |
+        |punt_touchbacks              |Int64   |
+        |punts_blocked                |Int64   |
+        |punt_returns_allowed         |Int64   |
+        |punt_return_yards_allowed    |Float64 |
+        |punt_return_tds_allowed      |Int64   |
+        |punt_epa                     |Float64 |
+        |fg_attempts                  |Int64   |
+        |fg_made                      |Int64   |
+        |fgs_blocked                  |Int64   |
+        |fg_epa                       |Float64 |
+        |kick_returns                 |Int64   |
+        |kick_return_yards            |Float64 |
+        |punt_returns                 |Int64   |
+        |punt_return_yards            |Float64 |
+        |punt_blocks_by               |Int64   |
+        |fg_blocks_by                 |Int64   |
+        |kick_return_tds              |Int64   |
+        |kick_return_epa              |Float64 |
+        |punt_return_tds              |Int64   |
+        |punt_return_epa              |Float64 |
+        |games                        |UInt32  |
+        |punt_net_yards               |Float64 |
+        |kickoff_touchback_rate       |Float64 |
+        |kickoff_return_avg_allowed   |Float64 |
+        |fg_pct                       |Float64 |
+        |punt_avg                     |Float64 |
+        |punt_net_avg                 |Float64 |
+        |punt_return_avg_allowed      |Float64 |
+        |kick_return_avg              |Float64 |
+        |punt_return_avg              |Float64 |
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2004.
+
+    Example:
+        Quick start::
+
+            load_cfb_usage_st_team(seasons=2024)
+    """
+    frames, missing = [], []
+    for season in _as_season_list(seasons):
+        if int(season) < 2004:
+            raise SeasonNotFoundError("season cannot be less than 2004")
+        df = _read_release_parquet(
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_usage_st_team/usage_st_team_{season}.parquet"
+        )
+        if df is None:
+            missing.append(season)
+            continue
+        frames.append(df)
+    if missing:
+        cli_warn("load_cfb_usage_st_team: no data for season(s) {missing} (skipped)".format(missing=missing))
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+def load_cfb_team_tendencies(seasons, return_as_pandas: bool = False):
+    """Load espn_cfb_team_tendencies (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_team_tendencies
+
+    Args:
+        seasons: an int or iterable of seasons (>= 2004).
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; seasons with no published asset are
+        skipped with a warning rather than raising (404-safe).
+
+        |col_name                       |type    |
+        |:------------------------------|:-------|
+        |season                         |Int64   |
+        |pos_team_id                    |Int64   |
+        |pos_team                       |String  |
+        |games                          |UInt32  |
+        |plays                          |UInt32  |
+        |rushes                         |UInt32  |
+        |passes                         |UInt32  |
+        |epa                            |Float64 |
+        |epa_rush                       |Float64 |
+        |epa_pass                       |Float64 |
+        |epa_early_down                 |Float64 |
+        |epa_neutral                    |Float64 |
+        |successes                      |UInt32  |
+        |successes_rush                 |UInt32  |
+        |successes_pass                 |UInt32  |
+        |yards                          |Float64 |
+        |yards_rush                     |Float64 |
+        |yards_pass                     |Float64 |
+        |explosives                     |UInt32  |
+        |explosives_rush                |UInt32  |
+        |explosives_pass                |UInt32  |
+        |third_down_opportunities       |UInt32  |
+        |third_down_conversions         |UInt32  |
+        |third_down_expected            |Float64 |
+        |plays_neutral                  |UInt32  |
+        |passes_neutral                 |UInt32  |
+        |plays_d1                       |UInt32  |
+        |passes_d1                      |UInt32  |
+        |plays_d2                       |UInt32  |
+        |passes_d2                      |UInt32  |
+        |plays_d3                       |UInt32  |
+        |passes_d3                      |UInt32  |
+        |plays_d4                       |UInt32  |
+        |passes_d4                      |UInt32  |
+        |plays_early_down               |UInt32  |
+        |passes_early_down              |UInt32  |
+        |plays_standard_down            |UInt32  |
+        |passes_standard_down           |UInt32  |
+        |plays_passing_down             |UInt32  |
+        |passes_passing_down            |UInt32  |
+        |plays_leading                  |UInt32  |
+        |passes_leading                 |UInt32  |
+        |plays_tied                     |UInt32  |
+        |passes_tied                    |UInt32  |
+        |plays_trailing                 |UInt32  |
+        |passes_trailing                |UInt32  |
+        |plays_first_half               |UInt32  |
+        |passes_first_half              |UInt32  |
+        |plays_second_half              |UInt32  |
+        |passes_second_half             |UInt32  |
+        |fourth_decisions               |UInt32  |
+        |fourth_went                    |UInt32  |
+        |fourth_converted               |UInt32  |
+        |fourth_model_go                |UInt32  |
+        |fourth_model_kick              |UInt32  |
+        |fourth_went_when_go            |UInt32  |
+        |fourth_went_when_kick          |UInt32  |
+        |fourth_agreed                  |UInt32  |
+        |fourth_wp_left                 |Float64 |
+        |drives                         |UInt32  |
+        |drives_with_clock              |UInt32  |
+        |drive_seconds                  |Float64 |
+        |drive_plays                    |Float64 |
+        |drive_seconds_neutral          |Float64 |
+        |drive_plays_neutral            |Float64 |
+        |drive_points                   |Float64 |
+        |rz_trips                       |UInt32  |
+        |rz_tds                         |UInt32  |
+        |rz_scores                      |UInt32  |
+        |rz_points                      |Float64 |
+        |so_trips                       |UInt32  |
+        |so_tds                         |UInt32  |
+        |so_scores                      |UInt32  |
+        |so_points                      |Float64 |
+        |scripted_drives                |UInt32  |
+        |scripted_plays                 |UInt32  |
+        |scripted_epa                   |Float64 |
+        |scripted_successes             |UInt32  |
+        |scripted_points                |Float64 |
+        |non_scripted_drives            |UInt32  |
+        |non_scripted_plays             |UInt32  |
+        |non_scripted_epa               |Float64 |
+        |non_scripted_successes         |UInt32  |
+        |non_scripted_points            |Float64 |
+        |plays_per_game                 |Float64 |
+        |plays_per_drive                |Float64 |
+        |drives_per_game                |Float64 |
+        |sec_per_play                   |Float64 |
+        |sec_per_play_neutral           |Float64 |
+        |pace_coverage                  |Float64 |
+        |pass_rate                      |Float64 |
+        |pass_rate_neutral              |Float64 |
+        |pass_rate_d1                   |Float64 |
+        |pass_rate_d2                   |Float64 |
+        |pass_rate_d3                   |Float64 |
+        |pass_rate_d4                   |Float64 |
+        |pass_rate_early_down           |Float64 |
+        |pass_rate_standard_down        |Float64 |
+        |pass_rate_passing_down         |Float64 |
+        |pass_rate_leading              |Float64 |
+        |pass_rate_tied                 |Float64 |
+        |pass_rate_trailing             |Float64 |
+        |pass_rate_first_half           |Float64 |
+        |pass_rate_second_half          |Float64 |
+        |epa_per_play                   |Float64 |
+        |epa_per_rush                   |Float64 |
+        |epa_per_pass                   |Float64 |
+        |epa_per_play_early_down        |Float64 |
+        |epa_per_play_neutral           |Float64 |
+        |success_rate                   |Float64 |
+        |success_rate_rush              |Float64 |
+        |success_rate_pass              |Float64 |
+        |ypp                            |Float64 |
+        |ypp_rush                       |Float64 |
+        |ypp_pass                       |Float64 |
+        |explosive_rate                 |Float64 |
+        |explosive_rate_rush            |Float64 |
+        |explosive_rate_pass            |Float64 |
+        |third_down_rate                |Float64 |
+        |rz_trip_rate                   |Float64 |
+        |rz_td_rate                     |Float64 |
+        |rz_conversion_rate             |Float64 |
+        |rz_pts_per_trip                |Float64 |
+        |so_trip_rate                   |Float64 |
+        |so_td_rate                     |Float64 |
+        |so_conversion_rate             |Float64 |
+        |so_pts_per_trip                |Float64 |
+        |pts_per_drive                  |Float64 |
+        |scripted_epa_per_play          |Float64 |
+        |scripted_success_rate          |Float64 |
+        |scripted_pts_per_drive         |Float64 |
+        |non_scripted_epa_per_play      |Float64 |
+        |non_scripted_success_rate      |Float64 |
+        |non_scripted_pts_per_drive     |Float64 |
+        |go_rate                        |Float64 |
+        |go_rate_when_model_says_go     |Float64 |
+        |go_rate_when_model_says_kick   |Float64 |
+        |fourth_agreement_rate          |Float64 |
+        |fourth_wp_left_per_decision    |Float64 |
+        |fourth_conversion_rate         |Float64 |
+        |third_down_over_expected       |Float64 |
+        |def_games                      |UInt32  |
+        |def_plays                      |UInt32  |
+        |def_rushes                     |UInt32  |
+        |def_passes                     |UInt32  |
+        |def_epa                        |Float64 |
+        |def_epa_rush                   |Float64 |
+        |def_epa_pass                   |Float64 |
+        |def_epa_early_down             |Float64 |
+        |def_epa_neutral                |Float64 |
+        |def_successes                  |UInt32  |
+        |def_successes_rush             |UInt32  |
+        |def_successes_pass             |UInt32  |
+        |def_yards                      |Float64 |
+        |def_yards_rush                 |Float64 |
+        |def_yards_pass                 |Float64 |
+        |def_explosives                 |UInt32  |
+        |def_explosives_rush            |UInt32  |
+        |def_explosives_pass            |UInt32  |
+        |def_third_down_opportunities   |UInt32  |
+        |def_third_down_conversions     |UInt32  |
+        |def_third_down_expected        |Float64 |
+        |def_plays_neutral              |UInt32  |
+        |def_passes_neutral             |UInt32  |
+        |def_plays_d1                   |UInt32  |
+        |def_passes_d1                  |UInt32  |
+        |def_plays_d2                   |UInt32  |
+        |def_passes_d2                  |UInt32  |
+        |def_plays_d3                   |UInt32  |
+        |def_passes_d3                  |UInt32  |
+        |def_plays_d4                   |UInt32  |
+        |def_passes_d4                  |UInt32  |
+        |def_plays_early_down           |UInt32  |
+        |def_passes_early_down          |UInt32  |
+        |def_plays_standard_down        |UInt32  |
+        |def_passes_standard_down       |UInt32  |
+        |def_plays_passing_down         |UInt32  |
+        |def_passes_passing_down        |UInt32  |
+        |def_plays_leading              |UInt32  |
+        |def_passes_leading             |UInt32  |
+        |def_plays_tied                 |UInt32  |
+        |def_passes_tied                |UInt32  |
+        |def_plays_trailing             |UInt32  |
+        |def_passes_trailing            |UInt32  |
+        |def_plays_first_half           |UInt32  |
+        |def_passes_first_half          |UInt32  |
+        |def_plays_second_half          |UInt32  |
+        |def_passes_second_half         |UInt32  |
+        |def_drives                     |UInt32  |
+        |def_drives_with_clock          |UInt32  |
+        |def_drive_seconds              |Float64 |
+        |def_drive_plays                |Float64 |
+        |def_drive_seconds_neutral      |Float64 |
+        |def_drive_plays_neutral        |Float64 |
+        |def_drive_points               |Float64 |
+        |def_rz_trips                   |UInt32  |
+        |def_rz_tds                     |UInt32  |
+        |def_rz_scores                  |UInt32  |
+        |def_rz_points                  |Float64 |
+        |def_so_trips                   |UInt32  |
+        |def_so_tds                     |UInt32  |
+        |def_so_scores                  |UInt32  |
+        |def_so_points                  |Float64 |
+        |def_scripted_drives            |UInt32  |
+        |def_scripted_plays             |UInt32  |
+        |def_scripted_epa               |Float64 |
+        |def_scripted_successes         |UInt32  |
+        |def_scripted_points            |Float64 |
+        |def_non_scripted_drives        |UInt32  |
+        |def_non_scripted_plays         |UInt32  |
+        |def_non_scripted_epa           |Float64 |
+        |def_non_scripted_successes     |UInt32  |
+        |def_non_scripted_points        |Float64 |
+        |def_plays_per_game             |Float64 |
+        |def_plays_per_drive            |Float64 |
+        |def_drives_per_game            |Float64 |
+        |def_sec_per_play               |Float64 |
+        |def_sec_per_play_neutral       |Float64 |
+        |def_pace_coverage              |Float64 |
+        |def_pass_rate                  |Float64 |
+        |def_pass_rate_neutral          |Float64 |
+        |def_pass_rate_d1               |Float64 |
+        |def_pass_rate_d2               |Float64 |
+        |def_pass_rate_d3               |Float64 |
+        |def_pass_rate_d4               |Float64 |
+        |def_pass_rate_early_down       |Float64 |
+        |def_pass_rate_standard_down    |Float64 |
+        |def_pass_rate_passing_down     |Float64 |
+        |def_pass_rate_leading          |Float64 |
+        |def_pass_rate_tied             |Float64 |
+        |def_pass_rate_trailing         |Float64 |
+        |def_pass_rate_first_half       |Float64 |
+        |def_pass_rate_second_half      |Float64 |
+        |def_epa_per_play               |Float64 |
+        |def_epa_per_rush               |Float64 |
+        |def_epa_per_pass               |Float64 |
+        |def_epa_per_play_early_down    |Float64 |
+        |def_epa_per_play_neutral       |Float64 |
+        |def_success_rate               |Float64 |
+        |def_success_rate_rush          |Float64 |
+        |def_success_rate_pass          |Float64 |
+        |def_ypp                        |Float64 |
+        |def_ypp_rush                   |Float64 |
+        |def_ypp_pass                   |Float64 |
+        |def_explosive_rate             |Float64 |
+        |def_explosive_rate_rush        |Float64 |
+        |def_explosive_rate_pass        |Float64 |
+        |def_third_down_rate            |Float64 |
+        |def_rz_trip_rate               |Float64 |
+        |def_rz_td_rate                 |Float64 |
+        |def_rz_conversion_rate         |Float64 |
+        |def_rz_pts_per_trip            |Float64 |
+        |def_so_trip_rate               |Float64 |
+        |def_so_td_rate                 |Float64 |
+        |def_so_conversion_rate         |Float64 |
+        |def_so_pts_per_trip            |Float64 |
+        |def_pts_per_drive              |Float64 |
+        |def_scripted_epa_per_play      |Float64 |
+        |def_scripted_success_rate      |Float64 |
+        |def_scripted_pts_per_drive     |Float64 |
+        |def_non_scripted_epa_per_play  |Float64 |
+        |def_non_scripted_success_rate  |Float64 |
+        |def_non_scripted_pts_per_drive |Float64 |
+        |def_third_down_over_expected   |Float64 |
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2004.
+
+    Example:
+        Quick start::
+
+            load_cfb_team_tendencies(seasons=2024)
+    """
+    frames, missing = [], []
+    for season in _as_season_list(seasons):
+        if int(season) < 2004:
+            raise SeasonNotFoundError("season cannot be less than 2004")
+        df = _read_release_parquet(
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_team_tendencies/team_tendencies_{season}.parquet"
+        )
+        if df is None:
+            missing.append(season)
+            continue
+        frames.append(df)
+    if missing:
+        cli_warn("load_cfb_team_tendencies: no data for season(s) {missing} (skipped)".format(missing=missing))
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+def load_cfb_coach_tendencies(seasons, return_as_pandas: bool = False):
+    """Load espn_cfb_coach_tendencies (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_coach_tendencies
+
+    Args:
+        seasons: an int or iterable of seasons (>= 2004).
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; seasons with no published asset are
+        skipped with a warning rather than raising (404-safe).
+
+        |col_name                       |type    |
+        |:------------------------------|:-------|
+        |season                         |Int64   |
+        |pos_team_id                    |Int64   |
+        |pos_team                       |String  |
+        |coach                          |String  |
+        |role                           |String  |
+        |games                          |UInt32  |
+        |plays                          |UInt32  |
+        |rushes                         |UInt32  |
+        |passes                         |UInt32  |
+        |epa                            |Float64 |
+        |epa_rush                       |Float64 |
+        |epa_pass                       |Float64 |
+        |epa_early_down                 |Float64 |
+        |epa_neutral                    |Float64 |
+        |successes                      |UInt32  |
+        |successes_rush                 |UInt32  |
+        |successes_pass                 |UInt32  |
+        |yards                          |Float64 |
+        |yards_rush                     |Float64 |
+        |yards_pass                     |Float64 |
+        |explosives                     |UInt32  |
+        |explosives_rush                |UInt32  |
+        |explosives_pass                |UInt32  |
+        |third_down_opportunities       |UInt32  |
+        |third_down_conversions         |UInt32  |
+        |third_down_expected            |Float64 |
+        |plays_neutral                  |UInt32  |
+        |passes_neutral                 |UInt32  |
+        |plays_d1                       |UInt32  |
+        |passes_d1                      |UInt32  |
+        |plays_d2                       |UInt32  |
+        |passes_d2                      |UInt32  |
+        |plays_d3                       |UInt32  |
+        |passes_d3                      |UInt32  |
+        |plays_d4                       |UInt32  |
+        |passes_d4                      |UInt32  |
+        |plays_early_down               |UInt32  |
+        |passes_early_down              |UInt32  |
+        |plays_standard_down            |UInt32  |
+        |passes_standard_down           |UInt32  |
+        |plays_passing_down             |UInt32  |
+        |passes_passing_down            |UInt32  |
+        |plays_leading                  |UInt32  |
+        |passes_leading                 |UInt32  |
+        |plays_tied                     |UInt32  |
+        |passes_tied                    |UInt32  |
+        |plays_trailing                 |UInt32  |
+        |passes_trailing                |UInt32  |
+        |plays_first_half               |UInt32  |
+        |passes_first_half              |UInt32  |
+        |plays_second_half              |UInt32  |
+        |passes_second_half             |UInt32  |
+        |fourth_decisions               |UInt32  |
+        |fourth_went                    |UInt32  |
+        |fourth_converted               |UInt32  |
+        |fourth_model_go                |UInt32  |
+        |fourth_model_kick              |UInt32  |
+        |fourth_went_when_go            |UInt32  |
+        |fourth_went_when_kick          |UInt32  |
+        |fourth_agreed                  |UInt32  |
+        |fourth_wp_left                 |Float64 |
+        |drives                         |UInt32  |
+        |drives_with_clock              |UInt32  |
+        |drive_seconds                  |Float64 |
+        |drive_plays                    |Float64 |
+        |drive_seconds_neutral          |Float64 |
+        |drive_plays_neutral            |Float64 |
+        |drive_points                   |Float64 |
+        |rz_trips                       |UInt32  |
+        |rz_tds                         |UInt32  |
+        |rz_scores                      |UInt32  |
+        |rz_points                      |Float64 |
+        |so_trips                       |UInt32  |
+        |so_tds                         |UInt32  |
+        |so_scores                      |UInt32  |
+        |so_points                      |Float64 |
+        |scripted_drives                |UInt32  |
+        |scripted_plays                 |UInt32  |
+        |scripted_epa                   |Float64 |
+        |scripted_successes             |UInt32  |
+        |scripted_points                |Float64 |
+        |non_scripted_drives            |UInt32  |
+        |non_scripted_plays             |UInt32  |
+        |non_scripted_epa               |Float64 |
+        |non_scripted_successes         |UInt32  |
+        |non_scripted_points            |Float64 |
+        |plays_per_game                 |Float64 |
+        |plays_per_drive                |Float64 |
+        |drives_per_game                |Float64 |
+        |sec_per_play                   |Float64 |
+        |sec_per_play_neutral           |Float64 |
+        |pace_coverage                  |Float64 |
+        |pass_rate                      |Float64 |
+        |pass_rate_neutral              |Float64 |
+        |pass_rate_d1                   |Float64 |
+        |pass_rate_d2                   |Float64 |
+        |pass_rate_d3                   |Float64 |
+        |pass_rate_d4                   |Float64 |
+        |pass_rate_early_down           |Float64 |
+        |pass_rate_standard_down        |Float64 |
+        |pass_rate_passing_down         |Float64 |
+        |pass_rate_leading              |Float64 |
+        |pass_rate_tied                 |Float64 |
+        |pass_rate_trailing             |Float64 |
+        |pass_rate_first_half           |Float64 |
+        |pass_rate_second_half          |Float64 |
+        |epa_per_play                   |Float64 |
+        |epa_per_rush                   |Float64 |
+        |epa_per_pass                   |Float64 |
+        |epa_per_play_early_down        |Float64 |
+        |epa_per_play_neutral           |Float64 |
+        |success_rate                   |Float64 |
+        |success_rate_rush              |Float64 |
+        |success_rate_pass              |Float64 |
+        |ypp                            |Float64 |
+        |ypp_rush                       |Float64 |
+        |ypp_pass                       |Float64 |
+        |explosive_rate                 |Float64 |
+        |explosive_rate_rush            |Float64 |
+        |explosive_rate_pass            |Float64 |
+        |third_down_rate                |Float64 |
+        |rz_trip_rate                   |Float64 |
+        |rz_td_rate                     |Float64 |
+        |rz_conversion_rate             |Float64 |
+        |rz_pts_per_trip                |Float64 |
+        |so_trip_rate                   |Float64 |
+        |so_td_rate                     |Float64 |
+        |so_conversion_rate             |Float64 |
+        |so_pts_per_trip                |Float64 |
+        |pts_per_drive                  |Float64 |
+        |scripted_epa_per_play          |Float64 |
+        |scripted_success_rate          |Float64 |
+        |scripted_pts_per_drive         |Float64 |
+        |non_scripted_epa_per_play      |Float64 |
+        |non_scripted_success_rate      |Float64 |
+        |non_scripted_pts_per_drive     |Float64 |
+        |go_rate                        |Float64 |
+        |go_rate_when_model_says_go     |Float64 |
+        |go_rate_when_model_says_kick   |Float64 |
+        |fourth_agreement_rate          |Float64 |
+        |fourth_wp_left_per_decision    |Float64 |
+        |fourth_conversion_rate         |Float64 |
+        |third_down_over_expected       |Float64 |
+        |def_games                      |UInt32  |
+        |def_plays                      |UInt32  |
+        |def_rushes                     |UInt32  |
+        |def_passes                     |UInt32  |
+        |def_epa                        |Float64 |
+        |def_epa_rush                   |Float64 |
+        |def_epa_pass                   |Float64 |
+        |def_epa_early_down             |Float64 |
+        |def_epa_neutral                |Float64 |
+        |def_successes                  |UInt32  |
+        |def_successes_rush             |UInt32  |
+        |def_successes_pass             |UInt32  |
+        |def_yards                      |Float64 |
+        |def_yards_rush                 |Float64 |
+        |def_yards_pass                 |Float64 |
+        |def_explosives                 |UInt32  |
+        |def_explosives_rush            |UInt32  |
+        |def_explosives_pass            |UInt32  |
+        |def_third_down_opportunities   |UInt32  |
+        |def_third_down_conversions     |UInt32  |
+        |def_third_down_expected        |Float64 |
+        |def_plays_neutral              |UInt32  |
+        |def_passes_neutral             |UInt32  |
+        |def_plays_d1                   |UInt32  |
+        |def_passes_d1                  |UInt32  |
+        |def_plays_d2                   |UInt32  |
+        |def_passes_d2                  |UInt32  |
+        |def_plays_d3                   |UInt32  |
+        |def_passes_d3                  |UInt32  |
+        |def_plays_d4                   |UInt32  |
+        |def_passes_d4                  |UInt32  |
+        |def_plays_early_down           |UInt32  |
+        |def_passes_early_down          |UInt32  |
+        |def_plays_standard_down        |UInt32  |
+        |def_passes_standard_down       |UInt32  |
+        |def_plays_passing_down         |UInt32  |
+        |def_passes_passing_down        |UInt32  |
+        |def_plays_leading              |UInt32  |
+        |def_passes_leading             |UInt32  |
+        |def_plays_tied                 |UInt32  |
+        |def_passes_tied                |UInt32  |
+        |def_plays_trailing             |UInt32  |
+        |def_passes_trailing            |UInt32  |
+        |def_plays_first_half           |UInt32  |
+        |def_passes_first_half          |UInt32  |
+        |def_plays_second_half          |UInt32  |
+        |def_passes_second_half         |UInt32  |
+        |def_drives                     |UInt32  |
+        |def_drives_with_clock          |UInt32  |
+        |def_drive_seconds              |Float64 |
+        |def_drive_plays                |Float64 |
+        |def_drive_seconds_neutral      |Float64 |
+        |def_drive_plays_neutral        |Float64 |
+        |def_drive_points               |Float64 |
+        |def_rz_trips                   |UInt32  |
+        |def_rz_tds                     |UInt32  |
+        |def_rz_scores                  |UInt32  |
+        |def_rz_points                  |Float64 |
+        |def_so_trips                   |UInt32  |
+        |def_so_tds                     |UInt32  |
+        |def_so_scores                  |UInt32  |
+        |def_so_points                  |Float64 |
+        |def_scripted_drives            |UInt32  |
+        |def_scripted_plays             |UInt32  |
+        |def_scripted_epa               |Float64 |
+        |def_scripted_successes         |UInt32  |
+        |def_scripted_points            |Float64 |
+        |def_non_scripted_drives        |UInt32  |
+        |def_non_scripted_plays         |UInt32  |
+        |def_non_scripted_epa           |Float64 |
+        |def_non_scripted_successes     |UInt32  |
+        |def_non_scripted_points        |Float64 |
+        |def_plays_per_game             |Float64 |
+        |def_plays_per_drive            |Float64 |
+        |def_drives_per_game            |Float64 |
+        |def_sec_per_play               |Float64 |
+        |def_sec_per_play_neutral       |Float64 |
+        |def_pace_coverage              |Float64 |
+        |def_pass_rate                  |Float64 |
+        |def_pass_rate_neutral          |Float64 |
+        |def_pass_rate_d1               |Float64 |
+        |def_pass_rate_d2               |Float64 |
+        |def_pass_rate_d3               |Float64 |
+        |def_pass_rate_d4               |Float64 |
+        |def_pass_rate_early_down       |Float64 |
+        |def_pass_rate_standard_down    |Float64 |
+        |def_pass_rate_passing_down     |Float64 |
+        |def_pass_rate_leading          |Float64 |
+        |def_pass_rate_tied             |Float64 |
+        |def_pass_rate_trailing         |Float64 |
+        |def_pass_rate_first_half       |Float64 |
+        |def_pass_rate_second_half      |Float64 |
+        |def_epa_per_play               |Float64 |
+        |def_epa_per_rush               |Float64 |
+        |def_epa_per_pass               |Float64 |
+        |def_epa_per_play_early_down    |Float64 |
+        |def_epa_per_play_neutral       |Float64 |
+        |def_success_rate               |Float64 |
+        |def_success_rate_rush          |Float64 |
+        |def_success_rate_pass          |Float64 |
+        |def_ypp                        |Float64 |
+        |def_ypp_rush                   |Float64 |
+        |def_ypp_pass                   |Float64 |
+        |def_explosive_rate             |Float64 |
+        |def_explosive_rate_rush        |Float64 |
+        |def_explosive_rate_pass        |Float64 |
+        |def_third_down_rate            |Float64 |
+        |def_rz_trip_rate               |Float64 |
+        |def_rz_td_rate                 |Float64 |
+        |def_rz_conversion_rate         |Float64 |
+        |def_rz_pts_per_trip            |Float64 |
+        |def_so_trip_rate               |Float64 |
+        |def_so_td_rate                 |Float64 |
+        |def_so_conversion_rate         |Float64 |
+        |def_so_pts_per_trip            |Float64 |
+        |def_pts_per_drive              |Float64 |
+        |def_scripted_epa_per_play      |Float64 |
+        |def_scripted_success_rate      |Float64 |
+        |def_scripted_pts_per_drive     |Float64 |
+        |def_non_scripted_epa_per_play  |Float64 |
+        |def_non_scripted_success_rate  |Float64 |
+        |def_non_scripted_pts_per_drive |Float64 |
+        |def_third_down_over_expected   |Float64 |
+
+    Note:
+        One row per (season, team, head coach). The coach comes from the producer's vendored CFBD coach roster (team-season attribution), so role is always "HC".
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2004.
+
+    Example:
+        Quick start::
+
+            load_cfb_coach_tendencies(seasons=2024)
+    """
+    frames, missing = [], []
+    for season in _as_season_list(seasons):
+        if int(season) < 2004:
+            raise SeasonNotFoundError("season cannot be less than 2004")
+        df = _read_release_parquet(
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_coach_tendencies/coach_tendencies_{season}.parquet"
+        )
+        if df is None:
+            missing.append(season)
+            continue
+        frames.append(df)
+    if missing:
+        cli_warn("load_cfb_coach_tendencies: no data for season(s) {missing} (skipped)".format(missing=missing))
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+def load_cfb_coach_careers(return_as_pandas: bool = False):
+    """Load espn_cfb_coach_careers (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_coach_careers
+
+    Args:
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; an absent asset yields an empty frame
+        with a warning rather than raising (404-safe).
+
+        |col_name                       |type    |
+        |:------------------------------|:-------|
+        |coach                          |String  |
+        |role                           |String  |
+        |teams                          |String  |
+        |seasons                        |UInt32  |
+        |first_season                   |Int64   |
+        |last_season                    |Int64   |
+        |games                          |UInt32  |
+        |plays                          |UInt32  |
+        |rushes                         |UInt32  |
+        |passes                         |UInt32  |
+        |epa                            |Float64 |
+        |epa_rush                       |Float64 |
+        |epa_pass                       |Float64 |
+        |epa_early_down                 |Float64 |
+        |epa_neutral                    |Float64 |
+        |successes                      |UInt32  |
+        |successes_rush                 |UInt32  |
+        |successes_pass                 |UInt32  |
+        |yards                          |Float64 |
+        |yards_rush                     |Float64 |
+        |yards_pass                     |Float64 |
+        |explosives                     |UInt32  |
+        |explosives_rush                |UInt32  |
+        |explosives_pass                |UInt32  |
+        |third_down_opportunities       |UInt32  |
+        |third_down_conversions         |UInt32  |
+        |third_down_expected            |Float64 |
+        |plays_neutral                  |UInt32  |
+        |passes_neutral                 |UInt32  |
+        |plays_d1                       |UInt32  |
+        |passes_d1                      |UInt32  |
+        |plays_d2                       |UInt32  |
+        |passes_d2                      |UInt32  |
+        |plays_d3                       |UInt32  |
+        |passes_d3                      |UInt32  |
+        |plays_d4                       |UInt32  |
+        |passes_d4                      |UInt32  |
+        |plays_early_down               |UInt32  |
+        |passes_early_down              |UInt32  |
+        |plays_standard_down            |UInt32  |
+        |passes_standard_down           |UInt32  |
+        |plays_passing_down             |UInt32  |
+        |passes_passing_down            |UInt32  |
+        |plays_leading                  |UInt32  |
+        |passes_leading                 |UInt32  |
+        |plays_tied                     |UInt32  |
+        |passes_tied                    |UInt32  |
+        |plays_trailing                 |UInt32  |
+        |passes_trailing                |UInt32  |
+        |plays_first_half               |UInt32  |
+        |passes_first_half              |UInt32  |
+        |plays_second_half              |UInt32  |
+        |passes_second_half             |UInt32  |
+        |fourth_decisions               |UInt32  |
+        |fourth_went                    |UInt32  |
+        |fourth_converted               |UInt32  |
+        |fourth_model_go                |UInt32  |
+        |fourth_model_kick              |UInt32  |
+        |fourth_went_when_go            |UInt32  |
+        |fourth_went_when_kick          |UInt32  |
+        |fourth_agreed                  |UInt32  |
+        |fourth_wp_left                 |Float64 |
+        |drives                         |UInt32  |
+        |drives_with_clock              |UInt32  |
+        |drive_seconds                  |Float64 |
+        |drive_plays                    |Float64 |
+        |drive_seconds_neutral          |Float64 |
+        |drive_plays_neutral            |Float64 |
+        |drive_points                   |Float64 |
+        |rz_trips                       |UInt32  |
+        |rz_tds                         |UInt32  |
+        |rz_scores                      |UInt32  |
+        |rz_points                      |Float64 |
+        |so_trips                       |UInt32  |
+        |so_tds                         |UInt32  |
+        |so_scores                      |UInt32  |
+        |so_points                      |Float64 |
+        |scripted_drives                |UInt32  |
+        |scripted_plays                 |UInt32  |
+        |scripted_epa                   |Float64 |
+        |scripted_successes             |UInt32  |
+        |scripted_points                |Float64 |
+        |non_scripted_drives            |UInt32  |
+        |non_scripted_plays             |UInt32  |
+        |non_scripted_epa               |Float64 |
+        |non_scripted_successes         |UInt32  |
+        |non_scripted_points            |Float64 |
+        |def_games                      |UInt32  |
+        |def_plays                      |UInt32  |
+        |def_rushes                     |UInt32  |
+        |def_passes                     |UInt32  |
+        |def_epa                        |Float64 |
+        |def_epa_rush                   |Float64 |
+        |def_epa_pass                   |Float64 |
+        |def_epa_early_down             |Float64 |
+        |def_epa_neutral                |Float64 |
+        |def_successes                  |UInt32  |
+        |def_successes_rush             |UInt32  |
+        |def_successes_pass             |UInt32  |
+        |def_yards                      |Float64 |
+        |def_yards_rush                 |Float64 |
+        |def_yards_pass                 |Float64 |
+        |def_explosives                 |UInt32  |
+        |def_explosives_rush            |UInt32  |
+        |def_explosives_pass            |UInt32  |
+        |def_third_down_opportunities   |UInt32  |
+        |def_third_down_conversions     |UInt32  |
+        |def_third_down_expected        |Float64 |
+        |def_plays_neutral              |UInt32  |
+        |def_passes_neutral             |UInt32  |
+        |def_plays_d1                   |UInt32  |
+        |def_passes_d1                  |UInt32  |
+        |def_plays_d2                   |UInt32  |
+        |def_passes_d2                  |UInt32  |
+        |def_plays_d3                   |UInt32  |
+        |def_passes_d3                  |UInt32  |
+        |def_plays_d4                   |UInt32  |
+        |def_passes_d4                  |UInt32  |
+        |def_plays_early_down           |UInt32  |
+        |def_passes_early_down          |UInt32  |
+        |def_plays_standard_down        |UInt32  |
+        |def_passes_standard_down       |UInt32  |
+        |def_plays_passing_down         |UInt32  |
+        |def_passes_passing_down        |UInt32  |
+        |def_plays_leading              |UInt32  |
+        |def_passes_leading             |UInt32  |
+        |def_plays_tied                 |UInt32  |
+        |def_passes_tied                |UInt32  |
+        |def_plays_trailing             |UInt32  |
+        |def_passes_trailing            |UInt32  |
+        |def_plays_first_half           |UInt32  |
+        |def_passes_first_half          |UInt32  |
+        |def_plays_second_half          |UInt32  |
+        |def_passes_second_half         |UInt32  |
+        |def_drives                     |UInt32  |
+        |def_drives_with_clock          |UInt32  |
+        |def_drive_seconds              |Float64 |
+        |def_drive_plays                |Float64 |
+        |def_drive_seconds_neutral      |Float64 |
+        |def_drive_plays_neutral        |Float64 |
+        |def_drive_points               |Float64 |
+        |def_rz_trips                   |UInt32  |
+        |def_rz_tds                     |UInt32  |
+        |def_rz_scores                  |UInt32  |
+        |def_rz_points                  |Float64 |
+        |def_so_trips                   |UInt32  |
+        |def_so_tds                     |UInt32  |
+        |def_so_scores                  |UInt32  |
+        |def_so_points                  |Float64 |
+        |def_scripted_drives            |UInt32  |
+        |def_scripted_plays             |UInt32  |
+        |def_scripted_epa               |Float64 |
+        |def_scripted_successes         |UInt32  |
+        |def_scripted_points            |Float64 |
+        |def_non_scripted_drives        |UInt32  |
+        |def_non_scripted_plays         |UInt32  |
+        |def_non_scripted_epa           |Float64 |
+        |def_non_scripted_successes     |UInt32  |
+        |def_non_scripted_points        |Float64 |
+        |plays_per_game                 |Float64 |
+        |plays_per_drive                |Float64 |
+        |drives_per_game                |Float64 |
+        |sec_per_play                   |Float64 |
+        |sec_per_play_neutral           |Float64 |
+        |pace_coverage                  |Float64 |
+        |pass_rate                      |Float64 |
+        |pass_rate_neutral              |Float64 |
+        |pass_rate_d1                   |Float64 |
+        |pass_rate_d2                   |Float64 |
+        |pass_rate_d3                   |Float64 |
+        |pass_rate_d4                   |Float64 |
+        |pass_rate_early_down           |Float64 |
+        |pass_rate_standard_down        |Float64 |
+        |pass_rate_passing_down         |Float64 |
+        |pass_rate_leading              |Float64 |
+        |pass_rate_tied                 |Float64 |
+        |pass_rate_trailing             |Float64 |
+        |pass_rate_first_half           |Float64 |
+        |pass_rate_second_half          |Float64 |
+        |epa_per_play                   |Float64 |
+        |epa_per_rush                   |Float64 |
+        |epa_per_pass                   |Float64 |
+        |epa_per_play_early_down        |Float64 |
+        |epa_per_play_neutral           |Float64 |
+        |success_rate                   |Float64 |
+        |success_rate_rush              |Float64 |
+        |success_rate_pass              |Float64 |
+        |ypp                            |Float64 |
+        |ypp_rush                       |Float64 |
+        |ypp_pass                       |Float64 |
+        |explosive_rate                 |Float64 |
+        |explosive_rate_rush            |Float64 |
+        |explosive_rate_pass            |Float64 |
+        |third_down_rate                |Float64 |
+        |rz_trip_rate                   |Float64 |
+        |rz_td_rate                     |Float64 |
+        |rz_conversion_rate             |Float64 |
+        |rz_pts_per_trip                |Float64 |
+        |so_trip_rate                   |Float64 |
+        |so_td_rate                     |Float64 |
+        |so_conversion_rate             |Float64 |
+        |so_pts_per_trip                |Float64 |
+        |pts_per_drive                  |Float64 |
+        |scripted_epa_per_play          |Float64 |
+        |scripted_success_rate          |Float64 |
+        |scripted_pts_per_drive         |Float64 |
+        |non_scripted_epa_per_play      |Float64 |
+        |non_scripted_success_rate      |Float64 |
+        |non_scripted_pts_per_drive     |Float64 |
+        |go_rate                        |Float64 |
+        |go_rate_when_model_says_go     |Float64 |
+        |go_rate_when_model_says_kick   |Float64 |
+        |fourth_agreement_rate          |Float64 |
+        |fourth_wp_left_per_decision    |Float64 |
+        |fourth_conversion_rate         |Float64 |
+        |third_down_over_expected       |Float64 |
+        |def_plays_per_game             |Float64 |
+        |def_plays_per_drive            |Float64 |
+        |def_drives_per_game            |Float64 |
+        |def_sec_per_play               |Float64 |
+        |def_sec_per_play_neutral       |Float64 |
+        |def_pace_coverage              |Float64 |
+        |def_pass_rate                  |Float64 |
+        |def_pass_rate_neutral          |Float64 |
+        |def_pass_rate_d1               |Float64 |
+        |def_pass_rate_d2               |Float64 |
+        |def_pass_rate_d3               |Float64 |
+        |def_pass_rate_d4               |Float64 |
+        |def_pass_rate_early_down       |Float64 |
+        |def_pass_rate_standard_down    |Float64 |
+        |def_pass_rate_passing_down     |Float64 |
+        |def_pass_rate_leading          |Float64 |
+        |def_pass_rate_tied             |Float64 |
+        |def_pass_rate_trailing         |Float64 |
+        |def_pass_rate_first_half       |Float64 |
+        |def_pass_rate_second_half      |Float64 |
+        |def_epa_per_play               |Float64 |
+        |def_epa_per_rush               |Float64 |
+        |def_epa_per_pass               |Float64 |
+        |def_epa_per_play_early_down    |Float64 |
+        |def_epa_per_play_neutral       |Float64 |
+        |def_success_rate               |Float64 |
+        |def_success_rate_rush          |Float64 |
+        |def_success_rate_pass          |Float64 |
+        |def_ypp                        |Float64 |
+        |def_ypp_rush                   |Float64 |
+        |def_ypp_pass                   |Float64 |
+        |def_explosive_rate             |Float64 |
+        |def_explosive_rate_rush        |Float64 |
+        |def_explosive_rate_pass        |Float64 |
+        |def_third_down_rate            |Float64 |
+        |def_rz_trip_rate               |Float64 |
+        |def_rz_td_rate                 |Float64 |
+        |def_rz_conversion_rate         |Float64 |
+        |def_rz_pts_per_trip            |Float64 |
+        |def_so_trip_rate               |Float64 |
+        |def_so_td_rate                 |Float64 |
+        |def_so_conversion_rate         |Float64 |
+        |def_so_pts_per_trip            |Float64 |
+        |def_pts_per_drive              |Float64 |
+        |def_scripted_epa_per_play      |Float64 |
+        |def_scripted_success_rate      |Float64 |
+        |def_scripted_pts_per_drive     |Float64 |
+        |def_non_scripted_epa_per_play  |Float64 |
+        |def_non_scripted_success_rate  |Float64 |
+        |def_non_scripted_pts_per_drive |Float64 |
+        |def_third_down_over_expected   |Float64 |
+
+    Note:
+        One season-less file: every published coach_tendencies season summed per head coach with the rates recomputed (play-weighted, never averaged averages). Careers therefore cover exactly the seasons published under the coach_tendencies tag.
+
+    Example:
+        Quick start::
+
+            load_cfb_coach_careers()
+    """
+    # One asset for the whole dataset (no {season} token in the manifest url), so
+    # there is no season loop: an absent asset is an empty frame plus a warning,
+    # the same 404-safe contract the per-season loaders keep per season.
+    df = _read_release_parquet(
+        "https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_coach_careers/coach_careers.parquet"
+    )
+    if df is None:
+        cli_warn("load_cfb_coach_careers: no published asset (returning an empty frame)")
+    out = df if df is not None else pl.DataFrame()
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 

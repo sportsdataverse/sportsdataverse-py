@@ -13,6 +13,8 @@ from sportsdataverse.config import (
     NFL_CONTRACTS_URL,
     NFL_DEPTH_CHARTS_URL,
     NFL_DRAFT_PICKS_URL,
+    NFL_ESPN_COACH_CAREERS_URL,
+    NFL_ESPN_FOOTBALL_URL,
     NFL_ESPN_QBR_SEASON_URL,
     NFL_ESPN_QBR_WEEK_URL,
     NFL_FF_OPPORTUNITY_URL,
@@ -2088,4 +2090,619 @@ def load_nfl_ngs(seasons: List[int], dataset: str = "passing", return_as_pandas:
     # diagonal_relaxed: per-season release schemas drift (columns added or
     # dropped, and dtypes widened) -- union columns, null-fill gaps.
     data = pl.concat(frames, how="diagonal_relaxed")
+    return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
+
+
+# ---------------------------------------------------------------------------
+# ESPN usage leaderboards + team / coach tendencies (espn_nfl_* releases)
+# ---------------------------------------------------------------------------
+# Built by ``nfl-data`` from the released ``espn_nfl_pbp`` plays with
+# ``sportsdataverse.football.usage_box`` (the eleven usage / special-teams
+# sections, summed per season) and ``sportsdataverse.football.tendencies``
+# (team-season and coach-season rows, plus the season-less coach careers).
+# One asset per season, ``espn_nfl_<stem>/<stem>_{season}.parquet``; the CFB
+# twins are the generated ``load_cfb_*`` loaders in ``cfb/cfb_loaders.py``.
+#
+# Hand-written on purpose (NFL is not a generated-loader league), so the season
+# contract is the nfl_loaders one: a season with no published asset raises
+# ``NoDataError`` instead of being skipped. Coverage as published 2026-09-15
+# is uneven and lives in each docstring: ESPN's 2005 feed carries no play text
+# (its games are stubs), the participant-based sections start in 2014, and the
+# kicker / punter / returner tables have no 2005-2007 assets.
+
+_NFL_ESPN_FOOTBALL_FLOOR = 2002
+
+#: usage sections whose seasonal rows come from ESPN play participants
+_NFL_ESPN_FOOTBALL_STEMS = (
+    "usage_players",
+    "usage_position_groups",
+    "usage_tackles",
+    "usage_position_group_tackles",
+    "usage_teams",
+    "usage_drive_scripting",
+    "usage_st_kickers",
+    "usage_st_punters",
+    "usage_st_returners",
+    "usage_st_blocks",
+    "usage_st_team",
+    "team_tendencies",
+    "coach_tendencies",
+)
+
+
+def _load_nfl_espn_football(stem: str, seasons, return_as_pandas: bool = False) -> pl.DataFrame:
+    """Read ``espn_nfl_<stem>/<stem>_{season}.parquet`` for every requested season.
+
+    The shared body of the thirteen seasonal ``load_nfl_usage_*`` /
+    ``load_nfl_*_tendencies`` loaders. A season below the 2002 floor raises
+    ``SeasonNotFoundError``; a season with no published asset raises
+    ``NoDataError`` (the hand-written-loader contract). Seasons are unioned with
+    ``diagonal_relaxed`` so a column added or widened in a later season does not
+    break a multi-season read.
+    """
+    if stem not in _NFL_ESPN_FOOTBALL_STEMS:
+        raise ValueError(f"stem must be one of {list(_NFL_ESPN_FOOTBALL_STEMS)}; got {stem!r}")
+    if isinstance(seasons, int):
+        seasons = [seasons]
+    frames: list[pl.DataFrame] = []
+    for i in seasons:
+        season_not_found_error(int(i), _NFL_ESPN_FOOTBALL_FLOOR)
+        frames.append(_fetch_release_parquet(NFL_ESPN_FOOTBALL_URL.format(stem=stem, season=int(i))))
+    if not frames:
+        data = pl.DataFrame()
+    elif len(frames) == 1:
+        data = frames[0]
+    else:
+        # diagonal_relaxed: per-season release schemas drift (columns added or
+        # dropped, and dtypes widened) -- union columns, null-fill gaps.
+        data = pl.concat(frames, how="diagonal_relaxed")
+    return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
+
+
+@cached_loader
+def load_nfl_usage_players(seasons: List[int], return_as_pandas: bool = False) -> pl.DataFrame:
+    """Load the ESPN NFL player usage leaderboard (``espn_nfl_usage_players`` release).
+
+    One row per (season, possession team, player) for every rusher / receiver:
+    rushes, targets, receptions, touches, opportunities, yards, first downs,
+    touchdowns, explosive and successful plays, EPA, red-zone and
+    scoring-opportunity splits, third downs converted vs expected, and the
+    **target / first-down / touch shares** of the team. Built by ``nfl-data``
+    from the released play-by-play with
+    :func:`sportsdataverse.football.usage_box.create_usage_box` and summed per
+    season with :func:`~sportsdataverse.football.usage_box.aggregate_usage_box`.
+
+    Coverage: 2002-2026 except 2005 (ESPN's 2005 feed carries no play text, so
+    the season has no asset). ``position_group`` is null before 2014, when the
+    feed starts carrying participant positions.
+
+    Args:
+        seasons (List[int]): Seasons to load, as the season's starting calendar
+            year (2024 = the 2024-25 season). Each season is one release asset.
+        return_as_pandas (bool): If True, returns a pandas dataframe. If False,
+            returns a polars dataframe.
+
+    Returns:
+        pl.DataFrame: One row per player per season, with the summed counts and
+        the rates recomputed from the sums (a leaderboard never averages
+        averages). Multi-season reads are unioned with ``diagonal_relaxed``.
+
+    Raises:
+        SeasonNotFoundError: If a requested season is before 2002.
+        NoDataError: If a requested season has no published asset.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nfl import load_nfl_usage_players
+            usage = load_nfl_usage_players(seasons=[2024])
+            print(usage.shape)
+
+        Target-share leaders::
+
+            import polars as pl
+            usage.filter(pl.col("targets") >= 50).sort("target_share", descending=True).head(10)
+
+        Pandas round-trip::
+
+            usage_pd = load_nfl_usage_players(seasons=[2024], return_as_pandas=True)
+
+        See Also:
+            * :func:`load_cfb_usage_players` -- the college twin
+            * :func:`load_nfl_usage_position_groups` -- the same columns per position group
+
+    """
+    return _load_nfl_espn_football("usage_players", seasons, return_as_pandas)
+
+
+@cached_loader
+def load_nfl_usage_position_groups(seasons: List[int], return_as_pandas: bool = False) -> pl.DataFrame:
+    """Load ESPN NFL usage summed per position group (``espn_nfl_usage_position_groups`` release).
+
+    The :func:`load_nfl_usage_players` columns summed per (season, possession
+    team, position group). Needs ESPN play participants for the positions, which
+    the NFL feed carries from 2014; earlier seasons have no asset.
+
+    Args:
+        seasons (List[int]): Seasons to load, as the season's starting calendar
+            year (2024 = the 2024-25 season). Each season is one release asset.
+        return_as_pandas (bool): If True, returns a pandas dataframe. If False,
+            returns a polars dataframe.
+
+    Returns:
+        pl.DataFrame: One row per position group per season, with the summed counts and
+        the rates recomputed from the sums (a leaderboard never averages
+        averages). Multi-season reads are unioned with ``diagonal_relaxed``.
+
+    Raises:
+        SeasonNotFoundError: If a requested season is before 2002.
+        NoDataError: If a requested season has no published asset.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nfl import load_nfl_usage_position_groups
+            groups = load_nfl_usage_position_groups(seasons=[2024])
+            groups.filter(groups["position_group"] == "WR").sort("target_share", descending=True).head()
+
+    """
+    return _load_nfl_espn_football("usage_position_groups", seasons, return_as_pandas)
+
+
+@cached_loader
+def load_nfl_usage_tackles(seasons: List[int], return_as_pandas: bool = False) -> pl.DataFrame:
+    """Load the ESPN NFL tackle leaderboard (``espn_nfl_usage_tackles`` release).
+
+    One row per (season, defending team, tackler): tackles, assists,
+    ``tackle_points`` (tackles + 0.5 assists) and the **tackle share** of the
+    defense, with the position group. Needs the ESPN play participants
+    (``tackler_player_ids`` / ``assisted_by_player_ids``), which the NFL feed
+    carries from 2014; earlier seasons have no asset.
+
+    Args:
+        seasons (List[int]): Seasons to load, as the season's starting calendar
+            year (2024 = the 2024-25 season). Each season is one release asset.
+        return_as_pandas (bool): If True, returns a pandas dataframe. If False,
+            returns a polars dataframe.
+
+    Returns:
+        pl.DataFrame: One row per tackler per season, with the summed counts and
+        the rates recomputed from the sums (a leaderboard never averages
+        averages). Multi-season reads are unioned with ``diagonal_relaxed``.
+
+    Raises:
+        SeasonNotFoundError: If a requested season is before 2002.
+        NoDataError: If a requested season has no published asset.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nfl import load_nfl_usage_tackles
+            tackles = load_nfl_usage_tackles(seasons=[2024])
+            tackles.sort("tackle_share", descending=True).head(10)
+
+    """
+    return _load_nfl_espn_football("usage_tackles", seasons, return_as_pandas)
+
+
+@cached_loader
+def load_nfl_usage_position_group_tackles(seasons: List[int], return_as_pandas: bool = False) -> pl.DataFrame:
+    """Load ESPN NFL tackles summed per position group (``espn_nfl_usage_position_group_tackles`` release).
+
+    The :func:`load_nfl_usage_tackles` columns summed per (season, defending
+    team, position group). Published from 2014 (participant positions).
+
+    Args:
+        seasons (List[int]): Seasons to load, as the season's starting calendar
+            year (2024 = the 2024-25 season). Each season is one release asset.
+        return_as_pandas (bool): If True, returns a pandas dataframe. If False,
+            returns a polars dataframe.
+
+    Returns:
+        pl.DataFrame: One row per position group per season, with the summed counts and
+        the rates recomputed from the sums (a leaderboard never averages
+        averages). Multi-season reads are unioned with ``diagonal_relaxed``.
+
+    Raises:
+        SeasonNotFoundError: If a requested season is before 2002.
+        NoDataError: If a requested season has no published asset.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nfl import load_nfl_usage_position_group_tackles
+            groups = load_nfl_usage_position_group_tackles(seasons=[2024])
+            groups.filter(groups["position_group"] == "LB").sort("tackle_share", descending=True).head()
+
+    """
+    return _load_nfl_espn_football("usage_position_group_tackles", seasons, return_as_pandas)
+
+
+@cached_loader
+def load_nfl_usage_teams(seasons: List[int], return_as_pandas: bool = False) -> pl.DataFrame:
+    """Load ESPN NFL team usage and situational efficiency (``espn_nfl_usage_teams`` release).
+
+    One row per (season, possession team): plays, rushes, targets, completions,
+    first downs, touchdowns, explosive / successful plays, EPA, third downs
+    converted over expected, and the **red-zone** and **scoring-opportunity**
+    efficiencies (trips, plays, touchdown rate, points per trip, success rate,
+    EPA per play). Coverage 2002-2026; 2005 is thin (ESPN's 2005 feed carries
+    no play text).
+
+    Args:
+        seasons (List[int]): Seasons to load, as the season's starting calendar
+            year (2024 = the 2024-25 season). Each season is one release asset.
+        return_as_pandas (bool): If True, returns a pandas dataframe. If False,
+            returns a polars dataframe.
+
+    Returns:
+        pl.DataFrame: One row per team per season, with the summed counts and
+        the rates recomputed from the sums (a leaderboard never averages
+        averages). Multi-season reads are unioned with ``diagonal_relaxed``.
+
+    Raises:
+        SeasonNotFoundError: If a requested season is before 2002.
+        NoDataError: If a requested season has no published asset.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nfl import load_nfl_usage_teams
+            teams = load_nfl_usage_teams(seasons=[2024])
+            teams.sort("rz_points_per_trip", descending=True).select("pos_team", "rz_trips", "rz_points_per_trip")
+
+    """
+    return _load_nfl_espn_football("usage_teams", seasons, return_as_pandas)
+
+
+@cached_loader
+def load_nfl_usage_drive_scripting(seasons: List[int], return_as_pandas: bool = False) -> pl.DataFrame:
+    """Load ESPN NFL scripted vs non-scripted drive efficiency (``espn_nfl_usage_drive_scripting`` release).
+
+    One row per (season, possession team, ``script``), where ``"scripted"`` is
+    the team's first two drives of each half and ``"non_scripted"`` the rest:
+    drives, plays, EPA per play, success rate, yards per play, points per
+    drive, touchdown rate and scoring-opportunity rate. Coverage 2002-2026;
+    2005 is thin.
+
+    Args:
+        seasons (List[int]): Seasons to load, as the season's starting calendar
+            year (2024 = the 2024-25 season). Each season is one release asset.
+        return_as_pandas (bool): If True, returns a pandas dataframe. If False,
+            returns a polars dataframe.
+
+    Returns:
+        pl.DataFrame: One row per (team, script) per season, with the summed counts and
+        the rates recomputed from the sums (a leaderboard never averages
+        averages). Multi-season reads are unioned with ``diagonal_relaxed``.
+
+    Raises:
+        SeasonNotFoundError: If a requested season is before 2002.
+        NoDataError: If a requested season has no published asset.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nfl import load_nfl_usage_drive_scripting
+            scripts = load_nfl_usage_drive_scripting(seasons=[2024])
+            scripts.pivot(on="script", index="pos_team", values="epa_per_play")
+
+    """
+    return _load_nfl_espn_football("usage_drive_scripting", seasons, return_as_pandas)
+
+
+@cached_loader
+def load_nfl_usage_st_kickers(seasons: List[int], return_as_pandas: bool = False) -> pl.DataFrame:
+    """Load the ESPN NFL kicker leaderboard (``espn_nfl_usage_st_kickers`` release).
+
+    One row per (season, kicking team, kicker): kickoffs (yards, touchbacks,
+    onside, out of bounds) and the coverage allowed on them, field goals by
+    range (0-39, 40-49, 50+), long, blocked, EPA, and extra points. No asset
+    for 2005-2007.
+
+    Args:
+        seasons (List[int]): Seasons to load, as the season's starting calendar
+            year (2024 = the 2024-25 season). Each season is one release asset.
+        return_as_pandas (bool): If True, returns a pandas dataframe. If False,
+            returns a polars dataframe.
+
+    Returns:
+        pl.DataFrame: One row per kicker per season, with the summed counts and
+        the rates recomputed from the sums (a leaderboard never averages
+        averages). Multi-season reads are unioned with ``diagonal_relaxed``.
+
+    Raises:
+        SeasonNotFoundError: If a requested season is before 2002.
+        NoDataError: If a requested season has no published asset.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nfl import load_nfl_usage_st_kickers
+            kickers = load_nfl_usage_st_kickers(seasons=[2024])
+            kickers.filter(kickers["fg_attempts"] >= 20).sort("fg_pct", descending=True).head()
+
+    """
+    return _load_nfl_espn_football("usage_st_kickers", seasons, return_as_pandas)
+
+
+@cached_loader
+def load_nfl_usage_st_punters(seasons: List[int], return_as_pandas: bool = False) -> pl.DataFrame:
+    """Load the ESPN NFL punter leaderboard (``espn_nfl_usage_st_punters`` release).
+
+    One row per (season, punting team, punter): punts, gross and net average
+    (net = gross - return yards - 20 per touchback), long, inside the 20,
+    touchbacks, fair catches, downed, out of bounds, blocked, returns allowed
+    and EPA. No asset for 2005-2007.
+
+    Args:
+        seasons (List[int]): Seasons to load, as the season's starting calendar
+            year (2024 = the 2024-25 season). Each season is one release asset.
+        return_as_pandas (bool): If True, returns a pandas dataframe. If False,
+            returns a polars dataframe.
+
+    Returns:
+        pl.DataFrame: One row per punter per season, with the summed counts and
+        the rates recomputed from the sums (a leaderboard never averages
+        averages). Multi-season reads are unioned with ``diagonal_relaxed``.
+
+    Raises:
+        SeasonNotFoundError: If a requested season is before 2002.
+        NoDataError: If a requested season has no published asset.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nfl import load_nfl_usage_st_punters
+            punters = load_nfl_usage_st_punters(seasons=[2024])
+            punters.filter(punters["punts"] >= 30).sort("punt_net_avg", descending=True).head()
+
+    """
+    return _load_nfl_espn_football("usage_st_punters", seasons, return_as_pandas)
+
+
+@cached_loader
+def load_nfl_usage_st_returners(seasons: List[int], return_as_pandas: bool = False) -> pl.DataFrame:
+    """Load the ESPN NFL returner leaderboard (``espn_nfl_usage_st_returners`` release).
+
+    One row per (season, returning team, returner): kickoff and punt returns,
+    yards, average, long, touchdowns and EPA. No asset for 2005-2007.
+
+    Args:
+        seasons (List[int]): Seasons to load, as the season's starting calendar
+            year (2024 = the 2024-25 season). Each season is one release asset.
+        return_as_pandas (bool): If True, returns a pandas dataframe. If False,
+            returns a polars dataframe.
+
+    Returns:
+        pl.DataFrame: One row per returner per season, with the summed counts and
+        the rates recomputed from the sums (a leaderboard never averages
+        averages). Multi-season reads are unioned with ``diagonal_relaxed``.
+
+    Raises:
+        SeasonNotFoundError: If a requested season is before 2002.
+        NoDataError: If a requested season has no published asset.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nfl import load_nfl_usage_st_returners
+            returners = load_nfl_usage_st_returners(seasons=[2024])
+            returners.sort("kick_return_yards", descending=True).head()
+
+    """
+    return _load_nfl_espn_football("usage_st_returners", seasons, return_as_pandas)
+
+
+@cached_loader
+def load_nfl_usage_st_blocks(seasons: List[int], return_as_pandas: bool = False) -> pl.DataFrame:
+    """Load ESPN NFL punt and field-goal blocks per player (``espn_nfl_usage_st_blocks`` release).
+
+    One row per (season, blocking team, player): punts blocked, field goals
+    blocked and their sum. Published from 2007.
+
+    Args:
+        seasons (List[int]): Seasons to load, as the season's starting calendar
+            year (2024 = the 2024-25 season). Each season is one release asset.
+        return_as_pandas (bool): If True, returns a pandas dataframe. If False,
+            returns a polars dataframe.
+
+    Returns:
+        pl.DataFrame: One row per blocker per season, with the summed counts and
+        the rates recomputed from the sums (a leaderboard never averages
+        averages). Multi-season reads are unioned with ``diagonal_relaxed``.
+
+    Raises:
+        SeasonNotFoundError: If a requested season is before 2002.
+        NoDataError: If a requested season has no published asset.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nfl import load_nfl_usage_st_blocks
+            blocks = load_nfl_usage_st_blocks(seasons=[2024])
+            blocks.sort("blocks", descending=True).head()
+
+    """
+    return _load_nfl_espn_football("usage_st_blocks", seasons, return_as_pandas)
+
+
+@cached_loader
+def load_nfl_usage_st_team(seasons: List[int], return_as_pandas: bool = False) -> pl.DataFrame:
+    """Load ESPN NFL team special-teams totals (``espn_nfl_usage_st_team`` release).
+
+    One row per (season, team): its own kicking, punting and returns, the
+    coverage against it (returns, yards and touchdowns allowed on kickoffs and
+    punts), field goals, and blocks made (``*_blocks_by``) and suffered.
+    Coverage 2002-2026; 2005 is thin.
+
+    Args:
+        seasons (List[int]): Seasons to load, as the season's starting calendar
+            year (2024 = the 2024-25 season). Each season is one release asset.
+        return_as_pandas (bool): If True, returns a pandas dataframe. If False,
+            returns a polars dataframe.
+
+    Returns:
+        pl.DataFrame: One row per team per season, with the summed counts and
+        the rates recomputed from the sums (a leaderboard never averages
+        averages). Multi-season reads are unioned with ``diagonal_relaxed``.
+
+    Raises:
+        SeasonNotFoundError: If a requested season is before 2002.
+        NoDataError: If a requested season has no published asset.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nfl import load_nfl_usage_st_team
+            st = load_nfl_usage_st_team(seasons=[2024])
+            st.select("pos_team", "punt_net_avg", "kickoff_touchback_rate", "fg_pct").head()
+
+    """
+    return _load_nfl_espn_football("usage_st_team", seasons, return_as_pandas)
+
+
+@cached_loader
+def load_nfl_team_tendencies(seasons: List[int], return_as_pandas: bool = False) -> pl.DataFrame:
+    """Load ESPN NFL team-season tendencies (``espn_nfl_team_tendencies`` release).
+
+    One row per (season, team) from the released play-by-play, built by
+    ``nfl-data`` with :func:`sportsdataverse.football.tendencies.tendencies`.
+    Coverage 2002-2026; 2005 is thin (ESPN's 2005 feed carries no play text).
+
+    Column families (offense; the ``def_`` twins are the same measures allowed
+    while the team's defense was on the field): volume (games, plays, drives),
+    pace from ESPN's own drive clock (``sec_per_play``, ``sec_per_play_neutral``,
+    ``pace_coverage``), run / pass by situation (``pass_rate_neutral``, by down,
+    standard vs passing downs, leading / tied / trailing, by half), efficiency
+    (EPA per play, success, yards per play, explosive rate, with rush / pass
+    splits; third downs over expected), finishing (red-zone and
+    scoring-opportunity trips, touchdown / conversion rates, points per trip;
+    scripted vs non-scripted drives) and fourth downs (decisions, go rate, go
+    rate when the model says go / kick, agreement rate, win probability left on
+    the table). Every rate ships with its numerator and denominator counts (see
+    ``sportsdataverse.football.tendencies.RATES``), so rows can be summed and
+    re-rated without averaging averages.
+
+    Args:
+        seasons (List[int]): Seasons to load, as the season's starting calendar
+            year (2024 = the 2024-25 season). Each season is one release asset.
+        return_as_pandas (bool): If True, returns a pandas dataframe. If False,
+            returns a polars dataframe.
+
+    Returns:
+        pl.DataFrame: One row per team per season, with the summed counts and
+        the rates recomputed from the sums (a leaderboard never averages
+        averages). Multi-season reads are unioned with ``diagonal_relaxed``.
+
+    Raises:
+        SeasonNotFoundError: If a requested season is before 2002.
+        NoDataError: If a requested season has no published asset.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nfl import load_nfl_team_tendencies
+            teams = load_nfl_team_tendencies(seasons=[2024])
+            teams.sort("pass_rate_neutral", descending=True).select("pos_team", "pass_rate_neutral", "sec_per_play_neutral")
+
+        Fourth-down aggressiveness against the model::
+
+            teams.select("pos_team", "go_rate_when_model_says_go", "fourth_wp_left_per_decision")
+
+        See Also:
+            * :func:`load_nfl_coach_tendencies` -- the same row per head coach
+            * :func:`load_cfb_team_tendencies` -- the college twin
+
+    """
+    return _load_nfl_espn_football("team_tendencies", seasons, return_as_pandas)
+
+
+@cached_loader
+def load_nfl_coach_tendencies(seasons: List[int], return_as_pandas: bool = False) -> pl.DataFrame:
+    """Load ESPN NFL coach-season tendencies (``espn_nfl_coach_tendencies`` release).
+
+    One row per (season, team, head coach): the :func:`load_nfl_team_tendencies`
+    columns with the plays attributed per game to the head coach on the
+    nflverse schedule (``home_coach`` / ``away_coach``), so a midseason change
+    splits the season between both coaches. ``role`` is always ``"HC"``.
+    Coverage 2002-2026; 2005 is thin.
+
+    Column families (offense; the ``def_`` twins are the same measures allowed
+    while the coach's defense was on the field): volume (games, plays, drives),
+    pace from ESPN's own drive clock (``sec_per_play``, ``sec_per_play_neutral``,
+    ``pace_coverage``), run / pass by situation (``pass_rate_neutral``, by down,
+    standard vs passing downs, leading / tied / trailing, by half), efficiency
+    (EPA per play, success, yards per play, explosive rate, with rush / pass
+    splits; third downs over expected), finishing (red-zone and
+    scoring-opportunity trips, touchdown / conversion rates, points per trip;
+    scripted vs non-scripted drives) and fourth downs (decisions, go rate, go
+    rate when the model says go / kick, agreement rate, win probability left on
+    the table). Every rate ships with its numerator and denominator counts (see
+    ``sportsdataverse.football.tendencies.RATES``), so rows can be summed and
+    re-rated without averaging averages.
+
+    Args:
+        seasons (List[int]): Seasons to load, as the season's starting calendar
+            year (2024 = the 2024-25 season). Each season is one release asset.
+        return_as_pandas (bool): If True, returns a pandas dataframe. If False,
+            returns a polars dataframe.
+
+    Returns:
+        pl.DataFrame: One row per (team, coach) per season, with the summed counts and
+        the rates recomputed from the sums (a leaderboard never averages
+        averages). Multi-season reads are unioned with ``diagonal_relaxed``.
+
+    Raises:
+        SeasonNotFoundError: If a requested season is before 2002.
+        NoDataError: If a requested season has no published asset.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nfl import load_nfl_coach_tendencies
+            coaches = load_nfl_coach_tendencies(seasons=[2024])
+            coaches.sort("go_rate_when_model_says_go", descending=True).select("coach", "pos_team", "go_rate_when_model_says_go")
+
+        See Also:
+            * :func:`load_nfl_coach_careers` -- every coach season summed into a career row
+
+    """
+    return _load_nfl_espn_football("coach_tendencies", seasons, return_as_pandas)
+
+
+@cached_loader
+def load_nfl_coach_careers(return_as_pandas: bool = False) -> pl.DataFrame:
+    """Load ESPN NFL head-coach careers (``espn_nfl_coach_careers`` release).
+
+    One season-less file: every published :func:`load_nfl_coach_tendencies`
+    season summed per head coach with
+    :func:`sportsdataverse.football.tendencies.aggregate_tendencies` -- counts
+    summed, rates recomputed from the sums (play-weighted), plus ``teams``,
+    ``seasons``, ``first_season`` and ``last_season``. Careers cover exactly the
+    seasons published under the coach-tendencies tag, and the file is rebuilt
+    whenever a season is.
+
+    Args:
+        return_as_pandas (bool): If True, returns a pandas dataframe. If False,
+            returns a polars dataframe.
+
+    Returns:
+        pl.DataFrame: One row per head coach.
+
+    Raises:
+        NoDataError: If the career asset has not been published.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nfl import load_nfl_coach_careers
+            careers = load_nfl_coach_careers()
+            careers.filter(careers["games"] >= 100).sort("epa_per_play", descending=True).select("coach", "teams", "games", "epa_per_play")
+
+        See Also:
+            * :func:`load_cfb_coach_careers` -- the college twin
+
+    """
+    data = _fetch_release_parquet(NFL_ESPN_COACH_CAREERS_URL)
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
