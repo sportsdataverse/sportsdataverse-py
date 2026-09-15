@@ -287,6 +287,28 @@ current/future days and ranges containing them bypass both cache reads and write
 while wholly historical dates retain the 30-day TTL. Explicit TTL overrides still
 take precedence.
 
+### Added — team and coach tendencies (`sportsdataverse.football.tendencies`)
+
+`tendencies(plays, league=)` folds a season of processed plays (either
+processor's output) into one row per group -- `(season, pos_team)` by default,
+or `(season, coach)` when the caller attaches a coach column -- with pace
+(seconds per play from the drive clock, plays per game and per drive, with a
+coverage share so pre-clock seasons read as missing rather than wrong),
+run/pass splits by down, by score state (leading / tied / trailing) and in
+situation-neutral snaps (win probability 20-80%, regulation, outside the last
+two minutes of a half), early-down and neutral pass rates, explosive and
+success rates, EPA per play, third downs over expected, red-zone and
+scoring-opportunity trips with TD rate, points per trip and success, scripted
+vs non-scripted drive efficiency, and fourth-down decision making (go rate,
+agreement with the bundled fourth-down model, go rate when the model says go,
+go rate when it says kick, conversion rate when going, win probability left on
+the field by deciding against the model). Every rate carries its numerator and
+denominator (`RATES`), so `aggregate_tendencies(frames, keys=)` sums seasons
+into careers and recomputes the rates exactly. A defense twin (`def_*`) is
+computed by the defending key so a coach's defense is judged on what it
+allowed. Expected third downs stay null, never zero, when no curve is
+available.
+
 ### Added — usage and situational box (`sportsdataverse.football.usage_box`)
 
 Six new `advBoxScore` sections on BOTH football processors, computed once in the
