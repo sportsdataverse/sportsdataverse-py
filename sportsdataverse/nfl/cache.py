@@ -24,10 +24,11 @@ from __future__ import annotations
 import hashlib
 import json
 import shutil
+import inspect
 import time
-from functools import wraps
+from functools import lru_cache, wraps
 from pathlib import Path
-from typing import Any, Callable, TypeVar
+from typing import Any, Callable, Optional, TypeVar
 
 import polars as pl
 
@@ -133,6 +134,20 @@ def cache_put(key: str, frame: pl.DataFrame) -> None:
             pass  # Cache write failure is non-fatal; data still returned.
 
 
+@lru_cache(maxsize=None)
+def _positional_index(func: Callable[..., Any], name: str) -> Optional[int]:
+    """Index at which ``name`` can be passed positionally to ``func``, or ``None``
+    when it is keyword-only, variadic, or absent."""
+    try:
+        params = list(inspect.signature(func).parameters.values())
+    except (TypeError, ValueError):
+        return None
+    for i, prm in enumerate(params):
+        if prm.name == name:
+            return i if prm.kind in (prm.POSITIONAL_ONLY, prm.POSITIONAL_OR_KEYWORD) else None
+    return None
+
+
 def cached_loader(func: F) -> F:
     """Decorator that adds caching to a ``load_nfl_*`` function.
 
@@ -188,10 +203,27 @@ def cached_loader(func: F) -> F:
         if cfg.cache_mode == "off":
             return func(*args, **kwargs)
 
-        # Cache key excludes return_as_pandas — see module docstring.
+        # Cache key excludes return_as_pandas — see module docstring. Strip it
+        # from a POSITIONAL call too, so load_x(2024, True) and load_x(2024)
+        # share one entry; every other arg keeps the shape it was passed in, so
+        # existing keys are unchanged.
         key_kwargs = {k: v for k, v in kwargs.items() if k != "return_as_pandas"}
-        key = _cache_key(func, args, key_kwargs)
-        return_as_pandas = kwargs.get("return_as_pandas", False)
+        rap = _positional_index(func, "return_as_pandas")
+        key_args = args if rap is None or len(args) <= rap else args[:rap] + args[rap + 1 :]
+        key = _cache_key(func, key_args, key_kwargs)
+        # Bind the call so a POSITIONAL return_as_pandas (``load_x(2024, True)``)
+        # is seen too, and so the miss path below can re-issue the call with it
+        # forced off without handing the parameter two values.
+        try:
+            bound = inspect.signature(func).bind_partial(*args, **kwargs)
+        except TypeError:
+            bound = None
+        if bound is not None:
+            return_as_pandas = bool(bound.arguments.pop("return_as_pandas", False))
+            inner_args, inner_kwargs = bound.args, {**bound.kwargs, "return_as_pandas": False}
+        else:
+            return_as_pandas = bool(kwargs.get("return_as_pandas", False))
+            inner_args, inner_kwargs = args, {**kwargs, "return_as_pandas": False}
 
         if cfg.cache_mode == "memory":
             cached = _MEMORY.get(key)
@@ -202,8 +234,7 @@ def cached_loader(func: F) -> F:
                 # Expired — drop and refetch.
                 del _MEMORY[key]
             # Miss — always materialize as polars internally.
-            inner_kwargs = {**kwargs, "return_as_pandas": False}
-            frame = func(*args, **inner_kwargs)
+            frame = func(*inner_args, **inner_kwargs)
             _MEMORY[key] = (time.time(), frame)
             return frame.to_pandas() if return_as_pandas else frame
 
@@ -219,8 +250,7 @@ def cached_loader(func: F) -> F:
                     # cache is opaque infra and the caller asked for data.
                     path.unlink(missing_ok=True)
             # Miss / expired / corrupt — refetch.
-            inner_kwargs = {**kwargs, "return_as_pandas": False}
-            frame = func(*args, **inner_kwargs)
+            frame = func(*inner_args, **inner_kwargs)
             cache_dir = cfg.cache_dir
             cache_dir.mkdir(parents=True, exist_ok=True)
             try:

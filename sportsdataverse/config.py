@@ -114,6 +114,10 @@ NFL_RATINGS_WEEKLY_URL = SDVRELEASES + "nfl_ratings_weekly/nfl_ratings_weekly_{s
 # {tag}/{stem} come from nfl_loaders._NFL_NGS_DATASETS (stems are not all
 # derivable from the tag -- schedules publishes ngs_schedule_{season}).
 NFL_NGS_SDV_URL = SDVRELEASES + "{tag}/{stem}_{season}.parquet"
+# ESPN NFL usage leaderboards + team / coach tendencies (nfl-data): one asset per
+# season under espn_nfl_<stem>; coach_careers is a single season-less file.
+NFL_ESPN_FOOTBALL_URL = SDVRELEASES + "espn_nfl_{stem}/{stem}_{season}.parquet"
+NFL_ESPN_COACH_CAREERS_URL = SDVRELEASES + "espn_nfl_coach_careers/coach_careers.parquet"
 NFL_FTN_CHARTING_URL = NFLVERSEGITHUB + "ftn_charting/ftn_charting_{season}.parquet"
 NFL_TRADES_URL = f"{NFLVERSEGITHUB}trades/trades.parquet"
 NFL_FF_PLAYERIDS_URL = f"{DYNASTYPROCESSGITHUB}db_playerids.csv"
