@@ -304,3 +304,16 @@ def test_punter_and_returner_rows_key_by_id_when_only_some_plays_carry_it():
     (returner,) = box["st_returners"]
     assert returner["player_id"] == "99"
     assert (returner["punt_returns"], returner["punt_return_yards"], returner["kick_returns"]) == (1, 12, 1)
+
+
+def test_blockers_key_by_id_when_the_punt_block_has_it_and_the_fg_block_only_the_name():
+    punt_block = {"punt": True, "yds_punted": 0, "punt_blocked": True, "pos_team": 1, "def_pos_team": 2}
+    punt_block |= {"punt_block_player_id": "55", "punt_block_player_name": "Blocker"}
+    fg_block = {"fg_attempt": True, "yds_fg": 40, "pos_team": 1, "def_pos_team": 2}
+    fg_block |= {"fg_block_player_id": None, "fg_block_player_name": "Blocker"}
+    plays = _st_plays([punt_block, fg_block]).with_columns(
+        punt_team=pl.lit(1, dtype=pl.Int64), punt_return_team=pl.lit(2, dtype=pl.Int64)
+    )
+    (row,) = create_usage_box(plays, None, league="cfb")["st_blocks"]
+    assert (row["def_pos_team"], row["player_id"], row["player_name"]) == (2, "55", "Blocker")
+    assert (row["punt_blocks"], row["fg_blocks"], row["blocks"]) == (1, 1, 2)

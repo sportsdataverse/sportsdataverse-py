@@ -329,6 +329,7 @@ files = [
     "sportsdataverse/nfl/nfl_field_position.py",
     "sportsdataverse/football/positions.py",
     "sportsdataverse/football/usage_box.py",
+    "sportsdataverse/football/espn_text.py",
     "sportsdataverse/football/tendencies.py",
     "sportsdataverse/cfb/cfb_ncaa_pbp.py",
     "sportsdataverse/cfb/cfb_ncaa_box.py",
