@@ -126,5 +126,7 @@ def test_degrades_without_curve_or_clock(plays):
     assert career["third_down_conversions"].sum() == 2 * t["third_down_conversions"].sum()
     with pytest.raises(ValueError, match="aggregation keys"):
         aggregate_tendencies([t], keys=("coach",))
+    with pytest.raises(ValueError, match="aggregation keys"):  # missing in only one frame
+        aggregate_tendencies([t.with_columns(coach=pl.lit("X")), t], keys=("coach",))
     with pytest.raises(ValueError, match="grouping columns"):
         tendencies(plays.drop("season"), league="nfl")

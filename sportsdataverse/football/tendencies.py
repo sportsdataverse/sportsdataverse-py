@@ -509,11 +509,12 @@ def aggregate_tendencies(frames: list[pl.DataFrame], keys: tuple[str, ...] = ("c
     keep = [f for f in frames if f is not None and f.height]
     if not keep:
         return pl.DataFrame()
-    df = pl.concat(keep, how="diagonal_relaxed")
     ks = list(keys)
-    absent = [k for k in ks if k not in df.columns]
-    if absent:
-        raise ValueError(f"frames lack aggregation keys: {absent}")
+    for frame in keep:  # every frame, or a diagonal concat would invent a null identity
+        absent = [k for k in ks if k not in frame.columns]
+        if absent:
+            raise ValueError(f"frames lack aggregation keys: {absent}")
+    df = pl.concat(keep, how="diagonal_relaxed")
     # ids are never counts: a summed team id is a number that means nothing
     counts = [
         c
