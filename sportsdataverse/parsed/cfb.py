@@ -427,6 +427,8 @@ from sportsdataverse.cfb import load_cfb_adv_team_gamelog as load_cfb_adv_team_g
 from sportsdataverse.cfb import load_cfb_adv_turnover as load_cfb_adv_turnover  # noqa: F401
 from sportsdataverse.cfb import load_cfb_betting as load_cfb_betting  # noqa: F401
 from sportsdataverse.cfb import load_cfb_betting_lines as load_cfb_betting_lines  # noqa: F401
+from sportsdataverse.cfb import load_cfb_coach_careers as load_cfb_coach_careers  # noqa: F401
+from sportsdataverse.cfb import load_cfb_coach_tendencies as load_cfb_coach_tendencies  # noqa: F401
 from sportsdataverse.cfb import load_cfb_drives as load_cfb_drives  # noqa: F401
 from sportsdataverse.cfb import load_cfb_fpi_weekly as load_cfb_fpi_weekly  # noqa: F401
 from sportsdataverse.cfb import load_cfb_game_rosters as load_cfb_game_rosters  # noqa: F401
@@ -456,8 +458,20 @@ from sportsdataverse.cfb import load_cfb_team_info as load_cfb_team_info  # noqa
 from sportsdataverse.cfb import load_cfb_team_summaries as load_cfb_team_summaries  # noqa: F401
 from sportsdataverse.cfb import load_cfb_team_summaries_weekly as load_cfb_team_summaries_weekly  # noqa: F401
 from sportsdataverse.cfb import load_cfb_team_talent as load_cfb_team_talent  # noqa: F401
+from sportsdataverse.cfb import load_cfb_team_tendencies as load_cfb_team_tendencies  # noqa: F401
 from sportsdataverse.cfb import load_cfb_teams as load_cfb_teams  # noqa: F401
 from sportsdataverse.cfb import load_cfb_teams_crosswalk as load_cfb_teams_crosswalk  # noqa: F401
+from sportsdataverse.cfb import load_cfb_usage_drive_scripting as load_cfb_usage_drive_scripting  # noqa: F401
+from sportsdataverse.cfb import load_cfb_usage_players as load_cfb_usage_players  # noqa: F401
+from sportsdataverse.cfb import load_cfb_usage_position_group_tackles as load_cfb_usage_position_group_tackles  # noqa: F401
+from sportsdataverse.cfb import load_cfb_usage_position_groups as load_cfb_usage_position_groups  # noqa: F401
+from sportsdataverse.cfb import load_cfb_usage_st_blocks as load_cfb_usage_st_blocks  # noqa: F401
+from sportsdataverse.cfb import load_cfb_usage_st_kickers as load_cfb_usage_st_kickers  # noqa: F401
+from sportsdataverse.cfb import load_cfb_usage_st_punters as load_cfb_usage_st_punters  # noqa: F401
+from sportsdataverse.cfb import load_cfb_usage_st_returners as load_cfb_usage_st_returners  # noqa: F401
+from sportsdataverse.cfb import load_cfb_usage_st_team as load_cfb_usage_st_team  # noqa: F401
+from sportsdataverse.cfb import load_cfb_usage_tackles as load_cfb_usage_tackles  # noqa: F401
+from sportsdataverse.cfb import load_cfb_usage_teams as load_cfb_usage_teams  # noqa: F401
 from sportsdataverse.cfb import load_draft_outcomes as load_draft_outcomes  # noqa: F401
 from sportsdataverse.cfb import load_fp_curve as load_fp_curve  # noqa: F401
 from sportsdataverse.cfb import load_ncaa_mfb_drives as load_ncaa_mfb_drives  # noqa: F401
@@ -726,6 +740,8 @@ __all__ = [
     "load_cfb_adv_turnover",
     "load_cfb_betting",
     "load_cfb_betting_lines",
+    "load_cfb_coach_careers",
+    "load_cfb_coach_tendencies",
     "load_cfb_drives",
     "load_cfb_fpi_weekly",
     "load_cfb_game_rosters",
@@ -755,8 +771,20 @@ __all__ = [
     "load_cfb_team_summaries",
     "load_cfb_team_summaries_weekly",
     "load_cfb_team_talent",
+    "load_cfb_team_tendencies",
     "load_cfb_teams",
     "load_cfb_teams_crosswalk",
+    "load_cfb_usage_drive_scripting",
+    "load_cfb_usage_players",
+    "load_cfb_usage_position_group_tackles",
+    "load_cfb_usage_position_groups",
+    "load_cfb_usage_st_blocks",
+    "load_cfb_usage_st_kickers",
+    "load_cfb_usage_st_punters",
+    "load_cfb_usage_st_returners",
+    "load_cfb_usage_st_team",
+    "load_cfb_usage_tackles",
+    "load_cfb_usage_teams",
     "load_draft_outcomes",
     "load_fp_curve",
     "load_ncaa_mfb_drives",

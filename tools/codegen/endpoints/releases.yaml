@@ -366,6 +366,124 @@ loaders:
     seasons: 2024
   id_int64:
   - team_id
+# ESPN CFB usage leaderboards + team / coach tendencies (sportsdataverse.football
+# usage_box / tendencies, built by cfbfastR-cfb-data). One asset per season; the
+# coach_careers tag is a single season-less file (no {season} token -> no seasons arg).
+- fn: load_cfb_usage_players
+  league: cfb
+  base: sdv_releases
+  url: espn_cfb_usage_players/usage_players_{season}.parquet
+  tag: espn_cfb_usage_players
+  min_season: 2004
+  example_args:
+    seasons: 2024
+  notes: "position_group is null for seasons whose play-by-play carried no participant positions."
+- fn: load_cfb_usage_position_groups
+  league: cfb
+  base: sdv_releases
+  url: espn_cfb_usage_position_groups/usage_position_groups_{season}.parquet
+  tag: espn_cfb_usage_position_groups
+  min_season: 2004
+  example_args:
+    seasons: 2024
+  notes: "Needs ESPN play participants: rows exist only for seasons whose play-by-play carried player positions."
+- fn: load_cfb_usage_tackles
+  league: cfb
+  base: sdv_releases
+  url: espn_cfb_usage_tackles/usage_tackles_{season}.parquet
+  tag: espn_cfb_usage_tackles
+  min_season: 2004
+  example_args:
+    seasons: 2024
+  notes: "Needs ESPN play participants (tackler / assist ids); a season without them has no rows, and position_group is null when no participant carried a position."
+- fn: load_cfb_usage_position_group_tackles
+  league: cfb
+  base: sdv_releases
+  url: espn_cfb_usage_position_group_tackles/usage_position_group_tackles_{season}.parquet
+  tag: espn_cfb_usage_position_group_tackles
+  min_season: 2004
+  example_args:
+    seasons: 2024
+  notes: "Needs ESPN play participants with player positions; a season without them has no rows."
+- fn: load_cfb_usage_teams
+  league: cfb
+  base: sdv_releases
+  url: espn_cfb_usage_teams/usage_teams_{season}.parquet
+  tag: espn_cfb_usage_teams
+  min_season: 2004
+  example_args:
+    seasons: 2024
+- fn: load_cfb_usage_drive_scripting
+  league: cfb
+  base: sdv_releases
+  url: espn_cfb_usage_drive_scripting/usage_drive_scripting_{season}.parquet
+  tag: espn_cfb_usage_drive_scripting
+  min_season: 2004
+  example_args:
+    seasons: 2024
+- fn: load_cfb_usage_st_kickers
+  league: cfb
+  base: sdv_releases
+  url: espn_cfb_usage_st_kickers/usage_st_kickers_{season}.parquet
+  tag: espn_cfb_usage_st_kickers
+  min_season: 2004
+  example_args:
+    seasons: 2024
+- fn: load_cfb_usage_st_punters
+  league: cfb
+  base: sdv_releases
+  url: espn_cfb_usage_st_punters/usage_st_punters_{season}.parquet
+  tag: espn_cfb_usage_st_punters
+  min_season: 2004
+  example_args:
+    seasons: 2024
+- fn: load_cfb_usage_st_returners
+  league: cfb
+  base: sdv_releases
+  url: espn_cfb_usage_st_returners/usage_st_returners_{season}.parquet
+  tag: espn_cfb_usage_st_returners
+  min_season: 2004
+  example_args:
+    seasons: 2024
+- fn: load_cfb_usage_st_blocks
+  league: cfb
+  base: sdv_releases
+  url: espn_cfb_usage_st_blocks/usage_st_blocks_{season}.parquet
+  tag: espn_cfb_usage_st_blocks
+  min_season: 2004
+  example_args:
+    seasons: 2024
+- fn: load_cfb_usage_st_team
+  league: cfb
+  base: sdv_releases
+  url: espn_cfb_usage_st_team/usage_st_team_{season}.parquet
+  tag: espn_cfb_usage_st_team
+  min_season: 2004
+  example_args:
+    seasons: 2024
+- fn: load_cfb_team_tendencies
+  league: cfb
+  base: sdv_releases
+  url: espn_cfb_team_tendencies/team_tendencies_{season}.parquet
+  tag: espn_cfb_team_tendencies
+  min_season: 2004
+  example_args:
+    seasons: 2024
+- fn: load_cfb_coach_tendencies
+  league: cfb
+  base: sdv_releases
+  url: espn_cfb_coach_tendencies/coach_tendencies_{season}.parquet
+  tag: espn_cfb_coach_tendencies
+  min_season: 2004
+  example_args:
+    seasons: 2024
+  notes: "One row per (season, team, head coach). The coach comes from the producer's vendored CFBD coach roster (team-season attribution), so role is always \"HC\"."
+- fn: load_cfb_coach_careers
+  league: cfb
+  base: sdv_releases
+  url: espn_cfb_coach_careers/coach_careers.parquet
+  tag: espn_cfb_coach_careers
+  notes: "One season-less file: every published coach_tendencies season summed per head coach with the rates recomputed (play-weighted, never averaged averages). Careers therefore cover exactly the seasons published under the coach_tendencies tag."
 - fn: load_mbb_pbp
   league: mbb
   base: sdv_releases
@@ -1836,6 +1954,134 @@ loaders:
   min_season: 2022
   example_args:
     seasons: 2024
+# ESPN NFL usage leaderboards + team / coach tendencies (sportsdataverse.football
+# usage_box / tendencies, built by nfl-data). Docs metadata only: NFL loaders are
+# hand-written in nfl_loaders.py (NFL is not in _GENERATED_LOADER_LEAGUES) and a
+# missing season raises NoDataError there. Per-tag coverage as published 2026-09-15
+# is in each entry's notes.
+- fn: load_nfl_usage_players
+  league: nfl
+  base: sdv_releases
+  url: espn_nfl_usage_players/usage_players_{season}.parquet
+  tag: espn_nfl_usage_players
+  min_season: 2002
+  example_args:
+    seasons: 2024
+  notes: "2005 has no asset: ESPN's 2005 NFL feed carries no play text, so no usage rows exist for it. position_group is null before 2014, when the feed starts carrying participant positions. A season with no asset raises NoDataError."
+- fn: load_nfl_usage_position_groups
+  league: nfl
+  base: sdv_releases
+  url: espn_nfl_usage_position_groups/usage_position_groups_{season}.parquet
+  tag: espn_nfl_usage_position_groups
+  min_season: 2002
+  example_args:
+    seasons: 2024
+  notes: "Built from ESPN play participants, which the NFL feed carries from 2014; earlier seasons have no asset (NoDataError)."
+- fn: load_nfl_usage_tackles
+  league: nfl
+  base: sdv_releases
+  url: espn_nfl_usage_tackles/usage_tackles_{season}.parquet
+  tag: espn_nfl_usage_tackles
+  min_season: 2002
+  example_args:
+    seasons: 2024
+  notes: "Built from ESPN play participants (tackler / assist ids), which the NFL feed carries from 2014; earlier seasons have no asset (NoDataError)."
+- fn: load_nfl_usage_position_group_tackles
+  league: nfl
+  base: sdv_releases
+  url: espn_nfl_usage_position_group_tackles/usage_position_group_tackles_{season}.parquet
+  tag: espn_nfl_usage_position_group_tackles
+  min_season: 2002
+  example_args:
+    seasons: 2024
+  notes: "Built from ESPN play participants, which the NFL feed carries from 2014; earlier seasons have no asset (NoDataError)."
+- fn: load_nfl_usage_teams
+  league: nfl
+  base: sdv_releases
+  url: espn_nfl_usage_teams/usage_teams_{season}.parquet
+  tag: espn_nfl_usage_teams
+  min_season: 2002
+  example_args:
+    seasons: 2024
+  notes: "Published 2002-2026 (2005 is built from ESPN's play-text-less 2005 feed, so it is thin). A season with no asset raises NoDataError."
+- fn: load_nfl_usage_drive_scripting
+  league: nfl
+  base: sdv_releases
+  url: espn_nfl_usage_drive_scripting/usage_drive_scripting_{season}.parquet
+  tag: espn_nfl_usage_drive_scripting
+  min_season: 2002
+  example_args:
+    seasons: 2024
+  notes: "Published 2002-2026 (2005 is thin: ESPN's 2005 feed carries no play text). A season with no asset raises NoDataError."
+- fn: load_nfl_usage_st_kickers
+  league: nfl
+  base: sdv_releases
+  url: espn_nfl_usage_st_kickers/usage_st_kickers_{season}.parquet
+  tag: espn_nfl_usage_st_kickers
+  min_season: 2002
+  example_args:
+    seasons: 2024
+  notes: "No asset for 2005-2007 (2005 has no play text upstream); a season with no asset raises NoDataError."
+- fn: load_nfl_usage_st_punters
+  league: nfl
+  base: sdv_releases
+  url: espn_nfl_usage_st_punters/usage_st_punters_{season}.parquet
+  tag: espn_nfl_usage_st_punters
+  min_season: 2002
+  example_args:
+    seasons: 2024
+  notes: "No asset for 2005-2007 (2005 has no play text upstream); a season with no asset raises NoDataError."
+- fn: load_nfl_usage_st_returners
+  league: nfl
+  base: sdv_releases
+  url: espn_nfl_usage_st_returners/usage_st_returners_{season}.parquet
+  tag: espn_nfl_usage_st_returners
+  min_season: 2002
+  example_args:
+    seasons: 2024
+  notes: "No asset for 2005-2007 (2005 has no play text upstream); a season with no asset raises NoDataError."
+- fn: load_nfl_usage_st_blocks
+  league: nfl
+  base: sdv_releases
+  url: espn_nfl_usage_st_blocks/usage_st_blocks_{season}.parquet
+  tag: espn_nfl_usage_st_blocks
+  min_season: 2002
+  example_args:
+    seasons: 2024
+  notes: "Published from 2007 (no block participants earlier); a season with no asset raises NoDataError."
+- fn: load_nfl_usage_st_team
+  league: nfl
+  base: sdv_releases
+  url: espn_nfl_usage_st_team/usage_st_team_{season}.parquet
+  tag: espn_nfl_usage_st_team
+  min_season: 2002
+  example_args:
+    seasons: 2024
+  notes: "Published 2002-2026 (2005 is thin: ESPN's 2005 feed carries no play text). A season with no asset raises NoDataError."
+- fn: load_nfl_team_tendencies
+  league: nfl
+  base: sdv_releases
+  url: espn_nfl_team_tendencies/team_tendencies_{season}.parquet
+  tag: espn_nfl_team_tendencies
+  min_season: 2002
+  example_args:
+    seasons: 2024
+  notes: "Published 2002-2026 (2005 is thin: ESPN's 2005 feed carries no play text). A season with no asset raises NoDataError."
+- fn: load_nfl_coach_tendencies
+  league: nfl
+  base: sdv_releases
+  url: espn_nfl_coach_tendencies/coach_tendencies_{season}.parquet
+  tag: espn_nfl_coach_tendencies
+  min_season: 2002
+  example_args:
+    seasons: 2024
+  notes: "One row per (season, team, head coach). The coach comes from the nflverse schedule (home_coach / away_coach) per game, so a midseason change splits the season between both coaches; role is always \"HC\". Published 2002-2026 (2005 is thin). A season with no asset raises NoDataError."
+- fn: load_nfl_coach_careers
+  league: nfl
+  base: sdv_releases
+  url: espn_nfl_coach_careers/coach_careers.parquet
+  tag: espn_nfl_coach_careers
+  notes: "One season-less file: every published coach_tendencies season summed per head coach with the rates recomputed (play-weighted, never averaged averages). Careers therefore cover exactly the seasons published under the coach_tendencies tag."
 - fn: load_ncaa_mbb_pbp
   league: mbb
   base: sdv_releases

@@ -1148,10 +1148,13 @@ def _build_loader_docstring(ld: spec.Loader) -> str:
     lines.append("")
     lines.append("Args:")
     rng = f" (>= {ld.min_season})" if ld.min_season else ""
-    lines.append(f"    seasons: an int or iterable of seasons{rng}.")
     # Driven off the URL token so the documented convention cannot drift from the
-    # asset path it describes.
+    # asset path it describes. No token at all means ONE asset for the whole
+    # dataset (e.g. a career table), so the loader takes no ``seasons``.
     token = spec.SEASON_TOKEN.search(ld.url)
+    single = _loader_is_single(ld)
+    if not single:
+        lines.append(f"    seasons: an int or iterable of seasons{rng}.")
     if token and token.group(1):
         # Example year comes from the loader's own floor, not a hard-coded 1996:
         # load_nba_stats_lineups starts at 2007 and RAISES SeasonNotFoundError
@@ -1163,8 +1166,12 @@ def _build_loader_docstring(ld: spec.Loader) -> str:
     lines.append("    return_as_pandas: return a pandas DataFrame instead of polars.")
     lines.append("")
     lines.append("Returns:")
-    lines.append("    A polars (or pandas) DataFrame; seasons with no published asset are")
-    lines.append("    skipped with a warning rather than raising (404-safe).")
+    if single:
+        lines.append("    A polars (or pandas) DataFrame; an absent asset yields an empty frame")
+        lines.append("    with a warning rather than raising (404-safe).")
+    else:
+        lines.append("    A polars (or pandas) DataFrame; seasons with no published asset are")
+        lines.append("    skipped with a warning rather than raising (404-safe).")
     # Same token, same reason as the Args note: when the asset year is shifted, the
     # frame carries the ASSET's stamp, so the `season` column does NOT equal the
     # `seasons` argument. Documented rather than restamped -- rewriting the column
@@ -1208,16 +1215,29 @@ def _build_loader_docstring(ld: spec.Loader) -> str:
         for para in ld.notes.strip().split("\n"):
             lines.append(f"    {para}".rstrip())
         lines.append("")
-    if ld.min_season:
+    if ld.min_season and not single:
         lines.append("Raises:")
         lines.append(f"    SeasonNotFoundError: if a requested season is below {ld.min_season}.")
         lines.append("")
     lines.append("Example:")
     lines.append("    Quick start::")
     lines.append("")
-    lines.append(f"        {ld.fn}(seasons={ld.example_args.get('seasons', 2024)!r})")
+    lines.append(f"        {_loader_example_call(ld)}")
     lines.append('"""')
     return "\n".join(("    " + ln) if ln else "" for ln in lines)
+
+
+def _loader_is_single(ld: spec.Loader) -> bool:
+    """True when the manifest url carries no ``{season}`` token: one asset for the
+    whole dataset, so the loader takes no ``seasons`` argument."""
+    return spec.SEASON_TOKEN.search(ld.url) is None
+
+
+def _loader_example_call(ld: spec.Loader) -> str:
+    """The one-line quick-start call shared by the docstring and the loaders page."""
+    if _loader_is_single(ld):
+        return f"{ld.fn}()"
+    return f"{ld.fn}(seasons={ld.example_args.get('seasons', 2024)!r})"
 
 
 class _LoaderView:
@@ -1235,6 +1255,7 @@ class _LoaderView:
         self.abs_url = "" if ld.stub else f"{bases[ld.base]}{ld.url}"
         self.docstring = _build_loader_docstring(ld)
         self.id_int64 = ld.id_int64
+        self.single = _loader_is_single(ld)
 
 
 def render_loader_module(league: str, loaders, bases: dict) -> str:
@@ -2412,6 +2433,7 @@ def _loader_doc_views(prefix: str) -> list[dict]:
                     else _loader_schema_table(ld.fn, prefix)
                 ),
                 "example_seasons": (ld.example_args or {}).get("seasons", 2024),
+                "single": _loader_is_single(ld),
             },
         )
     return out
