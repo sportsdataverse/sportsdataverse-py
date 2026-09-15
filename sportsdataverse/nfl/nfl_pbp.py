@@ -339,7 +339,9 @@ class NFLPlayProcess(object):
 
         Args:
             summary (dict, optional): A previously fetched ESPN summary payload. When given, no
-                request is made -- the offline path for committed raw libraries.
+                request is made -- the offline path for committed raw libraries -- and the
+                pipeline joins participants only if ``participants=`` was passed at
+                construction (it never fetches them, nor a roster, for a supplied summary).
             game_id (int): Unique game_id, can be obtained from nfl_schedule().
 
         Returns:
@@ -368,6 +370,10 @@ class NFLPlayProcess(object):
                 result = proc.run_processing_pipeline()
         """
         pbp_txt = {"timeouts": {}}
+        if summary is not None and self.participants is None:
+            # a supplied summary is the offline path: the pipeline must not reach
+            # the network for participants (or a roster) unless they were passed in
+            self.join_participants = False
         if summary is None:
             cache_buster = int(time.time() * 1000)
             # summary endpoint for pickcenter array

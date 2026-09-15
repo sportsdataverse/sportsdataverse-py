@@ -4065,7 +4065,7 @@ espn_nfl_pbp() - Pull the game by id. Data from API endpoints: `nfl/playbyplay`,
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `summary` | `dict` | `None` | A previously fetched ESPN summary payload. When given, no request is made -- the offline path for committed raw libraries. |
+| `summary` | `dict` | `None` | A previously fetched ESPN summary payload. When given, no request is made -- the offline path for committed raw libraries -- and the pipeline joins participants only if `participants=` was passed at construction (it never fetches them, nor a roster, for a supplied summary). |
 
 **Returns**
 

@@ -1068,7 +1068,9 @@ class CFBPlayProcess(object):
 
         Args:
             summary (dict, optional): A previously fetched ESPN summary payload. When given, no
-                request is made -- the offline path for committed raw libraries.
+                request is made -- the offline path for committed raw libraries -- and the
+                pipeline joins participants only if ``participants=`` was passed at
+                construction (it never fetches them, nor a roster, for a supplied summary).
             game_id (int): Unique game_id, can be obtained from cfb_schedule().
             raw (bool): If True, returns the raw json from the API endpoint. If False, returns a
             cleaned dictionary of datasets.
@@ -1102,6 +1104,10 @@ class CFBPlayProcess(object):
                 * `nflverse <https://nflverse.nflverse.com>`_ -- companion data ecosystem for the NFL
         """
         pbp_txt = {"timeouts": {}}
+        if summary is not None and self.participants is None:
+            # a supplied summary is the offline path: the pipeline must not reach
+            # the network for participants (or a roster) unless they were passed in
+            self.join_participants = False
         if summary is None:
             cache_buster = int(time.time() * 1000)
             # summary endpoint for pickcenter array

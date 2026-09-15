@@ -35,8 +35,10 @@ def test_espn_nfl_pbp_accepts_a_prefetched_summary(summary, monkeypatch):
         raise AssertionError("network call on the offline path")
 
     monkeypatch.setattr(mod, "download", _boom)
-    proc = NFLPlayProcess(gameId=GAME_ID, join_participants=False)
+    # no join_participants=False needed: a supplied summary implies the offline path
+    proc = NFLPlayProcess(gameId=GAME_ID)
     payload = proc.espn_nfl_pbp(summary=summary)
+    assert proc.join_participants is False
     assert "drives" in payload and "boxscore" in payload
     out = proc.run_processing_pipeline()
     assert set(out) >= {"plays", "advBoxScore"} and len(out["plays"]) > 100
