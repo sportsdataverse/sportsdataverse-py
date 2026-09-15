@@ -402,3 +402,16 @@ def test_gapped_window_skips_the_quarter_between():
     assert both["teams"][HOME]["time_tied_seconds"] == (
         q1["teams"][HOME]["time_tied_seconds"] + q3["teams"][HOME]["time_tied_seconds"]
     )
+
+
+def test_live_current_drive_repeated_in_previous_counts_once():
+    # a live ESPN summary lists drives.current inside drives.previous too (NFL 401872931)
+    flat = drive_summary.create_drive_summary(_drives(), _frame(), HOME, AWAY)
+    live_grouping = {"previous": _drives(), "current": _drives()[-1]}
+    assert drive_summary.create_drive_summary(live_grouping, _frame(), HOME, AWAY) == flat
+    # a caller that flattened previous + [current] itself gets the same answer
+    doubled = _drives() + [_drives()[-1]]
+    out = drive_summary.create_drive_summary(doubled, _frame(), HOME, AWAY)
+    assert out == flat
+    assert out["teams"][HOME]["total_drives"] == 3
+    assert len(out["chart"]) == len(_drives())
