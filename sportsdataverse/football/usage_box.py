@@ -1255,8 +1255,9 @@ def create_usage_box(
     Args:
         plays: the processed plays frame (``NFLPlayProcess`` / ``CFBPlayProcess``).
         participants: the wide per-play participants frame (tackles and
-            position groups come from it); ``None`` yields empty tackle
-            sections and no position groups.
+            position ids come from it); ``None`` yields empty tackle
+            sections, and position groups only where ``rosters`` supplies
+            them.
         league: ``"cfb"`` or ``"nfl"`` -- selects the bundled third-down curve.
         third_down_curve: override the bundled curve (``distance``, ``rate``).
         rosters: the game roster -- a frame, a list of athlete records or the
