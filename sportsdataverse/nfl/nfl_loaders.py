@@ -2681,7 +2681,7 @@ def load_nfl_coach_careers(return_as_pandas: bool = False) -> pl.DataFrame:
     summed, rates recomputed from the sums (play-weighted), plus ``teams``,
     ``seasons``, ``first_season`` and ``last_season``. Careers cover exactly the
     seasons published under the coach-tendencies tag, and the file is rebuilt
-    whenever a season is.
+    whenever any coach-tendencies season is rebuilt.
 
     Args:
         return_as_pandas (bool): If True, returns a pandas dataframe. If False,

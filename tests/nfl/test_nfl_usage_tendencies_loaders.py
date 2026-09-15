@@ -11,6 +11,7 @@ code reads. The release read is mocked; nothing here touches the network.
 
 from __future__ import annotations
 
+import dataclasses
 import inspect
 from pathlib import Path
 
@@ -30,10 +31,12 @@ SEASONAL = list(_mod._NFL_ESPN_FOOTBALL_STEMS)
 
 @pytest.fixture(autouse=True)
 def _no_cache():
-    prior = get_config().cache_mode
+    # Snapshot the WHOLE process-global config (mode, dir, TTL, ...), not just
+    # the mode: a test below points cache_dir at a tmp_path.
+    prior = dataclasses.asdict(get_config())
     update_config(cache_mode="off")
     yield
-    update_config(cache_mode=prior)
+    update_config(**prior)
 
 
 def _capture(monkeypatch, frame_for):
