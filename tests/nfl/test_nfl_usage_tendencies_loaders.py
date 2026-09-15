@@ -144,7 +144,8 @@ def test_positional_return_as_pandas_survives_a_cache_miss(monkeypatch, tmp_path
     """``load_x(2024, True)`` used to raise TypeError on a cache miss: the wrapper
     re-issued the call with ``return_as_pandas=False`` as a keyword while the
     positional True was still in ``args``. The wrapper now binds the call."""
-    _capture(monkeypatch, lambda url: pl.DataFrame({"season": [2024], "coach": ["Andy Reid"]}))
+    seen = _capture(monkeypatch, lambda url: pl.DataFrame({"season": [2024], "coach": ["Andy Reid"]}))
+    prior_dir = get_config().cache_dir
     update_config(cache_mode=mode, cache_dir=tmp_path)
     clear_cache()
     try:
@@ -152,8 +153,14 @@ def test_positional_return_as_pandas_survives_a_cache_miss(monkeypatch, tmp_path
         assert out.__class__.__module__.startswith("pandas") and len(out) == 1
         again = nfl.load_nfl_usage_players([2024], True)  # served from the cache, still pandas
         assert again.__class__.__module__.startswith("pandas")
+        # the positional and keyword forms share ONE cache entry: no third fetch
+        assert isinstance(nfl.load_nfl_usage_players([2024]), pl.DataFrame)
+        assert isinstance(nfl.load_nfl_usage_players([2024], return_as_pandas=False), pl.DataFrame)
+        assert len(seen) == 1
         careers = nfl.load_nfl_coach_careers(True)
         assert careers.__class__.__module__.startswith("pandas") and list(careers["coach"]) == ["Andy Reid"]
         assert isinstance(nfl.load_nfl_coach_careers(), pl.DataFrame)
+        assert len(seen) == 2
     finally:
         clear_cache()
+        update_config(cache_dir=prior_dir)
