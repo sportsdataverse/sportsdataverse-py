@@ -116,3 +116,29 @@ def test_supplied_summary_never_fetches_odds(summary, monkeypatch):
     proc = NFLPlayProcess(gameId=GAME_ID)
     proc.espn_nfl_pbp(summary=none)
     assert proc._NFLPlayProcess__helper_nfl_pickcenter(proc.json)["gameSpreadAvailable"] is False
+
+
+def test_odds_override_replaces_the_pickcenter_cascade(summary, monkeypatch):
+    import sportsdataverse.nfl.nfl_pbp as mod
+
+    def _boom(*a, **k):
+        raise AssertionError("network call on the offline path")
+
+    monkeypatch.setattr(mod, "download", _boom)
+    # nflverse convention: spread_line positive = home favored
+    spread_line, total_line = 8.5, 47.5
+    proc = NFLPlayProcess(
+        gameId=GAME_ID,
+        odds_override={
+            "gameSpread": abs(spread_line),
+            "overUnder": total_line,
+            "homeFavorite": spread_line > 0,
+            "gameSpreadAvailable": True,
+        },
+    )
+    proc.espn_nfl_pbp(summary=summary)
+    odds = proc._NFLPlayProcess__helper_nfl_pickcenter(proc.json)
+    assert odds == {"gameSpread": 8.5, "overUnder": 47.5, "homeFavorite": True, "gameSpreadAvailable": True}
+    assert proc.odds_source == "injected"
+    with pytest.raises(ValueError, match="missing required keys"):
+        NFLPlayProcess(gameId=GAME_ID, odds_override={"gameSpread": 1})
