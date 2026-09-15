@@ -299,10 +299,10 @@ situation-neutral snaps (win probability 20-80%, regulation, outside the last
 two minutes of a half), early-down and neutral pass rates, explosive and
 success rates, EPA per play, third downs over expected, red-zone and
 scoring-opportunity trips with TD rate, points per trip and success, scripted
-vs non-scripted drive efficiency, and fourth-down decision making (go rate by
-distance and field zone, agreement with the bundled fourth-down model, go rate
-when the model says go, conversion rate when going, win probability left on
-the field by kicking against the model). Every rate carries its numerator and
+vs non-scripted drive efficiency, and fourth-down decision making (go rate,
+agreement with the bundled fourth-down model, go rate when the model says go,
+go rate when it says kick, conversion rate when going, win probability left on
+the field by deciding against the model). Every rate carries its numerator and
 denominator (`RATES`), so `aggregate_tendencies(frames, keys=)` sums seasons
 into careers and recomputes the rates exactly. A defense twin (`def_*`) is
 computed by the defending key so a coach's defense is judged on what it

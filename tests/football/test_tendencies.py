@@ -119,5 +119,12 @@ def test_degrades_without_curve_or_clock(plays):
     assert (t2["pace_coverage"] == 0).all() and t2["sec_per_play"].null_count() == t2.height
     assert tendencies(pl.DataFrame(), league="nfl").height == 0
     assert aggregate_tendencies([]).height == 0
+    # a career summed from seasons without a curve keeps "over expected" null, never the raw count
+    career = aggregate_tendencies([t, t.with_columns(season=pl.lit(2025))], keys=("pos_team",))
+    assert career["third_down_expected"].null_count() == career.height
+    assert career["third_down_over_expected"].null_count() == career.height
+    assert career["third_down_conversions"].sum() == 2 * t["third_down_conversions"].sum()
+    with pytest.raises(ValueError, match="aggregation keys"):
+        aggregate_tendencies([t], keys=("coach",))
     with pytest.raises(ValueError, match="grouping columns"):
         tendencies(plays.drop("season"), league="nfl")

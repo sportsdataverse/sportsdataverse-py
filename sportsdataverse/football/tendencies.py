@@ -510,14 +510,26 @@ def aggregate_tendencies(frames: list[pl.DataFrame], keys: tuple[str, ...] = ("c
     if not keep:
         return pl.DataFrame()
     df = pl.concat(keep, how="diagonal_relaxed")
-    ks = [k for k in keys if k in df.columns]
+    ks = list(keys)
+    absent = [k for k in ks if k not in df.columns]
+    if absent:
+        raise ValueError(f"frames lack aggregation keys: {absent}")
     # ids are never counts: a summed team id is a number that means nothing
     counts = [
         c
         for c in df.columns
         if c not in ks and c != "season" and df.schema[c].is_numeric() and not _is_rate(c) and not c.endswith("_id")
     ]
-    aggs = [pl.col(c).sum() for c in counts]
+    # expected third downs are null when no curve was available; a plain sum
+    # would read 0 and turn "over expected" into the raw conversion count
+    aggs = [
+        (
+            pl.when(pl.col(c).is_not_null().any()).then(pl.col(c).sum()).otherwise(None).alias(c)
+            if c.endswith("third_down_expected")
+            else pl.col(c).sum()
+        )
+        for c in counts
+    ]
     if "season" in df.columns:
         aggs += [
             pl.col("season").n_unique().alias("seasons"),
