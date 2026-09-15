@@ -1,0 +1,509 @@
+{
+ "id": "a9a890ed-4feb-11f1-abca-2c54536568a9",
+ "homeTeam": {
+  "id": "10402310-a47e-10ea-7442-16b633633637",
+  "currentLogo": "https://static.www.nfl.com/{formatInstructions}/league/api/clubs/logos/KC",
+  "fullName": "Kansas City Chiefs"
+ },
+ "awayTeam": {
+  "id": "10401400-b89b-96e5-55d1-caa7e18de3d8",
+  "currentLogo": "https://static.www.nfl.com/{formatInstructions}/league/api/clubs/logos/DEN",
+  "fullName": "Denver Broncos"
+ },
+ "category": "MNF",
+ "date": "2026-09-15",
+ "time": "2026-09-15T00:15:00Z",
+ "broadcastInfo": {
+  "homeNetworkChannels": [
+   "ESPN",
+   "ABC",
+   "ESPN2",
+   "ESPN DEPORTES"
+  ],
+  "awayNetworkChannels": [
+   "ESPN",
+   "ABC",
+   "ESPN2",
+   "ESPN DEPORTES"
+  ],
+  "internationalWatchOptions": [],
+  "streamingNetworks": [
+   {
+    "hostNetwork": "ESPN",
+    "networks": [
+     "ESPN",
+     "ABC"
+    ],
+    "streamType": "en-pri"
+   },
+   {
+    "hostNetwork": "ESPNDEPORTES",
+    "networks": [
+     "ESPNDEPORTES"
+    ],
+    "streamType": "es-alt-1"
+   },
+   {
+    "hostNetwork": "ESPN2",
+    "networks": [
+     "ESPN2"
+    ],
+    "streamType": "en-alt-1"
+   }
+  ],
+  "territory": "NATIONAL",
+  "audioNetworks": [
+   {
+    "audience": "Westwood One",
+    "languages": [
+     "en"
+    ]
+   },
+   {
+    "audience": "Entravision",
+    "languages": [
+     "es"
+    ]
+   },
+   {
+    "audience": "Home",
+    "languages": [
+     "en"
+    ]
+   },
+   {
+    "audience": "Away",
+    "languages": [
+     "en"
+    ]
+   },
+   {
+    "audience": "Home SAP",
+    "languages": [
+     "es"
+    ]
+   },
+   {
+    "audience": "Away SAP",
+    "languages": [
+     "es"
+    ]
+   }
+  ]
+ },
+ "gameType": "UNSPECIFIED",
+ "international": false,
+ "neutralSite": false,
+ "venue": {
+  "id": "00081552-5c92-a7d0-fa55-fc0bb887fb88",
+  "name": "Arrowhead Stadium",
+  "city": "Kansas City",
+  "country": "USA"
+ },
+ "season": 2026,
+ "seasonType": "REG",
+ "status": "SCHEDULED",
+ "week": 1,
+ "weekType": "REG",
+ "externalIds": [
+  {
+   "source": "elias",
+   "id": "2026091400"
+  },
+  {
+   "source": "gsis",
+   "id": "60193"
+  },
+  {
+   "source": "slug",
+   "id": "broncos-at-chiefs-2026-reg-1"
+  }
+ ],
+ "ticketUrl": "https://www.ticketmaster.com/event/0600646B83F86E1A?wt.mc_id=NFL_LEAGUE_SCHED_PG_KC_LINK3&utm_source=NFL.com&utm_medium=client&utm_campaign=NFL_LEAGUE&utm_content=SCHED_PG_KC_LINK3&campaign=kc-ti-iw-sp-2072608",
+ "ticketVendors": [
+  {
+   "vendorName": "lodgingUrl",
+   "ticketUrl": "https://www.marriott.com/search/findHotels.mi?pageType=advanced&showMore=true&destinationAddress.location=GEHA+Field+at+Arrowhead+Stadium&cid=PMO_GLB0003VDI_GLE00095QK_GLF000HKF5&deviceType=desktop-web&view=list#/1/"
+  },
+  {
+   "vendorName": "oneBoxUrl",
+   "ticketUrl": "https://www.ticketmaster.com/event/0600646B83F86E1A?wt.mc_id=NFL_LEAGUE_GOOGLE_ONEBOX_KC_LINK3&utm_source=NFL.com&utm_medium=client&utm_campaign=NFL_LEAGUE&utm_content=GOOGLE_ONEBOX_KC_LINK3&campaign=kc-ti-na-vg-2072162"
+  },
+  {
+   "vendorName": "ticketmaster",
+   "ticketUrl": "https://www.ticketmaster.com/event/0600646B83F86E1A?wt.mc_id=NFL_LEAGUE_SCHED_PG_KC_LINK3&utm_source=NFL.com&utm_medium=client&utm_campaign=NFL_LEAGUE&utm_content=SCHED_PG_KC_LINK3&campaign=kc-ti-iw-sp-2072608"
+  }
+ ],
+ "extensions": [],
+ "version": 9,
+ "summary": {
+  "gameId": "a9a890ed-4feb-11f1-abca-2c54536568a9",
+  "offset": 467,
+  "attendance": 73543,
+  "clock": "00:36",
+  "distance": 11,
+  "down": 2,
+  "gameBookUrl": "https://static.www.nfl.com/image/upload/v1789470925/gamecenter/a9a890ed-4feb-11f1-abca-2c54536568a9.pdf",
+  "isGoalToGo": false,
+  "isRedZone": false,
+  "phase": "FINAL",
+  "quarter": "END_OF_GAME",
+  "startTime": "2026-09-15T00:16:12Z",
+  "weather": "Temp: 91° F, Humidity: 45%, Wind: S 13 mph",
+  "yardLine": "DEN 18",
+  "awayTeam": {
+   "teamId": "10401400-b89b-96e5-55d1-caa7e18de3d8",
+   "hasPossession": true,
+   "score": {
+    "q1": 7,
+    "q2": 0,
+    "q3": 3,
+    "q4": 0,
+    "ot": 0,
+    "total": 10
+   },
+   "timeouts": {
+    "remaining": 2,
+    "used": 1
+   }
+  },
+  "homeTeam": {
+   "teamId": "10402310-a47e-10ea-7442-16b633633637",
+   "hasPossession": false,
+   "score": {
+    "q1": 7,
+    "q2": 7,
+    "q3": 10,
+    "q4": 7,
+    "ot": 0,
+    "total": 31
+   },
+   "timeouts": {
+    "remaining": 2,
+    "used": 1
+   }
+  }
+ },
+ "awayTeamStandings": {
+  "team": {
+   "id": "10401400-b89b-96e5-55d1-caa7e18de3d8",
+   "currentLogo": "https://static.www.nfl.com/{formatInstructions}/league/api/clubs/logos/DEN",
+   "fullName": "Denver Broncos"
+  },
+  "clinched": {
+   "bye": false,
+   "division": false,
+   "eliminated": false,
+   "homeField": false,
+   "playoff": false,
+   "wildCard": false
+  },
+  "closeGames": {
+   "wins": 0,
+   "losses": 0,
+   "ties": 0
+  },
+  "conference": {
+   "wins": 0,
+   "winPct": 0,
+   "losses": 1,
+   "ties": 0,
+   "rank": 15,
+   "points": {
+    "for": 10,
+    "against": 31
+   }
+  },
+  "division": {
+   "wins": 0,
+   "winPct": 0,
+   "losses": 1,
+   "ties": 0,
+   "rank": 4,
+   "points": {
+    "for": 10,
+    "against": 31
+   }
+  },
+  "home": {
+   "wins": 0,
+   "winPct": 0,
+   "losses": 0,
+   "ties": 0,
+   "points": {
+    "for": 0,
+    "against": 0
+   }
+  },
+  "last5": {
+   "wins": 0,
+   "winPct": 0,
+   "losses": 1,
+   "ties": 0,
+   "points": {
+    "for": 10,
+    "against": 31
+   }
+  },
+  "overall": {
+   "games": 1,
+   "wins": 0,
+   "winPct": 0,
+   "losses": 1,
+   "ties": 0,
+   "points": {
+    "for": 10,
+    "against": 31
+   },
+   "streak": {
+    "type": "L",
+    "length": 1
+   }
+  },
+  "road": {
+   "wins": 0,
+   "winPct": 0,
+   "losses": 1,
+   "ties": 0,
+   "points": {
+    "for": 10,
+    "against": 31
+   }
+  }
+ },
+ "homeTeamStandings": {
+  "team": {
+   "id": "10402310-a47e-10ea-7442-16b633633637",
+   "currentLogo": "https://static.www.nfl.com/{formatInstructions}/league/api/clubs/logos/KC",
+   "fullName": "Kansas City Chiefs"
+  },
+  "clinched": {
+   "bye": false,
+   "division": false,
+   "eliminated": false,
+   "homeField": false,
+   "playoff": false,
+   "wildCard": false
+  },
+  "closeGames": {
+   "wins": 0,
+   "losses": 0,
+   "ties": 0
+  },
+  "conference": {
+   "wins": 1,
+   "winPct": 1,
+   "losses": 0,
+   "ties": 0,
+   "rank": 2,
+   "points": {
+    "for": 31,
+    "against": 10
+   }
+  },
+  "division": {
+   "wins": 1,
+   "winPct": 1,
+   "losses": 0,
+   "ties": 0,
+   "rank": 1,
+   "points": {
+    "for": 31,
+    "against": 10
+   }
+  },
+  "home": {
+   "wins": 1,
+   "winPct": 1,
+   "losses": 0,
+   "ties": 0,
+   "points": {
+    "for": 31,
+    "against": 10
+   }
+  },
+  "last5": {
+   "wins": 1,
+   "winPct": 1,
+   "losses": 0,
+   "ties": 0,
+   "points": {
+    "for": 31,
+    "against": 10
+   }
+  },
+  "overall": {
+   "games": 1,
+   "wins": 1,
+   "winPct": 1,
+   "losses": 0,
+   "ties": 0,
+   "points": {
+    "for": 31,
+    "against": 10
+   },
+   "streak": {
+    "type": "W",
+    "length": 1
+   }
+  },
+  "road": {
+   "wins": 0,
+   "winPct": 0,
+   "losses": 0,
+   "ties": 0,
+   "points": {
+    "for": 0,
+    "against": 0
+   }
+  }
+ },
+ "driveChart": {
+  "gameId": "a9a890ed-4feb-11f1-abca-2c54536568a9",
+  "offset": 467,
+  "drives": [
+   {
+    "sequence": 1,
+    "teamId": "10401400-b89b-96e5-55d1-caa7e18de3d8",
+    "startedClock": "15:00",
+    "startedDescription": "Kickoff",
+    "startedPlayId": 40,
+    "startedPlaySequenceNumber": 40,
+    "startedQuarter": 1,
+    "startedTime": "2026-09-15T00:16:12.707Z",
+    "startedYardLine": "DEN 35",
+    "endedClock": "13:30",
+    "endedDescription": "Interception",
+    "endedPlayId": 99,
+    "endedPlaySequenceNumber": 99,
+    "endedQuarter": 1,
+    "endedTime": null,
+    "endedWithScore": false,
+    "endedYardLine": "DEN 34",
+    "firstDowns": 0,
+    "inside20": false,
+    "plays": 3,
+    "timeOfPossession": "1:30",
+    "totalEndedWithScore": false,
+    "yardsGained": -1,
+    "yardsGainedByPenalty": 0,
+    "yardsGainedNet": -1
+   },
+   {
+    "sequence": 2,
+    "teamId": "10402310-a47e-10ea-7442-16b633633637",
+    "startedClock": "13:30",
+    "startedDescription": "Interception",
+    "startedPlayId": 126,
+    "startedPlaySequenceNumber": 126,
+    "startedQuarter": 1,
+    "startedTime": "2026-09-15T00:19:30.647Z",
+    "startedYardLine": "DEN 46",
+    "endedClock": "08:11",
+    "endedDescription": "Touchdown",
+    "endedPlayId": 402,
+    "endedPlaySequenceNumber": 402,
+    "endedQuarter": 1,
+    "endedTime": null,
+    "endedWithScore": true,
+    "endedYardLine": "DEN 15",
+    "firstDowns": 4,
+    "inside20": true,
+    "plays": 10,
+    "timeOfPossession": "5:19",
+    "totalEndedWithScore": true,
+    "yardsGained": 56,
+    "yardsGainedByPenalty": -10,
+    "yardsGainedNet": 46
+   }
+  ],
+  "plays": [
+   {
+    "playId": 3976,
+    "clockTime": null,
+    "down": 0,
+    "driveNetYards": 0,
+    "drivePlayCount": 0,
+    "driveSequence": 0,
+    "driveTimeOfPossession": null,
+    "nextPlayType": "UNSPECIFIED",
+    "nextPlayIsGoalToGo": false,
+    "prePlayByPlay": null,
+    "playDeleted": true,
+    "playDescription": null,
+    "playDescriptionWithJerseyNumbers": null,
+    "playEndTime": null,
+    "playIsEndOfQuarter": false,
+    "playIsGoalToGo": false,
+    "playScored": false,
+    "playSequenceNumber": 0,
+    "playStartTime": null,
+    "playType": "UNSPECIFIED",
+    "quarter": 0,
+    "scoringPlayType": "UNSPECIFIED",
+    "scoringTeamId": null,
+    "specialTeamsPlayType": "UNSPECIFIED",
+    "yardLine": null,
+    "yardsGained": 0,
+    "yardsRemaining": 0,
+    "stats": []
+   },
+   {
+    "playId": 1,
+    "clockTime": null,
+    "down": 0,
+    "driveNetYards": 0,
+    "drivePlayCount": 0,
+    "driveSequence": 0,
+    "driveTimeOfPossession": null,
+    "nextPlayType": "FREE_KICK",
+    "nextPlayIsGoalToGo": false,
+    "prePlayByPlay": "DEN - KC",
+    "playDeleted": false,
+    "playDescription": "GAME",
+    "playDescriptionWithJerseyNumbers": "GAME",
+    "playEndTime": null,
+    "playIsEndOfQuarter": false,
+    "playIsGoalToGo": false,
+    "playScored": false,
+    "playSequenceNumber": 1,
+    "playStartTime": null,
+    "playType": "GAME_START",
+    "quarter": 1,
+    "scoringPlayType": "UNSPECIFIED",
+    "scoringTeamId": null,
+    "specialTeamsPlayType": "UNSPECIFIED",
+    "yardLine": null,
+    "yardsGained": 0,
+    "yardsRemaining": 0,
+    "stats": []
+   }
+  ],
+  "scoringSummaries": [
+   {
+    "sequence": 1,
+    "awayScore": 0,
+    "clockTime": "08:11",
+    "homeScore": 7,
+    "patPlayId": 402,
+    "playDescription": "P.Mahomes 15 yd. run (H.Butker kick) (10-46, 5:19)",
+    "quarter": 1,
+    "scoreType": "TOUCHDOWN",
+    "scoringPlayId": 379,
+    "scoringTeamId": "10402310-a47e-10ea-7442-16b633633637"
+   },
+   {
+    "sequence": 2,
+    "awayScore": 7,
+    "clockTime": "03:48",
+    "homeScore": 7,
+    "patPlayId": 674,
+    "playDescription": "E.Engram 19 yd. pass from B.Nix (W.Lutz kick) (7-68, 4:23)",
+    "quarter": 1,
+    "scoreType": "TOUCHDOWN",
+    "scoringPlayId": 648,
+    "scoringTeamId": "10401400-b89b-96e5-55d1-caa7e18de3d8"
+   }
+  ]
+ }
+}

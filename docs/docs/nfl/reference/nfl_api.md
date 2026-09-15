@@ -947,7 +947,7 @@ GET /experience/v2/gamedetails/{game_id} — one row: the flat v2 game detail (g
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `id` | character | NFL.com Shield GUID for the combine profile. |
+| `id` | character | NFL.com Shield GUID for the game. |
 | `category` | character | Game category / window (e.g. SNF, MNF, TNF). |
 | `date` | character | Game date (YYYY-MM-DD). |
 | `time` | character | ISO 8601 kickoff timestamp. |
@@ -1156,7 +1156,7 @@ GET /experience/v1/gamedetailsbyslug/{slug} — one row: the flat game detail lo
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `id` | character | NFL.com Shield GUID for the combine profile. |
+| `id` | character | NFL.com Shield GUID for the game. |
 | `category` | character | Game category / window (e.g. SNF, MNF, TNF). |
 | `date` | character | Game date (YYYY-MM-DD). |
 | `time` | character | ISO 8601 kickoff timestamp. |

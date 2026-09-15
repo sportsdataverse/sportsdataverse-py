@@ -3,7 +3,7 @@ kind: dataframe
 columns:
 - name: id
   type: character
-  description: NFL.com Shield GUID for the combine profile.
+  description: NFL.com Shield GUID for the game.
 - name: category
   type: character
   description: Game category / window (e.g. SNF, MNF, TNF).

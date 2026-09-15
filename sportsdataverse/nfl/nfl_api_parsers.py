@@ -405,7 +405,8 @@ def parse_nfl_live_player_statistics(raw: Dict, return_as_pandas: bool = False) 
 def parse_nfl_game_details_v2(raw: Dict, return_as_pandas: bool = False) -> DataFrameT:
     """Flatten ``/experience/v2/gamedetails/{game_id}`` into one row.
 
-    The v2 payload is flat (the v1 route wraps it under ``data``): game fields
+    The v2 payload is flat (only ``/experience/v1/gamedetails/{game_id}`` wraps
+    the game under ``data``; the v1 by-slug route is flat too): game fields
     at the top level plus ``summary`` and, when requested, ``driveChart``,
     ``replays`` and the two standings blocks. Nested objects flatten into
     prefixed columns; list-valued sections (``externalIds``, ``replays``, drive
@@ -432,7 +433,10 @@ def parse_nfl_game_details_by_slug(raw: Dict, return_as_pandas: bool = False) ->
     """Flatten ``/experience/v1/gamedetailsbyslug/{slug}`` into one row.
 
     Same flat shape as :func:`parse_nfl_game_details_v2`, looked up by the
-    nfl.com slug instead of the Shield uuid.
+    nfl.com slug instead of the Shield uuid. Unlike
+    ``/experience/v1/gamedetails/{game_id}``, this v1 route does NOT wrap the
+    game under ``data`` -- ``id`` / ``status`` sit at the top level
+    (``tests/fixtures/nfl_api/game_details_by_slug.json``).
 
     Args:
         raw: Raw JSON dict from :func:`sportsdataverse.nfl.nfl_game_details_by_slug`.

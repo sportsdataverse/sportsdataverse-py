@@ -57,6 +57,17 @@ def test_by_slug_matches_v2_shape():
     assert a.columns == b.columns
 
 
+def test_by_slug_v1_body_is_flat_not_data_wrapped():
+    # /experience/v1/gamedetailsbyslug returns the game at the top level (only
+    # /experience/v1/gamedetails/{game_id} wraps it under ``data``).
+    raw = _load("game_details_by_slug")
+    assert "data" not in raw and raw["id"] == GAME
+    df = P.parse_nfl_game_details_by_slug(raw)
+    assert df.height == 1 and df["id"][0] == GAME and df["status"][0] == raw["status"]
+    assert not any(c.startswith("data_") for c in df.columns)
+    assert {"season", "week", "venue_name", "summary_game_id"} <= set(df.columns)
+
+
 @pytest.mark.parametrize(
     "fn",
     [P.parse_nfl_live_team_statistics, P.parse_nfl_live_player_statistics, P.parse_nfl_game_details_v2],
