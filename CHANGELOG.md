@@ -287,6 +287,23 @@ current/future days and ranges containing them bypass both cache reads and write
 while wholly historical dates retain the 30-day TTL. Explicit TTL overrides still
 take precedence.
 
+### Added — NFL field-position EP curve (`nfl_field_position`)
+
+`load_nfl_fp_curve()` loads the bundled `nfl/models/nfl_field_position_ep.parquet`
+(EP of a drive start by own yard line, 1..99), the NFL twin of the college curve
+and fit with the same recipe -- weighted isotonic regression of realized drive
+points on the starting yard line -- so the two leagues' field-position margins
+are comparable. `fit_nfl_field_position_ep(pbp)` refits it from released
+`espn_nfl_pbp` plays; the bundled artifact is the 2016-2025 fit (59,026 drives).
+
+### Added — offline processor inputs (#491)
+
+`espn_nfl_pbp(summary=)` / `espn_cfb_pbp(summary=)` run the processor over a
+stored ESPN summary with no network (participants, roster and odds fetches all
+gated); `play_participants_from_items` + `athlete_lookup_from_summary` build the
+participants frame from stored core play items; `NFLPlayProcess(odds_override=)`
+mirrors the CFB contract and `odds_source` records which branch resolved the line.
+
 ### Added — CFB drive summary and situational team stats, graduated from Game on Paper (#470)
 
 `cfb_drive_summary.create_drive_summary(drives, frame, home_id, away_id,
