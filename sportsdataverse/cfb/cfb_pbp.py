@@ -953,6 +953,7 @@ from sportsdataverse.football.box import build_specialists_box as _build_special
 from sportsdataverse.football.box import fill_missing as _fill_missing  # noqa: E402
 from sportsdataverse.football.espn_box import parse_espn_player_box as _parse_espn_player_box  # noqa: E402
 from sportsdataverse.football.espn_box import parse_espn_team_box as _parse_espn_team_box  # noqa: E402
+from sportsdataverse.football import espn_text as _espn_text  # noqa: E402
 from sportsdataverse.football.play_participants import coalesce_participants as _coalesce_participants  # noqa: E402
 from sportsdataverse.football.usage_box import SECTIONS as _USAGE_SECTIONS  # noqa: E402
 from sportsdataverse.football.usage_box import create_usage_box as _create_usage_box  # noqa: E402
@@ -2593,9 +2594,12 @@ class CFBPlayProcess(object):
                 )
                 .then(True)
                 .otherwise(False),
+                # In the jersey style a trailing ", out of bounds" after "#0 B.Inniss
+                # return 16 yards" is the returner stepping out, not the kick.
                 kickoff_oob=pl.when(
                     (pl.col("text").str.contains("(?i)out-of-bounds|(?i)out of bounds")).and_(
                         pl.col("kickoff_play") == True,
+                        _espn_text.has_jersey_return() == False,
                     ),
                 )
                 .then(True)
@@ -2628,7 +2632,10 @@ class CFBPlayProcess(object):
                 .then(True)
                 .otherwise(False),
                 punt_oob=pl.when(
-                    (pl.col("text").str.contains("(?i)out-of-bounds|(?i)out of bounds")).and_(pl.col("punt") == True),
+                    (pl.col("text").str.contains("(?i)out-of-bounds|(?i)out of bounds")).and_(
+                        pl.col("punt") == True,
+                        _espn_text.has_jersey_return() == False,
+                    ),
                 )
                 .then(True)
                 .otherwise(False),
@@ -3839,7 +3846,12 @@ class CFBPlayProcess(object):
                 .otherwise(False),
                 # --- Touchdowns ----
                 scoring_play=pl.col("type.text").is_in(scores_vec),
-                yds_punted=pl.col("text").str.extract(r"(?i)(punt for \d+)").str.extract(r"(\d+)").cast(pl.Int32),
+                # Two text styles: "punt for 43 yards" (through 2024) and the 2025 vendor
+                # template's jersey style, "#43 M.Chiumento punt 43 yards to the OSU36".
+                yds_punted=pl.coalesce(
+                    pl.col("text").str.extract(r"(?i)(punt for \d+)").str.extract(r"(\d+)").cast(pl.Int32),
+                    _espn_text.jersey_punt_yards(),
+                ),
                 yds_punt_gained=pl.when(pl.col("punt") == True).then(pl.col("statYardage")).otherwise(None),
                 fg_attempt=pl.when(
                     (pl.col("type.text").str.contains(r"(?i)Field Goal")).or_(
@@ -3849,13 +3861,18 @@ class CFBPlayProcess(object):
                 .then(True)
                 .otherwise(False),
                 fg_made=pl.col("type.text") == "Field Goal Good",
-                yds_fg=pl.col("text")
-                .str.extract(
-                    r"(?i)(\d+)\s?Yd Field|(?i)(\d+)\s?YD FG|(?i)(\d+)\s?Yard FG|(?i)(\d+)\s?Field|(?i)(\d+)\s?Yard Field",
-                    0,
-                )
-                .str.extract(r"(\d+)")
-                .cast(pl.Int32),
+                # "47 Yd Field Goal Good" (through 2024) or the jersey style's "field goal
+                # attempt from 26 yards GOOD" / "NO GOOD" / "BLOCKED" (2025).
+                yds_fg=pl.coalesce(
+                    pl.col("text")
+                    .str.extract(
+                        r"(?i)(\d+)\s?Yd Field|(?i)(\d+)\s?YD FG|(?i)(\d+)\s?Yard FG|(?i)(\d+)\s?Field|(?i)(\d+)\s?Yard Field",
+                        0,
+                    )
+                    .str.extract(r"(\d+)")
+                    .cast(pl.Int32),
+                    _espn_text.jersey_fg_yards(),
+                ),
             )
             .with_columns(
                 pl.when(pl.col("fg_attempt") == True)
@@ -4356,6 +4373,33 @@ class CFBPlayProcess(object):
             .then(pl.col("statYardage"))
             .otherwise(None),
         )
+        # The 2025 vendor template writes special teams in the NFL-like jersey style
+        # -- "#43 M.Chiumento punt 43 yards to the OSU36 #0 B.Inniss return 16 yards
+        # to the TEX48 (#81 N.Townsend), out of bounds", "#49 M.Diomede kickoff 65
+        # yards to the TEX00, Touchback", "#96 C.Hawkins field goal attempt from 26
+        # yards GOOD" -- which none of the "for N yards" / "returned by" branches
+        # above read (every kick, punt, field-goal and return yardage came out null
+        # on those games). The older phrasings keep their values; the jersey clauses
+        # only fill what is still null, except a jersey return clause, which wins
+        # over the flag-derived 0 (its ", out of bounds" tail is the returner's).
+        _jersey_return = _espn_text.jersey_return_yards()
+        play_df = play_df.with_columns(
+            yds_kickoff=pl.when(pl.col("kickoff_play") == True)
+            .then(pl.coalesce(pl.col("yds_kickoff"), _espn_text.jersey_kickoff_yards()))
+            .otherwise(pl.col("yds_kickoff")),
+            yds_punted=pl.when((pl.col("punt") == True).and_(pl.col("punt_blocked") == False))
+            .then(pl.coalesce(pl.col("yds_punted"), _espn_text.jersey_punt_yards()))
+            .otherwise(pl.col("yds_punted")),
+            yds_fg=pl.coalesce(pl.col("yds_fg"), _espn_text.jersey_fg_yards()),
+            yds_punt_return=pl.when((pl.col("punt") == True).and_(_jersey_return.is_not_null()))
+            .then(_jersey_return)
+            .otherwise(pl.col("yds_punt_return")),
+            yds_kickoff_return=pl.when(
+                (pl.col("kickoff_play") == True).and_(pl.col("kickoff_tb") == False).and_(_jersey_return.is_not_null()),
+            )
+            .then(_jersey_return)
+            .otherwise(pl.col("yds_kickoff_return")),
+        )
         return play_df
 
     def __add_air_yards_cols(self, play_df):
@@ -4714,35 +4758,46 @@ class CFBPlayProcess(object):
                 )
                 .otherwise(None),
                 # --- Punter Names ----
+                # The jersey-style clause ("#43 M.Chiumento punt 43 yards") is read
+                # first; the windowed captures below are the pre-2025 phrasings. ESPN's
+                # participants, when the game has them, overwrite either in
+                # __join_participants -- the text name is the fallback.
                 punter_player=pl.when(pl.col("type.text").str.contains("Punt"))
                 .then(
-                    _extract_player_name(pl.col("text"), r"(?i)(.{0,30}) punt|(?i)Punt by (.{0,30})")
-                    .str.replace(r"(?i) punt", "")
-                    .str.replace(r"(?i) for(.+)", "")
-                    .str.replace(r"(?i)Punt by ", "")
-                    .str.replace(r"(?i)\((.+)\)", "")
-                    .str.replace(r"(?i) returned \d+", "")
-                    .str.replace(r"(?i) returned", "")
-                    .str.replace(r"(?i) no return", ""),
+                    pl.coalesce(
+                        _espn_text.jersey_punter(),
+                        _extract_player_name(pl.col("text"), r"(?i)(.{0,30}) punt|(?i)Punt by (.{0,30})")
+                        .str.replace(r"(?i) punt", "")
+                        .str.replace(r"(?i) for(.+)", "")
+                        .str.replace(r"(?i)Punt by ", "")
+                        .str.replace(r"(?i)\((.+)\)", "")
+                        .str.replace(r"(?i) returned \d+", "")
+                        .str.replace(r"(?i) returned", "")
+                        .str.replace(r"(?i) no return", ""),
+                    )
                 )
                 .otherwise(None),
                 # --- Punt Returner Names ----
                 punt_return_player=pl.when(pl.col("type.text").str.contains("Punt"))
                 .then(
-                    _extract_player_name(
-                        pl.col("text"),
-                        r"(?i), (.{0,25}) returns|(?i)fair catch by (.{0,25})|(?i), returned by (.{0,25})|(?i)yards by (.{0,30})|(?i) return by (.{0,25})",
+                    pl.coalesce(
+                        # "#0 B.Inniss return 16 yards" / "fair catch by #21 R.Niblett"
+                        _espn_text.jersey_returner(),
+                        _extract_player_name(
+                            pl.col("text"),
+                            r"(?i), (.{0,25}) returns|(?i)fair catch by (.{0,25})|(?i), returned by (.{0,25})|(?i)yards by (.{0,30})|(?i) return by (.{0,25})",
+                        )
+                        .str.replace(r"(?i), ", "")
+                        .str.replace(r"(?i) returns", "")
+                        .str.replace(r"(?i) returned", "")
+                        .str.replace(r"(?i) return", "")
+                        .str.replace(r"(?i)fair catch by", "")
+                        .str.replace(r"(?i) at (.+)", "")
+                        .str.replace(r"(?i) for (.+)", "")
+                        .str.replace(r"(?i)(.+) by ", "")
+                        .str.replace(r"(?i) to (.+)", "")
+                        .str.replace(r"(?i)\((.+)\)", ""),
                     )
-                    .str.replace(r"(?i), ", "")
-                    .str.replace(r"(?i) returns", "")
-                    .str.replace(r"(?i) returned", "")
-                    .str.replace(r"(?i) return", "")
-                    .str.replace(r"(?i)fair catch by", "")
-                    .str.replace(r"(?i) at (.+)", "")
-                    .str.replace(r"(?i) for (.+)", "")
-                    .str.replace(r"(?i)(.+) by ", "")
-                    .str.replace(r"(?i) to (.+)", "")
-                    .str.replace(r"(?i)\((.+)\)", ""),
                 )
                 .otherwise(None),
                 # --- Punt Blocker Names ----
@@ -4799,35 +4854,44 @@ class CFBPlayProcess(object):
                 # --- Kickoff Names ----
                 kickoff_player=pl.when(pl.col("type.text").str.contains(r"(?i)kickoff"))
                 .then(
-                    _extract_player_name(pl.col("text"), r"(?i)(.{0,25}) kickoff|(.{0,25}) on-side").str.replace(
-                        r"(?i) on-side| kickoff", ""
-                    ),
+                    pl.coalesce(
+                        _espn_text.jersey_kicker(),
+                        _extract_player_name(pl.col("text"), r"(?i)(.{0,25}) kickoff|(.{0,25}) on-side").str.replace(
+                            r"(?i) on-side| kickoff", ""
+                        ),
+                    )
                 )
                 .otherwise(None),
                 # --- Kickoff Returner Names ----
                 kickoff_return_player=pl.when(pl.col("type.text").str.contains(r"(?i)ickoff"))
                 .then(
-                    _extract_player_name(
-                        pl.col("text"),
-                        r"(?i), (.{0,25}) return|(?i), (.{0,25}) fumble|(?i)returned by (.{0,25})|(?i)touchback by (.{0,25})",
+                    pl.coalesce(
+                        _espn_text.jersey_returner(),
+                        _extract_player_name(
+                            pl.col("text"),
+                            r"(?i), (.{0,25}) return|(?i), (.{0,25}) fumble|(?i)returned by (.{0,25})|(?i)touchback by (.{0,25})",
+                        )
+                        .str.replace(r", ", "")
+                        .str.replace(r"(?i) for .*", "")
+                        .str.replace(r"(?i) return|(?i) fumble|(?i) returned by|(?i)touchback by ", "")
+                        .str.replace(r"(?i) at the.*", "")
+                        .str.replace(r"(?i) to the.*", "")
+                        .str.replace(r"\((.+)\)(.+)", ""),
                     )
-                    .str.replace(r", ", "")
-                    .str.replace(r"(?i) for .*", "")
-                    .str.replace(r"(?i) return|(?i) fumble|(?i) returned by|(?i)touchback by ", "")
-                    .str.replace(r"(?i) at the.*", "")
-                    .str.replace(r"(?i) to the.*", "")
-                    .str.replace(r"\((.+)\)(.+)", ""),
                 )
                 .otherwise(None),
                 # --- Field Goal Kicker Names ----
                 fg_kicker_player=pl.when(pl.col("type.text").str.contains(r"(?i)Field Goal"))
                 .then(
-                    _extract_player_name(
-                        pl.col("text"),
-                        r"(?i)(.{0,25} )\d{0,2} yd field goal|(?i)(.{0,25} )\d{0,2} yd fg|(?i)(.{0,25} )\d{0,2} yard field goal",
+                    pl.coalesce(
+                        _espn_text.jersey_fg_kicker(),
+                        _extract_player_name(
+                            pl.col("text"),
+                            r"(?i)(.{0,25} )\d{0,2} yd field goal|(?i)(.{0,25} )\d{0,2} yd fg|(?i)(.{0,25} )\d{0,2} yard field goal",
+                        )
+                        .str.replace(r"(?i) Yd Field Goal|(?i)Yd FG |(?i)yd FG|(?i) yd FG", "")
+                        .str.replace(r"(\d{1,2})", ""),
                     )
-                    .str.replace(r"(?i) Yd Field Goal|(?i)Yd FG |(?i)yd FG|(?i) yd FG", "")
-                    .str.replace(r"(\d{1,2})", ""),
                 )
                 .otherwise(None),
                 # --- Field Goal Blocker Names ----

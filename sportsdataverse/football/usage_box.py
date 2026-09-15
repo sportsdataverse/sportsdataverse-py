@@ -752,6 +752,41 @@ def _merge_players(parts: list[pl.DataFrame], team_col: str) -> pl.DataFrame:
     return out
 
 
+def _key_players(frames: list[tuple[pl.DataFrame, str, str]], team_col: str) -> list[pl.DataFrame]:
+    """Give one player one ``player_key`` across every source frame of a section.
+
+    ``frames`` are ``(frame, id_col, name_col)``. A player's id and name reach the
+    plays through different routes (ESPN's participants, the box score, the play
+    text), so one source can carry his id where another has only his name -- keyed
+    on ``coalesce(id, name)`` per source, the same kicker then lands twice: once
+    under his id with the kickoffs and once under his name with the field goals.
+    Every (id, name) pair seen on any source builds a per-team name -> id and
+    id -> name map; each row is keyed on ``coalesce(id, id_from_name, name)`` and
+    carries the resolved ``player_id`` / ``player_name``, so the per-source
+    aggregates merge into one row.
+    """
+    pairs = pl.concat(
+        [f.select(pl.col(team_col), pl.col(i).alias("_pid"), pl.col(n).alias("_pname")) for f, i, n in frames],
+        how="vertical_relaxed",
+    ).filter(pl.col("_pid").is_not_null() & pl.col("_pname").is_not_null())
+    # sort() keeps the resolution deterministic when a source disagrees with itself
+    name_to_id = pairs.group_by(team_col, "_pname").agg(pl.col("_pid").sort().first().alias("_id_from_name"))
+    id_to_name = pairs.group_by(team_col, "_pid").agg(pl.col("_pname").sort().first().alias("_name_from_id"))
+    out = []
+    for f, i, n in frames:
+        out.append(
+            f.join(name_to_id, left_on=[team_col, n], right_on=[team_col, "_pname"], how="left")
+            .join(id_to_name, left_on=[team_col, i], right_on=[team_col, "_pid"], how="left")
+            .with_columns(
+                player_id=pl.coalesce(pl.col(i), pl.col("_id_from_name")),
+                player_name=pl.coalesce(pl.col(n), pl.col("_name_from_id")),
+            )
+            .with_columns(player_key=pl.coalesce(pl.col("player_id"), pl.col("player_name")))
+            .drop("_id_from_name", "_name_from_id")
+        )
+    return out
+
+
 def _fill_counts(df: pl.DataFrame, skip: tuple[str, ...]) -> pl.DataFrame:
     return df.with_columns(
         [
@@ -764,16 +799,28 @@ def _fill_counts(df: pl.DataFrame, skip: tuple[str, ...]) -> pl.DataFrame:
 
 def _st_kicker_rows(st: pl.DataFrame) -> pl.DataFrame:
     """Per (kicking team, kicker): kickoffs + coverage allowed, field goals by range, extra points."""
-    ko = st.filter(pl.col("s_kickoff_play")).with_columns(
-        pos_team=pl.col("kick_team"),
-        player_key=pl.coalesce(pl.col("s_kickoff_player_id"), pl.col("s_kickoff_player_name")),
+    ko = st.filter(pl.col("s_kickoff_play")).with_columns(pos_team=pl.col("kick_team"))
+    fg = st.filter(pl.col("s_fg_attempt")).with_columns(
+        pos_team=pl.col("fg_kick_team"),
+        blocked=pl.col("s_fg_block_player_name").is_not_null(),
+    )
+    xp = st.filter(pl.col("s_xp_attempt")).with_columns(pos_team=pl.col("s_pos_team"))
+    # one key per kicker across the three sources: the kickoffs may carry his id
+    # where the field goals carry only his name (or the other way round)
+    ko, fg, xp = _key_players(
+        [
+            (ko, "s_kickoff_player_id", "s_kickoff_player_name"),
+            (fg, "s_fg_kicker_player_id", "s_fg_kicker_player_name"),
+            (xp, "s_xp_kicker_player_id", "s_xp_kicker_player_name"),
+        ],
+        "pos_team",
     )
     ko_agg = (
         ko.filter(pl.col("player_key").is_not_null())
         .group_by(["pos_team", "player_key"])
         .agg(
-            player_id=pl.col("s_kickoff_player_id").drop_nulls().first(),
-            player_name=pl.col("s_kickoff_player_name").drop_nulls().first(),
+            player_id=pl.col("player_id").drop_nulls().first(),
+            player_name=pl.col("player_name").drop_nulls().first(),
             kickoffs=pl.len(),
             kickoff_yards=pl.col("s_yds_kickoff").sum(),
             kickoff_touchbacks=pl.col("s_kickoff_tb").sum(),
@@ -785,18 +832,13 @@ def _st_kicker_rows(st: pl.DataFrame) -> pl.DataFrame:
             kickoff_epa=pl.col("kick_epa").sum(),
         )
     )
-    fg = st.filter(pl.col("s_fg_attempt")).with_columns(
-        pos_team=pl.col("fg_kick_team"),
-        player_key=pl.coalesce(pl.col("s_fg_kicker_player_id"), pl.col("s_fg_kicker_player_name")),
-        blocked=pl.col("s_fg_block_player_name").is_not_null(),
-    )
     d = pl.col("s_yds_fg")
     fg_agg = (
         fg.filter(pl.col("player_key").is_not_null())
         .group_by(["pos_team", "player_key"])
         .agg(
-            player_id=pl.col("s_fg_kicker_player_id").drop_nulls().first(),
-            player_name=pl.col("s_fg_kicker_player_name").drop_nulls().first(),
+            player_id=pl.col("player_id").drop_nulls().first(),
+            player_name=pl.col("player_name").drop_nulls().first(),
             fg_attempts=pl.len(),
             fg_made=pl.col("s_fg_made").sum(),
             fg_long=d.filter(pl.col("s_fg_made")).max(),
@@ -810,16 +852,12 @@ def _st_kicker_rows(st: pl.DataFrame) -> pl.DataFrame:
             fg_epa=pl.col("s_EPA").sum(),
         )
     )
-    xp = st.filter(pl.col("s_xp_attempt")).with_columns(
-        pos_team=pl.col("s_pos_team"),
-        player_key=pl.coalesce(pl.col("s_xp_kicker_player_id"), pl.col("s_xp_kicker_player_name")),
-    )
     xp_agg = (
         xp.filter(pl.col("player_key").is_not_null())
         .group_by(["pos_team", "player_key"])
         .agg(
-            player_id=pl.col("s_xp_kicker_player_id").drop_nulls().first(),
-            player_name=pl.col("s_xp_kicker_player_name").drop_nulls().first(),
+            player_id=pl.col("player_id").drop_nulls().first(),
+            player_name=pl.col("player_name").drop_nulls().first(),
             xp_attempts=pl.len(),
             xp_made=pl.col("s_xp_made").sum(),
         )
@@ -853,17 +891,17 @@ def _st_kicker_rows(st: pl.DataFrame) -> pl.DataFrame:
 def _st_punter_rows(st: pl.DataFrame) -> pl.DataFrame:
     pu = st.filter(pl.col("s_punt")).with_columns(
         pos_team=pl.coalesce(pl.col("s_punt_team"), pl.col("s_pos_team")),
-        player_key=pl.coalesce(pl.col("s_punter_player_id"), pl.col("s_punter_player_name")),
         inside_20=(~pl.col("s_punt_tb") & (pl.col("punt_landing") <= 20) & (pl.col("punt_landing") >= 0)),
     )
     if pu.height == 0:
         return pl.DataFrame()
+    (pu,) = _key_players([(pu, "s_punter_player_id", "s_punter_player_name")], "pos_team")
     out = (
         pu.filter(pl.col("player_key").is_not_null())
         .group_by(["pos_team", "player_key"])
         .agg(
-            player_id=pl.col("s_punter_player_id").drop_nulls().first(),
-            player_name=pl.col("s_punter_player_name").drop_nulls().first(),
+            player_id=pl.col("player_id").drop_nulls().first(),
+            player_name=pl.col("player_name").drop_nulls().first(),
             punts=pl.len(),
             punt_yards=pl.col("s_yds_punted").sum(),
             punt_long=pl.col("s_yds_punted").max(),
@@ -897,16 +935,21 @@ def _st_punter_rows(st: pl.DataFrame) -> pl.DataFrame:
 
 
 def _st_returner_rows(st: pl.DataFrame) -> pl.DataFrame:
-    kr = st.filter(pl.col("kick_returned")).with_columns(
-        pos_team=pl.col("kick_ret_team"),
-        player_key=pl.coalesce(pl.col("s_kickoff_return_player_id"), pl.col("s_kickoff_return_player_name")),
+    kr = st.filter(pl.col("kick_returned")).with_columns(pos_team=pl.col("kick_ret_team"))
+    pr = st.filter(pl.col("punt_returned")).with_columns(pos_team=pl.col("punt_ret_team"))
+    kr, pr = _key_players(
+        [
+            (kr, "s_kickoff_return_player_id", "s_kickoff_return_player_name"),
+            (pr, "s_punt_return_player_id", "s_punt_return_player_name"),
+        ],
+        "pos_team",
     )
     kr_agg = (
         kr.filter(pl.col("player_key").is_not_null())
         .group_by(["pos_team", "player_key"])
         .agg(
-            player_id=pl.col("s_kickoff_return_player_id").drop_nulls().first(),
-            player_name=pl.col("s_kickoff_return_player_name").drop_nulls().first(),
+            player_id=pl.col("player_id").drop_nulls().first(),
+            player_name=pl.col("player_name").drop_nulls().first(),
             kick_returns=pl.len(),
             kick_return_yards=pl.col("s_yds_kickoff_return").sum(),
             kick_return_long=pl.col("s_yds_kickoff_return").max(),
@@ -914,16 +957,12 @@ def _st_returner_rows(st: pl.DataFrame) -> pl.DataFrame:
             kick_return_epa=pl.col("s_EPA").sum(),  # pos_team is the return team on a kickoff
         )
     )
-    pr = st.filter(pl.col("punt_returned")).with_columns(
-        pos_team=pl.col("punt_ret_team"),
-        player_key=pl.coalesce(pl.col("s_punt_return_player_id"), pl.col("s_punt_return_player_name")),
-    )
     pr_agg = (
         pr.filter(pl.col("player_key").is_not_null())
         .group_by(["pos_team", "player_key"])
         .agg(
-            player_id=pl.col("s_punt_return_player_id").drop_nulls().first(),
-            player_name=pl.col("s_punt_return_player_name").drop_nulls().first(),
+            player_id=pl.col("player_id").drop_nulls().first(),
+            player_name=pl.col("player_name").drop_nulls().first(),
             punt_returns=pl.len(),
             punt_return_yards=pl.col("s_yds_punt_return").sum(),
             punt_return_long=pl.col("s_yds_punt_return").max(),
@@ -963,9 +1002,9 @@ def _st_block_rows(st: pl.DataFrame) -> pl.DataFrame:
     rows = pl.concat([pb, fb], how="diagonal_relaxed")
     if rows.height == 0:
         return pl.DataFrame()
+    (rows,) = _key_players([(rows, "player_id", "player_name")], "def_pos_team")
     return (
-        rows.with_columns(player_key=pl.coalesce(pl.col("player_id"), pl.col("player_name")))
-        .group_by(["def_pos_team", "player_key"])
+        rows.group_by(["def_pos_team", "player_key"])
         .agg(
             player_id=pl.col("player_id").drop_nulls().first(),
             player_name=pl.col("player_name").drop_nulls().first(),

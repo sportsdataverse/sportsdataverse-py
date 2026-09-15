@@ -58,6 +58,7 @@ from sportsdataverse.football.box import build_defensive_players_box as _build_d
 from sportsdataverse.football.box import build_specialists_box as _build_specialists_box
 from sportsdataverse.football.espn_box import parse_espn_player_box as _parse_espn_player_box
 from sportsdataverse.football.espn_box import parse_espn_team_box as _parse_espn_team_box
+from sportsdataverse.football.espn_text import ABBREVIATED_NAME as _ABBREVIATED_NAME
 from sportsdataverse.football.play_participants import coalesce_participants as _coalesce_participants
 from sportsdataverse.football.usage_box import SECTIONS as _USAGE_SECTIONS
 from sportsdataverse.football.usage_box import create_usage_box as _create_usage_box
@@ -101,11 +102,10 @@ from sportsdataverse.nfl.model_vars import (
 # "Ja.Surname", "A.St. Brown", "A.Van Ginkel", "D.Jones Jr."); the CFB text the
 # older extractors were written for spells names out and never appears in the
 # NFL feed. Rust regex has no lookaround, so each pattern anchors on the verb
-# that follows the name instead.
-_NFL_NAME = (
-    r"[A-Z][a-z]{0,2}\.(?:St\. |Ste\. |Van |Von |De |Da |Del |Di |Du |La |Le )?[A-Za-z'\-]+"
-    r"(?: (?:Jr|Sr|II|III|IV)\.?)?"
-)
+# that follows the name instead. The name shape itself is shared with the CFB
+# processor (the 2025 college feed writes the same abbreviated names) and lives
+# in ``sportsdataverse.football.espn_text``.
+_NFL_NAME = _ABBREVIATED_NAME
 # ESPN's scoring-summary phrasing ("Denzel Boston 46 Yd pass from Deshaun Watson
 # (Andre Szmyt Kick)", "Bri.Thomas 5 Yd Run") spells names out; group 1 + "." +
 # group 2 folds them to the abbreviated form the rest of the game uses so a
