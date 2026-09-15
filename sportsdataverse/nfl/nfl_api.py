@@ -103,9 +103,9 @@ def nfl_standings(
 def nfl_rosters(
     season: Optional[int] = 2024,
     limit: Optional[int] = 40,
-    team_id: Optional[str] = None,
     headers: Optional[Dict[str, str]] = None,
     *,
+    team_id: Optional[str] = None,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,

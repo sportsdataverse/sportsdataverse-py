@@ -27,6 +27,9 @@ class Param:
     default_from: Optional[str] = None  # use another arg's value when None
     transform: Optional[str] = None  # named runtime transform (e.g. format_nhl_season, _csv)
     description: str = ""  # authored human-readable description for docs
+    # Render after ``*`` so a param added to an existing wrapper never shifts the
+    # positional slot of ``headers`` (or any later arg) for existing callers.
+    kw_only: bool = False
 
 
 @dataclass(frozen=True)
@@ -235,6 +238,7 @@ def _parse_endpoint(e: dict, registry: Dict[str, Param], path: Path) -> Endpoint
                 default=extra.get("default"),
                 transform=extra.get("transform"),
                 description=extra.get("description", "") or inherited_desc,
+                kw_only=bool(extra.get("kw_only", False)),
             ),
         )
     pps = []

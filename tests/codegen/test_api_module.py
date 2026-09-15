@@ -84,3 +84,36 @@ def test_flat_module_runtime_urls(tmp_path):
         assert dl.call_args.kwargs["url"] == "https://api-web.nhle.com/v1/club-schedule-season/TOR/now"
         mod.nhl_club_schedule("TOR", season=2025)  # format_nhl_season(2025) -> 20242025
         assert dl.call_args.kwargs["url"] == "https://api-web.nhle.com/v1/club-schedule-season/TOR/20242025"
+
+
+def test_kw_only_extra_param_renders_after_star_and_keeps_headers_positional(tmp_path):
+    # A param added to an existing wrapper with ``kw_only: true`` must not shift
+    # the positional slot of ``headers`` (nfl_rosters(2024, 40, headers) contract).
+    y = tmp_path / "nfl_api.yaml"
+    y.write_text(
+        "api: nfl_api\nhost: 'https://api.nfl.com'\nname_pattern: 'nfl_{short}'\n"
+        "module: nfl_api\nparser_module: nfl.nfl_api_parsers\nruntime_imports: [_get]\n"
+        "auth: true\ngetter_module: sportsdataverse.nfl.nfl_api_runtime\n"
+        "endpoints:\n"
+        "  - short: rosters\n    summary: 'Rosters.'\n    path: '/football/v2/rosters'\n"
+        "    parser: parse_nfl_rosters\n"
+        "    extra_params:\n      - { name: season, query_key: season, type: int, default: 2024 }\n"
+        "      - { name: team_id, query_key: teamId, type: str, default: null, kw_only: true }\n"
+        "    example_args: { season: 2024 }\n"
+        "  - short: teams\n    summary: 'Teams (no parser).'\n    path: '/football/v2/teams'\n"
+        "    extra_params:\n      - { name: season, query_key: season, type: int, default: 2024 }\n"
+        "      - { name: limit, query_key: limit, type: int, default: 40, kw_only: true }\n"
+        "    example_args: { season: 2024 }\n",
+        encoding="utf-8",
+    )
+    api = spec.load_flat_api(y, {})
+    src = generate.render_flat_module(api)
+    tree = ast.parse(src)
+    fns = {n.name: n for n in tree.body if isinstance(n, ast.FunctionDef)}
+    rosters = fns["nfl_rosters"].args
+    assert [a.arg for a in rosters.args] == ["season", "headers"]
+    assert [a.arg for a in rosters.kwonlyargs] == ["team_id", "return_parsed", "return_as_pandas"]
+    assert '"teamId": team_id,' in src  # still sent on the wire
+    teams = fns["nfl_teams"].args  # no parser: the star is still emitted for the kw-only param
+    assert [a.arg for a in teams.args] == ["season", "headers"]
+    assert [a.arg for a in teams.kwonlyargs] == ["limit"]

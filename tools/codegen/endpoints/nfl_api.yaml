@@ -33,7 +33,7 @@ endpoints:
   extra_params:
   - {name: season, query_key: season, type: int, default: 2024}
   - {name: limit, query_key: limit, type: int, default: 40}
-  - {name: team_id, query_key: teamId, type: str, default: null, description: "Shield team uuid (the ``id`` of a team in the teams history listing). Returns just that team's roster -- one roster (~37 KB) instead of all 32 (~1.2 MB)."}
+  - {name: team_id, query_key: teamId, type: str, default: null, kw_only: true, description: "Shield team uuid (the ``id`` of a team in the teams history listing). Returns just that team's roster -- one roster (~37 KB) instead of all 32 (~1.2 MB)."}
   example_args: {season: 2024}
 - short: teams_history
   summary: "GET /football/v2/teams/history — one row per team for a season."

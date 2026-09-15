@@ -35,8 +35,13 @@ def {{ ep.fn_name }}(
 {% if auth %}
     headers: Optional[Dict[str, str]] = None,
 {% endif %}
-{% if ep.parser %}
+{% if ep.parser or ep.kw_only_params %}
     *,
+{% endif %}
+{% for p in ep.kw_only_params %}
+    {{ p.python_name }}: Optional[{{ p.type|type_hint }}] = {{ p.default|py_repr }},
+{% endfor %}
+{% if ep.parser %}
     return_parsed: bool = True,
     return_as_pandas: bool = False,
 {% endif %}
