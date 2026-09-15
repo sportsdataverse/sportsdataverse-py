@@ -24,6 +24,21 @@ __all__ = [
 ]
 
 
+def _ordered_rows(df: "pl.DataFrame", team: str, name: str, volume: str | None = None) -> "pl.DataFrame":
+    """Rows in a total order: ``volume`` descending (when given), then team, then name.
+
+    ``group_by`` emits groups in arbitrary order, so a table sorted on volume alone
+    -- or not at all -- came out tied players (two receivers with one target each)
+    in a different order on every run. The same game rendered twice never matched,
+    and live tables reshuffled between refreshes. Team + name make the order total:
+    both are the grouping keys, so no two rows share them.
+    """
+    keys = [c for c in (volume, team, name) if c is not None and c in df.columns]
+    if not keys:
+        return df
+    return df.sort(keys, descending=[c == volume for c in keys], nulls_last=True, maintain_order=True)
+
+
 def air_yards_box(pass_box: "pl.DataFrame", key: str) -> "pl.DataFrame":
     """Per-``key`` air-yards / YAC aggregate for the passer + receiver box scores.
 
@@ -201,7 +216,9 @@ def build_defensive_players_box(play_df: pl.DataFrame) -> list:
             .fill_null(0)
             .with_columns(def_pos_team=pl.col("def_pos_team").cast(pl.Int32))
         )
-        defensive_players_json = json.loads(defensive_players.write_json())
+        defensive_players_json = json.loads(
+            _ordered_rows(defensive_players, "def_pos_team", "player_name").write_json()
+        )
     else:
         defensive_players_json = []
 
@@ -252,7 +269,7 @@ def build_specialists_box(play_df: pl.DataFrame) -> list:
             .fill_null(0)
             .with_columns(pos_team=pl.col("pos_team").cast(pl.Int32))
         )
-        specialists_json = json.loads(specialists.write_json())
+        specialists_json = json.loads(_ordered_rows(specialists, "pos_team", "player_name").write_json())
     else:
         specialists_json = []
 
