@@ -2,7 +2,7 @@
 
 League-agnostic (CFB and NFL processors emit the same play frame). One call,
 :func:`create_usage_box`, turns a game's processed plays (plus the wide
-per-play participants frame when available) into six sections that both
+per-play participants frame when available) into eleven sections that both
 ``advBoxScore`` producers attach and both ``espn_{league}_adv_*`` dataset
 families release; season leaderboards are the same rows summed over games
 (:func:`aggregate_usage_box`).
@@ -243,6 +243,12 @@ def _standing_scrimmage(plays: pl.DataFrame) -> pl.DataFrame:
     )
 
 
+def _null_safe_sum(expr: pl.Expr) -> pl.Expr:
+    """Sum that stays null when every value is null (no curve loaded), so
+    ``third_down_over_expected`` never reads as "conversions minus nothing"."""
+    return pl.when(expr.drop_nulls().len() > 0).then(expr.sum()).otherwise(None)
+
+
 def _third_downs(df: pl.DataFrame) -> pl.DataFrame:
     return df.filter((pl.col("td_down") == 3) & pl.col("td_distance").is_not_null())
 
@@ -333,7 +339,7 @@ def _usage_agg(long: pl.DataFrame, keys: list[str]) -> pl.DataFrame:
         so_touchdowns=(pl.col("u_scoring_opp") & pl.col("u_touchdown")).sum(),
         third_down_opportunities=third.sum(),
         third_down_conversions=(third & pl.col("converted")).sum(),
-        third_down_expected=pl.col("expected").filter(third).sum(),
+        third_down_expected=_null_safe_sum(pl.col("expected").filter(third)),
     )
 
 
@@ -591,7 +597,7 @@ def _team_rows(df: pl.DataFrame, drv: pl.DataFrame, curve: Optional[pl.DataFrame
     t3 = third.group_by("pos_team").agg(
         third_down_opportunities=pl.len(),
         third_down_conversions=pl.col("converted").sum(),
-        third_down_expected=pl.col("expected").sum(),
+        third_down_expected=_null_safe_sum(pl.col("expected")),
     )
     out = base.join(t3, on="pos_team", how="left")
     out = out.join(_zone_eff(df, drv, "rz_play", "rz"), on="pos_team", how="left")
@@ -1129,7 +1135,7 @@ def create_usage_box(
     league: str = "cfb",
     third_down_curve: Optional[pl.DataFrame] = None,
 ) -> dict[str, list[dict[str, Any]]]:
-    """Build the six usage / situational sections for one game.
+    """Build the eleven usage / situational / special-teams sections for one game.
 
     Args:
         plays: the processed plays frame (``NFLPlayProcess`` / ``CFBPlayProcess``).

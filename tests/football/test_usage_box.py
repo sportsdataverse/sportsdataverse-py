@@ -144,6 +144,16 @@ def test_aggregate_sums_counts_and_recomputes_rates(game):
     assert aggregate_usage_box("team_usage", []).height == 0
 
 
+def test_no_curve_leaves_expected_null(game):
+    _, out, parts = game
+    plays = pl.from_dicts(out["plays"], infer_schema_length=None)
+    box = create_usage_box(plays, parts, league="nfl", third_down_curve=pl.DataFrame({"distance": [], "rate": []}))
+    for row in box["team_usage"]:
+        assert row["third_down_expected"] is None and row["third_down_over_expected"] is None
+    assert all(r["third_down_over_expected"] is None for r in box["player_usage"])
+    assert all(position_group(i) is None for i in (0, 50, 70, 71, 72, 99, 218))
+
+
 def test_no_participants_degrades_to_empty_tackles(game):
     proc, out, _ = game
     plays = pl.from_dicts(out["plays"], infer_schema_length=None)

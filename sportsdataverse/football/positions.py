@@ -2,7 +2,11 @@
 
 Vendored from ``sports.core.api.espn.com/v2/sports/football/leagues/{nfl,
 college-football}/positions`` (74 entries, identical across the two leagues,
-captured 2026-09-15). Play participants carry a position ``$ref`` whose
+captured 2026-09-15). The 67 player positions are mapped; the seven non-player
+ids ESPN also lists -- the placeholders ``0`` and ``99`` (Unknown), ``50``
+(Athlete), the side groups ``70`` (Offense), ``71`` (Defense) and ``72``
+(Special Teams), and ``218`` (Setter, a volleyball leak) -- deliberately
+resolve to ``None``. Play participants carry a position ``$ref`` whose
 trailing id is what :func:`position_group` maps; the groups are the ones the
 usage box splits tackles and first downs by: ``QB``, ``RB``, ``WR``, ``TE``,
 ``OL``, ``DL``, ``LB``, ``DB``, ``ST``.
