@@ -78,8 +78,14 @@ def test_coach_grouping_and_career_aggregation(plays):
         coach=pl.when(pl.col("pos_team") == 5).then(pl.lit("Coach A")).otherwise(pl.lit("Coach B")),
         def_coach=pl.when(pl.col("def_pos_team") == 5).then(pl.lit("Coach A")).otherwise(pl.lit("Coach B")),
     )
-    c = tendencies(coached, league="nfl", group_cols=("season", "coach"), def_group_cols=("season", "def_coach"))
+    c = tendencies(
+        coached,
+        league="nfl",
+        group_cols=("season", "pos_team", "coach"),
+        def_group_cols=("season", "def_pos_team", "def_coach"),
+    )
     assert set(c["coach"].to_list()) == {"Coach A", "Coach B"}
+    assert c.columns[:3] == ["season", "pos_team", "coach"] and "def_coach" not in c.columns
     t = tendencies(plays, league="nfl")
     assert (
         abs(c.filter(pl.col("coach") == "Coach A")["pass_rate"][0] - t.filter(pl.col("pos_team") == 5)["pass_rate"][0])

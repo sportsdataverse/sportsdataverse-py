@@ -44,7 +44,11 @@ Example:
 
     Coach-seasons, once a ``coach`` (and ``def_coach``) column is on the plays::
 
-        coaches = tendencies(pbp.with_columns(coach=..., def_coach=...), group_cols=("season", "coach"), def_group_cols=("season", "def_coach"))
+        coaches = tendencies(
+            pbp.with_columns(coach=..., def_coach=...),
+            group_cols=("season", "pos_team", "coach"),
+            def_group_cols=("season", "def_pos_team", "def_coach"),
+        )
 """
 
 from __future__ import annotations
@@ -417,9 +421,10 @@ def tendencies(
             on (a ``coach`` on the offense side, a ``def_coach`` on the defense).
         league: ``"cfb"`` or ``"nfl"`` -- selects the bundled third-down curve.
         group_cols: the offense grouping (a team-season by default).
-        def_group_cols: the defense grouping; its last column is renamed to the
-            last column of ``group_cols`` so the defense-allowed columns land on
-            the same row (``def_pos_team`` -> ``pos_team``).
+        def_group_cols: the defense grouping, one column per ``group_cols``
+            entry in the same order; each is renamed onto its offense twin so
+            the defense-allowed columns land on the same row
+            (``def_pos_team`` -> ``pos_team``, ``def_coach`` -> ``coach``).
         third_down_curve: override the bundled curve.
 
     Returns:
@@ -460,9 +465,10 @@ def tendencies(
     if d_off.height:
         d_off = d_off.rename({c: f"def_{c}" for c in d_off.columns if c not in dkeys})
         d_off = _apply_rates(d_off, prefix="def_")
-        d_off = d_off.rename({dkeys[-1]: keys[-1]}) if dkeys[-1] != keys[-1] else d_off
-        join_keys = [*keys[:-1], keys[-1]]
-        off = off.join(d_off, on=join_keys, how="left")
+        # every defending key maps positionally onto its offense key (def_pos_team
+        # -> pos_team, def_coach -> coach), so any number of keys joins
+        d_off = d_off.rename({d: k for d, k in zip(dkeys, keys) if d != k})
+        off = off.join(d_off, on=list(keys), how="left")
     # counts read 0 when a group had nothing to count; expected third downs stay
     # null when no curve was available, so the over-expected rate stays null too
     count_cols = [
@@ -505,7 +511,12 @@ def aggregate_tendencies(frames: list[pl.DataFrame], keys: tuple[str, ...] = ("c
         return pl.DataFrame()
     df = pl.concat(keep, how="diagonal_relaxed")
     ks = [k for k in keys if k in df.columns]
-    counts = [c for c in df.columns if c not in ks and c != "season" and df.schema[c].is_numeric() and not _is_rate(c)]
+    # ids are never counts: a summed team id is a number that means nothing
+    counts = [
+        c
+        for c in df.columns
+        if c not in ks and c != "season" and df.schema[c].is_numeric() and not _is_rate(c) and not c.endswith("_id")
+    ]
     aggs = [pl.col(c).sum() for c in counts]
     if "season" in df.columns:
         aggs += [
