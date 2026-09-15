@@ -3,6 +3,12 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [Unreleased](#unreleased)
+  - [Fixed — CFB special teams read ESPN's 2025 jersey-style text; the usage box keys a kicker once](#fixed--cfb-special-teams-read-espns-2025-jersey-style-text-the-usage-box-keys-a-kicker-once)
+  - [Added — loaders for the ESPN football usage leaderboards and team / coach tendencies](#added--loaders-for-the-espn-football-usage-leaderboards-and-team--coach-tendencies)
+  - [Added — team and coach tendencies (`sportsdataverse.football.tendencies`)](#added--team-and-coach-tendencies-sportsdataversefootballtendencies)
+  - [Added — usage and situational box (`sportsdataverse.football.usage_box`)](#added--usage-and-situational-box-sportsdataversefootballusage_box)
+  - [Added — NFL field-position EP curve (`nfl_field_position`)](#added--nfl-field-position-ep-curve-nfl_field_position)
+  - [Added — offline processor inputs (#491)](#added--offline-processor-inputs-491)
   - [Added — CFB drive summary and situational team stats, graduated from Game on Paper (#470)](#added--cfb-drive-summary-and-situational-team-stats-graduated-from-game-on-paper-470)
   - [Fixed — MLB expected stats counted raw pitches as plate appearances](#fixed--mlb-expected-stats-counted-raw-pitches-as-plate-appearances)
 - [0.1.4 Release: September 1, 2026](#014-release-september-1-2026)
@@ -286,6 +292,34 @@ Fixed scoreboard cache TTL selection when dates are supplied in query parameters
 current/future days and ranges containing them bypass both cache reads and writes,
 while wholly historical dates retain the 30-day TTL. Explicit TTL overrides still
 take precedence.
+
+### Fixed — CFB special teams read ESPN's 2025 jersey-style text; the usage box keys a kicker once
+
+ESPN's 2025 college feed writes kicks the way the NFL feed does -- "(04:07) #43
+M.Chiumento punt 43 yards to the OSU36 #0 B.Inniss return 16 yards to the TEX48
+(#81 N.Townsend), out of bounds", "#49 M.Diomede kickoff 65 yards to the TEX00,
+Touchback", "#96 C.Hawkins field goal attempt from 26 yards GOOD" -- and the CFB
+processor only read "punt for N yards", "kickoff for N yards", "N Yd Field Goal"
+and "returned by X for N yards". On those games (401856682, Ohio State @ Texas,
+and many more) `yds_punted`, `yds_kickoff`, `yds_fg`, `yds_punt_return` and
+`yds_kickoff_return` were null on every kick, as were the returner and
+fair-catcher names, and a returner stepping out of bounds was counted as a punt
+out of bounds. The jersey-style clauses now fill the distances, the return
+yards, the touchback and fair catch, and the punter / kicker / returner /
+fair-catcher names from the text; ESPN's participants still overwrite the
+names wherever they exist (the abbreviated text name is the fallback, as in the
+NFL processor), and the older phrasings are unchanged. The abbreviated-name
+pattern the NFL grammar was built on moved to
+`sportsdataverse.football.espn_text`, which both processors share. Verified on
+the committed 401856682 summary and participants fixtures.
+
+`create_usage_box` keyed each special-teams source on `coalesce(player_id,
+player_name)` separately, so a kicker whose kickoffs carried his id (ESPN's
+participants) and whose field goals carried only his name (the play text)
+appeared twice in `st_kickers` -- "Eli Ozick" with id 5157006 and six kickoffs,
+and again with a null id and the field-goal line. Every (id, name) pair seen on
+any source now resolves one key per team for kickers, punters, returners and
+blockers, and the merged row carries the resolved id and name.
 
 ### Added — loaders for the ESPN football usage leaderboards and team / coach tendencies
 

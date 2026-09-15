@@ -3,6 +3,12 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [Unreleased](#unreleased)
+  - [Fixed — CFB special teams read ESPN's 2025 jersey-style text; the usage box keys a kicker once](#fixed--cfb-special-teams-read-espns-2025-jersey-style-text-the-usage-box-keys-a-kicker-once)
+  - [Added — loaders for the ESPN football usage leaderboards and team / coach tendencies](#added--loaders-for-the-espn-football-usage-leaderboards-and-team--coach-tendencies)
+  - [Added — team and coach tendencies (`sportsdataverse.football.tendencies`)](#added--team-and-coach-tendencies-sportsdataversefootballtendencies)
+  - [Added — usage and situational box (`sportsdataverse.football.usage_box`)](#added--usage-and-situational-box-sportsdataversefootballusage_box)
+  - [Added — NFL field-position EP curve (`nfl_field_position`)](#added--nfl-field-position-ep-curve-nfl_field_position)
+  - [Added — offline processor inputs (#491)](#added--offline-processor-inputs-491)
   - [Added — CFB drive summary and situational team stats, graduated from Game on Paper (#470)](#added--cfb-drive-summary-and-situational-team-stats-graduated-from-game-on-paper-470)
   - [Fixed — MLB expected stats counted raw pitches as plate appearances](#fixed--mlb-expected-stats-counted-raw-pitches-as-plate-appearances)
 - [0.1.4 Release: September 1, 2026](#014-release-september-1-2026)
@@ -286,6 +292,116 @@ Fixed scoreboard cache TTL selection when dates are supplied in query parameters
 current/future days and ranges containing them bypass both cache reads and writes,
 while wholly historical dates retain the 30-day TTL. Explicit TTL overrides still
 take precedence.
+
+### Fixed — CFB special teams read ESPN's 2025 jersey-style text; the usage box keys a kicker once
+
+ESPN's 2025 college feed writes kicks the way the NFL feed does -- "(04:07) #43
+M.Chiumento punt 43 yards to the OSU36 #0 B.Inniss return 16 yards to the TEX48
+(#81 N.Townsend), out of bounds", "#49 M.Diomede kickoff 65 yards to the TEX00,
+Touchback", "#96 C.Hawkins field goal attempt from 26 yards GOOD" -- and the CFB
+processor only read "punt for N yards", "kickoff for N yards", "N Yd Field Goal"
+and "returned by X for N yards". On those games (401856682, Ohio State @ Texas,
+and many more) `yds_punted`, `yds_kickoff`, `yds_fg`, `yds_punt_return` and
+`yds_kickoff_return` were null on every kick, as were the returner and
+fair-catcher names, and a returner stepping out of bounds was counted as a punt
+out of bounds. The jersey-style clauses now fill the distances, the return
+yards, the touchback and fair catch, and the punter / kicker / returner /
+fair-catcher names from the text; ESPN's participants still overwrite the
+names wherever they exist (the abbreviated text name is the fallback, as in the
+NFL processor), and the older phrasings are unchanged. The abbreviated-name
+pattern the NFL grammar was built on moved to
+`sportsdataverse.football.espn_text`, which both processors share. Verified on
+the committed 401856682 summary and participants fixtures.
+
+`create_usage_box` keyed each special-teams source on `coalesce(player_id,
+player_name)` separately, so a kicker whose kickoffs carried his id (ESPN's
+participants) and whose field goals carried only his name (the play text)
+appeared twice in `st_kickers` -- "Eli Ozick" with id 5157006 and six kickoffs,
+and again with a null id and the field-goal line. Every (id, name) pair seen on
+any source now resolves one key per team for kickers, punters, returners and
+blockers, and the merged row carries the resolved id and name.
+
+### Added — loaders for the ESPN football usage leaderboards and team / coach tendencies
+
+Twenty-eight dataset loaders over the release tags `cfbfastR-cfb-data` and `nfl-data`
+publish from `sportsdataverse.football.usage_box` and `tendencies`: the eleven usage
+sections (`load_{cfb,nfl}_usage_players`, `_usage_position_groups`, `_usage_tackles`,
+`_usage_position_group_tackles`, `_usage_teams`, `_usage_drive_scripting`,
+`_usage_st_kickers`, `_usage_st_punters`, `_usage_st_returners`, `_usage_st_blocks`,
+`_usage_st_team`), `load_{cfb,nfl}_team_tendencies`, `load_{cfb,nfl}_coach_tendencies`,
+and the season-less `load_{cfb,nfl}_coach_careers()`. One parquet per season
+(`{stem}_{season}.parquet`, CFB from 2004, NFL from 2002), unioned with
+`diagonal_relaxed`; the CFB loaders are generated from `releases.yaml` (a missing
+season is skipped with a warning), the NFL ones are hand-written in `nfl_loaders.py`
+(a missing season raises `NoDataError`, matching its siblings). Returns tables are
+derived from the published parquets and every column is described from the
+producers' semantics; published coverage caveats (NFL 2005 has no play text upstream,
+the participant-based sections start in 2014, the kicker / punter / returner tags
+have no 2005-2007 assets) live in each loader's `notes:` / docstring.
+
+The loader codegen learned a season-less form: a `releases.yaml` url with no
+`{season}` token now renders a `fn(return_as_pandas=False)` loader that reads one
+asset (an absent asset is an empty frame plus a warning), and the loaders page
+renders its example as `fn()`.
+
+### Added — team and coach tendencies (`sportsdataverse.football.tendencies`)
+
+`tendencies(plays, league=)` folds a season of processed plays (either
+processor's output) into one row per group -- `(season, pos_team)` by default,
+or `(season, coach)` when the caller attaches a coach column -- with pace
+(seconds per play from the drive clock, plays per game and per drive, with a
+coverage share so pre-clock seasons read as missing rather than wrong),
+run/pass splits by down, by score state (leading / tied / trailing) and in
+situation-neutral snaps (win probability 20-80%, regulation, outside the last
+two minutes of a half), early-down and neutral pass rates, explosive and
+success rates, EPA per play, third downs over expected, red-zone and
+scoring-opportunity trips with TD rate, points per trip and success, scripted
+vs non-scripted drive efficiency, and fourth-down decision making (go rate,
+agreement with the bundled fourth-down model, go rate when the model says go,
+go rate when it says kick, conversion rate when going, win probability left on
+the field by deciding against the model). Every rate carries its numerator and
+denominator (`RATES`), so `aggregate_tendencies(frames, keys=)` sums seasons
+into careers and recomputes the rates exactly. A defense twin (`def_*`) is
+computed by the defending key so a coach's defense is judged on what it
+allowed. Expected third downs stay null, never zero, when no curve is
+available.
+
+### Added — usage and situational box (`sportsdataverse.football.usage_box`)
+
+Six new `advBoxScore` sections on BOTH football processors, computed once in the
+shared football layer from the processed plays and the per-play participants:
+`player_usage` (explosive plays, first downs, touchdowns, first-down +
+touchdown rate, target share, first-down share, red-zone and
+scoring-opportunity touches / targets / touchdowns, third downs converted
+over expected), `position_group_usage`, `tackles` (tackle share:
+tackles + 0.5 assists over the team total), `position_group_tackles`,
+`team_usage` (third downs over expected, red-zone and scoring-opportunity
+efficiencies: trips, TD rate, points per trip, success, EPA per play) and
+`drive_scripting` (scripted = a team's first two drives of each half vs the
+rest). `aggregate_usage_box` sums per-game rows into season leaderboards and
+recomputes every rate. The participants pivot now also emits
+`{type}_position_id`; `sportsdataverse.football.positions` maps ESPN position
+ids to abbreviations and groups. Bundled third-down conversion curves
+(`{cfb,nfl}/models/{league}_third_down_conversion.parquet`, isotonic in yards to
+go; NFL 2002-2025, CFB 2022-2025) feed the "over expected" columns and refit
+with `fit_third_down_curve`.
+
+### Added — NFL field-position EP curve (`nfl_field_position`)
+
+`load_nfl_fp_curve()` loads the bundled `nfl/models/nfl_field_position_ep.parquet`
+(EP of a drive start by own yard line, 1..99), the NFL twin of the college curve
+and fit with the same recipe -- weighted isotonic regression of realized drive
+points on the starting yard line -- so the two leagues' field-position margins
+are comparable. `fit_nfl_field_position_ep(pbp)` refits it from released
+`espn_nfl_pbp` plays; the bundled artifact is the 2016-2025 fit (59,026 drives).
+
+### Added — offline processor inputs (#491)
+
+`espn_nfl_pbp(summary=)` / `espn_cfb_pbp(summary=)` run the processor over a
+stored ESPN summary with no network (participants, roster and odds fetches all
+gated); `play_participants_from_items` + `athlete_lookup_from_summary` build the
+participants frame from stored core play items; `NFLPlayProcess(odds_override=)`
+mirrors the CFB contract and `odds_source` records which branch resolved the line.
 
 ### Added — CFB drive summary and situational team stats, graduated from Game on Paper (#470)
 

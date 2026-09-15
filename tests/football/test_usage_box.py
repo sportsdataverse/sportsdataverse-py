@@ -221,3 +221,113 @@ def test_special_teams_leaderboard_uses_max_for_longs(game):
     p = pl.from_dicts(out["advBoxScore"]["st_punters"], infer_schema_length=None).with_columns(season=pl.lit(2026))
     plb = aggregate_usage_box("st_punters", [p, p])
     assert abs(plb["punt_net_avg"][0] - p["punt_net_avg"][0]) < 1e-9
+
+
+def _st_plays(rows):
+    base = {
+        "kickoff_play": False,
+        "kickoff_tb": False,
+        "kickoff_onside": False,
+        "kickoff_oob": False,
+        "kickoff_fair_catch": False,
+        "punt": False,
+        "punt_tb": False,
+        "punt_fair_catch": False,
+        "punt_downed": False,
+        "punt_oob": False,
+        "punt_blocked": False,
+        "fg_attempt": False,
+        "fg_made": False,
+        "xp_attempt": False,
+        "xp_made": False,
+        "touchdown": False,
+        "penalty_no_play": False,
+        "yds_kickoff": None,
+        "yds_kickoff_return": None,
+        "yds_punted": None,
+        "yds_punt_return": None,
+        "yds_fg": None,
+        "EPA": 0.0,
+        "start.yardsToEndzone": 65,
+        "pos_team": 2,
+        "def_pos_team": 1,
+        "kicking_team": 1,
+        "kickoff_player_id": None,
+        "kickoff_player_name": None,
+        "fg_kicker_player_id": None,
+        "fg_kicker_player_name": None,
+        "xp_kicker_player_id": None,
+        "xp_kicker_player_name": None,
+        "punter_player_id": None,
+        "punter_player_name": None,
+        "kickoff_return_player_id": None,
+        "kickoff_return_player_name": None,
+        "punt_return_player_id": None,
+        "punt_return_player_name": None,
+    }
+    return pl.DataFrame([{**base, **r} for r in rows], infer_schema_length=None)
+
+
+def test_kicker_keyed_by_id_across_kickoffs_field_goals_and_extra_points():
+    """The kickoffs carry the kicker's id (ESPN's participants), the field goals
+    only his name (the play text): keyed per source on coalesce(id, name) he came
+    out twice -- "Eli Ozick" with id 5157006 and six kickoffs, and again with a
+    null id and the field-goal line. One row, with the id, the kickoffs and the
+    field goals together."""
+    ko = {"kickoff_play": True, "kickoff_tb": True, "yds_kickoff": 65, "yds_kickoff_return": 25}
+    ko |= {"kickoff_player_id": "5157006", "kickoff_player_name": "Eli Ozick"}
+    fg = {"fg_attempt": True, "fg_made": True, "yds_fg": 42, "pos_team": 1, "def_pos_team": 2}
+    fg |= {"fg_kicker_player_id": None, "fg_kicker_player_name": "Eli Ozick"}
+    xp = {"xp_attempt": True, "xp_made": True, "pos_team": 1, "def_pos_team": 2}
+    xp |= {"xp_kicker_player_id": "5157006", "xp_kicker_player_name": None}
+    other = {"kickoff_play": True, "kickoff_tb": True, "yds_kickoff": 60, "yds_kickoff_return": 25}
+    other |= {"kickoff_player_id": None, "kickoff_player_name": "Someone Else"}
+    box = create_usage_box(_st_plays([ko] * 6 + [fg, xp] + [other]), None, league="cfb")
+    rows = {r["player_name"]: r for r in box["st_kickers"]}
+    assert set(rows) == {"Eli Ozick", "Someone Else"}
+    ozick = rows["Eli Ozick"]
+    assert ozick["player_id"] == "5157006"
+    assert (ozick["kickoffs"], ozick["kickoff_yards"], ozick["fg_attempts"], ozick["fg_made"]) == (6, 390, 1, 1)
+    assert (ozick["xp_attempts"], ozick["xp_made"], ozick["fg_long"]) == (1, 1, 42)
+    assert rows["Someone Else"]["player_id"] is None and rows["Someone Else"]["kickoffs"] == 1
+
+
+def test_punter_and_returner_rows_key_by_id_when_only_some_plays_carry_it():
+    punt_a = {"punt": True, "yds_punted": 45, "punter_player_id": "77", "punter_player_name": "Punter One"}
+    punt_b = {"punt": True, "yds_punted": 40, "punter_player_id": None, "punter_player_name": "Punter One"}
+    punt_b |= {"punt_return_player_id": None, "punt_return_player_name": "Returner", "yds_punt_return": 12}
+    kick = {"kickoff_play": True, "yds_kickoff": 60, "yds_kickoff_return": 20, "pos_team": 1, "def_pos_team": 2}
+    kick |= {"kickoff_return_player_id": "99", "kickoff_return_player_name": "Returner"}
+    box = create_usage_box(_st_plays([punt_a, punt_b, kick]), None, league="cfb")
+    (punter,) = box["st_punters"]
+    assert (punter["player_id"], punter["punts"], punter["punt_yards"]) == ("77", 2, 85)
+    (returner,) = box["st_returners"]
+    assert returner["player_id"] == "99"
+    assert (returner["punt_returns"], returner["punt_return_yards"], returner["kick_returns"]) == (1, 12, 1)
+
+
+def test_blockers_key_by_id_when_the_punt_block_has_it_and_the_fg_block_only_the_name():
+    punt_block = {"punt": True, "yds_punted": 0, "punt_blocked": True, "pos_team": 1, "def_pos_team": 2}
+    punt_block |= {"punt_block_player_id": "55", "punt_block_player_name": "Blocker"}
+    fg_block = {"fg_attempt": True, "yds_fg": 40, "pos_team": 1, "def_pos_team": 2}
+    fg_block |= {"fg_block_player_id": None, "fg_block_player_name": "Blocker"}
+    plays = _st_plays([punt_block, fg_block]).with_columns(
+        punt_team=pl.lit(1, dtype=pl.Int64), punt_return_team=pl.lit(2, dtype=pl.Int64)
+    )
+    (row,) = create_usage_box(plays, None, league="cfb")["st_blocks"]
+    assert (row["def_pos_team"], row["player_id"], row["player_name"]) == (2, "55", "Blocker")
+    assert (row["punt_blocks"], row["fg_blocks"], row["blocks"]) == (1, 1, 2)
+
+
+def test_an_ambiguous_name_is_not_resolved_to_either_player():
+    """Two same-name kickers on one team: a name-only row must stay its own row
+    rather than merge into whichever id sorts first."""
+    a = {"kickoff_play": True, "kickoff_tb": True, "yds_kickoff": 65, "yds_kickoff_return": 25}
+    a |= {"kickoff_player_id": "1", "kickoff_player_name": "Same Name"}
+    b = {**a, "kickoff_player_id": "2"}
+    fg = {"fg_attempt": True, "fg_made": True, "yds_fg": 30, "pos_team": 1, "def_pos_team": 2}
+    fg |= {"fg_kicker_player_id": None, "fg_kicker_player_name": "Same Name"}
+    rows = create_usage_box(_st_plays([a, b, fg]), None, league="cfb")["st_kickers"]
+    got = sorted(((r["player_id"] or ""), r["kickoffs"], r["fg_attempts"]) for r in rows)
+    assert got == [("", 0, 1), ("1", 1, 0), ("2", 1, 0)]
+    assert all(r["player_name"] == "Same Name" for r in rows)
