@@ -53,11 +53,14 @@ from sportsdataverse.football.attribution import (
     refine_play_types_post_attribution as _refine_play_types_post_attribution,
 )
 from sportsdataverse.football.box import air_yards_box as _air_yards_box
+from sportsdataverse.football.box import _ordered_rows
 from sportsdataverse.football.box import build_defensive_players_box as _build_defensive_players_box
 from sportsdataverse.football.box import build_specialists_box as _build_specialists_box
 from sportsdataverse.football.espn_box import parse_espn_player_box as _parse_espn_player_box
 from sportsdataverse.football.espn_box import parse_espn_team_box as _parse_espn_team_box
 from sportsdataverse.football.play_participants import coalesce_participants as _coalesce_participants
+from sportsdataverse.football.usage_box import SECTIONS as _USAGE_SECTIONS
+from sportsdataverse.football.usage_box import create_usage_box as _create_usage_box
 from sportsdataverse.football.series import add_series_data as _add_series_data
 from sportsdataverse.nfl.ep_wp import (
     CP_FEATURES,
@@ -3810,6 +3813,7 @@ class NFLPlayProcess(object):
                 from sportsdataverse.nfl.nfl_play_participants import espn_nfl_play_participants
 
                 parts = espn_nfl_play_participants(self.gameId)
+                self.participants = parts  # the usage box reads it from the instance
             if parts is None or parts.height == 0 or "id" not in play_df.columns:
                 return play_df
             joined = _coalesce_participants(play_df, parts, prefer_ids=True)
@@ -4193,7 +4197,7 @@ class NFLPlayProcess(object):
                 rz_play=pl.when(pl.col("start.yardLine") <= 20).then(True).otherwise(False),
                 under_2=pl.when(pl.col("start.TimeSecsRem") <= 120).then(True).otherwise(False),
                 goal_to_go=pl.when(pl.col("start.yardLine") <= 10).then(True).otherwise(False),
-                scoring_opp=pl.when(pl.col("start.yardLine") <= 40).then(True).otherwise(False),
+                scoring_opp=pl.when(pl.col("start.yardsToEndzone") <= 40).then(True).otherwise(False),
                 stuffed_run=pl.when((pl.col("type.text") == "Rush").and_(pl.col("yds_rushed") <= 0))
                 .then(True)
                 .otherwise(False),
@@ -6785,10 +6789,10 @@ class NFLPlayProcess(object):
             )
         )
 
-        return {
-            "pass": json.loads(passer_box.write_json()),
-            "rush": json.loads(rusher_box.write_json()),
-            "receiver": json.loads(receiver_box.write_json()),
+        box = {
+            "pass": json.loads(_ordered_rows(passer_box, "pos_team", "passer_player_name", "Att").write_json()),
+            "rush": json.loads(_ordered_rows(rusher_box, "pos_team", "rusher_player_name", "Car").write_json()),
+            "receiver": json.loads(_ordered_rows(receiver_box, "pos_team", "receiver_player_name", "Tar").write_json()),
             "team": json.loads(team_box.write_json()),
             "situational": json.loads(situation_box.write_json()),
             "defensive": def_box_json,
@@ -6801,6 +6805,15 @@ class NFLPlayProcess(object):
             "espn_team": list(espn_team_box.values()),
             "espn_players": _parse_espn_player_box(espn_box),
         }
+        # usage / situational splits (player, position group, tackles, team,
+        # drive scripting) -- shared across the football processors; the box
+        # must never cost the game, so a failure leaves the six sections empty
+        try:
+            box.update(_create_usage_box(play_df, getattr(self, "participants", None), league="nfl"))
+        except Exception as exc:  # noqa: BLE001
+            logging.debug(f"{self.gameId}: usage box failed -- {exc}")
+            box.update({k: [] for k in _USAGE_SECTIONS})
+        return box
 
     def run_processing_pipeline(self):
         """Run the full feature-engineering pipeline against ``self.json``.

@@ -947,12 +947,15 @@ from sportsdataverse.football.attribution import (  # noqa: E402
     refine_play_types_post_attribution as _refine_play_types_post_attribution,
 )
 from sportsdataverse.football.box import air_yards_box as _air_yards_box  # noqa: E402
+from sportsdataverse.football.box import _ordered_rows  # noqa: E402
 from sportsdataverse.football.box import build_defensive_players_box as _build_defensive_players_box  # noqa: E402
 from sportsdataverse.football.box import build_specialists_box as _build_specialists_box  # noqa: E402
 from sportsdataverse.football.box import fill_missing as _fill_missing  # noqa: E402
 from sportsdataverse.football.espn_box import parse_espn_player_box as _parse_espn_player_box  # noqa: E402
 from sportsdataverse.football.espn_box import parse_espn_team_box as _parse_espn_team_box  # noqa: E402
 from sportsdataverse.football.play_participants import coalesce_participants as _coalesce_participants  # noqa: E402
+from sportsdataverse.football.usage_box import SECTIONS as _USAGE_SECTIONS  # noqa: E402
+from sportsdataverse.football.usage_box import create_usage_box as _create_usage_box  # noqa: E402
 from sportsdataverse.football.series import add_series_data as _add_series_data  # noqa: E402
 
 
@@ -7469,10 +7472,10 @@ class CFBPlayProcess(object):
 
         espn_players = _parse_espn_player_box(espn_box)
 
-        return {
-            "pass": json.loads(passer_box.write_json()),
-            "rush": json.loads(rusher_box.write_json()),
-            "receiver": json.loads(receiver_box.write_json()),
+        box = {
+            "pass": json.loads(_ordered_rows(passer_box, "pos_team", "passer_player_name", "Att").write_json()),
+            "rush": json.loads(_ordered_rows(rusher_box, "pos_team", "rusher_player_name", "Car").write_json()),
+            "receiver": json.loads(_ordered_rows(receiver_box, "pos_team", "receiver_player_name", "Tar").write_json()),
             "team": json.loads(team_box.write_json()),
             "situational": json.loads(situation_box.write_json()),
             "defensive": def_box_json,
@@ -7483,6 +7486,15 @@ class CFBPlayProcess(object):
             "espn_team": list(espn_team_box.values()),
             "espn_players": espn_players,
         }
+        # usage / situational splits (player, position group, tackles, team,
+        # drive scripting) -- shared across the football processors; the box
+        # must never cost the game, so a failure leaves the six sections empty
+        try:
+            box.update(_create_usage_box(play_df, getattr(self, "participants", None), league="cfb"))
+        except Exception as exc:  # noqa: BLE001
+            logging.debug(f"{self.gameId}: usage box failed -- {exc}")
+            box.update({k: [] for k in _USAGE_SECTIONS})
+        return box
 
     def create_drive_summary(self, play_df, drives, periods=None) -> dict | None:
         """Build the StatBroadcast-style drive summary for this game.
@@ -7592,6 +7604,7 @@ class CFBPlayProcess(object):
                 from sportsdataverse.cfb.cfb_play_participants import espn_cfb_play_participants
 
                 parts = espn_cfb_play_participants(self.gameId)
+                self.participants = parts  # the usage box reads it from the instance
 
             # Graceful fallback conditions
             if parts is None or parts.height == 0 or "id" not in play_df.columns:

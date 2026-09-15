@@ -287,6 +287,65 @@ current/future days and ranges containing them bypass both cache reads and write
 while wholly historical dates retain the 30-day TTL. Explicit TTL overrides still
 take precedence.
 
+### Added — team and coach tendencies (`sportsdataverse.football.tendencies`)
+
+`tendencies(plays, league=)` folds a season of processed plays (either
+processor's output) into one row per group -- `(season, pos_team)` by default,
+or `(season, coach)` when the caller attaches a coach column -- with pace
+(seconds per play from the drive clock, plays per game and per drive, with a
+coverage share so pre-clock seasons read as missing rather than wrong),
+run/pass splits by down, by score state (leading / tied / trailing) and in
+situation-neutral snaps (win probability 20-80%, regulation, outside the last
+two minutes of a half), early-down and neutral pass rates, explosive and
+success rates, EPA per play, third downs over expected, red-zone and
+scoring-opportunity trips with TD rate, points per trip and success, scripted
+vs non-scripted drive efficiency, and fourth-down decision making (go rate,
+agreement with the bundled fourth-down model, go rate when the model says go,
+go rate when it says kick, conversion rate when going, win probability left on
+the field by deciding against the model). Every rate carries its numerator and
+denominator (`RATES`), so `aggregate_tendencies(frames, keys=)` sums seasons
+into careers and recomputes the rates exactly. A defense twin (`def_*`) is
+computed by the defending key so a coach's defense is judged on what it
+allowed. Expected third downs stay null, never zero, when no curve is
+available.
+
+### Added — usage and situational box (`sportsdataverse.football.usage_box`)
+
+Six new `advBoxScore` sections on BOTH football processors, computed once in the
+shared football layer from the processed plays and the per-play participants:
+`player_usage` (explosive plays, first downs, touchdowns, first-down +
+touchdown rate, target share, first-down share, red-zone and
+scoring-opportunity touches / targets / touchdowns, third downs converted
+over expected), `position_group_usage`, `tackles` (tackle share:
+tackles + 0.5 assists over the team total), `position_group_tackles`,
+`team_usage` (third downs over expected, red-zone and scoring-opportunity
+efficiencies: trips, TD rate, points per trip, success, EPA per play) and
+`drive_scripting` (scripted = a team's first two drives of each half vs the
+rest). `aggregate_usage_box` sums per-game rows into season leaderboards and
+recomputes every rate. The participants pivot now also emits
+`{type}_position_id`; `sportsdataverse.football.positions` maps ESPN position
+ids to abbreviations and groups. Bundled third-down conversion curves
+(`{cfb,nfl}/models/{league}_third_down_conversion.parquet`, isotonic in yards to
+go; NFL 2002-2025, CFB 2022-2025) feed the "over expected" columns and refit
+with `fit_third_down_curve`.
+
+### Added — NFL field-position EP curve (`nfl_field_position`)
+
+`load_nfl_fp_curve()` loads the bundled `nfl/models/nfl_field_position_ep.parquet`
+(EP of a drive start by own yard line, 1..99), the NFL twin of the college curve
+and fit with the same recipe -- weighted isotonic regression of realized drive
+points on the starting yard line -- so the two leagues' field-position margins
+are comparable. `fit_nfl_field_position_ep(pbp)` refits it from released
+`espn_nfl_pbp` plays; the bundled artifact is the 2016-2025 fit (59,026 drives).
+
+### Added — offline processor inputs (#491)
+
+`espn_nfl_pbp(summary=)` / `espn_cfb_pbp(summary=)` run the processor over a
+stored ESPN summary with no network (participants, roster and odds fetches all
+gated); `play_participants_from_items` + `athlete_lookup_from_summary` build the
+participants frame from stored core play items; `NFLPlayProcess(odds_override=)`
+mirrors the CFB contract and `odds_source` records which branch resolved the line.
+
 ### Added — CFB drive summary and situational team stats, graduated from Game on Paper (#470)
 
 `cfb_drive_summary.create_drive_summary(drives, frame, home_id, away_id,

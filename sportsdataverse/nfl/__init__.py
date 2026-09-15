@@ -99,6 +99,7 @@ from sportsdataverse.nfl.ep_wp import (
 )
 from sportsdataverse.nfl.nfl_clean import clean_nfl_pbp, team_name_fn
 from sportsdataverse.nfl.nfl_fourth_down import *
+from sportsdataverse.nfl.nfl_field_position import *
 from sportsdataverse.nfl.nfl_market import *
 from sportsdataverse.nfl.nfl_ngs_tracking import (
     nfl_ngs_man_zone_rates,

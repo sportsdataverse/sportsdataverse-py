@@ -192,6 +192,7 @@ from sportsdataverse.nfl import espn_nfl_player_stats as espn_nfl_player_stats  
 from sportsdataverse.nfl import espn_nfl_schedule as espn_nfl_schedule  # noqa: F401
 from sportsdataverse.nfl import espn_nfl_teams as espn_nfl_teams  # noqa: F401
 from sportsdataverse.nfl import fg_make_probability as fg_make_probability  # noqa: F401
+from sportsdataverse.nfl import fit_nfl_field_position_ep as fit_nfl_field_position_ep  # noqa: F401
 from sportsdataverse.nfl import fox_nfl_event_matchup as fox_nfl_event_matchup  # noqa: F401
 from sportsdataverse.nfl import fox_nfl_event_recap as fox_nfl_event_recap  # noqa: F401
 from sportsdataverse.nfl import fox_nfl_event_standings as fox_nfl_event_standings  # noqa: F401
@@ -243,6 +244,7 @@ from sportsdataverse.nfl import load_nfl_espn_qbr as load_nfl_espn_qbr  # noqa: 
 from sportsdataverse.nfl import load_nfl_ff_opportunity as load_nfl_ff_opportunity  # noqa: F401
 from sportsdataverse.nfl import load_nfl_ff_playerids as load_nfl_ff_playerids  # noqa: F401
 from sportsdataverse.nfl import load_nfl_ff_rankings as load_nfl_ff_rankings  # noqa: F401
+from sportsdataverse.nfl import load_nfl_fp_curve as load_nfl_fp_curve  # noqa: F401
 from sportsdataverse.nfl import load_nfl_ftn_charting as load_nfl_ftn_charting  # noqa: F401
 from sportsdataverse.nfl import load_nfl_injuries as load_nfl_injuries  # noqa: F401
 from sportsdataverse.nfl import load_nfl_model_pbp as load_nfl_model_pbp  # noqa: F401
@@ -494,6 +496,7 @@ __all__ = [
     "espn_nfl_venue",
     "espn_nfl_venues",
     "fg_make_probability",
+    "fit_nfl_field_position_ep",
     "fox_nfl_boxscore",
     "fox_nfl_event_matchup",
     "fox_nfl_event_recap",
@@ -553,6 +556,7 @@ __all__ = [
     "load_nfl_ff_opportunity",
     "load_nfl_ff_playerids",
     "load_nfl_ff_rankings",
+    "load_nfl_fp_curve",
     "load_nfl_ftn_charting",
     "load_nfl_injuries",
     "load_nfl_model_pbp",

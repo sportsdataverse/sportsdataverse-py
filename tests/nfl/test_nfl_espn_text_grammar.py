@@ -181,6 +181,18 @@ def test_box_sections_match_the_cfb_processor(processed):
         "drives",
         "espn_team",
         "espn_players",
+        # the shared usage / situational / special-teams box (both processors)
+        "player_usage",
+        "position_group_usage",
+        "tackles",
+        "position_group_tackles",
+        "team_usage",
+        "drive_scripting",
+        "st_kickers",
+        "st_punters",
+        "st_returners",
+        "st_blocks",
+        "st_team",
     }
     # the CFB passer / receiver air-yards and CPOE keys are present
     assert {"AirYds", "aDOT", "CompAirYds", "YAC", "AirYdsPct", "CompPct", "xCompPct", "CPOE"} <= out["advBoxScore"][
@@ -479,3 +491,18 @@ def test_offensive_foul_credits_the_run_to_the_spot_of_the_foul(processed):
     assert out["yds_receiving"].to_list() == [None, None, 2, None, None, 12, None, 11]
     # the lateral is split off for the receiver box: catcher 1, lateral recipient 10
     assert out["lateral_player_name"].to_list()[-1] == "K.Shakir" and out["yds_lateral"].to_list()[-1] == 10
+
+
+def test_scoring_opp_is_yards_to_endzone_not_the_raw_yardline(processed):
+    """scoring_opp = the offense is within 40 yards of the END ZONE (the CFB
+    rule). It used to read ESPN's home-oriented ``start.yardLine``, which flagged
+    two thirds of NFL drives as scoring opportunities."""
+    _, out = processed
+    df = pl.from_dicts(out["plays"], infer_schema_length=None).filter(
+        pl.col("scrimmage_play") == True  # noqa: E712
+    )
+    assert df.height > 100
+    expected = df["start.yardsToEndzone"] <= 40
+    assert (df["scoring_opp"] == expected).all()
+    share = df["scoring_opp"].mean()
+    assert 0.15 < share < 0.45, share
