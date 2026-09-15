@@ -1104,6 +1104,7 @@ class CFBPlayProcess(object):
                 * `nflverse <https://nflverse.nflverse.com>`_ -- companion data ecosystem for the NFL
         """
         pbp_txt = {"timeouts": {}}
+        self._offline = summary is not None
         if summary is not None and self.participants is None:
             # a supplied summary is the offline path: the pipeline must not reach
             # the network for participants (or a roster) unless they were passed in
@@ -2358,7 +2359,12 @@ class CFBPlayProcess(object):
                 "homeFavorite": self.homeFavorite,
                 "gameSpreadAvailable": self.gameSpreadAvailable,
             }
-        if len(pbp_txt.get("pickcenter", [])) > 1:
+        offline = getattr(self, "_offline", False)
+        n_pick = len(pbp_txt.get("pickcenter", []))
+        # offline (a supplied summary): the summary's own pickcenter is the only
+        # odds source, so one provider is enough and an empty array means the
+        # documented defaults, never a request
+        if n_pick > 1 or (offline and n_pick >= 1):
             pickcenter = pd.json_normalize(data=pbp_txt, record_path="pickcenter")
             pickcenter = pickcenter.sort_values(by=["provider.id"])
             homeFavorite = (
@@ -2390,7 +2396,7 @@ class CFBPlayProcess(object):
                 overUnder,
                 homeFavorite,
                 gameSpreadAvailable,
-            ) = self.__helper__espn_cfb_odds_information__()
+            ) = (2.5, 55.5, True, False) if offline else self.__helper__espn_cfb_odds_information__()
             self.odds_source = "core_odds_api" if gameSpreadAvailable else "default"
         self.gameSpread = gameSpread
         self.overUnder = overUnder

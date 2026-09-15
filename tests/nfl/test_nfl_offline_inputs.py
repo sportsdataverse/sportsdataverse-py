@@ -92,3 +92,27 @@ def test_play_participants_from_items_is_offline_and_joins():
     assert got["passer_player_name"] == "Q. Back" and got["passer_player_id"] == "7"
     assert got["receiver_player_name"] == "W.Out" and got["receiver_player_id"] == "9"
     assert play_participants_from_items([], GAME_ID).height == 0
+
+
+def test_supplied_summary_never_fetches_odds(summary, monkeypatch):
+    import copy
+
+    import sportsdataverse.nfl.nfl_pbp as mod
+
+    def _boom(*a, **k):
+        raise AssertionError("network call on the offline path")
+
+    monkeypatch.setattr(mod, "download", _boom)
+    # one provider is enough offline (the live path wants two before trusting it)
+    one = copy.deepcopy(summary)
+    one["pickcenter"] = summary["pickcenter"][:1]
+    proc = NFLPlayProcess(gameId=GAME_ID)
+    proc.espn_nfl_pbp(summary=one)
+    odds = proc._NFLPlayProcess__helper_nfl_pickcenter(proc.json)
+    assert odds["gameSpreadAvailable"] is True and odds["gameSpread"] is not None
+    # an empty pickcenter means the documented defaults, not a request
+    none = copy.deepcopy(summary)
+    none["pickcenter"] = []
+    proc = NFLPlayProcess(gameId=GAME_ID)
+    proc.espn_nfl_pbp(summary=none)
+    assert proc._NFLPlayProcess__helper_nfl_pickcenter(proc.json)["gameSpreadAvailable"] is False
