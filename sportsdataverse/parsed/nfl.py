@@ -232,6 +232,8 @@ from sportsdataverse.nfl import load_ff_rankings as load_ff_rankings  # noqa: F4
 from sportsdataverse.nfl import load_ftn_charting as load_ftn_charting  # noqa: F401
 from sportsdataverse.nfl import load_injuries as load_injuries  # noqa: F401
 from sportsdataverse.nfl import load_nextgen_stats as load_nextgen_stats  # noqa: F401
+from sportsdataverse.nfl import load_nfl_coach_careers as load_nfl_coach_careers  # noqa: F401
+from sportsdataverse.nfl import load_nfl_coach_tendencies as load_nfl_coach_tendencies  # noqa: F401
 from sportsdataverse.nfl import load_nfl_combine as load_nfl_combine  # noqa: F401
 from sportsdataverse.nfl import load_nfl_contracts as load_nfl_contracts  # noqa: F401
 from sportsdataverse.nfl import load_nfl_depth_charts as load_nfl_depth_charts  # noqa: F401
@@ -268,8 +270,20 @@ from sportsdataverse.nfl import load_nfl_rosters as load_nfl_rosters  # noqa: F4
 from sportsdataverse.nfl import load_nfl_schedule as load_nfl_schedule  # noqa: F401
 from sportsdataverse.nfl import load_nfl_snap_counts as load_nfl_snap_counts  # noqa: F401
 from sportsdataverse.nfl import load_nfl_team_stats as load_nfl_team_stats  # noqa: F401
+from sportsdataverse.nfl import load_nfl_team_tendencies as load_nfl_team_tendencies  # noqa: F401
 from sportsdataverse.nfl import load_nfl_teams as load_nfl_teams  # noqa: F401
 from sportsdataverse.nfl import load_nfl_trades as load_nfl_trades  # noqa: F401
+from sportsdataverse.nfl import load_nfl_usage_drive_scripting as load_nfl_usage_drive_scripting  # noqa: F401
+from sportsdataverse.nfl import load_nfl_usage_players as load_nfl_usage_players  # noqa: F401
+from sportsdataverse.nfl import load_nfl_usage_position_group_tackles as load_nfl_usage_position_group_tackles  # noqa: F401
+from sportsdataverse.nfl import load_nfl_usage_position_groups as load_nfl_usage_position_groups  # noqa: F401
+from sportsdataverse.nfl import load_nfl_usage_st_blocks as load_nfl_usage_st_blocks  # noqa: F401
+from sportsdataverse.nfl import load_nfl_usage_st_kickers as load_nfl_usage_st_kickers  # noqa: F401
+from sportsdataverse.nfl import load_nfl_usage_st_punters as load_nfl_usage_st_punters  # noqa: F401
+from sportsdataverse.nfl import load_nfl_usage_st_returners as load_nfl_usage_st_returners  # noqa: F401
+from sportsdataverse.nfl import load_nfl_usage_st_team as load_nfl_usage_st_team  # noqa: F401
+from sportsdataverse.nfl import load_nfl_usage_tackles as load_nfl_usage_tackles  # noqa: F401
+from sportsdataverse.nfl import load_nfl_usage_teams as load_nfl_usage_teams  # noqa: F401
 from sportsdataverse.nfl import load_nfl_weekly_rosters as load_nfl_weekly_rosters  # noqa: F401
 from sportsdataverse.nfl import load_officials as load_officials  # noqa: F401
 from sportsdataverse.nfl import load_participation as load_participation  # noqa: F401
@@ -544,6 +558,8 @@ __all__ = [
     "load_ftn_charting",
     "load_injuries",
     "load_nextgen_stats",
+    "load_nfl_coach_careers",
+    "load_nfl_coach_tendencies",
     "load_nfl_combine",
     "load_nfl_contracts",
     "load_nfl_depth_charts",
@@ -580,8 +596,20 @@ __all__ = [
     "load_nfl_schedule",
     "load_nfl_snap_counts",
     "load_nfl_team_stats",
+    "load_nfl_team_tendencies",
     "load_nfl_teams",
     "load_nfl_trades",
+    "load_nfl_usage_drive_scripting",
+    "load_nfl_usage_players",
+    "load_nfl_usage_position_group_tackles",
+    "load_nfl_usage_position_groups",
+    "load_nfl_usage_st_blocks",
+    "load_nfl_usage_st_kickers",
+    "load_nfl_usage_st_punters",
+    "load_nfl_usage_st_returners",
+    "load_nfl_usage_st_team",
+    "load_nfl_usage_tackles",
+    "load_nfl_usage_teams",
     "load_nfl_weekly_rosters",
     "load_officials",
     "load_participation",

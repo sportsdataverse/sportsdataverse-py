@@ -4,6 +4,7 @@
 
 - [Unreleased](#unreleased)
   - [Fixed — CFB special teams read ESPN's 2025 jersey-style text; the usage box keys a kicker once](#fixed--cfb-special-teams-read-espns-2025-jersey-style-text-the-usage-box-keys-a-kicker-once)
+  - [Added — loaders for the ESPN football usage leaderboards and team / coach tendencies](#added--loaders-for-the-espn-football-usage-leaderboards-and-team--coach-tendencies)
   - [Added — team and coach tendencies (`sportsdataverse.football.tendencies`)](#added--team-and-coach-tendencies-sportsdataversefootballtendencies)
   - [Added — usage and situational box (`sportsdataverse.football.usage_box`)](#added--usage-and-situational-box-sportsdataversefootballusage_box)
   - [Added — NFL field-position EP curve (`nfl_field_position`)](#added--nfl-field-position-ep-curve-nfl_field_position)
@@ -319,6 +320,29 @@ appeared twice in `st_kickers` -- "Eli Ozick" with id 5157006 and six kickoffs,
 and again with a null id and the field-goal line. Every (id, name) pair seen on
 any source now resolves one key per team for kickers, punters, returners and
 blockers, and the merged row carries the resolved id and name.
+
+### Added — loaders for the ESPN football usage leaderboards and team / coach tendencies
+
+Twenty-eight dataset loaders over the release tags `cfbfastR-cfb-data` and `nfl-data`
+publish from `sportsdataverse.football.usage_box` and `tendencies`: the eleven usage
+sections (`load_{cfb,nfl}_usage_players`, `_usage_position_groups`, `_usage_tackles`,
+`_usage_position_group_tackles`, `_usage_teams`, `_usage_drive_scripting`,
+`_usage_st_kickers`, `_usage_st_punters`, `_usage_st_returners`, `_usage_st_blocks`,
+`_usage_st_team`), `load_{cfb,nfl}_team_tendencies`, `load_{cfb,nfl}_coach_tendencies`,
+and the season-less `load_{cfb,nfl}_coach_careers()`. One parquet per season
+(`{stem}_{season}.parquet`, CFB from 2004, NFL from 2002), unioned with
+`diagonal_relaxed`; the CFB loaders are generated from `releases.yaml` (a missing
+season is skipped with a warning), the NFL ones are hand-written in `nfl_loaders.py`
+(a missing season raises `NoDataError`, matching its siblings). Returns tables are
+derived from the published parquets and every column is described from the
+producers' semantics; published coverage caveats (NFL 2005 has no play text upstream,
+the participant-based sections start in 2014, the kicker / punter / returner tags
+have no 2005-2007 assets) live in each loader's `notes:` / docstring.
+
+The loader codegen learned a season-less form: a `releases.yaml` url with no
+`{season}` token now renders a `fn(return_as_pandas=False)` loader that reads one
+asset (an absent asset is an empty frame plus a warning), and the loaders page
+renders its example as `fn()`.
 
 ### Added — team and coach tendencies (`sportsdataverse.football.tendencies`)
 

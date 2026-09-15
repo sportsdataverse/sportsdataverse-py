@@ -24,7 +24,11 @@ __all__ = [
 {% for ld in loaders %}
 
 
+{% if ld.single %}
+def {{ ld.fn }}(return_as_pandas: bool = False):
+{% else %}
 def {{ ld.fn }}(seasons, return_as_pandas: bool = False):
+{% endif %}
 {{ ld.docstring }}
 {% if ld.stub %}
     raise NotImplementedError({{ ld.stub_message|py_repr }})
@@ -38,6 +42,18 @@ def {{ ld.fn }}(seasons, return_as_pandas: bool = False):
     # is applied here. The START -> END year translation lives in the target's
     # own asset-path template ({season + N}), not at this boundary.
     return {{ ld.deprecated_for }}(seasons, return_as_pandas=return_as_pandas)
+{% elif ld.single %}
+    # One asset for the whole dataset (no {season} token in the manifest url), so
+    # there is no season loop: an absent asset is an empty frame plus a warning,
+    # the same 404-safe contract the per-season loaders keep per season.
+    df = _read_release_parquet("{{ ld.abs_url }}")
+    if df is None:
+        cli_warn("{{ ld.fn }}: no published asset (returning an empty frame)")
+    out = df if df is not None else pl.DataFrame()
+{% if ld.id_int64 %}
+    out = _cast_ids_int64(out, {{ ld.id_int64|py_repr }})
+{% endif %}
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 {% else %}
     frames, missing = [], []
     for season in _as_season_list(seasons):
