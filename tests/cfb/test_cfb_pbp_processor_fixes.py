@@ -27,6 +27,8 @@ Every case runs the real pipeline, offline, on a stored ESPN summary:
 * ``summary_243040130.json`` -- Michigan State @ Michigan, 2004 (3OT; sequenceNumber restarts per drive).
 * ``summary_401301042.json`` -- East Carolina @ Memphis, 2021 (OT; the winning touchdown row is missing, the "End of OT" marker carries 29-30).
 * ``summary_401858224.json`` -- Wake Forest @ Purdue, 2026 (2OT; the vendor feed's sequenceNumber is a garbled running count).
+* ``summary_332990030.json`` -- Utah @ USC, 2013 ("Timeout SOUTHERN CAL").
+* ``summary_401110775.json`` -- UT Martin @ Florida, 2019 ("Timeout TENN MARTIN").
 
 The 2026 summaries are copied verbatim from ``cfbfastR-cfb-raw/cfb/json/raw``.
 """
@@ -383,6 +385,16 @@ def test_legacy_fg_kicker_and_interceptor_shapes():
     assert fg["fg_kicker_player_name"] == "Josh Brown"
     pick = _row(_plays(401636889), "Sawyer Robertson pass intercepted, touchback. Jontez Williams return for no gain")
     assert pick["interception_player_name"] == "Jontez Williams"
+
+
+# --- C33: a spelled-out team whose initials are the header's abbreviation ------------------------
+
+
+def test_timeout_spelled_out_team_matches_abbreviation():
+    usc = _plays(332990030).filter(pl.col("text").str.starts_with("Timeout SOUTHERN CAL"))
+    assert usc.height == 5 and usc["homeTimeoutCalled"].all() and not usc["awayTimeoutCalled"].any()
+    utm = _plays(401110775).filter(pl.col("text").str.starts_with("Timeout TENN MARTIN"))
+    assert utm.height == 3 and utm["awayTimeoutCalled"].all() and not utm["homeTimeoutCalled"].any()
 
 
 # --- C36: a punt "for a loss of N" ended N yards behind the line ----------------------------------

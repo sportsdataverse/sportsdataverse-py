@@ -620,6 +620,30 @@ def _timeout_team_token() -> pl.Expr:
     )
 
 
+def _timeout_initials_side(row) -> str | None:
+    """ "home" / "away" when the timeout token's initialism is exactly one team's abbreviation, else None.
+
+    Older feeds spell a team out where the header abbreviates it: "SOUTHERN CAL" (USC), "BRIGHAM
+    YOUNG" (BYU), "LOUISIANA STATE" (LSU), "TENN MARTIN" (UTM), "SOUTHERN METHODIST UNIVERSITY"
+    (SMU), "NORTH CAROLINA ST" (NCST). The token's initials, with a university "U" before or
+    after them, or the initials of all but its last word plus that word, are compared with both
+    abbreviations from the header; a strict winner is charged. This outranks a substring match:
+    "SOUTHERN CAL" contains Cal's abbreviation but is USC's timeout.
+    """
+    words = [
+        w for w in re.split(r"[\s\-]+", (row["_timeout_token"] or "").upper().replace("&", "").replace(".", "")) if w
+    ]
+    if len(words) < 2:
+        return None
+    initials = "".join(w[0] for w in words)
+    forms = {initials, initials + "U", "U" + initials, "".join(w[0] for w in words[:-1]) + words[-1]}
+    home = _squash_team(row["homeTeamAbbrev"]) in forms
+    away = _squash_team(row["awayTeamAbbrev"]) in forms
+    if home == away:
+        return None
+    return "home" if home else "away"
+
+
 def _timeout_team_side(row) -> str | None:
     """ "home" / "away" for a timeout token that no team name part contains, else None.
 
@@ -1595,15 +1619,15 @@ class CFBPlayProcess(object):
         away_match = _timeout_team_match_len(
             [init["awayTeamAbbrev"], init["awayTeamName"], init["awayTeamMascot"], init["awayTeamNameAlt"]]
         )
+        _timeout_struct = pl.struct(
+            _timeout_team_token().alias("_timeout_token"),
+            *[f"{side}{part}" for side in ("homeTeam", "awayTeam") for part in ("Abbrev", "Name", "NameAlt", "Mascot")],
+        )
         short_side = pl.when((pl.col("type.text") == "Timeout") & (home_match == 0) & (away_match == 0)).then(
-            pl.struct(
-                _timeout_team_token().alias("_timeout_token"),
-                *[
-                    f"{side}{part}"
-                    for side in ("homeTeam", "awayTeam")
-                    for part in ("Abbrev", "Name", "NameAlt", "Mascot")
-                ],
-            ).map_elements(_timeout_team_side, return_dtype=pl.Utf8)
+            _timeout_struct.map_elements(_timeout_team_side, return_dtype=pl.Utf8)
+        )
+        initials_side = pl.when(pl.col("type.text") == "Timeout").then(
+            _timeout_struct.map_elements(_timeout_initials_side, return_dtype=pl.Utf8)
         )
         pbp_txt["plays"] = (
             pbp_txt["plays"]
@@ -1701,16 +1725,23 @@ class CFBPlayProcess(object):
                 # Charged to the team whose name part is the LONGER match, so "Timeout Indiana" is
                 # Indiana's and not Notre Dame's ("nd"), "Timeout Iowa State" is not Iowa's. A tie
                 # (two teams sharing a mascot) still charges both. A token no part matches goes to
-                # the shortened-name resolver, which charges a strict winner or nobody.
+                # the shortened-name resolver, which charges a strict winner or nobody. A token
+                # whose initialism is exactly one team's abbreviation outranks both.
                 (
                     (pl.col("type.text") == "Timeout")
-                    & (((home_match > 0) & (home_match >= away_match)) | (short_side == "home"))
+                    & pl.coalesce(
+                        initials_side == "home",
+                        ((home_match > 0) & (home_match >= away_match)) | (short_side == "home"),
+                    )
                 )
                 .fill_null(False)
                 .alias("homeTimeoutCalled"),
                 (
                     (pl.col("type.text") == "Timeout")
-                    & (((away_match > 0) & (away_match >= home_match)) | (short_side == "away"))
+                    & pl.coalesce(
+                        initials_side == "away",
+                        ((away_match > 0) & (away_match >= home_match)) | (short_side == "away"),
+                    )
                 )
                 .fill_null(False)
                 .alias("awayTimeoutCalled"),
