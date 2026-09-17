@@ -716,9 +716,12 @@ class NFLPlayProcess(object):
                 pl.col("sequenceNumber").cast(pl.Int32),
             )
         )
-        pbp_txt["plays"] = pbp_txt["plays"].sort(by=["id", "start.adj_TimeSecsRem"])
+        # maintain_order: a play repeated under drives.current sorts after its
+        # drives.previous copy, so keeping the last copy keeps the fresher one
+        pbp_txt["plays"] = pbp_txt["plays"].sort(by=["id", "start.adj_TimeSecsRem"], maintain_order=True)
 
-        # drop play text dupes intelligently, even if they have different play_id values
+        # drop true duplicates only: the same play id again, or an identical copy
+        # (same text and start state) on the next row
         pbp_txt["plays"] = (
             pbp_txt["plays"]
             .with_columns(
@@ -733,21 +736,14 @@ class NFLPlayProcess(object):
                 text_dupe=pl.lit(False),
             )
             .with_columns(
-                text_dupe=pl.when(
-                    (pl.col("start.team.id") == pl.col("lead_start_team"))
-                    .and_(pl.col("start.down") == pl.col("lead_start_down"))
-                    .and_(pl.col("start.yardsToEndzone") == pl.col("lead_start_yardsToEndzone"))
-                    .and_(pl.col("start.distance") == pl.col("lead_start_distance"))
-                    .and_(pl.col("text") == pl.col("lead_text"))
-                    .and_(pl.col("type.text").is_in(clock_stoppage_vec) == False),
-                )
+                text_dupe=pl.when(pl.col("id") == pl.col("id").shift(-1))
                 .then(pl.lit(True))
                 .when(
                     (pl.col("start.team.id") == pl.col("lead_start_team"))
                     .and_(pl.col("start.down") == pl.col("lead_start_down"))
                     .and_(pl.col("start.yardsToEndzone") == pl.col("lead_start_yardsToEndzone"))
                     .and_(pl.col("start.distance") == pl.col("lead_start_distance"))
-                    .and_(pl.col("text").is_in(pl.col("lead_text").implode()))
+                    .and_(pl.col("text") == pl.col("lead_text"))
                     .and_(pl.col("type.text").is_in(clock_stoppage_vec) == False),
                 )
                 .then(pl.lit(True))

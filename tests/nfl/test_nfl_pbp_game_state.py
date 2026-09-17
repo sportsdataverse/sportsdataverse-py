@@ -272,3 +272,59 @@ def test_rerun_after_a_corrupt_short_circuit_returns_the_same_payload(summary):
     first = proc.run_processing_pipeline()
     assert first is not None and first["plays"] == []
     assert proc.run_processing_pipeline() is first
+
+
+# ---------------------------------------------------------------------------
+# N5 -- the duplicate filter drops true duplicates only, never a distinct snap
+# ---------------------------------------------------------------------------
+
+# BUF @ ARI, 2020 week 10: nfl-raw ``nfl/espn/raw/2020/401220341.json.gz`` trimmed to the
+# keys the processor reads (header, drives, boxscore, gameInfo, pickcenter).
+BUF_ARI = Path(__file__).parent / "fixtures" / "summary_401220341_trimmed.json.gz"
+
+
+@pytest.fixture(scope="module")
+def buf_ari() -> dict:
+    import gzip
+
+    with gzip.open(BUF_ARI, "rt", encoding="utf-8") as fh:
+        return json.load(fh)
+
+
+@pytest.fixture(scope="module")
+def buf_ari_frame(buf_ari) -> pl.DataFrame:
+    proc = NFLPlayProcess(gameId=401220341)
+    proc.espn_nfl_pbp(summary=buf_ari)
+    proc.run_processing_pipeline()
+    return proc.plays_frame
+
+
+def test_distinct_snaps_sharing_the_next_rows_start_state_are_kept(buf_ari, buf_ari_frame):
+    # Each of these shares its start (team, down, yards to go, distance) with the
+    # next row but is a different play; the whole-column text test dropped both.
+    kept = set(buf_ari_frame["id"].to_list())
+    assert 4012203414669 in kept  # Diggs 21-yd TD, followed by a BUF timeout at the same spot
+    assert 4012203413279 in kept  # Allen 21-yd completion wiped by a penalty, down replayed
+    raw_ids = {int(p["id"]) for d in buf_ari["drives"]["previous"] for p in d["plays"]}
+    admin = {"End Period", "End of Half", "End of Game", "Coin Toss"}
+    snaps = {int(p["id"]) for d in buf_ari["drives"]["previous"] for p in d["plays"] if p["type"]["text"] not in admin}
+    assert snaps <= kept <= raw_ids
+
+
+def test_a_repeated_current_drive_is_still_deduplicated(buf_ari, buf_ari_frame):
+    import copy
+
+    # a live feed repeats the drive in progress under drives.current, its text
+    # sometimes already revised (tacklers added): same ids, the fresher copy kept
+    live = copy.deepcopy(buf_ari)
+    current = copy.deepcopy(live["drives"]["previous"][-1])
+    for play in current["plays"]:
+        play["text"] += " (revised)"
+    live["drives"]["current"] = current
+    proc = NFLPlayProcess(gameId=401220341)
+    proc.espn_nfl_pbp(summary=live)
+    proc.run_processing_pipeline()
+    f = proc.plays_frame
+    assert f["id"].to_list() == buf_ari_frame["id"].to_list()
+    last_drive = {int(p["id"]) for p in current["plays"]} & set(f["id"].to_list())
+    assert last_drive and f.filter(pl.col("id").is_in(last_drive))["text"].str.ends_with("(revised)").all()
