@@ -22,6 +22,8 @@ Every case runs the real pipeline, offline, on a stored ESPN summary:
 * ``summary_252532751.json`` -- Louisiana Monroe @ Wyoming, 2005 ("Julius Stinson return -5 yards to the Wyom42").
 * ``summary_252460252.json`` -- Boston College @ BYU, 2005 ("Johnny Ayers punt for a loss of 12 yards").
 * ``summary_401752844.json`` -- Iowa @ Rutgers, 2025 ("J. Scullion kick for 65 yds", the short kickoff form).
+* ``summary_401309611.json`` -- Troy @ UL Monroe, 2021 (two timeout rows show 29-10 between a 29-16 touchdown and kickoff).
+* ``summary_400869817.json`` -- Nicholls @ South Alabama, 2016 (the last row shows 41-34 after the 41-40 final).
 
 The 2026 summaries are copied verbatim from ``cfbfastR-cfb-raw/cfb/json/raw``.
 """
@@ -321,6 +323,23 @@ def test_return_n_yards_clause():
     assert _row(plays, "Hoost Marsh return 12 yards to the Wyom32")["yds_punt_return"] == 12
     assert _row(plays, "Joe Merritt return 19 yards to the LaMon20")["yds_kickoff_return"] == 19
     assert _row(plays, "Josh Alexander return 0 yards to the LaMon30")["yds_int_return"] == 0
+
+
+# --- C29: a one- or two-row score glitch is reverted; the last row is anchored to the header ------
+
+
+def test_score_glitches_reverted_and_last_row_anchored():
+    troy = _plays(401309611)
+    timeouts = troy.filter(pl.col("text") == "Timeout UL MONROE, clock 00:36")
+    assert timeouts.height == 2
+    assert timeouts["end.awayScore"].to_list() == [16, 16]
+    assert timeouts["start.awayScore"].to_list() == [16, 16]
+    # every row of the game keeps a non-decreasing score
+    assert (troy["end.homeScore"].diff().fill_null(0) >= 0).all()
+    assert (troy["end.awayScore"].diff().fill_null(0) >= 0).all()
+    last = _plays(400869817).row(-1, named=True)
+    assert last["type.text"] == "Penalty"
+    assert (last["start.awayScore"], last["end.awayScore"]) == (40, 40)
 
 
 # --- C36: a punt "for a loss of N" ended N yards behind the line ----------------------------------

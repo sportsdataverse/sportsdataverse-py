@@ -136,6 +136,28 @@ _STATED_YARDS_RE = r"(?i)(no gain)|(loss of )?(-)?(\d+)[\s-]*(?:yds?|yards?)\b(\
 _RETURN_N_YARDS_RE = r"(?i)\breturn (-?\d+ yards?)\b"
 
 
+def _repair_score(col: str, lag: str, final: str) -> pl.Expr:
+    """One team's per-row score with an unconfirmed change reverted to the previous row's (see the call site).
+
+    A change is confirmed when the next two rows repeat it; past the last row the header's final
+    score stands in, so a glitch on the last row is caught and a real final is kept. Applied twice,
+    so the second row of a two-row glitch is compared with the repaired first row.
+    """
+    cur, prev = pl.col(col), pl.col(lag)
+    n1 = cur.shift(-1).fill_null(pl.col(final))
+    n2 = cur.shift(-2).fill_null(pl.col(final))
+    confirmed = ((n1 == cur) & (n2 == cur)).fill_null(True)
+    return (
+        pl.when(pl.col("game_play_number") == 1)
+        .then(cur)
+        .when((cur < prev) & ~confirmed)
+        .then(prev)
+        .when((cur > prev) & (pl.col("scoringPlay") == False) & ~confirmed)
+        .then(prev)
+        .otherwise(cur)
+    )
+
+
 def _signed_yards(tail: pl.Expr, *, before_fumble: bool = False) -> pl.Expr:
     """The first stated yardage in *tail*, before any penalty clause; 0 for "no gain", negative for "-N" / "a loss of N".
 
@@ -1429,6 +1451,8 @@ class CFBPlayProcess(object):
                 .get("completed"),
                 homeTeamId=pl.lit(init["homeTeamId"]),
                 awayTeamId=pl.lit(init["awayTeamId"]),
+                homeFinalScore=pl.lit(init.get("homeFinalScore"), dtype=pl.Int64),
+                awayFinalScore=pl.lit(init.get("awayFinalScore"), dtype=pl.Int64),
                 homeTeamName=pl.lit(str(init["homeTeamName"])),
                 awayTeamName=pl.lit(str(init["awayTeamName"])),
                 homeTeamMascot=pl.lit(str(init["homeTeamMascot"])),
@@ -2474,6 +2498,17 @@ class CFBPlayProcess(object):
             homeTeamName = str(pbp_txt["header"]["competitions"][0]["competitors"][1]["team"]["location"] or "")
             homeTeamAbbrev = str(pbp_txt["header"]["competitions"][0]["competitors"][1]["team"]["abbreviation"] or "")
             homeTeamNameAlt = re.sub("Stat(.+)", "St", homeTeamName)
+        # The header's final score (null while the game is live): the only statement of the end
+        # state that does not come from a play row, used to anchor the last row's score repair.
+        for side in ("home", "away"):
+            comp = next(
+                (c for c in pbp_txt["header"]["competitions"][0]["competitors"] if c.get("homeAway") == side), {}
+            )
+            score = str(comp.get("score") or "")
+            completed = (pbp_txt["header"]["competitions"][0].get("status") or {}).get("type", {}).get(
+                "completed"
+            ) is True
+            init[f"{side}FinalScore"] = int(score) if completed and score.isdigit() else None
         init["homeTeamId"] = homeTeamId
         init["homeTeamMascot"] = homeTeamMascot
         init["homeTeamName"] = homeTeamName
@@ -2836,48 +2871,33 @@ class CFBPlayProcess(object):
                 A_score_diff=pl.col("awayScore") - pl.col("lag_awayScore"),
             )
             .with_columns(
-                homeScore=pl.when(
-                    (pl.col("scoringPlay") == False)
-                    & (pl.col("game_play_number") != 1)
-                    & (pl.col("H_score_diff") >= 9),
-                )
-                .then(pl.col("lag_homeScore"))
-                .when(
-                    (pl.col("scoringPlay") == False)
-                    & (pl.col("game_play_number") != 1)
-                    & (pl.col("H_score_diff") < 9)
-                    & (pl.col("H_score_diff") > 1),
-                )
-                .then(pl.col("lag_homeScore"))
-                .when(
-                    (pl.col("scoringPlay") == False)
-                    & (pl.col("game_play_number") != 1)
-                    & (pl.col("H_score_diff") >= -9)
-                    & (pl.col("H_score_diff") < -1),
-                )
-                .then(pl.col("homeScore"))
-                .otherwise(pl.col("homeScore")),
-                awayScore=pl.when(
-                    (pl.col("scoringPlay") == False)
-                    & (pl.col("game_play_number") != 1)
-                    & (pl.col("A_score_diff") >= 9),
-                )
-                .then(pl.col("lag_awayScore"))
-                .when(
-                    (pl.col("scoringPlay") == False)
-                    & (pl.col("game_play_number") != 1)
-                    & (pl.col("A_score_diff") < 9)
-                    & (pl.col("A_score_diff") > 1),
-                )
-                .then(pl.col("lag_awayScore"))
-                .when(
-                    (pl.col("scoringPlay") == False)
-                    & (pl.col("game_play_number") != 1)
-                    & (pl.col("A_score_diff") >= -9)
-                    & (pl.col("A_score_diff") < -1),
-                )
-                .then(pl.col("awayScore"))
-                .otherwise(pl.col("awayScore")),
+                # Score repair. ESPN's per-row score is wrong on about 0.7% of rows: a one-row
+                # dip or spike that the next row does not repeat (2005 401207158 goes 3-1 ->
+                # 7-1 -> 3-0 on a 5-yard run; 2021 401309611 shows 29-10 on two timeout rows
+                # between a 29-16 touchdown and a 29-16 kickoff), and occasionally a late
+                # attachment (the try's point on the next kickoff row), which persists. The
+                # previous version reverted every upward jump on a non-scoring row, so the
+                # real score carried by a game's last row ("End of Game" at 29-30 after the
+                # winning touchdown row went missing) was thrown away, and never repaired a
+                # drop: its "drop" branch returned the row's own value. The rule is now
+                # persistence: a change that the next row does not confirm is reverted to the
+                # previous row's score -- any drop, or a rise on a non-scoring row -- and the
+                # last row, which has no next row, is confirmed by the header's final score.
+                # A change that persists (a review reversal, a score the feed attached one
+                # row late, the real final) is kept. Scoring rows keep their rises. Two
+                # passes, so a two-row glitch is caught whole (73% of one-row deviations in
+                # the 2004-2026 sample return to the previous score after one row, 19% after
+                # two).
+                homeScore=_repair_score("homeScore", "lag_homeScore", "homeFinalScore"),
+                awayScore=_repair_score("awayScore", "lag_awayScore", "awayFinalScore"),
+            )
+            .with_columns(
+                lag_homeScore=pl.col("homeScore").shift(1),
+                lag_awayScore=pl.col("awayScore").shift(1),
+            )
+            .with_columns(
+                homeScore=_repair_score("homeScore", "lag_homeScore", "homeFinalScore"),
+                awayScore=_repair_score("awayScore", "lag_awayScore", "awayFinalScore"),
             )
             .drop(["lag_homeScore", "lag_awayScore"])
             .with_columns(
@@ -5618,20 +5638,22 @@ class CFBPlayProcess(object):
         )
 
     def __process_epa(self, play_df):
-        # B5 (0.36-live): a penalty assessed BETWEEN a scoring play and the ensuing
+        # B5 (0.36-live): a penalty row sitting BETWEEN a scoring play and the ensuing
         # kickoff (the 2024 USC/LSU edge) inherits the prior play's field position and
         # earns a large spurious EPA/WPA. Flag it and give it the kickoff-touchback
-        # treatment below. The ``penalty_flag`` guard excludes Timeouts that also sit
-        # between a score and a kickoff (main already scores those EPA=0); the
-        # ``kickoff_vec`` exclusion keeps the flag strictly disjoint from main's
-        # existing ``kickoff_vec & penalty_in_text`` path (no double-handling).
+        # treatment below. The flag is positional: a Penalty row after a scoring play
+        # and before a kickoff. It used to also require a score change on the row, which
+        # a Penalty row shows only when ESPN's score on it is one row stale (0-7 between
+        # a 7-7 touchdown and a 7-7 kickoff), a glitch the score repair now removes: in
+        # a 345-game 2004-2026 sample the old test flagged 31 of the 42 such rows before
+        # the repair and none after (mean |EPA| 2.2, max 8.0 on the unflagged), and
+        # flagged 6 extra-point rows that merely mention a penalty. Timeouts and
+        # extra-point rows are not Penalty rows and stay out.
         play_df = play_df.with_columns(
             penalty_assessed_on_kickoff=(
                 (pl.col("scoring_play").shift(1) == True)
                 .and_(pl.col("kickoff_play").shift(-1) == True)
-                .and_(pl.col("end.pos_score_diff") != pl.col("start.pos_score_diff"))
-                .and_(pl.col("penalty_flag") == True)
-                .and_(pl.col("type.text").is_in(kickoff_vec) == False)
+                .and_(pl.col("type.text") == "Penalty")
             ).fill_null(False),
         )
         # treat the flagged penalty like a kickoff for the start-state substitution
