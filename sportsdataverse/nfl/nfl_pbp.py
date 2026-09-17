@@ -258,17 +258,20 @@ _NFL_PENALTY_CLAUSE_SPLIT_RE = re.compile(r"(?i)\bpenalty on\s+")
 _NFL_PENALTY_ENFORCED_RE = re.compile(r"(?i)^([A-Z]{2,3})\b.*?, (\d{1,2}) yards?, enforced\b")
 
 
-def _nfl_incompletion_end_y2e(text, start_y2e, offense_side, home_abbr, away_abbr):
-    """Yards to the end zone where an incompletion leaves the ball.
+def _nfl_incompletion_end_y2e(text, start_y2e, down, offense_side, home_abbr, away_abbr):
+    """Yards to the end zone where an incompletion leaves the ball, in the end team's frame.
 
     The pass gains nothing, so the ball stays at the line of scrimmage unless a penalty
-    is enforced, which moves it toward the penalized team's goal (ESPN enforced at the
-    line of scrimmage on all 839 sampled 2015-26 incompletions). None when a penalized
-    team cannot be placed.
+    is enforced, which moves it toward the penalized team's goal (ESPN enforced every one
+    of 839 sampled 2015-26 incompletion penalties at the line of scrimmage). Possession
+    changes only on a 4th down the defence was not penalised on, and the spot then flips
+    to the other team's frame -- the rule matches the next snap's team on 5,001 of 5,003
+    sampled incompletions, where ESPN's own ``end.team`` matches on 4,680. None when a
+    penalised team cannot be placed.
     """
     if start_y2e is None:
         return None
-    pos = start_y2e
+    pos, defence_penalised = start_y2e, False
     for clause in _NFL_PENALTY_CLAUSE_SPLIT_RE.split(text or "")[1:]:
         m = _NFL_PENALTY_ENFORCED_RE.match(clause)
         if not m:
@@ -276,8 +279,10 @@ def _nfl_incompletion_end_y2e(text, start_y2e, offense_side, home_abbr, away_abb
         penalized = _nfl_side_of_abbrev(m.group(1), home_abbr, away_abbr)
         if penalized is None:
             return None
+        defence_penalised |= penalized != offense_side
         pos += int(m.group(2)) if penalized == offense_side else -int(m.group(2))
-    return min(max(pos, 1), 99)
+    pos = min(max(pos, 1), 99)
+    return pos if down != 4 or defence_penalised else 100 - pos
 
 
 def _nfl_punt_los(text, punting_side, home_abbr, away_abbr):
@@ -1041,13 +1046,15 @@ class NFLPlayProcess(object):
             .with_columns(
                 # ESPN's end spot on an incompletion is as stale as its start (N6); the pass
                 # gains nothing, so it ends at the corrected start, moved by any enforced penalty
+                # and flipped to the defence's frame when a 4th down hands the ball over
                 pl.when(pl.col("type.text") == "Pass Incompletion")
                 .then(
-                    pl.struct("text", "start.yardsToEndzone", "start.team.id")
+                    pl.struct("text", "start.yardsToEndzone", "start.down", "start.team.id")
                     .map_elements(
                         lambda r: _nfl_incompletion_end_y2e(
                             r["text"],
                             r["start.yardsToEndzone"],
+                            r["start.down"],
                             "home" if r["start.team.id"] == init["homeTeamId"] else "away",
                             init["homeTeamAbbrev"],
                             init["awayTeamAbbrev"],

@@ -437,6 +437,10 @@ def test_incompletions_end_where_they_start_unless_a_penalty_is_enforced(phi_car
         4007915674123
     ]  # "PENALTY on CAR-L.Kuechly, Defensive Pass Interference, 10 yards, enforced at PHI 5"
     assert (accepted["start.yardsToEndzone"], accepted["end.yardsToEndzone"]) == (95, 85)
+    # a 4th-down incompletion hands the ball over: the spot flips to the other team's frame
+    turnover = inc[4007915674280]  # "(2:00) (Shotgun) S.Bradford pass incomplete short left to M.Austin."
+    assert turnover["start.down"] == 4
+    assert (turnover["start.yardsToEndzone"], turnover["end.yardsToEndzone"]) == (84, 16)
     followed = [
         r
         for r in inc.values()
