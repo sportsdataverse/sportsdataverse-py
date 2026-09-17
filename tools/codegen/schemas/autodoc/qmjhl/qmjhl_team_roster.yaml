@@ -88,6 +88,9 @@ columns:
 - name: veteran_description
   type: character
   description: ''
+- name: team_id
+  type: character
+  description: ''
 - name: team_name
   type: character
   description: ''

@@ -1,0 +1,18 @@
+schema: fox_nfl_league_stat_leaders
+kind: dataframe
+columns:
+- name: category
+  type: character
+  description: ''
+- name: stat
+  type: character
+  description: ''
+- name: stat_abbreviation
+  type: character
+  description: ''
+- name: player
+  type: character
+  description: ''
+- name: value
+  type: character
+  description: ''

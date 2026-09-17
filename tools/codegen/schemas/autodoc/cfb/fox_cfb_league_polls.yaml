@@ -1,0 +1,21 @@
+schema: fox_cfb_league_polls
+kind: dataframe
+columns:
+- name: section
+  type: character
+  description: ''
+- name: ranking
+  type: character
+  description: ''
+- name: v1
+  type: character
+  description: ''
+- name: v2
+  type: character
+  description: ''
+- name: pts
+  type: character
+  description: ''
+- name: entity_id
+  type: character
+  description: ''

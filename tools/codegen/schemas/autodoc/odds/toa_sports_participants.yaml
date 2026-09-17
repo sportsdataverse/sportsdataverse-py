@@ -1,0 +1,9 @@
+schema: toa_sports_participants
+kind: dataframe
+columns:
+- name: full_name
+  type: character
+  description: ''
+- name: id
+  type: character
+  description: ''

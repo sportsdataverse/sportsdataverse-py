@@ -1,0 +1,30 @@
+schema: fox_cfb_teamnav
+kind: dataframe
+columns:
+- name: group
+  type: character
+  description: ''
+- name: fox_id
+  type: character
+  description: ''
+- name: abbreviation
+  type: character
+  description: ''
+- name: name
+  type: character
+  description: ''
+- name: content_uri
+  type: character
+  description: ''
+- name: content_type
+  type: character
+  description: ''
+- name: web_url
+  type: character
+  description: ''
+- name: color
+  type: character
+  description: ''
+- name: logo_url
+  type: character
+  description: ''

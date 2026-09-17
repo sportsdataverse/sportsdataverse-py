@@ -1,0 +1,12 @@
+schema: realgm_teams
+kind: dataframe
+columns:
+- name: team
+  type: character
+  description: ''
+- name: division
+  type: character
+  description: ''
+- name: conference
+  type: character
+  description: ''

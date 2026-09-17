@@ -1,0 +1,9 @@
+schema: realgm_transactions
+kind: dataframe
+columns:
+- name: date
+  type: character
+  description: ''
+- name: transaction
+  type: character
+  description: ''

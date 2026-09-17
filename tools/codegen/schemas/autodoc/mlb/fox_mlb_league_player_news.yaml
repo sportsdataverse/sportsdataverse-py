@@ -1,0 +1,36 @@
+schema: fox_mlb_league_player_news
+kind: dataframe
+columns:
+- name: title
+  type: character
+  description: ''
+- name: subtitle
+  type: character
+  description: ''
+- name: headline
+  type: character
+  description: ''
+- name: description
+  type: character
+  description: ''
+- name: impact_title
+  type: character
+  description: ''
+- name: impact
+  type: character
+  description: ''
+- name: date
+  type: character
+  description: ''
+- name: source
+  type: character
+  description: ''
+- name: athlete_id
+  type: character
+  description: ''
+- name: content_uri
+  type: character
+  description: ''
+- name: web_url
+  type: character
+  description: ''

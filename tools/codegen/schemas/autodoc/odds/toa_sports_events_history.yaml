@@ -1,0 +1,30 @@
+schema: toa_sports_events_history
+kind: dataframe
+columns:
+- name: snapshot_timestamp
+  type: character
+  description: ''
+- name: previous_timestamp
+  type: character
+  description: ''
+- name: next_timestamp
+  type: character
+  description: ''
+- name: id
+  type: character
+  description: ''
+- name: sport_key
+  type: character
+  description: ''
+- name: sport_title
+  type: character
+  description: ''
+- name: commence_time
+  type: character
+  description: ''
+- name: home_team
+  type: character
+  description: ''
+- name: away_team
+  type: character
+  description: ''

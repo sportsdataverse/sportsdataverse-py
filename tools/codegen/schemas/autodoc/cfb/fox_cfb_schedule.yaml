@@ -1,0 +1,30 @@
+schema: fox_cfb_schedule
+kind: dataframe
+columns:
+- name: game_id
+  type: character
+  description: ''
+- name: date
+  type: character
+  description: ''
+- name: status
+  type: character
+  description: ''
+- name: week_label
+  type: character
+  description: ''
+- name: home_team
+  type: character
+  description: ''
+- name: home_team_id
+  type: character
+  description: ''
+- name: away_team
+  type: character
+  description: ''
+- name: away_team_id
+  type: character
+  description: ''
+- name: segment_id
+  type: character
+  description: ''

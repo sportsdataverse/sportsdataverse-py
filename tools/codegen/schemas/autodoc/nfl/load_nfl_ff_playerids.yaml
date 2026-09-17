@@ -8,19 +8,19 @@ columns:
   type: character
   description: ''
 - name: fantasypros_id
-  type: character
+  type: integer
   description: ''
 - name: gsis_id
   type: character
   description: ''
 - name: pff_id
-  type: character
+  type: integer
   description: ''
 - name: sleeper_id
   type: integer
   description: ''
 - name: nfl_id
-  type: character
+  type: integer
   description: ''
 - name: espn_id
   type: integer

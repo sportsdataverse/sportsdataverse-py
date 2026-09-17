@@ -1,0 +1,45 @@
+schema: realgm_draft
+kind: dataframe
+columns:
+- name: pick
+  type: integer
+  description: ''
+- name: player
+  type: character
+  description: ''
+- name: team
+  type: character
+  description: ''
+- name: draft_trades
+  type: character
+  description: ''
+- name: pos
+  type: character
+  description: ''
+- name: ht
+  type: character
+  description: ''
+- name: wt
+  type: integer
+  description: ''
+- name: age
+  type: integer
+  description: ''
+- name: yos
+  type: integer
+  description: ''
+- name: pre_draft_team
+  type: character
+  description: ''
+- name: class
+  type: character
+  description: ''
+- name: nationality
+  type: character
+  description: ''
+- name: round
+  type: integer
+  description: ''
+- name: draft_year
+  type: integer
+  description: ''

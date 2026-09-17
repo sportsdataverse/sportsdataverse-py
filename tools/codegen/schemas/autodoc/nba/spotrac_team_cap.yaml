@@ -1,0 +1,27 @@
+schema: spotrac_team_cap
+kind: dataframe
+columns:
+- name: rank
+  type: integer
+  description: ''
+- name: team
+  type: character
+  description: ''
+- name: record
+  type: character
+  description: ''
+- name: players_active
+  type: integer
+  description: ''
+- name: avg_age_team
+  type: double
+  description: ''
+- name: total_cap_allocations
+  type: double
+  description: ''
+- name: cap_space_all
+  type: double
+  description: ''
+- name: season
+  type: integer
+  description: ''
