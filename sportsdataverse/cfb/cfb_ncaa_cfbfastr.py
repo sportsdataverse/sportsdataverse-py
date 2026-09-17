@@ -50,6 +50,10 @@ _KICK_GOOD_RE = re.compile(r"(?<!no )good", re.I)
 #: after they've fed the stateful pass).
 _MARKER_TYPES = {"drive_start", "coin_toss"}
 
+#: plays snapped from the drive offense's own spot -- the only rows that may
+#: vote on a team's own yard-line side (see :func:`_own_side`).
+_SCRIMMAGE_TYPES = ("rush", "pass", "sack", "kneel", "punt", "field_goal")
+
 #: end_how -> approximate cfbfastR play_type label for synthesized OT rows.
 _OT_END_HOW_LABEL = {
     "TD": "Touchdown",
@@ -230,14 +234,18 @@ def _own_side(df: pl.DataFrame) -> "dict[str, str]":
 
     Drives overwhelmingly start in the offense's own territory, so of the two
     possible (team name -> side code) assignments, pick the one under which
-    more first-plays-of-drive sit on the offense's own side.
+    more first-SNAPS-of-drive sit on the offense's own side. Only scrimmage
+    plays vote: a drive's first row is usually the kickoff, which sits in the
+    RECEIVING team's drive but is spotted on the KICKING team's side, and
+    voting on it mirrored ``yards_to_goal`` for most games. Drives with no
+    scrimmage play (kickoff-, PAT- or penalty-only) cast no vote.
     """
     teams = [t for t in df.get_column("offense").unique().to_list() if t]
     sides = [s for s in df.get_column("yard_line_side").unique().to_list() if s]
     if len(teams) != 2 or len(sides) != 2:
         return {}
     firsts = (
-        df.filter(pl.col("yard_line_side").is_not_null())
+        df.filter(pl.col("yard_line_side").is_not_null() & pl.col("play_type").is_in(_SCRIMMAGE_TYPES))
         .group_by("drive_number", maintain_order=True)
         .first()
         .select("offense", "yard_line_side")
