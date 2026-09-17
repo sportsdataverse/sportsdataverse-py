@@ -126,15 +126,34 @@ _VENDOR_PUNT_RETURNER_RE = (
 )
 
 
-def _signed_yards(tail: pl.Expr) -> pl.Expr:
-    """The first yardage in *tail*, negative when written "-N" or "a loss of N".
+#: A stated yardage: "no gain", "12 yds", "a loss of 9 yards", "-2 yards", "a 25 yard touchdown".
+#: The unit is required, so a spot ("to the Bayl 24") is never read as yardage, and a spot that
+#: does carry one ("to the 50 yard line") is recognised and refused.
+_STATED_YARDS_RE = r"(?i)(no gain)|(loss of )?(-)?(\d+)[\s-]*(?:yds?|yards?)\b(\s+line)?"
 
-    The return-yardage chains read "the first number after the clause", and read it unsigned:
-    "return  for -55 yds" stored 55 and "returned by Darius Carey for a loss of 9 yards" stored 9.
+
+def _signed_yards(tail: pl.Expr, *, before_fumble: bool = False) -> pl.Expr:
+    """The first stated yardage in *tail*, before any penalty clause; 0 for "no gain", negative for "-N" / "a loss of N".
+
+    The return-yardage chains used to read "the first number after the clause", unsigned: "return
+    for -55 yds" stored 55, and a return with no stated yardage stored its spot -- "return for no gain
+    to the Bayl 24" stored 24. ``before_fumble`` also stops at a fumble, for kick, punt and interception
+    returns: in "returned by Montel Harris, fumbled, recovered by BC Montel Harris at the BC 7, Montel
+    Harris for 18 yards" the 18 yards is the recovery's advance, not the return.
     """
-    g = tail.str.extract_groups(r"(?i)(-|loss of )?(\d+)")
-    n = g.struct.field("2").cast(pl.Int32)
-    return pl.when(g.struct.field("1").is_not_null()).then(-n).otherwise(n)
+    if before_fumble:
+        tail = tail.str.replace(r"(?i)\bfumble.*$", "")
+    g = tail.str.replace(r"(?i)\bpenalty\b.*$", "").str.extract_groups(_STATED_YARDS_RE)
+    n = g.struct.field("4").cast(pl.Int32)
+    return (
+        pl.when(g.struct.field("1").is_not_null())
+        .then(pl.lit(0, dtype=pl.Int32))
+        .when(g.struct.field("5").is_not_null())
+        .then(pl.lit(None, dtype=pl.Int32))
+        .when(g.struct.field("2").is_not_null() | g.struct.field("3").is_not_null())
+        .then(-n)
+        .otherwise(n)
+    )
 
 
 def _strip_presentational_tokens(name_expr: pl.Expr) -> pl.Expr:
@@ -4215,10 +4234,12 @@ class CFBPlayProcess(object):
             .when(
                 (pl.col("pass") == True).and_(pl.col("int") == True).and_(pl.col("text").str.contains(r"(?i)for a TD")),
             )
-            .then(_signed_yards(pl.col("text").str.extract(r"(?i)return\s+for (.+)")))
+            .then(_signed_yards(pl.col("text").str.extract(r"(?i)return\s+for (.+)"), before_fumble=True))
             .when((pl.col("pass") == True).and_(pl.col("int") == True))
             .then(
-                _signed_yards(pl.col("text").str.replace("for a 1st", "").str.extract(r"(?i)for (.+)")),
+                _signed_yards(
+                    pl.col("text").str.replace("for a 1st", "").str.extract(r"(?i)for (.+)"), before_fumble=True
+                ),
             )
             .otherwise(None),
             yds_kickoff=pl.when(pl.col("kickoff_play") == True)
@@ -4245,9 +4266,9 @@ class CFBPlayProcess(object):
             .when((pl.col("kickoff_downed") == True).or_(pl.col("kickoff_fair_catch") == True))
             .then(0)
             .when((pl.col("kickoff_play") == True).and_(pl.col("text").str.contains(r"(?i)returned by")))
-            .then(_signed_yards(pl.col("text").str.extract(r"(?i)returned by (.+)")))
+            .then(_signed_yards(pl.col("text").str.extract(r"(?i)returned by (.+)"), before_fumble=True))
             .when((pl.col("kickoff_play") == True).and_(pl.col("text").str.contains(r"(?i)return\s+for")))
-            .then(_signed_yards(pl.col("text").str.extract(r"(?i)return\s+for (.+)")))
+            .then(_signed_yards(pl.col("text").str.extract(r"(?i)return\s+for (.+)"), before_fumble=True))
             .otherwise(None),
             yds_punted=pl.when((pl.col("punt") == True).and_(pl.col("punt_blocked") == True))
             .then(0)
@@ -4284,11 +4305,11 @@ class CFBPlayProcess(object):
             )
             .then(pl.col("text").str.extract(r"(?i)returned by .{2,40}? for (-?\d+) yard", 1).cast(pl.Int32))
             .when((pl.col("punt") == True).and_(pl.col("text").str.contains(r"(?i)returned -?\d+ yards")))
-            .then(_signed_yards(pl.col("text").str.extract(r"(?i)returned (.+)")))
+            .then(_signed_yards(pl.col("text").str.extract(r"(?i)returned (.+)"), before_fumble=True))
             .when((pl.col("punt") == True).and_(pl.col("punt_blocked") == False))
-            .then(_signed_yards(pl.col("text").str.extract(r"(?i)returns for (.+)")))
+            .then(_signed_yards(pl.col("text").str.extract(r"(?i)returns for (.+)"), before_fumble=True))
             .when((pl.col("punt") == True).and_(pl.col("punt_blocked") == True))
-            .then(_signed_yards(pl.col("text").str.extract(r"(?i)return\s+for (.+)")))
+            .then(_signed_yards(pl.col("text").str.extract(r"(?i)return\s+for (.+)"), before_fumble=True))
             .otherwise(None),
             yds_fumble_return=pl.when((pl.col("fumble_vec") == True).and_(pl.col("kickoff_play") == False))
             .then(_signed_yards(pl.col("text").str.extract(r"(?i)return\s+for (.+)")))

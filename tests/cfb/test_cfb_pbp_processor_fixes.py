@@ -18,6 +18,7 @@ Every case runs the real pipeline, offline, on a stored ESPN summary:
 * ``summary_243042579.json`` -- Tennessee @ South Carolina, 2004 ("for -2 yards", "returned -1 yards by").
 * ``summary_401636929.json`` -- Baylor @ West Virginia, 2024 ("return for a loss of 1 yard" on a kickoff).
 * ``summary_401858221.json`` -- Old Dominion @ Virginia Tech, 2026 ("return  for -55 yds").
+* ``summary_332570254.json`` -- Oregon State @ Utah, 2013 ("returned by Victor Bolden, fumbled, recovered by ... Victor Bolden for 10 yards").
 
 The 2026 summaries are copied verbatim from ``cfbfastR-cfb-raw/cfb/json/raw``.
 """
@@ -293,3 +294,16 @@ def test_negative_yardage_keeps_its_sign():
     assert _row(usc, "complete to Noah Whiteside (USC) for -11 yards.")["yds_receiving"] == -11
     assert _row(_plays(401636929), "Ashtyn Hawkins return for a loss of 1 yard")["yds_kickoff_return"] == -1
     assert _row(_plays(401858221), "return  for -55 yds")["yds_fumble_return"] == -55
+
+
+# --- C27: a spot or a later clause is never read as return yardage ---------------------------------
+
+
+def test_return_yardage_ignores_spots_and_fumble_advances():
+    # "no gain" is 0, not the spot (24); the fumble after it is irrelevant
+    row = _row(_plays(401112081), "Trystan Slinker return for no gain to the Bayl 24")
+    assert row["yds_kickoff_return"] == 0
+    # the kick return states no yardage; "for 10 yards" is the recovery's advance, not the return
+    fumbled = _plays(332570254).filter(pl.col("text").str.contains("returned by Victor Bolden, fumbled", literal=True))
+    assert fumbled.height == 2
+    assert fumbled["yds_kickoff_return"].to_list() == [None, None]
