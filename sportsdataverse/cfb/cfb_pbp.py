@@ -4655,11 +4655,23 @@ class CFBPlayProcess(object):
                     (pl.col("sack") == True).or_((pl.col("fumble_vec") == True).and_(pl.col("pass") == True)),
                 )
                 .then(
-                    pl.col("text")
-                    .str.extract(r"(?i)sacked by(.+)")
-                    .str.replace(r"for (.+)", "")
-                    .str.replace(r"(.+) by ", "")
-                    .str.replace(r" at the (.+)", ""),
+                    pl.coalesce(
+                        pl.col("text")
+                        .str.extract(r"(?i)sacked by(.+)")
+                        .str.replace(r"for (.+)", "")
+                        .str.replace(r"(.+) by ", "")
+                        .str.replace(r" at the (.+)", ""),
+                        # The vendor template (ESPN 2025+, stats.ncaa.org) has no "sacked by": the
+                        # sackers are the parenthetical after the spot -- "sacked for loss of 4 yards
+                        # to the AKR43 (#97 M.Herron, #52 D.Afalava)", "... to the TENN07
+                        # (Herring,Caleb)". Split sackers are joined with " and " for the split below;
+                        # the comma inside "Last,First" carries no space and is left alone.
+                        pl.col("text")
+                        .str.extract(
+                            r"(?i)sacked for (?:loss of -?\d+ yards?|no gain) to the [A-Za-z]*\s?\d{0,2} \(([^()]+)\)"
+                        )
+                        .str.replace_all(r";\s*|,\s+(#)", " and $1"),
+                    )
                 )
                 .otherwise(None),
             )

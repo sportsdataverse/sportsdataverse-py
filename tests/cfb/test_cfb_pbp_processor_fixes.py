@@ -74,3 +74,14 @@ def test_vendor_text_made_pat_touchdown_ep_end_is_seven():
     assert tds.height == 5
     assert tds["text"].str.contains("kick attempt good").all()
     assert tds["EP_end"].to_list() == [7.0] * 5
+
+
+# --- C5: the sacker is the parenthetical after the spot ------------------------------------------
+
+
+def test_sack_player_from_parenthetical():
+    plays = _plays(401856682)
+    sacks = plays.filter(pl.col("text").str.contains("sacked for loss"))
+    assert sacks["sack_player_name"].to_list() == ["R.Pettijohn", "K.Jackson Jr.", "L.Jackson", "C.Simmons"]
+    two = _row(_plays(401858435), "#2 E.Owens sacked for loss of 3 yards to the PUR33 (#23 T.Smith, #94 R.Lora)")
+    assert (two["sack_player_name"], two["sack_player_name2"]) == ("T.Smith", "R.Lora")
