@@ -136,6 +136,11 @@ _STATED_YARDS_RE = r"(?i)(no gain)|(loss of )?(-)?(\d+)[\s-]*(?:yds?|yards?)\b(\
 _RETURN_N_YARDS_RE = r"(?i)\breturn (-?\d+ yards?)\b"
 
 
+#: Play types whose touchdown belongs to a returner, a recovering defender or a kick, never to
+#: the passer or rusher (the "Fumble Recovery (Own) Touchdown" is the recovering player's too).
+_NOT_OFFENSE_TD_TYPE_RE = r"(?i)interception|fumble|punt|kickoff|blocked|safety|defensive"
+
+
 def _repair_score(col: str, lag: str, final: str) -> pl.Expr:
     """One team's per-row score with an unconfirmed change reverted to the previous row's (see the call site).
 
@@ -3868,10 +3873,21 @@ class CFBPlayProcess(object):
                 # Measured on 2025: 15 `pass_td` and 15 `rush_td` on negated
                 # plays, every one of them reaching a player leaderboard, where
                 # `summarize_passer` sums `pass_td` straight into `passing_td`.
+                # A return touchdown is not the offense's: "Interception Return Touchdown"
+                # rows carry pass = True (a pass was thrown) and td_play = True (the text
+                # says touchdown), so the text branch below credited the passer with the
+                # touchdown -- 26 of 26 interception-return and 13 of 13 opponent-fumble-
+                # recovery touchdowns in the 2004-2026 sweep sample -- and summarize_passer
+                # summed them into passing_td. cfbfastR sets pass_td / rush_td from the
+                # "Passing Touchdown" / "Rushing Touchdown" labels alone; the text branch is
+                # kept for the generic labels of 2004-2013 ("Pass Completion" with "for a 44
+                # yard touchdown") but never for a return, fumble, kick or defensive type.
                 pass_td=pl.when(pl.col("text").str.contains(_PENALTY_NEGATED_TEXT))
                 .then(False)
                 .when(pl.col("type.text").is_in(["Passing Touchdown"]))
                 .then(True)
+                .when(pl.col("type.text").str.contains(_NOT_OFFENSE_TD_TYPE_RE))
+                .then(False)
                 .when((pl.col("pass") == True).and_(pl.col("td_play") == True))
                 .then(True)
                 .otherwise(False),
@@ -3879,6 +3895,8 @@ class CFBPlayProcess(object):
                 .then(False)
                 .when(pl.col("type.text").is_in(["Rushing Touchdown"]))
                 .then(True)
+                .when(pl.col("type.text").str.contains(_NOT_OFFENSE_TD_TYPE_RE))
+                .then(False)
                 .when((pl.col("rush") == True).and_(pl.col("td_play") == True))
                 .then(True)
                 .otherwise(False),

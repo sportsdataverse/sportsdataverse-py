@@ -345,6 +345,22 @@ def test_score_glitches_reverted_and_last_row_anchored():
     assert (last["start.awayScore"], last["end.awayScore"]) == (40, 40)
 
 
+# --- C30: a return touchdown is not a passing or rushing touchdown ---------------------------------
+
+
+def test_return_touchdowns_are_not_offensive_touchdowns():
+    akron = _plays(401628455)
+    for needle in ("Lathan Ransom 27 Yd Fumble Return", "Gabe Powers 29 Yd Interception Return"):
+        row = _row(akron, needle)
+        assert (row["pass_td"], row["rush_td"]) == (False, False), needle
+        assert row["touchdown"] is True, needle
+    old = _row(_plays(332570254), "intercepted by Sean Martin at the Utah 27, returned for 27 yards for a TOUCHDOWN")
+    assert (old["pass_td"], old["rush_td"]) == (False, False)
+    # the offense's own touchdowns keep their flags
+    tex = _plays(401856682).filter(pl.col("type.text").is_in(["Passing Touchdown", "Rushing Touchdown"]))
+    assert tex.height == 5 and (tex["pass_td"] | tex["rush_td"]).all()
+
+
 # --- C31: an overtime game ends at the header's final score --------------------------------------
 
 
