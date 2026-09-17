@@ -6,6 +6,7 @@
   - [Box-score tabs (contest 5362283 — California @ Auburn, 2024-09-07)](#box-score-tabs-contest-5362283--california--auburn-2024-09-07)
   - [cfbfastR-mapper pbp fixtures (vendored from `ncaa-mfb-football-raw`)](#cfbfastr-mapper-pbp-fixtures-vendored-from-ncaa-mfb-football-raw)
   - [2025-season page variants (captured 2026-08-19)](#2025-season-page-variants-captured-2026-08-19)
+  - [2019-season and 2025 text/side-code variants (bundles captured 2026-08-19 / 2026-08-21)](#2019-season-and-2025-textside-code-variants-bundles-captured-2026-08-19--2026-08-21)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
