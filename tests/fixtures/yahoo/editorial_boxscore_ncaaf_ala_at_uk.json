@@ -1,0 +1,585 @@
+{
+ "service": {
+  "xml:lang": "en-US",
+  "boxscore": {
+   "player_stats": {
+    "ncaaf.p.470424": {
+     "ncaaf.stat_variation.2": {
+      "ncaaf.stat_type.102": "16",
+      "ncaaf.stat_type.103": "23",
+      "ncaaf.stat_type.105": "188",
+      "ncaaf.stat_type.104": "69.6",
+      "ncaaf.stat_type.106": "8.2",
+      "ncaaf.stat_type.111": "4",
+      "ncaaf.stat_type.112": "29",
+      "ncaaf.stat_type.108": "1",
+      "ncaaf.stat_type.109": "2",
+      "ncaaf.stat_type.113": "135.2",
+      "ncaaf.stat_type.202": "8",
+      "ncaaf.stat_type.203": "-9",
+      "ncaaf.stat_type.205": "-1.1",
+      "ncaaf.stat_type.206": "16",
+      "ncaaf.stat_type.207": "0"
+     }
+    },
+    "ncaaf.p.403635": {
+     "ncaaf.stat_variation.2": {
+      "ncaaf.stat_type.102": "18",
+      "ncaaf.stat_type.103": "31",
+      "ncaaf.stat_type.105": "146",
+      "ncaaf.stat_type.104": "58.1",
+      "ncaaf.stat_type.106": "4.7",
+      "ncaaf.stat_type.111": "4",
+      "ncaaf.stat_type.112": "25",
+      "ncaaf.stat_type.108": "1",
+      "ncaaf.stat_type.109": "1",
+      "ncaaf.stat_type.113": "101.8",
+      "ncaaf.stat_type.202": "6",
+      "ncaaf.stat_type.203": "-19",
+      "ncaaf.stat_type.205": "-3.2",
+      "ncaaf.stat_type.206": "4",
+      "ncaaf.stat_type.207": "0"
+     }
+    },
+    "ncaaf.p.404415": {
+     "ncaaf.stat_variation.2": {
+      "ncaaf.stat_type.411": "4",
+      "ncaaf.stat_type.412": "4",
+      "ncaaf.stat_type.407": "3",
+      "ncaaf.stat_type.408": "3",
+      "ncaaf.stat_type.410": "41",
+      "ncaaf.stat_type.409": "100.0"
+     }
+    },
+    "ncaaf.p.470454": {
+     "ncaaf.stat_variation.2": {
+      "ncaaf.stat_type.502": "2",
+      "ncaaf.stat_type.503": "33",
+      "ncaaf.stat_type.505": "16.5",
+      "ncaaf.stat_type.506": "17",
+      "ncaaf.stat_type.507": "0",
+      "ncaaf.stat_type.508": "0",
+      "ncaaf.stat_type.509": "0",
+      "ncaaf.stat_type.511": "0.0",
+      "ncaaf.stat_type.512": "0",
+      "ncaaf.stat_type.513": "0"
+     }
+    }
+   },
+   "team_stats": {
+    "ncaaf.t.69": {
+     "ncaaf.stat_variation.2": {
+      "ncaaf.stat_type.919": "14",
+      "ncaaf.stat_type.945": "209",
+      "ncaaf.stat_type.950": "3",
+      "ncaaf.stat_type.937": "8",
+      "ncaaf.stat_type.936": "3",
+      "ncaaf.stat_type.938": "3",
+      "ncaaf.stat_type.941": "1-14",
+      "ncaaf.stat_type.944": "2-4",
+      "ncaaf.stat_type.946": "64",
+      "ncaaf.stat_type.952": "3.3",
+      "ncaaf.stat_type.921": "63",
+      "ncaaf.stat_type.920": "32",
+      "ncaaf.stat_type.949": "2.0",
+      "ncaaf.stat_type.947": "146",
+      "ncaaf.stat_type.951": "18-32",
+      "ncaaf.stat_type.948": "4.6",
+      "ncaaf.stat_type.927": "4",
+      "ncaaf.stat_type.928": "-25",
+      "ncaaf.stat_type.926": "1",
+      "ncaaf.stat_type.929": "5",
+      "ncaaf.stat_type.930": "40.8",
+      "ncaaf.stat_type.933": "8",
+      "ncaaf.stat_type.934": "70",
+      "ncaaf.stat_type.931": "4",
+      "ncaaf.stat_type.932": "2"
+     }
+    },
+    "ncaaf.t.73": {
+     "ncaaf.stat_variation.2": {
+      "ncaaf.stat_type.919": "21",
+      "ncaaf.stat_type.945": "343",
+      "ncaaf.stat_type.950": "3",
+      "ncaaf.stat_type.937": "9",
+      "ncaaf.stat_type.936": "8",
+      "ncaaf.stat_type.938": "4",
+      "ncaaf.stat_type.941": "5-11",
+      "ncaaf.stat_type.944": "1-1",
+      "ncaaf.stat_type.946": "63",
+      "ncaaf.stat_type.952": "5.4",
+      "ncaaf.stat_type.921": "155",
+      "ncaaf.stat_type.920": "40",
+      "ncaaf.stat_type.949": "3.9",
+      "ncaaf.stat_type.947": "188",
+      "ncaaf.stat_type.951": "16-23",
+      "ncaaf.stat_type.948": "8.2",
+      "ncaaf.stat_type.927": "4",
+      "ncaaf.stat_type.928": "-29",
+      "ncaaf.stat_type.926": "2",
+      "ncaaf.stat_type.929": "1",
+      "ncaaf.stat_type.930": "54.0",
+      "ncaaf.stat_type.933": "8",
+      "ncaaf.stat_type.934": "45",
+      "ncaaf.stat_type.931": "2",
+      "ncaaf.stat_type.932": "1"
+     }
+    }
+   },
+   "stat_categories": {
+    "ncaaf.stat_category.1": {
+     "name": "Passing",
+     "sort": "ncaaf.stat_type.105",
+     "stats": [
+      "ncaaf.stat_type.102",
+      "ncaaf.stat_type.103",
+      "ncaaf.stat_type.104",
+      "ncaaf.stat_type.105",
+      "ncaaf.stat_type.106",
+      "ncaaf.stat_type.108",
+      "ncaaf.stat_type.109",
+      "ncaaf.stat_type.111",
+      "ncaaf.stat_type.112",
+      "ncaaf.stat_type.113"
+     ]
+    },
+    "ncaaf.stat_category.2": {
+     "name": "Rushing",
+     "sort": "ncaaf.stat_type.203",
+     "stats": [
+      "ncaaf.stat_type.202",
+      "ncaaf.stat_type.203",
+      "ncaaf.stat_type.205",
+      "ncaaf.stat_type.206",
+      "ncaaf.stat_type.207"
+     ]
+    },
+    "ncaaf.stat_category.3": {
+     "name": "Receiving",
+     "sort": "ncaaf.stat_type.303",
+     "stats": [
+      "ncaaf.stat_type.302",
+      "ncaaf.stat_type.303",
+      "ncaaf.stat_type.305",
+      "ncaaf.stat_type.306",
+      "ncaaf.stat_type.309"
+     ]
+    },
+    "ncaaf.stat_category.4": {
+     "name": "Kicking",
+     "sort": "ncaaf.stat_type.403",
+     "stats": [
+      "ncaaf.stat_type.407",
+      "ncaaf.stat_type.408",
+      "ncaaf.stat_type.409",
+      "ncaaf.stat_type.410",
+      "ncaaf.stat_type.411",
+      "ncaaf.stat_type.412"
+     ]
+    },
+    "ncaaf.stat_category.5": {
+     "name": "Returns",
+     "sort": "ncaaf.stat_type.503",
+     "stats": [
+      "ncaaf.stat_type.502",
+      "ncaaf.stat_type.503",
+      "ncaaf.stat_type.505",
+      "ncaaf.stat_type.506",
+      "ncaaf.stat_type.507",
+      "ncaaf.stat_type.508",
+      "ncaaf.stat_type.509",
+      "ncaaf.stat_type.511",
+      "ncaaf.stat_type.512",
+      "ncaaf.stat_type.513"
+     ]
+    },
+    "ncaaf.stat_category.6": {
+     "name": "Punting",
+     "sort": "ncaaf.stat_type.603",
+     "stats": [
+      "ncaaf.stat_type.602",
+      "ncaaf.stat_type.604",
+      "ncaaf.stat_type.608"
+     ]
+    },
+    "ncaaf.stat_category.7": {
+     "name": "Defense",
+     "sort": "ncaaf.stat_type.707",
+     "stats": [
+      "ncaaf.stat_type.702",
+      "ncaaf.stat_type.703",
+      "ncaaf.stat_type.705",
+      "ncaaf.stat_type.706",
+      "ncaaf.stat_type.707",
+      "ncaaf.stat_type.708",
+      "ncaaf.stat_type.709",
+      "ncaaf.stat_type.710"
+     ]
+    },
+    "ncaaf.stat_category.9": {
+     "name": "Team",
+     "sort": "ncaaf.stat_type.901",
+     "stats": [
+      "ncaaf.stat_type.919",
+      "ncaaf.stat_type.920",
+      "ncaaf.stat_type.921",
+      "ncaaf.stat_type.926",
+      "ncaaf.stat_type.927",
+      "ncaaf.stat_type.928",
+      "ncaaf.stat_type.929",
+      "ncaaf.stat_type.930",
+      "ncaaf.stat_type.931",
+      "ncaaf.stat_type.932",
+      "ncaaf.stat_type.933",
+      "ncaaf.stat_type.934",
+      "ncaaf.stat_type.936",
+      "ncaaf.stat_type.937",
+      "ncaaf.stat_type.938",
+      "ncaaf.stat_type.941",
+      "ncaaf.stat_type.944",
+      "ncaaf.stat_type.945",
+      "ncaaf.stat_type.946",
+      "ncaaf.stat_type.947",
+      "ncaaf.stat_type.948",
+      "ncaaf.stat_type.949",
+      "ncaaf.stat_type.950",
+      "ncaaf.stat_type.951",
+      "ncaaf.stat_type.952"
+     ]
+    }
+   },
+   "stat_variations": {
+    "ncaaf.stat_variation.2": {
+     "name": "Game"
+    }
+   },
+   "stat_types": {
+    "ncaaf.stat_type.102": {
+     "name": "Completions",
+     "short_name": "Comp"
+    },
+    "ncaaf.stat_type.103": {
+     "name": "Attempts",
+     "short_name": "Att"
+    },
+    "ncaaf.stat_type.105": {
+     "name": "Yards",
+     "short_name": "Yds"
+    },
+    "ncaaf.stat_type.104": {
+     "name": "Completion Percentage",
+     "short_name": "Pct"
+    },
+    "ncaaf.stat_type.106": {
+     "name": "Yards per Attempt",
+     "short_name": "Y/A"
+    },
+    "ncaaf.stat_type.111": {
+     "name": "Sacks",
+     "short_name": "Sack"
+    },
+    "ncaaf.stat_type.112": {
+     "name": "Yards Lost",
+     "short_name": "YdsL"
+    },
+    "ncaaf.stat_type.108": {
+     "name": "Touchdowns",
+     "short_name": "TD"
+    },
+    "ncaaf.stat_type.109": {
+     "name": "Interceptions",
+     "short_name": "Int"
+    },
+    "ncaaf.stat_type.113": {
+     "name": "QB Rating",
+     "short_name": "QBRat"
+    },
+    "ncaaf.stat_type.202": {
+     "name": "Rushes",
+     "short_name": "Rush"
+    },
+    "ncaaf.stat_type.203": {
+     "name": "Yards",
+     "short_name": "Yds"
+    },
+    "ncaaf.stat_type.205": {
+     "name": "Average",
+     "short_name": "Avg"
+    },
+    "ncaaf.stat_type.206": {
+     "name": "Longest",
+     "short_name": "Long"
+    },
+    "ncaaf.stat_type.207": {
+     "name": "Touchdowns",
+     "short_name": "TD"
+    },
+    "ncaaf.stat_type.302": {
+     "name": "Receptions",
+     "short_name": "Rec"
+    },
+    "ncaaf.stat_type.303": {
+     "name": "Yards",
+     "short_name": "Yds"
+    },
+    "ncaaf.stat_type.305": {
+     "name": "Average",
+     "short_name": "Avg"
+    },
+    "ncaaf.stat_type.306": {
+     "name": "Longest",
+     "short_name": "Long"
+    },
+    "ncaaf.stat_type.309": {
+     "name": "Touchdowns",
+     "short_name": "TD"
+    },
+    "ncaaf.stat_type.411": {
+     "name": "Extra Points Made",
+     "short_name": "XPM"
+    },
+    "ncaaf.stat_type.412": {
+     "name": "Extra Points Attempted",
+     "short_name": "XPA"
+    },
+    "ncaaf.stat_type.407": {
+     "name": "Total Made",
+     "short_name": "FGM"
+    },
+    "ncaaf.stat_type.408": {
+     "name": "Total Attempted",
+     "short_name": "FGA"
+    },
+    "ncaaf.stat_type.410": {
+     "name": "Long",
+     "short_name": "Long"
+    },
+    "ncaaf.stat_type.409": {
+     "name": "Percent",
+     "short_name": "Pct"
+    },
+    "ncaaf.stat_type.502": {
+     "name": "Kickoff Returns",
+     "short_name": "KR"
+    },
+    "ncaaf.stat_type.503": {
+     "name": "Yards",
+     "short_name": "Yds"
+    },
+    "ncaaf.stat_type.505": {
+     "name": "Average",
+     "short_name": "Avg"
+    },
+    "ncaaf.stat_type.506": {
+     "name": "Longest",
+     "short_name": "Long"
+    },
+    "ncaaf.stat_type.507": {
+     "name": "Touchdowns",
+     "short_name": "TD"
+    },
+    "ncaaf.stat_type.508": {
+     "name": "Punt Returns",
+     "short_name": "PR"
+    },
+    "ncaaf.stat_type.509": {
+     "name": "Yards",
+     "short_name": "Yds"
+    },
+    "ncaaf.stat_type.511": {
+     "name": "Average",
+     "short_name": "Avg"
+    },
+    "ncaaf.stat_type.512": {
+     "name": "Longest",
+     "short_name": "Long"
+    },
+    "ncaaf.stat_type.513": {
+     "name": "Touchdowns",
+     "short_name": "TD"
+    },
+    "ncaaf.stat_type.602": {
+     "name": "Punts",
+     "short_name": "Punt"
+    },
+    "ncaaf.stat_type.604": {
+     "name": "Average",
+     "short_name": "Avg"
+    },
+    "ncaaf.stat_type.608": {
+     "name": "Longest",
+     "short_name": "Long"
+    },
+    "ncaaf.stat_type.702": {
+     "name": "Solo Tackles",
+     "short_name": "Solo"
+    },
+    "ncaaf.stat_type.703": {
+     "name": "Tackle Assists",
+     "short_name": "Ast"
+    },
+    "ncaaf.stat_type.705": {
+     "name": "Sacks",
+     "short_name": "Sack"
+    },
+    "ncaaf.stat_type.706": {
+     "name": "Yards Lost",
+     "short_name": "YdsL"
+    },
+    "ncaaf.stat_type.710": {
+     "name": "Passes Defended",
+     "short_name": "PD"
+    },
+    "ncaaf.stat_type.707": {
+     "name": "Interceptions",
+     "short_name": "Int"
+    },
+    "ncaaf.stat_type.708": {
+     "name": "Yards",
+     "short_name": "Yds"
+    },
+    "ncaaf.stat_type.709": {
+     "name": "Interception Touchdowns",
+     "short_name": "IntTD"
+    },
+    "ncaaf.stat_type.919": {
+     "name": "First Downs",
+     "short_name": "Firsts"
+    },
+    "ncaaf.stat_type.945": {
+     "name": "Total Yards",
+     "short_name": "TOTYDS"
+    },
+    "ncaaf.stat_type.950": {
+     "name": "Turnovers",
+     "short_name": "TO"
+    },
+    "ncaaf.stat_type.937": {
+     "name": "Passes for First",
+     "short_name": "PASSF"
+    },
+    "ncaaf.stat_type.936": {
+     "name": "Rushes for First",
+     "short_name": "RUSHF"
+    },
+    "ncaaf.stat_type.938": {
+     "name": "Penalties for First",
+     "short_name": "PENF"
+    },
+    "ncaaf.stat_type.941": {
+     "name": "Third Down Efficiency",
+     "short_name": "3DE"
+    },
+    "ncaaf.stat_type.944": {
+     "name": "Fourth Down Efficiency",
+     "short_name": "4DE"
+    },
+    "ncaaf.stat_type.946": {
+     "name": "Total Plays",
+     "short_name": "TOTPLAYS"
+    },
+    "ncaaf.stat_type.952": {
+     "name": "Avg Gain Per Play",
+     "short_name": "AVGPYDS"
+    },
+    "ncaaf.stat_type.921": {
+     "name": "Net Yards Rushing",
+     "short_name": "RYDS"
+    },
+    "ncaaf.stat_type.920": {
+     "name": "Rushes",
+     "short_name": "Rushes"
+    },
+    "ncaaf.stat_type.949": {
+     "name": "Yards Per Rush",
+     "short_name": "AVGRYDS"
+    },
+    "ncaaf.stat_type.947": {
+     "name": "Net Yards Passing",
+     "short_name": "NETPYDS"
+    },
+    "ncaaf.stat_type.951": {
+     "name": "Comp-Att",
+     "short_name": "PASSEFF"
+    },
+    "ncaaf.stat_type.948": {
+     "name": "Yards Per Pass",
+     "short_name": "AVGPYDS"
+    },
+    "ncaaf.stat_type.927": {
+     "name": "Times Sacked",
+     "short_name": "SACKS"
+    },
+    "ncaaf.stat_type.928": {
+     "name": "Yds Lost To Sacks",
+     "short_name": "SACKYD"
+    },
+    "ncaaf.stat_type.926": {
+     "name": "Interceptions",
+     "short_name": "INTS"
+    },
+    "ncaaf.stat_type.929": {
+     "name": "Punts",
+     "short_name": "PUNTS"
+    },
+    "ncaaf.stat_type.930": {
+     "name": "Punt Average",
+     "short_name": "PUNTAVG"
+    },
+    "ncaaf.stat_type.933": {
+     "name": "Penalties",
+     "short_name": "PEN"
+    },
+    "ncaaf.stat_type.934": {
+     "name": "Penalty Yards",
+     "short_name": "PENYD"
+    },
+    "ncaaf.stat_type.931": {
+     "name": "Fumbles",
+     "short_name": "FUMB"
+    },
+    "ncaaf.stat_type.932": {
+     "name": "Fumbles Lost",
+     "short_name": "FUMBLOST"
+    }
+   },
+   "games": {
+    "ncaaf.g.202609120069": {
+     "gameid": "ncaaf.g.202609120069",
+     "home_team_id": "ncaaf.t.69",
+     "away_team_id": "ncaaf.t.73",
+     "start_time": "Sat, 12 Sep 2026 19:30:00 +0000",
+     "status_type": "status.type.final",
+     "total_home_points": "17",
+     "total_away_points": "45"
+    }
+   },
+   "gamelineups": {
+    "ncaaf.g.202609120069": {
+     "home_lineup": {
+      "all": {
+       "ncaaf.p.403635": {
+        "player_id": "ncaaf.p.403635"
+       },
+       "ncaaf.p.470454": {
+        "player_id": "ncaaf.p.470454"
+       }
+      }
+     },
+     "home_lineup_order": [],
+     "away_lineup": {
+      "all": {
+       "ncaaf.p.470424": {
+        "player_id": "ncaaf.p.470424"
+       },
+       "ncaaf.p.404415": {
+        "player_id": "ncaaf.p.404415"
+       }
+      }
+     },
+     "away_lineup_order": []
+    }
+   }
+  }
+ }
+}
