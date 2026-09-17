@@ -63,3 +63,14 @@ def test_missed_pat_touchdown_ep_end_is_six():
     vendor = _row(_plays(401858435), "#37 S.Lopez kick attempt failed")
     assert classic["EP_end"] == 6
     assert vendor["EP_end"] == 6
+
+
+# --- C4: a made vendor-text try ("kick attempt good") scores the touchdown row at 7 ------------
+
+
+def test_vendor_text_made_pat_touchdown_ep_end_is_seven():
+    plays = _plays(401856682)
+    tds = plays.filter(pl.col("type.text").str.contains("Touchdown"))
+    assert tds.height == 5
+    assert tds["text"].str.contains("kick attempt good").all()
+    assert tds["EP_end"].to_list() == [7.0] * 5

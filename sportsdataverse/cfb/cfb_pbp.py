@@ -5927,7 +5927,8 @@ class CFBPlayProcess(object):
                 # Defense TD + Kick/PAT Good
                 .when(
                     (pl.col("type.text").is_in(defense_score_vec)).and_(
-                        pl.col("text").str.to_lowercase().str.contains(r"kick\)"),
+                        # "(Name KICK)"; xp_made adds the 2025+ vendor "#96 C.Hawkins kick attempt good"
+                        pl.col("text").str.to_lowercase().str.contains(r"kick\)").or_(pl.col("xp_made") == True),
                     ),
                 )
                 .then(-7)
@@ -5965,7 +5966,8 @@ class CFBPlayProcess(object):
                 # Offense TD + Kick/PAT Good
                 .when(
                     (pl.col("type.text").is_in(offense_score_vec)).and_(
-                        pl.col("text").str.to_lowercase().str.contains(r"kick\)"),
+                        # "(Name KICK)"; xp_made adds the 2025+ vendor "#96 C.Hawkins kick attempt good"
+                        pl.col("text").str.to_lowercase().str.contains(r"kick\)").or_(pl.col("xp_made") == True),
                     ),
                 )
                 .then(7)
