@@ -8,9 +8,10 @@
 
 # `nfl_loaders` fixtures
 
-Real (not synthetic) slices of the nflverse release parquets that
-`sportsdataverse/nfl/nfl_loaders.py` reads, captured so the multi-season
-schema-drift regression test can run offline.
+Real (not synthetic) slices of the upstream files that
+`sportsdataverse/nfl/nfl_loaders.py` reads -- nflverse release parquets and
+DynastyProcess CSVs -- captured so the schema-drift and id-dtype regression
+tests can run offline.
 
 | File | Provenance | Captured |
 |---|---|---|
