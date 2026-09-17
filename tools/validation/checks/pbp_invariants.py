@@ -205,8 +205,17 @@ def _timeouts(df: pl.DataFrame) -> list[RuleResult | None]:
             f,
             "timeouts.range",
             1,
-            "timeouts remaining per team must be within [0, 3]",
-            pl.all_horizontal([c(col).is_not_null() for col in _TO]),
+            "timeouts remaining per team must be within [0, 3] in regulation",
+            pl.all_horizontal([c(col).is_not_null() for col in _TO]) & (c("period.number") <= 4),
+            rng,
+            _TO,
+        ),
+        _row_rule(
+            f,
+            "timeouts.range_overtime",
+            1,
+            "timeouts remaining per team must be within [0, 3] in overtime (the allotment resets)",
+            pl.all_horizontal([c(col).is_not_null() for col in _TO]) & (c("period.number") >= 5),
             rng,
             _TO,
         ),
@@ -252,8 +261,8 @@ def _timeouts(df: pl.DataFrame) -> list[RuleResult | None]:
             f,
             "timeouts.charged_on_non_timeout_row",
             1,
-            "only a timeout row may decrement a team's timeouts",
-            ~c("__is_to"),
+            "only a timeout row may decrement a team's timeouts (second-half opener excluded)",
+            ~c("__is_to") & ~c("__first_2h").fill_null(False),
             (c("__home_used") != 0) | (c("__away_used") != 0),
             _TO,
         ),
@@ -511,6 +520,33 @@ def _possession(df: pl.DataFrame) -> list[RuleResult | None]:
                 need + ("drive.id", "__prev_id", "__prev_pos"),
             )
         )
+    if _has(df, "end.pos_team.id", "period.number"):
+        n = (
+            df.with_columns(__scrim=_scrimmage())
+            .filter(c("__scrim"))
+            .with_columns(
+                __next_pos=c("start.pos_team.id").shift(-1),
+                __next_period=c("period.number").shift(-1),
+                __next_id=c("id").shift(-1),
+            )
+        )
+        kept_ball = (
+            (c("__next_pos") == c("start.pos_team.id"))
+            & (c("__next_period") == c("period.number"))
+            & ~_t("scoringPlay")
+            & ~_t("td_play")
+        )
+        out.append(
+            _row_rule(
+                n,
+                "poss.end_team_flips_without_change",
+                4,
+                "a scrimmage play whose offense also runs the next scrimmage play keeps end.pos_team == start.pos_team",
+                kept_ball,
+                c("end.pos_team.id") != c("start.pos_team.id"),
+                need + ("end.pos_team.id", "__next_id", "__next_pos", "wpa"),
+            )
+        )
     if _has(df, "punt", "kickoff_play", "penalty_flag", "fumble_vec", "td_play", "period.number"):
         k = (
             df.with_columns(__scrim=_scrimmage(), __row=pl.int_range(pl.len()))
@@ -626,6 +662,15 @@ def _offense_td() -> pl.Expr:
     ).fill_null(False)
 
 
+#: TD text that carries the try's result (PAT folded into the TD row).
+_PAT_IN_TEXT_RE = r"(?i)extra point|kick\)|kick is|\bpat\b|two-point|two point|2-pt|2pt|conversion"
+#: ...and says the try failed.
+_PAT_FAILED_RE = (
+    r"(?i)extra point is no good|extra point.{0,40}blocked|kick is (no good|blocked)|kick (failed|blocked|missed)"
+    r"|pat (failed|missed|blocked)|(two-point|two point|2-pt|conversion).{0,60}(fail|no good|incomplete)"
+)
+
+
 def _ep_wp(df: pl.DataFrame, summary: dict[str, Any] | None) -> list[RuleResult | None]:
     out: list[RuleResult | None] = [
         _row_rule(
@@ -652,6 +697,7 @@ def _ep_wp(df: pl.DataFrame, summary: dict[str, Any] | None) -> list[RuleResult 
         )
     if _has(df, "rush_td", "pass_td", "type.text", "EP_end"):
         td = _offense_td() & c("EP_end").is_not_null()
+        text = c("text").fill_null("")
         out += [
             _row_rule(
                 df,
@@ -664,13 +710,21 @@ def _ep_wp(df: pl.DataFrame, summary: dict[str, Any] | None) -> list[RuleResult 
             ),
             _row_rule(
                 df,
-                "ep.offense_td_end_pat_unresolved",
+                "ep.offense_td_pat_in_text_unresolved",
                 6,
-                "an offensive TD's EP_end falls back to 6.92 (the PAT outcome was not read)",
-                td,
+                "a TD whose text carries the try result ends at 6/7/8, not the 6.92 unknown-PAT fallback",
+                td & text.str.contains(_PAT_IN_TEXT_RE),
                 (c("EP_end") - 6.92).abs() < _EPS,
                 ("EP_start", "EP_end", "EPA"),
-                severity=Severity.WARN,
+            ),
+            _row_rule(
+                df,
+                "ep.offense_td_failed_try_scored_as_made",
+                6,
+                "a TD whose try failed (text) ends at 6, not 6.92/7",
+                td & text.str.contains(_PAT_FAILED_RE),
+                c("EP_end") > 6 + _EPS,
+                ("EP_start", "EP_end", "EPA"),
             ),
         ]
     if _has(df, "EPA", "EP_end", "EP_start", "penalty_in_text", "end_of_half", "type.text"):
@@ -715,6 +769,21 @@ def _ep_wp(df: pl.DataFrame, summary: dict[str, Any] | None) -> list[RuleResult 
                 severity=Severity.WARN,
             )
         )
+        if _has(df, "start.pos_team.id", "end.pos_team.id"):
+            out.append(
+                _row_rule(
+                    f,
+                    "wp.home_wp_after_complemented",
+                    6,
+                    "home_wp_after is not the complement of the next play's home_wp_before (perspective flip)",
+                    c("__next_home_wp_before").is_not_null()
+                    & c("home_wp_after").is_not_null()
+                    & (c("start.pos_team.id") != c("end.pos_team.id")),
+                    ((c("home_wp_after") - (1 - c("__next_home_wp_before"))).abs() < 0.01)
+                    & ((c("home_wp_after") - c("__next_home_wp_before")).abs() > 0.05),
+                    ("start.pos_team.id", "end.pos_team.id", "home_wp_after", "__next_home_wp_before", "wpa"),
+                )
+            )
         result = home_result(summary)
         if result is not None and df.height:
             nn = df.filter(c("home_wp_after").is_not_null() & c("home_wp_before").is_not_null())
@@ -1163,17 +1232,19 @@ def _attribution(df: pl.DataFrame) -> list[RuleResult | None]:
         & ~_t("punt_oob")
         & ~_t("punt_downed")
         & ~_t("punt_blocked")
-        & ~text.str.contains(r"(?i)touchback|out of bounds|out-of-bounds|fair catch|downed")
+        & ~text.str.contains(r"(?i)touchback|out of bounds|out-of-bounds|fair catch|downed|no return")
     )
+    named_sacker = text.str.contains(r"sacked[^.]*\(|(?i)sacked by|(?i)sack by")
+    named_kicker = text.str.contains(r"(?i) kicks | kickoff |kickoff by|kicked by")
     specs: tuple[tuple[str, pl.Expr, str, tuple[str, ...]], ...] = (
         ("attr.passer", _t("pass_attempt") & ~_t("sack") & live, "passer_player_name", ("pass_attempt",)),
         ("attr.receiver", _t("completion") & ~_t("sack") & live, "receiver_player_name", ("completion",)),
         ("attr.rusher", _t("rush") & live, "rusher_player_name", ("rush",)),
-        ("attr.sacker", _t("sack") & live, "sack_player_name", ("sack",)),
+        ("attr.sacker", _t("sack") & live & named_sacker, "sack_player_name", ("sack",)),
         ("attr.interceptor", _t("int") & live, "interception_player_name", ("int",)),
         ("attr.fg_kicker", _t("fg_attempt") & live, "fg_kicker_player_name", ("fg_attempt",)),
         ("attr.punter", _t("punt") & live, "punter_player_name", ("punt",)),
-        ("attr.kickoff_kicker", _t("kickoff_play") & live, "kickoff_player_name", ("kickoff_play",)),
+        ("attr.kickoff_kicker", _t("kickoff_play") & live & named_kicker, "kickoff_player_name", ("kickoff_play",)),
         ("attr.kickoff_returner", returned_ko & live, "kickoff_return_player_name", ("kickoff_play", "kickoff_tb")),
         ("attr.punt_returner", returned_punt & live, "punt_return_player_name", ("punt", "punt_tb", "punt_fair_catch")),
     )

@@ -145,6 +145,9 @@ def test_timeouts():
     assert _fires(both, "timeouts.timeout_row_charged_both") == 1
     assert _fires(_game(**{"end__homeTeamTimeouts": (0, 2)}), "timeouts.charged_on_non_timeout_row") == 1
     assert _fires(_game(**{"start__awayTeamTimeouts": (2, -1)}), "timeouts.range") == 1
+    overtime = _game(**{"period__number": (5, 5), "start__awayTeamTimeouts": (5, -1), "end__awayTeamTimeouts": (5, -1)})
+    assert _fires(overtime, "timeouts.range_overtime") == 1
+    assert _fires(overtime, "timeouts.range") == 0
     # no second-half reset: the 2H opener still carries the 1H's 2
     no_reset = _game(**{"start__homeTeamTimeouts": (5, 2), "end__homeTeamTimeouts": (5, 2)})
     assert _fires(no_reset, "timeouts.second_half_reset") == 1
@@ -181,6 +184,8 @@ def test_score():
 
 
 def test_possession():
+    assert _fires(_game(), "poss.end_team_flips_without_change") == 0
+    assert _fires(_game(**{"end__pos_team__id": (0, AWAY)}), "poss.end_team_flips_without_change") == 1
     assert _fires(_game(), "poss.offense_matches_drive_team") == 0
     assert _fires(_game(**{"drive__team__abbreviation": (2, "HOM")}), "poss.offense_matches_drive_team") == 1
     assert _fires(_game(**{"start__pos_team__id": (3, HOME)}), "poss.offense_constant_within_drive") == 1
@@ -222,7 +227,18 @@ def test_ep_wp():
     assert _fires(_game(**{"EP_start": (0, 7.5)}), "ep.start_range") == 1
     assert _fires(_game(), "ep.offense_td_end_not_realized") == 0
     assert _fires(_game(**{"EP_end": (1, 5.1)}), "ep.offense_td_end_not_realized") == 1
-    assert _fires(_game(**{"EP_end": (1, 6.92)}), "ep.offense_td_end_pat_unresolved") == 1
+    # the TD text carries "(K.Icker kick)": the try is known, 6.92 is the unknown-PAT fallback
+    assert _fires(_game(), "ep.offense_td_pat_in_text_unresolved") == 0
+    assert _fires(_game(**{"EP_end": (1, 6.92)}), "ep.offense_td_pat_in_text_unresolved") == 1
+    missed = _game(**{"text": (1, "A.Back run for 20 yards, TOUCHDOWN. K.Icker extra point is No Good, Wide Right")})
+    assert _fires(missed, "ep.offense_td_failed_try_scored_as_made") == 1
+    assert (
+        _fires(missed.with_columns(pl.col("EP_end").replace(7.0, 6.0)), "ep.offense_td_failed_try_scored_as_made") == 0
+    )
+    # possession change on row 1 (HOM TD -> AWY): home_wp_after must not be 1 - next home_wp_before
+    change = _game(**{"end__pos_team__id": (1, AWAY), "home_wp_after": (1, 0.3)})
+    assert _fires(change, "wp.home_wp_after_complemented") == 1
+    assert _fires(_game(**{"end__pos_team__id": (1, AWAY)}), "wp.home_wp_after_complemented") == 0
     assert _fires(_game(**{"EPA": (0, 0.9)}), "ep.epa_identity") == 1
     assert _fires(_game(**{"wp_after": (2, 1.2)}), "wp.wp_after_range") == 1
     assert _fires(_game(**{"home_wp_before": (3, 0.9)}), "wp.home_wp_continuity") == 1

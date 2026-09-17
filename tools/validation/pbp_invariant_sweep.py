@@ -20,8 +20,10 @@ Usage (resumable; finished games are skipped)::
         --out <dir> --nfl-raw /mnt/sdv_repos/nfl-raw/nfl/espn \\
         --cfb-raw /mnt/sdv_repos/cfbfastR-cfb-raw --workers 3
 
-``sample`` / ``run`` / ``report`` run the stages separately. Use a fresh
-``--out`` (or delete ``games/``) to re-evaluate after processor fixes.
+``sample`` / ``run`` / ``report`` run the stages separately; ``rescore``
+re-evaluates changed rules on the saved plays frames without re-processing.
+Use a fresh ``--out`` (keep ``manifest.json``) to re-measure after processor
+fixes -- the plays must be re-processed for a processor change to show.
 """
 
 from __future__ import annotations
@@ -48,77 +50,6 @@ log = logging.getLogger("pbp_invariant_sweep")
 FBS_CONFERENCES = {"1", "4", "5", "8", "9", "10", "12", "15", "16", "17", "18", "37", "151"}
 
 ERAS = ((2002, 2009), (2010, 2014), (2015, 2019), (2020, 2024), (2025, 2026))
-
-SLIM_COLUMNS = (
-    "id",
-    "game_play_number",
-    "sequenceNumber",
-    "period.number",
-    "clock.displayValue",
-    "type.text",
-    "orig_play_type",
-    "text",
-    "drive.id",
-    "drive.team.abbreviation",
-    "start.team.id",
-    "start.pos_team.id",
-    "end.pos_team.id",
-    "pos_team",
-    "homeTeamId",
-    "awayTeamId",
-    "homeTeamAbbrev",
-    "awayTeamAbbrev",
-    "start.down",
-    "start.distance",
-    "start.yardsToEndzone",
-    "end.down",
-    "end.distance",
-    "end.yardsToEndzone",
-    "start.downDistanceText",
-    "statYardage",
-    "scoringPlay",
-    "scoring_play",
-    "td_play",
-    "homeScore",
-    "awayScore",
-    "start.homeScore",
-    "start.awayScore",
-    "end.homeScore",
-    "end.awayScore",
-    "start.homeTeamTimeouts",
-    "start.awayTeamTimeouts",
-    "end.homeTeamTimeouts",
-    "end.awayTeamTimeouts",
-    "homeTimeoutCalled",
-    "awayTimeoutCalled",
-    "rush",
-    "pass",
-    "sack",
-    "pass_attempt",
-    "completion",
-    "int",
-    "rush_td",
-    "pass_td",
-    "penalty_flag",
-    "penalty_no_play",
-    "penalty_in_text",
-    "fumble_vec",
-    "fg_attempt",
-    "punt",
-    "kickoff_play",
-    "scrimmage_play",
-    "yds_rushed",
-    "yds_receiving",
-    "yds_sacked",
-    "EP_start",
-    "EP_end",
-    "EPA",
-    "wp_before",
-    "wp_after",
-    "wpa",
-    "home_wp_before",
-    "home_wp_after",
-)
 
 
 def era_of(season: int) -> str:
@@ -338,18 +269,17 @@ def process_game(task: dict[str, Any]) -> dict[str, Any]:
         if not isinstance(plays, pl.DataFrame) or plays.height == 0:
             meta.update(status="no_plays", seconds=round(time.time() - t0, 1), rules=[])
         else:
-            rules = pbp_invariants.evaluate(plays, summary=summary, box=result.get("advBoxScore"), league=league)
-            slim = plays.select(
-                [col for col in SLIM_COLUMNS if col in plays.columns]
-                + [col for col in plays.columns if col.endswith("_player_name")]
-            )
+            box_team = (result.get("advBoxScore") or {}).get("team")
             plays_path = out_dir / "plays" / league / str(season) / f"{gid}.parquet"
             plays_path.parent.mkdir(parents=True, exist_ok=True)
-            slim.write_parquet(plays_path)
+            # the whole frame, so later rules can be re-scored without re-processing
+            plays.write_parquet(plays_path)
+            rules = pbp_invariants.evaluate(plays, summary=summary, box={"team": box_team}, league=league)
             meta.update(
                 status="ok",
                 seconds=round(time.time() - t0, 1),
                 n_plays=plays.height,
+                box_team=box_team,
                 rules=[r.to_dict() for r in rules],
             )
     except Exception as exc:  # noqa: BLE001 -- a processor crash is itself a finding
@@ -363,6 +293,28 @@ def process_game(task: dict[str, Any]) -> dict[str, Any]:
     game_path.parent.mkdir(parents=True, exist_ok=True)
     game_path.write_text(json.dumps(meta, default=str))
     return {k: meta.get(k) for k in ("league", "season", "game_id", "status", "seconds", "error")}
+
+
+def rescore(out: Path, roots: dict[str, Path]) -> None:
+    """Re-evaluate the current rules on every saved plays frame (no re-processing)."""
+    import polars as pl
+
+    from tools.validation.checks import pbp_invariants
+
+    n = 0
+    for game_path in sorted((out / "games").rglob("*.json")):
+        meta = json.loads(game_path.read_text())
+        league, season, gid = meta["league"], int(meta["season"]), int(meta["game_id"])
+        plays_path = out / "plays" / league / str(season) / f"{gid}.parquet"
+        if meta.get("status") != "ok" or not plays_path.exists() or league not in roots:
+            continue
+        summary = read_summary(league, roots[league], season, gid)
+        box = {"team": meta["box_team"]} if meta.get("box_team") else None
+        rules = pbp_invariants.evaluate(pl.read_parquet(plays_path), summary=summary, box=box, league=league)
+        meta["rules"] = [r.to_dict() for r in rules]
+        game_path.write_text(json.dumps(meta, default=str))
+        n += 1
+    log.info("re-scored %d games", n)
 
 
 def _interleave(games: list[dict[str, Any]]) -> list[dict[str, Any]]:
@@ -497,7 +449,7 @@ def report(out: Path) -> None:
 
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("stage", choices=["sample", "run", "report", "all"])
+    ap.add_argument("stage", choices=["sample", "run", "rescore", "report", "all"])
     ap.add_argument("--out", required=True, type=Path)
     ap.add_argument("--nfl-raw", type=Path, default=os.environ.get("SDV_VALIDATION_NFL_RAW_ROOT"))
     ap.add_argument("--cfb-raw", type=Path, default=os.environ.get("SDV_VALIDATION_CFB_RAW_ROOT"))
@@ -510,7 +462,7 @@ def main(argv: list[str] | None = None) -> int:
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s", stream=sys.stdout)
     leagues = [lg.strip() for lg in args.leagues.split(",") if lg.strip()]
     roots = {"nfl": args.nfl_raw, "cfb": args.cfb_raw}
-    for lg in leagues:
+    for lg in leagues if args.stage != "report" else ():
         if roots.get(lg) is None:
             ap.error(f"--{lg}-raw (or SDV_VALIDATION_{lg.upper()}_RAW_ROOT) is required")
     args.out.mkdir(parents=True, exist_ok=True)
@@ -526,6 +478,8 @@ def main(argv: list[str] | None = None) -> int:
     if args.stage in ("run", "all"):
         manifest = [g for g in json.loads(manifest_path.read_text()) if g["league"] in leagues]
         run(manifest, args.out, {k: Path(v) for k, v in roots.items() if v is not None}, min(args.workers, 3))
+    if args.stage == "rescore":
+        rescore(args.out, {k: Path(v) for k, v in roots.items() if v is not None and k in leagues})
     if args.stage in ("report", "all"):
         report(args.out)
     return 0
