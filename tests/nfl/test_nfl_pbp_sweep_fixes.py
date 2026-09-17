@@ -261,10 +261,20 @@ def test_scoring_summary_kicker_and_interceptor_fold_to_the_abbreviated_form(tex
 # ---------------------------------------------------------------------------
 
 
-@pytest.mark.xfail(strict=True, reason="round-3 N31 pending (see s1-nfl/r3_STATE.md)")
-def test_field_goals_start_at_the_snap_spot(wsh_phi_2015):
+def test_field_goals_start_at_the_snap_spot(wsh_phi_2015, ne_mia_2005, mia_den_2002, gb_stl_2009):
     assert _row(wsh_phi_2015, 4007915081769)["start.yardsToEndzone"] == 16  # "34 Yd Field Goal" from the PHI 16
     assert _row(wsh_phi_2015, 4007915082166)["start.yardsToEndzone"] == 10  # "28 Yd Field Goal" from the 10
+    # ESPN's own yard line wins over the kick distance: "pushed ob at SL 8" then a
+    # 25-yard kick on 4th-and-6 from the 8 (a 7-yard hold), not from the 7
+    assert _row(gb_stl_2009, 2909270140918)["start.yardsToEndzone"] == 8
+    assert _row(gb_stl_2009, 2909270140220)["start.yardsToEndzone"] == 31  # 48-yard attempt, 4th-and-8 from the 31
+    # 2005: the text is empty (no kick distance), ESPN's yard line is the only spot
+    fgs = ne_mia_2005.filter(pl.col("fg_attempt") == True)  # noqa: E712
+    assert fgs.height == 5 and fgs["start.yardsToEndzone"].null_count() == 0
+    assert _row(ne_mia_2005, 2511130151894)["start.yardsToEndzone"] == 17
+    # 2002: ESPN's yardsToEndzone is 0 on every play; its yard line is right
+    assert _row(mia_den_2002, 2210130070109)["start.yardsToEndzone"] == 15  # "33 yard field goal by Jason Elam"
+    assert _row(mia_den_2002, 2210130073209)["start.yardsToEndzone"] == 37  # "55 yard field goal by Jason Elam"
 
 
 # ---------------------------------------------------------------------------

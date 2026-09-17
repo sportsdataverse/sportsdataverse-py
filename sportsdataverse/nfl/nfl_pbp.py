@@ -2618,8 +2618,15 @@ class NFLPlayProcess(object):
                 .cast(pl.Int32),
             )
             .with_columns(
-                pl.when(pl.col("fg_attempt") == True)
-                .then(pl.col("yds_fg") - 17)
+                # A field goal snaps from ESPN's own yard line; the kick distance is a
+                # fallback for the oldest feeds, and it is 18 yards longer than the
+                # line of scrimmage (7-8 yards to the hold plus the 10-yard end zone):
+                # ESPN's yard line sits at yds_fg - 18 on 525 of 582 sampled kicks
+                # 2002-2026, at yds_fg - 17 on 22.
+                pl.when((pl.col("fg_attempt") == True).and_(pl.col("start.yard") > 0))
+                .then(pl.col("start.yard"))
+                .when(pl.col("fg_attempt") == True)
+                .then(pl.col("yds_fg") - 18)
                 .otherwise(pl.col("start.yardsToEndzone"))
                 .alias("start.yardsToEndzone"),
             )
