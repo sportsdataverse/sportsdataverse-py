@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import copy
 import json
 import logging
 import os
@@ -453,6 +454,8 @@ class NFLPlayProcess(object):
         """
         pbp_txt = {"timeouts": {}}
         self._offline = summary is not None
+        # the pipeline writes into the payload (header home/away, ...): never the caller's dict
+        summary = copy.deepcopy(summary)
         if summary is not None and self.participants is None:
             # a supplied summary is the offline path: the pipeline must not reach
             # the network for participants (or a roster) unless they were passed in
@@ -6943,6 +6946,7 @@ class NFLPlayProcess(object):
             confirmed_corrupt = self.corrupt_pbp_check()
 
             if confirmed_corrupt:
+                self.ran_pipeline = True
                 return self.json if self.return_keys is None else {k: self.json.get(f"{k}") for k in self.return_keys}
 
             if (pbp_json.get("header").get("competitions")[0].get("playByPlaySource") != "none") and (
@@ -7015,7 +7019,7 @@ class NFLPlayProcess(object):
                 }
                 self.json = pbp_json
             self.ran_pipeline = True
-            return self.json if self.return_keys is None else {k: self.json.get(f"{k}") for k in self.return_keys}
+        return self.json if self.return_keys is None else {k: self.json.get(f"{k}") for k in self.return_keys}
 
     def run_cleaning_pipeline(self):
         """Run the lighter cleaning pipeline against ``self.json``.
@@ -7072,6 +7076,7 @@ class NFLPlayProcess(object):
             confirmed_corrupt = self.corrupt_pbp_check()
 
             if confirmed_corrupt:
+                self.ran_cleaning_pipeline = True
                 return self.json if self.return_keys is None else {k: self.json.get(f"{k}") for k in self.return_keys}
 
             if (
@@ -7124,7 +7129,7 @@ class NFLPlayProcess(object):
                 }
                 self.json = pbp_json
             self.ran_cleaning_pipeline = True
-            return self.json
+        return self.json
 
     def corrupt_pbp_check(self):
         """Detect ESPN payloads that look corrupt or partial.

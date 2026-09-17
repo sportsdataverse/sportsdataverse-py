@@ -215,7 +215,8 @@ def dome_run(summary):
 
     indoor = copy.deepcopy(summary)
     indoor["gameInfo"]["venue"]["indoor"] = True
-    return _recorded_run(indoor)
+    pristine = copy.deepcopy(indoor)
+    return (*_recorded_run(indoor), indoor, pristine)
 
 
 def _roof_seen(seen: dict) -> set:
@@ -242,8 +243,32 @@ def test_roof_defaults_to_outdoors_for_every_model(run, frame):
 
 
 def test_indoor_venue_is_a_dome_for_every_model(dome_run, frame):
-    proc, _, seen = dome_run
+    proc, _, seen, _, _ = dome_run
     assert proc.plays_frame["roof"].unique().to_list() == ["dome"]
     assert _roof_seen(seen) == {"dome"}
     ep = frame.select("id", "EP_start").join(proc.plays_frame.select("id", "EP_start"), on="id", suffix="_dome")
     assert (ep["EP_start"] - ep["EP_start_dome"]).abs().max() > 0.01
+
+
+# ---------------------------------------------------------------------------
+# N4 -- a second run returns the processed result; the caller's summary is untouched
+# ---------------------------------------------------------------------------
+
+
+def test_rerun_returns_the_result_and_the_supplied_summary_is_not_mutated(dome_run):
+    proc, out, _, passed, pristine = dome_run
+    assert passed == pristine
+    again = proc.run_processing_pipeline()
+    assert again is out
+
+
+def test_rerun_after_a_corrupt_short_circuit_returns_the_same_payload(summary):
+    import copy
+
+    pregame = copy.deepcopy(summary)
+    pregame["drives"] = {}
+    proc = NFLPlayProcess(gameId=GAME_ID)
+    proc.espn_nfl_pbp(summary=pregame)
+    first = proc.run_processing_pipeline()
+    assert first is not None and first["plays"] == []
+    assert proc.run_processing_pipeline() is first
