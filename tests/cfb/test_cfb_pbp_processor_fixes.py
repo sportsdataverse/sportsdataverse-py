@@ -10,6 +10,18 @@ Every case runs the real pipeline, offline, on a stored ESPN summary:
 * ``summary_401858213.json`` -- Florida A&M @ Miami, 2026 (a timeout logged twice).
 * ``summary_401677179.json`` -- Indiana @ Notre Dame, 2024 ("Timeout Indiana" holds "nd").
 * ``summary_401112081.json`` -- Baylor @ TCU, 2019 (triple overtime, every OT period numbered 5).
+* ``summary_401858426.json`` -- Northern Illinois @ Iowa, 2026 (a punt returner written ``R.Vander Zee``).
+* ``summary_400869270.json`` -- Central Michigan @ Oklahoma State, 2016 ("Timeout CENTRAL MICH").
+* ``summary_401032062.json`` -- Western Michigan @ BYU, 2018 ("Timeout WESTRN MICHIGAN").
+* ``summary_401752746.json`` -- Auburn @ Arkansas, 2025 ("Timeout , clock" names no team).
+* ``summary_401762858.json`` -- Buffalo @ Central Michigan, 2025 ("sacked  by", "fumbled,  return  for 85 yds").
+* ``summary_243042579.json`` -- Tennessee @ South Carolina, 2004 ("for -2 yards", "returned -1 yards by").
+* ``summary_401636929.json`` -- Baylor @ West Virginia, 2024 ("return for a loss of 1 yard" on a kickoff).
+* ``summary_401858221.json`` -- Old Dominion @ Virginia Tech, 2026 ("return  for -55 yds").
+* ``summary_332570254.json`` -- Oregon State @ Utah, 2013 ("returned by Victor Bolden, fumbled, recovered by ... Victor Bolden for 10 yards").
+* ``summary_252532751.json`` -- Louisiana Monroe @ Wyoming, 2005 ("Julius Stinson return -5 yards to the Wyom42").
+* ``summary_252460252.json`` -- Boston College @ BYU, 2005 ("Johnny Ayers punt for a loss of 12 yards").
+* ``summary_401752844.json`` -- Iowa @ Rutgers, 2025 ("J. Scullion kick for 65 yds", the short kickoff form).
 
 The 2026 summaries are copied verbatim from ``cfbfastR-cfb-raw/cfb/json/raw``.
 """
@@ -22,6 +34,7 @@ from functools import lru_cache
 from pathlib import Path
 
 import polars as pl
+from polars.testing import assert_frame_equal
 
 from sportsdataverse.cfb.cfb_pbp import CFBPlayProcess
 
@@ -33,11 +46,11 @@ def _summary(game_id: int) -> dict:
 
 
 @lru_cache(maxsize=None)
-def _processed(game_id: int, blank_mascots: bool = False):
+def _processed(game_id: int, mascot: str | None = "keep"):
     summary = _summary(game_id)
-    if blank_mascots:
+    if mascot != "keep":
         for comp in summary["header"]["competitions"][0]["competitors"]:
-            comp["team"]["name"] = ""
+            comp["team"]["name"] = mascot
     snapshot = copy.deepcopy(summary)
     proc = CFBPlayProcess(gameId=game_id)
     proc.espn_cfb_pbp(summary=summary)
@@ -144,7 +157,7 @@ def test_overtime_timeouts_reset_to_one():
 def test_timeout_team_matching_empty_mascot_and_substrings():
     # "Timeout Indiana" contains Notre Dame's abbreviation "nd"; an empty mascot is contained in
     # every string. Either way the timeout used to be charged to both teams.
-    plays = _plays(401677179, blank_mascots=True).filter(pl.col("type.text") == "Timeout")
+    plays = _plays(401677179, mascot="").filter(pl.col("type.text") == "Timeout")
     assert plays.height == 7
     both = plays.filter(pl.col("homeTimeoutCalled") & pl.col("awayTimeoutCalled"))
     assert both.height == 0, both["text"].to_list()
@@ -182,3 +195,145 @@ def test_odds_source_returned():
     proc, result, _, _ = _processed(401856682)
     assert result["odds_source"] == proc.odds_source
     assert result["odds_source"] in {"summary_pickcenter", "core_odds_api", "default", "injected"}
+
+
+# --- C16: punt returner names that are not "X.Surname" -------------------------------------------
+
+
+def test_punt_returner_beyond_abbreviated_names():
+    plays = _plays(401858426).filter(pl.col("text").str.contains("#2 R.Vander Zee return", literal=True))
+    assert plays.height == 2
+    assert plays["punt_return_player_name"].to_list() == ["R.Vander Zee", "R.Vander Zee"]
+
+
+# --- C17: a doubled space in "sacked  by" / "return  for" -------------------------------------------
+
+
+def test_double_space_sack_and_return_text():
+    row = _row(_plays(401762858), "T. Roberson sacked  by K. Demma for -3 yds")
+    assert (row["sack_player_name"], row["passer_player_name"]) == ("K. Demma", "T. Roberson")
+    assert row["yds_fumble_return"] == 85
+
+
+# --- C18: a null mascot is processed exactly like an empty one ------------------------------------
+
+
+def test_null_mascot_is_empty_not_the_string_none():
+    null_mascot = _plays(401677179, mascot=None)
+    assert null_mascot["homeTeamMascot"].unique().to_list() == [""]
+    assert null_mascot["awayTeamMascot"].unique().to_list() == [""]
+    assert_frame_equal(null_mascot, _plays(401677179, mascot=""))
+
+
+# --- C19: cfb_pbp_json() returns the attached payload ---------------------------------------------
+
+
+def test_cfb_pbp_json_returns_the_attached_summary():
+    proc = CFBPlayProcess(gameId=401856682)
+    loaded = proc.espn_cfb_pbp(summary=_summary(401856682))
+    assert proc.cfb_pbp_json() is loaded
+    assert proc.json is loaded
+
+
+# --- C20: the payload's timeout lists agree with the capped counts --------------------------------
+
+
+def test_timeout_lists_agree_with_counts():
+    period = pl.col("period.number")
+    window = (
+        pl.when(period <= 2)
+        .then(pl.lit("1"))
+        .when(period <= 4)
+        .then(pl.lit("2"))
+        .otherwise(pl.format("OT{}", period - 4))
+    )
+    for game_id in (401856682, 401112081):
+        proc, result, _, _ = _processed(game_id)
+        plays = proc.plays_frame.with_columns(window=window)
+        for side, team_id in (("home", proc.homeTeamId), ("away", proc.awayTeamId)):
+            lists = result["timeouts"][team_id]
+            last = plays.group_by("window", maintain_order=True).agg(
+                pl.col(f"end.{side}TeamTimeouts").last(), pl.col("period.number").first()
+            )
+            for key, remaining, first_period in last.iter_rows():
+                allotted = 3 if first_period <= 4 else 1
+                assert len(lists.get(key, [])) == allotted - remaining, (game_id, side, key)
+            ids = [i for key_ids in lists.values() for i in key_ids]
+            charged = plays.filter(pl.col("id").is_in(ids))
+            assert charged.height == len(ids) and charged[f"{side}TimeoutCalled"].all()
+    # Texas logged four timeouts in the first half of 2026 Ohio State @ Texas; Baylor's overtime
+    # timeouts of 2019 Baylor @ TCU used to be listed under the second half.
+    assert len(_processed(401856682)[1]["timeouts"][251]["1"]) == 3
+    baylor = _processed(401112081)[1]["timeouts"][239]
+    assert (len(baylor["2"]), len(baylor["OT1"])) == (3, 1)
+
+
+# --- C21: shortened team names in timeout rows ------------------------------------------------------
+
+
+def test_timeout_shortened_team_names():
+    for game_id, short, team_side in (
+        (400869270, "Timeout CENTRAL MICH", "away"),
+        (401032062, "Timeout WESTRN MICHIGAN", "away"),
+    ):
+        timeouts = _plays(game_id).filter(pl.col("type.text") == "Timeout")
+        assert (timeouts["homeTimeoutCalled"] != timeouts["awayTimeoutCalled"]).all(), game_id
+        named = timeouts.filter(pl.col("text").str.starts_with(short))
+        assert named.height >= 3 and named[f"{team_side}TimeoutCalled"].all(), game_id
+    # a row that names no team is charged to nobody
+    blank = _plays(401752746).filter(pl.col("text").str.starts_with("Timeout , clock"))
+    assert blank.height == 14
+    assert not (blank["homeTimeoutCalled"] | blank["awayTimeoutCalled"]).any()
+
+
+# --- C23: negative yardage keeps its sign ---------------------------------------------------------
+
+
+def test_negative_yardage_keeps_its_sign():
+    usc = _plays(243042579)
+    assert _row(usc, "Kickoff returned by Jamon Meredith (USC) for -2 yards.")["yds_kickoff_return"] == -2
+    assert _row(usc, "returned -1 yards by Noah Whiteside (USC)")["yds_punt_return"] == -1
+    assert _row(usc, "Robert Meachem (TENN) rushed right side for -4 yards.")["yds_rushed"] == -4
+    assert _row(usc, "complete to Noah Whiteside (USC) for -11 yards.")["yds_receiving"] == -11
+    assert _row(_plays(401636929), "Ashtyn Hawkins return for a loss of 1 yard")["yds_kickoff_return"] == -1
+    assert _row(_plays(401858221), "return  for -55 yds")["yds_fumble_return"] == -55
+
+
+# --- C27: a spot or a later clause is never read as return yardage ---------------------------------
+
+
+def test_return_yardage_ignores_spots_and_fumble_advances():
+    # "no gain" is 0, not the spot (24); the fumble after it is irrelevant
+    row = _row(_plays(401112081), "Trystan Slinker return for no gain to the Bayl 24")
+    assert row["yds_kickoff_return"] == 0
+    # the kick return states no yardage; "for 10 yards" is the recovery's advance, not the return
+    fumbled = _plays(332570254).filter(pl.col("text").str.contains("returned by Victor Bolden, fumbled", literal=True))
+    assert fumbled.height == 2
+    assert fumbled["yds_kickoff_return"].to_list() == [None, None]
+
+
+# --- C28: the returner clause without "for": "Name return -2 yards" -------------------------------
+
+
+def test_return_n_yards_clause():
+    plays = _plays(252532751)
+    assert _row(plays, "Julius Stinson return -5 yards to the Wyom42")["yds_punt_return"] == -5
+    assert _row(plays, "Hoost Marsh return 12 yards to the Wyom32")["yds_punt_return"] == 12
+    assert _row(plays, "Joe Merritt return 19 yards to the LaMon20")["yds_kickoff_return"] == 19
+    assert _row(plays, "Josh Alexander return 0 yards to the LaMon30")["yds_int_return"] == 0
+
+
+# --- C36: a punt "for a loss of N" ended N yards behind the line ----------------------------------
+
+
+def test_punt_for_a_loss_is_negative():
+    assert _row(_plays(252460252), "Johnny Ayers punt for a loss of 12 yards.")["yds_punted"] == -12
+
+
+# --- C37: the short kickoff form, "kick for N yds" ------------------------------------------------
+
+
+def test_short_kick_form_parses():
+    kick = _row(_plays(401752844), "J. Scullion kick for 65 yds")
+    assert kick["yds_kickoff"] == 65
+    assert kick["yds_kickoff_return"] == 100
