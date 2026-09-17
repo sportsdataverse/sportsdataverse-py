@@ -310,6 +310,13 @@ def _spaces(text: str) -> str:
 
 
 def _yards_gained(text: str) -> "int | None":
+    """Signed yards of the play's FIRST ``for N yards`` clause -- the ball carrier's gain.
+
+    After a fumble or lateral the text carries a second clause for the recovering /
+    trailing runner; it is deliberately ignored, matching cfbfastR, whose
+    ``yards_gained`` is ESPN's ``statYardage`` (the first carrier's yards, verified on
+    the 2024 parquet over 1,036 fumble continuations).
+    """
     m = _YARDS_RE.search(text)
     if not m:
         return None
