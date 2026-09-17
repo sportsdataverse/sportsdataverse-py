@@ -252,3 +252,39 @@ def test_end_yards_to_goal_follows_a_clean_gain() -> None:
             | (pl.col("yards_to_goal_end") != pl.col("yards_to_goal") - pl.col("yards_gained"))
         ).select("yards_to_goal", "yards_gained", "yards_to_goal_end", "play_text")
         assert bad.height == 0, (cid, bad.rows()[:5])
+
+
+# --- return touchdowns --------------------------------------------------------
+# 6386449 South Carolina St. @ South Carolina (2025) -- punt return TD, blocked punt
+#   return TD and a rush fumble-return TD, all by South Carolina (real final 38-10)
+# 6414322 The Citadel @ Samford (2025) -- pass and rush fumble-return TDs by The Citadel
+
+#: (fixture, play_text prefix) -> cfbfastR play_type of a TD scored by the drive's defense
+RETURN_TDS = {
+    ("6386449", "(05:16) Janish,Elliott punt 44 yards"): "Punt Return Touchdown",
+    ("6386449", "(03:19) Janish,Elliott punt 0 yards"): "Blocked Punt Touchdown",
+    ("6386449", "(06:07) No Huddle-Shotgun Pickett-Hicks,Mason rush middle"): "Fumble Recovery (Opponent) Touchdown",
+    ("6414322", "No Huddle-Shotgun Crittendon,Quincy pass complete short left to Bird,Preston caught at SAM26"): (
+        "Fumble Recovery (Opponent) Touchdown"
+    ),
+    ("6414322", "No Huddle Garner,Jake rush left for 11 yards loss"): "Fumble Recovery (Opponent) Touchdown",
+    ("5336803", "No Huddle-Shotgun Bullock,Tahj rush middle for 2 yards gain"): "Fumble Recovery (Opponent) Touchdown",
+}
+
+
+def test_return_touchdowns_use_cfbfastr_labels_not_offensive_td_flags() -> None:
+    frames = {cid: _frame(cid) for cid in {cid for cid, _ in RETURN_TDS}}
+    for (cid, prefix), label in RETURN_TDS.items():
+        row = frames[cid].filter(pl.col("play_text").str.starts_with(prefix))
+        assert row.height == 1, (cid, prefix)
+        r = row.row(0, named=True)
+        assert (r["play_type"], r["touchdown"], r["rush_td"], r["pass_td"]) == (label, True, False, False), (
+            cid,
+            prefix,
+        )
+        assert r["score_pts"] == -6, (cid, prefix)  # the drive's defense scored
+    # event-sourced running score (no drive-title snapping) credits the returners
+    pos, pos_s, dpos, dpos_s = (
+        frames["6386449"].select("pos_team", "pos_team_score", "def_pos_team", "def_pos_team_score").row(-1)
+    )
+    assert {pos: pos_s, dpos: dpos_s} == {"South Carolina": 38, "South Carolina St.": 10}

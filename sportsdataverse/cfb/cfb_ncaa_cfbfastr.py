@@ -303,9 +303,30 @@ def _split_end_yard_line(
     return next(((aliases[_norm_code(c)], n) for c, n in _yl_candidates(token) if _norm_code(c) in aliases), None)
 
 
-def _play_type_label(r: "dict[str, Any]") -> str:
-    """Map the NCAA structural play_type to the cfbfastR play_type vocabulary."""
+def _td_by_defense(r: "dict[str, Any]", offense: "Optional[str]", own_side: "dict[str, str]", end: Any) -> bool:
+    """Whether a TOUCHDOWN row was scored by its drive's DEFENSE (a return touchdown).
+
+    The end spot says whose end zone the ball reached: ending on the offense's own
+    side means the other team ran it back. Without a resolvable end spot, fall back to
+    the text: an interception, a fumble recovery, or a punt / field goal (return TDs).
+    """
+    if end is not None and end[0] is not None and offense in own_side:
+        return own_side[offense] == end[0]
+    return r["turnover_type"] in ("interception", "fumble") or r["play_type"] in ("punt", "field_goal")
+
+
+def _play_type_label(r: "dict[str, Any]", return_td: bool = False) -> str:
+    """Map the NCAA structural play_type to the cfbfastR play_type vocabulary.
+
+    ``return_td``: a touchdown scored by the team NOT in possession at the snap
+    (for a kickoff: by the receiving team), labelled the way cfbfastR does.
+    """
     pt, td = r["play_type"], bool(r["is_touchdown"])
+    blocked = "blocked" in (r["play_text"] or "").lower()
+    if td and return_td and pt in ("rush", "kneel", "pass", "sack"):
+        if r["turnover_type"] == "interception":
+            return "Interception Return Touchdown"
+        return "Fumble Recovery (Opponent) Touchdown"
     if pt == "rush" or pt == "kneel":
         return "Rushing Touchdown" if td else "Rush"
     if pt == "pass":
@@ -317,10 +338,18 @@ def _play_type_label(r: "dict[str, Any]") -> str:
     if pt == "sack":
         return "Sack"
     if pt == "punt":
-        return "Blocked Punt" if "blocked" in (r["play_text"] or "").lower() else "Punt"
+        if td:
+            if not return_td:
+                return "Punt Team Fumble Recovery Touchdown"
+            return "Blocked Punt Touchdown" if blocked else "Punt Return Touchdown"
+        return "Blocked Punt" if blocked else "Punt"
     if pt == "kickoff":
-        return "Kickoff Return Touchdown" if td else "Kickoff"
+        if td:
+            return "Kickoff Return Touchdown" if return_td else "Kickoff Team Fumble Recovery Touchdown"
+        return "Kickoff"
     if pt == "field_goal":
+        if td and return_td:
+            return "Blocked Field Goal Touchdown" if blocked else "Missed Field Goal Return Touchdown"
         return "Field Goal Good" if r["fg_made"] else "Field Goal Missed"
     if pt == "extra_point":
         return "Extra Point Good" if _KICK_GOOD_RE.search(r["play_text"] or "") else "Extra Point Missed"
@@ -601,6 +630,13 @@ def to_cfbfastr(
         defense = next((t for t in teams if t != offense), None) if offense else None
 
         # running score -- award points to the right side of the ball
+        end = _split_end_yard_line(r["end_yard_line"], side_codes, end_aliases)
+        def_td = bool(r["is_touchdown"]) and _td_by_defense(r, offense, own_side, end)
+        return_td = def_td
+        if r["play_type"] == "kickoff" and r["is_touchdown"]:
+            # a kickoff's return TD is the RECEIVING team's; the kicking team owns the spot's side
+            kicker = next((t for t, sd in own_side.items() if sd == r["yard_line_side"]), defense)
+            return_td = (defense if def_td else offense) != kicker
         pts_off = pts_def = 0
         if r["play_type"] not in (
             "timeout",
@@ -609,9 +645,7 @@ def to_cfbfastr(
             "coin_toss",
         ):
             if r["is_touchdown"]:
-                # a fumble-return TD has turnover_type set WITHOUT is_turnover
-                to_defense = r["turnover_type"] in ("interception", "fumble")
-                if to_defense:
+                if def_td:
                     pts_def += 6
                     last_td_team = defense
                 else:
@@ -659,7 +693,6 @@ def to_cfbfastr(
         if side is not None and num is not None and offense in own_side:
             ytg = 100 - num if own_side[offense] == side else num
         end_ytg = None
-        end = _split_end_yard_line(r["end_yard_line"], side_codes, end_aliases)
         if end and offense in own_side:
             end_side, end_num = end
             end_ytg = 100 - end_num if end_side is not None and own_side[offense] == end_side else end_num
@@ -721,13 +754,13 @@ def to_cfbfastr(
                 "log_ydstogo": math.log(r["distance"]) if r["distance"] else None,
                 "yards_gained": r["yards_gained"],
                 # typing
-                "play_type": _play_type_label(r),
+                "play_type": _play_type_label(r, return_td),
                 "orig_play_type": pt,
                 "play_text": r["play_text"],
                 "rush": is_rush,
-                "rush_td": is_rush and bool(r["is_touchdown"]),
+                "rush_td": is_rush and bool(r["is_touchdown"]) and not return_td,
                 "pass": is_pass_att or is_sack,
-                "pass_td": is_pass_att and completion and bool(r["is_touchdown"]),
+                "pass_td": is_pass_att and completion and bool(r["is_touchdown"]) and not return_td,
                 "pass_attempt": is_pass_att,
                 "completion": completion,
                 "target": is_pass_att and r["receiver"] is not None,
