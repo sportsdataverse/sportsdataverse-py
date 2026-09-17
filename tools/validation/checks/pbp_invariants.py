@@ -297,6 +297,39 @@ def _field_position(df: pl.DataFrame) -> list[RuleResult | None]:
             ("end.yardsToEndzone",),
         ),
     ]
+    if _has(df, "start.downDistanceText", "homeTeamAbbrev", "awayTeamAbbrev", "homeTeamId", "start.pos_team.id"):
+        # "3rd & 3 at HOU 32": the spot ESPN prints next to the down. The side is
+        # resolved against the offense/defense abbreviation when it matches;
+        # otherwise only the two mirror values are admissible.
+        spot = c("start.downDistanceText").str.extract_groups(r"at (?:([A-Za-z&\.]{2,6}) )?(\d{1,2})$")
+        home = c("start.pos_team.id").cast(pl.Int64) == c("homeTeamId").cast(pl.Int64)
+        f = df.with_columns(
+            __side=spot.struct.field("1").str.to_uppercase(),
+            __yl=spot.struct.field("2").cast(pl.Int64, strict=False),
+            __off=pl.when(home).then(c("homeTeamAbbrev")).otherwise(c("awayTeamAbbrev")).str.to_uppercase(),
+            __def=pl.when(home).then(c("awayTeamAbbrev")).otherwise(c("homeTeamAbbrev")).str.to_uppercase(),
+        ).with_columns(
+            __text_ytg=pl.when(c("__yl") == 50)
+            .then(50)
+            .when(c("__side") == c("__off"))
+            .then(100 - c("__yl"))
+            .when(c("__side") == c("__def"))
+            .then(c("__yl"))
+            .otherwise(None),
+        )
+        out.append(
+            _row_rule(
+                f,
+                "ytg.start_matches_down_distance_text",
+                2,
+                "start yards-to-endzone agrees with the spot in ESPN's own downDistanceText",
+                _scrimmage() & c("__yl").is_not_null() & c("start.yardsToEndzone").is_not_null(),
+                pl.when(c("__text_ytg").is_not_null())
+                .then(c("start.yardsToEndzone") != c("__text_ytg"))
+                .otherwise((c("start.yardsToEndzone") != c("__yl")) & (c("start.yardsToEndzone") != 100 - c("__yl"))),
+                ("start.downDistanceText", "start.yardsToEndzone", "__text_ytg", "__side", "__off"),
+            )
+        )
     if _has(df, "rush", "pass", "type.text", "start.yardsToEndzone"):
         out.append(
             _row_rule(

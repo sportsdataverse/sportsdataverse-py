@@ -165,6 +165,13 @@ def test_field_position():
     assert _fires(_game(), "ytg.td_start_eq_yards_gained") == 0
     assert _fires(_game(**{"yds_rushed": (1, 19)}), "ytg.td_start_eq_yards_gained") == 1
     assert _fires(_game(**{"start__yardsToEndzone": (5, 0)}), "ytg.scrimmage_start_1_99") == 1
+    # row 0: HOM offense 25 yards from the endzone == "at AWY 25"; on its own 25 it would be 75
+    spot = "ytg.start_matches_down_distance_text"
+    assert _fires(_game(**{"start__downDistanceText": (0, "1st & 10 at AWY 25")}), spot) == 0
+    assert _fires(_game(**{"start__downDistanceText": (0, "1st & 10 at HOM 25")}), spot) == 1
+    # an unrecognized side code only admits the two mirror values
+    assert _fires(_game(**{"start__downDistanceText": (0, "1st & 10 at XYZ 75")}), spot) == 0
+    assert _fires(_game(**{"start__downDistanceText": (0, "1st & 10 at XYZ 30")}), spot) == 1
 
 
 # 3 --------------------------------------------------------------------------
