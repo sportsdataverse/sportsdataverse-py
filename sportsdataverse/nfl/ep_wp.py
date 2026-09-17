@@ -2344,12 +2344,6 @@ def calculate_wpa(df: pl.DataFrame) -> pl.DataFrame:
             )
             .then(1 - pl.col("lead_wp_before"))
             .when(
-                (pl.col("end_of_half") == True)
-                .and_(pl.col("start.pos_team_receives_2H_kickoff") == False)
-                .and_(pl.col("type.text").is_in(clock_stoppage_vec)),
-            )
-            .then(pl.col("wp_after"))
-            .when(
                 (pl.col("lead_play_type").is_in(["End Period", "End of Half"])).and_(
                     pl.col("change_of_pos_team") == False,
                 ),
