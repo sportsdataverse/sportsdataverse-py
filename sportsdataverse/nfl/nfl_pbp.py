@@ -861,6 +861,10 @@ class NFLPlayProcess(object):
             )
         )
 
+        # Q2 -> Q3, Q4 -> OT and OT -> OT end a clock; Q1 -> Q2 and Q3 -> Q4 carry it over
+        period_over = (pl.col("period.number").shift(-1) != pl.col("period.number")).and_(
+            pl.col("period.number").is_in([1, 3]) == False,
+        )
         pbp_txt["timeouts"][init["homeTeamId"]]["1"] = (
             pbp_txt["plays"]
             .filter((pl.col("homeTimeoutCalled") == True).and_(pl.col("period.number") <= 2))
@@ -940,21 +944,23 @@ class NFLPlayProcess(object):
                 .then(3)
                 .otherwise(pl.col("end.awayTeamTimeouts").shift(n=1, fill_value=3))
                 .alias("start.awayTeamTimeouts"),
-                pl.col("start.TimeSecsRem").shift(n=1).alias("end.TimeSecsRem"),
-                pl.col("start.adj_TimeSecsRem").shift(n=1).alias("end.adj_TimeSecsRem"),
+                # ESPN's clock is the snap, so a play ends when the next one starts
+                # (the lagged clock put the end before the start: 1800 vs 1792)
+                pl.col("start.TimeSecsRem").shift(n=-1).alias("end.TimeSecsRem"),
+                pl.col("start.adj_TimeSecsRem").shift(n=-1).alias("end.adj_TimeSecsRem"),
             )
             .with_columns(
-                pl.when(pl.col("game_play_number") == 1)
-                .then(pl.lit(1800))
-                .when((pl.col("half") == 2) & (pl.col("lag_half") == 1))
-                .then(pl.lit(1800))
+                # ...unless the half, regulation or an overtime period runs out first;
+                # the last row of a live feed has no next snap and keeps its own clock
+                pl.when(period_over)
+                .then(pl.lit(0))
                 .otherwise(pl.col("end.TimeSecsRem"))
+                .fill_null(pl.col("start.TimeSecsRem"))
                 .alias("end.TimeSecsRem"),
-                pl.when(pl.col("game_play_number") == 1)
-                .then(pl.lit(3600))
-                .when((pl.col("half") == 2) & (pl.col("lag_half") == 1))
-                .then(pl.lit(1800))
+                pl.when(period_over)
+                .then(pl.when(pl.col("period.number") == 2).then(pl.lit(1800)).otherwise(pl.lit(0)))
                 .otherwise(pl.col("end.adj_TimeSecsRem"))
+                .fill_null(pl.col("start.adj_TimeSecsRem"))
                 .alias("end.adj_TimeSecsRem"),
                 pl.when(pl.col("start.pos_team.id") == pl.col("homeTeamId"))
                 .then(pl.col("start.homeTeamTimeouts"))

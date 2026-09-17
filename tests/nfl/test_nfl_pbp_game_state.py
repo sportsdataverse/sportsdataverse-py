@@ -377,3 +377,21 @@ def test_incompletions_start_from_the_snap_spot(buf_ari, buf_ari_frame):
     assert sum(raw[k] != v for k, v in los.items()) == 6
     f = buf_ari_frame.filter(pl.col("id").is_in(list(los)))
     assert dict(f.select("id", "start.yardsToEndzone").iter_rows()) == los
+
+
+# ---------------------------------------------------------------------------
+# N8 -- a play ends at the next snap's clock, and at 0 when its half runs out
+# ---------------------------------------------------------------------------
+
+
+def test_end_clock_is_the_next_snap(frame):
+    f = frame.sort("game_play_number")
+    first = f.row(0, named=True)
+    assert (first["start.TimeSecsRem"], first["end.TimeSecsRem"]) == (1800, 1792)  # 15:00 kickoff, 14:52 snap
+    assert (f["end.TimeSecsRem"] <= f["start.TimeSecsRem"]).all()
+    same_half = f.filter(pl.col("half") == pl.col("half").shift(-1))
+    nxt = f.with_columns(pl.col("start.TimeSecsRem").shift(-1).alias("_next"))
+    within = nxt.filter(pl.col("period") == pl.col("period").shift(-1))
+    assert same_half.height > 100 and (within["end.TimeSecsRem"] == within["_next"]).all()
+    last_h1 = f.filter(pl.col("half") == 1).row(-1, named=True)
+    assert (last_h1["end.TimeSecsRem"], last_h1["end.adj_TimeSecsRem"]) == (0, 1800)
