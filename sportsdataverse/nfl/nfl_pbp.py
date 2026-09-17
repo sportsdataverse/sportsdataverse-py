@@ -601,24 +601,23 @@ class NFLPlayProcess(object):
         return self.json
 
     def nfl_pbp_json(self, **kwargs):
-        """Set ``self.json`` to the imported ``json`` module reference (legacy stub).
+        """Return the JSON payload currently attached to this :class:`NFLPlayProcess` instance.
 
-        Retained for API compatibility. Prefer ``espn_nfl_pbp()`` (live)
-        or ``nfl_pbp_disk()`` (offline) to populate ``self.json`` with an
-        actual ESPN payload.
+        ``espn_nfl_pbp()`` (live, or ``summary=`` offline) and ``nfl_pbp_disk()``
+        attach the payload; this returns it unchanged.
 
         Returns:
-            module: The Python ``json`` module reference (mirrors legacy behavior).
+            dict | None: The attached payload (``self.json``); ``None`` before one is attached.
 
         Example:
-            Stub usage (rarely needed -- prefer the live or disk loaders)::
+            Read back the payload a fetch attached::
 
                 from sportsdataverse.nfl import NFLPlayProcess
                 proc = NFLPlayProcess(gameId=401220403)
-                proc.nfl_pbp_json()  # populates `self.json` with the json module
+                proc.espn_nfl_pbp()
+                payload = proc.nfl_pbp_json()
         """
-        self.json = json
-        return self.json
+        return getattr(self, "json", None)
 
     def __helper_nfl_pbp_drives(self, pbp_txt):
         pbp_txt, init = self.__helper_nfl_pbp(pbp_txt)

@@ -606,3 +606,16 @@ def test_cleaning_and_processing_pipelines_share_one_instance(summary, frame):
     other.espn_nfl_pbp(summary=summary)
     other.run_processing_pipeline()
     assert [p["id"] for p in other.run_cleaning_pipeline()["plays"]] == ref_ids
+
+
+# ---------------------------------------------------------------------------
+# N14 -- nfl_pbp_json() returns the attached payload instead of the json module
+# ---------------------------------------------------------------------------
+
+
+def test_nfl_pbp_json_returns_the_attached_payload(summary):
+    proc = NFLPlayProcess(gameId=GAME_ID)
+    assert proc.nfl_pbp_json() is None
+    payload = proc.espn_nfl_pbp(summary=summary)
+    assert proc.nfl_pbp_json() is payload
+    assert proc.json is payload and isinstance(proc.json, dict) and "drives" in proc.json
