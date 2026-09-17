@@ -7,7 +7,7 @@ Every case runs the real pipeline, offline, on a stored ESPN summary:
 * ``summary_401858435.json`` -- Indiana State @ Purdue, 2026 (a failed vendor kick, a
   two-word kicker surname, a two-man sack).
 * ``summary_401858439.json`` -- Howard @ Indiana, 2026 (a returner written ``J.Washington lll``).
-* ``summary_401868326.json`` -- Alabama State @ Troy, 2026 (one timeout logged twice).
+* ``summary_401858213.json`` -- Florida A&M @ Miami, 2026 (a timeout logged twice).
 * ``summary_401677179.json`` -- Indiana @ Notre Dame, 2024 ("Timeout Indiana" holds "nd").
 * ``summary_401112081.json`` -- Baylor @ TCU, 2019 (triple overtime, every OT period numbered 5).
 
@@ -97,3 +97,42 @@ def test_fg_kicker_and_kickoff_returner_beyond_abbreviated_names():
     assert set(lozano["fg_kicker_player_name"].to_list()) == {"J.Echeverria Lozano"}
     kr = _row(_plays(401858439), "#21 J.Washington lll return 23 yards")
     assert kr["kickoff_return_player_name"] == "J.Washington lll"
+
+
+# --- C7: timeouts remaining stay within the allotment ---------------------------------------------
+
+_TIMEOUT_COLS = [
+    "start.homeTeamTimeouts",
+    "start.awayTeamTimeouts",
+    "end.homeTeamTimeouts",
+    "end.awayTeamTimeouts",
+    "start.posTeamTimeouts",
+    "start.defPosTeamTimeouts",
+    "end.posTeamTimeouts",
+    "end.defPosTeamTimeouts",
+]
+
+
+def test_timeouts_remaining_never_negative():
+    # ESPN logs more "Timeout <team>" rows than a team can call (Texas: four in the 2nd quarter)
+    plays = _plays(401856682)
+    for col in _TIMEOUT_COLS:
+        assert plays[col].min() >= 0, col
+        assert plays[col].max() <= 3, col
+
+
+def test_timeout_logged_twice_is_charged_once():
+    # Florida A&M's first timeout of the game, on two consecutive rows
+    plays = _plays(401858213)
+    twice = plays.filter(pl.col("text") == "Timeout Florida A&M, clock 12:02")
+    assert twice.height == 2
+    assert twice["end.awayTeamTimeouts"].to_list() == [2, 2]
+
+
+def test_overtime_timeouts_reset_to_one():
+    # an overtime period allots one timeout per team; the fourth quarter's count must not carry over
+    plays = _plays(401112081).filter(pl.col("period.number") >= 5)
+    assert plays.height > 0
+    for col in _TIMEOUT_COLS[:4]:
+        assert plays[col].max() <= 1, col
+        assert plays[col].min() >= 0, col

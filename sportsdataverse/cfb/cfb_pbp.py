@@ -1615,92 +1615,30 @@ class CFBPlayProcess(object):
             .get_column("id")
             .to_list()
         )
-        # end_timeouts = pbp_txt["plays"].select(
-        #     (
-        #         3
-        #         - pl.struct(["id", "period.number"]).apply(
-        #             lambda x: (
-        #                 sum(
-        #                     (i <= x.struct.field("id")) & (x.struct.field("period.number") <= 2)
-        #                     for i in pbp_txt["timeouts"][int(init["homeTeamId"])]["1"]
-        #                 )
-        #             )
-        #             | (
-        #                 sum(
-        #                     (i <= x.struct.field("id")) & (x.struct.field("period.number") > 2)
-        #                     for i in pbp_txt["timeouts"][int(init["homeTeamId"])]["2"]
-        #                 )
-        #             ),
-        #             return_dtype=pl.Int64,
-        #         )
-        #     ).alias("end.homeTeamTimeouts"),
-        #     (
-        #         3
-        #         - pl.struct(["id", "period.number"]).apply(
-        #             lambda x: (
-        #                 sum(
-        #                     (i <= x.struct.field("id")) & (x.struct.field("period.number") <= 2)
-        #                     for i in pbp_txt["timeouts"][int(init["awayTeamId"])]["1"]
-        #                 )
-        #             )
-        #             | (
-        #                 sum(
-        #                     (i <= x.struct.field("id")) & (x.struct.field("period.number") > 2)
-        #                     for i in pbp_txt["timeouts"][int(init["awayTeamId"])]["2"]
-        #                 )
-        #             ),
-        #             return_dtype=pl.Int64,
-        #         )
-        #     ).alias("end.awayTeamTimeouts"),
-        # )
-        # pbp_txt["plays"] = pbp_txt["plays"].join(end_timeouts, on=["id", "period.number"], how="left")
+        # Timeouts remaining. The text says neither which "Timeout <team>" rows were charged (22-24%
+        # of team-halves in 2024-2026 carry 4-7 of them: media and injury stoppages are logged the
+        # same way) nor, in older feeds, which overtime period a row belongs to, so the count is
+        # bounded rather than trusted: an adjacent repeat of the same row is one timeout, each half
+        # allots 3 and each overtime period 1, and the count never goes below 0.
+        period = pl.col("period.number")
+        window = pl.when(period <= 2).then(1).when(period <= 4).then(2).otherwise(period)
+        allotted = pl.when(period <= 4).then(3).otherwise(1)
+        repeat = (pl.col("text") == pl.col("text").shift(1)).fill_null(False)
+        home_used = ((pl.col("homeTimeoutCalled") == True) & (repeat == False)).cast(pl.Int64)
+        away_used = ((pl.col("awayTimeoutCalled") == True) & (repeat == False)).cast(pl.Int64)
         pbp_txt["plays"] = (
             pbp_txt["plays"]
             .with_columns(
-                (
-                    3
-                    - pl.struct("id", "period.number").map_elements(
-                        lambda x: (
-                            (
-                                sum(
-                                    (i <= x["id"]) & (x["period.number"] <= 2)
-                                    for i in pbp_txt["timeouts"][int(init["homeTeamId"])]["1"]
-                                )
-                            )
-                            | (
-                                sum(
-                                    (i <= x["id"]) & (x["period.number"] > 2)
-                                    for i in pbp_txt["timeouts"][int(init["homeTeamId"])]["2"]
-                                )
-                            )
-                        ),
-                        return_dtype=pl.Int64,
-                    )
-                ).alias("end.homeTeamTimeouts"),
-                (
-                    3
-                    - pl.struct("id", "period.number").map_elements(
-                        lambda x: (
-                            (
-                                sum(
-                                    (i <= x["id"]) & (x["period.number"] <= 2)
-                                    for i in pbp_txt["timeouts"][int(init["awayTeamId"])]["1"]
-                                )
-                            )
-                            | (
-                                sum(
-                                    (i <= x["id"]) & (x["period.number"] > 2)
-                                    for i in pbp_txt["timeouts"][int(init["awayTeamId"])]["2"]
-                                )
-                            )
-                        ),
-                        return_dtype=pl.Int64,
-                    )
-                ).alias("end.awayTeamTimeouts"),
+                (allotted - home_used.cum_sum().over(window)).clip(lower_bound=0).alias("end.homeTeamTimeouts"),
+                (allotted - away_used.cum_sum().over(window)).clip(lower_bound=0).alias("end.awayTeamTimeouts"),
+                (allotted - (home_used.cum_sum() - home_used).over(window))
+                .clip(lower_bound=0)
+                .alias("start.homeTeamTimeouts"),
+                (allotted - (away_used.cum_sum() - away_used).over(window))
+                .clip(lower_bound=0)
+                .alias("start.awayTeamTimeouts"),
             )
             .with_columns(
-                pl.col("end.homeTeamTimeouts").shift(n=1, fill_value=3).alias("start.homeTeamTimeouts"),
-                pl.col("end.awayTeamTimeouts").shift(n=1, fill_value=3).alias("start.awayTeamTimeouts"),
                 pl.col("start.TimeSecsRem").shift(n=1).alias("end.TimeSecsRem"),
                 pl.col("start.adj_TimeSecsRem").shift(n=1).alias("end.adj_TimeSecsRem"),
             )
