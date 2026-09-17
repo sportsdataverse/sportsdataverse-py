@@ -34,7 +34,12 @@ import polars as pl
 import yaml
 
 from sportsdataverse.dl_utils import underscore
-from sportsdataverse.cbs.cbs_napi_parsers import parse_cbs_napi, parse_cbs_napi_standings
+from sportsdataverse.cbs.cbs_napi_parsers import (
+    parse_cbs_napi,
+    parse_cbs_napi_scoring_drives,
+    parse_cbs_napi_scoring_plays,
+    parse_cbs_napi_standings,
+)
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -77,6 +82,10 @@ _CAPTURES: Dict[str, Tuple[str, Any]] = {
     "team_players": ("captures/_sample/*_team_players.json", parse_cbs_napi),
     "team_standings": ("captures/_sample/*_team_standings.json", parse_cbs_napi_standings),
     "endpoint_registry": ("captures/napi/_discovery/resource_endpoint_registry.json", parse_cbs_napi),
+    # play-by-play + drives: real NCAAF/NFL bodies trimmed into this repo's
+    # tests/fixtures/cbs/ (not in the refs capture set), hence the absolute path.
+    "game_scoring_plays": (str(ROOT / "tests/fixtures/cbs/game_scoring_plays_*.json"), parse_cbs_napi_scoring_plays),
+    "game_scoring_drives": (str(ROOT / "tests/fixtures/cbs/game_scoring_drives_*.json"), parse_cbs_napi_scoring_drives),
 }
 
 # Endpoints whose payload is the ``{year: {season_type: {...}}}`` standings map
@@ -84,6 +93,13 @@ _CAPTURES: Dict[str, Tuple[str, Any]] = {
 # here -- the sportsline / player standings siblings have no captured body, so
 # they keep the generic parser rather than a guessed shape.
 _STANDINGS_PARSER = {"team_standings"}
+
+# Endpoints whose body is a ``{"plays"|"drives": [...]}`` record list of
+# string-valued CBS fields, parsed one row per play / drive.
+_ROW_PARSERS = {
+    "game_scoring_plays": "parse_cbs_napi_scoring_plays",
+    "game_scoring_drives": "parse_cbs_napi_scoring_drives",
+}
 
 # An ``allowedValues`` entry the registry leaked as a JS source fragment rather
 # than a value (``seasonYear``); it is a pattern, not an enum member.
@@ -179,7 +195,9 @@ def _endpoint_entry(path: str, op: dict) -> Dict[str, Any]:
         "short": short,
         "summary": op.get("summary") or f"GET {path}",
         "path": _emit_path(path),
-        "parser": "parse_cbs_napi_standings" if short in _STANDINGS_PARSER else "parse_cbs_napi",
+        "parser": "parse_cbs_napi_standings"
+        if short in _STANDINGS_PARSER
+        else _ROW_PARSERS.get(short, "parse_cbs_napi"),
         "returns_schema": f"native/cbs_napi/{short}",
     }
     if pps:
@@ -204,7 +222,9 @@ def _capture_columns(refs: Path, pattern: str, parser: Any) -> List[Dict[str, st
     ``Null`` contributes nothing -- a column CBS leaves empty for one league
     must not demote the dtype another league proves.
     """
-    files = sorted((refs).glob(pattern)) if "*" in pattern else [refs / pattern]
+    base = Path(pattern).parent if Path(pattern).is_absolute() else refs
+    name = Path(pattern).name if Path(pattern).is_absolute() else pattern
+    files = sorted(base.glob(name)) if "*" in name else [base / name]
     seen: Dict[str, set] = {}
     order: List[str] = []
     for src in files:

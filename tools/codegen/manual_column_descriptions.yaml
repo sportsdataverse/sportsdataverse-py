@@ -4101,6 +4101,48 @@ game_pace:
     innings.
   total9_inn_games_scheduled: Total number of nine-inning games that were scheduled in the sample period.
   total9_inn_games_without_extra_inn: Number of nine-inning games completed without requiring extra innings.
+game_scoring_drives:
+  drive_plays: Number of plays CBS counts in the drive.
+  drive_yards_total: Total drive yardage as CBS reports it, penalties included.
+  ending_play_id: CBS play id of the drive's last play; joins id of the scoring-plays frame.
+  ending_time: Game clock (m:ss) at the drive's last play.
+  ending_yardline: Field position where the drive ended, team abbreviation plus yard line (e.g. TEXAS 18).
+  first_downs_on_drive: First downs gained on the drive.
+  id: CBS drive number within the game; joins drive_id of the scoring-plays frame.
+  inside_the_20: True when the drive reached the opponent's 20-yard line (CBS "Yes"/"No" flag).
+  penalty_yards: Penalty yards assessed on the drive.
+  quarter: Period in which the drive started.
+  result: Drive outcome label from CBS (Punt, Touchdown, Field Goal, Downs, Fumble, End of Half, ...).
+  score_on_drive: True when the drive produced a score (CBS "Yes"/"No" flag).
+  starting_play_id: CBS play id of the drive's first play; joins id of the scoring-plays frame.
+  starting_time: Game clock (m:ss) at the drive's first snap.
+  starting_yardline: Field position where the drive started, team abbreviation plus yard line (e.g. TEXAS 22).
+  team_id: CBS team id of the offense on the drive.
+  time_of_possession: Drive duration as m:ss.
+  yards_on_drive: Net yards gained on the drive.
+game_scoring_plays:
+  away_timeouts_remaining: Away team's timeouts left after the play (absent in older games).
+  description: Full CBS play text, including tacklers and spots.
+  distance: Yards to go for a first down, or the literal "Goal" on goal-to-go downs.
+  down: Down at the snap; 0 on kickoffs and tries.
+  drive_id: CBS drive number within the game; joins id of the scoring-drives frame.
+  game_id: CBS game id (absent in older games).
+  home_timeouts_remaining: Home team's timeouts left after the play (absent in older games).
+  id: CBS play id; the GSIS play id for NFL games, an epoch-style stamp for NCAAF games.
+  medium: Medium-length play summary (e.g. "J. Sayin pass to M. Williams for 6 yds").
+  quarter: Period of the snap.
+  real_clock: UTC wall-clock timestamp of the play in ISO 8601 (absent in older games).
+  score_on_play: True when the play scored (CBS "Yes"/"No" flag).
+  score_type: Scoring type for a scoring play (Touchdown, FieldGoal, ...); null otherwise.
+  short: Short play summary (e.g. "6 yd pass").
+  short_score: Short scoring summary; empty string when the play did not score.
+  side: Team abbreviation naming the half of the field that yardline refers to.
+  subplays: 'Sub-events of the play as a list of structs: type, order, and the event fields (player ids and names, yards_on_play,
+    yards_to_endzone, team_in_possession).'
+  team_in_possession: CBS team id with the ball at the snap.
+  time_remaining: Game clock (m:ss) at the snap.
+  under_review: True when the play was under replay review (CBS "Yes"/"No" flag).
+  yardline: Yard line of the ball on the side team's half of the field.
 game_timestamps:
   timecode: A timestamp string representing a specific point in time used to query the MLB Stats API for game state changes.
 gamerotation:
