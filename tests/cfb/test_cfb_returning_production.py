@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import dataclasses
 import importlib
 
 import pytest
@@ -13,6 +14,17 @@ from sportsdataverse.cfb.cfb_returning_production import _returning_from_frames
 # The package re-exports the FUNCTION under the module's name, so attribute
 # import would hand back the callable; resolve the module explicitly.
 rp = importlib.import_module("sportsdataverse.cfb.cfb_returning_production")
+# Captured before the autouse stub replaces them, for the tests that exercise them.
+_PARTICIPANTS_BUILDER = rp._defense_from_participants
+_PBP_SPLASH_BUILDER = rp._defense_from_pbp_splash
+
+
+@pytest.fixture(autouse=True)
+def _no_network_defense(monkeypatch):
+    """The defensive sources read releases; stub them empty unless a test opts in."""
+    empty = lambda _s: pl.DataFrame(schema=rp._PRODUCTION_SCHEMA)  # noqa: E731
+    monkeypatch.setattr(rp, "_defense_from_participants", empty)
+    monkeypatch.setattr(rp, "_defense_from_pbp_splash", empty)
 
 
 def test_half_offense_returns() -> None:
@@ -223,3 +235,177 @@ class TestSeason2004:
         out = rp.cfb_returning_production(2004)
         assert out.height == 0
         assert out.schema["is_estimated"] == pl.Boolean
+
+
+class TestDefensiveSources:
+    """def_returning reads coverage-complete sources, not the sparse ESPN defensive box."""
+
+    def test_participants_score_tackles_splits_sacks_and_counts_tfl(self, monkeypatch):
+        parts = pl.DataFrame(
+            {
+                "game_id": [1, 1, 1, 1],
+                "play_id": [10, 11, 12, 13],
+                # numpy-repr cells, as the release stores them
+                "tackler_player_ids": ["['7']", "['7']", "[]", "[]"],
+                "assisted_by_player_ids": ["[]", "['8' '9']", "[]", "[]"],
+                "sacked_by_player_ids": ["[]", "[]", "['7' '8']", "[]"],
+                "pass_defender_player_ids": ["[]", "[]", "[]", "['9']"],
+            }
+        )
+        pbp = pl.DataFrame(
+            {
+                "game_id": [1, 1, 1, 1],
+                "id": ["10", "11", "12", "13"],  # Utf8 play id, as the 2014 release ships it
+                "def_pos_team_id": [55, 55, 55, 55],
+                "statYardage": [4, -3, -7, 0],
+            }
+        )
+        monkeypatch.setattr(rp, "load_cfb_play_participants", lambda _s: parts)
+        monkeypatch.setattr(rp, "load_cfb_pbp", lambda _s: pbp)
+        monkeypatch.setattr(rp, "load_cfb_game_rosters", lambda _s: pl.DataFrame())
+        out = _PARTICIPANTS_BUILDER(2019)
+        got = {k: round(v, 4) for k, v in zip(out["player_id"].to_list(), out["prod_weight"].to_list())}
+        # the box counts a sack as a tackle and a tackle for loss, and splits a shared TFL:
+        # 7: tackle (1) + play 11 tackle (1) + TFL 1/3 + sack play tackle (1) + half sack (2/2) + TFL 1/2
+        # 8: play 11 assist (1) + TFL 1/3 + sack play tackle (1) + half sack (1) + TFL 1/2
+        # 9: play 11 assist (1) + TFL 1/3 + a pass defended (1)
+        assert got == {"7": 4.8333, "8": 3.8333, "9": 2.3333}
+        assert set(out["team_id"].to_list()) == {"55"} and set(out["unit"].to_list()) == {"defense"}
+
+    def test_participants_are_credited_to_their_roster_team(self, monkeypatch):
+        """On a punt the tackler covers for the team in possession, not the play's defending team."""
+        parts = pl.DataFrame(
+            {
+                "game_id": [1],
+                "play_id": [10],
+                "tackler_player_ids": ["['20' '21' '30']"],
+                "assisted_by_player_ids": ["[]"],
+                "sacked_by_player_ids": ["[]"],
+                "pass_defender_player_ids": ["[]"],
+            }
+        )
+        pbp = pl.DataFrame({"game_id": [1], "id": [10], "def_pos_team_id": [55], "statYardage": [8]})
+        # 30 is listed for two teams in the game, neither the defending one: ambiguous, so dropped
+        rosters = pl.DataFrame({"game_id": [1, 1, 1], "athlete_id": [20, 30, 30], "team_id": [66, 77, 66]})
+        monkeypatch.setattr(rp, "load_cfb_play_participants", lambda _s: parts)
+        monkeypatch.setattr(rp, "load_cfb_pbp", lambda _s: pbp)
+        monkeypatch.setattr(rp, "load_cfb_game_rosters", lambda _s: rosters)
+        out = _PARTICIPANTS_BUILDER(2019).sort("player_id")
+        # 20 is on 66's roster; 21 (no roster) and 30 (two rosters) fall back to the defending team
+        assert out.select("player_id", "team_id").rows() == [("20", "66"), ("21", "55"), ("30", "55")]
+
+    def test_a_partial_play_join_warns(self, monkeypatch):
+        parts = pl.DataFrame(
+            {
+                "game_id": [1, 2],
+                "play_id": [10, 20],
+                "tackler_player_ids": ["['7']", "['8']"],
+                "assisted_by_player_ids": ["[]", "[]"],
+                "sacked_by_player_ids": ["[]", "[]"],
+                "pass_defender_player_ids": ["[]", "[]"],
+            }
+        )
+        pbp = pl.DataFrame({"game_id": [1], "id": [10], "def_pos_team_id": [55], "statYardage": [3]})
+        monkeypatch.setattr(rp, "load_cfb_play_participants", lambda _s: parts)
+        monkeypatch.setattr(rp, "load_cfb_pbp", lambda _s: pbp)
+        monkeypatch.setattr(rp, "load_cfb_game_rosters", lambda _s: pl.DataFrame())
+        with pytest.warns(UserWarning, match="50.0% of season-2019 play participants"):
+            _PARTICIPANTS_BUILDER(2019)
+
+    def test_pbp_splash_weights_and_defending_team(self, monkeypatch):
+        pbp = pl.DataFrame(
+            {
+                "def_pos_team_id": [55, 55, 66],
+                "sack_player_id": [7, None, None],
+                "interception_player_id": [None, 8, None],
+                "pass_breakup_player_id": [None, None, 9],
+                "fumble_forced_player_id": [7, None, None],
+            }
+        )
+        monkeypatch.setattr(rp, "load_cfb_pbp", lambda _s: pbp)
+        out = _PBP_SPLASH_BUILDER(2009).sort("player_id")
+        assert out.select("team_id", "player_id", "prod_weight").rows() == [
+            ("55", "7", 3.0),
+            ("55", "8", 1.0),
+            ("66", "9", 1.0),
+        ]
+
+    @pytest.mark.parametrize(("season", "basis"), [(2020, "participants"), (2010, "pbp_splash")])
+    def test_the_production_season_picks_the_source_and_labels_it(self, monkeypatch, season, basis):
+        box = pl.DataFrame(
+            {
+                "team_id": [55, 55],
+                "athlete_id": [1, 2],
+                "athlete_name": ["a", "b"],
+                "passingYards": ["100", "0"],
+                "rushingYards": ["0", "50"],
+                "receivingYards": ["0", "0"],
+                "totalTackles": ["0", "9"],
+            }
+        )
+        defense = pl.DataFrame(
+            {
+                "season": [season - 1],
+                "team_id": ["55"],
+                "player_id": ["3"],
+                "player_name": [None],
+                "unit": ["defense"],
+                "prod_weight": [5.0],
+                "position": [None],
+            },
+            schema=rp._PRODUCTION_SCHEMA,
+        )
+        other = lambda _s: pl.DataFrame(schema=rp._PRODUCTION_SCHEMA)  # noqa: E731
+        monkeypatch.setattr(rp, "_load_box", lambda _s: box)
+        monkeypatch.setattr(
+            rp, "_defense_from_participants", (lambda _s: defense) if basis == "participants" else other
+        )
+        monkeypatch.setattr(rp, "_defense_from_pbp_splash", (lambda _s: defense) if basis == "pbp_splash" else other)
+        roster = pl.DataFrame({"season": [season, season], "team_id": ["55", "55"], "player_id": ["1", "3"]})
+        monkeypatch.setattr(rp, "_roster_keys", lambda _s: roster)
+        out = rp.cfb_returning_production(season)
+        row = out.row(0, named=True)
+        assert row["def_basis"] == basis
+        assert row["def_returning"] == 1.0  # player 3 (the source's defender) returned; the box tackler (2) is ignored
+        assert list(out.columns) == list(rp._RETURNING_SCHEMA)
+
+    def test_an_empty_source_keeps_the_box_defense_and_says_so(self, monkeypatch):
+        box = pl.DataFrame(
+            {
+                "team_id": [55, 55],
+                "athlete_id": [1, 2],
+                "athlete_name": ["a", "b"],
+                "passingYards": ["100", "0"],
+                "rushingYards": ["0", "0"],
+                "receivingYards": ["0", "0"],
+                "totalTackles": ["0", "9"],
+            }
+        )
+        monkeypatch.setattr(rp, "_load_box", lambda _s: box)
+        monkeypatch.setattr(
+            rp, "_roster_keys", lambda _s: pl.DataFrame({"season": [2025], "team_id": ["55"], "player_id": ["2"]})
+        )
+        row = rp.cfb_returning_production(2025).row(0, named=True)
+        assert row["def_basis"] == "box" and row["def_returning"] == 1.0
+
+    def test_a_team_without_defense_falls_back_to_offense_and_says_so(self, monkeypatch):
+        mixed = dataclasses.replace(rp.get_constants("fbs"), returning_prod_weights={"offense": 0.45, "defense": 0.55})
+        monkeypatch.setattr(rp, "get_constants", lambda _d: mixed)
+        prod_prev = pl.DataFrame(
+            {
+                "season": [2022] * 3,
+                "team_id": ["A", "A", "B"],
+                "player_id": ["p1", "d1", "q1"],
+                "unit": ["offense", "defense", "offense"],
+                "prod_weight": [10.0, 10.0, 10.0],
+                "position": [None] * 3,
+            }
+        )
+        roster = pl.DataFrame({"season": [2023, 2023], "team_id": ["A", "B"], "player_id": ["p1", "q1"]})
+        out = {r["team_id"]: r for r in _returning_from_frames(prod_prev, roster).to_dicts()}
+        assert out["A"]["overall_basis"] == "offense+defense" and abs(out["A"]["overall_returning"] - 0.45) < 1e-9
+        assert (
+            out["B"]["overall_basis"] == "offense"
+            and out["B"]["overall_returning"] == 1.0
+            and out["B"]["def_returning"] is None
+        )

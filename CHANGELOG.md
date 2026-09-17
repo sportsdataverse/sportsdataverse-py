@@ -294,6 +294,44 @@ current/future days and ranges containing them bypass both cache reads and write
 while wholly historical dates retain the 30-day TTL. Explicit TTL overrides still
 take precedence.
 
+### Changed — `cfb_returning_production` measures defense from play participants and weights it into `overall_returning`
+
+`def_returning` was built from ESPN's per-game defensive player box, which covers 0% of
+teams in 2014-2015 and 17-65% through 2023, so the column was null for most of the league
+before 2024 and the fitted FBS weights were offense 1.0 / defense 0.0: every published
+`overall_returning` equalled `off_returning`. Defense now comes from play participants
+when the production season is 2014+, 92-100% of teams every season (all of FBS), and
+from play-by-play splash ids (sacks, interceptions, pass breakups, forced fumbles) for
+2004-2013. Participants are scored the way the box counts the same plays (every
+tackler, assister or sacker a tackle; a sack 2.0 split across sackers; one tackle for
+loss shared on a play that lost yardage or had a sack; a pass defended 1.0), and each
+defender is credited to the team their game roster lists them on, because on punts
+and turnover returns the tacklers play for the team in possession. Against the box
+where both are near-complete they track it at player r = 0.944 (2024) and 0.980 (2025).
+A season whose participants join fewer than 95% of pbp plays warns; a missing source
+release keeps the box defense.
+
+New columns `def_basis` (`participants` / `pbp_splash` / `box`) and `overall_basis`
+(`offense+defense`, or `offense` for a team with no defensive value, whose overall
+then equals `off_returning`) say which measure each row used. The splash measure has
+no tackle volume and is not on the participants' scale.
+They are returned by `cfb_returning_production()` now and reach the
+`load_cfb_returning_production` release asset when it is next rebuilt.
+
+**`overall_returning` values change.** FBS weights are refitted on the corrected
+metric: offense 0.49 / defense 0.51 (FBS 2018-2025, n = 1,017; standardized
+coefficients off +1.15, def +1.21). Spearman against the next season's scoring-margin
+change rises from 0.173 (offense only) to 0.205, and on the splash era the fit never
+saw (2005-2014, n = 1,213) from 0.239 to 0.299 (gain 95% team-cluster interval
+[+0.022, +0.097]). Fitted on 2018-2023 and scored on 2024-2025 the gain is +0.010,
+an interval spanning zero. The retention gate is re-baselined on a recaptured
+2005-2025 fixture (floors 0.18 over 2018-2025 and 0.24 over 2018-2023; the retired
+gate's fixture scores 0.156 under the new weights, its defense column being the
+retired measure), with held-out gates for 2024-2025 and the splash era, a
+fixture coverage/level gate, and the shipped weights tested against the committed
+fit. The new results fixture keeps completed games only: canceled and postponed
+games carry 0-0 scores (164 in 2016-2024) that the earlier capture admitted.
+
 ### Fixed — the usage box glued shared tackles into one phantom player and read positions only from participants
 
 `cfbfastR-cfb-raw` stores each game's play participants with every list cell written
