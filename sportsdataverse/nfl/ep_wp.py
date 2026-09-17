@@ -2280,10 +2280,12 @@ def calculate_wpa(df: pl.DataFrame) -> pl.DataFrame:
             "classify the plays before calling calculate_wpa."
         )
 
+    # the end-of-play margin for the team that STARTED the play: pos_score_diff_end
+    # is the end team's, negated where ESPN's end.team differs from start.pos_team
     _start_pos_score_diff_end = (
-        pl.when(pl.col("start.pos_team.id") == pl.col("homeTeamId"))
-        .then(pl.col("end.homeScore") - pl.col("end.awayScore"))
-        .otherwise(pl.col("end.awayScore") - pl.col("end.homeScore"))
+        pl.when(pl.col("start.pos_team.id") == pl.col("end.pos_team.id"))
+        .then(pl.col("pos_score_diff_end"))
+        .otherwise(-pl.col("pos_score_diff_end"))
     )
     play_df = (
         df.with_columns(
