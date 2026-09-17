@@ -530,7 +530,7 @@ def to_cfbfastr(
     teams = (
         sorted(set(title_team.values()))
         if len(set(title_team.values())) == 2
-        else [t for t in pbp.get_column("offense").unique().to_list() if t]
+        else sorted(t for t in pbp.get_column("offense").unique().to_list() if t)
     )
     home = away = None
     if linescore is not None and linescore.height:

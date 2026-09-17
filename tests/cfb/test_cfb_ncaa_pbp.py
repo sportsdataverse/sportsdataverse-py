@@ -15,8 +15,10 @@ from pathlib import Path
 import polars as pl
 
 from sportsdataverse.cfb.cfb_ncaa_pbp import (
+    _SCRIMMAGE_TYPES,
     DRIVE_TITLES_SCHEMA,
     PBP_SCHEMA,
+    _own_side_codes,
     parse_cfb_ncaa_drive_titles,
     parse_cfb_ncaa_pbp,
 )
@@ -467,3 +469,33 @@ def test_own_recovery_is_not_a_turnover() -> None:
     wku = df.filter(pl.col("play_text").str.contains("recovered by WKU Flowers")).row(0, named=True)
     assert (lsu["offense"], lsu["is_turnover"], lsu["turnover_type"]) == ("LSU", False, None)
     assert (wku["offense"], wku["is_turnover"], wku["turnover_type"]) == ("LSU", True, "fumble")
+
+
+# --- own-side vote tie-break (NC9) --------------------------------------------
+
+
+def test_own_side_tie_broken_by_kickoff_geometry() -> None:
+    """A tied first-snap vote is settled by where the kickoffs were spotted, never by name order.
+
+    Samford @ The Citadel (6414322): the true assignment is the one that sorts SECOND
+    (Samford -> SAM, The Citadel -> CIT), so an alphabetical fallback would mirror the game.
+    The real rows are sliced to equally many own-side and opponent-side drive starts.
+    """
+    rows = parse_cfb_ncaa_pbp(
+        (FIX / "mfb_play_by_play_6414322.html").read_text(encoding="utf-8"), contest_id="6414322"
+    ).to_dicts()
+    truth = {"Samford": "SAM", "The Citadel": "CIT"}
+    assert _own_side_codes(rows) == truth
+    firsts: dict[int, dict] = {}
+    for r in rows:
+        if r["yard_line_side"] and r["play_type"] in _SCRIMMAGE_TYPES:
+            firsts.setdefault(r["drive_number"], r)
+    own = [dn for dn, r in firsts.items() if truth[r["offense"]] == r["yard_line_side"]]
+    opp = [dn for dn, r in firsts.items() if truth[r["offense"]] != r["yard_line_side"]]
+    n = min(len(own), len(opp))
+    assert n >= 1
+    keep = set(own[:n]) | set(opp[:n])
+    tied = [r for r in rows if r["drive_number"] in keep or r["play_type"] == "kickoff"]
+    assert _own_side_codes(tied) == truth
+    # no kickoffs either: the documented last resort is the alphabetical pairing
+    assert _own_side_codes([r for r in tied if r["play_type"] != "kickoff"]) == {"Samford": "CIT", "The Citadel": "SAM"}

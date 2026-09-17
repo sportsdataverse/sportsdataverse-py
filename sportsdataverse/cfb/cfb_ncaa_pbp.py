@@ -142,6 +142,11 @@ def _own_side_codes(rows: "list[dict]") -> "dict[str, str]":
     drive but is spotted on the KICKING team's side. Drives with no scrimmage play
     cast no vote. Rows need ``offense``, ``yard_line_side``, ``play_type``,
     ``drive_number``.
+
+    A tied vote is broken by that same kickoff geometry: every kickoff votes for the
+    assignment under which the drive offense's own side is NOT the kickoff's side.
+    With no evidence either way the alphabetical pairing (sorted teams -> sorted
+    sides) is returned, so the result never depends on hash order (``PYTHONHASHSEED``).
     """
     teams = sorted({r["offense"] for r in rows if r["offense"]})
     sides = sorted({r["yard_line_side"] for r in rows if r["yard_line_side"]})
@@ -155,6 +160,10 @@ def _own_side_codes(rows: "list[dict]") -> "dict[str, str]":
     b = {teams[0]: sides[1], teams[1]: sides[0]}
     score_a = sum(1 for r in firsts.values() if a.get(r["offense"]) == r["yard_line_side"])
     score_b = sum(1 for r in firsts.values() if b.get(r["offense"]) == r["yard_line_side"])
+    if score_a == score_b:
+        kickoffs = [r for r in rows if r["play_type"] == "kickoff" and r["yard_line_side"] and r["offense"] in a]
+        score_a = sum(1 for r in kickoffs if a[r["offense"]] != r["yard_line_side"])
+        score_b = sum(1 for r in kickoffs if b[r["offense"]] != r["yard_line_side"])
     return a if score_a >= score_b else b
 
 

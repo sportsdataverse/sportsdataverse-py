@@ -12,6 +12,11 @@ lowercase "kick attempt good") fails loudly. The field-position tests add the
 
 from __future__ import annotations
 
+import json
+import os
+import subprocess
+import sys
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 import polars as pl
@@ -569,3 +574,40 @@ def test_fumble_recoveries_follow_cfbfastr_labels_and_turnover_vec() -> None:
     own = df.filter(pl.col("play_text").str.contains("recovered by OSU") & (pl.col("pos_team") == "Oregon St."))
     assert own.height >= 2 and not own.get_column("turnover_vec").any()
     assert set(own.get_column("play_type").to_list()) <= {"Fumble Recovery (Own)", "Field Goal Missed", "Punt"}
+
+
+# --- determinism (NC9) ----------------------------------------------------------
+
+_SEED_CHILD = """
+import json, sys
+from pathlib import Path
+from sportsdataverse.cfb.cfb_ncaa_cfbfastr import to_cfbfastr
+from sportsdataverse.cfb.cfb_ncaa_pbp import parse_cfb_ncaa_drive_titles, parse_cfb_ncaa_pbp
+html = Path(sys.argv[1]).read_text(encoding="utf-8")
+df = to_cfbfastr(parse_cfb_ncaa_pbp(html, contest_id="6386300"), season=2025, drive_titles=parse_cfb_ncaa_drive_titles(html))
+print(json.dumps(df.select("yards_to_goal", "yards_to_goal_end", "Goal_To_Go").rows()))
+"""
+
+
+def test_field_position_identical_across_hash_seeds() -> None:
+    """New Haven @ Saginaw Valley (6386300) built under PYTHONHASHSEED 0..5 must agree.
+
+    Two identical season builds on main disagreed on 54/1,685 games (this one flipped
+    ``yards_to_goal`` between 35,87,76... and 65,13,24...) because the own-side pick
+    fell out of hash order on a tied vote.
+    """
+    path = FIX / "mfb_play_by_play_6386300.html"
+
+    def run(seed: int) -> list:
+        env = {**os.environ, "PYTHONHASHSEED": str(seed), "PYTHONPATH": str(Path(__file__).resolve().parents[2])}
+        out = subprocess.run(
+            [sys.executable, "-c", _SEED_CHILD, str(path)], env=env, capture_output=True, text=True, check=True
+        )
+        return json.loads(out.stdout)
+
+    with ThreadPoolExecutor(max_workers=3) as pool:
+        results = list(pool.map(run, range(6)))
+    assert len(results[0]) > 100
+    assert results[0][0][0] == 65  # kickoff from the SVS 35: cfbfastR kicking-team convention
+    for seed, rows in enumerate(results[1:], start=1):
+        assert rows == results[0], f"seed {seed} differs from seed 0"
