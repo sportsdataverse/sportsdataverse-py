@@ -889,6 +889,25 @@ class NFLPlayProcess(object):
             )
         )
 
+        # The opening kicker receives the second-half kickoff: nflverse's first defteam of
+        # the game, i.e. the kicking team on a kickoff row (onside or re-kicked alike) and the
+        # defense on a scrimmage row when the feed lacks the opening kickoff.
+        opening = (
+            pbp_txt["plays"]
+            .filter(
+                (pl.col("type.text").is_in(clock_stoppage_vec) == False).and_(
+                    pl.col("type.text").str.contains(r"(?i)end of|coin toss|end period|wins toss") == False,
+                ),
+            )
+            .head(1)
+            .select(
+                pl.when(pl.col("type.text").is_in(kickoff_vec).or_(pl.col("text").str.contains(r"(?i)\bkicks\b")))
+                .then(pl.col("start.team.id"))
+                .otherwise(pl.col("start.def_pos_team.id"))
+                .cast(pl.Int32),
+            )
+        )
+        opening_kicker = opening.item() if opening.height else None
         # Q2 -> Q3, Q4 -> OT and OT -> OT end a clock; Q1 -> Q2 and Q3 -> Q4 carry it over
         period_over = (pl.col("period.number").shift(-1) != pl.col("period.number")).and_(
             pl.col("period.number").is_in([1, 3]) == False,
@@ -1006,15 +1025,7 @@ class NFLPlayProcess(object):
                 .then(pl.col("end.awayTeamTimeouts"))
                 .otherwise(pl.col("end.homeTeamTimeouts"))
                 .alias("end.defPosTeamTimeouts"),
-                pl.when(
-                    (pl.col("game_play_number") == 1).and_(
-                        pl.col("type.text").is_in(kickoff_vec),
-                        pl.col("start.pos_team.id") == pl.col("homeTeamId"),
-                    ),
-                )
-                .then(pl.col("homeTeamId"))
-                .otherwise(pl.col("awayTeamId"))
-                .alias("firstHalfKickoffTeamId"),
+                pl.lit(opening_kicker, dtype=pl.Int32).alias("firstHalfKickoffTeamId"),
                 pl.col("period.number").alias("period"),
                 pl.when(pl.col("start.team.id") == pl.col("homeTeamId"))
                 .then(pl.lit(100) - pl.col("start.yardLine"))
@@ -1101,14 +1112,7 @@ class NFLPlayProcess(object):
                 .alias("end.yardsToEndzone"),
             )
         )
-        pbp_txt["firstHalfKickoffTeamId"] = np.where(
-            (pbp_txt["plays"]["game_play_number"] == 1)
-            & (pbp_txt["plays"]["type.text"].is_in(kickoff_vec))
-            & (pbp_txt["plays"]["start.team.id"] == init["homeTeamId"]),
-            init["homeTeamId"],
-            init["awayTeamId"],
-        )
-        pbp_txt["firstHalfKickoffTeamId"] = pbp_txt["firstHalfKickoffTeamId"][0]
+        pbp_txt["firstHalfKickoffTeamId"] = opening_kicker
 
         if "scoringType.displayName" in pbp_txt["plays"].columns:
             pbp_txt["plays"] = (
@@ -1851,11 +1855,12 @@ class NFLPlayProcess(object):
                 .then(pl.col("pos_score_diff"))
                 .otherwise(pl.col("pos_score_diff_start"))
                 .alias("pos_score_diff_start"),
-                pl.when(pl.col("start.pos_team.id") == pl.col("firstHalfKickoffTeamId"))
+                # nflverse receive_2h_ko: a first-half play whose offense kicked the opening kickoff
+                pl.when((pl.col("period") <= 2).and_(pl.col("start.pos_team.id") == pl.col("firstHalfKickoffTeamId")))
                 .then(True)
                 .otherwise(False)
                 .alias("start.pos_team_receives_2H_kickoff"),
-                pl.when(pl.col("end.pos_team.id") == pl.col("firstHalfKickoffTeamId"))
+                pl.when((pl.col("period") <= 2).and_(pl.col("end.pos_team.id") == pl.col("firstHalfKickoffTeamId")))
                 .then(True)
                 .otherwise(False)
                 .alias("end.pos_team_receives_2H_kickoff"),
@@ -3827,11 +3832,8 @@ class NFLPlayProcess(object):
             pl.when(scorer_is_pos).then(pl.col("pos_score_diff_start")).otherwise(-pl.col("pos_score_diff_start"))
         ).cast(pl.Float64) + 6.0
         qsr = (60 * pl.col("clock.minutes") + pl.col("clock.seconds")).cast(pl.Float64)
-        home_receives_2h = (
-            pl.when(pl.col("start.pos_team.id") == pl.col("homeTeamId"))
-            .then(pl.col("start.pos_team_receives_2H_kickoff"))
-            .otherwise(~pl.col("start.pos_team_receives_2H_kickoff"))
-        )
+        # nflverse home_opening_kickoff: the home team received the opening kickoff
+        home_opening_kickoff = pl.col("firstHalfKickoffTeamId") != pl.col("homeTeamId")
         scorer_timeouts = (
             pl.when(scorer_is_pos).then(pl.col("start.posTeamTimeouts")).otherwise(pl.col("start.defPosTeamTimeouts"))
         )
@@ -3854,7 +3856,7 @@ class NFLPlayProcess(object):
             lead_after_td.alias("score_differential"),
             scorer_timeouts.cast(pl.Int64).alias("posteam_timeouts_remaining"),
             other_timeouts.cast(pl.Int64).alias("defteam_timeouts_remaining"),
-            home_receives_2h.cast(pl.Int64).alias("home_opening_kickoff"),
+            home_opening_kickoff.cast(pl.Int64).alias("home_opening_kickoff"),
             pl.col("homeTeamSpread").cast(pl.Float64).alias("spread_line"),
             pl.col("overUnder").cast(pl.Float64).alias("total_line"),
         ).with_row_index("go_index")
@@ -5300,14 +5302,9 @@ class NFLPlayProcess(object):
 
         # quarter_seconds_remaining from the within-quarter clock (minutes/seconds).
         qsr = (60 * pl.col("clock.minutes") + pl.col("clock.seconds")).cast(pl.Float64)
-        # home_opening_kickoff: the home team received the opening kickoff iff it
-        # does NOT receive the 2H kickoff.  start.pos_team_receives_2H_kickoff is a
-        # per-play flag for the *current* posteam, so resolve it to the home team.
-        home_receives_2h = (
-            pl.when(pl.col("start.pos_team.id") == pl.col("homeTeamId"))
-            .then(pl.col("start.pos_team_receives_2H_kickoff"))
-            .otherwise(~pl.col("start.pos_team_receives_2H_kickoff"))
-        )
+        # home_opening_kickoff: the home team received the opening kickoff, i.e. the
+        # opening kicker (firstHalfKickoffTeamId) is the away team
+        home_opening_kickoff = pl.col("firstHalfKickoffTeamId") != pl.col("homeTeamId")
 
         nflverse_view = fourth.select(
             pl.col("id").alias("play_id"),
@@ -5325,7 +5322,7 @@ class NFLPlayProcess(object):
             pl.col("pos_score_diff_start").cast(pl.Float64).alias("score_differential"),
             pl.col("start.posTeamTimeouts").cast(pl.Int64).alias("posteam_timeouts_remaining"),
             pl.col("start.defPosTeamTimeouts").cast(pl.Int64).alias("defteam_timeouts_remaining"),
-            home_receives_2h.cast(pl.Int64).alias("home_opening_kickoff"),
+            home_opening_kickoff.cast(pl.Int64).alias("home_opening_kickoff"),
             # nflverse spread_line is positive when the home team is favoured, and so
             # is homeTeamSpread (+|spread| when homeFavorite): same sign, no flip.
             pl.col("homeTeamSpread").cast(pl.Float64).alias("spread_line"),

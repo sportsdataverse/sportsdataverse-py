@@ -26,7 +26,7 @@ def summary() -> dict:
     return json.loads(FIX.read_text())
 
 
-def _recorded_run(summary: dict):
+def _recorded_run(summary: dict, game_id: int = GAME_ID):
     """Run the pipeline offline, recording the frames/matrices handed to the models."""
     import sportsdataverse.nfl.nfl_fourth_down as fd
     import sportsdataverse.nfl.nfl_pbp as mod
@@ -51,7 +51,7 @@ def _recorded_run(summary: dict):
         mp.setattr(fd, "get_2pt_probs", record("two_pt", fd.get_2pt_probs))
         mp.setattr(mod, "calculate_xpass", record("xpass", mod.calculate_xpass))
         mp.setattr(mod, "DMatrix", dmatrix)
-        proc = NFLPlayProcess(gameId=GAME_ID)
+        proc = NFLPlayProcess(gameId=game_id)
         proc.espn_nfl_pbp(summary=summary)
         out = proc.run_processing_pipeline()
     return proc, out, seen
@@ -292,11 +292,13 @@ def buf_ari() -> dict:
 
 
 @pytest.fixture(scope="module")
-def buf_ari_frame(buf_ari) -> pl.DataFrame:
-    proc = NFLPlayProcess(gameId=401220341)
-    proc.espn_nfl_pbp(summary=buf_ari)
-    proc.run_processing_pipeline()
-    return proc.plays_frame
+def buf_ari_run(buf_ari):
+    return _recorded_run(buf_ari, 401220341)
+
+
+@pytest.fixture(scope="module")
+def buf_ari_frame(buf_ari_run) -> pl.DataFrame:
+    return buf_ari_run[0].plays_frame
 
 
 def test_distinct_snaps_sharing_the_next_rows_start_state_are_kept(buf_ari, buf_ari_frame):
@@ -442,3 +444,29 @@ def test_incompletions_end_where_they_start_unless_a_penalty_is_enforced(phi_car
     ]
     assert len(followed) > 20
     assert [r["id"] for r in followed if r["end.yardsToEndzone"] != r["_next_start"]] == []
+
+
+# ---------------------------------------------------------------------------
+# N9 -- the opening kicker receives the second-half kickoff (nflverse receive_2h_ko)
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.parametrize(
+    ("which", "kicker", "home_opening_kickoff"),
+    [
+        ("run", JAX, 0),  # "C.Little kicks 62 yards from JAX 35": the home team kicks off
+        ("buf_ari_run", 2, 1),  # "T.Bass kicks 62 yards from BUF 35": the away team kicks off
+    ],
+)
+def test_second_half_receiver_is_the_opening_kicker(request, which, kicker, home_opening_kickoff):
+    proc, _, seen = request.getfixturevalue(which)
+    f = proc.plays_frame
+    assert f["firstHalfKickoffTeamId"].unique().to_list() == [kicker]
+    # nflverse: receive_2h_ko = 1 iff qtr <= 2 and posteam kicked the opening kickoff
+    for side in ("start", "end"):
+        expected = (pl.col("period") <= 2) & (pl.col(f"{side}.pos_team.id") == kicker)
+        got = f.select((pl.col(f"{side}.pos_team_receives_2H_kickoff") == expected).all()).item()
+        assert got, side
+    assert f.filter(pl.col("period") <= 2)["start.pos_team_receives_2H_kickoff"].any()
+    for key in ("fourth", "two_pt"):
+        assert seen[key] and seen[key][0]["home_opening_kickoff"].unique().to_list() == [home_opening_kickoff], key
