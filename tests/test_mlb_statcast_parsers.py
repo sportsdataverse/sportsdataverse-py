@@ -194,15 +194,15 @@ def test_parse_search_real_capture_ids_are_int64_exact():
         c: t for c, t in base.schema.items() if c not in _SEARCH_ID_COLS
     }
     pdf = parse_mlb_statcast_search(text, return_as_pandas=True)
-    assert str(pdf["on_1b"].dtype) == "Int64" and pdf["on_1b"].isna().sum() == 26
+    assert {c: str(pdf[c].dtype) for c in _SEARCH_ID_COLS} == dict.fromkeys(_SEARCH_ID_COLS, "Int64")
+    assert pdf["on_1b"].isna().sum() == 26
 
 
 def test_parse_search_non_integral_id_is_not_truncated():
     """A non-integral value in an id column is surfaced (warning, column left as-is), never floored."""
     import csv
     import io
-
-    import pytest
+    import warnings
 
     from sportsdataverse.mlb.mlb_statcast_parsers import parse_mlb_statcast_search
 
@@ -214,8 +214,11 @@ def test_parse_search_non_integral_id_is_not_truncated():
     buf = io.StringIO()
     csv.writer(buf, lineterminator="\n").writerows(rows)
 
-    with pytest.warns(UserWarning, match="on_1b"):
+    with warnings.catch_warnings(record=True) as caught:
+        warnings.simplefilter("always")
         df = parse_mlb_statcast_search(buf.getvalue())
+    hits = [w for w in caught if issubclass(w.category, UserWarning) and "on_1b" in str(w.message)]
+    assert len(hits) == 1 and hits[0].filename == __file__  # once, attributed to the caller's line
     assert df.schema["on_1b"] == pl.Float64
     assert float(target[idx]) in df["on_1b"].to_list()
     assert df.schema["on_2b"] == pl.Int64 and df.schema["batter"] == pl.Int64

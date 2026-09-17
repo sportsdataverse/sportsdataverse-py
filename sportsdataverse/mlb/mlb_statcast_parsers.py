@@ -8,7 +8,7 @@ import json
 import re
 import warnings
 from io import StringIO
-from typing import Dict, List, Union
+from typing import Dict, Iterable, List, Optional, Set, Union
 
 import pandas as pd
 import polars as pl
@@ -44,22 +44,42 @@ def _to_output(df: pd.DataFrame, return_as_pandas: bool) -> pl.DataFrame | pd.Da
 _MLBAM_ID_COLUMNS = ("batter", "pitcher", "on_1b", "on_2b", "on_3b", *(f"fielder_{i}" for i in range(2, 10)), "game_pk")
 
 
-def _pin_id_columns(df: pd.DataFrame) -> pd.DataFrame:
-    """Cast float-read MLBAM id columns to nullable ``Int64``; warn and skip any holding a non-integral value."""
+def _pin_id_columns(df: pd.DataFrame) -> List[str]:
+    """Cast the MLBAM id columns present in ``df`` to nullable ``Int64``, in place.
+
+    Integer-read and integral float-read columns are cast. A float column holding a
+    non-integral value is left as read (never truncated) and its name is returned.
+    """
+    uncast: List[str] = []
     for col in _MLBAM_ID_COLUMNS:
-        if col not in df.columns or not pd.api.types.is_float_dtype(df[col]):
+        if col not in df.columns:
             continue
-        vals = df[col].dropna()
-        if not (vals % 1 == 0).all():
-            warnings.warn(
-                f"Savant CSV id column {col!r} has non-integral values; left as {df[col].dtype}.", stacklevel=3
-            )
-            continue
-        df[col] = df[col].astype("Int64")
-    return df
+        s = df[col]
+        if pd.api.types.is_float_dtype(s) and not (s.dropna() % 1 == 0).all():
+            uncast.append(col)
+        elif pd.api.types.is_integer_dtype(s) or pd.api.types.is_float_dtype(s):
+            df[col] = s.astype("Int64")
+    return uncast
 
 
-def _csv_to_frame(text: str, return_as_pandas: bool = False) -> pl.DataFrame | pd.DataFrame:
+def _warn_uncast_ids(cols: Iterable[str], stacklevel: int) -> None:
+    """Warn once about id columns left uncast; ``stacklevel`` is counted from this helper's caller."""
+    if cols:
+        warnings.warn(
+            f"Savant CSV id columns {sorted(cols)} hold non-integral values; left as read, not cast to Int64.",
+            stacklevel=stacklevel + 1,
+        )
+
+
+def _csv_to_frame(
+    text: str, return_as_pandas: bool = False, uncast_ids: Optional[Set[str]] = None
+) -> pl.DataFrame | pd.DataFrame:
+    """Read a Savant CSV into a snake-cased frame with its MLBAM id columns pinned to ``Int64``.
+
+    When ``uncast_ids`` is given, id columns left uncast are added to it so a
+    multi-chunk caller can warn once; otherwise this warns, attributed to the
+    caller of the public parser.
+    """
     if not text or not text.strip():
         return _empty_frame(return_as_pandas)
     try:
@@ -68,7 +88,13 @@ def _csv_to_frame(text: str, return_as_pandas: bool = False) -> pl.DataFrame | p
         return _empty_frame(return_as_pandas)
     if df.empty:
         return _empty_frame(return_as_pandas)
-    return _to_output(_pin_id_columns(_snake_columns(df)), return_as_pandas)
+    df = _snake_columns(df)
+    uncast = _pin_id_columns(df)
+    if uncast_ids is None:
+        _warn_uncast_ids(uncast, stacklevel=3)  # _csv_to_frame <- parse_mlb_statcast_* <- caller
+    else:
+        uncast_ids.update(uncast)
+    return _to_output(df, return_as_pandas)
 
 
 def _html_decode_var(html: str, var_name: str) -> Union[Dict, List, None]:

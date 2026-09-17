@@ -5,12 +5,17 @@ page returns HTML with embedded JSON rather than CSV/JSON."""
 from __future__ import annotations
 import warnings
 from datetime import date, timedelta
-from typing import TYPE_CHECKING, Any, List, Optional, Tuple, Union
+from typing import TYPE_CHECKING, Any, List, Optional, Set, Tuple, Union
 
 import polars as pl
 
 from sportsdataverse.dl_utils import download
-from sportsdataverse.mlb.mlb_statcast_parsers import _MLBAM_ID_COLUMNS, _csv_to_frame, parse_mlb_statcast_player
+from sportsdataverse.mlb.mlb_statcast_parsers import (
+    _MLBAM_ID_COLUMNS,
+    _csv_to_frame,
+    _warn_uncast_ids,
+    parse_mlb_statcast_player,
+)
 
 if TYPE_CHECKING:  # pragma: no cover -- annotation-only import
     import pandas as pd
@@ -103,12 +108,19 @@ def _translate_filters(filters: dict) -> dict:
     return out
 
 
-def _fetch_chunk(gt: str, lt: str, player_type: str, filters: dict, base_url: str = _SEARCH_URL) -> pl.DataFrame:
+def _fetch_chunk(
+    gt: str,
+    lt: str,
+    player_type: str,
+    filters: dict,
+    base_url: str = _SEARCH_URL,
+    uncast_ids: Optional[Set[str]] = None,
+) -> pl.DataFrame:
     params = {"all": "true", "type": "details", "player_type": player_type, "game_date_gt": gt, "game_date_lt": lt}
     params.update(_translate_filters(filters))
     resp = download(base_url, params=params)
     text = getattr(resp, "text", resp if isinstance(resp, str) else "")
-    return _csv_to_frame(text)
+    return _csv_to_frame(text, uncast_ids=uncast_ids)
 
 
 def _search_core(
@@ -119,6 +131,7 @@ def _search_core(
     player_type: str = "batter",
     chunk_days: int = 7,
     return_as_pandas: bool = False,
+    _uncast_ids: Optional[Set[str]] = None,
     **filters: Any,
 ) -> "Union[pl.DataFrame, pd.DataFrame]":
     """Shared date-chunked, truncation-aware Savant search (MLB / MiLB / WBC).
@@ -126,14 +139,24 @@ def _search_core(
     Splits ``[start_dt, end_dt]`` into ``chunk_days`` windows, fetches each from
     ``base_url``, halving the window for any chunk that hits the 25,000-row cap,
     and warns once at the 1-day floor (where a single day can still truncate).
+    Id columns left uncast in any chunk are collected across chunks (and the
+    truncation recursion, via ``_uncast_ids``) and warned about once per call.
     """
+    uncast_ids: Set[str] = set() if _uncast_ids is None else _uncast_ids
     frames: list[pl.DataFrame] = []
     for gt, lt in _date_chunks(start_dt, end_dt, days=chunk_days):
-        df = _fetch_chunk(gt, lt, player_type, filters, base_url=base_url)
+        df = _fetch_chunk(gt, lt, player_type, filters, base_url=base_url, uncast_ids=uncast_ids)
         if df.height >= 25000 and chunk_days > 1:
             # truncated -> recurse on this sub-range with a smaller window
             df = _search_core(
-                gt, lt, base_url, label, player_type=player_type, chunk_days=max(1, chunk_days // 2), **filters
+                gt,
+                lt,
+                base_url,
+                label,
+                player_type=player_type,
+                chunk_days=max(1, chunk_days // 2),
+                _uncast_ids=uncast_ids,
+                **filters,
             )
         elif df.height >= 25000:
             warnings.warn(
@@ -144,6 +167,8 @@ def _search_core(
         frames.append(df)
     frames = [f for f in frames if f.height]
     out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    if _uncast_ids is None:  # outermost call only
+        _warn_uncast_ids(uncast_ids, stacklevel=3)  # _search_core <- mlb_statcast_search* <- caller
     if return_as_pandas:
         # polars -> pandas widens a nullable Int64 to float64; keep the pinned id columns nullable Int64.
         ids = {c: "Int64" for c in _MLBAM_ID_COLUMNS if out.schema.get(c) == pl.Int64}

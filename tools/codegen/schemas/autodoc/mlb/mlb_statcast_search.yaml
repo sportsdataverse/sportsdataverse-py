@@ -95,13 +95,13 @@ columns:
   type: numeric
   description: "Plate z."
 - name: on_3b
-  type: character
+  type: integer
   description: "On 3b."
 - name: on_2b
-  type: character
+  type: integer
   description: "On 2b."
 - name: on_1b
-  type: character
+  type: integer
   description: "On 1b."
 - name: outs_when_up
   type: integer

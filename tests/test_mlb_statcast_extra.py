@@ -1,4 +1,10 @@
 from __future__ import annotations
+
+import csv
+import io
+import warnings
+from pathlib import Path
+
 import polars as pl
 
 
@@ -109,22 +115,87 @@ def test_player_raw_returns_html_else_frame(monkeypatch):
     assert isinstance(df, pl.DataFrame) and df.height == 1 and "xwoba" in df.columns
 
 
-def test_search_real_capture_ids_stay_int64_in_both_outputs(monkeypatch):
-    """Real Savant search CSV through the chunked search: runner ids Int64, not re-widened by to_pandas."""
-    from pathlib import Path
+_SEARCH_HEAD = Path(__file__).resolve().parent / "fixtures" / "mlb_statcast" / "search_2024-06-15_head.csv"
+_RUNNERS = ["on_1b", "on_2b", "on_3b"]
+#: (on_1b, on_2b, on_3b) of the fixture's bases-loaded pitch: game 745329, AB 44, pitch 2.
+_BASES_LOADED = (656305, 671218, 596103)
 
+
+class _Resp:
+    def __init__(self, text: str) -> None:
+        self.text = text
+
+
+def _fixture_rows() -> list:
+    return list(csv.reader(io.StringIO(_SEARCH_HEAD.read_text(encoding="utf-8"))))
+
+
+def _to_csv(rows: list) -> str:
+    buf = io.StringIO()
+    csv.writer(buf, lineterminator="\n").writerows(rows)
+    return buf.getvalue()
+
+
+def _exact_ints(values: list) -> bool:
+    # type check, not just ==: 656305.0 == 656305 is True, so a float id would slip past a value compare.
+    return all(type(v) is int for v in values)
+
+
+def test_search_real_capture_ids_stay_int64_in_both_outputs(monkeypatch):
+    """Real Savant search CSV through the chunked search: runner ids exact Int64 in polars AND pandas output."""
     from sportsdataverse.mlb import mlb_statcast_extra as ex
 
-    body = (Path(__file__).resolve().parent / "fixtures" / "mlb_statcast" / "search_2024-06-15_head.csv").read_text(
-        encoding="utf-8"
-    )
+    body = _SEARCH_HEAD.read_text(encoding="utf-8")
+    monkeypatch.setattr(ex, "download", lambda url, params=None, **kw: _Resp(body))
 
-    class R:
-        text = body
-
-    monkeypatch.setattr(ex, "download", lambda url, params=None, **kw: R())
     df = ex.mlb_statcast_search("2024-06-15", "2024-06-15")
-    assert (df.schema["on_1b"], df.schema["on_3b"], df.schema["game_pk"]) == (pl.Int64, pl.Int64, pl.Int64)
+    key = (pl.col("game_pk") == 745329) & (pl.col("at_bat_number") == 44) & (pl.col("pitch_number") == 2)
+    row = list(df.filter(key).select(_RUNNERS).row(0))
+    assert row == list(_BASES_LOADED) and _exact_ints(row)
+    assert [df.schema[c] for c in (*_RUNNERS, "game_pk")] == [pl.Int64] * 4
+
     pdf = ex.mlb_statcast_search("2024-06-15", "2024-06-15", return_as_pandas=True)
-    assert str(pdf["on_1b"].dtype) == "Int64" and pdf["on_1b"].isna().sum() == 26
-    assert pdf["on_1b"].dropna().iloc[0] == int(pdf["on_1b"].dropna().iloc[0])
+    hit = pdf.loc[(pdf["game_pk"] == 745329) & (pdf["at_bat_number"] == 44) & (pdf["pitch_number"] == 2), _RUNNERS]
+    assert len(hit) == 1
+    prow = hit.iloc[0].tolist()
+    assert prow == list(_BASES_LOADED) and _exact_ints(prow)
+    assert [str(pdf[c].dtype) for c in _RUNNERS] == ["Int64"] * 3 and pdf["on_1b"].isna().sum() == 26
+
+
+def test_search_all_blank_chunk_concat_keeps_runner_ids_int64(monkeypatch):
+    """Two chunks, one with on_3b blank on every row: the stitched on_3b is Int64 with the real ids intact."""
+    from sportsdataverse.mlb import mlb_statcast_extra as ex
+
+    rows = _fixture_rows()
+    idx = rows[0].index("on_3b")
+    expected = [int(r[idx]) for r in rows[1:] if r[idx]]
+    blanked = [rows[0]] + [r[:idx] + [""] + r[idx + 1 :] for r in rows[1:]]
+    bodies = {"2024-06-15": _to_csv(blanked), "2024-06-16": _SEARCH_HEAD.read_text(encoding="utf-8")}
+    monkeypatch.setattr(ex, "download", lambda url, params=None, **kw: _Resp(bodies[params["game_date_gt"]]))
+
+    df = ex.mlb_statcast_search("2024-06-15", "2024-06-16", chunk_days=1)
+    assert df.height == 92
+    assert df.schema["on_3b"] == pl.Int64
+    assert df["on_3b"].head(46).null_count() == 46
+    got = df["on_3b"].tail(46).drop_nulls().to_list()
+    assert got == expected and _exact_ints(got)
+
+
+def test_search_non_integral_id_warns_once_at_the_caller(monkeypatch):
+    """A non-integral id in every chunk warns ONCE per search call, attributed to the caller's line."""
+    from sportsdataverse.mlb import mlb_statcast_extra as ex
+
+    rows = _fixture_rows()
+    idx = rows[0].index("on_1b")
+    target = next(r for r in rows[1:] if r[idx])
+    target[idx] = target[idx] + ".5"
+    body = _to_csv(rows)
+    monkeypatch.setattr(ex, "download", lambda url, params=None, **kw: _Resp(body))
+
+    with warnings.catch_warnings(record=True) as caught:
+        warnings.simplefilter("always")
+        df = ex.mlb_statcast_search("2024-06-15", "2024-06-17", chunk_days=1)  # 3 chunks
+    hits = [w for w in caught if issubclass(w.category, UserWarning) and "on_1b" in str(w.message)]
+    assert len(hits) == 1, [str(w.message) for w in hits]
+    assert hits[0].filename == __file__
+    assert df.schema["on_1b"] == pl.Float64 and df.schema["on_2b"] == pl.Int64
