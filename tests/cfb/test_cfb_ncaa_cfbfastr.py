@@ -233,7 +233,7 @@ def test_ot_bundle_final_and_synthesized_drives(
 
 
 def test_end_yards_to_goal_follows_a_clean_gain() -> None:
-    """A clean gain of g yards ends at yards_to_goal - g (no fumble, penalty, lateral or TD)."""
+    """A clean gain of g yards ends at yards_to_goal - g (no fumble, penalty, lateral, TD or turnover on downs)."""
     for cid in ("6386303", "6396796"):
         df = _frame(cid)
         clean = df.filter(
@@ -243,6 +243,7 @@ def test_end_yards_to_goal_follows_a_clean_gain() -> None:
             & (pl.col("penalty_flag") == False)  # noqa: E712
             & (pl.col("fumble_vec") == False)  # noqa: E712
             & (pl.col("touchdown") == False)  # noqa: E712
+            & (pl.col("downs_turnover") == False)  # noqa: E712
             & pl.col("play_text").str.contains(r"to the ")
             & ~pl.col("play_text").str.contains("lateral")
         )
@@ -288,3 +289,50 @@ def test_return_touchdowns_use_cfbfastr_labels_not_offensive_td_flags() -> None:
         frames["6386449"].select("pos_team", "pos_team_score", "def_pos_team", "def_pos_team_score").row(-1)
     )
     assert {pos: pos_s, dpos: dpos_s} == {"South Carolina": 38, "South Carolina St.": 10}
+
+
+# --- cfbfastR kickoff / end-state convention ----------------------------------
+# cfbfastR (and sdv-py's ESPN CFBPlayProcess) put a kickoff on the KICKING team
+# (start 65 yards to go from its own 35) and measure the end state for the team
+# holding the ball after the play: a touchback is the receiver's 25 (75 to go).
+
+
+def test_kickoff_is_the_kicking_teams_play(field_position_frames: "list[tuple[str, pl.DataFrame]]") -> None:
+    n_touchbacks = 0
+    for cid, df in field_position_frames:
+        ko = df.filter(
+            (pl.col("orig_play_type") == "kickoff")
+            & (pl.col("penalty_flag") == False)  # noqa: E712
+            & pl.col("yard_line").str.ends_with("35")
+        )
+        assert ko.height > 0, cid
+        assert ko.get_column("yards_to_goal").to_list() == [65] * ko.height, cid
+        tb = ko.filter(pl.col("play_text").str.contains("(?i)touchback"))
+        n_touchbacks += tb.height
+        assert tb.get_column("yards_to_goal_end").to_list() == [75] * tb.height, cid
+    assert n_touchbacks > 0
+
+
+def test_punt_end_state_is_the_receivers_next_snap(field_position_frames: "list[tuple[str, pl.DataFrame]]") -> None:
+    """A punt's yards_to_goal_end is the receiving team's: the yards_to_goal of its next snap."""
+    n = 0
+    bad = {}
+    for cid, df in field_position_frames:
+        rows = df.filter(~pl.col("orig_play_type").is_in(["timeout", "period_marker"])).to_dicts()
+        for cur, nxt in zip(rows, rows[1:]):
+            text = (cur["play_text"] or "").lower()
+            if (
+                cur["orig_play_type"] != "punt"
+                or cur["touchdown"]
+                or cur["penalty_flag"]
+                or nxt["penalty_flag"]
+                or any(w in text for w in ("fumble", "blocked", "muff"))
+                or nxt["orig_play_type"] not in ("rush", "pass", "sack")
+                or nxt["pos_team"] == cur["pos_team"]
+            ):
+                continue
+            n += 1
+            if cur["yards_to_goal_end"] != nxt["yards_to_goal"]:
+                bad.setdefault(cid, []).append((cur["yards_to_goal_end"], nxt["yards_to_goal"], cur["play_text"]))
+    assert n > 20, n
+    assert not bad, bad

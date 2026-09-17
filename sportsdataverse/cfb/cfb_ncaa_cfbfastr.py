@@ -633,9 +633,14 @@ def to_cfbfastr(
         end = _split_end_yard_line(r["end_yard_line"], side_codes, end_aliases)
         def_td = bool(r["is_touchdown"]) and _td_by_defense(r, offense, own_side, end)
         return_td = def_td
-        if r["play_type"] == "kickoff" and r["is_touchdown"]:
-            # a kickoff's return TD is the RECEIVING team's; the kicking team owns the spot's side
-            kicker = next((t for t, sd in own_side.items() if sd == r["yard_line_side"]), defense)
+        # the kicking team owns the kickoff spot's side (the row sits in either drive)
+        kicker = (
+            next((t for t, sd in own_side.items() if sd == r["yard_line_side"]), defense)
+            if r["play_type"] == "kickoff"
+            else None
+        )
+        if kicker and r["is_touchdown"]:
+            # a kickoff's return TD is the RECEIVING team's
             return_td = (defense if def_td else offense) != kicker
         pts_off = pts_def = 0
         if r["play_type"] not in (
@@ -676,6 +681,9 @@ def to_cfbfastr(
 
         if r["play_type"] in _MARKER_TYPES:
             continue
+        if kicker and kicker != offense:
+            # cfbfastR: a kickoff is the KICKING team's play (65 to go from its 35)
+            offense, defense, pts_off, pts_def = kicker, offense, pts_def, pts_off
         game_play_number += 1
         half_play_number += 1
         dn = r["drive_number"]
@@ -815,6 +823,24 @@ def to_cfbfastr(
                 "ot_synthesized": False,
             }
         )
+
+    # cfbfastR end state: yards_to_goal_end is measured for the team holding the ball
+    # AFTER the play -- 0 on a touchdown; flipped to the new offense when possession
+    # changes (kickoff, punt, turnover, downs); a touchback puts it at the receiver's 25
+    # (kickoff) or 20; an unknown end spot takes the next snap's yards_to_goal.
+    chain = [x for x in rows if x["orig_play_type"] not in ("timeout", "period_marker")]
+    for cur, nxt in zip(chain, [*chain[1:], None]):
+        if cur["touchdown"]:
+            cur["yards_to_goal_end"] = 0
+        elif nxt is not None and nxt["half"] == cur["half"] and None not in (cur["pos_team"], nxt["pos_team"]):
+            if nxt["pos_team"] == cur["pos_team"]:
+                continue
+            if "touchback" in (cur["play_text"] or "").lower():
+                cur["yards_to_goal_end"] = 75 if cur["orig_play_type"] == "kickoff" else 80
+            elif cur["yards_to_goal_end"] is not None:
+                cur["yards_to_goal_end"] = 100 - cur["yards_to_goal_end"]
+            elif nxt["orig_play_type"] in ("rush", "pass", "sack", "kneel"):
+                cur["yards_to_goal_end"] = nxt["yards_to_goal"]
 
     # --- OT synthesis: stats.ncaa.org pbp pages omit OT drives. Rebuild them
     # (one row per drive) from the drives tab, with scores walked through the
