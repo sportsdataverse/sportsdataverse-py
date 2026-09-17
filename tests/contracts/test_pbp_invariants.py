@@ -227,6 +227,10 @@ def test_ep_wp():
     assert _fires(_game(**{"EP_start": (0, 7.5)}), "ep.start_range") == 1
     assert _fires(_game(), "ep.offense_td_end_not_realized") == 0
     assert _fires(_game(**{"EP_end": (1, 5.1)}), "ep.offense_td_end_not_realized") == 1
+    # CFB emits EP_end as Float32: 6.92 arrives as 6.920000076..., still a realized value
+    f32 = _game(**{"EP_end": (1, 6.92)}).with_columns(pl.col("EP_end").cast(pl.Float32))
+    assert _fires(f32, "ep.offense_td_end_not_realized") == 0
+    assert _fires(f32, "ep.offense_td_pat_in_text_unresolved") == 1
     # the TD text carries "(K.Icker kick)": the try is known, 6.92 is the unknown-PAT fallback
     assert _fires(_game(), "ep.offense_td_pat_in_text_unresolved") == 0
     assert _fires(_game(**{"EP_end": (1, 6.92)}), "ep.offense_td_pat_in_text_unresolved") == 1
@@ -258,6 +262,11 @@ def test_flags():
     assert _fires(_game(**{"rush": (0, False)}), "flags.rush_type_without_rush") == 1
     assert _fires(_game(**{"pass_attempt": (3, True)}), "flags.sack_counted_as_pass_attempt") == 1
     assert _fires(_game(**{"pass_attempt": (2, False)}), "flags.completion_without_attempt") == 1
+    pick_six = _game(**{"type__text": (2, "Interception Return Touchdown"), "pass_td": (2, True)})
+    assert _fires(pick_six, "flags.offense_td_flag_on_return_td") == 1
+    assert (
+        _fires(_game(**{"type__text": (2, "Interception Return Touchdown")}), "flags.offense_td_flag_on_return_td") == 0
+    )
     wiped = _game(**{"penalty_no_play": (2, True)})
     assert _fires(wiped, "flags.no_play_yardage_credited") == 1
     fg = _game(**{"type__text": (5, "Extra Point Missed"), "fg_attempt": (5, False)}).with_columns(

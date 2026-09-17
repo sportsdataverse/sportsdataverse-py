@@ -39,6 +39,8 @@ from tools.validation.findings import CheckContext, Finding, Severity
 _SAMPLE_N = 5
 _TEXT_CHARS = 140
 _EPS = 1e-6
+#: EP_end arrives as Float32 from some processors (6.92 -> 6.920000076...).
+_FLOAT32_EPS = 1e-4
 
 c = pl.col
 
@@ -347,7 +349,7 @@ def _field_position(df: pl.DataFrame) -> list[RuleResult | None]:
         f = df.with_columns(
             __gained=pl.when(_t("rush_td")).then(c("yds_rushed")).otherwise(c("yds_receiving")),
         )
-        scope = (_t("rush_td") ^ _t("pass_td")) & ~_t("penalty_flag") & ~_t("fumble_vec") & _scrimmage()
+        scope = (_t("rush_td") ^ _t("pass_td")) & ~_t("penalty_flag") & ~_t("fumble_vec") & _scrimmage() & _offense_td()
         out.append(
             _row_rule(
                 f,
@@ -705,7 +707,7 @@ def _ep_wp(df: pl.DataFrame, summary: dict[str, Any] | None) -> list[RuleResult 
                 6,
                 "an offensive TD's EP_end is a realized value (6, 7 or 8), not a model estimate",
                 td,
-                ~c("EP_end").is_in([6.0, 6.92, 7.0, 8.0]),
+                ~pl.any_horizontal([(c("EP_end") - v).abs() < _FLOAT32_EPS for v in (6.0, 6.92, 7.0, 8.0)]),
                 ("EP_start", "EP_end", "EPA", "rush_td", "pass_td"),
             ),
             _row_rule(
@@ -714,7 +716,7 @@ def _ep_wp(df: pl.DataFrame, summary: dict[str, Any] | None) -> list[RuleResult 
                 6,
                 "a TD whose text carries the try result ends at 6/7/8, not the 6.92 unknown-PAT fallback",
                 td & text.str.contains(_PAT_IN_TEXT_RE),
-                (c("EP_end") - 6.92).abs() < _EPS,
+                (c("EP_end") - 6.92).abs() < _FLOAT32_EPS,
                 ("EP_start", "EP_end", "EPA"),
             ),
             _row_rule(
@@ -723,7 +725,7 @@ def _ep_wp(df: pl.DataFrame, summary: dict[str, Any] | None) -> list[RuleResult 
                 6,
                 "a TD whose try failed (text) ends at 6, not 6.92/7",
                 td & text.str.contains(_PAT_FAILED_RE),
-                c("EP_end") > 6 + _EPS,
+                c("EP_end") > 6 + _FLOAT32_EPS,
                 ("EP_start", "EP_end", "EPA"),
             ),
         ]
@@ -931,6 +933,15 @@ def _flags(df: pl.DataFrame) -> list[RuleResult | None]:
             pl.lit(True),
             _t("rush_td") & _t("pass_td"),
             ("rush_td", "pass_td", "type.text"),
+        ),
+        _row_rule(
+            df,
+            "flags.offense_td_flag_on_return_td",
+            7,
+            "an interception/fumble/kick return TD is not a pass_td or rush_td for the offense",
+            typ.str.contains(r"(?i)(interception|fumble|punt|kickoff|blocked).*(touchdown|return td)"),
+            _t("pass_td") | _t("rush_td"),
+            ("pass_td", "rush_td", "type.text"),
         ),
         _row_rule(
             df,
@@ -1234,6 +1245,9 @@ def _attribution(df: pl.DataFrame) -> list[RuleResult | None]:
         & ~_t("punt_blocked")
         & ~text.str.contains(r"(?i)touchback|out of bounds|out-of-bounds|fair catch|downed|no return")
     )
+    # a returner is only expected where the text describes a return
+    returned_ko = returned_ko & text.str.contains(r"(?i)return")
+    returned_punt = returned_punt & text.str.contains(r"(?i)return")
     named_sacker = text.str.contains(r"sacked[^.]*\(|(?i)sacked by|(?i)sack by")
     named_kicker = text.str.contains(r"(?i) kicks | kickoff |kickoff by|kicked by")
     specs: tuple[tuple[str, pl.Expr, str, tuple[str, ...]], ...] = (
