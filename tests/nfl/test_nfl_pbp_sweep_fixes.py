@@ -10,6 +10,7 @@ drives, boxscore, gameInfo, pickcenter), processed offline through
 * ``summary_291018018_trimmed.json.gz`` -- NYG @ NO, 2009 week 6 (``&apos;`` in the text)
 * ``summary_400791508_trimmed.json.gz`` -- WSH @ PHI, 2015 week 16 (end.team flips, "PAT failed")
 * ``summary_400874485_trimmed.json.gz`` -- NYG @ PHI, 2016 week 16 ("34 Yrd Interception Return")
+* ``summary_261022011_trimmed.json.gz`` -- WSH @ IND, 2006 week 7 (the try booked on the kickoff row)
 """
 
 from __future__ import annotations
@@ -168,6 +169,20 @@ def test_score_drops_are_repaired(ne_mia_2005):
     assert [_row(f, i)["end.awayScore"] for i in (2511130152735, 2511130152756, 2511130152798)] == [6, 6, 6]
     assert _row(f, 2511130153777)["end.homeScore"] == 16  # ESPN wrote 10 after a scoring play made it 16
     assert f.tail(1).select("end.homeScore", "end.awayScore").row(0) == (16, 23)  # the header's final
+
+
+@pytest.fixture(scope="module")
+def ind_wsh_2006() -> pl.DataFrame:
+    return _process(261022011)
+
+
+def test_a_try_recorded_on_the_next_row_is_kept(ind_wsh_2006):
+    # WSH's two-point try at 0:25 is booked on the kickoff row (36-20 -> 36-22,
+    # scoringPlay False) and the game ends 36-22; a rise the feed never takes back is real
+    f = ind_wsh_2006
+    assert _row(f, 2610220114009)["end.awayScore"] == 22
+    assert f.tail(1).select("end.homeScore", "end.awayScore").row(0) == (36, 22)  # the header's final
+    assert (f["end.awayScore"].diff().fill_null(0) >= 0).all()
 
 
 # ---------------------------------------------------------------------------

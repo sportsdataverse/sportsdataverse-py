@@ -340,15 +340,25 @@ def _nfl_repair_scores(scores, scoring, texts):
 
     A score only ever drops when a review takes points off the board (no such
     drop in 319 sampled 2002-26 drops; all were feed errors), and it only rises
-    on a scoring play. Every other change is a feed error, replaced by the last
-    accepted value -- which then anchors the next row, so a run of bad rows heals
-    rather than re-seeding itself from the previous bad row.
+    on a scoring play or on the row after one. Every other change is a feed
+    error, replaced by the last accepted value -- which then anchors the next
+    row, so a run of bad rows heals rather than re-seeding itself from the
+    previous bad row.
     """
+    # A rise on a non-scoring row that the rest of the game keeps is a score ESPN
+    # recorded one row late (the 2006 feed puts the try on the kickoff row); one
+    # the feed takes back again is the error.
+    later_min, m = [None] * len(scores), None
+    for i in range(len(scores) - 1, -1, -1):
+        later_min[i] = m
+        if scores[i] is not None:
+            m = scores[i] if m is None else min(m, scores[i])
     out, prev = [], None
-    for score, is_scoring, text in zip(scores, scoring, texts):
+    for i, (score, is_scoring, text) in enumerate(zip(scores, scoring, texts)):
         if score is not None and prev is not None:
             delta = score - prev
-            if (delta < 0 and "revers" not in (text or "").lower()) or (delta > 1 and not is_scoring):
+            taken_back = later_min[i] is not None and later_min[i] < score
+            if (delta < 0 and "revers" not in (text or "").lower()) or (delta > 1 and not is_scoring and taken_back):
                 score = prev
         out.append(score)
         if score is not None:
