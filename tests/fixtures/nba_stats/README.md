@@ -19,6 +19,9 @@ Per-family subdirectories carry their own README (see `tracking/`).
 | File | Endpoint | Captured | Notes |
 |---|---|---|---|
 | `scheduleleaguev2_2025_26.json` | `nba_stats_scheduleleaguev2(season="2025-26", return_parsed=False)` | 2026-08-07 | 2025-26 season |
+| `commonteamroster_1610612747_2023_24.json` | `nba_stats_commonteamroster(team_id="1610612747", season="2023-24", return_parsed=False)` | 2026-07-08 | Lakers 2023-24, untrimmed; copied from `sdv-internal-refs/nba/captures/_sample/00/commonteamroster.json` |
+| `leaguestandingsv3_2023_24.json` | `nba_stats_leaguestandingsv3(season="2023-24", return_parsed=False)` | 2026-07-08 | 30 teams, untrimmed; copied from `sdv-internal-refs/nba/captures/_sample/00/leaguestandingsv3.json` |
+| `leaguegamelog_team_2023_24.json` | `nba_stats_leaguegamelog(league_id="00", season="2023-24", return_parsed=False)` | 2026-07-08 | Team game log, trimmed (see below); from `sdv-internal-refs/nba/captures/_sample/00/leaguegamelog.json` |
 
 ## Trimming
 
@@ -28,6 +31,11 @@ Per-family subdirectories carry their own README (see `tracking/`).
 ~4.7 MB. Every retained game object is byte-for-byte as served, and the
 first/last split keeps more than one `game_id` season-type prefix in the fixture
 so `season_type_description` derivation is exercised.
+
+`leaguegamelog_team_2023_24.json` keeps only the **first row per `TEAM_ID`** of
+the real 2,460-row body (30 rows, one per team, ~390 KB -> ~5 KB). The
+crosswalk reads it only for each team's tricode, so one row per team exercises
+the whole mapping; retained rows are unchanged, the envelope is as served.
 
 ## Re-capturing
 

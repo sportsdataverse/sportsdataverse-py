@@ -17,6 +17,7 @@ fixtures did not match the live payload.
 | File | Endpoint | Captured | Notes |
 |---|---|---|---|
 | `scheduleleaguev2_2026.json` | `wnba_stats_scheduleleaguev2(season="2026", return_parsed=False)` | 2026-08-07 | 2026 season |
+| `commonteamroster_1611661319_2023.json` | `wnba_stats_commonteamroster(team_id="1611661319", season="2023", return_parsed=False)` | 2026-07-08 | Aces 2023, untrimmed; copied from `sdv-internal-refs/nba/captures/_sample/10/commonteamroster.json` |
 
 ## Trimming
 
