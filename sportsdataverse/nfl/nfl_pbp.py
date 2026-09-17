@@ -71,6 +71,7 @@ from sportsdataverse.nfl.ep_wp import (
     WP_SPREAD_FEATURES,
     _EP_POINT_VALUES,
     _XYAC_OUT_COLS,
+    _DEFAULT_ROOF,
     _espn_cp_features,
     _espn_ep_features,
     _espn_wp_features,
@@ -297,26 +298,14 @@ def _nfl_punt_los(text, punting_side, home_abbr, away_abbr):
     return los if 0 < los < 100 else None
 
 
-# ESPN's summary names the venue but carries no roof. EP / CP / xpass were trained
-# (nfl-data ``model_training.play_level.make_model_mutations``) on nflverse roofs
-# where dome/closed -> dome=1 and every other roof -> outdoors=1 -- retractable is
-# never 1 -- and nfl4th reads "dome" / "outdoors" the same way, so the default is
-# the most common NFL roof rather than the retractable state no model was fit on.
-_NFL_DEFAULT_ROOF = "outdoors"
+# ESPN's summary names the venue but carries no roof; the models' one-hots come from
+# the game-level ``roof`` column through ep_wp's feature builders (_roof_one_hots).
 
 
 def _nfl_roof(game_info) -> str:
     """The game's roof from ``gameInfo.venue.indoor`` when ESPN (or an adapter) supplies it."""
     indoor = ((game_info or {}).get("venue") or {}).get("indoor")
-    return "dome" if indoor is True else "outdoors" if indoor is False else _NFL_DEFAULT_ROOF
-
-
-def _nfl_with_roof(x, feature_names, roof):
-    """Set the roof one-hots ``ep_wp``'s ESPN feature builders hard-code (retractable=1)."""
-    x[:, feature_names.index("retractable")] = 0.0
-    x[:, feature_names.index("dome")] = float(roof == "dome")
-    x[:, feature_names.index("outdoors")] = float(roof == "outdoors")
-    return x
+    return "dome" if indoor is True else "outdoors" if indoor is False else _DEFAULT_ROOF
 
 
 # "Timeout #1 by CLV at 04:52." (2008+; "Timeout #2 NYJ" occasionally drops "by"),
@@ -4585,9 +4574,7 @@ class NFLPlayProcess(object):
             pos_timeouts_col="start.posTeamTimeouts",
             def_timeouts_col="start.defPosTeamTimeouts",
         )
-        _probs_tb = _ep_model.predict(
-            DMatrix(_nfl_with_roof(X_ep_tb, EP_FEATURES, self.roof), feature_names=EP_FEATURES)
-        ).reshape(-1, 7)
+        _probs_tb = _ep_model.predict(DMatrix(X_ep_tb, feature_names=EP_FEATURES)).reshape(-1, 7)
         EP_start_touchback = np.clip(_probs_tb @ _EP_POINT_VALUES, -10.0, 10.0)
 
         X_ep_start = _espn_ep_features(
@@ -4603,9 +4590,7 @@ class NFLPlayProcess(object):
             pos_timeouts_col="start.posTeamTimeouts",
             def_timeouts_col="start.defPosTeamTimeouts",
         )
-        _probs_start = _ep_model.predict(
-            DMatrix(_nfl_with_roof(X_ep_start, EP_FEATURES, self.roof), feature_names=EP_FEATURES)
-        ).reshape(-1, 7)
+        _probs_start = _ep_model.predict(DMatrix(X_ep_start, feature_names=EP_FEATURES)).reshape(-1, 7)
         EP_start = np.clip(_probs_start @ _EP_POINT_VALUES, -10.0, 10.0)
 
         play_df = (
@@ -4680,9 +4665,7 @@ class NFLPlayProcess(object):
             pos_timeouts_col="end.posTeamTimeouts",
             def_timeouts_col="end.defPosTeamTimeouts",
         )
-        _probs_end = _ep_model.predict(
-            DMatrix(_nfl_with_roof(X_ep_end, EP_FEATURES, self.roof), feature_names=EP_FEATURES)
-        ).reshape(-1, 7)
+        _probs_end = _ep_model.predict(DMatrix(X_ep_end, feature_names=EP_FEATURES)).reshape(-1, 7)
         EP_end = np.clip(_probs_end @ _EP_POINT_VALUES, -10.0, 10.0)
 
         # --- Accepted-penalty counterfactual (parity with the CFB processor) ---
@@ -4755,9 +4738,7 @@ class NFLPlayProcess(object):
             pos_timeouts_col="start.posTeamTimeouts",
             def_timeouts_col="start.defPosTeamTimeouts",
         )
-        _probs_cf = _ep_model.predict(
-            DMatrix(_nfl_with_roof(X_ep_cf, EP_FEATURES, self.roof), feature_names=EP_FEATURES)
-        ).reshape(-1, 7)
+        _probs_cf = _ep_model.predict(DMatrix(X_ep_cf, feature_names=EP_FEATURES)).reshape(-1, 7)
         EP_penalty_cf = np.clip(_probs_cf @ _EP_POINT_VALUES, -10.0, 10.0)
 
         play_df = play_df.with_columns(
@@ -5035,9 +5016,7 @@ class NFLPlayProcess(object):
             pos_timeouts_col="_pos_to",
             def_timeouts_col="_def_to",
         )
-        _probs_respot = _ep_model.predict(
-            DMatrix(_nfl_with_roof(X_ep_respot, EP_FEATURES, self.roof), feature_names=EP_FEATURES)
-        ).reshape(-1, 7)
+        _probs_respot = _ep_model.predict(DMatrix(X_ep_respot, feature_names=EP_FEATURES)).reshape(-1, 7)
         ep_respot = np.clip(_probs_respot @ _EP_POINT_VALUES, -10.0, 10.0)
 
         fixed = respotted.select(
@@ -5564,9 +5543,7 @@ class NFLPlayProcess(object):
                 pass_middle_col="pass_middle",
                 home_col="start.is_home",
             )
-            cp_preds = _cp_model.predict(
-                DMatrix(_nfl_with_roof(X_cp, CP_FEATURES, self.roof), feature_names=CP_FEATURES)
-            )
+            cp_preds = _cp_model.predict(DMatrix(X_cp, feature_names=CP_FEATURES))
             cp_frame = pass_df.select("_cp_row_idx").with_columns(pl.Series("cp", cp_preds.tolist(), dtype=pl.Float64))
         else:
             cp_frame = pl.DataFrame(

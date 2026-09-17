@@ -522,3 +522,54 @@ def test_fourth_down_decisions_skip_clock_stoppage_rows(run, frame):
     assert scored == set(fourth.filter(pl.col("type.text").is_in(clock_stoppage_vec) == False)["id"].to_list())
     assert stoppages["fourth_down_recommendation"].null_count() == stoppages.height
     assert stoppages["go_boost"].null_count() == stoppages.height
+
+
+# ---------------------------------------------------------------------------
+# N12 -- roof one-hots follow the trainer of the bundled models, on both paths
+# ---------------------------------------------------------------------------
+
+_TRAINED_ONE_HOTS = {  # (retractable, dome, outdoors) per nfl-data play_level make_model_mutations
+    "dome": (0, 1, 0),
+    "closed": (0, 1, 0),
+    "outdoors": (0, 0, 1),
+    "open": (0, 0, 1),
+}
+
+
+def test_nflverse_roof_one_hots_follow_the_models_trainer():
+    from sportsdataverse.nfl.ep_wp import _make_cp_mutations, _make_model_mutations
+
+    # real nflverse 2023 pass rows (tests/fixtures/nfl_ep_wp): all four roof values
+    rows = pl.read_parquet(Path(__file__).resolve().parents[1] / "fixtures" / "nfl_ep_wp" / "pass_rows_2023.parquet")
+    assert set(rows["roof"].unique().to_list()) == set(_TRAINED_ONE_HOTS)
+    for mutate in (_make_model_mutations, _make_cp_mutations):
+        got = mutate(rows).select("roof", "retractable", "dome", "outdoors").unique().rows()
+        assert {r[0]: tuple(r[1:]) for r in got} == _TRAINED_ONE_HOTS, mutate.__name__
+    # a frame without a roof takes the documented default, a trained state
+    assert _make_model_mutations(rows.drop("roof")).select("retractable", "dome", "outdoors").unique().rows() == [
+        (0, 0, 1)
+    ]
+
+
+def test_espn_feature_builders_read_the_roof_column(frame):
+    from sportsdataverse.nfl.ep_wp import (
+        CP_FEATURES,
+        EP_FEATURES,
+        XYAC_FEATURES,
+        _espn_cp_features,
+        _espn_ep_features,
+        _espn_xyac_features,
+    )
+
+    rows = frame.head(25)
+    builders = (
+        (_espn_ep_features, EP_FEATURES),
+        (_espn_cp_features, CP_FEATURES),
+        (_espn_xyac_features, XYAC_FEATURES),
+    )
+    cases = [(rows.with_columns(pl.lit(r).alias("roof")), hot) for r, hot in _TRAINED_ONE_HOTS.items()]
+    cases.append((rows.drop("roof"), (0, 0, 1)))
+    for f, hot in cases:
+        for build, feats in builders:
+            x = build(f)[:, [feats.index(c) for c in ("retractable", "dome", "outdoors")]]
+            assert {tuple(int(v) for v in r) for r in x} == {hot}, (build.__name__, hot)
