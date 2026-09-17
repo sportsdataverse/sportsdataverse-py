@@ -19,6 +19,7 @@ Every case runs the real pipeline, offline, on a stored ESPN summary:
 * ``summary_401636929.json`` -- Baylor @ West Virginia, 2024 ("return for a loss of 1 yard" on a kickoff).
 * ``summary_401858221.json`` -- Old Dominion @ Virginia Tech, 2026 ("return  for -55 yds").
 * ``summary_332570254.json`` -- Oregon State @ Utah, 2013 ("returned by Victor Bolden, fumbled, recovered by ... Victor Bolden for 10 yards").
+* ``summary_252532751.json`` -- Louisiana Monroe @ Wyoming, 2005 ("Julius Stinson return -5 yards to the Wyom42").
 
 The 2026 summaries are copied verbatim from ``cfbfastR-cfb-raw/cfb/json/raw``.
 """
@@ -307,3 +308,14 @@ def test_return_yardage_ignores_spots_and_fumble_advances():
     fumbled = _plays(332570254).filter(pl.col("text").str.contains("returned by Victor Bolden, fumbled", literal=True))
     assert fumbled.height == 2
     assert fumbled["yds_kickoff_return"].to_list() == [None, None]
+
+
+# --- C28: the returner clause without "for": "Name return -2 yards" -------------------------------
+
+
+def test_return_n_yards_clause():
+    plays = _plays(252532751)
+    assert _row(plays, "Julius Stinson return -5 yards to the Wyom42")["yds_punt_return"] == -5
+    assert _row(plays, "Hoost Marsh return 12 yards to the Wyom32")["yds_punt_return"] == 12
+    assert _row(plays, "Joe Merritt return 19 yards to the LaMon20")["yds_kickoff_return"] == 19
+    assert _row(plays, "Josh Alexander return 0 yards to the LaMon30")["yds_int_return"] == 0

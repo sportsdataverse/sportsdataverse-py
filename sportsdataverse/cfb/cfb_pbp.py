@@ -131,6 +131,10 @@ _VENDOR_PUNT_RETURNER_RE = (
 #: does carry one ("to the 50 yard line") is recognised and refused.
 _STATED_YARDS_RE = r"(?i)(no gain)|(loss of )?(-)?(\d+)[\s-]*(?:yds?|yards?)\b(\s+line)?"
 
+#: The returner clause with no "for": "Shaun Carney return -2 yards to the AFA10" (2005-2007) and
+#: the vendor template's "#16 M.Beltran, Jr. return 18 yards", whatever the name's shape.
+_RETURN_N_YARDS_RE = r"(?i)\breturn (-?\d+ yards?)\b"
+
 
 def _signed_yards(tail: pl.Expr, *, before_fumble: bool = False) -> pl.Expr:
     """The first stated yardage in *tail*, before any penalty clause; 0 for "no gain", negative for "-N" / "a loss of N".
@@ -4235,6 +4239,12 @@ class CFBPlayProcess(object):
                 (pl.col("pass") == True).and_(pl.col("int") == True).and_(pl.col("text").str.contains(r"(?i)for a TD")),
             )
             .then(_signed_yards(pl.col("text").str.extract(r"(?i)return\s+for (.+)"), before_fumble=True))
+            .when(
+                (pl.col("pass") == True)
+                .and_(pl.col("int") == True)
+                .and_(pl.col("text").str.contains(_RETURN_N_YARDS_RE))
+            )
+            .then(_signed_yards(pl.col("text").str.extract(_RETURN_N_YARDS_RE, 1)))
             .when((pl.col("pass") == True).and_(pl.col("int") == True))
             .then(
                 _signed_yards(
@@ -4269,6 +4279,8 @@ class CFBPlayProcess(object):
             .then(_signed_yards(pl.col("text").str.extract(r"(?i)returned by (.+)"), before_fumble=True))
             .when((pl.col("kickoff_play") == True).and_(pl.col("text").str.contains(r"(?i)return\s+for")))
             .then(_signed_yards(pl.col("text").str.extract(r"(?i)return\s+for (.+)"), before_fumble=True))
+            .when((pl.col("kickoff_play") == True).and_(pl.col("text").str.contains(_RETURN_N_YARDS_RE)))
+            .then(_signed_yards(pl.col("text").str.extract(_RETURN_N_YARDS_RE, 1)))
             .otherwise(None),
             yds_punted=pl.when((pl.col("punt") == True).and_(pl.col("punt_blocked") == True))
             .then(0)
@@ -4306,6 +4318,8 @@ class CFBPlayProcess(object):
             .then(pl.col("text").str.extract(r"(?i)returned by .{2,40}? for (-?\d+) yard", 1).cast(pl.Int32))
             .when((pl.col("punt") == True).and_(pl.col("text").str.contains(r"(?i)returned -?\d+ yards")))
             .then(_signed_yards(pl.col("text").str.extract(r"(?i)returned (.+)"), before_fumble=True))
+            .when((pl.col("punt") == True).and_(pl.col("text").str.contains(_RETURN_N_YARDS_RE)))
+            .then(_signed_yards(pl.col("text").str.extract(_RETURN_N_YARDS_RE, 1)))
             .when((pl.col("punt") == True).and_(pl.col("punt_blocked") == False))
             .then(_signed_yards(pl.col("text").str.extract(r"(?i)returns for (.+)"), before_fumble=True))
             .when((pl.col("punt") == True).and_(pl.col("punt_blocked") == True))
