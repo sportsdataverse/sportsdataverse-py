@@ -188,6 +188,36 @@ def parse_standings(raw: Dict, team_id: Optional[Union[int, str]] = None) -> Lis
     return rows
 
 
+_MOVE_SIGN = {"up": 1, "down": -1}
+
+
+def parse_polls(raw: Dict) -> List[Dict]:
+    """league/polls: :func:`parse_standings` rows plus ``team`` and ``rank_change``.
+
+    Blank headers are named by position, and poll layouts differ (AP/Coaches:
+    rank, change, team, pts; RPI: rank, team, rpi, ...), so ``v1``/``v2`` swap
+    meaning per table; they are kept as-is. ``team`` is the ``cell-entity``
+    column wherever it sits. ``rank_change`` is the ``cell-change`` magnitude
+    signed by the cell's ``subType`` (``up`` -> positive, ``down`` -> negative);
+    null when the table has no change column or the row has no movement marker
+    (Fox renders unchanged and newly ranked teams the same way).
+    """
+    rows: List[Dict] = []
+    for sec in raw.get("standingsSections", []) or []:
+        for tbl in sec.get("standings", []) or []:
+            templates = [c.get("template") for c in (tbl.get("headers") or [{}])[0].get("columns") or []]
+            ent = templates.index("cell-entity") if "cell-entity" in templates else None
+            chg = templates.index("cell-change") if "cell-change" in templates else None
+            for row, r in zip(_table_rows(tbl, extra={"section": sec.get("title")}), tbl.get("rows") or []):
+                cols = r.get("columns") or []
+                cell = cols[chg] if chg is not None and chg < len(cols) else {}
+                sign, text = _MOVE_SIGN.get(cell.get("subType") or ""), cell.get("text")
+                row["team"] = cols[ent].get("text") if ent is not None and ent < len(cols) else None
+                row["rank_change"] = sign * int(text) if sign and text and text.isdigit() else None
+                rows.append(row)
+    return rows
+
+
 def _title_case(name: str) -> str:
     """Title case matching R ``stringr::str_to_title`` on team names.
 
@@ -1344,7 +1374,7 @@ _LEAGUE_ENDPOINTS: List[Any] = [
         "rankings / polls rendered as standings tables",
         "{sport}/league/polls",
         None,
-        parse_standings,
+        parse_polls,
         False,
         False,
     ),
