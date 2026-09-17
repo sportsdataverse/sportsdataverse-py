@@ -233,8 +233,12 @@ def test_ot_bundle_final_and_synthesized_drives(
 
 
 def test_end_yards_to_goal_follows_a_clean_gain() -> None:
-    """A clean gain of g yards ends at yards_to_goal - g (no fumble, penalty, lateral, TD or turnover on downs)."""
-    for cid in ("6386303", "6396796"):
+    """A clean gain of g yards ends at yards_to_goal - g (no turnover, penalty, lateral or TD).
+
+    6386333 is the trap the learned alias exists for: the text's "TULANE30" starts with the
+    other team's header code (Tulsa = TUL, Tulane = TLN).
+    """
+    for cid in ("6386303", "6396796", "6386333"):
         df = _frame(cid)
         clean = df.filter(
             pl.col("orig_play_type").is_in(["rush", "pass", "sack"])
@@ -244,6 +248,7 @@ def test_end_yards_to_goal_follows_a_clean_gain() -> None:
             & (pl.col("fumble_vec") == False)  # noqa: E712
             & (pl.col("touchdown") == False)  # noqa: E712
             & (pl.col("downs_turnover") == False)  # noqa: E712
+            & (pl.col("int") == False)  # noqa: E712
             & pl.col("play_text").str.contains(r"to the ")
             & ~pl.col("play_text").str.contains("lateral")
         )

@@ -260,6 +260,15 @@ def _own_side(df: pl.DataFrame) -> "dict[str, str]":
     return a if score_a >= score_b else b
 
 
+def _exact_side(token: "str | None", codes: "list[str]") -> "tuple[str, int] | None":
+    """(game side code, yard) when a token names one of the game's codes outright."""
+    lookup = {_norm_code(c): c for c in codes}
+    for code, num in _yl_candidates(token or ""):
+        if _norm_code(code) in lookup:
+            return lookup[_norm_code(code)], num
+    return None
+
+
 def _end_code_aliases(df: pl.DataFrame, own_side: "dict[str, str]") -> "dict[str, str]":
     """Map play-text side codes the drive headers never use ("OU" for "OKL") onto a game code.
 
@@ -279,7 +288,7 @@ def _end_code_aliases(df: pl.DataFrame, own_side: "dict[str, str]") -> "dict[str
     )
     for r in clean.select("offense", "yard_line_side", "yard_line_number", "yards_gained", "end_yard_line").to_dicts():
         off, side, num = r["offense"], r["yard_line_side"], r["yard_line_number"]
-        if off not in own_side or side is None or num is None or _split_yard_line(r["end_yard_line"], codes):
+        if off not in own_side or side is None or num is None or _exact_side(r["end_yard_line"], codes):
             continue
         to_go = (100 - num if own_side[off] == side else num) - r["yards_gained"]
         if not 0 < to_go < 100 or to_go == 50:
@@ -296,11 +305,19 @@ def _end_code_aliases(df: pl.DataFrame, own_side: "dict[str, str]") -> "dict[str
 def _split_end_yard_line(
     token: "str | None", codes: "list[str]", aliases: "dict[str, str]"
 ) -> "tuple[str | None, int] | None":
-    """(game side code, yard) of a play-text end yard line; learned aliases after the shared rule."""
-    split = _split_yard_line(token, codes)
-    if split or not token:
-        return split
-    return next(((aliases[_norm_code(c)], n) for c, n in _yl_candidates(token) if _norm_code(c) in aliases), None)
+    """(game side code, yard) of a play-text end yard line: the game's codes, then a learned
+    alias, then the shared rule's prefix match.
+
+    The learned alias comes first because a prefix match can be confidently wrong: in
+    Tulane (TLN) at Tulsa (TUL), the text's "TULANE30" starts with the OTHER team's code.
+    """
+    if not token:
+        return None
+    exact = _exact_side(token, codes)
+    if exact:
+        return exact
+    alias = next(((aliases[_norm_code(c)], n) for c, n in _yl_candidates(token) if _norm_code(c) in aliases), None)
+    return alias or _split_yard_line(token, codes)
 
 
 def _td_by_defense(r: "dict[str, Any]", offense: "Optional[str]", own_side: "dict[str, str]", end: Any) -> bool:
