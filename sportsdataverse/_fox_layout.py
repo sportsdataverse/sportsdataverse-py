@@ -59,13 +59,16 @@ def frame(rows: List[Dict[str, Any]], return_as_pandas: bool) -> Union[pl.DataFr
         return_as_pandas: If ``True`` return a pandas DataFrame; else polars.
 
     Returns:
-        A ``polars.DataFrame`` (default) or ``pandas.DataFrame``.
+        A ``polars.DataFrame`` (default) or ``pandas.DataFrame``. Dtypes are
+        inferred over every row, and ``rank_change`` (league polls) is always
+        a nullable Int64, even when a pull has no movement at all.
     """
     if return_as_pandas:
         import pandas as pd
 
-        return pd.DataFrame(rows)
-    return pl.DataFrame(rows)
+        pdf = pd.DataFrame(rows)
+        return pdf.astype({"rank_change": "Int64"}) if "rank_change" in pdf.columns else pdf
+    return pl.DataFrame(rows, infer_schema_length=None, schema_overrides={"rank_change": pl.Int64})
 
 
 def _cells(columns: Any) -> List[Optional[str]]:
@@ -197,23 +200,32 @@ def parse_polls(raw: Dict) -> List[Dict]:
     Blank headers are named by position, and poll layouts differ (AP/Coaches:
     rank, change, team, pts; RPI: rank, team, rpi, ...), so ``v1``/``v2`` swap
     meaning per table; they are kept as-is. ``team`` is the ``cell-entity``
-    column wherever it sits. ``rank_change`` is the ``cell-change`` magnitude
-    signed by the cell's ``subType`` (``up`` -> positive, ``down`` -> negative);
-    null when the table has no change column or the row has no movement marker
-    (Fox renders unchanged and newly ranked teams the same way).
+    column wherever it sits (a header-derived ``team`` column is kept when there
+    is no entity column); on AP/Coaches rows it carries the first-place vote
+    count (``"Michigan (57)"``), so join on ``entity_id``, not ``team``.
+    ``rank_change`` is the ``cell-change`` magnitude signed by the cell's
+    ``subType`` (``up`` -> positive, ``down`` -> negative); null when the table
+    has no change column or the row has no movement marker (Fox renders
+    unchanged and newly ranked teams the same way).
     """
     rows: List[Dict] = []
     for sec in raw.get("standingsSections", []) or []:
         for tbl in sec.get("standings", []) or []:
-            templates = [c.get("template") for c in (tbl.get("headers") or [{}])[0].get("columns") or []]
+            if not tbl:
+                continue
+            headers = (tbl.get("headers") or [{}])[0].get("columns") or []
+            templates = [c.get("template") if isinstance(c, dict) else None for c in headers]
             ent = templates.index("cell-entity") if "cell-entity" in templates else None
             chg = templates.index("cell-change") if "cell-change" in templates else None
             for row, r in zip(_table_rows(tbl, extra={"section": sec.get("title")}), tbl.get("rows") or []):
-                cols = r.get("columns") or []
+                cols = [c if isinstance(c, dict) else {"text": c} for c in (r.get("columns") or [])]
                 cell = cols[chg] if chg is not None and chg < len(cols) else {}
                 sign, text = _MOVE_SIGN.get(cell.get("subType") or ""), cell.get("text")
-                row["team"] = cols[ent].get("text") if ent is not None and ent < len(cols) else None
-                row["rank_change"] = sign * int(text) if sign and text and text.isdigit() else None
+                if ent is not None and ent < len(cols):
+                    row["team"] = cols[ent].get("text")
+                row.setdefault("team", None)
+                decimal = text if isinstance(text, str) and text.isdecimal() else None
+                row["rank_change"] = sign * int(decimal) if sign and decimal else None
                 rows.append(row)
     return rows
 
