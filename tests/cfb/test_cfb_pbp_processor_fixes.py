@@ -192,3 +192,13 @@ def test_punt_returner_beyond_abbreviated_names():
     plays = _plays(401858426).filter(pl.col("text").str.contains("#2 R.Vander Zee return", literal=True))
     assert plays.height == 2
     assert plays["punt_return_player_name"].to_list() == ["R.Vander Zee", "R.Vander Zee"]
+
+
+# --- C19: cfb_pbp_json() returns the attached payload ---------------------------------------------
+
+
+def test_cfb_pbp_json_returns_the_attached_summary():
+    proc = CFBPlayProcess(gameId=401856682)
+    loaded = proc.espn_cfb_pbp(summary=_summary(401856682))
+    assert proc.cfb_pbp_json() is loaded
+    assert proc.json is loaded

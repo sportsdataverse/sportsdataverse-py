@@ -1261,7 +1261,6 @@ class CFBPlayProcess(object):
                 game.espn_cfb_pbp()
                 cached = game.cfb_pbp_json()
         """
-        self.json = json
         return self.json
 
     def __helper_cfb_pbp_drives(self, pbp_txt):
