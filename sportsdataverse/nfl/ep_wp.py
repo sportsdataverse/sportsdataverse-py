@@ -1926,6 +1926,23 @@ def calculate_epa(df: pl.DataFrame) -> pl.DataFrame:
             "before calling calculate_epa."
         )
 
+    # The try ESPN folds into a touchdown row, read from the parsed flags
+    # (``xp_attempt`` / ``xp_made`` / ``two_point_conv_result``, NFLPlayProcess) when
+    # the frame carries them, else from the text. The old text test matched an
+    # upper-case "PAT" against lower-cased text and never fired, so every failed
+    # try scored as made and every "extra point is GOOD" stayed at the 6.92 unknown.
+    _lower = pl.col("text").str.to_lowercase()
+    two_pt_good = _lower.str.contains(r"conversion").and_(_lower.str.contains(r"failed") == False)  # noqa: E712
+    two_pt_failed = _lower.str.contains(r"conversion").and_(_lower.str.contains(r"failed"))
+    if "two_point_conv_result" in df.columns:
+        two_pt_good = (pl.col("two_point_conv_result") == "success").or_(two_pt_good)
+        two_pt_failed = (pl.col("two_point_conv_result") == "failure").or_(two_pt_failed)
+    kick_good = _lower.str.contains(r"kick\)")
+    kick_failed = _lower.str.contains(r"pat (?:failed|missed|no good)|extra point is (?:no good|blocked)")
+    if "xp_attempt" in df.columns and "xp_made" in df.columns:
+        kick_good = (pl.col("xp_made") == True).or_(kick_good)  # noqa: E712
+        kick_failed = ((pl.col("xp_attempt") == True).and_(pl.col("xp_made") == False)).or_(kick_failed)  # noqa: E712
+
     play_df = (
         df.with_columns(
             # --- Scoring-attempt EP_start override (must precede EP_end overlays) ---
@@ -1968,49 +1985,25 @@ def calculate_epa(df: pl.DataFrame) -> pl.DataFrame:
             )
             .then(-2)
             # Defense TD + Successful Two-Point Conversion
-            .when(
-                (pl.col("type.text").is_in(defense_score_vec))
-                .and_(pl.col("text").str.to_lowercase().str.contains(r"(?i)conversion"))
-                .and_(pl.col("text").str.to_lowercase().str.contains(r"(?i)failed") == False),
-            )
+            .when((pl.col("type.text").is_in(defense_score_vec)).and_(two_pt_good))
             .then(-8)
             # Defense TD + Failed Two-Point Conversion
-            .when(
-                (pl.col("type.text").is_in(defense_score_vec))
-                .and_(pl.col("text").str.to_lowercase().str.contains(r"(?i)conversion"))
-                .and_(pl.col("text").str.to_lowercase().str.contains(r"(?i)failed")),
-            )
+            .when((pl.col("type.text").is_in(defense_score_vec)).and_(two_pt_failed))
             .then(-6)
             # Defense TD + Kick/PAT Missed
-            .when(
-                (pl.col("type.text").is_in(defense_score_vec))
-                .and_(pl.col("text").str.to_lowercase().str.contains(r"PAT"))
-                .and_(pl.col("text").str.to_lowercase().str.contains(r"(?i)missed")),
-            )
+            .when((pl.col("type.text").is_in(defense_score_vec)).and_(kick_failed))
             .then(-6)
             # Defense TD + Kick/PAT Good
-            .when(
-                (pl.col("type.text").is_in(defense_score_vec)).and_(
-                    pl.col("text").str.to_lowercase().str.contains(r"kick\)"),
-                ),
-            )
+            .when((pl.col("type.text").is_in(defense_score_vec)).and_(kick_good))
             .then(-7)
             # Defense TD
             .when(pl.col("type.text").is_in(defense_score_vec))
             .then(-6.92)
             # Offense TD + Failed Two-Point Conversion
-            .when(
-                (pl.col("type.text").is_in(offense_score_vec))
-                .and_(pl.col("text").str.to_lowercase().str.contains(r"(?i)conversion"))
-                .and_(pl.col("text").str.to_lowercase().str.contains(r"(?i)failed")),
-            )
+            .when((pl.col("type.text").is_in(offense_score_vec)).and_(two_pt_failed))
             .then(6)
             # Offense TD + Successful Two-Point Conversion
-            .when(
-                (pl.col("type.text").is_in(offense_score_vec))
-                .and_(pl.col("text").str.to_lowercase().str.contains(r"(?i)conversion"))
-                .and_(pl.col("text").str.to_lowercase().str.contains(r"(?i)failed") == False),
-            )
+            .when((pl.col("type.text").is_in(offense_score_vec)).and_(two_pt_good))
             .then(8)
             # Offense Made FG
             .when(
@@ -2020,18 +2013,10 @@ def calculate_epa(df: pl.DataFrame) -> pl.DataFrame:
             )
             .then(3)
             # Offense TD + Kick/PAT Missed
-            .when(
-                (pl.col("type.text").is_in(offense_score_vec))
-                .and_(pl.col("text").str.to_lowercase().str.contains(r"PAT"))
-                .and_(pl.col("text").str.to_lowercase().str.contains(r"(?i)missed")),
-            )
+            .when((pl.col("type.text").is_in(offense_score_vec)).and_(kick_failed))
             .then(6)
             # Offense TD + Kick/PAT Good
-            .when(
-                (pl.col("type.text").is_in(offense_score_vec)).and_(
-                    pl.col("text").str.to_lowercase().str.contains(r"kick\)"),
-                ),
-            )
+            .when((pl.col("type.text").is_in(offense_score_vec)).and_(kick_good))
             .then(7)
             # Offense TD
             .when(pl.col("type.text").is_in(offense_score_vec))

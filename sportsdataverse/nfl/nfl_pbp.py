@@ -2783,13 +2783,17 @@ class NFLPlayProcess(object):
             qb_hurry=pl.col("text").str.contains(r"(?i)\shurried by\s").fill_null(False),
             # ESPN folds the try into the touchdown row ("... TOUCHDOWN. J.Elliott
             # extra point is GOOD, ..."), so the XP flags ride on that row.
+            # "(Dustin Hopkins PAT failed)", "(Adam Vinatieri PAT MISSED)" and the 2005-era
+            # "Extra Point Missed" stub are tries too, all failed
             xp_attempt=(
                 pl.col("text").str.contains("extra point is")
-                | pl.col("text").str.contains(r"\([A-Za-z' .-]+ Kick(?: [A-Za-z]+)?\)")
+                | pl.col("text").str.contains(r"\([A-Za-z' .-]+ (?:Kick|PAT)(?: [A-Za-z]+)?\)")
+                | (pl.col("type.text").str.contains("Touchdown") & (pl.col("text") == "Extra Point Missed"))
             ).fill_null(False),
             xp_made=(
                 pl.col("text").str.contains("extra point is GOOD")
                 | pl.col("text").str.contains(r"\([A-Za-z' .-]+ Kick\)")
+                | pl.col("text").str.contains(r"(?i)\([A-Za-z' .-]+ PAT good\)")
             ).fill_null(False),
             # ... and so is the two-point try: "TOUCHDOWN. TWO-POINT CONVERSION
             # ATTEMPT. C.Wentz pass to J.Jefferson is complete. ATTEMPT SUCCEEDS."
