@@ -135,12 +135,14 @@ def _row_rule(
 ) -> RuleResult | None:
     """Count ``scope`` rows and the ``scope & violation`` subset.
 
-    Returns None when the expressions reference a column the frame lacks.
+    A scope row whose ``violation`` is undecidable (null inputs) leaves the
+    denominator rather than passing silently. Returns None when the expressions
+    reference a column the frame lacks.
     ``cols`` (and ``sample_cols``) only choose what a sample row shows.
     """
     try:
         marked = frame.with_columns(
-            __scope=scope.fill_null(False),
+            __scope=(scope & violation.is_not_null()).fill_null(False),
             __viol=(scope & violation).fill_null(False),
         )
     except pl.exceptions.ColumnNotFoundError:
@@ -501,7 +503,7 @@ def _score(df: pl.DataFrame, summary: dict[str, Any] | None) -> list[RuleResult 
     home, away = header_final_score(summary)
     if home is not None and away is not None and df.height:
         last = f.tail(1)
-        bad = last.filter((c("end.homeScore") != home) | (c("end.awayScore") != away))
+        bad = last.filter(((c("end.homeScore") != home) | (c("end.awayScore") != away)).fill_null(True))
         out.append(
             RuleResult(
                 "score.final_matches_header",

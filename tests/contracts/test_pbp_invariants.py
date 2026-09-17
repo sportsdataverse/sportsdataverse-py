@@ -167,6 +167,8 @@ def test_field_position():
     assert _fires(_game(**{"start__yardsToEndzone": (1, 22)}), "ytg.continuity") == 1
     assert _fires(_game(), "ytg.td_start_eq_yards_gained") == 0
     assert _fires(_game(**{"yds_rushed": (1, 19)}), "ytg.td_start_eq_yards_gained") == 1
+    # an unparsed TD yardage is undecidable: it leaves the denominator instead of passing
+    assert _by_rule(_game(**{"yds_rushed": (1, None)}))["ytg.td_start_eq_yards_gained"].n_checked == 0
     assert _fires(_game(**{"start__yardsToEndzone": (5, 0)}), "ytg.scrimmage_start_1_99") == 1
     # row 0: HOM offense 25 yards from the endzone == "at AWY 25"; on its own 25 it would be 75
     spot = "ytg.start_matches_down_distance_text"
@@ -185,6 +187,7 @@ def test_field_position():
 def test_score():
     assert _fires(_game(), "score.final_matches_header", summary=_summary()) == 0
     assert _fires(_game(), "score.final_matches_header", summary=_summary(home=14)) == 1
+    assert _fires(_game(**{"end__homeScore": (5, None)}), "score.final_matches_header", summary=_summary()) == 1
     dip = _game(**{"end__homeScore": (3, 0)})
     assert _fires(dip, "score.monotone") == 1
     assert _fires(_game(**{"end__awayScore": (0, 3)}), "score.change_on_non_scoring_play") == 1
