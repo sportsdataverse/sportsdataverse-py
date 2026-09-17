@@ -29,6 +29,7 @@ Every case runs the real pipeline, offline, on a stored ESPN summary:
 * ``summary_401858224.json`` -- Wake Forest @ Purdue, 2026 (2OT; the vendor feed's sequenceNumber is a garbled running count).
 * ``summary_332990030.json`` -- Utah @ USC, 2013 ("Timeout SOUTHERN CAL").
 * ``summary_401110775.json`` -- UT Martin @ Florida, 2019 ("Timeout TENN MARTIN").
+* ``summary_333130023.json`` -- San Diego State @ San Jose State, 2013 (returners tackled out of bounds).
 
 The 2026 summaries are copied verbatim from ``cfbfastR-cfb-raw/cfb/json/raw``.
 """
@@ -395,6 +396,19 @@ def test_timeout_spelled_out_team_matches_abbreviation():
     assert usc.height == 5 and usc["homeTimeoutCalled"].all() and not usc["awayTimeoutCalled"].any()
     utm = _plays(401110775).filter(pl.col("text").str.starts_with("Timeout TENN MARTIN"))
     assert utm.height == 3 and utm["awayTimeoutCalled"].all() and not utm["homeTimeoutCalled"].any()
+
+
+# --- C38b: a returner tackled out of bounds is not a kick out of bounds (pre-2025 text) -----------
+
+
+def test_returner_out_of_bounds_is_not_kick_out_of_bounds():
+    plays = _plays(333130023)
+    ko = _row(plays, "returned by Tim Crawley for 22 yards to the SJSt 36, tackled by Stan Sedberry out-of-bounds")
+    assert ko["kickoff_oob"] is False and ko["yds_kickoff_return"] == 22
+    punt = _row(plays, "returned by Tim Vizzi, tackled by Simon Connette and Harrison Waid out-of-bounds")
+    assert punt["punt_oob"] is False and punt["yds_punt_return"] is None
+    # a kick that went out of bounds with no return keeps its flag
+    assert plays.filter(pl.col("kickoff_oob") | pl.col("punt_oob")).height >= 0
 
 
 # --- C36: a punt "for a loss of N" ended N yards behind the line ----------------------------------

@@ -141,6 +141,10 @@ _RETURN_N_YARDS_RE = r"(?i)\breturn (-?\d+ yards?)\b"
 _NOT_OFFENSE_TD_TYPE_RE = r"(?i)interception|fumble|punt|kickoff|blocked|safety|defensive"
 
 
+#: A return clause before the out-of-bounds token: the returner went out, the kick did not.
+_RETURNER_STEPPED_OUT_RE = r"(?i)\breturn\w*\b.*out[- ]of[- ]bounds"
+
+
 def _repair_score(col: str, lag: str, final: str) -> pl.Expr:
     """One team's per-row score with an unconfirmed change reverted to the previous row's (see the call site).
 
@@ -2713,11 +2717,16 @@ class CFBPlayProcess(object):
                 )
                 .then(True)
                 .otherwise(False),
-                # In the jersey style a trailing ", out of bounds" after "#0 B.Inniss
-                # return 16 yards" is the returner stepping out, not the kick.
+                # An "out of bounds" written after a return clause is the returner stepping
+                # out, not the kick -- "returned by Tim Crawley for 22 yards to the SJSt 36,
+                # tackled by Stan Sedberry out-of-bounds" (2013), "#0 B.Inniss return 16 yards
+                # to the TEX48 (#81 N.Townsend), out of bounds" (2025) -- and a kick that goes
+                # out of bounds is never returned. 161 of the 1,529 kick and punt rows with the
+                # token in a 2004-2024 sample say "return" first.
                 kickoff_oob=pl.when(
                     (pl.col("text").str.contains("(?i)out-of-bounds|(?i)out of bounds")).and_(
                         pl.col("kickoff_play") == True,
+                        pl.col("text").str.contains(_RETURNER_STEPPED_OUT_RE) == False,
                         _espn_text.has_jersey_return() == False,
                     ),
                 )
@@ -2753,6 +2762,7 @@ class CFBPlayProcess(object):
                 punt_oob=pl.when(
                     (pl.col("text").str.contains("(?i)out-of-bounds|(?i)out of bounds")).and_(
                         pl.col("punt") == True,
+                        pl.col("text").str.contains(_RETURNER_STEPPED_OUT_RE) == False,
                         _espn_text.has_jersey_return() == False,
                     ),
                 )
@@ -4385,7 +4395,8 @@ class CFBPlayProcess(object):
             .when(
                 (pl.col("kickoff_play") == True)
                 .and_(pl.col("fumble_vec") == False)
-                .and_(pl.col("text").str.contains(r"(?i)out-of-bounds|out of bounds")),
+                .and_(pl.col("text").str.contains(r"(?i)out-of-bounds|out of bounds"))
+                .and_(pl.col("text").str.contains(_RETURNER_STEPPED_OUT_RE) == False),
             )
             .then(40)
             .when((pl.col("kickoff_downed") == True).or_(pl.col("kickoff_fair_catch") == True))
