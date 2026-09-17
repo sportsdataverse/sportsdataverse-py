@@ -244,3 +244,29 @@ def test_minors_and_wbc_real_captures_are_their_own_population(monkeypatch):
     assert wbc.shape == (5, 119)
     assert set(wbc.select("home_team", "away_team", "game_type").rows()) == {("JPN", "CZE", "F")}
     assert wbc["game_pk"].unique().to_list() == [719529] and wbc.schema["batter"] == pl.Int64
+
+
+def test_search_header_only_every_chunk_keeps_the_schema(monkeypatch):
+    """Every chunk header-only (no games in the window): 0 rows with the 119 columns, not a 0-column frame."""
+    from sportsdataverse.mlb import mlb_statcast_extra as ex
+
+    header_only = _SEARCH_HEAD.read_text(encoding="utf-8").splitlines()[0] + "\n"
+    monkeypatch.setattr(ex, "download", lambda url, params=None, **kw: _Resp(header_only))
+
+    df = ex.mlb_statcast_search("2024-06-15", "2024-06-16", chunk_days=1)
+    assert df.shape == (0, 119) and df.schema["game_pk"] == pl.Int64
+    pdf = ex.mlb_statcast_search("2024-06-15", "2024-06-16", chunk_days=1, return_as_pandas=True)
+    assert pdf.shape == (0, 119) and str(pdf["game_pk"].dtype) == "Int64"
+
+
+def test_search_header_only_chunk_does_not_poison_populated_chunk_dtypes(monkeypatch):
+    """A header-only chunk (all-String schema) next to a populated one must not widen Float64 to String."""
+    from sportsdataverse.mlb import mlb_statcast_extra as ex
+
+    text = _SEARCH_HEAD.read_text(encoding="utf-8")
+    bodies = {"2024-06-15": text.splitlines()[0] + "\n", "2024-06-16": text}
+    monkeypatch.setattr(ex, "download", lambda url, params=None, **kw: _Resp(bodies[params["game_date_gt"]]))
+
+    df = ex.mlb_statcast_search("2024-06-15", "2024-06-16", chunk_days=1)
+    assert df.height == 46
+    assert df.schema["release_speed"] == pl.Float64 and df.schema["game_pk"] == pl.Int64

@@ -172,8 +172,14 @@ def _search_core(
                 stacklevel=2,
             )
         frames.append(df)
-    frames = [f for f in frames if f.height]
-    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    populated = [f for f in frames if f.height]
+    if populated:
+        out = pl.concat(populated, how="diagonal_relaxed")
+    else:
+        # Every chunk header-only (no games in the window): a header-only frame reads as all-String,
+        # so it is kept out of the concat above (String would widen the Float64 columns) but still
+        # carries the 119 documented columns with ids Int64.
+        out = next((f for f in frames if f.width), pl.DataFrame())
     if _uncast_ids is None:  # outermost call only
         _warn_uncast_ids(uncast_ids, stacklevel=3)  # _search_core <- mlb_statcast_search* <- caller
     if return_as_pandas:

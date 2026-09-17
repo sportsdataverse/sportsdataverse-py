@@ -94,8 +94,8 @@ def _csv_to_frame(
         df = pd.read_csv(StringIO(text))
     except Exception:
         return _empty_frame(return_as_pandas)
-    if df.empty:
-        return _empty_frame(return_as_pandas)
+    # A header-only body (no games in the window) reads as 0 rows x 119 columns: keep the
+    # columns so the empty frame carries the documented schema with its ids pinned.
     df = _snake_columns(df)
     uncast = _pin_id_columns(df)
     if uncast_ids is None:
@@ -144,7 +144,8 @@ def parse_mlb_statcast_search(payload: object, return_as_pandas: bool = False) -
         return_as_pandas: Return a pandas DataFrame instead of polars.
 
     Returns:
-        A polars (or pandas) DataFrame, one row per search result; zero rows on empty input.
+        A polars (or pandas) DataFrame, one row per search result; zero rows on empty
+        input (a header-only response keeps its columns, ids ``Int64``).
 
     Example:
         Quick start::

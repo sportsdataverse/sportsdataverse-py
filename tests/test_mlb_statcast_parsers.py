@@ -259,3 +259,18 @@ def test_gamefeed_non_numeric_game_pk_is_left_as_read_and_warned():
     assert len(hits) == 1 and hits[0].filename == __file__
     assert df.schema["game_pk"] == pl.String and "not-a-pk" in df["game_pk"].to_list()
     assert df.schema["batter"] == pl.Int64
+
+
+def test_header_only_csv_keeps_the_documented_columns():
+    """Savant answers a no-data query with the header row only: 0 rows WITH the 119 columns, ids Int64."""
+    from sportsdataverse.mlb.mlb_statcast_parsers import parse_mlb_statcast_search
+
+    text = _SEARCH_HEAD.read_text(encoding="utf-8")
+    header_only = text.splitlines()[0] + "\n"
+    full = parse_mlb_statcast_search(text)
+    df = parse_mlb_statcast_search(header_only)
+    assert df.shape == (0, 119) and df.columns == full.columns
+    assert {c: df.schema[c] for c in _SEARCH_ID_COLS} == dict.fromkeys(_SEARCH_ID_COLS, pl.Int64)
+    pdf = parse_mlb_statcast_search(header_only, return_as_pandas=True)
+    assert pdf.shape == (0, 119) and list(pdf.columns) == full.columns
+    assert {c: str(pdf[c].dtype) for c in _SEARCH_ID_COLS} == dict.fromkeys(_SEARCH_ID_COLS, "Int64")
