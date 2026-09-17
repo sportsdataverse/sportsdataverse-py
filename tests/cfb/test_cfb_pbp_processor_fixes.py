@@ -23,6 +23,7 @@ from functools import lru_cache
 from pathlib import Path
 
 import polars as pl
+from polars.testing import assert_frame_equal
 
 from sportsdataverse.cfb.cfb_pbp import CFBPlayProcess
 
@@ -34,11 +35,11 @@ def _summary(game_id: int) -> dict:
 
 
 @lru_cache(maxsize=None)
-def _processed(game_id: int, blank_mascots: bool = False):
+def _processed(game_id: int, mascot: str | None = "keep"):
     summary = _summary(game_id)
-    if blank_mascots:
+    if mascot != "keep":
         for comp in summary["header"]["competitions"][0]["competitors"]:
-            comp["team"]["name"] = ""
+            comp["team"]["name"] = mascot
     snapshot = copy.deepcopy(summary)
     proc = CFBPlayProcess(gameId=game_id)
     proc.espn_cfb_pbp(summary=summary)
@@ -145,7 +146,7 @@ def test_overtime_timeouts_reset_to_one():
 def test_timeout_team_matching_empty_mascot_and_substrings():
     # "Timeout Indiana" contains Notre Dame's abbreviation "nd"; an empty mascot is contained in
     # every string. Either way the timeout used to be charged to both teams.
-    plays = _plays(401677179, blank_mascots=True).filter(pl.col("type.text") == "Timeout")
+    plays = _plays(401677179, mascot="").filter(pl.col("type.text") == "Timeout")
     assert plays.height == 7
     both = plays.filter(pl.col("homeTimeoutCalled") & pl.col("awayTimeoutCalled"))
     assert both.height == 0, both["text"].to_list()
@@ -192,6 +193,16 @@ def test_punt_returner_beyond_abbreviated_names():
     plays = _plays(401858426).filter(pl.col("text").str.contains("#2 R.Vander Zee return", literal=True))
     assert plays.height == 2
     assert plays["punt_return_player_name"].to_list() == ["R.Vander Zee", "R.Vander Zee"]
+
+
+# --- C18: a null mascot is processed exactly like an empty one ------------------------------------
+
+
+def test_null_mascot_is_empty_not_the_string_none():
+    null_mascot = _plays(401677179, mascot=None)
+    assert null_mascot["homeTeamMascot"].unique().to_list() == [""]
+    assert null_mascot["awayTeamMascot"].unique().to_list() == [""]
+    assert_frame_equal(null_mascot, _plays(401677179, mascot=""))
 
 
 # --- C19: cfb_pbp_json() returns the attached payload ---------------------------------------------

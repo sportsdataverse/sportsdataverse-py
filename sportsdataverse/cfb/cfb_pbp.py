@@ -565,7 +565,7 @@ def _timeout_team_match_len(names) -> pl.Expr:
         .str.strip_chars(" .,;")
     )
     parts = {str(n).strip().lower() for n in names if n is not None}
-    parts = (parts | {n.replace("(", "").replace(")", "") for n in parts}) - {"", "none"}
+    parts = (parts | {n.replace("(", "").replace(")", "") for n in parts}) - {""}
     hits = [pl.when(token.str.contains(n, literal=True)).then(len(n)).otherwise(0) for n in parts]
     return pl.max_horizontal(hits) if hits else pl.lit(0)
 
@@ -2384,39 +2384,40 @@ class CFBPlayProcess(object):
         pbp_txt["overUnder"] = init["overUnder"]
         pbp_txt["odds_source"] = self.odds_source
         # Home and Away identification variables
+        # A missing or null name part is "", never str(None) == "None" (adapter-built headers).
         if pbp_txt["header"]["competitions"][0]["competitors"][0]["homeAway"] == "home":
             pbp_txt["header"]["competitions"][0]["home"] = pbp_txt["header"]["competitions"][0]["competitors"][0][
                 "team"
             ]
             homeTeamId = int(pbp_txt["header"]["competitions"][0]["competitors"][0]["team"]["id"])
-            homeTeamMascot = str(pbp_txt["header"]["competitions"][0]["competitors"][0]["team"].get("name", ""))
-            homeTeamName = str(pbp_txt["header"]["competitions"][0]["competitors"][0]["team"]["location"])
-            homeTeamAbbrev = str(pbp_txt["header"]["competitions"][0]["competitors"][0]["team"]["abbreviation"])
+            homeTeamMascot = str(pbp_txt["header"]["competitions"][0]["competitors"][0]["team"].get("name") or "")
+            homeTeamName = str(pbp_txt["header"]["competitions"][0]["competitors"][0]["team"]["location"] or "")
+            homeTeamAbbrev = str(pbp_txt["header"]["competitions"][0]["competitors"][0]["team"]["abbreviation"] or "")
             homeTeamNameAlt = re.sub("Stat(.+)", "St", homeTeamName)
             pbp_txt["header"]["competitions"][0]["away"] = pbp_txt["header"]["competitions"][0]["competitors"][1][
                 "team"
             ]
             awayTeamId = int(pbp_txt["header"]["competitions"][0]["competitors"][1]["team"]["id"])
-            awayTeamMascot = str(pbp_txt["header"]["competitions"][0]["competitors"][1]["team"].get("name", ""))
-            awayTeamName = str(pbp_txt["header"]["competitions"][0]["competitors"][1]["team"]["location"])
-            awayTeamAbbrev = str(pbp_txt["header"]["competitions"][0]["competitors"][1]["team"]["abbreviation"])
+            awayTeamMascot = str(pbp_txt["header"]["competitions"][0]["competitors"][1]["team"].get("name") or "")
+            awayTeamName = str(pbp_txt["header"]["competitions"][0]["competitors"][1]["team"]["location"] or "")
+            awayTeamAbbrev = str(pbp_txt["header"]["competitions"][0]["competitors"][1]["team"]["abbreviation"] or "")
             awayTeamNameAlt = re.sub("Stat(.+)", "St", awayTeamName)
         else:
             pbp_txt["header"]["competitions"][0]["away"] = pbp_txt["header"]["competitions"][0]["competitors"][0][
                 "team"
             ]
             awayTeamId = int(pbp_txt["header"]["competitions"][0]["competitors"][0]["team"]["id"])
-            awayTeamMascot = str(pbp_txt["header"]["competitions"][0]["competitors"][0]["team"].get("name", ""))
-            awayTeamName = str(pbp_txt["header"]["competitions"][0]["competitors"][0]["team"]["location"])
-            awayTeamAbbrev = str(pbp_txt["header"]["competitions"][0]["competitors"][0]["team"]["abbreviation"])
+            awayTeamMascot = str(pbp_txt["header"]["competitions"][0]["competitors"][0]["team"].get("name") or "")
+            awayTeamName = str(pbp_txt["header"]["competitions"][0]["competitors"][0]["team"]["location"] or "")
+            awayTeamAbbrev = str(pbp_txt["header"]["competitions"][0]["competitors"][0]["team"]["abbreviation"] or "")
             awayTeamNameAlt = re.sub("Stat(.+)", "St", awayTeamName)
             pbp_txt["header"]["competitions"][0]["home"] = pbp_txt["header"]["competitions"][0]["competitors"][1][
                 "team"
             ]
             homeTeamId = int(pbp_txt["header"]["competitions"][0]["competitors"][1]["team"]["id"])
-            homeTeamMascot = str(pbp_txt["header"]["competitions"][0]["competitors"][1]["team"].get("name", ""))
-            homeTeamName = str(pbp_txt["header"]["competitions"][0]["competitors"][1]["team"]["location"])
-            homeTeamAbbrev = str(pbp_txt["header"]["competitions"][0]["competitors"][1]["team"]["abbreviation"])
+            homeTeamMascot = str(pbp_txt["header"]["competitions"][0]["competitors"][1]["team"].get("name") or "")
+            homeTeamName = str(pbp_txt["header"]["competitions"][0]["competitors"][1]["team"]["location"] or "")
+            homeTeamAbbrev = str(pbp_txt["header"]["competitions"][0]["competitors"][1]["team"]["abbreviation"] or "")
             homeTeamNameAlt = re.sub("Stat(.+)", "St", homeTeamName)
         init["homeTeamId"] = homeTeamId
         init["homeTeamMascot"] = homeTeamMascot
