@@ -245,6 +245,41 @@ def _nfl_parse_penalty_spot(row):
     return f"{side}:{yardline}" if side else None
 
 
+# "Timeout #1 by CLV at 04:52." (2008+; "Timeout #2 NYJ" occasionally drops "by"),
+# "Timeout DENVER BRONCOS, clock 9:52.", "Indy timeout; 02:42 remaining 2nd quarter" (2002-2007).
+_NFL_TIMEOUT_CODE_RE = re.compile(r"(?i)\btimeout\s*#\s*\d+\s*(?:by\s+)?([A-Z]{2,3})\b")
+_NFL_TIMEOUT_NAME_RE = re.compile(r"(?i)^\s*timeout\s+(.+?),\s*clock\b|^\s*(.+?)\s+timeout\b")
+
+
+def _nfl_timeout_side(text, home, away):
+    """``"home"`` / ``"away"`` for the team a ``Timeout`` row charges, else None.
+
+    ``home`` / ``away`` are ``(abbreviation, location, mascot, name_alt)``. The
+    team token is parsed out of the text and matched whole -- a league code
+    through ``_NFL_TEXT_TEAM_ALIASES`` (``CLV`` -> ``CLE``), a name against the
+    location / mascot / "location mascot", else a nickname that starts with the
+    abbreviation ("Indy", "Philly") -- so ``LV`` inside ``CLV`` or ``la`` inside
+    "Cleveland" never charges the other side.
+    """
+    m = _NFL_TIMEOUT_CODE_RE.search(text or "")
+    if m:
+        return _nfl_side_of_abbrev(m.group(1), home[0], away[0])
+    m = _NFL_TIMEOUT_NAME_RE.search(text or "")
+    if not m:
+        return None
+    token = (m.group(1) or m.group(2)).strip().lower()
+
+    def names(team):
+        abbr, loc, mascot, alt = (str(x or "").lower() for x in team)
+        return {abbr, loc, mascot, alt, f"{loc} {mascot}"} - {""}
+
+    for match in (lambda t: token in names(t), lambda t: len(t[0]) >= 2 and token.startswith(str(t[0]).lower())):
+        h, a = match(home), match(away)
+        if h != a:
+            return "home" if h else "away"
+    return None
+
+
 # "td" : float(p[0]),
 # "opp_td" : float(p[1]),
 # "fg" : float(p[2]),
@@ -695,6 +730,12 @@ class NFLPlayProcess(object):
         )
         pbp_txt["plays"] = pbp_txt["plays"].filter(pl.col("text_dupe") == False)
         pbp_txt["plays"] = pbp_txt["plays"].with_row_index("game_play_number", 1)
+        home_names = tuple(init[f"homeTeam{k}"] for k in ("Abbrev", "Name", "Mascot", "NameAlt"))
+        away_names = tuple(init[f"awayTeam{k}"] for k in ("Abbrev", "Name", "Mascot", "NameAlt"))
+        timeout_side = pl.col("text").map_elements(
+            lambda t: _nfl_timeout_side(t, home_names, away_names),
+            return_dtype=pl.Utf8,
+        )
         pbp_txt["plays"] = (
             pbp_txt["plays"]
             .with_columns(
@@ -749,35 +790,11 @@ class NFLPlayProcess(object):
                 .then(True)
                 .otherwise(False)
                 .alias("end.is_home"),
-                pl.when(
-                    (pl.col("type.text") == "Timeout").and_(
-                        pl.col("text")
-                        .str.to_lowercase()
-                        .str.contains(str(init["homeTeamAbbrev"]).lower())
-                        .or_(
-                            pl.col("text").str.to_lowercase().str.contains(str(init["homeTeamAbbrev"]).lower()),
-                            pl.col("text").str.to_lowercase().str.contains(str(init["homeTeamName"]).lower()),
-                            pl.col("text").str.to_lowercase().str.contains(str(init["homeTeamMascot"]).lower()),
-                            pl.col("text").str.to_lowercase().str.contains(str(init["homeTeamNameAlt"]).lower()),
-                        ),
-                    ),
-                )
+                pl.when((pl.col("type.text") == "Timeout").and_(timeout_side == "home"))
                 .then(True)
                 .otherwise(False)
                 .alias("homeTimeoutCalled"),
-                pl.when(
-                    (pl.col("type.text") == "Timeout").and_(
-                        pl.col("text")
-                        .str.to_lowercase()
-                        .str.contains(str(init["awayTeamAbbrev"]).lower())
-                        .or_(
-                            pl.col("text").str.to_lowercase().str.contains(str(init["awayTeamAbbrev"]).lower()),
-                            pl.col("text").str.to_lowercase().str.contains(str(init["awayTeamName"]).lower()),
-                            pl.col("text").str.to_lowercase().str.contains(str(init["awayTeamMascot"]).lower()),
-                            pl.col("text").str.to_lowercase().str.contains(str(init["awayTeamNameAlt"]).lower()),
-                        ),
-                    ),
-                )
+                pl.when((pl.col("type.text") == "Timeout").and_(timeout_side == "away"))
                 .then(True)
                 .otherwise(False)
                 .alias("awayTimeoutCalled"),
@@ -853,8 +870,16 @@ class NFLPlayProcess(object):
                 ).alias("end.awayTeamTimeouts"),
             )
             .with_columns(
-                pl.col("end.homeTeamTimeouts").shift(n=1, fill_value=3).alias("start.homeTeamTimeouts"),
-                pl.col("end.awayTeamTimeouts").shift(n=1, fill_value=3).alias("start.awayTeamTimeouts"),
+                # each team gets 3 new timeouts at the half: the first 2nd-half play
+                # must not inherit the 1st half's end count
+                pl.when(pl.col("half") != pl.col("half").shift(1))
+                .then(3)
+                .otherwise(pl.col("end.homeTeamTimeouts").shift(n=1, fill_value=3))
+                .alias("start.homeTeamTimeouts"),
+                pl.when(pl.col("half") != pl.col("half").shift(1))
+                .then(3)
+                .otherwise(pl.col("end.awayTeamTimeouts").shift(n=1, fill_value=3))
+                .alias("start.awayTeamTimeouts"),
                 pl.col("start.TimeSecsRem").shift(n=1).alias("end.TimeSecsRem"),
                 pl.col("start.adj_TimeSecsRem").shift(n=1).alias("end.adj_TimeSecsRem"),
             )
