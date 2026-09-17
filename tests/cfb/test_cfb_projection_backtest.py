@@ -9,6 +9,7 @@ captured in Phase 5, so it is loaded lazily / optionally here.
 
 from __future__ import annotations
 
+import importlib.util
 from pathlib import Path
 
 import polars as pl
@@ -67,64 +68,138 @@ def test_talent_ranks_are_dense_from_one(oracle_corpus: dict[str, pl.DataFrame])
 _RETURNING = _FIX / "returning_2017_2023.parquet"
 
 
-@pytest.mark.skipif(not _RETURNING.exists(), reason="returning-production fixture not captured")
-def test_returning_production_retention_gate(oracle_corpus: dict[str, pl.DataFrame]) -> None:
+_RETURNING_2025 = _FIX / "returning_2005_2025.parquet"
+_RESULTS_2025 = _FIX / "results_2004_2025.parquet"
+_OFFENSE_ONLY = {"offense": 1.0, "defense": 0.0}
+
+
+@pytest.fixture(scope="module")
+def returning_fit():
+    """The weight-fitting module plus its FBS gate frame over the 2005-2025 fixtures.
+
+    Imported rather than re-implemented, so the gates, the fit and the shipped
+    combiner (``_combine_units``) cannot drift apart. Missing fixtures FAIL: the
+    shipped weights depend on them, and a skip would let them ship ungated.
+    Every number quoted below is printed by
+    ``python dev/cfb_projection/fit_returning_weights.py``.
+    """
+    missing = [f.name for f in (_RETURNING_2025, _RESULTS_2025) if not f.exists()]
+    if missing:
+        pytest.fail(f"returning-production gate fixtures missing: {missing}")
+    path = _FIX.parents[2] / "dev" / "cfb_projection" / "fit_returning_weights.py"
+    spec = importlib.util.spec_from_file_location("fit_returning_weights", path)
+    fit = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(fit)
+    return fit, fit.gate_frame(pl.read_parquet(_RETURNING_2025), pl.read_parquet(_RESULTS_2025))
+
+
+def test_returning_production_retention_gate(returning_fit) -> None:
     """Phase-2 gate: returning production predicts YoY scoring-margin change.
 
-    Observed on the 2026-07-08 capture (FBS 2018-2023, >=6 games both seasons,
-    n=794): spearman(overall_returning, margin_delta) = 0.229 with the fitted
-    unit weights (offense-only; see fit_returning_weights.py). Floor set one
-    notch below at 0.20 -- never lower it to pass.
+    RE-BASELINED 2026-09-17, not lowered to pass. The retired gate (floor 0.20,
+    observed 0.229) scored a July fixture whose defense was a play-stats splash
+    measure keyed by team name. Replayed unchanged on that fixture it scores 0.243
+    offense-only but 0.156 under these weights -- that defense column carried a
+    negative coefficient and is the measure this change retires. This fixture is
+    the current metric (defense from play participants), every FBS team.
 
-    Disclosure (leakage-review finding): the unit weights were fitted on this
-    same 2018-2023 window, so this gate validates the weight choice in-sample.
-    Low impact -- the combination is a 1-dof clamp and the wins backtest
-    consumes off/def_returning as separate features -- but a held-out-era
-    re-fit is the clean upgrade when 2024+ results land.
+    Observed with the shipped 0.49/0.51 weights: 0.205 over 2018-2025 (n=1017)
+    against 0.173 offense-only (gain +0.032, team-cluster 95% [+0.002, +0.066]),
+    and 0.266 over the retired gate's 2018-2023 window against 0.214. Floors sit
+    one notch below the observed values; offense-only fails both. 2017 is captured
+    but kept out of the window so it matches the fit (it scores 0.236 including
+    2017). In-sample: the weights are fitted on this window -- the held-out gates
+    are ``test_returning_weights_beat_offense_only_held_out`` and
+    ``test_returning_weights_hold_on_the_splash_era``. Never lower a floor to pass.
     """
-    from sportsdataverse.cfb.cfb_projection_constants import get_constants, spearman_corr
+    from sportsdataverse.cfb.cfb_projection_constants import get_constants
 
-    rp = pl.read_parquet(_RETURNING)
-    res = oracle_corpus["results"]
-    home = res.select(
-        pl.col("season"),
-        pl.col("home_team_id").alias("team_id"),
-        (pl.col("home_score") - pl.col("away_score")).alias("m"),
-    )
-    away = res.select(
-        pl.col("season"),
-        pl.col("away_team_id").alias("team_id"),
-        (pl.col("away_score") - pl.col("home_score")).alias("m"),
-    )
-    margins = (
-        pl.concat([home, away])
-        .group_by("season", "team_id")
-        .agg(pl.col("m").mean().alias("avg_margin"), pl.len().alias("g"))
-    )
-    delta = (
-        margins.join(
-            margins.with_columns((pl.col("season") + 1).alias("season")).rename(
-                {"avg_margin": "prior_margin", "g": "prior_g"}
-            ),
-            on=["season", "team_id"],
-            how="inner",
-        )
-        .filter((pl.col("g") >= 6) & (pl.col("prior_g") >= 6))
-        .with_columns((pl.col("avg_margin") - pl.col("prior_margin")).alias("margin_delta"))
-    )
-    # recombine overall from the unit columns with the CURRENT fitted weights so the
-    # committed fixture stays valid across weight refits
+    fit, j = returning_fit
     w = get_constants("fbs").returning_prod_weights
-    fbs = rp.filter(pl.col("classification") == "fbs").drop_nulls(["team_id", "off_returning", "def_returning"])
-    denom = w["offense"] + w["defense"]
-    fbs = fbs.with_columns(
-        ((pl.col("off_returning") * w["offense"] + pl.col("def_returning") * w["defense"]) / denom).alias("overall_w")
+    rho, n = fit.overall_rho(j, w, 2018, 2025)
+    assert n >= 950, f"expected ~1017 FBS team-season rows, got {n}"
+    assert rho >= 0.18, f"spearman(overall_returning, margin_delta) 2018-2025 = {rho:.4f} < 0.18"
+    rho_old_window, _ = fit.overall_rho(j, w, 2018, 2023)
+    assert rho_old_window >= 0.24, f"2018-2023 = {rho_old_window:.4f} < 0.24"
+
+
+def test_returning_gate_fixture_coverage_and_level(returning_fit) -> None:
+    """The gates only mean something if the fixture is the metric they claim to score.
+
+    Observed per season (FBS): ``def_basis`` pbp_splash 2005-2014 and participants
+    2015-2025; a defensive value for 90.8% (2005) to 100% of teams; mean off / def
+    returning 0.39-0.71 / 0.42-0.77 (2025 lowest, 2021's extra COVID year highest).
+    A recapture that fell back to the box, or lost defense for a season, fails
+    here rather than being silently dropped by the fit's ``drop_nulls``.
+    """
+    _, j = returning_fit
+    per = (
+        j.group_by("season")
+        .agg(
+            pl.len().alias("n"),
+            pl.col("def_returning").is_not_null().mean().alias("def_share"),
+            pl.col("def_basis").drop_nulls().unique().alias("basis"),
+            pl.col("off_returning").mean().alias("off_mean"),
+            pl.col("def_returning").mean().alias("def_mean"),
+        )
+        .sort("season")
     )
-    assert fbs.schema["team_id"] == delta.schema["team_id"] == pl.Utf8
-    j = fbs.join(delta, on=["season", "team_id"], how="inner")
-    assert j.height >= 700, f"expected ~794 FBS team-season rows, got {j.height}"
-    rho = spearman_corr(j["overall_w"].to_numpy(), j["margin_delta"].to_numpy())
-    assert rho >= 0.20, f"spearman(overall_returning, margin_delta) = {rho:.4f} < 0.20"
+    assert per["season"].to_list() == list(range(2005, 2026))
+    for row in per.iter_rows(named=True):
+        expected = ["participants"] if row["season"] >= 2015 else ["pbp_splash"]
+        assert row["basis"] == expected, row
+        assert row["def_share"] >= (0.95 if row["season"] >= 2015 else 0.88), row
+        assert row["n"] >= 100, row
+        assert 0.30 <= row["off_mean"] <= 0.80 and 0.30 <= row["def_mean"] <= 0.85, row
+
+
+def test_returning_weights_are_the_pooled_fit(returning_fit) -> None:
+    """The shipped FBS weights are the committed fit, to the rounding they ship at."""
+    from sportsdataverse.cfb.cfb_projection_constants import get_constants
+
+    fit, j = returning_fit
+    fitted, n = fit.fit_weights(j, 2018, 2025)
+    shipped = get_constants("fbs").returning_prod_weights
+    assert n >= 950
+    for unit in ("offense", "defense"):
+        assert abs(shipped[unit] - fitted[unit]) < 0.01, f"{unit}: shipped {shipped[unit]} vs fitted {fitted[unit]:.3f}"
+
+
+def test_returning_weights_beat_offense_only_held_out(returning_fit) -> None:
+    """Paired out-of-sample gate: weights fitted on 2018-2023 beat offense-only on 2024-2025.
+
+    Observed 0.117 vs 0.107 (n=270). Disclosure: the gain is small and its
+    team-cluster 95% interval is [-0.052, +0.074], so this guards the SIGN of the
+    comparison, not a significant lift. Both variants predict about half as well
+    in 2024-2025 as in 2018-2023. The training window's last margin (2023) is the
+    first held-out season's prior; a purged 2018-2022 fit also passes.
+    """
+    fit, j = returning_fit
+    train, _ = fit.fit_weights(j, 2018, 2023)
+    new, n = fit.overall_rho(j, train, 2024, 2025)
+    base, _ = fit.overall_rho(j, _OFFENSE_ONLY, 2024, 2025)
+    assert n >= 250
+    assert new > base, f"held-out 2024-2025: fitted {new:.4f} <= offense-only {base:.4f}"
+
+
+def test_returning_weights_hold_on_the_splash_era(returning_fit) -> None:
+    """Held-out era gate: the shipped weights, fitted on 2018-2025, on 2005-2014.
+
+    The fit never sees these seasons, and their defense is a different measure
+    (pbp splash ids, no tackles). Observed 0.299 vs 0.239 offense-only (n=1213),
+    gain +0.060, team-cluster 95% [+0.022, +0.097] -- the strongest out-of-sample
+    evidence for weighting defense in. Better in 7 of 10 seasons. Floor one notch
+    below the observed value.
+    """
+    from sportsdataverse.cfb.cfb_projection_constants import get_constants
+
+    fit, j = returning_fit
+    w = get_constants("fbs").returning_prod_weights
+    new, n = fit.overall_rho(j, w, 2005, 2014)
+    base, _ = fit.overall_rho(j, _OFFENSE_ONLY, 2005, 2014)
+    assert n >= 1100
+    assert new >= 0.27, f"splash era 2005-2014 = {new:.4f} < 0.27"
+    assert new > base, f"splash era: shipped {new:.4f} <= offense-only {base:.4f}"
 
 
 _RECRUITS14 = _FIX / "recruits_2014_2023.parquet"

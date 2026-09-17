@@ -32,17 +32,13 @@ __all__ = ["cfb_recruiting_projection"]
 
 #: Model inputs. `def_returning` is DELIBERATELY ABSENT.
 #:
-#: It is a hard requirement via `drop_nulls(FEATURES)`, and its coverage is
-#: driven by ESPN's defensive player box, which is sparse before ~2023 --
-#: measured non-null teams: 2016 0, 2018 61, 2021 47, 2024 148, 2025 229.
-#: Requiring it made the projection's output track that column almost exactly
-#: (2016 -> 0 rows, 2018 -> 60, 2024 -> 144) and collapsed 2016/2017 entirely,
-#: because their training history has no defensive box at all.
-#:
-#: It also carries no weight downstream: `returning_prod_weights` is
-#: {offense: 1.0, defense: 0.0}, so `overall_returning` never saw it either. A
-#: feature that is null across most of the training history cannot inform a
-#: model fit across that history -- it can only delete rows.
+#: It is a hard requirement via `drop_nulls(FEATURES)`. When this was fitted its
+#: coverage came from ESPN's defensive player box, sparse before ~2023 (non-null
+#: teams: 2016 0, 2018 61, 2021 47, 2024 148, 2025 229), and requiring it
+#: collapsed 2016/2017 entirely. It now comes from play participants (92-100% of
+#: teams from 2015) and carries 0.51 of `overall_returning`, so adding it is
+#: viable -- but it is a model change that needs this module's backtest gate
+#: re-observed, not a comment edit.
 FEATURES = ["talent_composite", "blue_chip_ratio", "off_returning", "prior_wins"]
 
 _PROJECTION_SCHEMA: dict[str, pl.PolarsDataType] = {
