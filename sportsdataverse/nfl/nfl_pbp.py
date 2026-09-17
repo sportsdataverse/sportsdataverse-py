@@ -5257,7 +5257,13 @@ class NFLPlayProcess(object):
         if any(c not in play_df.columns for c in required):
             return _with_null_decisions(play_df)
 
-        fourth = play_df.filter((pl.col("start.down") == 4).and_(pl.col("start.yardsToEndzone").is_not_null()))
+        # a 4th-down decision is a snap: timeouts, two-minute warnings and period ends
+        # carry the down but are not plays (nflverse has no such rows to score)
+        fourth = play_df.filter(
+            (pl.col("start.down") == 4)
+            .and_(pl.col("start.yardsToEndzone").is_not_null())
+            .and_(pl.col("type.text").is_in(clock_stoppage_vec) == False),
+        )
         if fourth.height == 0:
             return _with_null_decisions(play_df)
 

@@ -503,3 +503,22 @@ def test_overtime_starts_a_fresh_pool_of_three_timeouts(den_cin_run):
     assert (ot["end.homeTeamTimeouts"].min(), ot["end.awayTeamTimeouts"].min()) == (1, 1)
     assert [len(out["timeouts"][team]["OT"]) for team in (CIN, DEN)] == [2, 2]
     assert f.select(pl.col("^(start|end)\\.(home|away)TeamTimeouts$").min()).min_horizontal().item() >= 0
+
+
+# ---------------------------------------------------------------------------
+# N11 -- 4th-down decisions are scored on snaps only, never on clock-stoppage rows
+# ---------------------------------------------------------------------------
+
+
+def test_fourth_down_decisions_skip_clock_stoppage_rows(run, frame):
+    from sportsdataverse.nfl.model_vars import clock_stoppage_vec
+
+    _, _, seen = run
+    scored = set(seen["fourth"][0]["play_id"].to_list())
+    fourth = frame.filter(pl.col("start.down") == 4)
+    stoppages = fourth.filter(pl.col("type.text").is_in(clock_stoppage_vec))
+    # "Timeout #2 by CLV at 01:45." carries JAX's 4th down but is not a decision
+    assert 4018729221802 in stoppages["id"].to_list()
+    assert scored == set(fourth.filter(pl.col("type.text").is_in(clock_stoppage_vec) == False)["id"].to_list())
+    assert stoppages["fourth_down_recommendation"].null_count() == stoppages.height
+    assert stoppages["go_boost"].null_count() == stoppages.height
