@@ -336,3 +336,12 @@ def test_punt_end_state_is_the_receivers_next_snap(field_position_frames: "list[
                 bad.setdefault(cid, []).append((cur["yards_to_goal_end"], nxt["yards_to_goal"], cur["play_text"]))
     assert n > 20, n
     assert not bad, bad
+
+
+def test_nullified_touchdown_is_not_a_touchdown() -> None:
+    """ "TOUCHDOWN nullified by penalty" scores nothing (6414322: real final The Citadel 40, Samford 13)."""
+    df = _frame("6414322")
+    row = df.filter(pl.col("play_text").str.starts_with("(02:39) Platte,James punt 56 yards")).row(0, named=True)
+    assert (row["touchdown"], row["scoring_play"]) == (False, False)
+    pos, pos_s, dpos, dpos_s = df.select("pos_team", "pos_team_score", "def_pos_team", "def_pos_team_score").row(-1)
+    assert {pos: pos_s, dpos: dpos_s} == {"The Citadel": 40, "Samford": 13}

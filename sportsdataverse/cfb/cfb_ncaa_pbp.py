@@ -263,7 +263,10 @@ def _decompose_play_text(text: str) -> "dict":
 
     # universal flags (case-sensitive caps markers)
     out["is_first_down"] = "1ST DOWN" in text
-    out["is_touchdown"] = "TOUCHDOWN" in text
+    # "TOUCHDOWN nullified by penalty" scored nothing, and a replay-overturned play
+    # reprints its ORIGINAL call after "(Original Play:" -- neither is a touchdown
+    played = text.split("(Original Play:")[0]
+    out["is_touchdown"] = "TOUCHDOWN" in played and "TOUCHDOWN nullified" not in played
     out["is_safety"] = "SAFETY" in text
     out["is_fumble"] = "FUMBLE" in text.upper()
     out["out_of_bounds"] = "out of bounds" in tl
