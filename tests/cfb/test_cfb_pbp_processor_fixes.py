@@ -11,6 +11,9 @@ Every case runs the real pipeline, offline, on a stored ESPN summary:
 * ``summary_401677179.json`` -- Indiana @ Notre Dame, 2024 ("Timeout Indiana" holds "nd").
 * ``summary_401112081.json`` -- Baylor @ TCU, 2019 (triple overtime, every OT period numbered 5).
 * ``summary_401858426.json`` -- Northern Illinois @ Iowa, 2026 (a punt returner written ``R.Vander Zee``).
+* ``summary_400869270.json`` -- Central Michigan @ Oklahoma State, 2016 ("Timeout CENTRAL MICH").
+* ``summary_401032062.json`` -- Western Michigan @ BYU, 2018 ("Timeout WESTRN MICHIGAN").
+* ``summary_401752746.json`` -- Auburn @ Arkansas, 2025 ("Timeout , clock" names no team).
 
 The 2026 summaries are copied verbatim from ``cfbfastR-cfb-raw/cfb/json/raw``.
 """
@@ -246,3 +249,21 @@ def test_timeout_lists_agree_with_counts():
     assert len(_processed(401856682)[1]["timeouts"][251]["1"]) == 3
     baylor = _processed(401112081)[1]["timeouts"][239]
     assert (len(baylor["2"]), len(baylor["OT1"])) == (3, 1)
+
+
+# --- C21: shortened team names in timeout rows ------------------------------------------------------
+
+
+def test_timeout_shortened_team_names():
+    for game_id, short, team_side in (
+        (400869270, "Timeout CENTRAL MICH", "away"),
+        (401032062, "Timeout WESTRN MICHIGAN", "away"),
+    ):
+        timeouts = _plays(game_id).filter(pl.col("type.text") == "Timeout")
+        assert (timeouts["homeTimeoutCalled"] != timeouts["awayTimeoutCalled"]).all(), game_id
+        named = timeouts.filter(pl.col("text").str.starts_with(short))
+        assert named.height >= 3 and named[f"{team_side}TimeoutCalled"].all(), game_id
+    # a row that names no team is charged to nobody
+    blank = _plays(401752746).filter(pl.col("text").str.starts_with("Timeout , clock"))
+    assert blank.height == 14
+    assert not (blank["homeTimeoutCalled"] | blank["awayTimeoutCalled"]).any()

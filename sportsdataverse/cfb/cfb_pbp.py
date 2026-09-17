@@ -548,6 +548,28 @@ _PENALTY_TOKEN_RES = [
 _SQUASH_RE = re.compile(r"[^A-Z0-9]")
 
 
+def _timeout_team_token() -> pl.Expr:
+    """A Timeout row's team token: the lower-cased text without "timeout" and the clock tail."""
+    return (
+        pl.col("text")
+        .str.to_lowercase()
+        .str.replace(r"(?:[,;]\s*|\s+)(?:clock\b|\d{1,2}:\d{2}\s+remaining\b).*$", "")
+        .str.replace(r"\btimeout\b", "")
+        .str.strip_chars(" .,;")
+    )
+
+
+def _timeout_team_side(row) -> str | None:
+    """ "home" / "away" for a timeout token that no team name part contains, else None.
+
+    Older feeds shorten the name -- "CENTRAL MICH", "WESTRN MICHIGAN", "NORTHERNIL", "UL LAFAYETTE",
+    "GA SOUTHERN" -- so the token is scored like a penalty team token (exact, prefix, consonant
+    skeleton, derived initialism against both teams' abbreviation / location / name) and charged
+    only to a strict winner; a tie stays unmatched.
+    """
+    return _resolve_team_side(_squash_team(row["_timeout_token"]), *_team_candidates(row))
+
+
 def _timeout_team_match_len(names) -> pl.Expr:
     """Length of the longest of *names* found in a Timeout row's team token (0 when none is).
 
@@ -557,13 +579,7 @@ def _timeout_team_match_len(names) -> pl.Expr:
     written "MIAMI OH"). Empty or missing name parts are skipped: "" is contained in every
     string, so an empty mascot used to charge every timeout to that team.
     """
-    token = (
-        pl.col("text")
-        .str.to_lowercase()
-        .str.replace(r"(?:[,;]\s*|\s+)(?:clock\b|\d{1,2}:\d{2}\s+remaining\b).*$", "")
-        .str.replace(r"\btimeout\b", "")
-        .str.strip_chars(" .,;")
-    )
+    token = _timeout_team_token()
     parts = {str(n).strip().lower() for n in names if n is not None}
     parts = (parts | {n.replace("(", "").replace(")", "") for n in parts}) - {""}
     hits = [pl.when(token.str.contains(n, literal=True)).then(len(n)).otherwise(0) for n in parts]
@@ -1494,6 +1510,16 @@ class CFBPlayProcess(object):
         away_match = _timeout_team_match_len(
             [init["awayTeamAbbrev"], init["awayTeamName"], init["awayTeamMascot"], init["awayTeamNameAlt"]]
         )
+        short_side = pl.when((pl.col("type.text") == "Timeout") & (home_match == 0) & (away_match == 0)).then(
+            pl.struct(
+                _timeout_team_token().alias("_timeout_token"),
+                *[
+                    f"{side}{part}"
+                    for side in ("homeTeam", "awayTeam")
+                    for part in ("Abbrev", "Name", "NameAlt", "Mascot")
+                ],
+            ).map_elements(_timeout_team_side, return_dtype=pl.Utf8)
+        )
         pbp_txt["plays"] = (
             pbp_txt["plays"]
             .with_columns(
@@ -1589,11 +1615,18 @@ class CFBPlayProcess(object):
                 .alias("end.is_home"),
                 # Charged to the team whose name part is the LONGER match, so "Timeout Indiana" is
                 # Indiana's and not Notre Dame's ("nd"), "Timeout Iowa State" is not Iowa's. A tie
-                # (two teams sharing a mascot) still charges both.
-                ((pl.col("type.text") == "Timeout") & (home_match > 0) & (home_match >= away_match))
+                # (two teams sharing a mascot) still charges both. A token no part matches goes to
+                # the shortened-name resolver, which charges a strict winner or nobody.
+                (
+                    (pl.col("type.text") == "Timeout")
+                    & (((home_match > 0) & (home_match >= away_match)) | (short_side == "home"))
+                )
                 .fill_null(False)
                 .alias("homeTimeoutCalled"),
-                ((pl.col("type.text") == "Timeout") & (away_match > 0) & (away_match >= home_match))
+                (
+                    (pl.col("type.text") == "Timeout")
+                    & (((away_match > 0) & (away_match >= home_match)) | (short_side == "away"))
+                )
                 .fill_null(False)
                 .alias("awayTimeoutCalled"),
             )
