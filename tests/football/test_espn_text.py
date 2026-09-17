@@ -267,3 +267,65 @@ JERSEY = {
 @pytest.mark.parametrize(("expr", "text", "expected"), list(JERSEY.values()), ids=list(JERSEY))
 def test_jersey_helpers_read_real_name_shapes(expr, text, expected):
     assert pl.DataFrame({"text": [text]}).select(expr()).item() == expected
+
+
+# Jersey-style yardage: a distance of one is singular and a return behind its catch
+# point reads "return for loss of N yards" -- both are signed yardages.
+YARDS = {
+    "punt return 1 yard 401862693": (
+        espn_text.jersey_return_yards,
+        "#26 M.Choules punt 44 yards to the MEM23 #17 A.Brown return 1 yard to the MEM24 (#13 J.Allen)",
+        1,
+    ),
+    "kickoff return 1 yard, out of bounds 401856669": (
+        espn_text.jersey_return_yards,
+        "(01:33) #12 H.DiBoyan kickoff 42 yards to the VU23 #32 M.Carter return 1 yard to the VU24, out of bounds at VU24",
+        1,
+    ),
+    "return for loss of 1 yard 401757282": (
+        espn_text.jersey_return_yards,
+        "(08:13) #32 M.Dean punt 44 yards to the LU22 #6 R.Smith return for loss of 1 yard to the LU21, End Of Play",
+        -1,
+    ),
+    "kickoff return for loss of 5 yards 401752785": (
+        espn_text.jersey_return_yards,
+        "(14:59)  kickoff 27 yards to the FSU38 #83 T.Gelsey return for loss of 5 yards to the FSU33, End Of Play",
+        -5,
+    ),
+    "the first return clause, a loss, not the fumble return after it 401752910": (
+        espn_text.jersey_return_yards,
+        "(11:27) #49 W.Karoll punt 50 yards to the WASH17 #81 D.Roebuck return for loss of 4 yards to the WASH13 "
+        "fumbled by #81 D.Roebuck at WASH13 forced by #1 K.Clark recovered by UCLA #12 J.Benjamin at WASH13 "
+        "#12 J.Benjamin return 13 yards to the WASH00 TOUCHDOWN, clock 11:19 #94 M.Bhaghani kick attempt good "
+        "(H: #35 C.Peterman, LS: #50 S.Abdul-Wahab)",
+        -4,
+    ),
+    "a loss is a return clause 401778329": (
+        espn_text.has_jersey_return,
+        "#39 C.Salas kickoff 6 yards to the DUKE14 #16 J.Hamilton return for loss of 27 yards to the DUKE41 "
+        "(#39 C.Salas), out of bounds",
+        True,
+    ),
+    "plural punt beside a loss return 401752910": (
+        espn_text.jersey_punt_yards,
+        "(11:27) #49 W.Karoll punt 50 yards to the WASH17 #81 D.Roebuck return for loss of 4 yards to the WASH13",
+        50,
+    ),
+    "punt 1 yard 401754372": (
+        espn_text.jersey_punt_yards,
+        "(04:45) #95 N.Veltsistas punt 1 yard to the VT 21 blocked by #82 C.Boscia recovered by VT  #57 L.Austin at "
+        "VT 21, End Of Play",
+        1,
+    ),
+    "no jersey, no jersey return 401757280": (
+        espn_text.jersey_return_yards,
+        "Huiet, Joshua punt 41 yards to the LATECH18, Latulas, Dedrick return -2 yards to the LATECH16, PENALTY KENN "
+        "illegal formation 5 yards to the KENN36, NO PLAY.",
+        None,
+    ),
+}
+
+
+@pytest.mark.parametrize(("expr", "text", "expected"), list(YARDS.values()), ids=list(YARDS))
+def test_jersey_yardage_reads_singular_and_loss(expr, text, expected):
+    assert pl.DataFrame({"text": [text]}).select(expr()).item() == expected

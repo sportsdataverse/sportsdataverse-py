@@ -59,12 +59,15 @@ _JERSEY_NAME_NOCAP = r"#\d{1,3} " + ABBREVIATED_NAME
 # (ESPN writes "Touchback" and "GOOD" / "NO GOOD" / "BLOCKED" in mixed case);
 # the name itself is matched case-sensitively so its capital initial keeps
 # meaning -- hence the ``(?i)`` prefix with a ``(?-i:...)`` island around the
-# name, the inline case toggle Rust regex offers in place of lookaround.
-JERSEY_PUNT_YDS_RE = r"(?i)\bpunt (\d+) yards"
-JERSEY_KICKOFF_YDS_RE = r"(?i)\bkickoff (\d+) yards"
-JERSEY_FG_YDS_RE = r"(?i)field goal attempt from (\d+) yards"
-JERSEY_FG_RESULT_RE = r"(?i)field goal attempt from \d+ yards (GOOD|NO GOOD|BLOCKED)"
-JERSEY_RETURN_YDS_RE = r"(?i)(?-i:" + _JERSEY_NAME_NOCAP + r") return (-?\d+) yards"
+# name, the inline case toggle Rust regex offers in place of lookaround. A
+# distance of one is singular ("punt 1 yard", "return 1 yard").
+JERSEY_PUNT_YDS_RE = r"(?i)\bpunt (\d+) yards?\b"
+JERSEY_KICKOFF_YDS_RE = r"(?i)\bkickoff (\d+) yards?\b"
+JERSEY_FG_YDS_RE = r"(?i)field goal attempt from (\d+) yards?\b"
+JERSEY_FG_RESULT_RE = r"(?i)field goal attempt from \d+ yards? (GOOD|NO GOOD|BLOCKED)"
+#: Group 1 is a return's signed yardage ("return 16 yards", "return 1 yard"); group 2
+#: is the loss in "return for loss of 2 yards" -- read both through jersey_return_yards().
+JERSEY_RETURN_YDS_RE = r"(?i)(?-i:" + _JERSEY_NAME_NOCAP + r") return (?:(-?\d+)|for loss of (\d+)) yards?\b"
 JERSEY_RETURNER_RE = r"(?i)(?-i:" + JERSEY_NAME + r") return "
 JERSEY_FAIR_CATCH_RE = r"(?i)fair catch by (?-i:" + JERSEY_NAME + r")"
 JERSEY_PUNTER_RE = r"(?i)(?-i:" + JERSEY_NAME + r") punt "
@@ -201,13 +204,13 @@ def jersey_fg_result(col: str = "text") -> pl.Expr:
 
 
 def jersey_return_yards(col: str = "text") -> pl.Expr:
-    """Return yardage from ``#N X.Surname return N yards`` (the first return clause; a penalty appended after it is not read).
+    """Return yardage from ``#N X.Surname return N yards`` / ``return for loss of N yards`` (the first return clause; a penalty appended after it is not read).
 
     Args:
         col: The play-text column. Defaults to ``"text"``.
 
     Returns:
-        pl.Expr: Int32 return yardage (may be negative), null on any other text.
+        pl.Expr: Int32 return yardage, negative for a loss, null on any other text.
 
     Example:
         Quick start::
@@ -217,7 +220,8 @@ def jersey_return_yards(col: str = "text") -> pl.Expr:
             df = pl.DataFrame({"text": ["#43 M.Chiumento punt 43 yards to the OSU36 #0 B.Inniss return 16 yards to the TEX48"]})
             df.with_columns(v=jersey_return_yards())["v"].to_list()  # [16]
     """
-    return jersey_yards(JERSEY_RETURN_YDS_RE, col)
+    loss = _text(col).str.extract(JERSEY_RETURN_YDS_RE, 2).cast(pl.Int32, strict=False)
+    return pl.coalesce(jersey_yards(JERSEY_RETURN_YDS_RE, col), -loss)
 
 
 def jersey_returner(col: str = "text") -> pl.Expr:
