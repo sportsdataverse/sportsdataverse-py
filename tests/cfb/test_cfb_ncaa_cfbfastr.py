@@ -345,3 +345,16 @@ def test_nullified_touchdown_is_not_a_touchdown() -> None:
     assert (row["touchdown"], row["scoring_play"]) == (False, False)
     pos, pos_s, dpos, dpos_s = df.select("pos_team", "pos_team_score", "def_pos_team", "def_pos_team_score").row(-1)
     assert {pos: pos_s, dpos: dpos_s} == {"The Citadel": 40, "Samford": 13}
+
+
+def test_digit_side_code_end_spots_resolve_against_the_game_codes() -> None:
+    """1736435 (side code "SFA2"): "to the SFA25" is SFA2's 5, not an "SFA" 25 -- only the game's codes can tell."""
+    df = _frame("1736435")
+    want = {
+        "Ward, Da'Leon rush for no gain to the SFA25": 95,
+        "Hoy, Jordan pass complete to Walker, A.J. for 40 yards to the SFA26": 6,
+    }
+    for prefix, end in want.items():
+        row = df.filter(pl.col("play_text").str.starts_with(prefix))
+        assert row.height == 1, prefix
+        assert row.item(0, "yards_to_goal_end") == end, prefix
