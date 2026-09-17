@@ -20,6 +20,8 @@ Every case runs the real pipeline, offline, on a stored ESPN summary:
 * ``summary_401858221.json`` -- Old Dominion @ Virginia Tech, 2026 ("return  for -55 yds").
 * ``summary_332570254.json`` -- Oregon State @ Utah, 2013 ("returned by Victor Bolden, fumbled, recovered by ... Victor Bolden for 10 yards").
 * ``summary_252532751.json`` -- Louisiana Monroe @ Wyoming, 2005 ("Julius Stinson return -5 yards to the Wyom42").
+* ``summary_252460252.json`` -- Boston College @ BYU, 2005 ("Johnny Ayers punt for a loss of 12 yards").
+* ``summary_401752844.json`` -- Iowa @ Rutgers, 2025 ("J. Scullion kick for 65 yds", the short kickoff form).
 
 The 2026 summaries are copied verbatim from ``cfbfastR-cfb-raw/cfb/json/raw``.
 """
@@ -319,3 +321,10 @@ def test_return_n_yards_clause():
     assert _row(plays, "Hoost Marsh return 12 yards to the Wyom32")["yds_punt_return"] == 12
     assert _row(plays, "Joe Merritt return 19 yards to the LaMon20")["yds_kickoff_return"] == 19
     assert _row(plays, "Josh Alexander return 0 yards to the LaMon30")["yds_int_return"] == 0
+
+
+# --- C36: a punt "for a loss of N" ended N yards behind the line ----------------------------------
+
+
+def test_punt_for_a_loss_is_negative():
+    assert _row(_plays(252460252), "Johnny Ayers punt for a loss of 12 yards.")["yds_punted"] == -12

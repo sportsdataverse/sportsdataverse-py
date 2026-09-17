@@ -3858,8 +3858,14 @@ class CFBPlayProcess(object):
                 scoring_play=pl.col("type.text").is_in(scores_vec),
                 # Two text styles: "punt for 43 yards" (through 2024) and the 2025 vendor
                 # template's jersey style, "#43 M.Chiumento punt 43 yards to the OSU36".
+                # "punt for a loss of 12 yards" is a punt that ended 12 yards BEHIND the line of
+                # scrimmage, which ESPN's own field position confirms (7 of the 9 rows in a
+                # 2004-2026 sample that state no return: the next snap is exactly N yards behind
+                # the punt spot). cfbfastR reads the same clause unsigned (R/helper_pbp_add_yardage.R
+                # :235-240), so published +12 punts are a shared defect, reported for the R side.
                 yds_punted=pl.coalesce(
                     pl.col("text").str.extract(r"(?i)(punt for \d+)").str.extract(r"(\d+)").cast(pl.Int32),
+                    -1 * pl.col("text").str.extract(r"(?i)punt for a loss of (\d+)", 1).cast(pl.Int32),
                     _espn_text.jersey_punt_yards(),
                 ),
                 yds_punt_gained=pl.when(pl.col("punt") == True).then(pl.col("statYardage")).otherwise(None),
@@ -4284,6 +4290,8 @@ class CFBPlayProcess(object):
             .otherwise(None),
             yds_punted=pl.when((pl.col("punt") == True).and_(pl.col("punt_blocked") == True))
             .then(0)
+            .when((pl.col("punt") == True).and_(pl.col("text").str.contains(r"(?i)punt for a loss of \d+")))
+            .then(-1 * pl.col("text").str.extract(r"(?i)punt for a loss of (\d+)", 1).cast(pl.Int32))
             .when(pl.col("punt") == True)
             .then(pl.col("text").str.extract(r"(?i)punt for (.+)").str.extract(r"(\d+)").cast(pl.Int32))
             .otherwise(None),
