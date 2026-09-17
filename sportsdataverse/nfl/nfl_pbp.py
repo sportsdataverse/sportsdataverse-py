@@ -683,8 +683,8 @@ class NFLPlayProcess(object):
             pbp_txt["plays"] = pd.concat([pbp_txt["plays"], prev_drives], axis=0, ignore_index=True)
         pbp_txt["plays"] = pl.from_pandas(pbp_txt["plays"])
         pbp_txt["timeouts"] = {
-            init["homeTeamId"]: {"1": [], "2": []},
-            init["awayTeamId"]: {"1": [], "2": []},
+            init["homeTeamId"]: {"1": [], "2": [], "OT": []},
+            init["awayTeamId"]: {"1": [], "2": [], "OT": []},
         }
 
         logging.debug(f"{self.gameId}: plays_df length - {len(pbp_txt['plays'])}")
@@ -912,82 +912,42 @@ class NFLPlayProcess(object):
         period_over = (pl.col("period.number").shift(-1) != pl.col("period.number")).and_(
             pl.col("period.number").is_in([1, 3]) == False,
         )
-        pbp_txt["timeouts"][init["homeTeamId"]]["1"] = (
-            pbp_txt["plays"]
-            .filter((pl.col("homeTimeoutCalled") == True).and_(pl.col("period.number") <= 2))
-            .get_column("id")
-            .to_list()
+        # Timeouts are counted per nflverse game half (nfl-data native_pbp does the same):
+        # Q1-Q2, Q3-Q4 and overtime each start with 3, every overtime period sharing one pool.
+        pbp_txt["plays"] = pbp_txt["plays"].with_columns(
+            pl.when(pl.col("period.number") <= 2)
+            .then(pl.lit("1"))
+            .when(pl.col("period.number") <= 4)
+            .then(pl.lit("2"))
+            .otherwise(pl.lit("OT"))
+            .alias("_timeout_pool"),
         )
-        pbp_txt["timeouts"][init["homeTeamId"]]["2"] = (
-            pbp_txt["plays"]
-            .filter((pl.col("homeTimeoutCalled") == True).and_(pl.col("period.number") > 2))
-            .get_column("id")
-            .to_list()
-        )
-        pbp_txt["timeouts"][init["awayTeamId"]]["1"] = (
-            pbp_txt["plays"]
-            .filter((pl.col("awayTimeoutCalled") == True).and_(pl.col("period.number") <= 2))
-            .get_column("id")
-            .to_list()
-        )
-        pbp_txt["timeouts"][init["awayTeamId"]]["2"] = (
-            pbp_txt["plays"]
-            .filter((pl.col("awayTimeoutCalled") == True).and_(pl.col("period.number") > 2))
-            .get_column("id")
-            .to_list()
-        )
+        for team_id, called in ((init["homeTeamId"], "homeTimeoutCalled"), (init["awayTeamId"], "awayTimeoutCalled")):
+            for pool in ("1", "2", "OT"):
+                pbp_txt["timeouts"][team_id][pool] = (
+                    pbp_txt["plays"]
+                    .filter((pl.col(called) == True).and_(pl.col("_timeout_pool") == pool))
+                    .get_column("id")
+                    .to_list()
+                )
+        new_pool = pl.col("_timeout_pool") != pl.col("_timeout_pool").shift(1)
         pbp_txt["plays"] = (
             pbp_txt["plays"]
             .with_columns(
-                (
-                    3
-                    - pl.struct("id", "period.number").map_elements(
-                        lambda x: (
-                            (
-                                sum(
-                                    (i <= x["id"]) & (x["period.number"] <= 2)
-                                    for i in pbp_txt["timeouts"][int(init["homeTeamId"])]["1"]
-                                )
-                            )
-                            | (
-                                sum(
-                                    (i <= x["id"]) & (x["period.number"] > 2)
-                                    for i in pbp_txt["timeouts"][int(init["homeTeamId"])]["2"]
-                                )
-                            )
-                        ),
-                        return_dtype=pl.Int64,
-                    )
-                ).alias("end.homeTeamTimeouts"),
-                (
-                    3
-                    - pl.struct("id", "period.number").map_elements(
-                        lambda x: (
-                            (
-                                sum(
-                                    (i <= x["id"]) & (x["period.number"] <= 2)
-                                    for i in pbp_txt["timeouts"][int(init["awayTeamId"])]["1"]
-                                )
-                            )
-                            | (
-                                sum(
-                                    (i <= x["id"]) & (x["period.number"] > 2)
-                                    for i in pbp_txt["timeouts"][int(init["awayTeamId"])]["2"]
-                                )
-                            )
-                        ),
-                        return_dtype=pl.Int64,
-                    )
-                ).alias("end.awayTeamTimeouts"),
+                (3 - pl.col("homeTimeoutCalled").cast(pl.Int64).cum_sum().over("_timeout_pool"))
+                .clip(lower_bound=0)
+                .alias("end.homeTeamTimeouts"),
+                (3 - pl.col("awayTimeoutCalled").cast(pl.Int64).cum_sum().over("_timeout_pool"))
+                .clip(lower_bound=0)
+                .alias("end.awayTeamTimeouts"),
             )
             .with_columns(
-                # each team gets 3 new timeouts at the half: the first 2nd-half play
-                # must not inherit the 1st half's end count
-                pl.when(pl.col("half") != pl.col("half").shift(1))
+                # a new half (or overtime) starts with a full pool, not the last play's end count
+                pl.when(new_pool)
                 .then(3)
                 .otherwise(pl.col("end.homeTeamTimeouts").shift(n=1, fill_value=3))
                 .alias("start.homeTeamTimeouts"),
-                pl.when(pl.col("half") != pl.col("half").shift(1))
+                pl.when(new_pool)
                 .then(3)
                 .otherwise(pl.col("end.awayTeamTimeouts").shift(n=1, fill_value=3))
                 .alias("start.awayTeamTimeouts"),
@@ -1112,6 +1072,7 @@ class NFLPlayProcess(object):
                 .alias("end.yardsToEndzone"),
             )
         )
+        pbp_txt["plays"] = pbp_txt["plays"].drop("_timeout_pool")
         pbp_txt["firstHalfKickoffTeamId"] = opening_kicker
 
         if "scoringType.displayName" in pbp_txt["plays"].columns:

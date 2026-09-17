@@ -470,3 +470,36 @@ def test_second_half_receiver_is_the_opening_kicker(request, which, kicker, home
     assert f.filter(pl.col("period") <= 2)["start.pos_team_receives_2H_kickoff"].any()
     for key in ("fourth", "two_pt"):
         assert seen[key] and seen[key][0]["home_opening_kickoff"].unique().to_list() == [home_opening_kickoff], key
+
+
+# ---------------------------------------------------------------------------
+# N10 -- overtime starts a fresh pool of three timeouts (nflverse convention)
+# ---------------------------------------------------------------------------
+
+# DEN @ CIN, 2024 week 17: nfl-raw ``nfl/espn/raw/2024/401671835.json.gz`` trimmed like BUF_ARI.
+DEN_CIN = Path(__file__).parent / "fixtures" / "summary_401671835_trimmed.json.gz"
+CIN, DEN = 4, 7  # home, away
+
+
+@pytest.fixture(scope="module")
+def den_cin_run():
+    import gzip
+
+    with gzip.open(DEN_CIN, "rt", encoding="utf-8") as fh:
+        return _recorded_run(json.load(fh), 401671835)
+
+
+def test_overtime_starts_a_fresh_pool_of_three_timeouts(den_cin_run):
+    # CIN spent all three second-half timeouts and DEN two; in overtime each then
+    # calls two. nflverse (and nfl-data's native build) restart overtime at 3 each.
+    proc, out, _ = den_cin_run
+    f = proc.plays_frame.sort("game_play_number")
+    last_q4 = f.filter(pl.col("period") == 4).row(-1, named=True)
+    assert (last_q4["end.homeTeamTimeouts"], last_q4["end.awayTeamTimeouts"]) == (0, 1)
+    ot = f.filter(pl.col("period") == 5)
+    first_ot = ot.row(0, named=True)
+    assert (first_ot["start.homeTeamTimeouts"], first_ot["start.awayTeamTimeouts"]) == (3, 3)
+    assert (first_ot["start.posTeamTimeouts"], first_ot["start.defPosTeamTimeouts"]) == (3, 3)
+    assert (ot["end.homeTeamTimeouts"].min(), ot["end.awayTeamTimeouts"].min()) == (1, 1)
+    assert [len(out["timeouts"][team]["OT"]) for team in (CIN, DEN)] == [2, 2]
+    assert f.select(pl.col("^(start|end)\\.(home|away)TeamTimeouts$").min()).min_horizontal().item() >= 0
