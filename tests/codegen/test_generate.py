@@ -124,6 +124,105 @@ def test_autodoc_prune_keeps_in_scope_schema_whose_capture_failed(tmp_path, monk
     assert "1 pruned" in out and "1 kept (in scope, capture failed)" in out
 
 
+# ===========================================================================
+# refresh_autodoc_schemas -- one capture is not the whole schema
+# ===========================================================================
+
+
+def _capture(tmp_path: Path, monkeypatch, committed, frame) -> dict:
+    """Run the capture over one stubbed ``nfl.f`` returning ``frame``; return the written YAML."""
+    import yaml
+
+    d = tmp_path / "autodoc" / "nfl"
+    d.mkdir(parents=True)
+    if committed is not None:
+        (d / "f.yaml").write_text(yaml.safe_dump(committed, sort_keys=False), encoding="utf-8")
+    monkeypatch.setattr(generate, "_AUTODOC_SCHEMA_DIR", tmp_path / "autodoc")
+    monkeypatch.setattr(generate, "_autodoc_names_by_scope", lambda: {"nfl": ["f"]})
+    monkeypatch.setattr(generate, "_autodoc_example_args", lambda: {})
+    monkeypatch.setattr(importlib, "import_module", lambda name: SimpleNamespace(f=lambda: frame))
+    assert generate.refresh_autodoc_schemas() == 0
+    return yaml.safe_load((d / "f.yaml").read_text(encoding="utf-8"))
+
+
+def _cols(*pairs) -> list:
+    return [{"name": n, "type": t, "description": ""} for n, t in pairs]
+
+
+def test_autodoc_capture_retains_committed_columns_absent_from_fresh_frame(tmp_path, monkeypatch):
+    """A column the live call did not return this time stays, in committed order.
+
+    One call is one moment: an off-season scoreboard has no ``home_team_score``
+    and a pre-tournament schedule no ``tournament_id``. Overwriting with that
+    frame dropped 33 columns across 11 schemas on the 2026-09-17 capture and
+    orphaned their rendered descriptions. New columns still append.
+    """
+    import polars as pl
+
+    committed = {
+        "schema": "f",
+        "kind": "dataframe",
+        "columns": _cols(("a", "integer"), ("b", "integer"), ("c", "character")),
+    }
+    out = _capture(tmp_path, monkeypatch, committed, pl.DataFrame({"a": [1], "c": ["x"], "d": [2.0]}))
+    assert [c["name"] for c in out["columns"]] == ["a", "b", "c", "d"]
+    assert out["columns"][3]["type"] == "double"
+
+
+def test_autodoc_capture_keeps_committed_type_for_all_null_and_list_columns(tmp_path, monkeypatch):
+    """An all-null fresh column carries no type evidence; a committed ``list`` beats
+    the mapper's ``List(Int64)`` -> ``integer`` fold.
+
+    ``rank_delta`` is null before the season and ``highlights`` is empty on most
+    days; inferring from those rows wrote ``character`` over ``integer`` on 20
+    columns. ``_pl_to_doc_type`` cannot express a list, so a fresh ``integer``
+    for a committed ``list`` is the mapper, not a change.
+    """
+    import polars as pl
+
+    committed = {"schema": "f", "kind": "dataframe", "columns": _cols(("x", "integer"), ("y", "list"))}
+    frame = pl.DataFrame({"x": pl.Series([None, None], dtype=pl.Null), "y": [[1, 2], [3]]})
+    out = _capture(tmp_path, monkeypatch, committed, frame)
+    assert {c["name"]: c["type"] for c in out["columns"]} == {"x": "integer", "y": "list"}
+
+
+def test_autodoc_capture_keeps_real_dtype_change(tmp_path, monkeypatch):
+    """A populated fresh column with a different scalar type IS a change and wins."""
+    import polars as pl
+
+    committed = {"schema": "f", "kind": "dataframe", "columns": _cols(("z", "character"))}
+    out = _capture(tmp_path, monkeypatch, committed, pl.DataFrame({"z": [1, None]}))
+    assert out["columns"] == _cols(("z", "integer"))
+
+
+def test_autodoc_capture_never_overwrites_hand_authored_schema(tmp_path, monkeypatch, capsys):
+    """``hand_authored: true`` exempts a schema from the write, not just the prune (#483)."""
+    import polars as pl
+
+    committed = {"schema": "f", "kind": "dataframe", "hand_authored": True, "columns": _cols(("k", "integer"))}
+    out = _capture(tmp_path, monkeypatch, committed, pl.DataFrame({"other": ["v"]}))
+    assert out == committed
+    assert "1 hand_authored kept" in capsys.readouterr().out
+
+
+def test_autodoc_capture_summary_reports_thin_capture(tmp_path, monkeypatch, capsys):
+    """The summary line must make a thin capture visible, like #483's kept count."""
+    import polars as pl
+
+    committed = {
+        "schema": "f",
+        "kind": "dataframe",
+        "columns": _cols(("a", "integer"), ("b", "integer"), ("c", "list")),
+    }
+    frame = pl.DataFrame({"a": pl.Series([None], dtype=pl.Null), "c": [[1]], "n": [1]})
+    _capture(tmp_path, monkeypatch, committed, frame)
+    out = capsys.readouterr().out
+    assert "1 captured" in out
+    assert "1 columns retained (absent from capture)" in out
+    assert "2 types preserved (all-null or list)" in out
+    assert "autodoc merge nfl.f: 1 new, 1 retained, 2 types preserved" in out
+
+
 def test_loader_notes_reach_the_docstring_and_the_page():
     """A `notes:` caveat must render in BOTH generated surfaces.
 
