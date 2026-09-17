@@ -40,6 +40,8 @@ import pandas as pd
 import polars as pl
 
 from sportsdataverse.cfb.cfb_loaders import (
+    load_cfb_pbp,
+    load_cfb_play_participants,
     load_cfb_player_box,
     load_cfb_rosters,
     load_cfb_rosters_cfbd,
@@ -99,6 +101,26 @@ _DEFENSE_BOX_WEIGHTS: dict[str, float] = {
     "passesDefended": 1.0,
 }
 
+#: First season ESPN play participants exist. From here defensive production is
+#: built from participants (tacklers, assists, sackers, pass defenders) joined to
+#: the play for its defending team and yardage -- 98-100% of teams every season
+#: 2014-2023, where ESPN's defensive player box covers 0% (2014-15) to 20-65%
+#: (2016-23). Validated against the box where both are near-complete, same
+#: weights: player-level r = 0.936 (2024) / 0.976 (2025), team totals 0.893 / 0.966.
+_PARTICIPANTS_FLOOR = 2014
+
+#: Pre-participant defensive splash events on the play-by-play, keyed on the
+#: defending team id: (player-id column, weight). No tacklers exist before 2014,
+#: so this is a SPLASH-ONLY measure (no tackle volume) and is flagged via
+#: `def_basis`. The interception here is the DEFENDER's (unlike the box column,
+#: which is interceptions thrown).
+_DEFENSE_PBP_SPLASH: tuple[tuple[str, float], ...] = (
+    ("sack_player_id", 2.0),
+    ("interception_player_id", 1.0),
+    ("pass_breakup_player_id", 1.0),
+    ("fumble_forced_player_id", 1.0),
+)
+
 #: Below this share of teams carrying defensive box stats, `def_returning` is
 #: not a league-wide metric and a warning is emitted. ESPN's defensive box
 #: coverage is season-dependent and only recently near-complete (teams with
@@ -118,6 +140,13 @@ _RETURNING_SCHEMA: dict[str, pl.PolarsDataType] = {
     "def_returning": pl.Float64,
     "overall_returning": pl.Float64,
     "n_returning": pl.Int64,
+    #: Where S-1 defensive production came from: "participants" (2014+ play
+    #: participants: tackle volume + splash), "pbp_splash" (2004-2013: splash
+    #: events only, no tackle volume), or null when there is none.
+    "def_basis": pl.Utf8,
+    #: How `overall_returning` was combined for this team: "offense+defense"
+    #: (fitted unit weights) or "offense" (no defensive value for the team).
+    "overall_basis": pl.Utf8,
     #: True only where the S-1 production came from parsed play text rather than
     #: the ESPN box (2004 alone). Back-tested against 2005, where both sources
     #: exist, the play-text route tracks the box route at r=0.73 with a -0.085
@@ -164,6 +193,7 @@ def _returning_from_frames(
         "def_returning": pl.Float64,
         "overall_returning": pl.Float64,
         "n_returning": pl.Int64,
+        "overall_basis": pl.Utf8,
     }
     if prod_prev.height == 0:
         return pl.DataFrame(schema=empty_schema)
@@ -196,16 +226,24 @@ def _returning_from_frames(
         )
     n = agg.group_by(["season", "team_id"]).agg(pl.col("n_returning").sum())
     w_off, w_def = w["offense"], w["defense"]
+    has_def = pl.col("def_returning").is_not_null()
     if w_def == 0.0:
-        overall = pl.col("off_returning")
+        overall, basis = pl.col("off_returning"), pl.lit("offense")
     elif w_off == 0.0:
         overall = pl.col("def_returning")
+        basis = pl.when(has_def).then(pl.lit("defense")).otherwise(pl.lit(None, dtype=pl.Utf8))
     else:
-        overall = (pl.col("off_returning") * w_off + pl.col("def_returning") * w_def) / (w_off + w_def)
+        # a team with no defensive value falls back to offense rather than going
+        # null, and says so in overall_basis -- never a silently different number
+        weighted = (pl.col("off_returning") * w_off + pl.col("def_returning") * w_def) / (w_off + w_def)
+        overall = pl.when(has_def).then(weighted).otherwise(pl.col("off_returning"))
+        basis = pl.when(has_def).then(pl.lit("offense+defense")).otherwise(pl.lit("offense"))
     return (
         wide.join(n, on=["season", "team_id"], how="left")
-        .with_columns(overall.alias("overall_returning"))
-        .select("season", "team_id", "off_returning", "def_returning", "overall_returning", "n_returning")
+        .with_columns(overall.alias("overall_returning"), basis.alias("overall_basis"))
+        .select(
+            "season", "team_id", "off_returning", "def_returning", "overall_returning", "n_returning", "overall_basis"
+        )
     )
 
 
@@ -283,6 +321,136 @@ def _production_from_box(box: pl.DataFrame, season: int) -> pl.DataFrame:
         )
         .select("season", "team_id", "player_id", "player_name", "unit", "prod_weight", "position")
     )
+
+
+_PRODUCTION_SCHEMA: dict[str, pl.PolarsDataType] = {
+    "season": pl.Int64,
+    "team_id": pl.Utf8,
+    "player_id": pl.Utf8,
+    "player_name": pl.Utf8,
+    "unit": pl.Utf8,
+    "prod_weight": pl.Float64,
+    "position": pl.Utf8,
+}
+
+
+def _as_polars(frame: object) -> pl.DataFrame:
+    if isinstance(frame, pd.DataFrame):
+        return pl.from_pandas(frame)
+    return frame if isinstance(frame, pl.DataFrame) else pl.DataFrame()
+
+
+def _defense_rows(events: pl.DataFrame, season: int) -> pl.DataFrame:
+    """(team_id, player_id, prod_weight) events -> the production schema, unit = defense."""
+    if events.height == 0:
+        return pl.DataFrame(schema=_PRODUCTION_SCHEMA)
+    return (
+        events.drop_nulls(["team_id", "player_id"])
+        .group_by(["team_id", "player_id"])
+        .agg(pl.col("prod_weight").sum())
+        .filter(pl.col("prod_weight") > 0)
+        .with_columns(
+            pl.lit(season, dtype=pl.Int64).alias("season"),
+            pl.lit(None, dtype=pl.Utf8).alias("player_name"),
+            pl.lit("defense").alias("unit"),
+            pl.lit(None, dtype=pl.Utf8).alias("position"),
+        )
+        .select(list(_PRODUCTION_SCHEMA))
+    )
+
+
+def _defense_from_participants(season: int) -> pl.DataFrame:
+    """Season defensive production from ESPN play participants (2014+).
+
+    Same weights as the box (:data:`_DEFENSE_BOX_WEIGHTS`): every tackle or
+    assist 1.0 (``totalTackles``), a sack 2.0 split across shared sackers (the
+    box counts a half sack), a tackle or assist on a play that lost yardage
+    another 1.0 (``tacklesForLoss``), a pass defended 1.0. Each participant is
+    credited to the play's defending team, joined on ``(game_id, play_id)``;
+    both keys are cast to Int64 first because the pbp release ships the play id
+    as Utf8 in some seasons (2014) and Int64 in others.
+    """
+    from sportsdataverse.football.usage_box import _decode_list_cell
+
+    try:
+        parts = _as_polars(load_cfb_play_participants([season]))
+        pbp = _as_polars(load_cfb_pbp([season]))
+    except SeasonNotFoundError:
+        return pl.DataFrame(schema=_PRODUCTION_SCHEMA)
+    need_parts = {"game_id", "play_id"}
+    need_pbp = {"game_id", "id", "def_pos_team_id", "statYardage"}
+    if parts.height == 0 or pbp.height == 0 or not need_parts <= set(parts.columns) or not need_pbp <= set(pbp.columns):
+        return pl.DataFrame(schema=_PRODUCTION_SCHEMA)
+    plays = pbp.select(
+        pl.col("game_id").cast(pl.Int64),
+        pl.col("id").cast(pl.Int64).alias("play_id"),
+        pl.col("def_pos_team_id").cast(pl.Int64).cast(pl.Utf8).alias("team_id"),
+        pl.col("statYardage").cast(pl.Float64).alias("yds"),
+    )
+    parts = parts.with_columns(pl.col("game_id").cast(pl.Int64), pl.col("play_id").cast(pl.Int64))
+    assert parts.schema["play_id"] == plays.schema["play_id"] == pl.Int64
+    joined = parts.join(plays, on=["game_id", "play_id"], how="inner")
+
+    events: list[pl.DataFrame] = []
+    for col, kind in (
+        ("tackler_player_ids", "tackle"),
+        ("assisted_by_player_ids", "tackle"),
+        ("sacked_by_player_ids", "sack"),
+        ("pass_defender_player_ids", "pbu"),
+    ):
+        if col not in joined.columns:
+            continue
+        cell = pl.col(col)
+        ids = (
+            cell.map_elements(_decode_list_cell, return_dtype=pl.List(pl.Utf8))
+            if joined.schema[col] == pl.Utf8
+            else cell.cast(pl.List(pl.Utf8), strict=False)
+        )
+        e = (
+            joined.select("team_id", "yds", ids.alias("player_id"))
+            .filter(pl.col("player_id").list.len() > 0)
+            .with_columns(pl.col("player_id").list.len().alias("n"))
+            .explode("player_id", empty_as_null=False)
+        )
+        if kind == "sack":
+            events.append(
+                e.select("team_id", "player_id", (_DEFENSE_BOX_WEIGHTS["sacks"] / pl.col("n")).alias("prod_weight"))
+            )
+        elif kind == "pbu":
+            events.append(
+                e.select("team_id", "player_id", pl.lit(_DEFENSE_BOX_WEIGHTS["passesDefended"]).alias("prod_weight"))
+            )
+        else:
+            events.append(
+                e.select("team_id", "player_id", pl.lit(_DEFENSE_BOX_WEIGHTS["totalTackles"]).alias("prod_weight"))
+            )
+            events.append(
+                e.filter(pl.col("yds") < 0).select(
+                    "team_id", "player_id", pl.lit(_DEFENSE_BOX_WEIGHTS["tacklesForLoss"]).alias("prod_weight")
+                )
+            )
+    return _defense_rows(pl.concat(events, how="vertical_relaxed") if events else pl.DataFrame(), season)
+
+
+def _defense_from_pbp_splash(season: int) -> pl.DataFrame:
+    """Season defensive production from play-by-play splash ids (2004-2013; no tackles)."""
+    try:
+        pbp = _as_polars(load_cfb_pbp([season]))
+    except SeasonNotFoundError:
+        return pl.DataFrame(schema=_PRODUCTION_SCHEMA)
+    if pbp.height == 0 or "def_pos_team_id" not in pbp.columns:
+        return pl.DataFrame(schema=_PRODUCTION_SCHEMA)
+    team = pl.col("def_pos_team_id").cast(pl.Int64).cast(pl.Utf8).alias("team_id")
+    events = [
+        pbp.select(
+            team,
+            pl.col(col).cast(pl.Int64, strict=False).cast(pl.Utf8).alias("player_id"),
+            pl.lit(w).alias("prod_weight"),
+        )
+        for col, w in _DEFENSE_PBP_SPLASH
+        if col in pbp.columns
+    ]
+    return _defense_rows(pl.concat(events) if events else pl.DataFrame(), season)
 
 
 _EMPTY_KEYS = {"season": pl.Int64, "team_id": pl.Utf8, "player_id": pl.Utf8}
@@ -496,6 +664,23 @@ def _warn_thin_defense(frame: pl.DataFrame, season: int) -> None:
         )
 
 
+def _with_defense_source(prod_prev: pl.DataFrame, season: int) -> tuple[pl.DataFrame, str | None]:
+    """Replace the box's defensive production with the season's coverage-complete source.
+
+    2014+ reads play participants, 2004-2013 play-by-play splash ids. When that
+    source yields nothing (a missing release), the box's own defense is kept and
+    labelled ``"box"`` rather than silently dropping defense.
+    """
+    if season >= _PARTICIPANTS_FLOOR:
+        defense, basis = _defense_from_participants(season), "participants"
+    else:
+        defense, basis = _defense_from_pbp_splash(season), "pbp_splash"
+    if defense.height:
+        return pl.concat([prod_prev.filter(pl.col("unit") == "offense"), defense.select(prod_prev.columns)]), basis
+    box_defense = prod_prev.filter(pl.col("unit") == "defense").height > 0
+    return prod_prev, ("box" if box_defense else None)
+
+
 def cfb_returning_production(
     seasons: int | list[int], *, division: str = "fbs", return_as_pandas: bool = False
 ) -> pl.DataFrame | pd.DataFrame:
@@ -549,9 +734,11 @@ def cfb_returning_production(
     out_frames: list[pl.DataFrame] = []
     for season in season_list:
         estimated = False
+        def_basis: str | None = None
         box_prev = _load_box(season - 1)
         if box_prev.height:
             prod_prev = _production_from_box(box_prev, season - 1)
+            prod_prev, def_basis = _with_defense_source(prod_prev, season - 1)
         elif season - 1 == _ESPN_BOX_FLOOR - 1:
             # The one season the box cannot describe. Parsed 2003 play text is a
             # proxy, not the same measurement -- hence the flag on every row.
@@ -566,7 +753,15 @@ def cfb_returning_production(
             continue
         frame = _returning_from_frames(prod_prev, roster_curr, division=division)
         _warn_thin_defense(frame, season)
-        out_frames.append(frame.with_columns(pl.lit(estimated).alias("is_estimated")))
+        out_frames.append(
+            frame.with_columns(
+                pl.when(pl.col("def_returning").is_not_null())
+                .then(pl.lit(def_basis, dtype=pl.Utf8))
+                .otherwise(pl.lit(None, dtype=pl.Utf8))
+                .alias("def_basis"),
+                pl.lit(estimated).alias("is_estimated"),
+            ).select(list(_RETURNING_SCHEMA))
+        )
     if not out_frames:
         empty = pl.DataFrame(schema=_RETURNING_SCHEMA)
         return empty.to_pandas() if return_as_pandas else empty
