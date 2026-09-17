@@ -129,6 +129,25 @@ _NFL_LEGACY_RECEIVER_RE3 = r"^(?:\(.*?\) )?" + _NFL_LONG_NAME + r" Pass From "
 # Jenkins 34 Yrd Interception Return").
 _NFL_LEGACY_FG_KICKER_RE = r"^(?:\(.*?\) )?" + _NFL_LONG_NAME + r" \d{1,3} (?:Yd|Yrd)s? (?:Field Goal|FG)"
 _NFL_LEGACY_INTERCEPTOR_RE = r"^(?:\(.*?\) )?" + _NFL_LONG_NAME + r" \d{1,3} (?:Yd|Yrd)s? Interception Return"
+# The 2002-09 feed spells names out and tags the team -- "Clinton Portis (DEN)
+# rushed left side for 1 yard", "Brian Griese (DEN) pass left side complete to
+# Clinton Portis (DEN) for 9 yards", "Punt by Mark Royals (MIA) returned 15 yards
+# by Deltha O'Neal (DEN) to the Miami 26", "Kickoff returned by Travis Minor (MIA)
+# for 28 yards", "33 yard field goal by Jason Elam (DEN) is good" (2005-07 drop the
+# tag), "Extra point by Jason Elam (DEN) is good", "intercepted by Montae Reagor
+# (DEN)", "Denver fumble by Mike Anderson (DEN), recovered by Larry Chester (MIA)".
+_NFL_TEAM_TAG = r" \([A-Z]{2,3}\)"
+_NFL_TAGGED_RUSHER_RE = r"^" + _NFL_LONG_NAME + _NFL_TEAM_TAG + r" rushed"
+_NFL_TAGGED_PASSER_RE = r"^" + _NFL_LONG_NAME + _NFL_TEAM_TAG + r" (?:pass|sacked)"
+_NFL_TAGGED_RECEIVER_RE = r"complete to " + _NFL_LONG_NAME + _NFL_TEAM_TAG
+_NFL_TAGGED_PUNTER_RE = r"Punt by " + _NFL_LONG_NAME + _NFL_TEAM_TAG
+_NFL_TAGGED_PUNT_RETURNER_RE = r"returned -?\d+ yards? by " + _NFL_LONG_NAME + _NFL_TEAM_TAG
+_NFL_TAGGED_KICK_RETURNER_RE = r"Kickoff returned by " + _NFL_LONG_NAME + _NFL_TEAM_TAG
+_NFL_TAGGED_FG_KICKER_RE = r"field goal by " + _NFL_LONG_NAME
+_NFL_TAGGED_XP_KICKER_RE = r"Extra point by " + _NFL_LONG_NAME
+_NFL_TAGGED_INTERCEPTOR_RE = r"intercepted by " + _NFL_LONG_NAME
+_NFL_TAGGED_FUMBLER_RE = r"fumble by " + _NFL_LONG_NAME
+_NFL_TAGGED_RECOVERER_RE = r"recovered by " + _NFL_LONG_NAME
 _NFL_RUSH_DIRECTION = r"(?:up the middle|left (?:end|tackle|guard)|right (?:end|tackle|guard)|scrambles|kneels)"
 # A ball-carrier followed by a rush direction, or (aborted-snap recoveries: "J.Williams
 # to DET 32 for 7 yards") by the spot / gain the run ends at.
@@ -3603,6 +3622,7 @@ class NFLPlayProcess(object):
                         pl.col("text").str.extract(_NFL_RUSHER_RE, 1),
                         _abbreviated_name(_NFL_LEGACY_RUSHER_RE),
                         _abbreviated_name(_NFL_LEGACY_RUSHER_RE2),
+                        _abbreviated_name(_NFL_TAGGED_RUSHER_RE),
                         pl.col("rush_player"),
                     ),
                 )
@@ -3617,6 +3637,7 @@ class NFLPlayProcess(object):
                         pl.col("text").str.extract(_NFL_PASSER_RE, 1),
                         _abbreviated_name(_NFL_LEGACY_PASSER_RE),
                         _abbreviated_name(_NFL_LEGACY_PASSER_RE2),
+                        _abbreviated_name(_NFL_TAGGED_PASSER_RE),
                         pl.col("pass_player"),
                     ),
                 )
@@ -3633,6 +3654,7 @@ class NFLPlayProcess(object):
                         _abbreviated_name(_NFL_LEGACY_RECEIVER_RE3),
                         pl.col("text").str.replace(_NFL_DIRECT_SNAP_RE, "").str.extract(_NFL_RECEIVER_RE, 1),
                         _abbreviated_name(_NFL_LEGACY_RECEIVER_RE2),
+                        _abbreviated_name(_NFL_TAGGED_RECEIVER_RE),
                         pl.col("receiver_player"),
                     ),
                 )
@@ -3664,6 +3686,7 @@ class NFLPlayProcess(object):
                 interception_player=pl.coalesce(
                     pl.col("text").str.extract(_NFL_INTERCEPTOR_RE, 1),
                     _abbreviated_name(_NFL_LEGACY_INTERCEPTOR_RE),
+                    _abbreviated_name(_NFL_TAGGED_INTERCEPTOR_RE),
                     pl.col("interception_player"),
                 ),
                 pass_breakup_player=pl.when(pl.col("type.text") == "Pass Incompletion")
@@ -3679,12 +3702,14 @@ class NFLPlayProcess(object):
                     pl.when(pl.col("text").str.contains(r"(?:FUMBLES|MUFFS catch)[^.]*, and recovers"))
                     .then(pl.col("text").str.extract(_NFL_FUMBLER_RE, 1))
                     .otherwise(None),
+                    _abbreviated_name(_NFL_TAGGED_RECOVERER_RE),
                     pl.col("fumble_recovered_player"),
                 ),
                 fumble_player=pl.when(pl.col("fumble_vec") == True)
                 .then(
                     pl.coalesce(
                         pl.col("text").str.extract(_NFL_FUMBLER_RE, 1),
+                        _abbreviated_name(_NFL_TAGGED_FUMBLER_RE),
                         pl.when(pl.col("sack") == True).then(pl.col("pass_player")).otherwise(None),
                         pl.when(pl.col("pass") == True).then(pl.col("receiver_player")).otherwise(None),
                         pl.when(pl.col("rush") == True).then(pl.col("rush_player")).otherwise(None),
@@ -3692,7 +3717,11 @@ class NFLPlayProcess(object):
                     ),
                 )
                 .otherwise(pl.col("fumble_player")),
-                punter_player=pl.coalesce(pl.col("text").str.extract(_NFL_PUNTER_RE, 1), pl.col("punter_player")),
+                punter_player=pl.coalesce(
+                    pl.col("text").str.extract(_NFL_PUNTER_RE, 1),
+                    _abbreviated_name(_NFL_TAGGED_PUNTER_RE),
+                    pl.col("punter_player"),
+                ),
                 punt_block_player=pl.coalesce(
                     pl.col("text").str.extract(_NFL_PUNT_BLOCK_RE, 1),
                     pl.col("punt_block_player"),
@@ -3702,6 +3731,7 @@ class NFLPlayProcess(object):
                     pl.coalesce(
                         pl.col("text").str.extract(_NFL_PUNT_RETURNER_RE, 1),
                         pl.col("text").str.extract(_NFL_FAIR_CATCH_RE, 1),
+                        _abbreviated_name(_NFL_TAGGED_PUNT_RETURNER_RE),
                         pl.col("punt_return_player"),
                     ),
                 )
@@ -3711,6 +3741,7 @@ class NFLPlayProcess(object):
                 .then(
                     pl.coalesce(
                         pl.col("text").str.extract(_NFL_KICK_RETURNER_RE, 1),
+                        _abbreviated_name(_NFL_TAGGED_KICK_RETURNER_RE),
                         pl.col("kickoff_return_player"),
                     ),
                 )
@@ -3718,12 +3749,14 @@ class NFLPlayProcess(object):
                 fg_kicker_player=pl.coalesce(
                     pl.col("text").str.extract(_NFL_FG_KICKER_RE, 1),
                     _abbreviated_name(_NFL_LEGACY_FG_KICKER_RE),
+                    _abbreviated_name(_NFL_TAGGED_FG_KICKER_RE),
                     pl.col("fg_kicker_player"),
                 ),
                 fg_block_player=pl.coalesce(pl.col("text").str.extract(_NFL_FG_BLOCK_RE, 1), pl.col("fg_block_player")),
                 xp_kicker_player_name=pl.coalesce(
                     pl.col("text").str.extract(_NFL_XP_KICKER_RE, 1),
                     _abbreviated_name(_NFL_LEGACY_XP_KICKER_RE),
+                    _abbreviated_name(_NFL_TAGGED_XP_KICKER_RE),
                 ),
             )
             .with_columns(

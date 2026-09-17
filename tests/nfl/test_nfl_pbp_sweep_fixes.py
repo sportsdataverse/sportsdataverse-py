@@ -242,7 +242,11 @@ def test_scoring_summary_interceptor_is_named(nyg_phi_2016):
         ("Caleb Sturgis 34 Yd Field Goal ", "C.Sturgis", None),
         ("Malcolm Jenkins 34 Yd Interception Return (Caleb Sturgis Kick)", None, "M.Jenkins"),
         ("Marcus Cooper 60 Yd Interception Return  ", None, "M.Cooper"),
-        ("Malcolm Jenkins 34 Yrd Interception Return C.Sturgis extra point is GOOD, Center-R.Lovato", None, "M.Jenkins"),
+        (
+            "Malcolm Jenkins 34 Yrd Interception Return C.Sturgis extra point is GOOD, Center-R.Lovato",
+            None,
+            "M.Jenkins",
+        ),
     ],
 )
 def test_scoring_summary_kicker_and_interceptor_fold_to_the_abbreviated_form(text, kicker, interceptor):
@@ -343,7 +347,6 @@ def test_html_entities_are_unescaped_at_load(nyg_no_2009):
 # ---------------------------------------------------------------------------
 
 
-@pytest.mark.xfail(strict=True, reason="round-3 N27 pending (see s1-nfl/r3_STATE.md)")
 def test_legacy_team_tagged_text_names_players(mia_den_2002):
     f = mia_den_2002
     assert (
@@ -369,7 +372,8 @@ def test_legacy_team_tagged_text_names_players(mia_den_2002):
         f, 2210130071105
     )  # "Denver fumble by Mike Anderson (DEN), recovered by Larry Chester (MIA), returned for no gain."
     assert (fum["fumble_player_name"], fum["fumble_recovered_player_name"]) == ("M.Anderson", "L.Chester")
-    assert _row(f, 2210130070909)["xp_kicker_player_name"] == "J.Elam"  # "Extra point by Jason Elam (DEN) is good."
+    assert _row(f, 2210130070909)["xp_kicker_player_name"] == "O.Mare"  # "Extra point by Olindo Mare (MIA) is good."
+    assert _row(f, 2210130072915)["xp_kicker_player_name"] == "J.Elam"  # "Extra point by Jason Elam (DEN) is good."
     for flag, col in (
         ("rush", "rusher_player_name"),
         ("punt", "punter_player_name"),
