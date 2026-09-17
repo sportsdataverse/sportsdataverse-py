@@ -1614,6 +1614,34 @@ def _read_csv_retry(url: str, *, attempts: int = 4, **kwargs) -> pl.DataFrame:
     raise AssertionError("unreachable")
 
 
+# DynastyProcess ships a CSV, so an unpinned id takes whatever dtype the current
+# rows infer to (fantasypros_id / pff_id / nfl_id flipped Utf8 -> Int64 when
+# upstream happened to ship only numeric values). Pinned to the documented
+# contract; string ids are read straight from the CSV text, never via a float.
+_FF_PLAYERIDS_ID_DTYPES = {
+    "mfl_id": pl.Int64,
+    "sportradar_id": pl.Utf8,
+    "fantasypros_id": pl.Utf8,
+    "gsis_id": pl.Utf8,
+    "pff_id": pl.Utf8,
+    "sleeper_id": pl.Int64,
+    "nfl_id": pl.Utf8,
+    "espn_id": pl.Int64,
+    "yahoo_id": pl.Utf8,
+    "fleaflicker_id": pl.Utf8,
+    "cbs_id": pl.Int64,
+    "pfr_id": pl.Utf8,
+    "cfbref_id": pl.Utf8,
+    "rotowire_id": pl.Int64,
+    "rotoworld_id": pl.Utf8,
+    "ktc_id": pl.Int64,
+    "stats_id": pl.Int64,
+    "stats_global_id": pl.Int64,
+    "fantasy_data_id": pl.Int64,
+    "swish_id": pl.Utf8,
+}
+
+
 @cached_loader
 def load_nfl_ff_playerids(return_as_pandas=False) -> pl.DataFrame:
     """Load fantasy football player IDs from DynastyProcess.com
@@ -1623,6 +1651,13 @@ def load_nfl_ff_playerids(return_as_pandas=False) -> pl.DataFrame:
 
     Returns:
         pl.DataFrame: Polars dataframe containing fantasy football player ID mappings across platforms.
+
+    Note:
+        Id column dtypes are pinned at read time, not inferred from the rows
+        upstream currently ships: ``mfl_id``, ``sleeper_id``, ``espn_id``,
+        ``cbs_id``, ``rotowire_id``, ``ktc_id``, ``stats_id``,
+        ``stats_global_id`` and ``fantasy_data_id`` are ``Int64``; every other
+        ``*_id`` column is ``Utf8``.
 
     Example:
         Quick start::
@@ -1646,13 +1681,12 @@ def load_nfl_ff_playerids(return_as_pandas=False) -> pl.DataFrame:
         .. _DynastyProcess: https://github.com/dynastyprocess
         .. _nflverse: https://nflverse.nflverse.com
     """
-    return (
-        _read_csv_retry(NFL_FF_PLAYERIDS_URL, null_values=["NA", "NULL", ""]).to_pandas(
-            use_pyarrow_extension_array=True
-        )
-        if return_as_pandas
-        else _read_csv_retry(NFL_FF_PLAYERIDS_URL, null_values=["NA", "NULL", ""])
+    data = _read_csv_retry(
+        NFL_FF_PLAYERIDS_URL,
+        null_values=["NA", "NULL", ""],
+        schema_overrides=_FF_PLAYERIDS_ID_DTYPES,
     )
+    return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
 
 
 @cached_loader

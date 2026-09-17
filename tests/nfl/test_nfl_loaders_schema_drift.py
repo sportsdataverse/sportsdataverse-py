@@ -23,7 +23,14 @@ from pathlib import Path
 import polars as pl
 import pytest
 
-from sportsdataverse.nfl import clear_cache, load_nfl_pbp_participation, reset_config, update_config
+from sportsdataverse.config import NFL_FF_PLAYERIDS_URL
+from sportsdataverse.nfl import (
+    clear_cache,
+    load_nfl_ff_playerids,
+    load_nfl_pbp_participation,
+    reset_config,
+    update_config,
+)
 from sportsdataverse.nfl import nfl_loaders as _loaders
 from sportsdataverse.nfl import nfl_schedule as _schedule
 from tests.conftest import skip_if_no_live
@@ -128,3 +135,60 @@ def test_load_participation_live_across_the_2023_schema_change(no_cache):
     assert df.height > 0
     assert set(_ADDED_IN_2023).issubset(df.columns)
     assert df.schema["play_id"] == pl.Float64
+
+
+# DynastyProcess ``db_playerids.csv`` is read with ``pl.read_csv``, so without a
+# pin every id column's dtype follows whatever the current upstream rows happen
+# to contain. The expected dtypes are main's documented contract
+# (``tools/codegen/schemas/autodoc/nfl/load_nfl_ff_playerids.yaml``):
+# ``character`` -> ``pl.Utf8``, ``integer`` -> ``pl.Int64``.
+_FF_PLAYERIDS_ID_DTYPES = {
+    "mfl_id": pl.Int64,
+    "sportradar_id": pl.Utf8,
+    "fantasypros_id": pl.Utf8,
+    "gsis_id": pl.Utf8,
+    "pff_id": pl.Utf8,
+    "sleeper_id": pl.Int64,
+    "nfl_id": pl.Utf8,
+    "espn_id": pl.Int64,
+    "yahoo_id": pl.Utf8,
+    "fleaflicker_id": pl.Utf8,
+    "cbs_id": pl.Int64,
+    "pfr_id": pl.Utf8,
+    "cfbref_id": pl.Utf8,
+    "rotowire_id": pl.Int64,
+    "rotoworld_id": pl.Utf8,
+    "ktc_id": pl.Int64,
+    "stats_id": pl.Int64,
+    "stats_global_id": pl.Int64,
+    "fantasy_data_id": pl.Int64,
+    "swish_id": pl.Utf8,
+}
+
+_read_csv = pl.read_csv
+
+
+def test_ff_playerids_pins_id_dtypes_against_upstream_inference(monkeypatch, no_cache):
+    """Id dtypes must not follow the rows DynastyProcess happens to ship.
+
+    The fixture is four real rows of the live CSV (see the fixtures README) in
+    which every formerly-string id is purely numeric, so plain inference types
+    them ``Int64`` -- and ``nfl_id`` ``038666`` loses its leading zero.
+    """
+    slice_csv = FIXTURES / "db_playerids_slice.csv"
+    inferred = _read_csv(slice_csv, null_values=["NA", "NULL", ""])
+    assert inferred.schema["fantasypros_id"] == pl.Int64, "fixture no longer reproduces the flip"
+
+    seen: list = []
+
+    def fake_read_csv(source, **kwargs):
+        seen.append(source)
+        return _read_csv(slice_csv, **kwargs)
+
+    monkeypatch.setattr(_loaders.pl, "read_csv", fake_read_csv)
+    df = load_nfl_ff_playerids()  # ``load_ff_playerids`` is the same object
+
+    assert seen == [NFL_FF_PLAYERIDS_URL]
+    assert {c: df.schema[c] for c in _FF_PLAYERIDS_ID_DTYPES} == _FF_PLAYERIDS_ID_DTYPES
+    assert df["nfl_id"].to_list()[-1] == "038666"
+    assert df["fantasypros_id"].to_list()[:3] == ["28013", "24853", "11174"]
