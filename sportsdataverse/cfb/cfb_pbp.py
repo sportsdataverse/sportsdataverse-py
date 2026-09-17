@@ -113,6 +113,14 @@ _JERSEY_PREFIX = r"^\s*#\d{1,3}\s+"
 #: the form "(15:00) #36 T.Morrison", plus rusher, passer and interception names.
 _CLOCK_PREFIX = r"^\s*\(\d{1,2}:\d{2}\)\s*"
 
+#: The vendor template's kicker / returner clauses with any name shape: the capture excludes
+#: "#", parentheses and digits, so it can neither run back across a jersey or a yardline nor
+#: take the spot token ("to the Bryant14  return 14 yards" names no returner and stays null).
+_VENDOR_FG_KICKER_RE = r"(?:^|\)\s|#\d{1,3}\s)([^#()\d]+?) field goal attempt"
+_VENDOR_KICKOFF_RETURNER_RE = (
+    r"kickoff -?\d+ yards? to the [A-Za-z]*\s?\d{0,2},? (?:#\d{1,3} )?([^#()\d]+?) return -?\d+ yards?"
+)
+
 
 def _strip_presentational_tokens(name_expr: pl.Expr) -> pl.Expr:
     """Remove formation tags and the jersey number from an extracted name.
@@ -4879,6 +4887,10 @@ class CFBPlayProcess(object):
                 .then(
                     pl.coalesce(
                         _espn_text.jersey_returner(),
+                        # The same clause when the name is not "X.Surname" ("#10 J.Malau’ulu",
+                        # "#21 J.Washington lll", "#9 J.Ruffin, Jr.") or is stats.ncaa.org's
+                        # "Branch,Zachariah". Ahead of the legacy window, which reads "Jr." there.
+                        pl.col("text").str.extract(_VENDOR_KICKOFF_RETURNER_RE, 1),
                         _extract_player_name(
                             pl.col("text"),
                             r"(?i), (.{0,25}) return|(?i), (.{0,25}) fumble|(?i)returned by (.{0,25})|(?i)touchback by (.{0,25})",
@@ -4897,6 +4909,9 @@ class CFBPlayProcess(object):
                 .then(
                     pl.coalesce(
                         _espn_text.jersey_fg_kicker(),
+                        # multi-word surnames ("#92 J.Echeverria Lozano", "#81 A.De La Poza") and
+                        # stats.ncaa.org's "(00:00) Gilbert,Max field goal attempt"
+                        pl.col("text").str.extract(_VENDOR_FG_KICKER_RE, 1),
                         _extract_player_name(
                             pl.col("text"),
                             r"(?i)(.{0,25} )\d{0,2} yd field goal|(?i)(.{0,25} )\d{0,2} yd fg|(?i)(.{0,25} )\d{0,2} yard field goal",

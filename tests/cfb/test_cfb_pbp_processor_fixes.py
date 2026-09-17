@@ -85,3 +85,15 @@ def test_sack_player_from_parenthetical():
     assert sacks["sack_player_name"].to_list() == ["R.Pettijohn", "K.Jackson Jr.", "L.Jackson", "C.Simmons"]
     two = _row(_plays(401858435), "#2 E.Owens sacked for loss of 3 yards to the PUR33 (#23 T.Smith, #94 R.Lora)")
     assert (two["sack_player_name"], two["sack_player_name2"]) == ("T.Smith", "R.Lora")
+
+
+# --- C6: kicker / returner names that are not "X.Surname" ---------------------------------------
+
+
+def test_fg_kicker_and_kickoff_returner_beyond_abbreviated_names():
+    fgs = _plays(401858435).filter(pl.col("text").str.contains("field goal attempt"))
+    lozano = fgs.filter(pl.col("text").str.contains("#92 J.Echeverria Lozano"))
+    assert lozano.height >= 2
+    assert set(lozano["fg_kicker_player_name"].to_list()) == {"J.Echeverria Lozano"}
+    kr = _row(_plays(401858439), "#21 J.Washington lll return 23 yards")
+    assert kr["kickoff_return_player_name"] == "J.Washington lll"
