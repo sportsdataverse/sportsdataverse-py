@@ -295,26 +295,37 @@ def process_game(task: dict[str, Any]) -> dict[str, Any]:
     return {k: meta.get(k) for k in ("league", "season", "game_id", "status", "seconds", "error")}
 
 
-def rescore(out: Path, roots: dict[str, Path]) -> None:
-    """Re-evaluate the current rules on every saved plays frame (no re-processing)."""
+def rescore_game(args: tuple[str, str, str]) -> bool:
+    """Worker: re-evaluate one saved game in place; False when it has no saved frame."""
     import polars as pl
 
     from tools.validation.checks import pbp_invariants
 
-    n = 0
-    for game_path in sorted((out / "games").rglob("*.json")):
-        meta = json.loads(game_path.read_text())
-        league, season, gid = meta["league"], int(meta["season"]), int(meta["game_id"])
-        plays_path = out / "plays" / league / str(season) / f"{gid}.parquet"
-        if meta.get("status") != "ok" or not plays_path.exists() or league not in roots:
-            continue
-        summary = read_summary(league, roots[league], season, gid)
-        box = {"team": meta["box_team"]} if meta.get("box_team") else None
-        rules = pbp_invariants.evaluate(pl.read_parquet(plays_path), summary=summary, box=box, league=league)
-        meta["rules"] = [r.to_dict() for r in rules]
-        game_path.write_text(json.dumps(meta, default=str))
-        n += 1
-    log.info("re-scored %d games", n)
+    game_file, out_dir, raw_root = args
+    game_path, out = Path(game_file), Path(out_dir)
+    meta = json.loads(game_path.read_text())
+    league, season, gid = meta["league"], int(meta["season"]), int(meta["game_id"])
+    plays_path = out / "plays" / league / str(season) / f"{gid}.parquet"
+    if meta.get("status") != "ok" or not plays_path.exists():
+        return False
+    summary = read_summary(league, Path(raw_root), season, gid)
+    box = {"team": meta["box_team"]} if meta.get("box_team") else None
+    rules = pbp_invariants.evaluate(pl.read_parquet(plays_path), summary=summary, box=box, league=league)
+    meta["rules"] = [r.to_dict() for r in rules]
+    game_path.write_text(json.dumps(meta, default=str))
+    return True
+
+
+def rescore(out: Path, roots: dict[str, Path], workers: int = 3) -> None:
+    """Re-evaluate the current rules on every saved plays frame (no re-processing)."""
+    tasks = [
+        (str(p), str(out), str(roots[p.parts[-3]]))
+        for p in sorted((out / "games").rglob("*.json"))
+        if p.parts[-3] in roots
+    ]
+    with ProcessPoolExecutor(max_workers=workers, mp_context=mp.get_context("spawn")) as pool:
+        n = sum(pool.map(rescore_game, tasks, chunksize=8))
+    log.info("re-scored %d of %d games", n, len(tasks))
 
 
 def _interleave(games: list[dict[str, Any]]) -> list[dict[str, Any]]:
@@ -479,7 +490,9 @@ def main(argv: list[str] | None = None) -> int:
         manifest = [g for g in json.loads(manifest_path.read_text()) if g["league"] in leagues]
         run(manifest, args.out, {k: Path(v) for k, v in roots.items() if v is not None}, min(args.workers, 3))
     if args.stage == "rescore":
-        rescore(args.out, {k: Path(v) for k, v in roots.items() if v is not None and k in leagues})
+        rescore(
+            args.out, {k: Path(v) for k, v in roots.items() if v is not None and k in leagues}, min(args.workers, 3)
+        )
     if args.stage in ("report", "all"):
         report(args.out)
     return 0
