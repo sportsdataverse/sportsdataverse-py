@@ -516,6 +516,22 @@ windowed builds. Thin `CFBPlayProcess.create_drive_summary` /
 the post-pipeline `plays_frame`; drive-level attribution reads the drives
 grouping (`drive.team`), never plays grouped by `drive.id`.
 
+### Fixed — Statcast search runner ids are Int64, not Float64
+
+`mlb_statcast_search`, `mlb_statcast_search_minors` and `mlb_statcast_search_wbc`
+returned `on_1b` / `on_2b` / `on_3b` as Float64 (`660271.0`): pandas reads any
+integer CSV column holding a blank as float, and a base is blank whenever it is
+empty. Float ids break joins against `batter` / `pitcher` and stringify as
+`"660271.0"`. The 14 MLBAM id columns (`batter`, `pitcher`, `on_1b`..`on_3b`,
+`fielder_2`..`fielder_9`, `game_pk`) are now pinned to nullable Int64 (blank ->
+null), in polars and in `return_as_pandas=True` output, and the Returns docs say
+`integer`. An id column holding a non-integral value is left as read and warned
+about once per call rather than truncated.
+
+**Returned dtypes change:** `on_1b` / `on_2b` / `on_3b` go from Float64 to Int64,
+and pandas output from `parse_mlb_statcast_search` gives nullable `Int64` instead
+of numpy `int64` for the other ids.
+
 ### Fixed — MLB expected stats counted raw pitches as plate appearances
 
 `mlb_expected_stats` counted every non-batted-ball *pitch* row toward `pa`
